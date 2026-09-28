@@ -36,6 +36,9 @@
       "vo": "Busy is not the same as effective.",
       "props": {
         "text": "Busy is not the same as effective.",
+        "emphasis": [
+          "effective"
+        ],
         "support": "Measure the wait, not just the workload.",
         "source": "Illustrative sample data · replace before publishing"
       }

@@ -107,6 +107,7 @@
       "vo": "Prefer the option that is easier to test and reverse.",
       "props": {
         "label": "Recommendation",
+        "icon": "alert",
         "text": "Run a small, reversible trial.",
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"

@@ -11,6 +11,8 @@ metal = ["dep:fframes_skia_renderer"]
 
 [dependencies]
 fframes = { git = "https://github.com/dmtrKovalenko/fframes", rev = "bacfc3c3212d3d9429468435bfdc1ae2a21c7b3b", features = ["cli", "compile-time-svgtree", "h264", "libav-agree-gpl"] }
+# The same shaper usvgr renders with, already in the lock graph; used for exact text metrics.
+rustybuzz = "0.12"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 

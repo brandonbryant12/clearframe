@@ -1,0 +1,150 @@
+{
+  "version": 2,
+  "title": "Look back on a year with a clear through-line",
+  "logline": "Look back on a year with a clear through-line",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "ember",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "glow",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "chapter",
+      "block": "chapter",
+      "vo": "Here is what the year looked like.",
+      "props": {
+        "number": "2026",
+        "title": "A year in review",
+        "support": "Illustrative figures to replace with your own.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "kpis",
+      "block": "kpis",
+      "vo": "More requests arrived, and each one was answered faster.",
+      "props": {
+        "title": "The quarter in three numbers",
+        "items": [
+          {
+            "value": 12400,
+            "label": "Requests"
+          },
+          {
+            "value": 4.2,
+            "suffix": " days",
+            "label": "First response"
+          },
+          {
+            "value": 91,
+            "suffix": "%",
+            "label": "Satisfaction"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "line",
+      "block": "line",
+      "vo": "The trend climbed steadily through the second half.",
+      "props": {
+        "title": "A trend worth watching",
+        "series": [
+          12,
+          15,
+          14,
+          18,
+          23,
+          27
+        ],
+        "labels": [
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep"
+        ],
+        "min": 0,
+        "max": 30,
+        "format": " k",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "donut",
+      "block": "donut",
+      "vo": "Most of the time went to the work that mattered most.",
+      "props": {
+        "title": "Where a week of support goes",
+        "segments": [
+          {
+            "label": "Answering",
+            "value": 18
+          },
+          {
+            "label": "Routing",
+            "value": 12
+          },
+          {
+            "label": "Waiting on others",
+            "value": 7
+          },
+          {
+            "label": "Follow-up",
+            "value": 3
+          }
+        ],
+        "format": " h",
+        "center": "hours per week",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "quote",
+      "block": "quote",
+      "vo": "The best handoff is the one nobody has to chase.",
+      "props": {
+        "text": "The best handoff is the one nobody has to chase.",
+        "author": "Illustrative interview",
+        "role": "Fictional quotation for this template",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Next year, keep what worked and change one thing.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Change one thing, and measure it.",
+        "action": "Plan the first quarter",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Keep what worked."
+      }
+    }
+  ]
+}

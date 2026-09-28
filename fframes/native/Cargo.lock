@@ -390,6 +390,7 @@ version = "0.1.0"
 dependencies = [
  "fframes",
  "fframes_skia_renderer",
+ "rustybuzz",
  "serde",
  "serde_json",
 ]

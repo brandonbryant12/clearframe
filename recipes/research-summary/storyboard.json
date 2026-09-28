@@ -99,6 +99,7 @@
       "vo": "A difference is not enough to establish its cause.",
       "props": {
         "label": "The caveat",
+        "icon": "alert",
         "text": "Describe the uncertainty alongside the result.",
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"

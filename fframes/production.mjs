@@ -4,7 +4,7 @@ import os from 'node:os';
 import crypto from 'node:crypto';
 import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { BLOCKS, CANVASES, FRAME_RATES, THEMES, MOTIONS, TRANSITIONS, normalizeProps, palette } from './catalog.mjs';
+import { CANVASES, FRAME_RATES, THEMES, MOTIONS, TRANSITIONS, BACKDROPS, normalizeProps, palette } from './catalog.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 import { computeTiming, captionCues, toSRT, toVTT, findWord, assetSrc } from '../engine/lib/timing.mjs';
 import { mix, mux } from '../engine/lib/audio.mjs';
@@ -34,6 +34,41 @@ export async function buildNative({force=false}={}) {
   return binary();
 }
 
+// Seconds each preset's element entrance takes; the renderer's motion.rs uses the same values.
+export const ENTRANCE={gentle:.55,snappy:.30,spring:.72};
+const EXITS=['auto','none','fade','push','zoom','wipe'];
+const HERO_BLOCKS=new Set(['title','statement','endcard','chapter','highlight','quote','callout']);
+const NUMERIC=new Set(['stat','kpis','bars','line','waffle','ring','delta','funnel','donut','magnitude']);
+// Staged arrays: [prop, default offset after the scene cue, default spacing].
+const STAGED={'icon-grid':['items',0,null],flow:['nodes',0,null],kpis:['items',0,.45],steps:['items',0,.45],timeline:['items',0,.45],
+  list:['items',0,.45],funnel:['items',0,.45],magnitude:['items',0,.45],checklist:['items',.6,.55],annotate:['pins',.7,.6],highlight:['phrases',.7,.6]};
+// Props that are displayed; others (cues, files, enums) are not glyph-checked.
+const HIDDEN=new Set(['file','asset','say','land','growSay','drawSay','orientation','sort','mode','align','fit','icon','better']);
+const coverage=JSON.parse(fs.readFileSync(new URL('./assets/fonts/coverage.json',import.meta.url),'utf8')).ranges;
+/** First character the bundled fonts cannot draw, if any. */
+export function missingGlyph(text){for(const ch of String(text)){const cp=ch.codePointAt(0);if(cp<32||/\s/u.test(ch))continue;let lo=0,hi=coverage.length-1,ok=false;while(lo<=hi){const mid=(lo+hi)>>1,[a,b]=coverage[mid];if(cp<a)hi=mid-1;else if(cp>b)lo=mid+1;else{ok=true;break;}}if(!ok)return ch;}return null;}
+function glyphCheck(value,where,fail){
+  if(typeof value==='string'){const ch=missingGlyph(value);if(ch)fail(`"${ch}" (U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0')}) in ${where} is not in the bundled Inter fonts and would render as an empty box. Rephrase or add a font with that script.`);}
+  else if(Array.isArray(value))value.forEach((v,i)=>glyphCheck(v,`${where}[${i}]`,fail));
+  else if(value&&typeof value==='object')for(const [k,v] of Object.entries(value))if(!HIDDEN.has(k))glyphCheck(v,`${where}.${k}`,fail);
+}
+/** Seconds after the scene cue until every counter, bar and fill shows its exact final value. */
+function settleTime(block,props,cue){
+  const last=(items,d)=>Math.max(cue,...items.map(it=>it.at??cue))+d;
+  switch(block){
+    case 'stat':case 'ring':return cue+1.4;
+    case 'kpis':return last(props.items,1.3);
+    case 'delta':return cue+.45+1.3;
+    case 'bars':return cue+(props.data.length-1)*.09+1.1;
+    case 'line':return cue+1.6;
+    case 'waffle':{const rows=Math.ceil(props.total/props.cols);return cue+.35+(rows+props.cols)*.012+1.3;}
+    case 'donut':return cue+1.5;
+    case 'funnel':return last(props.items,.9);
+    case 'magnitude':return last(props.items,.9);
+    default:return cue;
+  }
+}
+
 export function createJob(sb,timing,{draft=false}={}) {
   const errors=[],warnings=[];
   const fail=(s)=>errors.push(s);
@@ -45,8 +80,10 @@ export function createJob(sb,timing,{draft=false}={}) {
   const vertical=timing.height>timing.width;
   const captions=sb.captions===true||(sb.captions??'auto')==='auto'&&vertical;
   if(sb.captions!=null&&![true,false,'auto','off'].includes(sb.captions))fail('captions must be true, false, auto or off.');
-  const backdrop=sb.backdrop??'none';if(!['none','dots','grid'].includes(backdrop))fail('Native backdrop must be none, dots or grid.');
-  const numeric=new Set(['stat','kpis','bars','line','waffle','ring','delta','funnel']);
+  const backdrop=sb.backdrop??'none';if(!BACKDROPS.includes(backdrop))fail(`Native backdrop must be ${BACKDROPS.join(', ')}.`);
+  const frame=1/timing.fps;
+  // Resolve every entrance first: a scene's exit mirrors the next scene's entrance.
+  const transitions=timing.beats.map(b=>{let t=sb.beats[b.index].transition??sb.transition??'fade';if(t==='auto')t=b.index&&timing.beats[b.index-1].chapter!==b.chapter?'rise':'fade';return t;});
   const beats=[];
   const cues=captionCues(timing);
   for(const b of timing.beats) {
@@ -57,32 +94,50 @@ export function createJob(sb,timing,{draft=false}={}) {
       const beatMotion={...motion,...sourceBeat.motion};
       if(!MOTIONS.includes(beatMotion.preset)||!Number.isFinite(beatMotion.intensity)||beatMotion.intensity<0||beatMotion.intensity>1)throw new Error('Invalid beat motion');
       const cue=(value,fallback=0.35)=>{
-        if(value==null)return Math.min(fallback,Math.max(0,b.dur-1/timing.fps));
+        if(value==null)return Math.min(fallback,Math.max(0,b.dur-frame));
         if(typeof value==='number'){if(!Number.isFinite(value)||value<0||value>=b.dur)throw new Error('Cue seconds must lie within the beat');return value;}
         const t=findWord(b.vo?.words??[],String(value));if(t==null)throw new Error(`Spoken cue "${value}" not found`);return Math.max(0,t-b.start);
       };
       const authoredCue=props.land??props.growSay??props.drawSay;
-      const at=cue(authoredCue);
-      if(props.focus)props.focus.at=cue(props.focus.say,at+1.6);
-      if(['icon-grid','flow'].includes(b.block)){
-        const duration={gentle:.55,snappy:.30,spring:.72}[beatMotion.preset];
-        const lastStart=b.dur-1/timing.fps-duration;
+      // Headlines start almost immediately; data scenes leave a beat for the header.
+      const at=cue(authoredCue,HERO_BLOCKS.has(b.block)?0.1:0.35);
+      if(props.focus&&b.block==='bars')props.focus.at=cue(props.focus.say,at+1.6);
+      if(props.focus&&b.block==='annotate')props.focus.at=cue(props.focus.say,at+.4);
+      if(STAGED[b.block]){
+        // Arrivals fit inside the beat: automatic spacing compresses, authored cues never
+        // move, and a cue too late to finish its entrance fails instead of being hidden.
+        const [key,offset,nominal]=STAGED[b.block],items=props[key];
+        const duration=ENTRANCE[beatMotion.preset];
+        const lastStart=b.dur-frame-duration;
         if(lastStart<0)throw new Error(`Beat is too short for its ${duration}s item entrance; extend the beat.`);
-        const key=b.block==='flow'?'nodes':'items',items=props[key];
         if(authoredCue!=null&&at>lastStart+1e-7)throw new Error('Scene cue is too late to complete its item entrances; extend the beat or move the cue.');
-        const latest=Math.max(authoredCue!=null?at:0,lastStart-Math.min(.3,b.dur*.1)),first=authoredCue!=null?at:Math.min(at,latest);
-        const spacing=items.length>1?Math.min(props.stagger,(latest-first)/(items.length-1)):0;
-        props[key]=items.map((it,i)=>{const time=it.say==null?first+i*spacing:cue(it.say);if(time>lastStart+1e-7)throw new Error('Item cue is too late to complete its entrance; extend the beat or move the cue.');return {...it,at:time};});
-      }else if(props.items)props.items=props.items.map((it,i)=>({...it,at:cue(it.say,at+i*0.45)}));
-      if(numeric.has(b.block)&&(!props.source||!sb.sources.length))throw new Error('Numbers need visible props.source and a storyboard.sources entry.');
+        const start=Math.min(at+offset,Math.max(at,lastStart));
+        const latest=Math.max(authoredCue!=null?at:0,lastStart-Math.min(.3,b.dur*.1)),first=authoredCue!=null?start:Math.min(start,latest);
+        const spacing=items.length>1?Math.max(0,Math.min(nominal??props.stagger,(latest-first)/(items.length-1))):0;
+        props[key]=items.map((it,i)=>{const time=it.say==null?first+i*spacing:cue(it.say);if(time>lastStart+1e-7)throw new Error(`Item cue is too late to complete its entrance; extend the beat or move the cue.`);const {say,...rest}=it;return {...rest,at:time};});
+      }
+      if(NUMERIC.has(b.block)){
+        if(!props.source||!sb.sources.length)throw new Error('Numbers need visible props.source and a storyboard.sources entry.');
+        const settle=settleTime(b.block,props,at);
+        if(settle>b.dur-frame+1e-6)(draft?warnings:errors).push(`${b.id}: values finish counting at ${settle.toFixed(2)}s but the beat ends at ${b.dur.toFixed(2)}s, so the final figures would never be shown; extend the beat or cue earlier.`);
+      }
+      glyphCheck(props,`${b.id}.props`,m=>{throw new Error(m);});
       if(b.vo?.estimated){(draft?warnings:errors).push(`${b.id}: narration is estimated; record/import audio or use --draft.`);}
-      if(b.vo&&(b.vo.start<b.start||b.vo.end>b.end+1/timing.fps))throw new Error('Narration crosses beat bounds; remove the forced duration/negative lead.');
+      if(b.vo&&(b.vo.start<b.start||b.vo.end>b.end+frame))throw new Error('Narration crosses beat bounds; remove the forced duration/negative lead.');
       if(b.block==='kinetic'&&!b.vo?.words?.length)throw new Error('kinetic needs narration and word timestamps.');
-      if((b.block==='kinetic'||captions)&&b.vo&&b.vo.wordTiming!=='measured') (draft?warnings:errors).push(`${b.id}: speech-following text requires measured word timestamps; run align or import timed speech.${b.vo.alignmentIssue?' '+b.vo.alignmentIssue:''}`);
-      let transition=sourceBeat.transition??sb.transition??'fade';if(transition==='auto')transition=b.index&&timing.beats[b.index-1].chapter!==b.chapter?'rise':'fade';
+      if((b.block==='kinetic'||captions)&&b.vo){
+        glyphCheck(b.vo.text,`${b.id}.vo (shown as ${b.block==='kinetic'?'kinetic text':'captions'})`,m=>{throw new Error(m);});
+        if(b.vo.wordTiming!=='measured')(draft?warnings:errors).push(`${b.id}: speech-following text requires measured word timestamps; run align or import timed speech.${b.vo.alignmentIssue?' '+b.vo.alignmentIssue:''}`);
+      }
+      const transition=transitions[b.index];
       if(!TRANSITIONS.includes(transition))throw new Error(`Unsupported native transition ${transition}`);
-      beats.push({id:b.id,block:b.block,frames:Math.round(b.end*timing.fps)-Math.round(b.start*timing.fps),start_frame:Math.round(b.start*timing.fps),cue_seconds:at,transition,motion:beatMotion,props,
-        words:(b.vo?.words??[]).map(w=>({text:w.w,start:Math.max(0,w.t0-Math.round(b.start*timing.fps)/timing.fps),end:Math.min(w.t1-Math.round(b.start*timing.fps)/timing.fps,(Math.round(b.end*timing.fps)-Math.round(b.start*timing.fps))/timing.fps)})),
+      const authoredExit=sourceBeat.exit??'auto';
+      if(!EXITS.includes(authoredExit))throw new Error(`exit must be ${EXITS.join(', ')}`);
+      const next=transitions[b.index+1];
+      const exit=authoredExit!=='auto'?authoredExit:next==null?'fade':next==='cut'?'none':next==='rise'?'fade':next;
+      const startFrame=Math.round(b.start*timing.fps),frames=Math.round(b.end*timing.fps)-startFrame;
+      beats.push({id:b.id,block:b.block,frames,start_frame:startFrame,cue_seconds:at,transition,exit,motion:beatMotion,props,
+        words:(b.vo?.words??[]).map(w=>({text:w.w,start:Math.max(0,w.t0-startFrame/timing.fps),end:Math.min(w.t1-startFrame/timing.fps,frames/timing.fps)})),
         captions:cues.filter(c=>c.start>=b.start&&c.start<b.end).map(c=>({start:c.start-b.start,end:Math.min(c.end,b.end)-b.start,text:c.text}))});
     }catch(e){fail(`${b.id}: ${e.message}`);}
   }
@@ -90,6 +145,7 @@ export function createJob(sb,timing,{draft=false}={}) {
   const luminance=hex=>{const rgb=hex.slice(1).match(/../g).map(v=>parseInt(v,16)/255).map(v=>v<=0.04045?v/12.92:((v+0.055)/1.055)**2.4);return rgb[0]*0.2126+rgb[1]*0.7152+rgb[2]*0.0722;};
   const contrast=(a,b)=>{const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
   for(const key of ['ink','muted','accent'])if(contrast(theme[key],theme.bg)<4.5)warnings.push(`Palette ${key} has low text contrast against bg; review small text at delivery size.`);
+  if(contrast(theme.accent2,theme.bg)<3)warnings.push('Palette accent2 has low graphic contrast (< 3:1) against bg; second series and chart segments may be hard to see.');
   const generatedSeconds=timing.beats.filter(b=>b.block==='video'&&sb.assets.some(a=>a.id===b.props?.asset&&!a.file)).reduce((n,b)=>n+b.dur,0);
   if(generatedSeconds>timing.duration*(sb.continuity?.maxGeneratedShare??0.2))warnings.push('Generated footage exceeds the configured runtime share (default 20%); use native graphics where they carry the story.');
   if(beats.some(b=>b.frames<1)||beats.reduce((n,b)=>n+b.frames,0)!==timing.frames)fail('Every beat must span at least one frame and cover the complete timeline.');
@@ -104,7 +160,7 @@ export async function prepareProject(root,{draft=false}={}) {
   const neededMedia=new Set();
   const hashes={};
   const record=file=>{hashes[path.relative(root,file)]=sha256(fs.readFileSync(file));};record(path.join(root,'storyboard.json'));
-  for(const b of result.job.beats)if(['image','video'].includes(b.block)) {
+  for(const b of result.job.beats)if(['image','video','annotate'].includes(b.block)) {
     const prop=b.props,a=prop.asset&&sb.assets.find(a=>a.id===prop.asset);
     if(a&&a.kind!==(b.block==='video'?'clip':'image'))throw new Error(`${b.id}: asset kind does not match the block`);
     const rel=prop.file??(a&&assetSrc(root,a));if(!rel)throw new Error(`${b.id}: asset is missing; import it or run images/clips.`);
@@ -150,14 +206,18 @@ export async function renderProject(root,{draft=false,out,noAudio=false,force=fa
   const token=crypto.randomUUID(),raw=path.join(ctx.dir,`${token}-raw.mp4`),silent=path.join(ctx.dir,`${token}-video.mp4`),audio=path.join(ctx.dir,`${token}-mix.wav`),finished=path.join(ctx.dir,`${token}-final.mp4`);
   const start=performance.now();
   try {
-    await nativeCommand(ctx,'render',['-o',raw]);
-    validateVideo(raw,ctx.job);
-    await ffmpeg(['-y','-i',raw,'-map','0:v:0','-c:v','copy','-an',silent]);
-    const soundCues=ctx.sb.sfx?ctx.job.beats.filter(b=>['stat','kpis','bars','steps','timeline'].includes(b.block)).map(b=>({name:'tick',t:b.start_frame/ctx.job.fps+b.cue_seconds,volume:0.2})):[];
+    // Drafts keep the authored canvas and frame rate but use the fast review encoder.
+    await nativeCommand(ctx,'render',[...(draft?['--draft','--scale','1']:[]),'-o',raw]);
+    // Upstream segment concatenation can end the MP4 edit list one frame early at some
+    // lengths (e.g. 451 frames), so players drop the final frame. Rebuild the timeline
+    // from the packets themselves; frames are copied bit-for-bit.
+    await ffmpeg(['-y','-ignore_editlist','1','-i',raw,'-map','0:v:0','-c:v','copy','-bsf:v','setts=pts=PTS-STARTPTS:dts=DTS-STARTPTS','-an',silent]);
+    validateVideo(silent,ctx.job);
+    const soundCues=ctx.sb.sfx?ctx.job.beats.filter(b=>['stat','kpis','bars','steps','timeline','checklist','donut','magnitude','chapter'].includes(b.block)).map(b=>({name:'tick',t:b.start_frame/ctx.job.fps+b.cue_seconds,volume:0.2})):[];
     const track=noAudio?null:await mix(root,ctx.timing,audio,ctx.sb.mix,soundCues);
     await mux(silent,track,finished);const probe=validateVideo(finished,ctx.job);unchanged(ctx);
     fs.mkdirSync(path.dirname(output),{recursive:true});fs.renameSync(finished,output);
-    const report={...ctx.manifest,width:ctx.job.width,height:ctx.job.height,fps:ctx.job.fps,frames:ctx.job.frames,seconds:(performance.now()-start)/1000,backend:process.platform==='darwin'?'skia-metal':'cpu',audio:!!probe.audio,colorSpace:probe.video.color_space??null,outputSha256:sha256(fs.readFileSync(output)),voiceProviders:[...new Set(ctx.timing.beats.map(b=>b.vo?.provider).filter(Boolean))]};
+    const report={...ctx.manifest,encoder:draft?'draft (x264 veryfast, CRF 23)':'final (x264 medium, CRF 16)',width:ctx.job.width,height:ctx.job.height,fps:ctx.job.fps,frames:ctx.job.frames,seconds:(performance.now()-start)/1000,backend:process.platform==='darwin'?'skia-metal':'cpu',audio:!!probe.audio,colorSpace:probe.video.color_space??null,outputSha256:sha256(fs.readFileSync(output)),voiceProviders:[...new Set(ctx.timing.beats.map(b=>b.vo?.provider).filter(Boolean))]};
     writeJSON(`${output}.json`,report);log.ok(`FFFrames video → ${output}`);return report;
   }finally{for(const f of [raw,silent,audio,finished])fs.rmSync(f,{force:true});}
 }

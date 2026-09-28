@@ -19,14 +19,48 @@
       "weight": 400,
       "opticalSize": 14,
       "tool": "FontTools varLib.instancer",
-      "sha256": "9c8679361c31c51fbd9a93a654e736e6d5e7093a7ed1f572c45a4e63d8837d64"
+      "sha256": "9c8679361c31c51fbd9a93a654e736e6d5e7093a7ed1f572c45a4e63d8837d64",
+      "family": "Inter"
     },
     {
       "file": "Inter-SemiBold.ttf",
       "weight": 600,
       "opticalSize": 14,
       "tool": "FontTools varLib.instancer",
-      "sha256": "36bc8547bfccdc3f2e4ca2e04e04efe790ff2e013936b1b560503520062af6c4"
+      "sha256": "36bc8547bfccdc3f2e4ca2e04e04efe790ff2e013936b1b560503520062af6c4",
+      "family": "Inter"
+    },
+    {
+      "file": "InterDisplay-Light.ttf",
+      "family": "Inter Display",
+      "weight": 300,
+      "opticalSize": 32,
+      "tool": "FontTools 4.60.1 varLib.instancer",
+      "sha256": "a29b2217202caeae2bbb2e6ee7f26aff4fcb9d67d52a01758351de9b249ff53e"
+    },
+    {
+      "file": "InterDisplay-SemiBold.ttf",
+      "family": "Inter Display",
+      "weight": 600,
+      "opticalSize": 32,
+      "tool": "FontTools 4.60.1 varLib.instancer",
+      "sha256": "1668dfc325832b74db13212597f838e1368a19a610a0b0b4a7a74f4278e7f23a"
+    },
+    {
+      "file": "InterDisplay-Bold.ttf",
+      "family": "Inter Display",
+      "weight": 700,
+      "opticalSize": 32,
+      "tool": "FontTools 4.60.1 varLib.instancer",
+      "sha256": "52cec4f8de638753c89cfb8c927eb0ec2c520a84acf2f27386e6c3c64388d7c5"
+    },
+    {
+      "file": "InterDisplay-Figures.ttf",
+      "family": "Inter Display Figures",
+      "weight": 700,
+      "opticalSize": 32,
+      "tool": "FontTools 4.60.1 varLib.instancer",
+      "sha256": "b9f812a3acf0377a2dc98bf5e4c2e5f94d665d5852d836647db3bfaf24895b7b"
     }
   ]
 }

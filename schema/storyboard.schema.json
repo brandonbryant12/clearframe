@@ -62,7 +62,11 @@
             "paper",
             "ink",
             "editorial",
-            "signal"
+            "signal",
+            "midnight",
+            "forest",
+            "ember",
+            "mono"
           ]
         },
         {
@@ -74,7 +78,11 @@
                 "paper",
                 "ink",
                 "editorial",
-                "signal"
+                "signal",
+                "midnight",
+                "forest",
+                "ember",
+                "mono"
               ]
             },
             "bg": {
@@ -94,6 +102,10 @@
               "pattern": "^#[0-9a-fA-F]{6}$"
             },
             "accent": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "accent2": {
               "type": "string",
               "pattern": "^#[0-9a-fA-F]{6}$"
             },
@@ -142,7 +154,8 @@
       "enum": [
         "none",
         "dots",
-        "grid"
+        "grid",
+        "glow"
       ]
     },
     "chrome": {
@@ -342,7 +355,13 @@
               "icon-grid",
               "flow",
               "cycle",
-              "breathing"
+              "breathing",
+              "chapter",
+              "highlight",
+              "donut",
+              "magnitude",
+              "checklist",
+              "annotate"
             ]
           },
           "vo": {
@@ -383,6 +402,16 @@
               "push",
               "zoom",
               "auto"
+            ]
+          },
+          "exit": {
+            "enum": [
+              "auto",
+              "none",
+              "fade",
+              "push",
+              "zoom",
+              "wipe"
             ]
           },
           "motion": {
@@ -445,6 +474,9 @@
                     },
                     "text": {
                       "description": "Main promise"
+                    },
+                    "emphasis": {
+                      "description": "Up to 4 whole-word phrases drawn in the accent color"
                     }
                   }
                 }
@@ -482,6 +514,9 @@
                     },
                     "text": {
                       "description": "Statement"
+                    },
+                    "emphasis": {
+                      "description": "Up to 4 whole-word phrases drawn in the accent color"
                     }
                   }
                 }
@@ -727,6 +762,9 @@
                     },
                     "label": {
                       "description": "Meaning"
+                    },
+                    "icon": {
+                      "description": "Optional icon per unit (pictogram), see icons"
                     }
                   }
                 }
@@ -825,6 +863,9 @@
                     },
                     "change": {
                       "description": "Optional explicit change label"
+                    },
+                    "better": {
+                      "description": "up|down: colors the change positive or negative"
                     }
                   }
                 }
@@ -978,10 +1019,13 @@
                       "description": "Supporting line"
                     },
                     "items": {
-                      "description": "[{label,value}] (2–5)"
+                      "description": "[{label,value,say}] (2–5)"
                     },
                     "format": {
                       "description": "{prefix,suffix,decimals} or units"
+                    },
+                    "rates": {
+                      "description": "Show conversion between stages (default true)"
                     }
                   }
                 }
@@ -1025,6 +1069,9 @@
                     },
                     "role": {
                       "description": "Context"
+                    },
+                    "emphasis": {
+                      "description": "Up to 4 whole-word phrases drawn in the accent color"
                     }
                   }
                 }
@@ -1102,6 +1149,9 @@
                     },
                     "rows": {
                       "description": "[{label,values:[string]}] (2–4)"
+                    },
+                    "highlight": {
+                      "description": "Column index to highlight"
                     }
                   }
                 }
@@ -1185,6 +1235,12 @@
                     },
                     "label": {
                       "description": "Label"
+                    },
+                    "icon": {
+                      "description": "Optional badge icon"
+                    },
+                    "emphasis": {
+                      "description": "Up to 4 whole-word phrases drawn in the accent color"
                     }
                   }
                 }
@@ -1225,6 +1281,9 @@
                     },
                     "action": {
                       "description": "Next step"
+                    },
+                    "emphasis": {
+                      "description": "Up to 4 whole-word phrases drawn in the accent color"
                     }
                   }
                 }
@@ -1271,6 +1330,12 @@
                     },
                     "label": {
                       "description": "Provenance label"
+                    },
+                    "fit": {
+                      "description": "contain (default) or cover"
+                    },
+                    "drift": {
+                      "description": "Slow push-in (true/false)"
                     }
                   }
                 }
@@ -1320,6 +1385,12 @@
                     },
                     "offset": {
                       "description": "Source in point in seconds"
+                    },
+                    "fit": {
+                      "description": "contain (default) or cover"
+                    },
+                    "drift": {
+                      "description": "Slow push-in (true/false)"
                     }
                   }
                 }
@@ -1544,6 +1615,261 @@
                     },
                     "ring": {
                       "description": "Show outer guide ring"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "chapter"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "number": {
+                      "description": "Short marker such as 01 or II (≤ 4 characters)"
+                    },
+                    "text": {
+                      "description": "Alias of title"
+                    },
+                    "emphasis": {
+                      "description": "Up to 4 whole-word phrases drawn in the accent color"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "highlight"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "text": {
+                      "description": "Sentence (≤ 200 characters)"
+                    },
+                    "phrases": {
+                      "description": "[string or {text,say}] (1–4 whole-word parts of text)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "donut"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "segments": {
+                      "description": "[{label,value}] (2–6)"
+                    },
+                    "format": {
+                      "description": "{prefix,suffix,decimals} or unit string"
+                    },
+                    "center": {
+                      "description": "Short caption under the total"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "magnitude"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "items": {
+                      "description": "[{label,value,say}] (2–4, positive)"
+                    },
+                    "format": {
+                      "description": "{prefix,suffix,decimals} or unit string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "checklist"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "items": {
+                      "description": "[string or {text,detail,say}] (2–6)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "annotate"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "asset": {
+                      "description": "Declared image asset id"
+                    },
+                    "file": {
+                      "description": "Local image path"
+                    },
+                    "pins": {
+                      "description": "[{x,y,label,detail,say}] (1–6; x/y 0–1 across the image)"
+                    },
+                    "focus": {
+                      "description": "{x,y,w,h,say} region to spotlight (0–1)"
+                    },
+                    "caption": {
+                      "description": "Visible caption"
+                    },
+                    "label": {
+                      "description": "Provenance label"
                     }
                   }
                 }

@@ -1,47 +1,79 @@
 // The production native vocabulary. Metadata, validation, CLI help and examples share this file.
 import { ICONS } from './icons.mjs';
 export const THEMES = {
-  paper: { bg: '#f5f3ed', surface: '#e9e7df', ink: '#222831', muted: '#616b76', accent: '#315cce', positive: '#17745c', negative: '#bd453c' },
-  ink: { bg: '#101721', surface: '#1d2938', ink: '#f4f4ed', muted: '#a4b2c4', accent: '#76cbb8', positive: '#83d3ac', negative: '#f29a8a' },
-  editorial: { bg: '#f7efe1', surface: '#ebddc6', ink: '#34281f', muted: '#74604e', accent: '#b13e2e', positive: '#477550', negative: '#b13e2e' },
-  signal: { bg: '#edf3f8', surface: '#dce7f1', ink: '#102e46', muted: '#507089', accent: '#006dae', positive: '#187659', negative: '#bf493b' },
+  paper: { bg: '#f5f3ed', surface: '#e9e7df', ink: '#222831', muted: '#616b76', accent: '#315cce', accent2: '#c2641f', positive: '#17745c', negative: '#bd453c' },
+  ink: { bg: '#101721', surface: '#1d2938', ink: '#f4f4ed', muted: '#a4b2c4', accent: '#76cbb8', accent2: '#f0b86e', positive: '#83d3ac', negative: '#f29a8a' },
+  editorial: { bg: '#f7efe1', surface: '#ebddc6', ink: '#34281f', muted: '#74604e', accent: '#b13e2e', accent2: '#2f6b6f', positive: '#477550', negative: '#b13e2e' },
+  signal: { bg: '#edf3f8', surface: '#dce7f1', ink: '#102e46', muted: '#507089', accent: '#006dae', accent2: '#c75a12', positive: '#187659', negative: '#bf493b' },
+  midnight: { bg: '#0c1024', surface: '#1a2040', ink: '#eef0ff', muted: '#a3abd0', accent: '#9aa5ff', accent2: '#ffb86b', positive: '#6fd6a8', negative: '#ff8f85' },
+  forest: { bg: '#0f1d17', surface: '#1c3128', ink: '#eef5ee', muted: '#a6bcae', accent: '#a3dc7f', accent2: '#f2c35b', positive: '#a3dc7f', negative: '#f39b84' },
+  ember: { bg: '#1b1311', surface: '#2c201b', ink: '#fbefe6', muted: '#c9ae9e', accent: '#ff8a57', accent2: '#ffd27a', positive: '#8fd3aa', negative: '#ff8f85' },
+  mono: { bg: '#fafafa', surface: '#ececec', ink: '#111111', muted: '#595959', accent: '#d12f1f', accent2: '#111111', positive: '#1d7a4f', negative: '#d12f1f' },
+};
+/** One-line character of each palette for `themes` and docs. */
+export const THEME_NOTES = {
+  paper: 'Warm off-white, ink blue accent. Calm reports and explainers.',
+  ink: 'Deep slate with mint and amber. Night-time, technical and reflective films.',
+  editorial: 'Newsprint cream with brick red and teal. Stories, essays and culture.',
+  signal: 'Cool paper with strong blue. Product, data and operational updates.',
+  midnight: 'Indigo night with periwinkle and apricot. Launches, science and big ideas.',
+  forest: 'Deep green with lime and gold. Nature, food, travel and sustainability.',
+  ember: 'Charred brown with coral and saffron. Warm personal stories and culture.',
+  mono: 'Black on white with a single red. Stark data, manifestos and myth-busting.',
 };
 const common = { title: 'Scene headline', kicker: 'Short eyebrow', source: 'Visible attribution', land: 'Spoken word or local seconds', support: 'Supporting line' };
+const emphasis = { emphasis: 'Up to 4 whole-word phrases drawn in the accent color' };
 const sampleSource = 'Illustrative sample data · replace before publishing';
 const b = (name, category, summary, props, example, extra = {}) => ({ name, category, summary, props: { ...common, ...props }, example: { ...example, source: example.source ?? sampleSource }, tail: 1.5, ...extra });
 export const BLOCKS = [
-  b('title', 'story', 'Open with a clear promise and a strong typographic hierarchy.', { text: 'Main promise' }, { kicker: 'Field notes', text: 'Make the next step clear', support: 'One idea, supported by evidence.' }),
-  b('statement', 'story', 'A single editorial statement with a supporting line.', { text: 'Statement' }, { text: 'Busy is not the same as effective.', support: 'Measure the wait, not just the workload.' }),
+  b('title', 'story', 'Open with a clear promise: display type rises line by line under an accent bar.', { text: 'Main promise', ...emphasis }, { kicker: 'Field notes', text: 'Make the next step clear', support: 'One idea, supported by evidence.' }),
+  b('statement', 'story', 'A single editorial statement with optional accent phrases and a supporting line.', { text: 'Statement', ...emphasis }, { text: 'Busy is not the same as effective.', emphasis: ['effective'], support: 'Measure the wait, not just the workload.' }),
   b('stat', 'numbers', 'A hero number with units, counted from a truthful starting value.', { value: 'Finite number', from: 'Starting value', prefix: 'Prefix', suffix: 'Units', decimals: '0–8', label: 'Meaning', context: 'Context' }, { value: 4.2, suffix: ' days', label: 'Median first response', context: 'From request to first answer.' }),
   b('kpis', 'numbers', 'Two to four comparable metrics with staggered entrances.', { items: '[{value,label,prefix,suffix,decimals,from,say}]' }, { title: 'The quarter in three numbers', items: [{ value: 12400, label: 'Requests' }, { value: 4.2, suffix: ' days', label: 'First response' }, { value: 91, suffix: '%', label: 'Satisfaction' }] }),
   b('bars', 'charts', 'Accurate zero-based comparison with a tunable focus.', { data: '[{label,value}] (2–8)', max: 'Positive scale maximum', format: '{prefix,suffix,decimals} or unit string', orientation: 'auto|horizontal|vertical', sort: 'none|desc', growSay: 'Growth cue', focus: '{label|index,say,dim,dur,note}' }, { title: 'Where the hours went', data: [{ label: 'Triage', value: 12 }, { label: 'Routing', value: 24 }, { label: 'Review', value: 8 }], format: ' h', focus: { label: 'Routing', dim: 0.55, note: 'Start here' } }),
   b('line', 'charts', 'A progressive time-series reveal on an explicit scale.', { series: '[number] or [{x,y}]', labels: '[string]', min: 'Scale minimum', max: 'Scale maximum', format: '{prefix,suffix,decimals} or units', drawSay: 'Reveal cue' }, { title: 'A trend worth watching', series: [12, 15, 14, 18, 23, 27], labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'], min: 0, max: 30, format: ' k' }),
-  b('waffle', 'charts', 'Countable units for a share or probability.', { value: 'Highlighted units', total: 'Total units (1–100)', cols: 'Columns', label: 'Meaning' }, { title: 'Seven in ten', value: 70, total: 100, cols: 10, label: 'A forecast, not a guarantee' }),
+  b('waffle', 'charts', 'Countable units for a share or probability; tiles fill one by one, optionally as icons.', { value: 'Highlighted units', total: 'Total units (1–100)', cols: 'Columns', label: 'Meaning', icon: 'Optional icon per unit (pictogram), see icons' }, { title: 'Seven in ten', value: 70, total: 100, cols: 10, label: 'A forecast, not a guarantee' }),
   b('ring', 'charts', 'A single proportion with an exact counter and units.', { value: 'Numerator', max: 'Denominator', decimals: '0–8', label: 'Meaning' }, { title: 'Inside the target window', value: 82, max: 100, label: 'of incidents resolved' }),
-  b('delta', 'numbers', 'Before and after with a correctly defined change.', { from: '{value,label}', to: '{value,label}', prefix: '', suffix: '', decimals: '0–8', change: 'Optional explicit change label' }, { title: 'A faster first response', from: { value: 4.2, label: 'Before' }, to: { value: 1.8, label: 'After' }, suffix: ' days' }),
+  b('delta', 'numbers', 'Before and after: the new value counts from the old one; the change chip can carry meaning.', { from: '{value,label}', to: '{value,label}', prefix: '', suffix: '', decimals: '0–8', change: 'Optional explicit change label', better: 'up|down: colors the change positive or negative' }, { title: 'A faster first response', from: { value: 4.2, label: 'Before' }, to: { value: 1.8, label: 'After' }, suffix: ' days', better: 'down' }),
   b('compare', 'decisions', 'Two approaches with matched criteria and a verdict.', { left: '{title,items:[string]}', right: '{title,items:[string]}', verdict: 'Decision' }, { title: 'Choose the right trade-off', left: { title: 'One large release', items: ['More coordination', 'Long feedback loop'] }, right: { title: 'Smaller releases', items: ['Frequent feedback', 'Lower change risk'] }, verdict: 'Prefer smaller, reversible steps.' }),
   b('steps', 'diagrams', 'A connected process revealed in sequence.', { items: '[{title,detail,say}] (2–5)' }, { title: 'From request to resolution', items: [{ title: 'Capture', detail: 'State the need' }, { title: 'Route', detail: 'Find the owner' }, { title: 'Resolve', detail: 'Confirm the outcome' }] }),
   b('timeline', 'diagrams', 'Events on an ordered rail with time labels.', { items: '[{label,title,detail,say}] (2–5)' }, { title: 'How the response unfolded', items: [{ label: '09:10', title: 'Detected', detail: 'Alert received' }, { label: '09:18', title: 'Contained', detail: 'Traffic rerouted' }, { label: '09:42', title: 'Recovered', detail: 'Service verified' }] }),
-  b('funnel', 'charts', 'Decreasing stages on one comparable scale.', { items: '[{label,value}] (2–5)', format: '{prefix,suffix,decimals} or units' }, { title: 'Find the drop-off', items: [{ label: 'Visited', value: 1000 }, { label: 'Started', value: 620 }, { label: 'Finished', value: 440 }] }),
-  b('quote', 'story', 'A sourced human voice with restrained emphasis.', { text: 'Quotation', author: 'Attribution', role: 'Context' }, { text: 'The best handoff is the one nobody has to chase.', author: 'Illustrative interview', role: 'Fictional quotation for this template' }),
+  b('funnel', 'charts', 'Decreasing stages on one comparable scale with derived step-to-step rates.', { items: '[{label,value,say}] (2–5)', format: '{prefix,suffix,decimals} or units', rates: 'Show conversion between stages (default true)' }, { title: 'Find the drop-off', items: [{ label: 'Visited', value: 1000 }, { label: 'Started', value: 620 }, { label: 'Finished', value: 440 }] }),
+  b('quote', 'story', 'A sourced human voice in light display type with an oversized mark.', { text: 'Quotation', author: 'Attribution', role: 'Context', ...emphasis }, { text: 'The best handoff is the one nobody has to chase.', author: 'Illustrative interview', role: 'Fictional quotation for this template' }),
   b('list', 'text', 'A short staged checklist or set of takeaways.', { items: '[string or {text,say}] (2–5)' }, { title: 'Three things to remember', items: ['Name the owner', 'Make the next step clear', 'Close the loop'] }),
-  b('matrix', 'decisions', 'A compact comparison grid for two to four criteria.', { columns: '[string] (2–3)', rows: '[{label,values:[string]}] (2–4)' }, { title: 'Evaluate the whole workflow', columns: ['Option A', 'Option B'], rows: [{ label: 'Setup', values: ['Low', 'Medium'] }, { label: 'Iteration', values: ['Medium', 'Low'] }, { label: 'Control', values: ['Limited', 'High'] }] }),
+  b('matrix', 'decisions', 'A compact comparison grid for two to four criteria; one column can be highlighted.', { columns: '[string] (2–3)', rows: '[{label,values:[string]}] (2–4)', highlight: 'Column index to highlight' }, { title: 'Evaluate the whole workflow', columns: ['Option A', 'Option B'], rows: [{ label: 'Setup', values: ['Low', 'Medium'] }, { label: 'Iteration', values: ['Medium', 'Low'] }, { label: 'Control', values: ['Limited', 'High'] }] }),
   b('equation', 'diagrams', 'Build a simple relationship, then show its implication.', { expression: 'Formula', result: 'Result', explanation: 'Meaning' }, { title: 'Leave room for variation', expression: 'Capacity − demand', result: '= headroom', explanation: 'Headroom absorbs the unexpected.' }),
-  b('callout', 'text', 'A framed correction, caveat or key insight.', { text: 'Insight', label: 'Label' }, { label: 'The caveat', text: 'An average can hide a long tail.', support: 'Look at the distribution before choosing a target.' }),
-  b('endcard', 'story', 'A deliberate ending with an actionable next step.', { text: 'Final takeaway', action: 'Next step' }, { title: 'Make the next step smaller.', support: 'Start with one handoff this week.', action: 'Choose an owner. Measure the wait.' }),
-  b('image', 'media', 'A real or generated plate inside the film’s graphic language.', { asset: 'Declared image asset id', file: 'Local image path', caption: 'Visible caption', label: 'Provenance label' }, { file: 'assets/demo.png', caption: 'A consistent palette connects the scenes.', label: 'Illustrative artwork' }),
-  b('video', 'media', 'A short footage insert with native titles and a shared soundtrack.', { asset: 'Declared clip asset id', file: 'Local video path', caption: 'Visible caption', label: 'Provenance label', offset: 'Source in point in seconds' }, { file: 'assets/demo.mp4', caption: 'One continuous visual language', label: 'Illustrative footage', offset: 0 }),
+  b('callout', 'text', 'A framed correction, caveat or key insight with an optional icon badge.', { text: 'Insight', label: 'Label', icon: 'Optional badge icon', ...emphasis }, { label: 'The caveat', icon: 'alert', text: 'An average can hide a long tail.', emphasis: ['long tail'], support: 'Look at the distribution before choosing a target.' }),
+  b('endcard', 'story', 'A deliberate ending; the next step becomes a call-to-action pill.', { text: 'Final takeaway', action: 'Next step', ...emphasis }, { title: 'Make the next step smaller.', support: 'Start with one handoff this week.', action: 'Choose an owner. Measure the wait.' }),
+  b('image', 'media', 'A real or generated plate at its own aspect ratio, in a rounded mask.', { asset: 'Declared image asset id', file: 'Local image path', caption: 'Visible caption', label: 'Provenance label', fit: 'contain (default) or cover', drift: 'Slow push-in (true/false)' }, { file: 'assets/demo.png', caption: 'A consistent palette connects the scenes.', label: 'Illustrative artwork' }),
+  b('video', 'media', 'A short footage insert with native titles and a shared soundtrack.', { asset: 'Declared clip asset id', file: 'Local video path', caption: 'Visible caption', label: 'Provenance label', offset: 'Source in point in seconds', fit: 'contain (default) or cover', drift: 'Slow push-in (true/false)' }, { file: 'assets/demo.mp4', caption: 'One continuous visual language', label: 'Illustrative footage', offset: 0 }),
   b('kinetic', 'speech', 'Speech-following words: highlight a phrase, reveal words, or show one at a time.', { mode: 'highlight|reveal|word', align: 'left|center', maxWords: 'Words per phrase (1–10)', maxGap:'Start a new phrase after this silence, 0–5 seconds (default 0.6)', maxDuration:'Maximum phrase span, 0.5–15 seconds (default 4); never split a timed word' }, { mode: 'highlight', align: 'left', maxWords: 6, source: '' }, { vo: 'Make every word land exactly when you hear it.' }),
   b('icon-grid', 'graphics', 'A paced composition of licensed vector icons, labels and optional details.', { items: '[{icon,label,detail?,say?}] (1–8)', columns: '1–4; automatic if omitted', stagger: 'Delay between arrivals, 0–2 seconds' }, { title: 'Pack for a curious afternoon', items: [{icon:'book-open',label:'Read',detail:'Bring a field guide'},{icon:'camera',label:'Notice',detail:'Record a small detail'},{icon:'compass',label:'Explore',detail:'Choose a new path'},{icon:'pencil',label:'Reflect',detail:'Keep a short note'}] }),
   b('flow', 'diagrams', 'Draw connections as a process unfolds; each node can follow a spoken cue.', { nodes: '[{icon?,label,detail?,say?}] (2–6)', orientation: 'auto|horizontal|vertical; portrait stays vertical', stagger: 'Delay between arrivals, 0–2 seconds' }, { title: 'From observation to explanation', nodes: [{icon:'leaf',label:'Notice',detail:'Start with a question'},{icon:'microscope',label:'Test',detail:'Change one thing'},{icon:'lightbulb',label:'Explain',detail:'Compare the evidence'}] }),
   b('cycle', 'diagrams', 'A repeating process with a moving marker on a continuous loop.', { nodes: '[{icon?,label}] (3–6)', period: 'Seconds per loop, 2–60', clockwise: 'true or false' }, { title: 'A creative practice', nodes: [{icon:'lightbulb',label:'Imagine'},{icon:'pencil',label:'Make'},{icon:'camera',label:'Observe'},{icon:'brush',label:'Refine'}], period: 8 }),
   b('breathing', 'motion', 'An expanding and contracting ring with explicit, editable phase durations.', { phases: '[{label,seconds,scale:expand|hold|contract}] (2–6)', minScale: 'Minimum relative radius, 0.2–1', maxScale: 'Maximum relative radius, 0.2–1, greater than minScale', ring: 'Show outer guide ring' }, { title: 'Take a quiet moment', phases: [{label:'Breathe in',seconds:3,scale:'expand'},{label:'Breathe out',seconds:4,scale:'contract'}], minScale:0.55,maxScale:1,ring:true,source:'Illustrative pacing · adjust to your comfort' }),
+  b('chapter', 'story', 'A section opener: an oversized number, a rule that sweeps and the chapter title.', { number: 'Short marker such as 01 or II (≤ 4 characters)', text: 'Alias of title', ...emphasis }, { number: '01', title: 'Where the time goes', support: 'Three places a request waits.' }),
+  b('highlight', 'text', 'A sentence whose key phrases get a marker sweep, each on its own cue.', { text: 'Sentence (≤ 200 characters)', phrases: '[string or {text,say}] (1–4 whole-word parts of text)' }, { text: 'An average can hide a long tail of slow requests.', phrases: ['long tail'], support: 'Look at the distribution, not just the middle.' }),
+  b('donut', 'charts', 'Part-to-whole: segments sweep in order; the legend states each value and share.', { segments: '[{label,value}] (2–6)', format: '{prefix,suffix,decimals} or unit string', center: 'Short caption under the total' }, { title: 'Where a week of support goes', segments: [{ label: 'Answering', value: 18 }, { label: 'Routing', value: 12 }, { label: 'Waiting on others', value: 7 }, { label: 'Follow-up', value: 3 }], format: ' h', center: 'hours per week' }),
+  b('magnitude', 'charts', 'Area-true squares for quantities that differ by orders of magnitude.', { items: '[{label,value,say}] (2–4, positive)', format: '{prefix,suffix,decimals} or unit string' }, { title: 'The same question, three scales', items: [{ label: 'A team', value: 12 }, { label: 'A company', value: 1200 }, { label: 'A city', value: 90000 }], format: ' people' }),
+  b('checklist', 'text', 'Items appear unchecked, then each box fills and ticks on its cue.', { items: '[string or {text,detail,say}] (2–6)' }, { title: 'Before you publish', items: [{ text: 'Replace every sample figure' }, { text: 'Add a visible source' }, { text: 'Listen with the sound on' }] }),
+  b('annotate', 'media', 'A screenshot or photo with numbered pins, a matching legend and an optional focus region.', { asset: 'Declared image asset id', file: 'Local image path', pins: '[{x,y,label,detail,say}] (1–6; x/y 0–1 across the image)', focus: '{x,y,w,h,say} region to spotlight (0–1)', caption: 'Visible caption', label: 'Provenance label' }, { title: 'Read the dashboard in order', file: 'assets/demo.png', pins: [{ x: 0.29, y: 0.21, label: 'Start with the total', detail: 'The number everything adds up to' }, { x: 0.51, y: 0.52, label: 'Then the outlier', detail: 'The week that needs a decision' }], focus: { x: 0.19, y: 0.36, w: 0.51, h: 0.56 }, caption: 'Illustrative wireframe · replace with an approved screenshot' }),
 ];
 export const blockByName = name => BLOCKS.find(b => b.name === name);
 export const MOTIONS = ['gentle', 'snappy', 'spring'];
 export const TRANSITIONS = ['cut', 'fade', 'rise', 'wipe', 'push', 'zoom'];
+export const BACKDROPS = ['none', 'dots', 'grid', 'glow'];
 export const CANVASES = [[1920,1080],[1080,1920],[1080,1080],[1080,1350],[640,360]];
 export const FRAME_RATES = [24,25,30,50,60];
+const words = value => String(value ?? '').split(/\s+/).filter(Boolean).join(' ');
+const wordChar = c => c != null && /[\p{L}\p{N}]/u.test(c);
+/** Index of a whole-word phrase in whitespace-normalised text, or -1 (mirrors the renderer). */
+export function findPhrase(text, phrase) {
+  const t = words(text), q = words(phrase);
+  if (!q) return -1;
+  for (let i = t.indexOf(q); i >= 0; i = t.indexOf(q, i + 1)) if (!wordChar(t[i - 1]) && !wordChar(t[i + q.length])) return i;
+  return -1;
+}
 export const precision = value => { const [n,e='0'] = String(value).split(/e/i); return Math.min(8, Math.max(0, (n.split('.')[1]?.length ?? 0) - Number(e))); };
 
 export function palette(theme = 'paper') {
@@ -65,7 +97,16 @@ export function normalizeProps(name, input = {}, { vertical = false } = {}) {
   if (!p || typeof p !== 'object' || Array.isArray(p)) fail('props must be an object');
   for (const key of Object.keys(p)) if (!(key in meta.props)) fail(`unsupported prop ${key}`);
   const text = (v, field, max = 160) => { if (v != null && (typeof v !== 'string' || v.length > max)) fail(`${field} must be text up to ${max} characters`); };
-  for (const key of ['title','kicker','source','support','text','label','context','caption','author','role','verdict','expression','result','explanation','action']) text(p[key],key, key === 'text' ? 240 : key === 'title' ? 90 : 160);
+  for (const key of ['title','kicker','source','support','text','label','context','caption','author','role','verdict','expression','result','explanation','action']) text(p[key],key, key === 'text' ? (name === 'highlight' ? 200 : 240) : key === 'title' ? 90 : 160);
+  text(p.number,'number',4);text(p.center,'center',30);
+  const icon = (value, field) => { if (value != null && !ICONS.includes(value)) fail(`${field}: unknown icon ${value}; run clearframe icons`); };
+  const unit = (value, field) => { if (!Number.isFinite(value) || value < 0 || value > 1) fail(`${field} must be a number from 0 to 1`); };
+  if (name === 'chapter' && p.text != null) { if (p.title != null) fail('use title or text, not both'); p.title = p.text; delete p.text; }
+  if (p.emphasis != null) {
+    if (!Array.isArray(p.emphasis) || p.emphasis.length < 1 || p.emphasis.length > 4) fail('emphasis needs 1–4 phrases');
+    const body = p.text ?? p.title;
+    p.emphasis.forEach(e => { text(e,'emphasis',60); if (findPhrase(body, e) < 0) fail(`emphasis "${e}" must be whole words from the text`); });
+  }
   const keys=(obj,allowed,field)=>{if(!obj||typeof obj!=='object'||Array.isArray(obj))fail(`${field} must be an object`);for(const k of Object.keys(obj))if(!allowed.includes(k))fail(`unsupported ${field}.${k}`);};
   const num = (n,key) => { if (!Number.isFinite(n)) fail(`${key} must be a finite number`); };
   const numeric = (obj,key) => { num(obj.value,`${key}.value`); if (obj.from != null) num(obj.from,`${key}.from`); obj.decimals ??= precision(obj.value); if (!Number.isInteger(obj.decimals) || obj.decimals < 0 || obj.decimals > 8) fail(`${key}.decimals must be 0–8`); text(obj.prefix,`${key}.prefix`,12); text(obj.suffix,`${key}.suffix`,16); };
@@ -115,10 +156,41 @@ export function normalizeProps(name, input = {}, { vertical = false } = {}) {
     if(!Number.isFinite(p.minScale)||!Number.isFinite(p.maxScale)||p.minScale<.2||p.maxScale>1||p.minScale>=p.maxScale)fail('scales require 0.2 ≤ minScale < maxScale ≤ 1');
     if(typeof p.ring!=='boolean')fail('ring must be boolean');
   }
-  if(name==='image'||name==='video'){if(!p.asset&&!p.file)fail('asset or file is required');if(p.offset!=null&&(!Number.isFinite(p.offset)||p.offset<0))fail('offset must be nonnegative');}
+  if(name==='image'||name==='video'||name==='annotate'){if(!p.asset&&!p.file)fail('asset or file is required');if(p.offset!=null&&(!Number.isFinite(p.offset)||p.offset<0))fail('offset must be nonnegative');}
+  if(name==='image'||name==='video'){if(p.fit!=null&&!['contain','cover'].includes(p.fit))fail('fit must be contain or cover');if(p.drift!=null&&typeof p.drift!=='boolean')fail('drift must be true or false');}
+  if(name==='callout'||name==='waffle')icon(p.icon,'icon');
+  if(name==='delta'&&p.better!=null&&!['up','down'].includes(p.better))fail('better must be up or down');
+  if(name==='matrix'&&p.highlight!=null&&(!Number.isInteger(p.highlight)||p.highlight<0||p.highlight>=p.columns.length))fail('highlight must be a column index');
+  if(name==='funnel'){p.rates ??= true;if(typeof p.rates!=='boolean')fail('rates must be true or false');}
+  if(name==='highlight'){
+    list(p.phrases,'phrases',1,4);
+    p.phrases=p.phrases.map((ph,i)=>{const o=typeof ph==='string'?{text:ph}:ph;keys(o,['text','say'],`phrases[${i}]`);text(o.text,'phrase',60);if(findPhrase(p.text,o.text)<0)fail(`phrase "${o.text}" must be whole words from the text`);return o;});
+  }
+  if(name==='donut'){
+    list(p.segments,'segments',2,6);p.segments.forEach((seg,i)=>{keys(seg,['label','value'],`segments[${i}]`);text(seg.label,'label',40);num(seg.value,'value');if(seg.value<0)fail('segment values must be nonnegative');});
+    if(!(p.segments.reduce((a,seg)=>a+seg.value,0)>0))fail('segments need a positive total');
+    format();p.format.decimals ??= Math.max(...p.segments.map(seg=>precision(seg.value)));
+  }
+  if(name==='magnitude'){
+    list(p.items,'items',2,4);p.items.forEach((it,i)=>{keys(it,['label','value','say'],`items[${i}]`);text(it.label,'label',40);num(it.value,'value');if(!(it.value>0))fail('magnitude values must be positive; area cannot show zero or negative amounts');});
+    format();p.format.decimals ??= Math.max(...p.items.map(it=>precision(it.value)));
+  }
+  if(name==='checklist'){
+    list(p.items,'items',2,6);p.items=p.items.map(it=>typeof it==='string'?{text:it}:it);
+    p.items.forEach((it,i)=>{keys(it,['text','detail','say'],`items[${i}]`);text(it.text,'text',65);text(it.detail,'detail',85);});
+  }
+  if(name==='annotate'){
+    list(p.pins,'pins',1,6);p.pins.forEach((pin,i)=>{keys(pin,['x','y','label','detail','say'],`pins[${i}]`);unit(pin.x,`pins[${i}].x`);unit(pin.y,`pins[${i}].y`);text(pin.label,'label',40);text(pin.detail,'detail',80);});
+    if(p.focus!=null){const f=p.focus;keys(f,['x','y','w','h','say'],'focus');for(const k of ['x','y','w','h'])unit(f[k],`focus.${k}`);if(!(f.w>0&&f.h>0)||f.x+f.w>1+1e-9||f.y+f.h>1+1e-9)fail('focus must be a nonempty region inside the image');}
+  }
   if(p.decimals!=null&&(!Number.isInteger(p.decimals)||p.decimals<0||p.decimals>8))fail('decimals must be 0–8');
   const required=(v,key)=>{if(typeof v!=='string'||!v.trim())fail(`${key} is required text`);};
-  if(['title','statement','quote','callout'].includes(name))required(p.text??p.title,'text/title');
+  if(['title','statement','quote','callout','highlight'].includes(name))required(p.text??p.title,'text/title');
+  if(name==='chapter')required(p.title,'title');
+  if(name==='checklist')p.items.forEach(d=>required(d.text,'items.text'));
+  if(name==='annotate')p.pins.forEach(d=>required(d.label,'pins.label'));
+  if(name==='donut')p.segments.forEach(d=>required(d.label,'segments.label'));
+  if(name==='magnitude')p.items.forEach(d=>required(d.label,'items.label'));
   if(name==='endcard')required(p.text??p.title,'text/title');
   if(name==='stat')required(p.label,'label');
   if(name==='equation')required(p.expression,'expression');

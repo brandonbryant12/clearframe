@@ -12,6 +12,8 @@ struct AppArgs {
 }
 
 fn run_canvas<const W:usize,const H:usize,const RATE:usize>(film:Film,mut args:cli::Cli<AppArgs>) -> Result<ExitCode,Box<dyn std::error::Error>> {
+    // Measure text with the exact font files the renderer loads from the prepared job.
+    clearframe_native::text::use_font_dir(std::path::Path::new(&args.app.media));
     let directory=MediaDirectory::read_folder(&args.app.media)?;
     let media=directory.process_media_source()?;
     let video=NativeFilm::<W,H,RATE>(film);
@@ -27,7 +29,8 @@ fn run_canvas<const W:usize,const H:usize,const RATE:usize>(film:Film,mut args:c
     let width=size.width;
     let height=size.height;
     if width%2!=0 || height%2!=0 || width<2 || height<2 {return Err("scaled H.264 canvas must have positive even dimensions".into());}
-    let codec_params=if draft{[("crf","30"),("preset","ultrafast"),("threads","1")]}else{[("crf","16"),("preset","medium"),("threads","1")]};
+    // Drafts are review copies: a fast preset at a quality that still shows type edges cleanly.
+    let codec_params=if draft{[("crf","23"),("preset","veryfast"),("threads","1")]}else{[("crf","16"),("preset","medium"),("threads","1")]};
     let command=cli::new(&video,RenderOptions{
         media:Some(&media),load_system_fonts:false,default_font:"Inter",
         video_encoder_options:EncoderOptions{

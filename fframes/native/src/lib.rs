@@ -3,14 +3,18 @@ use fframes::{AudioMap, Duration, FFramesContext, Frame, Scene, Scenes, Svgr, Vi
 use serde::Deserialize;
 use serde_json::Value;
 
-mod scenes;
+mod design;
 mod icons;
+mod motion;
+mod scenes;
+pub mod text;
 pub use scenes::{format_number, zero_scale};
 
 pub const BLOCKS: &[&str] = &[
     "title", "statement", "stat", "kpis", "bars", "line", "waffle", "ring", "delta",
     "compare", "steps", "timeline", "funnel", "quote", "list", "matrix", "equation",
     "callout", "endcard", "image", "video", "kinetic", "icon-grid", "flow", "cycle", "breathing",
+    "chapter", "highlight", "donut", "magnitude", "checklist", "annotate",
 ];
 
 #[derive(Debug, Clone, Deserialize)]
@@ -50,6 +54,9 @@ pub struct Beat {
     pub cue_seconds: f32,
     #[serde(default = "cut")]
     pub transition: String,
+    /// How the scene leaves: none, fade, push, zoom or wipe (set from the next entrance).
+    #[serde(default = "none")]
+    pub exit: String,
     pub props: Value,
     #[serde(default)]
     pub captions: Vec<Caption>,
@@ -61,6 +68,7 @@ pub struct Beat {
     pub environment: Environment,
 }
 fn cut() -> String { "cut".into() }
+fn none() -> String { "none".into() }
 fn paper() -> Value { Value::String("paper".into()) }
 
 #[derive(Debug, Deserialize)]
@@ -104,6 +112,7 @@ impl Film {
                 || !beat.cue_seconds.is_finite() || beat.cue_seconds < 0.0
                 || !beat.props.is_object()
                 || !["cut","fade","rise","wipe","push","zoom"].contains(&beat.transition.as_str())
+                || motion::ExitKind::parse(&beat.exit).is_none()
             { return Err(format!("invalid native scene {}", beat.id).into()); }
             let duration = beat.frames as f32 / film.fps as f32;
             for cues in [&beat.captions, &beat.words] {
@@ -156,8 +165,8 @@ impl<const W: usize, const H: usize, const RATE: usize> Video for NativeFilm<W,H
     }
     fn render_frame<'a>(&'a self, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Svgr<'a> {
         let env = &self.0.beats[0].environment;
-        let palette = scenes::Palette::from_theme(&self.0.theme);
-        let background = scenes::backdrop(&self.0.backdrop, env.width, env.height, &palette);
+        let palette = design::Palette::from_theme(&self.0.theme);
+        let background = design::backdrop(&self.0.backdrop, env.width, env.height, &palette, frame.global_index as f32 / RATE as f32);
         let rail = if self.0.chrome { frame.global_index as f32 / self.0.frames.max(1) as f32 * env.width } else { 0.0 };
         let progress = if rail>0.0 { fframes::svgr!(<rect x="0" y="0" height="4" width={rail} fill={palette.accent.clone()} />) } else { fframes::svgr!(<g />) };
         let chrome = if self.0.chrome {
@@ -272,8 +281,9 @@ mod tests {
                 if *block == "breathing" {
                     assert!(first.contains("Expand")); assert!(later.contains("Contract"));
                 } else {
+                    // Items not yet cued are omitted, not drawn invisibly; all have arrived later.
                     for entry in props.get("items").or_else(|| props.get("nodes")).unwrap().as_array().unwrap() {
-                        assert!(first.contains(entry["label"].as_str().unwrap()));
+                        assert!(later.contains(entry["label"].as_str().unwrap()), "{block} {width}x{height} omitted a label");
                     }
                     assert!(first.contains("path"), "{block} must contain native icon geometry");
                 }

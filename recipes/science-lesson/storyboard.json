@@ -100,6 +100,7 @@
       "vo": "A prediction and an observation are different things.",
       "props": {
         "label": "Think like a scientist",
+        "icon": "alert",
         "text": "Separate what you expected from what you saw.",
         "support": "Use the actual observations in your final film.",
         "source": "Illustrative sample data · replace before publishing"

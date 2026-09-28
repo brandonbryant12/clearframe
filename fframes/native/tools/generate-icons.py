@@ -43,7 +43,7 @@ for entry in MANIFEST["files"]:
         paths.append(path)
     assert 1 <= len(paths) <= 30
     icons[filename.removesuffix(".svg")] = paths
-assert len(icons) == 24
+assert len(icons) == sum(entry["file"].endswith(".svg") for entry in MANIFEST["files"])
 
 header = """// SPDX-License-Identifier: MIT
 // Tabler icon geometry: Copyright (c) 2020-2026 Paweł Kuna.

@@ -5,7 +5,9 @@ import os from 'node:os';
 import path from 'node:path';
 import { BLOCKS, normalizeProps, palette, precision } from '../fframes/catalog.mjs';
 import { PLAYBOOKS, scaffold, storyboardFor } from '../fframes/playbooks.mjs';
-import { createJob } from '../fframes/production.mjs';
+import { createJob, missingGlyph } from '../fframes/production.mjs';
+import { THEMES, findPhrase } from '../fframes/catalog.mjs';
+import { wireframePNG } from '../fframes/wireframe.mjs';
 import { computeTiming, findWord, toSRT } from '../engine/lib/timing.mjs';
 import { loadStoryboard, validateStoryboard } from '../engine/lib/project.mjs';
 import { pcmToWav, writeJSON, hashOf } from '../engine/lib/util.mjs';
@@ -19,14 +21,14 @@ import { reviewSamples, reviewProject } from '../engine/lib/review.mjs';
 import crypto from 'node:crypto';
 
 function project(t,sb){const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cf-native-'));t.after(()=>fs.rmSync(dir,{recursive:true,force:true}));writeJSON(path.join(dir,'storyboard.json'),sb);return dir;}
-test('all 26 catalog examples validate in landscape and vertical without mutating author input',()=>{
-  assert.equal(BLOCKS.length,26);
+test('all 32 catalog examples validate in landscape and vertical without mutating author input',()=>{
+  assert.equal(BLOCKS.length,32);
   for(const b of BLOCKS)for(const vertical of [false,true]){const before=JSON.stringify(b.example);normalizeProps(b.name,b.example,{vertical});assert.equal(JSON.stringify(b.example),before);}
 });
-test('nineteen distinct playbooks compile to native jobs without paid assets, slide chrome or custom code',t=>{
-  assert.equal(PLAYBOOKS.length,19);const arcs=new Set();
+test('twenty-four distinct playbooks compile to native jobs without paid assets, slide chrome or custom code',t=>{
+  assert.equal(PLAYBOOKS.length,24);const arcs=new Set();
   for(const p of PLAYBOOKS){const root=project(t,storyboardFor(p.id)),sb=loadStoryboard(root),result=createJob(sb,computeTiming(root),{draft:true});assert.deepEqual(result.errors,[],p.id);assert.ok(result.job.beats.every(b=>b.frames>0));assert.equal(result.job.chrome,false);arcs.add(result.job.beats.map(b=>b.block).join(','));assert.equal(sb.assets.length,0);}
-  assert.equal(arcs.size,19);
+  assert.equal(arcs.size,24);
 });
 test('graphic contracts reject unknown assets and invalid phase clocks while preserving cue controls',t=>{
   assert.equal(normalizeProps('flow',{nodes:[{label:'Start'},{label:'End'}],orientation:'horizontal'},{vertical:true}).orientation,'vertical');
@@ -38,7 +40,7 @@ test('graphic contracts reject unknown assets and invalid phase clocks while pre
   const sb=storyboardFor('science-lesson');sb.beats=[{id:'flow',block:'flow',duration:5,props:{nodes:[{label:'Start',say:.25},{label:'End',say:2}]}}];const root=project(t,sb),result=createJob(loadStoryboard(root),computeTiming(root));assert.deepEqual(result.errors,[]);assert.deepEqual(result.job.beats[0].props.nodes.map(n=>n.at),[.25,2]);
 });
 test('all bundled icon bytes match the MIT source manifest',()=>{
-  assert.equal(ICONS.length,24);assert.equal(ICON_SOURCE.license,'MIT');
+  assert.equal(ICONS.length,95);assert.equal(ICON_SOURCE.license,'MIT');
   const dir=new URL('../fframes/assets/icons/tabler/',import.meta.url),manifest=JSON.parse(fs.readFileSync(new URL('manifest.json',dir)));
   assert.match(fs.readFileSync(new URL('LICENSE',dir),'utf8'),/^MIT License/);
   for(const f of manifest.files)assert.equal(crypto.createHash('sha256').update(fs.readFileSync(new URL(f.file,dir))).digest('hex'),f.sha256,f.file);
@@ -155,4 +157,71 @@ test('upload refuses a redirecting or foreign resumable destination',async t=>{
   const dir=project(t,storyboardFor('speech-story')),file=path.join(dir,'take.wav');fs.writeFileSync(file,pcmToWav(Buffer.alloc(48000)));
   t.mock.method(globalThis,'fetch',async()=>new Response('{}',{headers:{'x-goog-upload-url':'https://unrelated.test/upload'}}));
   await assert.rejects(uploadAudio(file,{key:'test'}),/Invalid resumable/);
+});
+
+const native=file=>fs.readFileSync(new URL(`../fframes/native/src/${file}`,import.meta.url),'utf8');
+const job=(t,beats,extra={})=>{const sb={...storyboardFor('concept-explainer'),...extra,beats};const root=project(t,sb);return createJob(loadStoryboard(root),computeTiming(root));};
+
+test('the renderer and catalog agree on every block name and palette color',()=>{
+  const rust=[...native('lib.rs').match(/pub const BLOCKS: &\[&str\] = &\[([\s\S]*?)\];/)[1].matchAll(/"([a-z-]+)"/g)].map(m=>m[1]);
+  assert.deepEqual([...rust].sort(),BLOCKS.map(b=>b.name).sort());
+  const presets=Object.fromEntries([...native('design.rs').matchAll(/\("([a-z]+)", \[([^\]]+)\]\)/g)].map(m=>[m[1],[...m[2].matchAll(/"(#[0-9a-f]{6})"/g)].map(x=>x[1])]));
+  assert.deepEqual(Object.keys(presets),Object.keys(THEMES));
+  for(const [name,colors] of Object.entries(THEMES))assert.deepEqual(presets[name],['bg','surface','ink','muted','accent','accent2','positive','negative'].map(k=>colors[k]),name);
+});
+test('emphasis and highlight phrases must be whole words of the displayed text',()=>{
+  assert.equal(findPhrase('An average can hide a long tail.','long tail'),22);assert.equal(findPhrase('scattered','cat'),-1);assert.equal(findPhrase('a  long\ntail','long tail'),2);
+  assert.throws(()=>normalizeProps('statement',{text:'Busy is not effective',emphasis:['effect']}),/whole words/);
+  assert.throws(()=>normalizeProps('highlight',{text:'A long tail',phrases:['short']}),/whole words/);
+  assert.deepEqual(normalizeProps('highlight',{text:'A long tail',phrases:['long tail']}).phrases,[{text:'long tail'}]);
+  assert.throws(()=>normalizeProps('statement',{text:'x',emphasis:[]}),/1–4/);
+});
+test('new blocks reject values that cannot be drawn honestly',()=>{
+  assert.throws(()=>normalizeProps('donut',{segments:[{label:'A',value:0},{label:'B',value:0}]}),/positive total/);
+  assert.throws(()=>normalizeProps('donut',{segments:[{label:'A',value:-1},{label:'B',value:3}]}),/nonnegative/);
+  assert.throws(()=>normalizeProps('magnitude',{items:[{label:'A',value:0},{label:'B',value:3}]}),/positive/);
+  assert.throws(()=>normalizeProps('annotate',{file:'a.png',pins:[{x:1.2,y:.5,label:'A'}]}),/0 to 1/);
+  assert.throws(()=>normalizeProps('annotate',{file:'a.png',pins:[{x:.5,y:.5,label:'A'}],focus:{x:.7,y:0,w:.5,h:.5}}),/inside/);
+  assert.throws(()=>normalizeProps('callout',{text:'x',icon:'nope'}),/unknown icon/);
+  assert.throws(()=>normalizeProps('delta',{from:{value:1},to:{value:2},better:'sideways'}),/up or down/);
+  assert.throws(()=>normalizeProps('matrix',{columns:['A','B'],rows:[{label:'r',values:['1','2']},{label:'s',values:['3','4']}],highlight:2}),/column index/);
+  assert.deepEqual(normalizeProps('checklist',{items:['One','Two']}).items,[{text:'One'},{text:'Two'}]);
+  assert.equal(normalizeProps('chapter',{text:'Part one'}).title,'Part one');
+});
+test('each scene exits the way the next one enters, and the film ends on a fade',t=>{
+  const beats=['fade','cut','push','zoom','wipe','rise'].map((transition,i)=>({id:`b${i}`,block:'statement',duration:2,transition,props:{text:`Scene ${i}`}}));
+  const first=job(t,beats);assert.deepEqual(first.errors,[]);
+  assert.deepEqual(first.job.beats.map(b=>b.exit),['none','push','zoom','wipe','fade','fade']);
+  beats[5].exit='none';beats[0].exit='wipe';assert.deepEqual(job(t,beats).job.beats.map(b=>b.exit),['wipe','push','zoom','wipe','fade','none']);
+  beats[1].exit='dissolve';assert.match(job(t,beats).errors.join(),/exit must be/);
+});
+test('a beat that ends before its numbers finish counting fails, but drafts only warn',t=>{
+  const sb={...storyboardFor('concept-explainer'),beats:[{id:'short',block:'stat',duration:1.2,props:{value:4.2,suffix:' days',label:'Wait',source:'Sample'}}]};
+  const root=project(t,sb);let r=createJob(loadStoryboard(root),computeTiming(root));assert.match(r.errors.join(),/finish counting/);
+  r=createJob(loadStoryboard(root),computeTiming(root),{draft:true});assert.deepEqual(r.errors,[]);assert.match(r.warnings.join(),/finish counting/);
+  sb.beats[0].duration=2.5;const ok=project(t,sb);assert.deepEqual(createJob(loadStoryboard(ok),computeTiming(ok)).errors,[]);
+});
+test('text the bundled fonts cannot draw fails with the character and its location',t=>{
+  assert.equal(missingGlyph('Café — 42% → “ok” Ωμέγα Привет'),null);assert.equal(missingGlyph('Hello 東京'),'東');
+  const {errors}=job(t,[{id:'cjk',block:'title',duration:3,props:{text:'駅はどこですか'}}]);
+  assert.match(errors.join(),/U\+99C5.*cjk\.props\.text/);
+  assert.deepEqual(job(t,[{id:'ok',block:'title',duration:3,props:{text:'Plain text',kicker:'Überblick'}}]).errors,[]);
+});
+test('staged items of every sequence block fit inside their beat',t=>{
+  const {job:j,errors}=job(t,[{id:'list',block:'checklist',duration:2.4,props:{items:['One','Two','Three','Four','Five','Six']}}]);
+  assert.deepEqual(errors,[]);const items=j.beats[0].props.items;
+  assert.ok(items.every(it=>it.at+.55<=2.4-1/30+1e-9),'every check completes before the cut');assert.ok(items.every((it,i)=>!i||it.at>items[i-1].at));
+  assert.ok(items.every(it=>!('say' in it)),'spoken cue words are resolved, not passed to the renderer');
+});
+test('bundled font instances and their tabular figures match recorded provenance',()=>{
+  const dir=new URL('../fframes/assets/fonts/',import.meta.url),provenance=JSON.parse(fs.readFileSync(new URL('provenance.json',dir)));
+  const files=[...provenance.files,...provenance.staticInstances];assert.ok(provenance.staticInstances.some(f=>f.family==='Inter Display Figures'));
+  for(const f of files)assert.equal(crypto.createHash('sha256').update(fs.readFileSync(new URL(f.file,dir))).digest('hex'),f.sha256,f.file);
+  const coverage=JSON.parse(fs.readFileSync(new URL('coverage.json',dir)));assert.deepEqual(coverage.fonts,provenance.staticInstances.map(f=>f.file));
+});
+test('placeholder screenshots are deterministic PNGs and scaffold with their playbook',t=>{
+  const a=wireframePNG(THEMES.signal),b=wireframePNG(THEMES.signal);assert.ok(a.equals(b));assert.equal(a.subarray(1,4).toString(),'PNG');
+  assert.notDeepEqual(wireframePNG(THEMES.ink),a);
+  const dir=path.join(fs.mkdtempSync(path.join(os.tmpdir(),'cf-scaffold-')),'walk');t.after(()=>fs.rmSync(path.dirname(dir),{recursive:true,force:true}));
+  scaffold(dir,{playbook:'screen-walkthrough'});assert.ok(fs.readFileSync(path.join(dir,'assets/screen.png')).subarray(1,4).toString()==='PNG');
 });

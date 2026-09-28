@@ -2,8 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { BLOCKS, blockByName, palette } from './catalog.mjs';
 import { writeJSON, ffmpeg } from '../engine/lib/util.mjs';
+import { wireframePNG } from './wireframe.mjs';
 
-const beat = (block, vo, props = {}) => ({ id: block, block, vo, props: { ...structuredClone(blockByName(block).example), ...props } });
+// Example emphasis belongs to the example's wording; drop it when the text is replaced.
+const beat = (block, vo, props = {}) => {
+  const base = structuredClone(blockByName(block).example);
+  if (('text' in props || 'title' in props) && !('emphasis' in props)) delete base.emphasis;
+  return { id: block, block, vo, props: { ...base, ...props } };
+};
 const end = beat('endcard','Choose one next step, and make its owner clear.');
 const p = (id, title, audience, inputs, beats, options={}) => ({id,title,audience,inputs,beats,...options});
 export const PLAYBOOKS = [
@@ -102,11 +108,42 @@ export const PLAYBOOKS = [
     beat('title','Take a moment at your own pace.',{text:'A little room to pause',support:'Follow the visual only if the pace feels comfortable.'}),
     {id:'breathing',block:'breathing',duration:28,props:{...structuredClone(blockByName('breathing').example),title:'Find your own rhythm',source:'Optional visual pacing · no health claim'}},
     beat('endcard','Return when you are ready.',{text:'Continue at your own pace.',support:'A small pause can simply be a pause.',action:''})],{theme:'ink',motion:'gentle',note:'Phase durations are editable. This is a visual pacing exercise, not a therapeutic protocol or a promised health outcome.'}),
+  p('data-story','Tell a story with a few trustworthy numbers','A general audience meeting the numbers for the first time','Three to five sourced figures, their dates and denominators',[
+    beat('chapter','First, the scale of the problem.',{number:'01',title:'How much time a request really takes',support:'An illustrative week, measured end to end.'}),
+    beat('stat','A typical request waits more than four days for its first answer.'),
+    beat('magnitude','One team, one company and one city ask the same question at very different scales.'),
+    beat('donut','Most of that time goes to answering and routing, not the work itself.'),
+    beat('highlight','An average can hide a long tail of slow requests.'),
+    beat('endcard','Measure the wait before you change the process.',{title:'Start with the wait.',support:'One number, measured the same way every week.',action:'Pick your first metric'})],{theme:'midnight',backdrop:'glow'}),
+  p('screen-walkthrough','Walk through a screen in the order people should read it','New users of a product or report','An approved screenshot, the reading order and one outcome per step',[
+    beat('title','Here is how to read the weekly dashboard in under a minute.',{text:'Read the dashboard in order',support:'Three stops, one decision.'}),
+    beat('annotate','Start with the total, then look at the week that stands out.',{title:'Two stops before any decision',file:'assets/screen.png',label:'Illustrative wireframe'}),
+    beat('checklist','Check the total, find the outlier, and decide who follows up.',{title:'Your weekly routine',items:[{text:'Read the total'},{text:'Find the outlier week'},{text:'Name one owner for follow-up'}]}),
+    beat('endcard','Use the same order every week.',{text:'Same screen. Same order.',support:'Consistency makes the changes stand out.',action:'Open this week’s dashboard'})],{theme:'signal',note:'assets/screen.png is a generated, text-free wireframe. Replace it with an approved screenshot and move the pins (x/y from 0 to 1 across the image) onto the real elements.'}),
+  p('checklist-guide','Help someone get ready, one item at a time','Anyone preparing for a task or trip','A tested checklist, the reason for each item and one safety or quality note',[
+    beat('title','Before a long walk, a short checklist saves a lot of trouble.',{text:'Ready for a long walk',support:'An illustrative packing list; adapt it to your route.'}),
+    beat('checklist','Water, a map, a layer for the weather and a charged phone.',{title:'Pack the essentials',items:[{text:'Water for the whole route'},{text:'A map that works offline'},{text:'A layer for the weather'},{text:'A charged phone'}]}),
+    beat('icon-grid','Then think about the conditions you will actually meet.',{title:'Check the conditions',items:[{icon:'sun',label:'Daylight',detail:'Know when it ends'},{icon:'cloud-rain',label:'Weather',detail:'Check the forecast'},{icon:'map-pin',label:'Route',detail:'Share it with someone'}]}),
+    beat('callout','Tell someone where you are going and when you expect to return.',{label:'One more thing',icon:'user-check',text:'Share your plan before you leave.',emphasis:['Share your plan']}),
+    beat('endcard','Pack the night before so the morning is simple.',{text:'Pack the night before.',support:'A calm start makes a better walk.',action:'Save this checklist'})],{theme:'forest',backdrop:'glow'}),
+  p('year-in-review','Look back on a year with a clear through-line','A team, community or family','Verified yearly figures, one trend, one quote and what comes next',[
+    beat('chapter','Here is what the year looked like.',{number:'2026',title:'A year in review',support:'Illustrative figures to replace with your own.'}),
+    beat('kpis','More requests arrived, and each one was answered faster.'),
+    beat('line','The trend climbed steadily through the second half.'),
+    beat('donut','Most of the time went to the work that mattered most.'),
+    beat('quote','The best handoff is the one nobody has to chase.'),
+    beat('endcard','Next year, keep what worked and change one thing.',{text:'Keep what worked.',support:'Change one thing, and measure it.',action:'Plan the first quarter'})],{theme:'ember',backdrop:'glow'}),
+  p('scale-explainer','Make a very large number feel real','Curious viewers facing an abstract figure','One large figure, a trustworthy comparison and a human-scale unit',[
+    beat('statement','Big numbers are hard to picture until you compare them.',{text:'Big numbers need a comparison.',emphasis:['comparison']}),
+    beat('magnitude','Seen as areas, the difference between these groups is easy to feel.'),
+    beat('waffle','Out of every hundred people in this illustrative group, seventy take part.',{title:'Seventy in every hundred',icon:'user',value:70,total:100,cols:10,label:'An illustrative share, drawn one person at a time'}),
+    beat('highlight','A comparison turns an abstract number into a picture you can hold.',{text:'A comparison turns an abstract number into a picture.',phrases:['a picture']}),
+    beat('endcard','Choose a comparison your audience already knows.',{text:'Compare it to something familiar.',support:'Areas, people and everyday objects work well.',action:'Find your comparison'})],{theme:'mono'}),
 ];
 
 export function storyboardFor(id,{title,theme,vertical}={}) {
   const book=PLAYBOOKS.find(p=>p.id===id);if(!book)throw new Error(`Unknown playbook ${id}`);
-  const sb={version:2,title:title??book.title,logline:book.title,format:{preset:vertical?'vertical':book.format??'landscape',fps:30},theme:theme??book.theme??'paper',motion:{preset:book.motion??'gentle',intensity:0.65},transition:'fade',backdrop:'none',chrome:false,captions:book.captions??false,music:false,sources:[{id:'sample',title:'Hypothetical sample data and fictional quotations — replace before publishing'}],continuity:{maxGeneratedShare:0.2,treatment:'Restrained editorial graphics, generous space, no generated text',camera:'Locked or a slow push',lighting:'Soft, diffuse',motion:'Slow left-to-right movement'},beats:structuredClone(book.beats)};
+  const sb={version:2,title:title??book.title,logline:book.title,format:{preset:vertical?'vertical':book.format??'landscape',fps:30},theme:theme??book.theme??'paper',motion:{preset:book.motion??'gentle',intensity:0.65},transition:'fade',backdrop:book.backdrop??'none',chrome:false,captions:book.captions??false,music:false,sources:[{id:'sample',title:'Hypothetical sample data and fictional quotations — replace before publishing'}],continuity:{maxGeneratedShare:0.2,treatment:'Restrained editorial graphics, generous space, no generated text',camera:'Locked or a slow push',lighting:'Soft, diffuse',motion:'Slow left-to-right movement'},beats:structuredClone(book.beats)};
   const ids=new Map();for(const b of sb.beats){const n=(ids.get(b.id)??0)+1;ids.set(b.id,n);if(n>1)b.id+=`-${n}`;}
   palette(sb.theme);return sb;
 }
@@ -114,15 +151,18 @@ export function scaffold(dir,options={}) {
   if(fs.existsSync(dir)&&fs.readdirSync(dir).length)throw new Error(`${dir} is not empty`);
   const id=options.playbook??options.recipe??'concept-explainer',sb=storyboardFor(id,options),book=PLAYBOOKS.find(p=>p.id===id);
   fs.mkdirSync(dir,{recursive:true});writeJSON(path.join(dir,'storyboard.json'),sb);
+  // Placeholder screenshots are generated locally: text-free, palette-matched and clearly illustrative.
+  if(sb.beats.some(b=>b.props?.file==='assets/screen.png')){fs.mkdirSync(path.join(dir,'assets'),{recursive:true});fs.writeFileSync(path.join(dir,'assets/screen.png'),wireframePNG(palette(sb.theme)));}
   fs.writeFileSync(path.join(dir,'BRIEF.md'),`# ${sb.title}\n\nPlaybook: ${id}\nAudience: ${book.audience}\nRequired inputs: ${book.inputs}\n\n${book.note??''}\n\nReplace all sample claims and sources. Choose a palette and motion intensity in storyboard.json. The playbook is a starting structure: add, remove or reorder native blocks to serve the story.\n`);
   return sb;
 }
+const GALLERY_SECONDS={kinetic:6,breathing:8,cycle:8,highlight:5,donut:5,magnitude:5,checklist:5,annotate:6,kpis:5,waffle:5,delta:5};
 export async function writeGallery(dir,{vertical=false,theme='paper',only}={}) {
   if(fs.existsSync(path.join(dir,'storyboard.json')))throw new Error('Gallery destination already contains a storyboard; choose a fresh directory.');
   const colors=palette(theme);fs.mkdirSync(path.join(dir,'assets'),{recursive:true});
   await ffmpeg(['-y','-f','lavfi','-i',`color=c=${colors.surface}:s=960x540:r=30:d=4`,'-vf',`drawbox=x=100:y=120:w=240:h=240:color=${colors.accent}:t=fill`,'-an','-c:v','libx264','-threads','1','-pix_fmt','yuv420p',path.join(dir,'assets/demo.mp4')]);
-  await ffmpeg(['-y','-i',path.join(dir,'assets/demo.mp4'),'-frames:v','1','-threads','1',path.join(dir,'assets/demo.png')]);
+  fs.writeFileSync(path.join(dir,'assets/demo.png'),wireframePNG(colors));
   const sb=storyboardFor('concept-explainer',{theme,vertical});sb.title='Native building blocks';
-  sb.beats=BLOCKS.filter(b=>!only||only.includes(b.name)).map(b=>({id:b.name,block:b.name,duration:b.name==='kinetic'?6:b.name==='breathing'||b.name==='cycle'?8:4,...(b.vo?{vo:b.vo}:{}),props:{...structuredClone(b.example),...(b.name==='image'?{file:'assets/demo.png'}:{})}}));
+  sb.beats=BLOCKS.filter(b=>!only||only.includes(b.name)).map(b=>({id:b.name,block:b.name,duration:GALLERY_SECONDS[b.name]??4,...(b.vo?{vo:b.vo}:{}),props:{...structuredClone(b.example),...(['image','annotate'].includes(b.name)?{file:'assets/demo.png'}:{})}}));
   writeJSON(path.join(dir,'storyboard.json'),sb);return sb;
 }

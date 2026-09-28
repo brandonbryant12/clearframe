@@ -75,6 +75,7 @@
       "vo": "Measure the tail as well as the center.",
       "props": {
         "label": "The correction",
+        "icon": "alert",
         "text": "Averages need context.",
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"

@@ -15,3 +15,6 @@ archive/browser/templates/*/assets/
 archive/browser/recipes/*/assets/
 archive/comparison/examples/paired/assets/vo/
 archive/comparison/examples/paired/assets/music/
+
+# Generated placeholder screenshot for the screen-walkthrough recipe (text-free wireframe).
+!recipes/screen-walkthrough/assets/

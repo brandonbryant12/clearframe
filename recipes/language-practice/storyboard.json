@@ -58,6 +58,7 @@
       "vo": "Pause the video and try the phrase yourself.",
       "props": {
         "label": "Your turn",
+        "icon": "alert",
         "text": "Say the phrase in your own voice.",
         "support": "Replay the recording and compare.",
         "source": "Illustrative sample data · replace before publishing"

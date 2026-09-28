@@ -47,6 +47,9 @@
       "vo": "A request stalls when the next owner is unclear.",
       "props": {
         "text": "Busy is not the same as effective.",
+        "emphasis": [
+          "effective"
+        ],
         "support": "Measure the wait, not just the workload.",
         "source": "Illustrative sample data · replace before publishing"
       }

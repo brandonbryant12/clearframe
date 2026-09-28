@@ -72,7 +72,11 @@
       "vo": "An average can hide the moments when demand spikes.",
       "props": {
         "label": "The caveat",
+        "icon": "alert",
         "text": "An average can hide a long tail.",
+        "emphasis": [
+          "long tail"
+        ],
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"
       }

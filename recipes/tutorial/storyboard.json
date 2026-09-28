@@ -84,6 +84,7 @@
       "vo": "A result is useful only when you can reproduce it.",
       "props": {
         "label": "The caveat",
+        "icon": "alert",
         "text": "Record the conditions, not just the outcome.",
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"
