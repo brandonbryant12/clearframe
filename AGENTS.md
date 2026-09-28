@@ -5,7 +5,8 @@ This repository is **ClearFrame**, a harness for making calm, precise, professio
 ## Start here
 
 1. Read `skills/clearframe/SKILL.md`, the director's workflow. It routes you to the other skills.
-2. Load the others as you need them:
+2. For visuals, check `skills/clearframe-library/SKILL.md` **first**: 33 ready-made blocks, used from `storyboard.json` with no code, plus recipes. Look at `docs/media/blocks.jpg`.
+3. Load the others as you need them:
    - `skills/clearframe-script/SKILL.md`: narration
    - `skills/clearframe-motion/SKILL.md`: visual doctrine and anti-slop
    - `skills/clearframe-dataviz/SKILL.md`: numbers and charts
@@ -17,7 +18,11 @@ This repository is **ClearFrame**, a harness for making calm, precise, professio
 
 ```bash
 npm install                                   # once (Node ≥ 20, ffmpeg on PATH)
-node engine/cli.mjs new <dir> --template explainer|vertical
+node engine/cli.mjs doctor                    # verify ffmpeg, Chrome, fonts, icons, draft voice
+node engine/cli.mjs recipes                   # block-only storyboards to start from
+node engine/cli.mjs new <dir> --recipe quarterly-update   # or --template explainer|vertical (custom scenes)
+node engine/cli.mjs blocks [name]             # block catalog: props + an example beat
+node engine/cli.mjs icons <query>             # Lucide icon names
 node engine/cli.mjs voice <dir> --draft       # free timing; drop --draft for Gemini TTS
 node engine/cli.mjs music <dir> --draft       # free placeholder; drop --draft for Lyria
 node engine/cli.mjs sheet <dir>               # then READ <dir>/build/sheet.png
@@ -34,11 +39,13 @@ npm test
 - **Never generate information.** Image and video models make textures and plates only, never text, numbers, charts, logos or real people.
 - **Spend deliberately.** Run `plan` first and respect `storyboard.budget`. Don't use `GEMINI_API_KEY` unless the user wants final-quality generation.
 - **Determinism.** Every tween goes on the master timeline `tl`. Use no `Math.random`, `Date.now` or timers. Never tween a property that a `CF.onFrame` function also writes.
+- **Blocks before code.** Use a library block whenever one fits. Write custom scenes only for bespoke moments (fork a block, or `CF.mount` blocks inside a scene).
 - **Parallelize scenes.** If you can spawn subagents, give each one scene module plus `storyboard.json`, `STYLE.md` and the engine skill.
 
 ## Repo map
 
-- `engine/`: CLI (`cli.mjs`), Node libs (timing, server, render, audio, inspect, generate), browser runtime (`runtime/cf.js`, `cf-kit.js`, `cf.css`)
+- `engine/`: CLI (`cli.mjs`), Node libs (timing, server, render, audio, sfx, inspect, generate, catalog, doctor), browser runtime (`runtime/cf.js`, `cf-kit.js`, `cf-kit-plus.js`, `cf.css`, `default.html`) and the block library (`runtime/blocks/`)
+- `recipes/`: complete block-only storyboards
 - `skills/`: Agent Skills (`SKILL.md` + scripts). Also installable as a Claude Code plugin.
 - `examples/`, `templates/`: complete projects
 - `schema/storyboard.schema.json`: the storyboard schema

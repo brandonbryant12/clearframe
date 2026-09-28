@@ -37,7 +37,7 @@ export async function openComposition(browser, url, { width, height, scale = 1 }
   await page.waitForFunction('window.__CF_READY === true || !!window.__CF_ERROR', { timeout: 120_000 });
   const err = await page.evaluate('window.__CF_ERROR || null');
   if (err) throw new Error(`Composition failed to build:\n${err}`);
-  const info = await page.evaluate(() => ({ duration: __CF.duration, fps: __CF.fps, width: __CF.width, height: __CF.height, frames: __CF.frames, warnings: __CF.warnings }));
+  const info = await page.evaluate(() => ({ duration: __CF.duration, fps: __CF.fps, width: __CF.width, height: __CF.height, frames: __CF.frames, warnings: __CF.warnings, cues: __CF.cues ?? [] }));
   const cdp = await page.createCDPSession();
   return { page, cdp, info, issues };
 }

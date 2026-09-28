@@ -172,7 +172,7 @@
   /** Slow push / drift across an interval — no frame should be perfectly still for long. */
   K.drift = (target, from, to, { scale = 1.03, x = 0, y = 0, rotate = 0 } = {}) => {
     const a = T(from), b = T(to);
-    tl().fromTo(many(target), { scale: 1, x: 0, y: 0, rotate: 0 }, { scale, x: x * u(), y: y * u(), rotate, duration: Math.max(0.01, b - a), ease: 'none', immediateRender: false }, a);
+    tl().fromTo(many(target), { scale: 1, x: 0, y: 0, rotate: 0 }, { scale, x: x * u(), y: y * u(), rotate, duration: Math.max(0.01, b - a), ease: 'none', immediateRender: false, data: 'cf-ambient' }, a);
   };
 
   /**
@@ -184,7 +184,7 @@
     const A = one(from), B = one(to), t = T(at);
     const W = parseFloat(cssVar('--w')) || 1920;
     if (A) A.dataset.out = String(Math.max(parseFloat(A.dataset.out ?? 0), dur));
-    const o = { duration: dur, ease, immediateRender: false };
+    const o = { duration: dur, ease, immediateRender: false, data: 'cf-transition' };
     switch (kind) {
       case 'fade':
         A && tl().fromTo(A, { opacity: 1 }, { opacity: 0, ...o }, t);
@@ -359,7 +359,7 @@
    * Honest defaults: y-axis includes zero unless you pass min; monotone curve never overshoots data.
    */
   K.lineChart = (target, { data, width, height, pad, min, max, color = 'var(--accent)', strokeWidth = 5, area = true, grid = true,
-    yTicks = 4, yFormat = (v) => fmtNum(v), xLabels, smooth = true, tip = true, tipFormat } = {}) => {
+    yTicks = 4, yFormat = (v) => fmtNum(v), xLabels, smooth = true, tip = true, tipFormat, dash } = {}) => {
     const host = one(target);
     const W = width ?? host.offsetWidth, H = height ?? host.offsetHeight;
     const P = { top: 30, right: 150, bottom: 56, left: 90, ...(pad ?? {}) };
@@ -400,8 +400,13 @@
     const areaPath = area ? svg('path', { d: `${d} L${xy.at(-1).x},${sy(lo)} L${xy[0].x},${sy(lo)} Z`, fill: `url(#${gradId})`, 'clip-path': `url(#${clipId})` }, root) : null;
     const line = svg('path', { d, fill: 'none', stroke: color, 'stroke-width': strokeWidth * u(), 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, root);
     const len = line.getTotalLength();
-    line.style.strokeDasharray = `${len} ${len}`;
-    line.style.strokeDashoffset = len;
+    if (dash) { // dashed series reveal through the clip (a dash pattern and a draw-on can't share stroke-dasharray)
+      line.setAttribute('stroke-dasharray', dash);
+      line.setAttribute('clip-path', `url(#${clipId})`);
+    } else {
+      line.style.strokeDasharray = `${len} ${len}`;
+      line.style.strokeDashoffset = len;
+    }
 
     const tipOuter = svg('g', {}, root); // GSAP fades this; onFrame drives tipG (never tween what onFrame writes)
     const tipG = svg('g', { opacity: 0 }, tipOuter);
@@ -417,7 +422,7 @@
     CF.onFrame(() => {
       if (proxy.p === lastP) return;
       lastP = proxy.p;
-      line.style.strokeDashoffset = len * (1 - proxy.p);
+      if (!dash) line.style.strokeDashoffset = len * (1 - proxy.p);
       const pt = line.getPointAtLength(len * proxy.p);
       clipRect.setAttribute('width', pt.x);
       if (tip) {
@@ -479,13 +484,17 @@
     host.style.display = 'flex';
     host.style.flexDirection = vertical ? 'row' : 'column';
     host.style.alignItems = vertical ? 'flex-end' : 'stretch';
+    host.style.justifyContent = vertical ? 'flex-start' : 'center';
     host.style.gap = `${gap * u()}px`;
     const fs = labelSize ?? 30 * u();
+    const narrow = !vertical && host.offsetWidth < 1200 * u(); // e.g. 9:16 — put labels above the bars
+    const barH = vertical ? 0 : Math.max(fs * 1.4, Math.min(fs * 3, (host.offsetHeight / Math.max(1, data.length)) * (narrow ? 0.38 : 0.5)));
     const rows = data.map((d, i) => {
       const row = document.createElement('div');
       Object.assign(row.style, vertical
         ? { flex: '1', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'stretch', gap: `${12 * u()}px` }
-        : { display: 'grid', gridTemplateColumns: `minmax(${220 * u()}px, auto) 1fr`, alignItems: 'center', gap: `${24 * u()}px` });
+        : narrow ? { display: 'flex', flexDirection: 'column', gap: `${10 * u()}px` }
+          : { display: 'grid', gridTemplateColumns: `minmax(${220 * u()}px, auto) 1fr`, alignItems: 'center', gap: `${24 * u()}px` });
       const isHi = highlight === i || highlight === d.label;
       const value = document.createElement('div');
       value.className = 'cf-num';
@@ -494,7 +503,7 @@
       const barColor = d.color ?? (isHi ? accent : color);
       Object.assign(bar.style, vertical
         ? { height: `${(d.value / hi) * 78}%`, background: barColor, borderRadius: `${6 * u()}px ${6 * u()}px 0 0`, transformOrigin: '50% 100%' }
-        : { height: `${fs * 1.6}px`, width: `${(d.value / hi) * 100}%`, background: barColor, borderRadius: `0 ${6 * u()}px ${6 * u()}px 0`, transformOrigin: '0 50%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' });
+        : { height: `${barH}px`, width: `${(d.value / hi) * 100}%`, background: barColor, borderRadius: `0 ${6 * u()}px ${6 * u()}px 0`, transformOrigin: '0 50%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' });
       const label = document.createElement('div');
       label.className = 'cf-label';
       label.textContent = d.label;

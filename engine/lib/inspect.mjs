@@ -81,6 +81,33 @@ export async function sheet(root, { per = 3, thumb = 480, out, times } = {}) {
   }, { scale: 1 });
 }
 
+/** Catalog grid: one frame per beat (at `pos` of the beat), labelled, `cols` across. */
+export async function gridSheet(root, { cols = 4, pos = 0.88, thumb = 440, out } = {}) {
+  return withPage(root, async ({ page, cdp, timing, browser }) => {
+    const scale = thumb / timing.width;
+    const cells = [];
+    for (const b of timing.beats) {
+      const shot = { format: 'jpeg', quality: 82, clip: { x: 0, y: 0, width: timing.width, height: timing.height, scale } };
+      const img = await captureAt(page, cdp, b.start + b.dur * pos, { width: timing.width, height: timing.height, shot });
+      cells.push({ id: b.id, src: `data:image/jpeg;base64,${img.toString('base64')}` });
+    }
+    const esc = (s) => String(s ?? '').replace(/[&<>]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[ch]);
+    const html = `<!doctype html><meta charset="utf-8"><style>
+      body{margin:0;background:#0b0c0e;color:#d8dadd;font:14px/1.3 -apple-system,Inter,sans-serif;padding:22px;width:${cols * (thumb + 16)}px}
+      h1{font-size:18px;margin:0 0 16px} .g{display:grid;grid-template-columns:repeat(${cols},${thumb}px);gap:16px}
+      figure{margin:0} img{display:block;width:${thumb}px;border-radius:5px;outline:1px solid #25282d} figcaption{font:600 14px ui-monospace,monospace;color:#f0b44c;margin-top:6px}</style>
+      <h1>${esc(timing.title)}</h1><div class="g">${cells.map((c) => `<figure><img src="${c.src}"><figcaption>${esc(c.id)}</figcaption></figure>`).join('')}</div>`;
+    const sp = await browser.newPage();
+    await sp.setViewport({ width: cols * (thumb + 16) + 44, height: 600 });
+    await sp.setContent(html, { waitUntil: 'load' });
+    const file = out ?? path.join(paths(root).build, 'grid.png');
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    await sp.screenshot({ path: file, fullPage: true });
+    log.ok(`Grid (${cells.length} frames) → ${path.relative(process.cwd(), file)}`);
+    return file;
+  });
+}
+
 // ------------------------------------------------------------------ check
 function pageAudit() {
   const stage = document.getElementById('stage');
@@ -129,6 +156,8 @@ function pageAudit() {
       x: r.left - S.left, y: r.top - S.top, w: r.width, h: r.height,
       font: parseFloat(cs.fontSize),
       margin: !!el.closest('.cf-source,.cf-footnote,.cf-captions,[data-safe="margin"]'),
+      dense: !!el.closest('[data-dense]'),
+      caption: !!el.closest('.cf-captions'),
       ignore: !!el.closest('[data-safe="ignore"]'),
       overflow: el.scrollWidth > el.clientWidth + 2 && ['hidden', 'clip'].includes(cs.overflowX) && !el.closest('[class*="mask"]'),
     });
@@ -208,9 +237,11 @@ export async function check(root, { samples = [0.5, 0.9] } = {}) {
         const boxes = [];
         for (const it of a.items) {
           if (it.ignore) continue;
-          words += it.margin ? 0 : it.words;
+          words += it.margin || it.dense ? 0 : it.words;
           const inFrame = it.x >= -1 && it.y >= -1 && it.x + it.w <= a.W + 1 && it.y + it.h <= a.H + 1;
-          const inSafe = it.x >= a.safe.x - 1 && it.y >= a.safe.y - 1 && it.x + it.w <= a.safe.x + a.safe.w + 1 && it.y + it.h <= a.safe.y + a.safe.h + 1;
+          // Tolerance ≈ 1.2% of the frame: a slow camera push legitimately nudges edge text a few px past the line.
+          const tx = a.W * 0.012, ty = a.H * 0.012;
+          const inSafe = it.x >= a.safe.x - tx && it.y >= a.safe.y - ty && it.x + it.w <= a.safe.x + a.safe.w + tx && it.y + it.h <= a.safe.y + a.safe.h + ty;
           if (!inFrame) add(errors, `text cut off by the frame edge: "${it.text}"`);
           else if (!inSafe && !it.margin) add(warnings, `text outside the safe area: "${it.text}" (mark deliberate margin text with data-safe="margin")`);
           if (it.overflow) add(errors, `text overflows its box: "${it.text}"`);
@@ -223,11 +254,17 @@ export async function check(root, { samples = [0.5, 0.9] } = {}) {
           const iy = Math.max(0, Math.min(A.y + A.h, B.y + B.h) - Math.max(A.y, B.y));
           if (ix * iy > 0.25 * Math.min(A.w * A.h, B.w * B.h)) add(warnings, `overlapping text: "${A.text}" × "${B.text}"`);
         }
+        const caps = a.items.filter((it) => it.caption), rest = a.items.filter((it) => !it.caption && !it.ignore);
+        for (const C of caps) for (const B of rest) {
+          const ix = Math.max(0, Math.min(C.x + C.w, B.x + B.w) - Math.max(C.x, B.x)), iy = Math.max(0, Math.min(C.y + C.h, B.y + B.h) - Math.max(C.y, B.y));
+          if (ix * iy > 0.1 * Math.min(C.w * C.h, B.w * B.h)) add(errors, `captions collide with "${B.text}" — move it out of the caption band`);
+        }
         if (words > 32) add(warnings, `${words} words on screen — that's reading, not watching. Cut to the key phrase.`);
       }
     }
     for (const f of frameFindings.values()) {
-      const times = f.times.slice(0, 4).map((x) => `${x.toFixed(1)}s`).join(', ') + (f.times.length > 4 ? ` +${f.times.length - 4}` : '');
+      const uniq = [...new Set(f.times.map((x) => x.toFixed(1)))];
+      const times = uniq.slice(0, 4).map((x) => `${x}s`).join(', ') + (uniq.length > 4 ? ` +${uniq.length - 4}` : '');
       f.list.push(`[${[...f.beats].join(', ')} @ ${times}] ${f.msg}`);
     }
     issues.errors.forEach((e) => errors.push(`page error: ${e}`));

@@ -15,7 +15,7 @@
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const FONT_FAMILIES = ['Inter Variable', 'Instrument Serif', 'JetBrains Mono Variable', 'Fraunces Variable'];
 
-  const state = { timing: null, tl: null, frameFns: [], time: 0, playing: false, beats: new Map(), warnings: [] };
+  const state = { timing: null, tl: null, frameFns: [], time: 0, playing: false, beats: new Map(), warnings: [], cues: [], ctx: null };
 
   // ---------------------------------------------------------------- utilities
   function hashSeed(seed) {
@@ -126,13 +126,13 @@
       // Optional data.json: figures come from data, never typed from memory.
       const data = await fetch('/_cf/data.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
       state.data = data;
-      const ctx = { tl, beat, beats: [...state.beats.values()], time, timing, stage, rand, data, kit: CF.kit, CF };
+      const ctx = { tl, beat, beats: [...state.beats.values()], time, timing, stage, rand, data, format: fmt, look: timing.look ?? {}, kit: CF.kit, CF };
+      state.ctx = ctx;
 
-      // Scene modules: beats with "scene": "scenes/<id>.js" get a <section data-beat> and a build call.
+      // Scene modules ("scene": "scenes/x.js") and library blocks ("block": "stat") each get a <section data-beat>.
       const scenesHost = document.getElementById('scenes') ?? stage;
       for (const b of ctx.beats) {
-        if (!b.scene) continue;
-        const mod = await import(new URL(b.scene, location.href).href);
+        if (!b.scene && !b.block) continue;
         let el = scenesHost.querySelector(`:scope > [data-beat="${b.id}"]`);
         if (!el) {
           el = document.createElement('section');
@@ -140,9 +140,9 @@
           el.dataset.beat = b.id;
           scenesHost.appendChild(el);
         }
-        if (mod.css) { const st = document.createElement('style'); st.textContent = mod.css; document.head.appendChild(st); }
-        if (mod.html) el.innerHTML = typeof mod.html === 'function' ? mod.html({ beat: b, timing }) : mod.html;
-        if (typeof mod.default === 'function') await mod.default({ ...ctx, el, b });
+        if (b.block) { await mount(b.block, el, b.props ?? {}, b); continue; }
+        const mod = await import(new URL(b.scene, location.href).href);
+        await mountModule(mod, b.scene, el, b.props ?? {}, b);
       }
 
       if (build) await build(ctx);
@@ -154,12 +154,13 @@
       tl.seek(tl.duration(), false);
       tl.seek(0, false);
 
+      reportOverruns(tl);
       const straySources = gsap.globalTimeline.getChildren(false, true, true).filter((c) => c !== tl);
       if (straySources.length) warn(`${straySources.length} tween(s) live outside CF.tl — they will not render. Add them to the master timeline.`);
 
       window.__CF = {
         ready: true, duration: timing.duration, fps: timing.fps, width: timing.width, height: timing.height,
-        frames: timing.frames, seek, warnings: state.warnings, timing,
+        frames: timing.frames, seek, warnings: state.warnings, timing, cues: state.cues,
       };
       const start = qs.has('t') ? parseFloat(qs.get('t')) : restoreTime();
       await seek(start || 0);
@@ -169,6 +170,67 @@
       console.error(err);
       window.__CF_ERROR = String(err?.stack ?? err);
       showError(err);
+    }
+  }
+
+  const injected = new Set();
+  function injectCss(key, css) {
+    if (injected.has(key)) return;
+    injected.add(key);
+    const st = document.createElement('style');
+    st.textContent = css;
+    document.head.appendChild(st);
+  }
+
+  /**
+   * Mount a library block (engine/runtime/blocks/<name>.js) into `el`, timed to beat `b`.
+   * Usable from custom scenes too: `await CF.mount('stat', someEl, { value: 42 }, b)`.
+   */
+  async function mount(name, el, props = {}, b) {
+    const mod = await import(`/_cf/blocks/${name}.js`).catch((e) => { throw new Error(`Unknown block "${name}" (${e.message}). List them with: clearframe blocks`); });
+    el.classList.add('cf-block', `cf-block-${name}`);
+    return mountModule(mod, `block:${name}`, el, props, b, name);
+  }
+
+  /** Shared mount path for library blocks and custom scene modules (same ctx, so a block can be forked into scenes/). */
+  async function mountModule(mod, key, el, props = {}, b, name = null) {
+    const meta = mod.meta ?? {};
+    const p = { ...(meta.defaults ?? {}), ...props };
+    if (mod.css) injectCss(key, typeof mod.css === 'function' ? mod.css() : mod.css);
+    const beatObj = typeof b === 'string' ? beat(b) : b;
+    if (p.until) el.dataset.until = p.until;
+    const ctx = { ...state.ctx, el, b: beatObj, props: p, name };
+    ctx.cue = CF.kit.cueFor ? CF.kit.cueFor(beatObj) : (s) => beatObj.at(typeof s === 'number' ? s : 0);
+    ctx.sound = (cueName, t, opts) => { if (state.timing.look?.sfx && p.sfx !== false) sfx(cueName, t, opts); };
+    if (mod.html) el.innerHTML = typeof mod.html === 'function' ? mod.html(p, ctx) : mod.html;
+    if (typeof mod.default === 'function') await mod.default(ctx);
+    return el;
+  }
+
+  /** Register a sound cue: a built-in name (tick, tock, pop, click, type, whoosh, chime, thud, rise) or a project path. */
+  function sfx(name, t, { volume = 0.5 } = {}) {
+    const at = Math.max(0, Math.round(t * 1000) / 1000);
+    if (!state.cues.some((c) => c.name === name && Math.abs(c.t - at) < 0.03)) state.cues.push({ name, t: at, volume });
+  }
+
+  /** Warn when a scene's animation is still running after its beat ends (the payoff would be cut off). */
+  function reportOverruns(tl) {
+    const late = new Map();
+    for (const tw of tl.getChildren(true, true, false)) {
+      if (tw.data === 'cf-ambient' || tw.data === 'cf-transition') continue; // camera drift and scene transitions may overlap the cut by design
+      const end = tw.startTime() + tw.duration() * (tw.repeat() + 1);
+      for (const t of tw.targets()) {
+        const sec = t instanceof Element ? t.closest('[data-beat]') : null;
+        if (!sec) continue;
+        late.set(sec, Math.max(late.get(sec) ?? 0, end));
+      }
+    }
+    for (const [sec, end] of late) {
+      const b = state.beats.get(sec.dataset.beat);
+      const until = sec.dataset.until ? state.beats.get(sec.dataset.until) : b;
+      if (!b || !until) continue;
+      const over = end - (until.end + parseFloat(sec.dataset.out ?? 0));
+      if (over > 0.15 && end < state.timing.duration - 0.05) warn(`beat "${until.id}": animation runs ${over.toFixed(1)}s past the beat — its payoff gets cut. Add "tail": ${(1 + over).toFixed(1)} (or land it earlier).`);
     }
   }
 
@@ -383,7 +445,7 @@
   async function loadAudio() {
     const T = state.timing;
     audio.ctx ??= new AudioContext();
-    const srcs = new Set([...T.beats.flatMap((b) => [b.vo?.src, ...(b.sfx ?? []).map((s) => s.src)]), T.music?.src].filter(Boolean));
+    const srcs = new Set([...T.beats.flatMap((b) => [b.vo?.src, ...(b.sfx ?? []).map((s) => s.src)]), T.music?.src, ...state.cues.map(cueSrc)].filter(Boolean));
     await Promise.all([...srcs].filter((s) => !audio.buffers.has(s)).map(async (src) => {
       try { audio.buffers.set(src, await audio.ctx.decodeAudioData(await (await fetch(src)).arrayBuffer())); } catch { warn(`could not load audio ${src}`); }
     }));
@@ -414,6 +476,7 @@
       if (b.vo?.src) at(b.vo.src, b.vo.start, 1);
       for (const s of b.sfx ?? []) at(s.src, s.t, s.volume);
     }
+    for (const c of state.cues) at(cueSrc(c), c.t, c.volume);
     if (T.music?.src) {
       const g = at(T.music.src, -(T.music.offset ?? 0), T.music.volume);
       if (g && T.music.duck) {
@@ -428,6 +491,7 @@
       }
     }
   }
+  function cueSrc(c) { return /[/.]/.test(c.name) ? c.name : `/_cf/sfx/${c.name}.wav`; }
   function stopAudio() { for (const n of audio.live) { try { n.stop(); } catch {} } audio.live = []; }
 
   function showError(err) {
@@ -437,6 +501,6 @@
     document.body.appendChild(box);
   }
 
-  const CF = { compose, seek, onFrame, rand, beat, time, warn, get tl() { return state.tl; }, get timing() { return state.timing; }, get data() { return state.data; }, get t() { return state.time; }, RENDER, kit: {} };
+  const CF = { compose, seek, onFrame, rand, beat, time, warn, mount, sfx, get tl() { return state.tl; }, get timing() { return state.timing; }, get data() { return state.data; }, get t() { return state.time; }, get cues() { return state.cues; }, RENDER, kit: {} };
   window.CF = CF;
 })();

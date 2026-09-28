@@ -55,3 +55,24 @@ Every `at` accepts seconds or a time spec (`"beatId"`, `"beatId+0.4"`, `"beatId@
 |---|---|
 | `kit.source(sceneEl, text, at, { position: 'bottom-left' })` | mono source line in the margin |
 | `kit.footnote(sceneEl, text, at)` | same, returns the minimum comfortable hold in seconds |
+
+## Kit+ (`cf-kit-plus.js`)
+
+| Call | Notes |
+|---|---|
+| `await kit.icon(parent, name, { size, stroke, color })` | Lucide icon (`clearframe icons <query>`); returns the `<svg>` |
+| `kit.drawIcon(svg, at, { dur, stagger })` | draws the icon's strokes on; returns end time |
+| `kit.odometer(el, at, { from, to, dur, decimals, prefix, suffix })` | rolling digits; `.to(v, at)` chains |
+| `kit.chip(parent, '+12%', { dir: 'up'\|'down'\|'flat', good: 'up', label })` | delta pill coloured by whether the direction is good |
+| `kit.backdrop(stage, 'dots'\|'grid'\|'ruled'\|'topo'\|'aurora'\|'none', opts)` | ambient background (topo = seeded contour lines) |
+| `kit.chrome(stage, { chapter, count, progress })` | orientation layer (ambient, margin-safe) |
+| `kit.look(ctx, overrides)` | the default composition: backdrop + grain + vignette + chrome + captions + transitions |
+| `kit.autoTransitions(ctx, kind)` | transitions between all consecutive scene sections |
+| `kit.camera(wrapper)` | `.zoomTo(el, at, { pad, max, dur })` · `.reset(at)` · `.push(from, to, { scale })` |
+| `kit.spotlight(parent, { dim, pad, radius })` | `.to(el \| {x,y,w,h}, at)` · `.off(at)` |
+| `kit.cursor(parent)` | `.moveTo(el \| {x,y}, at, { dur })` · `.click(at)` (with a click cue when sfx is on) · `.hide(at)` |
+| `kit.rectIn(el, container)` | element rect in container coordinates (transform-safe) |
+| `kit.cueFor(b)(spec, fallback)` | `'word'` / `{ say, nth, lead }` / seconds → absolute time |
+| `kit.spread(b, i, n, { from, to })` | evenly spaced times across the narration |
+| `kit.sequence(els, b, cues, { enter, sound })` | reveal a list on cues |
+| `kit.md(text)` · `kit.esc(text)` · `kit.spoken(text)` | `*accent*` / `**strong**` markup · HTML escape · narration without tags |

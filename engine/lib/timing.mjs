@@ -127,6 +127,21 @@ function voiceFor(root, beat, sb) {
   };
 }
 
+const tailCache = new Map();
+/** A block's recommended hold after the last spoken word (its meta.tail), read without importing browser code. */
+export function blockTail(name) {
+  if (!tailCache.has(name)) {
+    let v = null;
+    try {
+      const src = fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'runtime', 'blocks', `${name}.js`), 'utf8');
+      const m = src.match(/export const meta = \{\s*tail:\s*([\d.]+)/);
+      if (m) v = parseFloat(m[1]);
+    } catch { /* unknown block: validated elsewhere */ }
+    tailCache.set(name, v);
+  }
+  return tailCache.get(name);
+}
+
 /** Compute the full timeline for a project. Pure file reads; cheap enough to run per request. */
 export function computeTiming(root) {
   const sb = loadStoryboard(root);
@@ -135,13 +150,16 @@ export function computeTiming(root) {
   let cursor = 0;
   for (const [index, b] of sb.beats.entries()) {
     const lead = b.lead ?? sb.pacing.lead;
-    const tail = b.tail ?? sb.pacing.tail;
+    const tail = b.tail ?? (b.block ? blockTail(b.block) : null) ?? sb.pacing.tail;
     const vo = b.vo ? voiceFor(root, b, sb) : null;
     const natural = vo ? Math.max(0, lead) + vo.duration + tail + (b.hold ?? 0) : sb.pacing.silentBeat + (b.hold ?? 0);
     const dur = b.duration ?? Math.max(b.min ?? sb.pacing.minBeat, natural);
     const start = snap(cursor, fps);
     const end = snap(cursor + dur, fps);
-    const beat = { id: b.id, index, chapter: b.chapter ?? null, scene: b.scene ?? null, start, end, dur: round(end - start), visual: b.visual ?? null };
+    const beat = {
+      id: b.id, index, chapter: b.chapter ?? null, scene: b.scene ?? null, block: b.block ?? null, props: b.props ?? null,
+      transition: b.transition ?? null, start, end, dur: round(end - start), visual: b.visual ?? null,
+    };
     if (vo) {
       const voStart = round(Math.max(0, start + lead));
       beat.vo = {
@@ -167,6 +185,11 @@ export function computeTiming(root) {
     width, height, fps, duration,
     frames: Math.round(duration * fps),
     theme: sb.theme ?? 'paper',
+    look: {
+      backdrop: sb.backdrop ?? 'dots', grain: sb.grain ?? true, vignette: sb.vignette ?? true,
+      chrome: sb.chrome ?? 'auto', captions: sb.captions ?? 'auto', transition: sb.transition ?? 'auto', sfx: sb.sfx ?? false,
+      voiceProvider: sb.voice.provider,
+    },
     estimated: beats.some((b) => b.vo?.estimated),
     beats,
     music,

@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/storyboard.schema.json",
+  "title": "Plan with confidence bands",
+  "logline": "Where to find the confidence band, how to set a buffer, and what it gives your team.",
+  "audience": "New users of a (fictional) planning tool — onboarding video.",
+  "format": { "preset": "landscape", "fps": 30 },
+  "theme": "ink", "backdrop": "grid", "sfx": true, "budget": 0.5,
+  "voice": { "voice": "Achird", "style": "friendly, clear, unhurried", "wpm": 155 },
+  "music": { "model": "lyria-3-clip-preview", "prompt": "Bright minimal electronic, soft plucks, gentle groove, restrained", "bpm": 104, "key": "F major", "volume": 0.16 },
+  "beats": [
+    { "id": "open", "block": "title", "vo": "Here's how to plan with confidence bands, in forty seconds.",
+      "props": { "kicker": "Planner · How-to", "title": "Plan with *confidence*", "subtitle": "Find the band, set a buffer, share it" } },
+    { "id": "ui", "block": "browser", "vo": "Open the forecast panel and look at the shaded band. Then open Planning to set your buffer.",
+      "props": { "url": "planner.example.com/forecast", "mock": "dashboard", "callouts": [{ "x": 0.27, "y": 0.2, "w": 0.7, "h": 0.44, "label": "The confidence band", "say": "shaded" }, { "x": 0.02, "y": 0.36, "w": 0.2, "h": 0.08, "label": "Planning", "say": "planning", "click": true }] } },
+    { "id": "gets", "block": "icons", "vo": "You get three things: a date you can defend, a visible buffer, and a link your team can follow.",
+      "props": { "title": "What you get", "items": [{ "icon": "calendar-check", "label": "A defensible date", "sub": "Backed by the band", "say": "date" }, { "icon": "shield-half", "label": "A visible buffer", "sub": "No hidden padding", "say": "buffer" }, { "icon": "share-2", "label": "One link", "sub": "Everyone sees the same plan", "say": "link" }] } },
+    { "id": "setup", "block": "checklist", "vo": "Before you share: band reviewed, buffer set, owner assigned.",
+      "props": { "title": "Before you share", "items": [{ "text": "Band reviewed", "say": "band" }, { "text": "Buffer set", "say": "buffer" }, { "text": "Owner assigned", "say": "owner" }] } },
+    { "id": "end", "block": "end", "duration": 4,
+      "props": { "title": "Plan with *confidence*.", "cta": "planner.example.com/guide", "source": "Fictional product for demonstration" } }
+  ],
+  "sources": []
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/storyboard.schema.json",
+  "title": "Incident review: checkout slowdown",
+  "logline": "A cache misconfiguration slowed checkout for 47 minutes; three fixes make it unlikely to recur.",
+  "audience": "Engineering and support; blameless post-incident review.",
+  "format": { "preset": "landscape", "fps": 30 },
+  "theme": "ink", "backdrop": "grid", "sfx": true, "budget": 0.5,
+  "voice": { "voice": "Iapetus", "style": "calm, factual, even", "wpm": 150 },
+  "music": false,
+  "beats": [
+    { "id": "open", "chapter": "What happened", "block": "title", "vo": "A blameless review of Tuesday's checkout slowdown.",
+      "props": { "kicker": "Incident 2026-0917 · Blameless review", "title": "Checkout slowdown", "subtitle": "47 minutes · no data loss" } },
+    { "id": "when", "chapter": "What happened", "block": "timeline", "vo": "At two-oh-four, latency rose. We were paged at two-oh-nine, found the cause at two-thirty, and recovered at two-fifty-one.",
+      "props": { "items": [{ "date": "14:04", "label": "Latency rises", "say": "latency" }, { "date": "14:09", "label": "Paged", "say": "paged" }, { "date": "14:30", "label": "Cause found", "say": "cause" }, { "date": "14:51", "label": "Recovered", "say": "recovered" }] } },
+    { "id": "impact", "chapter": "Impact", "block": "stat", "vo": "About three percent of checkouts timed out during the window.",
+      "props": { "value": 3.1, "suffix": "%", "label": "of checkouts timed out", "context": "14:04–14:51 UTC · all regions", "style": "counter", "land": "three", "source": "Checkout logs (sample data)" } },
+    { "id": "cause", "chapter": "Why", "block": "flow", "vo": "A config change sent every request past the cache, straight to the database, which saturated.",
+      "props": { "nodes": [{ "id": "api", "label": "Checkout API", "icon": "shopping-cart", "col": 0, "say": "request" }, { "id": "cache", "label": "Cache", "sub": "bypassed", "icon": "zap-off", "col": 1, "tone": "muted", "say": "cache" }, { "id": "db", "label": "Database", "sub": "saturated", "icon": "database", "col": 2, "tone": "accent", "say": "database" }], "edges": [{ "from": "api", "to": "cache", "label": "config change" }, { "from": "cache", "to": "db" }], "focus": [{ "id": "db", "say": "saturated" }] } },
+    { "id": "fixes", "chapter": "What we're changing", "block": "checklist", "vo": "Three changes: config validation in CI is done, a cache-bypass alert is done, and load-shedding is in progress.",
+      "props": { "items": [{ "text": "Config validation in CI", "say": "validation" }, { "text": "Alert on cache bypass", "say": "alert" }, { "text": "Load-shedding for the database", "say": "shedding", "state": "todo" }] } },
+    { "id": "end", "chapter": "What we're changing", "block": "end", "duration": 4,
+      "props": { "title": "Caught in 5 minutes. *Fixed for good* in 3 steps.", "source": "Sample incident for the recipe", "disclose": "Narration: AI-generated voice" } }
+  ],
+  "sources": [{ "claim": "Timeline, 3.1% timeouts", "source": "Sample incident — replace with your logs", "asOf": "2026-09-17" }]
+}

@@ -117,6 +117,7 @@ body { font-family: var(--cf-sans); color: var(--ink); -webkit-font-smoothing: a
 .cf-vignette { position: absolute; inset: 0; pointer-events: none; z-index: 49; background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgb(0 0 0 / 0.35) 100%); }
 :root:is([data-theme='paper'],[data-theme='editorial']) .cf-vignette { background: radial-gradient(120% 90% at 50% 45%, transparent 60%, rgb(60 40 10 / 0.10) 100%); }
 .cf-gridlines { position: absolute; inset: 0; pointer-events: none; }
+:root[data-format='vertical'] .cf-source { bottom: calc(var(--safe-bottom) - 10px * var(--u)) !important; }
 .cf-captions { position: absolute; left: var(--safe-x); right: var(--safe-x); bottom: calc(var(--safe-bottom) * 0.55); text-align: center; z-index: 40; font-family: var(--cf-sans); font-weight: 650; font-size: calc(52px * var(--u)); line-height: 1.15; letter-spacing: -0.015em; }
 .cf-captions .cf-cap { position: absolute; left: 0; right: 0; bottom: 0; opacity: 0; }
 .cf-captions .cf-cw { color: var(--ink); opacity: 0.45; }
@@ -142,3 +143,25 @@ body { font-family: var(--cf-sans); color: var(--ink); -webkit-font-smoothing: a
 .cf-safe-title { position: absolute; inset: var(--safe-top) var(--safe-x) var(--safe-bottom); outline: 2px dashed rgb(0 200 255 / 0.7); }
 .cf-safe-ui { position: absolute; left: 0; right: 0; bottom: 0; height: var(--safe-bottom); background: rgb(255 0 80 / 0.12); }
 .cf-error { position: fixed; inset: 20px; padding: 24px; background: #2a0d0d; color: #ffb4b4; border: 1px solid #7a2a2a; border-radius: 12px; font: 13px/1.5 ui-monospace, monospace; white-space: pre-wrap; overflow: auto; z-index: 2000; }
+
+/* ---------- kit+ : odometer, chips, chrome, cursor, icons, markup ---------- */
+.cf-odo { display: inline-flex; align-items: baseline; }
+.cf-odo-col { display: inline-block; height: 1em; line-height: 1; overflow: hidden; vertical-align: baseline; }
+.cf-odo-strip { display: flex; flex-direction: column; will-change: transform; }
+.cf-odo-strip > span { height: 1em; line-height: 1; display: block; }
+.cf-chip { display: inline-flex; align-items: baseline; gap: 0.5em; padding: 0.28em 0.7em; border-radius: 999px; font-size: var(--t-label); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cf-chip b { font-weight: 650; }
+.cf-chip span { color: var(--ink-2); font-weight: 450; }
+.cf-chip-good { background: color-mix(in oklab, var(--up) 16%, transparent); color: var(--up); }
+.cf-chip-bad { background: color-mix(in oklab, var(--down) 16%, transparent); color: var(--down); }
+.cf-chip-flat { background: color-mix(in oklab, var(--ink) 8%, transparent); color: var(--ink-2); }
+.cf-chrome { position: absolute; inset: 0; z-index: 30; pointer-events: none; }
+.cf-chrome .cf-chapter { position: absolute; top: calc(var(--safe-top) * 0.6); left: var(--safe-x); }
+.cf-chrome .cf-count { position: absolute; top: calc(var(--safe-top) * 0.6); right: var(--safe-x); }
+.cf-rail { position: absolute; left: 0; right: 0; top: 0; height: calc(4px * var(--u)); background: var(--line); }
+.cf-rail i { position: absolute; inset: 0; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); }
+.cf-cursor svg { display: block; filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.25)); }
+.cf-cursor .cf-ripple { position: absolute; left: calc(-18px * var(--u)); top: calc(-18px * var(--u)); width: calc(40px * var(--u)); height: calc(40px * var(--u)); border-radius: 50%; border: calc(3px * var(--u)) solid var(--accent); opacity: 0; }
+.cf-icon { display: block; flex: none; }
+.cf-block em { font-style: italic; color: var(--accent); }
+.cf-block strong { font-weight: 650; color: var(--ink); }

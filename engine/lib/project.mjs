@@ -52,6 +52,8 @@ export function validateStoryboard(sb) {
     ids.add(b.id);
     if (b.vo != null && typeof b.vo !== 'string') errors.push(`beats[${i}].vo must be a string`);
     if (b.duration != null && !(b.duration > 0)) errors.push(`beats[${i}].duration must be > 0`);
+    if (b.scene && b.block) errors.push(`beats[${i}] has both "scene" and "block" — use one`);
+    if (b.block && !/^[a-z0-9-]+$/.test(b.block)) errors.push(`beats[${i}].block must be a block name like "stat" (see: clearframe blocks)`);
   }
   const assetIds = new Set();
   for (const [i, a] of (sb.assets ?? []).entries()) {

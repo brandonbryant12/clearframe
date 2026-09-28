@@ -30,7 +30,13 @@ The research behind these defaults, including what made the p(doom) and other vi
 git clone https://github.com/brandonbryant12/clearframe && cd clearframe
 npm install                      # Node ≥ 20 · needs ffmpeg on PATH · downloads a headless Chrome
 npm link                         # optional: `clearframe` on your PATH (else: node engine/cli.mjs …)
+clearframe doctor                # checks every dependency and tells you how to fix what's missing
 
+# zero code: a whole film from a recipe (storyboard.json only)
+clearframe new my-update --recipe quarterly-update
+clearframe voice my-update --draft && clearframe render my-update --draft
+
+# or the hand-built flagship example
 clearframe voice examples/seventy-percent --draft   # free, offline narration for real timing
 clearframe music examples/seventy-percent --draft   # free synthesized placeholder bed
 clearframe preview examples/seventy-percent         # scrub it in the browser, with sound
@@ -62,6 +68,35 @@ As a Claude Code plugin:
 /plugin install clearframe@clearframe
 ```
 
+## The library: 33 blocks, 7 recipes, no code required
+
+Name a block on a beat and give it props; the narration drives the timing, and every reveal lands on its spoken word. A project can be just `storyboard.json`.
+
+```jsonc
+{ "id": "drivers", "block": "bars",
+  "vo": "Most of the gain came from routing; macros and staffing helped less.",
+  "props": { "title": "Hours saved per week", "data": [{ "label": "Routing", "value": 62 }, { "label": "Macros", "value": 21 }, { "label": "Staffing", "value": 14 }],
+             "format": { "suffix": " h" }, "focus": { "label": "Routing", "say": "routing", "note": "⅔ of the gain" } } }
+```
+
+<p align="center"><img src="docs/media/blocks.jpg" width="880" alt="A grid of all 33 ClearFrame blocks in 16:9"></p>
+
+| Kind | Blocks |
+|---|---|
+| **Numbers** | `stat` (serif / counter / odometer) · `kpis` · `delta` · `ring` · `gauge` · `circles` |
+| **Charts** | `bars` · `line` · `waffle` · `share` · `funnel` · `distribution` · `calendar` |
+| **Structure** | `steps` · `timeline` · `flow` (system diagram with moving packets) · `compare` · `table` · `checklist` · `points` · `icons` |
+| **Words** | `title` · `chapter` · `statement` (karaoke) · `quote` · `definition` · `question` · `end` |
+| **Media and UI** | `browser` (spotlight, cursor, zoom) · `code` · `chat` · `image` (Ken Burns) · `lower-third` |
+
+Every block also works in 9:16 ([vertical gallery](docs/media/blocks-vertical.jpg)). Discover them with `clearframe blocks`, `clearframe blocks <name>` (props plus an example beat) and `clearframe icons <query>` (2,000+ Lucide icons). The full reference is [`skills/clearframe-library`](skills/clearframe-library/SKILL.md). **Recipes** are complete block-only storyboards: quarterly update, concept explainer, product walkthrough, decision memo, incident review, research summary, vertical short ([list](recipes/README.md)).
+
+Look and sound are storyboard settings:
+- `theme`: `paper`, `ink`, `ember`, `editorial`, `slate` or `signal`
+- `backdrop`: `dots`, `grid`, `ruled`, `topo` or `aurora`
+- `chrome`, `captions` and `transition`
+- `sfx`: a quiet cue set synthesized by ffmpeg (ticks, pops, whoosh, chime)
+
 ## The skills
 
 | Skill | What it gives the agent |
@@ -70,7 +105,8 @@ As a Claude Code plugin:
 | [`clearframe-script`](skills/clearframe-script/SKILL.md) | Structures, hooks, writing for the ear, 140–160 wpm pacing math, vocal points, voice casting |
 | [`clearframe-motion`](skills/clearframe-motion/SKILL.md) | The visual doctrine: pacing, composition, type, colour, motion tokens, sync, transitions, blueprints, **anti-slop list** |
 | [`clearframe-dataviz`](skills/clearframe-dataviz/SKILL.md) | Choosing the chart, building it in the order it's spoken, honesty rules, binding figures to data |
-| [`clearframe-engine`](skills/clearframe-engine/SKILL.md) | Storyboard schema, scene modules, runtime API, determinism rules, kit, CLI |
+| [`clearframe-library`](skills/clearframe-library/SKILL.md) | The block menu by intent, sequences that work, rhythm rules, look and sound settings, icons, customising and extending |
+| [`clearframe-engine`](skills/clearframe-engine/SKILL.md) | Storyboard schema, blocks and scene modules, runtime API, determinism rules, kit, CLI |
 | [`clearframe-integrity`](skills/clearframe-integrity/SKILL.md) | Sourcing, balanced claims, readable disclosures, captions, AI transparency, pre-delivery review |
 | [`gemini-tts`](skills/gemini-tts/SKILL.md) | `gemini-3.8-flash-tts` via the Interactions API; style strings, pause tags, casting |
 | [`lyria-music`](skills/lyria-music/SKILL.md) | `lyria-3.5` beds with timestamped structure from the edit; Lyria RealTime; mixing |
@@ -85,7 +121,7 @@ Every Gemini script is zero-dependency and has a `--dry-run` that prints the exa
 storyboard.json ──► voice (TTS or draft) ──► word alignment ──► timing.json
       │                                                            │
       ▼                                                            ▼
-scenes/*.js + index.html ──► CF runtime: one paused GSAP timeline, b.say('word')
+blocks (JSON props) + scenes/*.js (+ optional index.html) ──► CF runtime: one paused GSAP timeline, b.say('word')
       │
       ├─► preview   browser player with synced voice + music, beat scrubber, safe areas
       ├─► sheet     contact sheet PNG  ─┐
@@ -103,7 +139,16 @@ scenes/*.js + index.html ──► CF runtime: one paused GSAP timeline, b.say('
 
 ## Kit
 
-A small motion and data vocabulary tuned for the professional register: `reveal`, `counter` (chainable escalating numbers), `mark` (highlight, underline, strike), `lineChart` (monotone, value on the tip), `bars`, `waffle` (unit charts for probabilities), `donut`, `meter`, `milestones`, `steps`, `captions` (word-synced), `transition`, `drift`, `grain`, `gridlines`, `source`, `footnote`. See [`skills/clearframe-engine/references/kit.md`](skills/clearframe-engine/references/kit.md).
+The building blocks under the blocks, for custom scenes:
+- **Text and numbers:** `reveal`, `counter`, `odometer`, `mark` (highlight, underline, strike)
+- **Charts:** `lineChart` (monotone, value on the tip, dashed baselines), `bars`, `waffle`, `donut`, `meter`
+- **Structure:** `milestones`, `steps`, `captions` (word-synced)
+- **Icons:** `icon` and `drawIcon` (Lucide)
+- **Camera and pointing:** `camera` (zoom-to and reset), `spotlight`, `cursor`, `transition`, `drift`
+- **Texture and chrome:** `backdrop` (including `topo` contour lines), `chrome`, `chip`
+- **Sourcing:** `source`, `footnote`
+
+See [`skills/clearframe-engine/references/kit.md`](skills/clearframe-engine/references/kit.md).
 
 ## Examples and templates
 
@@ -127,15 +172,28 @@ A small motion and data vocabulary tuned for the professional register: `reveal`
 
 Generation is cached by content hash, and `storyboard.budget` is a hard cap.
 
-## Requirements
+## Dependencies
 
-- Node ≥ 20 (≥ 22 for Lyria RealTime), ffmpeg, and ~200 MB for Puppeteer's Chrome.
-- A `GEMINI_API_KEY` only for paid generation. Everything else, including draft voice and music, is free and offline. The draft voice uses macOS `say` or `espeak-ng`.
+Run `clearframe doctor` to verify everything below and get fix commands.
+
+| Dependency | Needed for | Install |
+|---|---|---|
+| **Node.js ≥ 20** (22+ for Lyria RealTime's WebSocket) | everything | [nodejs.org](https://nodejs.org) |
+| **ffmpeg** with `libx264` and `aac`, plus the `loudnorm`, `sidechaincompress`, `silencedetect`, `silenceremove`, `adelay`, `amix`, `aevalsrc` and `scale` filters | encoding, the audio mix and ducking, voice trimming and alignment, synthesized draft music and sound cues | `brew install ffmpeg` · `apt install ffmpeg` · `winget install ffmpeg` (or `npm i ffmpeg-static`, or set `FFMPEG_PATH`) |
+| **Headless Chrome** (Chrome for Testing, ~200 MB) | frame capture | downloaded by `npm install` (Puppeteer); or `npx puppeteer browsers install chrome` |
+| npm: `puppeteer` | driving Chrome | `npm install` |
+| npm: `gsap` (Standard "no charge" license) | animation, including SplitText, CustomEase and MotionPath | `npm install` |
+| npm: `lucide-static` (ISC) | 2,000+ icons | `npm install` |
+| npm: `@fontsource-variable/inter`, `@fontsource/instrument-serif`, `@fontsource-variable/jetbrains-mono`, `@fontsource-variable/fraunces` (SIL OFL) | self-hosted fonts, so renders never hit a CDN | `npm install` |
+| *optional* macOS `say` or `espeak-ng` | free draft narration (`voice --draft`) | built into macOS · `apt install espeak-ng` |
+| *optional* `GEMINI_API_KEY` | final voice, music, images and footage (paid, cached, budget-capped) | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+
+The Gemini scripts use only Node built-ins (`fetch` and `WebSocket`), with no Google SDK.
 
 ## Tests
 
 ```bash
-npm test   # timing/alignment unit tests, Gemini request-contract tests, and an end-to-end render + QA test
+npm test   # timing/alignment units, Gemini request contracts, block catalog + recipes, end-to-end render + QA
 ```
 
 ## License

@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ClearFrame</title>
+  <link rel="stylesheet" href="/_cf/cf.css">
+</head>
+<body>
+  <!-- Default composition for storyboard-only projects: blocks from storyboard.json + the standard look.
+       Add your own index.html to take full control. -->
+  <div id="stage"><div id="scenes"></div></div>
+  <script src="/_cf/all.js"></script>
+  <script>CF.compose((ctx) => ctx.kit.look(ctx));</script>
+</body>
+</html>

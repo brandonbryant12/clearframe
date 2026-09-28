@@ -73,6 +73,7 @@ export async function render(root, opts = {}) {
 
   const warnings = new Set();
   const issues = new Set();
+  let cues = [];
   try {
     const per = Math.ceil(total / workers);
     const segments = [];
@@ -83,6 +84,7 @@ export async function render(root, opts = {}) {
       segments[w] = seg;
       const { page, cdp, info, issues: iss } = await openComposition(browser, server.url, { width: timing.width, height: timing.height, scale });
       info.warnings.forEach((x) => warnings.add(x));
+      if (w === 0) cues = info.cues;
       const enc = encoder(seg, { fps, draft: opts.draft, lossless: opts.lossless, width: outW, height: outH });
       const shot = { format: opts.lossless ? 'png' : 'jpeg', quality: opts.draft ? 80 : 95 };
       const size = { width: timing.width, height: timing.height, scale, shot, onFix: (m) => log.dim(`  frame ${m}`) };
@@ -108,7 +110,8 @@ export async function render(root, opts = {}) {
     const name = opts.out ?? path.join(P.build, `${slug(sb.title ?? path.basename(root))}${opts.draft ? '.draft' : ''}.mp4`);
     let audioFile = null;
     if (opts.audio !== false && first === 0) {
-      audioFile = await mix(root, timing, path.join(P.build, 'mix.wav'), sb.mix);
+      audioFile = await mix(root, timing, path.join(P.build, 'mix.wav'), sb.mix, cues);
+      if (cues.length) log.dim(`  ${cues.length} sound cue(s) from blocks`);
       if (!audioFile) log.dim('  no audio yet (no voice or music files) — rendering silent');
     }
     await mux(silent, audioFile, name);

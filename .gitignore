@@ -7,3 +7,4 @@ node_modules/
 # Generated media in the bundled examples/templates (regenerate with `clearframe voice|music --draft`)
 examples/*/assets/
 templates/*/assets/
+recipes/*/assets/

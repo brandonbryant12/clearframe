@@ -4,8 +4,21 @@
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
+import { sfxFile, SFX } from './sfx.mjs';
 import { computeTiming } from './timing.mjs';
 import { ENGINE_DIR, require } from './util.mjs';
+
+// One script tag for everything: GSAP + plugins + ClearFrame runtime + kit.
+const BUNDLE = [
+  ['gsap', 'dist/gsap.min.js'], ['gsap', 'dist/SplitText.min.js'], ['gsap', 'dist/CustomEase.min.js'], ['gsap', 'dist/MotionPathPlugin.min.js'],
+  [null, 'cf.js'], [null, 'cf-kit.js'], [null, 'cf-kit-plus.js'],
+];
+function bundle() {
+  return BUNDLE.map(([pkg, rel]) => {
+    const file = pkg ? path.join(pkgDir(pkg), rel) : path.join(ENGINE_DIR, 'runtime', rel);
+    return `/* ${pkg ?? 'clearframe'}/${rel} */\n${fs.readFileSync(file, 'utf8')}\n`;
+  }).join(';\n');
+}
 
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8',
@@ -30,6 +43,7 @@ function mounts() {
   for (const [alias, pkg] of Object.entries(fonts)) {
     try { m[`/_cf/fonts/${alias}/`] = pkgDir(pkg); } catch { /* optional font not installed */ }
   }
+  try { m['/_cf/icons/'] = path.join(pkgDir('lucide-static'), 'icons'); } catch { /* icons optional */ }
   m['/_cf/'] = path.join(ENGINE_DIR, 'runtime');
   return m;
 }
@@ -85,6 +99,18 @@ export function serve(root, { port = 0, live = false } = {}) {
       }
     }
     if (pathname === '/favicon.ico') { res.writeHead(204); return res.end(); }
+    if (pathname === '/_cf/all.js') {
+      res.writeHead(200, { 'content-type': MIME['.js'], 'cache-control': 'no-store' });
+      return res.end(bundle());
+    }
+    const sfx = pathname.match(/^\/_cf\/sfx\/([a-z-]+)\.wav$/);
+    if (sfx && SFX[sfx[1]]) {
+      sfxFile(sfx[1]).then((f) => sendFile(req, res, f), (e) => { res.writeHead(500); res.end(String(e.message)); });
+      return;
+    }
+    if ((pathname === '/' || pathname === '/index.html') && !fs.existsSync(path.join(root, 'index.html'))) {
+      return sendFile(req, res, path.join(ENGINE_DIR, 'runtime', 'default.html')); // storyboard-only projects
+    }
     if (pathname === '/_cf/data.json') { // optional project data; null when absent
       const f = path.join(root, 'data.json');
       if (fs.existsSync(f)) return sendFile(req, res, f);

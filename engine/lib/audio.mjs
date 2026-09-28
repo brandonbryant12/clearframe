@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { resolveCue, SFX } from './sfx.mjs';
 import { alignWords } from './timing.mjs';
 import { ffmpeg, log, mediaDuration, round } from './util.mjs';
 
@@ -90,11 +91,11 @@ export async function draftMusic(output, { seconds = 60, bpm = 72 } = {}) {
  * Mix narration, music bed (ducked under the voice) and sfx into one 48 kHz stereo WAV,
  * loudness-normalised (default -16 LUFS integrated, -1.5 dBTP).
  */
-export async function mix(root, timing, output, { loudness = -16, voiceGain = 1 } = {}) {
+export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 } = {}, cues = []) {
   const inputs = [];
   const filters = [];
   const D = timing.duration;
-  const add = (file, opts = []) => { inputs.push(...opts, '-i', path.join(root, file)); return inputs.filter((x) => x === '-i').length - 1; };
+  const add = (file, opts = []) => { inputs.push(...opts, '-i', path.isAbsolute(file) ? file : path.join(root, file)); return inputs.filter((x) => x === '-i').length - 1; };
   const fmt = 'aresample=48000,aformat=sample_fmts=fltp:channel_layouts=stereo';
 
   const voLabels = [];
@@ -105,9 +106,14 @@ export async function mix(root, timing, output, { loudness = -16, voiceGain = 1 
     voLabels.push(`[v${i}]`);
   }
   const sfxLabels = [];
-  for (const b of timing.beats) for (const s of b.sfx ?? []) {
-    if (!fs.existsSync(path.join(root, s.src))) { log.warn(`sfx missing: ${s.src}`); continue; }
-    const i = add(s.src);
+  const allSfx = [
+    ...timing.beats.flatMap((b) => (b.sfx ?? []).map((s) => ({ name: s.src, t: s.t, volume: s.volume }))),
+    ...cues.map((c) => ({ name: c.name, t: c.t, volume: c.volume })),
+  ].filter((s) => s.t < D);
+  for (const s of allSfx) {
+    const file = await resolveCue(root, s.name);
+    if (!file) { log.warn(`sfx missing: ${s.name} (built-ins: ${Object.keys(SFX).join(', ')})`); continue; }
+    const i = add(file);
     filters.push(`[${i}:a]${fmt},volume=${s.volume},adelay=${Math.round(s.t * 1000)}:all=1[s${i}]`);
     sfxLabels.push(`[s${i}]`);
   }

@@ -7,7 +7,7 @@ description: Direct and produce a calm, precise, professional motion-graphics vi
 
 You are the director. You write the story, set the rules, build (or delegate) the scenes, **look at every frame you make**, and deliver a film a careful professional would put their name on.
 
-> `clearframe <cmd>` means `node engine/cli.mjs <cmd>` from the repo root (or run `npm link` once). Setup: `npm install` (Node ≥ 20, ffmpeg on PATH).
+> `clearframe <cmd>` means `node engine/cli.mjs <cmd>` from the repo root (or run `npm link` once). Setup: `npm install` (Node ≥ 20, ffmpeg on PATH), then run `clearframe doctor`.
 
 ## What ClearFrame believes
 
@@ -25,6 +25,7 @@ You are the director. You write the story, set the rules, build (or delegate) th
 | `clearframe-script` | writing the narration, choosing structure, voice casting |
 | `clearframe-motion` | any visual decision: pacing, layout, type, color, motion, transitions, anti-slop |
 | `clearframe-dataviz` | any number, chart, comparison, probability or process diagram |
+| `clearframe-library` | **first stop for visuals**: 33 ready-made blocks (charts, numbers, diagrams, UI, text), recipes, look and sound settings, icons |
 | `clearframe-engine` | writing `storyboard.json`, `index.html`, `scenes/*.js`; runtime + kit API; CLI |
 | `clearframe-integrity` | sourcing, disclosures, accessibility, AI transparency — before delivery |
 | `gemini-tts` · `lyria-music` · `gemini-image` · `veo-video` | only when you reach the spend step |
@@ -37,11 +38,11 @@ You are the director. You write the story, set the rules, build (or delegate) th
 
 **2. Script.** Write for the ear at 140–160 wpm, 8–14 words per sentence, one idea per beat. Read it aloud in your head. Mark the landing word of each beat, the word the picture hits on.
 
-**3. Storyboard.** Create the project with `clearframe new <dir>` (or copy a template) and fill in `storyboard.json`. Each beat gets an `id`, a `chapter`, the `vo` (exact narration), a `visual` (what the eye sees as the words land, plus the one focal point) and a `scene` module. Put every figure in `sources`. If more than one agent will build scenes, write `STYLE.md` next to it: palette, type, motion tokens, the motif, and do/don't lists. Every scene builder reads it. This is how parallel subagents stay one film.
+**3. Storyboard.** Start from a recipe when one fits (`clearframe recipes`, then `clearframe new <dir> --recipe <name>`); otherwise use `clearframe new <dir>`. Fill in `storyboard.json`. Each beat gets an `id`, a `chapter`, the `vo` (exact narration), a `visual` (what the eye sees as the words land, plus the one focal point) and either a **`block`** with `props` (see `clearframe-library`; most beats) or a custom `scene` module (for bespoke moments). Put every figure in `sources`. If more than one agent will build scenes, write `STYLE.md` next to it: palette, type, motion tokens, the motif, and do/don't lists. Every scene builder reads it. This is how parallel subagents stay one film.
 
 **4. Draft the sound (free).** `clearframe voice <dir> --draft` records every line with the OS voice and aligns words. `clearframe music <dir> --draft` synthesizes a placeholder pad. You now have real timing without spending a cent.
 
-**5. Build.** Write `index.html` (global layers: texture, orientation chrome, transitions) and one `scenes/<name>.js` module per scene. See `clearframe-engine`. Use `b.say('word')` so every reveal lands on its spoken word. **Parallelize when you can:** hand each scene module to a subagent with the storyboard, STYLE.md and the engine skill. Scenes are independent files, so there are no conflicts.
+**5. Build.** Blocks need no code, so fill in their props and the words they land on (`say`, `land`). Write a custom `scenes/<name>.js` only for the moments the library can't express, such as your recurring motif or a bespoke diagram. You can fork a block as a starting point, or `CF.mount` blocks inside a scene. Add an `index.html` only for custom global layers; otherwise the default composition handles the backdrop, chrome, captions and transitions. See `clearframe-engine`. **Parallelize when you can:** hand each custom scene module to a subagent with the storyboard, STYLE.md and the engine skill. Scenes are independent files, so there are no conflicts.
 
 **6. Look (the taste loop).** Repeat until clean:
 - `clearframe sheet <dir>` → **Read `build/sheet.png`**. Three frames per beat: entering, settled, leaving.

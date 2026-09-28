@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/storyboard.schema.json",
+  "title": "Build or buy the scheduler?",
+  "logline": "Buying gets us live seven months sooner for a known cost; we recommend buy with an exit clause.",
+  "audience": "The steering group, deciding this week.",
+  "format": { "preset": "landscape", "fps": 30 },
+  "theme": "slate", "backdrop": "ruled", "sfx": true, "budget": 1.0,
+  "voice": { "voice": "Kore", "style": "calm, direct, confident", "wpm": 150 },
+  "music": { "model": "lyria-3.5", "prompt": "Sober cinematic minimalism, sustained strings, sparse piano, no percussion", "bpm": 70, "key": "C minor", "volume": 0.16 },
+  "beats": [
+    { "id": "ask", "chapter": "The decision", "block": "title", "vo": "One decision this week: do we build the scheduler, or buy it?",
+      "props": { "kicker": "Decision memo · Steering group", "title": "Build or *buy*?", "subtitle": "Recommendation inside — 50 seconds" } },
+    { "id": "cost", "chapter": "The stakes", "block": "delta", "vo": "Today, scheduling takes our coordinators eleven hours a week. Either option brings that to about two.",
+      "props": { "kicker": "Coordinator hours per week", "from": { "value": 11, "label": "Today" }, "to": { "value": 2, "label": "With a scheduler" }, "suffix": " h", "better": "down", "fromSay": "eleven", "toSay": "two", "source": "Time study, Aug 2026 (sample data)" } },
+    { "id": "options", "chapter": "The options", "block": "compare", "vo": "Building gives full control but takes nine months. Buying is live in eight weeks, with less flexibility.",
+      "props": { "left": { "tag": "Option A", "title": "Build", "points": [{ "text": "Full control", "mark": "check", "say": "control" }, { "text": "9 months to live", "mark": "x", "say": "nine" }] }, "right": { "tag": "Option B", "title": "Buy", "points": [{ "text": "Live in 8 weeks", "mark": "check", "say": "eight" }, { "text": "Less flexibility", "mark": "x", "say": "flexibility" }] }, "highlight": "right" } },
+    { "id": "detail", "chapter": "The options", "block": "table", "vo": "On the criteria that matter, buying covers audit, single sign-on and support; building only wins on customisation.",
+      "props": { "columns": ["", "Build", "Buy"], "rows": [["Audit logs", "no", "yes"], ["Single sign-on", "yes", "yes"], ["Vendor support", "no", "yes"], ["Customisation", "yes", "no"]], "highlight": { "col": 2, "say": "buying" }, "rowSay": ["audit", "single", "support", "customisation"] } },
+    { "id": "rec", "chapter": "Recommendation", "block": "statement", "vo": "We recommend buy, with a two-year exit clause, and revisit building once the process is stable.", "tail": 1.0,
+      "props": { "text": "We recommend *buy*, with a two-year exit clause — and revisit building once the process is stable." } },
+    { "id": "end", "chapter": "Recommendation", "block": "end", "duration": 4,
+      "props": { "title": "Recommendation: *buy*.", "subtitle": "Decision needed by Friday", "source": "Figures: sample data for the recipe" } }
+  ],
+  "sources": [{ "claim": "11 h → 2 h, 9 months, 8 weeks", "source": "Sample data — replace with your time study and vendor quotes", "asOf": "2026-08" }]
+}
