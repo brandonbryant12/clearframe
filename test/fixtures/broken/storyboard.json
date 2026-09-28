@@ -1,0 +1,9 @@
+{
+  "title": "Broken on purpose",
+  "format": { "width": 640, "height": 360, "fps": 10 },
+  "pacing": { "lead": 0.2, "tail": 0.3 },
+  "beats": [
+    { "id": "still", "duration": 6, "visual": "A static card that never moves; one line runs off the frame." },
+    { "id": "busy", "vo": "Revenue grew 42 percent year over year.", "visual": "Text that is too small." }
+  ]
+}

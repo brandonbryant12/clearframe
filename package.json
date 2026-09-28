@@ -1,0 +1,44 @@
+{
+  "name": "clearframe",
+  "version": "0.1.0",
+  "description": "An agent-first, code-rendered motion graphics framework for calm, precise, professional explainer videos. HTML + GSAP rendered deterministically to MP4, with Gemini TTS, Lyria music, Nano Banana imagery and Veo footage used only where code can't do the job.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "clearframe": "engine/cli.mjs"
+  },
+  "scripts": {
+    "cf": "node engine/cli.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20.10"
+  },
+  "keywords": [
+    "motion-graphics",
+    "video",
+    "gsap",
+    "agent-skills",
+    "claude",
+    "gemini",
+    "tts",
+    "lyria",
+    "veo",
+    "explainer"
+  ],
+  "files": [
+    "engine",
+    "skills",
+    "templates",
+    "schema",
+    "docs"
+  ],
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "gsap": "^3.15.0",
+    "puppeteer": "^25.12.0"
+  }
+}

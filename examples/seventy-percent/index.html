@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Seventy percent is not a promise</title>
+  <link rel="stylesheet" href="/_cf/cf.css">
+  <style>
+    /* Persistent orientation layer: chapter label, chapter count, progress hairline. */
+    .chrome { position: absolute; inset: 0; z-index: 30; pointer-events: none; }
+    .chrome .chapter { position: absolute; top: calc(var(--safe-top) * 0.6); left: var(--safe-x); }
+    .chrome .count { position: absolute; top: calc(var(--safe-top) * 0.6); right: var(--safe-x); }
+    .chrome .rail { position: absolute; left: 0; right: 0; top: 0; height: calc(4px * var(--u)); background: var(--line); }
+    .chrome .rail i { position: absolute; inset: 0; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); }
+  </style>
+</head>
+<body>
+  <div id="stage">
+    <div id="scenes"></div>
+    <div class="chrome" data-safe="margin" data-ambient>
+      <div class="rail"><i></i></div>
+      <div class="cf-kicker chapter"></div>
+      <div class="cf-kicker count"></div>
+    </div>
+  </div>
+
+  <script src="/_cf/vendor/gsap/gsap.min.js"></script>
+  <script src="/_cf/vendor/gsap/SplitText.min.js"></script>
+  <script src="/_cf/cf.js"></script>
+  <script src="/_cf/cf-kit.js"></script>
+  <script>
+    CF.compose(({ tl, kit, beat, beats, timing, stage }) => {
+      // Texture: faint dot grid, film grain, soft vignette. Felt, not seen.
+      kit.gridlines(stage, { dots: true, size: 56, opacity: 0.55, drift: [4, 2] });
+      kit.grain(stage);
+      kit.vignette(stage);
+
+      // Orientation: chapter name + index, driven by the playhead (deterministic).
+      const chapters = [...new Set(beats.map((b) => b.chapter))];
+      const chapterEl = stage.querySelector('.chapter');
+      const countEl = stage.querySelector('.count');
+      const rail = stage.querySelector('.rail i');
+      CF.onFrame((t) => {
+        const b = beats.find((x) => t >= x.start && t < x.end) ?? beats.at(-1);
+        const i = chapters.indexOf(b.chapter);
+        if (chapterEl.textContent !== b.chapter) chapterEl.textContent = b.chapter;
+        const n = `${String(i + 1).padStart(2, '0')} / ${String(chapters.length).padStart(2, '0')}`;
+        if (countEl.textContent !== n) countEl.textContent = n;
+        rail.style.transform = `scaleX(${(t / timing.duration).toFixed(5)})`;
+      });
+      kit.enter(stage.querySelector('.chrome'), 0.2, { y: 0, dur: 0.8 });
+
+      // Scene-to-scene transitions (scenes are <section data-beat="…"> created from storyboard "scene" files).
+      const S = (id) => `[data-beat="${id}"]`;
+      kit.transition('fade', S('hook'), S('hundred'), 'hundred', { dur: 0.5 });
+      kit.transition('rise', S('hundred'), S('calibrated'), 'calibrated', { dur: 0.6 });
+      kit.transition('fade', S('calibrated'), S('decide'), 'decide', { dur: 0.5 });
+      kit.transition('rise', S('decide'), S('recap'), 'recap', { dur: 0.6 });
+      kit.transition('fade', S('recap'), S('end'), 'end', { dur: 0.7 });
+    });
+  </script>
+</body>
+</html>

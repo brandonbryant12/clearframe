@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Decision first</title>
+  <link rel="stylesheet" href="/_cf/cf.css">
+</head>
+<body>
+  <div id="stage">
+    <div id="scenes"></div>
+  </div>
+  <script src="/_cf/vendor/gsap/gsap.min.js"></script>
+  <script src="/_cf/vendor/gsap/SplitText.min.js"></script>
+  <script src="/_cf/cf.js"></script>
+  <script src="/_cf/cf-kit.js"></script>
+  <script>
+    CF.compose(({ kit, stage }) => {
+      kit.gridlines(stage, { size: 72, opacity: 0.35, drift: [0, 5] });
+      kit.grain(stage);
+      kit.vignette(stage);
+      kit.captions(stage, { maxWords: 4, maxChars: 22 }); // vertical is often watched muted
+    });
+  </script>
+</body>
+</html>

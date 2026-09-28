@@ -1,0 +1,15 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="/_cf/cf.css">
+<style>
+  .edge { position: absolute; left: 520px; top: 40px; font-size: 40px; white-space: nowrap; }
+  .tiny { position: absolute; left: 60px; top: 160px; font-size: 5px; }
+  .box { position: absolute; left: 60px; top: 220px; width: 120px; overflow: hidden; white-space: nowrap; font-size: 30px; }
+</style></head>
+<body><div id="stage">
+  <section data-beat="still"><div class="edge">This line runs off the frame</div></section>
+  <section data-beat="busy"><div class="tiny">tiny text nobody can read</div><div class="box">overflowing box content</div></section>
+</div>
+<script src="/_cf/vendor/gsap/gsap.min.js"></script>
+<script src="/_cf/cf.js"></script><script src="/_cf/cf-kit.js"></script>
+<script>CF.compose(() => {});</script>
+</body></html>

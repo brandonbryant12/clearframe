@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema/storyboard.schema.json",
+  "title": "One percent",
+  "logline": "Small daily changes compound: 1% better for a year is ~38×, 1% worse is ~0.03×.",
+  "audience": "Anyone scrolling a feed at work — one idea, stated precisely, in under 30 seconds.",
+  "format": { "preset": "vertical", "fps": 30 },
+  "theme": "ink",
+  "budget": 0.5,
+  "voice": { "provider": "gemini", "model": "gemini-3.8-flash-tts", "voice": "Sadaltager", "style": "warm, clear, unhurried", "wpm": 155 },
+  "music": {
+    "model": "lyria-3-clip-preview",
+    "prompt": "Minimal electronic, soft plucked synth arpeggio, warm sub, light shaker",
+    "bpm": 96, "key": "A minor", "volume": 0.18
+  },
+  "pacing": { "lead": 0.2, "tail": 0.5, "minBeat": 1.8 },
+  "beats": [
+    { "id": "hook", "scene": "scenes/short.js", "lead": 0.15, "vo": "Get one percent better every day.",
+      "visual": "A tall '1%' lands on 'one percent'. A tiny day counter starts ticking." },
+    { "id": "year", "vo": "After a year, you're not three hundred sixty-five percent better.",
+      "visual": "'365%' appears and is struck through on 'not'." },
+    { "id": "math", "vo": "You're about thirty-seven times better.",
+      "visual": "A curve bends upward; the counter climbs from 1.00× to 37.8× as the line draws." },
+    { "id": "worse", "vo": "One percent worse each day? <short pause> You end the year near zero.",
+      "visual": "A second, falling curve in rust; its counter sinks to 0.03×." },
+    { "id": "end", "tail": 1.2, "vo": "Small changes compound. Both ways.",
+      "visual": "Both numbers side by side: 37.8× and 0.03×. Formula footnote." }
+  ],
+  "sources": [
+    { "claim": "1.01^365 ≈ 37.8 and 0.99^365 ≈ 0.026", "source": "Arithmetic (compound growth over 365 daily steps)", "asOf": "n/a" }
+  ]
+}

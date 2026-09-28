@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Why busy teams are slow</title>
+  <link rel="stylesheet" href="/_cf/cf.css">
+  <style>
+    .chrome { position: absolute; inset: 0; z-index: 30; pointer-events: none; }
+    .chrome .chapter { position: absolute; top: calc(var(--safe-top) * 0.6); left: var(--safe-x); }
+  </style>
+</head>
+<body>
+  <div id="stage">
+    <div id="scenes"></div>
+    <div class="chrome" data-ambient data-safe="margin"><div class="cf-kicker chapter"></div></div>
+  </div>
+  <script src="/_cf/vendor/gsap/gsap.min.js"></script>
+  <script src="/_cf/vendor/gsap/SplitText.min.js"></script>
+  <script src="/_cf/cf.js"></script>
+  <script src="/_cf/cf-kit.js"></script>
+  <script>
+    CF.compose(({ kit, beats, stage }) => {
+      kit.gridlines(stage, { dots: true, size: 56, opacity: 0.5 });
+      kit.grain(stage);
+      kit.vignette(stage);
+      const chapter = stage.querySelector('.chapter');
+      CF.onFrame((t) => {
+        const b = beats.find((x) => t >= x.start && t < x.end) ?? beats.at(-1);
+        if (chapter.textContent !== b.chapter) chapter.textContent = b.chapter;
+      });
+      const S = (id) => `[data-beat="${id}"]`;
+      kit.transition('fade', S('hook'), S('curve'), 'curve');
+      kit.transition('rise', S('curve'), S('end'), 'end', { dur: 0.6 });
+    });
+  </script>
+</body>
+</html>

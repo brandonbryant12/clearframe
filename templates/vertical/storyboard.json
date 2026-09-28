@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/storyboard.schema.json",
+  "title": "Decision first",
+  "logline": "Put the ask in the first line; context comes after.",
+  "audience": "Anyone who writes updates to busy people.",
+  "format": { "preset": "vertical", "fps": 30 },
+  "theme": "ink",
+  "budget": 0.3,
+  "voice": { "model": "gemini-3.8-flash-tts", "voice": "Achird", "style": "warm, clear, direct", "wpm": 155 },
+  "music": { "model": "lyria-3-clip-preview", "prompt": "Understated electronic, muted plucked synth arpeggio, soft kick, warm sub", "bpm": 100, "key": "A minor", "volume": 0.18 },
+  "pacing": { "lead": 0.2, "tail": 0.5 },
+  "beats": [
+    { "id": "hook", "scene": "scenes/short.js", "lead": 0.15,
+      "vo": "Long updates bury the decision.",
+      "visual": "A stack of grey text lines; one line, highlighted, is buried at the bottom." },
+    { "id": "fix", "vo": "Put the ask in the first line.",
+      "visual": "The highlighted line slides to the top of the stack." },
+    { "id": "end", "tail": 1.2, "vo": "Decision first. <short pause> Context after.",
+      "visual": "Two words, stacked: Decision. Context." }
+  ],
+  "sources": []
+}

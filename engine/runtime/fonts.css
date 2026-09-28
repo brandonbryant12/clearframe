@@ -1,0 +1,11 @@
+/* Self-hosted fonts (served from node_modules by the ClearFrame server — no CDN at render time).
+ * Inter (opsz + wght axes)  — interface, labels, numbers (tabular figures)
+ * Instrument Serif          — editorial display, big statements
+ * JetBrains Mono            — data, kickers, timestamps
+ * Fraunces                  — alternative display serif */
+@import url('/_cf/fonts/inter/opsz.css');
+@import url('/_cf/fonts/inter/opsz-italic.css');
+@import url('/_cf/fonts/instrument-serif/400.css');
+@import url('/_cf/fonts/instrument-serif/400-italic.css');
+@import url('/_cf/fonts/jetbrains-mono/index.css');
+@import url('/_cf/fonts/fraunces/index.css');

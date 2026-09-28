@@ -1,0 +1,69 @@
+{
+  "$schema": "../../schema/storyboard.schema.json",
+  "title": "Seventy percent is not a promise",
+  "logline": "A 70% forecast means 3 in 10 go the other way — judge forecasts by calibration, and plan for the thirty.",
+  "audience": "Busy professionals who read forecasts (delivery dates, pipelines, risk) but never learned how to read a probability.",
+  "format": { "preset": "landscape", "fps": 30 },
+  "theme": "paper",
+  "budget": 1.0,
+  "voice": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Charon",
+    "style": "calm, measured, quietly confident",
+    "wpm": 150
+  },
+  "music": {
+    "model": "lyria-3.5",
+    "prompt": "Minimal modern ambient, soft felt piano, warm analog pads, a very light pulse",
+    "bpm": 80,
+    "key": "D major",
+    "volume": 0.2,
+    "arc": {
+      "The forecast": "Intro: a single felt-piano figure over a soft pad, very sparse.",
+      "A hundred launches": "A light pulse enters; steady and patient, leaves room for the voice.",
+      "Calibration": "Same groove, slightly brighter pad; no new melody.",
+      "The better question": "Thin out to the pad alone for a moment of focus.",
+      "Recap": "Resolve: the piano figure returns once and settles on a sustained chord."
+    }
+  },
+  "pacing": { "lead": 0.3, "tail": 0.7, "minBeat": 2.0 },
+  "beats": [
+    { "id": "hook", "chapter": "The forecast", "scene": "scenes/forecast.js", "lead": 0.5, "tail": 0.5,
+      "vo": "Seventy percent. <short pause> It sounds like a sure thing.",
+      "visual": "A serif '70%' rises out of a mask as the word is spoken; the caption 'chance the launch ships on time' follows." },
+    { "id": "flip", "chapter": "The forecast",
+      "vo": "It isn't. It means three times in ten, it won't.",
+      "visual": "70% glides up and shrinks. A row of ten tiles builds; the last three turn cobalt on 'three'. '3 in 10' labels them." },
+    { "id": "hundred", "chapter": "A hundred launches", "scene": "scenes/hundred.js",
+      "vo": "Picture a hundred launches with that same forecast.",
+      "visual": "A 10×10 grid of dots blooms from the centre. Kicker: 100 launches · same 70% forecast." },
+    { "id": "seventy", "chapter": "A hundred launches",
+      "vo": "About seventy ship on time.",
+      "visual": "Seventy dots fill in ink, row by row. Counter: 70 · on time." },
+    { "id": "thirty", "chapter": "A hundred launches", "tail": 0.9,
+      "vo": "About thirty slip. <short pause> That's not the forecast failing. It's the forecast working.",
+      "visual": "The remaining thirty light up cobalt. Counter: 30 · slip. 'working' is underlined as it's spoken." },
+    { "id": "calibrated", "chapter": "Calibration", "scene": "scenes/calibration.js",
+      "vo": "Good forecasts are calibrated.",
+      "visual": "Axes draw: 'Forecast said' vs 'Actually happened'. A dashed diagonal draws: perfectly calibrated." },
+    { "id": "means", "chapter": "Calibration",
+      "vo": "Of everything called seventy percent, about seventy percent happens.",
+      "visual": "Points pop along the diagonal; the 70% point is marked: said 70 → happened 70." },
+    { "id": "over", "chapter": "Calibration",
+      "vo": "Overconfident forecasts sag below the line.",
+      "visual": "A second curve in rust draws below the diagonal, labelled overconfident." },
+    { "id": "decide", "chapter": "The better question", "scene": "scenes/question.js", "tail": 1.0,
+      "vo": "So don't ask whether the forecast was right. Ask whether you planned for the thirty.",
+      "visual": "'Was the forecast right?' is struck through. 'Did we plan for the 30?' rises beneath it; '30' is highlighted." },
+    { "id": "recap", "chapter": "Recap", "scene": "scenes/recap.js", "tail": 1.2,
+      "vo": "Seventy is likely, not certain. Check calibration. And plan for the thirty.",
+      "visual": "Three numbered takeaways, each landing on its spoken phrase." },
+    { "id": "end", "chapter": "Recap", "scene": "scenes/end.js", "duration": 4.0,
+      "visual": "Title card: 'Seventy percent is not a promise.' Footnote: hypothetical illustration." }
+  ],
+  "assets": [],
+  "sources": [
+    { "claim": "All figures (70%, 3 in 10, 100 launches, calibration curves)", "source": "Hypothetical illustration built for explanation — not real-world data.", "asOf": "2026-09" }
+  ]
+}

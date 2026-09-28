@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/storyboard.schema.json",
+  "title": "Why busy teams are slow",
+  "logline": "Waiting time explodes as utilisation nears 100% — slack is what keeps work moving.",
+  "audience": "Team leads and managers who plan capacity.",
+  "format": { "preset": "landscape", "fps": 30 },
+  "theme": "paper",
+  "budget": 0.5,
+  "voice": { "model": "gemini-3.8-flash-tts", "voice": "Charon", "style": "calm, measured, quietly confident", "wpm": 150 },
+  "music": { "model": "lyria-3.5", "prompt": "Minimal modern ambient, soft felt piano, warm analog pads, very light pulse", "bpm": 80, "key": "D major", "volume": 0.2 },
+  "pacing": { "lead": 0.3, "tail": 0.7 },
+  "beats": [
+    { "id": "hook", "chapter": "The intuition", "scene": "scenes/hook.js", "lead": 0.4,
+      "vo": "Ninety percent busy sounds efficient.",
+      "visual": "'90%' rises out of a mask on 'Ninety'; caption 'of capacity, booked' follows." },
+    { "id": "curve", "chapter": "The math", "scene": "scenes/curve.js",
+      "vo": "But waiting doesn't grow in a straight line.",
+      "visual": "Four bars — 50%, 80%, 90%, 95% busy — grow to 1×, 4×, 9×, 19× relative wait." },
+    { "id": "point", "chapter": "The math", "tail": 1.0,
+      "vo": "At half capacity, work waits one unit. At ninety percent, it waits nine.",
+      "visual": "The 90% bar takes the accent; others dim. Label: 9× the wait." },
+    { "id": "end", "chapter": "The takeaway", "scene": "scenes/end.js", "tail": 1.5,
+      "vo": "Leave slack. <short pause> It's what keeps work moving.",
+      "visual": "Title: 'Slack is not waste.' Source line: queueing theory, illustrative." }
+  ],
+  "sources": [
+    { "claim": "Relative wait ≈ ρ/(1−ρ): 1× at 50%, 4× at 80%, 9× at 90%, 19× at 95% utilisation", "source": "Single-server queue (M/M/1) result — illustrative model, not measured data", "asOf": "n/a" }
+  ]
+}

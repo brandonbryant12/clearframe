@@ -1,0 +1,67 @@
+---
+name: gemini-image
+description: Generate still images with Google's native Gemini image models (Nano Banana 2 — gemini-3.1-flash-image; Lite; Pro) via the Interactions API — exact contract, aspect ratios and sizes, reference images, pricing, and prompt recipes for textures, backdrops and editorial illustrations that leave room for code-rendered type. Use only when a ClearFrame storyboard declares an image asset that code can't produce; never for text, numbers, charts, logos or real people.
+---
+
+# Gemini image ("Nano Banana 2")
+
+**Default answer: don't.** CSS gradients, grain, grids and SVG cover most backgrounds. Generate a still only when a real-world material, place or illustration adds meaning, and keep it to ≤ 3 per film. Images are backdrops and textures; the information stays in code.
+
+## Use it
+
+Declare it in the storyboard, then generate:
+```jsonc
+"assets": [{ "id": "paper", "kind": "image", "size": "2K",
+  "prompt": "Macro photograph of layered off-white paper sheets, soft raking window light from the left, gentle shadows, shallow depth of field, calm neutral palette, generous empty space on the right third. No text, no letters, no logos, no people." }]
+```
+```bash
+clearframe plan <dir>      # shows ≈ cost
+clearframe images <dir>    # → assets/img/<id>.jpg (+ .json with prompt & model), cached by hash
+node skills/gemini-image/scripts/image.mjs --prompt "…" --aspect 16:9 --size 2K --out out.jpg [--ref style.jpg] [--dry-run]
+```
+Use it in a scene with `<img src="assets/img/paper.jpg">` or a CSS background. Add `kit.drift` for a slow Ken Burns push.
+
+## Contract (verified 2026-09-27 against ai.google.dev)
+
+`POST https://generativelanguage.googleapis.com/v1beta/interactions` with header `x-goog-api-key`
+
+```json
+{
+  "model": "gemini-3.1-flash-image",
+  "input": [
+    { "type": "text", "text": "…prompt…" },
+    { "type": "image", "mime_type": "image/png", "data": "<base64 reference>" }
+  ],
+  "response_format": { "type": "image", "mime_type": "image/jpeg", "aspect_ratio": "16:9", "image_size": "2K" }
+}
+```
+The response carries `steps[type="model_output"].content[type="image"] = { mime_type, data }`. Text blocks may accompany it, and thought blocks are separate.
+
+- `aspect_ratio`: `1:1 2:3 3:2 3:4 4:3 4:5 5:4 9:16 16:9 21:9` (plus `1:4 4:1 1:8 8:1` on 3.1 Flash).
+- `image_size`: `"512"` (3.1 Flash only), `"1K"` (default), `"2K"`, `"4K"`. The K must be uppercase. At 16:9, 2K is 2752×1536, which covers 1080p with room for a slow push.
+- Reference images: up to 14 in total. 3.1 Flash accepts up to 10 object and 4 character references. Use one style reference to keep a series consistent.
+- All output carries a **SynthID** watermark.
+- **Imagen was shut down on the Gemini API (Aug 17 2026).** Don't use `imagen-*`. `gemini-2.5-flash-image` shuts down Oct 2 2026.
+
+| Model | Use | Price per image |
+|---|---|---|
+| `gemini-3.1-flash-image` (default) | best balance | 512: $0.045 · 1K: $0.067 · 2K: $0.101 · 4K: $0.151 |
+| `gemini-3.1-flash-lite-image` | cheapest drafts, 1K only, weak multi-reference | $0.0336 |
+| `gemini-3-pro-image` | hardest compositions | 1K/2K: $0.134 · 4K: $0.24 |
+
+## Prompt recipes (professional register)
+
+Structure: **subject → material and light → palette → composition (where the empty space is) → exclusions.**
+
+- **Texture plate:** "Macro photograph of brushed aluminium with fine linear grain, soft diffused top light, cool neutral greys, even exposure edge to edge. No text, no logos."
+- **Editorial illustration:** "Flat editorial illustration of a small paper boat on calm water seen from above, two-colour palette of warm off-white and cobalt blue, lots of negative space, subtle paper texture, minimal shapes. No text, no letters, no people."
+- **Place, abstracted:** "Architectural photograph of an empty modern atrium at dawn, long soft shadows, muted warm palette, symmetrical composition, lower third left empty for typography. No people, no signage, no text."
+- **Backdrop for a chart:** "Out-of-focus abstract light gradient from deep navy to slate, very low contrast, subtle film grain, no shapes, no text." (Honestly, a CSS gradient usually wins here.)
+
+Always end with the exclusions: `No text, no letters, no numbers, no logos, no people` unless one of them is the point. Name the palette in words matching your theme (e.g. "warm off-white and cobalt").
+
+## Don't
+
+- Don't ask for text, numbers, charts, UI or diagrams. Models garble them, and they carry information that must be exact. Render those in code over the image.
+- No real people, brands, logos, documents or screenshots, and no "photos" that could pass as evidence.
+- No stock clichés (handshakes, lightbulbs, rockets, chess pieces).

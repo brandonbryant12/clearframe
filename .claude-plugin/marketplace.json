@@ -1,0 +1,11 @@
+{
+  "name": "clearframe",
+  "owner": { "name": "Brandon Bryant", "url": "https://github.com/brandonbryant12" },
+  "plugins": [
+    {
+      "name": "clearframe",
+      "source": ".",
+      "description": "Agent skills + a light engine for code-rendered professional explainer videos: director workflow, script, motion doctrine, data viz, integrity, and Gemini TTS / Lyria / image / Veo contracts."
+    }
+  ]
+}
