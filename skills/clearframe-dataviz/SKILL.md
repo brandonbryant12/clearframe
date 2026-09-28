@@ -1,86 +1,62 @@
 ---
 name: clearframe-dataviz
-description: Choose, choreograph and honestly animate numbers and charts in ClearFrame videos — which form for which question (bars, lines, waffle/unit charts, meters, donuts, milestones, steps), the build order that matches narration, honesty rules (baselines, scales, units, as-of dates), number formatting, and binding figures to data. Use whenever a video shows a number, a comparison, a trend, a probability or a process.
+description: Choose, choreograph and honestly animate numbers and charts in ClearFrame videos — which native block answers which question (stat, kpis, delta, bars, line, waffle, ring, donut, funnel, magnitude), the build order that matches narration, honesty rules (baselines, scales, units, as-of dates), number formatting, and binding figures to sources. Use whenever a video shows a number, a comparison, a trend, a share, a probability or a process.
 ---
 
 # Numbers and charts in motion
 
-A chart in a video is not a chart on a page. The viewer can't pause, re-read or hover, so every chart must answer **one question**, reveal it **in the order it's spoken**, and **point** at the answer.
+A chart in a video is not a chart on a page. The viewer can't pause, re-read or hover, so every chart must answer **one question**, reveal it **in the order it is spoken**, and **point** at the answer. All numeric blocks are native FFFrames renderers; run `node engine/cli.mjs blocks NAME` for exact props.
 
 ## Pick the form
 
-| Question | Form | Kit |
+| Question | Block | Notes |
 |---|---|---|
-| How big is this one number? | Hero number + counter | `kit.counter`, `kit.reveal` |
-| What share / what chance? | **Unit (waffle) chart**: "7 in 10" is countable, while 70% is abstract | `kit.waffle` |
-| One proportion, compact | Meter bar or single donut | `kit.meter`, `kit.donut` |
-| Compare a few values | Bars. Horizontal when labels are long; sorted unless order means something | `kit.bars` |
-| Change over time | Line that draws itself; the value rides the tip | `kit.lineChart` |
-| Before vs after | Two bars, or strike-and-replace text | `kit.bars`, `kit.mark` |
-| Sequence of events | Milestones on a line | `kit.milestones` |
-| A process | Steps with connectors | `kit.steps` |
-| Is the forecast honest? | Reliability diagram (said vs happened) | custom SVG (see `examples/seventy-percent/scenes/calibration.js`) |
+| How big is this one number? | `stat` | Tabular-figure counter from a truthful `from`; word units (" days") set small, symbols ("%") larger |
+| Two to four headline metrics | `kpis` | Cards count up in order; keep units comparable |
+| What changed? | `delta` | The new value counts from the old one; `better: up/down` colors the change chip, never the only signal (sign + arrow remain) |
+| Compare a few values | `bars` | Zero baseline always; horizontal for long labels; `sort: desc` unless order means something; `focus` dims the rest |
+| Change over time | `line` | Draws left to right with an area wash; round-number ticks; the final value appears at the tip |
+| What share, what chance? | `waffle` | "7 in 10" is countable where 70% is abstract; `icon: user` makes a pictogram |
+| One proportion, compact | `ring` | Percent when `max` is 100, otherwise "value of max" |
+| Parts of a whole | `donut` | Two to six segments; the legend states value and share; avoid for more than four similar slices |
+| Stages that lose people | `funnel` | Derived step rates ("↓ 62%") are computed from your data; turn off with `rates: false` |
+| Orders of magnitude | `magnitude` | Area-true squares; tiny squares keep their true size and get a locator ring |
+| A process or sequence | `steps`, `timeline`, `flow` | Not charts: use them when order, not quantity, is the point |
 
-Don't use: pies with more than 3 slices, 3D anything, dual y-axes, radar charts, word clouds, or animated tables with more than 3 rows.
+Don't use: 3D, dual axes, radar charts, word clouds, or tables with more than four rows in motion. Use `matrix` for qualitative comparison grids.
 
 ## Choreography: build it in the order you say it
 
-1. **Frame:** axes, labels and the title question fade in (0.5 s). Say what we're looking at.
-2. **Data:** the line draws or the bars grow (0.8–1.6 s), timed to the clause that describes it.
-3. **Focus:** dim everything that isn't the story (`bars.focus(i)`, opacity 0.3) and **mark the point** (ring, label, band).
-4. **Takeaway:** the number or sentence that answers the question lands on its word and **holds ≥ 2 s**.
+1. **Frame:** the header rises; axes, baselines and gridlines draw first.
+2. **Data:** bars grow, lines draw, segments sweep, timed to the clause that describes them with `growSay`, `drawSay` or `land` (an exact spoken word, or local seconds).
+3. **Focus:** dim what is not the story (`bars.focus` with authored `dim` and `dur`, `matrix.highlight`) and mark the point (`focus.note`, `annotate` pins).
+4. **Takeaway:** the answering number or sentence lands on its word and holds at least two seconds.
 
-One step per spoken clause. If the narration says one thing while the chart does another, the viewer follows the voice and misses the chart.
+Every counter and bar settles on the exact authored value. `check` fails a final render when a beat ends before its numbers finish counting (drafts warn), because the true figure would never be on screen. Extend the beat or cue earlier.
 
 ## Honesty rules
 
-- **Bars start at zero. Always.**
-- Lines may use a tighter range, but the axis must be labelled so the zoom is visible.
-- **Same scale when comparing, or split the chart.** If one series would be flattened into invisibility (37.8× vs 0.03×), give each its own chart with its own labelled axis rather than hiding it (see `examples/one-percent`).
-- Label the log scale if you use one, and say it.
-- Units on every number (%, ×, $, days, ms). Show an **as-of date** or period on every data scene (`kit.source`).
-- Consistent precision: don't show 37.8× next to 0.0255×. Round both to what the source supports.
-- Animate from a true baseline. A counter from 0 is fine for a count; for a rate that moved from 4.1% to 4.3%, animate 4.1 → 4.3, not 0 → 4.3.
-- Label hypothetical or illustrative data as such, on screen.
-- Don't smooth away the story. `kit.lineChart` uses a monotone curve that never overshoots the data; pass `smooth: false` for jagged real series.
+- **Bars start at zero. Always.** Negative bars are rejected; use `delta` or an explicit `line` domain for signed change.
+- Line domains may be tighter than zero, but they are explicit (`min`, `max`) and every data point must lie inside them. Tick labels are round values inside the domain, never rounded-off odd steps.
+- **Same scale when comparing, or split the chart.** When one value would be invisible next to another, use `magnitude` (area) or give each its own chart with its own labelled scale.
+- Units on every number (%, ×, $, days, ms), and an as-of date or period in `props.source` on every data scene.
+- Consistent precision: `decimals` is inferred from the data; set it explicitly when the source supports less.
+- Animate from a true baseline: a count may start at 0; a rate that moved from 4.1% to 4.3% should use `from: 4.1`.
+- Label hypothetical or illustrative data as such, on screen. Playbook samples already say so; replace them.
+- Derived figures (funnel step rates, donut shares) are computed from your inputs; the inputs still need a source.
 
-## Labels and colour
+## Labels and color
 
-- Use **direct labels**, not legends: the value at the line's tip (`tip: true`) and the label next to its bar.
-- **Context is neutral** (ink-2, line). **The story is the accent**, as one series or one bar. A second series gets `--down` or `--ink-2`, never a second bright hue.
-- Up/down colour always comes with a sign or arrow.
-- Gridlines are hairlines in `--line`, 3–5 of them at most. Use `kit.niceTicks` for round values.
+- Direct labels, not legends, except `donut`, whose legend doubles as the data table.
+- Context is neutral (`muted`, hairlines); the story is the `accent`. `accent2` is for a genuinely second series.
+- Positive/negative colors appear only when `better` states which direction is good, and always alongside a sign.
 
 ## Numbers
 
-- **Tabular figures** (`.cf-num`) for anything that changes, so digits don't jitter.
-- Format for speech and sight: 1.2M, 37.8×, 30%, $4.5B, 2.4 s, and never 1,234,567.89 in motion.
-- **A counter must land on exactly the displayed final value**, and that value must match the narration and the source.
-- Big numbers carry little text: a number plus a 2–5 word label.
+- Counters use Inter's own tabular figures, so digits never jitter and the suffix settles in place.
+- Format for speech and sight: 1.2M, 37.8×, 30%, $4.5B, 2.4 s — never 1,234,567.89 in motion.
+- A number plus a two-to-five word label; context goes in `context`/`support`, not in the figure.
 
-## Bind figures to data
+## Bind figures to sources
 
-Never type figures from memory into a scene. Put them in the storyboard block props (optionally retaining the source dataset alongside it), and record each one in `storyboard.sources` with `{ claim, source, asOf }`. Then:
-
-```js
-export default function ({ el, b, data, kit }) {
-  kit.counter(el.querySelector('.n'), b.say('grew'), { to: data.revenue.growthPct, decimals: 1, suffix: '%' });
-}
-```
-
-Before delivery, check that every number in the narration appears in `data.json` or `sources` (the integrity skill).
-
-## Kit quick reference
-
-```js
-kit.counter(el, at, { from, to, dur, decimals, prefix, suffix, format }).to(next, at2)   // chainable
-kit.lineChart(el, { data, min, max, yFormat, tipFormat, xLabels, area, grid, color, pad })
-   .axes(at).draw(at, { dur }).mark(i, at, { label }).band(i0, i1, at, { label }).hideTip(at)
-kit.bars(el, { data: [{ label, value }], orientation, format, highlight }).grow(at).focus(i, at)
-kit.waffle(el, { total: 100, cols: 10 }).show(at).fill(n, at, { color, order, start }).pulse(n, at)
-kit.donut(el, { thickness }).sweep(at, { to: 0.7 })
-kit.meter(el, { value: 0.7, label }).fill(at)
-kit.milestones(el, { items: [{ label, sub }] }).play(at, { step }).focus(i, at)
-kit.steps(el, { items: [{ label, sub }] }).play(at, { step }).focus(i, at)
-kit.source(sceneEl, 'Source: … · as of Sep 2026', at)
-```
+Never type figures from memory. Put them in block props and record each in `storyboard.sources` with `{ claim, source, asOf }`; the visible `props.source` is required for every numeric block. Before delivery, check that every number in the narration appears in the props and the sources (see the integrity skill).

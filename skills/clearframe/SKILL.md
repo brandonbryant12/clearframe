@@ -8,9 +8,9 @@ description: Direct and produce an FFFrames video from a brief, article, script 
 FFFrames is the only active renderer. Read the project AGENTS.md. Use the library skill before designing visuals, engine skill for commands, script skill for narration, motion/dataviz skills for design, integrity skill for evidence, and FFFrames skill for native code changes.
 
 1. Establish audience, takeaway, format, duration and available evidence. Work from the user's material; research unresolved factual claims. Define what the viewer should understand or do.
-2. Choose a playbook with `node engine/cli.mjs playbooks`, then adapt its arc. The 19 starters are not a finite catalog of possible videos. Combine blocks as needed; every beat needs a purpose.
+2. Choose a playbook with `node engine/cli.mjs playbooks`, then adapt its arc. The 24 starters are not a finite catalog of possible videos. Combine blocks as needed; every beat needs a purpose.
 3. Write spoken language, one idea per beat. Use verified figures and meaningful source labels. Plan the visual before spending on media. Keep titles short; reserve long speech for kinetic text.
-4. Scaffold with `new DIR --playbook NAME`. Choose a palette, motion preset/intensity and entrances using `docs/style.md`. Use `blocks NAME` for exact props. Do not write browser scene modules.
+4. Scaffold with `new DIR --playbook NAME`. Choose a palette (8 presets, `themes`), backdrop, motion preset/intensity and entrances using `docs/style.md`; decide which words deserve `emphasis` or a `highlight`. Use `blocks NAME` for exact props. Do not write browser scene modules.
 5. Generate free draft voice or import approved recordings. For speech-following typography/captions, read `docs/speech.md`, import measured words or explicitly transcribe the current recording. Never describe syllable interpolation as word alignment.
 6. Native type/charts/diagrams carry all information. Use Google image or Gemini Omni only for specific visual material the native scene cannot express. Read `docs/continuity.md`; keep palette/references/framing/movement consistent and preserve the shared soundtrack.
 7. Before paid generation, run `plan` and honor the user scope and budget. `voice --draft` and `music --draft` are free. `align --words` is free; `align --transcribe` uploads the selected recording and is paid.

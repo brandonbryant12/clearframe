@@ -57,6 +57,10 @@ pub struct Beat {
     /// How the scene leaves: none, fade, push, zoom or wipe (set from the next entrance).
     #[serde(default = "none")]
     pub exit: String,
+    /// Scene seconds by which every value and staged element has reached its final state;
+    /// the exit never starts earlier.
+    #[serde(default)]
+    pub settle_seconds: f32,
     pub props: Value,
     #[serde(default)]
     pub captions: Vec<Caption>,
@@ -113,6 +117,7 @@ impl Film {
                 || !beat.props.is_object()
                 || !["cut","fade","rise","wipe","push","zoom"].contains(&beat.transition.as_str())
                 || motion::ExitKind::parse(&beat.exit).is_none()
+                || !beat.settle_seconds.is_finite() || beat.settle_seconds < 0.0
             { return Err(format!("invalid native scene {}", beat.id).into()); }
             let duration = beat.frames as f32 / film.fps as f32;
             for cues in [&beat.captions, &beat.words] {
@@ -336,6 +341,52 @@ mod tests {
         let next = render(60);
         assert!(next.contains("Then") && next.contains("begin") && !next.contains("Look"));
         assert_eq!(first, render(6));
+    }
+    #[test] fn exits_wait_for_values_to_settle_and_numerals_lead_with_the_sign() {
+        let mut value = job(); value["beats"][0]["block"] = "stat".into(); value["beats"][0]["exit"] = "fade".into();
+        value["beats"][0]["props"] = serde_json::json!({"value":-3,"prefix":"$","label":"Change"});
+        value["beats"][0]["settle_seconds"] = 1.96.into();
+        let render = |settle: f64| {
+            let mut v = value.clone(); v["beats"][0]["settle_seconds"] = settle.into();
+            let film = Film::from_json(&serde_json::to_vec(&v).unwrap()).unwrap();
+            let ctx = FFramesContext { time_base: fframes::TimeBase { fps:30, sample_rate:48000 },
+                current_video_size: fframes::VideoSize { width:1920, height:1080 }, duration_in_frames:60,
+                mode:fframes::FFramesMode::Renderer, scenes:None, media_source:None, font_source:None, abort_signal:None };
+            let frame = format!("{:?}", film.beats[0].render_frame(Frame::new(58,58,30), &ctx));
+            frame
+        };
+        let frame = render(1.96);
+        assert_ne!(frame, render(0.0), "without a settle time the exit is already running at frame 58");
+        assert_eq!(frame, render(1.99), "with values settling at the cut there is no exit to draw");
+        let (sign, dollar) = (frame.find("\"−\"").expect("sign"), frame.find("\"$\"").expect("prefix"));
+        assert!(sign < dollar, "the sign precedes the prefix, as in format_number");
+        value["beats"][0]["settle_seconds"] = (-1.0).into();
+        assert!(Film::from_json(&serde_json::to_vec(&value).unwrap()).is_err());
+    }
+    #[test] fn magnitude_fits_long_values_on_a_vertical_canvas() {
+        let mut value = job(); value["width"]=1080.into(); value["height"]=1920.into(); value["beats"][0]["block"] = "magnitude".into();
+        value["beats"][0]["props"] = serde_json::json!({"format":{"suffix":" people"},"items":[
+            {"label":"A team","value":12},{"label":"A company","value":1200},{"label":"A city","value":90000},{"label":"A country","value":8000000}]});
+        let film = Film::from_json(&serde_json::to_vec(&value).unwrap()).unwrap();
+        let ctx = FFramesContext { time_base: fframes::TimeBase { fps:30, sample_rate:48000 },
+            current_video_size: fframes::VideoSize { width:1080, height:1920 }, duration_in_frames:60,
+            mode:fframes::FFramesMode::Renderer, scenes:None, media_source:None, font_source:None, abort_signal:None };
+        let frame = format!("{:?}", film.beats[0].render_frame(Frame::new(59,59,30), &ctx));
+        assert!(frame.contains("8,000,000 people"));
+    }
+    #[test] fn word_mode_holds_through_short_pauses_and_clears_in_silence() {
+        let mut value = job(); value["frames"] = 90.into();
+        value["beats"][0]["block"] = "kinetic".into(); value["beats"][0]["frames"] = 90.into();
+        value["beats"][0]["props"] = serde_json::json!({"mode":"word","maxGap":0.6});
+        value["beats"][0]["words"] = serde_json::json!([{"text":"Look","start":0,"end":0.4},{"text":"closely","start":0.5,"end":0.9}]);
+        let film = Film::from_json(&serde_json::to_vec(&value).unwrap()).unwrap();
+        let ctx = FFramesContext { time_base: fframes::TimeBase { fps:30, sample_rate:48000 },
+            current_video_size: fframes::VideoSize { width:1920, height:1080 }, duration_in_frames:90,
+            mode:fframes::FFramesMode::Renderer, scenes:None, media_source:None, font_source:None, abort_signal:None };
+        let render = |index| format!("{:?}", film.beats[0].render_frame(Frame::new(index,index,30), &ctx));
+        assert!(render(13).contains("Look"), "held across the 0.1s gap");
+        assert!(render(42).contains("closely"), "held 0.5s after the last word");
+        assert!(!render(48).contains("closely"), "cleared after maxGap of silence");
     }
     #[test] fn video_decoder_drains_exact_last_b_frame_and_survives_backward_seeks() {
         use fframes::FFramesSyncedVideoFrame;

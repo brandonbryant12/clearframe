@@ -12,8 +12,8 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 ## 1. Every figure has a source
 
 - Record each one in `storyboard.sources`: `{ "claim": "Revenue grew 42%", "source": "FY2026 annual report, p.12", "asOf": "2026-06-30" }`.
-- Keep figures in `data.json`, not typed into scenes (see `clearframe-dataviz`).
-- Put a **source line on screen** for every data scene (`kit.source`), with the period or as-of date.
+- Keep figures in block props, never typed from memory (see `clearframe-dataviz`). Numeric blocks refuse to render without a visible `props.source` and a `sources` entry.
+- Put a **source line on screen** for every data scene (`props.source`), with the period or as-of date.
 - **Illustrative numbers are labelled on screen** ("Hypothetical illustration"), in the footnote *and* the storyboard.
 - Round honestly. Precision should match the source, and "about" in the narration is fine when the screen shows the exact figure.
 - Check narration against the screen: the number spoken, the number shown and the number in `sources` must agree.
@@ -28,13 +28,13 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 
 ## 3. Disclosures people can actually read
 
-- Body size must be ≥ 24 px at 1080p (`clearframe check` enforces it) with contrast ≥ 4.5:1. Never use `--dim` for a disclosure.
-- Hold time is at least `words ÷ 3 + 1` seconds, and never under 2.5 s. `kit.footnote` returns this number, so make the beat at least that long.
+- Source lines render at 22 px; a disclosure viewers must actually read belongs in a `callout` or `statement` (32 px and up) in the `ink` color, with contrast ≥ 4.5:1 (`check` warns on low-contrast palettes).
+- Hold time is at least `words ÷ 3 + 1` seconds, and never under 2.5 s. Set the beat's `duration` or `hold` to at least that.
 - If a disclosure is required, say it in the narration too, not only on screen.
 
 ## 4. Accessibility
 
-- Export captions for every deliverable (`clearframe captions`). Burn them in for vertical and social (`kit.captions`).
+- Export captions for every deliverable (`clearframe captions`). Burn them in for vertical and social (`"captions": true`, on by default for vertical).
 - Never encode meaning in colour alone. Pair colour with a sign, an arrow or a label.
 - No flashing: nothing faster than 3 flashes per second, and no full-frame strobes.
 - Narration should describe the key visual ("the line doubles by year three"), so the film works for listeners too.

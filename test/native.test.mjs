@@ -203,6 +203,8 @@ test('a beat that ends before its numbers finish counting fails, but drafts only
 });
 test('text the bundled fonts cannot draw fails with the character and its location',t=>{
   assert.equal(missingGlyph('Café — 42% → “ok” Ωμέγα Привет'),null);assert.equal(missingGlyph('Hello 東京'),'東');
+  assert.equal(missingGlyph('co\u00ADoperate \u00A9\uFE0F join\u200Dme word\u2060joiner'),null,'invisible format characters render without boxes');
+  assert.equal(missingGlyph('launch 🚀'),'🚀');
   const {errors}=job(t,[{id:'cjk',block:'title',duration:3,props:{text:'駅はどこですか'}}]);
   assert.match(errors.join(),/U\+99C5.*cjk\.props\.text/);
   assert.deepEqual(job(t,[{id:'ok',block:'title',duration:3,props:{text:'Plain text',kicker:'Überblick'}}]).errors,[]);
@@ -224,4 +226,18 @@ test('placeholder screenshots are deterministic PNGs and scaffold with their pla
   assert.notDeepEqual(wireframePNG(THEMES.ink),a);
   const dir=path.join(fs.mkdtempSync(path.join(os.tmpdir(),'cf-scaffold-')),'walk');t.after(()=>fs.rmSync(path.dirname(dir),{recursive:true,force:true}));
   scaffold(dir,{playbook:'screen-walkthrough'});assert.ok(fs.readFileSync(path.join(dir,'assets/screen.png')).subarray(1,4).toString()==='PNG');
+});
+
+test('settle times include labels, and every beat tells the renderer when its values are final',t=>{
+  const sb={...storyboardFor('concept-explainer'),beats:[{id:'trend',block:'line',duration:2,props:{series:[1,2,3],source:'Sample'}}]};
+  const root=project(t,sb);assert.match(createJob(loadStoryboard(root),computeTiming(root)).errors.join(),/finish counting/,'the final-value tip label must be visible before the cut');
+  const {job:j}=job(t,[{id:'s',block:'stat',duration:4,props:{value:3,label:'Count',source:'Sample'}},{id:'c',block:'checklist',duration:4,props:{items:['One','Two']}}]);
+  assert.ok(j.beats.every(b=>b.settle_seconds>0&&b.settle_seconds<=b.frames/j.fps));
+  assert.ok(j.beats[1].settle_seconds>=j.beats[1].props.items.at(-1).at+.4-1e-9,'the last tick finishes before the exit may start');
+});
+test('props that would silently drop authored text are rejected',()=>{
+  assert.throws(()=>normalizeProps('statement',{title:'Heading',text:'Body'}),/not both/);
+  assert.throws(()=>normalizeProps('highlight',{title:'Heading',text:'A long tail',phrases:['tail']}),/kicker/);
+  assert.throws(()=>normalizeProps('stat',{value:1,label:'x',context:'a',support:'b'}),/not both/);
+  for(const p of PLAYBOOKS)for(const b of storyboardFor(p.id).beats)if(['title','statement','endcard'].includes(b.block))assert.ok(!(b.props.text&&b.props.title),`${p.id}/${b.id}`);
 });

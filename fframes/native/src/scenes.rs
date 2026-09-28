@@ -234,33 +234,40 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let (final_sign, final_digits) = number_parts(final_value, decimals);
         let (pfont, psize) = unit_style(prefix, size);
         let (sfont, ssize) = unit_style(suffix, size);
+        // The sign leads the prefix ("−$3"), matching format_number in charts and legends.
+        let sign_w = text::measure(Font::Figures, sign, size, 0.0);
+        let final_sign_w = text::measure(Font::Figures, final_sign, size, 0.0).max(sign_w);
         let pw = text::measure(pfont, prefix, psize, 0.0);
-        let body = format!("{sign}{digits}");
-        let body_w = text::measure(Font::Figures, &body, size, 0.0);
-        let reserve = text::measure(Font::Figures, &format!("{final_sign}{final_digits}"), size, 0.0).max(body_w);
+        let body_w = text::measure(Font::Figures, &digits, size, 0.0);
+        let reserve = text::measure(Font::Figures, &final_digits, size, 0.0).max(body_w);
         let sw = text::measure(sfont, suffix, ssize, 0.0);
         let gap = if suffix.starts_with(' ') || suffix.is_empty() { 0.0 } else { size * 0.03 };
         let pgap = if prefix.is_empty() || prefix.ends_with(' ') { 0.0 } else { size * 0.02 };
-        let total = pw + pgap + reserve + gap + sw;
+        let total = final_sign_w + pw + pgap + reserve + gap + sw;
         let x0 = match align_w { Some(w) => x + (w - total) / 2.0, None => x };
+        let px = x0 + sign_w;
         let nodes = vec![
-            self.run(prefix.to_owned(), x0, baseline, pfont, psize, 0.0, unit_color),
-            self.run(body, x0 + pw + pgap, baseline, Font::Figures, size, 0.0, color),
+            self.run(sign.to_owned(), x0, baseline, Font::Figures, size, 0.0, color),
+            self.run(prefix.to_owned(), px, baseline, pfont, psize, 0.0, unit_color),
+            self.run(digits, px + pw + pgap, baseline, Font::Figures, size, 0.0, color),
             // The suffix trails the current digits while counting and lands at its final place.
-            self.run(suffix.to_owned(), x0 + pw + pgap + body_w + gap, baseline, sfont, ssize, 0.0, unit_color),
+            self.run(suffix.to_owned(), px + pw + pgap + body_w + gap, baseline, sfont, ssize, 0.0, unit_color),
         ];
         (fframes::svgr!(<g>{nodes}</g>), total)
     }
+    /// Width `numeral` gives a final value at `size`.
+    pub(crate) fn numeral_width(&self, final_value: f64, decimals: usize, prefix: &str, suffix: &str, size: f32) -> f32 {
+        let (sign, digits) = number_parts(final_value, decimals);
+        let (pfont, psize) = unit_style(prefix, size);
+        let (sfont, ssize) = unit_style(suffix, size);
+        let gap = if suffix.starts_with(' ') || suffix.is_empty() { 0.0 } else { size * 0.03 };
+        let pgap = if prefix.is_empty() || prefix.ends_with(' ') { 0.0 } else { size * 0.02 };
+        text::measure(Font::Figures, sign, size, 0.0) + text::measure(pfont, prefix, psize, 0.0) + pgap
+            + text::measure(Font::Figures, &digits, size, 0.0) + gap + text::measure(sfont, suffix, ssize, 0.0)
+    }
     /// Largest numeral size (≤ `size`) whose final text fits `max_w`.
     pub(crate) fn numeral_size(&self, final_value: f64, decimals: usize, prefix: &str, suffix: &str, size: f32, max_w: f32) -> f32 {
-        let (sign, digits) = number_parts(final_value, decimals);
-        let width = |size: f32| {
-            let (pfont, psize) = unit_style(prefix, size);
-            let (sfont, ssize) = unit_style(suffix, size);
-            text::measure(pfont, prefix, psize, 0.0) + text::measure(Font::Figures, &format!("{sign}{digits}"), size, 0.0)
-                + text::measure(sfont, suffix, ssize, 0.0) + size * 0.05
-        };
-        let full = width(size);
+        let full = self.numeral_width(final_value, decimals, prefix, suffix, size);
         if full <= max_w { size } else { (size * max_w / full).floor().max(text::MIN_SIZE) }
     }
 
@@ -373,14 +380,18 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let time = n(phrase, "at", (start + 0.7 + index as f32 * 0.6) as f64) as f32;
             let pieces = text::phrase_pieces(&layout, value);
             let total: f32 = pieces.iter().map(|(_, x0, x1)| x1 - x0).sum::<f32>().max(1.0);
-            let sweep = self.m.grow(self.t - time, 0.35 + total / 2400.0);
+            // Bounded so production.mjs can schedule the sweep to finish inside the beat.
+            let sweep = self.m.grow(self.t - time, (0.35 + total / 2400.0).min(0.8));
             let mut covered = sweep * total;
             for (line, x0, x1) in pieces {
                 let piece = (x1 - x0).min(covered.max(0.0));
                 covered -= x1 - x0;
                 let lx = a.x + x0 - layout.size * 0.08;
                 let y = top + line as f32 * layout.line_height + layout.baseline - layout.size * 0.68;
-                markers.push(rounded(lx, y, piece + layout.size * 0.16 * (piece / (x1 - x0)).min(1.0), layout.size * 0.84, 6.0, &self.p.wash(&self.p.accent)));
+                // Translucent accent, not a pre-mixed wash: it must tint whatever lies below,
+                // including the glow backdrop, which can match a flat wash color exactly.
+                let marker = rounded(lx, y, piece + layout.size * 0.16 * (piece / (x1 - x0)).min(1.0), layout.size * 0.84, 6.0, &self.p.accent);
+                markers.push(fframes::svgr!(<g opacity={if self.p.dark { 0.34 } else { 0.22 }}>{marker}</g>));
             }
         }
         let body = self.lines(&layout, a.x, top, a.w, Align::Left, &self.p.ink, start, &[]);
@@ -422,12 +433,20 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let cell_w = (a.w - gap * (columns as f32 - 1.0)) / columns as f32;
         let max_card_h = (a.h - gap * (rows as f32 - 1.0)) / rows as f32;
         let pad = if cell_w < 320.0 { 28.0 } else { 40.0 };
-        let target = if self.wide { 112.0 } else if columns == 1 { 120.0 } else { 88.0 };
-        let sizes: Vec<f32> = items.iter().map(|it| self.numeral_size(n(it, "value", 0.0), n(it, "decimals", 0.0) as usize, s(it, "prefix"), s(it, "suffix"), target, cell_w - 2.0 * pad)).collect();
-        let size = sizes.iter().copied().fold(target, f32::min);
-        let labels: Vec<_> = items.iter().map(|it| self.fit(s(it, "label"), Style::text(if self.wide { 30.0 } else { 32.0 }), cell_w - 2.0 * pad, (max_card_h - size - 2.0 * pad - 24.0).max(30.0))).collect();
+        // A single column reads as wide cards: numeral on the left, its label beside it.
+        let side = columns == 1;
+        let target = if self.wide { 112.0 } else if side { 104.0 } else { 88.0 };
+        let number_w = if side { cell_w * 0.55 - pad } else { cell_w - 2.0 * pad };
+        fn parts(it: &Value) -> (f64, usize, &str, &str) { (n(it, "value", 0.0), n(it, "decimals", 0.0) as usize, s(it, "prefix"), s(it, "suffix")) }
+        let mut size = items.iter().map(|it| { let (v, d, p, x) = parts(it); self.numeral_size(v, d, p, x, target, number_w) }).fold(target, f32::min);
+        // Stacked cards keep room for a label line; the numeral shrinks to the card height.
+        size = size.min(((max_card_h - 2.0 * pad - if side { 0.0 } else { 58.0 }) / 0.95).max(text::MIN_SIZE));
+        let reserve = if side { items.iter().map(|it| { let (v, d, p, x) = parts(it); self.numeral_width(v, d, p, x, size) }).fold(0.0, f32::max) } else { 0.0 };
+        let label_w = if side { cell_w - 2.0 * pad - reserve - 44.0 } else { cell_w - 2.0 * pad };
+        let label_room = if side { max_card_h - 2.0 * pad } else { (max_card_h - 2.0 * pad - size * 0.95 - 20.0).max(20.0) };
+        let labels: Vec<_> = items.iter().map(|it| self.fit(s(it, "label"), Style::text(if self.wide { 30.0 } else { 32.0 }), label_w, label_room)).collect();
         let label_h = labels.iter().map(|l| l.height()).fold(0.0, f32::max);
-        let card_h = (pad * 2.0 + size * 0.95 + 20.0 + label_h + 10.0).min(max_card_h);
+        let card_h = if side { 2.0 * pad + (size * 0.95).max(label_h) } else { 2.0 * pad + size * 0.95 + 20.0 + label_h }.min(max_card_h);
         let block_h = rows as f32 * card_h + gap * (rows as f32 - 1.0);
         let top = a.y + ((a.h - block_h) * 0.4).max(0.0);
         let mut shapes = vec![];
@@ -435,11 +454,16 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let x = a.x + (i % columns) as f32 * (cell_w + gap);
             let y = top + (i / columns) as f32 * (card_h + gap);
             let time = at(item, self.b.cue_seconds, i);
-            let current = self.count(n(item, "from", 0.0), n(item, "value", 0.0), time, 1.3);
-            let (number, _) = self.numeral(current, n(item, "value", 0.0), n(item, "decimals", 0.0) as usize, s(item, "prefix"), s(item, "suffix"),
-                x + pad, y + pad + size * 0.78, size, None, &self.p.accent, &self.p.ink);
+            let (value, decimals, prefix, suffix) = parts(item);
+            let current = self.count(n(item, "from", 0.0), value, time, 1.3);
+            let baseline = if side { y + card_h / 2.0 + size * 0.36 } else { y + pad + size * 0.78 };
+            let (number, _) = self.numeral(current, value, decimals, prefix, suffix, x + pad, baseline, size, None, &self.p.accent, &self.p.ink);
             let card = rounded(x, y, cell_w, card_h, 26.0, &self.p.surface);
-            let label = self.draw(&labels[i], x + pad, y + pad + size * 0.95 + 20.0, cell_w - 2.0 * pad, Align::Left, &self.p.ink);
+            let label = if side {
+                self.draw(&labels[i], x + pad + reserve + 44.0, y + (card_h - labels[i].height()) / 2.0, label_w, Align::Left, &self.p.ink)
+            } else {
+                self.draw(&labels[i], x + pad, y + pad + size * 0.95 + 20.0, label_w, Align::Left, &self.p.ink)
+            };
             shapes.push(self.rise(fframes::svgr!(<g>{card}{number}{label}</g>), time, 30.0));
         }
         fframes::svgr!(<g>{shapes}</g>)
@@ -677,7 +701,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let current = active_word(words, self.t);
         let font = if caption { Font::TextStrong } else { Font::Display };
         if mode == "word" {
-            let Some(i) = current else { return empty() };
+            // Hold the last spoken word through short pauses so the screen does not blink
+            // between words; longer silences still clear. Timestamps are not altered.
+            let held = current.or_else(|| words.iter().rposition(|w| self.t >= w.end && self.t - w.end < max_gap));
+            let Some(i) = held else { return empty() };
             let layout = self.fit(&words[i].text, Style::display(Font::DisplayBold, size * 1.35), box_.w, box_.h);
             let pop = 0.9 + 0.1 * self.m.pop(self.t - words[i].start);
             let (cx, cy) = (box_.x + box_.w / 2.0, box_.y + box_.h / 2.0);
@@ -750,7 +777,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     }
     fn kinetic(&self) -> Svgr<'a> {
         let p = self.props();
-        self.word_layout(&self.b.words, self.area, if self.wide { 104.0 } else { 86.0 }, nonempty(s(p, "mode"), "highlight"),
+        self.word_layout(&self.b.words, self.area, if self.wide { 116.0 } else { 100.0 }, nonempty(s(p, "mode"), "highlight"),
             s(p, "align") == "center", n(p, "maxWords", 7.0) as usize, n(p, "maxGap", 0.6) as f32, n(p, "maxDuration", 4.0) as f32, false)
     }
     fn footer(&self) -> Svgr<'a> {
@@ -841,8 +868,8 @@ fn scene_motion<'a>(d: &Draw<'a, '_, '_>, header: Svgr<'a>, body: Svgr<'a>, foot
     let exit_kind = ExitKind::parse(&b.exit).unwrap_or(ExitKind::None);
     let exit_seconds = if final_scene { 0.8 } else { match d.m.preset { motion::Preset::Snappy => 0.22, motion::Preset::Spring => 0.36, motion::Preset::Gentle => 0.32 } };
     let last_word = b.words.last().map_or(0.0, |w| w.end);
-    // Never leave while the entrance is still running.
-    let earliest = last_word.max(d.m.duration() + 0.25);
+    // Never leave while the entrance, a count or a staged item is still running.
+    let earliest = last_word.max(d.m.duration() + 0.25).max(b.settle_seconds);
     let x = if exit_kind == ExitKind::None { 0.0 } else { motion::exit_progress(d.t, seconds, exit_seconds, earliest) };
     let mut exit_opacity = 1.0;
     let mut exit_transform = String::new();

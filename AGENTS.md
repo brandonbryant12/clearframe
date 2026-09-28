@@ -3,7 +3,7 @@
 ClearFrame now uses **FFFrames for every active render**. Begin with `skills/clearframe/SKILL.md`, then `skills/clearframe-library/SKILL.md`. Use `skills/clearframe-engine/SKILL.md` for project commands and `skills/clearframe-fframes/SKILL.md` plus `fframes/AGENTS.md` for renderer changes.
 
 - Author one storyboard, using `block` and validated `props`. Run `playbooks` and `blocks` before inventing a scene.
-- Adapt structure to the story. Nineteen playbooks are reusable starting arcs, not limits on possible films.
+- Adapt structure to the story. Twenty-four playbooks are reusable starting arcs, not limits on possible films.
 - Choose palette, motion preset/intensity and entrances explicitly. Follow `docs/style.md`; use `looks` to compare one scene across palettes. Keep slide counters out of film output.
 - New GitHub code/assets must be MIT-licensed at the exact imported revision, with bundled notices/provenance. Prefer independently implemented ideas over adding another renderer; see `docs/research/2026-github-video-patterns.md`.
 - For speech-following text read `docs/speech.md`. Never call interpolated timestamps measured. Final kinetic/captioned scenes require word timings tied to the current audio hash.

@@ -9,15 +9,15 @@ Read `docs/style.md` and use the active native catalog. The audience and subject
 
 ## Compose for a video frame
 
-Use bundled Inter 400/600 and actual glyph metrics. Do not prescribe fonts that the native renderer does not ship. A headline, graphic, source and optional captions need distinct space. Check portrait layouts at phone size, including the intended platform's overlays; the native header reserves 11% at the top, but this is not a universal platform safe-area guarantee.
+The renderer ships Inter (text, 14 pt optical master), Inter Display (300/600/700, 32 pt master) and Inter Display Figures (tabular digits for counters), measured with the same shaper that draws them. Do not prescribe fonts the renderer does not ship. Use `emphasis` or `highlight` to point at the words that matter instead of adding more text. A headline, graphic, source and optional captions need distinct space. Check portrait layouts at phone size, including the intended platform's overlays; the native header reserves 11% at the top, but this is not a universal platform safe-area guarantee.
 
 Film output has no slide fraction or scene counter. `chrome` defaults off; its optional title/progress rail does not add numbering. Keep source labels meaningful and readable.
 
-Use charts for evidence, `flow` for an ordered mechanism, `cycle` for repetition, `icon-grid` for related concepts, `breathing` for a continuous paced visual, and `kinetic` for speech. Mix these with real media when it carries information. Avoid a sequence of static title-and-bullet scenes.
+Use charts for evidence, `magnitude` for orders of magnitude, `flow` for an ordered mechanism, `cycle` for repetition, `icon-grid` for related concepts, `checklist` for a routine, `chapter` to open a section, `annotate` to walk through a screenshot, `breathing` for a continuous paced visual, and `kinetic` for speech. Mix these with real media when it carries information. Avoid a sequence of static title-and-bullet scenes: vary the block, the layout direction and the pace.
 
 ## Choose motion explicitly
 
-`motion.preset` is `gentle`, `snappy` or `spring`; `intensity` is 0–1. Entrances are `cut`, `fade`, `rise`, `wipe`, `push` and `zoom`, applied over the persistent background. They do not cross-dissolve adjacent scenes. Use coherent entrances within a sequence; a cut is often sufficient.
+`motion.preset` is `gentle` (0.55 s quartic), `snappy` (0.30 s exponential) or `spring` (0.72 s damped spring); `intensity` 0–1 scales travel, and 0 keeps fades only. Entrances are `cut`, `fade`, `rise`, `wipe`, `push` and `zoom`, applied over the persistent background; each scene's exit automatically mirrors the next entrance (override with a beat `exit`), and the film ends on a fade. Scenes never cross-dissolve. Use coherent entrances within a sequence; a cut is often sufficient, and elements still animate in.
 
 Native counters and chart growth remain monotonic even with spring entrances. Keep scale, sign and suffix truthful throughout motion. A focused bar uses authored `dim` and `dur`; do not hardcode them in new blocks.
 
@@ -31,7 +31,7 @@ Kinetic highlight/reveal/word modes use measured, audio-bound intervals. `maxWor
 
 ## Compare and inspect
 
-Start with `paper`, `ink`, `editorial` or `signal`, then override palette tokens. Use `looks DIR --beat ID` to compare the same moment across all four presets. Its JSON sidecar identifies each tile. Media retains its own colors; palette comparison is not automatic footage recoloring.
+Choose among `paper`, `ink`, `editorial`, `signal`, `midnight`, `forest`, `ember` and `mono` (`clearframe themes`), then override palette tokens. The `glow` backdrop adds slow-drifting light for dark palettes. Use `looks DIR --beat ID` to compare the same moment across all eight presets. Its JSON sidecar identifies each tile. Media retains its own colors; palette comparison is not automatic footage recoloring.
 
 Run `sheet`, open it, then `check` and `render`. Use `review DIR` to inspect actual encoded frames around cuts and word boundaries. Listen to the mix and check the first/last spoken words. Numeric diagnostics cannot establish factual accuracy, readable composition or perceptual audio quality.
 

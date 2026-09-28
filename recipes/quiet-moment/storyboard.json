@@ -70,7 +70,6 @@
       "block": "endcard",
       "vo": "Return when you are ready.",
       "props": {
-        "title": "Make the next step smaller.",
         "support": "A small pause can simply be a pause.",
         "action": "",
         "source": "Illustrative sample data · replace before publishing",

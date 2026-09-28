@@ -8,6 +8,8 @@ import { wireframePNG } from './wireframe.mjs';
 const beat = (block, vo, props = {}) => {
   const base = structuredClone(blockByName(block).example);
   if (('text' in props || 'title' in props) && !('emphasis' in props)) delete base.emphasis;
+  // For headline blocks `text` and `title` are aliases; keep only the one the playbook set.
+  if (['title', 'statement', 'endcard', 'chapter'].includes(block)) { if ('text' in props) delete base.title; if ('title' in props) delete base.text; }
   return { id: block, block, vo, props: { ...base, ...props } };
 };
 const end = beat('endcard','Choose one next step, and make its owner clear.');

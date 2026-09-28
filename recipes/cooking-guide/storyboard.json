@@ -98,7 +98,6 @@
       "block": "endcard",
       "vo": "Save the version you want to make again.",
       "props": {
-        "title": "Make the next step smaller.",
         "support": "Record the quantities and the result.",
         "action": "Add your tested variations.",
         "source": "Illustrative sample data · replace before publishing",

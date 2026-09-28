@@ -1,7 +1,7 @@
 {
   "name": "clearframe",
-  "version": "0.2.0",
-  "description": "Agent-directed video with FFFrames native graphics, measured speech-following text and selective Google media.",
+  "version": "0.3.0",
+  "description": "Agent-directed motion graphics with a native FFFrames renderer: display typography, honest animated charts, measured speech-following text and selective Google media.",
   "type": "module",
   "license": "MIT",
   "bin": {
@@ -43,7 +43,10 @@
     "examples",
     "schema",
     "docs",
-    "scripts"
+    "scripts",
+    "CHANGELOG.md",
+    "!examples/*/build",
+    "!recipes/*/build"
   ],
   "dependencies": {}
 }

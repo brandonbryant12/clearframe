@@ -253,6 +253,7 @@ pub fn phrase_pieces(layout: &Layout, phrase: &str) -> Vec<(usize, f32, f32)> {
 
 /// Whole-word match: the phrase must start and end on word boundaries.
 pub fn find_words(text: &str, phrase: &str) -> Option<usize> {
+    if phrase.trim().is_empty() { return None; }
     let boundary = |c: Option<char>| c.is_none_or(|c| !c.is_alphanumeric());
     let mut from = 0;
     while let Some(found) = text[from..].find(phrase) {
@@ -320,6 +321,8 @@ mod tests {
         assert!(phrase_pieces(&layout, "missing words").is_empty());
         assert_eq!(find_words("a cat scattered", "cat"), Some(2));
         assert_eq!(find_words("scattered", "cat"), None);
+        assert_eq!(find_words("A long tail", ""), None);
+        assert_eq!(find_words("A long tail", "  "), None);
     }
     #[test]
     fn coverage_reports_the_first_missing_glyph() {

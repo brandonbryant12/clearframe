@@ -98,7 +98,6 @@
       "block": "endcard",
       "vo": "Use the same order every week.",
       "props": {
-        "title": "Make the next step smaller.",
         "support": "Consistency makes the changes stand out.",
         "action": "Open this week’s dashboard",
         "source": "Illustrative sample data · replace before publishing",

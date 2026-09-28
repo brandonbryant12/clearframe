@@ -97,7 +97,6 @@
       "block": "endcard",
       "vo": "Choose one change and make another version.",
       "props": {
-        "title": "Make the next step smaller.",
         "support": "Keep the earlier draft so you can see the change.",
         "action": "Revise one thing.",
         "source": "Illustrative sample data · replace before publishing",

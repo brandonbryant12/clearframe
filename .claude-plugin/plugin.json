@@ -1,7 +1,7 @@
 {
   "name": "clearframe",
-  "description": "Direct, build and review FFFrames motion graphics with configurable palettes, playbooks, measured speech-following text and selective Google media.",
-  "version": "0.2.0",
+  "description": "Direct, build and review FFFrames motion graphics: 32 native blocks, 24 playbooks, 8 palettes, choreographed motion, measured speech-following text and selective Google media.",
+  "version": "0.3.0",
   "author": {
     "name": "Brandon Bryant",
     "url": "https://github.com/brandonbryant12"

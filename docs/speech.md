@@ -1,6 +1,6 @@
 # Speech that follows the words
 
-`kinetic` has three modes: `highlight` keeps a stable phrase and accents the currently spoken word; `reveal` reveals the phrase as it is spoken; `word` shows one word at a time. Set `maxWords` (1–10) and `align` (`left` or `center`). Phrase captions can also be burned into any narrated film with `captions: true` (`auto` enables them for vertical formats).
+`kinetic` has three modes: `highlight` keeps a stable phrase, dims words not yet spoken and accents the current one; `reveal` lifts each word into view as it is spoken; `word` shows one word at a time with a small pop, holding it through pauses shorter than `maxGap` so the screen does not blink between words (longer silences still clear; timestamps are never altered). Set `maxWords` (1–10) and `align` (`left` or `center`). Phrase captions can also be burned into any narrated film with `captions: true` (`auto` enables them for vertical formats); they sit on a soft background plate so they stay legible over charts and footage. A scene's exit never starts before its last spoken word.
 
 The renderer uses ordered, end-exclusive word intervals. Silence gaps remain gaps; seeking backward gives the same frame. A final kinetic or captioned render requires **measured word timestamps tied to the exact audio file**. A local voice or Gemini TTS take has estimated words until aligned. Estimated syllable/phrase timing is useful for drafts and is never silently promoted to measured alignment.
 

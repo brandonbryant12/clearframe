@@ -102,6 +102,10 @@ export function normalizeProps(name, input = {}, { vertical = false } = {}) {
   const icon = (value, field) => { if (value != null && !ICONS.includes(value)) fail(`${field}: unknown icon ${value}; run clearframe icons`); };
   const unit = (value, field) => { if (!Number.isFinite(value) || value < 0 || value > 1) fail(`${field} must be a number from 0 to 1`); };
   if (name === 'chapter' && p.text != null) { if (p.title != null) fail('use title or text, not both'); p.title = p.text; delete p.text; }
+  // Hero blocks show one headline: `text` and `title` are aliases, so both would drop one.
+  if (['title','statement','endcard'].includes(name) && p.text != null && p.title != null) fail('use text or title, not both');
+  if (name === 'highlight' && p.title != null) fail('highlight shows its text only; put a heading in kicker or a separate beat');
+  if (name === 'stat' && p.context != null && p.support != null) fail('use context or support, not both');
   if (p.emphasis != null) {
     if (!Array.isArray(p.emphasis) || p.emphasis.length < 1 || p.emphasis.length > 4) fail('emphasis needs 1–4 phrases');
     const body = p.text ?? p.title;

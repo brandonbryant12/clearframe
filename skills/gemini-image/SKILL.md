@@ -19,7 +19,7 @@ clearframe plan <dir>      # shows ≈ cost
 clearframe images <dir>    # → assets/img/<id>.jpg (+ .json with prompt & model), cached by hash
 node skills/gemini-image/scripts/image.mjs --prompt "…" --aspect 16:9 --size 2K --out out.jpg [--ref style.jpg] [--dry-run]
 ```
-Use it in a scene with `<img src="assets/img/paper.jpg">` or a CSS background. Add `kit.drift` for a slow Ken Burns push.
+Reference it from an `image` block (`"props": {"asset": "paper"}`); add `"drift": true` for a slow push-in and `"fit": "cover"` to fill the frame. Titles stay native text on top of or beside the plate.
 
 ## Contract (verified 2026-09-27 against ai.google.dev)
 

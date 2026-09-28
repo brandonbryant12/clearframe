@@ -64,7 +64,7 @@ impl Palette {
 }
 
 pub fn parse(hex: &str) -> Option<[f32; 3]> {
-    let digits = hex.strip_prefix('#').filter(|d| d.len() == 6)?;
+    let digits = hex.strip_prefix('#').filter(|d| d.len() == 6 && d.bytes().all(|b| b.is_ascii_hexdigit()))?;
     let channel = |i: usize| u8::from_str_radix(&digits[i..i + 2], 16).ok().map(|v| v as f32 / 255.0);
     Some([channel(0)?, channel(2)?, channel(4)?])
 }
@@ -156,6 +156,8 @@ mod tests {
         assert_eq!(mix("#000000", "#ffffff", 1.0), "#ffffff");
         assert_eq!(mix("#000000", "#ffffff", 0.5), "#808080");
         assert_eq!(mix("nope", "#ffffff", 0.5), "nope");
+        assert_eq!(parse("#aébbb"), None, "non-ASCII input must not panic on a char boundary");
+        assert_eq!(parse("#12345g"), None);
     }
     #[test]
     fn every_preset_keeps_readable_text_contrast() {

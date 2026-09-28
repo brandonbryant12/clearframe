@@ -1,5 +1,28 @@
 # Native verification — 2026-09-28
 
+## 0.3.0 redesign
+
+Recorded in `build/native-verified-v3d/verification.json` (ignored build output) from `scripts/verify-native.mjs`, run through the codex-heavy gate on the same Apple Silicon iMac with a warm cache, after all fixes in this release.
+
+- **Tests:** 48 Rust tests and 56 Node contract tests pass. They cover text shaping and fitting, balanced wrapping, tabular figures, palette contrast and catalog parity, easing and exits (including settle-aware exits), nice ticks, phrase and emphasis ranges, new-block validation, glyph coverage, in-beat scheduling, the counting gate, font provenance and the wireframe placeholder.
+- **Every block, four canvases:** all 32 blocks were checked in landscape (paper) and vertical (ink), with 611 sampled frames each. Sixteen representative and new blocks were checked in square and portrait at 25 fps, with 364 frames each. There were no native diagnostics apart from the gallery's deliberate draft-timing kinetic sample.
+- **Encoded gallery:** 147 seconds at 1920×1080 and 30 fps. `ffprobe` independently decodes exactly **4,410 frames**. The draft review encoder took 37.3 s to render and finish, about 8.5 ms per frame. The previous final-quality draft path took about 11 ms per frame.
+- **Frame-count regression:** a 451-frame file now decodes to all 451 frames. The upstream MP4 edit list previously ended one frame early at this length, so players dropped the final frame.
+- **60 fps:** 180 frames at 640×360. The new counting gate first rejected this fixture's 1.2 s stat beat, because the counter never reached its value before the cut. The fixture now allows 2.2 s.
+- **Dense layouts:** six-node cycle, eight-item grids and six-node flow in landscape and vertical, with 93 frames each and no diagnostics.
+- **Measured speech:** highlight, reveal and word modes with audio, 375 frames and no warnings. A measured caption overlay has 125 frames with audio.
+
+Contact sheets for the landscape, vertical, square, portrait, dense, data-story and eight-palette views were opened and reviewed. Encoded motion filmstrips were reviewed across entrances and exits for title, bars, line, stat, donut and checklist. That review found and fixed five problems:
+- label collisions in `magnitude`;
+- stretched `compare` cards;
+- KPI labels spilling out of height-limited cards;
+- highlight markers that vanished over the glow backdrop;
+- a `looks` grid that showed only four of the eight palettes.
+
+An independent code review of the redesign found eight issues. The main ones were exits that could fade numbers still counting, settle times that ignored label entrances, and props that silently dropped text. All eight are fixed and have regression tests.
+
+**Limits.** No paid provider call was made; Google integrations remain covered by mocks. No subjective listening result is claimed. Performance figures describe this machine and may vary with other local work. This run is not Linux or Windows build evidence.
+
 ## Completed baseline before the GitHub expansion
 
 The first complete FFFrames migration passed 40 Node contract tests and 12 Rust tests. Its release build used pinned FFFrames revision `bacfc3c3212d3d9429468435bfdc1ae2a21c7b3b`, bundled static Inter400/600 fonts, one Metal pipeline and bounded encoder workers on this Apple Silicon iMac.
@@ -48,6 +71,6 @@ Use the shared heavy gate, with at least 20 GiB available for a warm native buil
 /Users/brandon/.local/bin/codex-heavy -- node scripts/verify-native.mjs build/native-verification-new
 ```
 
-The integration script builds/tests Rust, checks/sheets all blocks in landscape and vertical, checks representative blocks in square and portrait, encodes the full gallery and a 60 fps sample, compares one frame across four palettes, and creates decoded boundary reviews. If `build/speech-smoke` exists, it also renders the measured speech modes and a non-kinetic caption overlay. Open the sheets/review pages and listen to complete MP4s after running it.
+The integration script builds/tests Rust, checks/sheets all blocks in landscape and vertical, checks representative and new blocks in square and portrait, encodes the full gallery, a 60 fps sample and a 451-frame final-frame regression, compares one frame across all palettes, and creates decoded boundary reviews. If `build/speech-smoke` exists, it also renders the measured speech modes and a non-kinetic caption overlay. Open the sheets/review pages and listen to complete MP4s after running it.
 
 Google transcription, Omni and Lyria request/cache/error behavior are covered with mocks. No paid provider call was made during this changeover; generated-video quality and continuity across real Omni/native joins remain a per-film review task. This run is not Linux/Windows build evidence.

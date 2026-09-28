@@ -46,26 +46,38 @@ const STAGED={'icon-grid':['items',0,null],flow:['nodes',0,null],kpis:['items',0
 const HIDDEN=new Set(['file','asset','say','land','growSay','drawSay','orientation','sort','mode','align','fit','icon','better']);
 const coverage=JSON.parse(fs.readFileSync(new URL('./assets/fonts/coverage.json',import.meta.url),'utf8')).ranges;
 /** First character the bundled fonts cannot draw, if any. */
-export function missingGlyph(text){for(const ch of String(text)){const cp=ch.codePointAt(0);if(cp<32||/\s/u.test(ch))continue;let lo=0,hi=coverage.length-1,ok=false;while(lo<=hi){const mid=(lo+hi)>>1,[a,b]=coverage[mid];if(cp<a)hi=mid-1;else if(cp>b)lo=mid+1;else{ok=true;break;}}if(!ok)return ch;}return null;}
+// Whitespace separates words and default-ignorable characters (soft hyphen, joiners,
+// variation selectors) are shaped invisibly, so neither can become an empty box.
+export function missingGlyph(text){for(const ch of String(text)){const cp=ch.codePointAt(0);if(cp<32||/[\s\p{Default_Ignorable_Code_Point}]/u.test(ch))continue;let lo=0,hi=coverage.length-1,ok=false;while(lo<=hi){const mid=(lo+hi)>>1,[a,b]=coverage[mid];if(cp<a)hi=mid-1;else if(cp>b)lo=mid+1;else{ok=true;break;}}if(!ok)return ch;}return null;}
 function glyphCheck(value,where,fail){
   if(typeof value==='string'){const ch=missingGlyph(value);if(ch)fail(`"${ch}" (U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0')}) in ${where} is not in the bundled Inter fonts and would render as an empty box. Rephrase or add a font with that script.`);}
   else if(Array.isArray(value))value.forEach((v,i)=>glyphCheck(v,`${where}[${i}]`,fail));
   else if(value&&typeof value==='object')for(const [k,v] of Object.entries(value))if(!HIDDEN.has(k))glyphCheck(v,`${where}.${k}`,fail);
 }
-/** Seconds after the scene cue until every counter, bar and fill shows its exact final value. */
-function settleTime(block,props,cue){
-  const last=(items,d)=>Math.max(cue,...items.map(it=>it.at??cue))+d;
+/** Seconds one staged item takes to reach its final state (mirrors the renderer). */
+function itemDuration(block,entrance){
   switch(block){
-    case 'stat':case 'ring':return cue+1.4;
-    case 'kpis':return last(props.items,1.3);
-    case 'delta':return cue+.45+1.3;
-    case 'bars':return cue+(props.data.length-1)*.09+1.1;
-    case 'line':return cue+1.6;
-    case 'waffle':{const rows=Math.ceil(props.total/props.cols);return cue+.35+(rows+props.cols)*.012+1.3;}
-    case 'donut':return cue+1.5;
-    case 'funnel':return last(props.items,.9);
-    case 'magnitude':return last(props.items,.9);
-    default:return cue;
+    case 'checklist':return Math.max(entrance,.4);        // box pop, then the tick draws
+    case 'highlight':return .8;                           // marker sweep, capped in scenes.rs
+    case 'annotate':return entrance+.05;                  // legend row follows its pin
+    case 'kpis':return Math.max(1.3,entrance);            // count-up
+    case 'funnel':case 'magnitude':return Math.max(.9,.3+entrance); // growth, then labels
+    default:return entrance;
+  }
+}
+/** Scene seconds by which every value, label and staged item is final. The renderer never
+ *  starts the exit earlier, and check fails when this falls after the beat's last frame. */
+function settleTime(block,props,cue,entrance){
+  const items=(list)=>Math.max(cue+entrance,...(list??[]).map(it=>(it.at??cue)+itemDuration(block,entrance)));
+  switch(block){
+    case 'stat':return cue+Math.max(1.4,.6+entrance);
+    case 'ring':return cue+Math.max(1.4,.8+entrance);
+    case 'delta':return cue+Math.max(.45+1.3,1+entrance);
+    case 'bars':{const grown=cue+(props.data.length-1)*.09+1.1;return props.focus?Math.max(grown,props.focus.at+props.focus.dur):grown;}
+    case 'line':return cue+1.6+entrance;               // the final-value tip label enters last
+    case 'waffle':{const rows=Math.ceil(props.total/props.cols);return cue+Math.max(.35+(rows+props.cols)*.012+1.3,.7+entrance);}
+    case 'donut':return cue+Math.max(1.5,1.1+entrance); // legend rows follow the sweep
+    default:{const key=STAGED[block]?.[0];if(key)return items(props[key]);return cue+entrance+(HERO_BLOCKS.has(block)?.3:0);}
   }
 }
 
@@ -107,18 +119,18 @@ export function createJob(sb,timing,{draft=false}={}) {
         // Arrivals fit inside the beat: automatic spacing compresses, authored cues never
         // move, and a cue too late to finish its entrance fails instead of being hidden.
         const [key,offset,nominal]=STAGED[b.block],items=props[key];
-        const duration=ENTRANCE[beatMotion.preset];
+        const duration=itemDuration(b.block,ENTRANCE[beatMotion.preset]);
         const lastStart=b.dur-frame-duration;
-        if(lastStart<0)throw new Error(`Beat is too short for its ${duration}s item entrance; extend the beat.`);
+        if(lastStart<0)throw new Error(`Beat is too short for its ${duration.toFixed(2)}s item entrance; extend the beat.`);
         if(authoredCue!=null&&at>lastStart+1e-7)throw new Error('Scene cue is too late to complete its item entrances; extend the beat or move the cue.');
         const start=Math.min(at+offset,Math.max(at,lastStart));
         const latest=Math.max(authoredCue!=null?at:0,lastStart-Math.min(.3,b.dur*.1)),first=authoredCue!=null?start:Math.min(start,latest);
         const spacing=items.length>1?Math.max(0,Math.min(nominal??props.stagger,(latest-first)/(items.length-1))):0;
         props[key]=items.map((it,i)=>{const time=it.say==null?first+i*spacing:cue(it.say);if(time>lastStart+1e-7)throw new Error(`Item cue is too late to complete its entrance; extend the beat or move the cue.`);const {say,...rest}=it;return {...rest,at:time};});
       }
+      const settle=settleTime(b.block,props,at,ENTRANCE[beatMotion.preset]);
       if(NUMERIC.has(b.block)){
         if(!props.source||!sb.sources.length)throw new Error('Numbers need visible props.source and a storyboard.sources entry.');
-        const settle=settleTime(b.block,props,at);
         if(settle>b.dur-frame+1e-6)(draft?warnings:errors).push(`${b.id}: values finish counting at ${settle.toFixed(2)}s but the beat ends at ${b.dur.toFixed(2)}s, so the final figures would never be shown; extend the beat or cue earlier.`);
       }
       glyphCheck(props,`${b.id}.props`,m=>{throw new Error(m);});
@@ -136,7 +148,7 @@ export function createJob(sb,timing,{draft=false}={}) {
       const next=transitions[b.index+1];
       const exit=authoredExit!=='auto'?authoredExit:next==null?'fade':next==='cut'?'none':next==='rise'?'fade':next;
       const startFrame=Math.round(b.start*timing.fps),frames=Math.round(b.end*timing.fps)-startFrame;
-      beats.push({id:b.id,block:b.block,frames,start_frame:startFrame,cue_seconds:at,transition,exit,motion:beatMotion,props,
+      beats.push({id:b.id,block:b.block,frames,start_frame:startFrame,cue_seconds:at,transition,exit,settle_seconds:Math.max(0,Math.min(settle,frames/timing.fps)),motion:beatMotion,props,
         words:(b.vo?.words??[]).map(w=>({text:w.w,start:Math.max(0,w.t0-startFrame/timing.fps),end:Math.min(w.t1-startFrame/timing.fps,frames/timing.fps)})),
         captions:cues.filter(c=>c.start>=b.start&&c.start<b.end).map(c=>({start:c.start-b.start,end:Math.min(c.end,b.end)-b.start,text:c.text}))});
     }catch(e){fail(`${b.id}: ${e.message}`);}
@@ -265,7 +277,8 @@ export async function lookbookProject(root,{draft=false,beat,pos=0.6,out}={}) {
       await singleFrame({...ctx,dir},time,path.join(temp,`tile-${String(i).padStart(4,'0')}.png`));
     }
     fs.mkdirSync(path.dirname(file),{recursive:true});
-    await ffmpeg(['-y','-framerate','1','-i',path.join(temp,'tile-%04d.png'),'-vf','scale=500:-2,tile=2x2:padding=12:margin=12:color=0x161b22','-frames:v','1','-threads','1',file]);
+    const columns=Math.min(4,themes.length),rows=Math.ceil(themes.length/columns);
+    await ffmpeg(['-y','-framerate','1','-i',path.join(temp,'tile-%04d.png'),'-vf',`scale=480:-2,tile=${columns}x${rows}:padding=12:margin=12:color=0x161b22`,'-frames:v','1','-threads','1',file]);
     unchanged(ctx);writeJSON(`${file}.json`,{inputId:ctx.manifest.inputId,beat:b.id,time,themes,order:'left to right, top to bottom',note:'Same scene and media; only the native palette changes. Generated footage is not recolored.'});return file;
   }finally{fs.rmSync(temp,{recursive:true,force:true});}
 }

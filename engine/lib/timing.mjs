@@ -188,10 +188,10 @@ export function computeTiming(root) {
     width, height, fps, duration,
     frames: Math.round(duration * fps),
     theme: sb.theme ?? 'paper',
+    // Recorded for reference; the native job (fframes/production.mjs) is authoritative.
     look: {
-      backdrop: sb.backdrop ?? 'dots', grain: sb.grain ?? true, vignette: sb.vignette ?? true,
-      chrome: sb.chrome ?? 'auto', captions: sb.captions ?? 'auto', transition: sb.transition ?? 'auto', sfx: sb.sfx ?? false,
-      voiceProvider: sb.voice.provider,
+      backdrop: sb.backdrop ?? 'none', chrome: sb.chrome === true, captions: sb.captions ?? 'auto',
+      transition: sb.transition ?? 'fade', sfx: sb.sfx ?? false, voiceProvider: sb.voice.provider,
     },
     estimated: beats.some((b) => b.vo?.estimated),
     beats,

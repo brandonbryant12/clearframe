@@ -111,7 +111,6 @@
       "block": "endcard",
       "vo": "What question would you test next?",
       "props": {
-        "title": "Make the next step smaller.",
         "support": "One observation can lead to another.",
         "action": "Write your next question.",
         "source": "Illustrative sample data · replace before publishing",

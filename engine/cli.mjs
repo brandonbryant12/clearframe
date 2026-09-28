@@ -5,18 +5,19 @@ import { parseArgs } from 'node:util';
 import { resolveProject } from './lib/project.mjs';
 import { writeJSON } from './lib/util.mjs';
 import { enterGate } from './lib/resource-gate.mjs';
-import { BLOCKS, THEMES, MOTIONS, TRANSITIONS, markdownCatalog } from '../fframes/catalog.mjs';
+import { BLOCKS, THEMES, THEME_NOTES, MOTIONS, TRANSITIONS, BACKDROPS, markdownCatalog } from '../fframes/catalog.mjs';
 import { PLAYBOOKS, scaffold, writeGallery } from '../fframes/playbooks.mjs';
 import { ICONS, ICON_SOURCE } from '../fframes/icons.mjs';
 import * as native from '../fframes/production.mjs';
 
 const HELP=`ClearFrame — FFFrames motion graphics
 
-  new <dir> [--playbook concept-explainer] [--theme ink] [--vertical]
-  playbooks | recipes                 narrative starting points
-  blocks [name] [--json | --md]        native building blocks and props
-  themes | motions                    palette presets and movement choices
-  icons                              bundled Tabler vector assets and provenance
+  new <dir> [--playbook concept-explainer] [--theme midnight] [--vertical]
+  playbooks | recipes                 24 narrative starting points
+  blocks [name] [--json | --md]        32 native building blocks and props
+  themes [--json]                     8 palettes with swatches
+  motions [--json]                    presets, entrances, exits and backdrops
+  icons [--json]                      95 bundled Tabler icons and provenance
   doctor | build                      native dependencies and compiler
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic]
   plan <dir>                          approximate generation cost and cache state
@@ -49,12 +50,14 @@ async function main(){
   const num=k=>{if(o[k]==null)return undefined;const n=Number(o[k]);if(!Number.isFinite(n))throw new Error(`--${k} must be a number`);return n;};
   const opts={...o,only:o.only?.split(','),budget:num('budget'),at:num('at'),pos:num('pos'),per:num('per'),columns:num('columns'),thumb:num('thumb'),noAudio:o['no-audio']};
   if(opts.budget!=null&&opts.budget<0)throw new Error('budget must be nonnegative');
-  if(cmd==='new'){const dir=path.resolve(positionals[0]??'my-video');scaffold(dir,opts);return console.log(`Created ${dir}. Edit storyboard.json, then voice --draft, sheet --draft, and render --draft.`);}
+  if(cmd==='new'){const dir=path.resolve(positionals[0]??'my-video');const sb=scaffold(dir,opts);const rel=path.relative(process.cwd(),dir)||'.';return console.log(`Created ${rel} (${sb.beats.length} beats, ${typeof sb.theme==='string'?sb.theme:sb.theme.base} palette). Replace the illustrative claims, then:\n  clearframe sheet ${rel} --draft     # contact sheet to review\n  clearframe voice ${rel} --draft     # free local narration\n  clearframe render ${rel} --draft    # fast review MP4`);}
   if(['playbooks','recipes'].includes(cmd))return console.log(o.json?JSON.stringify(PLAYBOOKS,null,2):PLAYBOOKS.map(p=>`${p.id.padEnd(24)} ${p.title}\n  ${p.audience} · ${p.inputs}`).join('\n'));
-  if(cmd==='blocks'){const b=positionals[0]?BLOCKS.find(b=>b.name===positionals[0]):null;if(positionals[0]&&!b)throw new Error('Unknown block');return console.log(o.md?markdownCatalog():o.json||b?JSON.stringify(b??BLOCKS,null,2):BLOCKS.map(b=>`${b.name.padEnd(14)} ${b.summary}`).join('\n'));}
-  if(cmd==='themes')return console.log(JSON.stringify(THEMES,null,2));
-  if(cmd==='icons')return console.log(JSON.stringify({icons:ICONS,...ICON_SOURCE},null,2));
-  if(cmd==='motions')return console.log(JSON.stringify({presets:MOTIONS,intensity:'0–1',transitions:TRANSITIONS},null,2));
+  if(cmd==='blocks'){const b=positionals[0]?BLOCKS.find(b=>b.name===positionals[0]):null;if(positionals[0]&&!b)throw new Error(`Unknown block ${positionals[0]}. Run clearframe blocks.`);if(o.md)return console.log(markdownCatalog());if(o.json||b)return console.log(JSON.stringify(b??BLOCKS,null,2));
+    const groups=[...new Set(BLOCKS.map(b=>b.category))];return console.log(groups.map(g=>`${g.toUpperCase()}\n${BLOCKS.filter(b=>b.category===g).map(b=>`  ${b.name.padEnd(12)} ${b.summary}`).join('\n')}`).join('\n\n')+'\n\nclearframe blocks NAME shows props and a ready-to-paste example.');}
+  if(cmd==='themes'){if(o.json)return console.log(JSON.stringify(THEMES,null,2));const swatch=hex=>process.stdout.isTTY?`\x1b[48;2;${hex.slice(1).match(/../g).map(v=>parseInt(v,16)).join(';')}m   \x1b[0m`:'';
+    return console.log(Object.entries(THEMES).map(([name,t])=>`${name.padEnd(10)} ${['bg','surface','ink','muted','accent','accent2'].map(k=>swatch(t[k])).join('')} ${THEME_NOTES[name]}`).join('\n')+'\n\nOverride any token in storyboard.json: "theme": {"base": "ink", "accent": "#d6acff"}. Compare palettes with: clearframe looks DIR --beat ID');}
+  if(cmd==='icons'){if(o.json)return console.log(JSON.stringify({icons:ICONS,...ICON_SOURCE},null,2));const width=Math.max(...ICONS.map(i=>i.length))+2;const rows=[];for(let i=0;i<ICONS.length;i+=6)rows.push(ICONS.slice(i,i+6).map(n=>n.padEnd(width)).join('').trimEnd());return console.log(`${rows.join('\n')}\n\n${ICONS.length} MIT Tabler icons · ${ICON_SOURCE.repository} @ ${ICON_SOURCE.revision.slice(0,12)}`);}
+  if(cmd==='motions')return console.log(JSON.stringify({presets:MOTIONS,intensity:'0–1',transitions:TRANSITIONS,exits:'auto (mirror the next entrance) | none | fade | push | zoom | wipe',backdrops:BACKDROPS},null,2));
   if(cmd==='doctor'){const rows=native.doctor();console.table(rows);if(rows.some(r=>!r.ok))process.exitCode=1;return;}
   if(cmd==='build')return console.log(await native.buildNative(opts));
   if(cmd==='gallery'){const dir=path.resolve(positionals[0]??'build/native-gallery');await writeGallery(dir,opts);return console.log(await native.sheetProject(dir,{...opts,draft:true,per:1,columns:4}));}

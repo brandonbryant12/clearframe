@@ -345,7 +345,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             self.draw(&layout, cx - inner / 2.0, cy + size * 0.3, inner, Align::Center, &self.p.muted)
         };
         // Legend: swatch, label, value and share.
-        let legend = if self.wide { Area { x: a.x + diameter + 90.0, y: a.y, w: a.w - diameter - 90.0, h: a.h } }
+        let legend = if self.wide { Area { x: a.x + diameter + 90.0, y: a.y, w: (a.w - diameter - 90.0).min(780.0), h: a.h } }
             else { Area { x: a.x, y: cy + diameter / 2.0 + 40.0, w: a.w, h: a.y + a.h - (cy + diameter / 2.0 + 40.0) } };
         let row_h = (legend.h / segments.len().max(1) as f32).min(96.0);
         let legend_top = legend.y + ((legend.h - row_h * segments.len() as f32) / 2.0).max(0.0) * if self.wide { 1.0 } else { 0.0 };
@@ -423,12 +423,20 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let values: Vec<f64> = items.iter().map(|i| n(i, "value", 0.0).max(0.0)).collect();
         let (decimals, prefix, suffix) = format_parts(&p["format"]);
         let largest = values.iter().copied().fold(0.0, f64::max).max(1e-12);
-        let value_size = if self.wide { 44.0 } else { 38.0 };
-        let texts: Vec<String> = values.iter().map(|v| format_number(*v, decimals, &prefix, &suffix)).collect();
-        let labels: Vec<_> = items.iter().map(|it| self.fit(s(it, "label"), Style::text(26.0), a.w / values.len() as f32 - 24.0, 64.0)).collect();
-        let text_w: Vec<f32> = texts.iter().zip(&labels).map(|(t, l)| text::measure(Font::DisplayBold, t, value_size, 0.0).max(l.width())).collect();
-        let text_h = value_size * 1.2 + 16.0 + labels.iter().map(|l| l.height()).fold(0.0, f32::max);
         let min_gap = 48.0;
+        let gaps = min_gap * (values.len() as f32 - 1.0);
+        let texts: Vec<String> = values.iter().map(|v| format_number(*v, decimals, &prefix, &suffix)).collect();
+        let labels: Vec<_> = items.iter().map(|it| self.fit(s(it, "label"), Style::text(26.0), a.w / values.len() as f32 - min_gap, 64.0)).collect();
+        // Value type shrinks until every column fits side by side; labels are already fitted.
+        let mut value_size: f32 = if self.wide { 44.0 } else { 38.0 };
+        let widest = |size: f32| texts.iter().zip(&labels).map(|(t, l)| text::measure(Font::DisplayBold, t, size, 0.0).max(l.width())).sum::<f32>();
+        while value_size > 20.0 && widest(value_size) + gaps > a.w { value_size -= 1.0; }
+        let text_w: Vec<f32> = texts.iter().zip(&labels).map(|(t, l)| text::measure(Font::DisplayBold, t, value_size, 0.0).max(l.width())).collect();
+        if text_w.iter().sum::<f32>() + gaps > a.w + 0.5 {
+            panic!("Text overflow in scene '{}' (magnitude): values and labels need {:.0}px side by side but the row is {:.0}px. Shorten the values, units or labels, or use fewer items; the minimum font size is 14px.",
+                self.b.id, text_w.iter().sum::<f32>() + gaps, a.w);
+        }
+        let text_h = value_size * 1.2 + 16.0 + labels.iter().map(|l| l.height()).fold(0.0, f32::max);
         let mut k = (a.h - text_h - 40.0).max(40.0) / (largest.sqrt() as f32);
         let mut sides: Vec<f32> = vec![];
         let mut slots: Vec<f32> = vec![];
