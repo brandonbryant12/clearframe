@@ -4,6 +4,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { loadStoryboard, paths } from './project.mjs';
 import { hashOf, readJSON, round, snap, wavDuration } from './util.mjs';
+import { findMusicBed } from './music-files.mjs';
+import { blockByName } from '../../fframes/catalog.mjs';
+import { audioHash, validateWords, wordKey } from './word-timing.mjs';
 
 const PAUSES = [
   [/(\.\.\.|…)$/, 0.45],
@@ -113,9 +116,17 @@ function voiceFor(root, beat, sb) {
   const file = path.join(p.vo, `${beat.id}.wav`);
   const meta = readJSON(path.join(p.vo, `${beat.id}.json`), null);
   if (fs.existsSync(file) && meta && meta.textHash === hashOf(beat.vo)) {
-    const duration = meta.duration ?? wavDuration(file);
-    const words = meta.words ?? distributeWords(tokenize(beat.vo), 0, duration);
-    return { src: `assets/vo/${beat.id}.wav`, duration, words, estimated: false, provider: meta.provider };
+    const duration = wavDuration(file);
+    if(!Number.isFinite(duration)||duration<=0)throw new Error(`${beat.id}: narration WAV is empty or invalid; import or regenerate it.`);
+    let words = meta.words ?? distributeWords(tokenize(beat.vo), 0, duration);
+    let wordTiming = 'estimated', alignmentIssue;
+    if(meta.alignment?.kind==='measured') {
+      try {
+        if(meta.alignment.audioHash!==audioHash(file)) throw new Error('audio changed after alignment');
+        validateWords(words,tokenize(beat.vo),duration);wordTiming='measured';
+      } catch(e) { alignmentIssue=e.message;words=distributeWords(tokenize(beat.vo),0,duration); }
+    }
+    return { src: `assets/vo/${beat.id}.wav`, duration, words, estimated: false, provider: meta.provider, wordTiming, alignmentIssue };
   }
   const duration = estimateDuration(beat.vo, sb.voice.wpm);
   return {
@@ -127,19 +138,9 @@ function voiceFor(root, beat, sb) {
   };
 }
 
-const tailCache = new Map();
-/** A block's recommended hold after the last spoken word (its meta.tail), read without importing browser code. */
+/** Recommended reading hold from the native catalog. */
 export function blockTail(name) {
-  if (!tailCache.has(name)) {
-    let v = null;
-    try {
-      const src = fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'runtime', 'blocks', `${name}.js`), 'utf8');
-      const m = src.match(/export const meta = \{\s*tail:\s*([\d.]+)/);
-      if (m) v = parseFloat(m[1]);
-    } catch { /* unknown block: validated elsewhere */ }
-    tailCache.set(name, v);
-  }
-  return tailCache.get(name);
+  return blockByName(name)?.tail ?? null;
 }
 
 /** Compute the full timeline for a project. Pure file reads; cheap enough to run per request. */
@@ -170,6 +171,8 @@ export function computeTiming(root) {
         dur: round(vo.duration),
         estimated: vo.estimated,
         provider: vo.provider ?? null,
+        wordTiming: vo.wordTiming ?? 'estimated',
+        ...(vo.alignmentIssue ? { alignmentIssue: vo.alignmentIssue } : {}),
         ...(vo.stale ? { stale: vo.stale } : {}),
         words: vo.words.map((w) => ({ w: w.w, t0: round(voStart + w.t0), t1: round(voStart + w.t1) })),
       };
@@ -212,12 +215,13 @@ export function resolveAt(at, beat) {
   return beat.start;
 }
 
-const norm = (w) => w.toLowerCase().replace(/[^a-z0-9%$]/g, '');
+const norm = wordKey;
 export function findWord(words, query, nth = 0) {
   const q = query.split(/\s+/).map(norm).filter(Boolean);
+  if(!q.length)return null;
   let seen = 0;
   for (let i = 0; i + q.length <= words.length; i++) {
-    if (q.every((part, j) => norm(words[i + j].w).startsWith(part))) {
+    if (q.every((part, j) => norm(words[i + j].w) === part)) {
       if (seen++ === nth) return words[i].t0;
     }
   }
@@ -225,7 +229,7 @@ export function findWord(words, query, nth = 0) {
 }
 
 function musicInfo(root, sb) {
-  const candidates = [sb.music.file, 'assets/music/bed.wav', 'assets/music/bed.mp3'].filter(Boolean);
+  const candidates = [sb.music.file, findMusicBed(root)].filter(Boolean);
   const src = candidates.find((f) => fs.existsSync(path.join(root, f))) ?? null;
   return { src, volume: sb.music.volume, duck: sb.music.duck, fadeIn: sb.music.fadeIn, fadeOut: sb.music.fadeOut, offset: sb.music.offset ?? 0 };
 }
@@ -262,5 +266,5 @@ const stamp = (t, sep) => {
   const h = Math.floor(ms / 3600000), m = Math.floor((ms % 3600000) / 60000), s = Math.floor((ms % 60000) / 1000);
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}${sep}${String(ms % 1000).padStart(3, '0')}`;
 };
-export function toSRT(cues) { return cues.map((c, i) => `${i + 1}\n${stamp(c.start, ',')} --> ${stamp(c.end + 0.15, ',')}\n${c.text}\n`).join('\n'); }
-export function toVTT(cues) { return `WEBVTT\n\n${cues.map((c) => `${stamp(c.start, '.')} --> ${stamp(c.end + 0.15, '.')}\n${c.text}\n`).join('\n')}`; }
+export function toSRT(cues) { return cues.map((c, i) => `${i + 1}\n${stamp(c.start, ',')} --> ${stamp(c.end, ',')}\n${c.text}\n`).join('\n'); }
+export function toVTT(cues) { return `WEBVTT\n\n${cues.map((c) => `${stamp(c.start, '.')} --> ${stamp(c.end, '.')}\n${c.text}\n`).join('\n')}`; }

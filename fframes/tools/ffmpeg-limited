@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+"""Limit each of the two browser encoders without changing the JS engine."""
+import os
+import sys
+
+args = sys.argv[1:]
+# ClearFrame's render command has one output, last. Leave probes and audio work alone.
+if "libx264" in args:
+    args[-1:-1] = ["-threads:v", "1", "-filter_threads", "1"]
+binary = os.environ.get("FFRAMES_FFMPEG", "/opt/homebrew/bin/ffmpeg")
+os.execv(binary, [binary, *args])

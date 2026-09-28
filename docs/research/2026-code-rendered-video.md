@@ -1,5 +1,7 @@
 # What made 2026's code-rendered videos land, and what ClearFrame took from them
 
+Historical research note: implementation references below describe the retired browser path. Current authoring uses FFFrames; see ../../README.md.
+
 *Research compiled 2026-09-27. View counts are snapshots from that day. Items marked (unverified) could not be confirmed from a primary source. Clip lengths, cut rates and loudness figures were measured from downloaded preview files with ffprobe, ffmpeg scene detection (threshold 0.3) and EBU R128.*
 
 ## Context

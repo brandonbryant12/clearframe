@@ -6,10 +6,14 @@ import { analyseVoice, cleanVoice, draftMusic, draftVoice } from './audio.mjs';
 import { loadStoryboard, paths } from './project.mjs';
 import { computeTiming, estimateDuration, tokenize } from './timing.mjs';
 import { hashOf, log, readJSON, round, writeJSON } from './util.mjs';
+import { findMusicBed, writeMusicBed } from './music-files.mjs';
 import * as tts from '../../skills/gemini-tts/scripts/tts.mjs';
 import * as image from '../../skills/gemini-image/scripts/image.mjs';
 import * as music from '../../skills/lyria-music/scripts/music.mjs';
 import * as veo from '../../skills/veo-video/scripts/veo.mjs';
+import * as omni from '../../skills/gemini-omni/scripts/omni.mjs';
+import { clipSpec } from './continuity.mjs';
+import { mediaDuration } from './util.mjs';
 
 const money = (n) => `$${n.toFixed(n < 0.1 ? 4 : 2)}`;
 
@@ -36,8 +40,9 @@ export async function voice(root, { draft = false, force = false, only, budget }
     const metaFile = path.join(P.vo, `${b.id}.json`);
     const wavFile = path.join(P.vo, `${b.id}.wav`);
     const meta = readJSON(metaFile, null);
-    const cached = meta?.hash === hashOf(spec) && fs.existsSync(wavFile);
+    const cached = meta?.hash === hashOf(spec) && nonempty(wavFile);
     if (cached && !force) continue;
+    if(meta?.provider==='imported'&&meta.textHash===hashOf(b.vo)&&nonempty(wavFile)&&!force){log.dim(`  ${b.id}: keeping the imported recording (use --force to replace)`);continue;}
     if (draft && meta?.provider === 'gemini' && meta.textHash === hashOf(b.vo) && !force) { log.dim(`  ${b.id}: keeping the real take (use --force to replace with a draft)`); continue; }
     todo.push({ b, spec, metaFile, wavFile });
   }
@@ -86,6 +91,17 @@ export function musicSections(timing, sb) {
   }));
 }
 
+function musicSpec(sb, timing) {
+  const model = sb.music.model ?? 'lyria-3.5';
+  const seconds = Math.ceil(timing.duration + 2);
+  if (model === 'lyria-realtime') return {
+    model, prompts: sb.music.weightedPrompts ?? [{ text: sb.music.prompt, weight: 1.0 }],
+    bpm: sb.music.bpm, density: sb.music.density, brightness: sb.music.brightness, scale: sb.music.scale, seconds,
+  };
+  return { model, prompt: music.composePrompt({ style: sb.music.prompt, bpm: sb.music.bpm, key: sb.music.key,
+    seconds, sections: musicSections(timing, sb), ending: sb.music.ending }) };
+}
+
 export async function scoreMusic(root, { draft = false, force = false, budget } = {}) {
   const sb = loadStoryboard(root);
   if (!sb.music) { log.dim('storyboard.music is false — skipping music.'); return; }
@@ -96,48 +112,42 @@ export async function scoreMusic(root, { draft = false, force = false, budget } 
   const metaFile = path.join(P.music, 'bed.json');
   const meta = readJSON(metaFile, null);
   if (draft) {
-    if (meta?.provider && meta.provider !== 'local' && !force) { log.dim('  keeping the generated music (use --force to replace with a draft)'); return; }
-    const out = path.join(P.music, 'bed.wav');
-    await draftMusic(out, { seconds, bpm: sb.music.bpm ?? 72 });
-    writeJSON(metaFile, { provider: 'local', seconds, createdAt: new Date().toISOString() });
+    if (meta?.provider && meta.provider !== 'local' && findMusicBed(root, meta) && !force) { log.dim('  keeping the generated music (use --force to replace with a draft)'); return; }
+    const out = path.join(P.music, `bed-draft-${process.pid}.wav`);
+    try {
+      await draftMusic(out, { seconds, bpm: sb.music.bpm ?? 72 });
+      writeMusicBed(root, fs.readFileSync(out), 'wav', { provider: 'local', seconds, createdAt: new Date().toISOString() });
+    } finally { fs.rmSync(out, { force: true }); }
     log.ok(`Draft music bed (${seconds}s) → assets/music/bed.wav`);
     return;
   }
-  const model = sb.music.model ?? 'lyria-3.5';
+  const spec = musicSpec(sb, timing), { model, prompt } = spec;
+  if (meta?.hash === hashOf(spec) && findMusicBed(root, meta) && !force) { log.ok('Music is up to date.'); return; }
   if (model === 'lyria-realtime') {
     const { stream } = await import('../../skills/lyria-music/scripts/realtime.mjs');
-    const prompts = sb.music.weightedPrompts ?? [{ text: sb.music.prompt, weight: 1.0 }];
-    const spec = { model, prompts, bpm: sb.music.bpm, density: sb.music.density, brightness: sb.music.brightness, scale: sb.music.scale, seconds };
-    if (meta?.hash === hashOf(spec) && !force) { log.ok('Music is up to date.'); return; }
     log.step(`Lyria RealTime: streaming ${seconds}s (experimental)…`);
     const buf = await stream(spec, { seconds });
-    fs.writeFileSync(path.join(P.music, 'bed.wav'), buf);
-    writeJSON(metaFile, { hash: hashOf(spec), provider: 'lyria-realtime', ...spec, createdAt: new Date().toISOString() });
+    writeMusicBed(root, buf, 'wav', { hash: hashOf(spec), provider: 'lyria-realtime', ...spec, createdAt: new Date().toISOString() });
     log.ok('Music → assets/music/bed.wav');
     return;
   }
-  const prompt = music.composePrompt({ style: sb.music.prompt, bpm: sb.music.bpm, key: sb.music.key, seconds, sections: musicSections(timing, sb), ending: sb.music.ending });
-  const spec = { model, prompt };
-  if (meta?.hash === hashOf(spec) && !force) { log.ok('Music is up to date.'); return; }
   const cost = music.estimateCost({ model });
   log.step(`Lyria (${model}): ${seconds}s bed, ≈ ${money(cost)}`);
   guardBudget(cost, budget ?? sb.budget);
-  const r = await music.generateMusic({ prompt, model, format: 'wav' });
-  for (const old of ['bed.wav', 'bed.mp3', 'bed.ogg']) fs.rmSync(path.join(P.music, old), { force: true });
-  const file = path.join(P.music, `bed.${r.ext}`);
-  fs.writeFileSync(file, r.data);
-  writeJSON(metaFile, { hash: hashOf(spec), provider: 'lyria', model, prompt, notes: r.text, createdAt: new Date().toISOString() });
-  log.ok(`Music → ${path.relative(root, file)}${r.text ? ' (model notes saved in bed.json)' : ''}`);
-  if (sb.music.file && sb.music.file !== path.relative(root, file)) log.warn(`storyboard.music.file points to ${sb.music.file}; the new bed is ${path.relative(root, file)}`);
+  const r = await music.generateMusic({ prompt, model, format: 'mp3' });
+  const file = writeMusicBed(root, r.data, r.ext, { hash: hashOf(spec), provider: 'lyria', model, prompt, notes: r.text, createdAt: new Date().toISOString() });
+  log.ok(`Music → ${file}${r.text ? ' (model notes saved in bed.json)' : ''}`);
+  if (sb.music.file && sb.music.file !== file) log.warn(`storyboard.music.file points to ${sb.music.file}; the new bed is ${file}`);
 }
 
 // ------------------------------------------------------------------ images & clips
+const nonempty = file => {try{return fs.statSync(file).size>0;}catch{return false;}};
 function assetMeta(dir, id) { return readJSON(path.join(dir, `${id}.json`), null); }
 
 export async function images(root, { only, force = false, budget } = {}) {
   const sb = loadStoryboard(root);
   const P = paths(root);
-  const list = sb.assets.filter((a) => a.kind === 'image' && (!only || only.includes(a.id)));
+  const list = sb.assets.filter((a) => a.kind === 'image' && !a.file && (!only || only.includes(a.id)));
   const todo = list.filter((a) => force || assetMeta(P.img, a.id)?.hash !== hashOf(a) || !fs.existsSync(path.join(P.img, `${a.id}.jpg`)));
   if (!todo.length) { log.ok('Images are up to date.'); return; }
   const cost = todo.reduce((s, a) => s + image.estimateCost({ model: a.model, size: a.size ?? '2K' }), 0);
@@ -155,25 +165,27 @@ export async function images(root, { only, force = false, budget } = {}) {
 }
 
 export async function clips(root, { only, force = false, budget } = {}) {
-  const sb = loadStoryboard(root);
-  const P = paths(root);
-  const list = sb.assets.filter((a) => a.kind === 'clip' && (!only || only.includes(a.id)));
-  const todo = list.filter((a) => force || assetMeta(P.clips, a.id)?.hash !== hashOf(a) || !fs.existsSync(path.join(P.clips, `${a.id}.mp4`)));
-  if (!todo.length) { log.ok('Clips are up to date.'); return; }
-  const cost = todo.reduce((s, a) => s + veo.estimateCost({ model: a.model, resolution: a.resolution ?? '720p', seconds: a.seconds ?? 4 }), 0);
-  log.step(`Veo: ${todo.length} clip(s), ≈ ${money(cost)} — each takes 11 s to 6 min`);
-  guardBudget(cost, budget ?? sb.budget);
-  fs.mkdirSync(P.clips, { recursive: true });
-  for (const a of todo) {
-    const img = a.from ? path.join(P.img, `${a.from}.jpg`) : a.image ? path.join(root, a.image) : undefined;
-    if (img && !fs.existsSync(img)) throw new Error(`[${a.id}] source image missing: ${img} (run \`clearframe images\` first)`);
-    const aspect = sb.format.width >= sb.format.height ? '16:9' : '9:16';
-    const out = path.join(P.clips, `${a.id}.mp4`);
-    await veo.generateVideo({ prompt: a.prompt, model: a.model, image: img, aspect, resolution: a.resolution ?? '720p', seconds: a.seconds ?? 4, seed: a.seed },
-      { out, onPoll: () => process.stdout.write('.') });
-    process.stdout.write('\n');
-    writeJSON(path.join(P.clips, `${a.id}.json`), { hash: hashOf(a), model: a.model ?? 'veo-3.1-lite-generate-preview', prompt: a.prompt, createdAt: new Date().toISOString() });
-    log.ok(`${a.id} → assets/clips/${a.id}.mp4`);
+  const sb=loadStoryboard(root),P=paths(root);
+  const list=sb.assets.filter(a=>a.kind==='clip'&&!a.file&&(!only||only.includes(a.id)));
+  const jobs=list.map(a=>({a,spec:clipSpec(root,sb,a)}));
+  const todo=jobs.filter(({a,spec})=>force||assetMeta(P.clips,a.id)?.hash!==spec.hash||!nonempty(path.join(P.clips,`${a.id}.mp4`)));
+  if(!todo.length){log.ok('Clips are up to date.');return;}
+  for(const {spec} of todo)if(spec.model!==omni.MODEL&&!Object.hasOwn(veo.MODELS,spec.model))throw new Error(`Unsupported video model ${spec.model}`);
+  const estimate=todo.reduce((n,{spec})=>n+(spec.model===omni.MODEL?omni:veo).estimateCost(spec),0);
+  log.step(`${todo.length} generated insert(s), approximately ${money(estimate)}. Omni duration and final charges can vary; this is an estimate, not a billing cap.`);
+  guardBudget(estimate,budget??sb.budget);fs.mkdirSync(P.clips,{recursive:true});
+  for(const {a,spec} of todo){
+    const out=path.join(P.clips,`${a.id}.mp4`),stage=path.join(P.clips,`${a.id}-${process.pid}.tmp.mp4`);
+    let result;
+    try {
+      if(spec.model===omni.MODEL){result=await omni.generateVideo(spec);fs.writeFileSync(stage,result.data);}
+      else await veo.generateVideo({...spec,image:spec.refs[0]}, {out:stage,onPoll:()=>process.stdout.write('.')});
+      const seconds=await mediaDuration(stage);if(!(seconds>0))throw new Error('Generated clip is not playable');
+      fs.renameSync(stage,out);
+      const {refs,...saved}=spec;
+      writeJSON(path.join(P.clips,`${a.id}.json`),{...saved,seconds,requestedSeconds:spec.seconds,interactionId:result?.interactionId,usage:result?.usage,createdAt:new Date().toISOString()});
+      log.ok(`${a.id} → assets/clips/${a.id}.mp4 (${seconds.toFixed(2)}s; clip audio is excluded from the film mix)`);
+    } finally {fs.rmSync(stage,{force:true});}
   }
 }
 
@@ -186,24 +198,24 @@ export function plan(root) {
   const rows = [];
   for (const b of sb.beats.filter((x) => x.vo)) {
     const meta = readJSON(path.join(P.vo, `${b.id}.json`), null);
-    const done = meta?.provider === 'gemini' && meta.hash === hashOf(voiceSpec(sb, b, 'gemini'));
+    const done = (meta?.provider === 'gemini' && meta.hash === hashOf(voiceSpec(sb, b, 'gemini')) || meta?.provider==='imported'&&meta.textHash===hashOf(b.vo)) && nonempty(path.join(P.vo, `${b.id}.wav`));
     const secs = estimateDuration(b.vo, sb.voice.wpm);
     rows.push({ kind: 'voice', id: b.id, detail: `${secs.toFixed(1)}s speech`, cost: done ? 0 : tts.estimateCost({ seconds: secs, model: sb.voice.model }), status: done ? 'cached' : meta?.provider === 'local' ? 'draft only' : 'todo' });
   }
   if (sb.music) {
     const meta = readJSON(path.join(P.music, 'bed.json'), null);
     const model = sb.music.model ?? 'lyria-3.5';
-    const done = meta && meta.provider !== 'local';
-    rows.push({ kind: 'music', id: 'bed', detail: `${Math.ceil(timing.duration + 2)}s ${model}`, cost: done ? 0 : model === 'lyria-realtime' ? 0 : music.estimateCost({ model }), status: done ? 'cached' : meta ? 'draft only' : 'todo' });
+    const done = meta?.provider !== 'local' && meta?.hash === hashOf(musicSpec(sb, timing)) && !!findMusicBed(root, meta);
+    rows.push({ kind: 'music', id: 'bed', detail: `${Math.ceil(timing.duration + 2)}s ${model}`, cost: done ? 0 : model === 'lyria-realtime' ? 0 : music.estimateCost({ model }), status: done ? 'cached' : meta?.provider === 'local' ? 'draft only' : 'todo' });
   }
-  for (const a of sb.assets) {
+  for (const a of sb.assets.filter(a=>!a.file)) {
     if (a.kind === 'image') {
-      const done = assetMeta(P.img, a.id)?.hash === hashOf(a);
+      const done = assetMeta(P.img, a.id)?.hash === hashOf(a) && nonempty(path.join(P.img, `${a.id}.jpg`));
       rows.push({ kind: 'image', id: a.id, detail: `${a.size ?? '2K'} ${a.model ?? 'gemini-3.1-flash-image'}`, cost: done ? 0 : image.estimateCost({ model: a.model, size: a.size ?? '2K' }), status: done ? 'cached' : 'todo' });
     }
     if (a.kind === 'clip') {
-      const done = assetMeta(P.clips, a.id)?.hash === hashOf(a);
-      rows.push({ kind: 'clip', id: a.id, detail: `${a.seconds ?? 4}s ${a.resolution ?? '720p'} ${a.model ?? 'veo-3.1-lite'}`, cost: done ? 0 : veo.estimateCost({ model: a.model, resolution: a.resolution ?? '720p', seconds: a.seconds ?? 4 }), status: done ? 'cached' : 'todo' });
+      const spec=clipSpec(root,sb,a,{allowMissing:true}), done = assetMeta(P.clips,a.id)?.hash===spec.hash && nonempty(path.join(P.clips,`${a.id}.mp4`));
+      rows.push({kind:'clip',id:a.id,detail:`~${spec.seconds}s ${spec.resolution} ${spec.model}`,cost:done?0:(spec.model===omni.MODEL?omni:veo).estimateCost(spec),status:done?'cached':'todo'});
     }
   }
   const clipSecs = sb.assets.filter((a) => a.kind === 'clip').reduce((s, a) => s + (a.seconds ?? 4), 0);

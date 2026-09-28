@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/storyboard.schema.json",
+  "title": "What we heard: 212 planning interviews",
+  "logline": "Most teams underestimate the tail — the long delays, not the average, drive missed commitments.",
+  "audience": "Product and planning leads; a research readout.",
+  "format": { "preset": "landscape", "fps": 30 },
+  "theme": "paper", "backdrop": "topo", "sfx": true, "budget": 1.0,
+  "voice": { "voice": "Schedar", "style": "even, thoughtful, clear", "wpm": 148 },
+  "music": { "model": "lyria-3.5", "prompt": "Reflective ambient, soft Rhodes, warm tape texture, slow and spacious", "bpm": 72, "key": "E minor", "volume": 0.18 },
+  "beats": [
+    { "id": "open", "chapter": "Context", "block": "title", "vo": "We interviewed two hundred and twelve planners. Here's what they told us.",
+      "props": { "kicker": "Research readout · Sep 2026", "title": "It's the *tail*, not the average", "subtitle": "212 planning interviews" } },
+    { "id": "voice", "chapter": "Findings", "block": "quote", "vo": "One planner put it simply: the average task is fine; it's the one that takes three weeks that sinks us.",
+      "props": { "text": "The average task is fine. It's the *one that takes three weeks* that sinks us.", "author": "Planning lead", "role": "Interview 047 (anonymised)" } },
+    { "id": "tail", "chapter": "Findings", "block": "distribution", "vo": "The data agrees. Most work finishes in about two days, but one task in ten takes more than a week.",
+      "props": { "title": "Days to finish a task", "values": "demo", "unit": "days", "marker": { "value": 1.8, "label": "median 1.8 days", "say": "most" }, "highlight": { "from": 7, "to": 20, "label": "1 in 10 takes > 7 days", "say": "week" }, "source": "Sample data" } },
+    { "id": "share", "chapter": "Findings", "block": "ring", "vo": "And sixty-four percent of missed commitments trace back to one of those long tasks.",
+      "props": { "value": 0.64, "label": "of missed commitments trace to a long-tail task", "land": "sixty", "source": "Interview coding, n = 212 (sample data)" } },
+    { "id": "recs", "chapter": "What to do", "block": "points", "vo": "So: plan to the tail, flag long tasks early, and review them weekly.", "tail": 1.0,
+      "props": { "kicker": "Recommendations", "items": [{ "text": "Plan to the *tail*, not the average", "say": "plan" }, { "text": "Flag long tasks early", "say": "flag" }, { "text": "Review them weekly", "say": "review" }] } },
+    { "id": "end", "chapter": "What to do", "block": "end", "duration": 4,
+      "props": { "title": "It's the *tail*.", "subtitle": "Full report → research/planning-2026", "source": "Sample data for the recipe" } }
+  ],
+  "sources": [{ "claim": "212 interviews, 1.8 days median, 1 in 10, 64%", "source": "Sample data — replace with your study", "asOf": "2026-09" }]
+}

@@ -1,0 +1,108 @@
+{
+  "version": 2,
+  "title": "Show how a work develops through iteration",
+  "logline": "Show how a work develops through iteration",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "ink",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "statement",
+      "block": "statement",
+      "vo": "The first version is a place to start.",
+      "props": {
+        "text": "Make room for a rough first version.",
+        "support": "Show the work as it changes.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "cycle",
+      "block": "cycle",
+      "vo": "Imagine, make, observe, and refine.",
+      "props": {
+        "title": "Let the work teach you",
+        "nodes": [
+          {
+            "icon": "lightbulb",
+            "label": "Imagine"
+          },
+          {
+            "icon": "pencil",
+            "label": "Make"
+          },
+          {
+            "icon": "camera",
+            "label": "Observe"
+          },
+          {
+            "icon": "brush",
+            "label": "Refine"
+          }
+        ],
+        "period": 8,
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "compare",
+      "block": "compare",
+      "vo": "Compare the intention with what the draft actually does.",
+      "props": {
+        "title": "Look closely at the draft",
+        "left": {
+          "title": "What I intended",
+          "items": [
+            "A clear focal point",
+            "A quiet mood"
+          ]
+        },
+        "right": {
+          "title": "What I noticed",
+          "items": [
+            "Too many competing shapes",
+            "A color worth keeping"
+          ]
+        },
+        "verdict": "Illustrative critique — replace with your own observations.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one change and make another version.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Keep the earlier draft so you can see the change.",
+        "action": "Revise one thing.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Try the next version."
+      }
+    }
+  ]
+}

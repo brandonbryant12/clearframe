@@ -49,7 +49,6 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 ## 6. Rights
 
 - Fonts ship with the engine under open licences (Inter, Instrument Serif, JetBrains Mono, Fraunces: SIL OFL).
-- GSAP is distributed under its Standard "no charge" licence (<https://gsap.com/standard-license>). It is free for almost every use, but read it if you're building a product that competes with Webflow's visual tooling. ClearFrame installs it from npm and doesn't redistribute it.
 - Don't prompt music "in the style of" a named artist. Lyria blocks it, and you shouldn't want it.
 - Only use brand assets (logos, marks, colours) the requester owns or is authorised to use.
 
@@ -62,3 +61,5 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 5. Footnotes and disclosures meet size and hold time.
 6. `clearframe captions` has been exported. Vertical deliverables have captions burned in.
 7. The delivery message lists the sources, what was AI-generated (voice, music, images, footage) and the spend.
+
+- FFFrames native rendering uses the pinned upstream crate and GPL-enabled codecs; review upstream and codec licensing for your distribution. Bundled Inter includes its OFL notice. Archived browser dependencies are not installed by the active package.

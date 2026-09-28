@@ -1,0 +1,90 @@
+{
+  "version": 2,
+  "title": "Listen, follow the words, then try the phrase",
+  "logline": "Listen, follow the words, then try the phrase",
+  "format": {
+    "preset": "vertical",
+    "fps": 30
+  },
+  "theme": "ink",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Listen once. Then follow the words as you hear them.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "Hear it. See it. Try it.",
+        "support": "Use a reviewed recording in your chosen language.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "kinetic",
+      "block": "kinetic",
+      "vo": "Where is the train station?",
+      "props": {
+        "mode": "highlight",
+        "align": "center",
+        "maxWords": 6,
+        "source": ""
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "Pause the video and try the phrase yourself.",
+      "props": {
+        "label": "Your turn",
+        "text": "Say the phrase in your own voice.",
+        "support": "Replay the recording and compare.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "kinetic-2",
+      "block": "kinetic",
+      "vo": "Where is the train station?",
+      "props": {
+        "mode": "reveal",
+        "align": "center",
+        "maxWords": 6,
+        "source": ""
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Try using the phrase in a different situation.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Change one word and check the meaning.",
+        "action": "Practice another short exchange.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Make it useful."
+      }
+    }
+  ]
+}

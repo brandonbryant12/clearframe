@@ -1,25 +1,34 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/brandonbryant12/clearframe/schema/storyboard.schema.json",
-  "title": "ClearFrame storyboard",
-  "description": "The source of truth for a ClearFrame video: script, beats, voice, music, generated assets and sources.",
+  "title": "ClearFrame FFFrames storyboard",
   "type": "object",
   "required": [
     "beats"
   ],
+  "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "const": 2
+    },
     "title": {
       "type": "string"
     },
     "logline": {
-      "type": "string",
-      "description": "The one sentence the audience should remember."
+      "type": "string"
     },
     "audience": {
       "type": "string"
     },
+    "budget": {
+      "type": "number",
+      "minimum": 0
+    },
     "format": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "preset": {
           "enum": [
@@ -30,67 +39,128 @@
           ]
         },
         "width": {
-          "type": "integer",
-          "minimum": 16
+          "type": "integer"
         },
         "height": {
-          "type": "integer",
-          "minimum": 16
+          "type": "integer"
         },
         "fps": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 120
+          "enum": [
+            24,
+            25,
+            30,
+            50,
+            60
+          ]
         }
       }
     },
     "theme": {
-      "enum": [
-        "paper",
-        "ink",
-        "ember",
-        "editorial",
-        "slate",
-        "signal"
-      ]
-    },
-    "budget": {
-      "type": "number",
-      "minimum": 0,
-      "description": "USD hard cap for paid generation per command."
-    },
-    "voice": {
-      "type": "object",
-      "properties": {
-        "provider": {
+      "oneOf": [
+        {
           "enum": [
-            "gemini"
+            "paper",
+            "ink",
+            "editorial",
+            "signal"
           ]
         },
-        "model": {
-          "type": "string",
-          "default": "gemini-3.8-flash-tts"
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "base": {
+              "enum": [
+                "paper",
+                "ink",
+                "editorial",
+                "signal"
+              ]
+            },
+            "bg": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "surface": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "ink": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "muted": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "accent": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "positive": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "negative": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          }
+        }
+      ]
+    },
+    "motion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "preset": {
+          "enum": [
+            "gentle",
+            "snappy",
+            "spring"
+          ]
         },
-        "voice": {
-          "type": "string",
-          "default": "Charon"
-        },
-        "style": {
-          "type": "string",
-          "description": "Short, constant delivery descriptor (speech_metadata.style)."
-        },
-        "language": {
-          "type": "string"
-        },
-        "wpm": {
+        "intensity": {
           "type": "number",
-          "default": 150
-        },
-        "draftVoice": {
-          "type": "string",
-          "description": "OS voice name for --draft (macOS `say -v`)."
+          "minimum": 0,
+          "maximum": 1
         }
       }
+    },
+    "transition": {
+      "enum": [
+        "cut",
+        "fade",
+        "rise",
+        "wipe",
+        "push",
+        "zoom",
+        "auto"
+      ]
+    },
+    "backdrop": {
+      "enum": [
+        "none",
+        "dots",
+        "grid"
+      ]
+    },
+    "chrome": {
+      "type": "boolean"
+    },
+    "captions": {
+      "enum": [
+        true,
+        false,
+        "auto",
+        "off"
+      ]
+    },
+    "sfx": {
+      "type": "boolean"
+    },
+    "voice": {
+      "type": "object"
     },
     "music": {
       "oneOf": [
@@ -98,236 +168,81 @@
           "const": false
         },
         {
-          "type": "object",
-          "properties": {
-            "model": {
-              "enum": [
-                "lyria-3.5",
-                "lyria-3-clip-preview",
-                "lyria-realtime"
-              ]
-            },
-            "prompt": {
-              "type": "string"
-            },
-            "bpm": {
-              "type": "number"
-            },
-            "key": {
-              "type": "string"
-            },
-            "volume": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
-            },
-            "duck": {
-              "type": "boolean"
-            },
-            "fadeIn": {
-              "type": "number"
-            },
-            "fadeOut": {
-              "type": "number"
-            },
-            "offset": {
-              "type": "number"
-            },
-            "file": {
-              "type": "string"
-            },
-            "arc": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              },
-              "description": "Per-chapter musical direction."
-            },
-            "sections": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "from": {
-                    "type": "number"
-                  },
-                  "to": {
-                    "type": "number"
-                  },
-                  "text": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "ending": {
-              "type": "string"
-            },
-            "weightedPrompts": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "text": {
-                    "type": "string"
-                  },
-                  "weight": {
-                    "type": "number"
-                  }
-                }
-              }
-            },
-            "density": {
-              "type": "number"
-            },
-            "brightness": {
-              "type": "number"
-            },
-            "scale": {
-              "type": "string"
-            }
-          }
+          "type": "object"
         }
       ]
     },
     "mix": {
-      "type": "object",
-      "properties": {
-        "loudness": {
-          "type": "number",
-          "default": -14
-        },
-        "voiceGain": {
-          "type": "number",
-          "default": 1
-        }
-      }
+      "type": "object"
     },
     "pacing": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "lead": {
           "type": "number",
-          "default": 0.25
+          "minimum": 0
         },
         "tail": {
           "type": "number",
-          "default": 0.6
+          "minimum": 0
         },
         "minBeat": {
           "type": "number",
-          "default": 1.6
+          "minimum": 0
         },
         "silentBeat": {
           "type": "number",
-          "default": 2.5
+          "minimum": 0
         },
         "outro": {
           "type": "number",
-          "default": 0
+          "minimum": 0
         }
       }
     },
-    "beats": {
+    "sources": {
       "type": "array",
-      "minItems": 1,
       "items": {
-        "type": "object",
-        "required": [
-          "id"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
-          },
-          "chapter": {
+        "oneOf": [
+          {
             "type": "string"
           },
-          "scene": {
-            "type": "string",
-            "description": "Path to a scene module, e.g. scenes/hook.js"
-          },
-          "vo": {
-            "type": "string",
-            "description": "Exact narration. Inline tags like <short pause> allowed."
-          },
-          "visual": {
-            "type": "string",
-            "description": "What the eye sees as the words land; the focal point."
-          },
-          "style": {
-            "type": "string",
-            "description": "Per-beat voice style override."
-          },
-          "lead": {
-            "type": "number",
-            "description": "Seconds before the voice starts (negative = J-cut)."
-          },
-          "tail": {
-            "type": "number"
-          },
-          "hold": {
-            "type": "number"
-          },
-          "min": {
-            "type": "number"
-          },
-          "duration": {
-            "type": "number",
-            "exclusiveMinimum": 0
-          },
-          "sfx": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "src"
-              ],
-              "properties": {
-                "src": {
-                  "type": "string"
-                },
-                "at": {
-                  "oneOf": [
-                    {
-                      "type": "number"
-                    },
-                    {
-                      "type": "string",
-                      "description": "word:<text>[+offset] | vo | vo-end | end"
-                    }
-                  ]
-                },
-                "volume": {
-                  "type": "number"
-                }
-              }
-            }
-          },
-          "block": {
-            "type": "string",
-            "pattern": "^[a-z0-9-]+$",
-            "description": "Library block name (see `clearframe blocks`)."
-          },
-          "props": {
-            "type": "object",
-            "description": "Props for the block or scene module."
-          },
-          "transition": {
-            "enum": [
-              "auto",
-              "fade",
-              "dip",
-              "rise",
-              "push",
-              "wipe",
-              "blur",
-              "zoom",
-              "cut",
-              "none"
-            ],
-            "description": "Transition into this beat's scene."
+          {
+            "type": "object"
+          }
+        ]
+      }
+    },
+    "continuity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "maxGeneratedShare": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "treatment": {
+          "type": "string"
+        },
+        "lighting": {
+          "type": "string"
+        },
+        "camera": {
+          "type": "string"
+        },
+        "motion": {
+          "type": "string"
+        },
+        "motif": {
+          "type": "string"
+        },
+        "refs": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "type": "string"
           }
         }
       }
@@ -342,7 +257,8 @@
         ],
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]*$"
           },
           "kind": {
             "enum": [
@@ -351,22 +267,14 @@
               "sfx"
             ]
           },
+          "file": {
+            "type": "string"
+          },
           "prompt": {
             "type": "string"
           },
           "model": {
             "type": "string"
-          },
-          "aspect": {
-            "type": "string"
-          },
-          "size": {
-            "enum": [
-              "512",
-              "1K",
-              "2K",
-              "4K"
-            ]
           },
           "refs": {
             "type": "array",
@@ -374,140 +282,1276 @@
               "type": "string"
             }
           },
-          "from": {
-            "type": "string",
-            "description": "clip: image asset id to animate (image-to-video)."
-          },
-          "image": {
-            "type": "string"
-          },
           "seconds": {
-            "enum": [
-              4,
-              6,
-              8
-            ]
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 10
           },
           "resolution": {
-            "enum": [
-              "720p",
-              "1080p",
-              "4k"
-            ]
+            "type": "string"
           },
-          "seed": {
-            "type": "integer"
+          "aspect": {
+            "type": "string"
           },
-          "file": {
+          "previousInteractionId": {
             "type": "string"
           }
         }
       }
     },
-    "sources": {
+    "beats": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
         "required": [
-          "claim",
-          "source"
+          "id",
+          "block",
+          "props"
         ],
+        "additionalProperties": false,
         "properties": {
-          "claim": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]*$"
+          },
+          "block": {
+            "enum": [
+              "title",
+              "statement",
+              "stat",
+              "kpis",
+              "bars",
+              "line",
+              "waffle",
+              "ring",
+              "delta",
+              "compare",
+              "steps",
+              "timeline",
+              "funnel",
+              "quote",
+              "list",
+              "matrix",
+              "equation",
+              "callout",
+              "endcard",
+              "image",
+              "video",
+              "kinetic",
+              "icon-grid",
+              "flow",
+              "cycle",
+              "breathing"
+            ]
+          },
+          "vo": {
             "type": "string"
           },
-          "source": {
+          "style": {
             "type": "string"
           },
-          "asOf": {
+          "chapter": {
             "type": "string"
-          }
-        }
-      }
-    },
-    "backdrop": {
-      "enum": [
-        "dots",
-        "grid",
-        "ruled",
-        "topo",
-        "aurora",
-        "none"
-      ],
-      "description": "Ambient background for the default composition."
-    },
-    "grain": {
-      "oneOf": [
-        {
-          "type": "boolean"
-        },
-        {
-          "type": "number"
-        }
-      ],
-      "description": "Film grain on/off or opacity."
-    },
-    "vignette": {
-      "type": "boolean"
-    },
-    "chrome": {
-      "oneOf": [
-        {
-          "enum": [
-            "auto"
-          ]
-        },
-        {
-          "type": "boolean"
-        },
-        {
-          "type": "object",
-          "properties": {
-            "chapter": {
-              "type": "boolean"
-            },
-            "count": {
-              "type": "boolean"
-            },
-            "progress": {
-              "type": "boolean"
+          },
+          "duration": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "lead": {
+            "type": "number",
+            "minimum": 0
+          },
+          "tail": {
+            "type": "number",
+            "minimum": 0
+          },
+          "hold": {
+            "type": "number",
+            "minimum": 0
+          },
+          "min": {
+            "type": "number",
+            "minimum": 0
+          },
+          "transition": {
+            "enum": [
+              "cut",
+              "fade",
+              "rise",
+              "wipe",
+              "push",
+              "zoom",
+              "auto"
+            ]
+          },
+          "motion": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "preset": {
+                "enum": [
+                  "gentle",
+                  "snappy",
+                  "spring"
+                ]
+              },
+              "intensity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          },
+          "props": {
+            "type": "object"
+          },
+          "sfx": {
+            "type": "array",
+            "items": {
+              "type": "object"
             }
           }
-        }
-      ],
-      "description": "Orientation layer: chapter label, count, progress rail."
-    },
-    "captions": {
-      "oneOf": [
-        {
-          "enum": [
-            "auto"
-          ]
         },
-        {
-          "type": "boolean"
-        }
-      ],
-      "description": "Burned-in word-synced captions ('auto' = on for vertical)."
-    },
-    "transition": {
-      "enum": [
-        "auto",
-        "fade",
-        "dip",
-        "rise",
-        "push",
-        "wipe",
-        "blur",
-        "zoom",
-        "cut",
-        "none"
-      ],
-      "description": "Default transition between scenes ('auto' = rise across chapters, fade within)."
-    },
-    "sfx": {
-      "type": "boolean",
-      "description": "Enable block sound cues (synthesized ticks, pops, whoosh, chime)."
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "title"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "text": {
+                      "description": "Main promise"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "statement"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "text": {
+                      "description": "Statement"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "stat"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "value": {
+                      "description": "Finite number"
+                    },
+                    "from": {
+                      "description": "Starting value"
+                    },
+                    "prefix": {
+                      "description": "Prefix"
+                    },
+                    "suffix": {
+                      "description": "Units"
+                    },
+                    "decimals": {
+                      "description": "0–8"
+                    },
+                    "label": {
+                      "description": "Meaning"
+                    },
+                    "context": {
+                      "description": "Context"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "kpis"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "items": {
+                      "description": "[{value,label,prefix,suffix,decimals,from,say}]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "bars"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "data": {
+                      "description": "[{label,value}] (2–8)"
+                    },
+                    "max": {
+                      "description": "Positive scale maximum"
+                    },
+                    "format": {
+                      "description": "{prefix,suffix,decimals} or unit string"
+                    },
+                    "orientation": {
+                      "description": "auto|horizontal|vertical"
+                    },
+                    "sort": {
+                      "description": "none|desc"
+                    },
+                    "growSay": {
+                      "description": "Growth cue"
+                    },
+                    "focus": {
+                      "description": "{label|index,say,dim,dur,note}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "line"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "series": {
+                      "description": "[number] or [{x,y}]"
+                    },
+                    "labels": {
+                      "description": "[string]"
+                    },
+                    "min": {
+                      "description": "Scale minimum"
+                    },
+                    "max": {
+                      "description": "Scale maximum"
+                    },
+                    "format": {
+                      "description": "{prefix,suffix,decimals} or units"
+                    },
+                    "drawSay": {
+                      "description": "Reveal cue"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "waffle"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "value": {
+                      "description": "Highlighted units"
+                    },
+                    "total": {
+                      "description": "Total units (1–100)"
+                    },
+                    "cols": {
+                      "description": "Columns"
+                    },
+                    "label": {
+                      "description": "Meaning"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "ring"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "value": {
+                      "description": "Numerator"
+                    },
+                    "max": {
+                      "description": "Denominator"
+                    },
+                    "decimals": {
+                      "description": "0–8"
+                    },
+                    "label": {
+                      "description": "Meaning"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "delta"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "from": {
+                      "description": "{value,label}"
+                    },
+                    "to": {
+                      "description": "{value,label}"
+                    },
+                    "prefix": {
+                      "description": ""
+                    },
+                    "suffix": {
+                      "description": ""
+                    },
+                    "decimals": {
+                      "description": "0–8"
+                    },
+                    "change": {
+                      "description": "Optional explicit change label"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "compare"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "left": {
+                      "description": "{title,items:[string]}"
+                    },
+                    "right": {
+                      "description": "{title,items:[string]}"
+                    },
+                    "verdict": {
+                      "description": "Decision"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "steps"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "items": {
+                      "description": "[{title,detail,say}] (2–5)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "timeline"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "items": {
+                      "description": "[{label,title,detail,say}] (2–5)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "funnel"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "items": {
+                      "description": "[{label,value}] (2–5)"
+                    },
+                    "format": {
+                      "description": "{prefix,suffix,decimals} or units"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "quote"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "text": {
+                      "description": "Quotation"
+                    },
+                    "author": {
+                      "description": "Attribution"
+                    },
+                    "role": {
+                      "description": "Context"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "list"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "items": {
+                      "description": "[string or {text,say}] (2–5)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "matrix"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "columns": {
+                      "description": "[string] (2–3)"
+                    },
+                    "rows": {
+                      "description": "[{label,values:[string]}] (2–4)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "equation"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "expression": {
+                      "description": "Formula"
+                    },
+                    "result": {
+                      "description": "Result"
+                    },
+                    "explanation": {
+                      "description": "Meaning"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "callout"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "text": {
+                      "description": "Insight"
+                    },
+                    "label": {
+                      "description": "Label"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "endcard"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "text": {
+                      "description": "Final takeaway"
+                    },
+                    "action": {
+                      "description": "Next step"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "image"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "asset": {
+                      "description": "Declared image asset id"
+                    },
+                    "file": {
+                      "description": "Local image path"
+                    },
+                    "caption": {
+                      "description": "Visible caption"
+                    },
+                    "label": {
+                      "description": "Provenance label"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "video"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "asset": {
+                      "description": "Declared clip asset id"
+                    },
+                    "file": {
+                      "description": "Local video path"
+                    },
+                    "caption": {
+                      "description": "Visible caption"
+                    },
+                    "label": {
+                      "description": "Provenance label"
+                    },
+                    "offset": {
+                      "description": "Source in point in seconds"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "kinetic"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "mode": {
+                      "description": "highlight|reveal|word"
+                    },
+                    "align": {
+                      "description": "left|center"
+                    },
+                    "maxWords": {
+                      "description": "Words per phrase (1–10)"
+                    },
+                    "maxGap": {
+                      "description": "Start a new phrase after this silence, 0–5 seconds (default 0.6)"
+                    },
+                    "maxDuration": {
+                      "description": "Maximum phrase span, 0.5–15 seconds (default 4); never split a timed word"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "icon-grid"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "items": {
+                      "description": "[{icon,label,detail?,say?}] (1–8)"
+                    },
+                    "columns": {
+                      "description": "1–4; automatic if omitted"
+                    },
+                    "stagger": {
+                      "description": "Delay between arrivals, 0–2 seconds"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "flow"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "nodes": {
+                      "description": "[{icon?,label,detail?,say?}] (2–6)"
+                    },
+                    "orientation": {
+                      "description": "auto|horizontal|vertical; portrait stays vertical"
+                    },
+                    "stagger": {
+                      "description": "Delay between arrivals, 0–2 seconds"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "cycle"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "nodes": {
+                      "description": "[{icon?,label}] (3–6)"
+                    },
+                    "period": {
+                      "description": "Seconds per loop, 2–60"
+                    },
+                    "clockwise": {
+                      "description": "true or false"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "breathing"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "phases": {
+                      "description": "[{label,seconds,scale:expand|hold|contract}] (2–6)"
+                    },
+                    "minScale": {
+                      "description": "Minimum relative radius, 0.2–1"
+                    },
+                    "maxScale": {
+                      "description": "Maximum relative radius, 0.2–1, greater than minScale"
+                    },
+                    "ring": {
+                      "description": "Show outer guide ring"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
     }
   }
 }

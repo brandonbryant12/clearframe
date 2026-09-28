@@ -1,0 +1,32 @@
+{
+  "repository": "https://github.com/google/fonts",
+  "revision": "0b58fb370093f9a9f4ff785d94405710b79de67c",
+  "files": [
+    {
+      "file": "source/Inter.ttf",
+      "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/inter/Inter%5Bopsz,wght%5D.ttf",
+      "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031"
+    },
+    {
+      "file": "OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/inter/OFL.txt",
+      "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57"
+    }
+  ],
+  "staticInstances": [
+    {
+      "file": "Inter-Regular.ttf",
+      "weight": 400,
+      "opticalSize": 14,
+      "tool": "FontTools varLib.instancer",
+      "sha256": "9c8679361c31c51fbd9a93a654e736e6d5e7093a7ed1f572c45a4e63d8837d64"
+    },
+    {
+      "file": "Inter-SemiBold.ttf",
+      "weight": 600,
+      "opticalSize": 14,
+      "tool": "FontTools varLib.instancer",
+      "sha256": "36bc8547bfccdc3f2e4ca2e04e04efe790ff2e013936b1b560503520062af6c4"
+    }
+  ]
+}

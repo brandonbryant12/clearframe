@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/storyboard.schema.json",
+  "title": "One percent",
+  "logline": "1% better every day compounds to ~38× in a year.",
+  "audience": "A feed at work — one idea in 20 seconds, often watched muted (captions are on).",
+  "format": { "preset": "vertical", "fps": 30 },
+  "theme": "ink", "backdrop": "dots", "sfx": true, "budget": 0.3,
+  "voice": { "voice": "Sadaltager", "style": "warm, clear, unhurried", "wpm": 155 },
+  "music": { "model": "lyria-3-clip-preview", "prompt": "Minimal electronic, soft plucked arpeggio, warm sub, light shaker", "bpm": 96, "key": "A minor", "volume": 0.18 },
+  "beats": [
+    { "id": "hook", "block": "stat", "vo": "One percent better, every day.", "lead": 0.15,
+      "props": { "value": 1, "suffix": "%", "label": "better, every day", "land": "one" } },
+    { "id": "turn", "block": "statement", "vo": "After a year, that's not three hundred sixty-five percent better.",
+      "props": { "text": "After a year, that's *not* 365% better." } },
+    { "id": "answer", "block": "circles", "vo": "It's about thirty-eight times better.",
+      "props": { "items": [{ "label": "Day one", "value": 1, "tone": "dim" }, { "label": "Day 365", "value": 37.8, "tone": "accent", "say": "thirty" }], "format": "×" } },
+    { "id": "end", "block": "end", "vo": "Small changes compound.", "tail": 1.2,
+      "props": { "title": "Small changes *compound*.", "source": "1.01³⁶⁵ ≈ 37.8" } }
+  ],
+  "sources": [{ "claim": "1.01^365 ≈ 37.8", "source": "Arithmetic", "asOf": "n/a" }]
+}

@@ -1,0 +1,105 @@
+{
+  "version": 2,
+  "title": "Make a keepsake from a meaningful moment",
+  "logline": "Make a keepsake from a meaningful moment",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "editorial",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Some stories begin with a moment you almost missed.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "The moment I kept",
+        "support": "A personal story told in your own voice.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "quote",
+      "block": "quote",
+      "vo": "Replace this fictional line with the memory you want to preserve.",
+      "props": {
+        "text": "I did not know it would become my favorite memory.",
+        "author": "Fictional sample narrator",
+        "role": "Replace with your own words",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "timeline",
+      "block": "timeline",
+      "vo": "Show what came before, what happened, and what stayed with you.",
+      "props": {
+        "title": "Give the moment context",
+        "items": [
+          {
+            "label": "Before",
+            "title": "An ordinary day",
+            "detail": "Set the scene"
+          },
+          {
+            "label": "The moment",
+            "title": "Something changed",
+            "detail": "Describe one concrete detail"
+          },
+          {
+            "label": "After",
+            "title": "What stayed",
+            "detail": "Say why it matters"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "kinetic",
+      "block": "kinetic",
+      "vo": "This is the part I want to remember.",
+      "props": {
+        "mode": "highlight",
+        "align": "left",
+        "maxWords": 5,
+        "source": ""
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Keep the story in your own words.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Add the date and the people who shared it.",
+        "action": "Save it for someone you love.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "A small story, kept."
+      }
+    }
+  ]
+}

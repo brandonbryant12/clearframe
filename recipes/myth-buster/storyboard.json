@@ -1,0 +1,95 @@
+{
+  "version": 2,
+  "title": "Correct a misconception",
+  "logline": "Correct a misconception",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "editorial",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "statement",
+      "block": "statement",
+      "vo": "A high average does not mean every case is fast.",
+      "props": {
+        "text": "Does a good average mean everyone is served?",
+        "support": "Measure the wait, not just the workload.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "bars",
+      "block": "bars",
+      "vo": "Different stages can hide very different waits.",
+      "props": {
+        "title": "Where the hours went",
+        "data": [
+          {
+            "label": "Triage",
+            "value": 12
+          },
+          {
+            "label": "Routing",
+            "value": 24
+          },
+          {
+            "label": "Review",
+            "value": 8
+          }
+        ],
+        "format": " h",
+        "focus": {
+          "label": "Routing",
+          "dim": 0.55,
+          "note": "Start here"
+        },
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "Measure the tail as well as the center.",
+      "props": {
+        "label": "The correction",
+        "text": "Averages need context.",
+        "support": "Look at the distribution before choosing a target.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ]
+}

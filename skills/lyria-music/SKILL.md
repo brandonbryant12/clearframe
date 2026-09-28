@@ -1,6 +1,6 @@
 ---
 name: lyria-music
-description: Score a video with Google Lyria via the Gemini API — lyria-3.5 (full instrumental beds, duration and timestamped structure steered by prompt) or lyria-3-clip-preview (30 s), plus experimental Lyria RealTime (WebSocket, exact length/BPM). Exact contracts, prompt recipes for calm professional beds, structure derived from the edit, mixing levels, pricing. Use when a ClearFrame film (> ~20 s) needs music.
+description: Score a video with Google Lyria via the Gemini API — lyria-3.5 (full instrumental beds, duration and timestamped structure steered by prompt) or lyria-3-clip-preview (30 s), plus experimental Lyria RealTime (WebSocket, exact length/BPM). Exact contracts, prompt recipes for calm professional beds, structure derived from the edit, mixing levels, pricing. Use when a ClearFrame film longer than about 20 seconds needs music.
 ---
 
 # Lyria music
@@ -20,21 +20,23 @@ Music gives a professional film warmth and pace, if it stays **under** the voice
 ```bash
 clearframe music <dir> --draft   # free synthesized pad, for timing and mix checks
 clearframe plan <dir>            # ≈ $0.08
-clearframe music <dir>           # → assets/music/bed.wav (+ bed.json with prompt and model notes)
+clearframe music <dir>           # → assets/music/bed.mp3 (+ bed.json with prompt and model notes)
 node skills/lyria-music/scripts/music.mjs --style "…" --bpm 80 --key "D major" --seconds 60 --section "0:00-0:08|sparse intro" --dry-run
 ```
 **The engine writes the structure for you.** It groups beats by `chapter`, converts them to timestamps (`[0:00 - 0:09] Intro: …`), asks for about the film's length plus 2 s, adds "Instrumental only, no vocals" and a mix note ("sits under a spoken voiceover"), and asks for a clean ending on a sustained chord. Override per chapter with `music.arc` or fully with `music.sections`.
 
-## Contract: Lyria 3.5 / 3 Clip (verified 2026-09-27)
+## Contract: Lyria 3.5 / 3 Clip (MP3 path checked 2026-09-28)
 
 `POST https://generativelanguage.googleapis.com/v1beta/interactions` with header `x-goog-api-key`
 ```json
 { "model": "lyria-3.5",
   "input": "Minimal modern ambient, 80 BPM, in D major.\nInstrumental only, no vocals.\nDuration: about 48 seconds.\n[0:00 - 0:09] Intro: …\nEnding: end cleanly on a sustained chord, no fade-out.",
-  "response_format": { "type": "audio", "mime_type": "audio/wav" } }
+  "response_format": { "type": "audio" } }
 ```
 - The response holds `steps[type="model_output"].content[]`: a `text` block (structure or lyrics) and an `audio` block `{ mime_type, data }`.
-- Output is 44.1 kHz stereo. **MP3 is the default**; `mime_type: "audio/wav"` (from the documented `AudioResponseFormat` enum) requests WAV. The engine accepts either.
+- Output is 44.1 kHz stereo. **Use the MP3 default without a MIME override.** The [Google music guide](https://ai.google.dev/gemini-api/docs/music-generation#output-format) mentions WAV in prose but its request examples omit `mime_type`; WAV requests have failed in this project. The script accepts `--format mp3` only. Convert locally with FFmpeg if WAV is needed; changing a filename does not convert audio.
+- Save using the response MIME type (`audio/mpeg` and `audio/mp3` both mean `.mp3`). Unknown formats fail explicitly. Draft music and RealTime still produce WAV locally.
+- `bed.json` records the active generated file. Cache reuse requires both matching musical intent and a nonempty audio file; `clearframe plan` uses the same check. A format-default change alone does not regenerate an existing paid bed.
 - `input` may also be an array with up to 10 images (mood references).
 - Duration is steered **in the prompt** ("about 60 seconds") and by timestamped sections. `lyria-3-clip-preview` is always 30 s.
 - There is no negative prompt and no seed, and identical calls vary. Everything is SynthID-watermarked. Named-artist prompts are blocked.

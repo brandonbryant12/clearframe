@@ -1,31 +1,127 @@
 {
-  "$schema": "../../schema/storyboard.schema.json",
-  "title": "Q3 service desk update",
-  "logline": "Faster first responses and higher satisfaction on 8% more volume — next quarter we automate triage.",
-  "audience": "Leadership and the wider support org; 60 seconds, watched in a weekly update.",
-  "format": { "preset": "landscape", "fps": 30 },
-  "theme": "paper", "backdrop": "dots", "sfx": true, "budget": 1.0,
-  "voice": { "voice": "Charon", "style": "calm, clear, quietly upbeat", "wpm": 150 },
-  "music": { "model": "lyria-3.5", "prompt": "Understated electronic, muted plucked synth, soft kick on quarters, warm pads", "bpm": 96, "key": "A minor", "volume": 0.18 },
-  "beats": [
-    { "id": "open", "chapter": "Headline", "block": "title", "vo": "Here is the service desk, quarter three, in one minute.",
-      "props": { "kicker": "Q3 2026 · Service desk", "title": "Faster, *and* busier", "subtitle": "The quarter in one minute" } },
-    { "id": "kpis", "chapter": "Headline", "block": "kpis", "vo": "Requests rose to twelve thousand four hundred. First response fell to four hours. Satisfaction reached ninety-one percent.",
-      "props": { "kicker": "At a glance", "items": [
-        { "label": "Requests", "value": 12400, "delta": "+8%", "dir": "up", "good": "up", "say": "requests" },
-        { "label": "First response", "value": 4, "suffix": " h", "delta": "−2.1 h", "dir": "down", "good": "down", "say": "first" },
-        { "label": "Satisfaction", "value": 91, "suffix": "%", "delta": "+3 pts", "dir": "up", "say": "satisfaction" } ],
-        "source": "Service desk export, Jul–Sep 2026 (sample data)" } },
-    { "id": "trend", "chapter": "What changed", "block": "line", "vo": "Response times held steady until August, then dropped once the new routing went live.",
-      "props": { "title": "Median first response, hours", "series": [7.1, 6.9, 7.2, 7.0, 6.8, 6.9, 5.2, 4.6, 4.3, 4.1, 4.0, 4.0, 3.9], "labels": ["Jul", "Sep"], "format": { "suffix": " h", "decimals": 1 }, "marks": [{ "i": 6, "label": "New routing", "say": "routing" }], "drawSay": "held", "source": "Sample data" } },
-    { "id": "drivers", "chapter": "What changed", "block": "bars", "vo": "Most of the gain came from routing; macros and staffing helped less.",
-      "props": { "title": "Hours saved per week, by change", "data": [{ "label": "Routing", "value": 62 }, { "label": "Macros", "value": 21 }, { "label": "Staffing", "value": 14 }], "format": { "suffix": " h" }, "growSay": "gain", "focus": { "label": "Routing", "say": "routing", "note": "⅔ of the gain" }, "source": "Sample data" } },
-    { "id": "next", "chapter": "Next quarter", "block": "timeline", "vo": "Next: pilot automated triage in October, roll it out in November, and review in December.",
-      "props": { "title": "Q4 plan", "items": [{ "date": "Oct", "label": "Pilot triage", "say": "pilot" }, { "date": "Nov", "label": "Roll out", "say": "roll" }, { "date": "Dec", "label": "Review", "say": "review" }], "now": 0 } },
-    { "id": "recap", "chapter": "Next quarter", "block": "points", "vo": "So: faster answers, happier customers, and automation next.", "tail": 1.0,
-      "props": { "kicker": "Recap", "items": [{ "text": "Faster answers — *4 h* median", "say": "faster" }, { "text": "Happier customers — 91%", "say": "happier" }, { "text": "Automated triage next", "say": "automation" }] } },
-    { "id": "end", "chapter": "Next quarter", "block": "end", "duration": 4,
-      "props": { "title": "Faster, *and* busier.", "subtitle": "Questions → #service-desk", "source": "All figures: sample data for the recipe" } }
+  "version": 2,
+  "title": "Report progress with context",
+  "logline": "Report progress with context",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "paper",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
   ],
-  "sources": [{ "claim": "All figures", "source": "Sample data — replace with your export and date", "asOf": "2026-09-30" }]
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "This sample update follows the work from demand to response.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "The quarter in context",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "kpis",
+      "block": "kpis",
+      "vo": "In this illustrative quarter, requests grew while response time fell.",
+      "props": {
+        "title": "The quarter in three numbers",
+        "items": [
+          {
+            "value": 12400,
+            "label": "Requests"
+          },
+          {
+            "value": 4.2,
+            "suffix": " days",
+            "label": "First response"
+          },
+          {
+            "value": 91,
+            "suffix": "%",
+            "label": "Satisfaction"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "line",
+      "block": "line",
+      "vo": "The sample trend increased over six months.",
+      "props": {
+        "title": "A trend worth watching",
+        "series": [
+          12,
+          15,
+          14,
+          18,
+          23,
+          27
+        ],
+        "labels": [
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep"
+        ],
+        "min": 0,
+        "max": 30,
+        "format": " k",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "delta",
+      "block": "delta",
+      "vo": "First response fell from four point two days to one point eight days.",
+      "props": {
+        "title": "A faster first response",
+        "from": {
+          "value": 4.2,
+          "label": "Before"
+        },
+        "to": {
+          "value": 1.8,
+          "label": "After"
+        },
+        "suffix": " days",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ]
 }

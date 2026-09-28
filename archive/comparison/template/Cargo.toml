@@ -1,0 +1,24 @@
+[package]
+name = "clearframe-native"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+publish = false
+
+[features]
+default = ["metal"]
+metal = ["dep:fframes_skia_renderer"]
+
+[dependencies]
+fframes = { git = "https://github.com/dmtrKovalenko/fframes", rev = "bacfc3c3212d3d9429468435bfdc1ae2a21c7b3b", features = ["cli", "h264", "libav-agree-gpl"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+fframes_skia_renderer = { git = "https://github.com/dmtrKovalenko/fframes", rev = "bacfc3c3212d3d9429468435bfdc1ae2a21c7b3b", features = ["metal"], optional = true }
+
+[profile.release]
+debug = false
+lto = false
+
+[workspace]

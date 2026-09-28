@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "beats": {
+    "opening": { "layout": "statement", "headline": "Same story. Two renderers.", "support": "One script, one soundtrack, one timeline.", "source": "ClearFrame renderer experiment", "cue": "same" },
+    "chart": { "layout": "bars", "headline": "Compare the same work", "support": "An illustrative chart, not a speed result.", "source": "Hypothetical hours · fixture values · September 2026", "cue": "hypothetical", "rows": [ { "label": "Example A", "value": 12 }, { "label": "Example B", "value": 18 }, { "label": "Example C", "value": 24 } ], "max": 24 },
+    "ending": { "layout": "statement", "headline": "Measure the whole process", "support": "Quality, review, revision, and render time.", "source": "No renderer winner claimed before a paired run.", "cue": "quality" }
+  }
+}

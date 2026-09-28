@@ -8,3 +8,10 @@ node_modules/
 examples/*/assets/
 templates/*/assets/
 recipes/*/assets/
+
+# Retired project media stays local.
+archive/browser/examples/*/assets/
+archive/browser/templates/*/assets/
+archive/browser/recipes/*/assets/
+archive/comparison/examples/paired/assets/vo/
+archive/comparison/examples/paired/assets/music/

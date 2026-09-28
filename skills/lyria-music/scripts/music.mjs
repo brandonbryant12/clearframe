@@ -2,17 +2,17 @@
 // Lyria music via the Interactions API — lyria-3.5 (songs up to a couple of minutes) or lyria-3-clip-preview (30 s).
 // Zero dependencies (Node ≥ 20).
 //
-// Contract (verified against ai.google.dev, 2026-09-27):
+// Contract (MP3 path checked against ai.google.dev, 2026-09-28):
 //   POST https://generativelanguage.googleapis.com/v1beta/interactions   header: x-goog-api-key
 //   { model: "lyria-3.5", input: "<prompt>" | [ {type:"text",text}, {type:"image",mime_type,data} ...≤10 ],
-//     response_format: { type: "audio", mime_type: "audio/wav" } }        // MP3 is the default when mime_type is omitted
+//     response_format: { type: "audio" } } // Use the MP3 default; do not send a WAV MIME override.
 //   → steps[type=model_output].content[] = { type:"text", text:"<lyrics / structure>" }, { type:"audio", mime_type, data }
 //   Output: 44.1 kHz stereo. Duration is steered IN THE PROMPT ("about 70 seconds") and with timestamped sections
 //   ("[0:00 - 0:08] Intro: ..."). Say "Instrumental only, no vocals." for beds. No negative prompt or seed documented.
 //   Pricing: lyria-3.5 $0.08/song, lyria-3-clip-preview $0.04/clip (paid tier only). Output is SynthID-watermarked.
 //
 // Usage:
-//   node music.mjs --prompt "Minimal ambient electronic, 84 BPM, in D major, soft Rhodes and warm synth pads" --seconds 70 --out bed.wav
+//   node music.mjs --prompt "Minimal ambient electronic, 84 BPM, in D major, soft Rhodes and warm synth pads" --seconds 70 --out bed.mp3
 //   node music.mjs --prompt "..." --section "0:00-0:08|sparse intro, single pad" --section "0:08-0:55|steady pulse, leaves room for voice" --dry-run
 import fs from 'node:fs';
 import path from 'node:path';
@@ -25,7 +25,7 @@ export const MODELS = {
   'lyria-3-clip-preview': { price: 0.04, note: 'always 30 s — cheap for auditioning a style' },
 };
 
-const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+const mmss = (s) => { const n = Math.round(s); return `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}`; };
 
 /**
  * Compose a Lyria prompt from structured intent. Sections: [{ from, to, text }] in seconds.
@@ -42,14 +42,14 @@ export function composePrompt({ style, bpm, key, seconds, sections = [], instrum
   return lines.join('\n');
 }
 
-export function buildRequest({ prompt, model = 'lyria-3.5', format = 'wav', images = [] }) {
+export function buildRequest({ prompt, model = 'lyria-3.5', format = 'mp3', images = [] }) {
   if (!prompt?.trim()) throw new Error('prompt is required');
+  if (format !== 'mp3') throw new Error('Lyria music requests support MP3 only; convert the generated MP3 locally if you need WAV.');
+  if (images.length > 10) throw new Error('Lyria supports at most 10 image references');
   const input = images.length
     ? [{ type: 'text', text: prompt }, ...images.map((f) => ({ type: 'image', mime_type: /\.png$/i.test(f) ? 'image/png' : 'image/jpeg', data: fs.readFileSync(f).toString('base64') }))]
     : prompt;
   const response_format = { type: 'audio' };
-  if (format === 'wav') response_format.mime_type = 'audio/wav';
-  if (format === 'mp3') response_format.mime_type = 'audio/mp3';
   return { model, input, response_format };
 }
 
@@ -61,10 +61,13 @@ export async function generateMusic(opts) {
   const json = await post('/interactions', body, { timeoutMs: 600_000, ...opts });
   const audio = outputBlocks(json, 'audio').at(-1);
   if (!audio?.data) throw new Error(`No audio in response (prompt may have been filtered): ${JSON.stringify(json).slice(0, 400)}`);
-  const mime = String(audio.mime_type ?? 'audio/mp3').toLowerCase();
-  const ext = mime.includes('wav') ? 'wav' : mime.includes('ogg') ? 'ogg' : 'mp3';
+  const mime = String(audio.mime_type ?? 'audio/mpeg').toLowerCase().split(';')[0].trim();
+  const ext = { 'audio/mpeg': 'mp3', 'audio/mp3': 'mp3', 'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/ogg': 'ogg' }[mime];
+  if (!ext) throw new Error(`Unsupported Lyria audio MIME type: ${mime}`);
+  const data = Buffer.from(audio.data, 'base64');
+  if (!data.length) throw new Error('Lyria returned empty audio');
   const text = outputBlocks(json, 'text').map((t) => t.text).join('\n');
-  return { data: Buffer.from(audio.data, 'base64'), mimeType: mime, ext, text };
+  return { data, mimeType: mime, ext, text };
 }
 
 async function main() {
@@ -72,7 +75,7 @@ async function main() {
     options: {
       prompt: { type: 'string' }, style: { type: 'string' }, bpm: { type: 'string' }, key: { type: 'string' }, seconds: { type: 'string' },
       section: { type: 'string', multiple: true, default: [] }, model: { type: 'string', default: 'lyria-3.5' },
-      format: { type: 'string', default: 'wav' }, image: { type: 'string', multiple: true, default: [] }, out: { type: 'string', default: 'music.wav' },
+      format: { type: 'string', default: 'mp3' }, image: { type: 'string', multiple: true, default: [] }, out: { type: 'string', default: 'music.mp3' },
       'dry-run': { type: 'boolean' },
     },
   });
@@ -81,7 +84,7 @@ async function main() {
     const [a, b] = range.split('-').map((x) => x.split(':').reduce((acc, n) => acc * 60 + parseFloat(n), 0));
     return { from: a, to: b, text };
   });
-  const prompt = v.style || sections.length
+  const prompt = v.style || v.bpm || v.key || v.seconds || sections.length
     ? composePrompt({ style: v.style ?? v.prompt, bpm: v.bpm, key: v.key, seconds: v.seconds && +v.seconds, sections })
     : v.prompt;
   const opts = { prompt, model: v.model, format: v.format, images: v.image };

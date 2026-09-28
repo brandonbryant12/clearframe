@@ -39,7 +39,12 @@ test('Lyria 3.5: string input, audio response_format, structured prompt', () => 
   assert.match(prompt, /80 BPM/);
   assert.match(prompt, /Instrumental only, no vocals\./);
   assert.match(prompt, /\[0:00 - 0:08\] Intro/);
-  assert.deepEqual(music.buildRequest({ prompt: 'x' }), { model: 'lyria-3.5', input: 'x', response_format: { type: 'audio', mime_type: 'audio/wav' } });
+  assert.deepEqual(music.buildRequest({ prompt: 'x' }), { model: 'lyria-3.5', input: 'x', response_format: { type: 'audio' } });
+  assert.deepEqual(music.buildRequest({ prompt: 'x', format: 'mp3' }).response_format, { type: 'audio' });
+  assert.throws(() => music.buildRequest({ prompt: 'x', format: 'wav' }), /MP3 only/);
+  assert.throws(() => music.buildRequest({ prompt: 'x', format: 'bogus' }), /MP3 only/);
+  assert.throws(() => music.buildRequest({ prompt: 'x', images: Array(11).fill('missing.png') }), /at most 10/);
+  assert.match(music.composePrompt({ style: 'ambient', sections: [{ from: 59.8, to: 120, text: 'Bridge' }] }), /\[1:00 - 2:00\]/);
 });
 
 test('Lyria RealTime: one field per client message, setup first', () => {

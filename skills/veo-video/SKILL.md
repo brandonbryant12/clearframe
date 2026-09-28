@@ -3,6 +3,8 @@ name: veo-video
 description: Generate short footage with Google Veo 3.1 via the Gemini API — defaults to the cheapest model (veo-3.1-lite-generate-preview, 720p, 4 s ≈ $0.20) — with the exact predictLongRunning contract, polling and download, image-to-video from a Gemini still for style consistency, constraints, pricing, and prompt recipes for calm establishing plates. Use rarely: only for an establishing shot code can't fake, ≤ 20% of runtime, never to carry information.
 ---
 
+ClearFrame defaults generated clips to Gemini Omni Flash 1.1. Select a Veo model explicitly to use this alternate provider.
+
 # Veo footage
 
 **Last resort, by design.** A ClearFrame film is typography, numbers and diagrams. Footage earns its place only as an *establishing plate*: a place, a physical process, a texture in motion that code can't fake. It never carries information, since text and numbers in generated video are unreliable. Put the words and numbers over the plate in code.

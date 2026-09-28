@@ -60,7 +60,7 @@ One step per spoken clause. If the narration says one thing while the chart does
 
 ## Bind figures to data
 
-Never type figures from memory into a scene. Put them in `data.json` next to the storyboard (loaded automatically as `ctx.data` / `CF.data`) or in the storyboard itself, and record each one in `storyboard.sources` with `{ claim, source, asOf }`. Then:
+Never type figures from memory into a scene. Put them in the storyboard block props (optionally retaining the source dataset alongside it), and record each one in `storyboard.sources` with `{ claim, source, asOf }`. Then:
 
 ```js
 export default function ({ el, b, data, kit }) {

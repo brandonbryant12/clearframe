@@ -36,7 +36,7 @@ export function ffmpegBin() {
 /** Run ffmpeg, resolve with stderr text. Rejects with the tail of stderr on failure. */
 export function ffmpeg(args, { quiet = true } = {}) {
   return new Promise((resolve, reject) => {
-    const p = spawn(ffmpegBin(), ['-hide_banner', ...(quiet ? ['-loglevel', 'info'] : []), ...args]);
+    const p = spawn(ffmpegBin(), ['-hide_banner', '-threads', '2', '-filter_threads', '2', '-filter_complex_threads', '2', ...(quiet ? ['-loglevel', 'info'] : []), ...args]);
     let err = '';
     p.stderr.on('data', (d) => { err += d; });
     p.on('error', reject);

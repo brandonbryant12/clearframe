@@ -1,0 +1,104 @@
+{
+  "version": 2,
+  "title": "Teach a repeatable procedure",
+  "logline": "Teach a repeatable procedure",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "paper",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Build a small experiment you can verify.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "A repeatable experiment",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "list",
+      "block": "list",
+      "vo": "Choose one metric, record a baseline, and name an owner.",
+      "props": {
+        "title": "Three things to remember",
+        "items": [
+          "Name the owner",
+          "Make the next step clear",
+          "Close the loop"
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "steps",
+      "block": "steps",
+      "vo": "Make one change, measure it, and compare the result.",
+      "props": {
+        "title": "From request to resolution",
+        "items": [
+          {
+            "title": "Change",
+            "detail": "One variable"
+          },
+          {
+            "title": "Measure",
+            "detail": "Same window"
+          },
+          {
+            "title": "Compare",
+            "detail": "Same definition"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "A result is useful only when you can reproduce it.",
+      "props": {
+        "label": "The caveat",
+        "text": "Record the conditions, not just the outcome.",
+        "support": "Look at the distribution before choosing a target.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ]
+}

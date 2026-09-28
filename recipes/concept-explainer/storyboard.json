@@ -1,27 +1,92 @@
 {
-  "$schema": "../../schema/storyboard.schema.json",
-  "title": "What a forecast really promises",
-  "logline": "A probability is a frequency, not a verdict — judge forecasts by calibration and plan for the misses.",
-  "audience": "Professionals who read forecasts but never learned to read probability.",
-  "format": { "preset": "landscape", "fps": 30 },
-  "theme": "editorial", "backdrop": "topo", "sfx": true, "budget": 1.0,
-  "voice": { "voice": "Sadaltager", "style": "warm, measured, curious", "wpm": 150 },
-  "music": { "model": "lyria-3.5", "prompt": "Minimal modern ambient, soft felt piano, warm pads, very light pulse", "bpm": 80, "key": "D major", "volume": 0.2 },
-  "beats": [
-    { "id": "hook", "chapter": "The question", "block": "stat", "vo": "Seventy percent. <short pause> Is that a promise?", "lead": 0.4,
-      "props": { "value": 70, "suffix": "%", "label": "chance the launch ships on time", "land": "seventy" } },
-    { "id": "thesis", "chapter": "The question", "block": "statement", "vo": "A probability isn't a verdict. It's how often you should expect to be surprised.",
-      "props": { "text": "A probability isn't a verdict. It's how often you should expect to be *surprised*." } },
-    { "id": "count", "chapter": "Make it countable", "block": "waffle", "vo": "Picture a hundred launches with that forecast. About seventy ship on time. About thirty slip.",
-      "props": { "kicker": "100 launches · same 70% forecast", "parts": [{ "n": 70, "label": "ship on time", "tone": "ink", "say": "seventy" }, { "n": 30, "label": "slip", "tone": "accent", "say": "thirty" }] } },
-    { "id": "term", "chapter": "Judge it right", "block": "definition", "vo": "The word for a trustworthy forecaster is calibrated: of everything they call seventy percent, about seventy percent happens.",
-      "props": { "term": "calibrated", "phonetic": "/ˈkæl.ɪ.breɪ.tɪd/", "pos": "adjective", "definition": "Of a forecaster: events they call 70% happen about 70% of the time.", "land": "calibrated" } },
-    { "id": "loop", "chapter": "Judge it right", "block": "steps", "vo": "So write the forecast down, check it against what happened, and adjust.",
-      "props": { "title": "The habit", "items": [{ "label": "Write it", "sub": "A number, a date", "icon": "pencil-line", "say": "write" }, { "label": "Check it", "sub": "Against outcomes", "icon": "list-checks", "say": "check" }, { "label": "Adjust", "sub": "Next forecast", "icon": "sliders-horizontal", "say": "adjust" }] } },
-    { "id": "turn", "chapter": "Plan for the rest", "block": "question", "vo": "And stop asking whether a forecast was right. Ask whether you planned for the thirty.", "tail": 0.9,
-      "props": { "from": "Was the forecast right?", "to": "Did we plan for *the 30?*", "strikeSay": "right", "toSay": "ask" } },
-    { "id": "end", "chapter": "Plan for the rest", "block": "end", "duration": 4.5,
-      "props": { "title": "Seventy percent is *not* a promise.", "subtitle": "Plan for the thirty.", "source": "Hypothetical illustration — figures are explanatory." } }
+  "version": 2,
+  "title": "Explain a mechanism",
+  "logline": "Explain a mechanism",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "paper",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
   ],
-  "sources": [{ "claim": "70%, 3 in 10, 100 launches", "source": "Hypothetical illustration", "asOf": "n/a" }]
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Headroom helps a system absorb the unexpected.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "Why headroom matters",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "equation",
+      "block": "equation",
+      "vo": "Subtract demand from capacity. What remains is headroom.",
+      "props": {
+        "title": "Leave room for variation",
+        "expression": "Capacity − demand",
+        "result": "= headroom",
+        "explanation": "Headroom absorbs the unexpected.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "waffle",
+      "block": "waffle",
+      "vo": "Imagine seventy of a hundred slots are already occupied.",
+      "props": {
+        "title": "Seven in ten",
+        "value": 70,
+        "total": 100,
+        "cols": 10,
+        "label": "A forecast, not a guarantee",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "An average can hide the moments when demand spikes.",
+      "props": {
+        "label": "The caveat",
+        "text": "An average can hide a long tail.",
+        "support": "Look at the distribution before choosing a target.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ]
 }

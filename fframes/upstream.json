@@ -1,0 +1,16 @@
+{
+  "repository": "https://github.com/dmtrKovalenko/fframes",
+  "revision": "bacfc3c3212d3d9429468435bfdc1ae2a21c7b3b",
+  "reviewedAt": "2026-09-28",
+  "crateVersion": "1.0.1",
+  "minimumRustEdition": "2024",
+  "sources": [
+    "skills/fframes-video/SKILL.md",
+    "skills/fframes-video/references/api.md",
+    "skills/fframes-video/references/design.md",
+    "skills/fframes-video/references/audio.md",
+    "cargo-fframes/templates/main_skia.rs.tmpl",
+    "fframes/src/renderer/cli.rs",
+    "fframes-skia-renderer/src/skia_pipeline.rs"
+  ]
+}

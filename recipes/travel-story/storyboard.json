@@ -1,0 +1,117 @@
+{
+  "version": 2,
+  "title": "Tell a small story about a place",
+  "logline": "Tell a small story about a place",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "editorial",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Tell the story of a day through the details you noticed.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "An afternoon worth remembering",
+        "support": "A fictional itinerary to replace with your own trip.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "timeline",
+      "block": "timeline",
+      "vo": "Start with the first stop, then follow the day as it happened.",
+      "props": {
+        "title": "A day at walking pace",
+        "items": [
+          {
+            "label": "Morning",
+            "title": "A quiet street",
+            "detail": "What first caught your eye?"
+          },
+          {
+            "label": "Afternoon",
+            "title": "A favorite corner",
+            "detail": "One detail worth keeping"
+          },
+          {
+            "label": "Evening",
+            "title": "The way back",
+            "detail": "What changed by the end?"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "icon-grid",
+      "block": "icon-grid",
+      "vo": "A sound, a color, and a small encounter can carry a place.",
+      "props": {
+        "title": "Keep the details",
+        "items": [
+          {
+            "icon": "music",
+            "label": "A sound"
+          },
+          {
+            "icon": "palette",
+            "label": "A color"
+          },
+          {
+            "icon": "map-pin",
+            "label": "A place"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "quote",
+      "block": "quote",
+      "vo": "Replace this with a real memory in your own words.",
+      "props": {
+        "text": "One small detail brought the whole afternoon back.",
+        "author": "Fictional sample recollection",
+        "role": "Replace with your own memory",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "What will you remember from your next walk?",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Use your own photos, recordings and words.",
+        "action": "Keep a small travel journal.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Bring back a detail."
+      }
+    }
+  ]
+}

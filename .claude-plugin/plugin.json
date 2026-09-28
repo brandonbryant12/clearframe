@@ -1,10 +1,23 @@
 {
   "name": "clearframe",
-  "description": "Direct, build, review and render calm, precise, professional motion-graphics videos as code (HTML + GSAP → MP4), with Gemini TTS, Lyria music, Gemini image and Veo used only where code can't do the job.",
-  "version": "0.1.0",
-  "author": { "name": "Brandon Bryant", "url": "https://github.com/brandonbryant12" },
+  "description": "Direct, build and review FFFrames motion graphics with configurable palettes, playbooks, measured speech-following text and selective Google media.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Brandon Bryant",
+    "url": "https://github.com/brandonbryant12"
+  },
   "homepage": "https://github.com/brandonbryant12/clearframe",
   "repository": "https://github.com/brandonbryant12/clearframe",
   "license": "MIT",
-  "keywords": ["video", "motion-graphics", "gsap", "explainer", "gemini", "tts", "lyria", "veo", "agent-skills"]
+  "keywords": [
+    "video",
+    "motion-graphics",
+    "explainer",
+    "gemini",
+    "tts",
+    "lyria",
+    "veo",
+    "agent-skills",
+    "fframes"
+  ]
 }

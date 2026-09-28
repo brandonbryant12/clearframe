@@ -1,21 +1,85 @@
 {
-  "$schema": "../../schema/storyboard.schema.json",
-  "title": "One percent",
-  "logline": "1% better every day compounds to ~38× in a year.",
-  "audience": "A feed at work — one idea in 20 seconds, often watched muted (captions are on).",
-  "format": { "preset": "vertical", "fps": 30 },
-  "theme": "ink", "backdrop": "dots", "sfx": true, "budget": 0.3,
-  "voice": { "voice": "Sadaltager", "style": "warm, clear, unhurried", "wpm": 155 },
-  "music": { "model": "lyria-3-clip-preview", "prompt": "Minimal electronic, soft plucked arpeggio, warm sub, light shaker", "bpm": 96, "key": "A minor", "volume": 0.18 },
-  "beats": [
-    { "id": "hook", "block": "stat", "vo": "One percent better, every day.", "lead": 0.15,
-      "props": { "value": 1, "suffix": "%", "label": "better, every day", "land": "one" } },
-    { "id": "turn", "block": "statement", "vo": "After a year, that's not three hundred sixty-five percent better.",
-      "props": { "text": "After a year, that's *not* 365% better." } },
-    { "id": "answer", "block": "circles", "vo": "It's about thirty-eight times better.",
-      "props": { "items": [{ "label": "Day one", "value": 1, "tone": "dim" }, { "label": "Day 365", "value": 37.8, "tone": "accent", "say": "thirty" }], "format": "×" } },
-    { "id": "end", "block": "end", "vo": "Small changes compound.", "tail": 1.2,
-      "props": { "title": "Small changes *compound*.", "source": "1.01³⁶⁵ ≈ 37.8" } }
+  "version": 2,
+  "title": "One idea for a small screen",
+  "logline": "One idea for a small screen",
+  "format": {
+    "preset": "vertical",
+    "fps": 30
+  },
+  "theme": "paper",
+  "motion": {
+    "preset": "snappy",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": true,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
   ],
-  "sources": [{ "claim": "1.01^365 ≈ 37.8", "source": "Arithmetic", "asOf": "n/a" }]
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "statement",
+      "block": "statement",
+      "vo": "Busy is not the same as effective.",
+      "props": {
+        "text": "Busy is not the same as effective.",
+        "support": "Measure the wait, not just the workload.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "bars",
+      "block": "bars",
+      "vo": "In this illustrative workflow, routing takes the most time.",
+      "props": {
+        "title": "Where the hours went",
+        "data": [
+          {
+            "label": "Triage",
+            "value": 12
+          },
+          {
+            "label": "Routing",
+            "value": 24
+          },
+          {
+            "label": "Review",
+            "value": 8
+          }
+        ],
+        "format": " h",
+        "focus": {
+          "label": "Routing",
+          "dim": 0.55,
+          "note": "Start here"
+        },
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Start where the work waits.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose one handoff to improve.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Measure the wait."
+      }
+    }
+  ]
 }

@@ -1,53 +1,19 @@
-# AGENTS.md
+# ClearFrame agent instructions
 
-This repository is **ClearFrame**, a harness for making calm, precise, professional motion-graphics videos as code. If you are an AI agent asked to make, edit or render a video here, follow this file.
+ClearFrame now uses **FFFrames for every active render**. Begin with `skills/clearframe/SKILL.md`, then `skills/clearframe-library/SKILL.md`. Use `skills/clearframe-engine/SKILL.md` for project commands and `skills/clearframe-fframes/SKILL.md` plus `fframes/AGENTS.md` for renderer changes.
 
-## Start here
+- Author one storyboard, using `block` and validated `props`. Run `playbooks` and `blocks` before inventing a scene.
+- Adapt structure to the story. Nineteen playbooks are reusable starting arcs, not limits on possible films.
+- Choose palette, motion preset/intensity and entrances explicitly. Follow `docs/style.md`; use `looks` to compare one scene across palettes. Keep slide counters out of film output.
+- New GitHub code/assets must be MIT-licensed at the exact imported revision, with bundled notices/provenance. Prefer independently implemented ideas over adding another renderer; see `docs/research/2026-github-video-patterns.md`.
+- For speech-following text read `docs/speech.md`. Never call interpolated timestamps measured. Final kinetic/captioned scenes require word timings tied to the current audio hash.
+- Keep factual text, charts and labels native. Every displayed number needs visible attribution and a `sources` entry. Never present sample figures or fictional quotes as evidence.
+- Generated footage is sparing (default review threshold 20% of runtime). Read `docs/continuity.md` and the Gemini Omni skill. Use references and the film palette; review both joins. Discard generated clip audio and keep the shared mix.
+- Run `plan` before paid generation and honor the user's scope/budget. No paid calls merely to test code.
+- Render `sheet`, open the image, run `check`, then render/review the complete MP4. Use `review DIR` for decoded frames around cuts and word boundaries. Passing diagnostics alone does not establish visual quality, accurate transcription or factual correctness.
+- Native frame output must depend only on frame number and prepared inputs. No live generation, random state or wall-clock animation in `render_frame`.
+- Preserve unrelated changes. Archived browser source is for recovery only; no fallback renderer is active.
+- Full tests/builds/installs use `/Users/brandon/.local/bin/codex-heavy -- ...`, one Cargo job and at most two supported workers. The CLI gates expensive commands automatically. Reuse warm caches, keep at least 20 GiB free, and avoid cold builds below 30 GiB.
+- When independent custom scene work benefits from parallel agents, give each agent one owned native module and the storyboard/visual brief; avoid concurrent heavy builds.
 
-1. Read `skills/clearframe/SKILL.md`, the director's workflow. It routes you to the other skills.
-2. For visuals, check `skills/clearframe-library/SKILL.md` **first**: 33 ready-made blocks, used from `storyboard.json` with no code, plus recipes. Look at `docs/media/blocks.jpg`.
-3. Load the others as you need them:
-   - `skills/clearframe-script/SKILL.md`: narration
-   - `skills/clearframe-motion/SKILL.md`: visual doctrine and anti-slop
-   - `skills/clearframe-dataviz/SKILL.md`: numbers and charts
-   - `skills/clearframe-engine/SKILL.md`: storyboard, scene modules, runtime, CLI
-   - `skills/clearframe-integrity/SKILL.md`: sources, disclosures, review
-   - `skills/gemini-tts`, `skills/lyria-music`, `skills/gemini-image`, `skills/veo-video`: paid generation, only when needed
-
-## Commands
-
-```bash
-npm install                                   # once (Node ≥ 20, ffmpeg on PATH)
-node engine/cli.mjs doctor                    # verify ffmpeg, Chrome, fonts, icons, draft voice
-node engine/cli.mjs recipes                   # block-only storyboards to start from
-node engine/cli.mjs new <dir> --recipe quarterly-update   # or --template explainer|vertical (custom scenes)
-node engine/cli.mjs blocks [name]             # block catalog: props + an example beat
-node engine/cli.mjs icons <query>             # Lucide icon names
-node engine/cli.mjs voice <dir> --draft       # free timing; drop --draft for Gemini TTS
-node engine/cli.mjs music <dir> --draft       # free placeholder; drop --draft for Lyria
-node engine/cli.mjs sheet <dir>               # then READ <dir>/build/sheet.png
-node engine/cli.mjs check <dir>               # fix errors; justify or fix warnings
-node engine/cli.mjs plan <dir>                # cost before spending
-node engine/cli.mjs render <dir> [--draft]
-npm test
-```
-
-## Rules
-
-- **Look at your work.** After building or changing scenes, render the contact sheet and read the image before claiming anything looks good.
-- **Never invent figures.** Every number on screen or in narration comes from the user, `data.json` or `storyboard.sources`, or is labelled hypothetical on screen.
-- **Never generate information.** Image and video models make textures and plates only, never text, numbers, charts, logos or real people.
-- **Spend deliberately.** Run `plan` first and respect `storyboard.budget`. Don't use `GEMINI_API_KEY` unless the user wants final-quality generation.
-- **Determinism.** Every tween goes on the master timeline `tl`. Use no `Math.random`, `Date.now` or timers. Never tween a property that a `CF.onFrame` function also writes.
-- **Blocks before code.** Use a library block whenever one fits. Write custom scenes only for bespoke moments (fork a block, or `CF.mount` blocks inside a scene).
-- **Parallelize scenes.** If you can spawn subagents, give each one scene module plus `storyboard.json`, `STYLE.md` and the engine skill.
-
-## Repo map
-
-- `engine/`: CLI (`cli.mjs`), Node libs (timing, server, render, audio, sfx, inspect, generate, catalog, doctor), browser runtime (`runtime/cf.js`, `cf-kit.js`, `cf-kit-plus.js`, `cf.css`, `default.html`) and the block library (`runtime/blocks/`)
-- `recipes/`: complete block-only storyboards
-- `skills/`: Agent Skills (`SKILL.md` + scripts). Also installable as a Claude Code plugin.
-- `examples/`, `templates/`: complete projects
-- `schema/storyboard.schema.json`: the storyboard schema
-- `docs/`: research and API contracts
-- `test/`: `node --test`
+Useful commands: `node engine/cli.mjs help`, `doctor`, `new DIR --playbook NAME`, `themes`, `motions`, `voice DIR --draft`, `sheet DIR --draft`, `check DIR --draft`, `render DIR --draft`. Node contract tests: `npm test` through the shared gate.

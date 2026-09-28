@@ -1,0 +1,157 @@
+{
+  "repository": "https://github.com/tabler/tabler-icons",
+  "revision": "74929e50416e2b7c0abb8368cdc74bdcb2560ab6",
+  "license": "MIT",
+  "files": [
+    {
+      "file": "LICENSE",
+      "upstreamPath": "LICENSE",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/LICENSE",
+      "sha256": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db"
+    },
+    {
+      "file": "book-open.svg",
+      "upstreamPath": "icons/outline/book.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/book.svg",
+      "sha256": "cbfd5cbdc16bbab2bf4123dfe815538e343f4f4ddcd15d56841944a4c3535a47"
+    },
+    {
+      "file": "lightbulb.svg",
+      "upstreamPath": "icons/outline/bulb.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/bulb.svg",
+      "sha256": "3617f3cd3f835b03b9d8d4feeaa180fa3d436a01de8e109ced052e419f9fa7e0"
+    },
+    {
+      "file": "leaf.svg",
+      "upstreamPath": "icons/outline/leaf.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/leaf.svg",
+      "sha256": "b661e18f1dc686659f811ea050b13aade9cd7a31962fd5b3ebb89e6222bab61a"
+    },
+    {
+      "file": "sun.svg",
+      "upstreamPath": "icons/outline/sun.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/sun.svg",
+      "sha256": "6d4dc625a54dea6c696e8320c35fcf7e235dc039f512ef2c30af9b0663a7ab3f"
+    },
+    {
+      "file": "cloud-rain.svg",
+      "upstreamPath": "icons/outline/cloud-rain.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/cloud-rain.svg",
+      "sha256": "feebc86f5770036f017170a3bf108b8df20ad23376c5bd670c5070c088345427"
+    },
+    {
+      "file": "droplet.svg",
+      "upstreamPath": "icons/outline/droplet.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/droplet.svg",
+      "sha256": "c5c43685cd44d30442361c2050777c6796f40bf25c7997d2573d05d6810cb2a9"
+    },
+    {
+      "file": "wind.svg",
+      "upstreamPath": "icons/outline/wind.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/wind.svg",
+      "sha256": "7e9df842870b130fc745b71ec30a41360ab4cdfcb996c72474c654fbf5e7dd8e"
+    },
+    {
+      "file": "heart.svg",
+      "upstreamPath": "icons/outline/heart.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/heart.svg",
+      "sha256": "f9f42a4d4ae0aca8f01dde4a7a255eff7af26ed0ee133b1458e9d3ff257464d6"
+    },
+    {
+      "file": "music.svg",
+      "upstreamPath": "icons/outline/music.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/music.svg",
+      "sha256": "8b69aafb5497fc9773078aab151dda57434e89011e712bb24c10c9b66f80ab68"
+    },
+    {
+      "file": "camera.svg",
+      "upstreamPath": "icons/outline/camera.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/camera.svg",
+      "sha256": "24c3560560e6177528dada3805efab129c5667ef97b0ea342a21d0a34032baa8"
+    },
+    {
+      "file": "map-pin.svg",
+      "upstreamPath": "icons/outline/map-pin.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/map-pin.svg",
+      "sha256": "980c1cccd35d4244cf1625306e900d9b54f512e1ba253c61ffb2b1374746f04d"
+    },
+    {
+      "file": "compass.svg",
+      "upstreamPath": "icons/outline/compass.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/compass.svg",
+      "sha256": "eafd654df183a65093927782834e3900cdb7c5d4d8b898fe25ef15bb06dee8a8"
+    },
+    {
+      "file": "plane.svg",
+      "upstreamPath": "icons/outline/plane.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/plane.svg",
+      "sha256": "983fa0719e3b04c57b7e96ca72a55ec0cce44f683a9800ad71fe7778cc0ebec5"
+    },
+    {
+      "file": "utensils.svg",
+      "upstreamPath": "icons/outline/tools-kitchen-2.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/tools-kitchen-2.svg",
+      "sha256": "42f0fb1f76138d7afcc4ce894d32a617b304f55bd506ac323ce7753570e3660c"
+    },
+    {
+      "file": "chef-hat.svg",
+      "upstreamPath": "icons/outline/chef-hat.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/chef-hat.svg",
+      "sha256": "ad800d27debbcb7c297bac3510409a7cbf601797bc90769b19d532dc8cd13556"
+    },
+    {
+      "file": "timer.svg",
+      "upstreamPath": "icons/outline/stopwatch.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/stopwatch.svg",
+      "sha256": "1a9c6fd1f4eac7f875d7c53d9e9bf2db29591db6acd2a61599eaf7f574a9a4a0"
+    },
+    {
+      "file": "brush.svg",
+      "upstreamPath": "icons/outline/brush.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/brush.svg",
+      "sha256": "4b9fa0b70f28551158ba43393b28645483362bb76a98f7654f88318109f998fb"
+    },
+    {
+      "file": "palette.svg",
+      "upstreamPath": "icons/outline/palette.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/palette.svg",
+      "sha256": "27a5a19ae4b0f73ff4089b7f5a6c8fdf17f19ecc853e19fa04494f083943e778"
+    },
+    {
+      "file": "sprout.svg",
+      "upstreamPath": "icons/outline/seedling.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/seedling.svg",
+      "sha256": "bf7adac5cfcee3744fcde71d8bc90e8e1f93bda8cbb73f8a3e850f693e9be0f9"
+    },
+    {
+      "file": "microscope.svg",
+      "upstreamPath": "icons/outline/microscope.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/microscope.svg",
+      "sha256": "903bbf67012608457a62887c7a2b1b818e997ebbc734e12d15a0fadeeb06d026"
+    },
+    {
+      "file": "languages.svg",
+      "upstreamPath": "icons/outline/language.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/language.svg",
+      "sha256": "b18466cfbbcd90126e80c3805f9b247423ac82d24633e9715b6e0a66f8127d90"
+    },
+    {
+      "file": "pencil.svg",
+      "upstreamPath": "icons/outline/pencil.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/pencil.svg",
+      "sha256": "03a842bd4a16861b0adc0e38ed7b0eb5e7cc613012006833da22e58d56f1f1fe"
+    },
+    {
+      "file": "check.svg",
+      "upstreamPath": "icons/outline/check.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/check.svg",
+      "sha256": "fe359b27c74ed0f4f72bfabbe5ca969a8bb13a5f39648bae63f9e798034ebed3"
+    },
+    {
+      "file": "arrow-right.svg",
+      "upstreamPath": "icons/outline/arrow-right.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/arrow-right.svg",
+      "sha256": "f3b14b2b1b68711e72864c3f231004c42a5317108dd480fe189bc98d5fad9f92"
+    }
+  ]
+}

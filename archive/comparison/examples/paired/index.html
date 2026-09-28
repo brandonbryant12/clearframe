@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Same story, two renderers</title>
+  <link rel="stylesheet" href="/_cf/cf.css">
+  <style>
+    @font-face { font-family: 'Paired Inter'; src: url('./assets/fonts/Inter.ttf') format('truetype'); font-weight: 100 900; }
+    #stage { background: #f5f3ed; }
+    .paired-svg { width: 100%; height: 100%; font-family: 'Paired Inter'; font-optical-sizing: none; }
+    .paired-svg .head { opacity: 0; transform: translateY(20px); }
+  </style>
+</head>
+<body>
+  <div id="stage"><div id="scenes"></div></div>
+  <script src="/_cf/all.js"></script>
+  <script>CF.compose(() => {});</script>
+</body>
+</html>

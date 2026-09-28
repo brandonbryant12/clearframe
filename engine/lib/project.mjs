@@ -45,23 +45,28 @@ export function validateStoryboard(sb) {
   const errors = [];
   if (!sb || typeof sb !== 'object') return ['storyboard must be a JSON object'];
   if (!Array.isArray(sb.beats) || sb.beats.length === 0) errors.push('`beats` must be a non-empty array');
+  if(sb.budget!=null&&(!Number.isFinite(sb.budget)||sb.budget<0))errors.push('budget must be nonnegative');
+  if (sb.format?.preset && !PRESETS[sb.format.preset]) errors.push('Unknown format preset');
+  if(sb.continuity?.maxGeneratedShare!=null && (!Number.isFinite(sb.continuity.maxGeneratedShare)||sb.continuity.maxGeneratedShare<0||sb.continuity.maxGeneratedShare>1)) errors.push('maxGeneratedShare must be 0–1');
+  for(const k of ['lead','tail','minBeat','silentBeat','outro']) if(sb.pacing?.[k]!=null&&(!Number.isFinite(sb.pacing[k])||sb.pacing[k]<0)) errors.push(`pacing.${k} must be nonnegative`);
   const ids = new Set();
   for (const [i, b] of (sb.beats ?? []).entries()) {
     if (!b.id || !/^[a-z0-9][a-z0-9-_]*$/i.test(b.id)) errors.push(`beats[${i}].id must be a slug (letters, digits, - or _)`);
     if (ids.has(b.id)) errors.push(`duplicate beat id "${b.id}"`);
     ids.add(b.id);
     if (b.vo != null && typeof b.vo !== 'string') errors.push(`beats[${i}].vo must be a string`);
-    if (b.duration != null && !(b.duration > 0)) errors.push(`beats[${i}].duration must be > 0`);
+    if (b.duration != null && (!Number.isFinite(b.duration) || !(b.duration > 0))) errors.push(`beats[${i}].duration must be > 0`);
+    for(const k of ['lead','tail','hold','min']) if(b[k]!=null&&(!Number.isFinite(b[k])||b[k]<0)) errors.push(`beats[${i}].${k} must be nonnegative`);
     if (b.scene && b.block) errors.push(`beats[${i}] has both "scene" and "block" — use one`);
     if (b.block && !/^[a-z0-9-]+$/.test(b.block)) errors.push(`beats[${i}].block must be a block name like "stat" (see: clearframe blocks)`);
   }
   const assetIds = new Set();
   for (const [i, a] of (sb.assets ?? []).entries()) {
-    if (!a.id) errors.push(`assets[${i}].id is required`);
+    if (!a.id || !/^[a-z0-9][a-z0-9_-]*$/i.test(a.id)) errors.push(`assets[${i}].id must be a slug`);
     if (assetIds.has(a.id)) errors.push(`duplicate asset id "${a.id}"`);
     assetIds.add(a.id);
     if (!['image', 'clip', 'sfx'].includes(a.kind)) errors.push(`assets[${i}].kind must be image | clip | sfx`);
-    if (a.kind !== 'sfx' && !a.prompt) errors.push(`assets[${i}].prompt is required for kind "${a.kind}"`);
+    if (a.kind !== 'sfx' && !a.file && !a.prompt) errors.push(`assets[${i}].prompt is required for kind "${a.kind}"`);
   }
   return errors;
 }

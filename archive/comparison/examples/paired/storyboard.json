@@ -1,0 +1,25 @@
+{
+  "title": "Same story, two renderers",
+  "logline": "Compare the cost of making the same useful video, including revision and review.",
+  "format": { "preset": "landscape", "width": 1920, "height": 1080, "fps": 30 },
+  "budget": 0,
+  "voice": { "wpm": 125 },
+  "theme": "paper",
+  "backdrop": "none",
+  "grain": false,
+  "vignette": false,
+  "chrome": false,
+  "captions": false,
+  "transition": false,
+  "sfx": false,
+  "music": false,
+  "pacing": { "lead": 0.25, "tail": 1.5, "minBeat": 5 },
+  "beats": [
+    { "id": "opening", "scene": "scenes/paired.js", "vo": "Use the same story, sound, and timing for both renderers.", "visual": "A clear statement establishes the comparison." },
+    { "id": "chart", "scene": "scenes/paired.js", "vo": "These hypothetical hours show how a simple chart carries a comparison.", "visual": "Three bars grow from zero; all values and the hypothetical label remain visible." },
+    { "id": "ending", "scene": "scenes/paired.js", "vo": "Judge quality, then measure revision time.", "tail": 3, "visual": "The takeaway holds long enough to read." }
+  ],
+  "sources": [
+    { "claim": "Example A 12 h, B 18 h, C 24 h", "source": "Invented fixture values for layout comparison; not renderer measurements.", "asOf": "2026-09-28" }
+  ]
+}

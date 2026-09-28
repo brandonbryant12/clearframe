@@ -1,0 +1,103 @@
+{
+  "version": 2,
+  "title": "Ground a story in a brief visual insert",
+  "logline": "Ground a story in a brief visual insert",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "editorial",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Use a visual moment to establish place, then return to the evidence.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "A story with a sense of place",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "statement",
+      "block": "statement",
+      "vo": "Keep the visual language consistent across every scene.",
+      "props": {
+        "text": "Carry one visual language through the film.",
+        "support": "Measure the wait, not just the workload.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "quote",
+      "block": "quote",
+      "vo": "The best handoff is the one nobody has to chase.",
+      "props": {
+        "text": "The best handoff is the one nobody has to chase.",
+        "author": "Illustrative interview",
+        "role": "Fictional quotation for this template",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "timeline",
+      "block": "timeline",
+      "vo": "Follow the sequence before drawing a conclusion.",
+      "props": {
+        "title": "How the response unfolded",
+        "items": [
+          {
+            "label": "09:10",
+            "title": "Detected",
+            "detail": "Alert received"
+          },
+          {
+            "label": "09:18",
+            "title": "Contained",
+            "detail": "Traffic rerouted"
+          },
+          {
+            "label": "09:42",
+            "title": "Recovered",
+            "detail": "Service verified"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ]
+}

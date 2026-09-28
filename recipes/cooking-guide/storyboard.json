@@ -1,0 +1,109 @@
+{
+  "version": 2,
+  "title": "Teach a recipe through preparation and visible checkpoints",
+  "logline": "Teach a recipe through preparation and visible checkpoints",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "editorial",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "A good recipe shows what to look for, not just what to do.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "Make a simple herb sauce",
+        "support": "Replace this outline with your own tested recipe.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "icon-grid",
+      "block": "icon-grid",
+      "vo": "Set out the ingredients and tools before you begin.",
+      "props": {
+        "title": "Get everything ready",
+        "items": [
+          {
+            "icon": "leaf",
+            "label": "Fresh herbs",
+            "detail": "Use your recipe quantities"
+          },
+          {
+            "icon": "utensils",
+            "label": "Mixing bowl",
+            "detail": "Keep the work area ready"
+          },
+          {
+            "icon": "chef-hat",
+            "label": "Your base",
+            "detail": "Choose a tested recipe"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "flow",
+      "block": "flow",
+      "vo": "Prepare the herbs, combine the ingredients, then taste and adjust.",
+      "props": {
+        "title": "Watch the texture change",
+        "nodes": [
+          {
+            "icon": "leaf",
+            "label": "Prepare",
+            "detail": "Show the cut or chop"
+          },
+          {
+            "icon": "utensils",
+            "label": "Combine",
+            "detail": "Show the consistency"
+          },
+          {
+            "icon": "check",
+            "label": "Adjust",
+            "detail": "Describe your result"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Save the version you want to make again.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Record the quantities and the result.",
+        "action": "Add your tested variations.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Make it your own."
+      }
+    }
+  ]
+}

@@ -1,25 +1,119 @@
 {
-  "$schema": "../../schema/storyboard.schema.json",
-  "title": "What we heard: 212 planning interviews",
-  "logline": "Most teams underestimate the tail — the long delays, not the average, drive missed commitments.",
-  "audience": "Product and planning leads; a research readout.",
-  "format": { "preset": "landscape", "fps": 30 },
-  "theme": "paper", "backdrop": "topo", "sfx": true, "budget": 1.0,
-  "voice": { "voice": "Schedar", "style": "even, thoughtful, clear", "wpm": 148 },
-  "music": { "model": "lyria-3.5", "prompt": "Reflective ambient, soft Rhodes, warm tape texture, slow and spacious", "bpm": 72, "key": "E minor", "volume": 0.18 },
-  "beats": [
-    { "id": "open", "chapter": "Context", "block": "title", "vo": "We interviewed two hundred and twelve planners. Here's what they told us.",
-      "props": { "kicker": "Research readout · Sep 2026", "title": "It's the *tail*, not the average", "subtitle": "212 planning interviews" } },
-    { "id": "voice", "chapter": "Findings", "block": "quote", "vo": "One planner put it simply: the average task is fine; it's the one that takes three weeks that sinks us.",
-      "props": { "text": "The average task is fine. It's the *one that takes three weeks* that sinks us.", "author": "Planning lead", "role": "Interview 047 (anonymised)" } },
-    { "id": "tail", "chapter": "Findings", "block": "distribution", "vo": "The data agrees. Most work finishes in about two days, but one task in ten takes more than a week.",
-      "props": { "title": "Days to finish a task", "values": "demo", "unit": "days", "marker": { "value": 1.8, "label": "median 1.8 days", "say": "most" }, "highlight": { "from": 7, "to": 20, "label": "1 in 10 takes > 7 days", "say": "week" }, "source": "Sample data" } },
-    { "id": "share", "chapter": "Findings", "block": "ring", "vo": "And sixty-four percent of missed commitments trace back to one of those long tasks.",
-      "props": { "value": 0.64, "label": "of missed commitments trace to a long-tail task", "land": "sixty", "source": "Interview coding, n = 212 (sample data)" } },
-    { "id": "recs", "chapter": "What to do", "block": "points", "vo": "So: plan to the tail, flag long tasks early, and review them weekly.", "tail": 1.0,
-      "props": { "kicker": "Recommendations", "items": [{ "text": "Plan to the *tail*, not the average", "say": "plan" }, { "text": "Flag long tasks early", "say": "flag" }, { "text": "Review them weekly", "say": "review" }] } },
-    { "id": "end", "chapter": "What to do", "block": "end", "duration": 4,
-      "props": { "title": "It's the *tail*.", "subtitle": "Full report → research/planning-2026", "source": "Sample data for the recipe" } }
+  "version": 2,
+  "title": "Separate a finding from its limits",
+  "logline": "Separate a finding from its limits",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "paper",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
   ],
-  "sources": [{ "claim": "212 interviews, 1.8 days median, 1 in 10, 64%", "source": "Sample data — replace with your study", "asOf": "2026-09" }]
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Start with the question, then show what the evidence can support.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "What does the evidence say?",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "steps",
+      "block": "steps",
+      "vo": "Define the sample, compare the outcomes, and check the limitations.",
+      "props": {
+        "title": "From request to resolution",
+        "items": [
+          {
+            "title": "Sample",
+            "detail": "Who was included?"
+          },
+          {
+            "title": "Method",
+            "detail": "What was compared?"
+          },
+          {
+            "title": "Limits",
+            "detail": "What remains uncertain?"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "bars",
+      "block": "bars",
+      "vo": "These illustrative categories use the same baseline and units.",
+      "props": {
+        "title": "Where the hours went",
+        "data": [
+          {
+            "label": "Triage",
+            "value": 12
+          },
+          {
+            "label": "Routing",
+            "value": 24
+          },
+          {
+            "label": "Review",
+            "value": 8
+          }
+        ],
+        "format": " h",
+        "focus": {
+          "label": "Routing",
+          "dim": 0.55,
+          "note": "Start here"
+        },
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "A difference is not enough to establish its cause.",
+      "props": {
+        "label": "The caveat",
+        "text": "Describe the uncertainty alongside the result.",
+        "support": "Look at the distribution before choosing a target.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ]
 }

@@ -1,0 +1,121 @@
+{
+  "version": 2,
+  "title": "Follow a question through an experiment",
+  "logline": "Follow a question through an experiment",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "signal",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "What could we learn by watching a seed?",
+      "props": {
+        "kicker": "Field notes",
+        "text": "Start with a small question",
+        "support": "An observation lesson, built around your own evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "icon-grid",
+      "block": "icon-grid",
+      "vo": "Gather a seed, a notebook, and a way to record what changes.",
+      "props": {
+        "title": "Build an observation kit",
+        "items": [
+          {
+            "icon": "sprout",
+            "label": "A subject",
+            "detail": "Choose what to observe"
+          },
+          {
+            "icon": "book-open",
+            "label": "A notebook",
+            "detail": "Record the conditions"
+          },
+          {
+            "icon": "camera",
+            "label": "A record",
+            "detail": "Keep the framing consistent"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "flow",
+      "block": "flow",
+      "vo": "Ask a question, make a prediction, observe, and compare.",
+      "props": {
+        "title": "Show how an idea is tested",
+        "nodes": [
+          {
+            "icon": "lightbulb",
+            "label": "Ask"
+          },
+          {
+            "icon": "pencil",
+            "label": "Predict"
+          },
+          {
+            "icon": "microscope",
+            "label": "Observe"
+          },
+          {
+            "icon": "book-open",
+            "label": "Compare"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "A prediction and an observation are different things.",
+      "props": {
+        "label": "Think like a scientist",
+        "text": "Separate what you expected from what you saw.",
+        "support": "Use the actual observations in your final film.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "What question would you test next?",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "One observation can lead to another.",
+        "action": "Write your next question.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Keep the question open."
+      }
+    }
+  ]
+}

@@ -37,12 +37,15 @@ POST https://generativelanguage.googleapis.com/v1beta/interactions
 
 ## Music: `skills/lyria-music/scripts/music.mjs`
 
+MP3 request path corrected on 2026-09-28; tests use mocked responses, not paid generation.
+
 ```json
 { "model": "lyria-3.5", "input": "<prompt with BPM, key, 'Instrumental only, no vocals.', duration, [m:ss - m:ss] sections>",
-  "response_format": { "type": "audio", "mime_type": "audio/wav" } }
+  "response_format": { "type": "audio" } }
 ```
 - **Response:** `steps[type=model_output].content[]` holds a `text` block (structure) and an `audio` block.
-- **Output:** 44.1 kHz stereo, MP3 by default. `mime_type` comes from the documented `AudioResponseFormat` enum (the WAV example in the guide shows only `type`).
+- **Output:** 44.1 kHz stereo, MP3 by default. Use that default without a MIME override. The guide mentions WAV but its examples show only `type`; the previous inferred WAV override failed in use. `--format` accepts `mp3` only. Convert MP3 locally if WAV is required.
+- **Files:** the engine requests MP3, saves using the returned MIME (`audio/mpeg` or `audio/mp3` → `.mp3`), and records the active filename in `bed.json`. Unsupported response types fail instead of being mislabeled as MP3. Draft and RealTime music still use locally produced WAV.
 - **Pricing:** `lyria-3.5` is $0.08 per song and `lyria-3-clip-preview` $0.04 per 30 s clip.
 - **Not documented:** a negative prompt or a seed.
 - **Sources:** [music-generation](https://ai.google.dev/gemini-api/docs/music-generation) · [Lyria prompt guide](https://ai.google.dev/gemini-api/docs/lyria-prompt-guide)
@@ -76,3 +79,9 @@ POST https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-lite-genera
 ## Keeping this current
 
 Models and prices change. When a call fails with a model-not-found or schema error, read the linked page, update the script's `buildRequest`, the model and price table at the top of the script, and `test/contracts.test.mjs`, then note the new verification date here.
+
+## Native speech and sparse Omni footage (verified 2026-09-28)
+
+- `gemini-3.5-transcribe`: Interactions, uploaded audio URI, `generation_config.transcription_config.mode = {type:"verbatim", timestamp_granularities:["word"]}`. Parse model-output `word_info` annotations with second-valued offsets. See `engine/lib/speech.mjs` and [Google transcription](https://ai.google.dev/gemini-api/docs/transcribe).
+- `gemini-omni-1.1-flash`: Interactions, ordered image/text input, video response format with aspect ratio, resolution and URI delivery. Duration is prompt-steered; no duration_seconds parameter. Poll file ACTIVE then download MP4. See `skills/gemini-omni/scripts/omni.mjs` and [Google Omni](https://ai.google.dev/gemini-api/docs/omni).
+- Clip continuity/cache keys include palette, visual instructions and reference bytes. Clip audio is excluded from the native film's shared mix. Provider correctness is covered by mocked tests; no live paid call was made for this migration.
