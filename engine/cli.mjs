@@ -112,7 +112,7 @@ async function main() {
         return;
       }
       for (const b of all) console.log(`  ${color.bold(b.name.padEnd(14))} ${b.summary}`);
-      log.dim(`\n  ${all.length} blocks · details: clearframe blocks <name> · catalog image: docs/media/blocks.png`);
+      log.dim(`\n  ${all.length} blocks · details: clearframe blocks <name> · catalog image: docs/media/blocks.jpg`);
       return;
     }
     case 'icons': {
