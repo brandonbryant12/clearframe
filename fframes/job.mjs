@@ -532,12 +532,16 @@ function linkWorlds(beats, sb, timing, { warnings }) {
       const firstWord = b.words?.find(w => w.end > w.start)?.start ?? Infinity;
       const land = Math.max(0.25, Math.min(firstNew, firstWord));
       let at = b.props.viewAt ?? (Number.isFinite(land) ? land - b.props.viewDur : 0);
-      if (at < 0) {
-        const aDur = a.frames / fps;
-        const room = adjacent ? Math.max(0, Math.min(1.0, aDur - a.settle_seconds, aDur / 2)) : 0;
-        at = -Math.min(-at, room);
-        if (at < 0) a.props.viewNext = { to: b.props.view, at: aDur + at, dur: b.props.viewDur };
+      if (at < 0 && b.props.viewAt == null) {
+        // Leave once the outgoing line has been said (its drawings may finish on the move);
+        // with little room, travel faster (down to 0.8 s) rather than land late.
+        const aDur = a.frames / fps,
+          lastWord = Math.max(0, ...(a.words ?? []).map(w => w.end));
+        const room = adjacent ? Math.max(0, Math.min(1.2, aDur - lastWord - 0.1, aDur / 2)) : 0;
+        if (room < -at) b.props.viewDur = Math.max(0.8, Math.min(b.props.viewDur, land + room));
+        at = Math.max(land - b.props.viewDur, -room);
       }
+      if (at < 0) a.props.viewNext = { to: b.props.view, at: a.frames / fps + at, dur: b.props.viewDur };
       b.props.viewAt = at;
       b.settle_seconds = Math.max(b.settle_seconds, at + b.props.viewDur);
     }

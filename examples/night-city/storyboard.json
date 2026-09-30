@@ -1406,7 +1406,10 @@
               8
             ],
             "say": "Seven",
-            "dur": 0.4
+            "dur": 0.4,
+            "exitAt": 8.0,
+            "exit": "fade",
+            "exitDur": 0.6
           },
           {
             "type": "line",
@@ -1421,7 +1424,10 @@
               8
             ],
             "say": "Seven",
-            "dur": 0.4
+            "dur": 0.4,
+            "exitAt": 8.0,
+            "exit": "fade",
+            "exitDur": 0.6
           },
           {
             "type": "path",
@@ -1429,7 +1435,10 @@
             "stroke": "accent2",
             "width": 4,
             "say": "Seven",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitAt": 8.0,
+            "exit": "fade",
+            "exitDur": 0.6
           },
           {
             "type": "text",
@@ -1445,7 +1454,10 @@
               "to": 7,
               "suffix": "°C",
               "dur": 0.5
-            }
+            },
+            "exitAt": 8.0,
+            "exit": "fade",
+            "exitDur": 0.6
           },
           {
             "type": "text",
@@ -1454,7 +1466,10 @@
             "y": 548.4,
             "size": 34,
             "fill": "ink",
-            "say": "night"
+            "say": "night",
+            "exitAt": 8.0,
+            "exit": "fade",
+            "exitDur": 0.6
           }
         ],
         "source": "Synthetic Climate Lab (test) [1]"
@@ -1559,8 +1574,8 @@
             "type": "text",
             "text": "NOON",
             "x": 220.0,
-            "y": 232,
-            "size": 22,
+            "y": 236,
+            "size": 26,
             "font": "mono",
             "fill": "muted",
             "anchor": "middle",
@@ -1572,8 +1587,8 @@
             "type": "text",
             "text": "6 PM",
             "x": 700.0,
-            "y": 232,
-            "size": 22,
+            "y": 236,
+            "size": 26,
             "font": "mono",
             "fill": "muted",
             "anchor": "middle",
@@ -1585,8 +1600,8 @@
             "type": "text",
             "text": "MIDNIGHT",
             "x": 1180.0,
-            "y": 232,
-            "size": 22,
+            "y": 236,
+            "size": 26,
             "font": "mono",
             "fill": "muted",
             "anchor": "middle",
@@ -1598,8 +1613,8 @@
             "type": "text",
             "text": "6 AM",
             "x": 1660.0,
-            "y": 232,
-            "size": 22,
+            "y": 236,
+            "size": 26,
             "font": "mono",
             "fill": "muted",
             "anchor": "middle",
@@ -1776,7 +1791,7 @@
             "type": "text",
             "text": "CITY",
             "x": 1676,
-            "y": 54,
+            "y": 38,
             "size": 22,
             "font": "mono",
             "fill": "accent2",
@@ -1788,7 +1803,7 @@
             "type": "text",
             "text": "COUNTRYSIDE",
             "x": 1676,
-            "y": 208,
+            "y": 184,
             "size": 22,
             "font": "mono",
             "fill": "#8ecae6",
@@ -1892,9 +1907,9 @@
                 "dur": 0
               },
               {
-                "say": "soak",
+                "say": "almost",
                 "scaleY": 0.95,
-                "dur": 1.6
+                "dur": 1.4
               },
               {
                 "say": "back",
@@ -1907,15 +1922,15 @@
             "type": "circle",
             "cx": 1530,
             "cy": 410,
-            "r": 18,
-            "fill": "accent",
-            "say": "sunlight",
+            "r": 20,
+            "fill": "#ffd166",
+            "say": "soak",
             "exitSay": "then",
             "exit": "fall"
           },
           {
             "type": "group",
-            "say": "sunlight",
+            "say": "soak",
             "stagger": 0.1,
             "exitSay": "then",
             "exit": "fade",
@@ -1963,7 +1978,7 @@
             "d": "M 1672 516 L 1644 516",
             "stroke": "accent2",
             "width": 1.5,
-            "say": "almost",
+            "say": "sunlight",
             "exitAt": 9,
             "exit": "fade"
           },
@@ -1976,7 +1991,7 @@
             "font": "bold",
             "fill": "accent2",
             "anchor": "end",
-            "say": "almost",
+            "say": "sunlight",
             "exitAt": 9,
             "exit": "fade"
           },
@@ -2622,8 +2637,8 @@
             "type": "text",
             "text": "4 of these 10 are on the hot 12%",
             "x": 1580,
-            "y": 1700,
-            "size": 26,
+            "y": 1702,
+            "size": 30,
             "fill": "muted",
             "say": "forty"
           }
@@ -2668,7 +2683,7 @@
             "font": "mono",
             "fill": "#8ecae6",
             "say": "cut",
-            "exitAt": 14,
+            "exitAt": 10,
             "exit": "fade"
           },
           {
@@ -2684,7 +2699,7 @@
           },
           {
             "type": "path",
-            "d": "M 1700 410 L 1732 493",
+            "d": "M 1706 432 L 1732 493",
             "stroke": "accent",
             "width": 3,
             "arrow": "end",
@@ -2694,7 +2709,7 @@
           },
           {
             "type": "path",
-            "d": "M 1744 493 L 1776 410",
+            "d": "M 1744 493 L 1770 432",
             "stroke": "#8ecae6",
             "width": 3,
             "arrow": "end",
@@ -2712,7 +2727,7 @@
             "fill": "#8ecae6",
             "anchor": "end",
             "say": "thirty",
-            "exitAt": 14,
+            "exitAt": 10,
             "exit": "fade"
           },
           {
@@ -2841,7 +2856,7 @@
             "fill": "bg",
             "opacity": 0.85,
             "say": "canopy",
-            "exitAt": 14,
+            "exitAt": 10,
             "exit": "fade"
           },
           {
@@ -2854,7 +2869,7 @@
             "fill": "positive",
             "anchor": "middle",
             "say": "canopy",
-            "exitAt": 14,
+            "exitAt": 10,
             "exit": "fade"
           }
         ],
@@ -3870,6 +3885,60 @@
         ],
         "elements": [
           {
+            "type": "line",
+            "x1": 580,
+            "y1": 523.6,
+            "x2": 960,
+            "y2": 523.6,
+            "stroke": "muted",
+            "width": 2,
+            "dash": [
+              6,
+              8
+            ],
+            "say": "Seven",
+            "dur": 0.4
+          },
+          {
+            "type": "line",
+            "x1": 960,
+            "y1": 389.2,
+            "x2": 1342,
+            "y2": 389.2,
+            "stroke": "muted",
+            "width": 2,
+            "dash": [
+              6,
+              8
+            ],
+            "say": "Seven",
+            "dur": 0.4
+          },
+          {
+            "type": "path",
+            "d": "M 945 389.2 L 960 389.2 L 960 523.6 L 945 523.6",
+            "stroke": "accent2",
+            "width": 4,
+            "say": "Seven",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "text": "7°C",
+            "x": 990,
+            "y": 496.4,
+            "size": 120,
+            "font": "bold",
+            "fill": "accent2",
+            "say": "Seven",
+            "count": {
+              "from": 0,
+              "to": 7,
+              "suffix": "°C",
+              "dur": 0.5
+            }
+          },
+          {
             "type": "ellipse",
             "cx": 1128,
             "cy": 492.4,
@@ -3996,7 +4065,8 @@
               }
             ]
           }
-        ]
+        ],
+        "source": "Synthetic Climate Lab (test) [1]"
       },
       "style": "warm, emphatic",
       "tail": 1.2,

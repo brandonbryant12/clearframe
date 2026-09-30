@@ -483,7 +483,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             if now < start {
                 break;
             }
-            let k = ease(s(key, "ease"), (now - start) / f(key, "dur", crate::constants::get().canvas.key).max(0.001));
+            // A zero-length key is a cut to the new state, applied on its own frame.
+            let dur = f(key, "dur", crate::constants::get().canvas.key);
+            let k = if dur <= 1e-3 { 1.0 } else { ease(s(key, "ease"), (now - start) / dur) };
             let prev = key_pose;
             key_pose = (
                 num(key, "x").map_or(prev.0, |v| prev.0 + (v - prev.0) * k),
