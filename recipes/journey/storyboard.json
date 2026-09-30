@@ -37,7 +37,7 @@
       "id": "source",
       "block": "canvas",
       "vo": "It starts as rain on the hills, collected in a reservoir.",
-      "tail": 0.5,
+      "tail": 0.7,
       "props": {
         "world": "journey",
         "view": [
@@ -102,7 +102,7 @@
       "id": "plant",
       "block": "canvas",
       "vo": "But first, a pipe carries it to a plant that filters and cleans it.",
-      "tail": 0.5,
+      "tail": 0.7,
       "props": {
         "world": "journey",
         "view": [
@@ -180,7 +180,7 @@
       "id": "city",
       "block": "canvas",
       "vo": "Then a second network runs it under the streets, to every tap.",
-      "tail": 0.5,
+      "tail": 0.7,
       "props": {
         "world": "journey",
         "view": [
@@ -265,7 +265,7 @@
       "id": "whole",
       "block": "canvas",
       "vo": "One journey, most of it out of sight.",
-      "tail": 0.5,
+      "tail": 0.7,
       "props": {
         "world": "journey",
         "view": [
