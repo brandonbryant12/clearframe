@@ -1,0 +1,14 @@
+{
+  "order": 1,
+  "notes": "Deep slate with mint and amber. Night-time, technical and reflective films.",
+  "colors": {
+    "bg": "#101721",
+    "surface": "#1d2938",
+    "ink": "#f4f4ed",
+    "muted": "#a4b2c4",
+    "accent": "#76cbb8",
+    "accent2": "#f0b86e",
+    "positive": "#83d3ac",
+    "negative": "#f29a8a"
+  }
+}

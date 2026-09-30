@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { readJSON } from './util.mjs';
+import { useProject } from '../../fframes/library.mjs';
 
 export const PRESETS = {
   landscape: { width: 1920, height: 1080, fps: 30 },
@@ -26,6 +27,8 @@ export function resolveProject(dir) {
 }
 
 export function loadStoryboard(root) {
+  // The project's own library/ (palettes, treatments, sketches, playbooks) overrides the built-ins.
+  useProject(root);
   const sb = readJSON(path.join(root, 'storyboard.json'));
   const errors = validateStoryboard(sb);
   if (errors.length) throw new Error(`storyboard.json is invalid:\n  - ${errors.join('\n  - ')}`);

@@ -9,7 +9,7 @@
       (these are cheap and print the exact current lists; they don't build or render anything)
     - schema/storyboard.schema.json: film and beat fields (transition, exit, tone, camera, plate, captions, textMotion, heading, sfx, format)
     - fframes/canvas.mjs: canvas element types, enters, exits, loops, keys, eases, fonts, colour tokens, effects (glow, shadow, rough, echo, depth, behind)
-    - fframes/treatments.mjs: what each treatment sets, plus its rules
+    - library/ (README.md + one file per palette, treatment, sketch and playbook): what each item sets
     - README.md, AGENTS.md, docs/canvas.md, docs/style.md, docs/ideas.md, docs/speech.md, docs/continuity.md
     - skills/clearframe*/SKILL.md (clearframe, direction, canvas, motion, script, library, engine, integrity, dataviz)
     - examples/night-city/BRIEF.md and storyboard.json (the case study in section 04)
@@ -774,11 +774,11 @@ node engine/cli.mjs render my-film            <span class="c"># final encode</sp
         <div class="concept" id="concept-treatments">
           <h3>Treatments<small>art direction in one word</small></h3>
           <div>
-            <p>A treatment sets the palette, backdrop, texture, frame, motion, transition grammar, voice style and sound, plus some beat defaults. It also writes its rules into DIRECTION.md. There are ten: <code>editorial</code>, <code>noir</code>, <code>kinetic</code>, <code>sketchbook</code>, <code>blueprint</code>, <code>audiogram</code>, <code>brand</code>, <code>calm</code>, <code>mosaic</code> and <code>tech</code>. Apply one with <code>new DIR --playbook NAME --treatment ID</code>, then adapt it. It is a starting direction, not a limit.</p>
+            <p>A treatment sets the palette, backdrop, texture, frame, motion, transition grammar, voice style and sound, plus some beat defaults. It also writes its rules into DIRECTION.md. Each is a file in <code>library/treatments/</code>, and a project can add its own. Built-ins include <code>editorial</code>, <code>noir</code>, <code>kinetic</code>, <code>sketchbook</code>, <code>blueprint</code>, <code>audiogram</code>, <code>brand</code>, <code>calm</code>, <code>mosaic</code> and <code>tech</code>. Apply one with <code>new DIR --playbook NAME --treatment ID</code>, then adapt it. It is a starting direction, not a limit.</p>
           </div>
         </div>
         <div class="concept" id="concept-palettes">
-          <h3>Palettes<small>15, contrast-checked</small></h3>
+          <h3>Palettes<small>contrast-checked on load</small></h3>
           <div>
             <p>Every palette has the tokens <code>bg</code>, <code>surface</code>, <code>ink</code>, <code>muted</code>, <code>accent</code>, <code>accent2</code>, <code>positive</code> and <code>negative</code>. You can override any of them with hex, for example <code>"theme": {"base": "ink", "accent": "#d6acff"}</code>, and <code>check</code> warns if the override drops contrast. Canvas colours are tokens too, so art follows the palette and a beat's <code>tone</code>. <code>looks DIR --beat ID</code> renders one frame in every palette.</p>
           </div>
@@ -1041,6 +1041,18 @@ Script:
 - Keep it alive: far layers at depth below 1 for parallax, behind: true for a change of state (<span class="ph">[the sky turning to night]</span>), glow on things that give light, a light particles field where it adds atmosphere, and labels that leave (exitAt) while the camera is away.
 - Interrupt the world once, at the turn: a kinetic card on a tone, with an iris in and out.
 - Every camera move should arrive by the first word of its line.</pre>
+        </figure>
+
+        <figure class="prompt-card" id="tpl-brand-kit">
+          <figcaption><span class="mono-label">Template</span><strong>A house style as a shared library</strong></figcaption>
+<pre class="prompt">Make a ClearFrame brand kit in <span class="ph">[brand/library]</span> for <span class="ph">[Acme]</span>. Read library/README.md first.
+
+Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Voice: <span class="ph">[calm, precise]</span>. Look: <span class="ph">[a reference film, or three adjectives]</span>.
+
+1. palettes/<span class="ph">[acme]</span>.json: all eight colours. It must load (ink, muted and accent need 4.5:1 on bg; accent2 needs 3:1).
+2. treatments/<span class="ph">[acme]</span>.json: film settings using that palette, beat defaults and 3–5 short rules.
+3. Optionally, a playbook for the films we make most often and a JSON sketch for our signature composition.
+4. Prove it: new build/acme-test --library <span class="ph">[brand/library]</span> --playbook <span class="ph">[concept-explainer]</span> --treatment <span class="ph">[acme]</span>, then critique, then draft. Open the sheet and tell me what the style still lacks.</pre>
         </figure>
 
         <figure class="prompt-card" id="tpl-vertical">
@@ -1355,6 +1367,12 @@ Script:
       </div>
 
       <h3 id="vocab-library">Library: blocks, sketches, playbooks</h3>
+      <p>Blocks are engine code. Everything else creative is a file in <code>library/</code>: one file per palette, treatment, sketch and playbook, validated when the engine starts. Adding an idea means adding a file. You can also layer your own:</p>
+      <ul>
+        <li><strong>For one film</strong>, put files in the project's own <code>library/palettes/</code>, <code>treatments/</code>, <code>sketches/</code> or <code>playbooks/</code>. The same id overrides a built-in.</li>
+        <li><strong>For a team or brand</strong>, keep a shared folder with the same layout and pass <code>--library DIR</code> (or set <code>CLEARFRAME_LIBRARY</code>). <code>new</code> copies any shared palette or treatment it uses into the project, so the film still renders without the shared folder.</li>
+        <li>Items outside the built-ins are JSON only, so templates stay data. <code>library/README.md</code> has every field.</li>
+      </ul>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Family</th><th>Blocks (33)</th></tr></thead>
@@ -1384,6 +1402,7 @@ Script:
             <tr><td><code>versus</code></td><td class="wrap">Two sides, a drawn divider, a badge</td><td class="wrap">Before/after, myth/fact, two options</td></tr>
             <tr><td><code>burst</code></td><td class="wrap">One big word, an underline, rays</td><td class="wrap">A key term or verdict</td></tr>
             <tr><td><code>ambient</code></td><td class="wrap">Soft drifting shapes (an <code>art.under</code> layer)</td><td class="wrap">Behind statements, quotes and kinetic type</td></tr>
+            <tr><td><code>niche</code></td><td class="wrap">A mosaic arch of sky, a moon in rings, a tiled sea</td><td class="wrap">Stories and places in the mosaic treatment</td></tr>
           </tbody>
         </table>
       </div>
@@ -1419,6 +1438,7 @@ Script:
             <tr><td><code>podcast-clip</code></td><td class="wrap">Cut a podcast moment into a vertical social clip</td></tr>
             <tr><td><code>brand-spot</code></td><td class="wrap">A short, designed spot with an editorial frame</td></tr>
             <tr><td><code>journey</code></td><td class="wrap">A travelling-camera explainer: one drawing, explored stop by stop</td></tr>
+            <tr><td><code>sizzle</code></td><td class="wrap">A brand reel: a claim, two chapters, a turn and a wordmark, made of objects drawn in code</td></tr>
           </tbody>
         </table>
       </div>
@@ -1543,6 +1563,7 @@ Script:
       <h2>What's new</h2>
       <p class="small">"Travel instead of cutting, type with a voice, and fewer false alarms." The full list is in <code>CHANGELOG.md</code>.</p>
       <ul class="news">
+        <li><strong>The library is files.</strong> Palettes, treatments, sketches and playbooks each live in their own file under <code>library/</code>, and are validated on load. A project's <code>library/</code> or a shared brand kit (<code>--library DIR</code>) adds or overrides items, and <code>new</code> copies shared items into the project. Palettes now have one source: the renderer no longer keeps a copy. See <a href="#vocab-library">Library</a>.</li>
         <li><strong>Sizzle toolkit.</strong> 3D wireframe <code>solid</code>s, <code>stars</code> and <code>warp</code> particles, the <code>neon</code> palette, the <code>tech</code> treatment and the <code>sizzle</code> playbook for brand reels made of objects drawn in code.</li>
         <li><strong>The picture keeps pace with the voice.</strong> No scene sits empty while the narration talks: a late-cued drawing is pulled forward to the first word, and number cards enter with the voice while their count lands on its word. <code>pace: "hold"</code> keeps a deliberate wait.</li>
         <li><strong>One continuous voice take.</strong> Gemini 3.8 TTS reads the whole narration as one take, with one text part and one short style, so the voice stays consistent. Per-beat styles are ignored (<a href="#prompting-voice">Voice</a>). <code>voice DIR --dry-run</code> shows the exact request.</li>
@@ -1570,7 +1591,7 @@ Script:
       <p>This page is meant to change with the project. When a feature lands:</p>
       <ol>
         <li>Read the newest <code>CHANGELOG.md</code> section and update <a href="#whats-new">What's new</a>. Once a version is released, fold its bullets into one line and start a new list.</li>
-        <li>Re-run the cheap listing commands (<code>help</code>, <code>treatments</code>, <code>playbooks</code>, <code>themes --json</code>, <code>blocks</code>, <code>motions</code>, <code>sketch</code>) and reconcile the vocabulary tables and counts in the header.</li>
+        <li>Re-run the cheap listing commands (<code>help</code>, <code>treatments</code>, <code>playbooks</code>, <code>themes --json</code>, <code>blocks</code>, <code>motions</code>, <code>sketch</code>) and reconcile the vocabulary tables and counts in the header. New palettes, treatments, sketches and playbooks are files in <code>library/</code>, so <code>git log -- library</code> shows what arrived.</li>
         <li>Check new props against <code>schema/storyboard.schema.json</code> and <code>fframes/canvas.mjs</code> before listing them. Don't document anything you haven't verified.</li>
         <li>If a new workflow changes how films are made, add a prompt template or an iteration prompt as well.</li>
         <li>Update the <strong>Last updated</strong> line in the header and the date in the comment at the top of the file.</li>

@@ -1,0 +1,88 @@
+{
+  "order": 1,
+  "title": "Report progress with context",
+  "audience": "A team or leadership group",
+  "inputs": "Comparable metrics, dates, denominators, decisions",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "This sample update follows the work from demand to response.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "The quarter in context",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "kpis",
+      "block": "kpis",
+      "vo": "In this illustrative quarter, requests grew while response time fell.",
+      "props": {
+        "title": "The quarter in three numbers",
+        "items": [
+          {
+            "value": 12400,
+            "label": "Requests"
+          },
+          {
+            "value": 4.2,
+            "suffix": " days",
+            "label": "First response"
+          },
+          {
+            "value": 91,
+            "suffix": "%",
+            "label": "Satisfaction"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "line",
+      "block": "line",
+      "vo": "The sample trend increased over six months.",
+      "props": {
+        "title": "A trend worth watching",
+        "series": [12, 15, 14, 18, 23, 27],
+        "labels": ["Apr", "May", "Jun", "Jul", "Aug", "Sep"],
+        "min": 0,
+        "max": 30,
+        "format": " k",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "delta",
+      "block": "delta",
+      "vo": "First response fell from four point two days to one point eight days.",
+      "props": {
+        "title": "A faster first response",
+        "from": {
+          "value": 4.2,
+          "label": "Before"
+        },
+        "to": {
+          "value": 1.8,
+          "label": "After"
+        },
+        "suffix": " days",
+        "better": "down",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ]
+}

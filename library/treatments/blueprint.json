@@ -1,0 +1,35 @@
+{
+  "order": 4,
+  "title": "Blueprint how-it-works",
+  "when": "Engineering, systems, architecture, technical walkthroughs",
+  "film": {
+    "theme": "blueprint",
+    "backdrop": "grid",
+    "texture": {
+      "vignette": 0.4
+    },
+    "motion": {
+      "preset": "snappy",
+      "intensity": 0.7
+    },
+    "transition": "push",
+    "frame": {
+      "brand": "Spec",
+      "left": "Fig.",
+      "right": ""
+    },
+    "sfx": "subtle",
+    "voice": {
+      "style": "precise, calm, engaged"
+    }
+  },
+  "beats": {
+    "font": "mono",
+    "graphic": "wipe"
+  },
+  "rules": [
+    "Every part is labelled in mono; lines draw on in the order the voice names them.",
+    "Use scramble for technical terms, dash loops for flow, along for packets.",
+    "One system diagram built across several beats beats many small ones (morph by id)."
+  ]
+}

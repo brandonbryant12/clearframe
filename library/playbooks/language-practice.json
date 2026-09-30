@@ -1,0 +1,67 @@
+{
+  "order": 15,
+  "title": "Listen, follow the words, then try the phrase",
+  "audience": "Language learners",
+  "inputs": "A reviewed recording, exact transcript, measured word timings and a checked translation",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Listen once. Then follow the words as you hear them.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "Hear it. See it. Try it.",
+        "support": "Use a reviewed recording in your chosen language.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "kinetic",
+      "block": "kinetic",
+      "vo": "Where is the train station?",
+      "props": {
+        "mode": "highlight",
+        "align": "center",
+        "maxWords": 6,
+        "source": ""
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "Pause the video and try the phrase yourself.",
+      "props": {
+        "label": "Your turn",
+        "icon": "alert",
+        "text": "Say the phrase in your own voice.",
+        "support": "Replay the recording and compare.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "kinetic",
+      "block": "kinetic",
+      "vo": "Where is the train station?",
+      "props": {
+        "mode": "reveal",
+        "align": "center",
+        "maxWords": 6,
+        "source": ""
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Try using the phrase in a different situation.",
+      "props": {
+        "support": "Change one word and check the meaning.",
+        "action": "Practice another short exchange.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Make it useful."
+      }
+    }
+  ],
+  "format": "vertical",
+  "theme": "ink",
+  "note": "Use measured timing in the target language. Check font glyph coverage and pronunciation; do not infer those from a successful render."
+}

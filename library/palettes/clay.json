@@ -1,0 +1,14 @@
+{
+  "order": 11,
+  "notes": "Terracotta paper with rust and teal. Craft, history, food and warm documentary.",
+  "colors": {
+    "bg": "#efe3d6",
+    "surface": "#e2d2c1",
+    "ink": "#2b1d17",
+    "muted": "#6b5446",
+    "accent": "#a8431f",
+    "accent2": "#2e5f6e",
+    "positive": "#3f6b43",
+    "negative": "#a8431f"
+  }
+}

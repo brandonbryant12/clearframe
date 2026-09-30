@@ -1,0 +1,14 @@
+{
+  "order": 8,
+  "notes": "Poster yellow with crimson and cobalt. Loud social cuts, launches and bold claims.",
+  "colors": {
+    "bg": "#ffd84a",
+    "surface": "#ffe685",
+    "ink": "#141414",
+    "muted": "#4a3f12",
+    "accent": "#b01030",
+    "accent2": "#1d3fbf",
+    "positive": "#0f6b3a",
+    "negative": "#b3122b"
+  }
+}

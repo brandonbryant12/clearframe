@@ -1,0 +1,365 @@
+{
+  "order": 26,
+  "title": "A short, designed spot with an editorial frame",
+  "audience": "Launch, announcement or channel intro",
+  "inputs": "One idea, three supporting beats, a call to action",
+  "beats": [
+    {
+      "id": "open",
+      "block": "title",
+      "vo": "This film is drawn in code.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "This film is drawn in code.",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing",
+        "emphasis": ["drawn"],
+        "emphasisStyle": "serif"
+      },
+      "label": "Introduction",
+      "art": {
+        "under": [
+          {
+            "type": "rect",
+            "x": 1300,
+            "y": 620,
+            "w": 420,
+            "h": 260,
+            "r": 30,
+            "fill": "bg",
+            "stroke": "accent",
+            "width": 3,
+            "rotate": -8,
+            "enter": "pop",
+            "at": 0.6,
+            "echo": {
+              "count": 9,
+              "step": {
+                "x": -16,
+                "y": 6,
+                "rotate": -3
+              },
+              "fade": 0.82
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "system",
+      "block": "canvas",
+      "vo": "Every frame is a function of time.",
+      "props": {
+        "title": "Every frame, on purpose",
+        "view": [1600, 640],
+        "stagger": 0.12,
+        "elements": [
+          {
+            "type": "circle",
+            "cx": 960,
+            "cy": 630,
+            "r": 124.2,
+            "fill": "none",
+            "stroke": "line",
+            "width": 3,
+            "at": 0.2,
+            "dur": 1
+          },
+          {
+            "type": "circle",
+            "cx": 960,
+            "cy": 630,
+            "r": 198.7,
+            "fill": "none",
+            "stroke": "line",
+            "width": 3,
+            "at": 0.35,
+            "dur": 1
+          },
+          {
+            "type": "circle",
+            "cx": 960,
+            "cy": 630,
+            "r": 276,
+            "fill": "none",
+            "stroke": "line",
+            "width": 3,
+            "at": 0.5,
+            "dur": 1
+          },
+          {
+            "type": "circle",
+            "cx": 960,
+            "cy": 630,
+            "r": 71.8,
+            "fill": "accent",
+            "at": 0.3,
+            "glow": {
+              "blur": 22,
+              "opacity": 0.7
+            },
+            "loop": {
+              "type": "pulse",
+              "period": 2.4,
+              "amount": 0.04
+            }
+          },
+          {
+            "type": "text",
+            "text": "Core",
+            "x": 960,
+            "y": 646,
+            "size": 46,
+            "anchor": "middle",
+            "font": "bold",
+            "fill": "bg",
+            "at": 0.5
+          },
+          {
+            "type": "circle",
+            "cx": 1084.2,
+            "cy": 630,
+            "r": 18,
+            "fill": "ink",
+            "origin": [960, 630],
+            "at": 0.9,
+            "loop": {
+              "type": "spin",
+              "period": 7,
+              "amount": 1
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 835.8,
+            "cy": 630,
+            "r": 18,
+            "fill": "accent2",
+            "origin": [960, 630],
+            "at": 1,
+            "loop": {
+              "type": "spin",
+              "period": 7,
+              "amount": 1
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 1067.4,
+            "cy": 797.2,
+            "r": 15,
+            "fill": "ink",
+            "origin": [960, 630],
+            "at": 1.1,
+            "loop": {
+              "type": "spin",
+              "period": 11,
+              "amount": -1
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 852.6,
+            "cy": 462.8,
+            "r": 15,
+            "fill": "accent2",
+            "origin": [960, 630],
+            "at": 1.2,
+            "loop": {
+              "type": "spin",
+              "period": 11,
+              "amount": -1
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 845.1,
+            "cy": 881,
+            "r": 12,
+            "fill": "ink",
+            "origin": [960, 630],
+            "at": 1.3,
+            "loop": {
+              "type": "spin",
+              "period": 15,
+              "amount": 1
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 1074.9,
+            "cy": 379,
+            "r": 12,
+            "fill": "accent2",
+            "origin": [960, 630],
+            "at": 1.4,
+            "loop": {
+              "type": "spin",
+              "period": 15,
+              "amount": 1
+            }
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing",
+        "sketch": "orbit"
+      },
+      "label": "How",
+      "transition": "whip",
+      "tone": "invert"
+    },
+    {
+      "id": "move",
+      "block": "canvas",
+      "vo": "Then make it move.",
+      "props": {
+        "title": "How an idea spreads",
+        "view": [1600, 640],
+        "stagger": 0.12,
+        "elements": [
+          {
+            "type": "text",
+            "text": "Enough",
+            "x": 960,
+            "y": 618.2,
+            "size": 230,
+            "anchor": "middle",
+            "font": "bold",
+            "fill": "ink",
+            "enter": "wipe",
+            "at": 0.2,
+            "dur": 0.6
+          },
+          {
+            "type": "path",
+            "d": "M 674.8 666.5 Q 960 712.5 1245.2 655",
+            "stroke": "accent",
+            "width": 12,
+            "at": 0.7,
+            "dur": 0.6
+          },
+          {
+            "type": "group",
+            "at": 1,
+            "stagger": 0.04,
+            "children": [
+              {
+                "type": "line",
+                "x1": 1096.6,
+                "y1": 334.7,
+                "x2": 1121.1,
+                "y2": 273.1,
+                "stroke": "accent",
+                "width": 8,
+                "dur": 0.35
+              },
+              {
+                "type": "line",
+                "x1": 1265.9,
+                "y1": 399.6,
+                "x2": 1320.9,
+                "y2": 357.4,
+                "stroke": "accent2",
+                "width": 8,
+                "dur": 0.35
+              },
+              {
+                "type": "line",
+                "x1": 1265.9,
+                "y1": 680.4,
+                "x2": 1320.9,
+                "y2": 722.6,
+                "stroke": "accent",
+                "width": 8,
+                "dur": 0.35
+              },
+              {
+                "type": "line",
+                "x1": 1096.6,
+                "y1": 745.3,
+                "x2": 1121.1,
+                "y2": 806.9,
+                "stroke": "accent2",
+                "width": 8,
+                "dur": 0.35
+              },
+              {
+                "type": "line",
+                "x1": 823.4,
+                "y1": 745.3,
+                "x2": 798.9,
+                "y2": 806.9,
+                "stroke": "accent",
+                "width": 8,
+                "dur": 0.35
+              },
+              {
+                "type": "line",
+                "x1": 654.1,
+                "y1": 680.4,
+                "x2": 599.1,
+                "y2": 722.6,
+                "stroke": "accent2",
+                "width": 8,
+                "dur": 0.35
+              },
+              {
+                "type": "line",
+                "x1": 654.1,
+                "y1": 399.6,
+                "x2": 599.1,
+                "y2": 357.4,
+                "stroke": "accent",
+                "width": 8,
+                "dur": 0.35
+              },
+              {
+                "type": "line",
+                "x1": 823.4,
+                "y1": 334.7,
+                "x2": 798.9,
+                "y2": 273.1,
+                "stroke": "accent2",
+                "width": 8,
+                "dur": 0.35
+              }
+            ],
+            "glow": {
+              "blur": 10,
+              "opacity": 0.6
+            }
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing",
+        "sketch": "burst"
+      },
+      "label": "Motion",
+      "transition": "iris",
+      "transitionOrigin": [0.2, 0.8]
+    },
+    {
+      "id": "end",
+      "block": "endcard",
+      "vo": "Now make yours.",
+      "props": {
+        "support": "Start with one handoff this week.",
+        "action": "Start a film",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Now make yours.",
+        "emphasis": ["yours"],
+        "emphasisStyle": "serif"
+      },
+      "label": "Your turn",
+      "transition": "panel"
+    }
+  ],
+  "theme": "paper",
+  "motion": "spring",
+  "texture": {
+    "grain": 0.3
+  },
+  "frame": {
+    "brand": "clearframe",
+    "left": "Made with ClearFrame",
+    "right": "SVG / Rust / MP4"
+  }
+}

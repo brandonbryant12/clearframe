@@ -1,0 +1,92 @@
+{
+  "order": 14,
+  "title": "Tell a small story about a place",
+  "audience": "Friends, family and curious travelers",
+  "inputs": "Your route, personal observations, permission-cleared photos and accurate place names",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Tell the story of a day through the details you noticed.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "An afternoon worth remembering",
+        "support": "A fictional itinerary to replace with your own trip.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "timeline",
+      "block": "timeline",
+      "vo": "Start with the first stop, then follow the day as it happened.",
+      "props": {
+        "title": "A day at walking pace",
+        "items": [
+          {
+            "label": "Morning",
+            "title": "A quiet street",
+            "detail": "What first caught your eye?"
+          },
+          {
+            "label": "Afternoon",
+            "title": "A favorite corner",
+            "detail": "One detail worth keeping"
+          },
+          {
+            "label": "Evening",
+            "title": "The way back",
+            "detail": "What changed by the end?"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "icon-grid",
+      "block": "icon-grid",
+      "vo": "A sound, a color, and a small encounter can carry a place.",
+      "props": {
+        "title": "Keep the details",
+        "items": [
+          {
+            "icon": "music",
+            "label": "A sound"
+          },
+          {
+            "icon": "palette",
+            "label": "A color"
+          },
+          {
+            "icon": "map-pin",
+            "label": "A place"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "quote",
+      "block": "quote",
+      "vo": "Replace this with a real memory in your own words.",
+      "props": {
+        "text": "One small detail brought the whole afternoon back.",
+        "author": "Fictional sample recollection",
+        "role": "Replace with your own memory",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "What will you remember from your next walk?",
+      "props": {
+        "support": "Use your own photos, recordings and words.",
+        "action": "Keep a small travel journal.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Bring back a detail."
+      }
+    }
+  ],
+  "theme": "editorial",
+  "note": "Insert your own image/video plates between native scenes. Generated establishing shots must be labelled illustrative; do not present them as footage of your trip."
+}

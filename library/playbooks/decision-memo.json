@@ -1,0 +1,84 @@
+{
+  "order": 2,
+  "title": "Make a trade-off explicit",
+  "audience": "Decision makers",
+  "inputs": "Two options, consistent criteria, recommendation",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "A useful decision starts with the criteria.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "Choose the next approach",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "compare",
+      "block": "compare",
+      "vo": "Large releases concentrate coordination. Smaller releases shorten feedback.",
+      "props": {
+        "title": "Choose the right trade-off",
+        "left": {
+          "title": "One large release",
+          "items": ["More coordination", "Long feedback loop"]
+        },
+        "right": {
+          "title": "Smaller releases",
+          "items": ["Frequent feedback", "Lower change risk"]
+        },
+        "verdict": "Prefer smaller, reversible steps.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "matrix",
+      "block": "matrix",
+      "vo": "Compare setup effort, iteration, and control together.",
+      "props": {
+        "title": "Evaluate the whole workflow",
+        "columns": ["Option A", "Option B"],
+        "rows": [
+          {
+            "label": "Setup",
+            "values": ["Low", "Medium"]
+          },
+          {
+            "label": "Iteration",
+            "values": ["Medium", "Low"]
+          },
+          {
+            "label": "Control",
+            "values": ["Limited", "High"]
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "Prefer the option that is easier to test and reverse.",
+      "props": {
+        "label": "Recommendation",
+        "icon": "alert",
+        "text": "Run a small, reversible trial.",
+        "support": "Look at the distribution before choosing a target.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ]
+}

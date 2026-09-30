@@ -1,0 +1,57 @@
+{
+  "order": 18,
+  "title": "Create a gentle paced visual break",
+  "audience": "Anyone who wants a brief pause",
+  "inputs": "Preferred phase labels, comfortable timing and an optional original soundtrack",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Take a moment at your own pace.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "A little room to pause",
+        "support": "Follow the visual only if the pace feels comfortable.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "breathing",
+      "block": "breathing",
+      "duration": 28,
+      "props": {
+        "title": "Find your own rhythm",
+        "phases": [
+          {
+            "label": "Breathe in",
+            "seconds": 3,
+            "scale": "expand"
+          },
+          {
+            "label": "Breathe out",
+            "seconds": 4,
+            "scale": "contract"
+          }
+        ],
+        "minScale": 0.55,
+        "maxScale": 1,
+        "ring": true,
+        "source": "Optional visual pacing · no health claim"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Return when you are ready.",
+      "props": {
+        "support": "A small pause can simply be a pause.",
+        "action": "",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Continue at your own pace."
+      }
+    }
+  ],
+  "theme": "ink",
+  "motion": "gentle",
+  "note": "Phase durations are editable. This is a visual pacing exercise, not a therapeutic protocol or a promised health outcome."
+}

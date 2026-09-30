@@ -1,0 +1,35 @@
+{
+  "order": 6,
+  "title": "Designed spot",
+  "when": "Brand intros, announcements, product moments, channel openers",
+  "film": {
+    "theme": "paper",
+    "backdrop": "none",
+    "texture": {
+      "grain": 0.3
+    },
+    "motion": {
+      "preset": "spring",
+      "intensity": 0.85
+    },
+    "transition": "cut",
+    "frame": {
+      "brand": "brand",
+      "left": "",
+      "right": ""
+    },
+    "sfx": "normal",
+    "voice": {
+      "style": "bright, confident"
+    }
+  },
+  "beats": {
+    "emphasisStyle": "serif",
+    "graphic": "iris"
+  },
+  "rules": [
+    "A persistent frame (brand, section label, footers) makes every scene feel designed.",
+    "Echo trails and stepped copies turn one shape into a composition.",
+    "Carry the hero object across cuts with morph by id or an iris from its position."
+  ]
+}

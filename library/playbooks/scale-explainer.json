@@ -1,0 +1,80 @@
+{
+  "order": 23,
+  "title": "Make a very large number feel real",
+  "audience": "Curious viewers facing an abstract figure",
+  "inputs": "One large figure, a trustworthy comparison and a human-scale unit",
+  "beats": [
+    {
+      "id": "statement",
+      "block": "statement",
+      "vo": "Big numbers are hard to picture until you compare them.",
+      "props": {
+        "text": "Big numbers need a comparison.",
+        "emphasis": ["comparison"],
+        "support": "Measure the wait, not just the workload.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "magnitude",
+      "block": "magnitude",
+      "vo": "Seen as areas, the difference between these groups is easy to feel.",
+      "props": {
+        "title": "The same question, three scales",
+        "items": [
+          {
+            "label": "A team",
+            "value": 12
+          },
+          {
+            "label": "A company",
+            "value": 1200
+          },
+          {
+            "label": "A city",
+            "value": 90000
+          }
+        ],
+        "format": " people",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "waffle",
+      "block": "waffle",
+      "vo": "Out of every hundred people in this illustrative group, seventy take part.",
+      "props": {
+        "title": "Seventy in every hundred",
+        "value": 70,
+        "total": 100,
+        "cols": 10,
+        "label": "An illustrative share, drawn one person at a time",
+        "source": "Illustrative sample data · replace before publishing",
+        "icon": "user"
+      }
+    },
+    {
+      "id": "highlight",
+      "block": "highlight",
+      "vo": "A comparison turns an abstract number into a picture you can hold.",
+      "props": {
+        "text": "A comparison turns an abstract number into a picture.",
+        "phrases": ["a picture"],
+        "support": "Look at the distribution, not just the middle.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose a comparison your audience already knows.",
+      "props": {
+        "support": "Areas, people and everyday objects work well.",
+        "action": "Find your comparison",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Compare it to something familiar."
+      }
+    }
+  ],
+  "theme": "mono"
+}

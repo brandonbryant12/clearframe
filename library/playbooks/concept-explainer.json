@@ -1,0 +1,68 @@
+{
+  "order": 0,
+  "title": "Explain a mechanism",
+  "audience": "A curious beginner",
+  "inputs": "One concept, an example, a caveat",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Headroom helps a system absorb the unexpected.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "Why headroom matters",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "equation",
+      "block": "equation",
+      "vo": "Subtract demand from capacity. What remains is headroom.",
+      "props": {
+        "title": "Leave room for variation",
+        "expression": "Capacity − demand",
+        "result": "= headroom",
+        "explanation": "Headroom absorbs the unexpected.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "waffle",
+      "block": "waffle",
+      "vo": "Imagine seventy of a hundred slots are already occupied.",
+      "props": {
+        "title": "Seven in ten",
+        "value": 70,
+        "total": 100,
+        "cols": 10,
+        "label": "A forecast, not a guarantee",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "An average can hide the moments when demand spikes.",
+      "props": {
+        "label": "The caveat",
+        "icon": "alert",
+        "text": "An average can hide a long tail.",
+        "emphasis": ["long tail"],
+        "support": "Look at the distribution before choosing a target.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "order": 13,
+  "notes": "Drawing paper with graphite, red and blue pencil. Hand-drawn explainers with rough canvas strokes and the paper backdrop.",
+  "colors": {
+    "bg": "#f2ecdf",
+    "surface": "#e6dece",
+    "ink": "#433e39",
+    "muted": "#6d655c",
+    "accent": "#c2344d",
+    "accent2": "#3a67b3",
+    "positive": "#3b7449",
+    "negative": "#c2344d"
+  }
+}

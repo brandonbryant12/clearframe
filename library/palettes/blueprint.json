@@ -1,0 +1,14 @@
+{
+  "order": 10,
+  "notes": "Drafting blue with sky and amber lines. Engineering, how-it-works and diagrams.",
+  "colors": {
+    "bg": "#0d2b52",
+    "surface": "#173d6e",
+    "ink": "#f1f6ff",
+    "muted": "#a9c1e3",
+    "accent": "#7fd4ff",
+    "accent2": "#ffd166",
+    "positive": "#8ee3b4",
+    "negative": "#ff9e8f"
+  }
+}

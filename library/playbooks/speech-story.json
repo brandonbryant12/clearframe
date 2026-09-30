@@ -1,0 +1,44 @@
+{
+  "order": 7,
+  "title": "Let speech drive the typography",
+  "audience": "Viewers watching with or without sound",
+  "inputs": "A recording, exact transcript, measured word timestamps",
+  "beats": [
+    {
+      "id": "kinetic",
+      "block": "kinetic",
+      "vo": "Make every word land exactly when you hear it.",
+      "props": {
+        "mode": "highlight",
+        "align": "left",
+        "maxWords": 6,
+        "source": ""
+      }
+    },
+    {
+      "id": "kinetic",
+      "block": "kinetic",
+      "vo": "Give the next thought room to breathe.",
+      "props": {
+        "mode": "reveal",
+        "align": "left",
+        "maxWords": 5,
+        "source": ""
+      }
+    },
+    {
+      "id": "kinetic",
+      "block": "kinetic",
+      "vo": "Then make the next step clear.",
+      "props": {
+        "mode": "word",
+        "align": "left",
+        "maxWords": 4,
+        "source": ""
+      }
+    }
+  ],
+  "format": "vertical",
+  "theme": "ink",
+  "captions": false
+}

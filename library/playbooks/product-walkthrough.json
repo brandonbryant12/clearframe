@@ -1,0 +1,83 @@
+{
+  "order": 5,
+  "title": "Show a workflow and its payoff",
+  "audience": "A prospective user",
+  "inputs": "User problem, real steps, proof of outcome",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Turn a request into a clear next action.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "A clearer handoff",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "statement",
+      "block": "statement",
+      "vo": "A request stalls when the next owner is unclear.",
+      "props": {
+        "text": "Busy is not the same as effective.",
+        "emphasis": ["effective"],
+        "support": "Measure the wait, not just the workload.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "steps",
+      "block": "steps",
+      "vo": "Capture the need, route it to an owner, and confirm the outcome.",
+      "props": {
+        "title": "From request to resolution",
+        "items": [
+          {
+            "title": "Capture",
+            "detail": "State the need"
+          },
+          {
+            "title": "Route",
+            "detail": "Find the owner"
+          },
+          {
+            "title": "Resolve",
+            "detail": "Confirm the outcome"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "compare",
+      "block": "compare",
+      "vo": "Compare the handoff before and after the workflow change.",
+      "props": {
+        "title": "Choose the right trade-off",
+        "left": {
+          "title": "One large release",
+          "items": ["More coordination", "Long feedback loop"]
+        },
+        "right": {
+          "title": "Smaller releases",
+          "items": ["Frequent feedback", "Lower change risk"]
+        },
+        "verdict": "Prefer smaller, reversible steps.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ],
+  "theme": "signal"
+}

@@ -1,0 +1,14 @@
+{
+  "order": 12,
+  "notes": "Cinema black with gold and vermilion. Drama, true stories, premium reveals.",
+  "colors": {
+    "bg": "#111111",
+    "surface": "#1d1d1d",
+    "ink": "#f2efe9",
+    "muted": "#a39e96",
+    "accent": "#e9c46a",
+    "accent2": "#e76f51",
+    "positive": "#8fbf9f",
+    "negative": "#e76f51"
+  }
+}

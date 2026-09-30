@@ -1,0 +1,36 @@
+{
+  "order": 8,
+  "title": "Mosaic",
+  "when": "Stories, heritage and culture, nature, anything that wants to feel handmade and luminous",
+  "film": {
+    "theme": "mosaic",
+    "backdrop": "mosaic",
+    "texture": {
+      "grain": 0.15,
+      "vignette": 0.55
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.6
+    },
+    "textMotion": "words",
+    "transition": "cut",
+    "sfx": "subtle",
+    "voice": {
+      "style": "warm storyteller, unhurried"
+    }
+  },
+  "beats": {
+    "mosaic": {
+      "tile": 16,
+      "glint": 0.2
+    },
+    "graphic": "iris"
+  },
+  "rules": [
+    "Everything is laid in tesserae: shapes assemble tile by tile (enter: assemble) and scatter when they stop being true (exit: scatter).",
+    "Let the andamento follow the form: rings for round things, rows for walls and skies; outline rows trace each contour.",
+    "Light is the drama: glow on gold tiles (moon, stars, windows); keep the palette to ultramarine, ivory, gold, coral and turquoise.",
+    "Frame scenes with a border or arch; one hero shape per frame, drawn big enough for tiles to read (at least 12 tiles across)."
+  ]
+}

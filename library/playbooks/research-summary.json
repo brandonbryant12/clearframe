@@ -1,0 +1,94 @@
+{
+  "order": 3,
+  "title": "Separate a finding from its limits",
+  "audience": "An informed general audience",
+  "inputs": "Source, method, result, uncertainty",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Start with the question, then show what the evidence can support.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "What does the evidence say?",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "steps",
+      "block": "steps",
+      "vo": "Define the sample, compare the outcomes, and check the limitations.",
+      "props": {
+        "title": "From request to resolution",
+        "items": [
+          {
+            "title": "Sample",
+            "detail": "Who was included?"
+          },
+          {
+            "title": "Method",
+            "detail": "What was compared?"
+          },
+          {
+            "title": "Limits",
+            "detail": "What remains uncertain?"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "bars",
+      "block": "bars",
+      "vo": "These illustrative categories use the same baseline and units.",
+      "props": {
+        "title": "Where the hours went",
+        "data": [
+          {
+            "label": "Triage",
+            "value": 12
+          },
+          {
+            "label": "Routing",
+            "value": 24
+          },
+          {
+            "label": "Review",
+            "value": 8
+          }
+        ],
+        "format": " h",
+        "focus": {
+          "label": "Routing",
+          "dim": 0.55,
+          "note": "Start here"
+        },
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "A difference is not enough to establish its cause.",
+      "props": {
+        "label": "The caveat",
+        "icon": "alert",
+        "text": "Describe the uncertainty alongside the result.",
+        "support": "Look at the distribution before choosing a target.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ]
+}

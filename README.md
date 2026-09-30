@@ -16,17 +16,17 @@ Agent-directed motion graphics rendered natively with **FFFrames**. A film is on
 
   Films take an editorial `frame`, grain and a vignette. See [canvas.md](docs/canvas.md) and [ideas.md](docs/ideas.md).
 - **33 native blocks** for evidence and structure: hero type, counters, KPI cards, deltas, bars, lines, waffles, rings, donuts, funnels, area-true magnitudes, steps, timelines, flows, cycles, checklists, annotated screenshots, kinetic type (including poster `stack` type that builds as spoken). `clearframe blocks NAME` prints props and an example.
-- **A creative system:**
-  - `treatments`: eight art directions (editorial, noir, kinetic, sketchbook, blueprint, audiogram, brand, calm).
-  - `sketch`: eight canvas starting compositions.
+- **A creative library** ([library/](library/README.md)): palettes, treatments, sketches and playbooks, one file per item, validated on load. A project's own `library/` or a shared brand kit (`--library DIR`) adds or overrides them.
+  - `treatments`: art directions such as editorial, noir, kinetic, sketchbook, blueprint, mosaic and tech.
+  - `sketch`: canvas starting compositions for mechanisms (route, orbit, pipeline, network…).
   - `reference VIDEO`: the cut rhythm, keyframes, palette and motion of a film to borrow from.
   - `critique`: flags deck-like runs, stillness, text density, weak hooks and "and then" story chains.
-  - 29 playbooks as starting arcs, including `journey` (one drawing, a travelling camera) and `sizzle` (a brand reel).
+  - `playbooks`: starting arcs, including `journey` (one drawing, a travelling camera) and `sizzle` (a brand reel).
 - **From material to film:**
   - `ingest --markdown` turns a research report (or HTML/DOCX/PDF) into an evidence brief of figures, sources, tensions and chart-ready tables.
   - `ingest --audio` turns a podcast or talk into gapless beats with measured word timings, speakers and live meters.
   - The `clearframe-direction` skill walks from brief to story to look to pictures to review.
-- **Type:** Inter, Inter Display and tabular figures; Instrument Serif for the italic accent word; IBM Plex Mono for labels and code; Architects Daughter for hand lettering. All are measured with the same shaper that draws them. **14 palettes**, each contrast-checked in every tone.
+- **Type:** Inter, Inter Display and tabular figures; Instrument Serif for the italic accent word; IBM Plex Mono for labels and code; Architects Daughter for hand lettering. All are measured with the same shaper that draws them. Palettes (`clearframe themes`) are contrast-checked on load and in every tone.
 - **Voice that performs:** Gemini 3.8 TTS reads the whole narration as one continuous take with one short style, so the voice stays consistent. Energy is written into the words. Also two-voice conversations, and word timings measured for free with local Whisper (`align --whisper`). Sound design (`sfx`) lands on visual peaks.
 - **Honest numbers:** every figure needs a visible source; counters land on the exact value; `check` refuses what would mislead. See [speech timing](docs/speech.md) and the integrity skill.
 

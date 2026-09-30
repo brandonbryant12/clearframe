@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import { BLOCKS, THEMES, MOTIONS, TRANSITIONS, BACKDROPS, FRAME_RATES, markdownCatalog } from '../fframes/catalog.mjs';
 import { wireframePNG } from '../fframes/wireframe.mjs';
-import { PLAYBOOKS, storyboardFor } from '../fframes/playbooks.mjs';
+import { playbooks, storyboardFor } from '../fframes/playbooks.mjs';
 const text = { type: 'string' },
   number = { type: 'number' },
   bool = { type: 'boolean' },
@@ -150,7 +150,10 @@ const schema = {
           sfx: { type: 'array', items: object },
           tone: { enum: ['none', 'accent', 'accent2', 'invert', 'surface'], description: 'Colour-blocked scene' },
           textMotion: { enum: ['lines', 'words', 'letters', 'cascade'], description: 'Type reveal for this scene' },
-          pace: { enum: ['hold'], description: 'Keep a deliberate wait: skip the pull-forward when the voice starts before the picture' },
+          pace: {
+            enum: ['hold'],
+            description: 'Keep a deliberate wait: skip the pull-forward when the voice starts before the picture',
+          },
           heading: { enum: ['top', 'bottom'], description: 'Title at the top, or as a lower third' },
           label: {
             type: 'string',
@@ -221,7 +224,7 @@ const schema = {
 };
 fs.writeFileSync('schema/storyboard.schema.json', JSON.stringify(schema, null, 2) + '\n');
 fs.writeFileSync('skills/clearframe-library/references/blocks.md', markdownCatalog());
-for (const b of PLAYBOOKS) {
+for (const b of playbooks()) {
   fs.mkdirSync(`recipes/${b.id}`, { recursive: true });
   const sb = storyboardFor(b.id);
   fs.writeFileSync(`recipes/${b.id}/storyboard.json`, JSON.stringify(sb, null, 2) + '\n');
@@ -237,6 +240,8 @@ for (const b of PLAYBOOKS) {
 fs.writeFileSync(
   'recipes/README.md',
   '# Narrative playbooks\n\nGenerated from fframes/playbooks.mjs. These are adaptable starting structures with illustrative content; replace claims and sources before publishing. Use `clearframe new DIR --playbook NAME`.\n\n' +
-    PLAYBOOKS.map(b => `- **${b.id}**: ${b.title}. Inputs: ${b.inputs}.`).join('\n') +
+    playbooks()
+      .map(b => `- **${b.id}**: ${b.title}. Inputs: ${b.inputs}.`)
+      .join('\n') +
     '\n',
 );

@@ -2,234 +2,24 @@
 // (palette, backdrop, texture, frame, motion, transitions, voice, sound) and beat defaults
 // (serif emphasis, rough strokes, kinetic mode), plus short rules for the author. They are
 // starting directions to adapt, like playbooks are starting arcs.
-export const TREATMENTS = [
-  {
-    id: 'editorial',
-    title: 'Editorial data film',
-    when: 'Reports, research digests, analysis with a few strong numbers',
-    film: {
-      theme: 'paper',
-      backdrop: 'none',
-      texture: { grain: 0.3 },
-      motion: { preset: 'gentle', intensity: 0.65 },
-      transition: 'fade',
-      frame: { brand: 'Brief', left: 'Sources on screen', right: '' },
-      sfx: 'subtle',
-      voice: { style: 'clear, warm, quietly confident' },
-    },
-    beats: { emphasisStyle: 'serif', graphic: 'panel' },
-    rules: [
-      'One claim per beat; the number lands on the stressed word.',
-      'Serif italic for the single feeling word in a headline; mono for dates and units.',
-      'A panel transition only at chapter turns; fades elsewhere.',
-      'Colour-block (tone: accent) the one figure the film is about.',
-    ],
-  },
-  {
-    id: 'noir',
-    title: 'Noir documentary',
-    when: 'True stories, investigations, history, premium reveals',
-    film: {
-      theme: 'noir',
-      backdrop: 'glow',
-      texture: { grain: 0.55, vignette: 0.7 },
-      motion: { preset: 'gentle', intensity: 0.55 },
-      transition: 'fade',
-      sfx: 'subtle',
-      voice: { style: 'low, measured, intimate' },
-    },
-    beats: { emphasisStyle: 'serif', graphic: 'iris' },
-    rules: [
-      'Plates with duotone treatment carry place and people; drift slowly.',
-      'Hold longer than feels safe on the turn; silence is a tool.',
-      'Iris transitions sparingly, into a revelation.',
-      'Gold (accent) only for the thing the viewer must remember.',
-    ],
-  },
-  {
-    id: 'kinetic',
-    title: 'Kinetic manifesto',
-    when: 'Social cuts, launches, opinion pieces, hooks that must stop a scroll',
-    film: {
-      theme: 'pop',
-      backdrop: 'none',
-      texture: { grain: 0.25 },
-      motion: { preset: 'snappy', intensity: 0.9 },
-      textMotion: 'cascade',
-      transition: 'cut',
-      sfx: 'punchy',
-      voice: { style: 'energetic, punchy, playful' },
-    },
-    beats: { kinetic: 'stack', emphasisStyle: 'serif', graphic: 'whip' },
-    rules: [
-      'Words are the picture: kinetic stack with 1–2 emphasis words per phrase.',
-      'Cut on the beat; whip or panel only between ideas.',
-      'Tone scenes as punctuation every 10–15 s.',
-      'Phrases of 3–6 words; nothing on screen longer than it takes to say.',
-    ],
-  },
-  {
-    id: 'sketchbook',
-    title: 'Hand-drawn explainer',
-    when: 'How things work, lessons, stories for curious beginners, whiteboard-style explainers',
-    film: {
-      theme: 'sketchbook',
-      backdrop: 'paper',
-      texture: { grain: 0.35, vignette: 0.35 },
-      motion: { preset: 'spring', intensity: 0.7 },
-      textMotion: 'words',
-      transition: 'cut',
-      sfx: 'subtle',
-      voice: { style: 'friendly, curious, like explaining to a friend' },
-    },
-    beats: { rough: { amount: 2.2, passes: 2, boil: 8 }, font: 'hand', fps: 12 },
-    rules: [
-      'Draw the mechanism on canvas; strokes draw on as they are named.',
-      'Hand lettering (font: hand) for labels; keep display type for the one big word.',
-      'Red pencil (accent) for the subject, blue (accent2) for motion trails and notes.',
-      'Stepped motion (fps 12) and a gentle line boil make it feel drawn, not rendered.',
-    ],
-  },
-  {
-    id: 'blueprint',
-    title: 'Blueprint how-it-works',
-    when: 'Engineering, systems, architecture, technical walkthroughs',
-    film: {
-      theme: 'blueprint',
-      backdrop: 'grid',
-      texture: { vignette: 0.4 },
-      motion: { preset: 'snappy', intensity: 0.7 },
-      transition: 'push',
-      frame: { brand: 'Spec', left: 'Fig.', right: '' },
-      sfx: 'subtle',
-      voice: { style: 'precise, calm, engaged' },
-    },
-    beats: { font: 'mono', graphic: 'wipe' },
-    rules: [
-      'Every part is labelled in mono; lines draw on in the order the voice names them.',
-      'Use scramble for technical terms, dash loops for flow, along for packets.',
-      'One system diagram built across several beats beats many small ones (morph by id).',
-    ],
-  },
-  {
-    id: 'audiogram',
-    title: 'Podcast audiogram',
-    when: 'Clips from interviews and podcasts, conversations, talks',
-    film: {
-      theme: 'electric',
-      backdrop: 'glow',
-      texture: { grain: 0.3, vignette: 0.5 },
-      motion: { preset: 'snappy', intensity: 0.75 },
-      textMotion: 'words',
-      transition: 'cut',
-      sfx: 'off',
-    },
-    beats: { kinetic: 'highlight', graphic: 'whip' },
-    rules: [
-      'The recording is the spine: never edit vo; give the moments pictures.',
-      'Speaker tags on every voiced beat; a meter (style mirror) where the words are not enough.',
-      'Pull the best line out as a quote or kinetic stack; literalise one concrete noun every 8–15 s with a canvas drawing.',
-      'Open on the hook moment, not the introduction.',
-    ],
-  },
-  {
-    id: 'brand',
-    title: 'Designed spot',
-    when: 'Brand intros, announcements, product moments, channel openers',
-    film: {
-      theme: 'paper',
-      backdrop: 'none',
-      texture: { grain: 0.3 },
-      motion: { preset: 'spring', intensity: 0.85 },
-      transition: 'cut',
-      frame: { brand: 'brand', left: '', right: '' },
-      sfx: 'normal',
-      voice: { style: 'bright, confident' },
-    },
-    beats: { emphasisStyle: 'serif', graphic: 'iris' },
-    rules: [
-      'A persistent frame (brand, section label, footers) makes every scene feel designed.',
-      'Echo trails and stepped copies turn one shape into a composition.',
-      'Carry the hero object across cuts with morph by id or an iris from its position.',
-    ],
-  },
-  {
-    id: 'calm',
-    title: 'Quiet lesson',
-    when: 'Wellbeing, reflective stories, gentle tutorials, children',
-    film: {
-      theme: 'forest',
-      backdrop: 'glow',
-      texture: { grain: 0.2 },
-      motion: { preset: 'gentle', intensity: 0.35 },
-      transition: 'fade',
-      sfx: 'off',
-      voice: { style: 'soft, slow, reassuring' },
-    },
-    beats: { graphic: 'fade' },
-    rules: [
-      'Slow everything: long holds, ambient art under the words, no graphic transitions.',
-      'Nothing flashes; values count slowly; one idea per scene.',
-    ],
-  },
-  {
-    id: 'mosaic',
-    title: 'Mosaic',
-    when: 'Stories, heritage and culture, nature, anything that wants to feel handmade and luminous',
-    film: {
-      theme: 'mosaic',
-      backdrop: 'mosaic',
-      texture: { grain: 0.15, vignette: 0.55 },
-      motion: { preset: 'gentle', intensity: 0.6 },
-      textMotion: 'words',
-      transition: 'cut',
-      sfx: 'subtle',
-      voice: { style: 'warm storyteller, unhurried' },
-    },
-    beats: { mosaic: { tile: 16, glint: 0.2 }, graphic: 'iris' },
-    rules: [
-      'Everything is laid in tesserae: shapes assemble tile by tile (enter: assemble) and scatter when they stop being true (exit: scatter).',
-      'Let the andamento follow the form: rings for round things, rows for walls and skies; outline rows trace each contour.',
-      'Light is the drama: glow on gold tiles (moon, stars, windows); keep the palette to ultramarine, ivory, gold, coral and turquoise.',
-      'Frame scenes with a border or arch; one hero shape per frame, drawn big enough for tiles to read (at least 12 tiles across).',
-    ],
-  },
-  {
-    id: 'tech',
-    title: 'Tech sizzle',
-    when: 'Tech brands, AI products, launches and sizzle reels that should feel built in code',
-    film: {
-      theme: 'neon',
-      backdrop: 'none',
-      texture: { grain: 0.18, vignette: 0.6 },
-      motion: { preset: 'snappy', intensity: 0.85 },
-      textMotion: 'words',
-      transition: 'cut',
-      sfx: 'normal',
-      voice: { style: 'confident, crisp, warm' },
-    },
-    beats: { emphasisStyle: 'serif', graphic: 'whip' },
-    rules: [
-      'Heroes are objects made in code: a glowing wireframe solid (type: solid) turning in space, a starfield (particles kind stars) or a warp tunnel (kind warp) under the words.',
-      'Numbered chapters: a mono kicker ("01 · Software") and a two-tone headline, the payoff words in the accent.',
-      'Cut on the beat. Whip only between chapters. One full-bleed colour block (tone accent) for the question before the wordmark.',
-      'Glow on the accent strokes; keep type crisp and never over a busy field. Brand the ending with a wordmark and one action.',
-    ],
-  },
-];
-export const treatmentById = id => TREATMENTS.find(t => t.id === id);
+import { items, item } from './library.mjs';
+
+/** Every treatment (built-in library/treatments plus any in the project's library/). */
+export const treatments = () => items('treatments');
+export const treatmentById = id => item('treatments', id);
 
 /**
  * Apply a treatment to a storyboard: film-level look plus beat defaults the author has not
  * set. Returns the storyboard (mutated) so `new` can write it.
  */
 export function applyTreatment(sb, id) {
-  const t = treatmentById(id);
-  if (!t) throw new Error(`Unknown treatment ${id}. Run clearframe treatments.`);
+  const found = treatmentById(id);
+  if (!found) throw new Error(`Unknown treatment ${id}. Run clearframe treatments.`);
+  const t = { ...found, beats: found.beats ?? {} };
   const { voice, ...film } = t.film;
   Object.assign(sb, structuredClone(film));
   if (voice) sb.voice = { ...(sb.voice ?? {}), ...voice };
-  if (film.frame?.brand === 'brand') sb.frame.brand = sb.title ?? 'Brand';
+  if (film.frame?.brand === 'brand' && sb.frame) sb.frame.brand = sb.title ?? 'Brand';
   const chapterStarts = new Set(
     sb.beats.map((b, i) => (i && b.chapter && b.chapter !== sb.beats[i - 1].chapter ? i : -1)),
   );
@@ -277,7 +67,7 @@ Treatment: **${t ? `${t.id} — ${t.title}` : 'none (choose one: clearframe trea
 |---|---|---|---|
 | hook | stop the scroll | | |
 
-${t ? `## Treatment rules\n${t.rules.map(r => `- ${r}`).join('\n')}\n` : ''}
+${t ? `## Treatment rules\n${(t.rules ?? []).map(r => `- ${r}`).join('\n')}\n` : ''}
 ## Before rendering
 - \`sheet\` at three moments per beat; \`critique\` for rhythm and density; a fresh reviewer reads the sheet against this brief.
 `;

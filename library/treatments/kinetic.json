@@ -1,0 +1,33 @@
+{
+  "order": 2,
+  "title": "Kinetic manifesto",
+  "when": "Social cuts, launches, opinion pieces, hooks that must stop a scroll",
+  "film": {
+    "theme": "pop",
+    "backdrop": "none",
+    "texture": {
+      "grain": 0.25
+    },
+    "motion": {
+      "preset": "snappy",
+      "intensity": 0.9
+    },
+    "textMotion": "cascade",
+    "transition": "cut",
+    "sfx": "punchy",
+    "voice": {
+      "style": "energetic, punchy, playful"
+    }
+  },
+  "beats": {
+    "kinetic": "stack",
+    "emphasisStyle": "serif",
+    "graphic": "whip"
+  },
+  "rules": [
+    "Words are the picture: kinetic stack with 1–2 emphasis words per phrase.",
+    "Cut on the beat; whip or panel only between ideas.",
+    "Tone scenes as punctuation every 10–15 s.",
+    "Phrases of 3–6 words; nothing on screen longer than it takes to say."
+  ]
+}

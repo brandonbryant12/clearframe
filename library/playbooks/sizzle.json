@@ -1,0 +1,504 @@
+{
+  "order": 28,
+  "title": "A brand sizzle reel: a claim, two chapters, a turn and a wordmark, made of objects drawn in code",
+  "audience": "A launch, a brand or a product that should feel built in code",
+  "inputs": "The brand line, two or three capabilities, one contrast, a closing question, a wordmark",
+  "beats": [
+    {
+      "id": "open",
+      "block": "canvas",
+      "vo": "AI has made it remarkably easy to make something.",
+      "props": {
+        "elements": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "stars",
+            "count": 220,
+            "fill": "ink",
+            "opacity": 0.8,
+            "at": 0,
+            "enter": "fade",
+            "dur": 0.6
+          },
+          {
+            "type": "text",
+            "text": "AI has made it remarkably easy to make something.",
+            "x": 960,
+            "y": 548,
+            "size": 30,
+            "font": "mono",
+            "fill": "ink",
+            "anchor": "middle",
+            "enter": "type",
+            "at": 0.1
+          }
+        ]
+      }
+    },
+    {
+      "id": "object",
+      "block": "canvas",
+      "vo": "But the hard part is making something that matters.",
+      "props": {
+        "elements": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "stars",
+            "count": 220,
+            "fill": "ink",
+            "opacity": 0.8,
+            "at": 0,
+            "enter": "fade",
+            "dur": 0.6
+          },
+          {
+            "type": "solid",
+            "shape": "icosa",
+            "cx": 960,
+            "cy": 540,
+            "size": 260,
+            "width": 4,
+            "stroke": "accent",
+            "nodes": true,
+            "at": 0.1,
+            "dur": 1.6,
+            "glow": {
+              "blur": 12
+            },
+            "spin": [10, 24, 4]
+          }
+        ]
+      }
+    },
+    {
+      "id": "claim",
+      "block": "title",
+      "vo": "Real intelligence. Amplified.",
+      "props": {
+        "kicker": "",
+        "text": "Real intelligence. Amplified.",
+        "support": "Better tools for people.",
+        "source": "",
+        "emphasis": ["Amplified."]
+      },
+      "art": {
+        "under": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "stars",
+            "count": 220,
+            "fill": "ink",
+            "opacity": 0.8,
+            "at": 0,
+            "enter": "fade",
+            "dur": 0.6
+          }
+        ],
+        "over": [
+          {
+            "type": "solid",
+            "shape": "octa",
+            "cx": 1560,
+            "cy": 520,
+            "size": 170,
+            "width": 4,
+            "stroke": "accent",
+            "at": 0.4,
+            "glow": {
+              "blur": 10
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "software",
+      "block": "canvas",
+      "label": "Software",
+      "vo": "Built faster. Built like it still matters.",
+      "props": {
+        "elements": [
+          {
+            "type": "rect",
+            "x": 150,
+            "y": 250,
+            "w": 560,
+            "h": 330,
+            "r": 14,
+            "fill": "surface",
+            "stroke": "accent",
+            "width": 1.5,
+            "opacity": 0.92,
+            "at": 0.2,
+            "enter": "rise",
+            "glow": {
+              "blur": 8,
+              "opacity": 0.35
+            },
+            "loop": {
+              "type": "float",
+              "period": 6,
+              "amount": 6
+            }
+          },
+          {
+            "type": "rect",
+            "x": 174,
+            "y": 274,
+            "w": 196,
+            "h": 14,
+            "r": 7,
+            "fill": "accent",
+            "at": 0.4
+          },
+          {
+            "type": "rect",
+            "x": 174,
+            "y": 320,
+            "w": 448,
+            "h": 10,
+            "r": 5,
+            "fill": "muted",
+            "opacity": 0.6,
+            "at": 0.5
+          },
+          {
+            "type": "rect",
+            "x": 174,
+            "y": 354,
+            "w": 347.20000000000005,
+            "h": 10,
+            "r": 5,
+            "fill": "muted",
+            "opacity": 0.6,
+            "at": 0.58
+          },
+          {
+            "type": "rect",
+            "x": 174,
+            "y": 388,
+            "w": 246.40000000000003,
+            "h": 10,
+            "r": 5,
+            "fill": "muted",
+            "opacity": 0.6,
+            "at": 0.66
+          },
+          {
+            "type": "poly",
+            "points": [
+              [174, 550],
+              [318, 500],
+              [458, 520],
+              [680, 460]
+            ],
+            "stroke": "accent",
+            "width": 3,
+            "at": 0.7,
+            "dur": 0.8
+          },
+          {
+            "type": "rect",
+            "x": 390,
+            "y": 560,
+            "w": 420,
+            "h": 260,
+            "r": 14,
+            "fill": "surface",
+            "stroke": "accent",
+            "width": 1.5,
+            "opacity": 0.92,
+            "at": 0.5,
+            "enter": "rise",
+            "glow": {
+              "blur": 8,
+              "opacity": 0.35
+            },
+            "loop": {
+              "type": "float",
+              "period": 6,
+              "amount": 6
+            }
+          },
+          {
+            "type": "rect",
+            "x": 414,
+            "y": 584,
+            "w": 147,
+            "h": 14,
+            "r": 7,
+            "fill": "accent",
+            "at": 0.7
+          },
+          {
+            "type": "rect",
+            "x": 414,
+            "y": 630,
+            "w": 336,
+            "h": 10,
+            "r": 5,
+            "fill": "muted",
+            "opacity": 0.6,
+            "at": 0.8
+          },
+          {
+            "type": "rect",
+            "x": 414,
+            "y": 664,
+            "w": 260.40000000000003,
+            "h": 10,
+            "r": 5,
+            "fill": "muted",
+            "opacity": 0.6,
+            "at": 0.88
+          },
+          {
+            "type": "rect",
+            "x": 414,
+            "y": 698,
+            "w": 184.8,
+            "h": 10,
+            "r": 5,
+            "fill": "muted",
+            "opacity": 0.6,
+            "at": 0.9600000000000001
+          },
+          {
+            "type": "poly",
+            "points": [
+              [414, 790],
+              [516, 740],
+              [621, 760],
+              [780, 700]
+            ],
+            "stroke": "accent",
+            "width": 3,
+            "at": 1,
+            "dur": 0.8
+          },
+          {
+            "type": "text",
+            "text": "01 · SOFTWARE",
+            "x": 1010,
+            "y": 380,
+            "size": 24,
+            "font": "mono",
+            "fill": "accent",
+            "at": 0.1
+          },
+          {
+            "type": "text",
+            "text": "Built faster.",
+            "x": 1010,
+            "y": 480,
+            "size": 80,
+            "font": "bold",
+            "fill": "ink",
+            "say": "Built"
+          },
+          {
+            "type": "text",
+            "text": "Built like it",
+            "x": 1010,
+            "y": 576,
+            "size": 80,
+            "font": "bold",
+            "fill": "accent",
+            "say": "like",
+            "glow": {
+              "blur": 8,
+              "opacity": 0.5
+            }
+          },
+          {
+            "type": "text",
+            "text": "still matters.",
+            "x": 1010,
+            "y": 672,
+            "size": 80,
+            "font": "bold",
+            "fill": "accent",
+            "say": "still",
+            "glow": {
+              "blur": 8,
+              "opacity": 0.5
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "systems",
+      "block": "canvas",
+      "label": "AI systems",
+      "transition": "whip",
+      "vo": "Make the busywork disappear, and keep the value.",
+      "props": {
+        "elements": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "warp",
+            "count": 140,
+            "fill": "accent",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "fade",
+            "dur": 0.6
+          },
+          {
+            "type": "solid",
+            "shape": "dodeca",
+            "cx": 1450,
+            "cy": 520,
+            "size": 200,
+            "width": 4,
+            "stroke": "accent2",
+            "at": 0.3,
+            "glow": {
+              "blur": 10
+            }
+          },
+          {
+            "type": "text",
+            "text": "02 · AI SYSTEMS",
+            "x": 180,
+            "y": 380,
+            "size": 24,
+            "font": "mono",
+            "fill": "accent",
+            "at": 0.1
+          },
+          {
+            "type": "text",
+            "text": "Make the busywork",
+            "x": 180,
+            "y": 480,
+            "size": 76,
+            "font": "bold",
+            "fill": "ink",
+            "say": "Make"
+          },
+          {
+            "type": "text",
+            "text": "disappear.",
+            "x": 180,
+            "y": 572,
+            "size": 76,
+            "font": "bold",
+            "fill": "ink",
+            "say": "disappear"
+          },
+          {
+            "type": "text",
+            "text": "Keep the value.",
+            "x": 180,
+            "y": 690,
+            "size": 76,
+            "font": "bold",
+            "fill": "accent",
+            "say": "keep",
+            "glow": {
+              "blur": 8,
+              "opacity": 0.5
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "contrast",
+      "block": "kinetic",
+      "vo": "It can generate code. It cannot take responsibility for it.",
+      "props": {
+        "mode": "stack",
+        "align": "left",
+        "maxWords": 6,
+        "source": "",
+        "emphasis": ["cannot"]
+      },
+      "art": {
+        "under": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "warp",
+            "count": 140,
+            "fill": "accent",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "fade",
+            "dur": 0.6
+          }
+        ]
+      }
+    },
+    {
+      "id": "question",
+      "block": "statement",
+      "vo": "So what could you do if the friction disappeared?",
+      "props": {
+        "text": "What could you do if the friction disappeared?",
+        "support": "",
+        "source": "",
+        "align": "center"
+      },
+      "tone": "accent",
+      "transition": "cut"
+    },
+    {
+      "id": "end",
+      "block": "endcard",
+      "vo": "Real intelligence, amplified.",
+      "props": {
+        "support": "Real intelligence. Amplified.",
+        "action": "Start a conversation",
+        "source": "",
+        "text": "brand*",
+        "emphasis": ["brand*"]
+      },
+      "art": {
+        "under": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "stars",
+            "count": 220,
+            "fill": "ink",
+            "opacity": 0.8,
+            "at": 0,
+            "enter": "fade",
+            "dur": 0.6
+          }
+        ]
+      }
+    }
+  ],
+  "theme": "neon",
+  "motion": "snappy",
+  "texture": {
+    "grain": 0.18,
+    "vignette": 0.6
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "order": 16,
+  "title": "Make a keepsake from a meaningful moment",
+  "audience": "Friends and family",
+  "inputs": "Personal memories, names, dates and permission-cleared recordings or photos",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Some stories begin with a moment you almost missed.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "The moment I kept",
+        "support": "A personal story told in your own voice.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "quote",
+      "block": "quote",
+      "vo": "Replace this fictional line with the memory you want to preserve.",
+      "props": {
+        "text": "I did not know it would become my favorite memory.",
+        "author": "Fictional sample narrator",
+        "role": "Replace with your own words",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "timeline",
+      "block": "timeline",
+      "vo": "Show what came before, what happened, and what stayed with you.",
+      "props": {
+        "title": "Give the moment context",
+        "items": [
+          {
+            "label": "Before",
+            "title": "An ordinary day",
+            "detail": "Set the scene"
+          },
+          {
+            "label": "The moment",
+            "title": "Something changed",
+            "detail": "Describe one concrete detail"
+          },
+          {
+            "label": "After",
+            "title": "What stayed",
+            "detail": "Say why it matters"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "kinetic",
+      "block": "kinetic",
+      "vo": "This is the part I want to remember.",
+      "props": {
+        "mode": "highlight",
+        "align": "left",
+        "maxWords": 5,
+        "source": ""
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Keep the story in your own words.",
+      "props": {
+        "support": "Add the date and the people who shared it.",
+        "action": "Save it for someone you love.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "A small story, kept."
+      }
+    }
+  ],
+  "theme": "editorial"
+}

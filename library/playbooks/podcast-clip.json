@@ -1,0 +1,98 @@
+{
+  "order": 25,
+  "title": "Cut a podcast moment into a vertical social clip",
+  "audience": "Listeners scrolling a feed",
+  "inputs": "A recording and word timestamps (clearframe ingest --audio), one self-contained moment of 30–60 s",
+  "beats": [
+    {
+      "id": "hook",
+      "block": "kinetic",
+      "vo": "Here is the one thing nobody tells you about starting.",
+      "props": {
+        "mode": "stack",
+        "align": "left",
+        "maxWords": 6,
+        "source": "",
+        "emphasis": ["nobody", "starting"],
+        "emphasisStyle": "serif"
+      },
+      "speaker": "host",
+      "transition": "cut"
+    },
+    {
+      "id": "answer",
+      "block": "kinetic",
+      "vo": "You do not need permission. You need a first draft that exists.",
+      "props": {
+        "mode": "highlight",
+        "align": "center",
+        "maxWords": 5,
+        "source": ""
+      },
+      "speaker": "guest",
+      "transition": "whip"
+    },
+    {
+      "id": "pull",
+      "block": "quote",
+      "vo": "A first draft is a promise you make to yourself.",
+      "props": {
+        "text": "A first draft is a promise you make to yourself.",
+        "author": "Guest",
+        "role": "Fictional sample quotation",
+        "source": "Illustrative sample data · replace before publishing"
+      },
+      "speaker": "guest",
+      "transition": "panel",
+      "tone": "accent"
+    },
+    {
+      "id": "close",
+      "block": "kinetic",
+      "vo": "So write it badly, and write it today.",
+      "props": {
+        "mode": "stack",
+        "align": "left",
+        "maxWords": 6,
+        "source": "",
+        "emphasis": ["badly", "today"]
+      },
+      "speaker": "host",
+      "transition": "whip"
+    },
+    {
+      "id": "end",
+      "block": "endcard",
+      "vo": "Hear the full conversation in the latest episode.",
+      "props": {
+        "support": "Episode link in the description.",
+        "action": "Listen to the episode",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Hear the whole conversation.",
+        "align": "center"
+      },
+      "transition": "iris"
+    }
+  ],
+  "theme": "electric",
+  "backdrop": "glow",
+  "motion": "snappy",
+  "format": "vertical",
+  "texture": {
+    "grain": 0.3,
+    "vignette": 0.5
+  },
+  "speakers": {
+    "host": {
+      "name": "Host",
+      "role": "Sample podcast",
+      "color": "accent"
+    },
+    "guest": {
+      "name": "Guest",
+      "role": "Sample guest",
+      "color": "accent2"
+    }
+  },
+  "note": "Import the real recording with clearframe ingest --audio episode.wav --words words.json --from START --to END --vertical. Every beat then plays its exact slice of the recording; keep the words as captions where they carry the moment, and give the rest pictures."
+}

@@ -671,7 +671,8 @@ mod tests {
     }
     #[test]
     fn graphic_transitions_keep_the_film_accent_across_a_cut_into_a_toned_scene() {
-        let value = serde_json::json!({"version":2,"width":1920,"height":1080,"fps":30,"frames":120,"theme":"noir",
+        let noir = design::tests::library_palette("noir");
+        let value = serde_json::json!({"version":2,"width":1920,"height":1080,"fps":30,"frames":120,"theme":noir,
             "beats":[
                 {"id":"a","block":"statement","frames":60,"start_frame":0,"cue_seconds":0,"exit":"panel","props":{"text":"Before"}},
                 {"id":"b","block":"statement","frames":60,"start_frame":60,"cue_seconds":0,"transition":"panel","tone":"accent","props":{"text":"After"}}]});
@@ -691,7 +692,7 @@ mod tests {
         let arriving = format!("{:?}", film.beats[1].render_frame(Frame::new(0, 60, 30), &ctx));
         assert!(leaving.contains(accent), "outgoing cover uses the film accent");
         assert!(arriving.contains(accent), "incoming reveal uses the same accent, not the toned scene's");
-        let toned = design::Palette::from_theme(&serde_json::json!("noir")).toned("accent");
+        let toned = design::Palette::from_theme(&noir).toned("accent");
         assert_eq!(toned.bg, accent);
         assert_ne!(toned.accent, accent, "the toned scene re-derives a readable accent");
     }

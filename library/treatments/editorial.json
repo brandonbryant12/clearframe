@@ -1,0 +1,36 @@
+{
+  "order": 0,
+  "title": "Editorial data film",
+  "when": "Reports, research digests, analysis with a few strong numbers",
+  "film": {
+    "theme": "paper",
+    "backdrop": "none",
+    "texture": {
+      "grain": 0.3
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.65
+    },
+    "transition": "fade",
+    "frame": {
+      "brand": "Brief",
+      "left": "Sources on screen",
+      "right": ""
+    },
+    "sfx": "subtle",
+    "voice": {
+      "style": "clear, warm, quietly confident"
+    }
+  },
+  "beats": {
+    "emphasisStyle": "serif",
+    "graphic": "panel"
+  },
+  "rules": [
+    "One claim per beat; the number lands on the stressed word.",
+    "Serif italic for the single feeling word in a headline; mono for dates and units.",
+    "A panel transition only at chapter turns; fades elsewhere.",
+    "Colour-block (tone: accent) the one figure the film is about."
+  ]
+}

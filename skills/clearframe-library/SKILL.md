@@ -5,7 +5,9 @@ description: Choose and combine 33 FFFrames blocks, canvas sketches, beat layers
 
 # Native visual library
 
-Run `node engine/cli.mjs blocks`, `blocks NAME`, `sketch`, `playbooks`, `themes`, `motions` and `icons`. The exact prop reference is [references/blocks.md](references/blocks.md), generated from `fframes/catalog.mjs`. Starter storyboards live in `recipes/` and are generated from `fframes/playbooks.mjs`.
+Run `node engine/cli.mjs blocks`, `blocks NAME`, `sketch`, `playbooks`, `themes`, `motions` and `icons`. The exact prop reference is [references/blocks.md](references/blocks.md), generated from `fframes/catalog.mjs`. Starter storyboards live in `recipes/` and are generated from the playbooks.
+
+Palettes, treatments, sketches and playbooks are files in `library/`, one per item. Read [library/README.md](../../library/README.md) before adding one: a new look, arc or composition is a new file, not engine code. A project's own `library/` overrides built-ins by id. So does a shared brand kit passed with `--library DIR`. Those layers are JSON only.
 
 Choose the visual by the task:
 

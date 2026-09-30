@@ -1,0 +1,28 @@
+{
+  "order": 7,
+  "title": "Quiet lesson",
+  "when": "Wellbeing, reflective stories, gentle tutorials, children",
+  "film": {
+    "theme": "forest",
+    "backdrop": "glow",
+    "texture": {
+      "grain": 0.2
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.35
+    },
+    "transition": "fade",
+    "sfx": "off",
+    "voice": {
+      "style": "soft, slow, reassuring"
+    }
+  },
+  "beats": {
+    "graphic": "fade"
+  },
+  "rules": [
+    "Slow everything: long holds, ambient art under the words, no graphic transitions.",
+    "Nothing flashes; values count slowly; one idea per scene."
+  ]
+}

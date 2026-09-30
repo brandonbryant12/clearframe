@@ -1,0 +1,264 @@
+{
+  "order": 27,
+  "title": "A travelling-camera explainer: one drawing, explored stop by stop",
+  "audience": "Anyone following a process, a supply chain, a route or a timeline",
+  "inputs": "Three to five stops in order, what happens at each, the whole at the end",
+  "beats": [
+    {
+      "id": "source",
+      "block": "canvas",
+      "vo": "It starts as rain on the hills, collected in a reservoir.",
+      "tail": 0.7,
+      "props": {
+        "world": "journey",
+        "view": [0, 0, 1920, 1080],
+        "rough": true,
+        "elements": [
+          {
+            "type": "rect",
+            "x": -1200,
+            "y": 820,
+            "w": 8000,
+            "h": 2400,
+            "fill": "surface",
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "path",
+            "d": "M 0 820 L 260 520 L 420 660 L 640 380 L 900 700 L 1100 560 L 1350 820 Z",
+            "fill": "muted",
+            "stroke": "ink",
+            "width": 4,
+            "at": 0.1,
+            "dur": 1.4
+          },
+          {
+            "type": "particles",
+            "x": 150,
+            "y": 140,
+            "w": 900,
+            "h": 560,
+            "kind": "rain",
+            "count": 80,
+            "fill": "accent2",
+            "say": "rain"
+          },
+          {
+            "type": "path",
+            "d": "M 1100 820 Q 1300 900 1560 860 L 1560 960 Q 1300 1000 1060 900 Z",
+            "fill": "accent2",
+            "say": "collected"
+          },
+          {
+            "type": "text",
+            "text": "Reservoir",
+            "x": 1600,
+            "y": 950,
+            "size": 56,
+            "font": "bold",
+            "fill": "ink",
+            "anchor": "start",
+            "say": "reservoir"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plant",
+      "block": "canvas",
+      "vo": "But first, a pipe carries it to a plant that filters and cleans it.",
+      "tail": 0.7,
+      "props": {
+        "world": "journey",
+        "view": [1500, 0, 1920, 1080],
+        "rough": true,
+        "elements": [
+          {
+            "type": "path",
+            "d": "M 1560 900 L 2300 900 L 2300 760 L 2700 760",
+            "stroke": "accent2",
+            "width": 22,
+            "say": "pipe",
+            "dur": 1.4
+          },
+          {
+            "type": "rect",
+            "x": 2700,
+            "y": 560,
+            "w": 520,
+            "h": 260,
+            "r": 10,
+            "fill": "surface",
+            "stroke": "ink",
+            "width": 4,
+            "enter": "grow-y",
+            "say": "plant"
+          },
+          {
+            "type": "circle",
+            "cx": 2830,
+            "cy": 690,
+            "r": 70,
+            "fill": "none",
+            "stroke": "accent",
+            "width": 10,
+            "say": "filters",
+            "loop": {
+              "type": "spin",
+              "period": 3
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 3090,
+            "cy": 690,
+            "r": 70,
+            "fill": "none",
+            "stroke": "accent",
+            "width": 10,
+            "say": "cleans",
+            "loop": {
+              "type": "spin",
+              "period": 3
+            }
+          },
+          {
+            "type": "text",
+            "text": "Treatment",
+            "x": 2960,
+            "y": 520,
+            "size": 56,
+            "font": "bold",
+            "fill": "ink",
+            "anchor": "middle",
+            "say": "plant"
+          }
+        ]
+      }
+    },
+    {
+      "id": "city",
+      "block": "canvas",
+      "vo": "Then a second network runs it under the streets, to every tap.",
+      "tail": 0.7,
+      "props": {
+        "world": "journey",
+        "view": [3300, 0, 1920, 1080],
+        "rough": true,
+        "elements": [
+          {
+            "type": "path",
+            "d": "M 3220 760 L 3500 760 L 3500 900 L 4900 900",
+            "stroke": "accent2",
+            "width": 22,
+            "say": "network",
+            "dur": 1.4
+          },
+          {
+            "type": "group",
+            "say": "streets",
+            "stagger": 0.15,
+            "children": [
+              {
+                "type": "path",
+                "d": "M 3900 820 L 3900 680 L 4010 600 L 4120 680 L 4120 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
+              },
+              {
+                "type": "path",
+                "d": "M 4200 820 L 4200 680 L 4310 600 L 4420 680 L 4420 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
+              },
+              {
+                "type": "path",
+                "d": "M 4500 820 L 4500 680 L 4610 600 L 4720 680 L 4720 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
+              },
+              {
+                "type": "path",
+                "d": "M 4800 820 L 4800 680 L 4910 600 L 5020 680 L 5020 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Your tap",
+            "x": 4400,
+            "y": 540,
+            "size": 56,
+            "font": "bold",
+            "fill": "ink",
+            "anchor": "middle",
+            "say": "every"
+          },
+          {
+            "type": "circle",
+            "cx": 4610,
+            "cy": 860,
+            "r": 12,
+            "fill": "accent2",
+            "say": "tap",
+            "loop": {
+              "type": "float",
+              "period": 1.2,
+              "amount": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "whole",
+      "block": "canvas",
+      "vo": "One journey, most of it out of sight.",
+      "tail": 0.7,
+      "props": {
+        "world": "journey",
+        "view": [-100, -700, 5200, 2925],
+        "rough": true,
+        "elements": [
+          {
+            "type": "text",
+            "text": "One journey",
+            "x": 2600,
+            "y": 300,
+            "size": 140,
+            "font": "display",
+            "fill": "accent",
+            "anchor": "middle",
+            "say": "journey"
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "block": "endcard",
+      "vo": "So follow the water in your own city.",
+      "props": {
+        "support": "Find your reservoir.",
+        "action": "Start at the tap",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Follow the water.",
+        "emphasis": ["water"],
+        "emphasisStyle": "serif"
+      }
+    }
+  ],
+  "theme": "sketchbook",
+  "backdrop": "paper",
+  "motion": "spring",
+  "texture": {
+    "grain": 0.3
+  }
+}

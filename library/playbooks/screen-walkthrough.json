@@ -1,0 +1,84 @@
+{
+  "order": 20,
+  "title": "Walk through a screen in the order people should read it",
+  "audience": "New users of a product or report",
+  "inputs": "An approved screenshot, the reading order and one outcome per step",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Here is how to read the weekly dashboard in under a minute.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "Read the dashboard in order",
+        "support": "Three stops, one decision.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "annotate",
+      "block": "annotate",
+      "vo": "Start with the total, then look at the week that stands out.",
+      "props": {
+        "title": "Two stops before any decision",
+        "file": "assets/screen.png",
+        "pins": [
+          {
+            "x": 0.29,
+            "y": 0.21,
+            "label": "Start with the total",
+            "detail": "The number everything adds up to"
+          },
+          {
+            "x": 0.51,
+            "y": 0.52,
+            "label": "Then the outlier",
+            "detail": "The week that needs a decision"
+          }
+        ],
+        "focus": {
+          "x": 0.19,
+          "y": 0.36,
+          "w": 0.51,
+          "h": 0.56
+        },
+        "caption": "Illustrative wireframe · replace with an approved screenshot",
+        "source": "Illustrative sample data · replace before publishing",
+        "label": "Illustrative wireframe"
+      }
+    },
+    {
+      "id": "checklist",
+      "block": "checklist",
+      "vo": "Check the total, find the outlier, and decide who follows up.",
+      "props": {
+        "title": "Your weekly routine",
+        "items": [
+          {
+            "text": "Read the total"
+          },
+          {
+            "text": "Find the outlier week"
+          },
+          {
+            "text": "Name one owner for follow-up"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Use the same order every week.",
+      "props": {
+        "support": "Consistency makes the changes stand out.",
+        "action": "Open this week’s dashboard",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Same screen. Same order."
+      }
+    }
+  ],
+  "theme": "signal",
+  "note": "assets/screen.png is a generated, text-free wireframe. Replace it with an approved screenshot and move the pins (x/y from 0 to 1 across the image) onto the real elements."
+}

@@ -1,0 +1,14 @@
+{
+  "order": 15,
+  "notes": "Near-black with lime and mint. Tech brands, launches and sizzle reels: wireframe solids, starfields and glow.",
+  "colors": {
+    "bg": "#070908",
+    "surface": "#121714",
+    "ink": "#eef5ef",
+    "muted": "#8e9b93",
+    "accent": "#86f23a",
+    "accent2": "#37e0c0",
+    "positive": "#86f23a",
+    "negative": "#ff5c7a"
+  }
+}

@@ -5,10 +5,11 @@ import { parseArgs } from 'node:util';
 import { resolveProject } from './lib/project.mjs';
 import { writeJSON } from './lib/util.mjs';
 import { BLOCKS, THEMES, THEME_NOTES, MOTIONS, TRANSITIONS, BACKDROPS, markdownCatalog } from '../fframes/catalog.mjs';
-import { PLAYBOOKS, scaffold, writeGallery } from '../fframes/playbooks.mjs';
+import { playbooks, scaffold, writeGallery } from '../fframes/playbooks.mjs';
 import { ICONS, ICON_SOURCE } from '../fframes/icons.mjs';
-import { SKETCHES, sketch } from '../fframes/sketches.mjs';
-import { TREATMENTS } from '../fframes/treatments.mjs';
+import { sketches, sketch } from '../fframes/sketches.mjs';
+import { treatments } from '../fframes/treatments.mjs';
+import { useProject } from '../fframes/library.mjs';
 import * as native from '../fframes/production.mjs';
 
 const HELP = `ClearFrame — FFFrames motion graphics
@@ -20,7 +21,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
                                       (also .txt, .html, .docx, .rtf; .pdf with pdftotext)
   ingest <dir> --audio episode.wav --words words.json [--script turns.txt] [--from s] [--to s] [--speakers host=Maya:Host,guest=Sam:Guest] [--vertical]
                                       a recording as gapless beats with measured word timings and speakers
-  playbooks | recipes                 ${PLAYBOOKS.length} narrative starting points
+  playbooks | recipes                 ${playbooks().length} narrative starting points
   blocks [name] [--json | --md]        ${BLOCKS.length} native building blocks and props
   themes [--json]                     ${Object.keys(THEMES).length} palettes with swatches
   motions [--json]                    presets, entrances, exits and backdrops
@@ -47,6 +48,9 @@ const HELP = `ClearFrame — FFFrames motion graphics
   render | preview <dir> [--draft] [--out film.mp4] [--no-audio] [--force]
   draft <dir> [--no-render]           one pass, one queue wait: critique, draft voice, check, sheet, draft MP4
 
+Library: palettes, treatments, sketches and playbooks are files in library/ (see library/README.md).
+A project's own library/ overrides them by id; --library DIR (or CLEARFRAME_LIBRARY) adds a shared one.
+
 FFFrames is the only active renderer. Preview produces a review MP4.
 Draft permits estimated narration/word timing; output keeps the authored dimensions.
 Native work automatically uses the local codex-heavy gate when available.
@@ -55,6 +59,7 @@ Paid generation needs GEMINI_API_KEY; rendering and word-file imports are free.
 async function main() {
   const [cmd, ...args] = process.argv.slice(2);
   const strings = [
+    'library',
     'title',
     'theme',
     'playbook',
@@ -105,6 +110,13 @@ async function main() {
     ]),
   });
   if (!cmd || cmd === 'help' || o.help) return console.log(HELP);
+  // --library DIR layers a shared library (brand kit, team templates) like CLEARFRAME_LIBRARY.
+  if (o.library) {
+    process.env.CLEARFRAME_LIBRARY = [process.env.CLEARFRAME_LIBRARY, path.resolve(o.library)]
+      .filter(Boolean)
+      .join(path.delimiter);
+    useProject(null);
+  }
   // Renders, checks and voice run freely; only a Cargo compile takes the shared lock (see buildNative).
   const num = k => {
     if (o[k] == null) return undefined;
@@ -135,8 +147,10 @@ async function main() {
   if (['playbooks', 'recipes'].includes(cmd))
     return console.log(
       o.json
-        ? JSON.stringify(PLAYBOOKS, null, 2)
-        : PLAYBOOKS.map(p => `${p.id.padEnd(24)} ${p.title}\n  ${p.audience} · ${p.inputs}`).join('\n'),
+        ? JSON.stringify(playbooks(), null, 2)
+        : playbooks()
+            .map(p => `${p.id.padEnd(24)} ${p.title}\n  ${p.audience} · ${p.inputs}`)
+            .join('\n'),
     );
   if (cmd === 'blocks') {
     const b = positionals[0] ? BLOCKS.find(b => b.name === positionals[0]) : null;
@@ -204,16 +218,20 @@ async function main() {
   if (cmd === 'treatments')
     return console.log(
       o.json
-        ? JSON.stringify(TREATMENTS, null, 2)
-        : TREATMENTS.map(
-            t =>
-              `${t.id.padEnd(11)} ${t.title}\n            ${t.when}\n            ${t.film.theme} · ${t.film.motion.preset} · ${t.film.transition}${t.film.frame ? ' · frame' : ''}${t.beats.rough ? ' · rough strokes' : ''}${t.film.sfx && t.film.sfx !== 'off' ? ` · sfx ${t.film.sfx}` : ''}`,
-          ).join('\n') + '\n\nclearframe new DIR --playbook NAME --treatment ID applies one and writes DIRECTION.md.',
+        ? JSON.stringify(treatments(), null, 2)
+        : treatments()
+            .map(
+              t =>
+                `${t.id.padEnd(11)} ${t.title}\n            ${t.when}\n            ${[t.film.theme, t.film.motion?.preset, t.film.transition, t.film.frame && 'frame', t.beats?.rough && 'rough strokes', t.film.sfx && t.film.sfx !== 'off' && `sfx ${t.film.sfx}`].filter(Boolean).join(' · ')}`,
+            )
+            .join('\n') + '\n\nclearframe new DIR --playbook NAME --treatment ID applies one and writes DIRECTION.md.',
     );
   if (cmd === 'sketch') {
     if (!positionals[0])
       return console.log(
-        SKETCHES.map(s => `${s.name.padEnd(10)} ${s.summary}\n           Use for: ${s.use}`).join('\n') +
+        sketches()
+          .map(s => `${s.name.padEnd(10)} ${s.summary}\n           Use for: ${s.use}`)
+          .join('\n') +
           '\n\nclearframe sketch NAME [--vertical] prints canvas props to adapt; ambient prints an art.under layer.',
       );
     return console.log(JSON.stringify(sketch(positionals[0], o.vertical ? 'vertical' : 'landscape'), null, 1));

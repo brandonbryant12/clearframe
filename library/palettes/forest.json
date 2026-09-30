@@ -1,0 +1,14 @@
+{
+  "order": 5,
+  "notes": "Deep green with lime and gold. Nature, food, travel and sustainability.",
+  "colors": {
+    "bg": "#0f1d17",
+    "surface": "#1c3128",
+    "ink": "#eef5ee",
+    "muted": "#a6bcae",
+    "accent": "#a3dc7f",
+    "accent2": "#f2c35b",
+    "positive": "#a3dc7f",
+    "negative": "#f39b84"
+  }
+}

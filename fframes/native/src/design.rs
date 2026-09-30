@@ -1,30 +1,14 @@
 //! Palette tokens, color arithmetic and film-level backdrops.
 //!
-//! Jobs normally carry a complete palette resolved by `fframes/catalog.mjs`; the preset
-//! table here is the renderer-side fallback and is checked against the catalog by tests.
+//! Jobs carry a complete palette resolved from library/palettes by `fframes/catalog.mjs`;
+//! the renderer only fills gaps from a paper fallback.
 use fframes::Svgr;
 use serde_json::Value;
 use std::f32::consts::TAU;
 
-/// bg, surface, ink, muted, accent, accent2, positive, negative.
-pub const PRESETS: &[(&str, [&str; 8])] = &[
-    ("paper", ["#f5f3ed", "#e9e7df", "#222831", "#616b76", "#315cce", "#c2641f", "#17745c", "#bd453c"]),
-    ("ink", ["#101721", "#1d2938", "#f4f4ed", "#a4b2c4", "#76cbb8", "#f0b86e", "#83d3ac", "#f29a8a"]),
-    ("editorial", ["#f7efe1", "#ebddc6", "#34281f", "#74604e", "#b13e2e", "#2f6b6f", "#477550", "#b13e2e"]),
-    ("signal", ["#edf3f8", "#dce7f1", "#102e46", "#507089", "#006dae", "#c75a12", "#187659", "#bf493b"]),
-    ("midnight", ["#0c1024", "#1a2040", "#eef0ff", "#a3abd0", "#9aa5ff", "#ffb86b", "#6fd6a8", "#ff8f85"]),
-    ("forest", ["#0f1d17", "#1c3128", "#eef5ee", "#a6bcae", "#a3dc7f", "#f2c35b", "#a3dc7f", "#f39b84"]),
-    ("ember", ["#1b1311", "#2c201b", "#fbefe6", "#c9ae9e", "#ff8a57", "#ffd27a", "#8fd3aa", "#ff8f85"]),
-    ("mono", ["#fafafa", "#ececec", "#111111", "#595959", "#d12f1f", "#111111", "#1d7a4f", "#d12f1f"]),
-    ("pop", ["#ffd84a", "#ffe685", "#141414", "#4a3f12", "#b01030", "#1d3fbf", "#0f6b3a", "#b3122b"]),
-    ("electric", ["#08080f", "#16162a", "#f4f4ff", "#a6a8c8", "#5cf2d6", "#ff5ccd", "#5cf2a0", "#ff7a90"]),
-    ("blueprint", ["#0d2b52", "#173d6e", "#f1f6ff", "#a9c1e3", "#7fd4ff", "#ffd166", "#8ee3b4", "#ff9e8f"]),
-    ("clay", ["#efe3d6", "#e2d2c1", "#2b1d17", "#6b5446", "#a8431f", "#2e5f6e", "#3f6b43", "#a8431f"]),
-    ("noir", ["#111111", "#1d1d1d", "#f2efe9", "#a39e96", "#e9c46a", "#e76f51", "#8fbf9f", "#e76f51"]),
-    ("sketchbook", ["#f2ecdf", "#e6dece", "#433e39", "#6d655c", "#c2344d", "#3a67b3", "#3b7449", "#c2344d"]),
-    ("mosaic", ["#16225e", "#223387", "#f3ead3", "#9aa6cf", "#e9b949", "#e2643c", "#3cc0b4", "#e2643c"]),
-    ("neon", ["#070908", "#121714", "#eef5ef", "#8e9b93", "#86f23a", "#37e0c0", "#86f23a", "#ff5c7a"]),
-];
+/// Paper, the fallback for any colour a job leaves out. The palettes themselves live in
+/// library/palettes/*.json; jobs carry the resolved colours, so the renderer keeps no copy.
+const FALLBACK: [&str; 8] = ["#f5f3ed", "#e9e7df", "#222831", "#616b76", "#315cce", "#c2641f", "#17745c", "#bd453c"];
 const KEYS: [&str; 8] = ["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative"];
 
 #[derive(Clone, Debug)]
@@ -43,14 +27,12 @@ pub struct Palette {
 
 impl Palette {
     pub fn from_theme(theme: &Value) -> Self {
-        let base = theme.as_str().or_else(|| theme.get("base").and_then(Value::as_str)).unwrap_or("paper");
-        let preset = PRESETS.iter().find(|(name, _)| *name == base).unwrap_or(&PRESETS[0]).1;
         let get = |index: usize| {
             theme
                 .get(KEYS[index])
                 .and_then(Value::as_str)
                 .filter(|v| parse(v).is_some())
-                .unwrap_or(preset[index])
+                .unwrap_or(FALLBACK[index])
                 .to_owned()
         };
         let bg = get(0);
@@ -344,14 +326,14 @@ pub fn guides<'a>(w: f32, h: f32) -> Svgr<'a> {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
     #[test]
     fn palettes_accept_scoped_overrides_and_ignore_invalid_colors() {
-        let p = Palette::from_theme(&serde_json::json!({"base":"ink","accent":"#FF8800","muted":"blue"}));
+        let p = Palette::from_theme(&serde_json::json!({"bg":"#101721","accent":"#FF8800","muted":"blue"}));
         assert_eq!(p.accent, "#FF8800");
         assert_eq!(p.bg, "#101721");
-        assert_eq!(p.muted, "#a4b2c4");
+        assert_eq!(p.muted, FALLBACK[3], "an invalid colour falls back");
         assert!(p.dark);
         assert!(!Palette::from_theme(&Value::Null).dark);
     }
@@ -364,27 +346,35 @@ mod tests {
         assert_eq!(parse("#aébbb"), None, "non-ASCII input must not panic on a char boundary");
         assert_eq!(parse("#12345g"), None);
     }
+    /// The library palettes, read from library/palettes/*.json (the single source of truth).
+    pub(crate) fn library_palettes() -> Vec<(String, Value)> {
+        let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../library/palettes");
+        let mut out: Vec<(String, Value)> = std::fs::read_dir(&dir)
+            .expect("library/palettes")
+            .filter_map(|e| e.ok().map(|e| e.path()))
+            .filter(|p| p.extension().is_some_and(|x| x == "json"))
+            .map(|p| {
+                let item: Value = serde_json::from_slice(&std::fs::read(&p).unwrap()).unwrap();
+                (p.file_stem().unwrap().to_string_lossy().into_owned(), item["colors"].clone())
+            })
+            .collect();
+        out.sort_by(|a, b| a.0.cmp(&b.0));
+        assert!(out.len() >= 8, "found the library palettes");
+        out
+    }
+    pub(crate) fn library_palette(name: &str) -> Value {
+        library_palettes().into_iter().find(|(n, _)| n == name).expect("palette").1
+    }
     #[test]
     fn toned_scenes_keep_readable_text_on_their_new_background() {
-        for (name, _) in PRESETS {
+        // Library files already guarantee contrast on their own background; toned()
+        // must keep text readable when a scene swaps the background for another role.
+        for (name, colors) in library_palettes() {
             for tone in ["accent", "accent2", "invert", "surface"] {
-                let p = Palette::from_theme(&Value::String((*name).into())).toned(tone);
+                let p = Palette::from_theme(&colors).toned(tone);
                 assert!(contrast(&p.ink, &p.bg) >= 3.0, "{name}/{tone} ink {}", contrast(&p.ink, &p.bg));
                 assert!(contrast(&p.accent, &p.bg) >= 1.5, "{name}/{tone} accent");
             }
-        }
-    }
-    #[test]
-    fn every_preset_keeps_readable_text_contrast() {
-        let contrast = |a: &str, b: &str| {
-            let (x, y) = (luminance(a), luminance(b));
-            (x.max(y) + 0.05) / (x.min(y) + 0.05)
-        };
-        for (name, colors) in PRESETS {
-            for index in [2, 3, 4] {
-                assert!(contrast(colors[index], colors[0]) >= 4.5, "{name} {} contrast", KEYS[index]);
-            }
-            assert!(contrast(colors[5], colors[0]) >= 3.0, "{name} accent2 must hold graphics contrast");
         }
     }
 }

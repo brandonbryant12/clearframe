@@ -1,0 +1,83 @@
+{
+  "order": 10,
+  "title": "Connect a problem to a concrete outcome",
+  "audience": "Prospective customers",
+  "inputs": "Attributed story, workflow, verified before and after",
+  "beats": [
+    {
+      "id": "quote",
+      "block": "quote",
+      "vo": "The best handoff is the one nobody has to chase.",
+      "props": {
+        "text": "The best handoff is the one nobody has to chase.",
+        "author": "Illustrative interview",
+        "role": "Fictional quotation for this template",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "statement",
+      "block": "statement",
+      "vo": "The team needed a clearer owner for each request.",
+      "props": {
+        "text": "One request. One clear owner.",
+        "support": "Measure the wait, not just the workload.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "steps",
+      "block": "steps",
+      "vo": "Capture, route, resolve, and verify.",
+      "props": {
+        "title": "From request to resolution",
+        "items": [
+          {
+            "title": "Capture",
+            "detail": "State the need"
+          },
+          {
+            "title": "Route",
+            "detail": "Find the owner"
+          },
+          {
+            "title": "Resolve",
+            "detail": "Confirm the outcome"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "delta",
+      "block": "delta",
+      "vo": "This hypothetical example reduces response time from four point two to one point eight days.",
+      "props": {
+        "title": "A faster first response",
+        "from": {
+          "value": 4.2,
+          "label": "Before"
+        },
+        "to": {
+          "value": 1.8,
+          "label": "After"
+        },
+        "suffix": " days",
+        "better": "down",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ],
+  "theme": "editorial"
+}

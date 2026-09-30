@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { BLOCKS, normalizeProps, palette, precision } from '../fframes/catalog.mjs';
-import { PLAYBOOKS, scaffold, storyboardFor } from '../fframes/playbooks.mjs';
+import { playbooks, scaffold, storyboardFor } from '../fframes/playbooks.mjs';
 import { createJob, missingGlyph } from '../fframes/production.mjs';
 import { THEMES, findPhrase } from '../fframes/catalog.mjs';
 import { wireframePNG } from '../fframes/wireframe.mjs';
@@ -35,10 +35,9 @@ test('all 33 catalog examples validate in landscape and vertical without mutatin
       assert.equal(JSON.stringify(b.example), before);
     }
 });
-test('twenty-seven distinct playbooks compile to native jobs without paid assets, slide chrome or custom code', t => {
-  assert.equal(PLAYBOOKS.length, 29);
+test('every playbook compiles to a native job without paid assets, slide chrome or custom code, and each arc is distinct', t => {
   const arcs = new Set();
-  for (const p of PLAYBOOKS) {
+  for (const p of playbooks()) {
     const root = project(t, storyboardFor(p.id)),
       sb = loadStoryboard(root),
       result = createJob(sb, computeTiming(root), { draft: true });
@@ -48,7 +47,7 @@ test('twenty-seven distinct playbooks compile to native jobs without paid assets
     arcs.add(result.job.beats.map(b => b.block).join(','));
     assert.equal(sb.assets.length, 0);
   }
-  assert.equal(arcs.size, 29);
+  assert.equal(arcs.size, playbooks().length);
 });
 test('graphic contracts reject unknown assets and invalid phase clocks while preserving cue controls', t => {
   assert.equal(
@@ -533,26 +532,22 @@ const job = (t, beats, extra = {}) => {
   return createJob(loadStoryboard(root), computeTiming(root));
 };
 
-test('the renderer and catalog agree on every block name and palette color', () => {
+test('the renderer and catalog agree on every block name, and the fallback is paper', () => {
   const rust = [
     ...native('lib.rs')
       .match(/pub const BLOCKS: &\[&str\] = &\[([\s\S]*?)\];/)[1]
       .matchAll(/"([a-z-]+)"/g),
   ].map(m => m[1]);
   assert.deepEqual([...rust].sort(), BLOCKS.map(b => b.name).sort());
-  const presets = Object.fromEntries(
-    [...native('design.rs').matchAll(/\("([a-z]+)", \[([^\]]+)\]\)/g)].map(m => [
-      m[1],
-      [...m[2].matchAll(/"(#[0-9a-f]{6})"/g)].map(x => x[1]),
-    ]),
+  const fallback = [
+    ...native('design.rs')
+      .match(/const FALLBACK: \[&str; 8\] = \[([^\]]+)\]/)[1]
+      .matchAll(/"(#[0-9a-f]{6})"/g),
+  ];
+  assert.deepEqual(
+    fallback.map(m => m[1]),
+    ['bg', 'surface', 'ink', 'muted', 'accent', 'accent2', 'positive', 'negative'].map(k => THEMES.paper[k]),
   );
-  assert.deepEqual(Object.keys(presets), Object.keys(THEMES));
-  for (const [name, colors] of Object.entries(THEMES))
-    assert.deepEqual(
-      presets[name],
-      ['bg', 'surface', 'ink', 'muted', 'accent', 'accent2', 'positive', 'negative'].map(k => colors[k]),
-      name,
-    );
 });
 test('emphasis and highlight phrases must be whole words of the displayed text', () => {
   assert.equal(findPhrase('An average can hide a long tail.', 'long tail'), 22);
@@ -766,7 +761,7 @@ test('props that would silently drop authored text are rejected', () => {
     /kicker/,
   );
   assert.throws(() => normalizeProps('stat', { value: 1, label: 'x', context: 'a', support: 'b' }), /not both/);
-  for (const p of PLAYBOOKS)
+  for (const p of playbooks())
     for (const b of storyboardFor(p.id).beats)
       if (['title', 'statement', 'endcard'].includes(b.block))
         assert.ok(!(b.props.text && b.props.title), `${p.id}/${b.id}`);

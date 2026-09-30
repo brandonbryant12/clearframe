@@ -1,0 +1,38 @@
+{
+  "order": 3,
+  "title": "Hand-drawn explainer",
+  "when": "How things work, lessons, stories for curious beginners, whiteboard-style explainers",
+  "film": {
+    "theme": "sketchbook",
+    "backdrop": "paper",
+    "texture": {
+      "grain": 0.35,
+      "vignette": 0.35
+    },
+    "motion": {
+      "preset": "spring",
+      "intensity": 0.7
+    },
+    "textMotion": "words",
+    "transition": "cut",
+    "sfx": "subtle",
+    "voice": {
+      "style": "friendly, curious, like explaining to a friend"
+    }
+  },
+  "beats": {
+    "rough": {
+      "amount": 2.2,
+      "passes": 2,
+      "boil": 8
+    },
+    "font": "hand",
+    "fps": 12
+  },
+  "rules": [
+    "Draw the mechanism on canvas; strokes draw on as they are named.",
+    "Hand lettering (font: hand) for labels; keep display type for the one big word.",
+    "Red pencil (accent) for the subject, blue (accent2) for motion trails and notes.",
+    "Stepped motion (fps 12) and a gentle line boil make it feel drawn, not rendered."
+  ]
+}

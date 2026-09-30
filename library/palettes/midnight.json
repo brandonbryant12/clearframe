@@ -1,0 +1,14 @@
+{
+  "order": 4,
+  "notes": "Indigo night with periwinkle and apricot. Launches, science and big ideas.",
+  "colors": {
+    "bg": "#0c1024",
+    "surface": "#1a2040",
+    "ink": "#eef0ff",
+    "muted": "#a3abd0",
+    "accent": "#9aa5ff",
+    "accent2": "#ffb86b",
+    "positive": "#6fd6a8",
+    "negative": "#ff8f85"
+  }
+}

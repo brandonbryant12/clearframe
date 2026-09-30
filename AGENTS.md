@@ -3,7 +3,8 @@
 ClearFrame now uses **FFFrames for every active render**. Begin with `skills/clearframe/SKILL.md`, then `skills/clearframe-library/SKILL.md`. Use `skills/clearframe-engine/SKILL.md` for project commands and `skills/clearframe-fframes/SKILL.md` plus `fframes/AGENTS.md` for renderer changes.
 
 - Author one storyboard, using `block` and validated `props`. Run `playbooks`, `blocks`, `treatments` and `sketch` before inventing a scene.
-- Adapt structure to the story. Twenty-nine playbooks and ten treatments are reusable starting points, not limits on possible films. Source material (reports, recordings) goes through `ingest`; references through `reference`; see `skills/clearframe-direction/SKILL.md`.
+- Adapt structure to the story. Playbooks and treatments are reusable starting points, not limits on possible films. Source material (reports, recordings) goes through `ingest`; references through `reference`; see `skills/clearframe-direction/SKILL.md`.
+- New palettes, treatments, sketches and playbooks are files in `library/` (see `library/README.md`); engine code is for new capabilities. A project's `library/` or `--library DIR` overrides built-ins, JSON only.
 - Films are not slide decks: draw mechanisms (`canvas`), use plates, tones, camera and graphic transitions, and run `critique` before rendering.
 - Choose palette, motion preset/intensity and entrances explicitly. Follow `docs/style.md`; use `looks` to compare one scene across palettes. Keep slide counters out of film output.
 - New GitHub code/assets must be MIT-licensed at the exact imported revision, with bundled notices/provenance; bundled fonts are SIL OFL 1.1 from google/fonts at a pinned revision with hashes in `fframes/assets/fonts/provenance.json`. Prefer independently implemented ideas over adding another renderer; see `docs/research/2026-github-video-patterns.md`.

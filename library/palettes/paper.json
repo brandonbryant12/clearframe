@@ -1,0 +1,14 @@
+{
+  "order": 0,
+  "notes": "Warm off-white, ink blue accent. Calm reports and explainers.",
+  "colors": {
+    "bg": "#f5f3ed",
+    "surface": "#e9e7df",
+    "ink": "#222831",
+    "muted": "#616b76",
+    "accent": "#315cce",
+    "accent2": "#c2641f",
+    "positive": "#17745c",
+    "negative": "#bd453c"
+  }
+}

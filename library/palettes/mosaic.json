@@ -1,0 +1,14 @@
+{
+  "order": 14,
+  "notes": "Ultramarine ground, ivory, gold, coral and turquoise tesserae. With backdrop mosaic and canvas mosaic: a film laid in tiles.",
+  "colors": {
+    "bg": "#16225e",
+    "surface": "#223387",
+    "ink": "#f3ead3",
+    "muted": "#9aa6cf",
+    "accent": "#e9b949",
+    "accent2": "#e2643c",
+    "positive": "#3cc0b4",
+    "negative": "#e2643c"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "order": 5,
+  "title": "Podcast audiogram",
+  "when": "Clips from interviews and podcasts, conversations, talks",
+  "film": {
+    "theme": "electric",
+    "backdrop": "glow",
+    "texture": {
+      "grain": 0.3,
+      "vignette": 0.5
+    },
+    "motion": {
+      "preset": "snappy",
+      "intensity": 0.75
+    },
+    "textMotion": "words",
+    "transition": "cut",
+    "sfx": "off"
+  },
+  "beats": {
+    "kinetic": "highlight",
+    "graphic": "whip"
+  },
+  "rules": [
+    "The recording is the spine: never edit vo; give the moments pictures.",
+    "Speaker tags on every voiced beat; a meter (style mirror) where the words are not enough.",
+    "Pull the best line out as a quote or kinetic stack; literalise one concrete noun every 8–15 s with a canvas drawing.",
+    "Open on the hook moment, not the introduction."
+  ]
+}

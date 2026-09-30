@@ -1,0 +1,14 @@
+{
+  "order": 3,
+  "notes": "Cool paper with strong blue. Product, data and operational updates.",
+  "colors": {
+    "bg": "#edf3f8",
+    "surface": "#dce7f1",
+    "ink": "#102e46",
+    "muted": "#507089",
+    "accent": "#006dae",
+    "accent2": "#c75a12",
+    "positive": "#187659",
+    "negative": "#bf493b"
+  }
+}

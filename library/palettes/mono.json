@@ -1,0 +1,14 @@
+{
+  "order": 7,
+  "notes": "Black on white with a single red. Stark data, manifestos and myth-busting.",
+  "colors": {
+    "bg": "#fafafa",
+    "surface": "#ececec",
+    "ink": "#111111",
+    "muted": "#595959",
+    "accent": "#d12f1f",
+    "accent2": "#111111",
+    "positive": "#1d7a4f",
+    "negative": "#d12f1f"
+  }
+}

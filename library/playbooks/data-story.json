@@ -1,0 +1,108 @@
+{
+  "order": 19,
+  "title": "Tell a story with a few trustworthy numbers",
+  "audience": "A general audience meeting the numbers for the first time",
+  "inputs": "Three to five sourced figures, their dates and denominators",
+  "beats": [
+    {
+      "id": "chapter",
+      "block": "chapter",
+      "vo": "First, the scale of the problem.",
+      "props": {
+        "number": "01",
+        "title": "How much time a request really takes",
+        "support": "An illustrative week, measured end to end.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "stat",
+      "block": "stat",
+      "vo": "A typical request waits more than four days for its first answer.",
+      "props": {
+        "value": 4.2,
+        "suffix": " days",
+        "label": "Median first response",
+        "context": "From request to first answer.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "magnitude",
+      "block": "magnitude",
+      "vo": "One team, one company and one city ask the same question at very different scales.",
+      "props": {
+        "title": "The same question, three scales",
+        "items": [
+          {
+            "label": "A team",
+            "value": 12
+          },
+          {
+            "label": "A company",
+            "value": 1200
+          },
+          {
+            "label": "A city",
+            "value": 90000
+          }
+        ],
+        "format": " people",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "donut",
+      "block": "donut",
+      "vo": "Most of that time goes to answering and routing, not the work itself.",
+      "props": {
+        "title": "Where a week of support goes",
+        "segments": [
+          {
+            "label": "Answering",
+            "value": 18
+          },
+          {
+            "label": "Routing",
+            "value": 12
+          },
+          {
+            "label": "Waiting on others",
+            "value": 7
+          },
+          {
+            "label": "Follow-up",
+            "value": 3
+          }
+        ],
+        "format": " h",
+        "center": "hours per week",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "highlight",
+      "block": "highlight",
+      "vo": "An average can hide a long tail of slow requests.",
+      "props": {
+        "text": "An average can hide a long tail of slow requests.",
+        "phrases": ["long tail"],
+        "support": "Look at the distribution, not just the middle.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Measure the wait before you change the process.",
+      "props": {
+        "title": "Start with the wait.",
+        "support": "One number, measured the same way every week.",
+        "action": "Pick your first metric",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ],
+  "theme": "midnight",
+  "backdrop": "glow"
+}

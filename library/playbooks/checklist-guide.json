@@ -1,0 +1,94 @@
+{
+  "order": 21,
+  "title": "Help someone get ready, one item at a time",
+  "audience": "Anyone preparing for a task or trip",
+  "inputs": "A tested checklist, the reason for each item and one safety or quality note",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "Before a long walk, a short checklist saves a lot of trouble.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "Ready for a long walk",
+        "support": "An illustrative packing list; adapt it to your route.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "checklist",
+      "block": "checklist",
+      "vo": "Water, a map, a layer for the weather and a charged phone.",
+      "props": {
+        "title": "Pack the essentials",
+        "items": [
+          {
+            "text": "Water for the whole route"
+          },
+          {
+            "text": "A map that works offline"
+          },
+          {
+            "text": "A layer for the weather"
+          },
+          {
+            "text": "A charged phone"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "icon-grid",
+      "block": "icon-grid",
+      "vo": "Then think about the conditions you will actually meet.",
+      "props": {
+        "title": "Check the conditions",
+        "items": [
+          {
+            "icon": "sun",
+            "label": "Daylight",
+            "detail": "Know when it ends"
+          },
+          {
+            "icon": "cloud-rain",
+            "label": "Weather",
+            "detail": "Check the forecast"
+          },
+          {
+            "icon": "map-pin",
+            "label": "Route",
+            "detail": "Share it with someone"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "Tell someone where you are going and when you expect to return.",
+      "props": {
+        "label": "One more thing",
+        "icon": "user-check",
+        "text": "Share your plan before you leave.",
+        "emphasis": ["Share your plan"],
+        "support": "Look at the distribution before choosing a target.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Pack the night before so the morning is simple.",
+      "props": {
+        "support": "A calm start makes a better walk.",
+        "action": "Save this checklist",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Pack the night before."
+      }
+    }
+  ],
+  "theme": "forest",
+  "backdrop": "glow"
+}

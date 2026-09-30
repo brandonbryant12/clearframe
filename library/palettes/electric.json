@@ -1,0 +1,14 @@
+{
+  "order": 9,
+  "notes": "Near-black with neon mint and magenta. Tech, culture, nightlife and energy.",
+  "colors": {
+    "bg": "#08080f",
+    "surface": "#16162a",
+    "ink": "#f4f4ff",
+    "muted": "#a6a8c8",
+    "accent": "#5cf2d6",
+    "accent2": "#ff5ccd",
+    "positive": "#5cf2a0",
+    "negative": "#ff7a90"
+  }
+}

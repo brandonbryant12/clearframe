@@ -1,0 +1,76 @@
+{
+  "order": 17,
+  "title": "Show how a work develops through iteration",
+  "audience": "Artists, makers and creative learners",
+  "inputs": "A real work in progress, process images and reflections",
+  "beats": [
+    {
+      "id": "statement",
+      "block": "statement",
+      "vo": "The first version is a place to start.",
+      "props": {
+        "text": "Make room for a rough first version.",
+        "support": "Show the work as it changes.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "cycle",
+      "block": "cycle",
+      "vo": "Imagine, make, observe, and refine.",
+      "props": {
+        "title": "Let the work teach you",
+        "nodes": [
+          {
+            "icon": "lightbulb",
+            "label": "Imagine"
+          },
+          {
+            "icon": "pencil",
+            "label": "Make"
+          },
+          {
+            "icon": "camera",
+            "label": "Observe"
+          },
+          {
+            "icon": "brush",
+            "label": "Refine"
+          }
+        ],
+        "period": 8,
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "compare",
+      "block": "compare",
+      "vo": "Compare the intention with what the draft actually does.",
+      "props": {
+        "title": "Look closely at the draft",
+        "left": {
+          "title": "What I intended",
+          "items": ["A clear focal point", "A quiet mood"]
+        },
+        "right": {
+          "title": "What I noticed",
+          "items": ["Too many competing shapes", "A color worth keeping"]
+        },
+        "verdict": "Illustrative critique — replace with your own observations.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one change and make another version.",
+      "props": {
+        "support": "Keep the earlier draft so you can see the change.",
+        "action": "Revise one thing.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Try the next version."
+      }
+    }
+  ],
+  "theme": "ink"
+}

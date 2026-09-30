@@ -1,0 +1,32 @@
+{
+  "order": 1,
+  "title": "Noir documentary",
+  "when": "True stories, investigations, history, premium reveals",
+  "film": {
+    "theme": "noir",
+    "backdrop": "glow",
+    "texture": {
+      "grain": 0.55,
+      "vignette": 0.7
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.55
+    },
+    "transition": "fade",
+    "sfx": "subtle",
+    "voice": {
+      "style": "low, measured, intimate"
+    }
+  },
+  "beats": {
+    "emphasisStyle": "serif",
+    "graphic": "iris"
+  },
+  "rules": [
+    "Plates with duotone treatment carry place and people; drift slowly.",
+    "Hold longer than feels safe on the turn; silence is a tool.",
+    "Iris transitions sparingly, into a revelation.",
+    "Gold (accent) only for the thing the viewer must remember."
+  ]
+}

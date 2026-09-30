@@ -39,6 +39,7 @@
     "fframes/assets",
     "fframes/tools",
     "skills",
+    "library",
     "recipes",
     "examples",
     "schema",

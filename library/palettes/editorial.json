@@ -1,0 +1,14 @@
+{
+  "order": 2,
+  "notes": "Newsprint cream with brick red and teal. Stories, essays and culture.",
+  "colors": {
+    "bg": "#f7efe1",
+    "surface": "#ebddc6",
+    "ink": "#34281f",
+    "muted": "#74604e",
+    "accent": "#b13e2e",
+    "accent2": "#2f6b6f",
+    "positive": "#477550",
+    "negative": "#b13e2e"
+  }
+}

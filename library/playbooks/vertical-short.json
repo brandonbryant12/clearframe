@@ -1,0 +1,62 @@
+{
+  "order": 6,
+  "title": "One idea for a small screen",
+  "audience": "A social audience",
+  "inputs": "One claim, one example, one takeaway",
+  "beats": [
+    {
+      "id": "statement",
+      "block": "statement",
+      "vo": "Busy is not the same as effective.",
+      "props": {
+        "text": "Busy is not the same as effective.",
+        "emphasis": ["effective"],
+        "support": "Measure the wait, not just the workload.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "bars",
+      "block": "bars",
+      "vo": "In this illustrative workflow, routing takes the most time.",
+      "props": {
+        "title": "Where the hours went",
+        "data": [
+          {
+            "label": "Triage",
+            "value": 12
+          },
+          {
+            "label": "Routing",
+            "value": 24
+          },
+          {
+            "label": "Review",
+            "value": 8
+          }
+        ],
+        "format": " h",
+        "focus": {
+          "label": "Routing",
+          "dim": 0.55,
+          "note": "Start here"
+        },
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Start where the work waits.",
+      "props": {
+        "support": "Start with one handoff this week.",
+        "action": "Choose one handoff to improve.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Measure the wait."
+      }
+    }
+  ],
+  "format": "vertical",
+  "captions": true,
+  "motion": "snappy"
+}

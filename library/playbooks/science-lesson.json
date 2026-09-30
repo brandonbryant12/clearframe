@@ -1,0 +1,96 @@
+{
+  "order": 12,
+  "title": "Follow a question through an experiment",
+  "audience": "Students and curious families",
+  "inputs": "A question, controlled comparison, observations and a trusted subject source",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "What could we learn by watching a seed?",
+      "props": {
+        "kicker": "Field notes",
+        "text": "Start with a small question",
+        "support": "An observation lesson, built around your own evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "icon-grid",
+      "block": "icon-grid",
+      "vo": "Gather a seed, a notebook, and a way to record what changes.",
+      "props": {
+        "title": "Build an observation kit",
+        "items": [
+          {
+            "icon": "sprout",
+            "label": "A subject",
+            "detail": "Choose what to observe"
+          },
+          {
+            "icon": "book-open",
+            "label": "A notebook",
+            "detail": "Record the conditions"
+          },
+          {
+            "icon": "camera",
+            "label": "A record",
+            "detail": "Keep the framing consistent"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "flow",
+      "block": "flow",
+      "vo": "Ask a question, make a prediction, observe, and compare.",
+      "props": {
+        "title": "Show how an idea is tested",
+        "nodes": [
+          {
+            "icon": "lightbulb",
+            "label": "Ask"
+          },
+          {
+            "icon": "pencil",
+            "label": "Predict"
+          },
+          {
+            "icon": "microscope",
+            "label": "Observe"
+          },
+          {
+            "icon": "book-open",
+            "label": "Compare"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "callout",
+      "block": "callout",
+      "vo": "A prediction and an observation are different things.",
+      "props": {
+        "label": "Think like a scientist",
+        "icon": "alert",
+        "text": "Separate what you expected from what you saw.",
+        "support": "Use the actual observations in your final film.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "What question would you test next?",
+      "props": {
+        "support": "One observation can lead to another.",
+        "action": "Write your next question.",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Keep the question open."
+      }
+    }
+  ],
+  "theme": "signal"
+}

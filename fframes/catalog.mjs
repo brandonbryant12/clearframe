@@ -1,188 +1,18 @@
 // The production native vocabulary. Metadata, validation, CLI help and examples share this file.
+import { palettes, paletteNotes, PALETTE_KEYS } from './library.mjs';
 import { helpers, VALIDATORS } from './validators.mjs';
-export const THEMES = {
-  paper: {
-    bg: '#f5f3ed',
-    surface: '#e9e7df',
-    ink: '#222831',
-    muted: '#616b76',
-    accent: '#315cce',
-    accent2: '#c2641f',
-    positive: '#17745c',
-    negative: '#bd453c',
+// Palettes live in library/palettes (one JSON file each, plus any in a project's library/).
+export const THEMES = new Proxy(
+  {},
+  {
+    get: (_, id) => palettes()[id],
+    has: (_, id) => id in palettes(),
+    ownKeys: () => Object.keys(palettes()),
+    getOwnPropertyDescriptor: (_, id) =>
+      id in palettes() ? { value: palettes()[id], enumerable: true, configurable: true } : undefined,
   },
-  ink: {
-    bg: '#101721',
-    surface: '#1d2938',
-    ink: '#f4f4ed',
-    muted: '#a4b2c4',
-    accent: '#76cbb8',
-    accent2: '#f0b86e',
-    positive: '#83d3ac',
-    negative: '#f29a8a',
-  },
-  editorial: {
-    bg: '#f7efe1',
-    surface: '#ebddc6',
-    ink: '#34281f',
-    muted: '#74604e',
-    accent: '#b13e2e',
-    accent2: '#2f6b6f',
-    positive: '#477550',
-    negative: '#b13e2e',
-  },
-  signal: {
-    bg: '#edf3f8',
-    surface: '#dce7f1',
-    ink: '#102e46',
-    muted: '#507089',
-    accent: '#006dae',
-    accent2: '#c75a12',
-    positive: '#187659',
-    negative: '#bf493b',
-  },
-  midnight: {
-    bg: '#0c1024',
-    surface: '#1a2040',
-    ink: '#eef0ff',
-    muted: '#a3abd0',
-    accent: '#9aa5ff',
-    accent2: '#ffb86b',
-    positive: '#6fd6a8',
-    negative: '#ff8f85',
-  },
-  forest: {
-    bg: '#0f1d17',
-    surface: '#1c3128',
-    ink: '#eef5ee',
-    muted: '#a6bcae',
-    accent: '#a3dc7f',
-    accent2: '#f2c35b',
-    positive: '#a3dc7f',
-    negative: '#f39b84',
-  },
-  ember: {
-    bg: '#1b1311',
-    surface: '#2c201b',
-    ink: '#fbefe6',
-    muted: '#c9ae9e',
-    accent: '#ff8a57',
-    accent2: '#ffd27a',
-    positive: '#8fd3aa',
-    negative: '#ff8f85',
-  },
-  mono: {
-    bg: '#fafafa',
-    surface: '#ececec',
-    ink: '#111111',
-    muted: '#595959',
-    accent: '#d12f1f',
-    accent2: '#111111',
-    positive: '#1d7a4f',
-    negative: '#d12f1f',
-  },
-  pop: {
-    bg: '#ffd84a',
-    surface: '#ffe685',
-    ink: '#141414',
-    muted: '#4a3f12',
-    accent: '#b01030',
-    accent2: '#1d3fbf',
-    positive: '#0f6b3a',
-    negative: '#b3122b',
-  },
-  electric: {
-    bg: '#08080f',
-    surface: '#16162a',
-    ink: '#f4f4ff',
-    muted: '#a6a8c8',
-    accent: '#5cf2d6',
-    accent2: '#ff5ccd',
-    positive: '#5cf2a0',
-    negative: '#ff7a90',
-  },
-  blueprint: {
-    bg: '#0d2b52',
-    surface: '#173d6e',
-    ink: '#f1f6ff',
-    muted: '#a9c1e3',
-    accent: '#7fd4ff',
-    accent2: '#ffd166',
-    positive: '#8ee3b4',
-    negative: '#ff9e8f',
-  },
-  clay: {
-    bg: '#efe3d6',
-    surface: '#e2d2c1',
-    ink: '#2b1d17',
-    muted: '#6b5446',
-    accent: '#a8431f',
-    accent2: '#2e5f6e',
-    positive: '#3f6b43',
-    negative: '#a8431f',
-  },
-  noir: {
-    bg: '#111111',
-    surface: '#1d1d1d',
-    ink: '#f2efe9',
-    muted: '#a39e96',
-    accent: '#e9c46a',
-    accent2: '#e76f51',
-    positive: '#8fbf9f',
-    negative: '#e76f51',
-  },
-  sketchbook: {
-    bg: '#f2ecdf',
-    surface: '#e6dece',
-    ink: '#433e39',
-    muted: '#6d655c',
-    accent: '#c2344d',
-    accent2: '#3a67b3',
-    positive: '#3b7449',
-    negative: '#c2344d',
-  },
-  mosaic: {
-    bg: '#16225e',
-    surface: '#223387',
-    ink: '#f3ead3',
-    muted: '#9aa6cf',
-    accent: '#e9b949',
-    accent2: '#e2643c',
-    positive: '#3cc0b4',
-    negative: '#e2643c',
-  },
-  neon: {
-    bg: '#070908',
-    surface: '#121714',
-    ink: '#eef5ef',
-    muted: '#8e9b93',
-    accent: '#86f23a',
-    accent2: '#37e0c0',
-    positive: '#86f23a',
-    negative: '#ff5c7a',
-  },
-};
-/** One-line character of each palette for `themes` and docs. */
-export const THEME_NOTES = {
-  paper: 'Warm off-white, ink blue accent. Calm reports and explainers.',
-  ink: 'Deep slate with mint and amber. Night-time, technical and reflective films.',
-  editorial: 'Newsprint cream with brick red and teal. Stories, essays and culture.',
-  signal: 'Cool paper with strong blue. Product, data and operational updates.',
-  midnight: 'Indigo night with periwinkle and apricot. Launches, science and big ideas.',
-  forest: 'Deep green with lime and gold. Nature, food, travel and sustainability.',
-  ember: 'Charred brown with coral and saffron. Warm personal stories and culture.',
-  mono: 'Black on white with a single red. Stark data, manifestos and myth-busting.',
-  pop: 'Poster yellow with crimson and cobalt. Loud social cuts, launches and bold claims.',
-  electric: 'Near-black with neon mint and magenta. Tech, culture, nightlife and energy.',
-  blueprint: 'Drafting blue with sky and amber lines. Engineering, how-it-works and diagrams.',
-  clay: 'Terracotta paper with rust and teal. Craft, history, food and warm documentary.',
-  noir: 'Cinema black with gold and vermilion. Drama, true stories, premium reveals.',
-  mosaic:
-    'Ultramarine ground, ivory, gold, coral and turquoise tesserae. With backdrop mosaic and canvas mosaic: a film laid in tiles.',
-  neon: 'Near-black with lime and mint. Tech brands, launches and sizzle reels: wireframe solids, starfields and glow.',
-  sketchbook:
-    'Drawing paper with graphite, red and blue pencil. Hand-drawn explainers with rough canvas strokes and the paper backdrop.',
-};
+);
+export const THEME_NOTES = new Proxy({}, { get: (_, id) => paletteNotes()[id] });
 const common = {
   title: 'Scene headline',
   kicker: 'Short eyebrow',
@@ -796,7 +626,7 @@ export function palette(theme = 'paper') {
   const result = palette(base);
   for (const [key, value] of Object.entries(theme)) {
     if (key === 'base') continue;
-    if (!(key in THEMES.paper) || !/^#[\da-f]{6}$/i.test(value))
+    if (!PALETTE_KEYS.includes(key) || !/^#[\da-f]{6}$/i.test(value))
       throw new Error(`theme.${key}: expected a palette color in #RRGGBB form`);
     result[key] = value;
   }

@@ -1,0 +1,14 @@
+{
+  "order": 6,
+  "notes": "Charred brown with coral and saffron. Warm personal stories and culture.",
+  "colors": {
+    "bg": "#1b1311",
+    "surface": "#2c201b",
+    "ink": "#fbefe6",
+    "muted": "#c9ae9e",
+    "accent": "#ff8a57",
+    "accent2": "#ffd27a",
+    "positive": "#8fd3aa",
+    "negative": "#ff8f85"
+  }
+}

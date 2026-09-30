@@ -1,0 +1,90 @@
+{
+  "order": 4,
+  "title": "Explain an incident without blame",
+  "audience": "Operators and stakeholders",
+  "inputs": "Verified timeline, impact, mitigation, follow-up",
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "This fictional incident review follows detection through recovery.",
+      "props": {
+        "kicker": "Field notes",
+        "text": "From detection to recovery",
+        "support": "One idea, supported by evidence.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "timeline",
+      "block": "timeline",
+      "vo": "The team detected the issue, contained it, and verified recovery.",
+      "props": {
+        "title": "How the response unfolded",
+        "items": [
+          {
+            "label": "09:10",
+            "title": "Detected",
+            "detail": "Alert received"
+          },
+          {
+            "label": "09:18",
+            "title": "Contained",
+            "detail": "Traffic rerouted"
+          },
+          {
+            "label": "09:42",
+            "title": "Recovered",
+            "detail": "Service verified"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "steps",
+      "block": "steps",
+      "vo": "Find the trigger, describe the mechanism, and test the safeguard.",
+      "props": {
+        "title": "From request to resolution",
+        "items": [
+          {
+            "title": "Trigger",
+            "detail": "What changed?"
+          },
+          {
+            "title": "Mechanism",
+            "detail": "How did it spread?"
+          },
+          {
+            "title": "Safeguard",
+            "detail": "How will we know?"
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "list",
+      "block": "list",
+      "vo": "Assign an owner, set a verification date, and close the loop.",
+      "props": {
+        "title": "Three things to remember",
+        "items": ["Name the owner", "Make the next step clear", "Close the loop"],
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Choose one next step, and make its owner clear.",
+      "props": {
+        "title": "Make the next step smaller.",
+        "support": "Start with one handoff this week.",
+        "action": "Choose an owner. Measure the wait.",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    }
+  ],
+  "theme": "ink"
+}
