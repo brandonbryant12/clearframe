@@ -554,6 +554,7 @@
               <li><a href="#prompting-templates">Templates</a></li>
               <li><a href="#prompting-styles">Asking for a style</a></li>
               <li><a href="#prompting-iterate">Iteration prompts</a></li>
+              <li><a href="#prompting-voice">Voice (Gemini 3.8 TTS)</a></li>
               <li><a href="#prompting-anti">Anti-patterns</a></li>
             </ol>
           </li>
@@ -602,7 +603,7 @@
         <div class="card">
           <span class="mono-label">Script</span> <span class="arrow">→</span> <span class="mono-label">film</span>
           <h4>Narration gets pictures</h4>
-          <p>Bring finished words. Each beat gets one idea, one landing word and its own picture. Recording in continuous chapter takes keeps the voice performing from line to line.</p>
+          <p>Bring finished words. Each beat gets one idea, one landing word and its own picture. Recording the whole narration as one continuous take keeps one consistent voice performing from line to line.</p>
         </div>
       </div>
       <p class="small">It also handles brand spots, data stories, lessons and how-tos, one-world journeys through a process or place, and speech-led kinetic type. Run <code>playbooks</code> for all 28 starting arcs.</p>
@@ -816,7 +817,7 @@ node engine/cli.mjs render my-film            <span class="c"># final encode</sp
   <span class="k">"motion"</span>: { "preset": "gentle", "intensity": 0.65 },
   <span class="k">"textMotion"</span>: "words",
   <span class="k">"sfx"</span>: "subtle",
-  <span class="k">"voice"</span>: { "takes": "chapter", "style": "clear, warm, quietly confident" },
+  <span class="k">"voice"</span>: { "voice": "Charon", "style": "clear, warm, quietly confident" },
   <span class="k">"sources"</span>: [ { "claim": "…", "source": "[Survey name], p. 4", "asOf": "2026-06-30" } ],
   <span class="k">"beats"</span>: [
     { <span class="k">"id"</span>: "hook", <span class="k">"block"</span>: "stat", <span class="k">"tone"</span>: "accent",
@@ -1000,7 +1001,7 @@ For each clip:
 Keep my wording. Where a line breaks the clearframe-script rules (one idea per beat, 8–14 words per sentence, a hook inside 3 s), suggest the edit and wait for my OK.
 
 - Split the script into beats of 5–15 spoken words and mark each beat's landing word.
-- Give the hook, the turn and the payoff their own short style (an energy map), and record in chapters (voice.takes: "chapter").
+- Record the narration as one continuous take with one short style (the default). Write the energy into the lines: a fragment for the hook, a question, a pause before the key number.
 - Start from the <span class="ph">[concept-explainer]</span> playbook and the <span class="ph">[editorial]</span> treatment. Fill the beat plan in DIRECTION.md (purpose, picture, landing word) before building.
 - Draw mechanisms on canvas. Use tone and graphic transitions only at the turn.
 - Draft voice only; measure the words with align --whisper.
@@ -1105,6 +1106,33 @@ Script:
           <figure class="prompt-card"><figcaption><strong>Paid step, with a budget</strong></figcaption>
 <pre class="prompt">We're ready for final voice. Run plan and show me the estimate first. Budget: <span class="ph">$[X]</span>. Nothing paid just to test code.</pre></figure>
         </div>
+      </section>
+
+      <section id="prompting-voice">
+        <h3>Voice with Gemini 3.8 TTS</h3>
+        <p><strong>The rule: one continuous take, one short style.</strong> Gemini 3.8 Flash TTS keeps one consistent, lively voice when it reads the whole narration in a single request, as one text with one style. Voices drift when lines are recorded separately, each with its own style or inflection, and stitched together: every style re-prompts the voice and every join resets its pitch and energy. ClearFrame therefore records the whole film as one take by default (<code>voice.takes: "film"</code>) and cuts it back into beats with measured word timings. Per-beat <code>style</code> is ignored in a continuous take.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Lever</th><th>Do</th><th>Don't</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Cast</strong> (<code>voice.voice</code>)</td><td>Choose the voice for accent, age and timbre: Charon (neutral), Sulafat (warm), Kore (firm), Puck (lively). For a signature voice, design one once and reuse its ID.</td><td>Describe the voice in the style string.</td></tr>
+              <tr><td><strong>Direct</strong> (<code>voice.style</code>)</td><td>Use 2–6 words about a person talking: <code>warm, curious, unhurried</code>. Keep it the same across a series.</td><td>Write long audio profiles, director's notes, stacked emotions, per-line styles, or "keep the voice steady".</td></tr>
+              <tr><td><strong>Speak</strong> (<code>vo</code>)</td><td>Write the energy into the words: fragments for punch, a question for lift, commas for pace, the stressed word last, digits for numbers.</td><td>Put directions in the text, such as <code>(whispering)</code> or <code>[pause]</code>. They are read aloud.</td></tr>
+              <tr><td><strong>Tags</strong></td><td>Use them sparingly: <code>&lt;short pause&gt;</code> before a reveal, <code>&lt;long pause&gt;</code> after a turn, <code>&lt;breath&gt;</code> before a big line. In conversation, an occasional <code>&lt;chuckle&gt;</code> and <code>|mm-hm|</code> backchannels.</td><td>Sprinkle laughs, sighs or whispers through an explainer.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="prompt-grid">
+          <figure class="prompt-card"><figcaption><span class="mono-label">Voice</span><strong>Final narration</strong></figcaption>
+<pre class="prompt">Record the final voice with Gemini 3.8 TTS as one continuous take for the whole film: voice <span class="ph">[Charon]</span>, one style of 2–6 words (<span class="ph">[warm, curious, unhurried]</span>), no per-beat styles. Before recording, read the vo lines aloud in order and fix any line that is flat in the words themselves. Run plan and show me the cost first. Then align, check and render a draft.</pre></figure>
+          <figure class="prompt-card"><figcaption><span class="mono-label">Voice</span><strong>Livelier, without drift</strong></figcaption>
+<pre class="prompt">The voice is flat. Don't add styles. Rewrite the narration for the ear: a fragment for the hook, one real question, a &lt;short pause&gt; before the key number, the stressed word last in each sentence. Keep one short film style, then re-record the whole take.</pre></figure>
+          <figure class="prompt-card"><figcaption><span class="mono-label">Voice</span><strong>Two-voice conversation</strong></figcaption>
+<pre class="prompt">Make this a two-voice conversation: host <span class="ph">[Puck, "curious"]</span> and guest <span class="ph">[Kore, "knowledgeable, warm"]</span> in one conversational take. The host asks short questions and pushes back now and then; the guest answers in two or three sentences. Add a few |mm-hm| backchannels and at most one &lt;chuckle&gt;. Disclose the synthetic voices.</pre></figure>
+          <figure class="prompt-card"><figcaption><span class="mono-label">Voice</span><strong>The voice changed mid-film</strong></figcaption>
+<pre class="prompt">The voice sounds different from beat to beat. Check that voice.takes is film and voice.perBeatStyle is off, remove per-beat styles, shorten voice.style to a few words, and re-record the whole take. Show me the dry-run request first so I can see it is one text part with one style.</pre></figure>
+        </div>
+        <p class="note">The full model guide, including the tag list, two-voice rules, designed voices, limits and pricing, is in <code>skills/gemini-tts/SKILL.md</code>. Script-writing for the ear is in <code>skills/clearframe-script/SKILL.md</code>.</p>
       </section>
 
       <section id="prompting-anti">
@@ -1263,7 +1291,7 @@ Script:
             <tr><td><code>texture</code></td><td class="wrap"><code>film</code>, <code>grain</code>, <code>vignette</code>, <code>none</code>, or <code>{grain, vignette, animate}</code></td></tr>
             <tr><td><code>frame</code></td><td class="wrap"><code>true</code> or <code>{brand, left, right, label, progress}</code>: a serif-italic brand, a section label, mono footers and a progress rail</td></tr>
             <tr><td><code>sfx</code></td><td class="wrap"><code>off</code>, <code>subtle</code>, <code>normal</code>, <code>punchy</code>: whooshes into graphic transitions, thuds on hero numbers, ticks and pops on counts and arrivals</td></tr>
-            <tr><td><code>voice</code></td><td class="wrap"><code>takes: "chapter"</code> for continuous takes, <code>style</code> (a few words), <code>cast</code> for two voices (conversational TTS; only its dry-run contract is tested)</td></tr>
+            <tr><td><code>voice</code></td><td class="wrap"><code>takes: "film"</code> (the default: one continuous take), <code>"chapter"</code> or <code>"beat"</code>; <code>style</code> (2–6 words, one for the film); <code>voice</code>; <code>cast</code> for two voices (one conversational take); <code>perBeatStyle</code> (not recommended)</td></tr>
             <tr><td><code>pacing</code></td><td class="wrap"><code>lead</code>, <code>tail</code>, <code>minBeat</code>, <code>silentBeat</code>, <code>outro</code></td></tr>
             <tr><td><code>continuity</code></td><td class="wrap"><code>maxGeneratedShare</code>, <code>treatment</code>, <code>lighting</code>, <code>camera</code>, <code>motion</code>, <code>motif</code>, <code>refs</code> (≤ 2), for generated inserts</td></tr>
           </tbody>

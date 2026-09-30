@@ -715,7 +715,6 @@ export const PLAYBOOKS = [
       motion: 'spring',
       texture: { grain: 0.35, vignette: 0.5 },
       frame: { brand: 'Research digest', left: 'Sources on screen', right: 'Illustrative sample' },
-      voice: { takes: 'chapter' },
       note: "Start from clearframe ingest --markdown report.md: it writes BRIEF.md with every figure, its sentence and its source, plus tensions and chart-ready tables. Replace every sample claim; lead with the question and the surprise, not the report's section order.",
     },
   ),

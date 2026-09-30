@@ -40,23 +40,37 @@ function voiceSpec(sb, b, provider) {
 
 export async function voice(root, { draft = false, force = false, only, budget } = {}) {
   const sb = loadStoryboard(root);
-  if (sb.voice.takes === 'chapter') {
-    // One take per chapter: continuous delivery, split back into beats afterwards.
+  if (sb.voice.takes !== 'beat') {
+    // Continuous takes (the whole film by default): one performance, split into beats afterwards.
     const { planTakes, recordTakes } = await import('./takes.mjs');
+    const styled = sb.beats.filter(b => b.vo && b.style);
+    if (styled.length && !sb.voice.perBeatStyle)
+      log.warn(
+        `${styled.length} beat(s) set their own style; a continuous take uses voice.style for every line so the voice stays consistent. Shape delivery with the words, punctuation and a few inline tags instead (voice.perBeatStyle: true sends them anyway).`,
+      );
     if (!draft && sb.voice.provider === 'gemini') {
       const secs = planTakes(sb)
         .flatMap(t => t.beats)
         .reduce((a, b) => a + estimateDuration(b.vo, sb.voice.wpm), 0);
       const cost = tts.estimateCost({ seconds: secs, model: sb.voice.model });
-      log.step(`Gemini TTS (continuous takes): ~${secs.toFixed(0)}s of speech, ≈ ${money(cost)}`);
+      const takes = planTakes(sb).length;
+      log.step(
+        `Gemini TTS: ${takes === 1 ? 'one continuous take' : `${takes} continuous takes`}, ~${secs.toFixed(0)}s of speech, ≈ ${money(cost)}`,
+      );
       guardBudget(cost, budget ?? sb.budget);
-    } else log.step('Draft voice in continuous takes (local OS TTS, free)');
+    } else
+      log.step(
+        `Draft voice in ${planTakes(sb).length === 1 ? 'one continuous take' : 'continuous takes'} (local OS TTS, free)`,
+      );
     return recordTakes(root, sb, {
       draft,
       force,
       synthesize: async (spec, out) => {
+        // A single voice reads the take as one text with one style: paragraphs between beats
+        // give natural pauses, and nothing re-prompts the voice mid-performance.
+        const single = !spec.cast && !sb.voice.perBeatStyle;
         const r = await tts.synthesize({
-          parts: spec.parts,
+          parts: single ? [{ text: spec.parts.map(p => p.text).join('\n\n'), style: spec.style }] : spec.parts,
           cast: spec.cast,
           voice: spec.voice,
           model: spec.model,

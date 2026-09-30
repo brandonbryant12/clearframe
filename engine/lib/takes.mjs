@@ -15,13 +15,22 @@ import { ffmpeg, hashOf, log, pcmToWav, readJSON, round, writeJSON } from './uti
 import { cutPoints, timedWords } from './ingest.mjs';
 import { whisperAvailable } from './whisper.mjs';
 
-/** Consecutive narrated beats of one chapter form a take (≤ 14 beats, ≤ ~100 s). */
+/**
+ * Narrated beats grouped into takes. `film` (the default) records the whole narration in one
+ * continuous take, which keeps one voice, one energy and one room tone from the first line
+ * to the last; it splits at a chapter boundary only past ~8 minutes, well inside Gemini TTS
+ * limits (8k input / 16k output tokens ≈ 10 min). `chapter` records one take per chapter
+ * (≤ 14 beats, ≤ ~100 s).
+ */
 export function planTakes(sb) {
+  const film = (sb.voice.takes ?? 'film') === 'film';
   const takes = [];
   let cur = null;
   for (const b of sb.beats) {
-    const chapter = b.chapter ?? '';
-    const full = cur && (cur.beats.length >= 14 || cur.seconds + estimateDuration(b.vo ?? '', sb.voice.wpm) > 100);
+    const chapter = film ? '' : (b.chapter ?? '');
+    const seconds = cur ? cur.seconds + estimateDuration(b.vo ?? '', sb.voice.wpm) : 0;
+    const full =
+      cur && (film ? seconds > 480 && b.chapter !== cur.lastChapter : cur.beats.length >= 14 || seconds > 100);
     if (!b.vo || !cur || cur.chapter !== chapter || full) {
       if (cur) takes.push(cur);
       cur = b.vo ? { chapter, beats: [], seconds: 0 } : null;
@@ -29,6 +38,7 @@ export function planTakes(sb) {
     if (b.vo) {
       cur.beats.push(b);
       cur.seconds += estimateDuration(b.vo, sb.voice.wpm);
+      cur.lastChapter = b.chapter;
     }
   }
   if (cur) takes.push(cur);
@@ -46,9 +56,13 @@ export function takeSpec(sb, take, provider) {
     voice: sb.voice.voice,
     cast,
     language: sb.voice.language ?? null,
+    // One performance: every part of a take shares the film's (or the speaker's) style.
+    // Per-beat styles re-prompt the voice mid-take and make it drift; they are sent only
+    // when voice.perBeatStyle is set.
+    style: sb.voice.style ?? '',
     parts: take.beats.map(b => ({
       text: b.vo,
-      style: b.style ?? sb.voice.cast?.[b.speaker]?.style ?? sb.voice.style ?? '',
+      style: (sb.voice.perBeatStyle ? b.style : null) ?? sb.voice.cast?.[b.speaker]?.style ?? sb.voice.style ?? '',
       ...(cast ? { speaker: b.speaker } : {}),
     })),
   };

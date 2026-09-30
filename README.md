@@ -27,7 +27,7 @@ Agent-directed motion graphics rendered natively with **FFFrames**. A film is on
   - `ingest --audio` turns a podcast or talk into gapless beats with measured word timings, speakers and live meters.
   - The `clearframe-direction` skill walks from brief to story to look to pictures to review.
 - **Type:** Inter, Inter Display and tabular figures; Instrument Serif for the italic accent word; IBM Plex Mono for labels and code; Architects Daughter for hand lettering. All are measured with the same shaper that draws them. **14 palettes**, each contrast-checked in every tone.
-- **Voice that performs:** continuous chapter takes with a per-beat energy map, two-voice conversations, and word timings measured for free with local Whisper (`align --whisper`). Sound design (`sfx`) lands on visual peaks.
+- **Voice that performs:** Gemini 3.8 TTS reads the whole narration as one continuous take with one short style, so the voice stays consistent. Energy is written into the words. Also two-voice conversations, and word timings measured for free with local Whisper (`align --whisper`). Sound design (`sfx`) lands on visual peaks.
 - **Honest numbers:** every figure needs a visible source; counters land on the exact value; `check` refuses what would mislead. See [speech timing](docs/speech.md) and the integrity skill.
 
 ## Start

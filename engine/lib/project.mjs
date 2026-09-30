@@ -11,7 +11,7 @@ export const PRESETS = {
 };
 
 export const DEFAULTS = {
-  voice: { provider: 'gemini', model: 'gemini-3.8-flash-tts', voice: 'Charon', style: '', wpm: 150 },
+  voice: { provider: 'gemini', model: 'gemini-3.8-flash-tts', voice: 'Charon', style: '', wpm: 150, takes: 'film' },
   pacing: { lead: 0.25, tail: 0.6, minBeat: 1.6, silentBeat: 2.5 },
   music: { provider: 'lyria', model: 'lyria-3.5', volume: 0.22, duck: true, fadeIn: 1.5, fadeOut: 2.5 },
   mix: { loudness: -14, voiceGain: 1.0 },
@@ -60,8 +60,8 @@ export function validateStoryboard(sb) {
       errors.push(`pacing.${k} must be nonnegative`);
   if (sb.pacing?.continuous != null && typeof sb.pacing.continuous !== 'boolean')
     errors.push('pacing.continuous must be true or false');
-  if (sb.voice?.takes != null && !['beat', 'chapter'].includes(sb.voice.takes))
-    errors.push('voice.takes must be beat or chapter');
+  if (sb.voice?.takes != null && !['beat', 'chapter', 'film'].includes(sb.voice.takes))
+    errors.push('voice.takes must be film (one continuous take, the default), chapter or beat');
   if (sb.voice?.cast != null) {
     if (typeof sb.voice.cast !== 'object' || Array.isArray(sb.voice.cast))
       errors.push('voice.cast must map speaker ids to {voice, style}');

@@ -226,6 +226,9 @@ sb = {
     'sources': [{'id': str(k), 'title': v.rsplit(' [', 1)[0]} for k, v in SRC.items()],
     'beats': beats,
 }
+# One continuous take reads every line with voice.style; per-line styles would make it drift.
+for b in beats:
+    b.pop('style', None)
 here = os.path.dirname(os.path.abspath(__file__))
 json.dump(sb, open(os.path.join(here, 'storyboard.json'), 'w'), indent=2, ensure_ascii=False)
 print(len(beats), 'beats')

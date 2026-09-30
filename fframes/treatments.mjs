@@ -15,7 +15,7 @@ export const TREATMENTS = [
       transition: 'fade',
       frame: { brand: 'Brief', left: 'Sources on screen', right: '' },
       sfx: 'subtle',
-      voice: { style: 'clear, warm, quietly confident', takes: 'chapter' },
+      voice: { style: 'clear, warm, quietly confident' },
     },
     beats: { emphasisStyle: 'serif', graphic: 'panel' },
     rules: [
@@ -36,7 +36,7 @@ export const TREATMENTS = [
       motion: { preset: 'gentle', intensity: 0.55 },
       transition: 'fade',
       sfx: 'subtle',
-      voice: { style: 'low, measured, intimate', takes: 'chapter' },
+      voice: { style: 'low, measured, intimate' },
     },
     beats: { emphasisStyle: 'serif', graphic: 'iris' },
     rules: [
@@ -58,7 +58,7 @@ export const TREATMENTS = [
       textMotion: 'cascade',
       transition: 'cut',
       sfx: 'punchy',
-      voice: { style: 'energetic, punchy, playful', takes: 'chapter' },
+      voice: { style: 'energetic, punchy, playful' },
     },
     beats: { kinetic: 'stack', emphasisStyle: 'serif', graphic: 'whip' },
     rules: [
@@ -80,7 +80,7 @@ export const TREATMENTS = [
       textMotion: 'words',
       transition: 'cut',
       sfx: 'subtle',
-      voice: { style: 'friendly, curious, like explaining to a friend', takes: 'chapter' },
+      voice: { style: 'friendly, curious, like explaining to a friend' },
     },
     beats: { rough: { amount: 2.2, passes: 2, boil: 8 }, font: 'hand', fps: 12 },
     rules: [
@@ -102,7 +102,7 @@ export const TREATMENTS = [
       transition: 'push',
       frame: { brand: 'Spec', left: 'Fig.', right: '' },
       sfx: 'subtle',
-      voice: { style: 'precise, calm, engaged', takes: 'chapter' },
+      voice: { style: 'precise, calm, engaged' },
     },
     beats: { font: 'mono', graphic: 'wipe' },
     rules: [
@@ -123,7 +123,6 @@ export const TREATMENTS = [
       textMotion: 'words',
       transition: 'cut',
       sfx: 'off',
-      voice: { takes: 'chapter' },
     },
     beats: { kinetic: 'highlight', graphic: 'whip' },
     rules: [
@@ -145,7 +144,7 @@ export const TREATMENTS = [
       transition: 'cut',
       frame: { brand: 'brand', left: '', right: '' },
       sfx: 'normal',
-      voice: { style: 'bright, confident', takes: 'chapter' },
+      voice: { style: 'bright, confident' },
     },
     beats: { emphasisStyle: 'serif', graphic: 'iris' },
     rules: [
@@ -165,7 +164,7 @@ export const TREATMENTS = [
       motion: { preset: 'gentle', intensity: 0.35 },
       transition: 'fade',
       sfx: 'off',
-      voice: { style: 'soft, slow, reassuring', takes: 'chapter' },
+      voice: { style: 'soft, slow, reassuring' },
     },
     beats: { graphic: 'fade' },
     rules: [
@@ -185,7 +184,7 @@ export const TREATMENTS = [
       textMotion: 'words',
       transition: 'cut',
       sfx: 'subtle',
-      voice: { style: 'warm storyteller, unhurried', takes: 'chapter' },
+      voice: { style: 'warm storyteller, unhurried' },
     },
     beats: { mosaic: { tile: 16 }, graphic: 'iris' },
     rules: [

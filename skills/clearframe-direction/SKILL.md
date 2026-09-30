@@ -37,7 +37,7 @@ Fill the beat plan table in `DIRECTION.md`: purpose, picture and landing word. U
 
 ## 5. Build, critique, look
 1. Write the storyboard; `clearframe critique DIR` flags deck-like runs, static holds, dense text, weak hooks and missing causal links. Fix, then run it again.
-2. Voice: `voice DIR --draft` (continuous takes if `voice.takes: "chapter"`), then `align DIR --whisper` for measured words.
+2. Voice: `voice DIR --draft` (the whole narration in one continuous take, one short `voice.style`), then `align DIR --whisper` for measured words. The final voice is Gemini 3.8 TTS in the same single take (`gemini-tts` skill).
 3. `sheet DIR --draft` and open it; `still --grid` to place art; `render DIR --draft`.
 
 ## 6. Fresh review
