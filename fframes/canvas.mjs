@@ -590,13 +590,15 @@ export function reframeView(view, elements, aspect) {
     el => !el.carried && !el.behind && el.depth == null && el.type !== 'particles' && fits(el),
   );
   const own = elementsExtent(foreground);
-  const [cx, cy, nw] = own
-    ? [
-        own.left + own.w / 2,
-        own.top + own.h / 2,
-        Math.min(w, Math.max(own.w * 1.2, own.h * 1.2 * aspect, h * aspect * 0.9)),
-      ]
-    : [x + w / 2, y + h / 2, Math.sqrt(w * h * aspect)];
+  // A beat that mostly reveals earlier work (a pull-back) keeps its centre and area.
+  const [cx, cy, nw] =
+    own && own.w >= w * 0.3
+      ? [
+          own.left + own.w / 2,
+          own.top + own.h / 2,
+          Math.min(w, Math.max(own.w * 1.2, own.h * 1.2 * aspect, h * aspect * 0.9)),
+        ]
+      : [x + w / 2, y + h / 2, Math.sqrt(w * h * aspect)];
   const nh = nw / aspect;
   return [cx - nw / 2, cy - nh / 2, nw, nh];
 }
