@@ -33,7 +33,7 @@ Start from set pieces (`clearframe sketch`):
 - **Places:** `horizon`, `skyline`, `ocean`, `terrain`.
 - **Journeys:** `tunnel`, `road`.
 - **Data:** `landscape` and `globe` (both need real values).
-- **People:** `crowd`.
+- **People:** `crowd` and `desk`, or an anonymous person as a depth-plate subject.
 - **Openings and closings:** `void` (cold open), `title`, `card`, `pause`.
 
 Beats can name them: `"props": {"sketch": "tunnel"}` and `"sketchText": {"TITLE": "…"}`. Then:

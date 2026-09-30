@@ -30,6 +30,7 @@ A slow push is added unless the beat sets a camera. Add `focus` for depth of fie
 - **Cut-outs** are generated on chroma green and keyed to transparency, sampling the real key colour from the corners.
 - **Describe objects, never scenes, for `subject` and `foreground`.** Given a scene "on green", models paint a framed picture of it.
 - **Consistency:** one `continuity.treatment` and `continuity.lighting` for the film, the palette in the prompt (automatic), and `refs` to an earlier plate for a series.
+- **People:** a plate subject can be a person, but always an anonymous one: seen from behind or in silhouette, hands at work, a figure small in a landscape. Never a likeness of a real, named person, and never a generated person presented as a real witness. For a human moment drawn in code, see `sketch desk` and `sketch crowd`.
 - **Cost:** about $0.20 a scene at 1K, cached by prompt. Run `plan` first and honour the budget.
 - **Check** the green `*.green.jpg` beside each cut-out if an edge looks wrong. Regenerate with a more object-like description.
 
