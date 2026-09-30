@@ -156,7 +156,7 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool) -> Layout {
         // Build order: an organic sweep, or rings from the centre out.
         let sweep = |x: f32, y: f32, i: u64| match s(spec, "build") {
             "radial" => ((x - cx).hypot(y - cy) / (bw.max(bh) * 0.5).max(1.0)).min(1.0),
-            "random" => unit(seed, 9000 + i),
+            "random" | "fly" => unit(seed, 9000 + i),
             _ => (0.75 * (x - bx) / bw.max(1.0) + 0.25 * (y - by) / bh.max(1.0)) * 0.8 + 0.2 * unit(seed, 9000 + i),
         };
         if flow == "rings" {
@@ -340,7 +340,16 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         // Bevel lit from the upper left: one L of light along the top and left edges.
         const LIGHT: [(f32, f32); 6] =
             [(-0.46, -0.46), (0.4, -0.46), (0.4, -0.34), (-0.34, -0.34), (-0.34, 0.4), (-0.46, 0.4)];
-        // Where a tile is at this moment: dropping in, settled, or thrown by scatter.
+        // `build: fly` sends tiles in from `from` (default: below the shape), each on its own arc.
+        let fly = s(spec, "build") == "fly";
+        let from = arr(spec, "from");
+        let from = if from.len() == 2 {
+            (from[0].as_f64().unwrap_or(0.0) as f32, from[1].as_f64().unwrap_or(0.0) as f32)
+        } else {
+            (layout.cx, layout.cy + 600.0)
+        };
+        let spread = f(spec, "spread", 220.0).max(0.0);
+        // Where a tile is at this moment: dropping in, flying in, settled, or thrown by scatter.
         let place = |i: usize, t: &Tile| -> Option<(f32, f32, f32, f32, f32)> {
             let p = motion::clamp01((assemble - t.order * 0.7) / 0.3).min(if t.class == 1 && !filled {
                 motion::clamp01((draw - t.order) * 8.0 + 1.0)
@@ -352,6 +361,17 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
             let settle = motion::out_cubic(p);
             let (mut x, mut y, mut a, mut k) = (t.x, t.y - (1.0 - settle) * 0.22 * t.h, t.angle, 1.45 - 0.45 * settle);
+            if fly && p < 1.0 {
+                // Fly in: from a loose cloud around `from`, along a gentle arc, spinning into the bed.
+                let (sx, sy) =
+                    (from.0 + noise(seed ^ 0x51, i as u64) * spread, from.1 + noise(seed ^ 0x53, i as u64) * spread);
+                let q = motion::in_out_cubic(p);
+                let lift = (1.0 - (2.0 * q - 1.0).powi(2)) * spread * 0.35;
+                x = sx + (t.x - sx) * q;
+                y = sy + (t.y - sy) * q - lift;
+                a = t.angle + (1.0 - q) * noise(seed ^ 0x57, i as u64) * 2.5;
+                k = 0.7 + 0.3 * q;
+            }
             if scatter > 0.0 {
                 let h = unit(t.order.to_bits() as u64 ^ i as u64, 77);
                 let (dx, dy) = (t.x - layout.cx, t.y - layout.cy);

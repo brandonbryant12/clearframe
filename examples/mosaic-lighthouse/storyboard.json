@@ -216,7 +216,13 @@
             "mosaic": {
               "tile": 12,
               "flow": "rings",
-              "glint": 0.4
+              "glint": 0.4,
+              "build": "fly",
+              "from": [
+                540,
+                480
+              ],
+              "spread": 160
             },
             "enter": "assemble",
             "say": "tiles",

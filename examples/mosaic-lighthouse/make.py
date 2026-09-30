@@ -16,7 +16,7 @@ scene = [
     *[{'type': 'rect', 'x': x, 'y': y, 'w': 9, 'h': 9, 'fill': GOLD, 'enter': 'pop', 'at': 1.4 + i * 0.07,
        'glow': {'blur': 6}, 'loop': {'type': 'blink', 'period': 2.6 + i % 3 * 0.7}}
       for i, (x, y) in enumerate([(260, 520), (330, 430), (410, 360), (820, 520), (300, 640), (760, 610), (450, 250), (620, 210)])],
-    {'type': 'circle', 'cx': 350, 'cy': 330, 'r': 78, 'fill': GOLD, 'mosaic': {'tile': 12, 'flow': 'rings', 'glint': 0.4},
+    {'type': 'circle', 'cx': 350, 'cy': 330, 'r': 78, 'fill': GOLD, 'mosaic': {'tile': 12, 'flow': 'rings', 'glint': 0.4, 'build': 'fly', 'from': [540, 480], 'spread': 160},
      'enter': 'assemble', 'say': 'tiles', 'dur': 1.4, 'glow': {'blur': 22, 'opacity': 0.7}},
     {'type': 'rect', 'x': 180, 'y': 760, 'w': 720, 'h': 200, 'fill': {'gradient': ['#3cc0b4', '#1c5a8c']},
      'mosaic': {'tile': 14, 'axis': 90, 'outline': False, 'glint': 0.6}, 'enter': 'assemble', 'at': 0.8, 'dur': 1.6},

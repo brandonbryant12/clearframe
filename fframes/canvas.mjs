@@ -378,18 +378,39 @@ export function mosaicSpec(m, at, fail) {
     jitter: [0, 1],
     shade: [0, 0.6],
     shine: [0, 1],
+    glint: [0, 1],
+    spread: [0, 4000],
     axis: [-360, 360],
     seed: [0, 1e9],
   };
   for (const k of Object.keys(m)) {
-    if (!['tile', 'gap', 'jitter', 'flow', 'outline', 'build', 'shade', 'shine', 'glint', 'grout', 'axis', 'seed'].includes(k))
+    if (
+      ![
+        'tile',
+        'gap',
+        'jitter',
+        'flow',
+        'outline',
+        'build',
+        'from',
+        'spread',
+        'shade',
+        'shine',
+        'glint',
+        'grout',
+        'axis',
+        'seed',
+      ].includes(k)
+    )
       fail(`${at}: unsupported field ${k}`);
     if (ranges[k] && !(Number.isFinite(m[k]) && m[k] >= ranges[k][0] && m[k] <= ranges[k][1]))
       fail(`${at}.${k} must be ${ranges[k][0]}–${ranges[k][1]}`);
   }
   if (m.flow != null && !['rows', 'rings'].includes(m.flow)) fail(`${at}.flow must be rows or rings`);
-  if (m.build != null && !['sweep', 'radial', 'random'].includes(m.build))
-    fail(`${at}.build must be sweep, radial or random`);
+  if (m.build != null && !['sweep', 'radial', 'random', 'fly'].includes(m.build))
+    fail(`${at}.build must be sweep, radial, random or fly`);
+  if (m.from != null && !(Array.isArray(m.from) && m.from.length === 2 && m.from.every(Number.isFinite)))
+    fail(`${at}.from must be [x, y]`);
   if (m.outline != null && typeof m.outline !== 'boolean') fail(`${at}.outline must be true or false`);
   return { ...m };
 }
