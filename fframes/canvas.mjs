@@ -20,6 +20,7 @@ export const ELEMENT_TYPES = {
   group: { geometry: ['children', 'x', 'y', 'stagger'], required: ['children'] },
   meter: { geometry: ['x', 'y', 'w', 'h', 'bars', 'style', 'step', 'gap', 'r'], required: ['w', 'h'] },
   spotlight: { geometry: ['cx', 'cy', 'r', 'x', 'y', 'w', 'h', 'radius', 'dim'], required: [] },
+  particles: { geometry: ['x', 'y', 'w', 'h', 'count', 'kind', 'seed', 'size', 'speed'], required: ['w', 'h'] },
 };
 const COMMON = [
   'type',
@@ -103,7 +104,7 @@ export const FONTS = [
   'mono',
   'hand',
 ];
-export const MAX_ELEMENTS = 240;
+export const MAX_ELEMENTS = 600;
 
 const isColor = v => typeof v === 'string' && (COLOR_TOKENS.includes(v) || /^#[\da-f]{6}$/i.test(v));
 const finite = v => typeof v === 'number' && Number.isFinite(v);
@@ -298,6 +299,12 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
         if (el.bars != null && (!Number.isInteger(el.bars) || el.bars < 3 || el.bars > 96))
           fail(`${at}.bars must be 3–96`);
         break;
+      case 'particles':
+        if (el.kind != null && !['dust', 'embers', 'rain', 'snow', 'bubbles'].includes(el.kind))
+          fail(`${at}.kind must be dust, embers, rain, snow or bubbles`);
+        if (el.count != null && (!Number.isInteger(el.count) || el.count < 1 || el.count > 400))
+          fail(`${at}.count must be 1–400`);
+        break;
       case 'spotlight':
         if (
           !(el.cx != null && el.cy != null && el.r != null) &&
@@ -392,14 +399,19 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve }
     const enter = defaultEnter(el);
     const chars = String(el.text ?? '').length;
     el.dur ??=
-      enter === 'draw' ? T.draw
-        : enter === 'type' ? Math.min(T.typeMax, Math.max(T.typeMin, chars * T.typePerChar))
-          : enter === 'scramble' ? T.scramble
-            : ['grow', 'grow-x', 'grow-y', 'wipe', 'wipe-up'].includes(enter) ? T.grow
-              : enter === 'none' ? 0
+      enter === 'draw'
+        ? T.draw
+        : enter === 'type'
+          ? Math.min(T.typeMax, Math.max(T.typeMin, chars * T.typePerChar))
+          : enter === 'scramble'
+            ? T.scramble
+            : ['grow', 'grow-x', 'grow-y', 'wipe', 'wipe-up'].includes(enter)
+              ? T.grow
+              : enter === 'none'
+                ? 0
                 : entrance;
     settle = Math.max(settle, el.at + el.dur);
-    if (el.count) settle = Math.max(settle, el.at + el.count.dur);
+    if (el.type === 'text' && el.count) settle = Math.max(settle, el.at + el.count.dur);
     if (el.exitSay != null) {
       el.exitAt = resolve(el.exitSay);
       delete el.exitSay;
@@ -457,7 +469,7 @@ export const usesLevels = list => {
 export const hasCount = list => {
   let found = false;
   eachElement(list, el => {
-    if (el.count) found = true;
+    if (el.type === 'text' && el.count) found = true;
   });
   return found;
 };

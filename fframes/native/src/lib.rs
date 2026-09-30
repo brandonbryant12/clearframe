@@ -82,6 +82,8 @@ pub struct Environment {
     pub framed: bool,
     /// Film-wide default for how type arrives.
     pub text_motion: String,
+    /// `plate` (phrase on a soft plate) or `pop` (social: heavy outlined type, spoken word on a pill).
+    pub caption_style: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -145,6 +147,9 @@ pub struct Beat {
 fn cut() -> String {
     "cut".into()
 }
+fn plate() -> String {
+    "plate".into()
+}
 fn lines() -> String {
     "lines".into()
 }
@@ -180,6 +185,8 @@ pub struct Film {
     /// Default arrival of type in every scene: lines, words, letters or cascade.
     #[serde(default = "lines")]
     pub text_motion: String,
+    #[serde(default = "plate")]
+    pub caption_style: String,
     /// Editorial frame chrome: brand, section label, footers and a progress line.
     #[serde(default)]
     pub frame: Option<Value>,
@@ -261,6 +268,7 @@ impl Film {
                 total,
                 framed: film.frame.is_some(),
                 text_motion: film.text_motion.clone(),
+                caption_style: film.caption_style.clone(),
             };
             offset += beat.frames;
         }

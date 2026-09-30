@@ -29,3 +29,4 @@ Generated from fframes/playbooks.mjs. These are adaptable starting structures wi
 - **research-digest**: Turn a long report into a question-led short film. Inputs: An evidence brief (clearframe ingest --markdown): the question, 3–5 sourced claims, one tension.
 - **podcast-clip**: Cut a podcast moment into a vertical social clip. Inputs: A recording and word timestamps (clearframe ingest --audio), one self-contained moment of 30–60 s.
 - **brand-spot**: A short, designed spot with an editorial frame. Inputs: One idea, three supporting beats, a call to action.
+- **journey**: A travelling-camera explainer: one drawing, explored stop by stop. Inputs: Three to five stops in order, what happens at each, the whole at the end.

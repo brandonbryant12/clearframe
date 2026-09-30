@@ -263,6 +263,8 @@ export function briefMarkdown(r, file) {
     '',
     '- Name the one question this report answers and the most surprising answer. That tension is the spine; the section order is not.',
     '- Choose 3–5 claims that carry the answer. Give each a different picture: a chart, a drawn mechanism (`canvas`), a plate, a stat on a colour block, poster type.',
+    '- Where the report describes a process, a chain of causes or a place, draw it once as a `world` and let the camera travel between its stops instead of cutting to a new slide.',
+    '- Give type a voice (`textMotion`: words for editorial, cascade for a hook) and keep held frames alive (loops, `particles`, a slow camera).',
     '- Open with the strongest figure or contradiction (below), not with context. Close on what it means for the viewer.',
     '- Show only figures with a source; mark estimates as estimates. ⚠ marks figures the report does not attribute.',
     '',

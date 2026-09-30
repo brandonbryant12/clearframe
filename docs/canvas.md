@@ -24,6 +24,9 @@ Without `view`, coordinates are frame pixels of the normalized canvas: 1920×108
 | `icon` | `name` (see `clearframe icons`), `x, y` (centre), `size`; colour from `stroke` or `fill` |
 | `image` | `asset` or `file`, `x, y, w, h, r`, `fit: cover|contain`, `treatment` |
 | `group` | `children`, `x, y` (offset), `stagger` (seconds between children) |
+| `meter` | `x, y, w, h`, `style: bars|mirror|ring|wave`, `bars`, `step`: the narration's loudness, live |
+| `spotlight` | `cx, cy, r` or `x, y, w, h`, `dim`: everything outside the window recedes |
+| `particles` | `x, y, w, h` (the field), `kind: dust|embers|rain|snow|bubbles`, `count` (1–400), `seed`, `size`, `speed`; colour from `fill`. Seeded and deterministic; particles wrap and fade at the edges. Use sparingly under a scene (`art.under`) for atmosphere: embers over heat, rain over a flood, dust in a quiet hold. |
 
 Paint: `fill` and `stroke` take palette tokens (`bg, surface, ink, muted, accent, accent2, positive, negative, line, wash, wash2, none`), `#rrggbb`, or a gradient `{gradient: [2–4 colours], angle, radial, fade}`. `fade` dissolves the last stop to transparent, which gives soft glows. Tokens follow the palette and a beat's `tone`, so art never clashes. Other paint fields: `width` (stroke), `opacity`, `dash: [on, off]`, `cap`, `join`, `rotate`, `origin: [x, y]` (for rotation and scale), `blend: multiply|screen|overlay|…`.
 
@@ -40,6 +43,20 @@ Paint: `fill` and `stroke` take palette tokens (`bg, surface, ink, muted, accent
 | `exit`, `exitSay` / `exitAt`, `exitDur` | Leave mid-scene: `fade, shrink, fall, lift, undraw, wipe, blur, none`. Use it to build, then transform: draw a problem, clear it, draw the fix. |
 
 `check` resolves every spoken cue against the narration and fails if one is missing or lands after the beat. `settle` (when the exit may begin) waits for every entrance, count, key and path move. Loops continue. A `count` is a displayed figure: it needs a visible `source` and a `sources` entry, like any chart.
+
+## Worlds: one drawing, a travelling camera
+
+Slides cut from one picture to the next. A world keeps one picture and moves the camera. Give consecutive canvas beats the same `world` name and a camera rect `view: [x, y, w, h]` in world coordinates:
+
+```json
+{ "id": "source", "block": "canvas", "props": { "world": "water", "view": [0, 0, 1920, 1080], "elements": [ …mountains, rain… ] } },
+{ "id": "plant",  "block": "canvas", "props": { "world": "water", "view": [1500, 0, 1920, 1080], "elements": [ …the pipe, the plant… ] } },
+{ "id": "whole",  "block": "canvas", "props": { "world": "water", "view": [-100, -560, 5200, 2925], "elements": [ …one line of type… ] } }
+```
+
+Each beat draws only what is new, cued to its own narration; everything drawn earlier stays, still looping, on its original clock. The cut between world beats is invisible (`cut`, no exit, camera moves off), and the camera travels from the previous view to the new one over `viewDur` (1.2 s) starting at `viewAt` (0 s): pan by moving `x, y`, push in or pull out by changing `w, h`. A camera rect fills the whole frame (keep it 16:9 for landscape, 9:16 for vertical). Finish on a wide view of the whole world for the payoff. Titles, where used, sit over the world.
+
+Good worlds: a journey (source → process → destination), a timeline laid out left to right, a map zooming from region to street, a machine explored part by part, one diagram built up and then revealed whole.
 
 ## Design the frame
 

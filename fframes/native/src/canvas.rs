@@ -15,9 +15,22 @@ mod effects;
 mod geometry;
 use geometry::*;
 
-pub(crate) const MAX_ELEMENTS: usize = 240;
-const TYPES: &[&str] =
-    &["rect", "circle", "ellipse", "line", "path", "poly", "text", "icon", "image", "group", "meter", "spotlight"];
+pub(crate) const MAX_ELEMENTS: usize = 600;
+const TYPES: &[&str] = &[
+    "rect",
+    "circle",
+    "ellipse",
+    "line",
+    "path",
+    "poly",
+    "text",
+    "icon",
+    "image",
+    "group",
+    "meter",
+    "spotlight",
+    "particles",
+];
 const ENTERS: &[&str] = &[
     "fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type",
     "scramble", "blur", "none",
@@ -61,7 +74,7 @@ pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut us
     for el in elements {
         *count += 1;
         if *count > MAX_ELEMENTS {
-            return Err("canvas supports at most 240 elements");
+            return Err("canvas supports at most 600 elements");
         }
         if !el.is_object() || !finite(el) {
             return Err("canvas elements must be objects with finite numbers");
@@ -133,6 +146,15 @@ pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut us
                     return Err("canvas meter needs w, h and style bars|mirror|ring|wave");
                 }
             }
+            "particles" => {
+                if !["", "dust", "embers", "rain", "snow", "bubbles"].contains(&s(el, "kind"))
+                    || f(el, "w", 0.0) <= 0.0
+                    || f(el, "h", 0.0) <= 0.0
+                    || !(1.0..=400.0).contains(&n(el, "count", 40.0))
+                {
+                    return Err("canvas particles need w, h, count 1–400 and kind dust|embers|rain|snow|bubbles");
+                }
+            }
             "text" => {
                 if s(el, "text").chars().count() > 240 && el.get("count").is_none() {
                     return Err("canvas text is limited to 240 characters");
@@ -151,11 +173,22 @@ pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut us
 }
 
 pub(crate) fn validate(props: &Value) -> Result<(), &'static str> {
-    let view = arr(props, "view");
-    if !view.is_empty()
-        && (view.len() != 2 || view.iter().any(|v| !v.as_f64().is_some_and(|v| v.is_finite() && v >= 16.0)))
-    {
-        return Err("canvas view must be [width, height]");
+    let finite = |v: &Value| v.as_f64().is_some_and(f64::is_finite);
+    for key in ["view", "viewFrom"] {
+        let view = arr(props, key);
+        let ok = match view.len() {
+            0 => true,
+            2 => key == "view" && view.iter().all(|v| v.as_f64().is_some_and(|v| v.is_finite() && v >= 16.0)),
+            4 => {
+                view.iter().all(finite)
+                    && view[2].as_f64().unwrap_or(0.0) >= 16.0
+                    && view[3].as_f64().unwrap_or(0.0) >= 16.0
+            }
+            _ => false,
+        };
+        if !ok {
+            return Err("canvas view must be [width, height] or a camera rect [x, y, width, height]");
+        }
     }
     let mut count = 0;
     validate_elements(arr(props, "elements"), 0, &mut count)?;
@@ -755,6 +788,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
             "image" => self.canvas_image(el),
             "meter" => self.meter(el, &fill, now),
+            "particles" => self.particles(el, &fill, now),
             "spotlight" => {
                 // A dimming field with a window: everything outside the target recedes.
                 let (x, y, w, h) = bounds(el);
@@ -775,6 +809,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
             "group" => {
                 let at = f(el, "at", 0.0);
+                // `shift` runs the children on another clock: a world beat carries earlier beats'
+                // drawings forward, already finished and still looping, at their own times.
+                let now = now + f(el, "shift", 0.0);
                 let children = self.elements_at(arr(el, "children"), at, f(el, "stagger", 0.0), defs, now);
                 let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
                 if x.abs() < 1e-4 && y.abs() < 1e-4 {
@@ -981,6 +1018,35 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     /// up to 2× so a sketch drawn at any scale fills the space it has.
     pub(crate) fn fit_view(&self, body: Svgr<'a>, p: &Value) -> Svgr<'a> {
         let a = self.area;
+        // A camera rect [x, y, w, h] frames that part of the drawing across the whole frame,
+        // travelling from `viewFrom` over `viewDur` seconds: one continuous world, not slides.
+        let rect = |v: &[Value]| -> Option<[f32; 4]> {
+            (v.len() == 4).then(|| std::array::from_fn(|i| v[i].as_f64().unwrap_or(0.0) as f32))
+        };
+        if let Some(to) = rect(arr(p, "view")) {
+            let env = &self.b.environment;
+            let cam = match rect(arr(p, "viewFrom")) {
+                Some(from) => {
+                    let q = motion::in_out_cubic(motion::clamp01(
+                        (self.t - f(p, "viewAt", 0.0)) / f(p, "viewDur", 1.2).max(0.01),
+                    ));
+                    // Zoom interpolates in log space so a push-in keeps a constant pace.
+                    let lerp = |a: f32, b: f32| a + (b - a) * q;
+                    let (w0, w1) = (from[2].max(1.0), to[2].max(1.0));
+                    let w = w0 * (w1 / w0).powf(q);
+                    let h = w * lerp(from[3] / w0, to[3] / w1);
+                    let (cx, cy) = (
+                        lerp(from[0] + from[2] / 2.0, to[0] + to[2] / 2.0),
+                        lerp(from[1] + from[3] / 2.0, to[1] + to[3] / 2.0),
+                    );
+                    [cx - w / 2.0, cy - h / 2.0, w, h]
+                }
+                None => to,
+            };
+            let k = (env.width / cam[2]).min(env.height / cam[3]);
+            let (ox, oy) = ((env.width - cam[2] * k) / 2.0 - cam[0] * k, (env.height - cam[3] * k) / 2.0 - cam[1] * k);
+            return fframes::svgr!(<g transform={format!("translate({ox} {oy}) scale({k})")}>{body}</g>);
+        }
         let (x0, y0, vw, vh) = if s(p, "view") == "auto" {
             let mut acc: Option<(f32, f32, f32, f32)> = None;
             for el in arr(p, "elements") {

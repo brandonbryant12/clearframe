@@ -48,7 +48,7 @@ const schema = {
     transition: { enum: [...TRANSITIONS, 'auto'] },
     backdrop: { enum: BACKDROPS },
     chrome: bool,
-    captions: { enum: [true, false, 'auto', 'off'] },
+    captions: { enum: [true, false, 'auto', 'off', 'pop'] },
     sfx: { enum: [true, false, 'off', 'subtle', 'normal', 'punchy'] },
     treatment: text,
     speakers: object,

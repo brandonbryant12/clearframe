@@ -276,6 +276,83 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         }
         fframes::svgr!(<g>{shapes}</g>)
     }
+    /// Social captions: a few words at a time in heavy display type with an outline so they
+    /// read over anything, the spoken word lifted onto an accent pill. Phrases end at
+    /// sentences and pauses and clear shortly after their last word.
+    fn pop_captions(&self, tall: bool) -> Svgr<'a> {
+        let env = &self.b.environment;
+        let words = &self.b.words;
+        let window = phrase_window(words, self.t, if tall { 3 } else { 4 }, 0.5, 1.8, true);
+        let (first, last) = match (words.get(window.start), window.end.checked_sub(1).and_then(|i| words.get(i))) {
+            (Some(a), Some(b)) => (a, b),
+            _ => return empty(),
+        };
+        if self.t < first.start - 0.04 || self.t > last.end + 0.45 {
+            return empty();
+        }
+        let chunk = &words[window.clone()];
+        let font = Font::DisplayBold;
+        let max_w = self.area.w * if tall { 0.92 } else { 0.72 };
+        let mut size: f32 = if tall { 78.0 } else { 60.0 };
+        let (mut lines, mut space);
+        loop {
+            // Wider than a normal space so the active word's pill never touches its neighbours.
+            space = text::measure(font, " ", size, 0.0) * 1.6;
+            lines = vec![vec![]];
+            let mut width = 0.0;
+            for (i, word) in chunk.iter().enumerate() {
+                let w = text::measure(font, &word.text, size, 0.0);
+                if width + w > max_w && !lines.last().unwrap().is_empty() {
+                    lines.push(vec![]);
+                    width = 0.0;
+                }
+                lines.last_mut().unwrap().push((i, w));
+                width += w + space;
+            }
+            // Tall frames have a deep caption band for two lines; wide frames keep one.
+            if lines.len() <= if tall { 2 } else { 1 } || size <= 32.0 {
+                break;
+            }
+            size -= 2.0;
+        }
+        let line_h = size * 1.12;
+        // Centred in the band the layout keeps free for captions, clear of the source line.
+        let centre_y = env.height - if tall { 200.0 } else { 88.0 };
+        let top = centre_y - lines.len() as f32 * line_h / 2.0;
+        let current = active_word(words, self.t);
+        let outline = (size * 0.16).round();
+        let mut back = vec![];
+        let mut front = vec![];
+        for (li, line) in lines.iter().enumerate() {
+            let width = line.iter().map(|(_, w)| w).sum::<f32>() + space * line.len().saturating_sub(1) as f32;
+            let mut x = self.area.x + (self.area.w - width) / 2.0;
+            let baseline = top + li as f32 * line_h + size * 0.9;
+            for &(i, w) in line {
+                let word = &chunk[i];
+                let active = current == Some(window.start + i);
+                let text = word.text.clone();
+                if active {
+                    let pop = 0.86 + 0.14 * self.m.pop(self.t - word.start);
+                    let (pw, ph) = (w + size * 0.3, size * 1.08);
+                    let (cx, cy) = (x + w / 2.0, baseline - size * 0.34);
+                    let pill = rounded(cx - pw / 2.0, cy - ph / 2.0, pw, ph, size * 0.2, &self.p.accent);
+                    let label = self.run(text, x, baseline, font, size, 0.0, &self.p.bg);
+                    front.push(fframes::svgr!(<g transform={format!("translate({cx} {cy}) rotate(-2) scale({pop}) translate({} {})", -cx, -cy)}>{pill}{label}</g>));
+                } else {
+                    let spoken = self.t >= word.start;
+                    let ink = if spoken { self.p.ink.as_str() } else { self.p.muted.as_str() };
+                    back.push(fframes::svgr!(<g stroke={self.p.bg.clone()} stroke-width={outline} stroke-linejoin="round">{self.run(text.clone(), x, baseline, font, size, 0.0, &self.p.bg)}</g>));
+                    front.push(self.run(text, x, baseline, font, size, 0.0, ink));
+                }
+                x += w + space;
+            }
+        }
+        // The phrase snaps in as a unit.
+        let e = self.m.enter_over(self.t - first.start + 0.04, 0.16);
+        let (cx, cy) = (self.area.x + self.area.w / 2.0, centre_y);
+        let scale = 0.9 + 0.1 * e.travel;
+        fframes::svgr!(<g opacity={e.alpha} transform={format!("translate({cx} {cy}) scale({scale}) translate({} {})", -cx, -cy)}>{back}{front}</g>)
+    }
     pub(crate) fn footer(&self) -> Svgr<'a> {
         let env = &self.b.environment;
         let tall = env.height > env.width;
@@ -295,7 +372,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             Align::Left,
         );
         let mut captions = empty();
-        if env.captions && self.b.block != "kinetic" {
+        if env.captions && self.b.block != "kinetic" && env.caption_style == "pop" && !self.b.words.is_empty() {
+            captions = self.pop_captions(tall);
+        } else if env.captions && self.b.block != "kinetic" {
             let box_ = Area {
                 x: self.area.x,
                 y: env.height - if tall { 242.0 } else { 104.0 },

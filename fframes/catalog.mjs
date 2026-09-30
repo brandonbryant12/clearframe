@@ -638,9 +638,14 @@ export const BLOCKS = [
     'graphics',
     'Draw anything: shapes, paths, text, icons and images that draw on, pop, travel along paths, loop and leave on spoken cues.',
     {
-      view: '"auto" (fit the drawing into the content area, up to 2×), [width, height] author units fitted below the header, or omit for frame pixels (1920×1080 landscape)',
+      view: '"auto" (fit the drawing into the content area, up to 2×), [width, height] author units fitted below the header, a camera rect [x, y, width, height] framed across the whole frame, or omit for frame pixels (1920×1080 landscape)',
+      viewFrom: 'Camera rect the view travels from (set automatically between world beats)',
+      viewAt: 'Scene seconds the camera move starts (default 0)',
+      viewDur: 'Seconds the camera move takes (default 1.2)',
+      world:
+        'Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views',
       elements:
-        '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt}] (≤ 240) — see docs/canvas.md',
+        '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt}] (≤ 600) — see docs/canvas.md',
       stagger: 'Seconds between top-level elements without a cue (0–3)',
       rough:
         'Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure|solid, gap} (an element can set rough: false)',

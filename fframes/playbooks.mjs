@@ -861,7 +861,192 @@ export const PLAYBOOKS = [
       frame: { brand: 'clearframe', left: 'Made with ClearFrame', right: 'SVG / Rust / MP4' },
     },
   ),
+  p(
+    'journey',
+    'A travelling-camera explainer: one drawing, explored stop by stop',
+    'Anyone following a process, a supply chain, a route or a timeline',
+    'Three to five stops in order, what happens at each, the whole at the end',
+    [
+      world(
+        'source',
+        'It starts as rain on the hills, collected in a reservoir.',
+        [0, 0, 1920, 1080],
+        [
+          { type: 'rect', x: -1200, y: 820, w: 8000, h: 2400, fill: 'surface', enter: 'none', at: 0 },
+          {
+            type: 'path',
+            d: 'M 0 820 L 260 520 L 420 660 L 640 380 L 900 700 L 1100 560 L 1350 820 Z',
+            fill: 'muted',
+            stroke: 'ink',
+            width: 4,
+            at: 0.1,
+            dur: 1.4,
+          },
+          { type: 'particles', x: 150, y: 140, w: 900, h: 560, kind: 'rain', count: 80, fill: 'accent2', say: 'rain' },
+          {
+            type: 'path',
+            d: 'M 1100 820 Q 1300 900 1560 860 L 1560 960 Q 1300 1000 1060 900 Z',
+            fill: 'accent2',
+            say: 'collected',
+          },
+          {
+            type: 'text',
+            text: 'Reservoir',
+            x: 1600,
+            y: 950,
+            size: 56,
+            font: 'bold',
+            fill: 'ink',
+            anchor: 'start',
+            say: 'reservoir',
+          },
+        ],
+      ),
+      world(
+        'plant',
+        'But first, a pipe carries it to a plant that filters and cleans it.',
+        [1500, 0, 1920, 1080],
+        [
+          {
+            type: 'path',
+            d: 'M 1560 900 L 2300 900 L 2300 760 L 2700 760',
+            stroke: 'accent2',
+            width: 22,
+            say: 'pipe',
+            dur: 1.4,
+          },
+          {
+            type: 'rect',
+            x: 2700,
+            y: 560,
+            w: 520,
+            h: 260,
+            r: 10,
+            fill: 'surface',
+            stroke: 'ink',
+            width: 4,
+            enter: 'grow-y',
+            say: 'plant',
+          },
+          {
+            type: 'circle',
+            cx: 2830,
+            cy: 690,
+            r: 70,
+            fill: 'none',
+            stroke: 'accent',
+            width: 10,
+            say: 'filters',
+            loop: { type: 'spin', period: 3 },
+          },
+          {
+            type: 'circle',
+            cx: 3090,
+            cy: 690,
+            r: 70,
+            fill: 'none',
+            stroke: 'accent',
+            width: 10,
+            say: 'cleans',
+            loop: { type: 'spin', period: 3 },
+          },
+          {
+            type: 'text',
+            text: 'Treatment',
+            x: 2960,
+            y: 520,
+            size: 56,
+            font: 'bold',
+            fill: 'ink',
+            anchor: 'middle',
+            say: 'plant',
+          },
+        ],
+      ),
+      world(
+        'city',
+        'Then a second network runs it under the streets, to every tap.',
+        [3300, 0, 1920, 1080],
+        [
+          {
+            type: 'path',
+            d: 'M 3220 760 L 3500 760 L 3500 900 L 4900 900',
+            stroke: 'accent2',
+            width: 22,
+            say: 'network',
+            dur: 1.4,
+          },
+          {
+            type: 'group',
+            say: 'streets',
+            stagger: 0.15,
+            children: [3900, 4200, 4500, 4800].map(x => ({
+              type: 'path',
+              d: `M ${x} 820 L ${x} 680 L ${x + 110} 600 L ${x + 220} 680 L ${x + 220} 820 Z`,
+              fill: 'surface',
+              stroke: 'ink',
+              width: 4,
+            })),
+          },
+          {
+            type: 'text',
+            text: 'Your tap',
+            x: 4400,
+            y: 540,
+            size: 56,
+            font: 'bold',
+            fill: 'ink',
+            anchor: 'middle',
+            say: 'every',
+          },
+          {
+            type: 'circle',
+            cx: 4610,
+            cy: 860,
+            r: 12,
+            fill: 'accent2',
+            say: 'tap',
+            loop: { type: 'float', period: 1.2, amount: 8 },
+          },
+        ],
+      ),
+      world(
+        'whole',
+        'One journey, most of it out of sight.',
+        [-100, -700, 5200, 2925],
+        [
+          {
+            type: 'text',
+            text: 'One journey',
+            x: 2600,
+            y: 300,
+            size: 140,
+            font: 'display',
+            fill: 'accent',
+            anchor: 'middle',
+            say: 'journey',
+          },
+        ],
+      ),
+      {
+        ...beat('endcard', 'So follow the water in your own city.', {
+          text: 'Follow the water.',
+          emphasis: ['water'],
+          emphasisStyle: 'serif',
+          support: 'Find your reservoir.',
+          action: 'Start at the tap',
+        }),
+        id: 'end',
+      },
+    ],
+    { theme: 'sketchbook', backdrop: 'paper', motion: 'spring', texture: { grain: 0.3 } },
+  ),
 ];
+
+/** One stop of a travelling-camera world: canvas props drawn in world coordinates. */
+function world(id, vo, view, elements) {
+  return { id, block: 'canvas', vo, props: { world: 'journey', view, rough: true, elements } };
+}
 
 export function storyboardFor(id, { title, theme, vertical } = {}) {
   const book = PLAYBOOKS.find(p => p.id === id);
@@ -892,6 +1077,15 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
     },
     beats: structuredClone(book.beats),
   };
+  // World cameras are landscape rects; a tall frame looks at a 9:16 rect on the same centre.
+  if (vertical)
+    for (const b of sb.beats) {
+      const v = b.props?.world && b.props.view;
+      if (!Array.isArray(v) || v.length !== 4) continue;
+      const w = v[2] * 0.62,
+        h = (w * 16) / 9;
+      b.props.view = [v[0] + (v[2] - w) / 2, v[1] + (v[3] - h) / 2, w, h];
+    }
   // Sketch coordinates are frame pixels: re-draw them for the requested frame.
   for (const b of sb.beats) {
     const name = b.props?.sketch;

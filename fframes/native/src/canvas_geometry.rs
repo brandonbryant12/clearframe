@@ -81,7 +81,9 @@ pub(super) fn points(v: &Value) -> Vec<(f32, f32)> {
 /// Element bounds in author units: (x, y, w, h).
 pub(super) fn bounds(el: &Value) -> (f32, f32, f32, f32) {
     match s(el, "type") {
-        "rect" | "image" | "meter" => (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0), f(el, "h", 0.0)),
+        "rect" | "image" | "meter" | "particles" => {
+            (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0), f(el, "h", 0.0))
+        }
         "spotlight" if el.get("cx").is_some() => {
             let r = f(el, "r", 0.0);
             (f(el, "cx", 0.0) - r, f(el, "cy", 0.0) - r, 2.0 * r, 2.0 * r)

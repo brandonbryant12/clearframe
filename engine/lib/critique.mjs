@@ -39,6 +39,17 @@ function onScreenWords(props) {
         'icon',
         'name',
         'say',
+        'cap',
+        'join',
+        'blend',
+        'view',
+        'land',
+        'growSay',
+        'drawSay',
+        'exitSay',
+        'emphasis',
+        'emphasisStyle',
+        'id',
       ].includes(k)
     )
       n += v.split(/\s+/).filter(Boolean).length;
@@ -65,7 +76,7 @@ function extent(elements) {
     for (const el of list) {
       const n = k => el[k] ?? 0;
       if (el.type === 'group') walk(el.children ?? [], dx + n('x'), dy + n('y'));
-      else if (['rect', 'image', 'meter'].includes(el.type))
+      else if (['rect', 'image', 'meter', 'particles'].includes(el.type))
         grow(dx + n('x'), dy + n('y'), dx + n('x') + n('w'), dy + n('y') + n('h'));
       else if (el.type === 'circle' || el.type === 'ellipse') {
         const rx = el.r ?? el.rx ?? 0,
@@ -111,7 +122,12 @@ export function critique(root) {
   // Sameness.
   let run = 1;
   for (let i = 1; i < beats.length; i++) {
-    run = FAMILY[beats[i].block] === FAMILY[beats[i - 1].block] && !beats[i].plate && !beats[i].tone ? run + 1 : 1;
+    // A world is one continuous picture on purpose; the camera move is the change.
+    const world = beats[i].props?.world && beats[i].props.world === beats[i - 1].props?.world;
+    run =
+      FAMILY[beats[i].block] === FAMILY[beats[i - 1].block] && !beats[i].plate && !beats[i].tone && !world
+        ? run + 1
+        : 1;
     if (run === 3)
       add(
         'warn',
@@ -151,6 +167,16 @@ export function critique(root) {
       'film',
       'No imagery at all. A plate (photo or generated still with a duotone treatment) grounds a film in the world.',
     );
+  // Consecutive drawings that cut from one to the next could be one world the camera travels.
+  for (let i = 2; i < beats.length; i++) {
+    const run = beats.slice(i - 2, i + 1);
+    if (run.every(b => b.block === 'canvas' && !b.props?.world) && beats[i + 1]?.block !== 'canvas')
+      add(
+        'idea',
+        run[0].id,
+        `${run.map(b => b.id).join(', ')} are separate drawings in a row. If they are stops on one journey, process or map, make them one world (props.world + camera view) so the camera travels instead of cutting.`,
+      );
+  }
   // Transitions.
   const transitions = beats.map(b => b.transition ?? sb.transition ?? 'fade');
   const graphic = transitions.filter(x => ['panel', 'iris', 'whip'].includes(x)).length;

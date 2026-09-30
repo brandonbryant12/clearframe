@@ -1,11 +1,27 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 export const audioHash = file => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
-export const wordKey = s =>
-  String(s)
+// Number words key as digits, so a cue of "18" finds a spoken "eighteen" and a recognizer's
+// "7" lines up with a scripted "seven". Single words and hyphenated tens only.
+const UNITS =
+  'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split(
+    ' ',
+  );
+const TENS = 'twenty thirty forty fifty sixty seventy eighty ninety'.split(' ');
+const NUMBER = new Map([
+  ...UNITS.map((w, i) => [w, String(i)]),
+  ...TENS.map((w, i) => [w, String(20 + 10 * i)]),
+  ...TENS.flatMap((t, i) => UNITS.slice(1, 10).map((u, j) => [t + u, String(21 + 10 * i + j)])),
+  ['hundred', '100'],
+  ['thousand', '1000'],
+]);
+export const wordKey = s => {
+  const key = String(s)
     .normalize('NFKC')
     .toLowerCase()
     .replace(/[^\p{L}\p{N}]/gu, '');
+  return NUMBER.get(key) ?? key;
+};
 const seconds = value =>
   typeof value === 'string' && /^\d+(\.\d+)?s$/.test(value) ? Number(value.slice(0, -1)) : value;
 

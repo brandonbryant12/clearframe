@@ -21,9 +21,11 @@ export function soundDesign(job, sfx) {
     if (spec.tock && level !== 'subtle')
       for (const it of b.props.items ?? b.props.nodes ?? []) if (it.at != null) add('tock', start + it.at, 0.14, 0);
     if (b.tone && level === 'punchy') add('thud', start + 0.02, 0.25, 2);
+    // A world camera travelling to its next stop.
+    if (b.block === 'canvas' && b.props.viewFrom) add('whoosh', start + (b.props.viewAt ?? 0), 0.18, 2);
     let pops = 0;
     for (const el of [...(b.block === 'canvas' ? b.props.elements : []), ...(b.art?.over ?? [])]) {
-      if (el.count) add('thud', start + el.at + el.count.dur, 0.28, 3);
+      if (el.type === 'text' && el.count) add('thud', start + el.at + el.count.dur, 0.28, 3);
       else if (
         (el.enter === 'pop' || (el.enter == null && ['circle', 'icon'].includes(el.type))) &&
         pops < (level === 'punchy' ? 8 : 4)

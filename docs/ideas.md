@@ -15,10 +15,11 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 - **Human units.** Convert to days, rooms, football pitches; count up (`count`) with a source.
 
 ## How it works
-- **Journey:** `route` sketch, stops landing as the line reaches them, a marker travelling `along`.
+- **Journey:** `route` sketch, stops landing as the line reaches them, a marker travelling `along`. For a longer journey, a `world`: one drawing, the camera travelling stop to stop, pulling out to the whole at the end (`playbook journey`).
 - **Flow:** `pipeline` sketch with `dash` loops marching between stages; packets riding `along` the pipe.
 - **Chain reaction:** dominoes (`rect` with `keys` rotating, staggered by 0.12 s).
 - **Machinery:** gears (`circle` + spokes, `spin` loops in opposite directions).
+- **Zoom in, zoom out:** a `world` whose views push from the whole system into one part and back out again.
 - **Accumulation:** a container filling (`grow-y`), a meter rising, stacked blocks landing with `pop`.
 - **System:** `orbit` or `network` sketch; the hub `pulse`s.
 - **Build then transform:** draw the broken version, `exit` the broken part on "but", draw the fix in its place.
@@ -27,6 +28,11 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 - `line` with an `art.over` arrow and label on the turning point, cued to the word that names it.
 - **Before/after:** the same element `id` in consecutive canvas beats morphs position, size and colour across a cut.
 - A marker travelling a `route` through dated stops (mono labels for dates).
+
+## Atmosphere
+- **Weather as mood:** `particles` under a scene: `embers` over heat, `rain` over a flood, `snow` for a slow season, `dust` for a quiet hold, `bubbles` for chemistry.
+- **Type with a voice:** `textMotion: cascade` for the loud line, `words` for the editorial through-line, `letters` for a single typed-out word.
+- **Social captions:** `captions: "pop"` for vertical cuts: heavy outlined phrases, the spoken word on an accent pill.
 
 ## Tension and trade-off
 - **Balance** sketch tipping on the "but" (`keys` with `ease: spring`).

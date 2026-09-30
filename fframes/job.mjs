@@ -49,6 +49,7 @@ export function createJob(sb, timing, { draft = false } = {}) {
   }
   mirrorExitStyles(beats);
   linkMorphs(beats, sb, timing, report);
+  linkWorlds(beats, sb, timing, report);
   const frame = frameChrome(sb, beats, report);
   fitGraphicTransitions(beats, timing, report);
   filmWarnings(sb, timing, film.theme, report);
@@ -66,6 +67,7 @@ export function createJob(sb, timing, { draft = false } = {}) {
     backdrop: film.backdrop,
     chrome: sb.chrome === true,
     captions: film.captions,
+    caption_style: film.captionStyle,
     ...(film.texture && film.texture !== 'none' ? { texture: film.texture } : {}),
     text_motion: film.textMotion,
     ...(frame ? { frame } : {}),
@@ -83,8 +85,8 @@ function filmSettings(sb, timing, { errors }) {
   const motion = { preset: 'gentle', intensity: 0.65, ...sb.motion };
   if (!validMotion(motion)) errors.push('motion requires a known preset and intensity from 0 to 1.');
   const vertical = timing.height > timing.width;
-  if (sb.captions != null && ![true, false, 'auto', 'off'].includes(sb.captions))
-    errors.push('captions must be true, false, auto or off.');
+  if (sb.captions != null && ![true, false, 'auto', 'off', 'pop'].includes(sb.captions))
+    errors.push('captions must be true, false, auto, off or pop.');
   const backdrop = sb.backdrop ?? 'none';
   if (!BACKDROPS.includes(backdrop)) errors.push(`Native backdrop must be ${BACKDROPS.join(', ')}.`);
   const texture = sb.texture ?? null;
@@ -106,7 +108,8 @@ function filmSettings(sb, timing, { errors }) {
     theme: palette(sb.theme ?? 'paper'),
     motion,
     vertical,
-    captions: sb.captions === true || ((sb.captions ?? 'auto') === 'auto' && vertical),
+    captions: sb.captions === true || sb.captions === 'pop' || ((sb.captions ?? 'auto') === 'auto' && vertical),
+    captionStyle: sb.captions === 'pop' ? 'pop' : 'plate',
     backdrop,
     texture,
   };
@@ -425,6 +428,52 @@ function linkMorphs(beats, sb, timing, { warnings }) {
       JSON.stringify(a.props.view ?? null) !== JSON.stringify(b.props.view ?? null)
     )
       warnings.push(`${b.id}: morphing canvases use different views; positions will jump.`);
+  }
+}
+
+/**
+ * Consecutive canvas beats that name the same `world` are one continuous drawing: each beat
+ * inherits everything drawn before (on its original clock, so loops and exits carry on), the
+ * cut between them is invisible, and the camera travels from the last view to the new one.
+ */
+function linkWorlds(beats, sb, timing, { warnings }) {
+  const fps = timing.fps;
+  for (let i = 1; i < beats.length; i++) {
+    const a = beats[i - 1],
+      b = beats[i];
+    const name = b.block === 'canvas' && b.props.world;
+    if (!name || a.block !== 'canvas' || a.props.world !== name) continue;
+    const shift = (b.start_frame - a.start_frame) / fps;
+    const carried = [],
+      own = [];
+    for (const el of a.props.elements) (el.carried ? carried : own).push(el);
+    b.props.elements = [
+      ...carried.map(g => ({ ...g, shift: g.shift + shift })),
+      ...(own.length ? [{ type: 'group', carried: true, at: 0, dur: 0, enter: 'none', shift, children: own }] : []),
+      ...b.props.elements,
+    ];
+    const src = sb.beats[timing.beats[i].index];
+    if (src.transition && src.transition !== 'cut')
+      warnings.push(
+        `${b.id}: continues world "${name}"; a ${src.transition} transition breaks the continuous camera, use cut.`,
+      );
+    else {
+      b.transition = 'cut';
+      a.exit = 'none';
+    }
+    if (!b.props.viewFrom && JSON.stringify(a.props.view) !== JSON.stringify(b.props.view)) {
+      b.props.viewFrom = a.props.view;
+      // Travel with the first new drawing, so the camera arrives as the next stop appears.
+      const firstNew = Math.min(...b.props.elements.filter(el => !el.carried).map(el => el.at ?? 0));
+      b.props.viewAt ??= Number.isFinite(firstNew) ? Math.max(0, firstNew - 0.25) : 0;
+      b.props.viewDur ??= 1.2;
+      b.settle_seconds = Math.max(b.settle_seconds, (b.props.viewAt ?? 0) + b.props.viewDur);
+    }
+    for (const [beat, s] of [
+      [a, sb.beats[timing.beats[i - 1].index]],
+      [b, src],
+    ])
+      if (!s.camera) beat.camera = { move: 'none' };
   }
 }
 

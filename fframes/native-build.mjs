@@ -59,7 +59,8 @@ export function rendererHash() {
     ...walk(path.join(crate, 'src')),
     ...(fs.existsSync(path.join(crate, 'vendor')) ? walk(path.join(crate, 'vendor')) : []),
     path.join(crate, 'Cargo.toml'),
-    path.join(crate, 'Cargo.lock'), path.join(ROOT, 'constants.json'),
+    path.join(crate, 'Cargo.lock'),
+    path.join(ROOT, 'constants.json'),
   ].sort();
   return sha256(
     Buffer.concat(src.map(f => Buffer.concat([Buffer.from(path.relative(crate, f) + '\0'), fs.readFileSync(f)]))),
@@ -88,8 +89,11 @@ export async function buildNative({ force = false } = {}) {
       '1',
       ...(process.platform === 'darwin' ? [] : ['--no-default-features']),
     ];
-  if (fs.existsSync(gate) && process.env.CLEARFRAME_HEAVY_HELD !== '1') await run(gate, ['--', 'cargo', ...cargo]);
-  else await run('cargo', cargo);
+  if (fs.existsSync(gate) && process.env.CLEARFRAME_HEAVY_HELD !== '1') {
+    const holder = lockHolder();
+    if (holder) log.warn(`Heavy-job lock is held by ${holder}; the build starts when it finishes.`);
+    await run(gate, ['--', 'cargo', ...cargo]);
+  } else await run('cargo', cargo);
   writeJSON(marker, {
     hash,
     backend: process.platform === 'darwin' ? 'skia-metal' : 'cpu',
@@ -126,4 +130,22 @@ export function doctor() {
     detail: `${free.toFixed(1)} GiB free (${warm ? 'warm cache' : 'cold build'})`,
   });
   return rows;
+}
+
+/** Who holds the machine-wide heavy-job lock, if its recorded owner is still running. */
+function lockHolder() {
+  try {
+    const pid = Number(fs.readFileSync(`/private/tmp/codex-heavy-${os.userInfo().uid}.lock`, 'utf8').trim());
+    if (!Number.isInteger(pid) || pid <= 0 || pid === process.pid) return null;
+    const ps = spawnSync('ps', ['-o', 'etime=,command=', '-p', String(pid)], { encoding: 'utf8' }).stdout.trim();
+    if (!ps.includes('codex-heavy')) return null;
+    const [elapsed, ...command] = ps.split(/\s+/);
+    const job = command
+      .slice(command.indexOf('--') + 1)
+      .join(' ')
+      .slice(0, 90);
+    return `PID ${pid} for ${elapsed} (${job})`;
+  } catch {
+    return null;
+  }
 }

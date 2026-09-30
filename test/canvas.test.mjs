@@ -51,11 +51,11 @@ test('canvas elements reject unknown types, fields, colors, effects and malforme
   assert.throws(
     () =>
       normalizeElements(
-        Array.from({ length: 241 }, () => ({ type: 'circle', r: 1 })),
+        Array.from({ length: 601 }, () => ({ type: 'circle', r: 1 })),
         'elements',
         fail,
       ),
-    /at most 240/,
+    /at most 600/,
   );
   const nested = normalizeElements(
     [

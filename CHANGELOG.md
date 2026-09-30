@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.0 — unreleased
+
+Travel instead of cutting, type with a voice, and fewer false alarms.
+
+- **Worlds.** Consecutive canvas beats that share `props.world` form one continuous drawing: each beat draws only what is new, inherits earlier drawings on their original clocks (loops and exits carry on), cuts invisibly, and the camera travels between camera rects (`view: [x, y, w, h]`, `viewFrom`, `viewAt`, `viewDur`), zooming at a constant pace. A soft whoosh marks each move. The new `journey` playbook is a worked example.
+- **Text motion.** `textMotion` (film default or per beat) makes display type arrive by `lines`, `words`, `letters` or `cascade` (letters dropping in with an alternating tilt). Serif rich headlines follow the same mode; body copy keeps the line rise. The kinetic treatment uses cascade, the sketchbook and blueprint treatments use words.
+- **Particles.** A seeded, deterministic `particles` canvas element (`dust`, `embers`, `rain`, `snow`, `bubbles`) for atmosphere under a scene.
+- **Pop captions.** `captions: "pop"` sets social-style captions: heavy outlined phrases of three or four words, the spoken word on a tilted accent pill.
+- **Numbers land on the word.** `stat`, `delta` and `ring` counts cued to a spoken word pre-roll, so the figure finishes as it is said. Number words and digits now match either way ("18" finds "eighteen"; Whisper's "7" aligns with a scripted "seven").
+- **Critique.** A titled canvas is no longer treated as full frame. Small drawings get a `view: "auto"` hint, runs of separate drawings get a world hint, and style keys are no longer counted as on-screen words.
+- **Hand-drawn scenes render about 6× faster.** Hachure is clipped to the shape analytically (a scanline, as in Rough.js) instead of through a clip mask, and jittered geometry is cached per element and seed; a rough 24 s film went from 113 s to 17 s.
+- **Canvas** holds up to 600 elements. `check` ignores "cut off by the canvas edge" while a world camera is moving. The build step names the heavy-lock holder while it waits.
+
 ## 0.4.0 — 2026-09-29
 
 From narrated slides to motion graphics, and from source material to films. This round was run as loops with different lenses: visual language, inputs and story, voice and performance, then the creative system and efficiency. It borrows ideas, not code, from FFFrames' own examples (MIT), Manim's indication vocabulary, Rough.js, flubber, Magic Move and editorial motion design.

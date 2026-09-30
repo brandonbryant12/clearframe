@@ -200,9 +200,27 @@ export async function checkProject(root, options = {}) {
   const errors = [],
     notes = [];
   try {
-    notes.push(await nativeCommand(ctx, 'inspect', ['--fail-on', 'error'], true));
+    notes.push(withoutCameraCuts(await nativeCommand(ctx, 'inspect', ['--fail-on', 'error'], true), ctx.job));
   } catch (e) {
     errors.push(e.message);
   }
   return { errors, warnings: ctx.warnings, notes, duration: ctx.timing.duration, inputId: ctx.manifest.inputId };
+}
+
+/** Drop "cut off by the canvas edge" notes that fall inside a world camera move: while the
+ * camera travels, drawings are meant to slide past the frame edge. */
+function withoutCameraCuts(report, job) {
+  const moves = job.beats
+    .filter(b => b.block === 'canvas' && b.props.viewFrom)
+    .map(b => {
+      const from = b.start_frame + Math.floor((b.props.viewAt ?? 0) * job.fps);
+      return [from, from + Math.ceil((b.props.viewDur ?? 1.2) * job.fps)];
+    });
+  return String(report)
+    .split('\n')
+    .filter(line => {
+      const m = / \(frames (\d+)\.\.(\d+),.*cut off by the canvas edge/.exec(line);
+      return !m || !moves.some(([a, b]) => +m[1] >= a && +m[2] <= b);
+    })
+    .join('\n');
 }

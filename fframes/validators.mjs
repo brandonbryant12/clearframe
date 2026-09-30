@@ -408,11 +408,19 @@ export const VALIDATORS = {
   },
   canvas: (p, h) => {
     if (p.support != null) h.fail('canvas draws only its elements; add a text element instead of support');
+    const camera = v => Array.isArray(v) && v.length === 4 && v.every(Number.isFinite) && v[2] >= 16 && v[3] >= 16;
     if (
-      p.view != null && p.view !== 'auto' &&
+      p.view != null &&
+      p.view !== 'auto' &&
+      !camera(p.view) &&
       (!Array.isArray(p.view) || p.view.length !== 2 || p.view.some(v => !Number.isFinite(v) || v < 16))
     )
-      h.fail('view must be "auto" or [width, height] in author units (each ≥ 16)');
+      h.fail('view must be "auto", [width, height] or a camera rect [x, y, width, height]');
+    if (p.viewFrom != null && !camera(p.viewFrom)) h.fail('viewFrom must be a camera rect [x, y, width, height]');
+    if (p.viewDur != null && !(Number.isFinite(p.viewDur) && p.viewDur > 0 && p.viewDur <= 10))
+      h.fail('viewDur must be 0–10 seconds');
+    if (p.world != null && (typeof p.world !== 'string' || !camera(p.view)))
+      h.fail('world must be a name, with view set to a camera rect [x, y, width, height]');
     if (p.stagger != null && (!Number.isFinite(p.stagger) || p.stagger < 0 || p.stagger > 3))
       h.fail('stagger must be 0–3 seconds');
     if (!Array.isArray(p.elements) || !p.elements.length) h.fail('elements needs at least one element');
