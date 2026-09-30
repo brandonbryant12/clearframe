@@ -4,6 +4,7 @@
 
 Travel instead of cutting, type with a voice, and fewer false alarms.
 
+- **Mosaic.** `mosaic` on any canvas shape (or the whole canvas) lays it in tesserae: fills tile in running-bond rows or concentric rings on a grout bed, with an outline row following the contour. Strokes become beaded lines, and gradient fills are sampled per tile. `enter: assemble` builds a shape tile by tile and `exit: scatter` throws the tiles loose. A `mosaic` palette, a `mosaic` backdrop (static, cached tiles) and a `mosaic` treatment complete the look.
 - **Worlds in any frame shape.** Camera rects authored for landscape are re-framed for vertical or square cuts on each beat's own foreground (for all canvases, not just the journey playbook). `viewTall` sets a vertical camera explicitly where a side-by-side composition cannot survive the crop. The text-size warning uses the real zoom for any frame.
 - **Glow and shadow.** `glow` (in the element's own colour or a set `color`) and `shadow` on any canvas element or group, as one filter per group.
 - **Podcast ingests keep the words on screen.** `ingest --audio` defaults to `captions: "pop"` for vertical clips and plate captions otherwise, so beats that become pictures still follow the speech. The brief suggests worlds for explanatory stretches.

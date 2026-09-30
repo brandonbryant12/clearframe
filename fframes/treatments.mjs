@@ -173,6 +173,28 @@ export const TREATMENTS = [
       'Nothing flashes; values count slowly; one idea per scene.',
     ],
   },
+  {
+    id: 'mosaic',
+    title: 'Mosaic',
+    when: 'Stories, heritage and culture, nature, anything that wants to feel handmade and luminous',
+    film: {
+      theme: 'mosaic',
+      backdrop: 'mosaic',
+      texture: { grain: 0.15, vignette: 0.55 },
+      motion: { preset: 'gentle', intensity: 0.6 },
+      textMotion: 'words',
+      transition: 'cut',
+      sfx: 'subtle',
+      voice: { style: 'warm storyteller, unhurried', takes: 'chapter' },
+    },
+    beats: { mosaic: { tile: 16 }, graphic: 'iris' },
+    rules: [
+      'Everything is laid in tesserae: shapes assemble tile by tile (enter: assemble) and scatter when they stop being true (exit: scatter).',
+      'Let the andamento follow the form: rings for round things, rows for walls and skies; outline rows trace each contour.',
+      'Light is the drama: glow on gold tiles (moon, stars, windows); keep the palette to ultramarine, ivory, gold, coral and turquoise.',
+      'Frame scenes with a border or arch; one hero shape per frame, drawn big enough for tiles to read (at least 12 tiles across).',
+    ],
+  },
 ];
 export const treatmentById = id => TREATMENTS.find(t => t.id === id);
 
@@ -196,6 +218,7 @@ export function applyTreatment(sb, id) {
       p.emphasisStyle = t.beats.emphasisStyle;
     if (t.beats.kinetic && b.block === 'kinetic' && !p.mode) p.mode = t.beats.kinetic;
     if (b.block === 'canvas' && t.beats.rough && p.rough == null) p.rough = t.beats.rough;
+    if (b.block === 'canvas' && t.beats.mosaic && p.mosaic == null) p.mosaic = t.beats.mosaic;
     if (b.block === 'canvas')
       for (const el of p.elements ?? []) {
         if (t.beats.font && el.type === 'text' && !el.font && (el.size ?? 48) < 90) el.font = t.beats.font;

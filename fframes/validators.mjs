@@ -2,7 +2,7 @@
 // runs the checks every block shares, then the block's validator here. A validator may fill
 // defaults (decimals, scales, orientation) so the renderer never guesses.
 import { ICONS } from './icons.mjs';
-import { normalizeElements, roughSpec, applyRough } from './canvas.mjs';
+import { normalizeElements, roughSpec, applyRough, mosaicSpec, applyMosaic } from './canvas.mjs';
 
 /** Validation helpers bound to one block's props and error prefix. */
 export function helpers(p, fail, { findPhrase, precision }) {
@@ -431,5 +431,7 @@ export const VALIDATORS = {
     p.elements = normalizeElements(p.elements, 'elements', h.fail);
     if (p.rough != null && p.rough !== false) applyRough(p.elements, roughSpec(p.rough, 'rough', h.fail));
     delete p.rough;
+    if (p.mosaic != null && p.mosaic !== false) applyMosaic(p.elements, mosaicSpec(p.mosaic, 'mosaic', h.fail));
+    delete p.mosaic;
   },
 };

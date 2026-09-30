@@ -22,6 +22,7 @@ pub const PRESETS: &[(&str, [&str; 8])] = &[
     ("clay", ["#efe3d6", "#e2d2c1", "#2b1d17", "#6b5446", "#a8431f", "#2e5f6e", "#3f6b43", "#a8431f"]),
     ("noir", ["#111111", "#1d1d1d", "#f2efe9", "#a39e96", "#e9c46a", "#e76f51", "#8fbf9f", "#e76f51"]),
     ("sketchbook", ["#f2ecdf", "#e6dece", "#433e39", "#6d655c", "#c2344d", "#3a67b3", "#3b7449", "#c2344d"]),
+    ("mosaic", ["#16225e", "#223387", "#f3ead3", "#9aa6cf", "#e9b949", "#e2643c", "#3cc0b4", "#e2643c"]),
 ];
 const KEYS: [&str; 8] = ["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative"];
 
@@ -170,9 +171,65 @@ pub fn backdrop<'a>(kind: &str, w: f32, h: f32, p: &Palette, seconds: f32) -> Sv
         }
         "glow" => return glow(w, h, p, seconds),
         "paper" => return paper(w, h, p),
+        "mosaic" => return mosaic_bed(w, h, p),
         _ => {}
     }
     fframes::svgr!(<g opacity="0.09">{shapes}</g>)
+}
+
+/// The ground a mosaic film is set in: running-bond rows of small tesserae in shades of the
+/// background on darker grout, a little brighter towards the centre. Static and cached per
+/// frame size and palette, so it costs a handful of paths a frame.
+fn mosaic_bed<'a>(w: f32, h: f32, p: &Palette) -> Svgr<'a> {
+    use std::collections::HashMap;
+    use std::sync::{Arc, Mutex, OnceLock};
+    type Bed = Arc<(String, Vec<(String, String)>)>;
+    static CACHE: OnceLock<Mutex<HashMap<String, Bed>>> = OnceLock::new();
+    let key = format!("{w}x{h}{}", p.bg);
+    let cache = CACHE.get_or_init(Default::default);
+    let hit = cache.lock().unwrap().get(&key).cloned();
+    let bed = hit.unwrap_or_else(|| {
+        let hash = |a: u64, b: u64| {
+            let mut z = a.wrapping_mul(0x9E37_79B9_7F4A_7C15) ^ b.wrapping_mul(0xBF58_476D_1CE4_E5B9);
+            z = (z ^ (z >> 29)).wrapping_mul(0x94D0_49BB_1331_11EB);
+            ((z ^ (z >> 32)) & 0xFFFF) as f32 / 65535.0
+        };
+        let (tile, gap) = (22.0f32, 3.0f32);
+        let pitch = tile + gap;
+        let mut paths = vec![String::new(); 5];
+        let diag = (w * w + h * h).sqrt() / 2.0;
+        for r in 0..(h / pitch).ceil() as u64 + 1 {
+            let y = (r as f32 + 0.5) * pitch;
+            let shift = if r % 2 == 1 { pitch / 2.0 } else { 0.0 };
+            for c in 0..(w / pitch).ceil() as u64 + 2 {
+                let x = (c as f32 - 0.5) * pitch + shift;
+                let centre = 1.0 - ((x - w / 2.0).hypot(y - h / 2.0) / diag).min(1.0);
+                let level = ((hash(r, c) * 2.6 + centre * 2.2) as usize).min(4);
+                let a = (hash(c, r) - 0.5) * 0.12;
+                let (jx, jy) = ((hash(r ^ 7, c) - 0.5) * 2.0, (hash(r, c ^ 7) - 0.5) * 2.0);
+                let s = tile * (0.94 + 0.08 * hash(r ^ 3, c ^ 5)) / 2.0;
+                let (cs, sn) = (a.cos(), a.sin());
+                let out = &mut paths[level];
+                for (i, (u, v)) in [(-1.0, -1.0), (1.0, -1.0), (1.0, 1.0), (-1.0, 1.0)].into_iter().enumerate() {
+                    let (px, py) = (x + jx + (u * cs - v * sn) * s, y + jy + (u * sn + v * cs) * s);
+                    out.push_str(&format!("{}{:.1} {:.1}", if i == 0 { "M" } else { "L" }, px, py));
+                }
+                out.push('Z');
+            }
+        }
+        let (toward, grout) = if p.dark { ("#ffffff", mix(&p.bg, "#000000", 0.5)) } else { ("#000000", mix(&p.bg, "#000000", 0.3)) };
+        let shades = paths
+            .into_iter()
+            .enumerate()
+            .map(|(i, d)| (mix(&p.bg, toward, 0.02 + 0.03 * i as f32), d))
+            .collect();
+        let bed = Arc::new((grout, shades));
+        cache.lock().unwrap().insert(key, bed.clone());
+        bed
+    });
+    let (grout, shades) = &*bed;
+    let tiles: Vec<_> = shades.iter().map(|(color, d)| fframes::svgr!(<path d={d.clone()} fill={color.clone()} />)).collect();
+    fframes::svgr!(<g><rect width={w} height={h} fill={grout.clone()} />{tiles}</g>)
 }
 
 /// Drawing paper: soft blotches and fine fibres over the palette background. Static, so it

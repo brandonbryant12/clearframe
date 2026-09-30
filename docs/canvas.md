@@ -44,6 +44,17 @@ Paint: `fill` and `stroke` take palette tokens (`bg, surface, ink, muted, accent
 
 `check` resolves every spoken cue against the narration and fails if one is missing or lands after the beat. `settle` (when the exit may begin) waits for every entrance, count, key and path move. Loops continue. A `count` is a displayed figure: it needs a visible `source` and a `sources` entry, like any chart.
 
+## Mosaic: shapes laid in tesserae
+
+Give a shape `mosaic: true` (or set `mosaic` on the canvas to lay every shape) and it is drawn in small square tiles instead of a flat fill:
+
+- **Fills** (rect, circle, ellipse, closed path or poly) are tiled on a darker grout bed. Tiles run in `rows` (running bond, the default for most shapes) or `rings` (the default for circles and ellipses), with an outline row tracing the contour in the stroke colour. A gradient fill is sampled per tile along `axis` (degrees; 90 = top to bottom), which gives mosaic skies and seas.
+- **Strokes** (a line, open path, or a shape with `fill: none`) become a beaded line of tiles along the path. With `enter: draw` the tiles are laid in drawing order.
+- **Motion.** `enter: assemble` builds the shape tile by tile (`build: sweep | radial | random`). `exit: scatter` throws the tiles loose; they spin, fall and fade.
+- **Options:** `tile` (size, default 16), `gap` (grout), `jitter` (0–1), `flow`, `outline` (true/false), `build`, `shade` (per-tile light/dark range), `shine` (glassy highlight), `grout` (colour), `axis`, `seed`.
+
+Pair it with the `mosaic` treatment (palette, `backdrop: "mosaic"`, gentle motion, iris at chapter turns). Put `glow` on gold tiles (a moon, a lamp, stars). Draw hero shapes big enough for a dozen tiles across. Layouts are cached and tiles are batched by colour, so a frame of a few thousand tiles costs a handful of paths.
+
 ## Worlds: one drawing, a travelling camera
 
 Slides cut from one picture to the next. A world keeps one picture and moves the camera. Give consecutive canvas beats the same `world` name and a camera rect `view: [x, y, w, h]` in world coordinates:

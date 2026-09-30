@@ -19,6 +19,11 @@ pub fn in_out_cubic(x: f32) -> f32 {
     let x = clamp01(x);
     if x < 0.5 { 4.0 * x * x * x } else { 1.0 - (-2.0 * x + 2.0).powi(3) / 2.0 }
 }
+/// Ease out with a small overshoot (a tile settling into its bed). Scale only, never opacity.
+pub fn out_back(x: f32) -> f32 {
+    let (c1, t) = (1.70158f32, clamp01(x) - 1.0);
+    1.0 + (c1 + 1.0) * t * t * t + c1 * t * t
+}
 pub fn in_cubic(x: f32) -> f32 {
     clamp01(x).powi(3)
 }

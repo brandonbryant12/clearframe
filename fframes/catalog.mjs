@@ -141,6 +141,16 @@ export const THEMES = {
     positive: '#3b7449',
     negative: '#c2344d',
   },
+  mosaic: {
+    bg: '#16225e',
+    surface: '#223387',
+    ink: '#f3ead3',
+    muted: '#9aa6cf',
+    accent: '#e9b949',
+    accent2: '#e2643c',
+    positive: '#3cc0b4',
+    negative: '#e2643c',
+  },
 };
 /** One-line character of each palette for `themes` and docs. */
 export const THEME_NOTES = {
@@ -157,6 +167,8 @@ export const THEME_NOTES = {
   blueprint: 'Drafting blue with sky and amber lines. Engineering, how-it-works and diagrams.',
   clay: 'Terracotta paper with rust and teal. Craft, history, food and warm documentary.',
   noir: 'Cinema black with gold and vermilion. Drama, true stories, premium reveals.',
+  mosaic:
+    'Ultramarine ground, ivory, gold, coral and turquoise tesserae. With backdrop mosaic and canvas mosaic: a film laid in tiles.',
   sketchbook:
     'Drawing paper with graphite, red and blue pencil. Hand-drawn explainers with rough canvas strokes and the paper backdrop.',
 };
@@ -651,6 +663,8 @@ export const BLOCKS = [
       stagger: 'Seconds between top-level elements without a cue (0–3)',
       rough:
         'Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure|solid, gap} (an element can set rough: false)',
+      mosaic:
+        'Lay every shape in tesserae: true or {tile, gap, jitter, flow: rows|rings, outline, build: sweep|radial|random, shade, shine, grout, axis} (an element can set mosaic: false)',
     },
     {
       title: 'How an idea spreads',
@@ -731,7 +745,7 @@ export const BLOCKS = [
 export const blockByName = name => BLOCKS.find(b => b.name === name);
 export const MOTIONS = ['gentle', 'snappy', 'spring'];
 export const TRANSITIONS = ['cut', 'fade', 'rise', 'wipe', 'push', 'zoom', 'panel', 'iris', 'whip'];
-export const BACKDROPS = ['none', 'dots', 'grid', 'glow', 'paper'];
+export const BACKDROPS = ['none', 'dots', 'grid', 'glow', 'paper', 'mosaic'];
 export const CANVASES = [
   [1920, 1080],
   [1080, 1920],

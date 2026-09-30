@@ -131,6 +131,27 @@ export function critique(root) {
         `The drawing covers ${Math.round((100 * box.w * box.h) / area)}% of the frame. Set view: "auto" to fit it to the space, or draw it larger.`,
       );
   }
+  // A mosaic needs room for its tiles: a shape a few tiles across reads as noise.
+  for (const b of beats.filter(x => x.block === 'canvas')) {
+    const small = [];
+    const visit = list =>
+      (list ?? []).forEach(el => {
+        if (el.type === 'group') return visit(el.children);
+        const m = el.mosaic ?? b.props.mosaic;
+        if (!m || m === false || !['rect', 'circle', 'ellipse', 'poly', 'path'].includes(el.type)) return;
+        if (el.fill == null || el.fill === 'none') return;
+        const e = extent([el]),
+          tile = (m === true ? null : m.tile) ?? 16;
+        if (e && Math.min(e.w, e.h) / tile < 5) small.push(el.id ?? el.type);
+      });
+    visit(b.props?.elements);
+    if (small.length)
+      add(
+        'idea',
+        b.id,
+        `${small.length} mosaic shape(s) are under five tiles across (${small.slice(0, 3).join(', ')}). Draw them bigger or use a smaller tile.`,
+      );
+  }
   // Frame-pixel drawings that reach the source line sit on top of the attribution.
   const sourceTop = sb.format.height - (sb.frame ? 165 : 130);
   for (const b of beats.filter(x => x.block === 'canvas' && x.props?.source && !x.props.view)) {

@@ -72,7 +72,8 @@
             "blueprint",
             "clay",
             "noir",
-            "sketchbook"
+            "sketchbook",
+            "mosaic"
           ]
         },
         {
@@ -94,7 +95,8 @@
                 "blueprint",
                 "clay",
                 "noir",
-                "sketchbook"
+                "sketchbook",
+                "mosaic"
               ]
             },
             "bg": {
@@ -171,7 +173,8 @@
         "dots",
         "grid",
         "glow",
-        "paper"
+        "paper",
+        "mosaic"
       ]
     },
     "chrome": {
@@ -2207,6 +2210,9 @@
                     },
                     "rough": {
                       "description": "Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure|solid, gap} (an element can set rough: false)"
+                    },
+                    "mosaic": {
+                      "description": "Lay every shape in tesserae: true or {tile, gap, jitter, flow: rows|rings, outline, build: sweep|radial|random, shade, shine, grout, axis} (an element can set mosaic: false)"
                     }
                   }
                 }

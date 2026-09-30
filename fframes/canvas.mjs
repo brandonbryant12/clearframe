@@ -56,6 +56,7 @@ const COMMON = [
   'depth',
   'shadow',
   'glow',
+  'mosaic',
 ];
 export const ENTERS = [
   'fade',
@@ -74,8 +75,9 @@ export const ENTERS = [
   'scramble',
   'blur',
   'none',
+  'assemble',
 ];
-export const EXITS = ['fade', 'shrink', 'fall', 'lift', 'undraw', 'wipe', 'blur', 'none'];
+export const EXITS = ['fade', 'shrink', 'fall', 'lift', 'undraw', 'wipe', 'blur', 'none', 'scatter'];
 export const LOOPS = ['spin', 'pulse', 'float', 'sway', 'orbit', 'dash', 'blink', 'level'];
 export const EASES = ['inOut', 'in', 'out', 'linear', 'spring'];
 export const COLOR_TOKENS = [
@@ -239,6 +241,11 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
     }
     if (el.rough === false) delete el.rough;
     else if (el.rough != null) el.rough = roughSpec(el.rough, `${at}.rough`, fail);
+    if (el.mosaic === false) delete el.mosaic;
+    else if (el.mosaic != null) {
+      if (!MOSAIC_TYPES.has(el.type)) fail(`${at}.mosaic works on rect, circle, ellipse, path, poly and line`);
+      el.mosaic = mosaicSpec(el.mosaic, `${at}.mosaic`, fail);
+    }
     if (el.echo != null) {
       const e = el.echo;
       if (!e || typeof e !== 'object' || Array.isArray(e)) fail(`${at}.echo must be {count, lag, step, fade, to}`);
@@ -360,6 +367,38 @@ export function roughSpec(value, where, fail) {
 }
 const ROUGH_TYPES = new Set(['rect', 'circle', 'ellipse', 'line', 'path', 'poly']);
 /** Apply a canvas-wide hand-drawn default to every drawable element that has not opted out. */
+const MOSAIC_TYPES = new Set(['rect', 'circle', 'ellipse', 'line', 'path', 'poly']);
+/** Validate a mosaic spec: `true` or {tile, gap, jitter, flow, outline, build, shade, shine, grout, axis, seed}. */
+export function mosaicSpec(m, at, fail) {
+  if (m === true) return {};
+  if (!m || typeof m !== 'object' || Array.isArray(m)) fail(`${at} must be true or an object`);
+  const ranges = {
+    tile: [3, 200],
+    gap: [0, 60],
+    jitter: [0, 1],
+    shade: [0, 0.6],
+    shine: [0, 1],
+    axis: [-360, 360],
+    seed: [0, 1e9],
+  };
+  for (const k of Object.keys(m)) {
+    if (!['tile', 'gap', 'jitter', 'flow', 'outline', 'build', 'shade', 'shine', 'grout', 'axis', 'seed'].includes(k))
+      fail(`${at}: unsupported field ${k}`);
+    if (ranges[k] && !(Number.isFinite(m[k]) && m[k] >= ranges[k][0] && m[k] <= ranges[k][1]))
+      fail(`${at}.${k} must be ${ranges[k][0]}–${ranges[k][1]}`);
+  }
+  if (m.flow != null && !['rows', 'rings'].includes(m.flow)) fail(`${at}.flow must be rows or rings`);
+  if (m.build != null && !['sweep', 'radial', 'random'].includes(m.build))
+    fail(`${at}.build must be sweep, radial or random`);
+  if (m.outline != null && typeof m.outline !== 'boolean') fail(`${at}.outline must be true or false`);
+  return { ...m };
+}
+/** A canvas-level mosaic: every shape without its own setting is laid in tiles. */
+export function applyMosaic(list, spec) {
+  eachElement(list, el => {
+    if (MOSAIC_TYPES.has(el.type) && el.mosaic === undefined && !el.dash) el.mosaic = { ...spec };
+  });
+}
 export function applyRough(list, rough) {
   eachElement(list, el => {
     if (ROUGH_TYPES.has(el.type) && el.rough === undefined && !el.dash) el.rough = { ...rough };
@@ -410,15 +449,17 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
     el.dur ??=
       enter === 'draw'
         ? T.draw
-        : enter === 'type'
-          ? Math.min(T.typeMax, Math.max(T.typeMin, chars * T.typePerChar))
-          : enter === 'scramble'
-            ? T.scramble
-            : ['grow', 'grow-x', 'grow-y', 'wipe', 'wipe-up'].includes(enter)
-              ? T.grow
-              : enter === 'none'
-                ? 0
-                : entrance;
+        : enter === 'assemble'
+          ? T.draw * 1.3
+          : enter === 'type'
+            ? Math.min(T.typeMax, Math.max(T.typeMin, chars * T.typePerChar))
+            : enter === 'scramble'
+              ? T.scramble
+              : ['grow', 'grow-x', 'grow-y', 'wipe', 'wipe-up'].includes(enter)
+                ? T.grow
+                : enter === 'none'
+                  ? 0
+                  : entrance;
     settle = Math.max(settle, el.at + el.dur);
     if (el.type === 'text' && el.count) settle = Math.max(settle, el.at + el.count.dur);
     if (el.exitSay != null) {

@@ -213,8 +213,8 @@ test('graphic transitions mirror across the cut and fall back to a fade when the
   assert.deepEqual(Object.keys(COVER).sort(), ['iris', 'panel', 'whip']);
 });
 
-test('fourteen palettes, kinetic stack mode and centred layouts are part of the contract', () => {
-  assert.equal(Object.keys(THEMES).length, 14);
+test('fifteen palettes, kinetic stack mode and centred layouts are part of the contract', () => {
+  assert.equal(Object.keys(THEMES).length, 15);
   const k = normalizeProps('kinetic', { mode: 'stack', emphasis: ['film'] });
   assert.equal(k.align, 'center');
   assert.throws(() => normalizeProps('kinetic', { mode: 'highlight', emphasis: ['x'] }), /stack mode/);

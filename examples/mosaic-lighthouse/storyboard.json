@@ -1,0 +1,678 @@
+{
+  "version": 2,
+  "title": "Laid in code",
+  "format": {
+    "preset": "square",
+    "fps": 30
+  },
+  "theme": "mosaic",
+  "backdrop": "mosaic",
+  "texture": {
+    "grain": 0.12,
+    "vignette": 0.55
+  },
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.6
+  },
+  "transition": "cut",
+  "captions": false,
+  "music": false,
+  "sfx": "subtle",
+  "voice": {
+    "takes": "chapter",
+    "style": "warm storyteller, unhurried"
+  },
+  "beats": [
+    {
+      "id": "tiles",
+      "block": "canvas",
+      "vo": "Every picture in this film is laid in tiles, one small square at a time.",
+      "props": {
+        "world": "bay",
+        "view": [
+          0,
+          0,
+          1080,
+          1080
+        ],
+        "elements": [
+          {
+            "type": "path",
+            "d": "M 180 980 L 180 430 A 360 360 0 0 1 900 430 L 900 980 Z",
+            "fill": {
+              "gradient": [
+                "#2b3fa0",
+                "#16225e"
+              ]
+            },
+            "stroke": "ink",
+            "mosaic": {
+              "tile": 18,
+              "axis": 90
+            },
+            "enter": "assemble",
+            "at": 0.1,
+            "dur": 1.8
+          },
+          {
+            "type": "rect",
+            "x": 260,
+            "y": 520,
+            "w": 9,
+            "h": 9,
+            "fill": "accent",
+            "enter": "pop",
+            "at": 1.4,
+            "glow": {
+              "blur": 6
+            },
+            "loop": {
+              "type": "blink",
+              "period": 2.6
+            }
+          },
+          {
+            "type": "rect",
+            "x": 330,
+            "y": 430,
+            "w": 9,
+            "h": 9,
+            "fill": "accent",
+            "enter": "pop",
+            "at": 1.47,
+            "glow": {
+              "blur": 6
+            },
+            "loop": {
+              "type": "blink",
+              "period": 3.3
+            }
+          },
+          {
+            "type": "rect",
+            "x": 410,
+            "y": 360,
+            "w": 9,
+            "h": 9,
+            "fill": "accent",
+            "enter": "pop",
+            "at": 1.54,
+            "glow": {
+              "blur": 6
+            },
+            "loop": {
+              "type": "blink",
+              "period": 4.0
+            }
+          },
+          {
+            "type": "rect",
+            "x": 820,
+            "y": 520,
+            "w": 9,
+            "h": 9,
+            "fill": "accent",
+            "enter": "pop",
+            "at": 1.6099999999999999,
+            "glow": {
+              "blur": 6
+            },
+            "loop": {
+              "type": "blink",
+              "period": 2.6
+            }
+          },
+          {
+            "type": "rect",
+            "x": 300,
+            "y": 640,
+            "w": 9,
+            "h": 9,
+            "fill": "accent",
+            "enter": "pop",
+            "at": 1.68,
+            "glow": {
+              "blur": 6
+            },
+            "loop": {
+              "type": "blink",
+              "period": 3.3
+            }
+          },
+          {
+            "type": "rect",
+            "x": 760,
+            "y": 610,
+            "w": 9,
+            "h": 9,
+            "fill": "accent",
+            "enter": "pop",
+            "at": 1.75,
+            "glow": {
+              "blur": 6
+            },
+            "loop": {
+              "type": "blink",
+              "period": 4.0
+            }
+          },
+          {
+            "type": "rect",
+            "x": 450,
+            "y": 250,
+            "w": 9,
+            "h": 9,
+            "fill": "accent",
+            "enter": "pop",
+            "at": 1.8199999999999998,
+            "glow": {
+              "blur": 6
+            },
+            "loop": {
+              "type": "blink",
+              "period": 2.6
+            }
+          },
+          {
+            "type": "rect",
+            "x": 620,
+            "y": 210,
+            "w": 9,
+            "h": 9,
+            "fill": "accent",
+            "enter": "pop",
+            "at": 1.89,
+            "glow": {
+              "blur": 6
+            },
+            "loop": {
+              "type": "blink",
+              "period": 3.3
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 710,
+            "cy": 380,
+            "r": 78,
+            "fill": "accent",
+            "mosaic": {
+              "tile": 12,
+              "flow": "rings"
+            },
+            "enter": "assemble",
+            "say": "tiles",
+            "dur": 1.4,
+            "glow": {
+              "blur": 22,
+              "opacity": 0.7
+            }
+          },
+          {
+            "type": "rect",
+            "x": 180,
+            "y": 760,
+            "w": 720,
+            "h": 220,
+            "fill": {
+              "gradient": [
+                "#3cc0b4",
+                "#1c5a8c"
+              ]
+            },
+            "mosaic": {
+              "tile": 16,
+              "axis": 90,
+              "outline": false
+            },
+            "enter": "assemble",
+            "at": 0.8,
+            "dur": 1.6
+          },
+          {
+            "type": "path",
+            "d": "M 190 800 L 210 804 L 230 807 L 250 809 L 270 810 L 290 810 L 310 808 L 330 806 L 350 802 L 370 799 L 390 795 L 410 792 L 430 791 L 450 790 L 470 791 L 490 793 L 510 796 L 530 799 L 550 803 L 570 806 L 590 808 L 610 810 L 630 810 L 650 809 L 670 806 L 690 803 L 710 800 L 730 796 L 750 793 L 770 791 L 790 790 L 810 790 L 830 792 L 850 795 L 870 798 L 890 802",
+            "stroke": "ink",
+            "mosaic": {
+              "tile": 7
+            },
+            "say": "square",
+            "dur": 1.0,
+            "loop": {
+              "type": "float",
+              "period": 3,
+              "amount": 5
+            }
+          },
+          {
+            "type": "path",
+            "d": "M 190 858 L 210 860 L 230 860 L 250 859 L 270 856 L 290 853 L 310 850 L 330 846 L 350 843 L 370 841 L 390 840 L 410 840 L 430 842 L 450 845 L 470 848 L 490 852 L 510 855 L 530 858 L 550 860 L 570 860 L 590 859 L 610 857 L 630 854 L 650 851 L 670 847 L 690 844 L 710 841 L 730 840 L 750 840 L 770 841 L 790 844 L 810 847 L 830 851 L 850 854 L 870 857 L 890 859",
+            "stroke": "ink",
+            "mosaic": {
+              "tile": 7
+            },
+            "say": "square",
+            "dur": 1.0,
+            "loop": {
+              "type": "float",
+              "period": 4,
+              "amount": 5
+            }
+          },
+          {
+            "type": "path",
+            "d": "M 190 909 L 210 907 L 230 904 L 250 901 L 270 897 L 290 894 L 310 891 L 330 890 L 350 890 L 370 892 L 390 894 L 410 897 L 430 901 L 450 904 L 470 907 L 490 909 L 510 910 L 530 909 L 550 908 L 570 905 L 590 902 L 610 898 L 630 895 L 650 892 L 670 890 L 690 890 L 710 891 L 730 893 L 750 896 L 770 900 L 790 903 L 810 906 L 830 909 L 850 910 L 870 910 L 890 908",
+            "stroke": "ink",
+            "mosaic": {
+              "tile": 7
+            },
+            "say": "square",
+            "dur": 1.0,
+            "loop": {
+              "type": "float",
+              "period": 5,
+              "amount": 5
+            }
+          },
+          {
+            "type": "poly",
+            "points": [
+              [
+                478,
+                790
+              ],
+              [
+                502,
+                520
+              ],
+              [
+                578,
+                520
+              ],
+              [
+                602,
+                790
+              ]
+            ],
+            "closed": true,
+            "fill": "ink",
+            "mosaic": {
+              "tile": 14
+            },
+            "enter": "assemble",
+            "say": "one",
+            "dur": 1.3
+          },
+          {
+            "type": "poly",
+            "points": [
+              [
+                492,
+                700
+              ],
+              [
+                495.6,
+                660
+              ],
+              [
+                584.4,
+                660
+              ],
+              [
+                588,
+                700
+              ]
+            ],
+            "closed": true,
+            "fill": "accent2",
+            "mosaic": {
+              "tile": 12,
+              "outline": false
+            },
+            "enter": "assemble",
+            "say": "small",
+            "dur": 0.9
+          },
+          {
+            "type": "poly",
+            "points": [
+              [
+                502,
+                610
+              ],
+              [
+                504.6,
+                570
+              ],
+              [
+                575.4,
+                570
+              ],
+              [
+                578,
+                610
+              ]
+            ],
+            "closed": true,
+            "fill": "accent2",
+            "mosaic": {
+              "tile": 12,
+              "outline": false
+            },
+            "enter": "assemble",
+            "say": "small",
+            "dur": 0.9
+          },
+          {
+            "type": "rect",
+            "x": 498,
+            "y": 470,
+            "w": 84,
+            "h": 50,
+            "fill": "accent",
+            "mosaic": {
+              "tile": 9,
+              "outline": false
+            },
+            "enter": "assemble",
+            "say": "time",
+            "dur": 0.8,
+            "glow": {
+              "blur": 16
+            }
+          },
+          {
+            "type": "poly",
+            "points": [
+              [
+                488,
+                472
+              ],
+              [
+                540,
+                430
+              ],
+              [
+                592,
+                472
+              ]
+            ],
+            "closed": true,
+            "fill": "accent2",
+            "mosaic": {
+              "tile": 12
+            },
+            "enter": "assemble",
+            "say": "time",
+            "dur": 0.8
+          },
+          {
+            "type": "rect",
+            "x": 60,
+            "y": 60,
+            "w": 960,
+            "h": 960,
+            "fill": "none",
+            "stroke": "accent",
+            "mosaic": {
+              "tile": 10
+            },
+            "at": 0,
+            "dur": 1.6,
+            "enter": "draw"
+          },
+          {
+            "type": "rect",
+            "x": 84,
+            "y": 84,
+            "w": 912,
+            "h": 912,
+            "fill": "none",
+            "stroke": "ink",
+            "mosaic": {
+              "tile": 8
+            },
+            "at": 0.3,
+            "dur": 1.6,
+            "enter": "draw"
+          }
+        ]
+      },
+      "lead": 0.6
+    },
+    {
+      "id": "light",
+      "block": "canvas",
+      "vo": "Light is just a few tiles that glow.",
+      "props": {
+        "world": "bay",
+        "view": [
+          300,
+          240,
+          600,
+          600
+        ],
+        "elements": [
+          {
+            "type": "poly",
+            "points": [
+              [
+                545,
+                492
+              ],
+              [
+                900,
+                400
+              ],
+              [
+                900,
+                580
+              ]
+            ],
+            "closed": true,
+            "fill": "#ffe7a3",
+            "opacity": 0.5,
+            "mosaic": {
+              "tile": 12,
+              "outline": false,
+              "build": "radial",
+              "grout": "none"
+            },
+            "enter": "assemble",
+            "say": "Light",
+            "dur": 1.0,
+            "origin": [
+              545,
+              492
+            ],
+            "loop": {
+              "type": "sway",
+              "period": 5,
+              "amount": 6
+            },
+            "glow": {
+              "blur": 18,
+              "opacity": 0.6
+            }
+          }
+        ]
+      },
+      "tail": 0.4
+    },
+    {
+      "id": "move",
+      "block": "canvas",
+      "vo": "And because each tile is placed in code, any shape can come apart, and come back together.",
+      "props": {
+        "world": "bay",
+        "view": [
+          0,
+          0,
+          1080,
+          1080
+        ],
+        "elements": [
+          {
+            "type": "poly",
+            "points": [
+              [
+                250,
+                850
+              ],
+              [
+                370,
+                850
+              ],
+              [
+                345,
+                885
+              ],
+              [
+                275,
+                885
+              ]
+            ],
+            "closed": true,
+            "fill": "accent2",
+            "mosaic": {
+              "tile": 10
+            },
+            "enter": "assemble",
+            "at": 0.1,
+            "dur": 0.8,
+            "exitSay": "apart",
+            "exit": "scatter",
+            "exitDur": 1.1
+          },
+          {
+            "type": "poly",
+            "points": [
+              [
+                312,
+                845
+              ],
+              [
+                312,
+                760
+              ],
+              [
+                360,
+                845
+              ]
+            ],
+            "closed": true,
+            "fill": "ink",
+            "mosaic": {
+              "tile": 10
+            },
+            "enter": "assemble",
+            "at": 0.2,
+            "dur": 0.8,
+            "exitSay": "apart",
+            "exit": "scatter",
+            "exitDur": 1.1
+          },
+          {
+            "type": "poly",
+            "points": [
+              [
+                640,
+                850
+              ],
+              [
+                760,
+                850
+              ],
+              [
+                735,
+                885
+              ],
+              [
+                665,
+                885
+              ]
+            ],
+            "closed": true,
+            "fill": "accent2",
+            "mosaic": {
+              "tile": 10
+            },
+            "enter": "assemble",
+            "say": "together",
+            "dur": 1.1
+          },
+          {
+            "type": "poly",
+            "points": [
+              [
+                702,
+                845
+              ],
+              [
+                702,
+                760
+              ],
+              [
+                750,
+                845
+              ]
+            ],
+            "closed": true,
+            "fill": "ink",
+            "mosaic": {
+              "tile": 10
+            },
+            "enter": "assemble",
+            "say": "together",
+            "dur": 1.1
+          }
+        ]
+      },
+      "tail": 0.9
+    },
+    {
+      "id": "end",
+      "block": "canvas",
+      "vo": "Every tile, laid in code.",
+      "props": {
+        "world": "bay",
+        "view": [
+          -40,
+          -40,
+          1160,
+          1160
+        ],
+        "elements": [
+          {
+            "type": "rect",
+            "x": 330,
+            "y": 918,
+            "w": 420,
+            "h": 74,
+            "r": 10,
+            "fill": "bg",
+            "opacity": 0.8,
+            "say": "Every"
+          },
+          {
+            "type": "text",
+            "text": "Laid in code.",
+            "x": 540,
+            "y": 970,
+            "size": 54,
+            "font": "serif-italic",
+            "fill": "accent",
+            "anchor": "middle",
+            "say": "code",
+            "glow": {
+              "blur": 10,
+              "opacity": 0.6
+            }
+          }
+        ]
+      },
+      "tail": 1.2
+    }
+  ]
+}

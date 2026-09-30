@@ -13,6 +13,8 @@ use std::sync::Mutex;
 mod effects;
 #[path = "canvas_geometry.rs"]
 mod geometry;
+#[path = "canvas_mosaic.rs"]
+mod mosaic;
 use geometry::*;
 
 pub(crate) const MAX_ELEMENTS: usize = 600;
@@ -33,9 +35,9 @@ const TYPES: &[&str] = &[
 ];
 const ENTERS: &[&str] = &[
     "fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type",
-    "scramble", "blur", "none",
+    "scramble", "blur", "none", "assemble",
 ];
-const EXITS: &[&str] = &["fade", "shrink", "fall", "lift", "undraw", "wipe", "blur", "none"];
+const EXITS: &[&str] = &["fade", "shrink", "fall", "lift", "undraw", "wipe", "blur", "none", "scatter"];
 const LOOPS: &[&str] = &["spin", "pulse", "float", "sway", "orbit", "dash", "blink", "level"];
 const TOKENS: &[&str] =
     &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "none"];
@@ -396,6 +398,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let c = &crate::constants::get().canvas;
         let default_dur = match enter {
             "draw" => c.draw,
+            "assemble" => c.draw * 1.3,
             "type" => (text_len * c.type_per_char).clamp(c.type_min, c.type_max),
             "grow" | "grow-x" | "grow-y" | "wipe" | "wipe-up" => c.grow,
             "scramble" => c.scramble,
@@ -602,15 +605,36 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
 
         let draw = if enter == "draw" { if dur <= 0.0 { 1.0 } else { motion::out_cubic(local / dur) } } else { 1.0 };
         let draw = if exit == "undraw" { draw * (1.0 - q) } else { draw };
-        let shape = self.shape(
-            el,
-            draw,
-            dash_shift,
-            if enter == "type" { motion::clamp01(local / dur.max(0.001)) } else { 1.0 },
-            local,
-            defs,
-            now,
-        );
+        let mosaic = el.get("mosaic").filter(|m| m.as_bool() == Some(true) || m.is_object());
+        let shape = match mosaic {
+            Some(spec) if matches!(kind, "rect" | "circle" | "ellipse" | "path" | "poly" | "line") => {
+                let stroked = matches!(kind, "line" | "path" | "poly");
+                let fill = self.paint(el.get("fill"), if stroked { "none" } else { "accent" }, defs);
+                let stroke = self.paint(el.get("stroke"), if stroked { "ink" } else { "none" }, defs);
+                let assemble =
+                    if enter == "assemble" { if dur <= 0.0 { 1.0 } else { motion::clamp01(local / dur) } } else { 1.0 };
+                let scatter = if exit == "scatter" { q } else { 0.0 };
+                let defaults = Value::Object(Default::default());
+                self.mosaic(
+                    el,
+                    if spec.is_object() { spec } else { &defaults },
+                    &fill,
+                    &stroke,
+                    draw,
+                    assemble,
+                    scatter,
+                )
+            }
+            _ => self.shape(
+                el,
+                draw,
+                dash_shift,
+                if enter == "type" { motion::clamp01(local / dur.max(0.001)) } else { 1.0 },
+                local,
+                defs,
+                now,
+            ),
+        };
 
         // Wipes reveal through a growing clip over the element bounds.
         let wipe = match (enter, exit) {

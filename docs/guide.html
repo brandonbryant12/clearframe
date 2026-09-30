@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<!--
+  ClearFrame guide: a living document (docs/guide.html).
+  Last updated: 2026-09-30. Covers CHANGELOG 0.5.0 (unreleased).
+
+  WHEN UPDATING, CONSULT (sources of truth, roughly in this order):
+    - CHANGELOG.md: newest section first. It feeds "What's new" and anything it changes below.
+    - CLI output: node engine/cli.mjs help | treatments | playbooks | themes [--json] | blocks [NAME] | motions | sketch | icons
+      (these are cheap and print the exact current lists; they don't build or render anything)
+    - schema/storyboard.schema.json: film and beat fields (transition, exit, tone, camera, plate, captions, textMotion, heading, sfx, format)
+    - fframes/canvas.mjs: canvas element types, enters, exits, loops, keys, eases, fonts, colour tokens, effects (glow, shadow, rough, echo, depth, behind)
+    - fframes/treatments.mjs: what each treatment sets, plus its rules
+    - README.md, AGENTS.md, docs/canvas.md, docs/style.md, docs/ideas.md, docs/speech.md, docs/continuity.md
+    - skills/clearframe*/SKILL.md (clearframe, direction, canvas, motion, script, library, engine, integrity, dataviz)
+    - examples/night-city/BRIEF.md and storyboard.json (the case study in section 04)
+
+  CONVENTIONS
+    - One <section id="..."> per topic, in the same order as the TOC. Keep ids stable because people link to them.
+    - Prompt templates are <pre class="prompt"> inside <figure class="prompt-card">. The script at the bottom adds copy buttons automatically.
+    - Any <section id> linked from the TOC gets highlighted automatically while it is on screen.
+    - Only list vocabulary you have verified in code or CLI output. Update the "Last updated" line in the header too.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="How ClearFrame turns reports, recordings and scripts into narrated motion-graphics films, and how to prompt and direct it.">
+<title>ClearFrame Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Inter:opsz,wght@14..32,400..700&display=swap">
+<style>
+  /* ---------- Tokens: paper palette (light), ink palette (dark) ---------- */
+  :root {
+    --bg: #f5f3ed;
+    --surface: #fbfaf6;
+    --surface-2: #ebe8df;
+    --ink: #222831;
+    --muted: #5d6772;
+    --faint: #8a929b;
+    --accent: #315cce;
+    --accent2: #b85a1a;
+    --positive: #17745c;
+    --negative: #bd453c;
+    --rule: #dbd6ca;
+    --wash: rgba(49, 92, 206, 0.06);
+    --code-bg: #1e242d;
+    --code-ink: #eeece4;
+    --code-muted: #95a1af;
+    --prompt-bg: #fffdf8;
+    --shadow: 0 1px 0 rgba(34, 40, 49, 0.04), 0 8px 24px -16px rgba(34, 40, 49, 0.18);
+    --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-serif: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --measure: 70ch;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101721;
+      --surface: #141e2a;
+      --surface-2: #1d2938;
+      --ink: #f1f1ea;
+      --muted: #a4b2c4;
+      --faint: #7b889a;
+      --accent: #76cbb8;
+      --accent2: #f0b86e;
+      --positive: #83d3ac;
+      --negative: #f29a8a;
+      --rule: #263446;
+      --wash: rgba(118, 203, 184, 0.07);
+      --code-bg: #0b1119;
+      --code-ink: #e7e5dc;
+      --code-muted: #8795a8;
+      --prompt-bg: #121b26;
+      --shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 10px 30px -18px rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  /* ---------- Base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 24px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.62;
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { text-decoration-thickness: 2px; }
+  ::selection { background: color-mix(in srgb, var(--accent) 25%, transparent); }
+  strong { font-weight: 620; }
+  code, kbd {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: var(--surface-2);
+    border-radius: 5px;
+    padding: 0.08em 0.36em;
+    overflow-wrap: anywhere;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  /* ---------- Layout ---------- */
+  .shell {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 64px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  main { min-width: 0; padding: 0 0 140px; max-width: 920px; }
+  main p, main ul, main ol, main h2, main h3, main h4, .lede { max-width: var(--measure); }
+
+  /* ---------- TOC ---------- */
+  .toc {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 44px 0 32px;
+    font-size: 14px;
+  }
+  .toc summary { list-style: none; cursor: pointer; display: none; }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc .toc-brand {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--ink);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .toc .toc-brand span { color: var(--accent); }
+  .toc .toc-meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--faint); margin: 0 0 24px; }
+  .toc ol { list-style: none; margin: 0; padding: 0; }
+  .toc li { margin: 0; }
+  .toc a {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 6px 10px;
+    margin-left: -10px;
+    border-radius: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    line-height: 1.35;
+    transition: color 0.15s, background 0.15s;
+  }
+  .toc a:hover { color: var(--ink); background: var(--surface-2); }
+  .toc a .n { font-family: var(--font-mono); font-size: 11px; color: var(--faint); min-width: 18px; }
+  .toc a[aria-current="true"], .toc a.in-path { color: var(--ink); }
+  .toc a[aria-current="true"] { background: var(--wash); }
+  .toc a[aria-current="true"] .n, .toc a.in-path .n { color: var(--accent); }
+  .toc ol.sub { margin: 2px 0 6px 28px; border-left: 1px solid var(--rule); }
+  .toc ol.sub a { padding: 4px 10px; margin-left: 0; font-size: 13px; border-radius: 0 8px 8px 0; }
+
+  /* ---------- Masthead ---------- */
+  .masthead { padding: 56px 0 8px; border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    align-items: center;
+    margin: 0 0 22px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+  h1 {
+    font-size: clamp(40px, 6.4vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    font-weight: 680;
+    margin: 0 0 22px;
+    max-width: 16ch;
+  }
+  h1 em {
+    display: block;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--accent);
+    font-size: 0.82em;
+    margin-top: 6px;
+  }
+  .lede { font-size: 20px; line-height: 1.55; color: var(--muted); margin: 0 0 26px; }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 30px;
+    padding: 0;
+    list-style: none;
+  }
+  .meta li {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 4px 11px;
+  }
+  .meta li.updated { color: var(--ink); border-color: color-mix(in srgb, var(--accent) 45%, var(--rule)); }
+
+  /* ---------- Sections ---------- */
+  section.topic { padding-top: 72px; }
+  section.topic + section.topic { border-top: 1px solid var(--rule); margin-top: 72px; }
+  .kicker { display: flex; align-items: baseline; gap: 12px; margin: 0 0 6px; }
+  .kicker .num { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; color: var(--accent); }
+  .kicker .serif { font-family: var(--font-serif); font-style: italic; font-size: 22px; color: var(--accent2); line-height: 1.2; }
+  h2 {
+    font-size: clamp(30px, 4.2vw, 42px);
+    line-height: 1.08;
+    letter-spacing: -0.028em;
+    font-weight: 660;
+    margin: 0 0 18px;
+  }
+  h3 { font-size: 21px; line-height: 1.25; letter-spacing: -0.015em; font-weight: 640; margin: 44px 0 10px; }
+  h4 { font-size: 16px; font-weight: 640; margin: 26px 0 6px; }
+  p { margin: 0 0 16px; }
+  ul, ol { padding-left: 1.25em; margin: 0 0 18px; }
+  li { margin: 0 0 7px; }
+  li::marker { color: var(--faint); }
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .serif-em { font-family: var(--font-serif); font-style: italic; font-size: 1.12em; color: var(--accent); }
+  .small { font-size: 14.5px; color: var(--muted); }
+
+  /* ---------- Cards ---------- */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin: 22px 0 26px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 18px 18px 16px;
+    box-shadow: var(--shadow);
+    min-width: 0;
+  }
+  .card h4 { margin: 8px 0 8px; font-size: 18px; letter-spacing: -0.01em; }
+  .card p { font-size: 15px; margin: 0; color: var(--muted); }
+  .card p + p { margin-top: 8px; }
+  .card .arrow { font-family: var(--font-serif); font-style: italic; color: var(--accent); font-size: 19px; }
+
+  .note {
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent2);
+    background: var(--surface);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 14px 18px;
+    margin: 20px 0 24px;
+    max-width: var(--measure);
+    font-size: 15.5px;
+  }
+  .note p:last-child, .note ul:last-child { margin-bottom: 0; }
+  .note .mono-label { display: block; margin-bottom: 4px; color: var(--accent2); }
+
+  /* ---------- Code ---------- */
+  pre {
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    line-height: 1.6;
+    margin: 16px 0 22px;
+    tab-size: 2;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; border-radius: 0; overflow-wrap: normal; }
+  pre.code {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    overflow-x: auto;
+  }
+  pre.code .c { color: var(--code-muted); }
+  pre.code .k { color: #9fb8ff; }
+  @media (prefers-color-scheme: dark) { pre.code .k { color: var(--accent); } }
+  .code-label { display: block; margin: 20px 0 -8px; }
+
+  /* ---------- Prompt cards ---------- */
+  .prompt-card {
+    margin: 18px 0 22px;
+    background: var(--prompt-bg);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    box-shadow: var(--shadow);
+    min-width: 0;
+  }
+  .prompt-card figcaption {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 12px 14px 10px 18px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .prompt-card figcaption strong { font-size: 15.5px; letter-spacing: -0.005em; flex: 1 1 auto; min-width: 0; }
+  .prompt-card figcaption .mono-label { color: var(--accent); }
+  pre.prompt {
+    margin: 0;
+    padding: 14px 18px 18px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    color: var(--ink);
+    font-size: 13.4px;
+    line-height: 1.66;
+  }
+  pre.prompt .ph { color: var(--accent2); }
+  .copy {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 4px 12px;
+    cursor: pointer;
+    margin-left: auto;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .copy:hover { color: var(--ink); border-color: var(--accent); }
+  .copy.done { color: var(--positive); border-color: var(--positive); }
+  .prompt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0 16px; }
+  .prompt-grid .prompt-card { margin: 10px 0; }
+
+  /* ---------- Tables ---------- */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+    margin: 16px 0 26px;
+    -webkit-overflow-scrolling: touch;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; line-height: 1.5; min-width: 560px; }
+  th {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 11px 14px;
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+  td { padding: 10px 14px; vertical-align: top; border-top: 1px solid var(--rule); }
+  td:first-child { white-space: nowrap; }
+  td code { font-size: 0.84em; }
+  td.wrap { white-space: normal; }
+  tr.group td {
+    background: var(--wash);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 7px 14px;
+  }
+  tr.group td code { text-transform: none; letter-spacing: 0; font-size: 12px; background: none; padding: 0; color: var(--ink); }
+  .badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 1px 7px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    vertical-align: 1px;
+    margin-left: 6px;
+    white-space: nowrap;
+  }
+  .badge.paid { color: var(--accent2); }
+  .badge.free { color: var(--positive); }
+  .badge.heavy { color: var(--negative); }
+  .sw { display: inline-flex; gap: 3px; vertical-align: middle; }
+  .sw i { width: 16px; height: 16px; border-radius: 50%; background: var(--c); display: inline-block; box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.35); }
+  .sw i:first-child { border-radius: 4px; width: 22px; }
+
+  /* ---------- Concept rows ---------- */
+  .concepts { margin: 18px 0 10px; border-top: 1px solid var(--rule); }
+  .concept { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .concept > h3 { margin: 2px 0 0; font-size: 17px; letter-spacing: -0.01em; }
+  .concept > h3 small { display: block; font-family: var(--font-mono); font-weight: 400; font-size: 11px; letter-spacing: 0.1em; color: var(--faint); text-transform: uppercase; margin-top: 4px; }
+  .concept > div > p { font-size: 16px; }
+  .concept > div > p:last-child, .concept > div > pre:last-child { margin-bottom: 0; }
+
+  /* ---------- Diagram ---------- */
+  figure.diagram { margin: 26px 0 10px; }
+  .diagram-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: 12px 8px 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .diagram svg { display: block; width: 100%; min-width: 760px; height: auto; }
+  .diagram figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; max-width: var(--measure); }
+  .scroll-hint { display: none; font-family: var(--font-mono); font-size: 11px; color: var(--faint); margin: 6px 0 0; }
+  .dg-box { fill: var(--bg); stroke: var(--rule); stroke-width: 1.25; }
+  .dg-box.hero { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+  .dg-label { font: 500 11px var(--font-mono); letter-spacing: 0.12em; fill: var(--faint); }
+  .dg-title { font: 640 17px var(--font-sans); letter-spacing: -0.01em; fill: var(--ink); }
+  .dg-title.mono { font: 600 15.5px var(--font-mono); letter-spacing: 0; }
+  .dg-detail { font: 400 13.5px var(--font-sans); fill: var(--muted); }
+  .dg-line { stroke: var(--faint); stroke-width: 1.5; fill: none; }
+  .dg-line.accent { stroke: var(--accent); }
+  .dg-line.warm { stroke: var(--accent2); }
+  .dg-head { fill: var(--faint); }
+  .dg-head.accent { fill: var(--accent); }
+  .dg-head.warm { fill: var(--accent2); }
+  .dg-loop { fill: var(--wash); stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 5 6; }
+  .dg-chip { fill: var(--surface); stroke: color-mix(in srgb, var(--accent) 55%, var(--rule)); }
+  .dg-chip-text { font: 500 12.5px var(--font-mono); fill: var(--ink); }
+  .dg-serif { font: italic 400 23px var(--font-serif); fill: var(--accent); }
+  .dg-edge { font: 500 11.5px var(--font-mono); fill: var(--accent2); }
+  .dg-edge.accent { fill: var(--accent); }
+  .dg-tag { font: 600 10.5px var(--font-mono); letter-spacing: 0.16em; fill: var(--accent); }
+
+  /* ---------- Stages & principles ---------- */
+  ol.stages { list-style: none; padding: 0; counter-reset: stage; margin: 26px 0; }
+  ol.stages > li { counter-increment: stage; position: relative; padding: 0 0 0 52px; margin: 0 0 18px; max-width: var(--measure); }
+  ol.stages > li::before {
+    content: counter(stage, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 2px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--rule));
+    border-radius: 999px;
+    padding: 1px 7px;
+  }
+  ol.stages > li > strong:first-child { display: block; font-size: 17.5px; margin-bottom: 2px; }
+  ol.principles { padding-left: 0; list-style: none; counter-reset: p; }
+  ol.principles > li { counter-increment: p; display: grid; grid-template-columns: 44px minmax(0, 1fr); margin: 0 0 16px; }
+  ol.principles > li::before { content: counter(p); font-family: var(--font-serif); font-style: italic; font-size: 30px; line-height: 1; color: var(--accent2); }
+  ol.principles > li > div > strong:first-child { display: block; font-size: 17.5px; }
+
+  /* ---------- Case study ---------- */
+  .versus { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 20px 0 24px; }
+  .versus .card { position: relative; }
+  .versus .card.after { border-color: color-mix(in srgb, var(--accent) 50%, var(--rule)); }
+  .versus blockquote { margin: 12px 0 0; font-family: var(--font-serif); font-style: italic; font-size: 22px; line-height: 1.25; color: var(--ink); }
+  .versus blockquote::before { content: "\201C"; color: var(--accent2); }
+  .versus blockquote::after { content: "\201D"; color: var(--accent2); }
+  .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px 22px; margin: 16px 0 10px; }
+  .two-col > div { min-width: 0; }
+  .two-col h4 { margin-top: 6px; }
+  .two-col ul { font-size: 15.5px; }
+
+  /* ---------- FAQ ---------- */
+  .faq { margin: 18px 0; }
+  .faq > div { padding: 16px 0; border-top: 1px solid var(--rule); }
+  .faq h3 { margin: 0 0 6px; font-size: 17.5px; }
+  .faq p { font-size: 16px; }
+  .faq p:last-child { margin-bottom: 0; }
+
+  /* ---------- What's new ---------- */
+  ul.news { list-style: none; padding: 0; }
+  ul.news li { padding: 10px 0 10px 18px; border-left: 2px solid var(--rule); margin: 0; position: relative; }
+  ul.news li::before { content: ""; position: absolute; left: -5px; top: 18px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  ul.news li strong { font-weight: 640; }
+
+  footer.end { margin-top: 90px; padding-top: 22px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--muted); }
+
+  /* ---------- Narrow screens ---------- */
+  @media (max-width: 1100px) {
+    .shell { gap: 40px; padding: 0 28px; grid-template-columns: 210px minmax(0, 1fr); }
+  }
+  @media (max-width: 960px) {
+    .shell { display: block; padding: 0 16px; }
+    .toc {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      max-height: none;
+      overflow: visible;
+      padding: 0;
+      margin: 0 -16px;
+      background: var(--bg);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .toc summary { display: flex; align-items: center; gap: 10px; padding: 11px 16px; }
+    .toc summary::after { content: "+"; margin-left: auto; font-family: var(--font-mono); color: var(--muted); }
+    .toc details[open] summary::after { content: "\2212"; }
+    .toc .toc-current { font-size: 14px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+    .toc .toc-body { max-height: 70vh; overflow-y: auto; padding: 4px 16px 16px 26px; }
+    .toc .toc-brand, .toc .toc-meta { display: none; }
+    .masthead { padding-top: 30px; }
+    section.topic { padding-top: 52px; }
+    section.topic + section.topic { margin-top: 52px; }
+    .scroll-hint { display: block; }
+    html { scroll-padding-top: 64px; }
+  }
+  @media (max-width: 640px) {
+    body { font-size: 16.5px; }
+    .lede { font-size: 18px; }
+    .concept { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+    ol.stages > li { padding-left: 44px; }
+    ol.principles > li { grid-template-columns: 34px minmax(0, 1fr); }
+    pre.prompt { padding: 12px 14px 16px; font-size: 13px; }
+    .prompt-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ================= TOC ================= -->
+  <nav class="toc" aria-label="Contents">
+    <details open>
+      <summary><span class="mono-label">Contents</span><span class="toc-current">What it is</span></summary>
+      <div class="toc-body">
+        <a class="toc-brand" href="#top">Clear<span>Frame</span></a>
+        <p class="toc-meta">GUIDE · 2026-09-30</p>
+        <ol>
+          <li><a href="#what-it-is"><span class="n">01</span>What it is</a></li>
+          <li><a href="#how-it-works"><span class="n">02</span>How it works</a></li>
+          <li><a href="#concepts"><span class="n">03</span>Core concepts</a></li>
+          <li><a href="#outcomes"><span class="n">04</span>Getting great outcomes</a></li>
+          <li><a href="#prompting"><span class="n">05</span>Prompting guide</a>
+            <ol class="sub">
+              <li><a href="#prompting-include">What to include</a></li>
+              <li><a href="#prompting-templates">Templates</a></li>
+              <li><a href="#prompting-styles">Asking for a style</a></li>
+              <li><a href="#prompting-iterate">Iteration prompts</a></li>
+              <li><a href="#prompting-anti">Anti-patterns</a></li>
+            </ol>
+          </li>
+          <li><a href="#vocabulary"><span class="n">06</span>Direction vocabulary</a></li>
+          <li><a href="#commands"><span class="n">07</span>Command reference</a></li>
+          <li><a href="#troubleshooting"><span class="n">08</span>Troubleshooting &amp; FAQ</a></li>
+          <li><a href="#whats-new"><span class="n">09</span>What's new</a></li>
+          <li><a href="#maintaining"><span class="n">10</span>Keeping this current</a></li>
+        </ol>
+      </div>
+    </details>
+  </nav>
+
+  <main id="top">
+
+    <!-- ================= MASTHEAD ================= -->
+    <header class="masthead">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span>ClearFrame</span><span>Field guide</span><span>Living document</span></p>
+      <h1>The ClearFrame guide <em>how it works, and how to direct it</em></h1>
+      <p class="lede">ClearFrame turns research reports, podcasts, scripts and briefs into narrated motion-graphics films, drawn natively in Rust. This guide covers the pipeline, the vocabulary and, above all, how to ask for a film worth watching.</p>
+      <ul class="meta">
+        <li class="updated">Last updated: 2026-09-30</li>
+        <li>Covers 0.5.0 (unreleased)</li>
+        <li>33 blocks · 15 palettes</li>
+        <li>9 treatments · 28 playbooks</li>
+      </ul>
+    </header>
+
+    <!-- ================= 01 WHAT IT IS ================= -->
+    <section class="topic" id="what-it-is">
+      <p class="kicker"><span class="num">01</span><span class="serif">the short version</span></p>
+      <h2>What it is</h2>
+      <p>ClearFrame is an agent-directed motion-graphics system. A model (usually Claude) reads your material and writes one <code>storyboard.json</code>. A native Rust/SVG renderer, <strong>FFFrames</strong>, then draws every frame: display type, counting numbers, honest charts, diagrams, hand-drawn canvases and captions, each timed to the words of the narration. Google models supply voice, music, stills and the occasional footage insert, but only when you ask for them and set a budget. It has no browser engine, no timeline editor and no npm runtime dependencies. You direct in words, and the storyboard is the whole film.</p>
+
+      <div class="cards">
+        <div class="card">
+          <span class="mono-label">Research</span> <span class="arrow">→</span> <span class="mono-label">explainer</span>
+          <h4>Reports become arguments</h4>
+          <p><code>ingest --markdown</code> pulls every figure out with its sentence and source, along with the tensions, quotes and chart-ready tables. It also scaffolds a question-led <code>research-digest</code> film. The sweet spot is 60–90 s, which is 12–18 beats.</p>
+        </div>
+        <div class="card">
+          <span class="mono-label">Podcast</span> <span class="arrow">→</span> <span class="mono-label">clips</span>
+          <h4>Recordings become social cuts</h4>
+          <p><code>ingest --audio</code> slices a recording into gapless beats with measured word timings and speaker tags. Vertical clips default to pop captions, so the words stay on screen even when a beat turns into a picture.</p>
+        </div>
+        <div class="card">
+          <span class="mono-label">Script</span> <span class="arrow">→</span> <span class="mono-label">film</span>
+          <h4>Narration gets pictures</h4>
+          <p>Bring finished words. Each beat gets one idea, one landing word and its own picture. Recording in continuous chapter takes keeps the voice performing from line to line.</p>
+        </div>
+      </div>
+      <p class="small">It also handles brand spots, data stories, lessons and how-tos, one-world journeys through a process or place, and speech-led kinetic type. Run <code>playbooks</code> for all 28 starting arcs.</p>
+
+      <h3>What it is not</h3>
+      <ul>
+        <li><strong>Not a slide-deck maker.</strong> If the result looks like slides, the film has failed. <code>critique</code> and the review loop exist to catch that.</li>
+        <li><strong>Not a text-to-video generator.</strong> Facts, charts and labels are drawn natively. Generated footage is a sparing insert (the default review threshold is 20% of runtime) with its own audio discarded, and it never carries information.</li>
+        <li><strong>Not a fact-checker.</strong> It refuses numbers that have no visible source, but it can't tell whether the source is right. The facts are your responsibility.</li>
+        <li><strong>Not a GUI or a browser renderer.</strong> The old HTML/GSAP engine is archived for recovery only. FFFrames is the only active renderer.</li>
+      </ul>
+    </section>
+
+    <!-- ================= 02 HOW IT WORKS ================= -->
+    <section class="topic" id="how-it-works">
+      <p class="kicker"><span class="num">02</span><span class="serif">from material to MP4</span></p>
+      <h2>How it works</h2>
+      <p>Material flows in one direction, from the source to <code>storyboard.json</code> to the frames. Direction flows back through a review loop. You change the film by editing the storyboard, and you change the tool by fixing the engine.</p>
+
+      <figure class="diagram" aria-labelledby="pipeline-caption">
+        <div class="diagram-scroll">
+          <svg viewBox="0 0 900 452" role="img" aria-labelledby="pipeline-title pipeline-desc">
+            <title id="pipeline-title">ClearFrame pipeline</title>
+            <desc id="pipeline-desc">Material goes through ingest into a brief and direction, then into storyboard.json, then voice and measured word timings, then job.json, the FFFrames Rust renderer and the MP4. A review loop (critique, check, sheet, draft MP4, fresh review) sends film choices back to the storyboard and tool problems back to the engine.</desc>
+            <defs>
+              <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0 0 L10 5 L0 10 z"/></marker>
+              <marker id="ah-accent" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head accent" d="M0 0 L10 5 L0 10 z"/></marker>
+              <marker id="ah-warm" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head warm" d="M0 0 L10 5 L0 10 z"/></marker>
+            </defs>
+
+            <!-- Row 1: material → ingest → storyboard → voice -->
+            <rect class="dg-box" x="2" y="40" width="191" height="120" rx="12"/>
+            <text class="dg-label" x="20" y="68">01 · SOURCE</text>
+            <text class="dg-title" x="20" y="96">Material</text>
+            <text class="dg-detail" x="20" y="122">report · recording</text>
+            <text class="dg-detail" x="20" y="142">script · brief</text>
+
+            <rect class="dg-box" x="237" y="40" width="191" height="120" rx="12"/>
+            <text class="dg-label" x="255" y="68">02 · INGEST</text>
+            <text class="dg-title" x="255" y="96">Brief &amp; direction</text>
+            <text class="dg-detail" x="255" y="122">ingest · reference</text>
+            <text class="dg-detail" x="255" y="142">BRIEF · DIRECTION.md</text>
+
+            <text class="dg-tag" x="567" y="28" text-anchor="middle">THE SINGLE SOURCE</text>
+            <rect class="dg-box hero" x="472" y="40" width="191" height="120" rx="12"/>
+            <text class="dg-label" x="490" y="68">03 · AUTHOR</text>
+            <text class="dg-title mono" x="490" y="96">storyboard.json</text>
+            <text class="dg-detail" x="490" y="122">beats · blocks · props</text>
+            <text class="dg-detail" x="490" y="142">spoken cues · layers</text>
+
+            <rect class="dg-box" x="707" y="40" width="191" height="120" rx="12"/>
+            <text class="dg-label" x="725" y="68">04 · VOICE</text>
+            <text class="dg-title" x="725" y="96">Voice &amp; timing</text>
+            <text class="dg-detail" x="725" y="122">voice · align</text>
+            <text class="dg-detail" x="725" y="142">measured word times</text>
+
+            <line class="dg-line" x1="197" y1="100" x2="231" y2="100" marker-end="url(#ah)"/>
+            <line class="dg-line" x1="432" y1="100" x2="466" y2="100" marker-end="url(#ah)"/>
+            <line class="dg-line" x1="667" y1="100" x2="701" y2="100" marker-end="url(#ah)"/>
+            <line class="dg-line" x1="802" y1="164" x2="802" y2="224" marker-end="url(#ah)"/>
+
+            <!-- Row 2 (flows right to left): job.json → FFFrames → MP4 → review -->
+            <rect class="dg-box" x="707" y="230" width="191" height="120" rx="12"/>
+            <text class="dg-label" x="725" y="258">05 · PREPARE</text>
+            <text class="dg-title mono" x="725" y="286">job.json</text>
+            <text class="dg-detail" x="725" y="312">cues → seconds</text>
+            <text class="dg-detail" x="725" y="332">prepared media</text>
+
+            <rect class="dg-box" x="472" y="230" width="191" height="120" rx="12"/>
+            <text class="dg-label" x="490" y="258">06 · RENDER</text>
+            <text class="dg-title" x="490" y="286">FFFrames</text>
+            <text class="dg-detail" x="490" y="312">Rust · SVG</text>
+            <text class="dg-detail" x="490" y="332">frame by frame</text>
+
+            <rect class="dg-box" x="237" y="230" width="191" height="120" rx="12"/>
+            <text class="dg-label" x="255" y="258">07 · OUTPUT</text>
+            <text class="dg-title" x="255" y="286">MP4</text>
+            <text class="dg-detail" x="255" y="312">video.mp4</text>
+            <text class="dg-detail" x="255" y="332">+ provenance JSON</text>
+
+            <line class="dg-line" x1="703" y1="290" x2="669" y2="290" marker-end="url(#ah)"/>
+            <line class="dg-line" x1="468" y1="290" x2="434" y2="290" marker-end="url(#ah)"/>
+            <line class="dg-line" x1="233" y1="290" x2="199" y2="290" marker-end="url(#ah)"/>
+
+            <!-- Review loop -->
+            <rect class="dg-loop" x="2" y="230" width="191" height="200" rx="14"/>
+            <text class="dg-serif" x="20" y="262">Review loop</text>
+            <rect class="dg-chip" x="20" y="276" width="155" height="24" rx="12"/>
+            <text class="dg-chip-text" x="34" y="292">critique</text>
+            <rect class="dg-chip" x="20" y="306" width="155" height="24" rx="12"/>
+            <text class="dg-chip-text" x="34" y="322">check</text>
+            <rect class="dg-chip" x="20" y="336" width="155" height="24" rx="12"/>
+            <text class="dg-chip-text" x="34" y="352">sheet</text>
+            <rect class="dg-chip" x="20" y="366" width="155" height="24" rx="12"/>
+            <text class="dg-chip-text" x="34" y="382">draft MP4</text>
+            <rect class="dg-chip" x="20" y="396" width="155" height="24" rx="12"/>
+            <text class="dg-chip-text" x="34" y="412">fresh review</text>
+
+            <!-- Feedback: film choices → storyboard; tool problems → engine -->
+            <path class="dg-line warm" d="M97 226 V196 H567 V166" marker-end="url(#ah-warm)"/>
+            <text class="dg-edge" x="112" y="189">film choices → edit the storyboard</text>
+            <path class="dg-line accent" d="M193 416 H567 V356" marker-end="url(#ah-accent)"/>
+            <text class="dg-edge accent" x="212" y="406">tool problems → fix the engine</text>
+          </svg>
+        </div>
+        <p class="scroll-hint">Swipe sideways to see the whole diagram →</p>
+        <figcaption id="pipeline-caption">Everything downstream of <code>storyboard.json</code> is regenerated. <code>draft DIR</code> runs critique, draft voice, check, sheet and a draft MP4 in one pass.</figcaption>
+      </figure>
+
+      <ol class="stages">
+        <li><strong>Material</strong>Reports (Markdown, text, HTML, DOCX, RTF, or PDF via <code>pdftotext</code>), recordings with word timestamps, a finished script or a brief. A reference film is optional: <code>reference VIDEO</code> writes REFERENCE.md with its cut rhythm, a keyframe sheet, its palette (with the nearest theme) and its motion energy.</li>
+        <li><strong>Ingest &amp; direction</strong><code>ingest --markdown</code> writes BRIEF.md (figures with their sentences and sources, tensions, questions, quotes, tables) and a storyboard for you to rewrite. <code>ingest --audio</code> imports a recording as beats. <code>new DIR --playbook NAME --treatment ID</code> scaffolds a film from a starting arc and writes DIRECTION.md. The story spine goes at the top of DIRECTION.md: the question, the misconception, the turn and the payoff.</li>
+        <li><strong><code>storyboard.json</code></strong>This is the single source. It holds the film settings (palette, motion, text motion, captions, sound, voice) and an ordered list of beats. Each beat is a block with validated props, a <code>vo</code> line and optional layers. It is checked against <code>schema/storyboard.schema.json</code> and per-block validators.</li>
+        <li><strong>Voice &amp; timing</strong><code>voice --draft</code> records a free local voice. Without <code>--draft</code>, it calls Gemini TTS, which is paid. <code>align --whisper</code> measures word timings locally for free, <code>align --words</code> imports a word file, and <code>align --transcribe</code> is paid. A beat lasts lead + voice + tail, which defaults to 0.25 s + voice + 0.6 s. Measured timings are tied to the hash of the audio file.</li>
+        <li><strong><code>job.json</code></strong>The engine turns every spoken cue into a time, schedules staged items so they finish inside their beat, prepares the media and writes <code>build/native/job.json</code> and <code>build/timing.json</code>.</li>
+        <li><strong>FFFrames</strong>The Rust renderer draws each frame as a pure function of the frame number and the prepared inputs. There is no random state and no wall-clock animation, so any frame can be re-rendered exactly.</li>
+        <li><strong>MP4</strong><code>render --draft</code> (or <code>preview</code>) uses a fast encoder, about 3× faster than the final. The final render verifies dimensions, FPS and decoded frames, then writes <code>build/video.mp4</code> with a provenance file recording input hashes, renderer revision, encoder, audio provenance, output hash and colour space.</li>
+      </ol>
+
+      <h3>The review loop</h3>
+      <p><code>critique</code> is instant and needs no render. It flags deck-like runs, stillness, text density, weak hooks and "and then" story chains. <code>check</code> validates inputs and native diagnostics. <code>sheet</code> renders a contact sheet at three moments per beat. The draft MP4 is the thing to watch and listen to, and <code>review DIR</code> decodes frames around every cut and word boundary. Last comes a <strong>fresh reviewer</strong>: a separate subagent that did not write the film and judges it against DIRECTION.md.</p>
+      <pre class="code"><code>node engine/cli.mjs new my-film --playbook data-story --treatment editorial
+node engine/cli.mjs critique my-film          <span class="c"># instant: rhythm, density, hook, story links</span>
+node engine/cli.mjs draft my-film             <span class="c"># critique + draft voice + check + sheet + draft MP4</span>
+node engine/cli.mjs align my-film --whisper   <span class="c"># free, local, measured word timings</span>
+node engine/cli.mjs render my-film            <span class="c"># final encode</span></code></pre>
+    </section>
+
+    <!-- ================= 03 CORE CONCEPTS ================= -->
+    <section class="topic" id="concepts">
+      <p class="kicker"><span class="num">03</span><span class="serif">the nouns you'll direct with</span></p>
+      <h2>Core concepts</h2>
+
+      <div class="concepts">
+        <div class="concept" id="concept-beats">
+          <h3>Beats<small>the unit of a film</small></h3>
+          <div>
+            <p>A beat is one idea. It has an <code>id</code>, a <code>block</code>, <code>props</code> and usually a <code>vo</code> line. It can also carry <code>style</code> (voice energy), <code>chapter</code>, <code>transition</code>/<code>exit</code>, <code>tone</code>, <code>camera</code>, <code>plate</code>, <code>art</code>, <code>textMotion</code>, <code>heading</code> and timing (<code>lead</code>, <code>tail</code>, <code>hold</code>, <code>duration</code>). Aim for 5–15 spoken words per beat. <code>critique</code> warns above 40.</p>
+          </div>
+        </div>
+        <div class="concept" id="concept-blocks">
+          <h3>Blocks &amp; props<small>33 native blocks</small></h3>
+          <div>
+            <p>The blocks fall into families: story, numbers, charts, decisions, diagrams, text, media, speech, graphics and motion (see the <a href="#vocab-library">library tables</a>). <code>blocks NAME</code> prints the props and a ready-to-paste example. Headline blocks take <code>emphasis</code> (up to four whole-word phrases in the accent colour), <code>emphasisStyle: "serif"</code> for the italic feeling word, and <code>align: "center"</code>.</p>
+          </div>
+        </div>
+        <div class="concept" id="concept-cues">
+          <h3>Spoken cues<small><code>land</code> · <code>say</code></small></h3>
+          <div>
+            <p><code>land</code>, <code>growSay</code>, <code>drawSay</code>, per-item <code>say</code> and bar <code>focus.say</code> take an exact word or phrase from the <code>vo</code> line, or local seconds. So do the canvas fields <code>say</code>, <code>exitSay</code>, <code>keys[].say</code> and <code>along.say</code>. Digits and number words match either way ("18" finds "eighteen"). Reveals start just early so they settle on the word, and counts pre-roll so the figure finishes as it is said. A missing cue fails, and so does a cue too late to finish its entrance.</p>
+          </div>
+        </div>
+        <div class="concept" id="concept-canvas">
+          <h3>Canvas &amp; art<small>draw what blocks can't</small></h3>
+          <div>
+            <p><code>canvas</code> is a beat you draw. It offers 13 element types with entrances, keyframes, motion along paths, loops and exits, all cueable to speech. Any beat can also carry <code>art.under</code> / <code>art.over</code> layers made of the same elements, placed in frame pixels: an arrow onto a bar, a circle round a number. Start from a <code>sketch</code> and place things with <code>still --grid</code>. <code>view: "auto"</code> fits a drawing into the space below the title.</p>
+          </div>
+        </div>
+        <div class="concept" id="concept-worlds">
+          <h3>Worlds<small>one drawing, a moving camera</small></h3>
+          <div>
+            <p>Consecutive canvas beats that share <code>props.world</code> form one continuous drawing. Each beat draws only what is new, and everything drawn earlier stays (still looping). The cuts between them are invisible, and the camera travels between camera rects <code>view: [x, y, w, h]</code>. End on a wide view of the whole world. A world survives an interruption: a world beat after a kinetic card resumes where the camera left off. <code>world DIR</code> renders the map with every beat's camera rect numbered.</p>
+            <pre class="code"><code>{ <span class="k">"id"</span>: "source", <span class="k">"block"</span>: "canvas", <span class="k">"props"</span>: { <span class="k">"world"</span>: "water", <span class="k">"view"</span>: [0, 0, 1920, 1080], <span class="k">"elements"</span>: [ …mountains, rain… ] } },
+{ <span class="k">"id"</span>: "plant",  <span class="k">"block"</span>: "canvas", <span class="k">"props"</span>: { <span class="k">"world"</span>: "water", <span class="k">"view"</span>: [1500, 0, 1920, 1080], <span class="k">"elements"</span>: [ …the pipe, the plant… ] } },
+{ <span class="k">"id"</span>: "whole",  <span class="k">"block"</span>: "canvas", <span class="k">"props"</span>: { <span class="k">"world"</span>: "water", <span class="k">"view"</span>: [-100, -560, 5200, 2925], <span class="k">"elements"</span>: [ …one line of type… ] } }</code></pre>
+          </div>
+        </div>
+        <div class="concept" id="concept-treatments">
+          <h3>Treatments<small>art direction in one word</small></h3>
+          <div>
+            <p>A treatment sets the palette, backdrop, texture, frame, motion, transition grammar, voice style and sound, plus some beat defaults. It also writes its rules into DIRECTION.md. There are nine: <code>editorial</code>, <code>noir</code>, <code>kinetic</code>, <code>sketchbook</code>, <code>blueprint</code>, <code>audiogram</code>, <code>brand</code>, <code>calm</code> and <code>mosaic</code>. Apply one with <code>new DIR --playbook NAME --treatment ID</code>, then adapt it. It is a starting direction, not a limit.</p>
+          </div>
+        </div>
+        <div class="concept" id="concept-palettes">
+          <h3>Palettes<small>15, contrast-checked</small></h3>
+          <div>
+            <p>Every palette has the tokens <code>bg</code>, <code>surface</code>, <code>ink</code>, <code>muted</code>, <code>accent</code>, <code>accent2</code>, <code>positive</code> and <code>negative</code>. You can override any of them with hex, for example <code>"theme": {"base": "ink", "accent": "#d6acff"}</code>, and <code>check</code> warns if the override drops contrast. Canvas colours are tokens too, so art follows the palette and a beat's <code>tone</code>. <code>looks DIR --beat ID</code> renders one frame in every palette.</p>
+          </div>
+        </div>
+        <div class="concept" id="concept-motion">
+          <h3>Motion &amp; text motion<small>how things arrive</small></h3>
+          <div>
+            <p><code>motion.preset</code> is <code>gentle</code>, <code>snappy</code> or <code>spring</code>, and <code>intensity</code> (0–1) scales travel. Values never overshoot. <code>textMotion</code> controls how display type arrives: <code>lines</code> (the default), <code>words</code>, <code>letters</code> or <code>cascade</code>. Use one mode for the film and break it for one or two moments. Scene headings always rise as a line. <code>heading: "bottom"</code> sets a scene's title as a lower third.</p>
+          </div>
+        </div>
+        <div class="concept" id="concept-transitions">
+          <h3>Transitions<small>cuts with meaning</small></h3>
+          <div>
+            <p>The entrances are <code>cut</code>, <code>fade</code>, <code>rise</code>, <code>wipe</code>, <code>push</code> and <code>zoom</code>, plus three graphic ones, <code>panel</code>, <code>iris</code> and <code>whip</code>, that carry one movement across the cut. Exits mirror the next entrance automatically, and scenes never cross-dissolve. Graphic transitions belong at turns in the story. Use <code>cut</code> for rhythm and <code>push</code> for sequence.</p>
+          </div>
+        </div>
+        <div class="concept" id="concept-captions">
+          <h3>Captions<small>plate · pop · kinetic</small></h3>
+          <div>
+            <p><code>captions: true</code> burns phrase captions onto a soft plate, and <code>"auto"</code> turns them on for vertical formats. <code>"pop"</code> gives social captions: heavy outlined phrases of three or four words, with the spoken word on a tilted accent pill. The <code>kinetic</code> block makes speech itself the picture, in <code>highlight</code>, <code>reveal</code>, <code>word</code> or <code>stack</code> mode. Final captioned or kinetic renders need <strong>measured</strong> word timings.</p>
+          </div>
+        </div>
+        <div class="concept" id="concept-honesty">
+          <h3>Sources &amp; honesty<small>non-negotiable</small></h3>
+          <div>
+            <p>Every displayed number needs a visible <code>props.source</code> and an entry in <code>storyboard.sources</code>, or <code>check</code> refuses it. That covers charts, stats and canvas <code>count</code>s. Record the claim, the source and the as-of date. Illustrative figures must be labelled as such on screen. Sample figures and fictional quotes are never evidence. Generated imagery is illustration, never documentation. Never imitate real people, logos or documents, and disclose synthetic voices.</p>
+          </div>
+        </div>
+      </div>
+
+      <span class="mono-label code-label">Storyboard anatomy (illustrative shape, not real data)</span>
+      <pre class="code"><code>{
+  <span class="k">"title"</span>: "Why estimates slip",
+  <span class="k">"format"</span>: { "preset": "landscape", "fps": 30 },
+  <span class="k">"theme"</span>: "paper",
+  <span class="k">"motion"</span>: { "preset": "gentle", "intensity": 0.65 },
+  <span class="k">"textMotion"</span>: "words",
+  <span class="k">"sfx"</span>: "subtle",
+  <span class="k">"voice"</span>: { "takes": "chapter", "style": "clear, warm, quietly confident" },
+  <span class="k">"sources"</span>: [ { "claim": "…", "source": "[Survey name], p. 4", "asOf": "2026-06-30" } ],
+  <span class="k">"beats"</span>: [
+    { <span class="k">"id"</span>: "hook", <span class="k">"block"</span>: "stat", <span class="k">"tone"</span>: "accent",
+      <span class="k">"vo"</span>: "Seventy percent. It sounds like a sure thing.",
+      <span class="k">"style"</span>: "intrigued, leaning in",
+      <span class="k">"props"</span>: { "value": 70, "suffix": "%", "label": "…", "source": "[Survey name], 2026",
+                 "land": "Seventy", "align": "center" } },
+    { <span class="k">"id"</span>: "why", <span class="k">"block"</span>: "canvas",
+      <span class="k">"vo"</span>: "But every handoff adds a queue.",
+      <span class="k">"props"</span>: { "view": "auto", "elements": [
+        { "type": "path", "d": "M 0 200 C 300 200 500 0 800 0",
+          "stroke": "accent", "width": 8, "arrow": "end", "say": "handoff" } ] } },
+    { <span class="k">"id"</span>: "turn", <span class="k">"block"</span>: "kinetic", <span class="k">"transition"</span>: "iris", <span class="k">"tone"</span>: "accent2",
+      <span class="k">"vo"</span>: "So the fix is not speed. It is fewer handoffs.",
+      <span class="k">"props"</span>: { "mode": "stack", "emphasis": ["fewer"], "align": "center" } }
+  ]
+}</code></pre>
+      <p class="small">Run <code>blocks NAME</code> for each block's exact props. The number and source above are placeholders and must never ship as they are.</p>
+    </section>
+
+    <!-- ================= 04 OUTCOMES ================= -->
+    <section class="topic" id="outcomes">
+      <p class="kicker"><span class="num">04</span><span class="serif">what actually moved quality</span></p>
+      <h2>Getting great outcomes</h2>
+      <p>These are the principles that turned narrated slides into designed films. Each comes with the prop or command that puts it into practice.</p>
+
+      <ol class="principles">
+        <li><div><strong>Films, not slides.</strong>The tells are every beat sharing a layout, a heading over a static graphic, the same fade on every cut, nothing moving once it has entered, and no imagery. Vary the frame: a full-bleed <code>plate</code>, a <code>tone</code> colour block, a kinetic <code>stack</code>, a centred statement, a lower-third heading, or no heading at all. <code>critique</code> counts heading-over-graphic scenes and flags three scenes of the same family in a row.</div></li>
+        <li><div><strong>Story before pictures.</strong>Question → misconception → turn → payoff. Choose 3–5 claims and send everything else to the source card. Link beats with <em>but</em> or <em>therefore</em>, never "and then". Read the <code>vo</code> lines alone: they should make an argument you could follow with your eyes closed.</div></li>
+        <li><div><strong>One picture per idea.</strong>Choose the picture by what the sentence <em>does</em>, not by what it is about (<code>docs/ideas.md</code>). When the narration says <em>how, why, through, between, until</em> or <em>instead</em>, draw the mechanism rather than the words.</div></li>
+        <li><div><strong>Land on the word.</strong>Each beat has one landing word (two at most), the stressed word at the end of the sentence. Cue the visual to it with <code>land</code> or <code>say</code>. Counts finish as the number is said, and world cameras arrive by the new line's first word.</div></li>
+        <li><div><strong>Travel instead of cutting.</strong>A process, a place, a chain of causes or a system should be one <code>world</code> with a travelling camera, not five separate drawings. Lay stations out in story order so the camera never re-crosses old material, and finish with a pull-back to the opening shot, changed.</div></li>
+        <li><div><strong>Punctuate rarely.</strong>Use one or two <code>tone</code> scenes per minute and graphic transitions only at turns. Everything else cuts, pushes or fades. <code>critique</code> warns when punctuation stops meaning anything.</div></li>
+        <li><div><strong>Something always breathes.</strong>Keep something moving: camera drift, a loop on the subject, a drifting plate, ambient <code>art.under</code>, a <code>particles</code> field. Hold still only on purpose.</div></li>
+        <li><div><strong>Look, then ask a fresh reviewer.</strong>Diagnostics can't judge taste. Open the sheet, watch the draft, then have a reviewer with no authorship bias judge it against DIRECTION.md. Keep the same reviewer across rounds so it can say which notes are resolved. Sort its notes into <strong>tool problems</strong> (fix the engine and every film benefits) and <strong>film choices</strong> (fix the storyboard).</div></li>
+      </ol>
+
+      <div class="note">
+        <span class="mono-label">Per minute of film, aim for</span>
+        <ul>
+          <li>at least one drawn mechanism (canvas), one colour-block punctuation, and one or two graphic transitions at turns;</li>
+          <li>imagery (plates) where the world matters, and kinetic type where the words are the picture;</li>
+          <li>a hook that lands inside 3 s, about 3 on-screen words per second, and narration at 140–160 wpm.</li>
+        </ul>
+      </div>
+
+      <h3 id="case-study">Case study: <span class="serif-em">night city</span></h3>
+      <p><code>examples/night-city</code> is a 47-second explainer built from a synthetic research brief on urban night heat. Every figure in it is sample data from made-up sources and is labelled that way. It is there to show craft, not facts. It went through repeated rounds with an independent reviewer.</p>
+
+      <div class="versus">
+        <div class="card before">
+          <span class="mono-label">Before</span>
+          <h4>Nine slide-like scenes</h4>
+          <p>Each scene was a heading over a graphic, with separate drawings joined by ordinary cuts. The direction skill's word for it: narrated slides.</p>
+        </div>
+        <div class="card after">
+          <span class="mono-label">After</span>
+          <h4>One world, a travelling camera</h4>
+          <p><code>props.world: "city"</code>, the noir palette, eight world beats plus one kinetic interruption, and no scene titles: the picture speaks. The reviewer's final verdict:</p>
+          <blockquote>a coherent motion-graphics explainer</blockquote>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Beat</th><th>Line</th><th>Picture &amp; device</th></tr></thead>
+          <tbody>
+            <tr><td><code>hook</code></td><td class="wrap">"Seven degrees. That's how much hotter a city night can run."</td><td class="wrap">The sun sets, both thermometers drop (<code>keys</code> with <code>scaleY</code>), and the gap becomes "7°C" on "Seven". Far buildings sit at <code>depth: 0.55</code> for parallax.</td></tr>
+            <tr><td><code>belief</code></td><td class="wrap">"It's only a few degrees, right?"</td><td class="wrap">A push in on one quoted line, landing on "only".</td></tr>
+            <tr><td><code>day-night</code></td><td class="wrap">"By day, the gap is small… after sunset, it can reach seven."</td><td class="wrap">The camera tilts up, and the chart becomes the sky. A <code>behind: true</code> day sky fades in on "day" and out at sunset.</td></tr>
+            <tr><td><code>mechanism</code></td><td class="wrap">"Asphalt and dark roofs soak up almost all of the sunlight…"</td><td class="wrap">A push into one roof, where the heat fills it and <code>glow</code> lights the hot surface.</td></tr>
+            <tr><td><code>turn</code></td><td class="wrap">"But the heat is not shared evenly."</td><td class="wrap">The interruption: a kinetic <code>stack</code> on an <code>accent2</code> tone with an <code>iris</code>, and serif emphasis on "not" and "evenly".</td></tr>
+            <tr><td><code>hotspots</code></td><td class="wrap">"…twelve percent of streets produced forty percent of heat emergencies."</td><td class="wrap">An iris back into the world, which resumes from the last view. The camera tilts down to the street plan under the ground.</td></tr>
+            <tr><td><code>works</code></td><td class="wrap">"Cool roofs cut rooftop heat by twenty to thirty degrees…"</td><td class="wrap">Back on the same roof, where a cool roof drains the heat.</td></tr>
+            <tr><td><code>gap</code></td><td class="wrap">"Yet only eighteen of a hundred cities surveyed have a heat plan."</td><td class="wrap">The survey sits beside the plan: 100 shapes, with 18 lit in the accent on "eighteen".</td></tr>
+            <tr><td><code>end</code></td><td class="wrap">"Seven degrees, every night. Start with the hottest blocks."</td><td class="wrap">A pull-back to the opening shot, changed. The 7°C bracket re-draws on "Seven" as a callback.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h4>Film choices that moved it</h4>
+          <ul>
+            <li>Stations laid out in story order: the sky up, the roof in close, the street plan down, the survey beside it.</li>
+            <li>The world changes state (a day sky, a roof filling with heat) instead of cutting to a new picture.</li>
+            <li>One interruption, at the turn, and the world resumes afterwards.</li>
+            <li>Labels leave at an <code>exitAt</code> after their beat, tidying the world while the camera is away.</li>
+            <li>A callback to the opening number at the end.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Tool problems fixed in the engine (0.5.0)</h4>
+          <ul>
+            <li>Camera moves landed late. They now pre-roll into the outgoing beat's settled tail and arrive by the new line's first word.</li>
+            <li><code>dur: 0</code> keys caused single-frame flashes. Zero-length keys now apply on their own frame.</li>
+            <li>A world lost its place after a card. It now resumes from the camera's last view.</li>
+            <li>Word-by-word headings read as speech-synced. Headings now always rise as a line.</li>
+            <li>Holds froze once the camera arrived. <code>viewDrift</code> now keeps a world alive.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="small">Regenerate it with <code>python3 make.py</code> inside <code>examples/night-city</code>, then run <code>node engine/cli.mjs draft examples/night-city</code> from the repository root.</p>
+    </section>
+
+    <!-- ================= 05 PROMPTING ================= -->
+    <section class="topic" id="prompting">
+      <p class="kicker"><span class="num">05</span><span class="serif">the heart of it</span></p>
+      <h2>Prompting guide</h2>
+      <p>The model does the authoring. Your job is to hand over material, intent and constraints, and then to direct the review rounds. The fewer creative decisions you leave to guesswork, the better the film.</p>
+
+      <section id="prompting-include">
+        <h3>What to include in a request</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Include</th><th>Why it matters</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Material</td><td class="wrap">Work starts from your source. <code>ingest</code> turns it into an evidence brief or into timed beats.</td><td class="wrap"><code>reports/heat.md</code>; <code>ep12.wav</code> + transcript</td></tr>
+              <tr><td>Audience &amp; takeaway</td><td class="wrap">This sets the question, the misconception to start from, and what to leave out.</td><td class="wrap">"Council staff; target the hottest streets first"</td></tr>
+              <tr><td>Length &amp; format</td><td class="wrap">60–90 s is about 12–18 beats, and 60 s of narration is about 125–140 words. Formats are landscape, vertical, square or portrait at 24–60 fps.</td><td class="wrap">"75 s landscape, plus a 30 s vertical cut"</td></tr>
+              <tr><td>Tone / treatment</td><td class="wrap">One word sets the palette, motion, transitions, voice and sound. Plain descriptions work too, and the model maps them to a treatment.</td><td class="wrap">"editorial" · "calm and warm" · "punchy for TikTok"</td></tr>
+              <tr><td>References</td><td class="wrap"><code>reference</code> breaks a film down into Keep / Change notes.</td><td class="wrap">"ref.mp4: keep the cut rhythm, change the palette"</td></tr>
+              <tr><td>Must-land facts</td><td class="wrap">These become the 3–5 claims and their landing words.</td><td class="wrap">"7°C at night (source, as-of date)"</td></tr>
+              <tr><td>Sources</td><td class="wrap">Every displayed number needs one, on screen and in <code>sources</code>.</td><td class="wrap">"Report title, p. 12, June 2026"</td></tr>
+              <tr><td>Budget</td><td class="wrap">Paid calls (TTS, music, images, clips, transcription) need <code>GEMINI_API_KEY</code> and your say-so. <code>plan</code> estimates the cost first.</td><td class="wrap">"Free draft only" · "up to $3 for final voice"</td></tr>
+              <tr><td>Deliverables</td><td class="wrap">Say whether you want a draft for review or a final, caption files, and any extra cuts.</td><td class="wrap">"Draft MP4 first; final with SRT"</td></tr>
+              <tr><td>Constraints</td><td class="wrap">Brand colours (hex), assets you own, words to avoid, required disclosures.</td><td class="wrap">"accent #0a7cff; our logo.png only"</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <span class="mono-label">The smallest good request</span>
+          <p>"Turn <em>[material]</em> into a <em>[length] [format]</em> film for <em>[audience]</em>. The one thing they should take away is <em>[X]</em>. Free draft only; show me the sheet and a fresh review before the final."</p>
+        </div>
+      </section>
+
+      <section id="prompting-templates">
+        <h3>Copy-ready templates</h3>
+        <p class="small">Replace the <span style="color:var(--accent2)">[bracketed]</span> parts. Every template assumes the model has read <code>AGENTS.md</code> and the <code>clearframe</code> skill, which it does when working in this repository.</p>
+
+        <figure class="prompt-card" id="tpl-research">
+          <figcaption><span class="mono-label">Template</span><strong>Research report → 60–90 s explainer</strong></figcaption>
+<pre class="prompt">Turn <span class="ph">[reports/heat-study.md]</span> into a 60–90 second landscape explainer.
+
+Audience: <span class="ph">[city staff who have not read the report]</span>.
+Takeaway: <span class="ph">[the one thing they should understand or do afterwards]</span>.
+Must land: <span class="ph">[figure + source + as-of date]</span>; <span class="ph">[figure + source + as-of date]</span>.
+Treatment: <span class="ph">[editorial]</span>, or propose one and tell me why.
+Reference: <span class="ph">[none | path/to/ref.mp4: run reference and write Keep/Change]</span>.
+Budget: free only (local draft voice, no paid generation).
+
+1. Run ingest --markdown, then put the story spine at the top of DIRECTION.md: question, misconception, turn, payoff. Pick 3–5 claims; everything else goes to the source card.
+2. Plan one picture per beat (docs/ideas.md). If the report describes a process, a place or a chain of causes, make it one canvas world, not separate scenes.
+3. Every displayed number gets a visible source line and a sources entry. No sample figures presented as evidence.
+4. Run critique, then draft. Open the sheet yourself first.
+5. Run a fresh reviewer round against DIRECTION.md (rubric in clearframe-direction). Split its notes into tool problems and film choices. Repeat until it has no structural notes.
+
+Report back with output paths, what you verified, and what is still estimated (voice, word timings, sample data).</pre>
+        </figure>
+
+        <figure class="prompt-card" id="tpl-podcast">
+          <figcaption><span class="mono-label">Template</span><strong>Podcast recording → vertical clips</strong></figcaption>
+<pre class="prompt">Cut <span class="ph">[3]</span> vertical clips of 30–60 s each from <span class="ph">[audio/episode-12.wav]</span>.
+
+Speakers: <span class="ph">host=[Maya]:Host, guest=[Sam]:Guest</span>.
+Transcript for spelling and speakers: <span class="ph">[transcript.txt with HOST:/GUEST: lines]</span>.
+Moments: <span class="ph">[12:40–13:25, on why estimates slip; …]</span>, or find self-contained moments that open on the hook rather than the introduction, and list the candidates for me to pick before you build.
+
+For each clip:
+- Get word timestamps with local Whisper (free), then run ingest --audio … --from S --to S --vertical into its own folder.
+- Use the audiogram treatment (or kinetic). Never edit vo: it must match the recording.
+- Keep the pop captions. Give the moments pictures: pull the best line out as a kinetic stack, draw a concrete thing the speaker names within 8–15 s, and turn an explanatory stretch into a canvas world.
+- Keep any number a speaker cites off screen unless we have a source for it.
+- Run critique, then draft, and open the sheet. Confirm the word timings are measured before the final render.</pre>
+        </figure>
+
+        <figure class="prompt-card" id="tpl-script">
+          <figcaption><span class="mono-label">Template</span><strong>Script → film</strong></figcaption>
+<pre class="prompt">Make a <span class="ph">[75]</span>-second <span class="ph">[landscape]</span> film from my script below, for <span class="ph">[audience]</span>.
+
+Keep my wording. Where a line breaks the clearframe-script rules (one idea per beat, 8–14 words per sentence, a hook inside 3 s), suggest the edit and wait for my OK.
+
+- Split the script into beats of 5–15 spoken words and mark each beat's landing word.
+- Give the hook, the turn and the payoff their own short style (an energy map), and record in chapters (voice.takes: "chapter").
+- Start from the <span class="ph">[concept-explainer]</span> playbook and the <span class="ph">[editorial]</span> treatment. Fill the beat plan in DIRECTION.md (purpose, picture, landing word) before building.
+- Draw mechanisms on canvas. Use tone and graphic transitions only at the turn.
+- Draft voice only; measure the words with align --whisper.
+
+Script:
+<span class="ph">[paste script]</span></pre>
+        </figure>
+
+        <figure class="prompt-card" id="tpl-brand">
+          <figcaption><span class="mono-label">Template</span><strong>Brand spot</strong></figcaption>
+<pre class="prompt">Make a <span class="ph">[20–30]</span>-second brand spot for <span class="ph">[brand]</span> announcing <span class="ph">[one idea]</span>.
+
+- Use the brand-spot playbook and the brand treatment. Brand colours: accent <span class="ph">[#hex]</span>, accent2 <span class="ph">[#hex]</span>, as theme overrides on <span class="ph">[paper]</span>. Tell me if check warns about contrast.
+- Frame brand text: <span class="ph">[Brand]</span>. Use only the assets I provide (<span class="ph">[assets/logo.png]</span>). Don't redraw or generate a logo, people or product shots.
+- One idea, three supporting beats, and one call to action on the endcard: <span class="ph">[CTA]</span>.
+- Carry the hero object across cuts (morph by id, or an iris from its position). Echo trails or stepped copies can turn one shape into a composition.
+- sfx: normal. Show me looks for the hero beat before you build the rest.</pre>
+        </figure>
+
+        <figure class="prompt-card" id="tpl-data">
+          <figcaption><span class="mono-label">Template</span><strong>Data story</strong></figcaption>
+<pre class="prompt">Tell a <span class="ph">[60]</span>-second data story for <span class="ph">[a general audience]</span> from <span class="ph">[data/survey.csv]</span> (source: <span class="ph">[publisher, title, date]</span>).
+
+- Use the data-story playbook with the <span class="ph">[editorial]</span> treatment.
+- Pick the one question the data answers and the 3–5 figures that carry it. Choose each chart by its job: a share → waffle or donut, a trend → line, a comparison → bars, orders of magnitude → magnitude, one number → stat.
+- Every figure needs a visible source line with its as-of date, a sources entry, and a count that lands on the spoken word (land). Round in the narration; show the exact figure on screen.
+- Give one tone: accent scene to the figure the film is about. Point at the outlier with an art.over spotlight or arrow cued to the word.
+- Label any estimate as an estimate on screen. Nothing drawn may imply data we don't have.</pre>
+        </figure>
+
+        <figure class="prompt-card" id="tpl-world">
+          <figcaption><span class="mono-label">Template</span><strong>One world: a journey or process</strong></figcaption>
+<pre class="prompt">Explain <span class="ph">[how a parcel gets from checkout to doorstep]</span> as one continuous world (journey playbook): one drawing, with the camera travelling from stop to stop.
+
+- Stops in story order: <span class="ph">[1 …]</span>, <span class="ph">[2 …]</span>, <span class="ph">[3 …]</span>, <span class="ph">[4 …]</span>. Lay them out so the camera never re-crosses old material, and finish on a pull-back to the opening shot, changed.
+- Before rendering, run world DIR and show me the map with the numbered camera rects.
+- Keep it alive: far layers at depth below 1 for parallax, behind: true for a change of state (<span class="ph">[the sky turning to night]</span>), glow on things that give light, a light particles field where it adds atmosphere, and labels that leave (exitAt) while the camera is away.
+- Interrupt the world once, at the turn: a kinetic card on a tone, with an iris in and out.
+- Every camera move should arrive by the first word of its line.</pre>
+        </figure>
+
+        <figure class="prompt-card" id="tpl-vertical">
+          <figcaption><span class="mono-label">Template</span><strong>Vertical social cut of an existing film</strong></figcaption>
+<pre class="prompt">Make a vertical (9:16) cut of <span class="ph">[films/night-heat]</span> in a new folder, <span class="ph">[films/night-heat-vertical]</span>. Leave the landscape project untouched.
+
+- Set format.preset to vertical. World cameras re-frame on each beat's own foreground. Where a side-by-side composition can't survive the crop, set viewTall or lay that beat out differently.
+- Check with world DIR and sheet --draft on the vertical project. Fix any text that reaches outside a beat's view or renders too small.
+- Tighten to <span class="ph">[30–45]</span> s, keeping the hook, the turn and the payoff. The first idea lands by 3 s.
+- Set captions: "pop", and keep every source line readable at phone size.</pre>
+        </figure>
+      </section>
+
+      <section id="prompting-styles">
+        <h3>Asking for a style</h3>
+        <p>Name a treatment when one fits, and say what to keep from it. When nothing fits, describe the look and ask the model to <em>map it to primitives and tell you the mapping</em> before it builds. That keeps the result honest about what the renderer can actually do.</p>
+        <div class="prompt-grid">
+          <figure class="prompt-card" id="style-sketchbook">
+            <figcaption><span class="mono-label">Style</span><strong>Sketchbook</strong></figcaption>
+<pre class="prompt">Style: the sketchbook treatment, a hand-drawn explainer. Rough strokes that draw on as they are named. Hand lettering for labels, with display type only for the one big word. Red pencil (accent) for the subject, blue (accent2) for motion and notes. Stepped motion at 12 fps with a gentle line boil, and text arriving word by word.</pre>
+          </figure>
+          <figure class="prompt-card" id="style-noir">
+            <figcaption><span class="mono-label">Style</span><strong>Noir</strong></figcaption>
+<pre class="prompt">Style: the noir treatment, documentary in feel. Noir palette on the glow backdrop, with heavy grain and vignette. Duotone plates carry place and people and drift slowly. Gold only for the thing the viewer must remember. Hold longer than feels safe on the turn; iris only into the revelation. Voice: low, measured, intimate.</pre>
+          </figure>
+          <figure class="prompt-card" id="style-kinetic">
+            <figcaption><span class="mono-label">Style</span><strong>Kinetic</strong></figcaption>
+<pre class="prompt">Style: the kinetic treatment, a manifesto that stops the scroll. Pop palette, snappy motion, cascade type. The words are the picture: a kinetic stack with one or two emphasis words per phrase, in phrases of 3–6 words. Cut on the beat, whip only between ideas, and a tone scene every 10–15 s. sfx: punchy.</pre>
+          </figure>
+          <figure class="prompt-card" id="style-mosaic">
+            <figcaption><span class="mono-label">Style</span><strong>Mosaic</strong></figcaption>
+<pre class="prompt">Style: the mosaic treatment, a film laid in tiles. Mosaic palette on the mosaic backdrop. Hero shapes set in tesserae, drawn big enough for at least 12 tiles across. Shapes assemble tile by tile on their cue (enter: assemble) and scatter when they stop being true (exit: scatter). Rings for round things, rows for walls and skies, and glow on the gold tiles (moon, stars, windows). Iris only at chapter turns.</pre>
+          </figure>
+          <figure class="prompt-card" id="style-custom">
+            <figcaption><span class="mono-label">Style</span><strong>A look with no preset</strong></figcaption>
+<pre class="prompt">Style: <span class="ph">[a risograph print look]</span>. No treatment matches it, so map it to existing primitives and tell me the mapping before you build. For example: <span class="ph">[pop]</span> palette, heavy static grain, blend: multiply on overlapping shapes, echo step copies offset a few pixels for misregistration, stepped motion (fps 12). Nothing drawn may imply data. Render one beat with looks DIR --beat ID --draft so I can compare palettes first.</pre>
+          </figure>
+        </div>
+      </section>
+
+      <section id="prompting-iterate">
+        <h3>Iteration prompts</h3>
+        <p>Most of the quality comes from rounds. Keep each round specific, and ask for the notes to be sorted into tool problems and film choices.</p>
+        <div class="prompt-grid">
+          <figure class="prompt-card"><figcaption><strong>Fresh review round</strong></figcaption>
+<pre class="prompt">Run a fresh review round. Give a new reviewer subagent the contact sheet, the review DIR strip, the draft MP4, the vo lines and DIRECTION.md, with the rubric in clearframe-direction. Ask it for a verdict, the five highest-impact changes and any visible faults with timestamps. Sort its notes into tool problems (fix the engine) and film choices (fix the storyboard).</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Next round, same reviewer</strong></figcaption>
+<pre class="prompt">Continue the same reviewer for round <span class="ph">[2]</span>: which notes are resolved, which remain, and what's new? Render the final only when it has no structural notes left.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Hook by 3 s</strong></figcaption>
+<pre class="prompt">Make the hook land by 3 s. Lead with the number, the contradiction or the question (no greeting, no logo). Cue the first idea to its word, and re-run critique until it stops flagging the hook.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Turn beats into one world</strong></figcaption>
+<pre class="prompt">Beats <span class="ph">[3–5]</span> are separate drawings of one process. Make them one canvas world: a shared props.world, a camera rect per beat, and each beat drawing only what is new. Show me world DIR before rendering.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Vertical cut</strong></figcaption>
+<pre class="prompt">Give this a vertical cut: a new folder, format.preset set to vertical, viewTall where a composition can't survive the crop, and pop captions. Show me world and sheet for the vertical project.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Still reads like slides</strong></figcaption>
+<pre class="prompt">This still reads like slides. Run critique, then change the picture wherever three scenes in a row share a family or a heading sits over a graphic. Give some scenes the whole frame, move some titles to heading: bottom, and drop others.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Numbers on the word</strong></figcaption>
+<pre class="prompt">Land every number on its word: add land to each stat, delta and chart so the count finishes as it is said. Then check that the narration, the screen and the sources all agree.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Unfreeze a hold</strong></figcaption>
+<pre class="prompt">Something freezes around <span class="ph">[0:24]</span>. Add a loop on the subject, a drift or ambient art under the text, or split the beat in two.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Measure the words</strong></figcaption>
+<pre class="prompt">Measure the words with align --whisper, then run check. Tell me which beats still have estimated timing, and don't call interpolated timestamps measured.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Paid step, with a budget</strong></figcaption>
+<pre class="prompt">We're ready for final voice. Run plan and show me the estimate first. Budget: <span class="ph">$[X]</span>. Nothing paid just to test code.</pre></figure>
+        </div>
+      </section>
+
+      <section id="prompting-anti">
+        <h3>Anti-patterns</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Instead of</th><th>Ask for</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td class="wrap">"Make five slides about X."</td><td class="wrap">"A 60 s film that answers [question], with a turn and a payoff."</td><td class="wrap">Slides are the failure mode, and critique flags them.</td></tr>
+              <tr><td class="wrap">"Summarise each section of the report."</td><td class="wrap">"Pick the 3–5 claims that answer the question."</td><td class="wrap">A film is not a summary of sections. Its order follows the argument, not the table of contents.</td></tr>
+              <tr><td class="wrap">"Add some stats to make it convincing."</td><td class="wrap">"Use only figures from [source]; label any illustration as hypothetical on screen."</td><td class="wrap"><code>check</code> refuses unsourced numbers, and fictional evidence is never allowed.</td></tr>
+              <tr><td class="wrap">"Generate a few clips to test the renderer."</td><td class="wrap">"Draft voice and local renders. Run plan and ask me before any paid call."</td><td class="wrap">No paid calls merely to test code.</td></tr>
+              <tr><td class="wrap">"Make it all AI footage."</td><td class="wrap">"Native graphics carry the information, with at most a short insert."</td><td class="wrap">The default review threshold is 20% of runtime, and footage is illustration, not evidence.</td></tr>
+              <tr><td class="wrap">"Put the whole paragraph on screen."</td><td class="wrap">"One sentence on screen; the voice carries the rest."</td><td class="wrap">Viewers read about 3 words a second while listening, and text that overflows fails.</td></tr>
+              <tr><td class="wrap">"Iris between every scene." / "Colour-block every beat."</td><td class="wrap">"Graphic transitions and tones only at turns."</td><td class="wrap">Punctuation stops meaning anything when it's everywhere, and critique warns.</td></tr>
+              <tr><td class="wrap">"Clean up the podcast wording."</td><td class="wrap">"Keep vo verbatim; give the moments pictures."</td><td class="wrap"><code>vo</code> must match the recording.</td></tr>
+              <tr><td class="wrap">"Check passes, ship it."</td><td class="wrap">"Open the sheet, watch the draft, then run a fresh review."</td><td class="wrap">Diagnostics don't establish visual quality or factual correctness.</td></tr>
+              <tr><td class="wrap">"Make it feel revolutionary."</td><td class="wrap">"Calm, calibrated language: tends to, about, likely."</td><td class="wrap">Hype and slogans read as slop.</td></tr>
+              <tr><td class="wrap">"Use [a real person]'s face or voice."</td><td class="wrap">"A quote card with attribution, or a disclosed synthetic narrator."</td><td class="wrap">Never generate or imitate real people, logos or documents.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- ================= 06 VOCABULARY ================= -->
+    <section class="topic" id="vocabulary">
+      <p class="kicker"><span class="num">06</span><span class="serif">words the renderer understands</span></p>
+      <h2>Direction vocabulary</h2>
+      <p>Every item here is checked against the CLI, the schema or <code>fframes/canvas.mjs</code>. Use the exact names in your prompts; the model will know what they mean.</p>
+
+      <h3 id="vocab-treatments">Treatments</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Treatment</th><th>Look</th><th>Best for</th><th>Signature rules</th></tr></thead>
+          <tbody>
+            <tr><td><code>editorial</code></td><td class="wrap">paper · gentle · fade · grain · editorial frame · serif emphasis · panel at chapter turns · sfx subtle</td><td class="wrap">Reports, research digests, analysis with a few strong numbers</td><td class="wrap">One claim per beat; colour-block the one figure the film is about.</td></tr>
+            <tr><td><code>noir</code></td><td class="wrap">noir · glow backdrop · heavy grain + vignette · gentle · fade · iris at chapter turns</td><td class="wrap">True stories, investigations, history, premium reveals</td><td class="wrap">Duotone plates; hold on the turn; gold only for what must be remembered.</td></tr>
+            <tr><td><code>kinetic</code></td><td class="wrap">pop · snappy · <code>cascade</code> text · cut · kinetic stack · whip at chapter turns · sfx punchy</td><td class="wrap">Social cuts, launches, opinion pieces, scroll-stopping hooks</td><td class="wrap">Words are the picture; a tone every 10–15 s; phrases of 3–6 words.</td></tr>
+            <tr><td><code>sketchbook</code></td><td class="wrap">sketchbook · paper backdrop · spring · <code>words</code> text · cut · rough strokes with boil · hand font · 12 fps steps</td><td class="wrap">How things work, lessons, whiteboard explainers</td><td class="wrap">Draw the mechanism; hand lettering for labels; red for the subject, blue for notes.</td></tr>
+            <tr><td><code>blueprint</code></td><td class="wrap">blueprint · grid backdrop · snappy · push · mono labels · frame · wipe at chapter turns</td><td class="wrap">Engineering, systems, architecture, technical walkthroughs</td><td class="wrap">Label every part in mono; scramble for terms; one system built across beats.</td></tr>
+            <tr><td><code>audiogram</code></td><td class="wrap">electric · glow · snappy · <code>words</code> text · cut · kinetic highlight · whip at chapter turns · sfx off</td><td class="wrap">Podcast and interview clips, conversations, talks</td><td class="wrap">Never edit vo; speaker tags; draw a concrete noun every 8–15 s.</td></tr>
+            <tr><td><code>brand</code></td><td class="wrap">paper · spring · cut · persistent frame · iris at chapter turns · sfx normal</td><td class="wrap">Brand intros, announcements, product moments</td><td class="wrap">Echo trails and stepped copies; carry the hero across cuts.</td></tr>
+            <tr><td><code>calm</code></td><td class="wrap">forest · glow · gentle (low intensity) · fade · sfx off</td><td class="wrap">Wellbeing, reflective stories, gentle tutorials, children</td><td class="wrap">Slow everything; no graphic transitions; nothing flashes.</td></tr>
+            <tr><td><code>mosaic</code></td><td class="wrap">mosaic palette · mosaic backdrop · gentle · <code>words</code> text · cut · canvas <code>mosaic</code> tiles · iris at chapter turns · sfx subtle</td><td class="wrap">Stories, heritage and culture, nature: anything that should feel handmade and luminous</td><td class="wrap">Shapes assemble tile by tile and scatter when no longer true; rings for round things, rows for walls and skies; glow on gold tiles.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="vocab-palettes">Palettes</h3>
+      <p class="small">The swatches show <code>bg</code>, <code>ink</code>, <code>accent</code> and <code>accent2</code>. Use them as <code>"theme": "noir"</code> or <code>{"base": "noir", "accent": "#…"}</code>.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Palette</th><th>Swatch</th><th>Character</th></tr></thead>
+          <tbody>
+            <tr><td><code>paper</code></td><td><span class="sw"><i style="--c:#f5f3ed"></i><i style="--c:#222831"></i><i style="--c:#315cce"></i><i style="--c:#c2641f"></i></span></td><td class="wrap">Warm off-white, ink-blue accent. Calm reports and explainers.</td></tr>
+            <tr><td><code>ink</code></td><td><span class="sw"><i style="--c:#101721"></i><i style="--c:#f4f4ed"></i><i style="--c:#76cbb8"></i><i style="--c:#f0b86e"></i></span></td><td class="wrap">Deep slate with mint and amber. Night-time, technical, reflective.</td></tr>
+            <tr><td><code>editorial</code></td><td><span class="sw"><i style="--c:#f7efe1"></i><i style="--c:#34281f"></i><i style="--c:#b13e2e"></i><i style="--c:#2f6b6f"></i></span></td><td class="wrap">Newsprint cream with brick red and teal. Stories, essays, culture.</td></tr>
+            <tr><td><code>signal</code></td><td><span class="sw"><i style="--c:#edf3f8"></i><i style="--c:#102e46"></i><i style="--c:#006dae"></i><i style="--c:#c75a12"></i></span></td><td class="wrap">Cool paper with strong blue. Product, data, operational updates.</td></tr>
+            <tr><td><code>midnight</code></td><td><span class="sw"><i style="--c:#0c1024"></i><i style="--c:#eef0ff"></i><i style="--c:#9aa5ff"></i><i style="--c:#ffb86b"></i></span></td><td class="wrap">Indigo night with periwinkle and apricot. Launches, science, big ideas.</td></tr>
+            <tr><td><code>forest</code></td><td><span class="sw"><i style="--c:#0f1d17"></i><i style="--c:#eef5ee"></i><i style="--c:#a3dc7f"></i><i style="--c:#f2c35b"></i></span></td><td class="wrap">Deep green with lime and gold. Nature, food, travel, sustainability.</td></tr>
+            <tr><td><code>ember</code></td><td><span class="sw"><i style="--c:#1b1311"></i><i style="--c:#fbefe6"></i><i style="--c:#ff8a57"></i><i style="--c:#ffd27a"></i></span></td><td class="wrap">Charred brown with coral and saffron. Warm personal stories.</td></tr>
+            <tr><td><code>mono</code></td><td><span class="sw"><i style="--c:#fafafa"></i><i style="--c:#111111"></i><i style="--c:#d12f1f"></i><i style="--c:#111111"></i></span></td><td class="wrap">Black on white with a single red. Stark data, manifestos, myth-busting.</td></tr>
+            <tr><td><code>pop</code></td><td><span class="sw"><i style="--c:#ffd84a"></i><i style="--c:#141414"></i><i style="--c:#b01030"></i><i style="--c:#1d3fbf"></i></span></td><td class="wrap">Poster yellow with crimson and cobalt. Loud social cuts, bold claims.</td></tr>
+            <tr><td><code>electric</code></td><td><span class="sw"><i style="--c:#08080f"></i><i style="--c:#f4f4ff"></i><i style="--c:#5cf2d6"></i><i style="--c:#ff5ccd"></i></span></td><td class="wrap">Near-black with neon mint and magenta. Tech, culture, nightlife.</td></tr>
+            <tr><td><code>blueprint</code></td><td><span class="sw"><i style="--c:#0d2b52"></i><i style="--c:#f1f6ff"></i><i style="--c:#7fd4ff"></i><i style="--c:#ffd166"></i></span></td><td class="wrap">Drafting blue with sky and amber lines. Engineering, diagrams.</td></tr>
+            <tr><td><code>clay</code></td><td><span class="sw"><i style="--c:#efe3d6"></i><i style="--c:#2b1d17"></i><i style="--c:#a8431f"></i><i style="--c:#2e5f6e"></i></span></td><td class="wrap">Terracotta paper with rust and teal. Craft, history, warm documentary.</td></tr>
+            <tr><td><code>noir</code></td><td><span class="sw"><i style="--c:#111111"></i><i style="--c:#f2efe9"></i><i style="--c:#e9c46a"></i><i style="--c:#e76f51"></i></span></td><td class="wrap">Cinema black with gold and vermilion. Drama, true stories, reveals.</td></tr>
+            <tr><td><code>sketchbook</code></td><td><span class="sw"><i style="--c:#f2ecdf"></i><i style="--c:#433e39"></i><i style="--c:#c2344d"></i><i style="--c:#3a67b3"></i></span></td><td class="wrap">Drawing paper with graphite, red and blue pencil. Hand-drawn explainers.</td></tr>
+            <tr><td><code>mosaic</code></td><td><span class="sw"><i style="--c:#16225e"></i><i style="--c:#f3ead3"></i><i style="--c:#e9b949"></i><i style="--c:#e2643c"></i></span></td><td class="wrap">Ultramarine ground with ivory, gold, coral and turquoise tesserae. Pairs with the mosaic backdrop and canvas mosaic.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="vocab-type">Type, speech &amp; captions</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Value</th><th>Effect</th></tr></thead>
+          <tbody>
+            <tr class="group"><td colspan="3"><code>textMotion</code> (film default or per beat)</td></tr>
+            <tr><td><code>lines</code></td><td class="wrap">default</td><td class="wrap">Each line rises through a mask. Calm.</td></tr>
+            <tr><td><code>words</code></td><td class="wrap"></td><td class="wrap">Word by word. Editorial, conversational energy.</td></tr>
+            <tr><td><code>letters</code></td><td class="wrap"></td><td class="wrap">Letter by letter, for a hook or a single typed-out word.</td></tr>
+            <tr><td><code>cascade</code></td><td class="wrap"></td><td class="wrap">Letters drop in with an alternating tilt, for the loud line. The whole reveal is capped near 0.9 s.</td></tr>
+            <tr class="group"><td colspan="3"><code>kinetic</code> block <code>mode</code></td></tr>
+            <tr><td><code>highlight</code></td><td class="wrap"></td><td class="wrap">A stable phrase: unspoken words dim and the current word takes the accent.</td></tr>
+            <tr><td><code>reveal</code></td><td class="wrap"></td><td class="wrap">Each word lifts into view as it is spoken.</td></tr>
+            <tr><td><code>word</code></td><td class="wrap"><code>maxGap</code></td><td class="wrap">One word at a time, held through pauses shorter than <code>maxGap</code>.</td></tr>
+            <tr><td><code>stack</code></td><td class="wrap"><code>emphasis</code>, <code>emphasisStyle</code>, <code>upper</code></td><td class="wrap">Poster type that builds word by word and breaks at sentences, with emphasis words larger in the accent.</td></tr>
+            <tr class="group"><td colspan="3"><code>captions</code> (film)</td></tr>
+            <tr><td><code>true</code></td><td class="wrap"></td><td class="wrap">Phrase captions on a soft plate.</td></tr>
+            <tr><td><code>"auto"</code></td><td class="wrap"></td><td class="wrap">On for vertical formats.</td></tr>
+            <tr><td><code>"pop"</code></td><td class="wrap"></td><td class="wrap">Social captions: heavy outlined 3–4 word phrases, with the spoken word on a tilted accent pill.</td></tr>
+            <tr><td><code>false</code> / <code>"off"</code></td><td class="wrap"></td><td class="wrap">No burned captions (<code>captions DIR</code> still exports SRT/VTT).</td></tr>
+            <tr class="group"><td colspan="3">Headings &amp; emphasis</td></tr>
+            <tr><td><code>heading</code></td><td class="wrap"><code>top</code> · <code>bottom</code></td><td class="wrap">Title above the picture, or as a lower third with an accent rule.</td></tr>
+            <tr><td><code>emphasis</code></td><td class="wrap">≤ 4 whole-word phrases</td><td class="wrap">Accent-coloured phrases on title, statement, chapter, quote, callout, endcard.</td></tr>
+            <tr><td><code>emphasisStyle</code></td><td class="wrap"><code>serif</code></td><td class="wrap">Emphasis set in Instrument Serif italic, the editorial feeling word.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="vocab-transitions">Transitions &amp; exits</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Value</th><th>What it does</th><th>Use for</th></tr></thead>
+          <tbody>
+            <tr><td><code>cut</code></td><td class="wrap">A hard cut. The heading is already in place, so the cut lands on a composed frame.</td><td class="wrap">Rhythm within a sequence</td></tr>
+            <tr><td><code>fade</code> · <code>rise</code> · <code>wipe</code> · <code>zoom</code></td><td class="wrap">Standard entrances. The outgoing scene exits to match.</td><td class="wrap">Calm films, general flow</td></tr>
+            <tr><td><code>push</code></td><td class="wrap">The previous scene slides away.</td><td class="wrap">Sequence, the next step</td></tr>
+            <tr><td><code>panel</code></td><td class="wrap">An accent panel with a second-accent edge sweeps across and off. Into an accent-<code>tone</code> scene, the panel becomes the background.</td><td class="wrap">Chapter turns</td></tr>
+            <tr><td><code>iris</code></td><td class="wrap">An accent circle closes the scene and opens the next. <code>transitionOrigin: [x, y]</code> (0–1) sets its centre.</td><td class="wrap">A revelation; leaving and re-entering a world</td></tr>
+            <tr><td><code>whip</code></td><td class="wrap">A fast horizontal move with motion blur.</td><td class="wrap">Between ideas in energetic cuts</td></tr>
+            <tr><td><code>auto</code></td><td class="wrap"><code>rise</code> where the chapter changes, <code>fade</code> otherwise. With nothing set, the film default is <code>fade</code>.</td><td class="wrap">Chaptered films</td></tr>
+            <tr class="group"><td colspan="3">Beat <code>exit</code> &amp; colour</td></tr>
+            <tr><td><code>exit</code></td><td class="wrap"><code>auto</code> (mirror the next entrance), <code>none</code>, <code>fade</code>, <code>push</code>, <code>zoom</code>, <code>wipe</code>, <code>panel</code>, <code>iris</code>, <code>whip</code>. An exit never starts before the beat's last spoken word.</td><td class="wrap">Overrides only</td></tr>
+            <tr><td><code>transitionColor</code></td><td class="wrap"><code>accent</code>, <code>accent2</code>, <code>ink</code>, <code>bg</code>, <code>surface</code></td><td class="wrap">Graphic covers</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="vocab-camera">Camera &amp; worlds</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Prop</th><th>Where</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>camera</code></td><td class="wrap">beat</td><td class="wrap"><code>auto</code> (a gentle push-in, except on kinetic text and footage), <code>none</code>, <code>in</code>, <code>out</code>, <code>left</code>, <code>right</code>, <code>up</code>, <code>down</code>, or <code>{move, amount: 0–1}</code>.</td></tr>
+            <tr><td><code>view</code></td><td class="wrap">canvas props</td><td class="wrap">Omit it for frame pixels. <code>[w, h]</code> gives author units fitted below the header; <code>"auto"</code> fits the drawing's bounds (up to 2×); <code>[x, y, w, h]</code> is a camera rect across the whole frame.</td></tr>
+            <tr><td><code>world</code></td><td class="wrap">canvas props</td><td class="wrap">A name shared by consecutive canvas beats that form one continuous drawing.</td></tr>
+            <tr><td><code>viewAt</code> · <code>viewDur</code></td><td class="wrap">canvas props</td><td class="wrap">When the camera move starts (default 0 s) and how long it takes (default 1.2 s; pre-rolled moves can run faster, down to 0.8 s).</td></tr>
+            <tr><td><code>viewFrom</code></td><td class="wrap">canvas props</td><td class="wrap">The rect the camera travels from. It is set automatically between world beats.</td></tr>
+            <tr><td><code>viewDrift</code></td><td class="wrap">canvas props</td><td class="wrap">How far the camera keeps easing in after it arrives (worlds default to 0.03). The next move starts from the drifted view.</td></tr>
+            <tr><td><code>viewTall</code></td><td class="wrap">canvas props</td><td class="wrap">A 9:16 camera rect for vertical frames. Without it, the view is re-framed on the beat's own foreground.</td></tr>
+            <tr><td><code>depth</code></td><td class="wrap">element</td><td class="wrap">Above 0 and at most 1. Below 1, the layer follows only part of the camera's travel, which gives parallax (a skyline at 0.5).</td></tr>
+            <tr><td><code>behind</code></td><td class="wrap">element</td><td class="wrap"><code>true</code> draws the element under everything already in the world, such as a sky that lights up by day.</td></tr>
+            <tr><td><code>exitAt</code> after the beat</td><td class="wrap">element</td><td class="wrap">Tidies labels away while the camera is elsewhere, without holding the beat.</td></tr>
+            <tr><td><code>world DIR</code></td><td class="wrap">CLI</td><td class="wrap">Renders the whole world with every beat's camera rect outlined and numbered.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="vocab-layers">Beat layers &amp; film settings</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Values</th></tr></thead>
+          <tbody>
+            <tr class="group"><td colspan="2">Beat layers (combine with any block)</td></tr>
+            <tr><td><code>plate</code></td><td class="wrap"><code>asset</code> | <code>file</code>; <code>side</code>: full, left, right, top, bottom; <code>treatment</code>: duotone, tint, mono, blur, soft, none; <code>drift</code>: in, out, left, right, up, down, none; <code>scrim</code> 0–1; <code>focus: [x, y]</code></td></tr>
+            <tr><td><code>tone</code></td><td class="wrap"><code>accent</code>, <code>accent2</code>, <code>invert</code>, <code>surface</code>, <code>none</code>. Floods the frame and re-derives readable colours.</td></tr>
+            <tr><td><code>art</code></td><td class="wrap"><code>{ under: [...], over: [...] }</code>: canvas elements in frame pixels</td></tr>
+            <tr><td><code>label</code></td><td class="wrap">The section label for the film frame (≤ 40 chars; defaults to the chapter)</td></tr>
+            <tr class="group"><td colspan="2">Film level</td></tr>
+            <tr><td><code>format</code></td><td class="wrap"><code>preset</code>: landscape, vertical, square, portrait; <code>fps</code>: 24, 25, 30, 50, 60</td></tr>
+            <tr><td><code>motion</code></td><td class="wrap"><code>preset</code>: gentle (0.55 s quartic), snappy (0.30 s exponential), spring (0.72 s damped); <code>intensity</code> 0–1</td></tr>
+            <tr><td><code>backdrop</code></td><td class="wrap"><code>none</code>, <code>dots</code>, <code>grid</code>, <code>glow</code> (slow drifting light pools), <code>paper</code>, <code>mosaic</code> (static cached tiles)</td></tr>
+            <tr><td><code>texture</code></td><td class="wrap"><code>film</code>, <code>grain</code>, <code>vignette</code>, <code>none</code>, or <code>{grain, vignette, animate}</code></td></tr>
+            <tr><td><code>frame</code></td><td class="wrap"><code>true</code> or <code>{brand, left, right, label, progress}</code>: a serif-italic brand, a section label, mono footers and a progress rail</td></tr>
+            <tr><td><code>sfx</code></td><td class="wrap"><code>off</code>, <code>subtle</code>, <code>normal</code>, <code>punchy</code>: whooshes into graphic transitions, thuds on hero numbers, ticks and pops on counts and arrivals</td></tr>
+            <tr><td><code>voice</code></td><td class="wrap"><code>takes: "chapter"</code> for continuous takes, <code>style</code> (a few words), <code>cast</code> for two voices (conversational TTS; only its dry-run contract is tested)</td></tr>
+            <tr><td><code>pacing</code></td><td class="wrap"><code>lead</code>, <code>tail</code>, <code>minBeat</code>, <code>silentBeat</code>, <code>outro</code></td></tr>
+            <tr><td><code>continuity</code></td><td class="wrap"><code>maxGeneratedShare</code>, <code>treatment</code>, <code>lighting</code>, <code>camera</code>, <code>motion</code>, <code>motif</code>, <code>refs</code> (≤ 2), for generated inserts</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="vocab-canvas">Canvas elements</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Type</th><th>Geometry &amp; notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>rect</code></td><td class="wrap"><code>x, y, w, h, r</code></td></tr>
+            <tr><td><code>circle</code> · <code>ellipse</code></td><td class="wrap"><code>cx, cy, r</code> · <code>cx, cy, rx, ry</code></td></tr>
+            <tr><td><code>line</code></td><td class="wrap"><code>x1, y1, x2, y2</code>, <code>arrow</code>: start | end | both, <code>head</code></td></tr>
+            <tr><td><code>path</code></td><td class="wrap"><code>d</code> (SVG path data), <code>arrow</code>, <code>head</code></td></tr>
+            <tr><td><code>poly</code></td><td class="wrap"><code>points: [[x, y], …]</code> (2–400), <code>closed</code></td></tr>
+            <tr><td><code>text</code></td><td class="wrap"><code>text, x, y, size, font, anchor, width, leading, tracking, upper</code>; <code>count: {from, to, decimals, prefix, suffix, dur}</code> is a displayed figure and needs a source. Fonts: display, semibold, bold, light, text, regular, strong, figures, serif, serif-italic, italic, mono, hand.</td></tr>
+            <tr><td><code>icon</code></td><td class="wrap"><code>name</code> (from <code>icons</code>, 95 Tabler), <code>x, y, size</code></td></tr>
+            <tr><td><code>image</code></td><td class="wrap"><code>asset</code> | <code>file</code>, <code>x, y, w, h, r</code>, <code>fit</code>: cover | contain, <code>treatment</code></td></tr>
+            <tr><td><code>group</code></td><td class="wrap"><code>children</code>, <code>x, y</code> offset, <code>stagger</code> (nests up to four levels)</td></tr>
+            <tr><td><code>meter</code></td><td class="wrap"><code>x, y, w, h</code>, <code>style</code>: bars | mirror | ring | wave: the narration's loudness, live</td></tr>
+            <tr><td><code>spotlight</code></td><td class="wrap"><code>cx, cy, r</code> or <code>x, y, w, h</code>, <code>dim</code> 0–1: everything outside recedes</td></tr>
+            <tr><td><code>particles</code></td><td class="wrap"><code>x, y, w, h</code>, <code>kind</code>: dust | embers | rain | snow | bubbles, <code>count</code> 1–400, <code>seed</code>, <code>size</code>, <code>speed</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Timing field</th><th>Values</th></tr></thead>
+          <tbody>
+            <tr><td><code>say</code> · <code>at</code></td><td class="wrap">When the element enters: a spoken word or phrase, or scene seconds</td></tr>
+            <tr><td><code>enter</code></td><td class="wrap">fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, scramble (text only for type and scramble), blur, assemble (tile by tile, for mosaic shapes), none</td></tr>
+            <tr><td><code>keys</code></td><td class="wrap">Up to 24 of <code>{say | at, dur, ease, x, y, scale, scaleX, scaleY, rotate, opacity}</code>. <code>scaleX</code>/<code>scaleY</code> stretch one axis about <code>origin</code>, for a level rising or a gap widening.</td></tr>
+            <tr><td><code>ease</code></td><td class="wrap">inOut, in, out, linear, spring</td></tr>
+            <tr><td><code>along</code></td><td class="wrap"><code>{d, say | at, dur, ease, rotate, loop}</code>: travel along a path</td></tr>
+            <tr><td><code>loop</code></td><td class="wrap"><code>{type, period, amount}</code>; types: spin, pulse, float, sway, orbit, dash (needs a <code>dash</code> pattern), blink, level (follows the voice)</td></tr>
+            <tr><td><code>exit</code></td><td class="wrap">fade, shrink, fall, lift, undraw, wipe, blur, scatter (mosaic tiles thrown loose), none, with <code>exitSay</code> | <code>exitAt</code> and <code>exitDur</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="vocab-effects">Canvas effects</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Effect</th><th>Syntax</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td><code>glow</code></td><td class="wrap"><code>true</code> or <code>{blur, opacity, color}</code></td><td class="wrap">Things that give light: windows (put it on the group), suns, screens, hot surfaces</td></tr>
+            <tr><td><code>shadow</code></td><td class="wrap"><code>true</code> or <code>{dx, dy, blur, opacity, color}</code></td><td class="wrap">Cards on light palettes. One filter per group.</td></tr>
+            <tr><td><code>particles</code></td><td class="wrap">element type (above)</td><td class="wrap">Atmosphere under a scene. Use one low-count field.</td></tr>
+            <tr><td><code>rough</code></td><td class="wrap"><code>true</code> or <code>{amount 0–40, passes 1–3, boil 0–30, fill: hachure | solid, gap, angle, hatchWidth}</code>, on the canvas or an element (<code>false</code> opts out)</td><td class="wrap">Hand-drawn pencil strokes with a line boil</td></tr>
+            <tr><td><code>mosaic</code></td><td class="wrap"><code>true</code> or <code>{tile, gap, jitter, flow: rows | rings, outline, build: sweep | radial | random, shade, shine, grout, axis, seed}</code> on rect, circle, ellipse, line, path or poly, or on the whole canvas (<code>false</code> opts out)</td><td class="wrap">Tesserae: fills tiled on grout, strokes as beaded lines, gradients sampled per tile</td></tr>
+            <tr><td>morph</td><td class="wrap">the same element <code>id</code> in consecutive canvas beats; <code>morphDur</code> 0.1–4 s (default 0.8)</td><td class="wrap">Before/after across a cut. Use <code>cut</code>, because a transition hides it.</td></tr>
+            <tr><td><code>echo</code></td><td class="wrap"><code>{count 1–24, lag 0–2, step: {x, y, rotate, scale}, fade, to}</code></td><td class="wrap">Motion trails (<code>lag</code>) or stacked copies with a colour shift (<code>step</code>)</td></tr>
+            <tr><td><code>fps</code></td><td class="wrap">2–60</td><td class="wrap">Stepped motion, e.g. 12 for "on twos"</td></tr>
+            <tr><td><code>depth</code> · <code>behind</code></td><td class="wrap">see Camera &amp; worlds</td><td class="wrap">Parallax; drawing under the existing world</td></tr>
+            <tr><td>gradient</td><td class="wrap"><code>fill: {gradient: [2–4 colours], angle, radial, fade}</code></td><td class="wrap">Soft glows (<code>fade</code> dissolves the last stop)</td></tr>
+            <tr><td><code>blend</code></td><td class="wrap">normal, multiply, screen, overlay, darken, lighten, soft-light, difference</td><td class="wrap">Layering</td></tr>
+            <tr><td>colour tokens</td><td class="wrap">bg, surface, ink, muted, accent, accent2, positive, negative, line, wash, wash2, none, or <code>#rrggbb</code></td><td class="wrap">Tokens follow the palette and the beat's <code>tone</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="vocab-library">Library: blocks, sketches, playbooks</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Family</th><th>Blocks (33)</th></tr></thead>
+          <tbody>
+            <tr><td>Story</td><td class="wrap"><code>title</code>, <code>statement</code>, <code>quote</code>, <code>endcard</code>, <code>chapter</code></td></tr>
+            <tr><td>Numbers</td><td class="wrap"><code>stat</code>, <code>kpis</code>, <code>delta</code></td></tr>
+            <tr><td>Charts</td><td class="wrap"><code>bars</code>, <code>line</code>, <code>waffle</code>, <code>ring</code>, <code>funnel</code>, <code>donut</code>, <code>magnitude</code></td></tr>
+            <tr><td>Decisions</td><td class="wrap"><code>compare</code>, <code>matrix</code></td></tr>
+            <tr><td>Diagrams</td><td class="wrap"><code>steps</code>, <code>timeline</code>, <code>equation</code>, <code>flow</code>, <code>cycle</code></td></tr>
+            <tr><td>Text</td><td class="wrap"><code>list</code>, <code>callout</code>, <code>highlight</code>, <code>checklist</code></td></tr>
+            <tr><td>Media</td><td class="wrap"><code>image</code>, <code>video</code>, <code>annotate</code></td></tr>
+            <tr><td>Speech</td><td class="wrap"><code>kinetic</code></td></tr>
+            <tr><td>Graphics</td><td class="wrap"><code>icon-grid</code>, <code>canvas</code></td></tr>
+            <tr><td>Motion</td><td class="wrap"><code>breathing</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sketch</th><th>What it draws</th><th>Use for</th></tr></thead>
+          <tbody>
+            <tr><td><code>route</code></td><td class="wrap">A path drawing through stops, with a travelling marker</td><td class="wrap">Journeys, milestones, processes over time</td></tr>
+            <tr><td><code>orbit</code></td><td class="wrap">Rings with satellites at different speeds</td><td class="wrap">Ecosystems, stakeholders, forces</td></tr>
+            <tr><td><code>pipeline</code></td><td class="wrap">Cards in order, dashed connectors marching</td><td class="wrap">Flows, handoffs, cause and effect</td></tr>
+            <tr><td><code>network</code></td><td class="wrap">Edges draw, nodes pop, a hub pulses</td><td class="wrap">Communities, dependencies, spread</td></tr>
+            <tr><td><code>balance</code></td><td class="wrap">A beam tipping on a spoken cue</td><td class="wrap">Trade-offs, risk versus reward</td></tr>
+            <tr><td><code>versus</code></td><td class="wrap">Two sides, a drawn divider, a badge</td><td class="wrap">Before/after, myth/fact, two options</td></tr>
+            <tr><td><code>burst</code></td><td class="wrap">One big word, an underline, rays</td><td class="wrap">A key term or verdict</td></tr>
+            <tr><td><code>ambient</code></td><td class="wrap">Soft drifting shapes (an <code>art.under</code> layer)</td><td class="wrap">Behind statements, quotes and kinetic type</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Playbook</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>concept-explainer</code></td><td class="wrap">Explain a mechanism</td></tr>
+            <tr><td><code>quarterly-update</code></td><td class="wrap">Report progress with context</td></tr>
+            <tr><td><code>decision-memo</code></td><td class="wrap">Make a trade-off explicit</td></tr>
+            <tr><td><code>research-summary</code></td><td class="wrap">Separate a finding from its limits</td></tr>
+            <tr><td><code>incident-review</code></td><td class="wrap">Explain an incident without blame</td></tr>
+            <tr><td><code>product-walkthrough</code></td><td class="wrap">Show a workflow and its payoff</td></tr>
+            <tr><td><code>vertical-short</code></td><td class="wrap">One idea for a small screen</td></tr>
+            <tr><td><code>speech-story</code></td><td class="wrap">Let speech drive the typography</td></tr>
+            <tr><td><code>myth-buster</code></td><td class="wrap">Correct a misconception</td></tr>
+            <tr><td><code>tutorial</code></td><td class="wrap">Teach a repeatable procedure</td></tr>
+            <tr><td><code>customer-story</code></td><td class="wrap">Connect a problem to a concrete outcome</td></tr>
+            <tr><td><code>documentary-hybrid</code></td><td class="wrap">Ground a story in a brief visual insert</td></tr>
+            <tr><td><code>science-lesson</code></td><td class="wrap">Follow a question through an experiment</td></tr>
+            <tr><td><code>cooking-guide</code></td><td class="wrap">Teach a recipe through visible checkpoints</td></tr>
+            <tr><td><code>travel-story</code></td><td class="wrap">Tell a small story about a place</td></tr>
+            <tr><td><code>language-practice</code></td><td class="wrap">Listen, follow the words, then try the phrase</td></tr>
+            <tr><td><code>personal-story</code></td><td class="wrap">Make a keepsake from a meaningful moment</td></tr>
+            <tr><td><code>creative-process</code></td><td class="wrap">Show how a work develops through iteration</td></tr>
+            <tr><td><code>quiet-moment</code></td><td class="wrap">Create a gentle paced visual break</td></tr>
+            <tr><td><code>data-story</code></td><td class="wrap">Tell a story with a few trustworthy numbers</td></tr>
+            <tr><td><code>screen-walkthrough</code></td><td class="wrap">Walk through a screen in reading order</td></tr>
+            <tr><td><code>checklist-guide</code></td><td class="wrap">Help someone get ready, one item at a time</td></tr>
+            <tr><td><code>year-in-review</code></td><td class="wrap">Look back on a year with a clear through-line</td></tr>
+            <tr><td><code>scale-explainer</code></td><td class="wrap">Make a very large number feel real</td></tr>
+            <tr><td><code>research-digest</code></td><td class="wrap">Turn a long report into a question-led short film</td></tr>
+            <tr><td><code>podcast-clip</code></td><td class="wrap">Cut a podcast moment into a vertical social clip</td></tr>
+            <tr><td><code>brand-spot</code></td><td class="wrap">A short, designed spot with an editorial frame</td></tr>
+            <tr><td><code>journey</code></td><td class="wrap">A travelling-camera explainer: one drawing, explored stop by stop</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= 07 COMMANDS ================= -->
+    <section class="topic" id="commands">
+      <p class="kicker"><span class="num">07</span><span class="serif">run from the repository root</span></p>
+      <h2>Command reference</h2>
+      <p>Every command is <code>node engine/cli.mjs COMMAND …</code>. The package also exposes it as <code>clearframe</code>. <code>help</code> prints the full list with flags.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr class="group"><td colspan="2">Set up</td></tr>
+            <tr><td><code>doctor</code></td><td class="wrap">Checks native dependencies, codecs and disk headroom.</td></tr>
+            <tr><td><code>build</code></td><td class="wrap">Compiles the native renderer (warm cache, one Cargo job).<span class="badge heavy">heavy lock</span></td></tr>
+            <tr><td><code>gallery DIR [--sketches]</code></td><td class="wrap">Renders every block (or sketch) in a theme and aspect, to review the vocabulary.</td></tr>
+            <tr class="group"><td colspan="2">Start &amp; choose</td></tr>
+            <tr><td><code>new DIR --playbook P --treatment T</code></td><td class="wrap">Scaffolds a storyboard and DIRECTION.md (<code>--theme</code>, <code>--vertical</code>).</td></tr>
+            <tr><td><code>treatments</code> · <code>playbooks</code></td><td class="wrap">Lists art directions and starting arcs.</td></tr>
+            <tr><td><code>blocks [NAME]</code></td><td class="wrap">Lists blocks, or one block's props and an example.</td></tr>
+            <tr><td><code>themes</code> · <code>motions</code> · <code>icons</code></td><td class="wrap">Palettes with swatches; motion presets, entrances, exits and backdrops; the bundled icons.</td></tr>
+            <tr><td><code>sketch [NAME] [--vertical]</code></td><td class="wrap">Canvas starting compositions as JSON.</td></tr>
+            <tr class="group"><td colspan="2">Material</td></tr>
+            <tr><td><code>ingest DIR --markdown FILE</code></td><td class="wrap">Writes the evidence brief (BRIEF.md), a storyboard and DIRECTION.md. Also reads .txt, .html, .docx, .rtf, and .pdf via pdftotext.</td></tr>
+            <tr><td><code>ingest DIR --audio WAV --words JSON</code></td><td class="wrap">Imports a recording as gapless beats with measured words (<code>--script</code>, <code>--from</code>/<code>--to</code>, <code>--speakers</code>, <code>--vertical</code>).</td></tr>
+            <tr><td><code>reference VIDEO</code></td><td class="wrap">Breaks a reference film down into cut rhythm, a keyframe sheet, a palette and motion (REFERENCE.md).</td></tr>
+            <tr class="group"><td colspan="2">Voice &amp; media</td></tr>
+            <tr><td><code>plan DIR</code></td><td class="wrap">Approximate generation cost and cache state. Run it before anything paid.</td></tr>
+            <tr><td><code>voice DIR [--draft]</code></td><td class="wrap">Local draft voice<span class="badge free">free</span>, or Gemini TTS<span class="badge paid">paid</span>.</td></tr>
+            <tr><td><code>music DIR [--draft]</code></td><td class="wrap">Local bed<span class="badge free">free</span>, or a Lyria MP3<span class="badge paid">paid</span>.</td></tr>
+            <tr><td><code>images</code> · <code>clips DIR</code></td><td class="wrap">Generates stills or footage inserts (<code>--only</code>, <code>--budget</code>, <code>--force</code>).<span class="badge paid">paid</span></td></tr>
+            <tr><td><code>speech DIR --beat ID --audio --transcript</code></td><td class="wrap">Imports a recording and transcript for one beat.</td></tr>
+            <tr><td><code>align DIR --whisper</code></td><td class="wrap">Measures word timestamps with local Whisper.<span class="badge free">free</span></td></tr>
+            <tr><td><code>align DIR --beat ID --words JSON</code></td><td class="wrap">Imports measured word timestamps.<span class="badge free">free</span></td></tr>
+            <tr><td><code>align DIR --beat ID --transcribe</code></td><td class="wrap">Gemini word timestamps (<code>--budget</code>).<span class="badge paid">paid</span></td></tr>
+            <tr class="group"><td colspan="2">Review</td></tr>
+            <tr><td><code>critique DIR</code></td><td class="wrap">Instant review of deck-ness, stillness, density, hook and story links. No render.</td></tr>
+            <tr><td><code>check DIR [--draft]</code></td><td class="wrap">Validates inputs and native diagnostics.</td></tr>
+            <tr><td><code>sheet DIR [--draft] [--grid]</code></td><td class="wrap">A contact sheet of the whole film (<code>--per 1|2|3</code>).</td></tr>
+            <tr><td><code>still DIR --beat ID [--pos .6] [--grid]</code></td><td class="wrap">One frame. <code>--grid</code> overlays labelled 100 px coordinates for placing art.</td></tr>
+            <tr><td><code>world DIR [--name NAME]</code></td><td class="wrap">A canvas world's map with every beat's camera rect numbered.</td></tr>
+            <tr><td><code>looks DIR --beat ID</code></td><td class="wrap">The same frame in every palette.</td></tr>
+            <tr><td><code>review DIR [--beat ID]</code></td><td class="wrap">Decoded frames around every cut and word boundary of the MP4.</td></tr>
+            <tr><td><code>timing</code> · <code>captions DIR</code></td><td class="wrap">Timing JSON; SRT and VTT (measured words required unless <code>--draft</code>).</td></tr>
+            <tr class="group"><td colspan="2">Render</td></tr>
+            <tr><td><code>draft DIR [--no-render]</code></td><td class="wrap">One pass: critique, draft voice, check, sheet and a draft MP4.</td></tr>
+            <tr><td><code>render DIR [--draft]</code> · <code>preview DIR</code></td><td class="wrap">Final encode, or a fast review MP4 (<code>--out</code>, <code>--no-audio</code>, <code>--force</code>).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= 08 TROUBLESHOOTING ================= -->
+    <section class="topic" id="troubleshooting">
+      <p class="kicker"><span class="num">08</span><span class="serif">when something's off</span></p>
+      <h2>Troubleshooting &amp; FAQ</h2>
+      <div class="faq">
+        <div id="faq-heavy-lock">
+          <h3>"Heavy-job lock is held by …; the build starts when it finishes."</h3>
+          <p>Only compiling the native renderer takes the machine-wide <code>codex-heavy</code> lock, using one Cargo job. Renders, checks and voice run freely. The build names the holder and waits, so let it finish rather than killing someone else's job. Builds are skipped when the renderer source hasn't changed, and the warm cache makes the rest quick. When parallel agents are working, avoid starting concurrent heavy builds.</p>
+        </div>
+        <div id="faq-disk">
+          <h3>"Native build needs N GiB free"</h3>
+          <p>The build refuses to start below <strong>10 GiB</strong> free with a warm cache, or <strong>25 GiB</strong> for a cold build. <code>doctor</code> flags headroom below 20 GiB (warm) or 30 GiB (cold). Free up space rather than deleting the warm cache: a cold rebuild needs far more.</p>
+        </div>
+        <div id="faq-timing">
+          <h3>The draft passed, but the final fails on word timing</h3>
+          <p>Drafts accept estimated narration and word timing. Final kinetic or captioned scenes need <strong>measured</strong> timestamps tied to the current audio's hash. Run <code>align DIR --whisper</code> (free; install with <code>brew install openai-whisper</code> or <code>pip install openai-whisper</code>), import a word file with <code>align --words</code>, or use the paid <code>align --transcribe</code>. Replacing the audio invalidates the alignment. Interpolated words are never labelled measured. <code>build/timing.json</code> shows each beat's <code>wordTiming</code> and <code>alignmentIssue</code>.</p>
+        </div>
+        <div id="faq-cue">
+          <h3>"Spoken cue not found" or "cued too late"</h3>
+          <p>Cues must be words exactly as they appear in the <code>vo</code> line. Digits and number words match either way ("18" ↔ "eighteen"). A cue has to leave room for the entrance to finish inside the beat, so cue an earlier word or give the beat more <code>tail</code>.</p>
+        </div>
+        <div id="faq-world-text">
+          <h3>"Text reaches outside this beat's camera view" / "renders at about N px"</h3>
+          <p>In worlds, <code>check</code> expects the camera to crop the drawing and ignores "cut off by the canvas edge" while the camera is moving. It still warns when a beat's <em>own</em> text falls outside its view, and when text shrinks below about 22 px through the camera's zoom (the warning gives the minimum size in world units). Fix it by widening or moving the view, enlarging the label, or moving the label into the shot. For vertical cuts, set <code>viewTall</code>. Confirm with <code>world DIR</code> and <code>still --grid</code>.</p>
+        </div>
+        <div id="faq-sources">
+          <h3>Why won't it render my number?</h3>
+          <p>Every displayed number (stats, charts, canvas <code>count</code>) needs a visible <code>props.source</code> and a <code>sources</code> entry, and <code>check</code> refuses it otherwise. Professional audiences forgive plain design but not a wrong number, and the storyboard plus its sources is the audit trail. Illustrative figures must say so on screen. Also make sure the number spoken, the number shown and the number in <code>sources</code> agree.</p>
+        </div>
+        <div id="faq-counters">
+          <h3>"Beat ends before its counters finish"</h3>
+          <p>A final render fails (and a draft warns) when a count or bar hasn't reached its true value by the end of the beat. Raise the beat's <code>tail</code> or <code>hold</code>, or cue the count earlier.</p>
+        </div>
+        <div id="faq-fallback">
+          <h3>A graphic transition became a fade</h3>
+          <p>The outgoing scene had no room to finish the cover, so <code>check</code> warns and falls back to a fade. Give that beat more tail, or use a <code>cut</code>. A related warning: the last element landing less than 0.45 s before the cut. Cue it earlier or extend the beat.</p>
+        </div>
+        <div id="faq-morph">
+          <h3>My morph doesn't show</h3>
+          <p>A morph pairs the same element <code>id</code> across consecutive canvas beats. Any transition other than <code>cut</code> hides it, and beats with different views make positions jump.</p>
+        </div>
+        <div id="faq-glyphs">
+          <h3>Text overflows, or a character fails</h3>
+          <p>Text that still doesn't fit its box at 14 px fails. Shorten it or split the beat. The bundled fonts cover Latin, Greek, Cyrillic, arrows, maths and currency, and <code>check</code> names any other character (for example CJK) along with its prop.</p>
+        </div>
+        <div id="faq-looks-fine">
+          <h3>Check passes, but it still looks like slides</h3>
+          <p>That's expected. Diagnostics can't judge composition or taste. Run <code>critique</code>, open the sheet, and ask for a fresh review round (see <a href="#prompting-iterate">iteration prompts</a>).</p>
+        </div>
+        <div id="faq-paid">
+          <h3>A paid command asks for a key, or I don't want to spend</h3>
+          <p>Paid generation needs <code>GEMINI_API_KEY</code>. Rendering, draft voice, draft music, word-file imports and Whisper alignment are all free. Run <code>plan</code> first, and use <code>--budget</code> and <code>--only</code> to scope a paid call. The budget check is an estimate, not a provider billing cap.</p>
+        </div>
+        <div id="faq-overwrite">
+          <h3>Render refuses to write my <code>--out</code> file</h3>
+          <p>Overwriting an existing explicit <code>--out</code> needs <code>--force</code>.</p>
+        </div>
+        <div id="faq-length">
+          <h3>How long, how many beats, how much footage?</h3>
+          <p>60–90 s is about 12–18 beats, with beats of 3–5 s for professional pieces and 2–3 s for social cuts. Narration runs at about 150 wpm. Generated footage stays sparing: the default review threshold is 20% of runtime, clip audio is discarded, and both joins get reviewed (<code>docs/continuity.md</code>).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 09 WHAT'S NEW ================= -->
+    <section class="topic" id="whats-new">
+      <p class="kicker"><span class="num">09</span><span class="serif">0.5.0, unreleased</span></p>
+      <h2>What's new</h2>
+      <p class="small">"Travel instead of cutting, type with a voice, and fewer false alarms." The full list is in <code>CHANGELOG.md</code>.</p>
+      <ul class="news">
+        <li><strong>Mosaic.</strong> <code>mosaic</code> on any canvas shape (or the whole canvas) lays it in tesserae. <code>enter: assemble</code> builds it tile by tile and <code>exit: scatter</code> throws the tiles loose. A <code>mosaic</code> palette, backdrop and treatment complete the look.</li>
+        <li><strong>Worlds.</strong> Consecutive canvas beats that share <code>props.world</code> form one continuous drawing, and the camera travels between camera rects. There is a new <code>journey</code> playbook.</li>
+        <li><strong>The camera lands on the words.</strong> Moves pre-roll into the outgoing beat's settled tail and arrive by the new line's first word. Graphic transitions between world beats cut under the cover, and <code>depth</code> below 1 gives parallax.</li>
+        <li><strong>Living worlds.</strong> <code>viewDrift</code> keeps the camera easing in, <code>behind: true</code> draws under the existing world, and the source line waits for the camera on a soft scrim.</li>
+        <li><strong>Worlds persist across interruptions</strong> and work in any frame shape. <code>viewTall</code> sets a vertical camera explicitly, and <code>world DIR</code> renders the plan.</li>
+        <li><strong>Glow and shadow</strong> on any canvas element or group, and seeded <strong>particles</strong> (dust, embers, rain, snow, bubbles).</li>
+        <li><strong>Text motion</strong> (<code>lines</code>, <code>words</code>, <code>letters</code>, <code>cascade</code>) and <strong>lower-third headings</strong> (<code>heading: "bottom"</code>).</li>
+        <li><strong>Pop captions</strong>, which podcast ingests now use by default for vertical clips (plate captions otherwise).</li>
+        <li><strong>Numbers land on the word.</strong> Counts pre-roll to finish as they are said, and digits and number words match either way.</li>
+        <li><strong>Keys gain <code>scaleX</code>/<code>scaleY</code></strong>, and zero-length keys apply on their own frame (no more single-frame flashes).</li>
+        <li><strong>Fresh-review fixes.</strong> Headings rise as a line and sit composed on hard cuts, and <code>check</code> warns when the last element lands under 0.45 s before a cut. Critique now judges the hook by its first cued idea.</li>
+        <li><strong>Hand-drawn scenes render about 14× faster</strong>: a rough 24 s film went from 113 s to 8 s.</li>
+        <li><strong>Canvas holds up to 600 elements</strong>, and the build names the heavy-lock holder while it waits.</li>
+        <li><strong>Example: <code>examples/night-city</code></strong>, a research brief turned into one continuous world.</li>
+      </ul>
+    </section>
+
+    <!-- ================= 10 MAINTAINING ================= -->
+    <section class="topic" id="maintaining">
+      <p class="kicker"><span class="num">10</span><span class="serif">for future editors</span></p>
+      <h2>Keeping this guide current</h2>
+      <p>This page is meant to change with the project. When a feature lands:</p>
+      <ol>
+        <li>Read the newest <code>CHANGELOG.md</code> section and update <a href="#whats-new">What's new</a>. Once a version is released, fold its bullets into one line and start a new list.</li>
+        <li>Re-run the cheap listing commands (<code>help</code>, <code>treatments</code>, <code>playbooks</code>, <code>themes --json</code>, <code>blocks</code>, <code>motions</code>, <code>sketch</code>) and reconcile the vocabulary tables and counts in the header.</li>
+        <li>Check new props against <code>schema/storyboard.schema.json</code> and <code>fframes/canvas.mjs</code> before listing them. Don't document anything you haven't verified.</li>
+        <li>If a new workflow changes how films are made, add a prompt template or an iteration prompt as well.</li>
+        <li>Update the <strong>Last updated</strong> line in the header and the date in the comment at the top of the file.</li>
+      </ol>
+      <p class="small">Structure: one <code>&lt;section id&gt;</code> per topic, in TOC order, with stable ids. Prompt blocks are <code>pre.prompt</code> inside <code>figure.prompt-card</code>, and copy buttons attach automatically. The file is self-contained apart from Google Fonts, and it falls back to system fonts offline.</p>
+    </section>
+
+    <footer class="end">
+      <p>ClearFrame guide · Last updated: 2026-09-30 · Sources: README.md, AGENTS.md, CHANGELOG.md, docs/, skills/clearframe*/, examples/night-city, and the CLI.</p>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  // Copy buttons for every prompt block.
+  document.querySelectorAll('pre.prompt').forEach(function (pre) {
+    var card = pre.closest('.prompt-card');
+    var host = (card && card.querySelector('figcaption')) || pre.parentElement;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy';
+    btn.textContent = 'Copy';
+    btn.setAttribute('aria-label', 'Copy prompt to clipboard');
+    btn.addEventListener('click', function () {
+      var text = pre.innerText.replace(/\s+$/, '');
+      var done = function (ok) {
+        btn.textContent = ok ? 'Copied' : 'Press ⌘C';
+        btn.classList.toggle('done', ok);
+        if (!ok) {
+          var range = document.createRange();
+          range.selectNodeContents(pre);
+          var sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+        setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1800);
+      };
+      var fallback = function () {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        done(ok);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+      } else {
+        fallback();
+      }
+    });
+    host.appendChild(btn);
+  });
+
+  // TOC: highlight the section on screen; collapse to a menu on narrow screens.
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a[href^="#"]'))
+    .filter(function (a) { return a.getAttribute('href').length > 1 && a.getAttribute('href') !== '#top'; });
+  var byId = {};
+  links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'))
+    .filter(function (s) { return byId[s.id]; });
+  var current = document.querySelector('.toc-current');
+  var details = document.querySelector('.toc details');
+  var narrow = window.matchMedia('(max-width: 960px)');
+  var active = null;
+
+  function setActive(id) {
+    if (id === active) return;
+    active = id;
+    links.forEach(function (a) { a.removeAttribute('aria-current'); a.classList.remove('in-path'); });
+    var a = byId[id];
+    if (!a) return;
+    a.setAttribute('aria-current', 'true');
+    var parentLi = a.closest('ol.sub') && a.closest('ol.sub').parentElement;
+    var parent = parentLi && parentLi.querySelector(':scope > a');
+    if (parent) parent.classList.add('in-path');
+    if (current) current.textContent = (parent ? parent.textContent.replace(/^\d+/, '') + ' · ' : '') + a.textContent.replace(/^\d+/, '');
+  }
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      var line = Math.min(160, window.innerHeight * 0.25);
+      var pick = sections[0];
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i].getBoundingClientRect().top - line <= 0) pick = sections[i];
+      }
+      if (pick) setActive(pick.id);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  function syncToc() { if (details) details.open = !narrow.matches; }
+  syncToc();
+  if (narrow.addEventListener) narrow.addEventListener('change', syncToc);
+  else if (narrow.addListener) narrow.addListener(syncToc);
+  links.forEach(function (a) {
+    a.addEventListener('click', function () { if (narrow.matches && details) details.open = false; });
+  });
+})();
+</script>
+</body>
+</html>

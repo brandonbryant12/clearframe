@@ -15,6 +15,7 @@ ClearFrame now uses **FFFrames for every active render**. Begin with `skills/cle
 - Native frame output must depend only on frame number and prepared inputs. No live generation, random state or wall-clock animation in `render_frame`.
 - Preserve unrelated changes. Archived browser source is for recovery only; no fallback renderer is active.
 - Native builds use one Cargo job and at most two supported workers; `buildNative` takes the machine-wide `codex-heavy` lock for the compile only (renders, checks and `npm test` run directly). Reuse the warm cache; warm builds need 10 GiB free, cold builds 25 GiB.
+- `docs/guide.html` is the living guide: how ClearFrame works and how to prompt it. When a feature, command or rule changes, update the guide in the same change (its header comment lists the sources of truth), along with the CHANGELOG.
 - This is an experimental project: tests are fast smoke checks that help development, not exhaustive edge-case coverage. Add a test when it saves debugging time; don't add them for completeness.
 - When independent custom scene work benefits from parallel agents, give each agent one owned native module and the storyboard/visual brief; avoid concurrent heavy builds.
 

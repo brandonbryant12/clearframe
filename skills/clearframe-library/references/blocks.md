@@ -1206,6 +1206,7 @@ Draw anything: shapes, paths, text, icons and images that draw on, pop, travel a
 | elements | [{type: rect / circle / ellipse / line / path / poly / text / icon / image / group / meter / spotlight / particles, geometry, fill, stroke, width, enter, say / at, dur, keys, loop, along, exit, exitSay / exitAt}] (≤ 600) — see docs/canvas.md |
 | stagger | Seconds between top-level elements without a cue (0–3) |
 | rough | Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure / solid, gap} (an element can set rough: false) |
+| mosaic | Lay every shape in tesserae: true or {tile, gap, jitter, flow: rows / rings, outline, build: sweep / radial / random, shade, shine, grout, axis} (an element can set mosaic: false) |
 
 ```json
 {
