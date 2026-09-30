@@ -1039,7 +1039,8 @@ export const PLAYBOOKS = [
 
 /** One stop of a travelling-camera world: canvas props drawn in world coordinates. */
 function world(id, vo, view, elements) {
-  return { id, block: 'canvas', vo, props: { world: 'journey', view, rough: true, elements } };
+  // A half-second tail lets each stop's last drawing be read before the camera moves on.
+  return { id, block: 'canvas', vo, tail: 0.5, props: { world: 'journey', view, rough: true, elements } };
 }
 
 export function storyboardFor(id, { title, theme, vertical } = {}) {
