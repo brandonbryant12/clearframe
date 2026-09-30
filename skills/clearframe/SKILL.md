@@ -5,7 +5,7 @@ description: Direct and produce an FFFrames video from a brief, article, researc
 
 # Direct a ClearFrame film
 
-FFFrames is the only active renderer. Read the project AGENTS.md. Skills: `clearframe-direction` (material → film), `clearframe-script` (narration and performance), `clearframe-canvas` (drawing), `clearframe-motion` (motion and rhythm), `clearframe-library` (blocks, layers, playbooks), `clearframe-dataviz` and `clearframe-integrity` (numbers and truth), `clearframe-engine` (commands), `clearframe-fframes` (renderer code). Idea library: `docs/ideas.md`. Film grammar: `docs/cinema.md` (shots, not slides).
+FFFrames is the only active renderer. Read the project AGENTS.md. Skills: `clearframe-direction` (material → film), `clearframe-script` (narration and performance), `clearframe-canvas` (drawing), `clearframe-motion` (motion and rhythm), `clearframe-cinema` (shots, depth, lens and genres, so a film isn't a slideshow), `clearframe-library` (blocks, layers, playbooks), `clearframe-dataviz` and `clearframe-integrity` (numbers and truth), `clearframe-engine` (commands), `clearframe-fframes` (renderer code). Idea library: `docs/ideas.md`. Film grammar: `docs/cinema.md` (shots, not slides).
 
 1. **Establish** the audience, the takeaway, format, length and evidence. Work from the user's material. With a report or recording, start with `ingest` (see `clearframe-direction`); with a reference video, run `reference`.
 2. **Find the story.** Question → misconception or tension → turn → payoff, in `DIRECTION.md`. Choose 3–5 claims. Beats link with *but*/*therefore*. A film is not a summary of sections.
