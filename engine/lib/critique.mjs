@@ -95,7 +95,16 @@ export function critique(root) {
     )
     .filter(Boolean)
     .map(w => w.t0 - (t[0]?.start ?? 0));
-  const lands = landed.length ? Math.min(...landed) : firstDur;
+  // Elements with a timed entrance land at their time.
+  const timed = [first?.props?.elements ?? [], first?.art?.under ?? [], first?.art?.over ?? []]
+    .flat()
+    .map(el => el.at)
+    .filter(Number.isFinite);
+  const lands = Math.min(
+    landed.length ? Math.min(...landed) : Infinity,
+    timed.length ? Math.min(...timed) + 0.6 : Infinity,
+    firstDur,
+  );
   if (lands > 5.5) add('warn', first.id, `The first idea lands ${lands.toFixed(1)} s in. Land it inside 3–5 s.`);
   // Sameness.
   let run = 1;

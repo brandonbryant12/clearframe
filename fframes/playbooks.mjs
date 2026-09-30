@@ -1035,7 +1035,266 @@ export const PLAYBOOKS = [
     ],
     { theme: 'sketchbook', backdrop: 'paper', motion: 'spring', texture: { grain: 0.3 } },
   ),
+  p(
+    'sizzle',
+    'A brand sizzle reel: a claim, two chapters, a turn and a wordmark, made of objects drawn in code',
+    'A launch, a brand or a product that should feel built in code',
+    'The brand line, two or three capabilities, one contrast, a closing question, a wordmark',
+    [
+      {
+        id: 'open',
+        block: 'canvas',
+        vo: 'AI has made it remarkably easy to make something.',
+        props: {
+          elements: [
+            space('stars', 0),
+            {
+              type: 'text',
+              text: 'AI has made it remarkably easy to make something.',
+              x: 960,
+              y: 548,
+              size: 30,
+              font: 'mono',
+              fill: 'ink',
+              anchor: 'middle',
+              enter: 'type',
+              at: 0.1,
+            },
+          ],
+        },
+      },
+      {
+        id: 'object',
+        block: 'canvas',
+        vo: 'But the hard part is making something that matters.',
+        props: {
+          elements: [
+            space('stars', 0),
+            {
+              type: 'solid',
+              shape: 'icosa',
+              cx: 960,
+              cy: 540,
+              size: 260,
+              width: 4,
+              stroke: 'accent',
+              nodes: true,
+              at: 0.1,
+              dur: 1.6,
+              glow: { blur: 12 },
+              spin: [10, 24, 4],
+            },
+          ],
+        },
+      },
+      {
+        ...beat('title', 'Real intelligence. Amplified.', {
+          text: 'Real intelligence. Amplified.',
+          kicker: '',
+          source: '',
+          emphasis: ['Amplified.'],
+          support: 'Better tools for people.',
+        }),
+        id: 'claim',
+        art: {
+          under: [space('stars', 0)],
+          over: [
+            {
+              type: 'solid',
+              shape: 'octa',
+              cx: 1560,
+              cy: 520,
+              size: 170,
+              width: 4,
+              stroke: 'accent',
+              at: 0.4,
+              glow: { blur: 10 },
+            },
+          ],
+        },
+      },
+      {
+        id: 'software',
+        block: 'canvas',
+        label: 'Software',
+        vo: 'Built faster. Built like it still matters.',
+        props: {
+          elements: [
+            ...panel(150, 250, 560, 330, 0.2),
+            ...panel(390, 560, 420, 260, 0.5),
+            { type: 'text', text: '01 · SOFTWARE', x: 1010, y: 380, size: 24, font: 'mono', fill: 'accent', at: 0.1 },
+            { type: 'text', text: 'Built faster.', x: 1010, y: 480, size: 80, font: 'bold', fill: 'ink', say: 'Built' },
+            {
+              type: 'text',
+              text: 'Built like it',
+              x: 1010,
+              y: 576,
+              size: 80,
+              font: 'bold',
+              fill: 'accent',
+              say: 'like',
+              glow: { blur: 8, opacity: 0.5 },
+            },
+            {
+              type: 'text',
+              text: 'still matters.',
+              x: 1010,
+              y: 672,
+              size: 80,
+              font: 'bold',
+              fill: 'accent',
+              say: 'still',
+              glow: { blur: 8, opacity: 0.5 },
+            },
+          ],
+        },
+      },
+      {
+        id: 'systems',
+        block: 'canvas',
+        label: 'AI systems',
+        transition: 'whip',
+        vo: 'Make the busywork disappear, and keep the value.',
+        props: {
+          elements: [
+            space('warp', 0),
+            {
+              type: 'solid',
+              shape: 'dodeca',
+              cx: 1450,
+              cy: 520,
+              size: 200,
+              width: 4,
+              stroke: 'accent2',
+              at: 0.3,
+              glow: { blur: 10 },
+            },
+            { type: 'text', text: '02 · AI SYSTEMS', x: 180, y: 380, size: 24, font: 'mono', fill: 'accent', at: 0.1 },
+            {
+              type: 'text',
+              text: 'Make the busywork',
+              x: 180,
+              y: 480,
+              size: 76,
+              font: 'bold',
+              fill: 'ink',
+              say: 'Make',
+            },
+            { type: 'text', text: 'disappear.', x: 180, y: 572, size: 76, font: 'bold', fill: 'ink', say: 'disappear' },
+            {
+              type: 'text',
+              text: 'Keep the value.',
+              x: 180,
+              y: 690,
+              size: 76,
+              font: 'bold',
+              fill: 'accent',
+              say: 'keep',
+              glow: { blur: 8, opacity: 0.5 },
+            },
+          ],
+        },
+      },
+      {
+        ...beat('kinetic', 'It can generate code. It cannot take responsibility for it.', {
+          mode: 'stack',
+          emphasis: ['cannot'],
+          maxWords: 6,
+        }),
+        id: 'contrast',
+        art: { under: [space('warp', 0)] },
+      },
+      {
+        ...beat('statement', 'So what could you do if the friction disappeared?', {
+          text: 'What could you do if the friction disappeared?',
+          support: '',
+          source: '',
+          align: 'center',
+        }),
+        id: 'question',
+        tone: 'accent',
+        transition: 'cut',
+      },
+      {
+        ...beat('endcard', 'Real intelligence, amplified.', {
+          source: '',
+          text: 'brand*',
+          emphasis: ['brand*'],
+          action: 'Start a conversation',
+          support: 'Real intelligence. Amplified.',
+        }),
+        id: 'end',
+        art: { under: [space('stars', 0)] },
+      },
+    ],
+    { theme: 'neon', motion: 'snappy', texture: { grain: 0.18, vignette: 0.6 } },
+  ),
 ];
+
+/** A full-frame starfield or warp tunnel for a scene's background. */
+function space(kind, at) {
+  return {
+    type: 'particles',
+    x: 0,
+    y: 0,
+    w: 1920,
+    h: 1080,
+    kind,
+    count: kind === 'warp' ? 140 : 220,
+    fill: kind === 'warp' ? 'accent' : 'ink',
+    opacity: kind === 'warp' ? 0.45 : 0.8,
+    at,
+    enter: 'fade',
+    dur: 0.6,
+  };
+}
+
+/** A floating UI card: a panel, a header bar and a few content lines. */
+function panel(x, y, w, h, at) {
+  return [
+    {
+      type: 'rect',
+      x,
+      y,
+      w,
+      h,
+      r: 14,
+      fill: 'surface',
+      stroke: 'accent',
+      width: 1.5,
+      opacity: 0.92,
+      at,
+      enter: 'rise',
+      glow: { blur: 8, opacity: 0.35 },
+      loop: { type: 'float', period: 6, amount: 6 },
+    },
+    { type: 'rect', x: x + 24, y: y + 24, w: w * 0.35, h: 14, r: 7, fill: 'accent', at: at + 0.2 },
+    ...[0, 1, 2].map(i => ({
+      type: 'rect',
+      x: x + 24,
+      y: y + 70 + i * 34,
+      w: w * (0.8 - i * 0.18),
+      h: 10,
+      r: 5,
+      fill: 'muted',
+      opacity: 0.6,
+      at: at + 0.3 + i * 0.08,
+    })),
+    {
+      type: 'poly',
+      points: [
+        [x + 24, y + h - 30],
+        [x + w * 0.3, y + h - 80],
+        [x + w * 0.55, y + h - 60],
+        [x + w - 30, y + h - 120],
+      ],
+      stroke: 'accent',
+      width: 3,
+      at: at + 0.5,
+      dur: 0.8,
+    },
+  ];
+}
 
 /** One stop of a travelling-camera world: canvas props drawn in world coordinates. */
 function world(id, vo, view, elements) {

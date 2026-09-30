@@ -30,6 +30,7 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 - A marker travelling a `route` through dated stops (mono labels for dates).
 
 ## Atmosphere
+- **Made in code:** a glowing wireframe `solid` (icosa, dodeca, cube) turning beside a claim; a `stars` field under the opening line; a `warp` tunnel under a contrast ("It can… It cannot…"). The `tech` treatment and `sizzle` playbook put these together.
 - **Weather as mood:** `particles` under a scene: `embers` over heat, `rain` over a flood, `snow` for a slow season, `dust` for a quiet hold, `bubbles` for chemistry.
 - **Type with a voice:** `textMotion: cascade` for the loud line, `words` for the editorial through-line, `letters` for a single typed-out word.
 - **Social captions:** `captions: "pop"` for vertical cuts: heavy outlined phrases, the spoken word on an accent pill.

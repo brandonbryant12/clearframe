@@ -23,6 +23,7 @@ pub const PRESETS: &[(&str, [&str; 8])] = &[
     ("noir", ["#111111", "#1d1d1d", "#f2efe9", "#a39e96", "#e9c46a", "#e76f51", "#8fbf9f", "#e76f51"]),
     ("sketchbook", ["#f2ecdf", "#e6dece", "#433e39", "#6d655c", "#c2344d", "#3a67b3", "#3b7449", "#c2344d"]),
     ("mosaic", ["#16225e", "#223387", "#f3ead3", "#9aa6cf", "#e9b949", "#e2643c", "#3cc0b4", "#e2643c"]),
+    ("neon", ["#070908", "#121714", "#eef5ef", "#8e9b93", "#86f23a", "#37e0c0", "#86f23a", "#ff5c7a"]),
 ];
 const KEYS: [&str; 8] = ["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative"];
 

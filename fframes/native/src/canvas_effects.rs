@@ -140,6 +140,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let kind = nonempty(s(el, "kind"), "dust");
         let seed = n(el, "seed", 1.0) as u64;
         // (velocity x, velocity y, sway, default size) in px/s and px.
+        if kind == "stars" || kind == "warp" {
+            return self.space(el, fill, now, kind);
+        }
         let (vx, vy, sway, base) = match kind {
             "embers" => (0.0, -70.0, 16.0, 5.0),
             "rain" => (-140.0, 1000.0, 0.0, 3.0),
@@ -402,4 +405,186 @@ fn hatch_line(seg: [(f32, f32); 2], amount: f32, seed: u64) -> String {
     let (x1, y1) = (seg[1].0 + j(3), seg[1].1 + j(4));
     let (mx, my) = ((x0 + x1) / 2.0 + j(5) * 2.0, (y0 + y1) / 2.0 + j(6) * 2.0);
     format!("M {x0:.1} {y0:.1} Q {mx:.1} {my:.1} {x1:.1} {y1:.1}")
+}
+
+impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
+    /// Space: `stars` twinkle in place with a slow drift; `warp` streaks radiate from the
+    /// centre of the box, accelerating outward (hyperspace, a tunnel of light or code).
+    fn space(&self, el: &Value, fill: &str, now: f32, kind: &str) -> Svgr<'a> {
+        let (x, y, w, h) = (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0).max(1.0), f(el, "h", 0.0).max(1.0));
+        let count = (n(el, "count", 120.0) as usize).clamp(1, 400);
+        let seed = n(el, "seed", 1.0) as u64;
+        let size = f(el, "size", if kind == "warp" { 2.0 } else { 2.2 }).max(0.3);
+        let t = now * f(el, "speed", 1.0);
+        let unit = |i: usize, k: u64| noise(seed, i as u64 * 8 + k) * 0.5 + 0.5;
+        let mut out = vec![];
+        if kind == "stars" {
+            for i in 0..count {
+                let px = x + (unit(i, 0) * w + t * 4.0 * (unit(i, 2) - 0.5)).rem_euclid(w);
+                let py = y + unit(i, 1) * h;
+                let twinkle = 0.25 + 0.75 * (t * (0.6 + 1.8 * unit(i, 3)) + unit(i, 4) * TAU).sin().abs();
+                let r = size * (0.35 + unit(i, 5).powi(3) * 1.6);
+                out.push(fframes::svgr!(<circle cx={px} cy={py} r={r} fill={fill.to_owned()} opacity={twinkle} />));
+            }
+        } else {
+            let (cx, cy) = (x + w / 2.0, y + h / 2.0);
+            let reach = w.hypot(h) * 0.55;
+            for i in 0..count {
+                let a = unit(i, 0) * TAU;
+                let u = (unit(i, 1) + t * (0.12 + 0.2 * unit(i, 2))).fract();
+                let r = u * u * reach + reach * 0.02;
+                let len = 6.0 + r * 0.16;
+                let (c, sn) = (a.cos(), a.sin());
+                let alpha = (u * 1.4).min(1.0) * (1.0 - ((u - 0.9) / 0.1).clamp(0.0, 1.0));
+                if alpha <= 0.02 {
+                    continue;
+                }
+                out.push(fframes::svgr!(<line x1={cx + c * r} y1={cy + sn * r} x2={cx + c * (r + len)} y2={cy + sn * (r + len)} stroke={fill.to_owned()} stroke-width={size * (0.5 + u)} stroke-linecap="round" opacity={alpha} />));
+            }
+        }
+        fframes::svgr!(<g>{out}</g>)
+    }
+
+    /// A 3D wireframe solid (tetra, cube, octa, icosa, dodeca) turning in space: `spin` in
+    /// degrees per second about x, y, z, `tilt` its starting angles, `perspective` 0..1.
+    /// Edges facing away are dimmer; `nodes` marks the vertices. Draws on edge by edge.
+    pub(super) fn solid(&self, el: &Value, draw: f32, now: f32, defs: &mut Vec<Svgr<'a>>) -> Svgr<'a> {
+        let color = self.paint(el.get("stroke").or(el.get("fill")).filter(|v| *v != "none"), "accent", defs);
+        let (cx, cy, size) = (f(el, "cx", 0.0), f(el, "cy", 0.0), f(el, "size", 120.0));
+        let width = f(el, "width", 3.0);
+        let three = |key: &str, d: [f32; 3]| {
+            let a = arr(el, key);
+            if a.len() == 3 { std::array::from_fn(|i| a[i].as_f64().unwrap_or(d[i] as f64) as f32) } else { d }
+        };
+        let (spin, tilt) = (three("spin", [14.0, 22.0, 0.0]), three("tilt", [20.0, 10.0, 0.0]));
+        let ang: [f32; 3] = std::array::from_fn(|i| (tilt[i] + spin[i] * now).to_radians());
+        let persp = f(el, "perspective", 0.35).clamp(0.0, 0.9);
+        let verts = polyhedron(nonempty(s(el, "shape"), "icosa"));
+        let rot = |v: [f32; 3]| {
+            let [mut x, mut y, mut z] = v;
+            let (s1, c1) = ang[0].sin_cos();
+            (y, z) = (y * c1 - z * s1, y * s1 + z * c1);
+            let (s2, c2) = ang[1].sin_cos();
+            (x, z) = (x * c2 + z * s2, -x * s2 + z * c2);
+            let (s3, c3) = ang[2].sin_cos();
+            (x, y) = (x * c3 - y * s3, x * s3 + y * c3);
+            [x, y, z]
+        };
+        let p: Vec<[f32; 3]> = verts.iter().map(|v| rot(*v)).collect();
+        let project = |v: [f32; 3]| {
+            let k = 1.0 / (1.0 - persp * v[2] * 0.5);
+            (cx + v[0] * size * k, cy + v[1] * size * k, v[2])
+        };
+        let q: Vec<(f32, f32, f32)> = p.iter().map(|v| project(*v)).collect();
+        let edges = edges_of(&verts);
+        let total = edges.len().max(1) as f32;
+        let mut order: Vec<usize> = (0..edges.len()).collect();
+        order.sort_by(|a, b| {
+            let za = q[edges[*a].0].2 + q[edges[*a].1].2;
+            let zb = q[edges[*b].0].2 + q[edges[*b].1].2;
+            za.total_cmp(&zb)
+        });
+        let mut lines = vec![];
+        for i in order {
+            let (a, b) = edges[i];
+            let reveal = motion::clamp01(draw * total - i as f32);
+            if reveal <= 0.0 {
+                continue;
+            }
+            let (ax, ay, az) = q[a];
+            let (bx, by, bz) = q[b];
+            let alpha = 0.3 + 0.7 * motion::clamp01(((az + bz) * 0.5 + 1.0) / 2.0);
+            let (ex, ey) = (ax + (bx - ax) * reveal, ay + (by - ay) * reveal);
+            lines.push(fframes::svgr!(<line x1={ax} y1={ay} x2={ex} y2={ey} stroke={color.clone()} stroke-width={width} stroke-linecap="round" opacity={alpha} />));
+        }
+        if el.get("nodes").and_then(Value::as_bool).unwrap_or(false) && draw >= 1.0 {
+            for (x, y, z) in &q {
+                let alpha = 0.3 + 0.7 * motion::clamp01((z + 1.0) / 2.0);
+                lines.push(
+                    fframes::svgr!(<circle cx={*x} cy={*y} r={width * 1.7} fill={color.clone()} opacity={alpha} />),
+                );
+            }
+        }
+        fframes::svgr!(<g>{lines}</g>)
+    }
+}
+
+/// Unit-radius vertices of the regular solids.
+fn polyhedron(shape: &str) -> Vec<[f32; 3]> {
+    let phi = (1.0 + 5f32.sqrt()) / 2.0;
+    let mut v: Vec<[f32; 3]> = match shape {
+        "tetra" => vec![[1.0, 1.0, 1.0], [1.0, -1.0, -1.0], [-1.0, 1.0, -1.0], [-1.0, -1.0, 1.0]],
+        "cube" => (0..8)
+            .map(|i| {
+                [
+                    if i & 1 == 0 { -1.0 } else { 1.0 },
+                    if i & 2 == 0 { -1.0 } else { 1.0 },
+                    if i & 4 == 0 { -1.0 } else { 1.0 },
+                ]
+            })
+            .collect(),
+        "octa" => vec![
+            [1.0, 0.0, 0.0],
+            [-1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, -1.0, 0.0],
+            [0.0, 0.0, 1.0],
+            [0.0, 0.0, -1.0],
+        ],
+        "dodeca" => {
+            let mut v: Vec<[f32; 3]> = (0..8)
+                .map(|i| {
+                    [
+                        if i & 1 == 0 { -1.0 } else { 1.0 },
+                        if i & 2 == 0 { -1.0 } else { 1.0 },
+                        if i & 4 == 0 { -1.0 } else { 1.0 },
+                    ]
+                })
+                .collect();
+            for a in [-1.0, 1.0] {
+                for b in [-1.0, 1.0] {
+                    v.push([0.0, a / phi, b * phi]);
+                    v.push([a / phi, b * phi, 0.0]);
+                    v.push([a * phi, 0.0, b / phi]);
+                }
+            }
+            v
+        }
+        _ => {
+            let mut v = vec![];
+            for a in [-1.0, 1.0] {
+                for b in [-1.0, 1.0] {
+                    v.push([0.0, a, b * phi]);
+                    v.push([a, b * phi, 0.0]);
+                    v.push([a * phi, 0.0, b]);
+                }
+            }
+            v
+        }
+    };
+    for p in &mut v {
+        let l = (p[0] * p[0] + p[1] * p[1] + p[2] * p[2]).sqrt();
+        *p = [p[0] / l, p[1] / l, p[2] / l];
+    }
+    v
+}
+
+/// Edges of a regular solid: every pair of vertices at the shortest distance.
+fn edges_of(v: &[[f32; 3]]) -> Vec<(usize, usize)> {
+    let d = |a: [f32; 3], b: [f32; 3]| ((a[0] - b[0]).powi(2) + (a[1] - b[1]).powi(2) + (a[2] - b[2]).powi(2)).sqrt();
+    let mut min = f32::MAX;
+    for i in 0..v.len() {
+        for j in i + 1..v.len() {
+            min = min.min(d(v[i], v[j]));
+        }
+    }
+    let mut out = vec![];
+    for i in 0..v.len() {
+        for j in i + 1..v.len() {
+            if d(v[i], v[j]) < min * 1.01 {
+                out.push((i, j));
+            }
+        }
+    }
+    out
 }

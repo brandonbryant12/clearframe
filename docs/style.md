@@ -45,7 +45,7 @@ The bundled fonts cover Latin, Greek, Cyrillic, arrows, math and currency symbol
 
 ## Color
 
-Fifteen palettes, each with `bg`, `surface`, `ink`, `muted`, `accent`, `accent2`, `positive` and `negative`. Run `clearframe themes` for swatches.
+Sixteen palettes, each with `bg`, `surface`, `ink`, `muted`, `accent`, `accent2`, `positive` and `negative`. Run `clearframe themes` for swatches.
 
 | Palette | Character |
 |---|---|
@@ -64,6 +64,7 @@ Fifteen palettes, each with `bg`, `surface`, `ink`, `muted`, `accent`, `accent2`
 | `noir` | Cinema black with gold and vermilion. Drama, true stories, premium reveals. |
 | `sketchbook` | Drawing paper with graphite, red and blue pencil. Hand-drawn explainers with rough strokes and the paper backdrop. |
 | `mosaic` | Ultramarine ground with ivory, gold, coral and turquoise tesserae. Films laid in tiles, with the mosaic backdrop. |
+| `neon` | Near-black with lime and mint. Tech brands, launches and sizzle reels: wireframe solids, starfields and glow. |
 
 **Tone** colour-blocks one scene: `"tone": "accent" | "accent2" | "invert" | "surface"` fills the frame and re-derives readable ink and accent colours for it (a test checks every palette × tone). Graphic transitions keep the film's own accent on both sides of the cut.
 

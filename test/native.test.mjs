@@ -36,7 +36,7 @@ test('all 33 catalog examples validate in landscape and vertical without mutatin
     }
 });
 test('twenty-seven distinct playbooks compile to native jobs without paid assets, slide chrome or custom code', t => {
-  assert.equal(PLAYBOOKS.length, 28);
+  assert.equal(PLAYBOOKS.length, 29);
   const arcs = new Set();
   for (const p of PLAYBOOKS) {
     const root = project(t, storyboardFor(p.id)),
@@ -48,7 +48,7 @@ test('twenty-seven distinct playbooks compile to native jobs without paid assets
     arcs.add(result.job.beats.map(b => b.block).join(','));
     assert.equal(sb.assets.length, 0);
   }
-  assert.equal(arcs.size, 28);
+  assert.equal(arcs.size, 29);
 });
 test('graphic contracts reject unknown assets and invalid phase clocks while preserving cue controls', t => {
   assert.equal(

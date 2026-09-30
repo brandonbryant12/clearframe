@@ -151,6 +151,16 @@ export const THEMES = {
     positive: '#3cc0b4',
     negative: '#e2643c',
   },
+  neon: {
+    bg: '#070908',
+    surface: '#121714',
+    ink: '#eef5ef',
+    muted: '#8e9b93',
+    accent: '#86f23a',
+    accent2: '#37e0c0',
+    positive: '#86f23a',
+    negative: '#ff5c7a',
+  },
 };
 /** One-line character of each palette for `themes` and docs. */
 export const THEME_NOTES = {
@@ -169,6 +179,7 @@ export const THEME_NOTES = {
   noir: 'Cinema black with gold and vermilion. Drama, true stories, premium reveals.',
   mosaic:
     'Ultramarine ground, ivory, gold, coral and turquoise tesserae. With backdrop mosaic and canvas mosaic: a film laid in tiles.',
+  neon: 'Near-black with lime and mint. Tech brands, launches and sizzle reels: wireframe solids, starfields and glow.',
   sketchbook:
     'Drawing paper with graphite, red and blue pencil. Hand-drawn explainers with rough canvas strokes and the paper backdrop.',
 };

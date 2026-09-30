@@ -30,3 +30,4 @@ Generated from fframes/playbooks.mjs. These are adaptable starting structures wi
 - **podcast-clip**: Cut a podcast moment into a vertical social clip. Inputs: A recording and word timestamps (clearframe ingest --audio), one self-contained moment of 30–60 s.
 - **brand-spot**: A short, designed spot with an editorial frame. Inputs: One idea, three supporting beats, a call to action.
 - **journey**: A travelling-camera explainer: one drawing, explored stop by stop. Inputs: Three to five stops in order, what happens at each, the whole at the end.
+- **sizzle**: A brand sizzle reel: a claim, two chapters, a turn and a wordmark, made of objects drawn in code. Inputs: The brand line, two or three capabilities, one contrast, a closing question, a wordmark.

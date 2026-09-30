@@ -21,6 +21,7 @@ export const ELEMENT_TYPES = {
   meter: { geometry: ['x', 'y', 'w', 'h', 'bars', 'style', 'step', 'gap', 'r'], required: ['w', 'h'] },
   spotlight: { geometry: ['cx', 'cy', 'r', 'x', 'y', 'w', 'h', 'radius', 'dim'], required: [] },
   particles: { geometry: ['x', 'y', 'w', 'h', 'count', 'kind', 'seed', 'size', 'speed'], required: ['w', 'h'] },
+  solid: { geometry: ['shape', 'cx', 'cy', 'size', 'spin', 'tilt', 'perspective', 'nodes'], required: ['size'] },
 };
 const COMMON = [
   'type',
@@ -316,10 +317,22 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
           fail(`${at}.bars must be 3–96`);
         break;
       case 'particles':
-        if (el.kind != null && !['dust', 'embers', 'rain', 'snow', 'bubbles'].includes(el.kind))
-          fail(`${at}.kind must be dust, embers, rain, snow or bubbles`);
+        if (el.kind != null && !['dust', 'embers', 'rain', 'snow', 'bubbles', 'stars', 'warp'].includes(el.kind))
+          fail(`${at}.kind must be dust, embers, rain, snow, bubbles, stars or warp`);
         if (el.count != null && (!Number.isInteger(el.count) || el.count < 1 || el.count > 400))
           fail(`${at}.count must be 1–400`);
+        break;
+      case 'solid':
+        if (el.shape != null && !['tetra', 'cube', 'octa', 'icosa', 'dodeca'].includes(el.shape))
+          fail(`${at}.shape must be tetra, cube, octa, icosa or dodeca`);
+        for (const key of ['spin', 'tilt'])
+          if (el[key] != null && !(Array.isArray(el[key]) && el[key].length === 3 && el[key].every(Number.isFinite)))
+            fail(`${at}.${key} must be [x, y, z] degrees${key === 'spin' ? ' per second' : ''}`);
+        if (
+          el.perspective != null &&
+          !(Number.isFinite(el.perspective) && el.perspective >= 0 && el.perspective <= 0.9)
+        )
+          fail(`${at}.perspective must be 0–0.9`);
         break;
       case 'spotlight':
         if (
@@ -466,7 +479,7 @@ export function eachElement(list, visit) {
 
 const defaultEnter = el =>
   el.enter ??
-  (['line', 'path', 'poly'].includes(el.type) && (el.fill == null || el.fill === 'none')
+  (el.type === 'solid' || (['line', 'path', 'poly'].includes(el.type) && (el.fill == null || el.fill === 'none'))
     ? 'draw'
     : el.type === 'text'
       ? 'rise'
@@ -580,7 +593,9 @@ export const hasCount = list => {
 export const hasDigits = list => {
   let found = false;
   eachElement(list, el => {
-    if (el.type === 'text' && /\d/.test(el.text ?? '')) found = true;
+    // Chapter numbering ("01 · Software", "2. Tools") is not a figure.
+    const text = String(el.text ?? '').replace(/^\s*\d{1,2}\s*[·.)\-–—:]\s*/, '');
+    if (el.type === 'text' && /\d/.test(text)) found = true;
   });
   return found;
 };
@@ -633,7 +648,10 @@ export function elementsExtent(elements) {
       if (el.type === 'group') walk(el.children ?? [], dx + n('x'), dy + n('y'));
       else if (['rect', 'image', 'meter', 'particles'].includes(el.type))
         grow(dx + n('x'), dy + n('y'), dx + n('x') + n('w'), dy + n('y') + n('h'));
-      else if (el.type === 'circle' || el.type === 'ellipse') {
+      else if (el.type === 'solid') {
+        const r = el.size ?? 120;
+        grow(dx + n('cx') - r, dy + n('cy') - r, dx + n('cx') + r, dy + n('cy') + r);
+      } else if (el.type === 'circle' || el.type === 'ellipse') {
         const rx = el.r ?? el.rx ?? 0,
           ry = el.r ?? el.ry ?? 0;
         grow(dx + n('cx') - rx, dy + n('cy') - ry, dx + n('cx') + rx, dy + n('cy') + ry);

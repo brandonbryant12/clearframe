@@ -194,6 +194,28 @@ export const TREATMENTS = [
       'Frame scenes with a border or arch; one hero shape per frame, drawn big enough for tiles to read (at least 12 tiles across).',
     ],
   },
+  {
+    id: 'tech',
+    title: 'Tech sizzle',
+    when: 'Tech brands, AI products, launches and sizzle reels that should feel built in code',
+    film: {
+      theme: 'neon',
+      backdrop: 'none',
+      texture: { grain: 0.18, vignette: 0.6 },
+      motion: { preset: 'snappy', intensity: 0.85 },
+      textMotion: 'words',
+      transition: 'cut',
+      sfx: 'normal',
+      voice: { style: 'confident, crisp, warm' },
+    },
+    beats: { emphasisStyle: 'serif', graphic: 'whip' },
+    rules: [
+      'Heroes are objects made in code: a glowing wireframe solid (type: solid) turning in space, a starfield (particles kind stars) or a warp tunnel (kind warp) under the words.',
+      'Numbered chapters: a mono kicker ("01 · Software") and a two-tone headline, the payoff words in the accent.',
+      'Cut on the beat. Whip only between chapters. One full-bleed colour block (tone accent) for the question before the wordmark.',
+      'Glow on the accent strokes; keep type crisp and never over a busy field. Brand the ending with a wordmark and one action.',
+    ],
+  },
 ];
 export const treatmentById = id => TREATMENTS.find(t => t.id === id);
 

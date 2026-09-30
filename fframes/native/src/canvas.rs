@@ -32,6 +32,7 @@ const TYPES: &[&str] = &[
     "meter",
     "spotlight",
     "particles",
+    "solid",
 ];
 const ENTERS: &[&str] = &[
     "fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type",
@@ -148,13 +149,22 @@ pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut us
                     return Err("canvas meter needs w, h and style bars|mirror|ring|wave");
                 }
             }
+            "solid" => {
+                if !["", "tetra", "cube", "octa", "icosa", "dodeca"].contains(&s(el, "shape"))
+                    || f(el, "size", 120.0) <= 0.0
+                {
+                    return Err("canvas solid needs size and shape tetra|cube|octa|icosa|dodeca");
+                }
+            }
             "particles" => {
-                if !["", "dust", "embers", "rain", "snow", "bubbles"].contains(&s(el, "kind"))
+                if !["", "dust", "embers", "rain", "snow", "bubbles", "stars", "warp"].contains(&s(el, "kind"))
                     || f(el, "w", 0.0) <= 0.0
                     || f(el, "h", 0.0) <= 0.0
                     || !(1.0..=400.0).contains(&n(el, "count", 40.0))
                 {
-                    return Err("canvas particles need w, h, count 1–400 and kind dust|embers|rain|snow|bubbles");
+                    return Err(
+                        "canvas particles need w, h, count 1–400 and kind dust|embers|rain|snow|bubbles|stars|warp",
+                    );
                 }
             }
             "text" => {
@@ -386,6 +396,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let enter = match s(el, "enter") {
             "" => match kind {
                 "line" | "path" | "poly" if el.get("fill").is_none_or(|f| f == "none") => "draw",
+                "solid" => "draw",
                 "text" => "rise",
                 "icon" | "circle" => "pop",
                 _ => "fade",
@@ -887,6 +898,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             "image" => self.canvas_image(el),
             "meter" => self.meter(el, &fill, now),
             "particles" => self.particles(el, &fill, now),
+            "solid" => self.solid(el, draw, now, defs),
             "spotlight" => {
                 // A dimming field with a window: everything outside the target recedes.
                 let (x, y, w, h) = bounds(el);
