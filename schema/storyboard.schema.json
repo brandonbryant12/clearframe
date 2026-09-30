@@ -2193,6 +2193,9 @@
                     "viewDrift": {
                       "description": "After arriving, the camera keeps easing in by this fraction of the view (worlds default 0.03)"
                     },
+                    "viewTall": {
+                      "description": "Camera rect for tall (vertical) frames; otherwise the view is re-framed on the beat’s own foreground"
+                    },
                     "world": {
                       "description": "Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views"
                     },

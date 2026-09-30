@@ -4,6 +4,7 @@
 
 Travel instead of cutting, type with a voice, and fewer false alarms.
 
+- **Worlds in any frame shape.** Camera rects authored for landscape are re-framed for vertical or square cuts on each beat's own foreground (for all canvases, not just the journey playbook). `viewTall` sets a vertical camera explicitly where a side-by-side composition cannot survive the crop. The text-size warning uses the real zoom for any frame.
 - **Glow and shadow.** `glow` (in the element's own colour or a set `color`) and `shadow` on any canvas element or group, as one filter per group.
 - **Podcast ingests keep the words on screen.** `ingest --audio` defaults to `captions: "pop"` for vertical clips and plate captions otherwise, so beats that become pictures still follow the speech. The brief suggests worlds for explanatory stretches.
 - **`world DIR`** renders a canvas world's plan: everything drawn, with every beat's camera rect outlined and numbered.

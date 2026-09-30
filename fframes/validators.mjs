@@ -417,6 +417,8 @@ export const VALIDATORS = {
     )
       h.fail('view must be "auto", [width, height] or a camera rect [x, y, width, height]');
     if (p.viewFrom != null && !camera(p.viewFrom)) h.fail('viewFrom must be a camera rect [x, y, width, height]');
+    if (p.viewTall != null && !camera(p.viewTall))
+      h.fail('viewTall must be a camera rect [x, y, width, height] (used in tall frames)');
     if (p.viewDrift != null && !(Number.isFinite(p.viewDrift) && p.viewDrift >= 0 && p.viewDrift <= 0.2))
       h.fail('viewDrift must be 0–0.2 (the fraction the camera eases in during a hold)');
     if (p.viewDur != null && !(Number.isFinite(p.viewDur) && p.viewDur > 0 && p.viewDur <= 10))

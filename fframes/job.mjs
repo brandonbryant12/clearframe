@@ -11,6 +11,7 @@ import {
   applyRough,
   TREATMENTS,
   elementsExtent,
+  reframeView,
 } from './canvas.mjs';
 import {
   ENTRANCE,
@@ -460,6 +461,16 @@ function linkWorlds(beats, sb, timing, { warnings }) {
     last = new Map();
   for (let i = 0; i < beats.length; i++) {
     const b = beats[i];
+    // A camera rect authored for another frame shape (a landscape world in a vertical cut)
+    // is re-framed on what this beat draws.
+    if (b.block === 'canvas' && b.props.view?.length === 4) {
+      const tall = timing.height > timing.width;
+      b.props.view =
+        tall && b.props.viewTall
+          ? b.props.viewTall
+          : reframeView(b.props.view, b.props.elements, timing.width / timing.height);
+    }
+    if (b.block === 'canvas') delete b.props.viewTall;
     // The camera crops the world on purpose, but a beat's own words must be in its shot.
     const v = b.block === 'canvas' && b.props.view?.length === 4 && b.props.view;
     // Parallax layers are placed for the view they were drawn in.
@@ -470,10 +481,12 @@ function linkWorlds(beats, sb, timing, { warnings }) {
         if (e && (e.left < v[0] || e.top < v[1] || e.left + e.w > v[0] + v[2] || e.bottom > v[1] + v[3]))
           warnings.push(`${b.id}: text "${String(el.text).slice(0, 30)}" reaches outside this beat's camera view.`);
         // Through the camera, a label's size on screen is its size times the zoom.
-        const px = ((el.size ?? 48) * timing.width) / v[2] / (timing.width / 1920);
+        const zoom =
+          Math.min(timing.width / v[2], timing.height / v[3]) * (1080 / Math.min(timing.width, timing.height));
+        const px = (el.size ?? 48) * zoom;
         if (px < 22)
           warnings.push(
-            `${b.id}: text "${String(el.text).slice(0, 30)}" renders at about ${Math.round(px)} px; make it at least ${Math.ceil((22 * v[2]) / 1920)} in world units.`,
+            `${b.id}: text "${String(el.text).slice(0, 30)}" renders at about ${Math.round(px)} px; make it at least ${Math.ceil(22 / zoom)} in world units.`,
           );
       }
     const name = b.block === 'canvas' && b.props.world;

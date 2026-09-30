@@ -570,3 +570,33 @@ export function elementsExtent(elements) {
   walk(elements);
   return Number.isFinite(l) ? { w: r - l, h: b - t, left: l, top: t, bottom: b } : null;
 }
+
+/**
+ * A camera rect re-framed for another aspect ratio (a landscape world in a vertical film):
+ * centred on what the beat itself draws, ignoring backdrop-sized elements, or, for a beat
+ * that mostly reveals earlier work, on the same centre with the same area.
+ */
+export function reframeView(view, elements, aspect) {
+  const [x, y, w, h] = view;
+  if (Math.abs(w / h - aspect) / aspect < 0.15) return view;
+  // The subject is the beat's own foreground: backdrops, parallax layers, behind layers and
+  // particles do not say where to look. A composition that cannot survive the crop (a map
+  // beside its labels) needs its own rect: `viewTall` for vertical cuts.
+  const fits = el => {
+    const e = elementsExtent([el]);
+    return e && e.w <= w && e.h <= h;
+  };
+  const foreground = elements.filter(
+    el => !el.carried && !el.behind && el.depth == null && el.type !== 'particles' && fits(el),
+  );
+  const own = elementsExtent(foreground);
+  const [cx, cy, nw] = own
+    ? [
+        own.left + own.w / 2,
+        own.top + own.h / 2,
+        Math.min(w, Math.max(own.w * 1.2, own.h * 1.2 * aspect, h * aspect * 0.9)),
+      ]
+    : [x + w / 2, y + h / 2, Math.sqrt(w * h * aspect)];
+  const nh = nw / aspect;
+  return [cx - nw / 2, cy - nh / 2, nw, nh];
+}
