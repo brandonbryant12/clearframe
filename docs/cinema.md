@@ -80,7 +80,7 @@ Set these per film with `lens`. Any beat can override a key:
 | `aberration` | Red and blue slip apart by a few pixels | 0.15–0.35. Hard edges only; subtle is the whole point |
 | `leak` | Warm light leaks drifting at the frame edges | 0.2–0.4 for nostalgia, launch and dawn moods |
 | `handheld` | A seeded operator sway of position and roll | 0.2–0.4 for documentary, 0.6+ for urgency |
-| `blur` | Motion blur on world camera moves (0.5 = 180° shutter) | 0.5 always, once there are fast moves |
+| `blur` | Motion blur on world camera moves and on elements moving fast on their keys (0.5 = 180° shutter) | 0.5 always, once there are fast moves |
 
 Within scenes, light is drawn: `glow` on light sources, `shine` sweeps across titles, `spotlight` on the subject, and gradients that fall off from a motivated source (the sun, a screen, a street lamp).
 

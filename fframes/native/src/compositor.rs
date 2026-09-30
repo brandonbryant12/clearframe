@@ -113,7 +113,7 @@ pub fn render<'a>(b: &'a Beat, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Sv
     let picture = push_to(&d, fframes::svgr!(<g>{d.art("under")}{body}{d.art("over")}</g>));
     // The heading leaves as the camera moves in, as a title card does.
     let header = match push_progress(&d) {
-        Some(q) if q > 0.0 => fframes::svgr!(<g opacity={1.0 - q}>{header}</g>),
+        Some(q) if q > 0.0 => fframes::svgr!(<g opacity={(1.0 - 2.0 * q).max(0.0)}>{header}</g>),
         _ => header,
     };
     let content = fframes::svgr!(<g>{header}{picture}</g>);

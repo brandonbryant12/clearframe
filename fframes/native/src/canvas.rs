@@ -225,6 +225,31 @@ impl Pose {
     }
 }
 
+/// The keyframed pose at `now`: (x, y, scale, rotate, opacity, scaleX, scaleY). Each key
+/// starts at its time and eases from the previous state; a zero-length key is a cut.
+fn keyed(el: &Value, now: f32) -> (f32, f32, f32, f32, f32, f32, f32) {
+    let mut key_pose = (0.0f32, 0.0f32, 1.0f32, 0.0f32, 1.0f32, 1.0f32, 1.0f32);
+    for key in arr(el, "keys") {
+        let start = f(key, "at", 0.0);
+        if now < start {
+            break;
+        }
+        let dur = f(key, "dur", crate::constants::get().canvas.key);
+        let k = if dur <= 1e-3 { 1.0 } else { ease(s(key, "ease"), (now - start) / dur) };
+        let prev = key_pose;
+        key_pose = (
+            num(key, "x").map_or(prev.0, |v| prev.0 + (v - prev.0) * k),
+            num(key, "y").map_or(prev.1, |v| prev.1 + (v - prev.1) * k),
+            num(key, "scale").map_or(prev.2, |v| prev.2 + (v - prev.2) * k),
+            num(key, "rotate").map_or(prev.3, |v| prev.3 + (v - prev.3) * k),
+            num(key, "opacity").map_or(prev.4, |v| prev.4 + (v - prev.4) * k),
+            num(key, "scaleX").map_or(prev.5, |v| prev.5 + (v - prev.5) * k),
+            num(key, "scaleY").map_or(prev.6, |v| prev.6 + (v - prev.6) * k),
+        );
+    }
+    key_pose
+}
+
 /// A depth driven by keys `{at, z, dur, ease}` from `start`: each key eases from the value
 /// before it (keys arrive sorted by time).
 fn keyed_z(keys: &[Value], start: f32, t: f32) -> f32 {
@@ -522,26 +547,16 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         }
         // Keyframed moves: each key starts at its time and eases from the previous state.
         // (x, y, scale, rotate, opacity, scaleX, scaleY)
-        let mut key_pose = (0.0f32, 0.0f32, 1.0f32, 0.0f32, 1.0f32, 1.0f32, 1.0f32);
-        for key in arr(el, "keys") {
-            let start = f(key, "at", 0.0);
-            if now < start {
-                break;
-            }
-            // A zero-length key is a cut to the new state, applied on its own frame.
-            let dur = f(key, "dur", crate::constants::get().canvas.key);
-            let k = if dur <= 1e-3 { 1.0 } else { ease(s(key, "ease"), (now - start) / dur) };
-            let prev = key_pose;
-            key_pose = (
-                num(key, "x").map_or(prev.0, |v| prev.0 + (v - prev.0) * k),
-                num(key, "y").map_or(prev.1, |v| prev.1 + (v - prev.1) * k),
-                num(key, "scale").map_or(prev.2, |v| prev.2 + (v - prev.2) * k),
-                num(key, "rotate").map_or(prev.3, |v| prev.3 + (v - prev.3) * k),
-                num(key, "opacity").map_or(prev.4, |v| prev.4 + (v - prev.4) * k),
-                num(key, "scaleX").map_or(prev.5, |v| prev.5 + (v - prev.5) * k),
-                num(key, "scaleY").map_or(prev.6, |v| prev.6 + (v - prev.6) * k),
-            );
-        }
+        let key_pose = keyed(el, now);
+        // Motion blur on a fast keyed move: how far the element travelled while the shutter
+        // (lens `blur`) was open, as a blur along each axis.
+        let shutter = crate::lens::Lens::from(&self.b.lens).blur;
+        let smear = if shutter > 0.0 && !arr(el, "keys").is_empty() {
+            let before = keyed(el, now - shutter / self.f.fps as f32);
+            (((key_pose.0 - before.0).abs() * 0.5).min(36.0), ((key_pose.1 - before.1).abs() * 0.5).min(36.0))
+        } else {
+            (0.0, 0.0)
+        };
         pose.dx += key_pose.0;
         pose.dy += key_pose.1;
         pose.sx *= key_pose.2 * key_pose.5;
@@ -733,6 +748,17 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let df = (1.0 + fz - cam_z).max(0.12);
             blur += (36.0 * aperture * (1.0 / dz - 1.0 / df).abs() / p.max(0.05)).min(80.0);
         }
+        let (sx, sy) = smear;
+        let shape = if sx > 0.6 || sy > 0.6 {
+            let id = self.uid("smear");
+            let pad = 3.0 * sx.max(sy) + 20.0;
+            fframes::svgr!(<g>
+                <defs><filter id={id.clone()} filterUnits="userSpaceOnUse" x={bx - pad - bw * 0.5} y={by - pad - bh * 0.5} width={bw * 2.0 + 2.0 * pad} height={bh * 2.0 + 2.0 * pad}><feGaussianBlur stdDeviation={format!("{sx:.2} {sy:.2}")} /></filter></defs>
+                <g filter={format!("url(#{id})")}>{shape}</g>
+            </g>)
+        } else {
+            shape
+        };
         let shape = if blur > 0.05 {
             let id = self.uid("blur");
             let pad = 3.0 * blur + 20.0;
