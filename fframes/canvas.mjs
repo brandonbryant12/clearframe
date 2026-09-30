@@ -480,3 +480,74 @@ export const hasDigits = list => {
   });
   return found;
 };
+
+/** End and control points of SVG path data, absolute (enough for a bounding box). */
+function pathPoints(d) {
+  const ARITY = { m: 2, l: 2, t: 2, h: 1, v: 1, c: 6, s: 4, q: 4, a: 7, z: 0 };
+  const out = [];
+  let x = 0,
+    y = 0;
+  for (const [, cmd, args] of d.matchAll(/([MLHVCSQTAZmlhvcsqtaz])([^MLHVCSQTAZmlhvcsqtaz]*)/g)) {
+    const n = ARITY[cmd.toLowerCase()],
+      rel = cmd === cmd.toLowerCase(),
+      v = args.match(/-?\d*\.?\d+(?:e-?\d+)?/gi)?.map(Number) ?? [];
+    for (let i = 0; n && i + n <= v.length; i += n) {
+      const g = v.slice(i, i + n),
+        k = cmd.toLowerCase();
+      if (k === 'h') x = rel ? x + g[0] : g[0];
+      else if (k === 'v') y = rel ? y + g[0] : g[0];
+      else {
+        const pairs = k === 'a' ? [g.slice(5)] : Array.from({ length: n / 2 }, (_, j) => g.slice(2 * j, 2 * j + 2));
+        pairs.forEach(([px, py], j) => {
+          const p = rel ? [x + px, y + py] : [px, py];
+          out.push(p);
+          if (j === pairs.length - 1) [x, y] = p;
+        });
+        continue;
+      }
+      out.push([x, y]);
+    }
+  }
+  return out;
+}
+
+/** Rough extent of canvas elements at rest, in author units: {w, h, bottom, left, top}. */
+export function elementsExtent(elements) {
+  let l = Infinity,
+    t = Infinity,
+    r = -Infinity,
+    b = -Infinity;
+  const grow = (x0, y0, x1, y1) => {
+    l = Math.min(l, x0);
+    t = Math.min(t, y0);
+    r = Math.max(r, x1);
+    b = Math.max(b, y1);
+  };
+  const walk = (list, dx = 0, dy = 0) => {
+    for (const el of list) {
+      const n = k => el[k] ?? 0;
+      if (el.type === 'group') walk(el.children ?? [], dx + n('x'), dy + n('y'));
+      else if (['rect', 'image', 'meter', 'particles'].includes(el.type))
+        grow(dx + n('x'), dy + n('y'), dx + n('x') + n('w'), dy + n('y') + n('h'));
+      else if (el.type === 'circle' || el.type === 'ellipse') {
+        const rx = el.r ?? el.rx ?? 0,
+          ry = el.r ?? el.ry ?? 0;
+        grow(dx + n('cx') - rx, dy + n('cy') - ry, dx + n('cx') + rx, dy + n('cy') + ry);
+      } else if (el.type === 'line')
+        grow(
+          dx + Math.min(n('x1'), n('x2')),
+          dy + Math.min(n('y1'), n('y2')),
+          dx + Math.max(n('x1'), n('x2')),
+          dy + Math.max(n('y1'), n('y2')),
+        );
+      else if (el.type === 'text' || el.type === 'icon') {
+        const size = el.size ?? 48;
+        grow(dx + n('x') - size, dy + n('y') - size, dx + n('x') + size * 4, dy + n('y') + size * 0.3);
+      } else if (el.type === 'path' && typeof el.d === 'string') {
+        for (const [x, y] of pathPoints(el.d)) grow(dx + x, dy + y, dx + x, dy + y);
+      }
+    }
+  };
+  walk(elements);
+  return Number.isFinite(l) ? { w: r - l, h: b - t, left: l, top: t, bottom: b } : null;
+}

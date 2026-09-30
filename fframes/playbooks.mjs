@@ -4,6 +4,7 @@ import { BLOCKS, blockByName, palette } from './catalog.mjs';
 import { writeJSON, ffmpeg } from '../engine/lib/util.mjs';
 import { wireframePNG } from './wireframe.mjs';
 import { SKETCHES, sketch } from './sketches.mjs';
+import { elementsExtent } from './canvas.mjs';
 import { applyTreatment, directionTemplate, treatmentById } from './treatments.mjs';
 
 // Example emphasis belongs to the example's wording; drop it when the text is replaced.
@@ -1077,14 +1078,24 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
     },
     beats: structuredClone(book.beats),
   };
-  // World cameras are landscape rects; a tall frame looks at a 9:16 rect on the same centre.
+  // World cameras are landscape rects. A tall frame frames a 9:16 rect on what the beat
+  // draws (or, for a beat that mostly reveals earlier work, on the landscape view's centre).
   if (vertical)
     for (const b of sb.beats) {
       const v = b.props?.world && b.props.view;
       if (!Array.isArray(v) || v.length !== 4) continue;
-      const w = v[2] * 0.62,
-        h = (w * 16) / 9;
-      b.props.view = [v[0] + (v[2] - w) / 2, v[1] + (v[3] - h) / 2, w, h];
+      // Backdrop-sized elements (ground, sky) do not say where the subject is.
+      const subject = (b.props.elements ?? []).filter(el => {
+        const e = elementsExtent([el]);
+        return !e || (e.w <= v[2] * 1.5 && e.h <= v[3] * 1.5);
+      });
+      const own = elementsExtent(subject);
+      const [cx, cy, w] =
+        own && own.w >= v[2] * 0.3
+          ? [own.left + own.w / 2, own.top + own.h / 2, Math.max(own.w * 1.15, (own.h * 1.15 * 9) / 16)]
+          : [v[0] + v[2] / 2, v[1] + v[3] / 2, v[2] * 0.62];
+      const h = (w * 16) / 9;
+      b.props.view = [cx - w / 2, cy - h / 2, w, h];
     }
   // Sketch coordinates are frame pixels: re-draw them for the requested frame.
   for (const b of sb.beats) {
