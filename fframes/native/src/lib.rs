@@ -138,6 +138,9 @@ pub struct Beat {
     /// How type arrives in this scene: lines, words, letters or cascade (film default otherwise).
     #[serde(default)]
     pub text_motion: Option<String>,
+    /// Where the title sits: `top` (default) or `bottom`, a lower third under the picture.
+    #[serde(default)]
+    pub heading: String,
     /// Voice level per scene frame, 0–100, prepared from this beat's narration audio.
     #[serde(default)]
     pub levels: Vec<u8>,

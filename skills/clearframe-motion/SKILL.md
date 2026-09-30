@@ -17,7 +17,8 @@ Read `docs/style.md` (vocabulary) and `docs/canvas.md` (drawing). The audience a
 6. **Hierarchy through scale.** One hero per frame, drawn big (poster type, a large numeral, a single word). Supporting text at least a third smaller. Use `align: "center"` and full-frame compositions for statements that deserve the whole frame.
 7. **Depth through layers.** Backdrop → plate (drifts) → art under → block → art over → texture. Parallax between plate and content reads as depth; grain and vignette hold dark palettes together.
 8. **Type has a voice.** `textMotion` sets how display type arrives: `lines` is calm, `words` is conversational, `letters`/`cascade` shout. Pick one for the film and break it only at the loudest moment.
-9. **Ease like physical things.** `gentle` for editorial calm, `snappy` for social energy, `spring` for friendly play. Values never overshoot; positions may.
+9. **Vary the frame, not just the content.** A title on top of every scene is a template. Move some titles to a lower third (`heading: bottom`), give some scenes no title at all, centre a few.
+10. **Ease like physical things.** `gentle` for editorial calm, `snappy` for social energy, `spring` for friendly play. Values never overshoot; positions may.
 
 ## Choosing the treatment
 

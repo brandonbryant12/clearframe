@@ -693,6 +693,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         if self.tall() { self.b.environment.height * 0.11 - 108.0 } else { 0.0 }
     }
     fn header(&self) -> Svgr<'a> {
+        if self.b.heading == "bottom" && self.head_y.is_none() {
+            return self.lower_third();
+        }
         let (x, w) = (self.area.x, self.area.w);
         let shift = self.shift();
         let (kicker, _) = self.kicker(s(self.props(), "kicker"), x, 100.0 + shift, w, 0.0);
@@ -704,6 +707,25 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let layout = self.fit(title, style, if self.wide { w * 0.86 } else { w }, 150.0);
         let title = self.lines(&layout, x, 146.0 + shift, w, Align::Left, &self.p.ink, 0.06, &[]);
         fframes::svgr!(<g>{kicker}{title}</g>)
+    }
+}
+
+impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
+    /// The title as a lower third: an accent rule, the kicker and the title set under the
+    /// picture, where documentary captions sit. The compositor reserves the space.
+    fn lower_third(&self) -> Svgr<'a> {
+        let (x, w) = (self.area.x, self.area.w);
+        let mut y = self.area.y + self.area.h + 34.0;
+        let (kicker, kh) = self.kicker(s(self.props(), "kicker"), x, y, w, 0.0);
+        if kh > 0.0 {
+            y += 40.0;
+        }
+        let style = Style::display(Font::Display, if self.wide { 58.0 } else { 52.0 }).leading(1.06);
+        let layout = self.fit(s(self.props(), "title"), style, if self.wide { w * 0.8 } else { w }, 132.0);
+        let grow = self.m.grow(self.t - 0.05, 0.6);
+        let rule = rect(x, y - 14.0, 120.0 * grow, 4.0, &self.p.accent);
+        let title = self.lines(&layout, x, y, w, Align::Left, &self.p.ink, 0.1, &[]);
+        fframes::svgr!(<g>{rule}{kicker}{title}</g>)
     }
 }
 

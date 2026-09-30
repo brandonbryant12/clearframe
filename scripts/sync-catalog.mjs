@@ -63,6 +63,7 @@ const schema = {
         },
       ],
     },
+    heading: { enum: ['top', 'bottom'], description: 'Where scene titles sit: top, or bottom as a lower third' },
     textMotion: {
       enum: ['lines', 'words', 'letters', 'cascade'],
       description: 'Default type reveal: whole lines, word by word, letter by letter or a tilted cascade',
@@ -149,6 +150,7 @@ const schema = {
           sfx: { type: 'array', items: object },
           tone: { enum: ['none', 'accent', 'accent2', 'invert', 'surface'], description: 'Colour-blocked scene' },
           textMotion: { enum: ['lines', 'words', 'letters', 'cascade'], description: 'Type reveal for this scene' },
+          heading: { enum: ['top', 'bottom'], description: 'Title at the top, or as a lower third' },
           label: {
             type: 'string',
             maxLength: 40,

@@ -91,6 +91,8 @@ Opacity never overshoots, and values never do: counters, bars, rings and fills u
 
 **Plates:** a beat's `plate` puts an image or clip full-bleed behind the block (`side: full`, with a readability `scrim`) or on one side of a split frame (`left`/`right`; tall frames stack them as `top`/`bottom`), opening from the seam as the scene enters. See [canvas.md](canvas.md).
 
+**Headings** (`heading`, film default or per beat): `top` puts a scene's kicker and title above the picture; `bottom` sets them as a lower third under it, with a short accent rule, the way documentaries caption a shot. Alternate the two, and drop the title entirely where the picture speaks, so scenes do not all share one template. Drawings in frame pixels must stay above the lower third (use `view: "auto"`); `critique` warns when they do not.
+
 **Text motion** (`textMotion`, film default or per beat) sets how display type arrives: `lines` (default, each line rises through a mask), `words` (word by word), `letters` (letter by letter) or `cascade` (letters drop in with a small alternating tilt). The whole reveal is capped near 0.9 s. Body copy, labels and list items keep the line rise. Use `words` for editorial energy, `letters`/`cascade` for a hook or a single loud word; keep one mode per film and override it for one or two moments.
 
 Inside a scene, elements are choreographed: headlines rise line by line, accent bars draw, cards and badges pop, rails and connectors draw between arrivals, and count-ups run in step with the bars or arcs they describe. `title`, `statement`, `endcard`, `chapter`, `highlight` and `stat` take `align: "center"` for a centred composition.

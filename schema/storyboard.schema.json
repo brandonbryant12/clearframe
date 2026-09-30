@@ -231,6 +231,13 @@
         }
       ]
     },
+    "heading": {
+      "enum": [
+        "top",
+        "bottom"
+      ],
+      "description": "Where scene titles sit: top, or bottom as a lower third"
+    },
     "textMotion": {
       "enum": [
         "lines",
@@ -565,6 +572,13 @@
               "cascade"
             ],
             "description": "Type reveal for this scene"
+          },
+          "heading": {
+            "enum": [
+              "top",
+              "bottom"
+            ],
+            "description": "Title at the top, or as a lower third"
           },
           "label": {
             "type": "string",

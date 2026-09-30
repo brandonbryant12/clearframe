@@ -24,14 +24,17 @@ pub fn render<'a>(b: &'a Beat, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Sv
     let hero = HERO.contains(&b.block.as_str()) || matches!(b.block.as_str(), "chapter" | "highlight");
     let portrait_shift = if tall { env.height * 0.11 - 108.0 } else { 0.0 };
     let headless = s(&b.props, "title").trim().is_empty() && s(&b.props, "kicker").trim().is_empty();
+    // A bottom heading gives the picture the top of the frame and reserves a lower third.
+    let low = !hero && !headless && b.heading == "bottom";
     let top = if hero {
         235.0 + portrait_shift
-    } else if headless && matches!(b.block.as_str(), "image" | "video" | "annotate" | "kinetic" | "canvas") {
+    } else if low || (headless && matches!(b.block.as_str(), "image" | "video" | "annotate" | "kinetic" | "canvas")) {
         200.0 + portrait_shift
     } else {
         335.0 + portrait_shift
     };
-    let mut area = Area { x, y: top, w: env.width - x * 2.0, h: env.height - top - bottom };
+    let reserve = if low { 176.0 + if s(&b.props, "kicker").trim().is_empty() { 0.0 } else { 40.0 } } else { 0.0 };
+    let mut area = Area { x, y: top, w: env.width - x * 2.0, h: env.height - top - bottom - reserve };
     let (mut head_y, mut floor) = (None, env.height);
     // Split plates hand the block the other side of the frame.
     let side = b.plate.as_ref().map_or("none", |p| plate_side(p, tall));

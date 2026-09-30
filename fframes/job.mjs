@@ -274,6 +274,11 @@ function artLayers(a, id) {
 /** Tone, graphic-transition style, frame label, speaker, camera and plate. */
 function beatLayers(source, b, sb) {
   const out = {};
+  const heading = source.heading ?? sb.heading;
+  if (heading != null) {
+    if (!['top', 'bottom'].includes(heading)) throw new Error('heading must be top or bottom');
+    out.heading = heading;
+  }
   if (source.textMotion != null) {
     if (!TEXT_MOTIONS.includes(source.textMotion)) throw new Error(`textMotion must be ${TEXT_MOTIONS.join(', ')}`);
     out.text_motion = source.textMotion;

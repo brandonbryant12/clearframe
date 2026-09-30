@@ -60,6 +60,36 @@ function onScreenWords(props) {
   return n;
 }
 
+/** End and control points of SVG path data, absolute (enough for a bounding box). */
+function pathPoints(d) {
+  const ARITY = { m: 2, l: 2, t: 2, h: 1, v: 1, c: 6, s: 4, q: 4, a: 7, z: 0 };
+  const out = [];
+  let x = 0,
+    y = 0;
+  for (const [, cmd, args] of d.matchAll(/([MLHVCSQTAZmlhvcsqtaz])([^MLHVCSQTAZmlhvcsqtaz]*)/g)) {
+    const n = ARITY[cmd.toLowerCase()],
+      rel = cmd === cmd.toLowerCase(),
+      v = args.match(/-?\d*\.?\d+(?:e-?\d+)?/gi)?.map(Number) ?? [];
+    for (let i = 0; n && i + n <= v.length; i += n) {
+      const g = v.slice(i, i + n),
+        k = cmd.toLowerCase();
+      if (k === 'h') x = rel ? x + g[0] : g[0];
+      else if (k === 'v') y = rel ? y + g[0] : g[0];
+      else {
+        const pairs = k === 'a' ? [g.slice(5)] : Array.from({ length: n / 2 }, (_, j) => g.slice(2 * j, 2 * j + 2));
+        pairs.forEach(([px, py], j) => {
+          const p = rel ? [x + px, y + py] : [px, py];
+          out.push(p);
+          if (j === pairs.length - 1) [x, y] = p;
+        });
+        continue;
+      }
+      out.push([x, y]);
+    }
+  }
+  return out;
+}
+
 /** Rough extent of canvas elements at rest, in frame pixels. */
 function extent(elements) {
   let l = Infinity,
@@ -93,13 +123,12 @@ function extent(elements) {
         const size = el.size ?? 48;
         grow(dx + n('x') - size, dy + n('y') - size, dx + n('x') + size * 4, dy + n('y') + size * 0.3);
       } else if (el.type === 'path' && typeof el.d === 'string') {
-        const v = el.d.match(/-?\d+(?:\.\d+)?/g)?.map(Number) ?? [];
-        for (let i = 0; i + 1 < v.length; i += 2) grow(dx + v[i], dy + v[i + 1], dx + v[i], dy + v[i + 1]);
+        for (const [x, y] of pathPoints(el.d)) grow(dx + x, dy + y, dx + x, dy + y);
       }
     }
   };
   walk(elements);
-  return Number.isFinite(l) ? { w: r - l, h: b - t } : null;
+  return Number.isFinite(l) ? { w: r - l, h: b - t, bottom: b } : null;
 }
 
 export function critique(root) {
@@ -151,6 +180,16 @@ export function critique(root) {
         'idea',
         b.id,
         `The drawing covers ${Math.round((100 * box.w * box.h) / area)}% of the frame. Set view: "auto" to fit it to the space, or draw it larger.`,
+      );
+  }
+  // A lower-third title shares the bottom of the frame with frame-pixel drawings.
+  for (const b of beats.filter(x => x.block === 'canvas' && (x.heading ?? sb.heading) === 'bottom' && x.props?.title)) {
+    const box = !b.props.view && extent(b.props.elements ?? []);
+    if (box && box.bottom > sb.format.height - 340)
+      add(
+        'warn',
+        b.id,
+        `heading: bottom puts the title where this drawing reaches (y ${Math.round(box.bottom)}). Set view: "auto" so the drawing fits above it, or keep the heading at the top.`,
       );
   }
   const drawn = beats.filter(b => b.block === 'canvas' || b.art).length,
