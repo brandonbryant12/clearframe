@@ -534,6 +534,12 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let phase = TAU * lt / period;
             match s(l, "type") {
                 "spin" => pose.rotate += 360.0 * f(l, "amount", 1.0) * lt / period,
+                // A bare stroke (a street, a route) throbs in brightness: scaling it would make
+                // it crawl and change length.
+                "pulse" if matches!(kind, "line" | "path" | "poly") && el.get("fill").is_none_or(|v| v == "none") => {
+                    let depth = (f(l, "amount", 0.06) * 3.0).min(0.7);
+                    pose.alpha *= 1.0 - depth * ramp * (0.5 + 0.5 * phase.sin());
+                }
                 "pulse" => {
                     let k = 1.0 + f(l, "amount", 0.06) * ramp * phase.sin();
                     pose.sx *= k;
@@ -1028,6 +1034,14 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         };
         if let Some(to) = rect(arr(p, "view")) {
             let env = &self.b.environment;
+            // After arriving, the camera keeps easing in (`viewDrift`, a fraction of the view)
+            // so holds never freeze; the next beat starts from this drifted view.
+            let drift = f(p, "viewDrift", 0.0);
+            let arrive =
+                if rect(arr(p, "viewFrom")).is_some() { f(p, "viewAt", 0.0) + f(p, "viewDur", 1.2) } else { 0.0 };
+            let span = (self.b.frames as f32 / self.f.fps as f32 - arrive).max(0.1);
+            let d = drift * motion::in_out_cubic(motion::clamp01((self.t - arrive) / span));
+            let to = [to[0] + to[2] * d / 2.0, to[1] + to[3] * d / 2.0, to[2] * (1.0 - d), to[3] * (1.0 - d)];
             let cam = match rect(arr(p, "viewFrom")) {
                 Some(from) => {
                     let q = motion::in_out_cubic(motion::clamp01(

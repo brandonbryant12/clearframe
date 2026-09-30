@@ -1200,6 +1200,7 @@ Draw anything: shapes, paths, text, icons and images that draw on, pop, travel a
 | viewFrom | Camera rect the view travels from (set automatically between world beats) |
 | viewAt | Scene seconds the camera move starts (default 0) |
 | viewDur | Seconds the camera move takes (default 1.2) |
+| viewDrift | After arriving, the camera keeps easing in by this fraction of the view (worlds default 0.03) |
 | world | Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views |
 | elements | [{type: rect / circle / ellipse / line / path / poly / text / icon / image / group / meter / spotlight / particles, geometry, fill, stroke, width, enter, say / at, dur, keys, loop, along, exit, exitSay / exitAt}] (≤ 600) — see docs/canvas.md |
 | stagger | Seconds between top-level elements without a cue (0–3) |

@@ -52,6 +52,7 @@ const COMMON = [
   'fps',
   'morphDur',
   'rough',
+  'behind',
 ];
 export const ENTERS = [
   'fade',
@@ -541,9 +542,18 @@ export function elementsExtent(elements) {
           dx + Math.max(n('x1'), n('x2')),
           dy + Math.max(n('y1'), n('y2')),
         );
-      else if (el.type === 'text' || el.type === 'icon') {
-        const size = el.size ?? 48;
-        grow(dx + n('x') - size, dy + n('y') - size, dx + n('x') + size * 4, dy + n('y') + size * 0.3);
+      else if (el.type === 'icon') {
+        const size = el.size ?? 64;
+        grow(dx + n('x') - size / 2, dy + n('y') - size / 2, dx + n('x') + size / 2, dy + n('y') + size / 2);
+      } else if (el.type === 'text') {
+        // Estimated advance: mono is wide, display faces about half an em per character.
+        const size = el.size ?? 48,
+          chars = String(
+            el.count ? `${el.count.prefix ?? ''}${el.count.to}${el.count.suffix ?? ''}` : (el.text ?? ''),
+          ).length;
+        const w = el.width ?? chars * size * (el.font === 'mono' ? 0.62 : 0.54);
+        const x0 = el.anchor === 'middle' ? n('x') - w / 2 : el.anchor === 'end' ? n('x') - w : n('x');
+        grow(dx + x0, dy + n('y') - size * 0.8, dx + x0 + w, dy + n('y') + size * 0.25);
       } else if (el.type === 'path' && typeof el.d === 'string') {
         for (const [x, y] of pathPoints(el.d)) grow(dx + x, dy + y, dx + x, dy + y);
       }

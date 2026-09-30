@@ -642,6 +642,7 @@ export const BLOCKS = [
       viewFrom: 'Camera rect the view travels from (set automatically between world beats)',
       viewAt: 'Scene seconds the camera move starts (default 0)',
       viewDur: 'Seconds the camera move takes (default 1.2)',
+      viewDrift: 'After arriving, the camera keeps easing in by this fraction of the view (worlds default 0.03)',
       world:
         'Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views',
       elements:

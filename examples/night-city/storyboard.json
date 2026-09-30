@@ -1,0 +1,3172 @@
+{
+  "version": 2,
+  "title": "Why city nights stay hot",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "noir",
+  "backdrop": "none",
+  "texture": {
+    "grain": 0.35,
+    "vignette": 0.5
+  },
+  "motion": {
+    "preset": "spring",
+    "intensity": 0.6
+  },
+  "transition": "cut",
+  "captions": false,
+  "music": false,
+  "sfx": "subtle",
+  "voice": {
+    "takes": "chapter",
+    "style": "warm, curious, quietly concerned"
+  },
+  "sources": [
+    {
+      "id": "1",
+      "title": "Synthetic Climate Lab (test)"
+    },
+    {
+      "id": "2",
+      "title": "Synthetic Materials Review (test)"
+    },
+    {
+      "id": "3",
+      "title": "City Health Dept. (synthetic)"
+    },
+    {
+      "id": "4",
+      "title": "Cooling Interventions Meta-analysis (synthetic)"
+    },
+    {
+      "id": "5",
+      "title": "Heat Plan Survey 2025 (synthetic)"
+    }
+  ],
+  "beats": [
+    {
+      "id": "hook",
+      "block": "canvas",
+      "vo": "Seven degrees. That's how much hotter a city night can run.",
+      "props": {
+        "world": "city",
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "type": "ellipse",
+            "cx": 960,
+            "cy": 760,
+            "rx": 1100,
+            "ry": 460,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "bg"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.6,
+            "enter": "none",
+            "at": 0,
+            "keys": [
+              {
+                "at": 0.2,
+                "opacity": 0.1,
+                "dur": 2.2
+              }
+            ]
+          },
+          {
+            "type": "circle",
+            "cx": 960,
+            "cy": 640,
+            "r": 64,
+            "fill": "accent",
+            "enter": "none",
+            "at": 0,
+            "keys": [
+              {
+                "at": 0.05,
+                "y": 200,
+                "dur": 1.7,
+                "ease": "in"
+              }
+            ]
+          },
+          {
+            "type": "rect",
+            "x": -4000,
+            "y": 760,
+            "w": 16000,
+            "h": 3000,
+            "fill": "surface",
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "line",
+            "x1": -4000,
+            "y1": 760,
+            "x2": 12000,
+            "y2": 760,
+            "stroke": "line",
+            "width": 2,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "path",
+            "d": "M 80 760 Q 260 680 440 735 Q 640 670 900 760 Z",
+            "fill": "positive",
+            "opacity": 0.22,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "circle",
+            "cx": 170,
+            "cy": 726,
+            "r": 20,
+            "fill": "positive",
+            "opacity": 0.45,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "circle",
+            "cx": 250,
+            "cy": 726,
+            "r": 20,
+            "fill": "positive",
+            "opacity": 0.45,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "circle",
+            "cx": 700,
+            "cy": 726,
+            "r": 20,
+            "fill": "positive",
+            "opacity": 0.45,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "circle",
+            "cx": 790,
+            "cy": 726,
+            "r": 20,
+            "fill": "positive",
+            "opacity": 0.45,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 1040,
+            "y": 580,
+            "w": 90,
+            "h": 180,
+            "fill": "surface",
+            "stroke": "line",
+            "width": 2,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 1135,
+            "y": 580,
+            "w": 75,
+            "h": 180,
+            "fill": "surface",
+            "stroke": "line",
+            "width": 2,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 1215,
+            "y": 560,
+            "w": 110,
+            "h": 200,
+            "fill": "surface",
+            "stroke": "line",
+            "width": 2,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 1400,
+            "y": 460,
+            "w": 85,
+            "h": 300,
+            "fill": "surface",
+            "stroke": "line",
+            "width": 2,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 1490,
+            "y": 540,
+            "w": 110,
+            "h": 220,
+            "fill": "surface",
+            "stroke": "line",
+            "width": 2,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 1605,
+            "y": 600,
+            "w": 70,
+            "h": 160,
+            "fill": "surface",
+            "stroke": "line",
+            "width": 2,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 1680,
+            "y": 500,
+            "w": 120,
+            "h": 260,
+            "fill": "surface",
+            "stroke": "line",
+            "width": 2,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 1805,
+            "y": 570,
+            "w": 95,
+            "h": 190,
+            "fill": "surface",
+            "stroke": "line",
+            "width": 2,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "group",
+            "at": 0.9,
+            "stagger": 0.02,
+            "children": [
+              {
+                "type": "rect",
+                "x": 1087,
+                "y": 630,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 4.0,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1156,
+                "y": 698,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 2.8,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1236,
+                "y": 644,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 2.8,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1262,
+                "y": 678,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 3.6,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1421,
+                "y": 510,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 2.8,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1447,
+                "y": 544,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 3.6,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1421,
+                "y": 646,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 2.4,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1447,
+                "y": 680,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 3.2,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1537,
+                "y": 590,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 3.6,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1563,
+                "y": 624,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 2.4,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1511,
+                "y": 692,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 2.4,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1701,
+                "y": 584,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 2.4,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1727,
+                "y": 618,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 3.2,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1753,
+                "y": 652,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 4.0,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1826,
+                "y": 620,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 2.4,
+                  "amount": 0.25
+                }
+              },
+              {
+                "type": "rect",
+                "x": 1852,
+                "y": 654,
+                "w": 10,
+                "h": 14,
+                "fill": "accent",
+                "opacity": 0.85,
+                "loop": {
+                  "type": "pulse",
+                  "period": 3.2,
+                  "amount": 0.25
+                }
+              }
+            ]
+          },
+          {
+            "type": "rect",
+            "x": 545,
+            "y": 250,
+            "w": 30,
+            "h": 460,
+            "r": 15,
+            "fill": "bg",
+            "stroke": "muted",
+            "width": 3,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 553,
+            "y": 280,
+            "w": 14,
+            "h": 420,
+            "r": 7,
+            "fill": "#8ecae6",
+            "origin": [
+              560,
+              700
+            ],
+            "enter": "none",
+            "at": 0,
+            "keys": [
+              {
+                "at": 0.3,
+                "scaleY": 0.8,
+                "dur": 1.2,
+                "ease": "inOut"
+              },
+              {
+                "at": 1.5,
+                "scaleY": 0.42,
+                "dur": 1.3,
+                "ease": "inOut"
+              }
+            ]
+          },
+          {
+            "type": "circle",
+            "cx": 560,
+            "cy": 718,
+            "r": 26,
+            "fill": "#8ecae6",
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 1347,
+            "y": 250,
+            "w": 30,
+            "h": 460,
+            "r": 15,
+            "fill": "bg",
+            "stroke": "muted",
+            "width": 3,
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "rect",
+            "x": 1355,
+            "y": 280,
+            "w": 14,
+            "h": 420,
+            "r": 7,
+            "fill": "accent2",
+            "origin": [
+              1362,
+              700
+            ],
+            "enter": "none",
+            "at": 0,
+            "keys": [
+              {
+                "at": 0.3,
+                "scaleY": 0.8,
+                "dur": 1.2,
+                "ease": "inOut"
+              },
+              {
+                "at": 1.5,
+                "scaleY": 0.74,
+                "dur": 1.3,
+                "ease": "inOut"
+              }
+            ]
+          },
+          {
+            "type": "circle",
+            "cx": 1362,
+            "cy": 718,
+            "r": 26,
+            "fill": "accent2",
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "text",
+            "text": "COUNTRYSIDE",
+            "x": 560,
+            "y": 812,
+            "size": 24,
+            "font": "mono",
+            "fill": "muted",
+            "anchor": "middle",
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "text",
+            "text": "CITY",
+            "x": 1362,
+            "y": 812,
+            "size": 24,
+            "font": "mono",
+            "fill": "muted",
+            "anchor": "middle",
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "line",
+            "x1": 580,
+            "y1": 523.6,
+            "x2": 960,
+            "y2": 523.6,
+            "stroke": "muted",
+            "width": 2,
+            "dash": [
+              6,
+              8
+            ],
+            "say": "Seven",
+            "dur": 0.4
+          },
+          {
+            "type": "line",
+            "x1": 960,
+            "y1": 389.2,
+            "x2": 1342,
+            "y2": 389.2,
+            "stroke": "muted",
+            "width": 2,
+            "dash": [
+              6,
+              8
+            ],
+            "say": "Seven",
+            "dur": 0.4
+          },
+          {
+            "type": "path",
+            "d": "M 945 389.2 L 960 389.2 L 960 523.6 L 945 523.6",
+            "stroke": "accent2",
+            "width": 4,
+            "say": "Seven",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "text": "7°C",
+            "x": 990,
+            "y": 496.4,
+            "size": 120,
+            "font": "bold",
+            "fill": "accent2",
+            "say": "Seven",
+            "count": {
+              "from": 0,
+              "to": 7,
+              "suffix": "°C",
+              "dur": 0.5
+            }
+          },
+          {
+            "type": "text",
+            "text": "warmer, at night",
+            "x": 994,
+            "y": 548.4,
+            "size": 34,
+            "fill": "ink",
+            "say": "night"
+          }
+        ],
+        "source": "Synthetic Climate Lab (test) [1]"
+      },
+      "lead": 2.3,
+      "tail": 0.5,
+      "style": "intrigued, leaning in"
+    },
+    {
+      "id": "belief",
+      "block": "canvas",
+      "vo": "It's only a few degrees, right?",
+      "props": {
+        "world": "city",
+        "view": [
+          620,
+          190,
+          960,
+          540
+        ],
+        "elements": [
+          {
+            "type": "text",
+            "text": "“Only a few degrees, right?”",
+            "x": 650,
+            "y": 330,
+            "size": 44,
+            "font": "serif-italic",
+            "fill": "ink",
+            "width": 270,
+            "say": "only",
+            "exitAt": 4,
+            "exit": "fade"
+          }
+        ]
+      },
+      "style": "light, a little skeptical"
+    },
+    {
+      "id": "day-night",
+      "block": "canvas",
+      "vo": "By day, the gap is small, one to three degrees. But after sunset, it can reach seven.",
+      "props": {
+        "world": "city",
+        "view": [
+          0,
+          -900,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "type": "rect",
+            "x": -4000,
+            "y": -4000,
+            "w": 16000,
+            "h": 4760,
+            "fill": {
+              "gradient": [
+                "#3d5a78",
+                "#1c2530"
+              ],
+              "angle": 90
+            },
+            "behind": true,
+            "enter": "none",
+            "at": 0,
+            "opacity": 0.95,
+            "keys": [
+              {
+                "at": 0,
+                "opacity": 0,
+                "dur": 0
+              },
+              {
+                "say": "day",
+                "opacity": 1,
+                "dur": 0.9
+              },
+              {
+                "say": "sunset",
+                "opacity": 0,
+                "dur": 1.4
+              }
+            ]
+          },
+          {
+            "type": "line",
+            "x1": 220,
+            "y1": -300,
+            "x2": 1660,
+            "y2": -300,
+            "stroke": "line",
+            "width": 2,
+            "at": 0.1
+          },
+          {
+            "type": "text",
+            "text": "NOON",
+            "x": 220.0,
+            "y": -262,
+            "size": 22,
+            "font": "mono",
+            "fill": "muted",
+            "anchor": "middle",
+            "at": 0.2
+          },
+          {
+            "type": "text",
+            "text": "6 PM",
+            "x": 700.0,
+            "y": -262,
+            "size": 22,
+            "font": "mono",
+            "fill": "muted",
+            "anchor": "middle",
+            "at": 0.2
+          },
+          {
+            "type": "text",
+            "text": "MIDNIGHT",
+            "x": 1180.0,
+            "y": -262,
+            "size": 22,
+            "font": "mono",
+            "fill": "muted",
+            "anchor": "middle",
+            "at": 0.2
+          },
+          {
+            "type": "text",
+            "text": "6 AM",
+            "x": 1660.0,
+            "y": -262,
+            "size": 22,
+            "font": "mono",
+            "fill": "muted",
+            "anchor": "middle",
+            "at": 0.2
+          },
+          {
+            "type": "circle",
+            "cx": 220.0,
+            "cy": -746,
+            "r": 26,
+            "fill": "accent",
+            "say": "day",
+            "keys": [
+              {
+                "say": "small",
+                "x": 400.0,
+                "y": 60,
+                "dur": 2.2,
+                "ease": "inOut"
+              },
+              {
+                "say": "sunset",
+                "y": 260,
+                "opacity": 0,
+                "dur": 0.9,
+                "ease": "in"
+              }
+            ]
+          },
+          {
+            "type": "path",
+            "d": "M 220 -564 L 460 -588 L 700 -516",
+            "stroke": "#8ecae6",
+            "width": 5,
+            "say": "day",
+            "dur": 1.4
+          },
+          {
+            "type": "path",
+            "d": "M 220 -612 L 460 -636 L 700 -588",
+            "stroke": "accent2",
+            "width": 5,
+            "say": "day",
+            "dur": 1.4
+          },
+          {
+            "type": "text",
+            "text": "1–3°C",
+            "x": 460.0,
+            "y": -664,
+            "size": 40,
+            "font": "bold",
+            "fill": "ink",
+            "anchor": "middle",
+            "say": "three"
+          },
+          {
+            "type": "path",
+            "d": "M 1194.0 -770 A 22 22 0 1 0 1194.0 -722 A 17 17 0 1 1 1194.0 -770 Z",
+            "fill": "ink",
+            "stroke": "none",
+            "say": "sunset",
+            "enter": "pop"
+          },
+          {
+            "type": "path",
+            "d": "M 700 -516 L 940 -408 L 1180 -348 L 1420 -324 L 1660 -300",
+            "stroke": "#8ecae6",
+            "width": 5,
+            "say": "sunset",
+            "dur": 1.8
+          },
+          {
+            "type": "path",
+            "d": "M 700 -588 L 940 -540 L 1180 -516 L 1420 -492 L 1660 -468",
+            "stroke": "accent2",
+            "width": 5,
+            "say": "sunset",
+            "dur": 1.8
+          },
+          {
+            "type": "poly",
+            "points": [
+              [
+                700,
+                -588
+              ],
+              [
+                940,
+                -540
+              ],
+              [
+                1180,
+                -516
+              ],
+              [
+                1420,
+                -492
+              ],
+              [
+                1660,
+                -468
+              ],
+              [
+                1660,
+                -300
+              ],
+              [
+                1420,
+                -324
+              ],
+              [
+                1180,
+                -348
+              ],
+              [
+                940,
+                -408
+              ],
+              [
+                700,
+                -516
+              ]
+            ],
+            "closed": true,
+            "fill": "accent2",
+            "opacity": 0.22,
+            "stroke": "none",
+            "enter": "wipe",
+            "say": "reach",
+            "dur": 0.9
+          },
+          {
+            "type": "path",
+            "d": "M 1408.0 -492 L 1420.0 -492 L 1420.0 -324 L 1408.0 -324",
+            "stroke": "ink",
+            "width": 3,
+            "say": "seven",
+            "dur": 0.4
+          },
+          {
+            "type": "text",
+            "text": "7°C",
+            "x": 1440.0,
+            "y": -386.0,
+            "size": 64,
+            "font": "bold",
+            "fill": "ink",
+            "say": "seven"
+          },
+          {
+            "type": "text",
+            "text": "CITY",
+            "x": 1676,
+            "y": -460,
+            "size": 22,
+            "font": "mono",
+            "fill": "accent2",
+            "say": "sunset"
+          },
+          {
+            "type": "text",
+            "text": "COUNTRYSIDE",
+            "x": 1676,
+            "y": -292,
+            "size": 22,
+            "font": "mono",
+            "fill": "#8ecae6",
+            "say": "sunset"
+          }
+        ],
+        "source": "Synthetic Climate Lab (test) [1] · Synthetic Materials Review (test) [2]"
+      },
+      "style": "brisk, clear"
+    },
+    {
+      "id": "mechanism",
+      "block": "canvas",
+      "vo": "Asphalt and dark roofs soak up almost all of the sunlight, then give it back after dark.",
+      "props": {
+        "world": "city",
+        "view": [
+          1420,
+          330,
+          640,
+          360
+        ],
+        "elements": [
+          {
+            "type": "rect",
+            "x": -4000,
+            "y": -4000,
+            "w": 16000,
+            "h": 4760,
+            "fill": {
+              "gradient": [
+                "#3d5a78",
+                "#1c2530"
+              ],
+              "angle": 90
+            },
+            "behind": true,
+            "enter": "none",
+            "at": 0,
+            "opacity": 0.9,
+            "keys": [
+              {
+                "at": 0,
+                "opacity": 0,
+                "dur": 0
+              },
+              {
+                "at": 0.1,
+                "opacity": 1,
+                "dur": 0.8
+              },
+              {
+                "say": "after dark",
+                "opacity": 0,
+                "dur": 1.0
+              }
+            ]
+          },
+          {
+            "type": "rect",
+            "x": 1680,
+            "y": 500,
+            "w": 120,
+            "h": 34,
+            "fill": "#262626",
+            "stroke": "ink",
+            "width": 1.5,
+            "at": 0.1
+          },
+          {
+            "type": "text",
+            "text": "ROOF · ASPHALT",
+            "x": 1810,
+            "y": 521,
+            "size": 11,
+            "font": "mono",
+            "fill": "muted",
+            "at": 0.2,
+            "exitAt": 9,
+            "exit": "fade"
+          },
+          {
+            "type": "rect",
+            "x": 1682,
+            "y": 502,
+            "w": 116,
+            "h": 30,
+            "fill": "accent2",
+            "origin": [
+              1680,
+              532
+            ],
+            "enter": "none",
+            "at": 0,
+            "keys": [
+              {
+                "at": 0,
+                "scaleY": 0.02,
+                "dur": 0
+              },
+              {
+                "say": "soak",
+                "scaleY": 0.95,
+                "dur": 1.6
+              },
+              {
+                "say": "back",
+                "scaleY": 0.35,
+                "dur": 0.9
+              }
+            ]
+          },
+          {
+            "type": "circle",
+            "cx": 1530,
+            "cy": 410,
+            "r": 18,
+            "fill": "accent",
+            "say": "sunlight",
+            "exitSay": "then",
+            "exit": "fall"
+          },
+          {
+            "type": "group",
+            "say": "sunlight",
+            "stagger": 0.1,
+            "exitSay": "then",
+            "exit": "fade",
+            "children": [
+              {
+                "type": "path",
+                "d": "M 1585 410 L 1694 499",
+                "stroke": "accent",
+                "width": 3,
+                "arrow": "end",
+                "head": 9,
+                "dur": 0.6
+              },
+              {
+                "type": "path",
+                "d": "M 1615 410 L 1722 499",
+                "stroke": "accent",
+                "width": 3,
+                "arrow": "end",
+                "head": 9,
+                "dur": 0.6
+              },
+              {
+                "type": "path",
+                "d": "M 1645 410 L 1750 499",
+                "stroke": "accent",
+                "width": 3,
+                "arrow": "end",
+                "head": 9,
+                "dur": 0.6
+              },
+              {
+                "type": "path",
+                "d": "M 1675 410 L 1778 499",
+                "stroke": "accent",
+                "width": 3,
+                "arrow": "end",
+                "head": 9,
+                "dur": 0.6
+              }
+            ]
+          },
+          {
+            "type": "path",
+            "d": "M 1672 516 L 1644 516",
+            "stroke": "accent2",
+            "width": 1.5,
+            "say": "almost",
+            "exitAt": 9,
+            "exit": "fade"
+          },
+          {
+            "type": "text",
+            "text": "95% absorbed",
+            "x": 1640,
+            "y": 521,
+            "size": 14,
+            "font": "bold",
+            "fill": "accent2",
+            "anchor": "end",
+            "say": "almost",
+            "exitAt": 9,
+            "exit": "fade"
+          },
+          {
+            "type": "path",
+            "d": "M 1860 390 A 16 16 0 1 0 1860 424 A 12 12 0 1 1 1860 390 Z",
+            "fill": "ink",
+            "stroke": "none",
+            "say": "after dark",
+            "enter": "pop"
+          },
+          {
+            "type": "ellipse",
+            "cx": 1740.0,
+            "cy": 480,
+            "rx": 80,
+            "ry": 46,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "bg"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.55,
+            "say": "back",
+            "exitAt": 9,
+            "exit": "fade"
+          },
+          {
+            "type": "path",
+            "d": "M 1705 496 C 1695 470 1715 450 1705 424",
+            "stroke": "accent2",
+            "width": 2,
+            "dash": [
+              5,
+              5
+            ],
+            "loop": {
+              "type": "dash",
+              "period": 0.8
+            },
+            "say": "back",
+            "dur": 0.6,
+            "exitAt": 9,
+            "exit": "fade"
+          },
+          {
+            "type": "path",
+            "d": "M 1735 496 C 1725 470 1745 450 1735 424",
+            "stroke": "accent2",
+            "width": 2,
+            "dash": [
+              5,
+              5
+            ],
+            "loop": {
+              "type": "dash",
+              "period": 0.8
+            },
+            "say": "back",
+            "dur": 0.6,
+            "exitAt": 9,
+            "exit": "fade"
+          },
+          {
+            "type": "path",
+            "d": "M 1765 496 C 1755 470 1775 450 1765 424",
+            "stroke": "accent2",
+            "width": 2,
+            "dash": [
+              5,
+              5
+            ],
+            "loop": {
+              "type": "dash",
+              "period": 0.8
+            },
+            "say": "back",
+            "dur": 0.6,
+            "exitAt": 9,
+            "exit": "fade"
+          }
+        ],
+        "source": "Synthetic Materials Review (test) [2]"
+      },
+      "style": "brisk, clear",
+      "tail": 0.9
+    },
+    {
+      "id": "turn",
+      "block": "kinetic",
+      "transition": "iris",
+      "tone": "accent2",
+      "style": "slower, lower",
+      "vo": "But the heat is not shared evenly.",
+      "tail": 1.0,
+      "props": {
+        "mode": "stack",
+        "emphasis": [
+          "not",
+          "evenly"
+        ],
+        "emphasisStyle": "serif",
+        "maxWords": 7,
+        "align": "center"
+      }
+    },
+    {
+      "id": "hotspots",
+      "block": "canvas",
+      "vo": "In one district, twelve percent of streets produced forty percent of heat emergencies.",
+      "props": {
+        "world": "city",
+        "view": [
+          250,
+          1110,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "type": "group",
+            "at": 0.2,
+            "stagger": 0.01,
+            "children": [
+              {
+                "type": "rect",
+                "x": 510,
+                "y": 1360,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 510,
+                "y": 1510,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 510,
+                "y": 1660,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 510,
+                "y": 1810,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 710,
+                "y": 1360,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 710,
+                "y": 1510,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 710,
+                "y": 1660,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 710,
+                "y": 1810,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 910,
+                "y": 1360,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 910,
+                "y": 1510,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 910,
+                "y": 1660,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 910,
+                "y": 1810,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 1110,
+                "y": 1360,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 1110,
+                "y": 1510,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 1110,
+                "y": 1660,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 1110,
+                "y": 1810,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 1310,
+                "y": 1360,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 1310,
+                "y": 1510,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 1310,
+                "y": 1660,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              },
+              {
+                "type": "rect",
+                "x": 1310,
+                "y": 1810,
+                "w": 180,
+                "h": 130,
+                "r": 6,
+                "fill": "#1f1f1f"
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0.3,
+            "stagger": 0.03,
+            "children": [
+              {
+                "type": "line",
+                "x1": 500,
+                "y1": 1350,
+                "x2": 1500,
+                "y2": 1350,
+                "stroke": "line",
+                "width": 6
+              },
+              {
+                "type": "line",
+                "x1": 500,
+                "y1": 1500,
+                "x2": 1500,
+                "y2": 1500,
+                "stroke": "line",
+                "width": 6
+              },
+              {
+                "type": "line",
+                "x1": 500,
+                "y1": 1650,
+                "x2": 1500,
+                "y2": 1650,
+                "stroke": "line",
+                "width": 6
+              },
+              {
+                "type": "line",
+                "x1": 500,
+                "y1": 1800,
+                "x2": 1500,
+                "y2": 1800,
+                "stroke": "line",
+                "width": 6
+              },
+              {
+                "type": "line",
+                "x1": 500,
+                "y1": 1950,
+                "x2": 1500,
+                "y2": 1950,
+                "stroke": "line",
+                "width": 6
+              },
+              {
+                "type": "line",
+                "x1": 500,
+                "y1": 1350,
+                "x2": 500,
+                "y2": 1950,
+                "stroke": "line",
+                "width": 6
+              },
+              {
+                "type": "line",
+                "x1": 700,
+                "y1": 1350,
+                "x2": 700,
+                "y2": 1950,
+                "stroke": "line",
+                "width": 6
+              },
+              {
+                "type": "line",
+                "x1": 900,
+                "y1": 1350,
+                "x2": 900,
+                "y2": 1950,
+                "stroke": "line",
+                "width": 6
+              },
+              {
+                "type": "line",
+                "x1": 1100,
+                "y1": 1350,
+                "x2": 1100,
+                "y2": 1950,
+                "stroke": "line",
+                "width": 6
+              },
+              {
+                "type": "line",
+                "x1": 1300,
+                "y1": 1350,
+                "x2": 1300,
+                "y2": 1950,
+                "stroke": "line",
+                "width": 6
+              },
+              {
+                "type": "line",
+                "x1": 1500,
+                "y1": 1350,
+                "x2": 1500,
+                "y2": 1950,
+                "stroke": "line",
+                "width": 6
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "say": "twelve",
+            "stagger": 0.08,
+            "children": [
+              {
+                "type": "line",
+                "x1": 500,
+                "y1": 1500,
+                "x2": 700,
+                "y2": 1500,
+                "stroke": "accent2",
+                "width": 14,
+                "loop": {
+                  "type": "pulse",
+                  "period": 1.6,
+                  "amount": 0.2
+                }
+              },
+              {
+                "type": "line",
+                "x1": 700,
+                "y1": 1500,
+                "x2": 700,
+                "y2": 1650,
+                "stroke": "accent2",
+                "width": 14,
+                "loop": {
+                  "type": "pulse",
+                  "period": 1.6,
+                  "amount": 0.2
+                }
+              },
+              {
+                "type": "line",
+                "x1": 700,
+                "y1": 1650,
+                "x2": 900,
+                "y2": 1650,
+                "stroke": "accent2",
+                "width": 14,
+                "loop": {
+                  "type": "pulse",
+                  "period": 1.6,
+                  "amount": 0.2
+                }
+              },
+              {
+                "type": "line",
+                "x1": 900,
+                "y1": 1650,
+                "x2": 900,
+                "y2": 1800,
+                "stroke": "accent2",
+                "width": 14,
+                "loop": {
+                  "type": "pulse",
+                  "period": 1.6,
+                  "amount": 0.2
+                }
+              },
+              {
+                "type": "line",
+                "x1": 1300,
+                "y1": 1350,
+                "x2": 1500,
+                "y2": 1350,
+                "stroke": "accent2",
+                "width": 14,
+                "loop": {
+                  "type": "pulse",
+                  "period": 1.6,
+                  "amount": 0.2
+                }
+              },
+              {
+                "type": "line",
+                "x1": 1100,
+                "y1": 1800,
+                "x2": 1100,
+                "y2": 1950,
+                "stroke": "accent2",
+                "width": 14,
+                "loop": {
+                  "type": "pulse",
+                  "period": 1.6,
+                  "amount": 0.2
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "12% of streets",
+            "x": 1620,
+            "y": 1530,
+            "size": 52,
+            "font": "bold",
+            "fill": "accent2",
+            "say": "twelve"
+          },
+          {
+            "type": "group",
+            "say": "forty",
+            "stagger": 0.09,
+            "children": [
+              {
+                "type": "circle",
+                "cx": 600.0,
+                "cy": 1500,
+                "r": 13,
+                "fill": "ink",
+                "stroke": "bg",
+                "width": 3,
+                "enter": "drop"
+              },
+              {
+                "type": "circle",
+                "cx": 700,
+                "cy": 1575.0,
+                "r": 13,
+                "fill": "ink",
+                "stroke": "bg",
+                "width": 3,
+                "enter": "drop"
+              },
+              {
+                "type": "circle",
+                "cx": 800.0,
+                "cy": 1650,
+                "r": 13,
+                "fill": "ink",
+                "stroke": "bg",
+                "width": 3,
+                "enter": "drop"
+              },
+              {
+                "type": "circle",
+                "cx": 900,
+                "cy": 1740.0,
+                "r": 13,
+                "fill": "ink",
+                "stroke": "bg",
+                "width": 3,
+                "enter": "drop"
+              },
+              {
+                "type": "circle",
+                "cx": 1200.0,
+                "cy": 1500,
+                "r": 13,
+                "fill": "ink",
+                "stroke": "bg",
+                "width": 3,
+                "enter": "drop"
+              },
+              {
+                "type": "circle",
+                "cx": 1300,
+                "cy": 1710.0,
+                "r": 13,
+                "fill": "ink",
+                "stroke": "bg",
+                "width": 3,
+                "enter": "drop"
+              },
+              {
+                "type": "circle",
+                "cx": 620.0,
+                "cy": 1950,
+                "r": 13,
+                "fill": "ink",
+                "stroke": "bg",
+                "width": 3,
+                "enter": "drop"
+              },
+              {
+                "type": "circle",
+                "cx": 1500,
+                "cy": 1845.0,
+                "r": 13,
+                "fill": "ink",
+                "stroke": "bg",
+                "width": 3,
+                "enter": "drop"
+              },
+              {
+                "type": "circle",
+                "cx": 1000.0,
+                "cy": 1350,
+                "r": 13,
+                "fill": "ink",
+                "stroke": "bg",
+                "width": 3,
+                "enter": "drop"
+              },
+              {
+                "type": "circle",
+                "cx": 1380.0,
+                "cy": 1950,
+                "r": 13,
+                "fill": "ink",
+                "stroke": "bg",
+                "width": 3,
+                "enter": "drop"
+              }
+            ]
+          },
+          {
+            "type": "circle",
+            "cx": 1636,
+            "cy": 1630,
+            "r": 13,
+            "fill": "ink",
+            "say": "forty"
+          },
+          {
+            "type": "text",
+            "text": "40% of heat emergencies",
+            "x": 1662,
+            "y": 1642,
+            "size": 40,
+            "font": "bold",
+            "fill": "ink",
+            "say": "forty"
+          },
+          {
+            "type": "text",
+            "text": "4 of these 10 are on the hot 12%",
+            "x": 1620,
+            "y": 1700,
+            "size": 26,
+            "fill": "muted",
+            "say": "forty"
+          }
+        ],
+        "source": "City Health Dept. (synthetic) [3]"
+      },
+      "style": "measured, serious",
+      "transition": "iris",
+      "tail": 0.6
+    },
+    {
+      "id": "works",
+      "block": "canvas",
+      "vo": "Cool roofs cut rooftop heat by twenty to thirty degrees. Trees help too, but only as a continuous canopy.",
+      "props": {
+        "world": "city",
+        "view": [
+          1405,
+          360,
+          720,
+          405
+        ],
+        "elements": [
+          {
+            "type": "rect",
+            "x": 1682,
+            "y": 502,
+            "w": 116,
+            "h": 30,
+            "fill": "#8ecae6",
+            "opacity": 0.9,
+            "enter": "wipe",
+            "say": "cut",
+            "dur": 0.8
+          },
+          {
+            "type": "text",
+            "text": "COOL ROOF",
+            "x": 1810,
+            "y": 521,
+            "size": 11,
+            "font": "mono",
+            "fill": "#8ecae6",
+            "say": "cut",
+            "exitAt": 14,
+            "exit": "fade"
+          },
+          {
+            "type": "rect",
+            "x": 1678,
+            "y": 495,
+            "w": 124,
+            "h": 7,
+            "fill": "ink",
+            "enter": "wipe",
+            "say": "Cool roofs",
+            "dur": 0.6
+          },
+          {
+            "type": "path",
+            "d": "M 1700 410 L 1732 493",
+            "stroke": "accent",
+            "width": 3,
+            "arrow": "end",
+            "head": 9,
+            "say": "cut",
+            "dur": 0.4
+          },
+          {
+            "type": "path",
+            "d": "M 1744 493 L 1776 410",
+            "stroke": "#8ecae6",
+            "width": 3,
+            "arrow": "end",
+            "head": 9,
+            "say": "rooftop",
+            "dur": 0.4
+          },
+          {
+            "type": "text",
+            "text": "20–30°C cooler roof",
+            "x": 1740.0,
+            "y": 396,
+            "size": 16,
+            "font": "bold",
+            "fill": "#8ecae6",
+            "anchor": "middle",
+            "say": "thirty",
+            "exitAt": 14,
+            "exit": "fade"
+          },
+          {
+            "type": "rect",
+            "x": 1447,
+            "y": 726,
+            "w": 6,
+            "h": 34,
+            "fill": "muted",
+            "say": "Trees"
+          },
+          {
+            "type": "rect",
+            "x": 1507,
+            "y": 726,
+            "w": 6,
+            "h": 34,
+            "fill": "muted",
+            "say": "Trees"
+          },
+          {
+            "type": "rect",
+            "x": 1567,
+            "y": 726,
+            "w": 6,
+            "h": 34,
+            "fill": "muted",
+            "say": "Trees"
+          },
+          {
+            "type": "rect",
+            "x": 1627,
+            "y": 726,
+            "w": 6,
+            "h": 34,
+            "fill": "muted",
+            "say": "Trees"
+          },
+          {
+            "type": "circle",
+            "cx": 1450,
+            "cy": 720,
+            "r": 15,
+            "fill": "positive",
+            "opacity": 0.85,
+            "say": "Trees",
+            "origin": [
+              1450,
+              720
+            ],
+            "keys": [
+              {
+                "say": "continuous",
+                "scale": 2.1,
+                "dur": 0.9,
+                "ease": "spring"
+              }
+            ]
+          },
+          {
+            "type": "circle",
+            "cx": 1510,
+            "cy": 720,
+            "r": 15,
+            "fill": "positive",
+            "opacity": 0.85,
+            "say": "Trees",
+            "origin": [
+              1510,
+              720
+            ],
+            "keys": [
+              {
+                "say": "continuous",
+                "scale": 2.1,
+                "dur": 0.9,
+                "ease": "spring"
+              }
+            ]
+          },
+          {
+            "type": "circle",
+            "cx": 1570,
+            "cy": 720,
+            "r": 15,
+            "fill": "positive",
+            "opacity": 0.85,
+            "say": "Trees",
+            "origin": [
+              1570,
+              720
+            ],
+            "keys": [
+              {
+                "say": "continuous",
+                "scale": 2.1,
+                "dur": 0.9,
+                "ease": "spring"
+              }
+            ]
+          },
+          {
+            "type": "circle",
+            "cx": 1630,
+            "cy": 720,
+            "r": 15,
+            "fill": "positive",
+            "opacity": 0.85,
+            "say": "Trees",
+            "origin": [
+              1630,
+              720
+            ],
+            "keys": [
+              {
+                "say": "continuous",
+                "scale": 2.1,
+                "dur": 0.9,
+                "ease": "spring"
+              }
+            ]
+          },
+          {
+            "type": "rect",
+            "x": 1470,
+            "y": 644,
+            "w": 140,
+            "h": 28,
+            "r": 6,
+            "fill": "bg",
+            "opacity": 0.85,
+            "say": "canopy",
+            "exitAt": 14,
+            "exit": "fade"
+          },
+          {
+            "type": "text",
+            "text": "1–2°C cooler air",
+            "x": 1540,
+            "y": 664,
+            "size": 16,
+            "font": "bold",
+            "fill": "positive",
+            "anchor": "middle",
+            "say": "canopy",
+            "exitAt": 14,
+            "exit": "fade"
+          }
+        ],
+        "source": "Cooling Interventions Meta-analysis (synthetic) [4]"
+      },
+      "style": "brighter, practical",
+      "tail": 1.3
+    },
+    {
+      "id": "gap",
+      "block": "canvas",
+      "vo": "Yet only eighteen of a hundred cities surveyed have a heat plan.",
+      "props": {
+        "world": "city",
+        "view": [
+          2380,
+          1150,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "type": "group",
+            "at": 0.1,
+            "stagger": 0.006,
+            "children": [
+              {
+                "type": "path",
+                "d": "M 2500 1440 L 2500 1422 L 2514 1422 L 2514 1408 L 2530 1408 L 2530 1426 L 2544 1426 L 2544 1414 L 2558 1414 L 2558 1440 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1440 L 2578 1422 L 2592 1422 L 2592 1408 L 2608 1408 L 2608 1426 L 2622 1426 L 2622 1414 L 2636 1414 L 2636 1440 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1440 L 2656 1422 L 2670 1422 L 2670 1408 L 2686 1408 L 2686 1426 L 2700 1426 L 2700 1414 L 2714 1414 L 2714 1440 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1440 L 2734 1422 L 2748 1422 L 2748 1408 L 2764 1408 L 2764 1426 L 2778 1426 L 2778 1414 L 2792 1414 L 2792 1440 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1440 L 2812 1422 L 2826 1422 L 2826 1408 L 2842 1408 L 2842 1426 L 2856 1426 L 2856 1414 L 2870 1414 L 2870 1440 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1440 L 2890 1422 L 2904 1422 L 2904 1408 L 2920 1408 L 2920 1426 L 2934 1426 L 2934 1414 L 2948 1414 L 2948 1440 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1440 L 2968 1422 L 2982 1422 L 2982 1408 L 2998 1408 L 2998 1426 L 3012 1426 L 3012 1414 L 3026 1414 L 3026 1440 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1440 L 3046 1422 L 3060 1422 L 3060 1408 L 3076 1408 L 3076 1426 L 3090 1426 L 3090 1414 L 3104 1414 L 3104 1440 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1440 L 3124 1422 L 3138 1422 L 3138 1408 L 3154 1408 L 3154 1426 L 3168 1426 L 3168 1414 L 3182 1414 L 3182 1440 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1440 L 3202 1422 L 3216 1422 L 3216 1408 L 3232 1408 L 3232 1426 L 3246 1426 L 3246 1414 L 3260 1414 L 3260 1440 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1496 L 2500 1478 L 2514 1478 L 2514 1464 L 2530 1464 L 2530 1482 L 2544 1482 L 2544 1470 L 2558 1470 L 2558 1496 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1496 L 2578 1478 L 2592 1478 L 2592 1464 L 2608 1464 L 2608 1482 L 2622 1482 L 2622 1470 L 2636 1470 L 2636 1496 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1496 L 2656 1478 L 2670 1478 L 2670 1464 L 2686 1464 L 2686 1482 L 2700 1482 L 2700 1470 L 2714 1470 L 2714 1496 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1496 L 2734 1478 L 2748 1478 L 2748 1464 L 2764 1464 L 2764 1482 L 2778 1482 L 2778 1470 L 2792 1470 L 2792 1496 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1496 L 2812 1478 L 2826 1478 L 2826 1464 L 2842 1464 L 2842 1482 L 2856 1482 L 2856 1470 L 2870 1470 L 2870 1496 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1496 L 2890 1478 L 2904 1478 L 2904 1464 L 2920 1464 L 2920 1482 L 2934 1482 L 2934 1470 L 2948 1470 L 2948 1496 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1496 L 2968 1478 L 2982 1478 L 2982 1464 L 2998 1464 L 2998 1482 L 3012 1482 L 3012 1470 L 3026 1470 L 3026 1496 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1496 L 3046 1478 L 3060 1478 L 3060 1464 L 3076 1464 L 3076 1482 L 3090 1482 L 3090 1470 L 3104 1470 L 3104 1496 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1496 L 3124 1478 L 3138 1478 L 3138 1464 L 3154 1464 L 3154 1482 L 3168 1482 L 3168 1470 L 3182 1470 L 3182 1496 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1496 L 3202 1478 L 3216 1478 L 3216 1464 L 3232 1464 L 3232 1482 L 3246 1482 L 3246 1470 L 3260 1470 L 3260 1496 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1552 L 2500 1534 L 2514 1534 L 2514 1520 L 2530 1520 L 2530 1538 L 2544 1538 L 2544 1526 L 2558 1526 L 2558 1552 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1552 L 2578 1534 L 2592 1534 L 2592 1520 L 2608 1520 L 2608 1538 L 2622 1538 L 2622 1526 L 2636 1526 L 2636 1552 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1552 L 2656 1534 L 2670 1534 L 2670 1520 L 2686 1520 L 2686 1538 L 2700 1538 L 2700 1526 L 2714 1526 L 2714 1552 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1552 L 2734 1534 L 2748 1534 L 2748 1520 L 2764 1520 L 2764 1538 L 2778 1538 L 2778 1526 L 2792 1526 L 2792 1552 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1552 L 2812 1534 L 2826 1534 L 2826 1520 L 2842 1520 L 2842 1538 L 2856 1538 L 2856 1526 L 2870 1526 L 2870 1552 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1552 L 2890 1534 L 2904 1534 L 2904 1520 L 2920 1520 L 2920 1538 L 2934 1538 L 2934 1526 L 2948 1526 L 2948 1552 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1552 L 2968 1534 L 2982 1534 L 2982 1520 L 2998 1520 L 2998 1538 L 3012 1538 L 3012 1526 L 3026 1526 L 3026 1552 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1552 L 3046 1534 L 3060 1534 L 3060 1520 L 3076 1520 L 3076 1538 L 3090 1538 L 3090 1526 L 3104 1526 L 3104 1552 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1552 L 3124 1534 L 3138 1534 L 3138 1520 L 3154 1520 L 3154 1538 L 3168 1538 L 3168 1526 L 3182 1526 L 3182 1552 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1552 L 3202 1534 L 3216 1534 L 3216 1520 L 3232 1520 L 3232 1538 L 3246 1538 L 3246 1526 L 3260 1526 L 3260 1552 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1608 L 2500 1590 L 2514 1590 L 2514 1576 L 2530 1576 L 2530 1594 L 2544 1594 L 2544 1582 L 2558 1582 L 2558 1608 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1608 L 2578 1590 L 2592 1590 L 2592 1576 L 2608 1576 L 2608 1594 L 2622 1594 L 2622 1582 L 2636 1582 L 2636 1608 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1608 L 2656 1590 L 2670 1590 L 2670 1576 L 2686 1576 L 2686 1594 L 2700 1594 L 2700 1582 L 2714 1582 L 2714 1608 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1608 L 2734 1590 L 2748 1590 L 2748 1576 L 2764 1576 L 2764 1594 L 2778 1594 L 2778 1582 L 2792 1582 L 2792 1608 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1608 L 2812 1590 L 2826 1590 L 2826 1576 L 2842 1576 L 2842 1594 L 2856 1594 L 2856 1582 L 2870 1582 L 2870 1608 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1608 L 2890 1590 L 2904 1590 L 2904 1576 L 2920 1576 L 2920 1594 L 2934 1594 L 2934 1582 L 2948 1582 L 2948 1608 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1608 L 2968 1590 L 2982 1590 L 2982 1576 L 2998 1576 L 2998 1594 L 3012 1594 L 3012 1582 L 3026 1582 L 3026 1608 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1608 L 3046 1590 L 3060 1590 L 3060 1576 L 3076 1576 L 3076 1594 L 3090 1594 L 3090 1582 L 3104 1582 L 3104 1608 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1608 L 3124 1590 L 3138 1590 L 3138 1576 L 3154 1576 L 3154 1594 L 3168 1594 L 3168 1582 L 3182 1582 L 3182 1608 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1608 L 3202 1590 L 3216 1590 L 3216 1576 L 3232 1576 L 3232 1594 L 3246 1594 L 3246 1582 L 3260 1582 L 3260 1608 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1664 L 2500 1646 L 2514 1646 L 2514 1632 L 2530 1632 L 2530 1650 L 2544 1650 L 2544 1638 L 2558 1638 L 2558 1664 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1664 L 2578 1646 L 2592 1646 L 2592 1632 L 2608 1632 L 2608 1650 L 2622 1650 L 2622 1638 L 2636 1638 L 2636 1664 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1664 L 2656 1646 L 2670 1646 L 2670 1632 L 2686 1632 L 2686 1650 L 2700 1650 L 2700 1638 L 2714 1638 L 2714 1664 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1664 L 2734 1646 L 2748 1646 L 2748 1632 L 2764 1632 L 2764 1650 L 2778 1650 L 2778 1638 L 2792 1638 L 2792 1664 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1664 L 2812 1646 L 2826 1646 L 2826 1632 L 2842 1632 L 2842 1650 L 2856 1650 L 2856 1638 L 2870 1638 L 2870 1664 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1664 L 2890 1646 L 2904 1646 L 2904 1632 L 2920 1632 L 2920 1650 L 2934 1650 L 2934 1638 L 2948 1638 L 2948 1664 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1664 L 2968 1646 L 2982 1646 L 2982 1632 L 2998 1632 L 2998 1650 L 3012 1650 L 3012 1638 L 3026 1638 L 3026 1664 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1664 L 3046 1646 L 3060 1646 L 3060 1632 L 3076 1632 L 3076 1650 L 3090 1650 L 3090 1638 L 3104 1638 L 3104 1664 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1664 L 3124 1646 L 3138 1646 L 3138 1632 L 3154 1632 L 3154 1650 L 3168 1650 L 3168 1638 L 3182 1638 L 3182 1664 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1664 L 3202 1646 L 3216 1646 L 3216 1632 L 3232 1632 L 3232 1650 L 3246 1650 L 3246 1638 L 3260 1638 L 3260 1664 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1720 L 2500 1702 L 2514 1702 L 2514 1688 L 2530 1688 L 2530 1706 L 2544 1706 L 2544 1694 L 2558 1694 L 2558 1720 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1720 L 2578 1702 L 2592 1702 L 2592 1688 L 2608 1688 L 2608 1706 L 2622 1706 L 2622 1694 L 2636 1694 L 2636 1720 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1720 L 2656 1702 L 2670 1702 L 2670 1688 L 2686 1688 L 2686 1706 L 2700 1706 L 2700 1694 L 2714 1694 L 2714 1720 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1720 L 2734 1702 L 2748 1702 L 2748 1688 L 2764 1688 L 2764 1706 L 2778 1706 L 2778 1694 L 2792 1694 L 2792 1720 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1720 L 2812 1702 L 2826 1702 L 2826 1688 L 2842 1688 L 2842 1706 L 2856 1706 L 2856 1694 L 2870 1694 L 2870 1720 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1720 L 2890 1702 L 2904 1702 L 2904 1688 L 2920 1688 L 2920 1706 L 2934 1706 L 2934 1694 L 2948 1694 L 2948 1720 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1720 L 2968 1702 L 2982 1702 L 2982 1688 L 2998 1688 L 2998 1706 L 3012 1706 L 3012 1694 L 3026 1694 L 3026 1720 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1720 L 3046 1702 L 3060 1702 L 3060 1688 L 3076 1688 L 3076 1706 L 3090 1706 L 3090 1694 L 3104 1694 L 3104 1720 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1720 L 3124 1702 L 3138 1702 L 3138 1688 L 3154 1688 L 3154 1706 L 3168 1706 L 3168 1694 L 3182 1694 L 3182 1720 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1720 L 3202 1702 L 3216 1702 L 3216 1688 L 3232 1688 L 3232 1706 L 3246 1706 L 3246 1694 L 3260 1694 L 3260 1720 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1776 L 2500 1758 L 2514 1758 L 2514 1744 L 2530 1744 L 2530 1762 L 2544 1762 L 2544 1750 L 2558 1750 L 2558 1776 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1776 L 2578 1758 L 2592 1758 L 2592 1744 L 2608 1744 L 2608 1762 L 2622 1762 L 2622 1750 L 2636 1750 L 2636 1776 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1776 L 2656 1758 L 2670 1758 L 2670 1744 L 2686 1744 L 2686 1762 L 2700 1762 L 2700 1750 L 2714 1750 L 2714 1776 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1776 L 2734 1758 L 2748 1758 L 2748 1744 L 2764 1744 L 2764 1762 L 2778 1762 L 2778 1750 L 2792 1750 L 2792 1776 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1776 L 2812 1758 L 2826 1758 L 2826 1744 L 2842 1744 L 2842 1762 L 2856 1762 L 2856 1750 L 2870 1750 L 2870 1776 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1776 L 2890 1758 L 2904 1758 L 2904 1744 L 2920 1744 L 2920 1762 L 2934 1762 L 2934 1750 L 2948 1750 L 2948 1776 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1776 L 2968 1758 L 2982 1758 L 2982 1744 L 2998 1744 L 2998 1762 L 3012 1762 L 3012 1750 L 3026 1750 L 3026 1776 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1776 L 3046 1758 L 3060 1758 L 3060 1744 L 3076 1744 L 3076 1762 L 3090 1762 L 3090 1750 L 3104 1750 L 3104 1776 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1776 L 3124 1758 L 3138 1758 L 3138 1744 L 3154 1744 L 3154 1762 L 3168 1762 L 3168 1750 L 3182 1750 L 3182 1776 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1776 L 3202 1758 L 3216 1758 L 3216 1744 L 3232 1744 L 3232 1762 L 3246 1762 L 3246 1750 L 3260 1750 L 3260 1776 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1832 L 2500 1814 L 2514 1814 L 2514 1800 L 2530 1800 L 2530 1818 L 2544 1818 L 2544 1806 L 2558 1806 L 2558 1832 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1832 L 2578 1814 L 2592 1814 L 2592 1800 L 2608 1800 L 2608 1818 L 2622 1818 L 2622 1806 L 2636 1806 L 2636 1832 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1832 L 2656 1814 L 2670 1814 L 2670 1800 L 2686 1800 L 2686 1818 L 2700 1818 L 2700 1806 L 2714 1806 L 2714 1832 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1832 L 2734 1814 L 2748 1814 L 2748 1800 L 2764 1800 L 2764 1818 L 2778 1818 L 2778 1806 L 2792 1806 L 2792 1832 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1832 L 2812 1814 L 2826 1814 L 2826 1800 L 2842 1800 L 2842 1818 L 2856 1818 L 2856 1806 L 2870 1806 L 2870 1832 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1832 L 2890 1814 L 2904 1814 L 2904 1800 L 2920 1800 L 2920 1818 L 2934 1818 L 2934 1806 L 2948 1806 L 2948 1832 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1832 L 2968 1814 L 2982 1814 L 2982 1800 L 2998 1800 L 2998 1818 L 3012 1818 L 3012 1806 L 3026 1806 L 3026 1832 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1832 L 3046 1814 L 3060 1814 L 3060 1800 L 3076 1800 L 3076 1818 L 3090 1818 L 3090 1806 L 3104 1806 L 3104 1832 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1832 L 3124 1814 L 3138 1814 L 3138 1800 L 3154 1800 L 3154 1818 L 3168 1818 L 3168 1806 L 3182 1806 L 3182 1832 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1832 L 3202 1814 L 3216 1814 L 3216 1800 L 3232 1800 L 3232 1818 L 3246 1818 L 3246 1806 L 3260 1806 L 3260 1832 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1888 L 2500 1870 L 2514 1870 L 2514 1856 L 2530 1856 L 2530 1874 L 2544 1874 L 2544 1862 L 2558 1862 L 2558 1888 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1888 L 2578 1870 L 2592 1870 L 2592 1856 L 2608 1856 L 2608 1874 L 2622 1874 L 2622 1862 L 2636 1862 L 2636 1888 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1888 L 2656 1870 L 2670 1870 L 2670 1856 L 2686 1856 L 2686 1874 L 2700 1874 L 2700 1862 L 2714 1862 L 2714 1888 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1888 L 2734 1870 L 2748 1870 L 2748 1856 L 2764 1856 L 2764 1874 L 2778 1874 L 2778 1862 L 2792 1862 L 2792 1888 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1888 L 2812 1870 L 2826 1870 L 2826 1856 L 2842 1856 L 2842 1874 L 2856 1874 L 2856 1862 L 2870 1862 L 2870 1888 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1888 L 2890 1870 L 2904 1870 L 2904 1856 L 2920 1856 L 2920 1874 L 2934 1874 L 2934 1862 L 2948 1862 L 2948 1888 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1888 L 2968 1870 L 2982 1870 L 2982 1856 L 2998 1856 L 2998 1874 L 3012 1874 L 3012 1862 L 3026 1862 L 3026 1888 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1888 L 3046 1870 L 3060 1870 L 3060 1856 L 3076 1856 L 3076 1874 L 3090 1874 L 3090 1862 L 3104 1862 L 3104 1888 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1888 L 3124 1870 L 3138 1870 L 3138 1856 L 3154 1856 L 3154 1874 L 3168 1874 L 3168 1862 L 3182 1862 L 3182 1888 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1888 L 3202 1870 L 3216 1870 L 3216 1856 L 3232 1856 L 3232 1874 L 3246 1874 L 3246 1862 L 3260 1862 L 3260 1888 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1944 L 2500 1926 L 2514 1926 L 2514 1912 L 2530 1912 L 2530 1930 L 2544 1930 L 2544 1918 L 2558 1918 L 2558 1944 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1944 L 2578 1926 L 2592 1926 L 2592 1912 L 2608 1912 L 2608 1930 L 2622 1930 L 2622 1918 L 2636 1918 L 2636 1944 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1944 L 2656 1926 L 2670 1926 L 2670 1912 L 2686 1912 L 2686 1930 L 2700 1930 L 2700 1918 L 2714 1918 L 2714 1944 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1944 L 2734 1926 L 2748 1926 L 2748 1912 L 2764 1912 L 2764 1930 L 2778 1930 L 2778 1918 L 2792 1918 L 2792 1944 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1944 L 2812 1926 L 2826 1926 L 2826 1912 L 2842 1912 L 2842 1930 L 2856 1930 L 2856 1918 L 2870 1918 L 2870 1944 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1944 L 2890 1926 L 2904 1926 L 2904 1912 L 2920 1912 L 2920 1930 L 2934 1930 L 2934 1918 L 2948 1918 L 2948 1944 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1944 L 2968 1926 L 2982 1926 L 2982 1912 L 2998 1912 L 2998 1930 L 3012 1930 L 3012 1918 L 3026 1918 L 3026 1944 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1944 L 3046 1926 L 3060 1926 L 3060 1912 L 3076 1912 L 3076 1930 L 3090 1930 L 3090 1918 L 3104 1918 L 3104 1944 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1944 L 3124 1926 L 3138 1926 L 3138 1912 L 3154 1912 L 3154 1930 L 3168 1930 L 3168 1918 L 3182 1918 L 3182 1944 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1944 L 3202 1926 L 3216 1926 L 3216 1912 L 3232 1912 L 3232 1930 L 3246 1930 L 3246 1918 L 3260 1918 L 3260 1944 Z",
+                "fill": "surface",
+                "stroke": "line",
+                "width": 1.5,
+                "enter": "fade"
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "say": "eighteen",
+            "stagger": 0.03,
+            "children": [
+              {
+                "type": "path",
+                "d": "M 2734 1440 L 2734 1422 L 2748 1422 L 2748 1408 L 2764 1408 L 2764 1426 L 2778 1426 L 2778 1414 L 2792 1414 L 2792 1440 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 3046 1440 L 3046 1422 L 3060 1422 L 3060 1408 L 3076 1408 L 3076 1426 L 3090 1426 L 3090 1414 L 3104 1414 L 3104 1440 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1496 L 2578 1478 L 2592 1478 L 2592 1464 L 2608 1464 L 2608 1482 L 2622 1482 L 2622 1470 L 2636 1470 L 2636 1496 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1496 L 3124 1478 L 3138 1478 L 3138 1464 L 3154 1464 L 3154 1482 L 3168 1482 L 3168 1470 L 3182 1470 L 3182 1496 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1552 L 2656 1534 L 2670 1534 L 2670 1520 L 2686 1520 L 2686 1538 L 2700 1538 L 2700 1526 L 2714 1526 L 2714 1552 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1552 L 3202 1534 L 3216 1534 L 3216 1520 L 3232 1520 L 3232 1538 L 3246 1538 L 3246 1526 L 3260 1526 L 3260 1552 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2734 1608 L 2734 1590 L 2748 1590 L 2748 1576 L 2764 1576 L 2764 1594 L 2778 1594 L 2778 1582 L 2792 1582 L 2792 1608 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1664 L 2500 1646 L 2514 1646 L 2514 1632 L 2530 1632 L 2530 1650 L 2544 1650 L 2544 1638 L 2558 1638 L 2558 1664 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2812 1664 L 2812 1646 L 2826 1646 L 2826 1632 L 2842 1632 L 2842 1650 L 2856 1650 L 2856 1638 L 2870 1638 L 2870 1664 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 3124 1664 L 3124 1646 L 3138 1646 L 3138 1632 L 3154 1632 L 3154 1650 L 3168 1650 L 3168 1638 L 3182 1638 L 3182 1664 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1720 L 2890 1702 L 2904 1702 L 2904 1688 L 2920 1688 L 2920 1706 L 2934 1706 L 2934 1694 L 2948 1694 L 2948 1720 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 3202 1720 L 3202 1702 L 3216 1702 L 3216 1688 L 3232 1688 L 3232 1706 L 3246 1706 L 3246 1694 L 3260 1694 L 3260 1720 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1776 L 2968 1758 L 2982 1758 L 2982 1744 L 2998 1744 L 2998 1762 L 3012 1762 L 3012 1750 L 3026 1750 L 3026 1776 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2500 1832 L 2500 1814 L 2514 1814 L 2514 1800 L 2530 1800 L 2530 1818 L 2544 1818 L 2544 1806 L 2558 1806 L 2558 1832 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2578 1888 L 2578 1870 L 2592 1870 L 2592 1856 L 2608 1856 L 2608 1874 L 2622 1874 L 2622 1862 L 2636 1862 L 2636 1888 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2890 1888 L 2890 1870 L 2904 1870 L 2904 1856 L 2920 1856 L 2920 1874 L 2934 1874 L 2934 1862 L 2948 1862 L 2948 1888 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2656 1944 L 2656 1926 L 2670 1926 L 2670 1912 L 2686 1912 L 2686 1930 L 2700 1930 L 2700 1918 L 2714 1918 L 2714 1944 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              },
+              {
+                "type": "path",
+                "d": "M 2968 1944 L 2968 1926 L 2982 1926 L 2982 1912 L 2998 1912 L 2998 1930 L 3012 1930 L 3012 1918 L 3026 1918 L 3026 1944 Z",
+                "fill": "accent",
+                "stroke": "none",
+                "enter": "pop"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "18",
+            "x": 3380,
+            "y": 1670,
+            "size": 180,
+            "font": "bold",
+            "fill": "accent",
+            "say": "only",
+            "count": {
+              "from": 0,
+              "to": 18,
+              "dur": 0.8
+            }
+          },
+          {
+            "type": "text",
+            "text": "of 100 cities surveyed",
+            "x": 3380,
+            "y": 1730,
+            "size": 36,
+            "fill": "ink",
+            "say": "hundred"
+          },
+          {
+            "type": "text",
+            "text": "have a heat plan",
+            "x": 3380,
+            "y": 1776,
+            "size": 36,
+            "fill": "muted",
+            "say": "plan"
+          }
+        ],
+        "source": "Heat Plan Survey 2025 (synthetic) [5]"
+      },
+      "style": "slower, pointed",
+      "lead": 0.9,
+      "tail": 0.7
+    },
+    {
+      "id": "end",
+      "block": "canvas",
+      "vo": "Seven degrees, every night. Start with the hottest blocks.",
+      "props": {
+        "world": "city",
+        "view": [
+          -60,
+          -34,
+          2040,
+          1148
+        ],
+        "elements": [
+          {
+            "type": "ellipse",
+            "cx": 1128,
+            "cy": 492.4,
+            "rx": 190,
+            "ry": 104,
+            "fill": "none",
+            "stroke": "accent2",
+            "width": 4,
+            "say": "Seven",
+            "dur": 0.8,
+            "rough": {
+              "amount": 3
+            }
+          },
+          {
+            "type": "text",
+            "text": "Start with the hottest blocks.",
+            "x": 960,
+            "y": 170,
+            "size": 72,
+            "font": "bold",
+            "fill": "ink",
+            "anchor": "middle",
+            "say": "Start"
+          },
+          {
+            "type": "group",
+            "say": "hottest",
+            "stagger": 0.12,
+            "children": [
+              {
+                "type": "ellipse",
+                "cx": 1442.5,
+                "cy": 460,
+                "rx": 76.5,
+                "ry": 36,
+                "fill": {
+                  "gradient": [
+                    "accent2",
+                    "bg"
+                  ],
+                  "radial": true,
+                  "fade": true
+                },
+                "opacity": 0.8,
+                "loop": {
+                  "type": "pulse",
+                  "period": 1.8,
+                  "amount": 0.08
+                }
+              },
+              {
+                "type": "ellipse",
+                "cx": 1740.0,
+                "cy": 500,
+                "rx": 108.0,
+                "ry": 36,
+                "fill": {
+                  "gradient": [
+                    "accent2",
+                    "bg"
+                  ],
+                  "radial": true,
+                  "fade": true
+                },
+                "opacity": 0.8,
+                "loop": {
+                  "type": "pulse",
+                  "period": 1.8,
+                  "amount": 0.08
+                }
+              },
+              {
+                "type": "ellipse",
+                "cx": 1172.5,
+                "cy": 580,
+                "rx": 67.5,
+                "ry": 36,
+                "fill": {
+                  "gradient": [
+                    "accent2",
+                    "bg"
+                  ],
+                  "radial": true,
+                  "fade": true
+                },
+                "opacity": 0.8,
+                "loop": {
+                  "type": "pulse",
+                  "period": 1.8,
+                  "amount": 0.08
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "style": "warm, emphatic",
+      "tail": 1.2
+    }
+  ]
+}

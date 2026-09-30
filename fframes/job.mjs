@@ -470,6 +470,7 @@ function linkWorlds(beats, sb, timing, { warnings }) {
       }
     const name = b.block === 'canvas' && b.props.world;
     if (!name) continue;
+    b.props.viewDrift ??= 0.03;
     const a = last.get(name);
     last.set(name, b);
     if (!a) continue;
@@ -478,10 +479,36 @@ function linkWorlds(beats, sb, timing, { warnings }) {
     const carried = [],
       own = [];
     for (const el of a.props.elements) (el.carried ? carried : own).push(el);
+    const group = (children, behind) => ({
+      type: 'group',
+      carried: true,
+      behind,
+      at: 0,
+      dur: 0,
+      enter: 'none',
+      shift,
+      children,
+    });
+    const moved = g => ({ ...g, shift: g.shift + shift });
+    const layer = behind => [
+      ...carried.filter(g => !!g.behind === behind).map(moved),
+      ...(own.some(el => !!el.behind === behind)
+        ? [
+            group(
+              own.filter(el => !!el.behind === behind),
+              behind,
+            ),
+          ]
+        : []),
+    ];
+    // `behind` elements (a sky changing colour, a glow under the city) stay under the world,
+    // newest above older ones; everything else draws over what came before.
+    const mine = b.props.elements;
     b.props.elements = [
-      ...carried.map(g => ({ ...g, shift: g.shift + shift })),
-      ...(own.length ? [{ type: 'group', carried: true, at: 0, dur: 0, enter: 'none', shift, children: own }] : []),
-      ...b.props.elements,
+      ...layer(true),
+      ...mine.filter(el => el.behind),
+      ...layer(false),
+      ...mine.filter(el => !el.behind),
     ];
     const src = sb.beats[timing.beats[i].index];
     if (adjacent) {
@@ -495,7 +522,10 @@ function linkWorlds(beats, sb, timing, { warnings }) {
       }
     }
     if (!b.props.viewFrom && JSON.stringify(a.props.view) !== JSON.stringify(b.props.view)) {
-      b.props.viewFrom = a.props.view;
+      // Start where the last beat's camera ended: its view, drifted in.
+      const [x, y, w, h] = a.props.view,
+        d = a.props.viewDrift ?? 0;
+      b.props.viewFrom = [x + (w * d) / 2, y + (h * d) / 2, w * (1 - d), h * (1 - d)];
       // Travel with the first new drawing, so the camera arrives as the next stop appears.
       const firstNew = Math.min(...b.props.elements.filter(el => !el.carried).map(el => el.at ?? 0));
       b.props.viewAt ??= Number.isFinite(firstNew) ? Math.max(0, firstNew - 0.25) : 0;

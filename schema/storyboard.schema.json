@@ -2190,6 +2190,9 @@
                     "viewDur": {
                       "description": "Seconds the camera move takes (default 1.2)"
                     },
+                    "viewDrift": {
+                      "description": "After arriving, the camera keeps easing in by this fraction of the view (worlds default 0.03)"
+                    },
                     "world": {
                       "description": "Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views"
                     },

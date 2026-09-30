@@ -376,6 +376,29 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             &self.p.muted,
             Align::Left,
         );
+        // Over a world camera: the credit waits for the camera to arrive at what it credits,
+        // and sits on a soft scrim so drawings passing under it never cross the text.
+        let props = self.props();
+        let source = if self.b.block == "canvas"
+            && arr(props, "view").len() == 4
+            && !s(props, "source").trim().is_empty()
+        {
+            let arrive = if arr(props, "viewFrom").is_empty() {
+                0.0
+            } else {
+                (n(props, "viewAt", 0.0) + n(props, "viewDur", 1.2)) as f32
+            };
+            let alpha = motion::clamp01((self.t - arrive + 0.2) / 0.35);
+            let id = self.uid("scrim");
+            let top = source_y - 70.0;
+            fframes::svgr!(<g opacity={alpha}>
+                <defs><linearGradient id={id.clone()} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color={self.p.bg.clone()} stop-opacity="0" /><stop offset="1" stop-color={self.p.bg.clone()} stop-opacity="0.9" /></linearGradient></defs>
+                <rect x="0" y={top} width={env.width} height={env.height - top} fill={format!("url(#{id})")} />
+                {source}
+            </g>)
+        } else {
+            source
+        };
         let mut captions = empty();
         if env.captions && self.b.block != "kinetic" && env.caption_style == "pop" && !self.b.words.is_empty() {
             captions = self.pop_captions(tall);
