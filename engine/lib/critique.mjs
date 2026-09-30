@@ -475,6 +475,18 @@ export function critique(root) {
       directions[0].id,
       'Stage directions in the narration text will be read aloud. Use an inline tag (<short pause>, <breath>) or the voice style instead.',
     );
+  // A film look promises depth: a lens over flat drawings reads as a filtered slide.
+  const filmLook = beats.some(b => {
+    const l = { ...(sb.lens ?? {}), ...(b.lens ?? {}) };
+    return l.letterbox || l.grade;
+  });
+  const drawings = beats.filter(b => b.block === 'canvas');
+  if (filmLook && drawings.length && !drawings.some(b => /"(z|depth)"\s*:/.test(JSON.stringify(b.props))))
+    add(
+      'idea',
+      'film',
+      'The film has a lens but every drawing is flat. Give places three planes: z on a far layer, the subject and one soft near layer, then let the camera move through them (docs/canvas.md, Depth).',
+    );
   const cinema = cinemaScore(sb, beats, t, transitions);
   for (const tell of cinema.tells) add('idea', 'cinema', `${tell.name}: ${tell.fix}`);
   const summary = {
