@@ -30,6 +30,16 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 
   A treatment can name the playbook it suits, so `new`/`ingest --treatment cinematic` starts from shots rather than a deck. Playbook beats can name a sketch (`"sketch": "tunnel"`, with `sketchText` for its placeholder type) and set the film's `lens`, `heading`, `textMotion` and `transition`.
 - **`critique` scores cinema.** It adds a 0–100 score from the eight tells of a slideshow; each tell names the fix. It also warns when frame-pixel type sits under letterbox bars. A run of world beats counts as one shot, and silent beats and moving-camera canvases count as distinct shots.
+- **The report playbooks are films now.** `research-digest` (what `ingest --markdown` starts from), `data-story` and `concept-explainer` (what `new` starts from):
+  - open on a question or an establishing shot;
+  - show figures as full-frame inserts;
+  - set charts under lower thirds with a moving camera;
+  - pause in silence before the turn;
+  - set the turn as poster type;
+  - add a subtle lens.
+
+  They score 100 on the cinema score, up from 25–63. A beat's `art` can name a sketch (`{"sketch": "ambient"}`).
+- **Fixed:** `view: "auto"` on a canvas was mistaken for a camera rect (the string has four characters) and failed to render.
 - **Held block scenes push in visibly** (about 2% over a beat instead of about 1%).
 - **`docs/cinema.md` and `docs/scorecard.md`.** A film-grammar guide covers:
   - shot scales;

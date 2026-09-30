@@ -119,7 +119,7 @@ export default {
       });
     });
     return {
-      dolly: [{ at: 0.2, z: 0.6, dur: 9, ease: 'out' }],
+      dolly: [{ at: 0.2, z: 0.25, dur: 9, ease: 'out' }],
       focus: { z: 0, aperture: 0.8, keys: [{ at: 2.2, z: 2.2, dur: 1.6 }] },
       elements,
     };

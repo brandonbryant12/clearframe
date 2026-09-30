@@ -5,14 +5,11 @@
   "inputs": "Three to five sourced figures, their dates and denominators",
   "beats": [
     {
-      "id": "chapter",
-      "block": "chapter",
-      "vo": "First, the scale of the problem.",
+      "id": "open",
+      "block": "canvas",
+      "vo": "How long does one request really take?",
       "props": {
-        "number": "01",
-        "title": "How much time a request really takes",
-        "support": "An illustrative week, measured end to end.",
-        "source": "Illustrative sample data · replace before publishing"
+        "sketch": "landscape"
       }
     },
     {
@@ -24,7 +21,15 @@
         "suffix": " days",
         "label": "Median first response",
         "context": "From request to first answer.",
-        "source": "Illustrative sample data · replace before publishing"
+        "source": "Illustrative sample data · replace before publishing",
+        "align": "center",
+        "land": "days"
+      },
+      "transition": "panel",
+      "tone": "accent",
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -49,6 +54,10 @@
         ],
         "format": " people",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "camera": {
+        "move": "right",
+        "amount": 0.8
       }
     },
     {
@@ -78,18 +87,32 @@
         "format": " h",
         "center": "hours per week",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      },
+      "art": {
+        "sketch": "ambient"
+      }
+    },
+    {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
       }
     },
     {
       "id": "highlight",
-      "block": "highlight",
+      "block": "kinetic",
       "vo": "An average can hide a long tail of slow requests.",
       "props": {
-        "text": "An average can hide a long tail of slow requests.",
-        "phrases": ["long tail"],
-        "support": "Look at the distribution, not just the middle.",
-        "source": "Illustrative sample data · replace before publishing"
-      }
+        "mode": "stack",
+        "align": "center",
+        "emphasis": ["long tail"]
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",
@@ -99,10 +122,27 @@
         "title": "Start with the wait.",
         "support": "One number, measured the same way every week.",
         "action": "Pick your first metric",
-        "source": "Illustrative sample data · replace before publishing"
-      }
+        "source": "Illustrative sample data · replace before publishing",
+        "align": "center"
+      },
+      "hold": 1
     }
   ],
   "theme": "midnight",
-  "backdrop": "glow"
+  "backdrop": "glow",
+  "heading": "bottom",
+  "textMotion": "words",
+  "transition": "cut",
+  "texture": {
+    "grain": 0.25,
+    "vignette": 0.4
+  },
+  "lens": {
+    "grade": "cool",
+    "gradeAmount": 0.3,
+    "bloom": 0.3,
+    "handheld": 0.12,
+    "blur": 0.5
+  },
+  "note": "The opening landscape is sample data drawn as a place: compute its heights from real values or replace it. Numbers are full-frame inserts; the turn is poster type after a silence."
 }

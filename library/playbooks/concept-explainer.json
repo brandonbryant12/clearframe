@@ -13,18 +13,24 @@
         "text": "Why headroom matters",
         "support": "One idea, supported by evidence.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      },
+      "art": {
+        "sketch": "ambient"
       }
     },
     {
       "id": "equation",
-      "block": "equation",
+      "block": "canvas",
       "vo": "Subtract demand from capacity. What remains is headroom.",
       "props": {
-        "title": "Leave room for variation",
-        "expression": "Capacity − demand",
-        "result": "= headroom",
-        "explanation": "Headroom absorbs the unexpected.",
-        "source": "Illustrative sample data · replace before publishing"
+        "title": "Capacity against demand",
+        "sketch": "balance",
+        "source": "Illustrative sample data · replace before publishing",
+        "view": "auto"
       }
     },
     {
@@ -38,20 +44,33 @@
         "cols": 10,
         "label": "A forecast, not a guarantee",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "transition": "panel",
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      }
+    },
+    {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
       }
     },
     {
       "id": "callout",
-      "block": "callout",
+      "block": "statement",
       "vo": "An average can hide the moments when demand spikes.",
       "props": {
-        "label": "The caveat",
-        "icon": "alert",
         "text": "An average can hide a long tail.",
         "emphasis": ["long tail"],
+        "emphasisStyle": "serif",
+        "align": "center",
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"
-      }
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",
@@ -61,8 +80,25 @@
         "title": "Make the next step smaller.",
         "support": "Start with one handoff this week.",
         "action": "Choose an owner. Measure the wait.",
-        "source": "Illustrative sample data · replace before publishing"
-      }
+        "source": "Illustrative sample data · replace before publishing",
+        "align": "center"
+      },
+      "hold": 1
     }
-  ]
+  ],
+  "backdrop": "glow",
+  "heading": "bottom",
+  "textMotion": "words",
+  "transition": "cut",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.3,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  }
 }

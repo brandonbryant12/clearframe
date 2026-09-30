@@ -11,11 +11,24 @@
     "preset": "gentle",
     "intensity": 0.65
   },
-  "transition": "fade",
-  "backdrop": "none",
+  "transition": "cut",
+  "backdrop": "glow",
   "chrome": false,
   "captions": false,
   "music": false,
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.3,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  },
+  "heading": "bottom",
+  "textMotion": "words",
   "sources": [
     {
       "id": "sample",
@@ -39,18 +52,278 @@
         "text": "Why headroom matters",
         "support": "One idea, supported by evidence.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      },
+      "art": {
+        "under": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "dust",
+            "count": 36,
+            "fill": "ink",
+            "opacity": 0.35,
+            "size": 3,
+            "at": 0
+          },
+          {
+            "type": "circle",
+            "cx": 288,
+            "cy": 216,
+            "r": 422.4,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 9,
+              "amount": 18
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 1574.4,
+            "cy": 324,
+            "r": 576,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "float",
+              "period": 11.5,
+              "amount": 22
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 1344,
+            "cy": 918,
+            "r": 384,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 14,
+              "amount": 26
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 576,
+            "cy": 864,
+            "r": 307.2,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "float",
+              "period": 16.5,
+              "amount": 30
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 960,
+            "cy": 486,
+            "r": 230.4,
+            "fill": {
+              "gradient": [
+                "ink",
+                "ink"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 19,
+              "amount": 34
+            }
+          }
+        ]
       }
     },
     {
       "id": "equation",
-      "block": "equation",
+      "block": "canvas",
       "vo": "Subtract demand from capacity. What remains is headroom.",
       "props": {
-        "title": "Leave room for variation",
-        "expression": "Capacity − demand",
-        "result": "= headroom",
-        "explanation": "Headroom absorbs the unexpected.",
-        "source": "Illustrative sample data · replace before publishing"
+        "title": "Capacity against demand",
+        "source": "Illustrative sample data · replace before publishing",
+        "view": "auto",
+        "elements": [
+          {
+            "type": "poly",
+            "points": [
+              [
+                960,
+                570
+              ],
+              [
+                870,
+                900
+              ],
+              [
+                1050,
+                900
+              ]
+            ],
+            "closed": true,
+            "fill": "surface",
+            "at": 0.2
+          },
+          {
+            "type": "group",
+            "at": 0.5,
+            "origin": [
+              960,
+              570
+            ],
+            "keys": [
+              {
+                "at": 1.6,
+                "rotate": -9,
+                "dur": 0.9,
+                "ease": "spring"
+              }
+            ],
+            "children": [
+              {
+                "type": "rect",
+                "x": 410,
+                "y": 562,
+                "w": 1100,
+                "h": 16,
+                "r": 8,
+                "fill": "ink",
+                "enter": "grow-x",
+                "origin": [
+                  960,
+                  570
+                ]
+              },
+              {
+                "type": "group",
+                "children": [
+                  {
+                    "type": "line",
+                    "x1": 410,
+                    "y1": 570,
+                    "x2": 410,
+                    "y2": 690,
+                    "stroke": "muted",
+                    "width": 4,
+                    "enter": "fade"
+                  },
+                  {
+                    "type": "path",
+                    "d": "M 300 690 Q 410 770 520 690 Z",
+                    "fill": "accent2",
+                    "enter": "fade"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Cost",
+                    "x": 410,
+                    "y": 820,
+                    "size": 40,
+                    "anchor": "middle",
+                    "font": "semibold",
+                    "fill": "ink",
+                    "enter": "fade"
+                  }
+                ]
+              },
+              {
+                "type": "group",
+                "children": [
+                  {
+                    "type": "line",
+                    "x1": 1510,
+                    "y1": 570,
+                    "x2": 1510,
+                    "y2": 690,
+                    "stroke": "muted",
+                    "width": 4,
+                    "enter": "fade"
+                  },
+                  {
+                    "type": "path",
+                    "d": "M 1400 690 Q 1510 770 1620 690 Z",
+                    "fill": "accent",
+                    "enter": "fade"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Benefit",
+                    "x": 1510,
+                    "y": 820,
+                    "size": 40,
+                    "anchor": "middle",
+                    "font": "semibold",
+                    "fill": "ink",
+                    "enter": "fade"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "circle",
+            "cx": 960,
+            "cy": 570,
+            "r": 14,
+            "fill": "accent",
+            "at": 0.4
+          }
+        ]
       }
     },
     {
@@ -64,22 +337,76 @@
         "cols": 10,
         "label": "A forecast, not a guarantee",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "transition": "panel",
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      }
+    },
+    {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "elements": [
+          {
+            "type": "ellipse",
+            "cx": 960,
+            "cy": 540,
+            "rx": 576,
+            "ry": 129.6,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.08,
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 1.6,
+            "loop": {
+              "type": "pulse",
+              "period": 2.4,
+              "amount": 0.06
+            }
+          },
+          {
+            "type": "line",
+            "x1": 895.2,
+            "y1": 540,
+            "x2": 1024.8,
+            "y2": 540,
+            "stroke": "ink",
+            "width": 2,
+            "cap": "round",
+            "glow": {
+              "blur": 8
+            },
+            "at": 0.4,
+            "enter": "draw",
+            "dur": 1.2
+          }
+        ]
       }
     },
     {
       "id": "callout",
-      "block": "callout",
+      "block": "statement",
       "vo": "An average can hide the moments when demand spikes.",
       "props": {
-        "label": "The caveat",
-        "icon": "alert",
         "text": "An average can hide a long tail.",
         "emphasis": [
           "long tail"
         ],
+        "emphasisStyle": "serif",
+        "align": "center",
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"
-      }
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",
@@ -89,8 +416,10 @@
         "title": "Make the next step smaller.",
         "support": "Start with one handoff this week.",
         "action": "Choose an owner. Measure the wait.",
-        "source": "Illustrative sample data · replace before publishing"
-      }
+        "source": "Illustrative sample data · replace before publishing",
+        "align": "center"
+      },
+      "hold": 1
     }
   ]
 }

@@ -216,7 +216,8 @@ function withoutCameraCuts(report, job) {
     const out = [];
     // A camera rect frames part of a larger drawing; cropping what lies outside is the point.
     // job.mjs checks the beat's own text against its view instead.
-    if (b.block === 'canvas' && b.props.view?.length === 4) out.push([b.start_frame, b.start_frame + b.frames]);
+    if (b.block === 'canvas' && Array.isArray(b.props.view) && b.props.view.length === 4)
+      out.push([b.start_frame, b.start_frame + b.frames]);
     if (moving.includes(b.transition)) out.push([b.start_frame, b.start_frame + edge]);
     if (moving.includes(b.exit)) out.push([b.start_frame + b.frames - edge, b.start_frame + b.frames]);
     return out;

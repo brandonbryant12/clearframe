@@ -17,19 +17,22 @@
         "align": "center",
         "land": "Thirty-seven"
       },
-      "tone": "accent",
-      "transition": "cut"
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      },
+      "art": {
+        "sketch": "ambient"
+      }
     },
     {
       "id": "question",
-      "block": "statement",
+      "block": "kinetic",
       "vo": "So why do we still assume the opposite?",
       "props": {
-        "text": "Why do we assume the opposite?",
-        "emphasis": ["opposite"],
-        "source": "Illustrative sample data · replace before publishing",
-        "emphasisStyle": "serif",
-        "align": "center"
+        "mode": "stack",
+        "align": "center",
+        "emphasis": ["the opposite"]
       },
       "transition": "panel"
     },
@@ -39,7 +42,6 @@
       "vo": "Here is the mechanism, step by step: collect, clean, model, then ship.",
       "props": {
         "title": "How it actually works",
-        "view": [1600, 640],
         "stagger": 0.12,
         "elements": [
           {
@@ -206,9 +208,13 @@
           }
         ],
         "source": "Illustrative sample data · replace before publishing",
-        "sketch": "pipeline"
+        "sketch": "pipeline",
+        "view": "auto"
       },
-      "transition": "push"
+      "camera": {
+        "move": "in",
+        "amount": 0.9
+      }
     },
     {
       "id": "evidence",
@@ -239,7 +245,6 @@
         "source": "Illustrative sample data · replace before publishing",
         "growSay": "evidence"
       },
-      "transition": "push",
       "art": {
         "over": [
           {
@@ -262,6 +267,17 @@
             "say": "outlier"
           }
         ]
+      },
+      "camera": {
+        "move": "right",
+        "amount": 0.8
+      }
+    },
+    {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
       }
     },
     {
@@ -280,17 +296,15 @@
     },
     {
       "id": "meaning",
-      "block": "callout",
+      "block": "statement",
       "vo": "So act on the distribution, not the average.",
       "props": {
-        "label": "What it means",
-        "icon": "lightbulb",
-        "text": "Act on the distribution.",
+        "text": "Act on the distribution, not the average.",
         "emphasis": ["distribution"],
-        "support": "Look at the distribution before choosing a target.",
+        "emphasisStyle": "serif",
+        "align": "center",
         "source": "Illustrative sample data · replace before publishing"
-      },
-      "transition": "fade"
+      }
     },
     {
       "id": "end",
@@ -300,22 +314,29 @@
         "support": "Start with one handoff this week.",
         "action": "Open the report",
         "source": "Illustrative sample data · replace before publishing",
-        "text": "Read the whole story."
+        "text": "Read the whole story.",
+        "align": "center"
       },
-      "transition": "fade"
+      "hold": 1
     }
   ],
   "theme": "noir",
   "backdrop": "glow",
-  "motion": "spring",
+  "motion": "gentle",
   "texture": {
     "grain": 0.35,
     "vignette": 0.5
   },
-  "frame": {
-    "brand": "Research digest",
-    "left": "Sources on screen",
-    "right": "Illustrative sample"
-  },
-  "note": "Start from clearframe ingest --markdown report.md: it writes BRIEF.md with every figure, its sentence and its source, plus tensions and chart-ready tables. Replace every sample claim; lead with the question and the surprise, not the report's section order."
+  "note": "Start from clearframe ingest --markdown report.md: it writes BRIEF.md with every figure, its sentence and its source, plus tensions and chart-ready tables. Replace every sample claim; lead with the question and the surprise, not the report's section order. Shots, not slides: the figure as a full-frame insert, the question as poster type, charts under lower thirds with a moving camera, a silence before the turn.",
+  "heading": "bottom",
+  "textMotion": "words",
+  "transition": "cut",
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.35,
+    "bloom": 0.3,
+    "leak": 0.1,
+    "handheld": 0.15,
+    "blur": 0.5
+  }
 }

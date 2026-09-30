@@ -550,7 +550,7 @@ function linkWorlds(beats, sb, timing, { warnings }) {
     const b = beats[i];
     // A camera rect authored for another frame shape (a landscape world in a vertical cut)
     // is re-framed on what this beat draws.
-    if (b.block === 'canvas' && b.props.view?.length === 4) {
+    if (b.block === 'canvas' && Array.isArray(b.props.view) && b.props.view.length === 4) {
       const tall = timing.height > timing.width;
       b.props.view =
         tall && b.props.viewTall
@@ -559,7 +559,7 @@ function linkWorlds(beats, sb, timing, { warnings }) {
     }
     if (b.block === 'canvas') delete b.props.viewTall;
     // The camera crops the world on purpose, but a beat's own words must be in its shot.
-    const v = b.block === 'canvas' && b.props.view?.length === 4 && b.props.view;
+    const v = b.block === 'canvas' && Array.isArray(b.props.view) && b.props.view.length === 4 && b.props.view;
     // Parallax layers are placed for the view they were drawn in.
     if (v)
       for (const el of b.props.elements)

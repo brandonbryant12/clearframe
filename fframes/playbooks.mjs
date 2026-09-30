@@ -47,6 +47,11 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
   // A sketch's own camera (view, truck, dolly, focus) travels with it. A canvas drawn in
   // landscape frame pixels is fitted whole into a tall frame rather than cropped off-centre.
   for (const b of sb.beats) {
+    // A beat's art layer can name a sketch too: `art: {sketch: "ambient"}` (its own layer).
+    if (b.art?.sketch) {
+      const drawn = sketch(b.art.sketch, vertical || book.format === 'vertical' ? 'vertical' : 'landscape');
+      b.art = { [drawn.layer ?? 'under']: drawn.elements };
+    }
     const name = b.props?.sketch;
     if (!name) {
       if ((vertical || book.format === 'vertical') && b.block === 'canvas' && b.props && b.props.view == null)
@@ -66,8 +71,10 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
     retext(b.props.elements);
     delete b.props.sketchText;
     for (const k of ['view', 'viewFrom', 'viewDur', 'dolly', 'focus'])
-      if (drawn[k] == null) delete b.props[k];
-      else if (tallFrame || b.props[k] == null) b.props[k] = drawn[k];
+      if (drawn[k] == null) {
+        // An authored "auto" fits the sketch to the space the scene leaves it.
+        if (!(k === 'view' && b.props.view === 'auto')) delete b.props[k];
+      } else if (tallFrame || b.props[k] == null) b.props[k] = drawn[k];
     delete b.props.sketch;
     delete b.props.stagger;
   }
