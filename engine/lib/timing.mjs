@@ -7,6 +7,7 @@ import { hashOf, readJSON, round, snap, wavDuration } from './util.mjs';
 import { findMusicBed } from './music-files.mjs';
 import { blockByName } from '../../fframes/catalog.mjs';
 import { audioHash, validateWords, wordKey } from './word-timing.mjs';
+import { planTakes } from './takes.mjs';
 
 const PAUSES = [
   [/(\.\.\.|…)$/, 0.45],
@@ -194,11 +195,15 @@ export function computeTiming(root) {
   const { fps, width, height } = sb.format;
   const beats = [];
   let cursor = 0;
+  // Before any audio exists, time the beats the way their planned continuous takes will
+  // play: back to back inside a take, with lead and tail only at its ends.
+  const planned = new Map();
+  for (const t of planTakes(sb)) t.beats.forEach((b, i) => planned.set(b.id, { index: i, count: t.beats.length }));
   for (const [index, b] of sb.beats.entries()) {
     // A continuous recording (imported podcast or talk) plays back to back: no added lead or tail.
     const vo = b.vo ? voiceFor(root, b, sb) : null;
     // Continuous takes play back to back: no lead inside a take, no tail until its last beat.
-    const take = vo?.take;
+    const take = vo?.take ?? (vo?.estimated && planned.get(b.id));
     const continuousLead = (sb.pacing.continuous === true && b.vo) || (take && take.index > 0);
     const continuousTail = (sb.pacing.continuous === true && b.vo) || (take && take.index < take.count - 1);
     const lead = b.lead ?? (continuousLead ? 0 : sb.pacing.lead);

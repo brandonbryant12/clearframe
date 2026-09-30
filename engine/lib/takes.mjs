@@ -14,6 +14,7 @@ import { readPCM } from './levels.mjs';
 import { ffmpeg, hashOf, log, pcmToWav, readJSON, round, writeJSON } from './util.mjs';
 import { cutPoints, timedWords } from './ingest.mjs';
 import { whisperAvailable } from './whisper.mjs';
+import { recordRate } from './voice-rates.mjs';
 
 /**
  * Narrated beats grouped into takes. `film` (the default) records the whole narration in one
@@ -372,8 +373,10 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
       bounds,
       createdAt: new Date().toISOString(),
     });
+    // Teach the drafts how fast this voice really reads.
+    const pace = provider !== 'local' && recordRate(sb.voice, take.beats.map(b => b.vo).join(' '), duration);
     log.ok(
-      `${take.id}: ${take.beats.length} beats · ${duration.toFixed(1)}s continuous take${measured ? ' · words measured with Whisper' : ''}`,
+      `${take.id}: ${take.beats.length} beats · ${duration.toFixed(1)}s continuous take${measured ? ' · words measured with Whisper' : ''}${pace ? ` · reads at ~${Math.round(pace)} wpm` : ''}`,
     );
   }
 }

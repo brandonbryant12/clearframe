@@ -42,6 +42,11 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 
   They score 100 on the cinema score, up from 25–63. A beat's `art` can name a sketch (`{"sketch": "ambient"}`).
 - **Fixed:** `view: "auto"` on a canvas was mistaken for a camera rect (the string has four characters) and failed to render.
+- **Drafts predict the final.** The first real final (the trailer, voiced by Gemini TTS as Orus, with words measured by Whisper) showed two ways drafts had been wrong:
+  - **The voice's reading speed.** A deliberate trailer read runs at about 95 wpm, not 150. ClearFrame now remembers each voice's measured speed per model, voice and style after every real take. Drafts use it unless the storyboard sets `voice.wpm`.
+  - **The gaps between lines.** Drafts padded every line with lead and tail, but a continuous take plays back to back. Estimated timing now follows the planned takes.
+
+  Draft beat starts now land within about a second of the final's. The stricter timing caught a brand-spot cue that could never have played in a real take.
 - **Lit solids.** `shade` on a `solid` draws lit faces: back faces culled and far faces first, a key light over an ambient fill, a specular glint and highlighted edges. The product-reveal playbook's hero object is now lit.
 - **Fixes from a fresh model's first film** (a test: a new session made "The Last Mile" from the docs alone):
   - Film looks strip the pencil strokes an arc was scaffolded with (`beats.rough: false`).

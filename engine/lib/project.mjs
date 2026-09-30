@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { readJSON } from './util.mjs';
+import { measuredRate } from './voice-rates.mjs';
 import { useProject } from '../../fframes/library.mjs';
 
 export const PRESETS = {
@@ -36,7 +37,12 @@ export function loadStoryboard(root) {
   return {
     ...sb,
     format: { ...preset, ...sb.format },
-    voice: { ...DEFAULTS.voice, ...sb.voice },
+    // Drafts use this voice's measured reading speed unless the storyboard sets one.
+    voice: {
+      ...DEFAULTS.voice,
+      ...sb.voice,
+      wpm: sb.voice?.wpm ?? measuredRate({ ...DEFAULTS.voice, ...sb.voice }) ?? DEFAULTS.voice.wpm,
+    },
     pacing: { ...DEFAULTS.pacing, ...sb.pacing },
     music: sb.music === false ? false : { ...DEFAULTS.music, ...sb.music },
     mix: { ...DEFAULTS.mix, ...sb.mix },
