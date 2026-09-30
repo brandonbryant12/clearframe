@@ -159,7 +159,8 @@ export function computeTiming(root) {
     const lead = b.lead ?? (continuousLead ? 0 : sb.pacing.lead);
     const tail = b.tail ?? (continuousTail ? 0 : (b.block ? blockTail(b.block) : null) ?? sb.pacing.tail);
     const natural = vo ? Math.max(0, lead) + vo.duration + tail + (b.hold ?? 0) : sb.pacing.silentBeat + (b.hold ?? 0);
-    const dur = b.duration ?? Math.max(b.min ?? sb.pacing.minBeat, natural);
+    // Stretching a slice of a continuous recording would insert silence into it.
+    const dur = b.duration ?? ((continuousLead || continuousTail) ? natural : Math.max(b.min ?? sb.pacing.minBeat, natural));
     const start = snap(cursor, fps);
     const end = snap(cursor + dur, fps);
     const beat = {

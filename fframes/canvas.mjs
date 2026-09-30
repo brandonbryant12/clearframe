@@ -166,7 +166,7 @@ export function roughSpec(value, where, fail) {
 const ROUGH_TYPES = new Set(['rect', 'circle', 'ellipse', 'line', 'path', 'poly']);
 /** Apply a canvas-wide hand-drawn default to every drawable element that has not opted out. */
 export function applyRough(list, rough) {
-  eachElement(list, el => { if (ROUGH_TYPES.has(el.type) && el.rough === undefined) el.rough = { ...rough }; });
+  eachElement(list, el => { if (ROUGH_TYPES.has(el.type) && el.rough === undefined && !el.dash) el.rough = { ...rough }; });
 }
 
 function pathData(d, where, fail) {

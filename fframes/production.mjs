@@ -31,9 +31,11 @@ export async function buildNative({force=false}={}) {
   if(!force&&fs.existsSync(binary())&&readJSON(marker,null)?.hash===hash)return binary();
   const st=fs.statfsSync(ROOT),free=st.bavail*st.bsize/2**30;
   const warm=fs.existsSync(path.join(ROOT,'.cache/metal/release/deps'));
-  if(free<(warm?20:30))throw new Error(`Native build needs ${warm?20:30} GiB free; ${free.toFixed(1)} GiB available. Preserve swap headroom.`);
+  if(free<(warm?10:25))throw new Error(`Native build needs ${warm?10:25} GiB free; ${free.toFixed(1)} GiB available.`);
   log.step(`Building FFFrames ${warm?'with the existing dependency cache':'from a cold cache'} (one Cargo job)`);
-  await run('cargo',['build','--manifest-path',path.join(crate,'Cargo.toml'),'--release','--locked','--jobs','1',...(process.platform==='darwin'?[]:['--no-default-features'])]);
+  // Only compilation takes the machine-wide heavy-job lock; renders and checks run freely.
+  const gate=path.join(os.homedir(),'.local/bin/codex-heavy'),cargo=['build','--manifest-path',path.join(crate,'Cargo.toml'),'--release','--locked','--jobs','1',...(process.platform==='darwin'?[]:['--no-default-features'])];
+  if(fs.existsSync(gate)&&process.env.CLEARFRAME_HEAVY_HELD!=='1')await run(gate,['--','cargo',...cargo]);else await run('cargo',cargo);
   writeJSON(marker,{hash,backend:process.platform==='darwin'?'skia-metal':'cpu',revision:readJSON(path.join(ROOT,'upstream.json')).revision});
   return binary();
 }
@@ -177,7 +179,8 @@ export function createJob(sb,timing,{draft=false}={}) {
         const o=sourceBeat.transitionOrigin;if(o!=null&&!(Array.isArray(o)&&o.length===2&&o.every(v=>Number.isFinite(v)&&v>=0&&v<=1)))throw new Error('transitionOrigin must be [x, y] from 0 to 1');
         enterStyle={...(sourceBeat.transitionColor?{color:sourceBeat.transitionColor}:{}),...(o?{origin:o}:{})};
       }
-      const label=sourceBeat.label??b.chapter??'';if(typeof label!=='string'||label.length>40)throw new Error('label must be text up to 40 characters');
+      if(sourceBeat.label!=null&&(typeof sourceBeat.label!=='string'||sourceBeat.label.length>40))throw new Error('label must be text up to 40 characters');
+      const label=sourceBeat.label??(sb.frame&&typeof b.chapter==='string'?b.chapter.slice(0,40):'');
       if(tone!=null&&!TONES.includes(tone))throw new Error(`tone must be ${TONES.join(', ')}`);
       let camera=null;
       if(sourceBeat.camera!=null){
@@ -290,6 +293,8 @@ export async function prepareProject(root,{draft=false}={}) {
   for(const b of result.job.beats){
     const images=[];eachElement(b.props.elements,el=>{if(el.type==='image')images.push(el);});if(b.art)for(const l of ['under','over'])eachElement(b.art[l],el=>{if(el.type==='image')images.push(el);});
     for(const el of images){const {key}=stage(assetFile(el,'image',`${b.id} canvas image`),b.id);el.file=key;delete el.asset;}
+    const morphs=[];eachElement(b.props.elements,el=>{if(el.morph?.from?.type==='image')morphs.push(el.morph.from);});if(b.art)for(const l of ['under','over'])eachElement(b.art[l],el=>{if(el.morph?.from?.type==='image')morphs.push(el.morph.from);});
+    for(const from of morphs){const {key}=stage(assetFile(from,'image',`${b.id} morph image`),b.id);from.file=key;delete from.asset;}
     if(b.plate){
       const rel=assetFile(b.plate,null,`${b.id} plate`),video=/\.(mp4|mov|webm|m4v)$/i.test(rel);const {file,key}=stage(rel,`${b.id} plate`);b.plate.file=key;b.plate.video=video;delete b.plate.asset;
       if(video){const probe=spawnSync('ffprobe',['-v','error','-show_entries','format=duration','-of','json',file],{encoding:'utf8'});const duration=Number(JSON.parse(probe.stdout||'{}').format?.duration);if(!b.plate.loop&&!(duration-(b.plate.offset??0)+1/result.job.fps>=b.frames/result.job.fps))throw new Error(`${b.id}: plate footage is shorter than the beat; set loop, trim the beat or use a longer clip.`);}

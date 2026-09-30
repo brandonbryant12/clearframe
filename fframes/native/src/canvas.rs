@@ -283,11 +283,11 @@ fn rough_contour(points: &[(f32, f32)], amount: f32, seed: u64) -> String {
     d
 }
 
-/// Contours of a stroked shape for rough rendering (closed shapes repeat their first point).
-fn contours_of(el: &Value) -> Vec<Vec<(f32, f32)>> {
+/// Contours of a stroked shape for rough rendering, each with whether it is closed.
+fn contours_of(el: &Value) -> Vec<(Vec<(f32, f32)>, bool)> {
     match s(el, "type") {
-        "path" => path_info(s(el, "d")).map(|p| p.points.clone()).unwrap_or_default(),
-        _ => morph_outline(el).map(|(c, _)| vec![c]).unwrap_or_default(),
+        "path" => path_info(s(el, "d")).map(|p| p.points.iter().map(|c| (c.clone(), c.len() > 2 && c.first() == c.last())).collect()).unwrap_or_default(),
+        _ => morph_outline(el).map(|(c, closed)| vec![(c, closed)]).unwrap_or_default(),
     }
 }
 
@@ -421,7 +421,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let at = f(el, "at", default_at);
         let enter = match s(el, "enter") {
             "" => match kind {
-                "line" | "path" | "poly" if s(el, "fill").is_empty() || s(el, "fill") == "none" => "draw",
+                "line" | "path" | "poly" if el.get("fill").is_none_or(|f| f == "none") => "draw",
                 "text" => "rise", "icon" | "circle" => "pop", _ => "fade",
             },
             other => other,
@@ -716,14 +716,14 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let seed = hasher.finish() ^ frame_seed.wrapping_mul(0xA24B_AED4_963E_E407);
         let contours = contours_of(el);
         let ink = if stroke != "none" { stroke.to_owned() } else if fill != "none" { fill.to_owned() } else { self.p.ink.clone() };
-        let length: f32 = contours.iter().map(|c| c.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum::<f32>()).sum::<f32>() * 1.08 + 2.0 * amount;
+        let length: f32 = contours.iter().map(|(c, _)| c.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum::<f32>()).sum::<f32>() * 1.08 + 2.0 * amount;
         let dash = if draw < 0.999 { (format!("{} {}", length, length * 2.0 + 10.0), length * (1.0 - draw)) } else { ("none".to_owned(), 0.0) };
         let mut nodes = vec![];
-        let closed = contours.iter().any(|c| c.len() > 2 && c.first() == c.last());
+        let closed = contours.iter().any(|(_, closed)| *closed);
         let fill_mode = nonempty(s(rough, "fill"), "hachure");
         if fill != "none" && closed && draw > 0.55 {
             let alpha = motion::clamp01((draw - 0.55) / 0.45);
-            let crisp = contours.iter().map(|c| c.iter().enumerate().map(|(i, p)| format!("{} {:.1} {:.1}", if i == 0 { "M" } else { "L" }, p.0, p.1)).collect::<Vec<_>>().join(" ") + " Z").collect::<Vec<_>>().join(" ");
+            let crisp = contours.iter().map(|(c, _)| c.iter().enumerate().map(|(i, p)| format!("{} {:.1} {:.1}", if i == 0 { "M" } else { "L" }, p.0, p.1)).collect::<Vec<_>>().join(" ") + " Z").collect::<Vec<_>>().join(" ");
             if fill_mode == "solid" {
                 nodes.push(fframes::svgr!(<path d={crisp} fill={fill.to_owned()} fill-opacity={alpha} stroke="none" />));
             } else {
@@ -750,9 +750,21 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
         }
         for pass in 0..passes {
-            let d = contours.iter().map(|c| rough_contour(c, amount, seed.wrapping_add(pass as u64 * 0x51_7CC1_B727_220A))).collect::<Vec<_>>().join(" ");
+            let d = contours.iter().map(|(c, _)| rough_contour(c, amount, seed.wrapping_add(pass as u64 * 0x51_7CC1_B727_220A))).collect::<Vec<_>>().join(" ");
             let w = width * if pass == 0 { 1.0 } else { 0.7 };
             nodes.push(fframes::svgr!(<path d={d} fill="none" stroke={ink.clone()} stroke-width={w} stroke-dasharray={dash.0.clone()} stroke-dashoffset={dash.1} stroke-linecap="round" stroke-linejoin="round" opacity={if pass == 0 { 1.0 } else { 0.75 }} />));
+        }
+        // Arrowheads ride the draw-on tip, as on crisp strokes.
+        let heads = s(el, "arrow");
+        if draw > 0.02 && heads != "" && heads != "none" {
+            let line = outline(el);
+            let head = f(el, "head", width * 3.2 + 6.0);
+            let mut tips = vec![];
+            if heads == "end" || heads == "both" { tips.push(along(&line, draw)); }
+            if heads == "start" || heads == "both" { let rev: Vec<_> = line.iter().rev().copied().collect(); tips.push(along(&rev, 1.0)); }
+            for ((x, y), angle) in tips.into_iter().flatten() {
+                nodes.push(fframes::svgr!(<path d={rough_contour(&[(x - head * (angle - PI / 6.5).cos(), y - head * (angle - PI / 6.5).sin()), (x, y), (x - head * (angle + PI / 6.5).cos(), y - head * (angle + PI / 6.5).sin())], amount * 0.4, seed ^ 0xA11)} fill="none" stroke={ink.clone()} stroke-width={width} stroke-linecap="round" stroke-linejoin="round" />));
+            }
         }
         fframes::svgr!(<g>{nodes}</g>)
     }
@@ -818,13 +830,17 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             const N: usize = 97;
             let (pa, mut pb) = (resample(&a, N), resample(&b, N));
             if closed_a && closed_b {
+                // Align start point and winding direction so the outline does not twist.
                 let ring = |v: &[(f32, f32)]| v[..N - 1].to_vec();
-                let (ra, rb) = (ring(&pa), ring(&pb));
-                let best = (0..N - 1).min_by(|&i, &j| {
-                    let cost = |s: usize| ra.iter().enumerate().map(|(t, p)| { let q = rb[(t + s) % (N - 1)]; (p.0 - q.0).powi(2) + (p.1 - q.1).powi(2) }).sum::<f32>();
-                    cost(i).partial_cmp(&cost(j)).unwrap_or(std::cmp::Ordering::Equal)
-                }).unwrap_or(0);
-                pb = (0..N - 1).map(|t| rb[(t + best) % (N - 1)]).chain(std::iter::once(rb[best])).collect();
+                let ra = ring(&pa);
+                let forward = ring(&pb);
+                let backward: Vec<_> = forward.iter().rev().copied().collect();
+                let cost = |rb: &[(f32, f32)], s: usize| ra.iter().enumerate().map(|(t, p)| { let q = rb[(t + s) % (N - 1)]; (p.0 - q.0).powi(2) + (p.1 - q.1).powi(2) }).sum::<f32>();
+                let (mut best, mut best_cost, mut best_ring) = (0, f32::MAX, &forward);
+                for candidate in [&forward, &backward] {
+                    for shift in 0..N - 1 { let c = cost(candidate, shift); if c < best_cost { best_cost = c; best = shift; best_ring = candidate; } }
+                }
+                pb = (0..N - 1).map(|t| best_ring[(t + best) % (N - 1)]).chain(std::iter::once(best_ring[best])).collect();
             }
             let d = pa.iter().zip(&pb).enumerate().map(|(i, (p, q))| format!("{} {:.2} {:.2}", if i == 0 { "M" } else { "L" }, p.0 + (q.0 - p.0) * k, p.1 + (q.1 - p.1) * k)).collect::<Vec<_>>().join(" ")
                 + if closed_a && closed_b { " Z" } else { "" };
@@ -832,6 +848,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             o.insert("type".into(), Value::String("path".into()));
             o.insert("d".into(), Value::String(d));
             if closed_a && closed_b && !to.get("fill").is_some_and(|v| v == "none") && o.get("fill").is_none() { o.insert("fill".into(), Value::String("accent".into())); }
+            // Paths default to an ink outline; a morph between unstroked shapes stays unstroked.
+            if from.get("stroke").is_none() && to.get("stroke").is_none() { o.insert("stroke".into(), Value::String("none".into())); }
         }
         for key in ["fill", "stroke"] {
             if let (Some(Value::String(a)), Some(Value::String(b))) = (from.get(key), to.get(key)) {

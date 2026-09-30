@@ -99,6 +99,8 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
     if (!force && meta?.hash === hash && fs.existsSync(wav)) bounds = meta.bounds ?? null;
     else if (provider === 'local') bounds = await draftTake(sb, spec, wav);
     else { await synthesize(spec, wav); }
+    // Record the take as soon as it exists, so a later failure never pays for it twice.
+    writeJSON(path.join(dir, `${take.id}.json`), { hash, provider, beats: take.beats.map(b => b.id), bounds, createdAt: new Date().toISOString() });
     pending.push({ take, spec, hash, wav, bounds, tokensPerBeat: take.beats.map(b => tokenize(b.vo).map(t => t.w)) });
   }
   // Pass 2: one recognizer pass for all of them.

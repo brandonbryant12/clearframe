@@ -4,7 +4,6 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { resolveProject } from './lib/project.mjs';
 import { writeJSON } from './lib/util.mjs';
-import { enterGate } from './lib/resource-gate.mjs';
 import { BLOCKS, THEMES, THEME_NOTES, MOTIONS, TRANSITIONS, BACKDROPS, markdownCatalog } from '../fframes/catalog.mjs';
 import { PLAYBOOKS, scaffold, writeGallery } from '../fframes/playbooks.mjs';
 import { ICONS, ICON_SOURCE } from '../fframes/icons.mjs';
@@ -58,8 +57,7 @@ async function main(){
   const booleans=['draft','force','vertical','json','md','no-audio','transcribe','help','grid','sketches','whisper','no-render'];
   const {values:o,positionals}=parseArgs({args,allowPositionals:true,options:Object.fromEntries([...strings.map(k=>[k,{type:'string'}]),...booleans.map(k=>[k,{type:'boolean'}])])});
   if(!cmd||cmd==='help'||o.help)return console.log(HELP);
-  if(['build','gallery','render','preview','sheet','still','looks','review','check','voice','music','speech','draft'].includes(cmd)&&await enterGate())return;
-  if(cmd==='align'&&o.whisper&&await enterGate())return;
+  // Renders, checks and voice run freely; only a Cargo compile takes the shared lock (see buildNative).
   const num=k=>{if(o[k]==null)return undefined;const n=Number(o[k]);if(!Number.isFinite(n))throw new Error(`--${k} must be a number`);return n;};
   const opts={...o,only:o.only?.split(','),budget:num('budget'),at:num('at'),pos:num('pos'),per:num('per'),columns:num('columns'),thumb:num('thumb'),noAudio:o['no-audio']};
   if(opts.budget!=null&&opts.budget<0)throw new Error('budget must be nonnegative');

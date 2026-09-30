@@ -14,7 +14,8 @@ ClearFrame now uses **FFFrames for every active render**. Begin with `skills/cle
 - Render `sheet`, open the image, run `check`, then render/review the complete MP4. Use `review DIR` for decoded frames around cuts and word boundaries. Passing diagnostics alone does not establish visual quality, accurate transcription or factual correctness.
 - Native frame output must depend only on frame number and prepared inputs. No live generation, random state or wall-clock animation in `render_frame`.
 - Preserve unrelated changes. Archived browser source is for recovery only; no fallback renderer is active.
-- Full tests/builds/installs use `/Users/brandon/.local/bin/codex-heavy -- ...`, one Cargo job and at most two supported workers. The CLI gates expensive commands automatically. Reuse warm caches, keep at least 20 GiB free, and avoid cold builds below 30 GiB.
+- Native builds use one Cargo job and at most two supported workers; `buildNative` takes the machine-wide `codex-heavy` lock for the compile only (renders, checks and `npm test` run directly). Reuse the warm cache; warm builds need 10 GiB free, cold builds 25 GiB.
+- This is an experimental project: tests are fast smoke checks that help development, not exhaustive edge-case coverage. Add a test when it saves debugging time; don't add them for completeness.
 - When independent custom scene work benefits from parallel agents, give each agent one owned native module and the storyboard/visual brief; avoid concurrent heavy builds.
 
 Useful commands: `node engine/cli.mjs help`, `doctor`, `new DIR --playbook NAME --treatment ID`, `ingest DIR --markdown|--audio`, `reference VIDEO`, `themes`, `treatments`, `sketch`, `critique DIR`, `voice DIR --draft`, `align DIR --whisper`, `sheet DIR --draft [--grid]`, `check DIR --draft`, `render DIR --draft`. Node contract tests: `npm test` through the shared gate.

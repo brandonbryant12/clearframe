@@ -214,14 +214,23 @@ export function timedWords(input) {
     const text = String(w.w ?? w.word ?? w.text ?? '').trim(), t0 = secs(w.t0 ?? w.start ?? w.start_offset), t1 = secs(w.t1 ?? w.end ?? w.end_offset);
     const speaker = w.speaker ?? w.speaker_id ?? w.spk ?? null;
     if (!text) continue;
-    if (!Number.isFinite(t0) || !Number.isFinite(t1) || t1 <= t0) throw new Error(`Word "${text}" has an invalid interval`);
     // Punctuation-only tokens join the previous word so beat text and timings stay aligned.
-    if (!wordKey(text) && out.length) { out.at(-1).w += text; out.at(-1).t1 = Math.max(out.at(-1).t1, t1); continue; }
+    if (!wordKey(text) && out.length) { out.at(-1).w += text; if (Number.isFinite(t1)) out.at(-1).t1 = Math.max(out.at(-1).t1 ?? 0, t1); continue; }
     if (!wordKey(text)) continue;
-    out.push({ w: text, t0, t1, ...(speaker != null ? { speaker: String(speaker) } : {}) });
+    // Recognizers leave some words untimed (WhisperX digits) or zero-length: keep them, fill below.
+    const timed = Number.isFinite(t0) && Number.isFinite(t1) && t1 > t0;
+    out.push({ w: text, t0: timed ? t0 : null, t1: timed ? t1 : null, ...(timed ? {} : { estimated: true }), ...(speaker != null ? { speaker: String(speaker) } : {}) });
   }
-  for (let i = 1; i < out.length; i++) if (out[i].t0 < out[i - 1].t1) out[i].t0 = out[i - 1].t1;
-  return out.filter(w => w.t1 > w.t0);
+  // Untimed words share the gap between their timed neighbours (and are flagged as estimates).
+  for (let i = 0; i < out.length; i++) {
+    if (out[i].t0 != null) continue;
+    let j = i; while (j < out.length && out[j].t0 == null) j++;
+    const from = i ? out[i - 1].t1 : 0, to = j < out.length ? out[j].t0 : from + 0.3 * (j - i), step = Math.max(0.02, (to - from) / (j - i));
+    for (let k = i; k < j; k++) { out[k].t0 = from + step * (k - i); out[k].t1 = out[k].t0 + step; }
+    i = j - 1;
+  }
+  for (let i = 1; i < out.length; i++) { if (out[i].t0 < out[i - 1].t1) out[i].t0 = out[i - 1].t1; if (out[i].t1 <= out[i].t0) out[i].t1 = out[i].t0 + 0.02; }
+  return out;
 }
 
 /** Speaker turns from a script: JSON [{speaker, text}] or lines like "HOST: text". */
@@ -329,7 +338,7 @@ export async function ingestRecording(root, { audio, words: wordsInput, script, 
     const file = path.join(P.vo, `${id}.wav`);
     fs.writeFileSync(file, pcmToWav(slice, { sampleRate: rate }));
     const text = seg.map(w => w.w).join(' '), sliceDur = slice.length / 2 / rate;
-    const timed = seg.map(w => ({ w: w.w, t0: round(Math.max(0, w.t0 - start), 4), t1: round(Math.min(sliceDur, w.t1 - start), 4) }));
+    const timed = seg.map(w => ({ w: w.w, t0: round(Math.max(0, w.t0 - start), 4), t1: round(Math.max(Math.min(sliceDur, w.t1 - start), Math.max(0, w.t0 - start) + 0.01), 4) }));
     // Interpolated words are estimates: a beat containing any is not labelled measured.
     const estimated = seg.filter(w => w.estimated).length;
     for (let k = 1; k < timed.length; k++) if (timed[k].t0 < timed[k - 1].t1) timed[k].t0 = timed[k - 1].t1;
