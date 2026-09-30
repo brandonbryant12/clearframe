@@ -673,7 +673,9 @@ export async function ingestRecording(
     transition: 'cut',
     backdrop: 'glow',
     texture: { grain: 0.3, vignette: 0.4 },
-    captions: false,
+    // Speech stays on screen when a beat becomes a picture: social pop captions on a vertical
+    // clip, phrase captions on a plate otherwise (kinetic beats never double them).
+    captions: vertical ? 'pop' : true,
     music: false,
     pacing: { continuous: true },
     ...(Object.keys(cast).length ? { speakers: cast } : {}),
@@ -683,7 +685,7 @@ export async function ingestRecording(
   writeJSON(P.storyboard, sb);
   fs.writeFileSync(
     path.join(root, 'BRIEF.md'),
-    `# ${sb.title}\n\nImported ${beats.length} beats (${round(duration, 1)} s) from \`${path.basename(audio)}\`${from ? ` starting at ${from}s` : ''}. Every beat plays its slice of the recording; cuts sit in pauses, so the beats replay it without gaps. Word timings are measured from the supplied transcript.\n\nEvery beat starts as kinetic captions. Keep that where the words are the picture; elsewhere, change the block (keep \`vo\`, \`speaker\` and \`note\`): pull quotes (\`kinetic\` stack, \`quote\`), the numbers they mention (with sources), drawn explanations (\`canvas\`), speaker plates. Do not edit \`vo\`: it must match the recording.\n`,
+    `# ${sb.title}\n\nImported ${beats.length} beats (${round(duration, 1)} s) from \`${path.basename(audio)}\`${from ? ` starting at ${from}s` : ''}. Every beat plays its slice of the recording; cuts sit in pauses, so the beats replay it without gaps. Word timings are measured from the supplied transcript.\n\nEvery beat starts as kinetic captions. Keep that where the words are the picture; elsewhere, change the block (keep \`vo\`, \`speaker\` and \`note\`): pull quotes (\`kinetic\` stack, \`quote\`), the numbers they mention (with sources), drawn explanations (\`canvas\`), speaker plates. Captions (\`${sb.captions === 'pop' ? 'pop' : 'true'}\`) keep the words on screen under any picture. When a stretch explains one process or place, draw it as a canvas \`world\` and let the camera follow the conversation through it (\`clearframe world DIR\` shows the plan). Do not edit \`vo\`: it must match the recording.\n`,
   );
   return {
     beats: beats.length,
