@@ -933,8 +933,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let filled_default = if matches!(kind, "line" | "path" | "poly") { "none" } else { "accent" };
         let fill = self.paint(el.get("fill"), filled_default, defs);
         let has_stroke = el.get("stroke").is_some();
-        let stroke =
-            self.paint(el.get("stroke"), if matches!(kind, "line" | "path" | "poly") { "ink" } else { "none" }, defs);
+        // Lines and open outlines draw in ink by default; a filled shape has no outline unless asked.
+        let filled = el.get("fill").is_some_and(|v| v != "none");
+        let outlined = kind == "line" || (matches!(kind, "path" | "poly") && !filled);
+        let stroke = self.paint(el.get("stroke"), if outlined { "ink" } else { "none" }, defs);
         let width = f(el, "width", if matches!(kind, "line" | "path" | "poly") { 6.0 } else { 4.0 });
         let length = stroke_length(el);
         // During a draw-on the fill follows the outline in; strokeless shapes simply fade.

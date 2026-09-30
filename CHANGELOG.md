@@ -41,6 +41,18 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 
   They score 100 on the cinema score, up from 25–63. A beat's `art` can name a sketch (`{"sketch": "ambient"}`).
 - **Fixed:** `view: "auto"` on a canvas was mistaken for a camera rect (the string has four characters) and failed to render.
+- **Fixes from a fresh model's first film** (a test: a new session made "The Last Mile" from the docs alone):
+  - Film looks strip the pencil strokes an arc was scaffolded with (`beats.rough: false`).
+  - Filled `path` and `poly` shapes no longer get an ink outline by default.
+  - A world beat may only move the camera (`elements: []`).
+  - The "no room for the panel transition" warning names the real cause (an element still moving, or the line).
+  - `doctor` checks disk headroom against the real thresholds (10 GiB warm, 25 GiB cold).
+  - `docs/canvas.md` now explains:
+    - how `viewAt`/`viewDur` time a world move;
+    - how `z` parallax is measured in worlds;
+    - why `behind` hides under an opaque sky;
+    - how long beats last;
+    - that element times are scene seconds.
 - **Every report playbook got film grammar.** The 21 remaining arcs (quarterly update, incident review, tutorial, science lesson and so on) now have:
   - lower-third headings instead of slide titles;
   - a subtle lens and texture (no handheld on calm genres);

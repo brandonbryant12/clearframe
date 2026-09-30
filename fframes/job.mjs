@@ -719,8 +719,14 @@ function fitGraphicTransitions(beats, timing, { warnings }) {
       COVER[a.transition]?.[1] ?? 0,
     );
     if (seconds - earliest < cover[0] - 1e-6 && a.exit === next.transition) {
+      // Name what actually holds the scene: the voice, or an element still moving.
+      const spoken = a.words.at(-1)?.end ?? 0;
+      const cause =
+        a.settle_seconds > spoken + 1e-3
+          ? `an element is still moving until ${a.settle_seconds.toFixed(2)}s (a key, count or exit); end it earlier`
+          : 'the line runs to the end of the beat; add tail or shorten the line';
       warnings.push(
-        `${a.id} → ${next.id}: no room for the ${next.transition} transition (${(seconds - earliest).toFixed(2)}s after the last word, needs ${cover[0]}s); using a fade. Add tail or shorten the line.`,
+        `${a.id} → ${next.id}: no room for the ${next.transition} transition (${(seconds - earliest).toFixed(2)}s free, needs ${cover[0]}s): ${cause}. Using a fade.`,
       );
       next.transition = 'fade';
       a.exit = 'fade';

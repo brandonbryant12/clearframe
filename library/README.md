@@ -45,7 +45,7 @@ Every item is validated when the engine starts, so a bad file fails immediately 
 ```
 
 - `film` holds storyboard-level settings, copied onto the storyboard. `film.theme` must name a palette.
-- `beats` holds defaults applied only where the author has not set them. Every key is optional:
+- `beats` holds defaults applied only where the author has not set them. `rough: false` strips pencil strokes that an arc was scaffolded with; the film looks use it. Every key is optional:
   - `graphic`: the transition used at chapter starts;
   - `emphasisStyle`: for title, statement and endcard;
   - `rough`, `mosaic`, `font` and `fps`: for canvas;

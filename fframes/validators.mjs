@@ -427,7 +427,8 @@ export const VALIDATORS = {
       h.fail('world must be a name, with view set to a camera rect [x, y, width, height]');
     if (p.stagger != null && (!Number.isFinite(p.stagger) || p.stagger < 0 || p.stagger > 3))
       h.fail('stagger must be 0–3 seconds');
-    if (!Array.isArray(p.elements) || !p.elements.length) h.fail('elements needs at least one element');
+    // A world beat may only move the camera: it inherits everything drawn before it.
+    if (!Array.isArray(p.elements) || (!p.elements.length && !p.world)) h.fail('elements needs at least one element');
     p.elements = normalizeElements(p.elements, 'elements', h.fail);
     // Depth: the camera flies through z (dolly) and a focus plane sets the depth of field.
     if (p.dolly != null) p.dolly = depthKeys(p.dolly, 'dolly', h.fail);

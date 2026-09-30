@@ -33,7 +33,8 @@
   },
   "beats": {
     "emphasisStyle": "serif",
-    "graphic": "whip"
+    "graphic": "whip",
+    "rough": false
   },
   "rules": [
     "Three acts: a cold open (sketch void), a rising montage of 2–4 s shots split by black type cards, a silence, the title (sketch title), then a button.",

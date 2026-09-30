@@ -29,7 +29,8 @@
   },
   "beats": {
     "emphasisStyle": "serif",
-    "graphic": "iris"
+    "graphic": "iris",
+    "rough": false
   },
   "rules": [
     "A dark stage and one hero object. Light it (glow, spotlight, shine) rather than decorating around it.",

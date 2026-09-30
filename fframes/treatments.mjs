@@ -29,6 +29,8 @@ export function applyTreatment(sb, id) {
       p.emphasisStyle = t.beats.emphasisStyle;
     if (t.beats.kinetic && b.block === 'kinetic' && !p.mode) p.mode = t.beats.kinetic;
     if (b.block === 'canvas' && t.beats.rough && p.rough == null) p.rough = t.beats.rough;
+    // A film look draws clean lines: it strips the pencil strokes an arc was scaffolded with.
+    if (b.block === 'canvas' && t.beats.rough === false) delete p.rough;
     if (b.block === 'canvas' && t.beats.mosaic && p.mosaic == null) p.mosaic = t.beats.mosaic;
     if (b.block === 'canvas')
       for (const el of p.elements ?? []) {

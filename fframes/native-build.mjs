@@ -135,7 +135,7 @@ export function doctor() {
     warm = fs.existsSync(path.join(ROOT, '.cache/metal/release/deps'));
   rows.push({
     name: 'Disk headroom',
-    ok: free >= (warm ? 20 : 30),
+    ok: free >= (warm ? 10 : 25),
     detail: `${free.toFixed(1)} GiB free (${warm ? 'warm cache' : 'cold build'})`,
   });
   return rows;

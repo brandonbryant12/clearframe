@@ -35,7 +35,8 @@
   },
   "beats": {
     "emphasisStyle": "serif",
-    "graphic": "fade"
+    "graphic": "fade",
+    "rough": false
   },
   "rules": [
     "Shots, not slides: write a shot list with scales (wide, medium, close, insert) before choosing blocks. Read docs/cinema.md.",

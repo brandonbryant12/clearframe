@@ -22,7 +22,7 @@ export const ELEMENT_TYPES = {
   spotlight: { geometry: ['cx', 'cy', 'r', 'x', 'y', 'w', 'h', 'radius', 'dim'], required: [] },
   particles: { geometry: ['x', 'y', 'w', 'h', 'count', 'kind', 'seed', 'size', 'speed'], required: ['w', 'h'] },
   solid: {
-    geometry: ['shape', 'cx', 'cy', 'size', 'spin', 'tilt', 'perspective', 'nodes', 'marks', 'arcs'],
+    geometry: ['shape', 'cx', 'cy', 'size', 'spin', 'tilt', 'perspective', 'nodes', 'marks', 'arcs', 'shade'],
     required: ['size'],
   },
 };
@@ -355,6 +355,22 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
         if (el.arcs != null && !(Array.isArray(el.arcs) && el.arcs.length <= 20 && el.arcs.every(a => coords(a, 4))))
           fail(`${at}.arcs must be up to 20 [lat, lon, lat, lon] routes`);
         if ((el.marks || el.arcs) && el.shape !== 'globe') fail(`${at}: marks and arcs are for shape globe`);
+        // Lit faces instead of a wireframe: a key light, ambient fill and edge highlights.
+        if (el.shade != null) {
+          const s = el.shade;
+          const ok =
+            s === true ||
+            s === false ||
+            (s &&
+              typeof s === 'object' &&
+              !Array.isArray(s) &&
+              Object.keys(s).every(k => ['light', 'ambient', 'edges'].includes(k)) &&
+              (s.light == null || (Array.isArray(s.light) && s.light.length === 3 && s.light.every(Number.isFinite))) &&
+              (s.ambient == null || (Number.isFinite(s.ambient) && s.ambient >= 0 && s.ambient <= 1)) &&
+              (s.edges == null || typeof s.edges === 'boolean'));
+          if (!ok) fail(`${at}.shade must be true or {light: [x, y, z], ambient: 0–1, edges}`);
+          if (el.shape === 'globe') fail(`${at}: shade is for the polyhedra, not the globe`);
+        }
         for (const key of ['spin', 'tilt'])
           if (el[key] != null && !(Array.isArray(el[key]) && el[key].length === 3 && el[key].every(Number.isFinite)))
             fail(`${at}.${key} must be [x, y, z] degrees${key === 'spin' ? ' per second' : ''}`);

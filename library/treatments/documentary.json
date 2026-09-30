@@ -32,7 +32,8 @@
   },
   "beats": {
     "emphasisStyle": "serif",
-    "graphic": "fade"
+    "graphic": "fade",
+    "rough": false
   },
   "rules": [
     "Cold open: start mid-scene on a detail (a close-up, one sound, one word), pull out to the context, and bring the title in late.",
