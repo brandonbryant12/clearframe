@@ -1256,7 +1256,7 @@ mod tests {
         ] {
             assert!(validate(&bad).is_err(), "{bad}");
         }
-        let many: Vec<_> = (0..241).map(|_| serde_json::json!({"type":"rect"})).collect();
+        let many: Vec<_> = (0..601).map(|_| serde_json::json!({"type":"rect"})).collect();
         assert!(validate(&serde_json::json!({"elements":many})).is_err());
     }
 }
