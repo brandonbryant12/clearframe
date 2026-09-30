@@ -13,4 +13,5 @@ export const TONES = ['none', 'accent', 'accent2', 'invert', 'surface'];
 export const PLATE_SIDES = ['full', 'left', 'right', 'top', 'bottom'];
 export const DRIFTS = ['none', 'in', 'out', 'left', 'right', 'up', 'down'];
 export const CAMERA_MOVES = ['auto', 'none', 'in', 'out', 'left', 'right', 'up', 'down'];
+export const TEXT_MOTIONS = ['lines', 'words', 'letters', 'cascade'];
 export const TRANSITION_COLORS = ['accent', 'accent2', 'ink', 'bg', 'surface'];

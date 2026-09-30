@@ -80,6 +80,8 @@ pub struct Environment {
     pub total: usize,
     /// The film draws an editorial frame; scenes keep their source line clear of its footer.
     pub framed: bool,
+    /// Film-wide default for how type arrives.
+    pub text_motion: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -131,6 +133,9 @@ pub struct Beat {
     /// same speaker, so the tag holds instead of re-entering).
     #[serde(default)]
     pub speaker: Option<Value>,
+    /// How type arrives in this scene: lines, words, letters or cascade (film default otherwise).
+    #[serde(default)]
+    pub text_motion: Option<String>,
     /// Voice level per scene frame, 0–100, prepared from this beat's narration audio.
     #[serde(default)]
     pub levels: Vec<u8>,
@@ -139,6 +144,9 @@ pub struct Beat {
 }
 fn cut() -> String {
     "cut".into()
+}
+fn lines() -> String {
+    "lines".into()
 }
 fn none() -> String {
     "none".into()
@@ -169,6 +177,9 @@ pub struct Film {
     /// Film-wide surface texture: `{grain: 0–1, vignette: 0–1, animate: bool}`.
     #[serde(default)]
     pub texture: Value,
+    /// Default arrival of type in every scene: lines, words, letters or cascade.
+    #[serde(default = "lines")]
+    pub text_motion: String,
     /// Editorial frame chrome: brand, section label, footers and a progress line.
     #[serde(default)]
     pub frame: Option<Value>,
@@ -249,6 +260,7 @@ impl Film {
                 index,
                 total,
                 framed: film.frame.is_some(),
+                text_motion: film.text_motion.clone(),
             };
             offset += beat.frames;
         }

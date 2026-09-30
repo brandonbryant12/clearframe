@@ -4,7 +4,7 @@
 // drawing lives in fframes/native/src. A block missing here gets the defaults below.
 
 /** Defaults: cue shortly after the header, settle when the entrance ends. */
-const DEFAULTS = { family: 'type', hero: false, numeric: false, cueDelay: 0.35 };
+const DEFAULTS = { family: 'type', hero: false, numeric: false, cueDelay: 0.35, preroll: 0 };
 
 const hero = { hero: true, cueDelay: 0.1, family: 'type' };
 const staged = (key, offset, spacing, itemSeconds = e => e) => ({ staged: { key, offset, spacing, itemSeconds } });
@@ -25,7 +25,13 @@ export const REGISTRY = {
     ...staged('items', 0.6, 0.55, e => Math.max(e, 0.4)),
     sounds: (b, add, t) => b.props.items.forEach(it => add('tock', t.start + it.at + 0.3, 0.22, 1)),
   },
-  stat: { family: 'number', numeric: true, settle: (p, cue, e) => cue + Math.max(1.4, 0.6 + e), sounds: heroNumber },
+  stat: {
+    family: 'number',
+    numeric: true,
+    preroll: 1.0,
+    settle: (p, cue, e) => cue + Math.max(1.4, 0.6 + e),
+    sounds: heroNumber,
+  },
   kpis: {
     family: 'number',
     numeric: true,
@@ -35,6 +41,7 @@ export const REGISTRY = {
   delta: {
     family: 'number',
     numeric: true,
+    preroll: 1.3,
     settle: (p, cue, e) => cue + Math.max(0.45 + 1.3, 1 + e),
     sounds: heroNumber,
   },
@@ -52,7 +59,13 @@ export const REGISTRY = {
     numeric: true,
     settle: (p, cue, e) => cue + Math.max(0.35 + (Math.ceil(p.total / p.cols) + p.cols) * 0.012 + 1.3, 0.7 + e),
   },
-  ring: { family: 'chart', numeric: true, settle: (p, cue, e) => cue + Math.max(1.4, 0.8 + e), sounds: heroNumber },
+  ring: {
+    family: 'chart',
+    numeric: true,
+    preroll: 1.0,
+    settle: (p, cue, e) => cue + Math.max(1.4, 0.8 + e),
+    sounds: heroNumber,
+  },
   donut: { family: 'chart', numeric: true, settle: (p, cue, e) => cue + Math.max(1.5, 1.1 + e) },
   funnel: { family: 'chart', numeric: true, ...staged('items', 0, 0.45, e => Math.max(0.9, 0.3 + e)) },
   magnitude: {

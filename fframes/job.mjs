@@ -11,7 +11,17 @@ import {
   applyRough,
   TREATMENTS,
 } from './canvas.mjs';
-import { ENTRANCE, COVER, EXITS, TONES, PLATE_SIDES, DRIFTS, CAMERA_MOVES, TRANSITION_COLORS } from './constants.mjs';
+import {
+  ENTRANCE,
+  COVER,
+  EXITS,
+  TONES,
+  PLATE_SIDES,
+  DRIFTS,
+  CAMERA_MOVES,
+  TRANSITION_COLORS,
+  TEXT_MOTIONS,
+} from './constants.mjs';
 import { glyphCheck } from './glyphs.mjs';
 import { rules } from './registry.mjs';
 import { captionCues, findWord } from '../engine/lib/timing.mjs';
@@ -57,6 +67,7 @@ export function createJob(sb, timing, { draft = false } = {}) {
     chrome: sb.chrome === true,
     captions: film.captions,
     ...(film.texture && film.texture !== 'none' ? { texture: film.texture } : {}),
+    text_motion: film.textMotion,
     ...(frame ? { frame } : {}),
     beats,
   };
@@ -88,7 +99,10 @@ function filmSettings(sb, timing, { errors }) {
   if (!textureOk) errors.push('texture must be grain, vignette, film, none or {grain: 0–1, vignette: 0–1, animate}.');
   if (sb.pacing.outro)
     errors.push('Use an endcard beat instead of pacing.outro so every output frame has an authored scene.');
+  const textMotion = sb.textMotion ?? 'lines';
+  if (!TEXT_MOTIONS.includes(textMotion)) errors.push(`textMotion must be ${TEXT_MOTIONS.join(', ')}.`);
   return {
+    textMotion,
     theme: palette(sb.theme ?? 'paper'),
     motion,
     vertical,
@@ -112,12 +126,17 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   const entrance = ENTRANCE[motion.preset];
   const cue = cueResolver(b, frame);
   const authored = props.land ?? props.growSay ?? props.drawSay;
-  // Headlines start almost immediately; data scenes leave a moment for the header.
-  const at = cue(authored, spec.cueDelay);
+  // Headlines start almost immediately; data scenes leave a moment for the header. A count
+  // cued to a spoken word pre-rolls so the figure lands on the word instead of starting there.
+  let at = cue(authored, spec.cueDelay);
+  if (spec.preroll && typeof authored === 'string') at = Math.max(0, at - spec.preroll);
   if (props.focus && b.block === 'bars') props.focus.at = cue(props.focus.say, at + 1.6);
   if (props.focus && b.block === 'annotate') props.focus.at = cue(props.focus.say, at + 0.4);
   if (spec.staged) stageItems(props, spec.staged, { b, frame, at, authored, cue, entrance });
   let settle = spec.settle(props, at, entrance, spec);
+  // Word, letter and cascade reveals take up to ~0.9 s longer than a line rise.
+  const textMotion = source.textMotion ?? film.textMotion;
+  if (textMotion !== 'lines') settle = Math.max(settle, at + 0.9 + entrance);
   // Author-drawn elements: resolve spoken cues and write exact times for the renderer.
   const scheduleArt = (list, start, stagger = 0) => {
     const end = scheduleElements(list, { start, stagger, entrance, resolve: v => cue(v) });
@@ -252,6 +271,10 @@ function artLayers(a, id) {
 /** Tone, graphic-transition style, frame label, speaker, camera and plate. */
 function beatLayers(source, b, sb) {
   const out = {};
+  if (source.textMotion != null) {
+    if (!TEXT_MOTIONS.includes(source.textMotion)) throw new Error(`textMotion must be ${TEXT_MOTIONS.join(', ')}`);
+    out.text_motion = source.textMotion;
+  }
   if (source.tone != null) {
     if (!TONES.includes(source.tone)) throw new Error(`tone must be ${TONES.join(', ')}`);
     out.tone = source.tone;

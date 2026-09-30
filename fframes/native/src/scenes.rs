@@ -389,6 +389,11 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         start: f32,
         emphasis: &[Emphasis],
     ) -> Svgr<'a> {
+        // Display type only: body copy, labels and list items keep the calmer line rise.
+        let mode = self.text_motion();
+        if mode != "lines" && layout.size >= 40.0 {
+            return self.pieces(layout, x, y, w, align, color, start, emphasis, mode);
+        }
         let mut out = vec![];
         for (i, line) in layout.lines.iter().enumerate() {
             let top = y + i as f32 * layout.line_height;
@@ -410,6 +415,123 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             </g>));
         }
         fframes::svgr!(<g>{out}</g>)
+    }
+    /// How this scene's type arrives: `lines` (default), `words`, `letters` or `cascade`.
+    pub(crate) fn text_motion(&self) -> &str {
+        self.b.text_motion.as_deref().filter(|m| !m.is_empty()).unwrap_or(self.b.environment.text_motion.as_str())
+    }
+    /// Words or letters arriving one after another, each rising through its own mask (or, for
+    /// `cascade`, dropping in with a small spring and tilt). Pieces sit at their shaped offsets,
+    /// so kerning and emphasis colours match the static line exactly. The whole reveal is capped
+    /// near 0.9 s so long headlines stay brisk.
+    #[allow(clippy::too_many_arguments)]
+    fn pieces(
+        &self,
+        layout: &Layout,
+        x: f32,
+        y: f32,
+        w: f32,
+        align: Align,
+        color: &str,
+        start: f32,
+        emphasis: &[Emphasis],
+        mode: &str,
+    ) -> Svgr<'a> {
+        let letters = mode == "letters" || mode == "cascade";
+        // (line, byte start, byte end) of each piece, in reading order.
+        let mut spans = vec![];
+        for (i, line) in layout.lines.iter().enumerate() {
+            let text = line.text.as_str();
+            if letters {
+                for (b, ch) in text.char_indices() {
+                    if !ch.is_whitespace() {
+                        spans.push((i, b, b + ch.len_utf8()));
+                    }
+                }
+            } else {
+                let mut from = None;
+                for (b, ch) in text.char_indices().chain(std::iter::once((text.len(), ' '))) {
+                    match (ch.is_whitespace(), from) {
+                        (false, None) => from = Some(b),
+                        (true, Some(a)) => {
+                            spans.push((i, a, b));
+                            from = None;
+                        }
+                        _ => {}
+                    }
+                }
+            }
+        }
+        let step = (if letters { 0.028_f32 } else { 0.075 }).min(0.9 / spans.len().max(1) as f32);
+        let mut out = vec![];
+        for (k, &(i, a, b)) in spans.iter().enumerate() {
+            let line = &layout.lines[i];
+            let top = y + i as f32 * layout.line_height;
+            let piece_color =
+                emphasis.iter().find(|e| e.0 == i && e.1 <= a && b <= e.2).map_or(color, |e| e.3.as_str());
+            let px = align.x(x, w, line.width) + text::offset(layout, i, a);
+            let body = self.run(
+                line.text[a..b].to_owned(),
+                px,
+                top + layout.baseline,
+                layout.font,
+                layout.size,
+                layout.tracking_px,
+                piece_color,
+            );
+            let width = text::measure(layout.font, &line.text[a..b], layout.size, layout.tracking_px);
+            if let Some(node) = self.reveal_piece(
+                body,
+                start + k as f32 * step,
+                k,
+                mode,
+                px,
+                top,
+                width,
+                layout.size,
+                layout.line_height,
+            ) {
+                out.push(node);
+            }
+        }
+        fframes::svgr!(<g>{out}</g>)
+    }
+    /// One word or letter of a `pieces` reveal: a masked rise, or for `cascade` a drop-in with
+    /// an alternating tilt. `None` while the piece is still waiting.
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn reveal_piece(
+        &self,
+        body: Svgr<'a>,
+        time: f32,
+        k: usize,
+        mode: &str,
+        px: f32,
+        top: f32,
+        width: f32,
+        size: f32,
+        line_h: f32,
+    ) -> Option<Svgr<'a>> {
+        let enter = self.m.enter(self.t - time);
+        if enter.done() {
+            return Some(body);
+        }
+        if enter.hidden() {
+            return None;
+        }
+        if mode == "cascade" {
+            let lift = (1.0 - enter.travel) * size * 0.6;
+            let tilt = (1.0 - enter.travel) * if k % 2 == 0 { -8.0 } else { 8.0 };
+            let (cx, cy) = (px + width / 2.0, top + line_h * 0.5);
+            return Some(
+                fframes::svgr!(<g opacity={enter.alpha} transform={format!("translate(0 {}) rotate({tilt} {cx} {cy})", -lift)}>{body}</g>),
+            );
+        }
+        let dy = (1.0 - enter.travel) * line_h * 0.55;
+        let id = self.uid("piece");
+        Some(fframes::svgr!(<g>
+            <defs><clipPath id={id.clone()}><rect x={px - size * 0.2} y={top - size * 0.3} width={width + size * 0.4} height={line_h + size * 0.42} /></clipPath></defs>
+            <g clip-path={format!("url(#{id})")}><g opacity={enter.alpha} transform={format!("translate(0 {dy})")}>{body}</g></g>
+        </g>))
     }
     /// Fit then draw statically; returns the node and the height it used.
     pub(crate) fn para(&self, value: &str, box_: Area, style: Style, color: &str, align: Align) -> (Svgr<'a>, f32) {

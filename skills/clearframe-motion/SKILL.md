@@ -16,13 +16,14 @@ Read `docs/style.md` (vocabulary) and `docs/canvas.md` (drawing). The audience a
 5. **Continuity across cuts.** `panel`, `iris` and `whip` carry one movement across a cut; a `panel` into an accent-`tone` scene becomes the background. Use them at turns in the story, and `cut`/`push` for sequence.
 6. **Hierarchy through scale.** One hero per frame, drawn big (poster type, a large numeral, a single word). Supporting text at least a third smaller. Use `align: "center"` and full-frame compositions for statements that deserve the whole frame.
 7. **Depth through layers.** Backdrop → plate (drifts) → art under → block → art over → texture. Parallax between plate and content reads as depth; grain and vignette hold dark palettes together.
-8. **Ease like physical things.** `gentle` for editorial calm, `snappy` for social energy, `spring` for friendly play. Values never overshoot; positions may.
+8. **Type has a voice.** `textMotion` sets how display type arrives: `lines` is calm, `words` is conversational, `letters`/`cascade` shout. Pick one for the film and break it only at the loudest moment.
+9. **Ease like physical things.** `gentle` for editorial calm, `snappy` for social energy, `spring` for friendly play. Values never overshoot; positions may.
 
 ## Choosing the treatment
 
 | Moment | Treatment |
 |---|---|
-| Hook, verdict, turning point | kinetic `stack` with `emphasis`, `statement`/`title` centred, `tone: accent`, `burst` sketch |
+| Hook, verdict, turning point | kinetic `stack` with `emphasis`, `statement`/`title` centred with `textMotion: cascade`, `tone: accent`, `burst` sketch |
 | A number that must land | `stat` on `tone` or beside a split `plate`; count in step with the voice |
 | How something works | `canvas` (route, pipeline, network, balance, orbit) or `flow`/`cycle` |
 | Evidence | chart blocks, annotated with `art.over` arrows and circles |

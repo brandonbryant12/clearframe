@@ -12,7 +12,7 @@ const GREETING = /^(hi|hello|hey|welcome|in this video|today we|today,? we|let's
 const FULL_FRAME = b =>
   b.plate ||
   (b.tone && b.tone !== 'none') ||
-  b.block === 'canvas' ||
+  (b.block === 'canvas' && !b.props?.title) ||
   b.block === 'kinetic' ||
   b.props?.align === 'center' ||
   (['title', 'statement', 'endcard', 'chapter', 'highlight', 'quote'].includes(b.block) && !b.props?.title);
@@ -47,6 +47,48 @@ function onScreenWords(props) {
   };
   walk(props, '');
   return n;
+}
+
+/** Rough extent of canvas elements at rest, in frame pixels. */
+function extent(elements) {
+  let l = Infinity,
+    t = Infinity,
+    r = -Infinity,
+    b = -Infinity;
+  const grow = (x0, y0, x1, y1) => {
+    l = Math.min(l, x0);
+    t = Math.min(t, y0);
+    r = Math.max(r, x1);
+    b = Math.max(b, y1);
+  };
+  const walk = (list, dx = 0, dy = 0) => {
+    for (const el of list) {
+      const n = k => el[k] ?? 0;
+      if (el.type === 'group') walk(el.children ?? [], dx + n('x'), dy + n('y'));
+      else if (['rect', 'image', 'meter'].includes(el.type))
+        grow(dx + n('x'), dy + n('y'), dx + n('x') + n('w'), dy + n('y') + n('h'));
+      else if (el.type === 'circle' || el.type === 'ellipse') {
+        const rx = el.r ?? el.rx ?? 0,
+          ry = el.r ?? el.ry ?? 0;
+        grow(dx + n('cx') - rx, dy + n('cy') - ry, dx + n('cx') + rx, dy + n('cy') + ry);
+      } else if (el.type === 'line')
+        grow(
+          dx + Math.min(n('x1'), n('x2')),
+          dy + Math.min(n('y1'), n('y2')),
+          dx + Math.max(n('x1'), n('x2')),
+          dy + Math.max(n('y1'), n('y2')),
+        );
+      else if (el.type === 'text' || el.type === 'icon') {
+        const size = el.size ?? 48;
+        grow(dx + n('x') - size, dy + n('y') - size, dx + n('x') + size * 4, dy + n('y') + size * 0.3);
+      } else if (el.type === 'path' && typeof el.d === 'string') {
+        const v = el.d.match(/-?\d+(?:\.\d+)?/g)?.map(Number) ?? [];
+        for (let i = 0; i + 1 < v.length; i += 2) grow(dx + v[i], dy + v[i + 1], dx + v[i], dy + v[i + 1]);
+      }
+    }
+  };
+  walk(elements);
+  return Number.isFinite(l) ? { w: r - l, h: b - t } : null;
 }
 
 export function critique(root) {
@@ -84,6 +126,17 @@ export function critique(root) {
       'film',
       `${headered} of ${beats.length} scenes are a heading over a graphic. That is the slide-deck look: give some scenes the whole frame (align center, tone, plate, kinetic stack, canvas).`,
     );
+  // A drawing that occupies a small part of the frame reads as an icon on a slide.
+  const area = sb.format.width * sb.format.height;
+  for (const b of beats.filter(x => x.block === 'canvas' && x.props?.view == null)) {
+    const box = extent(b.props.elements ?? []);
+    if (box && (box.w * box.h) / area < 0.18)
+      add(
+        'idea',
+        b.id,
+        `The drawing covers ${Math.round((100 * box.w * box.h) / area)}% of the frame. Set view: "auto" to fit it to the space, or draw it larger.`,
+      );
+  }
   const drawn = beats.filter(b => b.block === 'canvas' || b.art).length,
     imaged = beats.filter(b => b.plate || ['image', 'video', 'annotate'].includes(b.block)).length;
   if (timing.duration > 40 && !drawn)

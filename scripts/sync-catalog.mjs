@@ -63,6 +63,10 @@ const schema = {
         },
       ],
     },
+    textMotion: {
+      enum: ['lines', 'words', 'letters', 'cascade'],
+      description: 'Default type reveal: whole lines, word by word, letter by letter or a tilted cascade',
+    },
     texture: {
       oneOf: [
         { enum: ['grain', 'vignette', 'film', 'none'] },
@@ -144,6 +148,7 @@ const schema = {
           props: object,
           sfx: { type: 'array', items: object },
           tone: { enum: ['none', 'accent', 'accent2', 'invert', 'surface'], description: 'Colour-blocked scene' },
+          textMotion: { enum: ['lines', 'words', 'letters', 'cascade'], description: 'Type reveal for this scene' },
           label: {
             type: 'string',
             maxLength: 40,

@@ -114,6 +114,44 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     ) -> Svgr<'a> {
         let baseline = text::baseline_in(r.font, r.size, r.line_h);
         let mut out = vec![];
+        let mode = self.text_motion();
+        if mode != "lines" {
+            // Word by word (letters and cascade split each word too), in reading order.
+            let letters = mode != "words";
+            let count: usize = r.lines.iter().flatten().map(|w| if letters { w.0.chars().count() } else { 1 }).sum();
+            let step = (if letters { 0.028_f32 } else { 0.075 }).min(0.9 / count.max(1) as f32);
+            let mut k = 0;
+            for (i, line) in r.lines.iter().enumerate() {
+                let width = line.iter().map(|w| w.2).sum::<f32>() + r.space * line.len().saturating_sub(1) as f32;
+                let mut cx = align.x(x, w, width);
+                let top = y + i as f32 * r.line_h;
+                for (word, marked, ww) in line {
+                    let (font, size, fill) = if *marked {
+                        (Font::SerifItalic, r.size * 1.18, self.p.accent.as_str())
+                    } else {
+                        (r.font, r.size, color)
+                    };
+                    let parts: Vec<(usize, usize)> = if letters {
+                        word.char_indices().map(|(b, ch)| (b, b + ch.len_utf8())).collect()
+                    } else {
+                        vec![(0, word.len())]
+                    };
+                    for (a, b) in parts {
+                        let px = cx + if a == 0 { 0.0 } else { text::measure(font, &word[..a], size, 0.0) };
+                        let pw = text::measure(font, &word[a..b], size, 0.0);
+                        let body = self.run(word[a..b].to_owned(), px, top + baseline, font, size, 0.0, fill);
+                        if let Some(node) =
+                            self.reveal_piece(body, start + k as f32 * step, k, mode, px, top, pw, r.size, r.line_h)
+                        {
+                            out.push(node);
+                        }
+                        k += 1;
+                    }
+                    cx += ww + r.space;
+                }
+            }
+            return fframes::svgr!(<g>{out}</g>);
+        }
         for (i, line) in r.lines.iter().enumerate() {
             let width = line.iter().map(|w| w.2).sum::<f32>() + r.space * line.len().saturating_sub(1) as f32;
             let mut cx = align.x(x, w, width);
