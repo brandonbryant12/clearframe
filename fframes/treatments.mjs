@@ -186,7 +186,7 @@ export const TREATMENTS = [
       sfx: 'subtle',
       voice: { style: 'warm storyteller, unhurried' },
     },
-    beats: { mosaic: { tile: 16 }, graphic: 'iris' },
+    beats: { mosaic: { tile: 16, glint: 0.2 }, graphic: 'iris' },
     rules: [
       'Everything is laid in tesserae: shapes assemble tile by tile (enter: assemble) and scatter when they stop being true (exit: scatter).',
       'Let the andamento follow the form: rings for round things, rows for walls and skies; outline rows trace each contour.',

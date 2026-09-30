@@ -11,14 +11,14 @@ arch = 'M 180 980 L 180 430 A 360 360 0 0 1 900 430 L 900 980 Z'
 scene = [
     # The niche, the sea and the moon assemble tile by tile.
     {'type': 'path', 'd': arch, 'fill': {'gradient': ['#2b3fa0', '#16225e']}, 'stroke': IVORY,
-     'mosaic': {'tile': 18, 'axis': 90}, 'enter': 'assemble', 'at': 0.1, 'dur': 1.8},
+     'mosaic': {'tile': 18, 'axis': 90, 'glint': 0.15}, 'enter': 'assemble', 'at': 0.1, 'dur': 1.8},
     *[{'type': 'rect', 'x': x, 'y': y, 'w': 9, 'h': 9, 'fill': GOLD, 'enter': 'pop', 'at': 1.4 + i * 0.07,
        'glow': {'blur': 6}, 'loop': {'type': 'blink', 'period': 2.6 + i % 3 * 0.7}}
       for i, (x, y) in enumerate([(260, 520), (330, 430), (410, 360), (820, 520), (300, 640), (760, 610), (450, 250), (620, 210)])],
-    {'type': 'circle', 'cx': 710, 'cy': 380, 'r': 78, 'fill': GOLD, 'mosaic': {'tile': 12, 'flow': 'rings'},
+    {'type': 'circle', 'cx': 710, 'cy': 380, 'r': 78, 'fill': GOLD, 'mosaic': {'tile': 12, 'flow': 'rings', 'glint': 0.4},
      'enter': 'assemble', 'say': 'tiles', 'dur': 1.4, 'glow': {'blur': 22, 'opacity': 0.7}},
     {'type': 'rect', 'x': 180, 'y': 760, 'w': 720, 'h': 220, 'fill': {'gradient': ['#3cc0b4', '#1c5a8c']},
-     'mosaic': {'tile': 16, 'axis': 90, 'outline': False}, 'enter': 'assemble', 'at': 0.8, 'dur': 1.6},
+     'mosaic': {'tile': 16, 'axis': 90, 'outline': False, 'glint': 0.7}, 'enter': 'assemble', 'at': 0.8, 'dur': 1.6},
     *[{'type': 'path', 'd': wave(800 + 50 * i, phase=i), 'stroke': IVORY, 'mosaic': {'tile': 7},
        'say': 'square', 'dur': 1.0, 'loop': {'type': 'float', 'period': 3 + i, 'amount': 5}} for i in range(3)],
     # The lighthouse: an ivory tower with coral bands, a gold lamp and a coral cap.

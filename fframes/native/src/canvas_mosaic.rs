@@ -231,6 +231,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         draw: f32,
         assemble: f32,
         scatter: f32,
+        now: f32,
     ) -> Svgr<'a> {
         use std::hash::{Hash, Hasher};
         let mut hasher = std::collections::hash_map::DefaultHasher::new();
@@ -274,6 +275,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             .unwrap_or_else(|| crate::design::mix(&body, "#000000", 0.62));
         let depth = f(spec, "shade", 0.22).clamp(0.0, 0.6);
         let shine = f(spec, "shine", 0.35).clamp(0.0, 1.0);
+        // Glints: each tile catches the light briefly on its own slow rhythm, so a held mosaic
+        // shimmers. A pure function of time and the tile's seed.
+        let glint = f(spec, "glint", 0.0).clamp(0.0, 1.0);
+        let mut glints = [String::new(), String::new(), String::new()];
         let base_for = |t: &Tile| -> String {
             if t.class == 1 {
                 return line.clone();
@@ -326,6 +331,16 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let level = (t.shade * 2.0).round().clamp(-2.0, 2.0) as i8;
             let key = (base_for(t), level);
             quad(x, y, t.w * k, t.h * k, a, buckets.entry(key).or_default());
+            if glint > 0.0 && scatter <= 0.0 {
+                let period = 3.0 + 5.0 * unit(seed ^ 0x61, i as u64);
+                let phase = unit(seed ^ 0x67, i as u64);
+                let wave = (TAU * (now / period + phase)).cos().max(0.0).powi(48);
+                let g = wave * glint * (0.4 + 0.6 * unit(seed ^ 0x71, i as u64));
+                if g > 0.08 {
+                    let level = ((g * 3.0) as usize).min(2);
+                    quad(x, y, t.w * k * 0.9, t.h * k * 0.9, a, &mut glints[level]);
+                }
+            }
             if shine > 0.0 && t.shade > -0.4 {
                 // A small highlight on the upper-left of the tile: glass catching the light.
                 let (c, s) = (a.cos(), a.sin());
@@ -353,6 +368,11 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         }
         if !shines.is_empty() {
             nodes.push(fframes::svgr!(<path d={shines} fill="#ffffff" opacity={shine * 0.45} />));
+        }
+        for (level, d) in glints.into_iter().enumerate() {
+            if !d.is_empty() {
+                nodes.push(fframes::svgr!(<path d={d} fill="#fffbe8" opacity={0.25 + 0.25 * level as f32} />));
+            }
         }
         let fade = 1.0 - scatter * scatter;
         fframes::svgr!(<g opacity={fade}>{nodes}</g>)

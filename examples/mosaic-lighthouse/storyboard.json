@@ -49,7 +49,8 @@
             "stroke": "ink",
             "mosaic": {
               "tile": 18,
-              "axis": 90
+              "axis": 90,
+              "glint": 0.15
             },
             "enter": "assemble",
             "at": 0.1,
@@ -199,7 +200,8 @@
             "fill": "accent",
             "mosaic": {
               "tile": 12,
-              "flow": "rings"
+              "flow": "rings",
+              "glint": 0.4
             },
             "enter": "assemble",
             "say": "tiles",
@@ -224,7 +226,8 @@
             "mosaic": {
               "tile": 16,
               "axis": 90,
-              "outline": false
+              "outline": false,
+              "glint": 0.7
             },
             "enter": "assemble",
             "at": 0.8,

@@ -217,18 +217,17 @@ fn mosaic_bed<'a>(w: f32, h: f32, p: &Palette) -> Svgr<'a> {
                 out.push('Z');
             }
         }
-        let (toward, grout) = if p.dark { ("#ffffff", mix(&p.bg, "#000000", 0.5)) } else { ("#000000", mix(&p.bg, "#000000", 0.3)) };
-        let shades = paths
-            .into_iter()
-            .enumerate()
-            .map(|(i, d)| (mix(&p.bg, toward, 0.02 + 0.03 * i as f32), d))
-            .collect();
+        let (toward, grout) =
+            if p.dark { ("#ffffff", mix(&p.bg, "#000000", 0.5)) } else { ("#000000", mix(&p.bg, "#000000", 0.3)) };
+        let shades =
+            paths.into_iter().enumerate().map(|(i, d)| (mix(&p.bg, toward, 0.02 + 0.03 * i as f32), d)).collect();
         let bed = Arc::new((grout, shades));
         cache.lock().unwrap().insert(key, bed.clone());
         bed
     });
     let (grout, shades) = &*bed;
-    let tiles: Vec<_> = shades.iter().map(|(color, d)| fframes::svgr!(<path d={d.clone()} fill={color.clone()} />)).collect();
+    let tiles: Vec<_> =
+        shades.iter().map(|(color, d)| fframes::svgr!(<path d={d.clone()} fill={color.clone()} />)).collect();
     fframes::svgr!(<g><rect width={w} height={h} fill={grout.clone()} />{tiles}</g>)
 }
 

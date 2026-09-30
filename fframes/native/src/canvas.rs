@@ -623,6 +623,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                     draw,
                     assemble,
                     scatter,
+                    now,
                 )
             }
             _ => self.shape(

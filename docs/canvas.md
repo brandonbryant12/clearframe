@@ -51,7 +51,7 @@ Give a shape `mosaic: true` (or set `mosaic` on the canvas to lay every shape) a
 - **Fills** (rect, circle, ellipse, closed path or poly) are tiled on a darker grout bed. Tiles run in `rows` (running bond, the default for most shapes) or `rings` (the default for circles and ellipses), with an outline row tracing the contour in the stroke colour. A gradient fill is sampled per tile along `axis` (degrees; 90 = top to bottom), which gives mosaic skies and seas.
 - **Strokes** (a line, open path, or a shape with `fill: none`) become a beaded line of tiles along the path. With `enter: draw` the tiles are laid in drawing order.
 - **Motion.** `enter: assemble` builds the shape tile by tile (`build: sweep | radial | random`). `exit: scatter` throws the tiles loose; they spin, fall and fade.
-- **Options:** `tile` (size, default 16), `gap` (grout), `jitter` (0–1), `flow`, `outline` (true/false), `build`, `shade` (per-tile light/dark range), `shine` (glassy highlight), `grout` (colour), `axis`, `seed`.
+- **Options:** `tile` (size, default 16), `gap` (grout), `jitter` (0–1), `flow`, `outline` (true/false), `build`, `shade` (per-tile light/dark range), `shine` (glassy highlight), `glint` (0–1: tiles catch the light in turn, so a held mosaic shimmers; water 0.6, gold 0.4, walls 0.15), `grout` (colour), `axis`, `seed`.
 
 Pair it with the `mosaic` treatment (palette, `backdrop: "mosaic"`, gentle motion, iris at chapter turns). Put `glow` on gold tiles (a moon, a lamp, stars). Draw hero shapes big enough for a dozen tiles across. Layouts are cached and tiles are batched by colour, so a frame of a few thousand tiles costs a handful of paths.
 

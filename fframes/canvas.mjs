@@ -382,7 +382,7 @@ export function mosaicSpec(m, at, fail) {
     seed: [0, 1e9],
   };
   for (const k of Object.keys(m)) {
-    if (!['tile', 'gap', 'jitter', 'flow', 'outline', 'build', 'shade', 'shine', 'grout', 'axis', 'seed'].includes(k))
+    if (!['tile', 'gap', 'jitter', 'flow', 'outline', 'build', 'shade', 'shine', 'glint', 'grout', 'axis', 'seed'].includes(k))
       fail(`${at}: unsupported field ${k}`);
     if (ranges[k] && !(Number.isFinite(m[k]) && m[k] >= ranges[k][0] && m[k] <= ranges[k][1]))
       fail(`${at}.${k} must be ${ranges[k][0]}–${ranges[k][1]}`);
