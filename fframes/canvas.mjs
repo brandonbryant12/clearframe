@@ -2,6 +2,7 @@
 // exact scheduling. Used by the `canvas` block and by every beat's `art` layers. The renderer
 // (fframes/native/src/canvas.rs) re-validates structure and draws what this module prepares.
 import { ICONS } from './icons.mjs';
+import { CANVAS_TIMING as T } from './constants.mjs';
 
 export const ELEMENT_TYPES = {
   rect: { geometry: ['x', 'y', 'w', 'h', 'r'], required: ['w', 'h'] },
@@ -275,7 +276,7 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
               fail(`${at}.count: unsupported field ${key}`);
           c.from ??= 0;
           c.decimals ??= 0;
-          c.dur ??= 1.2;
+          c.dur ??= T.count;
           if (
             !finite(c.from) ||
             !Number.isInteger(c.decimals) ||
@@ -391,16 +392,11 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve }
     const enter = defaultEnter(el);
     const chars = String(el.text ?? '').length;
     el.dur ??=
-      enter === 'draw'
-        ? 1.2
-        : enter === 'type'
-          ? Math.min(2.5, Math.max(0.4, chars * 0.035))
-          : enter === 'scramble'
-            ? 0.9
-            : ['grow', 'grow-x', 'grow-y', 'wipe', 'wipe-up'].includes(enter)
-              ? 0.8
-              : enter === 'none'
-                ? 0
+      enter === 'draw' ? T.draw
+        : enter === 'type' ? Math.min(T.typeMax, Math.max(T.typeMin, chars * T.typePerChar))
+          : enter === 'scramble' ? T.scramble
+            : ['grow', 'grow-x', 'grow-y', 'wipe', 'wipe-up'].includes(enter) ? T.grow
+              : enter === 'none' ? 0
                 : entrance;
     settle = Math.max(settle, el.at + el.dur);
     if (el.count) settle = Math.max(settle, el.at + el.count.dur);
@@ -419,7 +415,7 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve }
         k.at = resolve(k.say);
         delete k.say;
       }
-      k.dur ??= 0.6;
+      k.dur ??= T.key;
       settle = Math.max(settle, k.at + k.dur);
     }
     if (el.keys) el.keys.sort((a, b) => a.at - b.at);
@@ -429,7 +425,7 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve }
         delete el.along.say;
       }
       el.along.at ??= el.at;
-      el.along.dur ??= 1.5;
+      el.along.dur ??= T.along;
       settle = Math.max(settle, el.along.at + el.along.dur);
     }
     if (el.type === 'group')

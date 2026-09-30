@@ -3,42 +3,9 @@
 // taste: it points at where to look; the sheet and a fresh reviewer decide.
 import { loadStoryboard } from './project.mjs';
 import { computeTiming, tokenize } from './timing.mjs';
+import { rules } from '../../fframes/registry.mjs';
 
-const FAMILY = {
-  title: 'type',
-  statement: 'type',
-  endcard: 'type',
-  chapter: 'type',
-  highlight: 'type',
-  quote: 'type',
-  callout: 'type',
-  list: 'type',
-  stat: 'number',
-  kpis: 'number',
-  delta: 'number',
-  bars: 'chart',
-  line: 'chart',
-  waffle: 'chart',
-  ring: 'chart',
-  donut: 'chart',
-  funnel: 'chart',
-  magnitude: 'chart',
-  compare: 'layout',
-  matrix: 'layout',
-  steps: 'diagram',
-  timeline: 'diagram',
-  flow: 'diagram',
-  cycle: 'diagram',
-  equation: 'diagram',
-  'icon-grid': 'diagram',
-  checklist: 'type',
-  image: 'media',
-  video: 'media',
-  annotate: 'media',
-  kinetic: 'speech',
-  canvas: 'drawing',
-  breathing: 'motion',
-};
+const FAMILY = new Proxy({}, { get: (_, name) => rules(name).family });
 const CONNECTOR =
   /\b(but|so|therefore|because|which means|that's why|that is why|yet|instead|until|unless|except|however|then again|this means|the result|meanwhile|now)\b/i;
 const GREETING = /^(hi|hello|hey|welcome|in this video|today we|today,? we|let's|let us|have you ever)\b/i;

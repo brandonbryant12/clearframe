@@ -10,14 +10,24 @@ use std::f32::consts::{PI, TAU};
 use std::sync::Mutex;
 
 pub(crate) const MAX_ELEMENTS: usize = 240;
-const TYPES: &[&str] = &["rect", "circle", "ellipse", "line", "path", "poly", "text", "icon", "image", "group", "meter", "spotlight"];
-const ENTERS: &[&str] = &["fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type", "scramble", "blur", "none"];
+const TYPES: &[&str] =
+    &["rect", "circle", "ellipse", "line", "path", "poly", "text", "icon", "image", "group", "meter", "spotlight"];
+const ENTERS: &[&str] = &[
+    "fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type",
+    "scramble", "blur", "none",
+];
 const EXITS: &[&str] = &["fade", "shrink", "fall", "lift", "undraw", "wipe", "blur", "none"];
 const LOOPS: &[&str] = &["spin", "pulse", "float", "sway", "orbit", "dash", "blink", "level"];
-const TOKENS: &[&str] = &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "none"];
+const TOKENS: &[&str] =
+    &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "none"];
 
 /// A path's normalized data, flattened outline (for length and arrow tips) and bounds.
-struct PathInfo { d: String, points: Vec<Vec<(f32, f32)>>, length: f32, bounds: (f32, f32, f32, f32) }
+struct PathInfo {
+    d: String,
+    points: Vec<Vec<(f32, f32)>>,
+    length: f32,
+    bounds: (f32, f32, f32, f32),
+}
 
 fn path_cache() -> &'static Mutex<HashMap<String, std::sync::Arc<PathInfo>>> {
     static CACHE: std::sync::OnceLock<Mutex<HashMap<String, std::sync::Arc<PathInfo>>>> = std::sync::OnceLock::new();
@@ -27,33 +37,64 @@ fn path_cache() -> &'static Mutex<HashMap<String, std::sync::Arc<PathInfo>>> {
 /// Parse authored path data once; the renderer draws kurbo's normalized absolute form so
 /// validation and drawing agree on every command (arcs become cubic curves).
 fn path_info(d: &str) -> Option<std::sync::Arc<PathInfo>> {
-    if let Some(hit) = path_cache().lock().ok()?.get(d) { return Some(hit.clone()); }
-    if d.len() > 12_000 { return None; }
+    if let Some(hit) = path_cache().lock().ok()?.get(d) {
+        return Some(hit.clone());
+    }
+    if d.len() > 12_000 {
+        return None;
+    }
     let path = BezPath::from_svg(d).ok()?;
-    if path.elements().is_empty() || path.elements().len() > 4000 { return None; }
+    if path.elements().is_empty() || path.elements().len() > 4000 {
+        return None;
+    }
     let mut contours: Vec<Vec<(f32, f32)>> = vec![];
     kurbo::flatten(path.iter(), 0.35, |el| match el {
         PathEl::MoveTo(p) => contours.push(vec![(p.x as f32, p.y as f32)]),
-        PathEl::LineTo(p) => { if let Some(c) = contours.last_mut() { c.push((p.x as f32, p.y as f32)); } }
-        PathEl::ClosePath => { if let Some(c) = contours.last_mut() { if let Some(&first) = c.first() { c.push(first); } } }
+        PathEl::LineTo(p) => {
+            if let Some(c) = contours.last_mut() {
+                c.push((p.x as f32, p.y as f32));
+            }
+        }
+        PathEl::ClosePath => {
+            if let Some(c) = contours.last_mut() {
+                if let Some(&first) = c.first() {
+                    c.push(first);
+                }
+            }
+        }
         _ => {}
     });
-    if contours.iter().flatten().any(|(x, y)| !x.is_finite() || !y.is_finite()) { return None; }
+    if contours.iter().flatten().any(|(x, y)| !x.is_finite() || !y.is_finite()) {
+        return None;
+    }
     let length: f64 = path.segments().map(|s| s.arclen(0.05)).sum();
     let r = path.bounding_box();
-    let info = std::sync::Arc::new(PathInfo { d: path.to_svg(), points: contours, length: length as f32,
-        bounds: (r.x0 as f32, r.y0 as f32, (r.x1 - r.x0) as f32, (r.y1 - r.y0) as f32) });
-    if let Ok(mut cache) = path_cache().lock() { cache.insert(d.to_owned(), info.clone()); }
+    let info = std::sync::Arc::new(PathInfo {
+        d: path.to_svg(),
+        points: contours,
+        length: length as f32,
+        bounds: (r.x0 as f32, r.y0 as f32, (r.x1 - r.x0) as f32, (r.y1 - r.y0) as f32),
+    });
+    if let Ok(mut cache) = path_cache().lock() {
+        cache.insert(d.to_owned(), info.clone());
+    }
     Some(info)
 }
 
-fn num(v: &Value, key: &str) -> Option<f32> { v.get(key).and_then(Value::as_f64).map(|x| x as f32) }
-fn f(v: &Value, key: &str, default: f32) -> f32 { num(v, key).unwrap_or(default) }
+fn num(v: &Value, key: &str) -> Option<f32> {
+    v.get(key).and_then(Value::as_f64).map(|x| x as f32)
+}
+fn f(v: &Value, key: &str, default: f32) -> f32 {
+    num(v, key).unwrap_or(default)
+}
 fn points(v: &Value) -> Vec<(f32, f32)> {
-    arr(v, "points").iter().filter_map(|p| {
-        let pair = p.as_array()?;
-        Some((pair.first()?.as_f64()? as f32, pair.get(1)?.as_f64()? as f32))
-    }).collect()
+    arr(v, "points")
+        .iter()
+        .filter_map(|p| {
+            let pair = p.as_array()?;
+            Some((pair.first()?.as_f64()? as f32, pair.get(1)?.as_f64()? as f32))
+        })
+        .collect()
 }
 fn finite(v: &Value) -> bool {
     match v {
@@ -69,7 +110,12 @@ fn paint_ok(v: Option<&Value>) -> bool {
         Some(Value::String(s)) => TOKENS.contains(&s.as_str()) || crate::design::parse(s).is_some(),
         Some(Value::Object(g)) => {
             let stops = g.get("gradient").and_then(Value::as_array);
-            stops.is_some_and(|s| (2..=4).contains(&s.len()) && s.iter().all(|c| c.as_str().is_some_and(|c| c != "none" && paint_ok(Some(&Value::String(c.to_owned()))))))
+            stops.is_some_and(|s| {
+                (2..=4).contains(&s.len())
+                    && s.iter().all(|c| {
+                        c.as_str().is_some_and(|c| c != "none" && paint_ok(Some(&Value::String(c.to_owned()))))
+                    })
+            })
         }
         _ => false,
     }
@@ -78,34 +124,94 @@ fn paint_ok(v: Option<&Value>) -> bool {
 /// Structural checks so a hand-written job cannot reach an undrawable state. The catalog
 /// gives the friendlier, author-facing messages first.
 pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut usize) -> Result<(), &'static str> {
-    if depth > 4 { return Err("canvas groups nest at most four levels"); }
+    if depth > 4 {
+        return Err("canvas groups nest at most four levels");
+    }
     for el in elements {
         *count += 1;
-        if *count > MAX_ELEMENTS { return Err("canvas supports at most 240 elements"); }
-        if !el.is_object() || !finite(el) { return Err("canvas elements must be objects with finite numbers"); }
+        if *count > MAX_ELEMENTS {
+            return Err("canvas supports at most 240 elements");
+        }
+        if !el.is_object() || !finite(el) {
+            return Err("canvas elements must be objects with finite numbers");
+        }
         let kind = s(el, "type");
-        if !TYPES.contains(&kind) { return Err("unknown canvas element type"); }
+        if !TYPES.contains(&kind) {
+            return Err("unknown canvas element type");
+        }
         let enter = s(el, "enter");
-        if !enter.is_empty() && !ENTERS.contains(&enter) { return Err("unknown canvas entrance"); }
+        if !enter.is_empty() && !ENTERS.contains(&enter) {
+            return Err("unknown canvas entrance");
+        }
         let exit = s(el, "exit");
-        if !exit.is_empty() && !EXITS.contains(&exit) { return Err("unknown canvas exit"); }
-        if let Some(l) = el.get("loop") { if !LOOPS.contains(&s(l, "type")) || f(l, "period", 4.0) <= 0.05 { return Err("canvas loops need a known type and a positive period"); } }
-        if !paint_ok(el.get("fill")) || !paint_ok(el.get("stroke")) { return Err("canvas colors must be palette tokens, #rrggbb or a gradient of tokens"); }
-        for key in ["at", "dur", "exitAt", "exitDur"] { if num(el, key).is_some_and(|v| v < 0.0) { return Err("canvas times must be nonnegative"); } }
-        if f(el, "opacity", 1.0) < 0.0 || f(el, "opacity", 1.0) > 1.0 { return Err("canvas opacity must be 0–1"); }
-        if el.get("along").is_some_and(|route| path_info(s(route, "d")).is_none()) { return Err("canvas along needs parseable path data"); }
-        if let Some(m) = el.get("morph") { validate_elements(std::slice::from_ref(&m["from"]), depth + 1, count)?; }
+        if !exit.is_empty() && !EXITS.contains(&exit) {
+            return Err("unknown canvas exit");
+        }
+        if let Some(l) = el.get("loop") {
+            if !LOOPS.contains(&s(l, "type")) || f(l, "period", 4.0) <= 0.05 {
+                return Err("canvas loops need a known type and a positive period");
+            }
+        }
+        if !paint_ok(el.get("fill")) || !paint_ok(el.get("stroke")) {
+            return Err("canvas colors must be palette tokens, #rrggbb or a gradient of tokens");
+        }
+        for key in ["at", "dur", "exitAt", "exitDur"] {
+            if num(el, key).is_some_and(|v| v < 0.0) {
+                return Err("canvas times must be nonnegative");
+            }
+        }
+        if f(el, "opacity", 1.0) < 0.0 || f(el, "opacity", 1.0) > 1.0 {
+            return Err("canvas opacity must be 0–1");
+        }
+        if el.get("along").is_some_and(|route| path_info(s(route, "d")).is_none()) {
+            return Err("canvas along needs parseable path data");
+        }
+        if let Some(m) = el.get("morph") {
+            validate_elements(std::slice::from_ref(&m["from"]), depth + 1, count)?;
+        }
         if let Some(echo) = el.get("echo") {
-            if !echo.is_object() || !(1.0..=24.0).contains(&n(echo, "count", 6.0)) || n(echo, "lag", 0.0) < 0.0
-                || echo.get("to").is_some_and(|t| !paint_ok(Some(t))) { return Err("canvas echo needs count 1–24, a nonnegative lag and a palette colour"); }
+            if !echo.is_object()
+                || !(1.0..=24.0).contains(&n(echo, "count", 6.0))
+                || n(echo, "lag", 0.0) < 0.0
+                || echo.get("to").is_some_and(|t| !paint_ok(Some(t)))
+            {
+                return Err("canvas echo needs count 1–24, a nonnegative lag and a palette colour");
+            }
         }
         match kind {
-            "path" => if path_info(s(el, "d")).is_none() { return Err("canvas path data could not be parsed"); },
-            "poly" => if points(el).len() < 2 || points(el).len() > 400 { return Err("canvas poly needs 2–400 points"); },
-            "icon" => if !crate::icons::supported(s(el, "name")) { return Err("unsupported native icon"); },
-            "meter" => if !["", "bars", "mirror", "ring", "wave"].contains(&s(el, "style")) || f(el, "w", 0.0) <= 0.0 || f(el, "h", 0.0) <= 0.0 { return Err("canvas meter needs w, h and style bars|mirror|ring|wave"); },
-            "text" => if s(el, "text").chars().count() > 240 && el.get("count").is_none() { return Err("canvas text is limited to 240 characters"); },
-            "image" => if s(el, "file").is_empty() { return Err("canvas images need a prepared file"); },
+            "path" => {
+                if path_info(s(el, "d")).is_none() {
+                    return Err("canvas path data could not be parsed");
+                }
+            }
+            "poly" => {
+                if points(el).len() < 2 || points(el).len() > 400 {
+                    return Err("canvas poly needs 2–400 points");
+                }
+            }
+            "icon" => {
+                if !crate::icons::supported(s(el, "name")) {
+                    return Err("unsupported native icon");
+                }
+            }
+            "meter" => {
+                if !["", "bars", "mirror", "ring", "wave"].contains(&s(el, "style"))
+                    || f(el, "w", 0.0) <= 0.0
+                    || f(el, "h", 0.0) <= 0.0
+                {
+                    return Err("canvas meter needs w, h and style bars|mirror|ring|wave");
+                }
+            }
+            "text" => {
+                if s(el, "text").chars().count() > 240 && el.get("count").is_none() {
+                    return Err("canvas text is limited to 240 characters");
+                }
+            }
+            "image" => {
+                if s(el, "file").is_empty() {
+                    return Err("canvas images need a prepared file");
+                }
+            }
             "group" => validate_elements(arr(el, "children"), depth + 1, count)?,
             _ => {}
         }
@@ -115,19 +221,32 @@ pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut us
 
 pub(crate) fn validate(props: &Value) -> Result<(), &'static str> {
     let view = arr(props, "view");
-    if !view.is_empty() && (view.len() != 2 || view.iter().any(|v| !v.as_f64().is_some_and(|v| v.is_finite() && v >= 16.0))) {
+    if !view.is_empty()
+        && (view.len() != 2 || view.iter().any(|v| !v.as_f64().is_some_and(|v| v.is_finite() && v >= 16.0)))
+    {
         return Err("canvas view must be [width, height]");
     }
     let mut count = 0;
     validate_elements(arr(props, "elements"), 0, &mut count)?;
-    if count == 0 { return Err("canvas needs at least one element"); }
+    if count == 0 {
+        return Err("canvas needs at least one element");
+    }
     Ok(())
 }
 
 #[derive(Clone, Copy, Default)]
-struct Pose { dx: f32, dy: f32, sx: f32, sy: f32, rotate: f32, alpha: f32 }
+struct Pose {
+    dx: f32,
+    dy: f32,
+    sx: f32,
+    sy: f32,
+    rotate: f32,
+    alpha: f32,
+}
 impl Pose {
-    fn identity() -> Self { Pose { sx: 1.0, sy: 1.0, alpha: 1.0, ..Default::default() } }
+    fn identity() -> Self {
+        Pose { sx: 1.0, sy: 1.0, alpha: 1.0, ..Default::default() }
+    }
 }
 
 fn ease(name: &str, x: f32) -> f32 {
@@ -144,10 +263,19 @@ fn ease(name: &str, x: f32) -> f32 {
 fn bounds(el: &Value) -> (f32, f32, f32, f32) {
     match s(el, "type") {
         "rect" | "image" | "meter" => (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0), f(el, "h", 0.0)),
-        "spotlight" if el.get("cx").is_some() => { let r = f(el, "r", 0.0); (f(el, "cx", 0.0) - r, f(el, "cy", 0.0) - r, 2.0 * r, 2.0 * r) }
+        "spotlight" if el.get("cx").is_some() => {
+            let r = f(el, "r", 0.0);
+            (f(el, "cx", 0.0) - r, f(el, "cy", 0.0) - r, 2.0 * r, 2.0 * r)
+        }
         "spotlight" => (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0), f(el, "h", 0.0)),
-        "circle" => { let r = f(el, "r", 0.0); (f(el, "cx", 0.0) - r, f(el, "cy", 0.0) - r, 2.0 * r, 2.0 * r) }
-        "ellipse" => { let (rx, ry) = (f(el, "rx", 0.0), f(el, "ry", 0.0)); (f(el, "cx", 0.0) - rx, f(el, "cy", 0.0) - ry, 2.0 * rx, 2.0 * ry) }
+        "circle" => {
+            let r = f(el, "r", 0.0);
+            (f(el, "cx", 0.0) - r, f(el, "cy", 0.0) - r, 2.0 * r, 2.0 * r)
+        }
+        "ellipse" => {
+            let (rx, ry) = (f(el, "rx", 0.0), f(el, "ry", 0.0));
+            (f(el, "cx", 0.0) - rx, f(el, "cy", 0.0) - ry, 2.0 * rx, 2.0 * ry)
+        }
         "line" => {
             let (x1, y1, x2, y2) = (f(el, "x1", 0.0), f(el, "y1", 0.0), f(el, "x2", 0.0), f(el, "y2", 0.0));
             (x1.min(x2), y1.min(y2), (x2 - x1).abs(), (y2 - y1).abs())
@@ -159,11 +287,19 @@ fn bounds(el: &Value) -> (f32, f32, f32, f32) {
             (x0, y0, x1 - x0, y1 - y0)
         }
         "path" => path_info(s(el, "d")).map_or((0.0, 0.0, 0.0, 0.0), |p| p.bounds),
-        "icon" => { let size = f(el, "size", 64.0); (f(el, "x", 0.0) - size / 2.0, f(el, "y", 0.0) - size / 2.0, size, size) }
+        "icon" => {
+            let size = f(el, "size", 64.0);
+            (f(el, "x", 0.0) - size / 2.0, f(el, "y", 0.0) - size / 2.0, size, size)
+        }
         "text" => {
             let size = f(el, "size", 48.0);
             let width = num(el, "width").unwrap_or_else(|| text::measure(text_font(el), s(el, "text"), size, 0.0));
-            let x = f(el, "x", 0.0) - match s(el, "anchor") { "middle" => width / 2.0, "end" => width, _ => 0.0 };
+            let x = f(el, "x", 0.0)
+                - match s(el, "anchor") {
+                    "middle" => width / 2.0,
+                    "end" => width,
+                    _ => 0.0,
+                };
             (x, f(el, "y", 0.0) - size * 0.8, width, size)
         }
         "group" => {
@@ -171,7 +307,10 @@ fn bounds(el: &Value) -> (f32, f32, f32, f32) {
             let mut acc: Option<(f32, f32, f32, f32)> = None;
             for child in arr(el, "children") {
                 let (x, y, w, h) = bounds(child);
-                acc = Some(match acc { None => (x, y, x + w, y + h), Some((a, b, c, d)) => (a.min(x), b.min(y), c.max(x + w), d.max(y + h)) });
+                acc = Some(match acc {
+                    None => (x, y, x + w, y + h),
+                    Some((a, b, c, d)) => (a.min(x), b.min(y), c.max(x + w), d.max(y + h)),
+                });
             }
             acc.map_or((gx, gy, 0.0, 0.0), |(a, b, c, d)| (a + gx, b + gy, c - a, d - b))
         }
@@ -181,23 +320,52 @@ fn bounds(el: &Value) -> (f32, f32, f32, f32) {
 
 fn text_font(el: &Value) -> Font {
     match s(el, "font") {
-        "text" | "regular" => Font::Text, "strong" => Font::TextStrong, "light" => Font::DisplayLight,
-        "bold" => Font::DisplayBold, "figures" => Font::Figures, "display" | "semibold" => Font::Display,
-        "serif" => Font::Serif, "serif-italic" | "italic" => Font::SerifItalic, "mono" => Font::Mono, "hand" => Font::Hand,
-        _ => if el.get("count").is_some() { Font::Figures } else if f(el, "size", 48.0) >= 40.0 { Font::Display } else { Font::Text },
+        "text" | "regular" => Font::Text,
+        "strong" => Font::TextStrong,
+        "light" => Font::DisplayLight,
+        "bold" => Font::DisplayBold,
+        "figures" => Font::Figures,
+        "display" | "semibold" => Font::Display,
+        "serif" => Font::Serif,
+        "serif-italic" | "italic" => Font::SerifItalic,
+        "mono" => Font::Mono,
+        "hand" => Font::Hand,
+        _ => {
+            if el.get("count").is_some() {
+                Font::Figures
+            } else if f(el, "size", 48.0) >= 40.0 {
+                Font::Display
+            } else {
+                Font::Text
+            }
+        }
     }
 }
 
 /// Stroke length used for draw-on entrances.
 fn stroke_length(el: &Value) -> f32 {
     match s(el, "type") {
-        "rect" => { let (w, h, r) = (f(el, "w", 0.0), f(el, "h", 0.0), f(el, "r", 0.0).min(f(el, "w", 0.0) / 2.0).min(f(el, "h", 0.0) / 2.0)); 2.0 * (w + h) - 8.0 * r + TAU * r }
+        "rect" => {
+            let (w, h, r) = (
+                f(el, "w", 0.0),
+                f(el, "h", 0.0),
+                f(el, "r", 0.0).min(f(el, "w", 0.0) / 2.0).min(f(el, "h", 0.0) / 2.0),
+            );
+            2.0 * (w + h) - 8.0 * r + TAU * r
+        }
         "circle" => TAU * f(el, "r", 0.0),
-        "ellipse" => { let (a, b) = (f(el, "rx", 0.0), f(el, "ry", 0.0)); PI * (3.0 * (a + b) - ((3.0 * a + b) * (a + 3.0 * b)).max(0.0).sqrt()) }
+        "ellipse" => {
+            let (a, b) = (f(el, "rx", 0.0), f(el, "ry", 0.0));
+            PI * (3.0 * (a + b) - ((3.0 * a + b) * (a + 3.0 * b)).max(0.0).sqrt())
+        }
         "line" => (f(el, "x2", 0.0) - f(el, "x1", 0.0)).hypot(f(el, "y2", 0.0) - f(el, "y1", 0.0)),
         "poly" => {
             let mut pts = points(el);
-            if el.get("closed").and_then(Value::as_bool).unwrap_or(false) { if let Some(&p) = pts.first() { pts.push(p); } }
+            if el.get("closed").and_then(Value::as_bool).unwrap_or(false) {
+                if let Some(&p) = pts.first() {
+                    pts.push(p);
+                }
+            }
             pts.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum()
         }
         "path" => path_info(s(el, "d")).map_or(0.0, |p| p.length),
@@ -210,27 +378,55 @@ fn outline(el: &Value) -> Vec<(f32, f32)> {
     match s(el, "type") {
         "line" => vec![(f(el, "x1", 0.0), f(el, "y1", 0.0)), (f(el, "x2", 0.0), f(el, "y2", 0.0))],
         "poly" => points(el),
-        "path" => path_info(s(el, "d")).and_then(|p| p.points.iter().rev().find(|c| c.len() > 1).cloned()).unwrap_or_default(),
+        "path" => {
+            path_info(s(el, "d")).and_then(|p| p.points.iter().rev().find(|c| c.len() > 1).cloned()).unwrap_or_default()
+        }
         _ => vec![],
     }
 }
 
 /// `n` points spaced evenly by arc length along a polyline.
 fn resample(points: &[(f32, f32)], n: usize) -> Vec<(f32, f32)> {
-    if points.len() < 2 { return vec![points.first().copied().unwrap_or((0.0, 0.0)); n]; }
+    if points.len() < 2 {
+        return vec![points.first().copied().unwrap_or((0.0, 0.0)); n];
+    }
     (0..n).map(|i| along(points, i as f32 / (n - 1) as f32).map_or(points[0], |(p, _)| p)).collect()
 }
 
 /// Outline of a morphable element as a polyline (closed shapes repeat their first point).
 fn morph_outline(el: &Value) -> Option<(Vec<(f32, f32)>, bool)> {
     match s(el, "type") {
-        "path" => path_info(s(el, "d")).and_then(|p| p.points.iter().max_by_key(|c| c.len()).cloned()).map(|c| { let closed = c.first() == c.last(); (c, closed) }),
-        "poly" => { let mut p = points(el); let closed = el.get("closed").and_then(Value::as_bool).unwrap_or(false); if closed { if let Some(&a) = p.first() { p.push(a); } } Some((p, closed)) }
+        "path" => path_info(s(el, "d")).and_then(|p| p.points.iter().max_by_key(|c| c.len()).cloned()).map(|c| {
+            let closed = c.first() == c.last();
+            (c, closed)
+        }),
+        "poly" => {
+            let mut p = points(el);
+            let closed = el.get("closed").and_then(Value::as_bool).unwrap_or(false);
+            if closed {
+                if let Some(&a) = p.first() {
+                    p.push(a);
+                }
+            }
+            Some((p, closed))
+        }
         "line" => Some((vec![(f(el, "x1", 0.0), f(el, "y1", 0.0)), (f(el, "x2", 0.0), f(el, "y2", 0.0))], false)),
         "circle" | "ellipse" => {
             let (cx, cy) = (f(el, "cx", 0.0), f(el, "cy", 0.0));
-            let (rx, ry) = if s(el, "type") == "circle" { (f(el, "r", 0.0), f(el, "r", 0.0)) } else { (f(el, "rx", 0.0), f(el, "ry", 0.0)) };
-            Some(((0..=96).map(|i| { let a = i as f32 / 96.0 * TAU - PI / 2.0; (cx + rx * a.cos(), cy + ry * a.sin()) }).collect(), true))
+            let (rx, ry) = if s(el, "type") == "circle" {
+                (f(el, "r", 0.0), f(el, "r", 0.0))
+            } else {
+                (f(el, "rx", 0.0), f(el, "ry", 0.0))
+            };
+            Some((
+                (0..=96)
+                    .map(|i| {
+                        let a = i as f32 / 96.0 * TAU - PI / 2.0;
+                        (cx + rx * a.cos(), cy + ry * a.sin())
+                    })
+                    .collect(),
+                true,
+            ))
         }
         "rect" => {
             let (x, y, w, h) = (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0), f(el, "h", 0.0));
@@ -253,7 +449,9 @@ fn noise(seed: u64, i: u64) -> f32 {
 /// A pencil pass along polylines: points every ~22 units nudged sideways, ends overshooting a
 /// little, joined with smooth quadratics.
 fn rough_contour(points: &[(f32, f32)], amount: f32, seed: u64) -> String {
-    if points.len() < 2 { return String::new(); }
+    if points.len() < 2 {
+        return String::new();
+    }
     let mut dense = vec![];
     for (k, w) in points.windows(2).enumerate() {
         let (a, b) = (w[0], w[1]);
@@ -286,26 +484,36 @@ fn rough_contour(points: &[(f32, f32)], amount: f32, seed: u64) -> String {
 /// Contours of a stroked shape for rough rendering, each with whether it is closed.
 fn contours_of(el: &Value) -> Vec<(Vec<(f32, f32)>, bool)> {
     match s(el, "type") {
-        "path" => path_info(s(el, "d")).map(|p| p.points.iter().map(|c| (c.clone(), c.len() > 2 && c.first() == c.last())).collect()).unwrap_or_default(),
+        "path" => path_info(s(el, "d"))
+            .map(|p| p.points.iter().map(|c| (c.clone(), c.len() > 2 && c.first() == c.last())).collect())
+            .unwrap_or_default(),
         _ => morph_outline(el).map(|(c, closed)| vec![(c, closed)]).unwrap_or_default(),
     }
 }
 
 /// An open chevron whose point is at (x, y), facing `angle`.
 fn arrowhead(x: f32, y: f32, angle: f32, head: f32) -> String {
-    format!("M {} {} L {x} {y} L {} {}",
-        x - head * (angle - PI / 6.5).cos(), y - head * (angle - PI / 6.5).sin(),
-        x - head * (angle + PI / 6.5).cos(), y - head * (angle + PI / 6.5).sin())
+    format!(
+        "M {} {} L {x} {y} L {} {}",
+        x - head * (angle - PI / 6.5).cos(),
+        y - head * (angle - PI / 6.5).sin(),
+        x - head * (angle + PI / 6.5).cos(),
+        y - head * (angle + PI / 6.5).sin()
+    )
 }
 
 /// Point and direction at `fraction` of a polyline's length.
 fn along(points: &[(f32, f32)], fraction: f32) -> Option<((f32, f32), f32)> {
     let total: f32 = points.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum();
-    if total <= 0.0 { return None; }
+    if total <= 0.0 {
+        return None;
+    }
     let mut remaining = total * fraction.clamp(0.0, 1.0);
     for w in points.windows(2) {
         let seg = (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1);
-        if seg <= 1e-6 { continue; }
+        if seg <= 1e-6 {
+            continue;
+        }
         if remaining <= seg || std::ptr::eq(w, points.windows(2).last()?) {
             let t = (remaining / seg).clamp(0.0, 1.0);
             let p = (w[0].0 + (w[1].0 - w[0].0) * t, w[0].1 + (w[1].1 - w[0].1) * t);
@@ -322,9 +530,17 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let p = &self.p;
         let token = |name: &str| -> String {
             match name {
-                "bg" => p.bg.clone(), "surface" => p.surface.clone(), "ink" => p.ink.clone(), "muted" => p.muted.clone(),
-                "accent" => p.accent.clone(), "accent2" => p.accent2.clone(), "positive" => p.positive.clone(),
-                "negative" => p.negative.clone(), "line" => p.line(), "wash" => p.wash(&p.accent), "wash2" => p.wash(&p.accent2),
+                "bg" => p.bg.clone(),
+                "surface" => p.surface.clone(),
+                "ink" => p.ink.clone(),
+                "muted" => p.muted.clone(),
+                "accent" => p.accent.clone(),
+                "accent2" => p.accent2.clone(),
+                "positive" => p.positive.clone(),
+                "negative" => p.negative.clone(),
+                "line" => p.line(),
+                "wash" => p.wash(&p.accent),
+                "wash2" => p.wash(&p.accent2),
                 "none" => "none".into(),
                 hex if crate::design::parse(hex).is_some() => hex.to_owned(),
                 _ => fallback.to_owned(),
@@ -333,16 +549,26 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         match value {
             Some(Value::String(name)) => token(name),
             Some(Value::Object(g)) => {
-                let stops: Vec<String> = g.get("gradient").and_then(Value::as_array).map(|s| s.iter().filter_map(Value::as_str).map(token).collect()).unwrap_or_default();
-                if stops.len() < 2 { return token(fallback); }
+                let stops: Vec<String> = g
+                    .get("gradient")
+                    .and_then(Value::as_array)
+                    .map(|s| s.iter().filter_map(Value::as_str).map(token).collect())
+                    .unwrap_or_default();
+                if stops.len() < 2 {
+                    return token(fallback);
+                }
                 let id = self.uid("grad");
                 let last = (stops.len() - 1) as f32;
                 // `fade` dissolves the final stop to transparent: soft glows without an edge.
                 let fade = g.get("fade").and_then(Value::as_bool).unwrap_or(false);
-                let nodes: Vec<_> = stops.iter().enumerate().map(|(i, c)| {
-                    let opacity = if fade && i + 1 == stops.len() { 0.0 } else { 1.0 };
-                    fframes::svgr!(<stop offset={i as f32 / last} stop-color={c.clone()} stop-opacity={opacity} />)
-                }).collect();
+                let nodes: Vec<_> = stops
+                    .iter()
+                    .enumerate()
+                    .map(|(i, c)| {
+                        let opacity = if fade && i + 1 == stops.len() { 0.0 } else { 1.0 };
+                        fframes::svgr!(<stop offset={i as f32 / last} stop-color={c.clone()} stop-opacity={opacity} />)
+                    })
+                    .collect();
                 if g.get("radial").and_then(Value::as_bool).unwrap_or(false) {
                     defs.push(fframes::svgr!(<radialGradient id={id.clone()} cx="0.5" cy="0.5" r="0.5">{nodes}</radialGradient>));
                 } else {
@@ -357,15 +583,34 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     }
 
     /// Draw a canvas element list. `inherited` is the entrance time children fall back to.
-    pub(crate) fn elements(&self, list: &[Value], inherited: f32, stagger: f32, defs: &mut Vec<Svgr<'a>>) -> Vec<Svgr<'a>> {
+    pub(crate) fn elements(
+        &self,
+        list: &[Value],
+        inherited: f32,
+        stagger: f32,
+        defs: &mut Vec<Svgr<'a>>,
+    ) -> Vec<Svgr<'a>> {
         self.elements_at(list, inherited, stagger, defs, self.t)
     }
     /// Elements as they are at scene time `now` (echo trails draw earlier moments).
-    fn elements_at(&self, list: &[Value], inherited: f32, stagger: f32, defs: &mut Vec<Svgr<'a>>, now: f32) -> Vec<Svgr<'a>> {
-        list.iter().enumerate().map(|(i, el)| {
-            let at = inherited + i as f32 * stagger;
-            match el.get("echo") { Some(echo) => self.echoed(el, echo, at, defs, now), None => self.element(el, at, defs, now) }
-        }).collect()
+    fn elements_at(
+        &self,
+        list: &[Value],
+        inherited: f32,
+        stagger: f32,
+        defs: &mut Vec<Svgr<'a>>,
+        now: f32,
+    ) -> Vec<Svgr<'a>> {
+        list.iter()
+            .enumerate()
+            .map(|(i, el)| {
+                let at = inherited + i as f32 * stagger;
+                match el.get("echo") {
+                    Some(echo) => self.echoed(el, echo, at, defs, now),
+                    None => self.element(el, at, defs, now),
+                }
+            })
+            .collect()
     }
 
     /// Copies behind an element: earlier moments of its motion (`lag`, a trail) and/or
@@ -375,13 +620,24 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let lag = f(echo, "lag", 0.0).max(0.0);
         let fade = f(echo, "fade", 0.72).clamp(0.0, 1.0);
         let step = echo.get("step");
-        let (sx, sy, sr, ss) = step.map_or((0.0, 0.0, 0.0, 0.0), |st| (f(st, "x", 0.0), f(st, "y", 0.0), f(st, "rotate", 0.0), f(st, "scale", 0.0)));
-        let target = echo.get("to").and_then(Value::as_str).map(|t| self.paint(Some(&Value::String(t.to_owned())), "accent", defs));
+        let (sx, sy, sr, ss) = step.map_or((0.0, 0.0, 0.0, 0.0), |st| {
+            (f(st, "x", 0.0), f(st, "y", 0.0), f(st, "rotate", 0.0), f(st, "scale", 0.0))
+        });
+        let target = echo
+            .get("to")
+            .and_then(Value::as_str)
+            .map(|t| self.paint(Some(&Value::String(t.to_owned())), "accent", defs));
         let (bx, by, bw, bh) = bounds(el);
-        let (ox, oy) = el.get("origin").and_then(Value::as_array).filter(|o| o.len() == 2)
-            .map(|o| (o[0].as_f64().unwrap_or(0.0) as f32, o[1].as_f64().unwrap_or(0.0) as f32)).unwrap_or((bx + bw / 2.0, by + bh / 2.0));
+        let (ox, oy) = el
+            .get("origin")
+            .and_then(Value::as_array)
+            .filter(|o| o.len() == 2)
+            .map(|o| (o[0].as_f64().unwrap_or(0.0) as f32, o[1].as_f64().unwrap_or(0.0) as f32))
+            .unwrap_or((bx + bw / 2.0, by + bh / 2.0));
         let mut base = el.clone();
-        if let Some(o) = base.as_object_mut() { o.remove("echo"); }
+        if let Some(o) = base.as_object_mut() {
+            o.remove("echo");
+        }
         let mut copies = vec![];
         for i in (1..=count).rev() {
             let mut copy = base.clone();
@@ -390,11 +646,15 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 for key in ["fill", "stroke"] {
                     if let Some(Value::String(color)) = o.get(key) {
                         let from = self.paint(Some(&Value::String(color.clone())), "accent", defs);
-                        if from != "none" { o.insert(key.into(), Value::String(crate::design::mix(&from, to, k))); }
+                        if from != "none" {
+                            o.insert(key.into(), Value::String(crate::design::mix(&from, to, k)));
+                        }
                     }
                 }
             }
-            if let Some(o) = copy.as_object_mut() { o.insert("opacity".into(), serde_json::json!(f(el, "opacity", 1.0) * fade.powi(i as i32))); }
+            if let Some(o) = copy.as_object_mut() {
+                o.insert("opacity".into(), serde_json::json!(f(el, "opacity", 1.0) * fade.powi(i as i32)));
+            }
             let node = self.element(&copy, at, defs, now - lag * i as f32);
             let fi = i as f32;
             let offset = sx.abs() + sy.abs() + sr.abs() + ss.abs() > 1e-6;
@@ -408,7 +668,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
 
     fn element(&self, el: &Value, default_at: f32, defs: &mut Vec<Svgr<'a>>, now: f32) -> Svgr<'a> {
         // Stepped time ("on twos"): the element updates `fps` times a second, a handmade feel.
-        let now = match num(el, "fps") { Some(q) if q > 0.0 => (now * q).floor() / q, _ => now };
+        let now = match num(el, "fps") {
+            Some(q) if q > 0.0 => (now * q).floor() / q,
+            _ => now,
+        };
         // Morph from the previous beat's element with the same id, across the cut.
         if let Some(m) = el.get("morph") {
             let dur = f(m, "dur", 0.8).max(0.01);
@@ -422,39 +685,55 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let enter = match s(el, "enter") {
             "" => match kind {
                 "line" | "path" | "poly" if el.get("fill").is_none_or(|f| f == "none") => "draw",
-                "text" => "rise", "icon" | "circle" => "pop", _ => "fade",
+                "text" => "rise",
+                "icon" | "circle" => "pop",
+                _ => "fade",
             },
             other => other,
         };
         let text_len = s(el, "text").chars().count() as f32;
         // Defaults mirror `canvasTimes` in fframes/production.mjs, which writes explicit
         // times into prepared jobs so scene settling can be scheduled exactly.
+        let c = &crate::constants::get().canvas;
         let default_dur = match enter {
-            "draw" => 1.2,
-            "type" => (text_len * 0.035).clamp(0.4, 2.5),
-            "grow" | "grow-x" | "grow-y" | "wipe" | "wipe-up" => 0.8,
-            "scramble" => 0.9,
+            "draw" => c.draw,
+            "type" => (text_len * c.type_per_char).clamp(c.type_min, c.type_max),
+            "grow" | "grow-x" | "grow-y" | "wipe" | "wipe-up" => c.grow,
+            "scramble" => c.scramble,
             "none" => 0.0,
             _ => self.m.duration(),
         };
         let dur = f(el, "dur", default_dur).max(0.0);
         let local = now - at;
-        if local < 0.0 { return fframes::svgr!(<g />); }
+        if local < 0.0 {
+            return fframes::svgr!(<g />);
+        }
         let exit = s(el, "exit");
         let exit_at = num(el, "exitAt");
         let exit_dur = f(el, "exitDur", self.m.duration());
         let q = match exit_at {
-            Some(e) if !exit.is_empty() && exit != "none" => if exit_dur <= 0.0 { if now >= e { 1.0 } else { 0.0 } } else { motion::in_cubic((now - e) / exit_dur) },
+            Some(e) if !exit.is_empty() && exit != "none" => {
+                if exit_dur <= 0.0 {
+                    if now >= e { 1.0 } else { 0.0 }
+                } else {
+                    motion::in_cubic((now - e) / exit_dur)
+                }
+            }
             Some(e) if exit == "none" && now >= e => 1.0,
             _ => 0.0,
         };
-        if q >= 1.0 { return fframes::svgr!(<g />); }
+        if q >= 1.0 {
+            return fframes::svgr!(<g />);
+        }
 
         // Entrance progress: opacity never overshoots; travel may spring.
         let e = if dur <= 0.0 { Enter::DONE } else { self.m.enter_over(local, dur) };
         let grow = if dur <= 0.0 { 1.0 } else { self.m.grow(local, dur) };
         let (bx, by, bw, bh) = bounds(el);
-        let origin = el.get("origin").and_then(Value::as_array).filter(|o| o.len() == 2)
+        let origin = el
+            .get("origin")
+            .and_then(Value::as_array)
+            .filter(|o| o.len() == 2)
             .map(|o| (o[0].as_f64().unwrap_or(0.0) as f32, o[1].as_f64().unwrap_or(0.0) as f32))
             .unwrap_or(match enter {
                 "grow-x" => (bx, by + bh / 2.0),
@@ -467,12 +746,32 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let distance = self.m.distance(f(el, "dist", 48.0));
         match enter {
             "fade" | "blur" => pose.alpha *= e.alpha,
-            "pop" => { let k = 0.55 + 0.45 * self.m.pop(local * self.m.duration() / dur.max(0.01)); pose.sx *= k; pose.sy *= k; pose.alpha *= e.alpha; }
-            "rise" => { pose.dy += distance * (1.0 - e.travel); pose.alpha *= e.alpha; }
-            "drop" => { pose.dy -= distance * (1.0 - e.travel); pose.alpha *= e.alpha; }
-            "left" => { pose.dx -= distance * (1.0 - e.travel); pose.alpha *= e.alpha; }
-            "right" => { pose.dx += distance * (1.0 - e.travel); pose.alpha *= e.alpha; }
-            "grow" => { pose.sx *= grow; pose.sy *= grow; }
+            "pop" => {
+                let k = 0.55 + 0.45 * self.m.pop(local * self.m.duration() / dur.max(0.01));
+                pose.sx *= k;
+                pose.sy *= k;
+                pose.alpha *= e.alpha;
+            }
+            "rise" => {
+                pose.dy += distance * (1.0 - e.travel);
+                pose.alpha *= e.alpha;
+            }
+            "drop" => {
+                pose.dy -= distance * (1.0 - e.travel);
+                pose.alpha *= e.alpha;
+            }
+            "left" => {
+                pose.dx -= distance * (1.0 - e.travel);
+                pose.alpha *= e.alpha;
+            }
+            "right" => {
+                pose.dx += distance * (1.0 - e.travel);
+                pose.alpha *= e.alpha;
+            }
+            "grow" => {
+                pose.sx *= grow;
+                pose.sy *= grow;
+            }
             "grow-x" => pose.sx *= grow,
             "grow-y" => pose.sy *= grow,
             _ => {}
@@ -481,8 +780,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let mut key_pose = (0.0f32, 0.0f32, 1.0f32, 0.0f32, 1.0f32);
         for key in arr(el, "keys") {
             let start = f(key, "at", 0.0);
-            if now < start { break; }
-            let k = ease(s(key, "ease"), (now - start) / f(key, "dur", 0.6).max(0.001));
+            if now < start {
+                break;
+            }
+            let k = ease(s(key, "ease"), (now - start) / f(key, "dur", crate::constants::get().canvas.key).max(0.001));
             let prev = key_pose;
             key_pose = (
                 num(key, "x").map_or(prev.0, |v| prev.0 + (v - prev.0) * k),
@@ -492,20 +793,31 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 num(key, "opacity").map_or(prev.4, |v| prev.4 + (v - prev.4) * k),
             );
         }
-        pose.dx += key_pose.0; pose.dy += key_pose.1; pose.sx *= key_pose.2; pose.sy *= key_pose.2;
-        pose.rotate += key_pose.3; pose.alpha *= key_pose.4.clamp(0.0, 1.0);
+        pose.dx += key_pose.0;
+        pose.dy += key_pose.1;
+        pose.sx *= key_pose.2;
+        pose.sy *= key_pose.2;
+        pose.rotate += key_pose.3;
+        pose.alpha *= key_pose.4.clamp(0.0, 1.0);
         // Travel along a path: the element's origin rides the outline, optionally turning.
         if let Some(route) = el.get("along") {
             if let Some(info) = path_info(s(route, "d")) {
                 if let Some(contour) = info.points.iter().find(|c| c.len() > 1) {
                     let start = f(route, "at", at);
-                    let span = f(route, "dur", 1.5).max(0.001);
+                    let span = f(route, "dur", crate::constants::get().canvas.along).max(0.001);
                     // A looping route repeats every `dur` seconds (eased per lap) after it starts.
-                    let lap = if route.get("loop").and_then(Value::as_bool).unwrap_or(false) && now > start { ((now - start) / span).fract() } else { (now - start) / span };
+                    let lap = if route.get("loop").and_then(Value::as_bool).unwrap_or(false) && now > start {
+                        ((now - start) / span).fract()
+                    } else {
+                        (now - start) / span
+                    };
                     let k = ease(nonempty(s(route, "ease"), "inOut"), lap);
                     if let Some(((px, py), angle)) = along(contour, k) {
-                        pose.dx += px - origin.0; pose.dy += py - origin.1;
-                        if route.get("rotate").and_then(Value::as_bool).unwrap_or(false) { pose.rotate += angle.to_degrees(); }
+                        pose.dx += px - origin.0;
+                        pose.dy += py - origin.1;
+                        if route.get("rotate").and_then(Value::as_bool).unwrap_or(false) {
+                            pose.rotate += angle.to_degrees();
+                        }
                     }
                 }
             }
@@ -520,14 +832,26 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let phase = TAU * lt / period;
             match s(l, "type") {
                 "spin" => pose.rotate += 360.0 * f(l, "amount", 1.0) * lt / period,
-                "pulse" => { let k = 1.0 + f(l, "amount", 0.06) * ramp * phase.sin(); pose.sx *= k; pose.sy *= k; }
+                "pulse" => {
+                    let k = 1.0 + f(l, "amount", 0.06) * ramp * phase.sin();
+                    pose.sx *= k;
+                    pose.sy *= k;
+                }
                 "float" => pose.dy += f(l, "amount", 10.0) * ramp * phase.sin(),
                 "sway" => pose.rotate += f(l, "amount", 4.0) * ramp * phase.sin(),
-                "orbit" => { let a = f(l, "amount", 12.0) * ramp; pose.dx += a * phase.cos() - a; pose.dy += a * phase.sin(); }
+                "orbit" => {
+                    let a = f(l, "amount", 12.0) * ramp;
+                    pose.dx += a * phase.cos() - a;
+                    pose.dy += a * phase.sin();
+                }
                 "dash" => dash_shift = -lt / period,
                 "blink" => pose.alpha *= 1.0 - f(l, "amount", 0.5).clamp(0.0, 1.0) * ramp * (0.5 - 0.5 * phase.cos()),
                 // Pulse with the narration's measured loudness.
-                "level" => { let k = 1.0 + f(l, "amount", 0.12) * self.level(now); pose.sx *= k; pose.sy *= k; }
+                "level" => {
+                    let k = 1.0 + f(l, "amount", 0.12) * self.level(now);
+                    pose.sx *= k;
+                    pose.sy *= k;
+                }
                 _ => {}
             }
         }
@@ -535,17 +859,38 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         if q > 0.0 {
             match exit {
                 "fade" | "blur" | "undraw" | "wipe" => pose.alpha *= 1.0 - q,
-                "shrink" => { let k = 1.0 - 0.45 * q; pose.sx *= k; pose.sy *= k; pose.alpha *= 1.0 - q; }
-                "fall" => { pose.dy += distance * q; pose.alpha *= 1.0 - q; }
-                "lift" => { pose.dy -= distance * q; pose.alpha *= 1.0 - q; }
+                "shrink" => {
+                    let k = 1.0 - 0.45 * q;
+                    pose.sx *= k;
+                    pose.sy *= k;
+                    pose.alpha *= 1.0 - q;
+                }
+                "fall" => {
+                    pose.dy += distance * q;
+                    pose.alpha *= 1.0 - q;
+                }
+                "lift" => {
+                    pose.dy -= distance * q;
+                    pose.alpha *= 1.0 - q;
+                }
                 _ => {}
             }
         }
-        if pose.alpha <= 0.001 { return fframes::svgr!(<g />); }
+        if pose.alpha <= 0.001 {
+            return fframes::svgr!(<g />);
+        }
 
         let draw = if enter == "draw" { if dur <= 0.0 { 1.0 } else { motion::out_cubic(local / dur) } } else { 1.0 };
         let draw = if exit == "undraw" { draw * (1.0 - q) } else { draw };
-        let shape = self.shape(el, draw, dash_shift, if enter == "type" { motion::clamp01(local / dur.max(0.001)) } else { 1.0 }, local, defs, now);
+        let shape = self.shape(
+            el,
+            draw,
+            dash_shift,
+            if enter == "type" { motion::clamp01(local / dur.max(0.001)) } else { 1.0 },
+            local,
+            defs,
+            now,
+        );
 
         // Wipes reveal through a growing clip over the element bounds.
         let wipe = match (enter, exit) {
@@ -559,9 +904,13 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             Some((p, up, leaving)) => {
                 let id = self.uid("wipe");
                 let pad = 8.0 + f(el, "width", 0.0);
-                let (cx, cy, cw, ch) = if up { (bx - pad, by - pad + (bh + 2.0 * pad) * (1.0 - p), bw + 2.0 * pad, (bh + 2.0 * pad) * p) }
-                    else if leaving { (bx - pad + (bw + 2.0 * pad) * (1.0 - p), by - pad, (bw + 2.0 * pad) * p, bh + 2.0 * pad) }
-                    else { (bx - pad, by - pad, (bw + 2.0 * pad) * p, bh + 2.0 * pad) };
+                let (cx, cy, cw, ch) = if up {
+                    (bx - pad, by - pad + (bh + 2.0 * pad) * (1.0 - p), bw + 2.0 * pad, (bh + 2.0 * pad) * p)
+                } else if leaving {
+                    (bx - pad + (bw + 2.0 * pad) * (1.0 - p), by - pad, (bw + 2.0 * pad) * p, bh + 2.0 * pad)
+                } else {
+                    (bx - pad, by - pad, (bw + 2.0 * pad) * p, bh + 2.0 * pad)
+                };
                 fframes::svgr!(<g>
                     <defs><clipPath id={id.clone()}><rect x={cx} y={cy} width={cw.max(0.0)} height={ch.max(0.0)} /></clipPath></defs>
                     <g clip-path={format!("url(#{id})")}>{shape}</g>
@@ -581,40 +930,76 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 <defs><filter id={id.clone()} filterUnits="userSpaceOnUse" x={bx - 60.0 - bw * 0.5} y={by - 60.0 - bh * 0.5} width={bw * 2.0 + 120.0} height={bh * 2.0 + 120.0}><feGaussianBlur stdDeviation={blur} /></filter></defs>
                 <g filter={format!("url(#{id})")}>{shape}</g>
             </g>)
-        } else { shape };
+        } else {
+            shape
+        };
         let shape = match s(el, "blend") {
             "" | "normal" => shape,
             mode => fframes::svgr!(<g mix-blend-mode={mode.to_owned()}>{shape}</g>),
         };
         let (ox, oy) = origin;
-        let identity = pose.dx.abs() < 1e-3 && pose.dy.abs() < 1e-3 && (pose.sx - 1.0).abs() < 1e-4 && (pose.sy - 1.0).abs() < 1e-4 && pose.rotate.abs() < 1e-3;
+        let identity = pose.dx.abs() < 1e-3
+            && pose.dy.abs() < 1e-3
+            && (pose.sx - 1.0).abs() < 1e-4
+            && (pose.sy - 1.0).abs() < 1e-4
+            && pose.rotate.abs() < 1e-3;
         let alpha = pose.alpha.clamp(0.0, 1.0);
-        if identity && alpha >= 0.999 { return shape; }
-        let transform = if identity { "translate(0 0)".to_owned() } else {
-            format!("translate({} {}) rotate({}) scale({} {}) translate({} {})", ox + pose.dx, oy + pose.dy, pose.rotate, pose.sx.max(0.0001), pose.sy.max(0.0001), -ox, -oy)
+        if identity && alpha >= 0.999 {
+            return shape;
+        }
+        let transform = if identity {
+            "translate(0 0)".to_owned()
+        } else {
+            format!(
+                "translate({} {}) rotate({}) scale({} {}) translate({} {})",
+                ox + pose.dx,
+                oy + pose.dy,
+                pose.rotate,
+                pose.sx.max(0.0001),
+                pose.sy.max(0.0001),
+                -ox,
+                -oy
+            )
         };
         fframes::svgr!(<g opacity={alpha} transform={transform}>{shape}</g>)
     }
 
     /// The element's geometry and paint at a draw-on fraction.
-    fn shape(&self, el: &Value, draw: f32, dash_shift: f32, reveal: f32, local: f32, defs: &mut Vec<Svgr<'a>>, now: f32) -> Svgr<'a> {
+    fn shape(
+        &self,
+        el: &Value,
+        draw: f32,
+        dash_shift: f32,
+        reveal: f32,
+        local: f32,
+        defs: &mut Vec<Svgr<'a>>,
+        now: f32,
+    ) -> Svgr<'a> {
         let kind = s(el, "type");
         let filled_default = if matches!(kind, "line" | "path" | "poly") { "none" } else { "accent" };
         let fill = self.paint(el.get("fill"), filled_default, defs);
         let has_stroke = el.get("stroke").is_some();
-        let stroke = self.paint(el.get("stroke"), if matches!(kind, "line" | "path" | "poly") { "ink" } else { "none" }, defs);
+        let stroke =
+            self.paint(el.get("stroke"), if matches!(kind, "line" | "path" | "poly") { "ink" } else { "none" }, defs);
         let width = f(el, "width", if matches!(kind, "line" | "path" | "poly") { 6.0 } else { 4.0 });
         let length = stroke_length(el);
         // During a draw-on the fill follows the outline in; strokeless shapes simply fade.
         let drawing = draw < 0.999 && length > 0.0 && (stroke != "none" || matches!(kind, "line" | "path" | "poly"));
         let fill_alpha = if draw < 0.999 && fill != "none" { motion::clamp01((draw - 0.55) / 0.45) } else { 1.0 };
-        let custom_dash = arr(el, "dash").iter().filter_map(Value::as_f64).map(|v| v.max(0.0).to_string()).collect::<Vec<_>>().join(" ");
+        let custom_dash = arr(el, "dash")
+            .iter()
+            .filter_map(Value::as_f64)
+            .map(|v| v.max(0.0).to_string())
+            .collect::<Vec<_>>()
+            .join(" ");
         let (dasharray, dashoffset) = if drawing {
             (format!("{} {}", length.max(0.001), length * 2.0 + 10.0), length * (1.0 - draw))
         } else if !custom_dash.is_empty() {
             let period: f32 = arr(el, "dash").iter().filter_map(Value::as_f64).sum::<f64>() as f32;
             (custom_dash, dash_shift * period)
-        } else { ("none".to_owned(), 0.0) };
+        } else {
+            ("none".to_owned(), 0.0)
+        };
         let cap = nonempty(s(el, "cap"), "round").to_owned();
         let join = nonempty(s(el, "join"), "round").to_owned();
         if let Some(rough) = el.get("rough").filter(|r| r.is_object()) {
@@ -632,7 +1017,11 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
             "circle" | "ellipse" => {
                 let (cx, cy) = (f(el, "cx", 0.0), f(el, "cy", 0.0));
-                let (rx, ry) = if kind == "circle" { (f(el, "r", 0.0), f(el, "r", 0.0)) } else { (f(el, "rx", 0.0), f(el, "ry", 0.0)) };
+                let (rx, ry) = if kind == "circle" {
+                    (f(el, "r", 0.0), f(el, "r", 0.0))
+                } else {
+                    (f(el, "rx", 0.0), f(el, "ry", 0.0))
+                };
                 fframes::svgr!(<g>
                     <ellipse cx={cx} cy={cy} rx={rx.max(0.0)} ry={ry.max(0.0)} fill={fill.clone()} fill-opacity={fill_alpha} stroke="none" />
                     {if stroke != "none" || drawing { fframes::svgr!(<ellipse cx={cx} cy={cy} rx={rx.max(0.0)} ry={ry.max(0.0)} fill="none" stroke={if has_stroke { stroke.clone() } else { fill.clone() }} stroke-width={width} stroke-dasharray={dasharray.clone()} stroke-dashoffset={dashoffset} stroke-linecap={cap.clone()} />) } else { fframes::svgr!(<g />) }}
@@ -640,17 +1029,32 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
             "line" | "path" | "poly" => {
                 let d = match kind {
-                    "line" => format!("M {} {} L {} {}", f(el, "x1", 0.0), f(el, "y1", 0.0), f(el, "x2", 0.0), f(el, "y2", 0.0)),
+                    "line" => format!(
+                        "M {} {} L {} {}",
+                        f(el, "x1", 0.0),
+                        f(el, "y1", 0.0),
+                        f(el, "x2", 0.0),
+                        f(el, "y2", 0.0)
+                    ),
                     "poly" => {
                         let pts = points(el);
-                        let mut d = pts.iter().enumerate().map(|(i, (x, y))| format!("{} {x} {y}", if i == 0 { "M" } else { "L" })).collect::<Vec<_>>().join(" ");
-                        if el.get("closed").and_then(Value::as_bool).unwrap_or(false) { d.push_str(" Z"); }
+                        let mut d = pts
+                            .iter()
+                            .enumerate()
+                            .map(|(i, (x, y))| format!("{} {x} {y}", if i == 0 { "M" } else { "L" }))
+                            .collect::<Vec<_>>()
+                            .join(" ");
+                        if el.get("closed").and_then(Value::as_bool).unwrap_or(false) {
+                            d.push_str(" Z");
+                        }
                         d
                     }
                     _ => path_info(s(el, "d")).map(|p| p.d.clone()).unwrap_or_default(),
                 };
                 let mut nodes = vec![];
-                if fill != "none" { nodes.push(fframes::svgr!(<path d={d.clone()} fill={fill.clone()} fill-opacity={fill_alpha} stroke="none" />)); }
+                if fill != "none" {
+                    nodes.push(fframes::svgr!(<path d={d.clone()} fill={fill.clone()} fill-opacity={fill_alpha} stroke="none" />));
+                }
                 if stroke != "none" {
                     nodes.push(fframes::svgr!(<path d={d} fill="none" stroke={stroke.clone()} stroke-width={width} stroke-dasharray={dasharray} stroke-dashoffset={dashoffset} stroke-linecap={cap} stroke-linejoin={join} />));
                     // Arrowheads ride the draw-on tip; a start head appears with the stroke.
@@ -658,7 +1062,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                     let outline = outline(el);
                     let head = f(el, "head", width * 3.2 + 6.0);
                     let mut tips = vec![];
-                    if (heads == "end" || heads == "both") && draw > 0.02 { tips.push(along(&outline, draw)); }
+                    if (heads == "end" || heads == "both") && draw > 0.02 {
+                        tips.push(along(&outline, draw));
+                    }
                     if (heads == "start" || heads == "both") && draw > 0.02 {
                         let reversed: Vec<_> = outline.iter().rev().copied().collect();
                         tips.push(along(&reversed, 1.0));
@@ -673,14 +1079,24 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             "icon" => {
                 let size = f(el, "size", 64.0);
                 let color = self.paint(el.get("stroke").or(el.get("fill")), "accent", defs);
-                crate::icons::render(s(el, "name"), f(el, "x", 0.0) - size / 2.0, f(el, "y", 0.0) - size / 2.0, size, &color)
+                crate::icons::render(
+                    s(el, "name"),
+                    f(el, "x", 0.0) - size / 2.0,
+                    f(el, "y", 0.0) - size / 2.0,
+                    size,
+                    &color,
+                )
             }
             "image" => self.canvas_image(el),
             "meter" => self.meter(el, &fill, now),
             "spotlight" => {
                 // A dimming field with a window: everything outside the target recedes.
                 let (x, y, w, h) = bounds(el);
-                let r = if el.get("r").is_some() && el.get("cx").is_some() { f(el, "r", 0.0) } else { f(el, "radius", 24.0) };
+                let r = if el.get("r").is_some() && el.get("cx").is_some() {
+                    f(el, "r", 0.0)
+                } else {
+                    f(el, "radius", 24.0)
+                };
                 let hole = if el.get("cx").is_some() {
                     let (cx, cy) = (f(el, "cx", 0.0), f(el, "cy", 0.0));
                     format!("M {} {cy} a {r} {r} 0 1 0 {} 0 a {r} {r} 0 1 0 {} 0 Z", cx - r, 2.0 * r, -2.0 * r)
@@ -695,8 +1111,11 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 let at = f(el, "at", 0.0);
                 let children = self.elements_at(arr(el, "children"), at, f(el, "stagger", 0.0), defs, now);
                 let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
-                if x.abs() < 1e-4 && y.abs() < 1e-4 { fframes::svgr!(<g>{children}</g>) }
-                else { fframes::svgr!(<g transform={format!("translate({x} {y})")}>{children}</g>) }
+                if x.abs() < 1e-4 && y.abs() < 1e-4 {
+                    fframes::svgr!(<g>{children}</g>)
+                } else {
+                    fframes::svgr!(<g transform={format!("translate({x} {y})")}>{children}</g>)
+                }
             }
             _ => fframes::svgr!(<g />),
         }
@@ -705,7 +1124,16 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     /// A hand-drawn rendering: `passes` jittered pencil strokes and, for filled closed shapes,
     /// hachure lines clipped to the shape (or a flat fill). `boil` re-seeds the jitter that many
     /// times a second, the lively wobble of traditional animation.
-    fn rough_shape(&self, el: &Value, rough: &Value, fill: &str, stroke: &str, width: f32, draw: f32, now: f32) -> Svgr<'a> {
+    fn rough_shape(
+        &self,
+        el: &Value,
+        rough: &Value,
+        fill: &str,
+        stroke: &str,
+        width: f32,
+        draw: f32,
+        now: f32,
+    ) -> Svgr<'a> {
         use std::hash::{Hash, Hasher};
         let amount = f(rough, "amount", 2.2).clamp(0.0, 40.0);
         let passes = (n(rough, "passes", 2.0) as usize).clamp(1, 3);
@@ -715,17 +1143,44 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let frame_seed = if boil > 0.0 { (now * boil).floor().max(0.0) as u64 } else { 0 };
         let seed = hasher.finish() ^ frame_seed.wrapping_mul(0xA24B_AED4_963E_E407);
         let contours = contours_of(el);
-        let ink = if stroke != "none" { stroke.to_owned() } else if fill != "none" { fill.to_owned() } else { self.p.ink.clone() };
-        let length: f32 = contours.iter().map(|(c, _)| c.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum::<f32>()).sum::<f32>() * 1.08 + 2.0 * amount;
-        let dash = if draw < 0.999 { (format!("{} {}", length, length * 2.0 + 10.0), length * (1.0 - draw)) } else { ("none".to_owned(), 0.0) };
+        let ink = if stroke != "none" {
+            stroke.to_owned()
+        } else if fill != "none" {
+            fill.to_owned()
+        } else {
+            self.p.ink.clone()
+        };
+        let length: f32 = contours
+            .iter()
+            .map(|(c, _)| c.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum::<f32>())
+            .sum::<f32>()
+            * 1.08
+            + 2.0 * amount;
+        let dash = if draw < 0.999 {
+            (format!("{} {}", length, length * 2.0 + 10.0), length * (1.0 - draw))
+        } else {
+            ("none".to_owned(), 0.0)
+        };
         let mut nodes = vec![];
         let closed = contours.iter().any(|(_, closed)| *closed);
         let fill_mode = nonempty(s(rough, "fill"), "hachure");
         if fill != "none" && closed && draw > 0.55 {
             let alpha = motion::clamp01((draw - 0.55) / 0.45);
-            let crisp = contours.iter().map(|(c, _)| c.iter().enumerate().map(|(i, p)| format!("{} {:.1} {:.1}", if i == 0 { "M" } else { "L" }, p.0, p.1)).collect::<Vec<_>>().join(" ") + " Z").collect::<Vec<_>>().join(" ");
+            let crisp = contours
+                .iter()
+                .map(|(c, _)| {
+                    c.iter()
+                        .enumerate()
+                        .map(|(i, p)| format!("{} {:.1} {:.1}", if i == 0 { "M" } else { "L" }, p.0, p.1))
+                        .collect::<Vec<_>>()
+                        .join(" ")
+                        + " Z"
+                })
+                .collect::<Vec<_>>()
+                .join(" ");
             if fill_mode == "solid" {
-                nodes.push(fframes::svgr!(<path d={crisp} fill={fill.to_owned()} fill-opacity={alpha} stroke="none" />));
+                nodes
+                    .push(fframes::svgr!(<path d={crisp} fill={fill.to_owned()} fill-opacity={alpha} stroke="none" />));
             } else {
                 let (bx, by, bw, bh) = bounds(el);
                 let gap = f(rough, "gap", 11.0).max(3.0);
@@ -738,7 +1193,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 for k in -count / 2..=count / 2 {
                     let off = k as f32 * gap;
                     let (ox, oy) = (cx - dy * off, cy + dx * off);
-                    let line = [(ox - dx * reach / 2.0, oy - dy * reach / 2.0), (ox + dx * reach / 2.0, oy + dy * reach / 2.0)];
+                    let line = [
+                        (ox - dx * reach / 2.0, oy - dy * reach / 2.0),
+                        (ox + dx * reach / 2.0, oy + dy * reach / 2.0),
+                    ];
                     hatch.push_str(&rough_contour(&line, amount * 0.5, seed ^ (k as u64).wrapping_mul(31)));
                     hatch.push(' ');
                 }
@@ -750,7 +1208,11 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
         }
         for pass in 0..passes {
-            let d = contours.iter().map(|(c, _)| rough_contour(c, amount, seed.wrapping_add(pass as u64 * 0x51_7CC1_B727_220A))).collect::<Vec<_>>().join(" ");
+            let d = contours
+                .iter()
+                .map(|(c, _)| rough_contour(c, amount, seed.wrapping_add(pass as u64 * 0x51_7CC1_B727_220A)))
+                .collect::<Vec<_>>()
+                .join(" ");
             let w = width * if pass == 0 { 1.0 } else { 0.7 };
             nodes.push(fframes::svgr!(<path d={d} fill="none" stroke={ink.clone()} stroke-width={w} stroke-dasharray={dash.0.clone()} stroke-dashoffset={dash.1} stroke-linecap="round" stroke-linejoin="round" opacity={if pass == 0 { 1.0 } else { 0.75 }} />));
         }
@@ -760,8 +1222,13 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let line = outline(el);
             let head = f(el, "head", width * 3.2 + 6.0);
             let mut tips = vec![];
-            if heads == "end" || heads == "both" { tips.push(along(&line, draw)); }
-            if heads == "start" || heads == "both" { let rev: Vec<_> = line.iter().rev().copied().collect(); tips.push(along(&rev, 1.0)); }
+            if heads == "end" || heads == "both" {
+                tips.push(along(&line, draw));
+            }
+            if heads == "start" || heads == "both" {
+                let rev: Vec<_> = line.iter().rev().copied().collect();
+                tips.push(along(&rev, 1.0));
+            }
             for ((x, y), angle) in tips.into_iter().flatten() {
                 nodes.push(fframes::svgr!(<path d={rough_contour(&[(x - head * (angle - PI / 6.5).cos(), y - head * (angle - PI / 6.5).sin()), (x, y), (x - head * (angle + PI / 6.5).cos(), y - head * (angle + PI / 6.5).sin())], amount * 0.4, seed ^ 0xA11)} fill="none" stroke={ink.clone()} stroke-width={width} stroke-linecap="round" stroke-linejoin="round" />));
             }
@@ -792,21 +1259,39 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
             "wave" => {
                 let mid = y + h / 2.0;
-                let pts: Vec<(f32, f32)> = (0..n).map(|k| (x + w * k as f32 / (n - 1) as f32, history(((n - 1) as isize - 2 * k as isize).unsigned_abs() / 2) * h / 2.0)).collect();
-                let top = pts.iter().map(|(px, a)| format!("{px:.1} {:.1}", mid - a.max(1.5))).collect::<Vec<_>>().join(" L ");
-                let bottom = pts.iter().rev().map(|(px, a)| format!("{px:.1} {:.1}", mid + a.max(1.5))).collect::<Vec<_>>().join(" L ");
+                let pts: Vec<(f32, f32)> = (0..n)
+                    .map(|k| {
+                        (
+                            x + w * k as f32 / (n - 1) as f32,
+                            history(((n - 1) as isize - 2 * k as isize).unsigned_abs() / 2) * h / 2.0,
+                        )
+                    })
+                    .collect();
+                let top = pts
+                    .iter()
+                    .map(|(px, a)| format!("{px:.1} {:.1}", mid - a.max(1.5)))
+                    .collect::<Vec<_>>()
+                    .join(" L ");
+                let bottom = pts
+                    .iter()
+                    .rev()
+                    .map(|(px, a)| format!("{px:.1} {:.1}", mid + a.max(1.5)))
+                    .collect::<Vec<_>>()
+                    .join(" L ");
                 fframes::svgr!(<path d={format!("M {top} L {bottom} Z")} fill={fill.to_owned()} />)
             }
             _ => {
                 let gap = w / n as f32 * f(el, "gap", 0.35).clamp(0.0, 0.9);
                 let bw = (w - gap * (n - 1) as f32) / n as f32;
                 let mirror = style == "mirror";
-                let bars: Vec<_> = (0..n).map(|i| {
-                    let k = if mirror { (i as isize - (n / 2) as isize).unsigned_abs() } else { n - 1 - i };
-                    let bh = (history(k) * h).max(bw.min(h));
-                    let by = if mirror { y + (h - bh) / 2.0 } else { y + h - bh };
-                    rounded(x + i as f32 * (bw + gap), by, bw, bh, f(el, "r", bw / 2.0), fill)
-                }).collect();
+                let bars: Vec<_> = (0..n)
+                    .map(|i| {
+                        let k = if mirror { (i as isize - (n / 2) as isize).unsigned_abs() } else { n - 1 - i };
+                        let bh = (history(k) * h).max(bw.min(h));
+                        let by = if mirror { y + (h - bh) / 2.0 } else { y + h - bh };
+                        rounded(x + i as f32 * (bw + gap), by, bw, bh, f(el, "r", bw / 2.0), fill)
+                    })
+                    .collect();
                 fframes::svgr!(<g>{bars}</g>)
             }
         }
@@ -817,13 +1302,19 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     fn morphed(&self, from: &Value, to: &Value, k: f32, defs: &mut Vec<Svgr<'a>>) -> Value {
         let mut out = to.clone();
         let Some(o) = out.as_object_mut() else { return out };
-        o.remove("morph"); o.remove("echo");
+        o.remove("morph");
+        o.remove("echo");
         o.insert("enter".into(), Value::String("none".into()));
         o.insert("at".into(), serde_json::json!(0.0));
         let same = s(from, "type") == s(to, "type") && !matches!(s(to, "type"), "path" | "poly");
         if same {
-            for key in ["x", "y", "w", "h", "r", "cx", "cy", "rx", "ry", "x1", "y1", "x2", "y2", "size", "width", "opacity", "rotate"] {
-                if let (Some(a), Some(b)) = (num(from, key), num(to, key)) { o.insert(key.into(), serde_json::json!(a + (b - a) * k)); }
+            for key in [
+                "x", "y", "w", "h", "r", "cx", "cy", "rx", "ry", "x1", "y1", "x2", "y2", "size", "width", "opacity",
+                "rotate",
+            ] {
+                if let (Some(a), Some(b)) = (num(from, key), num(to, key)) {
+                    o.insert(key.into(), serde_json::json!(a + (b - a) * k));
+                }
             }
         } else if let (Some((a, closed_a)), Some((b, closed_b))) = (morph_outline(from), morph_outline(to)) {
             // Different shapes (or paths): blend resampled outlines.
@@ -835,26 +1326,70 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 let ra = ring(&pa);
                 let forward = ring(&pb);
                 let backward: Vec<_> = forward.iter().rev().copied().collect();
-                let cost = |rb: &[(f32, f32)], s: usize| ra.iter().enumerate().map(|(t, p)| { let q = rb[(t + s) % (N - 1)]; (p.0 - q.0).powi(2) + (p.1 - q.1).powi(2) }).sum::<f32>();
+                let cost = |rb: &[(f32, f32)], s: usize| {
+                    ra.iter()
+                        .enumerate()
+                        .map(|(t, p)| {
+                            let q = rb[(t + s) % (N - 1)];
+                            (p.0 - q.0).powi(2) + (p.1 - q.1).powi(2)
+                        })
+                        .sum::<f32>()
+                };
                 let (mut best, mut best_cost, mut best_ring) = (0, f32::MAX, &forward);
                 for candidate in [&forward, &backward] {
-                    for shift in 0..N - 1 { let c = cost(candidate, shift); if c < best_cost { best_cost = c; best = shift; best_ring = candidate; } }
+                    for shift in 0..N - 1 {
+                        let c = cost(candidate, shift);
+                        if c < best_cost {
+                            best_cost = c;
+                            best = shift;
+                            best_ring = candidate;
+                        }
+                    }
                 }
-                pb = (0..N - 1).map(|t| best_ring[(t + best) % (N - 1)]).chain(std::iter::once(best_ring[best])).collect();
+                pb = (0..N - 1)
+                    .map(|t| best_ring[(t + best) % (N - 1)])
+                    .chain(std::iter::once(best_ring[best]))
+                    .collect();
             }
-            let d = pa.iter().zip(&pb).enumerate().map(|(i, (p, q))| format!("{} {:.2} {:.2}", if i == 0 { "M" } else { "L" }, p.0 + (q.0 - p.0) * k, p.1 + (q.1 - p.1) * k)).collect::<Vec<_>>().join(" ")
+            let d = pa
+                .iter()
+                .zip(&pb)
+                .enumerate()
+                .map(|(i, (p, q))| {
+                    format!(
+                        "{} {:.2} {:.2}",
+                        if i == 0 { "M" } else { "L" },
+                        p.0 + (q.0 - p.0) * k,
+                        p.1 + (q.1 - p.1) * k
+                    )
+                })
+                .collect::<Vec<_>>()
+                .join(" ")
                 + if closed_a && closed_b { " Z" } else { "" };
-            for key in ["x", "y", "w", "h", "r", "cx", "cy", "rx", "ry", "x1", "y1", "x2", "y2", "points", "closed", "d"] { o.remove(key); }
+            for key in
+                ["x", "y", "w", "h", "r", "cx", "cy", "rx", "ry", "x1", "y1", "x2", "y2", "points", "closed", "d"]
+            {
+                o.remove(key);
+            }
             o.insert("type".into(), Value::String("path".into()));
             o.insert("d".into(), Value::String(d));
-            if closed_a && closed_b && !to.get("fill").is_some_and(|v| v == "none") && o.get("fill").is_none() { o.insert("fill".into(), Value::String("accent".into())); }
+            if closed_a && closed_b && !to.get("fill").is_some_and(|v| v == "none") && o.get("fill").is_none() {
+                o.insert("fill".into(), Value::String("accent".into()));
+            }
             // Paths default to an ink outline; a morph between unstroked shapes stays unstroked.
-            if from.get("stroke").is_none() && to.get("stroke").is_none() { o.insert("stroke".into(), Value::String("none".into())); }
+            if from.get("stroke").is_none() && to.get("stroke").is_none() {
+                o.insert("stroke".into(), Value::String("none".into()));
+            }
         }
         for key in ["fill", "stroke"] {
             if let (Some(Value::String(a)), Some(Value::String(b))) = (from.get(key), to.get(key)) {
-                let (ha, hb) = (self.paint(Some(&Value::String(a.clone())), "accent", defs), self.paint(Some(&Value::String(b.clone())), "accent", defs));
-                if ha != "none" && hb != "none" { o.insert(key.into(), Value::String(crate::design::mix(&ha, &hb, k))); }
+                let (ha, hb) = (
+                    self.paint(Some(&Value::String(a.clone())), "accent", defs),
+                    self.paint(Some(&Value::String(b.clone())), "accent", defs),
+                );
+                if ha != "none" && hb != "none" {
+                    o.insert(key.into(), Value::String(crate::design::mix(&ha, &hb, k)));
+                }
             }
         }
         out
@@ -868,10 +1403,13 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         if let Some(count) = el.get("count") {
             let (from, to) = (n(count, "from", 0.0), n(count, "to", 0.0));
             let decimals = n(count, "decimals", 0.0) as usize;
-            let current = from + (to - from) * self.m.grow(local, f(count, "dur", 1.2)) as f64;
+            let current =
+                from + (to - from) * self.m.grow(local, f(count, "dur", crate::constants::get().canvas.count)) as f64;
             value = format_number(current, decimals, s(count, "prefix"), s(count, "suffix"));
         }
-        if el.get("upper").and_then(Value::as_bool).unwrap_or(false) { value = value.to_uppercase(); }
+        if el.get("upper").and_then(Value::as_bool).unwrap_or(false) {
+            value = value.to_uppercase();
+        }
         if reveal < 1.0 {
             let chars = value.chars().count();
             value = value.chars().take((chars as f32 * reveal).ceil() as usize).collect();
@@ -883,36 +1421,79 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let pool: Vec<char> = value.chars().filter(|c| c.is_alphanumeric()).collect();
             let chars: Vec<char> = value.chars().collect();
             let tick = (local * 18.0).floor() as u64;
-            value = chars.iter().enumerate().map(|(i, &c)| {
-                let lock = dur * (0.25 + 0.75 * i as f32 / chars.len().max(1) as f32);
-                if local >= lock || !c.is_alphanumeric() || pool.is_empty() { c } else {
-                    let h = (i as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15) ^ tick.wrapping_mul(0xC2B2_AE3D_27D4_EB4F);
-                    pool[(h >> 33) as usize % pool.len()]
-                }
-            }).collect();
+            value = chars
+                .iter()
+                .enumerate()
+                .map(|(i, &c)| {
+                    let lock = dur * (0.25 + 0.75 * i as f32 / chars.len().max(1) as f32);
+                    if local >= lock || !c.is_alphanumeric() || pool.is_empty() {
+                        c
+                    } else {
+                        let h =
+                            (i as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15) ^ tick.wrapping_mul(0xC2B2_AE3D_27D4_EB4F);
+                        pool[(h >> 33) as usize % pool.len()]
+                    }
+                })
+                .collect();
         }
         let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
-        let align = match s(el, "anchor") { "middle" => Align::Center, "end" => Align::Right, _ => Align::Left };
+        let align = match s(el, "anchor") {
+            "middle" => Align::Center,
+            "end" => Align::Right,
+            _ => Align::Left,
+        };
         if let Some(width) = num(el, "width") {
             // Wrapped text: `y` is the first baseline; the box is `width` wide.
-            let style = Style { font, size, leading: f(el, "leading", 1.15), tracking: f(el, "tracking", 0.0), upper: false, balance: true };
+            let style = Style {
+                font,
+                size,
+                leading: f(el, "leading", 1.15),
+                tracking: f(el, "tracking", 0.0),
+                upper: false,
+                balance: true,
+            };
             let layout = self.fit(&value, style, width.max(1.0), f(el, "height", size * 8.0).max(size));
-            let left = match align { Align::Center => x - width / 2.0, Align::Right => x - width, Align::Left => x };
+            let left = match align {
+                Align::Center => x - width / 2.0,
+                Align::Right => x - width,
+                Align::Left => x,
+            };
             return self.draw(&layout, left, y - layout.baseline, width, align, fill);
         }
         let w = text::measure(font, &value, size, tracking);
         let final_w = if el.get("count").is_some() {
             let count = &el["count"];
-            text::measure(font, &format_number(n(count, "to", 0.0), n(count, "decimals", 0.0) as usize, s(count, "prefix"), s(count, "suffix")), size, tracking).max(w)
-        } else { w };
+            text::measure(
+                font,
+                &format_number(
+                    n(count, "to", 0.0),
+                    n(count, "decimals", 0.0) as usize,
+                    s(count, "prefix"),
+                    s(count, "suffix"),
+                ),
+                size,
+                tracking,
+            )
+            .max(w)
+        } else {
+            w
+        };
         // Counters keep their final anchor so a centred number never drifts while counting.
-        let left = match align { Align::Center => x - final_w / 2.0 + (final_w - w) / 2.0, Align::Right => x - w, Align::Left => x };
+        let left = match align {
+            Align::Center => x - final_w / 2.0 + (final_w - w) / 2.0,
+            Align::Right => x - w,
+            Align::Left => x,
+        };
         self.run(value, left, y, font, size, tracking, fill)
     }
 
     fn canvas_image(&self, el: &Value) -> Svgr<'a> {
         let key = s(el, "file");
-        let image = self.ctx.get_image(key).map(|i| i.href()).unwrap_or_else(|| panic!("missing or undecodable prepared image: {key}"));
+        let image = self
+            .ctx
+            .get_image(key)
+            .map(|i| i.href())
+            .unwrap_or_else(|| panic!("missing or undecodable prepared image: {key}"));
         let (x, y, w, h) = (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0).max(1.0), f(el, "h", 0.0).max(1.0));
         let r = f(el, "r", 0.0);
         let aspect = if s(el, "fit") == "contain" { "xMidYMid meet" } else { "xMidYMid slice" };
@@ -939,7 +1520,11 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             "duotone" => {
                 // Luminance mapped from the palette's darkest to its accent: every photo or
                 // generated plate adopts the film's colors.
-                let (dark, light) = if self.p.dark { (self.p.bg.clone(), self.p.accent.clone()) } else { (self.p.ink.clone(), self.p.bg.clone()) };
+                let (dark, light) = if self.p.dark {
+                    (self.p.bg.clone(), self.p.accent.clone())
+                } else {
+                    (self.p.ink.clone(), self.p.bg.clone())
+                };
                 let (a, b) = (rgb(&dark), rgb(&light));
                 let table = |i: usize| format!("{} {}", a[i], b[i]);
                 let id = self.uid("duo");
@@ -960,10 +1545,18 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 let [r, g, b] = rgb(&self.p.accent);
                 // Desaturate, then multiply by the accent (lifted toward white so shadows keep detail).
                 let lift = |c: f32| 0.35 + 0.65 * c;
-                let m = format!("{r0} {g0} {b0} 0 0 {r1} {g1} {b1} 0 0 {r2} {g2} {b2} 0 0 0 0 0 1 0",
-                    r0 = 0.2126 * lift(r), g0 = 0.7152 * lift(r), b0 = 0.0722 * lift(r),
-                    r1 = 0.2126 * lift(g), g1 = 0.7152 * lift(g), b1 = 0.0722 * lift(g),
-                    r2 = 0.2126 * lift(b), g2 = 0.7152 * lift(b), b2 = 0.0722 * lift(b));
+                let m = format!(
+                    "{r0} {g0} {b0} 0 0 {r1} {g1} {b1} 0 0 {r2} {g2} {b2} 0 0 0 0 0 1 0",
+                    r0 = 0.2126 * lift(r),
+                    g0 = 0.7152 * lift(r),
+                    b0 = 0.0722 * lift(r),
+                    r1 = 0.2126 * lift(g),
+                    g1 = 0.7152 * lift(g),
+                    b1 = 0.0722 * lift(g),
+                    r2 = 0.2126 * lift(b),
+                    g2 = 0.7152 * lift(b),
+                    b2 = 0.0722 * lift(b)
+                );
                 fframes::svgr!(<g>
                     <defs><filter id={id.clone()} color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values={m} /></filter></defs>
                     <g filter={format!("url(#{id})")}>{image}</g>
@@ -993,7 +1586,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
 
     pub(crate) fn fit_view(&self, body: Svgr<'a>, p: &Value) -> Svgr<'a> {
         let view = arr(p, "view");
-        if view.len() != 2 { return body; }
+        if view.len() != 2 {
+            return body;
+        }
         let (vw, vh) = (view[0].as_f64().unwrap_or(1.0) as f32, view[1].as_f64().unwrap_or(1.0) as f32);
         let a = self.area;
         let k = (a.w / vw).min(a.h / vh);
@@ -1005,7 +1600,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     pub(crate) fn art(&self, layer: &str) -> Svgr<'a> {
         let Some(art) = self.b.art.as_ref() else { return fframes::svgr!(<g />) };
         let list = arr(art, layer);
-        if list.is_empty() { return fframes::svgr!(<g />); }
+        if list.is_empty() {
+            return fframes::svgr!(<g />);
+        }
         let mut defs = vec![];
         let nodes = self.elements(list, self.b.cue_seconds, 0.0, &mut defs);
         fframes::svgr!(<g><defs>{defs}</defs>{nodes}</g>)
@@ -1047,9 +1644,16 @@ mod tests {
                 {"type":"spotlight","cx":960,"cy":540,"r":120,"at":0.5,"dur":0.4},
                 {"type":"text","text":"Decode 2026","x":200,"y":150,"size":48,"enter":"scramble","at":0,"dur":1.2}]}}]});
         let film = crate::Film::from_json(&serde_json::to_vec(&job).unwrap()).unwrap();
-        let ctx = FFramesContext { time_base: fframes::TimeBase { fps:30, sample_rate:48000 },
-            current_video_size: fframes::VideoSize { width:1920, height:1080 }, duration_in_frames:90,
-            mode:fframes::FFramesMode::Renderer, scenes:None, media_source:None, font_source:None, abort_signal:None };
+        let ctx = FFramesContext {
+            time_base: fframes::TimeBase { fps: 30, sample_rate: 48000 },
+            current_video_size: fframes::VideoSize { width: 1920, height: 1080 },
+            duration_in_frames: 90,
+            mode: fframes::FFramesMode::Renderer,
+            scenes: None,
+            media_source: None,
+            font_source: None,
+            abort_signal: None,
+        };
         let render = |i| format!("{:?}", fframes::Scene::render_frame(&film.beats[0], Frame::new(i, i, 30), &ctx));
         let (early, late) = (render(7), render(40));
         assert_ne!(early, late, "the scene must animate");
@@ -1068,7 +1672,9 @@ mod tests {
             serde_json::json!({"elements":[{"type":"icon","name":"../x.svg"}]}),
             serde_json::json!({"elements":[{"type":"rect","enter":"explode"}]}),
             serde_json::json!({"view":[0,10],"elements":[{"type":"rect"}]}),
-        ] { assert!(validate(&bad).is_err(), "{bad}"); }
+        ] {
+            assert!(validate(&bad).is_err(), "{bad}");
+        }
         let many: Vec<_> = (0..241).map(|_| serde_json::json!({"type":"rect"})).collect();
         assert!(validate(&serde_json::json!({"elements":many})).is_err());
     }

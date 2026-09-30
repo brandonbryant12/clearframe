@@ -44,20 +44,36 @@ impl Palette {
         let base = theme.as_str().or_else(|| theme.get("base").and_then(Value::as_str)).unwrap_or("paper");
         let preset = PRESETS.iter().find(|(name, _)| *name == base).unwrap_or(&PRESETS[0]).1;
         let get = |index: usize| {
-            theme.get(KEYS[index]).and_then(Value::as_str).filter(|v| parse(v).is_some())
-                .unwrap_or(preset[index]).to_owned()
+            theme
+                .get(KEYS[index])
+                .and_then(Value::as_str)
+                .filter(|v| parse(v).is_some())
+                .unwrap_or(preset[index])
+                .to_owned()
         };
         let bg = get(0);
         let dark = luminance(&bg) < 0.18;
-        Self { bg, surface: get(1), ink: get(2), muted: get(3), accent: get(4), accent2: get(5),
-            positive: get(6), negative: get(7), dark }
+        Self {
+            bg,
+            surface: get(1),
+            ink: get(2),
+            muted: get(3),
+            accent: get(4),
+            accent2: get(5),
+            positive: get(6),
+            negative: get(7),
+            dark,
+        }
     }
     /// A colour-blocked variant: the frame takes `accent`, `accent2`, the inverse or the
     /// surface colour, and text/accent colours are re-chosen to stay readable on it.
     pub fn toned(self, tone: &str) -> Self {
         let bg = match tone {
-            "accent" => self.accent.clone(), "accent2" => self.accent2.clone(), "invert" => self.ink.clone(),
-            "surface" => self.surface.clone(), _ => return self,
+            "accent" => self.accent.clone(),
+            "accent2" => self.accent2.clone(),
+            "invert" => self.ink.clone(),
+            "surface" => self.surface.clone(),
+            _ => return self,
         };
         let ink = if contrast(&self.ink, &bg) >= contrast(&self.bg, &bg) { self.ink.clone() } else { self.bg.clone() };
         let best = |options: &[&str], min: f32| -> String {
@@ -66,13 +82,26 @@ impl Palette {
         let accent = best(&[&self.accent, &self.accent2], 3.0);
         let accent2 = best(&[&self.accent2, &self.accent], 3.0);
         let (positive, negative) = (best(&[&self.positive], 3.0), best(&[&self.negative], 3.0));
-        Self { surface: mix(&bg, &ink, 0.1), muted: mix(&ink, &bg, 0.32), positive, negative,
-            dark: luminance(&bg) < 0.18, accent, accent2, ink, bg }
+        Self {
+            surface: mix(&bg, &ink, 0.1),
+            muted: mix(&ink, &bg, 0.32),
+            positive,
+            negative,
+            dark: luminance(&bg) < 0.18,
+            accent,
+            accent2,
+            ink,
+            bg,
+        }
     }
     /// Hairlines for axes, rails and dividers: between surface and muted.
-    pub fn line(&self) -> String { mix(&self.surface, &self.muted, if self.dark { 0.32 } else { 0.28 }) }
+    pub fn line(&self) -> String {
+        mix(&self.surface, &self.muted, if self.dark { 0.32 } else { 0.28 })
+    }
     /// A soft accent wash for markers, focus areas and badges.
-    pub fn wash(&self, color: &str) -> String { mix(&self.bg, color, if self.dark { 0.26 } else { 0.18 }) }
+    pub fn wash(&self, color: &str) -> String {
+        mix(&self.bg, color, if self.dark { 0.26 } else { 0.18 })
+    }
     /// Ordered categorical colors: two hues, then quieter tints of each, then neutrals.
     pub fn series(&self, index: usize) -> String {
         match index % 6 {
@@ -122,10 +151,14 @@ pub fn backdrop<'a>(kind: &str, w: f32, h: f32, p: &Palette, seconds: f32) -> Sv
     match kind {
         "grid" => {
             for x in (0..w as usize).step_by(80) {
-                shapes.push(fframes::svgr!(<line x1={x} x2={x} y1="0" y2={h} stroke={p.muted.clone()} stroke-width="1" />));
+                shapes.push(
+                    fframes::svgr!(<line x1={x} x2={x} y1="0" y2={h} stroke={p.muted.clone()} stroke-width="1" />),
+                );
             }
             for y in (0..h as usize).step_by(80) {
-                shapes.push(fframes::svgr!(<line x1="0" x2={w} y1={y} y2={y} stroke={p.muted.clone()} stroke-width="1" />));
+                shapes.push(
+                    fframes::svgr!(<line x1="0" x2={w} y1={y} y2={y} stroke={p.muted.clone()} stroke-width="1" />),
+                );
             }
         }
         "dots" => {
@@ -193,7 +226,11 @@ fn glow<'a>(w: f32, h: f32, p: &Palette, seconds: f32) -> Svgr<'a> {
 pub fn texture<'a>(texture: &Value, w: f32, h: f32, p: &Palette, seconds: f32) -> (Svgr<'a>, Svgr<'a>) {
     let amount = |key: &str| -> f32 {
         match texture {
-            Value::String(s) => match (s.as_str(), key) { ("film", _) => 0.6, ("grain", "grain") | ("vignette", "vignette") => 0.6, _ => 0.0 },
+            Value::String(s) => match (s.as_str(), key) {
+                ("film", _) => 0.6,
+                ("grain", "grain") | ("vignette", "vignette") => 0.6,
+                _ => 0.0,
+            },
             Value::Object(_) => texture.get(key).and_then(Value::as_f64).unwrap_or(0.0).clamp(0.0, 1.0) as f32,
             _ => 0.0,
         }
@@ -210,7 +247,9 @@ pub fn texture<'a>(texture: &Value, w: f32, h: f32, p: &Palette, seconds: f32) -
             </radialGradient></defs>
             <rect width={w} height={h} fill="url(#cf-vignette)" />
         </g>)
-    } else { fframes::svgr!(<g />) };
+    } else {
+        fframes::svgr!(<g />)
+    };
     let grain_node = if grain > 0.0 {
         let seed = if animate { (seconds * 8.0).floor() as i32 % 97 + 1 } else { 7 };
         let opacity = grain * if p.dark { 0.16 } else { 0.12 };
@@ -221,7 +260,9 @@ pub fn texture<'a>(texture: &Value, w: f32, h: f32, p: &Palette, seconds: f32) -
             </filter></defs>
             <rect width={w} height={h} filter="url(#cf-grain)" mix-blend-mode="overlay" />
         </g>)
-    } else { fframes::svgr!(<g />) };
+    } else {
+        fframes::svgr!(<g />)
+    };
     (vignette_node, grain_node)
 }
 
@@ -231,12 +272,16 @@ pub fn guides<'a>(w: f32, h: f32) -> Svgr<'a> {
     for x in (0..=w as usize).step_by(100) {
         let major = x % 200 == 0;
         nodes.push(fframes::svgr!(<line x1={x} x2={x} y1="0" y2={h} stroke="#ff2d7a" stroke-width={if major { 1.4 } else { 0.7 }} opacity="0.55" />));
-        if major && x > 0 { nodes.push(fframes::svgr!(<text x={x as f32 + 4.0} y="22" font-family="Inter" font-size="18" font-weight="600" fill="#ff2d7a">{x.to_string()}</text>)); }
+        if major && x > 0 {
+            nodes.push(fframes::svgr!(<text x={x as f32 + 4.0} y="22" font-family="Inter" font-size="18" font-weight="600" fill="#ff2d7a">{x.to_string()}</text>));
+        }
     }
     for y in (0..=h as usize).step_by(100) {
         let major = y % 200 == 0;
         nodes.push(fframes::svgr!(<line x1="0" x2={w} y1={y} y2={y} stroke="#ff2d7a" stroke-width={if major { 1.4 } else { 0.7 }} opacity="0.55" />));
-        if major && y > 0 { nodes.push(fframes::svgr!(<text x="4" y={y as f32 - 4.0} font-family="Inter" font-size="18" font-weight="600" fill="#ff2d7a">{y.to_string()}</text>)); }
+        if major && y > 0 {
+            nodes.push(fframes::svgr!(<text x="4" y={y as f32 - 4.0} font-family="Inter" font-size="18" font-weight="600" fill="#ff2d7a">{y.to_string()}</text>));
+        }
     }
     fframes::svgr!(<g>{nodes}</g>)
 }

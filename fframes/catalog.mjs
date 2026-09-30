@@ -1,6 +1,6 @@
 // The production native vocabulary. Metadata, validation, CLI help and examples share this file.
 import { ICONS } from './icons.mjs';
-import { normalizeElements, roughSpec, applyRough } from './canvas.mjs';
+import { helpers, VALIDATORS } from './validators.mjs';
 export const THEMES = {
   paper: {
     bg: '#f5f3ed',
@@ -781,9 +781,8 @@ export function normalizeProps(name, input = {}, { vertical = false } = {}) {
   };
   if (!p || typeof p !== 'object' || Array.isArray(p)) fail('props must be an object');
   for (const key of Object.keys(p)) if (!(key in meta.props)) fail(`unsupported prop ${key}`);
-  const text = (v, field, max = 160) => {
-    if (v != null && (typeof v !== 'string' || v.length > max)) fail(`${field} must be text up to ${max} characters`);
-  };
+  const h = helpers(p, fail, { findPhrase, precision });
+  // Checks every block shares: text lengths, one headline, alignment and emphasis phrases.
   for (const key of [
     'title',
     'kicker',
@@ -801,15 +800,9 @@ export function normalizeProps(name, input = {}, { vertical = false } = {}) {
     'explanation',
     'action',
   ])
-    text(p[key], key, key === 'text' ? (name === 'highlight' ? 200 : 240) : key === 'title' ? 90 : 160);
-  text(p.number, 'number', 4);
-  text(p.center, 'center', 30);
-  const icon = (value, field) => {
-    if (value != null && !ICONS.includes(value)) fail(`${field}: unknown icon ${value}; run clearframe icons`);
-  };
-  const unit = (value, field) => {
-    if (!Number.isFinite(value) || value < 0 || value > 1) fail(`${field} must be a number from 0 to 1`);
-  };
+    h.text(p[key], key, key === 'text' ? (name === 'highlight' ? 200 : 240) : key === 'title' ? 90 : 160);
+  h.text(p.number, 'number', 4);
+  h.text(p.center, 'center', 30);
   if (name === 'chapter' && p.text != null) {
     if (p.title != null) fail('use title or text, not both');
     p.title = p.text;
@@ -821,402 +814,24 @@ export function normalizeProps(name, input = {}, { vertical = false } = {}) {
   if (name === 'highlight' && p.title != null)
     fail('highlight shows its text only; put a heading in kicker or a separate beat');
   if (name === 'stat' && p.context != null && p.support != null) fail('use context or support, not both');
-  if (p.align != null && name !== 'kinetic' && !['left', 'center'].includes(p.align))
-    fail('align must be left or center');
-  if (p.emphasisStyle != null && name !== 'kinetic') {
-    if (!['accent', 'serif'].includes(p.emphasisStyle)) fail('emphasisStyle must be accent or serif');
-    if (!p.emphasis) fail('emphasisStyle needs emphasis phrases');
-  }
-  if (name === 'canvas') {
-    if (p.support != null) fail('canvas draws only its elements; add a text element instead of support');
-    if (
-      p.view != null &&
-      (!Array.isArray(p.view) || p.view.length !== 2 || p.view.some(v => !Number.isFinite(v) || v < 16))
-    )
-      fail('view must be [width, height] in author units (each ≥ 16)');
-    if (p.stagger != null && (!Number.isFinite(p.stagger) || p.stagger < 0 || p.stagger > 3))
-      fail('stagger must be 0–3 seconds');
-    if (!Array.isArray(p.elements) || !p.elements.length) fail('elements needs at least one element');
-    p.elements = normalizeElements(p.elements, 'elements', fail);
-    if (p.rough != null && p.rough !== false) {
-      applyRough(p.elements, roughSpec(p.rough, 'rough', fail));
+  if (name !== 'kinetic') {
+    if (p.align != null && !['left', 'center'].includes(p.align)) fail('align must be left or center');
+    if (p.emphasisStyle != null) {
+      if (!['accent', 'serif'].includes(p.emphasisStyle)) fail('emphasisStyle must be accent or serif');
+      if (!p.emphasis) fail('emphasisStyle needs emphasis phrases');
     }
-    delete p.rough;
-  }
-  if (p.emphasis != null && name === 'kinetic') {
-    if (!Array.isArray(p.emphasis) || p.emphasis.length < 1 || p.emphasis.length > 8)
-      fail('emphasis needs 1–8 words or phrases');
-    p.emphasis.forEach(e => text(e, 'emphasis', 60));
-  } else if (p.emphasis != null) {
-    if (!Array.isArray(p.emphasis) || p.emphasis.length < 1 || p.emphasis.length > 4)
-      fail('emphasis needs 1–4 phrases');
-    const body = p.text ?? p.title;
-    p.emphasis.forEach(e => {
-      text(e, 'emphasis', 60);
-      if (findPhrase(body, e) < 0) fail(`emphasis "${e}" must be whole words from the text`);
-    });
-  }
-  const keys = (obj, allowed, field) => {
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) fail(`${field} must be an object`);
-    for (const k of Object.keys(obj)) if (!allowed.includes(k)) fail(`unsupported ${field}.${k}`);
-  };
-  const num = (n, key) => {
-    if (!Number.isFinite(n)) fail(`${key} must be a finite number`);
-  };
-  const numeric = (obj, key) => {
-    num(obj.value, `${key}.value`);
-    if (obj.from != null) num(obj.from, `${key}.from`);
-    obj.decimals ??= precision(obj.value);
-    if (!Number.isInteger(obj.decimals) || obj.decimals < 0 || obj.decimals > 8) fail(`${key}.decimals must be 0–8`);
-    text(obj.prefix, `${key}.prefix`, 12);
-    text(obj.suffix, `${key}.suffix`, 16);
-  };
-  const list = (items, key, min, max) => {
-    if (!Array.isArray(items) || items.length < min || items.length > max) fail(`${key} needs ${min}–${max} items`);
-  };
-  const format = () => {
-    if (typeof p.format === 'string') p.format = { suffix: p.format };
-    p.format ??= {};
-    if (!p.format || typeof p.format !== 'object' || Array.isArray(p.format))
-      fail('format must be an object or unit string');
-    for (const k of Object.keys(p.format))
-      if (!['prefix', 'suffix', 'decimals'].includes(k)) fail(`unsupported format.${k}`);
-    if (
-      p.format.decimals != null &&
-      (!Number.isInteger(p.format.decimals) || p.format.decimals < 0 || p.format.decimals > 8)
-    )
-      fail('format.decimals must be 0–8');
-    text(p.format.prefix, 'format.prefix', 12);
-    text(p.format.suffix, 'format.suffix', 16);
-  };
-  if (name === 'stat') numeric(p, 'stat');
-  if (name === 'kpis') {
-    list(p.items, 'items', 2, 4);
-    p.items.forEach((it, i) => {
-      keys(it, ['value', 'label', 'prefix', 'suffix', 'decimals', 'from', 'say'], `items[${i}]`);
-      numeric(it, `items[${i}]`);
-      text(it.label, 'label', 40);
-    });
-  }
-  if (name === 'bars') {
-    list(p.data, 'data', 2, 8);
-    p.data.forEach(d => {
-      keys(d, ['label', 'value'], 'data');
-      text(d.label, 'label', 65);
-      num(d.value, 'value');
-      if (d.value < 0) fail('bars require a zero-based nonnegative scale');
-    });
-    if (!['none', 'desc', undefined].includes(p.sort)) fail('sort must be none or desc');
-    if (p.sort === 'desc') p.data.sort((a, b) => b.value - a.value);
-    const largest = Math.max(...p.data.map(d => d.value));
-    p.max ??= largest * 1.08 || 1;
-    if (!Number.isFinite(p.max) || p.max <= 0 || p.max < largest) fail('max must be positive and cover every value');
-    p.orientation ??= 'auto';
-    if (p.orientation === 'auto')
-      p.orientation =
-        vertical || p.data.some(d => d.label.length > 12) || p.data.length > 5 ? 'horizontal' : 'vertical';
-    if (!['horizontal', 'vertical'].includes(p.orientation)) fail('unknown orientation');
-    format();
-    p.format.decimals ??= Math.max(...p.data.map(d => precision(d.value)));
-    if (p.focus) {
-      const f = p.focus;
-      keys(f, ['label', 'index', 'say', 'dim', 'dur', 'note'], 'focus');
-      text(f.note, 'focus.note', 100);
-      f.index ??= p.data.findIndex(d => d.label === f.label);
-      if (!Number.isInteger(f.index) || !p.data[f.index]) fail('focus must select an existing label/index');
-      f.dim ??= 0.28;
-      f.dur ??= 0.5;
-      if (!Number.isFinite(f.dim) || f.dim < 0 || f.dim > 1 || !Number.isFinite(f.dur) || f.dur < 0)
-        fail('focus dim must be 0–1 and dur nonnegative');
+    if (p.emphasis != null) {
+      if (!Array.isArray(p.emphasis) || p.emphasis.length < 1 || p.emphasis.length > 4)
+        fail('emphasis needs 1–4 phrases');
+      p.emphasis.forEach(e => {
+        h.text(e, 'emphasis', 60);
+        if (findPhrase(p.text ?? p.title, e) < 0) fail(`emphasis "${e}" must be whole words from the text`);
+      });
     }
   }
-  if (name === 'line') {
-    list(p.series, 'series', 2, 40);
-    p.series = p.series.map((d, i) => (typeof d === 'number' ? { x: i, y: d } : d));
-    p.series.forEach((d, i) => {
-      keys(d, ['x', 'y'], 'series');
-      num(d.x, 'series.x');
-      num(d.y, 'series.y');
-      if (i && d.x <= p.series[i - 1].x) fail('x coordinates must increase');
-    });
-    p.min ??= Math.min(0, ...p.series.map(d => d.y));
-    p.max ??= Math.max(0, ...p.series.map(d => d.y)) * 1.1 || 1;
-    if (
-      !Number.isFinite(p.min) ||
-      !Number.isFinite(p.max) ||
-      p.max <= p.min ||
-      p.series.some(d => d.y < p.min || d.y > p.max)
-    )
-      fail('line scale must cover the data');
-    if (p.labels) {
-      list(p.labels, 'labels', 2, 40);
-      if (p.labels.length !== p.series.length) fail('provide one label per point');
-      p.labels.forEach(x => text(x, 'label', 24));
-    }
-    format();
-    p.format.decimals ??= Math.max(...p.series.map(d => precision(d.y)));
-  }
-  if (name === 'waffle' || name === 'ring') {
-    if (name === 'ring') p.max ??= 100;
-    else p.total ??= 100;
-    num(p.value, 'value');
-    const max = name === 'waffle' ? p.total : p.max;
-    if (!Number.isFinite(max) || max <= 0 || p.value < 0 || p.value > max)
-      fail('value must lie between zero and total/max');
-    if (name === 'waffle' && (!Number.isInteger(max) || max > 100 || !Number.isInteger(p.value)))
-      fail('waffle counts must be integers up to 100');
-    if (name === 'waffle') {
-      p.cols ??= 10;
-      if (!Number.isInteger(p.cols) || p.cols < 1 || p.cols > 10) fail('cols must be 1–10');
-    }
-    p.decimals ??= 0;
-  }
-  if (name === 'delta') {
-    if (!p.from || !p.to) fail('from and to are required');
-    keys(p.from, ['value', 'label'], 'from');
-    keys(p.to, ['value', 'label'], 'to');
-    text(p.from.label, 'from.label', 40);
-    text(p.to.label, 'to.label', 40);
-    text(p.prefix, 'prefix', 12);
-    text(p.suffix, 'suffix', 16);
-    text(p.change, 'change', 100);
-    num(p.from.value, 'from.value');
-    num(p.to.value, 'to.value');
-    p.decimals ??= Math.max(precision(p.from.value), precision(p.to.value));
-    const d = p.to.value - p.from.value;
-    p.change ??=
-      d === 0
-        ? 'No change'
-        : p.from.value === 0
-          ? 'From zero'
-          : `${d > 0 ? '+' : '−'}${Math.abs((100 * d) / Math.abs(p.from.value)).toFixed(1)}%`;
-  }
-  if (name === 'compare') {
-    for (const key of ['left', 'right']) {
-      if (!p[key]) fail(`${key} is required`);
-      keys(p[key], ['title', 'items'], key);
-      text(p[key].title, key, 48);
-      list(p[key].items, `${key}.items`, 1, 4);
-      p[key].items.forEach(x => text(x, 'item', 75));
-    }
-  }
-  if (['steps', 'timeline', 'list', 'funnel'].includes(name)) {
-    list(p.items, 'items', 2, 5);
-    p.items = p.items.map(it => (typeof it === 'string' ? { text: it } : it));
-    p.items.forEach((it, i) => {
-      keys(
-        it,
-        name === 'list'
-          ? ['text', 'say']
-          : name === 'funnel'
-            ? ['label', 'value', 'say']
-            : ['title', 'detail', 'label', 'say'],
-        'items',
-      );
-      for (const k of ['text', 'title', 'label', 'detail']) text(it[k], k, k === 'detail' ? 85 : 65);
-      if (name === 'funnel') {
-        num(it.value, 'value');
-        if (it.value < 0 || (i && it.value > p.items[i - 1].value))
-          fail('funnel values must be nonnegative and decrease');
-      }
-    });
-    if (name === 'funnel') {
-      if (!p.items[0].value) fail('first funnel value must be positive');
-      format();
-      p.format.decimals ??= Math.max(...p.items.map(it => precision(it.value)));
-    }
-  }
-  if (name === 'matrix') {
-    list(p.columns, 'columns', 2, 3);
-    list(p.rows, 'rows', 2, 4);
-    p.columns.forEach(x => text(x, 'column', 24));
-    p.rows.forEach(r => {
-      keys(r, ['label', 'values'], 'rows');
-      text(r.label, 'row label', 32);
-      list(r.values, 'row values', p.columns.length, p.columns.length);
-      r.values.forEach(x => text(x, 'cell', 30));
-    });
-  }
-  if (name === 'kinetic') {
-    p.mode ??= 'highlight';
-    p.align ??= p.mode === 'stack' ? 'center' : 'left';
-    p.maxWords ??= 6;
-    p.maxGap ??= 0.6;
-    p.maxDuration ??= 4;
-    if (
-      !['highlight', 'reveal', 'word', 'stack'].includes(p.mode) ||
-      !['left', 'center'].includes(p.align) ||
-      !Number.isInteger(p.maxWords) ||
-      p.maxWords < 1 ||
-      p.maxWords > 10
-    )
-      fail('invalid kinetic mode, align or maxWords');
-    if (p.emphasis != null && p.mode !== 'stack') fail('kinetic emphasis applies to stack mode');
-    if (p.emphasisStyle != null && !['bold', 'serif'].includes(p.emphasisStyle))
-      fail('kinetic emphasisStyle must be bold or serif');
-    if (p.upper != null && typeof p.upper !== 'boolean') fail('upper must be true or false');
-    if (
-      !Number.isFinite(p.maxGap) ||
-      p.maxGap < 0 ||
-      p.maxGap > 5 ||
-      !Number.isFinite(p.maxDuration) ||
-      p.maxDuration < 0.5 ||
-      p.maxDuration > 15
-    )
-      fail('kinetic maxGap must be 0–5 and maxDuration 0.5–15 seconds');
-  }
-  if (['icon-grid', 'flow', 'cycle'].includes(name)) {
-    const key = name === 'icon-grid' ? 'items' : 'nodes';
-    list(p[key], key, name === 'icon-grid' ? 1 : name === 'cycle' ? 3 : 2, name === 'icon-grid' ? 8 : 6);
-    p[key].forEach((it, i) => {
-      keys(it, name === 'cycle' ? ['icon', 'label'] : ['icon', 'label', 'detail', 'say'], `${key}[${i}]`);
-      text(it.label, 'label', 40);
-      if (!it.label?.trim()) fail('every node needs a label');
-      text(it.detail, 'detail', 70);
-      if ((name === 'icon-grid' || it.icon != null) && !ICONS.includes(it.icon))
-        fail(`unknown icon ${it.icon}; run clearframe icons`);
-    });
-    if (name !== 'cycle') {
-      p.stagger ??= 0.45;
-      if (!Number.isFinite(p.stagger) || p.stagger < 0 || p.stagger > 2) fail('stagger must be 0–2 seconds');
-    }
-    if (name === 'icon-grid' && p.columns != null && (!Number.isInteger(p.columns) || p.columns < 1 || p.columns > 4))
-      fail('columns must be 1–4');
-    if (name === 'flow') {
-      p.orientation ??= 'auto';
-      if (!['auto', 'horizontal', 'vertical'].includes(p.orientation)) fail('invalid orientation');
-      if (vertical) p.orientation = 'vertical';
-    }
-    if (name === 'cycle') {
-      p.period ??= 8;
-      p.clockwise ??= true;
-      if (!Number.isFinite(p.period) || p.period < 2 || p.period > 60) fail('period must be 2–60 seconds');
-      if (typeof p.clockwise !== 'boolean') fail('clockwise must be boolean');
-    }
-  }
-  if (name === 'breathing') {
-    list(p.phases, 'phases', 2, 6);
-    p.phases.forEach((phase, i) => {
-      keys(phase, ['label', 'seconds', 'scale'], `phases[${i}]`);
-      text(phase.label, 'phase label', 40);
-      if (!phase.label?.trim()) fail('every phase needs a label');
-      if (!Number.isFinite(phase.seconds) || phase.seconds < 0.25 || phase.seconds > 30)
-        fail('phase seconds must be 0.25–30');
-      if (phase.scale == null && p.phases.length === 2) phase.scale = i ? 'contract' : 'expand';
-      if (!['expand', 'hold', 'contract'].includes(phase.scale))
-        fail('each phase needs scale expand, hold or contract');
-    });
-    p.minScale ??= 0.55;
-    p.maxScale ??= 1;
-    p.ring ??= true;
-    if (
-      !Number.isFinite(p.minScale) ||
-      !Number.isFinite(p.maxScale) ||
-      p.minScale < 0.2 ||
-      p.maxScale > 1 ||
-      p.minScale >= p.maxScale
-    )
-      fail('scales require 0.2 ≤ minScale < maxScale ≤ 1');
-    if (typeof p.ring !== 'boolean') fail('ring must be boolean');
-  }
-  if (name === 'image' || name === 'video' || name === 'annotate') {
-    if (!p.asset && !p.file) fail('asset or file is required');
-    if (p.offset != null && (!Number.isFinite(p.offset) || p.offset < 0)) fail('offset must be nonnegative');
-  }
-  if (name === 'image' || name === 'video') {
-    if (p.fit != null && !['contain', 'cover'].includes(p.fit)) fail('fit must be contain or cover');
-    if (p.drift != null && typeof p.drift !== 'boolean') fail('drift must be true or false');
-  }
-  if (name === 'callout' || name === 'waffle') icon(p.icon, 'icon');
-  if (name === 'delta' && p.better != null && !['up', 'down'].includes(p.better)) fail('better must be up or down');
-  if (
-    name === 'matrix' &&
-    p.highlight != null &&
-    (!Number.isInteger(p.highlight) || p.highlight < 0 || p.highlight >= p.columns.length)
-  )
-    fail('highlight must be a column index');
-  if (name === 'funnel') {
-    p.rates ??= true;
-    if (typeof p.rates !== 'boolean') fail('rates must be true or false');
-  }
-  if (name === 'highlight') {
-    list(p.phrases, 'phrases', 1, 4);
-    p.phrases = p.phrases.map((ph, i) => {
-      const o = typeof ph === 'string' ? { text: ph } : ph;
-      keys(o, ['text', 'say'], `phrases[${i}]`);
-      text(o.text, 'phrase', 60);
-      if (findPhrase(p.text, o.text) < 0) fail(`phrase "${o.text}" must be whole words from the text`);
-      return o;
-    });
-  }
-  if (name === 'donut') {
-    list(p.segments, 'segments', 2, 6);
-    p.segments.forEach((seg, i) => {
-      keys(seg, ['label', 'value'], `segments[${i}]`);
-      text(seg.label, 'label', 40);
-      num(seg.value, 'value');
-      if (seg.value < 0) fail('segment values must be nonnegative');
-    });
-    if (!(p.segments.reduce((a, seg) => a + seg.value, 0) > 0)) fail('segments need a positive total');
-    format();
-    p.format.decimals ??= Math.max(...p.segments.map(seg => precision(seg.value)));
-  }
-  if (name === 'magnitude') {
-    list(p.items, 'items', 2, 4);
-    p.items.forEach((it, i) => {
-      keys(it, ['label', 'value', 'say'], `items[${i}]`);
-      text(it.label, 'label', 40);
-      num(it.value, 'value');
-      if (!(it.value > 0)) fail('magnitude values must be positive; area cannot show zero or negative amounts');
-    });
-    format();
-    p.format.decimals ??= Math.max(...p.items.map(it => precision(it.value)));
-  }
-  if (name === 'checklist') {
-    list(p.items, 'items', 2, 6);
-    p.items = p.items.map(it => (typeof it === 'string' ? { text: it } : it));
-    p.items.forEach((it, i) => {
-      keys(it, ['text', 'detail', 'say'], `items[${i}]`);
-      text(it.text, 'text', 65);
-      text(it.detail, 'detail', 85);
-    });
-  }
-  if (name === 'annotate') {
-    list(p.pins, 'pins', 1, 6);
-    p.pins.forEach((pin, i) => {
-      keys(pin, ['x', 'y', 'label', 'detail', 'say'], `pins[${i}]`);
-      unit(pin.x, `pins[${i}].x`);
-      unit(pin.y, `pins[${i}].y`);
-      text(pin.label, 'label', 40);
-      text(pin.detail, 'detail', 80);
-    });
-    if (p.focus != null) {
-      const f = p.focus;
-      keys(f, ['x', 'y', 'w', 'h', 'say'], 'focus');
-      for (const k of ['x', 'y', 'w', 'h']) unit(f[k], `focus.${k}`);
-      if (!(f.w > 0 && f.h > 0) || f.x + f.w > 1 + 1e-9 || f.y + f.h > 1 + 1e-9)
-        fail('focus must be a nonempty region inside the image');
-    }
-  }
+  VALIDATORS[name]?.(p, h, { vertical });
   if (p.decimals != null && (!Number.isInteger(p.decimals) || p.decimals < 0 || p.decimals > 8))
     fail('decimals must be 0–8');
-  const required = (v, key) => {
-    if (typeof v !== 'string' || !v.trim()) fail(`${key} is required text`);
-  };
-  if (['title', 'statement', 'quote', 'callout', 'highlight'].includes(name)) required(p.text ?? p.title, 'text/title');
-  if (name === 'chapter') required(p.title, 'title');
-  if (name === 'checklist') p.items.forEach(d => required(d.text, 'items.text'));
-  if (name === 'annotate') p.pins.forEach(d => required(d.label, 'pins.label'));
-  if (name === 'donut') p.segments.forEach(d => required(d.label, 'segments.label'));
-  if (name === 'magnitude') p.items.forEach(d => required(d.label, 'items.label'));
-  if (name === 'endcard') required(p.text ?? p.title, 'text/title');
-  if (name === 'stat') required(p.label, 'label');
-  if (name === 'equation') required(p.expression, 'expression');
-  if (name === 'bars') p.data.forEach(d => required(d.label, 'data.label'));
-  if (name === 'kpis') p.items.forEach(d => required(d.label, 'items.label'));
-  if (['steps', 'timeline'].includes(name)) p.items.forEach(d => required(d.title, 'items.title'));
-  if (name === 'list') p.items.forEach(d => required(d.text, 'items.text'));
-  if (name === 'funnel') p.items.forEach(d => required(d.label, 'items.label'));
   return p;
 }
 
