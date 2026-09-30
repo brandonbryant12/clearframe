@@ -23,17 +23,30 @@ struct Tile {
     class: u8,
     /// 0..1 position along the fill gradient axis.
     along: f32,
+    /// Corner offsets (tile-local fractions): hand-cut, slanted edges.
+    cut: [(f32, f32); 4],
+    /// One tile in ~25 is a paler piece.
+    pale: bool,
 }
 
 struct Layout {
     tiles: Vec<Tile>,
     cx: f32,
     cy: f32,
-    grout: String,
+    gap: f32,
+    /// The shape's own outline, the grout bed of a settled filled shape (empty for beads).
+    outline: String,
 }
 
 fn layouts() -> &'static Mutex<HashMap<u64, Arc<Layout>>> {
     static CACHE: OnceLock<Mutex<HashMap<u64, Arc<Layout>>>> = OnceLock::new();
+    CACHE.get_or_init(Default::default)
+}
+
+/// Settled mosaics draw the same paths every frame: cache them per element and colours.
+type Parts = Arc<Vec<(String, f32, String)>>;
+fn statics() -> &'static Mutex<HashMap<u64, Parts>> {
+    static CACHE: OnceLock<Mutex<HashMap<u64, Parts>>> = OnceLock::new();
     CACHE.get_or_init(Default::default)
 }
 
@@ -111,26 +124,31 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool) -> Layout {
     let closed = contours.iter().any(|(_, c)| *c);
     let mut tiles = vec![];
     let mut k = 0u64;
-    let mut tile = |x: f32, y: f32, angle: f32, class: u8, order: f32| {
+    // A hand-cut tile: slanted corners, varied width and a slight turn, all from the seed.
+    let mut tile = |x: f32, y: f32, angle: f32, class: u8, order: f32, width: Option<f32>| {
         k += 1;
         let j = |i: u64| noise(seed, k * 16 + i) * jitter;
+        let c = |i: u64| noise(seed, k * 16 + 8 + i) * jitter * 0.24;
         tiles.push(Tile {
-            x: x + j(1) * gap * 0.35,
-            y: y + j(2) * gap * 0.35,
-            angle: angle + j(3) * 0.12,
-            w: size * (1.0 + j(4) * 0.1),
-            h: size * (1.0 + j(5) * 0.1),
+            x: x + j(1) * gap * 0.3,
+            y: y + j(2) * gap * 0.3,
+            angle: angle + j(3) * 0.2,
+            w: width.unwrap_or(size * (1.0 + j(4) * 0.6)).max(size * 0.35),
+            h: size * (1.0 + j(5) * 0.24),
             shade: noise(seed, k * 16 + 6),
             order,
             class,
             along: 0.0,
+            cut: [(c(0), c(1)), (c(2), c(3)), (c(4), c(5)), (c(6), c(7))],
+            pale: unit(seed, k * 16 + 7) < 0.04,
         });
     };
     let outline_row = spec.get("outline").and_then(Value::as_bool).unwrap_or(true);
     if filled && closed {
-        let flow =
-            nonempty(s(spec, "flow"), if matches!(s(el, "type"), "circle" | "ellipse") { "rings" } else { "rows" });
-        let margin = if outline_row { pitch * 0.92 } else { size * 0.5 };
+        let round = matches!(s(el, "type"), "circle" | "ellipse");
+        let flow = nonempty(s(spec, "flow"), if round { "rings" } else { "rows" });
+        // Interior tiles tuck under the outline row (drawn after them), so no bed shows between.
+        let margin = if outline_row { pitch * 0.72 } else { size * 0.3 };
         let keep = |x: f32, y: f32| {
             inside((x, y), &contours)
                 && contours.iter().filter(|(_, c)| *c).all(|(c, _)| distance((x, y), c, true) >= margin)
@@ -142,58 +160,78 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool) -> Layout {
             _ => (0.75 * (x - bx) / bw.max(1.0) + 0.25 * (y - by) / bh.max(1.0)) * 0.8 + 0.2 * unit(seed, 9000 + i),
         };
         if flow == "rings" {
+            // Wedge rings fitted to each circumference, from just inside the outline row in.
             let (rx, ry) = (bw / 2.0, bh / 2.0);
             let r_max = rx.max(ry).max(1.0);
+            let start = if outline_row { r_max - pitch * 1.5 } else { r_max - pitch * 0.5 };
             let mut ring = 0;
             loop {
-                let r = r_max - margin - ring as f32 * pitch;
-                if r < pitch * 0.45 {
-                    if keep(cx, cy) {
-                        tile(cx, cy, 0.0, 0, 0.0);
-                    }
+                let r = start - ring as f32 * pitch;
+                if r < pitch * 0.8 {
+                    tile(cx, cy, unit(seed, 77) * PI, 0, 0.0, Some(size * 1.1));
                     break;
                 }
-                let n = ((TAU * r) / pitch).floor().max(1.0) as usize;
+                let n = ((TAU * r) / pitch).round().max(3.0) as usize;
                 let offset = unit(seed, 500 + ring as u64) * TAU;
+                let fitted = TAU * r / n as f32 - gap;
                 for i in 0..n {
                     let a = offset + i as f32 / n as f32 * TAU;
                     let (x, y) = (cx + r / r_max * rx * a.cos(), cy + r / r_max * ry * a.sin());
-                    if keep(x, y) {
+                    if round || keep(x, y) {
                         let u = sweep(x, y, i as u64 + ring as u64 * 997);
-                        tile(x, y, a + PI / 2.0, 0, u);
+                        tile(x, y, a + PI / 2.0, 0, u, Some(fitted));
                     }
                 }
                 ring += 1;
             }
         } else {
-            let rows = (bh / pitch).ceil() as i32 + 1;
+            // Running-bond rows, their spacing fitted so the rows fill the shape's height.
+            let rows = ((bh / pitch).round() as i32).max(1);
+            let row_pitch = bh / rows as f32;
             let cols = (bw / pitch).ceil() as i32 + 2;
             for r in 0..rows {
-                let y = by + (r as f32 + 0.5) * pitch;
+                let y = by + (r as f32 + 0.5) * row_pitch;
                 let shift = if r % 2 == 1 { pitch * 0.5 } else { 0.0 };
                 for c in -1..cols {
                     let x = bx + (c as f32 + 0.5) * pitch + shift;
                     if keep(x, y) {
                         let u = sweep(x, y, (r * 4099 + c) as u64);
-                        tile(x, y, 0.0, 0, u);
+                        tile(x, y, 0.0, 0, u, None);
                     }
                 }
             }
         }
         if outline_row {
+            // The outline row sits half a tile inside the contour, turned along it.
             for (c, is_closed) in &contours {
                 if *is_closed {
-                    along_line(c, true, pitch, |(x, y), a, t| tile(x, y, a, 1, t * 0.4));
+                    along_line(c, true, pitch, |(x, y), a, t| {
+                        let (nx, ny) = (-a.sin(), a.cos());
+                        let d = pitch * 0.5;
+                        let (px, py) = if inside((x + nx * d, y + ny * d), &contours) {
+                            (x + nx * d, y + ny * d)
+                        } else {
+                            (x - nx * d, y - ny * d)
+                        };
+                        tile(px, py, a, 1, t * 0.4, Some(size));
+                    });
                 }
             }
         }
     } else {
         // A beaded line: tiles along every contour, built in drawing order.
         for (c, is_closed) in &contours {
-            along_line(c, *is_closed, pitch, |(x, y), a, t| tile(x, y, a, 1, t));
+            along_line(c, *is_closed, pitch, |(x, y), a, t| tile(x, y, a, 1, t, Some(size)));
         }
     }
-    let grout = if filled && closed {
+    // Gradient position of each tile along the fill's axis (angle in degrees, like `paint`).
+    let angle = spec.get("axis").and_then(Value::as_f64).unwrap_or(90.0) as f32 * PI / 180.0;
+    let (ax, ay) = (angle.cos(), angle.sin());
+    let reach = (bw * ax.abs() + bh * ay.abs()).max(1.0);
+    for t in &mut tiles {
+        t.along = (((t.x - cx) * ax + (t.y - cy) * ay) / reach + 0.5).clamp(0.0, 1.0);
+    }
+    let outline = if filled && closed {
         contours
             .iter()
             .filter(|(_, c)| *c)
@@ -208,14 +246,7 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool) -> Layout {
     } else {
         String::new()
     };
-    // Gradient position of each tile along the fill's axis (angle in degrees, like `paint`).
-    let angle = spec.get("axis").and_then(Value::as_f64).unwrap_or(90.0) as f32 * PI / 180.0;
-    let (ax, ay) = (angle.cos(), angle.sin());
-    let reach = (bw * ax.abs() + bh * ay.abs()).max(1.0);
-    for t in &mut tiles {
-        t.along = (((t.x - cx) * ax + (t.y - cy) * ay) / reach + 0.5).clamp(0.0, 1.0);
-    }
-    Layout { tiles, cx, cy, grout }
+    Layout { tiles, cx, cy, gap, outline }
 }
 
 impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
@@ -269,10 +300,11 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             stops.first().cloned().unwrap_or(self.p.accent.clone())
         };
         let line = if stroke.starts_with('#') { stroke.to_owned() } else { crate::design::mix(&body, "#000000", 0.35) };
+        // One dark bed under every tile of the film, not a tinted copy of each shape.
         let grout = spec
             .get("grout")
             .map(|g| self.paint(Some(g), "bg", &mut vec![]))
-            .unwrap_or_else(|| crate::design::mix(&body, "#000000", 0.62));
+            .unwrap_or_else(|| crate::design::mix(&self.p.bg, "#000000", if self.p.dark { 0.72 } else { 0.5 }));
         let depth = f(spec, "shade", 0.22).clamp(0.0, 0.6);
         let shine = f(spec, "shine", 0.35).clamp(0.0, 1.0);
         // Glints: each tile catches the light briefly on its own slow rhythm, so a held mosaic
@@ -286,34 +318,40 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             if stops.len() >= 2 {
                 let x = t.along * (stops.len() - 1) as f32;
                 let i = (x.floor() as usize).min(stops.len() - 2);
-                crate::design::mix(&stops[i], &stops[i + 1], ((x - i as f32) * 6.0).round() / 6.0)
+                crate::design::mix(&stops[i], &stops[i + 1], ((x - i as f32) * 24.0).round() / 24.0)
             } else {
                 body.clone()
             }
         };
-        let mut buckets: HashMap<(String, i8), String> = HashMap::new();
-        let mut shines = String::new();
-        let quad = |x: f32, y: f32, w: f32, h: f32, a: f32, out: &mut String| {
-            let (c, s) = (a.cos(), a.sin());
-            for (i, (u, v)) in [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)].into_iter().enumerate() {
-                let (px, py) = (x + (u * w) * c - (v * h) * s, y + (u * w) * s + (v * h) * c);
-                out.push_str(&format!("{}{:.1} {:.1}", if i == 0 { "M" } else { "L" }, px, py));
-            }
-            out.push('Z');
+        const SQUARE: [(f32, f32); 4] = [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)];
+        // Local-space polygon of a tile placed at (x, y), size (w, h), turned by `a`.
+        let shape =
+            |x: f32, y: f32, w: f32, h: f32, a: f32, pts: &mut dyn Iterator<Item = (f32, f32)>, out: &mut String| {
+                let (c, s) = (a.cos(), a.sin());
+                for (i, (u, v)) in pts.enumerate() {
+                    let (px, py) = (x + (u * w) * c - (v * h) * s, y + (u * w) * s + (v * h) * c);
+                    out.push_str(&format!("{}{:.1} {:.1}", if i == 0 { "M" } else { "L" }, px, py));
+                }
+                out.push('Z');
+            };
+        let quad = |x: f32, y: f32, w: f32, h: f32, a: f32, cut: &[(f32, f32); 4], out: &mut String| {
+            shape(x, y, w, h, a, &mut SQUARE.iter().zip(cut).map(|((u, v), (du, dv))| (u + du, v + dv)), out)
         };
-        for (i, t) in layout.tiles.iter().enumerate() {
-            // Build: each tile pops in over the last 30% of its window; a beaded line follows
-            // the draw-on; scatter throws tiles outward, spinning, as they shrink.
+        // Bevel lit from the upper left: one L of light along the top and left edges.
+        const LIGHT: [(f32, f32); 6] =
+            [(-0.46, -0.46), (0.4, -0.46), (0.4, -0.34), (-0.34, -0.34), (-0.34, 0.4), (-0.46, 0.4)];
+        // Where a tile is at this moment: dropping in, settled, or thrown by scatter.
+        let place = |i: usize, t: &Tile| -> Option<(f32, f32, f32, f32, f32)> {
             let p = motion::clamp01((assemble - t.order * 0.7) / 0.3).min(if t.class == 1 && !filled {
                 motion::clamp01((draw - t.order) * 8.0 + 1.0)
             } else {
                 1.0
             });
             if p <= 0.001 {
-                continue;
+                return None;
             }
-            let pop = motion::out_back(p);
-            let (mut x, mut y, mut a, mut k) = (t.x, t.y, t.angle, pop);
+            let settle = motion::out_cubic(p);
+            let (mut x, mut y, mut a, mut k) = (t.x, t.y - (1.0 - settle) * 0.22 * t.h, t.angle, 1.45 - 0.45 * settle);
             if scatter > 0.0 {
                 let h = unit(t.order.to_bits() as u64 ^ i as u64, 77);
                 let (dx, dy) = (t.x - layout.cx, t.y - layout.cy);
@@ -323,58 +361,90 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 x += dx / len * dist + noise(i as u64, 3) * 40.0 * q;
                 y += dy / len * dist + 180.0 * q * q;
                 a += noise(i as u64, 5) * 3.0 * q;
-                k *= 1.0 - 0.7 * q;
+                k *= 1.0 - 0.3 * q;
             }
-            if k <= 0.01 {
-                continue;
+            Some((x, y, a, t.w * k, t.h * k))
+        };
+        let settled = assemble >= 1.0 && scatter <= 0.0 && (filled || draw >= 1.0);
+        let key = {
+            let mut h = std::collections::hash_map::DefaultHasher::new();
+            (seed, &body, &line, &grout, &stops, depth.to_bits(), shine.to_bits()).hash(&mut h);
+            h.finish()
+        };
+        let cached = if settled { statics().lock().unwrap().get(&key).cloned() } else { None };
+        let parts: Parts = cached.unwrap_or_else(|| {
+            let mut buckets: HashMap<(String, i8, bool), String> = HashMap::new();
+            let (mut lights, mut bed) = (String::new(), String::new());
+            for (i, t) in layout.tiles.iter().enumerate() {
+                let Some((x, y, a, w, h)) = place(i, t) else { continue };
+                // The grout bed exists only where tiles are, so nothing shows before they arrive;
+                // a settled shape lays its bed as one outline instead.
+                if scatter <= 0.0 && !(settled && !layout.outline.is_empty()) {
+                    quad(x, y, w + layout.gap * 1.3, h + layout.gap * 1.3, a, &t.cut, &mut bed);
+                }
+                let level = (t.shade * 2.0).round().clamp(-2.0, 2.0) as i8;
+                quad(x, y, w, h, a, &t.cut, buckets.entry((base_for(t), level, t.pale)).or_default());
+                // Small tiles read without a bevel; it doubles their cost.
+                if shine > 0.0 && t.w >= 10.0 {
+                    shape(x, y, w, h, a, &mut LIGHT.iter().copied(), &mut lights);
+                }
             }
-            let level = (t.shade * 2.0).round().clamp(-2.0, 2.0) as i8;
-            let key = (base_for(t), level);
-            quad(x, y, t.w * k, t.h * k, a, buckets.entry(key).or_default());
-            if glint > 0.0 && scatter <= 0.0 {
+            let mut parts = vec![];
+            if settled && !layout.outline.is_empty() {
+                parts.push((grout.clone(), 1.0, layout.outline.clone()));
+            } else if !bed.is_empty() {
+                parts.push((grout.clone(), 1.0, bed));
+            }
+            let mut keys: Vec<_> = buckets.into_iter().collect();
+            keys.sort_by(|a, b| a.0.cmp(&b.0));
+            for ((base, level, pale), d) in keys {
+                let tone = level as f32 / 2.0 * depth;
+                let color = if tone >= 0.0 {
+                    crate::design::mix(&base, "#ffffff", tone)
+                } else {
+                    crate::design::mix(&base, "#000000", -tone)
+                };
+                let color = if pale { crate::design::mix(&color, "#ffffff", 0.42) } else { color };
+                parts.push((color, 1.0, d));
+            }
+            if !lights.is_empty() {
+                parts.push(("#ffffff".to_owned(), shine * 0.45, lights));
+            }
+            let parts = Arc::new(parts);
+            if settled {
+                let mut map = statics().lock().unwrap();
+                if map.len() > 256 {
+                    map.clear();
+                }
+                map.insert(key, parts.clone());
+            }
+            parts
+        });
+        let mut nodes: Vec<_> = parts
+            .iter()
+            .map(|(color, opacity, d)| fframes::svgr!(<path d={d.clone()} fill={color.clone()} opacity={*opacity} />))
+            .collect();
+        // Glints change every frame; they are the only per-frame work on a settled mosaic.
+        if glint > 0.0 && scatter <= 0.0 {
+            for (i, t) in layout.tiles.iter().enumerate() {
                 let period = 3.0 + 5.0 * unit(seed ^ 0x61, i as u64);
                 let phase = unit(seed ^ 0x67, i as u64);
                 let wave = (TAU * (now / period + phase)).cos().max(0.0).powi(48);
                 let g = wave * glint * (0.4 + 0.6 * unit(seed ^ 0x71, i as u64));
                 if g > 0.08 {
-                    let level = ((g * 3.0) as usize).min(2);
-                    quad(x, y, t.w * k * 0.9, t.h * k * 0.9, a, &mut glints[level]);
+                    if let Some((x, y, a, w, h)) = place(i, t) {
+                        let level = ((g * 3.0) as usize).min(2);
+                        quad(x, y, w * 0.9, h * 0.9, a, &t.cut, &mut glints[level]);
+                    }
                 }
             }
-            if shine > 0.0 && t.shade > -0.4 {
-                // A small highlight on the upper-left of the tile: glass catching the light.
-                let (c, s) = (a.cos(), a.sin());
-                let (ox, oy) = (-0.2 * t.w * k, -0.2 * t.h * k);
-                quad(x + ox * c - oy * s, y + ox * s + oy * c, t.w * k * 0.38, t.h * k * 0.2, a, &mut shines);
-            }
-        }
-        let mut nodes = vec![];
-        if !layout.grout.is_empty() {
-            let bed = motion::clamp01(assemble * 3.0) * (1.0 - scatter).max(0.0);
-            if bed > 0.0 {
-                nodes.push(fframes::svgr!(<path d={layout.grout.clone()} fill={grout.clone()} opacity={bed} />));
-            }
-        }
-        let mut keys: Vec<_> = buckets.into_iter().collect();
-        keys.sort_by(|a, b| a.0.cmp(&b.0));
-        for ((base, level), d) in keys {
-            let tone = level as f32 / 2.0 * depth;
-            let color = if tone >= 0.0 {
-                crate::design::mix(&base, "#ffffff", tone)
-            } else {
-                crate::design::mix(&base, "#000000", -tone)
-            };
-            nodes.push(fframes::svgr!(<path d={d} fill={color} />));
-        }
-        if !shines.is_empty() {
-            nodes.push(fframes::svgr!(<path d={shines} fill="#ffffff" opacity={shine * 0.45} />));
         }
         for (level, d) in glints.into_iter().enumerate() {
             if !d.is_empty() {
                 nodes.push(fframes::svgr!(<path d={d} fill="#fffbe8" opacity={0.25 + 0.25 * level as f32} />));
             }
         }
-        let fade = 1.0 - scatter * scatter;
+        let fade = 1.0 - motion::clamp01((scatter - 0.75) / 0.25);
         fframes::svgr!(<g opacity={fade}>{nodes}</g>)
     }
 }

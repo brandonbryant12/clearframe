@@ -39,22 +39,37 @@
         "elements": [
           {
             "type": "path",
-            "d": "M 180 980 L 180 430 A 360 360 0 0 1 900 430 L 900 980 Z",
+            "d": "M 180 960 L 180 430 A 360 360 0 0 1 900 430 L 900 960 Z",
             "fill": {
               "gradient": [
-                "#2b3fa0",
-                "#16225e"
+                "#0e1670",
+                "#2440b8"
               ]
             },
             "stroke": "ink",
             "mosaic": {
-              "tile": 18,
+              "tile": 16,
               "axis": 90,
-              "glint": 0.15
+              "glint": 0.12
             },
             "enter": "assemble",
-            "at": 0.1,
+            "at": 0.3,
             "dur": 1.8
+          },
+          {
+            "type": "rect",
+            "x": 150,
+            "y": 960,
+            "w": 780,
+            "h": 30,
+            "fill": "#8d93a6",
+            "mosaic": {
+              "tile": 6,
+              "outline": false
+            },
+            "enter": "assemble",
+            "at": 0.2,
+            "dur": 1.0
           },
           {
             "type": "rect",
@@ -194,8 +209,8 @@
           },
           {
             "type": "circle",
-            "cx": 710,
-            "cy": 380,
+            "cx": 350,
+            "cy": 330,
             "r": 78,
             "fill": "accent",
             "mosaic": {
@@ -216,7 +231,7 @@
             "x": 180,
             "y": 760,
             "w": 720,
-            "h": 220,
+            "h": 200,
             "fill": {
               "gradient": [
                 "#3cc0b4",
@@ -224,10 +239,10 @@
               ]
             },
             "mosaic": {
-              "tile": 16,
+              "tile": 14,
               "axis": 90,
               "outline": false,
-              "glint": 0.7
+              "glint": 0.6
             },
             "enter": "assemble",
             "at": 0.8,
@@ -301,7 +316,7 @@
             "closed": true,
             "fill": "ink",
             "mosaic": {
-              "tile": 14
+              "tile": 9
             },
             "enter": "assemble",
             "say": "one",
@@ -330,7 +345,7 @@
             "closed": true,
             "fill": "accent2",
             "mosaic": {
-              "tile": 12,
+              "tile": 7,
               "outline": false
             },
             "enter": "assemble",
@@ -360,7 +375,7 @@
             "closed": true,
             "fill": "accent2",
             "mosaic": {
-              "tile": 12,
+              "tile": 7,
               "outline": false
             },
             "enter": "assemble",
@@ -375,12 +390,12 @@
             "h": 50,
             "fill": "accent",
             "mosaic": {
-              "tile": 9,
+              "tile": 7,
               "outline": false
             },
             "enter": "assemble",
-            "say": "time",
-            "dur": 0.8,
+            "at": 0.0,
+            "dur": 0.9,
             "glow": {
               "blur": 16
             }
@@ -404,7 +419,7 @@
             "closed": true,
             "fill": "accent2",
             "mosaic": {
-              "tile": 12
+              "tile": 7
             },
             "enter": "assemble",
             "say": "time",
@@ -466,25 +481,27 @@
               ],
               [
                 900,
-                400
+                410
               ],
               [
                 900,
-                580
+                570
               ]
             ],
             "closed": true,
-            "fill": "#ffe7a3",
-            "opacity": 0.5,
-            "mosaic": {
-              "tile": 12,
-              "outline": false,
-              "build": "radial",
-              "grout": "none"
+            "fill": {
+              "gradient": [
+                "#fff1c2",
+                "#fff1c2"
+              ],
+              "angle": 0,
+              "fade": true
             },
-            "enter": "assemble",
+            "opacity": 0.55,
+            "blend": "screen",
+            "enter": "wipe",
             "say": "Light",
-            "dur": 1.0,
+            "dur": 0.8,
             "origin": [
               545,
               492
@@ -539,7 +556,12 @@
             "closed": true,
             "fill": "accent2",
             "mosaic": {
-              "tile": 10
+              "tile": 8
+            },
+            "loop": {
+              "type": "float",
+              "period": 3,
+              "amount": 4
             },
             "enter": "assemble",
             "at": 0.1,
@@ -567,7 +589,12 @@
             "closed": true,
             "fill": "ink",
             "mosaic": {
-              "tile": 10
+              "tile": 8
+            },
+            "loop": {
+              "type": "float",
+              "period": 3,
+              "amount": 4
             },
             "enter": "assemble",
             "at": 0.2,
@@ -580,26 +607,31 @@
             "type": "poly",
             "points": [
               [
-                640,
+                250,
                 850
               ],
               [
-                760,
+                370,
                 850
               ],
               [
-                735,
+                345,
                 885
               ],
               [
-                665,
+                275,
                 885
               ]
             ],
             "closed": true,
             "fill": "accent2",
             "mosaic": {
-              "tile": 10
+              "tile": 8
+            },
+            "loop": {
+              "type": "float",
+              "period": 3,
+              "amount": 4
             },
             "enter": "assemble",
             "say": "together",
@@ -609,22 +641,27 @@
             "type": "poly",
             "points": [
               [
-                702,
+                312,
                 845
               ],
               [
-                702,
+                312,
                 760
               ],
               [
-                750,
+                360,
                 845
               ]
             ],
             "closed": true,
             "fill": "ink",
             "mosaic": {
-              "tile": 10
+              "tile": 8
+            },
+            "loop": {
+              "type": "float",
+              "period": 3,
+              "amount": 4
             },
             "enter": "assemble",
             "say": "together",
@@ -649,29 +686,29 @@
         "elements": [
           {
             "type": "rect",
-            "x": 330,
-            "y": 918,
-            "w": 420,
-            "h": 74,
-            "r": 10,
-            "fill": "bg",
-            "opacity": 0.8,
-            "say": "Every"
+            "x": 340,
+            "y": 150,
+            "w": 400,
+            "h": 84,
+            "fill": "ink",
+            "stroke": "accent",
+            "mosaic": {
+              "tile": 8
+            },
+            "enter": "assemble",
+            "say": "Every",
+            "dur": 0.9
           },
           {
             "type": "text",
             "text": "Laid in code.",
             "x": 540,
-            "y": 970,
-            "size": 54,
+            "y": 206,
+            "size": 46,
             "font": "serif-italic",
-            "fill": "accent",
+            "fill": "#16225e",
             "anchor": "middle",
-            "say": "code",
-            "glow": {
-              "blur": 10,
-              "opacity": 0.6
-            }
+            "say": "code"
           }
         ]
       },
