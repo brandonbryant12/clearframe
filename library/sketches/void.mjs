@@ -13,7 +13,7 @@ export default {
       cy = round(h * 0.5);
     return {
       dolly: [{ at: 0, z: 1.1, dur: 9, ease: 'linear' }],
-      focus: { z: -0.4, aperture: 1.4, keys: [{ at: 2.4, z: 9, dur: 1.8 }] },
+      focus: { z: -0.4, aperture: 1, keys: [{ at: 0.8, z: 9, dur: 1.4 }] },
       elements: [
         // Something is on screen with the first word: the far light, then the field around it.
         {
@@ -38,7 +38,7 @@ export default {
           cy,
           r: round(Math.min(w, h) * 0.2),
           fill: { gradient: ['accent', 'accent'], radial: true, fade: true },
-          opacity: 0.22,
+          opacity: 0.42,
           z: 9,
           at: 0.2,
           enter: 'fade',
@@ -49,7 +49,7 @@ export default {
           type: 'circle',
           cx,
           cy,
-          r: 7,
+          r: 11,
           fill: 'ink',
           glow: { blur: 22, color: 'accent', opacity: 1 },
           z: 9,
@@ -65,14 +65,15 @@ export default {
           w,
           h,
           kind: 'dust',
-          count: 42,
+          count: 60,
           fill: 'ink',
-          opacity: 0.6,
-          size: 5,
+          opacity: 0.85,
+          size: 7,
           z: -0.45,
+          glow: { blur: 6, color: 'accent', opacity: 0.7 },
           at: 0,
           enter: 'fade',
-          dur: 0.5,
+          dur: 0.3,
         },
       ],
     };

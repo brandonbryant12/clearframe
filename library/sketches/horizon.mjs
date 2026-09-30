@@ -81,9 +81,9 @@ export default {
           {
             type: 'group',
             z: l.z,
-            at: 0.1 + i * 0.15,
+            at: 0.05 + i * 0.1,
             enter: 'rise',
-            dur: 1.2,
+            dur: 0.8,
             dist: 40,
             children: [
               {

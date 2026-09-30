@@ -124,9 +124,9 @@
           {
             "type": "group",
             "z": 6,
-            "at": 0.1,
+            "at": 0.05,
             "enter": "rise",
-            "dur": 1.2,
+            "dur": 0.8,
             "dist": 40,
             "children": [
               {
@@ -176,9 +176,9 @@
           {
             "type": "group",
             "z": 2.4,
-            "at": 0.25,
+            "at": 0.15000000000000002,
             "enter": "rise",
-            "dur": 1.2,
+            "dur": 0.8,
             "dist": 40,
             "children": [
               {
@@ -219,9 +219,9 @@
           {
             "type": "group",
             "z": 0.5,
-            "at": 0.4,
+            "at": 0.25,
             "enter": "rise",
-            "dur": 1.2,
+            "dur": 0.8,
             "dist": 40,
             "children": [
               {

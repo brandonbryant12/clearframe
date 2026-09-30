@@ -42,14 +42,15 @@ export default {
             fill: rand() > 0.8 ? 'accent2' : 'accent',
             opacity: 0.85,
             z: 1.4,
-            at: round(0.15 + rand() * 0.7),
+            at: round(0.05 + rand() * 0.4),
             enter: 'fade',
             dur: 0.4,
             ...(rand() > 0.7 ? { loop: { type: 'blink', period: round(3 + rand() * 6) } } : {}),
           });
         }
     }
-    const rects = (list, at) => list.map(r => ({ type: 'rect', ...r, at, enter: 'fade', dur: 0.5 }));
+    // The city is already there when the shot cuts in; the truck is the motion.
+    const rects = list => list.map(r => ({ type: 'rect', ...r, at: 0, dur: 0 }));
     // Masts on the three tallest towers, each with a slow red beacon.
     const masts = [...mid]
       .sort((a, b) => a.y - b.y)
@@ -143,7 +144,7 @@ export default {
           enter: 'fade',
           dur: 0.8,
         },
-        ...rects(far, 0.1),
+        ...rects(far),
         // Street level is in shadow: the far skyline stops at the ground line.
         {
           type: 'rect',
@@ -156,7 +157,7 @@ export default {
           at: 0,
           dur: 0,
         },
-        ...rects(mid, 0.2),
+        ...rects(mid),
         ...windows,
         ...masts,
         // Foreground towers at the frame edges, rim-lit by the city, soft with nearness.

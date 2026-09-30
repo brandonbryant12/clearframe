@@ -151,9 +151,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -164,9 +163,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -177,9 +175,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -190,9 +187,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -203,9 +199,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -216,9 +211,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -229,9 +223,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -242,9 +235,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -255,9 +247,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -268,9 +259,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -281,9 +271,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -294,9 +283,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -307,9 +295,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -320,9 +307,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -333,9 +319,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -346,9 +331,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -359,9 +343,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -372,9 +355,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -385,9 +367,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -398,9 +379,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -411,9 +391,8 @@
             "fill": "muted",
             "opacity": 0.2,
             "z": 4,
-            "at": 0.1,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -435,9 +414,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -448,9 +426,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -461,9 +438,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -474,9 +450,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -487,9 +462,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -500,9 +474,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -513,9 +486,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -526,9 +498,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -539,9 +510,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -552,9 +522,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -565,9 +534,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -578,9 +546,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -591,9 +558,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -604,9 +570,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -617,9 +582,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -630,9 +594,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -643,9 +606,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -656,9 +618,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -669,9 +630,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -682,9 +642,8 @@
             "fill": "bg",
             "opacity": 1,
             "z": 1.4,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 0.5
+            "at": 0,
+            "dur": 0
           },
           {
             "type": "rect",
@@ -695,7 +654,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -708,7 +667,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -721,7 +680,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -734,7 +693,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -747,7 +706,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -764,7 +723,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -781,7 +740,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -794,7 +753,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -811,7 +770,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -828,7 +787,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -841,7 +800,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -854,7 +813,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -867,7 +826,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -880,39 +839,13 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
           {
             "type": "rect",
             "x": -166.6,
-            "y": 378.1,
-            "w": 9,
-            "h": 14,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.4,
-            "at": 0.7,
-            "enter": "fade",
-            "dur": 0.4
-          },
-          {
-            "type": "rect",
-            "x": -88.6,
-            "y": 378.1,
-            "w": 9,
-            "h": 14,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.4,
-            "at": 0.5,
-            "enter": "fade",
-            "dur": 0.4
-          },
-          {
-            "type": "rect",
-            "x": -62.6,
             "y": 378.1,
             "w": 9,
             "h": 14,
@@ -925,6 +858,32 @@
           },
           {
             "type": "rect",
+            "x": -88.6,
+            "y": 378.1,
+            "w": 9,
+            "h": 14,
+            "fill": "accent",
+            "opacity": 0.85,
+            "z": 1.4,
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 0.4
+          },
+          {
+            "type": "rect",
+            "x": -62.6,
+            "y": 378.1,
+            "w": 9,
+            "h": 14,
+            "fill": "accent",
+            "opacity": 0.85,
+            "z": 1.4,
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 0.4
+          },
+          {
+            "type": "rect",
             "x": -166.6,
             "y": 418.1,
             "w": 9,
@@ -932,7 +891,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -949,7 +908,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -962,7 +921,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -979,7 +938,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -996,7 +955,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1009,7 +968,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1022,7 +981,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1035,7 +994,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1052,7 +1011,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1065,7 +1024,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1082,7 +1041,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1095,7 +1054,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1108,7 +1067,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1121,7 +1080,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1134,7 +1093,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1147,7 +1106,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1164,7 +1123,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1177,7 +1136,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1190,7 +1149,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1203,7 +1162,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1220,7 +1179,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1237,7 +1196,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1254,7 +1213,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1267,7 +1226,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1280,7 +1239,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1293,7 +1252,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1310,7 +1269,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1323,7 +1282,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1336,7 +1295,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1349,7 +1308,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1362,7 +1321,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1375,7 +1334,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1388,7 +1347,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1401,7 +1360,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1414,7 +1373,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1427,7 +1386,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1440,7 +1399,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1453,7 +1412,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1466,7 +1425,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1479,7 +1438,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1492,7 +1451,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1505,7 +1464,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1522,7 +1481,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1535,7 +1494,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1552,7 +1511,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1565,7 +1524,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1578,7 +1537,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1595,7 +1554,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1608,7 +1567,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1621,7 +1580,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1638,7 +1597,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1651,7 +1610,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1664,7 +1623,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1677,7 +1636,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1690,7 +1649,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1707,7 +1666,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1724,7 +1683,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1741,7 +1700,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1754,7 +1713,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1771,7 +1730,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1784,7 +1743,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1797,7 +1756,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1810,7 +1769,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1827,7 +1786,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1840,7 +1799,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1853,7 +1812,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1870,7 +1829,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1887,7 +1846,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -1904,7 +1863,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1917,7 +1876,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1930,7 +1889,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1943,7 +1902,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1956,7 +1915,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1969,7 +1928,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1982,7 +1941,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -1995,7 +1954,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2012,7 +1971,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2025,7 +1984,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2038,7 +1997,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2051,7 +2010,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2064,7 +2023,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2077,7 +2036,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2094,7 +2053,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2107,7 +2066,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2124,7 +2083,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2137,7 +2096,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2150,7 +2109,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2163,7 +2122,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2176,7 +2135,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2189,7 +2148,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2202,7 +2161,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2219,7 +2178,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2232,7 +2191,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2245,7 +2204,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2262,7 +2221,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2275,7 +2234,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2288,7 +2247,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2305,7 +2264,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2322,7 +2281,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2335,7 +2294,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2348,7 +2307,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2361,7 +2320,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2374,7 +2333,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2387,7 +2346,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2404,7 +2363,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2417,7 +2376,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2430,7 +2389,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2443,7 +2402,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2456,7 +2415,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2469,7 +2428,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2482,7 +2441,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2495,7 +2454,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2508,7 +2467,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2525,7 +2484,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2538,7 +2497,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2555,7 +2514,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2568,7 +2527,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2581,7 +2540,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2594,7 +2553,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2607,7 +2566,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2620,7 +2579,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2633,7 +2592,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2646,7 +2605,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2663,7 +2622,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2676,7 +2635,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2689,7 +2648,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2702,7 +2661,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2715,7 +2674,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2728,7 +2687,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2741,7 +2700,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2754,7 +2713,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2771,7 +2730,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2784,7 +2743,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2801,7 +2760,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2814,7 +2773,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2827,7 +2786,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2840,7 +2799,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2853,7 +2812,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2866,7 +2825,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2879,7 +2838,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2892,7 +2851,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2909,7 +2868,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.5,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -2926,7 +2885,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.2,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2939,7 +2898,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2952,7 +2911,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.3,
+            "at": 0.1,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2965,7 +2924,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2978,7 +2937,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -2991,7 +2950,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.7,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -3004,7 +2963,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -3021,7 +2980,7 @@
             "fill": "accent2",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4,
             "loop": {
@@ -3038,7 +2997,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.8,
+            "at": 0.4,
             "enter": "fade",
             "dur": 0.4
           },
@@ -3051,7 +3010,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.4,
+            "at": 0.2,
             "enter": "fade",
             "dur": 0.4
           },
@@ -3064,7 +3023,7 @@
             "fill": "accent",
             "opacity": 0.85,
             "z": 1.4,
-            "at": 0.6,
+            "at": 0.3,
             "enter": "fade",
             "dur": 0.4
           },

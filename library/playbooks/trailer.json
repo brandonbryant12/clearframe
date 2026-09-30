@@ -31,12 +31,12 @@
         "sketch": "void",
         "focus": {
           "z": -0.4,
-          "aperture": 1.4,
+          "aperture": 1,
           "keys": [
             {
-              "at": 0.9,
+              "at": 0.5,
               "z": 9,
-              "dur": 1.4
+              "dur": 1.2
             }
           ]
         }
