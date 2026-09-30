@@ -29,7 +29,7 @@ In `DIRECTION.md`, one line per beat: **scale** (wide, medium, close or insert),
 
 Start from set pieces (`clearframe sketch`):
 - **Places:** `horizon`, `skyline`, `ocean`, `terrain`.
-- **Journeys:** `tunnel`.
+- **Journeys:** `tunnel`, `road`.
 - **Data:** `landscape` and `globe` (both need real values).
 - **People:** `crowd`.
 - **Openings and closings:** `void` (cold open), `title`, `card`, `pause`.

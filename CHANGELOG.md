@@ -25,6 +25,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
     - `title-sequence`, where shapes become each other across cuts;
     - `zoom-journey`, one camera from a planet to a single window across four scales.
   - Set pieces built on depth: `void`, `tunnel`, `skyline`, `horizon`, `title`, `terrain`, `landscape`, `ocean` and `pause`.
+  - A `road` set piece: a night highway whose dashes and streetlights rush past as the camera drives.
   - A `crowd` set piece: anonymous silhouettes in depth, one lit, with focus racking to them.
   - A `globe` solid, with `marks` at [lat, lon] and great-circle `arcs` that lift off the surface and draw on in turn, plus a `globe` set piece.
   - A `flash` cut.
