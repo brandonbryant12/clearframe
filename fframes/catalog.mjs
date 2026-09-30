@@ -510,6 +510,8 @@ export const BLOCKS = [
         'Fly the camera through depth: keys [{say|at, z, dur, ease}]. Elements with z are drawn in perspective; the camera passes them as its z reaches theirs',
       focus:
         'Depth of field for elements with z: {z (the focus plane), aperture 0–3 (1 natural), keys [{say|at, z, dur}] for a rack focus}',
+      plates:
+        'A generated depth plate set staged in depth: the id of an image asset declared with layers: true (its far, mid and near layers at z 6, 1.2 and -0.35), under any elements; adds a slow dolly unless the beat sets a camera',
     },
     {
       title: 'How an idea spreads',
@@ -637,7 +639,7 @@ export function palette(theme = 'paper') {
   return result;
 }
 
-export function normalizeProps(name, input = {}, { vertical = false } = {}) {
+export function normalizeProps(name, input = {}, { vertical = false, width, height } = {}) {
   const meta = blockByName(name);
   if (!meta) throw new Error(`No native block "${name}". Run clearframe blocks; legacy scenes need an explicit port.`);
   const p = structuredClone(input);
@@ -694,7 +696,11 @@ export function normalizeProps(name, input = {}, { vertical = false } = {}) {
       });
     }
   }
-  VALIDATORS[name]?.(p, h, { vertical });
+  VALIDATORS[name]?.(p, h, {
+    vertical,
+    width: width ?? (vertical ? 1080 : 1920),
+    height: height ?? (vertical ? 1920 : 1080),
+  });
   if (p.decimals != null && (!Number.isInteger(p.decimals) || p.decimals < 0 || p.decimals > 8))
     fail('decimals must be 0–8');
   return p;

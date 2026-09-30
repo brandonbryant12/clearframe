@@ -5,7 +5,35 @@ description: Generate still images with Google's native Gemini image models (Nan
 
 # Gemini image ("Nano Banana 2")
 
-**Default answer: don't.** CSS gradients, grain, grids and SVG cover most backgrounds. Generate a still only when a real-world material, place or illustration adds meaning, and keep it to ≤ 3 per film. Images are backdrops and textures; the information stays in code.
+**Use it for places, not for facts.** Generated stills are a regular tool for the world a film happens in: a harbour, a street, a lab, a landscape. The information stays native: text, numbers, charts and labels are never in an image. Code-drawn set pieces cover abstract and data scenes.
+
+## Depth plates (the regular way)
+
+One declaration generates three layers that stand in depth, so the camera moves through painted art with real parallax and focus:
+
+```jsonc
+"assets": [{ "id": "harbor", "kind": "image", "layers": true, "size": "1K",
+  "prompt": "A small fishing harbour at dusk: a stone quay, moored boats, a lighthouse on the far headland",
+  "subject": "A small wooden fishing boat with a yellow wheelhouse, seen from the side",
+  "foreground": "A dark stone wall with a bare branch on the left, a weathered railing post on the right" }]
+```
+
+On a canvas beat, `"plates": "harbor"` stages the layers:
+
+| Layer | Depth | Contents |
+|---|---|---|
+| `harbor-far` | z 6 | A full-bleed painting of the setting |
+| `harbor-mid` | z 1.2 | The subject, cut out |
+| `harbor-near` | z −0.35 | Soft foreground framing, cut out |
+
+A slow push is added unless the beat sets a camera. Add `focus` for depth of field and draw native elements over it.
+- **Cut-outs** are generated on chroma green and keyed to transparency, sampling the real key colour from the corners.
+- **Describe objects, never scenes, for `subject` and `foreground`.** Given a scene "on green", models paint a framed picture of it.
+- **Consistency:** one `continuity.treatment` and `continuity.lighting` for the film, the palette in the prompt (automatic), and `refs` to an earlier plate for a series.
+- **Cost:** about $0.20 a scene at 1K, cached by prompt. Run `plan` first and honour the budget.
+- **Check** the green `*.green.jpg` beside each cut-out if an edge looks wrong. Regenerate with a more object-like description.
+
+Single stills (a material, a texture, a photo-like plate) are still declared as plain `assets` and used as a beat `plate` or an `image` element.
 
 ## Use it
 

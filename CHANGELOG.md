@@ -42,6 +42,12 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 
   They score 100 on the cinema score, up from 25–63. A beat's `art` can name a sketch (`{"sketch": "ambient"}`).
 - **Fixed:** `view: "auto"` on a canvas was mistaken for a camera rect (the string has four characters) and failed to render.
+- **Generated depth plates.** Image generation is now a regular tool for places. An asset with `layers: true` generates:
+  - a painted far layer;
+  - a cut-out subject;
+  - a cut-out foreground.
+
+  Cut-outs are generated on chroma green and keyed to transparency, sampling the real key colour. `"plates": "ID"` on a canvas stages the layers at three depths with a slow push, so dolly, parallax and rack focus work on generated art. The first test is a harbour at dusk with a sharp boat, a bokeh harbour behind it and soft foreground framing, for about $0.20 a scene at 1K. It taught that cut-out layers must describe objects: asked for a scene "on green", the model paints a framed picture.
 - **Drafts predict the final.** The first real final (the trailer, voiced by Gemini TTS as Orus, with words measured by Whisper) showed two ways drafts had been wrong:
   - **The voice's reading speed.** A deliberate trailer read runs at about 95 wpm, not 150. ClearFrame now remembers each voice's measured speed per model, voice and style after every real take. Drafts use it unless the storyboard sets `voice.wpm`.
   - **The gaps between lines.** Drafts padded every line with lead and tail, but a continuous take plays back to back. Estimated timing now follows the planned takes.

@@ -1,6 +1,7 @@
 // Generative assets, cached by content hash so nothing is paid for twice.
 // Order of preference: code (free) → draft (free, local) → Gemini (paid, only what the storyboard asks for).
 import fs from 'node:fs';
+import { CHROMA, keyOut } from './plates.mjs';
 import path from 'node:path';
 import { analyseVoice, cleanVoice, draftMusic, draftVoice } from './audio.mjs';
 import { loadStoryboard, paths } from './project.mjs';
@@ -339,10 +340,13 @@ export function imagePrompt(sb, a) {
     a.prompt,
     treated
       ? 'Strong tonal contrast and clear shapes; it will be recoloured into two tones, so readable light and shadow matter more than colour.'
-      : `Colour palette: background ${colors.bg}, deep tones near ${colors.ink}, one accent close to ${colors.accent}.`,
+      : a.cutout
+        ? `Colour palette for the subject: deep tones near ${colors.ink}, one accent close to ${colors.accent}.`
+        : `Colour palette: background ${colors.bg}, deep tones near ${colors.ink}, one accent close to ${colors.accent}.`,
     `Treatment: ${style.treatment ?? 'editorial, restrained, generous negative space'}. Lighting: ${style.lighting ?? 'soft, diffuse'}.`,
     ...hints,
     'No text, letters, numbers, logos, watermarks, charts or UI anywhere in the image.',
+    ...(a.cutout ? [CHROMA] : []),
   ].join('\n');
 }
 
@@ -352,7 +356,10 @@ export async function images(root, { only, force = false, budget } = {}) {
   const list = sb.assets.filter(a => a.kind === 'image' && !a.file && (!only || only.includes(a.id)));
   const specHash = a => hashOf({ ...a, prompt: imagePrompt(sb, a) });
   const todo = list.filter(
-    a => force || assetMeta(P.img, a.id)?.hash !== specHash(a) || !fs.existsSync(path.join(P.img, `${a.id}.jpg`)),
+    a =>
+      force ||
+      assetMeta(P.img, a.id)?.hash !== specHash(a) ||
+      !fs.existsSync(path.join(P.img, `${a.id}.${a.cutout ? 'png' : 'jpg'}`)),
   );
   if (!todo.length) {
     log.ok('Images are up to date.');
@@ -376,7 +383,13 @@ export async function images(root, { only, force = false, budget } = {}) {
       size: a.size ?? '2K',
       refs,
     });
-    fs.writeFileSync(path.join(P.img, `${a.id}.jpg`), r.data);
+    if (a.cutout) {
+      // Keyed to transparency so the layer can stand in depth over the others.
+      const raw = path.join(P.img, `${a.id}.green.jpg`);
+      fs.writeFileSync(raw, r.data);
+      await keyOut(raw, path.join(P.img, `${a.id}.png`));
+      fs.rmSync(path.join(P.img, `${a.id}.jpg`), { force: true });
+    } else fs.writeFileSync(path.join(P.img, `${a.id}.jpg`), r.data);
     writeJSON(path.join(P.img, `${a.id}.json`), {
       hash: specHash(a),
       model: a.model ?? 'gemini-3.1-flash-image',
@@ -384,7 +397,7 @@ export async function images(root, { only, force = false, budget } = {}) {
       note: r.text,
       createdAt: new Date().toISOString(),
     });
-    log.ok(`${a.id} → assets/img/${a.id}.jpg`);
+    log.ok(`${a.id} → assets/img/${a.id}.${a.cutout ? 'png (keyed)' : 'jpg'}`);
   }
 }
 

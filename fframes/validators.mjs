@@ -3,6 +3,7 @@
 // defaults (decimals, scales, orientation) so the renderer never guesses.
 import { ICONS } from './icons.mjs';
 import { normalizeElements, roughSpec, applyRough, mosaicSpec, applyMosaic, depthKeys } from './canvas.mjs';
+import { plateElements } from '../engine/lib/plates.mjs';
 
 /** Validation helpers bound to one block's props and error prefix. */
 export function helpers(p, fail, { findPhrase, precision }) {
@@ -406,7 +407,18 @@ export const VALIDATORS = {
       h.required(it.text, 'items.text');
     });
   },
-  canvas: (p, h) => {
+  canvas: (p, h, frame = {}) => {
+    // A generated depth plate set, staged under the beat's own drawing, with a slow push.
+    if (p.plates != null) {
+      if (typeof p.plates !== 'string' || !p.plates.trim())
+        h.fail('plates must be the id of an image asset with layers');
+      p.elements = [
+        ...plateElements(p.plates, { w: frame.width ?? 1920, h: frame.height ?? 1080 }),
+        ...(p.elements ?? []),
+      ];
+      if (p.dolly == null && p.view == null) p.dolly = [{ at: 0, z: 0.2, dur: 10, ease: 'linear' }];
+      delete p.plates;
+    }
     if (p.support != null) h.fail('canvas draws only its elements; add a text element instead of support');
     const camera = v => Array.isArray(v) && v.length === 4 && v.every(Number.isFinite) && v[2] >= 16 && v[3] >= 16;
     if (

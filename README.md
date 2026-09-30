@@ -16,6 +16,10 @@ Agent-directed motion graphics rendered natively with **FFFrames**. A film is on
 
   `critique` scores every storyboard against the eight tells of a slideshow.
 
+  - generated depth plates: a painted far layer, a cut-out subject and cut-out foreground from image generation, staged in depth so the camera moves through painted scenes.
+
+  ![A generated depth plate: a sharp painted boat, the harbour in soft focus behind it, letterboxed](docs/media/plates.jpg)
+
   ![Frames from the genre playbooks: a tunnel flight, a dawn, a title reveal, a data landscape in rack focus, a lit product, a cut-paper title, a chart close-up, a night city, a globe with routes](docs/media/cinema.jpg)
 - **Motion graphics, not slides.** Every scene can:
   - draw its own art (`canvas`: paths that draw on, markers travelling along routes, echo trails, morphs across cuts, spotlights, meters, hand-drawn pencil strokes);

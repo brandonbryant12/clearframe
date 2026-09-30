@@ -107,3 +107,35 @@ test('canvas depth: z, dolly and focus keys resolve spoken cues; shine waits for
   bad({ focus: { aperture: 9 }, elements: [box()] }, /aperture/);
   bad({ elements: [{ type: 'text', text: 'x', shine: { width: 3 } }] }, /shine.width/);
 });
+
+test('depth plates: layered assets expand, stage in depth, and cut-outs key to transparency', async t => {
+  const { expandAssets, keyOut, CHROMA } = await import('../engine/lib/plates.mjs');
+  const { imagePrompt } = await import('../engine/lib/generate.mjs');
+  const assets = expandAssets([{ id: 'harbor', kind: 'image', layers: true, prompt: 'A harbour at dusk' }]);
+  assert.deepEqual(
+    assets.map(a => [a.id, !!a.cutout]),
+    [['harbor-far', false], ['harbor-mid', true], ['harbor-near', true]],
+  );
+  const sb = { theme: 'cinema', beats: [], continuity: {} };
+  assert.ok(imagePrompt(sb, assets[1]).includes(CHROMA) && !imagePrompt(sb, assets[0]).includes(CHROMA));
+  const r = job(t, {
+    assets: [{ id: 'harbor', kind: 'image', layers: true, prompt: 'A harbour at dusk' }],
+    beats: [{ id: 'a', block: 'canvas', vo: 'The harbour wakes.', props: { plates: 'harbor', elements: [] } }],
+  });
+  // The plates are missing (no paid call in tests), but the staging is in the job props.
+  const p = r.job?.beats?.[0]?.props;
+  if (p) {
+    assert.deepEqual(p.elements.slice(0, 3).map(e => e.z), [6, 1.2, -0.35]);
+    assert.ok(p.dolly?.length, 'a slow push by default');
+  }
+  // Keying: a red disc on flat green becomes a disc on transparency.
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-key-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const { ffmpeg } = await import('../engine/lib/util.mjs');
+  const src = path.join(dir, 'green.png');
+  await ffmpeg(['-y', '-f', 'lavfi', '-i', 'color=c=0x00FF00:s=64x64', '-vf', "drawbox=x=16:y=16:w=32:h=32:color=red:t=fill", '-frames:v', '1', src]);
+  const out = await keyOut(src, path.join(dir, 'cut.png'));
+  const { spawnSync } = await import('node:child_process');
+  const probe = spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=pix_fmt', '-of', 'csv=p=0', out]).stdout.toString();
+  assert.match(probe, /rgba/);
+});

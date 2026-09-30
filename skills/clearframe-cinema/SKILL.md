@@ -27,6 +27,8 @@ In `DIRECTION.md`, one line per beat: **scale** (wide, medium, close or insert),
 
 ## 3. Build places in depth
 
+For a real place, use generated **depth plates**: an image asset with `layers: true` and `"plates": "ID"` on the canvas. The painted far layer, subject and foreground stand in depth, and the camera moves through them (`gemini-image` skill). About $0.20 a scene; plan first.
+
 Start from set pieces (`clearframe sketch`):
 - **Places:** `horizon`, `skyline`, `ocean`, `terrain`.
 - **Journeys:** `tunnel`, `road`.

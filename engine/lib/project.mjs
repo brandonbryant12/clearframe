@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { readJSON } from './util.mjs';
 import { measuredRate } from './voice-rates.mjs';
+import { expandAssets } from './plates.mjs';
 import { useProject } from '../../fframes/library.mjs';
 
 export const PRESETS = {
@@ -46,7 +47,8 @@ export function loadStoryboard(root) {
     pacing: { ...DEFAULTS.pacing, ...sb.pacing },
     music: sb.music === false ? false : { ...DEFAULTS.music, ...sb.music },
     mix: { ...DEFAULTS.mix, ...sb.mix },
-    assets: sb.assets ?? [],
+    // Layered image assets become their far, mid and near plates.
+    assets: expandAssets(sb.assets ?? []),
     sources: sb.sources ?? [],
   };
 }

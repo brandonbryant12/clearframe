@@ -148,7 +148,11 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   const frame = 1 / timing.fps,
     source = sb.beats[b.index],
     spec = rules(b.block);
-  const props = normalizeProps(b.block, b.props ?? {}, { vertical: film.vertical });
+  const props = normalizeProps(b.block, b.props ?? {}, {
+    vertical: film.vertical,
+    width: timing.width,
+    height: timing.height,
+  });
   const motion = { ...film.motion, ...source.motion };
   if (!validMotion(motion)) throw new Error('Invalid beat motion');
   const entrance = ENTRANCE[motion.preset];
