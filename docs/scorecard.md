@@ -21,13 +21,13 @@ Cinematic capability exists: worlds, a travelling camera, canvas, mosaic, morphs
 | 3 | **Composition and scale** | 2 | 3.5 | Set pieces are full-bleed; `camera.to` turns any chart into a close-up on its finding. Charts still open as a band in a big room. | Push-ins on more report chart beats by default. |
 | 4 | **Motion craft** | 3 | 4 | Set pieces keep moving; fast moves smear; number scenes push in; a silence gives the edit a breath. | Secondary motion on chart blocks during holds. |
 | 5 | **Look**: light, lens and grade | 2 | 4 | `lens`: letterbox, grade, bloom, aberration, leaks. `shine`, glow and bokeh from depth of field. | A `lens` on the report treatments too (subtle grade and bloom). |
-| 6 | **Imagery** | 2.5 | 4 | Horizon, skyline, ocean, tunnel, terrain, data landscape, globe, crowd, title, card. | Hands, objects and interiors. |
+| 6 | **Imagery** | 2.5 | 4 | Horizon, skyline, ocean, road, tunnel, terrain, data landscape, globe, crowd, lit solids, title, card. | Hands, objects and interiors. |
 | 7 | **Editing grammar** | 3 | 3.5 | `flash`, match cuts, silence beats; critique measures rhythm. | Beat-synced cuts on the music. |
 | 8 | **Typography** | 3.5 | 4 | Tracked title reveals with light sweeps, poster cards that wrap, type as image. | Masked reveals (type through a shape). |
 | 9 | **Sound** | 2.5 | 3.5 | Hits on flash cuts, a riser into silence, room tone, a shimmer on title sweeps, whooshes only for fast moves. | Beat-synced cuts; a music bed that builds with the montage. |
 | 10 | **Voice and sync** | 4 | 4 | Unchanged. | Genre reads: trailer, documentary. |
 | 11 | **Honesty and data** | 4.5 | 4.5 | Set pieces label sample values; routes say they are illustrative. | Keep it. |
-| 12 | **Tooling and review** | 4 | 4.5 | Cinema score from the eight tells; letterbox text check; review strips caught every fix this loop. | Motion-aware review (frame-to-frame change per beat). |
+| 12 | **Tooling and review** | 4 | 4.5 | Cinema score from the eight tells; letterbox and flat-depth checks; review strips; a fresh-model authoring test that found nine tool issues. | Run the fresh-model test after every loop. |
 | 13 | **Speed** | 4 | 4 | A 28 s letterboxed, graded trailer renders in about 20 s. | Keep lens filters on the GPU path. |
 | 14 | **Library and scale** | 4 | 4.5 | 19 palettes, 15 treatments, 35 playbooks, 19 sketches, all files. | Characters and a sound library. |
 | 15 | **Default outcome** | 2 | 3.5 | `new` and `ingest` start from reworked arcs (cinema 100); all 35 playbooks score 63–100. | Make the model's own first storyboard score as well (skills, examples). |
@@ -87,3 +87,12 @@ These are the signatures a viewer notices, in order of damage. `critique` should
   - **Library:** a `crowd` set piece.
   - **Fix:** `view: "auto"` was read as a camera rect.
   - **Build:** a lock-waiting build now records the hash it actually compiled.
+- **2026-09-30, loop 3 (a fresh model's first film):**
+  - **Test:** a new session made "The Last Mile" (57 s, one world, a dolly, a panel turn, a silence, a pull-back) from the docs alone. Its verdict: "reads mostly as a film, not slides". Its complaints became fixes:
+    - film looks strip pencil strokes;
+    - filled shapes lose default outlines;
+    - camera-only world beats;
+    - honest warnings;
+    - documented world timing, parallax and beat lengths.
+  - **Library:** lit `shade` solids (product reveals), a `road` set piece, a trailer `pulse` bed that follows the edit, and a `clearframe-cinema` skill.
+  - **Critique:** it flags a lens over flat drawings.
