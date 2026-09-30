@@ -11,20 +11,36 @@ const work = path.resolve('build/docs-media');
 const media = path.resolve('docs/media');
 fs.rmSync(work, { recursive: true, force: true });
 fs.mkdirSync(media, { recursive: true });
-const jpeg = (from, to, width) => ffmpeg(['-y', '-i', from, '-vf', `scale=${width}:-2`, '-q:v', '3', '-frames:v', '1', to]);
+const jpeg = (from, to, width) =>
+  ffmpeg(['-y', '-i', from, '-vf', `scale=${width}:-2`, '-q:v', '3', '-frames:v', '1', to]);
 
 const landscape = path.join(work, 'landscape');
 await writeGallery(landscape, { theme: 'paper' });
-await jpeg(await sheetProject(landscape, { draft: true, per: 1, columns: 4, thumb: 480 }), path.join(media, 'blocks.jpg'), 1800);
+await jpeg(
+  await sheetProject(landscape, { draft: true, per: 1, columns: 4, thumb: 480 }),
+  path.join(media, 'blocks.jpg'),
+  1800,
+);
 
 const vertical = path.join(work, 'vertical');
 await writeGallery(vertical, { vertical: true, theme: 'ink' });
-await jpeg(await sheetProject(vertical, { draft: true, per: 1, columns: 8, thumb: 240 }), path.join(media, 'blocks-vertical.jpg'), 1600);
+await jpeg(
+  await sheetProject(vertical, { draft: true, per: 1, columns: 8, thumb: 240 }),
+  path.join(media, 'blocks-vertical.jpg'),
+  1600,
+);
 
 // The same donut frame in all eight palettes.
-fs.copyFileSync(await lookbookProject(landscape, { beat: 'donut', pos: 0.8, draft: true }), path.join(media, 'looks.png'));
+fs.copyFileSync(
+  await lookbookProject(landscape, { beat: 'donut', pos: 0.8, draft: true }),
+  path.join(media, 'looks.png'),
+);
 
 const story = path.join(work, 'data-story');
 scaffold(story, { playbook: 'data-story' });
-await jpeg(await sheetProject(story, { draft: true, per: 1, columns: 3, thumb: 560 }), path.join(media, 'data-story.jpg'), 1500);
+await jpeg(
+  await sheetProject(story, { draft: true, per: 1, columns: 3, thumb: 560 }),
+  path.join(media, 'data-story.jpg'),
+  1500,
+);
 console.log(`Updated ${media}`);

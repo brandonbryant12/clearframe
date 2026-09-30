@@ -15,7 +15,14 @@ const PAUSES = [
   [/(—|--|–)$/, 0.24],
   [/,$/, 0.17],
 ];
-const TAG_PAUSES = { 'short pause': 0.35, 'long pause': 0.8, breath: 0.3, 'heavy breath': 0.45, sigh: 0.5, exhales: 0.4 };
+const TAG_PAUSES = {
+  'short pause': 0.35,
+  'long pause': 0.8,
+  breath: 0.3,
+  'heavy breath': 0.45,
+  sigh: 0.5,
+  exhales: 0.4,
+};
 
 /** Spoken text → tokens with syllable weights and trailing pauses. Inline <tags> become pauses; |backchannels| are dropped. */
 export function tokenize(text) {
@@ -28,7 +35,10 @@ export function tokenize(text) {
       continue;
     }
     for (const raw of part.split(/\s+/).filter(Boolean)) {
-      if (raw === '—' || raw === '--' || raw === '–') { if (tokens.length) tokens.at(-1).pause += 0.24; continue; }
+      if (raw === '—' || raw === '--' || raw === '–') {
+        if (tokens.length) tokens.at(-1).pause += 0.24;
+        continue;
+      }
       const pause = PAUSES.find(([re]) => re.test(raw))?.[1] ?? 0;
       tokens.push({ w: raw, syl: syllables(raw), pause });
     }
@@ -57,7 +67,7 @@ export function syllables(word) {
   return Math.max(1, s);
 }
 
-const secPerSyl = (wpm) => 60 / (wpm * 1.6);
+const secPerSyl = wpm => 60 / (wpm * 1.6);
 
 /** Estimated spoken duration of `text` at `wpm` (used until real audio exists). */
 export function estimateDuration(text, wpm = 150) {
@@ -90,22 +100,42 @@ export function distributeWords(tokens, t0, t1) {
 export function alignWords(text, segments, duration) {
   const tokens = tokenize(text);
   if (!tokens.length) return [];
-  let segs = segments.filter((s) => s.end - s.start > 0.06).map((s) => ({ ...s }));
+  let segs = segments.filter(s => s.end - s.start > 0.06).map(s => ({ ...s }));
   if (!segs.length) return distributeWords(tokens, 0, duration);
 
   let phrases = [];
   let cur = [];
-  for (const t of tokens) { cur.push(t); if (t.pause >= 0.17) { phrases.push(cur); cur = []; } }
+  for (const t of tokens) {
+    cur.push(t);
+    if (t.pause >= 0.17) {
+      phrases.push(cur);
+      cur = [];
+    }
+  }
   if (cur.length) phrases.push(cur);
 
   while (segs.length > phrases.length) {
-    let best = 0, gap = Infinity;
-    for (let i = 0; i < segs.length - 1; i++) { const g = segs[i + 1].start - segs[i].end; if (g < gap) { gap = g; best = i; } }
+    let best = 0,
+      gap = Infinity;
+    for (let i = 0; i < segs.length - 1; i++) {
+      const g = segs[i + 1].start - segs[i].end;
+      if (g < gap) {
+        gap = g;
+        best = i;
+      }
+    }
     segs.splice(best, 2, { start: segs[best].start, end: segs[best + 1].end });
   }
   while (phrases.length > segs.length) {
-    let best = 0, weakest = Infinity;
-    for (let i = 0; i < phrases.length - 1; i++) { const p = phrases[i].at(-1).pause; if (p < weakest) { weakest = p; best = i; } }
+    let best = 0,
+      weakest = Infinity;
+    for (let i = 0; i < phrases.length - 1; i++) {
+      const p = phrases[i].at(-1).pause;
+      if (p < weakest) {
+        weakest = p;
+        best = i;
+      }
+    }
     phrases.splice(best, 2, [...phrases[best], ...phrases[best + 1]]);
   }
   return phrases.flatMap((p, i) => distributeWords(p, segs[i].start, segs[i].end));
@@ -117,16 +147,31 @@ function voiceFor(root, beat, sb) {
   const meta = readJSON(path.join(p.vo, `${beat.id}.json`), null);
   if (fs.existsSync(file) && meta && meta.textHash === hashOf(beat.vo)) {
     const duration = wavDuration(file);
-    if(!Number.isFinite(duration)||duration<=0)throw new Error(`${beat.id}: narration WAV is empty or invalid; import or regenerate it.`);
+    if (!Number.isFinite(duration) || duration <= 0)
+      throw new Error(`${beat.id}: narration WAV is empty or invalid; import or regenerate it.`);
     let words = meta.words ?? distributeWords(tokenize(beat.vo), 0, duration);
-    let wordTiming = 'estimated', alignmentIssue;
-    if(meta.alignment?.kind==='measured') {
+    let wordTiming = 'estimated',
+      alignmentIssue;
+    if (meta.alignment?.kind === 'measured') {
       try {
-        if(meta.alignment.audioHash!==audioHash(file)) throw new Error('audio changed after alignment');
-        validateWords(words,tokenize(beat.vo),duration);wordTiming='measured';
-      } catch(e) { alignmentIssue=e.message;words=distributeWords(tokenize(beat.vo),0,duration); }
+        if (meta.alignment.audioHash !== audioHash(file)) throw new Error('audio changed after alignment');
+        validateWords(words, tokenize(beat.vo), duration);
+        wordTiming = 'measured';
+      } catch (e) {
+        alignmentIssue = e.message;
+        words = distributeWords(tokenize(beat.vo), 0, duration);
+      }
     }
-    return { src: `assets/vo/${beat.id}.wav`, duration, words, estimated: false, provider: meta.provider, wordTiming, alignmentIssue, take: meta.take };
+    return {
+      src: `assets/vo/${beat.id}.wav`,
+      duration,
+      words,
+      estimated: false,
+      provider: meta.provider,
+      wordTiming,
+      alignmentIssue,
+      take: meta.take,
+    };
   }
   const duration = estimateDuration(beat.vo, sb.voice.wpm);
   return {
@@ -157,15 +202,25 @@ export function computeTiming(root) {
     const continuousLead = (sb.pacing.continuous === true && b.vo) || (take && take.index > 0);
     const continuousTail = (sb.pacing.continuous === true && b.vo) || (take && take.index < take.count - 1);
     const lead = b.lead ?? (continuousLead ? 0 : sb.pacing.lead);
-    const tail = b.tail ?? (continuousTail ? 0 : (b.block ? blockTail(b.block) : null) ?? sb.pacing.tail);
+    const tail = b.tail ?? (continuousTail ? 0 : ((b.block ? blockTail(b.block) : null) ?? sb.pacing.tail));
     const natural = vo ? Math.max(0, lead) + vo.duration + tail + (b.hold ?? 0) : sb.pacing.silentBeat + (b.hold ?? 0);
     // Stretching a slice of a continuous recording would insert silence into it.
-    const dur = b.duration ?? ((continuousLead || continuousTail) ? natural : Math.max(b.min ?? sb.pacing.minBeat, natural));
+    const dur =
+      b.duration ?? (continuousLead || continuousTail ? natural : Math.max(b.min ?? sb.pacing.minBeat, natural));
     const start = snap(cursor, fps);
     const end = snap(cursor + dur, fps);
     const beat = {
-      id: b.id, index, chapter: b.chapter ?? null, scene: b.scene ?? null, block: b.block ?? null, props: b.props ?? null,
-      transition: b.transition ?? null, start, end, dur: round(end - start), visual: b.visual ?? null,
+      id: b.id,
+      index,
+      chapter: b.chapter ?? null,
+      scene: b.scene ?? null,
+      block: b.block ?? null,
+      props: b.props ?? null,
+      transition: b.transition ?? null,
+      start,
+      end,
+      dur: round(end - start),
+      visual: b.visual ?? null,
     };
     if (vo) {
       const voStart = round(Math.max(0, start + lead));
@@ -180,10 +235,10 @@ export function computeTiming(root) {
         wordTiming: vo.wordTiming ?? 'estimated',
         ...(vo.alignmentIssue ? { alignmentIssue: vo.alignmentIssue } : {}),
         ...(vo.stale ? { stale: vo.stale } : {}),
-        words: vo.words.map((w) => ({ w: w.w, t0: round(voStart + w.t0), t1: round(voStart + w.t1) })),
+        words: vo.words.map(w => ({ w: w.w, t0: round(voStart + w.t0), t1: round(voStart + w.t1) })),
       };
     }
-    if (b.sfx) beat.sfx = b.sfx.map((s) => ({ src: s.src, volume: s.volume ?? 0.6, t: resolveAt(s.at ?? 0, beat) }));
+    if (b.sfx) beat.sfx = b.sfx.map(s => ({ src: s.src, volume: s.volume ?? 0.6, t: resolveAt(s.at ?? 0, beat) }));
     beats.push(beat);
     cursor = end;
   }
@@ -191,18 +246,25 @@ export function computeTiming(root) {
   const music = sb.music && sb.music.file !== false ? musicInfo(root, sb) : null;
   return {
     title: sb.title ?? 'Untitled',
-    width, height, fps, duration,
+    width,
+    height,
+    fps,
+    duration,
     frames: Math.round(duration * fps),
     theme: sb.theme ?? 'paper',
     // Recorded for reference; the native job (fframes/production.mjs) is authoritative.
     look: {
-      backdrop: sb.backdrop ?? 'none', chrome: sb.chrome === true, captions: sb.captions ?? 'auto',
-      transition: sb.transition ?? 'fade', sfx: sb.sfx ?? false, voiceProvider: sb.voice.provider,
+      backdrop: sb.backdrop ?? 'none',
+      chrome: sb.chrome === true,
+      captions: sb.captions ?? 'auto',
+      transition: sb.transition ?? 'fade',
+      sfx: sb.sfx ?? false,
+      voiceProvider: sb.voice.provider,
     },
-    estimated: beats.some((b) => b.vo?.estimated),
+    estimated: beats.some(b => b.vo?.estimated),
     beats,
     music,
-    assets: sb.assets.map((a) => ({ id: a.id, kind: a.kind, src: assetSrc(root, a) })),
+    assets: sb.assets.map(a => ({ id: a.id, kind: a.kind, src: assetSrc(root, a) })),
   };
 }
 
@@ -224,7 +286,7 @@ export function resolveAt(at, beat) {
 const norm = wordKey;
 export function findWord(words, query, nth = 0) {
   const q = query.split(/\s+/).map(norm).filter(Boolean);
-  if(!q.length)return null;
+  if (!q.length) return null;
   let seen = 0;
   for (let i = 0; i + q.length <= words.length; i++) {
     if (q.every((part, j) => norm(words[i + j].w) === part)) {
@@ -236,8 +298,15 @@ export function findWord(words, query, nth = 0) {
 
 function musicInfo(root, sb) {
   const candidates = [sb.music.file, findMusicBed(root)].filter(Boolean);
-  const src = candidates.find((f) => fs.existsSync(path.join(root, f))) ?? null;
-  return { src, volume: sb.music.volume, duck: sb.music.duck, fadeIn: sb.music.fadeIn, fadeOut: sb.music.fadeOut, offset: sb.music.offset ?? 0 };
+  const src = candidates.find(f => fs.existsSync(path.join(root, f))) ?? null;
+  return {
+    src,
+    volume: sb.music.volume,
+    duck: sb.music.duck,
+    fadeIn: sb.music.fadeIn,
+    fadeOut: sb.music.fadeOut,
+    offset: sb.music.offset ?? 0,
+  };
 }
 
 export function assetSrc(root, a) {
@@ -257,10 +326,13 @@ export function captionCues(timing, { maxWords = 7, maxChars = 42 } = {}) {
   for (const b of timing.beats) {
     const words = b.vo?.words ?? [];
     let cur = [];
-    const flush = () => { if (cur.length) cues.push({ start: cur[0].t0, end: cur.at(-1).t1, text: cur.map((w) => w.w).join(' ') }); cur = []; };
+    const flush = () => {
+      if (cur.length) cues.push({ start: cur[0].t0, end: cur.at(-1).t1, text: cur.map(w => w.w).join(' ') });
+      cur = [];
+    };
     for (const w of words) {
       cur.push(w);
-      if (cur.length >= maxWords || cur.map((x) => x.w).join(' ').length >= maxChars || /[.!?;:,—]$/.test(w.w)) flush();
+      if (cur.length >= maxWords || cur.map(x => x.w).join(' ').length >= maxChars || /[.!?;:,—]$/.test(w.w)) flush();
     }
     flush();
   }
@@ -269,8 +341,14 @@ export function captionCues(timing, { maxWords = 7, maxChars = 42 } = {}) {
 
 const stamp = (t, sep) => {
   const ms = Math.round(t * 1000);
-  const h = Math.floor(ms / 3600000), m = Math.floor((ms % 3600000) / 60000), s = Math.floor((ms % 60000) / 1000);
+  const h = Math.floor(ms / 3600000),
+    m = Math.floor((ms % 3600000) / 60000),
+    s = Math.floor((ms % 60000) / 1000);
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}${sep}${String(ms % 1000).padStart(3, '0')}`;
 };
-export function toSRT(cues) { return cues.map((c, i) => `${i + 1}\n${stamp(c.start, ',')} --> ${stamp(c.end, ',')}\n${c.text}\n`).join('\n'); }
-export function toVTT(cues) { return `WEBVTT\n\n${cues.map((c) => `${stamp(c.start, '.')} --> ${stamp(c.end, '.')}\n${c.text}\n`).join('\n')}`; }
+export function toSRT(cues) {
+  return cues.map((c, i) => `${i + 1}\n${stamp(c.start, ',')} --> ${stamp(c.end, ',')}\n${c.text}\n`).join('\n');
+}
+export function toVTT(cues) {
+  return `WEBVTT\n\n${cues.map(c => `${stamp(c.start, '.')} --> ${stamp(c.end, '.')}\n${c.text}\n`).join('\n')}`;
+}

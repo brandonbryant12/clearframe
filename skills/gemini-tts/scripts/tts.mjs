@@ -23,11 +23,36 @@ export const MODELS = {
   'gemini-3.8-flash-lite-tts': { outPerM: 6.0, note: 'GA · cheapest' },
 };
 export const VOICES = {
-  Zephyr: 'Bright', Puck: 'Upbeat', Charon: 'Informative', Kore: 'Firm', Fenrir: 'Excitable', Leda: 'Youthful', Orus: 'Firm',
-  Aoede: 'Breezy', Callirrhoe: 'Easy-going', Autonoe: 'Bright', Enceladus: 'Breathy', Iapetus: 'Clear', Umbriel: 'Easy-going',
-  Algieba: 'Smooth', Despina: 'Smooth', Erinome: 'Clear', Algenib: 'Gravelly', Rasalgethi: 'Informative', Laomedeia: 'Upbeat',
-  Achernar: 'Soft', Alnilam: 'Firm', Schedar: 'Even', Gacrux: 'Mature', Pulcherrima: 'Forward', Achird: 'Friendly',
-  Zubenelgenubi: 'Casual', Vindemiatrix: 'Gentle', Sadachbia: 'Lively', Sadaltager: 'Knowledgeable', Sulafat: 'Warm',
+  Zephyr: 'Bright',
+  Puck: 'Upbeat',
+  Charon: 'Informative',
+  Kore: 'Firm',
+  Fenrir: 'Excitable',
+  Leda: 'Youthful',
+  Orus: 'Firm',
+  Aoede: 'Breezy',
+  Callirrhoe: 'Easy-going',
+  Autonoe: 'Bright',
+  Enceladus: 'Breathy',
+  Iapetus: 'Clear',
+  Umbriel: 'Easy-going',
+  Algieba: 'Smooth',
+  Despina: 'Smooth',
+  Erinome: 'Clear',
+  Algenib: 'Gravelly',
+  Rasalgethi: 'Informative',
+  Laomedeia: 'Upbeat',
+  Achernar: 'Soft',
+  Alnilam: 'Firm',
+  Schedar: 'Even',
+  Gacrux: 'Mature',
+  Pulcherrima: 'Forward',
+  Achird: 'Friendly',
+  Zubenelgenubi: 'Casual',
+  Vindemiatrix: 'Gentle',
+  Sadachbia: 'Lively',
+  Sadaltager: 'Knowledgeable',
+  Sulafat: 'Warm',
 };
 
 /**
@@ -36,12 +61,26 @@ export const VOICES = {
  * request, one performance, each part with its own delivery note. Two or more speakers use the
  * conversational mode with `cast` ([{speaker, voice}]) and `speech_metadata.speaker` per part.
  */
-export function buildRequest({ text, parts, voice = 'Charon', style, cast, model = 'gemini-3.8-flash-tts', language, sampleRate = 24000, format = 'audio/wav' }) {
+export function buildRequest({
+  text,
+  parts,
+  voice = 'Charon',
+  style,
+  cast,
+  model = 'gemini-3.8-flash-tts',
+  language,
+  sampleRate = 24000,
+  format = 'audio/wav',
+}) {
   const list = parts ?? [{ text, style }];
   if (!list.length || list.some(p => !p.text?.trim())) throw new Error('text is required');
   const content = list.map(p => {
     const part = { type: 'text', text: p.text };
-    const meta = { type: 'speech_metadata', ...((p.style ?? style) ? { style: p.style ?? style } : {}), ...(cast && p.speaker ? { speaker: p.speaker } : {}) };
+    const meta = {
+      type: 'speech_metadata',
+      ...((p.style ?? style) ? { style: p.style ?? style } : {}),
+      ...(cast && p.speaker ? { speaker: p.speaker } : {}),
+    };
     if (Object.keys(meta).length > 1) part.annotations = [meta];
     return part;
   });
@@ -49,7 +88,10 @@ export function buildRequest({ text, parts, voice = 'Charon', style, cast, model
   if (cast?.length) {
     const known = new Set(cast.map(c => c.speaker));
     for (const p of list) if (!known.has(p.speaker)) throw new Error(`part speaker "${p.speaker}" is not in the cast`);
-    speech_config = { mode: 'conversational', speakers: cast.map(c => ({ speaker: c.speaker, voice: c.voice, ...(language ? { language } : {}) })) };
+    speech_config = {
+      mode: 'conversational',
+      speakers: cast.map(c => ({ speaker: c.speaker, voice: c.voice, ...(language ? { language } : {}) })),
+    };
   } else {
     const speaker = { voice };
     if (language) speaker.language = language;
@@ -70,14 +112,27 @@ export function estimateCost({ seconds, model = 'gemini-3.8-flash-tts' }) {
 
 function wavFromPcm(pcm, rate, channels) {
   const h = Buffer.alloc(44);
-  h.write('RIFF', 0); h.writeUInt32LE(36 + pcm.length, 4); h.write('WAVE', 8); h.write('fmt ', 12);
-  h.writeUInt32LE(16, 16); h.writeUInt16LE(1, 20); h.writeUInt16LE(channels, 22); h.writeUInt32LE(rate, 24);
-  h.writeUInt32LE(rate * channels * 2, 28); h.writeUInt16LE(channels * 2, 32); h.writeUInt16LE(16, 34);
-  h.write('data', 36); h.writeUInt32LE(pcm.length, 40);
+  h.write('RIFF', 0);
+  h.writeUInt32LE(36 + pcm.length, 4);
+  h.write('WAVE', 8);
+  h.write('fmt ', 12);
+  h.writeUInt32LE(16, 16);
+  h.writeUInt16LE(1, 20);
+  h.writeUInt16LE(channels, 22);
+  h.writeUInt32LE(rate, 24);
+  h.writeUInt32LE(rate * channels * 2, 28);
+  h.writeUInt16LE(channels * 2, 32);
+  h.writeUInt16LE(16, 34);
+  h.write('data', 36);
+  h.writeUInt32LE(pcm.length, 40);
   return Buffer.concat([h, pcm]);
 }
 
-export async function post(pathname, body, { key = process.env.GEMINI_API_KEY, retries = 4, timeoutMs = 180_000 } = {}) {
+export async function post(
+  pathname,
+  body,
+  { key = process.env.GEMINI_API_KEY, retries = 4, timeoutMs = 180_000 } = {},
+) {
   if (!key) throw new Error('GEMINI_API_KEY is not set');
   for (let attempt = 0; ; attempt++) {
     const res = await fetch(`${API}${pathname}`, {
@@ -87,10 +142,15 @@ export async function post(pathname, body, { key = process.env.GEMINI_API_KEY, r
       signal: AbortSignal.timeout(timeoutMs),
     });
     const txt = await res.text();
-    let json; try { json = JSON.parse(txt); } catch { json = null; }
+    let json;
+    try {
+      json = JSON.parse(txt);
+    } catch {
+      json = null;
+    }
     if (res.ok) return json;
     if ([429, 500, 502, 503, 504].includes(res.status) && attempt < retries) {
-      await new Promise((r) => setTimeout(r, 2000 * 2 ** attempt));
+      await new Promise(r => setTimeout(r, 2000 * 2 ** attempt));
       continue;
     }
     throw new Error(`Gemini ${res.status}: ${json?.error?.message ?? txt.slice(0, 400)}`);
@@ -100,9 +160,14 @@ export async function post(pathname, body, { key = process.env.GEMINI_API_KEY, r
 /** Output blocks of a given type from an Interaction response. */
 export function outputBlocks(interaction, type) {
   if (interaction?.status && interaction.status !== 'completed') {
-    throw new Error(`interaction ${interaction.status}${interaction.error ? `: ${JSON.stringify(interaction.error)}` : ''}`);
+    throw new Error(
+      `interaction ${interaction.status}${interaction.error ? `: ${JSON.stringify(interaction.error)}` : ''}`,
+    );
   }
-  return (interaction?.steps ?? []).filter((s) => s.type === 'model_output').flatMap((s) => s.content ?? []).filter((c) => c.type === type);
+  return (interaction?.steps ?? [])
+    .filter(s => s.type === 'model_output')
+    .flatMap(s => s.content ?? [])
+    .filter(c => c.type === type);
 }
 
 /** Synthesize speech. Returns { wav: Buffer, mimeType, usage }. */
@@ -126,15 +191,27 @@ export async function synthesize(opts) {
 async function main() {
   const { values: v } = parseArgs({
     options: {
-      text: { type: 'string' }, file: { type: 'string' }, voice: { type: 'string', default: 'Charon' }, style: { type: 'string' },
-      model: { type: 'string', default: 'gemini-3.8-flash-tts' }, language: { type: 'string' }, out: { type: 'string', default: 'speech.wav' },
-      'dry-run': { type: 'boolean' }, 'list-voices': { type: 'boolean' },
+      text: { type: 'string' },
+      file: { type: 'string' },
+      voice: { type: 'string', default: 'Charon' },
+      style: { type: 'string' },
+      model: { type: 'string', default: 'gemini-3.8-flash-tts' },
+      language: { type: 'string' },
+      out: { type: 'string', default: 'speech.wav' },
+      'dry-run': { type: 'boolean' },
+      'list-voices': { type: 'boolean' },
     },
   });
-  if (v['list-voices']) { for (const [n, d] of Object.entries(VOICES)) console.log(`${n.padEnd(14)} ${d}`); return; }
+  if (v['list-voices']) {
+    for (const [n, d] of Object.entries(VOICES)) console.log(`${n.padEnd(14)} ${d}`);
+    return;
+  }
   const text = v.text ?? (v.file ? fs.readFileSync(v.file, 'utf8') : null);
   const opts = { text, voice: v.voice, style: v.style, model: v.model, language: v.language };
-  if (v['dry-run']) { console.log(`POST ${API}/interactions\n${JSON.stringify(buildRequest(opts), null, 2)}`); return; }
+  if (v['dry-run']) {
+    console.log(`POST ${API}/interactions\n${JSON.stringify(buildRequest(opts), null, 2)}`);
+    return;
+  }
   const r = await synthesize(opts);
   fs.mkdirSync(path.dirname(path.resolve(v.out)), { recursive: true });
   fs.writeFileSync(v.out, r.wav ?? r.data);
@@ -142,5 +219,8 @@ async function main() {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
-  main().catch((e) => { console.error(e.message); process.exit(1); });
+  main().catch(e => {
+    console.error(e.message);
+    process.exit(1);
+  });
 }

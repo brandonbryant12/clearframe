@@ -25,18 +25,31 @@ export const MODELS = {
   'lyria-3-clip-preview': { price: 0.04, note: 'always 30 s — cheap for auditioning a style' },
 };
 
-const mmss = (s) => { const n = Math.round(s); return `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}`; };
+const mmss = s => {
+  const n = Math.round(s);
+  return `${Math.floor(n / 60)}:${String(n % 60).padStart(2, '0')}`;
+};
 
 /**
  * Compose a Lyria prompt from structured intent. Sections: [{ from, to, text }] in seconds.
  * Keeps musical instructions separate from any lyrics (we use instrumental beds).
  */
-export function composePrompt({ style, bpm, key, seconds, sections = [], instrumental = true, ending = 'end cleanly on a sustained chord, no fade-out' }) {
+export function composePrompt({
+  style,
+  bpm,
+  key,
+  seconds,
+  sections = [],
+  instrumental = true,
+  ending = 'end cleanly on a sustained chord, no fade-out',
+}) {
   const lines = [];
   lines.push([style, bpm ? `${bpm} BPM` : null, key ? `in ${key}` : null].filter(Boolean).join(', ') + '.');
   if (instrumental) lines.push('Instrumental only, no vocals.');
   if (seconds) lines.push(`Duration: about ${Math.round(seconds)} seconds.`);
-  lines.push('Mix: understated and spacious — it sits under a spoken voiceover, so keep the midrange clear and avoid busy melodies.');
+  lines.push(
+    'Mix: understated and spacious — it sits under a spoken voiceover, so keep the midrange clear and avoid busy melodies.',
+  );
   for (const s of sections) lines.push(`[${mmss(s.from)} - ${mmss(s.to)}] ${s.text}`);
   if (ending) lines.push(`Ending: ${ending}.`);
   return lines.join('\n');
@@ -44,10 +57,18 @@ export function composePrompt({ style, bpm, key, seconds, sections = [], instrum
 
 export function buildRequest({ prompt, model = 'lyria-3.5', format = 'mp3', images = [] }) {
   if (!prompt?.trim()) throw new Error('prompt is required');
-  if (format !== 'mp3') throw new Error('Lyria music requests support MP3 only; convert the generated MP3 locally if you need WAV.');
+  if (format !== 'mp3')
+    throw new Error('Lyria music requests support MP3 only; convert the generated MP3 locally if you need WAV.');
   if (images.length > 10) throw new Error('Lyria supports at most 10 image references');
   const input = images.length
-    ? [{ type: 'text', text: prompt }, ...images.map((f) => ({ type: 'image', mime_type: /\.png$/i.test(f) ? 'image/png' : 'image/jpeg', data: fs.readFileSync(f).toString('base64') }))]
+    ? [
+        { type: 'text', text: prompt },
+        ...images.map(f => ({
+          type: 'image',
+          mime_type: /\.png$/i.test(f) ? 'image/png' : 'image/jpeg',
+          data: fs.readFileSync(f).toString('base64'),
+        })),
+      ]
     : prompt;
   const response_format = { type: 'audio' };
   return { model, input, response_format };
@@ -60,35 +81,62 @@ export async function generateMusic(opts) {
   const body = buildRequest(opts);
   const json = await post('/interactions', body, { timeoutMs: 600_000, ...opts });
   const audio = outputBlocks(json, 'audio').at(-1);
-  if (!audio?.data) throw new Error(`No audio in response (prompt may have been filtered): ${JSON.stringify(json).slice(0, 400)}`);
-  const mime = String(audio.mime_type ?? 'audio/mpeg').toLowerCase().split(';')[0].trim();
-  const ext = { 'audio/mpeg': 'mp3', 'audio/mp3': 'mp3', 'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/ogg': 'ogg' }[mime];
+  if (!audio?.data)
+    throw new Error(`No audio in response (prompt may have been filtered): ${JSON.stringify(json).slice(0, 400)}`);
+  const mime = String(audio.mime_type ?? 'audio/mpeg')
+    .toLowerCase()
+    .split(';')[0]
+    .trim();
+  const ext = { 'audio/mpeg': 'mp3', 'audio/mp3': 'mp3', 'audio/wav': 'wav', 'audio/x-wav': 'wav', 'audio/ogg': 'ogg' }[
+    mime
+  ];
   if (!ext) throw new Error(`Unsupported Lyria audio MIME type: ${mime}`);
   const data = Buffer.from(audio.data, 'base64');
   if (!data.length) throw new Error('Lyria returned empty audio');
-  const text = outputBlocks(json, 'text').map((t) => t.text).join('\n');
+  const text = outputBlocks(json, 'text')
+    .map(t => t.text)
+    .join('\n');
   return { data, mimeType: mime, ext, text };
 }
 
 async function main() {
   const { values: v } = parseArgs({
     options: {
-      prompt: { type: 'string' }, style: { type: 'string' }, bpm: { type: 'string' }, key: { type: 'string' }, seconds: { type: 'string' },
-      section: { type: 'string', multiple: true, default: [] }, model: { type: 'string', default: 'lyria-3.5' },
-      format: { type: 'string', default: 'mp3' }, image: { type: 'string', multiple: true, default: [] }, out: { type: 'string', default: 'music.mp3' },
+      prompt: { type: 'string' },
+      style: { type: 'string' },
+      bpm: { type: 'string' },
+      key: { type: 'string' },
+      seconds: { type: 'string' },
+      section: { type: 'string', multiple: true, default: [] },
+      model: { type: 'string', default: 'lyria-3.5' },
+      format: { type: 'string', default: 'mp3' },
+      image: { type: 'string', multiple: true, default: [] },
+      out: { type: 'string', default: 'music.mp3' },
       'dry-run': { type: 'boolean' },
     },
   });
-  const sections = v.section.map((s) => {
+  const sections = v.section.map(s => {
     const [range, text] = s.split('|');
-    const [a, b] = range.split('-').map((x) => x.split(':').reduce((acc, n) => acc * 60 + parseFloat(n), 0));
+    const [a, b] = range.split('-').map(x => x.split(':').reduce((acc, n) => acc * 60 + parseFloat(n), 0));
     return { from: a, to: b, text };
   });
-  const prompt = v.style || v.bpm || v.key || v.seconds || sections.length
-    ? composePrompt({ style: v.style ?? v.prompt, bpm: v.bpm, key: v.key, seconds: v.seconds && +v.seconds, sections })
-    : v.prompt;
+  const prompt =
+    v.style || v.bpm || v.key || v.seconds || sections.length
+      ? composePrompt({
+          style: v.style ?? v.prompt,
+          bpm: v.bpm,
+          key: v.key,
+          seconds: v.seconds && +v.seconds,
+          sections,
+        })
+      : v.prompt;
   const opts = { prompt, model: v.model, format: v.format, images: v.image };
-  if (v['dry-run']) { console.log(`POST ${API}/interactions\n${JSON.stringify(buildRequest(opts), null, 2)}\n≈ $${estimateCost(opts).toFixed(2)}`); return; }
+  if (v['dry-run']) {
+    console.log(
+      `POST ${API}/interactions\n${JSON.stringify(buildRequest(opts), null, 2)}\n≈ $${estimateCost(opts).toFixed(2)}`,
+    );
+    return;
+  }
   const r = await generateMusic(opts);
   const out = v.out.replace(/\.(wav|mp3|ogg)$/i, '') + `.${r.ext}`;
   fs.mkdirSync(path.dirname(path.resolve(out)), { recursive: true });
@@ -98,5 +146,8 @@ async function main() {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
-  main().catch((e) => { console.error(e.message); process.exit(1); });
+  main().catch(e => {
+    console.error(e.message);
+    process.exit(1);
+  });
 }

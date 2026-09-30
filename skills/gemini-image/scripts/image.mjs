@@ -22,8 +22,14 @@ import { fileURLToPath } from 'node:url';
 import { API, outputBlocks, post } from '../../gemini-tts/scripts/tts.mjs';
 
 export const MODELS = {
-  'gemini-3.1-flash-image': { price: { 512: 0.045, '1K': 0.067, '2K': 0.101, '4K': 0.151 }, note: 'Nano Banana 2 · default' },
-  'gemini-3.1-flash-lite-image': { price: { '1K': 0.0336 }, note: 'Nano Banana 2 Lite · cheapest · 1K only · weak at multi-reference' },
+  'gemini-3.1-flash-image': {
+    price: { 512: 0.045, '1K': 0.067, '2K': 0.101, '4K': 0.151 },
+    note: 'Nano Banana 2 · default',
+  },
+  'gemini-3.1-flash-lite-image': {
+    price: { '1K': 0.0336 },
+    note: 'Nano Banana 2 Lite · cheapest · 1K only · weak at multi-reference',
+  },
   'gemini-3-pro-image': { price: { '1K': 0.134, '2K': 0.134, '4K': 0.24 }, note: 'Nano Banana Pro · premium' },
 };
 const ASPECTS = ['1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9', '1:4', '4:1', '1:8', '8:1'];
@@ -40,7 +46,11 @@ export function buildRequest({ prompt, model = 'gemini-3.1-flash-image', aspect 
     const ext = path.extname(ref).toLowerCase();
     input.push({ type: 'image', mime_type: MIME[ext] ?? 'image/png', data: fs.readFileSync(ref).toString('base64') });
   }
-  return { model, input, response_format: { type: 'image', mime_type: 'image/jpeg', aspect_ratio: aspect, image_size: imageSize } };
+  return {
+    model,
+    input,
+    response_format: { type: 'image', mime_type: 'image/jpeg', aspect_ratio: aspect, image_size: imageSize },
+  };
 }
 
 export function estimateCost({ model = 'gemini-3.1-flash-image', size = '2K' }) {
@@ -54,22 +64,28 @@ export async function generateImage(opts) {
   const json = await post('/interactions', body, opts);
   const img = outputBlocks(json, 'image').at(-1);
   if (!img?.data) throw new Error(`No image in response (possibly filtered): ${JSON.stringify(json).slice(0, 400)}`);
-  const text = outputBlocks(json, 'text').map((t) => t.text).join('\n');
+  const text = outputBlocks(json, 'text')
+    .map(t => t.text)
+    .join('\n');
   return { data: Buffer.from(img.data, 'base64'), mimeType: img.mime_type ?? 'image/jpeg', text };
 }
 
 async function main() {
   const { values: v } = parseArgs({
     options: {
-      prompt: { type: 'string' }, model: { type: 'string', default: 'gemini-3.1-flash-image' }, aspect: { type: 'string', default: '16:9' },
-      size: { type: 'string', default: '2K' }, ref: { type: 'string', multiple: true, default: [] }, out: { type: 'string', default: 'image.jpg' },
+      prompt: { type: 'string' },
+      model: { type: 'string', default: 'gemini-3.1-flash-image' },
+      aspect: { type: 'string', default: '16:9' },
+      size: { type: 'string', default: '2K' },
+      ref: { type: 'string', multiple: true, default: [] },
+      out: { type: 'string', default: 'image.jpg' },
       'dry-run': { type: 'boolean' },
     },
   });
   const opts = { prompt: v.prompt, model: v.model, aspect: v.aspect, size: v.size, refs: v.ref };
   if (v['dry-run']) {
     const body = buildRequest(opts);
-    body.input = body.input.map((p) => (p.data ? { ...p, data: `<${p.data.length} base64 chars>` } : p));
+    body.input = body.input.map(p => (p.data ? { ...p, data: `<${p.data.length} base64 chars>` } : p));
     console.log(`POST ${API}/interactions\n${JSON.stringify(body, null, 2)}\n≈ $${estimateCost(opts).toFixed(3)}`);
     return;
   }
@@ -80,5 +96,8 @@ async function main() {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
-  main().catch((e) => { console.error(e.message); process.exit(1); });
+  main().catch(e => {
+    console.error(e.message);
+    process.exit(1);
+  });
 }
