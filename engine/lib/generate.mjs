@@ -38,8 +38,32 @@ function voiceSpec(sb, b, provider) {
   };
 }
 
-export async function voice(root, { draft = false, force = false, only, budget } = {}) {
+/** The text parts a take sends: one text and one style for a single voice, turns for a cast. */
+function takeParts(sb, spec) {
+  const single = !spec.cast && !sb.voice.perBeatStyle;
+  return single ? [{ text: spec.parts.map(p => p.text).join('\n\n'), style: spec.style }] : spec.parts;
+}
+
+export async function voice(root, { draft = false, force = false, only, budget, 'dry-run': dryRun = false } = {}) {
   const sb = loadStoryboard(root);
+  if (dryRun && sb.voice.takes !== 'beat') {
+    // The exact requests a real run would send, without a key or a call.
+    const { planTakes, takeSpec } = await import('./takes.mjs');
+    return planTakes(sb).map(take => {
+      const spec = takeSpec(sb, take, 'gemini');
+      return {
+        take: take.id,
+        beats: take.beats.map(b => b.id),
+        request: tts.buildRequest({
+          parts: takeParts(sb, spec),
+          cast: spec.cast,
+          voice: spec.voice,
+          model: spec.model,
+          language: spec.language ?? undefined,
+        }),
+      };
+    });
+  }
   if (sb.voice.takes !== 'beat') {
     // Continuous takes (the whole film by default): one performance, split into beats afterwards.
     const { planTakes, recordTakes } = await import('./takes.mjs');
@@ -68,9 +92,8 @@ export async function voice(root, { draft = false, force = false, only, budget }
       synthesize: async (spec, out) => {
         // A single voice reads the take as one text with one style: paragraphs between beats
         // give natural pauses, and nothing re-prompts the voice mid-performance.
-        const single = !spec.cast && !sb.voice.perBeatStyle;
         const r = await tts.synthesize({
-          parts: single ? [{ text: spec.parts.map(p => p.text).join('\n\n'), style: spec.style }] : spec.parts,
+          parts: takeParts(sb, spec),
           cast: spec.cast,
           voice: spec.voice,
           model: spec.model,

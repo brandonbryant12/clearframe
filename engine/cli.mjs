@@ -29,7 +29,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
   doctor | build                      native dependencies and compiler
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]
   plan <dir>                          approximate generation cost and cache state
-  voice <dir> [--draft]                local voice or paid Gemini TTS
+  voice <dir> [--draft] [--dry-run]    free local voice, or Gemini 3.8 TTS as one continuous take (--dry-run prints the request)
   music <dir> [--draft]                local bed or paid Lyria MP3
   images | clips <dir> [--only id] [--budget dollars] [--force]
   speech <dir> --beat id --audio recording.wav --transcript text.txt [--words words.json]
@@ -94,6 +94,7 @@ async function main() {
     'sketches',
     'whisper',
     'no-render',
+    'dry-run',
   ];
   const { values: o, positionals } = parseArgs({
     args,

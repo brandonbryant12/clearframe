@@ -23,6 +23,7 @@ The model gives a consistent, lively voice when it reads **the whole narration i
 clearframe voice <dir> --draft          # free OS voice, one continuous take, words measured with Whisper
 clearframe voice <dir>                  # Gemini: one continuous take (cached by text, voice, style, model)
 clearframe voice <dir> --force          # re-record after changing words
+clearframe voice <dir> --dry-run        # the exact request per take (one text, one style); no key, no call
 node skills/gemini-tts/scripts/tts.mjs --text "Seventy percent." --voice Charon --style "calm, measured" --out vo.wav
 node skills/gemini-tts/scripts/tts.mjs --text "…" --dry-run    # prints the exact request; no key, no call
 node skills/gemini-tts/scripts/tts.mjs --list-voices
