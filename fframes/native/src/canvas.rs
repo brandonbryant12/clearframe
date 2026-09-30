@@ -653,6 +653,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         } else {
             shape
         };
+        let shape = self.depth_light(el, shape, (bx, by, bw, bh));
         let shape = match s(el, "blend") {
             "" | "normal" => shape,
             mode => fframes::svgr!(<g mix-blend-mode={mode.to_owned()}>{shape}</g>),
@@ -682,6 +683,57 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             )
         };
         fframes::svgr!(<g opacity={alpha} transform={transform}>{shape}</g>)
+    }
+
+    /// Depth and light: `shadow` (a soft drop shadow) and `glow` (the element's light bleeding
+    /// outward, in its own colour or `color`). `true` takes the defaults; an object tunes
+    /// `blur`, `opacity`, `dx`, `dy` and `color`. On a group, one filter serves every child.
+    fn depth_light(&self, el: &Value, shape: Svgr<'a>, (bx, by, bw, bh): (f32, f32, f32, f32)) -> Svgr<'a> {
+        let on = |key: &str| el.get(key).filter(|v| v.as_bool() == Some(true) || v.is_object());
+        let (shadow, glow) = (on("shadow"), on("glow"));
+        if shadow.is_none() && glow.is_none() {
+            return shape;
+        }
+        let opt = |v: Option<&Value>, key: &str, default: f32| {
+            v.and_then(|v| v.get(key)).and_then(Value::as_f64).map_or(default, |x| x as f32)
+        };
+        let color = |v: Option<&Value>, fallback: &str| {
+            let token = v.and_then(|v| v.get("color")).cloned().unwrap_or(Value::String(fallback.to_owned()));
+            self.paint(Some(&token), fallback, &mut vec![])
+        };
+        let mut prims = vec![];
+        let mut reach = 20.0f32;
+        let mut top = "SourceGraphic";
+        if let Some(sh) = shadow {
+            let (dx, dy, blur) =
+                (opt(Some(sh), "dx", 0.0), opt(Some(sh), "dy", 8.0), opt(Some(sh), "blur", 12.0).max(0.0));
+            reach = reach.max(blur * 3.0 + dx.abs().max(dy.abs()) + 20.0);
+            prims.push(fframes::svgr!(<feDropShadow dx={dx} dy={dy} stdDeviation={blur} flood-color={color(Some(sh), "#000000")} flood-opacity={opt(Some(sh), "opacity", 0.45).clamp(0.0, 1.0)} result="shadowed" />));
+            top = "shadowed";
+        }
+        let merge = if let Some(g) = glow {
+            let blur = opt(Some(g), "blur", 14.0).max(0.0);
+            reach = reach.max(blur * 3.0 + 20.0);
+            let alpha = opt(Some(g), "opacity", 0.85).clamp(0.0, 1.0) * 1.6;
+            if g.get("color").is_some() {
+                prims.push(fframes::svgr!(<feGaussianBlur in="SourceAlpha" stdDeviation={blur} result="soft" />));
+                prims.push(fframes::svgr!(<feFlood flood-color={color(Some(g), "accent")} result="tint" />));
+                prims.push(fframes::svgr!(<feComposite in="tint" in2="soft" operator="in" result="tinted" />));
+                prims.push(fframes::svgr!(<feComponentTransfer in="tinted" result="glow"><feFuncA type="linear" slope={alpha} /></feComponentTransfer>));
+            } else {
+                prims.push(fframes::svgr!(<feGaussianBlur in="SourceGraphic" stdDeviation={blur} result="soft" />));
+                prims.push(fframes::svgr!(<feComponentTransfer in="soft" result="glow"><feFuncA type="linear" slope={alpha} /></feComponentTransfer>));
+            }
+            fframes::svgr!(<feMerge><feMergeNode in="glow" /><feMergeNode in={top.to_owned()} /></feMerge>)
+        } else {
+            fframes::svgr!(<feMerge><feMergeNode in={top.to_owned()} /></feMerge>)
+        };
+        prims.push(merge);
+        let id = self.uid("light");
+        fframes::svgr!(<g>
+            <defs><filter id={id.clone()} filterUnits="userSpaceOnUse" x={bx - reach} y={by - reach} width={bw + 2.0 * reach} height={bh + 2.0 * reach}>{prims}</filter></defs>
+            <g filter={format!("url(#{id})")}>{shape}</g>
+        </g>)
     }
 
     /// The element's geometry and paint at a draw-on fraction.

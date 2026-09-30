@@ -4,6 +4,7 @@
 
 Travel instead of cutting, type with a voice, and fewer false alarms.
 
+- **Glow and shadow.** `glow` (in the element's own colour or a set `color`) and `shadow` on any canvas element or group, as one filter per group.
 - **Podcast ingests keep the words on screen.** `ingest --audio` defaults to `captions: "pop"` for vertical clips and plate captions otherwise, so beats that become pictures still follow the speech. The brief suggests worlds for explanatory stretches.
 - **`world DIR`** renders a canvas world's plan: everything drawn, with every beat's camera rect outlined and numbered.
 - **Zero-length keys apply on their own frame.** A `dur: 0` key used to show the old state for one frame, which caused single-frame flashes. Camera pre-roll leaves once the outgoing line has been said, and travels faster (down to 0.8 s) rather than landing late.

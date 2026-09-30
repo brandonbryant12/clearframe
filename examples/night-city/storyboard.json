@@ -92,6 +92,9 @@
             "fill": "accent",
             "enter": "none",
             "at": 0,
+            "glow": {
+              "blur": 28
+            },
             "keys": [
               {
                 "at": 0.05,
@@ -1265,7 +1268,11 @@
                   "amount": 0.25
                 }
               }
-            ]
+            ],
+            "glow": {
+              "blur": 6,
+              "opacity": 0.9
+            }
           },
           {
             "type": "rect",
@@ -1307,7 +1314,11 @@
                 "dur": 1.3,
                 "ease": "inOut"
               }
-            ]
+            ],
+            "glow": {
+              "blur": 8,
+              "opacity": 0.6
+            }
           },
           {
             "type": "circle",
@@ -1358,7 +1369,11 @@
                 "dur": 1.3,
                 "ease": "inOut"
               }
-            ]
+            ],
+            "glow": {
+              "blur": 8,
+              "opacity": 0.6
+            }
           },
           {
             "type": "circle",
@@ -1926,7 +1941,10 @@
             "fill": "#ffd166",
             "say": "soak",
             "exitSay": "then",
-            "exit": "fall"
+            "exit": "fall",
+            "glow": {
+              "blur": 12
+            }
           },
           {
             "type": "group",
@@ -4063,7 +4081,10 @@
                 "fill": "accent2",
                 "enter": "wipe"
               }
-            ]
+            ],
+            "glow": {
+              "blur": 10
+            }
           }
         ],
         "source": "Synthetic Climate Lab (test) [1]"

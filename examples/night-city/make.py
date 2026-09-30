@@ -34,7 +34,7 @@ def thermometer(x, color, levels):
     keys = [{'at': a, 'scaleY': v, 'dur': d, 'ease': 'inOut'} for a, v, d in levels]
     return [
         {'type': 'rect', 'x': x - 15, 'y': 250, 'w': 30, 'h': 460, 'r': 15, 'fill': 'bg', 'stroke': 'muted', 'width': 3, 'enter': 'none', 'at': 0},
-        {'type': 'rect', 'x': x - 7, 'y': 280, 'w': 14, 'h': 420, 'r': 7, 'fill': color, 'origin': [x, 700], 'enter': 'none', 'at': 0, 'keys': keys},
+        {'type': 'rect', 'x': x - 7, 'y': 280, 'w': 14, 'h': 420, 'r': 7, 'fill': color, 'origin': [x, 700], 'enter': 'none', 'at': 0, 'keys': keys, 'glow': {'blur': 8, 'opacity': 0.6}},
         {'type': 'circle', 'cx': x, 'cy': 718, 'r': 26, 'fill': color, 'enter': 'none', 'at': 0},
     ]
 
@@ -57,7 +57,7 @@ hook = [
     {'type': 'ellipse', 'cx': 960, 'cy': HORIZON, 'rx': 1100, 'ry': 460,
      'fill': {'gradient': ['accent2', 'bg'], 'radial': True, 'fade': True}, 'opacity': 0.6, 'enter': 'none', 'at': 0,
      'keys': [{'at': 0.2, 'opacity': 0.1, 'dur': 2.2}]},
-    {'type': 'circle', 'cx': 960, 'cy': 640, 'r': 64, 'fill': 'accent', 'enter': 'none', 'at': 0,
+    {'type': 'circle', 'cx': 960, 'cy': 640, 'r': 64, 'fill': 'accent', 'enter': 'none', 'at': 0, 'glow': {'blur': 28},
      'keys': [{'at': 0.05, 'y': 200, 'dur': 1.7, 'ease': 'in'}]},
     *[{'type': 'rect', 'x': x, 'y': HORIZON - h, 'w': w, 'h': h, 'fill': '#181818', 'enter': 'none', 'at': 0, 'depth': 0.55}
       for x, w, h in [(-600 + 97 * i, 90 - (i * 29) % 40, 120 + (i * 53) % 170) for i in range(70)]],
@@ -66,7 +66,7 @@ hook = [
     {'type': 'path', 'd': f'M 80 {HORIZON} Q 260 680 440 735 Q 640 670 900 {HORIZON} Z', 'fill': 'positive', 'opacity': 0.22, 'enter': 'none', 'at': 0},
     *[{'type': 'circle', 'cx': x, 'cy': HORIZON - 34, 'r': 20, 'fill': 'positive', 'opacity': 0.45, 'enter': 'none', 'at': 0} for x in (170, 250, 700, 790)],
     *[{'type': 'rect', 'x': x, 'y': HORIZON - h, 'w': w, 'h': h, 'fill': 'surface', 'stroke': 'line', 'width': 2, 'enter': 'none', 'at': 0} for x, w, h in buildings],
-    {'type': 'group', 'at': 0.9, 'stagger': 0.02, 'children': windows},
+    {'type': 'group', 'at': 0.9, 'stagger': 0.02, 'children': windows, 'glow': {'blur': 6, 'opacity': 0.9}},
     *thermometer(COUNTRY_X, COOL, [(0.3, 0.8, 1.2), (1.5, 0.42, 1.3)]),
     *thermometer(CITY_X, 'accent2', [(0.3, 0.8, 1.2), (1.5, 0.74, 1.3)]),
     text('COUNTRYSIDE', COUNTRY_X, 812, 24, font='mono', fill='muted', anchor='middle', enter='none', at=0),
@@ -118,7 +118,7 @@ roof = [
     text('ROOF · ASPHALT', rx1 + 10, rtop + 21, 11, font='mono', fill='muted', at=0.2, exitAt=OFFSTAGE, exit='fade'),
     {'type': 'rect', 'x': rx0 + 2, 'y': rtop + 2, 'w': rx1 - rx0 - 4, 'h': 30, 'fill': 'accent2', 'origin': [rx0, rtop + 32], 'enter': 'none', 'at': 0,
      'keys': [{'at': 0, 'scaleY': 0.02, 'dur': 0}, {'say': 'almost', 'scaleY': 0.95, 'dur': 1.4}, {'say': 'back', 'scaleY': 0.35, 'dur': 0.9}]},
-    {'type': 'circle', 'cx': rx0 - 150, 'cy': rtop - 90, 'r': 20, 'fill': '#ffd166', 'say': 'soak', 'exitSay': 'then', 'exit': 'fall'},
+    {'type': 'circle', 'cx': rx0 - 150, 'cy': rtop - 90, 'r': 20, 'fill': '#ffd166', 'say': 'soak', 'exitSay': 'then', 'exit': 'fall', 'glow': {'blur': 12}},
     {'type': 'group', 'say': 'soak', 'stagger': 0.1, 'exitSay': 'then', 'exit': 'fade',
      'children': [{'type': 'path', 'd': f'M {rx0 - 95 + 30 * i} {rtop - 90} L {rx0 + 14 + 28 * i} {rtop - 1}', 'stroke': 'accent', 'width': 3, 'arrow': 'end', 'head': 9, 'dur': 0.6} for i in range(4)]},
     {'type': 'path', 'd': f'M {rx0 - 8} {rtop + 16} L {rx0 - 36} {rtop + 16}', 'stroke': 'accent2', 'width': 1.5, 'say': 'sunlight', 'exitAt': OFFSTAGE, 'exit': 'fade'},
@@ -194,7 +194,7 @@ end = [
         {'type': 'ellipse', 'cx': x + w / 2, 'cy': HORIZON - h, 'rx': w * 1.3, 'ry': 70, 'fill': {'gradient': ['accent2', 'bg'], 'radial': True, 'fade': True},
          'loop': {'type': 'pulse', 'period': 1.8, 'amount': 0.08}} for x, w, h in (buildings[3], buildings[4], buildings[7])]},
     {'type': 'group', 'say': 'hottest', 'stagger': 0.12, 'children': [
-        {'type': 'rect', 'x': x, 'y': HORIZON - h - 4, 'w': w, 'h': 10, 'fill': 'accent2', 'enter': 'wipe'} for x, w, h in (buildings[3], buildings[4], buildings[7])]},
+        {'type': 'rect', 'x': x, 'y': HORIZON - h - 4, 'w': w, 'h': 10, 'fill': 'accent2', 'enter': 'wipe'} for x, w, h in (buildings[3], buildings[4], buildings[7])], 'glow': {'blur': 10}},
 ]
 
 beats = [
