@@ -12,25 +12,27 @@ Cinematic capability exists: worlds, a travelling camera, canvas, mosaic, morphs
 
 ## Scores
 
-| # | Dimension | Now | Evidence | What a 5 looks like |
-|---|---|---|---|---|
-| 1 | **Continuity**: shots, not slides | 1.5 | Every beat is a fresh card that starts empty. Nothing survives a cut except inside canvas worlds. | Elements carry across cuts: a number becomes a bar, which becomes a city. Cuts are motivated: match cuts, cuts on action, camera moves. |
-| 2 | **Camera and depth** | 2 | Block scenes are locked off. Worlds travel in 2D. Parallax is one `depth` factor, with no perspective, focus or dolly. | Foreground, midground and background layers. Dolly through space, rack focus to the subject, a handheld drift for intimacy, motivated push-ins on revelations. |
-| 3 | **Composition and scale** | 2 | Small subjects in big empty frames (the process chart fills about 15% of the frame). A heading at the top left of every scene. The same grammar every beat. | Shot-scale variety: wide, medium, close and insert. Full-bleed type and objects. Negative space used on purpose, not left over. |
-| 4 | **Motion craft** | 3 | Good easing and staggered entrances, and counts land on words. But everything stops after it enters: the second and third frames of most beats are identical. | Overlap, follow-through and secondary motion. Holds keep breathing. Anticipation before big moments. Contrast between fast and slow. |
-| 5 | **Look**: light, lens and grade | 2 | Palettes, grain and a vignette. The image is screen-flat: no light, no lens, no grade. | Motivated light (rim, sweep, glow), bloom on highlights, a film grade, letterbox where the genre calls for it, motion blur on fast moves. |
-| 6 | **Imagery** | 2.5 | Code-drawn vector shapes, 95 UI icons, mosaic and wireframe solids. No illustration kit, so mechanisms become boxes and arrows. | A kit of set pieces (skylines, horizons, tunnels, terrains, 3D objects, data landscapes) that make worlds quick to build. |
-| 7 | **Editing grammar** | 3 | Graphic transitions (panel, iris, whip) and world camera moves. Mostly fades by default. The rhythm is set by the voice only. | Varied shot lengths, montage and smash cuts, J and L cuts, silence before an impact, cuts on the music. |
-| 8 | **Typography** | 3.5 | Strong type system (Inter Display, Instrument Serif accent, tabular figures), kinetic modes and cascade. Type is mostly captions and labels. | Type as image: huge, masked, in space, with light passing over it. |
-| 9 | **Sound** | 2.5 | A ducked music bed and a few SFX on visual peaks. No risers, hits or silence design, and no beat-synced edits. | A sound design that shapes tension: risers into reveals, a hit on the title, room tone, a button at the end. |
-| 10 | **Voice and sync** | 4 | One continuous Gemini take, measured word timings, cues that land on words, and a pacing guard. | Already close. Performance direction per genre (a trailer read versus a documentary read). |
-| 11 | **Honesty and data** | 4.5 | A source on every number, check and critique, sample data labelled as such. | Keep it. |
-| 12 | **Tooling and review** | 4 | check, critique, sheets, review filmstrips and the fresh-reviewer loop. Review is still of stills, so motion quality is under-judged. | Critique catches slideshow signatures (see below) and scores cinema as well as correctness. |
-| 13 | **Speed** | 4 | A 40 s reel renders in about 10 s. A mosaic film takes about 20 s. | Keep it while adding lens effects: budget them per frame. |
-| 14 | **Library and scale** | 4 | One file per palette, treatment, sketch and playbook. Project and shared layers. | Cinematic genres represented, not just report formats. |
-| 15 | **Default outcome**: what a model makes on the first try | 2 | Playbooks encode report structure (title, stat, chart, callout, endcard), so first drafts are decks. | Genre playbooks that start from shots and set pieces. The easy path produces a film. |
+"Base" is 2026-09-30 before the cinema loop; "Now" is after it. Scores are for what the defaults and the library produce, not what an expert could hand-build.
 
-**Overall: 2.8 / 5.** Great bones; the picture layer is the gap.
+| # | Dimension | Base | Now | Evidence now | Next |
+|---|---|---|---|---|---|
+| 1 | **Continuity**: shots, not slides | 1.5 | 3 | Genre playbooks connect shots with worlds, morph match cuts, flash cuts and cuts between moving cameras. The report playbooks still cut card to card. | Rework `data-story` and `research-digest` around continuity. |
+| 2 | **Camera and depth** | 2 | 4 | `z` perspective with parallax, `dolly` fly-throughs, rack `focus`, motion blur on moves, handheld. | Motion blur on fast element moves, not just the camera. |
+| 3 | **Composition and scale** | 2 | 3 | Set pieces are full-bleed with three planes. Chart blocks still sit small under a heading. | Close camera rects on charts, and full-bleed insert variants of the number blocks. |
+| 4 | **Motion craft** | 3 | 3.5 | Set pieces keep moving: loops, particles, drift, beacons, swell. The default push-in is now visible. | Secondary motion on chart blocks during holds. |
+| 5 | **Look**: light, lens and grade | 2 | 4 | `lens`: letterbox, grade, bloom, aberration, leaks. `shine`, glow and bokeh from depth of field. | A `lens` on the report treatments too (subtle grade and bloom). |
+| 6 | **Imagery** | 2.5 | 3.5 | Horizon, skyline, ocean, tunnel, terrain, data landscape, globe, title, card. | People: simple, honest figures for human stories. |
+| 7 | **Editing grammar** | 3 | 3.5 | `flash`, match cuts, silence beats; critique measures rhythm. | Beat-synced cuts on the music. |
+| 8 | **Typography** | 3.5 | 4 | Tracked title reveals with light sweeps, poster cards that wrap, type as image. | Masked reveals (type through a shape). |
+| 9 | **Sound** | 2.5 | 2.5 | Unchanged: a ducked bed and a few SFX. | Risers into reveals, a hit on flash and title, a drone under silences. |
+| 10 | **Voice and sync** | 4 | 4 | Unchanged. | Genre reads: trailer, documentary. |
+| 11 | **Honesty and data** | 4.5 | 4.5 | Set pieces label sample values; routes say they are illustrative. | Keep it. |
+| 12 | **Tooling and review** | 4 | 4.5 | Cinema score from the eight tells; letterbox text check; review strips caught every fix this loop. | Motion-aware review (frame-to-frame change per beat). |
+| 13 | **Speed** | 4 | 4 | A 28 s letterboxed, graded trailer renders in about 20 s. | Keep lens filters on the GPU path. |
+| 14 | **Library and scale** | 4 | 4.5 | 19 palettes, 15 treatments, 35 playbooks, 19 sketches, all files. | Characters and a sound library. |
+| 15 | **Default outcome** | 2 | 3 | Film looks start from genre playbooks (`ingest --treatment cinematic` → cinematic-explainer, cinema 100). The default report scaffolds still score 38–63. | Bring the report playbooks to 75+. |
+
+**Overall: 2.8 → 3.7 / 5.** The engine can now make films. The remaining gap is the default report path and sound.
 
 ## Why the films read as slides
 
@@ -56,16 +58,14 @@ These are the signatures a viewer notices, in order of damage. `critique` should
 - **Rhythm.** Contrast fast against slow. Silence before an impact, a hit on the title, a button at the end. Trailers are built on this.
 - **Type as image.** Big, masked, lit and placed in space (Saul Bass, Kyle Cooper, Apple keynotes).
 
-## Plan for this loop (2026-09-30)
+## Next loop
 
-| Step | Lands | Moves |
+| Priority | Work | Moves |
 |---|---|---|
-| A | **Lens**: film and beat `lens` with letterbox, grade, bloom, aberration, light leak, handheld drift and motion blur on camera moves | 5, 2 |
-| B | **Depth**: canvas `z` with true perspective, a camera dolly (fly-through) and rack focus (depth of field on a cue) | 2, 1 |
-| C | **Cinematic library**: treatments, genre playbooks (trailer, product reveal, title sequence, cold open, zoom journey) and set-piece sketches | 6, 15, 14 |
-| D | **Critique**: slideshow signatures and a cinema score | 12, 15 |
-| E | **Showcase films**: built with A to C and reviewed by a fresh reviewer | all |
-| F | **3D fills**: lit solids and boxes for product and data scenes | 6, 3 |
+| 1 | **Report films without slides.** Rework `data-story` and `research-digest`: an establishing set piece, numbers as full-frame inserts, charts in camera rects, lower thirds, a silence before the finding. Aim for a cinema score of 75+ by default. | 1, 3, 15 |
+| 2 | **Sound for cinema.** Risers into reveals, a hit on flash and title cuts, a drone under silences, whooshes matched to camera moves. | 9, 7 |
+| 3 | **People.** Simple, honest figures (silhouettes, hands, crowds as dots) for human stories. | 6 |
+| 4 | **Motion blur on elements** (fast keys and paths), not just the camera. | 2, 4 |
 
 ## Log
 
