@@ -94,13 +94,17 @@
             "size": 150,
             "spin": [6, 14, 0],
             "tilt": [18, 0, 0],
-            "stroke": "accent",
             "width": 1.2,
             "at": 0,
             "enter": "none",
             "glow": {
               "blur": 6
-            }
+            },
+            "shade": {
+              "light": [-0.5, -0.7, 0.6],
+              "ambient": 0.18
+            },
+            "fill": "accent"
           },
           {
             "type": "text",
@@ -110,10 +114,15 @@
             "size": 14,
             "font": "mono",
             "anchor": "middle",
-            "fill": "muted",
+            "fill": "ink",
             "tracking": 0.2,
             "at": 1.2,
-            "enter": "fade"
+            "enter": "fade",
+            "shadow": {
+              "blur": 6,
+              "opacity": 0.7,
+              "dy": 1
+            }
           }
         ],
         "viewTall": [835, 300, 250, 444]
