@@ -204,8 +204,14 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
   if (m?.src) {
     const i = add(m.src, ['-stream_loop', '-1']);
     const off = m.offset ?? 0;
+    // Silent beats are silent: any bed (composed or draft) dips to nothing through them,
+    // with 60 ms ramps so the cut to silence never clicks.
+    const gate = timing.beats
+      .filter(b => !b.vo && b.dur >= 0.8)
+      .map(b => `(1-clip((t-${(b.start - 0.06).toFixed(3)})/0.06,0,1)*clip((${(b.end + 0.06).toFixed(3)}-t)/0.06,0,1))`)
+      .join('*');
     filters.push(
-      `[${i}:a]${fmt},atrim=start=${off}:duration=${D},asetpts=PTS-STARTPTS,volume=${m.volume},afade=t=in:d=${m.fadeIn},afade=t=out:st=${Math.max(0, D - m.fadeOut)}:d=${m.fadeOut}[mus]`,
+      `[${i}:a]${fmt},atrim=start=${off}:duration=${D},asetpts=PTS-STARTPTS,volume=${m.volume},afade=t=in:d=${m.fadeIn},afade=t=out:st=${Math.max(0, D - m.fadeOut)}:d=${m.fadeOut}${gate ? `,volume='${gate}':eval=frame` : ''}[mus]`,
     );
     musicLabel = '[mus]';
   }

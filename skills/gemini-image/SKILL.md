@@ -1,6 +1,6 @@
 ---
 name: gemini-image
-description: Generate still images with Google's native Gemini image models (Nano Banana 2 — gemini-3.1-flash-image; Lite; Pro) via the Interactions API — exact contract, aspect ratios and sizes, reference images, pricing, and prompt recipes for textures, backdrops and editorial illustrations that leave room for code-rendered type. Use only when a ClearFrame storyboard declares an image asset that code can't produce; never for text, numbers, charts, logos or real people.
+description: Generate still images with Google's native Gemini image models (Nano Banana 2 — gemini-3.1-flash-image; Lite; Pro) via the Interactions API — depth plates (a painted far layer, cut-out subject and foreground staged in depth), single plates and textures, aspect ratios and sizes, reference images, pricing and prompt recipes. Use for the places a film happens in (depth plates are a regular tool); never for text, numbers, charts, logos or real people.
 ---
 
 # Gemini image ("Nano Banana 2")

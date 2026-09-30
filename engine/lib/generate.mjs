@@ -180,6 +180,43 @@ export async function voice(root, { draft = false, force = false, only, budget, 
 /** Derive a timestamped musical arc from the edit, so the score breathes with the story. */
 export function musicSections(timing, sb) {
   if (sb.music?.sections) return sb.music.sections;
+  // A film with silent beats is scored to its edit: a build that climbs into each silence,
+  // the silence itself, and a hit that carries whatever follows.
+  const silences = timing.beats.filter(b => !b.vo && b.dur >= 0.8);
+  if (silences.length) {
+    const out = [];
+    let from = 0;
+    silences.forEach((s, i) => {
+      const climb = Math.max(from, s.start - 3);
+      if (climb - from > 1)
+        out.push({
+          from: round(from, 1),
+          to: round(climb, 1),
+          text:
+            i === 0
+              ? 'Intro: sparse and low, a slow pulse that grows bar by bar.'
+              : 'Pick up again, darker and fuller.',
+        });
+      out.push({
+        from: round(climb, 1),
+        to: round(s.start, 1),
+        text: 'Build: every layer in, rising tension climbing into a sudden stop.',
+      });
+      out.push({
+        from: round(s.start, 1),
+        to: round(s.end, 1),
+        text: 'Silence: the music stops completely. Nothing plays.',
+      });
+      from = s.end;
+    });
+    if (timing.duration - from > 0.5)
+      out.push({
+        from: round(from, 1),
+        to: round(timing.duration, 1),
+        text: 'One deep impact on the first beat, then a low sustained chord that rings out to the end.',
+      });
+    return out;
+  }
   const groups = [];
   for (const b of timing.beats) {
     const key = b.chapter ?? (b.index === 0 ? 'open' : b.index === timing.beats.length - 1 ? 'close' : 'body');

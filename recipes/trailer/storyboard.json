@@ -18,7 +18,8 @@
   "music": {
     "style": "pulse",
     "bpm": 92,
-    "volume": 0.32
+    "volume": 0.32,
+    "prompt": "Cinematic trailer score: deep percussion, a pulsing synth bass and tense low strings"
   },
   "texture": {
     "grain": 0.4,
