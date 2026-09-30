@@ -15,6 +15,8 @@ Agent-directed motion graphics rendered natively with **FFFrames**. A film is on
   - set pieces to start from: horizon, skyline, ocean, tunnel, terrain, data landscape, globe, title reveal.
 
   `critique` scores every storyboard against the eight tells of a slideshow.
+
+  ![Frames from the genre playbooks: a tunnel flight, a dawn, a title reveal, a data landscape in rack focus, a lit product, a cut-paper title, a chart close-up, a night city, a globe with routes](docs/media/cinema.jpg)
 - **Motion graphics, not slides.** Every scene can:
   - draw its own art (`canvas`: paths that draw on, markers travelling along routes, echo trails, morphs across cuts, spotlights, meters, hand-drawn pencil strokes);
   - sit on imagery (full or split `plate` with duotone and tint treatments);
