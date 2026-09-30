@@ -178,8 +178,8 @@
             "tracking": 0.3,
             "fill": "ink",
             "enter": "blur",
-            "at": 0.05,
-            "dur": 0.5,
+            "at": 0,
+            "dur": 0.28,
             "keys": [
               {
                 "at": 0,
@@ -187,7 +187,7 @@
                 "dur": 0
               },
               {
-                "at": 0.05,
+                "at": 0,
                 "scale": 1.03,
                 "dur": 3.5,
                 "ease": "linear"
@@ -3538,8 +3538,8 @@
             "tracking": 0.3,
             "fill": "ink",
             "enter": "blur",
-            "at": 0.05,
-            "dur": 0.5,
+            "at": 0,
+            "dur": 0.28,
             "keys": [
               {
                 "at": 0,
@@ -3547,7 +3547,7 @@
                 "dur": 0
               },
               {
-                "at": 0.05,
+                "at": 0,
                 "scale": 1.03,
                 "dur": 3.5,
                 "ease": "linear"
@@ -3891,8 +3891,8 @@
               "angle": 90
             },
             "enter": "blur",
-            "at": 0.3,
-            "dur": 1.4,
+            "at": 0.05,
+            "dur": 0.9,
             "shine": {
               "dur": 1.3,
               "angle": 22,
@@ -3900,12 +3900,12 @@
             },
             "keys": [
               {
-                "at": 0.3,
+                "at": 0.05,
                 "scale": 1.04,
                 "dur": 0
               },
               {
-                "at": 0.3,
+                "at": 0.05,
                 "scale": 1,
                 "dur": 6,
                 "ease": "out"
@@ -3958,8 +3958,8 @@
             "tracking": 0.3,
             "fill": "ink",
             "enter": "blur",
-            "at": 0.05,
-            "dur": 0.5,
+            "at": 0,
+            "dur": 0.28,
             "keys": [
               {
                 "at": 0,
@@ -3967,7 +3967,7 @@
                 "dur": 0
               },
               {
-                "at": 0.05,
+                "at": 0,
                 "scale": 1.03,
                 "dur": 3.5,
                 "ease": "linear"

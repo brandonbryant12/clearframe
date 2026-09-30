@@ -53,12 +53,12 @@ export default {
           tracking: 0.28,
           fill: { gradient: ['muted', 'ink', 'muted'], angle: 90 },
           enter: 'blur',
-          at: 0.3,
-          dur: 1.4,
+          at: 0.05,
+          dur: 0.9,
           shine: { dur: 1.3, angle: 22, width: 0.28 },
           keys: [
-            { at: 0.3, scale: 1.04, dur: 0 },
-            { at: 0.3, scale: 1, dur: 6, ease: 'out' },
+            { at: 0.05, scale: 1.04, dur: 0 },
+            { at: 0.05, scale: 1, dur: 6, ease: 'out' },
           ],
         },
         {
