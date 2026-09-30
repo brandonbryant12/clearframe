@@ -4,6 +4,7 @@
 import { ICONS } from './icons.mjs';
 import { normalizeElements, roughSpec, applyRough, mosaicSpec, applyMosaic, depthKeys } from './canvas.mjs';
 import { plateElements } from '../engine/lib/plates.mjs';
+import { chartSpec, chartElements } from './data-canvas.mjs';
 
 /** Validation helpers bound to one block's props and error prefix. */
 export function helpers(p, fail, { findPhrase, precision }) {
@@ -408,6 +409,14 @@ export const VALIDATORS = {
     });
   },
   canvas: (p, h, frame = {}) => {
+    // A chart drawn as shapes with stable ids, so it can morph into the next beat's chart.
+    if (p.chart != null) {
+      p.elements = [
+        ...chartElements(chartSpec(p.chart, h.fail), { w: frame.width ?? 1920, h: frame.height ?? 1080 }),
+        ...(p.elements ?? []),
+      ];
+      delete p.chart;
+    }
     // A generated depth plate set, staged under the beat's own drawing, with a slow push.
     if (p.plates != null) {
       if (typeof p.plates !== 'string' || !p.plates.trim())

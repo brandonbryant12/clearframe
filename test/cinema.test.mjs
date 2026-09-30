@@ -114,7 +114,11 @@ test('depth plates: layered assets expand, stage in depth, and cut-outs key to t
   const assets = expandAssets([{ id: 'harbor', kind: 'image', layers: true, prompt: 'A harbour at dusk' }]);
   assert.deepEqual(
     assets.map(a => [a.id, !!a.cutout]),
-    [['harbor-far', false], ['harbor-mid', true], ['harbor-near', true]],
+    [
+      ['harbor-far', false],
+      ['harbor-mid', true],
+      ['harbor-near', true],
+    ],
   );
   const sb = { theme: 'cinema', beats: [], continuity: {} };
   assert.ok(imagePrompt(sb, assets[1]).includes(CHROMA) && !imagePrompt(sb, assets[0]).includes(CHROMA));
@@ -125,7 +129,10 @@ test('depth plates: layered assets expand, stage in depth, and cut-outs key to t
   // The plates are missing (no paid call in tests), but the staging is in the job props.
   const p = r.job?.beats?.[0]?.props;
   if (p) {
-    assert.deepEqual(p.elements.slice(0, 3).map(e => e.z), [6, 1.2, -0.35]);
+    assert.deepEqual(
+      p.elements.slice(0, 3).map(e => e.z),
+      [6, 1.2, -0.35],
+    );
     assert.ok(p.dolly?.length, 'a slow push by default');
   }
   // Keying: a red disc on flat green becomes a disc on transparency.
@@ -133,9 +140,69 @@ test('depth plates: layered assets expand, stage in depth, and cut-outs key to t
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
   const { ffmpeg } = await import('../engine/lib/util.mjs');
   const src = path.join(dir, 'green.png');
-  await ffmpeg(['-y', '-f', 'lavfi', '-i', 'color=c=0x00FF00:s=64x64', '-vf', "drawbox=x=16:y=16:w=32:h=32:color=red:t=fill", '-frames:v', '1', src]);
+  await ffmpeg([
+    '-y',
+    '-f',
+    'lavfi',
+    '-i',
+    'color=c=0x00FF00:s=64x64',
+    '-vf',
+    'drawbox=x=16:y=16:w=32:h=32:color=red:t=fill',
+    '-frames:v',
+    '1',
+    src,
+  ]);
   const out = await keyOut(src, path.join(dir, 'cut.png'));
   const { spawnSync } = await import('node:child_process');
-  const probe = spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=pix_fmt', '-of', 'csv=p=0', out]).stdout.toString();
+  const probe = spawnSync('ffprobe', [
+    '-v',
+    'error',
+    '-show_entries',
+    'stream=pix_fmt',
+    '-of',
+    'csv=p=0',
+    out,
+  ]).stdout.toString();
   assert.match(probe, /rgba/);
+});
+
+test('canvas charts: values become shapes with stable ids, so consecutive charts morph', t => {
+  const values = [
+    { label: 'Answering', value: 45, highlight: true },
+    { label: 'Routing', value: 30 },
+  ];
+  const r = job(t, {
+    sources: [{ id: 's', title: 'Sample' }],
+    beats: [
+      {
+        id: 'a',
+        block: 'canvas',
+        vo: 'Answering takes most of the week.',
+        props: { source: 'Sample', chart: { kind: 'stack', values }, elements: [] },
+      },
+      {
+        id: 'b',
+        block: 'canvas',
+        vo: 'Stand them side by side.',
+        props: { source: 'Sample', chart: { kind: 'bars', values }, elements: [] },
+      },
+    ],
+  });
+  assert.deepEqual(r.errors, []);
+  const bars = r.job.beats[1].props.elements.filter(e => e.type === 'rect');
+  assert.deepEqual(
+    bars.map(e => e.id),
+    ['chart-answering', 'chart-routing'],
+  );
+  assert.ok(
+    bars.every(e => e.morph),
+    'each bar morphs from its stack segment',
+  );
+  assert.ok(bars[0].h > bars[1].h, 'heights follow the values');
+  assert.match(
+    job(t, {
+      beats: [{ id: 'x', block: 'canvas', props: { chart: { kind: 'pie', values }, elements: [] } }],
+    }).errors.join(),
+    /chart.kind/,
+  );
 });

@@ -42,6 +42,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 
   They score 100 on the cinema score, up from 25–63. A beat's `art` can name a sketch (`{"sketch": "ambient"}`).
 - **Fixed:** `view: "auto"` on a canvas was mistaken for a camera rect (the string has four characters) and failed to render.
+- **Charts that become each other.** `chart` on a canvas draws a `number`, a `stack` or `bars` as shapes with ids computed from the labels, so consecutive canvas charts morph across the cut. A headline figure's bar slides into its segment of a stacked bar, and the segments stand up as bars. It removes the last card-to-card habit of data films; geometry follows the values.
 - **Music composed to the edit.** A film with silent beats sends its composed bed (Lyria) a brief timed to its own edit: an intro, a build that climbs into the silence, the silence, then an impact and a sustained chord. The mixer gates any bed, composed or draft, to nothing through silent beats with 60 ms ramps. In the real trailer final, the build sits at −18 dB, the silence at −32 dB and the title at −18 dB. The trailer playbook carries a score prompt.
 - **Generated depth plates.** Image generation is now a regular tool for places. An asset with `layers: true` generates:
   - a painted far layer;

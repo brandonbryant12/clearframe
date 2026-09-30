@@ -59,7 +59,7 @@ The camera moves because something happens. Match the move to the job:
 This is where motion design differs most from slides: **transitions are the story.** An object's identity survives the cut. Techniques, from subtle to bold:
 
 - **Worlds.** The same drawing continues and the camera moves to the next thing (see [canvas.md](canvas.md)).
-- **Morph by id.** A shape in one beat becomes a shape in the next: a circle becomes a planet, a bar becomes a building.
+- **Morph by id.** A shape in one beat becomes a shape in the next: a circle becomes a planet, a bar becomes a building. For data, canvas `chart` beats do it for you: a number becomes its bar, and a stacked bar becomes the bars.
 - **Match cut.** The same shape or position on both sides of a cut, such as a ring that becomes a coin that becomes a sun. Put the elements at the same frame position.
 - **Graphic wipes.** `panel`, `iris` and `whip` carry one movement across the cut. Use them at turns in the story, not at every cut.
 - **Cut on action.** Cut while something is moving (a whip, a camera move with motion blur), never after everything has settled.
