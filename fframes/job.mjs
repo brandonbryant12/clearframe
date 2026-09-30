@@ -469,6 +469,12 @@ function linkWorlds(beats, sb, timing, { warnings }) {
         const e = elementsExtent([el]);
         if (e && (e.left < v[0] || e.top < v[1] || e.left + e.w > v[0] + v[2] || e.bottom > v[1] + v[3]))
           warnings.push(`${b.id}: text "${String(el.text).slice(0, 30)}" reaches outside this beat's camera view.`);
+        // Through the camera, a label's size on screen is its size times the zoom.
+        const px = ((el.size ?? 48) * timing.width) / v[2] / (timing.width / 1920);
+        if (px < 22)
+          warnings.push(
+            `${b.id}: text "${String(el.text).slice(0, 30)}" renders at about ${Math.round(px)} px; make it at least ${Math.ceil((22 * v[2]) / 1920)} in world units.`,
+          );
       }
     const name = b.block === 'canvas' && b.props.world;
     if (!name) continue;
