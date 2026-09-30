@@ -21,7 +21,7 @@ Agent-directed motion graphics rendered natively with **FFFrames**. A film is on
   - `sketch`: eight canvas starting compositions.
   - `reference VIDEO`: the cut rhythm, keyframes, palette and motion of a film to borrow from.
   - `critique`: flags deck-like runs, stillness, text density, weak hooks and "and then" story chains.
-  - 28 playbooks as starting arcs, including `journey` (one drawing, a travelling camera).
+  - 29 playbooks as starting arcs, including `journey` (one drawing, a travelling camera) and `sizzle` (a brand reel).
 - **From material to film:**
   - `ingest --markdown` turns a research report (or HTML/DOCX/PDF) into an evidence brief of figures, sources, tensions and chart-ready tables.
   - `ingest --audio` turns a podcast or talk into gapless beats with measured word timings, speakers and live meters.
