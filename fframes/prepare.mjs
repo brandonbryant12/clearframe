@@ -214,10 +214,9 @@ function withoutCameraCuts(report, job) {
     edge = Math.ceil(0.8 * job.fps);
   const moves = job.beats.flatMap(b => {
     const out = [];
-    if (b.block === 'canvas' && b.props.viewFrom) {
-      const from = b.start_frame + Math.floor((b.props.viewAt ?? 0) * job.fps);
-      out.push([from, from + Math.ceil((b.props.viewDur ?? 1.2) * job.fps)]);
-    }
+    // A camera rect frames part of a larger drawing; cropping what lies outside is the point.
+    // job.mjs checks the beat's own text against its view instead.
+    if (b.block === 'canvas' && b.props.view?.length === 4) out.push([b.start_frame, b.start_frame + b.frames]);
     if (moving.includes(b.transition)) out.push([b.start_frame, b.start_frame + edge]);
     if (moving.includes(b.exit)) out.push([b.start_frame + b.frames - edge, b.start_frame + b.frames]);
     return out;
@@ -226,7 +225,9 @@ function withoutCameraCuts(report, job) {
     .split('\n')
     .filter(line => {
       const m = / \(frames (\d+)\.\.(\d+),.*cut off by the canvas edge/.exec(line);
-      return !m || !moves.some(([a, b]) => +m[1] >= a && +m[2] <= b);
+      // The renderer merges one text's sightings across beats; judge the range by its ends.
+      const inside = f => moves.some(([a, b]) => f >= a && f <= b);
+      return !m || !(inside(+m[1]) && inside(+m[2]));
     })
     .join('\n');
 }

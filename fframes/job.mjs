@@ -10,6 +10,7 @@ import {
   roughSpec,
   applyRough,
   TREATMENTS,
+  elementsExtent,
 } from './canvas.mjs';
 import {
   ENTRANCE,
@@ -148,7 +149,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   }
   // Author-drawn elements: resolve spoken cues and write exact times for the renderer.
   const scheduleArt = (list, start, stagger = 0) => {
-    const end = scheduleElements(list, { start, stagger, entrance, resolve: v => cue(v) });
+    const end = scheduleElements(list, { start, stagger, entrance, resolve: v => cue(v), limit: b.dur });
     eachElement(list, el => {
       if (el.at > b.dur - frame + 1e-7)
         throw new Error(
@@ -449,17 +450,30 @@ function linkMorphs(beats, sb, timing, { warnings }) {
 }
 
 /**
- * Consecutive canvas beats that name the same `world` are one continuous drawing: each beat
- * inherits everything drawn before (on its original clock, so loops and exits carry on), the
- * cut between them is invisible, and the camera travels from the last view to the new one.
+ * Canvas beats that name the same `world` are one drawing: each inherits everything drawn
+ * before (on its original clock, so loops and exits carry on) and the camera travels from
+ * the last view to the new one. Consecutive world beats cut invisibly; a world beat after
+ * an interruption (a kinetic card, a chart) returns to where the camera left off.
  */
 function linkWorlds(beats, sb, timing, { warnings }) {
-  const fps = timing.fps;
-  for (let i = 1; i < beats.length; i++) {
-    const a = beats[i - 1],
-      b = beats[i];
+  const fps = timing.fps,
+    last = new Map();
+  for (let i = 0; i < beats.length; i++) {
+    const b = beats[i];
+    // The camera crops the world on purpose, but a beat's own words must be in its shot.
+    const v = b.block === 'canvas' && b.props.view?.length === 4 && b.props.view;
+    if (v)
+      for (const el of b.props.elements.filter(el => el.type === 'text' && !el.carried)) {
+        const e = elementsExtent([el]);
+        if (e && (e.left < v[0] || e.top < v[1] || e.left + e.w > v[0] + v[2] || e.bottom > v[1] + v[3]))
+          warnings.push(`${b.id}: text "${String(el.text).slice(0, 30)}" reaches outside this beat's camera view.`);
+      }
     const name = b.block === 'canvas' && b.props.world;
-    if (!name || a.block !== 'canvas' || a.props.world !== name) continue;
+    if (!name) continue;
+    const a = last.get(name);
+    last.set(name, b);
+    if (!a) continue;
+    const adjacent = beats[i - 1] === a;
     const shift = (b.start_frame - a.start_frame) / fps;
     const carried = [],
       own = [];
@@ -470,13 +484,15 @@ function linkWorlds(beats, sb, timing, { warnings }) {
       ...b.props.elements,
     ];
     const src = sb.beats[timing.beats[i].index];
-    if (src.transition && src.transition !== 'cut')
-      warnings.push(
-        `${b.id}: continues world "${name}"; a ${src.transition} transition breaks the continuous camera, use cut.`,
-      );
-    else {
-      b.transition = 'cut';
-      a.exit = 'none';
+    if (adjacent) {
+      if (src.transition && src.transition !== 'cut')
+        warnings.push(
+          `${b.id}: continues world "${name}"; a ${src.transition} transition breaks the continuous camera, use cut.`,
+        );
+      else {
+        b.transition = 'cut';
+        a.exit = 'none';
+      }
     }
     if (!b.props.viewFrom && JSON.stringify(a.props.view) !== JSON.stringify(b.props.view)) {
       b.props.viewFrom = a.props.view;
@@ -487,7 +503,7 @@ function linkWorlds(beats, sb, timing, { warnings }) {
       b.settle_seconds = Math.max(b.settle_seconds, (b.props.viewAt ?? 0) + b.props.viewDur);
     }
     for (const [beat, s] of [
-      [a, sb.beats[timing.beats[i - 1].index]],
+      [a, sb.beats[timing.beats[beats.indexOf(a)].index]],
       [b, src],
     ])
       if (!s.camera) beat.camera = { move: 'none' };

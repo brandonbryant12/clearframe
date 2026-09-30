@@ -199,10 +199,10 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       el.keys.forEach((k, j) => {
         if (!k || typeof k !== 'object') fail(`${at}.keys[${j}] must be an object`);
         for (const key of Object.keys(k))
-          if (!['at', 'say', 'dur', 'ease', 'x', 'y', 'scale', 'rotate', 'opacity'].includes(key))
+          if (!['at', 'say', 'dur', 'ease', 'x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity'].includes(key))
             fail(`${at}.keys[${j}]: unsupported field ${key}`);
         if (k.at == null && k.say == null) fail(`${at}.keys[${j}] needs at (seconds) or say (spoken cue)`);
-        for (const key of ['at', 'dur', 'x', 'y', 'scale', 'rotate', 'opacity'])
+        for (const key of ['at', 'dur', 'x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity'])
           if (k[key] != null && !finite(k[key])) fail(`${at}.keys[${j}].${key} must be a number`);
         if (k.ease != null && !EASES.includes(k.ease)) fail(`${at}.keys[${j}].ease must be one of ${EASES.join(', ')}`);
         if (k.opacity != null && (k.opacity < 0 || k.opacity > 1)) fail(`${at}.keys[${j}].opacity must be 0–1`);
@@ -388,7 +388,7 @@ const defaultEnter = el =>
  * count, keyframe and path move has finished (ambient loops continue by design).
  * `resolve(value)` maps a number (seconds) or spoken phrase to scene seconds.
  */
-export function scheduleElements(list, { start, stagger = 0, entrance, resolve }) {
+export function scheduleElements(list, { start, stagger = 0, entrance, resolve, limit = Infinity }) {
   let settle = start;
   list.forEach((el, i) => {
     if (el.say != null) {
@@ -420,7 +420,8 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve }
       el.exitDur ??= entrance;
       if (el.exitAt < el.at)
         throw new Error(`an element exits (${el.exitAt.toFixed(2)}s) before it enters (${el.at.toFixed(2)}s)`);
-      settle = Math.max(settle, el.exitAt + el.exitDur);
+      // An exit timed after the beat (tidying a world while the camera is away) does not hold it.
+      if (el.exitAt < limit) settle = Math.max(settle, el.exitAt + el.exitDur);
     }
     for (const k of el.keys ?? []) {
       if (k.say != null) {
@@ -443,7 +444,7 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve }
     if (el.type === 'group')
       settle = Math.max(
         settle,
-        scheduleElements(el.children, { start: el.at, stagger: el.stagger ?? 0, entrance, resolve }),
+        scheduleElements(el.children, { start: el.at, stagger: el.stagger ?? 0, entrance, resolve, limit }),
       );
   });
   return settle;

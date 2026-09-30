@@ -476,7 +476,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             _ => {}
         }
         // Keyframed moves: each key starts at its time and eases from the previous state.
-        let mut key_pose = (0.0f32, 0.0f32, 1.0f32, 0.0f32, 1.0f32);
+        // (x, y, scale, rotate, opacity, scaleX, scaleY)
+        let mut key_pose = (0.0f32, 0.0f32, 1.0f32, 0.0f32, 1.0f32, 1.0f32, 1.0f32);
         for key in arr(el, "keys") {
             let start = f(key, "at", 0.0);
             if now < start {
@@ -490,12 +491,14 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 num(key, "scale").map_or(prev.2, |v| prev.2 + (v - prev.2) * k),
                 num(key, "rotate").map_or(prev.3, |v| prev.3 + (v - prev.3) * k),
                 num(key, "opacity").map_or(prev.4, |v| prev.4 + (v - prev.4) * k),
+                num(key, "scaleX").map_or(prev.5, |v| prev.5 + (v - prev.5) * k),
+                num(key, "scaleY").map_or(prev.6, |v| prev.6 + (v - prev.6) * k),
             );
         }
         pose.dx += key_pose.0;
         pose.dy += key_pose.1;
-        pose.sx *= key_pose.2;
-        pose.sy *= key_pose.2;
+        pose.sx *= key_pose.2 * key_pose.5;
+        pose.sy *= key_pose.2 * key_pose.6;
         pose.rotate += key_pose.3;
         pose.alpha *= key_pose.4.clamp(0.0, 1.0);
         // Travel along a path: the element's origin rides the outline, optionally turning.

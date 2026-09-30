@@ -77,7 +77,26 @@ export function critique(root) {
       first.id,
       'Opens with a greeting or preamble. Lead with the claim, number or question; greet later or never.',
     );
-  if (firstDur > 6) add('warn', first.id, `The hook runs ${firstDur.toFixed(1)} s. Land the first idea inside 3–5 s.`);
+  // What matters is when the first idea lands: a cued number or drawing, else the scene's end.
+  const cues = [first?.props?.land, ...(first?.props?.elements ?? []).map(el => el.say)].filter(
+    c => typeof c === 'string',
+  );
+  const words = t[0]?.vo?.words ?? [];
+  const landed = cues
+    .map(c =>
+      words.find(
+        w =>
+          w.w.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '') ===
+          c
+            .toLowerCase()
+            .split(/\s+/)[0]
+            .replace(/[^\p{L}\p{N}]/gu, ''),
+      ),
+    )
+    .filter(Boolean)
+    .map(w => w.t0 - (t[0]?.start ?? 0));
+  const lands = landed.length ? Math.min(...landed) : firstDur;
+  if (lands > 5.5) add('warn', first.id, `The first idea lands ${lands.toFixed(1)} s in. Land it inside 3–5 s.`);
   // Sameness.
   let run = 1;
   for (let i = 1; i < beats.length; i++) {
