@@ -63,6 +63,7 @@ export const SKETCHES = [
               stroke: 'bg',
               width: 6,
               at: round(0.3 + (draw * i) / (n - 1)),
+              ...(i === n - 1 ? { glow: { blur: 16 } } : {}),
             },
             // Vertical routes zigzag, so labels sit outside the curve; wide routes label below.
             tall(w, h)
@@ -133,6 +134,7 @@ export const SKETCHES = [
             r: round(R * 0.26),
             fill: 'accent',
             at: 0.3,
+            glow: { blur: 22, opacity: 0.7 },
             loop: { type: 'pulse', period: 2.4, amount: 0.04 },
           },
           {
@@ -297,7 +299,15 @@ export const SKETCHES = [
             at: 1.4,
             loop: { type: 'pulse', period: 1.6, amount: 0.15 },
           },
-          { type: 'circle', cx: P[0][0], cy: P[0][1], r: 48, fill: 'accent', at: 1.3 },
+          {
+            type: 'circle',
+            cx: P[0][0],
+            cy: P[0][1],
+            r: 48,
+            fill: 'accent',
+            at: 1.3,
+            glow: { blur: 18, opacity: 0.7 },
+          },
         ],
       };
     },
@@ -494,7 +504,7 @@ export const SKETCHES = [
             at: 0.7,
             dur: 0.6,
           },
-          { type: 'group', at: 1.0, stagger: 0.04, children: rays },
+          { type: 'group', at: 1.0, stagger: 0.04, children: rays, glow: { blur: 10, opacity: 0.6 } },
         ],
       };
     },
@@ -513,18 +523,22 @@ export const SKETCHES = [
       ];
       return {
         layer: 'under',
-        elements: blobs.map(([u, v, k, color], i) => ({
-          type: 'circle',
-          cx: round(u * w),
-          cy: round(v * h),
-          r: round(k * Math.max(w, h)),
-          fill: { gradient: [color, color], radial: true, fade: true },
-          opacity: 0.3,
-          enter: 'fade',
-          at: 0,
-          dur: 1.2,
-          loop: { type: i % 2 ? 'float' : 'orbit', period: 9 + i * 2.5, amount: 18 + i * 4 },
-        })),
+        elements: [
+          // A few specks of dust drift through: the held frame is never perfectly still.
+          { type: 'particles', x: 0, y: 0, w, h, kind: 'dust', count: 36, fill: 'ink', opacity: 0.35, size: 3, at: 0 },
+          ...blobs.map(([u, v, k, color], i) => ({
+            type: 'circle',
+            cx: round(u * w),
+            cy: round(v * h),
+            r: round(k * Math.max(w, h)),
+            fill: { gradient: [color, color], radial: true, fade: true },
+            opacity: 0.3,
+            enter: 'fade',
+            at: 0,
+            dur: 1.2,
+            loop: { type: i % 2 ? 'float' : 'orbit', period: 9 + i * 2.5, amount: 18 + i * 4 },
+          })),
+        ],
       };
     },
   },
