@@ -82,14 +82,22 @@
               0,
               0
             ],
-            "stroke": "ink",
             "width": 2,
             "glow": {
               "blur": 12,
               "color": "accent"
             },
             "at": 0.3,
-            "dur": 1.6
+            "dur": 1.6,
+            "shade": {
+              "light": [
+                -0.5,
+                -0.7,
+                0.6
+              ],
+              "ambient": 0.18
+            },
+            "fill": "accent"
           },
           {
             "type": "particles",
@@ -238,14 +246,22 @@
               0,
               0
             ],
-            "stroke": "ink",
             "width": 2.5,
             "glow": {
               "blur": 16,
               "color": "accent"
             },
             "at": 0,
-            "dur": 1.2
+            "dur": 1.2,
+            "shade": {
+              "light": [
+                -0.5,
+                -0.7,
+                0.6
+              ],
+              "ambient": 0.18
+            },
+            "fill": "accent"
           },
           {
             "type": "text",

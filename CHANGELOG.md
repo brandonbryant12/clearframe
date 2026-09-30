@@ -41,6 +41,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 
   They score 100 on the cinema score, up from 25–63. A beat's `art` can name a sketch (`{"sketch": "ambient"}`).
 - **Fixed:** `view: "auto"` on a canvas was mistaken for a camera rect (the string has four characters) and failed to render.
+- **Lit solids.** `shade` on a `solid` draws lit faces: back faces culled and far faces first, a key light over an ambient fill, a specular glint and highlighted edges. The product-reveal playbook's hero object is now lit.
 - **Fixes from a fresh model's first film** (a test: a new session made "The Last Mile" from the docs alone):
   - Film looks strip the pencil strokes an arc was scaffolded with (`beats.rough: false`).
   - Filled `path` and `poly` shapes no longer get an ink outline by default.

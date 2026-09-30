@@ -490,6 +490,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let verts = polyhedron(nonempty(s(el, "shape"), "icosa"));
         let p: Vec<[f32; 3]> = verts.iter().map(|v| rot(*v)).collect();
         let q: Vec<(f32, f32, f32)> = p.iter().map(|v| project(*v)).collect();
+        if let Some(shade) = el.get("shade").filter(|v| v.as_bool() == Some(true) || v.is_object()) {
+            return self.lit_solid(el, shade, &verts, &p, &q, draw, width, defs);
+        }
         let edges = edges_of(&verts);
         let total = edges.len().max(1) as f32;
         let mut order: Vec<usize> = (0..edges.len()).collect();
@@ -619,6 +622,133 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         }
         fframes::svgr!(<g>{nodes}</g>)
     }
+}
+
+impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
+    /// A solid with lit faces: back faces culled, far faces first, each shaded by a key
+    /// light (`light: [x, y, z]`, toward the viewer is +z) over an ambient fill, with a
+    /// specular glint and thin highlighted edges. Faces appear one after another as it draws.
+    #[allow(clippy::too_many_arguments)]
+    fn lit_solid(
+        &self,
+        el: &Value,
+        shade: &Value,
+        verts: &[[f32; 3]],
+        rotated: &[[f32; 3]],
+        projected: &[(f32, f32, f32)],
+        draw: f32,
+        width: f32,
+        defs: &mut Vec<Svgr<'a>>,
+    ) -> Svgr<'a> {
+        let mut hex = |v: Option<&Value>, fallback: &str| {
+            let c = self.paint(v, fallback, defs);
+            if c.starts_with('#') { c } else { self.p.accent.clone() }
+        };
+        let base = hex(el.get("fill").filter(|v| *v != "none").or(el.get("stroke")), "accent");
+        let edge_color = crate::design::mix(&base, "#ffffff", 0.55);
+        let light = {
+            let l = arr(shade, "light");
+            let v: [f32; 3] = if l.len() == 3 {
+                std::array::from_fn(|i| l[i].as_f64().unwrap_or(0.0) as f32)
+            } else {
+                [-0.45, -0.65, 0.75]
+            };
+            let n = (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]).sqrt().max(1e-3);
+            [v[0] / n, v[1] / n, v[2] / n]
+        };
+        let ambient = f(shade, "ambient", 0.22).clamp(0.0, 1.0);
+        let edges = shade.get("edges").and_then(Value::as_bool).unwrap_or(true);
+        let dot = |a: [f32; 3], b: [f32; 3]| a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+        let mut faces: Vec<(f32, Svgr<'a>)> = vec![];
+        let hull = faces_of(verts);
+        let total = hull.len().max(1) as f32;
+        for (i, face) in hull.iter().enumerate() {
+            // The face normal after rotation, from the rotated vertices themselves.
+            let c: [f32; 3] =
+                std::array::from_fn(|k| face.iter().map(|&v| rotated[v][k]).sum::<f32>() / face.len() as f32);
+            let n = {
+                let l = dot(c, c).sqrt().max(1e-6);
+                [c[0] / l, c[1] / l, c[2] / l]
+            };
+            if n[2] <= 0.02 {
+                continue;
+            }
+            let reveal = motion::clamp01(draw * total - i as f32);
+            if reveal <= 0.0 {
+                continue;
+            }
+            let diffuse = dot(n, light).max(0.0);
+            let lit = ambient + (1.0 - ambient) * diffuse;
+            // Blinn-Phong glint toward the viewer.
+            let half = {
+                let h = [light[0], light[1], light[2] + 1.0];
+                let l = dot(h, h).sqrt().max(1e-6);
+                [h[0] / l, h[1] / l, h[2] / l]
+            };
+            let glint = dot(n, half).max(0.0).powf(24.0);
+            let fill = crate::design::mix(&crate::design::mix("#000000", &base, lit.min(1.0)), "#ffffff", glint * 0.6);
+            let points = face
+                .iter()
+                .map(|&v| format!("{:.2},{:.2}", projected[v].0, projected[v].1))
+                .collect::<Vec<_>>()
+                .join(" ");
+            let node = if edges {
+                fframes::svgr!(<polygon points={points} fill={fill} stroke={edge_color.clone()} stroke-width={width * 0.6} stroke-opacity="0.55" stroke-linejoin="round" opacity={reveal} />)
+            } else {
+                fframes::svgr!(<polygon points={points} fill={fill} opacity={reveal} />)
+            };
+            faces.push((c[2], node));
+        }
+        faces.sort_by(|a, b| a.0.total_cmp(&b.0));
+        let nodes: Vec<Svgr<'a>> = faces.into_iter().map(|(_, n)| n).collect();
+        fframes::svgr!(<g>{nodes}</g>)
+    }
+}
+
+/// Faces of a convex solid with vertices on the unit sphere: every plane through three
+/// vertices with all the others behind it, merged into one polygon per plane and ordered
+/// around its centre.
+fn faces_of(v: &[[f32; 3]]) -> Vec<Vec<usize>> {
+    let sub = |a: [f32; 3], b: [f32; 3]| [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+    let cross =
+        |a: [f32; 3], b: [f32; 3]| [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+    let dot = |a: [f32; 3], b: [f32; 3]| a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    let n = v.len();
+    let mut normals: Vec<[f32; 3]> = vec![];
+    let mut faces = vec![];
+    for i in 0..n {
+        for j in i + 1..n {
+            for k in j + 1..n {
+                let c = cross(sub(v[j], v[i]), sub(v[k], v[i]));
+                let len = dot(c, c).sqrt();
+                if len < 1e-6 {
+                    continue;
+                }
+                let mut nrm = [c[0] / len, c[1] / len, c[2] / len];
+                let mut d = dot(nrm, v[i]);
+                if d < 0.0 {
+                    nrm = [-nrm[0], -nrm[1], -nrm[2]];
+                    d = -d;
+                }
+                if v.iter().any(|p| dot(nrm, *p) > d + 1e-4) || normals.iter().any(|m| dot(*m, nrm) > 0.9999) {
+                    continue;
+                }
+                normals.push(nrm);
+                let on: Vec<usize> = (0..n).filter(|&q| (dot(nrm, v[q]) - d).abs() < 1e-4).collect();
+                let centre: [f32; 3] =
+                    std::array::from_fn(|a| on.iter().map(|&q| v[q][a]).sum::<f32>() / on.len() as f32);
+                let u = sub(v[on[0]], centre);
+                let w = cross(nrm, u);
+                let mut ordered = on.clone();
+                ordered.sort_by(|&a, &b| {
+                    let (pa, pb) = (sub(v[a], centre), sub(v[b], centre));
+                    dot(pa, w).atan2(dot(pa, u)).total_cmp(&dot(pb, w).atan2(dot(pb, u)))
+                });
+                faces.push(ordered);
+            }
+        }
+    }
+    faces
 }
 
 /// Unit-radius vertices of the regular solids.
