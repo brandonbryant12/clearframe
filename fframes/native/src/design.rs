@@ -16,6 +16,12 @@ pub const PRESETS: &[(&str, [&str; 8])] = &[
     ("forest", ["#0f1d17", "#1c3128", "#eef5ee", "#a6bcae", "#a3dc7f", "#f2c35b", "#a3dc7f", "#f39b84"]),
     ("ember", ["#1b1311", "#2c201b", "#fbefe6", "#c9ae9e", "#ff8a57", "#ffd27a", "#8fd3aa", "#ff8f85"]),
     ("mono", ["#fafafa", "#ececec", "#111111", "#595959", "#d12f1f", "#111111", "#1d7a4f", "#d12f1f"]),
+    ("pop", ["#ffd84a", "#ffe685", "#141414", "#4a3f12", "#b01030", "#1d3fbf", "#0f6b3a", "#b3122b"]),
+    ("electric", ["#08080f", "#16162a", "#f4f4ff", "#a6a8c8", "#5cf2d6", "#ff5ccd", "#5cf2a0", "#ff7a90"]),
+    ("blueprint", ["#0d2b52", "#173d6e", "#f1f6ff", "#a9c1e3", "#7fd4ff", "#ffd166", "#8ee3b4", "#ff9e8f"]),
+    ("clay", ["#efe3d6", "#e2d2c1", "#2b1d17", "#6b5446", "#a8431f", "#2e5f6e", "#3f6b43", "#a8431f"]),
+    ("noir", ["#111111", "#1d1d1d", "#f2efe9", "#a39e96", "#e9c46a", "#e76f51", "#8fbf9f", "#e76f51"]),
+    ("sketchbook", ["#f2ecdf", "#e6dece", "#433e39", "#6d655c", "#c2344d", "#3a67b3", "#3b7449", "#c2344d"]),
 ];
 const KEYS: [&str; 8] = ["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative"];
 
@@ -45,6 +51,23 @@ impl Palette {
         let dark = luminance(&bg) < 0.18;
         Self { bg, surface: get(1), ink: get(2), muted: get(3), accent: get(4), accent2: get(5),
             positive: get(6), negative: get(7), dark }
+    }
+    /// A colour-blocked variant: the frame takes `accent`, `accent2`, the inverse or the
+    /// surface colour, and text/accent colours are re-chosen to stay readable on it.
+    pub fn toned(self, tone: &str) -> Self {
+        let bg = match tone {
+            "accent" => self.accent.clone(), "accent2" => self.accent2.clone(), "invert" => self.ink.clone(),
+            "surface" => self.surface.clone(), _ => return self,
+        };
+        let ink = if contrast(&self.ink, &bg) >= contrast(&self.bg, &bg) { self.ink.clone() } else { self.bg.clone() };
+        let best = |options: &[&str], min: f32| -> String {
+            options.iter().copied().find(|c| contrast(c, &bg) >= min).unwrap_or(ink.as_str()).to_owned()
+        };
+        let accent = best(&[&self.accent, &self.accent2], 3.0);
+        let accent2 = best(&[&self.accent2, &self.accent], 3.0);
+        let (positive, negative) = (best(&[&self.positive], 3.0), best(&[&self.negative], 3.0));
+        Self { surface: mix(&bg, &ink, 0.1), muted: mix(&ink, &bg, 0.32), positive, negative,
+            dark: luminance(&bg) < 0.18, accent, accent2, ink, bg }
     }
     /// Hairlines for axes, rails and dividers: between surface and muted.
     pub fn line(&self) -> String { mix(&self.surface, &self.muted, if self.dark { 0.32 } else { 0.28 }) }
@@ -82,6 +105,11 @@ pub fn mix(a: &str, b: &str, t: f32) -> String {
     }
 }
 
+pub fn contrast(a: &str, b: &str) -> f32 {
+    let (x, y) = (luminance(a), luminance(b));
+    (x.max(y) + 0.05) / (x.min(y) + 0.05)
+}
+
 pub fn luminance(hex: &str) -> f32 {
     let Some(rgb) = parse(hex) else { return 1.0 };
     let linear = rgb.map(|v| if v <= 0.04045 { v / 12.92 } else { ((v + 0.055) / 1.055).powf(2.4) });
@@ -108,9 +136,30 @@ pub fn backdrop<'a>(kind: &str, w: f32, h: f32, p: &Palette, seconds: f32) -> Sv
             }
         }
         "glow" => return glow(w, h, p, seconds),
+        "paper" => return paper(w, h, p),
         _ => {}
     }
     fframes::svgr!(<g opacity="0.09">{shapes}</g>)
+}
+
+/// Drawing paper: soft blotches and fine fibres over the palette background. Static, so it
+/// costs almost nothing to encode.
+fn paper<'a>(w: f32, h: f32, p: &Palette) -> Svgr<'a> {
+    let tone = if p.dark { "#ffffff" } else { "#6b5a3e" };
+    fframes::svgr!(<g>
+        <defs>
+            <filter id="cf-paper-blotch" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.004" numOctaves="3" seed="11" />
+                <feColorMatrix type="matrix" values="0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1.4 -0.55" />
+            </filter>
+            <filter id="cf-paper-fibre" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.9 0.06" numOctaves="2" seed="4" />
+                <feColorMatrix type="matrix" values="0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 2.2 -1.25" />
+            </filter>
+        </defs>
+        <rect width={w} height={h} fill={tone.to_owned()} filter="url(#cf-paper-blotch)" opacity="0.07" />
+        <rect width={w} height={h} fill={tone.to_owned()} filter="url(#cf-paper-fibre)" opacity="0.08" />
+    </g>)
 }
 
 /// Two broad, slowly drifting light pools in the palette's accents. Periods are long and
@@ -138,6 +187,60 @@ fn glow<'a>(w: f32, h: f32, p: &Palette, seconds: f32) -> Svgr<'a> {
     </g>)
 }
 
+/// Film-wide surface: a vignette under the scenes and optional grain over everything.
+/// Grain is static unless `animate` is set, when it changes eight times a second (a filmic
+/// flicker that costs encoder bits; keep it for films that want a tactile look).
+pub fn texture<'a>(texture: &Value, w: f32, h: f32, p: &Palette, seconds: f32) -> (Svgr<'a>, Svgr<'a>) {
+    let amount = |key: &str| -> f32 {
+        match texture {
+            Value::String(s) => match (s.as_str(), key) { ("film", _) => 0.6, ("grain", "grain") | ("vignette", "vignette") => 0.6, _ => 0.0 },
+            Value::Object(_) => texture.get(key).and_then(Value::as_f64).unwrap_or(0.0).clamp(0.0, 1.0) as f32,
+            _ => 0.0,
+        }
+    };
+    let (grain, vignette) = (amount("grain"), amount("vignette"));
+    let animate = texture.get("animate").and_then(Value::as_bool).unwrap_or(texture.as_str() == Some("film"));
+    let vignette_node = if vignette > 0.0 {
+        let edge = if p.dark { "#000000" } else { p.ink.as_str() };
+        let strength = vignette * if p.dark { 0.55 } else { 0.22 };
+        fframes::svgr!(<g>
+            <defs><radialGradient id="cf-vignette" gradientUnits="userSpaceOnUse" cx={w / 2.0} cy={h / 2.0} r={(w * w + h * h).sqrt() * 0.56}>
+                <stop offset="0.45" stop-color={edge.to_owned()} stop-opacity="0" />
+                <stop offset="1" stop-color={edge.to_owned()} stop-opacity={strength} />
+            </radialGradient></defs>
+            <rect width={w} height={h} fill="url(#cf-vignette)" />
+        </g>)
+    } else { fframes::svgr!(<g />) };
+    let grain_node = if grain > 0.0 {
+        let seed = if animate { (seconds * 8.0).floor() as i32 % 97 + 1 } else { 7 };
+        let opacity = grain * if p.dark { 0.16 } else { 0.12 };
+        fframes::svgr!(<g opacity={opacity}>
+            <defs><filter id="cf-grain" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed={seed} stitchTiles="stitch" />
+                <feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 0 1" />
+            </filter></defs>
+            <rect width={w} height={h} filter="url(#cf-grain)" mix-blend-mode="overlay" />
+        </g>)
+    } else { fframes::svgr!(<g />) };
+    (vignette_node, grain_node)
+}
+
+/// A labelled coordinate grid for placing art: thin lines every 100 px, labels every 200.
+pub fn guides<'a>(w: f32, h: f32) -> Svgr<'a> {
+    let mut nodes = vec![];
+    for x in (0..=w as usize).step_by(100) {
+        let major = x % 200 == 0;
+        nodes.push(fframes::svgr!(<line x1={x} x2={x} y1="0" y2={h} stroke="#ff2d7a" stroke-width={if major { 1.4 } else { 0.7 }} opacity="0.55" />));
+        if major && x > 0 { nodes.push(fframes::svgr!(<text x={x as f32 + 4.0} y="22" font-family="Inter" font-size="18" font-weight="600" fill="#ff2d7a">{x.to_string()}</text>)); }
+    }
+    for y in (0..=h as usize).step_by(100) {
+        let major = y % 200 == 0;
+        nodes.push(fframes::svgr!(<line x1="0" x2={w} y1={y} y2={y} stroke="#ff2d7a" stroke-width={if major { 1.4 } else { 0.7 }} opacity="0.55" />));
+        if major && y > 0 { nodes.push(fframes::svgr!(<text x="4" y={y as f32 - 4.0} font-family="Inter" font-size="18" font-weight="600" fill="#ff2d7a">{y.to_string()}</text>)); }
+    }
+    fframes::svgr!(<g>{nodes}</g>)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -158,6 +261,16 @@ mod tests {
         assert_eq!(mix("nope", "#ffffff", 0.5), "nope");
         assert_eq!(parse("#aébbb"), None, "non-ASCII input must not panic on a char boundary");
         assert_eq!(parse("#12345g"), None);
+    }
+    #[test]
+    fn toned_scenes_keep_readable_text_on_their_new_background() {
+        for (name, _) in PRESETS {
+            for tone in ["accent", "accent2", "invert", "surface"] {
+                let p = Palette::from_theme(&Value::String((*name).into())).toned(tone);
+                assert!(contrast(&p.ink, &p.bg) >= 3.0, "{name}/{tone} ink {}", contrast(&p.ink, &p.bg));
+                assert!(contrast(&p.accent, &p.bg) >= 1.5, "{name}/{tone} accent");
+            }
+        }
     }
     #[test]
     fn every_preset_keeps_readable_text_contrast() {

@@ -1,0 +1,1057 @@
+//! Author-drawn vector scenes. A `canvas` beat (or any beat's `art` layer) is a list of
+//! shapes, paths, text, icons, images and groups, each with an entrance, optional keyframed
+//! moves, an ambient loop and an exit. It is how a film shows a metaphor, map, mechanism or
+//! illustration the fixed blocks cannot. Every value is a pure function of scene seconds and
+//! prepared props, so seeking backwards reproduces the same frame.
+use super::*;
+use kurbo::{BezPath, ParamCurveArclen, PathEl, Shape};
+use std::collections::HashMap;
+use std::f32::consts::{PI, TAU};
+use std::sync::Mutex;
+
+pub(crate) const MAX_ELEMENTS: usize = 240;
+const TYPES: &[&str] = &["rect", "circle", "ellipse", "line", "path", "poly", "text", "icon", "image", "group", "meter", "spotlight"];
+const ENTERS: &[&str] = &["fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type", "scramble", "blur", "none"];
+const EXITS: &[&str] = &["fade", "shrink", "fall", "lift", "undraw", "wipe", "blur", "none"];
+const LOOPS: &[&str] = &["spin", "pulse", "float", "sway", "orbit", "dash", "blink", "level"];
+const TOKENS: &[&str] = &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "none"];
+
+/// A path's normalized data, flattened outline (for length and arrow tips) and bounds.
+struct PathInfo { d: String, points: Vec<Vec<(f32, f32)>>, length: f32, bounds: (f32, f32, f32, f32) }
+
+fn path_cache() -> &'static Mutex<HashMap<String, std::sync::Arc<PathInfo>>> {
+    static CACHE: std::sync::OnceLock<Mutex<HashMap<String, std::sync::Arc<PathInfo>>>> = std::sync::OnceLock::new();
+    CACHE.get_or_init(|| Mutex::new(HashMap::new()))
+}
+
+/// Parse authored path data once; the renderer draws kurbo's normalized absolute form so
+/// validation and drawing agree on every command (arcs become cubic curves).
+fn path_info(d: &str) -> Option<std::sync::Arc<PathInfo>> {
+    if let Some(hit) = path_cache().lock().ok()?.get(d) { return Some(hit.clone()); }
+    if d.len() > 12_000 { return None; }
+    let path = BezPath::from_svg(d).ok()?;
+    if path.elements().is_empty() || path.elements().len() > 4000 { return None; }
+    let mut contours: Vec<Vec<(f32, f32)>> = vec![];
+    kurbo::flatten(path.iter(), 0.35, |el| match el {
+        PathEl::MoveTo(p) => contours.push(vec![(p.x as f32, p.y as f32)]),
+        PathEl::LineTo(p) => { if let Some(c) = contours.last_mut() { c.push((p.x as f32, p.y as f32)); } }
+        PathEl::ClosePath => { if let Some(c) = contours.last_mut() { if let Some(&first) = c.first() { c.push(first); } } }
+        _ => {}
+    });
+    if contours.iter().flatten().any(|(x, y)| !x.is_finite() || !y.is_finite()) { return None; }
+    let length: f64 = path.segments().map(|s| s.arclen(0.05)).sum();
+    let r = path.bounding_box();
+    let info = std::sync::Arc::new(PathInfo { d: path.to_svg(), points: contours, length: length as f32,
+        bounds: (r.x0 as f32, r.y0 as f32, (r.x1 - r.x0) as f32, (r.y1 - r.y0) as f32) });
+    if let Ok(mut cache) = path_cache().lock() { cache.insert(d.to_owned(), info.clone()); }
+    Some(info)
+}
+
+fn num(v: &Value, key: &str) -> Option<f32> { v.get(key).and_then(Value::as_f64).map(|x| x as f32) }
+fn f(v: &Value, key: &str, default: f32) -> f32 { num(v, key).unwrap_or(default) }
+fn points(v: &Value) -> Vec<(f32, f32)> {
+    arr(v, "points").iter().filter_map(|p| {
+        let pair = p.as_array()?;
+        Some((pair.first()?.as_f64()? as f32, pair.get(1)?.as_f64()? as f32))
+    }).collect()
+}
+fn finite(v: &Value) -> bool {
+    match v {
+        Value::Number(n) => n.as_f64().is_some_and(f64::is_finite),
+        Value::Array(a) => a.iter().all(finite),
+        Value::Object(o) => o.values().all(finite),
+        _ => true,
+    }
+}
+fn paint_ok(v: Option<&Value>) -> bool {
+    match v {
+        None => true,
+        Some(Value::String(s)) => TOKENS.contains(&s.as_str()) || crate::design::parse(s).is_some(),
+        Some(Value::Object(g)) => {
+            let stops = g.get("gradient").and_then(Value::as_array);
+            stops.is_some_and(|s| (2..=4).contains(&s.len()) && s.iter().all(|c| c.as_str().is_some_and(|c| c != "none" && paint_ok(Some(&Value::String(c.to_owned()))))))
+        }
+        _ => false,
+    }
+}
+
+/// Structural checks so a hand-written job cannot reach an undrawable state. The catalog
+/// gives the friendlier, author-facing messages first.
+pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut usize) -> Result<(), &'static str> {
+    if depth > 4 { return Err("canvas groups nest at most four levels"); }
+    for el in elements {
+        *count += 1;
+        if *count > MAX_ELEMENTS { return Err("canvas supports at most 240 elements"); }
+        if !el.is_object() || !finite(el) { return Err("canvas elements must be objects with finite numbers"); }
+        let kind = s(el, "type");
+        if !TYPES.contains(&kind) { return Err("unknown canvas element type"); }
+        let enter = s(el, "enter");
+        if !enter.is_empty() && !ENTERS.contains(&enter) { return Err("unknown canvas entrance"); }
+        let exit = s(el, "exit");
+        if !exit.is_empty() && !EXITS.contains(&exit) { return Err("unknown canvas exit"); }
+        if let Some(l) = el.get("loop") { if !LOOPS.contains(&s(l, "type")) || f(l, "period", 4.0) <= 0.05 { return Err("canvas loops need a known type and a positive period"); } }
+        if !paint_ok(el.get("fill")) || !paint_ok(el.get("stroke")) { return Err("canvas colors must be palette tokens, #rrggbb or a gradient of tokens"); }
+        for key in ["at", "dur", "exitAt", "exitDur"] { if num(el, key).is_some_and(|v| v < 0.0) { return Err("canvas times must be nonnegative"); } }
+        if f(el, "opacity", 1.0) < 0.0 || f(el, "opacity", 1.0) > 1.0 { return Err("canvas opacity must be 0–1"); }
+        if el.get("along").is_some_and(|route| path_info(s(route, "d")).is_none()) { return Err("canvas along needs parseable path data"); }
+        if let Some(m) = el.get("morph") { validate_elements(std::slice::from_ref(&m["from"]), depth + 1, count)?; }
+        if let Some(echo) = el.get("echo") {
+            if !echo.is_object() || !(1.0..=24.0).contains(&n(echo, "count", 6.0)) || n(echo, "lag", 0.0) < 0.0
+                || echo.get("to").is_some_and(|t| !paint_ok(Some(t))) { return Err("canvas echo needs count 1–24, a nonnegative lag and a palette colour"); }
+        }
+        match kind {
+            "path" => if path_info(s(el, "d")).is_none() { return Err("canvas path data could not be parsed"); },
+            "poly" => if points(el).len() < 2 || points(el).len() > 400 { return Err("canvas poly needs 2–400 points"); },
+            "icon" => if !crate::icons::supported(s(el, "name")) { return Err("unsupported native icon"); },
+            "meter" => if !["", "bars", "mirror", "ring", "wave"].contains(&s(el, "style")) || f(el, "w", 0.0) <= 0.0 || f(el, "h", 0.0) <= 0.0 { return Err("canvas meter needs w, h and style bars|mirror|ring|wave"); },
+            "text" => if s(el, "text").chars().count() > 240 && el.get("count").is_none() { return Err("canvas text is limited to 240 characters"); },
+            "image" => if s(el, "file").is_empty() { return Err("canvas images need a prepared file"); },
+            "group" => validate_elements(arr(el, "children"), depth + 1, count)?,
+            _ => {}
+        }
+    }
+    Ok(())
+}
+
+pub(crate) fn validate(props: &Value) -> Result<(), &'static str> {
+    let view = arr(props, "view");
+    if !view.is_empty() && (view.len() != 2 || view.iter().any(|v| !v.as_f64().is_some_and(|v| v.is_finite() && v >= 16.0))) {
+        return Err("canvas view must be [width, height]");
+    }
+    let mut count = 0;
+    validate_elements(arr(props, "elements"), 0, &mut count)?;
+    if count == 0 { return Err("canvas needs at least one element"); }
+    Ok(())
+}
+
+#[derive(Clone, Copy, Default)]
+struct Pose { dx: f32, dy: f32, sx: f32, sy: f32, rotate: f32, alpha: f32 }
+impl Pose {
+    fn identity() -> Self { Pose { sx: 1.0, sy: 1.0, alpha: 1.0, ..Default::default() } }
+}
+
+fn ease(name: &str, x: f32) -> f32 {
+    match name {
+        "linear" => motion::clamp01(x),
+        "in" => motion::in_cubic(x),
+        "out" => motion::out_quart(x),
+        "spring" => motion::spring(x),
+        _ => motion::in_out_cubic(x),
+    }
+}
+
+/// Element bounds in author units: (x, y, w, h).
+fn bounds(el: &Value) -> (f32, f32, f32, f32) {
+    match s(el, "type") {
+        "rect" | "image" | "meter" => (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0), f(el, "h", 0.0)),
+        "spotlight" if el.get("cx").is_some() => { let r = f(el, "r", 0.0); (f(el, "cx", 0.0) - r, f(el, "cy", 0.0) - r, 2.0 * r, 2.0 * r) }
+        "spotlight" => (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0), f(el, "h", 0.0)),
+        "circle" => { let r = f(el, "r", 0.0); (f(el, "cx", 0.0) - r, f(el, "cy", 0.0) - r, 2.0 * r, 2.0 * r) }
+        "ellipse" => { let (rx, ry) = (f(el, "rx", 0.0), f(el, "ry", 0.0)); (f(el, "cx", 0.0) - rx, f(el, "cy", 0.0) - ry, 2.0 * rx, 2.0 * ry) }
+        "line" => {
+            let (x1, y1, x2, y2) = (f(el, "x1", 0.0), f(el, "y1", 0.0), f(el, "x2", 0.0), f(el, "y2", 0.0));
+            (x1.min(x2), y1.min(y2), (x2 - x1).abs(), (y2 - y1).abs())
+        }
+        "poly" => {
+            let pts = points(el);
+            let (x0, x1) = pts.iter().fold((f32::MAX, f32::MIN), |(a, b), p| (a.min(p.0), b.max(p.0)));
+            let (y0, y1) = pts.iter().fold((f32::MAX, f32::MIN), |(a, b), p| (a.min(p.1), b.max(p.1)));
+            (x0, y0, x1 - x0, y1 - y0)
+        }
+        "path" => path_info(s(el, "d")).map_or((0.0, 0.0, 0.0, 0.0), |p| p.bounds),
+        "icon" => { let size = f(el, "size", 64.0); (f(el, "x", 0.0) - size / 2.0, f(el, "y", 0.0) - size / 2.0, size, size) }
+        "text" => {
+            let size = f(el, "size", 48.0);
+            let width = num(el, "width").unwrap_or_else(|| text::measure(text_font(el), s(el, "text"), size, 0.0));
+            let x = f(el, "x", 0.0) - match s(el, "anchor") { "middle" => width / 2.0, "end" => width, _ => 0.0 };
+            (x, f(el, "y", 0.0) - size * 0.8, width, size)
+        }
+        "group" => {
+            let (gx, gy) = (f(el, "x", 0.0), f(el, "y", 0.0));
+            let mut acc: Option<(f32, f32, f32, f32)> = None;
+            for child in arr(el, "children") {
+                let (x, y, w, h) = bounds(child);
+                acc = Some(match acc { None => (x, y, x + w, y + h), Some((a, b, c, d)) => (a.min(x), b.min(y), c.max(x + w), d.max(y + h)) });
+            }
+            acc.map_or((gx, gy, 0.0, 0.0), |(a, b, c, d)| (a + gx, b + gy, c - a, d - b))
+        }
+        _ => (0.0, 0.0, 0.0, 0.0),
+    }
+}
+
+fn text_font(el: &Value) -> Font {
+    match s(el, "font") {
+        "text" | "regular" => Font::Text, "strong" => Font::TextStrong, "light" => Font::DisplayLight,
+        "bold" => Font::DisplayBold, "figures" => Font::Figures, "display" | "semibold" => Font::Display,
+        "serif" => Font::Serif, "serif-italic" | "italic" => Font::SerifItalic, "mono" => Font::Mono, "hand" => Font::Hand,
+        _ => if el.get("count").is_some() { Font::Figures } else if f(el, "size", 48.0) >= 40.0 { Font::Display } else { Font::Text },
+    }
+}
+
+/// Stroke length used for draw-on entrances.
+fn stroke_length(el: &Value) -> f32 {
+    match s(el, "type") {
+        "rect" => { let (w, h, r) = (f(el, "w", 0.0), f(el, "h", 0.0), f(el, "r", 0.0).min(f(el, "w", 0.0) / 2.0).min(f(el, "h", 0.0) / 2.0)); 2.0 * (w + h) - 8.0 * r + TAU * r }
+        "circle" => TAU * f(el, "r", 0.0),
+        "ellipse" => { let (a, b) = (f(el, "rx", 0.0), f(el, "ry", 0.0)); PI * (3.0 * (a + b) - ((3.0 * a + b) * (a + 3.0 * b)).max(0.0).sqrt()) }
+        "line" => (f(el, "x2", 0.0) - f(el, "x1", 0.0)).hypot(f(el, "y2", 0.0) - f(el, "y1", 0.0)),
+        "poly" => {
+            let mut pts = points(el);
+            if el.get("closed").and_then(Value::as_bool).unwrap_or(false) { if let Some(&p) = pts.first() { pts.push(p); } }
+            pts.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum()
+        }
+        "path" => path_info(s(el, "d")).map_or(0.0, |p| p.length),
+        _ => 0.0,
+    }
+}
+
+/// The outline an arrowhead follows: the last contour of a path/poly/line.
+fn outline(el: &Value) -> Vec<(f32, f32)> {
+    match s(el, "type") {
+        "line" => vec![(f(el, "x1", 0.0), f(el, "y1", 0.0)), (f(el, "x2", 0.0), f(el, "y2", 0.0))],
+        "poly" => points(el),
+        "path" => path_info(s(el, "d")).and_then(|p| p.points.iter().rev().find(|c| c.len() > 1).cloned()).unwrap_or_default(),
+        _ => vec![],
+    }
+}
+
+/// `n` points spaced evenly by arc length along a polyline.
+fn resample(points: &[(f32, f32)], n: usize) -> Vec<(f32, f32)> {
+    if points.len() < 2 { return vec![points.first().copied().unwrap_or((0.0, 0.0)); n]; }
+    (0..n).map(|i| along(points, i as f32 / (n - 1) as f32).map_or(points[0], |(p, _)| p)).collect()
+}
+
+/// Outline of a morphable element as a polyline (closed shapes repeat their first point).
+fn morph_outline(el: &Value) -> Option<(Vec<(f32, f32)>, bool)> {
+    match s(el, "type") {
+        "path" => path_info(s(el, "d")).and_then(|p| p.points.iter().max_by_key(|c| c.len()).cloned()).map(|c| { let closed = c.first() == c.last(); (c, closed) }),
+        "poly" => { let mut p = points(el); let closed = el.get("closed").and_then(Value::as_bool).unwrap_or(false); if closed { if let Some(&a) = p.first() { p.push(a); } } Some((p, closed)) }
+        "line" => Some((vec![(f(el, "x1", 0.0), f(el, "y1", 0.0)), (f(el, "x2", 0.0), f(el, "y2", 0.0))], false)),
+        "circle" | "ellipse" => {
+            let (cx, cy) = (f(el, "cx", 0.0), f(el, "cy", 0.0));
+            let (rx, ry) = if s(el, "type") == "circle" { (f(el, "r", 0.0), f(el, "r", 0.0)) } else { (f(el, "rx", 0.0), f(el, "ry", 0.0)) };
+            Some(((0..=96).map(|i| { let a = i as f32 / 96.0 * TAU - PI / 2.0; (cx + rx * a.cos(), cy + ry * a.sin()) }).collect(), true))
+        }
+        "rect" => {
+            let (x, y, w, h) = (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0), f(el, "h", 0.0));
+            Some((vec![(x + w / 2.0, y), (x + w, y), (x + w, y + h), (x, y + h), (x, y), (x + w / 2.0, y)], true))
+        }
+        _ => None,
+    }
+}
+
+/// Deterministic noise in [-1, 1] (splitmix64): the same seed and index always agree, so a
+/// hand-drawn line is identical on every seek.
+fn noise(seed: u64, i: u64) -> f32 {
+    let mut z = seed.wrapping_add(i.wrapping_mul(0x9E37_79B9_7F4A_7C15));
+    z = (z ^ (z >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
+    z = (z ^ (z >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
+    z ^= z >> 31;
+    (z >> 11) as f32 / (1u64 << 53) as f32 * 2.0 - 1.0
+}
+
+/// A pencil pass along polylines: points every ~22 units nudged sideways, ends overshooting a
+/// little, joined with smooth quadratics.
+fn rough_contour(points: &[(f32, f32)], amount: f32, seed: u64) -> String {
+    if points.len() < 2 { return String::new(); }
+    let mut dense = vec![];
+    for (k, w) in points.windows(2).enumerate() {
+        let (a, b) = (w[0], w[1]);
+        let len = (b.0 - a.0).hypot(b.1 - a.1);
+        let n = ((len / 22.0).ceil() as usize).max(1);
+        let (nx, ny) = if len > 1e-3 { (-(b.1 - a.1) / len, (b.0 - a.0) / len) } else { (0.0, 0.0) };
+        for j in 0..n {
+            let t = j as f32 / n as f32;
+            let i = (k * 97 + j) as u64;
+            let wobble = amount * noise(seed, i) * (0.6 + 0.4 * (len / 200.0).min(1.0));
+            dense.push((a.0 + (b.0 - a.0) * t + nx * wobble, a.1 + (b.1 - a.1) * t + ny * wobble));
+        }
+    }
+    let last = *points.last().unwrap();
+    dense.push((last.0 + amount * 0.6 * noise(seed, 7001), last.1 + amount * 0.6 * noise(seed, 7002)));
+    // Overshoot the start along the first direction, as a hand does.
+    let (a, b) = (dense[0], dense[1.min(dense.len() - 1)]);
+    let over = amount * 1.2 * (0.5 + 0.5 * noise(seed, 7003));
+    let len = (b.0 - a.0).hypot(b.1 - a.1).max(1e-3);
+    let start = (a.0 - (b.0 - a.0) / len * over, a.1 - (b.1 - a.1) / len * over);
+    let mut d = format!("M {:.1} {:.1}", start.0, start.1);
+    for w in dense.windows(2) {
+        let mid = ((w[0].0 + w[1].0) / 2.0, (w[0].1 + w[1].1) / 2.0);
+        d.push_str(&format!(" Q {:.1} {:.1} {:.1} {:.1}", w[0].0, w[0].1, mid.0, mid.1));
+    }
+    d.push_str(&format!(" L {:.1} {:.1}", last.0, last.1));
+    d
+}
+
+/// Contours of a stroked shape for rough rendering (closed shapes repeat their first point).
+fn contours_of(el: &Value) -> Vec<Vec<(f32, f32)>> {
+    match s(el, "type") {
+        "path" => path_info(s(el, "d")).map(|p| p.points.clone()).unwrap_or_default(),
+        _ => morph_outline(el).map(|(c, _)| vec![c]).unwrap_or_default(),
+    }
+}
+
+/// An open chevron whose point is at (x, y), facing `angle`.
+fn arrowhead(x: f32, y: f32, angle: f32, head: f32) -> String {
+    format!("M {} {} L {x} {y} L {} {}",
+        x - head * (angle - PI / 6.5).cos(), y - head * (angle - PI / 6.5).sin(),
+        x - head * (angle + PI / 6.5).cos(), y - head * (angle + PI / 6.5).sin())
+}
+
+/// Point and direction at `fraction` of a polyline's length.
+fn along(points: &[(f32, f32)], fraction: f32) -> Option<((f32, f32), f32)> {
+    let total: f32 = points.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum();
+    if total <= 0.0 { return None; }
+    let mut remaining = total * fraction.clamp(0.0, 1.0);
+    for w in points.windows(2) {
+        let seg = (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1);
+        if seg <= 1e-6 { continue; }
+        if remaining <= seg || std::ptr::eq(w, points.windows(2).last()?) {
+            let t = (remaining / seg).clamp(0.0, 1.0);
+            let p = (w[0].0 + (w[1].0 - w[0].0) * t, w[0].1 + (w[1].1 - w[0].1) * t);
+            return Some((p, (w[1].1 - w[0].1).atan2(w[1].0 - w[0].0)));
+        }
+        remaining -= seg;
+    }
+    None
+}
+
+impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
+    /// A palette token, hex color or gradient object as an SVG paint.
+    fn paint(&self, value: Option<&Value>, fallback: &str, defs: &mut Vec<Svgr<'a>>) -> String {
+        let p = &self.p;
+        let token = |name: &str| -> String {
+            match name {
+                "bg" => p.bg.clone(), "surface" => p.surface.clone(), "ink" => p.ink.clone(), "muted" => p.muted.clone(),
+                "accent" => p.accent.clone(), "accent2" => p.accent2.clone(), "positive" => p.positive.clone(),
+                "negative" => p.negative.clone(), "line" => p.line(), "wash" => p.wash(&p.accent), "wash2" => p.wash(&p.accent2),
+                "none" => "none".into(),
+                hex if crate::design::parse(hex).is_some() => hex.to_owned(),
+                _ => fallback.to_owned(),
+            }
+        };
+        match value {
+            Some(Value::String(name)) => token(name),
+            Some(Value::Object(g)) => {
+                let stops: Vec<String> = g.get("gradient").and_then(Value::as_array).map(|s| s.iter().filter_map(Value::as_str).map(token).collect()).unwrap_or_default();
+                if stops.len() < 2 { return token(fallback); }
+                let id = self.uid("grad");
+                let last = (stops.len() - 1) as f32;
+                // `fade` dissolves the final stop to transparent: soft glows without an edge.
+                let fade = g.get("fade").and_then(Value::as_bool).unwrap_or(false);
+                let nodes: Vec<_> = stops.iter().enumerate().map(|(i, c)| {
+                    let opacity = if fade && i + 1 == stops.len() { 0.0 } else { 1.0 };
+                    fframes::svgr!(<stop offset={i as f32 / last} stop-color={c.clone()} stop-opacity={opacity} />)
+                }).collect();
+                if g.get("radial").and_then(Value::as_bool).unwrap_or(false) {
+                    defs.push(fframes::svgr!(<radialGradient id={id.clone()} cx="0.5" cy="0.5" r="0.5">{nodes}</radialGradient>));
+                } else {
+                    let angle = g.get("angle").and_then(Value::as_f64).unwrap_or(90.0) as f32 * PI / 180.0;
+                    let (dx, dy) = (angle.cos() * 0.5, angle.sin() * 0.5);
+                    defs.push(fframes::svgr!(<linearGradient id={id.clone()} x1={0.5 - dx} y1={0.5 - dy} x2={0.5 + dx} y2={0.5 + dy}>{nodes}</linearGradient>));
+                }
+                format!("url(#{id})")
+            }
+            _ => token(fallback),
+        }
+    }
+
+    /// Draw a canvas element list. `inherited` is the entrance time children fall back to.
+    pub(crate) fn elements(&self, list: &[Value], inherited: f32, stagger: f32, defs: &mut Vec<Svgr<'a>>) -> Vec<Svgr<'a>> {
+        self.elements_at(list, inherited, stagger, defs, self.t)
+    }
+    /// Elements as they are at scene time `now` (echo trails draw earlier moments).
+    fn elements_at(&self, list: &[Value], inherited: f32, stagger: f32, defs: &mut Vec<Svgr<'a>>, now: f32) -> Vec<Svgr<'a>> {
+        list.iter().enumerate().map(|(i, el)| {
+            let at = inherited + i as f32 * stagger;
+            match el.get("echo") { Some(echo) => self.echoed(el, echo, at, defs, now), None => self.element(el, at, defs, now) }
+        }).collect()
+    }
+
+    /// Copies behind an element: earlier moments of its motion (`lag`, a trail) and/or
+    /// stepped offsets (`step`, a fanned stack or spiral), fading and shifting toward `to`.
+    fn echoed(&self, el: &Value, echo: &Value, at: f32, defs: &mut Vec<Svgr<'a>>, now: f32) -> Svgr<'a> {
+        let count = (n(echo, "count", 6.0) as usize).clamp(1, 24);
+        let lag = f(echo, "lag", 0.0).max(0.0);
+        let fade = f(echo, "fade", 0.72).clamp(0.0, 1.0);
+        let step = echo.get("step");
+        let (sx, sy, sr, ss) = step.map_or((0.0, 0.0, 0.0, 0.0), |st| (f(st, "x", 0.0), f(st, "y", 0.0), f(st, "rotate", 0.0), f(st, "scale", 0.0)));
+        let target = echo.get("to").and_then(Value::as_str).map(|t| self.paint(Some(&Value::String(t.to_owned())), "accent", defs));
+        let (bx, by, bw, bh) = bounds(el);
+        let (ox, oy) = el.get("origin").and_then(Value::as_array).filter(|o| o.len() == 2)
+            .map(|o| (o[0].as_f64().unwrap_or(0.0) as f32, o[1].as_f64().unwrap_or(0.0) as f32)).unwrap_or((bx + bw / 2.0, by + bh / 2.0));
+        let mut base = el.clone();
+        if let Some(o) = base.as_object_mut() { o.remove("echo"); }
+        let mut copies = vec![];
+        for i in (1..=count).rev() {
+            let mut copy = base.clone();
+            let k = i as f32 / count as f32;
+            if let (Some(to), Some(o)) = (&target, copy.as_object_mut()) {
+                for key in ["fill", "stroke"] {
+                    if let Some(Value::String(color)) = o.get(key) {
+                        let from = self.paint(Some(&Value::String(color.clone())), "accent", defs);
+                        if from != "none" { o.insert(key.into(), Value::String(crate::design::mix(&from, to, k))); }
+                    }
+                }
+            }
+            if let Some(o) = copy.as_object_mut() { o.insert("opacity".into(), serde_json::json!(f(el, "opacity", 1.0) * fade.powi(i as i32))); }
+            let node = self.element(&copy, at, defs, now - lag * i as f32);
+            let fi = i as f32;
+            let offset = sx.abs() + sy.abs() + sr.abs() + ss.abs() > 1e-6;
+            copies.push(if offset {
+                fframes::svgr!(<g transform={format!("translate({} {}) translate({ox} {oy}) rotate({}) scale({}) translate({} {})", sx * fi, sy * fi, sr * fi, (1.0 + ss * fi).max(0.01), -ox, -oy)}>{node}</g>)
+            } else { node });
+        }
+        copies.push(self.element(&base, at, defs, now));
+        fframes::svgr!(<g>{copies}</g>)
+    }
+
+    fn element(&self, el: &Value, default_at: f32, defs: &mut Vec<Svgr<'a>>, now: f32) -> Svgr<'a> {
+        // Stepped time ("on twos"): the element updates `fps` times a second, a handmade feel.
+        let now = match num(el, "fps") { Some(q) if q > 0.0 => (now * q).floor() / q, _ => now };
+        // Morph from the previous beat's element with the same id, across the cut.
+        if let Some(m) = el.get("morph") {
+            let dur = f(m, "dur", 0.8).max(0.01);
+            if now < dur {
+                let mixed = self.morphed(&m["from"], el, motion::in_out_cubic(now / dur), defs);
+                return self.element(&mixed, 0.0, defs, now);
+            }
+        }
+        let kind = s(el, "type");
+        let at = f(el, "at", default_at);
+        let enter = match s(el, "enter") {
+            "" => match kind {
+                "line" | "path" | "poly" if s(el, "fill").is_empty() || s(el, "fill") == "none" => "draw",
+                "text" => "rise", "icon" | "circle" => "pop", _ => "fade",
+            },
+            other => other,
+        };
+        let text_len = s(el, "text").chars().count() as f32;
+        // Defaults mirror `canvasTimes` in fframes/production.mjs, which writes explicit
+        // times into prepared jobs so scene settling can be scheduled exactly.
+        let default_dur = match enter {
+            "draw" => 1.2,
+            "type" => (text_len * 0.035).clamp(0.4, 2.5),
+            "grow" | "grow-x" | "grow-y" | "wipe" | "wipe-up" => 0.8,
+            "scramble" => 0.9,
+            "none" => 0.0,
+            _ => self.m.duration(),
+        };
+        let dur = f(el, "dur", default_dur).max(0.0);
+        let local = now - at;
+        if local < 0.0 { return fframes::svgr!(<g />); }
+        let exit = s(el, "exit");
+        let exit_at = num(el, "exitAt");
+        let exit_dur = f(el, "exitDur", self.m.duration());
+        let q = match exit_at {
+            Some(e) if !exit.is_empty() && exit != "none" => if exit_dur <= 0.0 { if now >= e { 1.0 } else { 0.0 } } else { motion::in_cubic((now - e) / exit_dur) },
+            Some(e) if exit == "none" && now >= e => 1.0,
+            _ => 0.0,
+        };
+        if q >= 1.0 { return fframes::svgr!(<g />); }
+
+        // Entrance progress: opacity never overshoots; travel may spring.
+        let e = if dur <= 0.0 { Enter::DONE } else { self.m.enter_over(local, dur) };
+        let grow = if dur <= 0.0 { 1.0 } else { self.m.grow(local, dur) };
+        let (bx, by, bw, bh) = bounds(el);
+        let origin = el.get("origin").and_then(Value::as_array).filter(|o| o.len() == 2)
+            .map(|o| (o[0].as_f64().unwrap_or(0.0) as f32, o[1].as_f64().unwrap_or(0.0) as f32))
+            .unwrap_or(match enter {
+                "grow-x" => (bx, by + bh / 2.0),
+                "grow-y" => (bx + bw / 2.0, by + bh),
+                _ => (bx + bw / 2.0, by + bh / 2.0),
+            });
+        let mut pose = Pose::identity();
+        pose.rotate = f(el, "rotate", 0.0);
+        pose.alpha = f(el, "opacity", 1.0);
+        let distance = self.m.distance(f(el, "dist", 48.0));
+        match enter {
+            "fade" | "blur" => pose.alpha *= e.alpha,
+            "pop" => { let k = 0.55 + 0.45 * self.m.pop(local * self.m.duration() / dur.max(0.01)); pose.sx *= k; pose.sy *= k; pose.alpha *= e.alpha; }
+            "rise" => { pose.dy += distance * (1.0 - e.travel); pose.alpha *= e.alpha; }
+            "drop" => { pose.dy -= distance * (1.0 - e.travel); pose.alpha *= e.alpha; }
+            "left" => { pose.dx -= distance * (1.0 - e.travel); pose.alpha *= e.alpha; }
+            "right" => { pose.dx += distance * (1.0 - e.travel); pose.alpha *= e.alpha; }
+            "grow" => { pose.sx *= grow; pose.sy *= grow; }
+            "grow-x" => pose.sx *= grow,
+            "grow-y" => pose.sy *= grow,
+            _ => {}
+        }
+        // Keyframed moves: each key starts at its time and eases from the previous state.
+        let mut key_pose = (0.0f32, 0.0f32, 1.0f32, 0.0f32, 1.0f32);
+        for key in arr(el, "keys") {
+            let start = f(key, "at", 0.0);
+            if now < start { break; }
+            let k = ease(s(key, "ease"), (now - start) / f(key, "dur", 0.6).max(0.001));
+            let prev = key_pose;
+            key_pose = (
+                num(key, "x").map_or(prev.0, |v| prev.0 + (v - prev.0) * k),
+                num(key, "y").map_or(prev.1, |v| prev.1 + (v - prev.1) * k),
+                num(key, "scale").map_or(prev.2, |v| prev.2 + (v - prev.2) * k),
+                num(key, "rotate").map_or(prev.3, |v| prev.3 + (v - prev.3) * k),
+                num(key, "opacity").map_or(prev.4, |v| prev.4 + (v - prev.4) * k),
+            );
+        }
+        pose.dx += key_pose.0; pose.dy += key_pose.1; pose.sx *= key_pose.2; pose.sy *= key_pose.2;
+        pose.rotate += key_pose.3; pose.alpha *= key_pose.4.clamp(0.0, 1.0);
+        // Travel along a path: the element's origin rides the outline, optionally turning.
+        if let Some(route) = el.get("along") {
+            if let Some(info) = path_info(s(route, "d")) {
+                if let Some(contour) = info.points.iter().find(|c| c.len() > 1) {
+                    let start = f(route, "at", at);
+                    let span = f(route, "dur", 1.5).max(0.001);
+                    // A looping route repeats every `dur` seconds (eased per lap) after it starts.
+                    let lap = if route.get("loop").and_then(Value::as_bool).unwrap_or(false) && now > start { ((now - start) / span).fract() } else { (now - start) / span };
+                    let k = ease(nonempty(s(route, "ease"), "inOut"), lap);
+                    if let Some(((px, py), angle)) = along(contour, k) {
+                        pose.dx += px - origin.0; pose.dy += py - origin.1;
+                        if route.get("rotate").and_then(Value::as_bool).unwrap_or(false) { pose.rotate += angle.to_degrees(); }
+                    }
+                }
+            }
+        }
+        // Ambient loop after the entrance, eased in so it never jumps.
+        let mut dash_shift = 0.0;
+        if let Some(l) = el.get("loop") {
+            let start = at + dur;
+            let lt = (now - start).max(0.0);
+            let period = f(l, "period", 4.0).max(0.05);
+            let ramp = motion::in_out_cubic(lt / 0.8);
+            let phase = TAU * lt / period;
+            match s(l, "type") {
+                "spin" => pose.rotate += 360.0 * f(l, "amount", 1.0) * lt / period,
+                "pulse" => { let k = 1.0 + f(l, "amount", 0.06) * ramp * phase.sin(); pose.sx *= k; pose.sy *= k; }
+                "float" => pose.dy += f(l, "amount", 10.0) * ramp * phase.sin(),
+                "sway" => pose.rotate += f(l, "amount", 4.0) * ramp * phase.sin(),
+                "orbit" => { let a = f(l, "amount", 12.0) * ramp; pose.dx += a * phase.cos() - a; pose.dy += a * phase.sin(); }
+                "dash" => dash_shift = -lt / period,
+                "blink" => pose.alpha *= 1.0 - f(l, "amount", 0.5).clamp(0.0, 1.0) * ramp * (0.5 - 0.5 * phase.cos()),
+                // Pulse with the narration's measured loudness.
+                "level" => { let k = 1.0 + f(l, "amount", 0.12) * self.level(now); pose.sx *= k; pose.sy *= k; }
+                _ => {}
+            }
+        }
+        // Exit.
+        if q > 0.0 {
+            match exit {
+                "fade" | "blur" | "undraw" | "wipe" => pose.alpha *= 1.0 - q,
+                "shrink" => { let k = 1.0 - 0.45 * q; pose.sx *= k; pose.sy *= k; pose.alpha *= 1.0 - q; }
+                "fall" => { pose.dy += distance * q; pose.alpha *= 1.0 - q; }
+                "lift" => { pose.dy -= distance * q; pose.alpha *= 1.0 - q; }
+                _ => {}
+            }
+        }
+        if pose.alpha <= 0.001 { return fframes::svgr!(<g />); }
+
+        let draw = if enter == "draw" { if dur <= 0.0 { 1.0 } else { motion::out_cubic(local / dur) } } else { 1.0 };
+        let draw = if exit == "undraw" { draw * (1.0 - q) } else { draw };
+        let shape = self.shape(el, draw, dash_shift, if enter == "type" { motion::clamp01(local / dur.max(0.001)) } else { 1.0 }, local, defs, now);
+
+        // Wipes reveal through a growing clip over the element bounds.
+        let wipe = match (enter, exit) {
+            ("wipe", _) if grow < 1.0 => Some((grow, false, false)),
+            ("wipe-up", _) if grow < 1.0 => Some((grow, true, false)),
+            (_, "wipe") if q > 0.0 => Some((1.0 - q, false, true)),
+            _ => None,
+        };
+        let shape = match wipe {
+            Some((p, _, _)) if p <= 0.001 => return fframes::svgr!(<g />),
+            Some((p, up, leaving)) => {
+                let id = self.uid("wipe");
+                let pad = 8.0 + f(el, "width", 0.0);
+                let (cx, cy, cw, ch) = if up { (bx - pad, by - pad + (bh + 2.0 * pad) * (1.0 - p), bw + 2.0 * pad, (bh + 2.0 * pad) * p) }
+                    else if leaving { (bx - pad + (bw + 2.0 * pad) * (1.0 - p), by - pad, (bw + 2.0 * pad) * p, bh + 2.0 * pad) }
+                    else { (bx - pad, by - pad, (bw + 2.0 * pad) * p, bh + 2.0 * pad) };
+                fframes::svgr!(<g>
+                    <defs><clipPath id={id.clone()}><rect x={cx} y={cy} width={cw.max(0.0)} height={ch.max(0.0)} /></clipPath></defs>
+                    <g clip-path={format!("url(#{id})")}>{shape}</g>
+                </g>)
+            }
+            None => shape,
+        };
+        // Focus blur in or out.
+        let blur = match (enter, exit) {
+            ("blur", _) if e.alpha < 1.0 => 14.0 * (1.0 - e.alpha),
+            (_, "blur") if q > 0.0 => 14.0 * q,
+            _ => 0.0,
+        };
+        let shape = if blur > 0.05 {
+            let id = self.uid("blur");
+            fframes::svgr!(<g>
+                <defs><filter id={id.clone()} filterUnits="userSpaceOnUse" x={bx - 60.0 - bw * 0.5} y={by - 60.0 - bh * 0.5} width={bw * 2.0 + 120.0} height={bh * 2.0 + 120.0}><feGaussianBlur stdDeviation={blur} /></filter></defs>
+                <g filter={format!("url(#{id})")}>{shape}</g>
+            </g>)
+        } else { shape };
+        let shape = match s(el, "blend") {
+            "" | "normal" => shape,
+            mode => fframes::svgr!(<g mix-blend-mode={mode.to_owned()}>{shape}</g>),
+        };
+        let (ox, oy) = origin;
+        let identity = pose.dx.abs() < 1e-3 && pose.dy.abs() < 1e-3 && (pose.sx - 1.0).abs() < 1e-4 && (pose.sy - 1.0).abs() < 1e-4 && pose.rotate.abs() < 1e-3;
+        let alpha = pose.alpha.clamp(0.0, 1.0);
+        if identity && alpha >= 0.999 { return shape; }
+        let transform = if identity { "translate(0 0)".to_owned() } else {
+            format!("translate({} {}) rotate({}) scale({} {}) translate({} {})", ox + pose.dx, oy + pose.dy, pose.rotate, pose.sx.max(0.0001), pose.sy.max(0.0001), -ox, -oy)
+        };
+        fframes::svgr!(<g opacity={alpha} transform={transform}>{shape}</g>)
+    }
+
+    /// The element's geometry and paint at a draw-on fraction.
+    fn shape(&self, el: &Value, draw: f32, dash_shift: f32, reveal: f32, local: f32, defs: &mut Vec<Svgr<'a>>, now: f32) -> Svgr<'a> {
+        let kind = s(el, "type");
+        let filled_default = if matches!(kind, "line" | "path" | "poly") { "none" } else { "accent" };
+        let fill = self.paint(el.get("fill"), filled_default, defs);
+        let has_stroke = el.get("stroke").is_some();
+        let stroke = self.paint(el.get("stroke"), if matches!(kind, "line" | "path" | "poly") { "ink" } else { "none" }, defs);
+        let width = f(el, "width", if matches!(kind, "line" | "path" | "poly") { 6.0 } else { 4.0 });
+        let length = stroke_length(el);
+        // During a draw-on the fill follows the outline in; strokeless shapes simply fade.
+        let drawing = draw < 0.999 && length > 0.0 && (stroke != "none" || matches!(kind, "line" | "path" | "poly"));
+        let fill_alpha = if draw < 0.999 && fill != "none" { motion::clamp01((draw - 0.55) / 0.45) } else { 1.0 };
+        let custom_dash = arr(el, "dash").iter().filter_map(Value::as_f64).map(|v| v.max(0.0).to_string()).collect::<Vec<_>>().join(" ");
+        let (dasharray, dashoffset) = if drawing {
+            (format!("{} {}", length.max(0.001), length * 2.0 + 10.0), length * (1.0 - draw))
+        } else if !custom_dash.is_empty() {
+            let period: f32 = arr(el, "dash").iter().filter_map(Value::as_f64).sum::<f64>() as f32;
+            (custom_dash, dash_shift * period)
+        } else { ("none".to_owned(), 0.0) };
+        let cap = nonempty(s(el, "cap"), "round").to_owned();
+        let join = nonempty(s(el, "join"), "round").to_owned();
+        if let Some(rough) = el.get("rough").filter(|r| r.is_object()) {
+            if matches!(kind, "rect" | "circle" | "ellipse" | "line" | "path" | "poly") {
+                return self.rough_shape(el, rough, &fill, &stroke, width, draw, now);
+            }
+        }
+        match kind {
+            "rect" => {
+                let r = f(el, "r", 0.0);
+                fframes::svgr!(<g>
+                    <rect x={f(el, "x", 0.0)} y={f(el, "y", 0.0)} width={f(el, "w", 0.0).max(0.0)} height={f(el, "h", 0.0).max(0.0)} rx={r} ry={r} fill={fill.clone()} fill-opacity={fill_alpha} stroke="none" />
+                    {if stroke != "none" || drawing { fframes::svgr!(<rect x={f(el, "x", 0.0)} y={f(el, "y", 0.0)} width={f(el, "w", 0.0).max(0.0)} height={f(el, "h", 0.0).max(0.0)} rx={r} ry={r} fill="none" stroke={if has_stroke { stroke.clone() } else { fill.clone() }} stroke-width={width} stroke-dasharray={dasharray.clone()} stroke-dashoffset={dashoffset} stroke-linecap={cap.clone()} stroke-linejoin={join.clone()} />) } else { fframes::svgr!(<g />) }}
+                </g>)
+            }
+            "circle" | "ellipse" => {
+                let (cx, cy) = (f(el, "cx", 0.0), f(el, "cy", 0.0));
+                let (rx, ry) = if kind == "circle" { (f(el, "r", 0.0), f(el, "r", 0.0)) } else { (f(el, "rx", 0.0), f(el, "ry", 0.0)) };
+                fframes::svgr!(<g>
+                    <ellipse cx={cx} cy={cy} rx={rx.max(0.0)} ry={ry.max(0.0)} fill={fill.clone()} fill-opacity={fill_alpha} stroke="none" />
+                    {if stroke != "none" || drawing { fframes::svgr!(<ellipse cx={cx} cy={cy} rx={rx.max(0.0)} ry={ry.max(0.0)} fill="none" stroke={if has_stroke { stroke.clone() } else { fill.clone() }} stroke-width={width} stroke-dasharray={dasharray.clone()} stroke-dashoffset={dashoffset} stroke-linecap={cap.clone()} />) } else { fframes::svgr!(<g />) }}
+                </g>)
+            }
+            "line" | "path" | "poly" => {
+                let d = match kind {
+                    "line" => format!("M {} {} L {} {}", f(el, "x1", 0.0), f(el, "y1", 0.0), f(el, "x2", 0.0), f(el, "y2", 0.0)),
+                    "poly" => {
+                        let pts = points(el);
+                        let mut d = pts.iter().enumerate().map(|(i, (x, y))| format!("{} {x} {y}", if i == 0 { "M" } else { "L" })).collect::<Vec<_>>().join(" ");
+                        if el.get("closed").and_then(Value::as_bool).unwrap_or(false) { d.push_str(" Z"); }
+                        d
+                    }
+                    _ => path_info(s(el, "d")).map(|p| p.d.clone()).unwrap_or_default(),
+                };
+                let mut nodes = vec![];
+                if fill != "none" { nodes.push(fframes::svgr!(<path d={d.clone()} fill={fill.clone()} fill-opacity={fill_alpha} stroke="none" />)); }
+                if stroke != "none" {
+                    nodes.push(fframes::svgr!(<path d={d} fill="none" stroke={stroke.clone()} stroke-width={width} stroke-dasharray={dasharray} stroke-dashoffset={dashoffset} stroke-linecap={cap} stroke-linejoin={join} />));
+                    // Arrowheads ride the draw-on tip; a start head appears with the stroke.
+                    let heads = s(el, "arrow");
+                    let outline = outline(el);
+                    let head = f(el, "head", width * 3.2 + 6.0);
+                    let mut tips = vec![];
+                    if (heads == "end" || heads == "both") && draw > 0.02 { tips.push(along(&outline, draw)); }
+                    if (heads == "start" || heads == "both") && draw > 0.02 {
+                        let reversed: Vec<_> = outline.iter().rev().copied().collect();
+                        tips.push(along(&reversed, 1.0));
+                    }
+                    for ((x, y), angle) in tips.into_iter().flatten() {
+                        nodes.push(fframes::svgr!(<path d={arrowhead(x, y, angle, head)} fill="none" stroke={stroke.clone()} stroke-width={width} stroke-linecap="round" stroke-linejoin="round" />));
+                    }
+                }
+                fframes::svgr!(<g>{nodes}</g>)
+            }
+            "text" => self.canvas_text(el, &fill, reveal, local),
+            "icon" => {
+                let size = f(el, "size", 64.0);
+                let color = self.paint(el.get("stroke").or(el.get("fill")), "accent", defs);
+                crate::icons::render(s(el, "name"), f(el, "x", 0.0) - size / 2.0, f(el, "y", 0.0) - size / 2.0, size, &color)
+            }
+            "image" => self.canvas_image(el),
+            "meter" => self.meter(el, &fill, now),
+            "spotlight" => {
+                // A dimming field with a window: everything outside the target recedes.
+                let (x, y, w, h) = bounds(el);
+                let r = if el.get("r").is_some() && el.get("cx").is_some() { f(el, "r", 0.0) } else { f(el, "radius", 24.0) };
+                let hole = if el.get("cx").is_some() {
+                    let (cx, cy) = (f(el, "cx", 0.0), f(el, "cy", 0.0));
+                    format!("M {} {cy} a {r} {r} 0 1 0 {} 0 a {r} {r} 0 1 0 {} 0 Z", cx - r, 2.0 * r, -2.0 * r)
+                } else {
+                    format!("M {x} {} h {w} v {h} h {} Z", y, -w)
+                };
+                let d = format!("M -20000 -20000 H 20000 V 20000 H -20000 Z {hole}");
+                let color = self.paint(el.get("fill"), "bg", defs);
+                fframes::svgr!(<path d={d} fill={color} fill-opacity={f(el, "dim", 0.72)} fill-rule="evenodd" />)
+            }
+            "group" => {
+                let at = f(el, "at", 0.0);
+                let children = self.elements_at(arr(el, "children"), at, f(el, "stagger", 0.0), defs, now);
+                let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
+                if x.abs() < 1e-4 && y.abs() < 1e-4 { fframes::svgr!(<g>{children}</g>) }
+                else { fframes::svgr!(<g transform={format!("translate({x} {y})")}>{children}</g>) }
+            }
+            _ => fframes::svgr!(<g />),
+        }
+    }
+
+    /// A hand-drawn rendering: `passes` jittered pencil strokes and, for filled closed shapes,
+    /// hachure lines clipped to the shape (or a flat fill). `boil` re-seeds the jitter that many
+    /// times a second, the lively wobble of traditional animation.
+    fn rough_shape(&self, el: &Value, rough: &Value, fill: &str, stroke: &str, width: f32, draw: f32, now: f32) -> Svgr<'a> {
+        use std::hash::{Hash, Hasher};
+        let amount = f(rough, "amount", 2.2).clamp(0.0, 40.0);
+        let passes = (n(rough, "passes", 2.0) as usize).clamp(1, 3);
+        let boil = f(rough, "boil", 0.0);
+        let mut hasher = std::collections::hash_map::DefaultHasher::new();
+        el.to_string().hash(&mut hasher);
+        let frame_seed = if boil > 0.0 { (now * boil).floor().max(0.0) as u64 } else { 0 };
+        let seed = hasher.finish() ^ frame_seed.wrapping_mul(0xA24B_AED4_963E_E407);
+        let contours = contours_of(el);
+        let ink = if stroke != "none" { stroke.to_owned() } else if fill != "none" { fill.to_owned() } else { self.p.ink.clone() };
+        let length: f32 = contours.iter().map(|c| c.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum::<f32>()).sum::<f32>() * 1.08 + 2.0 * amount;
+        let dash = if draw < 0.999 { (format!("{} {}", length, length * 2.0 + 10.0), length * (1.0 - draw)) } else { ("none".to_owned(), 0.0) };
+        let mut nodes = vec![];
+        let closed = contours.iter().any(|c| c.len() > 2 && c.first() == c.last());
+        let fill_mode = nonempty(s(rough, "fill"), "hachure");
+        if fill != "none" && closed && draw > 0.55 {
+            let alpha = motion::clamp01((draw - 0.55) / 0.45);
+            let crisp = contours.iter().map(|c| c.iter().enumerate().map(|(i, p)| format!("{} {:.1} {:.1}", if i == 0 { "M" } else { "L" }, p.0, p.1)).collect::<Vec<_>>().join(" ") + " Z").collect::<Vec<_>>().join(" ");
+            if fill_mode == "solid" {
+                nodes.push(fframes::svgr!(<path d={crisp} fill={fill.to_owned()} fill-opacity={alpha} stroke="none" />));
+            } else {
+                let (bx, by, bw, bh) = bounds(el);
+                let gap = f(rough, "gap", 11.0).max(3.0);
+                let angle = f(rough, "angle", -41.0).to_radians();
+                let (dx, dy) = (angle.cos(), angle.sin());
+                let reach = bw.hypot(bh);
+                let (cx, cy) = (bx + bw / 2.0, by + bh / 2.0);
+                let count = (reach / gap).ceil() as i32;
+                let mut hatch = String::new();
+                for k in -count / 2..=count / 2 {
+                    let off = k as f32 * gap;
+                    let (ox, oy) = (cx - dy * off, cy + dx * off);
+                    let line = [(ox - dx * reach / 2.0, oy - dy * reach / 2.0), (ox + dx * reach / 2.0, oy + dy * reach / 2.0)];
+                    hatch.push_str(&rough_contour(&line, amount * 0.5, seed ^ (k as u64).wrapping_mul(31)));
+                    hatch.push(' ');
+                }
+                let id = self.uid("hatch");
+                nodes.push(fframes::svgr!(<g>
+                    <defs><clipPath id={id.clone()}><path d={crisp} /></clipPath></defs>
+                    <g clip-path={format!("url(#{id})")} opacity={alpha}><path d={hatch} fill="none" stroke={fill.to_owned()} stroke-width={f(rough, "hatchWidth", (width * 0.55).max(1.5))} stroke-linecap="round" /></g>
+                </g>));
+            }
+        }
+        for pass in 0..passes {
+            let d = contours.iter().map(|c| rough_contour(c, amount, seed.wrapping_add(pass as u64 * 0x51_7CC1_B727_220A))).collect::<Vec<_>>().join(" ");
+            let w = width * if pass == 0 { 1.0 } else { 0.7 };
+            nodes.push(fframes::svgr!(<path d={d} fill="none" stroke={ink.clone()} stroke-width={w} stroke-dasharray={dash.0.clone()} stroke-dashoffset={dash.1} stroke-linecap="round" stroke-linejoin="round" opacity={if pass == 0 { 1.0 } else { 0.75 }} />));
+        }
+        fframes::svgr!(<g>{nodes}</g>)
+    }
+
+    /// Audio meter from the prepared voice levels: `bars` (newest at the right), `mirror`
+    /// (newest in the middle, symmetric), `ring` (around the centre) or `wave` (a filled
+    /// envelope). Silence leaves small dots, so who is talking is visible at a glance.
+    fn meter(&self, el: &Value, fill: &str, now: f32) -> Svgr<'a> {
+        let (x, y, w, h) = (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0).max(1.0), f(el, "h", 0.0).max(1.0));
+        let n = (n(el, "bars", 24.0) as usize).clamp(3, 96);
+        let step = f(el, "step", 2.0).max(0.5) / self.f.fps as f32;
+        let history = |k: usize| self.level(now - k as f32 * step);
+        let style = nonempty(s(el, "style"), "bars");
+        match style {
+            "ring" => {
+                let (cx, cy) = (x + w / 2.0, y + h / 2.0);
+                let radius = w.min(h) * 0.3;
+                let width = f(el, "width", (TAU * radius / n as f32 * 0.5).max(2.0));
+                let spokes: Vec<_> = (0..n).map(|k| {
+                    let a = k as f32 / n as f32 * TAU - PI / 2.0;
+                    let len = 4.0 + history(k.min(n - k)) * w.min(h) * 0.18;
+                    fframes::svgr!(<line x1={cx + radius * a.cos()} y1={cy + radius * a.sin()} x2={cx + (radius + len) * a.cos()} y2={cy + (radius + len) * a.sin()} stroke={fill.to_owned()} stroke-width={width} stroke-linecap="round" />)
+                }).collect();
+                fframes::svgr!(<g>{spokes}</g>)
+            }
+            "wave" => {
+                let mid = y + h / 2.0;
+                let pts: Vec<(f32, f32)> = (0..n).map(|k| (x + w * k as f32 / (n - 1) as f32, history(((n - 1) as isize - 2 * k as isize).unsigned_abs() / 2) * h / 2.0)).collect();
+                let top = pts.iter().map(|(px, a)| format!("{px:.1} {:.1}", mid - a.max(1.5))).collect::<Vec<_>>().join(" L ");
+                let bottom = pts.iter().rev().map(|(px, a)| format!("{px:.1} {:.1}", mid + a.max(1.5))).collect::<Vec<_>>().join(" L ");
+                fframes::svgr!(<path d={format!("M {top} L {bottom} Z")} fill={fill.to_owned()} />)
+            }
+            _ => {
+                let gap = w / n as f32 * f(el, "gap", 0.35).clamp(0.0, 0.9);
+                let bw = (w - gap * (n - 1) as f32) / n as f32;
+                let mirror = style == "mirror";
+                let bars: Vec<_> = (0..n).map(|i| {
+                    let k = if mirror { (i as isize - (n / 2) as isize).unsigned_abs() } else { n - 1 - i };
+                    let bh = (history(k) * h).max(bw.min(h));
+                    let by = if mirror { y + (h - bh) / 2.0 } else { y + h - bh };
+                    rounded(x + i as f32 * (bw + gap), by, bw, bh, f(el, "r", bw / 2.0), fill)
+                }).collect();
+                fframes::svgr!(<g>{bars}</g>)
+            }
+        }
+    }
+
+    /// The element `to` partway (k 0–1) from `from`: numbers interpolate, palette colours
+    /// mix, outlines resample by arc length and align before blending.
+    fn morphed(&self, from: &Value, to: &Value, k: f32, defs: &mut Vec<Svgr<'a>>) -> Value {
+        let mut out = to.clone();
+        let Some(o) = out.as_object_mut() else { return out };
+        o.remove("morph"); o.remove("echo");
+        o.insert("enter".into(), Value::String("none".into()));
+        o.insert("at".into(), serde_json::json!(0.0));
+        let same = s(from, "type") == s(to, "type") && !matches!(s(to, "type"), "path" | "poly");
+        if same {
+            for key in ["x", "y", "w", "h", "r", "cx", "cy", "rx", "ry", "x1", "y1", "x2", "y2", "size", "width", "opacity", "rotate"] {
+                if let (Some(a), Some(b)) = (num(from, key), num(to, key)) { o.insert(key.into(), serde_json::json!(a + (b - a) * k)); }
+            }
+        } else if let (Some((a, closed_a)), Some((b, closed_b))) = (morph_outline(from), morph_outline(to)) {
+            // Different shapes (or paths): blend resampled outlines.
+            const N: usize = 97;
+            let (pa, mut pb) = (resample(&a, N), resample(&b, N));
+            if closed_a && closed_b {
+                let ring = |v: &[(f32, f32)]| v[..N - 1].to_vec();
+                let (ra, rb) = (ring(&pa), ring(&pb));
+                let best = (0..N - 1).min_by(|&i, &j| {
+                    let cost = |s: usize| ra.iter().enumerate().map(|(t, p)| { let q = rb[(t + s) % (N - 1)]; (p.0 - q.0).powi(2) + (p.1 - q.1).powi(2) }).sum::<f32>();
+                    cost(i).partial_cmp(&cost(j)).unwrap_or(std::cmp::Ordering::Equal)
+                }).unwrap_or(0);
+                pb = (0..N - 1).map(|t| rb[(t + best) % (N - 1)]).chain(std::iter::once(rb[best])).collect();
+            }
+            let d = pa.iter().zip(&pb).enumerate().map(|(i, (p, q))| format!("{} {:.2} {:.2}", if i == 0 { "M" } else { "L" }, p.0 + (q.0 - p.0) * k, p.1 + (q.1 - p.1) * k)).collect::<Vec<_>>().join(" ")
+                + if closed_a && closed_b { " Z" } else { "" };
+            for key in ["x", "y", "w", "h", "r", "cx", "cy", "rx", "ry", "x1", "y1", "x2", "y2", "points", "closed", "d"] { o.remove(key); }
+            o.insert("type".into(), Value::String("path".into()));
+            o.insert("d".into(), Value::String(d));
+            if closed_a && closed_b && !to.get("fill").is_some_and(|v| v == "none") && o.get("fill").is_none() { o.insert("fill".into(), Value::String("accent".into())); }
+        }
+        for key in ["fill", "stroke"] {
+            if let (Some(Value::String(a)), Some(Value::String(b))) = (from.get(key), to.get(key)) {
+                let (ha, hb) = (self.paint(Some(&Value::String(a.clone())), "accent", defs), self.paint(Some(&Value::String(b.clone())), "accent", defs));
+                if ha != "none" && hb != "none" { o.insert(key.into(), Value::String(crate::design::mix(&ha, &hb, k))); }
+            }
+        }
+        out
+    }
+
+    fn canvas_text(&self, el: &Value, fill: &str, reveal: f32, local: f32) -> Svgr<'a> {
+        let font = text_font(el);
+        let size = f(el, "size", 48.0).max(8.0);
+        let tracking = f(el, "tracking", 0.0) * size;
+        let mut value = s(el, "text").to_owned();
+        if let Some(count) = el.get("count") {
+            let (from, to) = (n(count, "from", 0.0), n(count, "to", 0.0));
+            let decimals = n(count, "decimals", 0.0) as usize;
+            let current = from + (to - from) * self.m.grow(local, f(count, "dur", 1.2)) as f64;
+            value = format_number(current, decimals, s(count, "prefix"), s(count, "suffix"));
+        }
+        if el.get("upper").and_then(Value::as_bool).unwrap_or(false) { value = value.to_uppercase(); }
+        if reveal < 1.0 {
+            let chars = value.chars().count();
+            value = value.chars().take((chars as f32 * reveal).ceil() as usize).collect();
+        }
+        // Decode: each character cycles through glyphs of the text itself until it locks,
+        // left to right. Hash-driven, so every frame is reproducible.
+        if s(el, "enter") == "scramble" {
+            let dur = f(el, "dur", 0.9).max(0.01);
+            let pool: Vec<char> = value.chars().filter(|c| c.is_alphanumeric()).collect();
+            let chars: Vec<char> = value.chars().collect();
+            let tick = (local * 18.0).floor() as u64;
+            value = chars.iter().enumerate().map(|(i, &c)| {
+                let lock = dur * (0.25 + 0.75 * i as f32 / chars.len().max(1) as f32);
+                if local >= lock || !c.is_alphanumeric() || pool.is_empty() { c } else {
+                    let h = (i as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15) ^ tick.wrapping_mul(0xC2B2_AE3D_27D4_EB4F);
+                    pool[(h >> 33) as usize % pool.len()]
+                }
+            }).collect();
+        }
+        let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
+        let align = match s(el, "anchor") { "middle" => Align::Center, "end" => Align::Right, _ => Align::Left };
+        if let Some(width) = num(el, "width") {
+            // Wrapped text: `y` is the first baseline; the box is `width` wide.
+            let style = Style { font, size, leading: f(el, "leading", 1.15), tracking: f(el, "tracking", 0.0), upper: false, balance: true };
+            let layout = self.fit(&value, style, width.max(1.0), f(el, "height", size * 8.0).max(size));
+            let left = match align { Align::Center => x - width / 2.0, Align::Right => x - width, Align::Left => x };
+            return self.draw(&layout, left, y - layout.baseline, width, align, fill);
+        }
+        let w = text::measure(font, &value, size, tracking);
+        let final_w = if el.get("count").is_some() {
+            let count = &el["count"];
+            text::measure(font, &format_number(n(count, "to", 0.0), n(count, "decimals", 0.0) as usize, s(count, "prefix"), s(count, "suffix")), size, tracking).max(w)
+        } else { w };
+        // Counters keep their final anchor so a centred number never drifts while counting.
+        let left = match align { Align::Center => x - final_w / 2.0 + (final_w - w) / 2.0, Align::Right => x - w, Align::Left => x };
+        self.run(value, left, y, font, size, tracking, fill)
+    }
+
+    fn canvas_image(&self, el: &Value) -> Svgr<'a> {
+        let key = s(el, "file");
+        let image = self.ctx.get_image(key).map(|i| i.href()).unwrap_or_else(|| panic!("missing or undecodable prepared image: {key}"));
+        let (x, y, w, h) = (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0).max(1.0), f(el, "h", 0.0).max(1.0));
+        let r = f(el, "r", 0.0);
+        let aspect = if s(el, "fit") == "contain" { "xMidYMid meet" } else { "xMidYMid slice" };
+        let id = self.uid("cimg");
+        let img = fframes::svgr!(<image x={x} y={y} width={w} height={h} preserveAspectRatio={aspect} href={image} />);
+        let img = self.treat(img, s(el, "treatment"));
+        fframes::svgr!(<g>
+            <defs><clipPath id={id.clone()}><rect x={x} y={y} width={w} height={h} rx={r} ry={r} /></clipPath></defs>
+            <g clip-path={format!("url(#{id})")}>{img}</g>
+        </g>)
+    }
+
+    /// Palette-matched image treatments shared by canvas images and plates.
+    pub(crate) fn treat(&self, image: Svgr<'a>, treatment: &str) -> Svgr<'a> {
+        let rgb = |hex: &str| crate::design::parse(hex).unwrap_or([0.0, 0.0, 0.0]);
+        match treatment {
+            "mono" => {
+                let id = self.uid("mono");
+                fframes::svgr!(<g>
+                    <defs><filter id={id.clone()} color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0" /></filter></defs>
+                    <g filter={format!("url(#{id})")}>{image}</g>
+                </g>)
+            }
+            "duotone" => {
+                // Luminance mapped from the palette's darkest to its accent: every photo or
+                // generated plate adopts the film's colors.
+                let (dark, light) = if self.p.dark { (self.p.bg.clone(), self.p.accent.clone()) } else { (self.p.ink.clone(), self.p.bg.clone()) };
+                let (a, b) = (rgb(&dark), rgb(&light));
+                let table = |i: usize| format!("{} {}", a[i], b[i]);
+                let id = self.uid("duo");
+                fframes::svgr!(<g>
+                    <defs><filter id={id.clone()} color-interpolation-filters="sRGB">
+                        <feColorMatrix type="matrix" values="0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0 0 0 1 0" />
+                        <feComponentTransfer>
+                            <feFuncR type="table" tableValues={table(0)} />
+                            <feFuncG type="table" tableValues={table(1)} />
+                            <feFuncB type="table" tableValues={table(2)} />
+                        </feComponentTransfer>
+                    </filter></defs>
+                    <g filter={format!("url(#{id})")}>{image}</g>
+                </g>)
+            }
+            "tint" => {
+                let id = self.uid("tint");
+                let [r, g, b] = rgb(&self.p.accent);
+                // Desaturate, then multiply by the accent (lifted toward white so shadows keep detail).
+                let lift = |c: f32| 0.35 + 0.65 * c;
+                let m = format!("{r0} {g0} {b0} 0 0 {r1} {g1} {b1} 0 0 {r2} {g2} {b2} 0 0 0 0 0 1 0",
+                    r0 = 0.2126 * lift(r), g0 = 0.7152 * lift(r), b0 = 0.0722 * lift(r),
+                    r1 = 0.2126 * lift(g), g1 = 0.7152 * lift(g), b1 = 0.0722 * lift(g),
+                    r2 = 0.2126 * lift(b), g2 = 0.7152 * lift(b), b2 = 0.0722 * lift(b));
+                fframes::svgr!(<g>
+                    <defs><filter id={id.clone()} color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values={m} /></filter></defs>
+                    <g filter={format!("url(#{id})")}>{image}</g>
+                </g>)
+            }
+            "blur" | "soft" => {
+                let id = self.uid("iblur");
+                let amount = if treatment == "blur" { 18.0 } else { 6.0 };
+                fframes::svgr!(<g>
+                    <defs><filter id={id.clone()} x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation={amount} /></filter></defs>
+                    <g filter={format!("url(#{id})")}>{image}</g>
+                </g>)
+            }
+            _ => image,
+        }
+    }
+
+    /// The `canvas` block: author coordinates are the frame (1920×1080 landscape) unless a
+    /// `view` is given, which is fitted into the content area below the header.
+    pub(super) fn canvas(&self) -> Svgr<'a> {
+        let p = self.props();
+        let mut defs = vec![];
+        let nodes = self.elements(arr(p, "elements"), self.b.cue_seconds, f(p, "stagger", 0.0), &mut defs);
+        let body = fframes::svgr!(<g><defs>{defs}</defs>{nodes}</g>);
+        self.fit_view(body, p)
+    }
+
+    pub(crate) fn fit_view(&self, body: Svgr<'a>, p: &Value) -> Svgr<'a> {
+        let view = arr(p, "view");
+        if view.len() != 2 { return body; }
+        let (vw, vh) = (view[0].as_f64().unwrap_or(1.0) as f32, view[1].as_f64().unwrap_or(1.0) as f32);
+        let a = self.area;
+        let k = (a.w / vw).min(a.h / vh);
+        let (ox, oy) = (a.x + (a.w - vw * k) / 2.0, a.y + (a.h - vh * k) / 2.0);
+        fframes::svgr!(<g transform={format!("translate({ox} {oy}) scale({k})")}>{body}</g>)
+    }
+
+    /// A beat's `art` layer, drawn under or over its block in frame coordinates.
+    pub(crate) fn art(&self, layer: &str) -> Svgr<'a> {
+        let Some(art) = self.b.art.as_ref() else { return fframes::svgr!(<g />) };
+        let list = arr(art, layer);
+        if list.is_empty() { return fframes::svgr!(<g />); }
+        let mut defs = vec![];
+        let nodes = self.elements(list, self.b.cue_seconds, 0.0, &mut defs);
+        fframes::svgr!(<g><defs>{defs}</defs>{nodes}</g>)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn paths_parse_measure_and_reject_garbage() {
+        let info = path_info("M 0 0 L 300 400").unwrap();
+        assert!((info.length - 500.0).abs() < 0.5, "{}", info.length);
+        assert_eq!(info.bounds, (0.0, 0.0, 300.0, 400.0));
+        let arc = path_info("M 0 0 A 100 100 0 0 1 200 0").unwrap();
+        assert!((arc.length - PI * 100.0).abs() < 1.0, "semicircle {}", arc.length);
+        assert!(!arc.d.contains('A'), "arcs are normalized to curves");
+        assert!(path_info("M 0 0 L nope").is_none());
+        assert!(path_info("<script>").is_none());
+    }
+    #[test]
+    fn arrow_tips_follow_the_outline() {
+        let pts = vec![(0.0, 0.0), (100.0, 0.0), (100.0, 100.0)];
+        let ((x, y), angle) = along(&pts, 0.25).unwrap();
+        assert!((x - 50.0).abs() < 1e-3 && y.abs() < 1e-3 && angle.abs() < 1e-3);
+        let ((x, y), angle) = along(&pts, 1.0).unwrap();
+        assert!((x - 100.0).abs() < 1e-3 && (y - 100.0).abs() < 1e-3 && (angle - PI / 2.0).abs() < 1e-3);
+    }
+    #[test]
+    fn every_canvas_effect_is_a_pure_function_of_the_frame() {
+        let job = serde_json::json!({"version":2,"width":1920,"height":1080,"fps":30,"frames":90,"beats":[
+            {"id":"a","block":"canvas","frames":90,"start_frame":0,"cue_seconds":0,"levels":[0,10,40,80,60,30,20,50,90,70],"props":{"elements":[
+                {"type":"circle","cx":300,"cy":300,"r":40,"fill":"accent","rough":{"amount":3,"boil":8},"at":0,"dur":1},
+                {"type":"path","d":"M 100 800 C 500 400 900 400 1300 800","stroke":"ink","rough":{},"at":0.2,"dur":1},
+                {"type":"circle","cx":100,"cy":800,"r":20,"fill":"accent2","at":0,"dur":0.3,"fps":12,
+                 "along":{"d":"M 100 800 C 500 400 900 400 1300 800","at":0,"dur":2,"loop":true},"echo":{"count":5,"lag":0.08,"to":"accent"}},
+                {"type":"rect","x":1500,"y":200,"w":200,"h":200,"at":0,"dur":0,"morph":{"from":{"type":"circle","cx":1400,"cy":300,"r":60},"dur":1}},
+                {"type":"meter","x":600,"y":900,"w":600,"h":100,"style":"mirror","at":0,"dur":0},
+                {"type":"spotlight","cx":960,"cy":540,"r":120,"at":0.5,"dur":0.4},
+                {"type":"text","text":"Decode 2026","x":200,"y":150,"size":48,"enter":"scramble","at":0,"dur":1.2}]}}]});
+        let film = crate::Film::from_json(&serde_json::to_vec(&job).unwrap()).unwrap();
+        let ctx = FFramesContext { time_base: fframes::TimeBase { fps:30, sample_rate:48000 },
+            current_video_size: fframes::VideoSize { width:1920, height:1080 }, duration_in_frames:90,
+            mode:fframes::FFramesMode::Renderer, scenes:None, media_source:None, font_source:None, abort_signal:None };
+        let render = |i| format!("{:?}", fframes::Scene::render_frame(&film.beats[0], Frame::new(i, i, 30), &ctx));
+        let (early, late) = (render(7), render(40));
+        assert_ne!(early, late, "the scene must animate");
+        assert_eq!(early, render(7), "seeking back reproduces the frame exactly, boil and scramble included");
+        assert_eq!(render(88), render(88));
+    }
+    #[test]
+    fn validation_rejects_unknown_types_colors_and_oversized_scenes() {
+        let ok = serde_json::json!({"elements":[{"type":"circle","cx":10,"cy":10,"r":5,"fill":"accent"}]});
+        assert!(validate(&ok).is_ok());
+        for bad in [
+            serde_json::json!({"elements":[]}),
+            serde_json::json!({"elements":[{"type":"script"}]}),
+            serde_json::json!({"elements":[{"type":"rect","fill":"url(#x)"}]}),
+            serde_json::json!({"elements":[{"type":"path","d":"M 0 0 Q"}]}),
+            serde_json::json!({"elements":[{"type":"icon","name":"../x.svg"}]}),
+            serde_json::json!({"elements":[{"type":"rect","enter":"explode"}]}),
+            serde_json::json!({"view":[0,10],"elements":[{"type":"rect"}]}),
+        ] { assert!(validate(&bad).is_err(), "{bad}"); }
+        let many: Vec<_> = (0..241).map(|_| serde_json::json!({"type":"rect"})).collect();
+        assert!(validate(&serde_json::json!({"elements":many})).is_err());
+    }
+}

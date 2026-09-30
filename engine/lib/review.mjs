@@ -54,11 +54,13 @@ export async function reviewProject(root, { video, beat } = {}) {
     const images = fs.readdirSync(dir).filter(f => f.endsWith('.png')).sort();
     if (images.length !== samples.length) throw new Error(`Expected ${samples.length} decoded review frames; received ${images.length}`);
     samples.forEach((s, i) => { s.image = images[i]; });
+    // One tiled image of every sample, in order, so a reviewer (human or model) reads it at a glance.
+    await ffmpeg(['-y', '-framerate', '1', '-i', path.join(dir, 'frame-%04d.png'), '-vf', `scale=240:-2,tile=8x${Math.ceil(samples.length / 8)}:padding=4:margin=4:color=0x161b22`, '-frames:v', '1', '-threads', '1', path.join(dir, 'strip.png')]);
     writeJSON(path.join(dir, 'review.json'), { video: file, outputSha256: report.outputSha256, inputId: report.inputId, draft: report.draft, samples });
     const cards = samples.map(s => `<figure><img src="${s.image}" alt="Decoded frame ${s.frame}"><figcaption><b>${s.time.toFixed(3)}s · frame ${s.frame}</b><br>${s.reasons.map(escape).join('<br>')}</figcaption></figure>`).join('\n');
     const playback = `<video controls preload="metadata" style="width:min(100%,800px);max-height:550px;margin-bottom:24px" src="${escape(path.relative(dir,file).split(path.sep).join('/'))}"></video>`;
     fs.writeFileSync(path.join(dir, 'index.html'), `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Video boundary review</title><style>body{background:#151b24;color:#f5f3ed;font:16px system-ui;margin:32px}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}figure{margin:0;background:#26303c;padding:12px}img{width:100%;max-height:440px;object-fit:contain}figcaption{padding-top:10px;line-height:1.5}p{max-width:850px;color:#b9c5d3}</style><h1>Video boundary review</h1><p>Decoded from ${escape(path.basename(file))}. ${report.draft ? 'Draft timing: estimates may be present.' : 'Final render.'} Inspect joins, caption visibility and word starts/ends. Frame labels belong to this review page only. Listen to the MP4 to judge synchronization and sound.</p>${playback}<main>${cards}</main>`);
-    return path.join(dir, 'index.html');
+    return `${path.join(dir, 'index.html')}\n${path.join(dir, 'strip.png')} (all ${samples.length} frames in order; labels in review.json)`;
   } catch (error) {
     fs.rmSync(dir, { recursive: true, force: true });
     throw error;

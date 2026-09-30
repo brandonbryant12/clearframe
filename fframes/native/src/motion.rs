@@ -71,15 +71,33 @@ impl MotionStyle {
 
 /// How a scene leaves before the next one enters. Mirrors the incoming transition.
 #[derive(Clone, Copy, Debug, PartialEq)]
-pub enum ExitKind { None, Fade, Push, Zoom, Wipe }
+pub enum ExitKind { None, Fade, Push, Zoom, Wipe, Panel, Iris, Whip }
 impl ExitKind {
     pub fn parse(value: &str) -> Option<Self> {
-        Some(match value { "none" => Self::None, "fade" => Self::Fade, "push" => Self::Push, "zoom" => Self::Zoom, "wipe" => Self::Wipe, _ => return None })
+        Some(match value {
+            "none" => Self::None, "fade" => Self::Fade, "push" => Self::Push, "zoom" => Self::Zoom, "wipe" => Self::Wipe,
+            "panel" => Self::Panel, "iris" => Self::Iris, "whip" => Self::Whip, _ => return None,
+        })
     }
+    /// Graphic transitions cover the cut: the exit must finish, so it may start a little
+    /// earlier than a fade would. `production.mjs` mirrors these seconds.
+    pub fn cover_seconds(self) -> Option<f32> {
+        match self { Self::Panel => Some(0.42), Self::Iris => Some(0.5), Self::Whip => Some(0.24), _ => None }
+    }
+}
+/// Seconds the incoming half of a graphic transition takes.
+pub fn reveal_seconds(kind: &str) -> f32 {
+    match kind { "panel" => 0.5, "iris" => 0.55, "whip" => 0.3, _ => 0.0 }
 }
 
 /// Exit progress 0 → 1 over the final `duration` seconds, never before `earliest`
 /// (the end of the last spoken word) so speech-following text is not faded early.
+pub fn cover_progress(time: f32, scene_seconds: f32, duration: f32, earliest: f32) -> f32 {
+    // A cover must complete at the cut; if speech runs late it compresses, never skips.
+    let start = (scene_seconds - duration).max(earliest).min(scene_seconds - 0.12);
+    in_cubic((time - start) / (scene_seconds - start))
+}
+
 pub fn exit_progress(time: f32, scene_seconds: f32, duration: f32, earliest: f32) -> f32 {
     let start = (scene_seconds - duration).max(earliest);
     let span = scene_seconds - start;

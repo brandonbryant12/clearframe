@@ -21,14 +21,14 @@ import { reviewSamples, reviewProject } from '../engine/lib/review.mjs';
 import crypto from 'node:crypto';
 
 function project(t,sb){const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cf-native-'));t.after(()=>fs.rmSync(dir,{recursive:true,force:true}));writeJSON(path.join(dir,'storyboard.json'),sb);return dir;}
-test('all 32 catalog examples validate in landscape and vertical without mutating author input',()=>{
-  assert.equal(BLOCKS.length,32);
+test('all 33 catalog examples validate in landscape and vertical without mutating author input',()=>{
+  assert.equal(BLOCKS.length,33);
   for(const b of BLOCKS)for(const vertical of [false,true]){const before=JSON.stringify(b.example);normalizeProps(b.name,b.example,{vertical});assert.equal(JSON.stringify(b.example),before);}
 });
-test('twenty-four distinct playbooks compile to native jobs without paid assets, slide chrome or custom code',t=>{
-  assert.equal(PLAYBOOKS.length,24);const arcs=new Set();
+test('twenty-seven distinct playbooks compile to native jobs without paid assets, slide chrome or custom code',t=>{
+  assert.equal(PLAYBOOKS.length,27);const arcs=new Set();
   for(const p of PLAYBOOKS){const root=project(t,storyboardFor(p.id)),sb=loadStoryboard(root),result=createJob(sb,computeTiming(root),{draft:true});assert.deepEqual(result.errors,[],p.id);assert.ok(result.job.beats.every(b=>b.frames>0));assert.equal(result.job.chrome,false);arcs.add(result.job.beats.map(b=>b.block).join(','));assert.equal(sb.assets.length,0);}
-  assert.equal(arcs.size,24);
+  assert.equal(arcs.size,27);
 });
 test('graphic contracts reject unknown assets and invalid phase clocks while preserving cue controls',t=>{
   assert.equal(normalizeProps('flow',{nodes:[{label:'Start'},{label:'End'}],orientation:'horizontal'},{vertical:true}).orientation,'vertical');

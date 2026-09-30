@@ -49,6 +49,10 @@ export function validateStoryboard(sb) {
   if (sb.format?.preset && !PRESETS[sb.format.preset]) errors.push('Unknown format preset');
   if(sb.continuity?.maxGeneratedShare!=null && (!Number.isFinite(sb.continuity.maxGeneratedShare)||sb.continuity.maxGeneratedShare<0||sb.continuity.maxGeneratedShare>1)) errors.push('maxGeneratedShare must be 0–1');
   for(const k of ['lead','tail','minBeat','silentBeat','outro']) if(sb.pacing?.[k]!=null&&(!Number.isFinite(sb.pacing[k])||sb.pacing[k]<0)) errors.push(`pacing.${k} must be nonnegative`);
+  if(sb.pacing?.continuous!=null&&typeof sb.pacing.continuous!=='boolean') errors.push('pacing.continuous must be true or false');
+  if(sb.voice?.takes!=null&&!['beat','chapter'].includes(sb.voice.takes)) errors.push('voice.takes must be beat or chapter');
+  if(sb.voice?.cast!=null){if(typeof sb.voice.cast!=='object'||Array.isArray(sb.voice.cast))errors.push('voice.cast must map speaker ids to {voice, style}');else for(const b of sb.beats??[])if(b.vo&&!sb.voice.cast[b.speaker])errors.push(`beats "${b.id}" needs a speaker from voice.cast`);}
+  if(sb.speakers!=null){if(typeof sb.speakers!=='object'||Array.isArray(sb.speakers))errors.push('speakers must map ids to {name, role, color}');else for(const [id,s] of Object.entries(sb.speakers)){if(!s||typeof s.name!=='string'||!s.name.trim()||s.name.length>40)errors.push(`speakers.${id}.name must be text up to 40 characters`);if(s?.role!=null&&(typeof s.role!=='string'||s.role.length>40))errors.push(`speakers.${id}.role must be text up to 40 characters`);if(s?.color!=null&&!['accent','accent2','ink','positive','negative'].includes(s.color))errors.push(`speakers.${id}.color must be accent, accent2, ink, positive or negative`);if(s?.stem!=null&&typeof s.stem!=='string')errors.push(`speakers.${id}.stem must be a file path`);}}
   const ids = new Set();
   for (const [i, b] of (sb.beats ?? []).entries()) {
     if (!b.id || !/^[a-z0-9][a-z0-9-_]*$/i.test(b.id)) errors.push(`beats[${i}].id must be a slug (letters, digits, - or _)`);
@@ -59,6 +63,7 @@ export function validateStoryboard(sb) {
     for(const k of ['lead','tail','hold','min']) if(b[k]!=null&&(!Number.isFinite(b[k])||b[k]<0)) errors.push(`beats[${i}].${k} must be nonnegative`);
     if (b.scene && b.block) errors.push(`beats[${i}] has both "scene" and "block" — use one`);
     if (b.block && !/^[a-z0-9-]+$/.test(b.block)) errors.push(`beats[${i}].block must be a block name like "stat" (see: clearframe blocks)`);
+    if (b.speaker != null && !sb.speakers?.[b.speaker]) errors.push(`beats[${i}].speaker "${b.speaker}" is not in storyboard.speakers`);
   }
   const assetIds = new Set();
   for (const [i, a] of (sb.assets ?? []).entries()) {

@@ -30,18 +30,36 @@ export const VOICES = {
   Zubenelgenubi: 'Casual', Vindemiatrix: 'Gentle', Sadachbia: 'Lively', Sadaltager: 'Knowledgeable', Sulafat: 'Warm',
 };
 
-/** Build the documented request body. `style` is a SHORT delivery note ("calm, measured"); the text is read verbatim. */
-export function buildRequest({ text, voice = 'Charon', style, model = 'gemini-3.8-flash-tts', language, sampleRate = 24000, format = 'audio/wav' }) {
-  if (!text?.trim()) throw new Error('text is required');
-  const part = { type: 'text', text };
-  if (style) part.annotations = [{ type: 'speech_metadata', style }];
-  const speaker = { voice };
-  if (language) speaker.language = language;
+/**
+ * Build the documented request body. `style` is a SHORT delivery note ("calm, measured"); the
+ * text is read verbatim. A continuous take passes `parts` ([{text, style, speaker}]): one
+ * request, one performance, each part with its own delivery note. Two or more speakers use the
+ * conversational mode with `cast` ([{speaker, voice}]) and `speech_metadata.speaker` per part.
+ */
+export function buildRequest({ text, parts, voice = 'Charon', style, cast, model = 'gemini-3.8-flash-tts', language, sampleRate = 24000, format = 'audio/wav' }) {
+  const list = parts ?? [{ text, style }];
+  if (!list.length || list.some(p => !p.text?.trim())) throw new Error('text is required');
+  const content = list.map(p => {
+    const part = { type: 'text', text: p.text };
+    const meta = { type: 'speech_metadata', ...((p.style ?? style) ? { style: p.style ?? style } : {}), ...(cast && p.speaker ? { speaker: p.speaker } : {}) };
+    if (Object.keys(meta).length > 1) part.annotations = [meta];
+    return part;
+  });
+  let speech_config;
+  if (cast?.length) {
+    const known = new Set(cast.map(c => c.speaker));
+    for (const p of list) if (!known.has(p.speaker)) throw new Error(`part speaker "${p.speaker}" is not in the cast`);
+    speech_config = { mode: 'conversational', speakers: cast.map(c => ({ speaker: c.speaker, voice: c.voice, ...(language ? { language } : {}) })) };
+  } else {
+    const speaker = { voice };
+    if (language) speaker.language = language;
+    speech_config = [speaker];
+  }
   return {
     model,
-    input: [{ type: 'user_input', content: [part] }],
+    input: [{ type: 'user_input', content }],
     response_format: { type: 'audio', mime_type: format, sample_rate: sampleRate },
-    generation_config: { speech_config: [speaker] },
+    generation_config: { speech_config },
   };
 }
 

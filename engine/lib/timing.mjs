@@ -126,7 +126,7 @@ function voiceFor(root, beat, sb) {
         validateWords(words,tokenize(beat.vo),duration);wordTiming='measured';
       } catch(e) { alignmentIssue=e.message;words=distributeWords(tokenize(beat.vo),0,duration); }
     }
-    return { src: `assets/vo/${beat.id}.wav`, duration, words, estimated: false, provider: meta.provider, wordTiming, alignmentIssue };
+    return { src: `assets/vo/${beat.id}.wav`, duration, words, estimated: false, provider: meta.provider, wordTiming, alignmentIssue, take: meta.take };
   }
   const duration = estimateDuration(beat.vo, sb.voice.wpm);
   return {
@@ -150,9 +150,14 @@ export function computeTiming(root) {
   const beats = [];
   let cursor = 0;
   for (const [index, b] of sb.beats.entries()) {
-    const lead = b.lead ?? sb.pacing.lead;
-    const tail = b.tail ?? (b.block ? blockTail(b.block) : null) ?? sb.pacing.tail;
+    // A continuous recording (imported podcast or talk) plays back to back: no added lead or tail.
     const vo = b.vo ? voiceFor(root, b, sb) : null;
+    // Continuous takes play back to back: no lead inside a take, no tail until its last beat.
+    const take = vo?.take;
+    const continuousLead = (sb.pacing.continuous === true && b.vo) || (take && take.index > 0);
+    const continuousTail = (sb.pacing.continuous === true && b.vo) || (take && take.index < take.count - 1);
+    const lead = b.lead ?? (continuousLead ? 0 : sb.pacing.lead);
+    const tail = b.tail ?? (continuousTail ? 0 : (b.block ? blockTail(b.block) : null) ?? sb.pacing.tail);
     const natural = vo ? Math.max(0, lead) + vo.duration + tail + (b.hold ?? 0) : sb.pacing.silentBeat + (b.hold ?? 0);
     const dur = b.duration ?? Math.max(b.min ?? sb.pacing.minBeat, natural);
     const start = snap(cursor, fps);

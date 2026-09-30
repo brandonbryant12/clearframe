@@ -6,17 +6,27 @@ Agent-directed motion graphics rendered natively with **FFFrames**. A film is on
 
 ## What it makes
 
-- **32 native blocks** — hero typography, chapter openers and marker highlights; counters, KPI cards and before/after deltas; bars, lines, waffles and pictograms, rings, donuts, funnels and area-true magnitude comparisons; steps, timelines, flows, cycles, checklists and icon grids; image and video plates, annotated screenshots, and speech-following kinetic text. `clearframe blocks` lists them by purpose; `blocks NAME` prints props and a ready example. [Reference](skills/clearframe-library/references/blocks.md).
-- **24 playbooks** — reports, explainers, data stories, decision memos, incident reviews, product and screen walkthroughs, lessons, recipes, travel, language practice, checklists, year-in-review, personal stories and quiet moments. They are starting arcs, not a menu: combine and reorder blocks freely.
-- **A real type system** — Inter and Inter Display at their optical sizes, tabular figures for every counter, balanced headline wrapping, line-by-line masked reveals and whole-word accent emphasis, all measured with the same shaper that draws the pixels.
-- **Eight palettes** — `paper`, `ink`, `editorial`, `signal`, `midnight`, `forest`, `ember`, `mono`, each contrast-checked, with a secondary accent and a slow-drifting `glow` backdrop. Override any token in hex.
-- **Choreographed motion** — `gentle`, `snappy` or `spring` curves at any intensity; entrances (`cut`, `fade`, `rise`, `wipe`, `push`, `zoom`) and exits that mirror the next scene; values that count in step with the marks they describe and always land on the exact authored number.
-- **Speech-led text** — phrase highlighting, word reveals and one-word mode, burned captions and SRT/VTT, all tied to measured word timestamps of the exact recording. [Speech workflow](docs/speech.md).
-- **Occasional generated inserts** — Gemini Omni footage and Gemini images that follow the film's palette and continuity brief, capped at a share of runtime. [Continuity](docs/continuity.md).
+- **Motion graphics, not slides.** Every scene can:
+  - draw its own art (`canvas`: paths that draw on, markers travelling along routes, echo trails, morphs across cuts, spotlights, meters, hand-drawn pencil strokes);
+  - sit on imagery (full or split `plate` with duotone and tint treatments);
+  - flood the frame with colour (`tone`) and drift with a slow `camera`;
+  - cut with `panel`, `iris` or `whip` transitions that carry one movement across the cut.
 
-| | |
-|---|---|
-| ![Vertical gallery in the ink palette](docs/media/blocks-vertical.jpg) | ![One scene in all eight palettes](docs/media/looks.png) ![A data story in midnight with the glow backdrop](docs/media/data-story.jpg) |
+  Films take an editorial `frame`, grain and a vignette. See [canvas.md](docs/canvas.md) and [ideas.md](docs/ideas.md).
+- **33 native blocks** for evidence and structure: hero type, counters, KPI cards, deltas, bars, lines, waffles, rings, donuts, funnels, area-true magnitudes, steps, timelines, flows, cycles, checklists, annotated screenshots, kinetic type (including poster `stack` type that builds as spoken). `clearframe blocks NAME` prints props and an example.
+- **A creative system:**
+  - `treatments`: eight art directions (editorial, noir, kinetic, sketchbook, blueprint, audiogram, brand, calm).
+  - `sketch`: eight canvas starting compositions.
+  - `reference VIDEO`: the cut rhythm, keyframes, palette and motion of a film to borrow from.
+  - `critique`: flags deck-like runs, stillness, text density, weak hooks and "and then" story chains.
+  - 27 playbooks as starting arcs.
+- **From material to film:**
+  - `ingest --markdown` turns a research report (or HTML/DOCX/PDF) into an evidence brief of figures, sources, tensions and chart-ready tables.
+  - `ingest --audio` turns a podcast or talk into gapless beats with measured word timings, speakers and live meters.
+  - The `clearframe-direction` skill walks from brief to story to look to pictures to review.
+- **Type:** Inter, Inter Display and tabular figures; Instrument Serif for the italic accent word; IBM Plex Mono for labels and code; Architects Daughter for hand lettering. All are measured with the same shaper that draws them. **14 palettes**, each contrast-checked in every tone.
+- **Voice that performs:** continuous chapter takes with a per-beat energy map, two-voice conversations, and word timings measured for free with local Whisper (`align --whisper`). Sound design (`sfx`) lands on visual peaks.
+- **Honest numbers:** every figure needs a visible source; counters land on the exact value; `check` refuses what would mislead. See [speech timing](docs/speech.md) and the integrity skill.
 
 ## Start
 
@@ -24,7 +34,9 @@ Requires Node 20.10+, Rust 1.88+, FFmpeg/ffprobe and native codecs. Follow [nati
 
 ```sh
 node engine/cli.mjs doctor
-node engine/cli.mjs new my-film --playbook data-story --theme midnight
+node engine/cli.mjs new my-film --playbook data-story --treatment editorial
+node engine/cli.mjs critique my-film              # rhythm, density, hook and story links, instantly
+node engine/cli.mjs draft my-film                 # draft voice + check + sheet + draft MP4 in one pass
 # Replace the illustrative claims in my-film/storyboard.json, then:
 node engine/cli.mjs sheet my-film --draft      # contact sheet
 node engine/cli.mjs voice my-film --draft      # free local narration
@@ -34,6 +46,17 @@ node engine/cli.mjs render my-film             # final encode
 ```
 
 Open the contact sheet, then watch and listen to the MP4. `build/video.mp4.json` records input hashes, renderer revision, encoder, audio provenance, output hash and color space. Drafts keep the authored canvas and frame rate, allow provisional voice timing, and use a fast encoder (about 3× faster than the final encode).
+
+## From a document or recording
+
+```sh
+node engine/cli.mjs ingest digest --markdown report.md        # BRIEF.md: figures, sources, tensions, tables
+node engine/cli.mjs ingest clip --audio episode.wav --words words.json --script script.txt --from 312 --to 358 --vertical
+node engine/cli.mjs reference inspiration.mp4                 # REFERENCE.md + keyframe sheet
+node engine/cli.mjs align clip --whisper                      # free, local, measured word timings
+```
+
+Then follow `skills/clearframe-direction/SKILL.md`: find the question and the turn, pick a treatment, plan a picture per beat, critique, and have a fresh reviewer read the sheet.
 
 ## Authoring and review
 

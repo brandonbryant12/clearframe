@@ -26,3 +26,6 @@ Generated from fframes/playbooks.mjs. These are adaptable starting structures wi
 - **checklist-guide**: Help someone get ready, one item at a time. Inputs: A tested checklist, the reason for each item and one safety or quality note.
 - **year-in-review**: Look back on a year with a clear through-line. Inputs: Verified yearly figures, one trend, one quote and what comes next.
 - **scale-explainer**: Make a very large number feel real. Inputs: One large figure, a trustworthy comparison and a human-scale unit.
+- **research-digest**: Turn a long report into a question-led short film. Inputs: An evidence brief (clearframe ingest --markdown): the question, 3–5 sourced claims, one tension.
+- **podcast-clip**: Cut a podcast moment into a vertical social clip. Inputs: A recording and word timestamps (clearframe ingest --audio), one self-contained moment of 30–60 s.
+- **brand-spot**: A short, designed spot with an editorial frame. Inputs: One idea, three supporting beats, a call to action.

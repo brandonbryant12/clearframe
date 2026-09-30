@@ -1,21 +1,19 @@
 ---
 name: clearframe
-description: Direct and produce an FFFrames video from a brief, article, script or recording. Use for explainers, lessons, recipes, travel, personal stories, reports and speech-led films; routes authoring, media generation and review.
+description: Direct and produce an FFFrames video from a brief, article, research report, script, podcast or recording. Use for explainers, research digests, podcast clips, lessons, stories, reports and speech-led films; routes ingestion, direction, authoring, media generation and review.
 ---
 
 # Direct a ClearFrame film
 
-FFFrames is the only active renderer. Read the project AGENTS.md. Use the library skill before designing visuals, engine skill for commands, script skill for narration, motion/dataviz skills for design, integrity skill for evidence, and FFFrames skill for native code changes.
+FFFrames is the only active renderer. Read the project AGENTS.md. Skills: `clearframe-direction` (material → film), `clearframe-script` (narration and performance), `clearframe-canvas` (drawing), `clearframe-motion` (motion and rhythm), `clearframe-library` (blocks, layers, playbooks), `clearframe-dataviz` and `clearframe-integrity` (numbers and truth), `clearframe-engine` (commands), `clearframe-fframes` (renderer code). Idea library: `docs/ideas.md`.
 
-1. Establish audience, takeaway, format, duration and available evidence. Work from the user's material; research unresolved factual claims. Define what the viewer should understand or do.
-2. Choose a playbook with `node engine/cli.mjs playbooks`, then adapt its arc. The 24 starters are not a finite catalog of possible videos. Combine blocks as needed; every beat needs a purpose.
-3. Write spoken language, one idea per beat. Use verified figures and meaningful source labels. Plan the visual before spending on media. Keep titles short; reserve long speech for kinetic text.
-4. Scaffold with `new DIR --playbook NAME`. Choose a palette (8 presets, `themes`), backdrop, motion preset/intensity and entrances using `docs/style.md`; decide which words deserve `emphasis` or a `highlight`. Use `blocks NAME` for exact props. Do not write browser scene modules.
-5. Generate free draft voice or import approved recordings. For speech-following typography/captions, read `docs/speech.md`, import measured words or explicitly transcribe the current recording. Never describe syllable interpolation as word alignment.
-6. Native type/charts/diagrams carry all information. Use Google image or Gemini Omni only for specific visual material the native scene cannot express. Read `docs/continuity.md`; keep palette/references/framing/movement consistent and preserve the shared soundtrack.
-7. Before paid generation, run `plan` and honor the user scope and budget. `voice --draft` and `music --draft` are free. `align --words` is free; `align --transcribe` uploads the selected recording and is paid.
-8. Render a sheet and open it. Use `looks` to compare palettes and `review` to inspect encoded transitions and word boundaries, run `check`, render the MP4, and listen. Final kinetic/captioned output must pass the measured-timestamp gate without `--draft`. Report sample-data, draft or transcription limitations accurately.
+1. **Establish** the audience, the takeaway, format, length and evidence. Work from the user's material. With a report or recording, start with `ingest` (see `clearframe-direction`); with a reference video, run `reference`.
+2. **Find the story.** Question → misconception or tension → turn → payoff, in `DIRECTION.md`. Choose 3–5 claims. Beats link with *but*/*therefore*. A film is not a summary of sections.
+3. **Choose the look.** `treatments` (editorial, noir, kinetic, sketchbook, blueprint, audiogram, brand, calm), then palette overrides from the brand or reference. Scaffold with `new DIR --playbook NAME --treatment ID`; playbooks (`playbooks`) are starting arcs, not limits.
+4. **Plan a picture per beat** from `docs/ideas.md`: charts for evidence; `canvas` for mechanisms and metaphors (start from `sketch`); `plate` for the world; `tone` for punctuation; kinetic `stack` where words are the picture; `art` to point at things. Use `blocks NAME` for exact props. Do not write browser scene modules.
+5. **Write for the ear** (`clearframe-script`): one idea per beat, landing words where the visuals land, an energy map in per-beat `style`, continuous takes (`voice.takes: "chapter"`), figures as digits.
+6. **Critique before rendering.** Run `critique DIR` and fix deck-like runs, static holds, dense text, weak hooks and "and then" chains. Then `voice --draft`, `align --whisper` (free, measured words), `sheet --draft`, and open it. Use `still --grid` to place art. Ask a fresh reviewer subagent to judge the sheet against `DIRECTION.md` with the rubric in `clearframe-direction`.
+7. **Media.** Native type, charts and diagrams carry all information. Generate plates (Gemini image) only for world imagery code cannot draw, using a duotone or tint treatment so they match the palette. Footage inserts (Gemini Omni) are sparing (≤ 20% of runtime); read `docs/continuity.md`. Run `plan` before any paid generation and honour the user's budget. `voice --draft`, `music --draft`, `align --words` and `align --whisper` are free.
+8. **Deliver.** `check`, then render the final. Speech-following text needs measured timestamps (`docs/speech.md`). Set `sfx` (subtle/normal/punchy) so sound follows the picture, and listen to the mix. `review DIR` decodes frames around cuts and words.
 
-Deliver source/output locations, verification and remaining material limits. Do not claim a live API test from a mock or a visual review from a compilation. The historical engine is archived for recovery, not an active alternative.
-
-Keep ordinary film output free of slide counters. Research recent MIT projects when the native vocabulary lacks a useful pattern; preserve exact source licenses and prefer the existing simple stack. See `docs/research/2026-github-video-patterns.md`.
+Report source and output locations, what was verified, and remaining limits (sample data, estimated timings, draft voice). Never claim a live API test from a mock or a visual review from a compilation. Keep film output free of slide counters. Borrow from references and GitHub projects only under compatible licences (see `docs/research/2026-github-video-patterns.md`).

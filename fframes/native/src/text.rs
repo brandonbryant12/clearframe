@@ -9,21 +9,33 @@ use std::sync::{Arc, Mutex, OnceLock};
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 /// `Figures` is Inter Display Bold with its designed tabular digits as the default glyphs,
 /// so counters keep a constant width without hand-spaced digit slots.
-pub enum Font { Text, TextStrong, DisplayLight, Display, DisplayBold, Figures }
+/// `Serif`/`SerifItalic` (Instrument Serif) and `Mono` (IBM Plex Mono Medium) are accent
+/// faces: italic serif words inside sans headlines, monospace labels, code and chrome.
+pub enum Font { Text, TextStrong, DisplayLight, Display, DisplayBold, Figures, Serif, SerifItalic, Mono, Hand }
 
 impl Font {
-    const ALL: [Font; 6] = [Font::Text, Font::TextStrong, Font::DisplayLight, Font::Display, Font::DisplayBold, Font::Figures];
+    const ALL: [Font; 10] = [Font::Text, Font::TextStrong, Font::DisplayLight, Font::Display, Font::DisplayBold, Font::Figures,
+        Font::Serif, Font::SerifItalic, Font::Mono, Font::Hand];
     pub fn family(self) -> &'static str {
-        match self { Font::Text | Font::TextStrong => "Inter", Font::Figures => "Inter Display Figures", _ => "Inter Display" }
+        match self {
+            Font::Text | Font::TextStrong => "Inter", Font::Figures => "Inter Display Figures",
+            Font::Serif | Font::SerifItalic => "Instrument Serif", Font::Mono => "IBM Plex Mono", Font::Hand => "Architects Daughter", _ => "Inter Display",
+        }
     }
     pub fn weight(self) -> u16 {
-        match self { Font::Text => 400, Font::TextStrong | Font::Display => 600, Font::DisplayLight => 300, Font::DisplayBold | Font::Figures => 700 }
+        match self {
+            Font::Text | Font::Serif | Font::SerifItalic | Font::Hand => 400, Font::Mono => 500, Font::TextStrong | Font::Display => 600,
+            Font::DisplayLight => 300, Font::DisplayBold | Font::Figures => 700,
+        }
     }
+    pub fn italic(self) -> bool { self == Font::SerifItalic }
     fn file(self) -> &'static str {
         match self {
             Font::Text => "Inter-Regular.ttf", Font::TextStrong => "Inter-SemiBold.ttf",
             Font::DisplayLight => "InterDisplay-Light.ttf", Font::Display => "InterDisplay-SemiBold.ttf",
             Font::DisplayBold => "InterDisplay-Bold.ttf", Font::Figures => "InterDisplay-Figures.ttf",
+            Font::Serif => "InstrumentSerif-Regular.ttf", Font::SerifItalic => "InstrumentSerif-Italic.ttf",
+            Font::Mono => "IBMPlexMono-Medium.ttf", Font::Hand => "ArchitectsDaughter-Regular.ttf",
         }
     }
     fn index(self) -> usize { Font::ALL.iter().position(|f| *f == self).unwrap() }
@@ -145,6 +157,12 @@ fn wrap(text: &str, style: Style, size: f32, max_w: f32) -> Vec<Line> {
         lines.push(Line { text: current, width });
     }
     lines
+}
+
+/// Baseline offset inside a line box of `line_height` (the same half-leading model as `fit`).
+pub fn baseline_in(font: Font, size: f32, line_height: f32) -> f32 {
+    let (ascent, descent) = vertical_metrics(font);
+    (line_height - (ascent + descent) * size) / 2.0 + ascent * size
 }
 
 fn build(text: &str, style: Style, size: f32, max_w: f32) -> Layout {

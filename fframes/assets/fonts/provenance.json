@@ -62,5 +62,66 @@
       "tool": "FontTools 4.60.1 varLib.instancer",
       "sha256": "b9f812a3acf0377a2dc98bf5e4c2e5f94d665d5852d836647db3bfaf24895b7b"
     }
+  ],
+  "families": [
+    {
+      "family": "Instrument Serif",
+      "license": "OFL-1.1",
+      "repository": "https://github.com/google/fonts",
+      "revision": "0b58fb370093f9a9f4ff785d94405710b79de67c",
+      "files": [
+        {
+          "file": "InstrumentSerif-Regular.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/instrumentserif/InstrumentSerif-Regular.ttf",
+          "sha256": "498efd461f6ddfcb7a111bf9a565709d2085d48201d501ead960d93e84ffbb88"
+        },
+        {
+          "file": "InstrumentSerif-Italic.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/instrumentserif/InstrumentSerif-Italic.ttf",
+          "sha256": "08939b8bdf534afec24ae0ef5e03f948940cd9a8fe08e7fecbad040e62327385"
+        },
+        {
+          "file": "OFL-InstrumentSerif.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/instrumentserif/OFL.txt",
+          "sha256": "129ed7618959716959f2941fdd5b49e0ad6e6c1d78726761786a00253d865521"
+        }
+      ]
+    },
+    {
+      "family": "IBM Plex Mono",
+      "license": "OFL-1.1",
+      "repository": "https://github.com/google/fonts",
+      "revision": "0b58fb370093f9a9f4ff785d94405710b79de67c",
+      "files": [
+        {
+          "file": "IBMPlexMono-Medium.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/ibmplexmono/IBMPlexMono-Medium.ttf",
+          "sha256": "a9b4c49bb299e05b5f6c481e7fb5e78943d2793249a0c8874ab574a2d1ea6755"
+        },
+        {
+          "file": "OFL-IBMPlexMono.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/ibmplexmono/OFL.txt",
+          "sha256": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da"
+        }
+      ]
+    },
+    {
+      "family": "Architects Daughter",
+      "license": "OFL-1.1",
+      "repository": "https://github.com/google/fonts",
+      "revision": "0b58fb370093f9a9f4ff785d94405710b79de67c",
+      "files": [
+        {
+          "file": "ArchitectsDaughter-Regular.ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/architectsdaughter/ArchitectsDaughter-Regular.ttf",
+          "sha256": "6159718a08898e34bc1cb7354086141a5f9a70b73e54dbec27ead0d59a697359"
+        },
+        {
+          "file": "OFL-ArchitectsDaughter.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/architectsdaughter/OFL.txt",
+          "sha256": "0e441ae9f18ad0c294cc5b6ae3974c2db1614cab220598578b1b58c4cc334485"
+        }
+      ]
+    }
   ]
 }

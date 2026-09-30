@@ -7,9 +7,9 @@ description: Author, validate and render ClearFrame storyboard.json projects thr
 
 Read `README.md`, `docs/style.md` and the schema at `schema/storyboard.schema.json`. The shared Node layer owns project loading, media generation, timing and audio. `fframes/production.mjs` prepares a version 2 native job and runs the reusable Rust renderer.
 
-A project needs `storyboard.json` with a nonempty `beats` array. Each beat has a unique slug `id`, supported `block`, validated `props`, optional `vo`, `chapter`, `transition`, `exit` (default `auto`: mirror the next entrance), duration/pacing and sfx. Generated assets have slug IDs; local image/clip assets can use `file`. Numeric blocks require a visible `props.source` and `sources` entry. See `clearframe blocks NAME` for current props.
+A project needs `storyboard.json` with a nonempty `beats` array. Each beat has a unique slug `id`, supported `block`, validated `props`, optional `vo`, `chapter`, `transition`, `exit` (default `auto`: mirror the next entrance), duration/pacing and sfx, plus the layer fields `plate`, `tone`, `camera` and `art` (see `docs/canvas.md`). The film may set `texture`. Generated assets have slug IDs; local image/clip assets can use `file`. Numeric blocks require a visible `props.source` and `sources` entry. See `clearframe blocks NAME` for current props.
 
-By default, beat length follows lead + recorded/estimated voice + block tail. Forced duration must not clip narration. Cues (`land`, `growSay`, `drawSay`, item `say`, bar `focus.say`) use exact words/phrases or local seconds. Missing spoken cues fail. Recorded audio does not imply measured word times: see `docs/speech.md`.
+By default, beat length follows lead + recorded/estimated voice + block tail. Forced duration must not clip narration. Cues (`land`, `growSay`, `drawSay`, item `say`, bar `focus.say`, and canvas/art `say`, `exitSay`, `keys[].say`, `along.say`) use exact words/phrases or local seconds. Missing spoken cues fail. Recorded audio does not imply measured word times: see `docs/speech.md`.
 
 `check` also fails when a beat ends before its counters and bars reach their final values (drafts warn), when staged items are cued too late to finish, and when displayed text uses characters the bundled fonts cannot draw (it names the character and prop).
 
@@ -18,7 +18,8 @@ node engine/cli.mjs new film --playbook decision-memo --theme signal
 node engine/cli.mjs voice film --draft
 node engine/cli.mjs timing film
 node engine/cli.mjs sheet film --draft
-node engine/cli.mjs still film --beat compare --pos 0.7 --draft
+node engine/cli.mjs still film --beat compare --pos 0.7 --grid --draft   # --grid: coordinates for art
+node engine/cli.mjs sketch route --vertical                             # canvas starting points
 node engine/cli.mjs check film --draft
 node engine/cli.mjs looks film --beat compare --draft
 node engine/cli.mjs render film --draft

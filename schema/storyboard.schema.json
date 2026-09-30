@@ -66,7 +66,13 @@
             "midnight",
             "forest",
             "ember",
-            "mono"
+            "mono",
+            "pop",
+            "electric",
+            "blueprint",
+            "clay",
+            "noir",
+            "sketchbook"
           ]
         },
         {
@@ -82,7 +88,13 @@
                 "midnight",
                 "forest",
                 "ember",
-                "mono"
+                "mono",
+                "pop",
+                "electric",
+                "blueprint",
+                "clay",
+                "noir",
+                "sketchbook"
               ]
             },
             "bg": {
@@ -147,6 +159,9 @@
         "wipe",
         "push",
         "zoom",
+        "panel",
+        "iris",
+        "whip",
         "auto"
       ]
     },
@@ -155,7 +170,8 @@
         "none",
         "dots",
         "grid",
-        "glow"
+        "glow",
+        "paper"
       ]
     },
     "chrome": {
@@ -170,7 +186,80 @@
       ]
     },
     "sfx": {
-      "type": "boolean"
+      "enum": [
+        true,
+        false,
+        "off",
+        "subtle",
+        "normal",
+        "punchy"
+      ]
+    },
+    "treatment": {
+      "type": "string"
+    },
+    "speakers": {
+      "type": "object"
+    },
+    "frame": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Editorial frame: brand (serif italic), section label, mono footers, progress rail",
+          "properties": {
+            "brand": {
+              "type": "string"
+            },
+            "left": {
+              "type": "string"
+            },
+            "right": {
+              "type": "string"
+            },
+            "label": {
+              "type": "boolean"
+            },
+            "progress": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "texture": {
+      "oneOf": [
+        {
+          "enum": [
+            "grain",
+            "vignette",
+            "film",
+            "none"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "grain": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "vignette": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "animate": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
     },
     "voice": {
       "type": "object"
@@ -361,6 +450,7 @@
               "donut",
               "magnitude",
               "checklist",
+              "canvas",
               "annotate"
             ]
           },
@@ -401,6 +491,9 @@
               "wipe",
               "push",
               "zoom",
+              "panel",
+              "iris",
+              "whip",
               "auto"
             ]
           },
@@ -411,7 +504,10 @@
               "fade",
               "push",
               "zoom",
-              "wipe"
+              "wipe",
+              "panel",
+              "iris",
+              "whip"
             ]
           },
           "motion": {
@@ -439,6 +535,166 @@
             "type": "array",
             "items": {
               "type": "object"
+            }
+          },
+          "tone": {
+            "enum": [
+              "none",
+              "accent",
+              "accent2",
+              "invert",
+              "surface"
+            ],
+            "description": "Colour-blocked scene"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "Section label for the film frame (defaults to chapter)"
+          },
+          "note": {
+            "type": "string"
+          },
+          "transitionColor": {
+            "enum": [
+              "accent",
+              "accent2",
+              "ink",
+              "bg",
+              "surface"
+            ]
+          },
+          "transitionOrigin": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "camera": {
+            "oneOf": [
+              {
+                "enum": [
+                  "auto",
+                  "none",
+                  "in",
+                  "out",
+                  "left",
+                  "right",
+                  "up",
+                  "down"
+                ]
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "move": {
+                    "enum": [
+                      "auto",
+                      "none",
+                      "in",
+                      "out",
+                      "left",
+                      "right",
+                      "up",
+                      "down"
+                    ]
+                  },
+                  "amount": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              }
+            ]
+          },
+          "plate": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Image or clip behind or beside the block (docs/canvas.md)",
+            "properties": {
+              "asset": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "side": {
+                "enum": [
+                  "full",
+                  "left",
+                  "right",
+                  "top",
+                  "bottom"
+                ]
+              },
+              "treatment": {
+                "enum": [
+                  "none",
+                  "mono",
+                  "duotone",
+                  "tint",
+                  "blur",
+                  "soft"
+                ]
+              },
+              "drift": {
+                "enum": [
+                  "none",
+                  "in",
+                  "out",
+                  "left",
+                  "right",
+                  "up",
+                  "down"
+                ]
+              },
+              "scrim": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "focus": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "offset": {
+                "type": "number",
+                "minimum": 0
+              },
+              "loop": {
+                "type": "boolean"
+              }
+            }
+          },
+          "art": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Canvas elements under/over the block (docs/canvas.md)",
+            "properties": {
+              "under": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "over": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
             }
           }
         },
@@ -477,6 +733,12 @@
                     },
                     "emphasis": {
                       "description": "Up to 4 whole-word phrases drawn in the accent color"
+                    },
+                    "emphasisStyle": {
+                      "description": "accent (default) or serif: emphasis phrases set in italic serif, the editorial accent"
+                    },
+                    "align": {
+                      "description": "left (default) or center: centre the whole stack"
                     }
                   }
                 }
@@ -517,6 +779,12 @@
                     },
                     "emphasis": {
                       "description": "Up to 4 whole-word phrases drawn in the accent color"
+                    },
+                    "emphasisStyle": {
+                      "description": "accent (default) or serif: emphasis phrases set in italic serif, the editorial accent"
+                    },
+                    "align": {
+                      "description": "left (default) or center: centre the whole stack"
                     }
                   }
                 }
@@ -572,6 +840,9 @@
                     },
                     "context": {
                       "description": "Context"
+                    },
+                    "align": {
+                      "description": "left (default) or center: centre the whole stack"
                     }
                   }
                 }
@@ -1284,6 +1555,12 @@
                     },
                     "emphasis": {
                       "description": "Up to 4 whole-word phrases drawn in the accent color"
+                    },
+                    "emphasisStyle": {
+                      "description": "accent (default) or serif: emphasis phrases set in italic serif, the editorial accent"
+                    },
+                    "align": {
+                      "description": "left (default) or center: centre the whole stack"
                     }
                   }
                 }
@@ -1427,10 +1704,19 @@
                       "description": "Supporting line"
                     },
                     "mode": {
-                      "description": "highlight|reveal|word"
+                      "description": "highlight|reveal|word|stack"
                     },
                     "align": {
-                      "description": "left|center"
+                      "description": "left|center (stack defaults to center)"
+                    },
+                    "emphasis": {
+                      "description": "stack: words drawn larger in the accent (whole words from the narration)"
+                    },
+                    "emphasisStyle": {
+                      "description": "stack: bold (default) or serif italic emphasis words"
+                    },
+                    "upper": {
+                      "description": "stack: set in capitals (true/false)"
                     },
                     "maxWords": {
                       "description": "Words per phrase (1–10)"
@@ -1658,6 +1944,9 @@
                     },
                     "emphasis": {
                       "description": "Up to 4 whole-word phrases drawn in the accent color"
+                    },
+                    "align": {
+                      "description": "left (default) or center: centre the whole stack"
                     }
                   }
                 }
@@ -1698,6 +1987,9 @@
                     },
                     "phrases": {
                       "description": "[string or {text,say}] (1–4 whole-word parts of text)"
+                    },
+                    "align": {
+                      "description": "left (default) or center: centre the whole stack"
                     }
                   }
                 }
@@ -1818,6 +2110,52 @@
                     },
                     "items": {
                       "description": "[string or {text,detail,say}] (2–6)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
+                  "const": "canvas"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "view": {
+                      "description": "[width, height] author units fitted below the header; omit to use frame pixels (1920×1080 landscape)"
+                    },
+                    "elements": {
+                      "description": "[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt}] (≤ 240) — see docs/canvas.md"
+                    },
+                    "stagger": {
+                      "description": "Seconds between top-level elements without a cue (0–3)"
+                    },
+                    "rough": {
+                      "description": "Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure|solid, gap} (an element can set rough: false)"
                     }
                   }
                 }

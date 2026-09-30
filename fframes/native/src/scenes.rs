@@ -15,7 +15,38 @@ mod charts;
 mod diagrams;
 #[path = "media.rs"]
 mod media;
-pub(crate) use diagrams::validate as validate_diagram;
+#[path = "canvas.rs"]
+mod canvas;
+
+/// Block-specific structural checks (diagrams, canvas).
+pub(crate) fn validate_diagram(block: &str, props: &Value) -> Result<(), &'static str> {
+    if block == "canvas" { return canvas::validate(props); }
+    diagrams::validate(block, props)
+}
+
+/// Beat-level layers: art elements, camera move and image plate.
+pub(crate) fn validate_layers(art: Option<&Value>, camera: Option<&Value>, plate: Option<&Value>) -> Result<(), &'static str> {
+    if let Some(art) = art {
+        if !art.is_object() { return Err("art must be {under, over}"); }
+        let mut count = 0;
+        for layer in ["under", "over"] { canvas::validate_elements(arr(art, layer), 0, &mut count)?; }
+    }
+    if let Some(camera) = camera {
+        if !["", "auto", "none", "in", "out", "left", "right", "up", "down"].contains(&s(camera, "move"))
+            || !n(camera, "amount", 0.5).is_finite() || !(0.0..=1.0).contains(&n(camera, "amount", 0.5)) {
+            return Err("camera needs move in|out|left|right|up|down|none and amount 0–1");
+        }
+    }
+    if let Some(plate) = plate {
+        if s(plate, "file").is_empty() || !["", "full", "left", "right", "top", "bottom"].contains(&s(plate, "side"))
+            || !["", "none", "mono", "duotone", "tint", "blur", "soft"].contains(&s(plate, "treatment"))
+            || !["", "none", "in", "out", "left", "right", "up", "down"].contains(&s(plate, "drift"))
+            || !(0.0..=1.0).contains(&n(plate, "scrim", 0.0)) {
+            return Err("plate needs a prepared file, side full|left|right|top|bottom, a known treatment/drift and scrim 0–1");
+        }
+    }
+    Ok(())
+}
 
 pub(crate) fn s<'a>(v: &'a Value, key: &str) -> &'a str { v.get(key).and_then(Value::as_str).unwrap_or("") }
 pub(crate) fn n(v: &Value, key: &str, default: f64) -> f64 { v.get(key).and_then(Value::as_f64).unwrap_or(default) }
@@ -32,11 +63,17 @@ pub(crate) fn active_word(words: &[Caption], time: f32) -> Option<usize> {
 }
 /// Phrase membership is derived from prepared timestamps, never estimated from text.
 pub(crate) fn word_window(words: &[Caption], time: f32, max_words: usize, max_gap: f32, max_duration: f32) -> std::ops::Range<usize> {
+    phrase_window(words, time, max_words, max_gap, max_duration, false)
+}
+/// As `word_window`; with `sentences`, a phrase also ends after . ! or ? so poster type
+/// never strands the start of the next sentence.
+pub(crate) fn phrase_window(words: &[Caption], time: f32, max_words: usize, max_gap: f32, max_duration: f32, sentences: bool) -> std::ops::Range<usize> {
     if words.is_empty() { return 0..0; }
     let latest = words.iter().rposition(|word| time >= word.start).unwrap_or(0);
     let mut start = 0;
     for index in 1..words.len() {
-        let boundary = index - start >= max_words.max(1)
+        let ends_sentence = sentences && words[index - 1].text.trim_end_matches(['"', '\'', ')', '”', '’']).ends_with(['.', '!', '?']);
+        let boundary = index - start >= max_words.max(1) || ends_sentence
             || words[index].start - words[index - 1].end > max_gap
             || words[index].end - words[start].start > max_duration;
         if boundary {
@@ -101,22 +138,71 @@ pub(crate) struct Draw<'a, 'c, 'm> {
     pub f: Frame,
     pub ctx: &'c FFramesContext<'a, 'm>,
     pub p: Palette,
+    /// The film palette before any scene tone: graphic transitions use it on both sides of
+    /// a cut so the covering panel keeps one colour.
+    pub base: Palette,
     pub area: Area,
     /// Scene-local seconds.
     pub t: f32,
     pub wide: bool,
     pub m: MotionStyle,
     ids: Cell<usize>,
+    /// Header top when a plate occupies the top of a tall frame.
+    pub head_y: Option<f32>,
+    /// Lowest y the footer may use (a bottom plate raises it).
+    pub floor: f32,
 }
 
 impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     fn new(b: &'a Beat, f: Frame, ctx: &'c FFramesContext<'a, 'm>, area: Area) -> Self {
         let env = &b.environment;
-        Draw { b, t: f.seconds(), f, ctx, p: Palette::from_theme(&env.theme), area, wide: env.width / env.height > 1.3,
-            m: MotionStyle::new(&env.motion.preset, env.motion.intensity), ids: Cell::new(0) }
+        let base = Palette::from_theme(&env.theme);
+        Draw { b, t: f.seconds(), f, ctx, p: base.clone().toned(b.tone.as_deref().unwrap_or("")), base, area, wide: env.width / env.height > 1.3,
+            m: MotionStyle::new(&env.motion.preset, env.motion.intensity), ids: Cell::new(0), head_y: None, floor: env.height }
     }
     fn props(&self) -> &'a Value { &self.b.props }
     fn tall(&self) -> bool { self.b.environment.height > self.b.environment.width }
+    /// Voice level 0–1 at scene seconds `t` (0 without prepared levels).
+    pub(crate) fn level(&self, t: f32) -> f32 {
+        if t < 0.0 { return 0.0; }
+        self.b.levels.get((t * self.f.fps as f32).floor() as usize).map_or(0.0, |v| *v as f32 / 100.0)
+    }
+    /// A speaker's lower third: colour dot, name and role on a soft plate, and a small
+    /// meter driven by the voice level. It holds across consecutive beats by the same speaker.
+    fn speaker_tag(&self, bottom: f32) -> Svgr<'a> {
+        let Some(sp) = self.b.speaker.as_ref() else { return empty() };
+        let name = s(sp, "name");
+        if name.is_empty() { return empty(); }
+        let color = match s(sp, "color") { "accent2" => self.p.accent2.clone(), "ink" => self.p.ink.clone(), "positive" => self.p.positive.clone(), "negative" => self.p.negative.clone(), _ => self.p.accent.clone() };
+        let role = s(sp, "role");
+        let size = if self.tall() { 32.0 } else { 30.0 };
+        let name_w = text::measure(Font::TextStrong, name, size, 0.0);
+        let role_w = if role.is_empty() { 0.0 } else { text::measure(Font::Text, role, size * 0.8, 0.0) + 22.0 };
+        let (h, pad) = (size * 2.3, size * 0.7);
+        let meter_w = 5.0 * 6.0 + 4.0 * 5.0;
+        let w = pad + 18.0 + 16.0 + name_w + role_w + 20.0 + meter_w + pad;
+        let (x, y) = (self.area.x, bottom - h);
+        let level = self.level(self.t);
+        let dot = 9.0 * (1.0 + 0.35 * level);
+        let mid = y + h / 2.0;
+        let mut bars = vec![];
+        for i in 0..5 {
+            let lv = self.level(self.t - i as f32 * 2.0 / self.f.fps as f32);
+            let bh = 6.0 + lv * (h * 0.46);
+            let bx = x + w - pad - meter_w + (4 - i) as f32 * 11.0;
+            bars.push(rounded(bx, mid - bh / 2.0, 6.0, bh, 3.0, &color));
+        }
+        let text_x = x + pad + 18.0 + 16.0;
+        let base = mid + size * 0.36;
+        let body = fframes::svgr!(<g>
+            <g opacity="0.92">{rounded(x, y, w, h, h / 2.0, &self.p.surface)}</g>
+            <circle cx={x + pad + 9.0} cy={mid} r={dot} fill={color.clone()} />
+            {self.run(name.to_owned(), text_x, base, Font::TextStrong, size, 0.0, &self.p.ink)}
+            {if role.is_empty() { empty() } else { self.run(role.to_owned(), text_x + name_w + 22.0, base, Font::Text, size * 0.8, 0.0, &self.p.muted) }}
+            <g>{bars}</g>
+        </g>);
+        if sp.get("continues").and_then(Value::as_bool).unwrap_or(false) { body } else { self.rise(body, 0.05, 18.0) }
+    }
     /// Scene seconds of the final frame.
     pub(crate) fn last_frame(&self) -> f32 { self.b.frames.saturating_sub(1) as f32 / self.f.fps as f32 }
     /// Document-unique ids for clip paths and gradients, stable for a given frame.
@@ -135,6 +221,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     pub(crate) fn run(&self, value: String, x: f32, baseline: f32, font: Font, size: f32, tracking: f32, color: &str) -> Svgr<'a> {
         if value.is_empty() { return empty(); }
         let weight = font.weight().to_string();
+        if font.italic() {
+            return fframes::svgr!(<text x={x} y={baseline} font-family={font.family()} font-weight={weight} font-style="italic" font-size={size} letter-spacing={tracking} fill={color.to_owned()}>{value}</text>);
+        }
         if tracking.abs() > 1e-3 {
             fframes::svgr!(<text x={x} y={baseline} font-family={font.family()} font-weight={weight} font-size={size} letter-spacing={tracking} fill={color.to_owned()}>{value}</text>)
         } else {
@@ -275,11 +364,21 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     fn kicker(&self, value: &str, x: f32, y: f32, w: f32, time: f32) -> (Svgr<'a>, f32) {
         if value.trim().is_empty() { return (empty(), 0.0); }
         let layout = self.fit(value, Style::kicker(22.0), w - 40.0, 60.0);
+        // Centred scenes centre the dash and label together.
+        let x = if self.centered() { x + (w - 40.0 - layout.width()) / 2.0 } else { x };
         let dash = rounded(x, y + layout.baseline - layout.size * 0.36, 26.0, 4.0, 2.0, &self.p.accent);
         let label = self.draw(&layout, x + 40.0, y, w - 40.0, Align::Left, &self.p.accent);
         (self.rise(fframes::svgr!(<g>{dash}{label}</g>), time, 10.0), layout.height())
     }
-    fn shift(&self) -> f32 { if self.tall() { self.b.environment.height * 0.11 - 108.0 } else { 0.0 } }
+    /// Hero, number and chapter blocks can centre their stack with `align: "center"`.
+    pub(crate) fn centered(&self) -> bool {
+        s(self.props(), "align") == "center" && matches!(self.b.block.as_str(), "title" | "statement" | "endcard" | "chapter" | "stat" | "highlight")
+    }
+    fn align(&self) -> Align { if self.centered() { Align::Center } else { Align::Left } }
+    fn shift(&self) -> f32 {
+        if let Some(y) = self.head_y { return y - 100.0; }
+        if self.tall() { self.b.environment.height * 0.11 - 108.0 } else { 0.0 }
+    }
     fn header(&self) -> Svgr<'a> {
         let (x, w) = (self.area.x, self.area.w);
         let shift = self.shift();
@@ -290,6 +389,92 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let layout = self.fit(title, style, if self.wide { w * 0.86 } else { w }, 150.0);
         let title = self.lines(&layout, x, 146.0 + shift, w, Align::Left, &self.p.ink, 0.06, &[]);
         fframes::svgr!(<g>{kicker}{title}</g>)
+    }
+
+    /// Mixed-face headline: whole-word `phrases` are set in the italic serif (larger, to match
+    /// the sans capitals) and drawn in the accent; everything else in `font`. Wraps greedily,
+    /// avoids a one-word last line when it can, and shrinks until it fits the box.
+    fn rich(&self, value: &str, phrases: &[String], font: Font, size: f32, leading: f32, max_w: f32, max_h: f32) -> Rich {
+        let words: Vec<&str> = value.split_whitespace().collect();
+        let joined = words.join(" ");
+        let mut marked = vec![false; words.len()];
+        let mut offsets = vec![];
+        let mut at = 0;
+        for w in &words { offsets.push(at); at += w.len() + 1; }
+        for phrase in phrases {
+            let phrase = phrase.split_whitespace().collect::<Vec<_>>().join(" ");
+            if let Some(start) = text::find_words(&joined, &phrase) {
+                let end = start + phrase.len();
+                for (i, &o) in offsets.iter().enumerate() { if o < end && o + words[i].len() > start { marked[i] = true; } }
+            }
+        }
+        let mut size = size;
+        loop {
+            let serif = size * 1.18;
+            let space = text::measure(font, " ", size, 0.0) * 1.05;
+            let measured: Vec<(String, bool, f32)> = words.iter().zip(&marked).map(|(w, &m)| {
+                ((*w).to_owned(), m, text::measure(if m { Font::SerifItalic } else { font }, w, if m { serif } else { size }, 0.0))
+            }).collect();
+            let wrap = |limit: f32| {
+                let mut lines: Vec<Vec<(String, bool, f32)>> = vec![vec![]];
+                let mut width = 0.0;
+                for word in &measured {
+                    let add = if lines.last().unwrap().is_empty() { word.2 } else { space + word.2 };
+                    if width + add > limit && !lines.last().unwrap().is_empty() { lines.push(vec![]); width = 0.0; }
+                    width += if lines.last().unwrap().is_empty() { word.2 } else { space + word.2 };
+                    lines.last_mut().unwrap().push(word.clone());
+                }
+                lines
+            };
+            let mut lines = wrap(max_w);
+            // Balance: pull a word down rather than strand one alone on the last line.
+            if lines.len() > 1 && lines.last().unwrap().len() == 1 {
+                let mut limit = max_w;
+                for _ in 0..12 {
+                    limit *= 0.94;
+                    let trial = wrap(limit);
+                    if trial.len() > lines.len() { break; }
+                    if trial.last().unwrap().len() > 1 { lines = trial; break; }
+                }
+            }
+            let line_h = size * leading;
+            let widest = lines.iter().map(|l| l.iter().map(|w| w.2).sum::<f32>() + space * l.len().saturating_sub(1) as f32).fold(0.0, f32::max);
+            if (lines.len() as f32 * line_h <= max_h && widest <= max_w + 1.0) || size <= text::MIN_SIZE {
+                if size <= text::MIN_SIZE && (widest > max_w + 1.0 || lines.len() as f32 * line_h > max_h) {
+                    panic!("Text overflow in scene '{}' ({}): headline does not fit {:.0}×{:.0}px at the 14px minimum. Shorten or reflow the text.", self.b.id, self.b.block, max_w, max_h);
+                }
+                return Rich { lines, size, space, line_h, font };
+            }
+            size = (size * 0.95).max(text::MIN_SIZE);
+        }
+    }
+    fn rich_height(r: &Rich) -> f32 { r.lines.len() as f32 * r.line_h }
+    /// Draw a mixed-face headline line by line through rising masks.
+    fn draw_rich(&self, r: &Rich, x: f32, y: f32, w: f32, align: Align, color: &str, start: f32) -> Svgr<'a> {
+        let baseline = text::baseline_in(r.font, r.size, r.line_h);
+        let mut out = vec![];
+        for (i, line) in r.lines.iter().enumerate() {
+            let width = line.iter().map(|w| w.2).sum::<f32>() + r.space * line.len().saturating_sub(1) as f32;
+            let mut cx = align.x(x, w, width);
+            let top = y + i as f32 * r.line_h;
+            let mut runs = vec![];
+            for (word, marked, ww) in line {
+                let (font, size, fill) = if *marked { (Font::SerifItalic, r.size * 1.18, self.p.accent.as_str()) } else { (r.font, r.size, color) };
+                runs.push(self.run(word.clone(), cx, top + baseline, font, size, 0.0, fill));
+                cx += ww + r.space;
+            }
+            let body = fframes::svgr!(<g>{runs}</g>);
+            let enter = self.m.enter(self.t - start - i as f32 * self.m.stagger());
+            if enter.done() { out.push(body); continue; }
+            if enter.hidden() { continue; }
+            let dy = (1.0 - enter.travel) * r.line_h * (0.3 + 0.7 * self.m.intensity);
+            let id = self.uid("rich");
+            out.push(fframes::svgr!(<g>
+                <defs><clipPath id={id.clone()}><rect x={x - 80.0} y={top - r.size * 0.35} width={w + 160.0} height={r.line_h + r.size * 0.55} /></clipPath></defs>
+                <g clip-path={format!("url(#{id})")}><g opacity={enter.alpha} transform={format!("translate(0 {dy})")}>{body}</g></g>
+            </g>));
+        }
+        fframes::svgr!(<g>{out}</g>)
     }
 
     // ── Story blocks ────────────────────────────────────────────────────────────────
@@ -306,7 +491,11 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             "endcard" => (Font::DisplayBold, if self.wide { 108.0 } else { 88.0 }, if self.wide { 0.86 } else { 1.0 }),
             _ => (Font::Display, if self.wide { 96.0 } else { 80.0 }, if self.wide { 0.88 } else { 1.0 }),
         };
+        let serif = s(props, "emphasisStyle") == "serif" && !phrases(props, "emphasis").is_empty();
+        let rich = serif.then(|| self.rich(headline, &phrases(props, "emphasis"), font, size, 1.06, a.w * width, a.h * 0.62));
         let head = self.fit(headline, Style::display(font, size).leading(1.04), a.w * width, a.h * 0.62);
+        // The rich layout replaces the plain one for measurement below.
+        let head_h = rich.as_ref().map_or(head.height(), Self::rich_height);
         let sup = (!support.trim().is_empty())
             .then(|| self.fit(support, Style::text(if self.wide { 36.0 } else { 34.0 }).leading(1.34), a.w * if self.wide { 0.66 } else { 1.0 }, a.h * 0.2));
         let action = s(props, "action");
@@ -315,33 +504,36 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let bar_h = if block == "title" { 52.0 } else { 0.0 };
         let sup_h = sup.as_ref().map_or(0.0, |l| 40.0 + l.height());
         let pill_h = pill.as_ref().map_or(0.0, |l| 56.0 + l.height() + 36.0);
-        let group = bar_h + head.height() + sup_h + pill_h;
+        let group = bar_h + head_h + sup_h + pill_h;
         let top = a.y + ((a.h - group) * 0.42).max(0.0);
         let mut nodes = vec![];
         let emphasis = self.emphasis(&head, &phrases(props, "emphasis"), &self.p.accent);
+        let align = self.align();
+        let centre = |w: f32| if align == Align::Center { a.x + (a.w - w) / 2.0 } else { a.x };
         if block == "title" {
             let grow = self.m.grow(self.t - start + 0.1, 0.7);
-            nodes.push(rounded(a.x, top, 96.0 * grow, 8.0, 4.0, &self.p.accent));
+            nodes.push(rounded(centre(96.0) + if align == Align::Center { 48.0 * (1.0 - grow) } else { 0.0 }, top, 96.0 * grow, 8.0, 4.0, &self.p.accent));
         }
         let head_y = top + bar_h;
-        nodes.push(self.lines(&head, a.x, head_y, a.w, Align::Left, &self.p.ink, start, &emphasis));
-        let after = start + head.lines.len() as f32 * self.m.stagger() + 0.18;
+        match &rich {
+            Some(r) => nodes.push(self.draw_rich(r, a.x, head_y, a.w, align, &self.p.ink, start)),
+            None => nodes.push(self.lines(&head, a.x, head_y, a.w, align, &self.p.ink, start, &emphasis)),
+        }
+        let head_lines = rich.as_ref().map_or(head.lines.len(), |r| r.lines.len());
+        let after = start + head_lines as f32 * self.m.stagger() + 0.18;
         if let Some(sup) = &sup {
-            nodes.push(self.rise(self.draw(sup, a.x, head_y + head.height() + 40.0, a.w, Align::Left, &self.p.muted), after, 16.0));
+            nodes.push(self.rise(self.draw(sup, a.x, head_y + head_h + 40.0, a.w, align, &self.p.muted), after, 16.0));
         }
         if let Some(pill) = &pill {
-            let y = head_y + head.height() + sup_h + 56.0;
+            let y = head_y + head_h + sup_h + 56.0;
             let (w, h) = (pill.width() + 64.0, pill.height() + 36.0);
-            let body = fframes::svgr!(<g>{rounded(a.x, y, w, h, h / 2.0, &self.p.accent)}{self.draw(pill, a.x + 32.0, y + 18.0, pill.width(), Align::Left, &self.p.bg)}</g>);
-            nodes.push(self.pop(body, after + 0.2, a.x + w / 2.0, y + h / 2.0));
+            let px = centre(w);
+            let body = fframes::svgr!(<g>{rounded(px, y, w, h, h / 2.0, &self.p.accent)}{self.draw(pill, px + 32.0, y + 18.0, pill.width(), Align::Left, &self.p.bg)}</g>);
+            nodes.push(self.pop(body, after + 0.2, px + w / 2.0, y + h / 2.0));
         }
-        let kicker_y = if self.tall() { self.b.environment.height * 0.11 } else { 108.0 };
+        let kicker_y = self.head_y.map_or(if self.tall() { self.b.environment.height * 0.11 } else { 108.0 }, |y| y + 8.0);
         let (kicker, _) = self.kicker(s(props, "kicker"), a.x, kicker_y, a.w, 0.0);
-        // A slow push-in keeps a held headline alive without moving the reading line much.
-        let seconds = self.b.frames as f32 / self.f.fps as f32;
-        let drift = 1.0 + 0.016 * self.m.intensity * motion::in_out_cubic(self.t / seconds.max(0.1));
-        let (cx, cy) = (a.x, top + group / 2.0);
-        fframes::svgr!(<g>{kicker}<g transform={format!("translate({cx} {cy}) scale({drift}) translate({} {})", -cx, -cy)}>{nodes}</g></g>)
+        fframes::svgr!(<g>{kicker}<g>{nodes}</g></g>)
     }
     fn chapter(&self) -> Svgr<'a> {
         let a = self.area;
@@ -357,11 +549,12 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let top = a.y + ((a.h - group) * 0.45).max(0.0);
         let grow = self.m.grow(self.t - start - 0.25, 0.9);
         let line_y = top + num.height() + 12.0;
-        let numeral = self.lines(&num, a.x, top, a.w, Align::Left, &self.p.accent, start, &[]);
-        let line = rect(a.x, line_y, a.w * grow, 3.0, &self.p.line());
-        let title_node = self.lines(&title, a.x, line_y + 24.0, a.w, Align::Left, &self.p.ink, start + 0.3, &self.emphasis(&title, &phrases(props, "emphasis"), &self.p.accent));
-        let support = sup.map(|l| self.rise(self.draw(&l, a.x, line_y + 24.0 + title.height() + 32.0, a.w, Align::Left, &self.p.muted), start + 0.6, 14.0)).unwrap_or_else(empty);
-        let (kicker, _) = self.kicker(s(props, "kicker"), a.x, if self.tall() { self.b.environment.height * 0.11 } else { 108.0 }, a.w, 0.0);
+        let align = self.align();
+        let numeral = self.lines(&num, a.x, top, a.w, align, &self.p.accent, start, &[]);
+        let line = if align == Align::Center { rect(a.x + a.w * (1.0 - grow) / 2.0, line_y, a.w * grow, 3.0, &self.p.line()) } else { rect(a.x, line_y, a.w * grow, 3.0, &self.p.line()) };
+        let title_node = self.lines(&title, a.x, line_y + 24.0, a.w, align, &self.p.ink, start + 0.3, &self.emphasis(&title, &phrases(props, "emphasis"), &self.p.accent));
+        let support = sup.map(|l| self.rise(self.draw(&l, a.x, line_y + 24.0 + title.height() + 32.0, a.w, align, &self.p.muted), start + 0.6, 14.0)).unwrap_or_else(empty);
+        let (kicker, _) = self.kicker(s(props, "kicker"), a.x, self.head_y.map_or(if self.tall() { self.b.environment.height * 0.11 } else { 108.0 }, |y| y + 8.0), a.w, 0.0);
         fframes::svgr!(<g>{kicker}{numeral}{line}{title_node}{support}</g>)
     }
     /// A sentence with marker sweeps behind whole-word phrases, each on its own cue.
@@ -386,7 +579,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             for (line, x0, x1) in pieces {
                 let piece = (x1 - x0).min(covered.max(0.0));
                 covered -= x1 - x0;
-                let lx = a.x + x0 - layout.size * 0.08;
+                let indent = if self.centered() { (a.w - layout.lines[line].width) / 2.0 } else { 0.0 };
+                let lx = a.x + indent + x0 - layout.size * 0.08;
                 let y = top + line as f32 * layout.line_height + layout.baseline - layout.size * 0.68;
                 // Translucent accent, not a pre-mixed wash: it must tint whatever lies below,
                 // including the glow backdrop, which can match a flat wash color exactly.
@@ -394,9 +588,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 markers.push(fframes::svgr!(<g opacity={if self.p.dark { 0.34 } else { 0.22 }}>{marker}</g>));
             }
         }
-        let body = self.lines(&layout, a.x, top, a.w, Align::Left, &self.p.ink, start, &[]);
-        let support = sup.map(|l| self.rise(self.draw(&l, a.x, top + layout.height() + 44.0, a.w, Align::Left, &self.p.muted), start + 0.5, 14.0)).unwrap_or_else(empty);
-        let (kicker, _) = self.kicker(s(props, "kicker"), a.x, if self.tall() { self.b.environment.height * 0.11 } else { 108.0 }, a.w, 0.0);
+        let body = self.lines(&layout, a.x, top, a.w, self.align(), &self.p.ink, start, &[]);
+        let support = sup.map(|l| self.rise(self.draw(&l, a.x, top + layout.height() + 44.0, a.w, self.align(), &self.p.muted), start + 0.5, 14.0)).unwrap_or_else(empty);
+        let (kicker, _) = self.kicker(s(props, "kicker"), a.x, self.head_y.map_or(if self.tall() { self.b.environment.height * 0.11 } else { 108.0 }, |y| y + 8.0), a.w, 0.0);
         fframes::svgr!(<g>{kicker}<g>{markers}</g>{body}{support}</g>)
     }
     fn stat(&self) -> Svgr<'a> {
@@ -414,13 +608,15 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let cue = self.b.cue_seconds;
         let current = self.count(from, value, cue, 1.4);
         let e = self.enter(cue - 0.1);
-        let (number, width) = self.numeral(current, value, decimals, prefix, suffix, a.x, top + size * 0.78, size, None, &self.p.accent, &self.p.ink);
+        let centered = self.centered();
+        let (number, width) = self.numeral(current, value, decimals, prefix, suffix, a.x, top + size * 0.78, size, centered.then_some(a.w), &self.p.accent, &self.p.ink);
         let number = if e.hidden() { empty() } else { fframes::svgr!(<g opacity={e.alpha}>{number}</g>) };
         let bar_y = top + number_h + 40.0;
-        let bar = rounded(a.x, bar_y, width.min(a.w) * self.m.grow(self.t - cue, 1.4) as f32 * 0.32 + 0.0, 8.0, 4.0, &self.p.accent);
+        let bar_w = width.min(a.w) * self.m.grow(self.t - cue, 1.4) * 0.32;
+        let bar = rounded(if centered { a.x + (a.w - bar_w) / 2.0 } else { a.x }, bar_y, bar_w, 8.0, 4.0, &self.p.accent);
         let label_y = bar_y + 8.0 + 36.0;
-        let label_node = self.lines(&label, a.x, label_y, a.w, Align::Left, &self.p.ink, cue + 0.35, &[]);
-        let context_node = context.map(|l| self.rise(self.draw(&l, a.x, label_y + label.height() + 18.0, a.w, Align::Left, &self.p.muted), cue + 0.6, 14.0)).unwrap_or_else(empty);
+        let label_node = self.lines(&label, a.x, label_y, a.w, self.align(), &self.p.ink, cue + 0.35, &[]);
+        let context_node = context.map(|l| self.rise(self.draw(&l, a.x, label_y + label.height() + 18.0, a.w, self.align(), &self.p.muted), cue + 0.6, 14.0)).unwrap_or_else(empty);
         fframes::svgr!(<g>{number}{bar}{label_node}{context_node}</g>)
     }
     fn kpis(&self) -> Svgr<'a> {
@@ -777,13 +973,88 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     }
     fn kinetic(&self) -> Svgr<'a> {
         let p = self.props();
+        if s(p, "mode") == "stack" { return self.stack(); }
         self.word_layout(&self.b.words, self.area, if self.wide { 116.0 } else { 100.0 }, nonempty(s(p, "mode"), "highlight"),
             s(p, "align") == "center", n(p, "maxWords", 7.0) as usize, n(p, "maxGap", 0.6) as f32, n(p, "maxDuration", 4.0) as f32, false)
+    }
+    /// Poster typography that builds as it is spoken: each word rises through its own mask
+    /// on its measured start; `emphasis` words are larger and drawn in the accent. The
+    /// phrase clears at a pause, as in the other kinetic modes.
+    fn stack(&self) -> Svgr<'a> {
+        let p = self.props();
+        let words = &self.b.words;
+        if words.is_empty() { return empty(); }
+        let window = phrase_window(words, self.t, n(p, "maxWords", 6.0) as usize, n(p, "maxGap", 0.6) as f32, n(p, "maxDuration", 4.0) as f32, true);
+        let chunk = &words[window.clone()];
+        // Hold a phrase through pauses until the next one starts; the last phrase stays up
+        // until the scene leaves.
+        let last_end = chunk.last().map_or(0.0, |w| w.end);
+        if let Some(next) = words.get(window.end) {
+            if self.t > last_end + n(p, "maxGap", 0.6) as f32 && self.t < next.start - 0.3 { return empty(); }
+        }
+        let key = |w: &str| w.chars().filter(|c| c.is_alphanumeric()).flat_map(char::to_lowercase).collect::<String>();
+        let emphasized: std::collections::HashSet<String> = phrases(p, "emphasis").iter().flat_map(|ph| ph.split_whitespace().map(key).collect::<Vec<_>>()).collect();
+        let upper = p.get("upper").and_then(Value::as_bool).unwrap_or(false);
+        let serif = s(p, "emphasisStyle") == "serif";
+        let center = s(p, "align") != "left";
+        let a = self.area;
+        let base = if self.wide { 132.0 } else { 118.0 };
+        let text_of = |w: &Caption| if upper { w.text.to_uppercase() } else { w.text.clone() };
+        let big = |w: &Caption| emphasized.contains(&key(&w.text));
+        // Fit: shrink until every line fits the width and the stack fits the height.
+        let mut scale = 1.0f32;
+        let mut lines: Vec<Vec<(usize, f32, f32)>>;
+        loop {
+            lines = vec![vec![]];
+            let mut width = 0.0;
+            for (i, w) in chunk.iter().enumerate() {
+                let size = base * scale * if big(w) { if serif { 1.6 } else { 1.45 } } else { 1.0 };
+                let ww = text::measure(if big(w) && serif { Font::SerifItalic } else { Font::DisplayBold }, &text_of(w), size, if big(w) && serif { 0.0 } else { -0.01 * size });
+                let space = size * 0.24;
+                if width + ww > a.w && !lines.last().unwrap().is_empty() { lines.push(vec![]); width = 0.0; }
+                lines.last_mut().unwrap().push((i, ww, size));
+                width += ww + space;
+            }
+            let height: f32 = lines.iter().map(|l| l.iter().map(|x| x.2).fold(0.0, f32::max) * 1.0).sum();
+            let widest = lines.iter().map(|l| l.iter().map(|x| x.1 + x.2 * 0.24).sum::<f32>()).fold(0.0, f32::max);
+            if scale <= 0.3 || (height <= a.h && widest <= a.w + base) { break; }
+            scale *= 0.94;
+        }
+        let height: f32 = lines.iter().map(|l| l.iter().map(|x| x.2).fold(0.0, f32::max)).sum();
+        let mut y = a.y + (a.h - height) / 2.0;
+        let mut shapes = vec![];
+        for line in &lines {
+            let line_h = line.iter().map(|x| x.2).fold(0.0, f32::max);
+            let line_w = line.iter().map(|x| x.1).sum::<f32>() + line.iter().rev().skip(1).map(|x| x.2 * 0.24).sum::<f32>();
+            let mut x = if center { a.x + (a.w - line_w) / 2.0 } else { a.x };
+            let baseline = y + line_h * 0.8;
+            for &(i, width, size) in line {
+                let w = &chunk[i];
+                let appear = w.start - 0.04;
+                if self.t >= appear {
+                    let e = self.m.enter_over(self.t - appear, 0.28);
+                    let color = if big(w) { self.p.accent.clone() } else { self.p.ink.clone() };
+                    let run = if big(w) && serif { self.run(text_of(w), x, baseline, Font::SerifItalic, size, 0.0, &color) }
+                        else { self.run(text_of(w), x, baseline, Font::DisplayBold, size, -0.01 * size, &color) };
+                    if e.done() { shapes.push(run); } else {
+                        let id = self.uid("word");
+                        let dy = (1.0 - e.travel) * size * 0.9;
+                        shapes.push(fframes::svgr!(<g>
+                            <defs><clipPath id={id.clone()}><rect x={x - size * 0.2} y={baseline - size * 1.05} width={width + size * 0.4} height={size * 1.4} /></clipPath></defs>
+                            <g clip-path={format!("url(#{id})")}><g opacity={e.alpha} transform={format!("translate(0 {dy})")}>{run}</g></g>
+                        </g>));
+                    }
+                }
+                x += width + size * 0.24;
+            }
+            y += line_h;
+        }
+        fframes::svgr!(<g>{shapes}</g>)
     }
     fn footer(&self) -> Svgr<'a> {
         let env = &self.b.environment;
         let tall = env.height > env.width;
-        let source_y = env.height - if env.captions { if tall { 320.0 } else { 160.0 } } else { 92.0 };
+        let source_y = self.floor.min(env.height) - if env.captions && self.floor >= env.height { if tall { 320.0 } else { 160.0 } } else if env.framed && self.floor >= env.height { 128.0 } else { 92.0 };
         let (source, _) = self.para(s(self.props(), "source"), Area { x: self.area.x, y: source_y, w: self.area.w, h: 60.0 }, Style::text(22.0), &self.p.muted, Align::Left);
         let mut captions = empty();
         if env.captions && self.b.block != "kinetic" {
@@ -801,9 +1072,13 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 </g>);
             }
         }
-        fframes::svgr!(<g>{source}{captions}</g>)
+        let tag = self.speaker_tag(source_y - 28.0);
+        fframes::svgr!(<g>{source}{tag}{captions}</g>)
     }
 }
+
+/// A mixed-face headline laid out by `Draw::rich`.
+pub(crate) struct Rich { lines: Vec<Vec<(String, bool, f32)>>, size: f32, space: f32, line_h: f32, font: Font }
 
 /// Word units ("days", "people") sit small beside a numeral; symbols ("%", "k", "$") larger.
 fn unit_style(part: &str, size: f32) -> (Font, f32) {
@@ -813,18 +1088,52 @@ fn unit_style(part: &str, size: f32) -> (Font, f32) {
 
 const HERO: [&str; 3] = ["title", "statement", "endcard"];
 
+/// Where a plate sits; tall frames stack left/right plates on top/bottom.
+fn plate_side(plate: &Value, tall: bool) -> &str {
+    match (nonempty(s(plate, "side"), "full"), tall) {
+        ("left", true) => "top", ("right", true) => "bottom",
+        ("top", false) => "left", ("bottom", false) => "right",
+        (side, _) => side,
+    }
+}
+
 pub fn render<'a>(b: &'a Beat, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Svgr<'a> {
     let env = &b.environment;
     let wide = env.width / env.height > 1.3;
+    let tall = env.height > env.width;
     let x = if wide { 120.0 } else { 86.0 };
-    let bottom = if env.captions { if env.height > env.width { 365.0 } else { 215.0 } } else { 145.0 };
+    let bottom = if env.captions { if tall { 365.0 } else { 215.0 } } else { 145.0 };
     let hero = HERO.contains(&b.block.as_str()) || matches!(b.block.as_str(), "chapter" | "highlight");
-    let portrait_shift = if env.height > env.width { env.height * 0.11 - 108.0 } else { 0.0 };
+    let portrait_shift = if tall { env.height * 0.11 - 108.0 } else { 0.0 };
     let headless = s(&b.props, "title").trim().is_empty() && s(&b.props, "kicker").trim().is_empty();
     let top = if hero { 235.0 + portrait_shift }
-        else if headless && matches!(b.block.as_str(), "image" | "video" | "annotate" | "kinetic") { 200.0 + portrait_shift }
+        else if headless && matches!(b.block.as_str(), "image" | "video" | "annotate" | "kinetic" | "canvas") { 200.0 + portrait_shift }
         else { 335.0 + portrait_shift };
-    let d = Draw::new(b, frame, ctx, Area { x, y: top, w: env.width - x * 2.0, h: env.height - top - bottom });
+    let mut area = Area { x, y: top, w: env.width - x * 2.0, h: env.height - top - bottom };
+    let (mut head_y, mut floor) = (None, env.height);
+    // Split plates hand the block the other side of the frame.
+    let side = b.plate.as_ref().map_or("none", |p| plate_side(p, tall));
+    match side {
+        "left" => { let edge = env.width * 0.46; area.x = edge + 96.0; area.w = env.width - area.x - 110.0; }
+        "right" => { let edge = env.width * 0.54; area.w = edge - 96.0 - area.x; }
+        "top" => {
+            let edge = env.height * 0.4;
+            head_y = Some(edge + 64.0);
+            let shift = edge + 64.0 - 100.0;
+            area.y = if hero { edge + 150.0 } else { 335.0 + shift - if headless { 135.0 } else { 0.0 } };
+            area.h = env.height - area.y - bottom;
+        }
+        "bottom" => {
+            let edge = env.height * 0.6;
+            floor = edge;
+            area.h = (edge - 70.0 - area.y).max(120.0);
+        }
+        _ => {}
+    }
+    let mut d = Draw::new(b, frame, ctx, area);
+    d.head_y = head_y;
+    d.floor = floor;
+    let plate = d.plate_layer(side);
     let header = if hero { empty() } else { d.header() };
     let body = match b.block.as_str() {
         "title" | "statement" | "endcard" => d.hero(),
@@ -837,21 +1146,111 @@ pub fn render<'a>(b: &'a Beat, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Sv
         "steps" => d.steps(), "timeline" => d.timeline(), "checklist" => d.checklist(),
         "icon-grid" => d.icon_grid(), "flow" => d.flow(), "cycle" => d.cycle(), "breathing" => d.breathing(),
         "image" => d.media(false), "video" => d.media(true), "annotate" => d.annotate(),
-        "kinetic" => d.kinetic(),
+        "kinetic" => d.kinetic(), "canvas" => d.canvas(),
         _ => panic!("unsupported block {}", b.block),
     };
+    let content = fframes::svgr!(<g>{d.art("under")}{header}{body}{d.art("over")}</g>);
     let footer = d.footer();
-    scene_motion(&d, header, body, footer)
+    scene_motion(&d, plate, content, footer)
+}
+
+/// A slow camera move across the whole scene keeps held frames alive. `auto` pushes in
+/// gently on most blocks and holds still where reading must stay steady.
+fn camera<'a>(d: &Draw<'a, '_, '_>, body: Svgr<'a>) -> Svgr<'a> {
+    let b = d.b;
+    let spec = b.camera.as_ref();
+    let authored = spec.map(|c| nonempty(s(c, "move"), "auto")).unwrap_or("auto");
+    let (kind, amount) = match authored {
+        "auto" => {
+            let still = matches!(b.block.as_str(), "kinetic" | "video" | "annotate" | "breathing");
+            (if still { "none" } else { "in" }, 0.45 * d.m.intensity.max(0.35))
+        }
+        other => (other, spec.map_or(0.5, |c| n(c, "amount", 0.5) as f32)),
+    };
+    if kind == "none" || amount <= 0.0 { return body; }
+    let env = &b.environment;
+    let (w, h) = (env.width, env.height);
+    let seconds = b.frames as f32 / d.f.fps as f32;
+    let x = motion::in_out_cubic(d.t / seconds.max(0.1));
+    let (cx, cy) = (w / 2.0, h / 2.0);
+    let transform = match kind {
+        "in" => { let k = 1.0 + 0.045 * amount * x; format!("translate({cx} {cy}) scale({k}) translate({} {})", -cx, -cy) }
+        "out" => { let k = 1.0 + 0.045 * amount * (1.0 - x); format!("translate({cx} {cy}) scale({k}) translate({} {})", -cx, -cy) }
+        "left" => format!("translate({} 0)", w * 0.025 * amount * (0.5 - x) * 2.0),
+        "right" => format!("translate({} 0)", -w * 0.025 * amount * (0.5 - x) * 2.0),
+        "up" => format!("translate(0 {})", h * 0.025 * amount * (0.5 - x) * 2.0),
+        "down" => format!("translate(0 {})", -h * 0.025 * amount * (0.5 - x) * 2.0),
+        _ => return body,
+    };
+    fframes::svgr!(<g transform={transform}>{body}</g>)
+}
+
+/// Colour and origin of a graphic transition (film palette tokens; origin 0–1).
+fn cover_style(d: &Draw<'_, '_, '_>, entering: bool) -> (String, String, (f32, f32)) {
+    let style = if entering { d.b.enter_style.as_ref() } else { d.b.exit_style.as_ref() };
+    let token = |name: &str, fallback: &str| -> String {
+        let p = &d.base;
+        match name { "accent" => p.accent.clone(), "accent2" => p.accent2.clone(), "ink" => p.ink.clone(), "bg" => p.bg.clone(), "surface" => p.surface.clone(), _ => fallback.to_owned() }
+    };
+    let color = token(style.map_or("", |v| s(v, "color")), &d.base.accent);
+    // The band/ring takes the other accent, or the accent when the cover is already accent2.
+    let edge = if color == d.base.accent { d.base.accent2.clone() } else { d.base.accent.clone() };
+    let origin = style.map(|v| arr(v, "origin")).filter(|o| o.len() == 2)
+        .map(|o| (o[0].as_f64().unwrap_or(0.5) as f32, o[1].as_f64().unwrap_or(0.5) as f32)).unwrap_or((0.5, 0.5));
+    (color, edge, origin)
+}
+
+/// A frame-wide panel with a thin band on its leading edge.
+fn panel<'a>(d: &Draw<'a, '_, '_>, x: f32, leading_left: bool, entering: bool) -> Svgr<'a> {
+    let env = &d.b.environment;
+    let (w, h) = (env.width, env.height);
+    let (color, edge, _) = cover_style(d, entering);
+    let band = w * 0.055;
+    let band_x = if leading_left { x - band } else { x + w };
+    fframes::svgr!(<g>
+        {rect(x, 0.0, w, h, &color)}
+        {rect(band_x, 0.0, band, h, &edge)}
+    </g>)
+}
+
+/// A colour field with a circular window of radius `r` around the transition origin.
+fn iris<'a>(d: &Draw<'a, '_, '_>, progress: f32, window: bool) -> Svgr<'a> {
+    let env = &d.b.environment;
+    let (w, h) = (env.width, env.height);
+    let (color, edge, (ox, oy)) = cover_style(d, window);
+    let (cx, cy) = (w * ox.clamp(0.0, 1.0), h * oy.clamp(0.0, 1.0));
+    // Radius that reaches the farthest corner from the origin.
+    let far = [(0.0, 0.0), (w, 0.0), (0.0, h), (w, h)].iter().map(|(x, y): &(f32, f32)| (x - cx).hypot(y - cy)).fold(0.0, f32::max);
+    let r = progress * far + if window { 1.0 } else { 0.0 };
+    let circle = format!("M {} {cy} a {r} {r} 0 1 0 {} 0 a {r} {r} 0 1 0 {} 0 Z", cx - r, 2.0 * r, -2.0 * r);
+    if window {
+        let d_path = format!("M 0 0 H {w} V {h} H 0 Z {circle}");
+        fframes::svgr!(<g>
+            <path d={d_path} fill={color} fill-rule="evenodd" />
+            <circle cx={cx} cy={cy} r={r} fill="none" stroke={edge} stroke-width="14" />
+        </g>)
+    } else {
+        fframes::svgr!(<g>
+            <circle cx={cx} cy={cy} r={r} fill={color} />
+            <circle cx={cx} cy={cy} r={r} fill="none" stroke={edge} stroke-width="14" />
+        </g>)
+    }
 }
 
 /// The scene-level entrance over the persistent backdrop, then the exit that mirrors the
-/// next scene's entrance. Neither cross-dissolves two scenes.
-fn scene_motion<'a>(d: &Draw<'a, '_, '_>, header: Svgr<'a>, body: Svgr<'a>, footer: Svgr<'a>) -> Svgr<'a> {
+/// next scene's entrance. Neither cross-dissolves two scenes; graphic transitions (panel,
+/// iris, whip) are one movement split across the cut.
+fn scene_motion<'a>(d: &Draw<'a, '_, '_>, plate: Svgr<'a>, content: Svgr<'a>, footer: Svgr<'a>) -> Svgr<'a> {
     let b = d.b;
     let env = &b.environment;
     let (w, h) = (env.width, env.height);
+    let content = camera(d, content);
     let enter = d.m.enter(d.t);
     let distance = d.m.distance(36.0);
+    let reveal = motion::reveal_seconds(&b.transition);
+    let reveal_p = if reveal > 0.0 { motion::out_cubic(d.t / reveal) } else { 1.0 };
+    let mut blur = 0.0;
+    let mut cover = empty();
     let (opacity, transform, clip) = match b.transition.as_str() {
         "fade" => (enter.alpha, String::new(), w),
         "rise" => (enter.alpha, format!("translate(0 {})", distance * (1.0 - enter.travel)), w),
@@ -861,19 +1260,30 @@ fn scene_motion<'a>(d: &Draw<'a, '_, '_>, header: Svgr<'a>, body: Svgr<'a>, foot
             (enter.alpha, format!("translate({} {}) scale({scale})", w * (1.0 - scale) / 2.0, h * (1.0 - scale) / 2.0), w)
         }
         "wipe" => (1.0, String::new(), w * motion::in_out_cubic(d.t / (d.m.duration() + 0.25))),
+        "panel" => { if reveal_p < 1.0 { cover = panel(d, -w * reveal_p, false, true); } (1.0, String::new(), w) }
+        "iris" => { if reveal_p < 1.0 { cover = iris(d, reveal_p, true); } (1.0, String::new(), w) }
+        "whip" => {
+            blur = 38.0 * (1.0 - reveal_p);
+            (1.0, format!("translate({} 0)", w * 0.22 * (1.0 - reveal_p)), w)
+        }
         _ => (1.0, String::new(), w),
     };
     let seconds = b.frames as f32 / d.f.fps as f32;
     let final_scene = env.index + 1 == env.total;
     let exit_kind = ExitKind::parse(&b.exit).unwrap_or(ExitKind::None);
-    let exit_seconds = if final_scene { 0.8 } else { match d.m.preset { motion::Preset::Snappy => 0.22, motion::Preset::Spring => 0.36, motion::Preset::Gentle => 0.32 } };
+    let exit_seconds = if final_scene { 0.8 } else { exit_kind.cover_seconds().unwrap_or(match d.m.preset { motion::Preset::Snappy => 0.22, motion::Preset::Spring => 0.36, motion::Preset::Gentle => 0.32 }) };
     let last_word = b.words.last().map_or(0.0, |w| w.end);
     // Never leave while the entrance, a count or a staged item is still running.
-    let earliest = last_word.max(d.m.duration() + 0.25).max(b.settle_seconds);
-    let x = if exit_kind == ExitKind::None { 0.0 } else { motion::exit_progress(d.t, seconds, exit_seconds, earliest) };
+    let earliest = last_word.max(d.m.duration() + 0.25).max(b.settle_seconds).max(reveal);
+    let x = match exit_kind {
+        ExitKind::None => 0.0,
+        k if k.cover_seconds().is_some() && !final_scene => motion::cover_progress(d.t, seconds, exit_seconds, earliest),
+        _ => motion::exit_progress(d.t, seconds, exit_seconds, earliest),
+    };
     let mut exit_opacity = 1.0;
     let mut exit_transform = String::new();
     let mut exit_clip = (0.0, w);
+    let mut exit_cover = empty();
     if x > 0.0 {
         match exit_kind {
             ExitKind::Fade => { exit_opacity = 1.0 - x; if !final_scene { exit_transform = format!("translate(0 {})", -d.m.distance(22.0) * x); } }
@@ -884,13 +1294,27 @@ fn scene_motion<'a>(d: &Draw<'a, '_, '_>, header: Svgr<'a>, body: Svgr<'a>, foot
                 exit_transform = format!("translate({} {}) scale({scale})", w * (1.0 - scale) / 2.0, h * (1.0 - scale) / 2.0);
             }
             ExitKind::Wipe => { exit_clip = (w * x, w - w * x); }
+            ExitKind::Panel => exit_cover = panel(d, w * (1.0 - x), true, false),
+            ExitKind::Iris => exit_cover = iris(d, x, false),
+            ExitKind::Whip => { exit_transform = format!("translate({} 0)", -w * 0.22 * x); blur = blur.max(38.0 * x); }
             ExitKind::None => {}
         }
+        if final_scene && exit_kind.cover_seconds().is_some() { exit_opacity = 1.0 - x; exit_cover = empty(); exit_transform.clear(); }
     }
     if clip <= 0.0 { return layer(d, footer, exit_opacity, &exit_transform, None, h); }
-    let content = layer(d, fframes::svgr!(<g>{header}{body}</g>), opacity, &transform, (clip < w - 0.5).then_some((0.0, clip)), h);
+    let tone = if b.tone.as_deref().is_some_and(|t| !t.is_empty() && t != "none") { rect(0.0, 0.0, w, h, &d.p.bg) } else { empty() };
+    let content = layer(d, fframes::svgr!(<g>{tone}{plate}{content}</g>), opacity, &transform, (clip < w - 0.5).then_some((0.0, clip)), h);
     let exit_clip = (exit_clip.0 > 0.5).then_some(exit_clip);
-    layer(d, fframes::svgr!(<g>{content}{footer}</g>), exit_opacity, &exit_transform, exit_clip, h)
+    let scene = layer(d, fframes::svgr!(<g>{content}{footer}</g>), exit_opacity, &exit_transform, exit_clip, h);
+    // A whip is a horizontal motion blur on the moving scene only; the backdrop stays sharp.
+    let scene = if blur > 0.3 {
+        let id = d.uid("whip");
+        fframes::svgr!(<g>
+            <defs><filter id={id.clone()} filterUnits="userSpaceOnUse" x={-w * 0.1} y="0" width={w * 1.2} height={h}><feGaussianBlur stdDeviation={format!("{blur} 0")} /></filter></defs>
+            <g filter={format!("url(#{id})")}>{scene}</g>
+        </g>)
+    } else { scene };
+    fframes::svgr!(<g>{scene}{cover}{exit_cover}</g>)
 }
 
 /// Wrap a layer in opacity/transform/clip groups only when they change anything.

@@ -15,6 +15,8 @@ Open with a clear promise: display type rises line by line under an accent bar.
 | support | Supporting line |
 | text | Main promise |
 | emphasis | Up to 4 whole-word phrases drawn in the accent color |
+| emphasisStyle | accent (default) or serif: emphasis phrases set in italic serif, the editorial accent |
+| align | left (default) or center: centre the whole stack |
 
 ```json
 {
@@ -43,6 +45,8 @@ A single editorial statement with optional accent phrases and a supporting line.
 | support | Supporting line |
 | text | Statement |
 | emphasis | Up to 4 whole-word phrases drawn in the accent color |
+| emphasisStyle | accent (default) or serif: emphasis phrases set in italic serif, the editorial accent |
+| align | left (default) or center: centre the whole stack |
 
 ```json
 {
@@ -78,6 +82,7 @@ A hero number with units, counted from a truthful starting value.
 | decimals | 0–8 |
 | label | Meaning |
 | context | Context |
+| align | left (default) or center: centre the whole stack |
 
 ```json
 {
@@ -696,6 +701,8 @@ A deliberate ending; the next step becomes a call-to-action pill.
 | text | Final takeaway |
 | action | Next step |
 | emphasis | Up to 4 whole-word phrases drawn in the accent color |
+| emphasisStyle | accent (default) or serif: emphasis phrases set in italic serif, the editorial accent |
+| align | left (default) or center: centre the whole stack |
 
 ```json
 {
@@ -779,7 +786,7 @@ A short footage insert with native titles and a shared soundtrack.
 
 ## kinetic
 
-Speech-following words: highlight a phrase, reveal words, or show one at a time.
+Speech-following words: highlight a phrase, reveal words, one at a time, or stack them as poster type that builds as spoken.
 
 | Prop | Meaning |
 |---|---|
@@ -788,8 +795,11 @@ Speech-following words: highlight a phrase, reveal words, or show one at a time.
 | source | Visible attribution |
 | land | Spoken word or local seconds |
 | support | Supporting line |
-| mode | highlight / reveal / word |
-| align | left / center |
+| mode | highlight / reveal / word / stack |
+| align | left / center (stack defaults to center) |
+| emphasis | stack: words drawn larger in the accent (whole words from the narration) |
+| emphasisStyle | stack: bold (default) or serif italic emphasis words |
+| upper | stack: set in capitals (true/false) |
 | maxWords | Words per phrase (1–10) |
 | maxGap | Start a new phrase after this silence, 0–5 seconds (default 0.6) |
 | maxDuration | Maximum phrase span, 0.5–15 seconds (default 4); never split a timed word |
@@ -1004,6 +1014,7 @@ A section opener: an oversized number, a rule that sweeps and the chapter title.
 | number | Short marker such as 01 or II (≤ 4 characters) |
 | text | Alias of title |
 | emphasis | Up to 4 whole-word phrases drawn in the accent color |
+| align | left (default) or center: centre the whole stack |
 
 ```json
 {
@@ -1032,6 +1043,7 @@ A sentence whose key phrases get a marker sweep, each on its own cue.
 | support | Supporting line |
 | text | Sentence (≤ 200 characters) |
 | phrases | [string or {text,say}] (1–4 whole-word parts of text) |
+| align | left (default) or center: centre the whole stack |
 
 ```json
 {
@@ -1166,6 +1178,140 @@ Items appear unchecked, then each box fills and ticks on its cue.
       },
       {
         "text": "Listen with the sound on"
+      }
+    ],
+    "source": "Illustrative sample data · replace before publishing"
+  }
+}
+```
+
+## canvas
+
+Draw anything: shapes, paths, text, icons and images that draw on, pop, travel along paths, loop and leave on spoken cues.
+
+| Prop | Meaning |
+|---|---|
+| title | Scene headline |
+| kicker | Short eyebrow |
+| source | Visible attribution |
+| land | Spoken word or local seconds |
+| support | Supporting line |
+| view | [width, height] author units fitted below the header; omit to use frame pixels (1920×1080 landscape) |
+| elements | [{type: rect / circle / ellipse / line / path / poly / text / icon / image / group, geometry, fill, stroke, width, enter, say / at, dur, keys, loop, along, exit, exitSay / exitAt}] (≤ 240) — see docs/canvas.md |
+| stagger | Seconds between top-level elements without a cue (0–3) |
+| rough | Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure / solid, gap} (an element can set rough: false) |
+
+```json
+{
+  "id": "canvas",
+  "block": "canvas",
+  "vo": "Replace this narration.",
+  "props": {
+    "title": "How an idea spreads",
+    "view": [
+      1600,
+      640
+    ],
+    "stagger": 0.12,
+    "elements": [
+      {
+        "type": "circle",
+        "cx": 170,
+        "cy": 470,
+        "r": 70,
+        "fill": "none",
+        "stroke": "accent",
+        "width": 3,
+        "opacity": 0.5,
+        "enter": "pop",
+        "loop": {
+          "type": "pulse",
+          "period": 1.8,
+          "amount": 0.12
+        }
+      },
+      {
+        "type": "path",
+        "d": "M 170 470 C 520 470 640 150 1030 170 S 1350 160 1430 150",
+        "stroke": "accent",
+        "width": 8,
+        "arrow": "end",
+        "dur": 1.4
+      },
+      {
+        "type": "circle",
+        "cx": 170,
+        "cy": 470,
+        "r": 36,
+        "fill": "accent"
+      },
+      {
+        "type": "text",
+        "text": "One idea",
+        "x": 170,
+        "y": 590,
+        "size": 40,
+        "anchor": "middle",
+        "fill": "ink"
+      },
+      {
+        "type": "group",
+        "at": 1.2,
+        "stagger": 0.18,
+        "children": [
+          {
+            "type": "circle",
+            "cx": 700,
+            "cy": 300,
+            "r": 22,
+            "fill": "accent2"
+          },
+          {
+            "type": "circle",
+            "cx": 900,
+            "cy": 190,
+            "r": 22,
+            "fill": "accent2"
+          },
+          {
+            "type": "circle",
+            "cx": 1180,
+            "cy": 160,
+            "r": 22,
+            "fill": "accent2"
+          }
+        ]
+      },
+      {
+        "type": "circle",
+        "cx": 1430,
+        "cy": 150,
+        "r": 48,
+        "fill": "accent2",
+        "at": 1.9
+      },
+      {
+        "type": "text",
+        "text": "Adopted",
+        "x": 1430,
+        "y": 260,
+        "size": 40,
+        "anchor": "middle",
+        "fill": "ink",
+        "at": 2.1
+      },
+      {
+        "type": "circle",
+        "cx": 170,
+        "cy": 470,
+        "r": 12,
+        "fill": "ink",
+        "enter": "fade",
+        "at": 1.6,
+        "along": {
+          "d": "M 170 470 C 520 470 640 150 1030 170 S 1350 160 1430 150",
+          "dur": 1.6
+        }
       }
     ],
     "source": "Illustrative sample data · replace before publishing"

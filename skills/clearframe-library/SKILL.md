@@ -1,11 +1,11 @@
 ---
 name: clearframe-library
-description: Choose and combine 32 FFFrames blocks and 24 adaptable narrative playbooks. Use for graphic selection, palette and motion variation, charts, diagrams, media plates, kinetic text and native library extensions.
+description: Choose and combine 33 FFFrames blocks, canvas sketches, beat layers (plate, tone, camera, art) and adaptable narrative playbooks. Use for graphic selection, palette and motion variation, charts, diagrams, drawings, media plates, kinetic text and native library extensions.
 ---
 
 # Native visual library
 
-Run `node engine/cli.mjs blocks`, `blocks NAME`, `playbooks`, `themes`, `motions` and `icons`. The exact prop reference is [references/blocks.md](references/blocks.md), generated from `fframes/catalog.mjs`. Starter storyboards live in `recipes/` and are generated from `fframes/playbooks.mjs`.
+Run `node engine/cli.mjs blocks`, `blocks NAME`, `sketch`, `playbooks`, `themes`, `motions` and `icons`. The exact prop reference is [references/blocks.md](references/blocks.md), generated from `fframes/catalog.mjs`. Starter storyboards live in `recipes/` and are generated from `fframes/playbooks.mjs`.
 
 Choose the visual by the task:
 
@@ -21,10 +21,15 @@ Choose the visual by the task:
 | Walk through a routine | checklist |
 | Compare choices | compare, matrix |
 | Summarize | list |
-| Ground a story in imagery | image, video, annotate (pins on a screenshot) |
-| Follow spoken words | kinetic |
+| Ground a story in imagery | a beat `plate` (full or split, palette `treatment`), image, video, annotate |
+| Follow spoken words | kinetic (highlight, reveal, word; `stack` for poster type) |
+| Explain a mechanism, metaphor or system | canvas (start from `sketch`: route, orbit, pipeline, network, balance, versus, burst) |
+| Point at something in any scene | beat `art.over` (arrows, circles, labels placed with `still --grid`) |
+| Punctuate a turn or a number | `tone: accent`, a `panel`/`iris`/`whip` transition, centred `align` |
 
 Playbooks have different narrative arcs, audiences and required evidence. Adapt and combine them rather than stretching a mismatched structure. The sample claims/quotations are labelled illustrative; replace them before publishing. For real UI demonstrations use approved screenshots or recordings: `annotate` pins the reading order onto a screenshot; `screen-walkthrough` scaffolds a text-free wireframe placeholder to replace.
+
+Layers combine with any block: `plate` (image/clip behind or beside), `tone` (colour-blocked scene), `camera` (slow move, on by default) and `art` (canvas elements under/over). A film-level `texture` adds grain and vignette. Read `docs/canvas.md` and the `clearframe-canvas` skill before drawing.
 
 Colors, motion intensity, entrances, sources and reading time are authored choices. Read `docs/style.md`. Kinetic modes are highlight/reveal/word; follow `docs/speech.md` for the measured-timestamp requirement. For generated plates, use `docs/continuity.md` and inspect both joins.
 

@@ -49,6 +49,15 @@ The response carries `steps[type="model_output"].content[type="image"] = { mime_
 | `gemini-3.1-flash-lite-image` | cheapest drafts, 1K only, weak multi-reference | $0.0336 |
 | `gemini-3-pro-image` | hardest compositions | 1K/2K: $0.134 · 4K: $0.24 |
 
+## Plates that belong to the film
+
+`clearframe images` sends a composed prompt (recorded in `assets/img/<id>.json`). It starts with your subject, then adds:
+- the film's palette and continuity;
+- composition hints from how the storyboard uses the image (a `plate` on the left needs its subject away from the seam; a full plate needs calm space where the headline sits);
+- a strict no-text rule.
+
+When a beat applies `treatment: duotone` or `tint`, the prompt asks for strong tonal contrast instead of colours, because the renderer recolours the image into the palette. Set `raw: true` on the asset to send your prompt unchanged. Describe the subject, light and mood, and let the plate settings (`side`, `treatment`, `drift`, `focus`) do the layout.
+
 ## Prompt recipes (professional register)
 
 Structure: **subject → material and light → palette → composition (where the empty space is) → exclusions.**

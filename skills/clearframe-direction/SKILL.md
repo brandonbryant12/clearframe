@@ -1,0 +1,49 @@
+---
+name: clearframe-direction
+description: Direct a ClearFrame film from a document, report, transcript, podcast or recording plus a little direction — ingest the material, find the story, choose a treatment and references, plan pictures per beat, critique, and review with a fresh reviewer. Use when someone hands over source material ("turn this into a video") rather than a finished script.
+---
+
+# From material to film
+
+The goal is not to summarise the document on slides. It is a short film with a question, a turn and a payoff, where every beat has its own picture. Read `docs/ideas.md` for pictures, `docs/canvas.md` for drawing, and the `clearframe-script` skill for narration.
+
+## 1. Ingest
+- Research reports (markdown): `clearframe ingest DIR --markdown report.md`. It writes `BRIEF.md`: every figure with its sentence and source, tensions, questions, quotes, chart-ready tables and the source list, plus a research-digest storyboard to rewrite. Convert PDF/Docs to markdown or text first (`pdftotext -layout`, `textutil -convert txt`).
+- Recordings (podcasts, interviews, talks): `clearframe ingest DIR --audio episode.wav --words words.json [--script script.txt] [--from s --to s] [--vertical]`. Beats replay the recording gaplessly with measured word timings. A script (`HOST: …` lines or JSON turns) provides spelling and speakers. For word timestamps, use local Whisper (`whisper episode.wav --word_timestamps True --output_format json`, free) or Gemini transcription (paid).
+
+## 2. Find the story (before any visuals)
+Write these four lines at the top of `DIRECTION.md`:
+- **Question.** What does the viewer want to know?
+- **Misconception or tension.** What do they believe now? Starting from the wrong belief teaches better than a clean exposition.
+- **Turn.** The "but…" that changes the picture.
+- **Payoff.** What they understand or do at the end, and the last image.
+
+Then choose 3–5 claims from the brief that carry the answer. Everything else goes to the source card. Link beats with *but* or *therefore*, never "and then". Open a loop in the first 5 seconds and close it at the peak. A 60–90 s film has roughly 12–18 beats.
+
+## 3. Choose the look
+- `clearframe treatments` lists art directions: editorial, noir, kinetic, sketchbook, blueprint, audiogram, brand, calm. Start with `new DIR --playbook NAME --treatment ID` (or apply one to ingested material), then adapt.
+- If there is a reference video, run `clearframe reference VIDEO`. Read `REFERENCE.md`, open `sheet.png` and `opening.png`, and write **Keep** (rhythm, camera, type roles, transitions) and **Change** (brand, copy, subject) in `DIRECTION.md`. The fewer creative decisions left to guesswork, the better the film.
+- The user's direction ("make it feel like a Vox explainer", "punchy for TikTok", "calm and warm") maps to a treatment plus overrides. Say which you chose and why.
+
+## 4. Plan pictures
+Fill the beat plan table in `DIRECTION.md`: purpose, picture and landing word. Use `docs/ideas.md`: hooks, scale, mechanism, change, tension, hidden-in-the-average, people, turns, endings. Per minute, aim for:
+- at least one drawn mechanism (canvas);
+- one colour-block punctuation;
+- one or two graphic transitions at turns;
+- imagery (plates) where the world matters;
+- kinetic type where the words are the picture.
+
+## 5. Build, critique, look
+1. Write the storyboard; `clearframe critique DIR` flags deck-like runs, static holds, dense text, weak hooks and missing causal links. Fix, then run it again.
+2. Voice: `voice DIR --draft` (continuous takes if `voice.takes: "chapter"`), then `align DIR --whisper` for measured words.
+3. `sheet DIR --draft` and open it; `still --grid` to place art; `render DIR --draft`.
+
+## 6. Fresh review
+Ask a separate reviewer (a fresh subagent, with no authorship bias) to judge the sheet and draft against `DIRECTION.md` using this rubric. Collect specific, actionable notes:
+- **Hook.** Does the first frame make you want the second? Is the question clear by 5 s?
+- **Story.** Read only the `vo` lines: is it an argument with a turn, or a list? Does each beat follow from the last?
+- **Pictures.** Does each beat show a different idea? Are there three similar frames in a row? Is anything a heading over bullets?
+- **Motion.** Does something move in every held frame? Do reveals land on the stressed words? Are graphic transitions only at turns?
+- **Craft.** One hero per frame; type roles (sans claim, serif feeling word, mono facts); margins; readable at phone size.
+- **Truth.** Every figure sourced and dated; estimates labelled; nothing implies data it does not have.
+Apply the notes, re-sheet, and render the final only when the reviewer has no structural notes left.

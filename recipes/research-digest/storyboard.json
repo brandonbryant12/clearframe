@@ -1,0 +1,364 @@
+{
+  "version": 2,
+  "title": "Turn a long report into a question-led short film",
+  "logline": "Turn a long report into a question-led short film",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "noir",
+  "motion": {
+    "preset": "spring",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "glow",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "texture": {
+    "grain": 0.35,
+    "vignette": 0.5
+  },
+  "frame": {
+    "brand": "Research digest",
+    "left": "Sources on screen",
+    "right": "Illustrative sample"
+  },
+  "voice": {
+    "takes": "chapter"
+  },
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "hook",
+      "block": "stat",
+      "vo": "Thirty-seven percent. That one figure changes the question.",
+      "props": {
+        "value": 37,
+        "suffix": "%",
+        "label": "The figure that reframes it",
+        "context": "From request to first answer.",
+        "source": "Illustrative sample data · replace before publishing",
+        "align": "center",
+        "land": "Thirty-seven"
+      },
+      "tone": "accent",
+      "transition": "cut",
+      "style": "intrigued, leaning in"
+    },
+    {
+      "id": "question",
+      "block": "statement",
+      "vo": "So why do we still assume the opposite?",
+      "props": {
+        "text": "Why do we assume the opposite?",
+        "emphasis": [
+          "opposite"
+        ],
+        "source": "Illustrative sample data · replace before publishing",
+        "emphasisStyle": "serif",
+        "align": "center"
+      },
+      "transition": "panel",
+      "style": "curious, a little provocative"
+    },
+    {
+      "id": "mechanism",
+      "block": "canvas",
+      "vo": "Here is the mechanism, step by step: collect, clean, model, then ship.",
+      "props": {
+        "title": "How it actually works",
+        "elements": [
+          {
+            "type": "group",
+            "at": 0.3,
+            "children": [
+              {
+                "type": "rect",
+                "x": 120,
+                "y": 545,
+                "w": 352.5,
+                "h": 170,
+                "r": 28,
+                "fill": "surface",
+                "enter": "pop"
+              },
+              {
+                "type": "text",
+                "text": "Collect",
+                "x": 296.3,
+                "y": 646,
+                "size": 44,
+                "anchor": "middle",
+                "font": "bold",
+                "fill": "ink",
+                "enter": "fade"
+              }
+            ]
+          },
+          {
+            "type": "line",
+            "x1": 482.5,
+            "y1": 630,
+            "x2": 552.5,
+            "y2": 630,
+            "stroke": "accent",
+            "width": 6,
+            "dash": [
+              14,
+              12
+            ],
+            "arrow": "end",
+            "at": 0.6,
+            "dur": 0.4,
+            "enter": "fade",
+            "loop": {
+              "type": "dash",
+              "period": 0.8
+            }
+          },
+          {
+            "type": "group",
+            "at": 0.8,
+            "children": [
+              {
+                "type": "rect",
+                "x": 562.5,
+                "y": 545,
+                "w": 352.5,
+                "h": 170,
+                "r": 28,
+                "fill": "surface",
+                "enter": "pop"
+              },
+              {
+                "type": "text",
+                "text": "Clean",
+                "x": 738.8,
+                "y": 646,
+                "size": 44,
+                "anchor": "middle",
+                "font": "bold",
+                "fill": "ink",
+                "enter": "fade"
+              }
+            ]
+          },
+          {
+            "type": "line",
+            "x1": 925,
+            "y1": 630,
+            "x2": 995,
+            "y2": 630,
+            "stroke": "accent",
+            "width": 6,
+            "dash": [
+              14,
+              12
+            ],
+            "arrow": "end",
+            "at": 1.1,
+            "dur": 0.4,
+            "enter": "fade",
+            "loop": {
+              "type": "dash",
+              "period": 0.8
+            }
+          },
+          {
+            "type": "group",
+            "at": 1.3,
+            "children": [
+              {
+                "type": "rect",
+                "x": 1005,
+                "y": 545,
+                "w": 352.5,
+                "h": 170,
+                "r": 28,
+                "fill": "surface",
+                "enter": "pop"
+              },
+              {
+                "type": "text",
+                "text": "Model",
+                "x": 1181.3,
+                "y": 646,
+                "size": 44,
+                "anchor": "middle",
+                "font": "bold",
+                "fill": "ink",
+                "enter": "fade"
+              }
+            ]
+          },
+          {
+            "type": "line",
+            "x1": 1367.5,
+            "y1": 630,
+            "x2": 1437.5,
+            "y2": 630,
+            "stroke": "accent",
+            "width": 6,
+            "dash": [
+              14,
+              12
+            ],
+            "arrow": "end",
+            "at": 1.6,
+            "dur": 0.4,
+            "enter": "fade",
+            "loop": {
+              "type": "dash",
+              "period": 0.8
+            }
+          },
+          {
+            "type": "group",
+            "at": 1.8,
+            "children": [
+              {
+                "type": "rect",
+                "x": 1447.5,
+                "y": 545,
+                "w": 352.5,
+                "h": 170,
+                "r": 28,
+                "fill": "accent",
+                "enter": "pop"
+              },
+              {
+                "type": "text",
+                "text": "Ship",
+                "x": 1623.8,
+                "y": 646,
+                "size": 44,
+                "anchor": "middle",
+                "font": "bold",
+                "fill": "bg",
+                "enter": "fade"
+              }
+            ]
+          }
+        ],
+        "source": "Illustrative sample data · replace before publishing"
+      },
+      "transition": "push",
+      "style": "brisk, clear"
+    },
+    {
+      "id": "evidence",
+      "block": "bars",
+      "vo": "The evidence points one way, with a clear outlier.",
+      "props": {
+        "title": "What the evidence shows",
+        "data": [
+          {
+            "label": "Triage",
+            "value": 12
+          },
+          {
+            "label": "Routing",
+            "value": 24
+          },
+          {
+            "label": "Review",
+            "value": 8
+          }
+        ],
+        "format": " h",
+        "focus": {
+          "label": "Routing",
+          "dim": 0.55,
+          "note": "Start here"
+        },
+        "source": "Illustrative sample data · replace before publishing",
+        "growSay": "evidence"
+      },
+      "transition": "push",
+      "art": {
+        "over": [
+          {
+            "type": "path",
+            "d": "M 1510 330 C 1390 300 1210 330 1085 440",
+            "stroke": "accent2",
+            "width": 6,
+            "arrow": "end",
+            "say": "outlier"
+          },
+          {
+            "type": "text",
+            "text": "The outlier",
+            "x": 1530,
+            "y": 330,
+            "size": 38,
+            "font": "bold",
+            "fill": "accent2",
+            "enter": "type",
+            "say": "outlier"
+          }
+        ]
+      }
+    },
+    {
+      "id": "turn",
+      "block": "kinetic",
+      "vo": "But the average hides who is affected most.",
+      "props": {
+        "mode": "stack",
+        "align": "left",
+        "maxWords": 5,
+        "source": "",
+        "emphasis": [
+          "average",
+          "most"
+        ],
+        "emphasisStyle": "serif"
+      },
+      "transition": "iris",
+      "style": "slower, lower"
+    },
+    {
+      "id": "meaning",
+      "block": "callout",
+      "vo": "So act on the distribution, not the average.",
+      "props": {
+        "label": "What it means",
+        "icon": "lightbulb",
+        "text": "Act on the distribution.",
+        "emphasis": [
+          "distribution"
+        ],
+        "support": "Look at the distribution before choosing a target.",
+        "source": "Illustrative sample data · replace before publishing"
+      },
+      "transition": "fade",
+      "style": "warm, emphatic"
+    },
+    {
+      "id": "end",
+      "block": "endcard",
+      "vo": "The methods and the limits are in the full report.",
+      "props": {
+        "support": "Start with one handoff this week.",
+        "action": "Open the report",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Read the whole story."
+      },
+      "transition": "fade"
+    }
+  ]
+}

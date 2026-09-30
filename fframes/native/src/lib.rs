@@ -14,8 +14,11 @@ pub const BLOCKS: &[&str] = &[
     "title", "statement", "stat", "kpis", "bars", "line", "waffle", "ring", "delta",
     "compare", "steps", "timeline", "funnel", "quote", "list", "matrix", "equation",
     "callout", "endcard", "image", "video", "kinetic", "icon-grid", "flow", "cycle", "breathing",
-    "chapter", "highlight", "donut", "magnitude", "checklist", "annotate",
+    "chapter", "highlight", "donut", "magnitude", "checklist", "annotate", "canvas",
 ];
+/// Scene entrances. `panel`, `iris` and `whip` are graphic transitions: the outgoing scene's
+/// exit and the incoming entrance share one continuous movement across the cut.
+pub const TRANSITIONS: &[&str] = &["cut", "fade", "rise", "wipe", "push", "zoom", "panel", "iris", "whip"];
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Caption {
@@ -43,6 +46,8 @@ pub struct Environment {
     pub captions: bool,
     pub index: usize,
     pub total: usize,
+    /// The film draws an editorial frame; scenes keep their source line clear of its footer.
+    pub framed: bool,
 }
 
 #[derive(Debug, Deserialize)]
@@ -68,6 +73,35 @@ pub struct Beat {
     pub words: Vec<Caption>,
     #[serde(default)]
     pub motion: Option<Motion>,
+    /// Author-drawn canvas elements under and over the block: `{under: [...], over: [...]}`.
+    #[serde(default)]
+    pub art: Option<Value>,
+    /// Slow camera move over the scene: `{move: in|out|left|right|up|down|none, amount}`.
+    #[serde(default)]
+    pub camera: Option<Value>,
+    /// An image or footage plate behind or beside the block: `{file, video, side, treatment, drift, scrim}`.
+    #[serde(default)]
+    pub plate: Option<Value>,
+    /// Colour-blocked scene: `accent`, `accent2`, `invert` or `surface` fills the frame and
+    /// re-derives readable text colours for it.
+    #[serde(default)]
+    pub tone: Option<String>,
+    /// Graphic-transition styling for this scene's entrance and exit: `{color, origin: [x, y]}`
+    /// with a palette token and a 0–1 origin (iris centre, panel direction).
+    #[serde(default)]
+    pub enter_style: Option<Value>,
+    #[serde(default)]
+    pub exit_style: Option<Value>,
+    /// Section label shown by the film frame (chapter or authored label).
+    #[serde(default)]
+    pub label: String,
+    /// Who is speaking: `{name, role, color, continues}` (continues: the previous beat had the
+    /// same speaker, so the tag holds instead of re-entering).
+    #[serde(default)]
+    pub speaker: Option<Value>,
+    /// Voice level per scene frame, 0–100, prepared from this beat's narration audio.
+    #[serde(default)]
+    pub levels: Vec<u8>,
     #[serde(skip)]
     pub environment: Environment,
 }
@@ -94,6 +128,15 @@ pub struct Film {
     pub captions: bool,
     #[serde(default)]
     pub motion: Motion,
+    /// Film-wide surface texture: `{grain: 0–1, vignette: 0–1, animate: bool}`.
+    #[serde(default)]
+    pub texture: Value,
+    /// Editorial frame chrome: brand, section label, footers and a progress line.
+    #[serde(default)]
+    pub frame: Option<Value>,
+    /// Review aid: a labelled 100 px coordinate grid over every frame (never in deliverables).
+    #[serde(default)]
+    pub guides: bool,
     pub beats: Vec<Beat>,
 }
 
@@ -115,9 +158,10 @@ impl Film {
             if !BLOCKS.contains(&beat.block.as_str()) || beat.frames == 0 || beat.start_frame != offset
                 || !beat.cue_seconds.is_finite() || beat.cue_seconds < 0.0
                 || !beat.props.is_object()
-                || !["cut","fade","rise","wipe","push","zoom"].contains(&beat.transition.as_str())
+                || !TRANSITIONS.contains(&beat.transition.as_str())
                 || motion::ExitKind::parse(&beat.exit).is_none()
                 || !beat.settle_seconds.is_finite() || beat.settle_seconds < 0.0
+                || !["", "none", "accent", "accent2", "invert", "surface"].contains(&beat.tone.as_deref().unwrap_or(""))
             { return Err(format!("invalid native scene {}", beat.id).into()); }
             let duration = beat.frames as f32 / film.fps as f32;
             for cues in [&beat.captions, &beat.words] {
@@ -133,6 +177,7 @@ impl Film {
                 return Err(format!("kinetic scene {} requires timed words", beat.id).into());
             }
             scenes::validate_diagram(&beat.block, &beat.props)
+                .and_then(|_| scenes::validate_layers(beat.art.as_ref(), beat.camera.as_ref(), beat.plate.as_ref()))
                 .map_err(|message| format!("invalid native scene {}: {message}", beat.id))?;
             let motion = beat.motion.clone().unwrap_or_else(|| film.motion.clone());
             if !["gentle","snappy","spring"].contains(&motion.preset.as_str()) || !motion.intensity.is_finite()
@@ -141,7 +186,7 @@ impl Film {
             }
             beat.environment = Environment {
                 width: film.width as f32 * scale, height: film.height as f32 * scale,
-                theme: film.theme.clone(), motion, captions: film.captions, index, total,
+                theme: film.theme.clone(), motion, captions: film.captions, index, total, framed: film.frame.is_some(),
             };
             offset += beat.frames;
         }
@@ -154,6 +199,49 @@ impl Scene for Beat {
     fn duration(&self) -> Duration<'_> { Duration::Frames(self.frames) }
     fn render_frame<'a>(&'a self, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Svgr<'a> {
         scenes::render(self, frame, ctx)
+    }
+}
+
+impl<const W: usize, const H: usize, const RATE: usize> NativeFilm<W, H, RATE> {
+    /// A consistent editorial frame around every scene: brand mark top-left (serif italic),
+    /// the current section label top-right and footers bottom-left/right (monospace), and a
+    /// hairline progress rail with an accent segment.
+    fn frame_chrome<'a>(&self, w: f32, h: f32, global: usize) -> Svgr<'a> {
+        let Some(spec) = self.0.frame.as_ref() else { return fframes::svgr!(<g />) };
+        let text = |v: &Value, key: &str| v.get(key).and_then(Value::as_str).unwrap_or("").to_owned();
+        let beat = self.0.beats.iter().rev().find(|b| b.start_frame <= global).unwrap_or(&self.0.beats[0]);
+        let local = design::Palette::from_theme(&self.0.theme).toned(beat.tone.as_deref().unwrap_or(""));
+        let (ink, muted, accent) = (local.ink.clone(), local.muted.clone(), local.accent.clone());
+        // Aligned to the scenes' content grid.
+        let margin = if w / h > 1.3 { 120.0 } else { 86.0 };
+        let brand = text(spec, "brand");
+        let label = if spec.get("label").and_then(Value::as_bool) == Some(false) { String::new() } else { beat.label.to_uppercase() };
+        let (left, right) = (text(spec, "left").to_uppercase(), text(spec, "right").to_uppercase());
+        let mono = text::Font::Mono;
+        let label_w = text::measure(mono, &label, 20.0, 2.4);
+        let right_w = text::measure(mono, &right, 18.0, 2.2);
+        let progress = global as f32 / self.0.frames.max(1) as f32;
+        let rail_y = h - 46.0;
+        let footer_y = rail_y - 16.0;
+        let mut nodes = vec![];
+        if !brand.is_empty() {
+            nodes.push(fframes::svgr!(<text x={margin} y="82" font-family="Instrument Serif" font-style="italic" font-weight="400" font-size="44" fill={ink.clone()}>{brand}</text>));
+        }
+        if !label.is_empty() {
+            nodes.push(fframes::svgr!(<text x={w - margin - label_w} y="74" font-family="IBM Plex Mono" font-weight="500" font-size="20" letter-spacing="2.4" fill={muted.clone()}>{label}</text>));
+        }
+        if !left.is_empty() {
+            nodes.push(fframes::svgr!(<text x={margin} y={footer_y} font-family="IBM Plex Mono" font-weight="500" font-size="18" letter-spacing="2.2" fill={muted.clone()}>{left}</text>));
+        }
+        if !right.is_empty() {
+            nodes.push(fframes::svgr!(<text x={w - margin - right_w} y={footer_y} font-family="IBM Plex Mono" font-weight="500" font-size="18" letter-spacing="2.2" fill={muted.clone()}>{right}</text>));
+        }
+        if spec.get("progress").and_then(Value::as_bool).unwrap_or(true) {
+            let span = w - 2.0 * margin;
+            nodes.push(fframes::svgr!(<rect x={margin} y={rail_y} width={span} height="2" fill={muted.clone()} opacity="0.35" />));
+            if span * progress > 0.5 { nodes.push(fframes::svgr!(<rect x={margin} y={rail_y - 1.0} width={span * progress} height="4" fill={accent} />)); }
+        }
+        fframes::svgr!(<g>{nodes}</g>)
     }
 }
 
@@ -180,11 +268,17 @@ impl<const W: usize, const H: usize, const RATE: usize> Video for NativeFilm<W,H
                 {progress}
             </g>)
         } else { fframes::svgr!(<g />) };
+        let seconds = frame.global_index as f32 / RATE as f32;
+        let (vignette, grain) = design::texture(&self.0.texture, env.width, env.height, &palette, seconds);
         fframes::svgr!(<svg xmlns="http://www.w3.org/2000/svg" width={W} height={H} viewBox={format!("0 0 {} {}",env.width,env.height)}>
             <rect width={env.width} height={env.height} fill={palette.bg.clone()} />
             {background}
+            {vignette}
             {ctx.render_scenes(&frame)}
             {chrome}
+            {self.frame_chrome(env.width, env.height, frame.global_index)}
+            {grain}
+            {if self.0.guides { design::guides(env.width, env.height) } else { fframes::svgr!(<g />) }}
         </svg>)
     }
 }
@@ -362,6 +456,24 @@ mod tests {
         assert!(sign < dollar, "the sign precedes the prefix, as in format_number");
         value["beats"][0]["settle_seconds"] = (-1.0).into();
         assert!(Film::from_json(&serde_json::to_vec(&value).unwrap()).is_err());
+    }
+    #[test] fn graphic_transitions_keep_the_film_accent_across_a_cut_into_a_toned_scene() {
+        let value = serde_json::json!({"version":2,"width":1920,"height":1080,"fps":30,"frames":120,"theme":"noir",
+            "beats":[
+                {"id":"a","block":"statement","frames":60,"start_frame":0,"cue_seconds":0,"exit":"panel","props":{"text":"Before"}},
+                {"id":"b","block":"statement","frames":60,"start_frame":60,"cue_seconds":0,"transition":"panel","tone":"accent","props":{"text":"After"}}]});
+        let film = Film::from_json(&serde_json::to_vec(&value).unwrap()).unwrap();
+        let ctx = FFramesContext { time_base: fframes::TimeBase { fps:30, sample_rate:48000 },
+            current_video_size: fframes::VideoSize { width:1920, height:1080 }, duration_in_frames:120,
+            mode:fframes::FFramesMode::Renderer, scenes:None, media_source:None, font_source:None, abort_signal:None };
+        let accent = "#e9c46a";
+        let leaving = format!("{:?}", film.beats[0].render_frame(Frame::new(59,59,30), &ctx));
+        let arriving = format!("{:?}", film.beats[1].render_frame(Frame::new(0,60,30), &ctx));
+        assert!(leaving.contains(accent), "outgoing cover uses the film accent");
+        assert!(arriving.contains(accent), "incoming reveal uses the same accent, not the toned scene's");
+        let toned = design::Palette::from_theme(&serde_json::json!("noir")).toned("accent");
+        assert_eq!(toned.bg, accent);
+        assert_ne!(toned.accent, accent, "the toned scene re-derives a readable accent");
     }
     #[test] fn magnitude_fits_long_values_on_a_vertical_canvas() {
         let mut value = job(); value["width"]=1080.into(); value["height"]=1920.into(); value["beats"][0]["block"] = "magnitude".into();

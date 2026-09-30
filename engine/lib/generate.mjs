@@ -13,6 +13,7 @@ import * as music from '../../skills/lyria-music/scripts/music.mjs';
 import * as veo from '../../skills/veo-video/scripts/veo.mjs';
 import * as omni from '../../skills/gemini-omni/scripts/omni.mjs';
 import { clipSpec } from './continuity.mjs';
+import { palette } from '../../fframes/catalog.mjs';
 import { mediaDuration } from './util.mjs';
 
 const money = (n) => `$${n.toFixed(n < 0.1 ? 4 : 2)}`;
@@ -30,6 +31,21 @@ function voiceSpec(sb, b, provider) {
 
 export async function voice(root, { draft = false, force = false, only, budget } = {}) {
   const sb = loadStoryboard(root);
+  if (sb.voice.takes === 'chapter') {
+    // One take per chapter: continuous delivery, split back into beats afterwards.
+    const { planTakes, recordTakes } = await import('./takes.mjs');
+    if (!draft && sb.voice.provider === 'gemini') {
+      const secs = planTakes(sb).flatMap(t => t.beats).reduce((a, b) => a + estimateDuration(b.vo, sb.voice.wpm), 0);
+      const cost = tts.estimateCost({ seconds: secs, model: sb.voice.model });
+      log.step(`Gemini TTS (continuous takes): ~${secs.toFixed(0)}s of speech, ≈ ${money(cost)}`);
+      guardBudget(cost, budget ?? sb.budget);
+    } else log.step('Draft voice in continuous takes (local OS TTS, free)');
+    return recordTakes(root, sb, { draft, force, synthesize: async (spec, out) => {
+      const r = await tts.synthesize({ parts: spec.parts, cast: spec.cast, voice: spec.voice, model: spec.model, language: spec.language ?? undefined });
+      if (!r.wav) throw new Error(`TTS returned ${r.mimeType}, expected WAV`);
+      fs.writeFileSync(`${out}.raw`, r.wav); await cleanVoice(`${out}.raw`, out); fs.rmSync(`${out}.raw`, { force: true });
+    } });
+  }
   const P = paths(root);
   fs.mkdirSync(P.vo, { recursive: true });
   const provider = draft ? 'local' : sb.voice.provider;
@@ -144,11 +160,38 @@ export async function scoreMusic(root, { draft = false, force = false, budget } 
 const nonempty = file => {try{return fs.statSync(file).size>0;}catch{return false;}};
 function assetMeta(dir, id) { return readJSON(path.join(dir, `${id}.json`), null); }
 
+/**
+ * The prompt actually sent for a generated still: the author's subject, then the film's palette
+ * and continuity, then composition hints from how the storyboard uses the image (a split plate
+ * needs its subject away from the seam; a full plate needs calm space where text sits).
+ * `raw: true` sends the author's prompt unchanged.
+ */
+export function imagePrompt(sb, a) {
+  if (a.raw) return a.prompt;
+  const colors = palette(sb.theme ?? 'paper'), style = sb.continuity ?? {};
+  const uses = sb.beats.filter(b => b.plate?.asset === a.id || b.props?.asset === a.id);
+  const hints = [...new Set(uses.map(b => {
+    const side = b.plate?.side ?? (b.plate ? 'full' : null);
+    if (side === 'full') return `Composition: a calm, uncluttered area on the ${b.props?.align === 'center' ? 'centre' : 'left half'} where large text will sit; the subject toward the ${b.props?.align === 'center' ? 'edges' : 'right third'}.`;
+    if (side === 'left' || side === 'top') return 'Composition: the subject centred in the frame, nothing important near the right edge (it meets a text panel).';
+    if (side === 'right' || side === 'bottom') return 'Composition: the subject centred, nothing important near the left edge (it meets a text panel).';
+    return null;
+  }).filter(Boolean))];
+  const treated = uses.some(b => ['duotone', 'tint', 'mono'].includes(b.plate?.treatment));
+  return [a.prompt,
+    treated ? 'Strong tonal contrast and clear shapes; it will be recoloured into two tones, so readable light and shadow matter more than colour.'
+      : `Colour palette: background ${colors.bg}, deep tones near ${colors.ink}, one accent close to ${colors.accent}.`,
+    `Treatment: ${style.treatment ?? 'editorial, restrained, generous negative space'}. Lighting: ${style.lighting ?? 'soft, diffuse'}.`,
+    ...hints,
+    'No text, letters, numbers, logos, watermarks, charts or UI anywhere in the image.'].join('\n');
+}
+
 export async function images(root, { only, force = false, budget } = {}) {
   const sb = loadStoryboard(root);
   const P = paths(root);
   const list = sb.assets.filter((a) => a.kind === 'image' && !a.file && (!only || only.includes(a.id)));
-  const todo = list.filter((a) => force || assetMeta(P.img, a.id)?.hash !== hashOf(a) || !fs.existsSync(path.join(P.img, `${a.id}.jpg`)));
+  const specHash = a => hashOf({ ...a, prompt: imagePrompt(sb, a) });
+  const todo = list.filter((a) => force || assetMeta(P.img, a.id)?.hash !== specHash(a) || !fs.existsSync(path.join(P.img, `${a.id}.jpg`)));
   if (!todo.length) { log.ok('Images are up to date.'); return; }
   const cost = todo.reduce((s, a) => s + image.estimateCost({ model: a.model, size: a.size ?? '2K' }), 0);
   log.step(`Gemini image: ${todo.length} image(s), ≈ ${money(cost)}`);
@@ -157,9 +200,10 @@ export async function images(root, { only, force = false, budget } = {}) {
   for (const a of todo) {
     const refs = (a.refs ?? []).map((r) => (fs.existsSync(path.join(root, r)) ? path.join(root, r) : path.join(P.img, `${r}.jpg`)));
     const aspect = a.aspect ?? (sb.format.width > sb.format.height ? '16:9' : sb.format.width < sb.format.height ? '9:16' : '1:1');
-    const r = await image.generateImage({ prompt: a.prompt, model: a.model ?? 'gemini-3.1-flash-image', aspect, size: a.size ?? '2K', refs });
+    const prompt = imagePrompt(sb, a);
+    const r = await image.generateImage({ prompt, model: a.model ?? 'gemini-3.1-flash-image', aspect, size: a.size ?? '2K', refs });
     fs.writeFileSync(path.join(P.img, `${a.id}.jpg`), r.data);
-    writeJSON(path.join(P.img, `${a.id}.json`), { hash: hashOf(a), model: a.model ?? 'gemini-3.1-flash-image', prompt: a.prompt, note: r.text, createdAt: new Date().toISOString() });
+    writeJSON(path.join(P.img, `${a.id}.json`), { hash: specHash(a), model: a.model ?? 'gemini-3.1-flash-image', prompt, note: r.text, createdAt: new Date().toISOString() });
     log.ok(`${a.id} → assets/img/${a.id}.jpg`);
   }
 }
@@ -210,7 +254,7 @@ export function plan(root) {
   }
   for (const a of sb.assets.filter(a=>!a.file)) {
     if (a.kind === 'image') {
-      const done = assetMeta(P.img, a.id)?.hash === hashOf(a) && nonempty(path.join(P.img, `${a.id}.jpg`));
+      const done = assetMeta(P.img, a.id)?.hash === hashOf({ ...a, prompt: imagePrompt(sb, a) }) && nonempty(path.join(P.img, `${a.id}.jpg`));
       rows.push({ kind: 'image', id: a.id, detail: `${a.size ?? '2K'} ${a.model ?? 'gemini-3.1-flash-image'}`, cost: done ? 0 : image.estimateCost({ model: a.model, size: a.size ?? '2K' }), status: done ? 'cached' : 'todo' });
     }
     if (a.kind === 'clip') {

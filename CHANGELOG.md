@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.4.0 — 2026-09-29
+
+From narrated slides to motion graphics, and from source material to films. This round was run as loops with different lenses: visual language, inputs and story, voice and performance, then the creative system and efficiency. It borrows ideas, not code, from FFFrames' own examples (MIT), Manim's indication vocabulary, Rough.js, flubber, Magic Move and editorial motion design.
+
+### Visual language
+- **`canvas` block and `art` layers.** Author-drawn shapes, paths, text, icons and images with entrances (draw-on, pop, rise, grow, wipe, type, scramble, blur), keyframes, motion along paths (optionally looping), ambient loops (spin, pulse, float, sway, orbit, dash, blink, voice level), exits and spoken cues. Also: echo trails and stepped copies with colour shifts, morph by id across cuts (outlines resampled and aligned), stepped "on twos" time, spotlights, audio meters, gradients, blends and palette-token colours. Path data is parsed and re-serialized by kurbo, which is already in the lock graph. See `docs/canvas.md`.
+- **Hand-drawn strokes:** `rough` renders multi-pass pencil lines with hachure fills and an optional line boil. Together with the `sketchbook` palette, the `paper` backdrop and the `hand` font, this gives a whiteboard/notebook look.
+- **Sketches:** `clearframe sketch` gives eight starting compositions (route, orbit, pipeline, network, balance, versus, burst, ambient), each laid out for landscape or vertical. `gallery --sketches` renders them all.
+- **Beat layers:**
+  - `plate`: image or clip full-bleed with a scrim, or split left/right (top/bottom on tall frames), with duotone, tint, mono and blur treatments, drift and focus.
+  - `tone`: a colour-blocked scene with re-derived readable colours.
+  - `camera`: a slow move on every scene by default.
+- **Graphic transitions:** `panel`, `iris` (with origin and colour) and `whip` carry one movement across a cut. Scenes that cannot fit the cover fall back to a fade, with a warning.
+- **Editorial frame:** a serif-italic brand mark, mono section labels and footers, and a progress rail.
+- **Texture:** static or animated grain and a vignette.
+- **Typography:** Instrument Serif (and italic), IBM Plex Mono and Architects Daughter, all OFL at pinned google/fonts revisions with hashes and glyph coverage. Adds serif accent words in headlines (`emphasisStyle: serif`), centred compositions (`align: center`), and poster kinetic type (`kinetic` mode `stack`) that builds word by word and breaks at sentences.
+- **Palettes:** 14 (new: pop, electric, blueprint, clay, noir, sketchbook).
+- **Review aids:** `still --grid` / `sheet --grid` overlay a labelled coordinate grid for placing art.
+
+### Inputs and story
+- `ingest --markdown` (also HTML, DOCX, RTF, text, and PDF via pdftotext) writes an evidence brief: every figure with its sentence and source, tensions, questions, quotes, chart-ready tables and sources. It also scaffolds a question-led `research-digest` storyboard.
+- `ingest --audio --words [--script]` imports a podcast or talk as gapless beats, cut on frame-aligned pauses. Word timings are measured; a script supplies spelling and speakers, and any word the recognizer missed is labelled estimated. Speaker tags carry live level meters, and prepared voice levels drive meters and `level` loops.
+- `reference VIDEO` breaks a reference down: hard cuts and designed transitions, a keyframe sheet, an opening strip, palette with the nearest theme, and motion energy.
+- **Treatments** (`clearframe treatments`, `new --treatment`) set palette, texture, frame, motion, transition grammar, voice direction, sound and rules in one word. `new` writes a DIRECTION.md brief.
+- `critique` lints a storyboard for deck-like runs, stillness, text density, weak hooks, "and then" story chains, overused punctuation and flat delivery.
+- New playbooks: `research-digest`, `podcast-clip`, `brand-spot` (27 in total).
+- Skills: `clearframe-direction` (material → film, with a fresh-reviewer rubric), `clearframe-canvas`, a rewritten `clearframe-motion`, performance writing in `clearframe-script`, and `docs/ideas.md` (pictures for narrative moves).
+
+### Voice and sound
+- **Continuous takes** (`voice.takes: "chapter"`): a chapter is recorded in one call, with a per-beat `style` energy map, then split back into gapless beats. Word timings come from local Whisper when it is installed.
+- **Two voices:** `voice.cast` with conversational TTS requests (dry-run contract only; no paid calls were made).
+- `align --whisper` measures word timings locally for free. `word-align` maps script words onto recognizer timings and never labels interpolated words as measured.
+- **Sound follows picture:** with `sfx: subtle|normal|punchy`, whooshes lead into graphic transitions, thuds land with hero numbers, and ticks, tocks and pops land on counts, checks and arrivals, thinned so they never smear.
+- **Generated plates:** prompts now carry the film's palette and continuity, composition hints from how the image is used (split or full plate), and a strict no-text rule.
+
 ## 0.3.0 — 2026-09-28
 
 A redesign of the native renderer's visual language, a larger vocabulary, and new checks that stop a film from being quietly wrong.
