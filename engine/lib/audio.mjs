@@ -233,6 +233,10 @@ export async function mux(video, audio, output) {
     'aac',
     '-b:a',
     '192k',
+    // Pad the audio so the video is always the shorter stream: -shortest then never drops
+    // the last frames when the encoded audio ends a few milliseconds early.
+    '-af',
+    'apad',
     '-shortest',
     '-movflags',
     '+faststart',

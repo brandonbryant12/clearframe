@@ -1,5 +1,4 @@
 // The production native vocabulary. Metadata, validation, CLI help and examples share this file.
-import { ICONS } from './icons.mjs';
 import { helpers, VALIDATORS } from './validators.mjs';
 export const THEMES = {
   paper: {
