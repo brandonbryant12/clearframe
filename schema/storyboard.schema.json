@@ -576,6 +576,12 @@
             ],
             "description": "Type reveal for this scene"
           },
+          "pace": {
+            "enum": [
+              "hold"
+            ],
+            "description": "Keep a deliberate wait: skip the pull-forward when the voice starts before the picture"
+          },
           "heading": {
             "enum": [
               "top",

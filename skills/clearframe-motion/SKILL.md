@@ -12,13 +12,14 @@ Read `docs/style.md` (vocabulary) and `docs/canvas.md` (drawing). The audience a
 1. **Motion carries meaning.** Things that connect draw a line; things that grow grow; things that travel move along a path; things that stop being true leave. Pick the verb in the narration and animate that verb.
 2. **Stage, then pay off.** Ground first (axis, rule, faint path), subject second, change third, landing on the stressed word (`say`). Viewers read motion before text.
 3. **Rhythm is contrast.** Alternate dense and sparse, fast and slow, small and full-frame. Plan a pulse across the film: hook (fast, bold), build (steady), turn (a graphic transition, a `tone` scene), payoff (hold), exit. Three identical scenes in a row are a deck.
-4. **Nothing freezes.** Held frames breathe: the default camera push, a drifting plate, a loop on the subject, ambient `art.under`. Hold still only on purpose, for a hard truth or a quiet moment.
-5. **Continuity across cuts.** `panel`, `iris` and `whip` carry one movement across a cut; a `panel` into an accent-`tone` scene becomes the background. Use them at turns in the story, and `cut`/`push` for sequence.
-6. **Hierarchy through scale.** One hero per frame, drawn big (poster type, a large numeral, a single word). Supporting text at least a third smaller. Use `align: "center"` and full-frame compositions for statements that deserve the whole frame.
-7. **Depth through layers.** Backdrop → plate (drifts) → art under → block → art over → texture. Parallax between plate and content reads as depth; grain and vignette hold dark palettes together.
-8. **Type has a voice.** `textMotion` sets how display type arrives: `lines` is calm, `words` is conversational, `letters`/`cascade` shout. Pick one for the film and break it only at the loudest moment.
-9. **Vary the frame, not just the content.** A title on top of every scene is a template. Move some titles to a lower third (`heading: bottom`), give some scenes no title at all, centre a few.
-10. **Ease like physical things.** `gentle` for editorial calm, `snappy` for social energy, `spring` for friendly play. Values never overshoot; positions may.
+4. **The picture never waits for the voice.** Something must be on screen by the first spoken word of every scene: the setting, the ground line, the card a number will count on. Cue the first element to the opening words and save later cues for the payoff. The engine enforces this: a drawing left empty for more than 0.7 s is pulled forward to the first word, and a number card enters with the voice while its count still lands on its word. `check` reports each case. `pace: "hold"` keeps a deliberate wait.
+5. **Nothing freezes.** Held frames breathe: the default camera push, a drifting plate, a loop on the subject, ambient `art.under`. Hold still only on purpose, for a hard truth or a quiet moment.
+6. **Continuity across cuts.** `panel`, `iris` and `whip` carry one movement across a cut; a `panel` into an accent-`tone` scene becomes the background. Use them at turns in the story, and `cut`/`push` for sequence.
+7. **Hierarchy through scale.** One hero per frame, drawn big (poster type, a large numeral, a single word). Supporting text at least a third smaller. Use `align: "center"` and full-frame compositions for statements that deserve the whole frame.
+8. **Depth through layers.** Backdrop → plate (drifts) → art under → block → art over → texture. Parallax between plate and content reads as depth; grain and vignette hold dark palettes together.
+9. **Type has a voice.** `textMotion` sets how display type arrives: `lines` is calm, `words` is conversational, `letters`/`cascade` shout. Pick one for the film and break it only at the loudest moment.
+10. **Vary the frame, not just the content.** A title on top of every scene is a template. Move some titles to a lower third (`heading: bottom`), give some scenes no title at all, centre a few.
+11. **Ease like physical things.** `gentle` for editorial calm, `snappy` for social energy, `spring` for friendly play. Values never overshoot; positions may.
 
 ## Choosing the treatment
 

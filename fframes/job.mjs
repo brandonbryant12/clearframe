@@ -168,6 +168,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   }
   const art = source.art != null ? artLayers(source.art, b.id) : null;
   if (art) settle = Math.max(settle, scheduleArt(art.under, at), scheduleArt(art.over, at));
+  const paced = keepPace(b, source, props, art, at, { sb, report });
   const layers = beatLayers(source, b, sb);
   if (spec.numeric) {
     if (!props.source || !sb.sources.length)
@@ -198,7 +199,8 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     block: b.block,
     frames,
     start_frame: startFrame,
-    cue_seconds: at,
+    cue_seconds: paced?.cue ?? at,
+    ...(paced ? { count_seconds: paced.count } : {}),
     transition,
     exit: exitFor(authoredExit, transitions[b.index + 1]),
     settle_seconds: Math.max(0, Math.min(settle, frames / timing.fps)),
@@ -283,6 +285,54 @@ function artLayers(a, id) {
     throw new Error(m);
   });
   return art;
+}
+
+/**
+ * Pacing: the picture never waits for the voice. When a scene would sit empty for more than
+ * ~0.7 s after its narration starts (every element cued to a late word), the first drawing is
+ * pulled forward to the first word and reported; other blocks are reported. `pace: "hold"`
+ * on a beat keeps a deliberate wait. World beats after the first already show the world.
+ */
+function keepPace(b, source, props, art, at, { sb, report }) {
+  const first = b.vo?.words?.find(w => w.t1 > w.t0);
+  if (!first || source.pace === 'hold') return;
+  const voice = Math.max(0, first.t0 - b.start);
+  const continuing =
+    b.block === 'canvas' &&
+    props.world &&
+    sb.beats.slice(0, b.index).some(x => x.block === 'canvas' && x.props?.world === props.world);
+  if (continuing) return;
+  const own = b.block === 'canvas' ? (props.elements ?? []) : [];
+  const layers = [...own, ...(art?.under ?? []), ...(art?.over ?? [])];
+  const earliest = layers.length ? Math.min(...layers.map(el => el.at ?? 0)) : Infinity;
+  // Blocks show their body at the cue; a heading alone buys a little more time.
+  const content = b.block === 'canvas' ? earliest : Math.min(at, earliest);
+  const allowance = b.block !== 'canvas' && props.title ? 1.6 : 0.7;
+  const gap = content - voice;
+  if (!(gap > allowance)) return;
+  if (b.block === 'canvas' && own.length) {
+    const shift = content - Math.max(0, voice - 0.1);
+    const pulled = own.filter(el => (el.at ?? 0) <= earliest + 1e-6);
+    const move = el => {
+      el.at = Math.max(0, (el.at ?? 0) - shift);
+      if (el.type === 'group') el.children?.forEach(move);
+    };
+    pulled.forEach(move);
+    report.warnings.push(
+      `${b.id}: the voice would talk for ${gap.toFixed(1)} s over an empty scene; pulled the first drawing (${pulled[0].id ?? pulled[0].type}) forward to the first word. Cue something to the opening words, or set pace: "hold" for a deliberate wait.`,
+    );
+    return;
+  }
+  // Number blocks enter with the voice; their count still starts where it lands on its word.
+  if (['stat', 'delta', 'ring', 'waffle'].includes(b.block)) {
+    report.warnings.push(
+      `${b.id}: the ${b.block} entered with the voice (${gap.toFixed(1)} s earlier than its count) so the scene is never empty; the figure still lands on its word.`,
+    );
+    return { cue: Math.max(0, voice - 0.1), count: at };
+  }
+  report.warnings.push(
+    `${b.id}: the voice talks for ${gap.toFixed(1)} s before the picture arrives. Cue the ${b.block} earlier (land/cue on an earlier word), add art under it, or set pace: "hold" for a deliberate wait.`,
+  );
 }
 
 /** Tone, graphic-transition style, frame label, speaker, camera and plate. */

@@ -150,6 +150,7 @@ const schema = {
           sfx: { type: 'array', items: object },
           tone: { enum: ['none', 'accent', 'accent2', 'invert', 'surface'], description: 'Colour-blocked scene' },
           textMotion: { enum: ['lines', 'words', 'letters', 'cascade'], description: 'Type reveal for this scene' },
+          pace: { enum: ['hold'], description: 'Keep a deliberate wait: skip the pull-forward when the voice starts before the picture' },
           heading: { enum: ['top', 'bottom'], description: 'Title at the top, or as a lower third' },
           label: {
             type: 'string',

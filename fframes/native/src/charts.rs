@@ -366,7 +366,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let gap = (cell * 0.16).max(3.0);
         let grid_top = a.y + if self.wide { (a.h - cell * rows as f32) / 2.0 } else { 0.0 };
         let cue = self.b.cue_seconds;
-        let fill_start = cue + 0.35 + (rows + cols) as f32 * 0.012;
+        let fill_start = self.count_at().max(cue) + 0.35 + (rows + cols) as f32 * 0.012;
         let fill = self.m.grow(self.t - fill_start, 1.3);
         let filled = fill * count as f32;
         let mut tiles = vec![];
@@ -434,7 +434,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let (value, max) = (n(p, "value", 0.0), n(p, "max", 100.0));
         let decimals = n(p, "decimals", 0.0) as usize;
         let cue = self.b.cue_seconds;
-        let progress = self.m.grow(self.t - cue, 1.4);
+        let progress = self.m.grow(self.t - self.count_at(), 1.4);
         let diameter = if self.wide { (a.w * 0.4).min(a.h * 0.94) } else { (a.w * 0.76).min(a.h * 0.62) };
         let stroke = (diameter * 0.085).clamp(18.0, 40.0);
         let r = diameter / 2.0 - stroke / 2.0;

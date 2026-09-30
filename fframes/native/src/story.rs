@@ -393,7 +393,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let group = number_h + 40.0 + 8.0 + 36.0 + label.height() + context.as_ref().map_or(0.0, |l| 18.0 + l.height());
         let top = a.y + ((a.h - group) * 0.45).max(0.0);
         let cue = self.b.cue_seconds;
-        let current = self.count(from, value, cue, 1.4);
+        let current = self.count(from, value, self.count_at(), 1.4);
         let e = self.enter(cue - 0.1);
         let centered = self.centered();
         let (number, width) = self.numeral(
@@ -411,7 +411,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         );
         let number = if e.hidden() { empty() } else { fframes::svgr!(<g opacity={e.alpha}>{number}</g>) };
         let bar_y = top + number_h + 40.0;
-        let bar_w = width.min(a.w) * self.m.grow(self.t - cue, 1.4) * 0.32;
+        let bar_w = width.min(a.w) * self.m.grow(self.t - self.count_at(), 1.4) * 0.32;
         let bar =
             rounded(if centered { a.x + (a.w - bar_w) / 2.0 } else { a.x }, bar_y, bar_w, 8.0, 4.0, &self.p.accent);
         let label_y = bar_y + 8.0 + 36.0;
@@ -564,7 +564,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let time = cue + i as f32 * 0.45;
             let label = self.fit(s(item, "label"), label_style, column_w, 40.0);
             let label = self.draw(&label, x, y, column_w, Align::Left, &self.p.muted);
-            let current = if i == 0 { v0 } else { self.count(v0, v1, time, 1.3) };
+            let current = if i == 0 { v0 } else { self.count(v0, v1, self.count_at() + 0.45, 1.3) };
             let (number, _) = self.numeral(
                 current,
                 if i == 0 { v0 } else { v1 },

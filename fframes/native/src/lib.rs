@@ -93,6 +93,10 @@ pub struct Beat {
     pub frames: usize,
     pub start_frame: usize,
     pub cue_seconds: f32,
+    /// When a number block's count or fill starts, if later than its entrance (`cue_seconds`):
+    /// the card arrives with the voice and the figure still lands on its word.
+    #[serde(default)]
+    pub count_seconds: Option<f32>,
     #[serde(default = "cut")]
     pub transition: String,
     /// How the scene leaves: none, fade, push, zoom or wipe (set from the next entrance).

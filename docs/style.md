@@ -99,6 +99,8 @@ Opacity never overshoots, and values never do: counters, bars, rings and fills u
 
 Inside a scene, elements are choreographed: headlines rise line by line, accent bars draw, cards and badges pop, rails and connectors draw between arrivals, and count-ups run in step with the bars or arcs they describe. `title`, `statement`, `endcard`, `chapter`, `highlight` and `stat` take `align: "center"` for a centred composition.
 
+**Pacing.** The picture never waits for the voice: something lands by the first spoken word of every scene. When every drawing in a scene is cued to late words, the engine pulls the first one forward to the first word. Number blocks (`stat`, `delta`, `ring`, `waffle`) enter with the voice while their count still lands on its word. `check` reports each case; set `pace: "hold"` on a beat for a deliberate wait.
+
 **Cues.** `land`, `growSay`, `drawSay`, item/node/pin/phrase `say` and bar `focus.say` take an exact spoken word or phrase, or local seconds. A missing spoken cue fails. Automatic spacing of staged items compresses to finish inside the beat; an authored cue too late to finish its entrance fails with an actionable message rather than being hidden.
 
 ## Graphic variety

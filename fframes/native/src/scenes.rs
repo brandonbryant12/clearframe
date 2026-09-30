@@ -263,6 +263,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             occluders: Default::default(),
         }
     }
+    /// When counts and fills start: `count_seconds` if the job separated it from the entrance.
+    pub(crate) fn count_at(&self) -> f32 {
+        self.b.count_seconds.unwrap_or(self.b.cue_seconds)
+    }
     fn props(&self) -> &'a Value {
         &self.b.props
     }
