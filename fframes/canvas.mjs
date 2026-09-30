@@ -400,6 +400,7 @@ export function mosaicSpec(m, at, fail) {
         'grout',
         'axis',
         'seed',
+        'recolor',
       ].includes(k)
     )
       fail(`${at}: unsupported field ${k}`);
@@ -412,7 +413,21 @@ export function mosaicSpec(m, at, fail) {
   if (m.from != null && !(Array.isArray(m.from) && m.from.length === 2 && m.from.every(Number.isFinite)))
     fail(`${at}.from must be [x, y]`);
   if (m.outline != null && typeof m.outline !== 'boolean') fail(`${at}.outline must be true or false`);
-  return { ...m };
+  if (m.recolor != null) {
+    if (!Array.isArray(m.recolor) || m.recolor.length > 8) fail(`${at}.recolor must be a list of up to 8 fronts`);
+    m.recolor.forEach((r, i) => {
+      const where = `${at}.recolor[${i}]`;
+      if (!r || typeof r !== 'object') fail(`${where} must be {say|at, dur, fill, axis, share}`);
+      for (const k of Object.keys(r))
+        if (!['say', 'at', 'dur', 'fill', 'axis', 'share'].includes(k)) fail(`${where}: unsupported field ${k}`);
+      if (r.say == null && r.at == null) fail(`${where} needs say (a spoken cue) or at (seconds)`);
+      if (r.fill == null) fail(`${where} needs a fill (colour, token or gradient)`);
+      if (r.share != null && !(Number.isFinite(r.share) && r.share > 0 && r.share <= 1))
+        fail(`${where}.share must be 0–1`);
+      if (r.dur != null && !(Number.isFinite(r.dur) && r.dur > 0 && r.dur <= 20)) fail(`${where}.dur must be 0–20 s`);
+    });
+  }
+  return { ...m, ...(m.recolor ? { recolor: m.recolor.map(r => ({ ...r })) } : {}) };
 }
 /** A canvas-level mosaic: every shape without its own setting is laid in tiles. */
 export function applyMosaic(list, spec) {
@@ -493,6 +508,15 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
         throw new Error(`an element exits (${el.exitAt.toFixed(2)}s) before it enters (${el.at.toFixed(2)}s)`);
       // An exit timed after the beat (tidying a world while the camera is away) does not hold it.
       if (el.exitAt < limit) settle = Math.max(settle, el.exitAt + el.exitDur);
+    }
+    // Mosaic recolour fronts resolve their spoken cues like keys.
+    for (const r of el.mosaic?.recolor ?? []) {
+      if (r.say != null) {
+        r.at = resolve(r.say);
+        delete r.say;
+      }
+      r.dur ??= 1.2;
+      settle = Math.max(settle, r.at + r.dur);
     }
     for (const k of el.keys ?? []) {
       if (k.say != null) {

@@ -36,6 +36,8 @@ struct Layout {
     gap: f32,
     /// The shape's own outline, the grout bed of a settled filled shape (empty for beads).
     outline: String,
+    /// Bounds (x, y, w, h), for fronts that sweep across the shape.
+    bounds: (f32, f32, f32, f32),
 }
 
 fn layouts() -> &'static Mutex<HashMap<u64, Arc<Layout>>> {
@@ -246,7 +248,7 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool) -> Layout {
     } else {
         String::new()
     };
-    Layout { tiles, cx, cy, gap, outline }
+    Layout { tiles, cx, cy, gap, outline, bounds: (bx, by, bw, bh) }
 }
 
 impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
@@ -323,6 +325,76 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 body.clone()
             }
         };
+        // Recolour fronts: a sweeping edge flips tiles to new colours (day into night), or only
+        // a seeded `share` of them (12% of the tiles turn red). Each tile turns edge-on as the
+        // front passes and shows its new face on the way back.
+        struct Front {
+            at: f32,
+            dur: f32,
+            axis: (f32, f32),
+            share: f32,
+            stops: Vec<String>,
+        }
+        let fronts: Vec<Front> = arr(spec, "recolor")
+            .iter()
+            .map(|r| {
+                let a = f(r, "axis", 0.0) * PI / 180.0;
+                let stops: Vec<String> = match r.get("fill") {
+                    Some(Value::Object(g)) => g
+                        .get("gradient")
+                        .and_then(Value::as_array)
+                        .map(|a| a.iter().map(|v| self.paint(Some(v), "accent", &mut vec![])).collect())
+                        .unwrap_or_default(),
+                    other => vec![self.paint(other, "accent", &mut vec![])],
+                };
+                Front {
+                    at: f(r, "at", 0.0),
+                    dur: f(r, "dur", 1.2).max(0.01),
+                    axis: (a.cos(), a.sin()),
+                    share: f(r, "share", 1.0),
+                    stops,
+                }
+            })
+            .collect();
+        let (lx, ly, lw, lh) = layout.bounds;
+        // (colour, flip scale) of a tile at this moment, after every front that has reached it.
+        let face = |i: usize, t: &Tile| -> (String, f32) {
+            let mut color = base_for(t);
+            let mut squash = 1.0f32;
+            if t.class == 1 {
+                return (color, squash);
+            }
+            for fr in &fronts {
+                if fr.share < 1.0 && unit(seed ^ 0x3F, i as u64) >= fr.share {
+                    continue;
+                }
+                let reach = (lw * fr.axis.0.abs() + lh * fr.axis.1.abs()).max(1.0);
+                let u = (((t.x - lx - lw / 2.0) * fr.axis.0 + (t.y - ly - lh / 2.0) * fr.axis.1) / reach + 0.5)
+                    .clamp(0.0, 1.0);
+                // The front crosses the shape over 80% of `dur`; each tile flips in the next 20%.
+                let local = motion::clamp01(((self.t - fr.at) / fr.dur - u * 0.8) / 0.2);
+                if local <= 0.0 {
+                    continue;
+                }
+                squash = (PI * local).cos().abs().max(0.08);
+                if local >= 0.5 {
+                    color = if fr.stops.len() >= 2 {
+                        let x = t.along * (fr.stops.len() - 1) as f32;
+                        let k = (x.floor() as usize).min(fr.stops.len() - 2);
+                        crate::design::mix(&fr.stops[k], &fr.stops[k + 1], ((x - k as f32) * 24.0).round() / 24.0)
+                    } else {
+                        fr.stops.first().cloned().unwrap_or(color)
+                    };
+                }
+                if local >= 1.0 {
+                    squash = 1.0;
+                }
+            }
+            (color, squash)
+        };
+        // Whether any front is mid-flip now (then nothing can be cached) and how many have passed.
+        let flipping = fronts.iter().any(|fr| self.t > fr.at && self.t < fr.at + fr.dur);
+        let passed = fronts.iter().filter(|fr| self.t >= fr.at + fr.dur).count();
         const SQUARE: [(f32, f32); 4] = [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)];
         // Local-space polygon of a tile placed at (x, y), size (w, h), turned by `a`.
         let shape =
@@ -385,10 +457,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
             Some((x, y, a, t.w * k, t.h * k))
         };
-        let settled = assemble >= 1.0 && scatter <= 0.0 && (filled || draw >= 1.0);
+        let settled = assemble >= 1.0 && scatter <= 0.0 && (filled || draw >= 1.0) && !flipping;
         let key = {
             let mut h = std::collections::hash_map::DefaultHasher::new();
-            (seed, &body, &line, &grout, &stops, depth.to_bits(), shine.to_bits()).hash(&mut h);
+            (seed, &body, &line, &grout, &stops, depth.to_bits(), shine.to_bits(), passed).hash(&mut h);
             h.finish()
         };
         let cached = if settled { statics().lock().unwrap().get(&key).cloned() } else { None };
@@ -403,7 +475,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                     quad(x, y, w + layout.gap * 1.3, h + layout.gap * 1.3, a, &t.cut, &mut bed);
                 }
                 let level = (t.shade * 2.0).round().clamp(-2.0, 2.0) as i8;
-                quad(x, y, w, h, a, &t.cut, buckets.entry((base_for(t), level, t.pale)).or_default());
+                let (color, squash) = face(i, t);
+                quad(x, y, w * squash, h, a, &t.cut, buckets.entry((color, level, t.pale)).or_default());
                 // Small tiles read without a bevel; it doubles their cost.
                 if shine > 0.0 && t.w >= 10.0 {
                     shape(x, y, w, h, a, &mut LIGHT.iter().copied(), &mut lights);

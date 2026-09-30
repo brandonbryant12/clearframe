@@ -42,15 +42,28 @@
             "d": "M 180 960 L 180 430 A 360 360 0 0 1 900 430 L 900 960 Z",
             "fill": {
               "gradient": [
-                "#0e1670",
-                "#2440b8"
+                "#3b63c9",
+                "#e8a86b"
               ]
             },
             "stroke": "ink",
             "mosaic": {
               "tile": 16,
               "axis": 90,
-              "glint": 0.12
+              "glint": 0.12,
+              "recolor": [
+                {
+                  "say": "tiles",
+                  "dur": 2.0,
+                  "axis": 90,
+                  "fill": {
+                    "gradient": [
+                      "#070b3a",
+                      "#1a2a8c"
+                    ]
+                  }
+                }
+              ]
             },
             "enter": "assemble",
             "at": 0.3,

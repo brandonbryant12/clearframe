@@ -10,8 +10,8 @@ def wave(y, amp=10, phase=0.0, x0=190, x1=890, step=20):
 arch = 'M 180 960 L 180 430 A 360 360 0 0 1 900 430 L 900 960 Z'
 scene = [
     # The niche, the sea and the moon assemble tile by tile.
-    {'type': 'path', 'd': arch, 'fill': {'gradient': ['#0e1670', '#2440b8']}, 'stroke': IVORY,
-     'mosaic': {'tile': 16, 'axis': 90, 'glint': 0.12}, 'enter': 'assemble', 'at': 0.3, 'dur': 1.8},
+    {'type': 'path', 'd': arch, 'fill': {'gradient': ['#3b63c9', '#e8a86b']}, 'stroke': IVORY,
+     'mosaic': {'tile': 16, 'axis': 90, 'glint': 0.12, 'recolor': [{'say': 'tiles', 'dur': 2.0, 'axis': 90, 'fill': {'gradient': ['#070b3a', '#1a2a8c']}}]}, 'enter': 'assemble', 'at': 0.3, 'dur': 1.8},
     {'type': 'rect', 'x': 150, 'y': 960, 'w': 780, 'h': 30, 'fill': '#8d93a6', 'mosaic': {'tile': 6, 'outline': False}, 'enter': 'assemble', 'at': 0.2, 'dur': 1.0},
     *[{'type': 'rect', 'x': x, 'y': y, 'w': 9, 'h': 9, 'fill': GOLD, 'enter': 'pop', 'at': 1.4 + i * 0.07,
        'glow': {'blur': 6}, 'loop': {'type': 'blink', 'period': 2.6 + i % 3 * 0.7}}
