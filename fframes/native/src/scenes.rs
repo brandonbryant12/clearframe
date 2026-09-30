@@ -237,6 +237,9 @@ pub(crate) struct Draw<'a, 'c, 'm> {
     pub floor: f32,
     /// Centre of a world camera at this frame, for elements drawn with parallax (`depth`).
     pub camera: Cell<Option<(f32, f32)>>,
+    /// Mosaic knockout: for each mosaic element (by address), the outlines of the filled
+    /// mosaic shapes drawn after it, which remove its tiles and bend its rows around them.
+    pub occluders: std::cell::RefCell<std::collections::HashMap<usize, Vec<Vec<(f32, f32)>>>>,
 }
 
 impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
@@ -257,6 +260,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             head_y: None,
             floor: env.height,
             camera: Cell::new(None),
+            occluders: Default::default(),
         }
     }
     fn props(&self) -> &'a Value {

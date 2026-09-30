@@ -142,14 +142,15 @@ export function critique(root) {
         if (el.fill == null || el.fill === 'none') return;
         const e = extent([el]),
           tile = (m === true ? null : m.tile) ?? 16;
-        if (e && Math.min(e.w, e.h) / tile < 5) small.push(el.id ?? el.type);
+        // A shape needs enough tiles to read as a mosaic: ~25 in all, and at least two deep.
+        if (e && ((e.w * e.h) / (tile * tile) < 25 || Math.min(e.w, e.h) / tile < 2)) small.push(el.id ?? el.type);
       });
     visit(b.props?.elements);
     if (small.length)
       add(
         'idea',
         b.id,
-        `${small.length} mosaic shape(s) are under five tiles across (${small.slice(0, 3).join(', ')}). Draw them bigger or use a smaller tile.`,
+        `${small.length} mosaic shape(s) have too few tiles to read (${small.slice(0, 3).join(', ')}). Draw them bigger or use a smaller tile.`,
       );
   }
   // Frame-pixel drawings that reach the source line sit on top of the attribution.

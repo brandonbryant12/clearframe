@@ -1106,10 +1106,66 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     pub(super) fn canvas(&self) -> Svgr<'a> {
         let p = self.props();
         self.camera_rect(p);
+        self.collect_occluders(arr(p, "elements"), p.get("mosaic").is_some());
         let mut defs = vec![];
         let nodes = self.elements(arr(p, "elements"), self.b.cue_seconds, f(p, "stagger", 0.0), &mut defs);
         let body = fframes::svgr!(<g><defs>{defs}</defs>{nodes}</g>);
         self.fit_view(body, p)
+    }
+
+    /// For every mosaic element, the outlines of the filled mosaic shapes drawn after it (in
+    /// the same coordinates: group offsets applied). A later shape knocks its outline out of
+    /// the earlier mosaic, whose rows then bend around it (`halo`).
+    fn collect_occluders(&self, list: &[Value], canvas_mosaic: bool) {
+        // (element, group offset, clock shift) for every leaf, in drawing order.
+        let mut flat: Vec<(&Value, f32, f32, f32)> = vec![];
+        fn walk<'v>(list: &'v [Value], dx: f32, dy: f32, shift: f32, out: &mut Vec<(&'v Value, f32, f32, f32)>) {
+            for el in list {
+                if s(el, "type") == "group" {
+                    let (gx, gy, gs) = (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "shift", 0.0));
+                    walk(arr(el, "children"), dx + gx, dy + gy, shift + gs, out);
+                } else {
+                    out.push((el, dx, dy, shift));
+                }
+            }
+        }
+        walk(list, 0.0, 0.0, 0.0, &mut flat);
+        let is_mosaic = |el: &Value| {
+            let m = el.get("mosaic").filter(|m| m.as_bool() == Some(true) || m.is_object()).is_some()
+                || (canvas_mosaic && el.get("mosaic").is_none());
+            m && matches!(s(el, "type"), "rect" | "circle" | "ellipse" | "path" | "poly")
+                && el.get("fill").is_some_and(|f| f != "none")
+        };
+        // A later shape cuts in from the moment it enters until it leaves.
+        let present = |el: &Value, shift: f32| {
+            let now = self.t + shift;
+            now >= f(el, "at", 0.0) && num(el, "exitAt").is_none_or(|e| now < e)
+        };
+        let mut map = self.occluders.borrow_mut();
+        map.clear();
+        for (i, &(el, ex, ey, _)) in flat.iter().enumerate() {
+            if !is_mosaic(el) {
+                continue;
+            }
+            let later: Vec<Vec<(f32, f32)>> = flat[i + 1..]
+                .iter()
+                .filter(|(o, _, _, shift)| {
+                    is_mosaic(o)
+                        && present(o, *shift)
+                        && o.get("mosaic").and_then(|m| m.get("knockout")).is_none_or(|k| k != false)
+                })
+                .flat_map(|(o, dx, dy, _)| {
+                    contours_of(o)
+                        .into_iter()
+                        .filter(|(_, closed)| *closed)
+                        .map(|(c, _)| c.into_iter().map(|(x, y)| (x + dx - ex, y + dy - ey)).collect::<Vec<_>>())
+                        .collect::<Vec<_>>()
+                })
+                .collect();
+            if !later.is_empty() {
+                map.insert(el as *const Value as usize, later);
+            }
+        }
     }
 
     /// Place author coordinates in the frame. A `[w, h]` view is fitted into the content area;

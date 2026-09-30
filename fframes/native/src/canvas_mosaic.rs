@@ -71,6 +71,34 @@ fn distance(p: (f32, f32), line: &[(f32, f32)], closed: bool) -> f32 {
     best
 }
 
+/// Nearest point on any closed contour: (distance, unit vector from that point to `p`,
+/// tangent angle of the edge there).
+fn nearest(p: (f32, f32), contours: &[(Vec<(f32, f32)>, bool)]) -> (f32, (f32, f32), f32) {
+    let mut best = (f32::MAX, (0.0, 0.0), 0.0);
+    for (line, closed) in contours {
+        if !closed || line.len() < 2 {
+            continue;
+        }
+        let n = line.len();
+        for i in 0..n {
+            let (a, b) = (line[i], line[(i + 1) % n]);
+            let (dx, dy) = (b.0 - a.0, b.1 - a.1);
+            let len2 = dx * dx + dy * dy;
+            if len2 <= 0.0 {
+                continue;
+            }
+            let t = (((p.0 - a.0) * dx + (p.1 - a.1) * dy) / len2).clamp(0.0, 1.0);
+            let (qx, qy) = (a.0 + t * dx, a.1 + t * dy);
+            let d = (p.0 - qx).hypot(p.1 - qy);
+            if d < best.0 {
+                let dir = if d > 1e-4 { ((p.0 - qx) / d, (p.1 - qy) / d) } else { (0.0, 0.0) };
+                best = (d, dir, dy.atan2(dx));
+            }
+        }
+    }
+    best
+}
+
 /// Even-odd point in polygon over every closed contour.
 fn inside(p: (f32, f32), contours: &[(Vec<(f32, f32)>, bool)]) -> bool {
     let mut odd = false;
@@ -115,8 +143,11 @@ fn along_line(line: &[(f32, f32)], closed: bool, pitch: f32, mut push: impl FnMu
     }
 }
 
-fn lay(el: &Value, spec: &Value, seed: u64, filled: bool) -> Layout {
-    let size = f(spec, "tile", 16.0).clamp(3.0, 200.0);
+fn lay(el: &Value, spec: &Value, seed: u64, filled: bool, occluders: &[Vec<(f32, f32)>]) -> Layout {
+    let (_, _, area_w, area_h) = bounds(el);
+    // At most ~12,000 tiles per shape: a huge shape gets bigger tiles rather than a slow frame.
+    let asked = f(spec, "tile", 16.0).clamp(3.0, 200.0);
+    let size = asked.max((area_w * area_h / 12_000.0).sqrt() * 0.86);
     let gap = f(spec, "gap", (size * 0.16).max(1.0)).clamp(0.0, size);
     let jitter = f(spec, "jitter", 0.5).clamp(0.0, 1.0);
     let pitch = size + gap;
@@ -130,19 +161,19 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool) -> Layout {
     let mut tile = |x: f32, y: f32, angle: f32, class: u8, order: f32, width: Option<f32>| {
         k += 1;
         let j = |i: u64| noise(seed, k * 16 + i) * jitter;
-        let c = |i: u64| noise(seed, k * 16 + 8 + i) * jitter * 0.24;
+        let c = |i: u64| noise(seed, k * 16 + 8 + i) * jitter * 0.16;
         tiles.push(Tile {
             x: x + j(1) * gap * 0.3,
             y: y + j(2) * gap * 0.3,
-            angle: angle + j(3) * 0.2,
-            w: width.unwrap_or(size * (1.0 + j(4) * 0.6)).max(size * 0.35),
+            angle: angle + j(3) * 0.14,
+            w: width.unwrap_or(size * (1.0 + j(4) * 0.4)).max(size * 0.35),
             h: size * (1.0 + j(5) * 0.24),
             shade: noise(seed, k * 16 + 6),
             order,
             class,
             along: 0.0,
             cut: [(c(0), c(1)), (c(2), c(3)), (c(4), c(5)), (c(6), c(7))],
-            pale: unit(seed, k * 16 + 7) < 0.04,
+            pale: unit(seed, k * 16 + 7) < 0.03,
         });
     };
     let outline_row = spec.get("outline").and_then(Value::as_bool).unwrap_or(true);
@@ -161,7 +192,43 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool) -> Layout {
             "random" | "fly" => unit(seed, 9000 + i),
             _ => (0.75 * (x - bx) / bw.max(1.0) + 0.25 * (y - by) / bh.max(1.0)) * 0.8 + 0.2 * unit(seed, 9000 + i),
         };
-        if flow == "rings" {
+        if flow == "contour" {
+            // Andamento: rows run parallel to the outline at whole-pitch depths, each tile
+            // turned along the nearest edge; candidates are thinned to an even spacing.
+            let step = pitch * 0.3;
+            let first = if outline_row { 1.5 } else { 0.5 };
+            let mut grid: HashMap<(i32, i32), Vec<(f32, f32)>> = HashMap::new();
+            let cell = |x: f32, y: f32| ((x / pitch).floor() as i32, (y / pitch).floor() as i32);
+            let (cols, rows) = ((bw / step).ceil() as i32, (bh / step).ceil() as i32);
+            for r in 0..=rows {
+                for c in 0..=cols {
+                    let (x, y) = (bx + c as f32 * step, by + r as f32 * step);
+                    if !inside((x, y), &contours) {
+                        continue;
+                    }
+                    let (d, dir, angle) = nearest((x, y), &contours);
+                    let ring = ((d / pitch) - first).round().max(0.0);
+                    let target = (ring + first) * pitch;
+                    let (px, py) = (x + dir.0 * (target - d), y + dir.1 * (target - d));
+                    if !inside((px, py), &contours) {
+                        continue;
+                    }
+                    let (gx, gy) = cell(px, py);
+                    let crowded = (-1..=1).any(|i| {
+                        (-1..=1).any(|j| {
+                            grid.get(&(gx + i, gy + j))
+                                .is_some_and(|v| v.iter().any(|q| (q.0 - px).hypot(q.1 - py) < pitch * 0.86))
+                        })
+                    });
+                    if crowded {
+                        continue;
+                    }
+                    grid.entry((gx, gy)).or_default().push((px, py));
+                    let u = sweep(px, py, (r * 7919 + c) as u64);
+                    tile(px, py, angle, 0, u, None);
+                }
+            }
+        } else if flow == "rings" {
             // Wedge rings fitted to each circumference, from just inside the outline row in.
             let (rx, ry) = (bw / 2.0, bh / 2.0);
             let r_max = rx.max(ry).max(1.0);
@@ -226,6 +293,56 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool) -> Layout {
             along_line(c, *is_closed, pitch, |(x, y), a, t| tile(x, y, a, 1, t, Some(size)));
         }
     }
+    // Knockout and halo: shapes laid over this one remove the tiles beneath them (keeping a
+    // grout line), and the nearest `halo` rows bend around their outlines.
+    if !occluders.is_empty() && filled {
+        let occ: Vec<(Vec<(f32, f32)>, bool)> = occluders.iter().map(|c| (c.clone(), true)).collect();
+        let halo = f(spec, "halo", 2.0).clamp(0.0, 6.0);
+        let mut kept: Vec<Tile> = vec![];
+        let mut rest: Vec<Tile> = vec![];
+        for mut t in tiles.drain(..) {
+            if t.class == 1 {
+                rest.push(t);
+                continue;
+            }
+            if occ.iter().any(|o| inside((t.x, t.y), std::slice::from_ref(o))) {
+                continue;
+            }
+            let (d, dir, angle) = nearest((t.x, t.y), &occ);
+            if d < pitch * 0.55 {
+                continue;
+            }
+            if d < (halo + 0.5) * pitch {
+                let ring = (d / pitch - 0.6).round().max(0.0);
+                let target = (ring + 0.6) * pitch;
+                t.x += dir.0 * (target - d);
+                t.y += dir.1 * (target - d);
+                t.angle = angle;
+                kept.push(t);
+            } else {
+                rest.push(t);
+            }
+        }
+        // Halo tiles first, then the rest, each only where there is room.
+        let mut grid: HashMap<(i32, i32), Vec<(f32, f32)>> = HashMap::new();
+        let cell = |x: f32, y: f32| ((x / pitch).floor() as i32, (y / pitch).floor() as i32);
+        for t in kept.into_iter().chain(rest) {
+            if t.class == 0 {
+                let (gx, gy) = cell(t.x, t.y);
+                let crowded = (-1..=1).any(|i| {
+                    (-1..=1).any(|j| {
+                        grid.get(&(gx + i, gy + j))
+                            .is_some_and(|v| v.iter().any(|q| (q.0 - t.x).hypot(q.1 - t.y) < pitch * 0.9))
+                    })
+                });
+                if crowded {
+                    continue;
+                }
+                grid.entry((gx, gy)).or_default().push((t.x, t.y));
+            }
+            tiles.push(t);
+        }
+    }
     // Gradient position of each tile along the fill's axis (angle in degrees, like `paint`).
     let angle = spec.get("axis").and_then(Value::as_f64).unwrap_or(90.0) as f32 * PI / 180.0;
     let (ax, ay) = (angle.cos(), angle.sin());
@@ -273,17 +390,28 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let filled = fill != "none" && !fill.starts_with("url(");
         let gradient = el.get("fill").filter(|v| v.is_object());
         let filled = filled || gradient.is_some();
+        let occluders = self.occluders.borrow().get(&(el as *const Value as usize)).cloned().unwrap_or_default();
+        let lkey = {
+            let mut h = std::collections::hash_map::DefaultHasher::new();
+            seed.hash(&mut h);
+            for c in &occluders {
+                for (x, y) in c {
+                    (x.to_bits(), y.to_bits()).hash(&mut h);
+                }
+            }
+            h.finish()
+        };
         let layout = {
-            let hit = layouts().lock().unwrap().get(&seed).cloned();
+            let hit = layouts().lock().unwrap().get(&lkey).cloned();
             match hit {
                 Some(l) => l,
                 None => {
-                    let l = Arc::new(lay(el, spec, seed, filled));
+                    let l = Arc::new(lay(el, spec, seed, filled, &occluders));
                     let mut map = layouts().lock().unwrap();
                     if map.len() > 512 {
                         map.clear();
                     }
-                    map.insert(seed, l.clone());
+                    map.insert(lkey, l.clone());
                     l
                 }
             }
@@ -307,7 +435,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             .get("grout")
             .map(|g| self.paint(Some(g), "bg", &mut vec![]))
             .unwrap_or_else(|| crate::design::mix(&self.p.bg, "#000000", if self.p.dark { 0.72 } else { 0.5 }));
-        let depth = f(spec, "shade", 0.22).clamp(0.0, 0.6);
+        let depth = f(spec, "shade", 0.14).clamp(0.0, 0.6);
         let shine = f(spec, "shine", 0.35).clamp(0.0, 1.0);
         // Glints: each tile catches the light briefly on its own slow rhythm, so a held mosaic
         // shimmers. A pure function of time and the tile's seed.
@@ -372,7 +500,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 let u = (((t.x - lx - lw / 2.0) * fr.axis.0 + (t.y - ly - lh / 2.0) * fr.axis.1) / reach + 0.5)
                     .clamp(0.0, 1.0);
                 // The front crosses the shape over 80% of `dur`; each tile flips in the next 20%.
-                let local = motion::clamp01(((self.t - fr.at) / fr.dur - u * 0.8) / 0.2);
+                let local = motion::clamp01(((now - fr.at) / fr.dur - u * 0.8) / 0.2);
                 if local <= 0.0 {
                     continue;
                 }
@@ -393,8 +521,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             (color, squash)
         };
         // Whether any front is mid-flip now (then nothing can be cached) and how many have passed.
-        let flipping = fronts.iter().any(|fr| self.t > fr.at && self.t < fr.at + fr.dur);
-        let passed = fronts.iter().filter(|fr| self.t >= fr.at + fr.dur).count();
+        let flipping = fronts.iter().any(|fr| now > fr.at && now < fr.at + fr.dur);
+        let passed = fronts.iter().filter(|fr| now >= fr.at + fr.dur).count();
         const SQUARE: [(f32, f32); 4] = [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)];
         // Local-space polygon of a tile placed at (x, y), size (w, h), turned by `a`.
         let shape =
@@ -460,7 +588,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let settled = assemble >= 1.0 && scatter <= 0.0 && (filled || draw >= 1.0) && !flipping;
         let key = {
             let mut h = std::collections::hash_map::DefaultHasher::new();
-            (seed, &body, &line, &grout, &stops, depth.to_bits(), shine.to_bits(), passed).hash(&mut h);
+            (lkey, &body, &line, &grout, &stops, depth.to_bits(), shine.to_bits(), passed).hash(&mut h);
             h.finish()
         };
         let cached = if settled { statics().lock().unwrap().get(&key).cloned() } else { None };

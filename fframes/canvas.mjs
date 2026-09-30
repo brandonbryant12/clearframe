@@ -379,6 +379,7 @@ export function mosaicSpec(m, at, fail) {
     shade: [0, 0.6],
     shine: [0, 1],
     glint: [0, 1],
+    halo: [0, 6],
     spread: [0, 4000],
     axis: [-360, 360],
     seed: [0, 1e9],
@@ -401,13 +402,16 @@ export function mosaicSpec(m, at, fail) {
         'axis',
         'seed',
         'recolor',
+        'halo',
+        'knockout',
       ].includes(k)
     )
       fail(`${at}: unsupported field ${k}`);
     if (ranges[k] && !(Number.isFinite(m[k]) && m[k] >= ranges[k][0] && m[k] <= ranges[k][1]))
       fail(`${at}.${k} must be ${ranges[k][0]}–${ranges[k][1]}`);
   }
-  if (m.flow != null && !['rows', 'rings'].includes(m.flow)) fail(`${at}.flow must be rows or rings`);
+  if (m.flow != null && !['rows', 'rings', 'contour'].includes(m.flow))
+    fail(`${at}.flow must be rows, rings or contour`);
   if (m.build != null && !['sweep', 'radial', 'random', 'fly'].includes(m.build))
     fail(`${at}.build must be sweep, radial, random or fly`);
   if (m.from != null && !(Array.isArray(m.from) && m.from.length === 2 && m.from.every(Number.isFinite)))
@@ -432,7 +436,11 @@ export function mosaicSpec(m, at, fail) {
 /** A canvas-level mosaic: every shape without its own setting is laid in tiles. */
 export function applyMosaic(list, spec) {
   eachElement(list, el => {
-    if (MOSAIC_TYPES.has(el.type) && el.mosaic === undefined && !el.dash) el.mosaic = { ...spec };
+    if (!MOSAIC_TYPES.has(el.type) || el.mosaic !== undefined || el.dash) return;
+    // Backdrop-sized shapes (a ground, a sky) stay flat; the mosaic backdrop covers them.
+    const e = elementsExtent([el]);
+    if (e && e.w * e.h > 4e6) return;
+    el.mosaic = { ...spec };
   });
 }
 export function applyRough(list, rough) {
