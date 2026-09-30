@@ -23,6 +23,7 @@ Read [docs/canvas.md](../../docs/canvas.md) for the element reference. The fixed
 - Motion explains: `draw` for paths and connections, `along` for things that travel, `grow-y` for quantities, `pop` for arrivals, `keys` for change, `exit` for things that stop being true. Use fades only for background layers.
 - Something breathes after everything lands: `pulse` the subject, `dash` loop the connector, `float` ambient shapes.
 - Build, then transform: draw the problem, `exit` part of it on a cue, draw the fix in the same frame. One canvas beat can carry two or three ideas if the voice walks through them.
+- Plan a world on its map: `node engine/cli.mjs world DIR` draws everything with each beat's camera rect numbered. Stations in story order, with no camera move re-crossing earlier material.
 - Travel instead of cutting. When the story is a journey, a process or a map, make consecutive canvas beats one `world` with camera `view: [x, y, w, h]` per beat: each draws only what is new, the camera glides between, and the last beat pulls out to show the whole (docs/canvas.md, Worlds).
 - Atmosphere is cheap: a `particles` field (`embers`, `rain`, `snow`, `dust`, `bubbles`) under a scene keeps a hold alive. One field per scene, low count, palette colour.
 - Text inside canvas is display text: short labels, not sentences. Long thoughts belong in narration or a `statement`.

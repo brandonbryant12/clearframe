@@ -60,6 +60,8 @@ Camera moves land on the words: the move to a new beat's view starts in the outg
 
 While the camera holds, it drifts in slowly (`viewDrift`, default 3% of the view), and the next move starts from there, so a world never freezes. To change the world's state under what is already drawn, such as a sky that lights up by day or a glow under the city, give the new element `behind: true`. Labels that would clutter a later wide shot can leave while the camera is elsewhere: set an `exitAt` after the beat ends. Lay stations out in story order (up for the sky, down for a plan view, onward for the next stop) so the camera never re-crosses old material. `examples/night-city` shows all of this.
 
+`clearframe world DIR` renders the whole world at its final state with every beat's camera rect outlined and numbered. Use it to lay out stations and choose views before rendering the film, and again after any change of layout.
+
 Good worlds: a journey (source → process → destination), a timeline laid out left to right, a map zooming from region to street, a machine explored part by part, one diagram built up and then revealed whole.
 
 ## Design the frame

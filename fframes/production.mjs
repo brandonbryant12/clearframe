@@ -9,4 +9,4 @@ export { missingGlyph } from './glyphs.mjs';
 export { createJob } from './job.mjs';
 export { soundDesign } from './sound.mjs';
 export { prepareProject, nativeCommand, checkProject } from './prepare.mjs';
-export { validateVideo, renderProject, stillProject, sheetProject, lookbookProject } from './render.mjs';
+export { validateVideo, renderProject, stillProject, sheetProject, lookbookProject, worldMap } from './render.mjs';

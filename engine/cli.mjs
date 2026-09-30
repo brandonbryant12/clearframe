@@ -40,6 +40,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
   check <dir> [--draft]                validate inputs and native diagnostics
   critique <dir> [--json]             deck-ness, stillness, density, hook and story-link review (instant, no render)
   still <dir> --at seconds | --beat id [--pos .6] [--grid] [--draft] [--out image.png]
+  world <dir> [--name NAME] [--out image.png]   the whole canvas world with every beat's camera rect numbered
   sheet <dir> [--per 1|2|3] [--grid] [--draft] [--out sheet.png]   --grid: labelled 100 px coordinates for placing art
   looks <dir> [--beat id] [--draft]    compare the same frame in four palettes
   review <dir> [--beat id] [--video film.mp4]  decoded cut/word-boundary filmstrip
@@ -403,6 +404,7 @@ async function main() {
     return;
   }
   if (cmd === 'still') return console.log(await native.stillProject(dir, opts));
+  if (cmd === 'world') return console.log(await native.worldMap(dir, { ...opts, draft: true }));
   if (cmd === 'sheet') return console.log(await native.sheetProject(dir, opts));
   if (cmd === 'looks') return console.log(await native.lookbookProject(dir, opts));
   if (cmd === 'review') {

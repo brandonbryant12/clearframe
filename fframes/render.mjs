@@ -130,6 +130,86 @@ async function singleFrame(ctx, time, file) {
     fs.rmSync(shots, { recursive: true, force: true });
   }
 }
+/**
+ * One image of a canvas world at its final state, with every beat's camera rect outlined
+ * and numbered: the plan view for placing stations and choosing camera moves.
+ */
+export async function worldMap(root, { draft = true, name, out } = {}) {
+  const ctx = await prepareProject(root, { draft });
+  const beats = ctx.job.beats.filter(b => b.block === 'canvas' && b.props.world && (!name || b.props.world === name));
+  if (!beats.length) throw new Error(name ? `No canvas beats in world "${name}"` : 'No canvas beats use props.world');
+  const world = beats[0].props.world,
+    stops = beats.filter(b => b.props.world === world),
+    last = stops.at(-1);
+  // Frame the union of the camera rects, padded, at the film's aspect ratio.
+  const views = stops.map(b => b.props.view);
+  let l = Math.min(...views.map(v => v[0])),
+    t = Math.min(...views.map(v => v[1])),
+    r = Math.max(...views.map(v => v[0] + v[2])),
+    bt = Math.max(...views.map(v => v[1] + v[3]));
+  const aspect = ctx.job.width / ctx.job.height;
+  let w = (r - l) * 1.06,
+    h = (bt - t) * 1.06;
+  if (w / h < aspect) w = h * aspect;
+  else h = w / aspect;
+  const [cx, cy] = [(l + r) / 2, (t + bt) / 2];
+  const k = w / ctx.job.width;
+  const placed = [];
+  const overlay = stops.flatMap((b, i) => {
+    const [x, y, vw, vh] = b.props.view,
+      color = i % 2 ? '#8ecae6' : '#ff5da2';
+    // Rects that share a corner (a return to an earlier view) stack their labels.
+    let ly = y + 34 * k;
+    while (placed.some(([px, py]) => Math.abs(px - x) < 200 * k && Math.abs(py - ly) < 32 * k)) ly += 34 * k;
+    placed.push([x, ly]);
+    return [
+      {
+        type: 'rect',
+        x,
+        y,
+        w: vw,
+        h: vh,
+        fill: 'none',
+        stroke: color,
+        width: 3 * k,
+        dash: [14 * k, 10 * k],
+        enter: 'none',
+        at: 0,
+      },
+      {
+        type: 'text',
+        text: `${i + 1} ${b.id}`,
+        x: x + 12 * k,
+        y: ly,
+        size: 28 * k,
+        font: 'mono',
+        fill: color,
+        enter: 'none',
+        at: 0,
+      },
+    ];
+  });
+  const { viewFrom, viewNext, viewAt, viewDur, viewDrift, source, title, kicker, ...props } = last.props;
+  const beat = {
+    ...last,
+    start_frame: 0,
+    transition: 'cut',
+    exit: 'none',
+    camera: { move: 'none' },
+    props: { ...props, view: [cx - w / 2, cy - h / 2, w, h], elements: [...props.elements, ...overlay] },
+  };
+  delete beat.tone;
+  const dir = path.join(ctx.dir, `world-${crypto.randomUUID()}`);
+  fs.mkdirSync(dir);
+  const file = path.resolve(out ?? path.join(root, 'build', `world-${world}.png`));
+  try {
+    writeJSON(path.join(dir, 'job.json'), { ...ctx.job, frames: last.frames, frame: undefined, beats: [beat] });
+    await singleFrame({ ...ctx, dir }, (last.frames - 1) / ctx.job.fps, file);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+  return file;
+}
 export async function sheetProject(
   root,
   { draft = false, per = 3, columns = per, thumb = 400, out, grid = false } = {},
