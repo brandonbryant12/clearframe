@@ -61,39 +61,69 @@
       }
     },
     {
-      "id": "donut",
-      "block": "donut",
+      "id": "week",
+      "block": "canvas",
       "vo": "Most of that time goes to answering and routing, not the work itself.",
       "props": {
         "title": "Where a week of support goes",
-        "segments": [
-          {
-            "label": "Answering",
-            "value": 18
-          },
-          {
-            "label": "Routing",
-            "value": 12
-          },
-          {
-            "label": "Waiting on others",
-            "value": 7
-          },
-          {
-            "label": "Follow-up",
-            "value": 3
-          }
-        ],
-        "format": " h",
-        "center": "hours per week",
-        "source": "Illustrative sample data · replace before publishing"
-      },
-      "camera": {
-        "move": "in",
-        "amount": 0.8
-      },
-      "art": {
-        "sketch": "ambient"
+        "source": "Illustrative sample data · replace before publishing",
+        "chart": {
+          "kind": "stack",
+          "suffix": " h",
+          "values": [
+            {
+              "label": "Answering",
+              "value": 18,
+              "highlight": true
+            },
+            {
+              "label": "Routing",
+              "value": 12
+            },
+            {
+              "label": "Waiting",
+              "value": 7
+            },
+            {
+              "label": "Follow-up",
+              "value": 3
+            }
+          ]
+        },
+        "elements": []
+      }
+    },
+    {
+      "id": "side",
+      "block": "canvas",
+      "vo": "Side by side, routing is the part a better handoff can shrink.",
+      "props": {
+        "title": "Where a week of support goes",
+        "source": "Illustrative sample data · replace before publishing",
+        "chart": {
+          "kind": "bars",
+          "suffix": " h",
+          "values": [
+            {
+              "label": "Answering",
+              "value": 18
+            },
+            {
+              "label": "Routing",
+              "value": 12,
+              "highlight": true
+            },
+            {
+              "label": "Waiting",
+              "value": 7
+            },
+            {
+              "label": "Follow-up",
+              "value": 3
+            }
+          ]
+        },
+        "elements": []
       }
     },
     {

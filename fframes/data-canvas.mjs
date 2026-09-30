@@ -43,7 +43,7 @@ export function chartElements(spec, { w, h }) {
   const fill = v => (v.highlight ? 'accent' : 'muted');
   const out = [];
   if (spec.kind === 'bars') {
-    const [x, y, bw, bh] = spec.box ?? [w * 0.14, h * 0.26, w * 0.72, h * 0.46];
+    const [x, y, bw, bh] = spec.box ?? [w * 0.14, h * 0.15, w * 0.72, h * 0.43];
     const max = spec.max ?? Math.max(...values.map(v => v.value), 1);
     const n = values.length,
       col = bw / (n + (n - 1) * 0.45),

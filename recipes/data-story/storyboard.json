@@ -1299,168 +1299,69 @@
       }
     },
     {
-      "id": "donut",
-      "block": "donut",
+      "id": "week",
+      "block": "canvas",
       "vo": "Most of that time goes to answering and routing, not the work itself.",
       "props": {
         "title": "Where a week of support goes",
-        "segments": [
-          {
-            "label": "Answering",
-            "value": 18
-          },
-          {
-            "label": "Routing",
-            "value": 12
-          },
-          {
-            "label": "Waiting on others",
-            "value": 7
-          },
-          {
-            "label": "Follow-up",
-            "value": 3
-          }
-        ],
-        "format": " h",
-        "center": "hours per week",
-        "source": "Illustrative sample data · replace before publishing"
-      },
-      "camera": {
-        "move": "in",
-        "amount": 0.8
-      },
-      "art": {
-        "under": [
-          {
-            "type": "particles",
-            "x": 0,
-            "y": 0,
-            "w": 1920,
-            "h": 1080,
-            "kind": "dust",
-            "count": 36,
-            "fill": "ink",
-            "opacity": 0.35,
-            "size": 3,
-            "at": 0
-          },
-          {
-            "type": "circle",
-            "cx": 288,
-            "cy": 216,
-            "r": 422.4,
-            "fill": {
-              "gradient": [
-                "accent",
-                "accent"
-              ],
-              "radial": true,
-              "fade": true
+        "source": "Illustrative sample data · replace before publishing",
+        "chart": {
+          "kind": "stack",
+          "suffix": " h",
+          "values": [
+            {
+              "label": "Answering",
+              "value": 18,
+              "highlight": true
             },
-            "opacity": 0.3,
-            "enter": "fade",
-            "at": 0,
-            "dur": 1.2,
-            "loop": {
-              "type": "orbit",
-              "period": 9,
-              "amount": 18
-            }
-          },
-          {
-            "type": "circle",
-            "cx": 1574.4,
-            "cy": 324,
-            "r": 576,
-            "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
-              "radial": true,
-              "fade": true
+            {
+              "label": "Routing",
+              "value": 12
             },
-            "opacity": 0.3,
-            "enter": "fade",
-            "at": 0,
-            "dur": 1.2,
-            "loop": {
-              "type": "float",
-              "period": 11.5,
-              "amount": 22
-            }
-          },
-          {
-            "type": "circle",
-            "cx": 1344,
-            "cy": 918,
-            "r": 384,
-            "fill": {
-              "gradient": [
-                "accent",
-                "accent"
-              ],
-              "radial": true,
-              "fade": true
+            {
+              "label": "Waiting",
+              "value": 7
             },
-            "opacity": 0.3,
-            "enter": "fade",
-            "at": 0,
-            "dur": 1.2,
-            "loop": {
-              "type": "orbit",
-              "period": 14,
-              "amount": 26
+            {
+              "label": "Follow-up",
+              "value": 3
             }
-          },
-          {
-            "type": "circle",
-            "cx": 576,
-            "cy": 864,
-            "r": 307.2,
-            "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
-              "radial": true,
-              "fade": true
+          ]
+        },
+        "elements": []
+      }
+    },
+    {
+      "id": "side",
+      "block": "canvas",
+      "vo": "Side by side, routing is the part a better handoff can shrink.",
+      "props": {
+        "title": "Where a week of support goes",
+        "source": "Illustrative sample data · replace before publishing",
+        "chart": {
+          "kind": "bars",
+          "suffix": " h",
+          "values": [
+            {
+              "label": "Answering",
+              "value": 18
             },
-            "opacity": 0.3,
-            "enter": "fade",
-            "at": 0,
-            "dur": 1.2,
-            "loop": {
-              "type": "float",
-              "period": 16.5,
-              "amount": 30
-            }
-          },
-          {
-            "type": "circle",
-            "cx": 960,
-            "cy": 486,
-            "r": 230.4,
-            "fill": {
-              "gradient": [
-                "ink",
-                "ink"
-              ],
-              "radial": true,
-              "fade": true
+            {
+              "label": "Routing",
+              "value": 12,
+              "highlight": true
             },
-            "opacity": 0.3,
-            "enter": "fade",
-            "at": 0,
-            "dur": 1.2,
-            "loop": {
-              "type": "orbit",
-              "period": 19,
-              "amount": 34
+            {
+              "label": "Waiting",
+              "value": 7
+            },
+            {
+              "label": "Follow-up",
+              "value": 3
             }
-          }
-        ]
+          ]
+        },
+        "elements": []
       }
     },
     {
