@@ -112,6 +112,17 @@ export function critique(root) {
         `The drawing covers ${Math.round((100 * box.w * box.h) / area)}% of the frame. Set view: "auto" to fit it to the space, or draw it larger.`,
       );
   }
+  // Frame-pixel drawings that reach the source line sit on top of the attribution.
+  const sourceTop = sb.format.height - (sb.frame ? 165 : 130);
+  for (const b of beats.filter(x => x.block === 'canvas' && x.props?.source && !x.props.view)) {
+    const box = extent((b.props.elements ?? []).filter(el => (el.w ?? 0) < sb.format.width));
+    if (box && box.bottom > sourceTop)
+      add(
+        'warn',
+        b.id,
+        `The drawing reaches y ${Math.round(box.bottom)}, into the source line (from y ${sourceTop}). Move it up or set view: "auto".`,
+      );
+  }
   // A lower-third title shares the bottom of the frame with frame-pixel drawings.
   for (const b of beats.filter(x => x.block === 'canvas' && (x.heading ?? sb.heading) === 'bottom' && x.props?.title)) {
     const box = !b.props.view && extent(b.props.elements ?? []);

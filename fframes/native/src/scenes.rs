@@ -394,6 +394,21 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         if mode != "lines" && layout.size >= 40.0 {
             return self.pieces(layout, x, y, w, align, color, start, emphasis, mode);
         }
+        self.line_rise(layout, x, y, w, align, color, start, emphasis)
+    }
+    /// Each line rises through its own mask, staggered.
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn line_rise(
+        &self,
+        layout: &Layout,
+        x: f32,
+        y: f32,
+        w: f32,
+        align: Align,
+        color: &str,
+        start: f32,
+        emphasis: &[Emphasis],
+    ) -> Svgr<'a> {
         let mut out = vec![];
         for (i, line) in layout.lines.iter().enumerate() {
             let top = y + i as f32 * layout.line_height;
@@ -692,20 +707,26 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         }
         if self.tall() { self.b.environment.height * 0.11 - 108.0 } else { 0.0 }
     }
+    /// When the heading enters: already in place on a hard cut (a cut lands on a composed
+    /// frame), rising just after the scene starts otherwise.
+    fn heading_at(&self) -> f32 {
+        if self.b.transition == "cut" && self.b.environment.index > 0 { -10.0 } else { 0.06 }
+    }
     fn header(&self) -> Svgr<'a> {
         if self.b.heading == "bottom" && self.head_y.is_none() {
             return self.lower_third();
         }
         let (x, w) = (self.area.x, self.area.w);
         let shift = self.shift();
-        let (kicker, _) = self.kicker(s(self.props(), "kicker"), x, 100.0 + shift, w, 0.0);
+        let (kicker, _) = self.kicker(s(self.props(), "kicker"), x, 100.0 + shift, w, self.heading_at().min(0.0));
         let title = s(self.props(), "title");
         if title.trim().is_empty() {
             return kicker;
         }
         let style = Style::display(Font::Display, if self.wide { 62.0 } else { 56.0 }).leading(1.06);
         let layout = self.fit(title, style, if self.wide { w * 0.86 } else { w }, 150.0);
-        let title = self.lines(&layout, x, 146.0 + shift, w, Align::Left, &self.p.ink, 0.06, &[]);
+        // Headings label the scene; they are not spoken, so they never build word by word.
+        let title = self.line_rise(&layout, x, 146.0 + shift, w, Align::Left, &self.p.ink, self.heading_at(), &[]);
         fframes::svgr!(<g>{kicker}{title}</g>)
     }
 }
@@ -716,15 +737,16 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     fn lower_third(&self) -> Svgr<'a> {
         let (x, w) = (self.area.x, self.area.w);
         let mut y = self.area.y + self.area.h + 34.0;
-        let (kicker, kh) = self.kicker(s(self.props(), "kicker"), x, y, w, 0.0);
+        let (kicker, kh) = self.kicker(s(self.props(), "kicker"), x, y, w, self.heading_at().min(0.0));
         if kh > 0.0 {
             y += 40.0;
         }
         let style = Style::display(Font::Display, if self.wide { 58.0 } else { 52.0 }).leading(1.06);
         let layout = self.fit(s(self.props(), "title"), style, if self.wide { w * 0.8 } else { w }, 132.0);
-        let grow = self.m.grow(self.t - 0.05, 0.6);
+        let at = self.heading_at();
+        let grow = self.m.grow(self.t - at, 0.6);
         let rule = rect(x, y - 14.0, 120.0 * grow, 4.0, &self.p.accent);
-        let title = self.lines(&layout, x, y, w, Align::Left, &self.p.ink, 0.1, &[]);
+        let title = self.line_rise(&layout, x, y, w, Align::Left, &self.p.ink, at + 0.05, &[]);
         fframes::svgr!(<g>{rule}{kicker}{title}</g>)
     }
 }

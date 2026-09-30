@@ -137,9 +137,15 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   if (props.focus && b.block === 'annotate') props.focus.at = cue(props.focus.say, at + 0.4);
   if (spec.staged) stageItems(props, spec.staged, { b, frame, at, authored, cue, entrance });
   let settle = spec.settle(props, at, entrance, spec);
-  // Word, letter and cascade reveals take up to ~0.9 s longer than a line rise.
+  // Word, letter and cascade reveals of display type (mirrors pieces() in scenes.rs).
   const textMotion = source.textMotion ?? film.textMotion;
-  if (textMotion !== 'lines') settle = Math.max(settle, at + 0.9 + entrance);
+  const display = String(props.text ?? (spec.hero || b.block === 'chapter' ? props.title : '') ?? '');
+  if (textMotion !== 'lines' && display.trim()) {
+    const letters = textMotion !== 'words',
+      n = letters ? display.replace(/\s/g, '').length : display.trim().split(/\s+/).length,
+      step = Math.min(letters ? 0.028 : 0.075, 0.9 / Math.max(1, n));
+    settle = Math.max(settle, at + (n - 1) * step + entrance);
+  }
   // Author-drawn elements: resolve spoken cues and write exact times for the renderer.
   const scheduleArt = (list, start, stagger = 0) => {
     const end = scheduleElements(list, { start, stagger, entrance, resolve: v => cue(v) });
@@ -179,6 +185,12 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   if (!EXITS.includes(authoredExit)) throw new Error(`exit must be ${EXITS.join(', ')}`);
   const startFrame = Math.round(b.start * timing.fps),
     frames = Math.round(b.end * timing.fps) - startFrame;
+  // Something that arrives just before the cut is seen for a blink; viewers need ~0.5 s.
+  const hold = frames / timing.fps - settle;
+  if (hold >= 0 && hold < 0.45 && b.index < timing.beats.length - 1 && b.block !== 'kinetic')
+    report.warnings.push(
+      `${b.id}: the last element lands ${hold.toFixed(2)} s before the cut. Cue it earlier, or add hold/tail so it can be read.`,
+    );
   return {
     id: b.id,
     block: b.block,

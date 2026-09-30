@@ -224,7 +224,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                     size,
                     if big(w) && serif { 0.0 } else { -0.01 * size },
                 );
-                let space = size * 0.24;
+                // One normal word space everywhere (emphasis is bigger, the gap is not), plus a
+                // little room for the italic's overhang.
+                let space = base * scale * 0.24 + if big(w) && serif { size * 0.04 } else { 0.0 };
                 if width + ww > a.w && !lines.last().unwrap().is_empty() {
                     lines.push(vec![]);
                     width = 0.0;
@@ -233,7 +235,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 width += ww + space;
             }
             let height: f32 = lines.iter().map(|l| l.iter().map(|x| x.2).fold(0.0, f32::max) * 1.0).sum();
-            let widest = lines.iter().map(|l| l.iter().map(|x| x.1 + x.2 * 0.24).sum::<f32>()).fold(0.0, f32::max);
+            let widest =
+                lines.iter().map(|l| l.iter().map(|x| x.1 + base * scale * 0.24).sum::<f32>()).fold(0.0, f32::max);
             if scale <= 0.3 || (height <= a.h && widest <= a.w + base) {
                 break;
             }
@@ -244,8 +247,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let mut shapes = vec![];
         for line in &lines {
             let line_h = line.iter().map(|x| x.2).fold(0.0, f32::max);
+            let gap =
+                |i: usize, size: f32| base * scale * 0.24 + if big(&chunk[i]) && serif { size * 0.04 } else { 0.0 };
             let line_w =
-                line.iter().map(|x| x.1).sum::<f32>() + line.iter().rev().skip(1).map(|x| x.2 * 0.24).sum::<f32>();
+                line.iter().map(|x| x.1).sum::<f32>() + line.iter().rev().skip(1).map(|x| gap(x.0, x.2)).sum::<f32>();
             let mut x = if center { a.x + (a.w - line_w) / 2.0 } else { a.x };
             let baseline = y + line_h * 0.8;
             for &(i, width, size) in line {
@@ -270,7 +275,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                         </g>));
                     }
                 }
-                x += width + size * 0.24;
+                x += width + gap(i, size);
             }
             y += line_h;
         }

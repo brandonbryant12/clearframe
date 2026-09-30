@@ -57,6 +57,8 @@ export const REGISTRY = {
   waffle: {
     family: 'chart',
     numeric: true,
+    // Cells arrive, then fill for 1.3 s: the count finishes ~1.9 s after its cue.
+    preroll: 1.6,
     settle: (p, cue, e) => cue + Math.max(0.35 + (Math.ceil(p.total / p.cols) + p.cols) * 0.012 + 1.3, 0.7 + e),
   },
   ring: {
