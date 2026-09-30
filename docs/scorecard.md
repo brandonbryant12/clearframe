@@ -62,10 +62,10 @@ These are the signatures a viewer notices, in order of damage. `critique` should
 
 | Priority | Work | Moves |
 |---|---|---|
-| 1 | **Report films without slides.** Rework `data-story` and `research-digest`: an establishing set piece, numbers as full-frame inserts, charts in camera rects, lower thirds, a silence before the finding. Aim for a cinema score of 75+ by default. | 1, 3, 15 |
-| 2 | **Sound for cinema.** Risers into reveals, a hit on flash and title cuts, a drone under silences, whooshes matched to camera moves. | 9, 7 |
-| 3 | **People.** Simple, honest figures (silhouettes, hands, crowds as dots) for human stories. | 6 |
-| 4 | **Motion blur on elements** (fast keys and paths), not just the camera. | 2, 4 |
+| 1 | **Charts that transform.** A report's headline number morphs into its chart, and one chart into the next, across the cut (shared ids between blocks, not just canvas). | 1, 4 |
+| 2 | **A music bed that builds.** Local draft beds that follow the edit: sparse under the setup, building through a montage, cut dead for a silence. | 9, 7 |
+| 3 | **Orbiting 3D camera** for worlds and solids, not just pans and dollies. | 2 |
+| 4 | **The model's first draft.** A worked example per genre and skill guidance so a model's first storyboard scores 90+ without revision. | 15, 12 |
 
 ## Log
 
