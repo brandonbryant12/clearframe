@@ -109,9 +109,44 @@ pub fn render<'a>(b: &'a Beat, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Sv
         "canvas" => d.canvas(),
         _ => panic!("unsupported block {}", b.block),
     };
-    let content = fframes::svgr!(<g>{d.art("under")}{header}{body}{d.art("over")}</g>);
+    // A push to a detail moves the picture only: the heading and source stay readable.
+    let picture = push_to(&d, fframes::svgr!(<g>{d.art("under")}{body}{d.art("over")}</g>));
+    // The heading leaves as the camera moves in, as a title card does.
+    let header = match push_progress(&d) {
+        Some(q) if q > 0.0 => fframes::svgr!(<g opacity={1.0 - q}>{header}</g>),
+        _ => header,
+    };
+    let content = fframes::svgr!(<g>{header}{picture}</g>);
     let footer = d.footer();
     scene_motion(&d, plate, content, footer)
+}
+
+/// `camera: {to: [x, y, w, h], at, dur}`: from the full frame into a frame-pixel rect, at a
+/// constant pace in zoom (a close-up on the bar, the word or the part that matters), then a
+/// slow drift in so the close-up keeps breathing.
+/// Progress 0–1 of a push to a detail (None when the beat has none).
+fn push_progress(d: &Draw<'_, '_, '_>) -> Option<f32> {
+    let spec = d.b.camera.as_ref().filter(|c| arr(c, "to").len() == 4)?;
+    let (at, dur) = (n(spec, "at", 0.6) as f32, (n(spec, "dur", 1.4) as f32).max(0.05));
+    Some(motion::in_out_cubic(motion::clamp01((d.t - at) / dur)))
+}
+
+fn push_to<'a>(d: &Draw<'a, '_, '_>, picture: Svgr<'a>) -> Svgr<'a> {
+    let (Some(spec), Some(q)) = (d.b.camera.as_ref(), push_progress(d)) else { return picture };
+    let to = arr(spec, "to");
+    let env = &d.b.environment;
+    let (w, h) = (env.width, env.height);
+    let r: [f32; 4] = std::array::from_fn(|i| to[i].as_f64().unwrap_or(0.0) as f32);
+    let (at, dur) = (n(spec, "at", 0.6) as f32, (n(spec, "dur", 1.4) as f32).max(0.05));
+    let settle = motion::clamp01((d.t - at - dur) / 6.0);
+    // Target zoom fits the rect in the frame; the zoom interpolates in log space.
+    let k1 = (w / r[2]).min(h / r[3]) * (1.0 + 0.03 * settle);
+    let k = k1.powf(q);
+    let (cx, cy) = (w / 2.0 + (r[0] + r[2] / 2.0 - w / 2.0) * q, h / 2.0 + (r[1] + r[3] / 2.0 - h / 2.0) * q);
+    if q <= 0.0 {
+        return picture;
+    }
+    fframes::svgr!(<g transform={format!("translate({} {}) scale({k}) translate({} {})", w / 2.0, h / 2.0, -cx, -cy)}>{picture}</g>)
 }
 
 /// A slow camera move across the whole scene keeps held frames alive. `auto` pushes in
@@ -119,6 +154,10 @@ pub fn render<'a>(b: &'a Beat, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Sv
 fn camera<'a>(d: &Draw<'a, '_, '_>, body: Svgr<'a>) -> Svgr<'a> {
     let b = d.b;
     let spec = b.camera.as_ref();
+    // A push to a detail replaces the slow move.
+    if spec.is_some_and(|c| arr(c, "to").len() == 4) {
+        return body;
+    }
     let authored = spec.map(|c| nonempty(s(c, "move"), "auto")).unwrap_or("auto");
     let (kind, amount) = match authored {
         "auto" => {

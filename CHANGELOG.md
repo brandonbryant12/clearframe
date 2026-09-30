@@ -40,6 +40,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 
   They score 100 on the cinema score, up from 25–63. A beat's `art` can name a sketch (`{"sketch": "ambient"}`).
 - **Fixed:** `view: "auto"` on a canvas was mistaken for a camera rect (the string has four characters) and failed to render.
+- **Push to a detail.** `camera: {to: [x, y, w, h], say}` on any beat pushes the picture into a frame-pixel rect on a spoken word, a close-up on the bar or the part that matters. The heading fades as the camera moves in, and the source line stays. The research digest's evidence chart now ends as a close-up on its outlier.
 - **Sound for cinema.** New synthesized cues are placed by the picture:
   - a `hit` on every `flash` cut;
   - a `riser` that ends exactly where a silent beat begins;

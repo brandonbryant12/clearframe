@@ -46,7 +46,7 @@ The camera moves because something happens. Match the move to the job:
 
 | Move | Means | ClearFrame |
 |---|---|---|
-| Push in | "Look closer", a revelation, tension | World `view` narrowing; block `camera: in`; `dolly` forward |
+| Push in | "Look closer", a revelation, tension | World `view` narrowing; block `camera: in`; `camera: {to: [x, y, w, h], say}` onto the detail; `dolly` forward |
 | Pull out | Context, "it was bigger than we thought" | World view widening; `camera: out` |
 | Track / truck | Following something along | World view sliding sideways, with parallax from `z` |
 | Fly-through | Entering a place or a scale | `dolly` through `z` layers (rings, clouds, walls) |

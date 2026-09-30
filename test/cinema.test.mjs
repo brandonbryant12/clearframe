@@ -44,6 +44,29 @@ test('lens settings validate, and each beat carries the film lens merged with it
   );
 });
 
+test('a push to a detail resolves its spoken cue; bad rects are refused', t => {
+  const r = job(t, {
+    beats: [
+      {
+        id: 'bars',
+        block: 'statement',
+        vo: 'Most of it goes one way, with a clear outlier.',
+        camera: { to: [700, 170, 1160, 652], say: 'outlier' },
+        props: { text: 'One way' },
+      },
+    ],
+  });
+  assert.deepEqual(r.errors, []);
+  const c = r.job.beats[0].camera;
+  assert.ok(c.at > 1 && c.dur === 1.4 && c.say == null, JSON.stringify(c));
+  assert.match(
+    job(t, {
+      beats: [{ id: 'x', block: 'statement', camera: { to: [0, 0, 10, 10] }, props: { text: 'x' } }],
+    }).errors.join(),
+    /camera.to/,
+  );
+});
+
 test('canvas depth: z, dolly and focus keys resolve spoken cues; shine waits for the element', t => {
   const r = job(t, {
     beats: [

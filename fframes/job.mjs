@@ -203,6 +203,12 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   if (art) settle = Math.max(settle, scheduleArt(art.under, at), scheduleArt(art.over, at));
   const paced = keepPace(b, source, props, art, at, { sb, report });
   const layers = beatLayers(source, b, sb);
+  if (layers.camera?.to) {
+    const c = layers.camera;
+    c.at = c.say != null ? cue(c.say) : (c.at ?? 0.6);
+    delete c.say;
+    c.dur ??= 1.4;
+  }
   if (spec.numeric) {
     if (!props.source || !sb.sources.length)
       throw new Error('Numbers need visible props.source and a storyboard.sources entry.');
@@ -414,11 +420,21 @@ function beatLayers(source, b, sb) {
     if (
       !camera ||
       typeof camera !== 'object' ||
-      Object.keys(camera).some(k => !['move', 'amount'].includes(k)) ||
+      Object.keys(camera).some(k => !['move', 'amount', 'to', 'at', 'say', 'dur'].includes(k)) ||
       !CAMERA_MOVES.includes(camera.move ?? 'auto') ||
       (camera.amount != null && !unit(camera.amount))
     )
-      throw new Error(`camera must be ${CAMERA_MOVES.join('|')} or {move, amount: 0–1}`);
+      throw new Error(
+        `camera must be ${CAMERA_MOVES.join('|')}, {move, amount: 0–1} or {to: [x, y, w, h], say|at, dur}`,
+      );
+    // A push to a detail: the picture travels from the full frame into a frame-pixel rect.
+    if (camera.to != null) {
+      const r = camera.to;
+      if (!(Array.isArray(r) && r.length === 4 && r.every(Number.isFinite) && r[2] >= 64 && r[3] >= 36))
+        throw new Error('camera.to must be a frame-pixel rect [x, y, w, h] (at least 64 × 36)');
+      if (camera.dur != null && !(Number.isFinite(camera.dur) && camera.dur >= 0.2 && camera.dur <= 8))
+        throw new Error('camera.dur must be 0.2–8 seconds');
+    }
     out.camera = camera;
   }
   if (source.plate != null) out.plate = plateSpec(source.plate, b.block);
