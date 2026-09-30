@@ -11,7 +11,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 - **Pop captions.** `captions: "pop"` sets social-style captions: heavy outlined phrases of three or four words, the spoken word on a tilted accent pill.
 - **Numbers land on the word.** `stat`, `delta` and `ring` counts cued to a spoken word pre-roll, so the figure finishes as it is said. Number words and digits now match either way ("18" finds "eighteen"; Whisper's "7" aligns with a scripted "seven").
 - **Critique.** A titled canvas is no longer treated as full frame. Small drawings get a `view: "auto"` hint, runs of separate drawings get a world hint, and style keys are no longer counted as on-screen words.
-- **Hand-drawn scenes render about 6× faster.** Hachure is clipped to the shape analytically (a scanline, as in Rough.js) instead of through a clip mask, and jittered geometry is cached per element and seed; a rough 24 s film went from 113 s to 17 s.
+- **Hand-drawn scenes render about 14× faster.** Hachure is clipped to the shape analytically (a scanline, as in Rough.js) instead of through a clip mask, each hatch line is one bowed curve, and jittered geometry is cached per element and seed; a rough 24 s film went from 113 s to 8 s, close to its crisp cost.
 - **Canvas** holds up to 600 elements. `check` ignores "cut off by the canvas edge" while a world camera is moving. The build step names the heavy-lock holder while it waits.
 
 ## 0.4.0 — 2026-09-29

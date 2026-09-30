@@ -207,15 +207,21 @@ export async function checkProject(root, options = {}) {
   return { errors, warnings: ctx.warnings, notes, duration: ctx.timing.duration, inputId: ctx.manifest.inputId };
 }
 
-/** Drop "cut off by the canvas edge" notes that fall inside a world camera move: while the
- * camera travels, drawings are meant to slide past the frame edge. */
+/** Drop "cut off by the canvas edge" notes inside moves that carry type past the edge on
+ * purpose: a world camera travelling, and push/whip/zoom entrances and exits. */
 function withoutCameraCuts(report, job) {
-  const moves = job.beats
-    .filter(b => b.block === 'canvas' && b.props.viewFrom)
-    .map(b => {
+  const moving = ['push', 'whip', 'zoom'],
+    edge = Math.ceil(0.8 * job.fps);
+  const moves = job.beats.flatMap(b => {
+    const out = [];
+    if (b.block === 'canvas' && b.props.viewFrom) {
       const from = b.start_frame + Math.floor((b.props.viewAt ?? 0) * job.fps);
-      return [from, from + Math.ceil((b.props.viewDur ?? 1.2) * job.fps)];
-    });
+      out.push([from, from + Math.ceil((b.props.viewDur ?? 1.2) * job.fps)]);
+    }
+    if (moving.includes(b.transition)) out.push([b.start_frame, b.start_frame + edge]);
+    if (moving.includes(b.exit)) out.push([b.start_frame + b.frames - edge, b.start_frame + b.frames]);
+    return out;
+  });
   return String(report)
     .split('\n')
     .filter(line => {

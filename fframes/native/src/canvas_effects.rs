@@ -66,7 +66,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                     let o = (cx - dy * off - dx * reach / 2.0, cy + dx * off - dy * reach / 2.0);
                     for (j, seg) in scanline(&contours, o, (dx, dy)).into_iter().enumerate() {
                         let salt = (k as u64).wrapping_mul(31) ^ (j as u64).wrapping_mul(0x9E37);
-                        hatch.push_str(&rough_contour(&seg, amount * 0.5, seed ^ salt));
+                        hatch.push_str(&hatch_line(seg, amount, seed ^ salt));
                         hatch.push(' ');
                     }
                 }
@@ -392,4 +392,14 @@ pub(super) fn scanline(contours: &[(Vec<(f32, f32)>, bool)], o: (f32, f32), d: (
         .filter(|p| p[1] - p[0] > 2.0)
         .map(|p| [(o.0 + d.0 * p[0], o.1 + d.1 * p[0]), (o.0 + d.0 * p[1], o.1 + d.1 * p[1])])
         .collect()
+}
+
+/// One hachure stroke: a single slightly bowed curve with jittered ends, as Rough.js draws
+/// them. Outlines keep the finer multi-point pencil line; fills stay cheap at any size.
+fn hatch_line(seg: [(f32, f32); 2], amount: f32, seed: u64) -> String {
+    let j = |k: u64| noise(seed, k) * amount * 0.5;
+    let (x0, y0) = (seg[0].0 + j(1), seg[0].1 + j(2));
+    let (x1, y1) = (seg[1].0 + j(3), seg[1].1 + j(4));
+    let (mx, my) = ((x0 + x1) / 2.0 + j(5) * 2.0, (y0 + y1) / 2.0 + j(6) * 2.0);
+    format!("M {x0:.1} {y0:.1} Q {mx:.1} {my:.1} {x1:.1} {y1:.1}")
 }
