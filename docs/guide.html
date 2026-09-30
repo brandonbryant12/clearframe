@@ -1543,7 +1543,8 @@ Script:
       <h2>What's new</h2>
       <p class="small">"Travel instead of cutting, type with a voice, and fewer false alarms." The full list is in <code>CHANGELOG.md</code>.</p>
       <ul class="news">
-        <li><strong>Mosaic.</strong> <code>mosaic</code> on any canvas shape (or the whole canvas) lays it in tesserae. <code>enter: assemble</code> builds it tile by tile and <code>exit: scatter</code> throws the tiles loose. A <code>mosaic</code> palette, backdrop and treatment complete the look.</li>
+        <li><strong>One continuous voice take.</strong> Gemini 3.8 TTS reads the whole narration as one take, with one text part and one short style, so the voice stays consistent. Per-beat styles are ignored (<a href="#prompting-voice">Voice</a>). <code>voice DIR --dry-run</code> shows the exact request.</li>
+        <li><strong>Mosaic.</strong> <code>mosaic</code> on any canvas shape (or the whole canvas) lays it in tesserae. <code>enter: assemble</code> builds it tile by tile, <code>exit: scatter</code> throws the tiles loose, and <code>glint</code> makes held tiles shimmer. A <code>mosaic</code> palette, backdrop and treatment complete the look.</li>
         <li><strong>Worlds.</strong> Consecutive canvas beats that share <code>props.world</code> form one continuous drawing, and the camera travels between camera rects. There is a new <code>journey</code> playbook.</li>
         <li><strong>The camera lands on the words.</strong> Moves pre-roll into the outgoing beat's settled tail and arrive by the new line's first word. Graphic transitions between world beats cut under the cover, and <code>depth</code> below 1 gives parallax.</li>
         <li><strong>Living worlds.</strong> <code>viewDrift</code> keeps the camera easing in, <code>behind: true</code> draws under the existing world, and the source line waits for the camera on a soft scrim.</li>
