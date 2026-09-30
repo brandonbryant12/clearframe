@@ -20,7 +20,7 @@ Without `view`, coordinates are frame pixels of the normalized canvas: 1920×108
 | `line` | `x1, y1, x2, y2`, `arrow: start|end|both`, `head` |
 | `path` | `d` (SVG path data: M L H V C S Q T A Z), `arrow`, `head` |
 | `poly` | `points: [[x, y], …]`, `closed` |
-| `text` | `text, x, y` (first baseline), `size`, `font: display|bold|light|text|strong|figures`, `anchor: start|middle|end`, `width` (wraps and fits), `leading`, `tracking` (em), `upper`, `count: {from, to, decimals, prefix, suffix, dur}` |
+| `text` | `text, x, y` (first baseline), `size`, `font: display|semibold|bold|light|text|regular|strong|figures|serif|serif-italic|italic|mono|hand`, `anchor: start|middle|end`, `width` (wraps and fits), `leading`, `tracking` (em), `upper`, `count: {from, to, decimals, prefix, suffix, dur}` |
 | `icon` | `name` (see `clearframe icons`), `x, y` (centre), `size`; colour from `stroke` or `fill` |
 | `image` | `asset` or `file`, `x, y, w, h, r`, `fit: cover|contain`, `treatment` |
 | `group` | `children`, `x, y` (offset), `stagger` (seconds between children) |
@@ -35,12 +35,12 @@ Paint: `fill` and `stroke` take palette tokens (`bg, surface, ink, muted, accent
 | Field | Meaning |
 |---|---|
 | `say` / `at` | When the element enters: a spoken word or phrase, or scene seconds. Without either, elements follow the scene cue plus `stagger`. |
-| `enter` | `fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, blur, none`. Default: strokes `draw`, text `rise`, icons and circles `pop`, others `fade`. |
+| `enter` | `fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, scramble, blur, assemble (mosaic), none`. Default: strokes `draw`, text `rise`, icons and circles `pop`, others `fade`. |
 | `dur`, `dist` | Entrance seconds; travel distance. |
 | `keys` | `[{say|at, dur, ease: inOut|in|out|linear|spring, x, y, scale, scaleX, scaleY, rotate, opacity}]`: each key starts at its time and eases from the previous state. `x, y` are offsets; `scaleX`/`scaleY` stretch one axis about `origin` (a level rising or falling, a gap widening). |
 | `along` | `{d, say|at, dur, ease, rotate}`: the element's origin travels along a path (a marker on a route, a packet through a pipe). |
 | `loop` | `{type: spin|pulse|float|sway|orbit|dash|blink, period, amount}`: ambient motion after the entrance, eased in. `dash` marches a dashed stroke. `spin` with an `origin` orbits a centre. |
-| `exit`, `exitSay` / `exitAt`, `exitDur` | Leave mid-scene: `fade, shrink, fall, lift, undraw, wipe, blur, none`. Use it to build, then transform: draw a problem, clear it, draw the fix. |
+| `exit`, `exitSay` / `exitAt`, `exitDur` | Leave mid-scene: `fade, shrink, fall, lift, undraw, wipe, blur, scatter (mosaic), none`. Use it to build, then transform: draw a problem, clear it, draw the fix. |
 
 `check` resolves every spoken cue against the narration and fails if one is missing or lands after the beat. `settle` (when the exit may begin) waits for every entrance, count, key and path move. Loops continue. A `count` is a displayed figure: it needs a visible `source` and a `sources` entry, like any chart.
 

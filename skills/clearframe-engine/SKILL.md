@@ -28,7 +28,7 @@ node engine/cli.mjs review film
 
 `preview` (or `render --draft`) produces a review MP4 at the authored size with a fast encoder (x264 veryfast, CRF 23, about 3× faster than the final medium/CRF 16 encode). `captions` writes SRT/VTT. `plan` estimates generation and cache state. `voice`, `music`, `images`, `clips` perform explicit generation; use `--only`, `--budget` and `--force` deliberately. `speech` imports an audio/transcript pair; `align --words` imports measured offsets; `align --transcribe` calls Gemini transcription.
 
-The CLI automatically enters the local codex-heavy gate for expensive work. Direct full suites/builds/install commands must use it too. Keep >=20 GiB free with the warm cache, >=30 GiB before a cold native build. No browser or npm runtime dependencies are required.
+Only compiling the native renderer takes the machine-wide `codex-heavy` lock (one Cargo job); renders, checks, voice and `npm test` run directly. While another job holds the lock, the build names it and waits. Warm builds need 10 GiB free and cold builds 25 GiB (`doctor` warns below 20 GiB). No browser or npm runtime dependencies are required.
 
 Outputs: `build/native/job.json`, prepared media/manifest, `build/timing.json`, SRT/VTT, review PNGs, `build/video.mp4` and its provenance JSON. Final rendering verifies dimensions, FPS, decoded frames and unchanged inputs. Original media remains in `assets/`. An explicit existing `--out` requires `--force` to overwrite.
 

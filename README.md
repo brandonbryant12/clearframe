@@ -71,19 +71,19 @@ Cue anything to speech: `land`, `growSay`, `drawSay` and per-item `say` take an 
 - items cued too late to finish entering, text that overflows its box at 14 px;
 - speech-following text on estimated timing, or characters the bundled fonts cannot draw.
 
-`looks DIR --beat ID` renders one frame in all eight palettes. `still --beat ID` inspects a moment; `review DIR` decodes the encoded MP4 around every cut and word boundary. Paid commands are explicit: `plan` estimates spend, then `voice`, `music`, `images`, `clips` or `align --transcribe` call Google. Existing recordings and imported timestamps need no API key.
+`looks DIR --beat ID` renders one frame in every palette. `still --beat ID` inspects a moment; `review DIR` decodes the encoded MP4 around every cut and word boundary. Paid commands are explicit: `plan` estimates spend, then `voice`, `music`, `images`, `clips` or `align --transcribe` call Google. Existing recordings and imported timestamps need no API key.
 
 ## Development
 
 ```sh
-/Users/brandon/.local/bin/codex-heavy -- npm test                   # Node contract tests
+npm test                                                              # Node contract tests (fast; no lock)
 node engine/cli.mjs build                                            # native renderer (warm cache)
 node engine/cli.mjs gallery build/gallery-paper --theme paper
 node engine/cli.mjs gallery build/gallery-ink --vertical --theme ink
 /Users/brandon/.local/bin/codex-heavy -- node scripts/verify-native.mjs build/native-verification-new
 ```
 
-`engine/` owns orchestration, timing, generation and audio. `fframes/catalog.mjs` owns block metadata, `validators.mjs` prop validation, `registry.mjs` per-block runtime rules, `constants.json` shared timing, `playbooks.mjs`/`treatments.mjs`/`sketches.mjs` starting points, `job.mjs` storyboard → job, `prepare.mjs`/`render.mjs` media and outputs (re-exported by `production.mjs`). The Rust renderer in `fframes/native/src/` is split into `text` (shaping and fitting), `design` (palettes, tones, backdrops, texture), `motion` (curves, exits), `constants` (shared timing), `scenes` (layout grid and helpers), `story`, `speech`, `compositor` (camera, plates, transitions), `canvas` (author-drawn elements), `charts`, `diagrams` and `media`. `npm run catalog:sync` regenerates the schema, block reference and recipes. The CLI gates expensive work through `codex-heavy` with one Cargo job and bounded workers; keep 20 GiB free with a warm cache, 30 GiB before a cold build.
+`engine/` owns orchestration, timing, generation and audio. `fframes/catalog.mjs` owns block metadata, `validators.mjs` prop validation, `registry.mjs` per-block runtime rules, `constants.json` shared timing, `playbooks.mjs`/`treatments.mjs`/`sketches.mjs` starting points, `job.mjs` storyboard → job, `prepare.mjs`/`render.mjs` media and outputs (re-exported by `production.mjs`). The Rust renderer in `fframes/native/src/` is split into `text` (shaping and fitting), `design` (palettes, tones, backdrops, texture), `motion` (curves, exits), `constants` (shared timing), `scenes` (layout grid and helpers), `story`, `speech`, `compositor` (camera, plates, transitions), `canvas` (author-drawn elements), `charts`, `diagrams` and `media`. `npm run catalog:sync` regenerates the schema, block reference and recipes. Only the native compile takes the machine-wide `codex-heavy` lock (one Cargo job); warm builds need 10 GiB free, cold builds 25 GiB, and `doctor` warns below 20 GiB.
 
 Fonts are static instances derived from the pinned OFL Inter source (`fframes/native/tools/generate-fonts.py`); icons are 95 MIT Tabler outlines at a pinned revision (`fetch-icons.py`, `generate-icons.py`). The retired HTML/GSAP engine is preserved in [archive/](archive/README.md) for recovery only.
 

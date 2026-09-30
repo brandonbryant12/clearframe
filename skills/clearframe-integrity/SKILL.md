@@ -48,7 +48,7 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 
 ## 6. Rights
 
-- Fonts ship with the engine under open licences (Inter, Instrument Serif, JetBrains Mono, Fraunces: SIL OFL).
+- Fonts ship with the engine under open licences (Inter, Instrument Serif, IBM Plex Mono, Architects Daughter: SIL OFL 1.1, pinned google/fonts revisions with hashes in fframes/assets/fonts/provenance.json).
 - Don't prompt music "in the style of" a named artist. Lyria blocks it, and you shouldn't want it.
 - Only use brand assets (logos, marks, colours) the requester owns or is authorised to use.
 

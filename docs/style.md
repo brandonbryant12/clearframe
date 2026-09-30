@@ -45,7 +45,7 @@ The bundled fonts cover Latin, Greek, Cyrillic, arrows, math and currency symbol
 
 ## Color
 
-Thirteen palettes, each with `bg`, `surface`, `ink`, `muted`, `accent`, `accent2`, `positive` and `negative`. Run `clearframe themes` for swatches.
+Fifteen palettes, each with `bg`, `surface`, `ink`, `muted`, `accent`, `accent2`, `positive` and `negative`. Run `clearframe themes` for swatches.
 
 | Palette | Character |
 |---|---|
@@ -62,6 +62,8 @@ Thirteen palettes, each with `bg`, `surface`, `ink`, `muted`, `accent`, `accent2
 | `blueprint` | Drafting blue with sky and amber lines. Engineering, how-it-works and diagrams. |
 | `clay` | Terracotta paper with rust and teal. Craft, history, food and warm documentary. |
 | `noir` | Cinema black with gold and vermilion. Drama, true stories, premium reveals. |
+| `sketchbook` | Drawing paper with graphite, red and blue pencil. Hand-drawn explainers with rough strokes and the paper backdrop. |
+| `mosaic` | Ultramarine ground with ivory, gold, coral and turquoise tesserae. Films laid in tiles, with the mosaic backdrop. |
 
 **Tone** colour-blocks one scene: `"tone": "accent" | "accent2" | "invert" | "surface"` fills the frame and re-derives readable ink and accent colours for it (a test checks every palette × tone). Graphic transitions keep the film's own accent on both sides of the cut.
 
@@ -85,7 +87,7 @@ Every preset keeps `ink`, `muted` and `accent` at ≥ 4.5:1 against `bg`, and `a
 
 Opacity never overshoots, and values never do: counters, bars, rings and fills use non-overshooting curves and always settle on the exact authored number. `check` fails a final render when a beat ends before its numbers finish counting.
 
-**Entrances** (`transition`, global or per beat): `cut`, `fade`, `rise`, `wipe`, `push`, `zoom`, and three graphic transitions that carry one movement across the cut: `panel` (an accent panel with a second-accent edge sweeps across and off), `iris` (an accent circle closes the scene and opens the next) and `whip` (a fast horizontal move with motion blur). **Exits** mirror the next scene's entrance automatically: a scene before a push slides away, one before a wipe wipes off, one before a cut simply cuts, one before a panel is covered by it. The final scene fades out. Override with a beat's `exit`: `auto`, `none`, `fade`, `push`, `zoom`, `wipe`, `panel`, `iris`, `whip`. Exits never start before the last spoken word of the beat or before its entrance has finished; when the outgoing scene has no room to finish a graphic cover, `check` warns and uses a fade. Scenes are never cross-dissolved over each other.
+**Entrances** (`transition`, global or per beat): `auto` (a `rise` where the chapter changes, a `fade` elsewhere), `cut`, `fade`, `rise`, `wipe`, `push`, `zoom`, and three graphic transitions that carry one movement across the cut: `panel` (an accent panel with a second-accent edge sweeps across and off), `iris` (an accent circle closes the scene and opens the next) and `whip` (a fast horizontal move with motion blur). **Exits** mirror the next scene's entrance automatically: a scene before a push slides away, one before a wipe wipes off, one before a cut simply cuts, one before a panel is covered by it. The final scene fades out. Override with a beat's `exit`: `auto`, `none`, `fade`, `push`, `zoom`, `wipe`, `panel`, `iris`, `whip`. Exits never start before the last spoken word of the beat or before its entrance has finished; when the outgoing scene has no room to finish a graphic cover, `check` warns and uses a fade. Scenes are never cross-dissolved over each other.
 
 **Camera:** every scene gets a slow move (`camera: auto` pushes in gently, except kinetic text and footage). Set `camera` per beat to `in`, `out`, `left`, `right`, `up`, `down` or `none`, or `{move, amount: 0–1}`. Plates drift independently of the content, which gives parallax.
 

@@ -20,9 +20,9 @@ const HELP = `ClearFrame — FFFrames motion graphics
                                       (also .txt, .html, .docx, .rtf; .pdf with pdftotext)
   ingest <dir> --audio episode.wav --words words.json [--script turns.txt] [--from s] [--to s] [--speakers host=Maya:Host,guest=Sam:Guest] [--vertical]
                                       a recording as gapless beats with measured word timings and speakers
-  playbooks | recipes                 24 narrative starting points
-  blocks [name] [--json | --md]        32 native building blocks and props
-  themes [--json]                     8 palettes with swatches
+  playbooks | recipes                 ${PLAYBOOKS.length} narrative starting points
+  blocks [name] [--json | --md]        ${BLOCKS.length} native building blocks and props
+  themes [--json]                     ${Object.keys(THEMES).length} palettes with swatches
   motions [--json]                    presets, entrances, exits and backdrops
   icons [--json]                      95 bundled Tabler icons and provenance
   sketch [name] [--vertical]          canvas starting compositions (route, orbit, pipeline…) as JSON
@@ -42,7 +42,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
   still <dir> --at seconds | --beat id [--pos .6] [--grid] [--draft] [--out image.png]
   world <dir> [--name NAME] [--out image.png]   the whole canvas world with every beat's camera rect numbered
   sheet <dir> [--per 1|2|3] [--grid] [--draft] [--out sheet.png]   --grid: labelled 100 px coordinates for placing art
-  looks <dir> [--beat id] [--draft]    compare the same frame in four palettes
+  looks <dir> [--beat id] [--draft]    compare the same frame in every palette
   review <dir> [--beat id] [--video film.mp4]  decoded cut/word-boundary filmstrip
   render | preview <dir> [--draft] [--out film.mp4] [--no-audio] [--force]
   draft <dir> [--no-render]           one pass, one queue wait: critique, draft voice, check, sheet, draft MP4
@@ -224,7 +224,7 @@ async function main() {
           presets: MOTIONS,
           intensity: '0–1',
           transitions: TRANSITIONS,
-          exits: 'auto (mirror the next entrance) | none | fade | push | zoom | wipe',
+          exits: 'auto (mirror the next entrance) | none | fade | push | zoom | wipe | panel | iris | whip',
           backdrops: BACKDROPS,
         },
         null,
