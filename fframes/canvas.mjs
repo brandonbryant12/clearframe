@@ -53,6 +53,7 @@ const COMMON = [
   'morphDur',
   'rough',
   'behind',
+  'depth',
 ];
 export const ENTERS = [
   'fade',
@@ -146,6 +147,8 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
     }
     for (const key of ['w', 'h', 'r', 'rx', 'ry', 'size', 'width', 'head', 'dur', 'exitDur', 'at', 'exitAt'])
       if (el[key] != null && (!finite(el[key]) || el[key] < 0)) fail(`${at}.${key} must be a nonnegative number`);
+    if (el.depth != null && (!finite(el.depth) || el.depth <= 0 || el.depth > 1))
+      fail(`${at}.depth must be above 0 and at most 1 (1 moves with the world; smaller is farther away)`);
     if (el.opacity != null && (!finite(el.opacity) || el.opacity < 0 || el.opacity > 1))
       fail(`${at}.opacity must be 0–1`);
     for (const key of ['fill', 'stroke']) {

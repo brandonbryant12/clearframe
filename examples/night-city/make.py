@@ -47,6 +47,8 @@ hook = [
      'keys': [{'at': 0.2, 'opacity': 0.1, 'dur': 2.2}]},
     {'type': 'circle', 'cx': 960, 'cy': 640, 'r': 64, 'fill': 'accent', 'enter': 'none', 'at': 0,
      'keys': [{'at': 0.05, 'y': 200, 'dur': 1.7, 'ease': 'in'}]},
+    *[{'type': 'rect', 'x': x, 'y': HORIZON - h, 'w': w, 'h': h, 'fill': '#181818', 'enter': 'none', 'at': 0, 'depth': 0.55}
+      for x, w, h in [(-600 + 97 * i, 90 - (i * 29) % 40, 120 + (i * 53) % 170) for i in range(70)]],
     {'type': 'rect', 'x': -4000, 'y': HORIZON, 'w': 16000, 'h': 3000, 'fill': 'surface', 'enter': 'none', 'at': 0},
     {'type': 'line', 'x1': -4000, 'y1': HORIZON, 'x2': 12000, 'y2': HORIZON, 'stroke': 'line', 'width': 2, 'enter': 'none', 'at': 0},
     {'type': 'path', 'd': f'M 80 {HORIZON} Q 260 680 440 735 Q 640 670 900 {HORIZON} Z', 'fill': 'positive', 'opacity': 0.22, 'enter': 'none', 'at': 0},
@@ -68,7 +70,7 @@ hook = [
 # ── B: a day and a night, charted in the sky ───────────────────────────────────────────
 X0, X1 = 220, 1660
 def hx(h): return X0 + (h - 12) / 18 * (X1 - X0)
-def ty(t): return -300 - (t - 20) * 24
+def ty(t): return 200 - (t - 20) * 22
 city_t = {12: 33, 15: 34, 18: 32, 21: 30, 24: 29, 27: 28, 30: 27}
 country_t = {12: 31, 15: 32, 18: 29, 21: 24.5, 24: 22, 27: 21, 30: 20}
 def trace(temps, hours):
@@ -76,13 +78,14 @@ def trace(temps, hours):
     return 'M ' + ' L '.join(f'{x:.0f} {y:.0f}' for x, y in pts)
 day_h, night_h = [12, 15, 18], [18, 21, 24, 27, 30]
 gap_poly = [(hx(h), ty(city_t[h])) for h in night_h] + [(hx(h), ty(country_t[h])) for h in reversed(night_h)]
+OFFSTAGE_C = 9  # the chart leaves once the camera has gone down to the roof
 chart = [
-    {'type': 'rect', 'x': -4000, 'y': -4000, 'w': 16000, 'h': 4000 + HORIZON, 'fill': {'gradient': ['#3d5a78', '#1c2530'], 'angle': 90}, 'behind': True, 'enter': 'none', 'at': 0, 'opacity': 0.95,
+    {'type': 'rect', 'x': -4000, 'y': -4000, 'w': 16000, 'h': 4000 + HORIZON, 'fill': {'gradient': ['#6b9cc6', '#35597a'], 'angle': 90}, 'behind': True, 'enter': 'none', 'at': 0, 'opacity': 0.95,
      'keys': [{'at': 0, 'opacity': 0, 'dur': 0}, {'say': 'day', 'opacity': 1, 'dur': 0.9}, {'say': 'sunset', 'opacity': 0, 'dur': 1.4}]},
-    {'type': 'line', 'x1': X0, 'y1': -300, 'x2': X1, 'y2': -300, 'stroke': 'line', 'width': 2, 'at': 0.1},
-    *[text(lbl, hx(h), -262, 22, font='mono', fill='muted', anchor='middle', at=0.2) for h, lbl in ((12, 'NOON'), (18, '6 PM'), (24, 'MIDNIGHT'), (30, '6 AM'))],
-    {'type': 'circle', 'cx': hx(12), 'cy': ty(34) - 110, 'r': 26, 'fill': 'accent', 'say': 'day',
-     'keys': [{'say': 'small', 'x': hx(17) - hx(12), 'y': 60, 'dur': 2.2, 'ease': 'inOut'}, {'say': 'sunset', 'y': 260, 'opacity': 0, 'dur': 0.9, 'ease': 'in'}]},
+    {'type': 'line', 'x1': X0, 'y1': 200, 'x2': X1, 'y2': 200, 'stroke': 'line', 'width': 2, 'at': 0.1},
+    *[text(lbl, hx(h), 232, 22, font='mono', fill='muted', anchor='middle', at=0.2) for h, lbl in ((12, 'NOON'), (18, '6 PM'), (24, 'MIDNIGHT'), (30, '6 AM'))],
+    {'type': 'circle', 'cx': hx(12), 'cy': ty(34) - 150, 'r': 26, 'fill': 'accent', 'say': 'day',
+     'keys': [{'say': 'small', 'x': hx(17) - hx(12), 'y': 30, 'dur': 2.2, 'ease': 'inOut'}, {'say': 'sunset', 'y': 330, 'opacity': 0, 'dur': 0.9, 'ease': 'in'}]},
     {'type': 'path', 'd': trace(country_t, day_h), 'stroke': COOL, 'width': 5, 'say': 'day', 'dur': 1.4},
     {'type': 'path', 'd': trace(city_t, day_h), 'stroke': 'accent2', 'width': 5, 'say': 'day', 'dur': 1.4},
     text('1–3°C', hx(15), ty(34) - 28, 40, font='bold', fill='ink', anchor='middle', say='three'),
@@ -95,12 +98,14 @@ chart = [
     text('CITY', X1 + 16, ty(27) + 8, 22, font='mono', fill='accent2', say='sunset'),
     text('COUNTRYSIDE', X1 + 16, ty(20) + 8, 22, font='mono', fill=COOL, say='sunset'),
 ]
+for el in chart[1:]:
+    el.setdefault('exitAt', OFFSTAGE_C); el.setdefault('exit', 'fade')
 
 # ── A, zoomed: one roof through a day ──────────────────────────────────────────────────
 rx0, rx1, rtop = ROOF
 OFFSTAGE = 9  # scene seconds after the camera has left the roof: tidy it for the return
 roof = [
-    {'type': 'rect', 'x': -4000, 'y': -4000, 'w': 16000, 'h': 4000 + HORIZON, 'fill': {'gradient': ['#3d5a78', '#1c2530'], 'angle': 90}, 'behind': True, 'enter': 'none', 'at': 0, 'opacity': 0.9,
+    {'type': 'rect', 'x': -4000, 'y': -4000, 'w': 16000, 'h': 4000 + HORIZON, 'fill': {'gradient': ['#6b9cc6', '#35597a'], 'angle': 90}, 'behind': True, 'enter': 'none', 'at': 0, 'opacity': 0.9,
      'keys': [{'at': 0, 'opacity': 0, 'dur': 0}, {'at': 0.1, 'opacity': 1, 'dur': 0.8}, {'say': 'after dark', 'opacity': 0, 'dur': 1.0}]},
     {'type': 'rect', 'x': rx0, 'y': rtop, 'w': rx1 - rx0, 'h': 34, 'fill': '#262626', 'stroke': 'ink', 'width': 1.5, 'at': 0.1},
     text('ROOF · ASPHALT', rx1 + 10, rtop + 21, 11, font='mono', fill='muted', at=0.2, exitAt=OFFSTAGE, exit='fade'),
@@ -134,12 +139,12 @@ hotspots = [
     {'type': 'group', 'at': 0.3, 'stagger': 0.03, 'children': streets},
     {'type': 'group', 'say': 'twelve', 'stagger': 0.08, 'children': [
         {'type': 'line', 'x1': a, 'y1': b, 'x2': c, 'y2': d, 'stroke': 'accent2', 'width': 14, 'loop': {'type': 'pulse', 'period': 1.6, 'amount': 0.2}} for a, b, c, d in hot]},
-    text('12% of streets', 1620, 1530, 52, font='bold', fill='accent2', say='twelve'),
+    text('12% of streets', 1580, 1530, 52, font='bold', fill='accent2', say='twelve'),
     {'type': 'group', 'say': 'forty', 'stagger': 0.09, 'children': [
         {'type': 'circle', 'cx': x, 'cy': y, 'r': 13, 'fill': 'ink', 'stroke': 'bg', 'width': 3, 'enter': 'drop'} for x, y in dots_hot + dots_other]},
-    {'type': 'circle', 'cx': 1636, 'cy': 1630, 'r': 13, 'fill': 'ink', 'say': 'forty'},
-    text('40% of heat emergencies', 1662, 1642, 40, font='bold', fill='ink', say='forty'),
-    text('4 of these 10 are on the hot 12%', 1620, 1700, 26, fill='muted', say='forty'),
+    {'type': 'circle', 'cx': 1596, 'cy': 1630, 'r': 13, 'fill': 'ink', 'say': 'forty'},
+    text('40% of heat emergencies', 1622, 1642, 40, font='bold', fill='ink', say='forty'),
+    text('4 of these 10 are on the hot 12%', 1580, 1700, 26, fill='muted', say='forty'),
 ]
 
 # ── A, zoomed again: what cools the block ──────────────────────────────────────────────
@@ -151,9 +156,9 @@ works = [
     {'type': 'rect', 'x': rx0 - 2, 'y': rtop - 5, 'w': rx1 - rx0 + 4, 'h': 7, 'fill': 'ink', 'enter': 'wipe', 'say': 'Cool roofs', 'dur': 0.6},
     {'type': 'path', 'd': f'M {rx0 + 20} {rtop - 90} L {rx0 + 52} {rtop - 7}', 'stroke': 'accent', 'width': 3, 'arrow': 'end', 'head': 9, 'say': 'cut', 'dur': 0.4},
     {'type': 'path', 'd': f'M {rx0 + 64} {rtop - 7} L {rx0 + 96} {rtop - 90}', 'stroke': COOL, 'width': 3, 'arrow': 'end', 'head': 9, 'say': 'rooftop', 'dur': 0.4},
-    text('20–30°C cooler roof', (rx0 + rx1) / 2, rtop - 104, 16, font='bold', fill=COOL, anchor='middle', say='thirty', exitAt=OFFSTAGE_W, exit='fade'),
+    text('20–30°C cooler roof', rx0 - 16, rtop - 46, 16, font='bold', fill=COOL, anchor='end', say='thirty', exitAt=OFFSTAGE_W, exit='fade'),
     *[{'type': 'rect', 'x': x - 3, 'y': HORIZON - 34, 'w': 6, 'h': 34, 'fill': 'muted', 'say': 'Trees'} for x in tree_x],
-    *[{'type': 'circle', 'cx': x, 'cy': HORIZON - 40, 'r': 15, 'fill': 'positive', 'opacity': 0.85, 'say': 'Trees', 'origin': [x, HORIZON - 40],
+    *[{'type': 'circle', 'cx': x, 'cy': HORIZON - 40, 'r': 15, 'fill': 'positive', 'say': 'Trees', 'origin': [x, HORIZON - 40],
        'keys': [{'say': 'continuous', 'scale': 2.1, 'dur': 0.9, 'ease': 'spring'}]} for x in tree_x],
     {'type': 'rect', 'x': 1470, 'y': HORIZON - 116, 'w': 140, 'h': 28, 'r': 6, 'fill': 'bg', 'opacity': 0.85, 'say': 'canopy', 'exitAt': OFFSTAGE_W, 'exit': 'fade'},
     text('1–2°C cooler air', 1540, HORIZON - 96, 16, font='bold', fill='positive', anchor='middle', say='canopy', exitAt=OFFSTAGE_W, exit='fade'),
@@ -167,8 +172,8 @@ cities = [(GX + (k % 10) * 78, GY + (k // 10) * 56) for k in range(100)]
 lit = sorted({(k * 37 + 11) % 100 for k in range(18)})  # 18 scattered
 gap = [
     {'type': 'group', 'at': 0.1, 'stagger': 0.006, 'children': [{'type': 'path', 'd': tiny(x, y), 'fill': 'surface', 'stroke': 'line', 'width': 1.5, 'enter': 'fade'} for x, y in cities]},
-    {'type': 'group', 'say': 'eighteen', 'stagger': 0.03, 'children': [{'type': 'path', 'd': tiny(*cities[k]), 'fill': 'accent', 'stroke': 'none', 'enter': 'pop'} for k in lit]},
-    text('18', 3380, 1670, 180, font='bold', fill='accent', say='only', count={'from': 0, 'to': 18, 'dur': 0.8}),
+    {'type': 'group', 'say': 'eighteen', 'stagger': 0.02, 'children': [{'type': 'path', 'd': tiny(*cities[k]), 'fill': 'accent', 'stroke': 'none', 'enter': 'pop'} for k in lit]},
+    text('18', 3380, 1670, 180, font='bold', fill='accent', say='eighteen', count={'from': 0, 'to': 18, 'dur': 0.7}),
     text('of 100 cities surveyed', 3380, 1730, 36, fill='ink', say='hundred'),
     text('have a heat plan', 3380, 1776, 36, fill='muted', say='plan'),
 ]
@@ -178,17 +183,19 @@ end = [
     {'type': 'ellipse', 'cx': 1128, 'cy': (city_top + country_top) / 2 + 36, 'rx': 190, 'ry': 104, 'fill': 'none', 'stroke': 'accent2', 'width': 4, 'say': 'Seven', 'dur': 0.8, 'rough': {'amount': 3}},
     text('Start with the hottest blocks.', 960, 170, 72, font='bold', fill='ink', anchor='middle', say='Start'),
     {'type': 'group', 'say': 'hottest', 'stagger': 0.12, 'children': [
-        {'type': 'ellipse', 'cx': x + w / 2, 'cy': HORIZON - h, 'rx': w * 0.9, 'ry': 36, 'fill': {'gradient': ['accent2', 'bg'], 'radial': True, 'fade': True}, 'opacity': 0.8,
-         'loop': {'type': 'pulse', 'period': 1.8, 'amount': 0.08}} for x, w, h in (buildings[3], buildings[6], buildings[1])]},
+        {'type': 'ellipse', 'cx': x + w / 2, 'cy': HORIZON - h, 'rx': w * 1.3, 'ry': 70, 'fill': {'gradient': ['accent2', 'bg'], 'radial': True, 'fade': True},
+         'loop': {'type': 'pulse', 'period': 1.8, 'amount': 0.08}} for x, w, h in (buildings[3], buildings[4], buildings[7])]},
+    {'type': 'group', 'say': 'hottest', 'stagger': 0.12, 'children': [
+        {'type': 'rect', 'x': x, 'y': HORIZON - h - 4, 'w': w, 'h': 10, 'fill': 'accent2', 'enter': 'wipe'} for x, w, h in (buildings[3], buildings[4], buildings[7])]},
 ]
 
 beats = [
     world('hook', 'Seven degrees. That\'s how much hotter a city night can run.', [0, 0, 1920, 1080], hook,
           source=SRC[1], lead=2.3, tail=0.5, style='intrigued, leaning in'),
     world('belief', 'It\'s only a few degrees, right?', [620, 190, 960, 540],
-          [text('“Only a few degrees, right?”', 650, 330, 44, font='serif-italic', fill='ink', width=270, say='only', exitAt=4, exit='fade')],
-          style='light, a little skeptical'),
-    world('day-night', 'By day, the gap is small, one to three degrees. But after sunset, it can reach seven.', [0, -900, 1920, 1080], chart,
+          [text('“Only a few degrees, right?”', 650, 330, 44, font='serif-italic', fill='ink', width=270, say='only', exitAt=2.3, exit='fade', exitDur=0.4)],
+          style='light, a little skeptical', tail=0.7),
+    world('day-night', 'By day, the gap is small, one to three degrees. But after sunset, it can reach seven.', [0, -360, 1920, 1080], chart,
           source=f'{SRC[1]} · {SRC[2]}', style='brisk, clear'),
     world('mechanism', 'Asphalt and dark roofs soak up almost all of the sunlight, then give it back after dark.', [1420, 330, 640, 360], roof,
           source=SRC[2], style='brisk, clear', tail=0.9),
@@ -196,12 +203,12 @@ beats = [
      'vo': 'But the heat is not shared evenly.', 'tail': 1.0, 'props': {'mode': 'stack', 'emphasis': ['not', 'evenly'], 'emphasisStyle': 'serif', 'maxWords': 7, 'align': 'center'}},
     world('hotspots', 'In one district, twelve percent of streets produced forty percent of heat emergencies.', [250, 1110, 1920, 1080], hotspots,
           source=SRC[3], style='measured, serious', transition='iris', tail=0.6),
-    world('works', 'Cool roofs cut rooftop heat by twenty to thirty degrees. Trees help too, but only as a continuous canopy.', [1405, 360, 720, 405], works,
+    world('works', 'Cool roofs cut rooftop heat by twenty to thirty degrees. Trees help too, but only as a continuous canopy.', [1405, 420, 720, 405], works,
           source=SRC[4], style='brighter, practical', tail=1.3),
     world('gap', 'Yet only eighteen of a hundred cities surveyed have a heat plan.', [2380, 1150, 1920, 1080], gap,
           source=SRC[5], style='slower, pointed', lead=0.9, tail=0.7),
     world('end', 'Seven degrees, every night. Start with the hottest blocks.', [-60, -34, 2040, 1148], end,
-          style='warm, emphatic', tail=1.2),
+          style='warm, emphatic', tail=1.2, transition='iris'),
 ]
 sb = {
     'version': 2, 'title': 'Why city nights stay hot', 'format': {'preset': 'landscape', 'fps': 30},
@@ -211,6 +218,6 @@ sb = {
     'sources': [{'id': str(k), 'title': v.rsplit(' [', 1)[0]} for k, v in SRC.items()],
     'beats': beats,
 }
-here = os.path.dirname(os.path.abspath(__file__))  
+here = os.path.dirname(os.path.abspath(__file__))
 json.dump(sb, open(os.path.join(here, 'storyboard.json'), 'w'), indent=2, ensure_ascii=False)
 print(len(beats), 'beats')

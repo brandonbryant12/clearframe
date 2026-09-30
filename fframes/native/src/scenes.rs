@@ -235,6 +235,8 @@ pub(crate) struct Draw<'a, 'c, 'm> {
     pub head_y: Option<f32>,
     /// Lowest y the footer may use (a bottom plate raises it).
     pub floor: f32,
+    /// Centre of a world camera at this frame, for elements drawn with parallax (`depth`).
+    pub camera: Cell<Option<(f32, f32)>>,
 }
 
 impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
@@ -254,6 +256,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             ids: Cell::new(0),
             head_y: None,
             floor: env.height,
+            camera: Cell::new(None),
         }
     }
     fn props(&self) -> &'a Value {

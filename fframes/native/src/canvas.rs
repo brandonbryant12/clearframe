@@ -501,6 +501,16 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         pose.sy *= key_pose.2 * key_pose.6;
         pose.rotate += key_pose.3;
         pose.alpha *= key_pose.4.clamp(0.0, 1.0);
+        // Parallax: a layer at `depth` < 1 sits farther away, so it follows the camera by
+        // (1 - depth) of its travel from `depthRef` (the view centre where it was drawn).
+        if let (Some(depth), Some((cx, cy))) = (num(el, "depth"), self.camera.get()) {
+            let r = arr(el, "depthRef");
+            if r.len() == 2 {
+                let k = 1.0 - depth.clamp(0.0, 1.0);
+                pose.dx += k * (cx - r[0].as_f64().unwrap_or(0.0) as f32);
+                pose.dy += k * (cy - r[1].as_f64().unwrap_or(0.0) as f32);
+            }
+        }
         // Travel along a path: the element's origin rides the outline, optionally turning.
         if let Some(route) = el.get("along") {
             if let Some(info) = path_info(s(route, "d")) {
@@ -1016,6 +1026,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     /// `view` is given, which is fitted into the content area below the header.
     pub(super) fn canvas(&self) -> Svgr<'a> {
         let p = self.props();
+        self.camera_rect(p);
         let mut defs = vec![];
         let nodes = self.elements(arr(p, "elements"), self.b.cue_seconds, f(p, "stagger", 0.0), &mut defs);
         let body = fframes::svgr!(<g><defs>{defs}</defs>{nodes}</g>);
@@ -1025,41 +1036,45 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     /// Place author coordinates in the frame. A `[w, h]` view is fitted into the content area;
     /// `"auto"` fits the drawing's own bounds (at rest) with a margin, enlarging small drawings
     /// up to 2× so a sketch drawn at any scale fills the space it has.
+    /// The world camera at this frame: a rect [x, y, w, h] framed across the whole frame. It
+    /// travels in from `viewFrom` (from `viewAt`, over `viewDur`), drifts in by `viewDrift`
+    /// while it holds, and may start the next beat's move early (`viewNext: {to, at, dur}`),
+    /// so it lands on the next line instead of after it. Both beats evaluate the same curve
+    /// across the cut, so the move is continuous.
+    pub(crate) fn camera_rect(&self, p: &Value) -> Option<[f32; 4]> {
+        let to = rect4(arr(p, "view"))?;
+        let beat_end = self.b.frames as f32 / self.f.fps as f32;
+        let from = rect4(arr(p, "viewFrom"));
+        let arrive = if from.is_some() { f(p, "viewAt", 0.0) + f(p, "viewDur", 1.2) } else { 0.0 };
+        let next = p.get("viewNext").filter(|v| v.is_object());
+        let hold_end = next.map_or(beat_end, |n| f(n, "at", beat_end));
+        let span = (hold_end - arrive).max(0.1);
+        let d = f(p, "viewDrift", 0.0) * motion::in_out_cubic(motion::clamp01((self.t - arrive) / span));
+        let held = [to[0] + to[2] * d / 2.0, to[1] + to[3] * d / 2.0, to[2] * (1.0 - d), to[3] * (1.0 - d)];
+        let mut cam = match from {
+            Some(from) => {
+                let q = motion::in_out_cubic(motion::clamp01(
+                    (self.t - f(p, "viewAt", 0.0)) / f(p, "viewDur", 1.2).max(0.01),
+                ));
+                travel(from, held, q)
+            }
+            None => held,
+        };
+        if let (Some(n), Some(next_to)) = (next, next.and_then(|n| rect4(arr(n, "to")))) {
+            let at = f(n, "at", beat_end);
+            if self.t > at {
+                let q = motion::in_out_cubic(motion::clamp01((self.t - at) / f(n, "dur", 1.2).max(0.01)));
+                cam = travel(cam, next_to, q);
+            }
+        }
+        self.camera.set(Some((cam[0] + cam[2] / 2.0, cam[1] + cam[3] / 2.0)));
+        Some(cam)
+    }
+
     pub(crate) fn fit_view(&self, body: Svgr<'a>, p: &Value) -> Svgr<'a> {
         let a = self.area;
-        // A camera rect [x, y, w, h] frames that part of the drawing across the whole frame,
-        // travelling from `viewFrom` over `viewDur` seconds: one continuous world, not slides.
-        let rect = |v: &[Value]| -> Option<[f32; 4]> {
-            (v.len() == 4).then(|| std::array::from_fn(|i| v[i].as_f64().unwrap_or(0.0) as f32))
-        };
-        if let Some(to) = rect(arr(p, "view")) {
+        if let Some(cam) = self.camera_rect(p) {
             let env = &self.b.environment;
-            // After arriving, the camera keeps easing in (`viewDrift`, a fraction of the view)
-            // so holds never freeze; the next beat starts from this drifted view.
-            let drift = f(p, "viewDrift", 0.0);
-            let arrive =
-                if rect(arr(p, "viewFrom")).is_some() { f(p, "viewAt", 0.0) + f(p, "viewDur", 1.2) } else { 0.0 };
-            let span = (self.b.frames as f32 / self.f.fps as f32 - arrive).max(0.1);
-            let d = drift * motion::in_out_cubic(motion::clamp01((self.t - arrive) / span));
-            let to = [to[0] + to[2] * d / 2.0, to[1] + to[3] * d / 2.0, to[2] * (1.0 - d), to[3] * (1.0 - d)];
-            let cam = match rect(arr(p, "viewFrom")) {
-                Some(from) => {
-                    let q = motion::in_out_cubic(motion::clamp01(
-                        (self.t - f(p, "viewAt", 0.0)) / f(p, "viewDur", 1.2).max(0.01),
-                    ));
-                    // Zoom interpolates in log space so a push-in keeps a constant pace.
-                    let lerp = |a: f32, b: f32| a + (b - a) * q;
-                    let (w0, w1) = (from[2].max(1.0), to[2].max(1.0));
-                    let w = w0 * (w1 / w0).powf(q);
-                    let h = w * lerp(from[3] / w0, to[3] / w1);
-                    let (cx, cy) = (
-                        lerp(from[0] + from[2] / 2.0, to[0] + to[2] / 2.0),
-                        lerp(from[1] + from[3] / 2.0, to[1] + to[3] / 2.0),
-                    );
-                    [cx - w / 2.0, cy - h / 2.0, w, h]
-                }
-                None => to,
-            };
             let k = (env.width / cam[2]).min(env.height / cam[3]);
             let (ox, oy) = ((env.width - cam[2] * k) / 2.0 - cam[0] * k, (env.height - cam[3] * k) / 2.0 - cam[1] * k);
             return fframes::svgr!(<g transform={format!("translate({ox} {oy}) scale({k})")}>{body}</g>);
@@ -1102,6 +1117,23 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let nodes = self.elements(list, self.b.cue_seconds, 0.0, &mut defs);
         fframes::svgr!(<g><defs>{defs}</defs>{nodes}</g>)
     }
+}
+
+/// A camera rect from JSON `[x, y, w, h]`.
+fn rect4(v: &[Value]) -> Option<[f32; 4]> {
+    (v.len() == 4).then(|| std::array::from_fn(|i| v[i].as_f64().unwrap_or(0.0) as f32))
+}
+
+/// Camera between two rects at progress `q`: the centre moves linearly and the zoom
+/// interpolates in log space, so a push-in keeps a constant pace.
+fn travel(from: [f32; 4], to: [f32; 4], q: f32) -> [f32; 4] {
+    let lerp = |a: f32, b: f32| a + (b - a) * q;
+    let (w0, w1) = (from[2].max(1.0), to[2].max(1.0));
+    let w = w0 * (w1 / w0).powf(q);
+    let h = w * lerp(from[3] / w0, to[3] / w1);
+    let (cx, cy) =
+        (lerp(from[0] + from[2] / 2.0, to[0] + to[2] / 2.0), lerp(from[1] + from[3] / 2.0, to[1] + to[3] / 2.0));
+    [cx - w / 2.0, cy - h / 2.0, w, h]
 }
 
 #[cfg(test)]

@@ -462,6 +462,8 @@ function linkWorlds(beats, sb, timing, { warnings }) {
     const b = beats[i];
     // The camera crops the world on purpose, but a beat's own words must be in its shot.
     const v = b.block === 'canvas' && b.props.view?.length === 4 && b.props.view;
+    // Parallax layers are placed for the view they were drawn in.
+    if (v) for (const el of b.props.elements) if (el.depth != null) el.depthRef ??= [v[0] + v[2] / 2, v[1] + v[3] / 2];
     if (v)
       for (const el of b.props.elements.filter(el => el.type === 'text' && !el.carried)) {
         const e = elementsExtent([el]);
@@ -511,26 +513,33 @@ function linkWorlds(beats, sb, timing, { warnings }) {
       ...mine.filter(el => !el.behind),
     ];
     const src = sb.beats[timing.beats[i].index];
-    if (adjacent) {
-      if (src.transition && src.transition !== 'cut')
-        warnings.push(
-          `${b.id}: continues world "${name}"; a ${src.transition} transition breaks the continuous camera, use cut.`,
-        );
-      else {
-        b.transition = 'cut';
-        a.exit = 'none';
-      }
+    // A graphic transition between two world beats cuts to the new view under its cover.
+    const covered = adjacent && src.transition && src.transition !== 'cut';
+    if (adjacent && !covered) {
+      b.transition = 'cut';
+      a.exit = 'none';
     }
-    if (!b.props.viewFrom && JSON.stringify(a.props.view) !== JSON.stringify(b.props.view)) {
+    if (!covered && !b.props.viewFrom && JSON.stringify(a.props.view) !== JSON.stringify(b.props.view)) {
       // Start where the last beat's camera ended: its view, drifted in.
       const [x, y, w, h] = a.props.view,
         d = a.props.viewDrift ?? 0;
       b.props.viewFrom = [x + (w * d) / 2, y + (h * d) / 2, w * (1 - d), h * (1 - d)];
-      // Travel with the first new drawing, so the camera arrives as the next stop appears.
-      const firstNew = Math.min(...b.props.elements.filter(el => !el.carried).map(el => el.at ?? 0));
-      b.props.viewAt ??= Number.isFinite(firstNew) ? Math.max(0, firstNew - 0.25) : 0;
       b.props.viewDur ??= 1.2;
-      b.settle_seconds = Math.max(b.settle_seconds, (b.props.viewAt ?? 0) + b.props.viewDur);
+      // Land on the new line, not after it: arrive by its first word or first new drawing.
+      // Across a cut the move starts in the outgoing beat's tail (once it has settled).
+      const subjects = b.props.elements.filter(el => !el.carried && !el.behind && el.enter !== 'none');
+      const firstNew = Math.min(...subjects.map(el => el.at ?? 0));
+      const firstWord = b.words?.find(w => w.end > w.start)?.start ?? Infinity;
+      const land = Math.max(0.25, Math.min(firstNew, firstWord));
+      let at = b.props.viewAt ?? (Number.isFinite(land) ? land - b.props.viewDur : 0);
+      if (at < 0) {
+        const aDur = a.frames / fps;
+        const room = adjacent ? Math.max(0, Math.min(1.0, aDur - a.settle_seconds, aDur / 2)) : 0;
+        at = -Math.min(-at, room);
+        if (at < 0) a.props.viewNext = { to: b.props.view, at: aDur + at, dur: b.props.viewDur };
+      }
+      b.props.viewAt = at;
+      b.settle_seconds = Math.max(b.settle_seconds, at + b.props.viewDur);
     }
     for (const [beat, s] of [
       [a, sb.beats[timing.beats[beats.indexOf(a)].index]],

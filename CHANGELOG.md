@@ -4,6 +4,7 @@
 
 Travel instead of cutting, type with a voice, and fewer false alarms.
 
+- **The camera lands on the words.** World moves pre-roll into the outgoing beat's settled tail and arrive by the new line's first word or drawing; both beats share one move curve across the cut. Graphic transitions between world beats cut under the cover. `depth` below 1 gives far layers parallax.
 - **Living worlds.** World beats drift slowly after the camera arrives (`viewDrift`, default 0.03), and the next move starts from the drifted view. `behind: true` puts an element under everything already drawn, such as a sky that lights up by day. The source line waits for the camera and sits on a soft scrim. `pulse` on bare strokes throbs in brightness instead of changing length. Text bounds are estimated from length and anchor.
 - **Example: `examples/night-city`.** A research brief turned into one continuous world, refined over three review rounds.
 - **Worlds persist across interruptions.** A world beat after a kinetic card or chart returns to where the camera left off and travels on; exits timed after a beat (tidying the world while the camera is away) do not hold that beat. `check` accepts the camera cropping a world and instead warns when a beat's own text falls outside its view. Keys gain `scaleX`/`scaleY` for levels and gaps. `critique` judges the hook by when its first cued idea lands.
