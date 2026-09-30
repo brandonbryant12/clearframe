@@ -378,7 +378,7 @@ export function documentMarkdown(file) {
   throw new Error(`Unsupported document type ${ext}; use markdown, text, HTML, DOCX, RTF or PDF.`);
 }
 
-export function ingestMarkdown(root, file, { scaffold } = {}) {
+export function ingestMarkdown(root, file, { scaffold, playbook = 'research-digest' } = {}) {
   const source = documentMarkdown(file);
   const r = parseResearch(source);
   fs.mkdirSync(root, { recursive: true });
@@ -390,7 +390,7 @@ export function ingestMarkdown(root, file, { scaffold } = {}) {
   writeJSON(path.join(dir, 'research.json'), r);
   fs.writeFileSync(path.join(root, 'BRIEF.md'), briefMarkdown(r, `source/${path.basename(file)}`));
   if (scaffold && !fs.existsSync(path.join(root, 'storyboard.json'))) {
-    const sb = scaffold('research-digest', { title: r.title });
+    const sb = scaffold(playbook, { title: r.title });
     if (r.sources.length)
       sb.sources = r.sources.map(s => ({ id: s.id, title: s.title, ...(s.url ? { url: s.url } : {}) }));
     writeJSON(path.join(root, 'storyboard.json'), sb);

@@ -1,0 +1,39 @@
+{
+  "order": 14,
+  "title": "Cut paper",
+  "when": "Title sequences, openers, podcast and series intros, posters in motion: bold flat shapes in rhythm",
+  "playbook": "title-sequence",
+  "film": {
+    "theme": "bass",
+    "backdrop": "paper",
+    "texture": {
+      "grain": 0.25,
+      "vignette": 0.2
+    },
+    "motion": {
+      "preset": "snappy",
+      "intensity": 0.9
+    },
+    "textMotion": "letters",
+    "transition": "cut",
+    "sfx": "normal",
+    "voice": {
+      "style": "dry, confident, a little wry"
+    }
+  },
+  "beats": {
+    "rough": {
+      "amount": 1.4,
+      "passes": 1,
+      "fill": "solid"
+    },
+    "graphic": "cut"
+  },
+  "rules": [
+    "Flat shapes in two or three colours: no gradients, glows or lens effects. The edge of a cut is the texture.",
+    "Shapes become each other across cuts (the same element id in consecutive canvas beats morphs): a disc becomes a bar, which becomes a door. Continuity is the whole grammar.",
+    "Type is condensed caps with wide tracking, set into the composition like another shape, never as a caption.",
+    "Cut on the music: every beat is one move and one hold. Let the negative space do half the work.",
+    "Asymmetry and diagonals: nothing sits dead centre unless it is the title."
+  ]
+}

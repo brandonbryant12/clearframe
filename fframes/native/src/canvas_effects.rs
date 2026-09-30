@@ -459,7 +459,6 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let (spin, tilt) = (three("spin", [14.0, 22.0, 0.0]), three("tilt", [20.0, 10.0, 0.0]));
         let ang: [f32; 3] = std::array::from_fn(|i| (tilt[i] + spin[i] * now).to_radians());
         let persp = f(el, "perspective", 0.35).clamp(0.0, 0.9);
-        let verts = polyhedron(nonempty(s(el, "shape"), "icosa"));
         let rot = |v: [f32; 3]| {
             let [mut x, mut y, mut z] = v;
             let (s1, c1) = ang[0].sin_cos();
@@ -470,11 +469,26 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             (x, y) = (x * c3 - y * s3, x * s3 + y * c3);
             [x, y, z]
         };
-        let p: Vec<[f32; 3]> = verts.iter().map(|v| rot(*v)).collect();
         let project = |v: [f32; 3]| {
             let k = 1.0 / (1.0 - persp * v[2] * 0.5);
             (cx + v[0] * size * k, cy + v[1] * size * k, v[2])
         };
+        if s(el, "shape") == "globe" {
+            // A globe turns about its own pole (y) first, then tilts toward the viewer.
+            let globe_rot = |v: [f32; 3]| {
+                let [mut x, mut y, mut z] = v;
+                let (s2, c2) = ang[1].sin_cos();
+                (x, z) = (x * c2 + z * s2, -x * s2 + z * c2);
+                let (s1, c1) = ang[0].sin_cos();
+                (y, z) = (y * c1 - z * s1, y * s1 + z * c1);
+                let (s3, c3) = ang[2].sin_cos();
+                (x, y) = (x * c3 - y * s3, x * s3 + y * c3);
+                [x, y, z]
+            };
+            return self.globe(el, draw, now, &color, width, &globe_rot, &project, defs);
+        }
+        let verts = polyhedron(nonempty(s(el, "shape"), "icosa"));
+        let p: Vec<[f32; 3]> = verts.iter().map(|v| rot(*v)).collect();
         let q: Vec<(f32, f32, f32)> = p.iter().map(|v| project(*v)).collect();
         let edges = edges_of(&verts);
         let total = edges.len().max(1) as f32;
@@ -506,6 +520,104 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
         }
         fframes::svgr!(<g>{lines}</g>)
+    }
+}
+
+impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
+    /// A turning globe: a graticule every 30°, `marks` at [lat, lon] and great-circle `arcs`
+    /// [lat, lon, lat, lon] that lift off the surface and draw on one after another once the
+    /// globe has drawn. Lines on the far side fall away to a faint trace.
+    #[allow(clippy::too_many_arguments)]
+    fn globe(
+        &self,
+        el: &Value,
+        draw: f32,
+        now: f32,
+        color: &str,
+        width: f32,
+        rot: &dyn Fn([f32; 3]) -> [f32; 3],
+        project: &dyn Fn([f32; 3]) -> (f32, f32, f32),
+        defs: &mut Vec<Svgr<'a>>,
+    ) -> Svgr<'a> {
+        let unit = |lat: f32, lon: f32| {
+            let (la, lo) = (lat.to_radians(), lon.to_radians());
+            [la.cos() * lo.sin(), -la.sin(), la.cos() * lo.cos()]
+        };
+        let alpha = |z: f32| if z < 0.0 { 0.1 + 0.1 * (z + 1.0) } else { 0.35 + 0.65 * z };
+        let mut nodes = vec![];
+        // The body: a disc behind the lines when the globe is filled.
+        let (cx, cy, size) = (f(el, "cx", 0.0), f(el, "cy", 0.0), f(el, "size", 120.0));
+        if el.get("fill").is_some_and(|v| v != "none") && el.get("stroke").is_some() {
+            let body = self.paint(el.get("fill"), "surface", defs);
+            nodes.push(fframes::svgr!(<circle cx={cx} cy={cy} r={size} fill={body} opacity={draw.min(1.0)} />));
+        }
+        // Graticule: parallels and meridians as short segments, drawn on in order.
+        let mut segs: Vec<([f32; 3], [f32; 3])> = vec![];
+        for lat in [-60.0f32, -30.0, 0.0, 30.0, 60.0] {
+            for i in 0..36 {
+                let lon = i as f32 * 10.0;
+                segs.push((unit(lat, lon), unit(lat, lon + 10.0)));
+            }
+        }
+        for m in 0..12 {
+            let lon = m as f32 * 30.0;
+            for i in 0..18 {
+                let lat = -90.0 + i as f32 * 10.0;
+                segs.push((unit(lat, lon), unit(lat + 10.0, lon)));
+            }
+        }
+        let total = segs.len() as f32;
+        for (i, (a, b)) in segs.iter().enumerate() {
+            if (i as f32) / total > draw {
+                break;
+            }
+            let (ax, ay, az) = project(rot(*a));
+            let (bx, by, bz) = project(rot(*b));
+            nodes.push(fframes::svgr!(<line x1={ax} y1={ay} x2={bx} y2={by} stroke={color.to_owned()} stroke-width={width} stroke-linecap="round" opacity={alpha((az + bz) / 2.0)} />));
+        }
+        // Routes and places are the point of the shot: the accent, lit.
+        let mark_color = self.paint(Some(&Value::String("accent".into())), "accent", defs);
+        let after = now - f(el, "at", 0.0) - f(el, "dur", 1.2);
+        // Arcs: a great circle between two places, lifted by its length, drawn on in turn.
+        for (n, a) in arr(el, "arcs").iter().enumerate() {
+            let g = |i: usize| a.get(i).and_then(Value::as_f64).unwrap_or(0.0) as f32;
+            let (p, q) = (unit(g(0), g(1)), unit(g(2), g(3)));
+            let dot = (p[0] * q[0] + p[1] * q[1] + p[2] * q[2]).clamp(-1.0, 1.0);
+            let omega = dot.acos();
+            if omega < 1e-3 {
+                continue;
+            }
+            let reveal = motion::out_cubic(motion::clamp01((after - n as f32 * 0.35) / 1.4));
+            if reveal <= 0.0 {
+                continue;
+            }
+            let steps = 32;
+            let lift = 0.18 * omega / std::f32::consts::PI;
+            let mut pts = vec![];
+            for i in 0..=steps {
+                let t = i as f32 / steps as f32 * reveal;
+                let (s0, s1) = (((1.0 - t) * omega).sin() / omega.sin(), (t * omega).sin() / omega.sin());
+                let h = 1.0 + lift * (std::f32::consts::PI * t).sin();
+                let v = [(p[0] * s0 + q[0] * s1) * h, (p[1] * s0 + q[1] * s1) * h, (p[2] * s0 + q[2] * s1) * h];
+                pts.push(project(rot(v)));
+            }
+            for w in pts.windows(2) {
+                let ((ax, ay, az), (bx, by, bz)) = (w[0], w[1]);
+                nodes.push(fframes::svgr!(<line x1={ax} y1={ay} x2={bx} y2={by} stroke={mark_color.clone()} stroke-width={width * 2.4} stroke-linecap="round" opacity={alpha((az + bz) / 2.0).max(0.2)} />));
+            }
+        }
+        // Marks: places on the surface, shown once the globe has drawn.
+        if draw >= 1.0 {
+            for m in arr(el, "marks") {
+                let g = |i: usize| m.get(i).and_then(Value::as_f64).unwrap_or(0.0) as f32;
+                let (x, y, z) = project(rot(unit(g(0), g(1))));
+                if z > -0.15 {
+                    let pop = motion::out_cubic(motion::clamp01(after / 0.5));
+                    nodes.push(fframes::svgr!(<circle cx={x} cy={y} r={width * 3.4 * pop} fill={mark_color.clone()} opacity={alpha(z)} />));
+                }
+            }
+        }
+        fframes::svgr!(<g>{nodes}</g>)
     }
 }
 

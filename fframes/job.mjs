@@ -23,6 +23,8 @@ import {
   CAMERA_MOVES,
   TRANSITION_COLORS,
   TEXT_MOTIONS,
+  LENS_GRADES,
+  LENS_KEYS,
 } from './constants.mjs';
 import { glyphCheck } from './glyphs.mjs';
 import { rules } from './registry.mjs';
@@ -30,6 +32,22 @@ import { captionCues, findWord } from '../engine/lib/timing.mjs';
 
 const unit = v => Number.isFinite(v) && v >= 0 && v <= 1;
 const validMotion = m => MOTIONS.includes(m.preset) && unit(m.intensity);
+
+/** Check a film or beat `lens`; letterbox false (or 0) removes the bars. */
+export function lensSpec(v, where = 'lens') {
+  if (v == null) return null;
+  if (typeof v !== 'object' || Array.isArray(v)) throw new Error(`${where} must be an object`);
+  for (const [k, x] of Object.entries(v)) {
+    if (!LENS_KEYS.includes(k)) throw new Error(`${where}.${k} is not a lens setting (${LENS_KEYS.join(', ')})`);
+    if (k === 'letterbox') {
+      if (!(x === false || x === 0 || (Number.isFinite(x) && x >= 1.5 && x <= 3)))
+        throw new Error(`${where}.letterbox must be a picture aspect from 1.5 to 3 (2.39 scope, 2, 1.85) or false`);
+    } else if (k === 'grade') {
+      if (!LENS_GRADES.includes(x)) throw new Error(`${where}.grade must be ${LENS_GRADES.join(', ')}`);
+    } else if (!unit(x)) throw new Error(`${where}.${k} must be 0–1`);
+  }
+  return v;
+}
 
 /** Build the job; errors block rendering, warnings are advice (drafts demote some errors). */
 export function createJob(sb, timing, { draft = false } = {}) {
@@ -103,6 +121,11 @@ function filmSettings(sb, timing, { errors }) {
   if (!textureOk) errors.push('texture must be grain, vignette, film, none or {grain: 0–1, vignette: 0–1, animate}.');
   if (sb.pacing.outro)
     errors.push('Use an endcard beat instead of pacing.outro so every output frame has an authored scene.');
+  try {
+    lensSpec(sb.lens);
+  } catch (e) {
+    errors.push(e.message);
+  }
   const textMotion = sb.textMotion ?? 'lines';
   if (!TEXT_MOTIONS.includes(textMotion)) errors.push(`textMotion must be ${TEXT_MOTIONS.join(', ')}.`);
   return {
@@ -161,6 +184,16 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   };
   if (b.block === 'canvas') {
     settle = Math.max(settle, scheduleArt(props.elements, at, props.stagger ?? 0));
+    // Camera depth keys resolve their spoken cues; like camera drift, they never hold the beat.
+    for (const k of [...(props.dolly ?? []), ...(props.focus?.keys ?? [])]) {
+      if (k.say != null) {
+        k.at = cue(k.say);
+        delete k.say;
+      }
+      k.dur ??= 1.2;
+    }
+    props.dolly?.sort((a, b) => a.at - b.at);
+    props.focus?.keys?.sort((a, b) => a.at - b.at);
     if (hasCount(props.elements) && (!props.source || !sb.sources.length))
       throw new Error('Counted numbers need visible props.source and a storyboard.sources entry.');
     if (hasDigits(props.elements) && !props.source)
@@ -338,6 +371,10 @@ function keepPace(b, source, props, art, at, { sb, report }) {
 /** Tone, graphic-transition style, frame label, speaker, camera and plate. */
 function beatLayers(source, b, sb) {
   const out = {};
+  // The lens is resolved per beat: film settings, then the beat's own.
+  const lens = { ...(sb.lens ?? {}), ...(lensSpec(source.lens) ?? {}) };
+  if (lens.letterbox === false) lens.letterbox = 0;
+  if (Object.keys(lens).length) out.lens = lens;
   const heading = source.heading ?? sb.heading;
   if (heading != null) {
     if (!['top', 'bottom'].includes(heading)) throw new Error('heading must be top or bottom');
@@ -431,7 +468,7 @@ function checkNarration(b, frame, captions, report) {
 function exitFor(authored, next) {
   if (authored !== 'auto') return authored;
   if (next == null) return 'fade';
-  if (next === 'cut') return 'none';
+  if (next === 'cut' || next === 'flash') return 'none';
   if (next === 'rise') return 'fade';
   return next;
 }
@@ -524,7 +561,9 @@ function linkWorlds(beats, sb, timing, { warnings }) {
     // The camera crops the world on purpose, but a beat's own words must be in its shot.
     const v = b.block === 'canvas' && b.props.view?.length === 4 && b.props.view;
     // Parallax layers are placed for the view they were drawn in.
-    if (v) for (const el of b.props.elements) if (el.depth != null) el.depthRef ??= [v[0] + v[2] / 2, v[1] + v[3] / 2];
+    if (v)
+      for (const el of b.props.elements)
+        if (el.depth != null || el.z != null) el.depthRef ??= [v[0] + v[2] / 2, v[1] + v[3] / 2];
     if (v)
       for (const el of b.props.elements.filter(el => el.type === 'text' && !el.carried)) {
         const e = elementsExtent([el]);

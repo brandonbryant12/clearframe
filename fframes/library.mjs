@@ -54,13 +54,15 @@ const VALIDATE = {
     }
   },
   treatments(item, where) {
-    known(item, ['order', 'title', 'when', 'film', 'beats', 'rules'], where);
+    known(item, ['order', 'title', 'when', 'film', 'beats', 'rules', 'playbook'], where);
     if (!item.title || !item.when) throw new Error(`${where}: needs title and when`);
     if (!item.film || typeof item.film !== 'object') throw new Error(`${where}: needs film settings`);
     if (item.film.theme != null && typeof item.film.theme === 'string' && !palettes()[item.film.theme])
       throw new Error(`${where}: film.theme "${item.film.theme}" is not a palette`);
     if (item.beats != null && typeof item.beats !== 'object') throw new Error(`${where}: beats must be an object`);
     if (!Array.isArray(item.rules ?? [])) throw new Error(`${where}: rules must be a list of strings`);
+    if (item.playbook != null && !items('playbooks').some(p => p.id === item.playbook))
+      throw new Error(`${where}: playbook "${item.playbook}" is not a playbook`);
   },
   sketches(item, where) {
     if (!item.summary || !item.use) throw new Error(`${where}: needs summary and use`);
@@ -86,6 +88,10 @@ const VALIDATE = {
         'backdrop',
         'captions',
         'note',
+        'lens',
+        'heading',
+        'textMotion',
+        'transition',
       ],
       where,
     );

@@ -150,10 +150,10 @@ pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut us
                 }
             }
             "solid" => {
-                if !["", "tetra", "cube", "octa", "icosa", "dodeca"].contains(&s(el, "shape"))
+                if !["", "tetra", "cube", "octa", "icosa", "dodeca", "globe"].contains(&s(el, "shape"))
                     || f(el, "size", 120.0) <= 0.0
                 {
-                    return Err("canvas solid needs size and shape tetra|cube|octa|icosa|dodeca");
+                    return Err("canvas solid needs size and shape tetra|cube|octa|icosa|dodeca|globe");
                 }
             }
             "particles" => {
@@ -223,6 +223,22 @@ impl Pose {
     fn identity() -> Self {
         Pose { sx: 1.0, sy: 1.0, alpha: 1.0, ..Default::default() }
     }
+}
+
+/// A depth driven by keys `{at, z, dur, ease}` from `start`: each key eases from the value
+/// before it (keys arrive sorted by time).
+fn keyed_z(keys: &[Value], start: f32, t: f32) -> f32 {
+    let mut v = start;
+    for k in keys {
+        let at = f(k, "at", 0.0);
+        if t < at {
+            break;
+        }
+        let span = f(k, "dur", 1.2);
+        let q = if span <= 1e-3 { 1.0 } else { ease(s(k, "ease"), (t - at) / span) };
+        v += (f(k, "z", v) - v) * q;
+    }
+    v
 }
 
 fn ease(name: &str, x: f32) -> f32 {
@@ -391,6 +407,21 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 return self.element(&mixed, 0.0, defs, now);
             }
         }
+        // Depth: `z` is the element's distance (0 is the picture plane), authored as seen
+        // before the camera moves. As the camera flies forward (`dolly`), near layers grow
+        // faster than far ones around the camera centre; an element it has passed is gone.
+        let (cam_z, focus) = self.depth.get();
+        let persp = match num(el, "z") {
+            Some(z) => {
+                let dz = 1.0 + z - cam_z;
+                if dz < 0.12 {
+                    return fframes::svgr!(<g />);
+                }
+                // (scale against the authored view, distance to the lens, fade near the lens)
+                Some(((1.0 + z) / dz, dz, motion::clamp01((dz - 0.12) / 0.3)))
+            }
+            None => None,
+        };
         let kind = s(el, "type");
         let at = f(el, "at", default_at);
         let enter = match s(el, "enter") {
@@ -519,10 +550,12 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         pose.alpha *= key_pose.4.clamp(0.0, 1.0);
         // Parallax: a layer at `depth` < 1 sits farther away, so it follows the camera by
         // (1 - depth) of its travel from `depthRef` (the view centre where it was drawn).
-        if let (Some(depth), Some((cx, cy))) = (num(el, "depth"), self.camera.get()) {
+        let depth = num(el, "depth").or_else(|| num(el, "z").map(|z| 1.0 / (1.0 + z.max(-0.85))));
+        if let (Some(depth), Some((cx, cy))) = (depth, self.camera.get()) {
             let r = arr(el, "depthRef");
             if r.len() == 2 {
-                let k = 1.0 - depth.clamp(0.0, 1.0);
+                // A foreground layer (z < 0) has depth above 1: it outruns the camera.
+                let k = 1.0 - depth.clamp(0.0, 4.0);
                 pose.dx += k * (cx - r[0].as_f64().unwrap_or(0.0) as f32);
                 pose.dy += k * (cy - r[1].as_f64().unwrap_or(0.0) as f32);
             }
@@ -674,16 +707,37 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
             None => shape,
         };
-        // Focus blur in or out.
-        let blur = match (enter, exit) {
+        let shape = self.shine(el, shape, now, at + dur, (bx, by, bw, bh));
+        // Focus: blur in or out, an authored or keyed `blur`, and depth of field (distance
+        // from the focus plane as a circle of confusion on screen; elements without `z` are
+        // overlays and stay sharp).
+        let mut blur = match (enter, exit) {
             ("blur", _) if e.alpha < 1.0 => 14.0 * (1.0 - e.alpha),
             (_, "blur") if q > 0.0 => 14.0 * q,
             _ => 0.0,
         };
+        let mut authored = f(el, "blur", 0.0);
+        for key in arr(el, "keys") {
+            let start = f(key, "at", 0.0);
+            if now < start {
+                break;
+            }
+            if let Some(v) = num(key, "blur") {
+                let span = f(key, "dur", crate::constants::get().canvas.key);
+                let k = if span <= 1e-3 { 1.0 } else { ease(s(key, "ease"), (now - start) / span) };
+                authored += (v - authored) * k;
+            }
+        }
+        blur += authored.max(0.0);
+        if let (Some((p, dz, _)), Some((fz, aperture))) = (persp, focus) {
+            let df = (1.0 + fz - cam_z).max(0.12);
+            blur += (36.0 * aperture * (1.0 / dz - 1.0 / df).abs() / p.max(0.05)).min(80.0);
+        }
         let shape = if blur > 0.05 {
             let id = self.uid("blur");
+            let pad = 3.0 * blur + 20.0;
             fframes::svgr!(<g>
-                <defs><filter id={id.clone()} filterUnits="userSpaceOnUse" x={bx - 60.0 - bw * 0.5} y={by - 60.0 - bh * 0.5} width={bw * 2.0 + 120.0} height={bh * 2.0 + 120.0}><feGaussianBlur stdDeviation={blur} /></filter></defs>
+                <defs><filter id={id.clone()} filterUnits="userSpaceOnUse" x={bx - pad - bw * 0.5} y={by - pad - bh * 0.5} width={bw * 2.0 + 2.0 * pad} height={bh * 2.0 + 2.0 * pad}><feGaussianBlur stdDeviation={blur} /></filter></defs>
                 <g filter={format!("url(#{id})")}>{shape}</g>
             </g>)
         } else {
@@ -694,16 +748,27 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             "" | "normal" => shape,
             mode => fframes::svgr!(<g mix-blend-mode={mode.to_owned()}>{shape}</g>),
         };
-        let (ox, oy) = origin;
         let identity = pose.dx.abs() < 1e-3
             && pose.dy.abs() < 1e-3
             && (pose.sx - 1.0).abs() < 1e-4
             && (pose.sy - 1.0).abs() < 1e-4
             && pose.rotate.abs() < 1e-3;
         let alpha = pose.alpha.clamp(0.0, 1.0);
-        if identity && alpha >= 0.999 {
-            return shape;
+        let placed = if identity && alpha >= 0.999 { shape } else { self.posed(shape, &pose, origin, identity, alpha) };
+        match persp {
+            Some((p, _, fade)) => {
+                let (gx, gy) = self.offset.get();
+                let (cx, cy) = self.camera.get().unwrap_or_else(|| self.view_centre());
+                let (cx, cy) = (cx - gx, cy - gy);
+                fframes::svgr!(<g opacity={fade} transform={format!("translate({cx} {cy}) scale({p}) translate({} {})", -cx, -cy)}>{placed}</g>)
+            }
+            None => placed,
         }
+    }
+
+    /// The element's own pose (entrance, keys, loops) as one transform.
+    fn posed(&self, shape: Svgr<'a>, pose: &Pose, origin: (f32, f32), identity: bool, alpha: f32) -> Svgr<'a> {
+        let (ox, oy) = origin;
         let transform = if identity {
             "translate(0 0)".to_owned()
         } else {
@@ -719,6 +784,61 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             )
         };
         fframes::svgr!(<g opacity={alpha} transform={transform}>{shape}</g>)
+    }
+
+    /// Where perspective converges without a world camera: the middle of the authored view.
+    fn view_centre(&self) -> (f32, f32) {
+        let view = arr(self.props(), "view");
+        let env = &self.b.environment;
+        match view.len() {
+            2 => (view[0].as_f64().unwrap_or(0.0) as f32 / 2.0, view[1].as_f64().unwrap_or(0.0) as f32 / 2.0),
+            _ => (env.width / 2.0, env.height / 2.0),
+        }
+    }
+
+    /// A light sweep across the element (`shine`): a soft band, masked to the element's own
+    /// shape, travels across it once (or every `every` seconds), like a title catching light.
+    fn shine(
+        &self,
+        el: &Value,
+        shape: Svgr<'a>,
+        now: f32,
+        settled: f32,
+        (bx, by, bw, bh): (f32, f32, f32, f32),
+    ) -> Svgr<'a> {
+        let Some(sh) = el.get("shine").filter(|v| v.is_object() || v.as_bool() == Some(true)) else { return shape };
+        let span = f(sh, "dur", 1.1).max(0.05);
+        let mut u = now - f(sh, "at", settled);
+        if let Some(every) = num(sh, "every").filter(|_| u > 0.0) {
+            u %= every.max(span);
+        }
+        let progress = u / span;
+        if !(0.0..1.0).contains(&progress) {
+            return shape;
+        }
+        let q = motion::in_out_cubic(progress);
+        let pad = 8.0 + f(el, "width", 0.0);
+        let (x0, y0, w0, h0) = (bx - pad, by - pad, bw + 2.0 * pad, bh + 2.0 * pad);
+        let band = (w0 * f(sh, "width", 0.35)).max(8.0);
+        let angle = f(sh, "angle", 20.0);
+        let lean = h0 * angle.to_radians().tan().abs();
+        let cx = x0 - band - lean + (w0 + 2.0 * band + 2.0 * lean) * q;
+        let cy = y0 + h0 / 2.0;
+        let color = self.paint(sh.get("color").or(Some(&Value::String("#ffffff".into()))), "#ffffff", &mut vec![]);
+        let alpha = f(sh, "opacity", 0.85).clamp(0.0, 1.0);
+        let (mask, grad) = (self.uid("shine-mask"), self.uid("shine"));
+        fframes::svgr!(<g>
+            {shape.clone()}
+            <defs>
+                <mask id={mask.clone()} mask-type="alpha" maskUnits="userSpaceOnUse" x={x0} y={y0} width={w0} height={h0}>{shape}</mask>
+                <linearGradient id={grad.clone()} gradientUnits="userSpaceOnUse" x1={cx - band / 2.0} y1={cy} x2={cx + band / 2.0} y2={cy} gradientTransform={format!("rotate({angle} {cx} {cy})")}>
+                    <stop offset="0" stop-color={color.clone()} stop-opacity="0" />
+                    <stop offset="0.5" stop-color={color.clone()} stop-opacity={alpha} />
+                    <stop offset="1" stop-color={color} stop-opacity="0" />
+                </linearGradient>
+            </defs>
+            <rect x={x0} y={y0} width={w0} height={h0} fill={format!("url(#{grad})")} mask={format!("url(#{mask})")} />
+        </g>)
     }
 
     /// Depth and light: `shadow` (a soft drop shadow) and `glow` (the element's light bleeding
@@ -749,7 +869,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         }
         let merge = if let Some(g) = glow {
             let blur = opt(Some(g), "blur", 14.0).max(0.0);
-            reach = reach.max(blur * 3.0 + 20.0);
+            reach = reach.max(blur * 4.5 + 30.0);
             let alpha = opt(Some(g), "opacity", 0.85).clamp(0.0, 1.0) * 1.6;
             if g.get("color").is_some() {
                 prims.push(fframes::svgr!(<feGaussianBlur in="SourceAlpha" stdDeviation={blur} result="soft" />));
@@ -922,8 +1042,11 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 // `shift` runs the children on another clock: a world beat carries earlier beats'
                 // drawings forward, already finished and still looping, at their own times.
                 let now = now + f(el, "shift", 0.0);
-                let children = self.elements_at(arr(el, "children"), at, f(el, "stagger", 0.0), defs, now);
                 let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
+                let outer = self.offset.get();
+                self.offset.set((outer.0 + x, outer.1 + y));
+                let children = self.elements_at(arr(el, "children"), at, f(el, "stagger", 0.0), defs, now);
+                self.offset.set(outer);
                 if x.abs() < 1e-4 && y.abs() < 1e-4 {
                     fframes::svgr!(<g>{children}</g>)
                 } else {
@@ -936,7 +1059,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
 
     fn canvas_text(&self, el: &Value, fill: &str, reveal: f32, local: f32) -> Svgr<'a> {
         let font = text_font(el);
-        let size = f(el, "size", 48.0).max(8.0);
+        // Sizes are in the canvas's own units: a world label can be under a unit tall.
+        let size = f(el, "size", 48.0).max(0.2);
         let tracking = f(el, "tracking", 0.0) * size;
         let mut value = s(el, "text").to_owned();
         if let Some(count) = el.get("count") {
@@ -1118,6 +1242,12 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     pub(super) fn canvas(&self) -> Svgr<'a> {
         let p = self.props();
         self.camera_rect(p);
+        let cam_z = keyed_z(arr(p, "dolly"), 0.0, self.t);
+        let focus = p
+            .get("focus")
+            .filter(|v| v.is_object())
+            .map(|fo| (keyed_z(arr(fo, "keys"), f(fo, "z", 0.0), self.t), f(fo, "aperture", 1.0)));
+        self.depth.set((cam_z, focus));
         self.collect_occluders(arr(p, "elements"), p.get("mosaic").is_some());
         let mut defs = vec![];
         let nodes = self.elements(arr(p, "elements"), self.b.cue_seconds, f(p, "stagger", 0.0), &mut defs);
@@ -1189,6 +1319,13 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     /// so it lands on the next line instead of after it. Both beats evaluate the same curve
     /// across the cut, so the move is continuous.
     pub(crate) fn camera_rect(&self, p: &Value) -> Option<[f32; 4]> {
+        let cam = self.camera_at(p, self.t)?;
+        self.camera.set(Some((cam[0] + cam[2] / 2.0, cam[1] + cam[3] / 2.0)));
+        Some(cam)
+    }
+
+    /// The camera rect at scene seconds `t` (a pure function, for motion blur).
+    fn camera_at(&self, p: &Value, t: f32) -> Option<[f32; 4]> {
         let to = rect4(arr(p, "view"))?;
         let beat_end = self.b.frames as f32 / self.f.fps as f32;
         let from = rect4(arr(p, "viewFrom"));
@@ -1196,25 +1333,23 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let next = p.get("viewNext").filter(|v| v.is_object());
         let hold_end = next.map_or(beat_end, |n| f(n, "at", beat_end));
         let span = (hold_end - arrive).max(0.1);
-        let d = f(p, "viewDrift", 0.0) * motion::in_out_cubic(motion::clamp01((self.t - arrive) / span));
+        let d = f(p, "viewDrift", 0.0) * motion::in_out_cubic(motion::clamp01((t - arrive) / span));
         let held = [to[0] + to[2] * d / 2.0, to[1] + to[3] * d / 2.0, to[2] * (1.0 - d), to[3] * (1.0 - d)];
         let mut cam = match from {
             Some(from) => {
-                let q = motion::in_out_cubic(motion::clamp01(
-                    (self.t - f(p, "viewAt", 0.0)) / f(p, "viewDur", 1.2).max(0.01),
-                ));
+                let q =
+                    motion::in_out_cubic(motion::clamp01((t - f(p, "viewAt", 0.0)) / f(p, "viewDur", 1.2).max(0.01)));
                 travel(from, held, q)
             }
             None => held,
         };
         if let (Some(n), Some(next_to)) = (next, next.and_then(|n| rect4(arr(n, "to")))) {
             let at = f(n, "at", beat_end);
-            if self.t > at {
-                let q = motion::in_out_cubic(motion::clamp01((self.t - at) / f(n, "dur", 1.2).max(0.01)));
+            if t > at {
+                let q = motion::in_out_cubic(motion::clamp01((t - at) / f(n, "dur", 1.2).max(0.01)));
                 cam = travel(cam, next_to, q);
             }
         }
-        self.camera.set(Some((cam[0] + cam[2] / 2.0, cam[1] + cam[3] / 2.0)));
         Some(cam)
     }
 
@@ -1222,9 +1357,34 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let a = self.area;
         if let Some(cam) = self.camera_rect(p) {
             let env = &self.b.environment;
-            let k = (env.width / cam[2]).min(env.height / cam[3]);
-            let (ox, oy) = ((env.width - cam[2] * k) / 2.0 - cam[0] * k, (env.height - cam[3] * k) / 2.0 - cam[1] * k);
-            return fframes::svgr!(<g transform={format!("translate({ox} {oy}) scale({k})")}>{body}</g>);
+            let (w, h) = (env.width, env.height);
+            let place = |c: [f32; 4]| {
+                let k = (w / c[2]).min(h / c[3]);
+                (k, (w - c[2] * k) / 2.0 - c[0] * k, (h - c[3] * k) / 2.0 - c[1] * k)
+            };
+            let (k, ox, oy) = place(cam);
+            let moved = fframes::svgr!(<g transform={format!("translate({ox} {oy}) scale({k})")}>{body}</g>);
+            // Motion blur: how far the picture travelled while the shutter was open, as a
+            // Gaussian along each axis (zooms smear toward the edges, so they add to both).
+            let shutter = crate::lens::Lens::from(&self.b.lens).blur;
+            let before = (shutter > 0.0).then(|| self.camera_at(p, self.t - shutter / self.f.fps as f32)).flatten();
+            if let Some(prev) = before {
+                let (kp, px, py) = place(prev);
+                let (wx, wy) = ((w / 2.0 - ox) / k, (h / 2.0 - oy) / k);
+                let (dx, dy) = ((wx * kp + px - w / 2.0).abs(), (wy * kp + py - h / 2.0).abs());
+                let zoom = (k / kp - 1.0).abs() * w * 0.2;
+                let (bx, by) = (((dx + zoom) * 0.5).min(40.0), ((dy + zoom * h / w) * 0.5).min(40.0));
+                if bx > 0.6 || by > 0.6 {
+                    let id = self.uid("mblur");
+                    return fframes::svgr!(<g>
+                        <defs><filter id={id.clone()} filterUnits="userSpaceOnUse" x="0" y="0" width={w} height={h}>
+                            <feGaussianBlur stdDeviation={format!("{bx:.2} {by:.2}")} />
+                        </filter></defs>
+                        <g filter={format!("url(#{id})")}>{moved}</g>
+                    </g>);
+                }
+            }
+            return moved;
         }
         let (x0, y0, vw, vh) = if s(p, "view") == "auto" {
             let mut acc: Option<(f32, f32, f32, f32)> = None;

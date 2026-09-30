@@ -8,6 +8,13 @@ Agent-directed motion graphics rendered natively with **FFFrames**. A film is on
 
 ## What it makes
 
+- **Shots, not slides.** Film grammar is built in ([docs/cinema.md](docs/cinema.md)):
+  - a film `lens`: letterbox, colour grade, bloom, light leaks, handheld sway and motion blur;
+  - real depth: `z` layers in perspective, a `dolly` through them, a rack `focus` on a spoken word;
+  - genre playbooks: trailer, cold open, product reveal, cinematic explainer, title sequence, zoom journey;
+  - set pieces to start from: horizon, skyline, ocean, tunnel, terrain, data landscape, globe, title reveal.
+
+  `critique` scores every storyboard against the eight tells of a slideshow.
 - **Motion graphics, not slides.** Every scene can:
   - draw its own art (`canvas`: paths that draw on, markers travelling along routes, echo trails, morphs across cuts, spotlights, meters, hand-drawn pencil strokes);
   - sit on imagery (full or split `plate` with duotone and tint treatments);

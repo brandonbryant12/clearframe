@@ -6,6 +6,7 @@ use serde_json::Value;
 pub mod constants;
 mod design;
 mod icons;
+mod lens;
 mod motion;
 mod scenes;
 pub mod text;
@@ -48,7 +49,7 @@ pub const BLOCKS: &[&str] = &[
 ];
 /// Scene entrances. `panel`, `iris` and `whip` are graphic transitions: the outgoing scene's
 /// exit and the incoming entrance share one continuous movement across the cut.
-pub const TRANSITIONS: &[&str] = &["cut", "fade", "rise", "wipe", "push", "zoom", "panel", "iris", "whip"];
+pub const TRANSITIONS: &[&str] = &["cut", "fade", "rise", "wipe", "push", "zoom", "panel", "iris", "whip", "flash"];
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Caption {
@@ -148,6 +149,10 @@ pub struct Beat {
     /// Voice level per scene frame, 0–100, prepared from this beat's narration audio.
     #[serde(default)]
     pub levels: Vec<u8>,
+    /// The resolved lens for this beat (film `lens` merged with the beat's): letterbox,
+    /// grade, bloom, aberration, leak, handheld and motion blur.
+    #[serde(default)]
+    pub lens: Value,
     #[serde(skip)]
     pub environment: Environment,
 }
@@ -386,14 +391,41 @@ impl<const W: usize, const H: usize, const RATE: usize> Video for NativeFilm<W, 
         };
         let seconds = frame.global_index as f32 / RATE as f32;
         let (vignette, grain) = design::texture(&self.0.texture, env.width, env.height, &palette, seconds);
-        fframes::svgr!(<svg xmlns="http://www.w3.org/2000/svg" width={W} height={H} viewBox={format!("0 0 {} {}",env.width,env.height)}>
-            <rect width={env.width} height={env.height} fill={palette.bg.clone()} />
+        let (w, h) = (env.width, env.height);
+        // The lens of the beat on screen; letterbox bars ease between beats that differ.
+        let i = self.0.beats.iter().rposition(|b| b.start_frame <= frame.global_index).unwrap_or(0);
+        let beat = &self.0.beats[i];
+        let lens = lens::Lens::from(&beat.lens);
+        let mut bar = lens::bar(lens.letterbox, w, h);
+        if i > 0 {
+            let before = lens::bar(lens::Lens::from(&self.0.beats[i - 1].lens).letterbox, w, h);
+            let q = motion::in_out_cubic(motion::clamp01(
+                (frame.global_index - beat.start_frame) as f32 / RATE as f32 / 0.7,
+            ));
+            bar = before + (bar - before) * q;
+        }
+        let picture = fframes::svgr!(<g>
+            <rect width={w} height={h} fill={palette.bg.clone()} />
             {background}
             {vignette}
             {ctx.render_scenes(&frame)}
             {chrome}
+        </g>);
+        let picture = match lens::handheld(lens.handheld, seconds, w, h) {
+            Some(t) => fframes::svgr!(<g transform={t}>{picture}</g>),
+            None => picture,
+        };
+        let picture = match lens::filter(&lens, w, h) {
+            Some((id, defs)) => fframes::svgr!(<g>{defs}<g filter={format!("url(#{id})")}>{picture}</g></g>),
+            None => picture,
+        };
+        fframes::svgr!(<svg xmlns="http://www.w3.org/2000/svg" width={W} height={H} viewBox={format!("0 0 {} {}",env.width,env.height)}>
+            <rect width={w} height={h} fill={palette.bg.clone()} />
+            {picture}
+            {lens::leak(lens.leak, seconds, w, h, &palette)}
             {self.frame_chrome(env.width, env.height, frame.global_index)}
             {grain}
+            {lens::letterbox(bar, w, h)}
             {if self.0.guides { design::guides(env.width, env.height) } else { fframes::svgr!(<g />) }}
         </svg>)
     }

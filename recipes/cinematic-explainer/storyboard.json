@@ -1,0 +1,641 @@
+{
+  "version": 2,
+  "title": "A cinematic explainer: an establishing shot, a question, one world explored, the figure, a silence, the whole",
+  "logline": "A cinematic explainer: an establishing shot, a question, one world explored, the figure, a silence, the whole",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "cinema",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "texture": {
+    "grain": 0.3,
+    "vignette": 0.45,
+    "animate": true
+  },
+  "lens": {
+    "grade": "teal-orange",
+    "gradeAmount": 0.5,
+    "bloom": 0.35,
+    "leak": 0.1,
+    "handheld": 0.15,
+    "blur": 0.5
+  },
+  "heading": "bottom",
+  "textMotion": "words",
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "establish",
+      "block": "canvas",
+      "vo": "Every morning, a city of millions wakes up thirsty.",
+      "props": {
+        "elements": [
+          {
+            "type": "rect",
+            "x": -384,
+            "y": -324,
+            "w": 2688,
+            "h": 1036.8,
+            "fill": {
+              "gradient": [
+                "bg",
+                "surface",
+                "accent2"
+              ],
+              "angle": 90
+            },
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "type": "rect",
+            "x": -384,
+            "y": 669.6,
+            "w": 2688,
+            "h": 648,
+            "fill": "surface",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "type": "circle",
+            "cx": 1113.6,
+            "cy": 669.6,
+            "r": 540,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.45,
+            "z": 14,
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 2
+          },
+          {
+            "type": "circle",
+            "cx": 1113.6,
+            "cy": 702,
+            "r": 70.2,
+            "fill": "ink",
+            "z": 14,
+            "glow": {
+              "blur": 40,
+              "color": "accent2",
+              "opacity": 1
+            },
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 1.2,
+            "keys": [
+              {
+                "at": 0.4,
+                "y": -108,
+                "dur": 8,
+                "ease": "out"
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "z": 6,
+            "at": 0.1,
+            "enter": "rise",
+            "dur": 1.2,
+            "dist": 40,
+            "children": [
+              {
+                "type": "path",
+                "d": "M -384 630.4 C -328 636.4 -160 664.2 -48 666.5 C 64 668.8 176 644.7 288 644.4 C 400 644.1 512 667.3 624 664.6 C 736 661.9 848 631.7 960 628.1 C 1072 624.5 1184 640.7 1296 643.1 C 1408 645.6 1520 640 1632 642.8 C 1744 645.6 1856 658 1968 660 C 2080 662 2248 655.5 2304 654.6 L 2304 1296 L -384 1296 Z",
+                "fill": "surface",
+                "stroke": "none",
+                "at": 0,
+                "dur": 0
+              },
+              {
+                "type": "path",
+                "d": "M -384 630.4 C -328 636.4 -160 664.2 -48 666.5 C 64 668.8 176 644.7 288 644.4 C 400 644.1 512 667.3 624 664.6 C 736 661.9 848 631.7 960 628.1 C 1072 624.5 1184 640.7 1296 643.1 C 1408 645.6 1520 640 1632 642.8 C 1744 645.6 1856 658 1968 660 C 2080 662 2248 655.5 2304 654.6 L 2304 1296 L -384 1296 Z",
+                "fill": "muted",
+                "stroke": "none",
+                "opacity": 0.4,
+                "at": 0,
+                "dur": 0
+              }
+            ]
+          },
+          {
+            "type": "rect",
+            "x": -384,
+            "y": 669.6,
+            "w": 2688,
+            "h": 108,
+            "fill": {
+              "gradient": [
+                "ink",
+                "ink"
+              ],
+              "angle": 90,
+              "fade": true
+            },
+            "opacity": 0.12,
+            "z": 5.7,
+            "at": 0.6,
+            "enter": "fade",
+            "dur": 2,
+            "loop": {
+              "type": "float",
+              "period": 11,
+              "amount": 14
+            }
+          },
+          {
+            "type": "group",
+            "z": 2.4,
+            "at": 0.25,
+            "enter": "rise",
+            "dur": 1.2,
+            "dist": 40,
+            "children": [
+              {
+                "type": "path",
+                "d": "M -384 718.3 C -328 721.9 -160 735.2 -48 739.9 C 64 744.6 176 751.8 288 746.6 C 400 741.4 512 712.5 624 708.5 C 736 704.5 848 723.6 960 722.8 C 1072 722 1184 707.8 1296 703.7 C 1408 699.7 1520 693.8 1632 698.5 C 1744 703.2 1856 730.2 1968 732.1 C 2080 734 2248 713.6 2304 709.9 L 2304 1296 L -384 1296 Z",
+                "fill": "surface",
+                "stroke": "none",
+                "at": 0,
+                "dur": 0
+              }
+            ]
+          },
+          {
+            "type": "rect",
+            "x": -384,
+            "y": 756,
+            "w": 2688,
+            "h": 108,
+            "fill": {
+              "gradient": [
+                "ink",
+                "ink"
+              ],
+              "angle": 90,
+              "fade": true
+            },
+            "opacity": 0.12,
+            "z": 2.1,
+            "at": 0.6,
+            "enter": "fade",
+            "dur": 2,
+            "loop": {
+              "type": "float",
+              "period": 14,
+              "amount": 14
+            }
+          },
+          {
+            "type": "group",
+            "z": 0.5,
+            "at": 0.4,
+            "enter": "rise",
+            "dur": 1.2,
+            "dist": 40,
+            "children": [
+              {
+                "type": "path",
+                "d": "M -384 836.9 C -328 830.6 -160 802.9 -48 799 C 64 795.1 176 815.9 288 813.3 C 400 810.7 512 783.5 624 783.3 C 736 783.1 848 798.6 960 812 C 1072 825.4 1184 869.4 1296 863.9 C 1408 858.4 1520 783.8 1632 778.9 C 1744 774 1856 835.6 1968 834.6 C 2080 833.6 2248 783.3 2304 773 L 2304 1296 L -384 1296 Z",
+                "fill": "bg",
+                "stroke": "none",
+                "at": 0,
+                "dur": 0
+              }
+            ]
+          },
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "dust",
+            "count": 30,
+            "fill": "ink",
+            "opacity": 0.35,
+            "size": 4,
+            "z": -0.3,
+            "at": 0,
+            "enter": "fade",
+            "dur": 1
+          }
+        ],
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "viewFrom": [
+          0,
+          75.6,
+          1920,
+          1080
+        ],
+        "viewDur": 8
+      }
+    },
+    {
+      "id": "question",
+      "block": "kinetic",
+      "vo": "So where does the water actually come from?",
+      "props": {
+        "mode": "stack",
+        "align": "center",
+        "emphasis": [
+          "come from"
+        ]
+      }
+    },
+    {
+      "id": "source",
+      "block": "canvas",
+      "vo": "It starts as rain on the hills, collected in a reservoir.",
+      "tail": 0.7,
+      "props": {
+        "world": "journey",
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "type": "rect",
+            "x": -1200,
+            "y": 820,
+            "w": 8000,
+            "h": 2400,
+            "fill": "surface",
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "path",
+            "d": "M 0 820 L 260 520 L 420 660 L 640 380 L 900 700 L 1100 560 L 1350 820 Z",
+            "fill": {
+              "gradient": [
+                "muted",
+                "surface"
+              ],
+              "angle": 90
+            },
+            "stroke": "none",
+            "width": 4,
+            "at": 0.1,
+            "dur": 1.4,
+            "z": 1.2
+          },
+          {
+            "type": "particles",
+            "x": 150,
+            "y": 140,
+            "w": 900,
+            "h": 560,
+            "kind": "rain",
+            "count": 80,
+            "fill": "accent2",
+            "say": "rain",
+            "opacity": 0.5
+          },
+          {
+            "type": "path",
+            "d": "M 1100 820 Q 1300 900 1560 860 L 1560 960 Q 1300 1000 1060 900 Z",
+            "fill": "accent2",
+            "say": "collected"
+          },
+          {
+            "type": "text",
+            "text": "Reservoir",
+            "x": 1600,
+            "y": 950,
+            "size": 56,
+            "font": "bold",
+            "fill": "ink",
+            "anchor": "start",
+            "say": "reservoir"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plant",
+      "block": "canvas",
+      "vo": "But first, a pipe carries it to a plant that filters and cleans it.",
+      "tail": 0.7,
+      "props": {
+        "world": "journey",
+        "view": [
+          1500,
+          0,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "type": "path",
+            "d": "M 1560 900 L 2300 900 L 2300 760 L 2700 760",
+            "stroke": "accent2",
+            "width": 22,
+            "say": "pipe",
+            "dur": 1.4,
+            "glow": {
+              "blur": 10,
+              "opacity": 0.8
+            }
+          },
+          {
+            "type": "rect",
+            "x": 2700,
+            "y": 560,
+            "w": 520,
+            "h": 260,
+            "r": 10,
+            "fill": "surface",
+            "stroke": "ink",
+            "width": 4,
+            "enter": "grow-y",
+            "say": "plant"
+          },
+          {
+            "type": "circle",
+            "cx": 2830,
+            "cy": 690,
+            "r": 70,
+            "fill": "none",
+            "stroke": "accent",
+            "width": 10,
+            "say": "filters",
+            "loop": {
+              "type": "spin",
+              "period": 3
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 3090,
+            "cy": 690,
+            "r": 70,
+            "fill": "none",
+            "stroke": "accent",
+            "width": 10,
+            "say": "cleans",
+            "loop": {
+              "type": "spin",
+              "period": 3
+            }
+          },
+          {
+            "type": "text",
+            "text": "Treatment",
+            "x": 2960,
+            "y": 520,
+            "size": 56,
+            "font": "bold",
+            "fill": "ink",
+            "anchor": "middle",
+            "say": "plant"
+          }
+        ]
+      }
+    },
+    {
+      "id": "city",
+      "block": "canvas",
+      "vo": "Then a second network runs it under the streets, to every tap.",
+      "tail": 0.7,
+      "props": {
+        "world": "journey",
+        "view": [
+          3300,
+          0,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "type": "path",
+            "d": "M 3220 760 L 3500 760 L 3500 900 L 4900 900",
+            "stroke": "accent2",
+            "width": 22,
+            "say": "network",
+            "dur": 1.4,
+            "glow": {
+              "blur": 10,
+              "opacity": 0.8
+            }
+          },
+          {
+            "type": "group",
+            "say": "streets",
+            "stagger": 0.15,
+            "children": [
+              {
+                "type": "path",
+                "d": "M 3900 820 L 3900 680 L 4010 600 L 4120 680 L 4120 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
+              },
+              {
+                "type": "path",
+                "d": "M 4200 820 L 4200 680 L 4310 600 L 4420 680 L 4420 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
+              },
+              {
+                "type": "path",
+                "d": "M 4500 820 L 4500 680 L 4610 600 L 4720 680 L 4720 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
+              },
+              {
+                "type": "path",
+                "d": "M 4800 820 L 4800 680 L 4910 600 L 5020 680 L 5020 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Your tap",
+            "x": 4400,
+            "y": 540,
+            "size": 56,
+            "font": "bold",
+            "fill": "ink",
+            "anchor": "middle",
+            "say": "every"
+          },
+          {
+            "type": "circle",
+            "cx": 4610,
+            "cy": 860,
+            "r": 12,
+            "fill": "accent2",
+            "say": "tap",
+            "loop": {
+              "type": "float",
+              "period": 1.2,
+              "amount": 8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "hidden",
+      "block": "stat",
+      "vo": "Nine in ten metres of that journey run underground.",
+      "tone": "accent",
+      "props": {
+        "value": 90,
+        "suffix": "%",
+        "label": "of the pipe is out of sight",
+        "align": "center",
+        "land": "underground",
+        "source": "Illustrative sample data · replace before publishing"
+      },
+      "transition": "panel"
+    },
+    {
+      "id": "silence",
+      "block": "canvas",
+      "hold": 0.6,
+      "props": {
+        "elements": [
+          {
+            "type": "circle",
+            "cx": 960,
+            "cy": 380,
+            "r": 14,
+            "fill": "accent2",
+            "glow": {
+              "blur": 16
+            },
+            "at": 0.2,
+            "dur": 0.3,
+            "keys": [
+              {
+                "at": 0.5,
+                "y": 180,
+                "dur": 0.7,
+                "ease": "in"
+              },
+              {
+                "at": 1.2,
+                "opacity": 0,
+                "dur": 0.1
+              }
+            ]
+          },
+          {
+            "type": "ellipse",
+            "cx": 960,
+            "cy": 574,
+            "rx": 30,
+            "ry": 8,
+            "fill": "none",
+            "stroke": "accent2",
+            "width": 3,
+            "at": 1.2,
+            "enter": "pop",
+            "dur": 0.2,
+            "keys": [
+              {
+                "at": 1.2,
+                "scale": 6,
+                "dur": 1.4,
+                "ease": "out"
+              },
+              {
+                "at": 1.4,
+                "opacity": 0,
+                "dur": 1.2
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "whole",
+      "block": "canvas",
+      "vo": "One journey, most of it out of sight.",
+      "tail": 0.7,
+      "props": {
+        "world": "journey",
+        "view": [
+          -100,
+          -700,
+          5200,
+          2925
+        ],
+        "elements": [
+          {
+            "type": "text",
+            "text": "One journey",
+            "x": 2600,
+            "y": 300,
+            "size": 140,
+            "font": "display",
+            "fill": "accent",
+            "anchor": "middle",
+            "say": "journey"
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "block": "endcard",
+      "vo": "So follow the water in your own city.",
+      "props": {
+        "support": "Find your reservoir.",
+        "action": "Start at the tap",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Follow the water.",
+        "emphasis": [
+          "water"
+        ],
+        "emphasisStyle": "serif"
+      }
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "order": 13,
+  "title": "Keynote reveal",
+  "when": "Product reveals, feature launches and specs worth celebrating: one object, lit on a dark stage",
+  "playbook": "product-reveal",
+  "film": {
+    "theme": "stage",
+    "backdrop": "none",
+    "texture": {
+      "grain": 0.12,
+      "vignette": 0.55
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.7
+    },
+    "textMotion": "lines",
+    "transition": "fade",
+    "sfx": "subtle",
+    "lens": {
+      "grade": "cool",
+      "gradeAmount": 0.3,
+      "bloom": 0.45,
+      "blur": 0.5
+    },
+    "voice": {
+      "style": "confident, warm and precise, like a keynote presenter"
+    }
+  },
+  "beats": {
+    "emphasisStyle": "serif",
+    "graphic": "iris"
+  },
+  "rules": [
+    "A dark stage and one hero object. Light it (glow, spotlight, shine) rather than decorating around it.",
+    "Reveal in pieces, then the whole: close-ups of parts with camera rects, then pull out to the object.",
+    "Specs arrive as inserts: one huge number or word per shot (stat, magnitude, kinetic stack), centred, with nothing else in frame.",
+    "Type is huge, tight and centred; nothing under 40 px. One accent colour, used only on what is new.",
+    "End on the object and the name, with the title sketch's light sweep."
+  ]
+}

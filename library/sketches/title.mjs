@@ -1,0 +1,92 @@
+import { round } from '../../fframes/sketch-kit.mjs';
+
+// The title reveal: a wide-tracked word in a metallic gradient that sharpens out of blur,
+// catches a sweep of light, and settles over a thin rule and one line of small type.
+export default {
+  name: 'title',
+  order: 13,
+  summary:
+    'A title reveal: wide-tracked metallic type sharpening out of blur, a sweep of light across it, a rule and one small line.',
+  use: 'The title in a trailer or opener, the product name in a reveal, the last card before the button. Replace TITLE; cue the sweep with shine.say.',
+  build(w, h) {
+    const tallFrame = h > w,
+      size = round(tallFrame ? w * 0.15 : w * 0.105),
+      cx = round(w / 2),
+      cy = round(h * 0.52);
+    return {
+      elements: [
+        {
+          type: 'ellipse',
+          cx,
+          cy: round(cy - size * 0.3),
+          rx: round(w * 0.36),
+          ry: round(size * 1.1),
+          fill: { gradient: ['accent', 'accent'], radial: true, fade: true },
+          opacity: 0.16,
+          at: 0,
+          enter: 'fade',
+          dur: 2,
+        },
+        {
+          type: 'particles',
+          x: 0,
+          y: 0,
+          w,
+          h,
+          kind: 'dust',
+          count: 40,
+          fill: 'ink',
+          opacity: 0.4,
+          size: 3,
+          at: 0,
+          enter: 'fade',
+          dur: 1,
+        },
+        {
+          type: 'text',
+          text: 'TITLE',
+          x: cx,
+          y: cy,
+          size,
+          font: 'display',
+          anchor: 'middle',
+          tracking: 0.28,
+          fill: { gradient: ['muted', 'ink', 'muted'], angle: 90 },
+          enter: 'blur',
+          at: 0.3,
+          dur: 1.4,
+          shine: { dur: 1.3, angle: 22, width: 0.28 },
+          keys: [
+            { at: 0.3, scale: 1.04, dur: 0 },
+            { at: 0.3, scale: 1, dur: 6, ease: 'out' },
+          ],
+        },
+        {
+          type: 'rect',
+          x: round(cx - w * 0.09),
+          y: round(cy + size * 0.32),
+          w: round(w * 0.18),
+          h: 2,
+          fill: 'accent',
+          enter: 'grow-x',
+          at: 1.2,
+          dur: 0.9,
+        },
+        {
+          type: 'text',
+          text: 'A LINE OF CONTEXT',
+          x: cx,
+          y: round(cy + size * 0.32 + 58),
+          size: tallFrame ? 30 : 28,
+          font: 'mono',
+          anchor: 'middle',
+          tracking: 0.3,
+          fill: 'muted',
+          at: 1.6,
+          enter: 'fade',
+          dur: 0.8,
+        },
+      ],
+    };
+  },
+};

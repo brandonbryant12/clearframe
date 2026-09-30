@@ -1,0 +1,44 @@
+{
+  "order": 12,
+  "title": "Documentary",
+  "when": "True stories, reportage, research with a human side, case studies: observed rather than presented",
+  "playbook": "cold-open",
+  "film": {
+    "theme": "ember",
+    "backdrop": "none",
+    "texture": {
+      "grain": 0.45,
+      "vignette": 0.45,
+      "animate": true
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.5
+    },
+    "transition": "fade",
+    "heading": "bottom",
+    "sfx": "subtle",
+    "lens": {
+      "grade": "warm",
+      "gradeAmount": 0.5,
+      "bloom": 0.25,
+      "leak": 0.25,
+      "handheld": 0.35,
+      "blur": 0.5
+    },
+    "voice": {
+      "style": "warm, close and plainspoken, like someone who was there"
+    }
+  },
+  "beats": {
+    "emphasisStyle": "serif",
+    "graphic": "fade"
+  },
+  "rules": [
+    "Cold open: start mid-scene on a detail (a close-up, one sound, one word), pull out to the context, and bring the title in late.",
+    "Headings only as lower thirds (heading: bottom); names and places as captions in the picture.",
+    "Handheld on observed moments; lock the camera (camera: none, lens.handheld 0 on the beat) for data, so numbers read as fact.",
+    "Real imagery wherever possible: plates graded into the palette (plate.treatment tint or duotone).",
+    "Let the subject's own words carry the key line: a quote or a kinetic stack, not a paraphrase."
+  ]
+}

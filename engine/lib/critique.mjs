@@ -7,6 +7,15 @@ import { rules } from '../../fframes/registry.mjs';
 import { elementsExtent as extent } from '../../fframes/canvas.mjs';
 
 const FAMILY = new Proxy({}, { get: (_, name) => rules(name).family });
+// A canvas that holds only type is a type card (poster type), not a drawing.
+const typeCard = b =>
+  b.block === 'canvas' && (b.props?.elements ?? []).length > 0 && b.props.elements.every(el => el.type === 'text');
+const family = b => (typeCard(b) ? 'type card' : FAMILY[b.block]);
+// A shape with the same id in consecutive canvas beats morphs across the cut: a match cut.
+const matched = (a, b) => {
+  const ids = new Set((a?.props?.elements ?? []).map(el => el.id).filter(Boolean));
+  return (b?.props?.elements ?? []).some(el => el.id && ids.has(el.id));
+};
 const CONNECTOR =
   /\b(but|so|therefore|because|which means|that's why|that is why|yet|instead|until|unless|except|however|then again|this means|the result|meanwhile|now)\b/i;
 const GREETING = /^(hi|hello|hey|welcome|in this video|today we|today,? we|let's|let us|have you ever)\b/i;
@@ -51,6 +60,13 @@ function onScreenWords(props) {
         'emphasis',
         'emphasisStyle',
         'id',
+        'gradient',
+        'kind',
+        'shape',
+        'ease',
+        'color',
+        'world',
+        'mode',
       ].includes(k)
     )
       n += v.split(/\s+/).filter(Boolean).length;
@@ -59,6 +75,118 @@ function onScreenWords(props) {
   };
   walk(props, '');
   return n;
+}
+
+// ------------------------------------------------------------------ cinema
+
+const has = (v, re) => re.test(JSON.stringify(v ?? {}));
+const DEPTH = /"(z|dolly|focus|depth)"\s*:/;
+const LIFE = /"(loop|keys|along|dolly)"\s*:|"type"\s*:\s*"particles"/;
+
+/**
+ * The eight tells of a slideshow (docs/cinema.md), measured from the storyboard. Each tell
+ * found costs 12.5 points of 100; the fixes point at the controls that answer it.
+ */
+export function cinemaScore(sb, beats, timed, transitions) {
+  const tells = [];
+  const tell = (name, fix) => tells.push({ name, fix });
+  const lens = b => ({ ...(sb.lens ?? {}), ...(b.lens ?? {}) });
+  const n = beats.length;
+  if (n < 3) return { score: 100, tells };
+  // 1. Continuity: worlds, morphs by shared id, graphic wipes, or a cut between two moving
+  // cameras (cutting on action, the grammar of a montage).
+  const travelling = b =>
+    b.block === 'canvas' && (b.props?.world || b.props?.viewFrom || b.props?.dolly || b.props?.focus?.keys);
+  let carried = 0;
+  for (let i = 1; i < n; i++) {
+    const [a, b] = [beats[i - 1], beats[i]];
+    const ids = new Set((a.props?.elements ?? []).map(el => el.id).filter(Boolean));
+    if (
+      (b.props?.world && b.props.world === a.props?.world) ||
+      (b.props?.elements ?? []).some(el => el.id && ids.has(el.id)) ||
+      ['panel', 'iris', 'whip', 'flash'].includes(transitions[i]) ||
+      (travelling(a) && travelling(b))
+    )
+      carried++;
+  }
+  if (carried < (n - 1) / 4)
+    tell(
+      'Card per line',
+      `only ${carried} of ${n - 1} cuts carry anything across. Make runs of drawings one world, morph a shape into the next scene (same id), or cut on a whip.`,
+    );
+  // 2. Build, then freeze: what still moves once the scene has landed.
+  const alive = b =>
+    b.plate?.drift ||
+    lens(b).handheld > 0 ||
+    (b.block === 'canvas' && (b.props?.world || b.props?.viewFrom || has(b.props, LIFE))) ||
+    has(b.art, LIFE) ||
+    (b.camera && b.camera !== 'none' && b.camera?.move !== 'none' && (b.camera?.amount ?? 0.5) >= 0.6) ||
+    b.block === 'kinetic';
+  const frozen = beats.filter(b => !alive(b)).length;
+  if (frozen / n > 0.5)
+    tell(
+      'Build, then freeze',
+      `${frozen} of ${n} scenes stop moving once they land. Give each hold some life: a loop, particles, a dolly or truck, a plate drift, or lens.handheld.`,
+    );
+  // 3. Headings on every scene.
+  const headed = beats.filter(b => b.props?.title && !['title', 'endcard', 'chapter'].includes(b.block)).length;
+  if (headed / n > 0.5 && (sb.heading ?? 'top') !== 'bottom')
+    tell(
+      'A heading on every scene',
+      `${headed} of ${n} scenes carry a top-left title. Let the picture and the voice say it; keep titles for chapters, or use lower thirds (heading: "bottom").`,
+    );
+  // 4. Locked, flat camera.
+  const deep = beats.some(b => (b.block === 'canvas' && has(b.props, DEPTH)) || has(b.art, DEPTH));
+  const moved = beats.some(
+    b => b.props?.viewFrom || b.props?.world || (b.camera && b.camera !== 'none' && b.camera !== 'auto'),
+  );
+  if (!deep && !moved)
+    tell(
+      'Locked, flat camera',
+      'no depth and no camera move anywhere. Use z layers with a dolly or focus pull, a world whose camera travels, or a camera move on a revelation.',
+    );
+  // 5. Small subject, big room: how much of the film is full-frame picture.
+  const full = beats.filter(FULL_FRAME).length;
+  if (full / n < 0.35)
+    tell(
+      'Small subject, big room',
+      `only ${full} of ${n} scenes use the whole frame. Vary the shot scale: full-bleed type, a plate, a tone, a close camera rect, a canvas without a heading.`,
+    );
+  // A run of beats in one world is one continuous shot: its cuts are invisible.
+  const joined = i => i > 0 && beats[i].props?.world && beats[i].props.world === beats[i - 1].props?.world;
+  const shots = [];
+  beats.forEach((b, i) =>
+    joined(i) ? (shots.at(-1).dur += timed[i]?.dur ?? 0) : shots.push({ b, i, dur: timed[i]?.dur ?? 0 }),
+  );
+  // 6. Same grammar every beat.
+  const kinds = new Set(beats.map(family)).size;
+  const cuts = shots.slice(1).map(x => (matched(beats[x.i - 1], beats[x.i]) ? 'match' : transitions[x.i]));
+  if (cuts.length >= 3 && new Set(cuts).size === 1 && kinds <= Math.max(2, n / 4))
+    tell(
+      'Same grammar every beat',
+      `${kinds} kind${kinds === 1 ? '' : 's'} of scene and one kind of cut. Alternate wide and close, dense and bare, and give the story's turns a different cut.`,
+    );
+  // 7. Screen-flat image.
+  const lit = beats.some(b => {
+    const l = lens(b);
+    return l.grade || l.bloom || l.letterbox || l.leak;
+  });
+  const glow = beats.some(b => has(b.props, /"(glow|shine|spotlight)"/));
+  if (!lit && !glow && !sb.texture)
+    tell(
+      'Screen-flat image',
+      'no light, lens or texture. Choose a lens (grade, bloom, letterbox, leak), add grain and a vignette, and light the subject (glow, shine, spotlight).',
+    );
+  // 8. An edit set by the voice alone: every beat speaks and every shot is the same length.
+  const durs = shots.map(x => x.dur).filter(d => d > 0);
+  const mean = durs.reduce((a, b) => a + b, 0) / Math.max(1, durs.length);
+  const spread = Math.sqrt(durs.reduce((a, d) => a + (d - mean) ** 2, 0) / Math.max(1, durs.length)) / (mean || 1);
+  if (shots.length >= 4 && beats.every(b => b.vo) && spread < 0.3)
+    tell(
+      'An edit set by the voice alone',
+      'every shot speaks and runs about the same length. Vary the rhythm: quick cuts into a long hold, a silent beat before the payoff, a short button at the end.',
+    );
+  return { score: Math.round(100 - 12.5 * tells.length), tells };
 }
 
 export function critique(root) {
@@ -111,15 +239,23 @@ export function critique(root) {
   for (let i = 1; i < beats.length; i++) {
     // A world is one continuous picture on purpose; the camera move is the change.
     const world = beats[i].props?.world && beats[i].props.world === beats[i - 1].props?.world;
+    // Drawings with their own camera (a dolly, a truck) are different shots, as in a montage.
+    const shot = b => b.block === 'canvas' && (b.props?.dolly || b.props?.viewFrom);
     run =
-      FAMILY[beats[i].block] === FAMILY[beats[i - 1].block] && !beats[i].plate && !beats[i].tone && !world
+      family(beats[i]) === family(beats[i - 1]) &&
+      !beats[i].plate &&
+      !beats[i].tone &&
+      !world &&
+      !shot(beats[i]) &&
+      !matched(beats[i - 1], beats[i]) &&
+      beats[i].vo
         ? run + 1
         : 1;
     if (run === 3)
       add(
         'warn',
         `${beats[i - 2].id}…${beats[i].id}`,
-        `Three ${FAMILY[beats[i].block]} scenes in a row. Change the picture: a drawing, a plate, a colour block, poster type.`,
+        `Three ${family(beats[i])} scenes in a row. Change the picture: a drawing, a plate, a colour block, poster type.`,
       );
   }
   const headered = beats.filter(b => b.props?.title && !FULL_FRAME(b)).length;
@@ -131,7 +267,8 @@ export function critique(root) {
     );
   // A drawing that occupies a small part of the frame reads as an icon on a slide.
   const area = sb.format.width * sb.format.height;
-  for (const b of beats.filter(x => x.block === 'canvas' && x.props?.view == null)) {
+  // (A silent beat with one small mark is a deliberate pause, not an icon on a slide.)
+  for (const b of beats.filter(x => x.block === 'canvas' && x.props?.view == null && x.vo && !typeCard(x))) {
     const box = extent(b.props.elements ?? []);
     if (box && (box.w * box.h) / area < 0.18)
       add(
@@ -183,6 +320,22 @@ export function critique(root) {
         `heading: bottom puts the title where this drawing reaches (y ${Math.round(box.bottom)}). Set view: "auto" so the drawing fits above it, or keep the heading at the top.`,
       );
   }
+  // Letterbox bars cover the top and bottom of landscape frames; frame-pixel type must sit inside.
+  const { width: W, height: H } = sb.format;
+  for (const b of beats.filter(x => x.block === 'canvas' && !x.props?.view)) {
+    const aspect = { ...(sb.lens ?? {}), ...(b.lens ?? {}) }.letterbox;
+    const bar = aspect && W > H && W / aspect < H ? (H - W / aspect) / 2 : 0;
+    if (!bar) continue;
+    const hidden = (b.props.elements ?? []).filter(
+      el => el.type === 'text' && (el.y - (el.size ?? 48) < bar || el.y > H - bar),
+    );
+    if (hidden.length)
+      add(
+        'warn',
+        b.id,
+        `${hidden.length} text element(s) sit under the letterbox bars (${Math.round(bar)} px top and bottom), e.g. "${String(hidden[0].text).slice(0, 24)}". Move them into the picture.`,
+      );
+  }
   const drawn = beats.filter(b => b.block === 'canvas' || b.art).length,
     imaged = beats.filter(b => b.plate || ['image', 'video', 'annotate'].includes(b.block)).length;
   if (timing.duration > 40 && !drawn)
@@ -200,7 +353,11 @@ export function critique(root) {
   // Consecutive drawings that cut from one to the next could be one world the camera travels.
   for (let i = 2; i < beats.length; i++) {
     const run = beats.slice(i - 2, i + 1);
-    if (run.every(b => b.block === 'canvas' && !b.props?.world) && beats[i + 1]?.block !== 'canvas')
+    if (
+      run.every(b => b.block === 'canvas' && !b.props?.world && !b.props?.dolly && !b.props?.viewFrom && b.vo) &&
+      !run.some((b, j) => j && matched(run[j - 1], b)) &&
+      beats[i + 1]?.block !== 'canvas'
+    )
       add(
         'idea',
         run[0].id,
@@ -318,10 +475,13 @@ export function critique(root) {
       directions[0].id,
       'Stage directions in the narration text will be read aloud. Use an inline tag (<short pause>, <breath>) or the voice style instead.',
     );
+  const cinema = cinemaScore(sb, beats, t, transitions);
+  for (const tell of cinema.tells) add('idea', 'cinema', `${tell.name}: ${tell.fix}`);
   const summary = {
+    cinema: cinema.score,
     beats: beats.length,
     seconds: +timing.duration.toFixed(1),
-    families: [...new Set(beats.map(b => FAMILY[b.block]))].length,
+    families: [...new Set(beats.map(family))].length,
     drawn,
     imaged,
     graphicTransitions: graphic,

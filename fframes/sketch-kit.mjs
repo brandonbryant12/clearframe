@@ -23,3 +23,21 @@ export function smoothPath(points) {
   }
   return d;
 }
+
+/** A seeded random stream (mulberry32), so a sketch is the same every time it is built. */
+export function rng(seed = 1) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Size on screen of something `size` across at depth `z` (the renderer draws `z` as
+ * authored until the camera moves, so a far ring must be drawn at its apparent size).
+ */
+export const seen = (size, z) => size / (1 + z);

@@ -53,15 +53,19 @@ const walk = dir =>
   fs
     .readdirSync(dir, { withFileTypes: true })
     .flatMap(e => (e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]));
-export function rendererHash() {
+function rendererSources() {
   const crate = path.join(ROOT, 'native');
-  const src = [
+  return [
     ...walk(path.join(crate, 'src')),
     ...(fs.existsSync(path.join(crate, 'vendor')) ? walk(path.join(crate, 'vendor')) : []),
     path.join(crate, 'Cargo.toml'),
     path.join(crate, 'Cargo.lock'),
     path.join(ROOT, 'constants.json'),
   ].sort();
+}
+export function rendererHash() {
+  const crate = path.join(ROOT, 'native'),
+    src = rendererSources();
   return sha256(
     Buffer.concat(src.map(f => Buffer.concat([Buffer.from(path.relative(crate, f) + '\0'), fs.readFileSync(f)]))),
   );
@@ -94,8 +98,13 @@ export async function buildNative({ force = false } = {}) {
     if (holder) log.warn(`Heavy-job lock is held by ${holder}; the build starts when it finishes.`);
     await run(gate, ['--', 'cargo', ...cargo]);
   } else await run('cargo', cargo);
+  // The build may have waited a long time for the lock while sources changed; cargo
+  // compiles what is on disk when it starts. If every source is older than the new binary,
+  // the binary is current: record today's hash so the next render does not rebuild.
+  const built = fs.statSync(binary()).mtimeMs;
+  const current = rendererSources().every(f => fs.statSync(f).mtimeMs <= built);
   writeJSON(marker, {
-    hash,
+    hash: current ? rendererHash() : hash,
     backend: process.platform === 'darwin' ? 'skia-metal' : 'cpu',
     revision: readJSON(path.join(ROOT, 'upstream.json')).revision,
   });

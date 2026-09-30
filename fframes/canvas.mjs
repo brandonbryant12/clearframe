@@ -21,7 +21,10 @@ export const ELEMENT_TYPES = {
   meter: { geometry: ['x', 'y', 'w', 'h', 'bars', 'style', 'step', 'gap', 'r'], required: ['w', 'h'] },
   spotlight: { geometry: ['cx', 'cy', 'r', 'x', 'y', 'w', 'h', 'radius', 'dim'], required: [] },
   particles: { geometry: ['x', 'y', 'w', 'h', 'count', 'kind', 'seed', 'size', 'speed'], required: ['w', 'h'] },
-  solid: { geometry: ['shape', 'cx', 'cy', 'size', 'spin', 'tilt', 'perspective', 'nodes'], required: ['size'] },
+  solid: {
+    geometry: ['shape', 'cx', 'cy', 'size', 'spin', 'tilt', 'perspective', 'nodes', 'marks', 'arcs'],
+    required: ['size'],
+  },
 };
 const COMMON = [
   'type',
@@ -55,6 +58,9 @@ const COMMON = [
   'rough',
   'behind',
   'depth',
+  'z',
+  'blur',
+  'shine',
   'shadow',
   'glow',
   'mosaic',
@@ -159,6 +165,10 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       fail(`${at}.depth must be above 0 and at most 1 (1 moves with the world; smaller is farther away)`);
     if (el.opacity != null && (!finite(el.opacity) || el.opacity < 0 || el.opacity > 1))
       fail(`${at}.opacity must be 0–1`);
+    if (el.z != null && (!finite(el.z) || el.z <= -0.9 || el.z > 50))
+      fail(`${at}.z must be above -0.9 and at most 50 (0 is the picture plane; larger is farther away)`);
+    if (el.blur != null && (!finite(el.blur) || el.blur < 0 || el.blur > 60)) fail(`${at}.blur must be 0–60 px`);
+    if (el.shine != null) el.shine = shineSpec(el.shine, `${at}.shine`, fail);
     for (const key of ['fill', 'stroke']) {
       const v = el[key];
       if (v == null || isColor(v)) continue;
@@ -211,9 +221,15 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       el.keys.forEach((k, j) => {
         if (!k || typeof k !== 'object') fail(`${at}.keys[${j}] must be an object`);
         for (const key of Object.keys(k))
-          if (!['at', 'say', 'dur', 'ease', 'x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity'].includes(key))
+          if (
+            !['at', 'say', 'dur', 'ease', 'x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity', 'blur'].includes(
+              key,
+            )
+          )
             fail(`${at}.keys[${j}]: unsupported field ${key}`);
         if (k.at == null && k.say == null) fail(`${at}.keys[${j}] needs at (seconds) or say (spoken cue)`);
+        if (k.blur != null && (!finite(k.blur) || k.blur < 0 || k.blur > 60))
+          fail(`${at}.keys[${j}].blur must be 0–60 px`);
         for (const key of ['at', 'dur', 'x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity'])
           if (k[key] != null && !finite(k[key])) fail(`${at}.keys[${j}].${key} must be a number`);
         if (k.ease != null && !EASES.includes(k.ease)) fail(`${at}.keys[${j}].ease must be one of ${EASES.join(', ')}`);
@@ -323,8 +339,22 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
           fail(`${at}.count must be 1–400`);
         break;
       case 'solid':
-        if (el.shape != null && !['tetra', 'cube', 'octa', 'icosa', 'dodeca'].includes(el.shape))
-          fail(`${at}.shape must be tetra, cube, octa, icosa or dodeca`);
+        if (el.shape != null && !['tetra', 'cube', 'octa', 'icosa', 'dodeca', 'globe'].includes(el.shape))
+          fail(`${at}.shape must be tetra, cube, octa, icosa, dodeca or globe`);
+        // A globe takes places as [lat, lon] marks and [lat, lon, lat, lon] great-circle arcs.
+        const coords = (v, n) =>
+          Array.isArray(v) &&
+          v.length === n &&
+          v.every(Number.isFinite) &&
+          v.every((x, i) => Math.abs(x) <= (i % 2 ? 180 : 90));
+        if (
+          el.marks != null &&
+          !(Array.isArray(el.marks) && el.marks.length <= 40 && el.marks.every(m => coords(m, 2)))
+        )
+          fail(`${at}.marks must be up to 40 [lat, lon] pairs`);
+        if (el.arcs != null && !(Array.isArray(el.arcs) && el.arcs.length <= 20 && el.arcs.every(a => coords(a, 4))))
+          fail(`${at}.arcs must be up to 20 [lat, lon, lat, lon] routes`);
+        if ((el.marks || el.arcs) && el.shape !== 'globe') fail(`${at}: marks and arcs are for shape globe`);
         for (const key of ['spin', 'tilt'])
           if (el[key] != null && !(Array.isArray(el[key]) && el[key].length === 3 && el[key].every(Number.isFinite)))
             fail(`${at}.${key} must be [x, y, z] degrees${key === 'spin' ? ' per second' : ''}`);
@@ -539,6 +569,13 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
       r.dur ??= 1.2;
       settle = Math.max(settle, r.at + r.dur);
     }
+    if (el.shine) {
+      if (el.shine.say != null) {
+        el.shine.at = resolve(el.shine.say);
+        delete el.shine.say;
+      }
+      el.shine.at ??= el.at + el.dur;
+    }
     for (const k of el.keys ?? []) {
       if (k.say != null) {
         k.at = resolve(k.say);
@@ -564,6 +601,48 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
       );
   });
   return settle;
+}
+
+/**
+ * A light sweep across an element (a title catching the light): `{at|say, dur, color, width,
+ * angle, opacity, every}`. `every` repeats the sweep after that many seconds.
+ */
+export function shineSpec(v, where, fail) {
+  const spec = v === true ? {} : v;
+  if (!spec || typeof spec !== 'object' || Array.isArray(spec))
+    fail(`${where} must be true or {at|say, dur, color, width, angle, opacity, every}`);
+  for (const k of Object.keys(spec))
+    if (!['at', 'say', 'dur', 'color', 'width', 'angle', 'opacity', 'every'].includes(k))
+      fail(`${where}: unsupported field ${k}`);
+  const range = (k, lo, hi) => {
+    if (spec[k] != null && (!finite(spec[k]) || spec[k] < lo || spec[k] > hi))
+      fail(`${where}.${k} must be ${lo}–${hi}`);
+  };
+  range('dur', 0.2, 6);
+  range('width', 0.05, 1);
+  range('angle', -80, 80);
+  range('opacity', 0, 1);
+  range('every', 1, 60);
+  range('at', 0, 1e6);
+  if (spec.color != null && (!isColor(spec.color) || spec.color === 'none'))
+    fail(`${where}.color must be a palette colour`);
+  return structuredClone(spec);
+}
+
+/** Camera depth keys for a canvas: `dolly` moves the camera through `z` (a fly-through). */
+export function depthKeys(list, where, fail) {
+  if (!Array.isArray(list) || !list.length || list.length > 12)
+    fail(`${where} must be 1–12 keys {at|say, z, dur, ease}`);
+  return list.map((k, i) => {
+    if (!k || typeof k !== 'object') fail(`${where}[${i}] must be an object`);
+    for (const key of Object.keys(k))
+      if (!['at', 'say', 'z', 'dur', 'ease'].includes(key)) fail(`${where}[${i}]: unsupported field ${key}`);
+    if (k.at == null && k.say == null) fail(`${where}[${i}] needs at (seconds) or say (spoken cue)`);
+    if (!finite(k.z) || k.z <= -0.9 || k.z > 50) fail(`${where}[${i}].z must be above -0.9 and at most 50`);
+    if (k.dur != null && (!finite(k.dur) || k.dur < 0 || k.dur > 30)) fail(`${where}[${i}].dur must be 0–30 seconds`);
+    if (k.ease != null && !EASES.includes(k.ease)) fail(`${where}[${i}].ease must be one of ${EASES.join(', ')}`);
+    return { ...k };
+  });
 }
 
 /** Latest scheduled entrance start (for too-late checks). */

@@ -81,6 +81,27 @@ While the camera holds, it drifts in slowly (`viewDrift`, default 3% of the view
 
 Good worlds: a journey (source → process → destination), a timeline laid out left to right, a map zooming from region to street, a machine explored part by part, one diagram built up and then revealed whole.
 
+## Depth: z, dolly and focus
+
+Worlds move the camera across a plane. Depth moves it *into* the picture.
+
+- **`z` on an element or group** sets its distance: 0 is the picture plane, 1 is twice as far, 8 is far away, and −0.5 is close to the lens. Draw every layer as it should look before the camera moves: `z` changes nothing until the camera does. When a world camera pans, far layers move less and near layers (z < 0) move more, which is real parallax without `depth` factors. When the camera dollies forward, near layers grow faster than far ones. Put `z` on top-level layers or groups: a far skyline, a midground city, foreground dust.
+- **`dolly`** (canvas prop) flies the camera through `z`, with keys `[{say|at, z, dur, ease}]`. As the camera's z approaches an element's, the element grows past the frame and is gone once passed. Rings at z 1, 2, 3… make a tunnel, and layers of cloud make a descent. Dolly keys never hold the beat.
+- **`focus`** (canvas prop) is a lens with depth of field: `{z, aperture, keys}`. Elements with `z` blur by their distance from the focus plane, where `aperture` 1 is natural and 2–3 is a long lens. Keys give a rack focus, `{"say": "gate", "z": 0}`, pulling focus from the far light to the near gate on a word. Elements without `z` are overlays and stay sharp, which is right for titles and labels.
+- **`blur`** (px, 0–60) on any element, keyable (`keys: [{at, blur}]`), for hand-set focus.
+- **A globe:** `{"type": "solid", "shape": "globe", "size", "spin": [0, 9, 0], "tilt": [-22, 0, 0], "fill": "bg", "stroke": "muted", "marks": [[lat, lon], …], "arcs": [[lat, lon, lat, lon], …]}`. It turns about its own pole, marks appear once the graticule has drawn, and routes lift off the surface and draw on one after another. Coordinates are real places; say when the routes are illustrative.
+- **`shine`** on any element: a light sweep masked to its shape, like a title catching the light. Use `true` or `{at|say, dur, color, width, angle, opacity, every}`. It shows on mid-tone or metallic fills (a `muted`→`ink` gradient); on pure white type, pair it with lens bloom instead.
+
+```json
+{ "block": "canvas", "props": {
+  "dolly": [{ "at": 0.4, "z": 6, "dur": 5 }],
+  "focus": { "z": 7, "aperture": 1.2, "keys": [{ "say": "home", "z": 0.5 }] },
+  "elements": [
+    { "type": "particles", "kind": "dust", "x": 0, "y": 0, "w": 1920, "h": 1080, "z": -0.3 },
+    { "type": "group", "z": 3, "children": [ …the city… ] },
+    { "type": "group", "z": 7, "children": [ …the far light… ] } ] } }
+```
+
 ## Design the frame
 
 - **One idea, drawn.** Draw the mechanism the narration explains, not the words it says. A route for a journey, orbits for an ecosystem, a balance for a trade-off, a pipe for a flow, a network for spread.

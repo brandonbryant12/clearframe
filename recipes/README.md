@@ -31,3 +31,9 @@ Generated from fframes/playbooks.mjs. These are adaptable starting structures wi
 - **brand-spot**: A short, designed spot with an editorial frame. Inputs: One idea, three supporting beats, a call to action.
 - **journey**: A travelling-camera explainer: one drawing, explored stop by stop. Inputs: Three to five stops in order, what happens at each, the whole at the end.
 - **sizzle**: A brand sizzle reel: a claim, two chapters, a turn and a wordmark, made of objects drawn in code. Inputs: The brand line, two or three capabilities, one contrast, a closing question, a wordmark.
+- **trailer**: A trailer: a cold open, a rising montage, a silence, the title and a button. Inputs: One promise, three images of what it touches, a title, a date or call to action.
+- **cold-open**: A documentary cold open: a detail, the place, a voice, the scale, then the title. Inputs: One vivid detail with a time and place, a first-hand quote, one sourced figure, a title.
+- **product-reveal**: A product reveal: darkness, a part in close-up, specs as inserts, then the whole object. Inputs: The product (a render, a drawing or a 3D solid), two sourced specs, the name, availability.
+- **cinematic-explainer**: A cinematic explainer: an establishing shot, a question, one world explored, the figure, a silence, the whole. Inputs: A place or system with three to five stops, the question it answers, one sourced figure, the takeaway.
+- **title-sequence**: A title sequence: bold cut-paper shapes that become each other on the beat, ending on the title. Inputs: A title, three or four credits or promises, a music bed with a clear beat.
+- **zoom-journey**: A zoom journey: one continuous camera from a planet down to a single lit window, then all the way back. Inputs: Four nested scales (the whole, a region, a place, one detail) and the line that connects the smallest to the largest.

@@ -1,0 +1,387 @@
+{
+  "version": 2,
+  "title": "A title sequence: bold cut-paper shapes that become each other on the beat, ending on the title",
+  "logline": "A title sequence: bold cut-paper shapes that become each other on the beat, ending on the title",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "bass",
+  "motion": {
+    "preset": "snappy",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "paper",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "texture": {
+    "grain": 0.25,
+    "vignette": 0.2
+  },
+  "textMotion": "letters",
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "disc",
+      "block": "canvas",
+      "vo": "Every story starts with a shape.",
+      "props": {
+        "elements": [
+          {
+            "id": "sun",
+            "type": "circle",
+            "cx": 960,
+            "cy": 520,
+            "r": 190,
+            "fill": "accent",
+            "enter": "pop",
+            "at": 0.2,
+            "dur": 0.5,
+            "loop": {
+              "type": "pulse",
+              "period": 2.2,
+              "amount": 0.04
+            }
+          },
+          {
+            "id": "left",
+            "type": "rect",
+            "x": -40,
+            "y": 0,
+            "w": 420,
+            "h": 1080,
+            "fill": "ink",
+            "enter": "left",
+            "at": 0.5,
+            "dur": 0.5
+          },
+          {
+            "id": "right",
+            "type": "rect",
+            "x": 1540,
+            "y": 0,
+            "w": 420,
+            "h": 1080,
+            "fill": "ink",
+            "enter": "right",
+            "at": 0.6,
+            "dur": 0.5
+          }
+        ]
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      }
+    },
+    {
+      "id": "bar",
+      "block": "canvas",
+      "vo": "Then it becomes a line,",
+      "props": {
+        "elements": [
+          {
+            "id": "sun",
+            "type": "rect",
+            "x": 900,
+            "y": 120,
+            "w": 120,
+            "h": 840,
+            "fill": "accent",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "id": "left",
+            "type": "rect",
+            "x": -40,
+            "y": 0,
+            "w": 780,
+            "h": 1080,
+            "fill": "ink",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "id": "right",
+            "type": "rect",
+            "x": 1180,
+            "y": 0,
+            "w": 780,
+            "h": 1080,
+            "fill": "accent2",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "type": "text",
+            "text": "A SERIES BY",
+            "x": 960,
+            "y": 1010,
+            "size": 34,
+            "font": "bold",
+            "anchor": "middle",
+            "tracking": 0.3,
+            "fill": "ink",
+            "enter": "type",
+            "at": 0.6
+          }
+        ]
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      }
+    },
+    {
+      "id": "door",
+      "block": "canvas",
+      "props": {
+        "elements": [
+          {
+            "id": "sun",
+            "type": "rect",
+            "x": 780,
+            "y": 300,
+            "w": 360,
+            "h": 780,
+            "fill": "accent",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "id": "left",
+            "type": "rect",
+            "x": -40,
+            "y": 0,
+            "w": 820,
+            "h": 1080,
+            "fill": "ink",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "id": "right",
+            "type": "rect",
+            "x": 1140,
+            "y": 0,
+            "w": 820,
+            "h": 1080,
+            "fill": "ink",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "id": "knob",
+            "type": "circle",
+            "cx": 1080,
+            "cy": 700,
+            "r": 18,
+            "fill": "bg",
+            "enter": "pop",
+            "at": 0.6,
+            "dur": 0.3
+          },
+          {
+            "type": "text",
+            "text": "WITH GUESTS",
+            "x": 380,
+            "y": 560,
+            "size": 40,
+            "font": "bold",
+            "anchor": "middle",
+            "tracking": 0.3,
+            "fill": "bg",
+            "enter": "type",
+            "at": 0.5
+          }
+        ]
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      },
+      "duration": 1.4
+    },
+    {
+      "id": "step",
+      "block": "canvas",
+      "vo": "a door, and a way through.",
+      "props": {
+        "elements": [
+          {
+            "id": "sun",
+            "type": "rect",
+            "x": 780,
+            "y": 300,
+            "w": 360,
+            "h": 780,
+            "fill": "bg",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "id": "left",
+            "type": "rect",
+            "x": -40,
+            "y": 0,
+            "w": 820,
+            "h": 1080,
+            "fill": "ink",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "id": "right",
+            "type": "rect",
+            "x": 1140,
+            "y": 0,
+            "w": 820,
+            "h": 1080,
+            "fill": "ink",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "id": "figure",
+            "type": "rect",
+            "x": 930,
+            "y": 640,
+            "w": 60,
+            "h": 300,
+            "fill": "accent",
+            "enter": "grow-y",
+            "at": 0.3,
+            "dur": 0.5
+          },
+          {
+            "id": "head",
+            "type": "circle",
+            "cx": 960,
+            "cy": 600,
+            "r": 38,
+            "fill": "accent",
+            "enter": "pop",
+            "at": 0.6,
+            "dur": 0.3
+          }
+        ]
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      }
+    },
+    {
+      "id": "title",
+      "block": "canvas",
+      "hold": 1.2,
+      "vo": "Through Lines.",
+      "props": {
+        "elements": [
+          {
+            "id": "sun",
+            "type": "circle",
+            "cx": 1470,
+            "cy": 400,
+            "r": 130,
+            "fill": "accent",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "id": "left",
+            "type": "rect",
+            "x": -40,
+            "y": 0,
+            "w": 0,
+            "h": 1080,
+            "fill": "ink",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "id": "right",
+            "type": "rect",
+            "x": 1960,
+            "y": 0,
+            "w": 0,
+            "h": 1080,
+            "fill": "ink",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "type": "text",
+            "text": "THROUGH",
+            "x": 820,
+            "y": 520,
+            "size": 150,
+            "font": "bold",
+            "anchor": "middle",
+            "tracking": 0.12,
+            "fill": "ink",
+            "enter": "type",
+            "at": 0.3
+          },
+          {
+            "type": "text",
+            "text": "LINES",
+            "x": 820,
+            "y": 680,
+            "size": 150,
+            "font": "bold",
+            "anchor": "middle",
+            "tracking": 0.12,
+            "fill": "accent2",
+            "enter": "type",
+            "at": 0.6
+          },
+          {
+            "id": "rule",
+            "type": "rect",
+            "x": 420,
+            "y": 730,
+            "w": 800,
+            "h": 14,
+            "fill": "accent",
+            "enter": "grow-x",
+            "at": 1,
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "text": "A PODCAST ABOUT HOW THINGS CONNECT",
+            "x": 820,
+            "y": 800,
+            "size": 30,
+            "font": "bold",
+            "anchor": "middle",
+            "tracking": 0.35,
+            "fill": "muted",
+            "enter": "type",
+            "at": 1.3
+          }
+        ]
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      }
+    }
+  ]
+}

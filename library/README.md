@@ -51,6 +51,7 @@ Every item is validated when the engine starts, so a bad file fails immediately 
   - `rough`, `mosaic`, `font` and `fps`: for canvas;
   - `kinetic`: the kinetic mode.
 - `rules` end up in the project's `DIRECTION.md`.
+- `playbook` (optional) names the arc this look is made for. `new --treatment ID` and `ingest --treatment ID` start from it when no `--playbook` is given; for example, `cinematic` starts from `cinematic-explainer`.
 
 ## Sketches
 
@@ -90,7 +91,8 @@ A sketch should draw a mechanism, not a slide. Read `skills/clearframe-canvas/SK
 ```
 
 - Each beat is a storyboard beat. Its `props` are checked against the block when a project is made.
-- A canvas beat with `props.sketch` is redrawn from that sketch for vertical films.
+- A canvas beat can name a sketch instead of listing elements: `"props": {"sketch": "tunnel"}` draws it when the project is made, together with the sketch's own camera (`view`, `viewFrom`, `dolly`, `focus`). Any of those set on the beat win. `"sketchText": {"TITLE": "SIGNAL"}` replaces a sketch's placeholder type. Vertical films redraw every sketch beat for the tall frame.
+- A playbook can set the film's look: `theme`, `motion`, `backdrop`, `texture`, `lens`, `heading`, `textMotion` and `transition`. A treatment applied on top still wins.
 - Sample figures must be marked as illustrative, with `source: "Illustrative sample data · replace before publishing"`.
 - A playbook is a starting structure, not a template to fill in. Keep it to the arc and let the author adapt it.
 

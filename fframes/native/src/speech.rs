@@ -405,7 +405,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         } else if env.captions && self.b.block != "kinetic" {
             let box_ = Area {
                 x: self.area.x,
-                y: env.height - if tall { 242.0 } else { 104.0 },
+                y: env.height - (self.bar - 20.0).max(0.0) - if tall { 242.0 } else { 104.0 },
                 w: self.area.w,
                 h: if tall { 112.0 } else { 78.0 },
             };

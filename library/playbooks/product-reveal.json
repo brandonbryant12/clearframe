@@ -1,0 +1,175 @@
+{
+  "order": 31,
+  "title": "A product reveal: darkness, a part in close-up, specs as inserts, then the whole object",
+  "audience": "Customers and press at a launch",
+  "inputs": "The product (a render, a drawing or a 3D solid), two sourced specs, the name, availability",
+  "theme": "stage",
+  "transition": "fade",
+  "texture": { "grain": 0.12, "vignette": 0.55 },
+  "lens": { "grade": "cool", "gradeAmount": 0.3, "bloom": 0.45, "blur": 0.5 },
+  "note": "Light the object; don't decorate around it. Replace the solid with the product (an image element or a drawing) and the specs with real, sourced figures.",
+  "beats": [
+    {
+      "id": "dark",
+      "block": "canvas",
+      "vo": "We started with a single question.",
+      "props": {
+        "elements": [
+          {
+            "type": "ellipse",
+            "cx": 960,
+            "cy": 560,
+            "rx": 620,
+            "ry": 260,
+            "fill": { "gradient": ["accent", "accent"], "radial": true, "fade": true },
+            "opacity": 0.14,
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 2
+          },
+          {
+            "type": "solid",
+            "shape": "icosa",
+            "cx": 960,
+            "cy": 540,
+            "size": 150,
+            "spin": [6, 14, 0],
+            "tilt": [18, 0, 0],
+            "stroke": "ink",
+            "width": 2,
+            "glow": { "blur": 12, "color": "accent" },
+            "at": 0.3,
+            "dur": 1.6
+          },
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "dust",
+            "count": 30,
+            "fill": "ink",
+            "opacity": 0.3,
+            "size": 3,
+            "at": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "part",
+      "block": "canvas",
+      "vo": "What if it simply got out of the way?",
+      "props": {
+        "view": [760, 380, 400, 225],
+        "viewFrom": [560, 270, 800, 450],
+        "viewDur": 2.6,
+        "elements": [
+          {
+            "type": "solid",
+            "shape": "icosa",
+            "cx": 960,
+            "cy": 490,
+            "size": 150,
+            "spin": [6, 14, 0],
+            "tilt": [18, 0, 0],
+            "stroke": "accent",
+            "width": 1.2,
+            "at": 0,
+            "enter": "none",
+            "glow": { "blur": 6 }
+          },
+          {
+            "type": "text",
+            "text": "Nothing extra.",
+            "x": 960,
+            "y": 575,
+            "size": 14,
+            "font": "mono",
+            "anchor": "middle",
+            "fill": "muted",
+            "tracking": 0.2,
+            "at": 1.2,
+            "enter": "fade"
+          }
+        ]
+      }
+    },
+    {
+      "id": "spec-1",
+      "block": "stat",
+      "vo": "Twice as fast,",
+      "props": {
+        "value": 2,
+        "suffix": "×",
+        "label": "faster",
+        "align": "center",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "spec-2",
+      "block": "kinetic",
+      "vo": "and it lasts all day.",
+      "props": { "mode": "stack", "align": "center", "emphasis": ["all day"] }
+    },
+    {
+      "id": "whole",
+      "block": "canvas",
+      "hold": 1.2,
+      "vo": "Meet Halo.",
+      "props": {
+        "elements": [
+          {
+            "type": "ellipse",
+            "cx": 960,
+            "cy": 430,
+            "rx": 560,
+            "ry": 240,
+            "fill": { "gradient": ["accent", "accent"], "radial": true, "fade": true },
+            "opacity": 0.2,
+            "at": 0,
+            "enter": "fade",
+            "dur": 1.5
+          },
+          {
+            "type": "solid",
+            "shape": "icosa",
+            "cx": 960,
+            "cy": 420,
+            "size": 210,
+            "spin": [6, 12, 0],
+            "tilt": [18, 0, 0],
+            "stroke": "ink",
+            "width": 2.5,
+            "glow": { "blur": 16, "color": "accent" },
+            "at": 0,
+            "dur": 1.2
+          },
+          {
+            "type": "text",
+            "text": "HALO",
+            "x": 960,
+            "y": 820,
+            "size": 150,
+            "font": "display",
+            "anchor": "middle",
+            "tracking": 0.3,
+            "fill": { "gradient": ["muted", "ink", "muted"], "angle": 90 },
+            "enter": "blur",
+            "at": 0.5,
+            "dur": 1.2,
+            "shine": { "dur": 1.3, "angle": 22 }
+          }
+        ]
+      }
+    },
+    {
+      "id": "button",
+      "block": "endcard",
+      "vo": "Available today.",
+      "props": { "title": "Available today.", "align": "center" }
+    }
+  ]
+}

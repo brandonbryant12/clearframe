@@ -2,7 +2,7 @@
 // runs the checks every block shares, then the block's validator here. A validator may fill
 // defaults (decimals, scales, orientation) so the renderer never guesses.
 import { ICONS } from './icons.mjs';
-import { normalizeElements, roughSpec, applyRough, mosaicSpec, applyMosaic } from './canvas.mjs';
+import { normalizeElements, roughSpec, applyRough, mosaicSpec, applyMosaic, depthKeys } from './canvas.mjs';
 
 /** Validation helpers bound to one block's props and error prefix. */
 export function helpers(p, fail, { findPhrase, precision }) {
@@ -429,6 +429,19 @@ export const VALIDATORS = {
       h.fail('stagger must be 0–3 seconds');
     if (!Array.isArray(p.elements) || !p.elements.length) h.fail('elements needs at least one element');
     p.elements = normalizeElements(p.elements, 'elements', h.fail);
+    // Depth: the camera flies through z (dolly) and a focus plane sets the depth of field.
+    if (p.dolly != null) p.dolly = depthKeys(p.dolly, 'dolly', h.fail);
+    if (p.focus != null) {
+      const f = p.focus;
+      if (!f || typeof f !== 'object' || Array.isArray(f)) h.fail('focus must be {z, aperture, keys}');
+      for (const k of Object.keys(f))
+        if (!['z', 'aperture', 'keys'].includes(k)) h.fail(`focus: unsupported field ${k}`);
+      if (f.z != null && (!Number.isFinite(f.z) || f.z <= -0.9 || f.z > 50))
+        h.fail('focus.z must be above -0.9 and at most 50');
+      if (f.aperture != null && !(Number.isFinite(f.aperture) && f.aperture >= 0 && f.aperture <= 3))
+        h.fail('focus.aperture must be 0–3 (1 is a natural depth of field)');
+      if (f.keys != null) f.keys = depthKeys(f.keys, 'focus.keys', h.fail);
+    }
     if (p.rough != null && p.rough !== false) applyRough(p.elements, roughSpec(p.rough, 'rough', h.fail));
     delete p.rough;
     if (p.mosaic != null && p.mosaic !== false) applyMosaic(p.elements, mosaicSpec(p.mosaic, 'mosaic', h.fail));

@@ -34,8 +34,14 @@ pub fn render<'a>(b: &'a Beat, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Sv
         335.0 + portrait_shift
     };
     let reserve = if low { 176.0 + if s(&b.props, "kicker").trim().is_empty() { 0.0 } else { 40.0 } } else { 0.0 };
+    // Letterbox bars take the top and bottom of the frame: headings, content and the
+    // source line move inside the picture so nothing important sits under a bar.
+    let bar = crate::lens::bar(crate::lens::Lens::from(&b.lens).letterbox, env.width, env.height);
+    // Headings move below the bar; hero scenes already sit clear of it unless it is tall.
+    let (lift, drop) = ((bar - 50.0).max(0.0), (bar - 30.0).max(0.0));
+    let (top, bottom) = (top + if hero { (bar + 60.0 - top).max(0.0) } else { lift }, bottom + drop);
     let mut area = Area { x, y: top, w: env.width - x * 2.0, h: env.height - top - bottom - reserve };
-    let (mut head_y, mut floor) = (None, env.height);
+    let (mut head_y, mut floor) = (None, env.height - drop);
     // Split plates hand the block the other side of the frame.
     let side = b.plate.as_ref().map_or("none", |p| plate_side(p, tall));
     match side {
@@ -65,6 +71,8 @@ pub fn render<'a>(b: &'a Beat, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Sv
     let mut d = Draw::new(b, frame, ctx, area);
     d.head_y = head_y;
     d.floor = floor;
+    d.bar = bar;
+    d.lift = lift;
     let plate = d.plate_layer(side);
     let header = if hero { empty() } else { d.header() };
     let body = match b.block.as_str() {
@@ -115,7 +123,8 @@ fn camera<'a>(d: &Draw<'a, '_, '_>, body: Svgr<'a>) -> Svgr<'a> {
     let (kind, amount) = match authored {
         "auto" => {
             let still = matches!(b.block.as_str(), "kinetic" | "video" | "annotate" | "breathing");
-            (if still { "none" } else { "in" }, 0.45 * d.m.intensity.max(0.35))
+            // Enough push to read as a living shot (about 2% over the beat), not a zoom.
+            (if still { "none" } else { "in" }, 0.8 * d.m.intensity.max(0.35))
         }
         other => (other, spec.map_or(0.5, |c| n(c, "amount", 0.5) as f32)),
     };
@@ -252,6 +261,14 @@ fn scene_motion<'a>(d: &Draw<'a, '_, '_>, plate: Svgr<'a>, content: Svgr<'a>, fo
         "whip" => {
             blur = 38.0 * (1.0 - reveal_p);
             (1.0, format!("translate({} 0)", w * 0.22 * (1.0 - reveal_p)), w)
+        }
+        // A trailer's flash cut: a few frames of white light, gone before the shot is read.
+        "flash" => {
+            let a = (1.0 - motion::clamp01(d.t / 0.22)).powi(3);
+            if a > 0.004 {
+                cover = fframes::svgr!(<rect width={w} height={h} fill="#ffffff" opacity={a} />);
+            }
+            (1.0, String::new(), w)
         }
         _ => (1.0, String::new(), w),
     };

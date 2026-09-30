@@ -500,12 +500,16 @@ export const BLOCKS = [
       world:
         'Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views',
       elements:
-        '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt}] (≤ 600) — see docs/canvas.md',
+        '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine}] (≤ 600) — see docs/canvas.md',
       stagger: 'Seconds between top-level elements without a cue (0–3)',
       rough:
         'Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure|solid, gap} (an element can set rough: false)',
       mosaic:
         'Lay every shape in tesserae: true or {tile, gap, jitter, flow: rows|rings, outline, build: sweep|radial|random, shade, shine, grout, axis} (an element can set mosaic: false)',
+      dolly:
+        'Fly the camera through depth: keys [{say|at, z, dur, ease}]. Elements with z are drawn in perspective; the camera passes them as its z reaches theirs',
+      focus:
+        'Depth of field for elements with z: {z (the focus plane), aperture 0–3 (1 natural), keys [{say|at, z, dur}] for a rack focus}',
     },
     {
       title: 'How an idea spreads',
@@ -585,7 +589,7 @@ export const BLOCKS = [
 ];
 export const blockByName = name => BLOCKS.find(b => b.name === name);
 export const MOTIONS = ['gentle', 'snappy', 'spring'];
-export const TRANSITIONS = ['cut', 'fade', 'rise', 'wipe', 'push', 'zoom', 'panel', 'iris', 'whip'];
+export const TRANSITIONS = ['cut', 'fade', 'rise', 'wipe', 'push', 'zoom', 'panel', 'iris', 'whip', 'flash'];
 export const BACKDROPS = ['none', 'dots', 'grid', 'glow', 'paper', 'mosaic'];
 export const CANVASES = [
   [1920, 1080],

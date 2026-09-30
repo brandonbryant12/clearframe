@@ -1,0 +1,14 @@
+{
+  "order": 16,
+  "notes": "Blue-black night with warm amber light and a cool teal: built for the teal-orange grade, bloom and letterbox.",
+  "colors": {
+    "bg": "#0a0e14",
+    "surface": "#172230",
+    "ink": "#f2eee6",
+    "muted": "#9aa3ad",
+    "accent": "#f2a65a",
+    "accent2": "#4fb3bf",
+    "positive": "#7fd1a8",
+    "negative": "#f07167"
+  }
+}

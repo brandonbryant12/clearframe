@@ -1,0 +1,147 @@
+{
+  "order": 29,
+  "title": "A trailer: a cold open, a rising montage, a silence, the title and a button",
+  "audience": "An audience to build anticipation in: a launch, a season, an announcement",
+  "inputs": "One promise, three images of what it touches, a title, a date or call to action",
+  "theme": "noir",
+  "motion": "snappy",
+  "transition": "cut",
+  "textMotion": "letters",
+  "texture": {
+    "grain": 0.4,
+    "vignette": 0.6,
+    "animate": true
+  },
+  "lens": {
+    "letterbox": 2.39,
+    "grade": "bleach",
+    "gradeAmount": 0.5,
+    "bloom": 0.5,
+    "aberration": 0.3,
+    "handheld": 0.3,
+    "blur": 0.5
+  },
+  "note": "Shots, not slides (docs/cinema.md). Retime each sketch's dolly and focus to its line; each montage shot is shorter than the last. The silence beat has no voice on purpose, and the title lands after it.",
+  "beats": [
+    {
+      "id": "open",
+      "block": "canvas",
+      "vo": "It begins as a whisper.",
+      "props": {
+        "sketch": "void",
+        "focus": {
+          "z": -0.4,
+          "aperture": 1.4,
+          "keys": [
+            {
+              "at": 0.9,
+              "z": 9,
+              "dur": 1.4
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "card-1",
+      "block": "canvas",
+      "vo": "Before the noise.",
+      "props": {
+        "sketch": "card",
+        "sketchText": {
+          "CARD": "BEFORE THE NOISE"
+        }
+      }
+    },
+    {
+      "id": "through",
+      "block": "canvas",
+      "transition": "flash",
+      "vo": "It moves through every wire,",
+      "props": {
+        "sketch": "tunnel",
+        "dolly": [
+          {
+            "at": 0.1,
+            "z": 6.2,
+            "dur": 2.9,
+            "ease": "in"
+          }
+        ],
+        "focus": {
+          "z": 1,
+          "aperture": 0.9,
+          "keys": [
+            {
+              "at": 0.1,
+              "z": 7,
+              "dur": 2.9
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "city",
+      "block": "canvas",
+      "vo": "every city,",
+      "props": {
+        "sketch": "skyline",
+        "viewDur": 3
+      }
+    },
+    {
+      "id": "card-2",
+      "block": "canvas",
+      "vo": "One idea.",
+      "props": {
+        "sketch": "card",
+        "sketchText": {
+          "CARD": "ONE IDEA"
+        }
+      }
+    },
+    {
+      "id": "dawn",
+      "block": "canvas",
+      "transition": "flash",
+      "vo": "and every morning after.",
+      "props": {
+        "sketch": "horizon",
+        "viewDur": 3.4
+      }
+    },
+    {
+      "id": "silence",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
+      }
+    },
+    {
+      "id": "title",
+      "block": "canvas",
+      "hold": 1.5,
+      "transition": "flash",
+      "vo": "Signal.",
+      "props": {
+        "sketch": "title",
+        "sketchText": {
+          "TITLE": "SIGNAL",
+          "A LINE OF CONTEXT": "A FILM ABOUT WHAT CONNECTS US"
+        }
+      }
+    },
+    {
+      "id": "button",
+      "block": "canvas",
+      "vo": "Coming this fall.",
+      "props": {
+        "sketch": "card",
+        "sketchText": {
+          "CARD": "COMING THIS FALL"
+        }
+      }
+    }
+  ]
+}

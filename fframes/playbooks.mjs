@@ -21,12 +21,15 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
     format: { preset: vertical ? 'vertical' : (book.format ?? 'landscape'), fps: 30 },
     theme: theme ?? book.theme ?? 'paper',
     motion: { preset: book.motion ?? 'gentle', intensity: 0.65 },
-    transition: 'fade',
+    transition: book.transition ?? 'fade',
     backdrop: book.backdrop ?? 'none',
     chrome: false,
     captions: book.captions ?? false,
     music: false,
     ...(book.texture ? { texture: book.texture } : {}),
+    ...(book.lens ? { lens: book.lens } : {}),
+    ...(book.heading ? { heading: book.heading } : {}),
+    ...(book.textMotion ? { textMotion: book.textMotion } : {}),
     ...(book.frame ? { frame: book.frame } : {}),
     ...(book.speakers ? { speakers: book.speakers } : {}),
     ...(book.voice ? { voice: book.voice } : {}),
@@ -41,12 +44,31 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
     beats: structuredClone(book.beats),
   };
   // Sketch coordinates are frame pixels: re-draw them for the requested frame.
+  // A sketch's own camera (view, truck, dolly, focus) travels with it. A canvas drawn in
+  // landscape frame pixels is fitted whole into a tall frame rather than cropped off-centre.
   for (const b of sb.beats) {
     const name = b.props?.sketch;
-    if (!name) continue;
-    if (vertical || book.format === 'vertical') b.props.elements = sketch(name, 'vertical').elements;
+    if (!name) {
+      if ((vertical || book.format === 'vertical') && b.block === 'canvas' && b.props && b.props.view == null)
+        b.props.view = [1920, 1080];
+      continue;
+    }
+    const tallFrame = vertical || book.format === 'vertical';
+    const drawn = sketch(name, tallFrame ? 'vertical' : 'landscape');
+    if (tallFrame || !b.props.elements) b.props.elements = drawn.elements;
+    // Placeholder type in a sketch ("TITLE") is replaced by the playbook's words.
+    const words = b.props.sketchText ?? {};
+    const retext = list =>
+      list.forEach(el => {
+        if (el.type === 'text' && words[el.text] != null) el.text = words[el.text];
+        if (el.children) retext(el.children);
+      });
+    retext(b.props.elements);
+    delete b.props.sketchText;
+    for (const k of ['view', 'viewFrom', 'viewDur', 'dolly', 'focus'])
+      if (drawn[k] == null) delete b.props[k];
+      else if (tallFrame || b.props[k] == null) b.props[k] = drawn[k];
     delete b.props.sketch;
-    delete b.props.view;
     delete b.props.stagger;
   }
   const ids = new Map();
@@ -60,7 +82,11 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
 }
 export function scaffold(dir, options = {}) {
   if (fs.existsSync(dir) && fs.readdirSync(dir).length) throw new Error(`${dir} is not empty`);
-  const id = options.playbook ?? options.recipe ?? 'concept-explainer',
+  const id =
+      options.playbook ??
+      options.recipe ??
+      (options.treatment && treatmentById(options.treatment)?.playbook) ??
+      'concept-explainer',
     sb = storyboardFor(id, options),
     book = playbooks().find(p => p.id === id);
   if (options.treatment) {

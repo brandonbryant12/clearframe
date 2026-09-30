@@ -5,7 +5,7 @@ description: Direct a ClearFrame film from a document, report, transcript, podca
 
 # From material to film
 
-The goal is not to summarise the document on slides. It is a short film with a question, a turn and a payoff, where every beat has its own picture. Read `docs/ideas.md` for pictures, `docs/canvas.md` for drawing, and the `clearframe-script` skill for narration.
+The goal is not to summarise the document on slides. It is a short film with a question, a turn and a payoff, where every beat has its own picture. Read `docs/cinema.md` for film grammar (shots, planes, camera, lens, rhythm), `docs/ideas.md` for pictures, `docs/canvas.md` for drawing, and the `clearframe-script` skill for narration.
 
 ## 1. Ingest
 - Research reports (markdown): `clearframe ingest DIR --markdown report.md`. It writes `BRIEF.md`: every figure with its sentence and source, tensions, questions, quotes, chart-ready tables and the source list, plus a research-digest storyboard to rewrite. Convert PDF/Docs to markdown or text first (`pdftotext -layout`, `textutil -convert txt`).
@@ -21,14 +21,15 @@ Write these four lines at the top of `DIRECTION.md`:
 Then choose 3–5 claims from the brief that carry the answer. Everything else goes to the source card. Link beats with *but* or *therefore*, never "and then". Open a loop in the first 5 seconds and close it at the peak. A 60–90 s film has roughly 12–18 beats.
 
 ## 3. Choose the look
-- `clearframe treatments` lists art directions: editorial, noir, kinetic, sketchbook, blueprint, audiogram, brand, calm. Start with `new DIR --playbook NAME --treatment ID` (or apply one to ingested material), then adapt.
+- `clearframe treatments` lists art directions. Report looks: editorial, noir, kinetic, sketchbook, blueprint, audiogram, brand, calm. Film looks: cinematic, trailer, documentary, keynote. Start with `new DIR --playbook NAME --treatment ID` (or apply one to ingested material), then adapt.
+- Genre playbooks start from shots, not cards: `trailer` (cold open, montage, silence, title, button), `cold-open` (a documentary that starts mid-scene), `product-reveal` (a dark stage, parts, specs as inserts, the whole).
 - If there is a reference video, run `clearframe reference VIDEO`. Read `REFERENCE.md`, open `sheet.png` and `opening.png`, and write **Keep** (rhythm, camera, type roles, transitions) and **Change** (brand, copy, subject) in `DIRECTION.md`. The fewer creative decisions left to guesswork, the better the film.
 - The user's direction ("make it feel like a Vox explainer", "punchy for TikTok", "calm and warm") maps to a treatment plus overrides. Say which you chose and why.
 
 ## 4. Plan pictures
 First decide whether the film is **one world** or a **sequence of scenes**. When the material describes a place, a process, a chain of causes or a system, draw one world (`props.world`) and move the camera through it: stations in story order (up for the sky, down for a plan view, onward for the next stop), the world changing state with the story (a `behind` sky lighting up, a roof filling with heat), and a final pull-back to the opening shot, changed. Interrupt it only for a turn (a kinetic card on a colour block). `examples/night-city` shows the pattern end to end.
 
-Fill the beat plan table in `DIRECTION.md`: purpose, picture and landing word. Use `docs/ideas.md`: hooks, scale, mechanism, change, tension, hidden-in-the-average, people, turns, endings. Per minute, aim for:
+Fill the beat plan table in `DIRECTION.md`: purpose, picture, **shot scale** and landing word. Never three identical scales in a row. Every cut needs a reason: a world move, a morph, a match cut, a graphic wipe, or a cut between two moving cameras. For places and journeys, build three planes with `z` and let the camera dolly or truck; rack focus on the word that shifts attention. Set pieces to start from: `sketch void|tunnel|skyline|horizon|title`. Use `docs/ideas.md`: hooks, scale, mechanism, change, tension, hidden-in-the-average, people, turns, endings. Per minute, aim for:
 - at least one drawn mechanism (canvas);
 - one colour-block punctuation;
 - one or two graphic transitions at turns;
@@ -45,6 +46,7 @@ Ask a separate reviewer (a fresh subagent, with no authorship bias) to judge the
 - **Hook.** Does the first frame make you want the second? Is the question clear by 5 s?
 - **Story.** Read only the `vo` lines: is it an argument with a turn, or a list? Does each beat follow from the last?
 - **Pictures.** Does each beat show a different idea? Are there three similar frames in a row? Is anything a heading over bullets?
+- **Cinema.** Is it shots or slides? Check the eight tells in `docs/cinema.md`: a card per line, build-then-freeze, a heading on every scene, a flat camera, a small subject, the same grammar, a screen-flat image, an edit set only by the voice.
 - **Motion.** Does something move in every held frame? Do reveals land on the stressed words? Are graphic transitions only at turns?
 - **Craft.** One hero per frame; type roles (sans claim, serif feeling word, mono facts); margins; readable at phone size.
 - **Truth.** Every figure sourced and dated; estimates labelled; nothing implies data it does not have.

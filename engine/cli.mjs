@@ -268,7 +268,10 @@ async function main() {
     if (o.markdown) {
       const { storyboardFor } = await import('../fframes/playbooks.mjs');
       const { applyTreatment, directionTemplate, treatmentById } = await import('../fframes/treatments.mjs');
+      // A film look starts from its genre's shots (cinematic → cinematic-explainer), not a deck.
+      const playbook = o.playbook ?? (o.treatment && treatmentById(o.treatment)?.playbook) ?? 'research-digest';
       const r = ingestMarkdown(dir, o.markdown, {
+        playbook,
         scaffold: (id, opts) => {
           const sb = storyboardFor(id, { ...opts, theme: o.theme, vertical: o.vertical });
           if (o.treatment) {
@@ -375,7 +378,7 @@ async function main() {
     const { critique } = await import('./lib/critique.mjs');
     const c = critique(dir);
     lines.push(
-      `critique: ${c.summary.warnings} warning(s), ${c.summary.ideas} idea(s)`,
+      `critique: cinema ${c.summary.cinema}/100, ${c.summary.warnings} warning(s), ${c.summary.ideas} idea(s)`,
       ...c.findings.slice(0, 8).map(f => `  ${f.level === 'warn' ? '!' : '·'} ${f.where}: ${f.message}`),
     );
     const g = await import('./lib/generate.mjs');
@@ -408,7 +411,7 @@ async function main() {
     if (o.json) return console.log(JSON.stringify(r, null, 2));
     const s = r.summary;
     console.log(
-      `${s.beats} beats · ${s.seconds}s · ${s.families} scene families · ${s.drawn} drawn · ${s.imaged} with imagery · ${s.graphicTransitions} graphic transitions · ${s.tones} colour blocks`,
+      `cinema ${s.cinema}/100 · ${s.beats} beats · ${s.seconds}s · ${s.families} scene families · ${s.drawn} drawn · ${s.imaged} with imagery · ${s.graphicTransitions} graphic transitions · ${s.tones} colour blocks`,
     );
     return console.log(
       r.findings.length

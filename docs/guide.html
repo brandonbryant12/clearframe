@@ -578,8 +578,8 @@
       <ul class="meta">
         <li class="updated">Last updated: 2026-09-30</li>
         <li>Covers 0.5.0 (unreleased)</li>
-        <li>33 blocks · 16 palettes</li>
-        <li>10 treatments · 29 playbooks</li>
+        <li>33 blocks · 19 palettes</li>
+        <li>15 treatments · 35 playbooks</li>
       </ul>
     </header>
 
@@ -864,6 +864,25 @@ node engine/cli.mjs render my-film            <span class="c"># final encode</sp
         </ul>
       </div>
 
+      <h3 id="cinema">Shots, not slides: the cinema score</h3>
+      <p>A slide holds a layout until the presenter moves on. A shot is a moment in continuous time, with a camera that has a point of view. <code>critique</code> scores every storyboard out of 100 against the eight tells of a slideshow, and each tell it finds names the fix. The full grammar is in <code>docs/cinema.md</code>, and <code>docs/scorecard.md</code> tracks how close the defaults get.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tell</th><th>What answers it</th></tr></thead>
+          <tbody>
+            <tr><td>A card per line</td><td class="wrap">Carry something across each cut: a <code>world</code>, a morph by shared <code>id</code>, a match cut, <code>whip</code> or <code>flash</code>, or a cut between two moving cameras</td></tr>
+            <tr><td>Build, then freeze</td><td class="wrap">Life in every hold: loops, <code>particles</code>, a <code>dolly</code> or truck, a plate drift, <code>lens.handheld</code></td></tr>
+            <tr><td>A heading on every scene</td><td class="wrap">Titles in the picture, lower thirds (<code>heading: "bottom"</code>), or no title at all</td></tr>
+            <tr><td>Locked, flat camera</td><td class="wrap">Three planes with <code>z</code>, and a camera that moves: a dolly, a truck, a rack <code>focus</code></td></tr>
+            <tr><td>Small subject, big room</td><td class="wrap">Shot-scale variety: full-bleed type, plates, tones, close camera rects</td></tr>
+            <tr><td>The same grammar every beat</td><td class="wrap">Alternate wide and close, dense and bare; give turns a different cut</td></tr>
+            <tr><td>A screen-flat image</td><td class="wrap">A <code>lens</code> (grade, bloom, letterbox, leak), grain, and light in the scene (<code>glow</code>, <code>shine</code>, <code>spotlight</code>)</td></tr>
+            <tr><td>An edit set by the voice alone</td><td class="wrap">Rhythm: quick cuts into a long hold, a silent beat before the payoff, a button at the end</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small">Baseline: the default data-story scaffold scores 38 and the trailer playbook scores 100. A high score doesn't make a film good, but a low one reliably means slides.</p>
+
       <h3 id="case-study">Case study: <span class="serif-em">night city</span></h3>
       <p><code>examples/night-city</code> is a 47-second explainer built from a synthetic research brief on urban night heat. Every figure in it is sample data from made-up sources and is labelled that way. It is there to show craft, not facts. It went through repeated rounds with an independent reviewer.</p>
 
@@ -1043,6 +1062,18 @@ Script:
 - Every camera move should arrive by the first word of its line.</pre>
         </figure>
 
+        <figure class="prompt-card" id="tpl-cinematic">
+          <figcaption><span class="mono-label">Template</span><strong>A cinematic film, not a deck</strong></figcaption>
+<pre class="prompt">Make a <span class="ph">[45–60 s]</span> cinematic film about <span class="ph">[the idea, or reports/brief.md]</span>. It must not feel like slides. Read docs/cinema.md first.
+
+Genre: <span class="ph">[trailer | cold-open documentary | product reveal | cinematic explainer]</span>. Treatment: <span class="ph">[trailer | documentary | keynote | cinematic]</span>.
+
+1. Write a shot list in DIRECTION.md before any blocks: each beat's scale (wide, medium, close, insert), its camera move and why, and how it connects to the next shot.
+2. Build places in three planes with z and move the camera through them (dolly, truck, rack focus on the word that shifts attention). Start from sketch void, tunnel, skyline, horizon or title and make them yours.
+3. Give the edit rhythm: at least one silent beat before the payoff, montage shots that shorten, and a button at the end.
+4. Run critique until the cinema score is 90 or above, or every remaining tell is a choice you can defend. Then draft, open the sheet, and have a fresh reviewer judge it as film, not as slides.</pre>
+        </figure>
+
         <figure class="prompt-card" id="tpl-brand-kit">
           <figcaption><span class="mono-label">Template</span><strong>A house style as a shared library</strong></figcaption>
 <pre class="prompt">Make a ClearFrame brand kit in <span class="ph">[brand/library]</span> for <span class="ph">[Acme]</span>. Read library/README.md first.
@@ -1189,6 +1220,14 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>audiogram</code></td><td class="wrap">electric · glow · snappy · <code>words</code> text · cut · kinetic highlight · whip at chapter turns · sfx off</td><td class="wrap">Podcast and interview clips, conversations, talks</td><td class="wrap">Never edit vo; speaker tags; draw a concrete noun every 8–15 s.</td></tr>
             <tr><td><code>brand</code></td><td class="wrap">paper · spring · cut · persistent frame · iris at chapter turns · sfx normal</td><td class="wrap">Brand intros, announcements, product moments</td><td class="wrap">Echo trails and stepped copies; carry the hero across cuts.</td></tr>
             <tr><td><code>calm</code></td><td class="wrap">forest · glow · gentle (low intensity) · fade · sfx off</td><td class="wrap">Wellbeing, reflective stories, gentle tutorials, children</td><td class="wrap">Slow everything; no graphic transitions; nothing flashes.</td></tr>
+            <tr class="group"><td colspan="4">Film looks: each sets a <code>lens</code></td></tr>
+            <tr><td><code>cinematic</code></td><td class="wrap">cinema palette · letterbox 2.39 · teal-orange grade · bloom · handheld · lower-third headings · cut</td><td class="wrap">Stories and explainers that should feel like film: a place, a journey, a turn</td><td class="wrap">Shots, not slides; three planes with <code>z</code>; titles in the picture; open the letterbox only for the payoff.</td></tr>
+            <tr><td><code>trailer</code></td><td class="wrap">noir · letterbox · bleach grade · bloom · aberration · handheld · <code>letters</code> text · cut and flash · sfx normal</td><td class="wrap">Launches, announcements, teasers: anticipation, not explanation</td><td class="wrap">Cold open, rising montage, silence, title, button; white-on-black type cards.</td></tr>
+            <tr><td><code>documentary</code></td><td class="wrap">ember · warm grade · leak · handheld · heavy grain · lower thirds · fade</td><td class="wrap">True stories, reportage, case studies</td><td class="wrap">Start mid-scene; handheld when observing, locked for data; real imagery graded in.</td></tr>
+            <tr><td><code>keynote</code></td><td class="wrap">stage palette · cool grade · bloom · iris at chapter turns</td><td class="wrap">Product reveals and feature launches</td><td class="wrap">One lit object; parts, then the whole; specs as full-frame inserts.</td></tr>
+            <tr><td><code>cutpaper</code></td><td class="wrap">bass palette · paper backdrop · snappy · <code>letters</code> text · cut · solid rough edges · no lens</td><td class="wrap">Title sequences, series and podcast intros, posters in motion</td><td class="wrap">Flat shapes that become each other across cuts; condensed caps set like shapes; cut on the music.</td></tr>
+            <tr><td colspan="4" class="wrap small">Each film look names its playbook: <code>new DIR --treatment cinematic</code> or <code>ingest DIR --markdown report.md --treatment cinematic</code> starts from <code>cinematic-explainer</code> rather than a deck-shaped report arc (trailer → trailer, documentary → cold-open, keynote → product-reveal, cutpaper → title-sequence).</td></tr>
+            <tr class="group"><td colspan="4">Report and craft looks</td></tr>
             <tr><td><code>mosaic</code></td><td class="wrap">mosaic palette · mosaic backdrop · gentle · <code>words</code> text · cut · canvas <code>mosaic</code> tiles · iris at chapter turns · sfx subtle</td><td class="wrap">Stories, heritage and culture, nature: anything that should feel handmade and luminous</td><td class="wrap">Shapes assemble tile by tile and scatter when no longer true; rings for round things, rows for walls and skies; glow on gold tiles.</td></tr>
           </tbody>
         </table>
@@ -1258,6 +1297,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>panel</code></td><td class="wrap">An accent panel with a second-accent edge sweeps across and off. Into an accent-<code>tone</code> scene, the panel becomes the background.</td><td class="wrap">Chapter turns</td></tr>
             <tr><td><code>iris</code></td><td class="wrap">An accent circle closes the scene and opens the next. <code>transitionOrigin: [x, y]</code> (0–1) sets its centre.</td><td class="wrap">A revelation; leaving and re-entering a world</td></tr>
             <tr><td><code>whip</code></td><td class="wrap">A fast horizontal move with motion blur.</td><td class="wrap">Between ideas in energetic cuts</td></tr>
+            <tr><td><code>flash</code></td><td class="wrap">The new shot arrives out of a burst of white light.</td><td class="wrap">Trailer montage, and onto a title after a silence</td></tr>
             <tr><td><code>auto</code></td><td class="wrap"><code>rise</code> where the chapter changes, <code>fade</code> otherwise. With nothing set, the film default is <code>fade</code>.</td><td class="wrap">Chaptered films</td></tr>
             <tr class="group"><td colspan="3">Beat <code>exit</code> &amp; colour</td></tr>
             <tr><td><code>exit</code></td><td class="wrap"><code>auto</code> (mirror the next entrance), <code>none</code>, <code>fade</code>, <code>push</code>, <code>zoom</code>, <code>wipe</code>, <code>panel</code>, <code>iris</code>, <code>whip</code>. An exit never starts before the beat's last spoken word.</td><td class="wrap">Overrides only</td></tr>
@@ -1301,6 +1341,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>motion</code></td><td class="wrap"><code>preset</code>: gentle (0.55 s quartic), snappy (0.30 s exponential), spring (0.72 s damped); <code>intensity</code> 0–1</td></tr>
             <tr><td><code>backdrop</code></td><td class="wrap"><code>none</code>, <code>dots</code>, <code>grid</code>, <code>glow</code> (slow drifting light pools), <code>paper</code>, <code>mosaic</code> (static cached tiles)</td></tr>
             <tr><td><code>texture</code></td><td class="wrap"><code>film</code>, <code>grain</code>, <code>vignette</code>, <code>none</code>, or <code>{grain, vignette, animate}</code></td></tr>
+            <tr><td><code>lens</code></td><td class="wrap">film-wide, and on any beat (beat keys override): <code>letterbox</code> 1.5–3 or <code>false</code> (landscape only; content moves inside the bars), <code>grade</code> (teal-orange, warm, cool, bleach, mono, noir, sepia) with <code>gradeAmount</code>, <code>bloom</code>, <code>aberration</code>, <code>leak</code>, <code>handheld</code>, and <code>blur</code> (motion blur on camera moves; 0.5 is a 180° shutter), each 0–1. See <code>docs/cinema.md</code>.</td></tr>
             <tr><td><code>frame</code></td><td class="wrap"><code>true</code> or <code>{brand, left, right, label, progress}</code>: a serif-italic brand, a section label, mono footers and a progress rail</td></tr>
             <tr><td><code>sfx</code></td><td class="wrap"><code>off</code>, <code>subtle</code>, <code>normal</code>, <code>punchy</code>: whooshes into graphic transitions, thuds on hero numbers, ticks and pops on counts and arrivals</td></tr>
             <tr><td><code>voice</code></td><td class="wrap"><code>takes: "film"</code> (the default: one continuous take), <code>"chapter"</code> or <code>"beat"</code>; <code>style</code> (2–6 words, one for the film); <code>voice</code>; <code>cast</code> for two voices (one conversational take); <code>perBeatStyle</code> (not recommended)</td></tr>
@@ -1359,6 +1400,10 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>echo</code></td><td class="wrap"><code>{count 1–24, lag 0–2, step: {x, y, rotate, scale}, fade, to}</code></td><td class="wrap">Motion trails (<code>lag</code>) or stacked copies with a colour shift (<code>step</code>)</td></tr>
             <tr><td><code>fps</code></td><td class="wrap">2–60</td><td class="wrap">Stepped motion, e.g. 12 for "on twos"</td></tr>
             <tr><td><code>depth</code> · <code>behind</code></td><td class="wrap">see Camera &amp; worlds</td><td class="wrap">Parallax; drawing under the existing world</td></tr>
+            <tr><td><code>z</code></td><td class="wrap">a distance: 0 is the picture plane, 8 is far away, −0.5 is near the lens. Drawn as authored until the camera moves.</td><td class="wrap">Three planes: far layers move less on a truck; near layers grow faster on a dolly.</td></tr>
+            <tr><td><code>dolly</code> · <code>focus</code></td><td class="wrap">canvas props: <code>dolly: [{say|at, z, dur, ease}]</code>; <code>focus: {z, aperture 0–3, keys}</code></td><td class="wrap">Fly the camera through <code>z</code>; depth of field, with a rack focus on a spoken word</td></tr>
+            <tr><td><code>blur</code></td><td class="wrap">px 0–60, keyable (<code>keys: [{at, blur}]</code>)</td><td class="wrap">Hand-set focus: a soft foreground, a subject coming into focus</td></tr>
+            <tr><td><code>shine</code></td><td class="wrap"><code>true</code> or <code>{at|say, dur, color, width, angle, opacity, every}</code></td><td class="wrap">A light sweep masked to the shape: a title catching the light. Shows on metallic or mid-tone fills.</td></tr>
             <tr><td>gradient</td><td class="wrap"><code>fill: {gradient: [2–4 colours], angle, radial, fade}</code></td><td class="wrap">Soft glows (<code>fade</code> dissolves the last stop)</td></tr>
             <tr><td><code>blend</code></td><td class="wrap">normal, multiply, screen, overlay, darken, lighten, soft-light, difference</td><td class="wrap">Layering</td></tr>
             <tr><td>colour tokens</td><td class="wrap">bg, surface, ink, muted, accent, accent2, positive, negative, line, wash, wash2, none, or <code>#rrggbb</code></td><td class="wrap">Tokens follow the palette and the beat's <code>tone</code>.</td></tr>
@@ -1403,6 +1448,17 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>burst</code></td><td class="wrap">One big word, an underline, rays</td><td class="wrap">A key term or verdict</td></tr>
             <tr><td><code>ambient</code></td><td class="wrap">Soft drifting shapes (an <code>art.under</code> layer)</td><td class="wrap">Behind statements, quotes and kinetic type</td></tr>
             <tr><td><code>niche</code></td><td class="wrap">A mosaic arch of sky, a moon in rings, a tiled sea</td><td class="wrap">Stories and places in the mosaic treatment</td></tr>
+            <tr class="group"><td colspan="3">Cinematic set pieces (three planes, a moving camera)</td></tr>
+            <tr><td><code>void</code></td><td class="wrap">Dust near the lens, one far light, focus racking from one to the other as the camera creeps in</td><td class="wrap">Cold opens</td></tr>
+            <tr><td><code>tunnel</code></td><td class="wrap">Segmented rings at increasing depth; the camera flies through them toward a light</td><td class="wrap">Entering a system or a scale; montage shots</td></tr>
+            <tr><td><code>skyline</code></td><td class="wrap">A night city in three planes, lit windows coming and going, a sideways truck showing the parallax</td><td class="wrap">Establishing a place</td></tr>
+            <tr><td><code>horizon</code></td><td class="wrap">Dawn over three ridges fading with distance, the sun rising, a slow crane up</td><td class="wrap">The establishing shot, a beginning</td></tr>
+            <tr><td><code>title</code></td><td class="wrap">Wide-tracked metallic type sharpening out of blur and catching a sweep of light</td><td class="wrap">Titles, product names, the last card</td></tr>
+            <tr><td><code>terrain</code></td><td class="wrap">A perspective grid floor to a glowing horizon; the ground rushes under a gliding camera</td><td class="wrap">A data world's floor, launches, "the future"</td></tr>
+            <tr><td><code>landscape</code></td><td class="wrap">Rows of lit 3D columns growing from a floor in depth, the camera pushing in, focus racking front to back</td><td class="wrap">Data as a place (compute heights from real values and add a source)</td></tr>
+            <tr><td><code>ocean</code></td><td class="wrap">Swell lines rolling at three depths, a low moon, its reflection shimmering</td><td class="wrap">Crossings, trade, climate, distance</td></tr>
+            <tr><td><code>pause</code></td><td class="wrap">One thin line drawing itself in the dark</td><td class="wrap">The silence before an impact (a beat with no voice)</td></tr>
+            <tr><td><code>globe</code></td><td class="wrap">A turning globe: graticule, places marked, routes lifting off the surface and drawing on in turn</td><td class="wrap">Trade, travel, spread, supply chains (replace the illustrative routes)</td></tr>
           </tbody>
         </table>
       </div>
@@ -1439,6 +1495,12 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>brand-spot</code></td><td class="wrap">A short, designed spot with an editorial frame</td></tr>
             <tr><td><code>journey</code></td><td class="wrap">A travelling-camera explainer: one drawing, explored stop by stop</td></tr>
             <tr><td><code>sizzle</code></td><td class="wrap">A brand reel: a claim, two chapters, a turn and a wordmark, made of objects drawn in code</td></tr>
+            <tr><td><code>trailer</code></td><td class="wrap">A cold open, a rising montage split by type cards, a silence, the title and a button</td></tr>
+            <tr><td><code>cold-open</code></td><td class="wrap">A documentary that starts mid-scene: a detail, the place, a voice, the scale, then the title</td></tr>
+            <tr><td><code>product-reveal</code></td><td class="wrap">A dark stage, a part in close-up, specs as inserts, then the whole object</td></tr>
+            <tr><td><code>cinematic-explainer</code></td><td class="wrap">An establishing shot, the question as an insert, one world explored, the figure, a silence, the whole</td></tr>
+            <tr><td><code>title-sequence</code></td><td class="wrap">Bold cut-paper shapes that become each other on the beat, ending on the title</td></tr>
+            <tr><td><code>zoom-journey</code></td><td class="wrap">One continuous camera from a planet down to a single lit window, then all the way back</td></tr>
           </tbody>
         </table>
       </div>
@@ -1564,6 +1626,10 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
       <h2>What's new</h2>
       <p class="small">"Travel instead of cutting, type with a voice, and fewer false alarms." The full list is in <code>CHANGELOG.md</code>.</p>
       <ul class="news">
+        <li><strong>Shots, not slides.</strong> A new <a href="#cinema">cinema guide</a> covers shot scales, three planes, a motivated camera, continuity, light and rhythm. <code>critique</code> now prints a <strong>cinema score</strong> from the eight tells of a slideshow.</li>
+        <li><strong>A lens.</strong> <code>lens</code> adds a letterbox, a film grade, bloom, aberration, light leaks, a handheld sway and motion blur, film-wide or per beat.</li>
+        <li><strong>Depth.</strong> Canvas <code>z</code> gives true perspective and parallax. <code>dolly</code> flies the camera through the layers, <code>focus</code> racks focus on a spoken word, and <code>shine</code> sweeps light across a title.</li>
+        <li><strong>Film genres.</strong> New treatments (cinematic, trailer, documentary, keynote, cutpaper), playbooks (trailer, cold-open, product-reveal, cinematic-explainer, title-sequence, zoom-journey), set pieces (void, tunnel, skyline, horizon, title, terrain, landscape, ocean, pause) and a <code>flash</code> cut. Film looks start from their genre's playbook, so <code>ingest --treatment cinematic</code> no longer begins as a deck.</li>
         <li><strong>The library is files.</strong> Palettes, treatments, sketches and playbooks each live in their own file under <code>library/</code>, and are validated on load. A project's <code>library/</code> or a shared brand kit (<code>--library DIR</code>) adds or overrides items, and <code>new</code> copies shared items into the project. Palettes now have one source: the renderer no longer keeps a copy. See <a href="#vocab-library">Library</a>.</li>
         <li><strong>Sizzle toolkit.</strong> 3D wireframe <code>solid</code>s, <code>stars</code> and <code>warp</code> particles, the <code>neon</code> palette, the <code>tech</code> treatment and the <code>sizzle</code> playbook for brand reels made of objects drawn in code.</li>
         <li><strong>The picture keeps pace with the voice.</strong> No scene sits empty while the narration talks: a late-cued drawing is pulled forward to the first word, and number cards enter with the voice while their count lands on its word. <code>pace: "hold"</code> keeps a deliberate wait.</li>

@@ -235,8 +235,16 @@ pub(crate) struct Draw<'a, 'c, 'm> {
     pub head_y: Option<f32>,
     /// Lowest y the footer may use (a bottom plate raises it).
     pub floor: f32,
+    /// Letterbox bar height on this beat (captions sit above it).
+    pub bar: f32,
+    /// How far the heading moves down to clear a letterbox bar.
+    pub lift: f32,
     /// Centre of a world camera at this frame, for elements drawn with parallax (`depth`).
     pub camera: Cell<Option<(f32, f32)>>,
+    /// Canvas depth at this frame: the camera's z (`dolly`) and the focus plane (z, aperture).
+    pub depth: Cell<(f32, Option<(f32, f32)>)>,
+    /// Offset of the group being drawn, so perspective works in world coordinates.
+    pub offset: Cell<(f32, f32)>,
     /// Mosaic knockout: for each mosaic element (by address), the outlines of the filled
     /// mosaic shapes drawn after it, which remove its tiles and bend its rows around them.
     pub occluders: std::cell::RefCell<std::collections::HashMap<usize, Vec<Vec<(f32, f32)>>>>,
@@ -259,7 +267,11 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             ids: Cell::new(0),
             head_y: None,
             floor: env.height,
+            bar: 0.0,
+            lift: 0.0,
             camera: Cell::new(None),
+            depth: Cell::new((0.0, None)),
+            offset: Cell::new((0.0, 0.0)),
             occluders: Default::default(),
         }
     }
@@ -716,7 +728,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         if let Some(y) = self.head_y {
             return y - 100.0;
         }
-        if self.tall() { self.b.environment.height * 0.11 - 108.0 } else { 0.0 }
+        self.lift + if self.tall() { self.b.environment.height * 0.11 - 108.0 } else { 0.0 }
     }
     /// When the heading enters: already in place on a hard cut (a cut lands on a composed
     /// frame), rising just after the scene starts otherwise.
@@ -724,7 +736,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         if self.b.transition == "cut" && self.b.environment.index > 0 { -10.0 } else { 0.06 }
     }
     fn header(&self) -> Svgr<'a> {
-        if self.b.heading == "bottom" && self.head_y.is_none() {
+        // A lower third needs a title; without one there is no rule or kicker to set.
+        if self.b.heading == "bottom" && self.head_y.is_none() && !s(self.props(), "title").trim().is_empty() {
             return self.lower_third();
         }
         let (x, w) = (self.area.x, self.area.w);

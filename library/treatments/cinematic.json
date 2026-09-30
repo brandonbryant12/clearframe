@@ -1,0 +1,47 @@
+{
+  "order": 10,
+  "title": "Cinematic",
+  "when": "Stories and explainers that should feel like film: a place, a journey, a turn. Pairs with worlds, depth and the horizon, skyline, tunnel and void sketches",
+  "playbook": "cinematic-explainer",
+  "film": {
+    "theme": "cinema",
+    "backdrop": "none",
+    "texture": {
+      "grain": 0.35,
+      "vignette": 0.5,
+      "animate": true
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.55
+    },
+    "textMotion": "words",
+    "transition": "cut",
+    "heading": "bottom",
+    "sfx": "subtle",
+    "lens": {
+      "letterbox": 2.39,
+      "grade": "teal-orange",
+      "gradeAmount": 0.6,
+      "bloom": 0.4,
+      "aberration": 0.2,
+      "leak": 0.15,
+      "handheld": 0.25,
+      "blur": 0.5
+    },
+    "voice": {
+      "style": "measured, low and unhurried, like a documentary narrator"
+    }
+  },
+  "beats": {
+    "emphasisStyle": "serif",
+    "graphic": "fade"
+  },
+  "rules": [
+    "Shots, not slides: write a shot list with scales (wide, medium, close, insert) before choosing blocks. Read docs/cinema.md.",
+    "Three planes in every drawn scene: z on the background, the subject and one soft foreground layer. Rack focus on the word that moves attention.",
+    "Titles live in the picture (canvas type, lower thirds). No top-left scene headings.",
+    "Every held frame keeps moving: a dolly, a truck, drifting particles or the handheld lens.",
+    "Open the letterbox (lens.letterbox: false on the beat) only for the payoff."
+  ]
+}

@@ -4,6 +4,43 @@
 
 Travel instead of cutting, type with a voice, and fewer false alarms.
 
+- **A lens for the whole film.** `lens` (film-wide, overridable per beat) adds:
+  - `letterbox`: animated black bars (2.39, 2, 1.85). Headings, sources and captions move inside the picture.
+  - `grade`: tone curves per channel (`teal-orange`, `warm`, `cool`, `bleach`, `mono`, `noir`, `sepia`).
+  - `bloom`: light on the highlights.
+  - `aberration`: red and blue slipping apart.
+  - `leak`: drifting warm light leaks.
+  - `handheld`: a seeded operator sway.
+  - `blur`: motion blur on world camera moves.
+
+  Everything is one GPU filter over the composed frame and stays a pure function of the frame.
+- **Depth.** Canvas elements take `z`, a distance drawn in true perspective around the camera, which gives real parallax. `dolly` flies the camera through z, so layers grow past the lens and are gone once passed. `focus` adds depth of field with rack-focus keys on spoken words. `blur` (static or keyed) sets focus by hand, and `shine` sweeps light across a title. See `docs/canvas.md`.
+- **Film genres in the library.**
+  - Treatments: `cinematic`, `trailer`, `documentary`, `keynote` and `cutpaper`, with the `cinema`, `stage` and `bass` palettes.
+  - Playbooks:
+    - `trailer`;
+    - `cold-open`;
+    - `product-reveal`;
+    - `cinematic-explainer`;
+    - `title-sequence`, where shapes become each other across cuts;
+    - `zoom-journey`, one camera from a planet to a single window across four scales.
+  - Set pieces built on depth: `void`, `tunnel`, `skyline`, `horizon`, `title`, `terrain`, `landscape`, `ocean` and `pause`.
+  - A `globe` solid, with `marks` at [lat, lon] and great-circle `arcs` that lift off the surface and draw on in turn, plus a `globe` set piece.
+  - A `flash` cut.
+
+  A treatment can name the playbook it suits, so `new`/`ingest --treatment cinematic` starts from shots rather than a deck. Playbook beats can name a sketch (`"sketch": "tunnel"`, with `sketchText` for its placeholder type) and set the film's `lens`, `heading`, `textMotion` and `transition`.
+- **`critique` scores cinema.** It adds a 0–100 score from the eight tells of a slideshow; each tell names the fix. It also warns when frame-pixel type sits under letterbox bars. A run of world beats counts as one shot, and silent beats and moving-camera canvases count as distinct shots.
+- **Held block scenes push in visibly** (about 2% over a beat instead of about 1%).
+- **`docs/cinema.md` and `docs/scorecard.md`.** A film-grammar guide covers:
+  - shot scales;
+  - three planes;
+  - motivated camera moves;
+  - continuity across cuts;
+  - light and lens;
+  - rhythm and genres.
+
+  The scorecard is an honest running assessment of where ClearFrame stands (2.8 / 5 at baseline) and what each loop moves.
+
 - **The library is files.** Palettes, treatments, sketches and playbooks moved out of code into `library/`, one file per item (JSON, and `.mjs` for built-in sketches that lay out per frame size). The engine validates every item on load, including palette contrast. A project's own `library/` and shared libraries (`--library DIR` or `CLEARFRAME_LIBRARY`) add or override items by id; they are JSON only. `new` copies any shared palette or treatment it uses into the project so the project renders without the shared library. Palettes now have one source: the renderer's copy is gone (it keeps a paper fallback), and its tests read `library/palettes/`. Tests and docs no longer pin item counts. See `library/README.md`.
 - **Sizzle toolkit.** A `solid` canvas element draws 3D wireframe polyhedra (tetra, cube, octa, icosa, dodeca) turning in space, with perspective, depth-dimmed back edges and draw-on. Particles gain `stars` and `warp`. Also a `neon` palette, a `tech` treatment and a `sizzle` playbook (a brand reel: claim, numbered chapters, a contrast, a colour-block question, a wordmark). Chapter numbers like "01 · Software" no longer read as unsourced figures.
 - **The picture keeps pace with the voice.** A scene no longer sits empty while the narration talks. A drawing whose elements are all cued to late words has its first element pulled forward to the first word, and number blocks enter with the voice while their count (`count_seconds`) still lands on its word. `check` reports every case, and `pace: "hold"` keeps a deliberate wait.

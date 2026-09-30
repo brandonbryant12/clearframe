@@ -1,0 +1,14 @@
+{
+  "order": 17,
+  "notes": "A near-black keynote stage, white type and one electric blue: the object is lit, everything else falls away.",
+  "colors": {
+    "bg": "#050507",
+    "surface": "#15151b",
+    "ink": "#f5f5f7",
+    "muted": "#8e8e98",
+    "accent": "#3b9eff",
+    "accent2": "#c77dff",
+    "positive": "#30d158",
+    "negative": "#ff5c52"
+  }
+}

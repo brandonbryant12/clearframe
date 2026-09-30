@@ -1,0 +1,91 @@
+{
+  "order": 30,
+  "title": "A documentary cold open: a detail, the place, a voice, the scale, then the title",
+  "audience": "Viewers of a true story, a case study or reportage",
+  "inputs": "One vivid detail with a time and place, a first-hand quote, one sourced figure, a title",
+  "theme": "ember",
+  "transition": "fade",
+  "heading": "bottom",
+  "texture": { "grain": 0.45, "vignette": 0.45, "animate": true },
+  "lens": { "grade": "warm", "gradeAmount": 0.5, "bloom": 0.25, "leak": 0.25, "handheld": 0.35, "blur": 0.5 },
+  "note": "Start in the middle of the story, not with its title. The quote and the figure are illustrative placeholders: replace them with real ones and their sources before publishing.",
+  "beats": [
+    {
+      "id": "detail",
+      "block": "kinetic",
+      "vo": "At four fifty-two in the morning, the first call came in.",
+      "props": { "mode": "reveal", "align": "center" }
+    },
+    {
+      "id": "place",
+      "block": "canvas",
+      "vo": "The city was still asleep.",
+      "art": {
+        "over": [
+          {
+            "type": "text",
+            "text": "HARBOR CITY · 4:52 A.M.",
+            "x": 120,
+            "y": 930,
+            "size": 30,
+            "font": "mono",
+            "tracking": 0.2,
+            "fill": "ink",
+            "enter": "type",
+            "at": 0.6
+          }
+        ]
+      },
+      "props": { "sketch": "skyline" }
+    },
+    {
+      "id": "voice",
+      "block": "quote",
+      "vo": "One operator remembers it clearly.",
+      "props": {
+        "text": "We had no idea how big it was going to get.",
+        "author": "Night-shift operator",
+        "role": "Illustrative quotation for this template",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "scale",
+      "block": "stat",
+      "vo": "By sunrise, the line had taken three hundred and twelve calls.",
+      "props": {
+        "value": 312,
+        "label": "calls before sunrise",
+        "align": "center",
+        "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "title",
+      "block": "canvas",
+      "hold": 1.0,
+      "vo": "This is the story of the night shift.",
+      "props": {
+        "sketch": "title",
+        "sketchText": { "TITLE": "THE NIGHT SHIFT", "A LINE OF CONTEXT": "FOUR HOURS BEFORE MORNING" }
+      }
+    },
+    {
+      "id": "turn",
+      "block": "statement",
+      "vo": "And of what they learned before morning.",
+      "props": {
+        "text": "What they learned before morning.",
+        "emphasis": ["before morning"],
+        "emphasisStyle": "serif",
+        "align": "center"
+      }
+    },
+    {
+      "id": "end",
+      "block": "endcard",
+      "vo": "Watch the full story.",
+      "props": { "title": "Watch the full story.", "support": "A documentary in four hours.", "align": "center" }
+    }
+  ]
+}

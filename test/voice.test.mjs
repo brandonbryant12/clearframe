@@ -36,7 +36,14 @@ test('mosaic specs accept the andamento, build and recolour options and reject n
     throw new Error(m);
   };
   const ok = mosaicSpec(
-    { tile: 12, flow: 'contour', build: 'fly', from: [0, 0], glint: 0.3, recolor: [{ say: 'dark', fill: 'accent', share: 0.12 }] },
+    {
+      tile: 12,
+      flow: 'contour',
+      build: 'fly',
+      from: [0, 0],
+      glint: 0.3,
+      recolor: [{ say: 'dark', fill: 'accent', share: 0.12 }],
+    },
     'm',
     fail,
   );

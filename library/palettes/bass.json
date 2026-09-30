@@ -1,0 +1,14 @@
+{
+  "order": 18,
+  "notes": "Cut paper: cream stock, black, a hot red and a deep navy. Flat, bold, graphic: title sequences and posters.",
+  "colors": {
+    "bg": "#efe6d2",
+    "surface": "#e2d6bd",
+    "ink": "#141414",
+    "muted": "#5c5346",
+    "accent": "#c2241b",
+    "accent2": "#1f3f73",
+    "positive": "#2f6b3a",
+    "negative": "#c2241b"
+  }
+}
