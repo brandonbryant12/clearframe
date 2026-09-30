@@ -30,6 +30,7 @@
     "blur": 0.5
   },
   "heading": "bottom",
+  "sfx": "subtle",
   "sources": [
     {
       "id": "sample",

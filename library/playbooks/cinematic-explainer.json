@@ -6,6 +6,7 @@
   "theme": "cinema",
   "motion": "gentle",
   "transition": "cut",
+  "sfx": "subtle",
   "heading": "bottom",
   "textMotion": "words",
   "texture": {

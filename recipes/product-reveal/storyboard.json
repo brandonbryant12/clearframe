@@ -26,6 +26,7 @@
     "bloom": 0.45,
     "blur": 0.5
   },
+  "sfx": "subtle",
   "sources": [
     {
       "id": "sample",

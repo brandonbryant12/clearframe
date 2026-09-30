@@ -314,6 +314,7 @@ const book = {
   theme: 'cinema',
   motion: 'gentle',
   transition: 'cut',
+  sfx: 'subtle',
   texture: { grain: 0.3, vignette: 0.5, animate: true },
   lens: { grade: 'teal-orange', gradeAmount: 0.5, bloom: 0.45, blur: 0.5 },
   note: 'One world at four scales, each ten times smaller than the last; the camera zooms at a constant pace in log space. Strokes and type are sized for the zoom they are seen at (a city line is under a unit wide). The planet is stylised: do not add real coastlines without verified geography.',

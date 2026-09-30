@@ -58,6 +58,31 @@ export const SFX = {
     filters: 'lowpass=f=500',
     about: 'soft low hit — a hero number landing',
   },
+  // Cinema: the trailer grammar of a swell, a cut to silence, a hit.
+  hit: {
+    dur: 2.4,
+    expr: `0.55*sin(2*PI*(52*t-6*t*t))*exp(-1.8*t)+0.3*sin(2*PI*104*t)*exp(-2.6*t)+0.18*sin(2*PI*78*t)*exp(-2.2*t)+0.4*${noise}*exp(-22*t)`,
+    filters: 'lowpass=f=2200,afade=t=in:d=0.003',
+    about: 'deep impact — a flash cut, a title landing after a silence',
+  },
+  riser: {
+    dur: 2.5,
+    expr: `(0.2*sin(2*PI*(180*t+140*t*t))+0.12*sin(2*PI*(270*t+210*t*t)))*pow(t/2.5,2.2)+0.22*${noise}*pow(t/2.5,3)`,
+    filters: 'highpass=f=120,lowpass=f=5000',
+    about: 'swell that ends where the silence begins',
+  },
+  drone: {
+    dur: 3,
+    expr: '0.16*sin(2*PI*55*t)+0.09*sin(2*PI*82.4*t)+0.05*sin(2*PI*110.3*t)*(0.6+0.4*sin(2*PI*0.7*t))',
+    filters: 'lowpass=f=420,afade=t=in:d=0.5,afade=t=out:st=2.3:d=0.7',
+    about: 'low room tone under a silent beat',
+  },
+  shimmer: {
+    dur: 1.3,
+    expr: '(0.08*sin(2*PI*2637*t)+0.06*sin(2*PI*3951*t)+0.05*sin(2*PI*5274*t))*sin(PI*t/1.3)',
+    filters: 'highpass=f=1500,afade=t=in:d=0.2',
+    about: 'soft glint as light sweeps a title',
+  },
   rise: {
     dur: 0.9,
     expr: '(0.2*sin(2*PI*330*t)+0.14*sin(2*PI*495*t)+0.09*sin(2*PI*660*t))*pow(t/0.9,2)',

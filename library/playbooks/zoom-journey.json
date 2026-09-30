@@ -6,6 +6,7 @@
   "theme": "cinema",
   "motion": "gentle",
   "transition": "cut",
+  "sfx": "subtle",
   "texture": {
     "grain": 0.3,
     "vignette": 0.5,

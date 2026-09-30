@@ -92,6 +92,7 @@ const VALIDATE = {
         'heading',
         'textMotion',
         'transition',
+        'sfx',
       ],
       where,
     );

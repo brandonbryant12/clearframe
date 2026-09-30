@@ -40,6 +40,13 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 
   They score 100 on the cinema score, up from 25–63. A beat's `art` can name a sketch (`{"sketch": "ambient"}`).
 - **Fixed:** `view: "auto"` on a canvas was mistaken for a camera rect (the string has four characters) and failed to render.
+- **Sound for cinema.** New synthesized cues are placed by the picture:
+  - a `hit` on every `flash` cut;
+  - a `riser` that ends exactly where a silent beat begins;
+  - `drone` room tone under the silence;
+  - a `shimmer` as `shine` sweeps a title.
+
+  Whooshes now play only for fast camera moves, not slow creeps. Playbooks can set `sfx`, and the genre playbooks do.
 - **Held block scenes push in visibly** (about 2% over a beat instead of about 1%).
 - **`docs/cinema.md` and `docs/scorecard.md`.** A film-grammar guide covers:
   - shot scales;

@@ -6,6 +6,7 @@
   "theme": "noir",
   "motion": "snappy",
   "transition": "cut",
+  "sfx": "normal",
   "textMotion": "letters",
   "texture": {
     "grain": 0.4,

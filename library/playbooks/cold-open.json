@@ -5,16 +5,31 @@
   "inputs": "One vivid detail with a time and place, a first-hand quote, one sourced figure, a title",
   "theme": "ember",
   "transition": "fade",
+  "sfx": "subtle",
   "heading": "bottom",
-  "texture": { "grain": 0.45, "vignette": 0.45, "animate": true },
-  "lens": { "grade": "warm", "gradeAmount": 0.5, "bloom": 0.25, "leak": 0.25, "handheld": 0.35, "blur": 0.5 },
+  "texture": {
+    "grain": 0.45,
+    "vignette": 0.45,
+    "animate": true
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.5,
+    "bloom": 0.25,
+    "leak": 0.25,
+    "handheld": 0.35,
+    "blur": 0.5
+  },
   "note": "Start in the middle of the story, not with its title. The quote and the figure are illustrative placeholders: replace them with real ones and their sources before publishing.",
   "beats": [
     {
       "id": "detail",
       "block": "kinetic",
       "vo": "At four fifty-two in the morning, the first call came in.",
-      "props": { "mode": "reveal", "align": "center" }
+      "props": {
+        "mode": "reveal",
+        "align": "center"
+      }
     },
     {
       "id": "place",
@@ -36,7 +51,9 @@
           }
         ]
       },
-      "props": { "sketch": "skyline" }
+      "props": {
+        "sketch": "skyline"
+      }
     },
     {
       "id": "voice",
@@ -67,7 +84,10 @@
       "vo": "This is the story of the night shift.",
       "props": {
         "sketch": "title",
-        "sketchText": { "TITLE": "THE NIGHT SHIFT", "A LINE OF CONTEXT": "FOUR HOURS BEFORE MORNING" }
+        "sketchText": {
+          "TITLE": "THE NIGHT SHIFT",
+          "A LINE OF CONTEXT": "FOUR HOURS BEFORE MORNING"
+        }
       }
     },
     {
@@ -85,7 +105,11 @@
       "id": "end",
       "block": "endcard",
       "vo": "Watch the full story.",
-      "props": { "title": "Watch the full story.", "support": "A documentary in four hours.", "align": "center" }
+      "props": {
+        "title": "Watch the full story.",
+        "support": "A documentary in four hours.",
+        "align": "center"
+      }
     }
   ]
 }

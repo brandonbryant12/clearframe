@@ -21,6 +21,7 @@
     "vignette": 0.2
   },
   "textMotion": "letters",
+  "sfx": "normal",
   "sources": [
     {
       "id": "sample",

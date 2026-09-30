@@ -30,6 +30,7 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
     ...(book.lens ? { lens: book.lens } : {}),
     ...(book.heading ? { heading: book.heading } : {}),
     ...(book.textMotion ? { textMotion: book.textMotion } : {}),
+    ...(book.sfx ? { sfx: book.sfx } : {}),
     ...(book.frame ? { frame: book.frame } : {}),
     ...(book.speakers ? { speakers: book.speakers } : {}),
     ...(book.voice ? { voice: book.voice } : {}),

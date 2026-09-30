@@ -87,7 +87,7 @@ Within scenes, light is drawn: `glow` on light sources, `shine` sweeps across ti
 ### Rhythm
 
 - **Contrast fast and slow.** Three quick cuts, then a long hold. A montage then needs a breath.
-- **Silence before impact.** A beat with no voice, one element and a low hum, then the hit (a title, a number).
+- **Silence before impact.** A beat with no voice, one element and a low hum, then the hit (a title, a number). With `sfx` on, ClearFrame scores this for you: a riser ends where the silent beat begins, room tone fills it, and a `flash` cut lands with a hit.
 - **Button.** End on one short line after the title, like a trailer's final card.
 - **Hold with life.** Every held frame keeps something moving: drift, particles, a pulse, a loop or the lens handheld.
 
