@@ -409,10 +409,10 @@ export const VALIDATORS = {
   canvas: (p, h) => {
     if (p.support != null) h.fail('canvas draws only its elements; add a text element instead of support');
     if (
-      p.view != null &&
+      p.view != null && p.view !== 'auto' &&
       (!Array.isArray(p.view) || p.view.length !== 2 || p.view.some(v => !Number.isFinite(v) || v < 16))
     )
-      h.fail('view must be [width, height] in author units (each ≥ 16)');
+      h.fail('view must be "auto" or [width, height] in author units (each ≥ 16)');
     if (p.stagger != null && (!Number.isFinite(p.stagger) || p.stagger < 0 || p.stagger > 3))
       h.fail('stagger must be 0–3 seconds');
     if (!Array.isArray(p.elements) || !p.elements.length) h.fail('elements needs at least one element');

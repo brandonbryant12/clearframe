@@ -6,7 +6,7 @@ Start from a sketch, not a blank page: `clearframe sketch` lists starting compos
 
 ## Coordinates
 
-Without `view`, coordinates are frame pixels of the normalized canvas: 1920×1080 landscape, 1080×1920 vertical, 1080×1080 square, 1080×1350 portrait. A title and kicker occupy roughly y < 300 (landscape), and the source line sits near the bottom. With `view: [w, h]`, your coordinates are fitted, centred, into the content area below the header, which is useful for art you want to reuse at any size.
+Without `view`, coordinates are frame pixels of the normalized canvas: 1920×1080 landscape, 1080×1920 vertical, 1080×1080 square, 1080×1350 portrait. A title and kicker occupy roughly y < 300 (landscape), and the source line sits near the bottom. With `view: [w, h]`, your coordinates are fitted, centred, into the content area below the header, which is useful for art you want to reuse at any size. With `view: "auto"`, the drawing's own bounds (elements at rest) are fitted into the content area and enlarged up to 2×. Draw at any scale and it fills the space; this is the easiest choice for diagrams under a title.
 
 `art` layers always use frame pixels. To place art on a block (a bar, a number, a word), render `clearframe still DIR --beat ID --grid` and read the coordinates off the labelled 100 px grid.
 

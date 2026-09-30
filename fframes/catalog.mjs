@@ -638,7 +638,7 @@ export const BLOCKS = [
     'graphics',
     'Draw anything: shapes, paths, text, icons and images that draw on, pop, travel along paths, loop and leave on spoken cues.',
     {
-      view: '[width, height] author units fitted below the header; omit to use frame pixels (1920×1080 landscape)',
+      view: '"auto" (fit the drawing into the content area, up to 2×), [width, height] author units fitted below the header, or omit for frame pixels (1920×1080 landscape)',
       elements:
         '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt}] (≤ 240) — see docs/canvas.md',
       stagger: 'Seconds between top-level elements without a cue (0–3)',
