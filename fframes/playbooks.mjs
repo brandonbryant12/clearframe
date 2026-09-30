@@ -25,7 +25,7 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
     backdrop: book.backdrop ?? 'none',
     chrome: false,
     captions: book.captions ?? false,
-    music: false,
+    music: book.music ?? false,
     ...(book.texture ? { texture: book.texture } : {}),
     ...(book.lens ? { lens: book.lens } : {}),
     ...(book.heading ? { heading: book.heading } : {}),

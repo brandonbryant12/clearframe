@@ -21,7 +21,7 @@ export function soundDesign(job, sfx) {
     // ends where the silence begins (crescendo, then nothing, then the hit).
     if (b.transition === 'flash' && start > 0) add('hit', start, 0.55, 5);
     if (!b.words.length && b.frames / job.fps >= 1 && start > 0) {
-      add('drone', start, 0.2, 1);
+      add('drone', start, 0.06, 1);
       if (start >= 3) add('riser', start - 2.5, 0.3, 2);
     }
     // Only a fast flight whooshes; a slow creep is felt, not heard.

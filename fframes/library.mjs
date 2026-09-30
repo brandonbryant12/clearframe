@@ -93,6 +93,7 @@ const VALIDATE = {
         'textMotion',
         'transition',
         'sfx',
+        'music',
       ],
       where,
     );

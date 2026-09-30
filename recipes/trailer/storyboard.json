@@ -15,7 +15,11 @@
   "backdrop": "none",
   "chrome": false,
   "captions": false,
-  "music": false,
+  "music": {
+    "style": "pulse",
+    "bpm": 92,
+    "volume": 0.32
+  },
   "texture": {
     "grain": 0.4,
     "vignette": 0.6,

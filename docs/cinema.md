@@ -89,6 +89,7 @@ Within scenes, light is drawn: `glow` on light sources, `shine` sweeps across ti
 - **Contrast fast and slow.** Three quick cuts, then a long hold. A montage then needs a breath.
 - **Silence before impact.** A beat with no voice, one element and a low hum, then the hit (a title, a number). With `sfx` on, ClearFrame scores this for you: a riser ends where the silent beat begins, room tone fills it, and a `flash` cut lands with a hit.
 - **Button.** End on one short line after the title, like a trailer's final card.
+- **Music follows the edit.** `music: {style: "pulse", bpm: 92}` gives a free draft bed that builds toward the first silent beat, cuts dead through it, and carries the title on a low chord. Replace it with a composed bed (Lyria) for finals, and keep the same shape.
 - **Hold with life.** Every held frame keeps something moving: drift, particles, a pulse, a loop or the lens handheld.
 
 ## Genres

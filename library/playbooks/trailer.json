@@ -7,6 +7,11 @@
   "motion": "snappy",
   "transition": "cut",
   "sfx": "normal",
+  "music": {
+    "style": "pulse",
+    "bpm": 92,
+    "volume": 0.32
+  },
   "textMotion": "letters",
   "texture": {
     "grain": 0.4,

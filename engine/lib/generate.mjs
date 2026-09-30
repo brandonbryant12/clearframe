@@ -245,7 +245,9 @@ export async function scoreMusic(root, { draft = false, force = false, budget } 
     }
     const out = path.join(P.music, `bed-draft-${process.pid}.wav`);
     try {
-      await draftMusic(out, { seconds, bpm: sb.music.bpm ?? 72 });
+      // Silent beats: a pulse bed cuts dead through them, so the silence is real.
+      const silences = timing.beats.filter(b => !b.vo).map(b => [b.start, b.end]);
+      await draftMusic(out, { seconds, bpm: sb.music.bpm ?? 72, style: sb.music.style ?? 'pad', silences });
       writeMusicBed(root, fs.readFileSync(out), 'wav', {
         provider: 'local',
         seconds,

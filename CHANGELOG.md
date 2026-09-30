@@ -50,6 +50,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   The cinema score across all 35 playbooks is now 63–100, where 17 were at 25 or below.
 - **Motion blur on moving elements.** With `lens.blur` set, an element moving fast on its keys smears along its path by how far it travelled while the shutter was open, as a camera sees it. Static elements stay sharp.
 - **Push to a detail.** `camera: {to: [x, y, w, h], say}` on any beat pushes the picture into a frame-pixel rect on a spoken word, a close-up on the bar or the part that matters. The heading fades as the camera moves in, and the source line stays. The research digest's evidence chart now ends as a close-up on its outlier.
+- **A trailer bed that follows the edit.** `music: {style: "pulse", bpm}` (free, local) builds a sub drone and a beat pulse toward the first silence, cuts dead through every silent beat, and carries the title on a low chord. The trailer playbook uses it. In its draft, the montage sits at −18 dB, the silence drops to −30 dB, and the title hit lands at −11.5 dB. Room tone under silences is quieter.
 - **Sound for cinema.** New synthesized cues are placed by the picture:
   - a `hit` on every `flash` cut;
   - a `riser` that ends exactly where a silent beat begins;
