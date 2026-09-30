@@ -624,7 +624,6 @@ export const PLAYBOOKS = [
         id: 'hook',
         tone: 'accent',
         transition: 'cut',
-        style: 'intrigued, leaning in',
       },
       {
         ...beat('statement', 'So why do we still assume the opposite?', {
@@ -636,7 +635,6 @@ export const PLAYBOOKS = [
         }),
         id: 'question',
         transition: 'panel',
-        style: 'curious, a little provocative',
       },
       {
         ...beat('canvas', 'Here is the mechanism, step by step: collect, clean, model, then ship.', {
@@ -645,7 +643,6 @@ export const PLAYBOOKS = [
         }),
         id: 'mechanism',
         transition: 'push',
-        style: 'brisk, clear',
       },
       {
         ...beat('bars', 'The evidence points one way, with a clear outlier.', {
@@ -687,7 +684,6 @@ export const PLAYBOOKS = [
         }),
         id: 'turn',
         transition: 'iris',
-        style: 'slower, lower',
       },
       {
         ...beat('callout', 'So act on the distribution, not the average.', {
@@ -698,7 +694,6 @@ export const PLAYBOOKS = [
         }),
         id: 'meaning',
         transition: 'fade',
-        style: 'warm, emphatic',
       },
       {
         ...beat('endcard', 'The methods and the limits are in the full report.', {

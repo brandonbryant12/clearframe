@@ -25,9 +25,6 @@
     "left": "Sources on screen",
     "right": "Illustrative sample"
   },
-  "voice": {
-    "takes": "chapter"
-  },
   "sources": [
     {
       "id": "sample",
@@ -56,8 +53,7 @@
         "land": "Thirty-seven"
       },
       "tone": "accent",
-      "transition": "cut",
-      "style": "intrigued, leaning in"
+      "transition": "cut"
     },
     {
       "id": "question",
@@ -72,8 +68,7 @@
         "emphasisStyle": "serif",
         "align": "center"
       },
-      "transition": "panel",
-      "style": "curious, a little provocative"
+      "transition": "panel"
     },
     {
       "id": "mechanism",
@@ -256,8 +251,7 @@
         ],
         "source": "Illustrative sample data · replace before publishing"
       },
-      "transition": "push",
-      "style": "brisk, clear"
+      "transition": "push"
     },
     {
       "id": "evidence",
@@ -328,8 +322,7 @@
         ],
         "emphasisStyle": "serif"
       },
-      "transition": "iris",
-      "style": "slower, lower"
+      "transition": "iris"
     },
     {
       "id": "meaning",
@@ -345,8 +338,7 @@
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"
       },
-      "transition": "fade",
-      "style": "warm, emphatic"
+      "transition": "fade"
     },
     {
       "id": "end",
