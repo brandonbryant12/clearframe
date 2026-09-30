@@ -16,6 +16,19 @@
   "chrome": false,
   "captions": false,
   "music": false,
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0,
+    "blur": 0.5
+  },
+  "heading": "bottom",
+  "textMotion": "words",
   "sources": [
     {
       "id": "sample",
@@ -39,6 +52,142 @@
         "text": "A little room to pause",
         "support": "Follow the visual only if the pace feels comfortable.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "under": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "dust",
+            "count": 36,
+            "fill": "ink",
+            "opacity": 0.35,
+            "size": 3,
+            "at": 0
+          },
+          {
+            "type": "circle",
+            "cx": 288,
+            "cy": 216,
+            "r": 422.4,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 9,
+              "amount": 18
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 1574.4,
+            "cy": 324,
+            "r": 576,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "float",
+              "period": 11.5,
+              "amount": 22
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 1344,
+            "cy": 918,
+            "r": 384,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 14,
+              "amount": 26
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 576,
+            "cy": 864,
+            "r": 307.2,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "float",
+              "period": 16.5,
+              "amount": 30
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 960,
+            "cy": 486,
+            "r": 230.4,
+            "fill": {
+              "gradient": [
+                "ink",
+                "ink"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 19,
+              "amount": 34
+            }
+          }
+        ]
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {

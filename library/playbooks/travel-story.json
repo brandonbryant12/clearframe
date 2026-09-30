@@ -13,6 +13,13 @@
         "text": "An afternoon worth remembering",
         "support": "A fictional itinerary to replace with your own trip.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -65,6 +72,13 @@
       }
     },
     {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
+      }
+    },
+    {
       "id": "quote",
       "block": "quote",
       "vo": "Replace this with a real memory in your own words.",
@@ -73,7 +87,8 @@
         "author": "Fictional sample recollection",
         "role": "Replace with your own memory",
         "source": "Illustrative sample data · replace before publishing"
-      }
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",
@@ -88,5 +103,18 @@
     }
   ],
   "theme": "editorial",
-  "note": "Insert your own image/video plates between native scenes. Generated establishing shots must be labelled illustrative; do not present them as footage of your trip."
+  "note": "Insert your own image/video plates between native scenes. Generated establishing shots must be labelled illustrative; do not present them as footage of your trip.",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  }
 }

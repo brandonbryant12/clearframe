@@ -12,6 +12,13 @@
         "text": "Make room for a rough first version.",
         "support": "Show the work as it changes.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -72,5 +79,18 @@
       }
     }
   ],
-  "theme": "ink"
+  "theme": "ink",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  }
 }

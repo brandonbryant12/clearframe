@@ -13,6 +13,13 @@
         "text": "Read the dashboard in order",
         "support": "Three stops, one decision.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -45,7 +52,8 @@
         "caption": "Illustrative wireframe · replace with an approved screenshot",
         "source": "Illustrative sample data · replace before publishing",
         "label": "Illustrative wireframe"
-      }
+      },
+      "transition": "panel"
     },
     {
       "id": "checklist",
@@ -68,6 +76,13 @@
       }
     },
     {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
+      }
+    },
+    {
       "id": "endcard",
       "block": "endcard",
       "vo": "Use the same order every week.",
@@ -80,5 +95,18 @@
     }
   ],
   "theme": "signal",
-  "note": "assets/screen.png is a generated, text-free wireframe. Replace it with an approved screenshot and move the pins (x/y from 0 to 1 across the image) onto the real elements."
+  "note": "assets/screen.png is a generated, text-free wireframe. Replace it with an approved screenshot and move the pins (x/y from 0 to 1 across the image) onto the real elements.",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  }
 }

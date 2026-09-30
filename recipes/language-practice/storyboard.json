@@ -16,6 +16,19 @@
   "chrome": false,
   "captions": false,
   "music": false,
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0,
+    "blur": 0.5
+  },
+  "heading": "bottom",
+  "textMotion": "words",
   "sources": [
     {
       "id": "sample",
@@ -39,6 +52,142 @@
         "text": "Hear it. See it. Try it.",
         "support": "Use a reviewed recording in your chosen language.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "under": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1080,
+            "h": 1920,
+            "kind": "dust",
+            "count": 36,
+            "fill": "ink",
+            "opacity": 0.35,
+            "size": 3,
+            "at": 0
+          },
+          {
+            "type": "circle",
+            "cx": 162,
+            "cy": 384,
+            "r": 422.4,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 9,
+              "amount": 18
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 885.6,
+            "cy": 576,
+            "r": 576,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "float",
+              "period": 11.5,
+              "amount": 22
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 756,
+            "cy": 1632,
+            "r": 384,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 14,
+              "amount": 26
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 324,
+            "cy": 1536,
+            "r": 307.2,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "float",
+              "period": 16.5,
+              "amount": 30
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 540,
+            "cy": 864,
+            "r": 230.4,
+            "fill": {
+              "gradient": [
+                "ink",
+                "ink"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 19,
+              "amount": 34
+            }
+          }
+        ]
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -65,6 +214,54 @@
       }
     },
     {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "elements": [
+          {
+            "type": "ellipse",
+            "cx": 540,
+            "cy": 960,
+            "rx": 324,
+            "ry": 230.4,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.08,
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 1.6,
+            "loop": {
+              "type": "pulse",
+              "period": 2.4,
+              "amount": 0.06
+            }
+          },
+          {
+            "type": "line",
+            "x1": 475.2,
+            "y1": 960,
+            "x2": 604.8,
+            "y2": 960,
+            "stroke": "ink",
+            "width": 2,
+            "cap": "round",
+            "glow": {
+              "blur": 8
+            },
+            "at": 0.4,
+            "enter": "draw",
+            "dur": 1.2
+          }
+        ]
+      }
+    },
+    {
       "id": "kinetic-2",
       "block": "kinetic",
       "vo": "Where is the train station?",
@@ -73,7 +270,8 @@
         "align": "center",
         "maxWords": 6,
         "source": ""
-      }
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",

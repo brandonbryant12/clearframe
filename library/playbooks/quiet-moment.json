@@ -13,6 +13,13 @@
         "text": "A little room to pause",
         "support": "Follow the visual only if the pace feels comfortable.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -53,5 +60,18 @@
   ],
   "theme": "ink",
   "motion": "gentle",
-  "note": "Phase durations are editable. This is a visual pacing exercise, not a therapeutic protocol or a promised health outcome."
+  "note": "Phase durations are editable. This is a visual pacing exercise, not a therapeutic protocol or a promised health outcome.",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0,
+    "blur": 0.5
+  }
 }

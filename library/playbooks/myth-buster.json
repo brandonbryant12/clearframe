@@ -12,6 +12,13 @@
         "text": "Does a good average mean everyone is served?",
         "support": "Measure the wait, not just the workload.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -41,6 +48,17 @@
           "note": "Start here"
         },
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      }
+    },
+    {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
       }
     },
     {
@@ -53,7 +71,8 @@
         "text": "Averages need context.",
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"
-      }
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",
@@ -67,5 +86,18 @@
       }
     }
   ],
-  "theme": "editorial"
+  "theme": "editorial",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  }
 }

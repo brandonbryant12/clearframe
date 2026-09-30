@@ -16,6 +16,19 @@
   "chrome": false,
   "captions": false,
   "music": false,
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  },
+  "heading": "bottom",
+  "textMotion": "words",
   "sources": [
     {
       "id": "sample",
@@ -91,6 +104,10 @@
         "suffix": " days",
         "better": "down",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {

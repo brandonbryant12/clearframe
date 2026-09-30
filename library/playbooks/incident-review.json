@@ -13,6 +13,13 @@
         "text": "From detection to recovery",
         "support": "One idea, supported by evidence.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -62,7 +69,8 @@
           }
         ],
         "source": "Illustrative sample data · replace before publishing"
-      }
+      },
+      "transition": "panel"
     },
     {
       "id": "list",
@@ -72,6 +80,13 @@
         "title": "Three things to remember",
         "items": ["Name the owner", "Make the next step clear", "Close the loop"],
         "source": "Illustrative sample data · replace before publishing"
+      }
+    },
+    {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
       }
     },
     {
@@ -86,5 +101,18 @@
       }
     }
   ],
-  "theme": "ink"
+  "theme": "ink",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  }
 }

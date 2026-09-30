@@ -13,6 +13,13 @@
         "text": "Choose the next approach",
         "support": "One idea, supported by evidence.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -58,6 +65,13 @@
       }
     },
     {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
+      }
+    },
+    {
       "id": "callout",
       "block": "callout",
       "vo": "Prefer the option that is easier to test and reverse.",
@@ -67,7 +81,8 @@
         "text": "Run a small, reversible trial.",
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"
-      }
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",
@@ -80,5 +95,18 @@
         "source": "Illustrative sample data · replace before publishing"
       }
     }
-  ]
+  ],
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  }
 }

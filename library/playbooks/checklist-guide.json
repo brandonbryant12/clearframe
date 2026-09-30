@@ -13,6 +13,13 @@
         "text": "Ready for a long walk",
         "support": "An illustrative packing list; adapt it to your route.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -65,6 +72,13 @@
       }
     },
     {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
+      }
+    },
+    {
       "id": "callout",
       "block": "callout",
       "vo": "Tell someone where you are going and when you expect to return.",
@@ -75,7 +89,8 @@
         "emphasis": ["Share your plan"],
         "support": "Look at the distribution before choosing a target.",
         "source": "Illustrative sample data · replace before publishing"
-      }
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",
@@ -90,5 +105,18 @@
     }
   ],
   "theme": "forest",
-  "backdrop": "glow"
+  "backdrop": "glow",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  }
 }

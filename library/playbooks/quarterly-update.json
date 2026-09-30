@@ -13,6 +13,13 @@
         "text": "The quarter in context",
         "support": "One idea, supported by evidence.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -38,6 +45,10 @@
           }
         ],
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -52,7 +63,12 @@
         "max": 30,
         "format": " k",
         "source": "Illustrative sample data · replace before publishing"
-      }
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      },
+      "transition": "panel"
     },
     {
       "id": "delta",
@@ -71,6 +87,17 @@
         "suffix": " days",
         "better": "down",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      }
+    },
+    {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
       }
     },
     {
@@ -84,5 +111,18 @@
         "source": "Illustrative sample data · replace before publishing"
       }
     }
-  ]
+  ],
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  }
 }

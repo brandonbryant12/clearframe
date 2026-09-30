@@ -13,6 +13,13 @@
         "text": "Start with a small question",
         "support": "An observation lesson, built around your own evidence.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -69,6 +76,13 @@
       }
     },
     {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
+      }
+    },
+    {
       "id": "callout",
       "block": "callout",
       "vo": "A prediction and an observation are different things.",
@@ -78,7 +92,8 @@
         "text": "Separate what you expected from what you saw.",
         "support": "Use the actual observations in your final film.",
         "source": "Illustrative sample data · replace before publishing"
-      }
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",
@@ -92,5 +107,18 @@
       }
     }
   ],
-  "theme": "signal"
+  "theme": "signal",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0.1,
+    "blur": 0.5
+  }
 }

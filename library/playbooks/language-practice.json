@@ -13,6 +13,13 @@
         "text": "Hear it. See it. Try it.",
         "support": "Use a reviewed recording in your chosen language.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -39,6 +46,13 @@
       }
     },
     {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
+      }
+    },
+    {
       "id": "kinetic",
       "block": "kinetic",
       "vo": "Where is the train station?",
@@ -47,7 +61,8 @@
         "align": "center",
         "maxWords": 6,
         "source": ""
-      }
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",
@@ -63,5 +78,18 @@
   ],
   "format": "vertical",
   "theme": "ink",
-  "note": "Use measured timing in the target language. Check font glyph coverage and pronunciation; do not infer those from a successful render."
+  "note": "Use measured timing in the target language. Check font glyph coverage and pronunciation; do not infer those from a successful render.",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0,
+    "blur": 0.5
+  }
 }

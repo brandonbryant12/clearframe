@@ -13,6 +13,13 @@
         "text": "Make a simple herb sauce",
         "support": "Replace this outline with your own tested recipe.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -39,7 +46,8 @@
           }
         ],
         "source": "Illustrative sample data · replace before publishing"
-      }
+      },
+      "transition": "panel"
     },
     {
       "id": "flow",
@@ -68,6 +76,13 @@
       }
     },
     {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
+      }
+    },
+    {
       "id": "endcard",
       "block": "endcard",
       "vo": "Save the version you want to make again.",
@@ -80,5 +95,18 @@
     }
   ],
   "theme": "editorial",
-  "note": "Replace one beat with a real close-up when texture matters. Use authored steps and source footage rather than generated instructions or fabricated results."
+  "note": "Replace one beat with a real close-up when texture matters. Use authored steps and source footage rather than generated instructions or fabricated results.",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0,
+    "blur": 0.5
+  }
 }

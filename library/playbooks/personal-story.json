@@ -13,6 +13,13 @@
         "text": "The moment I kept",
         "support": "A personal story told in your own voice.",
         "source": "Illustrative sample data · replace before publishing"
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
       }
     },
     {
@@ -53,6 +60,13 @@
       }
     },
     {
+      "id": "pause",
+      "block": "canvas",
+      "props": {
+        "sketch": "pause"
+      }
+    },
+    {
       "id": "kinetic",
       "block": "kinetic",
       "vo": "This is the part I want to remember.",
@@ -61,7 +75,8 @@
         "align": "left",
         "maxWords": 5,
         "source": ""
-      }
+      },
+      "transition": "iris"
     },
     {
       "id": "endcard",
@@ -75,5 +90,18 @@
       }
     }
   ],
-  "theme": "editorial"
+  "theme": "editorial",
+  "heading": "bottom",
+  "textMotion": "words",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0,
+    "blur": 0.5
+  }
 }
