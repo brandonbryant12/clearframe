@@ -61,11 +61,17 @@ const GEOMETRY = new Set(
   ),
 );
 
+// Strings that style or cue things rather than show them ("accent2" is a colour, not a figure).
+const STYLE = new Set(
+  'type id fill stroke color font anchor enter exit say exitSay land growSay drawSay blend cap join shape style treatment side drift mode align preset ease kind asset file world sketch emphasisStyle loop along transition tone heading label'.split(
+    ' ',
+  ),
+);
 /** Numbers and text with digits on screen, plus attribution: what a "keep facts" protects. */
 export function factsOf(value, key = '') {
   if (value == null) return [];
   if (typeof value === 'number') return GEOMETRY.has(key) ? [] : [[key, value]];
-  if (typeof value === 'string') return key === 'source' || /\d/.test(value) ? [[key, value]] : [];
+  if (typeof value === 'string') return key === 'source' || (!STYLE.has(key) && /\d/.test(value)) ? [[key, value]] : [];
   if (Array.isArray(value)) return value.flatMap(v => factsOf(v, key));
   if (typeof value === 'object')
     return Object.keys(value)
@@ -188,7 +194,7 @@ export function reviewTimeline(ctx) {
           film: [round(tb.vo.start + s.at, 4), round(tb.vo.start + s.at + (s.to - s.from), 4)],
           source: [round(s.from, 4), round(s.to, 4)],
         })),
-        removed: (meta.source.removed ?? []).map(r => ({ id: r.id, kind: r.kind, words: r.words, from: r.from, to: r.to })),
+        removed: (meta.source.removed ?? []).map(r => ({ id: r.id, kind: r.kind, words: r.words, from: r.from, to: r.to, ...(r.note ? { note: r.note } : {}) })),
       };
     }
     return {

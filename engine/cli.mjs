@@ -63,7 +63,7 @@ Review and edit (docs/editing.md; state in DIR/review/)
   revisions | snapshot <dir> [--label TEXT]   list revisions / save the working copy as one (renders save one too)
   diff <dir> [rA] [rB|working]        what changed: content, appearance via neighbours or film settings, timing only
   note <dir> "text" [--at 2:13 [--to 2:20]] [--rev r003] [--beat ID] [--element ID] [--keep voice,words] [--scope beat|range|chapter|film] [--by NAME | --agent]
-  notes <dir> [--import notes.json] [--working] [--json]   notes and where each one is now (current, moved, changed, stale, orphaned)
+  notes <dir> [--import notes.json] [--rev rNNN] [--json]   notes and where each one is now (current, moved, changed, stale, orphaned, addressed)
   revise <dir> --note n001 [--scope ID,ID --reason TEXT | --scope film] [--override k001]
                                       candidate revision + before/after passages + impact report (review/compare/)
   compare <dir> rA [rB]               before/after page for two revisions (or rA and the working copy)

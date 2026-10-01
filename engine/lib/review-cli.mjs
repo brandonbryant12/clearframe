@@ -228,8 +228,12 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
       return console.log(`Imported ${added.length} note(s): ${added.map(n => `${n.id} (${n.anchor?.beat ?? 'film'})`).join(', ')}`);
     }
     const notes = readNotes(dir);
-    const latest = latestRevision(dir);
-    const target = o.working ? { id: null, timeline: (await workingTimeline(dir)).timeline } : latest ? { id: latest.id, timeline: loadRevision(dir, latest.id).timeline } : null;
+    // Where each note is now (the working copy), or in a named revision.
+    const target = o.rev
+      ? { id: checkId('revision', o.rev), timeline: loadRevision(dir, o.rev).timeline }
+      : notes.length
+        ? { id: null, timeline: (await workingTimeline(dir)).timeline }
+        : null;
     const rows = notes
       .filter(n => !o.status || n.status === o.status)
       .map(n => {
@@ -301,7 +305,7 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
       if (o.json) return json(r);
       return console.log(
         [
-          `rejected ${rev} (${r.decision}); the state before is saved as ${r.restorePoint}`,
+          `rejected ${rev} (${r.decision}); the state before is saved as ${r.restorePoint}, the result as ${r.now}`,
           r.restored.length ? `restored from ${r.parent}: ${r.restored.join(', ')}` : 'nothing restored',
           ...r.conflicts.map(c => `  left alone: ${c}`),
           o.note ? `${o.note} is open again.` : '',

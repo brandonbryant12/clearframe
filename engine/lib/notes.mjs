@@ -138,6 +138,7 @@ function chain(root, from, to) {
  *   changed  found, but the beat was edited since the note: it may already be addressed
  *   stale    the beat is there but the quoted words are not, or appear more than once
  *   orphaned the passage was cut or removed: nothing honestly corresponds to it any more
+ *   addressed the passage was cut on this note's behalf (cut --note)
  */
 export function locate(root, note, target) {
   const a = note.anchor;
@@ -195,6 +196,9 @@ export function locate(root, note, target) {
     );
     if (cuts.length) {
       const named = [...new Set(cuts.map(c => `${c.id}${c.words ? ` “${c.words}”` : ''}`))].join(', ');
+      // Cut on this note's behalf (cut --note): the note is addressed, not lost.
+      if (cuts.every(c => c.note === note.id))
+        return { state: 'addressed', ...(beats[0] ? { beat: beats[0].id, at: round(beats[0].start) } : {}), reason: `cut for this note (${named})` };
       return cuts.reduce((s, c) => s + c.overlap, 0) >= span * 0.9
         ? { state: 'orphaned', reason: `the quoted words were cut (${named})` }
         : { state: 'stale', ...(beats[0] ? { beat: beats[0].id } : {}), reason: `part of the quoted words was cut (${named}); point at the moment again` };
@@ -207,7 +211,11 @@ export function locate(root, note, target) {
     const found = elsewhere.flatMap(b => findQuote(b.words, a.words).map(i => [b, i]));
     if (found.length === 1) return { state: 'moved', ...place(...found[0]), reason: 'found by its time in the recording' };
   }
-  if (!beats.length) return { state: 'orphaned', reason: `${a.beat} is gone${removedBy ? ` (removed by ${removedBy})` : ''}` };
+  if (!beats.length) {
+    const own = readEdits(root).find(e => e.note === note.id && e.beats?.some(p => p.deleted && (a.beats ?? [a.beat]).includes(p.beat)));
+    if (own) return { state: 'addressed', reason: `${a.beat} was cut for this note (${own.id})` };
+    return { state: 'orphaned', reason: `${a.beat} is gone${removedBy ? ` (removed by ${removedBy})` : ''}` };
+  }
   return { state: 'stale', reason: `“${a.words}” is no longer in ${beats.map(b => b.id).join(', ')}; the wording changed` };
 }
 

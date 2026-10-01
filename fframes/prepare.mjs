@@ -54,11 +54,13 @@ export function roughStandIns(root, sb, timing, { rough = false } = {}) {
       W = timing.width,
       H = timing.height,
       m = Math.round(Math.min(W, H) * 0.035);
+    // A dashed frame and a label inside the title-safe area, in the second accent: unmistakably
+    // a stand-in, never mistaken for design.
     const label = `PLACEHOLDER · ${what}`.slice(0, 72);
     const slate = {
       over: [
-        { type: 'rect', x: m, y: m, w: W - 2 * m, h: H - 2 * m, r: 18, fill: 'none', stroke: 'muted', width: 3, dash: [16, 12], enter: 'none' },
-        { type: 'text', text: label, x: m + 28, y: m + 56, size: 30, font: 'mono', fill: 'muted', anchor: 'start', fit: W - 2 * m - 56, enter: 'none' },
+        { type: 'rect', x: m, y: m, w: W - 2 * m, h: H - 2 * m, r: 18, fill: 'none', stroke: 'accent2', width: 3, dash: [16, 12], opacity: 0.8, enter: 'none' },
+        { type: 'text', text: label, x: Math.round(W * 0.06), y: Math.round(H * 0.06) + 36, size: 34, font: 'mono', fill: 'accent2', anchor: 'start', fit: Math.round(W * 0.88), enter: 'none' },
       ],
     };
     const spoken = tb.vo?.words?.length > 0;

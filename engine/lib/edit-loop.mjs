@@ -33,6 +33,7 @@ const asJob = tl => ({ fps: tl.fps, frames: tl.frames, beats: tl.beats.map(b => 
 function noteBeats(root, note, timeline) {
   if (note.scope === 'film') return { film: true, beats: timeline.beats.map(b => b.id) };
   const where = locate(root, note, { id: null, timeline });
+  if (where.state === 'addressed' && !where.beat) return { film: false, beats: [...new Set(readEdits(root).filter(e => e.note === note.id).flatMap(e => (e.beats ?? []).map(p => p.beat)))], where };
   if (['stale', 'orphaned'].includes(where.state))
     throw new Error(`Note ${note.id} is ${where.state}: ${where.reason}. Show the person the old moment and ask before editing.`);
   const ids = new Set([where.beat]);
@@ -92,7 +93,7 @@ async function beforePassage(root, rev, timeline, range, name) {
       ...r,
       kind: 'passage',
       revision: rev.id,
-      from: 're-rendered from the revision’s stored inputs (its video was released)',
+      from: `re-rendered from the revision’s stored inputs (${(rev.videos ?? []).length ? 'its video was released to save space' : 'it was never rendered in full'})`,
       sameRenderer: ctx.manifest.rendererSourceHash === rev.renderer.sourceHash,
     };
     writeJSONAtomic(`${out}.json`, receipt);
@@ -309,8 +310,9 @@ export async function rejectRevision(root, { revision, note, by, said }) {
   const decision = addDecision(root, { action: 'reject', role: 'human', by, said, revision, scope: note ? { note } : {} });
   if (note) setNoteStatus(root, note, 'open', { revision, by, reason: `${revision} rejected: ${said}` });
   fs.appendFileSync(reviewPath(root, 'edits.jsonl'), JSON.stringify({ id: `x${Date.now()}`, op: 'reject', of: revision, beats: restored, conflicts, at: new Date().toISOString() }) + '\n');
+  const { revision: after } = await snapshot(root, { kind: 'restored', reason: `rejected ${revision}: restored ${restored.join(', ') || 'nothing'} from ${P.meta.id}` });
   writeReviewPage(root);
-  return { revision, parent: P.meta.id, restorePoint: point.id, restored, conflicts, decision: decision.id };
+  return { revision, parent: P.meta.id, restorePoint: point.id, now: after.id, restored, conflicts, decision: decision.id };
 }
 
 /**

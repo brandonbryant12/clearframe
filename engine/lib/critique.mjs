@@ -6,6 +6,7 @@ import { computeTiming, tokenize } from './timing.mjs';
 import { rules } from '../../fframes/registry.mjs';
 import { elementsExtent as extent } from '../../fframes/canvas.mjs';
 import { createJob } from '../../fframes/job.mjs';
+import { roughStandIns } from '../../fframes/prepare.mjs';
 import { sketch } from '../../fframes/sketches.mjs';
 
 /**
@@ -302,7 +303,12 @@ export function critique(root) {
   // What `check` would refuse comes first: a storyboard that cannot render has no cinema.
   let job;
   try {
-    job = createJob(structuredClone(sb), timing, { draft: true });
+    // A declared placeholder is judged as the slate a rough cut shows, and listed as unmade.
+    const ready = sb.beats.some(b => b.placeholder != null)
+      ? roughStandIns(root, structuredClone(sb), structuredClone(timing), { rough: true })
+      : { sb: structuredClone(sb), timing, placeholders: [] };
+    job = createJob(ready.sb, ready.timing, { draft: true });
+    for (const p of ready.placeholders) add('idea', p.beat, `placeholder: ${p.reason}. Fine for a rough cut; author it before the final.`);
   } catch (e) {
     job = { errors: [e.message] };
   }

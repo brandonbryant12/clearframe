@@ -293,24 +293,40 @@ export async function renderRange(
     const probe = validateVideo(finished, { ...ctx.job, frames });
     let check = null;
     if (verify) {
-      // Same frames, two routes: drawn directly at their film position, and decoded from the preview.
+      // Same frames, two routes: drawn directly at their film position, and decoded from the
+      // preview. Each must match at least as well as its neighbour in the preview, so a clock
+      // off by one frame fails wherever the picture moves (a still picture cannot tell, and
+      // there an off-by-one is invisible anyway).
       fs.mkdirSync(shots);
+      // The range's ends, and the first cut inside it, where a one-frame slip is plain to see.
+      const cut = ctx.job.beats.map(x => x.start_frame).find(f => f > a && f < b - 1);
+      const points = [
+        { film: a, near: [a + 1] },
+        ...(cut != null ? [{ film: cut, near: [cut - 1, cut + 1] }] : []),
+        ...(b - 1 > a ? [{ film: b - 1, near: [b - 2] }] : []),
+      ].map(p => ({ ...p, near: p.near.filter(f => f >= a && f < b) }));
       await phase('verify', async () => {
-        await nativeCommand(ctx, 'frame', [`${a},${b - 1}`, '-o', shots], true);
+        await nativeCommand(ctx, 'frame', [points.map(p => p.film).join(','), '-o', shots], true);
         const drawn = fs
           .readdirSync(shots)
           .filter(f => f.endsWith('.png'))
           .sort((x, y) => x.localeCompare(y, undefined, { numeric: true }))
           .map(f => path.join(shots, f));
-        const decoded = await decodeFrames(finished, [0, frames - 1], shots);
-        if (drawn.length !== 2) throw new Error(`Expected 2 reference frames; got ${drawn.length}`);
+        if (drawn.length !== points.length) throw new Error(`Expected ${points.length} reference frames; got ${drawn.length}`);
+        const wanted = [...new Set(points.flatMap(p => [p.film, ...p.near]).map(f => f - a))];
+        const decoded = await decodeFrames(finished, wanted, shots);
+        const at = f => decoded[wanted.indexOf(f - a)];
         check = [];
-        for (const [k, film] of [a, b - 1].entries()) check.push({ film, preview: k ? frames - 1 : 0, psnr: await psnr(drawn[k], decoded[k]) });
+        for (const [k, p] of points.entries()) {
+          const near = [];
+          for (const f of p.near) near.push(await psnr(drawn[k], at(f)));
+          check.push({ film: p.film, preview: p.film - a, psnr: await psnr(drawn[k], at(p.film)), neighbour: near.length ? Math.max(...near) : null });
+        }
       });
-      const bad = check.filter(c => !(c.psnr >= 35));
+      const bad = check.filter(c => !(c.psnr >= 35) || (c.neighbour != null && c.neighbour > c.psnr + 0.5));
       if (bad.length)
         throw new Error(
-          `Preview frames do not match the film at ${bad.map(c => `frame ${c.film} (${c.psnr?.toFixed(1)} dB)`).join(', ')}; the preview clock is off.`,
+          `Preview frames do not match the film at ${bad.map(c => `frame ${c.film} (${c.psnr?.toFixed(1)} dB; its neighbour ${c.neighbour?.toFixed(1)} dB)`).join(', ')}; the preview clock is off.`,
         );
     }
     unchanged(ctx);
@@ -326,7 +342,7 @@ export async function renderRange(
       profile: ctx.manifest.profile,
       inputId: ctx.manifest.inputId,
       rendererSourceHash: ctx.manifest.rendererSourceHash,
-      revision: ctx.manifest.revision,
+      rendererRevision: ctx.manifest.revision,
       range: { frames: [a, b], seconds: [a / fps, b / fps], fps, handles },
       beats: covered,
       width: ctx.job.width,
