@@ -24,6 +24,13 @@ const FILMS = [
   { name: 'title-sequence', args: ['--treatment', 'cutpaper'], why: 'a motion-design opener' },
   { name: 'zoom-journey', args: ['--playbook', 'zoom-journey'], why: 'one continuous camera through scales' },
   { name: 'trailer-vertical', args: ['--treatment', 'trailer', '--vertical'], why: 'a vertical social cut' },
+  // Generated imagery without new spend: a copy of a project whose depth plates are cached.
+  {
+    name: 'plates-harbor',
+    copy: 'build/plates-demo',
+    edit: sb => (sb.assets[0].ground = 'water'),
+    why: 'generated depth plates (cached images; no new spend)',
+  },
 ];
 
 const args = process.argv.slice(2);
@@ -104,10 +111,23 @@ for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name)))
     continue;
   }
   fs.rmSync(dir, { recursive: true, force: true });
-  const made = cli('new', dir, ...f.args);
-  if (made.status) {
-    rows.push({ ...f, error: made.stderr.trim().split('\n').at(-1) });
-    continue;
+  if (f.copy) {
+    const from = path.join(ROOT, f.copy);
+    if (!fs.existsSync(path.join(from, 'storyboard.json'))) {
+      rows.push({ ...f, error: `${f.copy} is missing` });
+      continue;
+    }
+    fs.mkdirSync(dir, { recursive: true });
+    fs.cpSync(path.join(from, 'assets'), path.join(dir, 'assets'), { recursive: true });
+    const sb = JSON.parse(fs.readFileSync(path.join(from, 'storyboard.json'), 'utf8'));
+    f.edit?.(sb);
+    fs.writeFileSync(path.join(dir, 'storyboard.json'), JSON.stringify(sb, null, 2));
+  } else {
+    const made = cli('new', dir, ...f.args);
+    if (made.status) {
+      rows.push({ ...f, error: made.stderr.trim().split('\n').at(-1) });
+      continue;
+    }
   }
   const crit = cli('critique', dir).stdout;
   const score = crit.match(/cinema (\d+)\/100/)?.[1];

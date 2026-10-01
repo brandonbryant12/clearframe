@@ -352,6 +352,12 @@ function assetMeta(dir, id) {
  * needs its subject away from the seam; a full plate needs calm space where text sits).
  * `raw: true` sends the author's prompt unchanged.
  */
+/** What an image's cache depends on: how it is drawn, not how it is staged (bounds, ground). */
+function imageHash(sb, a) {
+  const { bounds, ground, ...drawn } = a;
+  return hashOf({ ...drawn, prompt: imagePrompt(sb, drawn) });
+}
+
 export function imagePrompt(sb, a) {
   if (a.raw) return a.prompt;
   const colors = palette(sb.theme ?? 'paper'),
@@ -392,7 +398,7 @@ export async function images(root, { only, force = false, budget } = {}) {
   const sb = loadStoryboard(root);
   const P = paths(root);
   const list = sb.assets.filter(a => a.kind === 'image' && !a.file && (!only || only.includes(a.id)));
-  const specHash = a => hashOf({ ...a, prompt: imagePrompt(sb, a) });
+  const specHash = a => imageHash(sb, a);
   const todo = list.filter(
     a =>
       force ||
@@ -538,8 +544,8 @@ export function plan(root) {
   for (const a of sb.assets.filter(a => !a.file)) {
     if (a.kind === 'image') {
       const done =
-        assetMeta(P.img, a.id)?.hash === hashOf({ ...a, prompt: imagePrompt(sb, a) }) &&
-        nonempty(path.join(P.img, `${a.id}.jpg`));
+        assetMeta(P.img, a.id)?.hash === imageHash(sb, a) &&
+        nonempty(path.join(P.img, `${a.id}.${a.cutout ? 'png' : 'jpg'}`));
       rows.push({
         kind: 'image',
         id: a.id,

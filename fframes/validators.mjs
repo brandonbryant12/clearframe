@@ -446,7 +446,7 @@ export const VALIDATORS = {
       if (typeof p.plates !== 'string' || !p.plates.trim())
         h.fail('plates must be the id of an image asset with layers');
       p.elements = [
-        ...plateElements(p.plates, { w: frame.width ?? 1920, h: frame.height ?? 1080 }),
+        ...plateElements(p.plates, { w: frame.width ?? 1920, h: frame.height ?? 1080, assets: frame.assets }),
         ...(p.elements ?? []),
       ];
       if (p.dolly == null && p.view == null) p.dolly = [{ at: 0, z: 0.2, dur: 10, ease: 'linear' }];

@@ -152,6 +152,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     vertical: film.vertical,
     width: timing.width,
     height: timing.height,
+    assets: sb.assets,
   });
   const motion = { ...film.motion, ...source.motion };
   if (!validMotion(motion)) throw new Error('Invalid beat motion');

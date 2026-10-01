@@ -6,7 +6,55 @@
 // Cut-outs are generated on flat chroma green and keyed out with ffmpeg, so any image model
 // works. Plates are illustration: text, numbers and evidence stay native.
 import fs from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { ffmpeg } from './util.mjs';
+
+const bounds = new Map();
+/**
+ * Where a cut-out's subject sits: its alpha bounding box as fractions of the image, plus the
+ * image size. Used to ground the subject (a contact shadow, a reflection on water).
+ */
+export function alphaBounds(png) {
+  if (bounds.has(png)) return bounds.get(png);
+  let found = null;
+  const probe = spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', png], {
+    encoding: 'utf8',
+  });
+  const [iw, ih] = (probe.stdout ?? '').trim().split(',').map(Number);
+  const W = 192,
+    H = Math.max(1, Math.round((192 * ih) / iw) || 108);
+  const r = spawnSync('ffmpeg', [
+    '-v',
+    'error',
+    '-i',
+    png,
+    '-vf',
+    `scale=${W}:${H},format=rgba,alphaextract`,
+    '-f',
+    'rawvideo',
+    '-pix_fmt',
+    'gray',
+    '-',
+  ]);
+  const a = r.stdout;
+  if (iw > 0 && a?.length >= W * H) {
+    let x0 = W,
+      y0 = H,
+      x1 = -1,
+      y1 = -1;
+    for (let y = 0; y < H; y++)
+      for (let x = 0; x < W; x++)
+        if (a[y * W + x] > 128) {
+          x0 = Math.min(x0, x);
+          x1 = Math.max(x1, x);
+          y0 = Math.min(y0, y);
+          y1 = Math.max(y1, y);
+        }
+    if (x1 >= 0) found = { box: [x0 / W, y0 / H, (x1 + 1) / W, (y1 + 1) / H], size: [iw, ih] };
+  }
+  bounds.set(png, found);
+  return found;
+}
 
 // Cut-out layers describe objects, never scenes: asked for a scene "on green", image models
 // paint a framed picture of the scene on green. So the mid layer draws the `subject` alone
@@ -107,7 +155,7 @@ async function cornerColour(src) {
  * Canvas elements that stage a plate set in depth for a `w`×`h` frame: the far layer is
  * oversized so camera moves never show its edge; the near layer is soft with nearness.
  */
-export function plateElements(id, { w, h, layers = ['far', 'mid', 'near'] }) {
+export function plateElements(id, { w, h, layers = ['far', 'mid', 'near'], assets = [] }) {
   const out = [];
   if (layers.includes('far'))
     out.push({
@@ -122,20 +170,96 @@ export function plateElements(id, { w, h, layers = ['far', 'mid', 'near'] }) {
       at: 0,
       dur: 0,
     });
+  // Ground the subject: a soft contact shadow where it meets the ground, and on water its
+  // reflection (the cut-out mirrored about its waterline, dim and soft).
+  // Stage the subject from where it sits in its cut-out: its base at three quarters of the
+  // frame height (above any letterbox, with room for its shadow or reflection), no wider than
+  // 70% of the frame, drifted toward the centre.
+  const mid = assets.find(a => a.id === `${id}-mid`);
+  const r = v => Math.round(v * 10) / 10;
+  let box = [0, 0, w, h];
+  if (mid?.bounds) {
+    const [iw, ih] = mid.bounds.size,
+      k = Math.min(w / iw, h / ih),
+      [dx, dy] = [(w - iw * k) / 2, (h - ih * k) / 2],
+      [bx0, by0, bx1, by1] = mid.bounds.box;
+    const left = dx + bx0 * iw * k,
+      right = dx + bx1 * iw * k,
+      top = dy + by0 * ih * k,
+      foot = dy + by1 * ih * k,
+      sx = (left + right) / 2;
+    const s = Math.min(1, (w * 0.7) / (right - left), (h * 0.58) / Math.max(1, foot - top));
+    const tx = w / 2 + (sx - w / 2) * 0.5,
+      ty = h * 0.76;
+    box = [tx - sx * s, ty - foot * s, w * s, h * s];
+    mid.staged = { cx: tx, base: ty, span: (right - left) * s };
+  }
+  if (layers.includes('mid') && mid?.staged) {
+    const { cx, base, span } = mid.staged;
+    if (mid.ground === 'water')
+      out.push({
+        type: 'image',
+        asset: `${id}-mid`,
+        x: r(box[0]),
+        y: r(box[1]),
+        w: r(box[2]),
+        h: r(box[3]),
+        fit: 'contain',
+        z: LAYERS.mid.z,
+        opacity: 0.4,
+        blur: 3,
+        origin: [r(cx), r(base - span * 0.012)],
+        keys: [{ at: 0, scaleY: -0.7, dur: 0 }],
+        at: 0,
+        enter: 'fade',
+        dur: 0.6,
+      });
+    out.push({
+      type: 'ellipse',
+      cx: r(cx),
+      cy: r(base - span * 0.01),
+      rx: r(span * 0.56),
+      ry: r(Math.max(6, span * 0.035)),
+      fill: '#000000',
+      opacity: mid.ground === 'water' ? 0.3 : 0.5,
+      blur: r(Math.max(6, span * 0.02)),
+      z: LAYERS.mid.z,
+      at: 0,
+      enter: 'fade',
+      dur: 0.6,
+    });
+  }
   if (layers.includes('mid'))
     out.push({
       type: 'image',
       asset: `${id}-mid`,
-      x: 0,
-      y: 0,
-      w,
-      h,
+      x: r(box[0]),
+      y: r(box[1]),
+      w: r(box[2]),
+      h: r(box[3]),
       fit: 'contain',
       z: LAYERS.mid.z,
       at: 0,
       enter: 'fade',
       dur: 0.6,
     });
+  // On water the hull sits in it: a haze of the water's tone over its lower edge.
+  if (layers.includes('mid') && mid?.staged && mid.ground === 'water') {
+    const { cx, base, span } = mid.staged;
+    out.push({
+      type: 'ellipse',
+      cx: r(cx),
+      cy: r(base),
+      rx: r(span * 0.62),
+      ry: r(Math.max(10, span * 0.045)),
+      fill: { gradient: ['bg', 'bg'], radial: true, fade: true },
+      opacity: 0.9,
+      z: LAYERS.mid.z,
+      at: 0,
+      enter: 'fade',
+      dur: 0.6,
+    });
+  }
   if (layers.includes('near'))
     out.push({
       type: 'image',

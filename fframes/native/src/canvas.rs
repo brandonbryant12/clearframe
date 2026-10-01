@@ -803,8 +803,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 ox + pose.dx,
                 oy + pose.dy,
                 pose.rotate,
-                pose.sx.max(0.0001),
-                pose.sy.max(0.0001),
+                // A negative scale mirrors (a reflection); only a zero scale is degenerate.
+                if pose.sx.abs() < 0.0001 { 0.0001 } else { pose.sx },
+                if pose.sy.abs() < 0.0001 { 0.0001 } else { pose.sy },
                 -ox,
                 -oy
             )

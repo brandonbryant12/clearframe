@@ -31,6 +31,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - Links trailing a bullet source its sentences, and reference titles keep their words.
   - DIRECTION.md starts with the brief's tensions, sourced figures and quotations.
 - **Fixed: the draft music bed turned into a full-scale DC wall after about 10 s.** A NaN from `pow()` of a hair-negative sine poisoned the filter state. The loudness normaliser then pushed the voice down to make room for it.
+- **Depth plates ground their subject.** The cut-out's alpha bounds stage it with its base at three quarters of the frame height, above any letterbox, and give it a contact shadow. An asset with `ground: "water"` also gets a reflection (canvas scale may now be negative, a mirror) and a haze where the hull meets the water. Staging fields never change an image's cache hash, and `plan` finds cached cut-outs (`.png`).
 - **Films have a score and sound by default.** Playbooks scaffold a music bed (free as a draft, paid Lyria only after `plan`) and subtle sound design that follows the picture. Render writes the cue sheet to `build/cues.json`.
 - **An honest review loop.** `scripts/bench.mjs` drafts ten fixed films, and a fresh reviewer scores them against top studio work (`docs/review.md`). Round 1 scored 3.1/5. The bench also renders a draft voice and bed for every film, then reports loudness and a waveform with the cuts and sound cues marked.
 

@@ -645,7 +645,7 @@ export function palette(theme = 'paper') {
   return result;
 }
 
-export function normalizeProps(name, input = {}, { vertical = false, width, height } = {}) {
+export function normalizeProps(name, input = {}, { vertical = false, width, height, assets = [] } = {}) {
   const meta = blockByName(name);
   if (!meta) throw new Error(`No native block "${name}". Run clearframe blocks; legacy scenes need an explicit port.`);
   const p = structuredClone(input);
@@ -706,6 +706,7 @@ export function normalizeProps(name, input = {}, { vertical = false, width, heig
     vertical,
     width: width ?? (vertical ? 1080 : 1920),
     height: height ?? (vertical ? 1920 : 1080),
+    assets,
   });
   if (p.decimals != null && (!Number.isInteger(p.decimals) || p.decimals < 0 || p.decimals > 8))
     fail('decimals must be 0–8');
