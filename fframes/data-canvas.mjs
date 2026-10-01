@@ -96,6 +96,7 @@ export function chartElements(spec, { w, h }) {
         },
         {
           type: 'text',
+          of: v.key,
           text: format(v.value, spec),
           x: r(cx + col / 2),
           y: r(base - hv - 22),
@@ -109,6 +110,7 @@ export function chartElements(spec, { w, h }) {
         },
         {
           type: 'text',
+          of: v.key,
           text: v.label,
           x: r(cx + col / 2),
           y: r(base + 56),
@@ -149,6 +151,7 @@ export function chartElements(spec, { w, h }) {
         out.push(
           {
             type: 'text',
+            of: v.key,
             text: v.label,
             x: r(cx),
             y: r(y - 30),
@@ -161,6 +164,7 @@ export function chartElements(spec, { w, h }) {
           },
           {
             type: 'text',
+            of: v.key,
             text: format(v.value, spec),
             x: r(cx),
             y: r(y + bh + 78),
@@ -227,6 +231,18 @@ export function chartElements(spec, { w, h }) {
     );
     if (note) out.push(...noteElements(note, x + bw / 2, y + bh * 0.55 + size * 0.3 + 150, { left: x, right: x + bw }));
   }
+  // When the note lands, everything else steps back: the other values dim on the same word.
+  if (note) {
+    const cue = note.say ? { say: note.say } : { at: note.at ?? 1.2 };
+    const target = note.target.key;
+    for (const el of out) {
+      const mine = el.id === target || el.of === target;
+      if (!mine && !el.note && (el.type === 'rect' || el.type === 'text'))
+        el.keys = [...(el.keys ?? []), { ...cue, opacity: 0.35, dur: 0.5 }];
+      delete el.of;
+      delete el.note;
+    }
+  }
   return out;
 }
 
@@ -255,6 +271,7 @@ function noteElements(note, cx, y, { left, right, up = false }) {
             width: 3,
             arrow: 'end',
             head: 12,
+            note: true,
             enter: 'draw',
             dur: 0.35,
             ...cue,
@@ -269,6 +286,7 @@ function noteElements(note, cx, y, { left, right, up = false }) {
       size,
       font: 'bold',
       anchor,
+      note: true,
       fill: 'accent',
       enter: 'rise',
       dur: 0.45,

@@ -47,6 +47,8 @@ Beats can name them: `"props": {"sketch": "tunnel"}` and `"sketchText": {"TITLE"
   - a world truck for parallax;
   - `focus.keys` with `say` to rack attention on a word;
   - `camera: {to: [x, y, w, h], say}` to push any block (a chart, a quote) into the detail that matters.
+  - A picture on frame one: an opening world's layers sit at `at: 0` with `enter: "none"`; only details animate in. Ambient motion that should run past the cut (traffic, cloud) uses keys with `hold: false`.
+  - Long titles take `fit` (the widest the line may be) so they never run off the frame.
 - **Light:** `glow` on sources, and `shine` across titles.
 
 ## 4. Choose the lens

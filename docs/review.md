@@ -4,7 +4,7 @@ ClearFrame's score in `docs/scorecard.md` comes from an independent reviewer: a 
 
 ## Each round
 
-1. `node scripts/bench.mjs` scaffolds and drafts the benchmark films from scratch. It writes `build/bench/REPORT.md` with each film's cinema score, a contact sheet and a strip of decoded frames around every cut.
+1. `node scripts/bench.mjs` scaffolds and drafts the benchmark films from scratch. It writes `build/bench/REPORT.md` with each film's cinema score and check result, a contact sheet and a strip of decoded frames around every cut. It also writes the draft mix's loudness and a waveform image with the cuts (grey) and sound cues (orange) marked. The draft voice is local TTS and the bed is synthesised: judge the mix's structure, not the voice's timbre.
 2. A fresh reviewer agent reads this page, the dimension table in `docs/scorecard.md`, `build/bench/REPORT.md`, and every sheet and strip. It also reads the latest real final's strip and loudness numbers if they exist (`build/final-signal`). It doesn't read the code, the changelog or the builder's notes.
 3. The reviewer scores each of the 15 dimensions from 1 to 5 in half points, with the evidence for each score. It names the five issues that most block 4.9.
 4. The builder records the scores in the scorecard log, fixes the weakest dimensions, commits, and starts the next round.

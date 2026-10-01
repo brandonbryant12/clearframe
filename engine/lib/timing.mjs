@@ -212,7 +212,10 @@ export function computeTiming(root) {
     // scene has time to cover the cut after its last word (take slices are separate files).
     const next = sb.beats[index + 1];
     const cover = next && COVER[next.transition ?? sb.transition];
-    const breath = cover && !(sb.pacing.continuous === true) ? cover[0] + 0.1 : 0;
+    // Type that builds with the voice (kinetic, a statement) holds its finished line a
+    // moment before the cut, so the last word is read, not just heard.
+    const reads = ['kinetic', 'statement'].includes(b.block) ? 0.5 : 0;
+    const breath = sb.pacing.continuous === true ? 0 : Math.max(cover ? cover[0] + 0.1 : 0, reads);
     const tail =
       b.tail ??
       (continuousTail
