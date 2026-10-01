@@ -14,7 +14,8 @@ export default {
   build(w, h, { seed } = {}) {
     const rand = rng(seed ?? 23),
       tallFrame = h > w,
-      y0 = round(h * (tallFrame ? 0.3 : 0.27)),
+      // Tall frames tilt further down so the city fills the height; the haze is a band at the top.
+      y0 = round(h * (tallFrame ? 0.15 : 0.27)),
       vx = round(w * 0.5),
       f = Math.min(w, h) * 0.9,
       Hc = 6,
@@ -141,6 +142,7 @@ export default {
       width: round(Math.max(1, Math.min(6, (f * 0.06) / bandDepth(i)))),
       cap: 'round',
       opacity: 0.5,
+      enter: 'none',
     })));
     return {
       view: [round(w * 0.06), round(h * 0.07), round(w * 0.88), round(h * 0.88)],

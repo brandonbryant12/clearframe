@@ -24,7 +24,6 @@
       "grade": "teal-orange",
       "gradeAmount": 0.6,
       "bloom": 0.4,
-      "aberration": 0.2,
       "leak": 0.15,
       "handheld": 0.25,
       "blur": 0.5
@@ -43,6 +42,6 @@
     "One world for the mechanism, drawn so the payoff is visible (a cross-section, a cutaway): the camera travels its stations and pulls back over the whole.",
     "Three planes in every drawn scene: z on the background, the subject and one soft foreground layer. Light comes from one direction, and the time of day holds across the film.",
     "Titles and labels live in the picture, inside the letterbox (no top-left scene headings). Labels leave when the camera does; the pull-back gets its own.",
-    "Open the letterbox (lens.letterbox: false on the beat) only for the payoff."
+    "One matte for the whole film: keep the letterbox from first frame to last. Put figures in the world (in the ground, on the wall), not on a colour card."
   ]
 }

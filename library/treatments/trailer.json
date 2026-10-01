@@ -23,7 +23,6 @@
       "grade": "bleach",
       "gradeAmount": 0.5,
       "bloom": 0.5,
-      "aberration": 0.3,
       "handheld": 0.3,
       "blur": 0.5
     },
@@ -37,10 +36,10 @@
     "rough": false
   },
   "rules": [
-    "Three acts: a cold open (sketch signal), a rising montage of 2–4 s shots split by black type cards, a silence, the title (sketch title), then a button.",
+    "Three acts: a cold open (sketch signal), a rising montage of 2–4 s shots split by black type cards, a silence (sketch flatline), the title (sketch title), then a button.",
     "Every montage shot is a place the promise touches, drawn for this film (wires, citygrid, mast are examples): never a stock skyline reused from another film.",
-    "Cards are posters, not captions: a small lead line over one or two words that fill the frame (sketch card, sketchText LEAD and CARD), sharpening out of blur under a light sweep while they push in.",
-    "Vary the cut: a flash on the hits, a whip into a card, a hard cut on action between two moving shots. Each montage shot is shorter than the last as the title approaches.",
-    "Before the title, one beat with no voice and a single element: the silence makes the hit land. End on a button: one short line after the title, like a release date."
+    "Cards are posters, not captions: a small lead line over one or two words in the poster face that fill the frame (sketch card, sketchText LEAD and CARD). Flares and streaks sit behind or under type, never through it, and no aberration on type.",
+    "One white flash in the film, on the title. Cut on action between moving shots, a whip into a card; each montage shot shorter than the last.",
+    "Compose the vertical cut for 9:16: stacked type within the middle 80% of the width, scenes staged tall (sketches get w and h)."
   ]
 }

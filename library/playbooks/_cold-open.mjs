@@ -7,7 +7,8 @@ import { harbor } from '../sketches/harbor.mjs';
 
 const r = v => Math.round(v * 10) / 10;
 const SAMPLE = 'Illustrative sample data · replace before publishing';
-const still = list => list.map(el => ({ at: 0, enter: 'none', ...el }));
+// On screen from the first frame, children too (a shape without an entrance would fade or draw in).
+const still = list => list.map(el => ({ at: 0, enter: 'none', ...el, ...(el.children ? { children: still(el.children) } : {}) }));
 
 // ------------------------------------------------------------------ the clock (insert)
 const C = [760, 520],
@@ -21,22 +22,45 @@ const ticks = (n, inner, outer) =>
 // A hand pointing straight up, rotated about the centre: a tapered blade and a short tail.
 const hand = (len, width, tail) =>
   `M ${r(C[0] - width / 2)} ${r(C[1] + tail)} L ${r(C[0] - width * 0.32)} ${r(C[1] - len)} L ${r(C[0])} ${r(C[1] - len - width * 0.6)} L ${r(C[0] + width * 0.32)} ${r(C[1] - len)} L ${r(C[0] + width / 2)} ${r(C[1] + tail)} Z`;
-const HOUR = (4 + 52 / 60) * 30,
-  MINUTE = 52 * 6;
-const clock = [
-  // The wall, lit by a desk lamp below and to the right.
-  { type: 'rect', x: -100, y: -100, w: 2120, h: 1280, fill: { gradient: ['bg', 'surface'], angle: 160 } },
-  {
-    type: 'ellipse',
-    cx: 1500,
-    cy: 1000,
-    rx: 1100,
-    ry: 760,
-    fill: { gradient: ['accent2', 'accent2'], radial: true, fade: true },
-    opacity: 0.22,
-  },
-  // Its shadow on the wall, thrown up and to the left by the lamp.
-  { type: 'circle', cx: C[0] - 40, cy: C[1] - 34, r: R + 22, fill: 'bg', blur: 30, opacity: 0.8, z: 0.05 },
+/**
+ * The clock on the dispatch-room wall at `hh:mm`. At night a desk lamp lights it from below; at
+ * dawn the window throws four panes of low sun across the wall and the clock in them.
+ */
+const clockShot = (hh, mm, dawn = false) => {
+  const HOUR = (hh + mm / 60) * 30,
+    MINUTE = mm * 6;
+  const pane = (x, y) => ({
+    type: 'poly',
+    points: [
+      [x, y],
+      [x + 300, y - 70],
+      [x + 300, y + 230],
+      [x, y + 300],
+    ].map(([px, py]) => [r(px), r(py)]),
+    closed: true,
+    fill: { gradient: ['ink', 'accent2'], angle: 0 },
+    opacity: 0.42,
+    blend: 'screen',
+    blur: 8,
+  });
+  return [
+  { type: 'rect', x: -100, y: -100, w: 2120, h: 1280, fill: { gradient: dawn ? ['muted', 'surface', 'bg'] : ['bg', 'surface'], angle: dawn ? 0 : 160 } },
+  ...(dawn
+    ? [pane(380, 300), pane(700, 225), pane(380, 620), pane(700, 545)]
+    : [
+        // The desk lamp's pool, below and to the right.
+        {
+          type: 'ellipse',
+          cx: 1500,
+          cy: 1000,
+          rx: 1100,
+          ry: 760,
+          fill: { gradient: ['accent2', 'accent2'], radial: true, fade: true },
+          opacity: 0.22,
+        },
+      ]),
+  // Its shadow on the wall, thrown by the lamp (night) or the window (dawn).
+  { type: 'circle', cx: C[0] + (dawn ? 52 : -40), cy: C[1] + (dawn ? 24 : -34), r: R + 22, fill: 'bg', blur: 30, opacity: dawn ? 0.65 : 0.8, z: 0.05 },
   // Bezel: brushed metal catching the lamp on its lower right.
   { type: 'circle', cx: C[0], cy: C[1], r: R + 18, fill: { gradient: ['surface', 'muted', 'ink'], angle: 45 }, z: 0 },
   { type: 'circle', cx: C[0], cy: C[1], r: R, fill: { gradient: ['muted', 'ink', 'ink'], angle: 40 }, z: 0 },
@@ -104,7 +128,9 @@ const clock = [
     blend: 'screen',
     z: 0,
   },
-];
+  ];
+};
+const clock = clockShot(4, 52);
 // The console in the foreground, out of focus until its line lights.
 const console_ = {
   type: 'group',
@@ -141,45 +167,148 @@ const lineLight = {
 };
 
 // ------------------------------------------------------------------ the operator (close)
-// An anonymous profile, never a likeness: a silhouette in a headset, rim-lit by the screens in
-// front of it, the room behind falling away into soft screen light.
-const profilePts = [
-  [150, 1180],
-  [190, 900],
-  [330, 790],
-  [392, 700],
-  [372, 600],
-  [338, 470],
-  [356, 330],
-  [440, 238],
-  [540, 236],
-  [608, 300],
-  [628, 380],
-  [632, 410],
-  [672, 470],
-  [640, 492],
-  [648, 520],
-  [640, 534],
-  [646, 552],
-  [628, 590],
-  [584, 612],
-  [568, 660],
-  [582, 760],
-  [700, 820],
-  [790, 940],
-  [820, 1180],
-];
-const smooth = pts => {
-  let d = `M ${pts[0][0]} ${pts[0][1]}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const [a, b, c, e] = [pts[Math.max(0, i - 1)], pts[i], pts[i + 1], pts[Math.min(pts.length - 1, i + 2)]];
+// An anonymous profile, never a likeness: hair gathered at the nape, a headset over it, the
+// screens' light on the face and along the shoulder; the room behind falls away into blur.
+const smooth = (pts, closed = false) => {
+  const p = closed ? [pts.at(-1), ...pts, pts[0], pts[1]] : pts;
+  let d = `M ${p[closed ? 1 : 0][0]} ${p[closed ? 1 : 0][1]}`;
+  const start = closed ? 1 : 0,
+    end = closed ? p.length - 2 : p.length - 1;
+  for (let i = start; i < end; i++) {
+    const [a, b, c, e] = [p[Math.max(0, i - 1)], p[i], p[i + 1], p[Math.min(p.length - 1, i + 2)]];
     d += ` C ${r(b[0] + (c[0] - a[0]) / 6)} ${r(b[1] + (c[1] - a[1]) / 6)} ${r(c[0] - (e[0] - b[0]) / 6)} ${r(c[1] - (e[1] - b[1]) / 6)} ${c[0]} ${c[1]}`;
   }
   return d;
 };
+// Face front, forehead to throat (facing right).
+const face = [
+  [566, 246],
+  [584, 278],
+  [595, 318],
+  [600, 352],
+  [604, 374],
+  [597, 394],
+  [600, 408],
+  [614, 436],
+  [630, 462],
+  [642, 480],
+  [637, 489],
+  [622, 494],
+  [614, 498],
+  [613, 508],
+  [621, 521],
+  [617, 532],
+  [610, 537],
+  [616, 548],
+  [611, 559],
+  [602, 567],
+  [610, 588],
+  [606, 608],
+  [588, 622],
+  [556, 630],
+  [530, 640],
+  [520, 668],
+  [526, 708],
+  [534, 748],
+];
+const chest = [
+  [548, 776],
+  [610, 812],
+  [700, 860],
+  [772, 930],
+  [812, 1020],
+  [830, 1120],
+];
+const back = [
+  [90, 1120],
+  [120, 940],
+  [196, 852],
+  [300, 806],
+  [356, 772],
+  [380, 716],
+  [386, 662],
+];
+// The hair's outer edge, nape to hairline: a low knot at the back, swept over the crown.
+const hair = [
+  [404, 650],
+  [372, 628],
+  [348, 594],
+  [350, 556],
+  [330, 512],
+  [316, 448],
+  [320, 380],
+  [342, 306],
+  [386, 238],
+  [446, 194],
+  [512, 184],
+  [556, 204],
+  [574, 238],
+  [566, 246],
+];
+const hairInner = [
+  [566, 246],
+  [536, 262],
+  [508, 300],
+  [482, 350],
+  [466, 400],
+  [452, 452],
+  [446, 520],
+  [430, 590],
+  [404, 650],
+];
+const operatorFigure = () => {
+  const body = [...back, ...hair.slice(0, -1), ...face, ...chest];
+  const faceLight = [...face.slice(0, 24), ...face.slice(0, 24).reverse().map(([x, y]) => [x - 46 + (y > 560 ? 10 : 0), y])];
+  return [
+    // Silhouette, then the hair, then the light on the face and the rim.
+    { type: 'path', d: `${smooth(body)} Z`, fill: { gradient: ['surface', 'bg', 'bg'], angle: 0 }, stroke: 'none' },
+    { type: 'path', d: `${smooth([...hair, ...hairInner.slice(1)])} Z`, fill: { gradient: ['bg', 'surface'], angle: 45 }, stroke: 'none' },
+    {
+      type: 'path',
+      d: `${smooth(faceLight)} Z`,
+      fill: { gradient: ['accent2', 'accent2'], angle: 180, fade: true },
+      stroke: 'none',
+      opacity: 0.5,
+    },
+    {
+      type: 'path',
+      d: smooth(face.slice(0, 26)),
+      fill: 'none',
+      stroke: 'accent2',
+      width: 3.5,
+      cap: 'round',
+      glow: { blur: 12, opacity: 0.85 },
+    },
+    {
+      type: 'path',
+      d: smooth(hair.slice(8, 13)),
+      fill: 'none',
+      stroke: 'accent2',
+      width: 2.5,
+      cap: 'round',
+      opacity: 0.6,
+      glow: { blur: 8, opacity: 0.5 },
+    },
+    // A collar, and the screen light along the shoulder.
+    { type: 'path', d: smooth([[530, 744], [560, 792], [612, 818]]), fill: 'none', stroke: 'surface', width: 10, cap: 'round' },
+    { type: 'path', d: smooth([[536, 752], [566, 786], [640, 828]]), fill: 'none', stroke: 'muted', width: 2, opacity: 0.4 },
+    { type: 'path', d: smooth(chest), fill: 'none', stroke: 'accent2', width: 3, cap: 'round', opacity: 0.6, glow: { blur: 10, opacity: 0.6 } },
+    // The headset: the band over the crown, the cup over the ear, the boom to the mouth.
+    { type: 'path', d: 'M 446 424 C 430 330 440 230 500 178', fill: 'none', stroke: 'surface', width: 15, cap: 'round' },
+    { type: 'path', d: 'M 458 420 C 444 330 452 236 506 186', fill: 'none', stroke: 'muted', width: 2, cap: 'round', opacity: 0.5 },
+    { type: 'ellipse', cx: 452, cy: 472, rx: 48, ry: 64, fill: { gradient: ['surface', 'bg'], angle: 0 }, stroke: 'surface', width: 3 },
+    { type: 'path', d: 'M 470 412 A 48 64 0 0 1 498 480', fill: 'none', stroke: 'accent2', width: 2, opacity: 0.6 },
+    { type: 'ellipse', cx: 456, cy: 472, rx: 30, ry: 44, fill: 'bg', opacity: 0.7 },
+    { type: 'path', d: 'M 497 500 C 525 560 566 568 604 552', fill: 'none', stroke: 'surface', width: 8, cap: 'round' },
+    { type: 'path', d: 'M 500 498 C 528 556 568 562 602 548', fill: 'none', stroke: 'accent2', width: 1.5, opacity: 0.7 },
+    { type: 'rect', x: 596, y: 540, w: 22, h: 14, r: 7, fill: 'surface', stroke: 'accent2', width: 1.5 },
+    { type: 'circle', cx: 482, cy: 432, r: 4, fill: 'accent', glow: { blur: 10, opacity: 1 }, loop: { type: 'blink', period: 2.2, amount: 0.7 } },
+  ];
+};
+
 const operator = [
   { type: 'rect', x: -100, y: -100, w: 2120, h: 1280, fill: { gradient: ['bg', 'surface', 'bg'], angle: 0 } },
-  // Screens across the room, far out of focus.
+  // Screens across the room and the harbor through the window behind, far out of focus.
   ...[
     [-80, 180, 300, 190, 0.35],
     [250, 120, 260, 170, 0.22],
@@ -195,6 +324,13 @@ const operator = [
     opacity: o,
     z: 4,
   })),
+  ...[
+    [80, 640, 26],
+    [150, 610, 18],
+    [230, 650, 22],
+    [40, 700, 16],
+    [300, 600, 14],
+  ].map(([cx, cy, rr]) => ({ type: 'circle', cx, cy, r: rr, fill: 'accent2', opacity: 0.25, z: 5 })),
   // The light the operator faces, spilling from the right.
   {
     type: 'ellipse',
@@ -206,38 +342,7 @@ const operator = [
     opacity: 0.2,
     z: 0,
   },
-  { type: 'path', d: `${smooth(profilePts)} L 150 1180 Z`, fill: 'bg', stroke: 'none', z: 0 },
-  // Rim light along the brow, nose, lips and chin, and the shoulder.
-  {
-    type: 'path',
-    d: smooth(profilePts.slice(7, 19)),
-    fill: 'none',
-    stroke: 'accent2',
-    width: 3.5,
-    cap: 'round',
-    glow: { blur: 10, opacity: 0.8 },
-    opacity: 0.9,
-    z: 0,
-  },
-  {
-    type: 'path',
-    d: smooth(profilePts.slice(19, 23)),
-    fill: 'none',
-    stroke: 'accent2',
-    width: 3,
-    cap: 'round',
-    glow: { blur: 8, opacity: 0.6 },
-    opacity: 0.6,
-    z: 0,
-  },
-  // The headset: band over the crown, the cup over the ear, the boom to the mouth.
-  { type: 'path', d: 'M 412 470 C 380 300 430 214 520 218', fill: 'none', stroke: 'surface', width: 16, cap: 'round', z: 0 },
-  { type: 'ellipse', cx: 430, cy: 478, rx: 56, ry: 74, fill: 'surface', stroke: 'muted', width: 2.5, z: 0 },
-  { type: 'ellipse', cx: 436, cy: 478, rx: 28, ry: 40, fill: 'bg', opacity: 0.6, z: 0 },
-  { type: 'path', d: 'M 470 520 C 520 580 580 572 626 548', fill: 'none', stroke: 'surface', width: 8, cap: 'round', z: 0 },
-  { type: 'path', d: 'M 470 520 C 520 580 580 572 626 548', fill: 'none', stroke: 'accent2', width: 1.5, opacity: 0.6, z: 0 },
-  { type: 'circle', cx: 630, cy: 546, r: 11, fill: 'surface', stroke: 'accent2', width: 1.5, z: 0 },
-  { type: 'circle', cx: 470, cy: 430, r: 4, fill: 'accent', glow: { blur: 10, opacity: 1 }, z: 0, loop: { type: 'blink', period: 2.2, amount: 0.7 } },
+  { type: 'group', z: 0, subject: true, children: still(operatorFigure()) },
   // Dust turning in the screen light.
   {
     type: 'particles',
@@ -365,7 +470,7 @@ const beats = [
     props: {
       dolly: [{ at: 0, z: 0.12, dur: 8, ease: 'linear' }],
       focus: { z: 0, aperture: 1.4, keys: [{ say: 'call', z: -0.4, dur: 0.8 }] },
-      elements: [...still(clock), still([console_])[0], lineLight],
+      elements: [...still(clock), ...still([console_]), lineLight],
     },
   },
   {
@@ -402,7 +507,7 @@ const beats = [
     id: 'voice',
     block: 'canvas',
     vo: 'One operator remembers it clearly.',
-    hold: 2.2,
+    hold: 2.8,
     transition: 'cut',
     props: {
       dolly: [{ at: 0, z: 0.1, dur: 8, ease: 'linear' }],
@@ -459,13 +564,21 @@ const beats = [
     transition: 'cut',
     props: { source: SAMPLE, elements: boardEls },
   },
-  // Back to the harbor, the camera easing in; the title sits in the night sky above the cranes.
+  // A breath with no voice: the harbor again, only the lighthouse turning.
+  {
+    id: 'quiet',
+    block: 'canvas',
+    duration: 1.8,
+    transition: 'dissolve',
+    props: { world: 'harbor', view: [40, 10, 1860, 1046.3], viewAt: 0, viewDur: 1.8, elements: [] },
+  },
+  // Then the title, in the night sky above the cranes.
   {
     id: 'title',
     block: 'canvas',
     hold: 1.2,
     vo: 'This is the story of the night shift.',
-    transition: 'fade',
+    transition: 'cut',
     props: {
       world: 'harbor',
       view: PUSH,
@@ -476,9 +589,9 @@ const beats = [
           type: 'text',
           text: 'THE NIGHT SHIFT',
           x: 960,
-          y: 215,
-          size: 132,
-          font: 'serif',
+          y: 262,
+          size: 120,
+          font: 'serif-display',
           anchor: 'middle',
           tracking: 0.1,
           fit: 1500,
@@ -493,7 +606,7 @@ const beats = [
           type: 'text',
           text: 'FOUR HOURS BEFORE MORNING',
           x: 960,
-          y: 292,
+          y: 330,
           size: 36,
           font: 'semibold',
           anchor: 'middle',
@@ -525,8 +638,8 @@ const beats = [
           text: 'What they learned before morning.',
           x: 960,
           y: 230,
-          size: 76,
-          font: 'serif-italic',
+          size: 80,
+          font: 'serif-display-italic',
           anchor: 'middle',
           fit: 1400,
           fill: 'bg',
@@ -537,31 +650,46 @@ const beats = [
       ],
     },
   },
+  // Back to the clock from the first shot, closer to the end of the shift: the sun is up.
   {
     id: 'end',
     block: 'canvas',
     vo: 'Watch the full story.',
-    hold: 0.8,
+    hold: 1,
+    transition: 'cut',
     props: {
-      world: 'dawn',
-      view: [0, 0, 1920, 1080],
-      viewAt: 0,
-      viewDur: 3,
+      dolly: [{ at: 0, z: 0.1, dur: 6, ease: 'linear' }],
       elements: [
-        { type: 'rect', x: 900, y: 278, w: 120, h: 3, fill: 'bg', at: 0.4, enter: 'grow-x', dur: 0.6 },
+        ...still(clockShot(6, 41, true)),
+        {
+          type: 'text',
+          text: 'THE NIGHT SHIFT',
+          x: 1170,
+          y: 500,
+          size: 66,
+          font: 'serif-display',
+          anchor: 'start',
+          tracking: 0.08,
+          fit: 620,
+          fill: 'ink',
+          at: 0.3,
+          enter: 'fade',
+          dur: 0.8,
+        },
+        { type: 'rect', x: 1172, y: 534, w: 120, h: 3, fill: 'accent', at: 0.7, enter: 'grow-x', dur: 0.5 },
         {
           type: 'text',
           text: 'WATCH THE FULL STORY',
-          x: 960,
-          y: 345,
-          size: 38,
+          x: 1172,
+          y: 600,
+          size: 36,
           font: 'semibold',
-          anchor: 'middle',
-          tracking: 0.3,
-          fill: 'bg',
-          at: 0.6,
+          anchor: 'start',
+          tracking: 0.22,
+          fill: 'accent2',
+          at: 0.9,
           enter: 'fade',
-          dur: 0.8,
+          dur: 0.6,
         },
       ],
     },

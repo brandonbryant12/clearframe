@@ -32,7 +32,7 @@
   "rules": [
     "Flat shapes in two or three colours: no gradients, glows or lens effects. The edge of a cut is the texture.",
     "Shapes become each other across cuts (the same element id in consecutive canvas beats morphs): a disc becomes a bar, which becomes a door, which becomes the light through it. Continuity is the whole grammar.",
-    "Type is condensed caps with wide tracking, set into the composition like another shape (run it up a panel, cut it into a wall), never as a caption.",
+    "Type is condensed caps (the poster face), set flush into the composition like another shape and revealed whole (a slide or a fade), never typed letter by letter.",
     "Credits are complete: every role has its name. Without names, use complete lines (a season, the day it airs) rather than an empty role.",
     "Cut on the music: every beat is one move and one hold. End the morphs on the title, then change the grammar once for the button (a panel wipe)."
   ]

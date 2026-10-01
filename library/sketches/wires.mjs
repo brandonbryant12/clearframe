@@ -13,10 +13,12 @@ export default {
   build(w, h, { seed } = {}) {
     const rand = rng(seed ?? 17),
       tallFrame = h > w,
-      y0 = round(h * (tallFrame ? 0.6 : 0.6)),
-      vx = round(w * (tallFrame ? 0.66 : 0.7)),
-      f = Math.min(w, h) * 0.24,
-      X = -(tallFrame ? 5.2 : 9),
+      // A tall frame looks up from the foot of the line: the near pylons tower out of the top
+      // of the frame and the wires sweep down through the whole height to the horizon.
+      y0 = round(h * (tallFrame ? 0.8 : 0.6)),
+      vx = round(w * (tallFrame ? 0.8 : 0.7)),
+      f = tallFrame ? w * 0.62 : Math.min(w, h) * 0.24,
+      X = -(tallFrame ? 3.4 : 9),
       Hc = 3,
       P = 8.5;
     // Project a point on the pylon line: lateral offset u (units), height v (units), depth d.
@@ -132,7 +134,7 @@ export default {
         ...[0.32, 0.4, 0.47].map((k, i) => ({
           type: 'ellipse',
           cx: round(w * (0.3 + 0.25 * i)),
-          cy: round(h * k),
+          cy: round((y0 * k) / 0.6),
           rx: round(w * (0.3 - 0.06 * i)),
           ry: round(h * 0.012),
           fill: 'bg',
@@ -186,6 +188,7 @@ export default {
               width: round(Math.max(1, (f * 0.07) / d)),
               join: 'round',
               cap: 'round',
+              enter: 'none',
             })),
             ...tips.map(tip => ({
               type: 'path',
@@ -193,6 +196,7 @@ export default {
               fill: 'none',
               stroke: 'bg',
               width: 2,
+              enter: 'none',
             })),
           ],
         },

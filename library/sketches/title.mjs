@@ -11,9 +11,9 @@ export default {
   use: 'The title in a trailer or opener, the product name in a reveal, the last card before the button. Replace TITLE and A LINE OF CONTEXT; cut into it with a flash.',
   build(w, h) {
     const tallFrame = h > w,
-      size = round(tallFrame ? w * 0.24 : h * 0.3),
+      size = round(tallFrame ? w * 0.3 : h * 0.38),
       cx = round(w / 2),
-      cy = round(h * (tallFrame ? 0.5 : 0.54)),
+      cy = round(h * (tallFrame ? 0.5 : 0.52)),
       origin = [cx, round(cy - size * 0.35)];
     return {
       elements: [
@@ -44,6 +44,24 @@ export default {
           at: 0,
           enter: 'none',
         },
+        // The hit: a horizontal flare along the foot of the word that flashes and decays.
+        {
+          type: 'ellipse',
+          cx,
+          cy: round(cy + size * 0.06),
+          rx: round(w * 0.5),
+          ry: round(Math.max(4, h * 0.006)),
+          fill: { gradient: ['ink', 'accent'], radial: true, fade: true },
+          blend: 'screen',
+          at: 0,
+          enter: 'none',
+          keys: [
+            { at: 0, opacity: 0.9, scaleX: 0.6, dur: 0 },
+            { at: 0, scaleX: 1.2, dur: 1.2, ease: 'out' },
+            { at: 0.1, opacity: 0.25, dur: 1.4, ease: 'out' },
+          ],
+          origin: [cx, round(cy + size * 0.06)],
+        },
         {
           type: 'group',
           origin,
@@ -61,11 +79,11 @@ export default {
               x: cx,
               y: cy,
               size,
-              font: 'display',
+              font: 'poster',
               anchor: 'middle',
-              tracking: 0.2,
+              tracking: 0.06,
               // A long title shrinks to fit the frame instead of running off it.
-              fit: round(w * (tallFrame ? 0.82 : 0.84)),
+              fit: round(w * (tallFrame ? 0.72 : 0.84)),
               fill: { gradient: ['muted', 'ink', 'ink', 'muted'], angle: 90 },
               // On screen from the flash, sharpening out of a soft blur.
               enter: 'none',
@@ -78,28 +96,10 @@ export default {
             },
           ],
         },
-        // The hit: a horizontal flare through the word that flashes and decays.
-        {
-          type: 'ellipse',
-          cx,
-          cy: round(cy - size * 0.36),
-          rx: round(w * 0.5),
-          ry: round(Math.max(4, h * 0.006)),
-          fill: { gradient: ['ink', 'accent'], radial: true, fade: true },
-          blend: 'screen',
-          at: 0,
-          enter: 'none',
-          keys: [
-            { at: 0, opacity: 0.9, scaleX: 0.6, dur: 0 },
-            { at: 0, scaleX: 1.2, dur: 1.2, ease: 'out' },
-            { at: 0.1, opacity: 0.25, dur: 1.4, ease: 'out' },
-          ],
-          origin: [cx, round(cy - size * 0.36)],
-        },
         {
           type: 'rect',
           x: round(cx - w * 0.12),
-          y: round(cy + size * 0.2),
+          y: round(cy + size * 0.3),
           w: round(w * 0.24),
           h: 3,
           fill: 'accent',
@@ -112,12 +112,12 @@ export default {
           type: 'text',
           text: 'A LINE OF CONTEXT',
           x: cx,
-          y: round(cy + size * 0.2 + (tallFrame ? 76 : 64)),
+          y: round(cy + size * 0.3 + (tallFrame ? 76 : 66)),
           size: tallFrame ? 42 : 38,
           font: 'semibold',
           anchor: 'middle',
           tracking: 0.3,
-          fit: round(w * 0.8),
+          fit: round(w * (tallFrame ? 0.7 : 0.8)),
           fill: 'muted',
           at: 1.2,
           enter: 'fade',

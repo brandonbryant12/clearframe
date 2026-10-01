@@ -37,15 +37,23 @@ const inside = (pt, poly) => {
 };
 const polyD = pts => `M ${pts.map(([x, y]) => `${r(x)} ${r(y)}`).join(' L ')} Z`;
 
+// Compact path data for long outlines: an absolute start, then integer relative steps.
+const compact = (pts, close = true) => {
+  const q = pts.map(([x, y]) => [Math.round(x), Math.round(y)]);
+  let d = `M${q[0][0]} ${q[0][1]}l`;
+  for (let i = 1; i < q.length; i++) d += `${q[i][0] - q[i - 1][0]} ${q[i][1] - q[i - 1][1]} `;
+  return d.trim() + (close ? 'z' : '');
+};
+
 // ------------------------------------------------------------------ continents
 const R = 20000;
 /**
- * A continent: radius by angle (bays, capes and inlets at several scales), plus `fine(a)`, extra
- * detail added only where the camera will come close. Sampled densely there, coarsely elsewhere.
+ * A continent: radius by angle at many scales (bays and capes down to inlets a few pixels wide
+ * from orbit), plus `fine(a)`, extra detail only where the camera will come close.
  */
 const continent = (cx, cy, rad, wob, seed, fine = () => 0) => {
   const g = rng(seed),
-    ph = Array.from({ length: 7 }, () => g() * Math.PI * 2);
+    ph = Array.from({ length: 10 }, () => g() * Math.PI * 2);
   const radius = a =>
     rad *
       (1 +
@@ -55,10 +63,13 @@ const continent = (cx, cy, rad, wob, seed, fine = () => 0) => {
             0.16 * Math.sin(7 * a + ph[2]) +
             0.1 * Math.sin(13 * a + ph[3]) +
             0.06 * Math.sin(23 * a + ph[4]) +
-            0.035 * Math.sin(41 * a + ph[5]))) +
+            0.035 * Math.sin(41 * a + ph[5])) +
+        0.012 * Math.sin(67 * a + ph[7]) +
+        0.005 * Math.sin(131 * a + ph[8]) +
+        0.0025 * Math.sin(263 * a + ph[9])) +
     fine(a);
   const at = a => [cx + Math.cos(a) * radius(a), cy + Math.sin(a) * radius(a) * (0.82 + 0.12 * Math.sin(a + ph[6]))];
-  return { at, cx, cy };
+  return { at, cx, cy, rad };
 };
 const sample = (c, step) => {
   const pts = [];
@@ -73,10 +84,25 @@ const bump = (a, c, w) => Math.exp(-(((a - c) / w) ** 2));
 const fineMain = a =>
   bump(a, A1, 0.2) * (320 * Math.sin(a * 40 + 1) + 110 * Math.sin(a * 140 + 2) + 45 * Math.sin(a * 330 + 0.5) + 18 * Math.sin(a * 760)) +
   bump(a, AC, 0.014) * (5 * Math.sin(a * 2900 + 1.4) + 2 * Math.sin(a * 7100 + 0.3));
-const main = continent(4200, -2600, 8200, 0.42, 5, fineMain),
-  others = [continent(-9600, 7600, 5000, 0.5, 8), continent(-7400, -11400, 2600, 0.55, 11), continent(12600, 8800, 1300, 0.5, 14)];
-const mainPts = sample(main, a => (Math.abs(a - AC) < 0.02 ? 0.00025 : Math.abs(a - A1) < 0.3 ? 0.0022 : 0.03));
-const otherPts = others.map(c => sample(c, () => 0.035));
+const main = continent(4200, -2600, 8200, 0.42, 5, fineMain);
+const others = [
+  continent(-9600, 7600, 5000, 0.5, 8),
+  continent(-7400, -11400, 2600, 0.55, 11),
+  continent(12600, 8800, 1300, 0.5, 14),
+  // An archipelago off the south continent and a chain of islands in the western ocean.
+  ...[
+    [-3600, 12600, 520],
+    [-2500, 13600, 340],
+    [-1500, 14300, 260],
+    [-15800, -2400, 700],
+    [-14900, -800, 420],
+    [-15200, 700, 300],
+    [-11800, -6600, 380],
+    [9200, 13400, 460],
+  ].map(([x, y, rr], i) => continent(x, y, rr, 0.55, 30 + i)),
+];
+const mainPts = sample(main, a => (Math.abs(a - AC) < 0.02 ? 0.00025 : Math.abs(a - A1) < 0.3 ? 0.0022 : 0.009));
+const otherPts = others.map(c => sample(c, () => (c.rad > 2000 ? 0.011 : 0.05)));
 const P1 = main.at(A1);
 // The river mouth, the city just inland of it, and the street with the window.
 const mouth = main.at(AC),
@@ -94,6 +120,12 @@ for (let i = 0; i <= 50; i++) {
     s = Math.sin(t * 8) * 170 * t + Math.sin(t * 21) * 40 * t;
   riverPts.push([mouth[0] + inward[0] * d + side[0] * s, mouth[1] + inward[1] * d + side[1] * s]);
 }
+// The city's grid is turned to the coast; the window's street sits in it.
+const ang = Math.atan2(inward[1], inward[0]),
+  U = [Math.cos(ang), Math.sin(ang)],
+  V = [-Math.sin(ang), Math.cos(ang)];
+const at = (b, a) => [P2[0] + U[0] * b + V[0] * a, P2[1] + U[1] * b + V[1] * a];
+const P3 = at(160, 40);
 const onLand = p => inside(p, mainPts);
 const nearRiver = (p, k) => riverPts.some(q => Math.hypot(p[0] - q[0], p[1] - q[1]) < k);
 
@@ -131,6 +163,37 @@ for (let i = 0; i < 1100; i++) {
 }
 
 // ------------------------------------------------------------------ scale 0: the planet
+// The sun is to the left. Night is painted into the sea and land themselves (no shadow disc over
+// space): each continent's colours step from lit to dusk to night across it.
+const lit = x => Math.max(0, Math.min(1, (5000 - x) / 14000));
+// Sand only in full sun; grey stone into dusk; then the night.
+const landTone = L => (L > 0.93 ? 'accent' : L > 0.5 ? 'muted' : L > 0.2 ? 'surface' : 'bg');
+const bbox = pts => {
+  const xs = pts.map(p => p[0]);
+  return [Math.min(...xs), Math.max(...xs)];
+};
+const landPaint = pts => {
+  const [x0, x1] = bbox(pts);
+  return { gradient: [0, 1, 2, 3].map(k => landTone(lit(x0 + ((x1 - x0) * k) / 3))), angle: 0 };
+};
+// Mountain spines: a jagged ridge, lit on its sunward face, shadowed behind.
+const ridge = (pts, seed) => {
+  const g2 = rng(seed),
+    out = [];
+  for (let i = 0; i < pts.length - 1; i++)
+    for (let k = 0; k < 6; k++) {
+      const t = k / 6,
+        [x, y] = [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t];
+      out.push([x + (g2() - 0.5) * 500, y + (g2() - 0.5) * 500]);
+    }
+  out.push(pts.at(-1));
+  return out;
+};
+const spines = [
+  ridge([[-1800, -6400], [-400, -3200], [600, 400], [1400, 2600]], 3),
+  ridge([[-12600, 4600], [-10600, 7200], [-8200, 10400]], 4),
+  ridge([[-8400, -12600], [-6600, -10600]], 5),
+];
 const planet = [
   {
     type: 'particles',
@@ -158,46 +221,47 @@ const planet = [
     at: 0,
     enter: 'none',
   },
-  // Ocean: sunlit teal on the left deepening into night.
-  { type: 'circle', cx: 0, cy: 0, r: R, fill: { gradient: ['accent2', 'surface', 'bg'], angle: 0 }, at: 0, enter: 'none' },
-  { type: 'circle', cx: 0, cy: 0, r: R, fill: 'surface', opacity: 0.45, at: 0, enter: 'none' },
-  // Shallow water over the continental shelves.
-  ...[mainPts, ...otherPts].map(pts => ({
-    type: 'path',
-    d: polyD(pts.filter((_, i) => i % 3 === 0)),
-    fill: 'none',
-    stroke: 'accent2',
-    width: 700,
-    join: 'round',
-    opacity: 0.12,
-    at: 0,
-    enter: 'none',
-  })),
-  // Land, lit from the left, with darker uplands inland.
-  ...[mainPts, ...otherPts].map((pts, i) => ({
-    type: 'path',
-    d: i ? `${smoothPath([...pts, pts[0], pts[1]])} Z` : polyD(pts),
-    fill: { gradient: ['accent', 'muted', 'muted'], angle: 0 },
-    opacity: 0.42,
-    stroke: 'none',
-    at: 0,
-    enter: 'none',
-  })),
+  // Ocean: sunlit teal on the left, deepening through dusk into night.
+  { type: 'circle', cx: 0, cy: 0, r: R, fill: { gradient: ['accent2', 'surface', 'bg', 'bg'], angle: 0 }, at: 0, enter: 'none' },
+  // Shallow water over the shelves, lit only where the sun is.
+  ...[mainPts, ...otherPts].map(pts => {
+    const [x0, x1] = bbox(pts);
+    return {
+      type: 'path',
+      d: compact(pts.filter((_, i) => i % 2 === 0)),
+      fill: 'none',
+      stroke: { gradient: [0, 1, 2].map(k => (lit(x0 + ((x1 - x0) * k) / 2) > 0.4 ? 'accent2' : 'bg')), angle: 0 },
+      width: 900,
+      join: 'round',
+      opacity: 0.13,
+      at: 0,
+      enter: 'none',
+    };
+  }),
+  // Land: sand and stone in the sun, fading through dusk into night.
+  ...[mainPts, ...otherPts].map(pts => ({ type: 'path', d: compact(pts), fill: landPaint(pts), opacity: 0.62, stroke: 'none', at: 0, enter: 'none' })),
+  // Green lowlands and pale desert on the sunlit south continent.
   ...[
-    [2400, -1800, 4800, 3200],
-    [-10400, 8200, 3000, 2200],
-    [-7600, -11200, 1500, 1100],
-  ].map(([cx, cy, rx, ry]) => ({
+    [-8600, 8800, 2600, 1500, 'positive', 0.2],
+    [-11200, 6200, 1900, 1100, 'ink', 0.12],
+    [-5600, -900, 1800, 1300, 'positive', 0.12],
+  ].map(([cx, cy, rx, ry, fill, opacity]) => ({
     type: 'ellipse',
     cx,
     cy,
     rx,
     ry,
-    fill: { gradient: ['bg', 'bg'], radial: true, fade: true },
-    opacity: 0.32,
+    fill: { gradient: [fill, fill], radial: true, fade: true },
+    opacity,
     at: 0,
     enter: 'none',
   })),
+  // Mountain ranges: the sunward face catches the light, the far face falls into shadow.
+  ...spines.flatMap(pts => [
+    { type: 'path', d: compact(pts.map(([x, y]) => [x + 260, y + 140]), false), fill: 'none', stroke: 'bg', width: 560, join: 'round', cap: 'round', opacity: 0.16, at: 0, enter: 'none' },
+    { type: 'path', d: compact(pts, false), fill: 'none', stroke: 'ink', width: 380, join: 'round', cap: 'round', opacity: 0.1, at: 0, enter: 'none' },
+    { type: 'path', d: compact(pts, false), fill: 'none', stroke: 'ink', width: 90, join: 'round', cap: 'round', opacity: 0.12, at: 0, enter: 'none' },
+  ]),
   // Weather: soft clusters of cloud drifting over the day side.
   ...[
     [-7000, 3000, 1.0],
@@ -226,34 +290,6 @@ const planet = [
       loop: { type: 'float', period: 22 + i * 5, amount: 220 },
     })),
   ),
-  // Night: the terminator crosses the planet; everything east of it is dark.
-  // (a soft disc of shadow centred east of the planet: its fading rim is the curved terminator)
-  {
-    type: 'circle',
-    cx: R,
-    cy: -800,
-    r: r(R * 1.5),
-    fill: { gradient: ['bg', 'bg', 'bg'], radial: true, fade: true },
-    opacity: 0.94,
-    at: 0,
-    enter: 'none',
-  },
-  // Space beyond the night limb keeps its stars.
-  {
-    type: 'particles',
-    x: R + 400,
-    y: -32000,
-    w: 40000,
-    h: 76000,
-    kind: 'stars',
-    count: 90,
-    seed: 3,
-    fill: 'ink',
-    opacity: 0.7,
-    size: 40,
-    at: 0,
-    enter: 'none',
-  },
   // City lights on the night side.
   ...chunked(nightCities.map(dot), {
     type: 'path',
@@ -372,13 +408,14 @@ const coast = [
   { type: 'path', d: smoothPath(riverPts), fill: 'none', stroke: 'surface', width: 22, cap: 'round', opacity: 0.9, at: 0.2, enter: 'draw', dur: 1.2 },
   { type: 'path', d: smoothPath(riverPts), fill: 'none', stroke: 'accent2', width: 4, cap: 'round', opacity: 0.4, at: 0.3, enter: 'draw', dur: 1.2 },
 ];
-const coastView = view(P1[0] - 600, P1[1] + 300, 5200);
+// Every zoom view is centred on the window (P3, below), so a tenfold move keeps it fixed in frame.
+const coastView = () => view(P3[0], P3[1], 5200);
 coast.push(
   {
     type: 'text',
     text: 'THE COAST',
-    x: r(coastView[0] + 300),
-    y: r(coastView[1] + coastView[3] - 260),
+    x: r(coastView()[0] + coastView()[2] * 0.1),
+    y: r(coastView()[1] + coastView()[3] * 0.86),
     size: 108,
     font: 'semibold',
     tracking: 0.3,
@@ -388,14 +425,10 @@ coast.push(
     exitAt: 60,
     exit: 'fade',
   },
-  { type: 'rect', x: r(coastView[0] + 300), y: r(coastView[1] + coastView[3] - 210), w: 360, h: 10, fill: 'accent2', at: 1.1, enter: 'grow-x', dur: 0.5, exitAt: 60, exit: 'fade' },
+  { type: 'rect', x: r(coastView()[0] + coastView()[2] * 0.1), y: r(coastView()[1] + coastView()[3] * 0.86 + 50), w: 360, h: 10, fill: 'accent2', at: 1.1, enter: 'grow-x', dur: 0.5, exitAt: 60, exit: 'fade' },
 );
 
 // ------------------------------------------------------------------ scale 2: the city
-const ang = Math.atan2(inward[1], inward[0]),
-  U = [Math.cos(ang), Math.sin(ang)],
-  V = [-Math.sin(ang), Math.cos(ang)];
-const at = (b, a) => [P2[0] + U[0] * b + V[0] * a, P2[1] + U[1] * b + V[1] * a];
 const streets = [],
   majors = [],
   lamps = [],
@@ -433,7 +466,7 @@ for (let i = 0; i < 900; i++) {
   const p = at(-120 + g() * 640, -400 + g() * 800);
   if (ok(p)) windows.push(p);
 }
-const cityView = view(P2[0] + U[0] * 60, P2[1] + U[1] * 60, 520);
+const cityView = () => view(P3[0], P3[1], 520);
 const city = [
   // The city's ground at night, dark enough for its lights.
   {
@@ -492,10 +525,24 @@ const city = [
     loop: { type: 'dash', period: 1.4 },
   },
   {
+    type: 'ellipse',
+    cx: r(cityView()[0] + cityView()[2] * 0.1 + 80),
+    cy: r(cityView()[1] + cityView()[3] * 0.86 - 6),
+    rx: 150,
+    ry: 46,
+    fill: { gradient: ['bg', 'bg', 'bg'], radial: true, fade: true },
+    opacity: 0.92,
+    at: 0.6,
+    enter: 'fade',
+    dur: 0.4,
+    exitAt: 60,
+    exit: 'fade',
+  },
+  {
     type: 'text',
     text: 'THE CITY',
-    x: r(cityView[0] + 30),
-    y: r(cityView[1] + cityView[3] - 26),
+    x: r(cityView()[0] + cityView()[2] * 0.1),
+    y: r(cityView()[1] + cityView()[3] * 0.86),
     size: 10.8,
     font: 'semibold',
     tracking: 0.3,
@@ -510,7 +557,7 @@ const city = [
 // ------------------------------------------------------------------ scale 3: one window
 // The camera drops to a street front: three buildings at night, one window lit, a lamp and a
 // plant on the sill.
-const P3 = at(160, 40);
+
 const [wx, wy] = P3;
 const fac = [];
 const houses = [
@@ -582,8 +629,8 @@ const street = [
   {
     type: 'text',
     text: 'ONE WINDOW, STILL LIT',
-    x: r(wx - 23),
-    y: r(wy + 13.4),
+    x: r(wx - 20.8),
+    y: r(wy + 11.6),
     size: 1.08,
     font: 'semibold',
     tracking: 0.3,
@@ -613,17 +660,18 @@ const book = {
   transition: 'cut',
   sfx: 'subtle',
   texture: { grain: 0.3, vignette: 0.5, animate: true },
-  lens: { grade: 'teal-orange', gradeAmount: 0.5, bloom: 0.45, blur: 0.5 },
+  // No shutter blur: a tenfold zoom smeared by motion blur reads as mush, not a camera move.
+  lens: { grade: 'teal-orange', gradeAmount: 0.5, bloom: 0.45, blur: 0 },
   note: "One world at four scales, each ten times smaller than the last; the camera zooms at a constant pace in log space. Each scale is drawn inside the one before (library/playbooks/_zoom-journey.mjs): the coast is the continent's own outline, carrying finer bays only where the camera goes; the city's lights are the specks seen from orbit. Strokes and type are sized for the zoom they are seen at. The planet is stylised: do not add real coastlines without verified geography.",
   beats: [
-    W('planet', 'From out here, the planet looks calm.', view(1500, -800, 52000), planet, { transition: 'cut' }),
-    W('coast', 'Come closer, and there is a coast,', coastView, coast, { hold: 0.4 }),
-    W('city', 'a city that never quite sleeps,', cityView, city, { hold: 0.4 }),
-    W('window', 'and one window, still lit.', view(wx, wy + 1, 52), street, { hold: 0.8 }),
+    W('planet', 'From out here, the planet looks calm.', view(P3[0], P3[1], 52000), planet, { transition: 'cut' }, { viewFrom: view(1500, -800, 52000), viewAt: 0, viewDur: 3.6 }),
+    W('coast', 'Come closer, and there is a coast,', coastView(), coast, { hold: 0.8 }, { viewAt: 0, viewDur: 2.2 }),
+    W('city', 'a city that never quite sleeps,', cityView(), city, { hold: 0.8 }, { viewAt: 0, viewDur: 2.2 }),
+    W('window', 'and one window, still lit.', view(wx, wy + 1, 52), street, { hold: 1 }, { viewAt: 0, viewDur: 2.2 }),
     W(
       'whole',
       'Every story is that small, and that big.',
-      view(1500, -800, 52000),
+      view(P3[0], P3[1], 52000),
       [
         {
           type: 'circle',

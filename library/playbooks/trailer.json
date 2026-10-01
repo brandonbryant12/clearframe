@@ -24,11 +24,10 @@
     "grade": "bleach",
     "gradeAmount": 0.5,
     "bloom": 0.5,
-    "aberration": 0.3,
     "handheld": 0.3,
     "blur": 0.5
   },
-  "note": "Shots, not slides (docs/cinema.md). Every world here belongs to this film's promise (a signal): a waveform out of the dark, power lines at dusk, a city switching on, a mast at dawn. Swap them for the places your promise touches, keep the rhythm: each montage shot shorter than the last, a black card between them, a silence with no voice, the title on a flash, a button. Cards take a small LEAD line and one or two huge words (sketchText LEAD and CARD).",
+  "note": "Shots, not slides (docs/cinema.md). Every world here belongs to this film's promise (a signal): a waveform out of the dark, power lines at dusk, a city switching on, a mast at dawn. Swap them for the places your promise touches, keep the rhythm: each montage shot shorter than the last, a black card between them, a silence with no voice, the title on the one flash, a button. Cards take a small LEAD line and one or two huge words (sketchText LEAD and CARD).",
   "beats": [
     {
       "id": "open",
@@ -54,7 +53,7 @@
     {
       "id": "through",
       "block": "canvas",
-      "transition": "flash",
+      "transition": "cut",
       "vo": "It moves through every wire,",
       "props": {
         "sketch": "wires"
@@ -85,7 +84,7 @@
     {
       "id": "dawn",
       "block": "canvas",
-      "transition": "flash",
+      "transition": "cut",
       "vo": "and every morning after.",
       "props": {
         "sketch": "mast"
@@ -96,13 +95,13 @@
       "block": "canvas",
       "duration": 1.3,
       "props": {
-        "sketch": "pause"
+        "sketch": "flatline"
       }
     },
     {
       "id": "title",
       "block": "canvas",
-      "hold": 1.5,
+      "hold": 2.0,
       "transition": "flash",
       "vo": "Signal.",
       "props": {

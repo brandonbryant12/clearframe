@@ -23,6 +23,19 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - `cinematic-explainer`: the water system in cross-section, with labels kept inside the letterbox.
   - New set pieces: `signal`, `wires`, `citygrid`, `mast`, `harbor` and `rooftops`. `card` is a poster card (`LEAD`/`CARD`), and `title` fills the frame.
   - First beats cut in rather than fading up from black.
+- **Genre films after round 2.**
+  - Imagery:
+    - The cold open gets solid container stacks, a fitted office block and a real operator profile.
+    - The zoom journey gets coastlines at ten scales and a drift-free zoom centred on the window.
+    - The cinematic explainer gets cumulus clouds, a street with one house cut open to the sink, and the 90% figure inside the world.
+    - The product reveal gets a soft reflection, dithering grain and a spec beat that is a product shot.
+  - Type:
+    - Flares sit behind the words.
+    - There is no aberration on hero type.
+    - `poster` and `serif-display` are used across the genres.
+    - Words are never typed in mid-word.
+  - The vertical trailer is restaged for 9:16 (`wires` looks up, `citygrid` tilts down, a new `flatline` silence), with type in the middle 80%.
+  - The trailer flashes once, at the title.
 - **The frame audit warns about type outside title-safe:** 90% of a landscape frame, and the middle 80% of a vertical one's width. The editorial brand mark sits inside it.
 - **Two display faces for genres** (SIL OFL 1.1 from google/fonts at the pinned revision, hashes in `provenance.json`): `poster` (Bebas Neue condensed capitals) for trailer cards, and `serif-display` / `serif-display-italic` (DM Serif Display) for documentary and editorial titles.
 - **Report films rebuilt after round 2.** Each is one place, born from its mechanism and ending on a picture, with no iris, no "X, not Y" closer and no end card (generators in `library/playbooks/_*.mjs`).

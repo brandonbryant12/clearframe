@@ -50,21 +50,35 @@ export function harbor(w, h, { seed, dawn = false } = {}) {
     crane(570, quay, 400, 380, false),
     crane(880, quay, 300, 300, false),
   ];
-  const containers = [];
-  for (let i = 0; i < 26; i++) {
-    const cx = 80 + i * 36 + rand() * 6,
+  // Container stacks: solid steel boxes in the colours of a working port, one to three high, each
+  // with its corrugation and a top edge caught by the lamps (night) or the low sun (dawn).
+  const containers = [],
+    ribs = [];
+  const steel = ['accent', 'positive', 'muted', 'negative', 'accent2'];
+  for (let x = 70; x < 1060; ) {
+    const long = rand() > 0.35,
+      cw = long ? 46 : 23,
       tiers = 1 + Math.floor(rand() * 3);
-    for (let t = 0; t < tiers; t++)
-      containers.push({
-        type: 'rect',
-        x: X(cx),
-        y: Y(quay - 22 * (t + 1)),
-        w: S(32),
-        h: S(20),
-        fill: ['surface', 'muted', 'accent'][Math.floor(rand() * 3)],
-        opacity: dawn ? 0.55 : 0.28,
-      });
+    for (let t = 0; t < tiers; t++) {
+      const y = quay - 21 * (t + 1),
+        colour = steel[Math.floor(rand() * steel.length)];
+      containers.push(
+        {
+          type: 'rect',
+          x: X(x),
+          y: Y(y),
+          w: S(cw - 1.5),
+          h: S(20),
+          fill: { gradient: [colour, dawn ? 'surface' : 'bg'], angle: 90 },
+          opacity: dawn ? 0.75 : 0.62,
+        },
+        { type: 'rect', x: X(x), y: Y(y), w: S(cw - 1.5), h: S(1.6), fill: dawn ? 'accent2' : 'accent2', opacity: dawn ? 0.8 : 0.45 },
+      );
+      for (let k = 3; k < cw - 3; k += 3.2) ribs.push(`M${X(x + k)} ${Y(y + 2.5)}v${S(16)}`);
+    }
+    x += cw + (rand() > 0.8 ? 18 : 1.5);
   }
+  containers.push({ type: 'path', d: ribs.join(''), fill: 'none', stroke: 'bg', width: S(0.9), opacity: 0.45 });
   // Quay lamps: sodium points along the edge, each with its pool of light.
   const lamps = [130, 420, 700, 990, 1260].map(x => [x, quay - 70]);
   // The lighthouse at the end of the breakwater.
@@ -72,20 +86,23 @@ export function harbor(w, h, { seed, dawn = false } = {}) {
     lantern = [lh[0], lh[1] - 150];
   // The one building awake: the dispatch centre on the near quay, right of frame.
   const office = { x: 1590, y: 390, w: 420, h: quay - 390 + 40 };
-  const offWin = [];
-  for (let r = 0; r < 8; r++)
+  const offWin = [],
+    floors = Math.floor((office.h - 70) / 52);
+  for (let r = 0; r < floors; r++)
     for (let c = 0; c < 7; c++) {
-      const lit = !dawn && ((r === 3 && c > 1 && c < 6) || (r === 4 && c > 2 && c < 5) || rand() > 0.9);
+      const lit = !dawn && ((r === 2 && c > 1 && c < 6) || (r === 3 && c > 2 && c < 5) || rand() > 0.9);
       offWin.push({
         type: 'rect',
         x: X(office.x + 26 + c * 56),
-        y: Y(office.y + 30 + r * 52),
+        y: Y(office.y + 34 + r * 52),
         w: S(34),
         h: S(30),
         fill: lit ? 'accent2' : 'surface',
         opacity: lit ? 0.95 : dawn ? 0.5 : 0.35,
       });
     }
+  // Floor slabs between the window rows, and the plant on the roof.
+  const slabs = Array.from({ length: floors + 1 }, (_, r) => `M${X(office.x)} ${Y(office.y + 24 + r * 52)}h${S(office.w)}`).join('');
   // Every light is carried on the water as a broken streak below its own waterline, at its depth.
   const reflections = [];
   const reflect = (x, y, axis, len, color, width, opacity, z) =>
@@ -351,7 +368,10 @@ export function harbor(w, h, { seed, dawn = false } = {}) {
         { type: 'rect', x: X(office.x), y: Y(office.y), w: S(office.w), h: S(office.h), fill: 'bg' },
         { type: 'rect', x: X(office.x), y: Y(office.y), w: S(5), h: S(office.h), fill: dawn ? 'accent' : 'muted', opacity: 0.35 },
         { type: 'group', glow: dawn ? undefined : { blur: S(8), opacity: 0.6 }, children: offWin },
+        { type: 'path', d: slabs, fill: 'none', stroke: dawn ? 'accent' : 'muted', width: S(2), opacity: 0.18 },
         { type: 'rect', x: X(office.x + 80), y: Y(office.y - 60), w: S(4), h: S(60), fill: 'bg' },
+        { type: 'rect', x: X(office.x + 150), y: Y(office.y - 26), w: S(90), h: S(26), fill: 'bg' },
+        { type: 'rect', x: X(office.x + 260), y: Y(office.y - 16), w: S(50), h: S(16), fill: 'bg' },
       ],
     },
     // Near the lens: the quay edge, a bollard and its rope, soft.
@@ -368,11 +388,15 @@ export function harbor(w, h, { seed, dawn = false } = {}) {
       ],
     },
   ];
-  // Drop undefined glows.
-  const clean = list => list.forEach(el => {
-    if (el.glow === undefined) delete el.glow;
-    if (el.children) clean(el.children);
-  });
+  // Drop undefined glows, and hold everything still from the first frame (children too: a
+  // shape without an entrance would otherwise fade or draw in).
+  const clean = list =>
+    list.forEach(el => {
+      if (el.glow === undefined) delete el.glow;
+      el.at ??= 0;
+      el.enter ??= 'none';
+      if (el.children) clean(el.children);
+    });
   clean(els);
   return els;
 }

@@ -10,7 +10,8 @@ import { smoothPath, rng } from '../../fframes/sketch-kit.mjs';
 const r = v => Math.round(v * 10) / 10;
 const rand = rng(12);
 const SAMPLE = 'Illustrative sample data · replace before publishing';
-const still = list => list.map(el => ({ at: 0, enter: 'none', ...el }));
+// On screen from the first frame, children too (a shape without an entrance would fade or draw in).
+const still = list => list.map(el => ({ at: 0, enter: 'none', ...el, ...(el.children ? { children: still(el.children) } : {}) }));
 
 // ------------------------------------------------------------------ the land in section
 // The surface: peaks on the left, a valley holding the reservoir, the plain the plant and the
@@ -151,21 +152,24 @@ const hills = [
   // The cut edge of the ground: a lit line along the surface.
   { type: 'path', d: surface, fill: 'none', stroke: 'accent', width: 3, opacity: 0.5 },
 ];
-const cloud = (cx, cy, k) =>
-  [
-    [0, 0, 260, 90],
-    [-180, 30, 170, 70],
-    [190, 26, 200, 74],
-    [60, -50, 160, 80],
-  ].map(([dx, dy, rx, ry]) => ({
-    type: 'ellipse',
-    cx: cx + dx * k,
-    cy: cy + dy * k,
-    rx: rx * k,
-    ry: ry * k,
-    fill: { gradient: ['muted', 'surface'], angle: 90 },
-    opacity: 0.85,
-  }));
+// A cumulus: a billowing top built from arcs over a flat base, lit from above, its base in shadow.
+const cumulus = (cx, base, w, h, seed) => {
+  const g = rng(seed),
+    n = 7,
+    xs = Array.from({ length: n + 1 }, (_, i) => cx - w / 2 + (w * i) / n + (i && i < n ? (g() - 0.5) * (w / n) * 0.5 : 0));
+  let d = `M ${r(xs[0])} ${r(base)}`;
+  xs.slice(1).forEach((x, i) => {
+    const t = (i + 1) / n,
+      y = i + 1 < n ? base - h * Math.sin(Math.PI * t) ** 0.7 * (0.65 + 0.35 * g()) : base,
+      rad = (x - xs[i]) * (0.55 + 0.25 * g());
+    d += ` A ${r(rad)} ${r(rad * 0.9)} 0 0 1 ${r(x)} ${r(y)}`;
+  });
+  d += ` Q ${r(cx)} ${r(base + h * 0.06)} ${r(xs[0])} ${r(base)} Z`;
+  return [
+    { type: 'path', d, fill: { gradient: ['ink', 'muted', 'surface'], angle: 90 }, stroke: 'none', opacity: 0.94 },
+    { type: 'path', d, fill: 'none', stroke: 'accent', width: 2.5, opacity: 0.35 },
+  ];
+};
 const source = [
   ...still(sky),
   ...still(hills),
@@ -175,7 +179,7 @@ const source = [
     enter: 'none',
     z: 0.6,
     loop: { type: 'float', period: 9, amount: 10 },
-    children: [...cloud(380, 170, 1.3), ...cloud(860, 130, 1)],
+    children: still([...cumulus(880, 372, 560, 160, 2), ...cumulus(420, 410, 760, 200, 1)]),
   },
   {
     type: 'particles',
@@ -237,9 +241,10 @@ const source = [
 const plant = [
   ...pipe(PIPE1, 0, undefined, { dur: 2 }),
   // The building, in section: two settling tanks, then the filter bed of sand and gravel.
-  { type: 'rect', x: 2700, y: 520, w: 540, h: 164, r: 8, fill: { gradient: ['surface', 'bg'], angle: 90 }, stroke: 'muted', width: 3, say: 'plant', enter: 'grow-y' },
-  { type: 'poly', points: [[2690, 522], [2970, 430], [3250, 522]], closed: true, fill: 'surface', stroke: 'muted', width: 3, say: 'plant', enter: 'fade' },
-  ...[2730, 2880].map(x => ({ type: 'rect', x, y: 560, w: 120, h: 104, r: 4, fill: 'bg', stroke: 'muted', width: 2, say: 'plant', enter: 'fade' })),
+  { type: 'rect', x: 2700, y: 520, w: 540, h: 164, r: 8, fill: { gradient: ['surface', 'bg'], angle: 90 }, stroke: 'muted', width: 3, at: 0, enter: 'none' },
+  { type: 'poly', points: [[2690, 522], [2970, 430], [3250, 522]], closed: true, fill: { gradient: ['muted', 'surface'], angle: 0 }, stroke: 'muted', width: 3, at: 0, enter: 'none' },
+  { type: 'line', x1: 2970, y1: 432, x2: 3250, y2: 522, stroke: 'accent', width: 3, opacity: 0.6, at: 0, enter: 'none' },
+  ...[2730, 2880].map(x => ({ type: 'rect', x, y: 560, w: 120, h: 104, r: 4, fill: 'bg', stroke: 'muted', width: 2, at: 0, enter: 'none' })),
   ...[2730, 2880].map(x => ({
     type: 'rect',
     x: x + 4,
@@ -263,7 +268,7 @@ const plant = [
     say: 'filters',
     loop: { type: 'spin', period: 3 },
   })),
-  { type: 'rect', x: 3040, y: 560, w: 170, h: 104, r: 4, fill: 'bg', stroke: 'muted', width: 2, say: 'cleans', enter: 'fade' },
+  { type: 'rect', x: 3040, y: 560, w: 170, h: 104, r: 4, fill: 'bg', stroke: 'muted', width: 2, at: 0, enter: 'none' },
   ...[
     ['accent2', 570, 22],
     ['muted', 592, 26],
@@ -289,70 +294,120 @@ const plant = [
 ];
 
 // ------------------------------------------------------------------ station 3: the streets
-const house = (x, k, lit) => {
-  const w = 220,
-    h = 150 * k;
-  return [
-    { type: 'rect', x: x - w / 2, y: 680 - h, w, h, fill: { gradient: ['surface', 'bg'], angle: 90 }, stroke: 'muted', width: 2 },
-    {
-      type: 'poly',
-      points: [
-        [x - w / 2 - 14, 682 - h],
-        [x, 680 - h - 90],
-        [x + w / 2 + 14, 682 - h],
-      ],
-      closed: true,
-      fill: { gradient: ['muted', 'surface'], angle: 0 },
-      stroke: 'none',
-    },
-    ...[-50, 50].map(dx => ({
-      type: 'rect',
-      x: x + dx - 22,
-      y: 680 - h + 34,
-      w: 44,
-      h: 40,
-      fill: lit ? 'accent' : 'bg',
-      opacity: lit ? 0.9 : 0.8,
-      ...(lit ? { glow: { blur: 10, opacity: 0.7 } } : {}),
-    })),
-  ];
-};
+const G0 = 680; // street level
+const windowRow = (x0, y, n, gap, w, h, litEvery) =>
+  Array.from({ length: n }, (_, i) => ({
+    type: 'rect',
+    x: x0 + i * gap,
+    y,
+    w,
+    h,
+    fill: litEvery && i % litEvery === 1 ? 'accent' : 'bg',
+    opacity: litEvery && i % litEvery === 1 ? 0.85 : 0.75,
+    stroke: 'muted',
+    width: 1.5,
+  }));
+// A terrace house: three floors, a parapet, a door; lit from the right by the low sun.
+const terrace = (x, w) => [
+  { type: 'rect', x, y: G0 - 300, w, h: 300, fill: { gradient: ['surface', 'muted', 'surface'], angle: 0 }, opacity: 0.95 },
+  { type: 'rect', x: x - 6, y: G0 - 312, w: w + 12, h: 14, fill: 'surface', stroke: 'muted', width: 1.5 },
+  { type: 'rect', x: x + w - 6, y: G0 - 300, w: 6, h: 300, fill: 'accent', opacity: 0.35 },
+  ...[0, 1, 2].flatMap(f => windowRow(x + 22, G0 - 280 + f * 92, 3, (w - 44) / 3, 40, 56, f === 1 ? 2 : 0)),
+  { type: 'rect', x: x + w / 2 - 22, y: G0 - 70, w: 44, h: 70, fill: 'bg', stroke: 'muted', width: 1.5 },
+];
+// A gabled house with a chimney.
+const gabled = (x, w) => [
+  { type: 'rect', x, y: G0 - 190, w, h: 190, fill: { gradient: ['surface', 'muted', 'surface'], angle: 0 }, opacity: 0.95 },
+  { type: 'poly', points: [[x - 14, G0 - 188], [x + w / 2, G0 - 300], [x + w + 14, G0 - 188]], closed: true, fill: { gradient: ['bg', 'surface', 'muted'], angle: 0 } },
+  { type: 'line', x1: x + w / 2, y1: G0 - 300, x2: x + w + 14, y2: G0 - 188, stroke: 'accent', width: 3, opacity: 0.6 },
+  { type: 'rect', x: x + w * 0.68, y: G0 - 296, w: 26, h: 70, fill: 'surface', stroke: 'muted', width: 1.5 },
+  ...windowRow(x + 26, G0 - 160, 3, (w - 52) / 3, 40, 52, 3),
+  { type: 'rect', x: x + 26, y: G0 - 80, w: 40, h: 80, fill: 'bg', stroke: 'muted', width: 1.5 },
+  ...windowRow(x + 100, G0 - 72, 2, 64, 44, 48, 0),
+];
+// An apartment block, four floors.
+const block = (x, w) => [
+  { type: 'rect', x, y: G0 - 390, w, h: 390, fill: { gradient: ['surface', 'muted', 'surface'], angle: 0 }, opacity: 0.95 },
+  { type: 'rect', x: x + w - 6, y: G0 - 390, w: 6, h: 390, fill: 'accent', opacity: 0.35 },
+  ...[0, 1, 2, 3].flatMap(f => windowRow(x + 20, G0 - 366 + f * 88, 4, (w - 40) / 4, 36, 52, f % 2 ? 3 : 4)),
+  { type: 'rect', x: x + 30, y: G0 - 404, w: 60, h: 14, fill: 'surface' },
+];
+// The tap house, cut open: its walls in section, a kitchen with a sink, the riser coming up
+// through the floor to the tap.
+const TAP = [4486, 572];
+const cutaway = (x, w) => [
+  // The room behind the cut: a warm back wall, a window onto the morning.
+  { type: 'rect', x, y: G0 - 300, w, h: 300, fill: { gradient: ['accent', 'surface', 'bg'], angle: 90 }, opacity: 0.55 },
+  { type: 'rect', x: x + 40, y: G0 - 250, w: 96, h: 96, fill: { gradient: ['accent2', 'accent'], angle: 90 }, opacity: 0.6, stroke: 'muted', width: 3 },
+  { type: 'line', x1: x + 88, y1: G0 - 250, x2: x + 88, y2: G0 - 154, stroke: 'muted', width: 3 },
+  // The cut walls and roof, drawn in section.
+  { type: 'rect', x: x - 10, y: G0 - 300, w: 14, h: 300, fill: 'muted' },
+  { type: 'rect', x: x + w - 4, y: G0 - 300, w: 14, h: 300, fill: 'muted' },
+  { type: 'poly', points: [[x - 26, G0 - 296], [x + w / 2, G0 - 384], [x + w + 26, G0 - 296]], closed: true, fill: 'none', stroke: 'muted', width: 12, join: 'round' },
+  // The kitchen: a counter, the sink set in it, a cupboard below.
+  { type: 'rect', x: x + 90, y: G0 - 92, w: 200, h: 92, fill: 'surface', stroke: 'muted', width: 2 },
+  { type: 'rect', x: x + 80, y: G0 - 100, w: 220, h: 12, fill: 'muted' },
+  { type: 'path', d: `M ${x + 140} ${G0 - 100} q 50 30 100 0`, fill: 'bg', stroke: 'ink', width: 2, opacity: 0.9 },
+];
+const house = (x, w, kind) => (kind === 'terrace' ? terrace : kind === 'gabled' ? gabled : block)(x, w);
+const tree = (x, s = 1) => [
+  { type: 'rect', x: x - 5, y: G0 - 90 * s, w: 10, h: 90 * s, fill: 'bg' },
+  ...[
+    [0, -120, 56],
+    [-34, -96, 44],
+    [32, -92, 46],
+  ].map(([dx, dy, rr]) => ({ type: 'circle', cx: x + dx * s, cy: G0 + dy * s, r: rr * s, fill: { gradient: ['positive', 'surface'], angle: 60 }, opacity: 0.85 })),
+];
+const branchXs = [3790, 4060, TAP[0] - 46, 4800];
 const city = [
   ...pipe(`M 3330 640 L 3330 800 L 5000 800`, 0, undefined, { dur: 2.2 }),
-  { type: 'group', say: 'streets', stagger: 0.15, children: [3920, 4220, 4520, 4820].map((x, i) => ({ type: 'group', children: house(x, i % 2 ? 1.2 : 1, i !== 2) })) },
-  ...pipe(branches, undefined, 'every', { dur: 0.6 }),
-  // The tap in the third house, and a drop.
+  {
+    type: 'group',
+    at: 0,
+    enter: 'none',
+    children: still([
+      { type: 'group', children: house(3690, 200, 'terrace') },
+      { type: 'group', children: tree(3940, 0.9) },
+      { type: 'group', children: house(3980, 170, 'gabled') },
+      { type: 'group', children: cutaway(4250, 380) },
+      { type: 'group', children: house(4690, 230, 'block') },
+      { type: 'group', children: tree(4960, 1.1) },
+    ]),
+  },
+  { type: 'rect', x: 3340, y: G0 - 4, w: 1700, h: 8, fill: 'surface', at: 0, enter: 'none' },
+  ...pipe(branchXs.map(x => `M ${x} 800 L ${x} ${G0 - 2}`).join(' ') + ` M ${TAP[0] - 46} ${G0} L ${TAP[0] - 46} ${TAP[1] - 30} L ${TAP[0]} ${TAP[1] - 30}`, undefined, 'every', { dur: 0.8 }),
+  // The tap, and a drop forming under it.
   {
     type: 'path',
-    d: 'M 4520 690 L 4520 600 L 4560 600 L 4560 618',
+    d: `M ${TAP[0] - 46} ${TAP[1] - 30} L ${TAP[0] + 4} ${TAP[1] - 30} L ${TAP[0] + 4} ${TAP[1] - 6}`,
     fill: 'none',
     stroke: 'ink',
-    width: 10,
+    width: 9,
     cap: 'round',
     join: 'round',
     say: 'tap',
     enter: 'draw',
-    dur: 0.5,
+    dur: 0.4,
   },
   {
     type: 'circle',
-    cx: 4560,
-    cy: 634,
-    r: 7,
+    cx: TAP[0] + 4,
+    cy: TAP[1] + 6,
+    r: 6,
     fill: 'accent2',
     glow: { blur: 8 },
     say: 'tap',
-    loop: { type: 'float', period: 1.2, amount: 8 },
+    loop: { type: 'float', period: 1.2, amount: 6 },
   },
   {
     type: 'text',
     text: 'Your tap',
-    x: 4370,
-    y: 400,
-    size: 56,
+    x: 4600,
+    y: G0 - 190,
+    size: 48,
     font: 'bold',
     fill: 'ink',
-    anchor: 'middle',
+    anchor: 'end',
     say: 'every',
     shadow: { blur: 12, opacity: 0.8 },
     exitAt: 7,
@@ -362,7 +417,7 @@ const city = [
 
 // ------------------------------------------------------------------ beats
 // The pull-back's labels clear before the camera returns to the tap.
-const leave = { exitAt: 4.3, exitDur: 0.4, exit: 'fade' };
+const leave = { exitAt: 4.6, exitDur: 0.4, exit: 'fade' };
 const beats = [
   {
     id: 'establish',
@@ -427,14 +482,14 @@ const beats = [
     block: 'canvas',
     vo: 'It starts as rain on the hills, collected in a reservoir.',
     tail: 0.7,
-    props: { world: 'journey', view: [80, 170, 1680, 945], viewFrom: [-120, -60, 2160, 1215], viewAt: 0, viewDur: 4, elements: source },
+    props: { world: 'journey', view: [80, 70, 1680, 945], viewFrom: [-120, -60, 2160, 1215], viewAt: 0, viewDur: 4, elements: source },
   },
   {
     id: 'plant',
     block: 'canvas',
-    vo: 'But first, a pipe carries it to a plant that filters and cleans it.',
+    vo: 'From there, a pipe carries it to a plant that filters and cleans it.',
     tail: 0.7,
-    props: { world: 'journey', view: [2120, 160, 1600, 900], elements: plant },
+    props: { world: 'journey', view: [2120, 160, 1600, 900], viewAt: 0, viewDur: 1.5, elements: plant },
   },
   {
     id: 'city',
@@ -442,109 +497,144 @@ const beats = [
     vo: 'Then a second network runs it under the streets, to every tap.',
     tail: 0.7,
     hold: 0.5,
-    props: { world: 'journey', view: [3560, 150, 1600, 900], elements: city },
+    props: { world: 'journey', view: [3560, 150, 1600, 900], viewAt: 0, viewDur: 1.5, elements: city },
   },
+  // Down through the street into the ground: the figure sits in the soil with the pipe.
   {
     id: 'hidden',
-    block: 'stat',
+    block: 'canvas',
     vo: 'Nine in ten metres of that journey run underground.',
-    tone: 'accent',
-    transition: 'panel',
+    hold: 1,
     props: {
-      value: 90,
-      suffix: '%',
-      label: "of the pipe's length runs underground",
-      align: 'center',
-      land: 'ten',
+      world: 'journey',
+      view: [3440, 520, 1440, 810],
+      viewAt: 0,
+      viewDur: 1.6,
       source: SAMPLE,
+      elements: [
+        {
+          type: 'path',
+          d: 'M 3330 800 L 5000 800',
+          fill: 'none',
+          stroke: 'accent2',
+          width: 40,
+          opacity: 0.45,
+          glow: { blur: 30, opacity: 1 },
+          say: 'underground',
+          enter: 'draw',
+          dur: 0.9,
+          exitAt: 6.4,
+          exit: 'fade',
+        },
+        {
+          type: 'text',
+          text: '0',
+          x: 3560,
+          y: 1040,
+          size: 210,
+          font: 'display',
+          fill: 'ink',
+          at: 1.5,
+          enter: 'fade',
+          dur: 0.2,
+          count: { from: 0, to: 90, dur: 1.2, suffix: '%' },
+          exitAt: 6.4,
+          exit: 'fade',
+        },
+        {
+          type: 'text',
+          text: "of the pipe's length runs underground",
+          x: 4130,
+          y: 1010,
+          size: 44,
+          font: 'semibold',
+          fill: 'accent2',
+          width: 640,
+          at: 1.8,
+          enter: 'rise',
+          dur: 0.5,
+          exitAt: 6.4,
+          exit: 'fade',
+        },
+      ],
     },
   },
-  // Silence: one drop from the tap into a still basin.
+  // Silence: one drop from a chrome tap into a still basin, and the sound of it.
   {
     id: 'silence',
     block: 'canvas',
     hold: 1,
+    sfx: [{ src: 'drop', at: 1.2, volume: 0.7 }],
     props: {
-      elements: [
-        // A tap in close-up, lit by a window to the left; the basin below holds still water.
-        { type: 'rect', x: -100, y: -100, w: 2120, h: 1280, fill: { gradient: ['surface', 'bg', 'bg'], angle: 0 }, at: 0, enter: 'none' },
+      elements: still([
+        // Tiles lit by a window to the left.
+        { type: 'rect', x: -100, y: -100, w: 2120, h: 1280, fill: { gradient: ['muted', 'surface', 'bg'], angle: 0 } },
         {
-          type: 'ellipse',
-          cx: 300,
-          cy: 300,
-          rx: 700,
-          ry: 520,
-          fill: { gradient: ['accent2', 'accent2'], radial: true, fade: true },
-          opacity: 0.16,
-          at: 0,
-          enter: 'none',
-        },
-        ...[
-          ['muted', 64, 0, 0, 1],
-          ['bg', 18, 10, 14, 0.5],
-          ['ink', 9, -12, -12, 0.75],
-        ].map(([stroke, width, dx, dy, opacity]) => ({
           type: 'path',
-          d: `M ${400 + dx} ${150 + dy} L ${820 + dx} ${150 + dy} Q ${960 + dx} ${150 + dy} ${960 + dx} ${290 + dy} L ${960 + dx} ${318 + dy}`,
+          d: Array.from({ length: 13 }, (_, i) => `M ${-60 + i * 160} -100 V 600`).join(' ') + ' ' + Array.from({ length: 5 }, (_, i) => `M -100 ${i * 160 - 60} H 2020`).join(' '),
           fill: 'none',
-          stroke,
-          width,
-          cap: 'butt',
-          join: 'round',
-          opacity,
-          at: 0,
-          enter: 'none',
-        })),
-        { type: 'ellipse', cx: 960, cy: 320, rx: 32, ry: 9, fill: 'bg', stroke: 'ink', width: 2, opacity: 0.9, at: 0, enter: 'none' },
-        // The basin: still water catching the window light, the tap's reflection in it.
-        {
-          type: 'ellipse',
-          cx: 960,
-          cy: 780,
-          rx: 760,
-          ry: 120,
-          fill: { gradient: ['surface', 'accent2', 'bg'], angle: 0 },
-          opacity: 0.7,
-          at: 0,
-          enter: 'none',
+          stroke: 'bg',
+          width: 3,
+          opacity: 0.35,
         },
-        { type: 'ellipse', cx: 960, cy: 780, rx: 760, ry: 120, fill: 'none', stroke: 'muted', width: 6, opacity: 0.5, at: 0, enter: 'none' },
-        { type: 'line', x1: 960, y1: 760, x2: 960, y2: 800, stroke: 'muted', width: 30, opacity: 0.15, at: 0, enter: 'none' },
+        // The counter and the basin set into it, seen from just above.
+        { type: 'rect', x: -100, y: 600, w: 2120, h: 600, fill: { gradient: ['surface', 'bg'], angle: 90 } },
+        { type: 'rect', x: -100, y: 596, w: 2120, h: 6, fill: 'muted', opacity: 0.5 },
+        { type: 'ellipse', cx: 960, cy: 790, rx: 660, ry: 150, fill: { gradient: ['ink', 'muted', 'surface'], angle: 0 } },
+        { type: 'ellipse', cx: 960, cy: 800, rx: 590, ry: 122, fill: { gradient: ['bg', 'surface', 'muted'], angle: 90 } },
+        // Still water in the bowl, the window's light across it.
+        { type: 'ellipse', cx: 960, cy: 822, rx: 520, ry: 92, fill: { gradient: ['accent2', 'surface', 'bg'], angle: 0 }, opacity: 0.75 },
+        { type: 'ellipse', cx: 760, cy: 812, rx: 210, ry: 26, fill: { gradient: ['ink', 'ink'], radial: true, fade: true }, opacity: 0.22 },
+        { type: 'line', x1: 960, y1: 790, x2: 960, y2: 860, stroke: 'muted', width: 26, opacity: 0.18, blur: 4 },
+        // The tap: a chrome arm from the wall, an elbow and the spout, with their highlights.
+        { type: 'rect', x: 300, y: 150, w: 120, h: 120, r: 16, fill: { gradient: ['ink', 'muted', 'surface'], angle: 0 } },
+        { type: 'rect', x: 420, y: 178, w: 400, h: 64, fill: { gradient: ['surface', 'ink', 'muted', 'bg'], angle: 90 } },
+        {
+          type: 'path',
+          d: 'M 820 178 A 160 160 0 0 1 980 338 L 916 338 A 96 96 0 0 0 820 242 Z',
+          fill: { gradient: ['ink', 'muted', 'surface'], angle: 45 },
+          stroke: 'none',
+        },
+        { type: 'rect', x: 916, y: 336, w: 64, h: 40, fill: { gradient: ['bg', 'muted', 'ink', 'surface'], angle: 0 } },
+        { type: 'ellipse', cx: 948, cy: 376, rx: 32, ry: 9, fill: 'bg', stroke: 'muted', width: 2 },
+        { type: 'path', d: 'M 430 190 L 816 190 A 148 148 0 0 1 960 330', fill: 'none', stroke: 'ink', width: 4, cap: 'round', opacity: 0.85 },
+      ]).concat([
         {
           type: 'circle',
-          cx: 960,
-          cy: 340,
-          r: 13,
+          cx: 948,
+          cy: 388,
+          r: 12,
           fill: { gradient: ['ink', 'accent2'], angle: 90 },
-          glow: { blur: 14 },
+          glow: { blur: 12 },
           at: 0.15,
-          dur: 0.4,
+          dur: 0.45,
           enter: 'grow',
           keys: [
-            { at: 0.6, y: 430, dur: 0.6, ease: 'in' },
+            { at: 0.6, y: 432, dur: 0.6, ease: 'in' },
             { at: 1.2, opacity: 0, dur: 0.05 },
           ],
         },
         ...[0, 0.18, 0.36].map(d => ({
           type: 'ellipse',
-          cx: 960,
-          cy: 772,
-          rx: 330,
-          ry: 56,
+          cx: 948,
+          cy: 820,
+          rx: 420,
+          ry: 72,
           fill: 'none',
-          stroke: 'accent2',
+          stroke: 'ink',
           width: 3,
+          opacity: 0.7,
           at: r(1.2 + d),
           enter: 'pop',
           dur: 0.15,
           keys: [
-            { at: r(1.2 + d), scale: 0.14, dur: 0 },
-            { at: r(1.2 + d), scale: 1, dur: 1.6, ease: 'out' },
-            { at: r(1.4 + d), opacity: 0, dur: 1.2 },
+            { at: r(1.2 + d), scale: 0.08, dur: 0 },
+            { at: r(1.2 + d), scale: 1, dur: 1.8, ease: 'out' },
+            { at: r(1.4 + d), opacity: 0, dur: 1.4 },
           ],
-          origin: [960, 772],
+          origin: [948, 820],
         })),
-      ],
+      ]),
     },
   },
   {
@@ -553,14 +643,15 @@ const beats = [
     vo: 'One journey, most of it out of sight.',
     tail: 0.7,
     hold: 1.2,
-    lens: { letterbox: false },
     props: {
       world: 'journey',
       view: [-200, -900, 5300, 2981.3],
+      // Back from the silence on the street, then the long pull-back over the whole journey.
+      viewFrom: [3560, 150, 1600, 900],
       viewAt: 0,
-      viewDur: 3.4,
+      viewDur: 2.4,
       elements: [
-        { type: 'text', text: 'One journey', x: 2500, y: -140, size: 190, font: 'display', fill: 'ink', anchor: 'middle', say: 'journey', ...leave },
+        { type: 'text', text: 'One journey', x: 2500, y: -40, size: 190, font: 'serif-display', fill: 'ink', anchor: 'middle', at: 2.1, enter: 'rise', dur: 0.6, ...leave },
         ...[
           ['RESERVOIR', 1240, 470],
           ['TREATMENT', 2970, 340],
@@ -575,7 +666,7 @@ const beats = [
           tracking: 0.2,
           fill: 'ink',
           anchor: 'middle',
-          at: r(0.9 + i * 0.25),
+          at: r(2.2 + i * 0.15),
           enter: 'fade',
           dur: 0.5,
           ...leave,
@@ -594,7 +685,7 @@ const beats = [
           dur: 1.2,
           ...leave,
         },
-        { type: 'text', text: 'most of it out of sight', x: 2300, y: 1130, size: 180, font: 'serif-italic', fill: 'accent2', anchor: 'middle', say: 'sight', ...leave },
+        { type: 'text', text: 'most of it out of sight', x: 2300, y: 1130, size: 180, font: 'serif-display-italic', fill: 'accent2', anchor: 'middle', say: 'sight', ...leave },
       ],
     },
   },
@@ -606,12 +697,12 @@ const beats = [
     hold: 0.8,
     props: {
       world: 'journey',
-      view: [3480, 80, 1760, 990],
+      view: [3310, -60, 2140, 1203.8],
       viewAt: 0,
       viewDur: 2.6,
       elements: [
-        { type: 'text', text: 'Follow the water.', x: 4360, y: 318, size: 96, font: 'serif-italic', fill: 'ink', anchor: 'middle', at: 1.4, enter: 'rise', dur: 0.8 },
-        { type: 'text', text: 'START AT THE TAP', x: 4360, y: 380, size: 36, font: 'semibold', tracking: 0.3, fill: 'accent', anchor: 'middle', at: 2, enter: 'fade', dur: 0.6 },
+        { type: 'text', text: 'Follow the water.', x: 3700, y: 232, size: 96, font: 'serif-display-italic', fill: 'ink', anchor: 'start', at: 1.4, enter: 'rise', dur: 0.8 },
+        { type: 'text', text: 'START AT THE TAP', x: 3704, y: 296, size: 38, font: 'semibold', tracking: 0.3, fill: 'accent', anchor: 'start', at: 2, enter: 'fade', dur: 0.6 },
       ],
     },
   },
@@ -630,7 +721,7 @@ const book = {
   textMotion: 'words',
   texture: { grain: 0.3, vignette: 0.45, animate: true },
   lens: { grade: 'teal-orange', gradeAmount: 0.5, bloom: 0.35, leak: 0.1, handheld: 0.15, blur: 0.5 },
-  note: 'Shots, not slides (docs/cinema.md): wide establishing shot, an insert for the question, medium shots travelling one world, an insert for the figure, a silence, then the pull-back with the letterbox open. The world is drawn in section (library/playbooks/_cinematic-explainer.mjs) so the payoff is visible: redraw it for your system and keep the ground cut away. Replace the sample figure and its source before publishing.',
+  note: 'Shots, not slides (docs/cinema.md): wide establishing shot, an insert for the question, medium shots travelling one world, an insert for the figure, a silence, then the pull-back over the whole world, inside the same matte throughout. The world is drawn in section (library/playbooks/_cinematic-explainer.mjs) so the payoff is visible: redraw it for your system and keep the ground cut away. Replace the sample figure and its source before publishing.',
   beats,
 };
 fs.writeFileSync('library/playbooks/cinematic-explainer.json', JSON.stringify(book, null, 2) + '\n');

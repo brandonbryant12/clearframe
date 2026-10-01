@@ -7,7 +7,7 @@
     "theme": "stage",
     "backdrop": "none",
     "texture": {
-      "grain": 0.12,
+      "grain": 0.3,
       "vignette": 0.55
     },
     "motion": {
