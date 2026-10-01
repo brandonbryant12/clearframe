@@ -201,7 +201,7 @@ const schema = {
             type: 'object',
             additionalProperties: false,
             description: 'Canvas elements under/over the block (docs/canvas.md)',
-            properties: { under: { type: 'array', items: object }, over: { type: 'array', items: object } },
+            properties: { sketch: text, seed: { type: 'integer' }, opacity: { type: 'number', minimum: 0, maximum: 1 }, drift: { type: 'number', minimum: 0, maximum: 1 }, rough: { oneOf: [bool, number, object] }, under: { type: 'array', items: object }, over: { type: 'array', items: object } },
           },
         },
         allOf: BLOCKS.map(b => ({
@@ -224,6 +224,8 @@ const schema = {
 };
 fs.writeFileSync('schema/storyboard.schema.json', JSON.stringify(schema, null, 2) + '\n');
 fs.writeFileSync('skills/clearframe-library/references/blocks.md', markdownCatalog());
+// Reference-only refresh avoids rewriting unrelated recipe assets.
+if (process.argv.includes('--references-only')) process.exit(0);
 for (const b of playbooks()) {
   fs.mkdirSync(`recipes/${b.id}`, { recursive: true });
   const sb = storyboardFor(b.id);

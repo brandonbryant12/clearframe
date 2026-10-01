@@ -1,0 +1,185 @@
+{
+  "date": "2026-10-01",
+  "nodeTests": 90,
+  "nativeElementCombinations": 40,
+  "formats": [
+    "landscape",
+    "vertical",
+    "square",
+    "portrait"
+  ],
+  "nativeRenderChecks": "All three landscape examples passed native frame checks after the seed/drift revision (52, 52 and 26 frames checked); landscape and vertical sheets re-rendered and inspected.",
+  "visualReview": "Independent still review and a final follow-up after craft corrections; landscape, portrait, full decoded timelines and phone sheets inspected. No remaining visual blocker for stylized reusable assets. No real-time playback or seamless-loop claim. Claude Code (claude-opus-5-5) review: re-rendered all three previews with per-beat seeds and art.drift; inspected landscape/portrait sheets, beat start/end frames, a 30-tile seed board and the 360 px phone sheet.",
+  "imagegen": {
+    "tool": "built-in imagegen",
+    "iterations": 2,
+    "prompts": "prompts.json",
+    "runtimeDependency": false
+  },
+  "examples": [
+    {
+      "project": "examples/material-studies",
+      "preview": "material-studies.mp4",
+      "sheet": "material-studies.png",
+      "verticalSheet": "material-studies-vertical.png",
+      "render": {
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "frames": 384,
+        "audio": false,
+        "inputId": "8c4d970a5c9679bf4a723479a99b1ccfb958493ffffb45b0cd83ab0eb8580069",
+        "outputSha256": "2d92dc66264a01c10722bcd73abed1f4bc757916894314182fbd33468f1cfddd"
+      },
+      "qa": {
+        "seconds": 12.8,
+        "frames": 384,
+        "changePerSecond": 0.77,
+        "heldSeconds": 11.97,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "findings": [
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 0,
+          "frame": 0,
+          "beat": "lightwell",
+          "local": 0,
+          "end": 3.17,
+          "seconds": 3.2,
+          "message": "the picture barely changes for 3.2 s (0–3.17 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 3.33,
+          "frame": 100,
+          "beat": "contour-field",
+          "local": 0.13,
+          "end": 6.37,
+          "seconds": 3.07,
+          "message": "the picture barely changes for 3.07 s (3.33–6.37 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 6.5,
+          "frame": 195,
+          "beat": "paper-fold",
+          "local": 0.1,
+          "end": 9.57,
+          "seconds": 3.1,
+          "message": "the picture barely changes for 3.1 s (6.5–9.57 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 9.87,
+          "frame": 296,
+          "beat": "glass-orbits",
+          "local": 0.27,
+          "end": 12.43,
+          "seconds": 2.6,
+          "message": "the picture barely changes for 2.6 s (9.87–12.43 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        }
+      ],
+      "art": {
+        "seeds": "17 + beat index",
+        "drift": 0.5
+      }
+    },
+    {
+      "project": "examples/material-play",
+      "preview": "material-play.mp4",
+      "sheet": "material-play.png",
+      "verticalSheet": "material-play-vertical.png",
+      "render": {
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "frames": 384,
+        "audio": false,
+        "inputId": "6d26c6828eff9d450e222dc095857e15783c3d64e48ff2a8e8ab4956691713b9",
+        "outputSha256": "5f48f442a359ec341dfb8b3f470eda8276721f35657c82b5b04f7507af0baf39"
+      },
+      "qa": {
+        "seconds": 12.8,
+        "frames": 384,
+        "changePerSecond": 5.46,
+        "heldSeconds": 2.7,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "findings": [
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 0.5,
+          "frame": 15,
+          "beat": "bubble-cluster",
+          "local": 0.5,
+          "end": 3.17,
+          "seconds": 2.7,
+          "message": "the picture barely changes for 2.7 s (0.5–3.17 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        }
+      ],
+      "art": {
+        "seeds": "17 + beat index",
+        "drift": 0.8
+      }
+    },
+    {
+      "project": "examples/material-arena",
+      "preview": "material-arena.mp4",
+      "sheet": "material-arena.png",
+      "verticalSheet": "material-arena-vertical.png",
+      "render": {
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "frames": 192,
+        "audio": false,
+        "inputId": "cae47a5f52fece1e267f9a0015b9a1b098d505a38c20dbacae409592e04bb623",
+        "outputSha256": "18c547e594effa4ac14e6796c03bfdbbe7ec6739874e708a9457e479253020e3"
+      },
+      "qa": {
+        "seconds": 6.4,
+        "frames": 192,
+        "changePerSecond": 4.11,
+        "heldSeconds": 3.1,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "findings": [
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 0.1,
+          "frame": 3,
+          "beat": "arena-grid",
+          "local": 0.1,
+          "end": 3.17,
+          "seconds": 3.1,
+          "message": "the picture barely changes for 3.1 s (0.1–3.17 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        }
+      ],
+      "art": {
+        "seeds": "17 + beat index",
+        "drift": 0.8
+      }
+    }
+  ],
+  "seedVariation": {
+    "sketches": 10,
+    "formats": 4,
+    "seedsTested": 40,
+    "copyClearanceBound": "within 3.5% of the frame side of the reference layout (test/library.test.mjs)",
+    "worstObserved": "3.1% (bubble-cluster, square, seed 7, over 200 seeds)",
+    "unseededLayoutUnchanged": true
+  }
+}

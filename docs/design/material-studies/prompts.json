@@ -1,0 +1,14 @@
+{
+  "tool": "built-in imagegen",
+  "purpose": "Reference exploration only; native library assets are reconstructed independently, not raster recolors.",
+  "iterations": [
+    {
+      "file": "concept-01.png",
+      "prompt": "Use case: stylized-concept. Asset type: concept reference board for an editable native motion-graphics library, no text. Create a beautifully art-directed 3-panel horizontal material study, equal panels with narrow warm-white gutters. LEFT: an architectural folded paper sculpture, a single continuous ribbon with three broad planar turns and soft contact shadows, porcelain ivory and pale sage, warm white studio. CENTER: optical glass sculpture made of two overlapping thick translucent circular lenses and one small solid lavender sphere, pale blue-white studio with crisp rims and restrained caustics. RIGHT: a soft inflated coral-pink hollow ring intertwined with one lilac elongated capsule, pale peach studio, playful but sophisticated, tangible satin rubber. Each panel should contain just one clear hero toward the right or lower half, with generous calm empty space for typography later. High-end editorial 3D material study, precise silhouettes, tactile surfaces, subtle highlights. No type, labels, numbers, logos, watermarks, UI, stars, confetti or microdetail. These are original abstract shapes we will translate into deterministic geometry; favor visible structure over impossible tangled topology."
+    },
+    {
+      "file": "concept-02.png",
+      "prompt": "Use case: stylized-concept. Input image is a reference board to refine, not a brand-color authority. Create iteration two of the SAME three-panel material study. Preserve the pale studio moods and subjects: folded paper, optical lenses, inflated ring with capsule. Single targeted change: make the geometry directly reconstructable as editable 2.5D vector layers. Paper uses three broad flat quadrilateral faces with visible shared fold edges and a slightly offset shadow, not curled surfaces. Glass uses overlapping circular discs with a clearly visible double rim, restrained pale tinted fills, a small sphere, and a few simple elongated caustic shapes below. Inflated ring is a clean frontal circular annulus with a clear hole, with a diagonal rounded capsule behind its lower rim; split front and back arcs visibly through light and occlusion. Clean continuous silhouettes and few broad gradients; no photorealistic grain, no texture noise, no complex refractions. Still sophisticated and dimensional, like a premium motion design styleframe. Preserve large calm copy space at top/left. No text, numbers, labels, logos, UI, watermark. Wide three-panel board."
+    }
+  ]
+}

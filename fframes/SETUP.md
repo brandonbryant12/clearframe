@@ -35,4 +35,6 @@ The source media directory is prepared automatically. Fonts load locally. Metal 
 
 `preview` creates a review MP4. A live native editor/player is not part of this release. Set `GEMINI_API_KEY` only for explicitly requested paid media generation. Existing audio and timestamp imports remain offline.
 
+Full high-resolution finals need at least a **five-minute (300,000 ms) external execution allowance**, including the shared audio mix and mux. Longer films can exceed this; use a resumable process session and monitor it rather than treating a yield as failure or launching duplicate renders. The CLI does not impose a 120-second render deadline. When gating a render externally, use `/Users/brandon/.local/bin/codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node engine/cli.mjs render DIR` to avoid taking the same build lock twice.
+
 The native crate carries a small pinned `fframes-media` patch under `native/vendor` to drain delayed decoder frames at EOF. This keeps valid final B-frames visible. Read its patch/provenance notes before updating upstream; the vendor files participate in the renderer build hash.

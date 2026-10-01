@@ -110,3 +110,58 @@ test('a creative seed is reproducible, varies the look and the set pieces, and b
   assert.equal(sb.theme, muse(42).palette);
   assert.match(fs.readFileSync(path.join(dir, 'film', 'DIRECTION.md'), 'utf8'), /Creative seed 42/);
 });
+
+test('material art is reproducible, palette-driven and valid in all four frame shapes', async () => {
+  const { expandArt } = await import('../fframes/sketches.mjs');
+  const names = ['lightwell','contour-field','paper-fold','glass-orbits','bubble-cluster','ribbon-wave','petal-burst','inflated-loop','arena-grid','prism-shards'];
+  for (const name of names) for (const preset of ['landscape','vertical','square','portrait']) {
+    const a = sketch(name, preset, { seed: 17 });
+    assert.deepEqual(a, sketch(name, preset, { seed: 17 }), `${name} must be reproducible`);
+    normalizeElements(a.elements, `${name}.${preset}`, m => { throw new Error(m); });
+    assert.doesNotMatch(JSON.stringify(a.elements), /#[0-9a-f]{6}|"file"|"asset"|"text"/i, 'materials use palette paints, with no raster or baked text');
+  }
+  const authored = { type: 'circle', r: 8, fill: 'accent2' };
+  const input = { sketch: 'glass-orbits', seed: 7, opacity: 0.6, under: [authored], over: [authored] };
+  const a = expandArt(input, { width: 1080, height: 1920 });
+  assert.equal(a.under[0].opacity, 0.6);
+  assert.deepEqual(a.under[0].children, sketch('glass-orbits', 'vertical', { seed: 7 }).elements);
+  assert.deepEqual(a.under.at(-1), authored);
+  assert.deepEqual(a.over, [authored]);
+  assert.equal(input.sketch, 'glass-orbits', 'expansion does not mutate authoring data');
+  assert.deepEqual(expandArt({ sketch: 'paper-fold' }, { width: 1280, height: 720 }).under[0].children, item('sketches', 'paper-fold').build(1280, 720).elements, 'custom frame dimensions are respected');
+  assert.throws(() => expandArt({ sketch: 'tunnel' }), /not a background layer/);
+  assert.throws(() => expandArt({ sketch: 'missing' }), /Unknown sketch/);
+  assert.throws(() => expandArt({ sketch: 'paper-fold', opacity: 2 }), /opacity/);
+});
+
+test('material seeds vary the layout without pushing the art into the copy region', async () => {
+  const { elementsExtent } = await import('../fframes/canvas.mjs');
+  const names = ['lightwell','contour-field','paper-fold','glass-orbits','bubble-cluster','ribbon-wave','petal-burst','inflated-loop','arena-grid','prism-shards'];
+  // The subject only: soft washes, floor lines, dust and full-bleed planes are atmosphere.
+  const subject = els => els.filter(e => !e.fill?.fade && !['line', 'particles'].includes(e.type) && !(e.points ?? []).some(p => p[1] > 2000));
+  for (const name of names) {
+    assert.notDeepEqual(sketch(name, 'landscape', { seed: 3 }), sketch(name, 'landscape', { seed: 8 }), `${name}: the seed varies the layout`);
+    for (const [preset, w, h] of [['landscape', 1920, 1080], ['vertical', 1080, 1920], ['square', 1080, 1080], ['portrait', 1080, 1350]]) {
+      const edge = seed => {
+        const e = elementsExtent(subject(sketch(name, preset, { seed }).elements));
+        return h > w * 1.1 ? e.top : e.left;
+      };
+      const reference = edge(undefined), side = h > w * 1.1 ? h : w;
+      for (let seed = 0; seed < 40; seed++)
+        assert.ok(reference - edge(seed) < side * 0.035, `${name} ${preset} seed ${seed} reaches into the copy region`);
+    }
+  }
+});
+
+test('art drift pushes the sketch in over the beat from frame-based keys and never holds the beat', async () => {
+  const { expandArt } = await import('../fframes/sketches.mjs');
+  const still = expandArt({ sketch: 'prism-shards', seed: 4 }, { width: 1920, height: 1080, duration: 6 }).under[0];
+  assert.equal(still.keys, undefined, 'no drift unless asked');
+  const [left, right] = [3, 4].map(seed => expandArt({ sketch: 'prism-shards', seed, drift: 1 }, { width: 1920, height: 1080, duration: 6 }).under[0]);
+  assert.deepEqual(right.origin, [960, 540]);
+  assert.equal(right.keys[0].at, 0);
+  assert.equal(right.keys[0].dur, 6, 'the push spans the beat');
+  assert.ok(right.keys[0].scale > 1 && right.keys[0].hold === false);
+  assert.equal(Math.sign(left.keys[0].x), -Math.sign(right.keys[0].x), 'the seed chooses the direction of travel');
+  assert.throws(() => expandArt({ sketch: 'prism-shards', drift: 2 }), /drift/);
+});

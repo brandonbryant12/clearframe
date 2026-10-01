@@ -75,6 +75,7 @@ Open the letterbox (`"letterbox": false` on a beat) only for the payoff.
 
 1. `critique`, then `sheet --draft`, and open it.
 2. `render --draft`, then `review DIR` for frames around every cut.
-3. Check that each shot lands by its first word (no blank screen under the voice), that no text sits under the bars, and that the camera never moves without a reason.
+3. Check that each shot lands by its first word (no blank screen under the voice), that no text sits under the bars, and that the camera never moves without a reason. For staged blocks, check the first item's `say`, not only `land`; per-item cues override it. Populate long lead-ins with a scene or restrained atmosphere at `at: 0`, `enter: "none"`.
+4. Review every beat longer than 8–10 seconds at its opening, through any TTS pause, and after the reveal. `qa` held warnings are review prompts: slow pushes, noir lighting and deliberate pauses can trigger them. Keep the cinematic rhythm and record intentional holds in DIRECTION.md; never add frantic motion just to clear a threshold.
 
 Ask a fresh reviewer to judge it as film, not slides, against the eight tells in `docs/cinema.md`.
