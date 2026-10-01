@@ -303,12 +303,26 @@ test('a normal storyboard expands background sketches with frame-zero art and pr
   assert.equal(art.over[0].cx, 90);
 });
 
-test('a drifting art layer keeps its beat length and rejects drift without a sketch', t => {
-  const beat = art => ({ id: 'a', block: 'statement', duration: 3, props: { text: 'A clear idea' }, art });
-  const r = job(t, { theme: 'neon', captions: false, beats: [beat({ sketch: 'arena-grid', drift: 0.8 })] });
+test('a drifting art layer spans its resolved beat, even under a second, and never holds it', t => {
+  const beat = (art, extra = { duration: 3 }) => ({ id: 'a', block: 'statement', ...extra, props: { text: 'A clear idea' }, art });
+  const film = art => ({
+    theme: 'neon',
+    captions: false,
+    beats: [
+      beat(art),
+      { ...beat(art, { duration: 0.5 }), id: 'quick' },
+      // No authored duration: the narration sets the beat's length.
+      { ...beat(art, { vo: 'A longer spoken line sets how long this beat runs on screen.' }), id: 'spoken' },
+    ],
+  });
+  const r = job(t, film({ sketch: 'arena-grid', drift: 0.8 })),
+    still = job(t, film({ sketch: 'arena-grid' }));
   assert.deepEqual(r.errors, []);
-  const b = r.job.beats[0];
-  assert.equal(b.art.under[0].keys[0].dur, b.frames / 30, 'the push spans the beat');
-  assert.ok(b.settle_seconds < 1, 'ambient drift does not hold the beat');
+  r.job.beats.forEach((b, i) => {
+    const key = b.art.under[0].keys[0];
+    assert.ok(Math.abs(key.dur - b.frames / 30) < 0.02, `${b.id}: the push spans the ${b.frames / 30} s beat, not ${key.dur} s`);
+    assert.equal(b.settle_seconds, still.job.beats[i].settle_seconds, `${b.id}: ambient drift does not hold the beat`);
+  });
+  assert.ok(r.job.beats[1].frames / 30 < 1 && r.job.beats[2].frames / 30 > 3);
   assert.match(job(t, { beats: [beat({ drift: 0.5, under: [] })] }).errors.join('\n'), /require art.sketch/);
 });

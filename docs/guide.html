@@ -1428,7 +1428,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
       <p>Blocks are engine code. Everything else creative is a file in <code>library/</code>: one file per palette, treatment, sketch and playbook, validated when the engine starts. Adding an idea means adding a file. You can also layer your own:</p>
       <ul>
         <li><strong>For one film</strong>, put files in the project's own <code>library/palettes/</code>, <code>treatments/</code>, <code>sketches/</code> or <code>playbooks/</code>. The same id overrides a built-in.</li>
-        <li><strong>For a team or brand</strong>, keep a shared folder with the same layout and pass <code>--library DIR</code> (or set <code>CLEARFRAME_LIBRARY</code>). <code>new</code> copies any shared palette or treatment it uses into the project, so the film still renders without the shared folder.</li>
+        <li><strong>For a team or brand</strong>, keep a shared folder with the same layout and pass <code>--library DIR</code> (or set <code>CLEARFRAME_LIBRARY</code>). <code>new</code> copies any shared palette, treatment or art sketch it uses into the project, so the film still renders without the shared folder. A playbook's <code>art.sketch</code> stays as shorthand and is drawn when the job compiles, so <code>drift</code> spans each beat's final length.</li>
         <li>Items outside the built-ins are JSON only, so templates stay data. <code>library/README.md</code> has every field.</li>
       </ul>
       <div class="table-wrap">

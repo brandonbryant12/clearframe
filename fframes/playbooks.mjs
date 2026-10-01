@@ -53,9 +53,12 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
   // landscape frame pixels is fitted whole into a tall frame rather than cropped off-centre.
   for (const b of sb.beats) {
     // A beat's art layer can name a sketch too: `art: {sketch: "ambient"}` (its own layer).
+    // It is checked now but kept as shorthand: the job expands it at the final frame size and
+    // beat duration (voice can set that later), and scaffold vendors shared sketches.
     if (b.art?.sketch) {
       const [width, height] = SKETCH_SIZE[vertical ? 'vertical' : (book.format ?? 'landscape')] ?? SKETCH_SIZE.landscape;
-      b.art = expandArt({ ...b.art, seed: b.art.seed ?? seed }, { width, height });
+      if (b.art.seed == null && seed != null) b.art = { ...b.art, seed };
+      expandArt(b.art, { width, height });
     }
     const name = b.props?.sketch;
     if (!name) {
@@ -95,6 +98,8 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
   palette(sb.theme);
   return sb;
 }
+/** Library refs for the art sketches a storyboard names, so shared ones travel with it. */
+export const artSketches = sb => sb.beats.filter(b => b.art?.sketch).map(b => ['sketches', b.art.sketch]);
 export function scaffold(dir, options = {}) {
   if (fs.existsSync(dir) && fs.readdirSync(dir).length) throw new Error(`${dir} is not empty`);
   const id =
@@ -128,6 +133,7 @@ export function scaffold(dir, options = {}) {
   vendor(dir, [
     ['palettes', typeof sb.theme === 'string' ? sb.theme : sb.theme?.base],
     ['treatments', options.treatment],
+    ...artSketches(sb),
   ]);
   fs.writeFileSync(
     path.join(dir, 'DIRECTION.md'),

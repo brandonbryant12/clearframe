@@ -107,7 +107,7 @@ The engine looks for items in three places. A later layer wins by id.
 Rules for layers:
 
 - Items outside this folder must be JSON. A shared or project library is data and never runs code.
-- `clearframe new` copies any shared palette or treatment it uses into the new project's `library/`, so the project renders without the shared library.
+- `clearframe new` (and `ingest --markdown`) copies any shared palette, treatment or `art.sketch` it uses into the new project's `library/`, so the project renders without the shared library. A playbook's `art: {sketch, seed, opacity, drift}` stays as shorthand in the new storyboard and expands when the job compiles, at the final frame size and beat duration.
 - To change a built-in for one project, drop a file with the same id into the project's `library/`. To change it for everyone, edit it here.
 
 ## Library or engine?
