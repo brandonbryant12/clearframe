@@ -63,6 +63,13 @@ const SET_PIECES = [
   'globe',
   'crowd',
   'desk',
+  'signal',
+  'wires',
+  'citygrid',
+  'mast',
+  'harbor',
+  'rooftops',
+  'queue',
 ];
 
 const luminance = hex => {

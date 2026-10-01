@@ -33,10 +33,10 @@
     "rough": false
   },
   "rules": [
-    "A dark stage and one hero object. Light it (glow, spotlight, shine) rather than decorating around it.",
-    "Reveal in pieces, then the whole: close-ups of parts with camera rects, then pull out to the object.",
-    "Specs arrive as inserts: one huge number or word per shot (stat, magnitude, kinetic stack), centred, with nothing else in frame.",
-    "Type is huge, tight and centred; nothing under 40 px. One accent colour, used only on what is new.",
-    "End on the object and the name, with the title sketch's light sweep."
+    "A dark stage and one hero object, drawn: a few ellipses and gradients make a lit product (see the ring in product-reveal). Light it (a beam from above, rim light, a reflection, a contact shadow) rather than decorating around it.",
+    "Reveal in pieces, then the whole: the object arrives as a line of light, a macro close-up glides along an edge, then the camera pulls back to the object and its name.",
+    "Specs arrive as inserts: one huge number with its unit and what it is compared with, ideally the comparison drawn (two bars, two times). Every figure carries a visible source line.",
+    "Type sits in the negative space beside the object, never over it. Nothing under 34 px; one accent colour, used only on what is new.",
+    "End on the object and the name, with a light sweep, and one line of availability in the same shot."
   ]
 }

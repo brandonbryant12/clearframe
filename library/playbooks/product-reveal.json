@@ -2,10 +2,11 @@
   "order": 31,
   "title": "A product reveal: darkness, a part in close-up, specs as inserts, then the whole object",
   "audience": "Customers and press at a launch",
-  "inputs": "The product (a render, a drawing or a 3D solid), two sourced specs, the name, availability",
+  "inputs": "The product (a drawing like the ring here, or a render), two sourced specs, the name, availability",
   "theme": "stage",
-  "transition": "fade",
+  "transition": "cut",
   "sfx": "subtle",
+  "textMotion": "lines",
   "texture": {
     "grain": 0.12,
     "vignette": 0.55
@@ -16,63 +17,272 @@
     "bloom": 0.45,
     "blur": 0.5
   },
-  "note": "Light the object; don't decorate around it. Replace the solid with the product (an image element or a drawing) and the specs with real, sourced figures.",
+  "note": "Light the object; never decorate around it. The ring is drawn from a few ellipses (library/playbooks/_product-reveal.mjs): redraw your own product the same way, or place a render as an image element on the stage. Replace both specs with real figures and their sources; every number keeps its unit and what it is compared with.",
   "beats": [
     {
       "id": "dark",
       "block": "canvas",
+      "transition": "cut",
       "vo": "We started with a single question.",
+      "hold": 0.4,
       "props": {
+        "view": [
+          96,
+          54,
+          1728,
+          972
+        ],
+        "viewFrom": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "viewAt": 0,
+        "viewDur": 4.5,
         "elements": [
+          {
+            "type": "poly",
+            "points": [
+              [
+                890,
+                -40
+              ],
+              [
+                1030,
+                -40
+              ],
+              [
+                1430,
+                682.7
+              ],
+              [
+                490,
+                682.7
+              ]
+            ],
+            "closed": true,
+            "fill": {
+              "gradient": [
+                "ink",
+                "ink"
+              ],
+              "angle": 90,
+              "fade": true
+            },
+            "opacity": 0.06,
+            "blur": 30,
+            "z": 1.5,
+            "at": 0,
+            "enter": "none"
+          },
           {
             "type": "ellipse",
             "cx": 960,
-            "cy": 560,
+            "cy": 622.7,
             "rx": 620,
-            "ry": 260,
+            "ry": 90,
             "fill": {
-              "gradient": ["accent", "accent"],
+              "gradient": [
+                "muted",
+                "muted"
+              ],
               "radial": true,
               "fade": true
             },
-            "opacity": 0.14,
-            "at": 0.2,
-            "enter": "fade",
-            "dur": 2
-          },
-          {
-            "type": "solid",
-            "shape": "icosa",
-            "cx": 960,
-            "cy": 540,
-            "size": 150,
-            "spin": [6, 14, 0],
-            "tilt": [18, 0, 0],
-            "width": 2,
-            "glow": {
-              "blur": 12,
-              "color": "accent"
-            },
-            "at": 0.3,
-            "dur": 1.6,
-            "shade": {
-              "light": [-0.5, -0.7, 0.6],
-              "ambient": 0.18
-            },
-            "fill": "accent"
+            "opacity": 0.28,
+            "at": 0,
+            "enter": "none"
           },
           {
             "type": "particles",
-            "x": 0,
-            "y": 0,
-            "w": 1920,
-            "h": 1080,
+            "x": 580,
+            "y": 40,
+            "w": 760,
+            "h": 542.7,
             "kind": "dust",
-            "count": 30,
+            "count": 36,
+            "seed": 4,
+            "size": 2.4,
+            "speed": 0.4,
             "fill": "ink",
-            "opacity": 0.3,
-            "size": 3,
-            "at": 0
+            "opacity": 0.45,
+            "z": -0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "group",
+            "at": 0.15,
+            "enter": "fade",
+            "dur": 0.6,
+            "origin": [
+              960,
+              505.80000000000007
+            ],
+            "keys": [
+              {
+                "at": 0,
+                "scaleY": 0.05,
+                "dur": 0
+              },
+              {
+                "at": 0.9,
+                "scaleY": 1,
+                "dur": 2.6,
+                "ease": "inOut"
+              }
+            ],
+            "children": [
+              {
+                "type": "path",
+                "d": "M 630 490.5 A 330 134.2 0 0 0 1290 490.5 L 1290 607.4 A 330 134.2 0 0 1 630 607.4 Z",
+                "fill": {
+                  "gradient": [
+                    "muted",
+                    "bg"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "opacity": 0.22,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "ellipse",
+                "cx": 960,
+                "cy": 488.5,
+                "rx": 336.6,
+                "ry": 140.9,
+                "fill": "bg",
+                "stroke": "none",
+                "blur": 13.2,
+                "opacity": 0.9,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 648 371.5 A 312 126.9 0 1 1 1272 371.5 A 312 126.9 0 1 1 648 371.5 Z",
+                "fill": {
+                  "gradient": [
+                    "bg",
+                    "surface",
+                    "muted"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "id": "halo",
+                "type": "path",
+                "d": "M 652.7 435.8 A 307.3 125 0 0 1 1267.3 435.8",
+                "fill": "none",
+                "stroke": "accent",
+                "width": 4.5,
+                "cap": "round",
+                "glow": {
+                  "blur": 15.4,
+                  "color": "accent",
+                  "opacity": 1
+                },
+                "opacity": 1,
+                "at": 2.2,
+                "enter": "draw",
+                "dur": 1.4
+              },
+              {
+                "type": "path",
+                "d": "M 648 488.5 A 312 126.9 0 1 1 1272 488.5 A 312 126.9 0 1 1 648 488.5 Z",
+                "fill": "bg",
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "ellipse",
+                "cx": 960,
+                "cy": 488.5,
+                "rx": 280.8,
+                "ry": 114.2,
+                "fill": {
+                  "gradient": [
+                    "accent",
+                    "accent"
+                  ],
+                  "radial": true,
+                  "fade": true
+                },
+                "opacity": 0.4,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 630 371.5 A 330 134.2 0 0 0 1290 371.5 L 1290 488.5 A 330 134.2 0 0 1 630 488.5 Z",
+                "fill": {
+                  "gradient": [
+                    "surface",
+                    "ink",
+                    "muted",
+                    "bg"
+                  ],
+                  "angle": 0
+                },
+                "stroke": "none",
+                "shine": {
+                  "angle": 18,
+                  "width": 0.22,
+                  "opacity": 0.9,
+                  "at": 1.6,
+                  "dur": 1.8
+                },
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 630 488.5 A 330 134.2 0 0 0 1290 488.5",
+                "fill": "none",
+                "stroke": "bg",
+                "width": 3.8,
+                "opacity": 0.8,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 630 371.5 A 330 134.2 0 1 1 1290 371.5 A 330 134.2 0 1 1 630 371.5 Z M 648 371.5 A 312 126.9 0 1 0 1272 371.5 A 312 126.9 0 1 0 648 371.5 Z",
+                "fill": {
+                  "gradient": [
+                    "muted",
+                    "ink"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 631 371.5 A 329 133.8 0 0 0 1289 371.5",
+                "fill": "none",
+                "stroke": "ink",
+                "width": 1.8,
+                "opacity": 0.95,
+                "glow": {
+                  "blur": 6.4,
+                  "opacity": 0.6
+                },
+                "at": 0,
+                "enter": "none"
+              }
+            ]
           }
         ]
       }
@@ -81,137 +291,982 @@
       "id": "part",
       "block": "canvas",
       "vo": "What if it simply got out of the way?",
+      "hold": 0.3,
       "props": {
-        "view": [760, 380, 400, 225],
-        "viewFrom": [560, 270, 800, 450],
-        "viewDur": 2.6,
+        "view": [
+          940,
+          280,
+          760,
+          427.5
+        ],
+        "viewFrom": [
+          1060,
+          330,
+          640,
+          360
+        ],
+        "viewAt": 0,
+        "viewDur": 4,
+        "viewTall": [
+          1000,
+          260,
+          330,
+          587
+        ],
         "elements": [
           {
-            "type": "solid",
-            "shape": "icosa",
+            "type": "poly",
+            "points": [
+              [
+                890,
+                -40
+              ],
+              [
+                1030,
+                -40
+              ],
+              [
+                1430,
+                682.7
+              ],
+              [
+                490,
+                682.7
+              ]
+            ],
+            "closed": true,
+            "fill": {
+              "gradient": [
+                "ink",
+                "ink"
+              ],
+              "angle": 90,
+              "fade": true
+            },
+            "opacity": 0.05,
+            "blur": 30,
+            "z": 1.5,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "ellipse",
             "cx": 960,
-            "cy": 490,
-            "size": 150,
-            "spin": [6, 14, 0],
-            "tilt": [18, 0, 0],
-            "width": 1.2,
+            "cy": 622.7,
+            "rx": 620,
+            "ry": 90,
+            "fill": {
+              "gradient": [
+                "muted",
+                "muted"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.28,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "particles",
+            "x": 580,
+            "y": 40,
+            "w": 760,
+            "h": 542.7,
+            "kind": "dust",
+            "count": 36,
+            "seed": 4,
+            "size": 2.4,
+            "speed": 0.4,
+            "fill": "ink",
+            "opacity": 0.45,
+            "z": -0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "group",
             "at": 0,
             "enter": "none",
-            "glow": {
-              "blur": 6
-            },
-            "shade": {
-              "light": [-0.5, -0.7, 0.6],
-              "ambient": 0.18
-            },
-            "fill": "accent"
+            "children": [
+              {
+                "type": "path",
+                "d": "M 630 490.5 A 330 134.2 0 0 0 1290 490.5 L 1290 607.4 A 330 134.2 0 0 1 630 607.4 Z",
+                "fill": {
+                  "gradient": [
+                    "muted",
+                    "bg"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "opacity": 0.22,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "ellipse",
+                "cx": 960,
+                "cy": 488.5,
+                "rx": 336.6,
+                "ry": 140.9,
+                "fill": "bg",
+                "stroke": "none",
+                "blur": 13.2,
+                "opacity": 0.9,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 648 371.5 A 312 126.9 0 1 1 1272 371.5 A 312 126.9 0 1 1 648 371.5 Z",
+                "fill": {
+                  "gradient": [
+                    "bg",
+                    "surface",
+                    "muted"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "id": "halo",
+                "type": "path",
+                "d": "M 652.7 435.8 A 307.3 125 0 0 1 1267.3 435.8",
+                "fill": "none",
+                "stroke": "accent",
+                "width": 4.5,
+                "cap": "round",
+                "glow": {
+                  "blur": 15.4,
+                  "color": "accent",
+                  "opacity": 1
+                },
+                "opacity": 1,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 648 488.5 A 312 126.9 0 1 1 1272 488.5 A 312 126.9 0 1 1 648 488.5 Z",
+                "fill": "bg",
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "ellipse",
+                "cx": 960,
+                "cy": 488.5,
+                "rx": 280.8,
+                "ry": 114.2,
+                "fill": {
+                  "gradient": [
+                    "accent",
+                    "accent"
+                  ],
+                  "radial": true,
+                  "fade": true
+                },
+                "opacity": 0.4,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 630 371.5 A 330 134.2 0 0 0 1290 371.5 L 1290 488.5 A 330 134.2 0 0 1 630 488.5 Z",
+                "fill": {
+                  "gradient": [
+                    "surface",
+                    "ink",
+                    "muted",
+                    "bg"
+                  ],
+                  "angle": 0
+                },
+                "stroke": "none",
+                "shine": {
+                  "angle": 18,
+                  "width": 0.22,
+                  "opacity": 0.9,
+                  "at": 0.4,
+                  "dur": 2.4
+                },
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 630 488.5 A 330 134.2 0 0 0 1290 488.5",
+                "fill": "none",
+                "stroke": "bg",
+                "width": 3.8,
+                "opacity": 0.8,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 630 371.5 A 330 134.2 0 1 1 1290 371.5 A 330 134.2 0 1 1 630 371.5 Z M 648 371.5 A 312 126.9 0 1 0 1272 371.5 A 312 126.9 0 1 0 648 371.5 Z",
+                "fill": {
+                  "gradient": [
+                    "muted",
+                    "ink"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 631 371.5 A 329 133.8 0 0 0 1289 371.5",
+                "fill": "none",
+                "stroke": "ink",
+                "width": 1.8,
+                "opacity": 0.95,
+                "glow": {
+                  "blur": 6.4,
+                  "opacity": 0.6
+                },
+                "at": 0,
+                "enter": "none"
+              }
+            ]
           },
           {
             "type": "text",
             "text": "Nothing extra.",
-            "x": 960,
-            "y": 575,
-            "size": 14,
-            "font": "mono",
-            "anchor": "middle",
+            "x": 1360,
+            "y": 610,
+            "size": 21,
+            "font": "light",
             "fill": "ink",
-            "tracking": 0.2,
-            "at": 1.2,
-            "enter": "fade",
-            "shadow": {
-              "blur": 6,
-              "opacity": 0.7,
-              "dy": 1
-            }
+            "anchor": "start",
+            "at": 1.3,
+            "enter": "blur",
+            "dur": 0.8
           }
-        ],
-        "viewTall": [835, 300, 250, 444]
+        ]
       }
     },
     {
       "id": "spec-1",
-      "block": "stat",
+      "block": "canvas",
       "vo": "Twice as fast,",
+      "hold": 2.4,
+      "transition": "cut",
       "props": {
-        "value": 2,
-        "suffix": "×",
-        "label": "faster",
-        "align": "center",
-        "source": "Illustrative sample data · replace before publishing"
+        "source": "Illustrative sample data · replace before publishing",
+        "elements": [
+          {
+            "type": "ellipse",
+            "cx": 760,
+            "cy": 470,
+            "rx": 520,
+            "ry": 260,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.1,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "2×",
+            "x": 700,
+            "y": 610,
+            "size": 380,
+            "font": "display",
+            "anchor": "end",
+            "fill": {
+              "gradient": [
+                "muted",
+                "ink",
+                "muted"
+              ],
+              "angle": 90
+            },
+            "at": 0,
+            "enter": "blur",
+            "dur": 0.22,
+            "shine": {
+              "at": 0.5,
+              "dur": 1.2,
+              "angle": 20
+            },
+            "keys": [
+              {
+                "at": 0,
+                "scale": 1.04,
+                "dur": 0
+              },
+              {
+                "at": 0,
+                "scale": 1,
+                "dur": 1.8,
+                "ease": "out"
+              }
+            ],
+            "origin": [
+              520,
+              480
+            ]
+          },
+          {
+            "type": "text",
+            "text": "FASTER CHARGING",
+            "x": 770,
+            "y": 430,
+            "size": 64,
+            "font": "bold",
+            "tracking": 0.06,
+            "fill": "ink",
+            "at": 0.2,
+            "enter": "rise",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "text": "than the first generation",
+            "x": 770,
+            "y": 500,
+            "size": 44,
+            "font": "light",
+            "fill": "muted",
+            "at": 0.35,
+            "enter": "rise",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "text": "HALO",
+            "x": 770,
+            "y": 640,
+            "size": 34,
+            "font": "semibold",
+            "tracking": 0.12,
+            "fill": "ink",
+            "at": 0.4,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "rect",
+            "x": 1190,
+            "y": 620,
+            "w": 500,
+            "h": 14,
+            "r": 7,
+            "fill": "surface",
+            "at": 0.4,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "rect",
+            "x": 1190,
+            "y": 620,
+            "w": 500,
+            "h": 14,
+            "r": 5,
+            "fill": "accent",
+            "glow": {
+              "blur": 10,
+              "opacity": 0.8
+            },
+            "at": 0.5,
+            "enter": "grow-x",
+            "dur": 0.9
+          },
+          {
+            "type": "text",
+            "text": "FIRST GENERATION",
+            "x": 770,
+            "y": 710,
+            "size": 34,
+            "font": "semibold",
+            "tracking": 0.12,
+            "fill": "muted",
+            "at": 0.4,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "rect",
+            "x": 1190,
+            "y": 694,
+            "w": 500,
+            "h": 14,
+            "r": 7,
+            "fill": "surface",
+            "at": 0.4,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "rect",
+            "x": 1190,
+            "y": 694,
+            "w": 500,
+            "h": 14,
+            "r": 5,
+            "fill": "muted",
+            "at": 0.5,
+            "enter": "grow-x",
+            "dur": 1.8
+          }
+        ]
       }
     },
     {
       "id": "spec-2",
-      "block": "kinetic",
+      "block": "canvas",
       "vo": "and it lasts all day.",
+      "hold": 1.2,
+      "transition": "cut",
       "props": {
-        "mode": "stack",
-        "align": "center",
-        "emphasis": ["all day"]
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "viewFrom": [
+          60,
+          34,
+          1800,
+          1012.5
+        ],
+        "viewAt": 0,
+        "viewDur": 4,
+        "elements": [
+          {
+            "type": "ellipse",
+            "cx": 960,
+            "cy": 560,
+            "rx": 700,
+            "ry": 380,
+            "fill": {
+              "gradient": [
+                "surface",
+                "surface"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.8,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "path",
+            "d": "M 560 600 A 400 400 0 0 1 1360 600",
+            "fill": "none",
+            "stroke": "line",
+            "width": 3,
+            "dash": [
+              2,
+              14
+            ],
+            "cap": "round",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "path",
+            "d": "M 560 600 A 400 400 0 0 1 1360 600",
+            "fill": "none",
+            "stroke": "accent",
+            "width": 4,
+            "cap": "round",
+            "glow": {
+              "blur": 8,
+              "opacity": 0.7
+            },
+            "at": 0.3,
+            "enter": "draw",
+            "dur": 2.4
+          },
+          {
+            "type": "icon",
+            "name": "sun",
+            "x": 0,
+            "y": 0,
+            "size": 64,
+            "stroke": "ink",
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.3,
+            "along": {
+              "d": "M 560 600 A 400 400 0 0 1 1360 600",
+              "at": 0.3,
+              "dur": 2.4,
+              "ease": "inOut"
+            }
+          },
+          {
+            "type": "icon",
+            "name": "moon",
+            "x": 1360,
+            "y": 668,
+            "size": 52,
+            "stroke": "muted",
+            "at": 2.4,
+            "enter": "pop",
+            "dur": 0.4
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "children": [
+              {
+                "type": "path",
+                "d": "M 750 544.5 A 210 185.4 0 0 0 1170 544.5 L 1170 589.6 A 210 185.4 0 0 1 750 589.6 Z",
+                "fill": {
+                  "gradient": [
+                    "muted",
+                    "bg"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "opacity": 0.22,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "ellipse",
+                "cx": 960,
+                "cy": 542.5,
+                "rx": 214.2,
+                "ry": 194.7,
+                "fill": "bg",
+                "stroke": "none",
+                "blur": 8.4,
+                "opacity": 0.9,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 764 497.5 A 196 173.1 0 1 1 1156 497.5 A 196 173.1 0 1 1 764 497.5 Z",
+                "fill": {
+                  "gradient": [
+                    "bg",
+                    "surface",
+                    "muted"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "id": "halo",
+                "type": "path",
+                "d": "M 766.9 522.3 A 193.1 170.5 0 0 1 1153.1 522.3",
+                "fill": "none",
+                "stroke": "accent",
+                "width": 3.4,
+                "cap": "round",
+                "glow": {
+                  "blur": 11.5,
+                  "color": "accent",
+                  "opacity": 1
+                },
+                "opacity": 1,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 764 542.5 A 196 173.1 0 1 1 1156 542.5 A 196 173.1 0 1 1 764 542.5 Z",
+                "fill": "bg",
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "ellipse",
+                "cx": 960,
+                "cy": 542.5,
+                "rx": 176.4,
+                "ry": 155.8,
+                "fill": {
+                  "gradient": [
+                    "accent",
+                    "accent"
+                  ],
+                  "radial": true,
+                  "fade": true
+                },
+                "opacity": 0.4,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 750 497.5 A 210 185.4 0 0 0 1170 497.5 L 1170 542.5 A 210 185.4 0 0 1 750 542.5 Z",
+                "fill": {
+                  "gradient": [
+                    "surface",
+                    "ink",
+                    "muted",
+                    "bg"
+                  ],
+                  "angle": 0
+                },
+                "stroke": "none",
+                "shine": {
+                  "angle": 18,
+                  "width": 0.22,
+                  "opacity": 0.9,
+                  "at": 0.3,
+                  "dur": 2.6
+                },
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 750 542.5 A 210 185.4 0 0 0 1170 542.5",
+                "fill": "none",
+                "stroke": "bg",
+                "width": 2.9,
+                "opacity": 0.8,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 750 497.5 A 210 185.4 0 1 1 1170 497.5 A 210 185.4 0 1 1 750 497.5 Z M 764 497.5 A 196 173.1 0 1 0 1156 497.5 A 196 173.1 0 1 0 764 497.5 Z",
+                "fill": {
+                  "gradient": [
+                    "muted",
+                    "ink"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 750.6 497.5 A 209.4 184.9 0 0 0 1169.4 497.5",
+                "fill": "none",
+                "stroke": "ink",
+                "width": 1.3,
+                "opacity": 0.95,
+                "glow": {
+                  "blur": 4.8,
+                  "opacity": 0.6
+                },
+                "at": 0,
+                "enter": "none"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "ALL DAY.",
+            "x": 960,
+            "y": 900,
+            "size": 96,
+            "font": "display",
+            "tracking": 0.2,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0.6,
+            "enter": "blur",
+            "dur": 0.6
+          }
+        ]
       }
     },
     {
       "id": "whole",
       "block": "canvas",
-      "hold": 1.2,
       "vo": "Meet Halo.",
+      "hold": 1.4,
+      "transition": "fade",
       "props": {
+        "world": "reveal",
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "viewFrom": [
+          560,
+          200,
+          800,
+          450
+        ],
+        "viewAt": 0,
+        "viewDur": 1.8,
         "elements": [
+          {
+            "type": "poly",
+            "points": [
+              [
+                890,
+                -40
+              ],
+              [
+                1030,
+                -40
+              ],
+              [
+                1430,
+                682.7
+              ],
+              [
+                490,
+                682.7
+              ]
+            ],
+            "closed": true,
+            "fill": {
+              "gradient": [
+                "ink",
+                "ink"
+              ],
+              "angle": 90,
+              "fade": true
+            },
+            "opacity": 0.08,
+            "blur": 30,
+            "z": 1.5,
+            "at": 0,
+            "enter": "none"
+          },
           {
             "type": "ellipse",
             "cx": 960,
-            "cy": 430,
-            "rx": 560,
-            "ry": 240,
+            "cy": 622.7,
+            "rx": 620,
+            "ry": 90,
             "fill": {
-              "gradient": ["accent", "accent"],
+              "gradient": [
+                "muted",
+                "muted"
+              ],
               "radial": true,
               "fade": true
             },
-            "opacity": 0.2,
+            "opacity": 0.28,
             "at": 0,
-            "enter": "fade",
-            "dur": 1.5
+            "enter": "none"
           },
           {
-            "type": "solid",
-            "shape": "icosa",
-            "cx": 960,
-            "cy": 420,
-            "size": 210,
-            "spin": [6, 12, 0],
-            "tilt": [18, 0, 0],
-            "width": 2.5,
-            "glow": {
-              "blur": 16,
-              "color": "accent"
-            },
+            "type": "particles",
+            "x": 580,
+            "y": 40,
+            "w": 760,
+            "h": 542.7,
+            "kind": "dust",
+            "count": 36,
+            "seed": 4,
+            "size": 2.4,
+            "speed": 0.4,
+            "fill": "ink",
+            "opacity": 0.45,
+            "z": -0.3,
             "at": 0,
-            "dur": 1.2,
-            "shade": {
-              "light": [-0.5, -0.7, 0.6],
-              "ambient": 0.18
-            },
-            "fill": "accent"
+            "enter": "none"
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "children": [
+              {
+                "type": "path",
+                "d": "M 630 490.5 A 330 134.2 0 0 0 1290 490.5 L 1290 607.4 A 330 134.2 0 0 1 630 607.4 Z",
+                "fill": {
+                  "gradient": [
+                    "muted",
+                    "bg"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "opacity": 0.22,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "ellipse",
+                "cx": 960,
+                "cy": 488.5,
+                "rx": 336.6,
+                "ry": 140.9,
+                "fill": "bg",
+                "stroke": "none",
+                "blur": 13.2,
+                "opacity": 0.9,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 648 371.5 A 312 126.9 0 1 1 1272 371.5 A 312 126.9 0 1 1 648 371.5 Z",
+                "fill": {
+                  "gradient": [
+                    "bg",
+                    "surface",
+                    "muted"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "id": "halo",
+                "type": "path",
+                "d": "M 652.7 435.8 A 307.3 125 0 0 1 1267.3 435.8",
+                "fill": "none",
+                "stroke": "accent",
+                "width": 4.5,
+                "cap": "round",
+                "glow": {
+                  "blur": 15.4,
+                  "color": "accent",
+                  "opacity": 1
+                },
+                "opacity": 1,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 648 488.5 A 312 126.9 0 1 1 1272 488.5 A 312 126.9 0 1 1 648 488.5 Z",
+                "fill": "bg",
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "ellipse",
+                "cx": 960,
+                "cy": 488.5,
+                "rx": 280.8,
+                "ry": 114.2,
+                "fill": {
+                  "gradient": [
+                    "accent",
+                    "accent"
+                  ],
+                  "radial": true,
+                  "fade": true
+                },
+                "opacity": 0.4,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 630 371.5 A 330 134.2 0 0 0 1290 371.5 L 1290 488.5 A 330 134.2 0 0 1 630 488.5 Z",
+                "fill": {
+                  "gradient": [
+                    "surface",
+                    "ink",
+                    "muted",
+                    "bg"
+                  ],
+                  "angle": 0
+                },
+                "stroke": "none",
+                "shine": {
+                  "angle": 18,
+                  "width": 0.22,
+                  "opacity": 0.9,
+                  "at": 1.2,
+                  "dur": 1.8
+                },
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 630 488.5 A 330 134.2 0 0 0 1290 488.5",
+                "fill": "none",
+                "stroke": "bg",
+                "width": 3.8,
+                "opacity": 0.8,
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 630 371.5 A 330 134.2 0 1 1 1290 371.5 A 330 134.2 0 1 1 630 371.5 Z M 648 371.5 A 312 126.9 0 1 0 1272 371.5 A 312 126.9 0 1 0 648 371.5 Z",
+                "fill": {
+                  "gradient": [
+                    "muted",
+                    "ink"
+                  ],
+                  "angle": 90
+                },
+                "stroke": "none",
+                "at": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 631 371.5 A 329 133.8 0 0 0 1289 371.5",
+                "fill": "none",
+                "stroke": "ink",
+                "width": 1.8,
+                "opacity": 0.95,
+                "glow": {
+                  "blur": 6.4,
+                  "opacity": 0.6
+                },
+                "at": 0,
+                "enter": "none"
+              }
+            ]
           },
           {
             "type": "text",
             "text": "HALO",
             "x": 960,
-            "y": 820,
-            "size": 150,
+            "y": 900,
+            "size": 170,
             "font": "display",
             "anchor": "middle",
-            "tracking": 0.3,
+            "tracking": 0.32,
             "fill": {
-              "gradient": ["muted", "ink", "muted"],
+              "gradient": [
+                "muted",
+                "ink",
+                "muted"
+              ],
               "angle": 90
             },
             "enter": "blur",
-            "at": 0.5,
-            "dur": 1.2,
+            "at": 1.3,
+            "dur": 0.8,
             "shine": {
-              "dur": 1.3,
+              "at": 1.9,
+              "dur": 1.4,
               "angle": 22
             }
           }
@@ -220,11 +1275,34 @@
     },
     {
       "id": "button",
-      "block": "endcard",
+      "block": "canvas",
       "vo": "Available today.",
+      "hold": 0.8,
       "props": {
-        "title": "Available today.",
-        "align": "center"
+        "world": "reveal",
+        "view": [
+          -96,
+          -40,
+          2112,
+          1188
+        ],
+        "viewDur": 3,
+        "viewAt": 0,
+        "elements": [
+          {
+            "type": "text",
+            "text": "Available today.",
+            "x": 960,
+            "y": 1010,
+            "size": 60,
+            "font": "light",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0.2,
+            "enter": "rise",
+            "dur": 0.6
+          }
+        ]
       }
     }
   ]

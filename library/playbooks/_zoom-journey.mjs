@@ -1,224 +1,503 @@
 // Generates zoom-journey.json (run from the repository root: node library/playbooks/_zoom-journey.mjs).
-// One world at four scales, each ten times smaller; the ring on the way out marks the window.
+// One world at four scales, each ten times smaller: a planet at dusk, a stretch of its coast on
+// the night side, the city at a river mouth on that coast, and one window in that city. Each
+// scale is drawn where the last one said it was: the coast is the continent's own outline, which
+// carries finer bays only where the camera will look; the city's lights are the specks seen from
+// orbit; the window is in that city's street.
 import fs from 'node:fs';
 import { smoothPath, rng } from '../../fframes/sketch-kit.mjs';
-const r = v => Math.round(v * 100) / 100;
+
+const r = v => Math.round(v * 10) / 10;
 const rand = rng(21);
-const R = 20000;
 const view = (cx, cy, w) => [r(cx - w / 2), r(cy - (w * 9) / 32), r(w), r((w * 9) / 16)];
-// A coastline: large bays and small inlets (several frequencies of wobble), not a potato.
-const blob = (cx, cy, rad, n = 9, wob = 0.35) => {
-  const pts = [],
-    ph = [0, 1, 2, 3].map(() => rand() * Math.PI * 2),
-    count = Math.max(28, n * 3);
-  for (let i = 0; i < count; i++) {
-    const a = (i / count) * Math.PI * 2;
-    const k =
-      rad *
-      (1 +
-        wob * (0.5 * Math.sin(2 * a + ph[0]) + 0.3 * Math.sin(5 * a + ph[1]) + 0.15 * Math.sin(11 * a + ph[2])) +
-        0.06 * (rand() - 0.5));
-    pts.push([cx + Math.cos(a) * k, cy + Math.sin(a) * k * (0.8 + 0.2 * Math.sin(a + ph[3]))]);
+const dot = ([x, y]) => `M${Math.round(x)} ${Math.round(y)}h.1`;
+const dotF = ([x, y]) => `M${r(x)} ${r(y)}h.01`;
+/** Long path data split into elements under the 12,000-character cap. */
+const chunked = (parts, el) => {
+  const out = [];
+  let cur = '';
+  for (const p of parts) {
+    if (cur.length + p.length > 11500) {
+      out.push({ ...el, d: cur });
+      cur = '';
+    }
+    cur += p;
   }
-  pts.push(pts[0], pts[1]);
-  return smoothPath(pts) + ' Z';
+  if (cur) out.push({ ...el, d: cur });
+  return out;
 };
-const P1 = [6000, -3000],
-  P2 = [6400, -2800],
-  P3 = [6420, -2790];
-// Scale 0: the planet.
+const inside = (pt, poly) => {
+  let c = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i],
+      [xj, yj] = poly[j];
+    if (yi > pt[1] !== yj > pt[1] && pt[0] < ((xj - xi) * (pt[1] - yi)) / (yj - yi) + xi) c = !c;
+  }
+  return c;
+};
+const polyD = pts => `M ${pts.map(([x, y]) => `${r(x)} ${r(y)}`).join(' L ')} Z`;
+
+// ------------------------------------------------------------------ continents
+const R = 20000;
+/**
+ * A continent: radius by angle (bays, capes and inlets at several scales), plus `fine(a)`, extra
+ * detail added only where the camera will come close. Sampled densely there, coarsely elsewhere.
+ */
+const continent = (cx, cy, rad, wob, seed, fine = () => 0) => {
+  const g = rng(seed),
+    ph = Array.from({ length: 7 }, () => g() * Math.PI * 2);
+  const radius = a =>
+    rad *
+      (1 +
+        wob *
+          (0.42 * Math.sin(2 * a + ph[0]) +
+            0.26 * Math.sin(3 * a + ph[1]) +
+            0.16 * Math.sin(7 * a + ph[2]) +
+            0.1 * Math.sin(13 * a + ph[3]) +
+            0.06 * Math.sin(23 * a + ph[4]) +
+            0.035 * Math.sin(41 * a + ph[5]))) +
+    fine(a);
+  const at = a => [cx + Math.cos(a) * radius(a), cy + Math.sin(a) * radius(a) * (0.82 + 0.12 * Math.sin(a + ph[6]))];
+  return { at, cx, cy };
+};
+const sample = (c, step) => {
+  const pts = [];
+  for (let a = -Math.PI; a < Math.PI; a += step(a)) pts.push(c.at(a));
+  return pts;
+};
+// Where the story lands: an eastern coast, just past the terminator.
+const A1 = -0.3,
+  AC = A1 + 0.006;
+const bump = (a, c, w) => Math.exp(-(((a - c) / w) ** 2));
+// Each octave's height is a fraction of its wavelength, so the coast is rugged, not spiky.
+const fineMain = a =>
+  bump(a, A1, 0.2) * (320 * Math.sin(a * 40 + 1) + 110 * Math.sin(a * 140 + 2) + 45 * Math.sin(a * 330 + 0.5) + 18 * Math.sin(a * 760)) +
+  bump(a, AC, 0.014) * (5 * Math.sin(a * 2900 + 1.4) + 2 * Math.sin(a * 7100 + 0.3));
+const main = continent(4200, -2600, 8200, 0.42, 5, fineMain),
+  others = [continent(-9600, 7600, 5000, 0.5, 8), continent(-7400, -11400, 2600, 0.55, 11), continent(12600, 8800, 1300, 0.5, 14)];
+const mainPts = sample(main, a => (Math.abs(a - AC) < 0.02 ? 0.00025 : Math.abs(a - A1) < 0.3 ? 0.0022 : 0.03));
+const otherPts = others.map(c => sample(c, () => 0.035));
+const P1 = main.at(A1);
+// The river mouth, the city just inland of it, and the street with the window.
+const mouth = main.at(AC),
+  inward = (() => {
+    const [dx, dy] = [main.cx - mouth[0], main.cy - mouth[1]],
+      l = Math.hypot(dx, dy);
+    return [dx / l, dy / l];
+  })(),
+  side = [-inward[1], inward[0]];
+const P2 = [mouth[0] + inward[0] * 150, mouth[1] + inward[1] * 150];
+const riverPts = [];
+for (let i = 0; i <= 50; i++) {
+  const t = i / 50,
+    d = -40 + 2600 * t ** 1.25,
+    s = Math.sin(t * 8) * 170 * t + Math.sin(t * 21) * 40 * t;
+  riverPts.push([mouth[0] + inward[0] * d + side[0] * s, mouth[1] + inward[1] * d + side[1] * s]);
+}
+const onLand = p => inside(p, mainPts);
+const nearRiver = (p, k) => riverPts.some(q => Math.hypot(p[0] - q[0], p[1] - q[1]) < k);
+
+// ------------------------------------------------------------------ lights
+const g = rng(4);
+// The target city and its roads, seen from orbit as specks.
+const specks = [];
+for (let i = 0; i < 520; i++) {
+  const t = g() ** 1.7,
+    d = 20 + 520 * t,
+    a = g() * Math.PI * 2,
+    p = [P2[0] + Math.cos(a) * d, P2[1] + Math.sin(a) * d * 0.8];
+  if (onLand(p) && !nearRiver(p, 22)) specks.push(p);
+}
+const roads = [0.5, -0.7, 1.4].map(turn => {
+  const pts = [];
+  for (let k = 0; k <= 30; k++) {
+    const d = 300 + k * 90,
+      bend = Math.sin(k * 0.4 + turn) * 260;
+    pts.push([
+      P2[0] + (inward[0] * Math.cos(turn) - inward[1] * Math.sin(turn)) * d + side[0] * bend,
+      P2[1] + (inward[1] * Math.cos(turn) + inward[0] * Math.sin(turn)) * d + side[1] * bend,
+    ]);
+  }
+  return pts.filter(onLand);
+});
+roads.forEach(pts => pts.forEach(p => specks.push([p[0] + (g() - 0.5) * 60, p[1] + (g() - 0.5) * 60])));
+// Other cities across the night side.
+const nightCities = [];
+for (let i = 0; i < 1100; i++) {
+  const p = [-2000 + g() * 22000, -14000 + g() * 28000];
+  if (Math.hypot(p[0], p[1]) > R * 0.97 || Math.hypot(p[0] - P2[0], p[1] - P2[1]) < 3200) continue;
+  const land = onLand(p) || otherPts.some(o => inside(p, o));
+  if (land && p[0] > 2500 + g() * 3000 && g() > 0.35) nightCities.push(p);
+}
+
+// ------------------------------------------------------------------ scale 0: the planet
 const planet = [
   {
     type: 'particles',
-    x: -26000,
-    y: -14700,
-    w: 52000,
-    h: 29400,
+    x: -60000,
+    y: -32000,
+    w: 124000,
+    h: 76000,
     kind: 'stars',
-    count: 160,
+    count: 260,
+    seed: 2,
     fill: 'ink',
     opacity: 0.7,
     size: 40,
     at: 0,
-    enter: 'fade',
-    dur: 1.5,
+    enter: 'none',
   },
+  // The atmosphere's glow, strongest toward the sun on the left.
   {
     type: 'circle',
-    cx: 0,
+    cx: -1800,
     cy: 0,
-    r: R + 900,
-    fill: { gradient: ['accent2', 'accent2'], radial: true, fade: true },
-    opacity: 0.35,
-    at: 0.1,
-    enter: 'fade',
-    dur: 1.5,
+    r: R + 3400,
+    fill: { gradient: ['accent2', 'accent2', 'bg'], radial: true, fade: true },
+    opacity: 0.3,
+    at: 0,
+    enter: 'none',
   },
-  { type: 'circle', cx: 0, cy: 0, r: R, fill: 'surface', at: 0.1, enter: 'fade', dur: 1.2 },
-  {
+  // Ocean: sunlit teal on the left deepening into night.
+  { type: 'circle', cx: 0, cy: 0, r: R, fill: { gradient: ['accent2', 'surface', 'bg'], angle: 0 }, at: 0, enter: 'none' },
+  { type: 'circle', cx: 0, cy: 0, r: R, fill: 'surface', opacity: 0.45, at: 0, enter: 'none' },
+  // Shallow water over the continental shelves.
+  ...[mainPts, ...otherPts].map(pts => ({
     type: 'path',
-    d: blob(5200, -2600, 7200, 11, 0.45),
-    fill: 'muted',
-    opacity: 0.55,
-    stroke: 'none',
-    at: 0.3,
-    enter: 'fade',
-    dur: 1.2,
-  },
-  {
-    type: 'path',
-    d: blob(-8200, 5200, 5200, 9, 0.5),
-    fill: 'muted',
-    opacity: 0.45,
-    stroke: 'none',
-    at: 0.4,
-    enter: 'fade',
-    dur: 1.2,
-  },
-  {
-    type: 'path',
-    d: blob(-4000, -11000, 3000, 8, 0.5),
-    fill: 'muted',
-    opacity: 0.4,
-    stroke: 'none',
-    at: 0.5,
-    enter: 'fade',
-    dur: 1.2,
-  },
-  // Night falls across the far side.
-  {
-    type: 'circle',
-    cx: -9000,
-    cy: 6000,
-    r: R * 1.05,
-    fill: { gradient: ['bg', 'bg'], radial: true, fade: true },
-    opacity: 0.75,
-    at: 0.2,
-    enter: 'fade',
-    dur: 1.5,
-  },
-  {
-    type: 'circle',
-    cx: 0,
-    cy: 0,
-    r: R + 160,
+    d: polyD(pts.filter((_, i) => i % 3 === 0)),
     fill: 'none',
     stroke: 'accent2',
-    width: 220,
-    opacity: 0.5,
-    glow: { blur: 300 },
-    at: 0.3,
-    enter: 'fade',
-    dur: 1.5,
-  },
-];
-// Scale 1: a coast with city lights (10× in).
-const lights = [];
-for (let i = 0; i < 70; i++) {
-  const a = rand() * Math.PI * 2,
-    d = 380 * rand() ** 0.7;
-  lights.push({
+    width: 700,
+    join: 'round',
+    opacity: 0.12,
+    at: 0,
+    enter: 'none',
+  })),
+  // Land, lit from the left, with darker uplands inland.
+  ...[mainPts, ...otherPts].map((pts, i) => ({
+    type: 'path',
+    d: i ? `${smoothPath([...pts, pts[0], pts[1]])} Z` : polyD(pts),
+    fill: { gradient: ['accent', 'muted', 'muted'], angle: 0 },
+    opacity: 0.42,
+    stroke: 'none',
+    at: 0,
+    enter: 'none',
+  })),
+  ...[
+    [2400, -1800, 4800, 3200],
+    [-10400, 8200, 3000, 2200],
+    [-7600, -11200, 1500, 1100],
+  ].map(([cx, cy, rx, ry]) => ({
+    type: 'ellipse',
+    cx,
+    cy,
+    rx,
+    ry,
+    fill: { gradient: ['bg', 'bg'], radial: true, fade: true },
+    opacity: 0.32,
+    at: 0,
+    enter: 'none',
+  })),
+  // Weather: soft clusters of cloud drifting over the day side.
+  ...[
+    [-7000, 3000, 1.0],
+    [-13500, -4800, 0.8],
+    [-3000, 12800, 1.1],
+    [-11500, 9800, 0.7],
+    [-4500, -12500, 0.8],
+  ].flatMap(([x, y, k], i) =>
+    [
+      [0, 0, 3200, 1100],
+      [1900, 500, 2200, 900],
+      [-1800, 400, 1900, 800],
+      [700, -600, 1500, 700],
+    ].map(([dx, dy, rx, ry]) => ({
+      type: 'ellipse',
+      cx: r(x + dx * k),
+      cy: r(y + dy * k),
+      rx: r(rx * k),
+      ry: r(ry * k),
+      rotate: -12 + i * 7,
+      origin: [x, y],
+      fill: { gradient: ['ink', 'ink'], radial: true, fade: true },
+      opacity: 0.2,
+      at: 0,
+      enter: 'none',
+      loop: { type: 'float', period: 22 + i * 5, amount: 220 },
+    })),
+  ),
+  // Night: the terminator crosses the planet; everything east of it is dark.
+  // (a soft disc of shadow centred east of the planet: its fading rim is the curved terminator)
+  {
     type: 'circle',
-    cx: r(P2[0] + Math.cos(a) * d),
-    cy: r(P2[1] + Math.sin(a) * d * 0.6),
-    r: r(4 + 10 * rand()),
-    fill: rand() > 0.85 ? 'ink' : 'accent',
-    opacity: 0.9,
-    at: r(0.5 + rand() * 1.2),
-    enter: 'fade',
-    dur: 0.4,
-  });
-}
-const coast = [
+    cx: R,
+    cy: -800,
+    r: r(R * 1.5),
+    fill: { gradient: ['bg', 'bg', 'bg'], radial: true, fade: true },
+    opacity: 0.94,
+    at: 0,
+    enter: 'none',
+  },
+  // Space beyond the night limb keeps its stars.
+  {
+    type: 'particles',
+    x: R + 400,
+    y: -32000,
+    w: 40000,
+    h: 76000,
+    kind: 'stars',
+    count: 90,
+    seed: 3,
+    fill: 'ink',
+    opacity: 0.7,
+    size: 40,
+    at: 0,
+    enter: 'none',
+  },
+  // City lights on the night side.
+  ...chunked(nightCities.map(dot), {
+    type: 'path',
+    fill: 'none',
+    stroke: 'accent',
+    width: 46,
+    cap: 'round',
+    opacity: 0.75,
+    glow: { blur: 90, opacity: 0.8 },
+    at: 0,
+    enter: 'none',
+  }),
+  ...chunked(specks.map(dot), {
+    type: 'path',
+    fill: 'none',
+    stroke: 'accent',
+    width: 10,
+    cap: 'round',
+    opacity: 0.95,
+    glow: { blur: 30, opacity: 0.9 },
+    at: 0,
+    enter: 'none',
+  }),
+  // The city the camera is headed for: a warm smudge on the dark coast.
+  {
+    type: 'ellipse',
+    cx: r(P2[0]),
+    cy: r(P2[1]),
+    rx: 620,
+    ry: 500,
+    fill: { gradient: ['accent', 'accent'], radial: true, fade: true },
+    opacity: 0.5,
+    at: 0,
+    enter: 'none',
+    loop: { type: 'pulse', period: 3, amount: 0.08 },
+  },
+  // The sunlit limb.
   {
     type: 'path',
-    d: blob(P1[0] + 900, P1[1] + 300, 1500, 12, 0.3),
-    fill: 'muted',
-    opacity: 0.35,
+    d: `M ${r(R * 0.26)} ${r(-R * 0.96)} A ${R - 80} ${R - 80} 0 1 0 ${r(R * 0.26)} ${r(R * 0.96)}`,
+    fill: 'none',
     stroke: 'accent2',
-    width: 14,
-    at: 0.2,
-    enter: 'fade',
-    dur: 1,
+    width: 240,
+    cap: 'round',
+    opacity: 0.75,
+    glow: { blur: 400, opacity: 0.9 },
+    at: 0,
+    enter: 'none',
   },
-  { type: 'group', glow: { blur: 30, opacity: 0.9 }, children: lights },
   {
-    type: 'text',
-    text: 'A COAST',
-    x: P1[0] - 2400,
-    y: P1[1] + 1330,
-    size: 80,
-    font: 'mono',
-    tracking: 0.3,
-    fill: 'ink',
-    at: 0.8,
-    enter: 'type',
-    exitAt: 60,
-    exit: 'fade',
+    type: 'ellipse',
+    cx: -12000,
+    cy: -6000,
+    rx: 5200,
+    ry: 3400,
+    rotate: 30,
+    origin: [-12000, -6000],
+    fill: { gradient: ['ink', 'ink'], radial: true, fade: true },
+    opacity: 0.14,
+    blend: 'screen',
+    at: 0,
+    enter: 'none',
   },
 ];
-// Scale 2: a city: a river and a street grid (10× in again).
-const grid = [];
-for (let i = -6; i <= 6; i++) {
-  grid.push({
-    type: 'line',
-    x1: P2[0] - 240,
-    y1: r(P2[1] + i * 20),
-    x2: P2[0] + 240,
-    y2: r(P2[1] + i * 20),
-    stroke: 'muted',
-    width: 0.7,
-    opacity: 0.6,
-    at: r(0.2 + (i + 6) * 0.03),
-    enter: 'draw',
-    dur: 0.6,
-  });
-  grid.push({
-    type: 'line',
-    x1: r(P2[0] + i * 36),
-    y1: P2[1] - 140,
-    x2: r(P2[0] + i * 36),
-    y2: P2[1] + 140,
-    stroke: 'muted',
-    width: 0.7,
-    opacity: 0.6,
-    at: r(0.25 + (i + 6) * 0.03),
-    enter: 'draw',
-    dur: 0.6,
-  });
-}
-const city = [
+
+// ------------------------------------------------------------------ scale 1: the coast
+const coastLine = mainPts.filter((p, i) => {
+  const d = Math.hypot(p[0] - P1[0], p[1] - P1[1]);
+  return d < 6000 && (Math.hypot(p[0] - P2[0], p[1] - P2[1]) < 700 ? i % 2 === 0 : i % 4 === 0);
+});
+const lineD = pts => `M ${pts.map(([x, y]) => `${r(x)} ${r(y)}`).join(' L ')}`;
+// Inland relief: faint contour rings round a few hills, the way the land reads at night.
+const hills = [
+  [P1[0] - 1900, P1[1] - 700, 620],
+  [P1[0] - 2600, P1[1] + 900, 820],
+  [P1[0] - 900, P1[1] + 1700, 480],
+].flatMap(([cx, cy, rad]) =>
+  [1, 0.72, 0.46, 0.22].map(k => {
+    const pts = Array.from({ length: 14 }, (_, i) => {
+      const a = (i / 14) * Math.PI * 2,
+        w = 1 + 0.18 * Math.sin(3 * a + cx) + 0.1 * Math.sin(5 * a + cy);
+      return [cx + Math.cos(a) * rad * k * w, cy + Math.sin(a) * rad * k * w * 0.7];
+    });
+    return `${smoothPath([...pts, pts[0], pts[1]])}`;
+  }),
+);
+const coast = [
+  ...chunked(hills.map(d => d + ' '), { type: 'path', fill: 'none', stroke: 'muted', width: 6, opacity: 0.16, at: 0, enter: 'fade', dur: 0.8 }),
+  // Moonlight on the open sea.
   {
-    type: 'rect',
-    x: P2[0] - 300,
-    y: P2[1] - 170,
-    w: 600,
-    h: 340,
-    fill: 'bg',
-    opacity: 0.85,
+    type: 'ellipse',
+    cx: r(P1[0] + 1500),
+    cy: r(P1[1] - 300),
+    rx: 1700,
+    ry: 1000,
+    fill: { gradient: ['accent2', 'accent2'], radial: true, fade: true },
+    opacity: 0.14,
     at: 0,
     enter: 'fade',
     dur: 0.8,
   },
-  ...grid,
+  // Surf along the shore, catching what light there is.
   {
     type: 'path',
-    d: `M ${P2[0] - 300} ${P2[1] + 60} C ${P2[0] - 150} ${P2[1] + 10} ${P2[0] - 40} ${P2[1] + 120} ${P2[0] + 90} ${P2[1] + 40} S ${P2[0] + 250} ${P2[1] - 60} ${P2[0] + 300} ${P2[1] - 20}`,
+    d: lineD(coastLine),
+    fill: 'none',
     stroke: 'accent2',
     width: 9,
-    fill: 'none',
-    opacity: 0.8,
-    at: 0.3,
+    opacity: 0.55,
+    glow: { blur: 30, opacity: 0.7 },
+    at: 0.1,
     enter: 'draw',
-    dur: 1.2,
+    dur: 1.6,
+  },
+  // The river, catching a little moonlight on its way to the sea.
+  { type: 'path', d: smoothPath(riverPts), fill: 'none', stroke: 'surface', width: 22, cap: 'round', opacity: 0.9, at: 0.2, enter: 'draw', dur: 1.2 },
+  { type: 'path', d: smoothPath(riverPts), fill: 'none', stroke: 'accent2', width: 4, cap: 'round', opacity: 0.4, at: 0.3, enter: 'draw', dur: 1.2 },
+];
+const coastView = view(P1[0] - 600, P1[1] + 300, 5200);
+coast.push(
+  {
+    type: 'text',
+    text: 'THE COAST',
+    x: r(coastView[0] + 300),
+    y: r(coastView[1] + coastView[3] - 260),
+    size: 108,
+    font: 'semibold',
+    tracking: 0.3,
+    fill: 'ink',
+    at: 0.8,
+    enter: 'type',
+    exitAt: 60,
+    exit: 'fade',
+  },
+  { type: 'rect', x: r(coastView[0] + 300), y: r(coastView[1] + coastView[3] - 210), w: 360, h: 10, fill: 'accent2', at: 1.1, enter: 'grow-x', dur: 0.5, exitAt: 60, exit: 'fade' },
+);
+
+// ------------------------------------------------------------------ scale 2: the city
+const ang = Math.atan2(inward[1], inward[0]),
+  U = [Math.cos(ang), Math.sin(ang)],
+  V = [-Math.sin(ang), Math.cos(ang)];
+const at = (b, a) => [P2[0] + U[0] * b + V[0] * a, P2[1] + U[1] * b + V[1] * a];
+const streets = [],
+  majors = [],
+  lamps = [],
+  windows = [];
+const ok = p => onLand(p) && !nearRiver(p, 26) && Math.hypot(p[0] - P2[0], p[1] - P2[1]) < 520;
+// Parks: a few blocks with no streets through them.
+const park = (b, a) => {
+  const k = Math.sin(Math.floor(b / 60) * 12.9898 + Math.floor(a / 72) * 78.233) * 43758.5;
+  return k - Math.floor(k) < 0.1;
+};
+for (let a = -408; a <= 408; a += 24)
+  for (let b = -120; b <= 520; b += 6) {
+    const p = at(b, a),
+      q = at(b + 6, a),
+      major = Math.round(a / 24) % 4 === 0;
+    if (ok(p) && ok(q) && (major || !park(b, a))) {
+      (major ? majors : streets).push(`M ${r(p[0])} ${r(p[1])} L ${r(q[0])} ${r(q[1])}`);
+      if (Math.round(b) % 18 === 0) lamps.push(p);
+    }
+  }
+for (let b = -120; b <= 520; b += 20)
+  for (let a = -408; a <= 408; a += 6) {
+    const p = at(b, a),
+      q = at(b, a + 6),
+      major = Math.round(b / 20) % 3 === 0;
+    if (ok(p) && ok(q) && (major || !park(b, a))) (major ? majors : streets).push(`M ${r(p[0])} ${r(p[1])} L ${r(q[0])} ${r(q[1])}`);
+  }
+// A boulevard cutting across the grid on the diagonal.
+for (let k = -60; k < 60; k++) {
+  const p = at(80 + k * 5, k * 5),
+    q = at(85 + k * 5, k * 5 + 5);
+  if (ok(p) && ok(q)) majors.push(`M ${r(p[0])} ${r(p[1])} L ${r(q[0])} ${r(q[1])}`);
+}
+for (let i = 0; i < 900; i++) {
+  const p = at(-120 + g() * 640, -400 + g() * 800);
+  if (ok(p)) windows.push(p);
+}
+const cityView = view(P2[0] + U[0] * 60, P2[1] + U[1] * 60, 520);
+const city = [
+  // The city's ground at night, dark enough for its lights.
+  {
+    type: 'ellipse',
+    cx: r(P2[0] + U[0] * 120),
+    cy: r(P2[1] + U[1] * 120),
+    rx: 1150,
+    ry: 900,
+    rotate: r((ang * 180) / Math.PI),
+    origin: [r(P2[0] + U[0] * 120), r(P2[1] + U[1] * 120)],
+    fill: { gradient: ['bg', 'bg', 'bg'], radial: true, fade: true },
+    opacity: 0.8,
+    at: 0,
+    enter: 'fade',
+    dur: 0.6,
+  },
+  { type: 'path', d: smoothPath(riverPts.slice(0, 16)), fill: 'none', stroke: 'bg', width: 34, cap: 'round', at: 0, enter: 'fade', dur: 0.4 },
+  ...chunked(windows.map(dotF), { type: 'path', fill: 'none', stroke: 'accent', width: 1.6, cap: 'round', opacity: 0.45, at: 0.3, enter: 'fade', dur: 0.8 }),
+  ...chunked(streets, {
+    type: 'path',
+    fill: 'none',
+    stroke: 'accent',
+    width: 1,
+    cap: 'round',
+    opacity: 0.5,
+    at: 0.2,
+    enter: 'fade',
+    dur: 0.8,
+  }),
+  ...chunked(majors, {
+    type: 'path',
+    fill: 'none',
+    stroke: 'accent',
+    width: 2,
+    cap: 'round',
+    opacity: 0.95,
+    glow: { blur: 4, opacity: 0.9 },
+    at: 0.1,
+    enter: 'fade',
+    dur: 0.7,
+  }),
+  ...chunked(lamps.map(dotF), { type: 'path', fill: 'none', stroke: 'ink', width: 3, cap: 'round', opacity: 0.9, at: 0.5, enter: 'fade', dur: 0.6 }),
+  // Cars along the river road, and the city's light broken on the water.
+  {
+    type: 'path',
+    d: smoothPath(riverPts.slice(0, 16).map(([x, y]) => [x + side[0] * 24, y + side[1] * 24])),
+    fill: 'none',
+    stroke: 'ink',
+    width: 2.4,
+    dash: [3, 12],
+    cap: 'round',
+    glow: { blur: 3, opacity: 0.9 },
+    at: 0.3,
+    enter: 'fade',
+    dur: 0.5,
+    loop: { type: 'dash', period: 1.4 },
   },
   {
     type: 'text',
-    text: 'A CITY',
-    x: P2[0] - 240,
-    y: P2[1] + 132,
-    size: 8,
-    font: 'mono',
+    text: 'THE CITY',
+    x: r(cityView[0] + 30),
+    y: r(cityView[1] + cityView[3] - 26),
+    size: 10.8,
+    font: 'semibold',
     tracking: 0.3,
     fill: 'ink',
     at: 0.8,
@@ -227,83 +506,101 @@ const city = [
     exit: 'fade',
   },
 ];
-// Scale 3: one building, one lit window (10× in again).
-// A short street at night: three buildings with dark windows, a few dimly lit, and one
-// window bright enough to be the one.
-const windows = [];
+
+// ------------------------------------------------------------------ scale 3: one window
+// The camera drops to a street front: three buildings at night, one window lit, a lamp and a
+// plant on the sill.
+const P3 = at(160, 40);
+const [wx, wy] = P3;
+const fac = [];
 const houses = [
-  { x: P3[0] - 24, y: P3[1] - 4, w: 12, h: 12 },
-  { x: P3[0] - 10.5, y: P3[1] - 8, w: 21, h: 16 },
-  { x: P3[0] + 12, y: P3[1] - 5, w: 13, h: 13 },
+  { x: wx - 26, y: wy - 9, w: 15, h: 26, tone: 'surface' },
+  { x: wx - 10.5, y: wy - 13, w: 21, h: 30, tone: 'muted' },
+  { x: wx + 11.5, y: wy - 7, w: 15, h: 24, tone: 'surface' },
 ];
 houses.forEach((hs, n) => {
-  const cols = Math.floor((hs.w - 1.5) / 2.3),
-    rows = Math.floor((hs.h - 3) / 2.4);
+  const cols = Math.floor((hs.w - 2) / 3.2),
+    rows = Math.floor((hs.h - 4) / 4);
   for (let row = 0; row < rows; row++)
     for (let col = 0; col < cols; col++) {
-      const lit = n === 1 && row === 2 && col === 5,
-        dim = !lit && rand() > 0.82;
-      windows.push({
+      const lit = n === 1 && row === 2 && col === 2,
+        dim = !lit && rand() > 0.86;
+      const x = hs.x + 1.6 + col * 3.2 + (hs.w - 2 - cols * 3.2) / 2,
+        y = hs.y + 2.4 + row * 4;
+      fac.push({
         type: 'rect',
-        x: r(hs.x + 1.2 + col * 2.3),
-        y: r(hs.y + 1.6 + row * 2.4),
-        w: 1.1,
-        h: 1.4,
+        x: r(x),
+        y: r(y),
+        w: 1.8,
+        h: 2.4,
         fill: lit || dim ? 'accent' : 'bg',
-        opacity: lit ? 1 : dim ? 0.35 : 0.9,
-        at: r(0.2 + (row * 8 + col) * 0.01),
-        enter: 'fade',
-        dur: 0.3,
-        ...(lit ? { glow: { blur: 1.2 }, id: 'window' } : {}),
+        opacity: lit ? 1 : dim ? 0.35 : 0.85,
+        stroke: 'line',
+        width: 0.12,
+        ...(lit ? { id: 'window', glow: { blur: 1.4, opacity: 1 } } : {}),
       });
+      if (lit)
+        fac.push(
+          { type: 'rect', x: r(x + 0.15), y: r(y + 0.2), w: 0.5, h: 2, fill: 'ink', opacity: 0.35 },
+          { type: 'circle', cx: r(x + 1.25), cy: r(y + 1.3), r: 0.28, fill: 'ink', glow: { blur: 0.6, opacity: 1 } },
+          { type: 'rect', x: r(x + 1.1), y: r(y + 1.55), w: 0.3, h: 0.7, fill: 'bg', opacity: 0.8 },
+          { type: 'ellipse', cx: r(x + 0.55), cy: r(y + 2.05), rx: 0.42, ry: 0.32, fill: 'bg', opacity: 0.85 },
+          { type: 'ellipse', cx: r(x + 0.9), cy: r(y + 3.4), rx: 2.2, ry: 0.8, fill: { gradient: ['accent', 'accent'], radial: true, fade: true }, opacity: 0.45 },
+        );
     }
 });
 const street = [
-  { type: 'rect', x: P3[0] - 30, y: P3[1] - 18, w: 60, h: 36, fill: 'bg', at: 0, enter: 'fade', dur: 0.6 },
+  // A soft-edged backdrop: opaque where the camera looks, fading into the city around it.
   {
-    type: 'rect',
-    x: P3[0] - 30,
-    y: P3[1] + 8,
-    w: 60,
-    h: 10,
-    fill: 'surface',
-    opacity: 0.5,
+    type: 'ellipse',
+    cx: wx,
+    cy: wy,
+    rx: 80,
+    ry: 52,
+    fill: { gradient: ['bg', 'bg', 'bg', 'bg'], radial: true, fade: true },
     at: 0,
     enter: 'fade',
-    dur: 0.6,
+    dur: 0.25,
   },
+  { type: 'rect', x: wx - 30, y: wy - 18, w: 60, h: 34, fill: { gradient: ['bg', 'surface'], angle: 90 }, at: 0, enter: 'fade', dur: 0.3 },
   ...houses.map(hs => ({
     type: 'rect',
-    ...hs,
-    fill: 'surface',
-    stroke: 'muted',
-    width: 0.12,
-    at: 0.1,
+    x: r(hs.x),
+    y: r(hs.y),
+    w: hs.w,
+    h: hs.h + 10,
+    fill: { gradient: [hs.tone, 'bg'], angle: 90 },
+    opacity: 0.9,
+    at: 0,
     enter: 'fade',
-    dur: 0.6,
+    dur: 0.3,
   })),
-  ...windows,
+  ...houses.map(hs => ({ type: 'rect', x: r(hs.x - 0.4), y: r(hs.y - 0.6), w: hs.w + 0.8, h: 0.7, fill: 'bg', at: 0, enter: 'fade', dur: 0.3 })),
+  { type: 'group', at: 0, enter: 'fade', dur: 0.3, children: fac },
+  { type: 'rect', x: wx - 30, y: wy + 12, w: 60, h: 6, fill: 'bg', opacity: 0.9, at: 0, enter: 'fade', dur: 0.3 },
+  { type: 'particles', x: wx - 28, y: wy - 16, w: 56, h: 30, kind: 'dust', count: 14, seed: 9, size: 0.12, fill: 'ink', opacity: 0.4, at: 0.4, enter: 'fade', dur: 0.6 },
   {
     type: 'text',
     text: 'ONE WINDOW, STILL LIT',
-    x: P3[0] - 10.5,
-    y: P3[1] + 10.6,
-    size: 0.9,
-    font: 'mono',
+    x: r(wx - 23),
+    y: r(wy + 13.4),
+    size: 1.08,
+    font: 'semibold',
     tracking: 0.3,
     fill: 'ink',
-    at: 1.2,
+    at: 1.0,
     enter: 'type',
     exitAt: 60,
     exit: 'fade',
   },
 ];
-const W = (id, vo, v, elements, extra = {}) => ({
+
+const W = (id, vo, v, elements, extra = {}, props = {}) => ({
   id,
   block: 'canvas',
   vo,
   ...extra,
-  props: { world: 'zoom', view: v, elements },
+  props: { world: 'zoom', view: v, elements, ...props },
 });
 const book = {
   order: 34,
@@ -317,40 +614,58 @@ const book = {
   sfx: 'subtle',
   texture: { grain: 0.3, vignette: 0.5, animate: true },
   lens: { grade: 'teal-orange', gradeAmount: 0.5, bloom: 0.45, blur: 0.5 },
-  note: 'One world at four scales, each ten times smaller than the last; the camera zooms at a constant pace in log space. Strokes and type are sized for the zoom they are seen at (a city line is under a unit wide). The planet is stylised: do not add real coastlines without verified geography.',
+  note: "One world at four scales, each ten times smaller than the last; the camera zooms at a constant pace in log space. Each scale is drawn inside the one before (library/playbooks/_zoom-journey.mjs): the coast is the continent's own outline, carrying finer bays only where the camera goes; the city's lights are the specks seen from orbit. Strokes and type are sized for the zoom they are seen at. The planet is stylised: do not add real coastlines without verified geography.",
   beats: [
-    W('planet', 'From out here, the planet looks calm.', view(0, 0, 52000), planet),
-    W('coast', 'Come closer, and there is a coast,', view(P1[0] + 400, P1[1] + 200, 5200), coast, { hold: 0.4 }),
-    W('city', 'a city that never quite sleeps,', view(P2[0], P2[1], 520), city, { hold: 0.4 }),
-    W('window', 'and one window, still lit.', view(P3[0], P3[1] + 1, 52), street, { hold: 0.8 }),
+    W('planet', 'From out here, the planet looks calm.', view(1500, -800, 52000), planet, { transition: 'cut' }),
+    W('coast', 'Come closer, and there is a coast,', coastView, coast, { hold: 0.4 }),
+    W('city', 'a city that never quite sleeps,', cityView, city, { hold: 0.4 }),
+    W('window', 'and one window, still lit.', view(wx, wy + 1, 52), street, { hold: 0.8 }),
     W(
       'whole',
       'Every story is that small, and that big.',
-      view(0, 0, 52000),
+      view(1500, -800, 52000),
       [
         {
           type: 'circle',
-          cx: P3[0],
-          cy: P3[1],
-          r: 420,
+          cx: r(P3[0]),
+          cy: r(P3[1]),
+          r: 1300,
           fill: 'none',
           stroke: 'accent',
-          width: 90,
-          glow: { blur: 200 },
-          at: 1.6,
+          width: 150,
+          glow: { blur: 260 },
+          at: 2.2,
           enter: 'pop',
           dur: 0.5,
           loop: { type: 'pulse', period: 1.8, amount: 0.12 },
         },
       ],
       { hold: 0.8 },
+      { viewAt: 0, viewDur: 3 },
     ),
-    {
-      id: 'end',
-      block: 'endcard',
-      vo: 'Start with one window.',
-      props: { title: 'Start with one window.', align: 'center' },
-    },
+    // Further back still: the whole planet in the dark, and the line to take away.
+    W(
+      'end',
+      'Start with one window.',
+      view(1500, 6400, 96000),
+      [
+        {
+          type: 'text',
+          text: 'Start with one window.',
+          x: 1500,
+          y: 29500,
+          size: 3600,
+          font: 'semibold',
+          anchor: 'middle',
+          fill: 'ink',
+          at: 1.4,
+          enter: 'rise',
+          dur: 0.8,
+        },
+      ],
+      { hold: 0.8 },
+      { viewAt: 0, viewDur: 3 },
+    ),
   ],
 };
 fs.writeFileSync('library/playbooks/zoom-journey.json', JSON.stringify(book, null, 2) + '\n');

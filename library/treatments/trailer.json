@@ -28,7 +28,7 @@
       "blur": 0.5
     },
     "voice": {
-      "style": "deep, deliberate trailer read: short lines, weight on the last word"
+      "style": "deep, deliberate trailer read"
     }
   },
   "beats": {
@@ -37,10 +37,10 @@
     "rough": false
   },
   "rules": [
-    "Three acts: a cold open (sketch void), a rising montage of 2–4 s shots split by black type cards, a silence, the title (sketch title), then a button.",
-    "Type cards are white on black with wide tracking and one short phrase each. Use tone invert or canvas text, never a heading.",
-    "Cut on action and on the music; each montage shot is shorter than the last as the title approaches.",
-    "Before the title, one beat with no voice and a single element: the silence makes the hit land.",
-    "End on a button: one short line after the title, like a release date."
+    "Three acts: a cold open (sketch signal), a rising montage of 2–4 s shots split by black type cards, a silence, the title (sketch title), then a button.",
+    "Every montage shot is a place the promise touches, drawn for this film (wires, citygrid, mast are examples): never a stock skyline reused from another film.",
+    "Cards are posters, not captions: a small lead line over one or two words that fill the frame (sketch card, sketchText LEAD and CARD), sharpening out of blur under a light sweep while they push in.",
+    "Vary the cut: a flash on the hits, a whip into a card, a hard cut on action between two moving shots. Each montage shot is shorter than the last as the title approaches.",
+    "Before the title, one beat with no voice and a single element: the silence makes the hit land. End on a button: one short line after the title, like a release date."
   ]
 }

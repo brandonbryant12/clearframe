@@ -14,6 +14,15 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - `data-story` opens on a queue world in depth, then shows the average, its split into hours and its spread.
   - `research-digest` draws its mechanism (buses bunching).
   - `concept-explainer` draws a brake rippling back through full traffic, then the queueing curve (computed, so its source is the formula).
+- **Genre films rebuilt after the first independent review.**
+  - `trailer`: signal → card → wires → city → card → mast → silence → title → button, with frame-filling poster cards that sharpen, streak and push.
+  - `cold-open`: a clock at 4:52, a night harbour, an anonymous operator, 312 calls as 312 lights, then dawn on the same harbour.
+  - `product-reveal`: a drawn ring with a brushed band, rim light, contact shadow and floor reflection, plus a drawn 2× charging race.
+  - `title-sequence`: credits that are never empty.
+  - `zoom-journey`: one coastline outline from planet to street.
+  - `cinematic-explainer`: the water system in cross-section, with labels kept inside the letterbox.
+  - New set pieces: `signal`, `wires`, `citygrid`, `mast`, `harbor` and `rooftops`. `card` is a poster card (`LEAD`/`CARD`), and `title` fills the frame.
+  - First beats cut in rather than fading up from black.
 - **Display type is set tighter** (−1.5% tracking), as large Inter headlines should be.
 - **A pause is a picture, not an empty frame.** The `pause` sketch (used by 17 playbooks) is now a seam of light: a core present on frame one, a line opening to both edges, a widening band and dust in the beam.
 - **End cards without web buttons.** `action` is accent type over a drawn rule, not a pill.

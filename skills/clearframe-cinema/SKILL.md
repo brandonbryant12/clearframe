@@ -34,11 +34,13 @@ In `DIRECTION.md`, one line per beat: **scale** (wide, medium, close or insert),
 For a real place, use generated **depth plates**: an image asset with `layers: true` and `"plates": "ID"` on the canvas. The painted far layer, subject and foreground stand in depth, and the camera moves through them (`gemini-image` skill). About $0.20 a scene; plan first.
 
 Start from set pieces (`clearframe sketch`):
-- **Places:** `horizon`, `skyline`, `ocean`, `terrain`.
-- **Journeys:** `tunnel`, `road`.
-- **Data:** `landscape` and `globe` (both need real values).
+- **Places:** `horizon`, `skyline`, `ocean`, `terrain`, `harbor` (night or dawn), `rooftops`, `citygrid` (aerial).
+- **Journeys:** `tunnel`, `road`, `wires`.
+- **Data:** `landscape` and `globe` (both need real values); `queue` (waiting, a place in line).
 - **People:** `crowd` and `desk`, or an anonymous person as a depth-plate subject.
-- **Openings and closings:** `void` (cold open), `title`, `card`, `pause`.
+- **Openings and closings:** `void` (cold open), `signal`, `mast`, `title`, `card` (`sketchText: {LEAD, CARD}`), `pause` (a seam of light).
+
+No set piece should appear in two films of one series; draw the place the story is about.
 
 Beats can name them: `"props": {"sketch": "tunnel"}` and `"sketchText": {"TITLE": "…"}`. Then:
 - **Three planes:** `z` on far, middle and near layers, with the near layer soft at the frame edge.

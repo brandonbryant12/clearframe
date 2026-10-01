@@ -28,26 +28,16 @@
     "handheld": 0.3,
     "blur": 0.5
   },
-  "note": "Shots, not slides (docs/cinema.md). Retime each sketch's dolly and focus to its line; each montage shot is shorter than the last. The silence beat has no voice on purpose, and the title lands after it.",
+  "note": "Shots, not slides (docs/cinema.md). Every world here belongs to this film's promise (a signal): a waveform out of the dark, power lines at dusk, a city switching on, a mast at dawn. Swap them for the places your promise touches, keep the rhythm: each montage shot shorter than the last, a black card between them, a silence with no voice, the title on a flash, a button. Cards take a small LEAD line and one or two huge words (sketchText LEAD and CARD).",
   "beats": [
     {
       "id": "open",
       "block": "canvas",
       "vo": "It begins as a whisper.",
       "props": {
-        "sketch": "void",
-        "focus": {
-          "z": -0.4,
-          "aperture": 1,
-          "keys": [
-            {
-              "at": 0.5,
-              "z": 9,
-              "dur": 1.2
-            }
-          ]
-        }
-      }
+        "sketch": "signal"
+      },
+      "transition": "cut"
     },
     {
       "id": "card-1",
@@ -56,7 +46,8 @@
       "props": {
         "sketch": "card",
         "sketchText": {
-          "CARD": "BEFORE THE NOISE"
+          "LEAD": "BEFORE",
+          "CARD": "THE NOISE"
         }
       }
     },
@@ -66,45 +57,28 @@
       "transition": "flash",
       "vo": "It moves through every wire,",
       "props": {
-        "sketch": "tunnel",
-        "dolly": [
-          {
-            "at": 0.1,
-            "z": 6.2,
-            "dur": 2.9,
-            "ease": "in"
-          }
-        ],
-        "focus": {
-          "z": 1,
-          "aperture": 0.9,
-          "keys": [
-            {
-              "at": 0.1,
-              "z": 7,
-              "dur": 2.9
-            }
-          ]
-        }
+        "sketch": "wires"
       }
     },
     {
       "id": "city",
       "block": "canvas",
       "vo": "every city,",
+      "hold": 0.5,
       "props": {
-        "sketch": "skyline",
-        "viewDur": 3
+        "sketch": "citygrid"
       }
     },
     {
       "id": "card-2",
       "block": "canvas",
+      "transition": "whip",
       "vo": "One idea.",
       "props": {
         "sketch": "card",
         "sketchText": {
-          "CARD": "ONE IDEA"
+          "LEAD": "ONE",
+          "CARD": "IDEA"
         }
       }
     },
@@ -114,13 +88,13 @@
       "transition": "flash",
       "vo": "and every morning after.",
       "props": {
-        "sketch": "horizon",
-        "viewDur": 3.4
+        "sketch": "mast"
       }
     },
     {
       "id": "silence",
       "block": "canvas",
+      "duration": 1.3,
       "props": {
         "sketch": "pause"
       }
@@ -143,10 +117,12 @@
       "id": "button",
       "block": "canvas",
       "vo": "Coming this fall.",
+      "hold": 0.6,
       "props": {
         "sketch": "card",
         "sketchText": {
-          "CARD": "COMING THIS FALL"
+          "LEAD": "COMING",
+          "CARD": "THIS FALL"
         }
       }
     }

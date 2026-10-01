@@ -37,9 +37,9 @@
   },
   "rules": [
     "Cold open: start mid-scene on a detail (a close-up, one sound, one word), pull out to the context, and bring the title in late.",
-    "Headings only as lower thirds (heading: bottom); names and places as captions in the picture.",
-    "Handheld on observed moments; lock the camera (camera: none, lens.handheld 0 on the beat) for data, so numbers read as fact.",
-    "Real imagery wherever possible: plates graded into the palette (plate.treatment tint or duotone).",
-    "Let the subject's own words carry the key line: a quote or a kinetic stack, not a paraphrase."
+    "Draw the places the story happened, at the hour it happened: the clock on the wall, the harbor before dawn, the desk. Never a generic skyline.",
+    "Headings only as lower thirds (heading: bottom); names and places as captions in the picture, inside the frame.",
+    "Handheld on observed moments; lock the camera (camera: none, lens.handheld 0 on the beat) for data, so numbers read as fact. A number keeps its unit and what it is counted against, with its source in frame.",
+    "People are anonymous silhouettes lit by their world (a profile against screens), never likenesses. Quotes stay labelled until they are real and sourced."
   ]
 }
