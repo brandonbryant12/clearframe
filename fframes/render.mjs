@@ -64,6 +64,7 @@ function unvalidated(ctx, check) {
   return {
     profile: ctx.manifest.profile,
     placeholders: ctx.placeholders ?? [],
+    unfinished: ctx.unfinished ?? [],
     estimatedTiming: estimated,
     ...(check
       ? { craft: check.craft ?? [], audit: 'run' }

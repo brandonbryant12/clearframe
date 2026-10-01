@@ -303,12 +303,12 @@ export function critique(root) {
   // What `check` would refuse comes first: a storyboard that cannot render has no cinema.
   let job;
   try {
-    // A declared placeholder is judged as the slate a rough cut shows, and listed as unmade.
-    const ready = sb.beats.some(b => b.placeholder != null)
-      ? roughStandIns(root, structuredClone(sb), structuredClone(timing), { rough: true })
-      : { sb: structuredClone(sb), timing, placeholders: [] };
+    // Declared placeholders and unfinished elements are judged as a rough cut shows them, and
+    // listed as unmade.
+    const ready = roughStandIns(root, structuredClone(sb), structuredClone(timing), { rough: true });
     job = createJob(ready.sb, ready.timing, { draft: true });
     for (const p of ready.placeholders) add('idea', p.beat, `placeholder: ${p.reason}. Fine for a rough cut; author it before the final.`);
+    for (const u of ready.unfinished) add('idea', u.beat, `${u.element} is marked unfinished${u.note ? ` (${u.note})` : ''}. Finish it before the final.`);
   } catch (e) {
     job = { errors: [e.message] };
   }

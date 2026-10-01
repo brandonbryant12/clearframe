@@ -99,6 +99,7 @@ export function anchorAt(timeline, at, { to, beat: forced, element } = {}) {
     beatTime: round(at - beat.start),
     chapter: beat.chapter ?? null,
     words: quote.map(w => w.w).join(' '),
+    ...(quote.length ? { quoteAt: round(quote[0].t0) } : {}),
     ...(src && src[0] != null && src[1] != null
       ? { source: { file: beat.source.file, from: src[0], to: src[1], original: [round(src[0] + beat.source.offset), round(src[1] + beat.source.offset)] } }
       : {}),
@@ -147,6 +148,7 @@ export function locate(root, note, target) {
   // Follow beat ids through every revision since the note (splits, merges, removals).
   let ids = [...new Set(a.beats ?? [a.beat])];
   let removedBy = null;
+  const gone = new Set();
   const steps = chain(root, note.revision, target.id);
   const apply = lineage => {
     if (!lineage) return;
@@ -155,9 +157,17 @@ export function locate(root, note, target) {
       if (!r) return [id];
       if (r.into?.length) return r.into;
       removedBy ??= r.by ? `${r.by} (“${r.words}”)` : 'an edit';
+      gone.add(id);
       return [];
     });
     for (const [id, m] of Object.entries(lineage.merged ?? {})) if (m.from.some(f => ids.includes(f))) ids.push(id);
+    // A beat that comes back under its own id (an undone cut, a rejected candidate, a restore).
+    for (const id of Object.keys(lineage.added ?? {}))
+      if (gone.has(id)) {
+        ids.push(id);
+        gone.delete(id);
+        if (!gone.size) removedBy = null;
+      }
     ids = [...new Set(ids)];
   };
   for (const r of steps) apply(r.lineage);
@@ -166,7 +176,8 @@ export function locate(root, note, target) {
     apply(lineageOf(loadRevision(root, last).timeline, target.timeline, readEdits(root)));
   }
   const beats = target.timeline.beats.filter(b => ids.includes(b.id));
-  const place = (b, i) => ({ beat: b.id, at: round(i == null ? b.start + (a.beatTime ?? 0) : b.words[i].t0) });
+  // The playhead's place now: the quote's new time plus where the playhead sat after it began.
+  const place = (b, i) => ({ beat: b.id, at: round(i == null ? b.start + (a.beatTime ?? 0) : b.words[i].t0 + (a.quoteAt != null ? a.at - a.quoteAt : 0)) });
   if (!a.words) {
     if (!beats.length) return { state: 'orphaned', reason: `${a.beat} was removed${removedBy ? ` by ${removedBy}` : ''}` };
     const b = beats.find(x => x.id === a.beat) ?? beats[0];

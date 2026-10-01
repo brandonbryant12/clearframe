@@ -84,9 +84,10 @@ A project's own library/ overrides them by id; --library DIR (or CLEARFRAME_LIBR
 
 FFFrames is the only active renderer. Preview produces a review MP4.
 Draft permits estimated narration/word timing; output keeps the authored dimensions.
-Rough (--rough, a draft for first review) also renders declared placeholders as labelled slates and lists
-frame-audit type problems as unfinished craft instead of failing; clipped figures, sources, audio and timing
-checks still fail. Every full render saves a revision in review/revisions/.
+Rough (--rough, a draft for first review) also renders declared placeholders (a beat's "placeholder", or a
+generated asset not paid for yet) as labelled slates, and canvas/art elements marked "unfinished" as drawn.
+Only frame-audit findings about that declared text become "craft"; every other type, source, figure, audio,
+timing and schema check still fails. Every full render saves a revision in review/revisions/.
 Native work automatically uses the local codex-heavy gate when available.
 Paid generation needs GEMINI_API_KEY; rendering and word-file imports are free.
 `;

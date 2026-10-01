@@ -228,6 +228,14 @@ export function reviewTimeline(ctx) {
       source,
       elements: elementIds(b),
       was: Array.isArray(b.was) ? b.was : null,
+      // What a neighbour decides about this beat, so a report can say why it looks different.
+      coupling: {
+        exit: jb.exit,
+        continues: jb.speaker?.continues ?? null,
+        handoff: !!(jb.props?.viewNext || jb.props?.viewFrom),
+        morph: JSON.stringify(jb.props?.elements ?? []).includes('"morph"'),
+        carried: (jb.props?.elements ?? []).some(el => el.carried),
+      },
       prints,
     };
   });
@@ -361,6 +369,7 @@ export async function snapshot(root, { ctx, kind = 'snapshot', label, reason, no
       duration: timeline.duration,
       beats: timeline.beats.length,
       placeholders: ctx.placeholders ?? [],
+      unfinished: ctx.unfinished ?? [],
       estimatedTiming: timeline.beats.filter(b => b.vo && b.vo.timing !== 'measured').map(b => b.id),
       notes,
       lastEdit: edits.at(-1)?.id ?? null,
@@ -519,7 +528,13 @@ export function impact(A, B, { lineage, from = 'A', to = 'B' } = {}) {
       if (b.transition !== 'cut' && prevB && (!prevA || prevA.prints.own !== prevB.prints.own))
         reasons.push(`its ${b.transition} entrance draws ${prevB.id}, which changed`);
       if (b.world && worldsChanged.has(b.world)) reasons.push(`it shares world “${b.world}” with a changed beat`);
-      if (a.prints.own !== b.prints.own && !reasons.length) reasons.push('its prepared scene changed (timing-derived cues, a neighbour’s exit or camera hand-off)');
+      const ca = a.coupling ?? {},
+        cb = b.coupling ?? {};
+      if (ca.exit !== cb.exit) reasons.push(`its exit is now ${cb.exit} (it mirrors the next beat’s entrance)`);
+      if (ca.continues !== cb.continues) reasons.push(cb.continues ? 'its speaker tag now continues from the beat before' : 'its speaker tag now introduces the speaker');
+      if (ca.handoff !== cb.handoff || (cb.handoff && a.prints.own !== b.prints.own && !reasons.length)) reasons.push('the camera hand-off with a neighbouring world beat changed');
+      if (ca.morph !== cb.morph) reasons.push('a morph from the beat before changed');
+      if (a.prints.own !== b.prints.own && !reasons.length) reasons.push('its prepared scene changed (timing-derived cues or a neighbour’s influence)');
       beats.push({ id: b.id, status: 'appearance', reasons, shift: round(b.start - a.start) });
       if (b.world) worldsChanged.add(b.world);
       continue;

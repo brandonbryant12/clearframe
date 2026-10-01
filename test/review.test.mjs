@@ -8,10 +8,11 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import { recordedProject } from './fixtures.mjs';
 import { snapshot, loadRevision, listRevisions, impact, lineageOf, workingTimeline, attachVideo, materialize } from '../engine/lib/revisions.mjs';
 import { addNote, locate, parseStamp, parseTime, formatTime, importNotes, addKeep, checkKeeps, addDecision, acceptance, readNotes } from '../engine/lib/notes.mjs';
-import { cutWords, splitBeat } from '../engine/lib/recording.mjs';
+import { cutWords, splitBeat, uncut } from '../engine/lib/recording.mjs';
 import { rejectRevision, restoreRevision } from '../engine/lib/edit-loop.mjs';
 import { frameRange } from '../fframes/render.mjs';
 import { writeReviewPage, inertJSON, esc } from '../engine/lib/review-page.mjs';
@@ -19,6 +20,10 @@ import { runlogReport } from '../engine/lib/runlog.mjs';
 import { objectFile } from '../engine/lib/store.mjs';
 import { checkpoints } from '../engine/lib/checkpoints.mjs';
 import { writeJSON } from '../engine/lib/util.mjs';
+import { classifyAudit, roughStandIns } from '../fframes/prepare.mjs';
+import { createJob } from '../fframes/job.mjs';
+import { loadStoryboard } from '../engine/lib/project.mjs';
+import { computeTiming } from '../engine/lib/timing.mjs';
 
 const read = (root, f = 'storyboard.json') => JSON.parse(fs.readFileSync(path.join(root, f), 'utf8'));
 const write = (root, sb) => writeJSON(path.join(root, 'storyboard.json'), sb);
@@ -95,6 +100,20 @@ test('notes on words that were cut are orphaned, partly cut are stale, cut for t
   assert.equal(p.state, 'stale');
   assert.match(p.reason, /part of the quoted words was cut/);
   assert.equal(locate(root, own, target).state, 'addressed');
+});
+
+test('a note returns with its beat when the cut that removed it is undone', async t => {
+  const { root } = await recordedProject(t);
+  const { revision: r1 } = await snapshot(root);
+  const n = addNote(root, { text: 'the guest sounds rushed', revision: r1.id, at: 8.95, by: 'Ana' });
+  const c = cutWords(root, { words: 'Right.' }, { by: human });
+  await snapshot(root);
+  assert.equal(locate(root, n, await now(root)).state, 'orphaned');
+  uncut(root, { id: c.id });
+  await snapshot(root);
+  const back = locate(root, n, await now(root));
+  assert.deepEqual([back.state, back.beat], ['current', 's003']);
+  assert.ok(Math.abs(back.at - 8.95) < 0.01, `the playhead maps back to ${back.at}`);
 });
 
 test('a split beat keeps its notes: the quoted words are found in the part that has them', async t => {
@@ -317,4 +336,88 @@ test('lineage records a beat removed by a cut, with the words that went', async 
   const r = impact(A, B, { lineage: lineageOf(A, B) });
   assert.equal(r.beats.find(b => b.id === 's003').status, 'removed');
   assert.equal(loadRevision(root, revision.id).meta.parent, listRevisions(root)[0].id);
+});
+
+test('rough cuts relax only declared stand-in text: a clipped source line or a textless finding still fails', () => {
+  const job = {
+    beats: [
+      { id: 'chart', props: { title: 'Waits by hour', source: 'Source: City transit survey' }, words: [], captions: [] },
+      {
+        id: 'slate',
+        props: { mode: 'highlight' },
+        art: { over: [{ type: 'text', text: 'PLACEHOLDER · the desk at rush hour' }] },
+        words: [{ text: 'Then' }, { text: 'it' }, { text: 'explodes.' }],
+        captions: [],
+      },
+      {
+        id: 'draw',
+        props: {
+          elements: [
+            { type: 'text', text: 'Arrivals (rough label)' },
+            { type: 'text', text: 'Departures' },
+          ],
+        },
+        words: [],
+        captions: [],
+      },
+    ],
+  };
+  const allowed = [
+    { beat: 'slate', text: 'PLACEHOLDER · the desk at rush hour', why: 'placeholder slate' },
+    { beat: 'draw', text: 'Arrivals (rough label)', why: 'marked unfinished' },
+  ];
+  const finding = (beat, text, kind = 'clipped') => ({ beat, level: 'error', kind, text, message: `${kind}: ${text ?? ''}`, seconds: 1 });
+  const r = classifyAudit(
+    [
+      finding('chart', 'Source: City transit survey'), // attribution without a digit
+      finding('chart', 'Waits by hour', 'covered'), // a category label without a digit
+      finding('chart', undefined, 'small'), // no text to judge
+      finding('slate', 'PLACEHOLDER · the desk at rush hour'), // the slate itself
+      finding('slate', 'it explodes.', 'covered'), // the words spoken over the slate
+      finding('draw', 'Arrivals (rough'), // a wrapped line of an element marked unfinished
+      finding('draw', 'Departures', 'small'), // a finished element beside it
+    ],
+    { rough: true, allowed, job },
+  );
+  assert.equal(r.craft.length, 2, r.craft.join('\n'));
+  assert.ok(r.craft.every(c => /\[(placeholder slate|marked unfinished)\]/.test(c)));
+  assert.equal(r.errors.length, 5);
+  assert.equal(classifyAudit([finding('slate', 'PLACEHOLDER · the desk at rush hour')], { rough: false, allowed, job }).errors.length, 1, 'only rough relaxes');
+  const twice = { beats: [{ id: 'draw', props: { elements: [{ text: 'Coming soon' }, { text: 'Coming soon' }] }, words: [], captions: [] }] };
+  assert.equal(
+    classifyAudit([finding('draw', 'Coming soon')], { rough: true, allowed: [{ beat: 'draw', text: 'Coming soon', why: 'marked unfinished' }], job: twice }).errors.length,
+    1,
+    'text a finished element also shows is never relaxed',
+  );
+});
+
+test('placeholders and unfinished elements are rough-only stand-ins and never reach the renderer', t => {
+  const root = draftProject(t);
+  edit(root, sb => {
+    sb.beats[2].props.elements.push({ type: 'text', id: 'later', text: 'Label to come', x: 300, y: 300, size: 48, unfinished: 'final wording pending' });
+    sb.beats[4].placeholder = 'the closing shot of the desk';
+  });
+  const sb = loadStoryboard(root),
+    timing = computeTiming(root);
+  assert.throws(() => roughStandIns(root, structuredClone(sb), structuredClone(timing)), /declared placeholder|marked unfinished/);
+  const r = roughStandIns(root, structuredClone(sb), structuredClone(timing), { rough: true });
+  assert.deepEqual(r.unfinished, [{ beat: 'desk', element: 'later', note: 'final wording pending' }]);
+  assert.deepEqual(
+    r.allowed.map(a => [a.beat, a.why]),
+    [
+      ['desk', 'marked unfinished: final wording pending'],
+      ['end', 'placeholder slate'],
+    ],
+  );
+  assert.ok(!JSON.stringify(r.sb).includes('"unfinished"'), 'the flag is stripped');
+  const job = createJob(r.sb, r.timing, { draft: true });
+  assert.deepEqual(job.errors, []);
+  assert.equal(job.job.beats.find(b => b.id === 'end').art.over[1].text, 'PLACEHOLDER · the closing shot of the desk');
+});
+
+test('the CLI loads and lists the review commands', () => {
+  const r = spawnSync(process.execPath, [path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'engine', 'cli.mjs'), 'help'], { encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  for (const cmd of ['paper', 'revise', 'note', 'notes', 'keep', 'accept', 'reject', 'decide', 'restore', 'cut', 'uncut', 'runlog']) assert.match(r.stdout, new RegExp(`\\b${cmd}\\b`));
+  assert.match(r.stdout, /unfinished/);
 });

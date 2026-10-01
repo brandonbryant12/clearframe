@@ -97,6 +97,7 @@ function notValidated(meta, video) {
   const nv = [];
   const receipt = video?.receiptData?.notValidated;
   for (const p of meta.placeholders ?? []) nv.push(`${p.beat}: placeholder (${p.reason})`);
+  for (const u of meta.unfinished ?? []) nv.push(`${u.beat}: ${u.element} marked unfinished${u.note ? ` (${u.note})` : ''}`);
   if (meta.estimatedTiming?.length) nv.push(`estimated word timing in ${meta.estimatedTiming.length} beat(s): ${meta.estimatedTiming.slice(0, 8).join(', ')}${meta.estimatedTiming.length > 8 ? '…' : ''}`);
   if (receipt?.craft?.length) nv.push(...receipt.craft.map(c => `craft: ${c}`));
   if (receipt?.audit && receipt.audit !== 'run') nv.push(`frame audit: ${receipt.audit}`);
