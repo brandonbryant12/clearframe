@@ -14,7 +14,7 @@
   "lens": {
     "grade": "cool",
     "gradeAmount": 0.3,
-    "bloom": 0.45,
+    "bloom": 0.3,
     "blur": 0.5
   },
   "note": "Light the object; never decorate around it. The ring is drawn from a few ellipses (library/playbooks/_product-reveal.mjs): redraw your own product the same way, or place a render as an image element on the stage. Replace both specs with real figures and their sources; every number keeps its unit and what it is compared with.",
@@ -293,6 +293,7 @@
     {
       "id": "part",
       "block": "canvas",
+      "transition": "dissolve",
       "vo": "What if it simply got out of the way?",
       "hold": 0.3,
       "props": {
@@ -566,22 +567,12 @@
       "vo": "Twice as fast,",
       "hold": 2.4,
       "transition": "cut",
+      "camera": {
+        "move": "in",
+        "amount": 0.5
+      },
       "props": {
         "source": "Illustrative sample data · replace before publishing",
-        "view": [
-          0,
-          0,
-          1920,
-          1080
-        ],
-        "viewFrom": [
-          40,
-          22,
-          1840,
-          1035
-        ],
-        "viewAt": 0,
-        "viewDur": 4,
         "elements": [
           {
             "type": "poly",
@@ -877,12 +868,25 @@
           },
           {
             "type": "text",
+            "text": "CHARGE IN THE SAME 30 MINUTES",
+            "x": 1068,
+            "y": 762,
+            "size": 26,
+            "font": "semibold",
+            "tracking": 0.14,
+            "fill": "muted",
+            "at": 0.4,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "text",
             "text": "HALO",
             "x": 1068,
-            "y": 801,
-            "size": 30,
+            "y": 823,
+            "size": 28,
             "font": "semibold",
-            "tracking": 0.12,
+            "tracking": 0.08,
             "fill": "ink",
             "at": 0.4,
             "enter": "fade",
@@ -890,9 +894,9 @@
           },
           {
             "type": "rect",
-            "x": 1430,
-            "y": 784,
-            "w": 400,
+            "x": 1390,
+            "y": 806,
+            "w": 260,
             "h": 12,
             "r": 6,
             "fill": "surface",
@@ -902,9 +906,9 @@
           },
           {
             "type": "rect",
-            "x": 1430,
-            "y": 784,
-            "w": 400,
+            "x": 1390,
+            "y": 806,
+            "w": 260,
             "h": 12,
             "r": 6,
             "fill": "accent",
@@ -914,16 +918,28 @@
             },
             "at": 0.5,
             "enter": "grow-x",
-            "dur": 0.9
+            "dur": 1.2
+          },
+          {
+            "type": "text",
+            "text": "100%",
+            "x": 1670,
+            "y": 823,
+            "size": 30,
+            "font": "semibold",
+            "fill": "ink",
+            "at": 1.7,
+            "enter": "fade",
+            "dur": 0.3
           },
           {
             "type": "text",
             "text": "FIRST GENERATION",
             "x": 1068,
-            "y": 857,
-            "size": 30,
+            "y": 879,
+            "size": 28,
             "font": "semibold",
-            "tracking": 0.12,
+            "tracking": 0.08,
             "fill": "muted",
             "at": 0.4,
             "enter": "fade",
@@ -931,9 +947,9 @@
           },
           {
             "type": "rect",
-            "x": 1430,
-            "y": 840,
-            "w": 400,
+            "x": 1390,
+            "y": 862,
+            "w": 260,
             "h": 12,
             "r": 6,
             "fill": "surface",
@@ -943,15 +959,27 @@
           },
           {
             "type": "rect",
-            "x": 1430,
-            "y": 840,
-            "w": 400,
+            "x": 1390,
+            "y": 862,
+            "w": 130,
             "h": 12,
             "r": 6,
             "fill": "muted",
             "at": 0.5,
             "enter": "grow-x",
-            "dur": 1.8
+            "dur": 1.2
+          },
+          {
+            "type": "text",
+            "text": "50%",
+            "x": 1670,
+            "y": 879,
+            "size": 30,
+            "font": "semibold",
+            "fill": "muted",
+            "at": 1.7,
+            "enter": "fade",
+            "dur": 0.3
           }
         ]
       }
@@ -962,21 +990,12 @@
       "vo": "and it lasts all day.",
       "hold": 1.2,
       "transition": "cut",
+      "camera": {
+        "move": "out",
+        "amount": 0.5
+      },
       "props": {
-        "view": [
-          0,
-          0,
-          1920,
-          1080
-        ],
-        "viewFrom": [
-          60,
-          34,
-          1800,
-          1012.5
-        ],
-        "viewAt": 0,
-        "viewDur": 4,
+        "source": "Illustrative sample data · replace before publishing",
         "elements": [
           {
             "type": "ellipse",
@@ -1232,7 +1251,7 @@
       "block": "canvas",
       "vo": "Meet Halo.",
       "hold": 1.4,
-      "transition": "fade",
+      "transition": "dissolve",
       "props": {
         "world": "reveal",
         "view": [

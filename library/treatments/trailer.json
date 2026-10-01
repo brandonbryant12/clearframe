@@ -22,7 +22,7 @@
       "letterbox": 2.39,
       "grade": "bleach",
       "gradeAmount": 0.5,
-      "bloom": 0.5,
+      "bloom": 0.2,
       "handheld": 0.3,
       "blur": 0.5
     },

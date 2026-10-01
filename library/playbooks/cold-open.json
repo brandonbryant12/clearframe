@@ -3934,8 +3934,9 @@
             "font": "mono",
             "tracking": 0.18,
             "fill": "ink",
-            "enter": "type",
-            "at": 0.7,
+            "enter": "fade",
+            "at": 0.05,
+            "dur": 0.3,
             "exitAt": 4.5,
             "exit": "fade"
           }
@@ -7467,15 +7468,16 @@
             "tracking": 0.1,
             "fit": 1500,
             "fill": "ink",
-            "at": 0.6,
+            "at": 0.4,
             "enter": "blur",
-            "dur": 1.2,
-            "exitAt": 60,
-            "exit": "none"
+            "dur": 1,
+            "exitAt": 2.8,
+            "exitDur": 0.4,
+            "exit": "fade"
           },
           {
             "type": "text",
-            "text": "FOUR HOURS BEFORE MORNING",
+            "text": "FROM THE FIRST CALL TO SUNRISE",
             "x": 960,
             "y": 330,
             "size": 36,
@@ -7483,9 +7485,12 @@
             "anchor": "middle",
             "tracking": 0.32,
             "fill": "accent2",
-            "at": 1.4,
+            "at": 1,
             "enter": "fade",
-            "dur": 0.8
+            "dur": 0.6,
+            "exitAt": 2.8,
+            "exitDur": 0.4,
+            "exit": "fade"
           }
         ]
       }
@@ -9958,9 +9963,9 @@
             "anchor": "middle",
             "fit": 1400,
             "fill": "bg",
-            "at": 0.8,
+            "at": 0.9,
             "enter": "fade",
-            "dur": 1
+            "dur": 0.8
           }
         ]
       }

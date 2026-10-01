@@ -404,7 +404,8 @@
             "r": 140,
             "fill": "accent",
             "at": 0,
-            "dur": 0
+            "dur": 0,
+            "morphDur": 0.6
           },
           {
             "id": "left",
@@ -415,7 +416,8 @@
             "h": 1160,
             "fill": "ink",
             "at": 0,
-            "dur": 0
+            "dur": 0,
+            "morphDur": 0.2
           },
           {
             "id": "right",
@@ -426,7 +428,8 @@
             "h": 1160,
             "fill": "ink",
             "at": 0,
-            "dur": 0
+            "dur": 0,
+            "morphDur": 0.2
           },
           {
             "id": "floor",
@@ -437,18 +440,8 @@
             "h": 0,
             "fill": "ink",
             "at": 0,
-            "dur": 0
-          },
-          {
-            "id": "lintel",
-            "type": "rect",
-            "x": 760,
-            "y": -40,
-            "w": 400,
-            "h": 0,
-            "fill": "ink",
-            "at": 0,
-            "dur": 0
+            "dur": 0,
+            "morphDur": 0.2
           },
           {
             "type": "text",
@@ -459,10 +452,21 @@
             "font": "poster",
             "tracking": 0.03,
             "fill": "ink",
-            "enter": "left",
-            "at": 0.75,
-            "dur": 0.35,
-            "dist": 80
+            "enter": "none",
+            "at": 0,
+            "keys": [
+              {
+                "at": 0,
+                "x": -140,
+                "dur": 0
+              },
+              {
+                "at": 0,
+                "x": 0,
+                "dur": 0.35,
+                "ease": "out"
+              }
+            ]
           },
           {
             "type": "text",
@@ -473,10 +477,21 @@
             "font": "poster",
             "tracking": 0.03,
             "fill": "accent2",
-            "enter": "left",
-            "at": 0.9,
-            "dur": 0.35,
-            "dist": 80
+            "enter": "none",
+            "at": 0,
+            "keys": [
+              {
+                "at": 0,
+                "x": -220,
+                "dur": 0
+              },
+              {
+                "at": 0,
+                "x": 0,
+                "dur": 0.42,
+                "ease": "out"
+              }
+            ]
           },
           {
             "id": "rule",
@@ -487,7 +502,7 @@
             "h": 16,
             "fill": "accent",
             "enter": "grow-x",
-            "at": 1.15,
+            "at": 0.4,
             "dur": 0.45
           },
           {
@@ -501,7 +516,7 @@
             "fit": 1000,
             "fill": "muted",
             "enter": "rise",
-            "at": 1.35,
+            "at": 0.7,
             "dur": 0.45
           }
         ]

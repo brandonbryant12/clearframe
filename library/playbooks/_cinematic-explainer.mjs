@@ -336,17 +336,40 @@ const block = (x, w) => [
 // through the floor to the tap.
 const TAP = [4486, 572];
 const cutaway = (x, w) => [
-  // The room behind the cut: a warm back wall, a window onto the morning.
-  { type: 'rect', x, y: G0 - 300, w, h: 300, fill: { gradient: ['accent', 'surface', 'bg'], angle: 90 }, opacity: 0.55 },
-  { type: 'rect', x: x + 40, y: G0 - 250, w: 96, h: 96, fill: { gradient: ['accent2', 'accent'], angle: 90 }, opacity: 0.6, stroke: 'muted', width: 3 },
-  { type: 'line', x1: x + 88, y1: G0 - 250, x2: x + 88, y2: G0 - 154, stroke: 'muted', width: 3 },
-  // The cut walls and roof, drawn in section.
-  { type: 'rect', x: x - 10, y: G0 - 300, w: 14, h: 300, fill: 'muted' },
-  { type: 'rect', x: x + w - 4, y: G0 - 300, w: 14, h: 300, fill: 'muted' },
-  { type: 'poly', points: [[x - 26, G0 - 296], [x + w / 2, G0 - 384], [x + w + 26, G0 - 296]], closed: true, fill: 'none', stroke: 'muted', width: 12, join: 'round' },
+  // The room behind the cut: a lit interior (a warm back wall, a window onto the morning).
+  { type: 'rect', x, y: G0 - 300, w, h: 300, fill: { gradient: ['accent', 'muted', 'surface'], angle: 90 } },
+  { type: 'rect', x, y: G0 - 300, w, h: 300, fill: { gradient: ['ink', 'ink'], radial: true, fade: true }, opacity: 0.18 },
+  { type: 'rect', x: x + 40, y: G0 - 250, w: 96, h: 96, fill: { gradient: ['accent2', 'accent'], angle: 90 }, stroke: 'surface', width: 6 },
+  { type: 'line', x1: x + 88, y1: G0 - 250, x2: x + 88, y2: G0 - 154, stroke: 'surface', width: 5 },
+  // A shelf and a hanging lamp.
+  { type: 'rect', x: x + 180, y: G0 - 220, w: 150, h: 8, fill: 'surface' },
+  { type: 'line', x1: x + w / 2 + 40, y1: G0 - 300, x2: x + w / 2 + 40, y2: G0 - 240, stroke: 'bg', width: 3 },
+  { type: 'path', d: `M ${x + w / 2 + 16} ${G0 - 240} h 48 l -8 -22 h -32 Z`, fill: 'bg', stroke: 'none' },
+  { type: 'ellipse', cx: x + w / 2 + 40, cy: G0 - 200, rx: 90, ry: 60, fill: { gradient: ['ink', 'accent'], radial: true, fade: true }, opacity: 0.35 },
+  // The cut: walls, floor and roof drawn solid in section, edged in the low sun.
+  { type: 'rect', x: x - 16, y: G0 - 300, w: 18, h: 300, fill: 'bg', stroke: 'muted', width: 2 },
+  { type: 'rect', x: x + w - 2, y: G0 - 300, w: 18, h: 300, fill: 'bg', stroke: 'muted', width: 2 },
+  { type: 'rect', x: x - 16, y: G0 - 304, w: w + 32, h: 14, fill: 'bg', stroke: 'muted', width: 2 },
+  {
+    type: 'poly',
+    points: [
+      [x - 34, G0 - 290],
+      [x + w / 2, G0 - 392],
+      [x + w + 34, G0 - 290],
+      [x + w + 6, G0 - 290],
+      [x + w / 2, G0 - 366],
+      [x - 6, G0 - 290],
+    ],
+    closed: true,
+    fill: { gradient: ['surface', 'muted'], angle: 0 },
+    stroke: 'bg',
+    width: 2,
+  },
+  { type: 'line', x1: x + w / 2, y1: G0 - 392, x2: x + w + 34, y2: G0 - 290, stroke: 'accent', width: 3, opacity: 0.7 },
   // The kitchen: a counter, the sink set in it, a cupboard below.
-  { type: 'rect', x: x + 90, y: G0 - 92, w: 200, h: 92, fill: 'surface', stroke: 'muted', width: 2 },
-  { type: 'rect', x: x + 80, y: G0 - 100, w: 220, h: 12, fill: 'muted' },
+  { type: 'rect', x: x + 90, y: G0 - 92, w: 200, h: 92, fill: 'surface', stroke: 'bg', width: 2 },
+  { type: 'line', x1: x + 190, y1: G0 - 86, x2: x + 190, y2: G0 - 6, stroke: 'bg', width: 2 },
+  { type: 'rect', x: x + 80, y: G0 - 100, w: 220, h: 12, fill: 'ink', opacity: 0.85 },
   { type: 'path', d: `M ${x + 140} ${G0 - 100} q 50 30 100 0`, fill: 'bg', stroke: 'ink', width: 2, opacity: 0.9 },
 ];
 const house = (x, w, kind) => (kind === 'terrace' ? terrace : kind === 'gabled' ? gabled : block)(x, w);
@@ -417,7 +440,7 @@ const city = [
 
 // ------------------------------------------------------------------ beats
 // The pull-back's labels clear before the camera returns to the tap.
-const leave = { exitAt: 4.6, exitDur: 0.4, exit: 'fade' };
+const leave = { exitAt: 3.8, exitDur: 0.4, exit: 'fade' };
 const beats = [
   {
     id: 'establish',
@@ -507,7 +530,8 @@ const beats = [
     hold: 1,
     props: {
       world: 'journey',
-      view: [3440, 520, 1440, 810],
+      // Framed so the street's edge sits under the top matte: soil, pipes and the figure only.
+      view: [3440, 588, 1440, 810],
       viewAt: 0,
       viewDur: 1.6,
       source: SAMPLE,
@@ -652,25 +676,42 @@ const beats = [
       viewDur: 2.4,
       elements: [
         { type: 'text', text: 'One journey', x: 2500, y: -40, size: 190, font: 'serif-display', fill: 'ink', anchor: 'middle', at: 2.1, enter: 'rise', dur: 0.6, ...leave },
+        // Station labels on dark plates, in clear sky above each stop.
         ...[
-          ['RESERVOIR', 1240, 470],
-          ['TREATMENT', 2970, 340],
-          ['YOUR TAP', 4370, 380],
-        ].map(([text, x, y], i) => ({
-          type: 'text',
-          text,
-          x,
-          y,
-          size: 100,
-          font: 'semibold',
-          tracking: 0.2,
-          fill: 'ink',
-          anchor: 'middle',
-          at: r(2.2 + i * 0.15),
-          enter: 'fade',
-          dur: 0.5,
-          ...leave,
-        })),
+          ['RESERVOIR', 1240, 540, 740],
+          ['TREATMENT', 2970, 330, 760],
+          ['YOUR TAP', 4400, 200, 640],
+        ].flatMap(([text, x, y, w], i) => [
+          {
+            type: 'rect',
+            x: x - w / 2,
+            y: y - 92,
+            w,
+            h: 124,
+            r: 62,
+            fill: 'bg',
+            opacity: 0.72,
+            at: r(2.2 + i * 0.15),
+            enter: 'fade',
+            dur: 0.5,
+            ...leave,
+          },
+          {
+            type: 'text',
+            text,
+            x,
+            y,
+            size: 84,
+            font: 'semibold',
+            tracking: 0.2,
+            fill: 'ink',
+            anchor: 'middle',
+            at: r(2.2 + i * 0.15),
+            enter: 'fade',
+            dur: 0.5,
+            ...leave,
+          },
+        ]),
         // Below the cut: the pipe's whole underground run, picked out.
         {
           type: 'path',
@@ -695,11 +736,13 @@ const beats = [
     block: 'canvas',
     vo: 'So follow the water in your own city.',
     hold: 0.8,
+    transition: 'dissolve',
     props: {
       world: 'journey',
       view: [3310, -60, 2140, 1203.8],
+      viewFrom: [3380, -20, 2000, 1125],
       viewAt: 0,
-      viewDur: 2.6,
+      viewDur: 4.5,
       elements: [
         { type: 'text', text: 'Follow the water.', x: 3700, y: 232, size: 96, font: 'serif-display-italic', fill: 'ink', anchor: 'start', at: 1.4, enter: 'rise', dur: 0.8 },
         { type: 'text', text: 'START AT THE TAP', x: 3704, y: 296, size: 38, font: 'semibold', tracking: 0.3, fill: 'accent', anchor: 'start', at: 2, enter: 'fade', dur: 0.6 },
@@ -720,7 +763,7 @@ const book = {
   heading: 'bottom',
   textMotion: 'words',
   texture: { grain: 0.3, vignette: 0.45, animate: true },
-  lens: { grade: 'teal-orange', gradeAmount: 0.5, bloom: 0.35, leak: 0.1, handheld: 0.15, blur: 0.5 },
+  lens: { grade: 'teal-orange', gradeAmount: 0.5, bloom: 0.2, leak: 0.1, handheld: 0.12, blur: 0.4 },
   note: 'Shots, not slides (docs/cinema.md): wide establishing shot, an insert for the question, medium shots travelling one world, an insert for the figure, a silence, then the pull-back over the whole world, inside the same matte throughout. The world is drawn in section (library/playbooks/_cinematic-explainer.mjs) so the payoff is visible: redraw it for your system and keep the ground cut away. Replace the sample figure and its source before publishing.',
   beats,
 };

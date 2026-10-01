@@ -23,10 +23,10 @@
       "letterbox": 2.39,
       "grade": "teal-orange",
       "gradeAmount": 0.6,
-      "bloom": 0.4,
+      "bloom": 0.2,
       "leak": 0.15,
-      "handheld": 0.25,
-      "blur": 0.5
+      "handheld": 0.15,
+      "blur": 0.4
     },
     "voice": {
       "style": "measured, low and unhurried, like a documentary narrator"

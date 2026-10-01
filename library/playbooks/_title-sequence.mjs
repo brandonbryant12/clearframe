@@ -145,11 +145,11 @@ const beats = [
     camera: push,
     props: {
       elements: [
-        { id: 'sun', type: 'circle', cx: 1560, cy: 360, r: 140, fill: 'accent', ...hold },
-        { id: 'left', type: 'rect', x: -40, y: -40, w: 0, h: 1160, fill: 'ink', ...hold },
-        { id: 'right', type: 'rect', x: 1960, y: -40, w: 0, h: 1160, fill: 'ink', ...hold },
-        { id: 'floor', type: 'rect', x: -40, y: 1080, w: 2000, h: 0, fill: 'ink', ...hold },
-        { id: 'lintel', type: 'rect', x: 760, y: -40, w: 400, h: 0, fill: 'ink', ...hold },
+        // The walls fly apart fast so the title is on clean paper by the first syllable.
+        { id: 'sun', type: 'circle', cx: 1560, cy: 360, r: 140, fill: 'accent', ...hold, morphDur: 0.6 },
+        { id: 'left', type: 'rect', x: -40, y: -40, w: 0, h: 1160, fill: 'ink', ...hold, morphDur: 0.2 },
+        { id: 'right', type: 'rect', x: 1960, y: -40, w: 0, h: 1160, fill: 'ink', ...hold, morphDur: 0.2 },
+        { id: 'floor', type: 'rect', x: -40, y: 1080, w: 2000, h: 0, fill: 'ink', ...hold, morphDur: 0.2 },
         // One flush-left block: the two words, the rule and the line all hang from x = 200.
         {
           type: 'text',
@@ -160,10 +160,13 @@ const beats = [
           font: 'poster',
           tracking: 0.03,
           fill: 'ink',
-          enter: 'left',
-          at: 0.75,
-          dur: 0.35,
-          dist: 80,
+          // Riding in with the walls as they part: there from the first frame, never faded.
+          enter: 'none',
+          at: 0,
+          keys: [
+            { at: 0, x: -140, dur: 0 },
+            { at: 0, x: 0, dur: 0.35, ease: 'out' },
+          ],
         },
         {
           type: 'text',
@@ -174,12 +177,14 @@ const beats = [
           font: 'poster',
           tracking: 0.03,
           fill: 'accent2',
-          enter: 'left',
-          at: 0.9,
-          dur: 0.35,
-          dist: 80,
+          enter: 'none',
+          at: 0,
+          keys: [
+            { at: 0, x: -220, dur: 0 },
+            { at: 0, x: 0, dur: 0.42, ease: 'out' },
+          ],
         },
-        { id: 'rule', type: 'rect', x: 206, y: 828, w: 1000, h: 16, fill: 'accent', enter: 'grow-x', at: 1.15, dur: 0.45 },
+        { id: 'rule', type: 'rect', x: 206, y: 828, w: 1000, h: 16, fill: 'accent', enter: 'grow-x', at: 0.4, dur: 0.45 },
         {
           type: 'text',
           text: 'A PODCAST ABOUT HOW THINGS CONNECT',
@@ -191,7 +196,7 @@ const beats = [
           fit: 1000,
           fill: 'muted',
           enter: 'rise',
-          at: 1.35,
+          at: 0.7,
           dur: 0.45,
         },
       ],

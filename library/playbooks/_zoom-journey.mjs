@@ -165,9 +165,9 @@ for (let i = 0; i < 1100; i++) {
 // ------------------------------------------------------------------ scale 0: the planet
 // The sun is to the left. Night is painted into the sea and land themselves (no shadow disc over
 // space): each continent's colours step from lit to dusk to night across it.
-const lit = x => Math.max(0, Math.min(1, (5000 - x) / 14000));
+const lit = x => Math.max(0, Math.min(1, (9000 - x) / 16000));
 // Sand only in full sun; grey stone into dusk; then the night.
-const landTone = L => (L > 0.93 ? 'accent' : L > 0.5 ? 'muted' : L > 0.2 ? 'surface' : 'bg');
+const landTone = L => (L > 0.75 ? 'accent' : L > 0.35 ? 'muted' : 'surface');
 const bbox = pts => {
   const xs = pts.map(p => p[0]);
   return [Math.min(...xs), Math.max(...xs)];
@@ -221,8 +221,8 @@ const planet = [
     at: 0,
     enter: 'none',
   },
-  // Ocean: sunlit teal on the left, deepening through dusk into night.
-  { type: 'circle', cx: 0, cy: 0, r: R, fill: { gradient: ['accent2', 'surface', 'bg', 'bg'], angle: 0 }, at: 0, enter: 'none' },
+  // Ocean: sunlit teal on the left, deeper toward the far side.
+  { type: 'circle', cx: 0, cy: 0, r: R, fill: { gradient: ['accent2', 'surface', 'surface'], angle: 0 }, at: 0, enter: 'none' },
   // Shallow water over the shelves, lit only where the sun is.
   ...[mainPts, ...otherPts].map(pts => {
     const [x0, x1] = bbox(pts);
@@ -230,7 +230,7 @@ const planet = [
       type: 'path',
       d: compact(pts.filter((_, i) => i % 2 === 0)),
       fill: 'none',
-      stroke: { gradient: [0, 1, 2].map(k => (lit(x0 + ((x1 - x0) * k) / 2) > 0.4 ? 'accent2' : 'bg')), angle: 0 },
+      stroke: 'accent2',
       width: 900,
       join: 'round',
       opacity: 0.13,
@@ -290,6 +290,20 @@ const planet = [
       loop: { type: 'float', period: 22 + i * 5, amount: 220 },
     })),
   ),
+  // Night: the sphere's own shadow, a curved terminator softened by overlapping lunes (each one
+  // a half disc closed by an elliptical arc), darkest at the far limb.
+  ...Array.from({ length: 12 }, (_, i) => -0.7 + i * 0.1).map(k => ({
+    type: 'path',
+    d: `M 0 ${-R} A ${R} ${R} 0 0 1 0 ${R} A ${r(Math.max(1, Math.abs(k) * R))} ${R} 0 0 ${k > 0 ? 1 : 0} 0 ${-R} Z`,
+    fill: 'bg',
+    stroke: 'none',
+    opacity: 0.1,
+    at: 0,
+    enter: 'none',
+  })),
+  // The atmosphere rings the whole disc, faint on the night side, so the sphere never ends at the
+  // terminator.
+  { type: 'circle', cx: 0, cy: 0, r: R + 60, fill: 'none', stroke: 'accent2', width: 120, opacity: 0.22, glow: { blur: 160, opacity: 0.7 }, at: 0, enter: 'none' },
   // City lights on the night side.
   ...chunked(nightCities.map(dot), {
     type: 'path',
@@ -420,12 +434,13 @@ coast.push(
     font: 'semibold',
     tracking: 0.3,
     fill: 'ink',
-    at: 0.8,
-    enter: 'type',
-    exitAt: 60,
+    at: 0.4,
+    enter: 'fade',
+    dur: 0.4,
+    exitAt: 3.4,
     exit: 'fade',
   },
-  { type: 'rect', x: r(coastView()[0] + coastView()[2] * 0.1), y: r(coastView()[1] + coastView()[3] * 0.86 + 50), w: 360, h: 10, fill: 'accent2', at: 1.1, enter: 'grow-x', dur: 0.5, exitAt: 60, exit: 'fade' },
+  { type: 'rect', x: r(coastView()[0] + coastView()[2] * 0.1), y: r(coastView()[1] + coastView()[3] * 0.86 + 50), w: 360, h: 10, fill: 'accent2', at: 0.6, enter: 'grow-x', dur: 0.5, exitAt: 3.4, exit: 'fade' },
 );
 
 // ------------------------------------------------------------------ scale 2: the city
@@ -532,10 +547,10 @@ const city = [
     ry: 46,
     fill: { gradient: ['bg', 'bg', 'bg'], radial: true, fade: true },
     opacity: 0.92,
-    at: 0.6,
+    at: 0.3,
     enter: 'fade',
     dur: 0.4,
-    exitAt: 60,
+    exitAt: 3,
     exit: 'fade',
   },
   {
@@ -547,9 +562,10 @@ const city = [
     font: 'semibold',
     tracking: 0.3,
     fill: 'ink',
-    at: 0.8,
-    enter: 'type',
-    exitAt: 60,
+    at: 0.4,
+    enter: 'fade',
+    dur: 0.4,
+    exitAt: 3,
     exit: 'fade',
   },
 ];
@@ -635,9 +651,10 @@ const street = [
     font: 'semibold',
     tracking: 0.3,
     fill: 'ink',
-    at: 1.0,
-    enter: 'type',
-    exitAt: 60,
+    at: 0.6,
+    enter: 'fade',
+    dur: 0.4,
+    exitAt: 3.6,
     exit: 'fade',
   },
 ];
@@ -664,7 +681,7 @@ const book = {
   lens: { grade: 'teal-orange', gradeAmount: 0.5, bloom: 0.45, blur: 0 },
   note: "One world at four scales, each ten times smaller than the last; the camera zooms at a constant pace in log space. Each scale is drawn inside the one before (library/playbooks/_zoom-journey.mjs): the coast is the continent's own outline, carrying finer bays only where the camera goes; the city's lights are the specks seen from orbit. Strokes and type are sized for the zoom they are seen at. The planet is stylised: do not add real coastlines without verified geography.",
   beats: [
-    W('planet', 'From out here, the planet looks calm.', view(P3[0], P3[1], 52000), planet, { transition: 'cut' }, { viewFrom: view(1500, -800, 52000), viewAt: 0, viewDur: 3.6 }),
+    W('planet', 'From out here, the planet looks calm.', view(P3[0], P3[1], 52000), planet, { transition: 'cut' }, { viewFrom: view(1500, -800, 52000), viewAt: 0, viewDur: 2.4 }),
     W('coast', 'Come closer, and there is a coast,', coastView(), coast, { hold: 0.8 }, { viewAt: 0, viewDur: 2.2 }),
     W('city', 'a city that never quite sleeps,', cityView(), city, { hold: 0.8 }, { viewAt: 0, viewDur: 2.2 }),
     W('window', 'and one window, still lit.', view(wx, wy + 1, 52), street, { hold: 1 }, { viewAt: 0, viewDur: 2.2 }),
@@ -695,13 +712,13 @@ const book = {
     W(
       'end',
       'Start with one window.',
-      view(1500, 6400, 96000),
+      view(0, 5500, 96000),
       [
         {
           type: 'text',
           text: 'Start with one window.',
-          x: 1500,
-          y: 29500,
+          x: 0,
+          y: 23000,
           size: 3600,
           font: 'semibold',
           anchor: 'middle',

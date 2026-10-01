@@ -17,10 +17,10 @@
   "lens": {
     "grade": "teal-orange",
     "gradeAmount": 0.5,
-    "bloom": 0.35,
+    "bloom": 0.2,
     "leak": 0.1,
-    "handheld": 0.15,
-    "blur": 0.5
+    "handheld": 0.12,
+    "blur": 0.4
   },
   "note": "Shots, not slides (docs/cinema.md): wide establishing shot, an insert for the question, medium shots travelling one world, an insert for the figure, a silence, then the pull-back over the whole world, inside the same matte throughout. The world is drawn in section (library/playbooks/_cinematic-explainer.mjs) so the payoff is visible: redraw it for your system and keep the ground cut away. Replace the sample figure and its source before publishing.",
   "beats": [
@@ -1298,12 +1298,29 @@
                     "fill": {
                       "gradient": [
                         "accent",
-                        "surface",
-                        "bg"
+                        "muted",
+                        "surface"
                       ],
                       "angle": 90
+                    }
+                  },
+                  {
+                    "at": 0,
+                    "enter": "none",
+                    "type": "rect",
+                    "x": 4250,
+                    "y": 380,
+                    "w": 380,
+                    "h": 300,
+                    "fill": {
+                      "gradient": [
+                        "ink",
+                        "ink"
+                      ],
+                      "radial": true,
+                      "fade": true
                     },
-                    "opacity": 0.55
+                    "opacity": 0.18
                   },
                   {
                     "at": 0,
@@ -1320,9 +1337,8 @@
                       ],
                       "angle": 90
                     },
-                    "opacity": 0.6,
-                    "stroke": "muted",
-                    "width": 3
+                    "stroke": "surface",
+                    "width": 6
                   },
                   {
                     "at": 0,
@@ -1332,28 +1348,91 @@
                     "y1": 430,
                     "x2": 4338,
                     "y2": 526,
-                    "stroke": "muted",
+                    "stroke": "surface",
+                    "width": 5
+                  },
+                  {
+                    "at": 0,
+                    "enter": "none",
+                    "type": "rect",
+                    "x": 4430,
+                    "y": 460,
+                    "w": 150,
+                    "h": 8,
+                    "fill": "surface"
+                  },
+                  {
+                    "at": 0,
+                    "enter": "none",
+                    "type": "line",
+                    "x1": 4480,
+                    "y1": 380,
+                    "x2": 4480,
+                    "y2": 440,
+                    "stroke": "bg",
                     "width": 3
                   },
                   {
                     "at": 0,
                     "enter": "none",
-                    "type": "rect",
-                    "x": 4240,
-                    "y": 380,
-                    "w": 14,
-                    "h": 300,
-                    "fill": "muted"
+                    "type": "path",
+                    "d": "M 4456 440 h 48 l -8 -22 h -32 Z",
+                    "fill": "bg",
+                    "stroke": "none"
+                  },
+                  {
+                    "at": 0,
+                    "enter": "none",
+                    "type": "ellipse",
+                    "cx": 4480,
+                    "cy": 480,
+                    "rx": 90,
+                    "ry": 60,
+                    "fill": {
+                      "gradient": [
+                        "ink",
+                        "accent"
+                      ],
+                      "radial": true,
+                      "fade": true
+                    },
+                    "opacity": 0.35
                   },
                   {
                     "at": 0,
                     "enter": "none",
                     "type": "rect",
-                    "x": 4626,
+                    "x": 4234,
                     "y": 380,
-                    "w": 14,
+                    "w": 18,
                     "h": 300,
-                    "fill": "muted"
+                    "fill": "bg",
+                    "stroke": "muted",
+                    "width": 2
+                  },
+                  {
+                    "at": 0,
+                    "enter": "none",
+                    "type": "rect",
+                    "x": 4628,
+                    "y": 380,
+                    "w": 18,
+                    "h": 300,
+                    "fill": "bg",
+                    "stroke": "muted",
+                    "width": 2
+                  },
+                  {
+                    "at": 0,
+                    "enter": "none",
+                    "type": "rect",
+                    "x": 4234,
+                    "y": 376,
+                    "w": 412,
+                    "h": 14,
+                    "fill": "bg",
+                    "stroke": "muted",
+                    "width": 2
                   },
                   {
                     "at": 0,
@@ -1361,23 +1440,52 @@
                     "type": "poly",
                     "points": [
                       [
-                        4224,
-                        384
+                        4216,
+                        390
                       ],
                       [
                         4440,
-                        296
+                        288
                       ],
                       [
-                        4656,
-                        384
+                        4664,
+                        390
+                      ],
+                      [
+                        4636,
+                        390
+                      ],
+                      [
+                        4440,
+                        314
+                      ],
+                      [
+                        4244,
+                        390
                       ]
                     ],
                     "closed": true,
-                    "fill": "none",
-                    "stroke": "muted",
-                    "width": 12,
-                    "join": "round"
+                    "fill": {
+                      "gradient": [
+                        "surface",
+                        "muted"
+                      ],
+                      "angle": 0
+                    },
+                    "stroke": "bg",
+                    "width": 2
+                  },
+                  {
+                    "at": 0,
+                    "enter": "none",
+                    "type": "line",
+                    "x1": 4440,
+                    "y1": 288,
+                    "x2": 4664,
+                    "y2": 390,
+                    "stroke": "accent",
+                    "width": 3,
+                    "opacity": 0.7
                   },
                   {
                     "at": 0,
@@ -1388,7 +1496,18 @@
                     "w": 200,
                     "h": 92,
                     "fill": "surface",
-                    "stroke": "muted",
+                    "stroke": "bg",
+                    "width": 2
+                  },
+                  {
+                    "at": 0,
+                    "enter": "none",
+                    "type": "line",
+                    "x1": 4440,
+                    "y1": 594,
+                    "x2": 4440,
+                    "y2": 674,
+                    "stroke": "bg",
                     "width": 2
                   },
                   {
@@ -1399,7 +1518,8 @@
                     "y": 580,
                     "w": 220,
                     "h": 12,
-                    "fill": "muted"
+                    "fill": "ink",
+                    "opacity": 0.85
                   },
                   {
                     "at": 0,
@@ -1849,7 +1969,7 @@
         "world": "journey",
         "view": [
           3440,
-          520,
+          588,
           1440,
           810
         ],
@@ -2332,7 +2452,23 @@
             "at": 2.1,
             "enter": "rise",
             "dur": 0.6,
-            "exitAt": 4.6,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "rect",
+            "x": 870,
+            "y": 448,
+            "w": 740,
+            "h": 124,
+            "r": 62,
+            "fill": "bg",
+            "opacity": 0.72,
+            "at": 2.2,
+            "enter": "fade",
+            "dur": 0.5,
+            "exitAt": 3.8,
             "exitDur": 0.4,
             "exit": "fade"
           },
@@ -2340,8 +2476,8 @@
             "type": "text",
             "text": "RESERVOIR",
             "x": 1240,
-            "y": 470,
-            "size": 100,
+            "y": 540,
+            "size": 84,
             "font": "semibold",
             "tracking": 0.2,
             "fill": "ink",
@@ -2349,7 +2485,23 @@
             "at": 2.2,
             "enter": "fade",
             "dur": 0.5,
-            "exitAt": 4.6,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "rect",
+            "x": 2590,
+            "y": 238,
+            "w": 760,
+            "h": 124,
+            "r": 62,
+            "fill": "bg",
+            "opacity": 0.72,
+            "at": 2.4,
+            "enter": "fade",
+            "dur": 0.5,
+            "exitAt": 3.8,
             "exitDur": 0.4,
             "exit": "fade"
           },
@@ -2357,8 +2509,8 @@
             "type": "text",
             "text": "TREATMENT",
             "x": 2970,
-            "y": 340,
-            "size": 100,
+            "y": 330,
+            "size": 84,
             "font": "semibold",
             "tracking": 0.2,
             "fill": "ink",
@@ -2366,16 +2518,32 @@
             "at": 2.4,
             "enter": "fade",
             "dur": 0.5,
-            "exitAt": 4.6,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "rect",
+            "x": 4080,
+            "y": 108,
+            "w": 640,
+            "h": 124,
+            "r": 62,
+            "fill": "bg",
+            "opacity": 0.72,
+            "at": 2.5,
+            "enter": "fade",
+            "dur": 0.5,
+            "exitAt": 3.8,
             "exitDur": 0.4,
             "exit": "fade"
           },
           {
             "type": "text",
             "text": "YOUR TAP",
-            "x": 4370,
-            "y": 380,
-            "size": 100,
+            "x": 4400,
+            "y": 200,
+            "size": 84,
             "font": "semibold",
             "tracking": 0.2,
             "fill": "ink",
@@ -2383,7 +2551,7 @@
             "at": 2.5,
             "enter": "fade",
             "dur": 0.5,
-            "exitAt": 4.6,
+            "exitAt": 3.8,
             "exitDur": 0.4,
             "exit": "fade"
           },
@@ -2401,7 +2569,7 @@
             "say": "sight",
             "enter": "draw",
             "dur": 1.2,
-            "exitAt": 4.6,
+            "exitAt": 3.8,
             "exitDur": 0.4,
             "exit": "fade"
           },
@@ -2415,7 +2583,7 @@
             "fill": "accent2",
             "anchor": "middle",
             "say": "sight",
-            "exitAt": 4.6,
+            "exitAt": 3.8,
             "exitDur": 0.4,
             "exit": "fade"
           }
@@ -2427,6 +2595,7 @@
       "block": "canvas",
       "vo": "So follow the water in your own city.",
       "hold": 0.8,
+      "transition": "dissolve",
       "props": {
         "world": "journey",
         "view": [
@@ -2435,8 +2604,14 @@
           2140,
           1203.8
         ],
+        "viewFrom": [
+          3380,
+          -20,
+          2000,
+          1125
+        ],
         "viewAt": 0,
-        "viewDur": 2.6,
+        "viewDur": 4.5,
         "elements": [
           {
             "type": "text",

@@ -206,6 +206,7 @@ const beats = [
   {
     id: 'part',
     block: 'canvas',
+    transition: 'dissolve',
     vo: 'What if it simply got out of the way?',
     hold: 0.3,
     props: {
@@ -243,12 +244,9 @@ const beats = [
       vo: 'Twice as fast,',
       hold: 2.4,
       transition: 'cut',
+      camera: { move: 'in', amount: 0.5 },
       props: {
         source: SAMPLE,
-        view: [0, 0, 1920, 1080],
-        viewFrom: [40, 22, 1840, 1035],
-        viewAt: 0,
-        viewDur: 4,
         elements: [
           ...stage(590, small.floor, { beam: 0.07 }),
           { type: 'group', at: 0, enter: 'none', subject: true, children: small.parts },
@@ -294,26 +292,29 @@ const beats = [
             enter: 'rise',
             dur: 0.45,
           },
-          // The comparison, drawn: the same charge, in half the time.
+          // The comparison, drawn: in the same time, Halo charges full and the first generation half.
+          { type: 'text', text: 'CHARGE IN THE SAME 30 MINUTES', x: 1068, y: 762, size: 26, font: 'semibold', tracking: 0.14, fill: 'muted', at: 0.4, enter: 'fade', dur: 0.3 },
           ...[
-            ['HALO', 'ink', 'accent', 0.9, 790],
-            ['FIRST GENERATION', 'muted', 'muted', 1.8, 846],
-          ].flatMap(([label, ink, bar, dur, y]) => [
-            { type: 'text', text: label, x: 1068, y: y + 11, size: 30, font: 'semibold', tracking: 0.12, fill: ink, at: 0.4, enter: 'fade', dur: 0.3 },
-            { type: 'rect', x: 1430, y: y - 6, w: 400, h: 12, r: 6, fill: 'surface', at: 0.4, enter: 'fade', dur: 0.3 },
+            ['HALO', 'ink', 'accent', 260, 812, '100%'],
+            ['FIRST GENERATION', 'muted', 'muted', 130, 868, '50%'],
+          ].flatMap(([label, ink, bar, full, y, pct]) => [
+            { type: 'text', text: label, x: 1068, y: y + 11, size: 28, font: 'semibold', tracking: 0.08, fill: ink, at: 0.4, enter: 'fade', dur: 0.3 },
+            { type: 'rect', x: 1390, y: y - 6, w: 260, h: 12, r: 6, fill: 'surface', at: 0.4, enter: 'fade', dur: 0.3 },
             {
               type: 'rect',
-              x: 1430,
+              x: 1390,
               y: y - 6,
-              w: 400,
+              w: full,
               h: 12,
               r: 6,
               fill: bar,
               ...(bar === 'accent' ? { glow: { blur: 10, opacity: 0.8 } } : {}),
               at: 0.5,
               enter: 'grow-x',
-              dur,
+              // Both bars fill for the same time; Halo's goes twice as far.
+              dur: 1.2,
             },
+            { type: 'text', text: pct, x: 1670, y: y + 11, size: 30, font: 'semibold', fill: ink, at: 1.7, enter: 'fade', dur: 0.3 },
           ]),
         ],
       },
@@ -329,11 +330,9 @@ const beats = [
       vo: 'and it lasts all day.',
       hold: 1.2,
       transition: 'cut',
+      camera: { move: 'out', amount: 0.5 },
       props: {
-        view: [0, 0, 1920, 1080],
-        viewFrom: [60, 34, 1800, 1012.5],
-        viewAt: 0,
-        viewDur: 4,
+        source: SAMPLE,
         elements: [
           {
             type: 'ellipse',
@@ -417,7 +416,7 @@ const beats = [
     block: 'canvas',
     vo: 'Meet Halo.',
     hold: 1.4,
-    transition: 'fade',
+    transition: 'dissolve',
     props: {
       world: 'reveal',
       view: [0, 0, 1920, 1080],
@@ -485,7 +484,7 @@ const book = {
   sfx: 'subtle',
   textMotion: 'lines',
   texture: { grain: 0.3, vignette: 0.55 },
-  lens: { grade: 'cool', gradeAmount: 0.3, bloom: 0.45, blur: 0.5 },
+  lens: { grade: 'cool', gradeAmount: 0.3, bloom: 0.3, blur: 0.5 },
   note: 'Light the object; never decorate around it. The ring is drawn from a few ellipses (library/playbooks/_product-reveal.mjs): redraw your own product the same way, or place a render as an image element on the stage. Replace both specs with real figures and their sources; every number keeps its unit and what it is compared with.',
   beats,
 };

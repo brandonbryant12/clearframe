@@ -98,7 +98,7 @@ export default {
         .filter(([x]) => x > -w * 0.5 && x < w * 1.5)
         .map(p => p.join(' '))
         .join(' L ')}`;
-    // The wave: far bands light first, near bands last.
+    // The wave: far bands brighten first, near bands last.
     const wave = i => round(0.05 + ((BANDS - 1 - i) / (BANDS - 1)) * 1.0);
     // Path data is capped at 12,000 characters an element: long bands are split into runs.
     const chunks = ds => {
@@ -127,9 +127,13 @@ export default {
                 width: round(Math.max(1.2, Math.min(9, (f * size) / bandDepth(i)))),
                 cap: 'round',
                 opacity,
-                at: wave(i),
-                enter: 'fade',
-                dur: 0.5,
+                // Lit from the first frame (half bright), then the wave brings each band up.
+                at: 0,
+                enter: 'none',
+                keys: [
+                  { at: 0, opacity: 0.45, dur: 0 },
+                  { at: wave(i), opacity: 1, dur: 0.5 },
+                ],
               }
             : null,
         )
