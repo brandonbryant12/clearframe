@@ -5,7 +5,7 @@
 // film ends on the road flowing again.
 import fs from 'node:fs';
 
-const MATH = 'Queueing theory (M/M/1): wait grows as load ÷ (1 − load)';
+const MATH = 'Queueing theory (M/M/1): the wait in the queue grows as load ÷ (1 − load)';
 const SCENARIO = 'Illustrative scenario';
 const r = v => Math.round(v * 10) / 10;
 const still = el => ({ at: 0, enter: 'none', ...el });
@@ -197,6 +197,111 @@ ripple.push({
   dash: [18, 12],
 });
 
+// ------------------------------------------------------------------ 3. the curve, as roads
+// The wait in the queue (and the cars on the road) grows as load ÷ (1 − load): one stretch of
+// road per load, its length the multiple of the wait at half full, the 90% road in the accent.
+const LOADS = [
+  { label: '50% full', value: 1 },
+  { label: '60% full', value: 1.5 },
+  { label: '70% full', value: 2.3 },
+  { label: '80% full', value: 4 },
+  { label: '90% full', value: 9 },
+];
+const RX = 460,
+  RMAX = 1180;
+const curve = LOADS.flatMap((l, i) => {
+  const y = 230 + i * 128,
+    len = r((l.value / 9) * RMAX),
+    hot = l.value === 9,
+    at = 0.2 + i * 0.18;
+  return [
+    {
+      type: 'text',
+      text: l.label,
+      x: RX - 30,
+      y: y + 14,
+      size: 38,
+      font: 'bold',
+      anchor: 'end',
+      fill: hot ? 'ink' : 'muted',
+      at,
+      enter: 'fade',
+      dur: 0.3,
+    },
+    {
+      type: 'rect',
+      x: RX,
+      y: y - 30,
+      w: Math.max(len, 24),
+      h: 60,
+      r: 10,
+      fill: hot ? 'accent' : 'line',
+      opacity: hot ? 1 : 0.85,
+      enter: 'grow-x',
+      origin: [RX, y],
+      at,
+      dur: 0.6,
+    },
+    ...(len > 90
+      ? [
+          {
+            type: 'line',
+            x1: RX + 16,
+            y1: y,
+            x2: RX + len - 16,
+            y2: y,
+            stroke: 'bg',
+            width: 4,
+            dash: [22, 18],
+            opacity: 0.8,
+            at: at + 0.5,
+            enter: 'fade',
+            dur: 0.3,
+          },
+        ]
+      : []),
+    {
+      type: 'text',
+      text: `${l.value}×`,
+      x: RX + Math.max(len, 24) + 24,
+      y: y + 22,
+      size: 64,
+      font: 'figures',
+      fill: hot ? 'accent' : 'ink',
+      at: at + 0.4,
+      enter: 'rise',
+      dur: 0.35,
+    },
+  ];
+});
+curve.push(
+  {
+    type: 'text',
+    text: 'WAIT, IN MULTIPLES OF THE WAIT AT HALF FULL',
+    x: RX,
+    y: 140,
+    size: 30,
+    font: 'mono',
+    tracking: 0.12,
+    fill: 'muted',
+    at: 0.1,
+    enter: 'fade',
+    dur: 0.5,
+  },
+  {
+    type: 'text',
+    text: 'nine times the wait at half full',
+    x: RX,
+    y: 230 + 4 * 128 + 96,
+    size: 40,
+    font: 'bold',
+    fill: 'accent',
+    say: 'nine',
+    enter: 'rise',
+    dur: 0.45,
+  },
+);
+
 // ------------------------------------------------------------------ 4. the jam, close up
 const jam = [
   ...road(700).map(el => ({ ...el })),
@@ -291,23 +396,7 @@ const beats = [
     block: 'canvas',
     vo: 'Queueing math says the wait grows with load over spare room. At ninety percent full, it is nine times the wait at half full.',
     transition: 'cut',
-    props: {
-      source: MATH,
-      chart: {
-        kind: 'bars',
-        id: 'load',
-        suffix: '×',
-        values: [
-          { label: '50% full', value: 1 },
-          { label: '60%', value: 1.5 },
-          { label: '70%', value: 2.3 },
-          { label: '80%', value: 4 },
-          { label: '90%', value: 9, highlight: true },
-        ],
-        note: { text: '9 times the wait at half full', to: '90%', say: 'nine' },
-      },
-      elements: [],
-    },
+    props: { source: MATH, elements: curve },
     camera: { move: 'in', amount: 0.6 },
   },
   {

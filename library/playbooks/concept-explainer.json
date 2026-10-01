@@ -6430,41 +6430,299 @@
       "vo": "Queueing math says the wait grows with load over spare room. At ninety percent full, it is nine times the wait at half full.",
       "transition": "cut",
       "props": {
-        "source": "Queueing theory (M/M/1): wait grows as load ÷ (1 − load)",
-        "chart": {
-          "kind": "bars",
-          "id": "load",
-          "suffix": "×",
-          "values": [
-            {
-              "label": "50% full",
-              "value": 1
-            },
-            {
-              "label": "60%",
-              "value": 1.5
-            },
-            {
-              "label": "70%",
-              "value": 2.3
-            },
-            {
-              "label": "80%",
-              "value": 4
-            },
-            {
-              "label": "90%",
-              "value": 9,
-              "highlight": true
-            }
-          ],
-          "note": {
-            "text": "9 times the wait at half full",
-            "to": "90%",
-            "say": "nine"
+        "source": "Queueing theory (M/M/1): the wait in the queue grows as load ÷ (1 − load)",
+        "elements": [
+          {
+            "type": "text",
+            "text": "50% full",
+            "x": 430,
+            "y": 244,
+            "size": 38,
+            "font": "bold",
+            "anchor": "end",
+            "fill": "muted",
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "rect",
+            "x": 460,
+            "y": 200,
+            "w": 131.1,
+            "h": 60,
+            "r": 10,
+            "fill": "line",
+            "opacity": 0.85,
+            "enter": "grow-x",
+            "origin": [460, 230],
+            "at": 0.2,
+            "dur": 0.6
+          },
+          {
+            "type": "line",
+            "x1": 476,
+            "y1": 230,
+            "x2": 575.1,
+            "y2": 230,
+            "stroke": "bg",
+            "width": 4,
+            "dash": [22, 18],
+            "opacity": 0.8,
+            "at": 0.7,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "text",
+            "text": "1×",
+            "x": 615.1,
+            "y": 252,
+            "size": 64,
+            "font": "figures",
+            "fill": "ink",
+            "at": 0.6000000000000001,
+            "enter": "rise",
+            "dur": 0.35
+          },
+          {
+            "type": "text",
+            "text": "60% full",
+            "x": 430,
+            "y": 372,
+            "size": 38,
+            "font": "bold",
+            "anchor": "end",
+            "fill": "muted",
+            "at": 0.38,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "rect",
+            "x": 460,
+            "y": 328,
+            "w": 196.7,
+            "h": 60,
+            "r": 10,
+            "fill": "line",
+            "opacity": 0.85,
+            "enter": "grow-x",
+            "origin": [460, 358],
+            "at": 0.38,
+            "dur": 0.6
+          },
+          {
+            "type": "line",
+            "x1": 476,
+            "y1": 358,
+            "x2": 640.7,
+            "y2": 358,
+            "stroke": "bg",
+            "width": 4,
+            "dash": [22, 18],
+            "opacity": 0.8,
+            "at": 0.88,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "text",
+            "text": "1.5×",
+            "x": 680.7,
+            "y": 380,
+            "size": 64,
+            "font": "figures",
+            "fill": "ink",
+            "at": 0.78,
+            "enter": "rise",
+            "dur": 0.35
+          },
+          {
+            "type": "text",
+            "text": "70% full",
+            "x": 430,
+            "y": 500,
+            "size": 38,
+            "font": "bold",
+            "anchor": "end",
+            "fill": "muted",
+            "at": 0.56,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "rect",
+            "x": 460,
+            "y": 456,
+            "w": 301.6,
+            "h": 60,
+            "r": 10,
+            "fill": "line",
+            "opacity": 0.85,
+            "enter": "grow-x",
+            "origin": [460, 486],
+            "at": 0.56,
+            "dur": 0.6
+          },
+          {
+            "type": "line",
+            "x1": 476,
+            "y1": 486,
+            "x2": 745.6,
+            "y2": 486,
+            "stroke": "bg",
+            "width": 4,
+            "dash": [22, 18],
+            "opacity": 0.8,
+            "at": 1.06,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "text",
+            "text": "2.3×",
+            "x": 785.6,
+            "y": 508,
+            "size": 64,
+            "font": "figures",
+            "fill": "ink",
+            "at": 0.9600000000000001,
+            "enter": "rise",
+            "dur": 0.35
+          },
+          {
+            "type": "text",
+            "text": "80% full",
+            "x": 430,
+            "y": 628,
+            "size": 38,
+            "font": "bold",
+            "anchor": "end",
+            "fill": "muted",
+            "at": 0.74,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "rect",
+            "x": 460,
+            "y": 584,
+            "w": 524.4,
+            "h": 60,
+            "r": 10,
+            "fill": "line",
+            "opacity": 0.85,
+            "enter": "grow-x",
+            "origin": [460, 614],
+            "at": 0.74,
+            "dur": 0.6
+          },
+          {
+            "type": "line",
+            "x1": 476,
+            "y1": 614,
+            "x2": 968.4,
+            "y2": 614,
+            "stroke": "bg",
+            "width": 4,
+            "dash": [22, 18],
+            "opacity": 0.8,
+            "at": 1.24,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "text",
+            "text": "4×",
+            "x": 1008.4,
+            "y": 636,
+            "size": 64,
+            "font": "figures",
+            "fill": "ink",
+            "at": 1.1400000000000001,
+            "enter": "rise",
+            "dur": 0.35
+          },
+          {
+            "type": "text",
+            "text": "90% full",
+            "x": 430,
+            "y": 756,
+            "size": 38,
+            "font": "bold",
+            "anchor": "end",
+            "fill": "ink",
+            "at": 0.9199999999999999,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "rect",
+            "x": 460,
+            "y": 712,
+            "w": 1180,
+            "h": 60,
+            "r": 10,
+            "fill": "accent",
+            "opacity": 1,
+            "enter": "grow-x",
+            "origin": [460, 742],
+            "at": 0.9199999999999999,
+            "dur": 0.6
+          },
+          {
+            "type": "line",
+            "x1": 476,
+            "y1": 742,
+            "x2": 1624,
+            "y2": 742,
+            "stroke": "bg",
+            "width": 4,
+            "dash": [22, 18],
+            "opacity": 0.8,
+            "at": 1.42,
+            "enter": "fade",
+            "dur": 0.3
+          },
+          {
+            "type": "text",
+            "text": "9×",
+            "x": 1664,
+            "y": 764,
+            "size": 64,
+            "font": "figures",
+            "fill": "accent",
+            "at": 1.3199999999999998,
+            "enter": "rise",
+            "dur": 0.35
+          },
+          {
+            "type": "text",
+            "text": "WAIT, IN MULTIPLES OF THE WAIT AT HALF FULL",
+            "x": 460,
+            "y": 140,
+            "size": 30,
+            "font": "mono",
+            "tracking": 0.12,
+            "fill": "muted",
+            "at": 0.1,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "text": "nine times the wait at half full",
+            "x": 460,
+            "y": 838,
+            "size": 40,
+            "font": "bold",
+            "fill": "accent",
+            "say": "nine",
+            "enter": "rise",
+            "dur": 0.45
           }
-        },
-        "elements": []
+        ]
       },
       "camera": {
         "move": "in",
@@ -7585,7 +7843,7 @@
       "vo": "Leave room for the unexpected: plan for about seventy percent, not a hundred.",
       "transition": "dissolve",
       "props": {
-        "source": "Queueing theory (M/M/1): wait grows as load ÷ (1 − load)",
+        "source": "Queueing theory (M/M/1): the wait in the queue grows as load ÷ (1 − load)",
         "elements": [
           {
             "at": 0,

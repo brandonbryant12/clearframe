@@ -23,6 +23,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - `cinematic-explainer`: the water system in cross-section, with labels kept inside the letterbox.
   - New set pieces: `signal`, `wires`, `citygrid`, `mast`, `harbor` and `rooftops`. `card` is a poster card (`LEAD`/`CARD`), and `title` fills the frame.
   - First beats cut in rather than fading up from black.
+- **The concept explainer's curve is drawn as roads:** one stretch per load, its length the multiple of the wait at half full, the 90% road in the accent. The source names the queueing formula exactly (the wait in the queue).
 - **The data story counts in requests.** The hundred hours are a hundred small request cards, the same cards that wait in the queue, filled stage by stage. On "routing" everything else steps back. One bar chart remains, for the spread.
 - **The digest's evidence is drawn from the buses.** A strip of arrivals at one stop over 42 minutes, one small bus per arrival: timetable, in practice (in pairs, with the long gap bracketed) and the trial. The figure on each row is the average gap a rider meets.
 - **Round 4 finish.**
