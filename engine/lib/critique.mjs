@@ -521,6 +521,31 @@ export function critique(root) {
       'film',
       'The film has a lens but every drawing is flat. Give places three planes: z on a far layer, the subject and one soft near layer, then let the camera move through them (docs/canvas.md, Depth).',
     );
+  // One dataset per film: the same label must show the same value (and unit) everywhere.
+  const shown = new Map();
+  const record = (label, value, unit, id) => {
+    if (typeof label !== 'string' || !Number.isFinite(value)) return;
+    const key = label.trim().toLowerCase();
+    const seen = shown.get(key) ?? [];
+    seen.push({ label, value, unit: unit ?? '', id });
+    shown.set(key, seen);
+  };
+  for (const b of beats) {
+    const p = b.props ?? {};
+    for (const v of p.chart?.values ?? []) record(v.label, v.value, p.chart.suffix ?? p.chart.prefix, b.id);
+    for (const v of Array.isArray(p.data) ? p.data : []) record(v.label, v.value, p.format ?? p.suffix, b.id);
+    for (const v of Array.isArray(p.items) ? p.items : []) record(v.label, v.value, p.format ?? v.suffix, b.id);
+    if (Number.isFinite(p.value)) record(p.label, p.value, p.suffix, b.id);
+  }
+  for (const seen of shown.values()) {
+    const distinct = [...new Map(seen.map(x => [`${x.value}${x.unit}`, x])).values()];
+    if (distinct.length > 1)
+      add(
+        'warn',
+        distinct.map(x => x.id).join('…'),
+        `"${seen[0].label}" shows ${distinct.map(x => `${x.value}${x.unit} in ${x.id}`).join(' and ')}. One label, one value: the viewer reads a contradiction. Rename the label if these are different measures.`,
+      );
+  }
   const cinema = cinemaScore(sb, beats, t, transitions);
   for (const tell of cinema.tells) add('idea', 'cinema', `${tell.name}: ${tell.fix}`);
   const summary = {

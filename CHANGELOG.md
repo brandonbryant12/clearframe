@@ -30,7 +30,9 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - It skips dates, version numbers ("Opus 5.5", "Route 12"), codes (R128) and hex colours, and keeps 2.5M, series (8 → 34) and units.
   - Links trailing a bullet source its sentences, and reference titles keep their words.
   - DIRECTION.md starts with the brief's tensions, sourced figures and quotations.
-- **An honest review loop.** `scripts/bench.mjs` drafts ten fixed films, and a fresh reviewer scores them against top studio work (`docs/review.md`). Round 1 scored 3.1/5.
+- **Fixed: the draft music bed turned into a full-scale DC wall after about 10 s.** A NaN from `pow()` of a hair-negative sine poisoned the filter state. The loudness normaliser then pushed the voice down to make room for it.
+- **Films have a score and sound by default.** Playbooks scaffold a music bed (free as a draft, paid Lyria only after `plan`) and subtle sound design that follows the picture. Render writes the cue sheet to `build/cues.json`.
+- **An honest review loop.** `scripts/bench.mjs` drafts ten fixed films, and a fresh reviewer scores them against top studio work (`docs/review.md`). Round 1 scored 3.1/5. The bench also renders a draft voice and bed for every film, then reports loudness and a waveform with the cuts and sound cues marked.
 
 - **A lens for the whole film.** `lens` (film-wide, overridable per beat) adds:
   - `letterbox`: animated black bars (2.39, 2, 1.85). Headings, sources and captions move inside the picture.

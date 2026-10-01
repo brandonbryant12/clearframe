@@ -26,7 +26,10 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
     backdrop: book.backdrop ?? 'none',
     chrome: false,
     captions: book.captions ?? false,
-    music: book.music ?? false,
+    // A produced film has a score and sound that follows the picture: a draft bed is free
+    // (music --draft); the final bed is paid and runs only after plan and approval.
+    music: book.music ?? {},
+    sfx: book.sfx ?? 'subtle',
     ...(book.texture ? { texture: book.texture } : {}),
     ...(book.lens ? { lens: book.lens } : {}),
     ...(book.heading ? { heading: book.heading } : {}),

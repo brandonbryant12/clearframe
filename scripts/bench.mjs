@@ -29,6 +29,9 @@ const FILMS = [
 const args = process.argv.slice(2);
 const only = args.includes('--only') ? args[args.indexOf('--only') + 1].split(',') : null;
 const strips = !args.includes('--no-strips');
+// Sound evidence: a free draft voice and bed, the mixed loudness and a waveform with the cuts
+// (grey) and sound cues (accent) marked, so a reviewer can judge the mix from an image.
+const sound = !args.includes('--no-sound');
 // --report-only rebuilds REPORT.md from the existing renders (after re-running a few films).
 const reportOnly = args.includes('--report-only');
 const latestStrip = dir => {
@@ -42,6 +45,40 @@ const latestStrip = dir => {
   return runs[0] ?? null;
 };
 const cli = (...a) => spawnSync('node', [path.join(ROOT, 'engine/cli.mjs'), ...a], { cwd: ROOT, encoding: 'utf8' });
+const run = (cmd, a) => spawnSync(cmd, a, { cwd: ROOT, encoding: 'utf8' });
+
+/** Integrated loudness, range and true peak of a rendered film. */
+function loudness(video) {
+  const out = run('ffmpeg', ['-hide_banner', '-i', video, '-af', 'ebur128=peak=true', '-f', 'null', '-']).stderr;
+  const tail = out.slice(out.lastIndexOf('Summary:'));
+  const num = re => Number(tail.match(re)?.[1]);
+  return { lufs: num(/I:\s+(-?[\d.]+) LUFS/), lra: num(/LRA:\s+(-?[\d.]+) LU/), peak: num(/Peak:\s+(-?[\d.]+) dBFS/) };
+}
+
+/** The mix as a waveform, cuts as grey lines and sound cues as accent ticks. */
+function waveform(dir, video) {
+  const timing = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8'));
+  const cues = JSON.parse(fs.readFileSync(path.join(dir, 'build/cues.json'), 'utf8'));
+  const W = 1600,
+    H = 260,
+    x = t => Math.round((t / timing.duration) * W);
+  const marks = [
+    ...timing.beats.slice(1).map(b => `drawbox=x=${x(b.start)}:y=0:w=2:h=${H}:color=0x8b949e@0.9:t=fill`),
+    ...cues.map(c => `drawbox=x=${x(c.t) - 2}:y=${H - 30}:w=5:h=30:color=orange@1.0:t=fill`),
+  ];
+  const file = path.join(dir, 'build/waveform.png');
+  run('ffmpeg', [
+    '-y',
+    '-i',
+    video,
+    '-filter_complex',
+    `[0:a]showwavespic=s=${W}x${H}:colors=0x58a6ff:scale=sqrt[w];color=c=0x0d1117:s=${W}x${H}[bg];[bg][w]overlay=format=auto,${marks.join(',')}`,
+    '-frames:v',
+    '1',
+    file,
+  ]);
+  return fs.existsSync(file) ? { file, cues } : null;
+}
 
 fs.mkdirSync(OUT, { recursive: true });
 const rows = [];
@@ -50,11 +87,18 @@ for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name)))
   if (reportOnly) {
     const crit = cli('critique', dir).stdout;
     const sheet = path.join(dir, 'sheet.png');
+    const video = path.join(dir, 'build/video.mp4');
+    const check = JSON.parse(cli('check', dir, '--draft').stdout || '{}');
     rows.push({
       ...f,
       score: crit.match(/cinema (\d+)\/100/)?.[1],
       sheet: fs.existsSync(sheet) ? sheet : null,
       strip: latestStrip(dir),
+      audio:
+        sound && fs.existsSync(path.join(dir, 'build/cues.json'))
+          ? { ...loudness(video), wave: waveform(dir, video) }
+          : null,
+      errors: check.errors ?? [],
       findings: crit.split('\n').slice(1, 6),
     });
     continue;
@@ -69,12 +113,30 @@ for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name)))
   const score = crit.match(/cinema (\d+)\/100/)?.[1];
   const sheet = path.join(dir, 'sheet.png');
   const sh = cli('sheet', dir, '--draft', '--out', sheet);
-  let strip = null;
+  let strip = null,
+    audio = null;
   if (strips && !sh.status) {
-    const r = cli('render', dir, '--draft', '--no-audio');
-    if (!r.status) strip = cli('review', dir).stdout.match(/(\S+strip\.png)/)?.[1] ?? null;
+    if (sound) {
+      cli('voice', dir, '--draft');
+      cli('music', dir, '--draft');
+    }
+    const r = cli('render', dir, '--draft', ...(sound ? [] : ['--no-audio']));
+    if (!r.status) {
+      strip = cli('review', dir).stdout.match(/(\S+strip\.png)/)?.[1] ?? null;
+      const video = path.join(dir, 'build/video.mp4');
+      if (sound) audio = { ...loudness(video), wave: waveform(dir, video) };
+    }
   }
-  rows.push({ ...f, score, sheet: fs.existsSync(sheet) ? sheet : null, strip, findings: crit.split('\n').slice(1, 6) });
+  const check = JSON.parse(cli('check', dir, '--draft').stdout || '{}');
+  rows.push({
+    ...f,
+    score,
+    sheet: fs.existsSync(sheet) ? sheet : null,
+    strip,
+    audio,
+    errors: check.errors ?? [],
+    findings: crit.split('\n').slice(1, 6),
+  });
   console.log(
     `${f.name.padEnd(20)} cinema ${score ?? '?'}  ${fs.existsSync(sheet) ? 'sheet' : 'NO SHEET'}${strip ? ' + strip' : ''}`,
   );
@@ -87,16 +149,28 @@ fs.writeFileSync(
 
 Scaffolded from scratch with \`clearframe new\` and drafted for free (local voice estimate, no paid media). Same films every round.
 
-| Film | Why it's here | Cinema | Sheet | Strip (frames around every cut) |
-|---|---|---|---|---|
-${rows.map(r => `| ${r.name} | ${r.why} | ${r.score ?? r.error ?? '?'} | ${rel(r.sheet)} | ${rel(r.strip)} |`).join('\n')}
+| Film | Why it's here | Cinema | Check | Sheet | Strip (frames around every cut) |
+|---|---|---|---|---|---|
+${rows.map(r => `| ${r.name} | ${r.why} | ${r.score ?? r.error ?? '?'} | ${r.errors?.length ? `${r.errors.length} errors` : 'passes'} | ${rel(r.sheet)} | ${rel(r.strip)} |`).join('\n')}
+
+Sound is a draft: a local TTS voice in one take and a synthesised bed (the final uses Gemini TTS and a Lyria score). Each waveform marks the cuts (grey) and the sound cues (orange).
+
+| Film | Loudness | Range | True peak | Waveform | Cues |
+|---|---|---|---|---|---|
+${rows
+  .map(
+    r =>
+      `| ${r.name} | ${r.audio ? `${r.audio.lufs} LUFS` : '—'} | ${r.audio ? `${r.audio.lra} LU` : '—'} | ${r.audio ? `${r.audio.peak} dBFS` : '—'} | ${rel(r.audio?.wave?.file)} | ${
+        r.audio?.wave?.cues.map(c => `${c.name} ${c.t.toFixed(1)}s`).join(', ') || '—'
+      } |`,
+  )
+  .join('\n')}
 
 ${rows
   .map(
     r =>
       `## ${r.name}\n${
-        (r.findings ?? [])
-          .filter(Boolean)
+        [...(r.errors ?? []).map(e => `✗ check: ${e}`), ...(r.findings ?? []).filter(Boolean)]
           .map(l => `    ${l}`)
           .join('\n') || '    (no critique findings)'
       }`,

@@ -64,6 +64,8 @@ export async function renderProject(root, { draft = false, out, noAudio = false,
     ]);
     validateVideo(silent, ctx.job);
     const soundCues = soundDesign(ctx.job, ctx.sb.sfx);
+    // The cue sheet, for review: what plays where (bench waveforms mark these).
+    writeJSON(path.join(root, 'build/cues.json'), soundCues);
     const track = noAudio ? null : await mix(root, ctx.timing, audio, ctx.sb.mix, soundCues);
     await mux(silent, track, finished);
     const probe = validateVideo(finished, ctx.job);

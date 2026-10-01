@@ -143,7 +143,9 @@ export async function draftMusic(output, { seconds = 60, bpm = 72, style = 'pad'
         i === chords.length - 1 ? `${c[k]}` : `if(lt(mod(t,${bar * 4}),${bar * (i + 1)}),${c[k]},${acc})`,
       '',
     );
-  const env = `pow(sin(PI*mod(t,${bar})/${bar}),0.7)`;
+  // abs(): rounding can push the sine a hair below zero, and pow() of a negative is NaN, which
+  // would poison the lowpass and echo state for the rest of the bed (a full-scale DC wall).
+  const env = `pow(abs(sin(PI*mod(t,${bar})/${bar})),0.7)`;
   const voices = [0, 1, 2, 3]
     .map(k => `${[0.32, 0.22, 0.2, 0.12][k]}*sin(2*PI*(${sel(k)})*t)*(1+0.004*sin(2*PI*0.3*t))`)
     .join('+');
