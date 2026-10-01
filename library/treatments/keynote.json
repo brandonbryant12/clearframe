@@ -29,7 +29,7 @@
   },
   "beats": {
     "emphasisStyle": "serif",
-    "graphic": "dissolve",
+    "graphic": "cut",
     "rough": false
   },
   "rules": [
@@ -38,6 +38,6 @@
     "Specs arrive as inserts: one huge number with its unit and what it is compared with, ideally the comparison drawn (two bars, two times). Every figure carries a visible source line.",
     "Type sits in the negative space beside the object, never over it. Nothing under 34 px; one accent colour, used only on what is new.",
     "End on the object and the name, with a light sweep, and one line of availability in the same shot.",
-    "Never dip to black between shots: cut, or dissolve where the scale changes."
+    "Join shots with a cut or a matched move (one world, the camera pushing in or pulling back), never a dip to black or a double exposure. At most two levels of type in any short shot."
   ]
 }

@@ -45,80 +45,211 @@ const compact = (pts, close = true) => {
   return d.trim() + (close ? 'z' : '');
 };
 
-// ------------------------------------------------------------------ continents
+// ------------------------------------------------------------------ terrain
+// One elevation field on the sphere decides land and sea at every scale, from orbit down to a
+// street: the planet's coasts, the coastline the camera flies down to, and the ground the city
+// is built on are all contours of the same function, so each scale really sits inside the last.
 const R = 20000;
-/**
- * A continent: radius by angle at many scales (bays and capes down to inlets a few pixels wide
- * from orbit), plus `fine(a)`, extra detail only where the camera will come close.
- */
-const continent = (cx, cy, rad, wob, seed, fine = () => 0) => {
-  const g = rng(seed),
-    ph = Array.from({ length: 10 }, () => g() * Math.PI * 2);
-  const radius = a =>
-    rad *
-      (1 +
-        wob *
-          (0.42 * Math.sin(2 * a + ph[0]) +
-            0.26 * Math.sin(3 * a + ph[1]) +
-            0.16 * Math.sin(7 * a + ph[2]) +
-            0.1 * Math.sin(13 * a + ph[3]) +
-            0.06 * Math.sin(23 * a + ph[4]) +
-            0.035 * Math.sin(41 * a + ph[5])) +
-        0.012 * Math.sin(67 * a + ph[7]) +
-        0.005 * Math.sin(131 * a + ph[8]) +
-        0.0025 * Math.sin(263 * a + ph[9])) +
-    fine(a);
-  const at = a => [cx + Math.cos(a) * radius(a), cy + Math.sin(a) * radius(a) * (0.82 + 0.12 * Math.sin(a + ph[6]))];
-  return { at, cx, cy, rad };
+
+// ---- 3D value noise (seeded hash, smoothstep interpolation), fractal sum.
+const hash = (x, y, z, s) => {
+  let h = (x * 374761393 + y * 668265263 + z * 2147483647 + s * 1442695041) | 0;
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
 };
-const sample = (c, step) => {
-  const pts = [];
-  for (let a = -Math.PI; a < Math.PI; a += step(a)) pts.push(c.at(a));
-  return pts;
-};
-// Where the story lands: an eastern coast, just past the terminator.
-const A1 = -0.3,
-  AC = A1 + 0.006;
-const bump = (a, c, w) => Math.exp(-(((a - c) / w) ** 2));
-// Each octave's height is a fraction of its wavelength, so the coast is rugged, not spiky.
-const fineMain = a =>
-  bump(a, A1, 0.2) * (320 * Math.sin(a * 40 + 1) + 110 * Math.sin(a * 140 + 2) + 45 * Math.sin(a * 330 + 0.5) + 18 * Math.sin(a * 760)) +
-  bump(a, AC, 0.014) * (5 * Math.sin(a * 2900 + 1.4) + 2 * Math.sin(a * 7100 + 0.3));
-const main = continent(4200, -2600, 8200, 0.42, 5, fineMain);
-const others = [
-  continent(-9600, 7600, 5000, 0.5, 8),
-  continent(-7400, -11400, 2600, 0.55, 11),
-  continent(12600, 8800, 1300, 0.5, 14),
-  // An archipelago off the south continent and a chain of islands in the western ocean.
-  ...[
-    [-3600, 12600, 520],
-    [-2500, 13600, 340],
-    [-1500, 14300, 260],
-    [-15800, -2400, 700],
-    [-14900, -800, 420],
-    [-15200, 700, 300],
-    [-11800, -6600, 380],
-    [9200, 13400, 460],
-  ].map(([x, y, rr], i) => continent(x, y, rr, 0.55, 30 + i)),
+const fade = t => t * t * (3 - 2 * t);
+function noise3(x, y, z, s) {
+  const xi = Math.floor(x),
+    yi = Math.floor(y),
+    zi = Math.floor(z);
+  const xf = fade(x - xi),
+    yf = fade(y - yi),
+    zf = fade(z - zi);
+  const l = (a, b, t) => a + (b - a) * t;
+  const c = (dx, dy, dz) => hash(xi + dx, yi + dy, zi + dz, s);
+  return l(
+    l(l(c(0, 0, 0), c(1, 0, 0), xf), l(c(0, 1, 0), c(1, 1, 0), xf), yf),
+    l(l(c(0, 0, 1), c(1, 0, 1), xf), l(c(0, 1, 1), c(1, 1, 1), xf), yf),
+    zf,
+  );
+}
+function fbm(x, y, z, oct, s) {
+  let a = 0,
+    amp = 1,
+    norm = 0;
+  for (let i = 0; i < oct; i++) {
+    a += amp * (noise3(x, y, z, s + i) - 0.5);
+    norm += amp;
+    amp *= 0.5;
+    x *= 2.03;
+    y *= 2.03;
+    z *= 2.03;
+  }
+  return a / norm;
+}
+
+// Continents where the story wants them (the target coast on the night side, east of centre).
+const MASK = [
+  [7000, -2400, 7600, 1.0],
+  [2500, -9500, 4200, 0.8],
+  [-9500, 7600, 5600, 0.95],
+  [-4500, 11500, 3200, 0.7],
+  [-7000, -11500, 3600, 0.8],
+  [-15000, -2000, 2400, 0.6],
+  [12500, 11000, 2600, 0.6],
 ];
-const mainPts = sample(main, a => (Math.abs(a - AC) < 0.02 ? 0.00025 : Math.abs(a - A1) < 0.3 ? 0.0022 : 0.009));
-const otherPts = others.map(c => sample(c, () => (c.rad > 2000 ? 0.011 : 0.05)));
-const P1 = main.at(A1);
-// The river mouth, the city just inland of it, and the street with the window.
-const mouth = main.at(AC),
-  inward = (() => {
-    const [dx, dy] = [main.cx - mouth[0], main.cy - mouth[1]],
-      l = Math.hypot(dx, dy);
-    return [dx / l, dy / l];
-  })(),
-  side = [-inward[1], inward[0]];
+const mask = (x, y) => MASK.reduce((m, [cx, cy, rr, k]) => Math.max(m, k * Math.exp(-((x - cx) ** 2 + (y - cy) ** 2) / (rr * rr))), 0);
+
+/** Elevation at disc point (x, y): above 0 is land. `oct` trades detail for speed. */
+function elevation(x, y, oct = 9) {
+  const d2 = x * x + y * y;
+  if (d2 >= R * R * 0.995) return -1;
+  const z = Math.sqrt(R * R - d2);
+  const f = 1 / 7000;
+  // Domain warp gives coasts gulfs and peninsulas instead of blobs.
+  const wx = fbm(x * f * 0.7, y * f * 0.7, z * f * 0.7, 4, 101) * 2.2,
+    wy = fbm(x * f * 0.7 + 5.2, y * f * 0.7, z * f * 0.7, 4, 202) * 2.2;
+  const n = fbm(x * f + wx, y * f + wy, z * f, oct, 7);
+  return mask(x, y) * 0.95 - 0.5 + n * 2.1;
+}
+
+// ---- marching squares over a grid, stitched into closed loops (land on the left).
+function contour(x0, y0, x1, y1, step, field, level = 0) {
+  const nx = Math.ceil((x1 - x0) / step) + 1,
+    ny = Math.ceil((y1 - y0) / step) + 1;
+  const v = new Float64Array(nx * ny);
+  for (let j = 0; j < ny; j++)
+    for (let i = 0; i < nx; i++) {
+      const edge = i === 0 || j === 0 || i === nx - 1 || j === ny - 1;
+      v[j * nx + i] = edge ? -1 : field(x0 + i * step, y0 + j * step) - level;
+    }
+  const P = (i, j) => [x0 + i * step, y0 + j * step];
+  const val = (i, j) => v[j * nx + i];
+  const lerpPt = (a, b, va, vb) => {
+    const t = va / (va - vb);
+    return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  };
+  // Edge keys: top (i,j)-(i+1,j) = h i j; left (i,j)-(i,j+1) = v i j.
+  const next = new Map(),
+    pos = new Map();
+  const seg = (ka, pa, kb, pb) => {
+    pos.set(ka, pa);
+    pos.set(kb, pb);
+    next.set(ka, kb);
+  };
+  for (let j = 0; j < ny - 1; j++)
+    for (let i = 0; i < nx - 1; i++) {
+      const a = val(i, j),
+        b = val(i + 1, j),
+        c = val(i + 1, j + 1),
+        d = val(i, j + 1);
+      const idx = (a > 0 ? 8 : 0) | (b > 0 ? 4 : 0) | (c > 0 ? 2 : 0) | (d > 0 ? 1 : 0);
+      if (idx === 0 || idx === 15) continue;
+      const T = [`h${i},${j}`, () => lerpPt(P(i, j), P(i + 1, j), a, b)],
+        Rr = [`v${i + 1},${j}`, () => lerpPt(P(i + 1, j), P(i + 1, j + 1), b, c)],
+        B = [`h${i},${j + 1}`, () => lerpPt(P(i, j + 1), P(i + 1, j + 1), d, c)],
+        L = [`v${i},${j}`, () => lerpPt(P(i, j), P(i, j + 1), a, d)];
+      // Segments run so land lies on the left (screen coordinates, y down).
+      const S = (e1, e2) => seg(e1[0], e1[1](), e2[0], e2[1]());
+      const centre = (a + b + c + d) / 4;
+      switch (idx) {
+        case 1: S(B, L); break;
+        case 2: S(Rr, B); break;
+        case 3: S(Rr, L); break;
+        case 4: S(T, Rr); break;
+        case 5: if (centre > 0) { S(T, L); S(B, Rr); } else { S(T, Rr); S(B, L); } break;
+        case 6: S(T, B); break;
+        case 7: S(T, L); break;
+        case 8: S(L, T); break;
+        case 9: S(B, T); break;
+        case 10: if (centre > 0) { S(L, B); S(Rr, T); } else { S(L, T); S(Rr, B); } break;
+        case 11: S(Rr, T); break;
+        case 12: S(L, Rr); break;
+        case 13: S(B, Rr); break;
+        case 14: S(L, B); break;
+      }
+    }
+  const loops = [],
+    seen = new Set();
+  for (const start of next.keys()) {
+    if (seen.has(start)) continue;
+    const loop = [];
+    let k = start;
+    while (k && !seen.has(k)) {
+      seen.add(k);
+      loop.push(pos.get(k));
+      k = next.get(k);
+    }
+    if (loop.length > 2) loops.push(loop);
+  }
+  return loops;
+}
+
+const area = loop => {
+  let s = 0;
+  for (let i = 0; i < loop.length; i++) {
+    const [x1, y1] = loop[i],
+      [x2, y2] = loop[(i + 1) % loop.length];
+    s += x1 * y2 - x2 * y1;
+  }
+  return s / 2;
+};
+
+/** Ramer–Douglas–Peucker on a closed loop, tolerance by position. */
+function simplify(loop, tol) {
+  const keep = new Uint8Array(loop.length);
+  const rdp = (a, b) => {
+    const [ax, ay] = loop[a],
+      [bx, by] = loop[b];
+    const dx = bx - ax,
+      dy = by - ay,
+      l = Math.hypot(dx, dy) || 1;
+    let best = -1,
+      bd = 0;
+    for (let i = a + 1; i < b; i++) {
+      const d = Math.abs((loop[i][0] - ax) * dy - (loop[i][1] - ay) * dx) / l;
+      if (d > bd) (bd = d), (best = i);
+    }
+    if (best > 0 && bd > tol(loop[best])) {
+      keep[best] = 1;
+      rdp(a, best);
+      rdp(best, b);
+    }
+  };
+  const mid = Math.floor(loop.length / 2);
+  keep[0] = keep[mid] = 1;
+  rdp(0, mid);
+  rdp(mid, loop.length - 1);
+  keep[loop.length - 1] = 1;
+  return loop.filter((_, i) => keep[i]);
+}
+
+const land = (p, oct = 9) => elevation(p[0], p[1], oct) > 0;
+// The story's coast: walk west along a line on the night side until the land begins.
+const mouth = (() => {
+  for (let x = 17500; x > 6000; x -= 4) if (elevation(x, -3200) > 0) return [x, -3200];
+  throw new Error('no coast on the night side');
+})();
+// Inland is up the elevation slope.
+const inward = (() => {
+  const e = 30,
+    gx = elevation(mouth[0] + e, mouth[1]) - elevation(mouth[0] - e, mouth[1]),
+    gy = elevation(mouth[0], mouth[1] + e) - elevation(mouth[0], mouth[1] - e),
+    l = Math.hypot(gx, gy) || 1;
+  return [gx / l, gy / l];
+})();
+const side = [-inward[1], inward[0]];
 const P2 = [mouth[0] + inward[0] * 150, mouth[1] + inward[1] * 150];
+// The river meanders inland from the mouth, and stops where the land does.
 const riverPts = [];
 for (let i = 0; i <= 50; i++) {
   const t = i / 50,
-    d = -40 + 2600 * t ** 1.25,
-    s = Math.sin(t * 8) * 170 * t + Math.sin(t * 21) * 40 * t;
-  riverPts.push([mouth[0] + inward[0] * d + side[0] * s, mouth[1] + inward[1] * d + side[1] * s]);
+    d = -40 + 2400 * t ** 1.25,
+    sw = Math.sin(t * 8) * 170 * t + Math.sin(t * 21) * 40 * t,
+    p = [mouth[0] + inward[0] * d + side[0] * sw, mouth[1] + inward[1] * d + side[1] * sw];
+  if (i > 2 && !land(p)) break;
+  riverPts.push(p);
 }
 // The city's grid is turned to the coast; the window's street sits in it.
 const ang = Math.atan2(inward[1], inward[0]),
@@ -126,8 +257,21 @@ const ang = Math.atan2(inward[1], inward[0]),
   V = [-Math.sin(ang), Math.cos(ang)];
 const at = (b, a) => [P2[0] + U[0] * b + V[0] * a, P2[1] + U[1] * b + V[1] * a];
 const P3 = at(160, 40);
-const onLand = p => inside(p, mainPts);
+const onLand = p => land(p);
 const nearRiver = (p, k) => riverPts.some(q => Math.hypot(p[0] - q[0], p[1] - q[1]) < k);
+
+// The planet's coasts, contoured coarse but simplified finely near the story's coast; the
+// higher ground in bands, like a relief map.
+const near = p => Math.hypot(p[0] - P3[0], p[1] - P3[1]);
+const tolAt = p => (near(p) < 7000 ? 8 : 34);
+const planetLoops = level =>
+  contour(-R, -R, R, R, 90, (x, y) => elevation(x, y, 8), level)
+    .filter(l => Math.abs(area(l)) > 1.2e5)
+    .map(l => ({ pts: simplify(l, tolAt), lake: area(l) > 0 }));
+const coastsLoops = planetLoops(0),
+  uplands = planetLoops(0.22),
+  highlands = planetLoops(0.42),
+  peaks = planetLoops(0.6);
 
 // ------------------------------------------------------------------ lights
 const g = rng(4);
@@ -158,42 +302,16 @@ const nightCities = [];
 for (let i = 0; i < 1100; i++) {
   const p = [-2000 + g() * 22000, -14000 + g() * 28000];
   if (Math.hypot(p[0], p[1]) > R * 0.97 || Math.hypot(p[0] - P2[0], p[1] - P2[1]) < 3200) continue;
-  const land = onLand(p) || otherPts.some(o => inside(p, o));
-  if (land && p[0] > 2500 + g() * 3000 && g() > 0.35) nightCities.push(p);
+  if (p[0] > 3500 + g() * 3000 && g() > 0.35 && elevation(p[0], p[1], 6) > 0.03) nightCities.push(p);
 }
 
 // ------------------------------------------------------------------ scale 0: the planet
-// The sun is to the left. Night is painted into the sea and land themselves (no shadow disc over
-// space): each continent's colours step from lit to dusk to night across it.
-const lit = x => Math.max(0, Math.min(1, (9000 - x) / 16000));
-// Sand only in full sun; grey stone into dusk; then the night.
-const landTone = L => (L > 0.75 ? 'accent' : L > 0.35 ? 'muted' : 'surface');
-const bbox = pts => {
-  const xs = pts.map(p => p[0]);
-  return [Math.min(...xs), Math.max(...xs)];
-};
-const landPaint = pts => {
-  const [x0, x1] = bbox(pts);
-  return { gradient: [0, 1, 2, 3].map(k => landTone(lit(x0 + ((x1 - x0) * k) / 3))), angle: 0 };
-};
-// Mountain spines: a jagged ridge, lit on its sunward face, shadowed behind.
-const ridge = (pts, seed) => {
-  const g2 = rng(seed),
-    out = [];
-  for (let i = 0; i < pts.length - 1; i++)
-    for (let k = 0; k < 6; k++) {
-      const t = k / 6,
-        [x, y] = [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t];
-      out.push([x + (g2() - 0.5) * 500, y + (g2() - 0.5) * 500]);
-    }
-  out.push(pts.at(-1));
-  return out;
-};
-const spines = [
-  ridge([[-1800, -6400], [-400, -3200], [600, 400], [1400, 2600]], 3),
-  ridge([[-12600, 4600], [-10600, 7200], [-8200, 10400]], 4),
-  ridge([[-8400, -12600], [-6600, -10600]], 5),
-];
+// The sun is to the left; the night is the sphere's own shadow laid over sea and land alike.
+const relief = (loops, fill, opacity) =>
+  loops
+    .filter(l => !l.lake)
+    .map(l => ({ type: 'path', d: compact(l.pts), fill, opacity, stroke: 'none', at: 0, enter: 'none' }));
+const lakes = loops => loops.filter(l => l.lake).map(l => ({ type: 'path', d: compact(l.pts), fill: 'accent2', opacity: 0.85, stroke: 'none', at: 0, enter: 'none' }));
 const planet = [
   {
     type: 'particles',
@@ -222,46 +340,17 @@ const planet = [
     enter: 'none',
   },
   // Ocean: sunlit teal on the left, deeper toward the far side.
-  { type: 'circle', cx: 0, cy: 0, r: R, fill: { gradient: ['accent2', 'surface', 'surface'], angle: 0 }, at: 0, enter: 'none' },
-  // Shallow water over the shelves, lit only where the sun is.
-  ...[mainPts, ...otherPts].map(pts => {
-    const [x0, x1] = bbox(pts);
-    return {
-      type: 'path',
-      d: compact(pts.filter((_, i) => i % 2 === 0)),
-      fill: 'none',
-      stroke: 'accent2',
-      width: 900,
-      join: 'round',
-      opacity: 0.13,
-      at: 0,
-      enter: 'none',
-    };
-  }),
-  // Land: sand and stone in the sun, fading through dusk into night.
-  ...[mainPts, ...otherPts].map(pts => ({ type: 'path', d: compact(pts), fill: landPaint(pts), opacity: 0.62, stroke: 'none', at: 0, enter: 'none' })),
-  // Green lowlands and pale desert on the sunlit south continent.
-  ...[
-    [-8600, 8800, 2600, 1500, 'positive', 0.2],
-    [-11200, 6200, 1900, 1100, 'ink', 0.12],
-    [-5600, -900, 1800, 1300, 'positive', 0.12],
-  ].map(([cx, cy, rx, ry, fill, opacity]) => ({
-    type: 'ellipse',
-    cx,
-    cy,
-    rx,
-    ry,
-    fill: { gradient: [fill, fill], radial: true, fade: true },
-    opacity,
-    at: 0,
-    enter: 'none',
-  })),
-  // Mountain ranges: the sunward face catches the light, the far face falls into shadow.
-  ...spines.flatMap(pts => [
-    { type: 'path', d: compact(pts.map(([x, y]) => [x + 260, y + 140]), false), fill: 'none', stroke: 'bg', width: 560, join: 'round', cap: 'round', opacity: 0.16, at: 0, enter: 'none' },
-    { type: 'path', d: compact(pts, false), fill: 'none', stroke: 'ink', width: 380, join: 'round', cap: 'round', opacity: 0.1, at: 0, enter: 'none' },
-    { type: 'path', d: compact(pts, false), fill: 'none', stroke: 'ink', width: 90, join: 'round', cap: 'round', opacity: 0.12, at: 0, enter: 'none' },
-  ]),
+  { type: 'circle', cx: 0, cy: 0, r: R, fill: { gradient: ['accent2', 'surface'], angle: 0 }, at: 0, enter: 'none' },
+  // Shallow water: a thin pale band along every coast, inside the sea.
+  ...coastsLoops
+    .filter(l => !l.lake)
+    .map(l => ({ type: 'path', d: compact(l.pts), fill: 'none', stroke: 'ink', width: 140, join: 'round', opacity: 0.1, at: 0, enter: 'none' })),
+  // Land in elevation bands: green coastal plains, dry uplands, grey highlands, pale peaks.
+  ...relief(coastsLoops, { gradient: ['positive', 'accent'], angle: 60 }, 0.78),
+  ...relief(uplands, 'accent', 0.6),
+  ...relief(highlands, 'muted', 0.7),
+  ...relief(peaks, 'ink', 0.55),
+  ...lakes(coastsLoops),
   // Weather: soft clusters of cloud drifting over the day side.
   ...[
     [-7000, 3000, 1.0],
@@ -292,15 +381,20 @@ const planet = [
   ),
   // Night: the sphere's own shadow, a curved terminator softened by overlapping lunes (each one
   // a half disc closed by an elliptical arc), darkest at the far limb.
-  ...Array.from({ length: 12 }, (_, i) => -0.7 + i * 0.1).map(k => ({
-    type: 'path',
-    d: `M 0 ${-R} A ${R} ${R} 0 0 1 0 ${R} A ${r(Math.max(1, Math.abs(k) * R))} ${R} 0 0 ${k > 0 ? 1 : 0} 0 ${-R} Z`,
-    fill: 'bg',
+  // The night side: one disc shaded by a smooth gradient, opaque on the far side and fading to
+  // nothing across the day side. With the sun side-on the terminator is a great circle seen
+  // edge-on, a straight soft band, and the disc's edge is the planet's own, so nothing steps.
+  {
+    type: 'circle',
+    cx: 0,
+    cy: 0,
+    r: R,
+    fill: { gradient: ['bg', 'bg'], angle: 180, fade: true },
     stroke: 'none',
-    opacity: 0.1,
+    opacity: 0.95,
     at: 0,
     enter: 'none',
-  })),
+  },
   // The atmosphere rings the whole disc, faint on the night side, so the sphere never ends at the
   // terminator.
   { type: 'circle', cx: 0, cy: 0, r: R + 60, fill: 'none', stroke: 'accent2', width: 120, opacity: 0.22, glow: { blur: 160, opacity: 0.7 }, at: 0, enter: 'none' },
@@ -370,54 +464,54 @@ const planet = [
 ];
 
 // ------------------------------------------------------------------ scale 1: the coast
-const coastLine = mainPts.filter((p, i) => {
-  const d = Math.hypot(p[0] - P1[0], p[1] - P1[1]);
-  return d < 6000 && (Math.hypot(p[0] - P2[0], p[1] - P2[1]) < 700 ? i % 2 === 0 : i % 4 === 0);
-});
-const lineD = pts => `M ${pts.map(([x, y]) => `${r(x)} ${r(y)}`).join(' L ')}`;
-// Inland relief: faint contour rings round a few hills, the way the land reads at night.
-const hills = [
-  [P1[0] - 1900, P1[1] - 700, 620],
-  [P1[0] - 2600, P1[1] + 900, 820],
-  [P1[0] - 900, P1[1] + 1700, 480],
-].flatMap(([cx, cy, rad]) =>
-  [1, 0.72, 0.46, 0.22].map(k => {
-    const pts = Array.from({ length: 14 }, (_, i) => {
-      const a = (i / 14) * Math.PI * 2,
-        w = 1 + 0.18 * Math.sin(3 * a + cx) + 0.1 * Math.sin(5 * a + cy);
-      return [cx + Math.cos(a) * rad * k * w, cy + Math.sin(a) * rad * k * w * 0.7];
-    });
-    return `${smoothPath([...pts, pts[0], pts[1]])}`;
-  }),
-);
+// The same field contoured finely around the story's coast: the coastline the camera flies
+// down to, and the higher ground inland as faint relief lines.
+const BOX = [P3[0] - 3300, P3[1] - 2000, P3[0] + 3300, P3[1] + 2000];
+const openLines = (loops, step) =>
+  loops.flatMap(l => {
+    // Break each loop where it runs along the box edge (the grid's border is forced to sea).
+    const edge = ([x, y]) => x < BOX[0] + step * 1.5 || x > BOX[2] - step * 1.5 || y < BOX[1] + step * 1.5 || y > BOX[3] - step * 1.5;
+    const runs = [];
+    let cur = [];
+    for (const p of l) {
+      if (edge(p)) {
+        if (cur.length > 2) runs.push(cur);
+        cur = [];
+      } else cur.push(p);
+    }
+    if (cur.length > 2) runs.push(cur);
+    return runs;
+  });
+const fineAt = level => contour(BOX[0], BOX[1], BOX[2], BOX[3], 8, (x, y) => elevation(x, y, 9), level);
+const coastLines = openLines(fineAt(0), 8).map(l => simplify([...l, l.at(-1)], () => 1.5));
+const reliefLines = [0.22, 0.42].flatMap(level => openLines(fineAt(level), 8).map(l => simplify([...l, l.at(-1)], () => 3)));
+const lineD = pts => compact(pts, false);
 const coast = [
-  ...chunked(hills.map(d => d + ' '), { type: 'path', fill: 'none', stroke: 'muted', width: 6, opacity: 0.16, at: 0, enter: 'fade', dur: 0.8 }),
+  ...chunked(reliefLines.filter(l => l.length > 6).map(l => lineD(l) + ' '), { type: 'path', fill: 'none', stroke: 'muted', width: 5, opacity: 0.16, at: 0, enter: 'none' }),
   // Moonlight on the open sea.
   {
     type: 'ellipse',
-    cx: r(P1[0] + 1500),
-    cy: r(P1[1] - 300),
+    cx: r(P3[0] + 2200),
+    cy: r(P3[1] - 600),
     rx: 1700,
     ry: 1000,
     fill: { gradient: ['accent2', 'accent2'], radial: true, fade: true },
     opacity: 0.14,
     at: 0,
-    enter: 'fade',
-    dur: 0.8,
+    enter: 'none',
   },
   // Surf along the shore, catching what light there is.
-  {
+  ...chunked(coastLines.map(l => lineD(l) + ' '), {
     type: 'path',
-    d: lineD(coastLine),
     fill: 'none',
     stroke: 'accent2',
-    width: 9,
-    opacity: 0.55,
-    glow: { blur: 30, opacity: 0.7 },
-    at: 0.1,
-    enter: 'draw',
-    dur: 1.6,
-  },
+    width: 7,
+    opacity: 0.6,
+    join: 'round',
+    glow: { blur: 22, opacity: 0.7 },
+    at: 0,
+    enter: 'none',
+  }),
   // The river, catching a little moonlight on its way to the sea.
   { type: 'path', d: smoothPath(riverPts), fill: 'none', stroke: 'surface', width: 22, cap: 'round', opacity: 0.9, at: 0.2, enter: 'draw', dur: 1.2 },
   { type: 'path', d: smoothPath(riverPts), fill: 'none', stroke: 'accent2', width: 4, cap: 'round', opacity: 0.4, at: 0.3, enter: 'draw', dur: 1.2 },
@@ -612,6 +706,9 @@ houses.forEach((hs, n) => {
         );
     }
 });
+// The street dissolves in over the city plan as the camera arrives, and back out as it leaves:
+// a handoff between scales, not a cut.
+const away = { exitAt: 3.7, exitDur: 0.6, exit: 'fade' };
 const street = [
   // A soft-edged backdrop: opaque where the camera looks, fading into the city around it.
   {
@@ -621,11 +718,12 @@ const street = [
     rx: 80,
     ry: 52,
     fill: { gradient: ['bg', 'bg', 'bg', 'bg'], radial: true, fade: true },
-    at: 0,
+    at: 0.5,
     enter: 'fade',
-    dur: 0.25,
+    dur: 0.9,
+    ...away,
   },
-  { type: 'rect', x: wx - 30, y: wy - 18, w: 60, h: 34, fill: { gradient: ['bg', 'surface'], angle: 90 }, at: 0, enter: 'fade', dur: 0.3 },
+  { type: 'rect', x: wx - 30, y: wy - 18, w: 60, h: 34, fill: { gradient: ['bg', 'surface'], angle: 90 }, at: 0.5, enter: 'fade', dur: 0.9, ...away },
   ...houses.map(hs => ({
     type: 'rect',
     x: r(hs.x),
@@ -634,14 +732,15 @@ const street = [
     h: hs.h + 10,
     fill: { gradient: [hs.tone, 'bg'], angle: 90 },
     opacity: 0.9,
-    at: 0,
+    at: 0.5,
     enter: 'fade',
-    dur: 0.3,
+    dur: 0.9,
+    ...away,
   })),
-  ...houses.map(hs => ({ type: 'rect', x: r(hs.x - 0.4), y: r(hs.y - 0.6), w: hs.w + 0.8, h: 0.7, fill: 'bg', at: 0, enter: 'fade', dur: 0.3 })),
-  { type: 'group', at: 0, enter: 'fade', dur: 0.3, children: fac },
-  { type: 'rect', x: wx - 30, y: wy + 12, w: 60, h: 6, fill: 'bg', opacity: 0.9, at: 0, enter: 'fade', dur: 0.3 },
-  { type: 'particles', x: wx - 28, y: wy - 16, w: 56, h: 30, kind: 'dust', count: 14, seed: 9, size: 0.12, fill: 'ink', opacity: 0.4, at: 0.4, enter: 'fade', dur: 0.6 },
+  ...houses.map(hs => ({ type: 'rect', x: r(hs.x - 0.4), y: r(hs.y - 0.6), w: hs.w + 0.8, h: 0.7, fill: 'bg', at: 0.5, enter: 'fade', dur: 0.9, ...away })),
+  { type: 'group', at: 0.5, enter: 'fade', dur: 0.9, ...away, children: fac },
+  { type: 'rect', x: wx - 30, y: wy + 12, w: 60, h: 6, fill: 'bg', opacity: 0.9, at: 0.5, enter: 'fade', dur: 0.9, ...away },
+  { type: 'particles', x: wx - 28, y: wy - 16, w: 56, h: 30, kind: 'dust', count: 14, seed: 9, size: 0.12, fill: 'ink', opacity: 0.4, at: 0.6, enter: 'fade', dur: 0.8, ...away },
   {
     type: 'text',
     text: 'ONE WINDOW, STILL LIT',
@@ -651,10 +750,10 @@ const street = [
     font: 'semibold',
     tracking: 0.3,
     fill: 'ink',
-    at: 0.6,
+    at: 1.2,
     enter: 'fade',
     dur: 0.4,
-    exitAt: 3.6,
+    exitAt: 3.4,
     exit: 'fade',
   },
 ];
@@ -681,10 +780,12 @@ const book = {
   lens: { grade: 'teal-orange', gradeAmount: 0.5, bloom: 0.45, blur: 0 },
   note: "One world at four scales, each ten times smaller than the last; the camera zooms at a constant pace in log space. Each scale is drawn inside the one before (library/playbooks/_zoom-journey.mjs): the coast is the continent's own outline, carrying finer bays only where the camera goes; the city's lights are the specks seen from orbit. Strokes and type are sized for the zoom they are seen at. The planet is stylised: do not add real coastlines without verified geography.",
   beats: [
-    W('planet', 'From out here, the planet looks calm.', view(P3[0], P3[1], 52000), planet, { transition: 'cut' }, { viewFrom: view(1500, -800, 52000), viewAt: 0, viewDur: 2.4 }),
-    W('coast', 'Come closer, and there is a coast,', coastView(), coast, { hold: 0.8 }, { viewAt: 0, viewDur: 2.2 }),
-    W('city', 'a city that never quite sleeps,', cityView(), city, { hold: 0.8 }, { viewAt: 0, viewDur: 2.2 }),
-    W('window', 'and one window, still lit.', view(wx, wy + 1, 52), street, { hold: 1 }, { viewAt: 0, viewDur: 2.2 }),
+    // One unbroken push: each scale's move begins before the last one has settled (a negative
+    // viewAt starts it in the outgoing shot), and the camera keeps creeping in while it holds.
+    W('planet', 'From out here, the planet looks calm.', view(P3[0], P3[1], 52000), planet, { transition: 'cut' }, { viewFrom: view(1500, -800, 52000), viewAt: 0, viewDur: 2.4, viewDrift: 0.05 }),
+    W('coast', 'Come closer, and there is a coast,', coastView(), coast, { hold: 0.6 }, { viewAt: -0.9, viewDur: 2.7, viewDrift: 0.08 }),
+    W('city', 'a city that never quite sleeps,', cityView(), city, { hold: 0.6 }, { viewAt: -0.9, viewDur: 2.5, viewDrift: 0.08 }),
+    W('window', 'and one window, still lit.', view(wx, wy + 1, 52), street, { hold: 1 }, { viewAt: -0.9, viewDur: 2.5, viewDrift: 0.06 }),
     W(
       'whole',
       'Every story is that small, and that big.',
@@ -706,7 +807,7 @@ const book = {
         },
       ],
       { hold: 0.8 },
-      { viewAt: 0, viewDur: 3 },
+      { viewAt: -0.4, viewDur: 3, viewDrift: 0.04 },
     ),
     // Further back still: the whole planet in the dark, and the line to take away.
     W(

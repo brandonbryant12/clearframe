@@ -71,7 +71,7 @@
     {
       "id": "card-2",
       "block": "canvas",
-      "transition": "whip",
+      "transition": "cut",
       "vo": "One idea.",
       "props": {
         "sketch": "card",

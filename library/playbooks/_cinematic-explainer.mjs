@@ -334,43 +334,46 @@ const block = (x, w) => [
 ];
 // The tap house, cut open: its walls in section, a kitchen with a sink, the riser coming up
 // through the floor to the tap.
-const TAP = [4486, 572];
+// The tap house, cut open in section: two storeys at the same floor height as its neighbours, a
+// kitchen downstairs with the riser coming up through the floor to the tap, a lamp upstairs.
+const FLOOR = 92;
+const CUT = { x: 4250, w: 300 };
+const TAP = [CUT.x + 150, G0 - 52];
 const cutaway = (x, w) => [
-  // The room behind the cut: a lit interior (a warm back wall, a window onto the morning).
-  { type: 'rect', x, y: G0 - 300, w, h: 300, fill: { gradient: ['accent', 'muted', 'surface'], angle: 90 } },
-  { type: 'rect', x, y: G0 - 300, w, h: 300, fill: { gradient: ['ink', 'ink'], radial: true, fade: true }, opacity: 0.18 },
-  { type: 'rect', x: x + 40, y: G0 - 250, w: 96, h: 96, fill: { gradient: ['accent2', 'accent'], angle: 90 }, stroke: 'surface', width: 6 },
-  { type: 'line', x1: x + 88, y1: G0 - 250, x2: x + 88, y2: G0 - 154, stroke: 'surface', width: 5 },
-  // A shelf and a hanging lamp.
-  { type: 'rect', x: x + 180, y: G0 - 220, w: 150, h: 8, fill: 'surface' },
-  { type: 'line', x1: x + w / 2 + 40, y1: G0 - 300, x2: x + w / 2 + 40, y2: G0 - 240, stroke: 'bg', width: 3 },
-  { type: 'path', d: `M ${x + w / 2 + 16} ${G0 - 240} h 48 l -8 -22 h -32 Z`, fill: 'bg', stroke: 'none' },
-  { type: 'ellipse', cx: x + w / 2 + 40, cy: G0 - 200, rx: 90, ry: 60, fill: { gradient: ['ink', 'accent'], radial: true, fade: true }, opacity: 0.35 },
-  // The cut: walls, floor and roof drawn solid in section, edged in the low sun.
-  { type: 'rect', x: x - 16, y: G0 - 300, w: 18, h: 300, fill: 'bg', stroke: 'muted', width: 2 },
-  { type: 'rect', x: x + w - 2, y: G0 - 300, w: 18, h: 300, fill: 'bg', stroke: 'muted', width: 2 },
-  { type: 'rect', x: x - 16, y: G0 - 304, w: w + 32, h: 14, fill: 'bg', stroke: 'muted', width: 2 },
+  // Rooms behind the cut: warm walls, a window each floor.
+  { type: 'rect', x, y: G0 - 2 * FLOOR, w, h: 2 * FLOOR, fill: { gradient: ['accent', 'muted', 'surface'], angle: 90 } },
+  { type: 'rect', x, y: G0 - 2 * FLOOR, w, h: 2 * FLOOR, fill: { gradient: ['ink', 'ink'], radial: true, fade: true }, opacity: 0.16 },
+  ...[0, 1].map(f => ({ type: 'rect', x: x + 30, y: G0 - (f + 1) * FLOOR + 22, w: 44, h: 50, fill: { gradient: ['accent2', 'accent'], angle: 90 }, stroke: 'surface', width: 4 })),
+  // Upstairs: a lamp and a shelf.
+  { type: 'line', x1: x + w - 80, y1: G0 - 2 * FLOOR, x2: x + w - 80, y2: G0 - 2 * FLOOR + 28, stroke: 'bg', width: 2 },
+  { type: 'path', d: `M ${x + w - 96} ${G0 - 2 * FLOOR + 40} h 32 l -6 -12 h -20 Z`, fill: 'bg', stroke: 'none' },
+  { type: 'ellipse', cx: x + w - 80, cy: G0 - 2 * FLOOR + 56, rx: 60, ry: 36, fill: { gradient: ['ink', 'accent'], radial: true, fade: true }, opacity: 0.35 },
+  { type: 'rect', x: x + 110, y: G0 - 2 * FLOOR + 50, w: 80, h: 5, fill: 'surface' },
+  // The cut: walls, floor slab and roof drawn solid in section, edged in the low sun.
+  { type: 'rect', x: x - 12, y: G0 - 2 * FLOOR, w: 14, h: 2 * FLOOR, fill: 'bg', stroke: 'muted', width: 2 },
+  { type: 'rect', x: x + w - 2, y: G0 - 2 * FLOOR, w: 14, h: 2 * FLOOR, fill: 'bg', stroke: 'muted', width: 2 },
+  { type: 'rect', x: x - 12, y: G0 - FLOOR - 5, w: w + 24, h: 10, fill: 'bg', stroke: 'muted', width: 2 },
+  { type: 'rect', x: x - 12, y: G0 - 2 * FLOOR - 4, w: w + 24, h: 10, fill: 'bg', stroke: 'muted', width: 2 },
   {
     type: 'poly',
     points: [
-      [x - 34, G0 - 290],
-      [x + w / 2, G0 - 392],
-      [x + w + 34, G0 - 290],
-      [x + w + 6, G0 - 290],
-      [x + w / 2, G0 - 366],
-      [x - 6, G0 - 290],
+      [x - 26, G0 - 2 * FLOOR - 2],
+      [x + w / 2, G0 - 2 * FLOOR - 82],
+      [x + w + 26, G0 - 2 * FLOOR - 2],
+      [x + w + 4, G0 - 2 * FLOOR - 2],
+      [x + w / 2, G0 - 2 * FLOOR - 62],
+      [x - 4, G0 - 2 * FLOOR - 2],
     ],
     closed: true,
     fill: { gradient: ['surface', 'muted'], angle: 0 },
     stroke: 'bg',
     width: 2,
   },
-  { type: 'line', x1: x + w / 2, y1: G0 - 392, x2: x + w + 34, y2: G0 - 290, stroke: 'accent', width: 3, opacity: 0.7 },
-  // The kitchen: a counter, the sink set in it, a cupboard below.
-  { type: 'rect', x: x + 90, y: G0 - 92, w: 200, h: 92, fill: 'surface', stroke: 'bg', width: 2 },
-  { type: 'line', x1: x + 190, y1: G0 - 86, x2: x + 190, y2: G0 - 6, stroke: 'bg', width: 2 },
-  { type: 'rect', x: x + 80, y: G0 - 100, w: 220, h: 12, fill: 'ink', opacity: 0.85 },
-  { type: 'path', d: `M ${x + 140} ${G0 - 100} q 50 30 100 0`, fill: 'bg', stroke: 'ink', width: 2, opacity: 0.9 },
+  { type: 'line', x1: x + w / 2, y1: G0 - 2 * FLOOR - 82, x2: x + w + 26, y2: G0 - 2 * FLOOR - 2, stroke: 'accent', width: 3, opacity: 0.7 },
+  // Downstairs: the kitchen counter with the sink set in it, a cupboard below.
+  { type: 'rect', x: x + 100, y: G0 - 36, w: 120, h: 36, fill: 'surface', stroke: 'bg', width: 2 },
+  { type: 'rect', x: x + 94, y: G0 - 42, w: 132, h: 7, fill: 'ink', opacity: 0.85 },
+  { type: 'path', d: `M ${TAP[0] - 26} ${G0 - 42} q 26 16 52 0`, fill: 'bg', stroke: 'ink', width: 2, opacity: 0.9 },
 ];
 const house = (x, w, kind) => (kind === 'terrace' ? terrace : kind === 'gabled' ? gabled : block)(x, w);
 const tree = (x, s = 1) => [
@@ -381,9 +384,9 @@ const tree = (x, s = 1) => [
     [32, -92, 46],
   ].map(([dx, dy, rr]) => ({ type: 'circle', cx: x + dx * s, cy: G0 + dy * s, r: rr * s, fill: { gradient: ['positive', 'surface'], angle: 60 }, opacity: 0.85 })),
 ];
-const branchXs = [3790, 4060, TAP[0] - 46, 4800];
+const branchXs = [3790, 4060, TAP[0] - 34, 4800];
 const city = [
-  ...pipe(`M 3330 640 L 3330 800 L 5000 800`, 0, undefined, { dur: 2.2 }),
+  ...pipe(`M 3330 640 L 3330 800 L 5600 800`, 0, undefined, { dur: 2.2 }),
   {
     type: 'group',
     at: 0,
@@ -392,20 +395,29 @@ const city = [
       { type: 'group', children: house(3690, 200, 'terrace') },
       { type: 'group', children: tree(3940, 0.9) },
       { type: 'group', children: house(3980, 170, 'gabled') },
-      { type: 'group', children: cutaway(4250, 380) },
-      { type: 'group', children: house(4690, 230, 'block') },
+      { type: 'group', children: cutaway(CUT.x, CUT.w) },
+      { type: 'group', children: house(4640, 230, 'block') },
       { type: 'group', children: tree(4960, 1.1) },
     ]),
   },
   { type: 'rect', x: 3340, y: G0 - 4, w: 1700, h: 8, fill: 'surface', at: 0, enter: 'none' },
-  ...pipe(branchXs.map(x => `M ${x} 800 L ${x} ${G0 - 2}`).join(' ') + ` M ${TAP[0] - 46} ${G0} L ${TAP[0] - 46} ${TAP[1] - 30} L ${TAP[0]} ${TAP[1] - 30}`, undefined, 'every', { dur: 0.8 }),
-  // The tap, and a drop forming under it.
+  ...pipe(
+    branchXs.map(x => `M ${x} 800 L ${x} ${x === TAP[0] - 34 ? G0 - 30 : G0 - 14}`).join(' ') + ` M ${TAP[0] - 34} ${G0 - 30} L ${TAP[0] - 34} ${G0 - 66} L ${TAP[0]} ${G0 - 66}`,
+    undefined,
+    'every',
+    { dur: 0.8 },
+  ),
+  // Each branch ends at a meter where it enters its building.
+  ...branchXs
+    .filter(x => x !== TAP[0] - 34)
+    .map(x => ({ type: 'rect', x: x - 11, y: G0 - 30, w: 22, h: 18, r: 3, fill: 'bg', stroke: 'ink', width: 2, say: 'every', enter: 'pop', dur: 0.3 })),
+  // The tap: a spout from the riser, and a drop forming under it.
   {
     type: 'path',
-    d: `M ${TAP[0] - 46} ${TAP[1] - 30} L ${TAP[0] + 4} ${TAP[1] - 30} L ${TAP[0] + 4} ${TAP[1] - 6}`,
+    d: `M ${TAP[0] - 2} ${G0 - 66} L ${TAP[0] + 6} ${G0 - 66} L ${TAP[0] + 6} ${G0 - 56}`,
     fill: 'none',
     stroke: 'ink',
-    width: 9,
+    width: 7,
     cap: 'round',
     join: 'round',
     say: 'tap',
@@ -414,23 +426,24 @@ const city = [
   },
   {
     type: 'circle',
-    cx: TAP[0] + 4,
-    cy: TAP[1] + 6,
-    r: 6,
+    cx: TAP[0] + 6,
+    cy: G0 - 50,
+    r: 4.5,
     fill: 'accent2',
     glow: { blur: 8 },
     say: 'tap',
-    loop: { type: 'float', period: 1.2, amount: 6 },
+    loop: { type: 'float', period: 1.2, amount: 4 },
   },
+  // The label sits in the sky above the house, clear of everything in it.
   {
     type: 'text',
     text: 'Your tap',
-    x: 4600,
-    y: G0 - 190,
+    x: CUT.x + CUT.w / 2,
+    y: G0 - 2 * FLOOR - 110,
     size: 48,
     font: 'bold',
     fill: 'ink',
-    anchor: 'end',
+    anchor: 'middle',
     say: 'every',
     shadow: { blur: 12, opacity: 0.8 },
     exitAt: 7,
@@ -538,7 +551,7 @@ const beats = [
       elements: [
         {
           type: 'path',
-          d: 'M 3330 800 L 5000 800',
+          d: 'M 3330 800 L 5600 800',
           fill: 'none',
           stroke: 'accent2',
           width: 40,
@@ -715,7 +728,7 @@ const beats = [
         // Below the cut: the pipe's whole underground run, picked out.
         {
           type: 'path',
-          d: 'M 1505 790 L 2620 790 M 3330 800 L 5000 800',
+          d: 'M 1505 790 L 2620 790 M 3330 800 L 5600 800',
           fill: 'none',
           stroke: 'accent2',
           width: 60,
@@ -736,7 +749,8 @@ const beats = [
     block: 'canvas',
     vo: 'So follow the water in your own city.',
     hold: 0.8,
-    transition: 'dissolve',
+    // A hard cut back to the street (its own slow push), not a double exposure.
+    transition: 'cut',
     props: {
       world: 'journey',
       view: [3310, -60, 2140, 1203.8],

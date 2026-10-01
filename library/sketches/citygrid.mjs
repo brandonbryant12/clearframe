@@ -65,6 +65,34 @@ export default {
         if (!onRiver(a, b)) lay(pt, wide ? bright : lamps);
         a += stepAt(pt[1]);
       }
+    // The streets themselves as lines of light, so the grid reads as a city plan, not a starfield.
+    const lineBands = Array.from({ length: BANDS }, () => []),
+      wideBands = Array.from({ length: BANDS }, () => []);
+    const trace = (pointAt, from, to, wide) => {
+      let prev = null;
+      for (let t = from; t <= to; ) {
+        const pt = pointAt(t),
+          ok = visible(pt[0], pt[1]) && !onRiver(...(pointAt.grid ? pointAt.grid(t) : [0, 0]));
+        // Some blocks are dark (parks, rail yards), so the plan is not a uniform mesh.
+        if (ok && prev && rand() > 0.18) {
+          const [x1, y1] = P(...prev),
+            [x2, y2] = P(...pt);
+          (wide ? wideBands : lineBands)[bandOf(pt[1])].push(`M${Math.round(x1)} ${Math.round(y1)}L${Math.round(x2)} ${Math.round(y2)}`);
+        }
+        prev = ok ? pt : null;
+        t += Math.max(0.5, pt[1] / 6);
+      }
+    };
+    for (const { a, wide } of avenues) {
+      const fn = b => G(a, b);
+      fn.grid = b => [a, b];
+      trace(fn, -80, 320, wide);
+    }
+    for (const { b, wide } of streets) {
+      const fn = a => G(a, b);
+      fn.grid = a => [a, b];
+      trace(fn, -90, 90, wide);
+    }
     // Windows and rooftops: scattered warm points inside the blocks.
     for (let i = 0; i < 1400; i++) {
       const a = -40 + 80 * rand(),
@@ -138,6 +166,51 @@ export default {
             : null,
         )
         .filter(Boolean);
+    const towers = [
+      [-2, 14, 11, 1.3],
+      [1.5, 15.5, 7, 1.1],
+      [-5, 17, 6, 1.2],
+      [4, 18, 9, 1.4],
+      [-1, 19.5, 15, 1.5],
+      [2.5, 21, 6.5, 1.1],
+      [-4, 22, 10, 1.3],
+      [6, 23, 5, 1.2],
+      [0.5, 24.5, 8, 1.1],
+      [-7, 25, 4.5, 1.3],
+      [3.5, 26.5, 12, 1.2],
+      [-2.5, 28, 6, 1.0],
+      [8, 30, 4, 1.4],
+      [-6, 31, 5.5, 1.1],
+      [1, 33, 7, 1.2],
+    ]
+      .map(([a, b, ht, wd]) => ({ pt: G(a, b), ht, wd }))
+      .filter(({ pt }) => visible(pt[0], pt[1]))
+      .sort((p, q) => q.pt[1] - p.pt[1])
+      .flatMap(({ pt, ht, wd }, k) => {
+        const [x, y] = P(...pt),
+          s = f / pt[1],
+          tw = wd * s,
+          th = ht * s * 0.7,
+          rows = Math.floor(ht * 2.2),
+          cols = 3;
+        const lights = [];
+        for (let r = 0; r < rows; r++)
+          for (let c = 0; c < cols; c++)
+            if (rand() > 0.35) lights.push(`M${round(x - tw / 2 + tw * (c + 0.5) / cols)} ${round(y - th + th * (r + 0.6) / (rows + 0.4))}h.1`);
+        return [
+          { type: 'rect', x: round(x - tw / 2), y: round(y - th), w: round(tw), h: round(th), fill: { gradient: ['surface', 'bg'], angle: 90 }, at: 0, enter: 'none' },
+          // Rim light from the horizon glow on one edge, and the city's glow at the foot.
+          { type: 'rect', x: round(x - tw / 2), y: round(y - th), w: round(Math.max(1.2, tw * 0.07)), h: round(th), fill: 'accent2', opacity: 0.45, at: 0, enter: 'none' },
+          { type: 'rect', x: round(x - tw / 2), y: round(y - th * 0.25), w: round(tw), h: round(th * 0.25), fill: { gradient: ['accent', 'accent'], angle: 270, fade: true }, opacity: 0.25, at: 0, enter: 'none' },
+          { type: 'path', d: lights.join(''), fill: 'none', stroke: 'accent', width: round(Math.max(1.4, s * 0.12)), cap: 'round', opacity: 0.85, glow: { blur: 3, opacity: 0.7 }, at: 0, enter: 'none' },
+          ...(ht > 8
+            ? [
+                { type: 'line', x1: round(x), y1: round(y - th), x2: round(x), y2: round(y - th - s * 3), stroke: 'muted', width: round(Math.max(1, s * 0.08)), at: 0, enter: 'none' },
+                { type: 'circle', cx: round(x), cy: round(y - th - s * 3), r: round(Math.max(2, s * 0.12)), fill: 'negative', glow: { blur: 8, opacity: 1 }, at: 0, enter: 'none', loop: { type: 'blink', period: 1.4 + k * 0.2, amount: 0.9 } },
+              ]
+            : [{ type: 'circle', cx: round(x), cy: round(y - th), r: round(Math.max(1.5, s * 0.08)), fill: 'negative', glow: { blur: 6, opacity: 1 }, at: 0, enter: 'none', loop: { type: 'blink', period: 1.8 + k * 0.3, amount: 0.9 } }]),
+        ];
+      });
     const dim = [...lamps.keys()].flatMap(i => chunks([...lamps[i], ...bright[i]]).map(d => ({
       type: 'path',
       d,
@@ -182,12 +255,39 @@ export default {
           enter: 'none',
           glow: { blur: 4, color: 'accent', opacity: 0.9 },
           children: [
+            ...lineBands.flatMap((ds, i) =>
+              chunks(ds).map(d => ({
+                type: 'path',
+                d,
+                fill: 'none',
+                stroke: 'accent',
+                width: round(Math.max(0.7, Math.min(3, (f * 0.025) / bandDepth(i)))),
+                opacity: 0.3,
+                at: 0,
+                enter: 'none',
+              })),
+            ),
+            ...wideBands.flatMap((ds, i) =>
+              chunks(ds).map(d => ({
+                type: 'path',
+                d,
+                fill: 'none',
+                stroke: 'accent',
+                width: round(Math.max(1, Math.min(5, (f * 0.05) / bandDepth(i)))),
+                opacity: 0.6,
+                at: 0,
+                enter: 'none',
+              })),
+            ),
             ...bandGroup(windows, 'accent', 0.5, 0.045),
             ...bandGroup(lamps, 'accent', 0.95, 0.07),
             ...bandGroup(embank, 'accent2', 0.95, 0.09),
             ...bandGroup(bright, 'ink', 1, 0.1),
           ],
         },
+        // Downtown: a cluster of towers standing up out of the plan, far ones first, with lit
+        // windows and aviation lights; the tallest carries a spire.
+        ...towers,
         {
           type: 'path',
           d: lane(0),

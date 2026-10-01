@@ -408,42 +408,6 @@
             "morphDur": 0.6
           },
           {
-            "id": "left",
-            "type": "rect",
-            "x": -40,
-            "y": -40,
-            "w": 0,
-            "h": 1160,
-            "fill": "ink",
-            "at": 0,
-            "dur": 0,
-            "morphDur": 0.2
-          },
-          {
-            "id": "right",
-            "type": "rect",
-            "x": 1960,
-            "y": -40,
-            "w": 0,
-            "h": 1160,
-            "fill": "ink",
-            "at": 0,
-            "dur": 0,
-            "morphDur": 0.2
-          },
-          {
-            "id": "floor",
-            "type": "rect",
-            "x": -40,
-            "y": 1080,
-            "w": 2000,
-            "h": 0,
-            "fill": "ink",
-            "at": 0,
-            "dur": 0,
-            "morphDur": 0.2
-          },
-          {
             "type": "text",
             "text": "THROUGH",
             "x": 196,
@@ -453,20 +417,7 @@
             "tracking": 0.03,
             "fill": "ink",
             "enter": "none",
-            "at": 0,
-            "keys": [
-              {
-                "at": 0,
-                "x": -140,
-                "dur": 0
-              },
-              {
-                "at": 0,
-                "x": 0,
-                "dur": 0.35,
-                "ease": "out"
-              }
-            ]
+            "at": 0
           },
           {
             "type": "text",
@@ -478,20 +429,43 @@
             "tracking": 0.03,
             "fill": "accent2",
             "enter": "none",
+            "at": 0
+          },
+          {
+            "id": "left",
+            "type": "rect",
+            "x": -260,
+            "y": -40,
+            "w": 0,
+            "h": 1160,
+            "fill": "ink",
             "at": 0,
-            "keys": [
-              {
-                "at": 0,
-                "x": -220,
-                "dur": 0
-              },
-              {
-                "at": 0,
-                "x": 0,
-                "dur": 0.42,
-                "ease": "out"
-              }
-            ]
+            "dur": 0,
+            "morphDur": 0.3
+          },
+          {
+            "id": "right",
+            "type": "rect",
+            "x": 2180,
+            "y": -40,
+            "w": 0,
+            "h": 1160,
+            "fill": "ink",
+            "at": 0,
+            "dur": 0,
+            "morphDur": 0.3
+          },
+          {
+            "id": "floor",
+            "type": "rect",
+            "x": -40,
+            "y": 1300,
+            "w": 2000,
+            "h": 0,
+            "fill": "ink",
+            "at": 0,
+            "dur": 0,
+            "morphDur": 0.3
           },
           {
             "id": "rule",

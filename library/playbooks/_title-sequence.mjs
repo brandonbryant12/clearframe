@@ -145,11 +145,8 @@ const beats = [
     camera: push,
     props: {
       elements: [
-        // The walls fly apart fast so the title is on clean paper by the first syllable.
+        // The sun is drawn first, so it never crosses over the type on its way.
         { id: 'sun', type: 'circle', cx: 1560, cy: 360, r: 140, fill: 'accent', ...hold, morphDur: 0.6 },
-        { id: 'left', type: 'rect', x: -40, y: -40, w: 0, h: 1160, fill: 'ink', ...hold, morphDur: 0.2 },
-        { id: 'right', type: 'rect', x: 1960, y: -40, w: 0, h: 1160, fill: 'ink', ...hold, morphDur: 0.2 },
-        { id: 'floor', type: 'rect', x: -40, y: 1080, w: 2000, h: 0, fill: 'ink', ...hold, morphDur: 0.2 },
         // One flush-left block: the two words, the rule and the line all hang from x = 200.
         {
           type: 'text',
@@ -160,13 +157,9 @@ const beats = [
           font: 'poster',
           tracking: 0.03,
           fill: 'ink',
-          // Riding in with the walls as they part: there from the first frame, never faded.
+          // In place from the first frame, uncovered as the walls part.
           enter: 'none',
           at: 0,
-          keys: [
-            { at: 0, x: -140, dur: 0 },
-            { at: 0, x: 0, dur: 0.35, ease: 'out' },
-          ],
         },
         {
           type: 'text',
@@ -179,11 +172,11 @@ const beats = [
           fill: 'accent2',
           enter: 'none',
           at: 0,
-          keys: [
-            { at: 0, x: -220, dur: 0 },
-            { at: 0, x: 0, dur: 0.42, ease: 'out' },
-          ],
         },
+        // The walls part over the title and wipe it into view (drawn after it, so they cover it).
+        { id: 'left', type: 'rect', x: -260, y: -40, w: 0, h: 1160, fill: 'ink', ...hold, morphDur: 0.3 },
+        { id: 'right', type: 'rect', x: 2180, y: -40, w: 0, h: 1160, fill: 'ink', ...hold, morphDur: 0.3 },
+        { id: 'floor', type: 'rect', x: -40, y: 1300, w: 2000, h: 0, fill: 'ink', ...hold, morphDur: 0.3 },
         { id: 'rule', type: 'rect', x: 206, y: 828, w: 1000, h: 16, fill: 'accent', enter: 'grow-x', at: 0.4, dur: 0.45 },
         {
           type: 'text',

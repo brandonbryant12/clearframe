@@ -38,8 +38,8 @@
   "rules": [
     "Three acts: a cold open (sketch signal), a rising montage of 2–4 s shots split by black type cards, a silence (sketch flatline), the title (sketch title), then a button.",
     "Every montage shot is a place the promise touches, drawn for this film (wires, citygrid, mast are examples): never a stock skyline reused from another film.",
-    "Cards are posters, not captions: a small lead line over one or two words in the poster face that fill the frame (sketch card, sketchText LEAD and CARD). Flares and streaks sit behind or under type, never through it, and no aberration on type.",
-    "One white flash in the film, on the title. Cut on action between moving shots, a whip into a card; each montage shot shorter than the last.",
+    "Cards are flat, matte posters: a small lead line over one or two words (sketch card, sketchText LEAD and CARD). The main title outranks them: bigger, backlit, filling with metal (sketch title). No glow or aberration on type.",
+    "Cut clean: hard cuts on action between moving shots, one white flash at the title, never a smeared whip or a dissolve. Each montage shot is shorter than the last.",
     "Compose the vertical cut for 9:16: stacked type within the middle 80% of the width, scenes staged tall (sketches get w and h)."
   ]
 }

@@ -167,7 +167,11 @@ export function cinemaScore(sb, beats, timed, transitions) {
   );
   // 6. Same grammar every beat.
   const kinds = new Set(beats.map(family)).size;
-  const cuts = shots.slice(1).map(x => (matched(beats[x.i - 1], beats[x.i]) ? 'match' : transitions[x.i]));
+  // A camera travelling through a world between two beats is its own kind of join.
+  const cuts = [
+    ...shots.slice(1).map(x => (matched(beats[x.i - 1], beats[x.i]) ? 'match' : transitions[x.i])),
+    ...beats.map((_, i) => (joined(i) ? 'world' : null)).filter(Boolean),
+  ];
   if (cuts.length >= 3 && new Set(cuts).size === 1 && kinds <= Math.max(2, n / 4))
     tell(
       'Same grammar every beat',

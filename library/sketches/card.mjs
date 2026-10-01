@@ -13,15 +13,15 @@ export default {
     const tallFrame = h > w,
       cx = round(w / 2),
       // Landscape cards sit in the middle of a 2.39 letterbox: ~0.74 of the frame height.
-      big = round(tallFrame ? w * 0.27 : h * 0.36),
+      big = round(tallFrame ? w * 0.2 : h * 0.24),
       lead = round(tallFrame ? w * 0.06 : h * 0.06),
-      base = round(h / 2 + big * 0.38),
-      origin = [cx, round(h / 2)];
-    const push = [
-      { at: 0, scale: 0.985, dur: 0 },
-      { at: 0, scale: 1.07, dur: 4.5, ease: 'linear' },
-    ];
+      base = round(h / 2 + big * 0.38);
     return {
+      // The camera keeps pushing in while the card holds: a moving shot, cut against moving shots.
+      view: [round(w * 0.035), round(h * 0.035), round(w * 0.93), round(h * 0.93)],
+      viewFrom: [0, 0, w, h],
+      viewAt: 0,
+      viewDur: 4.5,
       elements: [
         // A low warm haze behind the type, so black is never flat.
         {
@@ -72,8 +72,6 @@ export default {
         },
         {
           type: 'group',
-          origin,
-          keys: push,
           at: 0,
           enter: 'none',
           children: [
@@ -102,15 +100,15 @@ export default {
               tracking: 0.04,
               // Tall frames keep stacked type inside the middle 80%, even at the end of the push.
               fit: round(w * (tallFrame ? 0.72 : 0.84)),
-              fill: { gradient: ['muted', 'ink', 'ink', 'muted'], angle: 90 },
+              // Flat, matte type: the main title alone gets the metal and the backlight.
+              fill: 'ink',
               // On screen from the cut, sharpening out of a soft blur.
               at: 0,
               enter: 'none',
               keys: [
-                { at: 0, blur: 22, opacity: 0.55, dur: 0 },
-                { at: 0, blur: 0, opacity: 1, dur: 0.3, ease: 'out' },
+                { at: 0, blur: 8, opacity: 0.8, dur: 0 },
+                { at: 0, blur: 0, opacity: 1, dur: 0.14, ease: 'out' },
               ],
-              shine: { at: 0.35, dur: 1.1, angle: 24, width: 0.22 },
             },
           ],
         },
