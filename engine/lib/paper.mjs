@@ -78,7 +78,8 @@ export function paperEdit(root, { suggest = false } = {}) {
     if (b.chapter !== chapter) {
       chapter = b.chapter;
       const span = timing.beats.filter(x => x.chapter === chapter);
-      lines.push(`## ${chapter ?? 'Whole film'} (${t(span[0].start)}–${t(span.at(-1).end)})`, '');
+      const held = span.filter(x => raw.get(x.id)?.placeholder != null).length;
+      lines.push(`## ${chapter ?? 'Whole film'} (${t(span[0].start)}–${t(span.at(-1).end)}, ${span.length} beats${held ? `, ${held} placeholder(s)` : ''})`, '');
     }
     const meta = readJSONFile(path.join(root, 'assets', 'vo', `${b.id}.json`), null);
     lines.push(`### [${b.id}] ${t(b.start)}–${t(b.end)}${r.speaker ? ` · ${sb.speakers?.[r.speaker]?.name ?? r.speaker}` : ''} · ${r.block ?? 'beat'}`);

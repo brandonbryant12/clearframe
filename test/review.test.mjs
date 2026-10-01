@@ -18,7 +18,7 @@ import { frameRange } from '../fframes/render.mjs';
 import { writeReviewPage, inertJSON, esc } from '../engine/lib/review-page.mjs';
 import { runlogReport } from '../engine/lib/runlog.mjs';
 import { objectFile } from '../engine/lib/store.mjs';
-import { checkpoints } from '../engine/lib/checkpoints.mjs';
+import { checkpoints, coverage } from '../engine/lib/checkpoints.mjs';
 import { writeJSON } from '../engine/lib/util.mjs';
 import { classifyAudit, roughStandIns } from '../fframes/prepare.mjs';
 import { createJob } from '../fframes/job.mjs';
@@ -442,4 +442,19 @@ test('a cut and the beat it changes next to it are one passage; separate stretch
     { id: 'd', status: 'appearance' },
   ]), [{ beats: ['b', 'd'], removed: ['c'], before: [30, 120], after: [30, 90] }]);
   assert.equal(affectedPassages(A, A, [{ id: 'a', status: 'content' }, { id: 'd', status: 'content' }]).length, 2);
+});
+
+test('coverage counts each chapter: pictures, placeholders, unfinished elements and acceptance', async t => {
+  const root = draftProject(t);
+  edit(root, sb => {
+    sb.beats.forEach((b, i) => (b.chapter = i < 2 ? 'Setup' : 'World'));
+    sb.beats[4].placeholder = 'the ending, drawn later';
+    sb.beats[2].props.elements[0].unfinished = true;
+  });
+  const { revision } = await snapshot(root);
+  addDecision(root, { action: 'accept', role: 'human', by: 'Ana', said: 'the opening works', revision: revision.id, scope: { beats: ['open', 'turn'] } });
+  assert.deepEqual(coverage(root), [
+    { chapter: 'Setup', beats: 2, placeholders: 0, unfinished: 0, pictured: 2, accepted: 2 },
+    { chapter: 'World', beats: 3, placeholders: 1, unfinished: 1, pictured: 2, accepted: 0 },
+  ]);
 });

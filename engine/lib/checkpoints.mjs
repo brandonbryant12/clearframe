@@ -8,8 +8,8 @@ import path from 'node:path';
 import { loadStoryboard } from './project.mjs';
 import { plan } from './generate.mjs';
 import { computeTiming } from './timing.mjs';
-import { listRevisions } from './revisions.mjs';
-import { readDecisions, readNotes } from './notes.mjs';
+import { listRevisions, loadRevision } from './revisions.mjs';
+import { readDecisions, readNotes, acceptance } from './notes.mjs';
 
 const mtime = f => (fs.existsSync(f) ? fs.statSync(f).mtimeMs : 0);
 const answered = (text, prompt) => {
@@ -50,6 +50,31 @@ function milestone(root, { profiles, checkpoint, mode }) {
   const agent = [...decisions].reverse().find(d => d.role === 'agent' && d.action === 'decide' && d.scope?.checkpoint === checkpoint);
   const notes = readNotes(root).filter(n => n.author?.role === 'human' && watched.some(r => r.id === n.revision));
   return { latest, human, agent, notes, closed: !!human || (checkpoint === 'rough' && notes.length > 0) || (mode === 'one-shot' && !!agent) };
+}
+
+/**
+ * Progress by chapter, for showing a long film a chapter at a time while tracking the whole:
+ * beats, declared placeholders, elements marked unfinished, beats with a picture beyond their
+ * captions, and beats a person accepted (still accepted in the newest revision).
+ */
+export function coverage(root) {
+  const sb = loadStoryboard(root);
+  const latest = listRevisions(root).at(-1);
+  const accepted = latest ? acceptance(root, loadRevision(root, latest.id).timeline) : {};
+  const unfinished = b =>
+    JSON.stringify([b.props?.elements ?? [], b.art ?? {}]).match(/"unfinished":/g)?.length ?? 0;
+  const out = [];
+  for (const b of sb.beats) {
+    const name = b.chapter ?? 'Whole film';
+    let c = out.find(x => x.chapter === name);
+    if (!c) out.push((c = { chapter: name, beats: 0, placeholders: 0, unfinished: 0, pictured: 0, accepted: 0 }));
+    c.beats++;
+    if (b.placeholder != null) c.placeholders++;
+    c.unfinished += unfinished(b);
+    if (b.placeholder == null && b.block && b.block !== 'kinetic') c.pictured++;
+    if (['accepted', 'moved'].includes(accepted[b.id]?.state)) c.accepted++;
+  }
+  return out;
 }
 
 /** The checkpoints for a project: {id, name, ask, done, detail, question, decision?}. */

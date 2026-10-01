@@ -60,4 +60,4 @@ node engine/cli.mjs decide DIR r006 --checkpoint rough --reason "one-shot: all n
 
 ## Reporting
 
-`revisions DIR`, `diff DIR rA [rB]`, `checkpoints DIR` (Rough cut and Final close on decisions), `runlog DIR` (measured time only; gaps between commands are not work). When you summarize, separate: rendered (a revision exists), applied (a candidate exists), accepted (a person said so).
+`revisions DIR`, `diff DIR rA [rB]`, `checkpoints DIR` (Rough cut and Final close on decisions; coverage by chapter for long films), `runlog DIR` (measured time only; gaps between commands are not work). When you summarize, separate: rendered (a revision exists), applied (a candidate exists), accepted (a person said so).

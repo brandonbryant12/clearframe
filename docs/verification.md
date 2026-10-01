@@ -1,6 +1,18 @@
-# Native verification — 2026-09-28
+# Native verification
 
-## 0.3.0 redesign
+## Review and edit loop — 2026-10-01
+
+Run on the same Apple Silicon iMac with the warm renderer (the worktree reused a renderer binary built from byte-identical sources, matched by `rendererHash`).
+
+- **Tests:** `npm test` (through the codex-heavy gate) passes 111 Node tests, including `test/recording.test.mjs` (cuts sample-exact against the source, byte-identical undo, cross-beat deletion and restore, split/merge, pause tightening, the removal planner, rebuilt legacy transcripts, paper-edit strike-through) and `test/review.test.mjs` (notes across revisions, orphaned/stale/addressed states, split lineage, keeps, impact classification, safe reject and restore, object hash checks, range math, page escaping, stamps, decisions, the rough-audit classifier, chapter coverage, CLI help).
+- **End to end:** `scripts/review-e2e.mjs` on a 70.8 s two-speaker recording spoken by macOS voices with local Whisper words: 21/21 checks (rough cut frame count; a picture candidate whose before/after passages cover the same frames across a dissolve; the preview clock; audio cut from the full mix; a sentence cut that shortens the film by whole frames with later beats reported as moved; byte-identical reject and uncut; note states; the native rough-audit rules). Rough cut 32 s, picture candidate 17 s, sentence-cut candidate 41 s.
+- **Range previews on bundled examples:** inside night-city's canvas world, preview frames match the full film's frames at the same positions (44–53 dB) and not the next frame (18–42 dB); in launch-promo, the music drop planned at 11.70 s is heard at 2.00 s into a preview that starts at 9.70 s.
+- **Pages:** the review and compare pages were opened in headless Chrome; a note containing markup is shown as text.
+
+**Limits.** Synthetic voices and scripted decisions (`scripted-e2e`) stand in for a person; nothing here is a listening review or a person's acceptance. No paid call was made. Timings describe this machine and these fixtures only, not the seven-minute run on another computer.
+
+
+## 2026-09-28: 0.3.0 redesign
 
 Recorded in `build/native-verified-v3d/verification.json` (ignored build output) from `scripts/verify-native.mjs`, run through the codex-heavy gate on the same Apple Silicon iMac with a warm cache, after all fixes in this release.
 

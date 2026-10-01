@@ -501,12 +501,24 @@ async function main() {
     return console.log(lines.join('\n'));
   }
   if (cmd === 'checkpoints') {
-    const { checkpoints } = await import('./lib/checkpoints.mjs');
+    const { checkpoints, coverage } = await import('./lib/checkpoints.mjs');
     const guided = (o.mode ?? 'guided') !== 'one-shot';
     const list = checkpoints(dir, { mode: guided ? 'guided' : 'one-shot' });
+    const chapters = coverage(dir);
     if (o.json)
-      return console.log(JSON.stringify({ mode: guided ? 'guided' : 'one-shot', checkpoints: list }, null, 2));
+      return console.log(JSON.stringify({ mode: guided ? 'guided' : 'one-shot', checkpoints: list, coverage: chapters }, null, 2));
     const next = list.find(c => !c.done);
+    if (chapters.length > 1)
+      console.log(
+        [
+          'Coverage by chapter:',
+          ...chapters.map(
+            c =>
+              `  ${c.chapter.slice(0, 24).padEnd(24)} ${String(c.beats).padStart(3)} beats · ${c.pictured} with a picture · ${c.placeholders} placeholder(s)${c.unfinished ? ` · ${c.unfinished} unfinished element(s)` : ''} · ${c.accepted} accepted`,
+          ),
+          '',
+        ].join('\n'),
+      );
     return console.log(
       [
         `${guided ? 'Guided: stop and ask the person at each open checkpoint.' : 'One-shot: decide each open checkpoint yourself, log it under "## Decisions" in DIRECTION.md (rough cut and final: decide DIR rNNN), and publish the review page; spend still needs a budget.'}`,
