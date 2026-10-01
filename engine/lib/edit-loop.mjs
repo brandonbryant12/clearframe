@@ -22,7 +22,7 @@ import {
 import { readNotes, locate, setNoteStatus, checkKeeps, addDecision, readKeeps, readDecisions } from './notes.mjs';
 import { readEdits } from './recording.mjs';
 import { assetSrc } from './timing.mjs';
-import { checkId, putObject, readJSONFile, restoreObject, reviewPath, writeJSONAtomic } from './store.mjs';
+import { checkId, nextId, putObject, readJSONFile, restoreObject, reviewPath, writeJSONAtomic } from './store.mjs';
 import { phase } from './runlog.mjs';
 import { writeComparePage, writeReviewPage } from './review-page.mjs';
 
@@ -198,7 +198,9 @@ export async function compareRevisions(root, { from, to, handles = 2 }) {
     B = { meta: null, timeline: w.timeline };
     ctxB = w.ctx;
   } else B = loadRevision(root, checkId('revision', to));
-  const report = impact(A.timeline, B.timeline, { lineage: B.meta?.lineage ?? lineageOf(A.timeline, B.timeline, readEdits(root)), from, to: to ?? 'working' });
+  // A revision's stored lineage is relative to its parent; otherwise derive it for this pair.
+  const lineage = B.meta?.parent === A.meta.id ? B.meta.lineage : lineageOf(A.timeline, B.timeline, readEdits(root));
+  const report = impact(A.timeline, B.timeline, { lineage, from, to: to ?? 'working' });
   const shown = await passages(root, { A, B, report, handles, ctxB, tag: `cmp-${from}-${to ?? 'working'}` });
   const page = writeComparePage(root, { A, B, report, passages: shown });
   return { report, passages: shown, page };
@@ -311,7 +313,10 @@ export async function rejectRevision(root, { revision, note, by, said }) {
   writeStoryboard(root, sb);
   const decision = addDecision(root, { action: 'reject', role: 'human', by, said, revision, scope: note ? { note } : {} });
   if (note) setNoteStatus(root, note, 'open', { revision, by, reason: `${revision} rejected: ${said}` });
-  fs.appendFileSync(reviewPath(root, 'edits.jsonl'), JSON.stringify({ id: `x${Date.now()}`, op: 'reject', of: revision, beats: restored, conflicts, at: new Date().toISOString() }) + '\n');
+  fs.appendFileSync(
+    reviewPath(root, 'edits.jsonl'),
+    JSON.stringify({ id: nextId('x', readEdits(root).map(e => e.id)), op: 'reject', of: revision, beats: restored, conflicts, at: new Date().toISOString() }) + '\n',
+  );
   const { revision: after } = await snapshot(root, { kind: 'restored', reason: `rejected ${revision}: restored ${restored.join(', ') || 'nothing'} from ${P.meta.id}` });
   writeReviewPage(root);
   return { revision, parent: P.meta.id, restorePoint: point.id, now: after.id, restored, conflicts, decision: decision.id };

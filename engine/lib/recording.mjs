@@ -580,7 +580,7 @@ export function splitBeat(root, { beat, at, nth }, { by = { role: 'agent' } } = 
     });
     sb.beats.splice(x.index, 1, ...parts);
     writeJSONAtomic(path.join(root, 'storyboard.json'), sb);
-    const entry = { id: nextId('s', readEdits(root).map(e => e.id)), op: 'split', beat, into: ids, by };
+    const entry = { id: nextId('p', readEdits(root).map(e => e.id)), op: 'split', beat, into: ids, by };
     logEdit(root, entry);
     return entry;
   });
@@ -626,6 +626,8 @@ export function mergeBeats(root, { beats: [first, second] }, { by = { role: 'age
 }
 
 // ------------------------------------------------------------------ the edit log
+// review/edits.jsonl, one line per edit: c001 cut, u001 uncut, p001 split, m001 merge,
+// x001 a rejected candidate's restore (written by edit-loop.mjs).
 
 export function readEdits(root) {
   const file = reviewPath(root, 'edits.jsonl');

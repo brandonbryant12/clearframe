@@ -318,7 +318,7 @@ export function lineageOf(prev, next, edits = []) {
   for (const b of prev.beats)
     if (!after.has(b.id)) {
       const into = next.beats.filter(n => (n.was ?? []).includes(b.id)).map(n => n.id);
-      const cut = edits.find(e => e.op === 'cut' && e.beats?.some(p => p.beat === b.id && p.deleted));
+      const cut = [...edits].reverse().find(e => e.op === 'cut' && e.beats?.some(p => p.beat === b.id && p.deleted));
       removed[b.id] = into.length
         ? { into }
         : { deleted: true, ...(cut ? { by: cut.id, words: cut.words } : {}), text: b.vo?.text ?? null };
