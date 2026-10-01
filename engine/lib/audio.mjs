@@ -149,7 +149,10 @@ export async function draftMusic(output, { seconds = 60, bpm = 72, style = 'pad'
   const voices = [0, 1, 2, 3]
     .map(k => `${[0.32, 0.22, 0.2, 0.12][k]}*sin(2*PI*(${sel(k)})*t)*(1+0.004*sin(2*PI*0.3*t))`)
     .join('+');
-  const expr = `(${voices})*${env}*0.5`;
+  // A bed in sections, not a static pad: it starts sparse, builds toward the last third of the
+  // film, then settles under the ending.
+  const arc = `(0.55+0.45*min(1,t/${(seconds * 0.7).toFixed(2)}))*(1-0.35*clip((t-${(seconds * 0.85).toFixed(2)})/${(seconds * 0.15).toFixed(2)},0,1))`;
+  const expr = `(${voices})*${env}*${arc}*0.5`;
   await ffmpeg([
     '-y',
     '-f',

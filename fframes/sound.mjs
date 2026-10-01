@@ -9,8 +9,9 @@ export function soundDesign(job, sfx) {
   const level = sfx === true ? 'normal' : sfx;
   if (!LEVELS[level]) return [];
   const cues = [];
+  // Nothing fires on the first frames: a film opens on its picture, not on a click.
   const add = (name, t, volume, weight = 1) => {
-    if (t >= 0 && t < job.frames / job.fps) cues.push({ name, t, volume: volume * LEVELS[level], weight });
+    if (t >= 0.2 && t < job.frames / job.fps) cues.push({ name, t, volume: volume * LEVELS[level], weight });
   };
   for (const b of job.beats) {
     const start = b.start_frame / job.fps,
@@ -42,7 +43,8 @@ export function soundDesign(job, sfx) {
     for (const el of [...(b.block === 'canvas' ? b.props.elements : []), ...(b.art?.over ?? [])]) {
       if (el.type === 'text' && el.count) add('thud', start + el.at + el.count.dur, 0.28, 3);
       // A bar growing into place lands with a soft tock, one per value.
-      else if (el.type === 'rect' && ['grow', 'grow-x', 'grow-y'].includes(el.enter) && grows < 6) {
+      // A chart landing gets one soft tock, on its first bar: a burst of ticks is noise.
+      else if (el.type === 'rect' && ['grow', 'grow-x', 'grow-y'].includes(el.enter) && grows < 1) {
         add('tock', start + el.at + (el.dur ?? 0.6) * 0.8, 0.12, 0);
         grows++;
       }

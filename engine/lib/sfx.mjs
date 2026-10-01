@@ -90,6 +90,12 @@ export const SFX = {
     filters: 'highpass=f=1800,lowpass=f=9000',
     about: 'an air brake hissing (a bus stopping)',
   },
+  lap: {
+    dur: 3.2,
+    expr: `0.22*${noise}*(0.55+0.45*sin(2*PI*0.45*t))*(0.6+0.4*sin(2*PI*1.3*t+1))*sin(PI*t/3.2)`,
+    filters: 'lowpass=f=900,highpass=f=120',
+    about: 'water lapping against a hull or a quay',
+  },
   drop: {
     dur: 0.45,
     expr: '0.5*sin(2*PI*(1400*t-1700*t*t))*exp(-14*t)',

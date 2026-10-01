@@ -28,7 +28,12 @@ const FILMS = [
   {
     name: 'plates-harbor',
     copy: 'build/plates-demo',
-    edit: sb => (sb.assets[0].ground = 'water'),
+    edit: sb => {
+      sb.assets[0].ground = 'water';
+      sb.sfx = 'subtle';
+      // The harbour heard: water at the hull under the line.
+      sb.beats[0].sfx = [{ src: 'lap', at: 0.3, volume: 0.5 }];
+    },
     why: 'generated depth plates (cached images; no new spend)',
   },
 ];
