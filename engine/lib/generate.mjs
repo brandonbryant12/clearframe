@@ -1,6 +1,7 @@
 // Generative assets, cached by content hash so nothing is paid for twice.
 // Order of preference: code (free) → draft (free, local) → Gemini (paid, only what the storyboard asks for).
 import fs from 'node:fs';
+import { planTakes, takeSpec } from './takes.mjs';
 import { CHROMA, keyOut } from './plates.mjs';
 import path from 'node:path';
 import { analyseVoice, cleanVoice, draftMusic, draftVoice } from './audio.mjs';
@@ -499,10 +500,17 @@ export function plan(root) {
   const P = paths(root);
   const timing = computeTiming(root);
   const rows = [];
+  // Continuous takes: a beat is recorded when its take's current spec matches what was made.
+  const takeHash = new Map();
+  for (const take of planTakes(sb)) {
+    const h = hashOf(takeSpec(sb, take, sb.voice.provider));
+    for (const b of take.beats) takeHash.set(b.id, h);
+  }
   for (const b of sb.beats.filter(x => x.vo)) {
     const meta = readJSON(path.join(P.vo, `${b.id}.json`), null);
     const done =
-      ((meta?.provider === 'gemini' && meta.hash === hashOf(voiceSpec(sb, b, 'gemini'))) ||
+      ((meta?.provider === 'gemini' &&
+        (meta.take ? meta.take.hash === takeHash.get(b.id) : meta.hash === hashOf(voiceSpec(sb, b, 'gemini')))) ||
         (meta?.provider === 'imported' && meta.textHash === hashOf(b.vo))) &&
       nonempty(path.join(P.vo, `${b.id}.wav`));
     const secs = estimateDuration(b.vo, sb.voice.wpm);

@@ -43,6 +43,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 
   They score 100 on the cinema score, up from 25–63. A beat's `art` can name a sketch (`{"sketch": "ambient"}`).
 - **Fixed:** `view: "auto"` on a canvas was mistaken for a camera rect (the string has four characters) and failed to render.
+- **One shot or guided.** `docs/collaboration.md` breaks down where a human changes the outcome: intent, truth, story and look, narration, spend, picture and final. Timing, layout, cues and sound placement never need a human. `clearframe checkpoints DIR [--mode guided|one-shot]` reports each checkpoint's state and the question to ask, or tells a one-shot agent to decide and log under `## Decisions`. The `clearframe` skill and AGENTS.md set guided as the default. Fixed along the way: `plan` now recognises voices recorded as continuous takes, which it had counted as still owed.
 - **A creative seed.** `clearframe muse --seed N` draws a brief from curated options:
   - a structural twist and a recurring motif;
   - camera and cut signatures, and type motion;

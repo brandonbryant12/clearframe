@@ -16,6 +16,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
 
   new <dir> [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical] [--seed N|random]
   muse [--seed N] [--light] [--json]  a seeded creative brief: twist, motif, camera, cuts, look, set pieces, music
+  checkpoints <dir> [--mode guided|one-shot] [--json]   where a human decides (intent, truth, story, words, spend, picture, final) and what is open
   treatments [--json]                 art direction presets: look, motion, voice, sound and rules
   reference <video> [--out dir]       cut rhythm, keyframe sheet, palette and motion of a reference film
   ingest <dir> --markdown report.md [--treatment noir]   evidence brief (figures, sources, tensions, tables) + storyboard + DIRECTION.md
@@ -61,6 +62,7 @@ async function main() {
   const [cmd, ...args] = process.argv.slice(2);
   const strings = [
     'seed',
+    'mode',
     'library',
     'title',
     'theme',
@@ -417,6 +419,23 @@ async function main() {
     }
     lines.push(`done in ${((performance.now() - t0) / 1000).toFixed(1)} s. Open the sheet before anything else.`);
     return console.log(lines.join('\n'));
+  }
+  if (cmd === 'checkpoints') {
+    const { checkpoints } = await import('./lib/checkpoints.mjs');
+    const list = checkpoints(dir),
+      guided = (o.mode ?? 'guided') !== 'one-shot';
+    if (o.json)
+      return console.log(JSON.stringify({ mode: guided ? 'guided' : 'one-shot', checkpoints: list }, null, 2));
+    const next = list.find(c => !c.done);
+    return console.log(
+      [
+        `${guided ? 'Guided: stop and ask the person at each open checkpoint.' : 'One-shot: decide each open checkpoint yourself and log the decision under "## Decisions" in DIRECTION.md (spend still needs a budget).'}`,
+        ...list.map(c => `${c.done ? '✓' : '○'} ${c.name.padEnd(15)} ${c.detail}`),
+        next
+          ? `\nNext: ${next.name}. ${guided || next.id === 'spend' ? `Ask: "${next.question}"` : 'Decide, then log what you chose and why.'}`
+          : '\nEvery checkpoint is closed.',
+      ].join('\n'),
+    );
   }
   if (cmd === 'critique') {
     const { critique } = await import('./lib/critique.mjs');
