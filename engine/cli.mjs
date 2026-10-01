@@ -47,6 +47,9 @@ const HELP = `ClearFrame — FFFrames motion graphics
   sheet <dir> [--per 1|2|3] [--grid] [--draft] [--out sheet.png]   --grid: labelled 100 px coordinates for placing art
   looks <dir> [--beat id] [--draft]    compare the same frame in every palette
   review <dir> [--beat id] [--video film.mp4]  decoded cut/word-boundary filmstrip
+  qa <dir> [--video film.mp4] [--loop]  time bugs in the encoded film: one-frame pops, held stretches,
+                                      world seams, export tags, loudness, the drop; timeline + phone sheets
+  beatmap <dir | track>               the music's tempo and measured drop, and each cut against its beat grid
   render | preview <dir> [--draft] [--out film.mp4] [--no-audio] [--force]
   draft <dir> [--no-render]           one pass, one queue wait: critique, draft voice, check, sheet, draft MP4
 
@@ -105,6 +108,7 @@ async function main() {
     'no-render',
     'dry-run',
     'light',
+    'loop',
   ];
   const { values: o, positionals } = parseArgs({
     args,
@@ -339,6 +343,12 @@ async function main() {
     }
     throw new Error('ingest needs --markdown FILE or --audio FILE --words FILE');
   }
+  if (cmd === 'beatmap' && positionals[0] && fs.statSync(positionals[0]).isFile()) {
+    const { analyseTrack } = await import('./lib/beatmap.mjs');
+    const r = analyseTrack(path.resolve(positionals[0]));
+    if (o.json) return console.log(JSON.stringify(r, null, 2));
+    return console.log(beatmapText(r));
+  }
   const dir = resolveProject(positionals[0]);
   if (['plan', 'voice', 'music', 'images', 'clips'].includes(cmd)) {
     const g = await import('./lib/generate.mjs');
@@ -448,7 +458,9 @@ async function main() {
     return console.log(
       r.findings.length
         ? r.findings
-            .map(f => `${f.level === 'error' ? '✗' : f.level === 'warn' ? '!' : '·'} ${f.where.padEnd(18)} ${f.message}`)
+            .map(
+              f => `${f.level === 'error' ? '✗' : f.level === 'warn' ? '!' : '·'} ${f.where.padEnd(18)} ${f.message}`,
+            )
             .join('\n')
         : 'No findings. Now look at the sheet.',
     );
@@ -467,11 +479,66 @@ async function main() {
     const { reviewProject } = await import('./lib/review.mjs');
     return console.log(await reviewProject(dir, opts));
   }
+  if (cmd === 'qa') {
+    const { qaProject } = await import('./lib/qa.mjs');
+    const r = await qaProject(dir, { video: o.video, loop: o.loop });
+    if (o.json) return console.log(JSON.stringify(r, null, 2));
+    const s = r.summary,
+      rel = f => path.relative(process.cwd(), f);
+    console.log(
+      `${s.seconds}s · change ${s.changePerSecond}/s (viral references 8–42; under 2 reads as held) · held ${s.heldSeconds}s · ${s.pops} pop(s) · ${s.loudness ? `${s.loudness.integrated} LUFS, peak ${s.loudness.peak}` : 'no audio'} · ${s.color}`,
+    );
+    for (const f of r.findings)
+      console.log(
+        `${f.level === 'error' ? '✗' : f.level === 'warn' ? '!' : '·'} ${(f.t != null ? `${f.t}s${f.beat ? ` ${f.beat}` : ''}` : f.kind).padEnd(22)} ${f.message}`,
+      );
+    console.log(
+      `${rel(path.join(r.dir, 'timeline.png'))} (one frame per second) · ${rel(path.join(r.dir, 'phone.png'))} (360 px: read it as a phone would)`,
+    );
+    if (r.findings.some(f => f.level === 'error')) process.exitCode = 1;
+    return;
+  }
+  if (cmd === 'beatmap') {
+    const { analyseTrack, cutsOnGrid } = await import('./lib/beatmap.mjs');
+    const { computeTiming } = await import('./lib/timing.mjs');
+    const timing = computeTiming(dir);
+    if (!timing.music?.src) throw new Error('No music bed yet: run music DIR --draft, or set music.file.');
+    const r = analyseTrack(path.join(dir, timing.music.src));
+    const grid = r.tempo ? cutsOnGrid(timing.beats, r.tempo, timing.music.offset) : [];
+    if (o.json) return console.log(JSON.stringify({ ...r, music: timing.music, cuts: grid }, null, 2));
+    const off = timing.music.offset;
+    const lines = [beatmapText(r)];
+    if (r.drop)
+      lines.push(
+        timing.music.drop
+          ? `drop plays at ${timing.music.drop.film}s (beat ${timing.music.drop.beat})`
+          : `drop plays at ${Math.round((r.drop.t - off) * 100) / 100}s of the film; land it on the key picture with "music": {"drop": {"beat": "ID"}}`,
+      );
+    if (grid.length)
+      lines.push(
+        `cuts against the beat (ms after the nearest beat; within ±60 reads as on the beat):`,
+        ...grid.map(
+          c =>
+            `  ${String(c.t).padStart(6)}s ${c.id.padEnd(18)} ${c.ms > 0 ? '+' : ''}${c.ms}${Math.abs(c.ms) <= 60 ? '  ✓' : ''}`,
+        ),
+      );
+    return console.log(lines.join('\n'));
+  }
   if (cmd === 'render' || cmd === 'preview')
     return console.log(
       JSON.stringify(await native.renderProject(dir, { ...opts, draft: cmd === 'preview' || o.draft }), null, 2),
     );
   throw new Error(`Unknown command ${cmd}. Run clearframe help.`);
+}
+function beatmapText(r) {
+  const t = r.tempo;
+  return [
+    `${r.seconds}s of music`,
+    t ? `tempo ${t.bpm} BPM (or ${t.alternatives.join(' / ')}: listen), first beat at ${t.phase}s` : 'no steady tempo',
+    r.drop
+      ? `drop at ${r.drop.t}s in the song (bass +${r.drop.jump} dB)`
+      : 'no drop: the bass never jumps and stays up',
+  ].join(' · ');
 }
 main().catch(e => {
   console.error(`ClearFrame: ${e.message}`);

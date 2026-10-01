@@ -84,7 +84,7 @@ Cue anything to speech: `land`, `growSay`, `drawSay` and per-item `say` take an 
 - items cued too late to finish entering, text that overflows its box at 14 px;
 - speech-following text on estimated timing, or characters the bundled fonts cannot draw.
 
-`looks DIR --beat ID` renders one frame in every palette. `still --beat ID` inspects a moment; `review DIR` decodes the encoded MP4 around every cut and word boundary. Paid commands are explicit: `plan` estimates spend, then `voice`, `music`, `images`, `clips` or `align --transcribe` call Google. Existing recordings and imported timestamps need no API key.
+`looks DIR --beat ID` renders one frame in every palette. `still --beat ID` inspects a moment; `review DIR` decodes the encoded MP4 around every cut and word boundary. `qa DIR` reads the whole film for time bugs: one-frame pops, stretches where the picture barely changes (measured as change per second against the frame a second earlier), world seams that jump, export tags and loudness; it writes a one-frame-per-second timeline and a 360 px phone sheet. `beatmap DIR` measures the music's tempo and drop, and `music.drop` lands that drop on a beat. Paid commands are explicit: `plan` estimates spend, then `voice`, `music`, `images`, `clips` or `align --transcribe` call Google. Existing recordings and imported timestamps need no API key.
 
 ## Development
 

@@ -96,6 +96,18 @@ function waveform(dir, video) {
   return fs.existsSync(file) ? { file, cues } : null;
 }
 
+/** Time bugs and stillness measured on the encoded film (qa): change per second, held seconds, pops. */
+function motionOf(dir) {
+  if (!fs.existsSync(path.join(dir, 'build/video.mp4'))) return null;
+  const r = cli('qa', dir, '--json');
+  try {
+    const q = JSON.parse(r.stdout);
+    return { ...q.summary, held: q.findings.filter(f => f.kind === 'held').map(f => `${f.t}–${f.end}s`) };
+  } catch {
+    return null;
+  }
+}
+
 fs.mkdirSync(OUT, { recursive: true });
 const rows = [];
 for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name))) {
@@ -116,6 +128,7 @@ for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name)))
           : null,
       errors: check.errors ?? [],
       findings: crit.split('\n').slice(1, 6),
+      motion: motionOf(dir),
     });
     continue;
   }
@@ -165,6 +178,7 @@ for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name)))
     audio,
     errors: check.errors ?? [],
     findings: crit.split('\n').slice(1, 6),
+    motion: strip ? motionOf(dir) : null,
   });
   console.log(
     `${f.name.padEnd(20)} cinema ${score ?? '?'}  ${fs.existsSync(sheet) ? 'sheet' : 'NO SHEET'}${strip ? ' + strip' : ''}`,
@@ -178,9 +192,11 @@ fs.writeFileSync(
 
 Scaffolded from scratch with \`clearframe new\` and drafted for free (local voice estimate, no paid media). Same films every round.
 
-| Film | Why it's here | Cinema | Check | Sheet | Strip (frames around every cut) |
-|---|---|---|---|---|---|
-${rows.map(r => `| ${r.name} | ${r.why} | ${r.score ?? r.error ?? '?'} | ${r.errors?.length ? `${r.errors.length} errors` : 'passes'} | ${rel(r.sheet)} | ${rel(r.strip)} |`).join('\n')}
+| Film | Why it's here | Cinema | Check | Change/s | Held | Sheet | Strip (frames around every cut) |
+|---|---|---|---|---|---|---|---|
+${rows.map(r => `| ${r.name} | ${r.why} | ${r.score ?? r.error ?? '?'} | ${r.errors?.length ? `${r.errors.length} errors` : 'passes'} | ${r.motion?.changePerSecond ?? '—'} | ${r.motion ? `${r.motion.heldSeconds}s${r.motion.held.length ? ` (${r.motion.held.join(', ')})` : ''}` : '—'} | ${rel(r.sheet)} | ${rel(r.strip)} |`).join('\n')}
+
+Change/s is measured on the encoded film by \`qa\`: the mean grey difference to the frame a second earlier (the viral motion references measured 8–42; a held slide sits under 2). Held lists stretches of 2.5 s or more where the picture barely changes.
 
 Sound is a draft: a local TTS voice in one take and a synthesised bed (the final uses Gemini TTS and a Lyria score). Each waveform marks the cuts (grey) and the sound cues (orange).
 

@@ -9,6 +9,7 @@ import { blockByName } from '../../fframes/catalog.mjs';
 import { audioHash, validateWords, wordKey } from './word-timing.mjs';
 import { planTakes } from './takes.mjs';
 import { COVER } from '../../fframes/constants.mjs';
+import { analyseTrack } from './beatmap.mjs';
 
 const PAUSES = [
   [/(\.\.\.|…)$/, 0.45],
@@ -217,10 +218,7 @@ export function computeTiming(root) {
     const reads = ['kinetic', 'statement'].includes(b.block) ? 0.5 : 0;
     const breath = sb.pacing.continuous === true ? 0 : Math.max(cover ? cover[0] + 0.1 : 0, reads);
     const tail =
-      b.tail ??
-      (continuousTail
-        ? breath
-        : Math.max(breath, (b.block ? blockTail(b.block) : null) ?? sb.pacing.tail));
+      b.tail ?? (continuousTail ? breath : Math.max(breath, (b.block ? blockTail(b.block) : null) ?? sb.pacing.tail));
     let natural = vo ? Math.max(0, lead) + vo.duration + tail + (b.hold ?? 0) : sb.pacing.silentBeat + (b.hold ?? 0);
     // Words cued to the narration must stay up long enough to be read: a note on the last
     // spoken word would otherwise flash for a fraction of a second before the cut.
@@ -264,7 +262,7 @@ export function computeTiming(root) {
     cursor = end;
   }
   const duration = round(cursor + (sb.pacing.outro ?? 0));
-  const music = sb.music && sb.music.file !== false ? musicInfo(root, sb) : null;
+  const music = sb.music && sb.music.file !== false ? musicInfo(root, sb, beats) : null;
   return {
     title: sb.title ?? 'Untitled',
     width,
@@ -337,10 +335,10 @@ export function findWord(words, query, nth = 0) {
   return null;
 }
 
-function musicInfo(root, sb) {
+function musicInfo(root, sb, beats) {
   const candidates = [sb.music.file, findMusicBed(root)].filter(Boolean);
   const src = candidates.find(f => fs.existsSync(path.join(root, f))) ?? null;
-  return {
+  const info = {
     src,
     volume: sb.music.volume,
     duck: sb.music.duck,
@@ -348,6 +346,19 @@ function musicInfo(root, sb) {
     fadeOut: sb.music.fadeOut,
     offset: sb.music.offset ?? 0,
   };
+  // The drop lands on the key picture: the song starts so that its drop (measured, or given in
+  // song seconds) plays at a beat's start or a cue in it. A negative offset delays the song.
+  const d = sb.music.drop;
+  if (d && src) {
+    const beat = beats.find(b => b.id === d.beat);
+    if (!beat) throw new Error(`music.drop.beat "${d.beat}" is not a beat id`);
+    const song = d.song == null || d.song === 'auto' ? analyseTrack(path.join(root, src)).drop?.t : d.song;
+    if (song == null) throw new Error(`No drop measured in ${src}; give music.drop.song in seconds.`);
+    const film = resolveAt(d.at ?? 0, beat);
+    info.offset = round(song - film);
+    info.drop = { beat: beat.id, film, song };
+  }
+  return info;
 }
 
 export function assetSrc(root, a) {

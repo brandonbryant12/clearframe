@@ -44,5 +44,6 @@ Kinetic modes (highlight, reveal, word, stack) use measured, audio-bound word in
 - `still DIR --beat ID --pos 0.5 --grid`: coordinates for art and canvas.
 - `looks DIR --beat ID`: the same frame in every palette.
 - `review DIR`: decoded frames around cuts and word boundaries of the rendered MP4.
+- `qa DIR`: change per second across the whole film (the viral motion references measured 8–42; under 2 reads as a held slide), held stretches, one-frame pops, world seams; `timeline.png` (one frame per second, boring stretches included) and `phone.png` (360 px).
 
 Numeric diagnostics cannot establish readable composition or good taste: open the images.

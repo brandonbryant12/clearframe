@@ -90,7 +90,9 @@ Within scenes, light is drawn: `glow` on light sources, `shine` sweeps across ti
 - **Silence before impact.** A beat with no voice, one element and a low hum, then the hit (a title, a number). With `sfx` on, ClearFrame scores this for you: a riser ends where the silent beat begins, room tone fills it, and a `flash` cut lands with a hit.
 - **Button.** End on one short line after the title, like a trailer's final card.
 - **Music follows the edit.** `music: {style: "pulse", bpm: 92}` gives a free draft bed that builds toward the first silent beat, cuts dead through it, and carries the title on a low chord. Replace it with a composed bed (Lyria) for finals, and keep the same shape.
-- **Hold with life.** Every held frame keeps something moving: drift, particles, a pulse, a loop or the lens handheld.
+- **The drop lands on the key picture.** With a real track, `beatmap DIR` measures its tempo and its drop (where the bass jumps and stays up, never an automatic grid, which is often a beat or two off or at double tempo). Set `music.drop: {"beat": "title"}` and the song starts so the drop plays on that beat; `qa` then checks the drop is heard there in the mix. `beatmap` also lists every cut against the beat grid: in a film without narration, move the cuts that miss by more than about 60 ms.
+- **Hold with life.** Every held frame keeps something moving: drift, particles, a pulse, a loop or the lens handheld. `qa DIR` measures it: the change per second against the frame a second earlier. The viral motion pieces we measured never fall under 3 for even 2.5 s (medians 8–42); a slide with a label landing on it sits under 2.
+- **Transform one thing; never crossfade two.** Two different shapes crossfading show a grey ghost of both for a few frames. Make the line *be* the logo squashed flat, the dot *be* the button: one element whose keys change (`morph` by id across cuts, `scaleY` from 0.01). Probe the middle of every transition, not its ends: text that outgrows the shape it is morphing out of only shows halfway.
 
 ## Genres
 
@@ -113,3 +115,4 @@ The playbooks are starting structures for each genre (`clearframe playbooks`); t
 - [ ] A lens chosen deliberately, or explicitly none.
 - [ ] One silence-before-impact moment, and a button.
 - [ ] `critique` has no slideshow tells left, or each one is a choice you can defend.
+- [ ] After the render, `qa` has no pops and no held stretch under the voice, and its `phone.png` reads at 360 px.

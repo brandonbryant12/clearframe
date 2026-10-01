@@ -24,9 +24,11 @@ node engine/cli.mjs check film --draft
 node engine/cli.mjs looks film --beat compare --draft
 node engine/cli.mjs render film --draft
 node engine/cli.mjs review film
+node engine/cli.mjs qa film            # time bugs, export tags, loudness, timeline + phone sheets
+node engine/cli.mjs beatmap film       # tempo, measured drop, cuts against the beat grid
 ```
 
-`preview` (or `render --draft`) produces a review MP4 at the authored size with a fast encoder (x264 veryfast, CRF 23, about 3× faster than the final medium/CRF 16 encode). `captions` writes SRT/VTT. `plan` estimates generation and cache state. `voice`, `music`, `images`, `clips` perform explicit generation; use `--only`, `--budget` and `--force` deliberately. `speech` imports an audio/transcript pair; `align --words` imports measured offsets; `align --transcribe` calls Gemini transcription.
+`preview` (or `render --draft`) produces a review MP4 at the authored size with a fast encoder (x264 veryfast, CRF 23, about 3× faster than the final medium/CRF 16 encode). `qa` decodes the finished MP4 and fails on a one-frame pop; it warns where the picture barely changes for 2.5 s or more under the voice, where a world's invisible cut jumps, where the export is untagged or off its loudness, and where the drop is not heard where `music.drop` placed it (`--loop` also measures a loop's seam). The final mux tags BT.709 primaries and transfer, the BT.601 matrix the encoder uses, TV range and square pixels, losslessly. `music.drop: {beat, at, song}` starts the track so its drop (measured by `beatmap`, or `song` seconds) plays at that beat's start or cue; a negative offset delays the song. `captions` writes SRT/VTT. `plan` estimates generation and cache state. `voice`, `music`, `images`, `clips` perform explicit generation; use `--only`, `--budget` and `--force` deliberately. `speech` imports an audio/transcript pair; `align --words` imports measured offsets; `align --transcribe` calls Gemini transcription.
 
 Only compiling the native renderer takes the machine-wide `codex-heavy` lock (one Cargo job); renders, checks, voice and `npm test` run directly. While another job holds the lock, the build names it and waits. Warm builds need 10 GiB free and cold builds 25 GiB (`doctor` warns below 20 GiB). No browser or npm runtime dependencies are required.
 

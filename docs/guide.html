@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ClearFrame guide: a living document (docs/guide.html).
-  Last updated: 2026-09-30. Covers CHANGELOG 0.5.0 (unreleased).
+  Last updated: 2026-10-01. Covers CHANGELOG 0.5.0 (unreleased).
 
   WHEN UPDATING, CONSULT (sources of truth, roughly in this order):
     - CHANGELOG.md: newest section first. It feeds "What's new" and anything it changes below.
@@ -724,7 +724,7 @@
       </ol>
 
       <h3>The review loop</h3>
-      <p><code>critique</code> is instant and needs no render. It flags deck-like runs, stillness, text density, weak hooks and "and then" story chains. <code>check</code> validates inputs and native diagnostics, and runs a frame audit that fails on held type cut by the frame edge or the letterbox, type over type or over a 3D subject, and type too small to read. <code>sheet</code> renders a contact sheet at three moments per beat. The draft MP4 is the thing to watch and listen to, and <code>review DIR</code> decodes frames around every cut and word boundary. Last comes a <strong>fresh reviewer</strong>: a separate subagent that did not write the film and judges it against DIRECTION.md.</p>
+      <p><code>critique</code> is instant and needs no render. It flags deck-like runs, stillness, text density, weak hooks and "and then" story chains. <code>check</code> validates inputs and native diagnostics, and runs a frame audit that fails on held type cut by the frame edge or the letterbox, type over type or over a 3D subject, and type too small to read. <code>sheet</code> renders a contact sheet at three moments per beat. The draft MP4 is the thing to watch and listen to, and <code>review DIR</code> decodes frames around every cut and word boundary. <code>qa DIR</code> reads the whole encoded film for the bugs a still cannot show: a one-frame pop, a stretch where the picture barely changes under the voice (it measures change per second against the frame a second earlier), a world cut that jumps, an untagged export, loudness off target, a drop heard in the wrong place. It writes a one-frame-per-second <code>timeline.png</code> and a 360 px <code>phone.png</code>. Last comes a <strong>fresh reviewer</strong>: a separate subagent that did not write the film and judges it against DIRECTION.md.</p>
       <pre class="code"><code>node engine/cli.mjs new my-film --playbook data-story --treatment editorial
 node engine/cli.mjs critique my-film          <span class="c"># instant: rhythm, density, hook, story links</span>
 node engine/cli.mjs draft my-film             <span class="c"># critique + draft voice + check + sheet + draft MP4</span>
@@ -1129,7 +1129,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
         <p>Most of the quality comes from rounds. Keep each round specific, and ask for the notes to be sorted into tool problems and film choices.</p>
         <div class="prompt-grid">
           <figure class="prompt-card"><figcaption><strong>Fresh review round</strong></figcaption>
-<pre class="prompt">Run a fresh review round. Give a new reviewer subagent the contact sheet, the review DIR strip, the draft MP4, the vo lines and DIRECTION.md, with the rubric in clearframe-direction. Ask it for a verdict, the five highest-impact changes and any visible faults with timestamps. Sort its notes into tool problems (fix the engine) and film choices (fix the storyboard).</pre></figure>
+<pre class="prompt">Run a fresh review round. Give a new reviewer subagent the contact sheet, the review DIR strip, the qa DIR timeline and phone sheets with its findings, the draft MP4, the vo lines and DIRECTION.md, with the rubric in clearframe-direction. Ask it for a verdict, the five highest-impact changes and any visible faults with timestamps. Sort its notes into tool problems (fix the engine) and film choices (fix the storyboard).</pre></figure>
           <figure class="prompt-card"><figcaption><strong>Next round, same reviewer</strong></figcaption>
 <pre class="prompt">Continue the same reviewer for round <span class="ph">[2]</span>: which notes are resolved, which remain, and what's new? Render the final only when it has no structural notes left.</pre></figure>
           <figure class="prompt-card"><figcaption><strong>Hook by 3 s</strong></figcaption>
@@ -1346,7 +1346,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>lens</code></td><td class="wrap">film-wide, and on any beat (beat keys override): <code>letterbox</code> 1.5–3 or <code>false</code> (landscape only; content moves inside the bars), <code>grade</code> (teal-orange, warm, cool, bleach, mono, noir, sepia) with <code>gradeAmount</code>, <code>bloom</code>, <code>aberration</code>, <code>leak</code>, <code>handheld</code>, and <code>blur</code> (motion blur on camera moves; 0.5 is a 180° shutter), each 0–1. See <code>docs/cinema.md</code>.</td></tr>
             <tr><td><code>frame</code></td><td class="wrap"><code>true</code> or <code>{brand, left, right, label, progress}</code>: a serif-italic brand, a section label, mono footers and a progress rail</td></tr>
             <tr><td><code>sfx</code></td><td class="wrap"><code>off</code>, <code>subtle</code>, <code>normal</code>, <code>punchy</code>: whooshes into graphic transitions and fast camera moves, thuds on hero numbers, ticks and pops on counts and arrivals. For cinema: a <strong>hit</strong> on every <code>flash</code> cut, a <strong>riser</strong> that ends where a silent beat begins, <strong>room tone</strong> under the silence, and a <strong>shimmer</strong> as <code>shine</code> sweeps a title.</td></tr>
-            <tr><td><code>music</code></td><td class="wrap"><code>false</code> or <code>{style: "pad" | "pulse", bpm, volume, prompt, …}</code>. The free draft bed is a calm pad, or a <code>pulse</code> that builds to the first silence, cuts dead through it and carries the title (trailers). The paid bed is Lyria.</td></tr>
+            <tr><td><code>music</code></td><td class="wrap"><code>false</code> or <code>{style: "pad" | "pulse", bpm, volume, prompt, …}</code>. The free draft bed is a calm pad, or a <code>pulse</code> that builds to the first silence, cuts dead through it and carries the title (trailers). The paid bed is Lyria. <code>drop: {beat, at, song}</code> starts the track so its drop (measured by <code>beatmap</code>, or <code>song</code> seconds) plays on that beat.</td></tr>
             <tr><td><code>voice</code></td><td class="wrap"><code>takes: "film"</code> (the default: one continuous take), <code>"chapter"</code> or <code>"beat"</code>; <code>style</code> (2–6 words, one for the film); <code>voice</code>; <code>cast</code> for two voices (one conversational take); <code>perBeatStyle</code> (not recommended)</td></tr>
             <tr><td><code>pacing</code></td><td class="wrap"><code>lead</code>, <code>tail</code>, <code>minBeat</code>, <code>silentBeat</code>, <code>outro</code></td></tr>
             <tr><td><code>continuity</code></td><td class="wrap"><code>maxGeneratedShare</code>, <code>treatment</code>, <code>lighting</code>, <code>camera</code>, <code>motion</code>, <code>motif</code>, <code>refs</code> (≤ 2), for generated inserts</td></tr>
@@ -1568,6 +1568,8 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>world DIR [--name NAME]</code></td><td class="wrap">A canvas world's map with every beat's camera rect numbered.</td></tr>
             <tr><td><code>looks DIR --beat ID</code></td><td class="wrap">The same frame in every palette.</td></tr>
             <tr><td><code>review DIR [--beat ID]</code></td><td class="wrap">Decoded frames around every cut and word boundary of the MP4.</td></tr>
+            <tr><td><code>qa DIR [--loop]</code></td><td class="wrap">Time bugs in the MP4: one-frame pops, held stretches, world seams, export tags, loudness and the drop; timeline and 360 px phone sheets.</td></tr>
+            <tr><td><code>beatmap DIR | TRACK</code></td><td class="wrap">The music's tempo (with half and double) and measured drop, and every cut against its beat grid.</td></tr>
             <tr><td><code>timing</code> · <code>captions DIR</code></td><td class="wrap">Timing JSON; SRT and VTT (measured words required unless <code>--draft</code>).</td></tr>
             <tr class="group"><td colspan="2">Render</td></tr>
             <tr><td><code>draft DIR [--no-render]</code></td><td class="wrap">One pass: critique, draft voice, check, sheet and a draft MP4.</td></tr>
@@ -1647,6 +1649,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
       <h2>What's new</h2>
       <p class="small">"Travel instead of cutting, type with a voice, and fewer false alarms." The full list is in <code>CHANGELOG.md</code>.</p>
       <ul class="news">
+        <li><strong>Time bugs and the drop</strong> (from the October 2026 motion references). <code>qa DIR</code> reads the encoded film for what stills miss: one-frame pops, stretches where the picture barely changes under the voice, jumping world seams, export tags and loudness, with a timeline and a 360 px phone sheet. <code>beatmap DIR</code> measures a track's tempo and drop, and <code>music.drop</code> lands the drop on a beat. Finals are now fully colour-tagged (BT.709 primaries and transfer, square pixels).</li>
         <li><strong>Reports shoot as films by default.</strong> <code>research-digest</code> (what <code>ingest</code> starts from), <code>data-story</code> and <code>concept-explainer</code> were rebuilt around shots. Every other report arc gained lower thirds, a subtle lens, push-ins on numbers and a silence before the close. All 35 playbooks score 63–100 on the cinema score.</li>
         <li><strong>Push to a detail.</strong> <code>camera: {to: [x, y, w, h], say}</code> turns any scene into a close-up on the word that matters. The heading bows out, and the source stays.</li>
         <li><strong>Sound for cinema.</strong> A hit on every flash cut, a riser that ends where a silence begins, room tone under it, and a shimmer as light sweeps a title. Fast moves and elements get motion blur.</li>

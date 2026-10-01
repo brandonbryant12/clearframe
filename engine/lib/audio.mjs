@@ -208,7 +208,10 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
   let musicLabel = null;
   if (m?.src) {
     const i = add(m.src, ['-stream_loop', '-1']);
-    const off = m.offset ?? 0;
+    // A song placed later than the film's start (its drop lands after the song's own drop
+    // time) waits in silence: delay it instead of trimming.
+    const off = Math.max(0, m.offset ?? 0),
+      wait = Math.max(0, -(m.offset ?? 0));
     // Silent beats are silent: any bed (composed or draft) dips to nothing through them,
     // with 60 ms ramps so the cut to silence never clicks.
     const gate = timing.beats
@@ -216,7 +219,7 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
       .map(b => `(1-clip((t-${(b.start - 0.06).toFixed(3)})/0.06,0,1)*clip((${(b.end + 0.06).toFixed(3)}-t)/0.06,0,1))`)
       .join('*');
     filters.push(
-      `[${i}:a]${fmt},atrim=start=${off}:duration=${D},asetpts=PTS-STARTPTS,volume=${m.volume},afade=t=in:d=${m.fadeIn},afade=t=out:st=${Math.max(0, D - m.fadeOut)}:d=${m.fadeOut}${gate ? `,volume='${gate}':eval=frame` : ''}[mus]`,
+      `[${i}:a]${fmt},atrim=start=${off}:duration=${Math.max(0.1, D - wait)},asetpts=PTS-STARTPTS,volume=${m.volume},afade=t=in:d=${m.fadeIn}${wait ? `,adelay=${Math.round(wait * 1000)}:all=1` : ''},afade=t=out:st=${Math.max(0, D - m.fadeOut)}:d=${m.fadeOut}${gate ? `,volume='${gate}':eval=frame` : ''}[mus]`,
     );
     musicLabel = '[mus]';
   }
@@ -296,10 +299,27 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
   return output;
 }
 
+// The renderer encodes BT.601 limited range and tags only the matrix; players then guess the
+// primaries and transfer, and guesses differ (one of the export bugs that never shows in a
+// still). Tag what the pixels are, losslessly: BT.709 primaries and transfer (the sRGB
+// primaries), the BT.601 matrix they were encoded with, TV range, square pixels.
+const TAGS = [
+  '-bsf:v',
+  'h264_metadata=colour_primaries=1:transfer_characteristics=1:matrix_coefficients=6:video_full_range_flag=0:sample_aspect_ratio=1/1',
+  '-color_primaries',
+  'bt709',
+  '-color_trc',
+  'bt709',
+  '-colorspace',
+  'smpte170m',
+  '-color_range',
+  'tv',
+];
+
 /** Mux silent video + mixed audio into the deliverable. */
 export async function mux(video, audio, output) {
   if (!audio) {
-    fs.copyFileSync(video, output);
+    await ffmpeg(['-y', '-i', video, '-map', '0:v:0', '-c:v', 'copy', ...TAGS, '-movflags', '+faststart', output]);
     return output;
   }
   await ffmpeg([
@@ -314,6 +334,7 @@ export async function mux(video, audio, output) {
     '1:a:0',
     '-c:v',
     'copy',
+    ...TAGS,
     '-c:a',
     'aac',
     '-b:a',
