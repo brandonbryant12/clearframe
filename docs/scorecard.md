@@ -16,23 +16,23 @@ Cinematic capability exists: worlds, a travelling camera, canvas, mosaic, morphs
 
 | # | Dimension | Base | Now | Evidence now | Next |
 |---|---|---|---|---|---|
-| 1 | **Continuity**: shots, not slides | 1.5 | 3.5 | Genre playbooks connect shots with worlds, match cuts, flash cuts and moving cameras. Report playbooks now add a graphic turn and a silence, but still mostly cut card to card. | Morph a report's key number into its chart across the cut. |
+| 1 | **Continuity**: shots, not slides | 1.5 | 4 | Worlds, match cuts, flash cuts, moving cameras; canvas charts morph across cuts (a number into its bar, a stack into bars), now in the default data story. | Morphs between block types (stat → bars) without rebuilding them in canvas. |
 | 2 | **Camera and depth** | 2 | 4.5 | `z` perspective and parallax, `dolly`, rack `focus`, motion blur on camera and element moves, handheld, and a push to a detail on a spoken word. | A camera on world beats that orbits (3D) rather than pans. |
 | 3 | **Composition and scale** | 2 | 3.5 | Set pieces are full-bleed; `camera.to` turns any chart into a close-up on its finding. Charts still open as a band in a big room. | Push-ins on more report chart beats by default. |
 | 4 | **Motion craft** | 3 | 4 | Set pieces keep moving; fast moves smear; number scenes push in; a silence gives the edit a breath. | Secondary motion on chart blocks during holds. |
 | 5 | **Look**: light, lens and grade | 2 | 4 | `lens`: letterbox, grade, bloom, aberration, leaks. `shine`, glow and bokeh from depth of field. | A `lens` on the report treatments too (subtle grade and bloom). |
-| 6 | **Imagery** | 2.5 | 4 | Horizon, skyline, ocean, road, tunnel, terrain, data landscape, globe, crowd, lit solids, title, card. | Hands, objects and interiors. |
+| 6 | **Imagery** | 2.5 | 4.5 | Generated depth plates (painted far layer, cut-out subject and foreground) put the camera inside painted places; vector set pieces cover abstract and data scenes; anonymous people (`desk`, `crowd`, plate subjects). | A library of reusable plates per brand. |
 | 7 | **Editing grammar** | 3 | 3.5 | `flash`, match cuts, silence beats; critique measures rhythm. | Beat-synced cuts on the music. |
 | 8 | **Typography** | 3.5 | 4 | Tracked title reveals with light sweeps, poster cards that wrap, type as image. | Masked reveals (type through a shape). |
-| 9 | **Sound** | 2.5 | 3.5 | Hits on flash cuts, a riser into silence, room tone, a shimmer on title sweeps, whooshes only for fast moves. | Beat-synced cuts; a music bed that builds with the montage. |
+| 9 | **Sound** | 2.5 | 4 | Cinema cues on picture events; composed music briefed from the edit; any bed gated through silences (−32 dB in the trailer final). | Beat-synced cuts. |
 | 10 | **Voice and sync** | 4 | 4 | Unchanged. | Genre reads: trailer, documentary. |
 | 11 | **Honesty and data** | 4.5 | 4.5 | Set pieces label sample values; routes say they are illustrative. | Keep it. |
 | 12 | **Tooling and review** | 4 | 4.5 | Cinema score from the eight tells; letterbox and flat-depth checks; review strips; a fresh-model authoring test that found nine tool issues. | Run the fresh-model test after every loop. |
-| 13 | **Speed** | 4 | 4 | A 28 s letterboxed, graded trailer renders in about 20 s. | Keep lens filters on the GPU path. |
+| 13 | **Speed and efficiency** | 4 | 4.5 | A 27 s graded final renders in about 85 s; drafts now predict the final (learned voice rates, continuous-take timing); lock-waiting builds no longer rebuild twice; `plan` no longer double-counts take voices. | Cache rendered beats between drafts. |
 | 14 | **Library and scale** | 4 | 4.5 | 19 palettes, 15 treatments, 35 playbooks, 19 sketches, all files. | Characters and a sound library. |
-| 15 | **Default outcome** | 2 | 3.5 | `new` and `ingest` start from reworked arcs (cinema 100); all 35 playbooks score 63–100. | Make the model's own first storyboard score as well (skills, examples). |
+| 15 | **Default outcome** | 2 | 4 | All 35 playbooks score 63–100; `ingest` and `new` start from films; a seeded `muse` keeps first drafts from looking alike; `checkpoints` puts a human where it matters. | Another fresh-model test on a report brief. |
 
-**Overall: 2.8 → 4.0 / 5.** The engine and the defaults now make films. What remains is craft depth: report charts that transform into each other, 3D camera moves, and a music bed that builds.
+**Overall: 2.8 → 4.3 / 5.** The defaults make films, image generation paints the places, and data transforms instead of cutting. What remains: block-to-block morphs, beat-synced edits, a reusable plate library, and a second fresh-model test on a report.
 
 ## Why the films read as slides
 
@@ -96,3 +96,11 @@ These are the signatures a viewer notices, in order of damage. `critique` should
     - documented world timing, parallax and beat lengths.
   - **Library:** lit `shade` solids (product reveals), a `road` set piece, a trailer `pulse` bed that follows the edit, and a `clearframe-cinema` skill.
   - **Critique:** it flags a lens over flat drawings.
+- **2026-09-30, loop 4 (a real final, image generation, data continuity):**
+  - **First real final:** a Gemini voice measured by Whisper. It exposed drafts timed 1.5× too fast with padding between lines; drafts now learn voice rates and time as continuous takes.
+  - **Depth plates:** image generation as a regular tool, about $0.20 a scene.
+  - **Charts:** canvas charts that morph across cuts.
+  - **Sound:** music briefed from the edit, and silences gated in the mix.
+  - **People:** a `desk` set piece and anonymous plate subjects.
+  - **Creativity:** a seeded `muse` for unique films.
+  - **Collaboration:** one-shot and guided modes with `checkpoints`.
