@@ -17,7 +17,11 @@ export function applyTreatment(sb, id) {
   if (!found) throw new Error(`Unknown treatment ${id}. Run clearframe treatments.`);
   const t = { ...found, beats: found.beats ?? {} };
   const { voice, ...film } = t.film;
+  // A playbook's own cutting (cut, dissolve) is part of its grammar: the treatment's film-wide
+  // transition only replaces the default fade, never a playbook's choice.
+  const cutting = sb.transition && sb.transition !== 'fade' ? sb.transition : null;
   Object.assign(sb, structuredClone(film));
+  if (cutting) sb.transition = cutting;
   if (voice) sb.voice = { ...(sb.voice ?? {}), ...voice };
   if (film.frame?.brand === 'brand' && sb.frame) sb.frame.brand = sb.title ?? 'Brand';
   const chapterStarts = new Set(
