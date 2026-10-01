@@ -611,7 +611,7 @@
     }
   ],
   "theme": "noir",
-  "backdrop": "glow",
+  "backdrop": "none",
   "motion": "gentle",
   "texture": {
     "grain": 0.35,

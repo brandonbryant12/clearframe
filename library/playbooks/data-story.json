@@ -188,7 +188,7 @@
     }
   ],
   "theme": "midnight",
-  "backdrop": "glow",
+  "backdrop": "none",
   "heading": "bottom",
   "textMotion": "words",
   "transition": "cut",

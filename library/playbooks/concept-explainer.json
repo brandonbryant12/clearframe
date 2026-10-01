@@ -2343,7 +2343,7 @@
       "hold": 1
     }
   ],
-  "backdrop": "glow",
+  "backdrop": "paper",
   "heading": "bottom",
   "textMotion": "words",
   "transition": "cut",
