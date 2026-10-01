@@ -1,0 +1,241 @@
+{
+  "version": 2,
+  "title": "material play",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "sorbet",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.6
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "captions": false,
+  "frame": false,
+  "sfx": "off",
+  "music": false,
+  "beats": [
+    {
+      "id": "bubble-cluster",
+      "block": "canvas",
+      "duration": 3.2,
+      "camera": "none",
+      "art": {
+        "sketch": "bubble-cluster",
+        "seed": 17,
+        "drift": 0.8
+      },
+      "props": {
+        "elements": [
+          {
+            "type": "text",
+            "text": "SOFT ENERGY",
+            "x": 140,
+            "y": 290,
+            "size": 23,
+            "tracking": 0.12,
+            "font": "mono",
+            "fill": "muted",
+            "at": 0,
+            "enter": "fade",
+            "dur": 0.35
+          },
+          {
+            "type": "text",
+            "text": "bubble\ncluster",
+            "x": 140,
+            "y": 385,
+            "size": 96,
+            "width": 840,
+            "height": 260,
+            "font": "bold",
+            "fill": "ink",
+            "at": 0,
+            "enter": "rise",
+            "dur": 0.6
+          },
+          {
+            "type": "text",
+            "text": "FORM / LIGHT / MOTION",
+            "x": 140,
+            "y": 650,
+            "size": 22,
+            "tracking": 0.06,
+            "font": "mono",
+            "fill": "accent",
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.5
+          }
+        ]
+      }
+    },
+    {
+      "id": "ribbon-wave",
+      "block": "canvas",
+      "duration": 3.2,
+      "camera": "none",
+      "art": {
+        "sketch": "ribbon-wave",
+        "seed": 18,
+        "drift": 0.8
+      },
+      "props": {
+        "elements": [
+          {
+            "type": "text",
+            "text": "SOFT ENERGY",
+            "x": 140,
+            "y": 290,
+            "size": 23,
+            "tracking": 0.12,
+            "font": "mono",
+            "fill": "muted",
+            "at": 0,
+            "enter": "fade",
+            "dur": 0.35
+          },
+          {
+            "type": "text",
+            "text": "ribbon\nwave",
+            "x": 140,
+            "y": 385,
+            "size": 96,
+            "width": 840,
+            "height": 260,
+            "font": "bold",
+            "fill": "ink",
+            "at": 0,
+            "enter": "rise",
+            "dur": 0.6
+          },
+          {
+            "type": "text",
+            "text": "FORM / LIGHT / MOTION",
+            "x": 140,
+            "y": 650,
+            "size": 22,
+            "tracking": 0.06,
+            "font": "mono",
+            "fill": "accent",
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.5
+          }
+        ]
+      }
+    },
+    {
+      "id": "petal-burst",
+      "block": "canvas",
+      "duration": 3.2,
+      "camera": "none",
+      "art": {
+        "sketch": "petal-burst",
+        "seed": 19,
+        "drift": 0.8
+      },
+      "props": {
+        "elements": [
+          {
+            "type": "text",
+            "text": "SOFT ENERGY",
+            "x": 140,
+            "y": 290,
+            "size": 23,
+            "tracking": 0.12,
+            "font": "mono",
+            "fill": "muted",
+            "at": 0,
+            "enter": "fade",
+            "dur": 0.35
+          },
+          {
+            "type": "text",
+            "text": "petal\nburst",
+            "x": 140,
+            "y": 385,
+            "size": 96,
+            "width": 840,
+            "height": 260,
+            "font": "bold",
+            "fill": "ink",
+            "at": 0,
+            "enter": "rise",
+            "dur": 0.6
+          },
+          {
+            "type": "text",
+            "text": "FORM / LIGHT / MOTION",
+            "x": 140,
+            "y": 650,
+            "size": 22,
+            "tracking": 0.06,
+            "font": "mono",
+            "fill": "accent",
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.5
+          }
+        ]
+      }
+    },
+    {
+      "id": "inflated-loop",
+      "block": "canvas",
+      "duration": 3.2,
+      "camera": "none",
+      "art": {
+        "sketch": "inflated-loop",
+        "seed": 20,
+        "drift": 0.8
+      },
+      "props": {
+        "elements": [
+          {
+            "type": "text",
+            "text": "SOFT ENERGY",
+            "x": 140,
+            "y": 290,
+            "size": 23,
+            "tracking": 0.12,
+            "font": "mono",
+            "fill": "muted",
+            "at": 0,
+            "enter": "fade",
+            "dur": 0.35
+          },
+          {
+            "type": "text",
+            "text": "inflated\nloop",
+            "x": 140,
+            "y": 385,
+            "size": 96,
+            "width": 840,
+            "height": 260,
+            "font": "bold",
+            "fill": "ink",
+            "at": 0,
+            "enter": "rise",
+            "dur": 0.6
+          },
+          {
+            "type": "text",
+            "text": "FORM / LIGHT / MOTION",
+            "x": 140,
+            "y": 650,
+            "size": 22,
+            "tracking": 0.06,
+            "font": "mono",
+            "fill": "accent",
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.5
+          }
+        ]
+      }
+    }
+  ]
+}

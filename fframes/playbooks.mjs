@@ -3,7 +3,7 @@ import path from 'node:path';
 import { BLOCKS, palette } from './catalog.mjs';
 import { writeJSON, ffmpeg } from '../engine/lib/util.mjs';
 import { wireframePNG } from './wireframe.mjs';
-import { sketches, sketch } from './sketches.mjs';
+import { sketches, sketch, expandArt, SKETCH_FRAMES as SKETCH_SIZE } from './sketches.mjs';
 import { items, vendor } from './library.mjs';
 import { muse, museMarkdown } from './muse.mjs';
 import { applyTreatment, directionTemplate, treatmentById } from './treatments.mjs';
@@ -54,8 +54,8 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
   for (const b of sb.beats) {
     // A beat's art layer can name a sketch too: `art: {sketch: "ambient"}` (its own layer).
     if (b.art?.sketch) {
-      const drawn = sketch(b.art.sketch, vertical || book.format === 'vertical' ? 'vertical' : 'landscape', { seed });
-      b.art = { [drawn.layer ?? 'under']: drawn.elements };
+      const [width, height] = SKETCH_SIZE[vertical ? 'vertical' : (book.format ?? 'landscape')] ?? SKETCH_SIZE.landscape;
+      b.art = expandArt({ ...b.art, seed: b.art.seed ?? seed }, { width, height });
     }
     const name = b.props?.sketch;
     if (!name) {

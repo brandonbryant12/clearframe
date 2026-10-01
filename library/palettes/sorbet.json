@@ -1,0 +1,14 @@
+{
+  "order": 20,
+  "notes": "Warm blush with raspberry and violet. Bubbly launches and culture films; rich text accents with softly tinted dimensional art.",
+  "colors": {
+    "bg": "#fff4f0",
+    "surface": "#f5dedc",
+    "ink": "#392638",
+    "muted": "#735766",
+    "accent": "#af355b",
+    "accent2": "#8053b7",
+    "positive": "#257451",
+    "negative": "#b03a36"
+  }
+}

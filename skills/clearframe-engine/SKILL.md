@@ -11,6 +11,8 @@ A project needs `storyboard.json` with a nonempty `beats` array. Each beat has a
 
 By default, beat length follows lead + recorded/estimated voice + block tail. Forced duration must not clip narration. Cues (`land`, `growSay`, `drawSay`, item `say`, bar `focus.say`, and canvas/art `say`, `exitSay`, `keys[].say`, `along.say`) use exact words/phrases or local seconds. Missing spoken cues fail. Recorded audio does not imply measured word times: see `docs/speech.md`.
 
+`check` warns when the first staged item arrives late under narration even if the block cue is early, and when stroked rect/circle/ellipse shapes omit `fill`. Keep spoken data cues intact by establishing a plate or art at `at: 0`, `enter: "none"`; use `fill: "none"` for outlines.
+
 `check` also fails when a beat ends before its counters and bars reach their final values (drafts warn), when staged items are cued too late to finish, and when displayed text uses characters the bundled fonts cannot draw (it names the character and prop).
 
 ```sh
@@ -30,7 +32,11 @@ node engine/cli.mjs beatmap film       # tempo, measured drop, cuts against the 
 
 `preview` (or `render --draft`) produces a review MP4 at the authored size with a fast encoder (x264 veryfast, CRF 23, about 3× faster than the final medium/CRF 16 encode). `qa` decodes the finished MP4 and fails on a one-frame pop; it warns where the picture barely changes for 2.5 s or more under the voice, where a world's invisible cut jumps, where the export is untagged or off its loudness, and where the drop is not heard where `music.drop` placed it (`--loop` also measures a loop's seam). The final mux tags BT.709 primaries and transfer, the BT.601 matrix the encoder uses, TV range and square pixels, losslessly. `music.drop: {beat, at, song}` starts the track so its drop (measured by `beatmap`, or `song` seconds) plays at that beat's start or cue; a negative offset delays the song. `captions` writes SRT/VTT. `plan` estimates generation and cache state. `voice`, `music`, `images`, `clips` perform explicit generation; use `--only`, `--budget` and `--force` deliberately. `speech` imports an audio/transcript pair; `align --words` imports measured offsets; `align --transcribe` calls Gemini transcription.
 
-Only compiling the native renderer takes the machine-wide `codex-heavy` lock (one Cargo job); renders, checks, voice and `npm test` run directly. While another job holds the lock, the build names it and waits. Warm builds need 10 GiB free and cold builds 25 GiB (`doctor` warns below 20 GiB). No browser or npm runtime dependencies are required.
+For a full 1080p final, give the calling shell/harness at least **300,000 ms (five minutes)** for rendering and audio finishing; longer films may need more. This is an external harness allowance, not a CLI flag or a render duration cap. With a session-based executor, yield and resume the same running process instead of restarting it at 120 seconds. Keep progress updates under a minute apart.
+
+The CLI itself automatically gates only compilation. On this 8 GB Mac, run full renders and full test suites through `/Users/brandon/.local/bin/codex-heavy -- <command>` as well; when wrapping a render, pass `env CLEARFRAME_HEAVY_HELD=1` after `--` to avoid a nested build lock. Keep at least 20 GiB free for expensive work.
+
+Compilation uses one Cargo job and names the lock holder while waiting. Small checks can run directly. No browser or npm runtime dependencies are required.
 
 Outputs: `build/native/job.json`, prepared media/manifest, `build/timing.json`, SRT/VTT, review PNGs, `build/video.mp4` and its provenance JSON. Final rendering verifies dimensions, FPS, decoded frames and unchanged inputs. Original media remains in `assets/`. An explicit existing `--out` requires `--force` to overwrite.
 

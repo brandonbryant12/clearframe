@@ -1,0 +1,24 @@
+{
+  "order": 21,
+  "title": "Prismatic arena",
+  "when": "Gaming, competitive product stories and energetic dark launches",
+  "film": {
+    "theme": "neon",
+    "backdrop": "none",
+    "motion": {
+      "preset": "snappy",
+      "intensity": 0.8
+    },
+    "transition": "cut",
+    "frame": false,
+    "sfx": "normal"
+  },
+  "beats": {
+    "rough": false
+  },
+  "rules": [
+    "Choose arena-grid or prism-shards as art.sketch with drift about 0.8; make angular geometry the hero and vary the seed between beats.",
+    "Keep luminous marks away from copy; dark does not mean unreadable.",
+    "Cut for a story reason; let tension build without constant flashing."
+  ]
+}

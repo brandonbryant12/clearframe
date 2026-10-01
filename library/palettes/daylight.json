@@ -1,0 +1,14 @@
+{
+  "order": 19,
+  "notes": "Cool porcelain with deep teal and violet. Airy professional films; pale materials derive from these tokens without weakening text contrast.",
+  "colors": {
+    "bg": "#f4f7fa",
+    "surface": "#e3eaf0",
+    "ink": "#172c38",
+    "muted": "#526575",
+    "accent": "#176b70",
+    "accent2": "#7956ae",
+    "positive": "#23714f",
+    "negative": "#af3e52"
+  }
+}

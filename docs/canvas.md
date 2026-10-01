@@ -35,6 +35,12 @@ Materials: `material: "thermal" | "chrome" | "gold" | "neon"` or `{map: preset |
 
 Paint: `fill` and `stroke` take palette tokens (`bg, surface, ink, muted, accent, accent2, positive, negative, line, wash, wash2, none`), `#rrggbb`, or a gradient `{gradient: [2–4 colours], angle, radial, fade}`. `fade` dissolves the last stop to transparent, which gives soft glows. Tokens follow the palette and a beat's `tone`, so art never clashes. Light and depth: `glow: true | {blur, opacity, color}` bleeds an element's light outward (lit windows, a sun, a hot roof); `shadow: true | {dx, dy, blur, opacity, color}` drops a soft shadow (on light palettes). Put `glow` on a group to light many shapes with one filter. Other paint fields: `width` (stroke), `opacity`, `dash: [on, off]`, `cap`, `join`, `rotate`, `origin: [x, y]` (for rotation and scale), `blend: multiply|screen|overlay|…`.
 
+**Outline shapes must declare `fill: "none"`.** A `stroke` does not remove the default solid accent fill on `rect`, `circle` or `ellipse`; glowing rings can otherwise cover the scene behind them. `check` and `critique` warn about this omission, including nested canvas and art layers. Set an explicit colour for a filled shape. Paths and polylines default to no fill, but declaring it makes the intent clear.
+
+```json
+{ "type": "ellipse", "cx": 960, "cy": 540, "rx": 400, "ry": 180, "fill": "none", "stroke": "accent", "width": 3, "glow": true, "at": 0, "enter": "none" }
+```
+
 ## Time
 
 | Field | Meaning |
@@ -141,3 +147,7 @@ These combine with any block, including `canvas`:
 - `tone: accent|accent2|invert|surface` floods the frame with a colour and re-derives readable text colours. Use it to punctuate. A `panel` transition into an accent-tone scene reads as the panel becoming the background.
 - `camera: in|out|left|right|up|down|none` or `{move, amount}`. The default `auto` pushes in gently everywhere except kinetic text and footage.
 - `camera: {to: [x, y, w, h], say|at, dur}` pushes the picture from the full frame into a frame-pixel rect: a close-up on the bar, the word or the part that matters, starting on a spoken word. The heading fades as the camera moves in; the source line stays. Read coordinates off `still --beat ID --grid`.
+
+## Reusable material art
+
+Use `art: {sketch: "glass-orbits", seed: 17, opacity: 0.8, drift: 0.5}` beneath any block. Extra `under` elements are drawn above the generated group (outside its `opacity` and `drift`); `over` stays above the block. `seed` gives each material a different, reproducible arrangement (lens angles, petal count, fold corners, lobe direction) that keeps the copy region as clear as the reference layout; without a seed you get the atlas layout. `drift` (0–1) pushes the art in by up to 8% about the frame centre over the beat, with a small sideways travel whose direction the seed picks: a parallax move under steady copy that never holds the beat. Use about 0.5 for professional films and 0.8 for playful or arena work. Only `layer: "under"` sketches without a camera/world are eligible. For a complete canvas scene use `props.sketch`. The new materials reserve the left half or portrait top for short native copy; centred blocks may need manual placement. See [image direction](image-direction.md) and the [material atlas](design/material-studies/index.html).

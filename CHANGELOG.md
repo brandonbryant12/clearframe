@@ -4,6 +4,14 @@
 
 Travel instead of cutting, type with a voice, and fewer false alarms.
 
+- **Material library.** Ten original native compositions span pale professional sculpture, rounded playful forms and angular dark stages. Two palettes (`daylight`, `sorbet`) and three treatments (`studio`, `buoyant`, `arena`) add shape and material variety. Two saved imagegen iterations informed native reconstructions; final shapes, paints, typography and timing are deterministic. See `docs/design/material-studies/index.html` and `docs/image-direction.md`.
+- **Reusable art.** Any storyboard beat can use `art.sketch`, `seed`, `opacity` and `drift` while preserving authored under/over layers. Background-only validation keeps scene cameras out of art layers. Parametric art respects actual frame dimensions. Schema sync now has a `--references-only` mode.
+- **Seeds and drift that mean something.** Every material sketch now varies with `seed` (fold corners, lens angles, petal count, lobe direction, gate shape), reproducibly, while keeping the copy region within about 3% of the reference layout's clearance; no seed draws the atlas layout unchanged. `art.drift` (0–1) pushes the art in over the beat from frame-based keys that never hold it, so material backgrounds move like a camera instead of sitting as stills under the copy.
+
+- **Cinematic lead-in safeguards.** Pacing checks read actual staged item times, catching late KPI/sequence reveals even with an early block cue; authored data cues stay intact. Stroked rect/circle/ellipse shapes without an explicit fill now warn, including nested art. Use `fill: "none"` for outlines.
+- **Held-frame QA respects the picture area.** The motion measure excludes authored letterbox bars and never combines separate shots into one held stretch. Held findings remain advisory and direct reviewers to inspect freezes and empty lead-ins while preserving deliberate cinematic pacing. `qa.json` records the threshold and analysis region.
+- **Full-render execution guidance.** Allow at least five minutes in the calling harness for high-resolution final rendering and audio finishing, or resume the same process session; no artificial CLI render deadline was added.
+
 - **Time bugs, measured on the film.** `qa DIR` decodes the finished MP4 and reports what no still can show (after Raphaël Aubry's write-up of the bugs in model-made motion films, October 2026):
   - a frame that differs from both neighbours while they agree (a pop or flash), which fails;
   - stretches of 2.5 s or more where the picture barely changes, measured as change per second against the frame a second earlier (the viral references measured 8–42; the report bench holds 5–18 s below 2 while `critique` scores it 100);

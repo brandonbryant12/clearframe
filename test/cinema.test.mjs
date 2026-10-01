@@ -9,6 +9,7 @@ import { lensSpec } from '../fframes/job.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 import { writeJSON } from '../engine/lib/util.mjs';
+import { critique } from '../engine/lib/critique.mjs';
 
 function job(t, sb) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-cinema-'));
@@ -16,6 +17,82 @@ function job(t, sb) {
   writeJSON(path.join(dir, 'storyboard.json'), sb);
   return createJob(loadStoryboard(dir), computeTiming(dir), { draft: true });
 }
+
+test('late staged KPI cues warn even when the block cue is early, without retiming the figures', t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-lead-in-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  writeJSON(path.join(dir, 'storyboard.json'), {
+    sources: [{ id: 'demo', title: 'Illustrative example' }],
+    beats: [
+      {
+        id: 'caps',
+        block: 'kpis',
+        duration: 16,
+        vo: 'Now seventy five.',
+        props: {
+          land: 'Now',
+          source: 'Illustrative example',
+          items: [
+            { label: 'Saving cap', value: 75, say: 'seventy five' },
+            { label: 'Other cap', value: 50, say: 13 },
+          ],
+        },
+      },
+    ],
+  });
+  const sb = loadStoryboard(dir),
+    timing = computeTiming(dir),
+    b = timing.beats[0];
+  b.vo.words = [
+    { w: 'Now', t0: b.start + 0.2, t1: b.start + 0.5 },
+    { w: 'seventy', t0: b.start + 11.5, t1: b.start + 11.9 },
+    { w: 'five', t0: b.start + 12, t1: b.start + 12.3 },
+  ];
+  const build = () => createJob(sb, timing, { draft: true });
+  const result = build();
+  assert.deepEqual(result.errors, []);
+  assert.ok(
+    result.warnings.some(w => /11.3 s before the first staged item/.test(w)),
+    result.warnings.join('\n'),
+  );
+  assert.equal(result.job.beats[0].props.items[0].at, 11.5);
+  sb.beats[0].art = { under: [{ type: 'particles', kind: 'dust', w: 1920, h: 1080, at: 0, enter: 'none' }] };
+  const covered = build();
+  assert.deepEqual(covered.errors, []);
+  assert.ok(!covered.warnings.some(w => /first staged item/.test(w)));
+  delete sb.beats[0].art;
+  sb.beats[0].pace = 'hold';
+  assert.ok(!build().warnings.some(w => /first staged item/.test(w)));
+  delete sb.beats[0].pace;
+  sb.beats[0].props.items[0].say = 11.5;
+  writeJSON(path.join(dir, 'storyboard.json'), sb);
+  assert.ok(critique(dir).findings.some(f => f.level === 'warn' && /first staged item/.test(f.message)));
+});
+
+test('implicit solid fills on stroked canvas and nested art shapes are called out', t => {
+  const r = job(t, {
+    beats: [
+      {
+        id: 'rings',
+        block: 'canvas',
+        duration: 4,
+        props: {
+          elements: [
+            { type: 'circle', cx: 100, cy: 100, r: 50, stroke: 'accent' },
+            { type: 'ellipse', cx: 300, cy: 100, rx: 80, ry: 40, stroke: 'accent', fill: 'none' },
+            { type: 'rect', x: 0, y: 0, w: 30, h: 30, stroke: 'ink', fill: 'surface' },
+          ],
+        },
+        art: { over: [{ type: 'group', children: [{ type: 'rect', x: 1, y: 1, w: 10, h: 10, stroke: 'accent' }] }] },
+      },
+    ],
+  });
+  assert.deepEqual(r.errors, []);
+  const warnings = r.warnings.filter(w => /no explicit fill/.test(w));
+  assert.equal(warnings.length, 2);
+  assert.match(warnings[0], /fill: "none"/);
+  assert.equal(r.job.beats[0].props.elements[0].fill, undefined, 'existing filled artwork retains its default');
+});
 
 test('lens settings validate, and each beat carries the film lens merged with its own', t => {
   assert.throws(() => lensSpec({ letterbox: 5 }), /letterbox/);
@@ -205,4 +282,33 @@ test('canvas charts: values become shapes with stable ids, so consecutive charts
     }).errors.join(),
     /chart.kind/,
   );
+});
+
+test('a normal storyboard expands background sketches with frame-zero art and preserves authored layers', t => {
+  const result = job(t, {
+    theme: 'daylight', format: { preset: 'vertical' }, captions: false,
+    beats: [{ id: 'a', block: 'statement', duration: 4,
+      props: { text: 'A clear idea' },
+      art: { sketch: 'paper-fold', opacity: 0.7,
+        under: [{ type: 'circle', cx: 80, cy: 80, r: 8, fill: 'accent' }],
+        over: [{ type: 'circle', cx: 90, cy: 90, r: 4, fill: 'accent2' }],
+      },
+    }],
+  });
+  assert.deepEqual(result.errors, []);
+  const art = result.job.beats[0].art;
+  assert.equal(art.under[0].at, 0);
+  assert.equal(art.under[0].opacity, 0.7);
+  assert.equal(art.under[1].cx, 80);
+  assert.equal(art.over[0].cx, 90);
+});
+
+test('a drifting art layer keeps its beat length and rejects drift without a sketch', t => {
+  const beat = art => ({ id: 'a', block: 'statement', duration: 3, props: { text: 'A clear idea' }, art });
+  const r = job(t, { theme: 'neon', captions: false, beats: [beat({ sketch: 'arena-grid', drift: 0.8 })] });
+  assert.deepEqual(r.errors, []);
+  const b = r.job.beats[0];
+  assert.equal(b.art.under[0].keys[0].dur, b.frames / 30, 'the push spans the beat');
+  assert.ok(b.settle_seconds < 1, 'ambient drift does not hold the beat');
+  assert.match(job(t, { beats: [beat({ drift: 0.5, under: [] })] }).errors.join('\n'), /require art.sketch/);
 });
