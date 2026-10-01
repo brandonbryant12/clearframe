@@ -418,8 +418,12 @@ impl<const W: usize, const H: usize, const RATE: usize> Video for NativeFilm<W, 
         let span = ((0.7 * RATE as f32) as usize).min(beat.frames / 2).max(1);
         let scenes = if beat.transition == "dissolve" && i > 0 && local < span {
             let prev = &self.0.beats[i - 1];
-            let behind = Scene::render_frame(prev, Frame::new(prev.frames + local, frame.global_index, RATE), ctx);
             let q = motion::in_out_cubic((local as f32 + 1.0) / span as f32);
+            // Its words clear in the first third of the dissolve; only the pictures cross.
+            let words = (1.0 - (local as f32 + 1.0) / (span as f32 * 0.35)).clamp(0.0, 1.0);
+            scenes::TEXT_ALPHA.with(|a| a.set(words));
+            let behind = Scene::render_frame(prev, Frame::new(prev.frames + local, frame.global_index, RATE), ctx);
+            scenes::TEXT_ALPHA.with(|a| a.set(1.0));
             fframes::svgr!(<g>{behind}<g opacity={q}>{ctx.render_scenes(&frame)}</g></g>)
         } else {
             ctx.render_scenes(&frame)

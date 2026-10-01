@@ -23,6 +23,15 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - `cinematic-explainer`: the water system in cross-section, with labels kept inside the letterbox.
   - New set pieces: `signal`, `wires`, `citygrid`, `mast`, `harbor` and `rooftops`. `card` is a poster card (`LEAD`/`CARD`), and `title` fills the frame.
   - First beats cut in rather than fading up from black.
+- **Round 4 finish.**
+  - A dissolve clears the outgoing scene's words in its first third, so two scenes' type never overprints.
+  - Kinetic words are on screen as they are said, and narration-cued type starts its entrance 0.2 s before the word.
+  - Charts are mostly drawn by the first spoken word.
+  - The whip blurs less.
+  - Encodes use adaptive quantisation mode 3 against banding in dark gradients, and drafts encode at CRF 21.
+  - Room tone (pink noise about 60 dB down) sits under every mix, so a silence is a held breath, not a dropout.
+  - The flash hit lands well above the dialogue.
+  - Plate subjects are present on frame one.
 - **World zooms turn about one point.** Between two views of different sizes, the camera zooms about the point both views share, so the target holds its place instead of swinging off frame mid-zoom.
 - **A group with `enter: "none"` places its children with none**, instead of letting them draw or fade in on the cut frame.
 - **Genre films after round 2.**

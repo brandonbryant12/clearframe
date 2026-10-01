@@ -152,6 +152,11 @@ pub(crate) fn phrase_window(
     start..words.len()
 }
 
+thread_local! {
+    /// The opacity of scene type: below 1 only while a scene runs on under a dissolve.
+    pub(crate) static TEXT_ALPHA: std::cell::Cell<f32> = const { std::cell::Cell::new(1.0) };
+}
+
 /// Words that lean on the next one: a phrase should not end on them.
 pub(crate) fn leans(word: &str) -> bool {
     const LEANING: &[&str] = &[
@@ -346,6 +351,18 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     ) -> Svgr<'a> {
         if value.is_empty() {
             return empty();
+        }
+        // Under a dissolve the outgoing scene's words leave first, so two scenes' type is
+        // never read on top of each other.
+        let alpha = TEXT_ALPHA.with(|a| a.get());
+        if alpha < 0.999 {
+            if alpha <= 0.001 {
+                return empty();
+            }
+            TEXT_ALPHA.with(|a| a.set(1.0));
+            let node = self.run(value, x, baseline, font, size, tracking, color);
+            TEXT_ALPHA.with(|a| a.set(alpha));
+            return fframes::svgr!(<g opacity={alpha}>{node}</g>);
         }
         let weight = font.weight().to_string();
         if font.italic() {

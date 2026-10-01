@@ -45,9 +45,10 @@ export function chartSpec(spec, fail) {
 
 /** The chart as canvas elements in a `w`×`h` frame. */
 export function chartElements(spec, { w, h }) {
+  // A chart is mostly drawn by the first spoken word: an early start and a quick stagger.
   const id = spec.id ?? 'chart',
-    at = spec.at ?? 0.2,
-    stagger = spec.stagger ?? 0.12;
+    at = spec.at ?? 0.05,
+    stagger = spec.stagger ?? 0.08;
   const values = spec.values.map(v => ({ ...v, key: `${id}-${slug(v.id ?? v.label)}` }));
   const tall = h > w;
   const note = spec.note && {

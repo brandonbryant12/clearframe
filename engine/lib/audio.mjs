@@ -234,6 +234,12 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
     }
   } else if (musicLabel) busses.push(musicLabel);
   busses.push(...sfxLabels);
+  // Room tone: a breath of pink noise about 60 dB down, so a silent beat is a held breath in
+  // the room, never a digital dropout.
+  filters.push(
+    `anoisesrc=d=${D}:c=pink:r=48000:a=0.0012,aformat=sample_fmts=fltp:channel_layouts=stereo,lowpass=f=6000[room]`,
+  );
+  busses.push('[room]');
   filters.push(
     `${busses.join('')}amix=inputs=${busses.length}:normalize=0:dropout_transition=0,apad=whole_dur=${D},atrim=0:${D},aresample=48000[out]`,
   );

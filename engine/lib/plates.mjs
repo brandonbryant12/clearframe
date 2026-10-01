@@ -225,8 +225,7 @@ export function plateElements(id, { w, h, layers = ['far', 'mid', 'near'], asset
       blur: r(Math.max(6, span * 0.02)),
       z: LAYERS.mid.z,
       at: 0,
-      enter: 'fade',
-      dur: 0.6,
+      enter: 'none',
     });
   }
   if (layers.includes('mid'))
@@ -240,8 +239,7 @@ export function plateElements(id, { w, h, layers = ['far', 'mid', 'near'], asset
       fit: 'contain',
       z: LAYERS.mid.z,
       at: 0,
-      enter: 'fade',
-      dur: 0.6,
+      enter: 'none',
     });
   // On water the hull sits in it: a haze of the water's tone over its lower edge.
   if (layers.includes('mid') && mid?.staged && mid.ground === 'water') {
@@ -256,8 +254,7 @@ export function plateElements(id, { w, h, layers = ['far', 'mid', 'near'], asset
       opacity: 0.9,
       z: LAYERS.mid.z,
       at: 0,
-      enter: 'fade',
-      dur: 0.6,
+      enter: 'none',
     });
   }
   if (layers.includes('near'))

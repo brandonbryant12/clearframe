@@ -85,10 +85,11 @@ fn run_canvas<const W: usize, const H: usize, const RATE: usize>(
         return Err("scaled H.264 canvas must have positive even dimensions".into());
     }
     // Drafts are review copies: a fast preset at a quality that still shows type edges cleanly.
+    // Adaptive quantisation mode 3 spends bits on dark, flat gradients, where banding shows.
     let codec_params = if draft {
-        [("crf", "23"), ("preset", "veryfast"), ("threads", "1")]
+        [("crf", "21"), ("preset", "veryfast"), ("threads", "1"), ("aq-mode", "3")]
     } else {
-        [("crf", "16"), ("preset", "medium"), ("threads", "1")]
+        [("crf", "16"), ("preset", "medium"), ("threads", "1"), ("aq-mode", "3")]
     };
     let command = cli::new(
         &video,

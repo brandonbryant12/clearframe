@@ -290,7 +290,7 @@ const beats = [
     id: 'curve',
     block: 'canvas',
     vo: 'Queueing math says the wait grows with load over spare room. At ninety percent full, it is nine times the wait at half full.',
-    transition: 'dissolve',
+    transition: 'cut',
     props: {
       source: MATH,
       chart: {

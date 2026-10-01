@@ -265,7 +265,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let baseline = y + line_h * 0.8;
             for &(i, width, size) in line {
                 let w = &chunk[i];
-                let appear = w.start - 0.04;
+                // A word is on screen as it is said, not a beat after.
+                let appear = w.start - 0.12;
                 if self.t >= appear {
                     let e = self.m.enter_over(self.t - appear, 0.28);
                     let color = if big(w) { self.p.accent.clone() } else { self.p.ink.clone() };

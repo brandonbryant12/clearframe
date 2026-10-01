@@ -580,7 +580,8 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
     // ask for one would otherwise draw or fade in on the cut frame.
     if (still && el.enter == null) el.enter = 'none';
     if (el.say != null) {
-      el.at = resolve(el.say);
+      // Type cued to a word is legible as the word is said: its entrance starts a moment early.
+      el.at = Math.max(0, resolve(el.say) - (el.type === 'text' ? 0.2 : 0));
       delete el.say;
     }
     el.at ??= start + i * stagger;

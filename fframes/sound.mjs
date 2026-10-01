@@ -19,7 +19,8 @@ export function soundDesign(job, sfx) {
     if (['panel', 'iris', 'whip'].includes(b.transition) && start > 0) add('whoosh', start - 0.3, 0.3, 3);
     // Cinema: a hit on a flash cut; a silent beat gets room tone, and the swell before it
     // ends where the silence begins (crescendo, then nothing, then the hit).
-    if (b.transition === 'flash' && start > 0) add('hit', start, 0.55, 5);
+    // The hit lands well above the dialogue: it is the punctuation of the edit.
+    if (b.transition === 'flash' && start > 0) add('hit', start, 0.95, 5);
     if (!b.words.length && b.frames / job.fps >= 1 && start > 0) {
       add('drone', start, 0.06, 1);
       if (start >= 3) add('riser', start - 2.5, 0.3, 2);

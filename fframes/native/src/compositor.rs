@@ -298,7 +298,7 @@ fn scene_motion<'a>(d: &Draw<'a, '_, '_>, plate: Svgr<'a>, content: Svgr<'a>, fo
             (1.0, String::new(), w)
         }
         "whip" => {
-            blur = 38.0 * (1.0 - reveal_p);
+            blur = 24.0 * (1.0 - reveal_p);
             (1.0, format!("translate({} 0)", w * 0.22 * (1.0 - reveal_p)), w)
         }
         // A trailer's flash cut: a few frames of white light, gone before the shot is read.
