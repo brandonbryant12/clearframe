@@ -6,6 +6,37 @@ import { computeTiming, tokenize } from './timing.mjs';
 import { rules } from '../../fframes/registry.mjs';
 import { elementsExtent as extent } from '../../fframes/canvas.mjs';
 import { createJob } from '../../fframes/job.mjs';
+import { sketch } from '../../fframes/sketches.mjs';
+
+/**
+ * A beat as it will be drawn: a canvas built from a library sketch is judged on the sketch's
+ * elements (its loops, keys and first-frame picture), not on the two-line reference to it.
+ */
+function asDrawn(b, { width = 1920, height = 1080 } = {}) {
+  if (b.block !== 'canvas' || !b.props?.sketch) return b;
+  const preset =
+    height > width * 1.1
+      ? height > width * 1.5
+        ? 'vertical'
+        : 'portrait'
+      : width > height * 1.1
+        ? 'landscape'
+        : 'square';
+  try {
+    const d = sketch(b.props.sketch, preset, { seed: b.props.seed }),
+      words = b.props.sketchText ?? {};
+    const retext = list =>
+      list.forEach(el => {
+        if (el.type === 'text' && words[el.text] != null) el.text = words[el.text];
+        if (el.children) retext(el.children);
+      });
+    retext(d.elements);
+    const { sketch: _s, sketchText: _t, ...rest } = b.props;
+    return { ...b, props: { ...d, ...rest, elements: [...d.elements, ...(b.props.elements ?? [])] } };
+  } catch {
+    return b;
+  }
+}
 
 const FAMILY = new Proxy({}, { get: (_, name) => rules(name).family });
 // A canvas that holds only type is a type card (poster type), not a drawing.
@@ -30,9 +61,12 @@ const FULL_FRAME = b =>
 
 function onScreenWords(props) {
   let n = 0;
+  // A phrase repeated (a marquee, an echo) is read once.
+  const seen = new Set();
   const walk = (v, k) => {
     if (
       typeof v === 'string' &&
+      !seen.has(v) &&
       ![
         'source',
         'file',
@@ -70,7 +104,7 @@ function onScreenWords(props) {
         'mode',
       ].includes(k)
     )
-      n += v.split(/\s+/).filter(Boolean).length;
+      (seen.add(v), (n += v.split(/\s+/).filter(Boolean).length));
     else if (Array.isArray(v)) v.forEach(x => walk(x, k));
     else if (v && typeof v === 'object') for (const [kk, vv] of Object.entries(v)) walk(vv, kk);
   };
@@ -81,7 +115,7 @@ function onScreenWords(props) {
 // ------------------------------------------------------------------ cinema
 
 const has = (v, re) => re.test(JSON.stringify(v ?? {}));
-const DEPTH = /"(z|dolly|focus|depth)"\s*:/;
+const DEPTH = /"(z|dolly|focus|depth|tilt)"\s*:/;
 const LIFE = /"(loop|keys|along|dolly)"\s*:|"type"\s*:\s*"particles"/;
 
 /**
@@ -261,7 +295,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
 export function critique(root) {
   const sb = loadStoryboard(root),
     timing = computeTiming(root),
-    beats = sb.beats,
+    beats = sb.beats.map(b => asDrawn(b, sb.format)),
     out = [];
   const add = (level, where, message) => out.push({ level, where, message });
   const t = timing.beats;

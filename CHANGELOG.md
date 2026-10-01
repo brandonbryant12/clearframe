@@ -12,6 +12,11 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - a `timeline.png` (one frame per second, the boring stretches included) and a `phone.png` at 360 px.
   The bench report lists each film's change per second and held stretches.
 - **The drop lands on the picture.** `beatmap DIR | TRACK` measures a track's drop (the bass jumping in 20 ms windows and staying up) and its tempo (a comb over the onset envelope, with half and double listed), and lists every cut against the beat grid. `music.drop: {beat, at, song}` starts the song so its drop plays on that beat; a negative offset delays the song. `qa` checks the drop is heard there in the mix.
+- **Planes in space.** `tilt: [x, y]` turns any canvas element or group about its axes (an orthographic turn, its far edge in shade), keyable as `tiltX`/`tiltY`, with a `rock` loop that keeps it turning gently: device windows, phones, tickets and cards in space, as in the launch films.
+- **Materials.** `material: "thermal" | "chrome" | "gold" | "neon"` (or `{map, depth, soften, flow, stripe, angle, grain, gain}`) paints a shape by its own depth through a gradient map, with stripes flowing through it: the heat-image type of the October references, built from filters, not images.
+- **Promo sketches.** `sunburst` (an event opener), `chat` (a conversation played out on a floating phone), `device` (a window swinging in over a sky) and `marquee` (an end card ringed by type), assembled in `examples/launch-promo` (a music-led promo whose drop lands on its reveal).
+- **Critique reads sketches.** A canvas built from a sketch is judged on the sketch's elements (its loops, keys and first frame), repeated phrases count once, and `tilt` counts as depth.
+- **Mastering converges.** A peaky mix (a kick-led bed, hits) lost loudness in the limiter and landed up to 3 LU under target; the gain is now measured and corrected for up to three passes.
 - **Colour-tagged finals.** The encoder writes BT.601 limited range and tagged only the matrix; the mux now tags BT.709 primaries and transfer, the BT.601 matrix, TV range and square pixels, losslessly (decoded pixels are identical).
 
 - **A frame audit that fails `check`.** The renderer inspects four held moments of every beat, ignoring text in motion. It refuses:

@@ -1,0 +1,137 @@
+{
+  "version": 2,
+  "title": "Relay launch promo",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "bass",
+  "motion": {
+    "preset": "snappy",
+    "intensity": 0.8
+  },
+  "transition": "cut",
+  "captions": false,
+  "sfx": "normal",
+  "lens": {
+    "blur": 0.5
+  },
+  "music": {
+    "style": "pulse",
+    "bpm": 120,
+    "volume": 0.5,
+    "drop": {
+      "beat": "pro"
+    }
+  },
+  "beats": [
+    {
+      "id": "open",
+      "block": "canvas",
+      "duration": 2.5,
+      "props": {
+        "sketch": "sunburst",
+        "sketchText": {
+          "TITLE": "RELAY",
+          "DETAIL": "Launching October 16"
+        }
+      }
+    },
+    {
+      "id": "ask",
+      "block": "canvas",
+      "transition": "whip",
+      "duration": 5.6,
+      "props": {
+        "sketch": "chat",
+        "sketchText": {
+          "HELLO": "Hi! What are we shipping?",
+          "ASK": "Can you cut the launch film?",
+          "REPLY": "Of course. Send me the link."
+        }
+      }
+    },
+    {
+      "id": "app",
+      "block": "canvas",
+      "transition": "iris",
+      "duration": 3.6,
+      "props": {
+        "sketch": "device",
+        "sketchText": {
+          "PRODUCT": "Relay",
+          "LINE": "Your launch, cut on the beat"
+        }
+      }
+    },
+    {
+      "id": "pro",
+      "block": "canvas",
+      "transition": "flash",
+      "duration": 3.0,
+      "props": {
+        "elements": [
+          {
+            "type": "text",
+            "text": "PRO",
+            "x": 960,
+            "y": 650,
+            "size": 400,
+            "font": "bold",
+            "anchor": "middle",
+            "material": "thermal",
+            "enter": "blur",
+            "dur": 0.5,
+            "at": 0,
+            "keys": [
+              {
+                "at": 0,
+                "scale": 1.12,
+                "dur": 0
+              },
+              {
+                "at": 0,
+                "scale": 1,
+                "dur": 1.2,
+                "ease": "out"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Sound that lands on the picture.",
+            "x": 960,
+            "y": 830,
+            "size": 52,
+            "font": "serif",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0.6
+          }
+        ]
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      }
+    },
+    {
+      "id": "end",
+      "block": "canvas",
+      "transition": "cut",
+      "duration": 3.6,
+      "props": {
+        "sketch": "marquee",
+        "sketchText": {
+          "TITLE": "RELAY",
+          "DETAIL": "relay.example · October 16",
+          "RUN": "Relay · October 16 ·"
+        }
+      }
+    }
+  ],
+  "texture": {
+    "grain": 0.3,
+    "vignette": 0.35
+  }
+}

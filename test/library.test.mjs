@@ -7,6 +7,7 @@ import path from 'node:path';
 import { items, item, palettes, useProject, libraryDirs } from '../fframes/library.mjs';
 import { palette } from '../fframes/catalog.mjs';
 import { sketch } from '../fframes/sketches.mjs';
+import { normalizeElements } from '../fframes/canvas.mjs';
 import { treatmentById } from '../fframes/treatments.mjs';
 import { scaffold } from '../fframes/playbooks.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
@@ -87,9 +88,22 @@ test('a creative seed is reproducible, varies the look and the set pieces, and b
   assert.deepEqual(muse(42), muse(42));
   const draws = new Set([1, 2, 3, 4, 5, 6, 7, 8].map(s => JSON.stringify([muse(s).palette, muse(s).twist])));
   assert.ok(draws.size >= 6, 'different seeds start somewhere different');
+  // The October 2026 set: every frame shape builds and validates as canvas elements.
+  for (const name of ['sunburst', 'chat', 'device', 'marquee'])
+    for (const preset of ['landscape', 'vertical', 'square', 'portrait']) {
+      const els = sketch(name, preset).elements;
+      assert.ok(els.length > 0, `${name} ${preset}`);
+      normalizeElements(els, `${name}.${preset}`, m => {
+        throw new Error(m);
+      });
+    }
   const a = sketch('skyline', 'landscape', { seed: 1 }).elements,
     b = sketch('skyline', 'landscape', { seed: 2 }).elements;
-  assert.notDeepEqual(a.map(e => e.h), b.map(e => e.h), 'seeded sketches vary their layout');
+  assert.notDeepEqual(
+    a.map(e => e.h),
+    b.map(e => e.h),
+    'seeded sketches vary their layout',
+  );
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-seed-'));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
   const sb = scaffold(path.join(dir, 'film'), { playbook: 'trailer', seed: 42 });

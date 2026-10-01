@@ -39,7 +39,7 @@ const ENTERS: &[&str] = &[
     "scramble", "blur", "none", "assemble",
 ];
 const EXITS: &[&str] = &["fade", "shrink", "fall", "lift", "undraw", "wipe", "blur", "none", "scatter"];
-const LOOPS: &[&str] = &["spin", "pulse", "float", "sway", "orbit", "dash", "blink", "level"];
+const LOOPS: &[&str] = &["spin", "pulse", "float", "sway", "orbit", "dash", "blink", "level", "rock"];
 const TOKENS: &[&str] =
     &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "none"];
 
@@ -109,6 +109,12 @@ pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut us
         }
         if f(el, "opacity", 1.0) < 0.0 || f(el, "opacity", 1.0) > 1.0 {
             return Err("canvas opacity must be 0–1");
+        }
+        if el.get("tilt").is_some_and(|t| t.as_array().is_none_or(|a| a.len() != 2)) {
+            return Err("canvas tilt is [x, y] degrees");
+        }
+        if el.get("material").is_some_and(|m| !effects::material_ok(m)) {
+            return Err("canvas material is a preset name or {map, depth, soften, flow, grain, angle}");
         }
         if el.get("along").is_some_and(|route| path_info(s(route, "d")).is_none()) {
             return Err("canvas along needs parseable path data");
@@ -218,6 +224,10 @@ struct Pose {
     sy: f32,
     rotate: f32,
     alpha: f32,
+    /// Turn of the element's plane in space (degrees about its x and y axes), drawn as an
+    /// orthographic projection: a card, a window or a page tilting toward the light.
+    tx: f32,
+    ty: f32,
 }
 impl Pose {
     fn identity() -> Self {
@@ -248,6 +258,36 @@ fn keyed(el: &Value, now: f32) -> (f32, f32, f32, f32, f32, f32, f32) {
         );
     }
     key_pose
+}
+
+/// The plane's tilt at `now`: the static `tilt: [x, y]` (degrees), then each key's `tiltX` /
+/// `tiltY` eased from the state before it.
+fn keyed_tilt(el: &Value, now: f32) -> (f32, f32) {
+    let base = arr(el, "tilt");
+    let mut t = (
+        base.first().and_then(Value::as_f64).unwrap_or(0.0) as f32,
+        base.get(1).and_then(Value::as_f64).unwrap_or(0.0) as f32,
+    );
+    for key in arr(el, "keys") {
+        let start = f(key, "at", 0.0);
+        if now < start {
+            break;
+        }
+        let dur = f(key, "dur", crate::constants::get().canvas.key);
+        let k = if dur <= 1e-3 { 1.0 } else { ease(s(key, "ease"), (now - start) / dur) };
+        t = (
+            num(key, "tiltX").map_or(t.0, |v| t.0 + (v - t.0) * k),
+            num(key, "tiltY").map_or(t.1, |v| t.1 + (v - t.1) * k),
+        );
+    }
+    t
+}
+
+/// The affine image of a plane turned `tx` degrees about its horizontal axis and `ty` about its
+/// vertical one, seen orthographically: x' = x·cos ty, y' = y·cos tx + x·sin tx·sin ty.
+pub(crate) fn tilt_matrix(tx: f32, ty: f32) -> [f32; 4] {
+    let (a, b) = (tx.to_radians(), ty.to_radians());
+    [b.cos(), a.sin() * b.sin(), 0.0, a.cos()]
 }
 
 /// A depth driven by keys `{at, z, dur, ease}` from `start`: each key eases from the value
@@ -419,6 +459,15 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     }
 
     fn element(&self, el: &Value, default_at: f32, defs: &mut Vec<Svgr<'a>>, now: f32) -> Svgr<'a> {
+        // A material paints the shape itself, so the shape is drawn white and the filter reads
+        // only its form (and the flowing stripes laid over it).
+        let whitened;
+        let el = if el.get("material").is_some() && s(el, "type") != "group" {
+            whitened = effects::whitened(el);
+            &whitened
+        } else {
+            el
+        };
         // Stepped time ("on twos"): the element updates `fps` times a second, a handmade feel.
         let now = match num(el, "fps") {
             Some(q) if q > 0.0 => (now * q).floor() / q,
@@ -512,6 +561,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let mut pose = Pose::identity();
         pose.rotate = f(el, "rotate", 0.0);
         pose.alpha = f(el, "opacity", 1.0);
+        (pose.tx, pose.ty) = keyed_tilt(el, now);
         let distance = self.m.distance(f(el, "dist", 48.0));
         match enter {
             "fade" | "blur" => pose.alpha *= e.alpha,
@@ -621,6 +671,12 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 }
                 "float" => pose.dy += f(l, "amount", 10.0) * ramp * phase.sin(),
                 "sway" => pose.rotate += f(l, "amount", 4.0) * ramp * phase.sin(),
+                // The plane rocks in space: a floating window or card turning gently.
+                "rock" => {
+                    let a = f(l, "amount", 8.0) * ramp;
+                    pose.ty += a * phase.sin();
+                    pose.tx += 0.35 * a * phase.cos();
+                }
                 "orbit" => {
                     let a = f(l, "amount", 12.0) * ramp;
                     pose.dx += a * phase.cos() - a;
@@ -722,7 +778,12 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
             None => shape,
         };
+        let shape = match el.get("material") {
+            Some(m) => self.material(m, shape, now, (bx, by, bw, bh)),
+            None => shape,
+        };
         let shape = self.shine(el, shape, now, at + dur, (bx, by, bw, bh));
+        let shape = self.tilt_shade(shape, (pose.tx, pose.ty), (bx, by, bw, bh));
         // Focus: blur in or out, an authored or keyed `blur`, and depth of field (distance
         // from the focus plane as a circle of confusion on screen; elements without `z` are
         // overlays and stay sharp).
@@ -780,7 +841,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             && pose.dy.abs() < 1e-3
             && (pose.sx - 1.0).abs() < 1e-4
             && (pose.sy - 1.0).abs() < 1e-4
-            && pose.rotate.abs() < 1e-3;
+            && pose.rotate.abs() < 1e-3
+            && pose.tx.abs() < 1e-3
+            && pose.ty.abs() < 1e-3;
         let alpha = pose.alpha.clamp(0.0, 1.0);
         let placed = if identity && alpha >= 0.999 { shape } else { self.posed(shape, &pose, origin, identity, alpha) };
         // `subject: true`: the frame audit refuses type printed over this element (a drawn
@@ -808,8 +871,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let transform = if identity {
             "translate(0 0)".to_owned()
         } else {
+            let [ma, mb, mc, md] = tilt_matrix(pose.tx, pose.ty);
             format!(
-                "translate({} {}) rotate({}) scale({} {}) translate({} {})",
+                "translate({} {}) rotate({}) matrix({ma} {mb} {mc} {md} 0 0) scale({} {}) translate({} {})",
                 ox + pose.dx,
                 oy + pose.dy,
                 pose.rotate,
@@ -875,6 +939,34 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 </linearGradient>
             </defs>
             <rect x={x0} y={y0} width={w0} height={h0} fill={format!("url(#{grad})")} mask={format!("url(#{mask})")} />
+        </g>)
+    }
+
+    /// A turned plane is lit unevenly: the edge turned toward the viewer catches a little light
+    /// and the far edge falls into shade, which is what makes an orthographic tilt read as depth.
+    fn tilt_shade(&self, shape: Svgr<'a>, (tx, ty): (f32, f32), (bx, by, bw, bh): (f32, f32, f32, f32)) -> Svgr<'a> {
+        let (gx, gy) = (ty.to_radians().sin(), tx.to_radians().sin());
+        let turn = gx.abs().max(gy.abs());
+        if turn < 0.03 {
+            return shape;
+        }
+        let len = (gx * gx + gy * gy).sqrt().max(1e-6);
+        let (ux, uy) = (gx / len, gy / len);
+        let (cx, cy) = (bx + bw / 2.0, by + bh / 2.0);
+        let reach = 0.5 * (bw * ux.abs() + bh * uy.abs());
+        let (mask, grad) = (self.uid("tilt-mask"), self.uid("tilt-shade"));
+        let pad = 4.0;
+        fframes::svgr!(<g>
+            {shape.clone()}
+            <defs>
+                <mask id={mask.clone()} mask-type="alpha" maskUnits="userSpaceOnUse" x={bx - pad} y={by - pad} width={bw + 2.0 * pad} height={bh + 2.0 * pad}>{shape}</mask>
+                <linearGradient id={grad.clone()} gradientUnits="userSpaceOnUse" x1={cx - ux * reach} y1={cy - uy * reach} x2={cx + ux * reach} y2={cy + uy * reach}>
+                    <stop offset="0" stop-color="#ffffff" stop-opacity={0.10 * turn} />
+                    <stop offset="0.45" stop-color="#ffffff" stop-opacity="0" />
+                    <stop offset="1" stop-color="#000000" stop-opacity={0.24 * turn} />
+                </linearGradient>
+            </defs>
+            <rect x={bx - pad} y={by - pad} width={bw + 2.0 * pad} height={bh + 2.0 * pad} fill={format!("url(#{grad})")} mask={format!("url(#{mask})")} />
         </g>)
     }
 
@@ -1557,7 +1649,10 @@ mod tests {
                 {"type":"rect","x":1500,"y":200,"w":200,"h":200,"at":0,"dur":0,"morph":{"from":{"type":"circle","cx":1400,"cy":300,"r":60},"dur":1}},
                 {"type":"meter","x":600,"y":900,"w":600,"h":100,"style":"mirror","at":0,"dur":0},
                 {"type":"spotlight","cx":960,"cy":540,"r":120,"at":0.5,"dur":0.4},
-                {"type":"text","text":"Decode 2026","x":200,"y":150,"size":48,"enter":"scramble","at":0,"dur":1.2}]}}]});
+                {"type":"text","text":"Decode 2026","x":200,"y":150,"size":48,"enter":"scramble","at":0,"dur":1.2},
+                {"type":"text","text":"PRO","x":900,"y":500,"size":200,"material":"thermal","at":0,"dur":0},
+                {"type":"rect","x":1200,"y":600,"w":400,"h":260,"r":20,"fill":"surface","tilt":[12,-20],
+                 "keys":[{"at":0,"tiltY":70,"dur":0},{"at":0,"tiltY":-20,"dur":1}],"loop":{"type":"rock","period":3,"amount":6},"at":0,"dur":0}]}}]});
         let film = crate::Film::from_json(&serde_json::to_vec(&job).unwrap()).unwrap();
         let ctx = FFramesContext {
             time_base: fframes::TimeBase { fps: 30, sample_rate: 48000 },
@@ -1576,6 +1671,17 @@ mod tests {
         assert_eq!(render(88), render(88));
     }
     #[test]
+    fn a_tilted_plane_is_an_orthographic_turn() {
+        assert_eq!(tilt_matrix(0.0, 0.0), [1.0, 0.0, 0.0, 1.0]);
+        let [a, b, c, d] = tilt_matrix(0.0, 60.0);
+        assert!(
+            (a - 0.5).abs() < 1e-5 && b.abs() < 1e-6 && c == 0.0 && (d - 1.0).abs() < 1e-6,
+            "turning about y narrows x"
+        );
+        let [_, b, _, d] = tilt_matrix(30.0, 30.0);
+        assert!(b > 0.2 && (d - 0.866).abs() < 1e-3, "both turns shear and shorten");
+    }
+    #[test]
     fn validation_rejects_unknown_types_colors_and_oversized_scenes() {
         let ok = serde_json::json!({"elements":[{"type":"circle","cx":10,"cy":10,"r":5,"fill":"accent"}]});
         assert!(validate(&ok).is_ok());
@@ -1585,6 +1691,8 @@ mod tests {
             serde_json::json!({"elements":[{"type":"rect","fill":"url(#x)"}]}),
             serde_json::json!({"elements":[{"type":"path","d":"M 0 0 Q"}]}),
             serde_json::json!({"elements":[{"type":"icon","name":"../x.svg"}]}),
+            serde_json::json!({"elements":[{"type":"rect","material":"plasma"}]}),
+            serde_json::json!({"elements":[{"type":"rect","tilt":[10]}]}),
             serde_json::json!({"elements":[{"type":"rect","enter":"explode"}]}),
             serde_json::json!({"view":[0,10],"elements":[{"type":"rect"}]}),
         ] {

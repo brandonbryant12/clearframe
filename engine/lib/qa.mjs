@@ -9,6 +9,7 @@ import { computeTiming } from './timing.mjs';
 import { loadStoryboard } from './project.mjs';
 import { ffmpeg, ffmpegBin, writeJSON } from './util.mjs';
 import { measureDrop } from './beatmap.mjs';
+import { COVER } from '../../fframes/constants.mjs';
 
 // Analysis grid: the long side at 128 px is enough to see a pop or a jump, and small enough
 // to hold a few minutes of film in memory.
@@ -51,7 +52,7 @@ const r2 = n => Math.round(n * 100) / 100;
  * d[i] = difference between frame i-1 and i; skip[i] = difference between i-1 and i+1;
  * second[i] = difference between frame i and the frame one second earlier.
  */
-export function timeFindings({ d, skip, second, fps, beats = [], worlds = {} }) {
+export function timeFindings({ d, skip, second, fps, beats = [], worlds = {}, covers = {} }) {
   const n = d.length;
   const beatAt = t => beats.find(b => t >= b.start && t < b.end) ?? beats.at(-1);
   const where = i => {
@@ -59,10 +60,12 @@ export function timeFindings({ d, skip, second, fps, beats = [], worlds = {} }) 
       b = beatAt(t);
     return { t: r2(t), frame: i, beat: b?.id ?? null, local: b ? r2(t - b.start) : null };
   };
+  // A join is the cut plus whatever a graphic transition covers on either side of it.
   const joins = new Set();
   for (const b of beats.slice(1)) {
-    const f = Math.round(b.start * fps);
-    for (let k = -2; k <= 2; k++) joins.add(f + k);
+    const f = Math.round(b.start * fps),
+      [before, after] = covers[b.id] ?? [0, 0];
+    for (let k = -2 - Math.ceil(before * fps); k <= 2 + Math.ceil(after * fps); k++) joins.add(f + k);
   }
   const findings = [];
   // A frame that differs from both neighbours while they agree: a flash, a pop, an element
@@ -227,7 +230,13 @@ export async function qaProject(root, { video, loop = false } = {}) {
   const same = timing.frames === n;
   const beats = same ? timing.beats : [];
   const worlds = Object.fromEntries(sb.beats.map(b => [b.id, b.props?.world ?? null]));
-  const findings = timeFindings({ d, skip, second, fps, beats, worlds });
+  const covers = Object.fromEntries(
+    sb.beats.map(b => {
+      const t = b.transition ?? sb.transition ?? 'fade';
+      return [b.id, COVER[t] ?? (t === 'cut' ? [0, 0] : [0.35, 0.35])];
+    }),
+  );
+  const findings = timeFindings({ d, skip, second, fps, beats, worlds, covers });
   if (!same)
     findings.unshift({
       level: 'warn',

@@ -46,6 +46,9 @@ test('canvas elements reject unknown types, fields, colors, effects and malforme
     [{ type: 'rect', w: 1, h: 1, keys: [{ x: 4 }] }, /needs at \(seconds\) or say/],
     [{ type: 'text', text: 'Hi', enter: 'type', count: { to: 'many' } }, /count needs a numeric to/],
     [{ type: 'circle', r: 3, enter: 'type' }, /enter "type" is for text/],
+    [{ type: 'rect', w: 1, h: 1, tilt: [10] }, /tilt must be \[x, y\]/],
+    [{ type: 'text', text: 'PRO', material: 'plasma' }, /material must be one of/],
+    [{ type: 'text', text: 'PRO', material: { map: ['accent'] } }, /map must be a preset name or 2–8 colours/],
   ])
     assert.throws(() => normalizeElements([bad], 'elements', fail), message, JSON.stringify(bad));
   assert.throws(
@@ -73,6 +76,22 @@ test('canvas elements reject unknown types, fields, colors, effects and malforme
     fail,
   );
   assert.equal(nested[0].children[0].children[0].fill.gradient[1], '#112233');
+  // A plane turned in space, rocking; type painted by a material.
+  const turned = normalizeElements(
+    [
+      {
+        type: 'group',
+        tilt: [12, -20],
+        loop: { type: 'rock', amount: 6 },
+        keys: [{ at: 0, tiltY: 70, dur: 0 }],
+        children: [{ type: 'text', text: 'PRO', material: { map: 'chrome', flow: 40, grain: 0.1 } }],
+      },
+    ],
+    'elements',
+    fail,
+  );
+  assert.deepEqual(turned[0].tilt, [12, -20]);
+  assert.equal(turned[0].children[0].material.map, 'chrome');
 });
 
 test('canvas scheduling resolves spoken cues, staggers groups and reports when everything has settled', () => {

@@ -269,30 +269,37 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
       pre,
     ]);
     const target = `I=${loudness}:TP=-1.5:LRA=20`;
-    const probe = spawnSync(
-      'ffmpeg',
-      ['-hide_banner', '-i', pre, '-af', `loudnorm=${target}:print_format=json`, '-f', 'null', '-'],
-      {
-        encoding: 'utf8',
-      },
-    ).stderr;
-    const m = JSON.parse(probe.slice(probe.lastIndexOf('{'), probe.lastIndexOf('}') + 1));
+    const integrated = file => {
+      const probe = spawnSync(
+        'ffmpeg',
+        ['-hide_banner', '-i', file, '-af', `loudnorm=${target}:print_format=json`, '-f', 'null', '-'],
+        { encoding: 'utf8' },
+      ).stderr;
+      return Number(JSON.parse(probe.slice(probe.lastIndexOf('{'), probe.lastIndexOf('}') + 1)).input_i);
+    };
     // Mastered as an engineer would: one gain to the target, then a peak limiter for the few
     // hits that would cross the ceiling. (loudnorm's linear mode silently falls back to its
-    // compressor when the gain would cross the ceiling, and flattens the film again.)
-    const gain = loudness - Number(m.input_i);
-    await ffmpeg([
-      '-y',
-      '-i',
-      pre,
-      '-af',
-      `volume=${gain.toFixed(2)}dB,alimiter=limit=${(10 ** (-1.8 / 20)).toFixed(3)}:attack=2:release=60:level=false,aresample=48000`,
-      '-ac',
-      '2',
-      '-c:a',
-      'pcm_s16le',
-      output,
-    ]);
+    // compressor when the gain would cross the ceiling, and flattens the film again.) A peaky
+    // mix (a kick-led bed, hits) loses loudness in the limiter, so the result is measured and
+    // the gain corrected, up to three passes, until it sits within half a unit of the target.
+    let gain = loudness - integrated(pre);
+    for (let pass = 0; pass < 3; pass++) {
+      await ffmpeg([
+        '-y',
+        '-i',
+        pre,
+        '-af',
+        `volume=${gain.toFixed(2)}dB,alimiter=limit=${(10 ** (-1.8 / 20)).toFixed(3)}:attack=2:release=60:level=false,aresample=48000`,
+        '-ac',
+        '2',
+        '-c:a',
+        'pcm_s16le',
+        output,
+      ]);
+      const short = loudness - integrated(output);
+      if (Math.abs(short) <= 0.5) break;
+      gain += short;
+    }
   } finally {
     fs.rmSync(pre, { force: true });
   }

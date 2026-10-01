@@ -28,6 +28,8 @@ Read [docs/canvas.md](../../docs/canvas.md) for the element reference. The fixed
 - Handmade looks: `rough` for pencil and whiteboard, `mosaic` for tesserae (fills in rows or rings on grout, beaded outlines, `enter: assemble` / `exit: scatter`); the `sketchbook` and `mosaic` treatments set the whole film up for them.
 - Depth makes a place: `z` on the far, middle and near layers (the near one soft and at the frame edge), then a camera that moves: `dolly` to fly in, a world truck for parallax, `focus` keys for a rack focus on the word that shifts attention. Draw every layer as it should look before the camera moves. The set pieces `void`, `tunnel`, `skyline`, `horizon` and `title` show the pattern (docs/canvas.md, Depth).
 - Light things that give light: `glow` on lit windows (on the group), suns, screens, hot surfaces; `shadow` for cards on light palettes. It is the cheapest way from flat vector to depth.
+- Turn flat things in space: `tilt: [x, y]` on a group (a window, a phone, a ticket, a box face with type on it), flipped in with `tiltY` keys from edge-on and kept alive with `loop: {type: "rock"}`, plus a `shadow` so it floats. Start from `sketch device` or `sketch chat`.
+- One word can be a material: `material: "thermal" | "chrome" | "gold" | "neon"` (or your own `map`) paints display type by its own depth. One hero word per film; never body text, never figures that need reading.
 - Atmosphere is cheap: a `particles` field (`embers`, `rain`, `snow`, `dust`, `bubbles`) under a scene keeps a hold alive. One field per scene, low count, palette colour.
 - Text inside canvas is display text: short labels, not sentences. Long thoughts belong in narration or a `statement`.
 

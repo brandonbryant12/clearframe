@@ -35,7 +35,12 @@ None of the references holds still for even 2.5 s. ClearFrame's genre films are 
 - **`qa DIR`** (time bugs): one-frame pops, held stretches, world seams, hard changes inside a beat, loop seams, export tags, loudness, the drop as heard; a timeline sheet (one frame per second, boring stretches included) and a 360 px phone sheet. The bench report now lists change per second.
 - **`beatmap` and `music.drop`**: the drop measured from the bass in 20 ms windows; tempo with half and double listed; cuts against the grid; the song placed so its drop lands on a beat.
 - **Colour-tagged finals**: BT.709 primaries and transfer, the BT.601 matrix, TV range, square pixels.
+- **Planes in space**: `tilt` and the `rock` loop, for the tilted windows, phones, tickets and box faces of the launch films (orthographic, with the far edge in shade; SVG cannot draw a true perspective warp of type).
+- **Materials**: `material` paints type by its own depth through a gradient map with flowing stripes and grain, the effect the @bbssppllvv tutorial builds from SVG filters (implemented independently in the renderer's filter graph).
+- **Sketches**: `sunburst`, `chat`, `device` and `marquee`, and `examples/launch-promo` assembling them with a measured drop on the reveal. The example measures 5.7 change per second with nothing held, against 4–6 for the report bench.
 - **Rules in `docs/cinema.md`**: transform one thing, never crossfade two; probe the middle of every transition; the drop lands on the key picture; hold with measurable life.
+
+`qa` earned its place on its first real use: on the launch example it caught a background drawn 0.37 s late (a one-frame jump of 74 the sheet never showed) and a mix 2.8 LU under its loudness target.
 
 ## Not taken
 

@@ -500,7 +500,7 @@ export const BLOCKS = [
       world:
         'Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views',
       elements:
-        '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine}] (≤ 600) — see docs/canvas.md',
+        '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine, tilt, material}] (≤ 600) — see docs/canvas.md',
       stagger: 'Seconds between top-level elements without a cue (0–3)',
       rough:
         'Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure|solid, gap} (an element can set rough: false)',

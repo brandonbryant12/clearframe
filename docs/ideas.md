@@ -59,6 +59,14 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 - Ambient `art.under` (the `ambient` sketch) under a quiet statement.
 - Take something away: after dense scenes, one word on an empty frame.
 
+## Launches and promos
+- **A stage for the name.** `sunburst`: rays turning around a disc, the name wiped across it on the first beat of the music.
+- **The ask, played out.** `chat`: the customer's question typed and sent, three dots, the answer and a heart. Label it as an illustration.
+- **The product in space.** `device`: a window swinging in from edge-on and turning gently, chips floating around it; put a real screenshot inside for a real product.
+- **One word as a material.** `material: "thermal"` (or chrome, gold, neon) on the product name or a single hero word, held under a push-in.
+- **An end card that keeps moving.** `marquee`: the name and date running around the frame while the title sits inside an arch.
+- **The drop lands on the reveal.** `beatmap DIR` to find it, `music.drop: {beat}` to place it. See `examples/launch-promo`.
+
 ## Endings
 - **Callback:** return to the opening picture, changed (morph by id, or the same sketch with the resolved state).
 - One action as the `endcard` pill; or a `checklist` of what to watch next.

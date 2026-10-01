@@ -344,6 +344,157 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
 }
 
 /// Jittered outlines and hachure for one rough element at one seed.
+/// Gradient maps for `material`, from the cold edge (low depth) to the hot core.
+fn material_map(name: &str) -> Option<&'static [&'static str]> {
+    Some(match name {
+        // A heat image: a pink rim through red, orange and white to a deep blue core.
+        "thermal" => &["#ff4fa3", "#ff3d2e", "#ff9f1c", "#fff3c4", "#7fd3ff", "#2a6cff", "#0a1a5c"],
+        // Polished metal: bands of dark and light, so the depth reads as reflections.
+        "chrome" => &["#202024", "#9a9aa3", "#f6f6f8", "#4a4a52", "#d6d6dc", "#ffffff", "#7c7c86"],
+        "gold" => &["#3b2405", "#a8741a", "#ffe9a8", "#b8862b", "#fff6d8", "#c99a3c"],
+        // The palette's own light: an accent rim to a white-hot core.
+        "neon" => &["accent", "accent", "accent2", "#ffffff"],
+        _ => return None,
+    })
+}
+
+pub(super) fn material_ok(m: &Value) -> bool {
+    match m {
+        Value::String(name) => material_map(name).is_some(),
+        Value::Object(o) => {
+            let map_ok = match o.get("map") {
+                None => true,
+                Some(Value::String(name)) => material_map(name).is_some(),
+                Some(Value::Array(stops)) => {
+                    (2..=8).contains(&stops.len())
+                        && stops.iter().all(|c| {
+                            c.as_str().is_some_and(|c| c != "none" && super::paint_ok(Some(&Value::String(c.into()))))
+                        })
+                }
+                _ => false,
+            };
+            map_ok
+                && o.keys().all(|k| {
+                    ["map", "depth", "soften", "flow", "stripe", "angle", "grain", "gain"].contains(&k.as_str())
+                })
+        }
+        _ => false,
+    }
+}
+
+/// The element (and its children) painted white: a material reads only the form.
+pub(super) fn whitened(el: &Value) -> Value {
+    let mut out = el.clone();
+    if let Some(o) = out.as_object_mut() {
+        for key in ["fill", "stroke"] {
+            if o.get(key).is_some_and(|v| v != "none") {
+                o.insert(key.into(), Value::String("#ffffff".into()));
+            }
+        }
+        if o.get("fill").is_none() && !matches!(s(el, "type"), "line" | "path" | "poly" | "group" | "image") {
+            o.insert("fill".into(), Value::String("#ffffff".into()));
+        }
+        if let Some(Value::Array(children)) = o.get_mut("children") {
+            for c in children.iter_mut() {
+                *c = whitened(c);
+            }
+        }
+    }
+    out
+}
+
+impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
+    /// `material`: the shape's depth (how far each point lies inside its outline, a blur of its
+    /// alpha), optionally rippled by stripes that flow across it, mapped through a gradient
+    /// (thermal, chrome, gold, neon or `map: [colors]`), softened at the rim and grained. One
+    /// filter, a pure function of the shape and scene seconds.
+    pub(super) fn material(
+        &self,
+        m: &Value,
+        shape: Svgr<'a>,
+        now: f32,
+        (bx, by, bw, bh): (f32, f32, f32, f32),
+    ) -> Svgr<'a> {
+        let preset = m.as_str().unwrap_or("thermal");
+        let opt = |key: &str| m.get(key).and_then(Value::as_f64).map(|v| v as f32);
+        let stops: Vec<String> = match m.get("map") {
+            Some(Value::Array(list)) => list.iter().filter_map(Value::as_str).map(str::to_owned).collect(),
+            Some(Value::String(name)) => material_map(name).unwrap_or(&[]).iter().map(|c| (*c).to_owned()).collect(),
+            _ => material_map(preset).unwrap_or(&[]).iter().map(|c| (*c).to_owned()).collect(),
+        };
+        let colors: Vec<[f32; 3]> = stops
+            .iter()
+            .filter_map(|c| {
+                let hex = self.paint(Some(&Value::String(c.clone())), "#ffffff", &mut vec![]);
+                crate::design::parse(&hex)
+            })
+            .collect();
+        if colors.len() < 2 {
+            return shape;
+        }
+        let table = |i: usize| colors.iter().map(|c| format!("{:.3}", c[i])).collect::<Vec<_>>().join(" ");
+        let short = bw.min(bh).max(1.0);
+        let depth = opt("depth").unwrap_or((short * 0.08).clamp(3.0, 48.0)).max(0.5);
+        let soften = opt("soften").unwrap_or(depth * 0.45).max(0.0);
+        let gain = opt("gain").unwrap_or(if preset == "thermal" { 1.7 } else { 1.35 });
+        let grain = opt("grain").unwrap_or(if preset == "thermal" { 0.12 } else { 0.0 }).clamp(0.0, 1.0);
+        let flow = opt("flow").unwrap_or(if preset == "thermal" { 60.0 } else { 0.0 });
+        let stripe = opt("stripe").unwrap_or(0.45).clamp(0.0, 1.0);
+        let angle = opt("angle").unwrap_or(60.0);
+        let reach = soften * 3.0 + depth + 24.0;
+        let (x0, y0, w0, h0) = (bx - reach, by - reach, bw + 2.0 * reach, bh + 2.0 * reach);
+        // Stripes flowing across the form darken it in moving bands, so the map's bands travel.
+        let source = if flow.abs() > 1e-3 && stripe > 0.0 {
+            let (mask, grad) = (self.uid("material-mask"), self.uid("material-stripe"));
+            let period = (bw.max(bh) * 0.6).max(40.0);
+            let shift = (flow * now).rem_euclid(period);
+            let (cx, cy) = (bx + bw / 2.0, by + bh / 2.0);
+            fframes::svgr!(<g>
+                {shape.clone()}
+                <defs>
+                    <mask id={mask.clone()} mask-type="alpha" maskUnits="userSpaceOnUse" x={x0} y={y0} width={w0} height={h0}>{shape}</mask>
+                    <linearGradient id={grad.clone()} gradientUnits="userSpaceOnUse" spreadMethod="repeat" x1={cx + shift} y1={cy} x2={cx + shift + period} y2={cy} gradientTransform={format!("rotate({angle} {cx} {cy})")}>
+                        <stop offset="0" stop-color="#000000" stop-opacity="0" />
+                        <stop offset="0.5" stop-color="#000000" stop-opacity={stripe} />
+                        <stop offset="1" stop-color="#000000" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+                <rect x={x0} y={y0} width={w0} height={h0} fill={format!("url(#{grad})")} mask={format!("url(#{mask})")} />
+            </g>)
+        } else {
+            shape
+        };
+        let id = self.uid("material");
+        let mut grain_prims = vec![];
+        if grain > 0.0 {
+            grain_prims.push(fframes::svgr!(<feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="1" seed="7" result="noise" />));
+            grain_prims.push(fframes::svgr!(<feColorMatrix in="noise" type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 0 1" result="speck" />));
+            grain_prims.push(fframes::svgr!(<feComposite in="mapped" in2="speck" operator="arithmetic" k1="0" k2="1" k3={grain} k4={-grain * 0.5} result="grained" />));
+        } else {
+            grain_prims.push(fframes::svgr!(<feOffset in="mapped" dx="0" dy="0" result="grained" />));
+        }
+        fframes::svgr!(<g>
+            <defs><filter id={id.clone()} filterUnits="userSpaceOnUse" x={x0} y={y0} width={w0} height={h0} color-interpolation-filters="sRGB">
+                <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.299 0.587 0.114 0 0" result="lum" />
+                <feGaussianBlur in="SourceAlpha" stdDeviation={depth} result="deep" />
+                <feComposite in="deep" in2="SourceAlpha" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="inner" />
+                <feComposite in="inner" in2="lum" operator="arithmetic" k1={gain} k2="0" k3="0" k4="0" result="heat" />
+                <feColorMatrix in="heat" type="matrix" values="0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1" result="grey" />
+                <feComponentTransfer in="grey" result="mapped">
+                    <feFuncR type="table" tableValues={table(0)} />
+                    <feFuncG type="table" tableValues={table(1)} />
+                    <feFuncB type="table" tableValues={table(2)} />
+                </feComponentTransfer>
+                {grain_prims}
+                <feGaussianBlur in="SourceAlpha" stdDeviation={soften} result="rim" />
+                <feComponentTransfer in="rim" result="edge"><feFuncA type="linear" slope="1.5" /></feComponentTransfer>
+                <feComposite in="grained" in2="edge" operator="in" />
+            </filter></defs>
+            <g filter={format!("url(#{id})")}>{source}</g>
+        </g>)
+    }
+}
+
 pub(super) struct RoughGeometry {
     length: f32,
     closed: bool,

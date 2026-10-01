@@ -800,7 +800,7 @@ Speech-following words: highlight a phrase, reveal words, one at a time, or stac
 | emphasis | stack: words drawn larger in the accent (whole words from the narration) |
 | emphasisStyle | stack: bold (default) or serif italic emphasis words |
 | upper | stack: set in capitals (true/false) |
-| maxWords | Words per phrase (1–10) |
+| maxWords | Words per phrase (1–16; stack pages whole sentences, up to 14 words, by default) |
 | maxGap | Start a new phrase after this silence, 0–5 seconds (default 0.6) |
 | maxDuration | Maximum phrase span, 0.5–15 seconds (default 4); never split a timed word |
 
@@ -1203,13 +1203,16 @@ Draw anything: shapes, paths, text, icons and images that draw on, pop, travel a
 | viewDrift | After arriving, the camera keeps easing in by this fraction of the view (worlds default 0.03) |
 | viewTall | Camera rect for tall (vertical) frames; otherwise the view is re-framed on the beat’s own foreground |
 | world | Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views |
-| elements | [{type: rect / circle / ellipse / line / path / poly / text / icon / image / group / meter / spotlight / particles / solid, geometry, fill, stroke, width, enter, say / at, dur, keys, loop, along, exit, exitSay / exitAt, z, blur, shine}] (≤ 600) — see docs/canvas.md |
+| elements | [{type: rect / circle / ellipse / line / path / poly / text / icon / image / group / meter / spotlight / particles / solid, geometry, fill, stroke, width, enter, say / at, dur, keys, loop, along, exit, exitSay / exitAt, z, blur, shine, tilt, material}] (≤ 600) — see docs/canvas.md |
 | stagger | Seconds between top-level elements without a cue (0–3) |
 | rough | Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure / solid, gap} (an element can set rough: false) |
 | mosaic | Lay every shape in tesserae: true or {tile, gap, jitter, flow: rows / rings, outline, build: sweep / radial / random, shade, shine, grout, axis} (an element can set mosaic: false) |
 | dolly | Fly the camera through depth: keys [{say / at, z, dur, ease}]. Elements with z are drawn in perspective; the camera passes them as its z reaches theirs |
 | focus | Depth of field for elements with z: {z (the focus plane), aperture 0–3 (1 natural), keys [{say / at, z, dur}] for a rack focus} |
-| chart | A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars / stack / number, values: [{label, value, highlight, id}], box: [x, y, w, h], max, prefix, suffix, decimals, id} |
+| chart | A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars / stack / number, values: [{label, value, highlight, id}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (the note replaces a heading: an annotation on the stressed word) |
+| sketch | A library sketch drawn under any elements, redrawn for this frame (clearframe sketch lists them); its camera (view, dolly, focus) applies unless the beat sets its own |
+| sketchText | Replacement words for a sketch’s placeholder type: {"TITLE": "Your words"} |
+| seed | Varies a sketch’s seeded layout (buildings, ridges, swell) |
 | plates | A generated depth plate set staged in depth: the id of an image asset declared with layers: true (its far, mid and near layers at z 6, 1.2 and -0.35), under any elements; adds a slow dolly unless the beat sets a camera |
 
 ```json

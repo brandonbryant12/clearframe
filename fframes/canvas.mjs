@@ -79,6 +79,8 @@ const COMMON = [
   'shadow',
   'glow',
   'mosaic',
+  'tilt',
+  'material',
 ];
 export const ENTERS = [
   'fade',
@@ -100,7 +102,8 @@ export const ENTERS = [
   'assemble',
 ];
 export const EXITS = ['fade', 'shrink', 'fall', 'lift', 'undraw', 'wipe', 'blur', 'none', 'scatter'];
-export const LOOPS = ['spin', 'pulse', 'float', 'sway', 'orbit', 'dash', 'blink', 'level'];
+export const LOOPS = ['spin', 'pulse', 'float', 'sway', 'orbit', 'dash', 'blink', 'level', 'rock'];
+export const MATERIALS = ['thermal', 'chrome', 'gold', 'neon'];
 export const EASES = ['inOut', 'in', 'out', 'linear', 'spring'];
 export const COLOR_TOKENS = [
   'bg',
@@ -189,6 +192,9 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
     if (el.type === 'text' && el.fit != null && (!finite(el.fit) || el.fit <= 0))
       fail(`${at}.fit must be the widest the line may be, in canvas units`);
     if (el.shine != null) el.shine = shineSpec(el.shine, `${at}.shine`, fail);
+    if (el.tilt != null && (!Array.isArray(el.tilt) || el.tilt.length !== 2 || el.tilt.some(v => !finite(v))))
+      fail(`${at}.tilt must be [x, y] degrees: the plane turned about its horizontal and vertical axes`);
+    if (el.material != null) materialSpec(el.material, `${at}.material`, fail);
     for (const key of ['fill', 'stroke']) {
       const v = el[key];
       if (v == null || isColor(v)) continue;
@@ -256,13 +262,15 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
               'opacity',
               'blur',
               'hold',
+              'tiltX',
+              'tiltY',
             ].includes(key)
           )
             fail(`${at}.keys[${j}]: unsupported field ${key}`);
         if (k.at == null && k.say == null) fail(`${at}.keys[${j}] needs at (seconds) or say (spoken cue)`);
         if (k.blur != null && (!finite(k.blur) || k.blur < 0 || k.blur > 60))
           fail(`${at}.keys[${j}].blur must be 0–60 px`);
-        for (const key of ['at', 'dur', 'x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity'])
+        for (const key of ['at', 'dur', 'x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity', 'tiltX', 'tiltY'])
           if (k[key] != null && !finite(k[key])) fail(`${at}.keys[${j}].${key} must be a number`);
         if (k.ease != null && !EASES.includes(k.ease)) fail(`${at}.keys[${j}].ease must be one of ${EASES.join(', ')}`);
         if (k.opacity != null && (k.opacity < 0 || k.opacity > 1)) fail(`${at}.keys[${j}].opacity must be 0–1`);
@@ -670,6 +678,35 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
  * A light sweep across an element (a title catching the light): `{at|say, dur, color, width,
  * angle, opacity, every}`. `every` repeats the sweep after that many seconds.
  */
+/** A material: a preset name, or {map: preset | [2–8 colours], depth, soften, flow, stripe, angle, grain, gain}. */
+export function materialSpec(v, where, fail) {
+  if (typeof v === 'string') {
+    if (!MATERIALS.includes(v)) fail(`${where} must be one of ${MATERIALS.join(', ')} or an object`);
+    return v;
+  }
+  if (!v || typeof v !== 'object' || Array.isArray(v)) fail(`${where} must be a preset name or an object`);
+  for (const k of Object.keys(v))
+    if (!['map', 'depth', 'soften', 'flow', 'stripe', 'angle', 'grain', 'gain'].includes(k))
+      fail(`${where}: unsupported field ${k}`);
+  if (v.map != null) {
+    const ok =
+      (typeof v.map === 'string' && MATERIALS.includes(v.map)) ||
+      (Array.isArray(v.map) && v.map.length >= 2 && v.map.length <= 8 && v.map.every(c => isColor(c) && c !== 'none'));
+    if (!ok) fail(`${where}.map must be a preset name or 2–8 colours (tokens or #rrggbb), cold rim to hot core`);
+  }
+  for (const k of ['depth', 'soften', 'flow', 'stripe', 'angle', 'grain', 'gain'])
+    if (v[k] != null && !finite(v[k])) fail(`${where}.${k} must be a number`);
+  for (const [k, lo, hi] of [
+    ['depth', 0.5, 120],
+    ['soften', 0, 60],
+    ['stripe', 0, 1],
+    ['grain', 0, 1],
+    ['gain', 0.2, 4],
+  ])
+    if (v[k] != null && (v[k] < lo || v[k] > hi)) fail(`${where}.${k} must be ${lo}–${hi}`);
+  return v;
+}
+
 export function shineSpec(v, where, fail) {
   const spec = v === true ? {} : v;
   if (!spec || typeof spec !== 'object' || Array.isArray(spec))
