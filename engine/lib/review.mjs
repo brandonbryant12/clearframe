@@ -63,18 +63,21 @@ export async function reviewProject(root, { video, beat } = {}) {
       '0:v:0',
       '-an',
       '-vf',
-      `select=${select},scale=360:-2`,
+      // Half resolution, large enough to judge type and edges (JPEG keeps a review small).
+      `select=${select},scale=960:-2`,
       '-fps_mode',
       'vfr',
       '-start_number',
       '0',
+      '-q:v',
+      '3',
       '-threads',
       '1',
-      path.join(dir, 'frame-%04d.png'),
+      path.join(dir, 'frame-%04d.jpg'),
     ]);
     const images = fs
       .readdirSync(dir)
-      .filter(f => f.endsWith('.png'))
+      .filter(f => f.endsWith('.jpg'))
       .sort();
     if (images.length !== samples.length)
       throw new Error(`Expected ${samples.length} decoded review frames; received ${images.length}`);
@@ -87,7 +90,7 @@ export async function reviewProject(root, { video, beat } = {}) {
       '-framerate',
       '1',
       '-i',
-      path.join(dir, 'frame-%04d.png'),
+      path.join(dir, 'frame-%04d.jpg'),
       '-vf',
       `scale=240:-2,tile=8x${Math.ceil(samples.length / 8)}:padding=4:margin=4:color=0x161b22`,
       '-frames:v',
