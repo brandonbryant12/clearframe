@@ -44,13 +44,14 @@ export function expandArt(art, { width = 1920, height = 1080, duration = 8 } = {
   const { sketch: name, seed, opacity = 1, drift = 0, ...rest } = art;
   const sketched = { type: 'group', at: 0, enter: 'none', opacity, children: drawn.elements };
   if (drift > 0) {
+    if (!(Number.isFinite(duration) && duration > 0)) throw new Error('art.drift needs a positive beat duration');
     // About the frame centre, linear from the cut, never holding the beat (hold: false).
     const side = Math.abs(seed ?? 0) % 2 ? -1 : 1;
     sketched.origin = [Math.round(width / 2), Math.round(height / 2)];
     sketched.keys = [
       {
         at: 0,
-        dur: Math.max(1, duration),
+        dur: duration,
         ease: 'linear',
         scale: Math.round((1 + 0.08 * drift) * 1000) / 1000,
         x: Math.round(side * drift * Math.min(width, height) * 0.03),

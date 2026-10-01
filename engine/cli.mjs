@@ -285,7 +285,8 @@ async function main() {
     const { ingestMarkdown, ingestRecording } = await import('./lib/ingest.mjs');
     const dir = path.resolve(positionals[0] ?? '.');
     if (o.markdown) {
-      const { storyboardFor } = await import('../fframes/playbooks.mjs');
+      const { storyboardFor, artSketches } = await import('../fframes/playbooks.mjs');
+      const { vendor } = await import('../fframes/library.mjs');
       const { applyTreatment, directionTemplate, treatmentById } = await import('../fframes/treatments.mjs');
       // A film look starts from its genre's shots (cinematic → cinematic-explainer), not a deck.
       const playbook = o.playbook ?? (o.treatment && treatmentById(o.treatment)?.playbook) ?? 'research-digest';
@@ -301,6 +302,8 @@ async function main() {
             path.join(dir, 'DIRECTION.md'),
             directionTemplate(sb, o.treatment ? treatmentById(o.treatment) : null),
           );
+          // Art sketches stay as shorthand until the job; shared ones travel with the project.
+          vendor(dir, artSketches(sb));
           return sb;
         },
       });
