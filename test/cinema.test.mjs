@@ -302,3 +302,13 @@ test('a normal storyboard expands background sketches with frame-zero art and pr
   assert.equal(art.under[1].cx, 80);
   assert.equal(art.over[0].cx, 90);
 });
+
+test('a drifting art layer keeps its beat length and rejects drift without a sketch', t => {
+  const beat = art => ({ id: 'a', block: 'statement', duration: 3, props: { text: 'A clear idea' }, art });
+  const r = job(t, { theme: 'neon', captions: false, beats: [beat({ sketch: 'arena-grid', drift: 0.8 })] });
+  assert.deepEqual(r.errors, []);
+  const b = r.job.beats[0];
+  assert.equal(b.art.under[0].keys[0].dur, b.frames / 30, 'the push spans the beat');
+  assert.ok(b.settle_seconds < 1, 'ambient drift does not hold the beat');
+  assert.match(job(t, { beats: [beat({ drift: 0.5, under: [] })] }).errors.join('\n'), /require art.sketch/);
+});

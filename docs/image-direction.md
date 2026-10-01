@@ -48,11 +48,11 @@ Built-in imagegen is the default when available. Copy any chosen project-bound r
   "id": "reveal",
   "block": "statement",
   "duration": 4,
-  "art": { "sketch": "glass-orbits", "seed": 17, "opacity": 0.8 },
+  "art": { "sketch": "glass-orbits", "seed": 17, "opacity": 0.8, "drift": 0.5 },
   "props": { "text": "Your approved message" }
 }
 ```
 
-`art.sketch` can sit beneath any block. For these compositions, position short copy in the left half (landscape) or top third (portrait), preferably with native canvas text. Default centred blocks can overlap the hero: inspect them. `art.under` appends authored background details, and `art.over` stays above the block. `opacity` affects the selected sketch, not authored additions. Only sketches marked `layer: "under"` with no scene camera/world can be used here; use `props.sketch` for a complete canvas scene.
+`art.sketch` can sit beneath any block. For these compositions, position short copy in the left half (landscape) or top third (portrait), preferably with native canvas text. Default centred blocks can overlap the hero: inspect them. `art.under` appends authored background details, and `art.over` stays above the block. `opacity` and `drift` affect the selected sketch, not authored additions. Give repeated uses of one material different seeds so consecutive beats are related but not identical; add `drift` so ambient art moves like a camera instead of sitting as a still behind the copy. Only sketches marked `layer: "under"` with no scene camera/world can be used here; use `props.sketch` for a complete canvas scene.
 
-For detailed shape or timing changes, run `node engine/cli.mjs sketch inflated-loop`, copy its elements into your storyboard, then edit native geometry, `fill`, `stroke`, `loop` and `keys`. Palette tokens remain live. Do not expect every sketch's seed to vary geometry; only seeded layouts use it. Shared/project JSON sketches retain their authored coordinates; supply format variants for the frames you use.
+For detailed shape or timing changes, run `node engine/cli.mjs sketch inflated-loop`, copy its elements into your storyboard, then edit native geometry, `fill`, `stroke`, `loop` and `keys`. Palette tokens remain live. All ten material sketches and the city/landscape sketches respond to `seed`; most mechanism sketches ignore it. Shared/project JSON sketches retain their authored coordinates; supply format variants for the frames you use.

@@ -217,7 +217,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     if (hasDigits(props.elements) && !props.source)
       report.warnings.push(`${b.id}: canvas text contains digits; if they are figures, add a visible source.`);
   }
-  const art = source.art != null ? artLayers(source.art, b.id, { width: timing.width, height: timing.height }) : null;
+  const art = source.art != null ? artLayers(source.art, b.id, { width: timing.width, height: timing.height, duration: b.dur }) : null;
   if (art) settle = Math.max(settle, scheduleArt(art.under, at), scheduleArt(art.over, at));
   const paced = keepPace(b, source, props, art, at, { sb, report });
   const layers = beatLayers(source, b, sb);
@@ -324,11 +324,11 @@ function artLayers(a, id, frame) {
     !a ||
     typeof a !== 'object' ||
     Array.isArray(a) ||
-    Object.keys(a).some(k => !['under', 'over', 'rough', 'sketch', 'seed', 'opacity'].includes(k))
+    Object.keys(a).some(k => !['under', 'over', 'rough', 'sketch', 'seed', 'opacity', 'drift'].includes(k))
   )
-    throw new Error('art must be {sketch, seed, opacity, under: [...], over: [...], rough}');
-  if (a.sketch == null && (a.seed != null || a.opacity != null))
-    throw new Error('art.seed and art.opacity require art.sketch');
+    throw new Error('art must be {sketch, seed, opacity, drift, under: [...], over: [...], rough}');
+  if (a.sketch == null && (a.seed != null || a.opacity != null || a.drift != null))
+    throw new Error('art.seed, art.opacity and art.drift require art.sketch');
   a = expandArt(a, frame);
   const state = { count: 0 };
   const fail = m => {

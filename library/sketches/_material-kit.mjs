@@ -1,5 +1,5 @@
 // Original vector artwork helpers. No imported imagery, fonts, random state or runtime APIs.
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round, rng } from '../../fframes/sketch-kit.mjs';
 export { round, smoothPath, rng } from '../../fframes/sketch-kit.mjs';
 export const still = (type, props) => ({ type, at: 0, enter: 'none', ...props });
 export const group = (children, props = {}) => still('group', { children, ...props });
@@ -18,6 +18,12 @@ export const wash = (cx, cy, rx, ry, color, opacity = 0.2) => still('ellipse', {
   fill: { gradient: [color, color], radial: true, fade: true }, stroke: 'none', opacity,
 });
 export const gradient = (colors, angle = 90) => ({ gradient: colors, angle });
+// Seeded, bounded variation: j(a) lies in [-a, a]. Without a seed every value is 0, the
+// reference layout shown in the atlas. Variations stay small enough to keep the copy region.
+export const jitter = seed => {
+  const r = seed == null ? null : rng(seed);
+  return a => (r ? (r() * 2 - 1) * a : 0);
+};
 export const frame = (w, h) => ({
   tall: h > w * 1.1, m: Math.min(w, h),
   // The top third in portrait and the left half in landscape stay available for copy.

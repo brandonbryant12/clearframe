@@ -1,13 +1,13 @@
-import { frame, still, poly, line, wash, gradient, group, round } from './_material-kit.mjs';
+import { frame, still, poly, line, wash, gradient, group, round, jitter } from './_material-kit.mjs';
 
 export default {
   name: 'lightwell', order: 30,
   summary: 'A pale architectural opening, bevelled walls and a long pool of light. Spacious, tactile and present from frame one.',
   use: 'Light professional openers, thoughtful reveals and long narration lead-ins. Use daylight or paper; leave copy left in landscape or above in portrait.',
-  build(w, h) {
-    const { m, tall, cx, cy } = frame(w, h),
-      pw = m * 0.36, ph = m * 0.58, x = cx - pw / 2, y = cy - ph / 2,
-      d = m * 0.075, floor = y + ph;
+  build(w, h, { seed } = {}) {
+    const { m, tall, cx, cy } = frame(w, h), j = jitter(seed),
+      pw = m * (0.36 + j(0.04)), ph = m * (0.58 + j(0.05)), x = cx - pw / 2, y = cy - ph / 2,
+      d = m * (0.075 + j(0.02)), floor = y + ph;
     return { layer: 'under', elements: [
       wash(cx, cy, m * 0.72, m * 0.7, 'accent2', 0.08),
       // A continuous floor, the portal's reflection and the cast beam make a place.

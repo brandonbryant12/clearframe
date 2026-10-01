@@ -17,7 +17,7 @@
     "rough": false
   },
   "rules": [
-    "Choose lightwell, paper-fold, glass-orbits or contour-field as art.sketch; reserve the left half or portrait top for native copy.",
+    "Choose lightwell, paper-fold, glass-orbits or contour-field as art.sketch with drift about 0.5 and a new seed per beat; reserve the left half or portrait top for native copy.",
     "One sculptural hero; broad light and contact shadows provide depth.",
     "Keep brand typography and all factual labels native; gradients use palette tokens.",
     "Ambient art supports the story; switch to a mechanism or evidence when the claim requires one."

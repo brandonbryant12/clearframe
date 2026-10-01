@@ -201,7 +201,7 @@ const schema = {
             type: 'object',
             additionalProperties: false,
             description: 'Canvas elements under/over the block (docs/canvas.md)',
-            properties: { sketch: text, seed: { type: 'integer' }, opacity: { type: 'number', minimum: 0, maximum: 1 }, rough: { oneOf: [bool, number, object] }, under: { type: 'array', items: object }, over: { type: 'array', items: object } },
+            properties: { sketch: text, seed: { type: 'integer' }, opacity: { type: 'number', minimum: 0, maximum: 1 }, drift: { type: 'number', minimum: 0, maximum: 1 }, rough: { oneOf: [bool, number, object] }, under: { type: 'array', items: object }, over: { type: 'array', items: object } },
           },
         },
         allOf: BLOCKS.map(b => ({

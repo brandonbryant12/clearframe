@@ -752,6 +752,11 @@
                 "minimum": 0,
                 "maximum": 1
               },
+              "drift": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
               "rough": {
                 "oneOf": [
                   {

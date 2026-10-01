@@ -24,7 +24,8 @@
       "camera": "none",
       "art": {
         "sketch": "lightwell",
-        "seed": 17
+        "seed": 17,
+        "drift": 0.5
       },
       "props": {
         "elements": [
@@ -78,7 +79,8 @@
       "camera": "none",
       "art": {
         "sketch": "contour-field",
-        "seed": 17
+        "seed": 18,
+        "drift": 0.5
       },
       "props": {
         "elements": [
@@ -132,7 +134,8 @@
       "camera": "none",
       "art": {
         "sketch": "paper-fold",
-        "seed": 17
+        "seed": 19,
+        "drift": 0.5
       },
       "props": {
         "elements": [
@@ -186,7 +189,8 @@
       "camera": "none",
       "art": {
         "sketch": "glass-orbits",
-        "seed": 17
+        "seed": 20,
+        "drift": 0.5
       },
       "props": {
         "elements": [

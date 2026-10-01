@@ -1,13 +1,13 @@
-import { frame, poly, line, wash, group, gradient, round } from './_material-kit.mjs';
+import { frame, poly, line, wash, group, gradient, round, jitter } from './_material-kit.mjs';
 
 export default {
   name: 'prism-shards', order: 38,
   summary: 'A suspended cluster of cut crystal facets, contrasting edge lights and offset fragment motion.',
   use: 'Gaming, bold music identities and futuristic reveals. Electric, neon or midnight; use briefly as a hero reveal or turn.',
-  build(w, h) {
-    const { m, cx, cy } = frame(w, h);
-    const shard = (u, v, size, angle, color) => {
-      const x = cx + u * m, y = cy + v * m, s = size * m,
+  build(w, h, { seed } = {}) {
+    const { m, cx, cy } = frame(w, h), j = jitter(seed);
+    const shard = (u, v, size, tilt, color) => {
+      const angle = round(tilt + j(10)), x = cx + u * m, y = cy + v * m, s = size * (1 + j(0.1)) * m,
         p = (a, b) => [x + a * s, y + b * s];
       return group([
         poly([p(0, -1), p(0.44, -0.2), p(0.06, 0.9), p(-0.36, 0.22)], gradient(['surface', color], 15), { opacity: 0.75 }),

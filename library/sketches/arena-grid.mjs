@@ -1,13 +1,15 @@
-import { frame, still, poly, line, group, wash, round } from './_material-kit.mjs';
+import { frame, still, poly, line, group, wash, round, jitter } from './_material-kit.mjs';
 
 export default {
   name: 'arena-grid', order: 37,
   summary: 'An angular competition gate above a receding grid, with restrained edge lights and racing dashes.',
   use: 'Gaming, competitive launches and high-energy technology. Dark electric or neon palettes; side-lit geometry keeps a readable copy zone.',
-  build(w, h) {
-    const { m, cx, cy } = frame(w, h), hy = cy + m * 0.24,
-      p = (u, v) => [cx + u * m, cy + v * m];
-    const gate = [p(-0.31, 0.21), p(-0.28, -0.21), p(-0.18, -0.32), p(0.21, -0.32), p(0.31, -0.21), p(0.31, 0.21)];
+  build(w, h, { seed } = {}) {
+    const { m, cx, cy } = frame(w, h), j = jitter(seed), hy = cy + m * 0.24,
+      p = (u, v) => [cx + u * m, cy + v * m],
+      // The seed reshapes the gate: its width, height and the cut of each upper corner.
+      sw = 1 + j(0.08), top = -0.32 + j(0.03), left = -0.18 + j(0.05), right = 0.21 + j(0.05);
+    const gate = [p(-0.31 * sw, 0.21), p(-0.28 * sw, -0.21), p(left * sw, top), p(right * sw, top), p(0.31 * sw, -0.21), p(0.31 * sw, 0.21)];
     return { layer: 'under', elements: [
       wash(cx, cy, m * 0.57, m * 0.48, 'accent2', 0.12),
       ...Array.from({ length: 13 }, (_, i) => line([cx + (i - 6) * m * 0.024, hy], [cx + (i - 6) * m * 0.3, h * 1.1], { stroke: 'accent', opacity: 0.16, width: 1.5 })),

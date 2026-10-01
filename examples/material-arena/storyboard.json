@@ -24,7 +24,8 @@
       "camera": "none",
       "art": {
         "sketch": "arena-grid",
-        "seed": 17
+        "seed": 17,
+        "drift": 0.8
       },
       "props": {
         "elements": [
@@ -78,7 +79,8 @@
       "camera": "none",
       "art": {
         "sketch": "prism-shards",
-        "seed": 17
+        "seed": 18,
+        "drift": 0.8
       },
       "props": {
         "elements": [
