@@ -44,7 +44,12 @@ test('every playbook compiles to a native job without paid assets, slide chrome 
     assert.deepEqual(result.errors, [], p.id);
     assert.ok(result.job.beats.every(b => b.frames > 0));
     assert.equal(result.job.chrome, false);
-    arcs.add(result.job.beats.map(b => b.block).join(','));
+    // All-canvas films differ by what they draw, not by block names.
+    arcs.add(
+      result.job.beats
+        .map(b => (b.block === 'canvas' ? `canvas[${b.props.elements.length}]` : b.block))
+        .join(','),
+    );
     assert.equal(sb.assets.length, 0);
   }
   assert.equal(arcs.size, playbooks().length);

@@ -239,9 +239,11 @@ export function chartElements(spec, { w, h }) {
       const mine = el.id === target || el.of === target;
       if (!mine && !el.note && (el.type === 'rect' || el.type === 'text'))
         el.keys = [...(el.keys ?? []), { ...cue, opacity: 0.35, dur: 0.5 }];
-      delete el.of;
-      delete el.note;
     }
+  }
+  for (const el of out) {
+    delete el.of;
+    delete el.note;
   }
   return out;
 }
