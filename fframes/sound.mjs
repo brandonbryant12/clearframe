@@ -36,9 +36,15 @@ export function soundDesign(job, sfx) {
     // A world camera travelling to its next stop.
     if (b.block === 'canvas' && b.props.viewFrom && (b.props.viewDur ?? 1.2) <= 2.5)
       add('whoosh', start + (b.props.viewAt ?? 0), 0.18, 2);
-    let pops = 0;
+    let pops = 0,
+      grows = 0;
     for (const el of [...(b.block === 'canvas' ? b.props.elements : []), ...(b.art?.over ?? [])]) {
       if (el.type === 'text' && el.count) add('thud', start + el.at + el.count.dur, 0.28, 3);
+      // A bar growing into place lands with a soft tock, one per value.
+      else if (el.type === 'rect' && ['grow', 'grow-x', 'grow-y'].includes(el.enter) && grows < 6) {
+        add('tock', start + el.at + (el.dur ?? 0.6) * 0.8, 0.12, 0);
+        grows++;
+      }
       else if (
         (el.enter === 'pop' || (el.enter == null && ['circle', 'icon'].includes(el.type))) &&
         pops < (level === 'punchy' ? 8 : 4)

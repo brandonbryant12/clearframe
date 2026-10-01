@@ -221,7 +221,10 @@ export function computeTiming(root) {
       (continuousTail
         ? breath
         : Math.max(breath, (b.block ? blockTail(b.block) : null) ?? sb.pacing.tail));
-    const natural = vo ? Math.max(0, lead) + vo.duration + tail + (b.hold ?? 0) : sb.pacing.silentBeat + (b.hold ?? 0);
+    let natural = vo ? Math.max(0, lead) + vo.duration + tail + (b.hold ?? 0) : sb.pacing.silentBeat + (b.hold ?? 0);
+    // Words cued to the narration must stay up long enough to be read: a note on the last
+    // spoken word would otherwise flash for a fraction of a second before the cut.
+    if (vo) natural = Math.max(natural, Math.max(0, lead) + readUntil(b, vo.words));
     // Stretching a slice of a continuous recording would insert silence into it.
     const dur =
       b.duration ?? (continuousLead || continuousTail ? natural : Math.max(b.min ?? sb.pacing.minBeat, natural));
@@ -302,6 +305,26 @@ export function resolveAt(at, beat) {
 }
 
 const norm = wordKey;
+/** When the last narration-cued line of type in a beat has been on screen long enough to read. */
+function readUntil(b, words) {
+  let until = 0;
+  const read = text => Math.max(1.3, String(text).split(/\s+/).length / 3 + 0.6);
+  const cued = (say, text) => {
+    const t = typeof say === 'string' ? findWord(words, say) : null;
+    if (t != null && text) until = Math.max(until, t + read(text));
+  };
+  const walk = list =>
+    (list ?? []).forEach(el => {
+      if (el.type === 'text') cued(el.say, el.text ?? el.count?.to);
+      walk(el.children);
+    });
+  walk(b.props?.elements);
+  walk(b.art?.under);
+  walk(b.art?.over);
+  if (b.props?.chart?.note) cued(b.props.chart.note.say, b.props.chart.note.text);
+  return until;
+}
+
 export function findWord(words, query, nth = 0) {
   const q = query.split(/\s+/).map(norm).filter(Boolean);
   if (!q.length) return null;

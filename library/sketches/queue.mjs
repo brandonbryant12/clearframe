@@ -10,7 +10,9 @@ export default {
   summary:
     'A queue in depth: cards in line on a gridded floor receding to a lit counter; the camera pushes along the line to one accent card.',
   use: 'Waiting, backlogs, a place in line, "how long does one request take": the opening world of a film about delay. Retime the dolly to the line.',
-  build(w, h) {
+  // `count` cards in line, `ours` the index of the accent card (a shorter line at the end of
+  // a film shows the wait shrinking).
+  build(w, h, { count = 16, ours: mine = 3 } = {}) {
     const t = tall(w, h),
       horizon = h * (t ? 0.42 : 0.4),
       cx = w / 2,
@@ -20,7 +22,7 @@ export default {
       ground = h * 0.97;
     const floorY = z => horizon + (ground - horizon) / (1 + z),
       laneX = z => cx + lane / (1 + z),
-      ours = 3;
+      ours = mine;
     const card = (i, z) => {
       const cw = seen(W0, z),
         ch = seen(H0, z),
@@ -81,7 +83,7 @@ export default {
         ],
       };
     };
-    const depths = Array.from({ length: 16 }, (_, i) => round(0.2 + i * 0.62));
+    const depths = Array.from({ length: count }, (_, i) => round(0.2 + i * 0.62));
     const edge = x0 => {
       // A lane edge from the vanishing point through (x0, ground) to the frame's bottom.
       const k = (h * 1.02 - horizon) / (ground - horizon);

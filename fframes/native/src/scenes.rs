@@ -133,8 +133,13 @@ pub(crate) fn phrase_window(
         let full = count > limit
             || (count == limit && !leans(&words[index - 1].text))
             || (limit >= 3 && count + 1 == limit && leans(&words[index].text) && !leans(&words[index - 1].text));
+        // Poster type pages on whole phrases: a long sentence breaks at a clause mark.
+        let ends_clause = sentences
+            && count >= 6
+            && words[index - 1].text.trim_end_matches(['"', '\'', ')', '”', '’']).ends_with([',', ';', ':', '—', '–']);
         let boundary = full
             || ends_sentence
+            || ends_clause
             || words[index].start - words[index - 1].end > max_gap
             || words[index].end - words[start].start > max_duration;
         if boundary {
@@ -148,7 +153,7 @@ pub(crate) fn phrase_window(
 }
 
 /// Words that lean on the next one: a phrase should not end on them.
-fn leans(word: &str) -> bool {
+pub(crate) fn leans(word: &str) -> bool {
     const LEANING: &[&str] = &[
         "a", "an", "the", "of", "to", "in", "on", "at", "by", "for", "from", "with", "and", "or", "but", "nor",
         "so", "as", "than", "that", "this", "these", "those", "its", "their", "our", "your", "my", "his", "her",

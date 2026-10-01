@@ -183,12 +183,14 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         if words.is_empty() {
             return empty();
         }
+        // A page is a whole sentence (or clause): poster type that strands half a phrase reads
+        // as a fragment, sometimes as the opposite claim.
         let window = phrase_window(
             words,
             self.t,
-            n(p, "maxWords", 6.0) as usize,
+            n(p, "maxWords", 14.0) as usize,
             n(p, "maxGap", 0.6) as f32,
-            n(p, "maxDuration", 4.0) as f32,
+            n(p, "maxDuration", 7.0) as f32,
             true,
         );
         let chunk = &words[window.clone()];
@@ -233,6 +235,14 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 }
                 lines.last_mut().unwrap().push((i, ww, size));
                 width += ww + space;
+            }
+            // A line never ends on a word that leans on the next one ("too", "the"): carry it
+            // down, so the break falls where a reader would pause.
+            for li in 0..lines.len().saturating_sub(1) {
+                while lines[li].len() > 1 && crate::scenes::leans(&chunk[lines[li].last().unwrap().0].text) {
+                    let item = lines[li].pop().unwrap();
+                    lines[li + 1].insert(0, item);
+                }
             }
             let height: f32 = lines.iter().map(|l| l.iter().map(|x| x.2).fold(0.0, f32::max) * 1.0).sum();
             let widest =

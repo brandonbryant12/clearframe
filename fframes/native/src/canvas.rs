@@ -744,7 +744,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             }
         }
         blur += authored.max(0.0);
-        if let (Some((p, dz, _)), Some((fz, aperture))) = (persp, focus) {
+        // Depth of field softens places, never words: type in depth stays readable through a
+        // rack focus (an authored `blur` still applies).
+        if let (Some((p, dz, _)), Some((fz, aperture)), false) = (persp, focus, s(el, "type") == "text") {
             let df = (1.0 + fz - cam_z).max(0.12);
             blur += (36.0 * aperture * (1.0 / dz - 1.0 / df).abs() / p.max(0.05)).min(80.0);
         }

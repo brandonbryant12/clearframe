@@ -214,9 +214,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             )
         });
         let action = s(props, "action");
-        // The call to action is type, not a web button: accent words over a drawn rule.
+        // The call to action is a film's last line, not a web button or link: tracked small
+        // capitals in the accent.
         let pill = (block == "endcard" && !action.trim().is_empty())
-            .then(|| self.fit(action, Style::strong(if self.wide { 40.0 } else { 38.0 }), a.w, 110.0));
+            .then(|| self.fit(action, Style::kicker(if self.wide { 32.0 } else { 30.0 }), a.w, 90.0));
         let bar_h = if block == "title" { 52.0 } else { 0.0 };
         let sup_h = sup.as_ref().map_or(0.0, |l| 40.0 + l.height());
         let pill_h = pill.as_ref().map_or(0.0, |l| 64.0 + l.height() + 18.0);
@@ -251,10 +252,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let y = head_y + head_h + sup_h + 64.0;
             let w = pill.width();
             let px = centre(w);
-            let grow = self.m.grow(self.t - after - 0.45, 0.6);
             let words = self.draw(pill, px, y, w, Align::Left, &self.p.accent);
-            let rule = rect(px, y + pill.height() + 14.0, w * grow, 3.0, &self.p.accent);
-            nodes.push(self.rise(fframes::svgr!(<g>{words}{rule}</g>), after + 0.2, 14.0));
+            nodes.push(self.rise(words, after + 0.2, 14.0));
         }
         let kicker_y =
             self.head_y.map_or(if self.tall() { self.b.environment.height * 0.11 } else { 108.0 }, |y| y + 8.0);

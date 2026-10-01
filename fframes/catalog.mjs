@@ -336,7 +336,7 @@ export const BLOCKS = [
       emphasis: 'stack: words drawn larger in the accent (whole words from the narration)',
       emphasisStyle: 'stack: bold (default) or serif italic emphasis words',
       upper: 'stack: set in capitals (true/false)',
-      maxWords: 'Words per phrase (1–10)',
+      maxWords: 'Words per phrase (1–16; stack pages whole sentences, up to 14 words, by default)',
       maxGap: 'Start a new phrase after this silence, 0–5 seconds (default 0.6)',
       maxDuration: 'Maximum phrase span, 0.5–15 seconds (default 4); never split a timed word',
     },

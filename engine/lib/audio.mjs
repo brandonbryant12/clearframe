@@ -235,22 +235,52 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
   } else if (musicLabel) busses.push(musicLabel);
   busses.push(...sfxLabels);
   filters.push(
-    `${busses.join('')}amix=inputs=${busses.length}:normalize=0:dropout_transition=0,apad=whole_dur=${D},atrim=0:${D},loudnorm=I=${loudness}:TP=-1.5:LRA=11,aresample=48000[out]`,
+    `${busses.join('')}amix=inputs=${busses.length}:normalize=0:dropout_transition=0,apad=whole_dur=${D},atrim=0:${D},aresample=48000[out]`,
   );
 
-  await ffmpeg([
-    '-y',
-    ...inputs,
-    '-filter_complex',
-    filters.join(';'),
-    '-map',
-    '[out]',
-    '-ac',
-    '2',
-    '-c:a',
-    'pcm_s16le',
-    output,
-  ]);
+  // Two passes: measure the mix, then one linear gain to the target. Single-pass loudnorm is
+  // a compressor that lifts quiet passages toward the target, so a silence before the title
+  // would come back as a murmur; linear normalisation keeps the drop.
+  const pre = `${output}.pre.wav`;
+  try {
+    await ffmpeg([
+      '-y',
+      ...inputs,
+      '-filter_complex',
+      filters.join(';'),
+      '-map',
+      '[out]',
+      '-ac',
+      '2',
+      '-c:a',
+      'pcm_f32le',
+      pre,
+    ]);
+    const target = `I=${loudness}:TP=-1.5:LRA=20`;
+    const probe = spawnSync(
+      'ffmpeg',
+      ['-hide_banner', '-i', pre, '-af', `loudnorm=${target}:print_format=json`, '-f', 'null', '-'],
+      {
+        encoding: 'utf8',
+      },
+    ).stderr;
+    const m = JSON.parse(probe.slice(probe.lastIndexOf('{'), probe.lastIndexOf('}') + 1));
+    const measured = `measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}`;
+    await ffmpeg([
+      '-y',
+      '-i',
+      pre,
+      '-af',
+      `loudnorm=${target}:${measured}:linear=true,aresample=48000`,
+      '-ac',
+      '2',
+      '-c:a',
+      'pcm_s16le',
+      output,
+    ]);
+  } finally {
+    fs.rmSync(pre, { force: true });
+  }
   return output;
 }
 

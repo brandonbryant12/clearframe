@@ -83,6 +83,19 @@ export const SFX = {
     filters: 'highpass=f=1500,afade=t=in:d=0.2',
     about: 'soft glint as light sweeps a title',
   },
+  // Subject sounds: name them in a beat's sfx, cued to a word ({src: 'brake', at: 'catches'}).
+  brake: {
+    dur: 0.9,
+    expr: `0.5*${noise}*exp(-3.5*t)*(1-exp(-80*t))+0.05*sin(2*PI*180*t)*exp(-10*t)`,
+    filters: 'highpass=f=1800,lowpass=f=9000',
+    about: 'an air brake hissing (a bus stopping)',
+  },
+  drop: {
+    dur: 0.45,
+    expr: '0.5*sin(2*PI*(1400*t-1700*t*t))*exp(-14*t)',
+    filters: 'highpass=f=250,aecho=0.6:0.4:60:0.25',
+    about: 'a water drop',
+  },
   rise: {
     dur: 0.9,
     expr: '(0.2*sin(2*PI*330*t)+0.14*sin(2*PI*495*t)+0.09*sin(2*PI*660*t))*pow(t/0.9,2)',

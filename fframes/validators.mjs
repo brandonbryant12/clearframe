@@ -282,15 +282,16 @@ export const VALIDATORS = {
   kinetic: (p, h) => {
     p.mode ??= 'highlight';
     p.align ??= p.mode === 'stack' ? 'center' : 'left';
-    p.maxWords ??= 6;
+    // Poster type (stack) pages on whole sentences and clauses; captions page every few words.
+    p.maxWords ??= p.mode === 'stack' ? 14 : 6;
     p.maxGap ??= 0.6;
-    p.maxDuration ??= 4;
+    p.maxDuration ??= p.mode === 'stack' ? 7 : 4;
     if (
       !['highlight', 'reveal', 'word', 'stack'].includes(p.mode) ||
       !['left', 'center'].includes(p.align) ||
       !Number.isInteger(p.maxWords) ||
       p.maxWords < 1 ||
-      p.maxWords > 10
+      p.maxWords > 16
     )
       h.fail('invalid kinetic mode, align or maxWords');
     if (p.emphasis != null) {

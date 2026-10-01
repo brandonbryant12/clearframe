@@ -58,7 +58,8 @@ export function chartElements(spec, { w, h }) {
   const out = [];
   if (spec.kind === 'bars') {
     // The finding fills the frame: no heading underneath, the narration names it.
-    const [x, y, bw, bh] = spec.box ?? (tall ? [w * 0.1, h * 0.26, w * 0.8, h * 0.4] : [w * 0.1, h * 0.17, w * 0.8, h * 0.56]);
+    const [x, y, bw, bh] =
+      spec.box ?? (tall ? [w * 0.1, h * 0.26, w * 0.8, h * 0.4] : [w * 0.1, h * 0.17, w * 0.8, h * 0.56]);
     const max = spec.max ?? Math.max(...values.map(v => v.value), 1);
     const n = values.length,
       col = bw / (n + (n - 1) * 0.45),
@@ -127,7 +128,8 @@ export function chartElements(spec, { w, h }) {
         out.push(...noteElements(note, cx + col / 2, base + 130, { left: x, right: x + bw, up: true }));
     });
   } else if (spec.kind === 'stack') {
-    const [x, y, bw, bh] = spec.box ?? (tall ? [w * 0.08, h * 0.42, w * 0.84, h * 0.1] : [w * 0.06, h * 0.4, w * 0.88, h * 0.15]);
+    const [x, y, bw, bh] =
+      spec.box ?? (tall ? [w * 0.08, h * 0.42, w * 0.84, h * 0.1] : [w * 0.06, h * 0.4, w * 0.88, h * 0.15]);
     const total = values.reduce((a, v) => a + v.value, 0) || 1;
     let cx = x;
     values.forEach((v, i) => {
@@ -173,6 +175,37 @@ export function chartElements(spec, { w, h }) {
             fill: 'ink',
             at: r(t + 0.4),
             enter: 'rise',
+            dur: 0.4,
+          },
+        );
+      else
+        // Too narrow for its own label: name it on a second row above, ending at its right
+        // edge, with a tick down to the segment, so no segment is left unnamed.
+        out.push(
+          {
+            type: 'line',
+            of: v.key,
+            x1: r(cx + sw / 2),
+            y1: r(y - 62),
+            x2: r(cx + sw / 2),
+            y2: r(y - 6),
+            stroke: 'muted',
+            width: 2,
+            at: r(t + 0.3),
+            enter: 'draw',
+            dur: 0.3,
+          },
+          {
+            type: 'text',
+            of: v.key,
+            text: `${v.label} ${format(v.value, spec)}`,
+            x: r(cx + sw / 2 + 10),
+            y: r(y - 74),
+            size: 32,
+            anchor: 'end',
+            fill: v.highlight ? 'ink' : 'muted',
+            at: r(t + 0.3),
+            enter: 'fade',
             dur: 0.4,
           },
         );

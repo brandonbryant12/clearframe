@@ -23,6 +23,17 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - `cinematic-explainer`: the water system in cross-section, with labels kept inside the letterbox.
   - New set pieces: `signal`, `wires`, `citygrid`, `mast`, `harbor` and `rooftops`. `card` is a poster card (`LEAD`/`CARD`), and `title` fills the frame.
   - First beats cut in rather than fading up from black.
+- **Report films rebuilt after round 2.** Each is one place, born from its mechanism and ending on a picture, with no iris, no "X, not Y" closer and no end card (generators in `library/playbooks/_*.mjs`).
+  - `data-story` stays in its queue: the wait lands over the line, and the charts stand in front of the same room.
+  - `research-digest` stays on one street: the figure sits above bunched buses, the camera tilts up to the evidence, and the film ends on the buses evenly spaced.
+  - `concept-explainer` draws cars as cars, plots the curve on evenly spaced loads, and ends close up on the jam, then on the road flowing again.
+- **Poster type pages on whole sentences.** Kinetic `stack` holds up to 14 words and breaks at clause marks, never mid-phrase, and a line never ends on a word that leans on the next.
+- **Narration-cued type stays up long enough to read.** Timing holds a beat until its last cued line has been readable.
+- **Depth of field softens places, never words.**
+- **End-card actions are tracked small capitals**, not underlined links.
+- **Loudness in two passes.** The mix is measured, then one linear gain is applied, so a silence before the title stays silent. Single-pass loudnorm was a compressor that lifted it back to a murmur.
+- **Subject sounds:** `brake` (an air brake) and `drop` (water), cued with beat `sfx: [{src, at: "word:…"}]`. Bars growing into place land with a soft tock.
+- **The critique adds "Slides with motion"** (half the scenes are type or charts on a plain field) **and "Ends on a card".** The hook check counts a picture on the first frame.
 - **`dissolve`**: a true crossfade in which the outgoing shot keeps running under the incoming one (`fade` dips through the backdrop). The cold open dissolves from night to dawn.
 - **Films open on their picture.** A film-wide transition never applies to the first beat.
 - **`subject: true`** on any canvas element protects it from overlapping type in the frame audit. `check` no longer reports a count of findings it has filtered out.

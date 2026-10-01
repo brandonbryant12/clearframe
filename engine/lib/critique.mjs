@@ -184,6 +184,45 @@ export function cinemaScore(sb, beats, timed, transitions) {
       'Screen-flat image',
       'no light, lens or texture. Choose a lens (grade, bloom, letterbox, leak), add grain and a vignette, and light the subject (glow, shine, spotlight).',
     );
+  // 10. Cards, not shots: type and charts on a plain field, with no place or picture behind.
+  const TYPE_CARDS = [
+    'title',
+    'statement',
+    'endcard',
+    'chapter',
+    'kinetic',
+    'quote',
+    'stat',
+    'kpis',
+    'bars',
+    'line',
+    'waffle',
+    'ring',
+    'delta',
+    'compare',
+    'list',
+    'checklist',
+    'magnitude',
+  ];
+  const card = b =>
+    !b.plate &&
+    !b.art?.under?.length &&
+    !b.props?.world &&
+    !b.props?.plates &&
+    (TYPE_CARDS.includes(b.block) ||
+      (b.block === 'canvas' && b.props?.chart && !(b.props.elements ?? []).some(el => el.type !== 'text')));
+  const cards = beats.filter(card).length;
+  if (cards / n >= 0.5)
+    tell(
+      'Slides with motion',
+      `${cards} of ${n} scenes are type or a chart on a plain field. Put the numbers and words in the film's place: a chart in front of the world it describes (art.under), in a world the camera travels, or over a plate.`,
+    );
+  const last = beats.at(-1);
+  if (last && card(last))
+    tell(
+      'Ends on a card',
+      `the film ends on ${last.block === 'endcard' ? 'an end card' : 'a type card'}. End on the picture (the place, the subject, the world changed) with the last line over it.`,
+    );
   // 9. The first frame: something to look at before anyone speaks.
   const first = beats[0];
   const shown = el =>
@@ -262,11 +301,20 @@ export function critique(root) {
     .flat()
     .map(el => el.at)
     .filter(Number.isFinite);
-  const lands = Math.min(
-    landed.length ? Math.min(...landed) : Infinity,
-    timed.length ? Math.min(...timed) + 0.6 : Infinity,
-    firstDur,
-  );
+  // A picture already on the first frame (a plate, a world drawn at 0) is the first idea.
+  const onFirstFrame =
+    first?.plate ||
+    first?.props?.plates ||
+    [first?.props?.elements ?? [], first?.art?.under ?? []]
+      .flat()
+      .some(el => (el.at ?? 1) <= 0.05 && el.type !== 'particles');
+  const lands = onFirstFrame
+    ? 0
+    : Math.min(
+        landed.length ? Math.min(...landed) : Infinity,
+        timed.length ? Math.min(...timed) + 0.6 : Infinity,
+        firstDur,
+      );
   if (lands > 5.5) add('warn', first.id, `The first idea lands ${lands.toFixed(1)} s in. Land it inside 3–5 s.`);
   // Sameness.
   let run = 1;
