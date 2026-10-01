@@ -32,7 +32,7 @@ Cinematic capability exists: worlds, a travelling camera, canvas, mosaic, morphs
 | 14 | **Library and scale** | 4 | 4.5 | 19 palettes, 15 treatments, 35 playbooks, 19 sketches, all files. | Characters and a sound library. |
 | 15 | **Default outcome** | 2 | 4 | All 35 playbooks score 63–100; `ingest` and `new` start from films; a seeded `muse` keeps first drafts from looking alike; `checkpoints` puts a human where it matters. | Another fresh-model test on a report brief. |
 
-**Overall: 2.8 → 4.3 / 5.** The defaults make films, image generation paints the places, and data transforms instead of cutting. What remains: block-to-block morphs, beat-synced edits, a reusable plate library, and a second fresh-model test on a report.
+**Builder's own estimate: 4.3. Independent review, round 1: 3.1 / 5.** The independent score is the one that counts (see the review log below); the builder's estimate was inflated.
 
 ## Why the films read as slides
 
@@ -66,6 +66,26 @@ These are the signatures a viewer notices, in order of damage. `critique` should
 | 2 | **A music bed that builds.** Local draft beds that follow the edit: sparse under the setup, building through a montage, cut dead for a silence. | 9, 7 |
 | 3 | **Orbiting 3D camera** for worlds and solids, not just pans and dollies. | 2 |
 | 4 | **The model's first draft.** A worked example per genre and skill guidance so a model's first storyboard scores 90+ without revision. | 15, 12 |
+
+## Independent review log
+
+Each round, a fresh reviewer scores the benchmark (`scripts/bench.mjs`) against [review.md](review.md). The goal is 4.9.
+
+| Round | Date | Continuity | Camera | Composition | Motion | Look | Imagery | Editing | Type | Sound | Voice | Honesty | Tooling | Speed | Library | Default | **Mean** |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 2026-09-30 | 3 | 3 | 2.5 | 3 | 3 | 3 | 3 | 2.5 | 3.5 | 3.5 | 3 | 3.5 | 4 | 3 | 2.5 | **3.1** |
+
+**Round 1, the five blockers:**
+1. **Report defaults read as slides.** A heading on every beat, small charts, dips through empty frames at cuts, one repeated iris, and web pill buttons on end cards.
+2. **Broken frames pass every check.**
+   - The cold-open title is clipped ("E NIGHT SHI").
+   - Letterbox bars slice world labels.
+   - Labels sit outside the camera ("OAST").
+   - Type is printed over the product.
+   - Credits have no names.
+3. **Numbers contradict each other** across beats; a figure is captioned as the wrong unit; a "SOURCES ON SCREEN" placeholder appears; a multiplier has no comparator.
+4. **Imagery is generic and reused across genres.** Plates are absent from the defaults, and the plated boat floats with no waterline.
+5. **Trailer type is timid.** It is small, holds still, has illegible taglines, and films open on near-black frames.
 
 ## Log
 
