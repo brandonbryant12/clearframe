@@ -38,6 +38,12 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - The cold open's slug completes early, and its tagline no longer contradicts the clock.
   - The trailer's type has no glow, and its city opens on light.
 - **The concept explainer's curve is drawn as roads:** one stretch per load, its length the multiple of the wait at half full, the 90% road in the accent. The source names the queueing formula exactly (the wait in the queue).
+- **The data story cuts on what changes.** It now runs nine shots of 2–7 s:
+  - the wait set into the room beside the line, not as a stat card;
+  - a hundred request cards (52 + 30 + 12 + 6, exactly 100);
+  - a cut-in to each stage, its crop's edges in the gaps between cards and its caption below the grid;
+  - the spread, then a cut-in to the tail;
+  - the shorter line.
 - **The data story counts in requests.** The hundred hours are a hundred small request cards, the same cards that wait in the queue, filled stage by stage. On "routing" everything else steps back. One bar chart remains, for the spread.
 - **The digest's evidence is drawn from the buses.** A strip of arrivals at one stop over 42 minutes, one small bus per arrival: timetable, in practice (in pairs, with the long gap bracketed) and the trial. The figure on each row is the average gap a rider meets.
 - **Round 4 finish.**
