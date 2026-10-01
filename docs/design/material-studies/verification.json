@@ -1,0 +1,184 @@
+{
+  "date": "2026-10-01",
+  "nodeTests": 87,
+  "nativeElementCombinations": 40,
+  "formats": [
+    "landscape",
+    "vertical",
+    "square",
+    "portrait"
+  ],
+  "nativeRenderChecks": "All three landscape examples passed native frame checks; landscape and vertical sheets inspected.",
+  "visualReview": "Independent still review and a final follow-up after craft corrections; landscape, portrait, full decoded timelines and phone sheets inspected. No remaining visual blocker for stylized reusable assets. No real-time playback or seamless-loop claim.",
+  "imagegen": {
+    "tool": "built-in imagegen",
+    "iterations": 2,
+    "prompts": "prompts.json",
+    "runtimeDependency": false
+  },
+  "examples": [
+    {
+      "project": "examples/material-studies",
+      "preview": "material-studies.mp4",
+      "sheet": "material-studies.png",
+      "verticalSheet": "material-studies-vertical.png",
+      "render": {
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "frames": 384,
+        "audio": false,
+        "outputSha256": "777416facabcfe3cb9e9b74af3f60bea1dd5200eada6e8219fb1f87308b0c3d9"
+      },
+      "qa": {
+        "seconds": 12.8,
+        "frames": 384,
+        "changePerSecond": 0.3,
+        "heldSeconds": 12.37,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "findings": [
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 0,
+          "frame": 0,
+          "beat": "lightwell",
+          "local": 0,
+          "end": 3.17,
+          "seconds": 3.2,
+          "message": "the picture barely changes for 3.2 s (0\u20133.17 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 3.27,
+          "frame": 98,
+          "beat": "contour-field",
+          "local": 0.07,
+          "end": 6.37,
+          "seconds": 3.13,
+          "message": "the picture barely changes for 3.13 s (3.27\u20136.37 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 6.43,
+          "frame": 193,
+          "beat": "paper-fold",
+          "local": 0.03,
+          "end": 9.57,
+          "seconds": 3.17,
+          "message": "the picture barely changes for 3.17 s (6.43\u20139.57 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 9.67,
+          "frame": 290,
+          "beat": "glass-orbits",
+          "local": 0.07,
+          "end": 12.5,
+          "seconds": 2.87,
+          "message": "the picture barely changes for 2.87 s (9.67\u201312.5 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        }
+      ]
+    },
+    {
+      "project": "examples/material-play",
+      "preview": "material-play.mp4",
+      "sheet": "material-play.png",
+      "verticalSheet": "material-play-vertical.png",
+      "render": {
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "frames": 384,
+        "audio": false,
+        "outputSha256": "0042c109637ea215f3006e6e1bb813295d43a1bd50cf47241d3c1f2e8ec13492"
+      },
+      "qa": {
+        "seconds": 12.8,
+        "frames": 384,
+        "changePerSecond": 1.69,
+        "heldSeconds": 5.66,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "findings": [
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 0.37,
+          "frame": 11,
+          "beat": "bubble-cluster",
+          "local": 0.37,
+          "end": 3.17,
+          "seconds": 2.83,
+          "message": "the picture barely changes for 2.83 s (0.37\u20133.17 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 9.6,
+          "frame": 288,
+          "beat": "inflated-loop",
+          "local": 0,
+          "end": 12.4,
+          "seconds": 2.83,
+          "message": "the picture barely changes for 2.83 s (9.6\u201312.4 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        }
+      ]
+    },
+    {
+      "project": "examples/material-arena",
+      "preview": "material-arena.mp4",
+      "sheet": "material-arena.png",
+      "verticalSheet": "material-arena-vertical.png",
+      "render": {
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "frames": 192,
+        "audio": false,
+        "outputSha256": "fa7028485d397afcbcaae62c759e509344fe500de1befcc0f776d3b2f627adaf"
+      },
+      "qa": {
+        "seconds": 6.4,
+        "frames": 192,
+        "changePerSecond": 0.31,
+        "heldSeconds": 5.77,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "findings": [
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 0,
+          "frame": 0,
+          "beat": "arena-grid",
+          "local": 0,
+          "end": 3.17,
+          "seconds": 3.2,
+          "message": "the picture barely changes for 3.2 s (0\u20133.17 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 3.43,
+          "frame": 103,
+          "beat": "prism-shards",
+          "local": 0.23,
+          "end": 5.97,
+          "seconds": 2.57,
+          "message": "the picture barely changes for 2.57 s (3.43\u20135.97 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        }
+      ]
+    }
+  ]
+}

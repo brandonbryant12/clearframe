@@ -20,6 +20,7 @@ Read [docs/canvas.md](../../docs/canvas.md) for the element reference. The fixed
 - One hero element per frame, clearly larger or brighter than the rest. Supporting labels 36–44 px, nothing under 28 px at 1080p.
 - Draw on a grid: align centres and baselines, keep equal gaps, respect the 90 px margins and the header area.
 - `accent` for the subject, `accent2` for the result or contrast, `ink` for structure, `line`/`muted` for scaffolding. Palette tokens follow `tone` and the theme; avoid raw hex unless it is brand colour.
+- Declare `fill` on stroked shapes. Wireframe orbits, contour rings, pulse rectangles and helmet outlines need `fill: "none"`; a stroke alone leaves rect/circle/ellipse solid accent-filled. Choose an explicit colour for intentional fills.
 - Motion explains: `draw` for paths and connections, `along` for things that travel, `grow-y` for quantities, `pop` for arrivals, `keys` for change, `exit` for things that stop being true. Use fades only for background layers.
 - Something breathes after everything lands: `pulse` the subject, `dash` loop the connector, `float` ambient shapes.
 - Build, then transform: draw the problem, `exit` part of it on a cue, draw the fix in the same frame. One canvas beat can carry two or three ideas if the voice walks through them.

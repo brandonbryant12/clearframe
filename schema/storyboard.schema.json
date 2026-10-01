@@ -77,7 +77,9 @@
             "neon",
             "cinema",
             "stage",
-            "bass"
+            "bass",
+            "daylight",
+            "sorbet"
           ]
         },
         {
@@ -104,7 +106,9 @@
                 "neon",
                 "cinema",
                 "stage",
-                "bass"
+                "bass",
+                "daylight",
+                "sorbet"
               ]
             },
             "bg": {
@@ -173,6 +177,7 @@
         "iris",
         "whip",
         "flash",
+        "dissolve",
         "auto"
       ]
     },
@@ -524,6 +529,7 @@
               "iris",
               "whip",
               "flash",
+              "dissolve",
               "auto"
             ]
           },
@@ -735,6 +741,30 @@
             "additionalProperties": false,
             "description": "Canvas elements under/over the block (docs/canvas.md)",
             "properties": {
+              "sketch": {
+                "type": "string"
+              },
+              "seed": {
+                "type": "integer"
+              },
+              "opacity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "rough": {
+                "oneOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "object"
+                  }
+                ]
+              },
               "under": {
                 "type": "array",
                 "items": {
@@ -1771,7 +1801,7 @@
                       "description": "stack: set in capitals (true/false)"
                     },
                     "maxWords": {
-                      "description": "Words per phrase (1–10)"
+                      "description": "Words per phrase (1–16; stack pages whole sentences, up to 14 words, by default)"
                     },
                     "maxGap": {
                       "description": "Start a new phrase after this silence, 0–5 seconds (default 0.6)"
@@ -2219,7 +2249,7 @@
                       "description": "Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views"
                     },
                     "elements": {
-                      "description": "[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine}] (≤ 600) — see docs/canvas.md"
+                      "description": "[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine, tilt, material}] (≤ 600) — see docs/canvas.md"
                     },
                     "stagger": {
                       "description": "Seconds between top-level elements without a cue (0–3)"
@@ -2237,7 +2267,16 @@
                       "description": "Depth of field for elements with z: {z (the focus plane), aperture 0–3 (1 natural), keys [{say|at, z, dur}] for a rack focus}"
                     },
                     "chart": {
-                      "description": "A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars|stack|number, values: [{label, value, highlight, id}], box: [x, y, w, h], max, prefix, suffix, decimals, id}"
+                      "description": "A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars|stack|number, values: [{label, value, highlight, id}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (the note replaces a heading: an annotation on the stressed word)"
+                    },
+                    "sketch": {
+                      "description": "A library sketch drawn under any elements, redrawn for this frame (clearframe sketch lists them); its camera (view, dolly, focus) applies unless the beat sets its own"
+                    },
+                    "sketchText": {
+                      "description": "Replacement words for a sketch’s placeholder type: {\"TITLE\": \"Your words\"}"
+                    },
+                    "seed": {
+                      "description": "Varies a sketch’s seeded layout (buildings, ridges, swell)"
                     },
                     "plates": {
                       "description": "A generated depth plate set staged in depth: the id of an image asset declared with layers: true (its far, mid and near layers at z 6, 1.2 and -0.35), under any elements; adds a slow dolly unless the beat sets a camera"

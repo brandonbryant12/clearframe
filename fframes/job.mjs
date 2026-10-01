@@ -28,6 +28,7 @@ import {
 } from './constants.mjs';
 import { glyphCheck } from './glyphs.mjs';
 import { rules } from './registry.mjs';
+import { expandArt } from './sketches.mjs';
 import { captionCues, findWord } from '../engine/lib/timing.mjs';
 
 const unit = v => Number.isFinite(v) && v >= 0 && v <= 1;
@@ -179,6 +180,17 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   }
   // Author-drawn elements: resolve spoken cues and write exact times for the renderer.
   const scheduleArt = (list, start, stagger = 0) => {
+    eachElement(list, el => {
+      if (
+        ['rect', 'circle', 'ellipse'].includes(el.type) &&
+        el.stroke != null &&
+        el.stroke !== 'none' &&
+        el.fill == null
+      )
+        report.warnings.push(
+          `${b.id}: stroked ${el.type}${el.id ? ` "${el.id}"` : ''} has no explicit fill; the native default is solid accent and can hide layers behind it. Set fill: "none" for an outline, or choose an explicit fill colour.`,
+        );
+    });
     const end = scheduleElements(list, { start, stagger, entrance, resolve: v => cue(v), limit: b.dur });
     eachElement(list, el => {
       if (el.at > b.dur - frame + 1e-7)
@@ -205,7 +217,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     if (hasDigits(props.elements) && !props.source)
       report.warnings.push(`${b.id}: canvas text contains digits; if they are figures, add a visible source.`);
   }
-  const art = source.art != null ? artLayers(source.art, b.id) : null;
+  const art = source.art != null ? artLayers(source.art, b.id, { width: timing.width, height: timing.height }) : null;
   if (art) settle = Math.max(settle, scheduleArt(art.under, at), scheduleArt(art.over, at));
   const paced = keepPace(b, source, props, art, at, { sb, report });
   const layers = beatLayers(source, b, sb);
@@ -307,14 +319,17 @@ function stageItems(props, { key, offset, spacing: nominal, itemSeconds }, { b, 
   });
 }
 
-function artLayers(a, id) {
+function artLayers(a, id, frame) {
   if (
     !a ||
     typeof a !== 'object' ||
     Array.isArray(a) ||
-    Object.keys(a).some(k => !['under', 'over', 'rough'].includes(k))
+    Object.keys(a).some(k => !['under', 'over', 'rough', 'sketch', 'seed', 'opacity'].includes(k))
   )
-    throw new Error('art must be {under: [...], over: [...], rough}');
+    throw new Error('art must be {sketch, seed, opacity, under: [...], over: [...], rough}');
+  if (a.sketch == null && (a.seed != null || a.opacity != null))
+    throw new Error('art.seed and art.opacity require art.sketch');
+  a = expandArt(a, frame);
   const state = { count: 0 };
   const fail = m => {
     throw new Error(`art: ${m}`);
@@ -352,8 +367,14 @@ function keepPace(b, source, props, art, at, { sb, report }) {
   const own = b.block === 'canvas' ? (props.elements ?? []) : [];
   const layers = [...own, ...(art?.under ?? []), ...(art?.over ?? [])];
   const earliest = layers.length ? Math.min(...layers.map(el => el.at ?? 0)) : Infinity;
-  // Blocks show their body at the cue; a heading alone buys a little more time.
-  const content = b.block === 'canvas' ? earliest : Math.min(at, earliest);
+  // Sequence bodies arrive on their item cues, not the block cue. Highlight and annotate
+  // already show text/an image before their staged markers, so keep their block cue.
+  const staged = rules(b.block).staged;
+  const itemCued = staged && !['highlight', 'annotate'].includes(b.block);
+  const body = itemCued ? Math.min(...props[staged.key].map(it => it.at)) : at;
+  // An authored plate is already a picture behind the delayed information.
+  const picture = source.plate || props.plates ? 0 : Infinity;
+  const content = Math.min(b.block === 'canvas' ? earliest : Math.min(body, earliest), picture);
   const allowance = b.block !== 'canvas' && props.title ? 1.6 : 0.7;
   const gap = content - voice;
   if (!(gap > allowance)) return;
@@ -378,7 +399,7 @@ function keepPace(b, source, props, art, at, { sb, report }) {
     return { cue: Math.max(0, voice - 0.1), count: at };
   }
   report.warnings.push(
-    `${b.id}: the voice talks for ${gap.toFixed(1)} s before the picture arrives. Cue the ${b.block} earlier (land/cue on an earlier word), add art under it, or set pace: "hold" for a deliberate wait.`,
+    `${b.id}: the voice starts ${gap.toFixed(1)} s before the ${itemCued ? 'first staged item' : 'picture'} arrives. ${itemCued ? 'Cue an item to the opening words (item say overrides land)' : `Cue the ${b.block} earlier (land on an earlier word)`}, or add a plate or art at: 0 with enter: "none" for the lead-in. Use pace: "hold" only for a reviewed, deliberate wait.`,
   );
 }
 

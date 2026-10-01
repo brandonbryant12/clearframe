@@ -5,7 +5,7 @@ description: Generate still images with Google's native Gemini image models (Nan
 
 # Gemini image ("Nano Banana 2")
 
-**Use it for places, not for facts.** Generated stills are a regular tool for the world a film happens in: a harbour, a street, a lab, a landscape. The information stays native: text, numbers, charts and labels are never in an image. Code-drawn set pieces cover abstract and data scenes.
+**Use it for places, not for facts.** Generated stills are a regular tool for the world a film happens in: a harbour, a street, a lab, a landscape. The information stays native: text, numbers, charts and labels are never in an image. Image exploration can also discover abstract materials and original objects. When exact brand colours, typography or repeatable geometry matter, reconstruct the selected idea as a native library sketch; keep text, logos and data native. See `docs/image-direction.md` for the two-pass workflow, hybrid options and prompt families. Built-in imagegen is the default when available; this skill documents the separate explicit Gemini provider path.
 
 ## Depth plates (the regular way)
 

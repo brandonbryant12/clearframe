@@ -6,22 +6,20 @@ import { computeTiming, tokenize } from './timing.mjs';
 import { rules } from '../../fframes/registry.mjs';
 import { elementsExtent as extent } from '../../fframes/canvas.mjs';
 import { createJob } from '../../fframes/job.mjs';
-import { sketch } from '../../fframes/sketches.mjs';
+import { sketch, expandArt, sketchPreset } from '../../fframes/sketches.mjs';
 
 /**
  * A beat as it will be drawn: a canvas built from a library sketch is judged on the sketch's
  * elements (its loops, keys and first-frame picture), not on the two-line reference to it.
  */
 function asDrawn(b, { width = 1920, height = 1080 } = {}) {
+  try {
+    if (b.art?.sketch) b = { ...b, art: expandArt(b.art, { width, height }) };
+  } catch {
+    // createJob below reports invalid references as author-facing errors.
+  }
   if (b.block !== 'canvas' || !b.props?.sketch) return b;
-  const preset =
-    height > width * 1.1
-      ? height > width * 1.5
-        ? 'vertical'
-        : 'portrait'
-      : width > height * 1.1
-        ? 'landscape'
-        : 'square';
+  const preset = sketchPreset(width, height);
   try {
     const d = sketch(b.props.sketch, preset, { seed: b.props.seed }),
       words = b.props.sketchText ?? {};
@@ -307,6 +305,7 @@ export function critique(root) {
     job = { errors: [e.message] };
   }
   for (const e of job.errors ?? []) add('error', 'check', e);
+  for (const w of job.warnings ?? []) add('warn', 'check', w);
   // Hook.
   const first = beats[0],
     firstDur = t[0]?.dur ?? 0;

@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { timeFindings, deliveryFindings } from '../engine/lib/qa.mjs';
+import { timeFindings, deliveryFindings, pictureDifference, qaProject } from '../engine/lib/qa.mjs';
 import { findDrop, findTempo, cutsOnGrid } from '../engine/lib/beatmap.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
 
@@ -59,6 +59,72 @@ test('qa reads the export the way a platform does', () => {
     { fps: 30, frames: 90, width: 1920, height: 1080 },
   );
   assert.deepEqual(ok, []);
+});
+
+test('held analysis excludes scope bars, respects open/portrait frames, and stays advisory', () => {
+  const width = 128,
+    height = 72;
+  const a = Buffer.alloc(width * height),
+    b = Buffer.alloc(width * height);
+  b.fill(2, 10 * width, 62 * width);
+  assert.ok(pictureDifference(a, b, width, height) < 2);
+  assert.equal(pictureDifference(a, b, width, height, 2.39, 16 / 9), 2);
+  assert.equal(pictureDifference(a, b, width, height, false), pictureDifference(a, b, width, height));
+  assert.equal(pictureDifference(a, b, 72, 128, 2.39), pictureDifference(a, b, 72, 128));
+  const fps = 30,
+    n = 360;
+  const signal = { d: Array(n).fill(0), skip: Array(n).fill(0), second: Array(n).fill(0), fps };
+  const held = timeFindings({ ...signal, beats: [{ id: 'quiet', start: 0, end: 12, vo: { start: 0, end: 12 } }] });
+  assert.ok(held.some(f => f.kind === 'held' && f.level === 'warn' && f.seconds === 12));
+  assert.match(held[0].message, /deliberate cinematic holds/);
+  // Similar-looking quick cuts must not be joined into one long frozen scene.
+  const montage = Array.from({ length: 6 }, (_, i) => ({ id: String(i), start: i * 2, end: (i + 1) * 2 }));
+  assert.ok(!timeFindings({ ...signal, beats: montage }).some(f => f.kind === 'held'));
+});
+
+test('encoded QA writes per-shot held findings and analysis metadata', async t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-qa-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  fs.mkdirSync(path.join(root, 'build'));
+  fs.writeFileSync(
+    path.join(root, 'storyboard.json'),
+    JSON.stringify({
+      format: { width: 640, height: 360, fps: 30 },
+      lens: { letterbox: 2.39 },
+      beats: [
+        { id: 'scope', block: 'statement', duration: 3, props: { text: 'A pause' } },
+        { id: 'open', block: 'statement', duration: 3, lens: { letterbox: false }, props: { text: 'Another pause' } },
+      ],
+    }),
+  );
+  execFileSync('ffmpeg', [
+    '-v',
+    'error',
+    '-f',
+    'lavfi',
+    '-i',
+    'color=black:s=640x360:r=30:d=6',
+    '-c:v',
+    'libx264',
+    '-threads',
+    '2',
+    '-pix_fmt',
+    'yuv420p',
+    path.join(root, 'build/video.mp4'),
+  ]);
+  const result = await qaProject(root);
+  assert.equal(result.summary.frames, 180);
+  assert.deepEqual(
+    result.findings.filter(f => f.kind === 'held').map(f => [f.beat, f.seconds]),
+    [
+      ['scope', 3],
+      ['open', 3],
+    ],
+  );
+  const report = JSON.parse(fs.readFileSync(path.join(result.dir, 'qa.json')));
+  assert.equal(report.heldAnalysis.advisory, true);
+  assert.match(report.heldAnalysis.region, /excluding authored letterbox/);
+  assert.ok(fs.statSync(path.join(result.dir, 'phone.png')).size > 0);
 });
 
 test('beat map: the drop where the bass jumps and stays, tempo from onsets, cuts against the grid', () => {

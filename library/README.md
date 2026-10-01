@@ -71,7 +71,7 @@ A sketch is canvas props (`elements`, and optionally `world`). There are two way
   - `smoothPath`;
   - `frames`.
 
-A sketch should draw a mechanism, not a slide. Read `skills/clearframe-canvas/SKILL.md` before writing one.
+A sketch should draw a mechanism, a place or a purposeful material composition, not a slide. Background sketches declare `layer: "under"` and can be used in any storyboard as `art: {sketch: "paper-fold", seed: 17, opacity: 0.8}`. Authored `under` additions and `over` layers are preserved. Scene cameras/worlds belong in `props.sketch`, not background art. Built-in parametric art redraws at the actual frame dimensions; project JSON art uses its authored coordinates. See `docs/image-direction.md` for imagegen-inspired deterministic design and `docs/design/material-studies/index.html` for the atlas. Read `skills/clearframe-canvas/SKILL.md` before writing one.
 
 ## Playbooks
 

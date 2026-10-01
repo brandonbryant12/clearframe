@@ -110,3 +110,26 @@ test('a creative seed is reproducible, varies the look and the set pieces, and b
   assert.equal(sb.theme, muse(42).palette);
   assert.match(fs.readFileSync(path.join(dir, 'film', 'DIRECTION.md'), 'utf8'), /Creative seed 42/);
 });
+
+test('material art is reproducible, palette-driven and valid in all four frame shapes', async () => {
+  const { expandArt } = await import('../fframes/sketches.mjs');
+  const names = ['lightwell','contour-field','paper-fold','glass-orbits','bubble-cluster','ribbon-wave','petal-burst','inflated-loop','arena-grid','prism-shards'];
+  for (const name of names) for (const preset of ['landscape','vertical','square','portrait']) {
+    const a = sketch(name, preset, { seed: 17 });
+    assert.deepEqual(a, sketch(name, preset, { seed: 17 }), `${name} must be reproducible`);
+    normalizeElements(a.elements, `${name}.${preset}`, m => { throw new Error(m); });
+    assert.doesNotMatch(JSON.stringify(a.elements), /#[0-9a-f]{6}|"file"|"asset"|"text"/i, 'materials use palette paints, with no raster or baked text');
+  }
+  const authored = { type: 'circle', r: 8, fill: 'accent2' };
+  const input = { sketch: 'glass-orbits', seed: 7, opacity: 0.6, under: [authored], over: [authored] };
+  const a = expandArt(input, { width: 1080, height: 1920 });
+  assert.equal(a.under[0].opacity, 0.6);
+  assert.deepEqual(a.under[0].children, sketch('glass-orbits', 'vertical', { seed: 7 }).elements);
+  assert.deepEqual(a.under.at(-1), authored);
+  assert.deepEqual(a.over, [authored]);
+  assert.equal(input.sketch, 'glass-orbits', 'expansion does not mutate authoring data');
+  assert.deepEqual(expandArt({ sketch: 'paper-fold' }, { width: 1280, height: 720 }).under[0].children, item('sketches', 'paper-fold').build(1280, 720).elements, 'custom frame dimensions are respected');
+  assert.throws(() => expandArt({ sketch: 'tunnel' }), /not a background layer/);
+  assert.throws(() => expandArt({ sketch: 'missing' }), /Unknown sketch/);
+  assert.throws(() => expandArt({ sketch: 'paper-fold', opacity: 2 }), /opacity/);
+});

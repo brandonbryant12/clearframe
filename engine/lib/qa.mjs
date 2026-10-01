@@ -18,6 +18,17 @@ const LONG = 128;
 // never drop under 3 for even 2.5 s (medians 8–42); a held slide sits under 1.
 export const HELD = { change: 2, seconds: 2.5 };
 
+/** Compare the active picture, excluding authored horizontal bars (same rule as lens.rs).
+ * The caller passes the original aspect to avoid analysis-grid rounding changing the crop.
+ */
+export function pictureDifference(a, b, width, height, letterbox = 0, aspect = width / height) {
+  const bar =
+    letterbox > aspect && aspect > 1
+      ? Math.min(Math.floor((height - 1) / 2), Math.ceil((height * (1 - aspect / letterbox)) / 2))
+      : 0;
+  return diff(a.subarray(bar * width, (height - bar) * width), b.subarray(bar * width, (height - bar) * width));
+}
+
 function grid(width, height) {
   const k = LONG / Math.max(width, height);
   const even = n => Math.max(2, Math.round((n * k) / 2) * 2);
@@ -115,11 +126,12 @@ export function timeFindings({ d, skip, second, fps, beats = [], worlds = {}, co
   // HELD.change), for at least HELD.seconds. A silent beat may hold on purpose.
   const F = Math.round(fps);
   const held = new Uint8Array(n);
-  for (let i = F; i < n; i++) if (second[i] < HELD.change) held.fill(1, i - F, i + 1);
+  for (let i = F; i < n; i++)
+    if (beatAt(i / fps) === beatAt((i - F) / fps) && second[i] < HELD.change) held.fill(1, i - F, i + 1);
   for (let i = 0; i < n; i++) {
     if (!held[i]) continue;
     let j = i;
-    while (j + 1 < n && held[j + 1]) j++;
+    while (j + 1 < n && held[j + 1] && beatAt((j + 1) / fps) === beatAt(i / fps)) j++;
     const seconds = (j - i + 1) / fps;
     if (seconds >= HELD.seconds) {
       const s = where(i),
@@ -131,7 +143,7 @@ export function timeFindings({ d, skip, second, fps, beats = [], worlds = {}, co
         ...s,
         end: e.t,
         seconds: r2(seconds),
-        message: `the picture barely changes for ${r2(seconds)} s (${s.t}–${e.t} s${e.beat !== s.beat ? `, ${s.beat} → ${e.beat}` : ''})${voiced ? ' while the voice speaks' : ''}: small additions on a still frame read as a slide; push in, move the camera, or cut`,
+        message: `the picture barely changes for ${r2(seconds)} s (${s.t}–${e.t} s)${voiced ? ' during the narration span' : ''}: review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing`,
       });
     }
     i = j;
@@ -223,12 +235,22 @@ export async function qaProject(root, { video, loop = false } = {}) {
   const d = [0],
     skip = [0],
     second = [];
+  const same = timing.frames === n;
+  const beats = same ? timing.beats : [];
+  const letterboxes = beats.map(b => sb.beats[b.index].lens?.letterbox ?? sb.lens?.letterbox ?? 0);
+  let beatIndex = 0;
   for (let i = 1; i < n; i++) d.push(diff(film.at(i - 1), film.at(i)));
   for (let i = 1; i < n - 1; i++) skip.push(diff(film.at(i - 1), film.at(i + 1)));
   skip.push(0);
-  for (let i = 0; i < n; i++) second.push(i >= F ? diff(film.at(i - F), film.at(i)) : Infinity);
-  const same = timing.frames === n;
-  const beats = same ? timing.beats : [];
+  for (let i = 0; i < n; i++) {
+    while (beatIndex + 1 < beats.length && i / fps >= beats[beatIndex].end) beatIndex++;
+    const withinBeat = !same || !beats.length || (i - F) / fps >= beats[beatIndex].start;
+    second.push(
+      i >= F && withinBeat
+        ? pictureDifference(film.at(i - F), film.at(i), w, h, letterboxes[beatIndex] ?? 0, v.width / v.height)
+        : Infinity,
+    );
+  }
   const worlds = Object.fromEntries(sb.beats.map(b => [b.id, b.props?.world ?? null]));
   const covers = Object.fromEntries(
     sb.beats.map(b => {
@@ -300,6 +322,16 @@ export async function qaProject(root, { video, loop = false } = {}) {
     loudness,
     color: [v.color_primaries, v.color_transfer, v.color_space, v.color_range].join('/'),
   };
-  writeJSON(path.join(dir, 'qa.json'), { video: file, summary, findings, change: change.map(r2) });
+  writeJSON(path.join(dir, 'qa.json'), {
+    video: file,
+    summary,
+    findings,
+    change: change.map(r2),
+    heldAnalysis: {
+      ...HELD,
+      region: same ? 'active picture excluding authored letterbox bars' : 'full frame (timeline mismatch)',
+      advisory: true,
+    },
+  });
   return { dir, summary, findings };
 }
