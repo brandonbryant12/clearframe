@@ -29,8 +29,17 @@ export function chartSpec(spec, fail) {
   if (spec.box != null && !(Array.isArray(spec.box) && spec.box.length === 4 && spec.box.every(Number.isFinite)))
     fail('chart.box must be [x, y, w, h]');
   for (const k of Object.keys(spec))
-    if (!['kind', 'values', 'box', 'max', 'prefix', 'suffix', 'decimals', 'id', 'at', 'stagger'].includes(k))
+    if (!['kind', 'values', 'box', 'max', 'prefix', 'suffix', 'decimals', 'id', 'at', 'stagger', 'note'].includes(k))
       fail(`chart: unsupported field ${k}`);
+  if (spec.note != null) {
+    const n = spec.note;
+    if (!n || typeof n !== 'object' || typeof n.text !== 'string' || !n.text.trim())
+      fail('chart.note must be {text, to?, say?|at?}: the narration-cued annotation that replaces a heading');
+    for (const k of Object.keys(n))
+      if (!['text', 'to', 'say', 'at'].includes(k)) fail(`chart.note: unsupported field ${k}`);
+    if (n.to != null && !spec.values.some(v => v.label === n.to))
+      fail(`chart.note.to must be one of the value labels (${spec.values.map(v => v.label).join(', ')})`);
+  }
   return spec;
 }
 
@@ -40,10 +49,16 @@ export function chartElements(spec, { w, h }) {
     at = spec.at ?? 0.2,
     stagger = spec.stagger ?? 0.12;
   const values = spec.values.map(v => ({ ...v, key: `${id}-${slug(v.id ?? v.label)}` }));
+  const tall = h > w;
+  const note = spec.note && {
+    ...spec.note,
+    target: values.find(v => v.label === spec.note.to) ?? values.find(v => v.highlight) ?? values[0],
+  };
   const fill = v => (v.highlight ? 'accent' : 'muted');
   const out = [];
   if (spec.kind === 'bars') {
-    const [x, y, bw, bh] = spec.box ?? [w * 0.14, h * 0.15, w * 0.72, h * 0.43];
+    // The finding fills the frame: no heading underneath, the narration names it.
+    const [x, y, bw, bh] = spec.box ?? (tall ? [w * 0.1, h * 0.26, w * 0.8, h * 0.4] : [w * 0.1, h * 0.17, w * 0.8, h * 0.56]);
     const max = spec.max ?? Math.max(...values.map(v => v.value), 1);
     const n = values.length,
       col = bw / (n + (n - 1) * 0.45),
@@ -83,8 +98,8 @@ export function chartElements(spec, { w, h }) {
           type: 'text',
           text: format(v.value, spec),
           x: r(cx + col / 2),
-          y: r(base - hv - 18),
-          size: Math.round(Math.min(56, Math.max(26, col * 0.3))),
+          y: r(base - hv - 22),
+          size: Math.round(Math.min(84, Math.max(40, col * 0.34))),
           font: 'figures',
           anchor: 'middle',
           fill: 'ink',
@@ -96,8 +111,9 @@ export function chartElements(spec, { w, h }) {
           type: 'text',
           text: v.label,
           x: r(cx + col / 2),
-          y: r(base + 44),
-          size: 30,
+          y: r(base + 56),
+          size: 36,
+          fit: r(col * 1.4),
           anchor: 'middle',
           fill: v.highlight ? 'ink' : 'muted',
           at: r(t + 0.2),
@@ -105,9 +121,11 @@ export function chartElements(spec, { w, h }) {
           dur: 0.4,
         },
       );
+      if (note && note.target === v)
+        out.push(...noteElements(note, cx + col / 2, base + 130, { left: x, right: x + bw, up: true }));
     });
   } else if (spec.kind === 'stack') {
-    const [x, y, bw, bh] = spec.box ?? [w * 0.12, h * 0.44, w * 0.76, h * 0.09];
+    const [x, y, bw, bh] = spec.box ?? (tall ? [w * 0.08, h * 0.42, w * 0.84, h * 0.1] : [w * 0.06, h * 0.4, w * 0.88, h * 0.15]);
     const total = values.reduce((a, v) => a + v.value, 0) || 1;
     let cx = x;
     values.forEach((v, i) => {
@@ -127,14 +145,15 @@ export function chartElements(spec, { w, h }) {
         at: r(t),
         dur: 0.6,
       });
-      if (sw > 150)
+      if (sw > 190)
         out.push(
           {
             type: 'text',
             text: v.label,
             x: r(cx),
-            y: r(y - 26),
-            size: 30,
+            y: r(y - 30),
+            size: 36,
+            fit: r(sw - 16),
             fill: v.highlight ? 'ink' : 'muted',
             at: r(t + 0.3),
             enter: 'fade',
@@ -144,8 +163,8 @@ export function chartElements(spec, { w, h }) {
             type: 'text',
             text: format(v.value, spec),
             x: r(cx),
-            y: r(y + bh + 52),
-            size: 40,
+            y: r(y + bh + 78),
+            size: 64,
             font: 'figures',
             fill: 'ink',
             at: r(t + 0.4),
@@ -153,20 +172,24 @@ export function chartElements(spec, { w, h }) {
             dur: 0.4,
           },
         );
+      if (note && note.target === v)
+        out.push(...noteElements(note, cx + Math.min(sw, 120) / 2, y + bh + 170, { left: x, right: x + bw, up: true }));
       cx += sw;
     });
   } else {
     // number: the figure, large, over its own bar (which can become a bar or a segment next).
     const v = values.find(x => x.highlight) ?? values[0];
-    const [x, y, bw, bh] = spec.box ?? [w * 0.2, h * 0.3, w * 0.6, h * 0.4];
-    const max = spec.max ?? v.value;
+    const [x, y, bw, bh] = spec.box ?? [w * 0.15, h * 0.24, w * 0.7, h * 0.48];
+    const max = spec.max ?? v.value,
+      size = Math.round(Math.min(bh * 0.6, 300));
     out.push(
       {
         type: 'text',
         text: format(v.value, spec),
         x: r(x + bw / 2),
         y: r(y + bh * 0.55),
-        size: Math.round(Math.min(bh * 0.55, 260)),
+        size,
+        fit: r(bw),
         font: 'figures',
         anchor: 'middle',
         fill: 'ink',
@@ -178,8 +201,10 @@ export function chartElements(spec, { w, h }) {
         type: 'text',
         text: v.label,
         x: r(x + bw / 2),
-        y: r(y + bh * 0.55 + 70),
-        size: 36,
+        // Below the figure's descenders.
+        y: r(y + bh * 0.55 + size * 0.3 + 54),
+        size: 44,
+        fit: r(bw),
         anchor: 'middle',
         fill: 'muted',
         at: r(at + 0.3),
@@ -190,16 +215,64 @@ export function chartElements(spec, { w, h }) {
         type: 'rect',
         id: v.key,
         x: r(x),
-        y: r(y + bh * 0.9),
+        y: r(y + bh * 0.55 + size * 0.3 + 100),
         w: r((v.value / max) * bw),
         h: 18,
         fill: 'accent',
         enter: 'grow-x',
-        origin: [r(x), r(y + bh * 0.9 + 9)],
+        origin: [r(x), r(y + bh * 0.55 + size * 0.3 + 109)],
         at: r(at + 0.5),
         dur: 0.7,
       },
     );
+    if (note) out.push(...noteElements(note, x + bw / 2, y + bh * 0.55 + size * 0.3 + 150, { left: x, right: x + bw }));
   }
   return out;
+}
+
+/**
+ * The annotation that replaces a chart heading: a short accent line under the value it is
+ * about, arriving on the word the narration stresses (`say`) with a stroke pointing up at it.
+ */
+function noteElements(note, cx, y, { left, right, up = false }) {
+  const size = 40,
+    // Keep the line inside the chart's width: anchored at the near edge when the value sits
+    // close to one side.
+    est = note.text.length * size * 0.52,
+    anchor = cx - est / 2 < left ? 'start' : cx + est / 2 > right ? 'end' : 'middle',
+    tx = anchor === 'start' ? Math.max(left, cx - 24) : anchor === 'end' ? Math.min(right, cx + 24) : cx;
+  const cue = note.say ? { say: note.say } : { at: note.at ?? 1.2 };
+  return [
+    ...(up
+      ? [
+          {
+            type: 'line',
+            x1: r(cx),
+            y1: r(y - 10),
+            x2: r(cx),
+            y2: r(y - 44),
+            stroke: 'accent',
+            width: 3,
+            arrow: 'end',
+            head: 12,
+            enter: 'draw',
+            dur: 0.35,
+            ...cue,
+          },
+        ]
+      : []),
+    {
+      type: 'text',
+      text: note.text,
+      x: r(tx),
+      y: r(y + size),
+      size,
+      font: 'bold',
+      anchor,
+      fill: 'accent',
+      enter: 'rise',
+      dur: 0.45,
+      ...cue,
+    },
+  ];
 }

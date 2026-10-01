@@ -5,6 +5,7 @@ import { ICONS } from './icons.mjs';
 import { normalizeElements, roughSpec, applyRough, mosaicSpec, applyMosaic, depthKeys } from './canvas.mjs';
 import { plateElements } from '../engine/lib/plates.mjs';
 import { chartSpec, chartElements } from './data-canvas.mjs';
+import { sketch } from './sketches.mjs';
 
 /** Validation helpers bound to one block's props and error prefix. */
 export function helpers(p, fail, { findPhrase, precision }) {
@@ -409,6 +410,29 @@ export const VALIDATORS = {
     });
   },
   canvas: (p, h, frame = {}) => {
+    // A library sketch, redrawn for this frame, under the beat's own elements.
+    if (p.sketch != null) {
+      const [w, ht] = [frame.width ?? 1920, frame.height ?? 1080];
+      const preset = ht > w * 1.1 ? (ht > w * 1.5 ? 'vertical' : 'portrait') : w > ht * 1.1 ? 'landscape' : 'square';
+      let drawn;
+      try {
+        drawn = sketch(p.sketch, preset, { seed: p.seed });
+      } catch (e) {
+        h.fail(e.message);
+      }
+      const words = p.sketchText ?? {};
+      const retext = list =>
+        list.forEach(el => {
+          if (el.type === 'text' && words[el.text] != null) el.text = words[el.text];
+          if (el.children) retext(el.children);
+        });
+      retext(drawn.elements);
+      p.elements = [...drawn.elements, ...(p.elements ?? [])];
+      for (const k of ['view', 'viewFrom', 'viewDur', 'dolly', 'focus']) if (drawn[k] != null) p[k] ??= drawn[k];
+      delete p.sketch;
+      delete p.sketchText;
+      delete p.seed;
+    }
     // A chart drawn as shapes with stable ids, so it can morph into the next beat's chart.
     if (p.chart != null) {
       p.elements = [

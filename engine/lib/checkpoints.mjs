@@ -21,6 +21,19 @@ const answered = (text, prompt) => {
   );
 };
 
+const anyAnswered = (text, prompts) => prompts.some(p => answered(text, p));
+/** The `## Decisions` log in DIRECTION.md: one-shot films record each checkpoint there. */
+function decisions(direction) {
+  const at = direction.search(/^##\s*Decisions\b/im);
+  if (at < 0) return () => false;
+  const rest = direction.slice(at).split('\n').slice(1);
+  const end = rest.findIndex(l => /^##\s/.test(l));
+  const log = (end < 0 ? rest : rest.slice(0, end)).join('\n');
+  // "- Intent: …", "**Look:** …", "Spend — draft only, no budget"
+  return (...names) =>
+    names.some(n => new RegExp(`^\\s*(?:[-*]\\s*)?(?:\\*\\*)?${n}\\b[^\\n]{0,40}?[:—–-]\\s*\\S`, 'im').test(log));
+}
+
 /** The seven checkpoints for a project: {id, name, ask, done, detail, question}. */
 export function checkpoints(root) {
   const sb = loadStoryboard(root);
@@ -39,14 +52,18 @@ export function checkpoints(root) {
   const video = mtime(path.join(root, 'build', 'video.mp4'));
   const edited = mtime(path.join(root, 'storyboard.json'));
   const timing = computeTiming(root);
+  const decided = decisions(direction);
+  const spine = anyAnswered(direction, ['The question the film answers:', 'Question:', 'Spine:']);
+  const drafted = costs.rows.filter(r => r.kind === 'voice').every(r => r.status !== 'todo');
   return [
     {
       id: 'intent',
       name: 'Intent',
       ask: true,
       done:
-        answered(direction, 'Who is watching, and what do they already believe?') &&
-        answered(direction, 'The one thing they should understand or do afterwards:'),
+        (anyAnswered(direction, ['Who is watching, and what do they already believe?', 'Audience:']) &&
+          anyAnswered(direction, ['The one thing they should understand or do afterwards:', 'Takeaway:'])) ||
+        decided('Intent'),
       detail: 'audience and takeaway in DIRECTION.md',
       question: 'Who is this for, and what should they understand or do afterwards?',
     },
@@ -62,27 +79,28 @@ export function checkpoints(root) {
       id: 'story',
       name: 'Story and look',
       ask: true,
-      done:
-        answered(direction, 'The question the film answers:') &&
-        !!(sb.treatment || sb.lens || typeof sb.theme === 'object'),
-      detail: `${sb.treatment ? `treatment ${sb.treatment}` : 'no treatment'}; spine ${answered(direction, 'The question the film answers:') ? 'written' : 'not written'}`,
+      done: (spine && !!(sb.treatment || sb.lens || typeof sb.theme === 'object')) || decided('Story', 'Look', 'Spine'),
+      detail: `${sb.treatment ? `treatment ${sb.treatment}` : 'no treatment'}; spine ${spine ? 'written' : 'not written'}`,
       question: 'Does the story spine (question, turn, payoff) and the look fit what you want?',
     },
     {
       id: 'script',
       name: 'Narration',
       ask: true,
-      done: narrated > 0 && pending.filter(r => r.kind === 'voice').length === 0,
-      detail: `${narrated} narrated beat(s); ${pending.some(r => r.kind === 'voice') ? 'not yet voiced' : 'voiced'}`,
+      // A one-shot film without a budget closes on the free draft voice and a logged decision.
+      done:
+        narrated > 0 &&
+        (pending.filter(r => r.kind === 'voice').length === 0 || (drafted && decided('Narration', 'Script'))),
+      detail: `${narrated} narrated beat(s); ${pending.some(r => r.kind === 'voice') ? (drafted ? 'draft voice only' : 'not yet voiced') : 'voiced'}`,
       question: 'Read the narration aloud: are these the words, before the voice is recorded?',
     },
     {
       id: 'spend',
       name: 'Spend',
       ask: true,
-      done: owed === 0,
+      done: owed === 0 || decided('Spend', 'Budget'),
       detail: owed
-        ? `≈ $${owed.toFixed(2)} of paid generation pending${sb.budget != null ? ` (budget $${sb.budget})` : ''}`
+        ? `≈ $${owed.toFixed(2)} of paid generation pending${sb.budget != null ? ` (budget $${sb.budget})` : ''}${decided('Spend', 'Budget') ? '; decision logged' : ''}`
         : 'nothing paid pending',
       question: `Approve about $${owed.toFixed(2)} for ${[...new Set(pending.map(r => r.kind))].join(', ') || 'generation'}?`,
     },

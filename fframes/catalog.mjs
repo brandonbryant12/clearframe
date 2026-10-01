@@ -511,7 +511,11 @@ export const BLOCKS = [
       focus:
         'Depth of field for elements with z: {z (the focus plane), aperture 0–3 (1 natural), keys [{say|at, z, dur}] for a rack focus}',
       chart:
-        'A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars|stack|number, values: [{label, value, highlight, id}], box: [x, y, w, h], max, prefix, suffix, decimals, id}',
+        'A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars|stack|number, values: [{label, value, highlight, id}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (the note replaces a heading: an annotation on the stressed word)',
+      sketch:
+        'A library sketch drawn under any elements, redrawn for this frame (clearframe sketch lists them); its camera (view, dolly, focus) applies unless the beat sets its own',
+      sketchText: 'Replacement words for a sketch’s placeholder type: {"TITLE": "Your words"}',
+      seed: 'Varies a sketch’s seeded layout (buildings, ridges, swell)',
       plates:
         'A generated depth plate set staged in depth: the id of an image asset declared with layers: true (its far, mid and near layers at z 6, 1.2 and -0.35), under any elements; adds a slow dolly unless the beat sets a camera',
     },

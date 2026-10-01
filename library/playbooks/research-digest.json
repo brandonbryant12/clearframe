@@ -7,315 +7,672 @@
     {
       "id": "hook",
       "block": "stat",
-      "vo": "Thirty-seven percent. That one figure changes the question.",
+      "vo": "Thirty-seven percent of buses on Route 12 arrive within two minutes of the one ahead.",
       "props": {
         "value": 37,
         "suffix": "%",
-        "label": "The figure that reframes it",
-        "context": "From request to first answer.",
+        "label": "of buses arrive bunched",
+        "context": "within two minutes of the bus ahead · Route 12, weekday mornings",
         "source": "Illustrative sample data · replace before publishing",
         "align": "center",
         "land": "Thirty-seven"
       },
+      "tone": "accent",
       "camera": {
         "move": "in",
-        "amount": 0.8
-      },
-      "art": {
-        "sketch": "ambient"
+        "amount": 0.6
       }
     },
     {
       "id": "question",
       "block": "kinetic",
-      "vo": "So why do we still assume the opposite?",
+      "vo": "So why does adding buses barely shorten the wait?",
       "props": {
         "mode": "stack",
         "align": "center",
-        "emphasis": ["the opposite"]
+        "emphasis": ["barely"],
+        "emphasisStyle": "serif"
       },
       "transition": "panel"
     },
     {
       "id": "mechanism",
       "block": "canvas",
-      "vo": "Here is the mechanism, step by step: collect, clean, model, then ship.",
+      "vo": "A late bus finds more people at every stop. Boarding takes longer, so it falls further behind, until the next bus catches up.",
       "props": {
-        "title": "How it actually works",
-        "stagger": 0.12,
         "elements": [
           {
+            "type": "rect",
+            "x": 0,
+            "y": 450,
+            "w": 256,
+            "h": 350,
+            "r": 6,
+            "fill": "surface",
+            "opacity": 0.75,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 270,
+            "y": 510,
+            "w": 216,
+            "h": 290,
+            "r": 6,
+            "fill": "surface",
+            "opacity": 0.75,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 500,
+            "y": 570,
+            "w": 256,
+            "h": 230,
+            "r": 6,
+            "fill": "surface",
+            "opacity": 0.75,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 770,
+            "y": 390,
+            "w": 216,
+            "h": 410,
+            "r": 6,
+            "fill": "surface",
+            "opacity": 0.75,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1000,
+            "y": 390,
+            "w": 216,
+            "h": 410,
+            "r": 6,
+            "fill": "surface",
+            "opacity": 0.75,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1230,
+            "y": 570,
+            "w": 176,
+            "h": 230,
+            "r": 6,
+            "fill": "surface",
+            "opacity": 0.75,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1420,
+            "y": 390,
+            "w": 176,
+            "h": 410,
+            "r": 6,
+            "fill": "surface",
+            "opacity": 0.75,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1610,
+            "y": 510,
+            "w": 216,
+            "h": 290,
+            "r": 6,
+            "fill": "surface",
+            "opacity": 0.75,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1840,
+            "y": 510,
+            "w": 216,
+            "h": 290,
+            "r": 6,
+            "fill": "surface",
+            "opacity": 0.75,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 0,
+            "y": 814,
+            "w": 1920,
+            "h": 420,
+            "fill": "surface",
+            "opacity": 0.5,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "line",
+            "x1": 0,
+            "y1": 814,
+            "x2": 1920,
+            "y2": 814,
+            "stroke": "line",
+            "width": 8,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "line",
+            "x1": 360,
+            "y1": 810,
+            "x2": 360,
+            "y2": 550,
+            "stroke": "muted",
+            "width": 6,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 360,
+            "cy": 530,
+            "r": 22,
+            "fill": "accent2",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 408,
+            "cy": 760,
+            "r": 19,
+            "fill": "muted",
+            "at": 0.2,
+            "enter": "pop",
+            "dur": 0.3,
+            "exitAt": 1.3,
+            "exitDur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 454,
+            "cy": 760,
+            "r": 19,
+            "fill": "muted",
+            "at": 0.32,
+            "enter": "pop",
+            "dur": 0.3,
+            "exitAt": 1.3,
+            "exitDur": 0.3
+          },
+          {
+            "type": "line",
+            "x1": 620,
+            "y1": 810,
+            "x2": 620,
+            "y2": 550,
+            "stroke": "muted",
+            "width": 6,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 620,
+            "cy": 530,
+            "r": 22,
+            "fill": "accent2",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 668,
+            "cy": 760,
+            "r": 19,
+            "fill": "muted",
+            "at": 0.4,
+            "enter": "pop",
+            "dur": 0.3,
+            "exitAt": 2.5,
+            "exitDur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 714,
+            "cy": 760,
+            "r": 19,
+            "fill": "muted",
+            "at": 0.52,
+            "enter": "pop",
+            "dur": 0.3,
+            "exitAt": 2.5,
+            "exitDur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 760,
+            "cy": 760,
+            "r": 19,
+            "fill": "muted",
+            "at": 0.64,
+            "enter": "pop",
+            "dur": 0.3,
+            "exitAt": 2.5,
+            "exitDur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 806,
+            "cy": 760,
+            "r": 19,
+            "fill": "muted",
+            "at": 0.76,
+            "enter": "pop",
+            "dur": 0.3,
+            "exitAt": 2.5,
+            "exitDur": 0.3
+          },
+          {
+            "type": "line",
+            "x1": 1660,
+            "y1": 810,
+            "x2": 1660,
+            "y2": 550,
+            "stroke": "muted",
+            "width": 6,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 1660,
+            "cy": 530,
+            "r": 22,
+            "fill": "accent2",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 1708,
+            "cy": 760,
+            "r": 19,
+            "fill": "muted",
+            "at": 0.6,
+            "enter": "pop",
+            "dur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 1754,
+            "cy": 760,
+            "r": 19,
+            "fill": "muted",
+            "at": 0.72,
+            "enter": "pop",
+            "dur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 1800,
+            "cy": 760,
+            "r": 19,
+            "fill": "muted",
+            "at": 0.84,
+            "enter": "pop",
+            "dur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 1846,
+            "cy": 760,
+            "r": 19,
+            "fill": "muted",
+            "at": 0.96,
+            "enter": "pop",
+            "dur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 1708,
+            "cy": 708,
+            "r": 19,
+            "fill": "muted",
+            "at": 1.08,
+            "enter": "pop",
+            "dur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 1754,
+            "cy": 708,
+            "r": 19,
+            "fill": "muted",
+            "at": 1.2,
+            "enter": "pop",
+            "dur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 1800,
+            "cy": 708,
+            "r": 19,
+            "fill": "muted",
+            "at": 1.32,
+            "enter": "pop",
+            "dur": 0.3
+          },
+          {
+            "type": "circle",
+            "cx": 1846,
+            "cy": 708,
+            "r": 19,
+            "fill": "muted",
+            "at": 1.44,
+            "enter": "pop",
+            "dur": 0.3
+          },
+          {
             "type": "group",
-            "at": 0.3,
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0.6,
+                "x": 1170,
+                "dur": 6.2,
+                "ease": "inOut"
+              }
+            ],
             "children": [
+              {
+                "type": "ellipse",
+                "cx": -290.0,
+                "cy": 804,
+                "rx": 197.6,
+                "ry": 12,
+                "fill": "ink",
+                "opacity": 0.12,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": -480,
+                "y": 636,
+                "w": 380,
+                "h": 150,
+                "r": 30,
+                "fill": "ink",
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": -450,
+                "y": 658,
+                "w": 92,
+                "h": 54,
+                "r": 10,
+                "fill": "bg",
+                "opacity": 0.85,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": -338,
+                "y": 658,
+                "w": 92,
+                "h": 54,
+                "r": 10,
+                "fill": "bg",
+                "opacity": 0.85,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": -226,
+                "y": 658,
+                "w": 92,
+                "h": 54,
+                "r": 10,
+                "fill": "bg",
+                "opacity": 0.85,
+                "enter": "none"
+              },
+              {
+                "type": "circle",
+                "cx": -394,
+                "cy": 788,
+                "r": 26,
+                "fill": "ink",
+                "enter": "none"
+              },
+              {
+                "type": "circle",
+                "cx": -186,
+                "cy": 788,
+                "r": 26,
+                "fill": "ink",
+                "enter": "none"
+              },
+              {
+                "type": "text",
+                "text": "next bus",
+                "x": -290.0,
+                "y": 600,
+                "size": 46,
+                "font": "bold",
+                "anchor": "middle",
+                "fill": "ink",
+                "enter": "none"
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0.5,
+                "x": 420,
+                "dur": 2.4,
+                "ease": "inOut"
+              },
+              {
+                "at": 3.0,
+                "x": 980,
+                "dur": 3.6,
+                "ease": "out"
+              }
+            ],
+            "children": [
+              {
+                "type": "ellipse",
+                "cx": 310.0,
+                "cy": 804,
+                "rx": 197.6,
+                "ry": 12,
+                "fill": "ink",
+                "opacity": 0.12,
+                "enter": "none"
+              },
               {
                 "type": "rect",
                 "x": 120,
-                "y": 545,
-                "w": 352.5,
-                "h": 170,
-                "r": 28,
-                "fill": "surface",
-                "enter": "pop"
-              },
-              {
-                "type": "text",
-                "text": "Collect",
-                "x": 296.3,
-                "y": 646,
-                "size": 44,
-                "anchor": "middle",
-                "font": "bold",
-                "fill": "ink",
-                "enter": "fade"
-              }
-            ]
-          },
-          {
-            "type": "line",
-            "x1": 482.5,
-            "y1": 630,
-            "x2": 552.5,
-            "y2": 630,
-            "stroke": "accent",
-            "width": 6,
-            "dash": [14, 12],
-            "arrow": "end",
-            "at": 0.6,
-            "dur": 0.4,
-            "enter": "fade",
-            "loop": {
-              "type": "dash",
-              "period": 0.8
-            }
-          },
-          {
-            "type": "group",
-            "at": 0.8,
-            "children": [
-              {
-                "type": "rect",
-                "x": 562.5,
-                "y": 545,
-                "w": 352.5,
-                "h": 170,
-                "r": 28,
-                "fill": "surface",
-                "enter": "pop"
-              },
-              {
-                "type": "text",
-                "text": "Clean",
-                "x": 738.8,
-                "y": 646,
-                "size": 44,
-                "anchor": "middle",
-                "font": "bold",
-                "fill": "ink",
-                "enter": "fade"
-              }
-            ]
-          },
-          {
-            "type": "line",
-            "x1": 925,
-            "y1": 630,
-            "x2": 995,
-            "y2": 630,
-            "stroke": "accent",
-            "width": 6,
-            "dash": [14, 12],
-            "arrow": "end",
-            "at": 1.1,
-            "dur": 0.4,
-            "enter": "fade",
-            "loop": {
-              "type": "dash",
-              "period": 0.8
-            }
-          },
-          {
-            "type": "group",
-            "at": 1.3,
-            "children": [
-              {
-                "type": "rect",
-                "x": 1005,
-                "y": 545,
-                "w": 352.5,
-                "h": 170,
-                "r": 28,
-                "fill": "surface",
-                "enter": "pop"
-              },
-              {
-                "type": "text",
-                "text": "Model",
-                "x": 1181.3,
-                "y": 646,
-                "size": 44,
-                "anchor": "middle",
-                "font": "bold",
-                "fill": "ink",
-                "enter": "fade"
-              }
-            ]
-          },
-          {
-            "type": "line",
-            "x1": 1367.5,
-            "y1": 630,
-            "x2": 1437.5,
-            "y2": 630,
-            "stroke": "accent",
-            "width": 6,
-            "dash": [14, 12],
-            "arrow": "end",
-            "at": 1.6,
-            "dur": 0.4,
-            "enter": "fade",
-            "loop": {
-              "type": "dash",
-              "period": 0.8
-            }
-          },
-          {
-            "type": "group",
-            "at": 1.8,
-            "children": [
-              {
-                "type": "rect",
-                "x": 1447.5,
-                "y": 545,
-                "w": 352.5,
-                "h": 170,
-                "r": 28,
+                "y": 636,
+                "w": 380,
+                "h": 150,
+                "r": 30,
                 "fill": "accent",
-                "enter": "pop"
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 150,
+                "y": 658,
+                "w": 92,
+                "h": 54,
+                "r": 10,
+                "fill": "bg",
+                "opacity": 0.85,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 262,
+                "y": 658,
+                "w": 92,
+                "h": 54,
+                "r": 10,
+                "fill": "bg",
+                "opacity": 0.85,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 374,
+                "y": 658,
+                "w": 92,
+                "h": 54,
+                "r": 10,
+                "fill": "bg",
+                "opacity": 0.85,
+                "enter": "none"
+              },
+              {
+                "type": "circle",
+                "cx": 206,
+                "cy": 788,
+                "r": 26,
+                "fill": "ink",
+                "enter": "none"
+              },
+              {
+                "type": "circle",
+                "cx": 414,
+                "cy": 788,
+                "r": 26,
+                "fill": "ink",
+                "enter": "none"
               },
               {
                 "type": "text",
-                "text": "Ship",
-                "x": 1623.8,
-                "y": 646,
-                "size": 44,
-                "anchor": "middle",
+                "text": "late bus",
+                "x": 310.0,
+                "y": 600,
+                "size": 46,
                 "font": "bold",
-                "fill": "bg",
-                "enter": "fade"
+                "anchor": "middle",
+                "fill": "accent",
+                "enter": "none"
               }
             ]
           }
         ],
-        "source": "Illustrative sample data · replace before publishing",
-        "sketch": "pipeline",
-        "view": "auto"
-      },
-      "camera": {
-        "move": "in",
-        "amount": 0.9
+        "view": [200, 190, 1720, 967.5]
       }
     },
     {
       "id": "evidence",
-      "block": "bars",
-      "vo": "The evidence points one way, with a clear outlier.",
+      "block": "canvas",
+      "vo": "Riders wait eleven minutes on average, nearly double what the timetable promises.",
       "props": {
-        "title": "What the evidence shows",
-        "data": [
-          {
-            "label": "Triage",
-            "value": 12
-          },
-          {
-            "label": "Routing",
-            "value": 24
-          },
-          {
-            "label": "Review",
-            "value": 8
-          }
-        ],
-        "format": " h",
-        "focus": {
-          "label": "Routing",
-          "dim": 0.55,
-          "note": "Start here"
-        },
         "source": "Illustrative sample data · replace before publishing",
-        "growSay": "evidence"
-      },
-      "art": {
-        "over": [
-          {
-            "type": "path",
-            "d": "M 1510 330 C 1390 300 1210 330 1085 440",
-            "stroke": "accent2",
-            "width": 6,
-            "arrow": "end",
-            "say": "outlier"
-          },
-          {
-            "type": "text",
-            "text": "The outlier",
-            "x": 1530,
-            "y": 330,
-            "size": 38,
-            "font": "bold",
-            "fill": "accent2",
-            "enter": "type",
-            "say": "outlier"
+        "chart": {
+          "kind": "bars",
+          "id": "wait",
+          "suffix": " min",
+          "max": 12,
+          "values": [
+            {
+              "label": "Timetable",
+              "value": 6
+            },
+            {
+              "label": "Riders wait",
+              "value": 11,
+              "highlight": true
+            }
+          ],
+          "note": {
+            "text": "nearly double the timetable",
+            "to": "Riders wait",
+            "say": "double"
           }
-        ]
+        },
+        "elements": []
       },
-      "camera": {
-        "to": [700, 170, 1160, 652],
-        "say": "one way",
-        "dur": 1.8
-      }
+      "transition": "whip"
     },
     {
-      "id": "pause",
+      "id": "trial",
       "block": "canvas",
+      "vo": "In a trial that held buses to even gaps, the wait fell to seven minutes.",
       "props": {
-        "sketch": "pause"
-      }
+        "source": "Illustrative sample data · replace before publishing",
+        "chart": {
+          "kind": "bars",
+          "id": "wait",
+          "suffix": " min",
+          "max": 12,
+          "values": [
+            {
+              "label": "Timetable",
+              "value": 6
+            },
+            {
+              "label": "Riders wait",
+              "value": 11
+            },
+            {
+              "label": "Even gaps (trial)",
+              "value": 7,
+              "highlight": true
+            }
+          ],
+          "note": {
+            "text": "the trial: 7 minutes",
+            "to": "Even gaps (trial)",
+            "say": "seven"
+          }
+        },
+        "elements": []
+      },
+      "hold": 0.8
     },
     {
       "id": "turn",
       "block": "kinetic",
-      "vo": "But the average hides who is affected most.",
+      "vo": "The problem was never too few buses. It was uneven gaps.",
       "props": {
         "mode": "stack",
         "align": "left",
         "maxWords": 5,
-        "source": "",
-        "emphasis": ["average", "most"],
+        "emphasis": ["uneven gaps"],
         "emphasisStyle": "serif"
       },
       "transition": "iris"
     },
     {
-      "id": "meaning",
-      "block": "statement",
-      "vo": "So act on the distribution, not the average.",
-      "props": {
-        "text": "Act on the distribution, not the average.",
-        "emphasis": ["distribution"],
-        "emphasisStyle": "serif",
-        "align": "center",
-        "source": "Illustrative sample data · replace before publishing"
-      }
-    },
-    {
       "id": "end",
       "block": "endcard",
-      "vo": "The methods and the limits are in the full report.",
+      "vo": "Hold the gaps, not the timetable. The method and its limits are in the full study.",
       "props": {
-        "support": "Start with one handoff this week.",
-        "action": "Open the report",
+        "text": "Hold the gaps, not the timetable.",
+        "support": "Method, routes and limits are in the full study.",
+        "action": "Read the study",
         "source": "Illustrative sample data · replace before publishing",
-        "text": "Read the whole story.",
         "align": "center"
       },
       "hold": 1
@@ -328,8 +685,8 @@
     "grain": 0.35,
     "vignette": 0.5
   },
-  "note": "Start from clearframe ingest --markdown report.md: it writes BRIEF.md with every figure, its sentence and its source, plus tensions and chart-ready tables. Replace every sample claim; lead with the question and the surprise, not the report's section order. Shots, not slides: the figure as a full-frame insert, the question as poster type, charts under lower thirds with a moving camera, a silence before the turn.",
-  "heading": "bottom",
+  "note": "Start from clearframe ingest --markdown report.md: it writes BRIEF.md with every figure, its sentence and its source. Replace every sample claim and keep one dataset: the same label always shows the same value and unit. Lead with the surprising figure, ask the question it raises, draw the mechanism (don't list it), show the evidence as a chart that changes on the cue, then turn. Charts fill the frame without headings: chart.note says what to look at, on the stressed word.",
+  "heading": "top",
   "textMotion": "words",
   "transition": "cut",
   "lens": {

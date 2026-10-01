@@ -199,12 +199,23 @@ export async function checkProject(root, options = {}) {
   }
   const errors = [],
     notes = [];
+  const warnings = [...ctx.warnings];
   try {
     notes.push(withoutCameraCuts(await nativeCommand(ctx, 'inspect', ['--fail-on', 'error'], true), ctx.job));
   } catch (e) {
     errors.push(e.message);
   }
-  return { errors, warnings: ctx.warnings, notes, duration: ctx.timing.duration, inputId: ctx.manifest.inputId };
+  // The frame audit: held type cut by the frame or the letterbox, printed over other type or
+  // the subject, or too small to read. A director would send any of these back.
+  try {
+    const file = path.join(ctx.dir, 'audit.json');
+    await nativeCommand(ctx, '--audit', [file], true);
+    for (const a of readJSON(file))
+      (a.level === 'error' ? errors : warnings).push(`${a.beat}: ${a.message} (${a.seconds.toFixed(1)} s)`);
+  } catch (e) {
+    errors.push(`frame audit failed: ${e.message}`);
+  }
+  return { errors, warnings, notes, duration: ctx.timing.duration, inputId: ctx.manifest.inputId };
 }
 
 /** Drop "cut off by the canvas edge" notes inside moves that carry type past the edge on

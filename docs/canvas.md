@@ -38,7 +38,7 @@ Paint: `fill` and `stroke` take palette tokens (`bg, surface, ink, muted, accent
 | `say` / `at` | When the element enters: a spoken word or phrase, or scene seconds. Without either, elements follow the scene cue plus `stagger`. |
 | `enter` | `fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, scramble, blur, assemble (mosaic), none`. Default: strokes `draw`, text `rise`, icons and circles `pop`, others `fade`. |
 | `dur`, `dist` | Entrance seconds; travel distance. |
-| `keys` | `[{say|at, dur, ease: inOut|in|out|linear|spring, x, y, scale, scaleX, scaleY, rotate, opacity}]`: each key starts at its time and eases from the previous state. `x, y` are offsets; `scaleX`/`scaleY` stretch one axis about `origin` (a level rising or falling, a gap widening). |
+| `keys` | `[{say|at, dur, ease: inOut|in|out|linear|spring, x, y, scale, scaleX, scaleY, rotate, opacity, hold}]`: each key starts at its time and eases from the previous state. `x, y` are offsets; `scaleX`/`scaleY` stretch one axis about `origin` (a level rising or falling, a gap widening). A key with `hold: false` is ambient motion (traffic, drifting cloud) that runs on past the cut instead of holding the beat. |
 | `along` | `{d, say|at, dur, ease, rotate}`: the element's origin travels along a path (a marker on a route, a packet through a pipe). |
 | `loop` | `{type: spin|pulse|float|sway|orbit|dash|blink, period, amount}`: ambient motion after the entrance, eased in. `dash` marches a dashed stroke. `spin` with an `origin` orbits a centre. |
 | `exit`, `exitSay` / `exitAt`, `exitDur` | Leave mid-scene: `fade, shrink, fall, lift, undraw, wipe, blur, scatter (mosaic), none`. Use it to build, then transform: draw a problem, clear it, draw the fix. |

@@ -222,9 +222,10 @@ pub fn letterbox<'a>(bar: f32, w: f32, h: f32) -> Svgr<'a> {
     if bar <= 0.25 {
         return fframes::svgr!(<g />);
     }
+    // Tagged so the frame audit can find type the bars cut.
     fframes::svgr!(<g>
-        <rect x="0" y="0" width={w} height={bar} fill="#000000" />
-        <rect x="0" y={h - bar} width={w} height={bar} fill="#000000" />
+        <g id="cf-bar-top"><rect x="0" y="0" width={w} height={bar} fill="#000000" /></g>
+        <g id="cf-bar-bottom"><rect x="0" y={h - bar} width={w} height={bar} fill="#000000" /></g>
     </g>)
 }
 

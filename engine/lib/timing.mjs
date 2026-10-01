@@ -8,6 +8,7 @@ import { findMusicBed } from './music-files.mjs';
 import { blockByName } from '../../fframes/catalog.mjs';
 import { audioHash, validateWords, wordKey } from './word-timing.mjs';
 import { planTakes } from './takes.mjs';
+import { COVER } from '../../fframes/constants.mjs';
 
 const PAUSES = [
   [/(\.\.\.|…)$/, 0.45],
@@ -207,7 +208,16 @@ export function computeTiming(root) {
     const continuousLead = (sb.pacing.continuous === true && b.vo) || (take && take.index > 0);
     const continuousTail = (sb.pacing.continuous === true && b.vo) || (take && take.index < take.count - 1);
     const lead = b.lead ?? (continuousLead ? 0 : sb.pacing.lead);
-    const tail = b.tail ?? (continuousTail ? 0 : ((b.block ? blockTail(b.block) : null) ?? sb.pacing.tail));
+    // A graphic transition marks a turn: the voice takes a breath there, so the outgoing
+    // scene has time to cover the cut after its last word (take slices are separate files).
+    const next = sb.beats[index + 1];
+    const cover = next && COVER[next.transition ?? sb.transition];
+    const breath = cover && !(sb.pacing.continuous === true) ? cover[0] + 0.1 : 0;
+    const tail =
+      b.tail ??
+      (continuousTail
+        ? breath
+        : Math.max(breath, (b.block ? blockTail(b.block) : null) ?? sb.pacing.tail));
     const natural = vo ? Math.max(0, lead) + vo.duration + tail + (b.hold ?? 0) : sb.pacing.silentBeat + (b.hold ?? 0);
     // Stretching a slice of a continuous recording would insert silence into it.
     const dur =

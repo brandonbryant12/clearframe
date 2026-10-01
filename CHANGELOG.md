@@ -4,6 +4,34 @@
 
 Travel instead of cutting, type with a voice, and fewer false alarms.
 
+- **A frame audit that fails `check`.** The renderer inspects four held moments of every beat, ignoring text in motion. It refuses:
+  - type cut off by the frame edge or by letterbox bars;
+  - type printed over other type or over a 3D solid;
+  - type under 14 px at 1080p (it warns under 20 px).
+- **Titles that fit.** Canvas text takes `fit` (the widest a line may be) and shrinks instead of running off the frame. The title sketch fills the frame and fits any title.
+- **Charts without headings.** `chart` bars, stacks and numbers fill the frame. `chart.note: {text, to, say}` is the annotation that replaces a heading: an accent line under the value, arriving on the stressed word.
+- **Report playbooks rebuilt as films.** Each now runs on one consistent dataset, with no heading on every chart and no empty "pause" beat.
+  - `data-story` opens on a queue world in depth, then shows the average, its split into hours and its spread.
+  - `research-digest` draws its mechanism (buses bunching).
+  - `concept-explainer` draws a brake rippling back through full traffic, then the queueing curve (computed, so its source is the formula).
+- **End cards without web buttons.** `action` is accent type over a drawn rule, not a pill.
+- **No bloom on light palettes**, where it only softened the shapes.
+- **Kinetic phrases never end on a leaning word** ("the", "of", "too"): the break moves one word early or late.
+- **A breath before a graphic transition.** Timing gives the outgoing beat the time its panel, iris or whip needs, even inside a continuous take, instead of falling back to a fade.
+- **Ambient motion that does not hold the beat.** A key with `hold: false` (traffic, drifting cloud) runs on past the cut.
+- **`props.sketch` works in any storyboard** (with `sketchText` and `seed`), not only through `new`.
+- **Honest critique.** It stops scoring slideshows 100:
+  - It shows `check` errors first.
+  - Headings count wherever they sit, and a handheld wobble no longer counts as life.
+  - A graphic wipe earns only half credit for continuity.
+  - A new tell flags a film that opens on an empty frame.
+- **Checkpoints read real direction files.** They accept `Audience:`, `Takeaway:` and `Question:` lines and the `## Decisions` log. A one-shot film without a budget can close Narration on the draft voice and Spend with a logged decision.
+- **Cleaner `ingest` briefs.**
+  - It skips dates, version numbers ("Opus 5.5", "Route 12"), codes (R128) and hex colours, and keeps 2.5M, series (8 → 34) and units.
+  - Links trailing a bullet source its sentences, and reference titles keep their words.
+  - DIRECTION.md starts with the brief's tensions, sourced figures and quotations.
+- **An honest review loop.** `scripts/bench.mjs` drafts ten fixed films, and a fresh reviewer scores them against top studio work (`docs/review.md`). Round 1 scored 3.1/5.
+
 - **A lens for the whole film.** `lens` (film-wide, overridable per beat) adds:
   - `letterbox`: animated black bars (2.39, 2, 1.85). Headings, sources and captions move inside the picture.
   - `grade`: tone curves per channel (`teal-orange`, `warm`, `cool`, `bleach`, `mono`, `noir`, `sepia`).

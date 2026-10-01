@@ -9,86 +9,68 @@
       "block": "canvas",
       "vo": "How long does one request really take?",
       "props": {
-        "sketch": "landscape"
+        "sketch": "queue"
       }
     },
     {
-      "id": "stat",
-      "block": "stat",
-      "vo": "A typical request waits more than four days for its first answer.",
+      "id": "wait",
+      "block": "canvas",
+      "vo": "On average, four point two days before anyone answers.",
       "props": {
-        "value": 4.2,
-        "suffix": " days",
-        "label": "Median first response",
-        "context": "From request to first answer.",
         "source": "Illustrative sample data · replace before publishing",
-        "align": "center",
-        "land": "days"
+        "chart": {
+          "kind": "number",
+          "suffix": " days",
+          "decimals": 1,
+          "values": [
+            {
+              "label": "average wait for a first answer",
+              "value": 4.2,
+              "id": "queue"
+            }
+          ]
+        },
+        "elements": []
       },
-      "transition": "panel",
-      "tone": "accent",
+      "transition": "flash",
       "camera": {
         "move": "in",
-        "amount": 0.8
+        "amount": 0.6
       }
     },
     {
-      "id": "magnitude",
-      "block": "magnitude",
-      "vo": "One team, one company and one city ask the same question at very different scales.",
-      "props": {
-        "title": "The same question, three scales",
-        "items": [
-          {
-            "label": "A team",
-            "value": 12
-          },
-          {
-            "label": "A company",
-            "value": 1200
-          },
-          {
-            "label": "A city",
-            "value": 90000
-          }
-        ],
-        "format": " people",
-        "source": "Illustrative sample data · replace before publishing"
-      },
-      "camera": {
-        "move": "right",
-        "amount": 0.8
-      }
-    },
-    {
-      "id": "week",
+      "id": "parts",
       "block": "canvas",
-      "vo": "Most of that time goes to answering and routing, not the work itself.",
+      "vo": "Where do those hundred hours go? Most of them are spent in a queue, and being routed. The answer itself takes twelve.",
       "props": {
-        "title": "Where a week of support goes",
         "source": "Illustrative sample data · replace before publishing",
         "chart": {
           "kind": "stack",
           "suffix": " h",
           "values": [
             {
-              "label": "Answering",
-              "value": 18,
+              "label": "Queue",
+              "value": 52,
               "highlight": true
             },
             {
               "label": "Routing",
+              "value": 31
+            },
+            {
+              "label": "Answering",
               "value": 12
             },
             {
-              "label": "Waiting",
-              "value": 7
-            },
-            {
               "label": "Follow-up",
-              "value": 3
+              "value": 6
             }
-          ]
+          ],
+          "note": {
+            "text": "the answer itself: 12 hours",
+            "to": "Answering",
+            "say": "twelve"
+          }
         },
         "elements": []
       }
@@ -96,62 +78,109 @@
     {
       "id": "side",
       "block": "canvas",
-      "vo": "Side by side, routing is the part a better handoff can shrink.",
+      "vo": "Stand them side by side, and routing is the part a better handoff can shrink.",
       "props": {
-        "title": "Where a week of support goes",
         "source": "Illustrative sample data · replace before publishing",
         "chart": {
           "kind": "bars",
           "suffix": " h",
           "values": [
             {
-              "label": "Answering",
-              "value": 18
+              "label": "Queue",
+              "value": 52
             },
             {
               "label": "Routing",
-              "value": 12,
+              "value": 31,
               "highlight": true
             },
             {
-              "label": "Waiting",
-              "value": 7
+              "label": "Answering",
+              "value": 12
             },
             {
               "label": "Follow-up",
-              "value": 3
+              "value": 6
             }
-          ]
+          ],
+          "note": {
+            "text": "what a better handoff can shrink",
+            "to": "Routing",
+            "say": "handoff"
+          }
         },
         "elements": []
-      }
+      },
+      "camera": {
+        "move": "right",
+        "amount": 0.6
+      },
+      "hold": 0.3
     },
     {
-      "id": "pause",
+      "id": "tail",
       "block": "canvas",
+      "vo": "But the average hides the shape. Almost half are answered the same day, while a few wait for weeks.",
       "props": {
-        "sketch": "pause"
-      }
+        "source": "Illustrative sample data · replace before publishing",
+        "chart": {
+          "kind": "bars",
+          "id": "spread",
+          "suffix": "%",
+          "values": [
+            {
+              "label": "Same day",
+              "value": 46
+            },
+            {
+              "label": "1–3 days",
+              "value": 28
+            },
+            {
+              "label": "3–7 days",
+              "value": 14
+            },
+            {
+              "label": "1–2 weeks",
+              "value": 8
+            },
+            {
+              "label": "2+ weeks",
+              "value": 4,
+              "highlight": true
+            }
+          ],
+          "note": {
+            "text": "the tail that drags the average up",
+            "to": "2+ weeks",
+            "say": "weeks"
+          }
+        },
+        "elements": []
+      },
+      "transition": "whip",
+      "hold": 0.8
     },
     {
-      "id": "highlight",
+      "id": "turn",
       "block": "kinetic",
-      "vo": "An average can hide a long tail of slow requests.",
+      "vo": "So fix the tail, not the average.",
       "props": {
         "mode": "stack",
         "align": "center",
-        "emphasis": ["long tail"]
+        "emphasis": ["the tail"],
+        "emphasisStyle": "serif"
       },
       "transition": "iris"
     },
     {
       "id": "endcard",
       "block": "endcard",
-      "vo": "Measure the wait before you change the process.",
+      "vo": "Measure the whole wait, then shorten the slowest step first.",
       "props": {
-        "title": "Start with the wait.",
-        "support": "One number, measured the same way every week.",
-        "action": "Pick your first metric",
+        "title": "Measure the whole wait.",
+        "support": "Then shorten the slowest step first.",
+        "action": "Start with routing",
         "source": "Illustrative sample data · replace before publishing",
         "align": "center"
       },
@@ -174,5 +203,5 @@
     "handheld": 0.12,
     "blur": 0.5
   },
-  "note": "The opening landscape is sample data drawn as a place: compute its heights from real values or replace it. Numbers are full-frame inserts; the turn is poster type after a silence."
+  "note": "One dataset carries the film: the average wait (4.2 days), the same wait split into hours (52 + 31 + 12 + 6 = 101 h), then its spread across requests. Replace every figure with yours and keep them consistent: the same label always shows the same value. Charts fill the frame without headings; a narration-cued note (chart.note) says what to look at. The queue opening is a world, not data: keep it or draw your own."
 }

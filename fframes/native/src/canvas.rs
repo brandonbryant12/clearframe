@@ -1046,6 +1046,12 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             "image" => self.canvas_image(el),
             "meter" => self.meter(el, &fill, now),
             "particles" => self.particles(el, &fill, now),
+            // Tagged so the frame audit can find type printed over the object (a globe carries
+            // its own labels).
+            "solid" if s(el, "shape") != "globe" => {
+                let id = self.uid("subject");
+                fframes::svgr!(<g id={id}>{self.solid(el, draw, now, defs)}</g>)
+            }
             "solid" => self.solid(el, draw, now, defs),
             "spotlight" => {
                 // A dimming field with a window: everything outside the target recedes.
@@ -1088,8 +1094,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     fn canvas_text(&self, el: &Value, fill: &str, reveal: f32, local: f32) -> Svgr<'a> {
         let font = text_font(el);
         // Sizes are in the canvas's own units: a world label can be under a unit tall.
-        let size = f(el, "size", 48.0).max(0.2);
-        let tracking = f(el, "tracking", 0.0) * size;
+        let mut size = f(el, "size", 48.0).max(0.2);
+        let mut tracking = f(el, "tracking", 0.0) * size;
         let mut value = s(el, "text").to_owned();
         if let Some(count) = el.get("count") {
             let (from, to) = (n(count, "from", 0.0), n(count, "to", 0.0));
@@ -1150,6 +1156,20 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 Align::Left => x,
             };
             return self.draw(&layout, left, y - layout.baseline, width, align, fill);
+        }
+        // `fit`: the widest a single line may be. A long title shrinks to fit instead of
+        // running off the frame; the final text decides, so a decode or reveal never jumps.
+        if let Some(fit) = num(el, "fit") {
+            let full = if el.get("upper").and_then(Value::as_bool).unwrap_or(false) {
+                s(el, "text").to_uppercase()
+            } else {
+                s(el, "text").to_owned()
+            };
+            let natural = text::measure(font, &full, size, tracking);
+            if natural > fit && natural > 0.0 {
+                size *= fit / natural;
+                tracking *= fit / natural;
+            }
         }
         let w = text::measure(font, &value, size, tracking);
         let final_w = if el.get("count").is_some() {

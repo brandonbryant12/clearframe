@@ -447,7 +447,9 @@ async function main() {
     );
     return console.log(
       r.findings.length
-        ? r.findings.map(f => `${f.level === 'warn' ? '!' : '·'} ${f.where.padEnd(18)} ${f.message}`).join('\n')
+        ? r.findings
+            .map(f => `${f.level === 'error' ? '✗' : f.level === 'warn' ? '!' : '·'} ${f.where.padEnd(18)} ${f.message}`)
+            .join('\n')
         : 'No findings. Now look at the sheet.',
     );
   }

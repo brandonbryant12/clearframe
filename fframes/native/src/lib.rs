@@ -3,6 +3,7 @@ use fframes::{AudioMap, Duration, FFramesContext, Frame, Scene, Scenes, Svgr, Vi
 use serde::Deserialize;
 use serde_json::Value;
 
+pub mod audit;
 pub mod constants;
 mod design;
 mod icons;
@@ -395,7 +396,12 @@ impl<const W: usize, const H: usize, const RATE: usize> Video for NativeFilm<W, 
         // The lens of the beat on screen; letterbox bars ease between beats that differ.
         let i = self.0.beats.iter().rposition(|b| b.start_frame <= frame.global_index).unwrap_or(0);
         let beat = &self.0.beats[i];
-        let lens = lens::Lens::from(&beat.lens);
+        let mut lens = lens::Lens::from(&beat.lens);
+        // Bloom lifts highlights out of a dark picture; on a light paper every pixel is a
+        // highlight, and the bloom only bleeds the paper into the shapes and softens them.
+        if !palette.dark {
+            lens.bloom = 0.0;
+        }
         let mut bar = lens::bar(lens.letterbox, w, h);
         if i > 0 {
             let before = lens::bar(lens::Lens::from(&self.0.beats[i - 1].lens).letterbox, w, h);

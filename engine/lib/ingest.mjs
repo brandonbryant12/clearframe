@@ -13,9 +13,12 @@ import { alignScript } from './word-align.mjs';
 
 const CONTRAST =
   /\b(however|but|although|though|despite|yet|whereas|instead|in contrast|contrary|surprising(?:ly)?|unexpected(?:ly)?|counter-?intuitive|paradox|nevertheless|even though)\b/i;
+// Capitalised words that lead into a quantity rather than name a thing ("About 3.2M").
+const NAMED =
+  /^(?:About|Around|Nearly|Almost|Over|Under|Some|Only|Just|More|Less|Fewer|At|In|By|The|A|An|Of|Up|Down|To|From|Roughly|Approximately|Exactly|Nearly|Top|Bottom|First|Last)$/;
 // A figure: optional currency, a number, an optional range or "of N", and an optional unit.
 const NUM = String.raw`[$€£¥]?\s?[-−]?\d[\d,]*(?:\.\d+)?`;
-const UNIT = String.raw`%|°\s?[CF]|°|percentage points?|percent|per cent|pp|×|x|times|fold|k|bn|million|billion|trillion|thousand|hundred|kg|tonnes?|km|mph|km\/h|[kMGT]Wh?|ppm|hours?|days?|weeks?|months?|years?|minutes?|seconds?|people|users|households`;
+const UNIT = String.raw`%|°\s?[CF]|°|percentage points?|percent|per cent|pp|×|x|times|fold|k|K|M|B|bn|million|billion|trillion|thousand|hundred|kg|tonnes?|km|mph|km\/h|[kMGT]Wh?|ppm|hours?|days?|weeks?|months?|years?|minutes?|seconds?|people|users|households`;
 const FIGURE = new RegExp(
   String.raw`${NUM}(?:\s?[–-]\s?${NUM})?(?:\s(?:of|in|out of)\s(?:every\s)?\d[\d,]*)?(?:\s?(?:${UNIT})(?![a-z]))?`,
   'gi',
@@ -61,8 +64,12 @@ export function parseResearch(markdown) {
     table = null,
     para = [];
   const addSource = (id, value) => {
-    const url = value.match(/https?:\/\/\S+/)?.[0]?.replace(/[)>.,]+$/, '');
-    const t = plain(value.replace(/https?:\/\/\S+/, '')).replace(/^[-–—:.,;\s]+|[-–—:.,;\s]+$/g, '');
+    // The first link is the source; its title is the entry's text with links reduced to words.
+    const url = (linksOf(value)[0]?.url ?? value.match(/https?:\/\/\S+/)?.[0])?.replace(/[)>.,]+$/, '');
+    const t = plain(value)
+      .replace(/https?:\/\/\S+/g, '')
+      .replace(/\(\s*\)/g, '')
+      .replace(/^[-–—:.,;\s]+|[-–—:.,;\s]+$/g, '');
     if (!sources.has(id)) sources.set(id, { id, title: t || url || id, url: url ?? null });
   };
   const flush = () => {
@@ -184,6 +191,22 @@ export function parseResearch(markdown) {
     let first = null,
       count = 0;
     for (const p of s.paragraphs) {
+      // A paragraph's or bullet's own links (often trailing: "… 2.5M views. [post](…)")
+      // source its sentences that cite nothing themselves.
+      const paragraphSources = [
+        ...new Set(
+          sentencesOf(p)
+            .filter(
+              md =>
+                /^\[[^\]]+\]\(https?:/.test(md.trim()) ||
+                plain(md)
+                  .replace(/\[[\w.,\s-]+\]/g, '')
+                  .split(/[\s·•|,;]+/)
+                  .filter(Boolean).length <= 4,
+            )
+            .flatMap(sourceFor),
+        ),
+      ];
       // Split the markdown paragraph and its plain form in step so citations stay attached.
       for (const md of sentencesOf(p)) {
         const sentence = plain(md)
@@ -192,9 +215,27 @@ export function parseResearch(markdown) {
         if (!sentence) continue;
         words += sentence.split(/\s+/).length;
         first ??= sentence;
-        const cites = sourceFor(md);
-        for (const m of sentence.matchAll(FIGURE)) {
-          const token = m[0].trim();
+        const own = sourceFor(md),
+          cites = own.length ? own : paragraphSources;
+        // Dates, versions, codes and colours are not statistics: blank them before matching.
+        const scrubbed = sentence
+          .replace(/\b\d{4}-\d{2}(?:-\d{2})?\b/g, m => ' '.repeat(m.length))
+          .replace(
+            /\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?\b(?:,?\s+\d{4})?/g,
+            m => ' '.repeat(m.length),
+          )
+          .replace(/#[0-9a-f]{3,8}\b/gi, m => ' '.repeat(m.length))
+          .replace(/(?<=[A-Za-z])\d[\d.]*/g, m => ' '.repeat(m.length))
+          // "Opus 5.5", "Route 12", "Figure 3": a name's number, not a measurement.
+          .replace(/(\b[A-Z][\w-]*\s)(\d+(?:\.\d+)?)(?![\d.,]|\s?(?:%|×|[kKMB]\b))/g, (m, name, num) =>
+            NAMED.test(name.trim()) ? m : name + ' '.repeat(num.length),
+          );
+        for (const m of scrubbed.matchAll(FIGURE)) {
+          const token = m[0].trim().replace(/,$/, '');
+          // A number in a series ("8 → 34 → 61") is a figure even when it is small.
+          const series =
+            /(?:→|->)\s*$/.test(scrubbed.slice(0, m.index)) ||
+            /^\s*(?:→|->)/.test(scrubbed.slice(m.index + m[0].length));
           const n = Number((token.match(/[-−]?\d[\d,]*(?:\.\d+)?/)?.[0] ?? '').replace(/,/g, '').replace('−', '-'));
           if (!Number.isFinite(n) || !/\d/.test(token)) continue;
           const unit = token.replace(
@@ -204,7 +245,7 @@ export function parseResearch(markdown) {
           const bare = !unit && !/[$€£¥]/.test(token) && !/\s(?:of|in|out of)\s/.test(token) && !/[–-]/.test(token);
           const year = bare && /^(1[89]|20|21)\d\d$/.test(token);
           // A lone small integer ("step 2", "3 reasons") is rarely a statistic worth showing.
-          if (year || (bare && Math.abs(n) < 10 && /^\d$/.test(token))) continue;
+          if (year || (bare && !series && Math.abs(n) < 10 && /^\d$/.test(token))) continue;
           figures.push({
             figure: token,
             value: n,
@@ -394,6 +435,33 @@ export function ingestMarkdown(root, file, { scaffold, playbook = 'research-dige
     if (r.sources.length)
       sb.sources = r.sources.map(s => ({ id: s.id, title: s.title, ...(s.url ? { url: s.url } : {}) }));
     writeJSON(path.join(root, 'storyboard.json'), sb);
+    // Start the direction from the evidence, not a blank page: the questions, the tensions and
+    // the sourced figures the brief found. The storyboard is the playbook's sample to rewrite.
+    const direction = path.join(root, 'DIRECTION.md');
+    if (fs.existsSync(direction)) {
+      const cite = f => (f.sources.length ? ` [${f.sources.join(', ')}]` : ' (unsourced: confirm or cut)');
+      const lines = [
+        '',
+        `## From the brief (${r.title})`,
+        '',
+        'The storyboard is the playbook’s sample, written for another subject: replace every beat with this material.',
+        '',
+        ...(r.questions.length
+          ? ['Questions the report asks:', ...r.questions.slice(0, 3).map(q => `- ${q.sentence}`), '']
+          : []),
+        ...(r.contrasts.length
+          ? ['Tensions (a turn lives here):', ...r.contrasts.slice(0, 3).map(c => `- ${c.sentence}`), '']
+          : []),
+        'Figures, sourced first:',
+        ...[...r.figures]
+          .sort((a, b) => b.sources.length - a.sources.length)
+          .slice(0, 6)
+          .map(f => `- ${f.figure}: ${f.sentence}${cite(f)}`),
+        ...(r.quotes.length ? ['', 'Quotations:', ...r.quotes.slice(0, 2).map(q => `- “${q.text}”`)] : []),
+        '',
+      ];
+      fs.appendFileSync(direction, lines.join('\n'));
+    }
   }
   return {
     title: r.title,

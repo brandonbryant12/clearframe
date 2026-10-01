@@ -12,7 +12,7 @@ export const ELEMENT_TYPES = {
   path: { geometry: ['d', 'arrow', 'head'], required: ['d'] },
   poly: { geometry: ['points', 'closed', 'arrow', 'head'], required: ['points'] },
   text: {
-    geometry: ['text', 'x', 'y', 'size', 'font', 'anchor', 'width', 'height', 'leading', 'tracking', 'upper', 'count'],
+    geometry: ['text', 'x', 'y', 'size', 'font', 'anchor', 'width', 'height', 'leading', 'tracking', 'upper', 'count', 'fit'],
     required: [],
   },
   icon: { geometry: ['name', 'x', 'y', 'size'], required: ['name'] },
@@ -168,6 +168,8 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
     if (el.z != null && (!finite(el.z) || el.z <= -0.9 || el.z > 50))
       fail(`${at}.z must be above -0.9 and at most 50 (0 is the picture plane; larger is farther away)`);
     if (el.blur != null && (!finite(el.blur) || el.blur < 0 || el.blur > 60)) fail(`${at}.blur must be 0–60 px`);
+    if (el.type === 'text' && el.fit != null && (!finite(el.fit) || el.fit <= 0))
+      fail(`${at}.fit must be the widest the line may be, in canvas units`);
     if (el.shine != null) el.shine = shineSpec(el.shine, `${at}.shine`, fail);
     for (const key of ['fill', 'stroke']) {
       const v = el[key];
@@ -222,9 +224,21 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
         if (!k || typeof k !== 'object') fail(`${at}.keys[${j}] must be an object`);
         for (const key of Object.keys(k))
           if (
-            !['at', 'say', 'dur', 'ease', 'x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity', 'blur'].includes(
-              key,
-            )
+            ![
+              'at',
+              'say',
+              'dur',
+              'ease',
+              'x',
+              'y',
+              'scale',
+              'scaleX',
+              'scaleY',
+              'rotate',
+              'opacity',
+              'blur',
+              'hold',
+            ].includes(key)
           )
             fail(`${at}.keys[${j}]: unsupported field ${key}`);
         if (k.at == null && k.say == null) fail(`${at}.keys[${j}] needs at (seconds) or say (spoken cue)`);
@@ -234,6 +248,8 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
           if (k[key] != null && !finite(k[key])) fail(`${at}.keys[${j}].${key} must be a number`);
         if (k.ease != null && !EASES.includes(k.ease)) fail(`${at}.keys[${j}].ease must be one of ${EASES.join(', ')}`);
         if (k.opacity != null && (k.opacity < 0 || k.opacity > 1)) fail(`${at}.keys[${j}].opacity must be 0–1`);
+        if (k.hold != null && typeof k.hold !== 'boolean')
+          fail(`${at}.keys[${j}].hold must be false for ambient motion that runs past the cut`);
       });
     }
     if (el.loop != null) {
@@ -598,7 +614,9 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
         delete k.say;
       }
       k.dur ??= T.key;
-      settle = Math.max(settle, k.at + k.dur);
+      // `hold: false`: ambient motion (traffic, drifting cloud) runs on past the cut.
+      if (k.hold !== false) settle = Math.max(settle, k.at + k.dur);
+      delete k.hold;
     }
     if (el.keys) el.keys.sort((a, b) => a.at - b.at);
     if (el.along) {

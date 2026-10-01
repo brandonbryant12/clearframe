@@ -9,6 +9,9 @@ struct AppArgs {
     job: String,
     #[arg(long, default_value = "media", global = true)]
     media: String,
+    /// Write the frame audit (clipped, covered or unreadable type) as JSON to this file.
+    #[arg(long, global = true)]
+    audit: Option<String>,
 }
 
 fn run_canvas<const W: usize, const H: usize, const RATE: usize>(
@@ -19,7 +22,46 @@ fn run_canvas<const W: usize, const H: usize, const RATE: usize>(
     clearframe_native::text::use_font_dir(std::path::Path::new(&args.app.media));
     let directory = MediaDirectory::read_folder(&args.app.media)?;
     let media = directory.process_media_source()?;
+    // Four held moments per beat, each with the frame after it to tell held type from moving.
+    let samples: Vec<(String, usize)> = film
+        .beats
+        .iter()
+        .flat_map(|b| {
+            [0.35, 0.6, 0.85, 0.97].map(|p| {
+                let last = b.start_frame + b.frames.saturating_sub(2);
+                (b.id.clone(), (b.start_frame + (b.frames as f32 * p) as usize).min(last))
+            })
+        })
+        .collect();
     let video = NativeFilm::<W, H, RATE>(film);
+    if let Some(out) = args.app.audit.clone() {
+        let options = RenderOptions {
+            media: Some(&media),
+            load_system_fonts: false,
+            default_font: "Inter",
+            ..Default::default()
+        };
+        let mut previewer = fframes::Previewer::new(&video, &options).map_err(|e| format!("{e:?}"))?;
+        let mut report: Vec<serde_json::Value> = Vec::new();
+        for (beat, frame) in samples {
+            let now = previewer.svg_tree(frame).map_err(|e| format!("{e:?}"))?;
+            let next = previewer.svg_tree(frame + 1).map_err(|e| format!("{e:?}"))?;
+            let (w, h) = (now.size().width(), now.size().height());
+            let scan = clearframe_native::audit::scan(&now);
+            for f in clearframe_native::audit::judge(&scan, &clearframe_native::audit::scan(&next), w, h) {
+                let seen = report.iter_mut().find(|r| r["beat"] == beat && r["kind"] == f.kind && r["text"] == f.text);
+                match seen {
+                    Some(r) => r["frames"] = (r["frames"].as_u64().unwrap_or(1) + 1).into(),
+                    None => report.push(serde_json::json!({
+                        "beat": beat, "frame": frame, "seconds": frame as f32 / RATE as f32,
+                        "level": f.level, "kind": f.kind, "text": f.text, "message": f.message, "frames": 1
+                    })),
+                }
+            }
+        }
+        std::fs::write(out, serde_json::to_string_pretty(&report)?)?;
+        return Ok(ExitCode::SUCCESS);
+    }
     // Upstream --draft replaces codec_params and would drop our thread limit.
     // Resolve it here and keep resource limits in both draft and final encodes.
     let mut draft = false;

@@ -214,11 +214,12 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             )
         });
         let action = s(props, "action");
+        // The call to action is type, not a web button: accent words over a drawn rule.
         let pill = (block == "endcard" && !action.trim().is_empty())
-            .then(|| self.fit(action, Style::strong(30.0), a.w - 64.0, 80.0));
+            .then(|| self.fit(action, Style::strong(if self.wide { 40.0 } else { 38.0 }), a.w, 110.0));
         let bar_h = if block == "title" { 52.0 } else { 0.0 };
         let sup_h = sup.as_ref().map_or(0.0, |l| 40.0 + l.height());
-        let pill_h = pill.as_ref().map_or(0.0, |l| 56.0 + l.height() + 36.0);
+        let pill_h = pill.as_ref().map_or(0.0, |l| 64.0 + l.height() + 18.0);
         let group = bar_h + head_h + sup_h + pill_h;
         let top = a.y + ((a.h - group) * 0.42).max(0.0);
         let mut nodes = vec![];
@@ -247,11 +248,13 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             nodes.push(self.rise(self.draw(sup, a.x, head_y + head_h + 40.0, a.w, align, &self.p.muted), after, 16.0));
         }
         if let Some(pill) = &pill {
-            let y = head_y + head_h + sup_h + 56.0;
-            let (w, h) = (pill.width() + 64.0, pill.height() + 36.0);
+            let y = head_y + head_h + sup_h + 64.0;
+            let w = pill.width();
             let px = centre(w);
-            let body = fframes::svgr!(<g>{rounded(px, y, w, h, h / 2.0, &self.p.accent)}{self.draw(pill, px + 32.0, y + 18.0, pill.width(), Align::Left, &self.p.bg)}</g>);
-            nodes.push(self.pop(body, after + 0.2, px + w / 2.0, y + h / 2.0));
+            let grow = self.m.grow(self.t - after - 0.45, 0.6);
+            let words = self.draw(pill, px, y, w, Align::Left, &self.p.accent);
+            let rule = rect(px, y + pill.height() + 14.0, w * grow, 3.0, &self.p.accent);
+            nodes.push(self.rise(fframes::svgr!(<g>{words}{rule}</g>), after + 0.2, 14.0));
         }
         let kicker_y =
             self.head_y.map_or(if self.tall() { self.b.environment.height * 0.11 } else { 108.0 }, |y| y + 8.0);

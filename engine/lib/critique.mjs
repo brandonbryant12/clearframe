@@ -5,6 +5,7 @@ import { loadStoryboard } from './project.mjs';
 import { computeTiming, tokenize } from './timing.mjs';
 import { rules } from '../../fframes/registry.mjs';
 import { elementsExtent as extent } from '../../fframes/canvas.mjs';
+import { createJob } from '../../fframes/job.mjs';
 
 const FAMILY = new Proxy({}, { get: (_, name) => rules(name).family });
 // A canvas that holds only type is a type card (poster type), not a drawing.
@@ -97,17 +98,22 @@ export function cinemaScore(sb, beats, timed, transitions) {
   // cameras (cutting on action, the grammar of a montage).
   const travelling = b =>
     b.block === 'canvas' && (b.props?.world || b.props?.viewFrom || b.props?.dolly || b.props?.focus?.keys);
+  // A graphic wipe hides a cut rather than carrying anything across it: half credit.
   let carried = 0;
+  const ids = b =>
+    new Set([...(b.props?.elements ?? []).map(el => el.id), ...(b.props?.chart ? ['chart'] : [])].filter(Boolean));
+  const chartIds = b =>
+    b.props?.chart ? b.props.chart.values.map(v => `${b.props.chart.id ?? 'chart'}-${v.id ?? v.label}`) : [];
   for (let i = 1; i < n; i++) {
     const [a, b] = [beats[i - 1], beats[i]];
-    const ids = new Set((a.props?.elements ?? []).map(el => el.id).filter(Boolean));
+    const before = new Set([...ids(a), ...chartIds(a)]);
     if (
       (b.props?.world && b.props.world === a.props?.world) ||
-      (b.props?.elements ?? []).some(el => el.id && ids.has(el.id)) ||
-      ['panel', 'iris', 'whip', 'flash'].includes(transitions[i]) ||
+      [...ids(b), ...chartIds(b)].some(id => id !== 'chart' && before.has(id)) ||
       (travelling(a) && travelling(b))
     )
       carried++;
+    else if (['panel', 'iris', 'whip', 'flash'].includes(transitions[i])) carried += 0.5;
   }
   if (carried < (n - 1) / 4)
     tell(
@@ -115,9 +121,9 @@ export function cinemaScore(sb, beats, timed, transitions) {
       `only ${carried} of ${n - 1} cuts carry anything across. Make runs of drawings one world, morph a shape into the next scene (same id), or cut on a whip.`,
     );
   // 2. Build, then freeze: what still moves once the scene has landed.
+  // A handheld lens alone is not life: a slide that wobbles is still a slide.
   const alive = b =>
     b.plate?.drift ||
-    lens(b).handheld > 0 ||
     (b.block === 'canvas' && (b.props?.world || b.props?.viewFrom || has(b.props, LIFE))) ||
     has(b.art, LIFE) ||
     (b.camera && b.camera !== 'none' && b.camera?.move !== 'none' && (b.camera?.amount ?? 0.5) >= 0.6) ||
@@ -129,11 +135,12 @@ export function cinemaScore(sb, beats, timed, transitions) {
       `${frozen} of ${n} scenes stop moving once they land. Give each hold some life: a loop, particles, a dolly or truck, a plate drift, or lens.handheld.`,
     );
   // 3. Headings on every scene.
+  // A heading at the bottom is still a heading: a chart with a caption under it reads as a slide.
   const headed = beats.filter(b => b.props?.title && !['title', 'endcard', 'chapter'].includes(b.block)).length;
-  if (headed / n > 0.5 && (sb.heading ?? 'top') !== 'bottom')
+  if (headed / n > 0.4)
     tell(
       'A heading on every scene',
-      `${headed} of ${n} scenes carry a top-left title. Let the picture and the voice say it; keep titles for chapters, or use lower thirds (heading: "bottom").`,
+      `${headed} of ${n} scenes carry a heading. Let the picture and the voice say it: a chart fills the frame and a narration-cued note (chart.note, or a callout cued with say) points at the finding; keep titles for chapters.`,
     );
   // 4. Locked, flat camera.
   const deep = beats.some(b => (b.block === 'canvas' && has(b.props, DEPTH)) || has(b.art, DEPTH));
@@ -177,6 +184,25 @@ export function cinemaScore(sb, beats, timed, transitions) {
       'Screen-flat image',
       'no light, lens or texture. Choose a lens (grade, bloom, letterbox, leak), add grain and a vignette, and light the subject (glow, shine, spotlight).',
     );
+  // 9. The first frame: something to look at before anyone speaks.
+  const first = beats[0];
+  const shown = el =>
+    el.type !== 'particles' &&
+    (el.at ?? 1) <= 0.05 &&
+    (el.enter === 'none' || el.dur === 0 || (el.at === 0 && el.dur === 0));
+  const present = list =>
+    (list ?? []).some(el => shown(el) || (el.type === 'group' && (el.at ?? 1) <= 0.05 && present(el.children)));
+  const pictured =
+    first?.plate ||
+    (first?.tone && first.tone !== 'none') ||
+    (first?.block === 'canvas' && (present(first.props?.elements) || first.props?.plates)) ||
+    present(first?.art?.under) ||
+    present(first?.art?.over);
+  if (first && !pictured)
+    tell(
+      'Opens on an empty frame',
+      `the first frames of ${first.id} show only the background while its picture builds. Put the establishing picture on frame one (elements at 0 with enter "none") and animate only the details in.`,
+    );
   // 8. An edit set by the voice alone: every beat speaks and every shot is the same length.
   const durs = shots.map(x => x.dur).filter(d => d > 0);
   const mean = durs.reduce((a, b) => a + b, 0) / Math.max(1, durs.length);
@@ -186,7 +212,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
       'An edit set by the voice alone',
       'every shot speaks and runs about the same length. Vary the rhythm: quick cuts into a long hold, a silent beat before the payoff, a short button at the end.',
     );
-  return { score: Math.round(100 - 12.5 * tells.length), tells };
+  return { score: Math.max(0, Math.round(100 - 11 * tells.length)), tells };
 }
 
 export function critique(root) {
@@ -196,6 +222,14 @@ export function critique(root) {
     out = [];
   const add = (level, where, message) => out.push({ level, where, message });
   const t = timing.beats;
+  // What `check` would refuse comes first: a storyboard that cannot render has no cinema.
+  let job;
+  try {
+    job = createJob(structuredClone(sb), timing, { draft: true });
+  } catch (e) {
+    job = { errors: [e.message] };
+  }
+  for (const e of job.errors ?? []) add('error', 'check', e);
   // Hook.
   const first = beats[0],
     firstDur = t[0]?.dur ?? 0;

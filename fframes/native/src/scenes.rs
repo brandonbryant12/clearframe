@@ -126,7 +126,14 @@ pub(crate) fn phrase_window(
     for index in 1..words.len() {
         let ends_sentence =
             sentences && words[index - 1].text.trim_end_matches(['"', '\'', ')', '”', '’']).ends_with(['.', '!', '?']);
-        let boundary = index - start >= max_words.max(1)
+        // A full phrase breaks at the word limit, but never right after a word that leans on
+        // the next one ("the", "of", "too"): break one word early so the leaning word starts
+        // the next phrase, or, failing that, one word late.
+        let (count, limit) = (index - start, max_words.max(1));
+        let full = count > limit
+            || (count == limit && !leans(&words[index - 1].text))
+            || (limit >= 3 && count + 1 == limit && leans(&words[index].text) && !leans(&words[index - 1].text));
+        let boundary = full
             || ends_sentence
             || words[index].start - words[index - 1].end > max_gap
             || words[index].end - words[start].start > max_duration;
@@ -138,6 +145,19 @@ pub(crate) fn phrase_window(
         }
     }
     start..words.len()
+}
+
+/// Words that lean on the next one: a phrase should not end on them.
+fn leans(word: &str) -> bool {
+    const LEANING: &[&str] = &[
+        "a", "an", "the", "of", "to", "in", "on", "at", "by", "for", "from", "with", "and", "or", "but", "nor",
+        "so", "as", "than", "that", "this", "these", "those", "its", "their", "our", "your", "my", "his", "her",
+        "is", "was", "are", "were", "be", "been", "does", "do", "did", "not", "no", "too", "very", "more",
+        "most", "every", "each", "into", "onto", "over", "under", "about", "if", "when", "while", "will",
+        "would", "can", "could", "should", "has", "have", "had", "it's", "what", "how", "why", "who",
+    ];
+    let w = word.trim_matches(|c: char| !c.is_alphanumeric() && c != '\'').to_lowercase();
+    !word.ends_with([',', '.', ';', ':', '!', '?']) && LEANING.contains(&w.as_str())
 }
 
 /// Locale-independent grouping; the sign, prefix, digits and suffix stay one atomic string.
@@ -868,6 +888,17 @@ mod tests {
         assert_eq!(word_window(&words, 2.5, 1, 0.6, 4.0), 3..4);
         assert_eq!(words[2].start, 2.0);
         assert_eq!(words[4].end, 3.4);
+    }
+    #[test]
+    fn phrases_never_end_on_a_word_that_leans_on_the_next() {
+        let words: Vec<Caption> = "The problem was never too few buses."
+            .split(' ')
+            .enumerate()
+            .map(|(i, w)| Caption { text: w.into(), start: i as f32 * 0.3, end: i as f32 * 0.3 + 0.25 })
+            .collect();
+        // "The problem was never too" would strand "too": it starts the next phrase instead.
+        assert_eq!(phrase_window(&words, 0.1, 5, 0.6, 9.0, true), 0..4);
+        assert_eq!(phrase_window(&words, 1.3, 5, 0.6, 9.0, true), 4..7);
     }
     #[test]
     fn emphasis_segments_cover_the_line_without_losing_characters() {
