@@ -10,12 +10,74 @@ import { voiceLevels } from '../engine/lib/levels.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 import { computeTiming, captionCues, toSRT, toVTT, assetSrc } from '../engine/lib/timing.mjs';
 import { writeJSON, readJSON } from '../engine/lib/util.mjs';
+import { phase } from '../engine/lib/runlog.mjs';
 
-export async function prepareProject(root, { draft = false } = {}) {
+/**
+ * Rough cuts stand in for what isn't made yet: a beat that declares `placeholder` (or uses a
+ * generated asset nobody has paid for) becomes a labelled slate over its own words, on its own
+ * clock. Nothing else is relaxed here; outside --rough a declared placeholder is an error.
+ */
+export function roughStandIns(root, sb, timing, { rough = false } = {}) {
+  const placeholders = [];
+  const missing = b => {
+    const ids = new Set();
+    const walk = v => {
+      if (Array.isArray(v)) v.forEach(walk);
+      else if (v && typeof v === 'object')
+        for (const [k, x] of Object.entries(v)) {
+          if (k === 'asset' && typeof x === 'string') ids.add(x);
+          else if (k === 'plates' && typeof x === 'string') ['far', 'mid', 'near'].forEach(l => ids.add(`${x}-${l}`));
+          else walk(x);
+        }
+    };
+    walk([b.props, b.art, b.plate]);
+    return [...ids].filter(id => {
+      const a = sb.assets.find(a => a.id === id);
+      return a && !a.file && a.prompt && !assetSrc(root, a);
+    });
+  };
+  const beats = sb.beats.map((b, i) => {
+    const declared = typeof b.placeholder === 'string' ? b.placeholder : b.placeholder?.text;
+    if (b.placeholder != null && !(typeof declared === 'string' && declared.trim() && declared.length <= 140))
+      throw new Error(`${b.id}: placeholder must be a description up to 140 characters (or {text}).`);
+    const pending = missing(b);
+    if (!declared && !pending.length) return b;
+    if (!rough)
+      throw new Error(
+        declared
+          ? `${b.id} is a declared placeholder (“${declared}”); author it, or render a rough cut with --rough.`
+          : `${b.id}: generated asset ${pending.join(', ')} is not made yet; run images/clips within the budget, or render a rough cut with --rough.`,
+      );
+    const what = declared ?? `generated ${pending.join(', ')} not made yet`;
+    placeholders.push({ beat: b.id, reason: what, declared: !!declared, ...(pending.length ? { assets: pending } : {}) });
+    const tb = timing.beats[i],
+      W = timing.width,
+      H = timing.height,
+      m = Math.round(Math.min(W, H) * 0.035);
+    const label = `PLACEHOLDER · ${what}`.slice(0, 72);
+    const slate = {
+      over: [
+        { type: 'rect', x: m, y: m, w: W - 2 * m, h: H - 2 * m, r: 18, fill: 'none', stroke: 'muted', width: 3, dash: [16, 12], enter: 'none' },
+        { type: 'text', text: label, x: m + 28, y: m + 56, size: 30, font: 'mono', fill: 'muted', anchor: 'start', fit: W - 2 * m - 56, enter: 'none' },
+      ],
+    };
+    const spoken = tb.vo?.words?.length > 0;
+    const stand = spoken
+      ? { block: 'kinetic', props: { mode: 'highlight', align: 'center', maxWords: H > W ? 5 : 8 } }
+      : { block: 'statement', props: { kicker: 'Placeholder', text: what.slice(0, 90) } };
+    const keep = ['id', 'vo', 'speaker', 'chapter', 'transition', 'exit', 'motion', 'duration', 'lead', 'tail', 'hold', 'min'];
+    timing.beats[i] = { ...tb, ...stand };
+    return { ...Object.fromEntries(keep.filter(k => b[k] !== undefined).map(k => [k, b[k]])), ...stand, art: slate };
+  });
+  return { sb: { ...sb, beats }, timing, placeholders };
+}
+
+export async function prepareProject(root, { draft = false, rough = false } = {}) {
   root = fs.realpathSync(root);
-  const sb = loadStoryboard(root),
-    timing = computeTiming(root);
-  const result = createJob(sb, timing, { draft });
+  const loaded = loadStoryboard(root),
+    computed = computeTiming(root);
+  const { sb, timing, placeholders } = roughStandIns(root, loaded, computed, { rough });
+  const result = createJob(sb, timing, { draft: draft || rough });
   if (result.errors.length) throw new Error(result.errors.join('\n'));
   const timingBeat = i => timing.beats[i];
   const dir = path.join(root, 'build/native'),
@@ -167,11 +229,13 @@ export async function prepareProject(root, { draft = false } = {}) {
     revision: readJSON(path.join(ROOT, 'upstream.json')).revision,
     hashes,
     inputId: sha256(JSON.stringify({ job: result.job, hashes, rendererSourceHash, fontHashes })),
-    draft,
+    draft: draft || rough,
+    profile: rough ? 'rough' : draft ? 'draft' : 'final',
+    ...(placeholders.length ? { placeholders } : {}),
     warnings: result.warnings,
   };
   writeJSON(path.join(dir, 'manifest.json'), manifest);
-  return { ...result, root, sb, timing, dir, media, manifest };
+  return { ...result, root, sb, timing, dir, media, manifest, placeholders };
 }
 export function unchanged(ctx) {
   if (rendererHash() !== ctx.manifest.rendererSourceHash)
@@ -192,30 +256,52 @@ export async function nativeCommand(ctx, command, args = [], capture = false) {
 }
 export async function checkProject(root, options = {}) {
   let ctx;
+  const profile = options.rough ? 'rough' : options.draft ? 'draft' : 'final';
   try {
-    ctx = await prepareProject(root, options);
+    ctx = await phase('prepare', () => prepareProject(root, options));
   } catch (e) {
-    return { errors: [e.message], warnings: [], notes: [] };
+    return { profile, errors: [e.message], warnings: [], notes: [], craft: [], placeholders: [] };
   }
   const errors = [],
-    notes = [];
+    notes = [],
+    craft = [];
   const warnings = [...ctx.warnings];
   try {
-    notes.push(withoutCameraCuts(await nativeCommand(ctx, 'inspect', ['--fail-on', 'error'], true), ctx.job));
+    notes.push(
+      withoutCameraCuts(
+        await phase('inspect', () => nativeCommand(ctx, 'inspect', ['--fail-on', 'error'], true)),
+        ctx.job,
+      ),
+    );
   } catch (e) {
     errors.push(e.message);
   }
   // The frame audit: held type cut by the frame or the letterbox, printed over other type or
-  // the subject, or too small to read. A director would send any of these back.
+  // the subject, or too small to read. A director would send any of these back. A rough cut
+  // lists them as unfinished craft instead of refusing to render, except where the type holds
+  // a figure: a clipped or covered number misinforms, so it stays an error in every profile.
   try {
     const file = path.join(ctx.dir, 'audit.json');
-    await nativeCommand(ctx, '--audit', [file], true);
-    for (const a of readJSON(file))
-      (a.level === 'error' ? errors : warnings).push(`${a.beat}: ${a.message} (${a.seconds.toFixed(1)} s)`);
+    await phase('audit', () => nativeCommand(ctx, '--audit', [file], true));
+    for (const a of readJSON(file)) {
+      const line = `${a.beat}: ${a.message} (${a.seconds.toFixed(1)} s)`;
+      if (a.level !== 'error') warnings.push(line);
+      else if (options.rough && !/\d/.test(a.text ?? '')) craft.push(line);
+      else errors.push(line);
+    }
   } catch (e) {
     errors.push(`frame audit failed: ${e.message}`);
   }
-  return { errors, warnings, notes, duration: ctx.timing.duration, inputId: ctx.manifest.inputId };
+  return {
+    profile,
+    errors,
+    warnings,
+    notes,
+    craft,
+    placeholders: ctx.placeholders,
+    duration: ctx.timing.duration,
+    inputId: ctx.manifest.inputId,
+  };
 }
 
 /** Drop "cut off by the canvas edge" notes inside moves that carry type past the edge on

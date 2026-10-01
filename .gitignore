@@ -8,11 +8,17 @@ node_modules/
 examples/*/assets/
 templates/*/assets/
 recipes/*/assets/
+# Review state (revisions, notes, previews) made while working on the bundled examples.
+examples/*/review/
+recipes/*/review/
 
 # Retired project media stays local.
 archive/browser/examples/*/assets/
 archive/browser/templates/*/assets/
 archive/browser/recipes/*/assets/
+# Review state (revisions, notes, previews) made while working on the bundled examples.
+examples/*/review/
+recipes/*/review/
 archive/comparison/examples/paired/assets/vo/
 archive/comparison/examples/paired/assets/music/
 

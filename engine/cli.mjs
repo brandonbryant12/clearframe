@@ -4,6 +4,9 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { resolveProject } from './lib/project.mjs';
 import { writeJSON } from './lib/util.mjs';
+import { startRun, finishRun } from './lib/runlog.mjs';
+import { parseTime } from './lib/notes.mjs';
+import { REVIEW, reviewCommand } from './lib/review-cli.mjs';
 import { BLOCKS, THEMES, THEME_NOTES, MOTIONS, TRANSITIONS, BACKDROPS, markdownCatalog } from '../fframes/catalog.mjs';
 import { playbooks, scaffold, writeGallery } from '../fframes/playbooks.mjs';
 import { ICONS, ICON_SOURCE } from '../fframes/icons.mjs';
@@ -50,14 +53,40 @@ const HELP = `ClearFrame — FFFrames motion graphics
   qa <dir> [--video film.mp4] [--loop]  time bugs in the encoded film: one-frame pops, held stretches,
                                       world seams, export tags, loudness, the drop; timeline + phone sheets
   beatmap <dir | track>               the music's tempo and measured drop, and each cut against its beat grid
-  render | preview <dir> [--draft] [--out film.mp4] [--no-audio] [--force]
-  draft <dir> [--no-render]           one pass, one queue wait: critique, draft voice, check, sheet, draft MP4
+  render | preview <dir> [--draft] [--rough] [--out film.mp4] [--no-audio] [--force]
+  draft <dir> [--rough] [--no-render]  one pass, one queue wait: critique, draft voice, check, sheet, draft MP4
+
+Review and edit (docs/editing.md; state in DIR/review/)
+  paper <dir> [--suggest-cuts]        the paper edit: chapters, timecodes, speakers, intended pictures, transcript
+  preview <dir> --beats a[,b] | --range 1:10-1:20 | --note n001 | --chapter NAME [--handles 2] [--rough]
+                                      render just that stretch of the full timeline (audio cut from the full mix)
+  revisions | snapshot <dir> [--label TEXT]   list revisions / save the working copy as one (renders save one too)
+  diff <dir> [rA] [rB|working]        what changed: content, appearance via neighbours or film settings, timing only
+  note <dir> "text" [--at 2:13 [--to 2:20]] [--rev r003] [--beat ID] [--element ID] [--keep voice,words] [--scope beat|range|chapter|film] [--by NAME | --agent]
+  notes <dir> [--import notes.json] [--working] [--json]   notes and where each one is now (current, moved, changed, stale, orphaned)
+  revise <dir> --note n001 [--scope ID,ID --reason TEXT | --scope film] [--override k001]
+                                      candidate revision + before/after passages + impact report (review/compare/)
+  compare <dir> rA [rB]               before/after page for two revisions (or rA and the working copy)
+  page <dir> [--rev r002]             write the review page (review/index.html): player, transcript, notes
+  accept | reject <dir> rNNN [--note n001 | --beats a,b | --checkpoint rough|final] --by NAME --said "their words"
+  decide <dir> rNNN --checkpoint rough|final --reason TEXT    one-shot: an agent decision, never shown as acceptance
+  keep <dir> voice|words|facts|picture|look [--beats a,b | --at 2:13 [--to 2:40] | --chapter NAME] --by NAME --said TEXT
+  keep <dir> --release k001 --by NAME | keeps <dir>    override <dir> --keep k001 --rev rNNN --by NAME --said TEXT
+  restore <dir> rNNN [--beats a,b] (--by NAME --said TEXT | --agent --reason TEXT)   saves the current state first
+  cut <dir> --words "…" [--beat ID] [--nth N] | --beat ID --sentence N | --at 2:13 [--rev r003] | --note n001
+            | --pauses-over 1.2 [--keep-pause 0.5] [--beats a,b] | --paper review/paper-edit.md
+            [--by NAME | --agent] [--dry-run]   cut recorded words from the source recording (undo: uncut)
+  uncut <dir> --cut c001 | --beat ID   split <dir> --beat ID --before "words"   merge <dir> ID ID
+  runlog <dir> [--json]               measured command and phase times; gaps between commands are not measured work
 
 Library: palettes, treatments, sketches and playbooks are files in library/ (see library/README.md).
 A project's own library/ overrides them by id; --library DIR (or CLEARFRAME_LIBRARY) adds a shared one.
 
 FFFrames is the only active renderer. Preview produces a review MP4.
 Draft permits estimated narration/word timing; output keeps the authored dimensions.
+Rough (--rough, a draft for first review) also renders declared placeholders as labelled slates and lists
+frame-audit type problems as unfinished craft instead of failing; clipped figures, sources, audio and timing
+checks still fail. Every full render saves a revision in review/revisions/.
 Native work automatically uses the local codex-heavy gate when available.
 Paid generation needs GEMINI_API_KEY; rendering and word-file imports are free.
 `;
@@ -92,6 +121,31 @@ async function main() {
     'fps',
     'script',
     'model',
+    'rev',
+    'note',
+    'scope',
+    'reason',
+    'handles',
+    'range',
+    'beats',
+    'chapter',
+    'element',
+    'keep',
+    'by',
+    'said',
+    'cut',
+    'sentence',
+    'pauses-over',
+    'keep-pause',
+    'paper',
+    'import',
+    'status',
+    'label',
+    'override',
+    'nth',
+    'before',
+    'release',
+    'checkpoint',
   ];
   const booleans = [
     'draft',
@@ -109,6 +163,11 @@ async function main() {
     'dry-run',
     'light',
     'loop',
+    'rough',
+    'agent',
+    'no-verify',
+    'suggest-cuts',
+    'working',
   ];
   const { values: o, positionals } = parseArgs({
     args,
@@ -137,7 +196,7 @@ async function main() {
     ...o,
     only: o.only?.split(','),
     budget: num('budget'),
-    at: num('at'),
+    at: o.at == null ? undefined : parseTime(o.at),
     pos: num('pos'),
     per: num('per'),
     columns: num('columns'),
@@ -284,6 +343,7 @@ async function main() {
   if (cmd === 'ingest') {
     const { ingestMarkdown, ingestRecording } = await import('./lib/ingest.mjs');
     const dir = path.resolve(positionals[0] ?? '.');
+    startRun(dir, cmd, args);
     if (o.markdown) {
       const { storyboardFor } = await import('../fframes/playbooks.mjs');
       const { applyTreatment, directionTemplate, treatmentById } = await import('../fframes/treatments.mjs');
@@ -350,6 +410,8 @@ async function main() {
     return console.log(beatmapText(r));
   }
   const dir = resolveProject(positionals[0]);
+  startRun(dir, cmd, args);
+  if (REVIEW.has(cmd)) return reviewCommand(cmd, dir, o, opts, positionals);
   if (['plan', 'voice', 'music', 'images', 'clips'].includes(cmd)) {
     const g = await import('./lib/generate.mjs');
     const result = await g[cmd === 'music' ? 'scoreMusic' : cmd](dir, opts);
@@ -407,11 +469,16 @@ async function main() {
       ...c.findings.slice(0, 8).map(f => `  ${f.level === 'warn' ? '!' : '·'} ${f.where}: ${f.message}`),
     );
     const g = await import('./lib/generate.mjs');
-    await g.voice(dir, { draft: true });
-    const r = await native.checkProject(dir, { draft: true });
+    const { phase } = await import('./lib/runlog.mjs');
+    await phase('voice', () => g.voice(dir, { draft: true }));
+    // --rough: the first full-length look. Declared placeholders render as slates and type
+    // problems are listed as unfinished craft; every correctness check still blocks.
+    const rough = !!o.rough;
+    const r = await native.checkProject(dir, { draft: true, rough });
     lines.push(
-      `check: ${r.errors.length} error(s), ${r.warnings.length} warning(s)`,
+      `check${rough ? ' (rough)' : ''}: ${r.errors.length} error(s), ${r.warnings.length} warning(s)${rough ? `, ${r.craft.length} craft finding(s) left for later, ${r.placeholders.length} placeholder(s)` : ''}`,
       ...r.errors.map(e => `  ✗ ${e}`),
+      ...r.craft.slice(0, 6).map(e => `  ~ ${e}`),
       ...r.warnings.slice(0, 6).map(w => `  ! ${w}`),
     );
     if (r.errors.length) {
@@ -420,26 +487,29 @@ async function main() {
     }
     const findings = (r.notes.join('\n').match(/^Warning .*$/gm) ?? []).slice(0, 6);
     if (findings.length) lines.push('native:', ...findings.map(f => `  ${f}`));
-    lines.push(`sheet: ${rel(await native.sheetProject(dir, { draft: true }))}`);
+    // A long film's rough cut is judged in motion; one frame per beat is enough of a sheet.
+    lines.push(`sheet: ${rel(await native.sheetProject(dir, { draft: true, rough, ...(rough ? { per: 1, columns: 6 } : {}) }))}`);
     if (!o['no-render']) {
-      const v = await native.renderProject(dir, { draft: true });
+      const v = await native.renderProject(dir, { draft: true, rough, check: r, label: o.label ?? (rough ? 'Rough cut' : undefined) });
       lines.push(
-        `video: ${rel(path.join(dir, 'build/video.mp4'))} (${v.frames} frames, ${v.seconds.toFixed(1)} s to render)`,
+        `video: ${rel(path.join(dir, 'build/video.mp4'))} (${v.frames} frames, ${v.seconds.toFixed(1)} s to render)${v.revision ? ` · revision ${v.revision}` : ''}`,
       );
+      const { writeReviewPage } = await import('./lib/review-page.mjs');
+      lines.push(`review page: ${rel(writeReviewPage(dir))}`);
     }
     lines.push(`done in ${((performance.now() - t0) / 1000).toFixed(1)} s. Open the sheet before anything else.`);
     return console.log(lines.join('\n'));
   }
   if (cmd === 'checkpoints') {
     const { checkpoints } = await import('./lib/checkpoints.mjs');
-    const list = checkpoints(dir),
-      guided = (o.mode ?? 'guided') !== 'one-shot';
+    const guided = (o.mode ?? 'guided') !== 'one-shot';
+    const list = checkpoints(dir, { mode: guided ? 'guided' : 'one-shot' });
     if (o.json)
       return console.log(JSON.stringify({ mode: guided ? 'guided' : 'one-shot', checkpoints: list }, null, 2));
     const next = list.find(c => !c.done);
     return console.log(
       [
-        `${guided ? 'Guided: stop and ask the person at each open checkpoint.' : 'One-shot: decide each open checkpoint yourself and log the decision under "## Decisions" in DIRECTION.md (spend still needs a budget).'}`,
+        `${guided ? 'Guided: stop and ask the person at each open checkpoint.' : 'One-shot: decide each open checkpoint yourself, log it under "## Decisions" in DIRECTION.md (rough cut and final: decide DIR rNNN), and publish the review page; spend still needs a budget.'}`,
         ...list.map(c => `${c.done ? '✓' : '○'} ${c.name.padEnd(15)} ${c.detail}`),
         next
           ? `\nNext: ${next.name}. ${guided || next.id === 'spend' ? `Ask: "${next.question}"` : 'Decide, then log what you chose and why.'}`
@@ -524,10 +594,13 @@ async function main() {
       );
     return console.log(lines.join('\n'));
   }
-  if (cmd === 'render' || cmd === 'preview')
-    return console.log(
-      JSON.stringify(await native.renderProject(dir, { ...opts, draft: cmd === 'preview' || o.draft }), null, 2),
-    );
+  if (cmd === 'preview' && (o.beats || o.range || o.note || o.chapter)) return reviewCommand('range', dir, o, opts, positionals);
+  if (cmd === 'render' || cmd === 'preview') {
+    const report = await native.renderProject(dir, { ...opts, draft: cmd === 'preview' || o.draft });
+    const { writeReviewPage } = await import('./lib/review-page.mjs');
+    report.reviewPage = writeReviewPage(dir);
+    return console.log(JSON.stringify(report, null, 2));
+  }
   throw new Error(`Unknown command ${cmd}. Run clearframe help.`);
 }
 function beatmapText(r) {
@@ -540,7 +613,10 @@ function beatmapText(r) {
       : 'no drop: the bass never jumps and stays up',
   ].join(' · ');
 }
-main().catch(e => {
-  console.error(`ClearFrame: ${e.message}`);
-  process.exitCode = 1;
-});
+main()
+  .then(() => finishRun())
+  .catch(e => {
+    finishRun({ error: e });
+    console.error(`ClearFrame: ${e.message}`);
+    process.exitCode = 1;
+  });

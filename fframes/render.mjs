@@ -4,11 +4,16 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { THEMES, palette } from './catalog.mjs';
-import { sha256 } from './native-build.mjs';
+import { buildNative } from './native-build.mjs';
+import { COVER } from './constants.mjs';
 import { prepareProject, nativeCommand, unchanged } from './prepare.mjs';
 import { soundDesign } from './sound.mjs';
 import { mix, mux } from '../engine/lib/audio.mjs';
-import { ffmpeg, writeJSON, log } from '../engine/lib/util.mjs';
+import { captionCues, toVTT } from '../engine/lib/timing.mjs';
+import { ffmpeg, ffmpegBin, writeJSON, log } from '../engine/lib/util.mjs';
+import { phase, record } from '../engine/lib/runlog.mjs';
+import { sha256File } from '../engine/lib/store.mjs';
+import { snapshot, attachVideo } from '../engine/lib/revisions.mjs';
 
 export function validateVideo(file, { width, height, fps, frames }) {
   const r = spawnSync(
@@ -30,8 +35,47 @@ export function validateVideo(file, { width, height, fps, frames }) {
     throw new Error('Native output dimensions, frame rate or decoded frame count differ from the storyboard.');
   return { video: v, audio: streams.find(s => s.codec_type === 'audio') ?? null };
 }
-export async function renderProject(root, { draft = false, out, noAudio = false, force = false } = {}) {
-  const ctx = await prepareProject(root, { draft });
+// The encoder settings live in fframes/native/src/main.rs; these labels describe them.
+export const ENCODERS = { draft: 'draft (x264 veryfast, CRF 21)', final: 'final (x264 medium, CRF 16)' };
+
+/** Upstream segment concatenation can end the MP4 edit list one frame early at some lengths
+ * (e.g. 451 frames), so players drop the final frame. Rebuild the timeline from the packets
+ * themselves; frames are copied bit-for-bit. */
+const packetTimeline = (raw, silent) =>
+  ffmpeg([
+    '-y',
+    '-ignore_editlist',
+    '1',
+    '-i',
+    raw,
+    '-map',
+    '0:v:0',
+    '-c:v',
+    'copy',
+    '-bsf:v',
+    'setts=pts=PTS-STARTPTS:dts=DTS-STARTPTS',
+    '-an',
+    silent,
+  ]);
+
+/** What a draft or rough render did not establish, carried in its receipt and revision. */
+function unvalidated(ctx, check) {
+  const estimated = ctx.timing.beats.filter(b => b.vo && b.vo.wordTiming !== 'measured').map(b => b.id);
+  return {
+    profile: ctx.manifest.profile,
+    placeholders: ctx.placeholders ?? [],
+    estimatedTiming: estimated,
+    ...(check
+      ? { craft: check.craft ?? [], audit: 'run' }
+      : { audit: 'not run by this command (run check, or draft, for the frame audit)' }),
+  };
+}
+
+export async function renderProject(
+  root,
+  { draft = false, rough = false, out, noAudio = false, force = false, check, revision = true, label } = {},
+) {
+  const ctx = await phase('prepare', () => prepareProject(root, { draft, rough }));
   const output = path.resolve(out ?? path.join(root, 'build/video.mp4'));
   if (out && fs.existsSync(output) && !force)
     throw new Error(`Output exists: ${output}; choose a new file or use --force.`);
@@ -41,40 +85,27 @@ export async function renderProject(root, { draft = false, out, noAudio = false,
     audio = path.join(ctx.dir, `${token}-mix.wav`),
     finished = path.join(ctx.dir, `${token}-final.mp4`);
   const start = performance.now();
+  const fast = draft || rough;
   try {
+    await phase('native-build', () => buildNative());
     // Drafts keep the authored canvas and frame rate but use the fast review encoder.
-    await nativeCommand(ctx, 'render', [...(draft ? ['--draft', '--scale', '1'] : []), '-o', raw]);
-    // Upstream segment concatenation can end the MP4 edit list one frame early at some
-    // lengths (e.g. 451 frames), so players drop the final frame. Rebuild the timeline
-    // from the packets themselves; frames are copied bit-for-bit.
-    await ffmpeg([
-      '-y',
-      '-ignore_editlist',
-      '1',
-      '-i',
-      raw,
-      '-map',
-      '0:v:0',
-      '-c:v',
-      'copy',
-      '-bsf:v',
-      'setts=pts=PTS-STARTPTS:dts=DTS-STARTPTS',
-      '-an',
-      silent,
-    ]);
-    validateVideo(silent, ctx.job);
+    await phase('native-render', () => nativeCommand(ctx, 'render', [...(fast ? ['--draft', '--scale', '1'] : []), '-o', raw]), {
+      frames: ctx.job.frames,
+    });
+    await phase('timeline', () => packetTimeline(raw, silent));
+    await phase('validate', () => validateVideo(silent, ctx.job));
     const soundCues = soundDesign(ctx.job, ctx.sb.sfx);
     // The cue sheet, for review: what plays where (bench waveforms mark these).
     writeJSON(path.join(root, 'build/cues.json'), soundCues);
-    const track = noAudio ? null : await mix(root, ctx.timing, audio, ctx.sb.mix, soundCues);
-    await mux(silent, track, finished);
-    const probe = validateVideo(finished, ctx.job);
+    const track = noAudio ? null : await phase('mix', () => mix(root, ctx.timing, audio, ctx.sb.mix, soundCues));
+    await phase('mux', () => mux(silent, track, finished));
+    const probe = await phase('validate-output', () => validateVideo(finished, ctx.job));
     unchanged(ctx);
     fs.mkdirSync(path.dirname(output), { recursive: true });
     fs.renameSync(finished, output);
     const report = {
       ...ctx.manifest,
-      encoder: draft ? 'draft (x264 veryfast, CRF 23)' : 'final (x264 medium, CRF 16)',
+      encoder: fast ? ENCODERS.draft : ENCODERS.final,
       width: ctx.job.width,
       height: ctx.job.height,
       fps: ctx.job.fps,
@@ -83,15 +114,279 @@ export async function renderProject(root, { draft = false, out, noAudio = false,
       backend: process.platform === 'darwin' ? 'skia-metal' : 'cpu',
       audio: !!probe.audio,
       colorSpace: probe.video.color_space ?? null,
-      outputSha256: sha256(fs.readFileSync(output)),
+      outputSha256: await phase('hash', () => sha256File(output)),
       voiceProviders: [...new Set(ctx.timing.beats.map(b => b.vo?.provider).filter(Boolean))],
+      ...(fast ? { notValidated: unvalidated(ctx, check) } : {}),
     };
     writeJSON(`${output}.json`, report);
     log.ok(`FFFrames video → ${output}`);
+    record({ frames: ctx.job.frames, profile: ctx.manifest.profile });
+    if (revision) {
+      // Whatever a person could watch gets a revision, so a note can say which cut it was about.
+      const { revision: rev, created } = await phase('revision', () =>
+        snapshot(root, { ctx, kind: 'render', label }),
+      );
+      attachVideo(root, rev.id, { file: output, receipt: report, profile: ctx.manifest.profile });
+      report.revision = rev.id;
+      writeJSON(`${output}.json`, report);
+      record({ revision: rev.id });
+      log.ok(`${created ? 'Revision' : 'Same content as revision'} ${rev.id} (review/revisions/${rev.id})`);
+    }
     return report;
   } finally {
     for (const f of [raw, silent, audio, finished]) fs.rmSync(f, { force: true });
   }
+}
+
+// ------------------------------------------------------------------ range previews
+
+/**
+ * Frames [a, b) for a stretch of the prepared timeline: whole beats (with the transitions into
+ * and out of them) or a time range, widened by `handles` seconds of context on either side.
+ */
+export function frameRange(job, { from, to, beats, handles = 2 } = {}) {
+  const fps = job.fps;
+  let a, b;
+  if (beats?.length) {
+    const idx = beats.map(id => {
+      const i = job.beats.findIndex(x => x.id === id);
+      if (i < 0) throw new Error(`No beat ${id} in the prepared film.`);
+      return i;
+    });
+    const first = job.beats[Math.min(...idx)],
+      last = job.beats[Math.max(...idx)],
+      next = job.beats[Math.max(...idx) + 1];
+    a = first.start_frame;
+    b = last.start_frame + last.frames;
+    // A transition draws both sides of its cut: keep the outgoing beat's exit and the next entrance.
+    const span = t => Math.ceil(Math.max(COVER[t]?.[0] ?? 0, COVER[t]?.[1] ?? 0, 0.5) * fps);
+    if (first.transition !== 'cut' && first.start_frame > 0) a -= span(first.transition);
+    if (next && next.transition !== 'cut') b += span(next.transition);
+  } else {
+    if (!(Number.isFinite(from) && Number.isFinite(to) && to > from)) throw new Error('A range needs from < to (seconds).');
+    a = Math.round(from * fps);
+    b = Math.round(to * fps);
+  }
+  if (!(Number.isFinite(handles) && handles >= 0 && handles <= 30)) throw new Error('--handles must be 0–30 seconds.');
+  a = Math.max(0, a - Math.round(handles * fps));
+  b = Math.min(job.frames, b + Math.round(handles * fps));
+  if (!(b > a)) throw new Error('The range is outside the film.');
+  const covered = job.beats
+    .filter(x => x.start_frame < b && x.start_frame + x.frames > a)
+    .map(x => ({
+      id: x.id,
+      film: [x.start_frame / fps, (x.start_frame + x.frames) / fps],
+      // Where the beat sits inside the preview (seconds, clipped to it).
+      local: [Math.max(0, x.start_frame - a) / fps, (Math.min(b, x.start_frame + x.frames) - a) / fps],
+    }));
+  return { a, b, covered };
+}
+
+/** The film's full mix, made once per state of its sound: a preview cuts its stretch from it,
+ * so the stretch plays at exactly the gain and ducking it has in the whole film. */
+async function fullMix(root, ctx) {
+  const cues = soundDesign(ctx.job, ctx.sb.sfx);
+  const key = crypto
+    .createHash('sha256')
+    .update(
+      JSON.stringify({
+        beats: ctx.timing.beats.map(b => [b.vo?.src, b.vo?.start, b.sfx, b.start, b.end, !!b.vo]),
+        music: ctx.timing.music,
+        duration: ctx.timing.duration,
+        hashes: ctx.manifest.hashes,
+        mix: ctx.sb.mix,
+        cues,
+      }),
+    )
+    .digest('hex')
+    .slice(0, 16);
+  const file = path.join(ctx.dir, `mix-${key}.wav`);
+  if (!fs.existsSync(file)) {
+    const tmp = path.join(ctx.dir, `mix-${key}-${crypto.randomUUID().slice(0, 8)}.wav`);
+    const track = await mix(root, ctx.timing, tmp, ctx.sb.mix, cues);
+    if (!track) return null;
+    fs.renameSync(tmp, file);
+    // Keep the newest few full mixes; they are rebuilt on demand.
+    const old = fs
+      .readdirSync(ctx.dir)
+      .filter(f => /^mix-[0-9a-f]{16}\.wav$/.test(f) && f !== path.basename(file))
+      .map(f => path.join(ctx.dir, f))
+      .sort((x, y) => fs.statSync(y).mtimeMs - fs.statSync(x).mtimeMs);
+    for (const f of old.slice(2)) fs.rmSync(f, { force: true });
+  }
+  return file;
+}
+
+export function loudness(file) {
+  const r = spawnSync(
+    ffmpegBin(),
+    ['-hide_banner', '-nostats', '-i', file, '-map', '0:a:0', '-af', 'ebur128=peak=true', '-f', 'null', '-'],
+    { encoding: 'utf8', maxBuffer: 2 ** 28 },
+  );
+  const tail = r.stderr.slice(r.stderr.lastIndexOf('Summary:'));
+  const i = tail.match(/I:\s+(-?[\d.]+) LUFS/),
+    p = tail.match(/Peak:\s+(-?[\d.]+) dBFS/);
+  return i ? { integrated: Number(i[1]), peak: p ? Number(p[1]) : null } : null;
+}
+
+/** PSNR (dB) between two images of the same size. */
+async function psnr(x, y) {
+  const log = await ffmpeg(['-i', x, '-i', y, '-lavfi', '[0][1]psnr', '-f', 'null', '-']);
+  const m = /average:(inf|[\d.]+)/.exec(log);
+  return m ? (m[1] === 'inf' ? Infinity : Number(m[1])) : null;
+}
+
+/** Decode frames (by index) of a video to PNGs: [file…]. */
+async function decodeFrames(video, frames, dir) {
+  const out = [];
+  for (const n of frames) {
+    const file = path.join(dir, `decoded-${n}.png`);
+    await ffmpeg(['-y', '-i', video, '-vf', `select=eq(n\\,${n})`, '-fps_mode', 'passthrough', '-frames:v', '1', file]);
+    out.push(file);
+  }
+  return out;
+}
+
+/**
+ * Render frames [a, b) of the full prepared timeline: every beat keeps its place, its
+ * neighbours, its world state and its transitions (nothing is cut out of the job). Audio is
+ * the matching samples of the full mix. The first and last frames are checked against frames
+ * the renderer draws directly at those film positions, so the preview's clock is the film's.
+ */
+export async function renderRange(
+  root,
+  { from, to, beats, handles = 2, rough = false, out, verify = true, name, ctx: given } = {},
+) {
+  const ctx = given ?? (await phase('prepare', () => prepareProject(root, { draft: true, rough })));
+  const { a, b, covered } = frameRange(ctx.job, { from, to, beats, handles });
+  const fps = ctx.job.fps,
+    frames = b - a;
+  const dir = path.join(root, 'review', 'previews');
+  fs.mkdirSync(dir, { recursive: true });
+  const base = name ?? `working-${a}-${b}-${ctx.manifest.inputId.slice(0, 8)}`;
+  if (!/^[a-z0-9][a-z0-9._-]{0,100}$/i.test(base)) throw new Error(`Invalid preview name ${base}`);
+  const output = path.resolve(out ?? path.join(dir, `${base}.mp4`));
+  const token = crypto.randomUUID(),
+    raw = path.join(ctx.dir, `${token}-range-raw.mp4`),
+    silent = path.join(ctx.dir, `${token}-range-video.mp4`),
+    cut = path.join(ctx.dir, `${token}-range.wav`),
+    finished = path.join(ctx.dir, `${token}-range-final.mp4`),
+    shots = path.join(ctx.dir, `${token}-range-frames`);
+  const start = performance.now();
+  try {
+    await phase('native-build', () => buildNative());
+    await phase('native-render', () => nativeCommand(ctx, 'render', [`${a}..${b}`, '--draft', '--scale', '1', '-o', raw]), { frames });
+    await phase('timeline', () => packetTimeline(raw, silent));
+    await phase('validate', () => validateVideo(silent, { ...ctx.job, frames }));
+    const full = await phase('mix', () => fullMix(root, ctx));
+    let audio = null;
+    if (full) {
+      const rate = 48000,
+        s0 = (a * rate) / fps,
+        s1 = (b * rate) / fps;
+      await phase('audio-cut', () =>
+        ffmpeg(['-y', '-i', full, '-af', `atrim=start_sample=${s0}:end_sample=${s1},asetpts=PTS-STARTPTS`, '-c:a', 'pcm_s16le', cut]),
+      );
+      audio = { from: 'the full film mix', samples: [s0, s1], rate, film: loudness(full), stretch: loudness(cut) };
+    }
+    await phase('mux', () => mux(silent, audio ? cut : null, finished));
+    const probe = validateVideo(finished, { ...ctx.job, frames });
+    let check = null;
+    if (verify) {
+      // Same frames, two routes: drawn directly at their film position, and decoded from the preview.
+      fs.mkdirSync(shots);
+      await phase('verify', async () => {
+        await nativeCommand(ctx, 'frame', [`${a},${b - 1}`, '-o', shots], true);
+        const drawn = fs
+          .readdirSync(shots)
+          .filter(f => f.endsWith('.png'))
+          .sort((x, y) => x.localeCompare(y, undefined, { numeric: true }))
+          .map(f => path.join(shots, f));
+        const decoded = await decodeFrames(finished, [0, frames - 1], shots);
+        if (drawn.length !== 2) throw new Error(`Expected 2 reference frames; got ${drawn.length}`);
+        check = [];
+        for (const [k, film] of [a, b - 1].entries()) check.push({ film, preview: k ? frames - 1 : 0, psnr: await psnr(drawn[k], decoded[k]) });
+      });
+      const bad = check.filter(c => !(c.psnr >= 35));
+      if (bad.length)
+        throw new Error(
+          `Preview frames do not match the film at ${bad.map(c => `frame ${c.film} (${c.psnr?.toFixed(1)} dB)`).join(', ')}; the preview clock is off.`,
+        );
+    }
+    unchanged(ctx);
+    fs.mkdirSync(path.dirname(output), { recursive: true });
+    fs.renameSync(finished, output);
+    // Speech for the page's player, on the preview's own clock.
+    const cues = captionCues(ctx.timing)
+      .filter(c => c.end > a / fps && c.start < b / fps)
+      .map(c => ({ ...c, start: Math.max(0, c.start - a / fps), end: Math.min(frames / fps, c.end - a / fps) }));
+    fs.writeFileSync(output.replace(/\.mp4$/, '.vtt'), toVTT(cues));
+    const report = {
+      kind: 'range-preview',
+      profile: ctx.manifest.profile,
+      inputId: ctx.manifest.inputId,
+      rendererSourceHash: ctx.manifest.rendererSourceHash,
+      revision: ctx.manifest.revision,
+      range: { frames: [a, b], seconds: [a / fps, b / fps], fps, handles },
+      beats: covered,
+      width: ctx.job.width,
+      height: ctx.job.height,
+      fps,
+      frames,
+      encoder: ENCODERS.draft,
+      audio,
+      verified: check,
+      captions: ctx.job.captions ? 'burned in by the renderer, as in the film' : 'none in the picture; speech cues in the .vtt beside the preview',
+      output,
+      outputSha256: sha256File(output),
+      seconds: (performance.now() - start) / 1000,
+      notValidated: unvalidated(ctx, null),
+      colorSpace: probe.video.color_space ?? null,
+    };
+    writeJSON(`${output}.json`, report);
+    record({ preview: path.relative(root, output), frames });
+    return report;
+  } finally {
+    for (const f of [raw, silent, cut, finished]) fs.rmSync(f, { force: true });
+    fs.rmSync(shots, { recursive: true, force: true });
+  }
+}
+
+/**
+ * Frames [a, b) of an existing film (a revision's stored video), re-encoded for side-by-side
+ * review with its own audio samples. The frames are what that person watched.
+ */
+export async function cutPassage(video, { fps, a, b, out }) {
+  const probe = spawnSync('ffprobe', ['-v', 'error', '-show_streams', '-of', 'json', video], { encoding: 'utf8' });
+  if (probe.status !== 0) throw new Error(`Cannot read ${video}`);
+  const streams = JSON.parse(probe.stdout).streams,
+    v = streams.find(s => s.codec_type === 'video'),
+    hasAudio = streams.some(s => s.codec_type === 'audio');
+  const rate = 48000;
+  await ffmpeg([
+    '-y',
+    '-i',
+    video,
+    '-vf',
+    `select=between(n\\,${a}\\,${b - 1}),setpts=N/(${fps}*TB)`,
+    '-r',
+    String(fps),
+    ...(hasAudio ? ['-af', `aresample=${rate},atrim=start_sample=${(a * rate) / fps}:end_sample=${(b * rate) / fps},asetpts=PTS-STARTPTS`] : ['-an']),
+    '-c:v',
+    'libx264',
+    '-preset',
+    'veryfast',
+    '-crf',
+    '18',
+    '-pix_fmt',
+    'yuv420p',
+    ...(hasAudio ? ['-c:a', 'aac', '-b:a', '192k'] : []),
+    '-movflags',
+    '+faststart',
+    out,
+  ]);
+  validateVideo(out, { width: v.width, height: v.height, fps, frames: b - a });
+  return { output: out, frames: b - a, outputSha256: sha256File(out) };
 }
 /** Review copy of the prepared job with a labelled coordinate grid for placing art. */
 function withGuides(ctx) {
@@ -100,8 +395,8 @@ function withGuides(ctx) {
   writeJSON(path.join(dir, 'job.json'), { ...ctx.job, guides: true });
   return { ...ctx, dir, cleanup: () => fs.rmSync(dir, { recursive: true, force: true }) };
 }
-export async function stillProject(root, { draft = false, at, beat, pos = 0.6, out, grid = false } = {}) {
-  let ctx = await prepareProject(root, { draft });
+export async function stillProject(root, { draft = false, rough = false, at, beat, pos = 0.6, out, grid = false } = {}) {
+  let ctx = await prepareProject(root, { draft, rough });
   const b = beat && ctx.timing.beats.find(b => b.id === beat);
   if (beat && !b) throw new Error(`No beat ${beat}`);
   if (grid) ctx = withGuides(ctx);
@@ -136,8 +431,8 @@ async function singleFrame(ctx, time, file) {
  * One image of a canvas world at its final state, with every beat's camera rect outlined
  * and numbered: the plan view for placing stations and choosing camera moves.
  */
-export async function worldMap(root, { draft = true, name, out } = {}) {
-  const ctx = await prepareProject(root, { draft });
+export async function worldMap(root, { draft = true, rough = false, name, out } = {}) {
+  const ctx = await prepareProject(root, { draft, rough });
   const beats = ctx.job.beats.filter(b => b.block === 'canvas' && b.props.world && (!name || b.props.world === name));
   if (!beats.length) throw new Error(name ? `No canvas beats in world "${name}"` : 'No canvas beats use props.world');
   const world = beats[0].props.world,
@@ -214,9 +509,9 @@ export async function worldMap(root, { draft = true, name, out } = {}) {
 }
 export async function sheetProject(
   root,
-  { draft = false, per = 3, columns = per, thumb = 400, out, grid = false } = {},
+  { draft = false, rough = false, per = 3, columns = per, thumb = 400, out, grid = false } = {},
 ) {
-  let ctx = await prepareProject(root, { draft });
+  let ctx = await phase('prepare', () => prepareProject(root, { draft, rough }));
   if (grid) ctx = withGuides(ctx);
   if (
     !Number.isInteger(columns) ||
@@ -237,7 +532,9 @@ export async function sheetProject(
   fs.mkdirSync(shots);
   const file = path.resolve(out ?? path.join(root, 'build/sheet.png'));
   try {
-    await nativeCommand(ctx, 'frame', [times.map(t => `${t.toFixed(4)}s`).join(','), '-o', shots]);
+    await phase('native-frames', () => nativeCommand(ctx, 'frame', [times.map(t => `${t.toFixed(4)}s`).join(','), '-o', shots]), {
+      frames: times.length,
+    });
     const pngs = fs
       .readdirSync(shots)
       .filter(f => f.endsWith('.png'))
@@ -271,8 +568,8 @@ export async function sheetProject(
     ctx.cleanup?.();
   }
 }
-export async function lookbookProject(root, { draft = false, beat, pos = 0.6, out } = {}) {
-  const ctx = await prepareProject(root, { draft });
+export async function lookbookProject(root, { draft = false, rough = false, beat, pos = 0.6, out } = {}) {
+  const ctx = await prepareProject(root, { draft, rough });
   const b = beat ? ctx.timing.beats.find(b => b.id === beat) : ctx.timing.beats[0];
   if (!b) throw new Error(`No beat ${beat}`);
   if (!Number.isFinite(pos) || pos < 0 || pos >= 1) throw new Error('Lookbook --pos must be 0–1, excluding 1.');

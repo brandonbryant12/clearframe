@@ -676,6 +676,33 @@ export async function ingestRecording(
   if (!words.length) throw new Error('No timed words fall inside the selected range.');
   const segs = segmentWords(words);
   const cuts = cutPoints(segs, duration, fps);
+  // The transcript on the recording's own clock, and where that clock starts in the original:
+  // recording edits (cut, split, merge) rebuild beats from these, never from beat text.
+  writeJSON(path.join(root, 'source', 'words.json'), {
+    version: 1,
+    file: 'source/recording.wav',
+    rate,
+    fps,
+    offset: from,
+    duration: round(duration, 4),
+    words: words.map(w => ({
+      w: w.w,
+      t0: round(w.t0, 4),
+      t1: round(w.t1, 4),
+      ...(w.speaker != null ? { speaker: w.speaker } : {}),
+      ...(w.estimated ? { estimated: true } : {}),
+    })),
+  });
+  writeJSON(path.join(root, 'source', 'recording.json'), {
+    file: 'source/recording.wav',
+    input: path.basename(audio),
+    offset: from,
+    ...(to != null ? { to } : {}),
+    rate,
+    duration: round(duration, 4),
+    sha256: audioHash(master),
+  });
+  let wordIndex = 0;
   const ids = new Set(segs.flatMap(s => s.map(w => w.speaker).filter(Boolean)));
   const cast = {};
   [...ids].forEach((id, i) => {
@@ -718,7 +745,17 @@ export async function ingestRecording(
         audioHash: audioHash(file),
         ...(estimated ? { interpolatedWords: estimated } : {}),
       },
-      source: { file: 'source/recording.wav', start: round(start + from, 4), end: round(end + from, 4) },
+      // start/end: seconds in the original file; span: frames on source/recording.wav's clock;
+      // words: this beat's share of source/words.json.
+      source: {
+        file: 'source/recording.wav',
+        start: round(start + from, 4),
+        end: round(end + from, 4),
+        offset: from,
+        fps,
+        span: [Math.round(start * fps), Math.round(end * fps)],
+        words: [wordIndex, (wordIndex += seg.length)],
+      },
       createdAt: new Date().toISOString(),
     });
     const stamp = t =>
