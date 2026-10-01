@@ -121,7 +121,7 @@ ripple.push(
   {
     type: 'text',
     text: '70% full',
-    x: 120,
+    x: 170,
     y: 270,
     size: 48,
     font: 'bold',
@@ -133,7 +133,7 @@ ripple.push(
   {
     type: 'text',
     text: '90% full',
-    x: 120,
+    x: 170,
     y: 690,
     size: 48,
     font: 'bold',

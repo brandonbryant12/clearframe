@@ -329,7 +329,8 @@ impl<const W: usize, const H: usize, const RATE: usize> NativeFilm<W, H, RATE> {
         let footer_y = rail_y - 16.0;
         let mut nodes = vec![];
         if !brand.is_empty() {
-            nodes.push(fframes::svgr!(<text x={margin} y="82" font-family="Instrument Serif" font-style="italic" font-weight="400" font-size="44" fill={ink.clone()}>{brand}</text>));
+            // Inside title-safe (5% of the frame), like everything a viewer reads.
+            nodes.push(fframes::svgr!(<text x={margin} y="100" font-family="Instrument Serif" font-style="italic" font-weight="400" font-size="44" fill={ink.clone()}>{brand}</text>));
         }
         if !label.is_empty() {
             nodes.push(fframes::svgr!(<text x={w - margin - label_w} y="74" font-family="IBM Plex Mono" font-weight="500" font-size="20" letter-spacing="2.4" fill={muted.clone()}>{label}</text>));

@@ -93,7 +93,7 @@ const beats = [
       note: { text: 'what a better handoff can shrink', to: 'Routing', say: 'handoff' },
     }),
     art: { under: behind() },
-    camera: { to: [200, 252, 1457.8, 820], say: 'routing', dur: 2.4 },
+    camera: { move: 'in', amount: 0.6 },
     hold: 0.3,
   },
   {

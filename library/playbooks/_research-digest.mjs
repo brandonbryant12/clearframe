@@ -109,8 +109,8 @@ const hook = [
   {
     type: 'text',
     x: 1060,
-    y: 470,
-    size: 230,
+    y: 208,
+    size: 210,
     font: 'figures',
     anchor: 'middle',
     fill: 'accent',
@@ -123,7 +123,7 @@ const hook = [
     type: 'text',
     text: 'of buses arrive bunched',
     x: 1060,
-    y: 548,
+    y: 314,
     size: 48,
     font: 'bold',
     anchor: 'middle',
@@ -136,7 +136,7 @@ const hook = [
     type: 'text',
     text: 'within two minutes of the one ahead · Route 12, weekday mornings',
     x: 1060,
-    y: 602,
+    y: 362,
     size: 32,
     anchor: 'middle',
     fill: 'muted',
@@ -164,7 +164,7 @@ const mechanism = [
 
 // ------------------------------------------------------------------ 3–4. the evidence, in the sky
 // The same chart in both beats: the timetable and the riders' wait first, the trial's bar after.
-const BOX = [330, -640, 1260, 600];
+const BOX = [330, -560, 1260, 560];
 const values = [
   { label: 'Timetable', value: 6 },
   { label: 'Riders wait', value: 11, highlight: true },
@@ -249,7 +249,7 @@ const after = [
     type: 'text',
     text: 'Space the buses evenly, and the wait shrinks.',
     x: 1060,
-    y: 390,
+    y: 230,
     size: 70,
     font: 'display',
     anchor: 'middle',
@@ -263,7 +263,7 @@ const after = [
     type: 'text',
     text: 'Method, routes and limits are in the full study.',
     x: 1060,
-    y: 456,
+    y: 300,
     size: 36,
     anchor: 'middle',
     fit: 1300,
@@ -275,12 +275,14 @@ const after = [
 ];
 
 const STREET = [200, 190, 1720, 967.5];
+// The street low in the frame with open sky above it, where the figure and the last line sit.
+const SKY = [100, -80, 1920, 1080];
 const beats = [
   {
     id: 'hook',
     block: 'canvas',
     vo: 'Thirty-seven percent of buses on Route 12 arrive within two minutes of the one ahead.',
-    props: { source: SAMPLE, view: STREET, elements: hook },
+    props: { source: SAMPLE, view: SKY, elements: hook },
   },
   {
     id: 'question',
@@ -327,7 +329,7 @@ const beats = [
     block: 'canvas',
     vo: 'Space the buses evenly, and the wait shrinks. The method and its limits are in the full study.',
     transition: 'dissolve',
-    props: { view: STREET, source: SAMPLE, elements: after },
+    props: { view: SKY, source: SAMPLE, elements: after },
     hold: 1,
   },
 ];

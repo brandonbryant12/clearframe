@@ -130,6 +130,17 @@ pub fn judge(now: &Scan, next: &Scan, w: f32, h: f32) -> Vec<Finding> {
         if !t.masked && !disjoint && !inside {
             push("error", "edge", &t.text, format!("{} is cut off by the frame edge", quote(&t.text)));
         }
+        // Title-safe: type a viewer must read stays within 90% of a landscape frame, and
+        // within 80% of a vertical one's width (phone UI covers the edges).
+        let (mx, my) = if h > w { (w * 0.1, h * 0.06) } else { (w * 0.05, h * 0.05) };
+        if inside && (x < mx || x + tw > w - mx || y < my || y + th > h - my) && t.px * unit >= MIN_PX {
+            push(
+                "warning",
+                "safe",
+                &t.text,
+                format!("{} runs outside the title-safe area (keep type {} the frame)", quote(&t.text), if h > w { "within the middle 80% of" } else { "within 90% of" }),
+            );
+        }
         if t.bars_cut(&now.bars) {
             push("error", "letterbox", &t.text, format!("{} is cut by the letterbox bars", quote(&t.text)));
         }
