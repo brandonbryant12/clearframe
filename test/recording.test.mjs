@@ -17,6 +17,7 @@ import {
   keptWords,
 } from '../engine/lib/recording.mjs';
 import { computeTiming, captionCues } from '../engine/lib/timing.mjs';
+import { paperEdit, applyPaperCuts } from '../engine/lib/paper.mjs';
 import { readPCM } from '../engine/lib/levels.mjs';
 
 import { RATE, recordedProject } from './fixtures.mjs';
@@ -223,4 +224,32 @@ test('projects ingested before source/words.json get their transcript rebuilt fr
   const r = cutWords(root, { words: 'the whole' });
   assert.equal(r.beats[0].beat, 's002');
   assertWordsExact(root, 's002');
+});
+
+test('words struck in the paper edit become exact cuts; a beat edited since printing is refused', async t => {
+  const { root } = await recordedProject(t);
+  const { file } = paperEdit(root);
+  const printed = fs.readFileSync(file, 'utf8');
+  fs.writeFileSync(
+    file,
+    printed.replace('> Short one. That is the whole story.', '> ~~Short one.~~ That is the whole story.').replace('and the line got shorter.', '~~and the line~~ got shorter.'),
+  );
+  const runs = applyPaperCuts(root, file, { by: { role: 'human', name: 'Ana' } });
+  assert.equal(runs.length, 2);
+  assert.deepEqual(
+    sb(root).beats.map(b => b.vo),
+    [
+      'Queues form when work arrives faster than it leaves.',
+      'That is the whole story.',
+      'Right.',
+      'Honestly it was a mess at first.',
+      'Then we measured the wait, got shorter.',
+    ],
+  );
+  for (const id of ['s002', 's005']) assertWordsExact(root, id);
+  // The printed line no longer matches s002: striking more of it is refused, not guessed.
+  fs.writeFileSync(file, printed.replace('> Short one. That is the whole story.', '> Short one. ~~That is~~ the whole story.'));
+  assert.throws(() => applyPaperCuts(root, file, {}), /no longer reads as printed/);
+  const again = paperEdit(root);
+  assert.match(fs.readFileSync(again.file, 'utf8'), /\[cut c\d{3}: “Short one\.”\] That is the whole story\./);
 });

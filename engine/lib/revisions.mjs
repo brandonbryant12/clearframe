@@ -630,6 +630,20 @@ export function affectedPassages(A, B, changes) {
     }
     p.before.push(id);
   }
+  // Stretches that touch in the new timeline are one passage (a cut and the beat after it).
+  const at = id => B.beats.findIndex(b => b.id === id);
+  const order = p => Math.min(...p.beats.map(at).filter(i => i >= 0), Infinity);
+  passages.sort((x, y) => order(x) - order(y));
+  for (let i = 1; i < passages.length; i++) {
+    const prev = passages[i - 1],
+      cur = passages[i];
+    const end = Math.max(...prev.beats.map(at), -Infinity);
+    if (cur.beats.length && prev.beats.length && order(cur) <= end + 1) {
+      prev.beats = [...new Set([...prev.beats, ...cur.beats])].sort((x, y) => at(x) - at(y));
+      prev.before.push(...cur.before);
+      passages.splice(i--, 1);
+    }
+  }
   const range = (T, ids) => {
     const bs = T.beats.filter(b => ids.includes(b.id));
     return bs.length ? [Math.min(...bs.map(b => b.startFrame)), Math.max(...bs.map(b => b.startFrame + b.frames))] : null;

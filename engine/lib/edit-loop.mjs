@@ -52,6 +52,8 @@ export function scopeViolations(report, { beats, film }) {
   const allowed = new Set(beats);
   const out = [];
   if (!film && report.film.look === 'changed') out.push({ what: 'film look', message: 'the film look changed, but the note is not film-wide' });
+  if (!film && report.film.sound === 'changed') out.push({ what: 'sound', message: 'the music or mix settings changed, but the note is not film-wide' });
+  if (!film && report.film.voice === 'changed') out.push({ what: 'voice', message: 'the voice settings changed, but the note is not film-wide' });
   for (const x of report.beats) {
     if (film) break;
     if (x.status === 'content' && !allowed.has(x.id)) out.push({ beat: x.id, message: `${x.id} changed (${x.reasons.join('; ')})` });
@@ -164,7 +166,7 @@ export async function revise(root, { note: noteId, scope, reason, handles = 2, o
     throw new Error(
       `This edit breaks a keep:\n  - ${broken.map(b => `${b.keep} (${b.what}): ${b.message}`).join('\n  - ')}\nAsk the person; if they agree, record it with override --keep ${broken[0].keep} --by NAME --said "…" and pass --override.`,
     );
-  if (report.counts.content == null && report.counts.added == null && report.counts.removed == null && report.film.look === 'same')
+  if (report.counts.content == null && report.counts.added == null && report.counts.removed == null && !['look', 'sound', 'voice', 'data'].some(k => report.film[k] === 'changed'))
     throw new Error(`Nothing changed since ${base.id}; edit the film for note ${note.id} first.`);
   const { revision: rev, created } = await phase('revision', () =>
     snapshot(root, { ctx, kind: 'candidate', label, reason: `note ${note.id}: ${note.text.slice(0, 160)}`, notes: [note.id] }),
@@ -184,7 +186,7 @@ export async function revise(root, { note: noteId, scope, reason, handles = 2, o
   setNoteStatus(root, note.id, 'applied', { revision: rev.id, reason: report.summary[0] });
   const page = writeComparePage(root, { A, B: loadRevision(root, rev.id), report, passages: shown, note });
   writeReviewPage(root);
-  return { revision: rev.id, base: base.id, note: note.id, report, passages: shown, page, declared };
+  return { revision: rev.id, base: base.id, note: note.id, report, passages: shown, unrendered: Math.max(0, report.passages.length - shown.length), page, declared };
 }
 
 /** Before/after for two revisions (B may be 'working'). */

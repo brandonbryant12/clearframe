@@ -11,6 +11,7 @@
     - fframes/canvas.mjs: canvas element types, enters, exits, loops, keys, eases, fonts, colour tokens, effects (glow, shadow, rough, echo, depth, behind)
     - library/ (README.md + one file per palette, treatment, sketch and playbook): what each item sets
     - README.md, AGENTS.md, docs/canvas.md, docs/style.md, docs/ideas.md, docs/speech.md, docs/continuity.md
+    - docs/editing.md and docs/collaboration.md: review state, notes, keeps, decisions, previews, recording edits, the journey
     - skills/clearframe*/SKILL.md (clearframe, direction, cinema, canvas, motion, script, library, engine, integrity, dataviz)
     - examples/night-city/BRIEF.md and storyboard.json (the case study in section 04)
 
@@ -542,10 +543,14 @@
       <summary><span class="mono-label">Contents</span><span class="toc-current">What it is</span></summary>
       <div class="toc-body">
         <a class="toc-brand" href="#top">Clear<span>Frame</span></a>
-        <p class="toc-meta">GUIDE · 2026-09-30</p>
+        <p class="toc-meta">GUIDE · 2026-10-01</p>
         <ol>
           <li><a href="#what-it-is"><span class="n">01</span>What it is</a></li>
-          <li><a href="#how-it-works"><span class="n">02</span>How it works</a></li>
+          <li><a href="#how-it-works"><span class="n">02</span>How it works</a>
+            <ol class="sub">
+              <li><a href="#review-edit">Review &amp; edit</a></li>
+            </ol>
+          </li>
           <li><a href="#concepts"><span class="n">03</span>Core concepts</a></li>
           <li><a href="#outcomes"><span class="n">04</span>Getting great outcomes</a></li>
           <li><a href="#prompting"><span class="n">05</span>Prompting guide</a>
@@ -730,6 +735,18 @@ node engine/cli.mjs critique my-film          <span class="c"># instant: rhythm,
 node engine/cli.mjs draft my-film             <span class="c"># critique + draft voice + check + sheet + draft MP4</span>
 node engine/cli.mjs align my-film --whisper   <span class="c"># free, local, measured word timings</span>
 node engine/cli.mjs render my-film            <span class="c"># final encode</span></code></pre>
+
+      <h3 id="review-edit">Review &amp; edit: rough cut, notes, candidates</h3>
+      <p>The person's first look is not the finished film. It is a <strong>plan</strong> they can read (<code>paper DIR</code>: chapters, timecodes, who speaks, the picture each beat is meant to get, the transcript) and then a <strong>rough cut</strong>: the whole film in motion on the real renderer, made with existing blocks and captions, with pictures that aren't drawn yet declared as <code>placeholder</code> slates (<code>draft DIR --rough</code>). Bespoke drawing and reviewer rounds come after their notes. For a recording, the words stay as recorded unless they ask for cuts.</p>
+      <p>Every full render saves a <strong>revision</strong> in <code>review/</code> with its inputs kept by content, and <code>review/index.html</code> plays it beside the transcript, with a note box that stamps the revision and playhead. A note such as "at 2:13 the diagram is confusing, keep the voice" is anchored to that cut: the beat, the words around the playhead, their time in the recording. After later edits it is found again by content, never by timestamp: <em>current</em>, <em>moved</em>, <em>changed</em> (maybe already fixed), <em>stale</em>, <em>orphaned</em> (its passage was cut) or <em>addressed</em>. An edit becomes a <strong>candidate</strong> (<code>revise</code>) with a before/after preview of only the stretch it touched, rendered from the full timeline with the film's own mix, and a plain report of what changed in content, what only looks different because of a neighbour or a film setting, and what merely moved. The person accepts, refines or rejects; <strong>applied is not accepted</strong>, and an agent's one-shot decision is never shown as acceptance.</p>
+      <p><code>--rough</code> relaxes only what is declared unfinished (placeholder slates and elements marked <code>unfinished</code>): a clipped source line, label or caption still fails, as do facts, audio and timing checks. "Keep the voice" keeps the recording and allows only the cuts the person asks for. Recorded narration is cut, split and merged from the untouched source recording, with measured timing intact and byte-identical undo. The contract, with every state and limit, is <code>docs/editing.md</code>.</p>
+      <pre class="code"><code>node engine/cli.mjs paper my-podcast                       <span class="c"># the plan to read</span>
+node engine/cli.mjs draft my-podcast --rough               <span class="c"># full-length rough cut → r001 + review/index.html</span>
+node engine/cli.mjs note my-podcast "the diagram is confusing" --at 2:13 --rev r001 --keep voice --by Ana
+node engine/cli.mjs revise my-podcast --note n001          <span class="c"># candidate + before/after passages</span>
+node engine/cli.mjs accept my-podcast r002 --note n001 --by Ana --said "yes, clearer"
+node engine/cli.mjs cut my-podcast --words "a story for another day" --by Ana   <span class="c"># undo: uncut --cut c001</span>
+node engine/cli.mjs runlog my-podcast                      <span class="c"># measured time per command; gaps are not work</span></code></pre>
     </section>
 
     <!-- ================= 03 CORE CONCEPTS ================= -->
@@ -1146,6 +1163,14 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
 <pre class="prompt">Something freezes around <span class="ph">[0:24]</span>. Add a loop on the subject, a drift or ambient art under the text, or split the beat in two.</pre></figure>
           <figure class="prompt-card"><figcaption><strong>Measure the words</strong></figcaption>
 <pre class="prompt">Measure the words with align --whisper, then run check. Tell me which beats still have estimated timing, and don't call interpolated timestamps measured.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Rough cut before polish</strong></figcaption>
+<pre class="prompt">Before drawing every beat, give me a full-length rough cut: existing blocks, captions, and placeholders where pictures will go. Keep the recording as it is. Send the review page and the paper edit, and wait for my notes.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Notes on what I watched</strong></figcaption>
+<pre class="prompt">Notes on <span class="ph">r003</span>: at <span class="ph">2:13</span> the diagram is confusing, keep the voice. <span class="ph">3:10–3:40</span> drags. Record each against that cut, fix what's clear, and show me before and after for each.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Cut a sentence</strong></figcaption>
+<pre class="prompt">Cut the sentence at <span class="ph">4:02</span> (the airport aside) from the recording, not from the text. Show me the before and after around it, and tell me what moved.</pre></figure>
+          <figure class="prompt-card"><figcaption><strong>Go back</strong></figcaption>
+<pre class="prompt">I preferred Tuesday's version of <span class="ph">s047</span>. Restore that beat from the revision I approved, keep everything else, and show me the passage.</pre></figure>
           <figure class="prompt-card"><figcaption><strong>Paid step, with a budget</strong></figcaption>
 <pre class="prompt">We're ready for final voice. Run plan and show me the estimate first. Budget: <span class="ph">$[X]</span>. Nothing paid just to test code.</pre></figure>
         </div>
@@ -1579,8 +1604,18 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>beatmap DIR | TRACK</code></td><td class="wrap">The music's tempo (with half and double) and measured drop, and every cut against its beat grid.</td></tr>
             <tr><td><code>timing</code> · <code>captions DIR</code></td><td class="wrap">Timing JSON; SRT and VTT (measured words required unless <code>--draft</code>).</td></tr>
             <tr class="group"><td colspan="2">Render</td></tr>
-            <tr><td><code>draft DIR [--no-render]</code></td><td class="wrap">One pass: critique, draft voice, check, sheet and a draft MP4.</td></tr>
+            <tr><td><code>draft DIR [--rough] [--no-render]</code></td><td class="wrap">One pass: critique, draft voice, check, sheet and a draft MP4. <code>--rough</code>: placeholders as slates, the first full-length look.</td></tr>
             <tr><td><code>render DIR [--draft]</code> · <code>preview DIR</code></td><td class="wrap">Final encode, or a fast review MP4 (<code>--out</code>, <code>--no-audio</code>, <code>--force</code>).</td></tr>
+            <tr class="group"><td colspan="2">Review &amp; edit (<code>docs/editing.md</code>)</td></tr>
+            <tr><td><code>paper DIR [--suggest-cuts]</code></td><td class="wrap">The paper edit: chapters, timecodes, speakers, intended pictures, transcript, recording times. Suggestions are proposals only.</td></tr>
+            <tr><td><code>preview DIR --beats a,b | --range 1:10-1:20 | --note ID | --chapter NAME</code></td><td class="wrap">One stretch of the full timeline, with the full mix's audio and a checked clock (<code>--handles</code>, <code>--rough</code>).</td></tr>
+            <tr><td><code>revisions</code> · <code>snapshot</code> · <code>diff DIR [rA] [rB]</code></td><td class="wrap">List revisions, save the working copy as one, and what changed: content, appearance, timing only.</td></tr>
+            <tr><td><code>note DIR "…" --at 2:13 --rev rNNN</code> · <code>notes DIR</code></td><td class="wrap">Feedback anchored to the cut that was watched (<code>--keep</code>, <code>--to</code>, <code>--beat</code>, <code>--element</code>, <code>--scope</code>, <code>--import</code>), and where each note is now.</td></tr>
+            <tr><td><code>revise DIR --note ID</code> · <code>compare DIR rA [rB]</code> · <code>page DIR</code></td><td class="wrap">A candidate with before/after passages and a compare page; any two revisions side by side; the review page.</td></tr>
+            <tr><td><code>accept</code> · <code>reject DIR rNNN --by NAME --said "…"</code> · <code>decide</code></td><td class="wrap">A person's verdict (reject undoes the candidate where nothing changed since); <code>decide</code> is an agent's one-shot call, labelled as such.</td></tr>
+            <tr><td><code>keep DIR voice|words|facts|picture|look</code> · <code>override</code> · <code>restore DIR rNNN</code></td><td class="wrap">Pin part of the film; record permission to break a pin; bring back a revision (or <code>--beats</code>) after saving the current state.</td></tr>
+            <tr><td><code>cut</code> · <code>uncut</code> · <code>split</code> · <code>merge</code></td><td class="wrap">Recording edits from the source: words, a sentence, the sentence at a time or under a note, pauses, struck words in the paper edit; exact undo.<span class="badge free">free</span></td></tr>
+            <tr><td><code>runlog DIR</code></td><td class="wrap">Measured command and phase times, milestones, and the gaps between commands (not measured work).</td></tr>
           </tbody>
         </table>
       </div>
@@ -1594,6 +1629,18 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
         <div id="faq-heavy-lock">
           <h3>"Heavy-job lock is held by …; the build starts when it finishes."</h3>
           <p>Only compiling the native renderer takes the machine-wide <code>codex-heavy</code> lock, using one Cargo job. Renders, checks and voice run freely. The build names the holder and waits, so let it finish rather than killing someone else's job. Builds are skipped when the renderer source hasn't changed, and the warm cache makes the rest quick. When parallel agents are working, avoid starting concurrent heavy builds.</p>
+        </div>
+        <div id="faq-scope">
+          <h3>"Changes outside note n00N's scope"</h3>
+          <p><code>revise</code> only accepts edits inside the beats the note is about (found again by content in the working copy). Revert the stray change, or widen the scope with <code>--scope ID,ID --reason "…"</code> and tell the person why. Beats that only moved, or that look different because a neighbour changed, are allowed and listed.</p>
+        </div>
+        <div id="faq-stale-note">
+          <h3>A note is "stale" or "orphaned"</h3>
+          <p>Its moment can't be found honestly in the current cut: the quoted words changed, appear twice, or were cut. It is never moved to whatever now plays at that time. Show the person the old moment (its revision, time and words, or <code>page DIR --rev rNNN</code>) and ask whether it still applies.</p>
+        </div>
+        <div id="faq-rough">
+          <h3>The rough cut still fails the frame audit</h3>
+          <p><code>--rough</code> relaxes only text that is declared unfinished: a placeholder slate, or an element marked <code>unfinished</code>. A clipped source line, a covered label or a too-small caption is still an error, because roughness says nothing about whether text that informs is readable. Fix it, or, if it really is a stand-in, mark that element <code>unfinished</code> (a final render will refuse it until it is finished).</p>
         </div>
         <div id="faq-disk">
           <h3>"Native build needs N GiB free"</h3>
@@ -1656,6 +1703,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
       <h2>What's new</h2>
       <p class="small">"Travel instead of cutting, type with a voice, and fewer false alarms." The full list is in <code>CHANGELOG.md</code>.</p>
       <ul class="news">
+        <li><strong>Review and edit</strong> (<a href="#review-edit">how it works</a>, <code>docs/editing.md</code>). A paper edit and a full-length rough cut come before bespoke drawing. Every render saves a revision with its inputs; notes are anchored to the cut that was watched and followed by content; edits become candidates with before/after previews of the affected stretch and an honest report of what else changed; a person's acceptance is recorded only from their words. Keeps ("keep the voice"), exact recording cuts from the source with byte-identical undo, safe reject and restore, a review page, and a run log that never counts gaps as work. Drafts are labelled CRF 21 (the old CRF 23 label was wrong).</li>
         <li><strong>Planes in space, materials, promo pieces.</strong> <code>tilt: [x, y]</code> turns any element or group in space (keys <code>tiltX</code>/<code>tiltY</code>, <code>loop: rock</code>), with its far edge in shade. <code>material</code> paints type by its own depth through a gradient map: <code>thermal</code>, <code>chrome</code>, <code>gold</code>, <code>neon</code> or your own colours, with stripes flowing through. New sketches <code>sunburst</code>, <code>chat</code>, <code>device</code> and <code>marquee</code>, put together in <code>examples/launch-promo</code>. <code>critique</code> now judges a sketch beat by the sketch it draws.</li>
         <li><strong>Time bugs and the drop</strong> (from the October 2026 motion references). <code>qa DIR</code> reads the encoded film for what stills miss: one-frame pops, stretches where the picture barely changes under the voice, jumping world seams, export tags and loudness, with a timeline and a 360 px phone sheet. <code>beatmap DIR</code> measures a track's tempo and drop, and <code>music.drop</code> lands the drop on a beat. Finals are now fully colour-tagged (BT.709 primaries and transfer, square pixels).</li>
         <li><strong>Reports shoot as films by default.</strong> <code>research-digest</code> (what <code>ingest</code> starts from), <code>data-story</code> and <code>concept-explainer</code> were rebuilt around shots. Every other report arc gained lower thirds, a subtle lens, push-ins on numbers and a silence before the close. All 35 playbooks score 63–100 on the cinema score.</li>

@@ -194,7 +194,8 @@ async function fullMix(root, ctx) {
         beats: ctx.timing.beats.map(b => [b.vo?.src, b.vo?.start, b.sfx, b.start, b.end, !!b.vo]),
         music: ctx.timing.music,
         duration: ctx.timing.duration,
-        hashes: ctx.manifest.hashes,
+        // Only what can be heard: a picture-only edit reuses the mix.
+        audio: Object.entries(ctx.manifest.hashes).filter(([k]) => /^assets\/(vo|music|sfx)\//.test(k) || k === ctx.timing.music?.src),
         mix: ctx.sb.mix,
         cues,
       }),

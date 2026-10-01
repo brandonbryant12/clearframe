@@ -168,7 +168,6 @@ async function main() {
     'agent',
     'no-verify',
     'suggest-cuts',
-    'working',
   ];
   const { values: o, positionals } = parseArgs({
     args,
@@ -472,8 +471,8 @@ async function main() {
     const g = await import('./lib/generate.mjs');
     const { phase } = await import('./lib/runlog.mjs');
     await phase('voice', () => g.voice(dir, { draft: true }));
-    // --rough: the first full-length look. Declared placeholders render as slates and type
-    // problems are listed as unfinished craft; every correctness check still blocks.
+    // --rough: the first full-length look. Declared placeholders render as slates; only audit
+    // findings about declared stand-ins become craft; every other check still blocks.
     const rough = !!o.rough;
     const r = await native.checkProject(dir, { draft: true, rough });
     lines.push(

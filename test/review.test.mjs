@@ -10,7 +10,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { recordedProject } from './fixtures.mjs';
-import { snapshot, loadRevision, listRevisions, impact, lineageOf, workingTimeline, attachVideo, materialize } from '../engine/lib/revisions.mjs';
+import { snapshot, loadRevision, listRevisions, impact, lineageOf, workingTimeline, attachVideo, materialize, affectedPassages } from '../engine/lib/revisions.mjs';
 import { addNote, locate, parseStamp, parseTime, formatTime, importNotes, addKeep, checkKeeps, addDecision, acceptance, readNotes } from '../engine/lib/notes.mjs';
 import { cutWords, splitBeat, uncut } from '../engine/lib/recording.mjs';
 import { rejectRevision, restoreRevision } from '../engine/lib/edit-loop.mjs';
@@ -83,6 +83,18 @@ test('a note is read against the revision the person watched, then followed by c
   assert.equal(where.state, 'moved');
   assert.equal(where.beat, 's003');
   assert.ok(Math.abs(where.at - (8.9 - 1.7667) - (old.anchor.at - 8.9)) < 0.4, `found ${where.at}`);
+});
+
+test('a range note across beats keeps its place when an earlier cut moves it', async t => {
+  const { root } = await recordedProject(t);
+  const { revision: r1 } = await snapshot(root);
+  const n = addNote(root, { text: 'this whole exchange drags', revision: r1.id, at: 7.2, to: 12.5, by: 'Ana' });
+  assert.deepEqual(n.anchor.beats, ['s002', 's003', 's004']);
+  assert.ok('Short one. That is the whole story.'.endsWith(n.anchor.words), `quoted from s002 only: ${n.anchor.words}`);
+  cutWords(root, { words: 'Queues form' }, { by: human });
+  const where = locate(root, n, await now(root));
+  assert.deepEqual([where.state, where.beat], ['moved', 's002']);
+  assert.ok(where.at < 7.2, `now at ${where.at}`);
 });
 
 test('notes on words that were cut are orphaned, partly cut are stale, cut for the note are addressed', async t => {
@@ -420,4 +432,14 @@ test('the CLI loads and lists the review commands', () => {
   assert.equal(r.status, 0, r.stderr);
   for (const cmd of ['paper', 'revise', 'note', 'notes', 'keep', 'accept', 'reject', 'decide', 'restore', 'cut', 'uncut', 'runlog']) assert.match(r.stdout, new RegExp(`\\b${cmd}\\b`));
   assert.match(r.stdout, /unfinished/);
+});
+
+test('a cut and the beat it changes next to it are one passage; separate stretches stay separate', () => {
+  const tl = ids => ({ beats: ids.map((id, i) => ({ id, startFrame: i * 30, frames: 30 })) });
+  const A = tl(['a', 'b', 'c', 'd', 'e']);
+  assert.deepEqual(affectedPassages(A, tl(['a', 'b', 'd', 'e']), [
+    { id: 'c', status: 'removed' },
+    { id: 'd', status: 'appearance' },
+  ]), [{ beats: ['b', 'd'], removed: ['c'], before: [30, 120], after: [30, 90] }]);
+  assert.equal(affectedPassages(A, A, [{ id: 'a', status: 'content' }, { id: 'd', status: 'content' }]).length, 2);
 });

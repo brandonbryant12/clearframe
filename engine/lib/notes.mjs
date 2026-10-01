@@ -23,7 +23,7 @@ const MAX_TEXT = 2000;
 /** 133.4, 2:13, 2:13.4 or 1:02:13.5 → seconds. */
 export function parseTime(value) {
   const s = String(value).trim();
-  if (!/^\d+(?::\d{1,2}){0,2}(?:\.\d+)?$/.test(s)) throw new Error(`Not a time: ${JSON.stringify(value)} (use 133.4 or 2:13.4)`);
+  if (!/^(?:\d+(?::\d{1,2}){0,2}(?:\.\d*)?|\.\d+)$/.test(s)) throw new Error(`Not a time: ${JSON.stringify(value)} (use 133.4 or 2:13.4)`);
   return s.split(':').reduce((acc, part) => acc * 60 + Number(part), 0);
 }
 export function formatTime(t) {
@@ -86,10 +86,8 @@ export function anchorAt(timeline, at, { to, beat: forced, element } = {}) {
     throw new Error(`${beat.id} has no element "${element}" (it has: ${beat.elements.join(', ') || 'none named'}).`);
   const beats = to != null ? timeline.beats.filter(b => b.start < to && b.end > at).map(b => b.id) : [beat.id];
   let quote = words.length ? words.slice(i0, i1 + 1) : [];
-  if (to != null) {
-    const spoken = timeline.beats.flatMap(b => (beats.includes(b.id) ? b.words : [])).filter(w => w.t1 > at && w.t0 < to);
-    quote = spoken.slice(0, 12);
-  }
+  // A range quotes what its first beat says inside it: a quote is always found within one beat.
+  if (to != null) quote = words.filter(w => w.t1 > at && w.t0 < to).slice(0, 12);
   const src = quote.length && beat.source ? [sourceAt(beat, quote[0].t0), sourceAt(beat, quote.at(-1).t1)] : null;
   return {
     beat: beat.id,

@@ -277,6 +277,7 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
           (p, i) =>
             `passage ${i + 1}: ${p.beats.join(', ')}${p.removed.length ? ` (removed ${p.removed.join(', ')})` : ''}\n  before ${p.before ? rel(p.before.output) : '—'}\n  after  ${p.after ? rel(p.after.output) : '—'}${p.after?.verified ? `  (clock checked: ${p.after.verified.map(v => `${Number.isFinite(v.psnr) ? v.psnr.toFixed(1) : '∞'} dB`).join(', ')})` : ''}`,
         ),
+        ...(r.unrendered ? [`${r.unrendered} more changed stretch(es) not rendered here: preview DIR --beats … for each`] : []),
         `compare page: ${rel(r.page)}`,
         'Ask the person to accept, refine or reject it; record their reply with accept/reject.',
       ].join('\n'),

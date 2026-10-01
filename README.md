@@ -69,6 +69,20 @@ node engine/cli.mjs ingest digest --markdown report.md        # BRIEF.md: figure
 node engine/cli.mjs ingest clip --audio episode.wav --words words.json --script script.txt --from 312 --to 358 --vertical
 node engine/cli.mjs reference inspiration.mp4                 # REFERENCE.md + keyframe sheet
 node engine/cli.mjs align clip --whisper                      # free, local, measured word timings
+node engine/cli.mjs paper clip                                # the paper edit: chapters, timecodes, transcript
+node engine/cli.mjs draft clip --rough                        # full-length rough cut; placeholders as slates
+```
+
+## Review and edit
+
+Every render saves a revision in `DIR/review/`, with its inputs kept by content, and `review/index.html` plays it beside the transcript with a note box stamped with the revision and playhead. Notes stay anchored to the cut that was watched; an edit becomes a candidate with a before/after preview of just the affected stretch; acceptance is recorded only from the person. Recorded narration is cut, split and restored from the source recording with measured timing intact. See `docs/editing.md`.
+
+```sh
+node engine/cli.mjs note clip "the diagram is confusing; keep the voice" --at 2:13 --rev r003 --keep voice --by Ana
+node engine/cli.mjs revise clip --note n001                   # candidate + before/after passages + impact report
+node engine/cli.mjs accept clip r004 --note n001 --by Ana --said "yes, clearer"
+node engine/cli.mjs cut clip --words "which is a story for another day" --by Ana   # undo: uncut clip --cut c001
+node engine/cli.mjs runlog clip                               # measured time per command and phase
 ```
 
 Then follow `skills/clearframe-direction/SKILL.md`: find the question and the turn, pick a treatment, plan a picture per beat, critique, and have a fresh reviewer read the sheet.

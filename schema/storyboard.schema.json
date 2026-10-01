@@ -607,6 +607,39 @@
           "note": {
             "type": "string"
           },
+          "speaker": {
+            "type": "string",
+            "description": "Speaker id from storyboard.speakers (recordings: set by ingest)"
+          },
+          "placeholder": {
+            "description": "A picture not made yet: a rough cut (--rough) shows a labelled slate over the beat's own words; any other render refuses it (docs/editing.md)",
+            "oneOf": [
+              {
+                "type": "string",
+                "maxLength": 140
+              },
+              {
+                "type": "object",
+                "required": [
+                  "text"
+                ],
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "maxLength": 140
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
+          "was": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Beat ids this beat was made from (split, merge); keeps notes and acceptance attached across the change"
+          },
           "transitionColor": {
             "enum": [
               "accent",

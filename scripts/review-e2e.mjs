@@ -211,9 +211,10 @@ const auditFilm = (extra = {}) =>
     }),
   );
 const checkJSON = (name, rough) => {
+  const t1 = performance.now();
   const r = spawnSync(process.execPath, [path.join(ROOT, 'engine/cli.mjs'), 'check', AUD, ...(rough ? ['--rough'] : [])], { cwd: ROOT, env, encoding: 'utf8' });
   const text = `${r.stdout}`;
-  steps.push({ name, seconds: 0, status: r.status });
+  steps.push({ name, seconds: Math.round((performance.now() - t1) / 10) / 100, status: r.status, expected: rough && /unfinished/.test(name) ? 0 : 1 });
   return { status: r.status, report: JSON.parse(text.slice(text.indexOf('{'))) };
 };
 auditFilm();
