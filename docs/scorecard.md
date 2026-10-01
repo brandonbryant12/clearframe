@@ -75,6 +75,7 @@ Each round, a fresh reviewer scores the benchmark (`scripts/bench.mjs`) against 
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 2026-09-30 | 3 | 3 | 2.5 | 3 | 3 | 3 | 3 | 2.5 | 3.5 | 3.5 | 3 | 3.5 | 4 | 3 | 2.5 | **3.1** |
 | 2 | 2026-10-01 | 3 | 3 | 2.5 | 3 | 3 | 2.5 | 3 | 2.5 | 3 | 3.5 | 4 | 3.5 | 4.5 | 3.5 | 2.5 | **3.13** |
+| 3 | 2026-10-01 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 2.5 | 3 | 3 | 3.5 | 3 | 4.5 | 3.5 | 2.5 | **3.10** |
 
 **Round 1, the five blockers:**
 1. **Report defaults read as slides.** A heading on every beat, small charts, dips through empty frames at cuts, one repeated iris, and web pill buttons on end cards.
@@ -103,6 +104,15 @@ Each round, a fresh reviewer scores the benchmark (`scripts/bench.mjs`) against 
   4. Composition, and a vertical cut that is the landscape cut reflowed (type at the frame edges).
   5. Sound and cutting don't drive the film: no real silence, cuts on sentence ends, flash overused.
 - **The critique still scored these films 100.** Its score is not evidence of quality.
+
+**Round 3: flat.** Composition and imagery rose to 3. Voice, honesty and tooling fell. Each round fixes what the last reviewer named, and the next reviewer finds a new layer; some of it the fixes introduced.
+- **The five blockers now:**
+  1. Transitions break the frame. A dissolve superimposes two scenes' type; frames are empty or smeared while the voice speaks; product cuts dip to black.
+  2. Broken geometry passes `check`: a sliced planet in the zoom journey's ending, sliced buildings, labels over art, partial glyphs at the edge.
+  3. The report films still read as animated dashboards: one callout grammar, flat bars, clip-art.
+  4. The picture lags the spoken payoff: titles a second late, slugs finishing as the shot cuts.
+  5. The finish is stock: Bebas with glow, banding in the darks, digital silence with no room tone, a title hit no louder than the voice.
+- **What the benchmark cannot show:** sound, voice and imagery are judged on free drafts (local TTS, a synthesised bed, code-drawn art). A real Gemini voice, a Lyria score and generated depth plates would be judged differently. That costs money per round, so it is the user's call.
 
 ## Log
 
