@@ -1613,7 +1613,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>note DIR "…" --at 2:13 --rev rNNN</code> · <code>notes DIR</code></td><td class="wrap">Feedback anchored to the cut that was watched (<code>--keep</code>, <code>--to</code>, <code>--beat</code>, <code>--element</code>, <code>--scope</code>, <code>--import</code>), and where each note is now.</td></tr>
             <tr><td><code>revise DIR --note ID</code> · <code>compare DIR rA [rB]</code> · <code>page DIR</code></td><td class="wrap">A candidate with before/after passages and a compare page; any two revisions side by side; the review page.</td></tr>
             <tr><td><code>accept</code> · <code>reject DIR rNNN --by NAME --said "…"</code> · <code>decide</code></td><td class="wrap">A person's verdict (reject undoes the candidate where nothing changed since); <code>decide</code> is an agent's one-shot call, labelled as such.</td></tr>
-            <tr><td><code>keep DIR voice|words|facts|picture|look</code> · <code>override</code> · <code>restore DIR rNNN</code></td><td class="wrap">Pin part of the film; record permission to break a pin; bring back a revision (or <code>--beats</code>) after saving the current state.</td></tr>
+            <tr><td><code>keep DIR voice|words|facts|picture|look</code> · <code>override</code> · <code>restore DIR rNNN</code></td><td class="wrap">Pin part of the film; record permission to break a pin; bring back a revision after saving the current state (later library overrides and shadowing media are set aside under <code>review/aside/</code>, and the result is verified), or <code>--beats</code> (<code>--shared</code> to also change media other beats use).</td></tr>
             <tr><td><code>cut</code> · <code>uncut</code> · <code>split</code> · <code>merge</code></td><td class="wrap">Recording edits from the source: words, a sentence, the sentence at a time or under a note, pauses, struck words in the paper edit; exact undo.<span class="badge free">free</span></td></tr>
             <tr><td><code>runlog DIR</code></td><td class="wrap">Measured command and phase times, milestones, and the gaps between commands (not measured work).</td></tr>
           </tbody>
@@ -1637,6 +1637,18 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
         <div id="faq-stale-note">
           <h3>A note is "stale" or "orphaned"</h3>
           <p>Its moment can't be found honestly in the current cut: the quoted words changed, appear twice, or were cut. It is never moved to whatever now plays at that time. Show the person the old moment (its revision, time and words, or <code>page DIR --rev rNNN</code>) and ask whether it still applies.</p>
+        </div>
+        <div id="faq-cut-note">
+          <h3>"cut --note" refuses: the note is orphaned, stale or already addressed</h3>
+          <p><code>cut --note</code> and <code>cut --at … --rev</code> cut the exact words that were pointed at, found by their identity in the recording's transcript, never by searching for the same text. If those words are gone (cut earlier, or the note's passage was removed), only partly there, or already cut for that note, nothing is cut. Show the person the old moment and ask; to cut other words, name them with <code>--words</code> and <code>--beat</code>.</p>
+        </div>
+        <div id="faq-final-open">
+          <h3>Final stays open after the person accepted a fix</h3>
+          <p>Final closes only on a decision about the whole current cut and its final encode: <code>accept DIR rNNN --checkpoint final --by NAME --said "…"</code> after rendering the final. Accepting one note's result or some beats, or an earlier cut, does not approve the film; any change to its content (an audio-only one too), a draft rendered over <code>build/video.mp4</code>, or a later rejection reopens it.</p>
+        </div>
+        <div id="faq-restore">
+          <h3>restore says the result is "NOT the same" as the revision</h3>
+          <p>A whole restore writes the revision's files, sets aside later library overrides and shadowing media under <code>review/aside/</code>, then compares the working copy with the revision. "Inputs" means the files match but the renderer or fonts changed since, so frames may differ. "NOT the same" lists what still differs (often a shared library from <code>CLEARFRAME_LIBRARY</code>, which lives outside the project); the command exits 1, and <code>restore DIR</code> with the reported restore point undoes it.</p>
         </div>
         <div id="faq-rough">
           <h3>The rough cut still fails the frame audit</h3>

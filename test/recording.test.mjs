@@ -20,7 +20,11 @@ import { computeTiming, captionCues } from '../engine/lib/timing.mjs';
 import { paperEdit, applyPaperCuts } from '../engine/lib/paper.mjs';
 import { readPCM } from '../engine/lib/levels.mjs';
 
-import { RATE, recordedProject } from './fixtures.mjs';
+import { RATE, recordedProject, synthRecording } from './fixtures.mjs';
+import { spawnSync } from 'node:child_process';
+import { ingestRecording } from '../engine/lib/ingest.mjs';
+import { snapshot } from '../engine/lib/revisions.mjs';
+import { addNote } from '../engine/lib/notes.mjs';
 
 const sb = root => JSON.parse(fs.readFileSync(path.join(root, 'storyboard.json'), 'utf8'));
 const meta = (root, id) => JSON.parse(fs.readFileSync(path.join(root, 'assets/vo', `${id}.json`), 'utf8'));
@@ -252,4 +256,91 @@ test('words struck in the paper edit become exact cuts; a beat edited since prin
   assert.throws(() => applyPaperCuts(root, file, {}), /no longer reads as printed/);
   const again = paperEdit(root);
   assert.match(fs.readFileSync(again.file, 'utf8'), /\[cut c\d{3}: “Short one\.”\] That is the whole story\./);
+});
+
+// Cutting what a note or a time pointed at, through the CLI: the words are found again by their
+// identity in the source transcript, never by searching the film for the same text.
+const CLI = path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'engine', 'cli.mjs');
+const cli = (...args) => spawnSync(process.execPath, [CLI, ...args], { encoding: 'utf8' });
+async function repeated(t) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-repeat-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const { input, words } = synthRecording(dir, [
+    ['a', 'Repeat this sentence.', 0.6],
+    ['b', 'This is the middle section, and it runs on a little.', 0.6],
+    ['a', 'Repeat this sentence.', 0.6],
+    ['b', 'Here is the closing thought.', 0.4],
+  ]);
+  const root = path.join(dir, 'film');
+  await ingestRecording(root, { audio: input, words: { words }, fps: 30, speakers: {} });
+  return root;
+}
+const vos = root => sb(root).beats.map(b => [b.id, b.vo]);
+const ana = { role: 'human', name: 'Ana' };
+
+test('cut --note refuses when its passage is gone, instead of cutting the same words elsewhere', async t => {
+  const root = await repeated(t);
+  const { revision: r1, timeline } = await snapshot(root);
+  const first = timeline.beats[0];
+  const note = addNote(root, { text: 'remove this', revision: r1.id, at: first.words[1].t0 + 0.01, by: 'Ana' });
+  cutWords(root, { words: 'Repeat this sentence.', beat: first.id }, { by: ana });
+  await snapshot(root);
+  const before = vos(root);
+  const r = cli('cut', root, '--note', note.id, '--by', 'Ana');
+  assert.notEqual(r.status, 0);
+  assert.match(r.stderr, /orphaned/);
+  assert.deepEqual(vos(root), before, 'the other “Repeat this sentence.” is untouched');
+});
+
+test('cut --at --rev takes exactly the sentence spoken there, after times shift and beats split or merge', async t => {
+  const root = await repeated(t);
+  const { revision: r1, timeline } = await snapshot(root);
+  const second = timeline.beats[2];
+  assert.equal(second.vo.text, 'Repeat this sentence.');
+  const at = (second.words[1].t0 + 0.01).toFixed(3);
+  // Later edits: an earlier cut moves everything, and the sentence's beat is split.
+  cutWords(root, { words: 'and it runs on a little.' }, { by: ana });
+  splitBeat(root, { beat: second.id, at: 'this sentence.' });
+  let r = cli('cut', root, '--at', at, '--rev', r1.id, '--by', 'Ana');
+  assert.equal(r.status, 0, r.stderr);
+  assert.deepEqual(
+    vos(root).map(([, vo]) => vo),
+    ['Repeat this sentence.', 'This is the middle section,', 'Here is the closing thought.'],
+    'the second occurrence went; the first stayed',
+  );
+  // Already gone: the same request now refuses.
+  r = cli('cut', root, '--at', at, '--rev', r1.id, '--by', 'Ana');
+  assert.notEqual(r.status, 0);
+  assert.match(r.stderr, /no longer play/);
+});
+
+test('a note survives a merge and is cut by identity; partly cut sentences and range notes are refused', async t => {
+  const { root } = await recordedProject(t);
+  const { revision: r1, timeline } = await snapshot(root);
+  const b5 = timeline.beats[4];
+  const note = addNote(root, { text: 'drop the ending', revision: r1.id, at: b5.words[6].t0 + 0.01, by: 'Ana' });
+  splitBeat(root, { beat: 's005', at: 'and the line' });
+  mergeBeats(root, { beats: ['s005a', 's005b'] });
+  let r = cli('cut', root, '--note', note.id, '--by', 'Ana');
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(sb(root).beats.length, 4, 'its whole sentence (the merged beat) went');
+  assert.match(cli('notes', root).stdout, new RegExp(`${note.id} \\S+\\s+addressed`));
+  r = cli('cut', root, '--note', note.id, '--by', 'Ana');
+  assert.notEqual(r.status, 0, 'cutting it twice');
+  assert.match(r.stderr, /already addressed/);
+  // A sentence that is partly gone, and a range note.
+  const n2 = addNote(root, { text: 'tighten', revision: r1.id, at: timeline.beats[0].words[2].t0 + 0.01, by: 'Ana' });
+  cutWords(root, { words: 'faster than' }, { by: ana });
+  r = cli('cut', root, '--note', n2.id, '--by', 'Ana');
+  assert.notEqual(r.status, 0);
+  assert.match(r.stderr, /stale|already cut/);
+  const n3 = addNote(root, { text: 'this stretch', revision: r1.id, at: 4.2, to: 9, by: 'Ana' });
+  r = cli('cut', root, '--note', n3.id, '--by', 'Ana');
+  assert.notEqual(r.status, 0);
+  assert.match(r.stderr, /range note/);
+  // With --words, only the beats the note is about are searched.
+  r = cli('cut', root, '--note', n3.id, '--words', 'Right.', '--by', 'Ana');
+  assert.equal(r.status, 0, r.stderr);
+  r = cli('cut', root, '--note', n3.id, '--words', 'Honestly', '--by', 'Ana');
+  assert.notEqual(r.status, 0, 'Honestly is outside the note’s beats');
 });

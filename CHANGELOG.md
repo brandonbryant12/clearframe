@@ -17,6 +17,12 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - **Checkpoints.** A Rough cut checkpoint; Rough cut and Final close on recorded decisions (a person's acceptance, or notes on the rough cut; a labelled agent decision in one-shot work), not on file times.
   - **Run log.** Every project command appends its measured phases to `review/runlog.jsonl`; `runlog DIR` reports them, milestones (first reviewable cut, first rough cut, first final) and the time between commands as unmeasured gaps.
   - **Measured end to end.** `scripts/review-e2e.mjs` runs the loop on a free 71 s two-speaker fixture (macOS voices, local Whisper words) with 21 checks: Whisper 33 s, rough cut 32 s, a picture candidate 17 s, a sentence-cut candidate 43 s on this iMac. Fixture numbers only; no claim about longer films or other machines.
+- **Review fixes after an independent review** (each with a regression test):
+  - `cut --note` and `cut --at --rev` resolve what was pointed at to the words' identities in the source transcript and cut exactly those; a stale, orphaned or already-addressed note, or words already cut, is refused instead of matching the same text elsewhere in the film.
+  - Final closes only on a decision about the whole current cut and its encode (`build/video.mp4`); acceptances of an earlier cut, a note's result or some beats no longer count, and an audio-only change or a later rejection reopens it. Decisions record which encodes they saw.
+  - A whole restore sets aside (into `review/aside/`) tracked inputs the target did not have and media the loader would pick over its own, then verifies the result against the target; `assets/music/bed.json` is now recorded. Selective restore refuses to silently rewrite media other beats use (`--shared` opts in) or to replay merged recording; reject leaves such shared files alone.
+  - `keep facts` covers labels, units and formats, on-screen wording and the cited source entries, not only digits; styling, position, motion and order stay free.
+  - Released review videos now actually free their stored copies (the release compared objects, not ids), unless something else still uses the same content.
 - **Draft encoder label corrected.** Receipts and the engine skill said CRF 23; drafts encode at CRF 21 (`fframes/native/src/main.rs`).
 
 - **Time bugs, measured on the film.** `qa DIR` decodes the finished MP4 and reports what no still can show (after Raphaël Aubry's write-up of the bugs in model-made motion films, October 2026):

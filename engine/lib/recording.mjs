@@ -131,10 +131,22 @@ export function sourceSegments(meta, { rate, fps }) {
 
 const removedAt = (meta, sample) => (meta.source.removed ?? []).find(r => sample >= r.samples[0] && sample < r.samples[1]);
 
-/** The beat's words that still play, on the source clock, with their transcript index. */
+/**
+ * The beat's words that still play, on the source clock, with their transcript index (their
+ * identity: it never changes through cuts, splits, merges, undo or restore). Metadata written
+ * before beats recorded their share of the transcript is read by its span instead (such beats
+ * had nothing cut).
+ */
 export function keptWords(meta, transcript) {
-  const [i0, i1] = meta.source.words ?? [0, 0],
-    rate = transcript.rate;
+  const rate = transcript.rate;
+  if (!meta.source.words) {
+    const fps = meta.source.fps ?? transcript.fps ?? 30;
+    const [f0, f1] = spanFrames({ source: { ...meta.source, offset: meta.source.offset ?? transcript.offset ?? 0 } }, fps);
+    return transcript.words
+      .map((w, index) => ({ ...w, index }))
+      .filter(w => (w.t0 + w.t1) / 2 >= f0 / fps && (w.t0 + w.t1) / 2 < f1 / fps);
+  }
+  const [i0, i1] = meta.source.words;
   const out = [];
   for (let k = i0; k < i1; k++) {
     const w = transcript.words[k];
@@ -300,14 +312,62 @@ export function sentenceAround(words, i) {
   return [a, b];
 }
 
+/** Which edits removed transcript words (by index): cut ids, for telling the person why. */
+function removedBy(root, ctx, indices) {
+  const ids = new Set();
+  for (const x of ctx.beats)
+    if (isRecorded(x.meta))
+      for (const r of x.meta.source.removed ?? [])
+        for (const i of indices) {
+          const w = ctx.transcript.words[i],
+            mid = Math.round(((w.t0 + w.t1) / 2) * ctx.transcript.rate);
+          if (mid >= r.samples[0] && mid < r.samples[1]) ids.add(r.id);
+        }
+  for (const e of readEdits(root))
+    for (const p of e.beats ?? [])
+      if (p.deleted && p.meta?.source?.words && indices.some(i => i >= p.meta.source.words[0] && i < p.meta.source.words[1])) ids.add(e.id);
+  return [...ids];
+}
+
 /** Resolve a selection to film-word indices [a, b]. */
-function select(ctx, words, sel) {
+function select(ctx, words, sel, root) {
+  if (sel.source) {
+    // Words named by their identity in the source transcript (what a note or a time in a
+    // revision pointed at). They must all still play, together; nothing is searched for.
+    const want = new Set(sel.source);
+    const at = words.map((w, i) => (want.has(w.index) ? i : -1)).filter(i => i >= 0);
+    const what = sel.label ?? 'Those words';
+    if (!at.length) {
+      const by = removedBy(root, ctx, sel.source);
+      throw new Error(`${what} no longer play in the film${by.length ? ` (removed by ${by.join(', ')})` : ''}; nothing was cut.`);
+    }
+    if (at.length !== want.size) {
+      const by = removedBy(root, ctx, sel.source.filter(i => !words.some(w => w.index === i)));
+      throw new Error(`Part of ${what.toLowerCase()} was already cut${by.length ? ` (${by.join(', ')})` : ''}; point at what is left instead. Nothing was cut.`);
+    }
+    if (at.at(-1) - at[0] !== at.length - 1) throw new Error(`${what} are no longer together in the film; nothing was cut.`);
+    return [at[0], at.at(-1)];
+  }
   if (sel.from && sel.to) {
     // Exact words: {beat, k} (k counts the beat's words as they play now), inclusive.
     const at = p => words.findIndex(w => w.beat === p.beat && w.k === p.k);
     const [a, b] = [at(sel.from), at(sel.to)];
     if (a < 0 || b < 0 || b < a) throw new Error('Those words are not in the recording as it plays now.');
     return [a, b];
+  }
+  if (sel.words && sel.within) {
+    // A phrase inside the beats a note is about now; never anywhere else in the film.
+    const inside = new Set(sel.within);
+    const hits = [];
+    const q = String(sel.words).split(/\s+/).map(wordKey).filter(Boolean);
+    for (let i = 0; i + q.length <= words.length; i++)
+      if (q.every((key, j) => wordKey(words[i + j].w) === key) && words.slice(i, i + q.length).some(w => inside.has(w.beat)))
+        hits.push([i, i + q.length - 1]);
+    if (!hits.length) throw new Error(`“${sel.words}” is not in ${[...inside].join(', ')} as it plays now; nothing was cut.`);
+    if (hits.length > 1 && sel.nth == null) throw new Error(`“${sel.words}” occurs ${hits.length} times in ${[...inside].join(', ')}; add --nth N.`);
+    const pick = hits[sel.nth == null ? 0 : sel.nth - 1];
+    if (!pick) throw new Error(`There are only ${hits.length} occurrences of “${sel.words}” there.`);
+    return pick;
   }
   if (sel.words) return findPhrase(words, sel.words, sel);
   if (sel.sentence != null) {
@@ -329,7 +389,7 @@ export function cutWords(root, sel, { by = { role: 'agent' }, note, dryRun = fal
   return withLock(root, () => {
     const ctx = context(root),
       words = filmWords(ctx);
-    const [a, b] = select(ctx, words, sel);
+    const [a, b] = select(ctx, words, sel, root);
     const id = nextId('c', [...readEdits(root).map(e => e.id)]);
     const text = words
       .slice(a, b + 1)

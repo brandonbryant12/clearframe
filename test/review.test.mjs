@@ -12,7 +12,8 @@ import { spawnSync } from 'node:child_process';
 import { recordedProject } from './fixtures.mjs';
 import { snapshot, loadRevision, listRevisions, impact, lineageOf, workingTimeline, attachVideo, materialize, affectedPassages } from '../engine/lib/revisions.mjs';
 import { addNote, locate, parseStamp, parseTime, formatTime, importNotes, addKeep, checkKeeps, addDecision, acceptance, readNotes } from '../engine/lib/notes.mjs';
-import { cutWords, splitBeat, uncut } from '../engine/lib/recording.mjs';
+import { cutWords, splitBeat, uncut, mergeBeats } from '../engine/lib/recording.mjs';
+import { useProject } from '../fframes/library.mjs';
 import { rejectRevision, restoreRevision } from '../engine/lib/edit-loop.mjs';
 import { frameRange } from '../fframes/render.mjs';
 import { writeReviewPage, inertJSON, esc } from '../engine/lib/review-page.mjs';
@@ -457,4 +458,238 @@ test('coverage counts each chapter: pictures, placeholders, unfinished elements 
     { chapter: 'Setup', beats: 2, placeholders: 0, unfinished: 0, pictured: 2, accepted: 2 },
     { chapter: 'World', beats: 3, placeholders: 1, unfinished: 1, pictured: 2, accepted: 0 },
   ]);
+});
+
+// Final: fake encodes isolate the status rules (no render is claimed); each revision gets
+// distinct bytes, written to build/video.mp4 as a final render would.
+function finalOf(root, rev) {
+  const file = path.join(root, 'build', 'video.mp4');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, `final encode of ${rev.id} ${crypto.randomUUID()}`);
+  const sha = crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+  attachVideo(root, rev.id, { file, profile: 'final', receipt: { outputSha256: sha, frames: rev.frames, encoder: 'test' } });
+  return file;
+}
+const final = (root, mode = 'guided') => checkpoints(root, { mode }).find(c => c.id === 'final');
+const say = { by: 'Ana', said: 'ship it' };
+
+test('Final closes only on a whole-cut acceptance of the current content and its encode', async t => {
+  const { root } = await recordedProject(t);
+  const { revision: r1 } = await snapshot(root);
+  finalOf(root, r1);
+  assert.equal(final(root).done, false, 'rendered is not accepted');
+  addDecision(root, { action: 'accept', role: 'human', ...say, revision: r1.id, scope: { checkpoint: 'final' } });
+  assert.equal(final(root).done, true);
+  // A new cut: the old acceptance must not approve it.
+  edit(root, sb => (sb.beats[0].props.mode = 'reveal'));
+  assert.equal(final(root).done, false, 'the working copy changed');
+  const { revision: r2 } = await snapshot(root);
+  finalOf(root, r2);
+  const f = final(root);
+  assert.equal(f.done, false, 'r001 was accepted, r002 was not');
+  assert.equal(f.decision, null);
+  assert.match(f.detail, /r002 is current; not accepted/);
+  // One note's result or some beats are not the film.
+  const n = addNote(root, { text: 'the opening reads better now', revision: r2.id, at: 1, by: 'Ana' });
+  addDecision(root, { action: 'accept', role: 'human', ...say, revision: r2.id, scope: { note: n.id } });
+  assert.equal(final(root).done, false, 'note-scoped acceptance');
+  addDecision(root, { action: 'accept', role: 'human', ...say, revision: r2.id, scope: { beats: ['s001'] } });
+  assert.equal(final(root).done, false, 'beat-scoped acceptance');
+  addDecision(root, { action: 'accept', role: 'human', ...say, revision: r2.id });
+  assert.equal(final(root).done, true, 'acceptance of the whole revision');
+  addDecision(root, { action: 'reject', role: 'human', by: 'Ana', said: 'no, the opening is wrong', revision: r2.id });
+  assert.equal(final(root).done, false, 'a later rejection reopens it');
+});
+
+test('Final reopens when the output or the audio no longer match, and agents only decide in one-shot work', async t => {
+  const { root } = await recordedProject(t);
+  const { revision: r1 } = await snapshot(root);
+  const file = finalOf(root, r1);
+  addDecision(root, { action: 'decide', role: 'agent', reason: 'one-shot', revision: r1.id, scope: { checkpoint: 'rough' } });
+  assert.equal(final(root, 'one-shot').done, false, 'a rough-cut decision is not the final');
+  addDecision(root, { action: 'decide', role: 'agent', reason: 'one-shot: final', revision: r1.id, scope: { checkpoint: 'final' } });
+  assert.equal(final(root, 'one-shot').done, true);
+  assert.equal(final(root, 'guided').done, false, 'guided work needs the person');
+  addDecision(root, { action: 'accept', role: 'human', ...say, revision: r1.id, scope: { checkpoint: 'final' } });
+  assert.equal(final(root).done, true);
+  // The deliverable is no longer that encode (a draft rendered over it, say).
+  const encode = fs.readFileSync(file);
+  fs.writeFileSync(file, 'a draft rendered later');
+  assert.match(final(root).detail, /build\/video\.mp4 is not r001's final encode/);
+  assert.equal(final(root).done, false);
+  fs.writeFileSync(file, encode);
+  assert.equal(final(root).done, true);
+  // An audio-only change leaves storyboard.json untouched but is a different film.
+  const wav = path.join(root, 'assets/vo/s003.wav');
+  const bytes = fs.readFileSync(wav);
+  bytes[bytes.length - 2] ^= 1;
+  fs.writeFileSync(wav, bytes);
+  const f = final(root);
+  assert.equal(f.done, false);
+  assert.match(f.detail, /changed since the last final render/);
+});
+
+test('keep facts holds what a chart means — labels, units, attribution, cited sources — but not its styling', async t => {
+  const { root } = await recordedProject(t);
+  edit(root, sb => {
+    sb.beats[0].block = 'bars';
+    sb.beats[0].props = { data: [{ label: 'Revenue', value: 10 }, { label: 'Costs', value: 20 }], source: 'Recording', format: ' dollars' };
+    sb.beats[1].block = 'canvas';
+    sb.beats[1].props = { elements: [{ type: 'text', id: 'claim', text: 'Waits fell', x: 400, y: 500, size: 80, fill: 'ink' }] };
+  });
+  const { revision } = await snapshot(root);
+  addKeep(root, { what: 'facts', beats: ['s001', 's002'], revision: revision.id, by: human, said: 'keep the facts' });
+  const broken = async change => {
+    const before = read(root);
+    edit(root, change);
+    const v = checkKeeps(root, (await now(root)).timeline);
+    write(root, before);
+    return v;
+  };
+  assert.equal((await broken(sb => (sb.beats[0].props.data[0].label = 'Profit'))).length, 1, 'a category label');
+  assert.equal((await broken(sb => (sb.beats[0].props.format = ' percent'))).length, 1, 'a unit');
+  assert.equal((await broken(sb => (sb.beats[0].props.source = 'Recording, adjusted'))).length, 1, 'the attribution line');
+  assert.equal((await broken(sb => (sb.sources[0].title = 'Recording: a different file'))).length, 1, 'the source it cites');
+  assert.equal((await broken(sb => (sb.beats[1].props.elements[0].text = 'Waits fell, mostly'))).length, 1, 'a qualifier, no digits');
+  assert.deepEqual(
+    await broken(sb => {
+      sb.beats[0].props.sort = 'desc';
+      Object.assign(sb.beats[1].props.elements[0], { fill: 'accent2', x: 520, enter: 'rise', size: 96 });
+    }),
+    [],
+    'order, colour, position, size and entrance are not facts',
+  );
+});
+
+test('released videos free their stored copies unless something else still needs them', async t => {
+  const { root } = await recordedProject(t);
+  const objects = [];
+  for (let i = 0; i < 5; i++) {
+    edit(root, sb => (sb.beats[0].props.maxWords = 3 + i));
+    const { revision } = await snapshot(root);
+    const file = path.join(root, `v${i}.mp4`);
+    // r002 and r005 share bytes: one stored copy that r005 still needs.
+    fs.writeFileSync(file, i === 4 ? 'shared encode' : i === 1 ? 'shared encode' : `encode ${i}`);
+    const sha = crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+    if (i === 0) addDecision(root, { action: 'accept', role: 'human', by: 'Ana', said: 'keep this one', revision: revision.id });
+    attachVideo(root, revision.id, { file, profile: 'draft', receipt: { outputSha256: sha, frames: 1, encoder: 'test' } });
+    objects.push(path.join(root, ...listRevisions(root).at(-1).videos[0].object.split('/')));
+  }
+  const kept = listRevisions(root).map(r => [r.id, r.videos[0].retained]);
+  assert.deepEqual(kept, [
+    ['r001', true],
+    ['r002', false],
+    ['r003', true],
+    ['r004', true],
+    ['r005', true],
+  ]);
+  assert.ok(fs.existsSync(objects[0]), 'accepted: kept');
+  assert.ok(fs.existsSync(objects[1]), 'released, but r005 has the same bytes');
+  assert.equal(objects[1], objects[4]);
+  edit(root, sb => (sb.beats[0].props.maxWords = 9));
+  const { revision: r6 } = await snapshot(root);
+  const file = path.join(root, 'v6.mp4');
+  fs.writeFileSync(file, 'encode 6');
+  attachVideo(root, r6.id, { file, profile: 'draft', receipt: { outputSha256: crypto.createHash('sha256').update('encode 6').digest('hex'), frames: 1, encoder: 'test' } });
+  assert.ok(!fs.existsSync(objects[2]), 'r003 released and nothing else needs its copy: freed');
+  assert.equal(listRevisions(root).find(r => r.id === 'r003').videos[0].retained, false);
+});
+
+// Restore: the result must be the target revision's effective inputs, not an overlay.
+const LIB = path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'library');
+function withPictures(t) {
+  const root = draftProject(t);
+  fs.mkdirSync(path.join(root, 'assets/img'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'assets/img/pic.png'), 'png bytes, first version');
+  edit(root, sb => {
+    sb.assets = [{ id: 'pic', kind: 'image', prompt: 'a desk' }];
+    for (const i of [0, 4]) {
+      sb.beats[i].block = 'canvas';
+      sb.beats[i].props = { elements: [{ type: 'image', asset: 'pic', x: 100, y: 100, w: 400, h: 300 }] };
+    }
+  });
+  return root;
+}
+
+test('a whole restore puts back the revision’s effective inputs: later overrides and shadowing files are set aside', async t => {
+  const root = withPictures(t);
+  edit(root, sb => {
+    sb.theme = 'ink';
+    sb.music = { volume: 0.2 };
+  });
+  fs.mkdirSync(path.join(root, 'assets/music'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'assets/music/bed.mp3'), 'first bed');
+  fs.writeFileSync(path.join(root, 'assets/music/bed.json'), JSON.stringify({ file: 'assets/music/bed.mp3' }));
+  const { revision: r1, timeline: t1 } = await snapshot(root);
+  // Afterwards: a palette override, a JPEG that wins over the PNG, a regenerated bed.
+  const pal = JSON.parse(fs.readFileSync(path.join(LIB, 'palettes/ink.json'), 'utf8'));
+  pal.colors.accent = '#ffffff';
+  fs.mkdirSync(path.join(root, 'library/palettes'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'library/palettes/ink.json'), JSON.stringify(pal));
+  fs.writeFileSync(path.join(root, 'assets/img/pic.jpg'), 'a newer picture');
+  fs.rmSync(path.join(root, 'assets/music/bed.mp3'));
+  fs.writeFileSync(path.join(root, 'assets/music/bed.wav'), 'second bed');
+  fs.writeFileSync(path.join(root, 'assets/music/bed.json'), JSON.stringify({ file: 'assets/music/bed.wav' }));
+  useProject(null);
+  await snapshot(root);
+  const r = await restoreRevision(root, { revision: r1.id, by: 'Ana', said: 'back to the first version' });
+  assert.equal(r.verified.state, 'exact', JSON.stringify(r.verified));
+  assert.notEqual(r.restorePoint, r.now);
+  assert.deepEqual(r.aside.map(a => a.file).sort(), ['assets/img/pic.jpg', 'library/palettes/ink.json']);
+  assert.ok(!fs.existsSync(path.join(root, 'library/palettes/ink.json')));
+  assert.ok(fs.existsSync(path.join(root, r.aside.find(a => a.file === 'assets/img/pic.jpg').to)), 'set aside, not deleted');
+  useProject(null);
+  const { timeline } = await workingTimeline(root);
+  assert.equal(timeline.film.look, t1.film.look);
+  assert.equal(timeline.music.src, 'assets/music/bed.mp3');
+  // And the restore itself can be undone: the point before has the override.
+  const back = await restoreRevision(root, { revision: r.restorePoint, by: 'Ana', said: 'undo that' });
+  assert.equal(back.verified.state, 'exact');
+  assert.ok(fs.existsSync(path.join(root, 'library/palettes/ink.json')));
+  useProject(null);
+  assert.deepEqual(await restoreRevision(root, { revision: r.restorePoint, by: 'Ana', said: 'again' }), {
+    revision: r.restorePoint,
+    unchanged: true,
+    restored: [],
+    verified: { state: 'exact' },
+  });
+});
+
+test('restoring some beats never silently rewrites media other beats use, or replays merged recording', async t => {
+  const root = withPictures(t);
+  const { revision: r1 } = await snapshot(root);
+  fs.writeFileSync(path.join(root, 'assets/img/pic.png'), 'png bytes, second version');
+  edit(root, sb => (sb.beats[0].props.elements[0].w = 500));
+  await snapshot(root);
+  await assert.rejects(restoreRevision(root, { revision: r1.id, beats: ['open'], by: 'Ana', said: 'the old opening' }), /also change other beats: assets\/img\/pic\.png \(used by end\)/);
+  assert.equal(fs.readFileSync(path.join(root, 'assets/img/pic.png'), 'utf8'), 'png bytes, second version', 'refused before touching anything');
+  const r = await restoreRevision(root, { revision: r1.id, beats: ['open'], by: 'Ana', said: 'the old opening, picture and all', shared: true });
+  assert.deepEqual(r.alsoChanged, [{ file: 'assets/img/pic.png', beats: ['end'] }]);
+  assert.equal(read(root).beats[0].props.elements[0].w, 400);
+  // A recorded beat merged away cannot come back on its own.
+  const { root: rec } = await recordedProject(t);
+  const { revision: q1 } = await snapshot(rec);
+  mergeBeats(rec, { beats: ['s004', 's005'] });
+  await snapshot(rec);
+  await assert.rejects(restoreRevision(rec, { revision: q1.id, beats: ['s005'], by: 'Ana', said: 'the old ending' }), /s005 became s004/);
+  // Even when nothing records the merge, the recording itself would play twice.
+  const sbRec = read(rec);
+  delete sbRec.beats.find(b => b.id === 's004').was;
+  write(rec, sbRec);
+  await assert.rejects(restoreRevision(rec, { revision: q1.id, beats: ['s005'], by: 'Ana', said: 'the old ending' }), /play the same recording twice \(s004 and s005\)/);
+});
+
+test('reject leaves a shared file alone when another beat that uses it changed since', async t => {
+  const root = withPictures(t);
+  await snapshot(root);
+  fs.writeFileSync(path.join(root, 'assets/img/pic.png'), 'png bytes, candidate');
+  edit(root, sb => (sb.beats[0].props.elements[0].x = 200));
+  const { revision: cand } = await snapshot(root, { kind: 'candidate' });
+  edit(root, sb => (sb.beats[4].props.elements[0].y = 160)); // the other user of pic.png, edited after
+  const r = await rejectRevision(root, { revision: cand.id, by: 'Ana', said: 'no' });
+  assert.ok(r.restored.includes('open'));
+  assert.ok(r.conflicts.some(c => /end was edited after/.test(c)));
+  assert.ok(r.conflicts.some(c => /assets\/img\/pic\.png is also used by end/.test(c)));
+  assert.equal(fs.readFileSync(path.join(root, 'assets/img/pic.png'), 'utf8'), 'png bytes, candidate', 'left as it is');
+  assert.equal(read(root).beats[0].props.elements[0].x, 100);
 });

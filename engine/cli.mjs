@@ -72,7 +72,7 @@ Review and edit (docs/editing.md; state in DIR/review/)
   decide <dir> rNNN --checkpoint rough|final --reason TEXT    one-shot: an agent decision, never shown as acceptance
   keep <dir> voice|words|facts|picture|look [--beats a,b | --at 2:13 [--to 2:40] | --chapter NAME] --by NAME --said TEXT
   keep <dir> --release k001 --by NAME | keeps <dir>    override <dir> --keep k001 --rev rNNN --by NAME --said TEXT
-  restore <dir> rNNN [--beats a,b] (--by NAME --said TEXT | --agent --reason TEXT)   saves the current state first
+  restore <dir> rNNN [--beats a,b [--shared]] (--by NAME --said TEXT | --agent --reason TEXT)   saves the current state first
   cut <dir> --words "…" [--beat ID] [--nth N] | --beat ID --sentence N | --at 2:13 [--rev r003] | --note n001
             | --pauses-over 1.2 [--keep-pause 0.5] [--beats a,b] | --paper review/paper-edit.md
             [--by NAME | --agent] [--dry-run]   cut recorded words from the source recording (undo: uncut)
@@ -168,6 +168,7 @@ async function main() {
     'agent',
     'no-verify',
     'suggest-cuts',
+    'shared',
   ];
   const { values: o, positionals } = parseArgs({
     args,

@@ -39,7 +39,7 @@ node engine/cli.mjs notes DIR --import notes-r003.json                          
    node engine/cli.mjs cut DIR --pauses-over 1.2 --keep-pause 0.5 --by NAME
    node engine/cli.mjs cut DIR --paper review/paper-edit.md --by NAME    # words they struck with ~~…~~
    ```
-   `--by NAME` means the person asked for the cut; `--agent` means you decided it (a voice keep refuses agent cuts). `--dry-run` shows what would go.
+   `--by NAME` means the person asked for the cut; `--agent` means you decided it (a voice keep refuses agent cuts). `--dry-run` shows what would go. `--note` and `--at --rev` find the exact words they pointed at by identity, not by text: if those words were already cut or the note is stale, nothing is cut and you should ask the person again.
 2. `revise DIR --note n014` checks the edit stayed inside the note's beats and broke no keep, saves a candidate revision, renders before/after passages and writes `review/compare/A-B/index.html`. If it reports changes outside the scope, revert them or widen with `--scope ID,ID --reason "…"` (say why to the person).
 3. Reply in one or two lines: what you changed, what else moved or looks different (from the report), and the compare page. Generated narration: a changed line re-records its whole take; say so and check the budget before `voice` without `--draft`.
 
@@ -55,7 +55,8 @@ node engine/cli.mjs decide DIR r006 --checkpoint rough --reason "one-shot: all n
 ```
 
 - `accept`/`reject`/`restore --by` are only for what the person actually said; quote them. Silence, elapsed time or "looks fine I guess" about something else is not acceptance.
-- `reject` undoes the candidate where nothing changed since and reports conflicts; `restore` brings back a whole revision (or `--beats`), saving the current state first. `uncut DIR --cut c004` undoes one recording cut exactly.
+- `reject` undoes the candidate where nothing changed since and reports conflicts; `restore` brings back a whole revision (setting aside later library overrides and shadowing media under `review/aside/`, then verifying the result) or `--beats` (refused when it would change media other beats use, unless `--shared`, or replay merged recording), saving the current state first. `uncut DIR --cut c004` undoes one recording cut exactly.
+- For the final, record acceptance of the whole cut (`accept DIR rNNN --checkpoint final --by NAME --said "…"`): accepting one note's result does not approve the film, and any later change reopens it.
 - In one-shot work use `decide`; it is shown as an agent decision, never as acceptance.
 
 ## Reporting

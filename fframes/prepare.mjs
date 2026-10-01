@@ -162,7 +162,11 @@ export function classifyAudit(findings, { rough = false, allowed = [], job } = {
   return { errors, warnings, craft };
 }
 
-export async function prepareProject(root, { draft = false, rough = false } = {}) {
+/** Prepare synchronously (nothing in preparation waits); prepareProject is the async form. */
+export async function prepareProject(root, options) {
+  return prepareProjectSync(root, options);
+}
+export function prepareProjectSync(root, { draft = false, rough = false } = {}) {
   root = fs.realpathSync(root);
   const loaded = loadStoryboard(root),
     computed = computeTiming(root);

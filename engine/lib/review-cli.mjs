@@ -22,12 +22,12 @@ import {
   KEEPS,
 } from './notes.mjs';
 import { revise, compareRevisions, rejectRevision, restoreRevision } from './edit-loop.mjs';
-import { cutWords, uncut, splitBeat, mergeBeats, tightenPauses, readEdits, sentenceAround } from './recording.mjs';
+import { cutWords, uncut, splitBeat, mergeBeats, tightenPauses, readEdits } from './recording.mjs';
 import { paperEdit, applyPaperCuts } from './paper.mjs';
+import { sentenceAt, sentenceAtTime } from './targets.mjs';
 import { writeReviewPage } from './review-page.mjs';
 import { readRunlog, runlogReport } from './runlog.mjs';
 import { checkId } from './store.mjs';
-import { wordKey } from './word-timing.mjs';
 
 export const REVIEW = new Set([
   'paper',
@@ -381,9 +381,27 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
     const by = who(o);
     if (by.role === 'human' && !o.said) throw new Error('restore --by NAME needs --said "their words".');
     if (by.role === 'agent' && !o.reason) throw new Error('restore --agent needs --reason.');
-    const r = await restoreRevision(dir, { revision: rev, beats: list(o.beats), by: by.name, said: o.said ?? o.reason, role: by.role });
+    const r = await restoreRevision(dir, { revision: rev, beats: list(o.beats), by: by.name, said: o.said ?? o.reason, role: by.role, shared: !!o.shared });
+    if (r.verified?.state === 'differs') process.exitCode = 1;
     if (o.json) return json(r);
-    return console.log(`restored ${r.restored.join(', ')} from ${rev}; the state before is ${r.restorePoint}, the restored state is ${r.now}. Undo with restore DIR ${r.restorePoint}.`);
+    if (r.unchanged) return console.log(`The working copy already is ${rev}'s content; nothing was restored.`);
+    const v = r.verified;
+    return console.log(
+      [
+        `restored ${r.restored.join(', ')} from ${rev}; the state before is ${r.restorePoint}, the restored state is ${r.now}. Undo with restore DIR ${r.restorePoint}.`,
+        ...(r.aside ?? []).map(a => `  moved aside: ${a.file} → ${a.to} (${a.why})`),
+        ...(r.alsoChanged ?? []).map(a => `  also changed ${a.file}, used by ${a.beats.join(', ')}`),
+        ...(v
+          ? [
+              v.state === 'exact'
+                ? `  verified: exactly ${rev}'s inputs, renderer and fonts`
+                : v.state === 'inputs'
+                  ? `  verified: ${rev}'s inputs; renderer ${v.renderer}, fonts ${v.fonts}: frames may differ from the original render`
+                  : `  NOT the same as ${rev}: ${v.error ?? [v.missing && `missing ${v.missing.join(', ')}`, v.extra && `extra ${v.extra.join(', ')}`, v.changed && `changed ${v.changed.join(', ')}`, `look ${v.look}`].filter(Boolean).join('; ')}`,
+            ]
+          : []),
+      ].join('\n'),
+    );
   }
 
   if (cmd === 'cut') {
@@ -405,9 +423,9 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
       result = [tightenPauses(dir, args, common)];
     } else {
       let sel;
-      if (o.words) sel = { words: o.words, beat: o.beat, nth: o.nth == null ? undefined : Number(o.nth) };
+      if (o.words && !o.note) sel = { words: o.words, beat: o.beat, nth: o.nth == null ? undefined : Number(o.nth) };
       else if (o.sentence != null) sel = { beat: checkId('beat', o.beat ?? ''), sentence: Number(o.sentence) };
-      else if (opts.at != null || o.note) sel = await sentenceSelection(dir, o, opts);
+      else if (opts.at != null || o.note) sel = await pointedSelection(dir, o, opts);
       else throw new Error('cut what? --words "…", --beat ID --sentence N, --at TIME, --note nNNN, --pauses-over S or --paper FILE');
       guardKeeps(dir, cutWords(dir, sel, { ...common, dryRun: true }).beats.map(p => p.beat), common, o);
       result = [cutWords(dir, sel, common)];
@@ -443,35 +461,37 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
 }
 
 /**
- * The sentence a person pointed at (by time on the revision they watched, or through a note),
- * found again by its words in the film as it is now. Never the nearest timestamp.
+ * What a note or a time in a revision points at, as exact words of the recording now. The
+ * note is located first (lineage, quoted words, recording time): a stale, orphaned or already
+ * addressed note is refused, never turned into a search for the same text elsewhere. Without
+ * --words the note's sentence is taken by its words' identity in the source transcript; with
+ * --words, only the beats the note is about now are searched.
  */
-async function sentenceSelection(dir, o, opts) {
-  let rev, at, note;
+async function pointedSelection(dir, o, opts) {
   if (o.note) {
-    note = readNotes(dir).find(n => n.id === checkId('note', o.note));
-    if (!note?.anchor) throw new Error(`Note ${o.note} has no moment to cut.`);
-    rev = note.revision;
-    at = note.anchor.words ? null : note.anchor.at;
-  } else {
-    rev = o.rev ?? [...listRevisions(dir)].reverse().find(r => (r.videos ?? []).length)?.id;
-    at = opts.at;
+    const note = readNotes(dir).find(n => n.id === checkId('note', o.note));
+    if (!note) throw new Error(`No note ${o.note}.`);
+    if (!note.anchor) throw new Error(`Note ${note.id} is about the whole film; name the words to cut with --words and --beat.`);
+    const target = { id: null, timeline: (await workingTimeline(dir)).timeline };
+    const where = locate(dir, note, target);
+    if (where.state === 'addressed') throw new Error(`Note ${note.id} is already addressed: ${where.reason}. Nothing was cut.`);
+    if (['stale', 'orphaned'].includes(where.state) || !where.beat)
+      throw new Error(`Note ${note.id} is ${where.state}: ${where.reason ?? 'its moment cannot be found'}. Show the person the old moment and ask; nothing was cut.`);
+    if (o.words) {
+      const within = new Set([where.beat]);
+      for (const id of note.anchor.beats ?? []) {
+        const w = locate(dir, { ...note, anchor: { ...note.anchor, beat: id, beats: [id], words: '' } }, target);
+        if (w.beat && !['stale', 'orphaned'].includes(w.state)) within.add(w.beat);
+      }
+      return { words: o.words, within: [...within], nth: o.nth == null ? undefined : Number(o.nth) };
+    }
+    const t = sentenceAt(dir, { revision: note.revision, anchor: note.anchor });
+    return { source: t.source, label: `The sentence note ${note.id} points at (“${t.text}”)` };
   }
+  const rev = o.rev ? checkId('revision', o.rev) : [...listRevisions(dir)].reverse().find(r => (r.videos ?? []).length)?.id;
   if (!rev) throw new Error('No revision to read the time against; pass --rev.');
-  const { timeline } = loadRevision(dir, checkId('revision', rev));
-  const anchor = note?.anchor ?? anchorAt(timeline, at);
-  // The sentence around the anchor, in the revision the person watched.
-  const words = timeline.beats.flatMap(b => b.words.map((w, k) => ({ ...w, beat: b.id, k })));
-  const inBeat = words.filter(w => w.beat === anchor.beat);
-  const quoteStart = anchor.words ? inBeat.findIndex((w, k) => anchor.words.split(' ').every((q, j) => inBeat[k + j] && wordKey(inBeat[k + j].w) === wordKey(q))) : -1;
-  const pos = quoteStart >= 0 ? words.indexOf(inBeat[quoteStart + Math.min(2, anchor.words.split(' ').length - 1)]) : words.findIndex(w => w.beat === anchor.beat && w.t1 > anchor.at);
-  if (pos < 0) throw new Error(`No words at that moment of ${rev}.`);
-  const [a, b] = sentenceAround(words, pos);
-  const text = words
-    .slice(a, b + 1)
-    .map(w => w.w)
-    .join(' ');
-  return { words: text, revision: rev };
+  const t = sentenceAtTime(dir, { revision: rev, at: opts.at });
+  return { source: t.source, label: `The sentence at ${formatTime(opts.at)} in ${rev} (“${t.text}”)` };
 }
 
 /** A cut must not break a keep: `voice` allows cuts the person asked for; `words` never. */

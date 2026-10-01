@@ -27,7 +27,7 @@ More reviewable artifacts do not mean more mandatory questions: in one-shot mode
 | 7   | **Picture**        | The fine-cut sheet: is this the film they imagined?             | Taste, and the person's eye for their brand and audience                        | Rendering and re-rendering a film nobody wanted     |
 | 8   | **Final**          | Watch it: ship it?                                              | It goes out under their name                                                    | Publishing a mistake                                |
 
-**Rough cut and Final close on a recorded decision, not on a file's age**: a person's `accept` (or, for the rough cut, notes the person gave on it) in guided work; a labelled agent `decide` in one-shot work. A current file proves the artifact exists; only an acceptance proves someone said yes, and `checkpoints` shows which is which.
+**Rough cut and Final close on a recorded decision, not on a file's age**: a person's `accept` (or, for the rough cut, notes the person gave on it) in guided work; a labelled agent `decide` in one-shot work. A current file proves the artifact exists; only an acceptance proves someone said yes, and `checkpoints` shows which is which. Final is closed only by a decision about the whole current cut and its final encode: accepting an earlier cut, one note's result or some beats does not approve the film, any change to its content (an audio-only change included) reopens it, and so does a later rejection.
 
 **What never needs a human:** timing and cues, layout and composition, camera moves, sound placement, fixing what `check` and `critique` report, render settings, and drafts. The tools and the model handle these well, and asking about them wastes the person's attention.
 

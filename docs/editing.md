@@ -29,12 +29,12 @@ A revision is an immutable record of something a person could watch or compare. 
 
 A revision holds:
 
-- the authored `storyboard.json` and **every input file** a render reads (narration slices and their metadata, images, clips, music, sfx, the project library, the source recording and its transcript, generated-voice takes), each preserved in `review/objects/` by content;
+- the authored `storyboard.json` and **every input file** a render reads (narration slices and their metadata, images, clips, music and the bed's pointer `assets/music/bed.json`, sfx, the project library, the source recording and its transcript, generated-voice takes), each preserved in `review/objects/` by content;
 - the prepared job (as an object) and a **review timeline**: per beat its frames and seconds, chapter, speaker, words on the film clock, the recording span it plays (with any cut-out parts), canvas element ids, placeholders and fingerprints;
 - receipts: each video (profile rough / draft / final, encoder, frames, output SHA-256) and previews;
 - lineage: beats added (and what they were made from), removed (and by which cut), merged.
 
-Identity is content, not a timestamp: two renders of the same inputs, renderer and fonts are the same revision. Videos are kept for the newest three revisions with a video plus any revision a person accepted; older videos are released (the record stays, marked "released"). Inputs are never released while a revision names them.
+Identity is content, not a timestamp: two renders of the same inputs, renderer and fonts are the same revision. Videos are kept for the newest three revisions with a video plus any revision a person accepted; older videos are released (the record stays, marked "released") and their stored copy is deleted unless something else still names the same content (another kept video, any revision's inputs, job or receipts, a preview). Inputs are never released while a revision names them.
 
 `materialize` (used by `compare` and `revise` when a video was released or never made) rebuilds a revision's project from its objects, each checked against its hash; a damaged object stops the operation instead of rendering something else. A re-render uses today's renderer and fonts; its receipt says whether they match the revision's. Rendering is deterministic, but **an old revision is only bit-identical if the renderer, fonts and every input are unchanged**; ClearFrame never promises it from the storyboard alone.
 
@@ -107,7 +107,7 @@ node engine/cli.mjs keep film --release k002 --by Ana --said "ok, tighten it"
 |---|---|---|
 | `voice` | the recording or take each beat plays: no re-recording, new TTS take, replacement or processing of that audio | cuts the person asked for (`cut … --by NAME`); refuses cuts the agent decides on its own |
 | `words` | the spoken words in scope | nothing that removes or changes words, including cuts, unless the person releases the keep or records an override |
-| `facts` | numbers and figures on screen and their attribution (`source`) | picture changes that keep them |
+| `facts` | what the beat shows as information: numbers and figures, category labels, units and formats, scale limits, the wording of on-screen text (titles, notes, qualifiers such as "about" or "mostly"), the attribution line and the source entries it cites | styling, position, size, entrances and other motion, presentation order (`sort`), emphasis, decorative elements |
 | `picture` | the beat's visual authoring (block, props, art, plate, camera, tone, transition, exit, lens) and its media | narration and timing changes |
 | `look` | film-wide look (palette, motion, captions, framing, format, lens, treatment) | everything per beat |
 
@@ -123,7 +123,10 @@ node engine/cli.mjs reject film r005 --note n012 --by Ana --said "no, the old on
 node engine/cli.mjs decide film r005 --checkpoint rough --reason "one-shot: notes applied, moving to the fine cut"
 ```
 
-`accept` and `reject` record a person's verdict and require `--by` and `--said`; they refuse `--agent`. `decide` is the agent's own call in one-shot work and is always displayed as "agent decision, not a person's acceptance". Nothing is accepted because time passed or because nobody objected. An acceptance attaches to beat fingerprints: a beat that only moved stays accepted (`moved`); one whose neighbour or the film look changed is `looks-different` (a quick look); one whose own content changed is `changed` (review again). `checkpoints` closes Rough cut and Final on these decisions, never on a file's age.
+`accept` and `reject` record a person's verdict and require `--by` and `--said`; they refuse `--agent`. `decide` is the agent's own call in one-shot work and is always displayed as "agent decision, not a person's acceptance". Nothing is accepted because time passed or because nobody objected. An acceptance attaches to beat fingerprints: a beat that only moved stays accepted (`moved`); one whose neighbour or the film look changed is `looks-different` (a quick look); one whose own content changed is `changed` (review again). `checkpoints` closes Rough cut and Final on these decisions, never on a file's age:
+
+- **Final** is closed only for the film as it is now: a final encode of exactly the working copy's content (same inputs, renderer and fonts, so an audio-only change reopens it), that encode being `build/video.mp4`, and a decision about that whole cut and that encode (`accept rNNN` or `accept rNNN --checkpoint final`; decisions record which encodes they saw). An acceptance of an earlier cut, of one note's result (`--note`) or of some beats (`--beats`) never closes it, and a later rejection reopens it. In one-shot work an agent `decide --checkpoint final` on that encode stands in, labelled as such; guided work needs the person.
+- **Rough cut** is closed by the person's notes on a rough or draft cut, or their acceptance of a whole rough cut (a later rejection takes it back); in one-shot work, by `decide --checkpoint rough`.
 
 ## Range previews
 
@@ -153,7 +156,11 @@ node engine/cli.mjs accept film r006 --note n012 --by Ana --said "yes"
 
 `revise` checks that the working copy changed **only inside the note's beats** (found by content in the working copy; a recording cut made with `--note` declares the beats it touched), with `appearance` and `shifted` beats allowed and listed. To change more, widen with `--scope s046,s050 --reason "…"` or `--scope film`. It checks every keep, saves a **candidate revision**, renders before/after passages of each affected stretch (the "before" from the previous revision's stored video when kept, otherwise re-rendered from its stored inputs; the "after" from the full prepared timeline), writes `review/compare/A-B/index.html`, and marks the note `applied`. Asking happens only for material ambiguity, a keep conflict, missing authority or paid work beyond the budget.
 
-`reject` undoes the candidate's changes **only where nothing was edited since**: beats it changed go back to its parent's version (storyboard data and files from the object store), beats it added go, beats it removed return in place, film settings revert if untouched; anything edited afterwards is reported as a conflict and left alone. It is not an inverse patch applied blindly. `restore film rNNN [--beats a,b]` is the explicit, whole-revision (or per-beat) restore; it saves the current state as a revision first, so `restore film <that revision>` undoes it.
+`reject` undoes the candidate's changes **only where nothing was edited since**: beats it changed go back to its parent's version (storyboard data and files from the object store), beats it added go, beats it removed return in place, film settings revert if untouched; anything edited afterwards is reported as a conflict and left alone, as is a media file that another beat edited since still uses. It refuses (changing nothing) when a recorded beat coming back would replay recording that another beat plays now. It is not an inverse patch applied blindly.
+
+`restore film rNNN` is the explicit whole-revision restore. It saves the current state as a revision first (so `restore film <that revision>` undoes it), writes every file of rNNN, then moves aside — into `review/aside/<restore point>/`, never deleting — tracked inputs rNNN did not have (project library overrides, takes, sound files, the bed's pointer) and any media the loader would now pick over rNNN's own (say, a newer `pic.jpg` that wins over rNNN's `pic.png`). It then verifies the working copy against rNNN: **exact** (same inputs, renderer and fonts), **inputs** (same inputs, but the renderer or fonts changed since, so frames may differ), or what still differs (the command then exits 1). Unrelated files elsewhere in the project are left alone.
+
+`restore film rNNN --beats a,b` restores some beats. It refuses, changing nothing, when a media file those beats need differs now and other beats use it (`--shared` changes it for them too, and says so), when a beat was split or merged since (restore its successors or the whole revision), or when a recorded beat would replay recording another beat plays now.
 
 ```sh
 node engine/cli.mjs compare film r001 r007      # any two revisions (or one and the working copy)
@@ -183,6 +190,8 @@ node engine/cli.mjs uncut film --cut c004                             # exact: b
 node engine/cli.mjs split film --beat s012 --before "and the line"    # s012a + s012b, both `was: ["s012"]`
 node engine/cli.mjs merge film s012a s012b
 ```
+
+**What `--note` and `--at` cut.** Every word of the recording has an identity: its index in `source/words.json`, which cuts, splits, merges, undo and restore never change and which two passages with the same wording never share. `cut --at 2:13 --rev r003` takes the sentence spoken at 2:13 in r003 and `cut --note n014` the sentence under the note's playhead in the revision it was made on, as identities; the film as it is now is then searched for exactly those words. If they no longer all play, together, nothing is cut and the cut that removed them is named. `--note` first finds where the note is now and refuses a stale, orphaned or already addressed note; with `--words`, only the beats the note is about are searched. A range note covers several sentences: name the words. Only an explicit `--words` without a note searches the whole film (and asks for `--beat` or `--nth` when the words occur more than once).
 
 How a cut is made: it starts inside the pause before the first removed word and ends inside the pause after the last, keeping half of each pause (at a beat edge, the edge pause goes too), and its length is a whole number of frames so beats still tile the timeline. Neighbouring words are never touched; when the pauses are shorter than a frame, the cut takes exactly the words and pads the join with under a frame of silence. Joins get a 4 ms fade inside the pause. A beat left without words is removed whole (and comes back with `uncut`). Kept words move by exact sample counts, so **measured timings stay measured** (`alignment.provider` notes "(source edit)"); interpolated words stay estimates. Later beats move earlier by the cut; the impact report and the candidate's passages show it (the "before" passage is longer than the "after" by exactly the cut). A sentence cut across beats is one edit (`c004`) and one undo.
 

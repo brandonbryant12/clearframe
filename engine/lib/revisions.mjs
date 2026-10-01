@@ -6,7 +6,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { prepareProject } from '../../fframes/prepare.mjs';
+import { prepareProject, prepareProjectSync } from '../../fframes/prepare.mjs';
 import { planTakes } from './takes.mjs';
 import { loadStoryboard } from './project.mjs';
 import { isRecorded, sourceSegments, readEdits } from './recording.mjs';
@@ -29,7 +29,7 @@ import {
 } from './store.mjs';
 
 const round = (n, d = 3) => Math.round(n * 10 ** d) / 10 ** d;
-export const PRINT_SCHEME = 1;
+export const PRINT_SCHEME = 2;
 const revDir = (root, id) => reviewPath(root, 'revisions', checkId('revision', id));
 
 // Keys of a beat that make its picture (a "keep picture" covers these and the media they use).
@@ -54,30 +54,54 @@ const PICTURE_KEYS = [
 // Film settings that make the look (a "keep look" covers these).
 const LOOK_KEYS = ['format', 'theme', 'motion', 'transition', 'backdrop', 'chrome', 'captions', 'treatment', 'frame', 'heading', 'textMotion', 'texture', 'lens', 'speakers'];
 const SOUND_KEYS = ['music', 'mix', 'sfx'];
-// Numbers that place or time things are not facts; numbers and figures shown are.
-const GEOMETRY = new Set(
-  'x y w h r cx cy rx ry x1 y1 x2 y2 size width height at dur dist opacity rotate depth z blur stagger leading tracking fit points d view viewFrom viewAt viewDur viewDrift viewTall dash keys loop along origin amount period seed speed count kind tilt scale scaleX scaleY morphDur exitAt exitDur maxWords maxGap maxDuration intensity'.split(
-    ' ',
-  ),
+// What a "keep facts" protects: everything a beat shows as information (figures, category
+// labels, units and formats, qualifiers, titles, scale limits, attribution) and the sources it
+// cites. Excluded, by key, is only what places, styles, times or identifies things, plus
+// purely decorative elements. Relevance is never inferred from the presence of digits.
+const NOT_FACT = new Set(
+  `x y w h r cx cy rx ry x1 y1 x2 y2 size width height points d box view viewFrom viewAt viewDur viewDrift viewTall
+   viewNext depth z rotate origin tilt fit leading tracking stagger dash arrow head anchor align columns cols orientation
+   layout gap padding radius minScale maxScale offset closed spin perspective shade marks arcs bars step
+   fill stroke color opacity blend cap join font upper material glow shadow blur rough mosaic echo shine treatment side
+   drift emphasisStyle mode preset ease tone emphasis highlight phrases sort dim style kind shape
+   at dur dist say exitSay land growSay drawSay enter exit exitAt exitDur keys loop along morphDur fps period speed seed
+   maxWords maxGap maxDuration intensity amount dolly focus
+   id type asset file sketch world plates subject behind icon name carried note`
+    .split(/\s+/)
+    .filter(Boolean),
 );
-
-// Strings that style or cue things rather than show them ("accent2" is a colour, not a figure).
-const STYLE = new Set(
-  'type id fill stroke color font anchor enter exit say exitSay land growSay drawSay blend cap join shape style treatment side drift mode align preset ease kind asset file world sketch emphasisStyle loop along transition tone heading label'.split(
-    ' ',
-  ),
-);
-/** Numbers and text with digits on screen, plus attribution: what a "keep facts" protects. */
+const DECORATIVE = new Set(['particles', 'solid', 'spotlight', 'meter']);
 export function factsOf(value, key = '') {
-  if (value == null) return [];
-  if (typeof value === 'number') return GEOMETRY.has(key) ? [] : [[key, value]];
-  if (typeof value === 'string') return key === 'source' || (!STYLE.has(key) && /\d/.test(value)) ? [[key, value]] : [];
+  if (value == null || typeof value === 'boolean') return [];
+  if (typeof value === 'number' || typeof value === 'string') return NOT_FACT.has(key) ? [] : [[key, value]];
   if (Array.isArray(value)) return value.flatMap(v => factsOf(v, key));
-  if (typeof value === 'object')
+  if (typeof value === 'object') {
+    if (DECORATIVE.has(value.type)) return [];
+    // A canvas element's `note` is an author's comment; a chart's `note` is shown on screen.
     return Object.keys(value)
       .sort()
-      .flatMap(k => (GEOMETRY.has(k) && k !== 'count' ? [] : factsOf(value[k], k === 'count' ? 'count' : k)));
+      .flatMap(k => (NOT_FACT.has(k) && !(k === 'note' && value[k] && typeof value[k] === 'object') ? [] : factsOf(value[k], k)));
+  }
   return [];
+}
+/** A beat's facts as one fingerprint: what it shows as information, and the sources it cites. */
+export const factsPrint = (beat, sources = []) =>
+  fingerprint({ shown: factsOf({ props: beat.props, art: beat.art }), sources: citedSources(beat, sources) });
+
+/** The film's source entries a beat's attribution names (by title, id or URL). */
+export function citedSources(beat, sources = []) {
+  const said = [beat.props?.source, beat.props?.chart?.source]
+    .filter(s => typeof s === 'string')
+    .join(' ')
+    .toLowerCase();
+  if (!said.trim()) return [];
+  const esc = s => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return sources.filter(
+    s =>
+      (s.title && said.includes(String(s.title).toLowerCase())) ||
+      (s.url && said.includes(String(s.url).toLowerCase())) ||
+      (s.id && new RegExp(`(^|[^\\w])${esc(String(s.id).toLowerCase())}($|[^\\w])`).test(said)),
+  );
 }
 
 function elementIds(beat) {
@@ -181,7 +205,7 @@ export function reviewTimeline(ctx) {
                 : { unrecorded: true },
           )
         : null,
-      facts: fingerprint(factsOf({ props: b.props, art: b.art })),
+      facts: factsPrint(b, filmRaw.sources ?? []),
     };
     prevOwn = own;
     let source = null;
@@ -275,6 +299,32 @@ export const latestRevision = (root, test = () => true) => listRevisions(root).f
 /** The newest revision a person could have watched (one with a full video). */
 export const latestWatchable = root => latestRevision(root, r => (r.videos ?? []).some(v => v.retained !== false));
 
+// Inputs that are not named by the prepared job but are read by the loader or by later edits:
+// the recording and its transcript, the music bed's pointer, generated-voice takes, project
+// sound files and the project library (which overrides palettes, treatments and sketches).
+export const TRACKED_FILES = ['source/recording.wav', 'source/words.json', 'source/recording.json', 'assets/music/bed.json'];
+export const TRACKED_DIRS = ['assets/vo/takes', 'assets/sfx', 'library'];
+
+/** Files in the tracked locations as they are now: [relative path…]. */
+export function trackedFiles(root) {
+  const out = TRACKED_FILES.filter(rel => {
+    const f = path.join(root, rel);
+    return fs.existsSync(f) && fs.statSync(f).isFile();
+  });
+  for (const dir of TRACKED_DIRS) {
+    const abs = path.join(root, dir);
+    if (!fs.existsSync(abs)) continue;
+    const walk = d =>
+      fs.readdirSync(d, { withFileTypes: true }).forEach(e => {
+        const p = path.join(d, e.name);
+        if (e.isDirectory()) walk(p);
+        else if (e.isFile()) out.push(path.relative(root, p).split(path.sep).join('/'));
+      });
+    walk(abs);
+  }
+  return out;
+}
+
 /** Every file a render of the project reads, plus what a restore needs (sources, takes, library). */
 function collectInputs(root, ctx) {
   const inputs = { ...ctx.manifest.hashes };
@@ -282,24 +332,27 @@ function collectInputs(root, ctx) {
     const file = path.join(root, rel);
     if (fs.existsSync(file) && fs.statSync(file).isFile()) inputs[rel] ??= sha256File(file);
   };
-  for (const f of ['source/recording.wav', 'source/words.json', 'source/recording.json']) add(f);
-  for (const dir of ['assets/vo/takes', 'assets/sfx', 'library']) {
-    const abs = path.join(root, dir);
-    if (!fs.existsSync(abs)) continue;
-    const walk = d =>
-      fs.readdirSync(d, { withFileTypes: true }).forEach(e => {
-        const p = path.join(d, e.name);
-        if (e.isDirectory()) walk(p);
-        else if (e.isFile()) add(path.relative(root, p).split(path.sep).join('/'));
-      });
-    walk(abs);
-  }
+  for (const rel of trackedFiles(root)) add(rel);
   for (const b of ctx.timing.beats)
     if (b.vo) {
       add(`assets/vo/${b.id}.wav`);
       add(`assets/vo/${b.id}.json`);
     }
   return Object.fromEntries(Object.entries(inputs).sort(([a], [b]) => a.localeCompare(b)));
+}
+
+/** A state's identity: its inputs, the renderer and the fonts. Same id, same film. */
+const contentIdOf = (inputs, manifest) =>
+  fingerprint({ inputs, renderer: manifest.rendererSourceHash, fonts: manifest.fontHashes });
+
+/**
+ * The working copy's identity, synchronously (no native work): prepared like a rough draft so
+ * placeholders don't stop it. A final revision is current only if its contentId equals this.
+ */
+export function workingContent(root) {
+  const ctx = prepareProjectSync(root, { draft: true, rough: true });
+  const inputs = collectInputs(root, ctx);
+  return { ctx, inputs, contentId: contentIdOf(inputs, ctx.manifest) };
 }
 
 /** What changed in the beat list between two timelines: ids added (and from what) or removed. */
@@ -334,7 +387,7 @@ export async function snapshot(root, { ctx, kind = 'snapshot', label, reason, no
   ctx ??= await prepareProject(root, { draft: true, rough: true });
   const timeline = reviewTimeline(ctx);
   const inputs = collectInputs(root, ctx);
-  const contentId = fingerprint({ inputs, renderer: ctx.manifest.rendererSourceHash, fonts: ctx.manifest.fontHashes });
+  const contentId = contentIdOf(inputs, ctx.manifest);
   return withLock(root, () => {
     const list = listRevisions(root),
       latest = list.at(-1);
@@ -423,28 +476,52 @@ export function attachVideo(root, id, { file, receipt, profile, keep = 3 }) {
   return meta;
 }
 
-function pruneVideos(root, keep) {
-  const accepted = new Set(
-    readDecisionsLight(root)
-      .filter(d => d.action === 'accept' && d.role === 'human')
-      .map(d => d.revision),
-  );
-  const withVideo = listRevisions(root).filter(r => (r.videos ?? []).some(v => v.retained));
-  const release = withVideo.slice(0, Math.max(0, withVideo.length - keep)).filter(r => !accepted.has(r.id));
-  const still = new Set(
-    listRevisions(root)
-      .filter(r => !release.includes(r))
-      .flatMap(r => (r.videos ?? []).filter(v => v.retained).map(v => v.object)),
-  );
-  for (const r of release)
-    updateRevision(root, r.id, m => {
-      for (const v of m.videos ?? [])
-        if (v.retained) {
-          if (!still.has(v.object)) fs.rmSync(path.join(root, ...v.object.split('/')), { force: true });
-          v.retained = false;
-          v.releasedAt = new Date().toISOString();
-        }
-    });
+/**
+ * Release the videos of all but the newest `keep` revisions that have one (a person's accepted
+ * revisions are always kept). A released video's object is deleted unless something else still
+ * names it: another kept video, any revision's inputs, job or receipts, or a preview.
+ */
+export function pruneVideos(root, keep = 3) {
+  return withLock(root, () => {
+    const accepted = new Set(
+      readDecisionsLight(root)
+        .filter(d => d.action === 'accept' && d.role === 'human')
+        .map(d => d.revision),
+    );
+    const revs = listRevisions(root);
+    const withVideo = revs.filter(r => (r.videos ?? []).some(v => v.retained));
+    const release = new Set(
+      withVideo
+        .slice(0, Math.max(0, withVideo.length - keep))
+        .filter(r => !accepted.has(r.id))
+        .map(r => r.id),
+    );
+    if (!release.size) return [];
+    const needed = new Set();
+    for (const r of revs) {
+      for (const o of Object.values(r.inputs ?? {})) needed.add(o);
+      if (r.job) needed.add(r.job);
+      for (const v of r.videos ?? []) {
+        if (v.receipt) needed.add(v.receipt);
+        if (v.retained && !release.has(r.id)) needed.add(v.object);
+      }
+      for (const p of r.previews ?? []) for (const side of [p.before, p.after]) if (side?.object) needed.add(side.object);
+    }
+    const freed = [];
+    for (const id of release)
+      updateRevision(root, id, m => {
+        for (const v of m.videos ?? [])
+          if (v.retained) {
+            if (!needed.has(v.object)) {
+              fs.rmSync(path.join(root, ...v.object.split('/')), { force: true });
+              freed.push(v.object);
+            }
+            v.retained = false;
+            v.releasedAt = new Date().toISOString();
+          }
+      });
+    return freed;
+  });
 }
 function readDecisionsLight(root) {
   const file = reviewPath(root, 'decisions.jsonl');

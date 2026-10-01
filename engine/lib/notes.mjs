@@ -9,8 +9,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { wordKey } from './word-timing.mjs';
-import { readEdits } from './recording.mjs';
-import { listRevisions, loadRevision, lineageOf } from './revisions.mjs';
+import { readEdits, spanFrames } from './recording.mjs';
+import { listRevisions, loadRevision, lineageOf, factsPrint } from './revisions.mjs';
 import { checkId, nextId, readJSONFile, reviewPath, withLock, writeJSONAtomic } from './store.mjs';
 
 const round = (n, d = 3) => Math.round(n * 10 ** d) / 10 ** d;
@@ -221,7 +221,16 @@ export function locate(root, note, target) {
     if (found.length === 1) return { state: 'moved', ...place(...found[0]), reason: 'found by its time in the recording' };
   }
   if (!beats.length) {
-    const own = readEdits(root).find(e => e.note === note.id && e.beats?.some(p => p.deleted && (a.beats ?? [a.beat]).includes(p.beat)));
+    // A beat removed whole for this note: by its id, or (after splits and merges renamed it)
+    // by the recording time it played.
+    const played = p => {
+      const src = p.meta?.source;
+      if (!src || !a.source) return false;
+      const fps = src.fps ?? 30,
+        [f0, f1] = spanFrames(p.meta, fps);
+      return f0 / fps < a.source.to && f1 / fps > a.source.from;
+    };
+    const own = readEdits(root).find(e => e.note === note.id && e.beats?.some(p => p.deleted && ((a.beats ?? [a.beat]).includes(p.beat) || played(p))));
     if (own) return { state: 'addressed', reason: `${a.beat} was cut for this note (${own.id})` };
     return { state: 'orphaned', reason: `${a.beat} is gone${removedBy ? ` (removed by ${removedBy})` : ''}` };
   }
@@ -398,6 +407,9 @@ export function checkKeeps(root, timeline, { overrides = [] } = {}) {
     return e?.by?.role === 'human';
   };
   for (const k of readKeeps(root).filter(k => k.active && !overrides.includes(k.id))) {
+    // Facts are re-read from the keep's own revision with today's rule, so a keep made under an
+    // older fingerprint scheme is still judged on what the beat showed.
+    const sbK = k.what === 'facts' ? readJSONFile(reviewPath(root, 'revisions', k.revision, 'storyboard.json'), null) : null;
     if (k.what === 'look') {
       if (k.baseline.look !== timeline.film.look) violations.push({ keep: k.id, what: 'look', message: 'the film look changed (palette, motion, captions, framing or format)' });
       continue;
@@ -418,7 +430,10 @@ export function checkKeeps(root, timeline, { overrides = [] } = {}) {
         const text = now.map(b => keysOf(b.vo?.text ?? '').join(' ')).join(' ');
         if (text !== base.words) say(`the words of ${id} changed`);
       } else if (k.what === 'facts' || k.what === 'picture') {
-        if (now.some(b => b.prints[k.what] !== base[k.what])) say(`the ${k.what === 'facts' ? 'figures or attribution' : 'picture'} of ${id} changed`);
+        const beatK = sbK?.beats?.find(b => b.id === id);
+        const want = k.what === 'facts' && beatK ? factsPrint(beatK, sbK.sources ?? []) : base[k.what];
+        if (now.some(b => b.prints[k.what] !== want))
+          say(`the ${k.what === 'facts' ? 'facts shown (figures, labels, units, wording or attribution)' : 'picture'} of ${id} changed`);
       } else if (k.what === 'voice') {
         if (now.some(b => b.prints.voice !== base.voice)) {
           say(`${id} no longer plays the same recording or take`);
@@ -480,6 +495,8 @@ export function addDecision(root, { action, role, by, said, reason, revision, sc
       ...(reason ? { reason: String(reason).slice(0, 1000) } : {}),
       revision,
       contentId: meta.contentId,
+      // What was on screen when the decision was made: the revision's kept encodes.
+      videos: (meta.videos ?? []).filter(v => v.retained !== false).map(v => ({ profile: v.profile, sha256: v.sha256 })),
       scope: { ...scope, ...(beats ? { beats } : {}) },
       film: timeline.film.look,
       prints,
@@ -498,10 +515,12 @@ export function addDecision(root, { action, role, by, said, reason, revision, sc
  */
 export function acceptance(root, timeline) {
   const out = {};
-  const accepts = readDecisions(root).filter(d => d.action === 'accept' && d.role === 'human');
+  const verdicts = readDecisions(root).filter(d => ['accept', 'reject'].includes(d.action) && d.role === 'human');
   for (const b of timeline.beats) {
-    const d = [...accepts].reverse().find(x => x.prints?.[b.id]);
+    const d = [...verdicts].reverse().find(x => x.action === 'accept' && x.prints?.[b.id]);
     if (!d) continue;
+    // Rejecting the same revision afterwards takes the acceptance back for the beats it covered.
+    if (verdicts.some(x => x.action === 'reject' && x.revision === d.revision && x.prints?.[b.id] && Date.parse(x.at) >= Date.parse(d.at))) continue;
     const p = d.prints[b.id];
     out[b.id] = {
       decision: d.id,
