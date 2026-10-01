@@ -394,10 +394,12 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             && arr(props, "view").len() == 4
             && !s(props, "source").trim().is_empty()
         {
+            // A slow move that drifts through the whole shot still shows its credit early: a
+            // figure on screen is never unsourced for long.
             let arrive = if arr(props, "viewFrom").is_empty() {
                 0.0
             } else {
-                (n(props, "viewAt", 0.0) + n(props, "viewDur", 1.2)) as f32
+                (n(props, "viewAt", 0.0) + n(props, "viewDur", 1.2).min(1.2)) as f32
             };
             let alpha = motion::clamp01((self.t - arrive + 0.2) / 0.35);
             let id = self.uid("scrim");

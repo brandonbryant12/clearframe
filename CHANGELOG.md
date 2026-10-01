@@ -23,6 +23,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - `cinematic-explainer`: the water system in cross-section, with labels kept inside the letterbox.
   - New set pieces: `signal`, `wires`, `citygrid`, `mast`, `harbor` and `rooftops`. `card` is a poster card (`LEAD`/`CARD`), and `title` fills the frame.
   - First beats cut in rather than fading up from black.
+- **A source line over a slow world move appears within 1.2 s**, rather than waiting for a camera that drifts through the whole shot.
 - **A treatment no longer overrides a playbook's cutting.** Its film-wide transition only replaces the default fade. Keynote's `fade` had turned the product reveal's cuts into dips to black.
 - **Genre films after round 3.**
   - The zoom journey's planet has a curved, soft terminator and a full atmosphere ring, so the closing shot is whole again; labels leave as the camera leaves their scale.
