@@ -20,7 +20,7 @@ Without `view`, coordinates are frame pixels of the normalized canvas: 1920×108
 | `line` | `x1, y1, x2, y2`, `arrow: start|end|both`, `head` |
 | `path` | `d` (SVG path data: M L H V C S Q T A Z), `arrow`, `head` |
 | `poly` | `points: [[x, y], …]`, `closed` |
-| `text` | `text, x, y` (first baseline), `size`, `font: display|semibold|bold|light|text|regular|strong|figures|serif|serif-italic|italic|mono|hand`, `anchor: start|middle|end`, `width` (wraps and fits), `leading`, `tracking` (em), `upper`, `count: {from, to, decimals, prefix, suffix, dur}` |
+| `text` | `text, x, y` (first baseline), `size`, `font: display|semibold|bold|light|text|regular|strong|figures|serif|serif-italic|italic|mono|hand`, `anchor: start|middle|end`, `width` (wraps and fits), `leading`, `tracking` (em), `upper`, `count: {from, to, decimals, prefix, suffix, dur}`, `fit` (the widest a single line may be: a long title shrinks instead of running off the frame) |
 | `icon` | `name` (see `clearframe icons`), `x, y` (centre), `size`; colour from `stroke` or `fill` |
 | `image` | `asset` or `file`, `x, y, w, h, r`, `fit: cover|contain`, `treatment` |
 | `group` | `children`, `x, y` (offset), `stagger` (seconds between children) |
