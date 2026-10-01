@@ -38,6 +38,12 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - The cold open's slug completes early, and its tagline no longer contradicts the clock.
   - The trailer's type has no glow, and its city opens on light.
 - **The concept explainer's curve is drawn as roads:** one stretch per load, its length the multiple of the wait at half full, the 90% road in the accent. The source names the queueing formula exactly (the wait in the queue).
+- **The concept explainer cuts on what changes.**
+  - The title sits over a skyline.
+  - The tap is a close-up.
+  - The roomy road and the full road are separate shots in one world, the ripple timed into its own shot.
+  - The curve has a cut-in to the 90% road.
+  - A ground under every road.
 - **The digest cuts on what changes.**
   - Its question and turn are set over the street, not blank paper.
   - The mechanism is three shots in one world, hard cuts between camera views: the late bus, the crowded stop, the catch-up.

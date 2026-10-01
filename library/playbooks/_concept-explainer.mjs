@@ -68,7 +68,9 @@ function car(x, y, fill, keys, { brake, scale = 1 } = {}) {
 }
 
 // A road seen side on: the surface under the wheels and a kerb line.
+// The ground below gives the frame its weight: a road is a place, not a line on paper.
 const road = y => [
+  still({ type: 'rect', x: -100, y: y + 48, w: 2120, h: 420, fill: { gradient: ['surface', 'bg'], angle: 90 }, opacity: 0.9 }),
   still({ type: 'rect', x: -100, y: y + 22, w: 2120, h: 26, fill: 'line', opacity: 0.55 }),
   still({ type: 'line', x1: -100, y1: y + 22, x2: 2020, y2: y + 22, stroke: 'muted', width: 3 }),
 ];
@@ -80,9 +82,23 @@ const flow = (x0, dx, n, y, dur, opts = {}) =>
   );
 
 // ------------------------------------------------------------------ 1. title over flowing traffic
+// A city behind the road: the title sits in a place, not on a blank page.
+const skyline = (base, seed = 7, scale = 1) => {
+  const out = [];
+  let x = -120;
+  while (x < 2040) {
+    seed = (seed * 9301 + 49297) % 233280;
+    const w = 110 + (seed % 5) * 30,
+      h = (160 + ((seed >> 3) % 7) * 45) * scale;
+    out.push({ type: 'rect', x, y: base - h, w: w - 10, h, r: 4, fill: 'line', opacity: 0.45, at: 0, enter: 'none' });
+    x += w;
+  }
+  return out;
+};
 const title = [
-  ...road(800),
-  ...flow(-900, 330, 9, 800, 7),
+  ...skyline(850),
+  ...road(850),
+  ...flow(-1100, 420, 8, 850, 7, { scale: 1.4 }),
   {
     type: 'text',
     text: 'FIELD NOTES',
@@ -114,9 +130,11 @@ const title = [
 ];
 
 // ------------------------------------------------------------------ 2. one tap of the brakes, twice
-const t0 = 1.8,
-  T = 9;
-const ripple = [...road(400), ...road(820)];
+const t0 = 1.1,
+  // The full road's cars belong to its own shot, on its own clock: the ripple starts there.
+  tB0 = 0.8,
+  T = 12;
+const ripple = [...road(400), ...road(1120)];
 ripple.push(
   {
     type: 'text',
@@ -134,7 +152,7 @@ ripple.push(
     type: 'text',
     text: '90% full',
     x: 170,
-    y: 690,
+    y: 990,
     size: 48,
     font: 'bold',
     fill: 'ink',
@@ -164,17 +182,20 @@ roomy.forEach((x, i) =>
   ),
 );
 // Packed: the same tap stops each car behind it in turn, a ripple running backwards.
+const packedCars = [];
 const packed = Array.from({ length: 21 }, (_, i) => -2000 + i * 185);
 const leadB = packed.filter(x => x < 1500).length - 1;
 packed.forEach((x, i) => {
   const k = leadB - i;
-  if (k < 0) return ripple.push(car(x, 820, 'muted', [{ at: 0, x: v * T, dur: T, ease: 'linear', hold: false }]));
-  const tb = r(t0 + k * 0.32),
-    d = r(v * t0 + 24 + k * 6);
-  ripple.push(
+  if (k < 0) return packedCars.push(car(x, 1120, 'muted', [{ at: 0, x: v * T, dur: T, ease: 'linear', hold: false }]));
+  // The ripple runs back a car every 0.22 s; past the frame's edge it stops spreading.
+  const kk = Math.min(k, 12),
+    tb = r(tB0 + kk * 0.22),
+    d = r(v * tB0 + 24 + kk * 6);
+  packedCars.push(
     car(
       x,
-      820,
+      1120,
       k === 0 ? 'accent' : 'muted',
       [
         { at: 0, x: d - 24, dur: tb, ease: 'linear' },
@@ -184,18 +205,20 @@ packed.forEach((x, i) => {
     ),
   );
 });
-ripple.push({
-  type: 'path',
-  d: 'M 1500 650 C 1100 620 700 620 260 650',
-  stroke: 'accent2',
-  width: 5,
-  arrow: 'end',
-  head: 18,
-  say: 'ripples',
-  enter: 'draw',
-  dur: 2.4,
-  dash: [18, 12],
-});
+const rippleArrow = [
+  {
+    type: 'path',
+    d: 'M 1500 950 C 1100 920 700 920 260 950',
+    stroke: 'accent2',
+    width: 5,
+    arrow: 'end',
+    head: 18,
+    say: 'ripples',
+    enter: 'draw',
+    dur: 2.4,
+    dash: [18, 12],
+  },
+];
 
 // ------------------------------------------------------------------ 3. the curve, as roads
 // The wait in the queue (and the cars on the road) grows as load ÷ (1 − load): one stretch of
@@ -274,33 +297,32 @@ const curve = LOADS.flatMap((l, i) => {
     },
   ];
 });
-curve.push(
-  {
-    type: 'text',
-    text: 'WAIT, IN MULTIPLES OF THE WAIT AT HALF FULL',
-    x: RX,
-    y: 140,
-    size: 30,
-    font: 'mono',
-    tracking: 0.12,
-    fill: 'muted',
-    at: 0.1,
-    enter: 'fade',
-    dur: 0.5,
-  },
-  {
-    type: 'text',
-    text: 'nine times the wait at half full',
-    x: RX,
-    y: 230 + 4 * 128 + 96,
-    size: 40,
-    font: 'bold',
-    fill: 'accent',
-    say: 'nine',
-    enter: 'rise',
-    dur: 0.45,
-  },
-);
+curve.push({
+  type: 'text',
+  text: 'WAIT, IN MULTIPLES OF THE WAIT AT HALF FULL',
+  x: RX,
+  y: 140,
+  size: 30,
+  font: 'mono',
+  tracking: 0.12,
+  fill: 'muted',
+  at: 0.1,
+  enter: 'fade',
+  dur: 0.5,
+});
+const curveNote = {
+  type: 'text',
+  text: 'nine times the wait at half full',
+  x: RX + RMAX,
+  anchor: 'end',
+  y: 230 + 4 * 128 + 96,
+  size: 40,
+  font: 'bold',
+  fill: 'accent',
+  say: 'nine',
+  enter: 'rise',
+  dur: 0.45,
+};
 
 // ------------------------------------------------------------------ 4. the jam, close up
 const jam = [
@@ -340,6 +362,7 @@ const jam = [
 
 // ------------------------------------------------------------------ 5. flowing again
 const after = [
+  ...skyline(800, 11, 0.55),
   ...road(800),
   ...flow(-1200, 360, 10, 800, 9),
   {
@@ -371,33 +394,54 @@ const after = [
   },
 ];
 
+// Hard cuts between views of one road world: the camera changes, the traffic keeps its clock.
+const cutTo = (view, elements = []) => ({ world: 'road', view, viewAt: 0, viewDur: 0.05, viewDrift: 0, elements });
+const placed = el => ({ ...el, at: 0, enter: 'none' });
+
 const beats = [
   {
     id: 'title',
     block: 'canvas',
-    vo: 'Why does a road at ninety percent full jam, when one at seventy keeps flowing?',
+    vo: 'Why does a full road jam?',
     props: { elements: title },
+    hold: 0.9,
     camera: { move: 'in', amount: 0.5 },
+  },
+  {
+    id: 'tap',
+    block: 'canvas',
+    vo: 'One driver taps the brakes.',
+    transition: 'cut',
+    props: { world: 'road', view: [1240, 200, 760, 427.5], viewDrift: 0, source: SCENARIO, elements: ripple },
+    sfx: [{ src: 'brake', at: 'word:taps', volume: 0.25 }],
+  },
+  {
+    id: 'absorb',
+    block: 'canvas',
+    vo: 'On a road seventy percent full, the gap absorbs it.',
+    props: { ...cutTo([0, -140, 1920, 1080]), source: SCENARIO },
   },
   {
     id: 'ripple',
     block: 'canvas',
-    vo: 'One driver taps the brakes. With room to spare, the gap absorbs it. Packed full, the slowdown ripples back down the line.',
-    transition: 'whip',
-    props: { source: SCENARIO, elements: ripple },
-    sfx: [
-      { src: 'brake', at: 'word:taps', volume: 0.25 },
-      { src: 'brake', at: 'word:ripples', volume: 0.35 },
-    ],
-    camera: { move: 'left', amount: 0.5 },
+    vo: 'Ninety percent full, the slowdown ripples back down the line.',
+    props: { ...cutTo([0, 580, 1920, 1080], [...packedCars, ...rippleArrow]), source: SCENARIO },
+    sfx: [{ src: 'brake', at: 'word:ripples', volume: 0.35 }],
   },
   {
     id: 'curve',
     block: 'canvas',
-    vo: 'Queueing math says the wait grows with load over spare room. At ninety percent full, it is nine times the wait at half full.',
+    vo: 'Queueing math says the wait grows with load over spare room.',
     transition: 'cut',
     props: { source: MATH, elements: curve },
-    camera: { move: 'in', amount: 0.6 },
+    camera: { move: 'in', amount: 0.4 },
+  },
+  {
+    id: 'nine',
+    block: 'canvas',
+    vo: 'At ninety percent full, it is nine times the wait at half full.',
+    transition: 'cut',
+    props: { source: MATH, view: [700, 530, 1180, 663.75], viewDrift: 0, elements: [...curve.map(placed), curveNote] },
   },
   {
     id: 'jam',
