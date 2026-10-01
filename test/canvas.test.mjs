@@ -251,3 +251,55 @@ test('palettes, kinetic stack mode and centred layouts are part of the contract'
     /unsupported prop align/,
   );
 });
+
+test('print finishes and mosaic styles validate, apply canvas-wide and reach the renderer', t => {
+  const ok = normalizeElements(
+    [
+      { type: 'rect', w: 10, h: 10, print: 'newsprint' },
+      { type: 'circle', r: 4, print: { screen: 'lines', tone: [0.1, 0.7], register: [3, 2], ink: 'accent' } },
+      { type: 'text', text: 'WORN', print: { wear: 0.4 } },
+      { type: 'rect', w: 10, h: 10, mosaic: { style: 'stitch', tile: 18 } },
+    ],
+    'elements',
+    fail,
+  );
+  assert.equal(ok[0].print, 'newsprint');
+  assert.deepEqual(ok[1].print.register, [3, 2]);
+  for (const [bad, message] of [
+    [{ type: 'rect', w: 1, h: 1, print: 'woodcut' }, /print must be one of/],
+    [{ type: 'rect', w: 1, h: 1, print: { tone: 2 } }, /tone must be 0–1/],
+    [{ type: 'rect', w: 1, h: 1, print: { register: [90, 0] } }, /register must be/],
+    [{ type: 'text', text: 'x', print: 'benday' }, /takes only wear/],
+    [{ type: 'icon', name: 'check', print: 'benday' }, /print works on/],
+    [{ type: 'rect', w: 1, h: 1, mosaic: { style: 'glass' } }, /style must be/],
+  ])
+    assert.throws(() => normalizeElements([bad], 'elements', fail), message);
+  // A canvas-level print reaches every shape that has not opted out, but never a backdrop.
+  const sb = base();
+  sb.beats.push({
+    id: 'printed',
+    block: 'canvas',
+    duration: 2,
+    props: {
+      print: 'letterpress',
+      elements: [
+        { type: 'rect', x: 0, y: 0, w: 1920, h: 1080, fill: 'bg' },
+        { type: 'circle', cx: 960, cy: 540, r: 200, fill: 'accent' },
+        { type: 'rect', x: 100, y: 100, w: 200, h: 200, fill: 'ink', print: false },
+      ],
+    },
+  });
+  const r = job(t, sb);
+  assert.deepEqual(r.errors, []);
+  assert.deepEqual(
+    r.job.beats[0].props.elements.map(e => e.print),
+    [undefined, 'letterpress', undefined],
+  );
+});
+
+test('the print library loads: era palettes, treatments, sketches and the style-relay playbook', () => {
+  for (const id of ['gallery', 'woodblock', 'newsprint', 'constructivist', 'deco', 'lcd']) assert.ok(THEMES[id], id);
+  const sb = storyboardFor('style-relay');
+  assert.equal(sb.theme, 'gallery');
+  assert.ok(sb.beats.every(b => b.props.world === 'plates'));
+});

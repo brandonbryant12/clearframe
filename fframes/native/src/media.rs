@@ -119,9 +119,20 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             ),
             _ => "translate(0 0)".to_owned(),
         };
-        let img =
-            fframes::svgr!(<image x={ix} y={iy} width={dw} height={dh} preserveAspectRatio="none" href={image} />);
-        let img = self.treat(img, s(plate, "treatment"));
+        // A printed plate: the still (or footage frame) becomes paper and a screen in the
+        // palette's ink, dots or engraved lines following its darkness.
+        let screen = super::canvas::print::Spec::parse(&Value::String(s(plate, "treatment").into()))
+            .filter(|p| p.screen != super::canvas::print::Screen::None);
+        let img = match screen {
+            Some(spec) => {
+                let (bg, ink) = (self.p.bg.clone(), self.p.ink.clone());
+                self.printed_picture(&image, (ix, iy, dw, dh), (box_.x, box_.y, box_.w, box_.h), &spec, &bg, &ink, !video)
+            }
+            None => {
+                let img = fframes::svgr!(<image x={ix} y={iy} width={dw} height={dh} preserveAspectRatio="none" href={image} />);
+                self.treat(img, s(plate, "treatment"))
+            }
+        };
         // Split plates open from the seam as the scene enters.
         let open = if side == "full" { 1.0 } else { self.m.grow(self.t, 0.9) };
         let (clip_x, clip_y, clip_w, clip_h) = match side {

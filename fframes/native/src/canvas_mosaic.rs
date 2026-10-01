@@ -149,7 +149,10 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool, occluders: &[Vec<(f32,
     let asked = f(spec, "tile", 16.0).clamp(3.0, 200.0);
     let size = asked.max((area_w * area_h / 12_000.0).sqrt() * 0.86);
     let gap = f(spec, "gap", (size * 0.16).max(1.0)).clamp(0.0, size);
-    let jitter = f(spec, "jitter", 0.5).clamp(0.0, 1.0);
+    // Pixels and cross-stitches sit on one square grid anchored at the canvas origin, like an
+    // LCD or an even-weave cloth, so neighbouring shapes share it.
+    let grid = matches!(s(spec, "style"), "pixel" | "stitch");
+    let jitter = if grid { 0.0 } else { f(spec, "jitter", 0.5).clamp(0.0, 1.0) };
     let pitch = size + gap;
     let contours = contours_of(el);
     let (bx, by, bw, bh) = bounds(el);
@@ -173,10 +176,11 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool, occluders: &[Vec<(f32,
             class,
             along: 0.0,
             cut: [(c(0), c(1)), (c(2), c(3)), (c(4), c(5)), (c(6), c(7))],
-            pale: unit(seed, k * 16 + 7) < 0.03,
+            pale: !grid && unit(seed, k * 16 + 7) < 0.03,
         });
     };
-    let outline_row = spec.get("outline").and_then(Value::as_bool).unwrap_or(true);
+    let stroked = el.get("stroke").is_some_and(|v| v != "none");
+    let outline_row = spec.get("outline").and_then(Value::as_bool).unwrap_or(!grid || stroked);
     if filled && closed {
         let round = matches!(s(el, "type"), "circle" | "ellipse");
         let flow = nonempty(s(spec, "flow"), if round { "rings" } else { "rows" });
@@ -192,7 +196,25 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool, occluders: &[Vec<(f32,
             "random" | "fly" => unit(seed, 9000 + i),
             _ => (0.75 * (x - bx) / bw.max(1.0) + 0.25 * (y - by) / bh.max(1.0)) * 0.8 + 0.2 * unit(seed, 9000 + i),
         };
-        if flow == "contour" {
+        if grid {
+            // Whole cells whose centres fall inside. With an outline, the cells on the edge
+            // take the stroke colour, the way pixel art and samplers outline a figure.
+            let at = |c: i32, r: i32| ((c as f32 + 0.5) * pitch, (r as f32 + 0.5) * pitch);
+            let ins = |c: i32, r: i32| inside(at(c, r), &contours);
+            let (c0, c1) = ((bx / pitch).floor() as i32, ((bx + bw) / pitch).ceil() as i32);
+            let (r0, r1) = ((by / pitch).floor() as i32, ((by + bh) / pitch).ceil() as i32);
+            for r in r0..r1 {
+                for c in c0..c1 {
+                    if !ins(c, r) {
+                        continue;
+                    }
+                    let (x, y) = at(c, r);
+                    let edge = outline_row && [(1, 0), (-1, 0), (0, 1), (0, -1)].iter().any(|(i, j)| !ins(c + i, r + j));
+                    let u = sweep(x, y, ((r - r0) * 4099 + (c - c0)) as u64);
+                    tile(x, y, 0.0, edge as u8, if edge { u * 0.4 } else { u }, Some(size));
+                }
+            }
+        } else if flow == "contour" {
             // Andamento: rows run parallel to the outline at whole-pitch depths, each tile
             // turned along the nearest edge; candidates are thinned to an even spacing.
             let step = pitch * 0.3;
@@ -270,7 +292,7 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool, occluders: &[Vec<(f32,
                 }
             }
         }
-        if outline_row {
+        if outline_row && !grid {
             // The outline row sits half a tile inside the contour, turned along it.
             for (c, is_closed) in &contours {
                 if *is_closed {
@@ -287,6 +309,36 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool, occluders: &[Vec<(f32,
                 }
             }
         }
+    } else if grid {
+        // A stroke rasterized onto the grid, one cell thick: the cells the line passes
+        // through, in order, less any corner cell where the line could step diagonally
+        // (pixel-perfect, as a pixel artist draws a line).
+        let mut seen = std::collections::HashSet::new();
+        for (c, is_closed) in &contours {
+            let mut cells: Vec<((i32, i32), f32)> = vec![];
+            along_line(c, *is_closed, pitch * 0.4, |(x, y), _, t| {
+                let cell = ((x / pitch).floor() as i32, (y / pitch).floor() as i32);
+                if cells.last().is_none_or(|(last, _)| *last != cell) {
+                    cells.push((cell, t));
+                }
+            });
+            let mut thin: Vec<((i32, i32), f32)> = vec![];
+            for (i, &(cell, t)) in cells.iter().enumerate() {
+                let (Some(&(prev, _)), Some(&(next, _))) = (thin.last(), cells.get(i + 1)) else {
+                    thin.push((cell, t));
+                    continue;
+                };
+                let diagonal = (prev.0 - next.0).abs() == 1 && (prev.1 - next.1).abs() == 1;
+                if !diagonal {
+                    thin.push((cell, t));
+                }
+            }
+            for (cell, t) in thin {
+                if seen.insert(cell) {
+                    tile((cell.0 as f32 + 0.5) * pitch, (cell.1 as f32 + 0.5) * pitch, 0.0, 1, t, Some(size));
+                }
+            }
+        }
     } else {
         // A beaded line: tiles along every contour, built in drawing order.
         for (c, is_closed) in &contours {
@@ -297,7 +349,8 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool, occluders: &[Vec<(f32,
     // grout line), and the nearest `halo` rows bend around their outlines.
     if !occluders.is_empty() && filled {
         let occ: Vec<(Vec<(f32, f32)>, bool)> = occluders.iter().map(|c| (c.clone(), true)).collect();
-        let halo = f(spec, "halo", 2.0).clamp(0.0, 6.0);
+        // A grid keeps its cells in place: a shape over pixels or stitches only removes them.
+        let halo = if grid { 0.0 } else { f(spec, "halo", 2.0).clamp(0.0, 6.0) };
         let mut kept: Vec<Tile> = vec![];
         let mut rest: Vec<Tile> = vec![];
         for mut t in tiles.drain(..) {
@@ -306,6 +359,11 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool, occluders: &[Vec<(f32,
                 continue;
             }
             if occ.iter().any(|o| inside((t.x, t.y), std::slice::from_ref(o))) {
+                continue;
+            }
+            if grid {
+                // Cells abut: the shape over the grid takes exactly the cells it covers.
+                rest.push(t);
                 continue;
             }
             let (d, dir, angle) = nearest((t.x, t.y), &occ);
@@ -435,8 +493,16 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             .get("grout")
             .map(|g| self.paint(Some(g), "bg", &mut vec![]))
             .unwrap_or_else(|| crate::design::mix(&self.p.bg, "#000000", if self.p.dark { 0.72 } else { 0.5 }));
-        let depth = f(spec, "shade", 0.14).clamp(0.0, 0.6);
-        let shine = f(spec, "shine", 0.35).clamp(0.0, 1.0);
+        let style = s(spec, "style");
+        let (stitch, grid) = (style == "stitch", matches!(style, "pixel" | "stitch"));
+        // Pixels are flat and even; stitches have sheen on their top legs.
+        let depth = f(spec, "shade", if style == "pixel" { 0.04 } else { 0.14 }).clamp(0.0, 0.6);
+        let shine = f(spec, "shine", match style {
+            "pixel" => 0.0,
+            "stitch" => 0.5,
+            _ => 0.35,
+        })
+        .clamp(0.0, 1.0);
         // Glints: each tile catches the light briefly on its own slow rhythm, so a held mosaic
         // shimmers. A pure function of time and the tile's seed.
         let glint = f(spec, "glint", 0.0).clamp(0.0, 1.0);
@@ -524,6 +590,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let flipping = fronts.iter().any(|fr| now > fr.at && now < fr.at + fr.dur);
         let passed = fronts.iter().filter(|fr| now >= fr.at + fr.dur).count();
         const SQUARE: [(f32, f32); 4] = [(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5)];
+        // One leg of a cross-stitch: a rounded length of thread, and the sheen along it.
+        const LEG: [(f32, f32); 8] =
+            [(-0.5, -0.25), (-0.42, -0.5), (0.42, -0.5), (0.5, -0.25), (0.5, 0.25), (0.42, 0.5), (-0.42, 0.5), (-0.5, 0.25)];
+        const SHEEN: [(f32, f32); 4] = [(-0.36, -0.3), (0.36, -0.3), (0.36, -0.06), (-0.36, -0.06)];
         // Local-space polygon of a tile placed at (x, y), size (w, h), turned by `a`.
         let shape =
             |x: f32, y: f32, w: f32, h: f32, a: f32, pts: &mut dyn Iterator<Item = (f32, f32)>, out: &mut String| {
@@ -588,37 +658,52 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let settled = assemble >= 1.0 && scatter <= 0.0 && (filled || draw >= 1.0) && !flipping;
         let key = {
             let mut h = std::collections::hash_map::DefaultHasher::new();
-            (lkey, &body, &line, &grout, &stops, depth.to_bits(), shine.to_bits(), passed).hash(&mut h);
+            (lkey, &body, &line, &grout, &stops, depth.to_bits(), shine.to_bits(), passed, style).hash(&mut h);
             h.finish()
         };
         let cached = if settled { statics().lock().unwrap().get(&key).cloned() } else { None };
         let parts: Parts = cached.unwrap_or_else(|| {
-            let mut buckets: HashMap<(String, i8, bool), String> = HashMap::new();
+            // Keyed by (layer, colour, shade, pale): a stitch's under-legs (layer 0) all go
+            // down before its over-legs (layer 1).
+            let mut buckets: HashMap<(u8, String, i8, bool), String> = HashMap::new();
             let (mut lights, mut bed) = (String::new(), String::new());
             for (i, t) in layout.tiles.iter().enumerate() {
                 let Some((x, y, a, w, h)) = place(i, t) else { continue };
                 // The grout bed exists only where tiles are, so nothing shows before they arrive;
-                // a settled shape lays its bed as one outline instead.
-                if scatter <= 0.0 && !(settled && !layout.outline.is_empty()) {
+                // a settled shape lays its bed as one outline instead. Pixels and stitches have
+                // no bed: the screen or the cloth shows between them.
+                if scatter <= 0.0 && !grid && !(settled && !layout.outline.is_empty()) {
                     quad(x, y, w + layout.gap * 1.3, h + layout.gap * 1.3, a, &t.cut, &mut bed);
                 }
                 let level = (t.shade * 2.0).round().clamp(-2.0, 2.0) as i8;
                 let (color, squash) = face(i, t);
-                quad(x, y, w * squash, h, a, &t.cut, buckets.entry((color, level, t.pale)).or_default());
+                if stitch {
+                    // Two legs corner to corner across the cell, the second crossing over.
+                    let (l, th) = (w.max(h) * 1.24 * squash, w.min(h) * 0.36);
+                    let under = buckets.entry((0, color.clone(), level - 3, t.pale)).or_default();
+                    shape(x, y, l, th, a + PI / 4.0, &mut LEG.iter().copied(), under);
+                    let over = buckets.entry((1, color, level, t.pale)).or_default();
+                    shape(x, y, l, th, a - PI / 4.0, &mut LEG.iter().copied(), over);
+                    if shine > 0.0 && t.w >= 6.0 {
+                        shape(x, y, l, th, a - PI / 4.0, &mut SHEEN.iter().copied(), &mut lights);
+                    }
+                    continue;
+                }
+                quad(x, y, w * squash, h, a, &t.cut, buckets.entry((0, color, level, t.pale)).or_default());
                 // Small tiles read without a bevel; it doubles their cost.
                 if shine > 0.0 && t.w >= 10.0 {
                     shape(x, y, w, h, a, &mut LIGHT.iter().copied(), &mut lights);
                 }
             }
             let mut parts = vec![];
-            if settled && !layout.outline.is_empty() {
+            if settled && !grid && !layout.outline.is_empty() {
                 parts.push((grout.clone(), 1.0, layout.outline.clone()));
             } else if !bed.is_empty() {
                 parts.push((grout.clone(), 1.0, bed));
             }
             let mut keys: Vec<_> = buckets.into_iter().collect();
             keys.sort_by(|a, b| a.0.cmp(&b.0));
-            for ((base, level, pale), d) in keys {
+            for ((_, base, level, pale), d) in keys {
                 let tone = level as f32 / 2.0 * depth;
                 let color = if tone >= 0.0 {
                     crate::design::mix(&base, "#ffffff", tone)
@@ -629,7 +714,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 parts.push((color, 1.0, d));
             }
             if !lights.is_empty() {
-                parts.push(("#ffffff".to_owned(), shine * 0.45, lights));
+                parts.push(("#ffffff".to_owned(), shine * if stitch { 0.3 } else { 0.45 }, lights));
             }
             let parts = Arc::new(parts);
             if settled {

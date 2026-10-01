@@ -36,6 +36,7 @@ export function applyTreatment(sb, id) {
     // A film look draws clean lines: it strips the pencil strokes an arc was scaffolded with.
     if (b.block === 'canvas' && t.beats.rough === false) delete p.rough;
     if (b.block === 'canvas' && t.beats.mosaic && p.mosaic == null) p.mosaic = t.beats.mosaic;
+    if (b.block === 'canvas' && t.beats.print && p.print == null) p.print = t.beats.print;
     if (b.block === 'canvas')
       for (const el of p.elements ?? []) {
         if (t.beats.font && el.type === 'text' && !el.font && (el.size ?? 48) < 90) el.font = t.beats.font;

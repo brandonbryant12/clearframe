@@ -65,12 +65,18 @@ Sixteen palettes, each with `bg`, `surface`, `ink`, `muted`, `accent`, `accent2`
 | `sketchbook` | Drawing paper with graphite, red and blue pencil. Hand-drawn explainers with rough strokes and the paper backdrop. |
 | `mosaic` | Ultramarine ground with ivory, gold, coral and turquoise tesserae. Films laid in tiles, with the mosaic backdrop. |
 | `neon` | Near-black with lime and mint. Tech brands, launches and sizzle reels: wireframe solids, starfields and glow. |
+| `gallery` | The museum catalogue: cream stock, midnight ink and an oxblood rule. Plates, captions, histories and collections. |
+| `woodblock` | Ukiyo-e: Prussian blue and beni red on washi. Water, weather and journeys; bokashi gradients and engraved lines. |
+| `newsprint` | A 1938 comic cover: process red, blue and yellow on yellowed newsprint with black key lines. Pairs with `print: newsprint`. |
+| `constructivist` | Two inks and cream, ochre for a third voice. Manifestos, campaigns and hard numbers. |
+| `deco` | A streamline poster at night: navy, gold, cream and a teal sea. Premieres, launches and cities. |
+| `lcd` | A 1989 handheld: four shades of green. Games and retro tech; pairs with mosaic `style: pixel`. |
 
 **Tone** colour-blocks one scene: `"tone": "accent" | "accent2" | "invert" | "surface"` fills the frame and re-derives readable ink and accent colours for it (a test checks every palette × tone). Graphic transitions keep the film's own accent on both sides of the cut.
 
 Every preset keeps `ink`, `muted` and `accent` at ≥ 4.5:1 against `bg`, and `accent2` at ≥ 3:1 (a renderer test enforces this). Override any token with six-digit hex under `theme`; `check` warns when an override drops below those ratios. `accent2` colors a genuinely second series and donut segments; `positive`/`negative` appear only when a block states direction (`delta.better`). Color never carries meaning alone.
 
-`looks DIR --beat ID --draft` renders the exact same frame in every palette (left to right, top to bottom; the sidecar records the order). Real and generated images keep their own colors unless a `plate` or canvas `image` sets a `treatment`: `duotone` maps luminance from the palette's darkest colour to its accent (dark palettes) or ink to paper (light), `tint` multiplies by the accent, `mono` removes colour, `blur`/`soft` defocus.
+`looks DIR --beat ID --draft` renders the exact same frame in every palette (left to right, top to bottom; the sidecar records the order). Real and generated images keep their own colors unless a `plate` or canvas `image` sets a `treatment`: `duotone` maps luminance from the palette's darkest colour to its accent (dark palettes) or ink to paper (light), `tint` multiplies by the accent, `mono` removes colour, `blur`/`soft` defocus, and `halftone`/`engraving` print it as a dot or line screen in the palette's ink (docs/canvas.md, Print).
 
 **Texture:** film-level `texture` adds a vignette under the scenes and fine grain over everything: `"film"`, `"grain"`, `"vignette"` or `{grain: 0–1, vignette: 0–1, animate}`. Static grain is nearly free to encode; `animate` changes it eight times a second, which looks filmic but costs bitrate.
 

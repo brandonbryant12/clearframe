@@ -1,0 +1,36 @@
+{
+  "order": 30,
+  "title": "Pulp comic",
+  "when": "Origin stories, action and stakes, myth-busting, anything that wants the punch of a 1938 newsstand cover",
+  "film": {
+    "theme": "newsprint",
+    "backdrop": "paper",
+    "texture": {
+      "grain": 0.3,
+      "vignette": 0.3
+    },
+    "motion": {
+      "preset": "snappy",
+      "intensity": 0.85
+    },
+    "textMotion": "words",
+    "transition": "cut",
+    "sfx": "punchy",
+    "voice": {
+      "style": "brisk radio-serial announcer, warm and urgent"
+    }
+  },
+  "beats": {
+    "print": "newsprint",
+    "rough": false,
+    "font": "poster",
+    "graphic": "panel"
+  },
+  "rules": [
+    "Every shape is printed: flat process colour a few pixels off register under a black key line (stroke ink, width 5–7). The canvas print default does this; set print: false on anything that must stay clean, such as a chart.",
+    "Tints are Ben-Day dots, not opacity: a pale sky is paper with accent2 dots (print {screen: dots, ink: accent2, tone: 0.25}); a shadow is a darker dot ramp.",
+    "One action per panel. Draw the force (benday-burst, speed lines, an impact star) and cut to the next panel on the hit; panel transitions between chapters.",
+    "Type is condensed caps in boxes, the way covers announced a feature: a caption box with an ink outline, never floating body text.",
+    "Keep numbers native and sourced; the comic look is for the frame, not the evidence."
+  ]
+}

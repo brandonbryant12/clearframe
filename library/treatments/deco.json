@@ -1,0 +1,38 @@
+{
+  "order": 33,
+  "title": "Streamline deco",
+  "when": "Premieres, launches, cities, travel and anything that should feel like an invitation",
+  "film": {
+    "theme": "deco",
+    "backdrop": "glow",
+    "texture": {
+      "grain": 0.18,
+      "vignette": 0.45
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.6
+    },
+    "textMotion": "letters",
+    "transition": "fade",
+    "sfx": "subtle",
+    "lens": {
+      "bloom": 0.25
+    },
+    "voice": {
+      "style": "smooth, assured, a touch of glamour"
+    }
+  },
+  "beats": {
+    "rough": false,
+    "emphasisStyle": "serif",
+    "graphic": "iris"
+  },
+  "rules": [
+    "Every surface is a gradient, never an outline: airbrushed skies, lit faces, shadowed sides. Strokes only as thin gold rules.",
+    "Symmetry and rays: a sunburst (the sunburst sketch) behind the subject, stepped towers either side, the subject on the axis.",
+    "Gold is light: the accent takes shine (a sweep across the title) and glow on windows and spires.",
+    "Type is wide-tracked caps (tracking 0.2–0.4) in the serif display face, centred.",
+    "Move slowly and symmetrically: push in on the axis, rise up a tower, iris at the chapter turn."
+  ]
+}

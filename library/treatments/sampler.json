@@ -1,0 +1,39 @@
+{
+  "order": 35,
+  "title": "Sampler",
+  "when": "Home, craft, care, heritage and patience: a lesson or a history stitched one cross at a time",
+  "film": {
+    "theme": "gallery",
+    "backdrop": "paper",
+    "texture": {
+      "grain": 0.3,
+      "vignette": 0.3
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.4
+    },
+    "textMotion": "words",
+    "transition": "cut",
+    "sfx": "subtle",
+    "voice": {
+      "style": "gentle, warm and patient, like reading a letter aloud"
+    }
+  },
+  "beats": {
+    "mosaic": {
+      "style": "stitch",
+      "tile": 18
+    },
+    "rough": false,
+    "emphasisStyle": "serif",
+    "graphic": "fade"
+  },
+  "rules": [
+    "Shapes are cross-stitched on linen: the canvas mosaic default lays each in Xs on one even grid; stroke colour outlines the motif.",
+    "Stitch things in: enter assemble with build sweep, row by row, the way a sampler is worked.",
+    "Frame every scene with a stitched border (art: {sketch: \"sampler-border\"} under the block) and keep motifs simple: a house, a heart, a tree, an alphabet row.",
+    "Text stays native type in the serif faces, set like an inscription under the motif; never stitch words people must read.",
+    "Two or three thread colours per scene: accent (madder red), accent2 (indigo) and ink."
+  ]
+}

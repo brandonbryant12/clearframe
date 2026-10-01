@@ -1,0 +1,14 @@
+{
+  "order": 30,
+  "notes": "The museum catalogue: cream stock, midnight ink and an oxblood rule. Plates, captions, histories and anything shown as a collection.",
+  "colors": {
+    "bg": "#f3f0e8",
+    "surface": "#e6e0d2",
+    "ink": "#1c2236",
+    "muted": "#66645f",
+    "accent": "#b5242c",
+    "accent2": "#2f5d8a",
+    "positive": "#3c7a4a",
+    "negative": "#b5242c"
+  }
+}

@@ -48,7 +48,7 @@ Every item is validated when the engine starts, so a bad file fails immediately 
 - `beats` holds defaults applied only where the author has not set them. `rough: false` strips pencil strokes that an arc was scaffolded with; the film looks use it. Every key is optional:
   - `graphic`: the transition used at chapter starts;
   - `emphasisStyle`: for title, statement and endcard;
-  - `rough`, `mosaic`, `font` and `fps`: for canvas;
+  - `rough`, `mosaic`, `print`, `font` and `fps`: for canvas;
   - `kinetic`: the kinetic mode.
 - `rules` end up in the project's `DIRECTION.md`.
 - `playbook` (optional) names the arc this look is made for. `new --treatment ID` and `ingest --treatment ID` start from it when no `--playbook` is given; for example, `cinematic` starts from `cinematic-explainer`.

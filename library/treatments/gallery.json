@@ -1,0 +1,36 @@
+{
+  "order": 36,
+  "title": "Gallery of plates",
+  "when": "Histories, comparisons across eras or styles, collections and catalogues: one subject seen many ways",
+  "playbook": "style-relay",
+  "film": {
+    "theme": "gallery",
+    "backdrop": "paper",
+    "texture": {
+      "grain": 0.2,
+      "vignette": 0.25
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.55
+    },
+    "textMotion": "words",
+    "transition": "cut",
+    "sfx": "subtle",
+    "voice": {
+      "style": "curious museum guide, warm and precise"
+    }
+  },
+  "beats": {
+    "rough": false,
+    "emphasisStyle": "serif",
+    "graphic": "cut"
+  },
+  "rules": [
+    "The film is a strip of framed plates on cream stock, travelled by one camera: open on the whole sheet, move plate to plate, close on the sheet again (the style-relay playbook).",
+    "Each plate is a different process: print presets (benday, engraving, newsprint, letterpress, halftone), mosaic styles (tesserae, pixel, stitch), material, rough. The subject stays the same so the change of process is the story.",
+    "Cross every border on a downbeat: plates are equal width, beats equal length, so the music's bar is the plate.",
+    "Label plates like a catalogue: number in accent serif italic, name in tracked caps, one italic line of date or place.",
+    "Between plates there is only paper and a thin rule; nothing floats in the gutters."
+  ]
+}

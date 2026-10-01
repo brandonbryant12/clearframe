@@ -59,7 +59,7 @@ pub(crate) fn validate_layers(
     if let Some(plate) = plate {
         if s(plate, "file").is_empty()
             || !["", "full", "left", "right", "top", "bottom"].contains(&s(plate, "side"))
-            || !["", "none", "mono", "duotone", "tint", "blur", "soft"].contains(&s(plate, "treatment"))
+            || !["", "none", "mono", "duotone", "tint", "blur", "soft", "halftone", "engraving"].contains(&s(plate, "treatment"))
             || !["", "none", "in", "out", "left", "right", "up", "down"].contains(&s(plate, "drift"))
             || !(0.0..=1.0).contains(&n(plate, "scrim", 0.0))
         {

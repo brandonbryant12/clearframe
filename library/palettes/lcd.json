@@ -1,0 +1,14 @@
+{
+  "order": 35,
+  "notes": "A 1989 handheld: four shades of green on a reflective screen. Games, retro tech, step-by-step logic; pair with mosaic style pixel and stepped motion.",
+  "colors": {
+    "bg": "#9bbc0f",
+    "surface": "#8bac0f",
+    "ink": "#0f380f",
+    "muted": "#1f4a1f",
+    "accent": "#1a451a",
+    "accent2": "#306230",
+    "positive": "#306230",
+    "negative": "#0f380f"
+  }
+}

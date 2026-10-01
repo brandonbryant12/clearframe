@@ -1,0 +1,14 @@
+{
+  "order": 32,
+  "notes": "A 1938 comic cover: process red, blue and yellow over yellowed newsprint, brush-black key lines. Action, origin stories, myth-busting; pair with print newsprint.",
+  "colors": {
+    "bg": "#efe3bf",
+    "surface": "#f5cf3a",
+    "ink": "#141210",
+    "muted": "#615234",
+    "accent": "#b8261d",
+    "accent2": "#2e64c6",
+    "positive": "#2a7034",
+    "negative": "#b8261d"
+  }
+}

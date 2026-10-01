@@ -2,7 +2,16 @@
 // runs the checks every block shares, then the block's validator here. A validator may fill
 // defaults (decimals, scales, orientation) so the renderer never guesses.
 import { ICONS } from './icons.mjs';
-import { normalizeElements, roughSpec, applyRough, mosaicSpec, applyMosaic, depthKeys } from './canvas.mjs';
+import {
+  normalizeElements,
+  roughSpec,
+  applyRough,
+  mosaicSpec,
+  applyMosaic,
+  printSpec,
+  applyPrint,
+  depthKeys,
+} from './canvas.mjs';
 import { plateElements } from '../engine/lib/plates.mjs';
 import { chartSpec, chartElements } from './data-canvas.mjs';
 import { sketch } from './sketches.mjs';
@@ -493,5 +502,7 @@ export const VALIDATORS = {
     delete p.rough;
     if (p.mosaic != null && p.mosaic !== false) applyMosaic(p.elements, mosaicSpec(p.mosaic, 'mosaic', h.fail));
     delete p.mosaic;
+    applyPrint(p.elements, p.print != null && p.print !== false ? printSpec(p.print, 'print', h.fail) : null);
+    delete p.print;
   },
 };
