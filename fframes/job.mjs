@@ -256,9 +256,11 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
       start: Math.max(0, w.t0 - startFrame / timing.fps),
       end: Math.min(w.t1 - startFrame / timing.fps, frames / timing.fps),
     })),
+    // A caption belongs to the beat it starts in; at a shared boundary (continuous takes),
+    // rounding must not drop the next beat's first caption into this one with no length.
     captions: captions
-      .filter(c => c.start >= b.start && c.start < b.end)
-      .map(c => ({ start: c.start - b.start, end: Math.min(c.end, b.end) - b.start, text: c.text })),
+      .filter(c => c.start >= b.start - frame / 2 && c.start < b.end - frame / 2)
+      .map(c => ({ start: Math.max(0, c.start - b.start), end: Math.min(c.end, b.end) - b.start, text: c.text })),
   };
 }
 

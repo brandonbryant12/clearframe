@@ -29,12 +29,36 @@ const FILMS = [
 const args = process.argv.slice(2);
 const only = args.includes('--only') ? args[args.indexOf('--only') + 1].split(',') : null;
 const strips = !args.includes('--no-strips');
+// --report-only rebuilds REPORT.md from the existing renders (after re-running a few films).
+const reportOnly = args.includes('--report-only');
+const latestStrip = dir => {
+  const b = path.join(dir, 'build');
+  if (!fs.existsSync(b)) return null;
+  const runs = fs
+    .readdirSync(b)
+    .filter(d => d.startsWith('review-') && fs.existsSync(path.join(b, d, 'strip.png')))
+    .map(d => path.join(b, d, 'strip.png'))
+    .sort((x, y) => fs.statSync(y).mtimeMs - fs.statSync(x).mtimeMs);
+  return runs[0] ?? null;
+};
 const cli = (...a) => spawnSync('node', [path.join(ROOT, 'engine/cli.mjs'), ...a], { cwd: ROOT, encoding: 'utf8' });
 
 fs.mkdirSync(OUT, { recursive: true });
 const rows = [];
-for (const f of FILMS.filter(f => !only || only.includes(f.name))) {
+for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name))) {
   const dir = path.join(OUT, f.name);
+  if (reportOnly) {
+    const crit = cli('critique', dir).stdout;
+    const sheet = path.join(dir, 'sheet.png');
+    rows.push({
+      ...f,
+      score: crit.match(/cinema (\d+)\/100/)?.[1],
+      sheet: fs.existsSync(sheet) ? sheet : null,
+      strip: latestStrip(dir),
+      findings: crit.split('\n').slice(1, 6),
+    });
+    continue;
+  }
   fs.rmSync(dir, { recursive: true, force: true });
   const made = cli('new', dir, ...f.args);
   if (made.status) {
