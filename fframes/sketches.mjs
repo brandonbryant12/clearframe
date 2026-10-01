@@ -11,10 +11,11 @@ export const sketches = () => items('sketches');
 export const sketchByName = name => item('sketches', name);
 
 /** Canvas props (or an `art` layer for ambient sketches) for a frame preset. */
-export function sketch(name, preset = 'landscape') {
+/** A sketch's props for a frame preset; `seed` varies its layout (buildings, ridges, swell). */
+export function sketch(name, preset = 'landscape', { seed } = {}) {
   const s = sketchByName(name);
   if (!s) throw new Error(`Unknown sketch ${name}. Run clearframe sketch to list them.`);
   const [w, h] = frames[preset] ?? frames.landscape;
-  return s.build(w, h);
+  return s.build(w, h, { seed });
 }
 export const SKETCH_FRAMES = frames;

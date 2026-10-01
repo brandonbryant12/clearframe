@@ -21,6 +21,10 @@ Read `docs/cinema.md` first: it holds the grammar this skill applies. `critique 
 
 `new DIR --treatment ID` starts from the treatment's playbook. So does `ingest DIR --markdown report.md --treatment cinematic`.
 
+## 1b. Start somewhere different
+
+Every film directed from the same defaults looks alike. `clearframe muse --seed N` (or `new DIR --seed random`) draws a creative brief: a twist, a motif, camera and cut signatures, a palette and grade, set pieces and a music feel. Every option is one that works. Use it when the user wants something unique, or when a series needs each episode to feel distinct. Record the seed so the draw can be reproduced.
+
 ## 2. Write the shot list before the blocks
 
 In `DIRECTION.md`, one line per beat: **scale** (wide, medium, close or insert), **camera** (what moves and why), and **the cut** into the next shot (world move, match cut by shared id, flash, whip, or a cut between two moving cameras). Never three identical scales in a row.

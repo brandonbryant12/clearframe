@@ -9,8 +9,8 @@ export default {
   summary:
     'One person in a crowd: rows of silhouettes in depth, one lit in the accent, focus racking from the front row to them.',
   use: 'Human stories and their scale: "one of millions", a patient, a worker, a voter. Cue the rack to the word that singles them out. The highlight is one person, not a statistic.',
-  build(w, h) {
-    const rand = rng(5),
+  build(w, h, { seed } = {}) {
+    const rand = rng(seed ?? 5),
       horizon = h * 0.36,
       cx = w / 2,
       floorY = z => horizon + (h * 1.02 - horizon) / (1 + z);

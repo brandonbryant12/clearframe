@@ -14,7 +14,8 @@ import * as native from '../fframes/production.mjs';
 
 const HELP = `ClearFrame — FFFrames motion graphics
 
-  new <dir> [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical]
+  new <dir> [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical] [--seed N|random]
+  muse [--seed N] [--light] [--json]  a seeded creative brief: twist, motif, camera, cuts, look, set pieces, music
   treatments [--json]                 art direction presets: look, motion, voice, sound and rules
   reference <video> [--out dir]       cut rhythm, keyframe sheet, palette and motion of a reference film
   ingest <dir> --markdown report.md [--treatment noir]   evidence brief (figures, sources, tensions, tables) + storyboard + DIRECTION.md
@@ -59,6 +60,7 @@ Paid generation needs GEMINI_API_KEY; rendering and word-file imports are free.
 async function main() {
   const [cmd, ...args] = process.argv.slice(2);
   const strings = [
+    'seed',
     'library',
     'title',
     'theme',
@@ -100,6 +102,7 @@ async function main() {
     'whisper',
     'no-render',
     'dry-run',
+    'light',
   ];
   const { values: o, positionals } = parseArgs({
     args,
@@ -136,6 +139,16 @@ async function main() {
     noAudio: o['no-audio'],
   };
   if (opts.budget != null && opts.budget < 0) throw new Error('budget must be nonnegative');
+  // `--seed random` draws a seed (and reports it); any integer reproduces a draw.
+  if (o.seed != null) {
+    opts.seed = o.seed === 'random' ? Math.floor(Math.random() * 100000) : Number(o.seed);
+    if (!Number.isInteger(opts.seed)) throw new Error('--seed must be an integer or "random"');
+  }
+  if (cmd === 'muse') {
+    const { muse, museMarkdown } = await import('../fframes/muse.mjs');
+    const m = muse(opts.seed ?? Math.floor(Math.random() * 100000), { dark: !o.light });
+    return console.log(o.json ? JSON.stringify(m, null, 2) : museMarkdown(m));
+  }
   if (cmd === 'new') {
     const dir = path.resolve(positionals[0] ?? 'my-video');
     const sb = scaffold(dir, opts);

@@ -81,3 +81,18 @@ test('a project library adds and overrides items by id, JSON only', () => {
   assert.equal(palettes().acme, undefined, 'clearing the project drops its items');
   assert.notEqual(palette('noir').bg, '#000000');
 });
+
+test('a creative seed is reproducible, varies the look and the set pieces, and briefs the director', async t => {
+  const { muse } = await import('../fframes/muse.mjs');
+  assert.deepEqual(muse(42), muse(42));
+  const draws = new Set([1, 2, 3, 4, 5, 6, 7, 8].map(s => JSON.stringify([muse(s).palette, muse(s).twist])));
+  assert.ok(draws.size >= 6, 'different seeds start somewhere different');
+  const a = sketch('skyline', 'landscape', { seed: 1 }).elements,
+    b = sketch('skyline', 'landscape', { seed: 2 }).elements;
+  assert.notDeepEqual(a.map(e => e.h), b.map(e => e.h), 'seeded sketches vary their layout');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-seed-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const sb = scaffold(path.join(dir, 'film'), { playbook: 'trailer', seed: 42 });
+  assert.equal(sb.theme, muse(42).palette);
+  assert.match(fs.readFileSync(path.join(dir, 'film', 'DIRECTION.md'), 'utf8'), /Creative seed 42/);
+});

@@ -8,8 +8,8 @@ export default {
   summary:
     'Open water at night: swell lines rolling at three depths, a low moon, and its reflection shimmering in broken dashes.',
   use: 'Crossings, trade, climate, distance, waiting: "somewhere out at sea…". Recolour the moon (accent2) for a sunset.',
-  build(w, h) {
-    const rand = rng(11),
+  build(w, h, { seed } = {}) {
+    const rand = rng(seed ?? 11),
       horizon = round(h * 0.46),
       mx = round(w * 0.62);
     const swell = (y, amp, z, width, opacity, period) => {

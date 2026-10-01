@@ -8,8 +8,8 @@ export default {
   order: 12,
   summary: 'Dawn over three ridges that fade with distance, mist between them, the sun rising, and a slow crane up.',
   use: 'The establishing shot: a beginning, a new era, "every morning…", the calm before a turn. Works with the warm or teal-orange grade and bloom.',
-  build(w, h) {
-    const rand = rng(3);
+  build(w, h, { seed } = {}) {
+    const rand = rng(seed ?? 3);
     const ridges = {};
     const ridge = (base, rough, seed) => (ridges[seed] ??= ridgePath(base, rough, seed));
     const ridgePath = (base, rough, seed) => {

@@ -9,8 +9,8 @@ export default {
   summary:
     'A night city in three planes (haze, lit midground, foreground towers) with a slow sideways truck that shows the parallax.',
   use: 'Establishing a place, "a city of millions", a trailer montage beat, or behind a lower-third title. Retime or reverse the truck to the story.',
-  build(w, h) {
-    const rand = rng(7),
+  build(w, h, { seed } = {}) {
+    const rand = rng(seed ?? 7),
       ground = round(h * 0.8),
       span = [-0.25 * w, 1.25 * w];
     const row = (z, min, max, fill, opacity, gap = 0, below = 0.3) => {

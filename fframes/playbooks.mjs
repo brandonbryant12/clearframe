@@ -5,13 +5,14 @@ import { writeJSON, ffmpeg } from '../engine/lib/util.mjs';
 import { wireframePNG } from './wireframe.mjs';
 import { sketches, sketch } from './sketches.mjs';
 import { items, vendor } from './library.mjs';
+import { muse, museMarkdown } from './muse.mjs';
 import { applyTreatment, directionTemplate, treatmentById } from './treatments.mjs';
 
 // Playbooks: starting story arcs, one JSON file each in library/playbooks (plus any in a
 // project's library/). A beat that names a `sketch` is redrawn for the requested frame.
 export const playbooks = () => items('playbooks');
 
-export function storyboardFor(id, { title, theme, vertical } = {}) {
+export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
   const book = playbooks().find(p => p.id === id);
   if (!book) throw new Error(`Unknown playbook ${id}`);
   const sb = {
@@ -50,7 +51,7 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
   for (const b of sb.beats) {
     // A beat's art layer can name a sketch too: `art: {sketch: "ambient"}` (its own layer).
     if (b.art?.sketch) {
-      const drawn = sketch(b.art.sketch, vertical || book.format === 'vertical' ? 'vertical' : 'landscape');
+      const drawn = sketch(b.art.sketch, vertical || book.format === 'vertical' ? 'vertical' : 'landscape', { seed });
       b.art = { [drawn.layer ?? 'under']: drawn.elements };
     }
     const name = b.props?.sketch;
@@ -60,7 +61,10 @@ export function storyboardFor(id, { title, theme, vertical } = {}) {
       continue;
     }
     const tallFrame = vertical || book.format === 'vertical';
-    const drawn = sketch(name, tallFrame ? 'vertical' : 'landscape');
+    // Each sketch beat gets its own seeded layout, so two films never share a skyline.
+    const drawn = sketch(name, tallFrame ? 'vertical' : 'landscape', {
+      seed: seed == null ? undefined : seed + sb.beats.indexOf(b) * 101,
+    });
     if (tallFrame || !b.props.elements) b.props.elements = drawn.elements;
     // Placeholder type in a sketch ("TITLE") is replaced by the playbook's words.
     const words = b.props.sketchText ?? {};
@@ -101,6 +105,21 @@ export function scaffold(dir, options = {}) {
     applyTreatment(sb, options.treatment);
     if (options.theme) sb.theme = options.theme;
   }
+  // A creative seed varies the look on top of the arc and treatment, and briefs the director.
+  const drawn = options.seed != null ? muse(options.seed) : null;
+  if (drawn) {
+    if (!options.theme) sb.theme = drawn.palette;
+    sb.lens = {
+      gradeAmount: 0.45,
+      bloom: 0.25,
+      blur: 0.5,
+      ...(sb.lens ?? {}),
+      grade: drawn.grade,
+      ...drawn.apply.lens,
+    };
+    sb.textMotion = drawn.textMotion;
+    sb.transition = drawn.apply.transition;
+  }
   fs.mkdirSync(dir, { recursive: true });
   writeJSON(path.join(dir, 'storyboard.json'), sb);
   vendor(dir, [
@@ -109,7 +128,8 @@ export function scaffold(dir, options = {}) {
   ]);
   fs.writeFileSync(
     path.join(dir, 'DIRECTION.md'),
-    directionTemplate(sb, options.treatment ? treatmentById(options.treatment) : null),
+    directionTemplate(sb, options.treatment ? treatmentById(options.treatment) : null) +
+      (drawn ? `\n${museMarkdown(drawn)}` : ''),
   );
   // Placeholder screenshots are generated locally: text-free, palette-matched and clearly illustrative.
   if (sb.beats.some(b => b.props?.file === 'assets/screen.png')) {
