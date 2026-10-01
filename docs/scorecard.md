@@ -1,6 +1,6 @@
 # ClearFrame scorecard
 
-A running, honest assessment. The standard is motion-design and film craft, not "a video file came out". Scores are out of 5. Update the scores, evidence and the "next" column whenever a loop lands something.
+A running, honest assessment. Since 2026-09-30, scores come from an independent reviewer judging the rendered benchmark (`scripts/bench.mjs`), following [review.md](review.md). The builder does not grade itself. The goal is 4.9. The standard is motion-design and film craft, not "a video file came out". Scores are out of 5. Update the scores, evidence and the "next" column whenever a loop lands something.
 
 **Baseline:** 2026-09-30. The evidence is the default output of `new --playbook research-digest --treatment editorial` and `new --playbook data-story --treatment noir`, drafted and read as contact sheets, plus the films made so far.
 
