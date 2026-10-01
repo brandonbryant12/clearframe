@@ -238,6 +238,12 @@ export function plateElements(id, { w, h, layers = ['far', 'mid', 'near'], asset
       h: r(box[3]),
       fit: 'contain',
       z: LAYERS.mid.z,
+      // Tinted toward the film's palette, so a subject generated in its own light sits in the
+      // painting's light; afloat, it rides the swell.
+      treatment: 'tint',
+      ...(mid?.ground === 'water'
+        ? { origin: [r(mid.staged.cx), r(mid.staged.base)], loop: { type: 'float', period: 4.5, amount: 5 } }
+        : {}),
       at: 0,
       enter: 'none',
     });
@@ -256,6 +262,40 @@ export function plateElements(id, { w, h, layers = ['far', 'mid', 'near'], asset
       at: 0,
       enter: 'none',
     });
+    // The hull's foot is under water: the water's tone rises over its last few pixels.
+    for (const [i, dy] of [-0.05, -0.04, -0.032].entries())
+      out.push({
+        type: 'rect',
+        x: r(cx - span * 0.47),
+        y: r(base + span * dy),
+        w: r(span * 0.94),
+        h: r(span * 0.04),
+        r: r(span * 0.02),
+        fill: 'bg',
+        opacity: [0.25, 0.45, 0.7][i],
+        blur: r(span * 0.012),
+        z: LAYERS.mid.z,
+        at: 0,
+        enter: 'none',
+      });
+    // The waterline: thin lines of reflected sky crossing the hull's foot, drifting slowly.
+    for (const [i, dy] of [-0.03, -0.02, -0.008, 0.006].entries())
+      out.push({
+        type: 'line',
+        x1: r(cx - span * (0.55 - i * 0.06)),
+        y1: r(base + span * dy),
+        x2: r(cx + span * (0.5 - i * 0.05)),
+        y2: r(base + span * dy),
+        stroke: 'ink',
+        width: Math.max(1, r(span * 0.003)),
+        opacity: r(0.2 - i * 0.04),
+        cap: 'round',
+        z: LAYERS.mid.z,
+        // A slow sideways drift (sway would tilt the line).
+        keys: [{ at: 0, x: (i % 2 ? -1 : 1) * span * 0.04, dur: 10, ease: 'linear', hold: false }],
+        at: 0,
+        enter: 'none',
+      });
   }
   if (layers.includes('near'))
     out.push({

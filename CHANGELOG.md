@@ -38,6 +38,10 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - The cold open's slug completes early, and its tagline no longer contradicts the clock.
   - The trailer's type has no glow, and its city opens on light.
 - **The concept explainer's curve is drawn as roads:** one stretch per load, its length the multiple of the wait at half full, the 90% road in the accent. The source names the queueing formula exactly (the wait in the queue).
+- **Plates seat their subject in the painting.**
+  - The cut-out is tinted toward the film's palette, so a subject generated in its own light sits in the plate's light.
+  - Afloat, it rides a slow swell, and its foot sinks under a soft band of the water's tone, crossed by drifting lines of reflected sky.
+  - The default push is longer.
 - **The concept explainer cuts on what changes.**
   - The title sits over a skyline.
   - The tap is a close-up.

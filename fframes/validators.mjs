@@ -450,7 +450,7 @@ export const VALIDATORS = {
         ...plateElements(p.plates, { w: frame.width ?? 1920, h: frame.height ?? 1080, assets: frame.assets }),
         ...(p.elements ?? []),
       ];
-      if (p.dolly == null && p.view == null) p.dolly = [{ at: 0, z: 0.2, dur: 10, ease: 'linear' }];
+      if (p.dolly == null && p.view == null) p.dolly = [{ at: 0, z: 0.32, dur: 9, ease: 'inOut' }];
       delete p.plates;
     }
     if (p.support != null) h.fail('canvas draws only its elements; add a text element instead of support');
