@@ -137,7 +137,7 @@ const hook = [
     anchor: 'middle',
     fill: 'muted',
     fit: 1500,
-    say: 'within',
+    say: 'bunched',
     enter: 'fade',
     dur: 0.5,
   },
@@ -223,12 +223,15 @@ const evidence = [
     enter: 'fade',
     dur: 0.5,
   },
-  ...row(-560, 'Timetable', EVEN, '6 min', { at: 0.2, fill: 'muted' }),
-  ...row(-330, 'In practice', BUNCHED, '11 min', { at: 0.9, fill: 'accent', figureSay: 'eleven' }),
+  ...row(-540, 'Timetable', EVEN, '6 min', { at: 0.2, fill: 'muted' }),
+];
+// The next shot: what actually happens, under the same timetable.
+const practice = [
+  ...row(-270, 'In practice', BUNCHED, '11 min', { at: 0.2, fill: 'accent', figureSay: 'eleven' }),
   // The long gap a rider is most likely to meet, bracketed on the word.
   {
     type: 'path',
-    d: `M ${X0 + 2.3 * PER_MIN + 30} -392 L ${X0 + 2.3 * PER_MIN + 30} -404 L ${X0 + 13 * PER_MIN - 30} -404 L ${X0 + 13 * PER_MIN - 30} -392`,
+    d: `M ${X0 + 2.3 * PER_MIN + 30} -332 L ${X0 + 2.3 * PER_MIN + 30} -344 L ${X0 + 13 * PER_MIN - 30} -344 L ${X0 + 13 * PER_MIN - 30} -332`,
     stroke: 'accent',
     width: 3,
     say: 'meets',
@@ -239,7 +242,7 @@ const evidence = [
     type: 'text',
     text: 'the gap most riders meet',
     x: X0 + 7.65 * PER_MIN,
-    y: -420,
+    y: -362,
     size: 34,
     font: 'bold',
     anchor: 'middle',
@@ -249,7 +252,7 @@ const evidence = [
     dur: 0.4,
   },
 ];
-const trial = [...row(-100, 'Trial', TRIAL, '7 min', { at: 0.2, fill: 'accent2', figureSay: 'seven' })];
+const trial = [...row(0, 'Trial', TRIAL, '7 min', { at: 0.2, fill: 'accent2', figureSay: 'seven' })];
 
 // ------------------------------------------------------------------ 6. the street again
 const after = [
@@ -292,11 +295,20 @@ const after = [
 const STREET = [200, 190, 1720, 967.5];
 // The street low in the frame with open sky above it, where the figure and the last line sit.
 const SKY = [100, -80, 1920, 1080];
+// Over the street, dimmed: the questions are asked in the place, not on a blank page.
+const behind = (extra = []) => [
+  ...street(),
+  ...extra,
+  { type: 'rect', x: -200, y: -200, w: 2400, h: 1600, fill: 'bg', opacity: 0.72, at: 0, enter: 'none' },
+];
+const bunchedBuses = [0, 1, 2].map(i => bus(1060 + i * 400, i === 0 ? 'accent' : 'ink'));
+const cut = view => ({ world: 'street', view, viewAt: 0, viewDur: 0.05, elements: [] });
+
 const beats = [
   {
     id: 'hook',
     block: 'canvas',
-    vo: 'Thirty-seven percent of buses on Route 12 arrive within two minutes of the one ahead.',
+    vo: 'Thirty-seven percent of buses on Route 12 arrive bunched.',
     props: { source: SAMPLE, view: SKY, elements: hook },
   },
   {
@@ -305,25 +317,42 @@ const beats = [
     vo: 'So why does adding buses barely shorten the wait?',
     transition: 'cut',
     props: { mode: 'stack', align: 'center', emphasis: ['barely'], emphasisStyle: 'serif' },
+    art: { under: behind() },
   },
   {
     id: 'mechanism',
     block: 'canvas',
-    vo: 'A late bus finds more people at every stop. Boarding takes longer, so it falls further behind, until the next bus catches up.',
+    vo: 'A late bus finds more people at every stop.',
     transition: 'cut',
     props: { world: 'street', view: STREET, elements: mechanism },
-    // The late bus hisses to a stop at each crowded stop; the next one brakes behind it.
-    sfx: [
-      { src: 'brake', at: 'word:Boarding', volume: 0.35 },
-      { src: 'brake', at: 'word:catches', volume: 0.45 },
-    ],
     camera: { move: 'right', amount: 0.4 },
+  },
+  {
+    id: 'boarding',
+    block: 'canvas',
+    vo: 'Boarding takes longer, so it falls further behind,',
+    props: cut([1000, 380, 1000, 562.5]),
+    // The late bus hisses to a stop at the crowded stop.
+    sfx: [{ src: 'brake', at: 'word:Boarding', volume: 0.35 }],
+  },
+  {
+    id: 'catches',
+    block: 'canvas',
+    vo: 'until the next bus catches up.',
+    props: cut([480, 330, 1300, 731.25]),
+    sfx: [{ src: 'brake', at: 'word:catches', volume: 0.45 }],
   },
   {
     id: 'evidence',
     block: 'canvas',
-    vo: 'The timetable spaces buses six minutes apart. In practice they arrive in pairs, and the average rider meets a gap of eleven minutes.',
-    props: { world: 'street', view: [100, -760, 1920, 1080], viewDur: 1.6, source: SAMPLE, elements: evidence },
+    vo: 'The timetable spaces buses six minutes apart.',
+    props: { world: 'street', view: [100, -760, 1920, 1080], viewDur: 1.2, source: SAMPLE, elements: evidence },
+  },
+  {
+    id: 'practice',
+    block: 'canvas',
+    vo: 'In practice they arrive in pairs, and the average rider meets a gap of eleven minutes.',
+    props: { world: 'street', view: [100, -760, 1920, 1080], source: SAMPLE, elements: practice },
   },
   {
     id: 'trial',
@@ -338,6 +367,7 @@ const beats = [
     vo: 'The problem was never too few buses. It was uneven gaps.',
     transition: 'cut',
     props: { mode: 'stack', align: 'center', emphasis: ['uneven gaps'], emphasisStyle: 'serif' },
+    art: { under: behind(bunchedBuses) },
   },
   {
     id: 'end',

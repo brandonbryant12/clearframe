@@ -38,6 +38,10 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - The cold open's slug completes early, and its tagline no longer contradicts the clock.
   - The trailer's type has no glow, and its city opens on light.
 - **The concept explainer's curve is drawn as roads:** one stretch per load, its length the multiple of the wait at half full, the 90% road in the accent. The source names the queueing formula exactly (the wait in the queue).
+- **The digest cuts on what changes.**
+  - Its question and turn are set over the street, not blank paper.
+  - The mechanism is three shots in one world, hard cuts between camera views: the late bus, the crowded stop, the catch-up.
+  - The evidence builds over two shots and fills the frame.
 - **The data story cuts on what changes.** It now runs nine shots of 2–7 s:
   - the wait set into the room beside the line, not as a stat card;
   - a hundred request cards (52 + 30 + 12 + 6, exactly 100);
