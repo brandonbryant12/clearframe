@@ -11,6 +11,8 @@ import { normalizeElements } from '../fframes/canvas.mjs';
 import { treatmentById } from '../fframes/treatments.mjs';
 import { scaffold } from '../fframes/playbooks.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
+import { computeTiming } from '../engine/lib/timing.mjs';
+import { createJob } from '../fframes/job.mjs';
 
 const write = (root, rel, value) => {
   fs.mkdirSync(path.dirname(path.join(root, rel)), { recursive: true });
@@ -164,4 +166,44 @@ test('art drift pushes the sketch in over the beat from frame-based keys and nev
   assert.ok(right.keys[0].scale > 1 && right.keys[0].hold === false);
   assert.equal(Math.sign(left.keys[0].x), -Math.sign(right.keys[0].x), 'the seed chooses the direction of travel');
   assert.throws(() => expandArt({ sketch: 'prism-shards', drift: 2 }), /drift/);
+});
+
+test('playbook art keeps its shorthand, so drift follows the final beat length like authored art', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-playbook-art-'));
+  const beats = [
+    { id: 'house', block: 'statement', duration: 3, props: { text: 'Idea' }, art: { sketch: 'house-glow', drift: 1 } },
+    { id: 'quick', block: 'statement', duration: 0.5, props: { text: 'Fast' }, art: { sketch: 'prism-shards', seed: 5, drift: 0.6 } },
+    { id: 'spoken', block: 'statement', vo: 'The narration decides how long this beat stays on screen.', props: { text: 'Said' }, art: { sketch: 'prism-shards', drift: 0.8 } },
+  ];
+  const compile = dir => {
+    const r = createJob(loadStoryboard(dir), computeTiming(dir), { draft: true });
+    assert.deepEqual(r.errors, []);
+    return r.job.beats;
+  };
+  try {
+    write(root, 'library/sketches/house-glow.json', {
+      summary: 'A brand glow', use: 'openers', layer: 'under',
+      elements: [{ type: 'circle', cx: 960, cy: 540, r: 200, fill: 'accent', at: 0, enter: 'none' }],
+    });
+    write(root, 'library/playbooks/drift-book.json', { title: 'Drift', audience: 'a', inputs: 'b', beats });
+    write(root, 'storyboard.json', { beats: [{ id: 'a', block: 'title', props: { title: 'x' } }] });
+    loadStoryboard(root);
+    const made = path.join(root, 'made');
+    const sb = scaffold(made, { playbook: 'drift-book' });
+    assert.deepEqual(sb.beats.map(b => b.art), beats.map(b => b.art), 'art stays as shorthand until the job');
+    assert.ok(fs.existsSync(path.join(made, 'library/sketches/house-glow.json')), 'shared art sketches travel with the project');
+    assert.throws(() => scaffold(path.join(root, 'bad'), { playbook: 'drift-book', theme: 'paper', seed: 1.5 }), /seed/);
+    // Compiled alone (the shared library no longer loaded), as a hand-authored copy would be.
+    const authored = path.join(root, 'authored');
+    write(authored, 'storyboard.json', { ...sb, beats });
+    fs.cpSync(path.join(made, 'library'), path.join(authored, 'library'), { recursive: true });
+    const [fromBook, byHand] = [compile(made), compile(authored)];
+    assert.deepEqual(fromBook.map(b => b.art), byHand.map(b => b.art));
+    for (const b of fromBook) assert.ok(Math.abs(b.art.under[0].keys[0].dur - b.frames / 30) < 0.02, `${b.id} drift spans its beat`);
+    assert.equal(fromBook[0].art.under[0].children[0].r, 200);
+    assert.ok(fromBook[1].frames / 30 < 1 && fromBook[2].frames / 30 > 3);
+  } finally {
+    useProject(null);
+    fs.rmSync(root, { recursive: true, force: true });
+  }
 });
