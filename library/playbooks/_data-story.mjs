@@ -46,6 +46,65 @@ const waitElements = [
   ...chartElements(wait, { w: W, h: H }),
 ];
 
+// The hundred hours as a hundred requests: one small card per hour, the same card that waits in
+// the queue, filled stage by stage (52 + 31 + 12 + 6 = 101). A unit chart reads as the thing
+// itself; the bar chart comes later, for the spread.
+const STAGES = [
+  { label: 'Queue', hours: 52, fill: 'accent' },
+  { label: 'Routing', hours: 31, fill: 'accent2' },
+  { label: 'Answering', hours: 12, fill: 'ink' },
+  { label: 'Follow-up', hours: 6, fill: 'muted' },
+];
+const COLS = 20,
+  CW = 56,
+  CH = 36,
+  GAP = 10,
+  GX = (W - COLS * (CW + GAP) + GAP) / 2,
+  GY = 300;
+const cards = [];
+let k = 0;
+for (const st of STAGES)
+  for (let n = 0; n < st.hours; n++, k++) {
+    const x = GX + (k % COLS) * (CW + GAP),
+      y = GY + Math.floor(k / COLS) * (CH + GAP);
+    cards.push({
+      stage: st.label,
+      el: {
+        type: 'group',
+        at: Math.round((0.1 + k * 0.012) * 100) / 100,
+        enter: 'pop',
+        dur: 0.25,
+        children: [
+          { type: 'rect', x, y, w: CW, h: CH, r: 6, fill: st.fill, opacity: st.fill === 'muted' ? 0.8 : 1 },
+          { type: 'rect', x: x + 8, y: y + 9, w: 26, h: 5, r: 2.5, fill: 'bg', opacity: 0.55 },
+        ],
+      },
+    });
+  }
+const rowsUsed = Math.ceil(k / COLS);
+const legendY = GY + rowsUsed * (CH + GAP) + 70;
+const legend = (dim, cue) =>
+  STAGES.map((st, i) => ({
+    type: 'group',
+    at: 0.9 + i * 0.12,
+    enter: 'fade',
+    dur: 0.35,
+    ...(dim && st.label !== 'Routing' ? { keys: [{ say: cue, opacity: 0.3, dur: 0.5 }] } : {}),
+    children: [
+      { type: 'rect', x: GX + i * 365, y: legendY - 26, w: 26, h: 26, r: 5, fill: st.fill },
+      { type: 'text', text: `${st.label}  ${st.hours} h`, x: GX + i * 365 + 40, y: legendY - 4, size: 36, fill: 'ink' },
+    ],
+  }));
+// The routing hours, picked out on the word: everything else steps back.
+const gridFor = dimOn =>
+  cards.map(({ stage, el }) =>
+    dimOn && stage !== 'Routing'
+      ? { ...el, at: 0, enter: 'none', keys: [{ say: dimOn, opacity: 0.22, dur: 0.6 }] }
+      : dimOn
+        ? { ...el, at: 0, enter: 'none' }
+        : el,
+  );
+
 // The end: the same room, a shorter line, our request near the front.
 const after = queue.build(W, H, { count: 7, ours: 1 });
 
@@ -70,28 +129,66 @@ const beats = [
     id: 'parts',
     block: 'canvas',
     vo: 'Where do those hundred hours go? Most are spent waiting in a queue, and being passed between teams. The answer itself takes twelve.',
-    props: chart(
-      {
-        kind: 'stack',
-        suffix: ' h',
-        values: hours('Queue'),
-        note: { text: 'the answer itself: 12 hours', to: 'Answering', say: 'twelve' },
-      },
-      { elements: [] },
-    ),
+    transition: 'dissolve',
+    props: {
+      source: SAMPLE,
+      elements: [
+        {
+          type: 'text',
+          text: 'ONE CARD = ONE HOUR OF ONE REQUEST',
+          x: GX,
+          y: GY - 40,
+          size: 30,
+          font: 'mono',
+          tracking: 0.12,
+          fill: 'muted',
+          at: 0.1,
+          enter: 'fade',
+          dur: 0.5,
+        },
+        ...gridFor(null),
+        ...legend(false),
+      ],
+    },
     art: { under: behind() },
-    camera: { move: 'in', amount: 0.6 },
+    camera: { move: 'in', amount: 0.5 },
   },
   {
     id: 'side',
     block: 'canvas',
-    vo: 'Stand them side by side, and routing is the part a better handoff can shrink.',
-    props: chart({
-      kind: 'bars',
-      suffix: ' h',
-      values: hours('Routing'),
-      note: { text: 'what a better handoff can shrink', to: 'Routing', say: 'handoff' },
-    }),
+    vo: 'And routing, the thirty-one hours spent passing it between teams, is the part a better handoff can shrink.',
+    props: {
+      source: SAMPLE,
+      elements: [
+        {
+          type: 'text',
+          text: 'ONE CARD = ONE HOUR OF ONE REQUEST',
+          x: GX,
+          y: GY - 40,
+          size: 30,
+          font: 'mono',
+          tracking: 0.12,
+          fill: 'muted',
+          at: 0,
+          enter: 'none',
+          keys: [{ say: 'routing', opacity: 0.3, dur: 0.5 }],
+        },
+        ...gridFor('routing'),
+        ...legend(true, 'routing').map(g => ({ ...g, at: 0, enter: 'none' })),
+        {
+          type: 'text',
+          text: 'what a better handoff can shrink',
+          x: GX + 365 + 40,
+          y: legendY + 64,
+          size: 40,
+          font: 'bold',
+          fill: 'accent2',
+          say: 'handoff',
+          enter: 'rise',
+          dur: 0.45,
+        },
+      ],
+    },
     art: { under: behind() },
     camera: { move: 'in', amount: 0.6 },
     hold: 0.3,
@@ -124,7 +221,10 @@ const beats = [
     vo: 'Measure the whole wait, and start with the requests that wait longest.',
     transition: 'dissolve',
     props: {
-      dolly: [{ at: 0, z: 0.9, dur: 0 }, { at: 0, z: 0.2, dur: 7, ease: 'out' }],
+      dolly: [
+        { at: 0, z: 0.9, dur: 0 },
+        { at: 0, z: 0.2, dur: 7, ease: 'out' },
+      ],
       focus: { z: after.focus.z, aperture: 0.7 },
       elements: [
         ...after.elements,
