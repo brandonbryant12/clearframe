@@ -155,8 +155,9 @@ impl Style {
     pub const fn strong(size: f32) -> Self {
         Self { font: Font::TextStrong, size, leading: 1.25, tracking: 0.0, upper: false, balance: false }
     }
+    /// Headlines: tightened a touch, as display type is set (Inter opens up at large sizes).
     pub const fn display(font: Font, size: f32) -> Self {
-        Self { font, size, leading: 1.08, tracking: 0.0, upper: false, balance: true }
+        Self { font, size, leading: 1.08, tracking: -0.015, upper: false, balance: true }
     }
     /// Small uppercase eyebrow with open tracking.
     pub const fn kicker(size: f32) -> Self {

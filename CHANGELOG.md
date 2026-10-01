@@ -14,6 +14,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - `data-story` opens on a queue world in depth, then shows the average, its split into hours and its spread.
   - `research-digest` draws its mechanism (buses bunching).
   - `concept-explainer` draws a brake rippling back through full traffic, then the queueing curve (computed, so its source is the formula).
+- **Display type is set tighter** (−1.5% tracking), as large Inter headlines should be.
 - **A pause is a picture, not an empty frame.** The `pause` sketch (used by 17 playbooks) is now a seam of light: a core present on frame one, a line opening to both edges, a widening band and dust in the beam.
 - **End cards without web buttons.** `action` is accent type over a drawn rule, not a pill.
 - **No bloom on light palettes**, where it only softened the shapes.
