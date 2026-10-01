@@ -76,6 +76,7 @@ Each round, a fresh reviewer scores the benchmark (`scripts/bench.mjs`) against 
 | 1 | 2026-09-30 | 3 | 3 | 2.5 | 3 | 3 | 3 | 3 | 2.5 | 3.5 | 3.5 | 3 | 3.5 | 4 | 3 | 2.5 | **3.1** |
 | 2 | 2026-10-01 | 3 | 3 | 2.5 | 3 | 3 | 2.5 | 3 | 2.5 | 3 | 3.5 | 4 | 3.5 | 4.5 | 3.5 | 2.5 | **3.13** |
 | 3 | 2026-10-01 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 2.5 | 3 | 3 | 3.5 | 3 | 4.5 | 3.5 | 2.5 | **3.10** |
+| 4 | 2026-10-01 | 3.5 | 3.5 | 3 | 3.5 | 3 | 3 | 3 | 3 | 3.5 | 3.5 | 3.5 | 3.5 | 4.5 | 3.5 | 3 | **3.37** |
 
 **Round 1, the five blockers:**
 1. **Report defaults read as slides.** A heading on every beat, small charts, dips through empty frames at cuts, one repeated iris, and web pill buttons on end cards.
@@ -113,6 +114,18 @@ Each round, a fresh reviewer scores the benchmark (`scripts/bench.mjs`) against 
   4. The picture lags the spoken payoff: titles a second late, slugs finishing as the shot cuts.
   5. The finish is stock: Bebas with glow, banding in the darks, digital silence with no room tone, a title hit no louder than the voice.
 - **What the benchmark cannot show:** sound, voice and imagery are judged on free drafts (local TTS, a synthesised bed, code-drawn art). A real Gemini voice, a Lyria score and generated depth plates would be judged differently. That costs money per round, so it is the user's call.
+
+**Round 4: the first real movement.**
+- **Rose:**
+  - Continuity, camera and motion, to 3.5: one world in the cinematic explainer, the rack focus, pushes onto findings.
+  - Sound, to 3.5: a 29 dB drop and hit in the trailer, and true silence in the cold open.
+  - The default outcome, to 3.
+- **The five blockers now:**
+  1. The report arcs still read as slides: a centred stat, charts parked in the top half and held for 15 s, sentences on blank paper, shots of about 6 s cut on sentences.
+  2. Rendering and illustration a professional would not ship: the zoom journey's banded planet and blob continents, the product's plain cylinder, the plate boat with no waterline, collisions in the explainer city.
+  3. Joins that smear instead of matching, and a zoom journey that cuts.
+  4. Typography with no hierarchy at the key moments: the trailer's main title is no bigger than its cards.
+  5. In the report films, sound and rhythm follow the voice: a static bed, generic cue bursts, a low loudness range.
 
 ## Log
 
