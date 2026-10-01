@@ -4,14 +4,10 @@
 // sky where the evidence stands as bars, and the street again at the end, the buses evenly spaced.
 // One dataset: 37% bunched; waits of 6 (timetable), 11 (riders) and 7 minutes (the trial).
 import fs from 'node:fs';
-import { chartElements, chartSpec } from '../../fframes/data-canvas.mjs';
 
 const SAMPLE = 'Illustrative sample data · replace before publishing';
 const ROAD = 800;
 const still = el => ({ at: 0, enter: 'none', ...el });
-const fail = m => {
-  throw new Error(m);
-};
 
 // ------------------------------------------------------------------ the street
 // A row of buildings in the surface colour (seeded, so every film's street is the same), the
@@ -163,78 +159,97 @@ const mechanism = [
 ];
 
 // ------------------------------------------------------------------ 3–4. the evidence, in the sky
-// The same chart in both beats: the timetable and the riders' wait first, the trial's bar after.
-const BOX = [330, -560, 1260, 560];
-const values = [
-  { label: 'Timetable', value: 6 },
-  { label: 'Riders wait', value: 11, highlight: true },
-  { label: 'Even gaps (trial)', value: 7 },
-];
-const evidenceAll = chartElements(
-  chartSpec(
-    {
-      kind: 'bars',
-      id: 'wait',
-      suffix: ' min',
-      max: 12,
-      box: BOX,
-      values,
-      note: { text: 'nearly double the timetable', to: 'Riders wait', say: 'double' },
-    },
-    fail,
-  ),
-  { w: 1920, h: 1080 },
-);
-const trialAll = chartElements(
-  chartSpec(
-    {
-      kind: 'bars',
-      id: 'wait',
-      suffix: ' min',
-      max: 12,
-      box: BOX,
-      values: values.map(v => ({ ...v, highlight: v.label.startsWith('Even') })),
-      note: { text: 'the trial: 7 minutes', to: 'Even gaps (trial)', say: 'seven' },
-    },
-    fail,
-  ),
-  { w: 1920, h: 1080 },
-);
-// The third column's x range: everything drawn there belongs to the trial.
-const third = trialAll.find(el => el.id === 'wait-even-gaps-trial');
-const inThird = el => (el.x ?? el.x1 ?? 0) >= third.x - 40;
-const evidence = evidenceAll.filter(el => !inThird(el) || (el.type === 'line' && el.x1 < third.x - 40));
-// The trial's note sits above its own (shorter) bar, clear of the evidence note below.
-const trial = [
-  ...trialAll.filter(el => inThird(el) && el.type !== 'line' && !(el.type === 'text' && el.fill === 'accent' && el.say)),
+// The chart is made of the buses themselves: each row is 42 minutes of one stop, a small bus
+// for every arrival. The timetable spaces them six minutes apart; in practice they arrive in
+// pairs, so the gap a rider meets is far longer; the trial evens them out again. The figure at
+// the end of each row is the average gap a rider meets (illustrative).
+const X0 = 520,
+  X1 = 1440,
+  PER_MIN = (X1 - X0) / 42;
+const marker = (minute, y, fill, at) => ({
+  type: 'group',
+  at,
+  enter: 'pop',
+  dur: 0.25,
+  children: [
+    { type: 'rect', x: X0 + minute * PER_MIN - 23, y: y - 30, w: 46, h: 24, r: 6, fill },
+    { type: 'circle', cx: X0 + minute * PER_MIN - 12, cy: y - 5, r: 5, fill: 'ink' },
+    { type: 'circle', cx: X0 + minute * PER_MIN + 12, cy: y - 5, r: 5, fill: 'ink' },
+  ],
+});
+const row = (y, label, minutes, figure, { at = 0.2, fill = 'muted', figureSay } = {}) => [
   {
     type: 'text',
-    text: 'the trial: 7 minutes',
-    x: third.x + third.w / 2,
-    y: third.y - 150,
-    size: 40,
+    text: label,
+    x: 480,
+    y: y - 8,
+    size: 38,
     font: 'bold',
-    anchor: 'middle',
-    fill: 'accent',
-    say: 'seven',
+    anchor: 'end',
+    fill: 'ink',
+    at,
+    enter: 'fade',
+    dur: 0.4,
+  },
+  { type: 'line', x1: X0 - 30, y1: y, x2: X1 + 30, y2: y, stroke: 'line', width: 4, at, enter: 'draw', dur: 0.6 },
+  ...minutes.map((m, i) => marker(m, y, fill, at + 0.3 + i * 0.07)),
+  {
+    type: 'text',
+    text: figure,
+    x: X1 + 70,
+    y: y + 4,
+    size: 72,
+    font: 'figures',
+    fill: fill === 'muted' ? 'ink' : fill,
+    ...(figureSay ? { say: figureSay } : { at: at + 0.9 }),
     enter: 'rise',
     dur: 0.45,
   },
+];
+const EVEN = [0, 6, 12, 18, 24, 30, 36, 42];
+const BUNCHED = [0, 2.3, 13, 15.3, 26, 28.3, 39, 41.3];
+const TRIAL = [0, 6.5, 12, 18.5, 24, 30.5, 36, 42];
+const evidence = [
   {
-    type: 'line',
-    x1: third.x + third.w / 2,
-    y1: third.y - 128,
-    x2: third.x + third.w / 2,
-    y2: third.y - 90,
+    type: 'text',
+    text: 'ARRIVALS AT ONE STOP, OVER 42 MINUTES',
+    x: X0 - 30,
+    y: -650,
+    size: 30,
+    font: 'mono',
+    tracking: 0.12,
+    fill: 'muted',
+    at: 0.1,
+    enter: 'fade',
+    dur: 0.5,
+  },
+  ...row(-560, 'Timetable', EVEN, '6 min', { at: 0.2, fill: 'muted' }),
+  ...row(-330, 'In practice', BUNCHED, '11 min', { at: 0.9, fill: 'accent', figureSay: 'eleven' }),
+  // The long gap a rider is most likely to meet, bracketed on the word.
+  {
+    type: 'path',
+    d: `M ${X0 + 2.3 * PER_MIN + 30} -392 L ${X0 + 2.3 * PER_MIN + 30} -404 L ${X0 + 13 * PER_MIN - 30} -404 L ${X0 + 13 * PER_MIN - 30} -392`,
     stroke: 'accent',
     width: 3,
-    arrow: 'end',
-    head: 12,
-    say: 'seven',
+    say: 'meets',
     enter: 'draw',
-    dur: 0.35,
+    dur: 0.4,
+  },
+  {
+    type: 'text',
+    text: 'the gap most riders meet',
+    x: X0 + 7.65 * PER_MIN,
+    y: -420,
+    size: 34,
+    font: 'bold',
+    anchor: 'middle',
+    fill: 'accent',
+    say: 'meets',
+    enter: 'rise',
+    dur: 0.4,
   },
 ];
+const trial = [...row(-100, 'Trial', TRIAL, '7 min', { at: 0.2, fill: 'accent2', figureSay: 'seven' })];
 
 // ------------------------------------------------------------------ 6. the street again
 const after = [
@@ -307,13 +322,13 @@ const beats = [
   {
     id: 'evidence',
     block: 'canvas',
-    vo: 'Riders wait eleven minutes on average, nearly double what the timetable promises.',
+    vo: 'The timetable spaces buses six minutes apart. In practice they arrive in pairs, and the average rider meets a gap of eleven minutes.',
     props: { world: 'street', view: [100, -760, 1920, 1080], viewDur: 1.6, source: SAMPLE, elements: evidence },
   },
   {
     id: 'trial',
     block: 'canvas',
-    vo: 'In a trial that held buses to even gaps, the wait fell to seven minutes.',
+    vo: 'In a trial that held buses to even gaps, that fell to seven.',
     props: { world: 'street', view: [100, -760, 1920, 1080], source: SAMPLE, elements: trial },
     hold: 0.8,
   },
