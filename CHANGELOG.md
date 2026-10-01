@@ -48,7 +48,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
 - **Narration-cued type stays up long enough to read.** Timing holds a beat until its last cued line has been readable.
 - **Depth of field softens places, never words.**
 - **End-card actions are tracked small capitals**, not underlined links.
-- **Loudness in two passes.** The mix is measured, then one linear gain is applied, so a silence before the title stays silent. Single-pass loudnorm was a compressor that lifted it back to a murmur.
+- **Mastered, not compressed.** The mix is measured, gained to the target, and only its peaks are limited, so a silence before the title stays about 20 dB down. Single-pass loudnorm was a compressor that lifted the silence back to a murmur, and its linear mode quietly falls back to that compressor.
 - **Subject sounds:** `brake` (an air brake) and `drop` (water), cued with beat `sfx: [{src, at: "word:…"}]`. Bars growing into place land with a soft tock.
 - **The critique adds "Slides with motion"** (half the scenes are type or charts on a plain field) **and "Ends on a card".** The hook check counts a picture on the first frame.
 - **`dissolve`**: a true crossfade in which the outgoing shot keeps running under the incoming one (`fade` dips through the backdrop). The cold open dissolves from night to dawn.

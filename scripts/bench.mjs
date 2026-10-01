@@ -65,7 +65,11 @@ function loudness(video) {
 /** The mix as a waveform, cuts as grey lines and sound cues as accent ticks. */
 function waveform(dir, video) {
   const timing = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8'));
-  const cues = JSON.parse(fs.readFileSync(path.join(dir, 'build/cues.json'), 'utf8'));
+  // The automatic sound design and each beat's own subject sounds (a brake, a drop).
+  const cues = [
+    ...JSON.parse(fs.readFileSync(path.join(dir, 'build/cues.json'), 'utf8')),
+    ...timing.beats.flatMap(b => (b.sfx ?? []).map(s => ({ name: s.src, t: s.t }))),
+  ].sort((a, b) => a.t - b.t);
   const W = 1600,
     H = 260,
     x = t => Math.round((t / timing.duration) * W);

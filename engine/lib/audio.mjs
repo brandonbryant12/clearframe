@@ -265,13 +265,16 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
       },
     ).stderr;
     const m = JSON.parse(probe.slice(probe.lastIndexOf('{'), probe.lastIndexOf('}') + 1));
-    const measured = `measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}`;
+    // Mastered as an engineer would: one gain to the target, then a peak limiter for the few
+    // hits that would cross the ceiling. (loudnorm's linear mode silently falls back to its
+    // compressor when the gain would cross the ceiling, and flattens the film again.)
+    const gain = loudness - Number(m.input_i);
     await ffmpeg([
       '-y',
       '-i',
       pre,
       '-af',
-      `loudnorm=${target}:${measured}:linear=true,aresample=48000`,
+      `volume=${gain.toFixed(2)}dB,alimiter=limit=${(10 ** (-1.8 / 20)).toFixed(3)}:attack=2:release=60:level=false,aresample=48000`,
       '-ac',
       '2',
       '-c:a',
