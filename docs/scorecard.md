@@ -74,6 +74,7 @@ Each round, a fresh reviewer scores the benchmark (`scripts/bench.mjs`) against 
 | Round | Date | Continuity | Camera | Composition | Motion | Look | Imagery | Editing | Type | Sound | Voice | Honesty | Tooling | Speed | Library | Default | **Mean** |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 2026-09-30 | 3 | 3 | 2.5 | 3 | 3 | 3 | 3 | 2.5 | 3.5 | 3.5 | 3 | 3.5 | 4 | 3 | 2.5 | **3.1** |
+| 2 | 2026-10-01 | 3 | 3 | 2.5 | 3 | 3 | 2.5 | 3 | 2.5 | 3 | 3.5 | 4 | 3.5 | 4.5 | 3.5 | 2.5 | **3.13** |
 
 **Round 1, the five blockers:**
 1. **Report defaults read as slides.** A heading on every beat, small charts, dips through empty frames at cuts, one repeated iris, and web pill buttons on end cards.
@@ -86,6 +87,22 @@ Each round, a fresh reviewer scores the benchmark (`scripts/bench.mjs`) against 
 3. **Numbers contradict each other** across beats; a figure is captioned as the wrong unit; a "SOURCES ON SCREEN" placeholder appears; a multiplier has no comparator.
 4. **Imagery is generic and reused across genres.** Plates are absent from the defaults, and the plated boat floats with no waterline.
 5. **Trailer type is timid.** It is small, holds still, has illegible taglines, and films open on near-black frames.
+
+**Round 2: what moved and what did not.**
+- **Rose:**
+  - Honesty, to 4: one dataset per film, the queueing curve computed from its formula.
+  - Library, to 3.5.
+  - Speed, to 4.5.
+- **Fell:**
+  - Imagery, to 2.5: clip-art cars, pentagon houses, blob continents, an icon-like operator, visible artifacts.
+  - Sound, to 3: no true drop before the title, sparse generic cues.
+- **The five blockers now:**
+  1. The report defaults are still one slide skeleton (stat → chart → chart → iris → "X, not Y" card → CTA). Charts should be born from each film's mechanism, and the film should end on a picture.
+  2. Kinetic type pages break sentences mid-phrase. Display type is generic; flares and aberration damage it.
+  3. Imagery is clip-art level, with artifacts.
+  4. Composition, and a vertical cut that is the landscape cut reflowed (type at the frame edges).
+  5. Sound and cutting don't drive the film: no real silence, cuts on sentence ends, flash overused.
+- **The critique still scored these films 100.** Its score is not evidence of quality.
 
 ## Log
 
