@@ -77,6 +77,7 @@ Each round, a fresh reviewer scores the benchmark (`scripts/bench.mjs`) against 
 | 2 | 2026-10-01 | 3 | 3 | 2.5 | 3 | 3 | 2.5 | 3 | 2.5 | 3 | 3.5 | 4 | 3.5 | 4.5 | 3.5 | 2.5 | **3.13** |
 | 3 | 2026-10-01 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 2.5 | 3 | 3 | 3.5 | 3 | 4.5 | 3.5 | 2.5 | **3.10** |
 | 4 | 2026-10-01 | 3.5 | 3.5 | 3 | 3.5 | 3 | 3 | 3 | 3 | 3.5 | 3.5 | 3.5 | 3.5 | 4.5 | 3.5 | 3 | **3.37** |
+| 5 | 2026-10-01 | 3.5 | 3 | 3 | 3 | 3 | 2.5 | 3 | 3 | 3 | 3 | 4.5 | 3.5 | 4 | 3.5 | 3 | **3.20** |
 
 **Round 1, the five blockers:**
 1. **Report defaults read as slides.** A heading on every beat, small charts, dips through empty frames at cuts, one repeated iris, and web pill buttons on end cards.
@@ -126,6 +127,21 @@ Each round, a fresh reviewer scores the benchmark (`scripts/bench.mjs`) against 
   3. Joins that smear instead of matching, and a zoom journey that cuts.
   4. Typography with no hierarchy at the key moments: the trailer's main title is no bigger than its cards.
   5. In the report films, sound and rhythm follow the voice: a static bed, generic cue bursts, a low loudness range.
+
+**Round 5: a plateau.** Five independent rounds have scored 3.10–3.37.
+- **Reviewer noise is about ±0.15:** two reviewers judging similar work differ by that much.
+- **Each round fixes what was named, and the next reviewer finds the next layer:**
+  - construction bugs in the illustrations: a peak through a cloud, a floating window, a boat on drawn lines;
+  - explainers that still cut once per sentence and hold;
+  - stock display type;
+  - a bed 22 dB under the voice.
+- **What has improved for good:**
+  - Honesty, to 4.5.
+  - Continuity, to 3.5.
+  - Checks that catch clipped, covered and unreadable type.
+  - Report films that are worlds, not slides.
+  - Real silence before titles.
+- **What caps the score:** illustration quality (code-drawn shapes against Kurzgesagt-level art), and draft voice, music and imagery. Neither moves with more rules.
 
 ## Log
 
