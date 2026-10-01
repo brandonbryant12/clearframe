@@ -113,7 +113,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
       (travelling(a) && travelling(b))
     )
       carried++;
-    else if (['panel', 'iris', 'whip', 'flash'].includes(transitions[i])) carried += 0.5;
+    else if (['panel', 'iris', 'whip', 'flash', 'dissolve'].includes(transitions[i])) carried += 0.5;
   }
   if (carried < (n - 1) / 4)
     tell(

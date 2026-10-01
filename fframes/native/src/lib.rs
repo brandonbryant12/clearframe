@@ -50,7 +50,8 @@ pub const BLOCKS: &[&str] = &[
 ];
 /// Scene entrances. `panel`, `iris` and `whip` are graphic transitions: the outgoing scene's
 /// exit and the incoming entrance share one continuous movement across the cut.
-pub const TRANSITIONS: &[&str] = &["cut", "fade", "rise", "wipe", "push", "zoom", "panel", "iris", "whip", "flash"];
+pub const TRANSITIONS: &[&str] =
+    &["cut", "fade", "rise", "wipe", "push", "zoom", "panel", "iris", "whip", "flash", "dissolve"];
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Caption {
@@ -410,11 +411,23 @@ impl<const W: usize, const H: usize, const RATE: usize> Video for NativeFilm<W, 
             ));
             bar = before + (bar - before) * q;
         }
+        // A dissolve: the outgoing beat runs on under the incoming one while it fades up, so
+        // two pictures share the screen (a fade dips through the backdrop instead).
+        let local = frame.global_index - beat.start_frame;
+        let span = ((0.7 * RATE as f32) as usize).min(beat.frames / 2).max(1);
+        let scenes = if beat.transition == "dissolve" && i > 0 && local < span {
+            let prev = &self.0.beats[i - 1];
+            let behind = Scene::render_frame(prev, Frame::new(prev.frames + local, frame.global_index, RATE), ctx);
+            let q = motion::in_out_cubic((local as f32 + 1.0) / span as f32);
+            fframes::svgr!(<g>{behind}<g opacity={q}>{ctx.render_scenes(&frame)}</g></g>)
+        } else {
+            ctx.render_scenes(&frame)
+        };
         let picture = fframes::svgr!(<g>
             <rect width={w} height={h} fill={palette.bg.clone()} />
             {background}
             {vignette}
-            {ctx.render_scenes(&frame)}
+            {scenes}
             {chrome}
         </g>);
         let picture = match lens::handheld(lens.handheld, seconds, w, h) {

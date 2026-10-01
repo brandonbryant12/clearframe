@@ -57,6 +57,7 @@ const COMMON = [
   'morphDur',
   'rough',
   'behind',
+  'subject',
   'depth',
   'z',
   'blur',

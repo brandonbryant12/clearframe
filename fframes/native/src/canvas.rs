@@ -781,6 +781,14 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             && pose.rotate.abs() < 1e-3;
         let alpha = pose.alpha.clamp(0.0, 1.0);
         let placed = if identity && alpha >= 0.999 { shape } else { self.posed(shape, &pose, origin, identity, alpha) };
+        // `subject: true`: the frame audit refuses type printed over this element (a drawn
+        // product, a hero object), as it does for 3D solids.
+        let placed = if el.get("subject").and_then(Value::as_bool) == Some(true) {
+            let id = self.uid("subject");
+            fframes::svgr!(<g id={id}>{placed}</g>)
+        } else {
+            placed
+        };
         match persp {
             Some((p, _, fade)) => {
                 let (gx, gy) = self.offset.get();

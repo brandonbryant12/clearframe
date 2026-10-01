@@ -23,6 +23,9 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - `cinematic-explainer`: the water system in cross-section, with labels kept inside the letterbox.
   - New set pieces: `signal`, `wires`, `citygrid`, `mast`, `harbor` and `rooftops`. `card` is a poster card (`LEAD`/`CARD`), and `title` fills the frame.
   - First beats cut in rather than fading up from black.
+- **`dissolve`**: a true crossfade in which the outgoing shot keeps running under the incoming one (`fade` dips through the backdrop). The cold open dissolves from night to dawn.
+- **Films open on their picture.** A film-wide transition never applies to the first beat.
+- **`subject: true`** on any canvas element protects it from overlapping type in the frame audit. `check` no longer reports a count of findings it has filtered out.
 - **Display type is set tighter** (−1.5% tracking), as large Inter headlines should be.
 - **A pause is a picture, not an empty frame.** The `pause` sketch (used by 17 playbooks) is now a seam of light: a core present on frame one, a line opening to both edges, a widening band and dust in the beam.
 - **End cards without web buttons.** `action` is accent type over a drawn rule, not a pill.

@@ -58,10 +58,7 @@
             "w": 2120,
             "h": 1280,
             "fill": {
-              "gradient": [
-                "bg",
-                "surface"
-              ],
+              "gradient": ["bg", "surface"],
               "angle": 160
             }
           },
@@ -74,10 +71,7 @@
             "rx": 1100,
             "ry": 760,
             "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
+              "gradient": ["accent2", "accent2"],
               "radial": true,
               "fade": true
             },
@@ -103,11 +97,7 @@
             "cy": 520,
             "r": 318,
             "fill": {
-              "gradient": [
-                "surface",
-                "muted",
-                "ink"
-              ],
+              "gradient": ["surface", "muted", "ink"],
               "angle": 45
             },
             "z": 0
@@ -120,11 +110,7 @@
             "cy": 520,
             "r": 300,
             "fill": {
-              "gradient": [
-                "muted",
-                "ink",
-                "ink"
-              ],
+              "gradient": ["muted", "ink", "ink"],
               "angle": 40
             },
             "z": 0
@@ -137,10 +123,7 @@
             "cy": 520,
             "r": 300,
             "fill": {
-              "gradient": [
-                "bg",
-                "bg"
-              ],
+              "gradient": ["bg", "bg"],
               "angle": 90,
               "fade": true
             },
@@ -176,10 +159,7 @@
             "fill": "bg",
             "stroke": "none",
             "rotate": 146,
-            "origin": [
-              769,
-              532
-            ],
+            "origin": [769, 532],
             "opacity": 0.3,
             "blur": 5,
             "z": 0
@@ -192,10 +172,7 @@
             "fill": "bg",
             "stroke": "none",
             "rotate": 146,
-            "origin": [
-              760,
-              520
-            ],
+            "origin": [760, 520],
             "z": 0
           },
           {
@@ -206,10 +183,7 @@
             "fill": "bg",
             "stroke": "none",
             "rotate": 312,
-            "origin": [
-              772,
-              535
-            ],
+            "origin": [772, 535],
             "opacity": 0.3,
             "blur": 6,
             "z": 0
@@ -222,20 +196,14 @@
             "fill": "bg",
             "stroke": "none",
             "rotate": 312,
-            "origin": [
-              760,
-              520
-            ],
+            "origin": [760, 520],
             "z": 0
           },
           {
             "at": 0,
             "enter": "none",
             "type": "group",
-            "origin": [
-              760,
-              520
-            ],
+            "origin": [760, 520],
             "rotate": 200,
             "z": 0,
             "loop": {
@@ -291,15 +259,9 @@
             "rx": 225,
             "ry": 90,
             "rotate": -35,
-            "origin": [
-              850,
-              640
-            ],
+            "origin": [850, 640],
             "fill": {
-              "gradient": [
-                "ink",
-                "ink"
-              ],
+              "gradient": ["ink", "ink"],
               "radial": true,
               "fade": true
             },
@@ -425,18 +387,8 @@
       "transition": "fade",
       "props": {
         "world": "harbor",
-        "view": [
-          0,
-          0,
-          1920,
-          1080
-        ],
-        "viewFrom": [
-          -110,
-          20,
-          1920,
-          1080
-        ],
+        "view": [0, 0, 1920, 1080],
+        "viewFrom": [-110, 20, 1920, 1080],
         "viewAt": 0,
         "viewDur": 6,
         "elements": [
@@ -447,12 +399,7 @@
             "w": 2800,
             "h": 1500,
             "fill": {
-              "gradient": [
-                "bg",
-                "bg",
-                "bg",
-                "surface"
-              ],
+              "gradient": ["bg", "bg", "bg", "surface"],
               "angle": 90
             },
             "at": 0,
@@ -481,10 +428,7 @@
             "rx": 1300,
             "ry": 170,
             "fill": {
-              "gradient": [
-                "accent",
-                "accent"
-              ],
+              "gradient": ["accent", "accent"],
               "radial": true,
               "fade": true
             },
@@ -500,10 +444,7 @@
             "rx": 1200,
             "ry": 70,
             "fill": {
-              "gradient": [
-                "accent",
-                "accent"
-              ],
+              "gradient": ["accent", "accent"],
               "radial": true,
               "fade": true
             },
@@ -615,11 +556,7 @@
             "w": 2800,
             "h": 1200,
             "fill": {
-              "gradient": [
-                "surface",
-                "bg",
-                "bg"
-              ],
+              "gradient": ["surface", "bg", "bg"],
               "angle": 90
             },
             "opacity": 0.85,
@@ -651,10 +588,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -677,10 +611,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -703,10 +634,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -729,10 +657,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -755,10 +680,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -781,10 +703,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -807,10 +726,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -833,10 +749,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -859,10 +772,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -885,10 +795,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -911,10 +818,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -937,10 +841,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -963,10 +864,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -989,10 +887,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1015,10 +910,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1041,10 +933,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1067,10 +956,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1093,10 +979,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1119,10 +1002,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1145,10 +1025,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1171,10 +1048,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1197,10 +1071,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1223,10 +1094,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1249,10 +1117,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1275,10 +1140,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1301,10 +1163,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1327,10 +1186,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1353,10 +1209,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1379,10 +1232,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1405,10 +1255,7 @@
             "width": 2,
             "cap": "round",
             "opacity": 0.4,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 4,
             "glow": {
               "blur": 5,
@@ -1431,10 +1278,7 @@
             "width": 5,
             "cap": "round",
             "opacity": 0.55,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 1,
             "glow": {
               "blur": 5,
@@ -1457,10 +1301,7 @@
             "width": 5,
             "cap": "round",
             "opacity": 0.55,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 1,
             "glow": {
               "blur": 5,
@@ -1483,10 +1324,7 @@
             "width": 5,
             "cap": "round",
             "opacity": 0.55,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 1,
             "glow": {
               "blur": 5,
@@ -1509,10 +1347,7 @@
             "width": 5,
             "cap": "round",
             "opacity": 0.55,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 1,
             "glow": {
               "blur": 5,
@@ -1535,10 +1370,7 @@
             "width": 5,
             "cap": "round",
             "opacity": 0.55,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 1,
             "glow": {
               "blur": 5,
@@ -1561,10 +1393,7 @@
             "width": 4,
             "cap": "round",
             "opacity": 0.5,
-            "dash": [
-              8,
-              6
-            ],
+            "dash": [8, 6],
             "z": 1.5,
             "glow": {
               "blur": 5,
@@ -1598,39 +1427,21 @@
           {
             "type": "poly",
             "points": [
-              [
-                1430,
-                487
-              ],
-              [
-                130,
-                300
-              ],
-              [
-                130,
-                640
-              ],
-              [
-                1430,
-                493
-              ]
+              [1430, 487],
+              [130, 300],
+              [130, 640],
+              [1430, 493]
             ],
             "closed": true,
             "fill": {
-              "gradient": [
-                "ink",
-                "ink"
-              ],
+              "gradient": ["ink", "ink"],
               "angle": 180,
               "fade": true
             },
             "opacity": 0.16,
             "blur": 14,
             "blend": "screen",
-            "origin": [
-              1430,
-              490
-            ],
+            "origin": [1430, 490],
             "z": 1.5,
             "at": 0,
             "enter": "none",
@@ -2447,10 +2258,7 @@
             "rx": 70,
             "ry": 14,
             "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
+              "gradient": ["accent2", "accent2"],
               "radial": true,
               "fade": true
             },
@@ -2492,10 +2300,7 @@
             "rx": 70,
             "ry": 14,
             "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
+              "gradient": ["accent2", "accent2"],
               "radial": true,
               "fade": true
             },
@@ -2537,10 +2342,7 @@
             "rx": 70,
             "ry": 14,
             "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
+              "gradient": ["accent2", "accent2"],
               "radial": true,
               "fade": true
             },
@@ -2582,10 +2384,7 @@
             "rx": 70,
             "ry": 14,
             "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
+              "gradient": ["accent2", "accent2"],
               "radial": true,
               "fade": true
             },
@@ -2627,10 +2426,7 @@
             "rx": 70,
             "ry": 14,
             "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
+              "gradient": ["accent2", "accent2"],
               "radial": true,
               "fade": true
             },
@@ -3276,11 +3072,7 @@
             "w": 2120,
             "h": 1280,
             "fill": {
-              "gradient": [
-                "bg",
-                "surface",
-                "bg"
-              ],
+              "gradient": ["bg", "surface", "bg"],
               "angle": 0
             }
           },
@@ -3294,10 +3086,7 @@
             "h": 190,
             "r": 8,
             "fill": {
-              "gradient": [
-                "accent2",
-                "accent"
-              ],
+              "gradient": ["accent2", "accent"],
               "angle": 90
             },
             "opacity": 0.35,
@@ -3313,10 +3102,7 @@
             "h": 170,
             "r": 8,
             "fill": {
-              "gradient": [
-                "accent2",
-                "accent"
-              ],
+              "gradient": ["accent2", "accent"],
               "angle": 90
             },
             "opacity": 0.22,
@@ -3332,10 +3118,7 @@
             "h": 150,
             "r": 8,
             "fill": {
-              "gradient": [
-                "accent2",
-                "accent"
-              ],
+              "gradient": ["accent2", "accent"],
               "angle": 90
             },
             "opacity": 0.18,
@@ -3350,10 +3133,7 @@
             "rx": 620,
             "ry": 520,
             "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
+              "gradient": ["accent2", "accent2"],
               "radial": true,
               "fade": true
             },
@@ -3575,11 +3355,7 @@
             "w": 2120,
             "h": 1280,
             "fill": {
-              "gradient": [
-                "bg",
-                "surface",
-                "bg"
-              ],
+              "gradient": ["bg", "surface", "bg"],
               "angle": 90
             },
             "at": 0,
@@ -6580,12 +6356,7 @@
       "transition": "fade",
       "props": {
         "world": "harbor",
-        "view": [
-          70,
-          20,
-          1800,
-          1012.5
-        ],
+        "view": [70, 20, 1800, 1012.5],
         "viewAt": 0,
         "viewDur": 4,
         "elements": [
@@ -6627,21 +6398,11 @@
       "id": "turn",
       "block": "canvas",
       "vo": "And of what they learned before morning.",
-      "transition": "fade",
+      "transition": "dissolve",
       "props": {
         "world": "dawn",
-        "view": [
-          100,
-          36,
-          1740,
-          978.75
-        ],
-        "viewFrom": [
-          70,
-          20,
-          1800,
-          1012.5
-        ],
+        "view": [100, 36, 1740, 978.75],
+        "viewFrom": [70, 20, 1800, 1012.5],
         "viewAt": 0,
         "viewDur": 6,
         "elements": [
@@ -6652,12 +6413,7 @@
             "w": 2800,
             "h": 1300,
             "fill": {
-              "gradient": [
-                "bg",
-                "surface",
-                "accent",
-                "accent2"
-              ],
+              "gradient": ["bg", "surface", "accent", "accent2"],
               "angle": 90
             },
             "at": 0,
@@ -6670,10 +6426,7 @@
             "rx": 900,
             "ry": 260,
             "fill": {
-              "gradient": [
-                "ink",
-                "accent2"
-              ],
+              "gradient": ["ink", "accent2"],
               "radial": true,
               "fade": true
             },
@@ -6771,11 +6524,7 @@
             "w": 2800,
             "h": 1200,
             "fill": {
-              "gradient": [
-                "accent",
-                "surface",
-                "bg"
-              ],
+              "gradient": ["accent", "surface", "bg"],
               "angle": 90
             },
             "opacity": 1,
@@ -8210,12 +7959,7 @@
       "hold": 0.8,
       "props": {
         "world": "dawn",
-        "view": [
-          0,
-          0,
-          1920,
-          1080
-        ],
+        "view": [0, 0, 1920, 1080],
         "viewAt": 0,
         "viewDur": 3,
         "elements": [

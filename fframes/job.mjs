@@ -54,7 +54,8 @@ export function createJob(sb, timing, { draft = false } = {}) {
   const report = { errors: [], warnings: [], draft };
   const film = filmSettings(sb, timing, report);
   const transitions = timing.beats.map(b => {
-    let t = sb.beats[b.index].transition ?? sb.transition ?? 'fade';
+    // A film-wide transition never applies to the first frame: the film opens on its picture.
+    let t = sb.beats[b.index].transition ?? (b.index === 0 ? 'cut' : (sb.transition ?? 'fade'));
     if (t === 'auto') t = b.index && timing.beats[b.index - 1].chapter !== b.chapter ? 'rise' : 'fade';
     return t;
   });
@@ -491,7 +492,7 @@ function checkNarration(b, frame, captions, report) {
 function exitFor(authored, next) {
   if (authored !== 'auto') return authored;
   if (next == null) return 'fade';
-  if (next === 'cut' || next === 'flash') return 'none';
+  if (next === 'cut' || next === 'flash' || next === 'dissolve') return 'none';
   if (next === 'rise') return 'fade';
   return next;
 }

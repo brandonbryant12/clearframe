@@ -511,7 +511,7 @@ const beats = [
     id: 'turn',
     block: 'canvas',
     vo: 'And of what they learned before morning.',
-    transition: 'fade',
+    transition: 'dissolve',
     props: {
       world: 'dawn',
       view: [100, 36, 1740, 978.75],

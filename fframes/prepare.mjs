@@ -233,7 +233,7 @@ function withoutCameraCuts(report, job) {
     if (moving.includes(b.exit)) out.push([b.start_frame + b.frames - edge, b.start_frame + b.frames]);
     return out;
   });
-  return String(report)
+  const kept = String(report)
     .split('\n')
     .filter(line => {
       const m = / \(frames (\d+)\.\.(\d+),.*cut off by the canvas edge/.exec(line);
@@ -242,4 +242,9 @@ function withoutCameraCuts(report, job) {
       return !m || !(inside(+m[1]) && inside(+m[2]));
     })
     .join('\n');
+  // The count describes what is left after the filter, not what the renderer first saw.
+  const left = kept.split('\n').filter(l => /^(Error|Warning|Info) /.test(l)).length;
+  return kept.replace(/(checked \d+ frames: )\d+ findings?/, (_, head) =>
+    left ? `${head}${left} findings` : `${head}no problems found`,
+  );
 }

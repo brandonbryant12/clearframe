@@ -597,7 +597,7 @@ export const BLOCKS = [
 ];
 export const blockByName = name => BLOCKS.find(b => b.name === name);
 export const MOTIONS = ['gentle', 'snappy', 'spring'];
-export const TRANSITIONS = ['cut', 'fade', 'rise', 'wipe', 'push', 'zoom', 'panel', 'iris', 'whip', 'flash'];
+export const TRANSITIONS = ['cut', 'fade', 'rise', 'wipe', 'push', 'zoom', 'panel', 'iris', 'whip', 'flash', 'dissolve'];
 export const BACKDROPS = ['none', 'dots', 'grid', 'glow', 'paper', 'mosaic'];
 export const CANVASES = [
   [1920, 1080],
