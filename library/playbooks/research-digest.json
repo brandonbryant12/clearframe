@@ -513,6 +513,10 @@
           }
         ],
         "view": [200, 190, 1720, 967.5]
+      },
+      "camera": {
+        "move": "right",
+        "amount": 0.5
       }
     },
     {
@@ -545,7 +549,11 @@
         },
         "elements": []
       },
-      "transition": "whip"
+      "transition": "whip",
+      "camera": {
+        "move": "in",
+        "amount": 0.6
+      }
     },
     {
       "id": "trial",
