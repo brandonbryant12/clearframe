@@ -12,7 +12,21 @@ export const ELEMENT_TYPES = {
   path: { geometry: ['d', 'arrow', 'head'], required: ['d'] },
   poly: { geometry: ['points', 'closed', 'arrow', 'head'], required: ['points'] },
   text: {
-    geometry: ['text', 'x', 'y', 'size', 'font', 'anchor', 'width', 'height', 'leading', 'tracking', 'upper', 'count', 'fit'],
+    geometry: [
+      'text',
+      'x',
+      'y',
+      'size',
+      'font',
+      'anchor',
+      'width',
+      'height',
+      'leading',
+      'tracking',
+      'upper',
+      'count',
+      'fit',
+    ],
     required: [],
   },
   icon: { geometry: ['name', 'x', 'y', 'size'], required: ['name'] },
@@ -559,9 +573,12 @@ const defaultEnter = el =>
  * count, keyframe and path move has finished (ambient loops continue by design).
  * `resolve(value)` maps a number (seconds) or spoken phrase to scene seconds.
  */
-export function scheduleElements(list, { start, stagger = 0, entrance, resolve, limit = Infinity }) {
+export function scheduleElements(list, { start, stagger = 0, entrance, resolve, limit = Infinity, still = false }) {
   let settle = start;
   list.forEach((el, i) => {
+    // A group placed with no entrance places its contents with none: children that do not
+    // ask for one would otherwise draw or fade in on the cut frame.
+    if (still && el.enter == null) el.enter = 'none';
     if (el.say != null) {
       el.at = resolve(el.say);
       delete el.say;
@@ -635,7 +652,14 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
     if (el.type === 'group')
       settle = Math.max(
         settle,
-        scheduleElements(el.children, { start: el.at, stagger: el.stagger ?? 0, entrance, resolve, limit }),
+        scheduleElements(el.children, {
+          start: el.at,
+          stagger: el.stagger ?? 0,
+          entrance,
+          resolve,
+          limit,
+          still: el.enter === 'none',
+        }),
       );
   });
   return settle;

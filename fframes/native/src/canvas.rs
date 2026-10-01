@@ -1497,6 +1497,15 @@ fn travel(from: [f32; 4], to: [f32; 4], q: f32) -> [f32; 4] {
     let (w0, w1) = (from[2].max(1.0), to[2].max(1.0));
     let w = w0 * (w1 / w0).powf(q);
     let h = w * lerp(from[3] / w0, to[3] / w1);
+    // A real zoom turns about one point that stays put on screen, the point both rects agree
+    // on. Interpolating the centre linearly while the width moves exponentially swings the
+    // target off frame mid-zoom. Pans (nearly equal widths) travel straight.
+    if (w1 / w0).ln().abs() > 0.15 {
+        let fixed = |a0: f32, a1: f32| (a0 * w1 - a1 * w0) / (w1 - w0);
+        let (fx, fy) = (fixed(from[0], to[0]), fixed(from[1], to[1]));
+        let k = w / w0;
+        return [fx - (fx - from[0]) * k, fy - (fy - from[1]) * k, w, h];
+    }
     let (cx, cy) =
         (lerp(from[0] + from[2] / 2.0, to[0] + to[2] / 2.0), lerp(from[1] + from[3] / 2.0, to[1] + to[3] / 2.0));
     [cx - w / 2.0, cy - h / 2.0, w, h]
@@ -1515,6 +1524,19 @@ mod tests {
         assert!(!arc.d.contains('A'), "arcs are normalized to curves");
         assert!(path_info("M 0 0 L nope").is_none());
         assert!(path_info("<script>").is_none());
+    }
+    #[test]
+    fn zooms_turn_about_the_point_both_views_share() {
+        // From the whole map to a window at (900, 500): the window keeps its place on screen.
+        let (from, to) = ([0.0, 0.0, 1920.0, 1080.0], [880.0, 488.75, 40.0, 22.5]);
+        let at = |c: [f32; 4]| ((900.0 - c[0]) / c[2], (500.0 - c[1]) / c[3]);
+        let (a, b) = (at(from), at(to));
+        for q in [0.25, 0.5, 0.75] {
+            let (u, v) = at(travel(from, to, q));
+            assert!((u - a.0).abs() < 0.02 && (v - a.1).abs() < 0.02, "{q}: {u},{v} vs {a:?} {b:?}");
+        }
+        let end = travel(from, to, 1.0);
+        assert!((end[0] - to[0]).abs() < 0.5 && (end[2] - to[2]).abs() < 0.5);
     }
     #[test]
     fn arrow_tips_follow_the_outline() {

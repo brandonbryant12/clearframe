@@ -23,6 +23,8 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - `cinematic-explainer`: the water system in cross-section, with labels kept inside the letterbox.
   - New set pieces: `signal`, `wires`, `citygrid`, `mast`, `harbor` and `rooftops`. `card` is a poster card (`LEAD`/`CARD`), and `title` fills the frame.
   - First beats cut in rather than fading up from black.
+- **World zooms turn about one point.** Between two views of different sizes, the camera zooms about the point both views share, so the target holds its place instead of swinging off frame mid-zoom.
+- **A group with `enter: "none"` places its children with none**, instead of letting them draw or fade in on the cut frame.
 - **Genre films after round 2.**
   - Imagery:
     - The cold open gets solid container stacks, a fitted office block and a real operator profile.
