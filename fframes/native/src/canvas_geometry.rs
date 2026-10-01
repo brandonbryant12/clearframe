@@ -155,6 +155,9 @@ pub(super) fn text_font(el: &Value) -> Font {
         "serif-italic" | "italic" => Font::SerifItalic,
         "mono" => Font::Mono,
         "hand" => Font::Hand,
+        "poster" => Font::Poster,
+        "serif-display" => Font::SerifDisplay,
+        "serif-display-italic" => Font::SerifDisplayItalic,
         _ => {
             if el.get("count").is_some() {
                 Font::Figures

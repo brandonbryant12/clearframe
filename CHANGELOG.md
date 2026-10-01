@@ -23,6 +23,7 @@ Travel instead of cutting, type with a voice, and fewer false alarms.
   - `cinematic-explainer`: the water system in cross-section, with labels kept inside the letterbox.
   - New set pieces: `signal`, `wires`, `citygrid`, `mast`, `harbor` and `rooftops`. `card` is a poster card (`LEAD`/`CARD`), and `title` fills the frame.
   - First beats cut in rather than fading up from black.
+- **Two display faces for genres** (SIL OFL 1.1 from google/fonts at the pinned revision, hashes in `provenance.json`): `poster` (Bebas Neue condensed capitals) for trailer cards, and `serif-display` / `serif-display-italic` (DM Serif Display) for documentary and editorial titles.
 - **Report films rebuilt after round 2.** Each is one place, born from its mechanism and ending on a picture, with no iris, no "X, not Y" closer and no end card (generators in `library/playbooks/_*.mjs`).
   - `data-story` stays in its queue: the wait lands over the line, and the charts stand in front of the same room.
   - `research-digest` stays on one street: the figure sits above bunched buses, the camera tilts up to the evidence, and the film ends on the buses evenly spaced.

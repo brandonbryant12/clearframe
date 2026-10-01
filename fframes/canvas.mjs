@@ -117,6 +117,9 @@ export const FONTS = [
   'italic',
   'mono',
   'hand',
+  'poster',
+  'serif-display',
+  'serif-display-italic',
 ];
 export const MAX_ELEMENTS = 600;
 

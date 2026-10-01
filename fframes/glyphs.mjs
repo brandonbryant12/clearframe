@@ -13,6 +13,9 @@ export const FACE = {
   italic: 'InstrumentSerif-Italic.ttf',
   mono: 'IBMPlexMono-Medium.ttf',
   hand: 'ArchitectsDaughter-Regular.ttf',
+  poster: 'BebasNeue-Regular.ttf',
+  'serif-display': 'DMSerifDisplay-Regular.ttf',
+  'serif-display-italic': 'DMSerifDisplay-Italic.ttf',
 };
 // Props that are never displayed (cues, files, enums), so they are not glyph-checked.
 const HIDDEN = new Set([

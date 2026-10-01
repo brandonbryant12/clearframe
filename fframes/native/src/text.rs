@@ -22,10 +22,15 @@ pub enum Font {
     SerifItalic,
     Mono,
     Hand,
+    /// Condensed poster capitals (Bebas Neue): trailer cards, title words.
+    Poster,
+    /// High-contrast display serif (DM Serif Display): documentary and editorial titles.
+    SerifDisplay,
+    SerifDisplayItalic,
 }
 
 impl Font {
-    const ALL: [Font; 10] = [
+    const ALL: [Font; 13] = [
         Font::Text,
         Font::TextStrong,
         Font::DisplayLight,
@@ -36,6 +41,9 @@ impl Font {
         Font::SerifItalic,
         Font::Mono,
         Font::Hand,
+        Font::Poster,
+        Font::SerifDisplay,
+        Font::SerifDisplayItalic,
     ];
     pub fn family(self) -> &'static str {
         match self {
@@ -44,12 +52,20 @@ impl Font {
             Font::Serif | Font::SerifItalic => "Instrument Serif",
             Font::Mono => "IBM Plex Mono",
             Font::Hand => "Architects Daughter",
+            Font::Poster => "Bebas Neue",
+            Font::SerifDisplay | Font::SerifDisplayItalic => "DM Serif Display",
             _ => "Inter Display",
         }
     }
     pub fn weight(self) -> u16 {
         match self {
-            Font::Text | Font::Serif | Font::SerifItalic | Font::Hand => 400,
+            Font::Text
+            | Font::Serif
+            | Font::SerifItalic
+            | Font::Hand
+            | Font::Poster
+            | Font::SerifDisplay
+            | Font::SerifDisplayItalic => 400,
             Font::Mono => 500,
             Font::TextStrong | Font::Display => 600,
             Font::DisplayLight => 300,
@@ -57,7 +73,7 @@ impl Font {
         }
     }
     pub fn italic(self) -> bool {
-        self == Font::SerifItalic
+        self == Font::SerifItalic || self == Font::SerifDisplayItalic
     }
     fn file(self) -> &'static str {
         match self {
@@ -71,6 +87,9 @@ impl Font {
             Font::SerifItalic => "InstrumentSerif-Italic.ttf",
             Font::Mono => "IBMPlexMono-Medium.ttf",
             Font::Hand => "ArchitectsDaughter-Regular.ttf",
+            Font::Poster => "BebasNeue-Regular.ttf",
+            Font::SerifDisplay => "DMSerifDisplay-Regular.ttf",
+            Font::SerifDisplayItalic => "DMSerifDisplay-Italic.ttf",
         }
     }
     fn index(self) -> usize {
