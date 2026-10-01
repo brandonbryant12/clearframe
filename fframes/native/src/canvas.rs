@@ -15,6 +15,8 @@ mod effects;
 mod geometry;
 #[path = "canvas_mosaic.rs"]
 mod mosaic;
+#[path = "canvas_print.rs"]
+pub(crate) mod print;
 use geometry::*;
 
 pub(crate) const MAX_ELEMENTS: usize = 600;
@@ -115,6 +117,11 @@ pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut us
         }
         if el.get("material").is_some_and(|m| !effects::material_ok(m)) {
             return Err("canvas material is a preset name or {map, depth, soften, flow, grain, angle}");
+        }
+        if el.get("print").is_some_and(|p| p != &Value::Bool(false) && !print::ok(p)) {
+            return Err(
+                "canvas print is benday|halftone|engraving|newsprint|letterpress or {screen, cell, angle, tone, axis, register, wear, ink}",
+            );
         }
         if el.get("along").is_some_and(|route| path_info(s(route, "d")).is_none()) {
             return Err("canvas along needs parseable path data");
@@ -751,6 +758,16 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 now,
             ),
         };
+        // Worn ink lets the paper through in specks: any element can be printed tired.
+        let shape = match el.get("print").and_then(print::Spec::parse).filter(|p| p.wear > 0.0) {
+            Some(spec) => {
+                use std::hash::{Hash, Hasher};
+                let mut h = std::collections::hash_map::DefaultHasher::new();
+                el.to_string().hash(&mut h);
+                self.worn(shape, spec.wear, h.finish(), (bx, by, bw, bh))
+            }
+            None => shape,
+        };
 
         // Wipes reveal through a growing clip over the element bounds.
         let wipe = match (enter, exit) {
@@ -1066,6 +1083,14 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 return self.rough_shape(el, rough, &fill, &stroke, width, draw, now);
             }
         }
+        // Printed: the colour plate (fill and screen) off register under the key line.
+        if let Some(spec) = el.get("print").and_then(print::Spec::parse) {
+            if matches!(kind, "rect" | "circle" | "ellipse" | "path" | "poly")
+                && (spec.screen != print::Screen::None || spec.register != (0.0, 0.0))
+            {
+                return self.printed(el, &spec, draw, dash_shift, reveal, local, defs, now);
+            }
+        }
         match kind {
             "rect" => {
                 let r = f(el, "r", 0.0);
@@ -1310,10 +1335,33 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             .unwrap_or_else(|| panic!("missing or undecodable prepared image: {key}"));
         let (x, y, w, h) = (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0).max(1.0), f(el, "h", 0.0).max(1.0));
         let r = f(el, "r", 0.0);
-        let aspect = if s(el, "fit") == "contain" { "xMidYMid meet" } else { "xMidYMid slice" };
+        let contain = s(el, "fit") == "contain";
+        let aspect = if contain { "xMidYMid meet" } else { "xMidYMid slice" };
         let id = self.uid("cimg");
-        let img = fframes::svgr!(<image x={x} y={y} width={w} height={h} preserveAspectRatio={aspect} href={image} />);
-        let img = self.treat(img, s(el, "treatment"));
+        // Printed pictures: the photo becomes paper and a screen whose dots (or lines) follow
+        // its darkness, in the palette's ink.
+        let spec = el
+            .get("print")
+            .and_then(print::Spec::parse)
+            .or_else(|| print::Spec::parse(&Value::String(s(el, "treatment").into())))
+            .filter(|p| p.screen != print::Screen::None);
+        let img = match spec {
+            Some(spec) => {
+                let (iw, ih) = (image.width.max(1) as f32, image.height.max(1) as f32);
+                let k = if contain { (w / iw).min(h / ih) } else { (w / iw).max(h / ih) };
+                let place = (x + (w - iw * k) / 2.0, y + (h - ih * k) / 2.0, iw * k, ih * k);
+                let mut defs = vec![];
+                let paper = self.paint(el.get("fill"), if el.get("treatment").is_some() { "bg" } else { "none" }, &mut defs);
+                let ink = self.paint(spec.ink.as_ref(), "ink", &mut defs);
+                let printed = self.printed_picture(&image, place, (x, y, w, h), &spec, &paper, &ink, true);
+                fframes::svgr!(<g><defs>{defs}</defs>{printed}</g>)
+            }
+            None => {
+                let img =
+                    fframes::svgr!(<image x={x} y={y} width={w} height={h} preserveAspectRatio={aspect} href={image} />);
+                self.treat(img, s(el, "treatment"))
+            }
+        };
         fframes::svgr!(<g>
             <defs><clipPath id={id.clone()}><rect x={x} y={y} width={w} height={h} rx={r} ry={r} /></clipPath></defs>
             <g clip-path={format!("url(#{id})")}>{img}</g>

@@ -1,0 +1,41 @@
+{
+  "order": 34,
+  "title": "Handheld LCD",
+  "when": "Games, retro technology, step-by-step logic, levels and progress: a story played on a 1989 screen",
+  "film": {
+    "theme": "lcd",
+    "backdrop": "none",
+    "texture": {
+      "grain": 0.12,
+      "vignette": 0.25
+    },
+    "motion": {
+      "preset": "snappy",
+      "intensity": 0.7
+    },
+    "textMotion": "letters",
+    "transition": "cut",
+    "sfx": "normal",
+    "voice": {
+      "style": "playful and quick, like a narrator who has played this level before"
+    }
+  },
+  "beats": {
+    "mosaic": {
+      "style": "pixel",
+      "tile": 18,
+      "gap": 2
+    },
+    "rough": false,
+    "font": "mono",
+    "fps": 12,
+    "graphic": "cut"
+  },
+  "rules": [
+    "Four shades only: bg, surface, accent2 and ink. Every shape is laid in pixels (the canvas mosaic default); outlines are pixel edges in the stroke colour.",
+    "Motion is stepped (12 frames a second on moving elements) and moves in whole cells: sprites hop, they do not glide.",
+    "Build the world in screens: one screen per beat, the camera cutting (or a world pan) as the player moves right. Start from pixel-skyline.",
+    "Labels are short mono caps, like a status bar: LEVEL 2, 3/5, GAME OVER. Real figures still carry a source line.",
+    "Give the screen depth with a shadow under moving sprites (shadow: {dx: 3, dy: 3, blur: 0, opacity: 0.25})."
+  ]
+}

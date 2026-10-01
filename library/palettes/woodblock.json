@@ -1,0 +1,14 @@
+{
+  "order": 31,
+  "notes": "Ukiyo-e: Prussian blue and beni red on warm washi, with ink key lines. Water, weather, journeys and quiet drama; pair with bokashi gradients and the engraving screen.",
+  "colors": {
+    "bg": "#ecdfc2",
+    "surface": "#e0d0a8",
+    "ink": "#1a1814",
+    "muted": "#66583f",
+    "accent": "#1f3a6b",
+    "accent2": "#c23b22",
+    "positive": "#3f6a98",
+    "negative": "#c23b22"
+  }
+}

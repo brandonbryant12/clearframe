@@ -189,7 +189,7 @@ const schema = {
               asset: text,
               file: text,
               side: { enum: ['full', 'left', 'right', 'top', 'bottom'] },
-              treatment: { enum: ['none', 'mono', 'duotone', 'tint', 'blur', 'soft'] },
+              treatment: { enum: ['none', 'mono', 'duotone', 'tint', 'blur', 'soft', 'halftone', 'engraving'] },
               drift: { enum: ['none', 'in', 'out', 'left', 'right', 'up', 'down'] },
               scrim: { type: 'number', minimum: 0, maximum: 1 },
               focus: { type: 'array', minItems: 2, maxItems: 2, items: { type: 'number', minimum: 0, maximum: 1 } },

@@ -1,0 +1,14 @@
+{
+  "order": 34,
+  "notes": "A streamline travel poster at night: navy sky, gold and cream, a teal sea. Launches, premieres, cities and journeys; gradients and sunbursts, never outlines.",
+  "colors": {
+    "bg": "#0b1733",
+    "surface": "#15284f",
+    "ink": "#f2e6c9",
+    "muted": "#aaa28a",
+    "accent": "#d9a840",
+    "accent2": "#3fa1a8",
+    "positive": "#7cc59a",
+    "negative": "#e0705a"
+  }
+}

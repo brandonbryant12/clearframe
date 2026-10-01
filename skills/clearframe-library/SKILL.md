@@ -29,6 +29,7 @@ Choose the visual by the task:
 | Point at something in any scene | beat `art.over` (arrows, circles, labels placed with `still --grid`) |
 | Punctuate a turn or a number | `tone: accent`, a `panel`/`iris`/`whip` transition, centred `align` |
 | Promo and launch pieces | canvas `sketch`: `sunburst` (opener), `chat` (a conversation on a floating phone), `device` (a window swinging in over a sky), `marquee` (an end card ringed by type); `material` for one word of hero type |
+| A period or craft look | `print` (benday, halftone, engraving, newsprint, letterpress; plate `treatment: halftone`), mosaic `style: pixel | stitch`; sketches `benday-burst`, `woodblock-wave`, `manifesto`, `pixel-skyline`, `sampler-border`; treatments `pulp`, `woodblock`, `constructivist`, `deco`, `handheld`, `sampler`; one subject across eras: the `style-relay` playbook (`gallery` treatment) |
 
 Playbooks have different narrative arcs, audiences and required evidence. Adapt and combine them rather than stretching a mismatched structure. The sample claims/quotations are labelled illustrative; replace them before publishing. For real UI demonstrations use approved screenshots or recordings: `annotate` pins the reading order onto a screenshot; `screen-walkthrough` scaffolds a text-free wireframe placeholder to replace.
 

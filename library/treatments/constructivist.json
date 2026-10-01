@@ -1,0 +1,36 @@
+{
+  "order": 32,
+  "title": "Constructivist",
+  "when": "Manifestos, campaigns, launches with a cause, hard numbers stated as demands",
+  "film": {
+    "theme": "constructivist",
+    "backdrop": "none",
+    "texture": {
+      "grain": 0.25,
+      "vignette": 0.15
+    },
+    "motion": {
+      "preset": "snappy",
+      "intensity": 0.9
+    },
+    "textMotion": "words",
+    "transition": "cut",
+    "sfx": "normal",
+    "voice": {
+      "style": "declarative and rousing, short sentences, no hedging"
+    }
+  },
+  "beats": {
+    "print": "letterpress",
+    "rough": false,
+    "font": "poster",
+    "graphic": "wipe"
+  },
+  "rules": [
+    "Two inks and cream: red for the cause, black for the structure. A third colour only for a source line.",
+    "Everything leans: build on a diagonal (rotate the group -12° to -30°); circles and wedges collide; type runs along the slope. Start from the manifesto sketch.",
+    "Photographs become halftones in one ink: plate treatment halftone, or an image element with print {screen: dots, ink: ink}.",
+    "Numbers are slabs: one figure huge in the poster face, its unit small beside it, its source visible.",
+    "Cut hard on the stressed word; no dissolves. A wipe at a chapter turn is the only soft move."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "order": 31,
+  "title": "Woodblock",
+  "when": "Water, weather, journeys, slow forces and quiet drama: a story told like a print from a series of views",
+  "film": {
+    "theme": "woodblock",
+    "backdrop": "paper",
+    "texture": {
+      "grain": 0.28,
+      "vignette": 0.25
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.45
+    },
+    "textMotion": "words",
+    "transition": "cut",
+    "sfx": "subtle",
+    "voice": {
+      "style": "calm, spare and observant, a little formal"
+    }
+  },
+  "beats": {
+    "rough": false,
+    "emphasisStyle": "serif",
+    "graphic": "wipe"
+  },
+  "rules": [
+    "Flat colour inside an ink key line; depth comes from overlap and scale, never from glow.",
+    "Skies and water carry bokashi: a gradient from accent (Prussian blue) into the paper, top to bottom. One gradient per area.",
+    "Water and shading are cut lines: print {screen: lines, ink: accent, angle: -20} on the sea, swelling where it darkens. Start from the woodblock-wave sketch.",
+    "Compose off-centre with a strong diagonal and a small, distant subject (a mountain, a boat, a figure) so scale tells the story.",
+    "A cartouche (a small accent2 rectangle with a title in serif) may name the view; nothing else is lettered on the picture."
+  ]
+}

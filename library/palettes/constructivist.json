@@ -1,0 +1,14 @@
+{
+  "order": 33,
+  "notes": "Two inks and cream: poster red and black, ochre for a third voice. Manifestos, campaigns, hard numbers; diagonals, wedges and halftone photographs.",
+  "colors": {
+    "bg": "#ece2cc",
+    "surface": "#dccfb2",
+    "ink": "#16130f",
+    "muted": "#625b4f",
+    "accent": "#bd281d",
+    "accent2": "#8a5a14",
+    "positive": "#3d6b45",
+    "negative": "#bd281d"
+  }
+}

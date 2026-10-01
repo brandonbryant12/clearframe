@@ -500,12 +500,14 @@ export const BLOCKS = [
       world:
         'Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views',
       elements:
-        '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine, tilt, material}] (≤ 600) — see docs/canvas.md',
+        '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine, tilt, material, mosaic, print}] (≤ 600) — see docs/canvas.md',
       stagger: 'Seconds between top-level elements without a cue (0–3)',
       rough:
         'Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure|solid, gap} (an element can set rough: false)',
       mosaic:
-        'Lay every shape in tesserae: true or {tile, gap, jitter, flow: rows|rings, outline, build: sweep|radial|random, shade, shine, grout, axis} (an element can set mosaic: false)',
+        'Lay every shape in tiles: true or {tile, gap, jitter, flow: rows|rings|contour, style: tesserae|pixel|stitch, outline, build: sweep|radial|random, shade, shine, grout, axis} (an element can set mosaic: false)',
+      print:
+        'Print every shape: benday|halftone|engraving|newsprint|letterpress or {screen: dots|lines|none, cell, angle, tone, axis, register: [dx, dy], wear, ink} (an element can set print: false)',
       dolly:
         'Fly the camera through depth: keys [{say|at, z, dur, ease}]. Elements with z are drawn in perspective; the camera passes them as its z reaches theirs',
       focus:

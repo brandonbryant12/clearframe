@@ -70,9 +70,33 @@ Give a shape `mosaic: true` (or set `mosaic` on the canvas to lay every shape) a
 - **Recolour fronts.** `recolor: [{say | at, dur, fill, axis, share}]` sweeps a front across the shape (along `axis` in degrees; 90 is top to bottom). The tiles it passes flip edge-on and come back in the new `fill` (a colour, token or gradient), which is how a mosaic sky turns from dusk to night. `share` flips only that seeded fraction of the tiles: a mosaic can show "12% of streets" by turning 12% of its tiles red.
 - **Knockout and halo.** A filled mosaic shape drawn later (the moon, the tower) removes the earlier mosaic's tiles beneath it from the moment it enters, leaving a grout line. The nearest `halo` rows (default 2) then bend around its outline, the way a mosaicist lays the sky around a figure. `knockout: false` on the later shape opts out.
 - **Scale.** A single shape is capped at about 12,000 tiles (its tile size grows instead). A canvas-level `mosaic` leaves backdrop-sized shapes flat for the mosaic backdrop to cover.
-- **Options:** `tile` (size, default 16), `gap` (grout), `jitter` (0–1), `flow`, `outline` (true/false), `build`, `shade` (per-tile light/dark range), `shine` (glassy highlight), `glint` (0–1: tiles catch the light in turn, so a held mosaic shimmers; water 0.6, gold 0.4, walls 0.15), `grout` (colour), `axis`, `seed`.
+- **Options:** `tile` (size, default 16), `gap` (grout), `jitter` (0–1), `flow`, `outline` (true/false), `build`, `shade` (per-tile light/dark range), `shine` (glassy highlight), `glint` (0–1: tiles catch the light in turn, so a held mosaic shimmers; water 0.6, gold 0.4, walls 0.15), `grout` (colour), `axis`, `seed`, `style`.
+- **Styles.** `style: "tesserae"` (the default) is hand-cut stone on grout. `"pixel"` lays square LCD cells and `"stitch"` lays cross-stitches (two legs, the top one catching the light) on one square grid anchored at the canvas origin, so neighbouring shapes share it, with no grout bed: the screen or the cloth shows between cells. A shape takes the cells whose centres fall inside it; with a `stroke` (or `outline: true`) its edge cells take the stroke colour, the way pixel art and samplers outline a figure. A stroke becomes a one-cell line (pixel-perfect: no doubled corners). A shape laid later takes exactly the cells it covers, with no halo. Pair `pixel` with the `handheld` treatment (`lcd` palette, stepped motion) and `stitch` with `sampler`.
 
 Pair it with the `mosaic` treatment (palette, `backdrop: "mosaic"`, gentle motion, iris at chapter turns). Put `glow` on gold tiles (a moon, a lamp, stars). Draw hero shapes big enough for a dozen tiles across. Layouts are cached and tiles are batched by colour, so a frame of a few thousand tiles costs a handful of paths.
+
+## Print: halftone, engraving, register and wear
+
+Give a shape or picture `print` and it is printed the way posters, comics and newspapers were, by a process rather than a filter. Presets:
+
+| preset | the process | settings |
+|---|---|---|
+| `benday` | comic tints: a fine flat dot screen | dots, cell 10, angle 15°, tone 0.3 |
+| `halftone` | a newspaper screen, light at the top, dark at the bottom | dots, cell 12, angle 45°, tone 0.12 → 0.62 |
+| `engraving` | banknote and woodcut lines that swell with the tone | lines, cell 7, angle −28°, tone 0.12 → 0.62 |
+| `newsprint` | the 1938 comic cover: Ben-Day tint, colour off register, worn paper | dots, cell 9, angle 15°, tone 0.28, register [5, 3.5], wear 0.22 |
+| `letterpress` | wood type and two-colour bills: no screen, plates apart, ink dropping out | register [7, −4.5], wear 0.35 |
+
+Or write it out: `{screen: dots | lines | none, cell, angle, tone, axis, register: [dx, dy], wear, ink}`.
+
+- **The screen.** The shape's `fill` is the paper or flat colour under the screen; the screen is printed on top in `ink` (default the `ink` token). `tone` is the ink coverage, 0–1: one number for a flat tint, or `[from, to]` ramped along `axis` (degrees; 90 runs top to bottom). Dots grow by area until they touch and then merge; lines thicken. The lattice is anchored at the canvas origin, so shapes printed with one screen share it, and it is clipped to the outline. A pale sky is paper with `accent2` dots (`{screen: "dots", ink: "accent2", tone: 0.25}`); a sea is a fill combed with lines (`{screen: "lines", ink: "accent", tone: [0.2, 0.7]}`).
+- **Pictures.** On an `image` the screen follows the picture: each dot or line piece takes the darkness of the pixels beneath it, so a photograph or generated still becomes a newspaper halftone or an engraving in the palette's ink (the image's `fill` is the paper; `treatment: "halftone" | "engraving"` is the same with paper `bg`). Plates take the same two treatments: `plate: {asset, treatment: "halftone"}`. Footage plates are screened frame by frame.
+- **Register.** `register: [dx, dy]` (pixels, up to 60) prints the colour plate (fill and screen) that far from the key plate (the `stroke`, on register): paper shows on one side of each key line and colour runs under it on the other. Give printed shapes an ink `stroke` (width 5–7) or the offset has nothing to be off from.
+- **Wear.** `wear` (0–1) lets the paper through: fine specks where the grain runs high, gathered into patches where the press ran dry. Static per element, like a real impression. Text takes `print: {wear}` alone (worn wood type).
+- **Canvas-wide.** `print` on the canvas (or a treatment's `beats.print`) prints every shape that has no finish of its own; frame-sized shapes (a sky, a ground) stay flat so no register shift opens an edge, and `print: false` opts a shape out (keep charts and anything people must read precisely clean).
+- **Cost.** Screens are vector geometry laid once per element and cached (at most about 36,000 marks; a huge shape gets a coarser screen), so a printed scene costs about as much per frame as a flat one.
+
+Start from `sketch benday-burst`, `woodblock-wave` or `manifesto`; the `pulp`, `woodblock` and `constructivist` treatments set a film up for them. The look comes from the *Superman in Flight* poster film (one figure through twenty art processes): see `docs/research/2026-10-superman-in-flight.md`.
 
 ## Worlds: one drawing, a travelling camera
 
@@ -143,7 +167,7 @@ These combine with any block, including `canvas`:
   "props": { "value": 72, "suffix": "%", "label": "…", "source": "…" } }
 ```
 
-- `plate`: an image or clip `side: full|left|right|top|bottom` (tall frames stack left/right as top/bottom). `treatment: duotone|tint|mono|blur|soft|none` recolours any photo or generated still into the palette; `drift: in|out|left|right|up|down|none`; `scrim` 0–1 keeps text readable on full plates; `focus: [x, y]` chooses the crop.
+- `plate`: an image or clip `side: full|left|right|top|bottom` (tall frames stack left/right as top/bottom). `treatment: duotone|tint|mono|blur|soft|none` recolours any photo or generated still into the palette, and `halftone|engraving` prints it as a dot or line screen in the palette's ink; `drift: in|out|left|right|up|down|none`; `scrim` 0–1 keeps text readable on full plates; `focus: [x, y]` chooses the crop.
 - `tone: accent|accent2|invert|surface` floods the frame with a colour and re-derives readable text colours. Use it to punctuate. A `panel` transition into an accent-tone scene reads as the panel becoming the background.
 - `camera: in|out|left|right|up|down|none` or `{move, amount}`. The default `auto` pushes in gently everywhere except kinetic text and footage.
 - `camera: {to: [x, y, w, h], say|at, dur}` pushes the picture from the full frame into a frame-pixel rect: a close-up on the bar, the word or the part that matters, starting on a spoken word. The heading fades as the camera moves in; the source line stays. Read coordinates off `still --beat ID --grid`.

@@ -81,6 +81,7 @@ const COMMON = [
   'mosaic',
   'tilt',
   'material',
+  'print',
 ];
 export const ENTERS = [
   'fade',
@@ -104,6 +105,10 @@ export const ENTERS = [
 export const EXITS = ['fade', 'shrink', 'fall', 'lift', 'undraw', 'wipe', 'blur', 'none', 'scatter'];
 export const LOOPS = ['spin', 'pulse', 'float', 'sway', 'orbit', 'dash', 'blink', 'level', 'rock'];
 export const MATERIALS = ['thermal', 'chrome', 'gold', 'neon'];
+/** Print finishes: the look of one printing process each (see `printSpec`). */
+export const PRINTS = ['benday', 'halftone', 'engraving', 'newsprint', 'letterpress'];
+/** Mosaic tile styles: hand-cut tesserae, LCD pixels, or cross-stitches on cloth. */
+export const MOSAIC_STYLES = ['tesserae', 'pixel', 'stitch'];
 export const EASES = ['inOut', 'in', 'out', 'linear', 'spring'];
 export const COLOR_TOKENS = [
   'bg',
@@ -119,7 +124,7 @@ export const COLOR_TOKENS = [
   'wash2',
   'none',
 ];
-export const TREATMENTS = ['none', 'mono', 'duotone', 'tint', 'blur', 'soft'];
+export const TREATMENTS = ['none', 'mono', 'duotone', 'tint', 'blur', 'soft', 'halftone', 'engraving'];
 export const FONTS = [
   'display',
   'semibold',
@@ -304,6 +309,13 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
     else if (el.mosaic != null) {
       if (!MOSAIC_TYPES.has(el.type)) fail(`${at}.mosaic works on rect, circle, ellipse, path, poly and line`);
       el.mosaic = mosaicSpec(el.mosaic, `${at}.mosaic`, fail);
+    }
+    // `print: false` opts out of a canvas-wide print; `applyPrint` removes the marker.
+    if (el.print != null && el.print !== false) {
+      if (!PRINT_TYPES.has(el.type)) fail(`${at}.print works on rect, circle, ellipse, path, poly, image and text`);
+      el.print = printSpec(el.print, `${at}.print`, fail);
+      if (el.type === 'text' && (typeof el.print !== 'object' || el.print.screen || el.print.register))
+        fail(`${at}.print on text takes only wear, as {wear} (screens and register need a shape or picture)`);
     }
     if (el.echo != null) {
       const e = el.echo;
@@ -505,6 +517,7 @@ export function mosaicSpec(m, at, fail) {
         'recolor',
         'halo',
         'knockout',
+        'style',
       ].includes(k)
     )
       fail(`${at}: unsupported field ${k}`);
@@ -513,6 +526,7 @@ export function mosaicSpec(m, at, fail) {
   }
   if (m.flow != null && !['rows', 'rings', 'contour'].includes(m.flow))
     fail(`${at}.flow must be rows, rings or contour`);
+  if (m.style != null && !MOSAIC_STYLES.includes(m.style)) fail(`${at}.style must be ${MOSAIC_STYLES.join(', ')}`);
   if (m.build != null && !['sweep', 'radial', 'random', 'fly'].includes(m.build))
     fail(`${at}.build must be sweep, radial, random or fly`);
   if (m.from != null && !(Array.isArray(m.from) && m.from.length === 2 && m.from.every(Number.isFinite)))
@@ -533,6 +547,56 @@ export function mosaicSpec(m, at, fail) {
     });
   }
   return { ...m, ...(m.recolor ? { recolor: m.recolor.map(r => ({ ...r })) } : {}) };
+}
+/**
+ * Validate a print finish: a preset name (`benday`, `halftone`, `engraving`, `newsprint`,
+ * `letterpress`) or {screen: dots|lines|none, cell, angle, tone, axis, register, wear, ink}.
+ * Presets pass through as names; the renderer holds their values.
+ */
+export function printSpec(p, at, fail) {
+  if (typeof p === 'string') {
+    if (!PRINTS.includes(p)) fail(`${at} must be one of ${PRINTS.join(', ')} or an object`);
+    return p;
+  }
+  if (!p || typeof p !== 'object' || Array.isArray(p))
+    fail(`${at} must be a preset (${PRINTS.join(', ')}) or {screen, cell, angle, tone, axis, register, wear, ink}`);
+  for (const k of Object.keys(p))
+    if (!['screen', 'cell', 'angle', 'tone', 'axis', 'register', 'wear', 'ink'].includes(k))
+      fail(`${at}: unsupported field ${k}`);
+  if (p.screen != null && !['dots', 'lines', 'none'].includes(p.screen)) fail(`${at}.screen must be dots, lines or none`);
+  if (p.cell != null && !(Number.isFinite(p.cell) && p.cell >= 2 && p.cell <= 160)) fail(`${at}.cell must be 2–160 px`);
+  for (const k of ['angle', 'axis'])
+    if (p[k] != null && !(Number.isFinite(p[k]) && Math.abs(p[k]) <= 360)) fail(`${at}.${k} must be degrees`);
+  const unit = v => Number.isFinite(v) && v >= 0 && v <= 1;
+  if (p.tone != null && !(unit(p.tone) || (Array.isArray(p.tone) && p.tone.length === 2 && p.tone.every(unit))))
+    fail(`${at}.tone must be 0–1 or [from, to] (ink coverage)`);
+  if (
+    p.register != null &&
+    !(Array.isArray(p.register) && p.register.length === 2 && p.register.every(v => Number.isFinite(v) && Math.abs(v) <= 60))
+  )
+    fail(`${at}.register must be [dx, dy] up to 60 px`);
+  if (p.wear != null && !unit(p.wear)) fail(`${at}.wear must be 0–1`);
+  if (p.ink != null && (typeof p.ink !== 'string' || !isColor(p.ink) || p.ink === 'none'))
+    fail(`${at}.ink must be a palette token or #rrggbb`);
+  return { ...p, ...(Array.isArray(p.tone) ? { tone: [...p.tone] } : {}), ...(p.register ? { register: [...p.register] } : {}) };
+}
+const PRINT_TYPES = new Set(['rect', 'circle', 'ellipse', 'path', 'poly', 'image', 'text']);
+/**
+ * A canvas-level print (`spec`, or null for none): every shape without its own finish is
+ * printed the same way. Always called, so `print: false` opt-outs are removed either way.
+ */
+export function applyPrint(list, spec) {
+  eachElement(list, el => {
+    if (el.print === false) {
+      delete el.print;
+      return;
+    }
+    if (!spec || !['rect', 'circle', 'ellipse', 'path', 'poly'].includes(el.type) || el.print !== undefined) return;
+    // Frame-sized shapes (a sky, a ground) stay flat, so no register shift opens an edge.
+    const e = elementsExtent([el]);
+    if (e && e.w * e.h > 1.5e6) return;
+    el.print = typeof spec === 'string' ? spec : { ...spec };
+  });
 }
 /** A canvas-level mosaic: every shape without its own setting is laid in tiles. */
 export function applyMosaic(list, spec) {
