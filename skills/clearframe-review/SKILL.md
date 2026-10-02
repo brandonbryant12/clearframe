@@ -32,7 +32,7 @@ node engine/cli.mjs notes DIR --import notes-r003.json                          
 
 ## Making the edit
 
-1. Edit only the note's beats (`notes DIR` shows where each note is now). Picture notes: edit `storyboard.json`. Recording cuts: never edit `vo`; use `cut`:
+1. Edit only the note's beats (`notes DIR` shows where each note is now). Picture notes: edit `storyboard.json`. Recording cuts: never edit `vo` or a beat's WAV (a voice keep compares every slice, sample for sample, with the master); use `cut`:
    ```sh
    node engine/cli.mjs cut DIR --note n014 --by NAME                     # the sentence the note points at
    node engine/cli.mjs cut DIR --words "which is a story for another day" --by NAME

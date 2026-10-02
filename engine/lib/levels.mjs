@@ -5,7 +5,11 @@ import fs from 'node:fs';
 
 /** 16-bit mono PCM samples and rate from a WAV file. */
 export function readPCM(file) {
-  const buf = fs.readFileSync(file);
+  return parsePCM(fs.readFileSync(file), file);
+}
+
+/** The samples of a WAV already in memory (`file` names it in messages). */
+export function parsePCM(buf, file = 'audio') {
   if (buf.toString('ascii', 0, 4) !== 'RIFF' || buf.toString('ascii', 8, 12) !== 'WAVE')
     throw new Error(`${file} is not a WAV file`);
   let offset = 12,

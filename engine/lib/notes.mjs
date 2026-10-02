@@ -9,8 +9,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { wordKey } from './word-timing.mjs';
-import { readEdits, spanFrames, slicePieces } from './recording.mjs';
-import { protectedSource, currentSource, uncovered } from './targets.mjs';
+import { readEdits, spanFrames, slicePieces, loadSource, masterState, sliceProblem } from './recording.mjs';
+import { protectedSource, currentSource, uncovered, revisionMaster } from './targets.mjs';
 import { listRevisions, loadRevision, lineageOf, factsPrint } from './revisions.mjs';
 import { checkId, nextId, readJSONFile, reviewPath, withLock, writeJSONAtomic } from './store.mjs';
 import { parseTime, formatTime, anchorAt } from './anchor.mjs';
@@ -322,9 +322,13 @@ export function releaseKeep(root, id, { by, said }) {
   });
 }
 
-/** Source sample ranges a person had removed: their removal records and the beats they cut whole. */
+/**
+ * Source sample ranges the person had removed: removals made by cuts the edit log shows they
+ * asked for (a removal record's own `by` is not taken on trust), and the beats they cut whole.
+ */
 function personRemoved(root, now, edits) {
-  const spans = now.removals.filter(r => r.by?.role === 'human').map(r => r.samples);
+  const theirs = new Set(edits.filter(e => ['cut', 'pauses'].includes(e.op) && e.by?.role === 'human').map(e => e.id));
+  const spans = now.removals.filter(r => theirs.has(r.id)).map(r => r.samples);
   for (const e of edits)
     if (['cut', 'pauses'].includes(e.op) && e.by?.role === 'human')
       for (const p of e.beats ?? [])
@@ -333,13 +337,28 @@ function personRemoved(root, now, edits) {
   return spans;
 }
 
+/** The master as it is now, read once: its state and its samples (to check slices against). */
+function recordingNow(root) {
+  if (!fs.existsSync(path.join(root, 'source', 'recording.wav'))) return masterState(root);
+  let src;
+  try {
+    src = loadSource(root);
+  } catch (e) {
+    return { sha: null, problem: `source/recording.wav cannot be read (${e.message})` };
+  }
+  return { ...masterState(root, src.sha), src };
+}
+
 /**
  * Keeps broken by going from the keep's revision to `timeline` (a candidate or the working
  * copy). For beats of an imported recording, `voice` and `words` are judged by what the keep's
  * revision played (transcript words and recording spans), whatever those beats are called now
  * after splits or merges: `words` breaks when any protected word no longer plays; `voice` when
- * any protected recording no longer plays, unless the person had it cut. Other keeps, and
- * narration that is not a recording, follow the beats through lineage.
+ * any protected recording no longer plays, unless the person had it cut, and when the audio
+ * itself is not that recording: the master must be the file the keep's revision played (and
+ * match its record), and every beat playing protected recording must hold exactly the samples
+ * its metadata declares from it. Other keeps, and narration that is not a recording, follow
+ * the beats through lineage.
  */
 export function checkKeeps(root, timeline, { overrides = [] } = {}) {
   const violations = [];
@@ -348,7 +367,10 @@ export function checkKeeps(root, timeline, { overrides = [] } = {}) {
     const e = edits.find(x => x.id === id);
     return e?.by?.role === 'human';
   };
-  let now = null;
+  let now = null,
+    master = null,
+    byPerson = null;
+  const audited = new Map();
   for (const k of readKeeps(root).filter(k => k.active && !overrides.includes(k.id))) {
     // Facts are re-read from the keep's own revision with today's rule, so a keep made under an
     // older fingerprint scheme is still judged on what the beat showed.
@@ -358,19 +380,34 @@ export function checkKeeps(root, timeline, { overrides = [] } = {}) {
       continue;
     }
     const prot = ['voice', 'words'].includes(k.what) ? protectedSource(root, k.revision, k.scope.film ? null : k.scope.beats) : {};
-    if (Object.keys(prot).length) {
+    if (Object.keys(prot).length && k.what === 'words') {
       now ??= currentSource(root);
-      const byPerson = k.what === 'voice' ? personRemoved(root, now, edits) : [];
       for (const [id, p] of Object.entries(prot)) {
-        if (k.what === 'words') {
-          const gone = p.words.filter(i => !now.words.has(i));
-          if (gone.length)
-            violations.push({ keep: k.id, what: 'words', beat: id, message: `words of ${id} no longer play (“${gone.slice(0, 8).map(i => now.transcript.words[i].w).join(' ')}”)` });
-        } else {
+        const gone = p.words.filter(i => !now.words.has(i));
+        if (gone.length)
+          violations.push({ keep: k.id, what: 'words', beat: id, message: `words of ${id} no longer play (“${gone.slice(0, 8).map(i => now.transcript.words[i].w).join(' ')}”)` });
+      }
+    } else if (Object.keys(prot).length) {
+      // The recording itself first: slices can only be checked against the right master.
+      master ??= recordingNow(root);
+      const played = revisionMaster(root, k.revision);
+      const wrong = master.problem ?? (played && played !== master.sha ? `source/recording.wav is not the recording ${k.revision} played: it was replaced` : null);
+      if (wrong) {
+        violations.push({ keep: k.id, what: 'voice', message: `${wrong} (${Object.keys(prot).join(', ')})` });
+      } else {
+        now ??= currentSource(root);
+        byPerson ??= personRemoved(root, now, edits);
+        for (const [id, p] of Object.entries(prot)) {
           const missing = p.spans.flatMap(span => uncovered(span, now.spans));
           const unexplained = missing.flatMap(span => uncovered(span, byPerson));
           if (unexplained.length)
             violations.push({ keep: k.id, what: 'voice', beat: id, message: `${id} no longer plays all of its recording: cut without the person asking, or replaced` });
+          // What plays it now (the beat, its parts, or the beat it merged into) must be the recording.
+          for (const x of now.beats.filter(x => x.spans.some(([a, b]) => p.spans.some(([c, d]) => a < d && b > c)))) {
+            if (!audited.has(x.id)) audited.set(x.id, sliceProblem(root, x.id, x.meta, master.src, now.fps));
+            const why = audited.get(x.id);
+            if (why) violations.push({ keep: k.id, what: 'voice', beat: id, message: `${x.id === id ? id : `${x.id} (playing ${id}'s recording)`} does not play the recording: ${why}` });
+          }
         }
       }
     }

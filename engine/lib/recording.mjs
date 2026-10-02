@@ -6,10 +6,10 @@
 // Removals sit inside pauses and are whole frames long, so beats still tile the timeline.
 import fs from 'node:fs';
 import path from 'node:path';
-import { readPCM } from './levels.mjs';
+import { parsePCM, readPCM } from './levels.mjs';
 import { hashOf, pcmToWav, round } from './util.mjs';
 import { audioHash, wordKey } from './word-timing.mjs';
-import { checkId, nextId, readJSONFile, reviewPath, sha256File, withLock, writeJSONAtomic } from './store.mjs';
+import { checkId, nextId, readJSONFile, reviewPath, sha256, sha256File, withLock, writeJSONAtomic } from './store.mjs';
 
 export const SOURCE = 'source/recording.wav';
 const RAMP = 0.004; // seconds faded at each join, inside the pause, so a join never clicks
@@ -28,8 +28,26 @@ export function loadSource(root) {
   const file = path.join(root, SOURCE);
   if (!fs.existsSync(file))
     throw new Error('No source/recording.wav: recording edits work on projects made with ingest --audio.');
-  const { rate, pcm } = readPCM(file);
-  return { file, rate, pcm, samples: pcm.length / 2 };
+  const bytes = fs.readFileSync(file);
+  const { rate, pcm } = parsePCM(bytes, SOURCE);
+  return { file, rate, pcm, samples: pcm.length / 2, sha: sha256(bytes) };
+}
+
+/**
+ * The master as it is: its SHA-256, and whether source/recording.json (written at ingest)
+ * still describes it. Every beat is rebuilt from this file, so a replaced master is caught
+ * by its bytes, even when its record was left as it was.
+ */
+export function masterState(root, sha) {
+  const file = path.join(root, SOURCE);
+  if (!fs.existsSync(file)) return { sha: null, recorded: null, problem: 'source/recording.wav is missing' };
+  sha ??= sha256File(file);
+  const recorded = readJSONFile(path.join(root, 'source', 'recording.json'), null)?.sha256 ?? null;
+  return {
+    sha,
+    recorded,
+    problem: recorded && recorded !== sha ? 'source/recording.wav does not match source/recording.json: the recording was replaced or damaged' : null,
+  };
 }
 
 /**
@@ -155,8 +173,11 @@ export function keptWords(meta, transcript) {
   return out;
 }
 
-/** Rebuild a beat's WAV, words, text and alignment from the master and its removals. */
-function rebuild(root, id, meta, src, transcript, fps) {
+/**
+ * The samples a beat's slice holds: its pieces of the master in order, inserted silence, and
+ * fades at the joins removals made. A pure function of the master and the metadata.
+ */
+export function slicePCM(meta, src, fps) {
   const { rate, pcm } = src,
     pieces = slicePieces(meta, { rate, fps });
   const length = pieces.reduce((n, p) => n + (p.pad ?? p.to - p.from), 0);
@@ -177,6 +198,36 @@ function rebuild(root, id, meta, src, transcript, fps) {
     }
     at += p.pad ?? p.to - p.from;
   }
+  return { out, placed, length };
+}
+
+/**
+ * Whether a beat's WAV holds exactly the samples its metadata declares from the master
+ * (`src`, from loadSource): null when it does, otherwise what is wrong. The metadata alone
+ * says what a beat should play; this checks what it does play.
+ */
+export function sliceProblem(root, id, meta, src, fps) {
+  const rel = `assets/vo/${id}.wav`,
+    file = wavPath(root, id);
+  if (!fs.existsSync(file)) return `${rel} is missing`;
+  let actual, expected;
+  try {
+    actual = readPCM(file);
+  } catch {
+    return `${rel} is not 16-bit mono PCM audio`;
+  }
+  try {
+    expected = slicePCM(meta, src, fps).out;
+  } catch (e) {
+    return e.message;
+  }
+  return actual.rate === src.rate && actual.pcm.equals(expected) ? null : `${rel} does not hold the samples of source/recording.wav its metadata declares`;
+}
+
+/** Rebuild a beat's WAV, words, text and alignment from the master and its removals. */
+function rebuild(root, id, meta, src, transcript, fps) {
+  const { rate } = src;
+  const { out, placed, length } = slicePCM(meta, src, fps);
   fs.writeFileSync(wavPath(root, id), pcmToWav(out, { sampleRate: rate }));
   const duration = length / rate;
   const kept = keptWords(meta, transcript);
@@ -272,6 +323,9 @@ function context(root) {
     fps = sb.format?.fps ?? 30;
   const transcript = ensureTranscript(root);
   const src = loadSource(root);
+  // Beats are rebuilt from the master: never from one that is not the recording ingested.
+  const { problem } = masterState(root, src.sha);
+  if (problem) throw new Error(`${problem}. Recording edits rebuild beats from it, so nothing was changed; restore it from a revision (restore DIR rNNN).`);
   if (src.rate !== transcript.rate) throw new Error('source/recording.wav does not match source/words.json.');
   const beats = sb.beats.map((b, index) => ({ b, index, meta: readMeta(root, b.id) }));
   return { sb, fps, transcript, src, beats };

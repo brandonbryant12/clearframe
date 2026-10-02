@@ -160,9 +160,8 @@ export function reviewTimeline(ctx) {
   const raw = readJSONFile(path.join(root, 'storyboard.json'));
   const rawById = new Map(raw.beats.map(b => [b.id, b]));
   const transcript = readJSONFile(path.join(root, 'source', 'words.json'), null);
-  const sourceSha = fs.existsSync(path.join(root, 'source', 'recording.wav'))
-    ? (readJSONFile(path.join(root, 'source', 'recording.json'), null)?.sha256 ?? sha256File(path.join(root, 'source', 'recording.wav')))
-    : null;
+  // The recording beats replay, by its bytes: its record in source/recording.json may be stale.
+  const sourceSha = fs.existsSync(path.join(root, 'source', 'recording.wav')) ? sha256File(path.join(root, 'source', 'recording.wav')) : null;
   const { beats: _b, ...filmRaw } = raw;
   const jobFilm = pick(job, ['width', 'height', 'fps', 'theme', 'motion', 'backdrop', 'chrome', 'captions', 'caption_style', 'texture', 'text_motion', 'frame']);
   const film = {

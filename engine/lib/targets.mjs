@@ -88,15 +88,32 @@ export function protectedSource(root, revision, beats = null) {
   return out;
 }
 
-/** What the film plays now: kept transcript words, source pieces, and removal records with who made them. */
+/**
+ * The recording a revision played: the SHA-256 of its source/recording.wav, read from the
+ * stored object's name (revisions saved before the master was tracked: its recorded digest).
+ */
+export function revisionMaster(root, revision) {
+  const { meta } = loadRevision(root, revision);
+  const object = meta.inputs?.['source/recording.wav'];
+  if (object) return /\/([0-9a-f]{64})(?:\.[a-z0-9]+)?$/.exec(object)?.[1] ?? null;
+  const rec = meta.inputs?.['source/recording.json'];
+  const file = rec && objectFile(root, rec);
+  return file ? (JSON.parse(fs.readFileSync(file, 'utf8')).sha256 ?? null) : null;
+}
+
+/**
+ * What the film plays now, as its metadata declares it: kept transcript words, source pieces
+ * (all, and per beat with the beat's metadata), and removal records.
+ */
 export function currentSource(root) {
   const sb = JSON.parse(fs.readFileSync(`${root}/storyboard.json`, 'utf8'));
-  if (!fs.existsSync(`${root}/source/recording.wav`)) return { words: new Set(), spans: [], removals: [] };
-  const transcript = ensureTranscript(root),
-    fps = sb.format?.fps ?? 30;
+  const fps = sb.format?.fps ?? 30;
+  if (!fs.existsSync(`${root}/source/recording.wav`)) return { words: new Set(), spans: [], removals: [], beats: [], fps };
+  const transcript = ensureTranscript(root);
   const words = new Set(),
     spans = [],
-    removals = [];
+    removals = [],
+    beats = [];
   for (const b of sb.beats) {
     let m = null;
     try {
@@ -105,10 +122,14 @@ export function currentSource(root) {
     // A beat plays its recording only while its text still matches it (an edited vo plays nothing).
     if (!isRecorded(m) || m.textHash !== hashOf(b.vo ?? '')) continue;
     for (const w of keptWords(m, transcript)) words.add(w.index);
-    for (const p of slicePieces(m, { rate: transcript.rate, fps })) if (p.pad == null) spans.push([p.from, p.to]);
+    const own = slicePieces(m, { rate: transcript.rate, fps })
+      .filter(p => p.pad == null)
+      .map(p => [p.from, p.to]);
+    spans.push(...own);
+    beats.push({ id: b.id, meta: m, spans: own });
     for (const r of m.source.removed ?? []) removals.push({ id: r.id, samples: r.samples, by: r.by ?? null, beat: b.id });
   }
-  return { words, spans, removals, transcript };
+  return { words, spans, removals, beats, transcript, fps };
 }
 
 /** Parts of [from, to] not covered by any of `spans`. */

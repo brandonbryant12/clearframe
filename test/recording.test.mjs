@@ -26,6 +26,7 @@ import { spawnSync } from 'node:child_process';
 import { ingestRecording } from '../engine/lib/ingest.mjs';
 import { snapshot, workingTimeline } from '../engine/lib/revisions.mjs';
 import { addNote, addKeep, checkKeeps } from '../engine/lib/notes.mjs';
+import { restoreRevision, revise } from '../engine/lib/edit-loop.mjs';
 import crypto from 'node:crypto';
 
 const sb = root => JSON.parse(fs.readFileSync(path.join(root, 'storyboard.json'), 'utf8'));
@@ -448,4 +449,112 @@ test('an edit that fails part way puts every file back', async t => {
     /disk full/,
   );
   assert.deepEqual(filesOf(root), before);
+});
+
+// A voice keep protects the audio itself, not only what the metadata says the beats play: the
+// master must be the file the keep's revision played, and every slice exactly its declared share.
+/** A copy of a WAV file's bytes with its samples changed by `fn` (header and length kept). */
+function withSamples(bytes, fn) {
+  const out = Buffer.from(bytes);
+  let at = 12;
+  while (out.toString('ascii', at, at + 4) !== 'data') at += 8 + out.readUInt32LE(at + 4) + (out.readUInt32LE(at + 4) % 2);
+  fn(out.subarray(at + 8, at + 8 + out.readUInt32LE(at + 4)));
+  return out;
+}
+
+test('a voice keep checks the audio itself: a silenced, swapped, altered or missing slice breaks it', async t => {
+  const root = await kept(t, 'voice', ['s001']);
+  const { timeline } = await workingTimeline(root);
+  const file = path.join(root, 'assets/vo/s001.wav'),
+    original = fs.readFileSync(file);
+  const master = pcm(path.join(root, 'source/recording.wav'));
+  const broken = [
+    ['silence, same length and header', withSamples(original, d => d.fill(0))],
+    ['another stretch of the same recording', withSamples(original, d => master.copy(d, 0, master.length - d.length))],
+    ['one sample changed', withSamples(original, d => d.writeInt16LE(d.readInt16LE(48000) ^ 1, 48000))],
+  ];
+  for (const [what, bytes] of broken) {
+    fs.writeFileSync(file, bytes);
+    const v = checkKeeps(root, timeline);
+    assert.equal(v.length, 1, what);
+    assert.match(v[0].message, /s001 does not play the recording: assets\/vo\/s001\.wav does not hold the samples/, what);
+  }
+  fs.rmSync(file);
+  assert.match(checkKeeps(root, timeline)[0]?.message ?? '', /s001\.wav is missing/);
+  fs.writeFileSync(file, original);
+  assert.deepEqual(checkKeeps(root, timeline), [], 'the recording itself again');
+  // revise's gate refuses the silenced slice as a candidate.
+  const n = addNote(root, { text: 'the opening line', revision: 'r001', at: 1, by: 'Ana' });
+  fs.writeFileSync(file, broken[0][1]);
+  await assert.rejects(revise(root, { note: n.id, render: false }), /breaks a keep:\n {2}- k001 \(voice\): s001 does not play the recording/);
+});
+
+test('a replaced master breaks a voice keep, with or without its record updated; edits refuse to rebuild from it', async t => {
+  const root = await kept(t, 'voice', ['s005']);
+  const { timeline } = await workingTimeline(root);
+  const masterFile = path.join(root, 'source/recording.wav'),
+    recordFile = path.join(root, 'source/recording.json');
+  fs.writeFileSync(masterFile, withSamples(fs.readFileSync(masterFile), d => d.fill(0, 0, RATE * 2)));
+  let v = checkKeeps(root, timeline);
+  assert.equal(v.length, 1);
+  assert.match(v[0].message, /source\/recording\.wav does not match source\/recording\.json: the recording was replaced or damaged \(s005\)/);
+  const before = filesOf(root);
+  for (const args of [['--words', 'Honestly'], ['--pauses-over', '1.2']]) {
+    const r = cli('cut', root, ...args, '--by', 'Ana');
+    assert.notEqual(r.status, 0);
+    assert.match(r.stderr, /does not match source\/recording\.json.*nothing was changed/);
+  }
+  assert.throws(() => splitBeat(root, { beat: 's005', at: 'and the line' }), /does not match source\/recording\.json/);
+  assert.deepEqual(filesOf(root), before, 'no slice rebuilt from the replaced master');
+  // Its record rewritten to match: still not the recording the keep's revision played.
+  const record = JSON.parse(fs.readFileSync(recordFile, 'utf8'));
+  fs.writeFileSync(recordFile, JSON.stringify({ ...record, sha256: crypto.createHash('sha256').update(fs.readFileSync(masterFile)).digest('hex') }));
+  v = checkKeeps(root, timeline);
+  assert.equal(v.length, 1);
+  assert.match(v[0].message, /source\/recording\.wav is not the recording r001 played: it was replaced/);
+  // Restoring the revision puts the recording back.
+  await restoreRevision(root, { revision: 'r001', by: 'Ana', said: 'put the recording back' });
+  assert.deepEqual(checkKeeps(root, (await workingTimeline(root)).timeline), []);
+});
+
+test('the person’s cuts, splits, merges, pause tightening, undo and restore keep the voice: every slice is still the recording', async t => {
+  const root = await kept(t, 'voice', ['s002', 's004', 's005']);
+  const check = async label => assert.deepEqual(checkKeeps(root, (await workingTimeline(root)).timeline), [], label);
+  const c = cutWords(root, { words: 'Short one.' }, { by: ana });
+  await check('a cut the person asked for');
+  splitBeat(root, { beat: 's005', at: 'and the line' });
+  await check('a split');
+  mergeBeats(root, { beats: ['s004', 's005a'] });
+  await check('a merge across the split');
+  uncut(root, { id: c.id });
+  await check('the cut undone');
+  tightenPauses(root, { over: 1.2, keep: 0.5 }, { by: ana });
+  await check('pauses the person asked to tighten');
+  await restoreRevision(root, { revision: 'r001', by: 'Ana', said: 'back to the start' });
+  await check('the whole revision restored');
+});
+
+test('beats ingested before transcripts were recorded pass the audio check as they are', async t => {
+  const { root } = await recordedProject(t);
+  fs.rmSync(path.join(root, 'source/words.json'));
+  fs.rmSync(path.join(root, 'source/recording.json'));
+  for (const b of sb(root).beats) {
+    const m = meta(root, b.id);
+    for (const k of ['offset', 'fps', 'span', 'words']) delete m.source[k];
+    fs.writeFileSync(path.join(root, 'assets/vo', `${b.id}.json`), JSON.stringify(m));
+  }
+  const { revision } = await snapshot(root);
+  addKeep(root, { what: 'voice', film: true, revision: revision.id, by: ana, said: 'keep the voice' });
+  assert.deepEqual(checkKeeps(root, (await workingTimeline(root)).timeline), []);
+});
+
+test('a cut counts as the person’s only when the edit log records them asking for it', async t => {
+  const root = await kept(t, 'voice', ['s005']);
+  cutWords(root, { words: 'and the line' }, { by: { role: 'agent' } });
+  const m = meta(root, 's005');
+  m.source.removed = m.source.removed.map(r => ({ ...r, by: ana })); // relabelled by hand
+  fs.writeFileSync(path.join(root, 'assets/vo/s005.json'), JSON.stringify(m));
+  const v = checkKeeps(root, (await workingTimeline(root)).timeline);
+  assert.equal(v.length, 1);
+  assert.match(v[0].message, /s005 no longer plays all of its recording: cut without the person asking/);
 });
