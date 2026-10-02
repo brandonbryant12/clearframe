@@ -207,3 +207,50 @@ test('playbook art keeps its shorthand, so drift follows the final beat length l
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('type voices are library items that reach the job, override per beat and check glyphs against their face', () => {
+  const voices = items('types');
+  assert.ok(voices.length >= 7 && voices[0].id === 'inter');
+  for (const t of items('treatments')) if (t.film.type) assert.ok(item('types', t.film.type), `${t.id} names a voice`);
+  // The library no longer converges on one voice: most of the serif-emphasis looks moved.
+  const voiced = items('treatments').filter(t => t.film.type && t.film.type !== 'inter');
+  assert.ok(new Set(voiced.map(t => t.film.type)).size >= 5, 'several distinct voices in use');
+  assert.ok(items('treatments').filter(t => t.beats?.emphasisStyle === 'serif').length <= 8);
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-type-'));
+  const beats = [
+    { id: 'a', block: 'title', duration: 3, props: { text: 'Make the next step clear', emphasis: ['clear'] } },
+    { id: 'b', block: 'statement', duration: 3, type: 'inter', props: { text: 'Plain again' } },
+    { id: 'c', block: 'chapter', duration: 3, type: 'condensed', props: { number: '02', title: 'Caps' } },
+  ];
+  const compile = (sb, extra = {}) => createJob({ ...loadStoryboard(root), ...sb }, computeTiming(root), { draft: true, ...extra });
+  try {
+    write(root, 'storyboard.json', { theme: 'paper', type: 'didone', beats });
+    const { job, errors } = compile({});
+    assert.deepEqual(errors, []);
+    assert.deepEqual(job.type, { id: 'didone', display: 'playfair', emphasis: 'italic', upper: false, tracking: -0.01, leading: 0.98 });
+    assert.equal(job.beats[0].type, undefined, 'the film voice is not repeated per beat');
+    assert.equal(job.beats[1].type.display, 'inter', 'a beat opts back out');
+    assert.equal(job.beats[2].type.upper, true);
+    write(root, 'storyboard.json', { theme: 'paper', beats });
+    assert.equal(compile({}).job.type, undefined, 'the default look leaves the job unchanged');
+    write(root, 'storyboard.json', { theme: 'paper', type: 'gothic', beats });
+    assert.match(compile({}).errors.join('\n'), /Unknown type "gothic"/);
+    // A character the voice's face lacks fails before rendering, naming the face.
+    write(root, 'storyboard.json', { theme: 'paper', type: 'didone', beats: [{ ...beats[0], props: { text: 'Alpha α' } }] });
+    assert.match(compile({}).errors.join('\n'), /not in the bundled PlayfairDisplay/);
+    // Shared voices travel with a scaffolded project like palettes do.
+    write(root, 'library/types/house.json', { title: 'House', when: 'Brand.', display: 'space-grotesk', emphasis: 'weight' });
+    write(root, 'library/treatments/housed.json', { title: 'Housed', when: 'Brand.', film: { theme: 'paper', type: 'house' } });
+    useProject(null);
+    loadStoryboard(root);
+    const sb = scaffold(path.join(root, 'made'), { playbook: 'vertical-short', treatment: 'housed' });
+    assert.equal(sb.type, 'house');
+    assert.ok(fs.existsSync(path.join(root, 'made/library/types/house.json')));
+    write(root, 'library/types/bad.json', { title: 'Bad', when: 'x', display: 'archivo-wide', emphasis: 'italic' });
+    useProject(null);
+    assert.throws(() => useProject(root), /has no italic/);
+  } finally {
+    useProject(null);
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});

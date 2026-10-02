@@ -1,16 +1,20 @@
 //! Story blocks: hero headlines (including mixed serif/sans), chapters, highlights, numbers,
 //! comparisons, quotes, lists, matrices, equations and callouts.
 use super::*;
+use crate::text::EmphasisKind;
 
 impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
-    /// Mixed-face headline: whole-word `phrases` are set in the italic serif (larger, to match
-    /// the sans capitals) and drawn in the accent; everything else in `font`. Wraps greedily,
-    /// avoids a one-word last line when it can, and shrinks until it fits the box.
+    /// Mixed-face headline: whole-word `phrases` are set in the `mark` face (scaled, so an
+    /// italic serif matches the sans capitals) and drawn in the accent; everything else in
+    /// `font`. Wraps greedily, avoids a one-word last line when it can, and shrinks until it
+    /// fits the box.
+    #[allow(clippy::too_many_arguments)]
     pub(crate) fn rich(
         &self,
         value: &str,
         phrases: &[String],
         font: Font,
+        mark: (Font, f32),
         size: f32,
         leading: f32,
         max_w: f32,
@@ -38,7 +42,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         }
         let mut size = size;
         loop {
-            let serif = size * 1.18;
+            let marked_size = size * mark.1;
             let space = text::measure(font, " ", size, 0.0) * 1.05;
             let measured: Vec<(String, bool, f32)> = words
                 .iter()
@@ -47,7 +51,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                     (
                         (*w).to_owned(),
                         m,
-                        text::measure(if m { Font::SerifItalic } else { font }, w, if m { serif } else { size }, 0.0),
+                        text::measure(if m { mark.0 } else { font }, w, if m { marked_size } else { size }, 0.0),
                     )
                 })
                 .collect();
@@ -93,7 +97,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                         self.b.id, self.b.block, max_w, max_h
                     );
                 }
-                return Rich { lines, size, space, line_h, font };
+                return Rich { lines, size, space, line_h, font, mark: mark.0, mark_scale: mark.1 };
             }
             size = (size * 0.95).max(text::MIN_SIZE);
         }
@@ -127,7 +131,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 let top = y + i as f32 * r.line_h;
                 for (word, marked, ww) in line {
                     let (font, size, fill) = if *marked {
-                        (Font::SerifItalic, r.size * 1.18, self.p.accent.as_str())
+                        (r.mark, r.size * r.mark_scale, self.p.accent.as_str())
                     } else {
                         (r.font, r.size, color)
                     };
@@ -159,7 +163,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             let mut runs = vec![];
             for (word, marked, ww) in line {
                 let (font, size, fill) = if *marked {
-                    (Font::SerifItalic, r.size * 1.18, self.p.accent.as_str())
+                    (r.mark, r.size * r.mark_scale, self.p.accent.as_str())
                 } else {
                     (r.font, r.size, color)
                 };
@@ -185,24 +189,82 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         fframes::svgr!(<g>{out}</g>)
     }
 
+    /// Emphasis drawn around phrases instead of in them: an accent marker block behind the
+    /// words (`marker`) or an accent rule under them (`underline`), growing with each line's
+    /// entrance. Pieces come from the shaped layout, so they sit exactly under the glyphs.
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn decorate(
+        &self,
+        layout: &Layout,
+        phrases: &[String],
+        x: f32,
+        y: f32,
+        w: f32,
+        align: Align,
+        start: f32,
+        kind: EmphasisKind,
+    ) -> Svgr<'a> {
+        let mut out = vec![];
+        for phrase in phrases {
+            for (i, a, b) in text::phrase_ranges(layout, phrase) {
+                // Arrive with the phrase's last piece, so a word never shows as a bare block
+                // (its ink is the background colour over a marker) or an underline alone.
+                let enter = self.m.enter(self.t - start - self.piece_delay(layout, i, b));
+                if enter.hidden() {
+                    continue;
+                }
+                let (from, to) = (text::offset(layout, i, a), text::offset(layout, i, b) - layout.tracking_px);
+                let line = &layout.lines[i];
+                let lx = align.x(x, w, line.width) + from;
+                let baseline = y + i as f32 * layout.line_height + layout.baseline;
+                let size = layout.size;
+                let node = if kind == EmphasisKind::Marker {
+                    let pad = size * 0.09;
+                    rounded(lx - pad, baseline - size * 0.78, (to - from + 2.0 * pad) * enter.travel, size * 1.0, size * 0.05, &self.p.accent)
+                } else {
+                    rect(lx, baseline + size * 0.09, (to - from) * enter.travel, (size * 0.065).max(3.0), &self.p.accent)
+                };
+                out.push(if enter.done() { node } else { fframes::svgr!(<g opacity={enter.alpha}>{node}</g>) });
+            }
+        }
+        fframes::svgr!(<g>{out}</g>)
+    }
+
     // ── Story blocks ────────────────────────────────────────────────────────────────
     /// Title, statement and endcard share an optically centred hero stack.
     pub(crate) fn hero(&self) -> Svgr<'a> {
         let a = self.area;
         let props = self.props();
         let block = self.b.block.as_str();
-        let headline = nonempty(s(props, "text"), s(props, "title"));
         let support = nonempty(s(props, "support"), s(props, "context"));
         let start = self.b.cue_seconds;
+        // The film's type voice sets the face, case and tracking; the beat's `emphasisStyle`
+        // (serif, accent) still wins over the voice's emphasis.
+        let v = self.voice();
         let (font, size, width) = match block {
-            "title" => (Font::DisplayBold, if self.wide { 124.0 } else { 98.0 }, if self.wide { 0.9 } else { 1.0 }),
-            "endcard" => (Font::DisplayBold, if self.wide { 108.0 } else { 88.0 }, if self.wide { 0.86 } else { 1.0 }),
-            _ => (Font::Display, if self.wide { 96.0 } else { 80.0 }, if self.wide { 0.88 } else { 1.0 }),
+            "title" => (v.bold(), if self.wide { 124.0 } else { 98.0 }, if self.wide { 0.9 } else { 1.0 }),
+            "endcard" => (v.bold(), if self.wide { 108.0 } else { 88.0 }, if self.wide { 0.86 } else { 1.0 }),
+            _ => (v.regular(), if self.wide { 96.0 } else { 80.0 }, if self.wide { 0.88 } else { 1.0 }),
         };
-        let serif = s(props, "emphasisStyle") == "serif" && !phrases(props, "emphasis").is_empty();
-        let rich =
-            serif.then(|| self.rich(headline, &phrases(props, "emphasis"), font, size, 1.06, a.w * width, a.h * 0.62));
-        let head = self.fit(headline, Style::display(font, size).leading(1.04), a.w * width, a.h * 0.62);
+        let cased = |t: &str| if v.upper { t.to_uppercase() } else { t.to_owned() };
+        let headline = cased(nonempty(s(props, "text"), s(props, "title")));
+        let headline = headline.as_str();
+        let marks: Vec<String> = phrases(props, "emphasis").iter().map(|p| cased(p)).collect();
+        let kind = if marks.is_empty() { EmphasisKind::Accent } else { v.emphasis_kind(s(props, "emphasisStyle")) };
+        // Mixed-face emphasis changes the measure; colour and decoration emphasis do not.
+        let (font, mark) = match kind {
+            EmphasisKind::Serif => (font, Some((Font::SerifItalic, 1.18))),
+            EmphasisKind::Italic => (font, Some((v.italic().unwrap_or(font), 1.0))),
+            EmphasisKind::Weight => (v.light().unwrap_or(font), Some((v.bold(), 1.0))),
+            _ => (font, None),
+        };
+        let rich = mark.map(|m| self.rich(headline, &marks, font, m, size, 1.06 * v.leading, a.w * width, a.h * 0.62));
+        let head = self.fit(headline, v.style(font, size, 1.04, false), a.w * width, a.h * 0.62);
+        let emphasis_color = match kind {
+            EmphasisKind::Marker => self.p.bg.clone(),
+            EmphasisKind::Underline => self.p.ink.clone(),
+            _ => self.p.accent.clone(),
+        };
         // The rich layout replaces the plain one for measurement below.
         let head_h = rich.as_ref().map_or(head.height(), Self::rich_height);
         let sup = (!support.trim().is_empty()).then(|| {
@@ -224,7 +286,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let group = bar_h + head_h + sup_h + pill_h;
         let top = a.y + ((a.h - group) * 0.42).max(0.0);
         let mut nodes = vec![];
-        let emphasis = self.emphasis(&head, &phrases(props, "emphasis"), &self.p.accent);
+        let emphasis = self.emphasis(&head, &marks, &emphasis_color);
         let align = self.align();
         let centre = |w: f32| if align == Align::Center { a.x + (a.w - w) / 2.0 } else { a.x };
         if block == "title" {
@@ -239,6 +301,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             ));
         }
         let head_y = top + bar_h;
+        if matches!(kind, EmphasisKind::Marker | EmphasisKind::Underline) {
+            nodes.push(self.decorate(&head, &marks, a.x, head_y, a.w, align, start, kind));
+        }
         match &rich {
             Some(r) => nodes.push(self.draw_rich(r, a.x, head_y, a.w, align, &self.p.ink, start)),
             None => nodes.push(self.lines(&head, a.x, head_y, a.w, align, &self.p.ink, start, &emphasis)),
@@ -266,13 +331,16 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let number = s(props, "number");
         let start = self.b.cue_seconds;
         let numeral_size = if self.wide { 300.0 } else { 240.0 };
-        let num = self.fit(number, Style::display(Font::DisplayBold, numeral_size).leading(0.9), a.w, a.h * 0.5);
+        let v = self.voice();
+        let num = self.fit(number, v.style(v.bold(), numeral_size, 0.9, false), a.w, a.h * 0.5);
         let title = self.fit(
             s(props, "title"),
-            Style::display(Font::Display, if self.wide { 92.0 } else { 76.0 }).leading(1.04),
+            v.style(v.regular(), if self.wide { 92.0 } else { 76.0 }, 1.04, true),
             a.w * if self.wide { 0.8 } else { 1.0 },
             a.h * 0.4,
         );
+        let marks: Vec<String> =
+            phrases(props, "emphasis").iter().map(|p| if v.upper { p.to_uppercase() } else { p.clone() }).collect();
         let sup = s(props, "support");
         let sup = (!sup.trim().is_empty()).then(|| self.fit(sup, Style::text(34.0), a.w * 0.8, a.h * 0.16));
         let group = num.height() + 36.0 + title.height() + sup.as_ref().map_or(0.0, |l| 32.0 + l.height());
@@ -294,7 +362,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             align,
             &self.p.ink,
             start + 0.3,
-            &self.emphasis(&title, &phrases(props, "emphasis"), &self.p.accent),
+            &self.emphasis(&title, &marks, &self.p.accent),
         );
         let support = sup
             .map(|l| {
@@ -318,9 +386,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     pub(crate) fn highlight(&self) -> Svgr<'a> {
         let a = self.area;
         let props = self.props();
+        let v = self.voice();
         let layout = self.fit(
             s(props, "text"),
-            Style::display(Font::Display, if self.wide { 92.0 } else { 76.0 }).leading(1.14),
+            v.style(v.regular(), if self.wide { 92.0 } else { 76.0 }, 1.14, false),
             a.w * if self.wide { 0.9 } else { 1.0 },
             a.h * 0.72,
         );
@@ -915,4 +984,7 @@ pub(crate) struct Rich {
     space: f32,
     line_h: f32,
     font: Font,
+    /// The emphasis face and its size relative to `font`.
+    mark: Font,
+    mark_scale: f32,
 }

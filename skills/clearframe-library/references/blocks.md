@@ -15,7 +15,7 @@ Open with a clear promise: display type rises line by line under an accent bar.
 | support | Supporting line |
 | text | Main promise |
 | emphasis | Up to 4 whole-word phrases drawn in the accent color |
-| emphasisStyle | accent (default) or serif: emphasis phrases set in italic serif, the editorial accent |
+| emphasisStyle | accent or serif (italic Instrument Serif, the editorial accent). Unset, the film type voice decides: accent, italic, weight, marker or underline |
 | align | left (default) or center: centre the whole stack |
 
 ```json
@@ -45,7 +45,7 @@ A single editorial statement with optional accent phrases and a supporting line.
 | support | Supporting line |
 | text | Statement |
 | emphasis | Up to 4 whole-word phrases drawn in the accent color |
-| emphasisStyle | accent (default) or serif: emphasis phrases set in italic serif, the editorial accent |
+| emphasisStyle | accent or serif (italic Instrument Serif, the editorial accent). Unset, the film type voice decides: accent, italic, weight, marker or underline |
 | align | left (default) or center: centre the whole stack |
 
 ```json
@@ -701,7 +701,7 @@ A deliberate ending; the next step becomes a call-to-action pill.
 | text | Final takeaway |
 | action | Next step |
 | emphasis | Up to 4 whole-word phrases drawn in the accent color |
-| emphasisStyle | accent (default) or serif: emphasis phrases set in italic serif, the editorial accent |
+| emphasisStyle | accent or serif (italic Instrument Serif, the editorial accent). Unset, the film type voice decides: accent, italic, weight, marker or underline |
 | align | left (default) or center: centre the whole stack |
 
 ```json

@@ -11,9 +11,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { frames } from './sketch-kit.mjs';
+import { validateType } from './type.mjs';
 
 export const LIBRARY = path.join(path.dirname(path.dirname(fileURLToPath(import.meta.url))), 'library');
-export const KINDS = ['palettes', 'treatments', 'sketches', 'playbooks'];
+export const KINDS = ['palettes', 'treatments', 'sketches', 'playbooks', 'types'];
 export const PALETTE_KEYS = ['bg', 'surface', 'ink', 'muted', 'accent', 'accent2', 'positive', 'negative'];
 
 // ------------------------------------------------------------------ validation
@@ -63,11 +64,17 @@ const VALIDATE = {
     if (!Array.isArray(item.rules ?? [])) throw new Error(`${where}: rules must be a list of strings`);
     if (item.playbook != null && !items('playbooks').some(p => p.id === item.playbook))
       throw new Error(`${where}: playbook "${item.playbook}" is not a playbook`);
+    if (item.film.type != null && !items('types').some(t => t.id === item.film.type))
+      throw new Error(`${where}: film.type "${item.film.type}" is not a type voice (clearframe types)`);
   },
   sketches(item, where) {
     if (!item.summary || !item.use) throw new Error(`${where}: needs summary and use`);
     if (typeof item.build !== 'function' && !item.elements && !item.formats)
       throw new Error(`${where}: needs elements (or formats: {landscape, vertical, …}) or, for built-ins, build(w, h)`);
+  },
+  types(item, where) {
+    known(item, ['order', 'title', 'when', 'display', 'emphasis', 'case', 'tracking', 'leading'], where);
+    validateType(item, where);
   },
   playbooks(item, where) {
     known(
@@ -91,6 +98,7 @@ const VALIDATE = {
         'lens',
         'heading',
         'textMotion',
+        'type',
         'transition',
         'sfx',
         'music',
@@ -210,6 +218,10 @@ export function vendor(dir, refs) {
     fs.copyFileSync(it.source, to);
   }
 }
+
+/** Type voices (built-ins plus any in the project's library/), and one by id. */
+export const types = () => items('types');
+export const typeById = id => item('types', id);
 
 /** Palettes as {id: colors}. */
 export const palettes = () => Object.fromEntries(items('palettes').map(p => [p.id, p.colors]));

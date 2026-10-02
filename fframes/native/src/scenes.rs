@@ -496,6 +496,50 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         }
         fframes::svgr!(<g>{out}</g>)
     }
+    /// This scene's type voice: the beat's own, else the film's.
+    pub(crate) fn voice(&self) -> &text::Voice {
+        self.b.type_voice.as_ref().unwrap_or(&self.b.environment.voice)
+    }
+    /// Seconds after a layout's start at which the piece ending at byte `end` of `line`
+    /// arrives under this scene's text motion (mirrors `pieces`); under `lines` the whole line
+    /// arrives on the line stagger. Decorations drawn around phrases follow this.
+    pub(crate) fn piece_delay(&self, layout: &Layout, line: usize, end: usize) -> f32 {
+        let mode = self.text_motion();
+        if mode == "lines" || layout.size < 40.0 {
+            return line as f32 * self.m.stagger();
+        }
+        let letters = mode != "words";
+        let (mut total, mut index) = (0usize, 0usize);
+        for (i, l) in layout.lines.iter().enumerate() {
+            let text = l.text.as_str();
+            let mut from = None;
+            for (b, ch) in text.char_indices().chain(std::iter::once((text.len(), ' '))) {
+                let piece_start = if letters {
+                    (!ch.is_whitespace() && b < text.len()).then_some(b)
+                } else {
+                    match (ch.is_whitespace(), from) {
+                        (false, None) => {
+                            from = Some(b);
+                            None
+                        }
+                        (true, Some(a)) => {
+                            from = None;
+                            Some(a)
+                        }
+                        _ => None,
+                    }
+                };
+                if let Some(a) = piece_start {
+                    if i == line && a < end {
+                        index = total;
+                    }
+                    total += 1;
+                }
+            }
+        }
+        let step = (if letters { 0.028_f32 } else { 0.075 }).min(0.9 / total.max(1) as f32);
+        index as f32 * step
+    }
     /// How this scene's type arrives: `lines` (default), `words`, `letters` or `cascade`.
     pub(crate) fn text_motion(&self) -> &str {
         self.b.text_motion.as_deref().filter(|m| !m.is_empty()).unwrap_or(self.b.environment.text_motion.as_str())
@@ -789,7 +833,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         if title.trim().is_empty() {
             return kicker;
         }
-        let style = Style::display(Font::Display, if self.wide { 62.0 } else { 56.0 }).leading(1.06);
+        let v = self.voice();
+        let style = v.style(v.regular(), if self.wide { 62.0 } else { 56.0 }, 1.06, false);
         let layout = self.fit(title, style, if self.wide { w * 0.86 } else { w }, 150.0);
         // Headings label the scene; they are not spoken, so they never build word by word.
         let title = self.line_rise(&layout, x, 146.0 + shift, w, Align::Left, &self.p.ink, self.heading_at(), &[]);
@@ -807,7 +852,8 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         if kh > 0.0 {
             y += 40.0;
         }
-        let style = Style::display(Font::Display, if self.wide { 58.0 } else { 52.0 }).leading(1.06);
+        let v = self.voice();
+        let style = v.style(v.regular(), if self.wide { 58.0 } else { 52.0 }, 1.06, false);
         let layout = self.fit(s(self.props(), "title"), style, if self.wide { w * 0.8 } else { w }, 132.0);
         let at = self.heading_at();
         let grow = self.m.grow(self.t - at, 0.6);

@@ -87,6 +87,8 @@ pub struct Environment {
     pub text_motion: String,
     /// `plate` (phrase on a soft plate) or `pop` (social: heavy outlined type, spoken word on a pill).
     pub caption_style: String,
+    /// The film's type voice (display family, emphasis, case, tracking, leading).
+    pub voice: text::Voice,
 }
 
 #[derive(Debug, Deserialize)]
@@ -145,6 +147,9 @@ pub struct Beat {
     /// How type arrives in this scene: lines, words, letters or cascade (film default otherwise).
     #[serde(default)]
     pub text_motion: Option<String>,
+    /// This scene's own type voice, when it differs from the film's.
+    #[serde(default, rename = "type")]
+    pub type_voice: Option<text::Voice>,
     /// Where the title sits: `top` (default) or `bottom`, a lower third under the picture.
     #[serde(default)]
     pub heading: String,
@@ -199,6 +204,9 @@ pub struct Film {
     /// Default arrival of type in every scene: lines, words, letters or cascade.
     #[serde(default = "lines")]
     pub text_motion: String,
+    /// The type voice resolved from `library/types`; absent for the default Inter look.
+    #[serde(default, rename = "type")]
+    pub type_voice: Option<text::Voice>,
     #[serde(default = "plate")]
     pub caption_style: String,
     /// Editorial frame chrome: brand, section label, footers and a progress line.
@@ -227,6 +235,10 @@ impl Film {
         }
         let scale = 1080.0 / film.width.min(film.height) as f32;
         let total = film.beats.len();
+        let voice = film.type_voice.clone().unwrap_or_default();
+        if !voice.valid() {
+            return Err(format!("job type voice {} names an unknown face set or emphasis", voice.id).into());
+        }
         let mut offset = 0;
         for (index, beat) in film.beats.iter_mut().enumerate() {
             if !BLOCKS.contains(&beat.block.as_str())
@@ -240,6 +252,7 @@ impl Film {
                 || !beat.settle_seconds.is_finite()
                 || beat.settle_seconds < 0.0
                 || !["", "none", "accent", "accent2", "invert", "surface"].contains(&beat.tone.as_deref().unwrap_or(""))
+                || !beat.type_voice.as_ref().is_none_or(text::Voice::valid)
             {
                 return Err(format!("invalid native scene {}", beat.id).into());
             }
@@ -283,6 +296,7 @@ impl Film {
                 framed: film.frame.is_some(),
                 text_motion: film.text_motion.clone(),
                 caption_style: film.caption_style.clone(),
+                voice: voice.clone(),
             };
             offset += beat.frames;
         }
