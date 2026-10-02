@@ -16,7 +16,7 @@ import * as native from '../fframes/production.mjs';
 const HELP = `ClearFrame — FFFrames motion graphics
 
   new <dir> [--direction ID] [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical] [--seed N|random]
-  start <dir> [--idea text] [--document report.md] [--brand brand.json] [--audience text] [--takeaway text]
+  start <dir> [--idea text] [--document report.md ...] [--brand brand.json] [--audience text] [--takeaway text]
                                       portable source + brand intake; accepts --direction, --playbook, --treatment, --vertical
   directions [research|podcast] [--json] optional story/picture/pace starting points; custom JSON in library/directions
   muse [--seed N] [--light] [--json]  a seeded creative brief: twist, motif, camera, cuts, look, set pieces, music
@@ -26,7 +26,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
   reference <video> [--out dir]       cut rhythm, keyframe sheet, palette and motion of a reference film
   ingest <dir> --markdown report.md [--treatment noir]   evidence brief (figures, sources, tensions, tables) + storyboard + DIRECTION.md
                                       (also .txt, .html, .docx, .rtf; .pdf with pdftotext)
-  ingest <dir> --audio episode.wav --words words.json [--script turns.txt] [--from s] [--to s] [--speakers host=Maya:Host,guest=Sam:Guest] [--vertical]
+  ingest <dir> --audio episode.wav --words words.json [--script turns.txt] [--brand brand.json] [--from s] [--to s] [--speakers host=Maya:Host,guest=Sam:Guest] [--vertical]
                                       a recording as gapless beats with measured word timings and speakers
   playbooks | recipes                 ${playbooks().length} narrative starting points
   blocks [name] [--json | --md]        ${BLOCKS.length} native building blocks and props
@@ -127,7 +127,7 @@ async function main() {
     args,
     allowPositionals: true,
     options: Object.fromEntries([
-      ...strings.map(k => [k, { type: 'string' }]),
+      ...strings.map(k => [k, { type: 'string', ...(k === 'document' ? { multiple: true } : {}) }]),
       ...booleans.map(k => [k, { type: 'boolean' }]),
     ]),
   });
@@ -350,7 +350,7 @@ async function main() {
             directionTemplate(sb, chosen.treatment ? treatmentById(chosen.treatment) : null) + directionMarkdown(o.direction),
           );
           // Art sketches stay as shorthand until the job; shared ones travel with the project.
-          vendor(dir, [...artSketches(sb), ...directionRefs(o.direction), ['treatments', chosen.treatment],
+          vendor(dir, [...artSketches(sb), ...directionRefs(o.direction, [['treatments', chosen.treatment], ['playbooks', playbook]]),
             ['palettes', typeof sb.theme === 'string' ? sb.theme : sb.theme?.base], ['types', sb.type]]);
           return sb;
         },
@@ -389,6 +389,8 @@ async function main() {
         title: o.title,
         treatment: chosen.treatment,
         direction: chosen.direction,
+        playbook: chosen.playbook,
+        brand: o.brand,
       });
       return console.log(
         `Imported ${r.beats} beats (${r.duration}s, ${r.words} words${r.speakers.length ? `, speakers ${r.speakers.join(', ')}` : ''}${r.interpolated != null ? `; script aligned, ${r.interpolated} word(s) interpolated` : ''}) into ${path.relative(process.cwd(), dir)}. Read BRIEF.md, then give the beats pictures.`,

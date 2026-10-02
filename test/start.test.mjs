@@ -11,6 +11,7 @@ import { createJob } from '../fframes/job.mjs';
 import { wireframePNG } from '../fframes/wireframe.mjs';
 import { palette } from '../fframes/catalog.mjs';
 import { useProject } from '../fframes/library.mjs';
+import { inspectSVG } from '../engine/lib/svg-assets.mjs';
 
 const json = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 function workspace(t) {
@@ -118,4 +119,50 @@ test('evidence is parsed from the copied original even if the external report ch
   assert.match(fs.readFileSync(report, 'utf8'), /200/);
   for (const file of ['source/original.md', 'source/document.md', 'EVIDENCE.md'])
     assert.match(fs.readFileSync(path.join(root, file), 'utf8'), /100/);
+});
+
+test('SVG brand intake retains the exact original and registers a transparent native PNG', { skip: process.platform !== 'darwin' }, t => {
+  const dir = workspace(t), root = path.join(dir, 'film');
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="200" height="100"><path d="M10 90L50 10L90 90Z" fill="#005544"/></svg>';
+  fs.writeFileSync(path.join(dir, 'logo.svg'), svg);
+  fs.writeFileSync(path.join(dir, 'brand.json'), JSON.stringify({ name: 'Example', assets: [{ id: 'logo', file: 'logo.svg' }] }));
+  const receipt = startProject(root, { idea: 'A simple idea', brand: path.join(dir, 'brand.json') });
+  const asset = receipt.assets[0];
+  assert.equal(fs.readFileSync(path.join(root, asset.original.file), 'utf8'), svg);
+  assert.equal(asset.file, 'assets/brand/logo.png');
+  assert.equal(asset.conversion.width, 2048); assert.equal(asset.conversion.height, 1024);
+  assert.equal(asset.conversion.liveText, false);
+  assert.equal(json(path.join(root, 'brand.json')).assets[0].file, asset.file);
+  const r = spawnSync('/usr/bin/sips', ['-g', 'hasAlpha', path.join(root, asset.file)], { encoding: 'utf8' });
+  assert.match(r.stdout, /hasAlpha: yes/);
+  fs.writeFileSync(path.join(dir, 'logo.svg'), svg.replace('<path', '<image href="https://example.org/external.png"/><path'));
+  const bad = path.join(dir, 'bad');
+  assert.throws(() => startProject(bad, { idea: 'A simple idea', brand: path.join(dir, 'brand.json') }), /external/);
+  assert.ok(!fs.existsSync(bad));
+  for (const encoded of ['u&#114;l(https://example.org/paint.svg#ink)', 'url( https://example.org/paint.svg#ink )']) {
+    fs.writeFileSync(path.join(dir, 'logo.svg'), svg.replace('fill="#005544"', `fill="${encoded}"`));
+    assert.throws(() => startProject(bad, { idea: 'A simple idea', brand: path.join(dir, 'brand.json') }), /external/);
+    assert.ok(!fs.existsSync(bad));
+  }
+  fs.writeFileSync(path.join(dir, 'logo.svg'), svg.replace('fill="#005544"', 'fill="url(&quot;#ink&quot;)"'));
+  assert.deepEqual(inspectSVG(path.join(dir, 'logo.svg')), { liveText: false });
+  fs.writeFileSync(path.join(dir, 'logo.svg'), svg.replace('<svg ', '<svg xml:base="https://example.org/" '));
+  assert.throws(() => inspectSVG(path.join(dir, 'logo.svg')), /self-contained/);
+});
+
+test('multiple documents keep citation namespaces and CSV values separate in one intake', t => {
+  const dir = workspace(t), root = path.join(dir, 'film');
+  const a = path.join(dir, 'a.md'), b = path.join(dir, 'b.md'), csv = path.join(dir, 'ledger.csv');
+  fs.writeFileSync(a, '# Report A\n\nRevenue is $100 [1].\n\n## Sources\n1. Ledger A\n');
+  fs.writeFileSync(b, '# Report B\n\nRevenue is $200 [1].\n\n## Sources\n1. Ledger B\n');
+  fs.writeFileSync(csv, 'Item,USD\n"Sale, gross",100\nFee,-3\nNet,97\n');
+  const result = spawnSync(process.execPath, ['engine/cli.mjs', 'start', root, '--document', a, '--document', b, '--document', csv, '--json'], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  const receipt = JSON.parse(result.stdout), research = json(path.join(root, 'source/research.json'));
+  assert.equal(receipt.inputs.length, 3);
+  assert.deepEqual(research.figures.filter(f => f.sources.length).map(f => f.sources), [['doc1:1'], ['doc2:1']]);
+  assert.ok(research.sources.some(s => s.id === 'doc1:1' && s.title === 'Ledger A'));
+  assert.ok(research.sources.some(s => s.id === 'doc2:1' && s.title === 'Ledger B'));
+  assert.deepEqual(research.tables[0].rows, [['Sale, gross', '100'], ['Fee', '-3'], ['Net', '97']]);
+  for (const [i, file] of [a, b, csv].entries()) assert.deepEqual(fs.readFileSync(path.join(root, receipt.inputs[i].file)), fs.readFileSync(file));
 });

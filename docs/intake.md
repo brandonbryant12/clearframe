@@ -10,7 +10,7 @@ node engine/cli.mjs start film \
   --playbook cash-flow --treatment editorial
 ```
 
-Supply an idea, a document, or both. Documents use the existing importer: Markdown, text, HTML, DOCX/RTF (macOS textutil), or PDF (pdftotext). `--direction ID`, `--vertical`, `--title`, `--theme`, `--seed` and shared `--library DIR` also work. An explicit theme overrides the brand theme; otherwise the brand palette is retained over treatment and seed choices. The brand's type voice and narration style override the treatment. Nothing is generated or purchased during intake.
+Supply an idea, documents, or both. Repeat `--document` to combine sources. Documents use the existing importer: Markdown, text, HTML, CSV, DOCX/RTF (macOS textutil), or PDF (pdftotext). CSV preserves supplied cells as a table without inferring units. Multiple documents keep their originals and independent reference namespaces under `source/documents/`; the aggregate research brief identifies each source. `--direction ID`, `--vertical`, `--title`, `--theme`, `--seed` and shared `--library DIR` also work. An explicit theme overrides the brand theme; otherwise the brand palette is retained over treatment and seed choices. The brand's type voice and narration style override the treatment. Nothing is generated or purchased during intake.
 
 Use `directions research` or `directions podcast` for contrasting starting forms. They are optional. Override the suggested playbook/treatment independently, author new scenes, or provide a custom direction through `--library DIR`. See [source adaptation](source-playbooks.md).
 
@@ -34,7 +34,9 @@ The destination must be new or empty. Intake validates the inputs and writes to 
 
 Only `name` is required. `theme` takes a built-in/shared palette or palette overrides. Brand text colours are checked against the background. `type` names an installed type voice; custom font loading is outside this POC. Use a shared library for a reusable palette, type voice or treatment. Shared references used by the film are copied into the project.
 
-Asset paths are relative to the brand JSON, or absolute local paths. Files are copied unchanged into `assets/brand/` under unique IDs. Image assets support PNG/JPEG/WebP, clips MP4/MOV and sounds WAV/MP3/M4A. Export SVG artwork as a supported raster before intake. `kind` defaults to `image`. The normalized `brand.json` uses the copied relative paths, so the project can move without the original kit. Assets are registered in `storyboard.assets`; the director places them using `asset: "logo"` or an appropriate plate. Placement stays a creative decision.
+Asset paths are relative to the brand JSON, or absolute local paths. PNG/JPEG/WebP images, MP4/MOV clips and WAV/MP3/M4A sounds are copied unchanged into `assets/brand/` under unique IDs. Static self-contained SVG artwork is also accepted on macOS: intake retains its exact original in `source/brand/` and uses `sips` to make a transparent PNG with a maximum side of 2048 pixels. Both files get hashes and a conversion receipt. External references and active content are rejected; SVGs with live text receive a font-review note. Supply an approved PNG on other platforms. `kind` defaults to `image`. The normalized `brand.json` uses copied relative paths, so the project can move without the original kit. Assets are registered in `storyboard.assets`; the director places them using `asset: "logo"` or an appropriate plate. Placement stays a creative decision.
+
+Recording intake also accepts `--brand brand.json`, alongside `--direction` and `--treatment`. It preserves the recording, transcript, word timings and speakers, applies visual brand choices and writes an intake receipt. Brand voice instructions do not replace a real recording. Recording destinations must be new or empty and failures roll back the temporary project.
 
 ## The handoff files
 

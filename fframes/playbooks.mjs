@@ -137,7 +137,7 @@ export function scaffold(dir, options = {}) {
     ['palettes', typeof sb.theme === 'string' ? sb.theme : sb.theme?.base],
     ['treatments', options.treatment],
     ['types', sb.type],
-    ...directionRefs(options.direction),
+    ...directionRefs(options.direction, [['treatments', options.treatment], ['playbooks', id]]),
     ...artSketches(sb),
   ]);
   fs.writeFileSync(
