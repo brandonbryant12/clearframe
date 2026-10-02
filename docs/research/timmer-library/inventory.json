@@ -1756,7 +1756,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "Partial implementation: finance calculation helpers pass focused tests; statistical transforms and visual integration remain planned",
       "effort": "L",
       "sourceIds": [
         "S04",
@@ -1772,7 +1772,7 @@
         "transform",
         "method version"
       ],
-      "existing": "source entries and render receipts exist; reusable finance/data transform layer does not.",
+      "existing": "source entries and render receipts exist; reusable finance/data transform layer does not. engine/lib/finance.mjs now provides illustrative account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion; see docs/finance-calculations.md.",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "reuse": [
         "science",
@@ -1960,7 +1960,7 @@
       "category": "Retirement recipe",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
       "effort": "M",
       "visual": "Employee and employer streams enter an account; native traces distinguish principal from investment gains or losses.",
       "parameters": [
@@ -1969,7 +1969,7 @@
         "period returns",
         "timing convention"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
       "dependsOn": [
         "C01",
         "T02",
@@ -1991,7 +1991,7 @@
       "category": "Retirement recipe",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
       "effort": "M",
       "visual": "A contribution travels along a rule strip; each match tier fills only as eligible contributions reach it.",
       "parameters": [
@@ -2001,7 +2001,7 @@
         "period basis",
         "true-up policy"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
       "dependsOn": [
         "T02",
         "I07"
@@ -2021,7 +2021,7 @@
       "category": "Retirement recipe",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
       "effort": "M",
       "visual": "A timeline changes ownership of the employer compartment while the employee compartment stays separate.",
       "parameters": [
@@ -2031,7 +2031,7 @@
         "employer balance",
         "plan source"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
       "dependsOn": [
         "T02",
         "M10"
@@ -2051,7 +2051,7 @@
       "category": "Retirement recipe",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
       "effort": "M",
       "visual": "Two aligned balances share one return/contribution path; the ending gap separates fees paid from lost growth.",
       "parameters": [
@@ -2062,7 +2062,7 @@
         "contributions",
         "time horizon"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
       "dependsOn": [
         "C01",
         "T02"
@@ -2082,7 +2082,7 @@
       "category": "Retirement recipe",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
       "effort": "M",
       "visual": "A reservoir switches from inflows to a measured payout stream; unfunded withdrawals remain visible after depletion.",
       "parameters": [
@@ -2093,7 +2093,7 @@
         "fees",
         "cashflow timing"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
       "dependsOn": [
         "C16",
         "I02",
@@ -2115,7 +2115,7 @@
       "category": "Retirement recipe",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
       "effort": "M",
       "visual": "Salary, service and accrual factors enter a native formula one at a time before resolving to an annual and monthly amount.",
       "parameters": [
@@ -2125,7 +2125,7 @@
         "accrual factor",
         "plan adjustments"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
       "dependsOn": [
         "T02",
         "I10"
@@ -2176,7 +2176,7 @@
       "category": "Retirement recipe",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
       "effort": "M",
       "visual": "A fixed payment stays level while the native real-value trace changes; a basket insert supplies the physical analogy.",
       "parameters": [
@@ -2186,7 +2186,7 @@
         "COLA policy",
         "currency"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
       "dependsOn": [
         "C09",
         "I11",
@@ -2207,7 +2207,7 @@
       "category": "Retirement recipe",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
       "effort": "M",
       "visual": "The same returns in different orders travel through paired withdrawal timelines; final balances and missed payments reveal the difference.",
       "parameters": [
@@ -2217,7 +2217,7 @@
         "cashflow timing",
         "shared scale"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
       "dependsOn": [
         "C01",
         "R05"

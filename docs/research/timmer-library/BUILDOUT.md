@@ -7,7 +7,7 @@ Authorized October 2, 2026: extend the general library with retirement, build th
 | Milestone | Scope | State |
 |---|---|---|
 | 0 — Durable inventory | Original package and 62-item macro inventory; add nine retirement recipes and primary references | Source validated; visual status unchanged |
-| 1 — Calculation contracts | T02 foundation: contribution ledger, tiered match, ownership, fee comparison, pension formula and cashflow fixtures | Next |
+| 1 — Calculation contracts | T02 foundation: contribution ledger, tiered match, ownership, fee comparison, pension formula and cashflow fixtures | Implemented; focused calculation checks pass |
 | 2 — Quantitative drawings | T01/C01 explicit scales, multiseries comparison, missing data, dates, annotations and native labels | Planned |
 | 3 — Retirement specimens | R01–R09: reusable native recipes, two distinct example subjects, landscape/portrait compositions | Planned |
 | 4 — Drivers, participation and flows | Reconciled decomposition, breadth/count versus weight, relative performance and stocks/flows | Planned |
@@ -47,3 +47,10 @@ Use existing native primitives before extending the renderer. Preserve the warm 
 Original delivery: [verification](VERIFICATION.md). It contains source/compile checks and retained-media hashes, not new motion acceptance. Browser preview inspection was blocked in that delivery. Future reviews must record what was actually inspected.
 
 Milestone 0 validation: inventory generation resolves all 71 entries and 27 source references (24 macro + 3 retirement); existing focused library tests pass 8/8. No new visual acceptance is asserted.
+
+## Published milestones
+
+- **0:** `470159b` pushed to `main`; remote branch verified at that commit. Package, 71-entry inventory, nine retirement recipes and acceptance criteria.
+- **1:** calculation implementation in `engine/lib/finance.mjs`; [contract and reproduction](../../finance-calculations.md). Ten focused checks pass, including closed-form annuity fixtures, hand-calculated matching and fees, loss/depletion cases, and ordering/validation. Five generated examples retain their input SHA-256. T02 remains partial: statistical transforms and the chart data contract are still planned. R01–R09 remain unreviewed visual proposals.
+
+Next: T01/C01 source contracts and native quantitative compositions. Rendering remains subject to the disk reserve; no generated visual candidate is accepted yet.
