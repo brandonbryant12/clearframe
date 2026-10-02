@@ -25,7 +25,19 @@ A film is not a slide deck with narration. The usual tells: every beat the same 
 
 ## Typography
 
-Everything is set in Inter, shipped with the renderer and measured with the same shaper that draws it, so wrapping, centering and fitted sizes are exact.
+Every face is shipped with the renderer and measured with the same shaper that draws it, so wrapping, centering and fitted sizes are exact. Inter is the default, and body copy, labels, sources, captions and counters always stay in it. The film's **type voice** (`"type"` in the storyboard, usually set by the treatment's `film.type`) chooses the display family and the emphasis for titles, statements, endcards, chapters, highlights, scene headers and kinetic text, so two treatments read as two films at thumbnail size. Run `clearframe types`.
+
+| Voice | Display face | Emphasis | Character |
+|---|---|---|---|
+| `inter` (default) | Inter Display 700 / 600 | accent colour (or `emphasisStyle: serif`) | Neutral, reports and explainers |
+| `didone` | Playfair Display Bold, lining figures | its own italic | Magazine authority: brand, premieres, atelier |
+| `wide` | Archivo Expanded ExtraBold, capitals | accent marker behind the phrase | Tech, arenas, sizzle, brutalist monolith |
+| `geometric` | Space Grotesk Light headline, Bold emphasis | weight contrast | Keynotes, product, playful explainers |
+| `condensed` | Big Shoulders Display ExtraBold, capitals, tight leading | accent underline | Trailers, manifestos, pulp |
+| `bookish` | DM Serif Display | its own italic | Documentaries, histories, deco invitations |
+| `typewriter` | IBM Plex Mono | underline | Engineering, incident reviews, retro tech |
+
+Voices are files in `library/types/` (see `library/README.md`): a face set, an emphasis kind, `case`, `tracking` and `leading`. A beat can set its own `type`; `inter` opts back out of the film voice. The renderer receives the resolved voice in the job, so a project renders without the library that defined it.
 
 | Role | Face | Used for |
 |---|---|---|
@@ -39,9 +51,9 @@ Display sizes use Inter's 32 pt optical master (tighter spacing, finer details);
 
 Keep copy short. Text that still does not fit its box at 14 px fails with a scene-specific error instead of overflowing. Divide long ideas into more beats; reserve extended speech for `kinetic`.
 
-**Emphasis.** `title`, `statement`, `chapter`, `quote`, `callout` and `endcard` accept `emphasis`: up to four whole-word phrases drawn in the accent color. `highlight` sweeps a marker behind its `phrases`, each on its own cue. Phrases must be exact whole words of the text; validation rejects partial matches so a later edit cannot silently lose the emphasis.
+**Emphasis.** `title`, `statement`, `chapter`, `quote`, `callout` and `endcard` accept `emphasis`: up to four whole-word phrases. How they are drawn comes from the voice (accent colour, the family's italic, a weight change, a marker block or an underline); a beat's `emphasisStyle: serif | accent` overrides it. Marker and underline arrive with the phrase's last word or letter under `textMotion`. `highlight` sweeps a marker behind its `phrases`, each on its own cue. Phrases must be exact whole words of the text; validation rejects partial matches so a later edit cannot silently lose the emphasis.
 
-The bundled fonts cover Latin, Greek, Cyrillic, arrows, math and currency symbols. `check` fails text that contains other scripts (for example CJK) and names the character and prop, rather than rendering empty boxes.
+Inter covers Latin, Greek, Cyrillic, arrows, math and currency symbols; the voice faces cover less (Playfair and Archivo have no Greek, Big Shoulders no Cyrillic), so display text is checked against the face that will draw it. `check` fails text that contains other scripts (for example CJK) and names the character, prop and face, rather than rendering empty boxes.
 
 ## Color
 

@@ -7,7 +7,7 @@ description: Choose and combine 33 FFFrames blocks, canvas sketches, beat layers
 
 Run `node engine/cli.mjs blocks`, `blocks NAME`, `sketch`, `playbooks`, `themes`, `motions` and `icons`. The exact prop reference is [references/blocks.md](references/blocks.md), generated from `fframes/catalog.mjs`. Starter storyboards live in `recipes/` and are generated from the playbooks.
 
-Palettes, treatments, sketches and playbooks are files in `library/`, one per item. Read [library/README.md](../../library/README.md) before adding one: a new look, arc or composition is a new file, not engine code. A project's own `library/` overrides built-ins by id. So does a shared brand kit passed with `--library DIR`. Those layers are JSON only.
+Palettes, treatments, type voices, sketches and playbooks are files in `library/`, one per item. Read [library/README.md](../../library/README.md) before adding one: a new look, arc or composition is a new file, not engine code. A project's own `library/` overrides built-ins by id. So does a shared brand kit passed with `--library DIR`. Those layers are JSON only.
 
 Choose the visual by the task:
 
@@ -29,6 +29,7 @@ Choose the visual by the task:
 | Point at something in any scene | beat `art.over` (arrows, circles, labels placed with `still --grid`) |
 | Punctuate a turn or a number | `tone: accent`, a `panel`/`iris`/`whip` transition, centred `align` |
 | Promo and launch pieces | canvas `sketch`: `sunburst` (opener), `chat` (a conversation on a floating phone), `device` (a window swinging in over a sky), `marquee` (an end card ringed by type); `material` for one word of hero type |
+| A distinct typographic voice | the treatment's `film.type` (or storyboard `type`): `didone`, `wide`, `geometric`, `condensed`, `bookish`, `typewriter`; `inter` is the default; `types` lists them. Emphasis follows the voice (italic, weight, marker, underline); `emphasisStyle: serif` on a beat still wins |
 | A period or craft look | `print` (benday, halftone, engraving, newsprint, letterpress; plate `treatment: halftone`), mosaic `style: pixel | stitch`; sketches `benday-burst`, `woodblock-wave`, `manifesto`, `pixel-skyline`, `sampler-border`; treatments `pulp`, `woodblock`, `constructivist`, `deco`, `handheld`, `sampler`; one subject across eras: the `style-relay` playbook (`gallery` treatment) |
 
 Playbooks have different narrative arcs, audiences and required evidence. Adapt and combine them rather than stretching a mismatched structure. The sample claims/quotations are labelled illustrative; replace them before publishing. For real UI demonstrations use approved screenshots or recordings: `annotate` pins the reading order onto a screenshot; `screen-walkthrough` scaffolds a text-free wireframe placeholder to replace.

@@ -8,6 +8,7 @@ Everything creative that is not engine code lives here, one file per item. To ad
 | `treatments/` | a complete art direction: look, motion, voice, sound and rules | `new --treatment`, `ingest --treatment`, `treatments` |
 | `sketches/` | a starting canvas composition for a mechanism | `sketch NAME`, playbook beats, `gallery --sketches` |
 | `playbooks/` | a narrative arc: beats with blocks, sample props and voice-over | `new --playbook`, `playbooks` |
+| `types/` | a type voice: the display family and emphasis for titles, statements, chapters, endcards and kinetic text | `type` in a storyboard or a treatment's `film`, `types` |
 
 The file name is the id (`library/palettes/noir.json` is `noir`). Files starting with `_` are ignored, so `_draft.json` stays out of listings. `order` sets the listing position. Items without it sort after the numbered ones, by id.
 
@@ -37,21 +38,38 @@ Every item is validated when the engine starts, so a bad file fails immediately 
   "order": 10,
   "title": "Quiet lesson",
   "when": "Wellbeing, reflective stories, gentle tutorials",
-  "film": { "theme": "forest", "backdrop": "glow", "motion": { "preset": "gentle", "intensity": 0.35 },
+  "film": { "theme": "forest", "type": "bookish", "backdrop": "glow", "motion": { "preset": "gentle", "intensity": 0.35 },
             "transition": "fade", "sfx": "off", "voice": { "style": "soft, slow, reassuring" } },
   "beats": { "graphic": "fade", "emphasisStyle": "serif", "rough": 0.6, "kinetic": "words", "font": "mono", "fps": 12, "mosaic": {} },
   "rules": ["Short imperative rules the author should follow."]
 }
 ```
 
-- `film` holds storyboard-level settings, copied onto the storyboard. `film.theme` must name a palette.
+- `film` holds storyboard-level settings, copied onto the storyboard. `film.theme` must name a palette; `film.type` (optional) names a type voice, and is what keeps two treatments from reading as the same brand.
 - `beats` holds defaults applied only where the author has not set them. `rough: false` strips pencil strokes that an arc was scaffolded with; the film looks use it. Every key is optional:
   - `graphic`: the transition used at chapter starts;
-  - `emphasisStyle`: for title, statement and endcard;
+  - `emphasisStyle`: `serif` or `accent` for title, statement and endcard, an explicit choice that overrides the voice's emphasis;
   - `rough`, `mosaic`, `print`, `font` and `fps`: for canvas;
   - `kinetic`: the kinetic mode.
 - `rules` end up in the project's `DIRECTION.md`.
 - `playbook` (optional) names the arc this look is made for. `new --treatment ID` and `ingest --treatment ID` start from it when no `--playbook` is given; for example, `cinematic` starts from `cinematic-explainer`.
+
+## Types
+
+```json
+{
+  "order": 2,
+  "title": "Didone editorial",
+  "when": "Keynotes, premieres, fashion, culture and brand films that want magazine authority",
+  "display": "playfair", "emphasis": "italic", "case": "mixed", "tracking": -0.01, "leading": 0.98
+}
+```
+
+- `display` names a bundled face set: `inter` (the default), `playfair` (Playfair Display Bold + italic, lining figures), `archivo-wide` (Archivo Expanded ExtraBold), `space-grotesk` (Bold + Light), `big-shoulders` (Big Shoulders Display ExtraBold), `bebas`, `dm-serif` (+ italic), `instrument-serif` (+ italic), `plex-mono`, `architects`.
+- `emphasis` says how `emphasis` phrases are drawn: `accent` (colour), `serif` (italic Instrument Serif, the editorial feeling word), `italic` (the family's own italic; the loader rejects it for a family without one), `weight` (a light headline with the phrase in bold; needs a light weight), `marker` (an accent block behind the phrase, ink in the background colour) or `underline` (an accent rule). A beat's own `emphasisStyle: serif | accent` still wins.
+- `case: upper` sets titles, statements, endcards, chapter titles and kinetic stacks in capitals (scene headers stay mixed). `tracking` is letter-spacing in em (−0.1 to 0.3); `leading` multiplies each block's line height (0.8 to 1.3).
+- The voice reaches titles, statements, endcards, chapters, highlights, scene headers and kinetic text. Body copy, labels, sources, captions and counters stay in Inter (counters need its tabular figures). Display text is glyph-checked against the voice's face before rendering.
+- Built-ins: `inter`, `didone`, `wide`, `geometric`, `condensed`, `bookish`, `typewriter`. Run `clearframe types`. A storyboard sets `"type": "didone"`; a beat can set its own `type` (`inter` opts back out). The job carries the resolved voice, so a project renders without the library that defined it, and `new` copies a shared voice into the project like a palette.
 
 ## Sketches
 

@@ -4,9 +4,9 @@ ClearFrame now uses **FFFrames for every active render**. Begin with `skills/cle
 
 - Author one storyboard, using `block` and validated `props`. Run `playbooks`, `blocks`, `treatments` and `sketch` before inventing a scene.
 - Adapt structure to the story. Playbooks and treatments are reusable starting points, not limits on possible films. Source material (reports, recordings) goes through `ingest`; references through `reference`; see `skills/clearframe-direction/SKILL.md`.
-- New palettes, treatments, sketches and playbooks are files in `library/` (see `library/README.md`); engine code is for new capabilities. A project's `library/` or `--library DIR` overrides built-ins, JSON only.
+- New palettes, treatments, type voices, sketches and playbooks are files in `library/` (see `library/README.md`); engine code is for new capabilities. A project's `library/` or `--library DIR` overrides built-ins, JSON only.
 - Films are not slide decks (read `skills/clearframe-cinema/SKILL.md` and `docs/cinema.md`; `critique` prints a cinema score): draw mechanisms (`canvas`), use plates, tones, camera and graphic transitions, and run `critique` before rendering.
-- Choose palette, motion preset/intensity and entrances explicitly. Follow `docs/style.md`; use `looks` to compare one scene across palettes. Keep slide counters out of film output.
+- Choose palette, type voice (`type`, usually from the treatment; `types` lists them), motion preset/intensity and entrances explicitly. Follow `docs/style.md`; use `looks` to compare one scene across palettes. Keep slide counters out of film output.
 - New GitHub code/assets must be MIT-licensed at the exact imported revision, with bundled notices/provenance; bundled fonts are SIL OFL 1.1 from google/fonts at a pinned revision with hashes in `fframes/assets/fonts/provenance.json`. Prefer independently implemented ideas over adding another renderer; see `docs/research/2026-github-video-patterns.md`.
 - For speech-following text read `docs/speech.md`. Never call interpolated timestamps measured. Final kinetic/captioned scenes require word timings tied to the current audio hash; `align --whisper` measures them locally for free.
 - Keep factual text, charts and labels native. Every displayed number needs visible attribution and a `sources` entry. Never present sample figures or fictional quotes as evidence.
