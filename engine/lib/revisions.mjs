@@ -684,8 +684,9 @@ const fmtShift = s => `${s < 0 ? 'earlier' : 'later'} by ${Math.abs(s).toFixed(2
 
 /**
  * Did the sequence of beats change between two orders of ids (not times: a cut that moves
- * later beats earlier is not a reorder)? Beats in both are compared; `moved` is a smallest set
- * of beats whose moving explains the new order (those outside a longest run kept in order).
+ * later beats earlier is not a reorder)? Beats in both are compared (`before`, `after`); `moved`
+ * is a smallest set of beats whose moving explains the new order (those outside a longest run
+ * kept in order).
  */
 export function sequenceMoves(before, after) {
   const inBoth = new Set(before.filter(id => after.includes(id)));
@@ -711,7 +712,7 @@ export function sequenceMoves(before, after) {
   });
   const stay = new Set();
   for (let i = tails.at(-1); i >= 0; i = prev[i]) stay.add(b[i]);
-  return { reordered: true, moved: b.filter(id => !stay.has(id)) };
+  return { reordered: true, moved: b.filter(id => !stay.has(id)), before: a, after: b };
 }
 const clip = (s, n) => (String(s ?? '').length > n ? String(s).slice(0, n - 1) + '…' : String(s ?? ''));
 

@@ -27,7 +27,7 @@ import { paperEdit } from './paper.mjs';
 import { sentenceAt, sentenceAtTime } from './targets.mjs';
 import { writeReviewPage } from './review-page.mjs';
 import { readRunlog, runlogReport } from './runlog.mjs';
-import { checkId } from './store.mjs';
+import { checkId, withLock } from './store.mjs';
 
 export const REVIEW = new Set([
   'paper',
@@ -409,7 +409,8 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
     const common = { by, note: o.note ? checkId('note', o.note) : undefined, dryRun: !!o['dry-run'] };
     const overrides = list(o.override) ?? [];
     // Every path plans first, checks the keeps against what the plan removes (by identity), and
-    // only then cuts; several cuts (the paper edit) are applied all or none.
+    // only then cuts, holding the review lock throughout so no other edit or keep lands between
+    // the check and the cut; several cuts (the paper edit) are applied all or none.
     let result;
     if (o.paper) {
       // Struck words are the person's own marks: attribute them.
@@ -417,20 +418,26 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
       const { paperSelections } = await import('./paper.mjs');
       const selections = paperSelections(dir, o.paper);
       if (!selections.length) return console.log('No struck words (~~…~~) that differ from the film as it plays now.');
-      guardKeeps(dir, cutAll(dir, selections, { ...common, dryRun: true }), by, overrides);
-      result = cutAll(dir, selections, common);
+      result = withLock(dir, () => {
+        guardKeeps(dir, cutAll(dir, selections, { ...common, dryRun: true }), by, overrides);
+        return cutAll(dir, selections, common);
+      });
     } else if (o['pauses-over'] != null) {
       const args = { over: Number(o['pauses-over']), keep: o['keep-pause'] == null ? 0.5 : Number(o['keep-pause']), beats: list(o.beats) };
-      guardKeeps(dir, [tightenPauses(dir, args, { ...common, dryRun: true })], by, overrides);
-      result = [tightenPauses(dir, args, common)];
+      result = withLock(dir, () => {
+        guardKeeps(dir, [tightenPauses(dir, args, { ...common, dryRun: true })], by, overrides);
+        return [tightenPauses(dir, args, common)];
+      });
     } else {
       let sel;
       if (o.words && !o.note) sel = { words: o.words, beat: o.beat, nth: o.nth == null ? undefined : Number(o.nth) };
       else if (o.sentence != null) sel = { beat: checkId('beat', o.beat ?? ''), sentence: Number(o.sentence) };
       else if (opts.at != null || o.note) sel = await pointedSelection(dir, o, opts);
       else throw new Error('cut what? --words "…", --beat ID --sentence N, --at TIME, --note nNNN, --pauses-over S or --paper FILE');
-      guardKeeps(dir, [cutWords(dir, sel, { ...common, dryRun: true })], by, overrides);
-      result = [cutWords(dir, sel, common)];
+      result = withLock(dir, () => {
+        guardKeeps(dir, [cutWords(dir, sel, { ...common, dryRun: true })], by, overrides);
+        return [cutWords(dir, sel, common)];
+      });
     }
     if (!common.dryRun) writeReviewPage(dir);
     if (o.json) return json(result);

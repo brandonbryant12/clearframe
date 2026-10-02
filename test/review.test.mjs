@@ -746,6 +746,65 @@ test('a cut that moves later beats in time is not a reorder', async t => {
   assert.deepEqual(ids(root), ['s001', 's002', 's003', 's004', 's005']);
 });
 
+test('a rejected reorder that also removed a beat comes back in the parent’s order; a beat added since keeps its place', async t => {
+  const root = draftProject(t);
+  await snapshot(root);
+  edit(root, sb => {
+    sb.beats.reverse();
+    sb.beats = sb.beats.filter(b => b.id !== 'door');
+  });
+  const { revision: cand } = await snapshot(root, { kind: 'candidate' });
+  // After the candidate the person adds a card after the desk.
+  edit(root, sb => sb.beats.splice(sb.beats.findIndex(b => b.id === 'desk') + 1, 0, { id: 'card', block: 'statement', vo: 'One more thing.', props: { text: 'One more thing.' } }));
+  const r = await rejectRevision(root, { revision: cand.id, by: 'Ana', said: 'no' });
+  assert.deepEqual(r.conflicts, []);
+  assert.deepEqual(r.restored, ['door', 'beat order']);
+  assert.deepEqual(ids(root), ['open', 'turn', 'desk', 'card', 'door', 'end']);
+});
+
+test('a beat split after a rejected reorder goes back with its original, still split', async t => {
+  const { root } = await recordedProject(t);
+  await snapshot(root);
+  edit(root, sb => sb.beats.reverse());
+  const { revision: cand } = await snapshot(root, { kind: 'candidate' });
+  splitBeat(root, { beat: 's005', at: 'and the line' });
+  const r = await rejectRevision(root, { revision: cand.id, by: 'Ana', said: 'keep the order' });
+  assert.deepEqual(r.conflicts, []);
+  assert.deepEqual(r.restored, ['beat order']);
+  assert.deepEqual(ids(root), ['s001', 's002', 's003', 's004', 's005a', 's005b']);
+  // Its parts moved apart since: that is the person's arrangement, kept and reported.
+  const { root: two } = await recordedProject(t);
+  await snapshot(two);
+  edit(two, sb => sb.beats.reverse());
+  const { revision: cand2 } = await snapshot(two, { kind: 'candidate' });
+  splitBeat(two, { beat: 's005', at: 'and the line' });
+  edit(two, sb => sb.beats.push(sb.beats.splice(1, 1)[0])); // s005b to the end
+  const later = ids(two);
+  const r2 = await rejectRevision(two, { revision: cand2.id, by: 'Ana', said: 'keep the order' });
+  assert.ok(r2.conflicts.some(c => /beat order was changed after/.test(c)));
+  assert.deepEqual(ids(two), later);
+});
+
+test('restoring a beat puts it after what is left of the beat before it', async t => {
+  const { root } = await recordedProject(t);
+  const { revision: r1 } = await snapshot(root);
+  cutWords(root, { words: 'Right.' }, { by: human });
+  splitBeat(root, { beat: 's002', at: 'That is' });
+  await restoreRevision(root, { revision: r1.id, beats: ['s003'], by: 'Ana', said: 'bring back the guest' });
+  assert.deepEqual(ids(root), ['s001', 's002a', 's002b', 's003', 's004', 's005']);
+});
+
+test('moving the note’s own beat is in scope, even past a beat outside it, and makes a candidate', async t => {
+  const root = draftProject(t);
+  const { revision, timeline } = await snapshot(root);
+  const n = addNote(root, { text: 'the desk should come after the door', revision: revision.id, at: timeline.beats[2].start + 0.2, by: 'Ana' });
+  edit(root, sb => sb.beats.splice(3, 0, sb.beats.splice(2, 1)[0]));
+  assert.deepEqual(ids(root), ['open', 'turn', 'door', 'desk', 'end']);
+  const r = await revise(root, { note: n.id, render: false });
+  assert.equal(r.report.order.reordered, true);
+  assert.match(r.report.summary.join(' '), /The order of beats changed/);
+});
+
 test('revise counts moving beats outside the note as out of scope', async t => {
   const root = draftProject(t);
   const { revision, timeline } = await snapshot(root);

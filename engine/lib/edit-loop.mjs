@@ -22,6 +22,7 @@ import {
   workingContent,
   reviewTimeline,
   trackedFiles,
+  sequenceMoves,
 } from './revisions.mjs';
 import { readNotes, locate, setNoteStatus, checkKeeps, addDecision, readKeeps, readDecisions } from './notes.mjs';
 import { readEdits, isRecorded, slicePieces } from './recording.mjs';
@@ -55,8 +56,13 @@ function noteBeats(root, note, timeline) {
 export function scopeViolations(report, { beats, film }) {
   const allowed = new Set(beats);
   const out = [];
-  const moved = (report.order?.moved ?? []).filter(id => !allowed.has(id));
-  if (!film && moved.length) out.push({ what: 'order', message: `the order of beats changed: ${moved.join(', ')} moved, outside the note's beats` });
+  // Moving the note's own beats is in scope; any other beat out of its order relative to the
+  // rest is not.
+  if (!film && report.order?.reordered) {
+    const others = id => !allowed.has(id);
+    const { moved } = sequenceMoves(report.order.before.filter(others), report.order.after.filter(others));
+    if (moved.length) out.push({ what: 'order', message: `the order of beats changed: ${moved.join(', ')} moved, outside the note's beats` });
+  }
   if (!film && report.film.look === 'changed') out.push({ what: 'film look', message: 'the film look changed, but the note is not film-wide' });
   if (!film && report.film.sound === 'changed') out.push({ what: 'sound', message: 'the music or mix settings changed, but the note is not film-wide' });
   if (!film && report.film.voice === 'changed') out.push({ what: 'voice', message: 'the voice settings changed, but the note is not film-wide' });
@@ -172,7 +178,13 @@ export async function revise(root, { note: noteId, scope, reason, handles = 2, o
     throw new Error(
       `This edit breaks a keep:\n  - ${broken.map(b => `${b.keep} (${b.what}): ${b.message}`).join('\n  - ')}\nAsk the person; if they agree, record it with override --keep ${broken[0].keep} --by NAME --said "…" and pass --override.`,
     );
-  if (report.counts.content == null && report.counts.added == null && report.counts.removed == null && !['look', 'sound', 'voice', 'data'].some(k => report.film[k] === 'changed'))
+  if (
+    report.counts.content == null &&
+    report.counts.added == null &&
+    report.counts.removed == null &&
+    !report.order.reordered &&
+    !['look', 'sound', 'voice', 'data'].some(k => report.film[k] === 'changed')
+  )
     throw new Error(`Nothing changed since ${base.id}; edit the film for note ${note.id} first.`);
   const { revision: rev, created } = await phase('revision', () =>
     snapshot(root, { ctx, kind: 'candidate', label, reason: `note ${note.id}: ${note.text.slice(0, 160)}`, notes: [note.id] }),
@@ -316,14 +328,72 @@ const storyboardOf = (root, id) => readJSONFile(reviewPath(root, 'revisions', id
 const writeStoryboard = (root, sb) => writeJSONAtomic(path.join(root, 'storyboard.json'), sb);
 const same = (x, y) => JSON.stringify(x) === JSON.stringify(y);
 
-/** Insert `beat` after the nearest earlier beat of `order` that the storyboard still has. */
-function insertInOrder(sb, beat, order) {
+/**
+ * Insert `beat` where it stood in `order` (a revision's beat ids): after what is left of the
+ * nearest earlier beat of `order` (itself, or its parts after a split) and after the beats new
+ * since that follow it, so a beat added since keeps the beat before it.
+ */
+function insertInOrder(sb, beat, order, edits) {
+  const origin = originsIn(sb, new Set(order), edits);
   const i = order.indexOf(beat.id);
   for (let k = i - 1; k >= 0; k--) {
-    const at = sb.beats.findIndex(b => b.id === order[k]);
-    if (at >= 0) return sb.beats.splice(at + 1, 0, beat);
+    let at = sb.beats.findLastIndex(b => origin.get(b.id) === order[k]);
+    if (at < 0) continue;
+    while (at + 1 < sb.beats.length && origin.get(sb.beats[at + 1].id) == null) at++;
+    return sb.beats.splice(at + 1, 0, beat);
   }
   sb.beats.unshift(beat);
+}
+
+/**
+ * For each beat of `sb`, the beat of `ids` it is or came from: split parts (followed through
+ * the edit log, however many times split) are their original, a merged beat is its first part;
+ * null for a beat that is new since.
+ */
+function originsIn(sb, ids, edits) {
+  const splitFrom = new Map();
+  for (const e of edits) if (e.op === 'split') for (const id of e.into ?? []) splitFrom.set(id, e.beat);
+  const of = b => {
+    let id = b.id;
+    for (const seen = new Set(); !ids.has(id) && splitFrom.has(id) && !seen.has(id); id = splitFrom.get(id)) seen.add(id);
+    return ids.has(id) ? id : ((b.was ?? []).find(w => ids.has(w)) ?? null);
+  };
+  return new Map(sb.beats.map(b => [b.id, of(b)]));
+}
+
+/**
+ * Put the beats of `sb` that come from the parent back in the parent's order, in the places they
+ * hold. Parts of a beat split since keep their order and move with it; a beat new since moves
+ * with the beat before it.
+ */
+function parentOrder(sb, sbP, edits) {
+  const rank = new Map(sbP.beats.map((b, i) => [b.id, i]));
+  const origin = originsIn(sb, new Set(rank.keys()), edits);
+  const head = [],
+    groups = [];
+  for (const b of sb.beats) {
+    const o = origin.get(b.id);
+    if (o != null) groups.push({ rank: rank.get(o), beats: [b] });
+    else (groups.at(-1)?.beats ?? head).push(b);
+  }
+  sb.beats = [...head, ...groups.map((g, n) => ({ ...g, n })).sort((x, y) => x.rank - y.rank || x.n - y.n).flatMap(g => g.beats)];
+}
+
+/**
+ * Did a candidate rearrange beats (`sbP` → `sbC`), and is that arrangement still as it left it
+ * in `sbNow`? Beats are followed through splits and merges made since; a beat moved away from the
+ * place its neighbours give it, or parts of one beat separated, is a later rearrangement.
+ */
+function orderSince(sbP, sbC, sbNow, edits) {
+  const inP = new Set(sbP.beats.map(b => b.id)),
+    inC = new Set(sbC.beats.map(b => b.id));
+  const orderP = sbP.beats.map(b => b.id).filter(id => inC.has(id)),
+    orderC = sbC.beats.map(b => b.id).filter(id => inP.has(id));
+  if (same(orderP, orderC)) return 'unchanged';
+  const origin = originsIn(sbNow, inP, edits);
+  const keys = sbNow.beats.map(b => origin.get(b.id)).filter(o => o != null && inC.has(o));
+  const runs = keys.filter((o, n) => o !== keys[n - 1]);
+  return new Set(runs).size === runs.length && same(runs, orderC.filter(id => runs.includes(id))) ? 'candidate' : 'since';
 }
 
 /** Move a file into review/aside/<restore point>/… (a rename on the same volume). */
@@ -349,6 +419,7 @@ export async function rejectRevision(root, { revision, note, by, said }) {
   const { timeline: W } = await workingTimeline(root);
   const sb = readJSONFile(path.join(root, 'storyboard.json'));
   const sbNow = structuredClone(sb);
+  const edits = readEdits(root);
   const sbP = storyboardOf(root, P.meta.id),
     sbC = storyboardOf(root, C.meta.id);
   const changes = impact(P.timeline, C.timeline, { lineage: C.meta.lineage }).beats;
@@ -379,7 +450,7 @@ export async function rejectRevision(root, { revision, note, by, said }) {
     const old = sbP.beats.find(x => x.id === b.id);
     if (b.op === 'replace') sb.beats[sb.beats.findIndex(x => x.id === b.id)] = old;
     else if (b.op === 'drop') sb.beats = sb.beats.filter(x => x.id !== b.id);
-    else insertInOrder(sb, old, sbP.beats.map(x => x.id));
+    else insertInOrder(sb, old, sbP.beats.map(x => x.id), edits);
   }
   // A recorded beat that comes back must not replay recording another beat plays now.
   const metaFor = id =>
@@ -393,21 +464,14 @@ export async function rejectRevision(root, { revision, note, by, said }) {
     );
   restoreFiles(root, [...files].filter(([rel]) => !sharedFiles.has(rel)));
   restored.push(...back.map(b => b.id));
-  // Beat order: if the candidate rearranged beats and nobody has rearranged them since, they go
-  // back to the parent's order in the places they hold now (other beats stay where they are).
-  const both = new Set(sbP.beats.map(b => b.id).filter(id => sbC.beats.some(b => b.id === id)));
-  const orderP = sbP.beats.map(b => b.id).filter(id => both.has(id)),
-    orderC = sbC.beats.map(b => b.id).filter(id => both.has(id));
-  if (!same(orderP, orderC)) {
-    const present = sb.beats.map(b => b.id).filter(id => both.has(id));
-    if (same(present, orderC.filter(id => present.includes(id)))) {
-      const slots = sb.beats.map((b, i) => (both.has(b.id) ? i : -1)).filter(i => i >= 0);
-      const want = orderP.filter(id => present.includes(id));
-      const byId = new Map(sb.beats.map(b => [b.id, b]));
-      slots.forEach((slot, k) => (sb.beats[slot] = byId.get(want[k])));
-      restored.push('beat order');
-    } else conflicts.push(`the beat order was changed after ${revision}; left as it is`);
-  }
+  // Beat order: if the candidate rearranged beats and nobody has rearranged them since, the
+  // parent's order comes back, with the beats this reject returned in their places and edits
+  // made since (splits, merges, new beats) kept.
+  const order = orderSince(sbP, sbC, sbNow, edits);
+  if (order === 'candidate') {
+    parentOrder(sb, sbP, edits);
+    restored.push('beat order');
+  } else if (order === 'since') conflicts.push(`the beat order was changed after ${revision}; left as it is`);
   // Film settings, when the candidate changed them and nobody has since.
   const film = s => {
     const { beats, ...rest } = s;
@@ -503,7 +567,7 @@ export async function restoreRevision(root, { revision, beats, by, said, role = 
       const old = sbR.beats.find(b => b.id === id);
       const at = sb.beats.findIndex(b => b.id === id);
       if (at >= 0) sb.beats[at] = old;
-      else insertInOrder(sb, old, sbR.beats.map(b => b.id));
+      else insertInOrder(sb, old, sbR.beats.map(b => b.id), readEdits(root));
     }
     const metaFor = id =>
       restoring.has(id) ? storedJSON(root, R.meta.inputs[`assets/vo/${id}.json`]) : readJSONFile(path.join(root, 'assets', 'vo', `${id}.json`), null);
