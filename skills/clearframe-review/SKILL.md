@@ -55,7 +55,8 @@ node engine/cli.mjs decide DIR r006 --checkpoint rough --reason "one-shot: all n
 ```
 
 - `accept`/`reject`/`restore --by` are only for what the person actually said; quote them. Silence, elapsed time or "looks fine I guess" about something else is not acceptance.
-- `reject` undoes the candidate where nothing changed since and reports conflicts; `restore` brings back a whole revision (setting aside later library overrides and shadowing media under `review/aside/`, then verifying the result) or `--beats` (refused when it would change media other beats use, unless `--shared`, or replay merged recording), saving the current state first. `uncut DIR --cut c004` undoes one recording cut exactly.
+- Keeps on a recording hold through splits and merges: a refused cut has written nothing; ask the person rather than looking for another path.
+- `reject` undoes the candidate where nothing changed since (beat order included) and reports conflicts; `restore` brings back a whole revision (setting aside later library overrides and shadowing media under `review/aside/`, then verifying the result) or `--beats` (refused when it would change media other beats use, unless `--shared`, or replay merged recording), saving the current state first. `uncut DIR --cut c004` undoes one recording cut exactly.
 - For the final, record acceptance of the whole cut (`accept DIR rNNN --checkpoint final --by NAME --said "…"`): accepting one note's result does not approve the film, and any later change reopens it.
 - In one-shot work use `decide`; it is shown as an agent decision, never as acceptance.
 

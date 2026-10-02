@@ -18,12 +18,12 @@ import {
   addDecision,
   setNoteStatus,
   checkKeeps,
-  readDecisions,
+  keepConflicts,
   KEEPS,
 } from './notes.mjs';
 import { revise, compareRevisions, rejectRevision, restoreRevision } from './edit-loop.mjs';
-import { cutWords, uncut, splitBeat, mergeBeats, tightenPauses, readEdits } from './recording.mjs';
-import { paperEdit, applyPaperCuts } from './paper.mjs';
+import { cutWords, cutAll, uncut, splitBeat, mergeBeats, tightenPauses, readEdits } from './recording.mjs';
+import { paperEdit } from './paper.mjs';
 import { sentenceAt, sentenceAtTime } from './targets.mjs';
 import { writeReviewPage } from './review-page.mjs';
 import { readRunlog, runlogReport } from './runlog.mjs';
@@ -407,19 +407,21 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
   if (cmd === 'cut') {
     const by = who(o);
     const common = { by, note: o.note ? checkId('note', o.note) : undefined, dryRun: !!o['dry-run'] };
+    const overrides = list(o.override) ?? [];
+    // Every path plans first, checks the keeps against what the plan removes (by identity), and
+    // only then cuts; several cuts (the paper edit) are applied all or none.
     let result;
     if (o.paper) {
       // Struck words are the person's own marks: attribute them.
       if (by.role !== 'human' && !common.dryRun) throw new Error('cut --paper applies a person’s marks: pass --by NAME.');
-      const { paperCuts } = await import('./paper.mjs');
-      const order = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8')).beats.map(b => b.id);
-      const touched = paperCuts(dir, o.paper).flatMap(r => order.slice(order.indexOf(r.from.beat), order.indexOf(r.to.beat) + 1));
-      guardKeeps(dir, touched, common, o);
-      result = common.dryRun ? [] : applyPaperCuts(dir, o.paper, common);
-      if (!result.length) return console.log(common.dryRun ? `would cut struck words in ${[...new Set(touched)].join(', ') || 'nothing'}` : 'No struck words (~~…~~) that differ from the film as it plays now.');
+      const { paperSelections } = await import('./paper.mjs');
+      const selections = paperSelections(dir, o.paper);
+      if (!selections.length) return console.log('No struck words (~~…~~) that differ from the film as it plays now.');
+      guardKeeps(dir, cutAll(dir, selections, { ...common, dryRun: true }), by, overrides);
+      result = cutAll(dir, selections, common);
     } else if (o['pauses-over'] != null) {
       const args = { over: Number(o['pauses-over']), keep: o['keep-pause'] == null ? 0.5 : Number(o['keep-pause']), beats: list(o.beats) };
-      guardKeeps(dir, tightenPauses(dir, args, { ...common, dryRun: true }).beats.map(p => p.beat), common, o);
+      guardKeeps(dir, [tightenPauses(dir, args, { ...common, dryRun: true })], by, overrides);
       result = [tightenPauses(dir, args, common)];
     } else {
       let sel;
@@ -427,7 +429,7 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
       else if (o.sentence != null) sel = { beat: checkId('beat', o.beat ?? ''), sentence: Number(o.sentence) };
       else if (opts.at != null || o.note) sel = await pointedSelection(dir, o, opts);
       else throw new Error('cut what? --words "…", --beat ID --sentence N, --at TIME, --note nNNN, --pauses-over S or --paper FILE');
-      guardKeeps(dir, cutWords(dir, sel, { ...common, dryRun: true }).beats.map(p => p.beat), common, o);
+      guardKeeps(dir, [cutWords(dir, sel, { ...common, dryRun: true })], by, overrides);
       result = [cutWords(dir, sel, common)];
     }
     if (!common.dryRun) writeReviewPage(dir);
@@ -494,19 +496,14 @@ async function pointedSelection(dir, o, opts) {
   return { source: t.source, label: `The sentence at ${formatTime(opts.at)} in ${rev} (“${t.text}”)` };
 }
 
-/** A cut must not break a keep: `voice` allows cuts the person asked for; `words` never. */
-function guardKeeps(dir, beats, common, o) {
-  const touched = new Set(beats);
-  const granted = new Set(readDecisions(dir).filter(d => d.action === 'override' && d.role === 'human').map(d => d.scope?.keep));
-  const overrides = new Set(list(o.override) ?? []);
-  for (const k of readKeeps(dir).filter(k => k.active && ['voice', 'words'].includes(k.what))) {
-    if (!(k.scope.film || k.scope.beats.some(id => touched.has(id)))) continue;
-    if (overrides.has(k.id) && granted.has(k.id)) continue;
-    if (k.what === 'voice' && common.by.role === 'human') continue;
-    throw new Error(
-      k.what === 'voice'
-        ? `${k.id} keeps the voice here (“${k.said ?? ''}”); a cut needs the person's request: pass --by NAME with what they asked.`
-        : `${k.id} keeps the words here (“${k.said ?? ''}”). Ask the person; if they agree: override DIR --keep ${k.id} --by NAME --said "…", then cut … --override ${k.id}.`,
-    );
-  }
+/** Refuse a planned cut that would break a keep (nothing has been cut yet). */
+function guardKeeps(dir, plans, by, overrides) {
+  const conflicts = keepConflicts(dir, plans, { by, overrides });
+  if (!conflicts.length) return;
+  const [{ keep: k, beats }] = conflicts;
+  throw new Error(
+    k.what === 'voice'
+      ? `${k.id} keeps the voice of ${beats.join(', ')} (“${k.said ?? ''}”); a cut there needs the person's request: pass --by NAME with what they asked. Nothing was cut.`
+      : `${k.id} keeps the words of ${beats.join(', ')} (“${k.said ?? ''}”) and this cut removes some of them. Ask the person; if they agree: override DIR --keep ${k.id} --by NAME --said "…", then cut … --override ${k.id}. Nothing was cut.`,
+  );
 }

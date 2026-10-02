@@ -15,6 +15,7 @@ import {
   ensureTranscript,
   planRemoval,
   keptWords,
+  atomically,
 } from '../engine/lib/recording.mjs';
 import { computeTiming, captionCues } from '../engine/lib/timing.mjs';
 import { paperEdit, applyPaperCuts } from '../engine/lib/paper.mjs';
@@ -23,8 +24,9 @@ import { readPCM } from '../engine/lib/levels.mjs';
 import { RATE, recordedProject, synthRecording } from './fixtures.mjs';
 import { spawnSync } from 'node:child_process';
 import { ingestRecording } from '../engine/lib/ingest.mjs';
-import { snapshot } from '../engine/lib/revisions.mjs';
-import { addNote } from '../engine/lib/notes.mjs';
+import { snapshot, workingTimeline } from '../engine/lib/revisions.mjs';
+import { addNote, addKeep, checkKeeps } from '../engine/lib/notes.mjs';
+import crypto from 'node:crypto';
 
 const sb = root => JSON.parse(fs.readFileSync(path.join(root, 'storyboard.json'), 'utf8'));
 const meta = (root, id) => JSON.parse(fs.readFileSync(path.join(root, 'assets/vo', `${id}.json`), 'utf8'));
@@ -343,4 +345,107 @@ test('a note survives a merge and is cut by identity; partly cut sentences and r
   assert.equal(r.status, 0, r.stderr);
   r = cli('cut', root, '--note', n3.id, '--words', 'Honestly', '--by', 'Ana');
   assert.notEqual(r.status, 0, 'Honestly is outside the note’s beats');
+});
+
+// Keeps through splits and merges: every cut path checks what it would remove against what the
+// keep's revision played (by identity), before anything is written.
+function filesOf(root) {
+  const out = {};
+  const add = rel => {
+    const f = path.join(root, rel);
+    if (fs.existsSync(f)) out[rel] = crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+  };
+  add('storyboard.json');
+  add('review/edits.jsonl');
+  for (const f of fs.readdirSync(path.join(root, 'assets/vo'))) add(`assets/vo/${f}`);
+  return out;
+}
+async function kept(t, what, beats) {
+  const { root } = await recordedProject(t);
+  const { revision } = await snapshot(root);
+  addKeep(root, { what, beats, revision: revision.id, by: ana, said: `keep the ${what}` });
+  return root;
+}
+
+test('a words keep holds through a split: the cut is refused and nothing is written', async t => {
+  const root = await kept(t, 'words', ['s005']);
+  splitBeat(root, { beat: 's005', at: 'and the line' });
+  await snapshot(root);
+  const before = filesOf(root);
+  const r = cli('cut', root, '--beat', 's005b', '--words', 'and the line', '--by', 'Ana');
+  assert.notEqual(r.status, 0);
+  assert.match(r.stderr, /k001 keeps the words of s005.*Nothing was cut/);
+  assert.deepEqual(filesOf(root), before, 'storyboard, slices, metadata and the edit log unchanged');
+  assert.deepEqual(checkKeeps(root, (await workingTimeline(root)).timeline), []);
+});
+
+test('after a merge only the protected beat’s words are held; the absorbed neighbour’s are free', async t => {
+  const root = await kept(t, 'words', ['s005']);
+  mergeBeats(root, { beats: ['s004', 's005'] });
+  let r = cli('cut', root, '--words', 'Then we measured', '--by', 'Ana');
+  assert.notEqual(r.status, 0, 's005’s words, now inside s004');
+  r = cli('cut', root, '--words', 'Honestly', '--by', 'Ana');
+  assert.equal(r.status, 0, r.stderr);
+  assert.deepEqual(checkKeeps(root, (await workingTimeline(root)).timeline), [], 'no false alarm from the merge');
+});
+
+test('a voice keep holds through a split for the agent’s cuts and pauses, not the person’s', async t => {
+  const root = await kept(t, 'voice', ['s002', 's005']);
+  splitBeat(root, { beat: 's005', at: 'and the line' });
+  splitBeat(root, { beat: 's002', at: 'That is' });
+  const before = filesOf(root);
+  let r = cli('cut', root, '--words', 'and the line', '--agent');
+  assert.notEqual(r.status, 0);
+  assert.match(r.stderr, /keeps the voice of s005/);
+  r = cli('cut', root, '--pauses-over', '1.2', '--keep-pause', '0.5', '--agent');
+  assert.notEqual(r.status, 0, 'the 1.6 s pause inside s002 is part of its recording');
+  assert.deepEqual(filesOf(root), before);
+  r = cli('cut', root, '--words', 'and the line', '--by', 'Ana');
+  assert.equal(r.status, 0, r.stderr);
+  assert.deepEqual(checkKeeps(root, (await workingTimeline(root)).timeline), [], 'the person’s own cut keeps the voice');
+  // A cut that went around the CLI is still caught afterwards, split or not.
+  cutWords(root, { words: 'Then we' }, { by: { role: 'agent' } });
+  const v = checkKeeps(root, (await workingTimeline(root)).timeline);
+  assert.equal(v.length, 1);
+  assert.match(v[0].message, /s005 no longer plays all of its recording/);
+});
+
+test('a keep gives way only to an override the person recorded', async t => {
+  const root = await kept(t, 'words', ['s005']);
+  splitBeat(root, { beat: 's005', at: 'and the line' });
+  let r = cli('cut', root, '--words', 'and the line', '--by', 'Ana', '--override', 'k001');
+  assert.notEqual(r.status, 0, 'passing --override is not enough');
+  const rev = JSON.parse(cli('revisions', root, '--json').stdout).at(-1).id;
+  r = cli('override', root, '--keep', 'k001', '--rev', rev, '--by', 'Ana', '--said', 'fine, cut that');
+  assert.equal(r.status, 0, r.stderr);
+  r = cli('cut', root, '--words', 'and the line', '--by', 'Ana', '--override', 'k001');
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(sb(root).beats.at(-1).vo, 'got shorter.');
+});
+
+test('struck words apply all or none: a protected run stops the earlier ones too', async t => {
+  const root = await kept(t, 'words', ['s005']);
+  const { file } = paperEdit(root);
+  const printed = fs.readFileSync(file, 'utf8');
+  fs.writeFileSync(file, printed.replace('> Short one. That is', '> ~~Short one.~~ That is').replace('and the line got shorter.', '~~and the line~~ got shorter.'));
+  const before = filesOf(root);
+  const r = cli('cut', root, '--paper', file, '--by', 'Ana');
+  assert.notEqual(r.status, 0);
+  assert.deepEqual(filesOf(root), before, 'the unprotected run in s002 was not applied either');
+});
+
+test('an edit that fails part way puts every file back', async t => {
+  const { root } = await recordedProject(t);
+  const before = filesOf(root);
+  assert.throws(
+    () =>
+      atomically(root, ['storyboard.json', 'assets/vo/s001.wav', 'assets/vo/new.json'], () => {
+        fs.writeFileSync(path.join(root, 'storyboard.json'), '{}');
+        fs.writeFileSync(path.join(root, 'assets/vo/s001.wav'), 'broken');
+        fs.writeFileSync(path.join(root, 'assets/vo/new.json'), '{}');
+        throw new Error('disk full');
+      }),
+    /disk full/,
+  );
+  assert.deepEqual(filesOf(root), before);
 });

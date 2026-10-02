@@ -14,7 +14,7 @@ import { snapshot, loadRevision, listRevisions, impact, lineageOf, workingTimeli
 import { addNote, locate, parseStamp, parseTime, formatTime, importNotes, addKeep, checkKeeps, addDecision, acceptance, readNotes } from '../engine/lib/notes.mjs';
 import { cutWords, splitBeat, uncut, mergeBeats } from '../engine/lib/recording.mjs';
 import { useProject } from '../fframes/library.mjs';
-import { rejectRevision, restoreRevision } from '../engine/lib/edit-loop.mjs';
+import { rejectRevision, restoreRevision, revise } from '../engine/lib/edit-loop.mjs';
 import { frameRange } from '../fframes/render.mjs';
 import { writeReviewPage, inertJSON, esc } from '../engine/lib/review-page.mjs';
 import { runlogReport } from '../engine/lib/runlog.mjs';
@@ -692,4 +692,67 @@ test('reject leaves a shared file alone when another beat that uses it changed s
   assert.ok(r.conflicts.some(c => /assets\/img\/pic\.png is also used by end/.test(c)));
   assert.equal(fs.readFileSync(path.join(root, 'assets/img/pic.png'), 'utf8'), 'png bytes, candidate', 'left as it is');
   assert.equal(read(root).beats[0].props.elements[0].x, 100);
+});
+
+// Rejecting a candidate that rearranged beats.
+const ids = root => read(root).beats.map(b => b.id);
+
+test('rejecting a reorder puts the parent’s order back, and the report names the reorder', async t => {
+  const root = draftProject(t);
+  const { timeline: A } = await snapshot(root);
+  const original = ids(root);
+  edit(root, sb => sb.beats.reverse());
+  const { revision: cand, timeline: B } = await snapshot(root, { kind: 'candidate' });
+  const report = impact(A, B);
+  assert.equal(report.order.reordered, true);
+  assert.match(report.summary.join(' '), /The order of beats changed/);
+  const r = await rejectRevision(root, { revision: cand.id, by: 'Ana', said: 'undo that reorder' });
+  assert.deepEqual(r.restored, ['beat order']);
+  assert.deepEqual(r.conflicts, []);
+  assert.deepEqual(ids(root), original);
+});
+
+test('a reorder made after the candidate is kept and reported; a later content edit survives the reject', async t => {
+  const root = draftProject(t);
+  await snapshot(root);
+  const original = ids(root);
+  edit(root, sb => sb.beats.reverse());
+  const { revision: cand } = await snapshot(root, { kind: 'candidate' });
+  edit(root, sb => ([sb.beats[0], sb.beats[1]] = [sb.beats[1], sb.beats[0]])); // the person moved two more
+  const later = ids(root);
+  const r = await rejectRevision(root, { revision: cand.id, by: 'Ana', said: 'no' });
+  assert.ok(r.conflicts.some(c => /beat order was changed after/.test(c)));
+  assert.deepEqual(ids(root), later, 'their order is left as they made it');
+  // Again, with a content edit instead of a reorder: the order goes back, the edit stays.
+  const root2 = draftProject(t);
+  await snapshot(root2);
+  edit(root2, sb => sb.beats.reverse());
+  const { revision: cand2 } = await snapshot(root2, { kind: 'candidate' });
+  edit(root2, sb => (sb.beats.find(b => b.id === 'desk').props.elements[0].fill = 'accent2'));
+  const r2 = await rejectRevision(root2, { revision: cand2.id, by: 'Ana', said: 'no' });
+  assert.deepEqual(r2.restored, ['beat order']);
+  assert.deepEqual(ids(root2), original);
+  assert.equal(read(root2).beats.find(b => b.id === 'desk').props.elements[0].fill, 'accent2');
+});
+
+test('a cut that moves later beats in time is not a reorder', async t => {
+  const { root } = await recordedProject(t);
+  const { timeline: A } = await snapshot(root);
+  cutWords(root, { words: 'Right.' }, { by: human });
+  const { revision: cand, timeline: B } = await snapshot(root, { kind: 'candidate' });
+  assert.equal(impact(A, B).order.reordered, false);
+  const r = await rejectRevision(root, { revision: cand.id, by: 'Ana', said: 'keep the guest' });
+  assert.ok(!r.restored.includes('beat order'));
+  assert.deepEqual(ids(root), ['s001', 's002', 's003', 's004', 's005']);
+});
+
+test('revise counts moving beats outside the note as out of scope', async t => {
+  const root = draftProject(t);
+  const { revision, timeline } = await snapshot(root);
+  const n = addNote(root, { text: 'the turn should hit harder', revision: revision.id, at: timeline.beats[1].start + 0.2, by: 'Ana' });
+  edit(root, sb => {
+    sb.beats.find(b => b.id === 'turn').props.text = 'Nobody sees them. Ever.';
+    sb.beats.push(sb.beats.splice(2, 1)[0]); // and, unasked, moves desk to the end
+  });
+  await assert.rejects(revise(root, { note: n.id, render: false }), /order of beats changed: desk moved/);
 });

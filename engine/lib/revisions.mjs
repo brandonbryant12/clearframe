@@ -635,6 +635,11 @@ export function impact(A, B, { lineage, from = 'A', to = 'B' } = {}) {
         text: a.vo?.text ?? null,
       };
     });
+  const order = sequenceMoves(
+    A.beats.map(b => b.id),
+    B.beats.map(b => b.id),
+  );
+  for (const x of beats) if (order.moved.includes(x.id)) (x.reasons ??= []).unshift('moved to another place in the sequence');
   const firstShift = beats.find(x => x.shift && Math.abs(x.shift) > 1e-6);
   const durationDelta = round(B.duration - A.duration);
   // Narration that changed under a generated take re-records the whole take.
@@ -659,6 +664,7 @@ export function impact(A, B, { lineage, from = 'A', to = 'B' } = {}) {
     summary.push(`Film-wide: ${global.map(k => (k === 'look' ? 'the look (palette, motion, captions or framing)' : 'the renderer or fonts')).join(' and ')} changed, so any frame may differ.`);
   if (film.sound === 'changed') summary.push('The music or mix settings changed: listen to the whole film again.');
   if (film.data === 'changed') summary.push('Sources or asset declarations changed.');
+  if (order.reordered) summary.push(`The order of beats changed: ${order.moved.slice(0, 6).join(', ')}${order.moved.length > 6 ? ` and ${order.moved.length - 6} more` : ''} moved to another place.`);
   if (counts.content) summary.push(`${counts.content} beat(s) changed in content: ${list('content')}.`);
   if (counts.added) summary.push(`${counts.added} beat(s) added: ${list('added')}.`);
   if (counts.removed) summary.push(`${counts.removed} beat(s) removed: ${list('removed')}.`);
@@ -672,9 +678,41 @@ export function impact(A, B, { lineage, from = 'A', to = 'B' } = {}) {
     summary.push(`Narration changed in ${t.because.join(', ')}: its take ${t.take} (${t.beats.length} beats) must be re-recorded; every beat in it gets new audio and may move.`);
   if (!summary.length) summary.push('No differences: the same content renders on the same frames.');
   summary.push(`${counts.unchanged ?? 0} beat(s) unchanged.`);
-  return { from, to, film, durationDelta, beats: [...beats, ...removed], counts, takes, passages, summary };
+  return { from, to, film, durationDelta, order, beats: [...beats, ...removed], counts, takes, passages, summary };
 }
 const fmtShift = s => `${s < 0 ? 'earlier' : 'later'} by ${Math.abs(s).toFixed(2)} s`;
+
+/**
+ * Did the sequence of beats change between two orders of ids (not times: a cut that moves
+ * later beats earlier is not a reorder)? Beats in both are compared; `moved` is a smallest set
+ * of beats whose moving explains the new order (those outside a longest run kept in order).
+ */
+export function sequenceMoves(before, after) {
+  const inBoth = new Set(before.filter(id => after.includes(id)));
+  const a = before.filter(id => inBoth.has(id)),
+    b = after.filter(id => inBoth.has(id));
+  if (a.join('\n') === b.join('\n')) return { reordered: false, moved: [] };
+  // Longest increasing subsequence of the old positions, in the new order.
+  const pos = b.map(id => a.indexOf(id));
+  const tails = [],
+    prev = new Array(pos.length).fill(-1),
+    at = [];
+  pos.forEach((p, i) => {
+    let lo = 0,
+      hi = tails.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (pos[tails[mid]] < p) lo = mid + 1;
+      else hi = mid;
+    }
+    prev[i] = lo ? tails[lo - 1] : -1;
+    tails[lo] = i;
+    at[i] = lo;
+  });
+  const stay = new Set();
+  for (let i = tails.at(-1); i >= 0; i = prev[i]) stay.add(b[i]);
+  return { reordered: true, moved: b.filter(id => !stay.has(id)) };
+}
 const clip = (s, n) => (String(s ?? '').length > n ? String(s).slice(0, n - 1) + '…' : String(s ?? ''));
 
 /**
@@ -682,7 +720,9 @@ const clip = (s, n) => (String(s ?? '').length > n ? String(s).slice(0, n - 1) +
  * removed), as frame ranges in both timelines. Removed beats widen the "before" range.
  */
 export function affectedPassages(A, B, changes) {
-  const flagged = new Set(changes.filter(c => !['unchanged', 'shifted'].includes(c.status)).map(c => c.id));
+  const flagged = new Set(
+    changes.filter(c => !['unchanged', 'shifted'].includes(c.status) || (c.reasons ?? []).includes('moved to another place in the sequence')).map(c => c.id),
+  );
   const passages = [];
   let cur = null;
   for (const b of B.beats) {

@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { computeTiming } from './timing.mjs';
 import { readJSONFile, reviewPath, writeAtomic } from './store.mjs';
-import { ensureTranscript, isRecorded, keptWords, readEdits, cutWords } from './recording.mjs';
+import { ensureTranscript, isRecorded, keptWords, readEdits, identitiesOf, cutAll } from './recording.mjs';
 import { wordKey } from './word-timing.mjs';
 import { formatTime } from './notes.mjs';
 import { listRevisions } from './revisions.mjs';
@@ -187,21 +187,29 @@ export function paperCuts(root, file) {
   return runs;
 }
 
-/** Apply struck words as cuts, one undoable cut per run (runs that touch across a beat join). */
-export function applyPaperCuts(root, file, opts) {
+/**
+ * Struck words as cut selections, by identity: one per run, runs that touch across a beat
+ * joined (one cut, one undo). Nothing is applied here.
+ */
+export function paperSelections(root, file) {
   const runs = paperCuts(root, file);
   if (!runs.length) return [];
   const sb = readJSONFile(path.join(root, 'storyboard.json'));
   const order = sb.beats.map(b => b.id);
-  // Join a run that ends a beat to one that starts the next recorded beat.
+  const transcript = ensureTranscript(root);
   const joined = [];
   for (const r of runs) {
     const prev = joined.at(-1);
     const meta = prev && readJSONFile(path.join(root, 'assets', 'vo', `${prev.to.beat}.json`), null);
-    const lastK = meta ? keptWords(meta, ensureTranscript(root)).length - 1 : -1;
+    const lastK = meta ? keptWords(meta, transcript).length - 1 : -1;
     if (prev && prev.to.k === lastK && r.from.k === 0 && order.indexOf(r.from.beat) === order.indexOf(prev.to.beat) + 1) prev.to = r.to;
     else joined.push({ ...r });
   }
-  // Apply from the end of the film backwards, so earlier word positions stay valid.
-  return joined.reverse().map(r => cutWords(root, { from: r.from, to: r.to }, opts));
+  return identitiesOf(root, joined).map(source => ({ source }));
+}
+
+/** Apply struck words as cuts: all of them or none (see cutAll). */
+export function applyPaperCuts(root, file, opts) {
+  const selections = paperSelections(root, file);
+  return selections.length ? cutAll(root, selections, opts) : [];
 }

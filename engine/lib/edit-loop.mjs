@@ -55,6 +55,8 @@ function noteBeats(root, note, timeline) {
 export function scopeViolations(report, { beats, film }) {
   const allowed = new Set(beats);
   const out = [];
+  const moved = (report.order?.moved ?? []).filter(id => !allowed.has(id));
+  if (!film && moved.length) out.push({ what: 'order', message: `the order of beats changed: ${moved.join(', ')} moved, outside the note's beats` });
   if (!film && report.film.look === 'changed') out.push({ what: 'film look', message: 'the film look changed, but the note is not film-wide' });
   if (!film && report.film.sound === 'changed') out.push({ what: 'sound', message: 'the music or mix settings changed, but the note is not film-wide' });
   if (!film && report.film.voice === 'changed') out.push({ what: 'voice', message: 'the voice settings changed, but the note is not film-wide' });
@@ -391,6 +393,21 @@ export async function rejectRevision(root, { revision, note, by, said }) {
     );
   restoreFiles(root, [...files].filter(([rel]) => !sharedFiles.has(rel)));
   restored.push(...back.map(b => b.id));
+  // Beat order: if the candidate rearranged beats and nobody has rearranged them since, they go
+  // back to the parent's order in the places they hold now (other beats stay where they are).
+  const both = new Set(sbP.beats.map(b => b.id).filter(id => sbC.beats.some(b => b.id === id)));
+  const orderP = sbP.beats.map(b => b.id).filter(id => both.has(id)),
+    orderC = sbC.beats.map(b => b.id).filter(id => both.has(id));
+  if (!same(orderP, orderC)) {
+    const present = sb.beats.map(b => b.id).filter(id => both.has(id));
+    if (same(present, orderC.filter(id => present.includes(id)))) {
+      const slots = sb.beats.map((b, i) => (both.has(b.id) ? i : -1)).filter(i => i >= 0);
+      const want = orderP.filter(id => present.includes(id));
+      const byId = new Map(sb.beats.map(b => [b.id, b]));
+      slots.forEach((slot, k) => (sb.beats[slot] = byId.get(want[k])));
+      restored.push('beat order');
+    } else conflicts.push(`the beat order was changed after ${revision}; left as it is`);
+  }
   // Film settings, when the candidate changed them and nobody has since.
   const film = s => {
     const { beats, ...rest } = s;

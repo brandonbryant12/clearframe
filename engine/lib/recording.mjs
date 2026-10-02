@@ -404,8 +404,18 @@ export function cutWords(root, sel, { by = { role: 'agent' }, note, dryRun = fal
         j = mine.at(-1).k;
       if (i === 0 && j === kept.length - 1) {
         const f = spanFrames(x.meta, ctx.fps);
-        const lost = slicePieces(x.meta, { rate: ctx.src.rate, fps: ctx.fps }).reduce((n, p) => n + (p.pad ?? p.to - p.from), 0);
-        plan.push({ beat: x.b.id, deleted: true, frames: lost / (ctx.src.rate / ctx.fps), seconds: round(lost / ctx.src.rate, 3), span: f });
+        const pieces = slicePieces(x.meta, { rate: ctx.src.rate, fps: ctx.fps });
+        const lost = pieces.reduce((n, p) => n + (p.pad ?? p.to - p.from), 0);
+        plan.push({
+          beat: x.b.id,
+          deleted: true,
+          frames: lost / (ctx.src.rate / ctx.fps),
+          seconds: round(lost / ctx.src.rate, 3),
+          span: f,
+          // What goes: every word the beat still plays and all the recording it plays.
+          indices: kept.map(w => w.index),
+          pieces: pieces.filter(p => p.pad == null).map(p => [p.from, p.to]),
+        });
         continue;
       }
       const span = spanFrames(x.meta, ctx.fps);
@@ -425,6 +435,7 @@ export function cutWords(root, sel, { by = { role: 'agent' }, note, dryRun = fal
         },
         frames: (r.samples[1] - r.samples[0] - r.pad) / (ctx.src.rate / ctx.fps),
         seconds: round((r.samples[1] - r.samples[0] - r.pad) / ctx.src.rate, 3),
+        indices: mine.map(w => w.index),
       });
     }
     const frames = plan.reduce((s, p) => s + p.frames, 0);
@@ -433,6 +444,28 @@ export function cutWords(root, sel, { by = { role: 'agent' }, note, dryRun = fal
     apply(root, ctx, report, { by, note });
     return report;
   });
+}
+
+/** Transcript identities of word ranges given by position ({beat, k}, inclusive) in the film now. */
+export function identitiesOf(root, ranges) {
+  const ctx = context(root),
+    words = filmWords(ctx);
+  return ranges.map(r => {
+    const [a, b] = select(ctx, words, { from: r.from, to: r.to }, root);
+    return words.slice(a, b + 1).map(w => w.index);
+  });
+}
+
+/**
+ * Several cuts as one: every selection is planned against the film as it is (a selection that
+ * cannot be cut stops all of them), then applied by identity; if any fails part way, every
+ * file goes back. Returns the reports, in order.
+ */
+export function cutAll(root, selections, opts = {}) {
+  const plans = selections.map(sel => cutWords(root, sel, { ...opts, dryRun: true }));
+  if (opts.dryRun) return plans;
+  const beats = plans.flatMap(p => p.beats.map(b => b.beat));
+  return atomically(root, touchedFiles(beats, ['source/words.json']), () => selections.map(sel => cutWords(root, sel, opts)));
 }
 
 /** Shorten every pause longer than `over` seconds to about `keep` (inside and between beats). */
@@ -450,6 +483,7 @@ export function tightenPauses(root, { over = 1.2, keep = 0.5, beats: only } = {}
         removal: { id, kind: 'pause', words, samples: r.samples, pad: 0, from: round(r.samples[0] / rate, 6), to: round(r.samples[1] / rate, 6) },
         frames: (r.samples[1] - r.samples[0]) / (rate / ctx.fps),
         seconds: round((r.samples[1] - r.samples[0]) / rate, 3),
+        indices: [],
       });
     const recorded = ctx.beats.filter(x => isRecorded(x.meta) && (!only || only.includes(x.b.id)));
     for (const [n, x] of recorded.entries()) {
@@ -499,8 +533,37 @@ export function tightenPauses(root, { over = 1.2, keep = 0.5, beats: only } = {}
   });
 }
 
+/**
+ * Run `fn`; if it throws, put every listed file back as it was (or remove it if it did not
+ * exist). Edits touch several files (slices, metadata, the storyboard, the log): a failure part
+ * way must not leave some of them changed.
+ */
+export function atomically(root, rels, fn) {
+  const saved = [...new Set(rels)].map(rel => {
+    const file = path.join(root, rel);
+    return [file, fs.existsSync(file) ? fs.readFileSync(file) : null];
+  });
+  try {
+    return fn();
+  } catch (e) {
+    for (const [file, data] of saved)
+      if (data == null) fs.rmSync(file, { force: true });
+      else fs.writeFileSync(file, data);
+    throw e;
+  }
+}
+const touchedFiles = (beats, extra = []) => [
+  'storyboard.json',
+  'review/edits.jsonl',
+  ...beats.flatMap(id => [`assets/vo/${id}.wav`, `assets/vo/${id}.json`]),
+  ...extra,
+];
+
 /** Write a planned edit: removals into metadata, rebuilt slices, deleted beats, the log. */
-function apply(root, ctx, report, { by, note }) {
+function apply(root, ctx, report, opts) {
+  return atomically(root, touchedFiles(report.beats.map(p => p.beat), ['source/words.json']), () => applyNow(root, ctx, report, opts));
+}
+function applyNow(root, ctx, report, { by, note }) {
   const sb = ctx.sb,
     entries = [],
     at = new Date().toISOString();

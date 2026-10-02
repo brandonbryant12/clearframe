@@ -6,8 +6,9 @@
 import fs from 'node:fs';
 import { loadRevision } from './revisions.mjs';
 import { objectFile } from './store.mjs';
-import { anchorAt } from './notes.mjs';
-import { isRecorded, keptWords, sentenceAround, ensureTranscript } from './recording.mjs';
+import { hashOf } from './util.mjs';
+import { anchorAt } from './anchor.mjs';
+import { isRecorded, keptWords, sentenceAround, ensureTranscript, slicePieces } from './recording.mjs';
 
 /** A revision's recorded words in film order: [{beat, k, index, w, t0, t1}] (film clock). */
 export function revisionWords(root, revision) {
@@ -50,4 +51,77 @@ export function sentenceAt(root, { revision, anchor }) {
 /** The sentence spoken at `at` seconds into a revision. */
 export function sentenceAtTime(root, { revision, at }) {
   return sentenceAt(root, { revision, anchor: anchorAt(loadRevision(root, revision).timeline, at) });
+}
+
+// ------------------------------------------------------------------ what a keep protects
+
+/**
+ * What a revision played of the recording, beat by beat: {beat: {words: [transcript index],
+ * spans: [[from, to] source samples]}}, limited to `beats` (null: every recorded beat). A keep
+ * protects exactly this, whatever the beats are called later (splits, merges) or wherever they
+ * sit in time. Projects without an imported recording have nothing here.
+ */
+export function protectedSource(root, revision, beats = null) {
+  const { meta, timeline } = loadRevision(root, revision);
+  const stored = rel => {
+    const o = meta.inputs?.[rel];
+    const file = o && objectFile(root, o);
+    return file ? JSON.parse(fs.readFileSync(file, 'utf8')) : null;
+  };
+  let transcript = stored('source/words.json');
+  if (!transcript) {
+    if (!fs.existsSync(`${root}/source/recording.wav`)) return {};
+    transcript = ensureTranscript(root);
+  }
+  const out = {};
+  for (const b of timeline.beats) {
+    if (beats && !beats.includes(b.id)) continue;
+    const m = stored(`assets/vo/${b.id}.json`);
+    if (!isRecorded(m)) continue;
+    out[b.id] = {
+      words: keptWords(m, transcript).map(w => w.index),
+      spans: slicePieces(m, { rate: transcript.rate, fps: timeline.fps })
+        .filter(p => p.pad == null)
+        .map(p => [p.from, p.to]),
+    };
+  }
+  return out;
+}
+
+/** What the film plays now: kept transcript words, source pieces, and removal records with who made them. */
+export function currentSource(root) {
+  const sb = JSON.parse(fs.readFileSync(`${root}/storyboard.json`, 'utf8'));
+  if (!fs.existsSync(`${root}/source/recording.wav`)) return { words: new Set(), spans: [], removals: [] };
+  const transcript = ensureTranscript(root),
+    fps = sb.format?.fps ?? 30;
+  const words = new Set(),
+    spans = [],
+    removals = [];
+  for (const b of sb.beats) {
+    let m = null;
+    try {
+      m = JSON.parse(fs.readFileSync(`${root}/assets/vo/${b.id}.json`, 'utf8'));
+    } catch {}
+    // A beat plays its recording only while its text still matches it (an edited vo plays nothing).
+    if (!isRecorded(m) || m.textHash !== hashOf(b.vo ?? '')) continue;
+    for (const w of keptWords(m, transcript)) words.add(w.index);
+    for (const p of slicePieces(m, { rate: transcript.rate, fps })) if (p.pad == null) spans.push([p.from, p.to]);
+    for (const r of m.source.removed ?? []) removals.push({ id: r.id, samples: r.samples, by: r.by ?? null, beat: b.id });
+  }
+  return { words, spans, removals, transcript };
+}
+
+/** Parts of [from, to] not covered by any of `spans`. */
+export function uncovered([from, to], spans) {
+  const out = [];
+  let at = from;
+  for (const [a, b] of [...spans].sort((x, y) => x[0] - y[0])) {
+    if (b <= at) continue;
+    if (a >= to) break;
+    if (a > at) out.push([at, Math.min(a, to)]);
+    at = Math.max(at, b);
+    if (at >= to) break;
+  }
+  if (at < to) out.push([at, to]);
+  return out;
 }

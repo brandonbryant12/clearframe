@@ -9,28 +9,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { wordKey } from './word-timing.mjs';
-import { readEdits, spanFrames } from './recording.mjs';
+import { readEdits, spanFrames, slicePieces } from './recording.mjs';
+import { protectedSource, currentSource, uncovered } from './targets.mjs';
 import { listRevisions, loadRevision, lineageOf, factsPrint } from './revisions.mjs';
 import { checkId, nextId, readJSONFile, reviewPath, withLock, writeJSONAtomic } from './store.mjs';
+import { parseTime, formatTime, anchorAt } from './anchor.mjs';
+export { parseTime, formatTime, anchorAt };
 
 const round = (n, d = 3) => Math.round(n * 10 ** d) / 10 ** d;
 export const KEEPS = ['voice', 'words', 'facts', 'picture', 'look'];
 export const SCOPES = ['element', 'beat', 'range', 'chapter', 'film'];
 const MAX_TEXT = 2000;
-
-// ------------------------------------------------------------------ time
-
-/** 133.4, 2:13, 2:13.4 or 1:02:13.5 → seconds. */
-export function parseTime(value) {
-  const s = String(value).trim();
-  if (!/^(?:\d+(?::\d{1,2}){0,2}(?:\.\d*)?|\.\d+)$/.test(s)) throw new Error(`Not a time: ${JSON.stringify(value)} (use 133.4 or 2:13.4)`);
-  return s.split(':').reduce((acc, part) => acc * 60 + Number(part), 0);
-}
-export function formatTime(t) {
-  const m = Math.floor(t / 60),
-    s = t - m * 60;
-  return `${m}:${s.toFixed(2).padStart(5, '0')}`;
-}
 
 /**
  * A note copied from the review page, e.g.
@@ -43,68 +32,6 @@ export function parseStamp(line) {
   );
   if (!m) return null;
   return { revision: m[1], at: parseTime(m[2]), ...(m[3] ? { to: parseTime(m[3]) } : {}), ...(m[4] ? { beat: m[4] } : {}), text: m[5].trim() };
-}
-
-// ------------------------------------------------------------------ anchors
-
-const sourceAt = (beat, t) => {
-  const s = beat.source?.segments?.find(x => t >= x.film[0] - 1e-6 && t <= x.film[1] + 1e-6);
-  return s ? round(s.source[0] + (t - s.film[0]), 3) : null;
-};
-
-/**
- * Where time `at` falls on a revision's timeline: the beat showing at that frame, the words
- * spoken around it, their time in the source recording, and any cut close enough that the
- * person may have meant the neighbouring beat (reported, never guessed).
- */
-export function anchorAt(timeline, at, { to, beat: forced, element } = {}) {
-  if (!(Number.isFinite(at) && at >= 0 && at < timeline.duration + 1e-6))
-    throw new Error(`${formatTime(at)} is outside this revision (${formatTime(timeline.duration)} long).`);
-  if (to != null && !(to > at)) throw new Error('A range must end after it starts.');
-  const frame = Math.min(timeline.frames - 1, Math.floor(at * timeline.fps + 1e-6));
-  let beat = timeline.beats.find(b => frame >= b.startFrame && frame < b.startFrame + b.frames);
-  const near = [];
-  for (const b of timeline.beats) {
-    if (b === beat) continue;
-    const edge = Math.min(Math.abs(at - b.end), Math.abs(at - b.start));
-    if (edge <= 0.3) near.push({ beat: b.id, seconds: round(edge) });
-  }
-  if (forced) {
-    const f = timeline.beats.find(b => b.id === forced);
-    if (!f) throw new Error(`No beat ${forced} in this revision.`);
-    if (f !== beat && !near.some(n => n.beat === forced))
-      throw new Error(`${forced} is not on screen at ${formatTime(at)} in this revision (that is ${beat.id}).`);
-    beat = f;
-  }
-  const words = beat.words ?? [];
-  let k = words.findIndex(w => at >= w.t0 && at < w.t1);
-  if (k < 0) k = words.findIndex(w => w.t0 >= at);
-  if (k < 0) k = words.length - 1;
-  const i0 = Math.max(0, k - 2),
-    i1 = Math.min(words.length - 1, k + 2);
-  if (element != null && !beat.elements.includes(element))
-    throw new Error(`${beat.id} has no element "${element}" (it has: ${beat.elements.join(', ') || 'none named'}).`);
-  const beats = to != null ? timeline.beats.filter(b => b.start < to && b.end > at).map(b => b.id) : [beat.id];
-  let quote = words.length ? words.slice(i0, i1 + 1) : [];
-  // A range quotes what its first beat says inside it: a quote is always found within one beat.
-  if (to != null) quote = words.filter(w => w.t1 > at && w.t0 < to).slice(0, 12);
-  const src = quote.length && beat.source ? [sourceAt(beat, quote[0].t0), sourceAt(beat, quote.at(-1).t1)] : null;
-  return {
-    beat: beat.id,
-    beats,
-    at: round(at),
-    ...(to != null ? { to: round(to) } : {}),
-    beatTime: round(at - beat.start),
-    chapter: beat.chapter ?? null,
-    words: quote.map(w => w.w).join(' '),
-    ...(quote.length ? { quoteAt: round(quote[0].t0) } : {}),
-    ...(src && src[0] != null && src[1] != null
-      ? { source: { file: beat.source.file, from: src[0], to: src[1], original: [round(src[0] + beat.source.offset), round(src[1] + beat.source.offset)] } }
-      : {}),
-    ...(element != null ? { element } : {}),
-    ...(near.length ? { near } : {}),
-    prints: { authored: beat.prints.authored, picture: beat.prints.picture, words: beat.prints.words, rendered: beat.prints.rendered },
-  };
 }
 
 const keysOf = text =>
@@ -395,9 +322,24 @@ export function releaseKeep(root, id, { by, said }) {
   });
 }
 
+/** Source sample ranges a person had removed: their removal records and the beats they cut whole. */
+function personRemoved(root, now, edits) {
+  const spans = now.removals.filter(r => r.by?.role === 'human').map(r => r.samples);
+  for (const e of edits)
+    if (['cut', 'pauses'].includes(e.op) && e.by?.role === 'human')
+      for (const p of e.beats ?? [])
+        if (p.deleted && p.meta?.source && now.transcript)
+          for (const x of slicePieces(p.meta, { rate: now.transcript.rate, fps: p.meta.source.fps ?? 30 })) if (x.pad == null) spans.push([x.from, x.to]);
+  return spans;
+}
+
 /**
  * Keeps broken by going from the keep's revision to `timeline` (a candidate or the working
- * copy). `voice` allows cuts the person asked for (recorded with role human); `words` does not.
+ * copy). For beats of an imported recording, `voice` and `words` are judged by what the keep's
+ * revision played (transcript words and recording spans), whatever those beats are called now
+ * after splits or merges: `words` breaks when any protected word no longer plays; `voice` when
+ * any protected recording no longer plays, unless the person had it cut. Other keeps, and
+ * narration that is not a recording, follow the beats through lineage.
  */
 export function checkKeeps(root, timeline, { overrides = [] } = {}) {
   const violations = [];
@@ -406,6 +348,7 @@ export function checkKeeps(root, timeline, { overrides = [] } = {}) {
     const e = edits.find(x => x.id === id);
     return e?.by?.role === 'human';
   };
+  let now = null;
   for (const k of readKeeps(root).filter(k => k.active && !overrides.includes(k.id))) {
     // Facts are re-read from the keep's own revision with today's rule, so a keep made under an
     // older fingerprint scheme is still judged on what the beat showed.
@@ -414,8 +357,26 @@ export function checkKeeps(root, timeline, { overrides = [] } = {}) {
       if (k.baseline.look !== timeline.film.look) violations.push({ keep: k.id, what: 'look', message: 'the film look changed (palette, motion, captions, framing or format)' });
       continue;
     }
+    const prot = ['voice', 'words'].includes(k.what) ? protectedSource(root, k.revision, k.scope.film ? null : k.scope.beats) : {};
+    if (Object.keys(prot).length) {
+      now ??= currentSource(root);
+      const byPerson = k.what === 'voice' ? personRemoved(root, now, edits) : [];
+      for (const [id, p] of Object.entries(prot)) {
+        if (k.what === 'words') {
+          const gone = p.words.filter(i => !now.words.has(i));
+          if (gone.length)
+            violations.push({ keep: k.id, what: 'words', beat: id, message: `words of ${id} no longer play (“${gone.slice(0, 8).map(i => now.transcript.words[i].w).join(' ')}”)` });
+        } else {
+          const missing = p.spans.flatMap(span => uncovered(span, now.spans));
+          const unexplained = missing.flatMap(span => uncovered(span, byPerson));
+          if (unexplained.length)
+            violations.push({ keep: k.id, what: 'voice', beat: id, message: `${id} no longer plays all of its recording: cut without the person asking, or replaced` });
+        }
+      }
+    }
     const target = { id: null, timeline };
     for (const [id, base] of Object.entries(k.baseline)) {
+      if (prot[id]) continue; // judged by its recording above
       // Follow the beat through splits and merges since the keep was made.
       const where = locate(root, { revision: k.revision, scope: 'beat', anchor: { beat: id, beats: [id], words: '', at: 0, beatTime: 0, prints: {} } }, target);
       const now = timeline.beats.filter(b => b.id === where.beat || (b.was ?? []).includes(id));
@@ -435,20 +396,43 @@ export function checkKeeps(root, timeline, { overrides = [] } = {}) {
         if (now.some(b => b.prints[k.what] !== want))
           say(`the ${k.what === 'facts' ? 'facts shown (figures, labels, units, wording or attribution)' : 'picture'} of ${id} changed`);
       } else if (k.what === 'voice') {
-        if (now.some(b => b.prints.voice !== base.voice)) {
-          say(`${id} no longer plays the same recording or take`);
-          continue;
-        }
-        if (now.length === 1 && now[0].id === id && now[0].prints.audio !== base.audio) {
-          const added = (now[0].source?.removed ?? []).map(r => r.id).filter(r => !base.removals.includes(r));
-          const undone = base.removals.filter(r => !(now[0].source?.removed ?? []).some(x => x.id === r));
-          if (!added.length && !undone.length) say(`the audio of ${id} changed`);
-          else if (added.some(r => !humanCut(r))) say(`${id} was cut without the person asking (${added.filter(r => !humanCut(r)).join(', ')})`);
-        }
+        // Narration that is not an imported recording: its take, and the audio cut from it.
+        if (now.some(b => b.prints.voice !== base.voice)) say(`${id} no longer plays the same take`);
+        else if (now.some(b => b.prints.audio !== base.audio)) say(`the audio of ${id} changed`);
       }
     }
   }
   return violations;
+}
+
+/**
+ * Keeps a planned cut would break, before anything is cut. `plans` are dry-run reports (each
+ * beat entry lists the transcript words it removes and, for a whole beat, the recording it
+ * played). `words` breaks on any protected word; `voice` on any protected recording when the
+ * agent decided the cut (a person's own cut keeps the voice). An override counts only when it
+ * was passed and the person recorded it.
+ */
+export function keepConflicts(root, plans, { by, overrides = [] } = {}) {
+  const words = new Set(),
+    spans = [];
+  for (const plan of plans)
+    for (const p of plan.beats ?? []) {
+      for (const i of p.indices ?? []) words.add(i);
+      if (p.removal) spans.push(p.removal.samples);
+      for (const s of p.pieces ?? []) spans.push(s);
+    }
+  const granted = new Set(readDecisions(root).filter(d => d.action === 'override' && d.role === 'human').map(d => d.scope?.keep));
+  const out = [];
+  for (const k of readKeeps(root).filter(k => k.active && ['voice', 'words'].includes(k.what))) {
+    if (overrides.includes(k.id) && granted.has(k.id)) continue;
+    if (k.what === 'voice' && by?.role === 'human') continue;
+    const prot = protectedSource(root, k.revision, k.scope.film ? null : k.scope.beats);
+    const hit = Object.entries(prot)
+      .filter(([, p]) => p.words.some(i => words.has(i)) || (k.what === 'voice' && p.spans.some(([c, d]) => spans.some(([a, b]) => a < d && b > c))))
+      .map(([id]) => id);
+    if (hit.length) out.push({ keep: k, beats: hit });
+  }
+  return out;
 }
 
 // ------------------------------------------------------------------ decisions
