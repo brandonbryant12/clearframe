@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "disclosure": "Hypothetical illustration \u2014 fictional inputs, not a plan quote or forecast",
+  "asOf": "2026-10-02",
+  "currency": "USD",
+  "cases": {
+    "retirement-match": {
+      "operation": "matchingContribution",
+      "input": {
+        "compensation": 10000,
+        "employeeContribution": 600,
+        "tiers": [
+          {
+            "through": 0.03,
+            "rate": 1
+          },
+          {
+            "through": 0.05,
+            "rate": 0.5
+          }
+        ]
+      }
+    },
+    "retirement-ownership": {
+      "operation": "vestedBalance",
+      "input": {
+        "employeeBalance": 8000,
+        "employerBalance": 2000,
+        "creditedService": 2,
+        "schedule": [
+          {
+            "service": 0,
+            "fraction": 0
+          },
+          {
+            "service": 2,
+            "fraction": 0.5
+          },
+          {
+            "service": 4,
+            "fraction": 1
+          }
+        ]
+      }
+    },
+    "retirement-benefit": {
+      "operation": "salaryServiceBenefit",
+      "input": {
+        "annualCompensation": 60000,
+        "creditedYears": 20,
+        "annualAccrualRate": 0.015,
+        "adjustmentFactor": 1
+      }
+    },
+    "retirement-fees": {
+      "operation": "feeComparison",
+      "input": {
+        "account": {
+          "openingBalance": 1000,
+          "cashflowTiming": "end",
+          "periods": [
+            {
+              "label": "Illustrative year 1",
+              "returnRate": 0.1
+            },
+            {
+              "label": "Illustrative year 2",
+              "returnRate": 0.1
+            }
+          ]
+        },
+        "baselineFeeRate": 0,
+        "comparisonFeeRate": 0.01
+      }
+    },
+    "project-reserve": {
+      "operation": "accountLedger",
+      "input": {
+        "openingBalance": 10000,
+        "cashflowTiming": "start",
+        "periods": [
+          {
+            "label": "Project month 1",
+            "employer": 2000,
+            "withdrawal": 3000,
+            "returnRate": 0
+          },
+          {
+            "label": "Project month 2",
+            "withdrawal": 5000,
+            "returnRate": 0
+          },
+          {
+            "label": "Project month 3",
+            "withdrawal": 6000,
+            "returnRate": 0
+          }
+        ]
+      }
+    }
+  }
+}

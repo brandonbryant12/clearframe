@@ -1,0 +1,224 @@
+{
+  "modelVersion": 1,
+  "disclosure": "Hypothetical illustration — fictional inputs, not a plan quote or forecast",
+  "asOf": "2026-10-02",
+  "currency": "USD",
+  "inputSha256": "b2568993ba35c702896cbd0f79809d1eb3f412493ec10a45ae10a1c2dc0db76f",
+  "cases": {
+    "retirement-match": {
+      "modelVersion": 1,
+      "tiers": [
+        {
+          "from": 0,
+          "through": 0.03,
+          "rate": 1,
+          "eligible": 300,
+          "matched": 300
+        },
+        {
+          "from": 0.03,
+          "through": 0.05,
+          "rate": 0.5,
+          "eligible": 200,
+          "matched": 100
+        }
+      ],
+      "employerContribution": 400,
+      "aboveMatchThreshold": 100
+    },
+    "retirement-ownership": {
+      "modelVersion": 1,
+      "vestedFraction": 0.5,
+      "employeeOwned": 8000,
+      "employerOwned": 1000,
+      "employerUnvested": 1000,
+      "totalOwned": 9000
+    },
+    "retirement-benefit": {
+      "modelVersion": 1,
+      "formula": "salary-times-service",
+      "annual": 18000,
+      "monthly": 1500
+    },
+    "retirement-fees": {
+      "modelVersion": 1,
+      "baseline": {
+        "modelVersion": 1,
+        "openingBalance": 1000,
+        "cashflowTiming": "end",
+        "feeTiming": "after return, before end-of-period cashflows",
+        "rows": [
+          {
+            "label": "Illustrative year 1",
+            "opening": 1000,
+            "employee": 0,
+            "employer": 0,
+            "returnRate": 0.1,
+            "gain": 100,
+            "feeRate": 0,
+            "feeAmount": 0,
+            "assessedFees": 0,
+            "fees": 0,
+            "unpaidFees": 0,
+            "requestedWithdrawal": 0,
+            "withdrawn": 0,
+            "shortfall": 0,
+            "closing": 1100
+          },
+          {
+            "label": "Illustrative year 2",
+            "opening": 1100,
+            "employee": 0,
+            "employer": 0,
+            "returnRate": 0.1,
+            "gain": 110,
+            "feeRate": 0,
+            "feeAmount": 0,
+            "assessedFees": 0,
+            "fees": 0,
+            "unpaidFees": 0,
+            "requestedWithdrawal": 0,
+            "withdrawn": 0,
+            "shortfall": 0,
+            "closing": 1210
+          }
+        ],
+        "totals": {
+          "employee": 0,
+          "employer": 0,
+          "gain": 210,
+          "fees": 0,
+          "unpaidFees": 0,
+          "withdrawn": 0,
+          "shortfall": 0
+        },
+        "closingBalance": 1210
+      },
+      "comparison": {
+        "modelVersion": 1,
+        "openingBalance": 1000,
+        "cashflowTiming": "end",
+        "feeTiming": "after return, before end-of-period cashflows",
+        "rows": [
+          {
+            "label": "Illustrative year 1",
+            "opening": 1000,
+            "employee": 0,
+            "employer": 0,
+            "returnRate": 0.1,
+            "gain": 100,
+            "feeRate": 0.01,
+            "feeAmount": 0,
+            "assessedFees": 11,
+            "fees": 11,
+            "unpaidFees": 0,
+            "requestedWithdrawal": 0,
+            "withdrawn": 0,
+            "shortfall": 0,
+            "closing": 1089
+          },
+          {
+            "label": "Illustrative year 2",
+            "opening": 1089,
+            "employee": 0,
+            "employer": 0,
+            "returnRate": 0.1,
+            "gain": 108.9,
+            "feeRate": 0.01,
+            "feeAmount": 0,
+            "assessedFees": 11.979000000000001,
+            "fees": 11.979000000000001,
+            "unpaidFees": 0,
+            "requestedWithdrawal": 0,
+            "withdrawn": 0,
+            "shortfall": 0,
+            "closing": 1185.921
+          }
+        ],
+        "totals": {
+          "employee": 0,
+          "employer": 0,
+          "gain": 208.9,
+          "fees": 22.979,
+          "unpaidFees": 0,
+          "withdrawn": 0,
+          "shortfall": 0
+        },
+        "closingBalance": 1185.921
+      },
+      "endingBalanceDifference": 24.07899999999995,
+      "chargedFeeDifference": 22.979,
+      "gainDifference": 1.0999999999999943,
+      "fundedWithdrawalDifference": 0
+    },
+    "project-reserve": {
+      "modelVersion": 1,
+      "openingBalance": 10000,
+      "cashflowTiming": "start",
+      "feeTiming": "after return, before end-of-period cashflows",
+      "rows": [
+        {
+          "label": "Project month 1",
+          "opening": 10000,
+          "employee": 0,
+          "employer": 2000,
+          "returnRate": 0,
+          "gain": 0,
+          "feeRate": 0,
+          "feeAmount": 0,
+          "assessedFees": 0,
+          "fees": 0,
+          "unpaidFees": 0,
+          "requestedWithdrawal": 3000,
+          "withdrawn": 3000,
+          "shortfall": 0,
+          "closing": 9000
+        },
+        {
+          "label": "Project month 2",
+          "opening": 9000,
+          "employee": 0,
+          "employer": 0,
+          "returnRate": 0,
+          "gain": 0,
+          "feeRate": 0,
+          "feeAmount": 0,
+          "assessedFees": 0,
+          "fees": 0,
+          "unpaidFees": 0,
+          "requestedWithdrawal": 5000,
+          "withdrawn": 5000,
+          "shortfall": 0,
+          "closing": 4000
+        },
+        {
+          "label": "Project month 3",
+          "opening": 4000,
+          "employee": 0,
+          "employer": 0,
+          "returnRate": 0,
+          "gain": 0,
+          "feeRate": 0,
+          "feeAmount": 0,
+          "assessedFees": 0,
+          "fees": 0,
+          "unpaidFees": 0,
+          "requestedWithdrawal": 6000,
+          "withdrawn": 4000,
+          "shortfall": 2000,
+          "closing": 0
+        }
+      ],
+      "totals": {
+        "employee": 0,
+        "employer": 2000,
+        "gain": 0,
+        "fees": 0,
+        "unpaidFees": 0,
+        "withdrawn": 12000,
+        "shortfall": 2000
+      },
+      "closingBalance": 0
+    }
+  }
+}
