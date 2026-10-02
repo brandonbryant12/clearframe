@@ -1,0 +1,17 @@
+{
+  "order": 0,
+  "title": "Evidence investigation",
+  "materials": [
+    "research"
+  ],
+  "playbook": "research-investigation",
+  "treatment": "editorial",
+  "when": "An argument rests on several kinds of evidence.",
+  "story": "Observation, inference, missing comparison, then the test that could change the conclusion.",
+  "picture": "A desk of source fragments; annotate and move between details in one physical space.",
+  "pace": "Patient reading, purposeful pushes, one decisive reveal.",
+  "rules": [
+    "Keep observation and inference visibly distinct.",
+    "Keep the report title, page or section with each real claim."
+  ]
+}

@@ -29,11 +29,12 @@ Agent-directed motion graphics rendered natively with **FFFrames**. A film is on
 
   Films take an editorial `frame`, grain and a vignette. See [canvas.md](docs/canvas.md) and [ideas.md](docs/ideas.md).
 - **33 native blocks** for evidence and structure: hero type, counters, KPI cards, deltas, bars, lines, waffles, rings, donuts, funnels, area-true magnitudes, steps, timelines, flows, cycles, checklists, annotated screenshots, kinetic type (including poster `stack` type that builds as spoken). `clearframe blocks NAME` prints props and an example.
-- **A creative library** ([library/](library/README.md)): palettes, treatments, sketches and playbooks, one file per item, validated on load. A project's own `library/` or a shared brand kit (`--library DIR`) adds or overrides them.
+- **A creative library** ([library/](library/README.md)): palettes, treatments, sketches, playbooks and optional direction profiles, one file per item, validated on load. A project's own `library/` or a shared brand kit (`--library DIR`) adds or overrides them.
   - `treatments`: art directions such as editorial, noir, kinetic, sketchbook, blueprint, mosaic and tech.
   - `sketch`: canvas starting compositions for mechanisms (route, orbit, pipeline, network…).
   - `reference VIDEO`: the cut rhythm, keyframes, palette and motion of a film to borrow from.
   - `critique`: flags deck-like runs, stillness, text density, weak hooks and "and then" story chains.
+  - `directions research|podcast`: optional story, picture and pace combinations. `--direction ID` seeds a project; explicit playbook/treatment/theme choices override it. Custom JSON profiles and fully authored canvas scenes keep the space open.
   - `playbooks`: starting arcs, including `journey` (one drawing, a travelling camera) and `sizzle` (a brand reel).
 - **From material to film:**
   - `ingest --markdown` turns a research report (or HTML/DOCX/PDF) into an evidence brief of figures, sources, tensions and chart-ready tables.
@@ -60,7 +61,21 @@ node engine/cli.mjs render my-film --draft     # fast review MP4
 node engine/cli.mjs render my-film             # final encode
 ```
 
-Open the contact sheet, then watch and listen to the MP4. `build/video.mp4.json` records input hashes, renderer revision, encoder, audio provenance, output hash and color space. Drafts keep the authored canvas and frame rate, allow provisional voice timing, and use a fast encoder (about 3× faster than the final encode).
+Open the contact sheet, then watch and listen to the MP4. `build/video.mp4.json` records input hashes, renderer revision, encoder, audio provenance, output hash and color space. Drafts keep authored layout and frame rate, allow provisional voice timing, and use a fast encoder. Optional `--scale 0.5` writes a smaller review copy; final output stays at authored resolution.
+
+## From an idea, document and brand
+
+`start` gathers the material into one portable project with an evidence brief, brand rules, copied assets and hashes. It prepares an illustrative arc for the directing agent to rewrite; no API calls are made.
+
+```sh
+node engine/cli.mjs start my-film --idea 'Explain cash timing' --document report.md --brand brand.json --playbook cash-flow
+node engine/cli.mjs critique my-film
+node engine/cli.mjs pipeline my-film --draft --scale 0.5
+```
+
+Research and podcasts can start from an evidence investigation, a mechanism, field notes, a visual essay, kinetic type or a drawn explanation. [Source adaptation and creative freedom](docs/source-playbooks.md) · [Custom directions](library/README.md#directions). The agent still authors the film from the actual source.
+
+Financial arcs: `cash-flow`, `scenario-lab` and `risk-tradeoffs`, with native animated mechanisms. [Intake and brand kit](docs/intake.md) · [Financial playbooks](docs/financial-playbooks.md) · [Free example](examples/financial-intake/README.md). The focus is a mature standalone production pipeline, exercised through its CLI before any host integration. [Production method and harness](docs/production.md).
 
 ## From a document or recording
 
@@ -96,7 +111,7 @@ node engine/cli.mjs gallery build/gallery-ink --vertical --theme ink
 /Users/brandon/.local/bin/codex-heavy -- node scripts/verify-native.mjs build/native-verification-new
 ```
 
-`engine/` owns orchestration, timing, generation and audio. `fframes/catalog.mjs` owns block metadata, `validators.mjs` prop validation, `registry.mjs` per-block runtime rules, `constants.json` shared timing, `playbooks.mjs`/`treatments.mjs`/`sketches.mjs` starting points, `job.mjs` storyboard → job, `prepare.mjs`/`render.mjs` media and outputs (re-exported by `production.mjs`). The Rust renderer in `fframes/native/src/` is split into `text` (shaping and fitting), `design` (palettes, tones, backdrops, texture), `motion` (curves, exits), `constants` (shared timing), `scenes` (layout grid and helpers), `story`, `speech`, `compositor` (camera, plates, transitions), `canvas` (author-drawn elements), `charts`, `diagrams` and `media`. `npm run catalog:sync` regenerates the schema, block reference and recipes. Only the native compile takes the machine-wide `codex-heavy` lock (one Cargo job); warm builds need 10 GiB free, cold builds 25 GiB, and `doctor` warns below 20 GiB.
+`engine/` owns orchestration, timing, generation and audio. `fframes/catalog.mjs` owns block metadata, `validators.mjs` prop validation, `registry.mjs` per-block runtime rules, `constants.json` shared timing, `playbooks.mjs`/`treatments.mjs`/`sketches.mjs` starting points, `job.mjs` storyboard → job, `prepare.mjs`/`render.mjs` media and outputs (re-exported by `production.mjs`). The Rust renderer in `fframes/native/src/` is split into `text` (shaping and fitting), `design` (palettes, tones, backdrops, texture), `motion` (curves, exits), `constants` (shared timing), `scenes` (layout grid and helpers), `story`, `speech`, `compositor` (camera, plates, transitions), `canvas` (author-drawn elements), `charts`, `diagrams` and `media`. `npm run catalog:sync` regenerates the schema, block reference and recipes. Native compilation and the production pipeline take the machine-wide `codex-heavy` lock (one Cargo job); warm builds need 10 GiB free, cold builds 25 GiB, and `doctor` warns below 20 GiB.
 
 Fonts are static instances derived from the pinned OFL Inter source (`fframes/native/tools/generate-fonts.py`); icons are 95 MIT Tabler outlines at a pinned revision (`fetch-icons.py`, `generate-icons.py`). The retired HTML/GSAP engine is preserved in [archive/](archive/README.md) for recovery only.
 

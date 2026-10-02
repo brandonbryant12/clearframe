@@ -637,8 +637,13 @@ export function cutPoints(segs, duration, fps) {
  */
 export async function ingestRecording(
   root,
-  { audio, words: wordsInput, script, from = 0, to, fps = 30, vertical = false, speakers = {}, theme, title },
+  { audio, words: wordsInput, script, from = 0, to, fps = 30, vertical = false, speakers = {}, theme, title, treatment, direction },
 ) {
+  const { directionOptions, directionMarkdown, directionRefs } = await import('../../fframes/directions.mjs');
+  const { applyTreatment, directionTemplate, treatmentById } = await import('../../fframes/treatments.mjs');
+  const { vendor } = await import('../../fframes/library.mjs');
+  ({ treatment } = directionOptions({ direction, treatment }));
+  if (treatment && !treatmentById(treatment)) throw new Error(`Unknown treatment ${treatment}`);
   const P = paths(root);
   if (fs.existsSync(P.storyboard))
     throw new Error(`${root} already has a storyboard; ingest a recording into a new directory.`);
@@ -750,7 +755,20 @@ export async function ingestRecording(
     sources: [{ id: 'recording', title: `Recording: ${path.basename(audio)}` }],
     beats,
   };
+  if (treatment) {
+    applyTreatment(sb, treatment, { recording: true });
+    // A visual treatment cannot alter the recording's clock or introduce generated speech.
+    delete sb.voice;
+    sb.transition = 'cut';
+    sb.pacing = { continuous: true };
+    sb.music = false;
+    if (theme) sb.theme = theme;
+  }
   writeJSON(P.storyboard, sb);
+  vendor(root, [...directionRefs(direction), ['treatments', treatment],
+    ['palettes', typeof sb.theme === 'string' ? sb.theme : sb.theme?.base], ['types', sb.type]]);
+  fs.writeFileSync(path.join(root, 'DIRECTION.md'),
+    directionTemplate(sb, treatment ? treatmentById(treatment) : null) + directionMarkdown(direction, { recording: true }));
   fs.writeFileSync(
     path.join(root, 'BRIEF.md'),
     `# ${sb.title}\n\nImported ${beats.length} beats (${round(duration, 1)} s) from \`${path.basename(audio)}\`${from ? ` starting at ${from}s` : ''}. Every beat plays its slice of the recording; cuts sit in pauses, so the beats replay it without gaps. Word timings are measured from the supplied transcript.\n\nEvery beat starts as kinetic captions. Keep that where the words are the picture; elsewhere, change the block (keep \`vo\`, \`speaker\` and \`note\`): pull quotes (\`kinetic\` stack, \`quote\`), the numbers they mention (with sources), drawn explanations (\`canvas\`), speaker plates. Captions (\`${sb.captions === 'pop' ? 'pop' : 'true'}\`) keep the words on screen under any picture. When a stretch explains one process or place, draw it as a canvas \`world\` and let the camera follow the conversation through it (\`clearframe world DIR\` shows the plan). Do not edit \`vo\`: it must match the recording.\n`,

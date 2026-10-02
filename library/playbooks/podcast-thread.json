@@ -1,0 +1,51 @@
+{
+  "order": 44,
+  "title": "Follow one podcast idea as a spacious visual essay",
+  "audience": "Listeners who want to stay with one thought rather than scan a wall of captions",
+  "inputs": "An exact recording excerpt and measured word timestamps, one tension, a concrete example and a reframe already present in the excerpt",
+  "theme": "forest",
+  "type": "bookish",
+  "format": "landscape",
+  "motion": "gentle",
+  "backdrop": "none",
+  "transition": "fade",
+  "textMotion": "words",
+  "sfx": "off",
+  "texture": { "grain": 0.2, "vignette": 0.15 },
+  "sources": [
+    { "claim": "All sample narration is an authored demonstration of the visual essay arc", "source": "Illustrative script, not a quotation, transcript or attributed podcast excerpt" }
+  ],
+  "note": "Use the actual recording as the timeline: clearframe ingest --audio episode.wav --words words.json --from START --to END. Select an excerpt whose own words contain a tension, an example and a reframe. Keep its wording, speaker identity, order, measured timestamps and meaningful pauses intact. This playbook's narration is only an authored demonstration; never put it in a real speaker's mouth. The thread is a qualitative metaphor, and the small meter uses actual narration audio. Adapt the drawings to the idea in the recording, with one recurring object, deliberate negative space and a camera move at the change of thought. Keep only essential phrases as type. A silent hold belongs only where the recording contains one or the edit deliberately leaves room after the excerpt. Pair with the calm treatment. See docs/source-playbooks.md.",
+  "beats": [
+    {
+      "id": "question",
+      "block": "statement",
+      "vo": "Sometimes we hear the words, but miss the thought behind them.",
+      "props": { "text": "What are we really hearing?", "align": "center", "emphasis": ["hearing"], "source": "Illustrative script · replace with an exact recorded excerpt" },
+      "art": { "sketch": "ribbon-wave", "seed": 13, "opacity": 0.22, "drift": 0.18 }
+    },
+    {
+      "id": "tangle",
+      "block": "canvas",
+      "vo": "Someone is still explaining, and we are already rehearsing an answer. Their question and our response get tangled together.",
+      "props": { "sketch": "thread-knot", "world": "conversation-thread", "viewAt": 0, "source": "Illustrative script · the thread is a metaphor" },
+      "transition": "cut",
+      "hold": 0.5
+    },
+    {
+      "id": "open",
+      "block": "canvas",
+      "vo": "A pause makes a little room. Before answering, we can ask what the other person most wants us to understand.",
+      "props": { "sketch": "thread-opening", "world": "conversation-thread", "viewAt": 0, "source": "Illustrative script · meter follows the narration audio" },
+      "transition": "cut",
+      "hold": 2.8
+    },
+    {
+      "id": "reframe",
+      "block": "statement",
+      "vo": "The conversation changes when understanding becomes the next step.",
+      "props": { "text": "Make room to understand.", "align": "center", "emphasis": ["understand"], "source": "Illustrative script · use the speaker's actual conclusion" },
+      "art": { "sketch": "ribbon-wave", "seed": 13, "opacity": 0.22, "drift": 0.18 }
+    }
+  ]
+}

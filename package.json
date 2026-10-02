@@ -12,7 +12,8 @@
     "cf:fframes": "node engine/cli.mjs",
     "test": "node --test --test-concurrency=2 test/*.test.mjs",
     "test:fframes": "node --test --test-concurrency=2 test/native.test.mjs",
-    "catalog:sync": "node scripts/sync-catalog.mjs"
+    "catalog:sync": "node scripts/sync-catalog.mjs",
+    "verify:pipeline": "node scripts/verify-pipeline.mjs"
   },
   "engines": {
     "node": ">=20.10"

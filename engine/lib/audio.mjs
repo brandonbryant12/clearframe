@@ -241,9 +241,9 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
   } else if (musicLabel) busses.push(musicLabel);
   busses.push(...sfxLabels);
   // Room tone: a breath of pink noise about 60 dB down, so a silent beat is a held breath in
-  // the room, never a digital dropout.
+  // the room, never a digital dropout. Seed it so repeated exports share the same mix.
   filters.push(
-    `anoisesrc=d=${D}:c=pink:r=48000:a=0.0012,aformat=sample_fmts=fltp:channel_layouts=stereo,lowpass=f=6000[room]`,
+    `anoisesrc=d=${D}:c=pink:r=48000:a=0.0012:seed=1,aformat=sample_fmts=fltp:channel_layouts=stereo,lowpass=f=6000[room]`,
   );
   busses.push('[room]');
   filters.push(

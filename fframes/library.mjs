@@ -14,7 +14,7 @@ import { frames } from './sketch-kit.mjs';
 import { validateType } from './type.mjs';
 
 export const LIBRARY = path.join(path.dirname(path.dirname(fileURLToPath(import.meta.url))), 'library');
-export const KINDS = ['palettes', 'treatments', 'sketches', 'playbooks', 'types'];
+export const KINDS = ['palettes', 'treatments', 'sketches', 'playbooks', 'types', 'directions'];
 export const PALETTE_KEYS = ['bg', 'surface', 'ink', 'muted', 'accent', 'accent2', 'positive', 'negative'];
 
 // ------------------------------------------------------------------ validation
@@ -36,6 +36,16 @@ const known = (item, keys, where) => {
 };
 
 const VALIDATE = {
+  directions(item, where) {
+    known(item, ['order', 'title', 'when', 'materials', 'playbook', 'treatment', 'story', 'picture', 'pace', 'rules'], where);
+    for (const key of ['title', 'when', 'story', 'picture', 'pace'])
+      if (typeof item[key] !== 'string' || !item[key].trim()) throw new Error(`${where}: needs ${key}`);
+    for (const key of ['materials', 'rules'])
+      if (!Array.isArray(item[key]) || !item[key].length || item[key].some(v => typeof v !== 'string' || !v.trim()))
+        throw new Error(`${where}: ${key} must be a nonempty list of strings`);
+    for (const [key, kind] of [['playbook', 'playbooks'], ['treatment', 'treatments']])
+      if (!items(kind).some(v => v.id === item[key])) throw new Error(`${where}: unknown ${key} "${item[key]}"`);
+  },
   palettes(item, where) {
     known(item, ['order', 'title', 'notes', 'colors'], where);
     if (!item.colors || typeof item.colors !== 'object')
@@ -84,6 +94,7 @@ const VALIDATE = {
         'title',
         'audience',
         'inputs',
+        'sources',
         'beats',
         'theme',
         'motion',
@@ -106,6 +117,11 @@ const VALIDATE = {
       where,
     );
     if (!item.title || !item.audience || !item.inputs) throw new Error(`${where}: needs title, audience and inputs`);
+    if (item.sources != null && (!Array.isArray(item.sources) || item.sources.some(s =>
+      !s || typeof s !== 'object' || Array.isArray(s) ||
+      !((typeof s.claim === 'string' && s.claim.trim() && typeof s.source === 'string' && s.source.trim()) ||
+        (typeof s.id === 'string' && s.id.trim() && typeof s.title === 'string' && s.title.trim())))))
+      throw new Error(`${where}: sources must contain claim/source or id/title entries`);
     if (!Array.isArray(item.beats) || !item.beats.length) throw new Error(`${where}: needs beats`);
     item.beats.forEach((b, i) => {
       if (!b || typeof b.block !== 'string') throw new Error(`${where}: beats[${i}] needs a block`);

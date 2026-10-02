@@ -1,0 +1,56 @@
+{
+  "order": 42,
+  "title": "Inspect the opportunity and the risk in the same frame",
+  "audience": "Financial educators and customers comparing the terms of a financial product",
+  "inputs": "Approved benefit and risk statements, current product terms, fees and access conditions, the audience's question and authorised brand assets",
+  "theme": "noir",
+  "type": "didone",
+  "motion": "gentle",
+  "transition": "cut",
+  "textMotion": "words",
+  "sfx": "subtle",
+  "texture": { "grain": 0.16, "vignette": 0.18 },
+  "lens": { "bloom": 0.15, "blur": 0.4 },
+  "sources": [
+    { "claim": "Access, price changes and potential loss are illustrative questions for inspecting product terms", "source": "Authored educational framework; no product rating, yield, probability or recommendation", "asOf": "Illustration only; use current approved product documents" }
+  ],
+  "note": "Arc: the attractive headline opens, a moving lens inspects access, price and loss, opportunity and limitation share equal screen space, silence separates the review from the decision, then the viewer gets a concrete question. Keep benefits and material risks equally prominent in narration, type size and hold time. The lens graphic is qualitative and does not rank products or measure risk. Do not add return figures without their period, fees, assumptions and relevant risk context. See docs/financial-playbooks.md.",
+  "beats": [
+    {
+      "id": "headline",
+      "block": "title",
+      "vo": "The headline is only the beginning. Look closely at what the terms ask you to accept.",
+      "props": { "text": "Read beyond the headline.", "align": "center", "emphasis": ["headline"], "source": "Illustrative product education · no specific product is represented" },
+      "camera": { "move": "in", "amount": 0.5 },
+      "art": { "sketch": "glass-orbits", "seed": 4, "opacity": 0.35, "drift": 0.4 }
+    },
+    {
+      "id": "inspect",
+      "block": "canvas",
+      "vo": "So ask about access to your money, changes in its price, and the possibility of loss. Each is a different question.",
+      "props": { "sketch": "risk-lens", "source": "Illustrative questions · the drawing is not a risk score" }
+    },
+    {
+      "id": "tradeoff",
+      "block": "compare",
+      "transition": "panel",
+      "vo": "Put the intended benefit beside the conditions and the possible loss. Give both enough room to be understood.",
+      "props": {
+        "title": "Hold both sides in view",
+        "left": { "title": "Intended benefit", "items": ["What is the objective?", "Which assumptions support it?"] },
+        "right": { "title": "Material limitations", "items": ["When is access restricted?", "What could be lost?"] },
+        "source": "Illustrative review questions · replace with approved benefit and risk statements"
+      }
+    },
+    { "id": "breath", "block": "canvas", "duration": 2.8, "props": { "sketch": "pause" } },
+    {
+      "id": "fit",
+      "block": "statement",
+      "transition": "iris",
+      "vo": "Before deciding, connect the terms to the actual need. When is the money needed, and what loss is acceptable?",
+      "props": { "text": "Do the terms fit the need?", "align": "center", "support": "Time horizon. Access. Capacity for loss.", "source": "Illustrative education · use current product terms and the relevant review process" },
+      "art": { "sketch": "contour-field", "seed": 12, "opacity": 0.28, "drift": 0.4 },
+      "camera": { "move": "out", "amount": 0.4 }
+    }
+  ]
+}

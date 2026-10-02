@@ -1,0 +1,85 @@
+{
+  "order": 40,
+  "title": "Follow the money until it becomes usable cash",
+  "audience": "Business owners, finance teams and customers learning a cash or settlement mechanism",
+  "inputs": "An approved description of the mechanism, cash dates and amounts on one basis, opening balance, constraints and brand assets",
+  "theme": "midnight",
+  "type": "geometric",
+  "motion": "gentle",
+  "transition": "cut",
+  "textMotion": "words",
+  "heading": "bottom",
+  "sfx": "subtle",
+  "texture": { "grain": 0.12, "vignette": 0.2 },
+  "lens": { "bloom": 0.2, "blur": 0.4 },
+  "sources": [
+    { "claim": "Illustrative opening cash $60k, collections $40k, payments $70k and closing cash $30k during the same example month", "source": "Authored arithmetic example: 60 + 40 - 70 = 30; not a company result", "asOf": "Illustrative month; no historical period" },
+    { "claim": "The clearing gate is a qualitative illustration of payment availability", "source": "Conceptual mechanism; replace with approved settlement terms", "asOf": "Illustration only" }
+  ],
+  "note": "Arc: a payment approaches a gate, the timing question lands, comparable flows expose the gap, the balance changes, a short breath, then the decision. Wide mechanism -> close statement -> evidence -> numerical insert -> pause -> button. The cash-lock sketch is qualitative, not scaled to the example values or a promise about clearing times. The sample closes at $30k because $60k + $40k - $70k = $30k. Replace the complete example together. See docs/financial-playbooks.md for source and adaptation guidance.",
+  "beats": [
+    {
+      "id": "clearing",
+      "block": "canvas",
+      "vo": "In this illustration, a payment waits at the clearing gate. Only then does it become available cash.",
+      "props": { "sketch": "cash-lock", "source": "Illustrative mechanism · timing and geometry are not to scale" }
+    },
+    {
+      "id": "question",
+      "block": "statement",
+      "vo": "So the question is when the cash becomes usable.",
+      "tone": "accent",
+      "transition": "panel",
+      "props": { "text": "When is the cash usable?", "align": "center", "emphasis": ["usable"], "source": "Illustrative question · confirm the actual settlement terms" },
+      "camera": { "move": "in", "amount": 0.45 }
+    },
+    {
+      "id": "flows",
+      "block": "bars",
+      "vo": "In our example month, collections bring in 40 thousand dollars. Payments take out 70 thousand.",
+      "art": { "sketch": "lightwell", "seed": 17, "opacity": 0.25, "drift": 0.3 },
+      "props": {
+        "title": "Same month. Different flows.",
+        "kicker": "Illustrative example",
+        "data": [{ "label": "Collections", "value": 40 }, { "label": "Payments", "value": 70 }],
+        "format": { "prefix": "$", "suffix": "k", "decimals": 0 },
+        "max": 80,
+        "sort": "none",
+        "orientation": "horizontal",
+        "growSay": "40 thousand",
+        "focus": { "label": "Payments", "say": "70 thousand", "note": "More cash leaves than arrives", "dim": 0.45 },
+        "source": "Illustrative sample data · example month · USD thousands"
+      }
+    },
+    {
+      "id": "balance",
+      "block": "delta",
+      "vo": "Starting with 60 thousand leaves 30 thousand at month end. The balance absorbs the difference.",
+      "props": {
+        "kicker": "Illustrative example",
+        "title": "The cash balance carries the gap",
+        "from": { "value": 60, "label": "Opening cash" },
+        "to": { "value": 30, "label": "Closing cash" },
+        "prefix": "$", "suffix": "k", "decimals": 0,
+        "support": "$60k + $40k collected - $70k paid = $30k",
+        "land": "30 thousand",
+        "source": "Illustrative sample data · same example month · USD thousands"
+      },
+      "camera": { "move": "in", "amount": 0.4 }
+    },
+    { "id": "breath", "block": "canvas", "duration": 2.8, "props": { "sketch": "pause" } },
+    {
+      "id": "decision",
+      "block": "endcard",
+      "transition": "iris",
+      "vo": "Before choosing a response, map when money arrives and when obligations fall due.",
+      "props": {
+        "title": "Make the timing visible.",
+        "support": "Compare availability with obligations.",
+        "action": "Use actual dates, terms and balances.",
+        "source": "Illustrative workflow · replace with approved company information"
+      },
+      "art": { "sketch": "lightwell", "seed": 17, "opacity": 0.4, "drift": 0.4 }
+    }
+  ]
+}
