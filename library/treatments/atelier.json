@@ -1,0 +1,44 @@
+{
+  "order": 27,
+  "title": "Atelier",
+  "when": "Fashion, craft, interiors, food and culture told like a magazine feature: a didone on porcelain paper, slow zooms, iris reveals and lower-third titles",
+  "playbook": "creative-process",
+  "film": {
+    "theme": "porcelain",
+    "type": "didone",
+    "backdrop": "none",
+    "texture": {
+      "grain": 0.35,
+      "vignette": 0.3
+    },
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.4
+    },
+    "textMotion": "lines",
+    "transition": "zoom",
+    "heading": "bottom",
+    "sfx": "off",
+    "lens": {
+      "grade": "warm",
+      "gradeAmount": 0.3,
+      "bloom": 0.15,
+      "blur": 0.5
+    },
+    "voice": {
+      "style": "low, intimate, unhurried, like a magazine profile read aloud"
+    }
+  },
+  "beats": {
+    "graphic": "iris",
+    "rough": false,
+    "font": "didone"
+  },
+  "rules": [
+    "Statements are short and set large in the didone; the feeling word is its italic, never a colour alone. Leave two thirds of the frame empty around them.",
+    "Scene titles sit as lower thirds under the picture, the way a magazine captions a photograph.",
+    "Pictures are materials: a fabric, a surface, a plate (depth plates, duotone treatment) or one drawn object with a soft shadow. Nothing glossy, no neon, no outlines.",
+    "Move like a slow lens: zoom in on a detail, iris to the next, never whip or push. One scene per sentence; let silences hold on the picture.",
+    "Figures are set small in Inter under the didone headline, with their source, the way a caption credits a photograph."
+  ]
+}

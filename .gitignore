@@ -18,3 +18,7 @@ archive/comparison/examples/paired/assets/music/
 
 # Generated placeholder screenshot for the screen-walkthrough recipe (text-free wireframe).
 !recipes/screen-walkthrough/assets/
+
+# Variable sources for the display voices are fetched by native/tools/generate-fonts.py, hash-checked, not committed.
+fframes/assets/fonts/source/*
+!fframes/assets/fonts/source/Inter.ttf

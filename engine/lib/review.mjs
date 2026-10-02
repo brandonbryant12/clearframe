@@ -39,7 +39,7 @@ export function reviewSamples(timing, { beat } = {}) {
   return [...samples.values()].sort((a, b) => a.frame - b.frame);
 }
 
-export async function reviewProject(root, { video, beat } = {}) {
+export async function reviewProject(root, { video, beat, directory } = {}) {
   const file = path.resolve(video ?? path.join(root, 'build/video.mp4'));
   const report = readJSON(`${file}.json`);
   if (sha(fs.readFileSync(file)) !== report.outputSha256)
@@ -52,8 +52,9 @@ export async function reviewProject(root, { video, beat } = {}) {
   if (timing.frames !== report.frames || timing.fps !== report.fps)
     throw new Error('Timeline differs from the encoded video. Render again before review.');
   const samples = reviewSamples(timing, { beat });
-  const dir = path.join(root, 'build', `review-${crypto.randomUUID()}`);
-  fs.mkdirSync(dir, { recursive: true });
+  const dir = directory ? path.resolve(directory) : path.join(root, 'build', `review-${crypto.randomUUID()}`);
+  // Never overwrite or clean up a caller-owned review directory.
+  fs.mkdirSync(dir);
   try {
     const select = samples.map(s => `eq(n\\,${s.frame})`).join('+');
     await ffmpeg([

@@ -22,11 +22,25 @@ export function gateIsInherited() {
 }
 export async function enterGate() {
   const gate = path.join(os.homedir(), '.local/bin/codex-heavy');
-  if (gateIsInherited() || !fs.existsSync(gate)) return false;
+  if (gateIsInherited()) { process.env.CLEARFRAME_HEAVY_HELD = '1'; return false; }
+  if (!fs.existsSync(gate)) return false;
   const child = spawn(gate, ['--', process.execPath, ...process.argv.slice(1)], {
-    stdio: 'inherit',
+    stdio: process.env.CLEARFRAME_PROGRESS_STDERR === '1' ? ['inherit', 'pipe', 'inherit'] : 'inherit',
     env: { ...process.env, CLEARFRAME_HEAVY_HELD: '1' },
   });
+  // The gate prints its waiting notice on stdout. Keep JSON stdout clean while forwarding the result.
+  if (child.stdout) {
+    let pending = '';
+    child.stdout.on('data', chunk => {
+      pending += chunk.toString();
+      let end;
+      while ((end = pending.indexOf('\n')) >= 0) {
+        const line = pending.slice(0, end + 1); pending = pending.slice(end + 1);
+        (line.startsWith('Waiting for another local build, test suite, or install to finish...') ? process.stderr : process.stdout).write(line);
+      }
+    });
+    child.stdout.on('end', () => { if (pending) process.stdout.write(pending); });
+  }
   const stop = () => child.kill('SIGINT'),
     terminate = () => child.kill('SIGTERM');
   process.once('SIGINT', stop);

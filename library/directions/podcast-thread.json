@@ -1,0 +1,18 @@
+{
+  "order": 3,
+  "title": "Follow a thought",
+  "materials": [
+    "podcast",
+    "research"
+  ],
+  "playbook": "podcast-thread",
+  "treatment": "calm",
+  "when": "A reflective conversation works through a tension.",
+  "story": "Follow one question through a complication to a changed perspective.",
+  "picture": "An evolving ribbon or an original visual metaphor carries the thought across cuts.",
+  "pace": "Let pauses breathe; move the picture when the thought changes.",
+  "rules": [
+    "Keep original speech and speaker identity intact when importing a recording.",
+    "Choose a metaphor from the source; the thread is an example, not a requirement."
+  ]
+}

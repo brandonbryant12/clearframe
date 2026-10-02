@@ -22,7 +22,8 @@ const common = {
 };
 const emphasis = { emphasis: 'Up to 4 whole-word phrases drawn in the accent color' };
 const emphasisStyle = {
-  emphasisStyle: 'accent (default) or serif: emphasis phrases set in italic serif, the editorial accent',
+  emphasisStyle:
+    'accent or serif (italic Instrument Serif, the editorial accent). Unset, the film type voice decides: accent, italic, weight, marker or underline',
 };
 const align = { align: 'left (default) or center: centre the whole stack' };
 const sampleSource = 'Illustrative sample data · replace before publishing';
@@ -514,6 +515,10 @@ export const BLOCKS = [
         'Depth of field for elements with z: {z (the focus plane), aperture 0–3 (1 natural), keys [{say|at, z, dur}] for a rack focus}',
       chart:
         'A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars|stack|number, values: [{label, value, highlight, id}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (the note replaces a heading: an annotation on the stressed word)',
+      kpi:
+        'Editable native dimensional KPI: {form: pedestal|comparison|rail|seesaw|stack, label, unit?, value?, values?:[{label,value}], total?, domain?:[0,max], prefix?, suffix?, decimals?:0–3, motion?:none|reveal|stagger|emphasis|{preset,duration,stagger}, focus?, source?}. Comparison front heights share one zero-based scale; rail and stack lengths use an explicit total. Seesaw has two comparable values and qualitative tilt. Seesaw/stack require a unit. Every form needs an exact visible source. See docs/kpi-direction.md.',
+      teaching:
+        'Editable pause/answer/explanation: {form:choice|gap, phase:question|answer, prompt, explanation, layout?:full|split, motion?:fade|none, revealAt?, explainAt?, source?}. Choice uses options:[2–3 strings] and correctIndex; gap uses before, answer and optional after. Use separate beats for reading and answer holds. Split reserves landscape right-half imagery. See docs/teaching-sequences.md.',
       sketch:
         'A library sketch drawn under any elements, redrawn for this frame (clearframe sketch lists them); its camera (view, dolly, focus) applies unless the beat sets its own',
       sketchText: 'Replacement words for a sketch’s placeholder type: {"TITLE": "Your words"}',

@@ -16,7 +16,15 @@ export const FACE = {
   poster: 'BebasNeue-Regular.ttf',
   'serif-display': 'DMSerifDisplay-Regular.ttf',
   'serif-display-italic': 'DMSerifDisplay-Italic.ttf',
+  didone: 'PlayfairDisplay-Bold.ttf',
+  'didone-italic': 'PlayfairDisplay-BoldItalic.ttf',
+  wide: 'ArchivoExpanded-ExtraBold.ttf',
+  geometric: 'SpaceGrotesk-Bold.ttf',
+  'geometric-light': 'SpaceGrotesk-Light.ttf',
+  condensed: 'BigShouldersDisplay-ExtraBold.ttf',
 };
+/** A face key (above) or a bundled file name, as the type voices name them. */
+const faceFile = face => FACE[face] ?? face;
 // Props that are never displayed (cues, files, enums), so they are not glyph-checked.
 const HIDDEN = new Set([
   'file',
@@ -54,7 +62,7 @@ const HIDDEN = new Set([
 
 /** First character the bundled fonts (or one accent face) cannot draw, if any. */
 export function missingGlyph(text, face) {
-  const ranges = face ? familyCoverage[FACE[face]] : coverage;
+  const ranges = face ? familyCoverage[faceFile(face)] : coverage;
   for (const ch of String(text)) {
     const cp = ch.codePointAt(0);
     // Whitespace and default-ignorable characters (soft hyphen, joiners, variation selectors) shape invisibly.
@@ -83,7 +91,7 @@ export function glyphCheck(value, where, fail, face = null) {
     const ch = missingGlyph(value, face);
     if (ch)
       fail(
-        `"${ch}" (U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')}) in ${where} is not in the bundled ${face ? FACE[face].replace(/-.*$/, '') : 'Inter'} font and would render as an empty box. Rephrase or add a font with that script.`,
+        `"${ch}" (U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')}) in ${where} is not in the bundled ${face ? faceFile(face).replace(/-.*$/, '') : 'Inter'} font and would render as an empty box. Rephrase or add a font with that script.`,
       );
   } else if (Array.isArray(value)) value.forEach((v, i) => glyphCheck(v, `${where}[${i}]`, fail, face));
   else if (value && typeof value === 'object') {

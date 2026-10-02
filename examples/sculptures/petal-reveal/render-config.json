@@ -1,0 +1,28 @@
+{
+  "id": "petal-reveal",
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "frames": 96,
+  "seed": 17,
+  "theme": "daylight",
+  "colors": {
+    "base": "daylight",
+    "bg": "#f4f7fa",
+    "surface": "#e3eaf0",
+    "ink": "#172c38",
+    "muted": "#526575",
+    "accent": "#176b70",
+    "accent2": "#7956ae",
+    "positive": "#23714f",
+    "negative": "#af3e52"
+  },
+  "samples": 48,
+  "pos": 0.5,
+  "still": false,
+  "draft": false,
+  "loop": true,
+  "out": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/petal-reveal",
+  "sourceRoot": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/petal-reveal/source",
+  "sceneFile": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/petal-reveal/source/petal-reveal.py"
+}

@@ -1,0 +1,62 @@
+{
+  "order": 43,
+  "title": "Investigate a report through its evidence and its missing test",
+  "audience": "People who need to understand how strong a research claim actually is",
+  "inputs": "A research brief, exact claims and citations, methods, limitations and the comparison that could change the conclusion",
+  "theme": "paper",
+  "type": "didone",
+  "motion": "gentle",
+  "backdrop": "none",
+  "transition": "cut",
+  "textMotion": "words",
+  "sfx": "subtle",
+  "texture": { "grain": 0.23 },
+  "sources": [
+    { "claim": "The sample discusses a hypothetical process change and shorter waits", "source": "Authored illustrative research scenario; no actual study, result or causal finding is asserted" }
+  ],
+  "note": "An editorial investigation, not a report read aloud. Start with a live question; separate what the source observed from what the author infers; cut to the missing comparison; narrow the conclusion; hold before the final test. The manuscript drawings are symbolic props, not facsimiles of a real publication. Replace the hypothetical waiting-time example with exact source claims and citations. Preserve methods, counterevidence and uncertainty. Use a sourced quantitative chart only when the source supplies comparable numbers; these drawings do not encode effect size. The page cuts and annotations carry the edit rather than a tour through a diagram world. Pair with the editorial treatment. See docs/source-playbooks.md.",
+  "beats": [
+    {
+      "id": "question",
+      "block": "statement",
+      "vo": "A report says a new process means shorter waits. Did the process really cause the change?",
+      "props": { "text": "Did it cause this?", "align": "center", "emphasis": ["cause"], "source": "Illustrative research scenario · replace with the report's exact claim" },
+      "art": { "sketch": "paper-fold", "seed": 11, "opacity": 0.5, "drift": 0.25 }
+    },
+    {
+      "id": "separate",
+      "block": "canvas",
+      "vo": "First separate the observation from the inference. What changed is one question. Why it changed is another.",
+      "props": { "sketch": "evidence-desk", "source": "Illustrative method · check the actual study design and evidence" },
+      "camera": { "move": "in", "amount": 0.25 }
+    },
+    {
+      "id": "missing",
+      "block": "canvas",
+      "transition": "panel",
+      "vo": "Now find the missing comparison. What happened where the process stayed the same? What else changed at the same time?",
+      "props": { "sketch": "evidence-gap", "source": "Illustrative questions · replace with the source's actual limitations" },
+      "camera": { "move": "in", "amount": 0.2 }
+    },
+    {
+      "id": "narrow",
+      "block": "callout",
+      "vo": "Until the evidence answers that, make the claim narrower. The change followed the process. That alone does not establish its cause.",
+      "props": { "label": "Match the claim to the evidence", "text": "A sequence is not a causal test.", "support": "State the design, the alternatives and the uncertainty.", "icon": "search", "source": "Illustrative scenario · no actual causal finding asserted" }
+    },
+    {
+      "id": "hold",
+      "block": "canvas",
+      "duration": 3.3,
+      "props": { "sketch": "evidence-gap", "sketchText": { "The missing comparison": "What would change your mind?" }, "source": "Illustrative research question" },
+      "camera": { "move": "out", "amount": 0.15 }
+    },
+    {
+      "id": "test",
+      "block": "statement",
+      "vo": "End with the evidence that would change the conclusion. The most useful takeaway may be the next question to test.",
+      "props": { "text": "Name the next test.", "support": "Evidence leads the conclusion.", "align": "center", "source": "Replace with the report's supported conclusion and open questions" },
+      "art": { "sketch": "paper-fold", "seed": 11, "opacity": 0.42, "drift": 0.18 }
+    }
+  ]
+}

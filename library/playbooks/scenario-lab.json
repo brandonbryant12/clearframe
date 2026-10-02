@@ -1,0 +1,80 @@
+{
+  "order": 41,
+  "title": "Test a financial decision against several possible futures",
+  "audience": "Planning teams and customers who need to understand assumptions and uncertainty",
+  "inputs": "The decision, a shared starting point, explicitly defined scenarios on the same basis, assumptions, decision triggers and approved brand assets",
+  "theme": "blueprint",
+  "type": "geometric",
+  "motion": "gentle",
+  "transition": "cut",
+  "textMotion": "words",
+  "sfx": "subtle",
+  "texture": { "grain": 0.08, "vignette": 0.16 },
+  "lens": { "bloom": 0.18, "blur": 0.4 },
+  "sources": [
+    { "claim": "Illustrative downside, base and upside revenue is $80k, $100k and $120k for the same example month", "source": "Authored scenario inputs, not forecasts; no probabilities are assigned", "asOf": "Illustrative month; no historical period" }
+  ],
+  "note": "Arc: one number hides uncertainty, a close view establishes one origin, a pullback in the same world reveals the possible paths, a common-scale chart compares the sample, the limitation gets its own spoken scene, a breath, and an explicit decision trigger closes. Paths and equal-size markers do not encode probabilities. Scenario amounts use the same period and units. These illustrative inputs are not a prediction, confidence interval or recommendation. Replace the branches, assumptions, figures and sources as one dataset. See docs/financial-playbooks.md.",
+  "beats": [
+    {
+      "id": "hook",
+      "block": "statement",
+      "vo": "A single planning number can hide the question that matters: what if the assumptions change?",
+      "props": { "text": "What if the assumptions change?", "align": "center", "emphasis": ["change"], "source": "Illustrative planning exercise" },
+      "art": { "sketch": "contour-field", "seed": 8, "opacity": 0.28, "drift": 0.45 },
+      "camera": { "move": "in", "amount": 0.4 }
+    },
+    {
+      "id": "paths",
+      "block": "canvas",
+      "hold": 0.9,
+      "vo": "So start from the same point. Let the assumptions open different paths.",
+      "props": { "sketch": "scenario-origin", "world": "financial-scenarios", "viewAt": 0, "source": "Illustrative scenarios · paths do not encode likelihood or time" }
+    },
+    {
+      "id": "outcomes",
+      "block": "canvas",
+      "vo": "Upside, base and downside. Possible outcomes, with no probabilities assigned.",
+      "props": { "sketch": "scenario-outcomes", "world": "financial-scenarios", "viewAt": 0, "source": "Illustrative scenarios · no probabilities assigned" }
+    },
+    {
+      "id": "comparison",
+      "block": "bars",
+      "transition": "panel",
+      "vo": "Our illustrative revenue cases are 80, 100 and 120 thousand dollars. Every bar covers the same example month.",
+      "art": { "sketch": "contour-field", "seed": 8, "opacity": 0.2, "drift": 0.3 },
+      "props": {
+        "title": "Change the assumptions. Keep the basis.",
+        "kicker": "Illustrative revenue scenarios",
+        "data": [{ "label": "Downside", "value": 80 }, { "label": "Base", "value": 100 }, { "label": "Upside", "value": 120 }],
+        "max": 140,
+        "sort": "none",
+        "format": { "prefix": "$", "suffix": "k", "decimals": 0 },
+        "orientation": "horizontal",
+        "growSay": "80",
+        "source": "Illustrative sample data · same example month · USD thousands"
+      }
+    },
+    {
+      "id": "limits",
+      "block": "callout",
+      "vo": "But these cases are not forecasts. The numbers do not tell us how likely each outcome is.",
+      "props": {
+        "label": "What the picture cannot tell you",
+        "icon": "alert",
+        "text": "Scenarios do not establish likelihood.",
+        "support": "No probabilities are assigned in this illustration.",
+        "source": "Illustrative exercise · outcomes depend on the stated assumptions"
+      }
+    },
+    { "id": "breath", "block": "canvas", "duration": 2.8, "props": { "sketch": "pause" } },
+    {
+      "id": "trigger",
+      "block": "statement",
+      "transition": "iris",
+      "vo": "Choose the signal that would make you revisit the decision. Name the assumption, the owner and the review date.",
+      "props": { "text": "What would change the decision?", "align": "center", "support": "Assumption. Signal. Owner. Review date.", "source": "Illustrative workflow · define triggers using approved planning inputs" },
+      "art": { "sketch": "lightwell", "seed": 7, "opacity": 0.3, "drift": 0.5 }
+    }
+  ]
+}

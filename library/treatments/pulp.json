@@ -4,6 +4,7 @@
   "when": "Origin stories, action and stakes, myth-busting, anything that wants the punch of a 1938 newsstand cover",
   "film": {
     "theme": "newsprint",
+    "type": "condensed",
     "backdrop": "paper",
     "texture": {
       "grain": 0.3,
@@ -23,7 +24,7 @@
   "beats": {
     "print": "newsprint",
     "rough": false,
-    "font": "poster",
+    "font": "condensed",
     "graphic": "panel"
   },
   "rules": [

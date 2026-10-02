@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import { BLOCKS, THEMES, MOTIONS, TRANSITIONS, BACKDROPS, FRAME_RATES, markdownCatalog } from '../fframes/catalog.mjs';
 import { wireframePNG } from '../fframes/wireframe.mjs';
 import { playbooks, storyboardFor } from '../fframes/playbooks.mjs';
+import { types } from '../fframes/library.mjs';
 const text = { type: 'string' },
   number = { type: 'number' },
   bool = { type: 'boolean' },
@@ -67,6 +68,10 @@ const schema = {
     textMotion: {
       enum: ['lines', 'words', 'letters', 'cascade'],
       description: 'Default type reveal: whole lines, word by word, letter by letter or a tilted cascade',
+    },
+    type: {
+      enum: types().map(t => t.id),
+      description: 'Type voice: the display family and emphasis for titles, statements, chapters, endcards and kinetic text (clearframe types)',
     },
     texture: {
       oneOf: [
@@ -150,6 +155,7 @@ const schema = {
           sfx: { type: 'array', items: object },
           tone: { enum: ['none', 'accent', 'accent2', 'invert', 'surface'], description: 'Colour-blocked scene' },
           textMotion: { enum: ['lines', 'words', 'letters', 'cascade'], description: 'Type reveal for this scene' },
+          type: { enum: types().map(t => t.id), description: 'Type voice for this scene (inter opts out of the film voice)' },
           pace: {
             enum: ['hold'],
             description: 'Keep a deliberate wait: skip the pull-forward when the voice starts before the picture',

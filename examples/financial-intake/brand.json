@@ -1,0 +1,12 @@
+{
+  "name": "Example Finance",
+  "theme": "midnight",
+  "type": "geometric",
+  "voiceStyle": "Clear, thoughtful and direct; explain one idea at a time.",
+  "rules": [
+    "Show the mechanism before presenting the numbers.",
+    "Keep illustrative status visible and speak the assumption.",
+    "Use one consistent unit and period for every comparison."
+  ],
+  "assets": []
+}

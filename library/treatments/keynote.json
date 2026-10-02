@@ -5,6 +5,7 @@
   "playbook": "product-reveal",
   "film": {
     "theme": "stage",
+    "type": "geometric",
     "backdrop": "none",
     "texture": {
       "grain": 0.3,
@@ -28,7 +29,6 @@
     }
   },
   "beats": {
-    "emphasisStyle": "serif",
     "graphic": "cut",
     "rough": false
   },

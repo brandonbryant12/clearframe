@@ -27,8 +27,12 @@ import {
   LENS_KEYS,
 } from './constants.mjs';
 import { glyphCheck } from './glyphs.mjs';
+import { typeById } from './library.mjs';
+import { voiceOf, voiceFace, DEFAULT_VOICE } from './type.mjs';
 import { rules } from './registry.mjs';
 import { expandArt } from './sketches.mjs';
+import { expandKPIProps } from './kpis.mjs';
+import { expandTeachingProps } from './teaching.mjs';
 import { captionCues, findWord } from '../engine/lib/timing.mjs';
 
 const unit = v => Number.isFinite(v) && v >= 0 && v <= 1;
@@ -92,6 +96,7 @@ export function createJob(sb, timing, { draft = false } = {}) {
     caption_style: film.captionStyle,
     ...(film.texture && film.texture !== 'none' ? { texture: film.texture } : {}),
     text_motion: film.textMotion,
+    ...(film.type ? { type: film.type } : {}),
     ...(frame ? { frame } : {}),
     beats,
   };
@@ -130,8 +135,17 @@ function filmSettings(sb, timing, { errors }) {
   }
   const textMotion = sb.textMotion ?? 'lines';
   if (!TEXT_MOTIONS.includes(textMotion)) errors.push(`textMotion must be ${TEXT_MOTIONS.join(', ')}.`);
+  // The type voice: display family and emphasis for titles, statements, chapters, endcards
+  // and kinetic text, resolved here so the renderer never reads the library.
+  let type = null;
+  try {
+    type = voiceOf(sb.type, sb.type != null ? typeById(sb.type) : null);
+  } catch (e) {
+    errors.push(e.message);
+  }
   return {
     textMotion,
+    type,
     theme: palette(sb.theme ?? 'paper'),
     motion,
     vertical,
@@ -150,7 +164,11 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   const frame = 1 / timing.fps,
     source = sb.beats[b.index],
     spec = rules(b.block);
-  const props = normalizeProps(b.block, b.props ?? {}, {
+  const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.duration };
+  const authoredProps = b.block === 'canvas'
+    ? expandTeachingProps(expandKPIProps(b.props ?? {}, helperFrame), helperFrame)
+    : (b.props ?? {});
+  const props = normalizeProps(b.block, authoredProps, {
     vertical: film.vertical,
     width: timing.width,
     height: timing.height,
@@ -238,7 +256,16 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   glyphCheck(props, `${b.id}.props`, m => {
     throw new Error(m);
   });
-  checkNarration(b, frame, film.captions, report);
+  // Display text set in the voice's face is checked against that face's own coverage.
+  const voice = source.type != null ? (voiceOf(source.type, typeById(source.type)) ?? DEFAULT_VOICE) : film.type;
+  const face = voiceFace(voice);
+  if (face && (spec.hero || ['chapter', 'highlight'].includes(b.block) || props.title != null))
+    for (const k of ['text', 'title'])
+      if (typeof props[k] === 'string')
+        glyphCheck(props[k], `${b.id}.props.${k}`, m => {
+          throw new Error(m);
+        }, face);
+  checkNarration(b, frame, film.captions, report, b.block === 'kinetic' ? face : null);
   const transition = transitions[b.index];
   if (!TRANSITIONS.includes(transition)) throw new Error(`Unsupported native transition ${transition}`);
   const authoredExit = source.exit ?? 'auto';
@@ -419,6 +446,8 @@ function beatLayers(source, b, sb) {
     if (!TEXT_MOTIONS.includes(source.textMotion)) throw new Error(`textMotion must be ${TEXT_MOTIONS.join(', ')}`);
     out.text_motion = source.textMotion;
   }
+  // A scene's own type voice (a trailer card inside a didone film); `inter` opts back out.
+  if (source.type != null) out.type = voiceOf(source.type, typeById(source.type)) ?? DEFAULT_VOICE;
   if (source.tone != null) {
     if (!TONES.includes(source.tone)) throw new Error(`tone must be ${TONES.join(', ')}`);
     out.tone = source.tone;
@@ -492,7 +521,7 @@ function plateSpec(input, block) {
   return plate;
 }
 
-function checkNarration(b, frame, captions, report) {
+function checkNarration(b, frame, captions, report, face = null) {
   const soft = report.draft ? report.warnings : report.errors;
   if (b.vo?.estimated) soft.push(`${b.id}: narration is estimated; record/import audio or use --draft.`);
   if (b.vo && (b.vo.start < b.start - 1e-3 || b.vo.end > b.end + frame))
@@ -502,6 +531,10 @@ function checkNarration(b, frame, captions, report) {
     glyphCheck(b.vo.text, `${b.id}.vo (shown as ${b.block === 'kinetic' ? 'kinetic text' : 'captions'})`, m => {
       throw new Error(m);
     });
+    if (face)
+      glyphCheck(b.vo.text, `${b.id}.vo (shown as kinetic text)`, m => {
+        throw new Error(m);
+      }, face);
     if (b.vo.wordTiming !== 'measured')
       soft.push(
         `${b.id}: speech-following text requires measured word timestamps; run align or import timed speech.${b.vo.alignmentIssue ? ' ' + b.vo.alignmentIssue : ''}`,

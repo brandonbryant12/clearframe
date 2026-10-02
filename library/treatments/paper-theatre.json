@@ -1,0 +1,19 @@
+{
+  "order": 30,
+  "title": "Paper theatre",
+  "when": "Editorial reveals, cultural essays and product moments built from apertures, folded planes and purposeful empty space",
+  "playbook": "material-etudes",
+  "film": {
+    "theme": "vellum", "type": "didone", "backdrop": "none", "texture": { "grain": 0.18 },
+    "motion": { "preset": "gentle", "intensity": 0.4 }, "textMotion": "lines", "transition": "fade", "sfx": "off",
+    "voice": { "style": "measured, curious, close and unhurried" }
+  },
+  "beats": { "graphic": "iris", "rough": false, "font": "didone" },
+  "rules": [
+    "Give the image a physical job: an opening reveals, a folded face redirects light, a sheet conceals then slips away.",
+    "Keep the copy left in landscape or in the top third of portrait. Let one large material object occupy the other area.",
+    "Use a didone for one short thought; keep evidence and body copy in clean native type outside the moving edges.",
+    "Cast shadows belong to objects. Avoid full-frame glow, orbiting ornaments and decorative particles.",
+    "Prefer a slow reveal followed by a held inspection. Use an iris only when the story moves through an opening."
+  ]
+}

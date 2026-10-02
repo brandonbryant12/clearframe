@@ -709,8 +709,18 @@ test('staged items of every sequence block fit inside their beat', t => {
 test('bundled font instances and their tabular figures match recorded provenance', () => {
   const dir = new URL('../fframes/assets/fonts/', import.meta.url),
     provenance = JSON.parse(fs.readFileSync(new URL('provenance.json', dir)));
-  const files = [...provenance.files, ...provenance.staticInstances];
+  const files = [
+    ...provenance.files,
+    ...provenance.staticInstances,
+    ...provenance.families.flatMap(f => [...f.files, ...(f.instances ?? [])]),
+  ];
   assert.ok(provenance.staticInstances.some(f => f.family === 'Inter Display Figures'));
+  // Every display voice is a static instance of a pinned OFL source with a bundled notice.
+  for (const f of provenance.families) {
+    assert.equal(f.license, 'OFL-1.1', f.family);
+    assert.ok(f.files.some(x => /^OFL-.*\.txt$/.test(x.file)), `${f.family} notice`);
+    for (const i of f.instances ?? []) assert.ok(f.source.some(s => s.file === i.source), `${i.file} source`);
+  }
   for (const f of files)
     assert.equal(
       crypto
@@ -725,6 +735,9 @@ test('bundled font instances and their tabular figures match recorded provenance
     coverage.fonts,
     provenance.staticInstances.map(f => f.file),
   );
+  const families = JSON.parse(fs.readFileSync(new URL('coverage-families.json', dir)));
+  for (const f of provenance.families)
+    for (const i of f.instances ?? []) assert.ok(families.ranges[i.file], `${i.file} has glyph coverage`);
 });
 test('placeholder screenshots are deterministic PNGs and scaffold with their playbook', t => {
   const a = wireframePNG(THEMES.signal),

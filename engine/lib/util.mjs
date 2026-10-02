@@ -12,12 +12,13 @@ export const require = createRequire(import.meta.url);
 const c = n => s => (process.stdout.isTTY ? `\x1b[${n}m${s}\x1b[0m` : String(s));
 export const color = { dim: c(2), bold: c(1), red: c(31), green: c(32), yellow: c(33), cyan: c(36) };
 
+const progress = message => (process.env.CLEARFRAME_PROGRESS_STDERR === '1' ? console.error : console.log)(message);
 export const log = {
-  step: msg => console.log(`${color.cyan('›')} ${msg}`),
-  ok: msg => console.log(`${color.green('✓')} ${msg}`),
-  warn: msg => console.log(`${color.yellow('!')} ${msg}`),
+  step: msg => progress(`${color.cyan('›')} ${msg}`),
+  ok: msg => progress(`${color.green('✓')} ${msg}`),
+  warn: msg => progress(`${color.yellow('!')} ${msg}`),
   err: msg => console.error(`${color.red('✗')} ${msg}`),
-  dim: msg => console.log(color.dim(msg)),
+  dim: msg => progress(color.dim(msg)),
 };
 
 let ffmpegPath;

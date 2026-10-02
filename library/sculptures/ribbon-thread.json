@@ -1,0 +1,11 @@
+{
+  "title": "A continuous thread",
+  "use": "Podcast titles, connected ideas, recurring processes, flow and continuity.",
+  "description": "A broad paper-metal ribbon follows a three-lobed knot while small markers move along its continuous route.",
+  "theme": "porcelain",
+  "duration": 4,
+  "loop": true,
+  "copy": "Let the whole shape breathe beside a short title; use a close crop to move into an explanation.",
+  "metaphor": "A qualitative continuity device, not a network graph or a measured flow.",
+  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+}

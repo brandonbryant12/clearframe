@@ -147,6 +147,168 @@
           "sha256": "0e441ae9f18ad0c294cc5b6ae3974c2db1614cab220598578b1b58c4cc334485"
         }
       ]
+    },
+    {
+      "family": "Archivo",
+      "license": "OFL-1.1",
+      "repository": "https://github.com/google/fonts",
+      "revision": "0b58fb370093f9a9f4ff785d94405710b79de67c",
+      "source": [
+        {
+          "file": "Archivo[wdth,wght].ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/archivo/Archivo%5Bwdth,wght%5D.ttf",
+          "sha256": "0e094a7d3c7c4c25cf1310c4b30014f1dae9332220b1c2c88f4fa996f0b05053"
+        }
+      ],
+      "files": [
+        {
+          "file": "OFL-Archivo.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/archivo/OFL.txt",
+          "sha256": "108b4e57c9c796d3d38d0428ca7ee39de47ad93187302718d9b2d8864b9b716b"
+        }
+      ],
+      "instances": [
+        {
+          "file": "ArchivoExpanded-ExtraBold.ttf",
+          "source": "Archivo[wdth,wght].ttf",
+          "axes": {
+            "wght": 800,
+            "wdth": 125
+          },
+          "weight": 800,
+          "italic": false,
+          "tool": "FontTools 4.66.1 varLib.instancer",
+          "sha256": "6fb0fc66499459babd14863cd2ab0ebb25a2abf927df1d2e4ba0b51507aa1458"
+        }
+      ]
+    },
+    {
+      "family": "Playfair Display",
+      "license": "OFL-1.1",
+      "repository": "https://github.com/google/fonts",
+      "revision": "0b58fb370093f9a9f4ff785d94405710b79de67c",
+      "source": [
+        {
+          "file": "PlayfairDisplay[wght].ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/playfairdisplay/PlayfairDisplay%5Bwght%5D.ttf",
+          "sha256": "c40f2293766a503bc70cce9e512ef844a4ccb7cbcde792fe2ea31d191917d8d6"
+        },
+        {
+          "file": "PlayfairDisplay-Italic[wght].ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/playfairdisplay/PlayfairDisplay-Italic%5Bwght%5D.ttf",
+          "sha256": "a5e26dc5e2e77fb2803a0bf02fd4f81ee136ec8dea863ccdb0c59a263b21378b"
+        }
+      ],
+      "files": [
+        {
+          "file": "OFL-PlayfairDisplay.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/playfairdisplay/OFL.txt",
+          "sha256": "566be814f8e96e93dfa16101331557eb6b5467e9e03f627c0910fe93ca12300e"
+        }
+      ],
+      "instances": [
+        {
+          "file": "PlayfairDisplay-Bold.ttf",
+          "source": "PlayfairDisplay[wght].ttf",
+          "axes": {
+            "wght": 700
+          },
+          "weight": 700,
+          "italic": false,
+          "baked": "lnum",
+          "tool": "FontTools 4.66.1 varLib.instancer",
+          "sha256": "c1e29313815ef233cff63dc7ae12d5ca2ee7b1e9f8a6e342ebc5bc38b194e966"
+        },
+        {
+          "file": "PlayfairDisplay-BoldItalic.ttf",
+          "source": "PlayfairDisplay-Italic[wght].ttf",
+          "axes": {
+            "wght": 700
+          },
+          "weight": 700,
+          "italic": true,
+          "baked": "lnum",
+          "tool": "FontTools 4.66.1 varLib.instancer",
+          "sha256": "3da065481a4c12fb810116d06d695a8e0a5d8f29dd30fc8f8230148e58145e80"
+        }
+      ]
+    },
+    {
+      "family": "Space Grotesk",
+      "license": "OFL-1.1",
+      "repository": "https://github.com/google/fonts",
+      "revision": "0b58fb370093f9a9f4ff785d94405710b79de67c",
+      "source": [
+        {
+          "file": "SpaceGrotesk[wght].ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/spacegrotesk/SpaceGrotesk%5Bwght%5D.ttf",
+          "sha256": "acad6de1fc93436f5c0f1f4137751ef04f1aea3063e7036535970ffcfbd79f72"
+        }
+      ],
+      "files": [
+        {
+          "file": "OFL-SpaceGrotesk.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/spacegrotesk/OFL.txt",
+          "sha256": "564ce565c371c5e5bbf286006565a7c9aa55a9f56e7ca58d56e05d649dd61a72"
+        }
+      ],
+      "instances": [
+        {
+          "file": "SpaceGrotesk-Bold.ttf",
+          "source": "SpaceGrotesk[wght].ttf",
+          "axes": {
+            "wght": 700
+          },
+          "weight": 700,
+          "italic": false,
+          "tool": "FontTools 4.66.1 varLib.instancer",
+          "sha256": "c2b0aab909db53ed247c1de6aae3877a557e33733e3f2b5c7215e0b740104170"
+        },
+        {
+          "file": "SpaceGrotesk-Light.ttf",
+          "source": "SpaceGrotesk[wght].ttf",
+          "axes": {
+            "wght": 300
+          },
+          "weight": 300,
+          "italic": false,
+          "tool": "FontTools 4.66.1 varLib.instancer",
+          "sha256": "ddd8f8f56673e24e82ca7de97353f3c0cf49c611ab8186f555dd47b671d2e8a9"
+        }
+      ]
+    },
+    {
+      "family": "Big Shoulders Display",
+      "license": "OFL-1.1",
+      "repository": "https://github.com/google/fonts",
+      "revision": "0b58fb370093f9a9f4ff785d94405710b79de67c",
+      "source": [
+        {
+          "file": "BigShouldersDisplay[wght].ttf",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/bigshouldersdisplay/BigShouldersDisplay%5Bwght%5D.ttf",
+          "sha256": "60e208dc276a1c35fc5b62e94f9fb959c40c11783a9eb7548175c14b1fbeb720"
+        }
+      ],
+      "files": [
+        {
+          "file": "OFL-BigShouldersDisplay.txt",
+          "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/bigshouldersdisplay/OFL.txt",
+          "sha256": "338f9c050f19daeda1d597243faf79f3a3d437c338af58cb7047617d0ce08771"
+        }
+      ],
+      "instances": [
+        {
+          "file": "BigShouldersDisplay-ExtraBold.ttf",
+          "source": "BigShouldersDisplay[wght].ttf",
+          "axes": {
+            "wght": 800
+          },
+          "weight": 800,
+          "italic": false,
+          "tool": "FontTools 4.66.1 varLib.instancer",
+          "sha256": "c41835ddbd7ae0fb8f42a0c2be7a02ec276a04dc40fefc2e8b0d65e4b470349b"
+        }
+      ]
     }
   ]
 }

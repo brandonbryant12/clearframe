@@ -1,0 +1,8 @@
+{
+  "order": 30,
+  "notes": "Warm translucent paper, oxblood ink and smoked indigo. Editorial apertures, layered objects and restrained architectural light.",
+  "colors": {
+    "bg": "#f3eee4", "surface": "#dfd4c2", "ink": "#292328", "muted": "#665b60",
+    "accent": "#8e343d", "accent2": "#545a83", "positive": "#376850", "negative": "#a13934"
+  }
+}

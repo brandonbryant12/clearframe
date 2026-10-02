@@ -1,0 +1,36 @@
+{
+  "name": "Foldwork — fictional studio",
+  "theme": {
+    "base": "paper",
+    "bg": "#f5efe5",
+    "surface": "#e8ddcc",
+    "ink": "#23363a",
+    "muted": "#576c6c",
+    "accent": "#2a635e",
+    "accent2": "#a44a38",
+    "positive": "#386d45",
+    "negative": "#a64237"
+  },
+  "type": "bookish",
+  "voiceStyle": "Warm, clear and unhurried. One thought at a time.",
+  "rules": [
+    "Preserve the supplied logo and its proportions.",
+    "Use original paper-workshop scenes, with generous space.",
+    "Use only approved copy; no invented figures, testimonials or performance claims.",
+    "The cream/teal/terracotta colours have distinct roles, not interchangeable decoration."
+  ],
+  "assets": [
+    {
+      "id": "logo",
+      "kind": "image",
+      "file": "logo.svg",
+      "role": "unaltered fictional studio identity"
+    },
+    {
+      "id": "whiteboard",
+      "kind": "image",
+      "file": "whiteboard.png",
+      "role": "supplied synthetic planning board"
+    }
+  ]
+}

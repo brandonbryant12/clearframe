@@ -1,0 +1,14 @@
+{
+  "order": 29,
+  "notes": "A fashion feature: porcelain paper, near-black ink, an oxblood rose and a slate teal. Craft, interiors, food and culture told like a magazine.",
+  "colors": {
+    "bg": "#f6f1ea",
+    "surface": "#ebe3d8",
+    "ink": "#1a1816",
+    "muted": "#6b625a",
+    "accent": "#8c2f39",
+    "accent2": "#4d6a6d",
+    "positive": "#3f6b4f",
+    "negative": "#8c2f39"
+  }
+}

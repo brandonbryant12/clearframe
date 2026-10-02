@@ -1,0 +1,28 @@
+{
+  "id": "strata-landform",
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "frames": 144,
+  "seed": 17,
+  "theme": "clay",
+  "colors": {
+    "base": "clay",
+    "bg": "#efe3d6",
+    "surface": "#e2d2c1",
+    "ink": "#2b1d17",
+    "muted": "#6b5446",
+    "accent": "#a8431f",
+    "accent2": "#2e5f6e",
+    "positive": "#3f6b43",
+    "negative": "#a8431f"
+  },
+  "samples": 48,
+  "pos": 0.5,
+  "still": false,
+  "draft": false,
+  "loop": true,
+  "out": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/strata-landform",
+  "sourceRoot": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/strata-landform/source",
+  "sceneFile": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/strata-landform/source/strata-landform.py"
+}

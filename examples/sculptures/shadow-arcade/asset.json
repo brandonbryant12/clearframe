@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "id": "shadow-arcade",
+  "title": "The shape of light",
+  "description": "A perspective walk past five mineral-plaster vaults. One raking light moves long shadows over a rectangular promenade while the camera trucks gently across the opening.",
+  "use": "Architecture, access, time passing, looking through a sequence, and quiet editorial transitions.",
+  "copy": "Use the corridor as a full-frame insert or inspect the clear ground before placing a native title. Keep type out of the receding vault edges and moving shadows.",
+  "metaphor": "An invented arcade and qualitative light study, not a reconstruction of a real building, a solar simulation, or a measured architectural plan.",
+  "license": "MIT; original procedural artwork",
+  "provenance": "Original ClearFrame recipe; no external models or textures.",
+  "kind": "clip",
+  "file": "clip.mp4",
+  "poster": "poster.png",
+  "editableScene": "scene.blend",
+  "loop": true,
+  "width": 1920,
+  "height": 1080,
+  "duration": 6,
+  "fps": 24,
+  "configuration": {
+    "id": "shadow-arcade",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 144,
+    "seed": 17,
+    "theme": "vellum",
+    "colors": {
+      "base": "vellum",
+      "bg": "#f3eee4",
+      "surface": "#dfd4c2",
+      "ink": "#292328",
+      "muted": "#665b60",
+      "accent": "#8e343d",
+      "accent2": "#545a83",
+      "positive": "#376850",
+      "negative": "#a13934"
+    },
+    "samples": 48,
+    "pos": 0.5,
+    "still": false,
+    "draft": false,
+    "loop": true
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "8177c9380f750d7a3054f69a1215ad4e5dd5d693d6b0ff8bdc10b414fc75e22d",
+    "library/sculptures/shadow-arcade.py": "33868d8790405ff37da032523d89d5f28762338617bbdde0f1e35552f236c2e4",
+    "library/sculptures/shadow-arcade.json": "52bc569c77965d701cdfa24acf4077c8819d8d6d8e55ce4beaf8f10ae1072c8d"
+  },
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "bc14ad5eeb6f5c1e66f708a29ebdf6fc84250422b00ca11c39c8e3e444b06f6a",
+      "bytes": 132158
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "08601cfbb23eb6c9bd1ed461f69c07ddf3b5bbc09b18176892c9152e03e15036",
+      "bytes": 1888700
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "97946ca77ca748c505359a0e8904b43beb486afc8549817e3163e1afe55ea80d",
+      "bytes": 2081816
+    }
+  },
+  "blender": {
+    "version": "5.2.2 LTS",
+    "hash": "d13f752e3b9c",
+    "samples": 48,
+    "engine": "BLENDER_EEVEE",
+    "requiresAutoExec": false
+  },
+  "mechanicalStatus": "ready-for-review",
+  "visualAcceptance": "Review in the context of the destination film."
+}

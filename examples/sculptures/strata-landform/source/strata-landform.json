@@ -1,0 +1,11 @@
+{
+  "title": "An idea in layers",
+  "use": "Hidden structure, accumulated work, a cutaway reveal, conceptual terrain, and tactile editorial transitions.",
+  "description": "A warm, matte stack of irregular contour sheets forms a saddle-backed ridge. The upper sheets lift together to reveal a blue-green layer through a broad cut, then settle exactly into place.",
+  "theme": "clay",
+  "duration": 6,
+  "loop": true,
+  "copy": "Use as a qualitative full-frame cutaway. Add native labels only for an approved story; do not attach map labels, geological dates or measured elevations to this invented geometry.",
+  "metaphor": "An invented paper landform. The contours, colours, layer count and heights are qualitative artwork, not geology, geography, probability or a measured dataset.",
+  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+}

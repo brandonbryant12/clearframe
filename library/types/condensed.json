@@ -1,0 +1,10 @@
+{
+  "order": 5,
+  "title": "Condensed poster",
+  "when": "Trailers, manifestos, pulp and campaigns: Big Shoulders Display ExtraBold capitals stacked tight, the key words underlined in the accent.",
+  "display": "big-shoulders",
+  "emphasis": "underline",
+  "case": "upper",
+  "tracking": 0.0,
+  "leading": 0.9
+}

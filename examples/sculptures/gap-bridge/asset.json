@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "id": "gap-bridge",
+  "title": "The missing connection",
+  "description": "Two ceramic beam ends leave a real center gap. A contrasting insert aligns with two guide rails, descends into the space, and remains seated.",
+  "use": "A fill-in-the-blank answer, a missing step, a completed argument or a repaired connection.",
+  "copy": "Use --pos 0 for the question poster with its visible gap. Hold the native sentence with a blank, then start the non-looping insertion clip on the answer beat and reveal the exact missing text. The physical piece carries no lettering.",
+  "metaphor": "A visual completion metaphor, not an interactive input field, factual mechanical assembly, or proof that a learner supplied the correct answer.",
+  "license": "MIT; original procedural artwork",
+  "provenance": "Original ClearFrame recipe; no external models or textures.",
+  "kind": "clip",
+  "file": "clip.mp4",
+  "poster": "poster.png",
+  "editableScene": "scene.blend",
+  "loop": false,
+  "width": 1920,
+  "height": 1080,
+  "duration": 4,
+  "fps": 24,
+  "configuration": {
+    "id": "gap-bridge",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "seed": 17,
+    "theme": "vellum",
+    "colors": {
+      "base": "vellum",
+      "bg": "#f3eee4",
+      "surface": "#dfd4c2",
+      "ink": "#292328",
+      "muted": "#665b60",
+      "accent": "#8e343d",
+      "accent2": "#545a83",
+      "positive": "#376850",
+      "negative": "#a13934"
+    },
+    "samples": 48,
+    "pos": 0,
+    "still": false,
+    "draft": false,
+    "loop": false
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347",
+    "library/sculptures/gap-bridge.py": "de7455aabd7c8784b0330042e9f828cbf1b9efa426a8759798f251b7ec467f26",
+    "library/sculptures/gap-bridge.json": "31d97881c5525af13046549132e8eee4b1eda702445345f3f16dec0448056b0b"
+  },
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "5106801353ee521f0f2b4d67d312ba021ddbc7cc2c096187cab374c35453fc50",
+      "bytes": 112113
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "56939efa178e926e7b0336d8bddb6094d7335675c178f397d6bfcdb256cb2f81",
+      "bytes": 1727268
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "0dcb74d84b4de37f77b7c005c9ae12c6526ee8d667d570e2943365c447a58dfc",
+      "bytes": 621281
+    }
+  },
+  "blender": {
+    "version": "5.2.2 LTS",
+    "hash": "d13f752e3b9c",
+    "samples": 48,
+    "engine": "BLENDER_EEVEE",
+    "requiresAutoExec": false
+  },
+  "mechanicalStatus": "ready-for-review",
+  "visualAcceptance": "Review in the context of the destination film."
+}

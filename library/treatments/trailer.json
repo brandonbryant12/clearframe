@@ -5,6 +5,7 @@
   "playbook": "trailer",
   "film": {
     "theme": "noir",
+    "type": "condensed",
     "backdrop": "none",
     "texture": {
       "grain": 0.4,
@@ -31,7 +32,6 @@
     }
   },
   "beats": {
-    "emphasisStyle": "serif",
     "graphic": "whip",
     "rough": false
   },
