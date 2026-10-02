@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "id": "ribbon-thread",
+  "title": "A continuous thread",
+  "description": "A broad paper-metal ribbon follows a three-lobed knot while small markers move along its continuous route.",
+  "use": "Podcast titles, connected ideas, recurring processes, flow and continuity.",
+  "copy": "Let the whole shape breathe beside a short title; use a close crop to move into an explanation.",
+  "metaphor": "A qualitative continuity device, not a network graph or a measured flow.",
+  "license": "MIT; original procedural artwork",
+  "provenance": "Original ClearFrame recipe; no external models or textures.",
+  "kind": "clip",
+  "file": "clip.mp4",
+  "poster": "poster.png",
+  "editableScene": "scene.blend",
+  "loop": true,
+  "width": 1920,
+  "height": 1080,
+  "duration": 4,
+  "fps": 24,
+  "configuration": {
+    "id": "ribbon-thread",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "seed": 17,
+    "theme": "porcelain",
+    "colors": {
+      "base": "porcelain",
+      "bg": "#f6f1ea",
+      "surface": "#ebe3d8",
+      "ink": "#1a1816",
+      "muted": "#6b625a",
+      "accent": "#8c2f39",
+      "accent2": "#4d6a6d",
+      "positive": "#3f6b4f",
+      "negative": "#8c2f39"
+    },
+    "samples": 48,
+    "pos": 0.5,
+    "still": false,
+    "draft": false,
+    "loop": true
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347",
+    "library/sculptures/ribbon-thread.py": "771c23a42414c02a6227138adccc39f328df24b1c93fdcf55c008824ef17c46b",
+    "library/sculptures/ribbon-thread.json": "a4a4c78ecc7b81246cea1b3a9a539af756138d973287721194f23ac2b4149337"
+  },
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "7200f93458d584194ad8569f01135fcf46c3797db6c6182af51da8157b76c9da",
+      "bytes": 158965
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "293c1cec7b7b7183e081e2ba0022f6dd9cdd292ac82f3c88a0837ea867054034",
+      "bytes": 1864448
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "869fca5922889b7787c29f30d2970d81d080b94489b8a1b97cc3eb79534a171f",
+      "bytes": 1330234
+    }
+  },
+  "blender": {
+    "version": "5.2.2 LTS",
+    "hash": "d13f752e3b9c",
+    "samples": 48,
+    "engine": "BLENDER_EEVEE",
+    "requiresAutoExec": false
+  },
+  "mechanicalStatus": "ready-for-review",
+  "visualAcceptance": "Review in the context of the destination film."
+}

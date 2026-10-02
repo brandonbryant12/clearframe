@@ -1,0 +1,28 @@
+{
+  "id": "counterweight-mobile",
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "frames": 144,
+  "seed": 17,
+  "theme": "forest",
+  "colors": {
+    "base": "forest",
+    "bg": "#0f1d17",
+    "surface": "#1c3128",
+    "ink": "#eef5ee",
+    "muted": "#a6bcae",
+    "accent": "#a3dc7f",
+    "accent2": "#f2c35b",
+    "positive": "#a3dc7f",
+    "negative": "#f39b84"
+  },
+  "samples": 48,
+  "pos": 0.5,
+  "still": false,
+  "draft": false,
+  "loop": true,
+  "out": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/counterweight-mobile",
+  "sourceRoot": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/counterweight-mobile/source",
+  "sceneFile": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/counterweight-mobile/source/counterweight-mobile.py"
+}

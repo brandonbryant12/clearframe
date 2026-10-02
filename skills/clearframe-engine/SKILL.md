@@ -36,7 +36,7 @@ node engine/cli.mjs beatmap film       # tempo, measured drop, cuts against the 
 
 For a full 1080p final, give the calling shell/harness at least **300,000 ms (five minutes)** for rendering and audio finishing; longer films may need more. This is an external harness allowance, not a CLI flag or a render duration cap. With a session-based executor, yield and resume the same running process instead of restarting it at 120 seconds. Keep progress updates under a minute apart.
 
-The CLI itself automatically gates only compilation. On this 8 GB Mac, run full renders and full test suites through `/Users/brandon/.local/bin/codex-heavy -- <command>` as well; when wrapping a render, pass `env CLEARFRAME_HEAVY_HELD=1` after `--` to avoid a nested build lock. Keep at least 20 GiB free for expensive work.
+Compilation, retained pipelines and optional sculpture asset passes automatically enter or inherit the heavy gate. On this 8 GB Mac, run full renders and full test suites through `/Users/brandon/.local/bin/codex-heavy -- <command>` as well; when wrapping a render, pass `env CLEARFRAME_HEAVY_HELD=1` after `--` to avoid a nested build lock. Keep at least 20 GiB free for expensive work.
 
 Compilation uses one Cargo job and names the lock holder while waiting. Small checks can run directly. No browser or npm runtime dependencies are required.
 
@@ -47,3 +47,9 @@ Outputs: `build/native/job.json`, prepared media/manifest, `build/timing.json`, 
 Custom visuals belong in the native catalog and Rust renderer; update validation, tests and examples together. There is no legacy JavaScript scene fallback. See the FFFrames skill for extending rendering. Native diagnostics cannot replace visual, source and listening review.
 
 Creative starting points: `directions [research|podcast] [--json]`; `new/start/ingest --direction ID`. Explicit playbook/treatment/theme overrides win. Shared custom profiles and their references travel with the project. Audio import styles pictures while preserving recorded source/timing.
+
+Optional 3D assets: read `docs/sculptures.md`, inspect `sculptures`, then use `sculpture ID --draft --still --out NEW-DIR` before a draft motion pass or master. This is a separate Blender asset pass; normal FFFrames rendering remains native. Keep factual text editable, retain exact source/scene receipts, and reuse the approved clip for copy revisions. Review motion, contact and portrait framing before inclusion.
+
+Native dimensional metrics use `canvas.props.kpi` (`pedestal`, `comparison`, `rail`, `seesaw`, `stack`), expanded by `fframes/kpis.mjs` into existing native primitives. Values, source, shared scale and bounded `none|reveal|stagger|emphasis` motion remain authored data. Headline values may be signed; other forms require nonnegative values. Rails and stacks require a positive total; seesaws require two comparable values and express qualitative balance. Changing figures never invokes Blender. See `docs/kpi-direction.md` and `examples/dimensional-kpis/`.
+
+For educational video, `canvas.props.teaching` separates question and answer phases with native type and an explanation. Use `choice` or `gap`, readable holds and the source contract in `docs/teaching-sequences.md`. Optional quiz/gap sculptures are one-way clips: retain an unrevealed question poster, align the selected tile with the correct answer, then play the answer reveal once. Review an encoded question frame to ensure it does not leak the answer.

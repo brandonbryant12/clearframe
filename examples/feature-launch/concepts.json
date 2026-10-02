@@ -1,0 +1,27 @@
+[
+  {
+    "id": "give-ideas-depth",
+    "selected": true,
+    "promise": "Add dimensional imagery while retaining editable native storytelling.",
+    "structure": "Material reveal → mechanism → actual commands → retained artifacts → native text change → payoff.",
+    "image": "Light petal, dark assembly and continuous ribbon; native command, file and edit diagrams connect the objects to actual behavior.",
+    "rhythm": "Two four-second visual hooks, two five-second explanation beats, a seven-second before/after, a five-second closing hold.",
+    "reason": "Shows both the new visual range and the practical editability claim."
+  },
+  {
+    "id": "one-asset-three-jobs",
+    "selected": false,
+    "promise": "One retained 3D asset can support a reveal, an explanation and a chapter transition.",
+    "structure": "Repeat the same sculpture in three purpose-built compositions, then reveal its single source.",
+    "image": "A close material study, a labelled exploded view and a cropped wipe share one object.",
+    "rhythm": "A precise triptych with matched cuts and one long final comparison."
+  },
+  {
+    "id": "from-command-to-picture",
+    "selected": false,
+    "promise": "Make the local asset workflow understandable and reproducible.",
+    "structure": "Begin on a real command, follow scene and render outputs, then build a finished film around them.",
+    "image": "An editorial workbench with actual retained commands, scene metadata and a single hero object.",
+    "rhythm": "Patient procedural sequence, accelerating only when the completed image appears."
+  }
+]

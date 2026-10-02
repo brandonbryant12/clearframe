@@ -1,0 +1,11 @@
+{
+  "title": "The shape of light",
+  "use": "Architecture, access, time passing, looking through a sequence, and quiet editorial transitions.",
+  "description": "A perspective walk past five mineral-plaster vaults. One raking light moves long shadows over a rectangular promenade while the camera trucks gently across the opening.",
+  "theme": "vellum",
+  "duration": 6,
+  "loop": true,
+  "copy": "Use the corridor as a full-frame insert or inspect the clear ground before placing a native title. Keep type out of the receding vault edges and moving shadows.",
+  "metaphor": "An invented arcade and qualitative light study, not a reconstruction of a real building, a solar simulation, or a measured architectural plan.",
+  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+}

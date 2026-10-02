@@ -1,0 +1,8 @@
+{
+  "order": 31,
+  "notes": "Deep green instrument housing, phosphor mint and warm amber. Coarse optical fields, engineered objects and spare signal-led films.",
+  "colors": {
+    "bg": "#101e1d", "surface": "#203a35", "ink": "#edf4dc", "muted": "#9cbcaf",
+    "accent": "#b8e779", "accent2": "#e3b67a", "positive": "#9ad8aa", "negative": "#efaaa0"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "id": "strata-landform",
+  "title": "An idea in layers",
+  "description": "A warm, matte stack of irregular contour sheets forms a saddle-backed ridge. The upper sheets lift together to reveal a blue-green layer through a broad cut, then settle exactly into place.",
+  "use": "Hidden structure, accumulated work, a cutaway reveal, conceptual terrain, and tactile editorial transitions.",
+  "copy": "Use as a qualitative full-frame cutaway. Add native labels only for an approved story; do not attach map labels, geological dates or measured elevations to this invented geometry.",
+  "metaphor": "An invented paper landform. The contours, colours, layer count and heights are qualitative artwork, not geology, geography, probability or a measured dataset.",
+  "license": "MIT; original procedural artwork",
+  "provenance": "Original ClearFrame recipe; no external models or textures.",
+  "kind": "clip",
+  "file": "clip.mp4",
+  "poster": "poster.png",
+  "editableScene": "scene.blend",
+  "loop": true,
+  "width": 1920,
+  "height": 1080,
+  "duration": 6,
+  "fps": 24,
+  "configuration": {
+    "id": "strata-landform",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 144,
+    "seed": 17,
+    "theme": "clay",
+    "colors": {
+      "base": "clay",
+      "bg": "#efe3d6",
+      "surface": "#e2d2c1",
+      "ink": "#2b1d17",
+      "muted": "#6b5446",
+      "accent": "#a8431f",
+      "accent2": "#2e5f6e",
+      "positive": "#3f6b43",
+      "negative": "#a8431f"
+    },
+    "samples": 48,
+    "pos": 0.5,
+    "still": false,
+    "draft": false,
+    "loop": true
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "8177c9380f750d7a3054f69a1215ad4e5dd5d693d6b0ff8bdc10b414fc75e22d",
+    "library/sculptures/strata-landform.py": "43555fde92de74ba271a7d3c787b652550d2f3ef304b04881bb3c7d0fe09275f",
+    "library/sculptures/strata-landform.json": "69b3d73af58f521a905080024ee49deed1d44630fddcc516cce99fa6a07eabcb"
+  },
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "763f3e11c41da5749e9fc073a0f5fbbe244b6e66ab6548246a570c0f4433101b",
+      "bytes": 154668
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "39e1b35b76715285b3484e2072d90920d09c6a1c53df159d41d1176627c8cbbb",
+      "bytes": 1844887
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "d12e0828c81440d6e77493eb91afc83cdcffea726b2b066d7f081e9ac22f95bd",
+      "bytes": 2115673
+    }
+  },
+  "blender": {
+    "version": "5.2.2 LTS",
+    "hash": "d13f752e3b9c",
+    "samples": 48,
+    "engine": "BLENDER_EEVEE",
+    "requiresAutoExec": false
+  },
+  "mechanicalStatus": "ready-for-review",
+  "visualAcceptance": "Review in the context of the destination film."
+}

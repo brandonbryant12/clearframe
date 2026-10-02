@@ -33,6 +33,10 @@ Use `clearframe directions research` or `directions podcast` to compare starting
 
 Before authoring, propose three materially different approaches from the actual source in `DIRECTION.md`: change the narrative entry, visual metaphor, camera/edit grammar and rhythm. At least one should depart from the nearest preset. Choose one for the audience and evidence; do not rotate palettes and call that variation. Invent native canvas scenes and combine arcs when the story needs them. Reuse reliable rendering primitives without repeating the same film. If the user requested a one-shot film, decide and record these choices without a new approval stop.
 
+For product or feature launches, connect the audience's problem to a specific behavior, a visible before/after proof and a payoff. Keep literal interface evidence distinct from conceptual imagery. Use approved product captures and brand assets; a drawn workflow panel is not a screen recording. Optional original Blender sculptures (`sculptures`, `docs/sculptures.md`) can earn a shot through contact, viewpoint or light. Test a still and a draft motion pass first, then reuse the approved clip for native copy revisions. New native scenes and trusted source recipes remain open-ended; neither the playbook nor the asset catalog limits the concept.
+
+Choose flat graphics for precise or dense comparisons. Native `props.kpi` depth can emphasize a headline, two to four nonnegative values, or progress without a Blender pass. Keep the domain fixed, the source visible and final labels aligned with settled values. Prefer a short reveal or outline emphasis over perspective, bounce or repeated looping of data. Use `motion:"none"` when immediate comparison or reduced motion matters. See `docs/kpi-direction.md`; its decorative guidance belongs in the direction brief, not boilerplate inside every film.
+
 Recording imports apply a treatment only to visual settings. The profile's playbook is a reference, never a replacement for recorded words, source slices, speakers or measured timing. Keep those when replacing kinetic captions with source-specific drawings. See `docs/source-playbooks.md`.
 
 ## 4. Plan pictures

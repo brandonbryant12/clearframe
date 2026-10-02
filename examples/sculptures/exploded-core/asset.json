@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "id": "exploded-core",
+  "title": "Inside the assembly",
+  "description": "Six precision panels separate in an axial sequence, exposing a finned cartridge and keyed connectors before reconnecting.",
+  "use": "Architecture, systems, product internals, consolidation and what sits behind a result.",
+  "copy": "Use the wide separation as an evidence insert; overlay native labels outside the object when adapting it to an actual system.",
+  "metaphor": "Conceptual assembly only; panel count, motion and materials are not factual measurements.",
+  "license": "MIT; original procedural artwork",
+  "provenance": "Original ClearFrame recipe; no external models or textures.",
+  "kind": "clip",
+  "file": "clip.mp4",
+  "poster": "poster.png",
+  "editableScene": "scene.blend",
+  "loop": true,
+  "width": 1920,
+  "height": 1080,
+  "duration": 4,
+  "fps": 24,
+  "configuration": {
+    "id": "exploded-core",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "seed": 17,
+    "theme": "stage",
+    "colors": {
+      "base": "stage",
+      "bg": "#050507",
+      "surface": "#15151b",
+      "ink": "#f5f5f7",
+      "muted": "#8e8e98",
+      "accent": "#3b9eff",
+      "accent2": "#c77dff",
+      "positive": "#30d158",
+      "negative": "#ff5c52"
+    },
+    "samples": 48,
+    "pos": 0.5,
+    "still": false,
+    "draft": false,
+    "loop": true
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "8177c9380f750d7a3054f69a1215ad4e5dd5d693d6b0ff8bdc10b414fc75e22d",
+    "library/sculptures/exploded-core.py": "0d46a603abd2be389c23c9038e27de875261b2a927e589475760141a1d871dc1",
+    "library/sculptures/exploded-core.json": "56d9ae7a45bc7336e6611ac6b130e85b8d0381195347a6afd4bed103a1c85317"
+  },
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "7b83e06a084ff5b881bbff4725fe9f72a20f7190d725f2c2503caf7d474ae2a1",
+      "bytes": 173320
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "d4cc2fe973a61835a73743d9e248f0a1fd88a235e1b172884e1badb76f5aef42",
+      "bytes": 1555558
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "095171338f4070b1e777386c4488801344be2cb303c9f55c0601ddd3e57d26af",
+      "bytes": 990756
+    }
+  },
+  "blender": {
+    "version": "5.2.2 LTS",
+    "hash": "d13f752e3b9c",
+    "samples": 48,
+    "engine": "BLENDER_EEVEE",
+    "requiresAutoExec": false
+  },
+  "mechanicalStatus": "ready-for-review",
+  "visualAcceptance": "Review in the context of the destination film."
+}

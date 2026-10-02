@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "title": "ClearFrame — Give ideas depth — before text proof",
+  "logline": "Dimensional assets, retained scenes, editable native stories.",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "porcelain",
+  "type": "geometric",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.45
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0
+  },
+  "pacing": {
+    "lead": 0,
+    "tail": 0,
+    "minBeat": 0,
+    "outro": 0
+  },
+  "continuity": {
+    "maxGeneratedShare": 1,
+    "treatment": "Original local Blender studies under native type; source artifacts retained.",
+    "camera": "Use the baked 3D camera unchanged; locked native workflow diagrams.",
+    "motion": "Material operation first, then artifact flow and an explicit native text change."
+  },
+  "sources": [
+    {
+      "claim": "The CLI lists sculpture studies and resolves a local sculpture render configuration.",
+      "source": "../../engine/cli.mjs; ../../engine/lib/sculptures.mjs; source/cli-proof.json"
+    },
+    {
+      "claim": "Each shown asset retains its rendered clip, editable baked scene and provenance receipt.",
+      "source": "../sculptures/{petal-reveal,exploded-core,ribbon-thread}/receipt.json"
+    },
+    {
+      "claim": "The edit demonstration changes a native text element while preserving the same image asset bytes.",
+      "source": "storyboard.json — edit beat; source/edit-before.storyboard.json; source/edit-after.storyboard.json"
+    }
+  ],
+  "assets": [
+    {
+      "id": "petal-reveal",
+      "kind": "clip",
+      "file": "../sculptures/petal-reveal/clip.mp4"
+    },
+    {
+      "id": "petal-reveal-poster",
+      "kind": "image",
+      "file": "../sculptures/petal-reveal/poster.png"
+    },
+    {
+      "id": "exploded-core",
+      "kind": "clip",
+      "file": "../sculptures/exploded-core/clip.mp4"
+    },
+    {
+      "id": "exploded-core-poster",
+      "kind": "image",
+      "file": "../sculptures/exploded-core/poster.png"
+    },
+    {
+      "id": "ribbon-thread",
+      "kind": "clip",
+      "file": "../sculptures/ribbon-thread/clip.mp4"
+    },
+    {
+      "id": "ribbon-thread-poster",
+      "kind": "image",
+      "file": "../sculptures/ribbon-thread/poster.png"
+    }
+  ],
+  "beats": [
+    {
+      "id": "edit-before",
+      "block": "canvas",
+      "duration": 3,
+      "camera": "none",
+      "props": {
+        "elements": [
+          {
+            "type": "image",
+            "asset": "ribbon-thread-poster",
+            "x": 576,
+            "y": 135,
+            "w": 768,
+            "h": 432,
+            "fit": "contain",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "Make it visible.",
+            "x": 960,
+            "y": 755,
+            "size": 98,
+            "font": "display",
+            "fill": "ink",
+            "fit": 1580,
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle"
+          }
+        ]
+      }
+    }
+  ]
+}
