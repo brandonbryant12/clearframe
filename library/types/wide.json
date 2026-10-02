@@ -1,0 +1,10 @@
+{
+  "order": 3,
+  "title": "Wide grotesk",
+  "when": "Tech, arenas, sport and sizzle: Archivo Expanded ExtraBold in capitals, the key phrase on an accent marker. Loud at thumbnail size.",
+  "display": "archivo-wide",
+  "emphasis": "marker",
+  "case": "upper",
+  "tracking": 0.01,
+  "leading": 0.96
+}

@@ -27,10 +27,20 @@ pub enum Font {
     /// High-contrast display serif (DM Serif Display): documentary and editorial titles.
     SerifDisplay,
     SerifDisplayItalic,
+    /// Didone editorial (Playfair Display Bold, lining figures) and its italic: the `didone` voice.
+    Didone,
+    DidoneItalic,
+    /// Wide grotesk with real weight (Archivo Expanded ExtraBold): the `wide` voice.
+    Wide,
+    /// Geometric grotesk in two weights (Space Grotesk Bold / Light): the `geometric` voice.
+    Geometric,
+    GeometricLight,
+    /// Condensed poster capitals with lower case (Big Shoulders Display ExtraBold): the `condensed` voice.
+    Condensed,
 }
 
 impl Font {
-    const ALL: [Font; 13] = [
+    const ALL: [Font; 19] = [
         Font::Text,
         Font::TextStrong,
         Font::DisplayLight,
@@ -44,6 +54,12 @@ impl Font {
         Font::Poster,
         Font::SerifDisplay,
         Font::SerifDisplayItalic,
+        Font::Didone,
+        Font::DidoneItalic,
+        Font::Wide,
+        Font::Geometric,
+        Font::GeometricLight,
+        Font::Condensed,
     ];
     pub fn family(self) -> &'static str {
         match self {
@@ -54,6 +70,10 @@ impl Font {
             Font::Hand => "Architects Daughter",
             Font::Poster => "Bebas Neue",
             Font::SerifDisplay | Font::SerifDisplayItalic => "DM Serif Display",
+            Font::Didone | Font::DidoneItalic => "Playfair Display",
+            Font::Wide => "Archivo Expanded",
+            Font::Geometric | Font::GeometricLight => "Space Grotesk",
+            Font::Condensed => "Big Shoulders Display",
             _ => "Inter Display",
         }
     }
@@ -68,12 +88,13 @@ impl Font {
             | Font::SerifDisplayItalic => 400,
             Font::Mono => 500,
             Font::TextStrong | Font::Display => 600,
-            Font::DisplayLight => 300,
-            Font::DisplayBold | Font::Figures => 700,
+            Font::DisplayLight | Font::GeometricLight => 300,
+            Font::DisplayBold | Font::Figures | Font::Didone | Font::DidoneItalic | Font::Geometric => 700,
+            Font::Wide | Font::Condensed => 800,
         }
     }
     pub fn italic(self) -> bool {
-        self == Font::SerifItalic || self == Font::SerifDisplayItalic
+        matches!(self, Font::SerifItalic | Font::SerifDisplayItalic | Font::DidoneItalic)
     }
     fn file(self) -> &'static str {
         match self {
@@ -90,11 +111,146 @@ impl Font {
             Font::Poster => "BebasNeue-Regular.ttf",
             Font::SerifDisplay => "DMSerifDisplay-Regular.ttf",
             Font::SerifDisplayItalic => "DMSerifDisplay-Italic.ttf",
+            Font::Didone => "PlayfairDisplay-Bold.ttf",
+            Font::DidoneItalic => "PlayfairDisplay-BoldItalic.ttf",
+            Font::Wide => "ArchivoExpanded-ExtraBold.ttf",
+            Font::Geometric => "SpaceGrotesk-Bold.ttf",
+            Font::GeometricLight => "SpaceGrotesk-Light.ttf",
+            Font::Condensed => "BigShouldersDisplay-ExtraBold.ttf",
         }
     }
     fn index(self) -> usize {
         Font::ALL.iter().position(|f| *f == self).unwrap()
     }
+}
+
+/// Known display face sets a voice can name (`type.mjs` FACE_SETS), by job id.
+pub const FACE_SETS: [&str; 10] = [
+    "inter",
+    "playfair",
+    "archivo-wide",
+    "space-grotesk",
+    "big-shoulders",
+    "bebas",
+    "dm-serif",
+    "instrument-serif",
+    "plex-mono",
+    "architects",
+];
+pub const EMPHASES: [&str; 6] = ["accent", "serif", "italic", "weight", "marker", "underline"];
+
+/// A film's type voice, resolved by the Node job from `library/types`: the display family
+/// for titles, statements, chapters, endcards and kinetic text, how emphasis phrases are
+/// drawn, and the case, tracking and leading of display type. Body copy, labels, sources,
+/// captions and counters keep Inter regardless.
+#[derive(Clone, Debug, serde::Deserialize, PartialEq)]
+#[serde(default)]
+pub struct Voice {
+    pub id: String,
+    pub display: String,
+    pub emphasis: String,
+    pub upper: bool,
+    /// Letter-spacing of display type, in em.
+    pub tracking: f32,
+    /// Multiplies each block's own line height.
+    pub leading: f32,
+}
+
+impl Default for Voice {
+    fn default() -> Self {
+        Self {
+            id: "inter".into(),
+            display: "inter".into(),
+            emphasis: "accent".into(),
+            upper: false,
+            tracking: -0.015,
+            leading: 1.0,
+        }
+    }
+}
+
+impl Voice {
+    pub fn valid(&self) -> bool {
+        FACE_SETS.contains(&self.display.as_str())
+            && EMPHASES.contains(&self.emphasis.as_str())
+            && self.tracking.is_finite()
+            && (-0.1..=0.3).contains(&self.tracking)
+            && self.leading.is_finite()
+            && (0.8..=1.3).contains(&self.leading)
+    }
+    fn faces(&self) -> (Font, Font, Option<Font>, Option<Font>) {
+        // (bold, regular, light, italic)
+        match self.display.as_str() {
+            "playfair" => (Font::Didone, Font::Didone, None, Some(Font::DidoneItalic)),
+            "archivo-wide" => (Font::Wide, Font::Wide, None, None),
+            "space-grotesk" => (Font::Geometric, Font::Geometric, Some(Font::GeometricLight), None),
+            "big-shoulders" => (Font::Condensed, Font::Condensed, None, None),
+            "bebas" => (Font::Poster, Font::Poster, None, None),
+            "dm-serif" => (Font::SerifDisplay, Font::SerifDisplay, None, Some(Font::SerifDisplayItalic)),
+            "instrument-serif" => (Font::Serif, Font::Serif, None, Some(Font::SerifItalic)),
+            "plex-mono" => (Font::Mono, Font::Mono, None, None),
+            "architects" => (Font::Hand, Font::Hand, None, None),
+            _ => (Font::DisplayBold, Font::Display, Some(Font::DisplayLight), None),
+        }
+    }
+    /// Titles, endcards, chapter numerals and poster words.
+    pub fn bold(&self) -> Font {
+        self.faces().0
+    }
+    /// Statements, chapter titles, highlights and scene headers.
+    pub fn regular(&self) -> Font {
+        self.faces().1
+    }
+    pub fn light(&self) -> Option<Font> {
+        self.faces().2
+    }
+    pub fn italic(&self) -> Option<Font> {
+        self.faces().3
+    }
+    /// How a headline's emphasis phrases are drawn, given the beat's own `emphasisStyle`
+    /// (`serif` and `accent` are explicit author choices; anything else defers to the voice).
+    /// Resolves to a kind the available faces can draw.
+    pub fn emphasis_kind(&self, beat_style: &str) -> EmphasisKind {
+        let kind = match beat_style {
+            "serif" => EmphasisKind::Serif,
+            "accent" => EmphasisKind::Accent,
+            _ => match self.emphasis.as_str() {
+                "serif" => EmphasisKind::Serif,
+                "italic" => EmphasisKind::Italic,
+                "weight" => EmphasisKind::Weight,
+                "marker" => EmphasisKind::Marker,
+                "underline" => EmphasisKind::Underline,
+                _ => EmphasisKind::Accent,
+            },
+        };
+        match kind {
+            EmphasisKind::Italic if self.italic().is_none() => EmphasisKind::Accent,
+            EmphasisKind::Weight if self.light().is_none() => EmphasisKind::Accent,
+            k => k,
+        }
+    }
+    /// Display type in this voice: the block's size and leading, with the voice's tracking,
+    /// case and leading factor applied.
+    pub fn style(&self, font: Font, size: f32, leading: f32, allow_upper: bool) -> Style {
+        Style {
+            font,
+            size,
+            leading: leading * self.leading,
+            tracking: self.tracking,
+            upper: allow_upper && self.upper,
+            balance: true,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum EmphasisKind {
+    Accent,
+    Serif,
+    Italic,
+    Weight,
+    Marker,
+    Underline,
 }
 
 static FONT_DIR: OnceLock<PathBuf> = OnceLock::new();
@@ -481,6 +637,35 @@ mod tests {
         assert_eq!(find_words("scattered", "cat"), None);
         assert_eq!(find_words("A long tail", ""), None);
         assert_eq!(find_words("A long tail", "  "), None);
+    }
+    #[test]
+    fn voices_resolve_faces_and_fall_back_to_what_their_family_can_draw() {
+        let didone = Voice { display: "playfair".into(), emphasis: "italic".into(), ..Default::default() };
+        assert_eq!(didone.emphasis_kind(""), EmphasisKind::Italic);
+        assert_eq!(didone.emphasis_kind("serif"), EmphasisKind::Serif, "the beat's own style wins");
+        assert_eq!(didone.bold(), Font::Didone);
+        let wide = Voice { display: "archivo-wide".into(), emphasis: "italic".into(), ..Default::default() };
+        assert_eq!(wide.emphasis_kind(""), EmphasisKind::Accent, "no italic in the family");
+        let geo = Voice { display: "space-grotesk".into(), emphasis: "weight".into(), ..Default::default() };
+        assert_eq!((geo.light(), geo.bold()), (Some(Font::GeometricLight), Font::Geometric));
+        assert!(Voice::default().valid() && !Voice { display: "comic".into(), ..Default::default() }.valid());
+        let caps = Voice { upper: true, leading: 0.9, tracking: 0.02, ..Default::default() };
+        let style = caps.style(Font::Wide, 100.0, 1.04, true);
+        assert!(style.upper && (style.leading - 0.936).abs() < 1e-4 && style.tracking == 0.02);
+        assert!(!caps.style(Font::Wide, 60.0, 1.06, false).upper, "scene headers keep mixed case");
+    }
+    #[test]
+    fn voice_faces_shape_and_playfair_uses_lining_figures() {
+        for font in [Font::Didone, Font::DidoneItalic, Font::Wide, Font::Geometric, Font::GeometricLight, Font::Condensed] {
+            assert_eq!(covers(font, "Make the next step clear — 4.2% €"), None, "{font:?}");
+            assert!(measure(font, "Clear", 100.0, 0.0) > 0.0);
+        }
+        // Lining figures stand at cap height: a lining "0" is as tall as "O" (old-style is x-height).
+        let face = &faces()[Font::Didone.index()];
+        let height = |c: char| face.glyph_bounding_box(face.glyph_index(c).unwrap()).unwrap().y_max as f32;
+        assert!((height('0') - height('O')).abs() < face.units_per_em() as f32 * 0.03);
+        assert!(measure(Font::Wide, "WIDE", 100.0, 0.0) > measure(Font::DisplayBold, "WIDE", 100.0, 0.0));
+        assert!(measure(Font::Condensed, "WIDE", 100.0, 0.0) < measure(Font::DisplayBold, "WIDE", 100.0, 0.0));
     }
     #[test]
     fn coverage_reports_the_first_missing_glyph() {

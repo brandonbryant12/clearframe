@@ -22,7 +22,8 @@ const common = {
 };
 const emphasis = { emphasis: 'Up to 4 whole-word phrases drawn in the accent color' };
 const emphasisStyle = {
-  emphasisStyle: 'accent (default) or serif: emphasis phrases set in italic serif, the editorial accent',
+  emphasisStyle:
+    'accent or serif (italic Instrument Serif, the editorial accent). Unset, the film type voice decides: accent, italic, weight, marker or underline',
 };
 const align = { align: 'left (default) or center: centre the whole stack' };
 const sampleSource = 'Illustrative sample data · replace before publishing';

@@ -1,0 +1,9 @@
+{
+  "order": 7,
+  "title": "Typewriter",
+  "when": "Engineering, incident reviews, how-it-works and retro tech: IBM Plex Mono for every headline, emphasis underlined.",
+  "display": "plex-mono",
+  "emphasis": "underline",
+  "tracking": -0.03,
+  "leading": 1.02
+}

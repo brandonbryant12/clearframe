@@ -9,7 +9,7 @@ import { playbooks, scaffold, writeGallery } from '../fframes/playbooks.mjs';
 import { ICONS, ICON_SOURCE } from '../fframes/icons.mjs';
 import { sketches, sketch } from '../fframes/sketches.mjs';
 import { treatments } from '../fframes/treatments.mjs';
-import { useProject } from '../fframes/library.mjs';
+import { useProject, types } from '../fframes/library.mjs';
 import * as native from '../fframes/production.mjs';
 
 const HELP = `ClearFrame — FFFrames motion graphics
@@ -18,6 +18,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
   muse [--seed N] [--light] [--json]  a seeded creative brief: twist, motif, camera, cuts, look, set pieces, music
   checkpoints <dir> [--mode guided|one-shot] [--json]   where a human decides (intent, truth, story, words, spend, picture, final) and what is open
   treatments [--json]                 art direction presets: look, motion, voice, sound and rules
+  types [--json]                      type voices: display family and emphasis per treatment (storyboard "type")
   reference <video> [--out dir]       cut rhythm, keyframe sheet, palette and motion of a reference film
   ingest <dir> --markdown report.md [--treatment noir]   evidence brief (figures, sources, tensions, tables) + storyboard + DIRECTION.md
                                       (also .txt, .html, .docx, .rtf; .pdf with pdftotext)
@@ -241,9 +242,21 @@ async function main() {
         : treatments()
             .map(
               t =>
-                `${t.id.padEnd(11)} ${t.title}\n            ${t.when}\n            ${[t.film.theme, t.film.motion?.preset, t.film.transition, t.film.frame && 'frame', t.beats?.rough && 'rough strokes', t.film.sfx && t.film.sfx !== 'off' && `sfx ${t.film.sfx}`].filter(Boolean).join(' · ')}`,
+                `${t.id.padEnd(11)} ${t.title}\n            ${t.when}\n            ${[t.film.theme, `type ${t.film.type ?? 'inter'}`, t.film.motion?.preset, t.film.transition, t.film.frame && 'frame', t.beats?.rough && 'rough strokes', t.film.sfx && t.film.sfx !== 'off' && `sfx ${t.film.sfx}`].filter(Boolean).join(' · ')}`,
             )
             .join('\n') + '\n\nclearframe new DIR --playbook NAME --treatment ID applies one and writes DIRECTION.md.',
+    );
+  if (cmd === 'types')
+    return console.log(
+      o.json
+        ? JSON.stringify(types(), null, 2)
+        : types()
+            .map(
+              t =>
+                `${t.id.padEnd(11)} ${t.title}\n            ${t.when}\n            ${[t.display, `emphasis ${t.emphasis ?? 'accent'}`, t.case === 'upper' && 'capitals'].filter(Boolean).join(' · ')}`,
+            )
+            .join('\n') +
+          '\n\nA treatment sets film.type; a storyboard or one beat can set "type" too. Body copy, labels and counters stay in Inter.',
     );
   if (cmd === 'sketch') {
     if (!positionals[0])

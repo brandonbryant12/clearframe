@@ -34,6 +34,7 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
     ...(book.lens ? { lens: book.lens } : {}),
     ...(book.heading ? { heading: book.heading } : {}),
     ...(book.textMotion ? { textMotion: book.textMotion } : {}),
+    ...(book.type ? { type: book.type } : {}),
     ...(book.sfx ? { sfx: book.sfx } : {}),
     ...(book.frame ? { frame: book.frame } : {}),
     ...(book.speakers ? { speakers: book.speakers } : {}),
@@ -133,6 +134,7 @@ export function scaffold(dir, options = {}) {
   vendor(dir, [
     ['palettes', typeof sb.theme === 'string' ? sb.theme : sb.theme?.base],
     ['treatments', options.treatment],
+    ['types', sb.type],
     ...artSketches(sb),
   ]);
   fs.writeFileSync(
