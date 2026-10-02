@@ -8,11 +8,11 @@ Three materially different concepts are recorded in `concepts.json`: a material 
 
 The included `storyboard.json` links to the ready clips and posters in the sibling `examples/sculptures/` gallery. Its portable CLI evidence marks the substituted output-directory placeholder. For a fresh run with original receipts and separate review outputs, use the script below.
 
-From the repository root, point to three completed sculpture directories named `petal-reveal`, `exploded-core` and `ribbon-thread`:
+From the repository root, use the included master set. Follow [native setup](../../fframes/SETUP.md); no Blender installation is required for this replay. The reference storyboard uses sibling assets and is not directly renderable: the script below copies them into a self-contained project.
 
 ```sh
-node scripts/trajectories/feature-launch.mjs --asset-root /path/to/sculptures --out /tmp/clearframe-launch-draft --render
-node scripts/trajectories/feature-launch.mjs --asset-root /path/to/1080p-masters --out /tmp/clearframe-launch-final --render --final
+node scripts/trajectories/feature-launch.mjs --asset-root examples/sculptures --out /tmp/clearframe-launch-draft --render
+node scripts/trajectories/feature-launch.mjs --asset-root examples/sculptures --out /tmp/clearframe-launch-final --render --final
 ```
 
 Omit `--render` to prepare source and assets only. Preparation refuses an existing output directory. A prepared project can be rendered again with `--out /tmp/clearframe-launch-draft --render-only`; each native pipeline run retains its own snapshot. `--final` requires 1920×1080 assets with non-draft receipts and omits the native pipeline's draft/scale flags. The shared heavy-process gate serializes expensive work.

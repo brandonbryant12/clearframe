@@ -52,6 +52,8 @@ Agent-directed motion graphics rendered natively with **FFFrames**. A film is on
 
 Requires Node 20.10+, Rust 1.88+, FFmpeg/ffprobe and native codecs. Follow [native setup](fframes/SETUP.md) before the first build. There are no npm runtime dependencies and no browser.
 
+Blender is an **optional separate installation** for preparing new 3D sculpture assets. The bundled clips, native KPI forms and teaching templates work without it. See [dimensional art setup](fframes/SETUP.md#optional-dimensional-art-setup) for executable checks, `BLENDER_BIN`, resource limits and replay commands using the included assets. No pip packages, addons or new npm dependencies are required.
+
 ```sh
 node engine/cli.mjs doctor
 node engine/cli.mjs new my-film --playbook data-story --treatment editorial
@@ -108,14 +110,14 @@ Cue anything to speech: `land`, `growSay`, `drawSay` and per-item `say` take an 
 ## Development
 
 ```sh
-npm test                                                              # Node contract tests (fast; no lock)
+/Users/brandon/.local/bin/codex-heavy -- npm test                     # full suite on this shared 8 GB Mac
 node engine/cli.mjs build                                            # native renderer (warm cache)
 node engine/cli.mjs gallery build/gallery-paper --theme paper
 node engine/cli.mjs gallery build/gallery-ink --vertical --theme ink
 /Users/brandon/.local/bin/codex-heavy -- node scripts/verify-native.mjs build/native-verification-new
 ```
 
-`engine/` owns orchestration, timing, generation and audio. `fframes/catalog.mjs` owns block metadata, `validators.mjs` prop validation, `registry.mjs` per-block runtime rules, `constants.json` shared timing, `playbooks.mjs`/`treatments.mjs`/`sketches.mjs` starting points, `job.mjs` storyboard → job, `prepare.mjs`/`render.mjs` media and outputs (re-exported by `production.mjs`). The Rust renderer in `fframes/native/src/` is split into `text` (shaping and fitting), `design` (palettes, tones, backdrops, texture), `motion` (curves, exits), `constants` (shared timing), `scenes` (layout grid and helpers), `story`, `speech`, `compositor` (camera, plates, transitions), `canvas` (author-drawn elements), `charts`, `diagrams` and `media`. `npm run catalog:sync` regenerates the schema, block reference and recipes. Native compilation and the production pipeline take the machine-wide `codex-heavy` lock (one Cargo job); warm builds need 10 GiB free, cold builds 25 GiB, and `doctor` warns below 20 GiB.
+`engine/` owns orchestration, timing, generation and audio. `fframes/catalog.mjs` owns block metadata, `validators.mjs` prop validation, `registry.mjs` per-block runtime rules, `constants.json` shared timing, `playbooks.mjs`/`treatments.mjs`/`sketches.mjs` starting points, `job.mjs` storyboard → job, `prepare.mjs`/`render.mjs` media and outputs (re-exported by `production.mjs`). The Rust renderer in `fframes/native/src/` is split into `text` (shaping and fitting), `design` (palettes, tones, backdrops, texture), `motion` (curves, exits), `constants` (shared timing), `scenes` (layout grid and helpers), `story`, `speech`, `compositor` (camera, plates, transitions), `canvas` (author-drawn elements), `charts`, `diagrams` and `media`. `npm run catalog:sync` regenerates the schema, block reference and recipes. Native compilation and the production pipeline take the machine-wide `codex-heavy` lock (one Cargo job); retain 20 GiB free for warm builds and allow 30 GiB for cold builds. `doctor` warns below 20 GiB. On other machines without the local gate, run `npm test` directly and serialize expensive work.
 
 Fonts are static instances derived from the pinned OFL Inter source (`fframes/native/tools/generate-fonts.py`); icons are 95 MIT Tabler outlines at a pinned revision (`fetch-icons.py`, `generate-icons.py`). The retired HTML/GSAP engine is preserved in [archive/](archive/README.md) for recovery only.
 
