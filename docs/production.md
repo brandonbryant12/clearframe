@@ -22,6 +22,8 @@ node engine/cli.mjs pipeline film --json
 
 `pipeline` enters the local `codex-heavy` gate automatically when it is installed. An existing outer gate is inherited without nesting. Resource caps in native rendering remain unchanged. Keep 20 GiB free before expensive work; preserve earlier evidence.
 
+QA shares one decode for its timeline and phone sheets. Final encoding checks the complete muxed video's decoded frame count before publishing it. The [performance measurements](performance.md) document the saved work, worker limits and byte-for-byte comparisons.
+
 Each invocation gets a fresh `film/build/pipeline/<run-id>/` directory. The prior run is retained. Outputs include:
 
 - `REPORT.md` and `report.json`: result, elapsed time by stage, errors and the review queue.
