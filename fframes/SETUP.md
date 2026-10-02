@@ -25,6 +25,42 @@ No npm packages are required for the active Node workflow. `npm ci` can establis
 /Users/brandon/.local/bin/codex-heavy -- npm test
 ```
 
+## Optional dimensional art setup
+
+| Functionality | Additional requirement |
+|---|---|
+| Native KPI, seesaw, contribution stack, quiz and fill-in-the-blank templates | None beyond the native setup above. |
+| Play or reuse the bundled `examples/sculptures/` clips | None. Prepared media and editable scenes are included. |
+| Prepare new `sculpture` assets or rerender retained `.blend` scenes | Blender installed separately. Recipes were verified with Blender 5.2.2 LTS on this Mac; other versions/platforms need their own check. |
+| Encode a sculpture or prepare the feature/teaching replay projects | Existing FFmpeg/ffprobe on `PATH`, with `libx264` and the standard scale, pad, tpad and fps filters. |
+| Run the repository's `verify:sculptures` harness | Git, for source revision and dirty-state evidence. |
+
+Download Blender from its [official distribution](https://www.blender.org/download/), or reuse an installed copy. The recipes run inside Blender's bundled Python: no system Python, pip packages, addons, npm dependencies or API keys are needed. ClearFrame does not install or download Blender automatically. Set `BLENDER_BIN` to the executable when `blender` is not on `PATH`; for a standard macOS installation:
+
+```sh
+export BLENDER_BIN="/Applications/Blender.app/Contents/MacOS/Blender"
+"$BLENDER_BIN" --version
+ffmpeg -hide_banner -h encoder=libx264
+ffprobe -version
+node engine/cli.mjs sculptures
+node engine/cli.mjs sculpture petal-reveal --draft --still --dry-run
+# Optional bounded render; the destination must not already exist:
+node engine/cli.mjs sculpture petal-reveal --draft --still --out /tmp/clearframe-petal-setup
+```
+
+`doctor` checks the native renderer's toolchain; verify the optional Blender executable with the commands above. `sculptures` and `--dry-run` work without Blender. A still pass produces a poster and scene; omit `--still` and use a new output directory for a clip. Asset rendering requires at least 20 GiB free, enters the shared heavy-process gate when available, and caps Blender/FFmpeg CPU threads at two.
+
+No Blender installation is needed for these replays from the bundled masters. Run the scripts from the repository root to prepare self-contained film projects; the reference storyboards in `examples/feature-launch` and `examples/teaching-3d` are source templates, not directly renderable projects.
+
+```sh
+node scripts/trajectories/feature-launch.mjs --asset-root examples/sculptures --out /tmp/clearframe-launch-setup --final --render
+node scripts/trajectories/teaching-3d.mjs --asset-root examples/sculptures --out /tmp/clearframe-teaching-setup --final --render
+```
+
+Omit `--render` to prepare each portable project without rendering its film. Retain its source scenes, asset receipts and exact inputs. See the [asset workflow](../docs/sculptures.md), [KPI direction guide](../docs/kpi-direction.md) and [teaching guide](../docs/teaching-sequences.md). Saved scenes open with Python auto-execution disabled; regeneration through `sculpture` explicitly runs the trusted built-in recipe. Native rendering remains the ordinary film pipeline.
+
+## Native verification and rendering
+
 For native tests use the same `nativeEnv()` as the build, to preserve tool paths, target directory and worker limits:
 
 ```sh

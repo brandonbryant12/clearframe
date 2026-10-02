@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Complete dimensional-art setup.** The native setup guide separates optional Blender preparation from dependency-free native KPI/teaching forms and bundled-asset reuse. It documents executable checks, `BLENDER_BIN`, FFmpeg/Git requirements, disk/worker limits and copy-and-run feature/teaching replay commands.
+
 Portable intake, varied source directions, financial mechanisms and smaller review copies join the native pipeline.
 
 - **Original material operations.** Three seeded native sketches (`die-cut-aperture`, `moire-signal`, `folded-louvers`), two contrasting palettes/treatments, and `material-etudes` add distinct physical compositions. Eight procedural Blender sculptures add ceramic reveals, machined assemblies, ribbons, articulated mobiles, architecture, layered cutaways, quiz choices and a closing gap. `sculpture` runs an optional offline, resource-bounded asset pass and retains the editable scene, exact source, prepared clip and hash-bound receipt. Film rendering stays native. `verify:sculptures` checks real artifacts and saved-scene pixel reproduction. See `docs/sculptures.md` and the feature-launch example.
