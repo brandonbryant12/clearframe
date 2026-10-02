@@ -2,6 +2,8 @@
 
 Everything creative that is not engine code lives here, one file per item. To add an idea, add a file. There is no registry to edit.
 
+To bundle related items, use the [package convention](../docs/library-packages.md): asset packs, style kits and story kits keep this layout and the existing JSON loader. The [Balance study kit](../examples/library-kits/balance-study/README.md) combines retained Blender media with a native composition and shared style. The [finance-inspired expansion inventory](../docs/research/timmer-library/index.html) separates existing ingredients from proposed charts, mechanisms, 3D operations and camera tools.
+
 | Folder | One file is | Used by |
 |---|---|---|
 | `palettes/` | eight colours with readable contrast | `theme` in a storyboard, `themes`, `looks` |

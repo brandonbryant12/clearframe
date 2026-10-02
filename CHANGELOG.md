@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Library packaging and expansion plan.** Documented asset-pack, style-kit and story-kit conventions using the existing library layout and loader. Added a portable Balance study kit with retained Blender media, shared JSON style, four native sketch variants and a source integration specimen. A dated, source-linked Timmer research inventory proposes 71 reusable chart, infographic, Blender, camera, tooling and retirement entries; its offline searchable view distinguishes existing ingredients from unbuilt work. Adds a milestone build-out goal and explicit calculation, art-direction, motion and format acceptance criteria. No renderer refactor or new Blender render is included.
+
 - **Complete dimensional-art setup.** The native setup guide separates optional Blender preparation from dependency-free native KPI/teaching forms and bundled-asset reuse. It documents executable checks, `BLENDER_BIN`, FFmpeg/Git requirements, disk/worker limits and copy-and-run feature/teaching replay commands.
 
 Portable intake, varied source directions, financial mechanisms and smaller review copies join the native pipeline.
