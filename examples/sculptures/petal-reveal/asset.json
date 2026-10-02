@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "id": "petal-reveal",
+  "title": "Porcelain petals",
+  "description": "Six ceramic shells unfold around a satin sphere. A held reveal gives the editor a place to land a native title.",
+  "use": "Reveal an idea or product, open a chapter, explain access or discovery.",
+  "copy": "Use as a full-frame insert or on the right side of a split plate. Keep all words and actual branding native.",
+  "metaphor": "Qualitative reveal; petal count and sphere size encode no quantity.",
+  "license": "MIT; original procedural artwork",
+  "provenance": "Original ClearFrame recipe; no external models or textures.",
+  "kind": "clip",
+  "file": "clip.mp4",
+  "poster": "poster.png",
+  "editableScene": "scene.blend",
+  "loop": true,
+  "width": 1920,
+  "height": 1080,
+  "duration": 4,
+  "fps": 24,
+  "configuration": {
+    "id": "petal-reveal",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "seed": 17,
+    "theme": "daylight",
+    "colors": {
+      "base": "daylight",
+      "bg": "#f4f7fa",
+      "surface": "#e3eaf0",
+      "ink": "#172c38",
+      "muted": "#526575",
+      "accent": "#176b70",
+      "accent2": "#7956ae",
+      "positive": "#23714f",
+      "negative": "#af3e52"
+    },
+    "samples": 48,
+    "pos": 0.5,
+    "still": false,
+    "draft": false,
+    "loop": true
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "8177c9380f750d7a3054f69a1215ad4e5dd5d693d6b0ff8bdc10b414fc75e22d",
+    "library/sculptures/petal-reveal.py": "0aacfecab2eaff7be1fd7c18ac12be63e2f6a8a30729f9b57ca700ae0421f85e",
+    "library/sculptures/petal-reveal.json": "9d1c819538f2582a39168ee3e8a08fda0e8e5d16f106f3fb173e82da31818006"
+  },
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "d0a6c5d3d69b9d4d635e7a74f6633bec21ca211ff4c02b441a6489acad8814c0",
+      "bytes": 177874
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "467deb08ce1fbe23f43a7f5d3e637d56898606cdd0d066b9b654daae190bd297",
+      "bytes": 1805875
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "e5088b7e6fefbeebe10bb258466731316e2993872a60e8fd6193d3347a1b37df",
+      "bytes": 1056426
+    }
+  },
+  "blender": {
+    "version": "5.2.2 LTS",
+    "hash": "d13f752e3b9c",
+    "samples": 48,
+    "engine": "BLENDER_EEVEE",
+    "requiresAutoExec": false
+  },
+  "mechanicalStatus": "ready-for-review",
+  "visualAcceptance": "Review in the context of the destination film."
+}

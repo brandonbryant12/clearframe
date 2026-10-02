@@ -9,6 +9,8 @@ import { computeTiming } from './timing.mjs';
 import { loadStoryboard } from './project.mjs';
 import { ffmpeg, ffmpegBin, writeJSON } from './util.mjs';
 import { measureDrop } from './beatmap.mjs';
+import { sha256 } from '../../fframes/native-build.mjs';
+import { reviewGeometry } from '../../fframes/render-geometry.mjs';
 import { COVER } from '../../fframes/constants.mjs';
 
 // Analysis grid: the long side at 128 px is enough to see a pop or a jump, and small enough
@@ -226,6 +228,12 @@ export async function qaProject(root, { video, loop = false } = {}) {
   const sb = loadStoryboard(root);
   const timing = computeTiming(root);
   const probe = probeStreams(file);
+  let receipt;
+  try { receipt = JSON.parse(fs.readFileSync(`${file}.json`, 'utf8')); } catch {}
+  const output = reviewGeometry(sb.format, receipt, {
+    videoHash: receipt?.draft ? sha256(fs.readFileSync(file)) : undefined,
+    storyboardHash: receipt?.draft ? sha256(fs.readFileSync(path.join(root, 'storyboard.json'))) : undefined,
+  });
   const v = probe.streams.find(s => s.codec_type === 'video');
   const [w, h] = grid(v.width, v.height);
   const film = decode(file, w, h);
@@ -283,8 +291,8 @@ export async function qaProject(root, { video, loop = false } = {}) {
       target: sb.mix?.loudness ?? -14,
       fps,
       frames: timing.frames,
-      width: sb.format.width,
-      height: sb.format.height,
+      width: output.width,
+      height: output.height,
     }),
   );
   // Measure the result, not the plan: the music's drop should be heard where it was placed.
@@ -324,6 +332,7 @@ export async function qaProject(root, { video, loop = false } = {}) {
   };
   writeJSON(path.join(dir, 'qa.json'), {
     video: file,
+    output: { width: output.width, height: output.height, scale: output.scale, draft: output.draft },
     summary,
     findings,
     change: change.map(r2),

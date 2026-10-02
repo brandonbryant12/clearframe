@@ -142,6 +142,12 @@ export const FONTS = [
   'poster',
   'serif-display',
   'serif-display-italic',
+  'didone',
+  'didone-italic',
+  'wide',
+  'geometric',
+  'geometric-light',
+  'condensed',
 ];
 export const MAX_ELEMENTS = 600;
 

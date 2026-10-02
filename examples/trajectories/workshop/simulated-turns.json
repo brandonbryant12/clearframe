@@ -1,0 +1,17 @@
+[
+  {
+    "turn": 1,
+    "kind": "simulated-user",
+    "text": "We are a small design studio. Explain our kickoff service: turn a messy brief into one clear decision. Use the supplied SVG logo, brand-colour roles, whiteboard PNG and approved copy sheet. Make a vertical video of about 25–30 seconds. No invented numbers or testimonials."
+  },
+  {
+    "turn": 2,
+    "kind": "simulated-user",
+    "text": "Avoid a generic three-step slide. Make it feel like a little paper workshop: questions arrive, alternatives take shape, one route is selected."
+  },
+  {
+    "turn": 3,
+    "kind": "simulated-user",
+    "text": "The middle is too busy. Remove half the objects, hold the chosen route, and put the unmodified logo on the final frame. CTA: Bring us the messy brief."
+  }
+]

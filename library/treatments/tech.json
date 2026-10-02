@@ -4,6 +4,7 @@
   "when": "Tech brands, AI products, launches and sizzle reels that should feel built in code",
   "film": {
     "theme": "neon",
+    "type": "wide",
     "backdrop": "none",
     "texture": {
       "grain": 0.18,
@@ -21,7 +22,6 @@
     }
   },
   "beats": {
-    "emphasisStyle": "serif",
     "graphic": "whip"
   },
   "rules": [

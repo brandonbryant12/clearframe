@@ -1,0 +1,28 @@
+{
+  "id": "ribbon-thread",
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "frames": 96,
+  "seed": 17,
+  "theme": "porcelain",
+  "colors": {
+    "base": "porcelain",
+    "bg": "#f6f1ea",
+    "surface": "#ebe3d8",
+    "ink": "#1a1816",
+    "muted": "#6b625a",
+    "accent": "#8c2f39",
+    "accent2": "#4d6a6d",
+    "positive": "#3f6b4f",
+    "negative": "#8c2f39"
+  },
+  "samples": 48,
+  "pos": 0.5,
+  "still": false,
+  "draft": false,
+  "loop": true,
+  "out": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/ribbon-thread",
+  "sourceRoot": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/ribbon-thread/source",
+  "sceneFile": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/ribbon-thread/source/ribbon-thread.py"
+}

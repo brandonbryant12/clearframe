@@ -28,7 +28,7 @@ export const binary = () => path.join(ROOT, '.cache/metal/release/clearframe-nat
 
 export function run(bin, args, { cwd = REPO, env = nativeEnv(), capture = false } = {}) {
   return new Promise((resolve, reject) => {
-    const child = spawn(bin, args, { cwd, env, stdio: capture ? ['ignore', 'pipe', 'pipe'] : 'inherit' });
+    const child = spawn(bin, args, { cwd, env, stdio: capture ? ['ignore', 'pipe', 'pipe'] : (process.env.CLEARFRAME_PROGRESS_STDERR === '1' ? ['inherit', 2, 2] : 'inherit') });
     let output = '';
     if (capture) {
       child.stdout.on('data', d => (output += d));

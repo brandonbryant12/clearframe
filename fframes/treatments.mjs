@@ -12,7 +12,7 @@ export const treatmentById = id => item('treatments', id);
  * Apply a treatment to a storyboard: film-level look plus beat defaults the author has not
  * set. Returns the storyboard (mutated) so `new` can write it.
  */
-export function applyTreatment(sb, id) {
+export function applyTreatment(sb, id, { recording = false } = {}) {
   const found = treatmentById(id);
   if (!found) throw new Error(`Unknown treatment ${id}. Run clearframe treatments.`);
   const t = { ...found, beats: found.beats ?? {} };
@@ -20,9 +20,10 @@ export function applyTreatment(sb, id) {
   // A playbook's own cutting (cut, dissolve) is part of its grammar: the treatment's film-wide
   // transition only replaces the default fade, never a playbook's choice.
   const cutting = sb.transition && sb.transition !== 'fade' ? sb.transition : null;
-  Object.assign(sb, structuredClone(film));
+  const visual = ['theme', 'type', 'backdrop', 'texture', 'motion', 'textMotion', 'frame', 'sfx', 'lens', 'heading', 'chrome'];
+  Object.assign(sb, structuredClone(recording ? Object.fromEntries(Object.entries(film).filter(([key]) => visual.includes(key))) : film));
   if (cutting) sb.transition = cutting;
-  if (voice) sb.voice = { ...(sb.voice ?? {}), ...voice };
+  if (voice && !recording) sb.voice = { ...(sb.voice ?? {}), ...voice };
   if (film.frame?.brand === 'brand' && sb.frame) sb.frame.brand = sb.title ?? 'Brand';
   const chapterStarts = new Set(
     sb.beats.map((b, i) => (i && b.chapter && b.chapter !== sb.beats[i - 1].chapter ? i : -1)),
@@ -42,7 +43,7 @@ export function applyTreatment(sb, id) {
         if (t.beats.font && el.type === 'text' && !el.font && (el.size ?? 48) < 90) el.font = t.beats.font;
         if (t.beats.fps && el.fps == null && (el.keys || el.loop || el.along)) el.fps = t.beats.fps;
       }
-    if (t.beats.graphic && chapterStarts.has(i) && !b.transition) b.transition = t.beats.graphic;
+    if (!recording && t.beats.graphic && chapterStarts.has(i) && !b.transition) b.transition = t.beats.graphic;
   });
   sb.treatment = id;
   return sb;

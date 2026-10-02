@@ -317,6 +317,7 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
       duration,
       fps,
     );
+    const interpolatedCount = perBeat.reduce((n, p) => n + (p.words?.filter(w => w.estimated).length ?? 0), 0);
     take.beats.forEach((b, i) => {
       const start = cuts[i],
         end = cuts[i + 1];
@@ -376,7 +377,7 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
     // Teach the drafts how fast this voice really reads.
     const pace = provider !== 'local' && recordRate(sb.voice, take.beats.map(b => b.vo).join(' '), duration);
     log.ok(
-      `${take.id}: ${take.beats.length} beats · ${duration.toFixed(1)}s continuous take${measured ? ' · words measured with Whisper' : ''}${pace ? ` · reads at ~${Math.round(pace)} wpm` : ''}`,
+      `${take.id}: ${take.beats.length} beats · ${duration.toFixed(1)}s continuous take${measured ? ` · Whisper alignment${interpolatedCount ? ` (${interpolatedCount} words interpolated; estimated timings)` : ' (all words measured)'}` : ''}${pace ? ` · reads at ~${Math.round(pace)} wpm` : ''}`,
     );
   }
 }

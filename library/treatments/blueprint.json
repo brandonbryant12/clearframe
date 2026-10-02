@@ -4,6 +4,7 @@
   "when": "Engineering, systems, architecture, technical walkthroughs",
   "film": {
     "theme": "blueprint",
+    "type": "typewriter",
     "backdrop": "grid",
     "texture": {
       "vignette": 0.4

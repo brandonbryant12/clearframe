@@ -4,6 +4,7 @@
   "when": "Gaming, competitive product stories and energetic dark launches",
   "film": {
     "theme": "neon",
+    "type": "geometric",
     "backdrop": "none",
     "motion": {
       "preset": "snappy",

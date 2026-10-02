@@ -1,0 +1,11 @@
+{
+  "title": "Inside the assembly",
+  "use": "Architecture, systems, product internals, consolidation and what sits behind a result.",
+  "description": "Six precision panels separate in an axial sequence, exposing a finned cartridge and keyed connectors before reconnecting.",
+  "theme": "stage",
+  "duration": 4,
+  "loop": true,
+  "copy": "Use the wide separation as an evidence insert; overlay native labels outside the object when adapting it to an actual system.",
+  "metaphor": "Conceptual assembly only; panel count, motion and materials are not factual measurements.",
+  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+}

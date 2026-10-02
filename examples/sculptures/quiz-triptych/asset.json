@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "id": "quiz-triptych",
+  "title": "A choice comes forward",
+  "description": "Three identical ceramic answer tiles sit on a recessed desk. One rises and tilts toward the viewer, then holds its selected state.",
+  "use": "A three-option quiz reveal, a chosen strategy, or one route brought into focus.",
+  "copy": "Use --pos 0 for an unrevealed question poster. Seed modulo three selects the left, middle or right tile (0, 1 or 2). Bind that index explicitly to the native correct answer. Keep question, options and explanation native, and start this non-looping clip only on the answer beat.",
+  "metaphor": "An authored video selection, not a clickable quiz or learner response. Tile dimensions do not encode confidence, votes, difficulty or correctness probabilities.",
+  "license": "MIT; original procedural artwork",
+  "provenance": "Original ClearFrame recipe; no external models or textures.",
+  "kind": "clip",
+  "file": "clip.mp4",
+  "poster": "poster.png",
+  "editableScene": "scene.blend",
+  "loop": false,
+  "width": 1920,
+  "height": 1080,
+  "duration": 4,
+  "fps": 24,
+  "configuration": {
+    "id": "quiz-triptych",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "seed": 17,
+    "theme": "porcelain",
+    "colors": {
+      "base": "porcelain",
+      "bg": "#f6f1ea",
+      "surface": "#ebe3d8",
+      "ink": "#1a1816",
+      "muted": "#6b625a",
+      "accent": "#8c2f39",
+      "accent2": "#4d6a6d",
+      "positive": "#3f6b4f",
+      "negative": "#8c2f39"
+    },
+    "samples": 48,
+    "pos": 0,
+    "still": false,
+    "draft": false,
+    "loop": false
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347",
+    "library/sculptures/quiz-triptych.py": "7b811d4192be126fa01ab42a973e59d3884eaf985720922d447c453de8c5f7e0",
+    "library/sculptures/quiz-triptych.json": "0ee92ff7d3b2d163c288988c3e9f757c7da743fcbbffcc24ab54867948e3e3b1"
+  },
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "c4d40b33953eb4ae307b10c4253da856d21d0604d320197a56c537b9964ce31c",
+      "bytes": 111358
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "02662dba1ad542dd52a729fabaae853abdd460df7803cd9f3b6f2f062e8bff30",
+      "bytes": 1743620
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "02d9b469cf57f0739023cab1a91ed83a4a75f22f0e195e4e4ad038e86256b1c0",
+      "bytes": 585218
+    }
+  },
+  "blender": {
+    "version": "5.2.2 LTS",
+    "hash": "d13f752e3b9c",
+    "samples": 48,
+    "engine": "BLENDER_EEVEE",
+    "requiresAutoExec": false
+  },
+  "mechanicalStatus": "ready-for-review",
+  "visualAcceptance": "Review in the context of the destination film."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "gap-bridge",
+  "title": "The missing connection",
+  "use": "A fill-in-the-blank answer, a missing step, a completed argument or a repaired connection.",
+  "description": "Two ceramic beam ends leave a real center gap. A contrasting insert aligns with two guide rails, descends into the space, and remains seated.",
+  "theme": "vellum",
+  "duration": 4,
+  "loop": false,
+  "posterPos": 0,
+  "copy": "Use --pos 0 for the question poster with its visible gap. Hold the native sentence with a blank, then start the non-looping insertion clip on the answer beat and reveal the exact missing text. The physical piece carries no lettering.",
+  "metaphor": "A visual completion metaphor, not an interactive input field, factual mechanical assembly, or proof that a learner supplied the correct answer.",
+  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+}

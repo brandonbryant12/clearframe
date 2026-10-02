@@ -1,0 +1,7 @@
+{
+  "order": 1,
+  "title": "Inter Display",
+  "when": "The default: a neutral grotesk for reports, explainers and anything that should not announce a style. Emphasis in the accent colour, or italic Instrument Serif per beat (emphasisStyle: serif).",
+  "display": "inter",
+  "emphasis": "accent"
+}

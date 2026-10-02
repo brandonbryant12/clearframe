@@ -4,6 +4,7 @@
   "when": "Manifestos, campaigns, launches with a cause, hard numbers stated as demands",
   "film": {
     "theme": "constructivist",
+    "type": "condensed",
     "backdrop": "none",
     "texture": {
       "grain": 0.25,
@@ -23,7 +24,7 @@
   "beats": {
     "print": "letterpress",
     "rough": false,
-    "font": "poster",
+    "font": "condensed",
     "graphic": "wipe"
   },
   "rules": [

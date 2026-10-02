@@ -65,13 +65,14 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             return empty();
         }
         let current = active_word(words, self.t);
-        let font = if caption { Font::TextStrong } else { Font::Display };
+        let font = if caption { Font::TextStrong } else { self.voice().regular() };
         if mode == "word" {
             // Hold the last spoken word through short pauses so the screen does not blink
             // between words; longer silences still clear. Timestamps are not altered.
             let held = current.or_else(|| words.iter().rposition(|w| self.t >= w.end && self.t - w.end < max_gap));
             let Some(i) = held else { return empty() };
-            let layout = self.fit(&words[i].text, Style::display(Font::DisplayBold, size * 1.35), box_.w, box_.h);
+            let v = self.voice();
+            let layout = self.fit(&words[i].text, v.style(v.bold(), size * 1.35, 1.08, true), box_.w, box_.h);
             let pop = 0.9 + 0.1 * self.m.pop(self.t - words[i].start);
             let (cx, cy) = (box_.x + box_.w / 2.0, box_.y + box_.h / 2.0);
             let y = box_.y + (box_.h - layout.height()) / 2.0;
@@ -205,8 +206,19 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
         let key = |w: &str| w.chars().filter(|c| c.is_alphanumeric()).flat_map(char::to_lowercase).collect::<String>();
         let emphasized: std::collections::HashSet<String> =
             phrases(p, "emphasis").iter().flat_map(|ph| ph.split_whitespace().map(key).collect::<Vec<_>>()).collect();
-        let upper = p.get("upper").and_then(Value::as_bool).unwrap_or(false);
-        let serif = s(p, "emphasisStyle") == "serif";
+        // The film's voice sets the poster face and case; `emphasisStyle: bold` keeps the
+        // larger bold word, `serif` the italic serif, and the voice's own italic when it has one.
+        let v = self.voice();
+        let upper = p.get("upper").and_then(Value::as_bool).unwrap_or(false) || v.upper;
+        let style = s(p, "emphasisStyle");
+        let (big_font, big_scale) = match (style, v.emphasis_kind(style)) {
+            ("bold", _) => (v.bold(), 1.45),
+            (_, crate::text::EmphasisKind::Serif) => (Font::SerifItalic, 1.6),
+            (_, crate::text::EmphasisKind::Italic) => (v.italic().unwrap_or(v.bold()), 1.45),
+            _ => (v.bold(), 1.45),
+        };
+        let serif = big_font.italic();
+        let word_font = v.bold();
         let center = s(p, "align") != "left";
         let a = self.area;
         let base = if self.wide { 132.0 } else { 118.0 };
@@ -219,9 +231,9 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             lines = vec![vec![]];
             let mut width = 0.0;
             for (i, w) in chunk.iter().enumerate() {
-                let size = base * scale * if big(w) { if serif { 1.6 } else { 1.45 } } else { 1.0 };
+                let size = base * scale * if big(w) { big_scale } else { 1.0 };
                 let ww = text::measure(
-                    if big(w) && serif { Font::SerifItalic } else { Font::DisplayBold },
+                    if big(w) { big_font } else { word_font },
                     &text_of(w),
                     size,
                     if big(w) && serif { 0.0 } else { -0.01 * size },
@@ -270,10 +282,10 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
                 if self.t >= appear {
                     let e = self.m.enter_over(self.t - appear, 0.28);
                     let color = if big(w) { self.p.accent.clone() } else { self.p.ink.clone() };
-                    let run = if big(w) && serif {
-                        self.run(text_of(w), x, baseline, Font::SerifItalic, size, 0.0, &color)
+                    let run = if big(w) {
+                        self.run(text_of(w), x, baseline, big_font, size, if serif { 0.0 } else { -0.01 * size }, &color)
                     } else {
-                        self.run(text_of(w), x, baseline, Font::DisplayBold, size, -0.01 * size, &color)
+                        self.run(text_of(w), x, baseline, word_font, size, -0.01 * size, &color)
                     };
                     if e.done() {
                         shapes.push(run);

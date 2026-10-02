@@ -1,0 +1,28 @@
+{
+  "id": "shadow-arcade",
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "frames": 144,
+  "seed": 17,
+  "theme": "vellum",
+  "colors": {
+    "base": "vellum",
+    "bg": "#f3eee4",
+    "surface": "#dfd4c2",
+    "ink": "#292328",
+    "muted": "#665b60",
+    "accent": "#8e343d",
+    "accent2": "#545a83",
+    "positive": "#376850",
+    "negative": "#a13934"
+  },
+  "samples": 48,
+  "pos": 0.5,
+  "still": false,
+  "draft": false,
+  "loop": true,
+  "out": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/shadow-arcade",
+  "sourceRoot": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/shadow-arcade/source",
+  "sceneFile": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/shadow-arcade/source/shadow-arcade.py"
+}

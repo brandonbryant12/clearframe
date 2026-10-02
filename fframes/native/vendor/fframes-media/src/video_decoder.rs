@@ -716,6 +716,15 @@ impl FFmpegDecoder {
     /// Generally safe but uses libav functions
     pub unsafe fn decode_up_to(&mut self, offset: i64) -> Result<bool> {
         unsafe {
+            let target_pts = av_rescale_q(
+                offset,
+                self.custom_time_base,
+                self.video_stream_info.time_base,
+            );
+            let stream_end = self.video_stream_info.duration;
+            if stream_end > 0 && target_pts >= stream_end {
+                return Ok(false);
+            }
             // Going back needs a seek, otherwise the newer frame that was already decoded
             // would be returned. Far jumps forward seek to the closest keyframe instead of
             // decoding every frame in between (frames can be requested out of order by
@@ -729,13 +738,21 @@ impl FFmpegDecoder {
                 self.seek_to_offset(offset)?;
             }
 
-            let target_pts = av_rescale_q(
-                offset,
-                self.custom_time_base,
-                self.video_stream_info.time_base,
-            );
+            // A frame remains present for its declared duration. A 24 fps
+            // clip's last sample starts before a 30 fps film's last request,
+            // even though that request is still inside the valid final sample.
+            // Only accept this interval at the stream end; never extend a
+            // short clip or infer a duration from an average frame rate.
+            let reaches_target = |frame: *mut AVFrame| {
+                let pts = (*frame).pts;
+                if pts < 0 { return false; }
+                pts >= target_pts || (stream_end > 0 && (*frame).duration > 0
+                    && pts.checked_add((*frame).duration).is_some_and(|end| {
+                        end >= stream_end && target_pts < end
+                    }))
+            };
 
-            if (*self.frame_buf.latest_av_frame).pts >= target_pts {
+            if reaches_target(self.frame_buf.latest_av_frame) {
                 return Ok(true);
             }
 
@@ -773,7 +790,7 @@ impl FFmpegDecoder {
                             let ret = avcodec_receive_frame(self.video_stream_info.codec_ctx, target_frame);
                             if ret == 0 {
                                 received = true;
-                                if (*target_frame).pts >= target_pts {
+                                if reaches_target(target_frame) {
                                     self.transfer_hardware_surface_data(target_frame)?;
                                     return Ok(true);
                                 }
@@ -820,7 +837,7 @@ impl FFmpegDecoder {
 
                             match ret {
                                 0 => {
-                                    if (*target_frame).pts >= target_pts {
+                                    if reaches_target(target_frame) {
                                         self.transfer_hardware_surface_data(target_frame)?;
 
                                         return Ok(true);

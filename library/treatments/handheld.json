@@ -4,6 +4,7 @@
   "when": "Games, retro technology, step-by-step logic, levels and progress: a story played on a 1989 screen",
   "film": {
     "theme": "lcd",
+    "type": "typewriter",
     "backdrop": "none",
     "texture": {
       "grain": 0.12,

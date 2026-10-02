@@ -1,0 +1,27 @@
+[
+  {
+    "id": "paper-workshop",
+    "story": "A supplied messy board becomes physical questions, tangible routes, then one clear path.",
+    "picture": "Top-down paper objects, a workbench edge, folded route strips and the actual supplied artwork.",
+    "edit": "Object montage with a repeated paper material; a deliberate hold on the selected route.",
+    "pace": "Quick questions, a slower comparison, then a held next step.",
+    "selected": true,
+    "reason": "The service is abstract; a small physical workshop gives the decision-making a visible action."
+  },
+  {
+    "id": "one-line-plan",
+    "story": "An indecisive mark explores branches until it becomes one continuous route.",
+    "picture": "One native pen stroke, minimal labels and the supplied board as a first-frame reference.",
+    "edit": "A single continuous camera world.",
+    "pace": "A continuous draw with one quiet turn.",
+    "selected": false
+  },
+  {
+    "id": "editorial-proof",
+    "story": "Read the brief as a document; circle ambiguity; rewrite one supported decision.",
+    "picture": "Approved copy, cropped source details and typographic annotations.",
+    "edit": "A source-led editorial montage with close and wide document views.",
+    "pace": "Patient reading and decisive cuts.",
+    "selected": false
+  }
+]

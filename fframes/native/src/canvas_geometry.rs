@@ -158,6 +158,12 @@ pub(super) fn text_font(el: &Value) -> Font {
         "poster" => Font::Poster,
         "serif-display" => Font::SerifDisplay,
         "serif-display-italic" => Font::SerifDisplayItalic,
+        "didone" => Font::Didone,
+        "didone-italic" => Font::DidoneItalic,
+        "wide" => Font::Wide,
+        "geometric" => Font::Geometric,
+        "geometric-light" => Font::GeometricLight,
+        "condensed" => Font::Condensed,
         _ => {
             if el.get("count").is_some() {
                 Font::Figures

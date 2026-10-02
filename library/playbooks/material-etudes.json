@@ -1,0 +1,22 @@
+{
+  "order": 42,
+  "title": "Ways of seeing: three native material studies",
+  "audience": "Directors comparing distinct reusable visual materials",
+  "inputs": "No external assets, narration or factual claims; adapt the studies around an actual story",
+  "theme": "vellum", "type": "didone", "motion": "gentle", "backdrop": "none", "transition": "cut", "textMotion": "lines", "sfx": "off", "sources": [],
+  "beats": [
+    { "id": "aperture", "block": "canvas", "duration": 5.5, "camera": "none",
+      "props": { "view": [0, 0, 1920, 1080], "viewTall": [0, 0, 1080, 1920], "elements": [
+        { "type": "text", "text": "Through paper", "x": 142, "y": 470, "size": 88, "fit": 770, "fill": "ink", "at": 0, "enter": "none" }
+      ] }, "art": { "sketch": "die-cut-aperture", "seed": 17 } },
+    { "id": "interference", "block": "canvas", "duration": 7.5, "camera": "none", "transition": "iris", "tone": "invert",
+      "props": { "view": [0, 0, 1920, 1080], "viewTall": [0, 0, 1080, 1920], "elements": [
+        { "type": "text", "text": "Between lines", "x": 142, "y": 470, "size": 88, "fit": 770, "fill": "ink", "at": 0, "enter": "none" }
+      ] }, "art": { "sketch": "moire-signal", "seed": 29 } },
+    { "id": "opening", "block": "canvas", "duration": 6.5, "camera": "none", "transition": "panel",
+      "props": { "view": [0, 0, 1920, 1080], "viewTall": [0, 0, 1080, 1920], "elements": [
+        { "type": "text", "text": "Into light", "x": 142, "y": 470, "size": 88, "fit": 770, "fill": "ink", "at": 0, "enter": "none" }
+      ] }, "art": { "sketch": "folded-louvers", "seed": 43 } }
+  ],
+  "note": "An art showcase without narration or source claims. The geometry is qualitative and carries no data. Compare paper-theatre and interference treatments, then author the image and timing around your own story. Seeds vary only the material, not factual content. A treatment may add transition sound effects."
+}

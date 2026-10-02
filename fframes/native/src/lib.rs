@@ -87,6 +87,8 @@ pub struct Environment {
     pub text_motion: String,
     /// `plate` (phrase on a soft plate) or `pop` (social: heavy outlined type, spoken word on a pill).
     pub caption_style: String,
+    /// The film's type voice (display family, emphasis, case, tracking, leading).
+    pub voice: text::Voice,
 }
 
 #[derive(Debug, Deserialize)]
@@ -145,6 +147,9 @@ pub struct Beat {
     /// How type arrives in this scene: lines, words, letters or cascade (film default otherwise).
     #[serde(default)]
     pub text_motion: Option<String>,
+    /// This scene's own type voice, when it differs from the film's.
+    #[serde(default, rename = "type")]
+    pub type_voice: Option<text::Voice>,
     /// Where the title sits: `top` (default) or `bottom`, a lower third under the picture.
     #[serde(default)]
     pub heading: String,
@@ -199,6 +204,9 @@ pub struct Film {
     /// Default arrival of type in every scene: lines, words, letters or cascade.
     #[serde(default = "lines")]
     pub text_motion: String,
+    /// The type voice resolved from `library/types`; absent for the default Inter look.
+    #[serde(default, rename = "type")]
+    pub type_voice: Option<text::Voice>,
     #[serde(default = "plate")]
     pub caption_style: String,
     /// Editorial frame chrome: brand, section label, footers and a progress line.
@@ -227,6 +235,10 @@ impl Film {
         }
         let scale = 1080.0 / film.width.min(film.height) as f32;
         let total = film.beats.len();
+        let voice = film.type_voice.clone().unwrap_or_default();
+        if !voice.valid() {
+            return Err(format!("job type voice {} names an unknown face set or emphasis", voice.id).into());
+        }
         let mut offset = 0;
         for (index, beat) in film.beats.iter_mut().enumerate() {
             if !BLOCKS.contains(&beat.block.as_str())
@@ -240,6 +252,7 @@ impl Film {
                 || !beat.settle_seconds.is_finite()
                 || beat.settle_seconds < 0.0
                 || !["", "none", "accent", "accent2", "invert", "surface"].contains(&beat.tone.as_deref().unwrap_or(""))
+                || !beat.type_voice.as_ref().is_none_or(text::Voice::valid)
             {
                 return Err(format!("invalid native scene {}", beat.id).into());
             }
@@ -283,6 +296,7 @@ impl Film {
                 framed: film.frame.is_some(),
                 text_motion: film.text_motion.clone(),
                 caption_style: film.caption_style.clone(),
+                voice: voice.clone(),
             };
             offset += beat.frames;
         }
@@ -817,6 +831,33 @@ mod tests {
             assert!(decoder.decode_up_to(30).unwrap());
             assert!((decoder.get_raw_frame().timestamp_seconds() - 1.0).abs() < 0.0001);
             assert!(decoder.decode_up_to(119).unwrap());
+            assert_eq!(final_pixels.data, decoder.get_raw_frame().into_image().href().data);
+        }
+    }
+    #[test]
+    fn video_decoder_preserves_the_final_sample_interval_at_a_higher_output_rate() {
+        use fframes::FFramesSyncedVideoFrame;
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/bframes.mp4");
+        unsafe {
+            // Existing fixture: 120 frames at 30 fps. Output: 240 at 60 fps.
+            let mut decoder = fframes::media::FFmpegDecoder::new(&path, 60, 2).unwrap();
+            assert!(decoder.decode_up_to(236).unwrap());
+            let previous = decoder.get_raw_frame().into_image().href();
+            assert!(decoder.decode_up_to(238).unwrap());
+            let final_pixels = decoder.get_raw_frame().into_image().href();
+            assert_ne!(previous.data, final_pixels.data);
+            for _ in 0..2 {
+                assert!(decoder.decode_up_to(239).unwrap(), "final source sample is still present at 239/60 seconds");
+                assert!((decoder.get_raw_frame().timestamp_seconds() - 119.0 / 30.0).abs() < 0.0001);
+                assert_eq!(final_pixels.data, decoder.get_raw_frame().into_image().href().data);
+            }
+            for _ in 0..2 {
+                assert!(!decoder.decode_up_to(240).unwrap(), "stream end remains exclusive");
+            }
+            assert!(!decoder.decode_up_to(600).unwrap(), "a far request beyond stream end does not seek");
+            assert!(decoder.decode_up_to(60).unwrap());
+            assert!((decoder.get_raw_frame().timestamp_seconds() - 1.0).abs() < 0.0001);
+            assert!(decoder.decode_up_to(239).unwrap(), "a direct seek into the final interval also decodes it");
             assert_eq!(final_pixels.data, decoder.get_raw_frame().into_image().href().data);
         }
     }

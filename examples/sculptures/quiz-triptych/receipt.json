@@ -1,0 +1,522 @@
+{
+  "version": 1,
+  "status": "ready-for-review",
+  "id": "quiz-triptych",
+  "title": "A choice comes forward",
+  "recipe": {
+    "id": "quiz-triptych",
+    "title": "A choice comes forward",
+    "use": "A three-option quiz reveal, a chosen strategy, or one route brought into focus.",
+    "description": "Three identical ceramic answer tiles sit on a recessed desk. One rises and tilts toward the viewer, then holds its selected state.",
+    "theme": "porcelain",
+    "duration": 4,
+    "loop": false,
+    "posterPos": 0,
+    "copy": "Use --pos 0 for an unrevealed question poster. Seed modulo three selects the left, middle or right tile (0, 1 or 2). Bind that index explicitly to the native correct answer. Keep question, options and explanation native, and start this non-looping clip only on the answer beat.",
+    "metaphor": "An authored video selection, not a clickable quiz or learner response. Tile dimensions do not encode confidence, votes, difficulty or correctness probabilities.",
+    "parameters": [
+      "theme",
+      "seed",
+      "duration",
+      "fps",
+      "vertical"
+    ]
+  },
+  "config": {
+    "id": "quiz-triptych",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "seed": 17,
+    "theme": "porcelain",
+    "colors": {
+      "base": "porcelain",
+      "bg": "#f6f1ea",
+      "surface": "#ebe3d8",
+      "ink": "#1a1816",
+      "muted": "#6b625a",
+      "accent": "#8c2f39",
+      "accent2": "#4d6a6d",
+      "positive": "#3f6b4f",
+      "negative": "#8c2f39"
+    },
+    "samples": 48,
+    "pos": 0,
+    "still": false,
+    "draft": false,
+    "loop": false
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347",
+    "library/sculptures/quiz-triptych.py": "7b811d4192be126fa01ab42a973e59d3884eaf985720922d447c453de8c5f7e0",
+    "library/sculptures/quiz-triptych.json": "0ee92ff7d3b2d163c288988c3e9f757c7da743fcbbffcc24ab54867948e3e3b1"
+  },
+  "encoding": {
+    "transfer": "iec61966-2-1",
+    "primaries": "bt709",
+    "matrix": "bt709",
+    "range": "tv",
+    "note": "Preserve Blender display sRGB transfer; convert RGB to limited-range BT.709 YUV."
+  },
+  "startedAt": "2026-10-02T16:25:54.654Z",
+  "stages": [
+    {
+      "name": "blender",
+      "status": "passed",
+      "seconds": 429.49195475000005
+    },
+    {
+      "name": "encode",
+      "status": "passed",
+      "seconds": 1.9373451249999925
+    },
+    {
+      "name": "verify",
+      "status": "passed",
+      "seconds": 0.15719712500000604
+    }
+  ],
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "c4d40b33953eb4ae307b10c4253da856d21d0604d320197a56c537b9964ce31c",
+      "bytes": 111358
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "02662dba1ad542dd52a729fabaae853abdd460df7803cd9f3b6f2f062e8bff30",
+      "bytes": 1743620
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "02d9b469cf57f0739023cab1a91ed83a4a75f22f0e195e4e4ad038e86256b1c0",
+      "bytes": 585218
+    }
+  },
+  "blender": {
+    "version": 1,
+    "blenderVersion": "5.2.2 LTS",
+    "blenderBuildHash": "d13f752e3b9c",
+    "engine": "BLENDER_EEVEE",
+    "threads": 2,
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "samples": 48,
+    "colorManagement": {
+      "view": "AgX",
+      "look": "AgX - Medium High Contrast"
+    },
+    "bakedMotion": true,
+    "requiresAutoExec": false,
+    "loopMaxTransformError": 1.0499999821186066,
+    "objects": 18,
+    "meshVertices": 88,
+    "buildSeconds": 0.014857415997539647,
+    "bakeSeconds": 0.004468416998861358,
+    "renderedFrames": [
+      {
+        "frame": 1,
+        "seconds": 4.836811707995366
+      },
+      {
+        "frame": 2,
+        "seconds": 4.476988374997745
+      },
+      {
+        "frame": 3,
+        "seconds": 4.446398166008294
+      },
+      {
+        "frame": 4,
+        "seconds": 4.412875458001508
+      },
+      {
+        "frame": 5,
+        "seconds": 4.517070875008358
+      },
+      {
+        "frame": 6,
+        "seconds": 4.44981958300923
+      },
+      {
+        "frame": 7,
+        "seconds": 4.480008875005296
+      },
+      {
+        "frame": 8,
+        "seconds": 4.432437957992079
+      },
+      {
+        "frame": 9,
+        "seconds": 4.455323000001954
+      },
+      {
+        "frame": 10,
+        "seconds": 4.434074208998936
+      },
+      {
+        "frame": 11,
+        "seconds": 4.501487499990617
+      },
+      {
+        "frame": 12,
+        "seconds": 4.546773750000284
+      },
+      {
+        "frame": 13,
+        "seconds": 4.473123834002763
+      },
+      {
+        "frame": 14,
+        "seconds": 4.499204749998171
+      },
+      {
+        "frame": 15,
+        "seconds": 4.470719624994672
+      },
+      {
+        "frame": 16,
+        "seconds": 4.532386125007179
+      },
+      {
+        "frame": 17,
+        "seconds": 4.564301999998861
+      },
+      {
+        "frame": 18,
+        "seconds": 4.456950541003607
+      },
+      {
+        "frame": 19,
+        "seconds": 4.399417874999926
+      },
+      {
+        "frame": 20,
+        "seconds": 4.363578167001833
+      },
+      {
+        "frame": 21,
+        "seconds": 4.449154957997962
+      },
+      {
+        "frame": 22,
+        "seconds": 4.495705375011312
+      },
+      {
+        "frame": 23,
+        "seconds": 4.349708791996818
+      },
+      {
+        "frame": 24,
+        "seconds": 4.44440541700169
+      },
+      {
+        "frame": 25,
+        "seconds": 4.449106833009864
+      },
+      {
+        "frame": 26,
+        "seconds": 4.504232875013258
+      },
+      {
+        "frame": 27,
+        "seconds": 4.370162791994517
+      },
+      {
+        "frame": 28,
+        "seconds": 4.632740749992081
+      },
+      {
+        "frame": 29,
+        "seconds": 4.4887756669922965
+      },
+      {
+        "frame": 30,
+        "seconds": 4.433203499997035
+      },
+      {
+        "frame": 31,
+        "seconds": 4.385031249999884
+      },
+      {
+        "frame": 32,
+        "seconds": 4.362039958999958
+      },
+      {
+        "frame": 33,
+        "seconds": 4.42023387500376
+      },
+      {
+        "frame": 34,
+        "seconds": 4.412740625004517
+      },
+      {
+        "frame": 35,
+        "seconds": 4.43374712500372
+      },
+      {
+        "frame": 36,
+        "seconds": 4.5017037090001395
+      },
+      {
+        "frame": 37,
+        "seconds": 4.38919870799873
+      },
+      {
+        "frame": 38,
+        "seconds": 4.378818208002485
+      },
+      {
+        "frame": 39,
+        "seconds": 4.443777167005464
+      },
+      {
+        "frame": 40,
+        "seconds": 4.401291708010831
+      },
+      {
+        "frame": 41,
+        "seconds": 4.445906083012233
+      },
+      {
+        "frame": 42,
+        "seconds": 4.465168374998029
+      },
+      {
+        "frame": 43,
+        "seconds": 4.472310333992937
+      },
+      {
+        "frame": 44,
+        "seconds": 4.428609416994732
+      },
+      {
+        "frame": 45,
+        "seconds": 4.545770999990054
+      },
+      {
+        "frame": 46,
+        "seconds": 4.455892333993688
+      },
+      {
+        "frame": 47,
+        "seconds": 4.404077083003358
+      },
+      {
+        "frame": 48,
+        "seconds": 4.360522457995103
+      },
+      {
+        "frame": 49,
+        "seconds": 4.428555624996079
+      },
+      {
+        "frame": 50,
+        "seconds": 4.390657833006117
+      },
+      {
+        "frame": 51,
+        "seconds": 4.389471540998784
+      },
+      {
+        "frame": 52,
+        "seconds": 4.478555832989514
+      },
+      {
+        "frame": 53,
+        "seconds": 4.549362916994141
+      },
+      {
+        "frame": 54,
+        "seconds": 4.506480124997324
+      },
+      {
+        "frame": 55,
+        "seconds": 4.521621584004606
+      },
+      {
+        "frame": 56,
+        "seconds": 4.452866207997431
+      },
+      {
+        "frame": 57,
+        "seconds": 4.480676874998608
+      },
+      {
+        "frame": 58,
+        "seconds": 4.595688999994309
+      },
+      {
+        "frame": 59,
+        "seconds": 4.5125478750123875
+      },
+      {
+        "frame": 60,
+        "seconds": 4.39164516699384
+      },
+      {
+        "frame": 61,
+        "seconds": 4.4065214169968385
+      },
+      {
+        "frame": 62,
+        "seconds": 4.546559875001549
+      },
+      {
+        "frame": 63,
+        "seconds": 4.427397625011508
+      },
+      {
+        "frame": 64,
+        "seconds": 4.401403041993035
+      },
+      {
+        "frame": 65,
+        "seconds": 4.392719583003782
+      },
+      {
+        "frame": 66,
+        "seconds": 4.41749858300318
+      },
+      {
+        "frame": 67,
+        "seconds": 4.339604042004794
+      },
+      {
+        "frame": 68,
+        "seconds": 4.423661292006727
+      },
+      {
+        "frame": 69,
+        "seconds": 4.507870959001593
+      },
+      {
+        "frame": 70,
+        "seconds": 4.418315707996953
+      },
+      {
+        "frame": 71,
+        "seconds": 4.477674249996198
+      },
+      {
+        "frame": 72,
+        "seconds": 4.4959044579882175
+      },
+      {
+        "frame": 73,
+        "seconds": 4.45988170801138
+      },
+      {
+        "frame": 74,
+        "seconds": 4.466201415998512
+      },
+      {
+        "frame": 75,
+        "seconds": 4.405574374992284
+      },
+      {
+        "frame": 76,
+        "seconds": 4.384704249998322
+      },
+      {
+        "frame": 77,
+        "seconds": 4.396136958006537
+      },
+      {
+        "frame": 78,
+        "seconds": 4.388368041996728
+      },
+      {
+        "frame": 79,
+        "seconds": 4.452265333005926
+      },
+      {
+        "frame": 80,
+        "seconds": 4.492507667004247
+      },
+      {
+        "frame": 81,
+        "seconds": 4.417238958005328
+      },
+      {
+        "frame": 82,
+        "seconds": 4.427463708008872
+      },
+      {
+        "frame": 83,
+        "seconds": 4.538913707991014
+      },
+      {
+        "frame": 84,
+        "seconds": 4.379547624994302
+      },
+      {
+        "frame": 85,
+        "seconds": 4.530684083001688
+      },
+      {
+        "frame": 86,
+        "seconds": 4.491581750000478
+      },
+      {
+        "frame": 87,
+        "seconds": 4.433878208001261
+      },
+      {
+        "frame": 88,
+        "seconds": 4.451949916998274
+      },
+      {
+        "frame": 89,
+        "seconds": 4.6132577910029795
+      },
+      {
+        "frame": 90,
+        "seconds": 4.442873624997446
+      },
+      {
+        "frame": 91,
+        "seconds": 4.467159457999514
+      },
+      {
+        "frame": 92,
+        "seconds": 4.431888375009294
+      },
+      {
+        "frame": 93,
+        "seconds": 4.457571749997442
+      },
+      {
+        "frame": 94,
+        "seconds": 4.512242708005942
+      },
+      {
+        "frame": 95,
+        "seconds": 4.450181874999544
+      },
+      {
+        "frame": 96,
+        "seconds": 4.418949875005637
+      }
+    ],
+    "renderSeconds": 428.02198141699773,
+    "posterFrame": 1,
+    "status": "rendered"
+  },
+  "probe": {
+    "codec_name": "h264",
+    "width": 1920,
+    "height": 1080,
+    "color_space": "bt709",
+    "color_transfer": "iec61966-2-1",
+    "color_primaries": "bt709",
+    "avg_frame_rate": "24/1",
+    "nb_read_frames": "96"
+  },
+  "seconds": 431.610348917,
+  "finishedAt": "2026-10-02T16:33:06.266Z"
+}

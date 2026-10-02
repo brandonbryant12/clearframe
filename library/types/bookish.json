@@ -1,0 +1,8 @@
+{
+  "order": 6,
+  "title": "Display serif",
+  "when": "Documentaries, histories and lessons: DM Serif Display with its italic, lower contrast than the didone and friendlier at small sizes.",
+  "display": "dm-serif",
+  "emphasis": "italic",
+  "tracking": -0.005
+}

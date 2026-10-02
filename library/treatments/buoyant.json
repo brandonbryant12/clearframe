@@ -4,6 +4,7 @@
   "when": "Friendly launches, creative events and optimistic stories with rounded expressive forms",
   "film": {
     "theme": "sorbet",
+    "type": "geometric",
     "backdrop": "none",
     "motion": {
       "preset": "snappy",

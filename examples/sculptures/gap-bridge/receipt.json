@@ -1,0 +1,522 @@
+{
+  "version": 1,
+  "status": "ready-for-review",
+  "id": "gap-bridge",
+  "title": "The missing connection",
+  "recipe": {
+    "id": "gap-bridge",
+    "title": "The missing connection",
+    "use": "A fill-in-the-blank answer, a missing step, a completed argument or a repaired connection.",
+    "description": "Two ceramic beam ends leave a real center gap. A contrasting insert aligns with two guide rails, descends into the space, and remains seated.",
+    "theme": "vellum",
+    "duration": 4,
+    "loop": false,
+    "posterPos": 0,
+    "copy": "Use --pos 0 for the question poster with its visible gap. Hold the native sentence with a blank, then start the non-looping insertion clip on the answer beat and reveal the exact missing text. The physical piece carries no lettering.",
+    "metaphor": "A visual completion metaphor, not an interactive input field, factual mechanical assembly, or proof that a learner supplied the correct answer.",
+    "parameters": [
+      "theme",
+      "seed",
+      "duration",
+      "fps",
+      "vertical"
+    ]
+  },
+  "config": {
+    "id": "gap-bridge",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "seed": 17,
+    "theme": "vellum",
+    "colors": {
+      "base": "vellum",
+      "bg": "#f3eee4",
+      "surface": "#dfd4c2",
+      "ink": "#292328",
+      "muted": "#665b60",
+      "accent": "#8e343d",
+      "accent2": "#545a83",
+      "positive": "#376850",
+      "negative": "#a13934"
+    },
+    "samples": 48,
+    "pos": 0,
+    "still": false,
+    "draft": false,
+    "loop": false
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347",
+    "library/sculptures/gap-bridge.py": "de7455aabd7c8784b0330042e9f828cbf1b9efa426a8759798f251b7ec467f26",
+    "library/sculptures/gap-bridge.json": "31d97881c5525af13046549132e8eee4b1eda702445345f3f16dec0448056b0b"
+  },
+  "encoding": {
+    "transfer": "iec61966-2-1",
+    "primaries": "bt709",
+    "matrix": "bt709",
+    "range": "tv",
+    "note": "Preserve Blender display sRGB transfer; convert RGB to limited-range BT.709 YUV."
+  },
+  "startedAt": "2026-10-02T16:34:33.518Z",
+  "stages": [
+    {
+      "name": "blender",
+      "status": "passed",
+      "seconds": 435.50194133300005
+    },
+    {
+      "name": "encode",
+      "status": "passed",
+      "seconds": 2.070619249999989
+    },
+    {
+      "name": "verify",
+      "status": "passed",
+      "seconds": 0.16247862499998883
+    }
+  ],
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "5106801353ee521f0f2b4d67d312ba021ddbc7cc2c096187cab374c35453fc50",
+      "bytes": 112113
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "56939efa178e926e7b0336d8bddb6094d7335675c178f397d6bfcdb256cb2f81",
+      "bytes": 1727268
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "0dcb74d84b4de37f77b7c005c9ae12c6526ee8d667d570e2943365c447a58dfc",
+      "bytes": 621281
+    }
+  },
+  "blender": {
+    "version": 1,
+    "blenderVersion": "5.2.2 LTS",
+    "blenderBuildHash": "d13f752e3b9c",
+    "engine": "BLENDER_EEVEE",
+    "threads": 2,
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "samples": 48,
+    "colorManagement": {
+      "view": "AgX",
+      "look": "AgX - Medium High Contrast"
+    },
+    "bakedMotion": true,
+    "requiresAutoExec": false,
+    "loopMaxTransformError": 1.8000001907348633,
+    "objects": 16,
+    "meshVertices": 88,
+    "buildSeconds": 0.01763462499366142,
+    "bakeSeconds": 0.004511708000791259,
+    "renderedFrames": [
+      {
+        "frame": 1,
+        "seconds": 5.263710958010051
+      },
+      {
+        "frame": 2,
+        "seconds": 4.500626999986707
+      },
+      {
+        "frame": 3,
+        "seconds": 4.486425374998362
+      },
+      {
+        "frame": 4,
+        "seconds": 4.363615749985911
+      },
+      {
+        "frame": 5,
+        "seconds": 4.33831854199525
+      },
+      {
+        "frame": 6,
+        "seconds": 4.419552040999406
+      },
+      {
+        "frame": 7,
+        "seconds": 4.483643457992002
+      },
+      {
+        "frame": 8,
+        "seconds": 4.3614631250093225
+      },
+      {
+        "frame": 9,
+        "seconds": 4.360829625002225
+      },
+      {
+        "frame": 10,
+        "seconds": 4.364435499999672
+      },
+      {
+        "frame": 11,
+        "seconds": 4.341131666995352
+      },
+      {
+        "frame": 12,
+        "seconds": 4.396790708007757
+      },
+      {
+        "frame": 13,
+        "seconds": 4.4712061250029365
+      },
+      {
+        "frame": 14,
+        "seconds": 4.499276082991855
+      },
+      {
+        "frame": 15,
+        "seconds": 4.408278707996942
+      },
+      {
+        "frame": 16,
+        "seconds": 4.7216119170043385
+      },
+      {
+        "frame": 17,
+        "seconds": 4.733809457989992
+      },
+      {
+        "frame": 18,
+        "seconds": 4.720148583990522
+      },
+      {
+        "frame": 19,
+        "seconds": 4.699757875001524
+      },
+      {
+        "frame": 20,
+        "seconds": 4.64748800000234
+      },
+      {
+        "frame": 21,
+        "seconds": 4.662302625001757
+      },
+      {
+        "frame": 22,
+        "seconds": 4.721708084005513
+      },
+      {
+        "frame": 23,
+        "seconds": 4.63898191699991
+      },
+      {
+        "frame": 24,
+        "seconds": 4.702631166990614
+      },
+      {
+        "frame": 25,
+        "seconds": 4.732025958990562
+      },
+      {
+        "frame": 26,
+        "seconds": 4.707905791990925
+      },
+      {
+        "frame": 27,
+        "seconds": 4.6810204579960555
+      },
+      {
+        "frame": 28,
+        "seconds": 4.604577083999175
+      },
+      {
+        "frame": 29,
+        "seconds": 4.4682817090069875
+      },
+      {
+        "frame": 30,
+        "seconds": 4.488922250005999
+      },
+      {
+        "frame": 31,
+        "seconds": 4.437044667007285
+      },
+      {
+        "frame": 32,
+        "seconds": 4.534824457994546
+      },
+      {
+        "frame": 33,
+        "seconds": 4.517713416003971
+      },
+      {
+        "frame": 34,
+        "seconds": 4.414080165995983
+      },
+      {
+        "frame": 35,
+        "seconds": 4.4121993749868125
+      },
+      {
+        "frame": 36,
+        "seconds": 4.534438125003362
+      },
+      {
+        "frame": 37,
+        "seconds": 4.55413225000666
+      },
+      {
+        "frame": 38,
+        "seconds": 4.5416779999941355
+      },
+      {
+        "frame": 39,
+        "seconds": 4.411579833002179
+      },
+      {
+        "frame": 40,
+        "seconds": 4.521138083000551
+      },
+      {
+        "frame": 41,
+        "seconds": 4.641124125002534
+      },
+      {
+        "frame": 42,
+        "seconds": 4.452588583997567
+      },
+      {
+        "frame": 43,
+        "seconds": 4.517132833003416
+      },
+      {
+        "frame": 44,
+        "seconds": 4.650421333004488
+      },
+      {
+        "frame": 45,
+        "seconds": 4.624106999996002
+      },
+      {
+        "frame": 46,
+        "seconds": 4.656942082991009
+      },
+      {
+        "frame": 47,
+        "seconds": 4.558623292003176
+      },
+      {
+        "frame": 48,
+        "seconds": 4.507942666998133
+      },
+      {
+        "frame": 49,
+        "seconds": 4.485425624996424
+      },
+      {
+        "frame": 50,
+        "seconds": 4.467789082991658
+      },
+      {
+        "frame": 51,
+        "seconds": 4.580358624996734
+      },
+      {
+        "frame": 52,
+        "seconds": 4.504448708990822
+      },
+      {
+        "frame": 53,
+        "seconds": 4.529996750003193
+      },
+      {
+        "frame": 54,
+        "seconds": 4.47710662499594
+      },
+      {
+        "frame": 55,
+        "seconds": 4.3997953749931185
+      },
+      {
+        "frame": 56,
+        "seconds": 4.426236999992398
+      },
+      {
+        "frame": 57,
+        "seconds": 4.434442541009048
+      },
+      {
+        "frame": 58,
+        "seconds": 4.648928999988129
+      },
+      {
+        "frame": 59,
+        "seconds": 4.516551415988943
+      },
+      {
+        "frame": 60,
+        "seconds": 4.422380958989379
+      },
+      {
+        "frame": 61,
+        "seconds": 4.458855999997468
+      },
+      {
+        "frame": 62,
+        "seconds": 4.48493312500068
+      },
+      {
+        "frame": 63,
+        "seconds": 4.547525417001452
+      },
+      {
+        "frame": 64,
+        "seconds": 4.4621939589997055
+      },
+      {
+        "frame": 65,
+        "seconds": 4.485209083009977
+      },
+      {
+        "frame": 66,
+        "seconds": 4.54897745900962
+      },
+      {
+        "frame": 67,
+        "seconds": 4.426271499993163
+      },
+      {
+        "frame": 68,
+        "seconds": 4.47075408299861
+      },
+      {
+        "frame": 69,
+        "seconds": 4.454412542007049
+      },
+      {
+        "frame": 70,
+        "seconds": 4.57659258399508
+      },
+      {
+        "frame": 71,
+        "seconds": 4.490825792003307
+      },
+      {
+        "frame": 72,
+        "seconds": 4.487727707994054
+      },
+      {
+        "frame": 73,
+        "seconds": 4.446329708007397
+      },
+      {
+        "frame": 74,
+        "seconds": 4.500560917003895
+      },
+      {
+        "frame": 75,
+        "seconds": 4.4902367500035325
+      },
+      {
+        "frame": 76,
+        "seconds": 4.519490125006996
+      },
+      {
+        "frame": 77,
+        "seconds": 4.545238624996273
+      },
+      {
+        "frame": 78,
+        "seconds": 4.476990374998422
+      },
+      {
+        "frame": 79,
+        "seconds": 4.447314707998885
+      },
+      {
+        "frame": 80,
+        "seconds": 4.449124041988398
+      },
+      {
+        "frame": 81,
+        "seconds": 4.45413254199957
+      },
+      {
+        "frame": 82,
+        "seconds": 4.441550374991493
+      },
+      {
+        "frame": 83,
+        "seconds": 4.402746583989938
+      },
+      {
+        "frame": 84,
+        "seconds": 4.399981665992527
+      },
+      {
+        "frame": 85,
+        "seconds": 4.413675207993947
+      },
+      {
+        "frame": 86,
+        "seconds": 4.519245167000918
+      },
+      {
+        "frame": 87,
+        "seconds": 4.409752124993247
+      },
+      {
+        "frame": 88,
+        "seconds": 4.483275208011037
+      },
+      {
+        "frame": 89,
+        "seconds": 4.487377416997333
+      },
+      {
+        "frame": 90,
+        "seconds": 4.556313708002563
+      },
+      {
+        "frame": 91,
+        "seconds": 4.560976416993071
+      },
+      {
+        "frame": 92,
+        "seconds": 4.4314312920032535
+      },
+      {
+        "frame": 93,
+        "seconds": 4.4499100420071045
+      },
+      {
+        "frame": 94,
+        "seconds": 4.525286417003372
+      },
+      {
+        "frame": 95,
+        "seconds": 4.5775149170076475
+      },
+      {
+        "frame": 96,
+        "seconds": 4.503447457987932
+      }
+    ],
+    "renderSeconds": 433.88369858400256,
+    "posterFrame": 1,
+    "status": "rendered"
+  },
+  "probe": {
+    "codec_name": "h264",
+    "width": 1920,
+    "height": 1080,
+    "color_space": "bt709",
+    "color_transfer": "iec61966-2-1",
+    "color_primaries": "bt709",
+    "avg_frame_rate": "24/1",
+    "nb_read_frames": "96"
+  },
+  "seconds": 437.749681541,
+  "finishedAt": "2026-10-02T16:41:51.264Z"
+}

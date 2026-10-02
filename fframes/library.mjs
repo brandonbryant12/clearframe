@@ -11,9 +11,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { frames } from './sketch-kit.mjs';
+import { validateType } from './type.mjs';
 
 export const LIBRARY = path.join(path.dirname(path.dirname(fileURLToPath(import.meta.url))), 'library');
-export const KINDS = ['palettes', 'treatments', 'sketches', 'playbooks'];
+export const KINDS = ['palettes', 'treatments', 'sketches', 'playbooks', 'types', 'directions'];
 export const PALETTE_KEYS = ['bg', 'surface', 'ink', 'muted', 'accent', 'accent2', 'positive', 'negative'];
 
 // ------------------------------------------------------------------ validation
@@ -35,6 +36,16 @@ const known = (item, keys, where) => {
 };
 
 const VALIDATE = {
+  directions(item, where) {
+    known(item, ['order', 'title', 'when', 'materials', 'playbook', 'treatment', 'story', 'picture', 'pace', 'rules'], where);
+    for (const key of ['title', 'when', 'story', 'picture', 'pace'])
+      if (typeof item[key] !== 'string' || !item[key].trim()) throw new Error(`${where}: needs ${key}`);
+    for (const key of ['materials', 'rules'])
+      if (!Array.isArray(item[key]) || !item[key].length || item[key].some(v => typeof v !== 'string' || !v.trim()))
+        throw new Error(`${where}: ${key} must be a nonempty list of strings`);
+    for (const [key, kind] of [['playbook', 'playbooks'], ['treatment', 'treatments']])
+      if (!items(kind).some(v => v.id === item[key])) throw new Error(`${where}: unknown ${key} "${item[key]}"`);
+  },
   palettes(item, where) {
     known(item, ['order', 'title', 'notes', 'colors'], where);
     if (!item.colors || typeof item.colors !== 'object')
@@ -63,11 +74,17 @@ const VALIDATE = {
     if (!Array.isArray(item.rules ?? [])) throw new Error(`${where}: rules must be a list of strings`);
     if (item.playbook != null && !items('playbooks').some(p => p.id === item.playbook))
       throw new Error(`${where}: playbook "${item.playbook}" is not a playbook`);
+    if (item.film.type != null && !items('types').some(t => t.id === item.film.type))
+      throw new Error(`${where}: film.type "${item.film.type}" is not a type voice (clearframe types)`);
   },
   sketches(item, where) {
     if (!item.summary || !item.use) throw new Error(`${where}: needs summary and use`);
     if (typeof item.build !== 'function' && !item.elements && !item.formats)
       throw new Error(`${where}: needs elements (or formats: {landscape, vertical, …}) or, for built-ins, build(w, h)`);
+  },
+  types(item, where) {
+    known(item, ['order', 'title', 'when', 'display', 'emphasis', 'case', 'tracking', 'leading'], where);
+    validateType(item, where);
   },
   playbooks(item, where) {
     known(
@@ -77,6 +94,7 @@ const VALIDATE = {
         'title',
         'audience',
         'inputs',
+        'sources',
         'beats',
         'theme',
         'motion',
@@ -91,6 +109,7 @@ const VALIDATE = {
         'lens',
         'heading',
         'textMotion',
+        'type',
         'transition',
         'sfx',
         'music',
@@ -98,6 +117,11 @@ const VALIDATE = {
       where,
     );
     if (!item.title || !item.audience || !item.inputs) throw new Error(`${where}: needs title, audience and inputs`);
+    if (item.sources != null && (!Array.isArray(item.sources) || item.sources.some(s =>
+      !s || typeof s !== 'object' || Array.isArray(s) ||
+      !((typeof s.claim === 'string' && s.claim.trim() && typeof s.source === 'string' && s.source.trim()) ||
+        (typeof s.id === 'string' && s.id.trim() && typeof s.title === 'string' && s.title.trim())))))
+      throw new Error(`${where}: sources must contain claim/source or id/title entries`);
     if (!Array.isArray(item.beats) || !item.beats.length) throw new Error(`${where}: needs beats`);
     item.beats.forEach((b, i) => {
       if (!b || typeof b.block !== 'string') throw new Error(`${where}: beats[${i}] needs a block`);
@@ -210,6 +234,10 @@ export function vendor(dir, refs) {
     fs.copyFileSync(it.source, to);
   }
 }
+
+/** Type voices (built-ins plus any in the project's library/), and one by id. */
+export const types = () => items('types');
+export const typeById = id => item('types', id);
 
 /** Palettes as {id: colors}. */
 export const palettes = () => Object.fromEntries(items('palettes').map(p => [p.id, p.colors]));

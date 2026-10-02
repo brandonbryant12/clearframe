@@ -1,0 +1,18 @@
+{
+  "order": 5,
+  "title": "Draw the explanation",
+  "materials": [
+    "podcast",
+    "research"
+  ],
+  "playbook": "concept-explainer",
+  "treatment": "sketchbook",
+  "when": "The speaker explains an idea that can be drawn.",
+  "story": "Pose the question, construct a visual explanation, stress-test it, then leave the useful model.",
+  "picture": "An evolving hand-drawn diagram with labels that arrive when named.",
+  "pace": "Follow the actual thought; alternate construction with time to inspect.",
+  "rules": [
+    "Keep narration and timing when replacing imported kinetic beats with drawings.",
+    "Draw new objects for the subject rather than recycling unrelated stock metaphors."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "exploded-core",
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "frames": 96,
+  "seed": 17,
+  "theme": "stage",
+  "colors": {
+    "base": "stage",
+    "bg": "#050507",
+    "surface": "#15151b",
+    "ink": "#f5f5f7",
+    "muted": "#8e8e98",
+    "accent": "#3b9eff",
+    "accent2": "#c77dff",
+    "positive": "#30d158",
+    "negative": "#ff5c52"
+  },
+  "samples": 48,
+  "pos": 0.5,
+  "still": false,
+  "draft": false,
+  "loop": true,
+  "out": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/exploded-core",
+  "sourceRoot": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/exploded-core/source",
+  "sceneFile": "/Users/brandon/Documents/clearframe-art-studies-2026-10-02/masters/exploded-core/source/exploded-core.py"
+}
