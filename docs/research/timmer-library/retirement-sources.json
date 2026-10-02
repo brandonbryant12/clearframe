@@ -1,0 +1,49 @@
+{
+  "asOf": "2026-10-02",
+  "scope": "Retirement collection: supplementary primary references, separate from the 24-record Timmer corpus. Dates below are access dates, not publication dates. Plan-specific rules must come from supplied plan documents.",
+  "sources": [
+    {
+      "id": "RS01",
+      "title": "Retirement topics \u2014 Vesting",
+      "date": "accessed 2026-10-02",
+      "url": "https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-vesting",
+      "kind": "IRS participant guidance",
+      "access": "Direct primary page read",
+      "observation": "Employee elective contributions are owned by the employee. Employer vesting and service-credit rules depend on the plan. Separate ownership from withdrawal eligibility.",
+      "topics": [
+        "ownership",
+        "vesting",
+        "service credit"
+      ]
+    },
+    {
+      "id": "RS02",
+      "title": "Types of Retirement Plans",
+      "date": "accessed 2026-10-02",
+      "url": "https://www.dol.gov/general/topic/retirement/typesofplans",
+      "kind": "U.S. Department of Labor guidance",
+      "access": "Direct primary page read",
+      "observation": "Distinguishes an account funded by contributions and investment results from a defined benefit promise. A salary-and-service formula is one example, not a universal pension formula.",
+      "topics": [
+        "defined contribution",
+        "defined benefit",
+        "matching",
+        "payouts"
+      ]
+    },
+    {
+      "id": "RS03",
+      "title": "Compound Interest Calculator",
+      "date": "accessed 2026-10-02",
+      "url": "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator",
+      "kind": "SEC Investor.gov educational calculator",
+      "access": "Direct primary page read",
+      "observation": "Makes the starting amount, periodic contribution, time and assumed interest explicit. Inspires editable scenario inputs; no performance forecast is supplied by this library.",
+      "topics": [
+        "compounding",
+        "contributions",
+        "assumptions"
+      ]
+    }
+  ]
+}

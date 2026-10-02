@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "id": "balance-study",
+  "version": "0.1.0",
+  "kind": "story-kit",
+  "title": "Balance study",
+  "purpose": "Introduce competing forces and return to matched native evidence",
+  "status": "ready-for-review",
+  "tags": {
+    "purpose": [
+      "compare",
+      "explain",
+      "qualify"
+    ],
+    "appearance": [
+      "ceramic",
+      "brass",
+      "forest"
+    ],
+    "movement": [
+      "rock",
+      "settle",
+      "reveal"
+    ],
+    "format": [
+      "landscape"
+    ],
+    "subject": [
+      "general",
+      "tradeoffs"
+    ]
+  },
+  "includes": {
+    "library": "library",
+    "media": [
+      "media/counterweight-mobile"
+    ],
+    "specimen": "storyboard.json",
+    "preview": "preview.html"
+  },
+  "requires": {
+    "renderer": "ClearFrame / FFFrames; authoring inspected at f00c6de",
+    "replay": [
+      "native canvas",
+      "compare",
+      "clip plates",
+      "shared JSON library"
+    ],
+    "edit3D": [
+      "optional Blender installation; asset receipt records original version"
+    ],
+    "fonts": "bundled Space Grotesk and Inter with existing renderer licenses"
+  },
+  "editable": {
+    "native": [
+      "labels",
+      "evidence",
+      "type",
+      "native palette",
+      "beat timing"
+    ],
+    "requiresNewAssetPass": [
+      "geometry",
+      "materials",
+      "lighting",
+      "baked palette",
+      "3D camera"
+    ],
+    "fixedClip": [
+      "1920x1080",
+      "24 fps",
+      "6 seconds",
+      "opaque background",
+      "no audio"
+    ]
+  },
+  "evidence": {
+    "original": "examples/sculptures/counterweight-mobile",
+    "receipt": "media/counterweight-mobile/receipt.json",
+    "asset": "media/counterweight-mobile/asset.json",
+    "fileIdentity": "SHA-256 manifest; copied asset output/source hashes checked separately",
+    "visualReview": "Existing poster inspected; no new clip playback or complete specimen rendering; acceptance pending",
+    "nativeVariants": "four JSON frame shapes; source compilation only"
+  },
+  "license": "MIT for original artwork and kit files; see LICENSE",
+  "files": [
+    {
+      "path": "DIRECTION.md",
+      "bytes": 777,
+      "sha256": "13e39238b91fcb7255195056cc6171cf28da23ec0d6bf2ba76a575314836b4c2"
+    },
+    {
+      "path": "library/palettes/balance-forest.json",
+      "bytes": 319,
+      "sha256": "028ecfebcb00fd44c7546f62dd65a77379976a6a26dd0d445e940e4282bc9813"
+    },
+    {
+      "path": "library/playbooks/balance-study.json",
+      "bytes": 1554,
+      "sha256": "0e80a7616b150a5916859d8a87c36e1690c23ebd1c7f3035118abecb5fd40ff4"
+    },
+    {
+      "path": "library/sketches/balance-forces.json",
+      "bytes": 12621,
+      "sha256": "95ff1c4c9aaddacf2d8ba914a8687bc075ddb9e0a6c32432f9fdc25f7c58c5b3"
+    },
+    {
+      "path": "library/treatments/balance-study.json",
+      "bytes": 646,
+      "sha256": "87f415d111c297008620433e6283a93223c59c07e3da30d1e8a408d4292f817c"
+    },
+    {
+      "path": "library/types/balance-geometric.json",
+      "bytes": 262,
+      "sha256": "07c5c7d605110fa8e6a2afa023b2df59970f93e272210d5f6d382ba01148cece"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1099,
+      "sha256": "bde1fff290731a65c93efe5b2a5044acb9b0e4b2b9b99ed97871fab2ae8a16f1"
+    },
+    {
+      "path": "media/counterweight-mobile/asset.json",
+      "bytes": 2642,
+      "sha256": "1bd1df943f17008eae2c1e4bed33cf08dc17b734366de3b6cf2e10a82a022496"
+    },
+    {
+      "path": "media/counterweight-mobile/clip.mp4",
+      "bytes": 884832,
+      "sha256": "329c6fbf53f5387c2e3a3c318e13335c9095c6875b663a460a86bd8e60e6707f"
+    },
+    {
+      "path": "media/counterweight-mobile/poster.png",
+      "bytes": 1612948,
+      "sha256": "b153568a0c8e8ba983d05638b120b16351b7408ffb547c129b96ca69568f5a40"
+    },
+    {
+      "path": "media/counterweight-mobile/receipt.json",
+      "bytes": 14767,
+      "sha256": "6c5f393dfe16c179e4c5c06ab8d62a8590e060b19028ac95f5206fe186e721d7"
+    },
+    {
+      "path": "media/counterweight-mobile/render-config.json",
+      "bytes": 807,
+      "sha256": "961190063f127ed67d31ec7bb493b024d08beb690456069f5e648ba35541f82c"
+    },
+    {
+      "path": "media/counterweight-mobile/scene.blend",
+      "bytes": 235253,
+      "sha256": "18105c43d3fd25185a57a2c28569bef4ed9eaa3fa9c03d7f7049b2cc00868450"
+    },
+    {
+      "path": "media/counterweight-mobile/source/artkit.py",
+      "bytes": 5744,
+      "sha256": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347"
+    },
+    {
+      "path": "media/counterweight-mobile/source/counterweight-mobile.json",
+      "bytes": 646,
+      "sha256": "c5e184f309d47c672eb9d1b3e5df12838af52b8dd7ad48d58a632bc079991264"
+    },
+    {
+      "path": "media/counterweight-mobile/source/counterweight-mobile.py",
+      "bytes": 3291,
+      "sha256": "7feb1bcd781b5b5da30ac93778bc2e432cb671447977ba0d4a9d5eac4897f37e"
+    },
+    {
+      "path": "media/counterweight-mobile/source/render.py",
+      "bytes": 5050,
+      "sha256": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114"
+    },
+    {
+      "path": "preview.html",
+      "bytes": 1712,
+      "sha256": "31b92873159eedeeefe6e2c7ca206e1c31e871130d9cff10fd7c81ca7f17ff8c"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3044,
+      "sha256": "46b07dcb0e407485308cb62737f858a0a6c5ec89c04ed28d89d67f4c44d3f7ef"
+    },
+    {
+      "path": "storyboard.json",
+      "bytes": 5435,
+      "sha256": "56096a687e62b52453d23e40630719956111fb4f121c2a42d8ebeb0a7ebc3602"
+    }
+  ]
+}

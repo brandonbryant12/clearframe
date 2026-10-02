@@ -1,0 +1,24 @@
+{
+  "title": "Balance study",
+  "when": "Qualitative tradeoffs followed by matched native evidence",
+  "film": {
+    "theme": "balance-forest",
+    "type": "balance-geometric",
+    "backdrop": "none",
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.4
+    },
+    "transition": "cut",
+    "sfx": "off"
+  },
+  "beats": {
+    "rough": false
+  },
+  "rules": [
+    "Introduce competing forces with a qualitative physical metaphor.",
+    "Keep equal space for the evidence on both sides.",
+    "Keep all text, numbers and sources native.",
+    "The included clip has baked forest colors; palette changes affect native layers only."
+  ]
+}

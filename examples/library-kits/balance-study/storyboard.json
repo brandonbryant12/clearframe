@@ -1,0 +1,218 @@
+{
+  "version": 2,
+  "title": "Balance study — integration specimen",
+  "logline": "Two forces, then evidence",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "balance-forest",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sfx": "off",
+  "type": "balance-geometric",
+  "sources": [
+    {
+      "claim": "Force A and Force B are placeholders; no financial relationship is asserted",
+      "source": "Original qualitative teaching specimen; replace before publication"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "material",
+      "block": "canvas",
+      "duration": 6,
+      "camera": "none",
+      "plate": {
+        "asset": "balance-mobile",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": true
+      },
+      "props": {
+        "elements": []
+      }
+    },
+    {
+      "id": "forces",
+      "block": "canvas",
+      "duration": 6,
+      "props": {
+        "source": "Qualitative illustration; tilt is not measured",
+        "elements": [
+          {
+            "type": "poly",
+            "points": [
+              [
+                960,
+                570
+              ],
+              [
+                870,
+                900
+              ],
+              [
+                1050,
+                900
+              ]
+            ],
+            "closed": true,
+            "fill": "surface",
+            "at": 0.2
+          },
+          {
+            "type": "group",
+            "at": 0.5,
+            "origin": [
+              960,
+              570
+            ],
+            "keys": [
+              {
+                "at": 1.6,
+                "rotate": -9,
+                "dur": 0.9,
+                "ease": "spring"
+              }
+            ],
+            "children": [
+              {
+                "type": "rect",
+                "x": 410,
+                "y": 562,
+                "w": 1100,
+                "h": 16,
+                "r": 8,
+                "fill": "ink",
+                "enter": "grow-x",
+                "origin": [
+                  960,
+                  570
+                ]
+              },
+              {
+                "type": "group",
+                "children": [
+                  {
+                    "type": "line",
+                    "x1": 410,
+                    "y1": 570,
+                    "x2": 410,
+                    "y2": 690,
+                    "stroke": "muted",
+                    "width": 4,
+                    "enter": "fade"
+                  },
+                  {
+                    "type": "path",
+                    "d": "M 300 690 Q 410 770 520 690 Z",
+                    "fill": "accent2",
+                    "enter": "fade"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Force A",
+                    "x": 410,
+                    "y": 820,
+                    "size": 40,
+                    "anchor": "middle",
+                    "font": "semibold",
+                    "fill": "ink",
+                    "enter": "fade"
+                  }
+                ]
+              },
+              {
+                "type": "group",
+                "children": [
+                  {
+                    "type": "line",
+                    "x1": 1510,
+                    "y1": 570,
+                    "x2": 1510,
+                    "y2": 690,
+                    "stroke": "muted",
+                    "width": 4,
+                    "enter": "fade"
+                  },
+                  {
+                    "type": "path",
+                    "d": "M 1400 690 Q 1510 770 1620 690 Z",
+                    "fill": "accent",
+                    "enter": "fade"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Force B",
+                    "x": 1510,
+                    "y": 820,
+                    "size": 40,
+                    "anchor": "middle",
+                    "font": "semibold",
+                    "fill": "ink",
+                    "enter": "fade"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "circle",
+            "cx": 960,
+            "cy": 570,
+            "r": 14,
+            "fill": "accent",
+            "at": 0.4
+          }
+        ]
+      }
+    },
+    {
+      "id": "evidence",
+      "block": "compare",
+      "duration": 6,
+      "props": {
+        "title": "Inspect both forces",
+        "left": {
+          "title": "Force A",
+          "items": [
+            "What changes?",
+            "What evidence supports it?"
+          ]
+        },
+        "right": {
+          "title": "Force B",
+          "items": [
+            "What offsets it?",
+            "What would change the conclusion?"
+          ]
+        },
+        "source": "Original teaching framework; no investment recommendation"
+      }
+    }
+  ],
+  "budget": 0,
+  "assets": [
+    {
+      "id": "balance-mobile",
+      "kind": "clip",
+      "file": "media/counterweight-mobile/clip.mp4"
+    }
+  ]
+}

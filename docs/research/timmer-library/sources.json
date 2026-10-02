@@ -1,0 +1,398 @@
+{
+  "version": 1,
+  "asOf": "2026-10-02",
+  "window": {
+    "from": "2025-10-02",
+    "through": "2026-10-02",
+    "timezone": "America/New_York"
+  },
+  "method": "Representative, purposive survey across every month of the requested year, plus the October 1 endpoint. Not an exhaustive archive or a frequency estimate. Sources are deduplicated by page; blog/social overlap is not independent confirmation.",
+  "limitations": [
+    "Direct X access was unavailable or empty. Five social items are explicitly marked indirect evidence.",
+    "Publisher summaries are distinguished from Timmer-authored essays and interviews. Dates on syndicated pages can differ from the underlying note date.",
+    "Charts and market datasets were not licensed or imported. No market forecast or numerical conclusion is adopted as fact.",
+    "Index-only search hits and out-of-window articles were excluded from the analyzed corpus."
+  ],
+  "sources": [
+    {
+      "id": "S01",
+      "date": "2025-10-10",
+      "title": "Looking Up",
+      "url": "https://advisoranalyst.com/2025/10/10/jurrien-timmer-looking-up.html/",
+      "kind": "Timmer essay, republished by Fidelity Canada",
+      "access": "article text reviewed",
+      "observation": "Contrasts cyclical and secular trends, earnings and valuation, a late-1990s analogy, and a tightening liquidity backdrop.",
+      "topics": [
+        "cycles",
+        "earnings",
+        "valuation",
+        "liquidity"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S02",
+      "date": "2025-11-10",
+      "title": "The global macro view",
+      "url": "https://www.fidelity.ca/en/insights/videos/the-global-macro-view-timmer-nov10/",
+      "kind": "Fidelity interview transcript",
+      "access": "transcript excerpts reviewed; transcription is not independently corrected",
+      "observation": "Discusses opposing tail outcomes, revisions into earnings season, implied equity risk premium and the limits of historical technology-boom comparisons.",
+      "topics": [
+        "uncertainty",
+        "earnings",
+        "valuation",
+        "analogies"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S03",
+      "date": "2025-11-24",
+      "title": "Embracing volatility as part of the investment cycle",
+      "url": "https://www.fidelity.ca/en/insights/articles/timmer-global-macro-view-nov24/",
+      "kind": "Fidelity editorial summary",
+      "access": "indexed article body reviewed; direct open failed",
+      "observation": "Connects market corrections with AI infrastructure investment, monetary conditions, demographic constraints and productivity.",
+      "topics": [
+        "drawdowns",
+        "productivity",
+        "capital-allocation"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S04",
+      "date": "2025-12-02",
+      "title": "Market Sense: year-end discussion",
+      "url": "https://media.fidelity.com/assets/Fidelity.com_VMS/401/515/120225_PODCAST_MarketSense.pdf",
+      "kind": "Fidelity interview transcript",
+      "access": "opening transcript excerpt reviewed",
+      "observation": "The opening frames the year through a sharp selloff followed by recovery; useful as an event-to-recovery narrative.",
+      "topics": [
+        "drawdowns",
+        "cycles"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S05",
+      "date": "2025-12-28",
+      "title": "Lines in the Sand",
+      "url": "https://advisoranalyst.com/2025/12/28/jurrien-timmer-lines-in-the-sand.html/",
+      "kind": "Timmer essay, republished by Fidelity Canada",
+      "access": "article text reviewed",
+      "observation": "Combines return drivers, inflation adjustment, concentration, capital allocation, yield curves, diversification and conditional scenarios.",
+      "topics": [
+        "earnings",
+        "valuation",
+        "breadth",
+        "rates",
+        "allocation",
+        "inflation",
+        "capital-allocation",
+        "cycles"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S06",
+      "date": "2026-01-15",
+      "title": "Spheres of Influence",
+      "url": "https://advisoranalyst.com/2026/01/15/jurrien-timmer-spheres-of-influence.html/",
+      "kind": "Timmer essay, republished by Fidelity Canada",
+      "access": "article text reviewed",
+      "observation": "Discusses geographic fragmentation, market broadening, international earnings, commodities and growth alongside soft employment.",
+      "topics": [
+        "global",
+        "breadth",
+        "productivity",
+        "earnings"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S07",
+      "date": "2026-02-13",
+      "title": "Green Over Red",
+      "url": "https://advisoranalyst.com/2026/02/13/jurrien-timmer-green-over-red.html/",
+      "kind": "Timmer essay, republished by Fidelity Canada",
+      "access": "article text reviewed",
+      "observation": "Examines broader participation, nominal versus real performance, earnings revisions, valuation and payouts across markets.",
+      "topics": [
+        "breadth",
+        "inflation",
+        "earnings",
+        "valuation",
+        "global"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S08",
+      "date": "2026-03-23",
+      "title": "Markets face a new stress test as geopolitics and inflation collide",
+      "url": "https://www.fidelity.ca/en/insights/articles/timmer-global-macro-view-mar23/?language=en",
+      "kind": "Fidelity editorial summary",
+      "access": "article text reviewed",
+      "observation": "Separates earnings resilience from valuation changes and links energy transport bottlenecks, futures curves and changing cross-asset behavior.",
+      "topics": [
+        "supply-chains",
+        "rates",
+        "valuation",
+        "correlation"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S09",
+      "date": "2026-04-13",
+      "title": "Zooming out in volatile markets",
+      "url": "https://www.fidelity.ca/en/insights/articles/timmer-global-macro-view-apr13/",
+      "kind": "Fidelity editorial summary",
+      "access": "article text reviewed",
+      "observation": "Questions traditional diversification when correlations change; separates prices, earnings and valuation and discusses rebalancing.",
+      "topics": [
+        "correlation",
+        "allocation",
+        "valuation",
+        "earnings"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S10",
+      "date": "2026-05-14",
+      "title": "Boom Bust Bubble?",
+      "url": "https://advisoranalyst.com/2026/05/14/jurrien-timmer-boom-bust-bubble.html/",
+      "kind": "Timmer essay, republished by Fidelity Canada",
+      "access": "article text reviewed",
+      "observation": "Juxtaposes AI-driven earnings with energy scarcity, narrowing participation, changing correlations and a historically aligned boom comparison.",
+      "topics": [
+        "uncertainty",
+        "supply-chains",
+        "earnings",
+        "breadth",
+        "analogies"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S11",
+      "date": "2026-06-24",
+      "title": "Found in Translation",
+      "url": "https://advisoranalyst.com/2026/06/24/jurrien-timmer-found-in-translation.html/",
+      "kind": "Timmer essay, republished by Fidelity Canada",
+      "access": "article text reviewed",
+      "observation": "Uses inventory stress, breakevens, global rates and an earnings-cycle clock to examine the tension between participation and protection.",
+      "topics": [
+        "supply-chains",
+        "rates",
+        "cycles",
+        "allocation"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S12",
+      "date": "2026-07-02",
+      "title": "Decision Trees",
+      "url": "https://advisoranalyst.com/2026/07/02/jurrien-timmer-decision-trees.html/",
+      "kind": "Timmer essay, republished by Fidelity Canada",
+      "access": "article text reviewed",
+      "observation": "Uses branching relative-performance comparisons and valuation-sized marks to discuss AI exposure, diversification and broadening.",
+      "topics": [
+        "allocation",
+        "breadth",
+        "valuation",
+        "capital-allocation"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S13",
+      "date": "2026-07-13",
+      "title": "What markets need from earnings season",
+      "url": "https://www.fidelity.ca/en/insights/articles/earnings-season-market-insights-jurrien-timmer/",
+      "kind": "Fidelity editorial summary",
+      "access": "article text reviewed",
+      "observation": "Highlights rising expectations, broader participation, earnings-led returns, changing buybacks and issuance, and the eventual productivity payoff from capital investment.",
+      "topics": [
+        "earnings",
+        "breadth",
+        "capital-allocation",
+        "productivity"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S14",
+      "date": "2026-08-10",
+      "title": "Constant Motion",
+      "url": "https://advisoranalyst.com/2026/08/10/constant-motion.html/",
+      "kind": "Timmer essay, republished by Fidelity Canada",
+      "access": "article text reviewed",
+      "observation": "Separates level from growth and acceleration, fund flows from asset values, nominal from real rates, and resemblance from important historical differences.",
+      "topics": [
+        "rates",
+        "earnings",
+        "liquidity",
+        "analogies",
+        "capital-allocation"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S15",
+      "date": "2026-09-15",
+      "title": "Depth of Field",
+      "url": "https://advisoranalyst.com/2026/09/15/timmer-depth-of-field.html/",
+      "kind": "Timmer essay, republished by Fidelity Canada",
+      "access": "article text reviewed",
+      "observation": "Looks beneath headline indices at payouts, international rates, commodity participation and relative gold/Bitcoin behavior.",
+      "topics": [
+        "breadth",
+        "rates",
+        "global",
+        "relative-value"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S16",
+      "date": "2026-09-21",
+      "title": "Real Rates, Oil and the AI Build-Out",
+      "url": "https://www.fidelity.ca/en/insights/articles/real-rates-oil-ai-build-out-jurrien-timmer/",
+      "kind": "Fidelity editorial summary",
+      "access": "opening and oil/correlation section reviewed; no numeric claims adopted",
+      "observation": "Connects energy pressure, bond and equity relationships, real yields, the debt burden and AI investment.",
+      "topics": [
+        "rates",
+        "correlation",
+        "productivity",
+        "debt"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S17",
+      "date": "2026-10-01",
+      "title": "Balancing Act",
+      "url": "https://advisoranalyst.com/2026/10/01/timmer-balancing-act-2.html/",
+      "kind": "Timmer essay, republished by Fidelity Canada",
+      "access": "indexed article excerpt reviewed",
+      "observation": "Contrasts a resilient headline index with weaker breadth and examines earnings support against higher real rates and valuation compression.",
+      "topics": [
+        "breadth",
+        "earnings",
+        "valuation",
+        "rates",
+        "debt"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S18",
+      "date": "2026-08-05",
+      "title": "A market pulled in two directions (commentary dated August 4)",
+      "url": "https://www-prd1.fidelity.ca/en/insights/articles/timmer-global-macro-view-august-04-2026/",
+      "kind": "Fidelity editorial summary",
+      "access": "indexed article body reviewed; displayed publication date August 5, title August 4",
+      "observation": "Frames the interaction between earnings, discount rates, policy uncertainty, currencies and diversified leadership.",
+      "topics": [
+        "rates",
+        "earnings",
+        "valuation",
+        "global"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "S19",
+      "date": "2026-09-14",
+      "title": "What rising rates mean for stocks, bonds and diversification",
+      "url": "https://www.fidelity.ca/en/insights/articles/rising-rates-investment-insights-jurrien-timmer/",
+      "kind": "Fidelity editorial summary",
+      "access": "opening excerpt reviewed",
+      "observation": "The opening describes a global rise in long-term yields and its interaction with earnings and broader participation.",
+      "topics": [
+        "rates",
+        "global",
+        "breadth"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "X01",
+      "date": "2025-10-23",
+      "title": "Gold and Bitcoin relative to money supply",
+      "url": "https://u.today/fidelitys-timmer-reveals-why-bitcoin-bulls-should-be-cautious",
+      "kind": "X post via third-party embed",
+      "access": "embedded English post excerpt; X page returned no readable text",
+      "observation": "Embedded post compares money supply with combined hard-asset values; inspires common-base ratios and explicit denominators.",
+      "topics": [
+        "liquidity",
+        "relative-value"
+      ],
+      "originalPost": "https://x.com/TimmerFidelity/status/1981420356544967113"
+    },
+    {
+      "id": "X02",
+      "date": "2025-12-26",
+      "title": "Gold and Bitcoin within the diversifying allocation",
+      "url": "https://u.today/fidelitys-macro-guru-turns-bearish-on-bitcoin",
+      "kind": "X post via third-party embed",
+      "access": "embedded English post excerpt; direct X open failed",
+      "observation": "Embedded post discusses different horizons for hard assets and relative performance against equities.",
+      "topics": [
+        "allocation",
+        "cycles",
+        "relative-value"
+      ],
+      "originalPost": "https://twitter.com/TimmerFidelity/status/2004613182103363726"
+    },
+    {
+      "id": "X03",
+      "date": "2026-02-20",
+      "title": "Cross-asset risk-adjusted comparison",
+      "url": "https://coincentral.com/bitcoin-price-stabilizes-at-65k-support-fidelity-director-optimistic/",
+      "kind": "X post via third-party report",
+      "access": "indexed report and embedded excerpt; original post not independently retrieved",
+      "observation": "Reported post compares asset classes through rolling risk-adjusted performance rather than price alone.",
+      "topics": [
+        "relative-value",
+        "uncertainty"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "X04",
+      "date": "2026-07-01",
+      "title": "AI buildout now versus potential productivity later",
+      "url": "https://willouuinsights.com/2026/07/02/7%EC%9B%94-3%EC%9D%BC-%ED%85%8C%EC%9D%BC%EB%9F%AC-%EC%A4%80%EC%B9%99%EC%9D%98-%EA%B4%B4%EB%A6%AC-%ED%86%B5%ED%99%94%EC%A0%95%EC%B1%85-%EA%B3%BC%EC%9E%89-%EC%99%84%ED%99%94-%ED%8F%89%EA%B0%80/",
+      "kind": "X post via third-party embed",
+      "access": "embedded English excerpt only; no reliance on the surrounding translated analysis",
+      "observation": "Embedded English post contrasts near-term inflation pressure from investment with a possible later disinflationary payoff and differing policy-model paths.",
+      "topics": [
+        "productivity",
+        "rates",
+        "uncertainty"
+      ],
+      "originalPost": null
+    },
+    {
+      "id": "X05",
+      "date": "2026-09-23",
+      "title": "AI operating signals versus investment spending",
+      "url": "https://www.webull.com/news/15626732893045760",
+      "kind": "X post via third-party embed",
+      "access": "embedded English post excerpt; direct X open failed",
+      "observation": "Embedded post distinguishes token expenditure, GPU leasing and memory prices, suggesting a small-multiples view of divergent operational signals.",
+      "topics": [
+        "productivity",
+        "capital-allocation"
+      ],
+      "originalPost": "https://x.com/TimmerFidelity/status/2102559823476797712"
+    }
+  ]
+}

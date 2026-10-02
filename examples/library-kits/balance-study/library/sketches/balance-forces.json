@@ -1,0 +1,518 @@
+{
+  "summary": "Two labeled qualitative forces on a moving beam",
+  "use": "Tradeoffs and opposing pressures; never measured weights",
+  "formats": {
+    "landscape": {
+      "elements": [
+        {
+          "type": "poly",
+          "points": [
+            [
+              960,
+              570
+            ],
+            [
+              870,
+              900
+            ],
+            [
+              1050,
+              900
+            ]
+          ],
+          "closed": true,
+          "fill": "surface",
+          "at": 0.2
+        },
+        {
+          "type": "group",
+          "at": 0.5,
+          "origin": [
+            960,
+            570
+          ],
+          "keys": [
+            {
+              "at": 1.6,
+              "rotate": -9,
+              "dur": 0.9,
+              "ease": "spring"
+            }
+          ],
+          "children": [
+            {
+              "type": "rect",
+              "x": 410,
+              "y": 562,
+              "w": 1100,
+              "h": 16,
+              "r": 8,
+              "fill": "ink",
+              "enter": "grow-x",
+              "origin": [
+                960,
+                570
+              ]
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "line",
+                  "x1": 410,
+                  "y1": 570,
+                  "x2": 410,
+                  "y2": 690,
+                  "stroke": "muted",
+                  "width": 4,
+                  "enter": "fade"
+                },
+                {
+                  "type": "path",
+                  "d": "M 300 690 Q 410 770 520 690 Z",
+                  "fill": "accent2",
+                  "enter": "fade"
+                },
+                {
+                  "type": "text",
+                  "text": "Force A",
+                  "x": 410,
+                  "y": 820,
+                  "size": 40,
+                  "anchor": "middle",
+                  "font": "semibold",
+                  "fill": "ink",
+                  "enter": "fade"
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "line",
+                  "x1": 1510,
+                  "y1": 570,
+                  "x2": 1510,
+                  "y2": 690,
+                  "stroke": "muted",
+                  "width": 4,
+                  "enter": "fade"
+                },
+                {
+                  "type": "path",
+                  "d": "M 1400 690 Q 1510 770 1620 690 Z",
+                  "fill": "accent",
+                  "enter": "fade"
+                },
+                {
+                  "type": "text",
+                  "text": "Force B",
+                  "x": 1510,
+                  "y": 820,
+                  "size": 40,
+                  "anchor": "middle",
+                  "font": "semibold",
+                  "fill": "ink",
+                  "enter": "fade"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "circle",
+          "cx": 960,
+          "cy": 570,
+          "r": 14,
+          "fill": "accent",
+          "at": 0.4
+        }
+      ]
+    },
+    "vertical": {
+      "elements": [
+        {
+          "type": "poly",
+          "points": [
+            [
+              540,
+              998.4
+            ],
+            [
+              450,
+              1338.4
+            ],
+            [
+              630,
+              1338.4
+            ]
+          ],
+          "closed": true,
+          "fill": "surface",
+          "at": 0.2
+        },
+        {
+          "type": "group",
+          "at": 0.5,
+          "origin": [
+            540,
+            998.4
+          ],
+          "keys": [
+            {
+              "at": 1.6,
+              "rotate": -9,
+              "dur": 0.9,
+              "ease": "spring"
+            }
+          ],
+          "children": [
+            {
+              "type": "rect",
+              "x": 176.8,
+              "y": 990.4,
+              "w": 726.4,
+              "h": 16,
+              "r": 8,
+              "fill": "ink",
+              "enter": "grow-x",
+              "origin": [
+                540,
+                998.4
+              ]
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "line",
+                  "x1": 176.8,
+                  "y1": 998.4,
+                  "x2": 176.8,
+                  "y2": 1118.4,
+                  "stroke": "muted",
+                  "width": 4,
+                  "enter": "fade"
+                },
+                {
+                  "type": "path",
+                  "d": "M 66.8 1118.4 Q 176.8 1198.4 286.8 1118.4 Z",
+                  "fill": "accent2",
+                  "enter": "fade"
+                },
+                {
+                  "type": "text",
+                  "text": "Force A",
+                  "x": 176.8,
+                  "y": 1248.4,
+                  "size": 40,
+                  "anchor": "middle",
+                  "font": "semibold",
+                  "fill": "ink",
+                  "enter": "fade"
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "line",
+                  "x1": 903.2,
+                  "y1": 998.4,
+                  "x2": 903.2,
+                  "y2": 1118.4,
+                  "stroke": "muted",
+                  "width": 4,
+                  "enter": "fade"
+                },
+                {
+                  "type": "path",
+                  "d": "M 793.2 1118.4 Q 903.2 1198.4 1013.2 1118.4 Z",
+                  "fill": "accent",
+                  "enter": "fade"
+                },
+                {
+                  "type": "text",
+                  "text": "Force B",
+                  "x": 903.2,
+                  "y": 1248.4,
+                  "size": 40,
+                  "anchor": "middle",
+                  "font": "semibold",
+                  "fill": "ink",
+                  "enter": "fade"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "circle",
+          "cx": 540,
+          "cy": 998.4,
+          "r": 14,
+          "fill": "accent",
+          "at": 0.4
+        }
+      ]
+    },
+    "square": {
+      "elements": [
+        {
+          "type": "poly",
+          "points": [
+            [
+              540,
+              570
+            ],
+            [
+              450,
+              900
+            ],
+            [
+              630,
+              900
+            ]
+          ],
+          "closed": true,
+          "fill": "surface",
+          "at": 0.2
+        },
+        {
+          "type": "group",
+          "at": 0.5,
+          "origin": [
+            540,
+            570
+          ],
+          "keys": [
+            {
+              "at": 1.6,
+              "rotate": -9,
+              "dur": 0.9,
+              "ease": "spring"
+            }
+          ],
+          "children": [
+            {
+              "type": "rect",
+              "x": 204,
+              "y": 562,
+              "w": 672,
+              "h": 16,
+              "r": 8,
+              "fill": "ink",
+              "enter": "grow-x",
+              "origin": [
+                540,
+                570
+              ]
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "line",
+                  "x1": 204,
+                  "y1": 570,
+                  "x2": 204,
+                  "y2": 690,
+                  "stroke": "muted",
+                  "width": 4,
+                  "enter": "fade"
+                },
+                {
+                  "type": "path",
+                  "d": "M 94 690 Q 204 770 314 690 Z",
+                  "fill": "accent2",
+                  "enter": "fade"
+                },
+                {
+                  "type": "text",
+                  "text": "Force A",
+                  "x": 204,
+                  "y": 820,
+                  "size": 40,
+                  "anchor": "middle",
+                  "font": "semibold",
+                  "fill": "ink",
+                  "enter": "fade"
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "line",
+                  "x1": 876,
+                  "y1": 570,
+                  "x2": 876,
+                  "y2": 690,
+                  "stroke": "muted",
+                  "width": 4,
+                  "enter": "fade"
+                },
+                {
+                  "type": "path",
+                  "d": "M 766 690 Q 876 770 986 690 Z",
+                  "fill": "accent",
+                  "enter": "fade"
+                },
+                {
+                  "type": "text",
+                  "text": "Force B",
+                  "x": 876,
+                  "y": 820,
+                  "size": 40,
+                  "anchor": "middle",
+                  "font": "semibold",
+                  "fill": "ink",
+                  "enter": "fade"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "circle",
+          "cx": 540,
+          "cy": 570,
+          "r": 14,
+          "fill": "accent",
+          "at": 0.4
+        }
+      ]
+    },
+    "portrait": {
+      "elements": [
+        {
+          "type": "poly",
+          "points": [
+            [
+              540,
+              580.6
+            ],
+            [
+              450,
+              920.6
+            ],
+            [
+              630,
+              920.6
+            ]
+          ],
+          "closed": true,
+          "fill": "surface",
+          "at": 0.2
+        },
+        {
+          "type": "group",
+          "at": 0.5,
+          "origin": [
+            540,
+            580.6
+          ],
+          "keys": [
+            {
+              "at": 1.6,
+              "rotate": -9,
+              "dur": 0.9,
+              "ease": "spring"
+            }
+          ],
+          "children": [
+            {
+              "type": "rect",
+              "x": 176.8,
+              "y": 572.6,
+              "w": 726.4,
+              "h": 16,
+              "r": 8,
+              "fill": "ink",
+              "enter": "grow-x",
+              "origin": [
+                540,
+                580.6
+              ]
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "line",
+                  "x1": 176.8,
+                  "y1": 580.6,
+                  "x2": 176.8,
+                  "y2": 700.6,
+                  "stroke": "muted",
+                  "width": 4,
+                  "enter": "fade"
+                },
+                {
+                  "type": "path",
+                  "d": "M 66.8 700.6 Q 176.8 780.6 286.8 700.6 Z",
+                  "fill": "accent2",
+                  "enter": "fade"
+                },
+                {
+                  "type": "text",
+                  "text": "Force A",
+                  "x": 176.8,
+                  "y": 830.6,
+                  "size": 40,
+                  "anchor": "middle",
+                  "font": "semibold",
+                  "fill": "ink",
+                  "enter": "fade"
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "line",
+                  "x1": 903.2,
+                  "y1": 580.6,
+                  "x2": 903.2,
+                  "y2": 700.6,
+                  "stroke": "muted",
+                  "width": 4,
+                  "enter": "fade"
+                },
+                {
+                  "type": "path",
+                  "d": "M 793.2 700.6 Q 903.2 780.6 1013.2 700.6 Z",
+                  "fill": "accent",
+                  "enter": "fade"
+                },
+                {
+                  "type": "text",
+                  "text": "Force B",
+                  "x": 903.2,
+                  "y": 830.6,
+                  "size": 40,
+                  "anchor": "middle",
+                  "font": "semibold",
+                  "fill": "ink",
+                  "enter": "fade"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "circle",
+          "cx": 540,
+          "cy": 580.6,
+          "r": 14,
+          "fill": "accent",
+          "at": 0.4
+        }
+      ]
+    }
+  }
+}

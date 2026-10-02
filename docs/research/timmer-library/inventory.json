@@ -1,0 +1,2235 @@
+{
+  "version": 1,
+  "asOf": "2026-10-02",
+  "sourceManifest": "sources.json",
+  "purpose": "General explanatory library: a macro research corpus and a complementary retirement collection; not a schedule to reproduce source videos.",
+  "statusLegend": {
+    "Reuse": "Existing source or capability can be curated and reviewed.",
+    "Extend": "Existing primitives are present; a reusable adapter, composition or workflow remains to be built.",
+    "New": "Proposed asset or capability; not implemented by this research."
+  },
+  "effortLegend": {
+    "S": "Curation or a narrow existing-primitive adaptation.",
+    "M": "A new reusable composition/adapter with bounded variants.",
+    "L": "A new quantitative contract, native feature or Blender rig with meaningful verification."
+  },
+  "priorities": {
+    "Now": "First proof set; high reuse or unlocks several others.",
+    "Next": "Build after the first proof set establishes the contracts.",
+    "Later": "Specialized or expensive; wait for a concrete scene to justify it."
+  },
+  "items": [
+    {
+      "id": "C01",
+      "name": "Shared-axis time-series comparison",
+      "category": "Chart",
+      "priority": "Now",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S01",
+        "S07",
+        "S09",
+        "S14"
+      ],
+      "visual": "Draw two or more lines on one locked axis; dim context and follow the cited series without losing its baseline.",
+      "parameters": [
+        "dated series",
+        "units",
+        "fixed domain",
+        "missing samples",
+        "focus range"
+      ],
+      "existing": "line block is single-series; canvas paths exist. Reusable multiseries/date/legend semantics need work.",
+      "guardrail": "Do not independently normalize or rescale lines without an explicit label. Break gaps instead of inventing data.",
+      "reuse": [
+        "science",
+        "operations",
+        "health"
+      ],
+      "dependsOn": [
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C02",
+      "name": "Indexed performance and historical analog",
+      "category": "Chart",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S01",
+        "S10",
+        "S14"
+      ],
+      "visual": "Align histories at an explicit event; reveal common history, then separate the historical continuation from the current endpoint.",
+      "parameters": [
+        "base date",
+        "base value",
+        "elapsed unit",
+        "series",
+        "event anchors"
+      ],
+      "existing": "line and timeline can supply marks; normalization and aligned comparison are not packaged.",
+      "guardrail": "Label elapsed time and base; never animate the old future as the predicted new future.",
+      "reuse": [
+        "product cohorts",
+        "weather",
+        "adoption"
+      ],
+      "dependsOn": [
+        "C01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C03",
+      "name": "Return-driver decomposition",
+      "category": "Chart",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S05",
+        "S09",
+        "S17"
+      ],
+      "visual": "Separate total movement into earnings, multiple and income contributions, then reconcile the pieces back to the total.",
+      "parameters": [
+        "start/end",
+        "decomposition method",
+        "drivers",
+        "interaction residual",
+        "units"
+      ],
+      "existing": "bars, equation and native contribution stacks exist; signed waterfall and exact decomposition do not.",
+      "guardrail": "Multiplicative drivers are not naively additive. Show interaction/residual or use a declared log attribution method.",
+      "reuse": [
+        "revenue analysis",
+        "energy use",
+        "cost accounting"
+      ],
+      "dependsOn": [
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C04",
+      "name": "Earnings revision ribbons",
+      "category": "Chart",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S02",
+        "S07",
+        "S13"
+      ],
+      "visual": "A family of forecast-vintage lines approaches a reporting date; observed results replace the forecast marker at publication.",
+      "parameters": [
+        "estimate vintage",
+        "target quarter",
+        "release date",
+        "actual",
+        "revision"
+      ],
+      "existing": "line and timeline are available; vintage/actual state and a shared legend need composition.",
+      "guardrail": "Forecasts retain their as-of dates. Do not use later revisions in an earlier view.",
+      "reuse": [
+        "demand forecasting",
+        "project budgets",
+        "weather"
+      ],
+      "dependsOn": [
+        "C01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C05",
+      "name": "Market breadth tile field",
+      "category": "Chart",
+      "priority": "Now",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S06",
+        "S07",
+        "S10",
+        "S17"
+      ],
+      "visual": "Pull back from a few large leaders to equally sized constituent tiles; independently show how many meet the stated condition.",
+      "parameters": [
+        "constituents",
+        "weights",
+        "membership date",
+        "threshold",
+        "metric"
+      ],
+      "existing": "waffle, icon-grid and crowd sketch exist; constituent-aware weighted/equal views need an adapter.",
+      "guardrail": "Count and index weight are different encodings. Preserve membership date and denominator.",
+      "reuse": [
+        "survey participation",
+        "system health",
+        "product adoption"
+      ],
+      "dependsOn": [
+        "T01"
+      ]
+    },
+    {
+      "id": "C06",
+      "name": "Yield and forward-curve strip",
+      "category": "Chart",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S05",
+        "S08",
+        "S11",
+        "S19"
+      ],
+      "visual": "A flat maturity curve changes between dated observations; pin short and long ends while the middle bends.",
+      "parameters": [
+        "maturities",
+        "values",
+        "as-of",
+        "spot/forward",
+        "curve type"
+      ],
+      "existing": "line supports points; maturity spacing and synchronized curve snapshots are not a dedicated asset.",
+      "guardrail": "Term structures are not a future time-series forecast. Preserve nonuniform maturity spacing.",
+      "reuse": [
+        "delivery lead times",
+        "term pricing",
+        "capacity planning"
+      ],
+      "dependsOn": [
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C07",
+      "name": "Correlation regime matrix",
+      "category": "Chart",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S09",
+        "S10",
+        "S16"
+      ],
+      "visual": "A signed matrix changes by window while selected pairs expand into synchronized miniature charts.",
+      "parameters": [
+        "return series",
+        "window",
+        "frequency",
+        "method",
+        "min observations"
+      ],
+      "existing": "matrix is a comparison table, not a numeric correlation heatmap.",
+      "guardrail": "Compute on aligned returns, name window/method, include missing cells, and never imply causality.",
+      "reuse": [
+        "sensor relationships",
+        "research",
+        "demand planning"
+      ],
+      "dependsOn": [
+        "T01",
+        "T02",
+        "C01"
+      ]
+    },
+    {
+      "id": "C08",
+      "name": "Relative-performance branch chart",
+      "category": "Chart",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S12"
+      ],
+      "visual": "Branches extend left or right of a benchmark; endpoints optionally carry a second, separately labeled metric.",
+      "parameters": [
+        "benchmark",
+        "period",
+        "relative returns",
+        "optional mark size"
+      ],
+      "existing": "bars and canvas lines exist; signed lollipop layout and bubble-area encoding need packaging.",
+      "guardrail": "Say percentage points versus ratios. Area, not radius, encodes a nonnegative size metric.",
+      "reuse": [
+        "competitive benchmarks",
+        "experiments",
+        "service levels"
+      ],
+      "dependsOn": [
+        "T01"
+      ]
+    },
+    {
+      "id": "C09",
+      "name": "Nominal-to-real comparison",
+      "category": "Chart",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S05",
+        "S07"
+      ],
+      "visual": "Keep a nominal path visible while a second path accounts for a named price index; finish on the purchasing-power gap.",
+      "parameters": [
+        "nominal series",
+        "deflator",
+        "base date",
+        "currency",
+        "return basis"
+      ],
+      "existing": "delta, line and equation exist; deflation transform needs a transparent data adapter.",
+      "guardrail": "Use matched base periods; price return and total return are different series.",
+      "reuse": [
+        "wages",
+        "budgets",
+        "cost of living"
+      ],
+      "dependsOn": [
+        "C01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C10",
+      "name": "Level, growth and acceleration",
+      "category": "Chart",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S14"
+      ],
+      "visual": "Three linked panels reveal the original level, its growth measure and change in that growth measure in sequence.",
+      "parameters": [
+        "series",
+        "frequency",
+        "growth definition",
+        "smoothing",
+        "lag"
+      ],
+      "existing": "line exists; linked derivatives and unit labeling are not packaged.",
+      "guardrail": "Define discrete changes precisely; do not call every change in growth a second derivative.",
+      "reuse": [
+        "production",
+        "epidemiology",
+        "user growth"
+      ],
+      "dependsOn": [
+        "C01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C11",
+      "name": "Rolling risk and drawdown",
+      "category": "Chart",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S03",
+        "S04",
+        "X03"
+      ],
+      "visual": "A path leaves its prior peak and fills the underwater distance; a separate window shows volatility or risk-adjusted performance.",
+      "parameters": [
+        "return basis",
+        "peak rule",
+        "window",
+        "risk-free series",
+        "frequency"
+      ],
+      "existing": "line and native shapes exist; peak-to-trough and rolling metrics require transforms.",
+      "guardrail": "Do not substitute raw price gain for risk-adjusted return. Mark incomplete recoveries.",
+      "reuse": [
+        "service reliability",
+        "sales recovery",
+        "capacity loss"
+      ],
+      "dependsOn": [
+        "C01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C12",
+      "name": "Scenario fan and interval band",
+      "category": "Chart",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S02",
+        "S10"
+      ],
+      "visual": "Observed history stops at a divider; clearly named alternative paths or computed intervals open beyond it.",
+      "parameters": [
+        "observed cutoff",
+        "scenarios",
+        "interval type",
+        "method",
+        "assumptions"
+      ],
+      "existing": "scenario-fork is qualitative; quantitative bands and interval labels are new.",
+      "guardrail": "A decorative fan is not a probability distribution. Use equal path weights unless supported probabilities are supplied.",
+      "reuse": [
+        "planning",
+        "forecasting",
+        "climate"
+      ],
+      "dependsOn": [
+        "C01",
+        "T01"
+      ]
+    },
+    {
+      "id": "C13",
+      "name": "Distribution and tail lens",
+      "category": "Chart",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S02",
+        "S10"
+      ],
+      "visual": "Build a histogram from samples, then highlight a supplied threshold; retain the whole distribution as context.",
+      "parameters": [
+        "observations",
+        "bins",
+        "threshold",
+        "density/count",
+        "sample size"
+      ],
+      "existing": "bars can form bins but computed histograms and probability-area semantics are not packaged.",
+      "guardrail": "Do not invent a bell curve or tail probability from an opinion about risk.",
+      "reuse": [
+        "quality control",
+        "research",
+        "latency"
+      ],
+      "dependsOn": [
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C14",
+      "name": "Valuation sensitivity surface, flat first",
+      "category": "Chart",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S02",
+        "S05",
+        "S18"
+      ],
+      "visual": "Reveal a two-input heatmap, then trace one controlled cross-section while holding other model assumptions fixed.",
+      "parameters": [
+        "model",
+        "growth range",
+        "discount range",
+        "terminal rule",
+        "selected cell"
+      ],
+      "existing": "native shapes can draw cells; a reviewed model and quantitative heatmap are new.",
+      "guardrail": "Label model assumptions and invalid regions; perspective is reserved for a qualitative introduction.",
+      "reuse": [
+        "pricing",
+        "engineering tradeoffs",
+        "unit economics"
+      ],
+      "dependsOn": [
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C15",
+      "name": "Cycle clock and phase trail",
+      "category": "Chart",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S11",
+        "S14"
+      ],
+      "visual": "A point leaves a dated trail through four labeled quadrants; its turns explain changes in momentum.",
+      "parameters": [
+        "x/y definitions",
+        "zero/reference",
+        "dates",
+        "trail",
+        "smoothing"
+      ],
+      "existing": "cycle is a process diagram; quantitative phase-space plotting is not currently packaged.",
+      "guardrail": "Quadrants describe chosen variables, not a guaranteed repeating sequence or a market timer.",
+      "reuse": [
+        "inventory cycles",
+        "machine telemetry",
+        "seasonality"
+      ],
+      "dependsOn": [
+        "T01",
+        "T02"
+      ]
+    },
+    {
+      "id": "C16",
+      "name": "Flow versus stock reconciliation",
+      "category": "Chart",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S05",
+        "S13",
+        "S14"
+      ],
+      "visual": "Separate opening stock, net flows and valuation changes; reunite them at the ending balance.",
+      "parameters": [
+        "opening",
+        "inflows",
+        "outflows",
+        "revaluation",
+        "period"
+      ],
+      "existing": "cash-lock and native stacks exist; a signed reconciliation bridge needs composition.",
+      "guardrail": "AUM changes are not fund flows; preserve residuals and units.",
+      "reuse": [
+        "inventory",
+        "headcount",
+        "reservoirs",
+        "subscriptions"
+      ],
+      "dependsOn": [
+        "C03",
+        "T02"
+      ]
+    },
+    {
+      "id": "C17",
+      "name": "Log scale and long-horizon model",
+      "category": "Chart",
+      "priority": "Later",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S01",
+        "S05",
+        "X02"
+      ],
+      "visual": "Show equal multiplicative steps on an explicitly logarithmic axis, with observations separated from any fitted model.",
+      "parameters": [
+        "positive series",
+        "base",
+        "fit window",
+        "model",
+        "residuals"
+      ],
+      "existing": "single line chart does not expose a reusable logarithmic scale contract.",
+      "guardrail": "Reject nonpositive values; fit uncertainty and extrapolation boundaries remain visible.",
+      "reuse": [
+        "population",
+        "adoption",
+        "scientific magnitude"
+      ],
+      "dependsOn": [
+        "T01",
+        "T02",
+        "C01"
+      ]
+    },
+    {
+      "id": "C18",
+      "name": "Ranked small multiples",
+      "category": "Chart",
+      "priority": "Now",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S01",
+        "S13",
+        "X05"
+      ],
+      "visual": "Several compact charts share scale and time; a selected panel expands without silently changing either.",
+      "parameters": [
+        "series",
+        "common dates",
+        "sort key",
+        "domain",
+        "selected panel"
+      ],
+      "existing": "native line, bars and canvas provide parts; small-multiple layout is new.",
+      "guardrail": "Shared scales by default; disclose independent scales and maintain stable identities during resorting.",
+      "reuse": [
+        "operational dashboards",
+        "product comparisons",
+        "research"
+      ],
+      "dependsOn": [
+        "C01",
+        "T03"
+      ]
+    },
+    {
+      "id": "I01",
+      "name": "Two-force balance",
+      "category": "Infographic",
+      "priority": "Now",
+      "implementation": "Reuse",
+      "readiness": "existing source; adaptation/review needed",
+      "effort": "S",
+      "sourceIds": [
+        "S09",
+        "S17",
+        "S18"
+      ],
+      "visual": "A native beam tilts between named forces, then resolves into matched evidence panels.",
+      "parameters": [
+        "labels",
+        "qualitative tilt",
+        "timing",
+        "palette"
+      ],
+      "existing": "library/sketches/balance.mjs; native kpi seesaw; example kit added in this change.",
+      "guardrail": "Choreographed tilt is qualitative, not a measure of net financial impact.",
+      "reuse": [
+        "tradeoffs",
+        "product choices",
+        "policy"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "I02",
+      "name": "Liquidity reservoirs and gates",
+      "category": "Infographic",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S01",
+        "S05",
+        "X01"
+      ],
+      "visual": "Follow a token through connected reservoirs, gates and balance-sheet compartments; pause at the bottleneck.",
+      "parameters": [
+        "nodes",
+        "edge meaning",
+        "gate states",
+        "event phases"
+      ],
+      "existing": "cash-lock, pipeline, queue and world cameras supply components.",
+      "guardrail": "Money stocks, flows and market demand are different concepts; arrows require a stated relationship.",
+      "reuse": [
+        "supply chains",
+        "queues",
+        "water",
+        "payments"
+      ],
+      "dependsOn": [
+        "T05"
+      ]
+    },
+    {
+      "id": "I03",
+      "name": "Discounting time tunnel",
+      "category": "Infographic",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S02",
+        "S18"
+      ],
+      "visual": "Cash-flow cards occupy future stations; each returns to a present-value plane using the declared formula.",
+      "parameters": [
+        "cash flows",
+        "dates",
+        "discount convention",
+        "rate",
+        "terminal value"
+      ],
+      "existing": "world, dolly, equation and native type exist.",
+      "guardrail": "Keep distances qualitative unless time spacing is explicit. Native values carry the calculation.",
+      "reuse": [
+        "project appraisal",
+        "energy investment",
+        "planning"
+      ],
+      "dependsOn": [
+        "T02",
+        "M01"
+      ]
+    },
+    {
+      "id": "I04",
+      "name": "Allocation trays",
+      "category": "Infographic",
+      "priority": "Now",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S05",
+        "S09",
+        "S12"
+      ],
+      "visual": "Move labeled tokens between compartments while keeping total count constant; finish on an exact native allocation chart.",
+      "parameters": [
+        "buckets",
+        "weights",
+        "rebalance rule",
+        "before/after"
+      ],
+      "existing": "donut, waffle and kpi stack exist; conservation choreography is new.",
+      "guardrail": "Show weights separately from risk contribution. Rebalancing does not guarantee protection.",
+      "reuse": [
+        "budgets",
+        "resource allocation",
+        "scheduling"
+      ],
+      "dependsOn": [
+        "T01"
+      ]
+    },
+    {
+      "id": "I05",
+      "name": "Supply bottleneck map",
+      "category": "Infographic",
+      "priority": "Now",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S08",
+        "S10",
+        "S11"
+      ],
+      "visual": "Travel from origin to destination, expose a narrow passage, then inspect alternative routes and their constraints.",
+      "parameters": [
+        "nodes",
+        "routes",
+        "capacity",
+        "delay",
+        "map basis"
+      ],
+      "existing": "route, harbor, pipeline and queue sketches already exist.",
+      "guardrail": "Label conceptual geography; do not imply invented capacities or real-time shipping positions.",
+      "reuse": [
+        "logistics",
+        "networks",
+        "production"
+      ],
+      "dependsOn": [
+        "T05"
+      ]
+    },
+    {
+      "id": "I06",
+      "name": "Productivity assembly line",
+      "category": "Infographic",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S03",
+        "S06",
+        "S13",
+        "X04"
+      ],
+      "visual": "Follow investment into tools, adoption and output, with a visible delay and a branch where the payoff is uncertain.",
+      "parameters": [
+        "stages",
+        "lag",
+        "input/output metric",
+        "assumptions"
+      ],
+      "existing": "pipeline, steps, network and native data faces exist.",
+      "guardrail": "Investment is not realized productivity; distinguish measured output from a proposed causal explanation.",
+      "reuse": [
+        "training",
+        "automation",
+        "manufacturing"
+      ],
+      "dependsOn": [
+        "T05"
+      ]
+    },
+    {
+      "id": "I07",
+      "name": "Capital-allocation switchyard",
+      "category": "Infographic",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S05",
+        "S13",
+        "X05"
+      ],
+      "visual": "A common cash source branches into investment, distributions and reserves; financing enters from a separately labeled line.",
+      "parameters": [
+        "sources",
+        "uses",
+        "period",
+        "gross/net",
+        "residual"
+      ],
+      "existing": "flow and cash-lock are useful bases; quantitative Sankey widths are not supported as a dedicated asset.",
+      "guardrail": "Use uniform qualitative arrows unless widths come from reconciled amounts.",
+      "reuse": [
+        "company finances",
+        "budgets",
+        "energy flows"
+      ],
+      "dependsOn": [
+        "C16"
+      ]
+    },
+    {
+      "id": "I08",
+      "name": "Concentration to participation",
+      "category": "Infographic",
+      "priority": "Now",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S06",
+        "S07",
+        "S17"
+      ],
+      "visual": "Begin beside a handful of oversized objects, pull back to the full crowd, then switch to equal-size participation tiles.",
+      "parameters": [
+        "leaders",
+        "constituents",
+        "weight basis",
+        "condition"
+      ],
+      "existing": "crowd, magnitude and waffle exist.",
+      "guardrail": "Make the switch from weight to count explicit; perspective size must not masquerade as an exact weight.",
+      "reuse": [
+        "market share",
+        "ecosystems",
+        "audiences"
+      ],
+      "dependsOn": [
+        "C05",
+        "M02"
+      ]
+    },
+    {
+      "id": "I09",
+      "name": "Scenario fork and conditional return",
+      "category": "Infographic",
+      "priority": "Now",
+      "implementation": "Reuse",
+      "readiness": "existing source; adaptation/review needed",
+      "effort": "S",
+      "sourceIds": [
+        "S02",
+        "S10",
+        "S12"
+      ],
+      "visual": "Trace alternative routes from a shared starting point; return to the assumption that selects each route.",
+      "parameters": [
+        "branches",
+        "conditions",
+        "labels",
+        "selection cue"
+      ],
+      "existing": "scenario-fork, scenario-origin, scenario-outcomes and scenario-lab playbook exist.",
+      "guardrail": "Branch position, brightness and width do not encode probability.",
+      "reuse": [
+        "planning",
+        "decision education",
+        "troubleshooting"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "I10",
+      "name": "Claim, mechanism, evidence, limit",
+      "category": "Infographic",
+      "priority": "Now",
+      "implementation": "Reuse",
+      "readiness": "existing source; adaptation/review needed",
+      "effort": "S",
+      "sourceIds": [
+        "S08",
+        "S09",
+        "S14"
+      ],
+      "visual": "Open a physical-looking evidence desk; separate observation, proposed explanation and the missing test.",
+      "parameters": [
+        "claim",
+        "source",
+        "mechanism",
+        "counterexample",
+        "limit"
+      ],
+      "existing": "evidence-desk, evidence-gap, annotate and research-investigation exist.",
+      "guardrail": "Keep a theory visibly distinct from observed data, including source claims that contain imprecise statistics.",
+      "reuse": [
+        "research",
+        "education",
+        "investigations"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "I11",
+      "name": "Inflation basket and purchasing power",
+      "category": "Infographic",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S05",
+        "S07"
+      ],
+      "visual": "Hold the basket constant while prices change; compare what an unchanged budget can purchase.",
+      "parameters": [
+        "basket",
+        "weights",
+        "price dates",
+        "budget",
+        "substitution policy"
+      ],
+      "existing": "icon-grid, bars and delta supply components.",
+      "guardrail": "A representative index is not every household experience; disclose basket and dates.",
+      "reuse": [
+        "household budgets",
+        "pricing",
+        "procurement"
+      ],
+      "dependsOn": [
+        "C09"
+      ]
+    },
+    {
+      "id": "I12",
+      "name": "Global relationship atlas",
+      "category": "Infographic",
+      "priority": "Later",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S06",
+        "S15",
+        "S19"
+      ],
+      "visual": "Move among regional panels linked by a named relationship; switch from map to shared-scale comparison for evidence.",
+      "parameters": [
+        "regions",
+        "relationship",
+        "dataset",
+        "period",
+        "projection"
+      ],
+      "existing": "globe and route exist; verified geographic geometry and data binding are additional work.",
+      "guardrail": "Separate geography from political claims; maps never imply causal influence without evidence.",
+      "reuse": [
+        "trade",
+        "ecology",
+        "communications"
+      ],
+      "dependsOn": [
+        "C18"
+      ]
+    },
+    {
+      "id": "B01",
+      "name": "Articulated counterweight mobile",
+      "category": "Blender",
+      "priority": "Now",
+      "implementation": "Reuse",
+      "readiness": "existing source; adaptation/review needed",
+      "effort": "S",
+      "sourceIds": [
+        "S09",
+        "S17",
+        "S18"
+      ],
+      "visual": "Brass arms and ceramic weights exchange gentle motion, then settle for the editor to cut to evidence.",
+      "parameters": [
+        "existing forest render",
+        "recipe seed",
+        "duration",
+        "palette on rerender"
+      ],
+      "existing": "library/sculptures/counterweight-mobile.* and retained clip/scene exist; packaged as balance-study.",
+      "guardrail": "This is a choreographed metaphor, not force simulation, allocation or exact values.",
+      "reuse": [
+        "tradeoffs",
+        "dependencies",
+        "priorities"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "B02",
+      "name": "Layered cutaway",
+      "category": "Blender",
+      "priority": "Now",
+      "implementation": "Reuse",
+      "readiness": "existing source; adaptation/review needed",
+      "effort": "S",
+      "sourceIds": [
+        "S05",
+        "S07",
+        "S17"
+      ],
+      "visual": "Lift a surface to expose an underlying layer before matching the silhouette to a native breakdown.",
+      "parameters": [
+        "layer palette",
+        "reveal phase",
+        "copy region"
+      ],
+      "existing": "strata-landform and exploded-core recipes/clips already exist.",
+      "guardrail": "Invented layers are not actual product internals or measured economic strata.",
+      "reuse": [
+        "hidden structure",
+        "science",
+        "product systems"
+      ],
+      "dependsOn": [
+        "M06"
+      ]
+    },
+    {
+      "id": "B03",
+      "name": "Flowing ribbon and connected thread",
+      "category": "Blender",
+      "priority": "Now",
+      "implementation": "Reuse",
+      "readiness": "existing source; adaptation/review needed",
+      "effort": "S",
+      "sourceIds": [
+        "S01",
+        "S06",
+        "S11"
+      ],
+      "visual": "Follow a ribbon through a knot, emerge into an open view and continue its line as a native path.",
+      "parameters": [
+        "palette",
+        "phase",
+        "camera crop",
+        "loop point"
+      ],
+      "existing": "ribbon-thread recipe and clip; native thread-knot and thread-opening sketches.",
+      "guardrail": "Flow speed and strand thickness remain decorative unless explicitly bound to data.",
+      "reuse": [
+        "conversations",
+        "networks",
+        "continuity"
+      ],
+      "dependsOn": [
+        "M06"
+      ]
+    },
+    {
+      "id": "B04",
+      "name": "Reservoir with mechanical gates",
+      "category": "Blender",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S01",
+        "S05"
+      ],
+      "visual": "Transparent chambers and sliding gates reveal a staged transfer; use geometry rather than expensive fluid simulation.",
+      "parameters": [
+        "chambers",
+        "gate state",
+        "fill planes",
+        "camera",
+        "materials"
+      ],
+      "existing": "cash-lock is a native concept only; no corresponding Blender recipe yet.",
+      "guardrail": "Qualitative liquid levels by default; exact balances remain in native graphics.",
+      "reuse": [
+        "liquidity",
+        "water",
+        "inventory"
+      ],
+      "dependsOn": [
+        "T04",
+        "T05"
+      ]
+    },
+    {
+      "id": "B05",
+      "name": "Elastic valuation frame",
+      "category": "Blender",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S09",
+        "S17",
+        "S18"
+      ],
+      "visual": "A flexible frame compresses around a rigid central object, then releases; the camera holds a readable silhouette.",
+      "parameters": [
+        "compression",
+        "core scale",
+        "material",
+        "easing",
+        "settled phase"
+      ],
+      "existing": "no matching recipe; native keys can prototype the operation.",
+      "guardrail": "Do not imply a calibrated price elasticity. Earnings and multiples are labeled only in the native explanation.",
+      "reuse": [
+        "constraints",
+        "capacity",
+        "tradeoffs"
+      ],
+      "dependsOn": [
+        "T05"
+      ]
+    },
+    {
+      "id": "B06",
+      "name": "Switchable pendulum coupling",
+      "category": "Blender",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S09",
+        "S10",
+        "S16"
+      ],
+      "visual": "Two suspended objects shift from independent rhythms to coordinated movement when a visible connector engages.",
+      "parameters": [
+        "phase offsets",
+        "coupling state",
+        "period",
+        "camera"
+      ],
+      "existing": "counterweight recipe offers construction helpers, not a correlation rig.",
+      "guardrail": "Choreography illustrates a change in relationship; it is not a measured correlation coefficient.",
+      "reuse": [
+        "synchronization",
+        "networks",
+        "system coupling"
+      ],
+      "dependsOn": [
+        "T04",
+        "T05"
+      ]
+    },
+    {
+      "id": "B07",
+      "name": "Foldable term-structure ribbon",
+      "category": "Blender",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S05",
+        "S08",
+        "S19"
+      ],
+      "visual": "A segmented strip bends from flat to steep, then cuts to an orthographic native curve with explicit tenors.",
+      "parameters": [
+        "control points",
+        "surface",
+        "bend",
+        "camera",
+        "phase"
+      ],
+      "existing": "ribbon-thread is a different geometry; this is a new recipe.",
+      "guardrail": "The 3D strip introduces shape only. Exact yields and maturity spacing belong to C06.",
+      "reuse": [
+        "delivery curves",
+        "cost curves",
+        "capacity"
+      ],
+      "dependsOn": [
+        "C06",
+        "T05"
+      ]
+    },
+    {
+      "id": "B08",
+      "name": "Crowd with distributed light",
+      "category": "Blender",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S06",
+        "S07",
+        "S17"
+      ],
+      "visual": "Begin on a few lit towers; pull back as illumination spreads across a field of equal modules.",
+      "parameters": [
+        "module count",
+        "light pattern",
+        "reveal order",
+        "camera",
+        "seed"
+      ],
+      "existing": "native crowd and citygrid exist; a 3D instanced field is new.",
+      "guardrail": "A lit module is symbolic unless count and membership are supplied and checked.",
+      "reuse": [
+        "participation",
+        "adoption",
+        "infrastructure"
+      ],
+      "dependsOn": [
+        "M02",
+        "T04"
+      ]
+    },
+    {
+      "id": "B09",
+      "name": "Conveyor bottleneck and release",
+      "category": "Blender",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S08",
+        "S10",
+        "S11"
+      ],
+      "visual": "Repeated tokens approach a narrowing gate, queue, then advance through an alternate passage.",
+      "parameters": [
+        "arrival spacing",
+        "gate width",
+        "alternate route",
+        "phase"
+      ],
+      "existing": "queue and pipeline are native starting points; no Blender conveyor yet.",
+      "guardrail": "Use deterministic keyframes. Do not claim simulated throughput from an aesthetic animation.",
+      "reuse": [
+        "logistics",
+        "latency",
+        "manufacturing"
+      ],
+      "dependsOn": [
+        "T05"
+      ]
+    },
+    {
+      "id": "B10",
+      "name": "Layered inflation basket",
+      "category": "Blender",
+      "priority": "Later",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S05",
+        "S07"
+      ],
+      "visual": "Generic ceramic household objects occupy a stable basket; removable sleeves expose the comparison beneath.",
+      "parameters": [
+        "original object set",
+        "basket layout",
+        "reveal",
+        "material"
+      ],
+      "existing": "no recipe; use simple original geometry, no branded packaging.",
+      "guardrail": "Keep product identity illustrative and prices native. Avoid making smaller objects imply price changes.",
+      "reuse": [
+        "cost of living",
+        "procurement",
+        "consumer education"
+      ],
+      "dependsOn": [
+        "I11"
+      ]
+    },
+    {
+      "id": "B11",
+      "name": "Infrastructure lattice and payoff delay",
+      "category": "Blender",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S03",
+        "S13",
+        "X04",
+        "X05"
+      ],
+      "visual": "Modular frames assemble first; a delayed light travels through the completed network to downstream objects.",
+      "parameters": [
+        "build stages",
+        "latency",
+        "connected nodes",
+        "lighting",
+        "camera"
+      ],
+      "existing": "native network and pipeline can prototype this; new Blender geometry/rig.",
+      "guardrail": "Light arrival denotes the authored story beat, not verified return on investment.",
+      "reuse": [
+        "AI infrastructure",
+        "utilities",
+        "training",
+        "research"
+      ],
+      "dependsOn": [
+        "T04",
+        "T05"
+      ]
+    },
+    {
+      "id": "B12",
+      "name": "Nested time rings",
+      "category": "Blender",
+      "priority": "Later",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S01",
+        "S05",
+        "X02"
+      ],
+      "visual": "Camera travels from a short inner arc to wider nested arcs, establishing multiple horizons before native histories appear.",
+      "parameters": [
+        "ring count",
+        "spacing",
+        "camera rail",
+        "material",
+        "phase"
+      ],
+      "existing": "tunnel sketch exists; new Blender rig and original geometry.",
+      "guardrail": "Ring size and repetition do not establish periodicity or predict a cycle.",
+      "reuse": [
+        "history",
+        "seasonality",
+        "long-term planning"
+      ],
+      "dependsOn": [
+        "M01",
+        "T04"
+      ]
+    },
+    {
+      "id": "B13",
+      "name": "Allocation mosaic with conservation",
+      "category": "Blender",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S05",
+        "S09",
+        "S12"
+      ],
+      "visual": "A fixed set of ceramic pieces migrates between trays; end poses line up with a native part-to-whole chart.",
+      "parameters": [
+        "piece count",
+        "tray positions",
+        "move order",
+        "camera"
+      ],
+      "existing": "quiz-triptych is an adjacent source; generalized conservation choreography is new.",
+      "guardrail": "Token count is qualitative unless a declared unit reconciles to weights; no risk equivalence implied.",
+      "reuse": [
+        "budgets",
+        "staffing",
+        "resource planning"
+      ],
+      "dependsOn": [
+        "I04",
+        "T05"
+      ]
+    },
+    {
+      "id": "B14",
+      "name": "Shadow threshold and aperture",
+      "category": "Blender",
+      "priority": "Now",
+      "implementation": "Reuse",
+      "readiness": "existing source; adaptation/review needed",
+      "effort": "S",
+      "sourceIds": [
+        "S02",
+        "S10",
+        "S17"
+      ],
+      "visual": "A moving shadow or opening shell changes what is visible; native evidence appears only after the reveal settles.",
+      "parameters": [
+        "lighting phase",
+        "negative space",
+        "palette",
+        "copy timing"
+      ],
+      "existing": "shadow-arcade and petal-reveal already exist; native die-cut-aperture is an alternative.",
+      "guardrail": "A threshold is a narrative device, not an implied trigger for trading.",
+      "reuse": [
+        "discovery",
+        "uncertainty",
+        "chapters"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "M01",
+      "name": "Detail-to-system dolly",
+      "category": "Camera / motion",
+      "priority": "Now",
+      "implementation": "Reuse",
+      "readiness": "existing source; adaptation/review needed",
+      "effort": "S",
+      "sourceIds": [
+        "S09",
+        "S16"
+      ],
+      "visual": "Start inside a mechanism, then travel outward to reveal the connected system.",
+      "parameters": [
+        "start/end views",
+        "z layers",
+        "duration",
+        "cue",
+        "hold"
+      ],
+      "existing": "native world/view/dolly/focus exist; Blender camera path variant remains to be authored.",
+      "guardrail": "Native chart axes and source labels stay readable; do not distort quantitative marks.",
+      "reuse": [
+        "systems",
+        "architecture",
+        "education"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "M02",
+      "name": "Hero-to-crowd pullback",
+      "category": "Camera / motion",
+      "priority": "Now",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S06",
+        "S07",
+        "S17"
+      ],
+      "visual": "A single hero becomes one member of a larger field, changing the viewer's sense of scale.",
+      "parameters": [
+        "hero identity",
+        "count",
+        "end composition",
+        "portrait framing"
+      ],
+      "existing": "native world/crowd exist; reusable matching Blender framing is new.",
+      "guardrail": "A count needs real data; a decorative crowd must be labeled as an illustration.",
+      "reuse": [
+        "concentration",
+        "ecology",
+        "adoption"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "M03",
+      "name": "Rack focus from claim to evidence",
+      "category": "Camera / motion",
+      "priority": "Now",
+      "implementation": "Reuse",
+      "readiness": "existing source; adaptation/review needed",
+      "effort": "S",
+      "sourceIds": [
+        "S09",
+        "S10"
+      ],
+      "visual": "Shift focus between physical layers while crisp native copy presents the qualification.",
+      "parameters": [
+        "planes",
+        "aperture",
+        "cue",
+        "focus duration"
+      ],
+      "existing": "native focus.keys and z exist; no standalone Blender focus preset.",
+      "guardrail": "Never blur the only source or risk label during its reading hold.",
+      "reuse": [
+        "research",
+        "product proof",
+        "education"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "M04",
+      "name": "Orthographic reveal from oblique view",
+      "category": "Camera / motion",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S07",
+        "S12"
+      ],
+      "visual": "Begin on a sculptural arrangement; rotate to a flat measurement plane before showing exact quantities.",
+      "parameters": [
+        "start pose",
+        "orthographic end",
+        "native match frame",
+        "hold"
+      ],
+      "existing": "Blender camera supports authored shots; there is no reusable cross-renderer pose contract.",
+      "guardrail": "Reveal labels after the quantitative view settles. Do not measure perspective-distorted bars.",
+      "reuse": [
+        "technical diagrams",
+        "data explanations"
+      ],
+      "dependsOn": [
+        "T03",
+        "T04"
+      ]
+    },
+    {
+      "id": "M05",
+      "name": "Track a packet through the mechanism",
+      "category": "Camera / motion",
+      "priority": "Next",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S08",
+        "S11"
+      ],
+      "visual": "Follow one token through a route and settle at the constraint; keep the surrounding system available in a pullback.",
+      "parameters": [
+        "path",
+        "token",
+        "look-ahead",
+        "speed",
+        "stop points"
+      ],
+      "existing": "native along, route and world views exist; automated chase framing is new.",
+      "guardrail": "Path duration is story timing unless tied to observed transit time.",
+      "reuse": [
+        "logistics",
+        "payments",
+        "networks"
+      ],
+      "dependsOn": [
+        "T03"
+      ]
+    },
+    {
+      "id": "M06",
+      "name": "Blender-to-native silhouette match",
+      "category": "Camera / motion",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S05",
+        "S17"
+      ],
+      "visual": "A material strip, circle or tile ends at a registered pose and continues as an editable native chart mark.",
+      "parameters": [
+        "anchor points",
+        "end pose",
+        "palette match",
+        "cut frame"
+      ],
+      "existing": "native morph IDs work across native beats; baked clips cannot use those IDs.",
+      "guardrail": "Match cuts are editorial transitions, not proof that metaphor geometry encodes the data.",
+      "reuse": [
+        "explainers",
+        "product films",
+        "data reveals"
+      ],
+      "dependsOn": [
+        "T03",
+        "T05"
+      ]
+    },
+    {
+      "id": "M07",
+      "name": "Macro-to-portrait reframe",
+      "category": "Camera / motion",
+      "priority": "Now",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S13",
+        "S17"
+      ],
+      "visual": "Keep the subject and copy region explicit while authoring separate landscape and vertical camera endpoints.",
+      "parameters": [
+        "subject bounds",
+        "copy safe area",
+        "aspect ratio",
+        "endpoints"
+      ],
+      "existing": "viewTall and sculpture --vertical exist; reusable asset framing presets need packaging.",
+      "guardrail": "A crop is not verified portrait composition; review each format.",
+      "reuse": [
+        "all formats"
+      ],
+      "dependsOn": [
+        "T03"
+      ]
+    },
+    {
+      "id": "M08",
+      "name": "Controlled time compression",
+      "category": "Camera / motion",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S01",
+        "S05"
+      ],
+      "visual": "Accelerate an explicitly labeled historical interval, then slow down at the event that changes interpretation.",
+      "parameters": [
+        "time mapping",
+        "event hold",
+        "axis display",
+        "cue"
+      ],
+      "existing": "native key timing exists; data-time/editorial-time mapping utility does not.",
+      "guardrail": "Keep calendar time visible; never let animation speed imply data velocity without a declared mapping.",
+      "reuse": [
+        "history",
+        "experiments",
+        "long processes"
+      ],
+      "dependsOn": [
+        "T02",
+        "T05"
+      ]
+    },
+    {
+      "id": "M09",
+      "name": "Section-plane inspection",
+      "category": "Camera / motion",
+      "priority": "Later",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S05",
+        "S16"
+      ],
+      "visual": "Move a cut plane through an object, pause on a hidden relationship and return to the whole.",
+      "parameters": [
+        "cut plane",
+        "layer masks",
+        "camera",
+        "inspection positions"
+      ],
+      "existing": "exploded-core and strata are lift-apart operations; a general section-plane rig is new.",
+      "guardrail": "Do not portray a conceptual cutaway as a real engineered model.",
+      "reuse": [
+        "science",
+        "engineering",
+        "systems"
+      ],
+      "dependsOn": [
+        "T04"
+      ]
+    },
+    {
+      "id": "M10",
+      "name": "Anticipate, act, settle, hold",
+      "category": "Camera / motion",
+      "priority": "Now",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S02",
+        "S13"
+      ],
+      "visual": "Standardize motion phases so the action ends before the native evidence-reading interval starts.",
+      "parameters": [
+        "anticipation",
+        "action",
+        "settle",
+        "hold",
+        "speech cue"
+      ],
+      "existing": "native enter/keys and sculpture phases exist; exported shared phase markers are new.",
+      "guardrail": "Retiming must not cut off settlement or evidence holds; loops and one-way reveals have different contracts.",
+      "reuse": [
+        "every reusable motion"
+      ],
+      "dependsOn": [
+        "T05"
+      ]
+    },
+    {
+      "id": "T01",
+      "name": "Quantitative mark and scale contract",
+      "category": "Tool",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S05",
+        "S07",
+        "S08",
+        "S12"
+      ],
+      "visual": "A shared data-mark specification gives new charts explicit units, axes, legends, thresholds and interval semantics.",
+      "parameters": [
+        "data type",
+        "units",
+        "domain",
+        "scale",
+        "missing policy",
+        "source"
+      ],
+      "existing": "existing native validation is a foundation; chart-specific rules need extension.",
+      "guardrail": "Do not weaken existing native number/source integrity checks.",
+      "reuse": [
+        "all quantitative graphics"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "T02",
+      "name": "Auditable data transforms",
+      "category": "Tool",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S04",
+        "S05",
+        "S07",
+        "S14"
+      ],
+      "visual": "Retain input snapshots and declared transforms for rebasing, deflation, returns, rolling windows and decompositions.",
+      "parameters": [
+        "input hash",
+        "as-of",
+        "frequency",
+        "transform",
+        "method version"
+      ],
+      "existing": "source entries and render receipts exist; reusable finance/data transform layer does not.",
+      "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
+      "reuse": [
+        "science",
+        "operations",
+        "finance"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "T03",
+      "name": "Asset anchors and copy zones",
+      "category": "Tool",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S08",
+        "S09",
+        "S17"
+      ],
+      "visual": "Export subject bounds, safe label regions and handoff points for each prepared asset and format.",
+      "parameters": [
+        "anchors",
+        "safe rectangles",
+        "occlusion intervals",
+        "aspect ratio"
+      ],
+      "existing": "asset.json has prose copy guidance; machine-readable per-frame anchors are proposed.",
+      "guardrail": "Do not assume tracked 3D labels already work; begin with static end-pose anchors.",
+      "reuse": [
+        "all compositing"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "T04",
+      "name": "Small Blender camera-rig library",
+      "category": "Tool",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S06",
+        "S08",
+        "S11"
+      ],
+      "visual": "Trusted built-in helpers create a few reusable dolly, orbit, truck, orthographic and focus rigs with baked keyframes.",
+      "parameters": [
+        "subject bounds",
+        "path",
+        "lens",
+        "focus target",
+        "seed",
+        "limits"
+      ],
+      "existing": "scripts/blender/artkit.py and per-recipe cameras exist; reusable rig APIs are not yet implemented.",
+      "guardrail": "Shared/project kits stay JSON-only. Bake transforms and avoid live random state or uncached physics.",
+      "reuse": [
+        "all 3D assets"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "T05",
+      "name": "Motion phase and retiming manifest",
+      "category": "Tool",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S02",
+        "S10",
+        "S13"
+      ],
+      "visual": "Publish named phase intervals and safe trim points so native evidence can align with prepared motion.",
+      "parameters": [
+        "fps",
+        "frames",
+        "anticipation",
+        "action",
+        "settle",
+        "hold",
+        "loop endpoints"
+      ],
+      "existing": "asset duration/FPS and native cues exist; semantic phase interchange is proposed.",
+      "guardrail": "Distinguish a clip playback-rate change from a new simulation or exact source-time map.",
+      "reuse": [
+        "all mixed-media scenes"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "T06",
+      "name": "Reusable library browser",
+      "category": "Tool",
+      "priority": "Now",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S01",
+        "S17"
+      ],
+      "visual": "Browse by storytelling purpose, visual operation, medium, readiness and source inspiration.",
+      "parameters": [
+        "tags",
+        "status",
+        "preview",
+        "file links",
+        "source IDs"
+      ],
+      "existing": "offline sculpture gallery exists; this research delivers a local searchable planning catalog.",
+      "guardrail": "Planning records are not installed assets; previews of existing media are distinguished from concepts.",
+      "reuse": [
+        "all library discovery"
+      ],
+      "dependsOn": []
+    },
+    {
+      "id": "T07",
+      "name": "Transparent and layered render passes",
+      "category": "Tool",
+      "priority": "Later",
+      "implementation": "New",
+      "readiness": "proposed; not built",
+      "effort": "L",
+      "sourceIds": [
+        "S09",
+        "S16"
+      ],
+      "visual": "Prepare optional alpha, shadow, depth and object-ID passes for selective compositing and label occlusion.",
+      "parameters": [
+        "pass set",
+        "color handling",
+        "premultiplication",
+        "format",
+        "frame range"
+      ],
+      "existing": "current sculpture delivery is opaque MP4; no general multilayer handoff is claimed.",
+      "guardrail": "Prototype one format through the native decoder before committing to an alpha/export workflow.",
+      "reuse": [
+        "advanced compositing"
+      ],
+      "dependsOn": [
+        "T03",
+        "T04"
+      ]
+    },
+    {
+      "id": "T08",
+      "name": "Variation ledger and contact-sheet review",
+      "category": "Tool",
+      "priority": "Next",
+      "implementation": "Extend",
+      "readiness": "proposed; not built",
+      "effort": "M",
+      "sourceIds": [
+        "S01",
+        "S05",
+        "S14",
+        "S17"
+      ],
+      "visual": "Record recent mechanism, material, camera and story choices; show candidate sheets to help avoid repeating the same film grammar.",
+      "parameters": [
+        "recent choices",
+        "candidate families",
+        "preview",
+        "review notes"
+      ],
+      "existing": "sheet, looks, critique and QA exist; cross-film variation memory/reporting is new.",
+      "guardrail": "Novel color or a new seed alone is not a new concept; never force a less truthful visual for variety.",
+      "reuse": [
+        "all recurring series"
+      ],
+      "dependsOn": [
+        "T06"
+      ]
+    },
+    {
+      "id": "R01",
+      "name": "Contribution streams and compounding",
+      "category": "Retirement recipe",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "effort": "M",
+      "visual": "Employee and employer streams enter an account; native traces distinguish principal from investment gains or losses.",
+      "parameters": [
+        "opening balance",
+        "dated contributions",
+        "period returns",
+        "timing convention"
+      ],
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "dependsOn": [
+        "C01",
+        "T02",
+        "I02"
+      ],
+      "sourceIds": [
+        "RS02",
+        "RS03"
+      ],
+      "guardrail": "Do not present assumed returns as a forecast. Reconcile every period and preserve negative returns.",
+      "reuse": [
+        "fundraising",
+        "inventory accumulation"
+      ]
+    },
+    {
+      "id": "R02",
+      "name": "Employer match thresholds",
+      "category": "Retirement recipe",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "effort": "M",
+      "visual": "A contribution travels along a rule strip; each match tier fills only as eligible contributions reach it.",
+      "parameters": [
+        "eligible compensation",
+        "contribution amount",
+        "match tiers",
+        "period basis",
+        "true-up policy"
+      ],
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "dependsOn": [
+        "T02",
+        "I07"
+      ],
+      "sourceIds": [
+        "RS02"
+      ],
+      "guardrail": "Matching uses supplied plan rules. Show whether the calculation is per payroll or annual; do not invent true-ups or legal limits.",
+      "reuse": [
+        "rebates",
+        "grant matching"
+      ]
+    },
+    {
+      "id": "R03",
+      "name": "Vesting ownership timeline",
+      "category": "Retirement recipe",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "effort": "M",
+      "visual": "A timeline changes ownership of the employer compartment while the employee compartment stays separate.",
+      "parameters": [
+        "credited service",
+        "schedule",
+        "employee balance",
+        "employer balance",
+        "plan source"
+      ],
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "dependsOn": [
+        "T02",
+        "M10"
+      ],
+      "sourceIds": [
+        "RS01"
+      ],
+      "guardrail": "Vested means owned, not immediately withdrawable. Do not apply employer forfeiture to employee elective contributions.",
+      "reuse": [
+        "milestone grants",
+        "conditional rewards"
+      ]
+    },
+    {
+      "id": "R04",
+      "name": "Fee drag comparison",
+      "category": "Retirement recipe",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "effort": "M",
+      "visual": "Two aligned balances share one return/contribution path; the ending gap separates fees paid from lost growth.",
+      "parameters": [
+        "fee rates",
+        "fee basis",
+        "charge timing",
+        "returns",
+        "contributions",
+        "time horizon"
+      ],
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "dependsOn": [
+        "C01",
+        "T02"
+      ],
+      "sourceIds": [
+        "RS03"
+      ],
+      "guardrail": "The ending balance gap is not the sum of charged fees. State fee assumptions; do not imply that lower fees alone establish suitability.",
+      "reuse": [
+        "maintenance costs",
+        "service charges"
+      ]
+    },
+    {
+      "id": "R05",
+      "name": "Accumulation to withdrawals",
+      "category": "Retirement recipe",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "effort": "M",
+      "visual": "A reservoir switches from inflows to a measured payout stream; unfunded withdrawals remain visible after depletion.",
+      "parameters": [
+        "starting balance",
+        "dated inflows",
+        "withdrawal requests",
+        "returns",
+        "fees",
+        "cashflow timing"
+      ],
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "dependsOn": [
+        "C16",
+        "I02",
+        "B04"
+      ],
+      "sourceIds": [
+        "RS02",
+        "RS03"
+      ],
+      "guardrail": "Do not draw negative account balances as payable cash. Expose shortfall and depletion; no safe withdrawal claim.",
+      "reuse": [
+        "inventory drawdown",
+        "project runway"
+      ]
+    },
+    {
+      "id": "R06",
+      "name": "Pension benefit formula build",
+      "category": "Retirement recipe",
+      "priority": "Now",
+      "implementation": "New",
+      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "effort": "M",
+      "visual": "Salary, service and accrual factors enter a native formula one at a time before resolving to an annual and monthly amount.",
+      "parameters": [
+        "formula type",
+        "compensation basis",
+        "credited service",
+        "accrual factor",
+        "plan adjustments"
+      ],
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "dependsOn": [
+        "T02",
+        "I10"
+      ],
+      "sourceIds": [
+        "RS02"
+      ],
+      "guardrail": "An illustrative salary-times-service formula does not cover every pension. Require explicit plan inputs; account balance and promised benefit are distinct.",
+      "reuse": [
+        "royalties",
+        "service-based benefits"
+      ]
+    },
+    {
+      "id": "R07",
+      "name": "Payout choices and conditions",
+      "category": "Retirement recipe",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "effort": "M",
+      "visual": "Parallel payment rails compare a lump sum, single-life stream and survivor stream with conditions and unknowns visible.",
+      "parameters": [
+        "quoted amounts",
+        "payment frequency",
+        "beneficiary terms",
+        "COLA",
+        "guarantee period",
+        "valuation assumptions"
+      ],
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "dependsOn": [
+        "I09",
+        "C16"
+      ],
+      "sourceIds": [
+        "RS02"
+      ],
+      "guardrail": "Do not claim equivalence or rank options without actuarial inputs. Lifetime uncertainty remains visible; amounts come from actual quotes or marked examples.",
+      "reuse": [
+        "contract offers",
+        "subscription terms"
+      ]
+    },
+    {
+      "id": "R08",
+      "name": "Fixed income and purchasing power",
+      "category": "Retirement recipe",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "effort": "M",
+      "visual": "A fixed payment stays level while the native real-value trace changes; a basket insert supplies the physical analogy.",
+      "parameters": [
+        "payment schedule",
+        "price index",
+        "explicit base date",
+        "COLA policy",
+        "currency"
+      ],
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "dependsOn": [
+        "C09",
+        "I11",
+        "B10"
+      ],
+      "sourceIds": [
+        "RS03"
+      ],
+      "guardrail": "Nominal and real values need distinct labels and a common stated price basis. A shrinking basket is qualitative unless calibrated.",
+      "reuse": [
+        "wages",
+        "budgets"
+      ]
+    },
+    {
+      "id": "R09",
+      "name": "Sequence of returns under withdrawals",
+      "category": "Retirement recipe",
+      "priority": "Next",
+      "implementation": "New",
+      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "effort": "M",
+      "visual": "The same returns in different orders travel through paired withdrawal timelines; final balances and missed payments reveal the difference.",
+      "parameters": [
+        "return sequence",
+        "withdrawals",
+        "opening balance",
+        "cashflow timing",
+        "shared scale"
+      ],
+      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "dependsOn": [
+        "C01",
+        "R05"
+      ],
+      "sourceIds": [
+        "RS03"
+      ],
+      "guardrail": "Use identical cashflow rules and shared scales. Label constructed scenarios; equal average returns do not mean equal outcomes with cashflows.",
+      "reuse": [
+        "cash runway",
+        "endowment spending"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "title": "Two forces, then evidence",
+  "audience": "Viewers learning how competing factors interact",
+  "inputs": "Two named forces, a supported relationship, evidence for each and a limitation",
+  "theme": "balance-forest",
+  "type": "balance-geometric",
+  "motion": "gentle",
+  "transition": "cut",
+  "music": false,
+  "sfx": "off",
+  "sources": [
+    {
+      "claim": "Force A and Force B are placeholders; no financial relationship is asserted",
+      "source": "Original qualitative teaching specimen; replace before publication"
+    }
+  ],
+  "note": "A short composition specimen, not a completed financial film. Replace placeholders. A prepared Blender insert is optional and must be registered in the destination film; --library does not copy media.",
+  "beats": [
+    {
+      "id": "forces",
+      "block": "canvas",
+      "duration": 6,
+      "props": {
+        "sketch": "balance-forces",
+        "source": "Qualitative illustration; tilt is not measured"
+      }
+    },
+    {
+      "id": "evidence",
+      "block": "compare",
+      "duration": 6,
+      "props": {
+        "title": "Inspect both forces",
+        "left": {
+          "title": "Force A",
+          "items": [
+            "What changes?",
+            "What evidence supports it?"
+          ]
+        },
+        "right": {
+          "title": "Force B",
+          "items": [
+            "What offsets it?",
+            "What would change the conclusion?"
+          ]
+        },
+        "source": "Original teaching framework; no investment recommendation"
+      }
+    }
+  ]
+}
