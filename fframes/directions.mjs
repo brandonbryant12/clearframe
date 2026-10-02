@@ -12,18 +12,18 @@ export function directionOptions(options) {
   const d = directionById(options.direction);
   return { ...options, playbook: options.playbook ?? options.recipe ?? d.playbook, treatment: options.treatment ?? d.treatment };
 }
-export function directionMarkdown(id, { recording = false } = {}) {
+export function directionMarkdown(id, { recording = false, playbook } = {}) {
   if (!id) return '';
   const d = directionById(id);
   return `\n## Starting direction: ${d.title}\n\n${d.when}\n\n` +
     `- Story: ${d.story}\n- Picture: ${d.picture}\n- Pace: ${d.pace}\n` +
     d.rules.map(r => `- ${r}\n`).join('') +
-    (recording ? `\nThe ${d.playbook} playbook is a visual reference only. Imported beats retain the recording, timing and speakers. Give those beats new pictures; keep their IDs, vo and recorded audio.\n` : '') +
+    (recording ? `\nThe ${playbook ?? d.playbook} playbook is a visual reference only. Imported beats retain the recording, timing and speakers. Give those beats new pictures; keep their IDs, vo and recorded audio.\n` : '') +
     '\nThis is a starting hypothesis, not a required sequence. Change the arc, combine treatments, draw a new canvas scene or use a custom library. Before authoring, propose an alternative with a different visual metaphor, camera grammar and rhythm. Record the chosen departure here. Palette changes alone do not count as a new direction.\n';
 }
 
 /** Keep a custom direction and its referenced library items portable, even if overridden. */
-export function directionRefs(id) {
+export function directionRefs(id, selected = []) {
   const refs = new Map();
   function visit(kind, name) {
     if (!name || refs.has(`${kind}/${name}`)) return;
@@ -47,5 +47,6 @@ export function directionRefs(id) {
     }
   }
   visit('directions', id);
+  for (const [kind, name] of selected) visit(kind, name);
   return [...refs.values()];
 }

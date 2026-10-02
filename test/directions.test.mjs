@@ -45,11 +45,14 @@ test('custom directions and their overridden defaults remain portable after thei
   write(path.join(library, 'directions/house.json'), { ...directions()[0], id: 'house', title: 'A new idea', playbook: 'house', treatment: 'house' });
   write(path.join(library, 'playbooks/house.json'), { title: 'House', audience: 'a', inputs: 'a', beats: [{ id: 'a', block: 'statement', duration: 2, props: { text: 'Original scene' } }] });
   write(path.join(library, 'treatments/house.json'), { title: 'House', when: 'New films', film: { theme: 'paper', type: 'didone' } });
-  const r = spawnSync(process.execPath, ['engine/cli.mjs', 'new', dir, '--library', library, '--direction', 'house', '--playbook', 'concept-explainer', '--treatment', 'calm'], { encoding: 'utf8' });
+  write(path.join(library, 'palettes/override.json'), { colors: items('palettes')[0].colors });
+  write(path.join(library, 'playbooks/override.json'), { title: 'Override', audience: 'a', inputs: 'a', beats: [{ id: 'a', block: 'statement', duration: 2, props: { text: 'Override scene' } }] });
+  write(path.join(library, 'treatments/override.json'), { title: 'Override', when: 'Selected independently', playbook: 'override', film: { theme: 'override' } });
+  const r = spawnSync(process.execPath, ['engine/cli.mjs', 'new', dir, '--library', library, '--direction', 'house', '--playbook', 'concept-explainer', '--treatment', 'override', '--theme', 'paper'], { encoding: 'utf8' });
   assert.equal(r.status, 0, r.stderr);
   fs.rmSync(library, { recursive: true });
   const sb = loadStoryboard(dir);
-  assert.equal(sb.treatment, 'calm');
+  assert.equal(sb.treatment, 'override'); assert.equal(sb.theme, 'paper');
   assert.equal(directions().find(d => d.id === 'house').title, 'A new idea');
   assert.deepEqual(createJob(sb, computeTiming(dir), { draft: true }).errors, []);
   // Camera properties must survive the catalog preview as well as the actual playbook.
@@ -63,18 +66,22 @@ test('podcast looks preserve exact source audio, cut times, words, speakers and 
   const pcm = Buffer.alloc(48000 * 4 * 2);
   for (let i = 0; i < pcm.length / 2; i++) pcm.writeInt16LE(Math.round(Math.sin(i * Math.PI / 100) * 1800), i * 2);
   fs.writeFileSync(audio, pcmToWav(pcm, { sampleRate: 48000 }));
+  const brand = path.join(root, 'brand.json');
+  write(brand, { name: 'Recorded show', theme: 'paper', voiceStyle: 'Must not change the recording' });
   const words = [{ w: 'One', t0: 0.1, t1: 0.7, speaker: 'host' }, { w: 'thought.', t0: 0.8, t1: 1.6, speaker: 'host' },
     { w: 'A', t0: 2.1, t1: 2.4, speaker: 'guest' }, { w: 'reply.', t0: 2.5, t1: 3.8, speaker: 'guest' }];
   const runs = [];
   for (const direction of [undefined, 'podcast-thread', 'podcast-kinetic', 'podcast-sketch']) {
     const dir = path.join(root, direction ?? 'plain');
-    await ingestRecording(dir, { audio, words, direction });
+    await ingestRecording(dir, { audio, words, direction, playbook: 'cash-flow', brand });
+    assert.match(fs.readFileSync(path.join(dir, 'DIRECTION.md'), 'utf8'), /cash-flow/);
     const sb = loadStoryboard(dir);
     assert.deepEqual(createJob(sb, computeTiming(dir)).errors, []);
     const metadata = sb.beats.map(b => { const { createdAt, ...meta } = read(path.join(dir, 'assets/vo', b.id + '.json')); return meta; });
     const slices = sb.beats.map(b => readPCM(path.join(dir, 'assets/vo', b.id + '.wav')).pcm);
     const raw = read(path.join(dir, 'storyboard.json'));
     assert.equal(raw.transition, 'cut'); assert.equal(raw.voice, undefined); assert.deepEqual(raw.pacing, { continuous: true });
+    assert.equal(raw.theme, 'paper'); assert.ok(fs.existsSync(path.join(dir, 'BRAND.md')));
     assert.deepEqual(Buffer.concat(slices), readPCM(path.join(dir, 'source/recording.wav')).pcm);
     runs.push({ source: sb.beats.map(b => [b.id, b.vo, b.speaker, b.note]), metadata, slices });
   }
@@ -82,4 +89,6 @@ test('podcast looks preserve exact source audio, cut times, words, speakers and 
   const invalid = path.join(root, 'invalid');
   await assert.rejects(ingestRecording(invalid, { audio, words, treatment: 'missing' }), /Unknown treatment/);
   assert.ok(!fs.existsSync(invalid));
+  await assert.rejects(ingestRecording(invalid, { audio, words: [] }), /No word timestamps/);
+  assert.ok(!fs.existsSync(invalid), 'failed recording intake leaves no partial project');
 });

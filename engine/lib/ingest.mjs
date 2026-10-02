@@ -400,6 +400,27 @@ export function htmlToMarkdown(html) {
 /** Read a report in any common document format as markdown. */
 export function documentMarkdown(file) {
   const ext = path.extname(file).toLowerCase();
+  if (ext === '.csv') {
+    const input = fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '');
+    const rows = [], row = []; let cell = '', quoted = false;
+    for (let i = 0; i < input.length; i++) {
+      const ch = input[i];
+      if (ch === '"') {
+        if (quoted && input[i + 1] === '"') { cell += '"'; i++; }
+        else quoted = !quoted;
+      } else if (!quoted && (ch === ',' || ch === '\n' || ch === '\r')) {
+        row.push(cell); cell = '';
+        if (ch !== ',') { if (row.some(v => v.trim())) rows.push(row.splice(0)); else row.length = 0;
+          if (ch === '\r' && input[i + 1] === '\n') i++; }
+      } else cell += ch;
+    }
+    if (quoted) throw new Error('CSV has an unclosed quoted cell.');
+    if (cell || row.length) { row.push(cell); rows.push(row); }
+    if (!rows.length || rows[0].some(v => !v.trim()) || rows.some(r => r.length !== rows[0].length))
+      throw new Error('CSV needs nonempty headers and the same number of cells in every row.');
+    const line = r => '| ' + r.map(v => v.replace(/\|/g, '\\|').replace(/[\r\n]+/g, ' ')).join(' | ') + ' |';
+    return `# ${path.basename(file, ext)}\n\n${line(rows[0])}\n${line(rows[0].map(() => '---'))}\n${rows.slice(1).map(line).join('\n')}\n`;
+  }
   if (['.md', '.markdown', '.txt', ''].includes(ext)) return fs.readFileSync(file, 'utf8');
   if (['.html', '.htm'].includes(ext)) return htmlToMarkdown(fs.readFileSync(file, 'utf8'));
   if (['.docx', '.doc', '.rtf', '.odt', '.webarchive'].includes(ext)) {
@@ -416,7 +437,7 @@ export function documentMarkdown(file) {
       throw new Error('PDF input needs pdftotext (brew install poppler), or export the PDF as text/markdown.');
     return r.stdout;
   }
-  throw new Error(`Unsupported document type ${ext}; use markdown, text, HTML, DOCX, RTF or PDF.`);
+  throw new Error(`Unsupported document type ${ext}; use markdown, text, CSV, HTML, DOCX, RTF or PDF.`);
 }
 
 export function ingestMarkdown(root, file, { scaffold, playbook = 'research-digest' } = {}) {
@@ -635,15 +656,16 @@ export function cutPoints(segs, duration, fps) {
  * at frame-aligned points inside pauses, so the beats replay it exactly with no gaps;
  * timings from a word-level transcript are measured, not estimated.
  */
-export async function ingestRecording(
+async function writeRecording(
   root,
-  { audio, words: wordsInput, script, from = 0, to, fps = 30, vertical = false, speakers = {}, theme, title, treatment, direction },
+  { audio, words: wordsInput, script, from = 0, to, fps = 30, vertical = false, speakers = {}, theme, title, treatment, direction, playbook, brand },
 ) {
   const { directionOptions, directionMarkdown, directionRefs } = await import('../../fframes/directions.mjs');
   const { applyTreatment, directionTemplate, treatmentById } = await import('../../fframes/treatments.mjs');
-  const { vendor } = await import('../../fframes/library.mjs');
-  ({ treatment } = directionOptions({ direction, treatment }));
+  const { vendor, item } = await import('../../fframes/library.mjs');
+  ({ treatment, playbook } = directionOptions({ direction, treatment, playbook }));
   if (treatment && !treatmentById(treatment)) throw new Error(`Unknown treatment ${treatment}`);
+  if (playbook && !item('playbooks', playbook)) throw new Error(`Unknown playbook ${playbook}`);
   const P = paths(root);
   if (fs.existsSync(P.storyboard))
     throw new Error(`${root} already has a storyboard; ingest a recording into a new directory.`);
@@ -764,11 +786,14 @@ export async function ingestRecording(
     sb.music = false;
     if (theme) sb.theme = theme;
   }
+  const { applyBrand } = await import('./brand.mjs');
+  const brandAssets = applyBrand(root, sb, brand, { recording: true, theme });
   writeJSON(P.storyboard, sb);
-  vendor(root, [...directionRefs(direction), ['treatments', treatment],
+  vendor(root, [...directionRefs(direction, [['treatments', treatment], ['playbooks', playbook]]),
     ['palettes', typeof sb.theme === 'string' ? sb.theme : sb.theme?.base], ['types', sb.type]]);
   fs.writeFileSync(path.join(root, 'DIRECTION.md'),
-    directionTemplate(sb, treatment ? treatmentById(treatment) : null) + directionMarkdown(direction, { recording: true }));
+    directionTemplate(sb, treatment ? treatmentById(treatment) : null) + directionMarkdown(direction, { recording: true, playbook }) +
+    (!direction && playbook ? `\nVisual reference playbook: ${playbook}. Keep the imported recording and timing when adapting its pictures.\n` : ''));
   fs.writeFileSync(
     path.join(root, 'BRIEF.md'),
     `# ${sb.title}\n\nImported ${beats.length} beats (${round(duration, 1)} s) from \`${path.basename(audio)}\`${from ? ` starting at ${from}s` : ''}. Every beat plays its slice of the recording; cuts sit in pauses, so the beats replay it without gaps. Word timings are measured from the supplied transcript.\n\nEvery beat starts as kinetic captions. Keep that where the words are the picture; elsewhere, change the block (keep \`vo\`, \`speaker\` and \`note\`): pull quotes (\`kinetic\` stack, \`quote\`), the numbers they mention (with sources), drawn explanations (\`canvas\`), speaker plates. Captions (\`${sb.captions === 'pop' ? 'pop' : 'true'}\`) keep the words on screen under any picture. When a stretch explains one process or place, draw it as a canvas \`world\` and let the camera follow the conversation through it (\`clearframe world DIR\` shows the plan). Do not edit \`vo\`: it must match the recording.\n`,
@@ -778,6 +803,28 @@ export async function ingestRecording(
     duration: round(duration, 2),
     speakers: Object.keys(cast),
     words: words.length,
+    assets: brandAssets,
     ...(scripted ? { interpolated: scripted.interpolated } : {}),
   };
+}
+
+/** Recording and brand intake is a transaction just like document intake. */
+export async function ingestRecording(destination, options = {}) {
+  const root = path.resolve(destination);
+  if (fs.existsSync(root) && (!fs.statSync(root).isDirectory() || fs.readdirSync(root).length))
+    throw new Error(`${root} is not empty; ingest a recording into a new directory.`);
+  const { readBrand } = await import('./brand.mjs');
+  const { useProject } = await import('../../fframes/library.mjs');
+  useProject(null);
+  const brand = readBrand(options.brand && path.resolve(options.brand));
+  fs.mkdirSync(path.dirname(root), { recursive: true });
+  const staging = fs.mkdtempSync(path.join(path.dirname(root), '.clearframe-recording-'));
+  try {
+    const project = path.join(staging, 'project');
+    const receipt = await writeRecording(project, { ...options, brand });
+    writeJSON(path.join(project, 'intake.json'), { version: 1, status: 'recording-needs-pictures', ...receipt });
+    if (fs.existsSync(root)) fs.rmdirSync(root);
+    fs.renameSync(project, root);
+    return receipt;
+  } finally { fs.rmSync(staging, { recursive: true, force: true }); useProject(null); }
 }
