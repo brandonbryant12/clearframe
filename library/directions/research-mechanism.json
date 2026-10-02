@@ -1,0 +1,18 @@
+{
+  "order": 1,
+  "title": "Mechanism in motion",
+  "materials": [
+    "research",
+    "podcast"
+  ],
+  "playbook": "concept-explainer",
+  "treatment": "blueprint",
+  "when": "The source explains how a system works.",
+  "story": "Start with the consequence, open the mechanism, follow the cause and return to the consequence.",
+  "picture": "Build one labelled system across shots; use camera travel to expose each link.",
+  "pace": "Reveal in the order the explanation needs; hold the completed mechanism.",
+  "rules": [
+    "Do not invent a causal link from a correlation.",
+    "Replace the sample mechanism with the actual one in the source."
+  ]
+}

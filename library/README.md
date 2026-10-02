@@ -8,11 +8,36 @@ Everything creative that is not engine code lives here, one file per item. To ad
 | `treatments/` | a complete art direction: look, motion, voice, sound and rules | `new --treatment`, `ingest --treatment`, `treatments` |
 | `sketches/` | a starting canvas composition for a mechanism | `sketch NAME`, playbook beats, `gallery --sketches` |
 | `playbooks/` | a narrative arc: beats with blocks, sample props and voice-over | `new --playbook`, `playbooks` |
+| `directions/` | optional source-aware story, picture and pace guidance plus playbook/treatment defaults | `directions`, `new/start/ingest --direction` |
 | `types/` | a type voice: the display family and emphasis for titles, statements, chapters, endcards and kinetic text | `type` in a storyboard or a treatment's `film`, `types` |
 
 The file name is the id (`library/palettes/noir.json` is `noir`). Files starting with `_` are ignored, so `_draft.json` stays out of listings. `order` sets the listing position. Items without it sort after the numbered ones, by id.
 
 Every item is validated when the engine starts, so a bad file fails immediately and names itself. Run `node --test test/library.test.mjs` after adding one.
+
+## Directions
+
+Directions help choose a starting form; they never constrain what a storyboard may contain. The built-ins combine story and visual grammar for research and podcasts. The `materials` tags filter suggestions and can use your own terms. `--playbook`, `--treatment` and `--theme` override the suggested defaults independently. A brand kit retains its own palette/type rules.
+
+Add `library/directions/my-idea.json` to a shared library, then use `--library DIR --direction my-idea`:
+
+```json
+{
+  "title": "A new way to see the system",
+  "when": "The source has a hidden connection worth revealing.",
+  "materials": ["research", "podcast"],
+  "playbook": "concept-explainer",
+  "treatment": "blueprint",
+  "story": "Start at the consequence, follow the cause, return with a changed understanding.",
+  "picture": "Draw a new spatial mechanism around the source's actual objects.",
+  "pace": "Open quickly, slow down to inspect, reveal the connection at the turn.",
+  "rules": ["Keep uncertainty visible; never invent a causal relationship."]
+}
+```
+
+`title`, `when`, `materials`, `playbook`, `treatment`, `story`, `picture`, `pace` and `rules` are required. `order` is optional. References are validated against the active library. Custom direction dependencies are copied with the project, even when a default is overridden. There is no engine registry or finite set of direction IDs to edit.
+
+`DIRECTION.md` records the guidance for the agent. The agent still reads the source, chooses the argument and authors the actual pictures. Recording imports begin with kinetic captions and preserve audio and timing; the profile's playbook is a visual reference. A profile does not automatically map source nouns to unrelated stock scenes. Draw original native canvas elements or add JSON sketches when a preset does not fit. See [source adaptation](../docs/source-playbooks.md).
 
 ## Palettes
 
@@ -111,6 +136,7 @@ A sketch should draw a mechanism, a place or a purposeful material composition, 
 - Each beat is a storyboard beat. Its `props` are checked against the block when a project is made.
 - A canvas beat can name a sketch instead of listing elements: `"props": {"sketch": "tunnel"}` draws it when the project is made, together with the sketch's own camera (`view`, `viewFrom`, `dolly`, `focus`). Any of those set on the beat win. `"sketchText": {"TITLE": "SIGNAL"}` replaces a sketch's placeholder type. Vertical films redraw every sketch beat for the tall frame.
 - A playbook can set the film's look: `theme`, `motion`, `backdrop`, `texture`, `lens`, `heading`, `textMotion` and `transition`. A treatment applied on top still wins.
+- Optional `sources` holds `claim`/`source` entries (with `asOf` when useful), or `id`/`title` entries. They are copied intact into a scaffold, so a playbook can preserve its illustrative assumptions and arithmetic.
 - Sample figures must be marked as illustrative, with `source: "Illustrative sample data · replace before publishing"`.
 - A playbook is a starting structure, not a template to fill in. Keep it to the arc and let the author adapt it.
 
@@ -119,7 +145,7 @@ A sketch should draw a mechanism, a place or a purposeful material composition, 
 The engine looks for items in three places. A later layer wins by id.
 
 1. **Built-ins:** this folder.
-2. **Shared libraries:** folders named in `CLEARFRAME_LIBRARY`, separated by `:`, or given with `--library DIR`. Use these for a brand kit, a team's templates, or an agent workspace's house style. Each folder has the same `palettes/`, `treatments/`, `sketches/` and `playbooks/` layout.
+2. **Shared libraries:** folders named in `CLEARFRAME_LIBRARY`, separated by `:`, or given with `--library DIR`. Use these for a brand kit, a team's templates, or an agent workspace's house style. Each folder has the same `palettes/`, `treatments/`, `sketches/`, `playbooks/`, `types/` and `directions/` layout.
 3. **The project:** `library/` inside a video project. Commands load it automatically with the storyboard.
 
 Rules for layers:

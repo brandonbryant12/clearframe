@@ -9,12 +9,16 @@ import { playbooks, scaffold, writeGallery } from '../fframes/playbooks.mjs';
 import { ICONS, ICON_SOURCE } from '../fframes/icons.mjs';
 import { sketches, sketch } from '../fframes/sketches.mjs';
 import { treatments } from '../fframes/treatments.mjs';
+import { directions, directionOptions, directionMarkdown, directionRefs } from '../fframes/directions.mjs';
 import { useProject, types } from '../fframes/library.mjs';
 import * as native from '../fframes/production.mjs';
 
 const HELP = `ClearFrame — FFFrames motion graphics
 
-  new <dir> [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical] [--seed N|random]
+  new <dir> [--direction ID] [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical] [--seed N|random]
+  start <dir> [--idea text] [--document report.md] [--brand brand.json] [--audience text] [--takeaway text]
+                                      portable source + brand intake; accepts --direction, --playbook, --treatment, --vertical
+  directions [research|podcast] [--json] optional story/picture/pace starting points; custom JSON in library/directions
   muse [--seed N] [--light] [--json]  a seeded creative brief: twist, motif, camera, cuts, look, set pieces, music
   checkpoints <dir> [--mode guided|one-shot] [--json]   where a human decides (intent, truth, story, words, spend, picture, final) and what is open
   treatments [--json]                 art direction presets: look, motion, voice, sound and rules
@@ -51,20 +55,27 @@ const HELP = `ClearFrame — FFFrames motion graphics
   qa <dir> [--video film.mp4] [--loop]  time bugs in the encoded film: one-frame pops, held stretches,
                                       world seams, export tags, loudness, the drop; timeline + phone sheets
   beatmap <dir | track>               the music's tempo and measured drop, and each cut against its beat grid
-  render | preview <dir> [--draft] [--out film.mp4] [--no-audio] [--force]
-  draft <dir> [--no-render]           one pass, one queue wait: critique, draft voice, check, sheet, draft MP4
+  render | preview <dir> [--draft] [--scale 0.5] [--out film.mp4] [--no-audio] [--force]
+  pipeline <dir> [--draft] [--scale 0.5] [--no-render]   saved production pass: checks, sheet, encode, QA, boundary review
+  draft <dir> [--no-render] [--scale 0.5]           one pass, one queue wait: critique, draft voice, check, sheet, draft MP4
 
 Library: palettes, treatments, sketches and playbooks are files in library/ (see library/README.md).
 A project's own library/ overrides them by id; --library DIR (or CLEARFRAME_LIBRARY) adds a shared one.
 
 FFFrames is the only active renderer. Preview produces a review MP4.
-Draft permits estimated narration/word timing; output keeps the authored dimensions.
+Draft permits estimated timing; --scale 0.25–1 reduces review resolution only (default 1).
 Native work automatically uses the local codex-heavy gate when available.
 Paid generation needs GEMINI_API_KEY; rendering and word-file imports are free.
 `;
 async function main() {
   const [cmd, ...args] = process.argv.slice(2);
   const strings = [
+    'scale',
+    'idea',
+    'document',
+    'brand',
+    'audience',
+    'takeaway',
     'seed',
     'mode',
     'library',
@@ -73,6 +84,7 @@ async function main() {
     'playbook',
     'recipe',
     'treatment',
+    'direction',
     'only',
     'budget',
     'at',
@@ -140,11 +152,17 @@ async function main() {
     budget: num('budget'),
     at: num('at'),
     pos: num('pos'),
+    scale: num('scale'),
     per: num('per'),
     columns: num('columns'),
     thumb: num('thumb'),
     noAudio: o['no-audio'],
   };
+  if (opts.scale != null) {
+    if (!['render', 'preview', 'draft', 'pipeline'].includes(cmd)) throw new Error('--scale is only supported by render, preview, draft and pipeline');
+    const { renderGeometry } = await import('../fframes/render-geometry.mjs');
+    renderGeometry({ width: 1920, height: 1080 }, { scale: opts.scale, draft: o.draft || ['preview', 'draft'].includes(cmd) });
+  }
   if (opts.budget != null && opts.budget < 0) throw new Error('budget must be nonnegative');
   // `--seed random` draws a seed (and reports it); any integer reproduces a draw.
   if (o.seed != null) {
@@ -156,6 +174,13 @@ async function main() {
     const m = muse(opts.seed ?? Math.floor(Math.random() * 100000), { dark: !o.light });
     return console.log(o.json ? JSON.stringify(m, null, 2) : museMarkdown(m));
   }
+  if (cmd === 'start') {
+    if (!positionals[0]) throw new Error('start needs a new project directory');
+    const { startProject } = await import('./lib/start.mjs');
+    const r = startProject(positionals[0], opts);
+    return console.log(o.json ? JSON.stringify(r, null, 2) :
+      `Created ${positionals[0]}: ${r.inputs.length} document, ${r.assets.length} brand assets. Read BRIEF.md${r.evidence ? ' and EVIDENCE.md' : ''}; rewrite the sample beats, then run critique and draft.`);
+  }
   if (cmd === 'new') {
     const dir = path.resolve(positionals[0] ?? 'my-video');
     const sb = scaffold(dir, opts);
@@ -163,6 +188,13 @@ async function main() {
     return console.log(
       `Created ${rel} (${sb.beats.length} beats, ${typeof sb.theme === 'string' ? sb.theme : sb.theme.base} palette). Replace the illustrative claims, then:\n  clearframe sheet ${rel} --draft     # contact sheet to review\n  clearframe voice ${rel} --draft     # free local narration\n  clearframe render ${rel} --draft    # fast review MP4`,
     );
+  }
+  if (cmd === 'directions') {
+    const found = directions(positionals[0]);
+    if (!found.length) throw new Error(`No directions for ${positionals[0]}. Run clearframe directions to list all.`);
+    return console.log(o.json ? JSON.stringify(found, null, 2) : found.map(d =>
+      `${d.id.padEnd(23)} ${d.title}\n  ${d.when}\n  Story: ${d.story}\n  Picture: ${d.picture}\n  Pace: ${d.pace}\n  Start: ${d.playbook} + ${d.treatment}`,
+    ).join('\n\n') + '\n\nUse --direction ID with new, start or ingest. Override --playbook, --treatment or --theme independently. Every scene remains editable; add your own JSON directions in --library DIR.');
   }
   if (['playbooks', 'recipes'].includes(cmd))
     return console.log(
@@ -296,27 +328,30 @@ async function main() {
   }
   if (cmd === 'ingest') {
     const { ingestMarkdown, ingestRecording } = await import('./lib/ingest.mjs');
+    const { vendor } = await import('../fframes/library.mjs');
+    const { applyTreatment, directionTemplate, treatmentById } = await import('../fframes/treatments.mjs');
+    const chosen = directionOptions(opts);
+    if (chosen.treatment && !treatmentById(chosen.treatment)) throw new Error(`Unknown treatment ${chosen.treatment}`);
     const dir = path.resolve(positionals[0] ?? '.');
     if (o.markdown) {
       const { storyboardFor, artSketches } = await import('../fframes/playbooks.mjs');
-      const { vendor } = await import('../fframes/library.mjs');
-      const { applyTreatment, directionTemplate, treatmentById } = await import('../fframes/treatments.mjs');
       // A film look starts from its genre's shots (cinematic → cinematic-explainer), not a deck.
-      const playbook = o.playbook ?? (o.treatment && treatmentById(o.treatment)?.playbook) ?? 'research-digest';
+      const playbook = chosen.playbook ?? (chosen.treatment && treatmentById(chosen.treatment)?.playbook) ?? 'research-digest';
       const r = ingestMarkdown(dir, o.markdown, {
         playbook,
         scaffold: (id, opts) => {
           const sb = storyboardFor(id, { ...opts, theme: o.theme, vertical: o.vertical });
-          if (o.treatment) {
-            applyTreatment(sb, o.treatment);
+          if (chosen.treatment) {
+            applyTreatment(sb, chosen.treatment);
             if (o.theme) sb.theme = o.theme;
           }
           fs.writeFileSync(
             path.join(dir, 'DIRECTION.md'),
-            directionTemplate(sb, o.treatment ? treatmentById(o.treatment) : null),
+            directionTemplate(sb, chosen.treatment ? treatmentById(chosen.treatment) : null) + directionMarkdown(o.direction),
           );
           // Art sketches stay as shorthand until the job; shared ones travel with the project.
-          vendor(dir, artSketches(sb));
+          vendor(dir, [...artSketches(sb), ...directionRefs(o.direction), ['treatments', chosen.treatment],
+            ['palettes', typeof sb.theme === 'string' ? sb.theme : sb.theme?.base], ['types', sb.type]]);
           return sb;
         },
       });
@@ -352,6 +387,8 @@ async function main() {
         speakers,
         theme: o.theme,
         title: o.title,
+        treatment: chosen.treatment,
+        direction: chosen.direction,
       });
       return console.log(
         `Imported ${r.beats} beats (${r.duration}s, ${r.words} words${r.speakers.length ? `, speakers ${r.speakers.join(', ')}` : ''}${r.interpolated != null ? `; script aligned, ${r.interpolated} word(s) interpolated` : ''}) into ${path.relative(process.cwd(), dir)}. Read BRIEF.md, then give the beats pictures.`,
@@ -411,6 +448,15 @@ async function main() {
     fs.writeFileSync(path.join(dir, 'build/captions.vtt'), t.toVTT(cues));
     return console.log('Wrote captions. Timing quality is recorded in build/timing.json.');
   }
+  if (cmd === 'pipeline') {
+    if (o.json) process.env.CLEARFRAME_PROGRESS_STDERR = '1';
+    const { enterGate } = await import('./lib/resource-gate.mjs');
+    if (await enterGate()) return;
+    const { runPipeline } = await import('./lib/pipeline.mjs');
+    const report = await runPipeline(dir, { draft: o.draft, scale: opts.scale, noRender: o['no-render'] });
+    return console.log(o.json ? JSON.stringify(report, null, 2) :
+      `${report.status}: ${path.join(report.dir, 'REPORT.md')}\n${report.seconds.toFixed(1)} s · ${report.reviewQueue.length} review items${report.artifacts.video ? `\nVideo: ${report.artifacts.video}` : ''}`);
+  }
   if (cmd === 'draft') {
     // Everything a review round needs, inside a single gate entry, with a compact report.
     const t0 = performance.now(),
@@ -438,7 +484,7 @@ async function main() {
     if (findings.length) lines.push('native:', ...findings.map(f => `  ${f}`));
     lines.push(`sheet: ${rel(await native.sheetProject(dir, { draft: true }))}`);
     if (!o['no-render']) {
-      const v = await native.renderProject(dir, { draft: true });
+      const v = await native.renderProject(dir, { draft: true, scale: opts.scale });
       lines.push(
         `video: ${rel(path.join(dir, 'build/video.mp4'))} (${v.frames} frames, ${v.seconds.toFixed(1)} s to render)`,
       );

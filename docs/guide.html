@@ -9,7 +9,7 @@
       (these are cheap and print the exact current lists; they don't build or render anything)
     - schema/storyboard.schema.json: film and beat fields (transition, exit, tone, camera, plate, captions, textMotion, heading, sfx, format)
     - fframes/canvas.mjs: canvas element types, enters, exits, loops, keys, eases, fonts, colour tokens, effects (glow, shadow, rough, echo, depth, behind)
-    - library/ (README.md + one file per palette, treatment, sketch and playbook): what each item sets
+    - library/ (README.md + one file per palette, treatment, sketch, playbook and optional direction): what each item sets
     - README.md, AGENTS.md, docs/canvas.md, docs/style.md, docs/ideas.md, docs/speech.md, docs/continuity.md
     - skills/clearframe*/SKILL.md (clearframe, direction, cinema, canvas, motion, script, library, engine, integrity, dataviz)
     - examples/night-city/BRIEF.md and storyboard.json (the case study in section 04)
@@ -542,7 +542,7 @@
       <summary><span class="mono-label">Contents</span><span class="toc-current">What it is</span></summary>
       <div class="toc-body">
         <a class="toc-brand" href="#top">Clear<span>Frame</span></a>
-        <p class="toc-meta">GUIDE · 2026-09-30</p>
+        <p class="toc-meta">GUIDE · 2026-10-02</p>
         <ol>
           <li><a href="#what-it-is"><span class="n">01</span>What it is</a></li>
           <li><a href="#how-it-works"><span class="n">02</span>How it works</a></li>
@@ -579,7 +579,7 @@
         <li class="updated">Last updated: 2026-10-02</li>
         <li>Covers 0.5.0 (unreleased)</li>
         <li>33 blocks · 19 palettes</li>
-        <li>15 treatments · 35 playbooks</li>
+        <li>Open creative library · editable storyboards</li>
       </ul>
     </header>
 
@@ -606,7 +606,7 @@
           <p>Bring finished words. Each beat gets one idea, one landing word and its own picture. Recording the whole narration as one continuous take keeps one consistent voice performing from line to line.</p>
         </div>
       </div>
-      <p class="small">It also handles brand spots, data stories, lessons and how-tos, one-world journeys through a process or place, and speech-led kinetic type. Run <code>playbooks</code> for all 29 starting arcs.</p>
+      <p class="small">It also handles brand spots, data stories, lessons and how-tos, one-world journeys through a process or place, and speech-led kinetic type. Run <code>playbooks</code> for the current starting arcs, including financial mechanisms, scenario comparisons and risk tradeoffs.</p>
 
       <h3>What it is not</h3>
       <ul>
@@ -1456,9 +1456,12 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
       </div>
 
       <h3 id="vocab-library">Library: blocks, sketches, playbooks</h3>
-      <p>Blocks are engine code. Everything else creative is a file in <code>library/</code>: one file per palette, treatment, sketch and playbook, validated when the engine starts. Adding an idea means adding a file. You can also layer your own:</p>
+      <p><strong>Starting points, with room to invent.</strong> <code>directions research</code> and <code>directions podcast</code> compare story, picture and pace. Choose <code>--direction ID</code> on <code>new</code>, <code>start</code> or <code>ingest</code>; override playbook, treatment and theme independently. Add your own JSON directions or skip profiles and draw original native scenes. Before authoring, compare three different narrative entries, metaphors and editing rhythms in <code>DIRECTION.md</code>. Changing only a palette is not meaningful variation. See <a href="source-playbooks.md">research and conversation examples</a> and <a href="../library/README.md#directions">custom directions</a>.</p>
+      <p>Research can become an evidence montage, a mechanism or field notes. Podcasts can become kinetic type, a drawn explanation or a continuous visual essay. Audio imports apply visual styling while preserving the recording and timing; the chosen playbook is a reference for the agent, not replacement narration. Source interpretation and picture authorship remain directing work.</p>
+      <p>For financial material, try <code>cash-flow</code>, <code>scenario-lab</code> or <code>risk-tradeoffs</code>. Their mechanism sketches also work independently. <code>start</code> accepts an idea, document and brand JSON together; see <a href="intake.md">the input contract</a>.</p>
+      <p>Blocks are engine code. Everything else creative is a file in <code>library/</code>: one file per palette, treatment, sketch, playbook and optional direction, validated when the engine starts. Adding an idea means adding a file. You can also layer your own:</p>
       <ul>
-        <li><strong>For one film</strong>, put files in the project's own <code>library/palettes/</code>, <code>treatments/</code>, <code>sketches/</code> or <code>playbooks/</code>. The same id overrides a built-in.</li>
+        <li><strong>For one film</strong>, put files in the project's own <code>library/palettes/</code>, <code>treatments/</code>, <code>sketches/</code>, <code>playbooks/</code>, <code>types/</code> or <code>directions/</code>. The same id overrides a built-in.</li>
         <li><strong>For a team or brand</strong>, keep a shared folder with the same layout and pass <code>--library DIR</code> (or set <code>CLEARFRAME_LIBRARY</code>). <code>new</code> copies any shared palette, treatment or art sketch it uses into the project, so the film still renders without the shared folder. A playbook's <code>art.sketch</code> stays as shorthand and is drawn when the job compiles, so <code>drift</code> spans each beat's final length.</li>
         <li>Items outside the built-ins are JSON only, so templates stay data. <code>library/README.md</code> has every field.</li>
       </ul>
@@ -1588,7 +1591,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>gallery DIR [--sketches]</code></td><td class="wrap">Renders every block (or sketch) in a theme and aspect, to review the vocabulary.</td></tr>
             <tr class="group"><td colspan="2">Start &amp; choose</td></tr>
             <tr><td><code>new DIR --playbook P --treatment T</code></td><td class="wrap">Scaffolds a storyboard and DIRECTION.md (<code>--theme</code>, <code>--vertical</code>).</td></tr>
-            <tr><td><code>treatments</code> · <code>playbooks</code> · <code>types</code></td><td class="wrap">Lists art directions, starting arcs and type voices.</td></tr>
+            <tr><td><code>directions</code> · <code>treatments</code> · <code>playbooks</code> · <code>types</code></td><td class="wrap">Lists art directions, starting arcs and type voices.</td></tr>
             <tr><td><code>blocks [NAME]</code></td><td class="wrap">Lists blocks, or one block's props and an example.</td></tr>
             <tr><td><code>themes</code> · <code>motions</code> · <code>icons</code></td><td class="wrap">Palettes with swatches; motion presets, entrances, exits and backdrops; the bundled icons.</td></tr>
             <tr><td><code>sketch [NAME] [--vertical]</code></td><td class="wrap">Canvas starting compositions as JSON.</td></tr>
@@ -1695,6 +1698,9 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
     <section class="topic" id="whats-new">
       <p class="kicker"><span class="num">09</span><span class="serif">0.5.0, unreleased</span></p>
       <h2>What's new</h2>
+      <p><strong>A saved CLI production pass.</strong> <code>pipeline FILM --draft --scale 0.5</code> creates the first review; <code>pipeline FILM</code> checks and renders the full-resolution final. Each run retains a source snapshot, matching sheet/video receipts, stage timings, encoded QA, boundary frames and a review queue. Errors fail the run. <code>ready-for-review</code> is the mechanical result, not an approval. <code>npm run verify:pipeline -- NEW-DIR</code> exercises ten financial, research and podcast examples across both formats through the real CLI. Our focus is production films and an efficient standalone methodology before any port. See <a href="production.md">production method and regression harness</a>.</p>
+      <p><strong>Portable intake and smaller reviews.</strong> <code>start DIR --idea "..." --document report.md --brand brand.json</code> gathers source material and a brand kit into an isolated new project, with evidence, copied assets and hashes. The agent reads the briefs and rewrites the illustrative arc. <code>draft DIR --scale 0.5</code> writes a smaller review copy with the same layout, frame clock and audio; final renders keep authored resolution. <code>qa</code> verifies scaled reviews against a matching receipt. No new runtime dependency or Content Studio integration is added. See <a href="intake.md">the intake guide</a> and <a href="../examples/financial-intake/README.md">the free example</a>.</p>
+      <p><strong>Financial visual options.</strong> <code>cash-flow</code>, <code>scenario-lab</code> and <code>risk-tradeoffs</code> add narrative arcs around three new native mechanisms: a cash clearing gate, branching assumptions and a lens exposing risk dimensions. Their examples are visibly illustrative. See <a href="financial-playbooks.md">financial playbooks</a>.</p>
       <p class="small">"Travel instead of cutting, type with a voice, and fewer false alarms." The full list is in <code>CHANGELOG.md</code>.</p>
       <ul class="news">
         <li><strong>Type voices, so films stop looking alike.</strong> A film-level <code>type</code> (set by the treatment) picks the display family and emphasis for titles, statements, endcards, chapters and kinetic text: <code>didone</code> (Playfair Display with its italic), <code>wide</code> (Archivo Expanded capitals on a marker), <code>geometric</code> (Space Grotesk light with bold emphasis), <code>condensed</code> (Big Shoulders Display, underlined), <code>bookish</code>, <code>typewriter</code>, and <code>inter</code> as the unchanged default. Twelve treatments moved onto a voice; <code>monolith</code> and <code>atelier</code> are new, each with its own palette. Four OFL families join the bundle with provenance and glyph coverage. See <a href="#vocab-type">Type</a>.</li>
@@ -1703,7 +1709,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
         <li><strong>Material library and image direction.</strong> Ten new native sketches span light professional, bubbly and dark angular forms. Try <code>studio</code>, <code>buoyant</code> or <code>arena</code> treatments and <code>art: {sketch: "glass-orbits", seed: 4, opacity: 0.8, drift: 0.5}</code> beneath a beat: the seed gives a different arrangement that keeps the copy region clear, and <code>drift</code> pushes the art in slowly under steady copy. The <a href="design/material-studies/index.html">visual atlas</a> shows the results. Use <a href="image-direction.md">imagegen for exploration</a>, then rebuild brand-sensitive shapes with palette tokens and native fonts. A generated font name or hex request is not a guarantee.</li>
         <li><strong>Cinematic safeguards.</strong> Pacing checks catch late staged-item reveals; canvas checks flag implicit fills on stroked shapes. Held-frame QA excludes authored letterbox bars and separates shots. Its below-2 change threshold over 2.5 seconds is advisory: inspect the MP4 for freezes and empty lead-ins, preserve deliberate slow pushes and pauses, and record reviewed holds in DIRECTION.md.</li>
         <li><strong>Time bugs and the drop</strong> (from the October 2026 motion references). <code>qa DIR</code> reads the encoded film for what stills miss: one-frame pops, stretches where the picture barely changes under the voice, jumping world seams, export tags and loudness, with a timeline and a 360 px phone sheet. <code>beatmap DIR</code> measures a track's tempo and drop, and <code>music.drop</code> lands the drop on a beat. Finals are now fully colour-tagged (BT.709 primaries and transfer, square pixels).</li>
-        <li><strong>Reports shoot as films by default.</strong> <code>research-digest</code> (what <code>ingest</code> starts from), <code>data-story</code> and <code>concept-explainer</code> were rebuilt around shots. Every other report arc gained lower thirds, a subtle lens, push-ins on numbers and a silence before the close. All 35 playbooks score 63–100 on the cinema score.</li>
+        <li><strong>Reports shoot as films by default.</strong> <code>research-digest</code> (what <code>ingest</code> starts from), <code>data-story</code> and <code>concept-explainer</code> were rebuilt around shots. Every other report arc gained lower thirds, a subtle lens, push-ins on numbers and a silence before the close. Use the cinema score to locate possible weaknesses, then review the actual film.</li>
         <li><strong>Push to a detail.</strong> <code>camera: {to: [x, y, w, h], say}</code> turns any scene into a close-up on the word that matters. The heading bows out, and the source stays.</li>
         <li><strong>Sound for cinema.</strong> A hit on every flash cut, a riser that ends where a silence begins, room tone under it, and a shimmer as light sweeps a title. Fast moves and elements get motion blur.</li>
         <li><strong>Shots, not slides.</strong> A new <a href="#cinema">cinema guide</a> covers shot scales, three planes, a motivated camera, continuity, light and rhythm. <code>critique</code> now prints a <strong>cinema score</strong> from the eight tells of a slideshow.</li>

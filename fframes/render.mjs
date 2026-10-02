@@ -6,6 +6,7 @@ import { spawnSync } from 'node:child_process';
 import { THEMES, palette } from './catalog.mjs';
 import { sha256 } from './native-build.mjs';
 import { prepareProject, nativeCommand, unchanged } from './prepare.mjs';
+import { renderGeometry } from './render-geometry.mjs';
 import { soundDesign } from './sound.mjs';
 import { mix, mux } from '../engine/lib/audio.mjs';
 import { ffmpeg, writeJSON, log } from '../engine/lib/util.mjs';
@@ -30,8 +31,11 @@ export function validateVideo(file, { width, height, fps, frames }) {
     throw new Error('Native output dimensions, frame rate or decoded frame count differ from the storyboard.');
   return { video: v, audio: streams.find(s => s.codec_type === 'audio') ?? null };
 }
-export async function renderProject(root, { draft = false, out, noAudio = false, force = false } = {}) {
+export async function renderProject(root, { draft = false, out, noAudio = false, force = false, scale = 1 } = {}) {
+  renderGeometry({ width: 1920, height: 1080 }, { draft, scale });
   const ctx = await prepareProject(root, { draft });
+  const geometry = renderGeometry(ctx.job, { draft, scale });
+  const expected = { ...ctx.job, ...geometry };
   const output = path.resolve(out ?? path.join(root, 'build/video.mp4'));
   if (out && fs.existsSync(output) && !force)
     throw new Error(`Output exists: ${output}; choose a new file or use --force.`);
@@ -42,8 +46,8 @@ export async function renderProject(root, { draft = false, out, noAudio = false,
     finished = path.join(ctx.dir, `${token}-final.mp4`);
   const start = performance.now();
   try {
-    // Drafts keep the authored canvas and frame rate but use the fast review encoder.
-    await nativeCommand(ctx, 'render', [...(draft ? ['--draft', '--scale', '1'] : []), '-o', raw]);
+    // Scale only the output raster; layout, frame rate, speech and source media clocks stay authored.
+    await nativeCommand(ctx, 'render', [...(draft ? ['--draft', '--scale', String(scale)] : []), '-o', raw]);
     // Upstream segment concatenation can end the MP4 edit list one frame early at some
     // lengths (e.g. 451 frames), so players drop the final frame. Rebuild the timeline
     // from the packets themselves; frames are copied bit-for-bit.
@@ -62,21 +66,24 @@ export async function renderProject(root, { draft = false, out, noAudio = false,
       '-an',
       silent,
     ]);
-    validateVideo(silent, ctx.job);
+    validateVideo(silent, expected);
     const soundCues = soundDesign(ctx.job, ctx.sb.sfx);
     // The cue sheet, for review: what plays where (bench waveforms mark these).
     writeJSON(path.join(root, 'build/cues.json'), soundCues);
     const track = noAudio ? null : await mix(root, ctx.timing, audio, ctx.sb.mix, soundCues);
     await mux(silent, track, finished);
-    const probe = validateVideo(finished, ctx.job);
+    const probe = validateVideo(finished, expected);
     unchanged(ctx);
     fs.mkdirSync(path.dirname(output), { recursive: true });
     fs.renameSync(finished, output);
     const report = {
       ...ctx.manifest,
-      encoder: draft ? 'draft (x264 veryfast, CRF 23)' : 'final (x264 medium, CRF 16)',
-      width: ctx.job.width,
-      height: ctx.job.height,
+      encoder: draft ? 'draft (x264 veryfast, CRF 21)' : 'final (x264 medium, CRF 16)',
+      width: geometry.width,
+      height: geometry.height,
+      authoredWidth: ctx.job.width,
+      authoredHeight: ctx.job.height,
+      scale,
       fps: ctx.job.fps,
       frames: ctx.job.frames,
       seconds: (performance.now() - start) / 1000,

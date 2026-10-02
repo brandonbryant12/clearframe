@@ -7,6 +7,7 @@ import { sketches, sketch, expandArt, SKETCH_FRAMES as SKETCH_SIZE } from './ske
 import { items, vendor } from './library.mjs';
 import { muse, museMarkdown } from './muse.mjs';
 import { applyTreatment, directionTemplate, treatmentById } from './treatments.mjs';
+import { directionOptions, directionMarkdown, directionRefs } from './directions.mjs';
 
 // Playbooks: starting story arcs, one JSON file each in library/playbooks (plus any in a
 // project's library/). A beat that names a `sketch` is redrawn for the requested frame.
@@ -39,7 +40,7 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
     ...(book.frame ? { frame: book.frame } : {}),
     ...(book.speakers ? { speakers: book.speakers } : {}),
     ...(book.voice ? { voice: book.voice } : {}),
-    sources: [{ id: 'sample', title: 'Hypothetical sample data and fictional quotations — replace before publishing' }],
+    sources: structuredClone(book.sources ?? [{ id: 'sample', title: 'Hypothetical sample data and fictional quotations — replace before publishing' }]),
     continuity: {
       maxGeneratedShare: 0.2,
       treatment: 'Restrained editorial graphics, generous space, no generated text',
@@ -103,6 +104,7 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
 export const artSketches = sb => sb.beats.filter(b => b.art?.sketch).map(b => ['sketches', b.art.sketch]);
 export function scaffold(dir, options = {}) {
   if (fs.existsSync(dir) && fs.readdirSync(dir).length) throw new Error(`${dir} is not empty`);
+  options = directionOptions(options);
   const id =
       options.playbook ??
       options.recipe ??
@@ -135,11 +137,13 @@ export function scaffold(dir, options = {}) {
     ['palettes', typeof sb.theme === 'string' ? sb.theme : sb.theme?.base],
     ['treatments', options.treatment],
     ['types', sb.type],
+    ...directionRefs(options.direction),
     ...artSketches(sb),
   ]);
   fs.writeFileSync(
     path.join(dir, 'DIRECTION.md'),
     directionTemplate(sb, options.treatment ? treatmentById(options.treatment) : null) +
+      directionMarkdown(options.direction) +
       (drawn ? `\n${museMarkdown(drawn)}` : ''),
   );
   // Placeholder screenshots are generated locally: text-free, palette-matched and clearly illustrative.
@@ -188,7 +192,8 @@ export function sketchGallery({ vertical = false, theme = 'paper', only } = {}) 
             id: s.name,
             block: 'canvas',
             duration: 5,
-            props: { kicker: 'Sketch', title: s.name[0].toUpperCase() + s.name.slice(1), elements: props.elements },
+            props: { kicker: 'Sketch', title: s.name[0].toUpperCase() + s.name.slice(1), elements: props.elements,
+              ...Object.fromEntries(['view', 'viewFrom', 'viewDur', 'dolly', 'focus'].filter(k => props[k] != null).map(k => [k, props[k]])) },
           };
     });
   return sb;

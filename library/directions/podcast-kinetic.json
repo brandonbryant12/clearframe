@@ -1,0 +1,17 @@
+{
+  "order": 4,
+  "title": "Words as performance",
+  "materials": [
+    "podcast"
+  ],
+  "playbook": "podcast-clip",
+  "treatment": "audiogram",
+  "when": "The delivery of a memorable line is central to the clip.",
+  "story": "Hook, context, contrast and the line worth remembering.",
+  "picture": "Measured kinetic type, speaker tags, a meter and an occasional literal drawing.",
+  "pace": "Follow vocal emphasis and silence; never add words or compress audio to fit the preset.",
+  "rules": [
+    "Use measured word timings bound to the current recording.",
+    "Use text as picture selectively; give concrete ideas a scene."
+  ]
+}
