@@ -1,0 +1,11 @@
+{
+  "title": "Porcelain petals",
+  "use": "Reveal an idea or product, open a chapter, explain access or discovery.",
+  "description": "Six ceramic shells unfold around a satin sphere. A held reveal gives the editor a place to land a native title.",
+  "theme": "daylight",
+  "duration": 4,
+  "loop": true,
+  "copy": "Use as a full-frame insert or on the right side of a split plate. Keep all words and actual branding native.",
+  "metaphor": "Qualitative reveal; petal count and sphere size encode no quantity.",
+  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+}

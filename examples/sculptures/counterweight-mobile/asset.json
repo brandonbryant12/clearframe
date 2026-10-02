@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "id": "counterweight-mobile",
+  "title": "A balance of decisions",
+  "description": "A two-tier brass mobile transfers a slow rocking motion through articulated beams and hanging ceramic counterweights.",
+  "use": "Trade-offs, dependencies, competing priorities and reflective editorial titles.",
+  "copy": "Use the connected motion to introduce a trade-off, then cut to native evidence. A single short line can sit beside the hanging forms.",
+  "metaphor": "A choreographed sculpture, not a physics simulation or a chart of actual weights or values.",
+  "license": "MIT; original procedural artwork",
+  "provenance": "Original ClearFrame recipe; no external models or textures.",
+  "kind": "clip",
+  "file": "clip.mp4",
+  "poster": "poster.png",
+  "editableScene": "scene.blend",
+  "loop": true,
+  "width": 1920,
+  "height": 1080,
+  "duration": 6,
+  "fps": 24,
+  "configuration": {
+    "id": "counterweight-mobile",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 144,
+    "seed": 17,
+    "theme": "forest",
+    "colors": {
+      "base": "forest",
+      "bg": "#0f1d17",
+      "surface": "#1c3128",
+      "ink": "#eef5ee",
+      "muted": "#a6bcae",
+      "accent": "#a3dc7f",
+      "accent2": "#f2c35b",
+      "positive": "#a3dc7f",
+      "negative": "#f39b84"
+    },
+    "samples": 48,
+    "pos": 0.5,
+    "still": false,
+    "draft": false,
+    "loop": true
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347",
+    "library/sculptures/counterweight-mobile.py": "7feb1bcd781b5b5da30ac93778bc2e432cb671447977ba0d4a9d5eac4897f37e",
+    "library/sculptures/counterweight-mobile.json": "c5e184f309d47c672eb9d1b3e5df12838af52b8dd7ad48d58a632bc079991264"
+  },
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "18105c43d3fd25185a57a2c28569bef4ed9eaa3fa9c03d7f7049b2cc00868450",
+      "bytes": 235253
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "b153568a0c8e8ba983d05638b120b16351b7408ffb547c129b96ca69568f5a40",
+      "bytes": 1612948
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "329c6fbf53f5387c2e3a3c318e13335c9095c6875b663a460a86bd8e60e6707f",
+      "bytes": 884832
+    }
+  },
+  "blender": {
+    "version": "5.2.2 LTS",
+    "hash": "d13f752e3b9c",
+    "samples": 48,
+    "engine": "BLENDER_EEVEE",
+    "requiresAutoExec": false
+  },
+  "mechanicalStatus": "ready-for-review",
+  "visualAcceptance": "Review in the context of the destination film."
+}

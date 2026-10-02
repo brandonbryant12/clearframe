@@ -1,0 +1,521 @@
+{
+  "version": 1,
+  "status": "ready-for-review",
+  "id": "ribbon-thread",
+  "title": "A continuous thread",
+  "recipe": {
+    "id": "ribbon-thread",
+    "title": "A continuous thread",
+    "use": "Podcast titles, connected ideas, recurring processes, flow and continuity.",
+    "description": "A broad paper-metal ribbon follows a three-lobed knot while small markers move along its continuous route.",
+    "theme": "porcelain",
+    "duration": 4,
+    "loop": true,
+    "copy": "Let the whole shape breathe beside a short title; use a close crop to move into an explanation.",
+    "metaphor": "A qualitative continuity device, not a network graph or a measured flow.",
+    "parameters": [
+      "theme",
+      "seed",
+      "duration",
+      "fps",
+      "vertical"
+    ]
+  },
+  "config": {
+    "id": "ribbon-thread",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "seed": 17,
+    "theme": "porcelain",
+    "colors": {
+      "base": "porcelain",
+      "bg": "#f6f1ea",
+      "surface": "#ebe3d8",
+      "ink": "#1a1816",
+      "muted": "#6b625a",
+      "accent": "#8c2f39",
+      "accent2": "#4d6a6d",
+      "positive": "#3f6b4f",
+      "negative": "#8c2f39"
+    },
+    "samples": 48,
+    "pos": 0.5,
+    "still": false,
+    "draft": false,
+    "loop": true
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "aa0d4eb393f64ae4ccc56952dded23817ffd75efcc888fb478808423db340114",
+    "scripts/blender/artkit.py": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347",
+    "library/sculptures/ribbon-thread.py": "771c23a42414c02a6227138adccc39f328df24b1c93fdcf55c008824ef17c46b",
+    "library/sculptures/ribbon-thread.json": "a4a4c78ecc7b81246cea1b3a9a539af756138d973287721194f23ac2b4149337"
+  },
+  "encoding": {
+    "transfer": "iec61966-2-1",
+    "primaries": "bt709",
+    "matrix": "bt709",
+    "range": "tv",
+    "note": "Preserve Blender display sRGB transfer; convert RGB to limited-range BT.709 YUV."
+  },
+  "startedAt": "2026-10-02T15:41:27.055Z",
+  "stages": [
+    {
+      "name": "blender",
+      "status": "passed",
+      "seconds": 459.116669584
+    },
+    {
+      "name": "encode",
+      "status": "passed",
+      "seconds": 2.9718282500000206
+    },
+    {
+      "name": "verify",
+      "status": "passed",
+      "seconds": 0.2246870409999974
+    }
+  ],
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "7200f93458d584194ad8569f01135fcf46c3797db6c6182af51da8157b76c9da",
+      "bytes": 158965
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "293c1cec7b7b7183e081e2ba0022f6dd9cdd292ac82f3c88a0837ea867054034",
+      "bytes": 1864448
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "869fca5922889b7787c29f30d2970d81d080b94489b8a1b97cc3eb79534a171f",
+      "bytes": 1330234
+    }
+  },
+  "blender": {
+    "version": 1,
+    "blenderVersion": "5.2.2 LTS",
+    "blenderBuildHash": "d13f752e3b9c",
+    "engine": "BLENDER_EEVEE",
+    "threads": 2,
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "frames": 96,
+    "samples": 48,
+    "colorManagement": {
+      "view": "AgX",
+      "look": "AgX - Medium High Contrast"
+    },
+    "bakedMotion": true,
+    "requiresAutoExec": false,
+    "loopMaxTransformError": 6.267745230567915e-16,
+    "objects": 12,
+    "meshVertices": 3158,
+    "buildSeconds": 0.04934016599145252,
+    "bakeSeconds": 0.007798874998115934,
+    "renderedFrames": [
+      {
+        "frame": 1,
+        "seconds": 5.087996875008685
+      },
+      {
+        "frame": 2,
+        "seconds": 4.971422290996998
+      },
+      {
+        "frame": 3,
+        "seconds": 4.718998625001404
+      },
+      {
+        "frame": 4,
+        "seconds": 4.779543791999458
+      },
+      {
+        "frame": 5,
+        "seconds": 4.685488292001537
+      },
+      {
+        "frame": 6,
+        "seconds": 4.787231584006804
+      },
+      {
+        "frame": 7,
+        "seconds": 4.766491000002134
+      },
+      {
+        "frame": 8,
+        "seconds": 4.844376667009783
+      },
+      {
+        "frame": 9,
+        "seconds": 4.701213708001887
+      },
+      {
+        "frame": 10,
+        "seconds": 4.689843957996345
+      },
+      {
+        "frame": 11,
+        "seconds": 4.765355499999714
+      },
+      {
+        "frame": 12,
+        "seconds": 4.679548708998482
+      },
+      {
+        "frame": 13,
+        "seconds": 4.775209041996277
+      },
+      {
+        "frame": 14,
+        "seconds": 4.6764523339952575
+      },
+      {
+        "frame": 15,
+        "seconds": 4.729404041005182
+      },
+      {
+        "frame": 16,
+        "seconds": 4.754235166998114
+      },
+      {
+        "frame": 17,
+        "seconds": 4.744543249995331
+      },
+      {
+        "frame": 18,
+        "seconds": 4.807721000004676
+      },
+      {
+        "frame": 19,
+        "seconds": 4.7885273749998305
+      },
+      {
+        "frame": 20,
+        "seconds": 4.777373707998777
+      },
+      {
+        "frame": 21,
+        "seconds": 4.6980759169964585
+      },
+      {
+        "frame": 22,
+        "seconds": 4.731213874998502
+      },
+      {
+        "frame": 23,
+        "seconds": 4.7812564999912865
+      },
+      {
+        "frame": 24,
+        "seconds": 4.823939666006481
+      },
+      {
+        "frame": 25,
+        "seconds": 4.838163958003861
+      },
+      {
+        "frame": 26,
+        "seconds": 4.745799665994127
+      },
+      {
+        "frame": 27,
+        "seconds": 4.649146750001819
+      },
+      {
+        "frame": 28,
+        "seconds": 4.913872958990396
+      },
+      {
+        "frame": 29,
+        "seconds": 4.690497957999469
+      },
+      {
+        "frame": 30,
+        "seconds": 4.808506582994596
+      },
+      {
+        "frame": 31,
+        "seconds": 5.0121861250081565
+      },
+      {
+        "frame": 32,
+        "seconds": 4.844159375003073
+      },
+      {
+        "frame": 33,
+        "seconds": 4.7676114159985445
+      },
+      {
+        "frame": 34,
+        "seconds": 4.804964584007394
+      },
+      {
+        "frame": 35,
+        "seconds": 4.651722415990662
+      },
+      {
+        "frame": 36,
+        "seconds": 4.882786834001308
+      },
+      {
+        "frame": 37,
+        "seconds": 4.805067332999897
+      },
+      {
+        "frame": 38,
+        "seconds": 4.740978000001633
+      },
+      {
+        "frame": 39,
+        "seconds": 4.824599500003387
+      },
+      {
+        "frame": 40,
+        "seconds": 4.878681709000375
+      },
+      {
+        "frame": 41,
+        "seconds": 4.953811458006385
+      },
+      {
+        "frame": 42,
+        "seconds": 4.820887665991904
+      },
+      {
+        "frame": 43,
+        "seconds": 4.7656830420019105
+      },
+      {
+        "frame": 44,
+        "seconds": 4.833260458006407
+      },
+      {
+        "frame": 45,
+        "seconds": 4.947198458001367
+      },
+      {
+        "frame": 46,
+        "seconds": 4.790260540990857
+      },
+      {
+        "frame": 47,
+        "seconds": 4.7536883339926135
+      },
+      {
+        "frame": 48,
+        "seconds": 4.828943208995042
+      },
+      {
+        "frame": 49,
+        "seconds": 4.735175458001322
+      },
+      {
+        "frame": 50,
+        "seconds": 4.716521000009379
+      },
+      {
+        "frame": 51,
+        "seconds": 4.76743770801113
+      },
+      {
+        "frame": 52,
+        "seconds": 4.7556407499942
+      },
+      {
+        "frame": 53,
+        "seconds": 4.7037199170008535
+      },
+      {
+        "frame": 54,
+        "seconds": 4.793714791012462
+      },
+      {
+        "frame": 55,
+        "seconds": 4.704406124990783
+      },
+      {
+        "frame": 56,
+        "seconds": 4.7835380409960635
+      },
+      {
+        "frame": 57,
+        "seconds": 4.692492165995645
+      },
+      {
+        "frame": 58,
+        "seconds": 4.724002417002339
+      },
+      {
+        "frame": 59,
+        "seconds": 4.677370459001395
+      },
+      {
+        "frame": 60,
+        "seconds": 4.709257791997516
+      },
+      {
+        "frame": 61,
+        "seconds": 4.948283334000735
+      },
+      {
+        "frame": 62,
+        "seconds": 4.7412704580056015
+      },
+      {
+        "frame": 63,
+        "seconds": 4.7780850419949275
+      },
+      {
+        "frame": 64,
+        "seconds": 4.733371084003011
+      },
+      {
+        "frame": 65,
+        "seconds": 4.633471749999444
+      },
+      {
+        "frame": 66,
+        "seconds": 4.660872833992471
+      },
+      {
+        "frame": 67,
+        "seconds": 4.691663542005699
+      },
+      {
+        "frame": 68,
+        "seconds": 4.730219542005216
+      },
+      {
+        "frame": 69,
+        "seconds": 4.715276000002632
+      },
+      {
+        "frame": 70,
+        "seconds": 4.753392958009499
+      },
+      {
+        "frame": 71,
+        "seconds": 4.760174082999583
+      },
+      {
+        "frame": 72,
+        "seconds": 4.697869958996307
+      },
+      {
+        "frame": 73,
+        "seconds": 4.736645583005156
+      },
+      {
+        "frame": 74,
+        "seconds": 4.736345625002286
+      },
+      {
+        "frame": 75,
+        "seconds": 4.726865040996927
+      },
+      {
+        "frame": 76,
+        "seconds": 4.772054583008867
+      },
+      {
+        "frame": 77,
+        "seconds": 4.699671916998341
+      },
+      {
+        "frame": 78,
+        "seconds": 4.692112666001776
+      },
+      {
+        "frame": 79,
+        "seconds": 4.735845374991186
+      },
+      {
+        "frame": 80,
+        "seconds": 4.731204957992304
+      },
+      {
+        "frame": 81,
+        "seconds": 4.733626750006806
+      },
+      {
+        "frame": 82,
+        "seconds": 4.673711541996454
+      },
+      {
+        "frame": 83,
+        "seconds": 4.718963042003452
+      },
+      {
+        "frame": 84,
+        "seconds": 4.664725667011226
+      },
+      {
+        "frame": 85,
+        "seconds": 4.663863458001288
+      },
+      {
+        "frame": 86,
+        "seconds": 4.729076832998544
+      },
+      {
+        "frame": 87,
+        "seconds": 4.8309780419949675
+      },
+      {
+        "frame": 88,
+        "seconds": 4.794245708006201
+      },
+      {
+        "frame": 89,
+        "seconds": 4.803433832988958
+      },
+      {
+        "frame": 90,
+        "seconds": 4.768879958006437
+      },
+      {
+        "frame": 91,
+        "seconds": 4.675812749992474
+      },
+      {
+        "frame": 92,
+        "seconds": 4.766310791994329
+      },
+      {
+        "frame": 93,
+        "seconds": 4.690011124999728
+      },
+      {
+        "frame": 94,
+        "seconds": 4.6744551669980865
+      },
+      {
+        "frame": 95,
+        "seconds": 4.746069165994413
+      },
+      {
+        "frame": 96,
+        "seconds": 4.764726250010426
+      }
+    ],
+    "renderSeconds": 457.38695749999897,
+    "posterFrame": 49,
+    "status": "rendered"
+  },
+  "probe": {
+    "codec_name": "h264",
+    "width": 1920,
+    "height": 1080,
+    "color_space": "bt709",
+    "color_transfer": "iec61966-2-1",
+    "color_primaries": "bt709",
+    "avg_frame_rate": "24/1",
+    "nb_read_frames": "96"
+  },
+  "seconds": 462.33265400000005,
+  "finishedAt": "2026-10-02T15:49:09.383Z"
+}

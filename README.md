@@ -32,6 +32,10 @@ Agent-directed motion graphics rendered natively with **FFFrames**. A film is on
 - **A creative library** ([library/](library/README.md)): palettes, treatments, sketches, playbooks and optional direction profiles, one file per item, validated on load. A project's own `library/` or a shared brand kit (`--library DIR`) adds or overrides them.
   - `treatments`: art directions such as editorial, noir, kinetic, sketchbook, blueprint, mosaic and tech.
   - `sketch`: canvas starting compositions for mechanisms (route, orbit, pipeline, network…).
+  - `sculptures`: eight original 3D operations, with an optional headless Blender asset pass. Retain editable scenes and prepared clips, then compose native text and evidence. [Asset workflow](docs/sculptures.md).
+  - Native `die-cut-aperture`, `moire-signal` and `folded-louvers` sketches add paper, optical and hinged forms with contrasting `paper-theatre` and `interference` treatments. [Material studies](docs/art-direction-studies.md).
+  - `canvas.props.kpi`: editable dimensional headlines, comparisons, progress rails, seesaws and contribution stacks, with restrained motion. [Flat graphics, native depth and true 3D](docs/kpi-direction.md).
+  - `canvas.props.teaching`: readable question, answer and explanation phases for multiple choice and fill-in-the-blank films. [Teaching sequences](docs/teaching-sequences.md).
   - `reference VIDEO`: the cut rhythm, keyframes, palette and motion of a film to borrow from.
   - `critique`: flags deck-like runs, stillness, text density, weak hooks and "and then" story chains.
   - `directions research|podcast`: optional story, picture and pace combinations. `--direction ID` seeds a project; explicit playbook/treatment/theme choices override it. Custom JSON profiles and fully authored canvas scenes keep the space open.

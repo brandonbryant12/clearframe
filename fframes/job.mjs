@@ -31,6 +31,8 @@ import { typeById } from './library.mjs';
 import { voiceOf, voiceFace, DEFAULT_VOICE } from './type.mjs';
 import { rules } from './registry.mjs';
 import { expandArt } from './sketches.mjs';
+import { expandKPIProps } from './kpis.mjs';
+import { expandTeachingProps } from './teaching.mjs';
 import { captionCues, findWord } from '../engine/lib/timing.mjs';
 
 const unit = v => Number.isFinite(v) && v >= 0 && v <= 1;
@@ -162,7 +164,11 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   const frame = 1 / timing.fps,
     source = sb.beats[b.index],
     spec = rules(b.block);
-  const props = normalizeProps(b.block, b.props ?? {}, {
+  const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.duration };
+  const authoredProps = b.block === 'canvas'
+    ? expandTeachingProps(expandKPIProps(b.props ?? {}, helperFrame), helperFrame)
+    : (b.props ?? {});
+  const props = normalizeProps(b.block, authoredProps, {
     vertical: film.vertical,
     width: timing.width,
     height: timing.height,

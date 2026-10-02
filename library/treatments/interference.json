@@ -1,0 +1,19 @@
+{
+  "order": 31,
+  "title": "Optical interference",
+  "when": "Signal, perception and system stories that need a dark, precise optical character with a coarse moving line field",
+  "playbook": "material-etudes",
+  "film": {
+    "theme": "oscilloscope", "type": "condensed", "backdrop": "none", "texture": { "grain": 0.08 },
+    "motion": { "preset": "snappy", "intensity": 0.55 }, "textMotion": "lines", "transition": "cut", "sfx": "subtle",
+    "voice": { "style": "direct, observant, calm, with space between ideas" }
+  },
+  "beats": { "graphic": "panel", "rough": false, "font": "mono" },
+  "rules": [
+    "Use coarse line screens and a slow relative movement; do not add rapid strobing, flashing or subpixel patterns.",
+    "The optical field is qualitative artwork. Never call it a measured waveform, uncertainty distribution or probability map.",
+    "Keep native claims, labels and numbers outside the line field. Do not embed text in renders or texture plates.",
+    "Show one physical operation per shot: overlap, align, gate or open. Reserve amber for the second material or a genuine contrast.",
+    "Let the object carry continuous motion while type arrives in complete short lines. Cut when the operation changes."
+  ]
+}

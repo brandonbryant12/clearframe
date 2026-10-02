@@ -10,10 +10,13 @@ Everything creative that is not engine code lives here, one file per item. To ad
 | `playbooks/` | a narrative arc: beats with blocks, sample props and voice-over | `new --playbook`, `playbooks` |
 | `directions/` | optional source-aware story, picture and pace guidance plus playbook/treatment defaults | `directions`, `new/start/ingest --direction` |
 | `types/` | a type voice: the display family and emphasis for titles, statements, chapters, endcards and kinetic text | `type` in a storyboard or a treatment's `film`, `types` |
+| `sculptures/` | trusted built-in JSON brief + Python scene recipe for an original offline 3D insert | `sculptures`, `sculpture ID --out NEW-DIR` |
 
 The file name is the id (`library/palettes/noir.json` is `noir`). Files starting with `_` are ignored, so `_draft.json` stays out of listings. `order` sets the listing position. Items without it sort after the numbered ones, by id.
 
-Every item is validated when the engine starts, so a bad file fails immediately and names itself. Run `node --test test/library.test.mjs` after adding one.
+The native creative catalog is validated when the engine starts, so a bad file fails immediately and names itself. Run `node --test test/library.test.mjs` after adding one. Optional sculptures validate when listed or rendered and are deliberately outside shared/project JSON loading; external library data never executes Python. See [sculptures](../docs/sculptures.md).
+
+`dimensional-kpis` is an editable native playbook, with no prepared media or Blender dependency. Its `canvas.props.kpi` values generate fixed-depth geometry and native type. See the [form, data and motion guide](../docs/kpi-direction.md) when choosing between flat graphics, native dimensional KPIs and true 3D inserts.
 
 ## Directions
 

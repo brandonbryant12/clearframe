@@ -22,6 +22,9 @@ const HELP = `ClearFrame — FFFrames motion graphics
   muse [--seed N] [--light] [--json]  a seeded creative brief: twist, motif, camera, cuts, look, set pieces, music
   checkpoints <dir> [--mode guided|one-shot] [--json]   where a human decides (intent, truth, story, words, spend, picture, final) and what is open
   treatments [--json]                 art direction presets: look, motion, voice, sound and rules
+  sculptures [--json]                original 3D asset recipes; optional offline Blender
+  sculpture ID --out NEW-DIR [--draft] [--still] [--vertical] [--theme ID] [--duration 4] [--fps 24] [--seed N]
+                                      baked .blend + PNG + MP4, render receipts; --dry-run prints settings
   types [--json]                      type voices: display family and emphasis per treatment (storyboard "type")
   reference <video> [--out dir]       cut rhythm, keyframe sheet, palette and motion of a reference film
   ingest <dir> --markdown report.md [--treatment noir]   evidence brief (figures, sources, tensions, tables) + storyboard + DIRECTION.md
@@ -70,6 +73,7 @@ Paid generation needs GEMINI_API_KEY; rendering and word-file imports are free.
 async function main() {
   const [cmd, ...args] = process.argv.slice(2);
   const strings = [
+    'duration',
     'scale',
     'idea',
     'document',
@@ -107,6 +111,7 @@ async function main() {
     'model',
   ];
   const booleans = [
+    'still',
     'draft',
     'force',
     'vertical',
@@ -139,7 +144,7 @@ async function main() {
       .join(path.delimiter);
     useProject(null);
   }
-  // Renders, checks and voice run freely; only a Cargo compile takes the shared lock (see buildNative).
+  // Compilation, retained pipelines and 3D asset passes enter the shared gate.
   const num = k => {
     if (o[k] == null) return undefined;
     const n = Number(o[k]);
@@ -168,6 +173,26 @@ async function main() {
   if (o.seed != null) {
     opts.seed = o.seed === 'random' ? Math.floor(Math.random() * 100000) : Number(o.seed);
     if (!Number.isInteger(opts.seed)) throw new Error('--seed must be an integer or "random"');
+  }
+  if (cmd === 'sculptures') {
+    const { sculptures } = await import('./lib/sculptures.mjs');
+    const found = sculptures();
+    return console.log(o.json ? JSON.stringify(found, null, 2) : found.map(s =>
+      `${s.id.padEnd(22)} ${s.title}\n  ${s.use}\n  ${s.description}\n  ${s.theme} palette · ${s.duration}s ${s.loop ? 'loop' : 'reveal'} · ${s.copy}`,
+    ).join('\n\n'));
+  }
+  if (cmd === 'sculpture') {
+    const { sculptureConfig, renderSculpture } = await import('./lib/sculptures.mjs');
+    const settings = { ...opts, duration: num('duration'), fps: num('fps') };
+    const config = sculptureConfig(positionals[0], settings);
+    if (o['dry-run']) return console.log(JSON.stringify(config, null, 2));
+    if (!o.out) throw new Error('sculpture needs --out NEW-DIRECTORY.');
+    if (o.json) process.env.CLEARFRAME_PROGRESS_STDERR = '1';
+    const { enterGate } = await import('./lib/resource-gate.mjs');
+    if (await enterGate()) return;
+    const report = await renderSculpture(positionals[0], o.out, settings);
+    return console.log(o.json ? JSON.stringify(report, null, 2) :
+      `${report.title}: ${report.status} in ${report.seconds.toFixed(1)}s. Assets and receipt: ${path.resolve(o.out)}`);
   }
   if (cmd === 'muse') {
     const { muse, museMarkdown } = await import('../fframes/muse.mjs');

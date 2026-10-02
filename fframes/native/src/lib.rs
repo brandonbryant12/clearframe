@@ -834,4 +834,31 @@ mod tests {
             assert_eq!(final_pixels.data, decoder.get_raw_frame().into_image().href().data);
         }
     }
+    #[test]
+    fn video_decoder_preserves_the_final_sample_interval_at_a_higher_output_rate() {
+        use fframes::FFramesSyncedVideoFrame;
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/bframes.mp4");
+        unsafe {
+            // Existing fixture: 120 frames at 30 fps. Output: 240 at 60 fps.
+            let mut decoder = fframes::media::FFmpegDecoder::new(&path, 60, 2).unwrap();
+            assert!(decoder.decode_up_to(236).unwrap());
+            let previous = decoder.get_raw_frame().into_image().href();
+            assert!(decoder.decode_up_to(238).unwrap());
+            let final_pixels = decoder.get_raw_frame().into_image().href();
+            assert_ne!(previous.data, final_pixels.data);
+            for _ in 0..2 {
+                assert!(decoder.decode_up_to(239).unwrap(), "final source sample is still present at 239/60 seconds");
+                assert!((decoder.get_raw_frame().timestamp_seconds() - 119.0 / 30.0).abs() < 0.0001);
+                assert_eq!(final_pixels.data, decoder.get_raw_frame().into_image().href().data);
+            }
+            for _ in 0..2 {
+                assert!(!decoder.decode_up_to(240).unwrap(), "stream end remains exclusive");
+            }
+            assert!(!decoder.decode_up_to(600).unwrap(), "a far request beyond stream end does not seek");
+            assert!(decoder.decode_up_to(60).unwrap());
+            assert!((decoder.get_raw_frame().timestamp_seconds() - 1.0).abs() < 0.0001);
+            assert!(decoder.decode_up_to(239).unwrap(), "a direct seek into the final interval also decodes it");
+            assert_eq!(final_pixels.data, decoder.get_raw_frame().into_image().href().data);
+        }
+    }
 }

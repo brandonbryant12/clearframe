@@ -1,0 +1,187 @@
+{
+  "recordedAt": "2026-10-02T15:18:12.121Z",
+  "commands": [
+    {
+      "command": [
+        "node",
+        "engine/cli.mjs",
+        "sculptures",
+        "--json"
+      ],
+      "seconds": 0.124054709,
+      "exitCode": 0,
+      "output": [
+        {
+          "id": "counterweight-mobile",
+          "title": "A balance of decisions",
+          "use": "Trade-offs, dependencies, competing priorities and reflective editorial titles.",
+          "description": "A two-tier brass mobile transfers a slow rocking motion through articulated beams and hanging ceramic counterweights.",
+          "theme": "forest",
+          "duration": 6,
+          "loop": true,
+          "copy": "Use the connected motion to introduce a trade-off, then cut to native evidence. A single short line can sit beside the hanging forms.",
+          "metaphor": "A choreographed sculpture, not a physics simulation or a chart of actual weights or values.",
+          "parameters": [
+            "theme",
+            "seed",
+            "duration",
+            "fps",
+            "vertical"
+          ]
+        },
+        {
+          "id": "exploded-core",
+          "title": "Inside the assembly",
+          "use": "Architecture, systems, product internals, consolidation and what sits behind a result.",
+          "description": "Six precision panels separate in an axial sequence, exposing a finned cartridge and keyed connectors before reconnecting.",
+          "theme": "stage",
+          "duration": 4,
+          "loop": true,
+          "copy": "Use the wide separation as an evidence insert; overlay native labels outside the object when adapting it to an actual system.",
+          "metaphor": "Conceptual assembly only; panel count, motion and materials are not factual measurements.",
+          "parameters": [
+            "theme",
+            "seed",
+            "duration",
+            "fps",
+            "vertical"
+          ]
+        },
+        {
+          "id": "petal-reveal",
+          "title": "Porcelain petals",
+          "use": "Reveal an idea or product, open a chapter, explain access or discovery.",
+          "description": "Six ceramic shells unfold around a satin sphere. A held reveal gives the editor a place to land a native title.",
+          "theme": "daylight",
+          "duration": 4,
+          "loop": true,
+          "copy": "Use as a full-frame insert or on the right side of a split plate. Keep all words and actual branding native.",
+          "metaphor": "Qualitative reveal; petal count and sphere size encode no quantity.",
+          "parameters": [
+            "theme",
+            "seed",
+            "duration",
+            "fps",
+            "vertical"
+          ]
+        },
+        {
+          "id": "ribbon-thread",
+          "title": "A continuous thread",
+          "use": "Podcast titles, connected ideas, recurring processes, flow and continuity.",
+          "description": "A broad paper-metal ribbon follows a three-lobed knot while small markers move along its continuous route.",
+          "theme": "porcelain",
+          "duration": 4,
+          "loop": true,
+          "copy": "Let the whole shape breathe beside a short title; use a close crop to move into an explanation.",
+          "metaphor": "A qualitative continuity device, not a network graph or a measured flow.",
+          "parameters": [
+            "theme",
+            "seed",
+            "duration",
+            "fps",
+            "vertical"
+          ]
+        },
+        {
+          "id": "shadow-arcade",
+          "title": "The shape of light",
+          "use": "Architecture, access, time passing, looking through a sequence, and quiet editorial transitions.",
+          "description": "A perspective walk past five mineral-plaster vaults. One raking light moves long shadows over a rectangular promenade while the camera trucks gently across the opening.",
+          "theme": "vellum",
+          "duration": 6,
+          "loop": true,
+          "copy": "Use the corridor as a full-frame insert or inspect the clear ground before placing a native title. Keep type out of the receding vault edges and moving shadows.",
+          "metaphor": "An invented arcade and qualitative light study, not a reconstruction of a real building, a solar simulation, or a measured architectural plan.",
+          "parameters": [
+            "theme",
+            "seed",
+            "duration",
+            "fps",
+            "vertical"
+          ]
+        },
+        {
+          "id": "strata-landform",
+          "title": "An idea in layers",
+          "use": "Hidden structure, accumulated work, a cutaway reveal, conceptual terrain, and tactile editorial transitions.",
+          "description": "A warm, matte stack of irregular contour sheets forms a saddle-backed ridge. The upper sheets lift together to reveal a blue-green layer through a broad cut, then settle exactly into place.",
+          "theme": "clay",
+          "duration": 6,
+          "loop": true,
+          "copy": "Use as a qualitative full-frame cutaway. Add native labels only for an approved story; do not attach map labels, geological dates or measured elevations to this invented geometry.",
+          "metaphor": "An invented paper landform. The contours, colours, layer count and heights are qualitative artwork, not geology, geography, probability or a measured dataset.",
+          "parameters": [
+            "theme",
+            "seed",
+            "duration",
+            "fps",
+            "vertical"
+          ]
+        }
+      ]
+    },
+    {
+      "command": [
+        "node",
+        "engine/cli.mjs",
+        "sculpture",
+        "exploded-core",
+        "--out",
+        "EXAMPLE_OUTPUT/unused-dry-run-output",
+        "--dry-run"
+      ],
+      "seconds": 0.11661179199999998,
+      "exitCode": 0,
+      "output": {
+        "id": "exploded-core",
+        "recipe": {
+          "id": "exploded-core",
+          "title": "Inside the assembly",
+          "use": "Architecture, systems, product internals, consolidation and what sits behind a result.",
+          "description": "Six precision panels separate in an axial sequence, exposing a finned cartridge and keyed connectors before reconnecting.",
+          "theme": "stage",
+          "duration": 4,
+          "loop": true,
+          "copy": "Use the wide separation as an evidence insert; overlay native labels outside the object when adapting it to an actual system.",
+          "metaphor": "Conceptual assembly only; panel count, motion and materials are not factual measurements.",
+          "parameters": [
+            "theme",
+            "seed",
+            "duration",
+            "fps",
+            "vertical"
+          ]
+        },
+        "width": 1920,
+        "height": 1080,
+        "fps": 24,
+        "frames": 96,
+        "seed": 17,
+        "theme": "stage",
+        "colors": {
+          "base": "stage",
+          "bg": "#050507",
+          "surface": "#15151b",
+          "ink": "#f5f5f7",
+          "muted": "#8e8e98",
+          "accent": "#3b9eff",
+          "accent2": "#c77dff",
+          "positive": "#30d158",
+          "negative": "#ff5c52"
+        },
+        "samples": 48,
+        "pos": 0.5,
+        "still": false,
+        "draft": false,
+        "loop": true
+      }
+    }
+  ],
+  "sourceHashes": {
+    "engine/cli.mjs": "f2671f17e92459c52bad69c2d4543cb041bf0b99187169f5591cc2b5120f0e98",
+    "engine/lib/sculptures.mjs": "0b84e9e6b15bfd30986e09b2656e2ca35dba474f5c5faac90581238ca0af3471",
+    "package.json": "ca7342ece09c318d781528ea140592ff0f7eae286519719bf12450ebf438629a"
+  },
+  "pathNotice": "This portable copy replaces the original output directory with EXAMPLE_OUTPUT. All other command results and observed source hashes are preserved."
+}

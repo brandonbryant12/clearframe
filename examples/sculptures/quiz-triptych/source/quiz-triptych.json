@@ -1,0 +1,13 @@
+{
+  "id": "quiz-triptych",
+  "title": "A choice comes forward",
+  "use": "A three-option quiz reveal, a chosen strategy, or one route brought into focus.",
+  "description": "Three identical ceramic answer tiles sit on a recessed desk. One rises and tilts toward the viewer, then holds its selected state.",
+  "theme": "porcelain",
+  "duration": 4,
+  "loop": false,
+  "posterPos": 0,
+  "copy": "Use --pos 0 for an unrevealed question poster. Seed modulo three selects the left, middle or right tile (0, 1 or 2). Bind that index explicitly to the native correct answer. Keep question, options and explanation native, and start this non-looping clip only on the answer beat.",
+  "metaphor": "An authored video selection, not a clickable quiz or learner response. Tile dimensions do not encode confidence, votes, difficulty or correctness probabilities.",
+  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+}

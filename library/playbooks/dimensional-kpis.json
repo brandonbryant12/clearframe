@@ -1,0 +1,159 @@
+{
+  "order": 43,
+  "title": "Dimensional data — editable native templates",
+  "audience": "Directors choosing a restrained dimensional treatment for a small set of metrics",
+  "inputs": "Replace illustrative values, labels, units, scale and visible source before publication",
+  "theme": "porcelain",
+  "type": "geometric",
+  "motion": "gentle",
+  "backdrop": "none",
+  "transition": "cut",
+  "sfx": "off",
+  "sources": [
+    {
+      "claim": "All metrics in this demonstration are invented illustrative values.",
+      "source": "Native dimensional KPI demonstration"
+    }
+  ],
+  "beats": [
+    {
+      "id": "headline",
+      "block": "canvas",
+      "duration": 5.5,
+      "camera": "none",
+      "props": {
+        "source": "Illustrative values · replace before publishing",
+        "kpi": {
+          "form": "pedestal",
+          "label": "Quarter revenue",
+          "unit": "USD millions",
+          "value": 12.4,
+          "prefix": "$",
+          "suffix": "M",
+          "decimals": 1,
+          "motion": {
+            "preset": "reveal",
+            "duration": 0.8
+          }
+        }
+      }
+    },
+    {
+      "id": "comparison",
+      "block": "canvas",
+      "duration": 6,
+      "camera": "none",
+      "props": {
+        "source": "Illustrative values · replace before publishing",
+        "kpi": {
+          "form": "comparison",
+          "label": "Completion rate",
+          "unit": "Percent of assigned work",
+          "suffix": "%",
+          "domain": [
+            0,
+            100
+          ],
+          "values": [
+            {
+              "label": "Before",
+              "value": 54
+            },
+            {
+              "label": "After",
+              "value": 72
+            }
+          ],
+          "motion": {
+            "preset": "stagger",
+            "duration": 0.9,
+            "stagger": 0.2
+          }
+        }
+      }
+    },
+    {
+      "id": "progress",
+      "block": "canvas",
+      "duration": 5.5,
+      "camera": "none",
+      "props": {
+        "source": "Illustrative values · replace before publishing",
+        "kpi": {
+          "form": "rail",
+          "label": "Project delivery",
+          "unit": "Tasks completed",
+          "value": 72,
+          "total": 100,
+          "motion": {
+            "preset": "emphasis",
+            "duration": 1.2
+          }
+        }
+      }
+    },
+    {
+      "id": "contributions",
+      "block": "canvas",
+      "duration": 6.5,
+      "camera": "none",
+      "props": {
+        "source": "Illustrative values · replace before publishing",
+        "kpi": {
+          "form": "stack",
+          "label": "Where the work goes",
+          "unit": "Hours per week",
+          "total": 40,
+          "values": [
+            {
+              "label": "Delivery",
+              "value": 20
+            },
+            {
+              "label": "Planning",
+              "value": 10
+            },
+            {
+              "label": "Support",
+              "value": 6
+            }
+          ],
+          "motion": {
+            "preset": "stagger",
+            "duration": 0.55,
+            "stagger": 0.12
+          }
+        }
+      }
+    },
+    {
+      "id": "balance",
+      "block": "canvas",
+      "duration": 6,
+      "camera": "none",
+      "props": {
+        "source": "Illustrative values · replace before publishing",
+        "kpi": {
+          "form": "seesaw",
+          "label": "Requests by channel",
+          "unit": "Requests this week",
+          "values": [
+            {
+              "label": "Email",
+              "value": 24
+            },
+            {
+              "label": "Chat",
+              "value": 36
+            }
+          ],
+          "motion": {
+            "preset": "reveal",
+            "duration": 1.1
+          }
+        }
+      }
+    }
+  ],
+  "note": "Native dimensional geometry, not a Blender render. Edit the literal values and render. Front heights and lengths encode exact data on shared scales; the fixed pedestal and fixed seesaw weights are decoration. Seesaw tilt expresses which value is larger, not measured torque or a physical model. The stack preserves any remainder against an explicit total. Keep units and sources visible. Use motion:none for a static presentation. Prefer flat charts for dense, signed or very close comparisons."
+}

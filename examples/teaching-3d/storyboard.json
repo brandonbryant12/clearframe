@@ -1,0 +1,342 @@
+{
+  "version": 2,
+  "title": "Think, reveal, explain — dimensional teaching",
+  "logline": "One question, a considered pause, then a visible answer and a worked explanation.",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "porcelain",
+  "type": "geometric",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.45
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": false,
+  "sfx": "off",
+  "texture": {
+    "grain": 0
+  },
+  "pacing": {
+    "lead": 0,
+    "tail": 0,
+    "minBeat": 0,
+    "outro": 0
+  },
+  "continuity": {
+    "maxGeneratedShare": 1,
+    "treatment": "Two original retained sculpture reveals in a consistent picture panel; native type carries all teaching content.",
+    "camera": "Keep each complete 3D view; contain the image in the panel without crop or native camera motion.",
+    "motion": "Still question image, one-way answer action, then a stable completed state."
+  },
+  "sources": [
+    {
+      "claim": "A rise from 4% to 5% is 1 percentage point and a 25% relative increase.",
+      "source": "Arithmetic example: 5 − 4 = 1; (5 − 4) / 4 = 0.25."
+    },
+    {
+      "claim": "The right-hand quiz tile maps to native option C / correctIndex 2.",
+      "source": "Retained quiz-triptych receipt: seed 17 modulo 3 = 2. Labels A/B/C map left/middle/right."
+    },
+    {
+      "claim": "The answer plates use one-way retained 3D reveals and hold their completed state.",
+      "source": "asset-manifest.json and derivative-receipts.json retain the original assets and exact scale/pad/final-frame extension commands."
+    }
+  ],
+  "assets": [
+    {
+      "id": "quiz-triptych-question",
+      "kind": "image",
+      "file": "assets/img/quiz-triptych-question.png"
+    },
+    {
+      "id": "quiz-triptych-answer",
+      "kind": "clip",
+      "file": "assets/clips/quiz-triptych-answer.mp4"
+    },
+    {
+      "id": "gap-bridge-question",
+      "kind": "image",
+      "file": "assets/img/gap-bridge-question.png"
+    },
+    {
+      "id": "gap-bridge-answer",
+      "kind": "clip",
+      "file": "assets/clips/gap-bridge-answer.mp4"
+    }
+  ],
+  "beats": [
+    {
+      "id": "quiz-triptych-question",
+      "block": "canvas",
+      "duration": 4.5,
+      "camera": "none",
+      "plate": {
+        "asset": "quiz-triptych-question",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "source": "Arithmetic example · 4% to 5%",
+        "teaching": {
+          "form": "choice",
+          "prompt": "What changed from 4% to 5%?",
+          "options": [
+            "1 percent",
+            "5 percent",
+            "1 percentage point"
+          ],
+          "correctIndex": 2,
+          "explanation": "The rates differ by 1 percentage point. The relative increase is 25%.",
+          "phase": "question",
+          "layout": "split",
+          "motion": "fade",
+          "revealAt": 0.4,
+          "explainAt": 2.2
+        },
+        "elements": [
+          {
+            "type": "rect",
+            "id": "quiz-triptych-question-picture-outline",
+            "x": 1002,
+            "y": 292,
+            "w": 816,
+            "h": 466,
+            "fill": "none",
+            "stroke": "#ded7cc",
+            "width": 2,
+            "r": 6,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "id": "quiz-triptych-question-tile-label-0",
+            "text": "A",
+            "x": 1258,
+            "y": 838,
+            "size": 42,
+            "font": "mono",
+            "fill": "ink",
+            "anchor": "middle",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "id": "quiz-triptych-question-tile-label-1",
+            "text": "B",
+            "x": 1402,
+            "y": 838,
+            "size": 42,
+            "font": "mono",
+            "fill": "ink",
+            "anchor": "middle",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "id": "quiz-triptych-question-tile-label-2",
+            "text": "C",
+            "x": 1554,
+            "y": 838,
+            "size": 42,
+            "font": "mono",
+            "fill": "ink",
+            "anchor": "middle",
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "id": "quiz-triptych-answer",
+      "block": "canvas",
+      "duration": 6,
+      "camera": "none",
+      "plate": {
+        "asset": "quiz-triptych-answer",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "source": "Arithmetic example · 4% to 5%",
+        "teaching": {
+          "form": "choice",
+          "prompt": "What changed from 4% to 5%?",
+          "options": [
+            "1 percent",
+            "5 percent",
+            "1 percentage point"
+          ],
+          "correctIndex": 2,
+          "explanation": "The rates differ by 1 percentage point. The relative increase is 25%.",
+          "phase": "answer",
+          "layout": "split",
+          "motion": "fade",
+          "revealAt": 0.4,
+          "explainAt": 2.2
+        },
+        "elements": [
+          {
+            "type": "rect",
+            "id": "quiz-triptych-answer-picture-outline",
+            "x": 1002,
+            "y": 292,
+            "w": 816,
+            "h": 466,
+            "fill": "none",
+            "stroke": "#ded7cc",
+            "width": 2,
+            "r": 6,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "id": "quiz-triptych-answer-tile-label-0",
+            "text": "A",
+            "x": 1258,
+            "y": 838,
+            "size": 42,
+            "font": "mono",
+            "fill": "ink",
+            "anchor": "middle",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "id": "quiz-triptych-answer-tile-label-1",
+            "text": "B",
+            "x": 1402,
+            "y": 838,
+            "size": 42,
+            "font": "mono",
+            "fill": "ink",
+            "anchor": "middle",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "id": "quiz-triptych-answer-tile-label-2",
+            "text": "C",
+            "x": 1554,
+            "y": 838,
+            "size": 42,
+            "font": "mono",
+            "fill": "ink",
+            "anchor": "middle",
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "id": "gap-bridge-question",
+      "block": "canvas",
+      "duration": 4,
+      "camera": "none",
+      "plate": {
+        "asset": "gap-bridge-question",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "source": "Arithmetic example · 4% to 5%",
+        "teaching": {
+          "form": "gap",
+          "prompt": "Complete the statement.",
+          "before": "From 4% to 5% is",
+          "answer": "1 percentage point",
+          "after": "higher.",
+          "explanation": "Subtract the two percentages: 5 minus 4 equals 1 percentage point.",
+          "phase": "question",
+          "layout": "split",
+          "motion": "fade",
+          "revealAt": 0.4,
+          "explainAt": 2.2
+        },
+        "elements": [
+          {
+            "type": "rect",
+            "id": "gap-bridge-question-picture-outline",
+            "x": 1002,
+            "y": 292,
+            "w": 816,
+            "h": 466,
+            "fill": "none",
+            "stroke": "#ded7cc",
+            "width": 2,
+            "r": 6,
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "id": "gap-bridge-answer",
+      "block": "canvas",
+      "duration": 6,
+      "camera": "none",
+      "plate": {
+        "asset": "gap-bridge-answer",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "source": "Arithmetic example · 4% to 5%",
+        "teaching": {
+          "form": "gap",
+          "prompt": "Complete the statement.",
+          "before": "From 4% to 5% is",
+          "answer": "1 percentage point",
+          "after": "higher.",
+          "explanation": "Subtract the two percentages: 5 minus 4 equals 1 percentage point.",
+          "phase": "answer",
+          "layout": "split",
+          "motion": "fade",
+          "revealAt": 0.4,
+          "explainAt": 2.2
+        },
+        "elements": [
+          {
+            "type": "rect",
+            "id": "gap-bridge-answer-picture-outline",
+            "x": 1002,
+            "y": 292,
+            "w": 816,
+            "h": 466,
+            "fill": "none",
+            "stroke": "#ded7cc",
+            "width": 2,
+            "r": 6,
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      }
+    }
+  ]
+}
