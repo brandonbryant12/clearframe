@@ -1,0 +1,37 @@
+{
+  "order": 26,
+  "title": "Brutalist monolith",
+  "when": "Manifestos, campaigns, architecture, sport and hard launches: wide capitals on concrete, pushes and wipes, nothing decorative",
+  "playbook": "sizzle",
+  "film": {
+    "theme": "concrete",
+    "type": "wide",
+    "backdrop": "grid",
+    "texture": {
+      "grain": 0.25
+    },
+    "motion": {
+      "preset": "snappy",
+      "intensity": 1
+    },
+    "textMotion": "words",
+    "transition": "push",
+    "sfx": "punchy",
+    "voice": {
+      "style": "flat, declarative, unhurried"
+    }
+  },
+  "beats": {
+    "graphic": "wipe",
+    "kinetic": "stack",
+    "rough": false,
+    "font": "wide"
+  },
+  "rules": [
+    "Every headline is a block of capitals; the one phrase that matters sits on the marker. Keep headlines to six words so the wide face stays large.",
+    "Compose with hard rectangles, rules and the grid: no rounded forms, no glow, no gradients. Colour is a slab of accent behind a number or a word (tone accent) at most twice per minute.",
+    "Cut by pushing: every scene arrives from the right or below on the beat; a wipe only where a chapter changes.",
+    "Numbers are poster-sized and tabular; one per scene, with its source line in the same grid.",
+    "Hold nothing still: the slow camera stays on, type arrives word by word, and plates drift against it."
+  ]
+}

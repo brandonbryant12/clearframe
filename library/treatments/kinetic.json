@@ -4,6 +4,7 @@
   "when": "Social cuts, launches, opinion pieces, hooks that must stop a scroll",
   "film": {
     "theme": "pop",
+    "type": "wide",
     "backdrop": "none",
     "texture": {
       "grain": 0.25
@@ -21,7 +22,6 @@
   },
   "beats": {
     "kinetic": "stack",
-    "emphasisStyle": "serif",
     "graphic": "whip"
   },
   "rules": [

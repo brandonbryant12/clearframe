@@ -4,6 +4,7 @@
   "when": "Premieres, launches, cities, travel and anything that should feel like an invitation",
   "film": {
     "theme": "deco",
+    "type": "bookish",
     "backdrop": "glow",
     "texture": {
       "grain": 0.18,
@@ -25,7 +26,6 @@
   },
   "beats": {
     "rough": false,
-    "emphasisStyle": "serif",
     "graphic": "iris"
   },
   "rules": [

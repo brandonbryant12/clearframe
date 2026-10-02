@@ -4,6 +4,7 @@
   "when": "Brand intros, announcements, product moments, channel openers",
   "film": {
     "theme": "paper",
+    "type": "didone",
     "backdrop": "none",
     "texture": {
       "grain": 0.3
@@ -24,7 +25,6 @@
     }
   },
   "beats": {
-    "emphasisStyle": "serif",
     "graphic": "iris"
   },
   "rules": [
