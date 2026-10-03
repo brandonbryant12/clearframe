@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Chart-flight overlay evidence.** Retain a still-reviewed compact attribution panel and delayed header experiment in both formats, with unchanged data labels and plate timing. Portrait header safety improves; seven inherited data-label warnings, camera craft and motion acceptance remain open. See `examples/library-kits/graph-flight-study/evidence/compact-overlay-v1/README.md`.
+
 - **Native sRGB output tags.** Correct the finisher’s transfer signal in MP4 and H.264 while preserving the actual SMPTE 170M matrix and all encoded picture samples. Real silent/audio mux tests and four retained stream-copy comparisons verify the correction; receipts now expose all color properties and JavaScript finisher hashes. Arbitrary imported-media normalization and player acceptance remain open. See `docs/research/fframes-color-transfer/README.md`.
 
 - **FFFrames 1.2.0.** Pin the current stable renderer release and its dependency graph. Upstream now supplies delayed-frame draining. Replace the old media patch with one output-duration rounding fix after a new fractional-duration regression proves that unpatched 1.2 can lose a valid final sample. Preserve one Metal pipeline, two encoder workers and libx264 output; use upstream geometry-cache defaults.
