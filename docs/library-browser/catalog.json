@@ -584,6 +584,81 @@
       }
     },
     {
+      "id": "correlation-studies",
+      "title": "Correlation studies",
+      "purpose": "Compare explicit monthly Pearson windows and show the paired returns behind a selected relationship.",
+      "status": "prototype",
+      "integrity": "verified",
+      "fileCount": 159,
+      "issues": [],
+      "inventoryIds": [
+        "C07"
+      ],
+      "manifest": "examples/library-kits/correlation-studies/kit.json",
+      "preview": "examples/library-kits/correlation-studies/preview.html",
+      "readme": "examples/library-kits/correlation-studies/README.md",
+      "review": "examples/library-kits/correlation-studies/REVIEW.md",
+      "sources": "examples/library-kits/correlation-studies/SOURCES.md",
+      "tags": {
+        "purpose": [
+          "compare",
+          "relate",
+          "inspect-missing-data"
+        ],
+        "appearance": [
+          "paper",
+          "native-chart",
+          "signed-matrix"
+        ],
+        "movement": [
+          "cell-reveal",
+          "window-cut",
+          "synchronized-return-reveal",
+          "reading-hold"
+        ],
+        "format": [
+          "landscape",
+          "vertical"
+        ],
+        "subject": [
+          "monthly-returns",
+          "correlation",
+          "paired-observations"
+        ]
+      },
+      "editable": {
+        "native": [
+          "data",
+          "copy",
+          "domains",
+          "window",
+          "minimum pairs",
+          "selected pair",
+          "timing",
+          "layout"
+        ],
+        "fixedClip": []
+      },
+      "requires": {
+        "replay": [
+          "ClearFrame native compositor",
+          "bundled fonts"
+        ],
+        "preparation": [
+          "Node.js",
+          "FFmpeg",
+          "Python 3"
+        ]
+      },
+      "evidence": {
+        "summary": "evidence/summary.json",
+        "review": "REVIEW.md",
+        "encoded": "evidence/encoded-checks.json",
+        "implementation": "evidence/implementation.json",
+        "continuousPlayback": "unverified"
+      }
+    },
+    {
       "id": "drivers-and-flows",
       "title": "Drivers and flows",
       "purpose": "Explain event alignment, two-factor product changes and opening-to-closing stock reconciliation with auditable native quantities.",
@@ -1935,6 +2010,134 @@
         "S10"
       ],
       "search": "attention can move through depth reveal connections, surrounding context and depth with reusable authored camera paths and sharp native qualifications. m03 context selection focus connections porcelain mineral blue amber perspective-pullback rack-focus reading-hold infrastructure dependencies locations specimens inspection research-context s09 s10 rack focus from claim to evidence shift focus between physical layers while crisp native copy presents the qualification. planes aperture cue focus duration research product proof education"
+    },
+    {
+      "id": "correlation-studies/changing-pair",
+      "kind": "example",
+      "title": "Same pair, different window",
+      "packageId": "correlation-studies",
+      "inventoryIds": [
+        "C07"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/correlation-studies/specimens/changing-pair-landscape/storyboard.json",
+          "video": "examples/library-kits/correlation-studies/evidence/changing-pair-landscape/video.mp4",
+          "poster": "examples/library-kits/correlation-studies/evidence/independent-review/changing-pair-landscape/encoded-00.100000.png",
+          "receipt": "examples/library-kits/correlation-studies/evidence/changing-pair-landscape/video.mp4.json",
+          "duration": 94,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/correlation-studies/specimens/changing-pair-vertical/storyboard.json",
+          "video": "examples/library-kits/correlation-studies/evidence/changing-pair-vertical/video.mp4",
+          "poster": "examples/library-kits/correlation-studies/evidence/independent-review/changing-pair-vertical/encoded-00.100000.png",
+          "receipt": "examples/library-kits/correlation-studies/evidence/changing-pair-vertical/video.mp4.json",
+          "duration": 94,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Compare explicit monthly Pearson windows and show the paired returns behind a selected relationship.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "relate",
+        "inspect-missing-data"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart",
+        "signed-matrix"
+      ],
+      "movement": [
+        "cell-reveal",
+        "window-cut",
+        "synchronized-return-reveal",
+        "reading-hold"
+      ],
+      "subjects": [
+        "monthly-returns",
+        "correlation",
+        "paired-observations"
+      ],
+      "collections": [
+        "relationships"
+      ],
+      "sourceIds": [
+        "S09",
+        "S10",
+        "S16"
+      ],
+      "search": "same pair, different window compare explicit monthly pearson windows and show the paired returns behind a selected relationship. c07 compare relate inspect-missing-data paper native-chart signed-matrix cell-reveal window-cut synchronized-return-reveal reading-hold monthly-returns correlation paired-observations s09 s10 s16 correlation regime matrix a signed matrix changes by window while selected pairs expand into synchronized miniature charts. return series window frequency method min observations sensor relationships research demand planning"
+    },
+    {
+      "id": "correlation-studies/missing-pairs",
+      "kind": "example",
+      "title": "Missing months change the sample",
+      "packageId": "correlation-studies",
+      "inventoryIds": [
+        "C07"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/correlation-studies/specimens/missing-pairs-landscape/storyboard.json",
+          "video": "examples/library-kits/correlation-studies/evidence/missing-pairs-landscape/video.mp4",
+          "poster": "examples/library-kits/correlation-studies/evidence/independent-review/missing-pairs-landscape/encoded-00.100000.png",
+          "receipt": "examples/library-kits/correlation-studies/evidence/missing-pairs-landscape/video.mp4.json",
+          "duration": 94,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/correlation-studies/specimens/missing-pairs-vertical/storyboard.json",
+          "video": "examples/library-kits/correlation-studies/evidence/missing-pairs-vertical/video.mp4",
+          "poster": "examples/library-kits/correlation-studies/evidence/independent-review/missing-pairs-vertical/encoded-00.100000.png",
+          "receipt": "examples/library-kits/correlation-studies/evidence/missing-pairs-vertical/video.mp4.json",
+          "duration": 94,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Compare explicit monthly Pearson windows and show the paired returns behind a selected relationship.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "relate",
+        "inspect-missing-data"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart",
+        "signed-matrix"
+      ],
+      "movement": [
+        "cell-reveal",
+        "window-cut",
+        "synchronized-return-reveal",
+        "reading-hold"
+      ],
+      "subjects": [
+        "monthly-returns",
+        "correlation",
+        "paired-observations"
+      ],
+      "collections": [
+        "relationships"
+      ],
+      "sourceIds": [
+        "S09",
+        "S10",
+        "S16"
+      ],
+      "search": "missing months change the sample compare explicit monthly pearson windows and show the paired returns behind a selected relationship. c07 compare relate inspect-missing-data paper native-chart signed-matrix cell-reveal window-cut synchronized-return-reveal reading-hold monthly-returns correlation paired-observations s09 s10 s16 correlation regime matrix a signed matrix changes by window while selected pairs expand into synchronized miniature charts. return series window frequency method min observations sensor relationships research demand planning"
     },
     {
       "id": "drivers-and-flows/cohort-adoption",
@@ -4718,7 +4921,7 @@
         "C07"
       ],
       "medium": "Chart",
-      "statusText": "proposed; not built",
+      "statusText": "Native prototype: monthly Pearson matrices with explicit paired counts, undefined cells and synchronized return histories in landscape/vertical; other frequencies/methods and continuous playback remain open",
       "guardrail": "Compute on aligned returns, name window/method, include missing cells, and never imply causality.",
       "parameters": [
         "return series",
@@ -4727,10 +4930,13 @@
         "method",
         "min observations"
       ],
-      "related": [],
+      "related": [
+        "correlation-studies/changing-pair",
+        "correlation-studies/missing-pairs"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],
@@ -6528,7 +6734,7 @@
         "T02"
       ],
       "medium": "Tool",
-      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization and descriptive scenario quantiles; forward models and broader risk-adjusted metrics remain planned",
+      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles and pairwise monthly Pearson correlations; forward models and broader risk-adjusted metrics remain planned",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "parameters": [
         "input hash",

@@ -1,0 +1,33 @@
+{
+  "project": "missing-pairs-vertical",
+  "frame": 2085,
+  "seconds": 69.5,
+  "width": 720,
+  "videoSha256": "46af5894983e90052bec3b7edb0b81e46cef858d8538117cf6e97538aacda401",
+  "imageSha256": "fa1679a8251ced70e7668b8ae397dd67e99eb6776062e9983d43a4f993ae206b",
+  "samples": [
+    {
+      "position": [
+        527,
+        491
+      ],
+      "rgb": [
+        242,
+        242,
+        231
+      ]
+    },
+    {
+      "position": [
+        528,
+        492
+      ],
+      "rgb": [
+        255,
+        246,
+        239
+      ]
+    }
+  ],
+  "note": "Current larger hollow marker with unchanged center/rim acceptance predicate; final frame visually inspected."
+}

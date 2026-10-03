@@ -1,0 +1,131 @@
+{
+  "status": "prototype",
+  "continuousPlayback": "unverified",
+  "variants": [
+    {
+      "name": "changing-pair-landscape",
+      "pipelineId": "2026-10-03T10-08-43-608Z-9b8ed11f",
+      "videoSha256": "7f329ac01c40ba583440a4ee20e5f8d05e89af90fa8da7a5b40bd324f13f471d",
+      "storyboardSha256": "e773d60cfe403156933ad25a4138a31e4799fed961845755fcb93408ac907c9a",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 358 frames: no problems found\n"
+        ],
+        "duration": 94,
+        "inputId": "6535626dad5894e8ca0d92c13e615b68b4552fc780d6510a1e1ce7dcd39e4374"
+      },
+      "qa": {
+        "seconds": 94,
+        "frames": 2820,
+        "changePerSecond": 0,
+        "heldSeconds": 93.2,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "changing-pair-vertical",
+      "pipelineId": "2026-10-03T10-09-14-506Z-413a178b",
+      "videoSha256": "1cd2ae2becd5a69f45089254de06f73dbf2ad8f2e0627b30841525260d837277",
+      "storyboardSha256": "2a9ccbe59518f3e0a05b7a21d0dc88318757f76c87b4958256844cf5d6c32efe",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 358 frames: no problems found\n"
+        ],
+        "duration": 94,
+        "inputId": "2313f7655d48a0141d20d6946ffa055ff064d5e116b0db9a4a713d4246b96931"
+      },
+      "qa": {
+        "seconds": 94,
+        "frames": 2820,
+        "changePerSecond": 0,
+        "heldSeconds": 93.2,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "missing-pairs-landscape",
+      "pipelineId": "2026-10-03T10-09-45-241Z-3c4bfd02",
+      "videoSha256": "26e593eeec83cb3bb5818ed7ef31a2b9b33a85ead839ed8ab46b10cfbd74348a",
+      "storyboardSha256": "cf704868d83c6679e3438e2b0dcfd0fcfd5328acbdaff07ad5165e8602e035ea",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 358 frames: no problems found\n"
+        ],
+        "duration": 94,
+        "inputId": "58525175dc208015577aac3dc4cfb298b6ca0b9f0901c075a952d628dc46233f"
+      },
+      "qa": {
+        "seconds": 94,
+        "frames": 2820,
+        "changePerSecond": 0,
+        "heldSeconds": 93.2,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "missing-pairs-vertical",
+      "pipelineId": "2026-10-03T10-10-15-655Z-a7178417",
+      "videoSha256": "46af5894983e90052bec3b7edb0b81e46cef858d8538117cf6e97538aacda401",
+      "storyboardSha256": "784c09b16e3b3518ad8ec5065666cc16c51839c8d1517dfd3b26e52e684e4105",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 358 frames: no problems found\n"
+        ],
+        "duration": 94,
+        "inputId": "865d7f661833424428a0159202b41d398b8d61f0af7bb43081249bc5e870a517"
+      },
+      "qa": {
+        "seconds": 94,
+        "frames": 2820,
+        "changePerSecond": 0,
+        "heldSeconds": 93.2,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    }
+  ],
+  "tests": {
+    "pass": 196,
+    "fail": 0,
+    "skipped": 0
+  },
+  "encoded": {
+    "nativeMappingChecks": 1424,
+    "arithmeticChecks": 540,
+    "sampledFrames": 840,
+    "cellFillChecks": 19968,
+    "undefinedFillChecks": 5280,
+    "hiddenCellChecks": 768,
+    "pointChecks": 2428,
+    "frontChecks": 72,
+    "missingColumnChecks": 192,
+    "hollowPointChecks": 220,
+    "failures": 0
+  },
+  "limits": [
+    "Monthly simple-percent Pearson returns only; other frequencies and methods unreviewed",
+    "Descriptive pairwise matrix; no causal, predictive, significance or portfolio covariance claim",
+    "Fictional supplied observations; four-member visual acceptance remains open",
+    "Bounded encoded probes and phone-frame review, not continuous playback or final master acceptance",
+    "Square and 4:5 unreviewed"
+  ]
+}

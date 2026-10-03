@@ -12,7 +12,7 @@ const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const results=[];
 const ok=(name,fn)=>{fn();results.push({name,passed:true});};
 const d=await catalog();
-ok('Current catalog has 11 kits, 51 examples, 71 inventory items',()=>{assert.equal(d.packages.length,11);assert.equal(d.records.filter(r=>r.kind==='example').length,51);assert.equal(d.records.filter(r=>r.kind==='inventory').length,71);});
+ok('Current catalog has 12 kits, 53 examples, 71 inventory items',()=>{assert.equal(d.packages.length,12);assert.equal(d.records.filter(r=>r.kind==='example').length,53);assert.equal(d.records.filter(r=>r.kind==='inventory').length,71);});
 let links=0,durations=0;
 for(const r of d.records)for(const v of r.variants??[]){
  for(const k of ['source','video','poster','receipt'])if(v[k]){safeLocal(repoRoot,v[k]);links++;}

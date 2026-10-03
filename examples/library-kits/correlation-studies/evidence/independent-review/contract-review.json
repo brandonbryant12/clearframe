@@ -1,0 +1,20 @@
+{
+  "status": "pass",
+  "assertions": 32489,
+  "matrixCases": 297,
+  "cellChecks": 2531,
+  "mathAssertions": 28770,
+  "guardAssertions": 22,
+  "sceneAndColorAssertions": 2813,
+  "kitAuditAssertions": 884,
+  "reference": "Exact IEEE-754 dyadic integers and BigInt covariance sums n*sum(xy)-sum(x)*sum(y), converted only for the final normalized coefficient; no implementation centering or min/range normalization.",
+  "formulaSource": "https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/correlat.htm",
+  "inputSha256": "eb159d2103e49cc8497b13a0dcda34cc6c089642363273d0ceb08b361027939c",
+  "auditSha256": "56023efc7a1adde33bea6db76778de12228f57a7997b89567f823bf2280e16ef",
+  "scope": "Bounded source/math/scene and current fictional kit-audit checks only; no rendering, browser, continuous playback or full-repository suite.",
+  "sourceHashes": {
+    "correlation-data.mjs": "25d6e7ed20b6f4837136da01d55b4b0bfc24fb956fb2f8bc673d0653a18cf697",
+    "correlations.mjs": "799558247b9b6a784cb41fcfaa3f6a4fdfe619e50c9e29b5c7ebdc7380276582",
+    "plot-data.mjs": "16fd41d99d74d8af3c53126aeb4c55940f5a5a12654b2382caaed046e1d5f4d6"
+  }
+}

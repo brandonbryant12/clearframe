@@ -3,16 +3,16 @@
   "status": "source-prototype",
   "browserReview": "pending-scoped-localhost-approval-after-file-url-policy-rejection",
   "catalog": {
-    "packages": 11,
-    "examples": 51,
-    "nativeVariants": 100,
+    "packages": 12,
+    "examples": 53,
+    "nativeVariants": 104,
     "preparedInserts": 1,
     "inventoryItems": 71,
-    "manifestFiles": 3202,
+    "manifestFiles": 3361,
     "issues": 0
   },
   "tests": {
-    "nodePassed": 192,
+    "nodePassed": 196,
     "nodeFailed": 0,
     "focusedPassed": 4,
     "independentPassed": 17,
@@ -33,22 +33,22 @@
     {
       "path": "docs/library-browser/README.md",
       "bytes": 6109,
-      "sha256": "d6380e8170019e2e50d195de44b102ea6f20d1328a591da663a6f439f5a5c393"
+      "sha256": "16072dfecd209a05b689d3e1653b71de94e8e7b4a0c808d591bd0fc8450eafa1"
     },
     {
       "path": "docs/library-browser/app.js",
-      "bytes": 235508,
-      "sha256": "cd18a6420de5203132b2a9f79f29b42efe7ed18b30825a2fa3bd1396845fb4ae"
+      "bytes": 241597,
+      "sha256": "c5ae7f667860a12082b215d745c03a6e4bb9a419b8fa1f149d722940a4520d21"
     },
     {
       "path": "docs/library-browser/catalog.json",
-      "bytes": 276717,
-      "sha256": "d78e72bdd5564c9abb0576f6c306837e6c9a510cbe6fdf56046fc756a7aa3f1b"
+      "bytes": 284693,
+      "sha256": "939972dc4c9686bd3c94b317faf407391b6cb17dfc7b43ca053618c65850606a"
     },
     {
       "path": "docs/library-browser/evidence/catalog-build.json",
       "bytes": 193,
-      "sha256": "8eecfdc7e87ccbf304989b893c72b6211952828dabf96ec7902b9cc09af3e098"
+      "sha256": "9e58433019c5d91a9fde5dcf1e360c1902df06505a9188d9dad860be838df052"
     },
     {
       "path": "docs/library-browser/evidence/cli-smoke.json",
@@ -57,28 +57,28 @@
     },
     {
       "path": "docs/library-browser/evidence/node-tests.txt",
-      "bytes": 19413,
-      "sha256": "7b7f3e58c8db556195e36d58f19b7d205f83603ec7a08d745662863590e8f503"
+      "bytes": 19848,
+      "sha256": "191cc8fe1a594131c8d92fc186f4d7935327c934d834eb3bc6b82a57a9d8ab77"
     },
     {
       "path": "docs/library-browser/evidence/source-review-checks.json",
-      "bytes": 8183,
-      "sha256": "78746dbfbb96e2f114489ae733b4624560b14c6b5f040632229ad08ab2849a1d"
+      "bytes": 8371,
+      "sha256": "4823d5b7a1b1fdf034783347d0a827aeb0d09ac3928cc41263af9c4f1d3e728c"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.json",
       "bytes": 2106,
-      "sha256": "2d629a15f70212b7f56a43387017826f6149b55fd51551a997102fe42b4624d0"
+      "sha256": "5921ea28de2ad4d47caf4463435a0f2b41da73e0f401f193001eaa62325ed789"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.mjs",
       "bytes": 8284,
-      "sha256": "af3a0c2708eab5d29ea36b2d8dba40d3a563e738a8bfef5f08ef94435e8ff703"
+      "sha256": "25e0c22eba88de8d0007404277fe61cae3487a81a338449983cb4808cfc6d6f6"
     },
     {
       "path": "docs/library-browser/evidence/source-review.md",
-      "bytes": 9062,
-      "sha256": "23e3c6f13f4ed859125900488e416e287de861ca3458c56f4da9ba88cb985f4c"
+      "bytes": 9253,
+      "sha256": "273952766a97ca7cef9da7511c87e0e43f4dea7a979e52c95068b7b6ca7be705"
     },
     {
       "path": "docs/library-browser/example-ledger.json",
@@ -102,13 +102,13 @@
     },
     {
       "path": "docs/research/timmer-library/asset-links.json",
-      "bytes": 5969,
-      "sha256": "bb90149d6d33696399c9ec2ead1b5a6d43866380d822823b0efe1ea36fa542c4"
+      "bytes": 6137,
+      "sha256": "15fc58fa307ca396e540bc0f2a3cab2986c4414c9f6c7b7cba31ef9866835d24"
     },
     {
       "path": "docs/research/timmer-library/inventory.json",
-      "bytes": 78154,
-      "sha256": "8af55d74b3206de8d239dc1bb02829e0de245cb51463902629fef74b5385700a"
+      "bytes": 78553,
+      "sha256": "b0328453e1284d6e68317ee1eec67a8bd393c38e1980c3d181c210b335cdc7ca"
     },
     {
       "path": "engine/cli.mjs",
@@ -148,8 +148,8 @@
     {
       "path": "test/library-browser.test.mjs",
       "bytes": 5170,
-      "sha256": "e8c9ba3af3819cb5905141860431962f81900383e0ef0858dd16384df51017bc"
+      "sha256": "8a80084fef934cffc4a778aa8eb4f415e03e670cfde55b7f8943722b1b6e546c"
     }
   ],
-  "sourceRefresh": "Ranked small-multiples catalog expansion; browser UI, CLI and ledger source unchanged from 4616757; 17 independent checks rerun"
+  "sourceRefresh": "Correlation-window catalog expansion; browser UI, CLI and ledger source unchanged from 2d8c79c; planned-only fixture now C13; 17 independent checks rerun"
 }

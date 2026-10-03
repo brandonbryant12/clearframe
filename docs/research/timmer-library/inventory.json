@@ -225,7 +225,7 @@
       "category": "Chart",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "Native prototype: monthly Pearson matrices with explicit paired counts, undefined cells and synchronized return histories in landscape/vertical; other frequencies/methods and continuous playback remain open",
       "effort": "L",
       "sourceIds": [
         "S09",
@@ -240,7 +240,7 @@
         "method",
         "min observations"
       ],
-      "existing": "matrix is a comparison table, not a numeric correlation heatmap.",
+      "existing": "fframes/correlation-data.mjs and correlations.mjs implement source-bound pairwise monthly Pearson windows and native matrices/paired histories. correlation-studies retains two fictional cases and four specimens; see docs/correlations.md.",
       "guardrail": "Compute on aligned returns, name window/method, include missing cells, and never imply causality.",
       "reuse": [
         "sensor relationships",
@@ -1756,7 +1756,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization and descriptive scenario quantiles; forward models and broader risk-adjusted metrics remain planned",
+      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles and pairwise monthly Pearson correlations; forward models and broader risk-adjusted metrics remain planned",
       "effort": "L",
       "sourceIds": [
         "S04",

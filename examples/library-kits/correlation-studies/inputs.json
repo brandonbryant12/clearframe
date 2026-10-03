@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "asOf": "2024-12-31",
+  "provenance": "Original fictional monthly simple returns in percent, supplied directly rather than calculated from price levels. No external observations, forecasts or investment advice.",
+  "dates": ["2024-01-31", "2024-02-29", "2024-03-31", "2024-04-30", "2024-05-31", "2024-06-30", "2024-07-31", "2024-08-31", "2024-09-30", "2024-10-31", "2024-11-30", "2024-12-31"],
+  "windows": [{"start":"2024-01-31","end":"2024-06-30"},{"start":"2024-07-31","end":"2024-12-31"}],
+  "cases": [
+    {
+      "id":"changing-pair", "title":"Same pair, different window", "source":"Fictional simple returns. No causal or predictive claim.",
+      "domain":[-5,5], "ticks":[-5,0,5], "minObservations":4, "selectedPair":["alpha","beta"],
+      "series":[
+        {"id":"alpha","label":"Alpha","values":[-3,-2,-1,1,2,3,-3,-2,-1,1,2,3]},
+        {"id":"beta","label":"Beta","values":[-2,-1,0,2,3,4,3,2,1,-1,-2,-3]},
+        {"id":"gamma","label":"Gamma","values":[-1,2,-2,1,0,3,2,2,2,2,2,2]}
+      ]
+    },
+    {
+      "id":"missing-pairs", "title":"Missing months change the sample", "source":"Fictional simple returns. Missing is not zero.",
+      "domain":[-5,5], "ticks":[-5,0,5], "minObservations":4, "selectedPair":["alpha","beta"],
+      "series":[
+        {"id":"alpha","label":"Alpha","values":[-4,-2,0,2,4,0,-3,-2,-1,1,2,3]},
+        {"id":"beta","label":"Beta","values":[4,2,0,-2,-4,0,3,null,1,-1,null,-3]},
+        {"id":"gamma","label":"Gamma","values":[1,1,2,2,3,3,null,1,null,2,null,3]}
+      ]
+    }
+  ]
+}

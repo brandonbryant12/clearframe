@@ -1,0 +1,66 @@
+{
+  "finding": "A later segment paints through an earlier hollow point because segment and point nodes are interleaved.",
+  "specimen": "missing-pairs-landscape",
+  "seconds": 93.9,
+  "decodedWidth": 720,
+  "videoSha256": "52f079f7bc7e81df6ab840433f3be74ab3c1a2758cb92f176e2686e966e3a293",
+  "storyboardSha256": "55bb97c7ec75b612a8eaa837c522051eb4c75051c474bc8c45b67404dd79a8f6",
+  "compositionSha256": "8e7db7c791a54361bd33ab7892a77c7dceaa0b2469fa78744e83818104e51b93",
+  "samples": [
+    {
+      "month": "2024-08-31",
+      "position": [
+        138,
+        239
+      ],
+      "rgb": [
+        42,
+        87,
+        210
+      ]
+    },
+    {
+      "month": "2024-11-30",
+      "position": [
+        278,
+        202
+      ],
+      "rgb": [
+        100,
+        133,
+        226
+      ]
+    }
+  ],
+  "expected": "The interior must show background; retain the colored rim and mask adjacent segments.",
+  "status": "resolved; original image/sample evidence is explicitly superseded by corrected source and current native renders",
+  "corrected": {
+    "videoSha256": "26e593eeec83cb3bb5818ed7ef31a2b9b33a85ead839ed8ab46b10cfbd74348a",
+    "compositionSha256": "799558247b9b6a784cb41fcfaa3f6a4fdfe619e50c9e29b5c7ebdc7380276582",
+    "storyboardSha256": "cf704868d83c6679e3438e2b0dcfd0fcfd5328acbdaff07ad5165e8602e035ea",
+    "samples": [
+      {
+        "position": [
+          138,
+          239
+        ],
+        "rgb": [
+          244,
+          242,
+          232
+        ]
+      },
+      {
+        "position": [
+          278,
+          202
+        ],
+        "rgb": [
+          243,
+          243,
+          232
+        ]
+      }
+    ]
+  }
+}

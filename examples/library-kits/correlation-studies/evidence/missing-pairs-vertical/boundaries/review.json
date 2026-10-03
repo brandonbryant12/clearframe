@@ -1,0 +1,82 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/correlation-studies/specimens/missing-pairs-vertical/build/pipeline/2026-10-03T10-10-15-655Z-a7178417/video.mp4",
+  "outputSha256": "46af5894983e90052bec3b7edb0b81e46cef858d8538117cf6e97538aacda401",
+  "inputId": "865d7f661833424428a0159202b41d398b8d61f0af7bb43081249bc5e870a517",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "first-window: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "first-window: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 1019,
+      "time": 33.96666666666667,
+      "reasons": [
+        "first-window: last frame",
+        "Before last-window"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 1020,
+      "time": 34,
+      "reasons": [
+        "last-window: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 1026,
+      "time": 34.2,
+      "reasons": [
+        "last-window: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1979,
+      "time": 65.96666666666667,
+      "reasons": [
+        "last-window: last frame",
+        "Before pair-view"
+      ],
+      "image": "frame-0005.jpg"
+    },
+    {
+      "frame": 1980,
+      "time": 66,
+      "reasons": [
+        "pair-view: first frame"
+      ],
+      "image": "frame-0006.jpg"
+    },
+    {
+      "frame": 1986,
+      "time": 66.2,
+      "reasons": [
+        "pair-view: entrance"
+      ],
+      "image": "frame-0007.jpg"
+    },
+    {
+      "frame": 2819,
+      "time": 93.96666666666667,
+      "reasons": [
+        "pair-view: last frame"
+      ],
+      "image": "frame-0008.jpg"
+    }
+  ]
+}

@@ -327,6 +327,16 @@
           "C18"
         ]
       }
+    },
+    "correlation-studies": {
+      "cases": {
+        "changing-pair": [
+          "C07"
+        ],
+        "missing-pairs": [
+          "C07"
+        ]
+      }
     }
   },
   "sourceOnly": {

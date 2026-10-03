@@ -1,0 +1,11 @@
+# Correlation studies
+
+Four native 94-second clips compare two explicit Pearson-correlation windows and then show a selected pair's monthly returns. Two original fictional cases are composed independently for landscape and vertical. See [preview](preview.html), [review](REVIEW.md), [method provenance](SOURCES.md) and [reusable helpers](../../../docs/correlations.md).
+
+The first case reverses Alpha/Beta's relation between January–June and July–December. Gamma becomes constant, so its late-window cells are undefined, including its diagonal. The second case retains missing monthly returns. Different pairs have different counts; too few shared observations remains undefined. In the selected-pair charts, hollow Alpha points were observed but excluded because Beta was missing in those months.
+
+Each matrix keeps member order, a fixed signed −1/0/+1 color domain, coefficients rounded to two decimals, counts and the outlined selected pair. An em dash differs from zero. `few` means insufficient pairs; `flat` means a constant member in the paired sample. Blue/orange show sign, not desirability. The selected charts share explicit percent axes, date domains and a synchronized calendar-time reveal. The window cut never interpolates an uncomputed coefficient.
+
+Edit `inputs.json` and run `node examples/library-kits/correlation-studies/build.mjs`. `audit.json` retains exact models, contributing/missing dates, native geometry and storyboard hashes. The original supplied data are monthly simple returns in percent, not price levels; no annualization or price-to-return conversion is inferred. Run `verify.mjs` under the resource gate, then the independent `check-encoded.py` and visual review. `package.mjs` refreshes identities only after current review and checks.
+
+**Prototype.** Retained calculation, native layout, deterministic seek and sampled encoded evidence do not establish continuous subjective playback or a final master. Other frequencies/methods, statistical significance, causal or predictive inference, four-member visual acceptance, arbitrary labels, square and 4:5 layouts remain outside this review. Pairwise matrices can be non-positive-semidefinite and are not portfolio covariance models. These are silent reusable assets, with no paid generation or external observations. Original files are MIT; bundled fonts retain OFL notices.

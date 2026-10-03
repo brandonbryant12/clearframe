@@ -1,0 +1,12 @@
+✔ correlation uses only paired dates and keeps undefined separate from zero (4.724417ms)
+✔ monthly return contract rejects mixed grids, frequencies, windows and impossible simple returns (1.111291ms)
+✔ rescaling avoids underflow and preserves tiny real differences (0.343875ms)
+✔ native matrices share fixed color endpoints and paired charts retain gaps and common scales (3.167958ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 59.422084
