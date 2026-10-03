@@ -3,21 +3,21 @@
   "status": "source-prototype",
   "browserReview": "pending-scoped-localhost-approval-after-file-url-policy-rejection",
   "catalog": {
-    "packages": 9,
-    "examples": 45,
-    "nativeVariants": 88,
+    "packages": 10,
+    "examples": 49,
+    "nativeVariants": 96,
     "preparedInserts": 1,
     "inventoryItems": 71,
-    "manifestFiles": 2755,
+    "manifestFiles": 3041,
     "issues": 0
   },
   "tests": {
-    "nodePassed": 185,
+    "nodePassed": 188,
     "nodeFailed": 0,
     "focusedPassed": 4,
     "independentPassed": 17,
     "cliSmokePassed": 2,
-    "cliSmokeProvenance": "Retained milestone 6a checks; unchanged CLI source, not rerun for this catalog-only refresh"
+    "cliSmokeProvenance": "Current library-log and library-variation CLI smoke checks rerun for the static-anchor milestone; retained exact outputs"
   },
   "limits": [
     "No browser, accessibility or visual acceptance claimed",
@@ -32,53 +32,53 @@
     },
     {
       "path": "docs/library-browser/README.md",
-      "bytes": 6063,
-      "sha256": "bebe1225db5ec98fbabd3b68dd75802ceace0f57229043594f5b9ffeef3203cf"
+      "bytes": 6072,
+      "sha256": "a3f509cbef062d7c6e0af3bdadf4fbde613f3c9896a492cd1af14e2f4ae5227d"
     },
     {
       "path": "docs/library-browser/app.js",
-      "bytes": 219651,
-      "sha256": "9fdc5dc0eb4d3cd120827f59e69a6bb08eb9272ba51e19b428cc9bbae6fea834"
+      "bytes": 229397,
+      "sha256": "466c2e3d22811d4e3449476048b2244d2a3ffdd16956682213825b6f82050134"
     },
     {
       "path": "docs/library-browser/catalog.json",
-      "bytes": 256058,
-      "sha256": "0aa842e03feea7e1ea4f17c47ff24c7271b80c7cc192dc5274df70f2adb41c1d"
+      "bytes": 268759,
+      "sha256": "0c7d5d88a895ba5e064713bfd7953fe9ebc8f63479b98c2cdb4b060d42f049b4"
     },
     {
       "path": "docs/library-browser/evidence/catalog-build.json",
-      "bytes": 192,
-      "sha256": "e84277a6f84f1b68e618bed60bb5c2bc8dabb5dc57bad68fe18c81bd3afbee19"
+      "bytes": 193,
+      "sha256": "feda31b9f5e9513a2e7727206ba1aa0c7cee69e8e23209d2fa41ca86fd94d5d7"
     },
     {
       "path": "docs/library-browser/evidence/cli-smoke.json",
-      "bytes": 217,
-      "sha256": "1ab879d3f41422886fc84f608abf8d53f1a5ad26bb684aa383486ed0d9dfdc2c"
+      "bytes": 2626,
+      "sha256": "3a3f6d897cadda4c38609e0d6f2c9f21294377830ef531719d3ede9c4856a084"
     },
     {
       "path": "docs/library-browser/evidence/node-tests.txt",
-      "bytes": 18694,
-      "sha256": "4e73a1bfff0c92d180626c3e979ecaf785c73d24ca33b618c1992bc7df7a745d"
+      "bytes": 19013,
+      "sha256": "cf24a0b65be36147ae356915fe616d064ddaa5a7427cf35eeefa08da2214beaa"
     },
     {
       "path": "docs/library-browser/evidence/source-review-checks.json",
-      "bytes": 7105,
-      "sha256": "7ff4c9bd0fbae499fc4180e7e1c77b81e4c3e20d1273fee1f4d09980c6a2514e"
+      "bytes": 8045,
+      "sha256": "b3106fddf1fef9671a734a961ca5e6a35b7f77f2b2f536ea34a81ea75af9222d"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.json",
-      "bytes": 2104,
-      "sha256": "37c4eb508830bfafeffb40f622a538727db3b41e2e0641e9b8921ca86af30f87"
+      "bytes": 2105,
+      "sha256": "c7ce1fbfa58f03b48324ef1aa03ead693251a0853ae7defd4c95f73277b98450"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.mjs",
-      "bytes": 8282,
-      "sha256": "65addf40b1fbde5a1aaa37ea36f58020cae6efa4ccc60297a4b32794a0d38d53"
+      "bytes": 8284,
+      "sha256": "42cd5b4df3192381e32cd30ea2be7f9e82ec9d5dcfa14e745fc7b992c4e2ef6e"
     },
     {
       "path": "docs/library-browser/evidence/source-review.md",
-      "bytes": 8188,
-      "sha256": "af7ea4a490a44140bff990a865bc6f60c09d13010038dd33d8554194843983e5"
+      "bytes": 8851,
+      "sha256": "6e78e1e3b634e42a59647ca20560d4ce67024bd410582a3353693ed195ac14e9"
     },
     {
       "path": "docs/library-browser/example-ledger.json",
@@ -102,18 +102,18 @@
     },
     {
       "path": "docs/research/timmer-library/asset-links.json",
-      "bytes": 5520,
-      "sha256": "4e8915df820ede845fd7df904d25081a0d757ddca5f9ae98e3cad0bad7c2d81e"
+      "bytes": 5794,
+      "sha256": "87afcf84830427a55adc482a69040bedc965ca36ff8f24571f865e338b4b1370"
     },
     {
       "path": "docs/research/timmer-library/inventory.json",
-      "bytes": 77232,
-      "sha256": "fe6df5b29f78b8b15418fd79784d98c645107fcd5c9390cc47f64c8dd66fe3e6"
+      "bytes": 77609,
+      "sha256": "36d747dadb572d4c53582d062a74fe41afe467e94d23c195df6c3e0e79ecd921"
     },
     {
       "path": "engine/cli.mjs",
-      "bytes": 33471,
-      "sha256": "75ff718e190480b54f702d59b64a91fc7e70c76aee91f003770903714b4084cd"
+      "bytes": 34305,
+      "sha256": "fde77dad87970c3aee7c7fa8a4eabb8031cfdc643b7be4ce9725c4704c9183c2"
     },
     {
       "path": "engine/lib/library-browser-build.mjs",

@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/anchor-studies/specimens/settled-level-landscape/build/pipeline/2026-10-03T08-54-46-296Z-96d609ca/video.mp4",
+  "outputSha256": "1159932312b65f1e8607d6b28305bd4ecc0039e14496d9beefacf792c8141e51",
+  "inputId": "7104d8c2ab05b8e4e161a18015ddf7f58c987d1058287e4d55d294e8869c05fb",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "operation: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "operation: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 239,
+      "time": 7.966666666666667,
+      "reasons": [
+        "operation: last frame",
+        "Before registered-hold"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 240,
+      "time": 8,
+      "reasons": [
+        "registered-hold: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 246,
+      "time": 8.2,
+      "reasons": [
+        "registered-hold: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 839,
+      "time": 27.966666666666665,
+      "reasons": [
+        "registered-hold: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

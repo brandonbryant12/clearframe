@@ -1787,7 +1787,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "partial prototype; static anchors and copy zones verified; tracking and occlusion remain open",
       "effort": "M",
       "sourceIds": [
         "S08",
@@ -1801,8 +1801,8 @@
         "occlusion intervals",
         "aspect ratio"
       ],
-      "existing": "asset.json has prose copy guidance; machine-readable per-frame anchors are proposed.",
-      "guardrail": "Do not assume tracked 3D labels already work; begin with static end-pose anchors.",
+      "existing": "engine/lib/asset-anchors.mjs and the asset-anchors command export source-bound static geometry. anchor-studies retains four source manifests and eight native specimens with original prepared media, native labels and encoded checks; see docs/asset-anchors.md.",
+      "guardrail": "Static geometry and copy-zone clearance do not establish visibility, occlusion, shadows or glyph fit. Re-export changed sources; review native encoded layouts. Moving labels and occlusion intervals remain open.",
       "reuse": [
         "all compositing"
       ],

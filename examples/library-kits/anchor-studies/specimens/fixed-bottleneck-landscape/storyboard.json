@@ -1,0 +1,194 @@
+{
+  "version": 2,
+  "title": "The original bottleneck remains",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "research-paper",
+  "type": "inter",
+  "backdrop": "none",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.3
+  },
+  "transition": "cut",
+  "sfx": "off",
+  "captions": false,
+  "music": false,
+  "assets": [
+    {
+      "id": "mechanism",
+      "kind": "clip",
+      "file": "media/clip.mp4"
+    },
+    {
+      "id": "held",
+      "kind": "clip",
+      "file": "media/final-hold.mp4"
+    }
+  ],
+  "sources": [
+    {
+      "claim": "Illustrative logistics; no measured capacity.",
+      "source": "Original ClearFrame prepared Blender geometry with native editorial labels; this is a qualitative example, not measured evidence."
+    }
+  ],
+  "beats": [
+    {
+      "id": "operation",
+      "block": "canvas",
+      "duration": 8,
+      "camera": "none",
+      "exit": "none",
+      "plate": {
+        "asset": "mechanism",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "sourceElement": "source",
+        "elements": [
+          {
+            "id": "title",
+            "type": "text",
+            "text": "The original bottleneck remains",
+            "x": 220.80000000000004,
+            "y": 125.49600000000001,
+            "size": 61.44,
+            "width": 1478.4,
+            "height": 75.60000000000001,
+            "leading": 1.1,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "source",
+            "type": "text",
+            "text": "Illustrative logistics; no measured capacity.",
+            "x": 220.80000000000004,
+            "y": 994.8720000000001,
+            "size": 53.76,
+            "width": 1478.4,
+            "height": 61.82399999999999,
+            "leading": 1.1,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "id": "registered-hold",
+      "block": "canvas",
+      "duration": 20,
+      "camera": "none",
+      "exit": "none",
+      "plate": {
+        "asset": "held",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": true
+      },
+      "props": {
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "sourceElement": "source",
+        "elements": [
+          {
+            "id": "title",
+            "type": "text",
+            "text": "The original bottleneck remains",
+            "x": 220.80000000000004,
+            "y": 125.49600000000001,
+            "size": 61.44,
+            "width": 1478.4,
+            "height": 75.60000000000001,
+            "leading": 1.1,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "source",
+            "type": "text",
+            "text": "Illustrative logistics; no measured capacity.",
+            "x": 220.80000000000004,
+            "y": 994.8720000000001,
+            "size": 53.76,
+            "width": 1478.4,
+            "height": 61.82399999999999,
+            "leading": 1.1,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "attached-copy",
+            "type": "text",
+            "text": "The narrow main connection has not widened",
+            "x": 220.80000000000004,
+            "y": 204.98399999999998,
+            "size": 53.76,
+            "width": 1478.4,
+            "height": 64.8,
+            "leading": 1.1,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0.25,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "attached-leader",
+            "type": "line",
+            "x1": 960.0000000000001,
+            "y1": 229.39999999999998,
+            "x2": 920.9597396850586,
+            "y2": 500.9727872085571,
+            "width": 2.688,
+            "stroke": "ink",
+            "at": 0.5,
+            "enter": "draw",
+            "dur": 0.6,
+            "drawEase": "linear"
+          },
+          {
+            "id": "attached-anchor",
+            "type": "circle",
+            "cx": 920.9597396850586,
+            "cy": 508.65278720855713,
+            "r": 7.68,
+            "fill": "bg",
+            "stroke": "ink",
+            "width": 2.88,
+            "at": 1.1,
+            "enter": "fade",
+            "dur": 0.15
+          }
+        ]
+      }
+    }
+  ]
+}

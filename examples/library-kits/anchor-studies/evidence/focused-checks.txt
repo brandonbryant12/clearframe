@@ -1,0 +1,11 @@
+✔ held registration rejects moving ranges, geometry overlap and unsupported visibility claims (1.943458ms)
+✔ contain and cover use exact centered image transforms, and cropped copy zones cannot receive labels (1.65925ms)
+✔ source verification rejects replacement pixels and receipt changes (2.601291ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 62.861083

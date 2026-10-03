@@ -1,15 +1,82 @@
 {
-  "status": "pass",
+  "checkedAt": "2026-10-03T09:08:50.558Z",
   "checks": [
     {
       "command": "library-log",
       "exitCode": 0,
-      "entries": 1
+      "result": {
+        "added": true,
+        "id": "63da3008c9597c33dfd1bc18f4281349e2e93411fc18f95c48cdb83962a0d098",
+        "ledger": {
+          "schemaVersion": 1,
+          "kind": "projects",
+          "title": "Project decisions",
+          "entries": [
+            {
+              "id": "63da3008c9597c33dfd1bc18f4281349e2e93411fc18f95c48cdb83962a0d098",
+              "title": "Access follows an open gate",
+              "project": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/anchor-studies/specimens/access-gate-landscape",
+              "recordedAt": "2026-10-03T09:08:50.449Z",
+              "storyboardSha256": "9d10b9d93c045be143011fb9457ecabac0268b9ed614d087abc11e6b3502da40",
+              "assets": [
+                "T03"
+              ],
+              "choices": {
+                "mechanisms": [
+                  "Gate"
+                ],
+                "materials": [
+                  "Porcelain"
+                ],
+                "camera": [
+                  "Fixed"
+                ],
+                "story": [
+                  "Point to held geometry"
+                ]
+              },
+              "note": ""
+            }
+          ]
+        }
+      }
     },
     {
       "command": "library-variation",
       "exitCode": 0,
-      "entries": 1
+      "result": {
+        "kind": "projects",
+        "title": "Project decisions",
+        "entries": [
+          {
+            "id": "63da3008c9597c33dfd1bc18f4281349e2e93411fc18f95c48cdb83962a0d098",
+            "title": "Access follows an open gate",
+            "project": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/anchor-studies/specimens/access-gate-landscape",
+            "recordedAt": "2026-10-03T09:08:50.449Z",
+            "storyboardSha256": "9d10b9d93c045be143011fb9457ecabac0268b9ed614d087abc11e6b3502da40",
+            "assets": [
+              "T03"
+            ],
+            "choices": {
+              "mechanisms": [
+                "Gate"
+              ],
+              "materials": [
+                "Porcelain"
+              ],
+              "camera": [
+                "Fixed"
+              ],
+              "story": [
+                "Point to held geometry"
+              ]
+            },
+            "note": ""
+          }
+        ],
+        "repeated": [],
+        "basis": "Declared mechanism and story labels; palette and seed do not establish a new concept. Repetition can be appropriate; this report never changes a film."
+      }
     }
   ]
 }

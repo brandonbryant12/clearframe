@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/anchor-studies/specimens/fixed-bottleneck-landscape/build/pipeline/2026-10-03T08-59-27-303Z-101925ba/video.mp4",
+  "outputSha256": "7c888c12a0463f4d4a2aeccb09d9318ddabe15c987c5db112ee47d27cf27902e",
+  "inputId": "3f7f4dfb378874cdf17e59bad90bd85894fbc0ced02aad51f1066a842dda5d04",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "operation: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "operation: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 239,
+      "time": 7.966666666666667,
+      "reasons": [
+        "operation: last frame",
+        "Before registered-hold"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 240,
+      "time": 8,
+      "reasons": [
+        "registered-hold: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 246,
+      "time": 8.2,
+      "reasons": [
+        "registered-hold: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 839,
+      "time": 27.966666666666665,
+      "reasons": [
+        "registered-hold: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "cases": [
+    {"id":"access-gate","media":"reservoir","anchor":"gate","title":"Access follows an open gate","label":"The gate closes after the transfer","source":"Illustrative access; levels do not encode balances."},
+    {"id":"settled-level","media":"reservoir","anchor":"level","title":"The levels settle after transfer","label":"A level edge stays attached to the chamber","source":"Illustrative tank; no measured liquid volume."},
+    {"id":"alternate-route","media":"conveyor","anchor":"alternate-gate","title":"A separate route carries the packets","label":"The alternate passage remains open","source":"Illustrative routing; no measured throughput."},
+    {"id":"fixed-bottleneck","media":"conveyor","anchor":"main-neck","title":"The original bottleneck remains","label":"The narrow main connection has not widened","source":"Illustrative logistics; no measured capacity."}
+  ]
+}

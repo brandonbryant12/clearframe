@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/anchor-studies/specimens/settled-level-vertical/build/pipeline/2026-10-03T08-54-57-141Z-31bada89/video.mp4",
+  "outputSha256": "91589282ee515430ec657f57f40515a9a37b4f8d2cd3200fe6e44a1361322c6f",
+  "inputId": "c4dbfc621f7ad85e1b909b7eb6f584c6331d4fd307a17bcdd05a7ca8f86343f8",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "operation: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "operation: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 239,
+      "time": 7.966666666666667,
+      "reasons": [
+        "operation: last frame",
+        "Before registered-hold"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 240,
+      "time": 8,
+      "reasons": [
+        "registered-hold: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 246,
+      "time": 8.2,
+      "reasons": [
+        "registered-hold: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 839,
+      "time": 27.966666666666665,
+      "reasons": [
+        "registered-hold: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

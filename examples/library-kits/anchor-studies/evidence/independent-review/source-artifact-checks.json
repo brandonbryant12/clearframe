@@ -1,0 +1,78 @@
+[
+  {
+    "name": "reservoir-landscape",
+    "manifestSha256": "f5950be8569ee14d514a254c34fd2bf938bf9c2335db3e92c77948ece700066b",
+    "definitionSha256": "1f6d7dae5dd417efd403eea6b92f727b161736e71af696ea920579dc5f3a071b",
+    "sceneSha256": "2d56feb98cb68505f0664ef249591d72adb20e6717473488d4fa961793391c84",
+    "clipSha256": "309050de4eec62c901c215cf91c25989f510bd55215bce0fd746c57e07cc0c46",
+    "receiptSha256": "620f9686dfd9f5dd593e30195e9dd06248af3b7210af907a45a4ff3e101ada13",
+    "holdClipSha256": "f9610fe3f071053db03e0c2fbfb8b30bc0911e2cf6ee1356f2cc544760551fca",
+    "sourceRange": [
+      154,
+      192
+    ],
+    "heldSourceFrame": 191,
+    "sourceReportHashMatches": true,
+    "projectionReportHashMatches": true,
+    "projectionChecks": 76,
+    "maxProjectionError": 7.450580596923828e-9,
+    "all48DecodedHoldFramesMatchSource": true
+  },
+  {
+    "name": "reservoir-vertical",
+    "manifestSha256": "6a9a7c5ad9ebc9268d6527cefce57281c84561a04e4b6cf29f1105a71d0ee324",
+    "definitionSha256": "247fe136e2d2560cad95b6ee91ae732c78f97fabc32e0a67c98e4b98e94fdc28",
+    "sceneSha256": "f4e3f3d375db61e3c095c174e3d3d678fbca7a0536c5778575fabbd8e0554132",
+    "clipSha256": "619f4501808f04d8b19a9e2d16e673c20667cfd2f4fc927074304bf3e481ace0",
+    "receiptSha256": "93e98ab535f9f3caece14d01d389fd0bc402cd7b86a8cb3b7fc8310bd4d17b26",
+    "holdClipSha256": "55b970dc33a8fb658b5f88c9f28c10a8719daadc97d0e07e24d7b3851ee5df0c",
+    "sourceRange": [
+      154,
+      192
+    ],
+    "heldSourceFrame": 191,
+    "sourceReportHashMatches": true,
+    "projectionReportHashMatches": true,
+    "projectionChecks": 76,
+    "maxProjectionError": 3.166496753692627e-8,
+    "all48DecodedHoldFramesMatchSource": true
+  },
+  {
+    "name": "conveyor-landscape",
+    "manifestSha256": "5edc08e1528934525e1b79b37c7ee4344a4346c3b0a51a3711086d6a823d101e",
+    "definitionSha256": "718c6a5f3e24a9860920ae380195636b4b75ec1782070bacc21425298f5841a1",
+    "sceneSha256": "849bb760b15a56b929acc6181afc2db407b2b3c6ab60e4877a18b7e1700ae4cb",
+    "clipSha256": "f42e7aa4c7b88a1e03cdbbb05854490c27f940787b4c650ee3e952988c5942b6",
+    "receiptSha256": "95cb0a36bff0bf189daf3b54953e10db844b9937cdc4955c7ddfdfe227857d81",
+    "holdClipSha256": "64e4c81cb635cef1a61bcf5f59ac35c47733e7c086786a05104837a705fbe87c",
+    "sourceRange": [
+      154,
+      192
+    ],
+    "heldSourceFrame": 191,
+    "sourceReportHashMatches": true,
+    "projectionReportHashMatches": true,
+    "projectionChecks": 76,
+    "maxProjectionError": 3.5390257835388184e-8,
+    "all48DecodedHoldFramesMatchSource": true
+  },
+  {
+    "name": "conveyor-vertical",
+    "manifestSha256": "eea4eb2d28c496ca094784f94efee083262bd0b9b450e57c311c932861236069",
+    "definitionSha256": "04deb11cee13d0a25d681173353b25da1994410372f7f7e0761843c812c68c78",
+    "sceneSha256": "82b06ffeef0ce7fd96387dafb2ee69b546a5742f151bd1eae5db62c3f3964294",
+    "clipSha256": "3b3c92c050a195f73116991e1a45f8384adde3849e3d5660eb6f64989cf28187",
+    "receiptSha256": "7774ae304dc97d8739326a42243b0c9c76767a135297134753f05fc31e35068e",
+    "holdClipSha256": "3d5c40ab4e4639c47ba47b6ad4076deb34a0c8fba8976c135f0a90a518131819",
+    "sourceRange": [
+      154,
+      192
+    ],
+    "heldSourceFrame": 191,
+    "sourceReportHashMatches": true,
+    "projectionReportHashMatches": true,
+    "projectionChecks": 76,
+    "maxProjectionError": 1.862645149230957e-8,
+    "all48DecodedHoldFramesMatchSource": true
+  }
+]

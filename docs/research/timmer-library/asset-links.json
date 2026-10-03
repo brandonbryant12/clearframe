@@ -301,6 +301,22 @@
           "C12"
         ]
       }
+    },
+    "anchor-studies": {
+      "cases": {
+        "access-gate": [
+          "T03"
+        ],
+        "settled-level": [
+          "T03"
+        ],
+        "alternate-route": [
+          "T03"
+        ],
+        "fixed-bottleneck": [
+          "T03"
+        ]
+      }
     }
   },
   "sourceOnly": {

@@ -1,0 +1,194 @@
+{
+  "version": 2,
+  "title": "A separate route carries the packets",
+  "format": {
+    "preset": "vertical",
+    "fps": 30
+  },
+  "theme": "research-paper",
+  "type": "inter",
+  "backdrop": "none",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.3
+  },
+  "transition": "cut",
+  "sfx": "off",
+  "captions": false,
+  "music": false,
+  "assets": [
+    {
+      "id": "mechanism",
+      "kind": "clip",
+      "file": "media/clip.mp4"
+    },
+    {
+      "id": "held",
+      "kind": "clip",
+      "file": "media/final-hold.mp4"
+    }
+  ],
+  "sources": [
+    {
+      "claim": "Illustrative routing; no measured throughput.",
+      "source": "Original ClearFrame prepared Blender geometry with native editorial labels; this is a qualitative example, not measured evidence."
+    }
+  ],
+  "beats": [
+    {
+      "id": "operation",
+      "block": "canvas",
+      "duration": 8,
+      "camera": "none",
+      "exit": "none",
+      "plate": {
+        "asset": "mechanism",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "view": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "sourceElement": "source",
+        "elements": [
+          {
+            "id": "title",
+            "type": "text",
+            "text": "A separate route carries the packets",
+            "x": 124.2,
+            "y": 235.74,
+            "size": 48.6,
+            "width": 831.6,
+            "height": 144,
+            "leading": 1.1,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "source",
+            "type": "text",
+            "text": "Illustrative routing; no measured throughput.",
+            "x": 124.2,
+            "y": 1739.2320000000002,
+            "size": 34.56,
+            "width": 831.6,
+            "height": 39.744,
+            "leading": 1.1,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      }
+    },
+    {
+      "id": "registered-hold",
+      "block": "canvas",
+      "duration": 20,
+      "camera": "none",
+      "exit": "none",
+      "plate": {
+        "asset": "held",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": true
+      },
+      "props": {
+        "view": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "sourceElement": "source",
+        "elements": [
+          {
+            "id": "title",
+            "type": "text",
+            "text": "A separate route carries the packets",
+            "x": 124.2,
+            "y": 235.74,
+            "size": 48.6,
+            "width": 831.6,
+            "height": 144,
+            "leading": 1.1,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "source",
+            "type": "text",
+            "text": "Illustrative routing; no measured throughput.",
+            "x": 124.2,
+            "y": 1739.2320000000002,
+            "size": 34.56,
+            "width": 831.6,
+            "height": 39.744,
+            "leading": 1.1,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "attached-copy",
+            "type": "text",
+            "text": "The alternate passage remains open",
+            "x": 124.2,
+            "y": 442.08,
+            "size": 43.2,
+            "width": 831.6,
+            "height": 153.6,
+            "leading": 1.1,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0.25,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "attached-leader",
+            "type": "line",
+            "x1": 540,
+            "y1": 564.8,
+            "x2": 591.4977693557739,
+            "y2": 989.4954602050781,
+            "width": 1.512,
+            "stroke": "ink",
+            "at": 0.5,
+            "enter": "draw",
+            "dur": 0.6,
+            "drawEase": "linear"
+          },
+          {
+            "id": "attached-anchor",
+            "type": "circle",
+            "cx": 591.4977693557739,
+            "cy": 993.8154602050781,
+            "r": 4.32,
+            "fill": "bg",
+            "stroke": "ink",
+            "width": 1.62,
+            "at": 1.1,
+            "enter": "fade",
+            "dur": 0.15
+          }
+        ]
+      }
+    }
+  ]
+}

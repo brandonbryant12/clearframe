@@ -1,0 +1,44 @@
+{
+  "status": "pass",
+  "method": "Saved camera projection matrix times inverse camera world transform times object/local point; independently compared to exporter coordinates. No rendered visibility claim.",
+  "blenderVersion": "5.2.2 LTS",
+  "scriptSha256": "ec51440bb428d51e0cf8e4ea9bf8d227ce5eb90998f86dc414389684d43d872a",
+  "variants": [
+    {
+      "name": "reservoir-landscape",
+      "frames": 38,
+      "anchorChecks": 76,
+      "maxNormalizedError": 7.450580596923828e-09,
+      "tolerance": 2e-06,
+      "manifestSha256": "f5950be8569ee14d514a254c34fd2bf938bf9c2335db3e92c77948ece700066b",
+      "sceneSha256": "2d56feb98cb68505f0664ef249591d72adb20e6717473488d4fa961793391c84"
+    },
+    {
+      "name": "reservoir-vertical",
+      "frames": 38,
+      "anchorChecks": 76,
+      "maxNormalizedError": 3.166496753692627e-08,
+      "tolerance": 2e-06,
+      "manifestSha256": "6a9a7c5ad9ebc9268d6527cefce57281c84561a04e4b6cf29f1105a71d0ee324",
+      "sceneSha256": "f4e3f3d375db61e3c095c174e3d3d678fbca7a0536c5778575fabbd8e0554132"
+    },
+    {
+      "name": "conveyor-landscape",
+      "frames": 38,
+      "anchorChecks": 76,
+      "maxNormalizedError": 3.5390257835388184e-08,
+      "tolerance": 2e-06,
+      "manifestSha256": "5edc08e1528934525e1b79b37c7ee4344a4346c3b0a51a3711086d6a823d101e",
+      "sceneSha256": "849bb760b15a56b929acc6181afc2db407b2b3c6ab60e4877a18b7e1700ae4cb"
+    },
+    {
+      "name": "conveyor-vertical",
+      "frames": 38,
+      "anchorChecks": 76,
+      "maxNormalizedError": 1.862645149230957e-08,
+      "tolerance": 2e-06,
+      "manifestSha256": "eea4eb2d28c496ca094784f94efee083262bd0b9b450e57c311c932861236069",
+      "sceneSha256": "82b06ffeef0ce7fd96387dafb2ee69b546a5742f151bd1eae5db62c3f3964294"
+    }
+  ]
+}

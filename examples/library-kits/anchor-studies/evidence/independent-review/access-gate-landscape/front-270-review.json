@@ -1,0 +1,82 @@
+{
+  "frame": 270,
+  "expectedFront": [
+    367.1479082107544,
+    197.1924497038126
+  ],
+  "width": 720,
+  "height": 405,
+  "samples": [
+    {
+      "pixel": [
+        367,
+        196
+      ],
+      "encodedRGB": [
+        102,
+        102,
+        102
+      ],
+      "sourceRGB": [
+        215,
+        215,
+        215
+      ],
+      "meanDarkening": 113.0
+    },
+    {
+      "pixel": [
+        367,
+        197
+      ],
+      "encodedRGB": [
+        147,
+        147,
+        147
+      ],
+      "sourceRGB": [
+        215,
+        215,
+        215
+      ],
+      "meanDarkening": 68.0
+    },
+    {
+      "pixel": [
+        366,
+        197
+      ],
+      "encodedRGB": [
+        179,
+        179,
+        179
+      ],
+      "sourceRGB": [
+        215,
+        215,
+        215
+      ],
+      "meanDarkening": 36.0
+    },
+    {
+      "pixel": [
+        368,
+        197
+      ],
+      "encodedRGB": [
+        221,
+        221,
+        221
+      ],
+      "sourceRGB": [
+        216,
+        216,
+        216
+      ],
+      "meanDarkening": -5.0
+    }
+  ],
+  "sourceFrame": 191,
+  "videoSha256": "3e127d662e3ab69f7e5d8d35bb7af31007aae1a713bed645449b6537aae28eeb",
+  "sourceClipSha256": "309050de4eec62c901c215cf91c25989f510bd55215bce0fd746c57e07cc0c46"
+}

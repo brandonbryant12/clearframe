@@ -1,0 +1,19 @@
+{
+  "engine/lib/asset-anchors.mjs": "5831b4dd3eb3a43f8ddc60cb6ddf0999721a9e4acdaaddc7af97b58ce9cba4bf",
+  "scripts/blender/export_anchors.py": "a131a5f89837ff0721125402bb252029870aba4f78d5cfcc133f17ac46c8dfbc",
+  "examples/library-kits/anchor-studies/inputs.json": "24516f048b4aada3af1f52a1454f21e49612f84f905df2e0616a92a5e2f20b29",
+  "examples/library-kits/anchor-studies/build.mjs": "17d1b4c9f454e00e85037ac047ea9da423c76ee5a34b6c09b2c00fdd0615a309",
+  "examples/library-kits/anchor-studies/DIRECTION.md": "d8d29c4a3e1a10ef2aef0d7b981d714da2131e96addcf0563fefd8f3d139b26a",
+  "examples/library-kits/anchor-studies/audit.json": "78b95ee185ee4f4169cdc6bf27cb03c2d46afc0372fed874d26a47e5df5f2317",
+  "examples/library-kits/anchor-studies/check-source.mjs": "305f42a4fbc324793d70b19fa09b6f49c10a4cbb8751a5aee90da7475b485c90",
+  "examples/library-kits/anchor-studies/check-projection.py": "ec51440bb428d51e0cf8e4ea9bf8d227ce5eb90998f86dc414389684d43d872a",
+  "examples/library-kits/anchor-studies/evidence/source-checks.json": "89ebb3dc19f4b6e0b4fd3956408d0949b5ffd74aa38a9dec4b5f9c6a029ab871",
+  "examples/library-kits/anchor-studies/evidence/projection-checks.json": "3c01e52b137978af52ce3445a4da19c0caeadd00a07440c64149b13ef63109a6",
+  "examples/library-kits/anchor-studies/README.md": "8a2e10df66a5f961e7e9ee7c2f0f2e5462582a37babfb3c159133a9fba61d86e",
+  "examples/library-kits/anchor-studies/check-encoded.py": "f6a446ce56eca7904d52c717dcd954181a45fc39115b235069d40aeec4423ec9",
+  "examples/library-kits/anchor-studies/build/verification.json": "5ed6a9989ccdb4452d28d8eaa0dc6cfcd1e22a6e5cd365550f12114e1172ff68",
+  "examples/library-kits/anchor-studies/build/encoded-checks.json": "bdc16affc42a381e1ad11b7730ef820d7ffe87ae06bfecc05f61a89ac97669b0",
+  "examples/library-kits/anchor-studies/evidence/critique.json": "cc4635dcb1e67858f253d792cd0b7d16e4e776a1a224298f8133a0eb5cac11d8",
+  "docs/asset-anchors.md": "eaa24592292d37819f0d7daccc235d1dc8ae5d350b0719659732cc49ce2c8c3f",
+  "test/asset-anchors.test.mjs": "2118f42d224cc5bcc5f2a9b0db0d2cc88caf9e7dcf9acde553f0825c3c007332"
+}

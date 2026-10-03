@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Static prepared-asset anchors.** A source-bound export verifies every frame of a declared static range, projects named local points and reserves geometry-clear copy rectangles. Centered contain/cover helpers keep native labels editable. Eight native specimens retain source, projection and encoded evidence. Visibility, occlusion and moving tracking remain open. See `docs/asset-anchors.md`.
+
 - **Expectations prototypes.** Publication-aware forecast vintages, correctly spaced maturity quotes and descriptive scenario bands now have twelve native examples. Cutoffs preserve revision chronology; nulls break curves and complete-ensemble bands. Auditable source calculations and sampled encoded review remain separate from continuous playback acceptance. Forward-rate models remain open. See `docs/expectations.md`.
 
 - **Library discovery and declared choices.** An offline browser indexes retained examples, explicit inventory mappings, editable sources and review evidence. Package lifecycle stays separate from manifest integrity. A source-bound ledger records mechanism, material, camera and story choices and reports repeated declared concepts without treating a new palette as novelty. Interactive desktop/phone browser review remains pending. See `docs/library-browser/README.md`.

@@ -6,13 +6,13 @@
     "passed": 4
   },
   "catalog": {
-    "packages": 9,
-    "examples": 45,
+    "packages": 10,
+    "examples": 49,
     "inventory": 71,
-    "existingSafeLocalReferences": 355,
+    "existingSafeLocalReferences": 387,
     "unresolvedSourceIds": 0,
     "matchingBundledLedgerSourceHashes": 4,
-    "nativeVariants": 88,
+    "nativeVariants": 96,
     "sourceInsertVariants": 1
   },
   "findings": [
@@ -93,7 +93,7 @@
     "passed": 4
   },
   "independentRegressionChecks": 17,
-  "finalVariantDurationChecks": 88,
+  "finalVariantDurationChecks": 96,
   "sourceHashes": {
     "engine/lib/library-browser.mjs": "829c57ccdd96541f1056f785f99a613d3b5b329d35e4c084fb77784c13913d59",
     "engine/lib/library-browser-build.mjs": "707dfd6f2a685ecffaa22d05f056e8f2394385fe4ef0e48ddf4732815f07c591",
@@ -101,23 +101,25 @@
     "engine/ui/library-browser/app.js": "0981e68ee87f195a3fd097b17703be0d9030b020562df26d9511224ae0b76ea8",
     "engine/ui/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
     "engine/ui/library-browser/style.css": "7457ba692f1c35216a06d83ce288be95082f43306840aaaa6b0116d93b22a1cf",
-    "docs/research/timmer-library/asset-links.json": "4e8915df820ede845fd7df904d25081a0d757ddca5f9ae98e3cad0bad7c2d81e",
+    "docs/research/timmer-library/asset-links.json": "87afcf84830427a55adc482a69040bedc965ca36ff8f24571f865e338b4b1370",
     "test/library-browser.test.mjs": "e8c9ba3af3819cb5905141860431962f81900383e0ef0858dd16384df51017bc"
   },
   "finalBundleHashes": {
     "docs/library-browser/example-ledger.mjs": "d9e1ac01a058494fd8e4edc4a0e876492617dab39c97ce7d5de01f2d1876e979",
     "docs/library-browser/example-ledger.json": "d057d406e30fb4c7911757c9f2cd2f8ffc2ef054f635f7e9c668b973af962631",
-    "docs/library-browser/app.js": "9fdc5dc0eb4d3cd120827f59e69a6bb08eb9272ba51e19b428cc9bbae6fea834",
-    "docs/library-browser/catalog.json": "0aa842e03feea7e1ea4f17c47ff24c7271b80c7cc192dc5274df70f2adb41c1d",
+    "docs/library-browser/app.js": "466c2e3d22811d4e3449476048b2244d2a3ffdd16956682213825b6f82050134",
+    "docs/library-browser/catalog.json": "0c7d5d88a895ba5e064713bfd7953fe9ebc8f63479b98c2cdb4b060d42f049b4",
     "docs/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
     "docs/library-browser/style.css": "0c80ce1cd03abf96b895f46f19501e07a64df40ab74b03fa7e917ea8393b24cd",
     "docs/library-browser/DIRECTION.md": "449b761ae2abf2c44427e8917862cd5885b081f371683e363ed5d42c8754e975",
-    "docs/research/timmer-library/inventory.json": "fe6df5b29f78b8b15418fd79784d98c645107fcd5c9390cc47f64c8dd66fe3e6",
-    "docs/research/timmer-library/asset-links.json": "4e8915df820ede845fd7df904d25081a0d757ddca5f9ae98e3cad0bad7c2d81e",
-    "docs/library-browser/evidence/catalog-build.json": "e84277a6f84f1b68e618bed60bb5c2bc8dabb5dc57bad68fe18c81bd3afbee19",
-    "docs/library-browser/evidence/node-tests.txt": "4e73a1bfff0c92d180626c3e979ecaf785c73d24ca33b618c1992bc7df7a745d",
-    "docs/library-browser/evidence/source-review-regressions.mjs": "65addf40b1fbde5a1aaa37ea36f58020cae6efa4ccc60297a4b32794a0d38d53",
-    "docs/library-browser/evidence/source-review-regressions.json": "37c4eb508830bfafeffb40f622a538727db3b41e2e0641e9b8921ca86af30f87"
+    "docs/research/timmer-library/inventory.json": "36d747dadb572d4c53582d062a74fe41afe467e94d23c195df6c3e0e79ecd921",
+    "docs/research/timmer-library/asset-links.json": "87afcf84830427a55adc482a69040bedc965ca36ff8f24571f865e338b4b1370",
+    "docs/library-browser/evidence/catalog-build.json": "feda31b9f5e9513a2e7727206ba1aa0c7cee69e8e23209d2fa41ca86fd94d5d7",
+    "docs/library-browser/evidence/node-tests.txt": "cf24a0b65be36147ae356915fe616d064ddaa5a7427cf35eeefa08da2214beaa",
+    "docs/library-browser/evidence/source-review-regressions.mjs": "42cd5b4df3192381e32cd30ea2be7f9e82ec9d5dcfa14e745fc7b992c4e2ef6e",
+    "docs/library-browser/evidence/source-review-regressions.json": "c7ce1fbfa58f03b48324ef1aa03ead693251a0853ae7defd4c95f73277b98450",
+    "engine/cli.mjs": "fde77dad87970c3aee7c7fa8a4eabb8031cfdc643b7be4ce9725c4704c9183c2",
+    "docs/library-browser/evidence/cli-smoke.json": "3a3f6d897cadda4c38609e0d6f2c9f21294377830ef531719d3ede9c4856a084"
   },
   "finalBundleChecks": {
     "engineAndUiSourcesUnchanged": true,
@@ -157,19 +159,33 @@
     "packageIssueCount": 0,
     "independentRegressionsPassed": 17,
     "recordAndFormatIdentitiesUnique": true,
-    "expectationsCaseMappingsMatch": true
+    "expectationsCaseMappingsMatch": true,
+    "engineAndUiComparisonScope": "Tracked library-browser, library-browser-build, variation-ledger and engine/ui/library-browser files only; engine/cli.mjs changed and is separately reviewed/bound.",
+    "anchorCaseMappingsMatch": true,
+    "currentProducerLedgerCliSmokePass": true
   },
   "producerFullSuite": {
-    "passed": 185,
-    "total": 185,
+    "passed": 188,
+    "total": 188,
     "skipped": 0,
     "failed": 0,
     "reviewerReran": false,
     "note": "Producer reports current gated full-suite pass; reviewer inspected retained node-tests.txt summary."
   },
-  "refreshedAt": "2026-10-03T08:19:47.806463+00:00",
+  "refreshedAt": "2026-10-03T09:10:52.047399+00:00",
   "sourceChangesSincePriorReview": [
     "docs/research/timmer-library/asset-links.json",
-    "test/library-browser.test.mjs"
-  ]
+    "engine/cli.mjs (new anchor command; separately bound)"
+  ],
+  "producerLedgerCliSmoke": {
+    "checkedAt": "2026-10-03T09:08:50.558Z",
+    "commands": [
+      "library-log",
+      "library-variation"
+    ],
+    "passed": 2,
+    "reviewerReran": false,
+    "sourceStoryboardHashMatches": true,
+    "scope": "Producer current rerun; retained results inspected. CLI changes add anchor help, definition flag, and guarded asset-anchors dispatch; not an unchanged-full-CLI claim."
+  }
 }

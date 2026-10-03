@@ -1,0 +1,130 @@
+[
+  {
+    "name": "access-gate-landscape",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 28,
+      "families": 2,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "access-gate-vertical",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 28,
+      "families": 2,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "alternate-route-landscape",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 28,
+      "families": 2,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "alternate-route-vertical",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 28,
+      "families": 2,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "fixed-bottleneck-landscape",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 28,
+      "families": 2,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "fixed-bottleneck-vertical",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 28,
+      "families": 2,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "settled-level-landscape",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 28,
+      "families": 2,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "settled-level-vertical",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 28,
+      "families": 2,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  }
+]

@@ -1,0 +1,62 @@
+{
+  "scope": "Fake Blender control-flow fixtures, including vertex-count changes; not face/edge connectivity, material animation, Blender projection, actual saved-scene replay, occlusion or rendered appearance evidence",
+  "checks": [
+    {
+      "name": "All three half-open source frames map to Blender frames 1,2,3",
+      "passed": true
+    },
+    {
+      "name": "Nonzero half-open subrange visits exactly Blender frames 2,3",
+      "passed": true
+    },
+    {
+      "name": "A one-frame hold checks its one source frame",
+      "passed": true
+    },
+    {
+      "name": "Moving middle frame fails even when endpoints would agree",
+      "passed": true
+    },
+    {
+      "name": "Intermediate evaluated vertex-count change fails",
+      "passed": true
+    },
+    {
+      "name": "Camera movement fails even when fake projection is held",
+      "passed": true
+    },
+    {
+      "name": "Geometry before camera near plane fails",
+      "passed": true
+    },
+    {
+      "name": "Range outside saved scene fails before traversal",
+      "passed": true
+    },
+    {
+      "name": "Copy zone overlapping mesh fails",
+      "passed": true
+    },
+    {
+      "name": "Separated zone violating padding fails",
+      "passed": true
+    },
+    {
+      "name": "Zone separated beyond padding succeeds",
+      "passed": true
+    },
+    {
+      "name": "Nonsquare source pixels reject",
+      "passed": true
+    },
+    {
+      "name": "Source FPS mismatch rejects",
+      "passed": true
+    },
+    {
+      "name": "Source dimension mismatch rejects",
+      "passed": true
+    }
+  ],
+  "passed": 14
+}

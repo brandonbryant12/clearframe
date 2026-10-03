@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "frames": [
+    154,
+    192
+  ],
+  "subjects": [
+    "Conveyor plinth",
+    "Incoming belt",
+    "Outgoing belt",
+    "Narrow main connector",
+    "Bypass descent",
+    "Bypass crossing",
+    "Bypass ascent",
+    "Fixed narrow main neck",
+    "Fixed narrow main neck.001",
+    "Main neck overhead link",
+    "Bypass gate guide",
+    "Bypass gate guide.001",
+    "Alternate passage gate",
+    "Bypass gate crosshead",
+    "Incoming guide stripe",
+    "Outgoing guide stripe",
+    "Incoming guide stripe.001",
+    "Outgoing guide stripe.001",
+    "Outer bypass guide stripe",
+    "Outer bypass guide stripe.001",
+    "Lower bypass guide stripe",
+    "Packet metal rim 0",
+    "Packet ceramic face 0",
+    "Packet metal rim 1",
+    "Packet ceramic face 1",
+    "Packet metal rim 2",
+    "Packet ceramic face 2",
+    "Packet metal rim 3",
+    "Packet ceramic face 3"
+  ],
+  "anchors": [
+    {
+      "id": "alternate-gate",
+      "object": "Alternate passage gate",
+      "local": [
+        0,
+        -0.45,
+        0.2
+      ]
+    },
+    {
+      "id": "main-neck",
+      "object": "Main neck overhead link",
+      "local": [
+        0,
+        -0.675,
+        0.065
+      ]
+    }
+  ],
+  "copyZones": [
+    {
+      "id": "heading",
+      "rect": [
+        0.105,
+        0.1,
+        0.79,
+        0.075
+      ]
+    },
+    {
+      "id": "callout",
+      "rect": [
+        0.105,
+        0.21,
+        0.79,
+        0.08
+      ]
+    },
+    {
+      "id": "source",
+      "rect": [
+        0.105,
+        0.87,
+        0.79,
+        0.06
+      ]
+    }
+  ],
+  "padding": 0.02
+}

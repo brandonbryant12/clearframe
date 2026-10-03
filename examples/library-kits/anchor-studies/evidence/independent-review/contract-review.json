@@ -1,0 +1,6 @@
+{
+  "checks": 501,
+  "passed": 501,
+  "sourceSha256": "5831b4dd3eb3a43f8ddc60cb6ddf0999721a9e4acdaaddc7af97b58ce9cba4bf",
+  "scope": "Independent centered geometry across 32 contain/cover boxes; three label alignments; static frame boundaries; source-byte and path guards; rejection before Blender of an occupied output or changed source; numerical collapse regressions. No real Blender projection, render, browser, visibility or occlusion proof."
+}

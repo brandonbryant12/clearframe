@@ -332,6 +332,81 @@
   ],
   "packages": [
     {
+      "id": "anchor-studies",
+      "title": "Anchor studies",
+      "purpose": "Attach editable native labels to source-bound static prepared-asset points and reserved copy zones.",
+      "status": "prototype",
+      "integrity": "verified",
+      "fileCount": 286,
+      "issues": [],
+      "inventoryIds": [
+        "T03"
+      ],
+      "manifest": "examples/library-kits/anchor-studies/kit.json",
+      "preview": "examples/library-kits/anchor-studies/preview.html",
+      "readme": "examples/library-kits/anchor-studies/README.md",
+      "review": "examples/library-kits/anchor-studies/REVIEW.md",
+      "sources": null,
+      "tags": {
+        "purpose": [
+          "annotate",
+          "explain-mechanism"
+        ],
+        "appearance": [
+          "paper",
+          "porcelain",
+          "glass"
+        ],
+        "movement": [
+          "mechanism-action",
+          "static-attachment",
+          "reading-hold"
+        ],
+        "format": [
+          "landscape",
+          "vertical"
+        ],
+        "subject": [
+          "access",
+          "levels",
+          "routes",
+          "bottlenecks"
+        ]
+      },
+      "editable": {
+        "native": [
+          "copy",
+          "label placement",
+          "timing",
+          "leader",
+          "ring"
+        ],
+        "fixedClip": [
+          "Prepared mechanism pixels; regenerate geometry exports and review after source edits"
+        ]
+      },
+      "requires": {
+        "replay": [
+          "ClearFrame native compositor",
+          "bundled fonts"
+        ],
+        "preparation": [
+          "Node.js",
+          "Blender",
+          "FFmpeg",
+          "Python 3",
+          "Original physical-mechanisms prepared scenes and receipts"
+        ]
+      },
+      "evidence": {
+        "summary": "evidence/summary.json",
+        "review": "REVIEW.md",
+        "encoded": "evidence/encoded-checks.json",
+        "implementation": "evidence/implementation.json",
+        "continuousPlayback": "unverified"
+      }
+    },
+    {
       "id": "balance-study",
       "title": "Balance study",
       "purpose": "Introduce competing forces and return to matched native evidence",
@@ -1086,6 +1161,250 @@
     }
   ],
   "records": [
+    {
+      "id": "anchor-studies/access-gate",
+      "kind": "example",
+      "title": "Access follows an open gate",
+      "packageId": "anchor-studies",
+      "inventoryIds": [
+        "T03"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/anchor-studies/specimens/access-gate-landscape/storyboard.json",
+          "video": "examples/library-kits/anchor-studies/evidence/access-gate-landscape/video.mp4",
+          "poster": "examples/library-kits/anchor-studies/evidence/independent-review/access-gate-landscape/27.9s.png",
+          "receipt": "examples/library-kits/anchor-studies/evidence/access-gate-landscape/video.mp4.json",
+          "duration": 28,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/anchor-studies/specimens/access-gate-vertical/storyboard.json",
+          "video": "examples/library-kits/anchor-studies/evidence/access-gate-vertical/video.mp4",
+          "poster": "examples/library-kits/anchor-studies/evidence/independent-review/access-gate-vertical/27.9s.png",
+          "receipt": "examples/library-kits/anchor-studies/evidence/access-gate-vertical/video.mp4.json",
+          "duration": 28,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Attach editable native labels to source-bound static prepared-asset points and reserved copy zones.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "annotate",
+        "explain-mechanism"
+      ],
+      "appearance": [
+        "paper",
+        "porcelain",
+        "glass"
+      ],
+      "movement": [
+        "mechanism-action",
+        "static-attachment",
+        "reading-hold"
+      ],
+      "subjects": [
+        "access",
+        "levels",
+        "routes",
+        "bottlenecks"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S08",
+        "S09",
+        "S17"
+      ],
+      "search": "access follows an open gate attach editable native labels to source-bound static prepared-asset points and reserved copy zones. t03 annotate explain-mechanism paper porcelain glass mechanism-action static-attachment reading-hold access levels routes bottlenecks s08 s09 s17 asset anchors and copy zones export subject bounds, safe label regions and handoff points for each prepared asset and format. anchors safe rectangles occlusion intervals aspect ratio all compositing"
+    },
+    {
+      "id": "anchor-studies/alternate-route",
+      "kind": "example",
+      "title": "A separate route carries the packets",
+      "packageId": "anchor-studies",
+      "inventoryIds": [
+        "T03"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/anchor-studies/specimens/alternate-route-landscape/storyboard.json",
+          "video": "examples/library-kits/anchor-studies/evidence/alternate-route-landscape/video.mp4",
+          "poster": "examples/library-kits/anchor-studies/evidence/independent-review/alternate-route-landscape/27.9s.png",
+          "receipt": "examples/library-kits/anchor-studies/evidence/alternate-route-landscape/video.mp4.json",
+          "duration": 28,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/anchor-studies/specimens/alternate-route-vertical/storyboard.json",
+          "video": "examples/library-kits/anchor-studies/evidence/alternate-route-vertical/video.mp4",
+          "poster": "examples/library-kits/anchor-studies/evidence/independent-review/alternate-route-vertical/27.9s.png",
+          "receipt": "examples/library-kits/anchor-studies/evidence/alternate-route-vertical/video.mp4.json",
+          "duration": 28,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Attach editable native labels to source-bound static prepared-asset points and reserved copy zones.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "annotate",
+        "explain-mechanism"
+      ],
+      "appearance": [
+        "paper",
+        "porcelain",
+        "glass"
+      ],
+      "movement": [
+        "mechanism-action",
+        "static-attachment",
+        "reading-hold"
+      ],
+      "subjects": [
+        "access",
+        "levels",
+        "routes",
+        "bottlenecks"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S08",
+        "S09",
+        "S17"
+      ],
+      "search": "a separate route carries the packets attach editable native labels to source-bound static prepared-asset points and reserved copy zones. t03 annotate explain-mechanism paper porcelain glass mechanism-action static-attachment reading-hold access levels routes bottlenecks s08 s09 s17 asset anchors and copy zones export subject bounds, safe label regions and handoff points for each prepared asset and format. anchors safe rectangles occlusion intervals aspect ratio all compositing"
+    },
+    {
+      "id": "anchor-studies/fixed-bottleneck",
+      "kind": "example",
+      "title": "The original bottleneck remains",
+      "packageId": "anchor-studies",
+      "inventoryIds": [
+        "T03"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/anchor-studies/specimens/fixed-bottleneck-landscape/storyboard.json",
+          "video": "examples/library-kits/anchor-studies/evidence/fixed-bottleneck-landscape/video.mp4",
+          "poster": "examples/library-kits/anchor-studies/evidence/independent-review/fixed-bottleneck-landscape/27.9s.png",
+          "receipt": "examples/library-kits/anchor-studies/evidence/fixed-bottleneck-landscape/video.mp4.json",
+          "duration": 28,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/anchor-studies/specimens/fixed-bottleneck-vertical/storyboard.json",
+          "video": "examples/library-kits/anchor-studies/evidence/fixed-bottleneck-vertical/video.mp4",
+          "poster": "examples/library-kits/anchor-studies/evidence/independent-review/fixed-bottleneck-vertical/27.9s.png",
+          "receipt": "examples/library-kits/anchor-studies/evidence/fixed-bottleneck-vertical/video.mp4.json",
+          "duration": 28,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Attach editable native labels to source-bound static prepared-asset points and reserved copy zones.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "annotate",
+        "explain-mechanism"
+      ],
+      "appearance": [
+        "paper",
+        "porcelain",
+        "glass"
+      ],
+      "movement": [
+        "mechanism-action",
+        "static-attachment",
+        "reading-hold"
+      ],
+      "subjects": [
+        "access",
+        "levels",
+        "routes",
+        "bottlenecks"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S08",
+        "S09",
+        "S17"
+      ],
+      "search": "the original bottleneck remains attach editable native labels to source-bound static prepared-asset points and reserved copy zones. t03 annotate explain-mechanism paper porcelain glass mechanism-action static-attachment reading-hold access levels routes bottlenecks s08 s09 s17 asset anchors and copy zones export subject bounds, safe label regions and handoff points for each prepared asset and format. anchors safe rectangles occlusion intervals aspect ratio all compositing"
+    },
+    {
+      "id": "anchor-studies/settled-level",
+      "kind": "example",
+      "title": "The levels settle after transfer",
+      "packageId": "anchor-studies",
+      "inventoryIds": [
+        "T03"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/anchor-studies/specimens/settled-level-landscape/storyboard.json",
+          "video": "examples/library-kits/anchor-studies/evidence/settled-level-landscape/video.mp4",
+          "poster": "examples/library-kits/anchor-studies/evidence/independent-review/settled-level-landscape/27.9s.png",
+          "receipt": "examples/library-kits/anchor-studies/evidence/settled-level-landscape/video.mp4.json",
+          "duration": 28,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/anchor-studies/specimens/settled-level-vertical/storyboard.json",
+          "video": "examples/library-kits/anchor-studies/evidence/settled-level-vertical/video.mp4",
+          "poster": "examples/library-kits/anchor-studies/evidence/independent-review/settled-level-vertical/27.9s.png",
+          "receipt": "examples/library-kits/anchor-studies/evidence/settled-level-vertical/video.mp4.json",
+          "duration": 28,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Attach editable native labels to source-bound static prepared-asset points and reserved copy zones.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "annotate",
+        "explain-mechanism"
+      ],
+      "appearance": [
+        "paper",
+        "porcelain",
+        "glass"
+      ],
+      "movement": [
+        "mechanism-action",
+        "static-attachment",
+        "reading-hold"
+      ],
+      "subjects": [
+        "access",
+        "levels",
+        "routes",
+        "bottlenecks"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S08",
+        "S09",
+        "S17"
+      ],
+      "search": "the levels settle after transfer attach editable native labels to source-bound static prepared-asset points and reserved copy zones. t03 annotate explain-mechanism paper porcelain glass mechanism-action static-attachment reading-hold access levels routes bottlenecks s08 s09 s17 asset anchors and copy zones export subject bounds, safe label regions and handoff points for each prepared asset and format. anchors safe rectangles occlusion intervals aspect ratio all compositing"
+    },
     {
       "id": "balance-study/balance-study",
       "kind": "example",
@@ -6045,18 +6364,23 @@
         "T03"
       ],
       "medium": "Tool",
-      "statusText": "proposed; not built",
-      "guardrail": "Do not assume tracked 3D labels already work; begin with static end-pose anchors.",
+      "statusText": "partial prototype; static anchors and copy zones verified; tracking and occlusion remain open",
+      "guardrail": "Static geometry and copy-zone clearance do not establish visibility, occlusion, shadows or glyph fit. Re-export changed sources; review native encoded layouts. Moving labels and occlusion intervals remain open.",
       "parameters": [
         "anchors",
         "safe rectangles",
         "occlusion intervals",
         "aspect ratio"
       ],
-      "related": [],
+      "related": [
+        "anchor-studies/access-gate",
+        "anchor-studies/alternate-route",
+        "anchor-studies/fixed-bottleneck",
+        "anchor-studies/settled-level"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],

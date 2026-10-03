@@ -1,0 +1,990 @@
+{
+  "version": 1,
+  "inputSha256": "24516f048b4aada3af1f52a1454f21e49612f84f905df2e0616a92a5e2f20b29",
+  "results": [
+    {
+      "name": "access-gate-landscape",
+      "recipe": "T03",
+      "caseId": "access-gate",
+      "preset": "landscape",
+      "mediaName": "reservoir-landscape",
+      "sourceAsset": "examples/library-kits/physical-mechanisms/media/reservoir-landscape",
+      "sourceClipSha256": "309050de4eec62c901c215cf91c25989f510bd55215bce0fd746c57e07cc0c46",
+      "sourceSceneSha256": "2d56feb98cb68505f0664ef249591d72adb20e6717473488d4fa961793391c84",
+      "anchorManifestSha256": "f5950be8569ee14d514a254c34fd2bf938bf9c2335db3e92c77948ece700066b",
+      "holdClipSha256": "f9610fe3f071053db03e0c2fbfb8b30bc0911e2cf6ee1356f2cc544760551fca",
+      "heldSourceFrame": 191,
+      "staticFrames": [
+        154,
+        192
+      ],
+      "anchorId": "gate",
+      "placement": {
+        "frame": 191,
+        "fit": "cover",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "mediaRect": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "subjectBounds": [
+          545.8065032958984,
+          262.4613404273987,
+          828.3868789672852,
+          652.2772908210754
+        ],
+        "anchors": [
+          {
+            "id": "gate",
+            "point": [
+              982.8733062744141,
+              592.8158390522003
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          },
+          {
+            "id": "level",
+            "point": [
+              758.8070297241211,
+              669.2762732505798
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          }
+        ],
+        "copyZones": [
+          {
+            "id": "heading",
+            "rect": [
+              201.6,
+              70.2,
+              1516.8000000000002,
+              75.60000000000001
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "callout",
+            "rect": [
+              201.6,
+              156.6,
+              1516.8000000000002,
+              64.8
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "source",
+            "rect": [
+              201.6,
+              945,
+              1516.8000000000002,
+              64.8
+            ],
+            "fullyVisible": true
+          }
+        ],
+        "sourceSha256": "309050de4eec62c901c215cf91c25989f510bd55215bce0fd746c57e07cc0c46"
+      },
+      "labelRect": {
+        "x": 220.80000000000004,
+        "y": 156.6,
+        "width": 1478.4,
+        "height": 64.8
+      },
+      "titleRect": {
+        "x": 220.80000000000004,
+        "y": 70.2,
+        "width": 1478.4,
+        "height": 75.60000000000001
+      },
+      "sourceRect": {
+        "x": 220.80000000000004,
+        "y": 946.488,
+        "width": 1478.4,
+        "height": 61.82399999999999
+      },
+      "leader": {
+        "from": [
+          960.0000000000001,
+          229.39999999999998
+        ],
+        "to": [
+          982.8733062744141,
+          585.1358390522004
+        ]
+      },
+      "radius": 7.68,
+      "storyboardSha256": "9d10b9d93c045be143011fb9457ecabac0268b9ed614d087abc11e6b3502da40"
+    },
+    {
+      "name": "access-gate-vertical",
+      "recipe": "T03",
+      "caseId": "access-gate",
+      "preset": "vertical",
+      "mediaName": "reservoir-vertical",
+      "sourceAsset": "examples/library-kits/physical-mechanisms/media/reservoir-vertical",
+      "sourceClipSha256": "619f4501808f04d8b19a9e2d16e673c20667cfd2f4fc927074304bf3e481ace0",
+      "sourceSceneSha256": "f4e3f3d375db61e3c095c174e3d3d678fbca7a0536c5778575fabbd8e0554132",
+      "anchorManifestSha256": "6a9a7c5ad9ebc9268d6527cefce57281c84561a04e4b6cf29f1105a71d0ee324",
+      "holdClipSha256": "55b970dc33a8fb658b5f88c9f28c10a8719daadc97d0e07e24d7b3851ee5df0c",
+      "heldSourceFrame": 191,
+      "staticFrames": [
+        154,
+        192
+      ],
+      "anchorId": "gate",
+      "placement": {
+        "frame": 191,
+        "fit": "cover",
+        "box": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "mediaRect": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "subjectBounds": [
+          90.8910459280014,
+          639.3414688110352,
+          898.2177954912186,
+          718.1169891357422
+        ],
+        "anchors": [
+          {
+            "id": "gate",
+            "point": [
+              564.8015069961548,
+              996.4117813110352
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          },
+          {
+            "id": "level",
+            "point": [
+              321.84696078300476,
+              1079.5264434814453
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          }
+        ],
+        "copyZones": [
+          {
+            "id": "heading",
+            "rect": [
+              113.39999999999999,
+              192,
+              853.2,
+              144
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "callout",
+            "rect": [
+              113.39999999999999,
+              403.2,
+              853.2,
+              153.6
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "source",
+            "rect": [
+              113.39999999999999,
+              1670.4,
+              853.2,
+              115.19999999999999
+            ],
+            "fullyVisible": true
+          }
+        ],
+        "sourceSha256": "619f4501808f04d8b19a9e2d16e673c20667cfd2f4fc927074304bf3e481ace0"
+      },
+      "labelRect": {
+        "x": 124.2,
+        "y": 403.2,
+        "width": 831.6,
+        "height": 153.6
+      },
+      "titleRect": {
+        "x": 124.2,
+        "y": 192,
+        "width": 831.6,
+        "height": 144
+      },
+      "sourceRect": {
+        "x": 124.2,
+        "y": 1708.1280000000002,
+        "width": 831.6,
+        "height": 39.744
+      },
+      "leader": {
+        "from": [
+          540,
+          564.8
+        ],
+        "to": [
+          564.8015069961548,
+          992.0917813110351
+        ]
+      },
+      "radius": 4.32,
+      "storyboardSha256": "dc83d5a476c99bcff0ef50c75fc6382e837853568b6dacb9846524822c690817"
+    },
+    {
+      "name": "settled-level-landscape",
+      "recipe": "T03",
+      "caseId": "settled-level",
+      "preset": "landscape",
+      "mediaName": "reservoir-landscape",
+      "sourceAsset": "examples/library-kits/physical-mechanisms/media/reservoir-landscape",
+      "sourceClipSha256": "309050de4eec62c901c215cf91c25989f510bd55215bce0fd746c57e07cc0c46",
+      "sourceSceneSha256": "2d56feb98cb68505f0664ef249591d72adb20e6717473488d4fa961793391c84",
+      "anchorManifestSha256": "f5950be8569ee14d514a254c34fd2bf938bf9c2335db3e92c77948ece700066b",
+      "holdClipSha256": "f9610fe3f071053db03e0c2fbfb8b30bc0911e2cf6ee1356f2cc544760551fca",
+      "heldSourceFrame": 191,
+      "staticFrames": [
+        154,
+        192
+      ],
+      "anchorId": "level",
+      "placement": {
+        "frame": 191,
+        "fit": "cover",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "mediaRect": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "subjectBounds": [
+          545.8065032958984,
+          262.4613404273987,
+          828.3868789672852,
+          652.2772908210754
+        ],
+        "anchors": [
+          {
+            "id": "gate",
+            "point": [
+              982.8733062744141,
+              592.8158390522003
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          },
+          {
+            "id": "level",
+            "point": [
+              758.8070297241211,
+              669.2762732505798
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          }
+        ],
+        "copyZones": [
+          {
+            "id": "heading",
+            "rect": [
+              201.6,
+              70.2,
+              1516.8000000000002,
+              75.60000000000001
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "callout",
+            "rect": [
+              201.6,
+              156.6,
+              1516.8000000000002,
+              64.8
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "source",
+            "rect": [
+              201.6,
+              945,
+              1516.8000000000002,
+              64.8
+            ],
+            "fullyVisible": true
+          }
+        ],
+        "sourceSha256": "309050de4eec62c901c215cf91c25989f510bd55215bce0fd746c57e07cc0c46"
+      },
+      "labelRect": {
+        "x": 220.80000000000004,
+        "y": 156.6,
+        "width": 1478.4,
+        "height": 64.8
+      },
+      "titleRect": {
+        "x": 220.80000000000004,
+        "y": 70.2,
+        "width": 1478.4,
+        "height": 75.60000000000001
+      },
+      "sourceRect": {
+        "x": 220.80000000000004,
+        "y": 946.488,
+        "width": 1478.4,
+        "height": 61.82399999999999
+      },
+      "leader": {
+        "from": [
+          960.0000000000001,
+          229.39999999999998
+        ],
+        "to": [
+          758.8070297241211,
+          661.5962732505799
+        ]
+      },
+      "radius": 7.68,
+      "storyboardSha256": "754d6f7e6115e877b0afe087b8b3a97e2e78d8b9b2671fbe61783684aac354cc"
+    },
+    {
+      "name": "settled-level-vertical",
+      "recipe": "T03",
+      "caseId": "settled-level",
+      "preset": "vertical",
+      "mediaName": "reservoir-vertical",
+      "sourceAsset": "examples/library-kits/physical-mechanisms/media/reservoir-vertical",
+      "sourceClipSha256": "619f4501808f04d8b19a9e2d16e673c20667cfd2f4fc927074304bf3e481ace0",
+      "sourceSceneSha256": "f4e3f3d375db61e3c095c174e3d3d678fbca7a0536c5778575fabbd8e0554132",
+      "anchorManifestSha256": "6a9a7c5ad9ebc9268d6527cefce57281c84561a04e4b6cf29f1105a71d0ee324",
+      "holdClipSha256": "55b970dc33a8fb658b5f88c9f28c10a8719daadc97d0e07e24d7b3851ee5df0c",
+      "heldSourceFrame": 191,
+      "staticFrames": [
+        154,
+        192
+      ],
+      "anchorId": "level",
+      "placement": {
+        "frame": 191,
+        "fit": "cover",
+        "box": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "mediaRect": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "subjectBounds": [
+          90.8910459280014,
+          639.3414688110352,
+          898.2177954912186,
+          718.1169891357422
+        ],
+        "anchors": [
+          {
+            "id": "gate",
+            "point": [
+              564.8015069961548,
+              996.4117813110352
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          },
+          {
+            "id": "level",
+            "point": [
+              321.84696078300476,
+              1079.5264434814453
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          }
+        ],
+        "copyZones": [
+          {
+            "id": "heading",
+            "rect": [
+              113.39999999999999,
+              192,
+              853.2,
+              144
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "callout",
+            "rect": [
+              113.39999999999999,
+              403.2,
+              853.2,
+              153.6
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "source",
+            "rect": [
+              113.39999999999999,
+              1670.4,
+              853.2,
+              115.19999999999999
+            ],
+            "fullyVisible": true
+          }
+        ],
+        "sourceSha256": "619f4501808f04d8b19a9e2d16e673c20667cfd2f4fc927074304bf3e481ace0"
+      },
+      "labelRect": {
+        "x": 124.2,
+        "y": 403.2,
+        "width": 831.6,
+        "height": 153.6
+      },
+      "titleRect": {
+        "x": 124.2,
+        "y": 192,
+        "width": 831.6,
+        "height": 144
+      },
+      "sourceRect": {
+        "x": 124.2,
+        "y": 1708.1280000000002,
+        "width": 831.6,
+        "height": 39.744
+      },
+      "leader": {
+        "from": [
+          540,
+          564.8
+        ],
+        "to": [
+          321.84696078300476,
+          1075.2064434814454
+        ]
+      },
+      "radius": 4.32,
+      "storyboardSha256": "9aca13c345f0f848201b3bec27ef544ce4a93c49fb3b00fccc59e3d5d6e9c0f4"
+    },
+    {
+      "name": "alternate-route-landscape",
+      "recipe": "T03",
+      "caseId": "alternate-route",
+      "preset": "landscape",
+      "mediaName": "conveyor-landscape",
+      "sourceAsset": "examples/library-kits/physical-mechanisms/media/conveyor-landscape",
+      "sourceClipSha256": "f42e7aa4c7b88a1e03cdbbb05854490c27f940787b4c650ee3e952988c5942b6",
+      "sourceSceneSha256": "849bb760b15a56b929acc6181afc2db407b2b3c6ab60e4877a18b7e1700ae4cb",
+      "anchorManifestSha256": "5edc08e1528934525e1b79b37c7ee4344a4346c3b0a51a3711086d6a823d101e",
+      "holdClipSha256": "64e4c81cb635cef1a61bcf5f59ac35c47733e7c086786a05104837a705fbe87c",
+      "heldSourceFrame": 191,
+      "staticFrames": [
+        154,
+        192
+      ],
+      "anchorId": "alternate-gate",
+      "placement": {
+        "frame": 191,
+        "fit": "cover",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "mediaRect": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "subjectBounds": [
+          440.1316165924072,
+          262.4613404273987,
+          1039.736623764038,
+          652.2772264480591
+        ],
+        "anchors": [
+          {
+            "id": "alternate-gate",
+            "point": [
+              1019.6114730834961,
+              583.2930743694305
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          },
+          {
+            "id": "main-neck",
+            "point": [
+              920.9597396850586,
+              508.65278720855713
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          }
+        ],
+        "copyZones": [
+          {
+            "id": "heading",
+            "rect": [
+              201.6,
+              70.2,
+              1516.8000000000002,
+              75.60000000000001
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "callout",
+            "rect": [
+              201.6,
+              156.6,
+              1516.8000000000002,
+              64.8
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "source",
+            "rect": [
+              201.6,
+              945,
+              1516.8000000000002,
+              64.8
+            ],
+            "fullyVisible": true
+          }
+        ],
+        "sourceSha256": "f42e7aa4c7b88a1e03cdbbb05854490c27f940787b4c650ee3e952988c5942b6"
+      },
+      "labelRect": {
+        "x": 220.80000000000004,
+        "y": 156.6,
+        "width": 1478.4,
+        "height": 64.8
+      },
+      "titleRect": {
+        "x": 220.80000000000004,
+        "y": 70.2,
+        "width": 1478.4,
+        "height": 75.60000000000001
+      },
+      "sourceRect": {
+        "x": 220.80000000000004,
+        "y": 946.488,
+        "width": 1478.4,
+        "height": 61.82399999999999
+      },
+      "leader": {
+        "from": [
+          960.0000000000001,
+          229.39999999999998
+        ],
+        "to": [
+          1019.6114730834961,
+          575.6130743694306
+        ]
+      },
+      "radius": 7.68,
+      "storyboardSha256": "5dde454a4f337588f051ce12f08d66318bf8360d93c387efd11425a77e0b0255"
+    },
+    {
+      "name": "alternate-route-vertical",
+      "recipe": "T03",
+      "caseId": "alternate-route",
+      "preset": "vertical",
+      "mediaName": "conveyor-vertical",
+      "sourceAsset": "examples/library-kits/physical-mechanisms/media/conveyor-vertical",
+      "sourceClipSha256": "3b3c92c050a195f73116991e1a45f8384adde3849e3d5660eb6f64989cf28187",
+      "sourceSceneSha256": "82b06ffeef0ce7fd96387dafb2ee69b546a5742f151bd1eae5db62c3f3964294",
+      "anchorManifestSha256": "eea4eb2d28c496ca094784f94efee083262bd0b9b450e57c311c932861236069",
+      "holdClipSha256": "3d5c40ab4e4639c47ba47b6ad4076deb34a0c8fba8976c135f0a90a518131819",
+      "heldSourceFrame": 191,
+      "staticFrames": [
+        154,
+        192
+      ],
+      "anchorId": "alternate-gate",
+      "placement": {
+        "frame": 191,
+        "fit": "cover",
+        "box": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "mediaRect": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "subjectBounds": [
+          90.8911344408989,
+          716.6522598266602,
+          898.2177713513374,
+          563.4955215454102
+        ],
+        "anchors": [
+          {
+            "id": "alternate-gate",
+            "point": [
+              591.4977693557739,
+              993.8154602050781
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          },
+          {
+            "id": "main-neck",
+            "point": [
+              506.2736248970032,
+              929.3345260620117
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          }
+        ],
+        "copyZones": [
+          {
+            "id": "heading",
+            "rect": [
+              113.39999999999999,
+              192,
+              853.2,
+              144
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "callout",
+            "rect": [
+              113.39999999999999,
+              403.2,
+              853.2,
+              153.6
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "source",
+            "rect": [
+              113.39999999999999,
+              1670.4,
+              853.2,
+              115.19999999999999
+            ],
+            "fullyVisible": true
+          }
+        ],
+        "sourceSha256": "3b3c92c050a195f73116991e1a45f8384adde3849e3d5660eb6f64989cf28187"
+      },
+      "labelRect": {
+        "x": 124.2,
+        "y": 403.2,
+        "width": 831.6,
+        "height": 153.6
+      },
+      "titleRect": {
+        "x": 124.2,
+        "y": 192,
+        "width": 831.6,
+        "height": 144
+      },
+      "sourceRect": {
+        "x": 124.2,
+        "y": 1708.1280000000002,
+        "width": 831.6,
+        "height": 39.744
+      },
+      "leader": {
+        "from": [
+          540,
+          564.8
+        ],
+        "to": [
+          591.4977693557739,
+          989.4954602050781
+        ]
+      },
+      "radius": 4.32,
+      "storyboardSha256": "9ea040a51a52f27ff1bb480808b975ebe79b023392282a91b3938718cbb6b066"
+    },
+    {
+      "name": "fixed-bottleneck-landscape",
+      "recipe": "T03",
+      "caseId": "fixed-bottleneck",
+      "preset": "landscape",
+      "mediaName": "conveyor-landscape",
+      "sourceAsset": "examples/library-kits/physical-mechanisms/media/conveyor-landscape",
+      "sourceClipSha256": "f42e7aa4c7b88a1e03cdbbb05854490c27f940787b4c650ee3e952988c5942b6",
+      "sourceSceneSha256": "849bb760b15a56b929acc6181afc2db407b2b3c6ab60e4877a18b7e1700ae4cb",
+      "anchorManifestSha256": "5edc08e1528934525e1b79b37c7ee4344a4346c3b0a51a3711086d6a823d101e",
+      "holdClipSha256": "64e4c81cb635cef1a61bcf5f59ac35c47733e7c086786a05104837a705fbe87c",
+      "heldSourceFrame": 191,
+      "staticFrames": [
+        154,
+        192
+      ],
+      "anchorId": "main-neck",
+      "placement": {
+        "frame": 191,
+        "fit": "cover",
+        "box": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "mediaRect": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "subjectBounds": [
+          440.1316165924072,
+          262.4613404273987,
+          1039.736623764038,
+          652.2772264480591
+        ],
+        "anchors": [
+          {
+            "id": "alternate-gate",
+            "point": [
+              1019.6114730834961,
+              583.2930743694305
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          },
+          {
+            "id": "main-neck",
+            "point": [
+              920.9597396850586,
+              508.65278720855713
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          }
+        ],
+        "copyZones": [
+          {
+            "id": "heading",
+            "rect": [
+              201.6,
+              70.2,
+              1516.8000000000002,
+              75.60000000000001
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "callout",
+            "rect": [
+              201.6,
+              156.6,
+              1516.8000000000002,
+              64.8
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "source",
+            "rect": [
+              201.6,
+              945,
+              1516.8000000000002,
+              64.8
+            ],
+            "fullyVisible": true
+          }
+        ],
+        "sourceSha256": "f42e7aa4c7b88a1e03cdbbb05854490c27f940787b4c650ee3e952988c5942b6"
+      },
+      "labelRect": {
+        "x": 220.80000000000004,
+        "y": 156.6,
+        "width": 1478.4,
+        "height": 64.8
+      },
+      "titleRect": {
+        "x": 220.80000000000004,
+        "y": 70.2,
+        "width": 1478.4,
+        "height": 75.60000000000001
+      },
+      "sourceRect": {
+        "x": 220.80000000000004,
+        "y": 946.488,
+        "width": 1478.4,
+        "height": 61.82399999999999
+      },
+      "leader": {
+        "from": [
+          960.0000000000001,
+          229.39999999999998
+        ],
+        "to": [
+          920.9597396850586,
+          500.9727872085571
+        ]
+      },
+      "radius": 7.68,
+      "storyboardSha256": "68ee5833e2c1a1e399c9032f436ec81531e2922576cc07bc6f2e038115273a05"
+    },
+    {
+      "name": "fixed-bottleneck-vertical",
+      "recipe": "T03",
+      "caseId": "fixed-bottleneck",
+      "preset": "vertical",
+      "mediaName": "conveyor-vertical",
+      "sourceAsset": "examples/library-kits/physical-mechanisms/media/conveyor-vertical",
+      "sourceClipSha256": "3b3c92c050a195f73116991e1a45f8384adde3849e3d5660eb6f64989cf28187",
+      "sourceSceneSha256": "82b06ffeef0ce7fd96387dafb2ee69b546a5742f151bd1eae5db62c3f3964294",
+      "anchorManifestSha256": "eea4eb2d28c496ca094784f94efee083262bd0b9b450e57c311c932861236069",
+      "holdClipSha256": "3d5c40ab4e4639c47ba47b6ad4076deb34a0c8fba8976c135f0a90a518131819",
+      "heldSourceFrame": 191,
+      "staticFrames": [
+        154,
+        192
+      ],
+      "anchorId": "main-neck",
+      "placement": {
+        "frame": 191,
+        "fit": "cover",
+        "box": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "mediaRect": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "subjectBounds": [
+          90.8911344408989,
+          716.6522598266602,
+          898.2177713513374,
+          563.4955215454102
+        ],
+        "anchors": [
+          {
+            "id": "alternate-gate",
+            "point": [
+              591.4977693557739,
+              993.8154602050781
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          },
+          {
+            "id": "main-neck",
+            "point": [
+              506.2736248970032,
+              929.3345260620117
+            ],
+            "inFrame": true,
+            "visibility": "unassessed"
+          }
+        ],
+        "copyZones": [
+          {
+            "id": "heading",
+            "rect": [
+              113.39999999999999,
+              192,
+              853.2,
+              144
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "callout",
+            "rect": [
+              113.39999999999999,
+              403.2,
+              853.2,
+              153.6
+            ],
+            "fullyVisible": true
+          },
+          {
+            "id": "source",
+            "rect": [
+              113.39999999999999,
+              1670.4,
+              853.2,
+              115.19999999999999
+            ],
+            "fullyVisible": true
+          }
+        ],
+        "sourceSha256": "3b3c92c050a195f73116991e1a45f8384adde3849e3d5660eb6f64989cf28187"
+      },
+      "labelRect": {
+        "x": 124.2,
+        "y": 403.2,
+        "width": 831.6,
+        "height": 153.6
+      },
+      "titleRect": {
+        "x": 124.2,
+        "y": 192,
+        "width": 831.6,
+        "height": 144
+      },
+      "sourceRect": {
+        "x": 124.2,
+        "y": 1708.1280000000002,
+        "width": 831.6,
+        "height": 39.744
+      },
+      "leader": {
+        "from": [
+          540,
+          564.8
+        ],
+        "to": [
+          506.2736248970032,
+          925.0145260620117
+        ]
+      },
+      "radius": 4.32,
+      "storyboardSha256": "4673ec5b1a119ad8b14575cf8ff77df91f7c70245515727f3c3e698dc404e90d"
+    }
+  ]
+}

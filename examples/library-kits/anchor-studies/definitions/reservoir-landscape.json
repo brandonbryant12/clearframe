@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "frames": [
+    154,
+    192
+  ],
+  "subjects": [
+    "Reservoir foundation",
+    "Chamber floor",
+    "Transparent front or back",
+    "Panel horizontal trim",
+    "Panel horizontal trim.001",
+    "Transparent front or back.001",
+    "Panel horizontal trim.002",
+    "Panel horizontal trim.003",
+    "Transparent outer end",
+    "Corner upright",
+    "Corner upright.001",
+    "Chamber floor.001",
+    "Transparent front or back.002",
+    "Panel horizontal trim.004",
+    "Panel horizontal trim.005",
+    "Transparent front or back.003",
+    "Panel horizontal trim.006",
+    "Panel horizontal trim.007",
+    "Transparent outer end.001",
+    "Corner upright.002",
+    "Corner upright.003",
+    "Gate guide",
+    "Gate guide.001",
+    "Gate yoke",
+    "Isolation gate",
+    "Connected gate stem",
+    "Fixed handwheel grip",
+    "Left fill",
+    "Left level edge",
+    "Right fill",
+    "Right level edge",
+    "Channel fill strip 00",
+    "Channel fill strip 01",
+    "Channel fill strip 02",
+    "Channel fill strip 03",
+    "Channel fill strip 04",
+    "Channel fill strip 05"
+  ],
+  "anchors": [
+    {
+      "id": "gate",
+      "object": "Isolation gate",
+      "local": [
+        0.075,
+        0.25,
+        0.55
+      ]
+    },
+    {
+      "id": "level",
+      "object": "Left level edge",
+      "local": [
+        0,
+        -0.0125,
+        0
+      ]
+    }
+  ],
+  "copyZones": [
+    {
+      "id": "heading",
+      "rect": [
+        0.105,
+        0.065,
+        0.79,
+        0.07
+      ]
+    },
+    {
+      "id": "callout",
+      "rect": [
+        0.105,
+        0.145,
+        0.79,
+        0.06
+      ]
+    },
+    {
+      "id": "source",
+      "rect": [
+        0.105,
+        0.875,
+        0.79,
+        0.06
+      ]
+    }
+  ],
+  "padding": 0.02
+}

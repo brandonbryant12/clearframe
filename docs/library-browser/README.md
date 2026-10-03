@@ -1,6 +1,6 @@
 # ClearFrame library browser
 
-[Open the local browser](index.html). It indexes retained example packages and the expansion inventory without installing assets or changing their readiness. The current snapshot has nine packages, 45 examples with 88 native format variants plus one prepared Blender insert, and 71 inventory items.
+[Open the local browser](index.html). It indexes retained example packages and the expansion inventory without installing assets or changing their readiness. The current snapshot has ten packages, 49 examples with 96 native format variants plus one prepared Blender insert, and 71 inventory items.
 
 Search by topic, operation, source ID or inventory ID. Collection, purpose, medium and package-state filters narrow examples. The inventory view uses availability states (has example, source only, planned) and retains the full readiness text. A linked example does not mean that the entire inventory proposal is complete. Source attribution and adaptation limits remain beside the selected preview. One controlled video is mounted at a time, with no autoplay or preload.
 
@@ -50,6 +50,6 @@ The displayed candidate thumbnails link back to their retained example. They are
 
 ## Verification and remaining work
 
-See [direction](DIRECTION.md) and [source review](evidence/source-review.md). Focused checks cover real catalog mappings, changed/missing previews, path safety and source-bound ledger behavior. The current full Node suite passes 185/185. Seventeen independent source checks are rerun after catalog expansion; the retained two CLI recording/report smoke checks come from milestone 6a. No browser evidence is claimed.
+See [direction](DIRECTION.md) and [source review](evidence/source-review.md). Focused checks cover real catalog mappings, changed/missing previews, path safety and source-bound ledger behavior. The current full Node suite passes 188/188. Seventeen independent source checks are rerun after catalog expansion; both CLI recording/report smoke checks also pass against the current command source. No browser evidence is claimed.
 
 Actual interactive visual verification is pending. The browser tool rejected `file:` navigation under its URL security policy. Approval has been requested for a scoped localhost-only HTTP preview; no alternative browser route was attempted while that question was pending. Desktop and phone screenshots, keyboard flow, native video controls, export/import and continuous browser playback must be inspected before calling the UI visually verified.

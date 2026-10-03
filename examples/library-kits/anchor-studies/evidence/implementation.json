@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "inputSha256": "24516f048b4aada3af1f52a1454f21e49612f84f905df2e0616a92a5e2f20b29",
+  "sourceFiles": [
+    {
+      "path": "engine/lib/asset-anchors.mjs",
+      "sha256": "5831b4dd3eb3a43f8ddc60cb6ddf0999721a9e4acdaaddc7af97b58ce9cba4bf"
+    },
+    {
+      "path": "scripts/blender/export_anchors.py",
+      "sha256": "a131a5f89837ff0721125402bb252029870aba4f78d5cfcc133f17ac46c8dfbc"
+    },
+    {
+      "path": "engine/cli.mjs",
+      "sha256": "fde77dad87970c3aee7c7fa8a4eabb8031cfdc643b7be4ce9725c4704c9183c2"
+    },
+    {
+      "path": "fframes/job.mjs",
+      "sha256": "de4a304de1002da87812e0434aaa92362847e8d8369e5f439c2244c1b5959ec8"
+    },
+    {
+      "path": "fframes/native/src/canvas.rs",
+      "sha256": "82c1802b887e33bf2c7e7998e02e682b1f159e53dff2d06794831a9330ffc914"
+    }
+  ]
+}

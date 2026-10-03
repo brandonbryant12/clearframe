@@ -1,0 +1,72 @@
+{
+  "status": "pass",
+  "scope": "Every claimed static geometry frame and every decoded held YUV frame; two actual saved-scene rejection cases. Does not establish visibility or continuous playback.",
+  "sourceFiles": {
+    "engine/lib/asset-anchors.mjs": "5831b4dd3eb3a43f8ddc60cb6ddf0999721a9e4acdaaddc7af97b58ce9cba4bf",
+    "scripts/blender/export_anchors.py": "a131a5f89837ff0721125402bb252029870aba4f78d5cfcc133f17ac46c8dfbc"
+  },
+  "variants": [
+    {
+      "name": "reservoir-landscape",
+      "asset": "examples/library-kits/physical-mechanisms/media/reservoir-landscape",
+      "manifestSha256": "f5950be8569ee14d514a254c34fd2bf938bf9c2335db3e92c77948ece700066b",
+      "sourceFrame": 191,
+      "sourceYuvSha256": "f4a083cd57109780f1e4313d73c3e90ab66146479b277b927a9e058160e8ca38",
+      "loopFrames": 48,
+      "allLoopFramesEqualSource": true,
+      "staticFrames": 38,
+      "verticesPerFrame": 3088,
+      "maxCoordinateDrift": 0
+    },
+    {
+      "name": "reservoir-vertical",
+      "asset": "examples/library-kits/physical-mechanisms/media/reservoir-vertical",
+      "manifestSha256": "6a9a7c5ad9ebc9268d6527cefce57281c84561a04e4b6cf29f1105a71d0ee324",
+      "sourceFrame": 191,
+      "sourceYuvSha256": "33e1b26c105aa52770471a3fa0d828591f20082116967cdbf8eb602533e03862",
+      "loopFrames": 48,
+      "allLoopFramesEqualSource": true,
+      "staticFrames": 38,
+      "verticesPerFrame": 3088,
+      "maxCoordinateDrift": 0
+    },
+    {
+      "name": "conveyor-landscape",
+      "asset": "examples/library-kits/physical-mechanisms/media/conveyor-landscape",
+      "manifestSha256": "5edc08e1528934525e1b79b37c7ee4344a4346c3b0a51a3711086d6a823d101e",
+      "sourceFrame": 191,
+      "sourceYuvSha256": "0c675d22d408beb7dc5cc66f64e185926d22a4301796a028ad60e0812ee529b2",
+      "loopFrames": 48,
+      "allLoopFramesEqualSource": true,
+      "staticFrames": 38,
+      "verticesPerFrame": 6112,
+      "maxCoordinateDrift": 0
+    },
+    {
+      "name": "conveyor-vertical",
+      "asset": "examples/library-kits/physical-mechanisms/media/conveyor-vertical",
+      "manifestSha256": "eea4eb2d28c496ca094784f94efee083262bd0b9b450e57c311c932861236069",
+      "sourceFrame": 191,
+      "sourceYuvSha256": "7fc632be062d4b6053d9ac56181b5df3febce28d3f8592d03f236d9d1f255db9",
+      "loopFrames": 48,
+      "allLoopFramesEqualSource": true,
+      "staticFrames": 38,
+      "verticesPerFrame": 6112,
+      "maxCoordinateDrift": 0
+    }
+  ],
+  "negatives": [
+    {
+      "name": "moving-range",
+      "rejected": true,
+      "outputAbsent": true,
+      "reason": "ValueError: Proposed static anchor range moves: frame 24, maximum coordinate drift 0.0029449462890625\n\nError: script failed, file: '/Users/brandon/Development/clearframe-finance-library/scripts/blender/export_anchors.py', exiting.\nBlender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)\n\nBlender quit\n"
+    },
+    {
+      "name": "overlapping-copy",
+      "rejected": true,
+      "outputAbsent": true,
+      "reason": "ValueError: Copy zone bad overlaps projected subject bounds and padding.\n\nError: script failed, file: '/Users/brandon/Development/clearframe-finance-library/scripts/blender/export_anchors.py', exiting.\nBlender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)\n\nBlender quit\n"
+    }
+  ]
+}

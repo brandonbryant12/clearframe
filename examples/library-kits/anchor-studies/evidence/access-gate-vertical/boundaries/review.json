@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/anchor-studies/specimens/access-gate-vertical/build/pipeline/2026-10-03T08-50-08-708Z-2e3f797f/video.mp4",
+  "outputSha256": "e12b6b61b91bb5aa8b995100759186ddf429d89f333d07d96ed90d0ef22019cd",
+  "inputId": "3d32f386ddb6cb1a1b16ecfd7cf2783a76832124fd0aa5baea4beb652481ccac",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "operation: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "operation: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 239,
+      "time": 7.966666666666667,
+      "reasons": [
+        "operation: last frame",
+        "Before registered-hold"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 240,
+      "time": 8,
+      "reasons": [
+        "registered-hold: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 246,
+      "time": 8.2,
+      "reasons": [
+        "registered-hold: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 839,
+      "time": 27.966666666666665,
+      "reasons": [
+        "registered-hold: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

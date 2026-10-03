@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/anchor-studies/specimens/alternate-route-vertical/build/pipeline/2026-10-03T08-59-15-571Z-415ab5d4/video.mp4",
+  "outputSha256": "b6b7d96d44b1f88149ad6beb12eef69a6cb4d73c40cb76a426371ca0ac40d437",
+  "inputId": "aaad81c2347a7ce54118814ca974cb17d7f2af8005bdad8aadbe1ee4c38bd92a",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "operation: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "operation: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 239,
+      "time": 7.966666666666667,
+      "reasons": [
+        "operation: last frame",
+        "Before registered-hold"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 240,
+      "time": 8,
+      "reasons": [
+        "registered-hold: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 246,
+      "time": 8.2,
+      "reasons": [
+        "registered-hold: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 839,
+      "time": 27.966666666666665,
+      "reasons": [
+        "registered-hold: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

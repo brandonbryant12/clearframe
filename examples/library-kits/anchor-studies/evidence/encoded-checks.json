@@ -1,0 +1,3338 @@
+[
+  {
+    "project": "access-gate-landscape",
+    "videoSha256": "3e127d662e3ab69f7e5d8d35bb7af31007aae1a713bed645449b6537aae28eeb",
+    "storyboardSha256": "9d10b9d93c045be143011fb9457ecabac0268b9ed614d087abc11e6b3502da40",
+    "anchorManifestSha256": "f5950be8569ee14d514a254c34fd2bf938bf9c2335db3e92c77948ece700066b",
+    "checkerSha256": "f6a446ce56eca7904d52c717dcd954181a45fc39115b235069d40aeec4423ec9",
+    "nativeMappingChecks": 13,
+    "sampledFrames": 42,
+    "plateProbesPerFrame": 1182,
+    "ringChecks": 152,
+    "leaderChecks": 266,
+    "frontChecks": 3,
+    "failures": 0,
+    "frontProofs": [
+      {
+        "frame": 258,
+        "expected": [
+          361.42958164215094,
+          108.25848994076244
+        ],
+        "support": [
+          {
+            "xy": [
+              360,
+              106
+            ],
+            "encoded": [
+              154,
+              155,
+              153
+            ],
+            "source": [
+              193,
+              193,
+              190
+            ]
+          },
+          {
+            "xy": [
+              361,
+              106
+            ],
+            "encoded": [
+              69,
+              70,
+              68
+            ],
+            "source": [
+              193,
+              193,
+              190
+            ]
+          },
+          {
+            "xy": [
+              361,
+              107
+            ],
+            "encoded": [
+              60,
+              60,
+              60
+            ],
+            "source": [
+              194,
+              194,
+              194
+            ]
+          },
+          {
+            "xy": [
+              361,
+              108
+            ],
+            "encoded": [
+              125,
+              127,
+              129
+            ],
+            "source": [
+              195,
+              197,
+              200
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 264,
+        "expected": [
+          364.2887449264527,
+          152.72546982228772
+        ],
+        "support": [
+          {
+            "xy": [
+              363,
+              151
+            ],
+            "encoded": [
+              146,
+              146,
+              146
+            ],
+            "source": [
+              207,
+              207,
+              207
+            ]
+          },
+          {
+            "xy": [
+              364,
+              151
+            ],
+            "encoded": [
+              80,
+              80,
+              80
+            ],
+            "source": [
+              203,
+              203,
+              203
+            ]
+          },
+          {
+            "xy": [
+              363,
+              152
+            ],
+            "encoded": [
+              159,
+              159,
+              159
+            ],
+            "source": [
+              207,
+              207,
+              207
+            ]
+          },
+          {
+            "xy": [
+              364,
+              152
+            ],
+            "encoded": [
+              76,
+              76,
+              76
+            ],
+            "source": [
+              203,
+              203,
+              203
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 270,
+        "expected": [
+          367.1479082107544,
+          197.1924497038126
+        ],
+        "support": [
+          {
+            "xy": [
+              366,
+              195
+            ],
+            "encoded": [
+              129,
+              129,
+              129
+            ],
+            "source": [
+              215,
+              215,
+              215
+            ]
+          },
+          {
+            "xy": [
+              367,
+              195
+            ],
+            "encoded": [
+              115,
+              115,
+              115
+            ],
+            "source": [
+              215,
+              215,
+              215
+            ]
+          },
+          {
+            "xy": [
+              366,
+              196
+            ],
+            "encoded": [
+              131,
+              131,
+              131
+            ],
+            "source": [
+              215,
+              215,
+              215
+            ]
+          },
+          {
+            "xy": [
+              367,
+              196
+            ],
+            "encoded": [
+              102,
+              102,
+              102
+            ],
+            "source": [
+              215,
+              215,
+              215
+            ]
+          },
+          {
+            "xy": [
+              367,
+              197
+            ],
+            "encoded": [
+              147,
+              147,
+              147
+            ],
+            "source": [
+              215,
+              215,
+              215
+            ]
+          }
+        ]
+      }
+    ],
+    "samples": [
+      {
+        "frame": 243,
+        "plateMeanAbsoluteError": 1.5002820078962211,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 258,
+        "plateMeanAbsoluteError": 1.4531866892272984,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 264,
+        "plateMeanAbsoluteError": 1.4531866892272984,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 270,
+        "plateMeanAbsoluteError": 1.4540327129159618,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 285,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 300,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 315,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 330,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 345,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 360,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 375,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 390,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 405,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 420,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 435,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 450,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 465,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 480,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 495,
+        "plateMeanAbsoluteError": 1.4537507050197405,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 510,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 525,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 540,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 555,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 570,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 585,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 600,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 615,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 630,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 645,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 660,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 675,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 690,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 705,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 720,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 735,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 750,
+        "plateMeanAbsoluteError": 1.4509306260575296,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 765,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 780,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 795,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 810,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 825,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      },
+      {
+        "frame": 839,
+        "plateMeanAbsoluteError": 1.4534686971235196,
+        "plateP95AbsoluteError": 4.333333333333333
+      }
+    ]
+  },
+  {
+    "project": "access-gate-vertical",
+    "videoSha256": "e12b6b61b91bb5aa8b995100759186ddf429d89f333d07d96ed90d0ef22019cd",
+    "storyboardSha256": "dc83d5a476c99bcff0ef50c75fc6382e837853568b6dacb9846524822c690817",
+    "anchorManifestSha256": "6a9a7c5ad9ebc9268d6527cefce57281c84561a04e4b6cf29f1105a71d0ee324",
+    "checkerSha256": "f6a446ce56eca7904d52c717dcd954181a45fc39115b235069d40aeec4423ec9",
+    "nativeMappingChecks": 13,
+    "sampledFrames": 42,
+    "plateProbesPerFrame": 4454,
+    "ringChecks": 152,
+    "leaderChecks": 266,
+    "frontChecks": 3,
+    "failures": 0,
+    "frontProofs": [
+      {
+        "frame": 258,
+        "expected": [
+          362.75572299957275,
+          424.0101979234481
+        ],
+        "support": [
+          {
+            "xy": [
+              362,
+              422
+            ],
+            "encoded": [
+              75,
+              79,
+              75
+            ],
+            "source": [
+              196,
+              196,
+              194
+            ]
+          },
+          {
+            "xy": [
+              363,
+              422
+            ],
+            "encoded": [
+              152,
+              155,
+              152
+            ],
+            "source": [
+              196,
+              196,
+              194
+            ]
+          },
+          {
+            "xy": [
+              362,
+              423
+            ],
+            "encoded": [
+              75,
+              79,
+              75
+            ],
+            "source": [
+              196,
+              196,
+              194
+            ]
+          },
+          {
+            "xy": [
+              363,
+              423
+            ],
+            "encoded": [
+              153,
+              157,
+              153
+            ],
+            "source": [
+              196,
+              196,
+              194
+            ]
+          },
+          {
+            "xy": [
+              362,
+              424
+            ],
+            "encoded": [
+              140,
+              144,
+              140
+            ],
+            "source": [
+              196,
+              196,
+              194
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 264,
+        "expected": [
+          368.26716899871826,
+          518.9639271036787
+        ],
+        "support": [
+          {
+            "xy": [
+              367,
+              517
+            ],
+            "encoded": [
+              139,
+              141,
+              143
+            ],
+            "source": [
+              209,
+              209,
+              209
+            ]
+          },
+          {
+            "xy": [
+              368,
+              517
+            ],
+            "encoded": [
+              94,
+              96,
+              95
+            ],
+            "source": [
+              208,
+              208,
+              208
+            ]
+          },
+          {
+            "xy": [
+              367,
+              518
+            ],
+            "encoded": [
+              136,
+              138,
+              139
+            ],
+            "source": [
+              209,
+              209,
+              209
+            ]
+          },
+          {
+            "xy": [
+              368,
+              518
+            ],
+            "encoded": [
+              84,
+              87,
+              86
+            ],
+            "source": [
+              208,
+              208,
+              208
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 270,
+        "expected": [
+          373.77861499786377,
+          613.9176562839084
+        ],
+        "support": [
+          {
+            "xy": [
+              373,
+              612
+            ],
+            "encoded": [
+              81,
+              83,
+              82
+            ],
+            "source": [
+              218,
+              218,
+              218
+            ]
+          },
+          {
+            "xy": [
+              373,
+              613
+            ],
+            "encoded": [
+              95,
+              97,
+              96
+            ],
+            "source": [
+              224,
+              219,
+              218
+            ]
+          }
+        ]
+      }
+    ],
+    "samples": [
+      {
+        "frame": 243,
+        "plateMeanAbsoluteError": 2.038691812602904,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 258,
+        "plateMeanAbsoluteError": 2.0060619667714414,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 264,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 270,
+        "plateMeanAbsoluteError": 2.0059871276754975,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 285,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 300,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 315,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 330,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 345,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 360,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 375,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 390,
+        "plateMeanAbsoluteError": 2.0062116449633285,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 405,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 420,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 435,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 450,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 465,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 480,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 495,
+        "plateMeanAbsoluteError": 2.005912288579554,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 510,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 525,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 540,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 555,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 570,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 585,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 600,
+        "plateMeanAbsoluteError": 2.0089058524173025,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 615,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 630,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 645,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 660,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 675,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 690,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 705,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 720,
+        "plateMeanAbsoluteError": 2.0089058524173025,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 735,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 750,
+        "plateMeanAbsoluteError": 2.0062864840592725,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 765,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 780,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 795,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 810,
+        "plateMeanAbsoluteError": 2.0089058524173025,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 825,
+        "plateMeanAbsoluteError": 2.008606496033528,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 839,
+        "plateMeanAbsoluteError": 2.0100284388564584,
+        "plateP95AbsoluteError": 5.0
+      }
+    ]
+  },
+  {
+    "project": "settled-level-landscape",
+    "videoSha256": "1159932312b65f1e8607d6b28305bd4ecc0039e14496d9beefacf792c8141e51",
+    "storyboardSha256": "754d6f7e6115e877b0afe087b8b3a97e2e78d8b9b2671fbe61783684aac354cc",
+    "anchorManifestSha256": "f5950be8569ee14d514a254c34fd2bf938bf9c2335db3e92c77948ece700066b",
+    "checkerSha256": "f6a446ce56eca7904d52c717dcd954181a45fc39115b235069d40aeec4423ec9",
+    "nativeMappingChecks": 13,
+    "sampledFrames": 42,
+    "plateProbesPerFrame": 1173,
+    "ringChecks": 152,
+    "leaderChecks": 266,
+    "frontChecks": 3,
+    "failures": 0,
+    "frontProofs": [
+      {
+        "frame": 258,
+        "expected": [
+          347.4254393577577,
+          113.03726707816114
+        ],
+        "support": [
+          {
+            "xy": [
+              347,
+              111
+            ],
+            "encoded": [
+              86,
+              87,
+              84
+            ],
+            "source": [
+              133,
+              133,
+              133
+            ]
+          },
+          {
+            "xy": [
+              348,
+              111
+            ],
+            "encoded": [
+              54,
+              60,
+              60
+            ],
+            "source": [
+              98,
+              101,
+              103
+            ]
+          },
+          {
+            "xy": [
+              347,
+              112
+            ],
+            "encoded": [
+              63,
+              65,
+              62
+            ],
+            "source": [
+              197,
+              197,
+              197
+            ]
+          },
+          {
+            "xy": [
+              348,
+              112
+            ],
+            "encoded": [
+              147,
+              153,
+              153
+            ],
+            "source": [
+              189,
+              192,
+              194
+            ]
+          },
+          {
+            "xy": [
+              347,
+              113
+            ],
+            "encoded": [
+              140,
+              141,
+              139
+            ],
+            "source": [
+              190,
+              190,
+              190
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 264,
+        "expected": [
+          322.27631807327265,
+          167.06180123448394
+        ],
+        "support": [
+          {
+            "xy": [
+              322,
+              165
+            ],
+            "encoded": [
+              105,
+              107,
+              102
+            ],
+            "source": [
+              208,
+              208,
+              205
+            ]
+          },
+          {
+            "xy": [
+              323,
+              165
+            ],
+            "encoded": [
+              107,
+              108,
+              103
+            ],
+            "source": [
+              208,
+              208,
+              205
+            ]
+          },
+          {
+            "xy": [
+              322,
+              166
+            ],
+            "encoded": [
+              58,
+              59,
+              54
+            ],
+            "source": [
+              208,
+              208,
+              205
+            ]
+          },
+          {
+            "xy": [
+              322,
+              167
+            ],
+            "encoded": [
+              144,
+              145,
+              140
+            ],
+            "source": [
+              208,
+              208,
+              205
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 270,
+        "expected": [
+          297.12719678878784,
+          221.0863353908062
+        ],
+        "support": [
+          {
+            "xy": [
+              297,
+              219
+            ],
+            "encoded": [
+              70,
+              88,
+              105
+            ],
+            "source": [
+              175,
+              198,
+              219
+            ]
+          },
+          {
+            "xy": [
+              298,
+              219
+            ],
+            "encoded": [
+              105,
+              123,
+              138
+            ],
+            "source": [
+              175,
+              198,
+              219
+            ]
+          },
+          {
+            "xy": [
+              297,
+              220
+            ],
+            "encoded": [
+              45,
+              62,
+              77
+            ],
+            "source": [
+              175,
+              198,
+              219
+            ]
+          }
+        ]
+      }
+    ],
+    "samples": [
+      {
+        "frame": 243,
+        "plateMeanAbsoluteError": 1.5387894288150044,
+        "plateP95AbsoluteError": 5.0
+      },
+      {
+        "frame": 258,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 264,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 270,
+        "plateMeanAbsoluteError": 1.4720090934924694,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 285,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 300,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 315,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 330,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 345,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 360,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 375,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 390,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 405,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 420,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 435,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 450,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 465,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 480,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 495,
+        "plateMeanAbsoluteError": 1.4722932651321399,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 510,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 525,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 540,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 555,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 570,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 585,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 600,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 615,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 630,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 645,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 660,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 675,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 690,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 705,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 720,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 735,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 750,
+        "plateMeanAbsoluteError": 1.4543904518329072,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 765,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 780,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 795,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 810,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 825,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      },
+      {
+        "frame": 839,
+        "plateMeanAbsoluteError": 1.4575163398692812,
+        "plateP95AbsoluteError": 4.666666666666667
+      }
+    ]
+  },
+  {
+    "project": "settled-level-vertical",
+    "videoSha256": "91589282ee515430ec657f57f40515a9a37b4f8d2cd3200fe6e44a1361322c6f",
+    "storyboardSha256": "9aca13c345f0f848201b3bec27ef544ce4a93c49fb3b00fccc59e3d5d6e9c0f4",
+    "anchorManifestSha256": "6a9a7c5ad9ebc9268d6527cefce57281c84561a04e4b6cf29f1105a71d0ee324",
+    "checkerSha256": "f6a446ce56eca7904d52c717dcd954181a45fc39115b235069d40aeec4423ec9",
+    "nativeMappingChecks": 13,
+    "sampledFrames": 42,
+    "plateProbesPerFrame": 4439,
+    "ringChecks": 152,
+    "leaderChecks": 266,
+    "frontChecks": 3,
+    "failures": 0,
+    "frontProofs": [
+      {
+        "frame": 258,
+        "expected": [
+          335.760773420334,
+          433.245160386827
+        ],
+        "support": [
+          {
+            "xy": [
+              336,
+              431
+            ],
+            "encoded": [
+              66,
+              69,
+              66
+            ],
+            "source": [
+              196,
+              196,
+              194
+            ]
+          },
+          {
+            "xy": [
+              335,
+              432
+            ],
+            "encoded": [
+              102,
+              105,
+              102
+            ],
+            "source": [
+              196,
+              196,
+              194
+            ]
+          },
+          {
+            "xy": [
+              336,
+              432
+            ],
+            "encoded": [
+              90,
+              94,
+              90
+            ],
+            "source": [
+              196,
+              196,
+              194
+            ]
+          },
+          {
+            "xy": [
+              335,
+              433
+            ],
+            "encoded": [
+              146,
+              150,
+              146
+            ],
+            "source": [
+              196,
+              196,
+              194
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 264,
+        "expected": [
+          287.2823202610014,
+          546.6688144938155
+        ],
+        "support": [
+          {
+            "xy": [
+              287,
+              545
+            ],
+            "encoded": [
+              90,
+              94,
+              90
+            ],
+            "source": [
+              210,
+              210,
+              208
+            ]
+          },
+          {
+            "xy": [
+              288,
+              545
+            ],
+            "encoded": [
+              155,
+              159,
+              155
+            ],
+            "source": [
+              211,
+              211,
+              209
+            ]
+          },
+          {
+            "xy": [
+              287,
+              546
+            ],
+            "encoded": [
+              73,
+              76,
+              73
+            ],
+            "source": [
+              210,
+              210,
+              208
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 270,
+        "expected": [
+          238.8038671016693,
+          660.0924686008029
+        ],
+        "support": [
+          {
+            "xy": [
+              239,
+              658
+            ],
+            "encoded": [
+              41,
+              67,
+              81
+            ],
+            "source": [
+              175,
+              198,
+              218
+            ]
+          },
+          {
+            "xy": [
+              238,
+              659
+            ],
+            "encoded": [
+              93,
+              118,
+              130
+            ],
+            "source": [
+              176,
+              200,
+              215
+            ]
+          },
+          {
+            "xy": [
+              239,
+              659
+            ],
+            "encoded": [
+              62,
+              88,
+              100
+            ],
+            "source": [
+              175,
+              198,
+              214
+            ]
+          },
+          {
+            "xy": [
+              238,
+              660
+            ],
+            "encoded": [
+              107,
+              132,
+              146
+            ],
+            "source": [
+              176,
+              200,
+              215
+            ]
+          }
+        ]
+      }
+    ],
+    "samples": [
+      {
+        "frame": 243,
+        "plateMeanAbsoluteError": 2.0518885634902757,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 258,
+        "plateMeanAbsoluteError": 2.0183975369828038,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 264,
+        "plateMeanAbsoluteError": 2.0183975369828038,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 270,
+        "plateMeanAbsoluteError": 2.0177217090936397,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 285,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 300,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 315,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 330,
+        "plateMeanAbsoluteError": 2.0177968010813245,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 345,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 360,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 375,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 390,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 405,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 420,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 435,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 450,
+        "plateMeanAbsoluteError": 2.0177968010813245,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 465,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 480,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 495,
+        "plateMeanAbsoluteError": 2.0174964331305847,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 510,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 525,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 540,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 555,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 570,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 585,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 600,
+        "plateMeanAbsoluteError": 2.020950664564091,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 615,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 630,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 645,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 660,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 675,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 690,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 705,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 720,
+        "plateMeanAbsoluteError": 2.020950664564091,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 735,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 750,
+        "plateMeanAbsoluteError": 2.016595329278366,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 765,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 780,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 795,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 810,
+        "plateMeanAbsoluteError": 2.020950664564091,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 825,
+        "plateMeanAbsoluteError": 2.020650296613351,
+        "plateP95AbsoluteError": 5.333333333333333
+      },
+      {
+        "frame": 839,
+        "plateMeanAbsoluteError": 2.021926860403995,
+        "plateP95AbsoluteError": 5.333333333333333
+      }
+    ]
+  },
+  {
+    "project": "alternate-route-landscape",
+    "videoSha256": "db2cadf72ec03f17c6530cbf3c53dd44ef3606449f6eca08957c6664f13a271d",
+    "storyboardSha256": "5dde454a4f337588f051ce12f08d66318bf8360d93c387efd11425a77e0b0255",
+    "anchorManifestSha256": "5edc08e1528934525e1b79b37c7ee4344a4346c3b0a51a3711086d6a823d101e",
+    "checkerSha256": "f6a446ce56eca7904d52c717dcd954181a45fc39115b235069d40aeec4423ec9",
+    "nativeMappingChecks": 13,
+    "sampledFrames": 42,
+    "plateProbesPerFrame": 1492,
+    "ringChecks": 152,
+    "leaderChecks": 266,
+    "frontChecks": 3,
+    "failures": 0,
+    "frontProofs": [
+      {
+        "frame": 258,
+        "expected": [
+          363.72571706771856,
+          107.66331714808933
+        ],
+        "support": [
+          {
+            "xy": [
+              363,
+              106
+            ],
+            "encoded": [
+              69,
+              68,
+              65
+            ],
+            "source": [
+              238,
+              236,
+              235
+            ]
+          },
+          {
+            "xy": [
+              363,
+              107
+            ],
+            "encoded": [
+              84,
+              83,
+              80
+            ],
+            "source": [
+              238,
+              236,
+              235
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 264,
+        "expected": [
+          371.1771512031556,
+          150.9399514442684
+        ],
+        "support": [
+          {
+            "xy": [
+              370,
+              149
+            ],
+            "encoded": [
+              113,
+              112,
+              109
+            ],
+            "source": [
+              235,
+              232,
+              231
+            ]
+          },
+          {
+            "xy": [
+              371,
+              149
+            ],
+            "encoded": [
+              144,
+              143,
+              139
+            ],
+            "source": [
+              233,
+              231,
+              230
+            ]
+          },
+          {
+            "xy": [
+              370,
+              150
+            ],
+            "encoded": [
+              146,
+              145,
+              144
+            ],
+            "source": [
+              233,
+              231,
+              230
+            ]
+          },
+          {
+            "xy": [
+              371,
+              150
+            ],
+            "encoded": [
+              112,
+              111,
+              110
+            ],
+            "source": [
+              235,
+              232,
+              231
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 270,
+        "expected": [
+          378.62858533859253,
+          194.21658574044704
+        ],
+        "support": [
+          {
+            "xy": [
+              378,
+              192
+            ],
+            "encoded": [
+              67,
+              66,
+              65
+            ],
+            "source": [
+              204,
+              200,
+              196
+            ]
+          },
+          {
+            "xy": [
+              378,
+              193
+            ],
+            "encoded": [
+              77,
+              76,
+              75
+            ],
+            "source": [
+              251,
+              249,
+              247
+            ]
+          },
+          {
+            "xy": [
+              378,
+              194
+            ],
+            "encoded": [
+              137,
+              136,
+              134
+            ],
+            "source": [
+              239,
+              237,
+              238
+            ]
+          }
+        ]
+      }
+    ],
+    "samples": [
+      {
+        "frame": 243,
+        "plateMeanAbsoluteError": 0.9848078641644324,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 258,
+        "plateMeanAbsoluteError": 0.9504021447721179,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 264,
+        "plateMeanAbsoluteError": 0.9504021447721179,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 270,
+        "plateMeanAbsoluteError": 0.9504021447721179,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 285,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 300,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 315,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 330,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 345,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 360,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 375,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 390,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 405,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 420,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 435,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 450,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 465,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 480,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 495,
+        "plateMeanAbsoluteError": 0.9510723860589813,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 510,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 525,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 540,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 555,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 570,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 585,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 600,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 615,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 630,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 645,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 660,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 675,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 690,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 705,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 720,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 735,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 750,
+        "plateMeanAbsoluteError": 0.9573279714030384,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 765,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 780,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 795,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 810,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 825,
+        "plateMeanAbsoluteError": 0.9579982126899016,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 839,
+        "plateMeanAbsoluteError": 0.9582216264521896,
+        "plateP95AbsoluteError": 3.0
+      }
+    ]
+  },
+  {
+    "project": "alternate-route-vertical",
+    "videoSha256": "b6b7d96d44b1f88149ad6beb12eef69a6cb4d73c40cb76a426371ca0ac40d437",
+    "storyboardSha256": "9ea040a51a52f27ff1bb480808b975ebe79b023392282a91b3938718cbb6b066",
+    "anchorManifestSha256": "eea4eb2d28c496ca094784f94efee083262bd0b9b450e57c311c932861236069",
+    "checkerSha256": "f6a446ce56eca7904d52c717dcd954181a45fc39115b235069d40aeec4423ec9",
+    "nativeMappingChecks": 13,
+    "sampledFrames": 42,
+    "plateProbesPerFrame": 3487,
+    "ringChecks": 152,
+    "leaderChecks": 266,
+    "frontChecks": 3,
+    "failures": 0,
+    "frontProofs": [
+      {
+        "frame": 258,
+        "expected": [
+          365.72197437286377,
+          423.721717800564
+        ],
+        "support": [
+          {
+            "xy": [
+              365,
+              422
+            ],
+            "encoded": [
+              75,
+              76,
+              72
+            ],
+            "source": [
+              231,
+              229,
+              225
+            ]
+          },
+          {
+            "xy": [
+              365,
+              423
+            ],
+            "encoded": [
+              90,
+              91,
+              87
+            ],
+            "source": [
+              232,
+              230,
+              226
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 264,
+        "expected": [
+          377.16592311859137,
+          518.0984867350263
+        ],
+        "support": [
+          {
+            "xy": [
+              376,
+              516
+            ],
+            "encoded": [
+              107,
+              108,
+              105
+            ],
+            "source": [
+              239,
+              237,
+              236
+            ]
+          },
+          {
+            "xy": [
+              377,
+              516
+            ],
+            "encoded": [
+              137,
+              138,
+              136
+            ],
+            "source": [
+              239,
+              237,
+              236
+            ]
+          },
+          {
+            "xy": [
+              376,
+              517
+            ],
+            "encoded": [
+              158,
+              159,
+              157
+            ],
+            "source": [
+              239,
+              237,
+              236
+            ]
+          },
+          {
+            "xy": [
+              377,
+              517
+            ],
+            "encoded": [
+              110,
+              111,
+              109
+            ],
+            "source": [
+              239,
+              237,
+              236
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 270,
+        "expected": [
+          388.60987186431885,
+          612.4752556694878
+        ],
+        "support": [
+          {
+            "xy": [
+              388,
+              610
+            ],
+            "encoded": [
+              73,
+              72,
+              66
+            ],
+            "source": [
+              179,
+              176,
+              173
+            ]
+          },
+          {
+            "xy": [
+              388,
+              611
+            ],
+            "encoded": [
+              63,
+              60,
+              54
+            ],
+            "source": [
+              185,
+              180,
+              171
+            ]
+          },
+          {
+            "xy": [
+              388,
+              612
+            ],
+            "encoded": [
+              95,
+              90,
+              82
+            ],
+            "source": [
+              186,
+              178,
+              168
+            ]
+          }
+        ]
+      }
+    ],
+    "samples": [
+      {
+        "frame": 243,
+        "plateMeanAbsoluteError": 1.729758149316509,
+        "plateP95AbsoluteError": 3.6666666666666665
+      },
+      {
+        "frame": 258,
+        "plateMeanAbsoluteError": 1.7072937577669438,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 264,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 270,
+        "plateMeanAbsoluteError": 1.7082496893222445,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 285,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 300,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 315,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 330,
+        "plateMeanAbsoluteError": 1.7076761303890642,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 345,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 360,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 375,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 390,
+        "plateMeanAbsoluteError": 1.7079629098556544,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 405,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 420,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 435,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 450,
+        "plateMeanAbsoluteError": 1.7076761303890642,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 465,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 480,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 495,
+        "plateMeanAbsoluteError": 1.7071981646114138,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 510,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 525,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 540,
+        "plateMeanAbsoluteError": 1.7080585030111843,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 555,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 570,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 585,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 600,
+        "plateMeanAbsoluteError": 1.7080585030111843,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 615,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 630,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 645,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 660,
+        "plateMeanAbsoluteError": 1.7080585030111843,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 675,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 690,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 705,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 720,
+        "plateMeanAbsoluteError": 1.7080585030111843,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 735,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 750,
+        "plateMeanAbsoluteError": 1.7055730809674026,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 765,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 780,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 795,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 810,
+        "plateMeanAbsoluteError": 1.7080585030111843,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 825,
+        "plateMeanAbsoluteError": 1.7078673167001241,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 839,
+        "plateMeanAbsoluteError": 1.7082496893222445,
+        "plateP95AbsoluteError": 3.3333333333333335
+      }
+    ]
+  },
+  {
+    "project": "fixed-bottleneck-landscape",
+    "videoSha256": "7c888c12a0463f4d4a2aeccb09d9318ddabe15c987c5db112ee47d27cf27902e",
+    "storyboardSha256": "68ee5833e2c1a1e399c9032f436ec81531e2922576cc07bc6f2e038115273a05",
+    "anchorManifestSha256": "5edc08e1528934525e1b79b37c7ee4344a4346c3b0a51a3711086d6a823d101e",
+    "checkerSha256": "f6a446ce56eca7904d52c717dcd954181a45fc39115b235069d40aeec4423ec9",
+    "nativeMappingChecks": 13,
+    "sampledFrames": 42,
+    "plateProbesPerFrame": 1498,
+    "ringChecks": 152,
+    "leaderChecks": 266,
+    "frontChecks": 3,
+    "failures": 0,
+    "frontProofs": [
+      {
+        "frame": 258,
+        "expected": [
+          357.5599837303162,
+          102.99829920053475
+        ],
+        "support": [
+          {
+            "xy": [
+              357,
+              101
+            ],
+            "encoded": [
+              91,
+              90,
+              87
+            ],
+            "source": [
+              238,
+              236,
+              232
+            ]
+          },
+          {
+            "xy": [
+              357,
+              102
+            ],
+            "encoded": [
+              72,
+              70,
+              65
+            ],
+            "source": [
+              238,
+              236,
+              232
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 264,
+        "expected": [
+          352.6799511909485,
+          136.9448976016046
+        ],
+        "support": [
+          {
+            "xy": [
+              352,
+              135
+            ],
+            "encoded": [
+              105,
+              104,
+              101
+            ],
+            "source": [
+              239,
+              237,
+              236
+            ]
+          },
+          {
+            "xy": [
+              353,
+              135
+            ],
+            "encoded": [
+              153,
+              152,
+              148
+            ],
+            "source": [
+              239,
+              237,
+              236
+            ]
+          },
+          {
+            "xy": [
+              352,
+              136
+            ],
+            "encoded": [
+              81,
+              80,
+              76
+            ],
+            "source": [
+              239,
+              237,
+              236
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 270,
+        "expected": [
+          347.7999186515808,
+          170.8914960026741
+        ],
+        "support": [
+          {
+            "xy": [
+              347,
+              169
+            ],
+            "encoded": [
+              119,
+              118,
+              117
+            ],
+            "source": [
+              237,
+              232,
+              231
+            ]
+          },
+          {
+            "xy": [
+              348,
+              169
+            ],
+            "encoded": [
+              119,
+              118,
+              117
+            ],
+            "source": [
+              235,
+              232,
+              231
+            ]
+          },
+          {
+            "xy": [
+              347,
+              170
+            ],
+            "encoded": [
+              95,
+              94,
+              93
+            ],
+            "source": [
+              237,
+              232,
+              231
+            ]
+          },
+          {
+            "xy": [
+              348,
+              170
+            ],
+            "encoded": [
+              153,
+              152,
+              151
+            ],
+            "source": [
+              235,
+              232,
+              231
+            ]
+          }
+        ]
+      }
+    ],
+    "samples": [
+      {
+        "frame": 243,
+        "plateMeanAbsoluteError": 0.9797507788161994,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 258,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 264,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 270,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 285,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 300,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 315,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 330,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 345,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 360,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 375,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 390,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 405,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 420,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 435,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 450,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 465,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 480,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 495,
+        "plateMeanAbsoluteError": 0.9514908767245215,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 510,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 525,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 540,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 555,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 570,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 585,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 600,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 615,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 630,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 645,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 660,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 675,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 690,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 705,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 720,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 735,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 750,
+        "plateMeanAbsoluteError": 0.9574988874054294,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 765,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 780,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 795,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 810,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 825,
+        "plateMeanAbsoluteError": 0.9590565198041834,
+        "plateP95AbsoluteError": 3.0
+      },
+      {
+        "frame": 839,
+        "plateMeanAbsoluteError": 0.959279038718291,
+        "plateP95AbsoluteError": 3.0
+      }
+    ]
+  },
+  {
+    "project": "fixed-bottleneck-vertical",
+    "videoSha256": "ecf73e8b0e65d65e4c373e63208e9261868df04eda8f40c4dd2cc09a298fb166",
+    "storyboardSha256": "4673ec5b1a119ad8b14575cf8ff77df91f7c70245515727f3c3e698dc404e90d",
+    "anchorManifestSha256": "eea4eb2d28c496ca094784f94efee083262bd0b9b450e57c311c932861236069",
+    "checkerSha256": "f6a446ce56eca7904d52c717dcd954181a45fc39115b235069d40aeec4423ec9",
+    "nativeMappingChecks": 13,
+    "sampledFrames": 42,
+    "plateProbesPerFrame": 3497,
+    "ringChecks": 152,
+    "leaderChecks": 266,
+    "frontChecks": 3,
+    "failures": 0,
+    "frontProofs": [
+      {
+        "frame": 258,
+        "expected": [
+          356.2526249885559,
+          416.55716956244555
+        ],
+        "support": [
+          {
+            "xy": [
+              356,
+              415
+            ],
+            "encoded": [
+              83,
+              84,
+              80
+            ],
+            "source": [
+              231,
+              229,
+              225
+            ]
+          },
+          {
+            "xy": [
+              356,
+              416
+            ],
+            "encoded": [
+              118,
+              119,
+              115
+            ],
+            "source": [
+              231,
+              229,
+              225
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 264,
+        "expected": [
+          348.7578749656677,
+          496.6048420206708
+        ],
+        "support": [
+          {
+            "xy": [
+              348,
+              495
+            ],
+            "encoded": [
+              108,
+              109,
+              107
+            ],
+            "source": [
+              238,
+              236,
+              235
+            ]
+          },
+          {
+            "xy": [
+              349,
+              495
+            ],
+            "encoded": [
+              150,
+              151,
+              148
+            ],
+            "source": [
+              238,
+              236,
+              235
+            ]
+          },
+          {
+            "xy": [
+              348,
+              496
+            ],
+            "encoded": [
+              122,
+              123,
+              120
+            ],
+            "source": [
+              238,
+              236,
+              235
+            ]
+          }
+        ]
+      },
+      {
+        "frame": 270,
+        "expected": [
+          341.26312494277954,
+          576.6525144788953
+        ],
+        "support": [
+          {
+            "xy": [
+              341,
+              575
+            ],
+            "encoded": [
+              69,
+              70,
+              68
+            ],
+            "source": [
+              235,
+              232,
+              231
+            ]
+          },
+          {
+            "xy": [
+              341,
+              576
+            ],
+            "encoded": [
+              115,
+              116,
+              113
+            ],
+            "source": [
+              235,
+              232,
+              231
+            ]
+          }
+        ]
+      }
+    ],
+    "samples": [
+      {
+        "frame": 243,
+        "plateMeanAbsoluteError": 1.7243351444094939,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 258,
+        "plateMeanAbsoluteError": 1.7072729005814506,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 264,
+        "plateMeanAbsoluteError": 1.7067963015918408,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 270,
+        "plateMeanAbsoluteError": 1.7079401391669051,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 285,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 300,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 315,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 330,
+        "plateMeanAbsoluteError": 1.7067009817939185,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 345,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 360,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 375,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 390,
+        "plateMeanAbsoluteError": 1.7075588599752167,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 405,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 420,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 435,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 450,
+        "plateMeanAbsoluteError": 1.7067009817939185,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 465,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 480,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 495,
+        "plateMeanAbsoluteError": 1.7065103421980747,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 510,
+        "plateMeanAbsoluteError": 1.7038413878562577,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 525,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 540,
+        "plateMeanAbsoluteError": 1.704222667047946,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 555,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 570,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 585,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 600,
+        "plateMeanAbsoluteError": 1.704699266037556,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 615,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 630,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 645,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 660,
+        "plateMeanAbsoluteError": 1.704222667047946,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 675,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 690,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 705,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 720,
+        "plateMeanAbsoluteError": 1.704699266037556,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 735,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 750,
+        "plateMeanAbsoluteError": 1.7026975502811934,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 765,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 780,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 795,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 810,
+        "plateMeanAbsoluteError": 1.704699266037556,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 825,
+        "plateMeanAbsoluteError": 1.7039367076541798,
+        "plateP95AbsoluteError": 3.3333333333333335
+      },
+      {
+        "frame": 839,
+        "plateMeanAbsoluteError": 1.704985225431322,
+        "plateP95AbsoluteError": 3.3333333333333335
+      }
+    ]
+  }
+]
