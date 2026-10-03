@@ -1,0 +1,284 @@
+{
+  "asOf": "2026-10-02",
+  "provenance": "Original fictional fixtures for count, weight, signed position and circle-area encodings.",
+  "cases": [
+    {
+      "id": "narrow-leadership",
+      "recipe": "C05",
+      "title": "Two members carry most of the weight",
+      "metricUnit": "Period price return (%)",
+      "weightUnit": "Opening weight points",
+      "membershipDate": "2026-09-01",
+      "metricAsOf": "2026-09-30",
+      "period": "2026-09-01 to 2026-09-30",
+      "condition": {
+        "operator": "gt",
+        "threshold": 0
+      },
+      "basis": "Fixed opening weights; twelve fictional members. Price returns exclude income.",
+      "members": [
+        {
+          "id": "a",
+          "label": "A",
+          "value": 10,
+          "weight": 40
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "value": 6,
+          "weight": 25
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "value": -4,
+          "weight": 10
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "value": -2,
+          "weight": 5
+        },
+        {
+          "id": "e",
+          "label": "E",
+          "value": 0,
+          "weight": 5
+        },
+        {
+          "id": "f",
+          "label": "F",
+          "value": -1,
+          "weight": 4
+        },
+        {
+          "id": "g",
+          "label": "G",
+          "value": -3,
+          "weight": 3
+        },
+        {
+          "id": "h",
+          "label": "H",
+          "value": -6,
+          "weight": 2
+        },
+        {
+          "id": "i",
+          "label": "I",
+          "value": -5,
+          "weight": 2
+        },
+        {
+          "id": "j",
+          "label": "J",
+          "value": -4,
+          "weight": 2
+        },
+        {
+          "id": "k",
+          "label": "K",
+          "value": -3,
+          "weight": 1
+        },
+        {
+          "id": "l",
+          "label": "L",
+          "value": -2,
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "service-health",
+      "recipe": "C05",
+      "title": "Count the missing services too",
+      "metricUnit": "Measured uptime (%)",
+      "weightUnit": "Opening request-share points",
+      "membershipDate": "2026-09-01",
+      "metricAsOf": "2026-09-30",
+      "period": "2026-09-01 to 2026-09-30",
+      "condition": {
+        "operator": "gte",
+        "threshold": 99.9
+      },
+      "basis": "Twelve fictional services. Weight is opening request share; two uptime observations are missing.",
+      "members": [
+        {
+          "id": "a",
+          "label": "A",
+          "value": 100,
+          "weight": 25
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "value": 99.95,
+          "weight": 20
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "value": 99.9,
+          "weight": 15
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "value": 99.9,
+          "weight": 10
+        },
+        {
+          "id": "e",
+          "label": "E",
+          "value": 99.94,
+          "weight": 8
+        },
+        {
+          "id": "f",
+          "label": "F",
+          "value": 99.91,
+          "weight": 6
+        },
+        {
+          "id": "g",
+          "label": "G",
+          "value": 99.5,
+          "weight": 5
+        },
+        {
+          "id": "h",
+          "label": "H",
+          "value": 99,
+          "weight": 4
+        },
+        {
+          "id": "i",
+          "label": "I",
+          "value": 99.7,
+          "weight": 3
+        },
+        {
+          "id": "j",
+          "label": "J",
+          "value": 98.1,
+          "weight": 2
+        },
+        {
+          "id": "k",
+          "label": "K",
+          "value": null,
+          "weight": 1
+        },
+        {
+          "id": "l",
+          "label": "L",
+          "value": null,
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "relative-price",
+      "recipe": "C08",
+      "title": "A benchmark changes the comparison",
+      "metricUnit": "Period price return (%)",
+      "relativeUnit": "Percentage points versus benchmark",
+      "sizeUnit": "Sample holdings \u00b7 USD millions",
+      "sizeSuffix": "m USD",
+      "benchmark": 4,
+      "domain": [
+        -8,
+        8
+      ],
+      "ticks": [
+        -8,
+        -4,
+        0,
+        4,
+        8
+      ],
+      "maxSize": 450,
+      "period": "2026-09-01 to 2026-09-30",
+      "basis": "Price returns exclude income. Size is sample-portfolio holdings at period end; zero means not held.",
+      "items": [
+        {
+          "id": "a",
+          "label": "Fund A",
+          "value": 8,
+          "size": 50
+        },
+        {
+          "id": "b",
+          "label": "Fund B",
+          "value": 1,
+          "size": 200
+        },
+        {
+          "id": "c",
+          "label": "Fund C",
+          "value": 4,
+          "size": 0
+        },
+        {
+          "id": "d",
+          "label": "Fund D",
+          "value": -2,
+          "size": 450
+        }
+      ]
+    },
+    {
+      "id": "relative-completion",
+      "recipe": "C08",
+      "title": "A target and the volume behind it",
+      "metricUnit": "On-time completion (%)",
+      "relativeUnit": "Percentage points versus target",
+      "sizeUnit": "Open cases at period end",
+      "sizeSuffix": "cases",
+      "benchmark": 92,
+      "domain": [
+        -8,
+        8
+      ],
+      "ticks": [
+        -8,
+        -4,
+        0,
+        4,
+        8
+      ],
+      "maxSize": 80,
+      "period": "2026-09-01 to 2026-09-30",
+      "basis": "Period completion rates; Team C missing. Size counts open cases at period end, on an independent basis.",
+      "items": [
+        {
+          "id": "a",
+          "label": "Team A",
+          "value": 98,
+          "size": 80
+        },
+        {
+          "id": "b",
+          "label": "Team B",
+          "value": 88,
+          "size": 20
+        },
+        {
+          "id": "c",
+          "label": "Team C",
+          "value": null,
+          "size": 45
+        },
+        {
+          "id": "d",
+          "label": "Team D",
+          "value": 92,
+          "size": 0
+        }
+      ]
+    }
+  ]
+}

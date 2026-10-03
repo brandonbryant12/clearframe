@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/participation-and-benchmarks/specimens/narrow-leadership-vertical/build/pipeline/2026-10-03T04-03-04-669Z-37d00365/video.mp4",
+  "outputSha256": "ea67e7596fa0a92f238c4273aa236f039752110e3f93bc6f6cd76ceaea730d2f",
+  "inputId": "7649a602f98035e08b88e88d1b7436d750312cedf19676f29aeee0af5873fdef",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "narrow-leadership-count: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "narrow-leadership-count: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 299,
+      "time": 9.966666666666667,
+      "reasons": [
+        "narrow-leadership-count: last frame",
+        "Before narrow-leadership-weight"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 300,
+      "time": 10,
+      "reasons": [
+        "narrow-leadership-weight: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 306,
+      "time": 10.2,
+      "reasons": [
+        "narrow-leadership-weight: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 659,
+      "time": 21.966666666666665,
+      "reasons": [
+        "narrow-leadership-weight: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

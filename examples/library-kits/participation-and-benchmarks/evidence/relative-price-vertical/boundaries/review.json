@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/participation-and-benchmarks/specimens/relative-price-vertical/build/pipeline/2026-10-03T04-07-18-559Z-757c5d82/video.mp4",
+  "outputSha256": "ded4245e3c2cb4204d60797f550beeefaa4c01946606e98a311b3fdb56ab05b0",
+  "inputId": "b649ba777c16629dc2d14b7f3aa3ec32ca7bf2d1bf0efc53190895bd5f26f741",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "relative-price-inputs: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "relative-price-inputs: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 299,
+      "time": 9.966666666666667,
+      "reasons": [
+        "relative-price-inputs: last frame",
+        "Before relative-price"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 300,
+      "time": 10,
+      "reasons": [
+        "relative-price: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 306,
+      "time": 10.2,
+      "reasons": [
+        "relative-price: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 719,
+      "time": 23.966666666666665,
+      "reasons": [
+        "relative-price: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

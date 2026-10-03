@@ -1,0 +1,735 @@
+{
+  "modelVersion": 1,
+  "inputSha256": "b26b5f5c498b1850a20bc97f6c12bc0fa6a544422d608c3cbf797c0aa4e76ddc",
+  "asOf": "2026-10-02",
+  "results": [
+    {
+      "name": "narrow-leadership-landscape",
+      "recipe": "C05",
+      "caseId": "narrow-leadership",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "method": "full-membership-count-and-weight-shares",
+        "membershipDate": "2026-09-01",
+        "metricAsOf": "2026-09-30",
+        "condition": {
+          "operator": "gt",
+          "threshold": 0
+        },
+        "totalCount": 12,
+        "totalWeight": 100,
+        "observedCount": 12,
+        "observedWeight": 100,
+        "groups": [
+          {
+            "state": "meets",
+            "count": 2,
+            "weight": 65,
+            "countFraction": 0.16666666666666666,
+            "weightFraction": 0.65
+          },
+          {
+            "state": "other",
+            "count": 10,
+            "weight": 35,
+            "countFraction": 0.8333333333333334,
+            "weightFraction": 0.35
+          },
+          {
+            "state": "missing",
+            "count": 0,
+            "weight": 0,
+            "countFraction": 0,
+            "weightFraction": 0
+          }
+        ],
+        "members": [
+          {
+            "id": "a",
+            "label": "A",
+            "value": 10,
+            "weight": 40,
+            "state": "meets",
+            "weightFraction": 0.4
+          },
+          {
+            "id": "b",
+            "label": "B",
+            "value": 6,
+            "weight": 25,
+            "state": "meets",
+            "weightFraction": 0.25
+          },
+          {
+            "id": "c",
+            "label": "C",
+            "value": -4,
+            "weight": 10,
+            "state": "other",
+            "weightFraction": 0.1
+          },
+          {
+            "id": "d",
+            "label": "D",
+            "value": -2,
+            "weight": 5,
+            "state": "other",
+            "weightFraction": 0.05
+          },
+          {
+            "id": "e",
+            "label": "E",
+            "value": 0,
+            "weight": 5,
+            "state": "other",
+            "weightFraction": 0.05
+          },
+          {
+            "id": "f",
+            "label": "F",
+            "value": -1,
+            "weight": 4,
+            "state": "other",
+            "weightFraction": 0.04
+          },
+          {
+            "id": "g",
+            "label": "G",
+            "value": -3,
+            "weight": 3,
+            "state": "other",
+            "weightFraction": 0.03
+          },
+          {
+            "id": "h",
+            "label": "H",
+            "value": -6,
+            "weight": 2,
+            "state": "other",
+            "weightFraction": 0.02
+          },
+          {
+            "id": "i",
+            "label": "I",
+            "value": -5,
+            "weight": 2,
+            "state": "other",
+            "weightFraction": 0.02
+          },
+          {
+            "id": "j",
+            "label": "J",
+            "value": -4,
+            "weight": 2,
+            "state": "other",
+            "weightFraction": 0.02
+          },
+          {
+            "id": "k",
+            "label": "K",
+            "value": -3,
+            "weight": 1,
+            "state": "other",
+            "weightFraction": 0.01
+          },
+          {
+            "id": "l",
+            "label": "L",
+            "value": -2,
+            "weight": 1,
+            "state": "other",
+            "weightFraction": 0.01
+          }
+        ]
+      }
+    },
+    {
+      "name": "narrow-leadership-vertical",
+      "recipe": "C05",
+      "caseId": "narrow-leadership",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "method": "full-membership-count-and-weight-shares",
+        "membershipDate": "2026-09-01",
+        "metricAsOf": "2026-09-30",
+        "condition": {
+          "operator": "gt",
+          "threshold": 0
+        },
+        "totalCount": 12,
+        "totalWeight": 100,
+        "observedCount": 12,
+        "observedWeight": 100,
+        "groups": [
+          {
+            "state": "meets",
+            "count": 2,
+            "weight": 65,
+            "countFraction": 0.16666666666666666,
+            "weightFraction": 0.65
+          },
+          {
+            "state": "other",
+            "count": 10,
+            "weight": 35,
+            "countFraction": 0.8333333333333334,
+            "weightFraction": 0.35
+          },
+          {
+            "state": "missing",
+            "count": 0,
+            "weight": 0,
+            "countFraction": 0,
+            "weightFraction": 0
+          }
+        ],
+        "members": [
+          {
+            "id": "a",
+            "label": "A",
+            "value": 10,
+            "weight": 40,
+            "state": "meets",
+            "weightFraction": 0.4
+          },
+          {
+            "id": "b",
+            "label": "B",
+            "value": 6,
+            "weight": 25,
+            "state": "meets",
+            "weightFraction": 0.25
+          },
+          {
+            "id": "c",
+            "label": "C",
+            "value": -4,
+            "weight": 10,
+            "state": "other",
+            "weightFraction": 0.1
+          },
+          {
+            "id": "d",
+            "label": "D",
+            "value": -2,
+            "weight": 5,
+            "state": "other",
+            "weightFraction": 0.05
+          },
+          {
+            "id": "e",
+            "label": "E",
+            "value": 0,
+            "weight": 5,
+            "state": "other",
+            "weightFraction": 0.05
+          },
+          {
+            "id": "f",
+            "label": "F",
+            "value": -1,
+            "weight": 4,
+            "state": "other",
+            "weightFraction": 0.04
+          },
+          {
+            "id": "g",
+            "label": "G",
+            "value": -3,
+            "weight": 3,
+            "state": "other",
+            "weightFraction": 0.03
+          },
+          {
+            "id": "h",
+            "label": "H",
+            "value": -6,
+            "weight": 2,
+            "state": "other",
+            "weightFraction": 0.02
+          },
+          {
+            "id": "i",
+            "label": "I",
+            "value": -5,
+            "weight": 2,
+            "state": "other",
+            "weightFraction": 0.02
+          },
+          {
+            "id": "j",
+            "label": "J",
+            "value": -4,
+            "weight": 2,
+            "state": "other",
+            "weightFraction": 0.02
+          },
+          {
+            "id": "k",
+            "label": "K",
+            "value": -3,
+            "weight": 1,
+            "state": "other",
+            "weightFraction": 0.01
+          },
+          {
+            "id": "l",
+            "label": "L",
+            "value": -2,
+            "weight": 1,
+            "state": "other",
+            "weightFraction": 0.01
+          }
+        ]
+      }
+    },
+    {
+      "name": "service-health-landscape",
+      "recipe": "C05",
+      "caseId": "service-health",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "method": "full-membership-count-and-weight-shares",
+        "membershipDate": "2026-09-01",
+        "metricAsOf": "2026-09-30",
+        "condition": {
+          "operator": "gte",
+          "threshold": 99.9
+        },
+        "totalCount": 12,
+        "totalWeight": 100,
+        "observedCount": 10,
+        "observedWeight": 98,
+        "groups": [
+          {
+            "state": "meets",
+            "count": 6,
+            "weight": 84,
+            "countFraction": 0.5,
+            "weightFraction": 0.84
+          },
+          {
+            "state": "other",
+            "count": 4,
+            "weight": 14,
+            "countFraction": 0.3333333333333333,
+            "weightFraction": 0.14
+          },
+          {
+            "state": "missing",
+            "count": 2,
+            "weight": 2,
+            "countFraction": 0.16666666666666666,
+            "weightFraction": 0.02
+          }
+        ],
+        "members": [
+          {
+            "id": "a",
+            "label": "A",
+            "value": 100,
+            "weight": 25,
+            "state": "meets",
+            "weightFraction": 0.25
+          },
+          {
+            "id": "b",
+            "label": "B",
+            "value": 99.95,
+            "weight": 20,
+            "state": "meets",
+            "weightFraction": 0.2
+          },
+          {
+            "id": "c",
+            "label": "C",
+            "value": 99.9,
+            "weight": 15,
+            "state": "meets",
+            "weightFraction": 0.15
+          },
+          {
+            "id": "d",
+            "label": "D",
+            "value": 99.9,
+            "weight": 10,
+            "state": "meets",
+            "weightFraction": 0.1
+          },
+          {
+            "id": "e",
+            "label": "E",
+            "value": 99.94,
+            "weight": 8,
+            "state": "meets",
+            "weightFraction": 0.08
+          },
+          {
+            "id": "f",
+            "label": "F",
+            "value": 99.91,
+            "weight": 6,
+            "state": "meets",
+            "weightFraction": 0.06
+          },
+          {
+            "id": "g",
+            "label": "G",
+            "value": 99.5,
+            "weight": 5,
+            "state": "other",
+            "weightFraction": 0.05
+          },
+          {
+            "id": "h",
+            "label": "H",
+            "value": 99,
+            "weight": 4,
+            "state": "other",
+            "weightFraction": 0.04
+          },
+          {
+            "id": "i",
+            "label": "I",
+            "value": 99.7,
+            "weight": 3,
+            "state": "other",
+            "weightFraction": 0.03
+          },
+          {
+            "id": "j",
+            "label": "J",
+            "value": 98.1,
+            "weight": 2,
+            "state": "other",
+            "weightFraction": 0.02
+          },
+          {
+            "id": "k",
+            "label": "K",
+            "value": null,
+            "weight": 1,
+            "state": "missing",
+            "weightFraction": 0.01
+          },
+          {
+            "id": "l",
+            "label": "L",
+            "value": null,
+            "weight": 1,
+            "state": "missing",
+            "weightFraction": 0.01
+          }
+        ]
+      }
+    },
+    {
+      "name": "service-health-vertical",
+      "recipe": "C05",
+      "caseId": "service-health",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "method": "full-membership-count-and-weight-shares",
+        "membershipDate": "2026-09-01",
+        "metricAsOf": "2026-09-30",
+        "condition": {
+          "operator": "gte",
+          "threshold": 99.9
+        },
+        "totalCount": 12,
+        "totalWeight": 100,
+        "observedCount": 10,
+        "observedWeight": 98,
+        "groups": [
+          {
+            "state": "meets",
+            "count": 6,
+            "weight": 84,
+            "countFraction": 0.5,
+            "weightFraction": 0.84
+          },
+          {
+            "state": "other",
+            "count": 4,
+            "weight": 14,
+            "countFraction": 0.3333333333333333,
+            "weightFraction": 0.14
+          },
+          {
+            "state": "missing",
+            "count": 2,
+            "weight": 2,
+            "countFraction": 0.16666666666666666,
+            "weightFraction": 0.02
+          }
+        ],
+        "members": [
+          {
+            "id": "a",
+            "label": "A",
+            "value": 100,
+            "weight": 25,
+            "state": "meets",
+            "weightFraction": 0.25
+          },
+          {
+            "id": "b",
+            "label": "B",
+            "value": 99.95,
+            "weight": 20,
+            "state": "meets",
+            "weightFraction": 0.2
+          },
+          {
+            "id": "c",
+            "label": "C",
+            "value": 99.9,
+            "weight": 15,
+            "state": "meets",
+            "weightFraction": 0.15
+          },
+          {
+            "id": "d",
+            "label": "D",
+            "value": 99.9,
+            "weight": 10,
+            "state": "meets",
+            "weightFraction": 0.1
+          },
+          {
+            "id": "e",
+            "label": "E",
+            "value": 99.94,
+            "weight": 8,
+            "state": "meets",
+            "weightFraction": 0.08
+          },
+          {
+            "id": "f",
+            "label": "F",
+            "value": 99.91,
+            "weight": 6,
+            "state": "meets",
+            "weightFraction": 0.06
+          },
+          {
+            "id": "g",
+            "label": "G",
+            "value": 99.5,
+            "weight": 5,
+            "state": "other",
+            "weightFraction": 0.05
+          },
+          {
+            "id": "h",
+            "label": "H",
+            "value": 99,
+            "weight": 4,
+            "state": "other",
+            "weightFraction": 0.04
+          },
+          {
+            "id": "i",
+            "label": "I",
+            "value": 99.7,
+            "weight": 3,
+            "state": "other",
+            "weightFraction": 0.03
+          },
+          {
+            "id": "j",
+            "label": "J",
+            "value": 98.1,
+            "weight": 2,
+            "state": "other",
+            "weightFraction": 0.02
+          },
+          {
+            "id": "k",
+            "label": "K",
+            "value": null,
+            "weight": 1,
+            "state": "missing",
+            "weightFraction": 0.01
+          },
+          {
+            "id": "l",
+            "label": "L",
+            "value": null,
+            "weight": 1,
+            "state": "missing",
+            "weightFraction": 0.01
+          }
+        ]
+      }
+    },
+    {
+      "name": "relative-price-landscape",
+      "recipe": "C08",
+      "caseId": "relative-price",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "method": "signed-metric-difference",
+        "benchmark": 4,
+        "items": [
+          {
+            "id": "a",
+            "label": "Fund A",
+            "value": 8,
+            "size": 50,
+            "difference": 4
+          },
+          {
+            "id": "b",
+            "label": "Fund B",
+            "value": 1,
+            "size": 200,
+            "difference": -3
+          },
+          {
+            "id": "c",
+            "label": "Fund C",
+            "value": 4,
+            "size": 0,
+            "difference": 0
+          },
+          {
+            "id": "d",
+            "label": "Fund D",
+            "value": -2,
+            "size": 450,
+            "difference": -6
+          }
+        ]
+      }
+    },
+    {
+      "name": "relative-price-vertical",
+      "recipe": "C08",
+      "caseId": "relative-price",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "method": "signed-metric-difference",
+        "benchmark": 4,
+        "items": [
+          {
+            "id": "a",
+            "label": "Fund A",
+            "value": 8,
+            "size": 50,
+            "difference": 4
+          },
+          {
+            "id": "b",
+            "label": "Fund B",
+            "value": 1,
+            "size": 200,
+            "difference": -3
+          },
+          {
+            "id": "c",
+            "label": "Fund C",
+            "value": 4,
+            "size": 0,
+            "difference": 0
+          },
+          {
+            "id": "d",
+            "label": "Fund D",
+            "value": -2,
+            "size": 450,
+            "difference": -6
+          }
+        ]
+      }
+    },
+    {
+      "name": "relative-completion-landscape",
+      "recipe": "C08",
+      "caseId": "relative-completion",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "method": "signed-metric-difference",
+        "benchmark": 92,
+        "items": [
+          {
+            "id": "a",
+            "label": "Team A",
+            "value": 98,
+            "size": 80,
+            "difference": 6
+          },
+          {
+            "id": "b",
+            "label": "Team B",
+            "value": 88,
+            "size": 20,
+            "difference": -4
+          },
+          {
+            "id": "c",
+            "label": "Team C",
+            "value": null,
+            "size": 45,
+            "difference": null
+          },
+          {
+            "id": "d",
+            "label": "Team D",
+            "value": 92,
+            "size": 0,
+            "difference": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "relative-completion-vertical",
+      "recipe": "C08",
+      "caseId": "relative-completion",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "method": "signed-metric-difference",
+        "benchmark": 92,
+        "items": [
+          {
+            "id": "a",
+            "label": "Team A",
+            "value": 98,
+            "size": 80,
+            "difference": 6
+          },
+          {
+            "id": "b",
+            "label": "Team B",
+            "value": 88,
+            "size": 20,
+            "difference": -4
+          },
+          {
+            "id": "c",
+            "label": "Team C",
+            "value": null,
+            "size": 45,
+            "difference": null
+          },
+          {
+            "id": "d",
+            "label": "Team D",
+            "value": 92,
+            "size": 0,
+            "difference": 0
+          }
+        ]
+      }
+    }
+  ]
+}

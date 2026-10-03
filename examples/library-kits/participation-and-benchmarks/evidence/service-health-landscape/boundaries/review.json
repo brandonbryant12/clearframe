@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/participation-and-benchmarks/specimens/service-health-landscape/build/pipeline/2026-10-03T04-07-26-505Z-839b687e/video.mp4",
+  "outputSha256": "90bdab6d6d648e2873e88e822f6fd6bfa5503e2d8efc031374525b0244fdaa46",
+  "inputId": "79e980e1653e42536d935a50e2d0bf9107afd0e146a1059b39671c4c01c20b70",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "service-health-count: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "service-health-count: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 299,
+      "time": 9.966666666666667,
+      "reasons": [
+        "service-health-count: last frame",
+        "Before service-health-weight"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 300,
+      "time": 10,
+      "reasons": [
+        "service-health-weight: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 306,
+      "time": 10.2,
+      "reasons": [
+        "service-health-weight: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 659,
+      "time": 21.966666666666665,
+      "reasons": [
+        "service-health-weight: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

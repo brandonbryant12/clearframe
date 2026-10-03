@@ -1,0 +1,1219 @@
+{
+  "schemaVersion": 1,
+  "id": "participation-and-benchmarks",
+  "version": "0.1.0",
+  "kind": "story-kit",
+  "title": "Participation and benchmarks",
+  "status": "prototype",
+  "purpose": "Separate membership counts from weights and benchmark differences from an independent circle-area measure.",
+  "inventoryIds": [
+    "C05",
+    "C08",
+    "T02"
+  ],
+  "tags": {
+    "purpose": [
+      "count",
+      "weight",
+      "compare-to-benchmark"
+    ],
+    "appearance": [
+      "paper",
+      "blue",
+      "orange",
+      "violet"
+    ],
+    "movement": [
+      "quantity-preserving-fade",
+      "staged-reading",
+      "reading-hold"
+    ],
+    "format": [
+      "landscape",
+      "vertical"
+    ],
+    "subject": [
+      "finance",
+      "operations",
+      "adoption"
+    ]
+  },
+  "includes": {
+    "source": "inputs.json",
+    "calculations": "audit.json",
+    "composition": "source/scenes.mjs",
+    "specimens": [
+      "specimens/narrow-leadership-landscape/storyboard.json",
+      "specimens/narrow-leadership-vertical/storyboard.json",
+      "specimens/relative-completion-landscape/storyboard.json",
+      "specimens/relative-completion-vertical/storyboard.json",
+      "specimens/relative-price-landscape/storyboard.json",
+      "specimens/relative-price-vertical/storyboard.json",
+      "specimens/service-health-landscape/storyboard.json",
+      "specimens/service-health-vertical/storyboard.json"
+    ],
+    "preview": "preview.html"
+  },
+  "requires": {
+    "replay": [
+      "ClearFrame native compositor",
+      "paper palette",
+      "bundled Inter fonts"
+    ],
+    "preparation": [
+      "Node.js",
+      "FFmpeg",
+      "Python 3 for encoded verification",
+      "native renderer setup"
+    ]
+  },
+  "editable": {
+    "native": [
+      "values",
+      "dates",
+      "units",
+      "labels",
+      "domains",
+      "palette",
+      "timing"
+    ],
+    "fixedClip": [
+      "Retained MP4 pixels; regenerate and review after source edits"
+    ]
+  },
+  "evidence": {
+    "summary": "evidence/summary.json",
+    "review": "REVIEW.md",
+    "proportions": "evidence/encoded-proportions.json",
+    "continuousPlayback": "unverified"
+  },
+  "provenance": {
+    "references": "SOURCES.md",
+    "data": "Original fictional inputs; no copied market trajectories",
+    "inputSha256": "b26b5f5c498b1850a20bc97f6c12bc0fa6a544422d608c3cbf797c0aa4e76ddc",
+    "modelVersion": 1
+  },
+  "license": "MIT for original files. Bundled fonts retain OFL notices.",
+  "files": [
+    {
+      "path": "audit.json",
+      "bytes": 17564,
+      "sha256": "36de28b150159d7a835f4b0758c10b9ed28a39aaf9ed47df18c151a2e20fa798"
+    },
+    {
+      "path": "build.mjs",
+      "bytes": 2048,
+      "sha256": "3e92628c2526595cfb558369161938b144406f72c95ca2e26e1513d6e42e8f01"
+    },
+    {
+      "path": "check-encoded.py",
+      "bytes": 9672,
+      "sha256": "b07b38409cad81765c6389a7a8677fad9c30d2ffb2f8b2bc808a14f3068dd58a"
+    },
+    {
+      "path": "DIRECTION.md",
+      "bytes": 2769,
+      "sha256": "2734c7b2d4b76758d61a015fece3448653ce21e82329af0c69f577d96f71b23b"
+    },
+    {
+      "path": "evidence/encoded-proportions.json",
+      "bytes": 7949,
+      "sha256": "8c6b4775e7092efb15dfd43eb57b2f1b085e0d2c334204e4e4d689fad5bc1f5a"
+    },
+    {
+      "path": "evidence/independent-review/before-fixes/narrow-leadership-landscape/3s.png",
+      "bytes": 45589,
+      "sha256": "d5e26abec1b786c46ad471ac426ea8dd524ae9b1bafed2f63c096ae392a30e93"
+    },
+    {
+      "path": "evidence/independent-review/before-fixes/narrow-leadership-vertical/3s.png",
+      "bytes": 48940,
+      "sha256": "bd3f47f6d880da582331d836126049e18478d61f7a36b25aab97f85b048e4573"
+    },
+    {
+      "path": "evidence/independent-review/before-fixes/relative-completion-landscape/13s.png",
+      "bytes": 48743,
+      "sha256": "0bfcd7e75a68e7e60d4ff95c55b826d2f7d7ad52d07c12aa7e2cb1d80dd51ba7"
+    },
+    {
+      "path": "evidence/independent-review/before-fixes/relative-completion-landscape/3s.png",
+      "bytes": 47639,
+      "sha256": "c936f7bf06ad0b29c65657a9e1556836182b4adc1c31bfe2b9ea78633651ebf0"
+    },
+    {
+      "path": "evidence/independent-review/before-fixes/relative-completion-vertical/3s.png",
+      "bytes": 52081,
+      "sha256": "b3118b99fff7f82e6c205ce078b40a1718e1170a71f4df3da4c15173454b81e9"
+    },
+    {
+      "path": "evidence/independent-review/before-fixes/relative-price-landscape/13s.png",
+      "bytes": 49631,
+      "sha256": "b242935dd634ff7ef650bc1669a9086904a695c7dead8a75c346f20591acd16a"
+    },
+    {
+      "path": "evidence/independent-review/before-fixes/service-health-landscape/3s.png",
+      "bytes": 44478,
+      "sha256": "529cca25c4af36ee5807ba7674624189bbda2750d0aedd1d880783fd634a6faf"
+    },
+    {
+      "path": "evidence/independent-review/before-fixes/service-health-vertical/3s.png",
+      "bytes": 47715,
+      "sha256": "648c070f1d0d4ca04857680c62efaabb6e0b169289996c7a05adf3f4fb60f233"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-landscape/1.2s.png",
+      "bytes": 33608,
+      "sha256": "c9db60fe4e1aaed3e8adfe8b177962734f69581e39b2f9be69506659fd04a347"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-landscape/10.03s.png",
+      "bytes": 34346,
+      "sha256": "13aa512ac9a721085928153c742fcee17011751e7af5a1afbb652c4fbeec7ff5"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-landscape/10.65s.png",
+      "bytes": 36048,
+      "sha256": "3f4ee9e1343cbba76cc6fd9e9daabc11c1fb6d4e671aa6b4ae5900d26a92c0bb"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-landscape/13s.png",
+      "bytes": 48004,
+      "sha256": "6cdcbb225a974c3c6242fb8b853014143dafaeef8ce312c9872645e3fc6fd3da"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-landscape/21.9s.png",
+      "bytes": 48107,
+      "sha256": "603dd4cf46c5c8b3a76eb2552a0f8a31249b03e66ed0b2d356bf15f06c4880f2"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-landscape/3s.png",
+      "bytes": 45907,
+      "sha256": "8d9c2a1ab60c43a6c1da8a3fb02a64491b9505b8f8e60b55fd6f7bfc9154bf72"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-landscape/9.9s.png",
+      "bytes": 45218,
+      "sha256": "1980a2fd6ebd4fd058c700b563879321d077a5e578e5d638847f37d4e146c260"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-vertical/1.2s.png",
+      "bytes": 35718,
+      "sha256": "1e1d457c213a6395342835c1cb2f7a1137a77a12513d301ae55a6b2eeb455b36"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-vertical/10.03s.png",
+      "bytes": 36929,
+      "sha256": "5ca225fbc85872112f1f8ade02e59425170bb05b51912ce39b7b1cd170148d4f"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-vertical/10.65s.png",
+      "bytes": 39087,
+      "sha256": "a364cedcd8288e2df6c067cdcda1f8e2566da8ab6ba940e8eeb823d279ed93d2"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-vertical/13s.png",
+      "bytes": 51606,
+      "sha256": "2e185a79622c1912b48d933e01bac34cdd44b46e404f1b549830bb648b83dfe5"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-vertical/21.9s.png",
+      "bytes": 51391,
+      "sha256": "cc23ab40cec4159c07e852f4927d1ce507408c46db4d07dc0d2c82e9971786b9"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-vertical/3s.png",
+      "bytes": 49066,
+      "sha256": "63687532d6f88541a00c580cc2b108bfd5e8227f0e4dff8113916bb7a49fa8a5"
+    },
+    {
+      "path": "evidence/independent-review/narrow-leadership-vertical/9.9s.png",
+      "bytes": 48065,
+      "sha256": "11018cb7bf873ca280fad0f31e32b3b25a74d58c215397bf6ee6a87013d76349"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-landscape/1.2s.png",
+      "bytes": 40406,
+      "sha256": "258fda5a8e45cf5b8f374e5478e19aaf909b86d0ebdf4976be3fdddfbd60bb1f"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-landscape/10.03s.png",
+      "bytes": 33376,
+      "sha256": "40fdf87665e4185a2418cd627d98bd595e890f987c0f0eeef1ce9f3f9eaf648f"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-landscape/10.65s.png",
+      "bytes": 38591,
+      "sha256": "a51444eb907b675c815f02dd41749b087dcaec063bc400ec56fb74d7525b626f"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-landscape/13s.png",
+      "bytes": 48450,
+      "sha256": "a7127e2b5b832f4be695bc1c8552e857e7ec25764f52160498683fd9bd04e9ee"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-landscape/23.9s.png",
+      "bytes": 48727,
+      "sha256": "b3aa22e3ad101de72e28677ca048c003f45b748c54d55b11c15cd8c01a3eca72"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-landscape/3s.png",
+      "bytes": 46710,
+      "sha256": "647e3cc2e9125294b56edc0d7c07f1a282ae4f1867e804e6fe267915ccfeb4e9"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-landscape/9.9s.png",
+      "bytes": 47035,
+      "sha256": "77ebe4fda9f97d22b83e90a5019add3aa99b457d812067da879a059de26920c7"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-vertical/1.2s.png",
+      "bytes": 44944,
+      "sha256": "8cc4105200afbdfe7a4ad72af8c512feee7e10eeb4492e4082eb8aeb5756ee03"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-vertical/10.03s.png",
+      "bytes": 37546,
+      "sha256": "9bc7fe0cd2bb1c2a68ed9007bf8bfc7c23b9d5832e4aef342bc8466a7e3f1867"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-vertical/10.65s.png",
+      "bytes": 42938,
+      "sha256": "47ecad24e23727e4281a72a2e1971d448c2908836820d722e698d86a410a5803"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-vertical/13s.png",
+      "bytes": 53319,
+      "sha256": "c35a839fc4bcdc4af8c7b21b67c19a0fad50ce9597cf4e5e1aad3483f050c1b5"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-vertical/23.9s.png",
+      "bytes": 53582,
+      "sha256": "e3043ba13d1aa5b43f33f26ed6f00b5397e386c5d858b4906e87bdcb6a6e5795"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-vertical/3s.png",
+      "bytes": 51328,
+      "sha256": "a25136dd85288b6052cb290506c371c076c72f65eec9c61246b3fac235676591"
+    },
+    {
+      "path": "evidence/independent-review/relative-completion-vertical/9.9s.png",
+      "bytes": 51628,
+      "sha256": "a867d1d1c92bb6a75e0065dbad472635afcdb21a33e03f6ab01f5b41b09e78b2"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-landscape/1.2s.png",
+      "bytes": 39993,
+      "sha256": "231b769056de30ea288ad74aaf4735ccb2a6cc4606a436430f781da8406ee63d"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-landscape/10.03s.png",
+      "bytes": 35777,
+      "sha256": "07a43fd657d5c6bd4b698f943316cd3bd65871c06c735516c0253995d548cf11"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-landscape/10.65s.png",
+      "bytes": 40334,
+      "sha256": "64b17b3c0335ce359b7d4d5f4b4b3a6412b52d35e22a23ee2aa56c21a5dcf858"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-landscape/13s.png",
+      "bytes": 51845,
+      "sha256": "b99638609b734e5c226e83751a56093e4cad39609bdcd6435b6a9dfe29b634be"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-landscape/23.9s.png",
+      "bytes": 52127,
+      "sha256": "886c5573c7a078ec365394d19b86d87491debfde03f473c38cbb509041bda1e2"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-landscape/3s.png",
+      "bytes": 46003,
+      "sha256": "33223e99e3e2200154b0a9fab208ccc8c8680c9c1deb563727663cfc6619c9de"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-landscape/9.9s.png",
+      "bytes": 46114,
+      "sha256": "9f20e49670587fa3f4e0e7fc17346328dc98407a3b5a3ba0b713d331b621d7d1"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-vertical/1.2s.png",
+      "bytes": 44304,
+      "sha256": "404808c6b6d76c5c4a89de50a58e2b0072c817ac3b6ab936094d77f1e059f343"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-vertical/10.03s.png",
+      "bytes": 40029,
+      "sha256": "d8a2535f91599c187bef7ce56d9c01aa20d4029155133f172dc443a44b45f9f7"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-vertical/10.65s.png",
+      "bytes": 44607,
+      "sha256": "8a9f1c0af77db3439a38ab20c46c64ed0102c734db7d5566dc8c010c816b7796"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-vertical/13s.png",
+      "bytes": 56074,
+      "sha256": "bc6eb5befa8f38623aab5c103f3011c8a21f29f4581799f6fac685cff82e07c0"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-vertical/23.9s.png",
+      "bytes": 56346,
+      "sha256": "d394b0c27289711a1e641367506cd71ae8c0bed41856b7c62fe7f0bab3d4ae40"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-vertical/3s.png",
+      "bytes": 50572,
+      "sha256": "8a89daf47a70142a1c5cf3c1e59684f816c372d97409be2d410e4587789e1f99"
+    },
+    {
+      "path": "evidence/independent-review/relative-price-vertical/9.9s.png",
+      "bytes": 50865,
+      "sha256": "e38a6e6573f74348d32a68fc9ab3a2649107fd78c07a10e179a2a264eba6b64d"
+    },
+    {
+      "path": "evidence/independent-review/service-health-landscape/1.2s.png",
+      "bytes": 32405,
+      "sha256": "c65ff96d769d4f393d82040754853961f6febc658c993bf5e34d49f10804f7d0"
+    },
+    {
+      "path": "evidence/independent-review/service-health-landscape/10.03s.png",
+      "bytes": 35073,
+      "sha256": "000929da213c3cd3e487ea3efdf53d80f28dd157fdf159c6f55aa4d9524d52cd"
+    },
+    {
+      "path": "evidence/independent-review/service-health-landscape/10.65s.png",
+      "bytes": 36907,
+      "sha256": "6e744a9c3f7c6c9000785f4c59cfff82ed805a0b9f0b427efad2883877205a99"
+    },
+    {
+      "path": "evidence/independent-review/service-health-landscape/13s.png",
+      "bytes": 48171,
+      "sha256": "40d448953c956f2bf77580f0da9182f0169ad9678518893097b2db75bf22de53"
+    },
+    {
+      "path": "evidence/independent-review/service-health-landscape/21.9s.png",
+      "bytes": 48195,
+      "sha256": "83ca6cd14b40ae957243fe7cb00789271225b97107d094b93dfdbf318abdfdeb"
+    },
+    {
+      "path": "evidence/independent-review/service-health-landscape/3s.png",
+      "bytes": 44589,
+      "sha256": "29c08e52c97e683c763993a2fec8f10d555270be04c823dbfd1d8ea69ee992e2"
+    },
+    {
+      "path": "evidence/independent-review/service-health-landscape/9.9s.png",
+      "bytes": 44100,
+      "sha256": "f9560f3b5a1ef17033fc15714a52e80f604d8ecc382791268d8686818737276b"
+    },
+    {
+      "path": "evidence/independent-review/service-health-vertical/1.2s.png",
+      "bytes": 34672,
+      "sha256": "46c10a7cf3c0c81f34ea110023a151ef0f9a3d738c623424d2bc29e7ae4ce580"
+    },
+    {
+      "path": "evidence/independent-review/service-health-vertical/10.03s.png",
+      "bytes": 37534,
+      "sha256": "cf3e571d7ed248a21bfe383ec57b6278db64febfb099403c387ade1eef770fcf"
+    },
+    {
+      "path": "evidence/independent-review/service-health-vertical/10.65s.png",
+      "bytes": 39393,
+      "sha256": "8749f7594cf2cc65a57d7368167ec4911fa98e8976ca8a685d9989f351adcc89"
+    },
+    {
+      "path": "evidence/independent-review/service-health-vertical/13s.png",
+      "bytes": 51310,
+      "sha256": "14499c2e314240414373b0b474bbc63cfbd685cf80cd141d14cc7efd69036b58"
+    },
+    {
+      "path": "evidence/independent-review/service-health-vertical/21.9s.png",
+      "bytes": 51303,
+      "sha256": "d733f46dcb92a668a40711b7d50f9cfc94bf5bbd0f5eceed945dff9ad775d28c"
+    },
+    {
+      "path": "evidence/independent-review/service-health-vertical/3s.png",
+      "bytes": 47957,
+      "sha256": "68baa18e84b038719036dca4c48219c36d3f07914d81a8fd8971a4f9c4b9e82a"
+    },
+    {
+      "path": "evidence/independent-review/service-health-vertical/9.9s.png",
+      "bytes": 46991,
+      "sha256": "2b3caa5135e161307331a609d9b9eb4e72e03729bbbd43175abf48f2274dd27d"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/boundaries/frame-0000.jpg",
+      "bytes": 35168,
+      "sha256": "f5fdd7345d09db598663478ec777f3fcd09794a0fbc6ff35fa2a83f26599bf47"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/boundaries/frame-0001.jpg",
+      "bytes": 39377,
+      "sha256": "a244460a652400e83a4ba9740cd854e2bc89549b239dbe4b2dae865522571e80"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/boundaries/frame-0002.jpg",
+      "bytes": 65962,
+      "sha256": "768338890e96fe4c39919c584768845d1a80f7856a7ba51e0e99794f0ad9b332"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/boundaries/frame-0003.jpg",
+      "bytes": 44713,
+      "sha256": "4e91b8340fbcc7526f7e6f6191ad794b835f20dae85ea8a84aacdd75a0330497"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/boundaries/frame-0004.jpg",
+      "bytes": 48903,
+      "sha256": "a21889e6c05b325d5cf85045d4734cf18d645ecb95f5e6d6126256ba6b3a4755"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/boundaries/frame-0005.jpg",
+      "bytes": 67449,
+      "sha256": "22dcf3ed8df7c1fe60dedb9546c2ac401fac8b56c16e6eff506f71e25274086b"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/boundaries/index.html",
+      "bytes": 1843,
+      "sha256": "7451b4b16442dcda787597f49292509050440eeb70ee84951076c310113f2710"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/boundaries/review.json",
+      "bytes": 1437,
+      "sha256": "d4687c260c3d8e833159b99970b61e4c2ebb74759c4ad7b0c1627dfde940daec"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/boundaries/strip.png",
+      "bytes": 103735,
+      "sha256": "35588fa507f971e58b6ddbb0815dd371e91739d4d2036a4cacae194c16f92931"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/check.json",
+      "bytes": 270,
+      "sha256": "f7c48aa46d7e9d6b5a8988796357bdbd373f51d0a39253b9efca005e6fa5ef4d"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/phone.png",
+      "bytes": 407133,
+      "sha256": "2851ec507697eddce6e8e6ea905b4b1b9f2ee82a4038338e858351dc39199300"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/qa.json",
+      "bytes": 6349,
+      "sha256": "df3500191c20dea0fd218a66a3b2bf6c425d0cbf86be7c56a596acd2529557eb"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/seek.json",
+      "bytes": 1026,
+      "sha256": "ed43e1fd572e4f85d171c455b16c456e97833fdd3d497879e2dc1bb38ecc4043"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/sheet.png",
+      "bytes": 115241,
+      "sha256": "56539f476260dd784057717cbfb552be24b5aa87568e421ada6764f879481e5b"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/timeline.png",
+      "bytes": 144913,
+      "sha256": "56b6a317829e022f620c1f59d08258c2553b7831c90ddbe30c431891d7fde015"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/video.mp4",
+      "bytes": 530245,
+      "sha256": "048fcbdbf7c3c42134a7611257d187154108bf228925b5cb0347eeb5c2f1c880"
+    },
+    {
+      "path": "evidence/narrow-leadership-landscape/video.mp4.json",
+      "bytes": 2734,
+      "sha256": "350d6ab50fcaf023690c0727a7b2e035255ae5c769b98db45a7956b9aff59cb1"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/boundaries/frame-0000.jpg",
+      "bytes": 39279,
+      "sha256": "b48b0bb5cd2428a4cf8ec76ee1ab70bc72636c422e20df58ee972591d34eaea7"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/boundaries/frame-0001.jpg",
+      "bytes": 43145,
+      "sha256": "20d91046f433a316ef0dc2edb5bd2dd82eb69a49ba40bd9971c81859efb5b159"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/boundaries/frame-0002.jpg",
+      "bytes": 79241,
+      "sha256": "ac274f5012887fee11816c326507591e7cd02470e43df2b1ca3d91ee6478dbd5"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/boundaries/frame-0003.jpg",
+      "bytes": 49878,
+      "sha256": "604509a0fb9bd6b914a0d0647b22eaac36bfbabf97d6589a3b4d318865d6a958"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/boundaries/frame-0004.jpg",
+      "bytes": 54006,
+      "sha256": "8b46e683ff546f242074af162b5c66ae993a4e5aa48640a43d458db937780be6"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/boundaries/frame-0005.jpg",
+      "bytes": 73136,
+      "sha256": "af622459952bfd2b3883258457751dc06695bad7145d99d6463bd4edc7a16d1a"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/boundaries/index.html",
+      "bytes": 1843,
+      "sha256": "7451b4b16442dcda787597f49292509050440eeb70ee84951076c310113f2710"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/boundaries/review.json",
+      "bytes": 1436,
+      "sha256": "46ef7b92b6ab54a78fdec62748fa64dfd416d6bf9aa7f2f2b9ad0b918323255e"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/boundaries/strip.png",
+      "bytes": 105266,
+      "sha256": "2a5fc03245d9e73d36db29f1c35dd9bd53afd724b367e77aafc7d88951d82776"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/check.json",
+      "bytes": 270,
+      "sha256": "50daf500c2bd259f2093e12bffa03e7e41794f209cecde7667e2ed0613c4d608"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/phone.png",
+      "bytes": 391816,
+      "sha256": "7a528498d0e452120878e66990841e46e49f502b20219db82a831cca65341398"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/qa.json",
+      "bytes": 6353,
+      "sha256": "260a82ff467fec8e90fcb9ca89a3612c918180cacc619039c949afa2c1c19c5a"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/seek.json",
+      "bytes": 1026,
+      "sha256": "d1863968188e583528a842302c18d959e461129e49f068b5dc6847fa8eeebaef"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/sheet.png",
+      "bytes": 127599,
+      "sha256": "867d252800d1817f08a5b96470997012122874602cf87703c2ba280f176a3c9f"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/timeline.png",
+      "bytes": 83537,
+      "sha256": "2ac609624427e465334239887254fb125e2fb8c19f722bd0833c48e620258db2"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/video.mp4",
+      "bytes": 338393,
+      "sha256": "ea67e7596fa0a92f238c4273aa236f039752110e3f93bc6f6cd76ceaea730d2f"
+    },
+    {
+      "path": "evidence/narrow-leadership-vertical/video.mp4.json",
+      "bytes": 2734,
+      "sha256": "d2fc8ce5517eb44b0d067b7c53365ebfca2dc1eeec76b08bd5348e4f940a6340"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/boundaries/frame-0000.jpg",
+      "bytes": 41355,
+      "sha256": "73daa6f2298a8fb63d0ffdf0f497066c63b5361780b392e423f9d75cc18ae8f3"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/boundaries/frame-0001.jpg",
+      "bytes": 45846,
+      "sha256": "26be655f1400d00f8549ca9e4cedd27a04d9901d27e6b69d73a7633f391e43ec"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/boundaries/frame-0002.jpg",
+      "bytes": 61078,
+      "sha256": "bb9d4bd2be309da482f6c3764dc95db9912d1b014a59eea50d8d257ab9894d8b"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/boundaries/frame-0003.jpg",
+      "bytes": 43478,
+      "sha256": "90d66572f8e668b3663c36fa50dd3bbb0a8ca3c0d74d3b32bec572e2164bd72d"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/boundaries/frame-0004.jpg",
+      "bytes": 47189,
+      "sha256": "07c4a307f675de09f7dcc49a85cf3df75837202194895d61a37b5b224c4af688"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/boundaries/frame-0005.jpg",
+      "bytes": 65169,
+      "sha256": "e71fea39562592b619ba38f18c68af2b19997c7d00e4dc63b715dccf4f1334e2"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/boundaries/index.html",
+      "bytes": 1832,
+      "sha256": "c7b495117eb2ca6fcaf0f9ae78870a5bea4a93d4632bc1c07b1c5d73cbcbddbe"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/boundaries/review.json",
+      "bytes": 1428,
+      "sha256": "70e827b5efdc3e804ae74be04c25418427a824da8dff1aa1cb3e7adf6479e29f"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/boundaries/strip.png",
+      "bytes": 110181,
+      "sha256": "2a88e847063cc235a78175852d7e83a1341faf36b3aed7b0f0d2cecbc2b64d0f"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/check.json",
+      "bytes": 270,
+      "sha256": "b278eb7db21c46ea532769d46a3c6561d5047c39733cf4082ecfd6b41a125e90"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/phone.png",
+      "bytes": 413691,
+      "sha256": "de438d53072aa7a790f552c2145691a84c9ae8185b63327f37ccc5c90a4d124f"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/qa.json",
+      "bytes": 6779,
+      "sha256": "6906843bf5a5846d2a51ffe1a2f9bb022d3de9c15580c00e28fa18e309ce08ce"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/seek.json",
+      "bytes": 1026,
+      "sha256": "c145ae846741d9d4c8b8d0a59a33d680b1455b215fd359fb6a857cf5ca52c3d5"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/sheet.png",
+      "bytes": 124366,
+      "sha256": "847d05a2adf81a195b4c42b115ffad513582e99fabb5a87b4da2f6aab0621f88"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/timeline.png",
+      "bytes": 146689,
+      "sha256": "182b652e761d4d8eca992b1c65eb693e7538cbd350a4ccc7e685b846646f2fe4"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/video.mp4",
+      "bytes": 573671,
+      "sha256": "db7cf5ab816668124cfd21b946f675b0bff8628e80d99d2fc522cadf386b2bfb"
+    },
+    {
+      "path": "evidence/relative-completion-landscape/video.mp4.json",
+      "bytes": 2740,
+      "sha256": "c159d5ca6dab055e3bc88f94b0d0e90421facf86e5d1a10f9f816dd9228b6200"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/boundaries/frame-0000.jpg",
+      "bytes": 48969,
+      "sha256": "578fd1d195283fde5ebc593c387b1a70daabe48ab8b385df5e67540d51d0f58b"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/boundaries/frame-0001.jpg",
+      "bytes": 53467,
+      "sha256": "c2df168662a8d48c09cb20f5b171db8e1a9fcd7fe8f40633e8b843b99543f39a"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/boundaries/frame-0002.jpg",
+      "bytes": 69920,
+      "sha256": "2111f29ae0b1d000311e605879d3b3cd5e05501e03c0430298768d78789a084b"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/boundaries/frame-0003.jpg",
+      "bytes": 53518,
+      "sha256": "086960495ce49c1971d103dc9001dea087d6d0e3bf8b769fbb2c3123c629b639"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/boundaries/frame-0004.jpg",
+      "bytes": 56760,
+      "sha256": "5f1eea2f3b3823ef36f13df1e76180e7a235605d9682935ae2e4c3e9eb68c48d"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/boundaries/frame-0005.jpg",
+      "bytes": 74695,
+      "sha256": "0941250888dc714afa8e78e19069a72a28fb2f2af681b770addb6ad826f305e3"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/boundaries/index.html",
+      "bytes": 1832,
+      "sha256": "c7b495117eb2ca6fcaf0f9ae78870a5bea4a93d4632bc1c07b1c5d73cbcbddbe"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/boundaries/review.json",
+      "bytes": 1427,
+      "sha256": "e46942d6e05b52d11d707cd37bdc839c1b724f675ea1f693bf36aca2f53c9d95"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/boundaries/strip.png",
+      "bytes": 117067,
+      "sha256": "ab1b5ddb58dbac864cbab96c5b74d842ca7a1652805a8feda445b06f17d5bdfd"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/check.json",
+      "bytes": 270,
+      "sha256": "2b345c5fbb913d13ab41e0e74c3b2dd63e9ceaff3068a001a4f2525d43200159"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/phone.png",
+      "bytes": 408809,
+      "sha256": "417be05e70e3db68eed132adf214b1b98b30f251ad750cdb9438f9143882ec2c"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/qa.json",
+      "bytes": 6738,
+      "sha256": "281266c489db2d2e7b7de79be83b5bbf3ad3275c683e3ed9fbcbe00bf4e9ed1a"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/seek.json",
+      "bytes": 1026,
+      "sha256": "587a1e215bab63e16d087fdb9d29a823e302d0e0a0df298cbd2f7f176945eeec"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/sheet.png",
+      "bytes": 139089,
+      "sha256": "5af25d0bdbe71bf1b0323266a353f0add808ff9b7b059ba14657e8bac4cbe1bf"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/timeline.png",
+      "bytes": 84163,
+      "sha256": "863e3231757ea4e3c2e39a4b08a57ea8c71f16921f9264b3f673e609fa33b5d8"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/video.mp4",
+      "bytes": 369766,
+      "sha256": "03c6600856af38e093b48df5622b0d6c211ad7bec7195894e48bb197297c975a"
+    },
+    {
+      "path": "evidence/relative-completion-vertical/video.mp4.json",
+      "bytes": 2740,
+      "sha256": "350c76868fc4b549efc71a126a869d71f1d3ccd95aba29f10698dea5aa6fd166"
+    },
+    {
+      "path": "evidence/relative-price-landscape/boundaries/frame-0000.jpg",
+      "bytes": 40842,
+      "sha256": "d360d2a5219af6b52e75adbe1e01d44f118dbfbdf7e76665a2102fc37e1386a1"
+    },
+    {
+      "path": "evidence/relative-price-landscape/boundaries/frame-0001.jpg",
+      "bytes": 45126,
+      "sha256": "12245db37463ec94a43c3e3133b78c9e3c5c04d93e006d2c030ea4f6eb26999a"
+    },
+    {
+      "path": "evidence/relative-price-landscape/boundaries/frame-0002.jpg",
+      "bytes": 58730,
+      "sha256": "258d3eb83f9e82730128cd8b2f069fde438a8161810a7aacd3e9457b4ab3f429"
+    },
+    {
+      "path": "evidence/relative-price-landscape/boundaries/frame-0003.jpg",
+      "bytes": 46615,
+      "sha256": "58a127e790ed74bb5018296e153077eba076f7345494792ef83ab8f2d8572e8f"
+    },
+    {
+      "path": "evidence/relative-price-landscape/boundaries/frame-0004.jpg",
+      "bytes": 50189,
+      "sha256": "e8f74c22b411ab71f4292b098fb4c5249b238a090e4714f8830fdee952f3390d"
+    },
+    {
+      "path": "evidence/relative-price-landscape/boundaries/frame-0005.jpg",
+      "bytes": 69073,
+      "sha256": "1c93bd8c61a7004dfda151af8b232421ecebe4ebede7a4a7963c2afa33945dcd"
+    },
+    {
+      "path": "evidence/relative-price-landscape/boundaries/index.html",
+      "bytes": 1797,
+      "sha256": "211ec9eb63c6fb2851bc1c1b19bd4846f1eb4b42429e36db9f677a8aacaaf508"
+    },
+    {
+      "path": "evidence/relative-price-landscape/boundaries/review.json",
+      "bytes": 1388,
+      "sha256": "8945bb0ec6f93292c1432415202556b0a678f7b5bdfefea342ff4b369813191c"
+    },
+    {
+      "path": "evidence/relative-price-landscape/boundaries/strip.png",
+      "bytes": 113956,
+      "sha256": "1106b729eb2ec97da86899a80dd4836e2bdcf4c2ab993e92094a76a298b6ccfe"
+    },
+    {
+      "path": "evidence/relative-price-landscape/check.json",
+      "bytes": 270,
+      "sha256": "a7715c0491adb6ce38386fd2b5930a20bffeaa0c915c356c0f0ef9cfa8e0ac9a"
+    },
+    {
+      "path": "evidence/relative-price-landscape/phone.png",
+      "bytes": 427816,
+      "sha256": "6a45dbd66a5b67805b21c453c0bb90848746592f7abe0ccdc5756ce1721431ad"
+    },
+    {
+      "path": "evidence/relative-price-landscape/qa.json",
+      "bytes": 6786,
+      "sha256": "52675ecf29569cffb80c6fec759fb7e704dbe912a25ef7ab18e03fdcebcc2c7b"
+    },
+    {
+      "path": "evidence/relative-price-landscape/seek.json",
+      "bytes": 1026,
+      "sha256": "7be6042b9d231b15f3d97bbf4e2d01c452a36ac18788b580a8f0e777286d046b"
+    },
+    {
+      "path": "evidence/relative-price-landscape/sheet.png",
+      "bytes": 127790,
+      "sha256": "be8ce0e2529e657993b267a90383be5cbebb4ba9c137be97772f044d1c68fcb8"
+    },
+    {
+      "path": "evidence/relative-price-landscape/timeline.png",
+      "bytes": 152947,
+      "sha256": "0c08c650429f2a8b26b1b27eca7a3580b075570b1d61bd4189ca380cf9cdd439"
+    },
+    {
+      "path": "evidence/relative-price-landscape/video.mp4",
+      "bytes": 545733,
+      "sha256": "83b53ea568f1a1fb2c988433b8ea33d2d7e4e820debd53c4bbaeca6475b8bf17"
+    },
+    {
+      "path": "evidence/relative-price-landscape/video.mp4.json",
+      "bytes": 2734,
+      "sha256": "4e7f5e9ace3336643a0c2d5bb7998a254a902f65445742f584eda053cb40ca81"
+    },
+    {
+      "path": "evidence/relative-price-vertical/boundaries/frame-0000.jpg",
+      "bytes": 48383,
+      "sha256": "3dc062d2e47b80df176127068ff77ba04584c5ec95965c24b7878efc736df695"
+    },
+    {
+      "path": "evidence/relative-price-vertical/boundaries/frame-0001.jpg",
+      "bytes": 52666,
+      "sha256": "0148459e1ec1a850014bc71a48e0821303cacaa24d98f96450a75f58563b0e77"
+    },
+    {
+      "path": "evidence/relative-price-vertical/boundaries/frame-0002.jpg",
+      "bytes": 67804,
+      "sha256": "0c7be7a326d6f54a2f06621597f4d84bcbc0cfaa2dccf291e31ba148d13707fb"
+    },
+    {
+      "path": "evidence/relative-price-vertical/boundaries/frame-0003.jpg",
+      "bytes": 56044,
+      "sha256": "d1356b461e19aa0eb5fe8746206df134fcf84ecb2f9be733b1f57a3dfb1d2202"
+    },
+    {
+      "path": "evidence/relative-price-vertical/boundaries/frame-0004.jpg",
+      "bytes": 59351,
+      "sha256": "4cc342b5d2303a9605fcb387b39dac9154ae476efd0e41861a884f42baea1f88"
+    },
+    {
+      "path": "evidence/relative-price-vertical/boundaries/frame-0005.jpg",
+      "bytes": 76979,
+      "sha256": "37d35b7fafc26c4a39682b98bddad33e588aa579ca91e61ee2498d6caf3a0967"
+    },
+    {
+      "path": "evidence/relative-price-vertical/boundaries/index.html",
+      "bytes": 1797,
+      "sha256": "211ec9eb63c6fb2851bc1c1b19bd4846f1eb4b42429e36db9f677a8aacaaf508"
+    },
+    {
+      "path": "evidence/relative-price-vertical/boundaries/review.json",
+      "bytes": 1387,
+      "sha256": "ebf33e873b5b0f937bdd4d645b47322eaa19df46340ad043edc952e21bfe4bf4"
+    },
+    {
+      "path": "evidence/relative-price-vertical/boundaries/strip.png",
+      "bytes": 119755,
+      "sha256": "6f3a4947c0128582ec7b6513b657851738939020f3e22dfef4ac1449bacd750f"
+    },
+    {
+      "path": "evidence/relative-price-vertical/check.json",
+      "bytes": 270,
+      "sha256": "6ff5f1d4d7e269975f6ba92e138cd0af618d480e022dbf70c0596e4ddc81850d"
+    },
+    {
+      "path": "evidence/relative-price-vertical/phone.png",
+      "bytes": 418021,
+      "sha256": "b4f8342ecc23951e69bf9726a5c7ae042cd5191576990832622e4d013d38da01"
+    },
+    {
+      "path": "evidence/relative-price-vertical/qa.json",
+      "bytes": 6731,
+      "sha256": "ba677841c4742665b70b42a864b6d6995f47d33991bcf59985429716518f6a77"
+    },
+    {
+      "path": "evidence/relative-price-vertical/seek.json",
+      "bytes": 1026,
+      "sha256": "9477469179aab918a42b73ae24e2812b1b50094d05abb528a803be0b4122bbe8"
+    },
+    {
+      "path": "evidence/relative-price-vertical/sheet.png",
+      "bytes": 141376,
+      "sha256": "972badd7c9a947e5719d69613560932dea0a7c05ae317dab2bb176cf5c2199cf"
+    },
+    {
+      "path": "evidence/relative-price-vertical/timeline.png",
+      "bytes": 87551,
+      "sha256": "6599deb50e64b83bc5d2c94fcd487e3e7427f209dfa9a0a326f5ee2549826a61"
+    },
+    {
+      "path": "evidence/relative-price-vertical/video.mp4",
+      "bytes": 351355,
+      "sha256": "ded4245e3c2cb4204d60797f550beeefaa4c01946606e98a311b3fdb56ab05b0"
+    },
+    {
+      "path": "evidence/relative-price-vertical/video.mp4.json",
+      "bytes": 2740,
+      "sha256": "2a1bdf1bd4a9ef6101e594a341c9eaf5297af10798c3c2518d060683eaf606c0"
+    },
+    {
+      "path": "evidence/service-health-landscape/boundaries/frame-0000.jpg",
+      "bytes": 33745,
+      "sha256": "71d88bac393be0913234c4c9146bbb0c4323663d3c17cf0f1bef02ccd722b89f"
+    },
+    {
+      "path": "evidence/service-health-landscape/boundaries/frame-0001.jpg",
+      "bytes": 38006,
+      "sha256": "20466ded476f88deb5a67bda79ccc2d28176bad447a175b841dee65bda65e5d4"
+    },
+    {
+      "path": "evidence/service-health-landscape/boundaries/frame-0002.jpg",
+      "bytes": 64097,
+      "sha256": "c14f3d61d293f8442c2edb23a8895a799126674ccaa8a4e3cd5540a615fdc799"
+    },
+    {
+      "path": "evidence/service-health-landscape/boundaries/frame-0003.jpg",
+      "bytes": 45938,
+      "sha256": "abb5964705a3b045dedba520453c8dffe76b5ddf2e14845f24d9a69a3d7a85b9"
+    },
+    {
+      "path": "evidence/service-health-landscape/boundaries/frame-0004.jpg",
+      "bytes": 50396,
+      "sha256": "a0062d1219062901e8e372f60173a6e98589e1913054b7c3c5fc16b8b19c07a5"
+    },
+    {
+      "path": "evidence/service-health-landscape/boundaries/frame-0005.jpg",
+      "bytes": 68141,
+      "sha256": "38855df060b06eee1556ae320181c39cde5ace1eb7eeafde469fe8f3a4931a4e"
+    },
+    {
+      "path": "evidence/service-health-landscape/boundaries/index.html",
+      "bytes": 1822,
+      "sha256": "20b682775232cd0a9476dfed43d00e59dc0a0b4597132f77f09aed29bd439d22"
+    },
+    {
+      "path": "evidence/service-health-landscape/boundaries/review.json",
+      "bytes": 1413,
+      "sha256": "891b2ec3c477dd72150759d48e5fafa9918f57c32222a2c196166d68ad2b325a"
+    },
+    {
+      "path": "evidence/service-health-landscape/boundaries/strip.png",
+      "bytes": 102300,
+      "sha256": "036cf5655a6bccbff3460b0f711375eb748d739b95c0fecddbdbc0a038c636a0"
+    },
+    {
+      "path": "evidence/service-health-landscape/check.json",
+      "bytes": 270,
+      "sha256": "602e23365585d4a5f0516590f53c81435fb970d74fe1195f6cbfb923d9c3f15b"
+    },
+    {
+      "path": "evidence/service-health-landscape/phone.png",
+      "bytes": 407012,
+      "sha256": "cd0c3e4802c60cab7217b7ee174fc2bd1ff4c2a56efeb0b41755bc45d80656f9"
+    },
+    {
+      "path": "evidence/service-health-landscape/qa.json",
+      "bytes": 6350,
+      "sha256": "34e17f418d706691bf056757c24cf4d16b97fe244d71ef9bd3cdb0ebb4b5a50d"
+    },
+    {
+      "path": "evidence/service-health-landscape/seek.json",
+      "bytes": 1026,
+      "sha256": "e5da1031489d1dcf3da7dd57bac702986ca713800c0d76f5202662eab5af1707"
+    },
+    {
+      "path": "evidence/service-health-landscape/sheet.png",
+      "bytes": 113891,
+      "sha256": "e8dec928ed8022424676a2746295ce4a54c39e4d4ac9bd9363849905e0585128"
+    },
+    {
+      "path": "evidence/service-health-landscape/timeline.png",
+      "bytes": 145103,
+      "sha256": "aaf3ebe4860f9e88d92290c02e123c2774cd609312418ba56a68f4cb2e71e102"
+    },
+    {
+      "path": "evidence/service-health-landscape/video.mp4",
+      "bytes": 519103,
+      "sha256": "90bdab6d6d648e2873e88e822f6fd6bfa5503e2d8efc031374525b0244fdaa46"
+    },
+    {
+      "path": "evidence/service-health-landscape/video.mp4.json",
+      "bytes": 2741,
+      "sha256": "47193bb1eb0c10dd5e52bed3954f437f3fa52e3dbe6b6099e17a7311a84e0e24"
+    },
+    {
+      "path": "evidence/service-health-vertical/boundaries/frame-0000.jpg",
+      "bytes": 38332,
+      "sha256": "bac0b289c67b0c97262f3a870c5d301c56d4a531d3ee952cced82da73041e736"
+    },
+    {
+      "path": "evidence/service-health-vertical/boundaries/frame-0001.jpg",
+      "bytes": 42251,
+      "sha256": "22a40147cf77f407209d344a27afddcf62c7266991e6299f7abfcdfb547b7216"
+    },
+    {
+      "path": "evidence/service-health-vertical/boundaries/frame-0002.jpg",
+      "bytes": 77666,
+      "sha256": "fe82465c27f8601a865373009613e1f3f8b318db99954413b2aacc5442b0e024"
+    },
+    {
+      "path": "evidence/service-health-vertical/boundaries/frame-0003.jpg",
+      "bytes": 50862,
+      "sha256": "1abf7c15a2664a2bdb6385de61c9ccd4e36eb69d68be01dde92fb69f78aba372"
+    },
+    {
+      "path": "evidence/service-health-vertical/boundaries/frame-0004.jpg",
+      "bytes": 54767,
+      "sha256": "ef7f697db6603e62ea5dacdc6b465e85517b2a66605bc3890f20644ad73dfc64"
+    },
+    {
+      "path": "evidence/service-health-vertical/boundaries/frame-0005.jpg",
+      "bytes": 73064,
+      "sha256": "6d0b82b9720ea85f9fa1e8c659d81ca7630a5cfce893619b5ad9aeb5f5226023"
+    },
+    {
+      "path": "evidence/service-health-vertical/boundaries/index.html",
+      "bytes": 1822,
+      "sha256": "20b682775232cd0a9476dfed43d00e59dc0a0b4597132f77f09aed29bd439d22"
+    },
+    {
+      "path": "evidence/service-health-vertical/boundaries/review.json",
+      "bytes": 1412,
+      "sha256": "d37b98b0a182ee1a3ea3263662cbe0d9a63a2810a96a438dc1cc80571e7ddc67"
+    },
+    {
+      "path": "evidence/service-health-vertical/boundaries/strip.png",
+      "bytes": 103931,
+      "sha256": "915b50792c6813b836ac6a0156acd5b9cb71a43048cc751ab09aa1ebc8b0c99c"
+    },
+    {
+      "path": "evidence/service-health-vertical/check.json",
+      "bytes": 270,
+      "sha256": "803f1875998352e1b2599f7a6d84109ac6fef053c977909fecb7671ad6874386"
+    },
+    {
+      "path": "evidence/service-health-vertical/phone.png",
+      "bytes": 387735,
+      "sha256": "df66f1ea0ab4778a960b55292ddfcaddca091094f292cb080924c6fa33fa55a4"
+    },
+    {
+      "path": "evidence/service-health-vertical/qa.json",
+      "bytes": 6338,
+      "sha256": "1221c8fef38b77a22d46894984811efa7457f55d51a03b8cdf825d29aafe655e"
+    },
+    {
+      "path": "evidence/service-health-vertical/seek.json",
+      "bytes": 1026,
+      "sha256": "aca46c7f8b99b435953fbef0f87b9bd80a6df5f5be6e12b9934deadf421d8d8d"
+    },
+    {
+      "path": "evidence/service-health-vertical/sheet.png",
+      "bytes": 126500,
+      "sha256": "10c38ddfb68d679ee313e9af93f83da4a3cd5b73d49d6b3b086a821cc0d99dba"
+    },
+    {
+      "path": "evidence/service-health-vertical/timeline.png",
+      "bytes": 82555,
+      "sha256": "49e67dddecf3f2623e059d72d3e5b8cd206fd4784b83609df34d7f7f98592a41"
+    },
+    {
+      "path": "evidence/service-health-vertical/video.mp4",
+      "bytes": 326043,
+      "sha256": "1e5d17d2caf7a77fe095ecfad7f2b23ef0b05a6382c51af57b07b5559eaf2278"
+    },
+    {
+      "path": "evidence/service-health-vertical/video.mp4.json",
+      "bytes": 2741,
+      "sha256": "01fddcc518fa4316eaaea3d4da9b5364bae7881efdfaeb3406c7a05897f34c13"
+    },
+    {
+      "path": "evidence/source-checks.txt",
+      "bytes": 16761,
+      "sha256": "1f90fb92fbe069b8079177000b536fe968f28d6692223a44d17074e11409bec0"
+    },
+    {
+      "path": "evidence/summary.json",
+      "bytes": 5889,
+      "sha256": "aee71764f5d3c09475440ec31a6f89ba6ff19e017e016d2fd33da120a1653989"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 6188,
+      "sha256": "b26b5f5c498b1850a20bc97f6c12bc0fa6a544422d608c3cbf797c0aa4e76ddc"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1099,
+      "sha256": "bde1fff290731a65c93efe5b2a5044acb9b0e4b2b9b99ed97871fab2ae8a16f1"
+    },
+    {
+      "path": "package.mjs",
+      "bytes": 6493,
+      "sha256": "1f2d1ff7e980168b5b0b58fad92e935870157476be6fb02420d0567a0cd4a255"
+    },
+    {
+      "path": "preview.html",
+      "bytes": 4421,
+      "sha256": "9c1e755a602a192a8b71321a0c049a83871934071f26f9bde7e6fbaf9c18a79c"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4449,
+      "sha256": "dd6a34cf773cc8ca330772ed9b48091b1fb53633a2941e76d04fb4260a312b42"
+    },
+    {
+      "path": "REVIEW.md",
+      "bytes": 11309,
+      "sha256": "6f78240253786c32833f7fcbc9c36b9675c6d55670ecaeea0a71f5878b073548"
+    },
+    {
+      "path": "source/scenes.mjs",
+      "bytes": 6991,
+      "sha256": "54d656e05af31749f3bc7e5db75a168ce73f7dc689e835509db705fa729bc82d"
+    },
+    {
+      "path": "SOURCES.md",
+      "bytes": 1633,
+      "sha256": "32f9df7eb86f35b32960fdd9f047534622325e31af4270412306d50f8fe2e5fd"
+    },
+    {
+      "path": "specimens/narrow-leadership-landscape/storyboard.json",
+      "bytes": 16866,
+      "sha256": "39cec40120fc6393d39f85697935283cd9e246548019b5b149ab97be86bc4ec5"
+    },
+    {
+      "path": "specimens/narrow-leadership-vertical/storyboard.json",
+      "bytes": 16377,
+      "sha256": "3071d825ae66647d89bcf4a51db2a1b41fd4a6ff94198c5d08403c23a9561234"
+    },
+    {
+      "path": "specimens/relative-completion-landscape/storyboard.json",
+      "bytes": 14473,
+      "sha256": "bada759fced980c4e95015b05b5e3b493f80c3463d045d2524b5d0641e6d0646"
+    },
+    {
+      "path": "specimens/relative-completion-vertical/storyboard.json",
+      "bytes": 14077,
+      "sha256": "35b41e2d6ad1e2e7a36c5721bc0c795d2fd0ca8e32f705cf22b357f1f1c9c9d6"
+    },
+    {
+      "path": "specimens/relative-price-landscape/storyboard.json",
+      "bytes": 14856,
+      "sha256": "abfed0ce665c20d585fe83b12103134653c3284bed15d01205e7b5a869323bcc"
+    },
+    {
+      "path": "specimens/relative-price-vertical/storyboard.json",
+      "bytes": 14573,
+      "sha256": "bb565aa7c45db14da807c196a052d94cdb8be7b0a06e1752268660e9ee3bef77"
+    },
+    {
+      "path": "specimens/service-health-landscape/storyboard.json",
+      "bytes": 17092,
+      "sha256": "755a3f83d587351803d1aa7813fd1b35fa35af44608c2829e6d087354e7c287f"
+    },
+    {
+      "path": "specimens/service-health-vertical/storyboard.json",
+      "bytes": 16598,
+      "sha256": "d52b1afb67ac1176dd4a001e8401ae8c182a79ae68ae2c92694f32000c795830"
+    },
+    {
+      "path": "verify.mjs",
+      "bytes": 2003,
+      "sha256": "f03134b0d95bb5a4269891d7d62c7449634bb8b7d2733662eaa997c97941d040"
+    }
+  ]
+}

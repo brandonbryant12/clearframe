@@ -12,7 +12,7 @@ Additional user direction: include a small set of [Timmer-inspired style studies
 | 1 — Calculation contracts | T02 foundation: contribution ledger, tiered match, ownership, fee comparison, pension formula and cashflow fixtures | Implemented; focused calculation checks pass |
 | 2 — Quantitative drawings | T01/C01 explicit scales, multiseries comparison, missing data, dates, annotations and native labels | Engineering foundation and proportion checks implemented; sampled defects resolved; continuous playback still unverified |
 | 3 — Retirement specimens | R01–R09: reusable native recipes, two distinct scenarios, landscape/vertical compositions | Native prototypes and review evidence implemented; continuous playback and promotion pending |
-| 4 — Drivers, participation and flows | Reconciled decomposition, breadth/count versus weight, relative performance and stocks/flows | C02/C03/C16 native prototypes implemented; breadth/count versus weight and broader relative-performance work remain |
+| 4 — Drivers, participation and flows | Reconciled decomposition, breadth/count versus weight, relative performance and stocks/flows | C02/C03/C05/C08/C16 native prototypes implemented; continuous playback and promotion pending |
 | 5 — Physical mechanisms and cameras | Curate existing B01–B03; build reservoir/gate/conveyor and reusable camera/phase contracts | Planned |
 | 6 — Remaining collections | Curves, relationships, uncertainty, long horizons, delayed payoff and supporting tools | Planned |
 
@@ -82,8 +82,18 @@ Validation: the full Node suite passes 157/157. Six native clips total 60 second
 
 ## Milestone 4a — drivers and flows
 
+Published as `ec55151` on `main`; exact remote hash verified.
+
 The [drivers-and-flows kit](../../../examples/library-kits/drivers-and-flows/README.md) implements C02/C03/C16 with six original fictional subjects and twelve native landscape/vertical clips. Original dates and units remain visible before event alignment. Two-factor product changes expose interaction and separate additions. Signed bridges reconcile observed closing stocks with supplied changes and explicitly unexplained residuals. Shared domains and equal bar thickness preserve value-to-length and rectangle-area ratios through fades; missing observations remain gaps.
 
 T02 now includes [observed-anchor rebasing, product decomposition and stock reconciliation](../../data-transforms.md). Helpers reject unsupported inputs, retain input hashes and avoid intermediate display rounding. These are bounded algebraic models; they do not implement reinvested total-return indices, causal attribution, rolling statistics, annualization or vintage alignment. Broader participation and relative-performance work remains.
 
 Status remains **prototype** while subjective continuous playback is unverified. Native source-bound pipeline reports, independent encoded proportions and sampled reviewer evidence are retained in the kit. The full Node suite passes 162/162. All twelve native pipelines pass with zero layout findings or detected one-frame pops, and forward/shuffled seeks agree. Independent encoded checks stream 8,760 frames and pass 160 native mappings, 29,820 rectangle-edge probes (344 during visible fades), 11,226 observation probes, 3,062 reveal-front probes, 2,036 future-column checks and 782 missing-column checks, with zero failures. Exact exclusions and tolerances are retained in the kit; this is bounded geometry evidence, not subjective continuous playback.
+
+## Milestone 4b — participation and benchmarks
+
+The [participation-and-benchmarks kit](../../../examples/library-kits/participation-and-benchmarks/README.md) implements C05 and C08 with four original cases and eight separately composed native landscape/vertical specimens. Count tiles have equal area; the weighted view keeps the full membership and missing weights. The signed branch uses percentage-point positions and a separate circle-area measure, with square-root radii. Zero size gets an unfilled locator cross; a missing metric has no endpoint. Holdings and end-period open cases are independent of the period metric they accompany.
+
+Independent review found and resolved ambiguous category/count grouping, crowded landscape value/source text, and a size definition that made a zero amount incompatible with an observed completion rate. The final definitions, native arithmetic, encoded mark probes and phase review remain separately recorded. These are **prototypes**, with continuous playback and finished-film promotion still unverified. The helper layer remains partial for T02; rolling statistics, annualization and vintage alignment are future work.
+
+Validation: the full Node suite passes 166/166. All eight native pipelines pass with zero errors, warnings or detected one-frame pops; forward/shuffled native seeks agree. The encoded audit streams 5,520 frames and passes 48 equal-tile, 10 weighted-area, 10 circle-area, 40 position and eight absence checks against native geometry. Decoded probes pass 30,672 rectangle edges, 11,160 circle chords (718 combined probes during visible fades), 1,378 zero markers and 782 missing-endpoint checks, with zero failures. Timing filters, native/pixel tolerances and sampled-review limits are retained in the kit. These probes do not establish an exhaustive painted-area census or subjective continuous playback.

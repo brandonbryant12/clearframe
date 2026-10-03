@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/participation-and-benchmarks/specimens/relative-completion-vertical/build/pipeline/2026-10-03T04-07-02-166Z-4ef2f245/video.mp4",
+  "outputSha256": "03c6600856af38e093b48df5622b0d6c211ad7bec7195894e48bb197297c975a",
+  "inputId": "a66744fc07f5d29c6c763292c9c506704c65dc2f751d6139d6860fe811d554d1",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "relative-completion-inputs: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "relative-completion-inputs: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 299,
+      "time": 9.966666666666667,
+      "reasons": [
+        "relative-completion-inputs: last frame",
+        "Before relative-completion"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 300,
+      "time": 10,
+      "reasons": [
+        "relative-completion: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 306,
+      "time": 10.2,
+      "reasons": [
+        "relative-completion: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 719,
+      "time": 23.966666666666665,
+      "reasons": [
+        "relative-completion: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

@@ -158,7 +158,7 @@
       "category": "Chart",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "proposed; not built",
+      "readiness": "Native prototype: two original cases with landscape/vertical source, quantitative encoded checks and sampled independent review; continuous playback and promotion pending",
       "effort": "M",
       "sourceIds": [
         "S06",
@@ -174,7 +174,7 @@
         "threshold",
         "metric"
       ],
-      "existing": "waffle, icon-grid and crowd sketch exist; constituent-aware weighted/equal views need an adapter.",
+      "existing": "examples/library-kits/participation-and-benchmarks packages equal member tiles and full-denominator weight segments. Dated membership, explicit conditions, nonnegative weights and missing metrics feed engine/lib/data-transforms.mjs; missing members are never dropped or silently renormalized.",
       "guardrail": "Count and index weight are different encodings. Preserve membership date and denominator.",
       "reuse": [
         "survey participation",
@@ -258,8 +258,8 @@
       "name": "Relative-performance branch chart",
       "category": "Chart",
       "priority": "Next",
-      "implementation": "New",
-      "readiness": "proposed; not built",
+      "implementation": "Extend",
+      "readiness": "Native prototype: two original cases with landscape/vertical source, quantitative encoded checks and sampled independent review; continuous playback and promotion pending",
       "effort": "M",
       "sourceIds": [
         "S12"
@@ -271,7 +271,7 @@
         "relative returns",
         "optional mark size"
       ],
-      "existing": "bars and canvas lines exist; signed lollipop layout and bubble-area encoding need packaging.",
+      "existing": "examples/library-kits/participation-and-benchmarks packages a signed percentage-point branch chart with a separate circle-area measure. Square-root radii preserve area ratios; zero size has a cross and no fill, while missing metrics have no endpoint. Sample holdings and open cases are independent of the period performance metric.",
       "guardrail": "Say percentage points versus ratios. Area, not radius, encodes a nonnegative size metric.",
       "reuse": [
         "competitive benchmarks",
@@ -1756,7 +1756,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Partial implementation: finance helpers plus observed-anchor rebasing, exact product decomposition and stock reconciliation; rolling statistics, annualization and vintage alignment remain planned",
+      "readiness": "Partial implementation: finance helpers, observed-anchor rebasing, exact product decomposition, stock reconciliation, full-membership count/weight summaries and benchmark differences; rolling statistics, annualization and vintage alignment remain planned",
       "effort": "L",
       "sourceIds": [
         "S04",
@@ -1772,7 +1772,7 @@
         "transform",
         "method version"
       ],
-      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md.",
+      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics.",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "reuse": [
         "science",

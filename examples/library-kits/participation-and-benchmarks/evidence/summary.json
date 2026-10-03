@@ -1,0 +1,197 @@
+{
+  "status": "prototype",
+  "continuousPlayback": "unverified",
+  "variants": [
+    {
+      "name": "narrow-leadership-landscape",
+      "pipelineId": "2026-10-03T04-02-56-467Z-333de6a5",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 86 frames: no problems found\n"
+        ],
+        "duration": 22,
+        "inputId": "c6cf5feaf6f0d51bd156d954e9851b173d6ac8426113be1e7c5f887db8aa889c"
+      },
+      "qa": {
+        "seconds": 22,
+        "frames": 660,
+        "changePerSecond": 0,
+        "heldSeconds": 18.87,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "narrow-leadership-vertical",
+      "pipelineId": "2026-10-03T04-03-04-669Z-37d00365",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 86 frames: no problems found\n"
+        ],
+        "duration": 22,
+        "inputId": "7649a602f98035e08b88e88d1b7436d750312cedf19676f29aeee0af5873fdef"
+      },
+      "qa": {
+        "seconds": 22,
+        "frames": 660,
+        "changePerSecond": 0,
+        "heldSeconds": 19.77,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "relative-completion-landscape",
+      "pipelineId": "2026-10-03T04-06-53-495Z-da505ce8",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 93 frames: no problems found\n"
+        ],
+        "duration": 24,
+        "inputId": "75a4abe9b93b8f4b5c8df3807a11463182ac97c5843287324ce3f653634b174f"
+      },
+      "qa": {
+        "seconds": 24,
+        "frames": 720,
+        "changePerSecond": 0,
+        "heldSeconds": 22.87,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "relative-completion-vertical",
+      "pipelineId": "2026-10-03T04-07-02-166Z-4ef2f245",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 93 frames: no problems found\n"
+        ],
+        "duration": 24,
+        "inputId": "a66744fc07f5d29c6c763292c9c506704c65dc2f751d6139d6860fe811d554d1"
+      },
+      "qa": {
+        "seconds": 24,
+        "frames": 720,
+        "changePerSecond": 0,
+        "heldSeconds": 24,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "relative-price-landscape",
+      "pipelineId": "2026-10-03T04-07-10-118Z-d9ec020d",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 93 frames: no problems found\n"
+        ],
+        "duration": 24,
+        "inputId": "a09a133018ce2c6eba8bd2c24c385363ae3ba4e5fb5769f5962f07156011fcb7"
+      },
+      "qa": {
+        "seconds": 24,
+        "frames": 720,
+        "changePerSecond": 0,
+        "heldSeconds": 22.33,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "relative-price-vertical",
+      "pipelineId": "2026-10-03T04-07-18-559Z-757c5d82",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 93 frames: no problems found\n"
+        ],
+        "duration": 24,
+        "inputId": "b649ba777c16629dc2d14b7f3aa3ec32ca7bf2d1bf0efc53190895bd5f26f741"
+      },
+      "qa": {
+        "seconds": 24,
+        "frames": 720,
+        "changePerSecond": 0,
+        "heldSeconds": 24,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "service-health-landscape",
+      "pipelineId": "2026-10-03T04-07-26-505Z-839b687e",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 86 frames: no problems found\n"
+        ],
+        "duration": 22,
+        "inputId": "79e980e1653e42536d935a50e2d0bf9107afd0e146a1059b39671c4c01c20b70"
+      },
+      "qa": {
+        "seconds": 22,
+        "frames": 660,
+        "changePerSecond": 0,
+        "heldSeconds": 18.87,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "service-health-vertical",
+      "pipelineId": "2026-10-03T04-07-34-252Z-84aed0e3",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 86 frames: no problems found\n"
+        ],
+        "duration": 22,
+        "inputId": "133be8a7550c6be30774d9af0c8c15e251b8b20dac725635cb332b6b7cdd42d6"
+      },
+      "qa": {
+        "seconds": 22,
+        "frames": 660,
+        "changePerSecond": 0,
+        "heldSeconds": 19.77,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    }
+  ],
+  "limitations": [
+    "Original fictional inputs; no forecasts or causal attribution",
+    "Missing members remain in full denominators",
+    "Size is independent of the performance metric",
+    "Demonstrated densities: twelve tiles and four branches",
+    "Square and 4:5 not reviewed"
+  ]
+}
