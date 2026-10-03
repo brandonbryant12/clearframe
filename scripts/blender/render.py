@@ -104,6 +104,7 @@ def main():
         'loopMaxTransformError': loop_error,
         'holdTransformChecks': hold_errors,
         'motionClock': config.get('motion', {}).get('clock'),
+        'framing': json.loads(scene.camera['clearframe_framing']) if scene.camera.get('clearframe_framing') else None,
         'objects': len(scene.objects),
         'meshVertices': sum(len(obj.data.vertices) for obj in scene.objects if obj.type == 'MESH'),
         'buildSeconds': build_seconds, 'bakeSeconds': bake_seconds,

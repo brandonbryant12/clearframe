@@ -2,6 +2,7 @@
 import math
 import bpy
 from mathutils import Vector
+from bpy_extras.object_utils import world_to_camera_view
 
 
 def linear_rgba(hex_color):
@@ -9,7 +10,7 @@ def linear_rgba(hex_color):
     return tuple(c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in values) + (1,)
 
 
-def material(name, color, metallic=0.0, roughness=0.3, coat=0.25):
+def material(name, color, metallic=0.0, roughness=0.3, coat=0.25, opacity=1.0):
     mat = bpy.data.materials.new(name)
     mat.diffuse_color = linear_rgba(color)
     mat.use_nodes = True
@@ -19,6 +20,13 @@ def material(name, color, metallic=0.0, roughness=0.3, coat=0.25):
     bsdf.inputs['Roughness'].default_value = roughness
     bsdf.inputs['Coat Weight'].default_value = coat
     bsdf.inputs['Coat Roughness'].default_value = 0.22
+    if opacity != 1.0:
+        if not 0 < opacity < 1:
+            raise ValueError('Panel opacity must be greater than zero and at most one.')
+        # Stylized clear panels, not refractive optical glass. Alpha blending
+        # keeps a view of the authored levels without a fluid/raytrace pass.
+        bsdf.inputs['Alpha'].default_value = opacity
+        mat.surface_render_method = 'BLENDED'
     return mat
 
 
@@ -107,6 +115,42 @@ def ring(name, radius, tube, mat, location=(0, 0, 0), rotation=(0, 0, 0), parent
 
 def aim(obj, target):
     obj.rotation_euler = (Vector(target) - obj.location).to_track_quat('-Z', 'Y').to_euler()
+
+
+def fit_camera(camera, objects, safe=(.08, .15, .92, .76)):
+    """Opt-in orthographic framing; reserve native copy above/below the subject.
+
+    safe = left, bottom, right, top in normalized camera coordinates. Supply
+    geometry enclosing every animated extent, then verify every baked frame.
+    This fits a fixed camera; it does not retime or invent a camera move.
+    """
+    import json
+    if camera.data.type != 'ORTHO' or len(safe) != 4 or not (0 <= safe[0] < safe[2] <= 1 and 0 <= safe[1] < safe[3] <= 1):
+        raise ValueError('Framing requires an orthographic camera and a valid safe rectangle.')
+    objects = list(objects)
+    if not objects:
+        raise ValueError('Framing requires subject geometry.')
+    scene = bpy.context.scene
+    bpy.context.view_layer.update()
+    def bounds():
+        projected = [world_to_camera_view(scene, camera, obj.matrix_world @ Vector(corner)) for obj in objects for corner in obj.bound_box]
+        return (min(p.x for p in projected), min(p.y for p in projected), max(p.x for p in projected), max(p.y for p in projected))
+    before = bounds()
+    camera.data.ortho_scale *= max((before[2] - before[0]) / (safe[2] - safe[0]), (before[3] - before[1]) / (safe[3] - safe[1])) * 1.01
+    bpy.context.view_layer.update()
+    after_scale = bounds()
+    aspect = (scene.render.resolution_x * scene.render.pixel_aspect_x) / (scene.render.resolution_y * scene.render.pixel_aspect_y)
+    width = camera.data.ortho_scale * min(1, aspect)
+    height = camera.data.ortho_scale / max(1, aspect)
+    dx = ((after_scale[0] + after_scale[2]) - (safe[0] + safe[2])) * .5 * width
+    dy = ((after_scale[1] + after_scale[3]) - (safe[1] + safe[3])) * .5 * height
+    camera.location += camera.rotation_euler.to_matrix() @ Vector((dx, dy, 0))
+    bpy.context.view_layer.update()
+    result = bounds()
+    if result[0] < safe[0] - 1e-5 or result[1] < safe[1] - 1e-5 or result[2] > safe[2] + 1e-5 or result[3] > safe[3] + 1e-5:
+        raise ValueError('Camera fit did not preserve the requested safe rectangle.')
+    camera['clearframe_framing'] = json.dumps({'version': 1, 'safe': safe, 'initialSubjectBounds': result, 'subjectNames': [obj.name for obj in objects]})
+    return result
 
 
 def light(name, location, target, energy, size, color=(1, 1, 1)):
