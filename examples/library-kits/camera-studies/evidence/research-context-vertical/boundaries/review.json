@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-studies/specimens/research-context-vertical/build/pipeline/2026-10-03T06-11-00-699Z-852c228a/video.mp4",
+  "outputSha256": "0b2d3434c8cbe01a8c8961ad5157eba96fd24be8599465f1ee229a816189d2d4",
+  "inputId": "ff79e2886337c5dbde6b84ea532f604f62bd480f64254f5710df6795b5f0e7b3",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "mechanism: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "mechanism: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 239,
+      "time": 7.966666666666667,
+      "reasons": [
+        "mechanism: last frame",
+        "Before reading-hold"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 240,
+      "time": 8,
+      "reasons": [
+        "reading-hold: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 246,
+      "time": 8.2,
+      "reasons": [
+        "reading-hold: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 299,
+      "time": 9.966666666666667,
+      "reasons": [
+        "reading-hold: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

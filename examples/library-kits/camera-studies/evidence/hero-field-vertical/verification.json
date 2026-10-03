@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "passed-mechanical-checks",
+  "cases": [
+    {
+      "id": "hero-field",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-studies/build/renders/hero-field-vertical/hero-field",
+      "width": 540,
+      "height": 960,
+      "frames": 192,
+      "renderSeconds": 102.594338292,
+      "loop": false,
+      "loopTransformError": 24.679157257080078,
+      "loopSeam": 38.355179398148145,
+      "neighbourP95": 3.5231481481481484,
+      "finalHoldStep": 0,
+      "reloadPixelsMatch": true,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 0,
+        "maxDifference": 0,
+        "changedFraction": 0
+      },
+      "posterPixelSha256": "4c50df2aa7ad4038b17c14d88c48e02ee4bc6fa9cef6c61a1dd2e8ba04895134",
+      "reloadPixelSha256": "4c50df2aa7ad4038b17c14d88c48e02ee4bc6fa9cef6c61a1dd2e8ba04895134"
+    }
+  ],
+  "startedAt": "2026-10-03T05:59:26.988Z",
+  "revision": "8c0242d416041408ad742777b12dd8aa95b557a3",
+  "dirty": true,
+  "finishedAt": "2026-10-03T05:59:29.790Z"
+}

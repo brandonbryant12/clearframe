@@ -1,0 +1,23 @@
+[
+  {
+    "name": "focus-depth-landscape",
+    "videoSha256": "ccb4400026a12eed3b272321ab001d92c4791e5926df958a830a505ad33f52cd",
+    "frames": [
+      0,
+      191
+    ],
+    "near": [
+      40.95879061466567,
+      29.893561179625287
+    ],
+    "far": [
+      52.108069533517416,
+      59.899936071010416
+    ],
+    "nearRatio": 1.3701542739773063,
+    "farRatio": 1.1495328191438956,
+    "threshold": 1.25,
+    "passed": false,
+    "limitations": "RMS two-pixel grayscale gradient in projected panel regions after 128px scaling. Relative sharpness in these fixtures only; no physical optics calibration or subjective playback claim."
+  }
+]

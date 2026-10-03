@@ -1,0 +1,1048 @@
+{
+  "version": 1,
+  "blenderVersion": "5.2.2 LTS",
+  "blenderBuildHash": "d13f752e3b9c",
+  "engine": "BLENDER_EEVEE",
+  "threads": 2,
+  "width": 960,
+  "height": 540,
+  "fps": 24,
+  "frames": 192,
+  "samples": 16,
+  "colorManagement": {
+    "view": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "bakedMotion": true,
+  "requiresAutoExec": false,
+  "loopMaxTransformError": 0.0,
+  "loopMaxCameraOpticsError": 1.2113208770751953,
+  "holdTransformChecks": [
+    {
+      "id": "near",
+      "frames": 31,
+      "maxTransformError": 0.0,
+      "maxCameraOpticsError": 0.0
+    },
+    {
+      "id": "far",
+      "frames": 49,
+      "maxTransformError": 0.0,
+      "maxCameraOpticsError": 0.0
+    }
+  ],
+  "motionClock": "qualitative-pose",
+  "framing": null,
+  "cameraRig": {
+    "version": 1,
+    "clock": "qualitative-pose",
+    "projection": "perspective",
+    "dof": true,
+    "keys": [
+      {
+        "location": [
+          0.8030745983123779,
+          -11.193044662475586,
+          5.498447418212891
+        ],
+        "target": [
+          0.0,
+          0.05000000074505806,
+          0.6800000071525574
+        ],
+        "lens": 65.0,
+        "scale": 6.0,
+        "shift_x": -0.011844920925796032,
+        "shift_y": 0.008022239431738853,
+        "focus": 11.651103973388672,
+        "fstop": 0.10000000149011612,
+        "phase": 0,
+        "ease": "linear"
+      },
+      {
+        "location": [
+          0.8030745983123779,
+          -11.193044662475586,
+          5.498447418212891
+        ],
+        "target": [
+          0.0,
+          0.05000000074505806,
+          0.6800000071525574
+        ],
+        "lens": 65.0,
+        "scale": 6.0,
+        "shift_x": -0.011844920925796032,
+        "shift_y": 0.008022239431738853,
+        "focus": 11.651103973388672,
+        "fstop": 0.10000000149011612,
+        "phase": 0.16,
+        "ease": "linear"
+      },
+      {
+        "location": [
+          0.8030745983123779,
+          -11.193044662475586,
+          5.498447418212891
+        ],
+        "target": [
+          0.0,
+          0.05000000074505806,
+          0.6800000071525574
+        ],
+        "lens": 65.0,
+        "scale": 6.0,
+        "shift_x": -0.011844920925796032,
+        "shift_y": 0.008022239431738853,
+        "focus": 12.862424850463867,
+        "fstop": 0.10000000149011612,
+        "phase": 0.74,
+        "ease": "smooth"
+      },
+      {
+        "location": [
+          0.8030745983123779,
+          -11.193044662475586,
+          5.498447418212891
+        ],
+        "target": [
+          0.0,
+          0.05000000074505806,
+          0.6800000071525574
+        ],
+        "lens": 65.0,
+        "scale": 6.0,
+        "shift_x": -0.011844920925796032,
+        "shift_y": 0.008022239431738853,
+        "focus": 12.862424850463867,
+        "fstop": 0.10000000149011612,
+        "phase": 1,
+        "ease": "linear"
+      }
+    ]
+  },
+  "cameraReview": {
+    "kind": "rack-focus",
+    "opening": {
+      "safe": [
+        0.08,
+        0.17,
+        0.92,
+        0.68
+      ],
+      "bounds": [
+        0.3306664228439331,
+        0.1749430000782013,
+        0.6693336367607117,
+        0.6750569939613342
+      ],
+      "subjectNames": [
+        "Focus-study foundation",
+        "Near pedestal",
+        "Far pedestal",
+        "Near surface panel",
+        "Near engraved bar 0",
+        "Near engraved bar 1",
+        "Near engraved bar 2",
+        "Near engraved bar 3",
+        "Near engraved bar 4",
+        "Near engraved bar 5",
+        "Near engraved bar 6",
+        "Far frame top",
+        "Far frame bottom",
+        "Far structure rib 0",
+        "Far structure rib 1",
+        "Far structure rib 2",
+        "Far structure rib 3",
+        "Far structure rib 4",
+        "Far structure rib 5",
+        "Far structure rib 6"
+      ]
+    },
+    "ending": {
+      "safe": [
+        0.08,
+        0.17,
+        0.92,
+        0.68
+      ],
+      "bounds": [
+        0.3306664228439331,
+        0.1749430000782013,
+        0.6693336367607117,
+        0.6750569939613342
+      ],
+      "subjectNames": [
+        "Focus-study foundation",
+        "Near pedestal",
+        "Far pedestal",
+        "Near surface panel",
+        "Near engraved bar 0",
+        "Near engraved bar 1",
+        "Near engraved bar 2",
+        "Near engraved bar 3",
+        "Near engraved bar 4",
+        "Near engraved bar 5",
+        "Near engraved bar 6",
+        "Far frame top",
+        "Far frame bottom",
+        "Far structure rib 0",
+        "Far structure rib 1",
+        "Far structure rib 2",
+        "Far structure rib 3",
+        "Far structure rib 4",
+        "Far structure rib 5",
+        "Far structure rib 6"
+      ]
+    },
+    "heroNames": [
+      "Near surface panel",
+      "Near engraved bar 0",
+      "Near engraved bar 1",
+      "Near engraved bar 2",
+      "Near engraved bar 3",
+      "Near engraved bar 4",
+      "Near engraved bar 5",
+      "Near engraved bar 6"
+    ],
+    "systemNames": [
+      "Focus-study foundation",
+      "Near pedestal",
+      "Far pedestal",
+      "Near surface panel",
+      "Near engraved bar 0",
+      "Near engraved bar 1",
+      "Near engraved bar 2",
+      "Near engraved bar 3",
+      "Near engraved bar 4",
+      "Near engraved bar 5",
+      "Near engraved bar 6",
+      "Far frame top",
+      "Far frame bottom",
+      "Far structure rib 0",
+      "Far structure rib 1",
+      "Far structure rib 2",
+      "Far structure rib 3",
+      "Far structure rib 4",
+      "Far structure rib 5",
+      "Far structure rib 6"
+    ],
+    "focusPlanes": {
+      "near": {
+        "point": [
+          -0.4300000071525574,
+          -0.6299999952316284,
+          0.7099999785423279
+        ],
+        "depth": 11.651104398071766,
+        "subjectNames": [
+          "Near surface panel",
+          "Near engraved bar 0",
+          "Near engraved bar 1",
+          "Near engraved bar 2",
+          "Near engraved bar 3",
+          "Near engraved bar 4",
+          "Near engraved bar 5",
+          "Near engraved bar 6"
+        ]
+      },
+      "far": {
+        "point": [
+          0.4000000059604645,
+          0.75,
+          0.7099999785423279
+        ],
+        "depth": 12.862424857914448,
+        "subjectNames": [
+          "Far frame top",
+          "Far frame bottom",
+          "Far structure rib 0",
+          "Far structure rib 1",
+          "Far structure rib 2",
+          "Far structure rib 3",
+          "Far structure rib 4",
+          "Far structure rib 5",
+          "Far structure rib 6"
+        ]
+      }
+    },
+    "intent": "Optical attention only; every claim and qualification stays crisp in native type."
+  },
+  "objects": 25,
+  "meshVertices": 168,
+  "buildSeconds": 0.04002775001572445,
+  "bakeSeconds": 0.02613420897978358,
+  "renderedFrames": [
+    {
+      "frame": 1,
+      "seconds": 1.1264538340037689
+    },
+    {
+      "frame": 2,
+      "seconds": 0.5936927089933306
+    },
+    {
+      "frame": 3,
+      "seconds": 0.5821357909881044
+    },
+    {
+      "frame": 4,
+      "seconds": 0.5842525000043679
+    },
+    {
+      "frame": 5,
+      "seconds": 0.5915160000149626
+    },
+    {
+      "frame": 6,
+      "seconds": 0.6112525839998852
+    },
+    {
+      "frame": 7,
+      "seconds": 0.5894058750127442
+    },
+    {
+      "frame": 8,
+      "seconds": 0.5994506659917533
+    },
+    {
+      "frame": 9,
+      "seconds": 0.6066032499948051
+    },
+    {
+      "frame": 10,
+      "seconds": 0.6444783750048373
+    },
+    {
+      "frame": 11,
+      "seconds": 0.5963153750053607
+    },
+    {
+      "frame": 12,
+      "seconds": 0.5694166669854894
+    },
+    {
+      "frame": 13,
+      "seconds": 0.5898106249806006
+    },
+    {
+      "frame": 14,
+      "seconds": 0.5822991250024643
+    },
+    {
+      "frame": 15,
+      "seconds": 0.5797591249865945
+    },
+    {
+      "frame": 16,
+      "seconds": 0.5836155000142753
+    },
+    {
+      "frame": 17,
+      "seconds": 0.5788608329894487
+    },
+    {
+      "frame": 18,
+      "seconds": 0.5803036249999423
+    },
+    {
+      "frame": 19,
+      "seconds": 0.5883977909979876
+    },
+    {
+      "frame": 20,
+      "seconds": 0.5790076669945847
+    },
+    {
+      "frame": 21,
+      "seconds": 0.5770400410110597
+    },
+    {
+      "frame": 22,
+      "seconds": 0.5839194170257542
+    },
+    {
+      "frame": 23,
+      "seconds": 0.5936657919955906
+    },
+    {
+      "frame": 24,
+      "seconds": 0.5761200829874724
+    },
+    {
+      "frame": 25,
+      "seconds": 0.5880258750112262
+    },
+    {
+      "frame": 26,
+      "seconds": 0.5918146249896381
+    },
+    {
+      "frame": 27,
+      "seconds": 0.6023430410132278
+    },
+    {
+      "frame": 28,
+      "seconds": 0.5971867080079392
+    },
+    {
+      "frame": 29,
+      "seconds": 0.5922520839958452
+    },
+    {
+      "frame": 30,
+      "seconds": 0.5819670830096584
+    },
+    {
+      "frame": 31,
+      "seconds": 0.5906037499953527
+    },
+    {
+      "frame": 32,
+      "seconds": 0.5742919170006644
+    },
+    {
+      "frame": 33,
+      "seconds": 0.571684374997858
+    },
+    {
+      "frame": 34,
+      "seconds": 0.5912509589979891
+    },
+    {
+      "frame": 35,
+      "seconds": 0.5810746669885702
+    },
+    {
+      "frame": 36,
+      "seconds": 0.5766209169814829
+    },
+    {
+      "frame": 37,
+      "seconds": 0.6014550830004737
+    },
+    {
+      "frame": 38,
+      "seconds": 0.576971542002866
+    },
+    {
+      "frame": 39,
+      "seconds": 0.5987283340073191
+    },
+    {
+      "frame": 40,
+      "seconds": 0.5888436249806546
+    },
+    {
+      "frame": 41,
+      "seconds": 0.5711655830091331
+    },
+    {
+      "frame": 42,
+      "seconds": 0.5920612499758136
+    },
+    {
+      "frame": 43,
+      "seconds": 0.586179958016146
+    },
+    {
+      "frame": 44,
+      "seconds": 0.5923460420162883
+    },
+    {
+      "frame": 45,
+      "seconds": 0.6075412910140585
+    },
+    {
+      "frame": 46,
+      "seconds": 0.5834660000109579
+    },
+    {
+      "frame": 47,
+      "seconds": 0.5697296660218854
+    },
+    {
+      "frame": 48,
+      "seconds": 0.5782237079984043
+    },
+    {
+      "frame": 49,
+      "seconds": 0.5769510829995852
+    },
+    {
+      "frame": 50,
+      "seconds": 0.5901415840198752
+    },
+    {
+      "frame": 51,
+      "seconds": 0.56879287501215
+    },
+    {
+      "frame": 52,
+      "seconds": 0.5733613749907818
+    },
+    {
+      "frame": 53,
+      "seconds": 0.6009475000028033
+    },
+    {
+      "frame": 54,
+      "seconds": 0.5727885410015006
+    },
+    {
+      "frame": 55,
+      "seconds": 0.5974574169958942
+    },
+    {
+      "frame": 56,
+      "seconds": 0.5930627500056289
+    },
+    {
+      "frame": 57,
+      "seconds": 0.5744616669835523
+    },
+    {
+      "frame": 58,
+      "seconds": 0.5738879169803113
+    },
+    {
+      "frame": 59,
+      "seconds": 0.6122839580057189
+    },
+    {
+      "frame": 60,
+      "seconds": 0.5990756670071278
+    },
+    {
+      "frame": 61,
+      "seconds": 0.5942852919979487
+    },
+    {
+      "frame": 62,
+      "seconds": 0.5767924169776961
+    },
+    {
+      "frame": 63,
+      "seconds": 0.6031261660100427
+    },
+    {
+      "frame": 64,
+      "seconds": 0.6003127089934424
+    },
+    {
+      "frame": 65,
+      "seconds": 0.5787934999971185
+    },
+    {
+      "frame": 66,
+      "seconds": 0.5733017919992562
+    },
+    {
+      "frame": 67,
+      "seconds": 0.5791342089942191
+    },
+    {
+      "frame": 68,
+      "seconds": 0.5847124589781743
+    },
+    {
+      "frame": 69,
+      "seconds": 0.5998975409893319
+    },
+    {
+      "frame": 70,
+      "seconds": 0.5797755410021637
+    },
+    {
+      "frame": 71,
+      "seconds": 0.5822269579803105
+    },
+    {
+      "frame": 72,
+      "seconds": 0.571006958023645
+    },
+    {
+      "frame": 73,
+      "seconds": 0.6076560829824302
+    },
+    {
+      "frame": 74,
+      "seconds": 0.5677224590035621
+    },
+    {
+      "frame": 75,
+      "seconds": 0.5724422079802025
+    },
+    {
+      "frame": 76,
+      "seconds": 0.5817824580008164
+    },
+    {
+      "frame": 77,
+      "seconds": 0.5649215419834945
+    },
+    {
+      "frame": 78,
+      "seconds": 0.5751817499985918
+    },
+    {
+      "frame": 79,
+      "seconds": 0.5710002499981783
+    },
+    {
+      "frame": 80,
+      "seconds": 0.583147708006436
+    },
+    {
+      "frame": 81,
+      "seconds": 0.5723501660104375
+    },
+    {
+      "frame": 82,
+      "seconds": 0.5570517090091016
+    },
+    {
+      "frame": 83,
+      "seconds": 0.5966566250135656
+    },
+    {
+      "frame": 84,
+      "seconds": 0.5753862079873215
+    },
+    {
+      "frame": 85,
+      "seconds": 0.602439541980857
+    },
+    {
+      "frame": 86,
+      "seconds": 0.588055541011272
+    },
+    {
+      "frame": 87,
+      "seconds": 0.5990379160211887
+    },
+    {
+      "frame": 88,
+      "seconds": 0.5883160829835106
+    },
+    {
+      "frame": 89,
+      "seconds": 0.5734881669923197
+    },
+    {
+      "frame": 90,
+      "seconds": 0.5814437080116477
+    },
+    {
+      "frame": 91,
+      "seconds": 0.5906742079823744
+    },
+    {
+      "frame": 92,
+      "seconds": 0.5971558339952026
+    },
+    {
+      "frame": 93,
+      "seconds": 0.5889252079941798
+    },
+    {
+      "frame": 94,
+      "seconds": 0.5835574169759639
+    },
+    {
+      "frame": 95,
+      "seconds": 0.5938378749997355
+    },
+    {
+      "frame": 96,
+      "seconds": 0.5859441670181695
+    },
+    {
+      "frame": 97,
+      "seconds": 0.608285333000822
+    },
+    {
+      "frame": 98,
+      "seconds": 0.6016425830021035
+    },
+    {
+      "frame": 99,
+      "seconds": 0.5603407919988967
+    },
+    {
+      "frame": 100,
+      "seconds": 0.5957807079830673
+    },
+    {
+      "frame": 101,
+      "seconds": 0.5844381250208244
+    },
+    {
+      "frame": 102,
+      "seconds": 0.6064215420046821
+    },
+    {
+      "frame": 103,
+      "seconds": 0.5882574579736684
+    },
+    {
+      "frame": 104,
+      "seconds": 0.5923293750092853
+    },
+    {
+      "frame": 105,
+      "seconds": 0.600203333015088
+    },
+    {
+      "frame": 106,
+      "seconds": 0.5967234999989159
+    },
+    {
+      "frame": 107,
+      "seconds": 0.5794186250132043
+    },
+    {
+      "frame": 108,
+      "seconds": 0.603066416020738
+    },
+    {
+      "frame": 109,
+      "seconds": 0.6009897920012008
+    },
+    {
+      "frame": 110,
+      "seconds": 0.5949640000180807
+    },
+    {
+      "frame": 111,
+      "seconds": 0.5908001250063535
+    },
+    {
+      "frame": 112,
+      "seconds": 0.5778881250007544
+    },
+    {
+      "frame": 113,
+      "seconds": 0.5775617920153309
+    },
+    {
+      "frame": 114,
+      "seconds": 0.5753351669991389
+    },
+    {
+      "frame": 115,
+      "seconds": 0.5786910419992637
+    },
+    {
+      "frame": 116,
+      "seconds": 0.5728988749906421
+    },
+    {
+      "frame": 117,
+      "seconds": 0.5829303749778774
+    },
+    {
+      "frame": 118,
+      "seconds": 0.5691032080212608
+    },
+    {
+      "frame": 119,
+      "seconds": 0.5789676670101471
+    },
+    {
+      "frame": 120,
+      "seconds": 0.5904818749986589
+    },
+    {
+      "frame": 121,
+      "seconds": 0.5829707499942742
+    },
+    {
+      "frame": 122,
+      "seconds": 0.5642425830010325
+    },
+    {
+      "frame": 123,
+      "seconds": 0.5625789579935372
+    },
+    {
+      "frame": 124,
+      "seconds": 0.5801397500035819
+    },
+    {
+      "frame": 125,
+      "seconds": 0.5810676669934765
+    },
+    {
+      "frame": 126,
+      "seconds": 0.5795815419987775
+    },
+    {
+      "frame": 127,
+      "seconds": 0.5631102499901317
+    },
+    {
+      "frame": 128,
+      "seconds": 0.5860758750059176
+    },
+    {
+      "frame": 129,
+      "seconds": 0.5936716670112219
+    },
+    {
+      "frame": 130,
+      "seconds": 0.5752298340084963
+    },
+    {
+      "frame": 131,
+      "seconds": 0.5978364170005079
+    },
+    {
+      "frame": 132,
+      "seconds": 0.5966455840098206
+    },
+    {
+      "frame": 133,
+      "seconds": 0.5644227919983678
+    },
+    {
+      "frame": 134,
+      "seconds": 0.6073696250095963
+    },
+    {
+      "frame": 135,
+      "seconds": 0.5971109579841141
+    },
+    {
+      "frame": 136,
+      "seconds": 0.5654170000052545
+    },
+    {
+      "frame": 137,
+      "seconds": 0.5755041670054197
+    },
+    {
+      "frame": 138,
+      "seconds": 0.5831367500068154
+    },
+    {
+      "frame": 139,
+      "seconds": 0.5890506249852479
+    },
+    {
+      "frame": 140,
+      "seconds": 0.6023130420071539
+    },
+    {
+      "frame": 141,
+      "seconds": 0.5951781669864431
+    },
+    {
+      "frame": 142,
+      "seconds": 0.5735404590086546
+    },
+    {
+      "frame": 143,
+      "seconds": 0.5939045830164105
+    },
+    {
+      "frame": 144,
+      "seconds": 0.5971765420108568
+    },
+    {
+      "frame": 145,
+      "seconds": 0.5897337080095895
+    },
+    {
+      "frame": 146,
+      "seconds": 0.6071822090016212
+    },
+    {
+      "frame": 147,
+      "seconds": 0.5887103750137612
+    },
+    {
+      "frame": 148,
+      "seconds": 0.581764500006102
+    },
+    {
+      "frame": 149,
+      "seconds": 0.5941691659973003
+    },
+    {
+      "frame": 150,
+      "seconds": 0.586555000016233
+    },
+    {
+      "frame": 151,
+      "seconds": 0.5913147920218762
+    },
+    {
+      "frame": 152,
+      "seconds": 0.5805880000116304
+    },
+    {
+      "frame": 153,
+      "seconds": 0.5797340410063043
+    },
+    {
+      "frame": 154,
+      "seconds": 0.5559817079920322
+    },
+    {
+      "frame": 155,
+      "seconds": 0.5849983750085812
+    },
+    {
+      "frame": 156,
+      "seconds": 0.5717044999764767
+    },
+    {
+      "frame": 157,
+      "seconds": 0.5783764579973649
+    },
+    {
+      "frame": 158,
+      "seconds": 0.5897449579788372
+    },
+    {
+      "frame": 159,
+      "seconds": 0.5986503339954652
+    },
+    {
+      "frame": 160,
+      "seconds": 0.5718175830261316
+    },
+    {
+      "frame": 161,
+      "seconds": 0.5877387910149992
+    },
+    {
+      "frame": 162,
+      "seconds": 0.5975171249883715
+    },
+    {
+      "frame": 163,
+      "seconds": 0.6018204580177553
+    },
+    {
+      "frame": 164,
+      "seconds": 0.5810279170109425
+    },
+    {
+      "frame": 165,
+      "seconds": 0.5807257090054918
+    },
+    {
+      "frame": 166,
+      "seconds": 0.5920959160139319
+    },
+    {
+      "frame": 167,
+      "seconds": 0.5651858750206884
+    },
+    {
+      "frame": 168,
+      "seconds": 0.5888084580074064
+    },
+    {
+      "frame": 169,
+      "seconds": 0.5940260409843177
+    },
+    {
+      "frame": 170,
+      "seconds": 0.6029388750030193
+    },
+    {
+      "frame": 171,
+      "seconds": 0.5735069589863997
+    },
+    {
+      "frame": 172,
+      "seconds": 0.6097114589938428
+    },
+    {
+      "frame": 173,
+      "seconds": 0.5882540839957073
+    },
+    {
+      "frame": 174,
+      "seconds": 0.5777491659973748
+    },
+    {
+      "frame": 175,
+      "seconds": 0.6016635000123642
+    },
+    {
+      "frame": 176,
+      "seconds": 0.5987425000057556
+    },
+    {
+      "frame": 177,
+      "seconds": 0.6171341669978574
+    },
+    {
+      "frame": 178,
+      "seconds": 0.5901129999838304
+    },
+    {
+      "frame": 179,
+      "seconds": 0.5832178749842569
+    },
+    {
+      "frame": 180,
+      "seconds": 0.5828071249998175
+    },
+    {
+      "frame": 181,
+      "seconds": 0.5651309580134694
+    },
+    {
+      "frame": 182,
+      "seconds": 0.576451166998595
+    },
+    {
+      "frame": 183,
+      "seconds": 0.5895669579913374
+    },
+    {
+      "frame": 184,
+      "seconds": 0.6059249159879982
+    },
+    {
+      "frame": 185,
+      "seconds": 0.608784458017908
+    },
+    {
+      "frame": 186,
+      "seconds": 0.5782215409853961
+    },
+    {
+      "frame": 187,
+      "seconds": 0.586090166005306
+    },
+    {
+      "frame": 188,
+      "seconds": 0.5748813330137637
+    },
+    {
+      "frame": 189,
+      "seconds": 0.6040793750144076
+    },
+    {
+      "frame": 190,
+      "seconds": 0.5862914170138538
+    },
+    {
+      "frame": 191,
+      "seconds": 0.5984884579956997
+    },
+    {
+      "frame": 192,
+      "seconds": 0.5850660419964697
+    }
+  ],
+  "renderSeconds": 113.28307720800512,
+  "posterFrame": 163,
+  "status": "rendered"
+}

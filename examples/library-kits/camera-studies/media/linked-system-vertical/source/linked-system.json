@@ -1,0 +1,46 @@
+{
+  "title": "From a junction to the connected system",
+  "description": "An invented manifold begins at a control wheel, then a perspective dolly reveals its branches and housings.",
+  "use": "Dependencies, shared infrastructure and contextual inspection.",
+  "theme": "research-paper",
+  "duration": 8,
+  "loop": false,
+  "posterPos": 0.85,
+  "copy": "Keep native copy outside the reserved subject region. Exact claims and qualifications stay sharp above or below the prepared footage.",
+  "metaphor": "A conceptual manifold, not an engineered product diagram or a measurement.",
+  "parameters": [
+    "theme",
+    "seed",
+    "duration",
+    "fps",
+    "vertical",
+    "phaseSeconds"
+  ],
+  "motion": {
+    "version": 1,
+    "clock": "qualitative-pose",
+    "phases": [
+      {
+        "id": "detail",
+        "role": "hold",
+        "start": 0,
+        "end": 0.16,
+        "minSeconds": 0.3
+      },
+      {
+        "id": "pullback",
+        "role": "action",
+        "start": 0.16,
+        "end": 0.74,
+        "minSeconds": 0.75
+      },
+      {
+        "id": "system",
+        "role": "hold",
+        "start": 0.74,
+        "end": 1,
+        "minSeconds": 0.75
+      }
+    ]
+  }
+}

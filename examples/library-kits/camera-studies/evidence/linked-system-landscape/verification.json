@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "passed-mechanical-checks",
+  "cases": [
+    {
+      "id": "linked-system",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-studies/build/renders/linked-system-landscape/linked-system",
+      "width": 960,
+      "height": 540,
+      "frames": 192,
+      "renderSeconds": 101.57100991600001,
+      "loop": false,
+      "loopTransformError": 15.283174514770508,
+      "loopSeam": 29.298900462962962,
+      "neighbourP95": 3.1263020833333335,
+      "finalHoldStep": 0.0007233796296296296,
+      "reloadPixelsMatch": false,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 1,
+        "maxDifference": 1,
+        "changedFraction": 6.430041152263375e-7
+      },
+      "posterPixelSha256": "ab23d9e57eb1a63e4df5b98544b8e966dbf6b0cab1b2d75d5fd385562017100e",
+      "reloadPixelSha256": "c50fc86b8c00d949323556c3554dbfdb9510e190671d03f0e894f5d9b6157c74"
+    }
+  ],
+  "startedAt": "2026-10-03T05:54:09.073Z",
+  "revision": "8c0242d416041408ad742777b12dd8aa95b557a3",
+  "dirty": true,
+  "finishedAt": "2026-10-03T05:54:11.434Z"
+}

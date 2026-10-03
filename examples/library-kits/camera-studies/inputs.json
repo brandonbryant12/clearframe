@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "basis": "Original illustrative scenarios; camera paths and apparent sizes encode no measured values.",
+  "cases": [
+    {
+      "id": "shared-infrastructure",
+      "mechanism": "linked-system",
+      "subject": "Shared infrastructure",
+      "title": "A junction belongs to a system",
+      "source": "Illustrative connections; no measured flow.",
+      "labels": {
+        "detail": "Inspect one junction",
+        "pullback": "Reveal its connections",
+        "system": "See the connected system"
+      }
+    },
+    {
+      "id": "approval-network",
+      "mechanism": "linked-system",
+      "subject": "Approval network metaphor",
+      "title": "One decision has dependencies",
+      "source": "Illustrative dependencies; no timing or capacity data.",
+      "labels": {
+        "detail": "Start with one decision",
+        "pullback": "Reveal the dependencies",
+        "system": "Keep the wider context in view"
+      }
+    },
+    {
+      "id": "location-network",
+      "mechanism": "hero-field",
+      "subject": "Location network",
+      "title": "One location sits within a wider field",
+      "source": "Illustrative markers; not a measured location count.",
+      "labels": {
+        "hero": "A selected location",
+        "pullback": "Reveal the surrounding field",
+        "field": "Selection and context together"
+      }
+    },
+    {
+      "id": "specimen-field",
+      "mechanism": "hero-field",
+      "subject": "Specimen field",
+      "title": "A close view leaves out its neighbors",
+      "source": "Illustrative specimens; no population or share data.",
+      "labels": {
+        "hero": "Inspect one specimen",
+        "pullback": "Widen the field of view",
+        "field": "The neighbors remain in view"
+      }
+    },
+    {
+      "id": "surface-inspection",
+      "mechanism": "focus-depth",
+      "subject": "Surface inspection",
+      "title": "Attention can move through depth",
+      "source": "Stylized focus study; no measured optical response.",
+      "labels": {
+        "near": "Inspect the near surface",
+        "rack": "Shift focus through depth",
+        "far": "Inspect the deeper structure"
+      }
+    },
+    {
+      "id": "research-context",
+      "mechanism": "focus-depth",
+      "subject": "Research context metaphor",
+      "title": "Keep the claim sharp as attention shifts",
+      "source": "Illustrative analogy; focus does not establish evidence.",
+      "labels": {
+        "near": "Start with the foreground detail",
+        "rack": "Shift attention to context",
+        "far": "Read the deeper context"
+      }
+    }
+  ]
+}

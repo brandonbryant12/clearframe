@@ -1,0 +1,18 @@
+[
+  {
+    "variant": "hero-field-landscape",
+    "region": "front-right base",
+    "filter": "crop=iw*.14:ih*.42:iw*.80:ih*.45,scale=64:64",
+    "frames": 31,
+    "maxMeanRgbDifferenceFromOpening": 0.21695963541666666,
+    "limitations": "Fixed opening-hold crop only. Does not establish action-phase or subjective playback smoothness."
+  },
+  {
+    "variant": "hero-field-vertical",
+    "region": "amber hero shadow below crown",
+    "filter": "crop=iw*.43:ih*.09:iw*.31:ih*.445,scale=64:64",
+    "frames": 31,
+    "maxMeanRgbDifferenceFromOpening": 0.36376953125,
+    "limitations": "Fixed opening-hold crop only. Does not establish action-phase or subjective playback smoothness."
+  }
+]

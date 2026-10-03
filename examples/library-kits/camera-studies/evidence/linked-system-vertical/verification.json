@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "passed-mechanical-checks",
+  "cases": [
+    {
+      "id": "linked-system",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-studies/build/renders/linked-system-vertical/linked-system",
+      "width": 540,
+      "height": 960,
+      "frames": 192,
+      "renderSeconds": 98.093992834,
+      "loop": false,
+      "loopTransformError": 17.736571311950684,
+      "loopSeam": 29.23943865740741,
+      "neighbourP95": 3.248553240740741,
+      "finalHoldStep": 0,
+      "reloadPixelsMatch": true,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 0,
+        "maxDifference": 0,
+        "changedFraction": 0
+      },
+      "posterPixelSha256": "837ce2f1d2290d74ec920170b3db998f28a310473194eb519398d5ac3a7c8216",
+      "reloadPixelSha256": "837ce2f1d2290d74ec920170b3db998f28a310473194eb519398d5ac3a7c8216"
+    }
+  ],
+  "startedAt": "2026-10-03T05:55:50.741Z",
+  "revision": "8c0242d416041408ad742777b12dd8aa95b557a3",
+  "dirty": true,
+  "finishedAt": "2026-10-03T05:55:53.470Z"
+}

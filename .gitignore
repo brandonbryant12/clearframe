@@ -22,3 +22,7 @@ archive/comparison/examples/paired/assets/music/
 # Variable sources for the display voices are fetched by native/tools/generate-fonts.py, hash-checked, not committed.
 fframes/assets/fonts/source/*
 !fframes/assets/fonts/source/Inter.ttf
+
+# Reproducible Python bytecode from procedural recipe inspection.
+__pycache__/
+*.pyc

@@ -1,0 +1,289 @@
+{
+  "status": "prototype",
+  "continuousPlayback": "unverified",
+  "variants": [
+    {
+      "name": "approval-network-landscape",
+      "pipelineId": "2026-10-03T06-10-05-465Z-77883615",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "42e6775c991b966f21c44833e84e6d394ba704b974224f88bac7558388c20c6e"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 5.1,
+        "heldSeconds": 2.67,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "approval-network-vertical",
+      "pipelineId": "2026-10-03T06-10-12-045Z-78aaa7f2",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "a2d78c07924227e279dc5d968045a7454d4136e1505061a1ac50097790b51cf4"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 5.34,
+        "heldSeconds": 2.73,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "location-network-landscape",
+      "pipelineId": "2026-10-03T06-10-18-646Z-b9fd1376",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "5bdf46afd72dbd9b35fbffd3fe82ba7e838735f795270e117ab69abc153fb308"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 6.46,
+        "heldSeconds": 2.6,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "location-network-vertical",
+      "pipelineId": "2026-10-03T06-10-25-288Z-33084dcd",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "b85ca6903c1f8e9d0a8198a8a145eacd01ea4b23801c8d593631d844e4ccb478"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 6.39,
+        "heldSeconds": 2.7,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "research-context-landscape",
+      "pipelineId": "2026-10-03T06-10-55-598Z-e83df9fb",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "a4eebc49672c0f58654c1bb78ee34805b07617e8e7df3e251a3491ddc19b1836"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 0.23,
+        "heldSeconds": 8,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "research-context-vertical",
+      "pipelineId": "2026-10-03T06-11-00-699Z-852c228a",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "ff79e2886337c5dbde6b84ea532f604f62bd480f64254f5710df6795b5f0e7b3"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 0.26,
+        "heldSeconds": 8,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "shared-infrastructure-landscape",
+      "pipelineId": "2026-10-03T06-03-33-625Z-78aad40d",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "f7fe203ea5bb5441bf4dec54229c7b1a3c6e109b4f3593cac2661e5b54079b81"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 5.1,
+        "heldSeconds": 2.7,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "shared-infrastructure-vertical",
+      "pipelineId": "2026-10-03T06-03-40-396Z-eeec5c76",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "d49ded5458e34ae81af0af310dd01cabf1a97c4af3308debc6f91f3d28b6a6ed"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 5.32,
+        "heldSeconds": 2.73,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "specimen-field-landscape",
+      "pipelineId": "2026-10-03T06-10-31-908Z-462cd2bc",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "3dc4ca9e71a510722e00bf658008b85d2ad589927866c8e306b619255f60164b"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 6.45,
+        "heldSeconds": 2.57,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "specimen-field-vertical",
+      "pipelineId": "2026-10-03T06-10-38-621Z-a6ea412e",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "257338de0d62f998a0f2b626264f3d4643f96ab9bc1fd42555777d0c99b63bda"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 6.4,
+        "heldSeconds": 2.67,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "surface-inspection-landscape",
+      "pipelineId": "2026-10-03T06-10-45-439Z-3a0e2899",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "a80bbd7692f5441f5c48d06a7be5444eb6ab5ab6bcde9f83388ac68228e49d34"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 0.24,
+        "heldSeconds": 8,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "surface-inspection-vertical",
+      "pipelineId": "2026-10-03T06-10-50-437Z-7ed68b07",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 40 frames: no problems found\n"
+        ],
+        "duration": 10,
+        "inputId": "05f664267ce610a8dc7ab6475d4a9baae90f9f60aef30dbc2bc9cb55dd612a21"
+      },
+      "qa": {
+        "seconds": 10,
+        "frames": 300,
+        "changePerSecond": 0.27,
+        "heldSeconds": 8,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    }
+  ],
+  "limitations": [
+    "Original qualitative geometry, apparent size, illustrative count and timing encode no measurements",
+    "Framing and sharpness checks do not prove arbitrary occlusion safety or measured optics",
+    "Square and 4:5 not reviewed",
+    "Draft samples only; master and continuous subjective playback remain pending",
+    "Stable close-up surface grain on hero-field marker bases/crowns remains a master surface-quality item"
+  ]
+}

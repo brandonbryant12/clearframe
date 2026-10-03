@@ -1,0 +1,15 @@
+✔ camera paths preserve authored holds, optics and arbitrary seek order (103.245208ms)
+✔ phase manifests preserve the old pose clock and expose exact half-open holds (15.293083ms)
+✔ named phase retiming quantizes cue boundaries and is available through the CLI (186.132584ms)
+✔ encoded frame plans retain all action, minimum holds and exact selected source times (2.337791ms)
+✔ malformed phase partitions are rejected before preparing outputs (0.892167ms)
+✔ optional Blender recipes can be explored without starting Blender (100.619583ms)
+✔ an unavailable Blender leaves a failure receipt and protects an existing destination (9.323125ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 341.795875

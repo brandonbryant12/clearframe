@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "id": "focus-depth",
+  "status": "passed",
+  "clipSha256": "d01f0e9ed3da8d8c9f901a9615c82fcc1295b28c8cd0c218765cd1c549407f67",
+  "sourceHashes": {
+    "scripts/blender/render.py": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+    "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+    "scripts/blender/camera_rig.py": "3317be57d0c11bff11670902426460650ec639f7baeb98777a8af076640288d6",
+    "library/sculptures/focus-depth.py": "623a0bb6e186a0f464ed610e6227e3456d1e43e6daca3b774f9faf7b74f99332",
+    "library/sculptures/focus-depth.json": "48d0d96735666a788b305d83bf8384cbe76ae84fdc09b3ec456ac64c426f62d7"
+  },
+  "framesChecked": 193,
+  "maxPoseError": 4.7229519317681934e-07,
+  "maxStaticGeometryDrift": 0,
+  "seekEqual": true,
+  "focusRois": {
+    "near": [
+      0.3917204737663269,
+      0.31728944182395935,
+      0.4850703477859497,
+      0.5434946417808533
+    ],
+    "far": [
+      0.5248262882232666,
+      0.4429021179676056,
+      0.625815749168396,
+      0.6750569939613342
+    ]
+  },
+  "limits": "Projected bounds and baked pose checks do not prove rendered visibility or collision avoidance."
+}

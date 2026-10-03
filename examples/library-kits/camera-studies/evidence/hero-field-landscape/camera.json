@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "id": "hero-field",
+  "status": "passed",
+  "clipSha256": "23f3448317a805ed4e174b99093296b5015aa57ddd99a6f5f83ca5c7b2ffcb08",
+  "sourceHashes": {
+    "scripts/blender/render.py": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+    "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+    "scripts/blender/camera_rig.py": "3317be57d0c11bff11670902426460650ec639f7baeb98777a8af076640288d6",
+    "library/sculptures/hero-field.py": "49deefa0e8579c853604ad3c93fbca8173c3ee56619d4064bd26fe4ddcf35d64",
+    "library/sculptures/hero-field.json": "beab864888ebe70765cdc238d9b0cb1c9dd4cad7be20e5a29ebfa83066b6015c"
+  },
+  "framesChecked": 193,
+  "maxPoseError": 9.324622887163514e-07,
+  "maxStaticGeometryDrift": 0,
+  "seekEqual": true,
+  "focusRois": {},
+  "limits": "Projected bounds and baked pose checks do not prove rendered visibility or collision avoidance.",
+  "distanceRatio": 3.8759912830173993,
+  "heroWidthRatio": 3.398043985047107
+}

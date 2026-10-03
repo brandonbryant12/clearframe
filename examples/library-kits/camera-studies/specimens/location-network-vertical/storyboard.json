@@ -1,0 +1,272 @@
+{
+  "version": 2,
+  "title": "One location sits within a wider field",
+  "format": {
+    "preset": "vertical",
+    "fps": 30
+  },
+  "theme": "research-paper",
+  "type": "inter",
+  "backdrop": "none",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.3
+  },
+  "transition": "cut",
+  "sfx": "off",
+  "captions": false,
+  "music": false,
+  "assets": [
+    {
+      "id": "mechanism",
+      "kind": "clip",
+      "file": "media/clip.mp4"
+    },
+    {
+      "id": "settled",
+      "kind": "clip",
+      "file": "media/final-hold.mp4"
+    }
+  ],
+  "sources": [
+    {
+      "claim": "Location network: Illustrative markers; not a measured location count.",
+      "source": "Original ClearFrame procedural artwork and fictional explanatory scenario."
+    }
+  ],
+  "beats": [
+    {
+      "id": "mechanism",
+      "block": "canvas",
+      "duration": 8,
+      "camera": "none",
+      "exit": "none",
+      "plate": {
+        "asset": "mechanism",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "elements": [
+          {
+            "id": "header-band",
+            "type": "rect",
+            "x": 0,
+            "y": 0,
+            "w": 1080,
+            "h": 633.6,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "footer-band",
+            "type": "rect",
+            "x": 0,
+            "y": 1612.8,
+            "w": 1080,
+            "h": 307.2,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "qualification",
+            "type": "text",
+            "text": "Illustrative markers; not a measured location count.",
+            "x": 113.39999999999999,
+            "y": 1699.2,
+            "size": 35.64,
+            "width": 853.2,
+            "height": 124.80000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "subject",
+            "type": "text",
+            "text": "Location network",
+            "x": 113.39999999999999,
+            "y": 230.39999999999998,
+            "size": 30.240000000000002,
+            "width": 853.2,
+            "height": 76.8,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "text"
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "text": "One location sits within a wider field",
+            "x": 113.39999999999999,
+            "y": 345.59999999999997,
+            "size": 56.16,
+            "width": 853.2,
+            "height": 201.6,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "display"
+          },
+          {
+            "id": "phase-hero",
+            "type": "text",
+            "text": "A selected location",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 1.1716666666666669,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-pullback",
+            "type": "text",
+            "text": "Reveal the surrounding field",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 1.2916666666666667,
+            "enter": "fade",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 5.838333333333333,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-field",
+            "type": "text",
+            "text": "Selection and context together",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 5.958333333333333,
+            "enter": "fade",
+            "dur": 0.12
+          }
+        ]
+      }
+    },
+    {
+      "id": "reading-hold",
+      "block": "canvas",
+      "duration": 2,
+      "camera": "none",
+      "exit": "none",
+      "transition": "cut",
+      "plate": {
+        "asset": "settled",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "elements": [
+          {
+            "id": "header-band",
+            "type": "rect",
+            "x": 0,
+            "y": 0,
+            "w": 1080,
+            "h": 633.6,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "footer-band",
+            "type": "rect",
+            "x": 0,
+            "y": 1612.8,
+            "w": 1080,
+            "h": 307.2,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "qualification",
+            "type": "text",
+            "text": "Illustrative markers; not a measured location count.",
+            "x": 113.39999999999999,
+            "y": 1699.2,
+            "size": 35.64,
+            "width": 853.2,
+            "height": 124.80000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "subject",
+            "type": "text",
+            "text": "Location network",
+            "x": 113.39999999999999,
+            "y": 230.39999999999998,
+            "size": 30.240000000000002,
+            "width": 853.2,
+            "height": 76.8,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "text"
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "text": "One location sits within a wider field",
+            "x": 113.39999999999999,
+            "y": 345.59999999999997,
+            "size": 56.16,
+            "width": 853.2,
+            "height": 201.6,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "display"
+          },
+          {
+            "id": "phase-field",
+            "type": "text",
+            "text": "Selection and context together",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          }
+        ]
+      }
+    }
+  ]
+}

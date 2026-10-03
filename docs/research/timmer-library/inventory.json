@@ -1430,7 +1430,7 @@
       "category": "Camera / motion",
       "priority": "Now",
       "implementation": "Reuse",
-      "readiness": "existing source; adaptation/review needed",
+      "readiness": "prototype; continuous playback and master review pending",
       "effort": "S",
       "sourceIds": [
         "S09",
@@ -1444,7 +1444,7 @@
         "cue",
         "hold"
       ],
-      "existing": "native world/view/dolly/focus exist; Blender camera path variant remains to be authored.",
+      "existing": "linked-system supplies a retained perspective detail-to-system path with constant lens and native captions. See examples/library-kits/camera-studies.",
       "guardrail": "Native chart axes and source labels stay readable; do not distort quantitative marks.",
       "reuse": [
         "systems",
@@ -1459,7 +1459,7 @@
       "category": "Camera / motion",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "proposed; not built",
+      "readiness": "prototype; continuous playback and master review pending",
       "effort": "M",
       "sourceIds": [
         "S06",
@@ -1473,7 +1473,7 @@
         "end composition",
         "portrait framing"
       ],
-      "existing": "native world/crowd exist; reusable matching Blender framing is new.",
+      "existing": "hero-field supplies a retained perspective hero-to-field path; all fifteen markers are illustrative, not measured. See examples/library-kits/camera-studies.",
       "guardrail": "A count needs real data; a decorative crowd must be labeled as an illustration.",
       "reuse": [
         "concentration",
@@ -1488,7 +1488,7 @@
       "category": "Camera / motion",
       "priority": "Now",
       "implementation": "Reuse",
-      "readiness": "existing source; adaptation/review needed",
+      "readiness": "prototype; continuous playback and master review pending",
       "effort": "S",
       "sourceIds": [
         "S09",
@@ -1501,7 +1501,7 @@
         "cue",
         "focus duration"
       ],
-      "existing": "native focus.keys and z exist; no standalone Blender focus preset.",
+      "existing": "focus-depth supplies a fixed-camera focus transfer; native claims and qualifications remain sharp. See examples/library-kits/camera-studies.",
       "guardrail": "Never blur the only source or risk label during its reading hold.",
       "reuse": [
         "research",
@@ -1621,7 +1621,7 @@
         "aspect ratio",
         "endpoints"
       ],
-      "existing": "artkit.fit_camera reserves explicit normalized subject/copy bounds; physical-mechanisms verifies all baked frames in four source variants and reviews separate native landscape/vertical layouts.",
+      "existing": "artkit.fit_camera reserves explicit normalized subject/copy bounds; physical-mechanisms verifies all baked frames in four source variants and reviews separate native landscape/vertical layouts. camera_rig.fit_perspective now fits independent landscape/portrait endpoints for three camera studies; arbitrary aspect reframing remains open.",
       "guardrail": "A crop is not verified portrait composition; review each format.",
       "reuse": [
         "all formats"
@@ -1814,7 +1814,7 @@
       "category": "Tool",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "partial prototype; orbit, truck and broader rig presets remain",
       "effort": "L",
       "sourceIds": [
         "S06",
@@ -1830,7 +1830,7 @@
         "seed",
         "limits"
       ],
-      "existing": "scripts/blender/artkit.py and per-recipe cameras exist; reusable rig APIs are not yet implemented.",
+      "existing": "camera_rig.py supplies complete deterministic poses, a Blender bake adapter and perspective endpoint fitting. Two pullbacks and a focus preset are retained in camera-studies; broader camera presets remain open.",
       "guardrail": "Shared/project kits stay JSON-only. Bake transforms and avoid live random state or uncached physics.",
       "reuse": [
         "all 3D assets"
@@ -1843,7 +1843,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Partial implementation: eleven recipe contracts, custom pose timing, safe clip-selection plans and retained drafts; physical-mechanisms binds native captions to source phases; general automatic cue integration remains open",
+      "readiness": "Partial implementation: fourteen recipe contracts, custom pose timing, safe clip-selection plans and retained drafts; physical-mechanisms and camera-studies bind native captions to source phases; general automatic cue integration remains open",
       "effort": "M",
       "sourceIds": [
         "S02",
@@ -1860,7 +1860,7 @@
         "hold",
         "loop endpoints"
       ],
-      "existing": "engine/lib/motion-phases.mjs; sculpture --phase-seconds; eleven recipe contracts; examples/motion-phases gate/bridge and physical-mechanisms source-bound native cues and explicit still holds",
+      "existing": "engine/lib/motion-phases.mjs; sculpture --phase-seconds; fourteen recipe contracts; examples/motion-phases gate/bridge and physical-mechanisms/camera-studies source-bound native cues and explicit still holds",
       "guardrail": "Distinguish a clip playback-rate change from a new simulation or exact source-time map.",
       "reuse": [
         "all mixed-media scenes"

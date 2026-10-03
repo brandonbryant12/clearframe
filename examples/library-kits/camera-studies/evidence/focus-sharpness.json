@@ -1,0 +1,128 @@
+[
+  {
+    "name": "focus-depth-landscape",
+    "videoSha256": "d01f0e9ed3da8d8c9f901a9615c82fcc1295b28c8cd0c218765cd1c549407f67",
+    "frames": [
+      0,
+      191
+    ],
+    "near": [
+      40.71307450296368,
+      14.770048457117475
+    ],
+    "far": [
+      31.04614047171381,
+      60.53917364207533
+    ],
+    "nearRatio": 2.75646180993703,
+    "farRatio": 1.949974222954788,
+    "threshold": 1.25,
+    "passed": true,
+    "limitations": "RMS two-pixel grayscale gradient in projected panel regions after 128px scaling. Relative sharpness in these fixtures only; no physical optics calibration or subjective playback claim."
+  },
+  {
+    "name": "surface-inspection-landscape",
+    "videoSha256": "ebaa7945fa0a6541486e30558ffe5f95ad60609b26d3a779a3a82b883c91fa03",
+    "frames": [
+      0,
+      299
+    ],
+    "near": [
+      37.63099475683812,
+      14.61286984614859
+    ],
+    "far": [
+      30.09067224558912,
+      58.86302420999725
+    ],
+    "nearRatio": 2.575195369084619,
+    "farRatio": 1.9561884071442028,
+    "threshold": 1.25,
+    "passed": true,
+    "limitations": "RMS two-pixel grayscale gradient in projected panel regions after 128px scaling. Relative sharpness in these fixtures only; no physical optics calibration or subjective playback claim."
+  },
+  {
+    "name": "research-context-landscape",
+    "videoSha256": "1ccb2fe0cac4c78f38a3898f628fc9b7bc3b0b5646428d00a98757861e0e0e4d",
+    "frames": [
+      0,
+      299
+    ],
+    "near": [
+      37.63025245868088,
+      14.610686650943917
+    ],
+    "far": [
+      30.08515922196574,
+      58.808028109564056
+    ],
+    "nearRatio": 2.5755293613288046,
+    "farRatio": 1.9547188590787716,
+    "threshold": 1.25,
+    "passed": true,
+    "limitations": "RMS two-pixel grayscale gradient in projected panel regions after 128px scaling. Relative sharpness in these fixtures only; no physical optics calibration or subjective playback claim."
+  },
+  {
+    "name": "focus-depth-vertical",
+    "videoSha256": "62da8499d4f6746522f02ba1e15778e11518b7b8bb25bf1398a68b23456a60f3",
+    "frames": [
+      0,
+      191
+    ],
+    "near": [
+      40.29216836986922,
+      13.48860177081115
+    ],
+    "far": [
+      20.476098665157515,
+      63.370122593893065
+    ],
+    "nearRatio": 2.9871271355241604,
+    "farRatio": 3.0948338172312466,
+    "threshold": 1.25,
+    "passed": true,
+    "limitations": "RMS two-pixel grayscale gradient in projected panel regions after 128px scaling. Relative sharpness in these fixtures only; no physical optics calibration or subjective playback claim."
+  },
+  {
+    "name": "surface-inspection-vertical",
+    "videoSha256": "5087c93d96fbbb40627413e48551e7f989699cd55eff0ba8bfb8ba35ce391ab6",
+    "frames": [
+      0,
+      299
+    ],
+    "near": [
+      38.88433380157757,
+      13.977267574349185
+    ],
+    "far": [
+      19.920443681876925,
+      60.8619051709736
+    ],
+    "nearRatio": 2.7819696227993345,
+    "farRatio": 3.055248474527909,
+    "threshold": 1.25,
+    "passed": true,
+    "limitations": "RMS two-pixel grayscale gradient in projected panel regions after 128px scaling. Relative sharpness in these fixtures only; no physical optics calibration or subjective playback claim."
+  },
+  {
+    "name": "research-context-vertical",
+    "videoSha256": "0b2d3434c8cbe01a8c8961ad5157eba96fd24be8599465f1ee229a816189d2d4",
+    "frames": [
+      0,
+      299
+    ],
+    "near": [
+      38.87579611291724,
+      13.976478866239491
+    ],
+    "far": [
+      19.919586651387192,
+      60.87330488957356
+    ],
+    "nearRatio": 2.7815157512113178,
+    "farRatio": 3.0559522120070883,
+    "threshold": 1.25,
+    "passed": true,
+    "limitations": "RMS two-pixel grayscale gradient in projected panel regions after 128px scaling. Relative sharpness in these fixtures only; no physical optics calibration or subjective playback claim."
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "passed-mechanical-checks",
+  "cases": [
+    {
+      "id": "focus-depth",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-studies/build/renders/focus-depth-vertical/focus-depth",
+      "width": 540,
+      "height": 960,
+      "frames": 192,
+      "renderSeconds": 110.582194125,
+      "loop": false,
+      "loopTransformError": 0,
+      "loopSeam": 1.6291956018518519,
+      "neighbourP95": 0.10170717592592593,
+      "finalHoldStep": 0,
+      "reloadPixelsMatch": false,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 81,
+        "maxDifference": 1,
+        "changedFraction": 0.00005208333333333334
+      },
+      "posterPixelSha256": "d3ada32bd117fa4f856fc19abbd01e1a33d095c472e4d6e53df855ba865fec21",
+      "reloadPixelSha256": "dd51c9d6b0050a159cb2a2d4b40660cf3aecd49380794798748c9aba8b13bc27"
+    }
+  ],
+  "startedAt": "2026-10-03T06:09:56.945Z",
+  "revision": "8c0242d416041408ad742777b12dd8aa95b557a3",
+  "dirty": true,
+  "finishedAt": "2026-10-03T06:09:59.848Z"
+}

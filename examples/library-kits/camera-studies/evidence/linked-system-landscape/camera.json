@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "id": "linked-system",
+  "status": "passed",
+  "clipSha256": "0af2eb406328cc64f9fc32daffa678cdc008690a68ce66b9c8301b7bbfb40c3e",
+  "sourceHashes": {
+    "scripts/blender/render.py": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+    "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+    "scripts/blender/camera_rig.py": "3317be57d0c11bff11670902426460650ec639f7baeb98777a8af076640288d6",
+    "library/sculptures/linked-system.py": "dea5b362feca9b4fe8abe60c420a8796897544162a5f7af37c773ab1f59f6117",
+    "library/sculptures/linked-system.json": "6cbfe32e78d59b7a9f6c4d0181d6f7611ce18fc1235830a53705f32306623e0b"
+  },
+  "framesChecked": 193,
+  "maxPoseError": 9.525335400439872e-07,
+  "maxStaticGeometryDrift": 0,
+  "seekEqual": true,
+  "focusRois": {},
+  "limits": "Projected bounds and baked pose checks do not prove rendered visibility or collision avoidance.",
+  "distanceRatio": 4.429852211817452,
+  "heroWidthRatio": 4.296932103575168
+}

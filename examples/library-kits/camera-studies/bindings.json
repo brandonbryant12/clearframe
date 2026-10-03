@@ -1,0 +1,246 @@
+{
+  "version": 1,
+  "inputSha256": "5f59d5a7a6ab496d1bebb8aa4b3c28039a1281bb1280ded332d6a597d96bd62b",
+  "bindings": [
+    {
+      "name": "shared-infrastructure-landscape",
+      "mediaName": "linked-system-landscape",
+      "sourceClipSha256": "0af2eb406328cc64f9fc32daffa678cdc008690a68ce66b9c8301b7bbfb40c3e",
+      "storyboardSha256": "80c21a9798a1d2b86078448b2165c402d8dc51276b9dd26a97b39bf7c9ce0720",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "3668e43fbc29f4608e9904a951884533220d07b493e59c384ec711efc644c71a",
+      "holdClipSha256": "04316ec4f119c39b38564644acb5ad24146e43bcd51b26450b50259979296165",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "detail": 0,
+        "pullback": 1.2916666666666667,
+        "system": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "shared-infrastructure-vertical",
+      "mediaName": "linked-system-vertical",
+      "sourceClipSha256": "767d07bc7b367cd75411da6babf858ef1d8412f8dab3297b47d1316d468df0e9",
+      "storyboardSha256": "b97126ae69578b6554ec432eb9f21e638565235c06fc90d73d050e7cdf0ed0eb",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "21c6bb36605af124c66e6ad6eb03262b9deb19d238cb3c2ff46fac85d21f9c82",
+      "holdClipSha256": "3d31862b5f2d7c21e4e25184248c2066dec0e7ee6006ca15743540b93c416081",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "detail": 0,
+        "pullback": 1.2916666666666667,
+        "system": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "approval-network-landscape",
+      "mediaName": "linked-system-landscape",
+      "sourceClipSha256": "0af2eb406328cc64f9fc32daffa678cdc008690a68ce66b9c8301b7bbfb40c3e",
+      "storyboardSha256": "a0ecbcfdaa2d26fb7893c387c4184072b3a7c29d61ca9f9446ec876b3a00835c",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "3668e43fbc29f4608e9904a951884533220d07b493e59c384ec711efc644c71a",
+      "holdClipSha256": "04316ec4f119c39b38564644acb5ad24146e43bcd51b26450b50259979296165",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "detail": 0,
+        "pullback": 1.2916666666666667,
+        "system": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "approval-network-vertical",
+      "mediaName": "linked-system-vertical",
+      "sourceClipSha256": "767d07bc7b367cd75411da6babf858ef1d8412f8dab3297b47d1316d468df0e9",
+      "storyboardSha256": "cc93e8267f387c7f2c1ccf661a8ae0758e2575d1f220b8e1171a07aea47b362a",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "21c6bb36605af124c66e6ad6eb03262b9deb19d238cb3c2ff46fac85d21f9c82",
+      "holdClipSha256": "3d31862b5f2d7c21e4e25184248c2066dec0e7ee6006ca15743540b93c416081",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "detail": 0,
+        "pullback": 1.2916666666666667,
+        "system": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "location-network-landscape",
+      "mediaName": "hero-field-landscape",
+      "sourceClipSha256": "23f3448317a805ed4e174b99093296b5015aa57ddd99a6f5f83ca5c7b2ffcb08",
+      "storyboardSha256": "c479c3e589faecc73c638f7e62297e0a7df1aacf1265408f2c01c4aadc534485",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "640c26ce4f19304ae8156e1b6ac969de58882b86d51c78e4655c347f14b15730",
+      "holdClipSha256": "6696116e8d75cb8d089c95ba76cfbec7cfac0548abf3e77aeb80b630de6ffacf",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "hero": 0,
+        "pullback": 1.2916666666666667,
+        "field": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "location-network-vertical",
+      "mediaName": "hero-field-vertical",
+      "sourceClipSha256": "fd62c41c9c3c9c83a8a32270cab09205ced87326ed267a77da46a3ac4345a8e9",
+      "storyboardSha256": "9d92f42002011757162549816052e58f0e9c52ddf34e4141fcb1793e1f61caa8",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "f87f45b31083b21ec9608a0abe87ab03038aa0149be43f2dfe6e32790235d312",
+      "holdClipSha256": "af70e7df3efc385b8a339223e1d1c5e2c4607f2583e34abc299e1526420a0c4c",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "hero": 0,
+        "pullback": 1.2916666666666667,
+        "field": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "specimen-field-landscape",
+      "mediaName": "hero-field-landscape",
+      "sourceClipSha256": "23f3448317a805ed4e174b99093296b5015aa57ddd99a6f5f83ca5c7b2ffcb08",
+      "storyboardSha256": "2217406e47874a6d174429292bd8439699a9118a81c32f8ea457d12e3b39628a",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "640c26ce4f19304ae8156e1b6ac969de58882b86d51c78e4655c347f14b15730",
+      "holdClipSha256": "6696116e8d75cb8d089c95ba76cfbec7cfac0548abf3e77aeb80b630de6ffacf",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "hero": 0,
+        "pullback": 1.2916666666666667,
+        "field": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "specimen-field-vertical",
+      "mediaName": "hero-field-vertical",
+      "sourceClipSha256": "fd62c41c9c3c9c83a8a32270cab09205ced87326ed267a77da46a3ac4345a8e9",
+      "storyboardSha256": "fd393728acbfa9fca4fdd459c25b772eb3a24fba47217337cceb1de41163520b",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "f87f45b31083b21ec9608a0abe87ab03038aa0149be43f2dfe6e32790235d312",
+      "holdClipSha256": "af70e7df3efc385b8a339223e1d1c5e2c4607f2583e34abc299e1526420a0c4c",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "hero": 0,
+        "pullback": 1.2916666666666667,
+        "field": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "surface-inspection-landscape",
+      "mediaName": "focus-depth-landscape",
+      "sourceClipSha256": "d01f0e9ed3da8d8c9f901a9615c82fcc1295b28c8cd0c218765cd1c549407f67",
+      "storyboardSha256": "d4bae869f40cb7af35035deb2feedf7a73bd7dcd409d0397eca287dd9e8d6eba",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "dc21272830c2fc13732cc7c0a1eeb51932b32983be0922cbbbbafb93d0114ea1",
+      "holdClipSha256": "3dad9c4e08f708a93b26956755069fa39cccf00cecc988346cadb48cbeb1e183",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "near": 0,
+        "rack": 1.2916666666666667,
+        "far": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "surface-inspection-vertical",
+      "mediaName": "focus-depth-vertical",
+      "sourceClipSha256": "62da8499d4f6746522f02ba1e15778e11518b7b8bb25bf1398a68b23456a60f3",
+      "storyboardSha256": "5611219d86a4b157c374c6fe51c0cb7c8820fe6d0c0faf5811f7edf7983ff14b",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "c7d01ff9b6e17404b6d37bb753e6761e3b31517a2b215663c3106d9ae94e5351",
+      "holdClipSha256": "36b9832370e1f283f122671b066acf1d0389496e8b9f9f206a4eb1e9d3078cae",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "near": 0,
+        "rack": 1.2916666666666667,
+        "far": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "research-context-landscape",
+      "mediaName": "focus-depth-landscape",
+      "sourceClipSha256": "d01f0e9ed3da8d8c9f901a9615c82fcc1295b28c8cd0c218765cd1c549407f67",
+      "storyboardSha256": "953a5859adc6b0f6573186fbba0f9bbdecddac74d714a83753317c06e918bf5e",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "dc21272830c2fc13732cc7c0a1eeb51932b32983be0922cbbbbafb93d0114ea1",
+      "holdClipSha256": "3dad9c4e08f708a93b26956755069fa39cccf00cecc988346cadb48cbeb1e183",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "near": 0,
+        "rack": 1.2916666666666667,
+        "far": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    },
+    {
+      "name": "research-context-vertical",
+      "mediaName": "focus-depth-vertical",
+      "sourceClipSha256": "62da8499d4f6746522f02ba1e15778e11518b7b8bb25bf1398a68b23456a60f3",
+      "storyboardSha256": "a96686d4f62ba8f3279c04c4be80459174830e8f4a33a67d744918661426c02f",
+      "sourceFps": 24,
+      "sourceFrames": 192,
+      "nativeFps": 30,
+      "nativeFrames": 300,
+      "heldSourceFrame": 191,
+      "heldImageSha256": "c7d01ff9b6e17404b6d37bb753e6761e3b31517a2b215663c3106d9ae94e5351",
+      "holdClipSha256": "36b9832370e1f283f122671b066acf1d0389496e8b9f9f206a4eb1e9d3078cae",
+      "explicitStaticHoldSeconds": 2,
+      "cueSeconds": {
+        "near": 0,
+        "rack": 1.2916666666666667,
+        "far": 5.958333333333333
+      },
+      "finalHoldSeconds": 4.041666666666667
+    }
+  ]
+}
