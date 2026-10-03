@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/time-series-studies/specimens/budget-and-prices-vertical/build/pipeline/2026-10-03T06-56-34-026Z-0bf079fa/video.mp4",
+  "outputSha256": "1473dafd2bfd67d10cdafcb9490963b8fa3071d54a7ff89e7f0401963b44ff15",
+  "inputId": "5870ddf3022192c576edaf2ebe2c1bbf7b3934e654e1cf93fdd437a9c1b6f862",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "budget-and-prices-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "budget-and-prices-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "budget-and-prices-basis: last frame",
+        "Before budget-and-prices"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "budget-and-prices: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "budget-and-prices: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1199,
+      "time": 39.96666666666667,
+      "reasons": [
+        "budget-and-prices: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

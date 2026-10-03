@@ -1,0 +1,1475 @@
+{
+  "version": 2,
+  "title": "A gap does not establish a recovery",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "frames": 1200,
+  "theme": {
+    "base": "paper",
+    "bg": "#f5f3ed",
+    "surface": "#e9e7df",
+    "ink": "#222831",
+    "muted": "#616b76",
+    "accent": "#315cce",
+    "accent2": "#c2641f",
+    "positive": "#17745c",
+    "negative": "#bd453c"
+  },
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.35
+  },
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "caption_style": "plate",
+  "text_motion": "lines",
+  "type": {
+    "id": "geometric",
+    "display": "space-grotesk",
+    "emphasis": "weight",
+    "upper": false,
+    "tracking": -0.02,
+    "leading": 1
+  },
+  "beats": [
+    {
+      "id": "unfinished-path-basis",
+      "block": "canvas",
+      "frames": 600,
+      "start_frame": 0,
+      "cue_seconds": 0.35,
+      "transition": "cut",
+      "exit": "none",
+      "settle_seconds": 1.85,
+      "motion": {
+        "preset": "gentle",
+        "intensity": 0.35
+      },
+      "props": {
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "sourceElement": "unfinished-path-basis-source",
+        "elements": [
+          {
+            "id": "unfinished-path-basis-title",
+            "type": "text",
+            "text": "Read observed loss and variability",
+            "x": 124.80000000000001,
+            "y": 129.6,
+            "size": 72.96,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "fit": 1670.4,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-basis-0",
+            "type": "text",
+            "text": "Worst observed drawdown: -25%",
+            "x": 124.80000000000001,
+            "y": 313.2,
+            "size": 63.36,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "fade",
+            "width": 1670.4,
+            "height": 118.8,
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-basis-1",
+            "type": "text",
+            "text": "Drawdown = level ÷ highest observed level − 1",
+            "x": 124.80000000000001,
+            "y": 459,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "text",
+            "at": 0.55,
+            "enter": "fade",
+            "width": 1670.4,
+            "height": 118.8,
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-basis-2",
+            "type": "text",
+            "text": "3-month sample SD of monthly % changes; denominator n − 1.",
+            "x": 124.80000000000001,
+            "y": 604.8000000000001,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "text",
+            "at": 1.1,
+            "enter": "fade",
+            "width": 1670.4,
+            "height": 118.8,
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-basis-3",
+            "type": "text",
+            "text": "No annualization. Latest episode has no observed recovery.",
+            "x": 124.80000000000001,
+            "y": 750.6,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "text",
+            "at": 1.6500000000000001,
+            "enter": "fade",
+            "width": 1670.4,
+            "height": 118.8,
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-basis-source",
+            "type": "text",
+            "text": "Fictional monthly index · 2024. No unseen highs or lows are inferred.",
+            "x": 124.80000000000001,
+            "y": 961.2,
+            "size": 53.76,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "width": 1670.4,
+            "height": 91.80000000000001,
+            "dur": 0
+          }
+        ]
+      },
+      "camera": {
+        "move": "none"
+      },
+      "words": [],
+      "captions": []
+    },
+    {
+      "id": "unfinished-path",
+      "block": "canvas",
+      "frames": 600,
+      "start_frame": 600,
+      "cue_seconds": 0.35,
+      "transition": "cut",
+      "exit": "none",
+      "settle_seconds": 4.95,
+      "motion": {
+        "preset": "gentle",
+        "intensity": 0.35
+      },
+      "props": {
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "sourceElement": "unfinished-path-source",
+        "elements": [
+          {
+            "id": "unfinished-path-title",
+            "type": "text",
+            "text": "A gap does not establish a recovery",
+            "x": 124.80000000000001,
+            "y": 129.6,
+            "size": 72.96,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "fit": 1670.4,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-unit",
+            "type": "text",
+            "text": "Level (blue) / observed peak (orange)",
+            "x": 124.80000000000001,
+            "y": 243.71999999999997,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none",
+            "fit": 1670.4,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-grid-0",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 383.4,
+            "x2": 1795.2,
+            "y2": 383.4,
+            "stroke": "line",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-tick-0",
+            "type": "text",
+            "text": "80",
+            "x": 422.4,
+            "y": 398.952,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-grid-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 275.4,
+            "x2": 1795.2,
+            "y2": 275.4,
+            "stroke": "line",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-tick-1",
+            "type": "text",
+            "text": "130",
+            "x": 422.4,
+            "y": 290.952,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-date-grid-2024-01-01",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 275.4,
+            "x2": 470.4,
+            "y2": 383.4,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-date-grid-2024-06-01",
+            "type": "line",
+            "x1": 1205.3255474452556,
+            "y1": 275.4,
+            "x2": 1205.3255474452556,
+            "y2": 383.4,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-date-grid-2024-10-01",
+            "type": "line",
+            "x1": 1795.2000000000003,
+            "y1": 275.4,
+            "x2": 1795.2000000000003,
+            "y2": 383.4,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-0-point-0",
+            "type": "circle",
+            "cx": 470.4,
+            "cy": 340.2,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 0.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-0-segment-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 340.2,
+            "x2": 620.2861313868614,
+            "y2": 297,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 0.6,
+            "enter": "draw",
+            "dur": 0.45255474452554745,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-0-point-1",
+            "type": "circle",
+            "cx": 620.2861313868614,
+            "cy": 297,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 1.0525547445255474,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-0-segment-2",
+            "type": "line",
+            "x1": 620.2861313868614,
+            "y1": 297,
+            "x2": 760.5021897810219,
+            "y2": 348.84,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 1.0525547445255474,
+            "enter": "draw",
+            "dur": 0.42335766423357657,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-0-point-2",
+            "type": "circle",
+            "cx": 760.5021897810219,
+            "cy": 348.84,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 1.475912408759124,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-0-point-4",
+            "type": "circle",
+            "cx": 1055.4394160583943,
+            "cy": 361.79999999999995,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 2.3664233576642335,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-0-segment-5",
+            "type": "line",
+            "x1": 1055.4394160583943,
+            "y1": 361.79999999999995,
+            "x2": 1205.3255474452556,
+            "y2": 348.84,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 2.3664233576642335,
+            "enter": "draw",
+            "dur": 0.45255474452554756,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-0-point-5",
+            "type": "circle",
+            "cx": 1205.3255474452556,
+            "cy": 348.84,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 2.818978102189781,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-0-segment-6",
+            "type": "line",
+            "x1": 1205.3255474452556,
+            "y1": 348.84,
+            "x2": 1350.3766423357665,
+            "y2": 322.91999999999996,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 2.818978102189781,
+            "enter": "draw",
+            "dur": 0.43795620437956195,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-0-point-6",
+            "type": "circle",
+            "cx": 1350.3766423357665,
+            "cy": 322.91999999999996,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 3.256934306569343,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-0-segment-7",
+            "type": "line",
+            "x1": 1350.3766423357665,
+            "y1": 322.91999999999996,
+            "x2": 1500.262773722628,
+            "y2": 335.88,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 3.256934306569343,
+            "enter": "draw",
+            "dur": 0.45255474452554756,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-0-point-7",
+            "type": "circle",
+            "cx": 1500.262773722628,
+            "cy": 335.88,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 3.7094890510948906,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-0-segment-8",
+            "type": "line",
+            "x1": 1500.262773722628,
+            "y1": 335.88,
+            "x2": 1650.148905109489,
+            "y2": 309.96,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 3.7094890510948906,
+            "enter": "draw",
+            "dur": 0.4525547445255471,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-0-point-8",
+            "type": "circle",
+            "cx": 1650.148905109489,
+            "cy": 309.96,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 4.162043795620438,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-0-segment-9",
+            "type": "line",
+            "x1": 1650.148905109489,
+            "y1": 309.96,
+            "x2": 1795.2000000000003,
+            "y2": 322.91999999999996,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 4.162043795620438,
+            "enter": "draw",
+            "dur": 0.43795620437956195,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-0-point-9",
+            "type": "circle",
+            "cx": 1795.2000000000003,
+            "cy": 322.91999999999996,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 4.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-1-point-0",
+            "type": "circle",
+            "cx": 470.4,
+            "cy": 340.2,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 0.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-1-segment-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 340.2,
+            "x2": 620.2861313868614,
+            "y2": 297,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 0.6,
+            "enter": "draw",
+            "dur": 0.45255474452554745,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-1-point-1",
+            "type": "circle",
+            "cx": 620.2861313868614,
+            "cy": 297,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 1.0525547445255474,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-1-segment-2",
+            "type": "line",
+            "x1": 620.2861313868614,
+            "y1": 297,
+            "x2": 760.5021897810219,
+            "y2": 297,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 1.0525547445255474,
+            "enter": "draw",
+            "dur": 0.42335766423357657,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-1-point-2",
+            "type": "circle",
+            "cx": 760.5021897810219,
+            "cy": 297,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 1.475912408759124,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-1-segment-3",
+            "type": "line",
+            "x1": 760.5021897810219,
+            "y1": 297,
+            "x2": 910.3883211678833,
+            "y2": 297,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 1.475912408759124,
+            "enter": "draw",
+            "dur": 0.45255474452554756,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-1-point-3",
+            "type": "circle",
+            "cx": 910.3883211678833,
+            "cy": 297,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 1.9284671532846716,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-1-segment-4",
+            "type": "line",
+            "x1": 910.3883211678833,
+            "y1": 297,
+            "x2": 1055.4394160583943,
+            "y2": 297,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 1.9284671532846716,
+            "enter": "draw",
+            "dur": 0.43795620437956195,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-1-point-4",
+            "type": "circle",
+            "cx": 1055.4394160583943,
+            "cy": 297,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 2.3664233576642335,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-1-segment-5",
+            "type": "line",
+            "x1": 1055.4394160583943,
+            "y1": 297,
+            "x2": 1205.3255474452556,
+            "y2": 297,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 2.3664233576642335,
+            "enter": "draw",
+            "dur": 0.45255474452554756,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-1-point-5",
+            "type": "circle",
+            "cx": 1205.3255474452556,
+            "cy": 297,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 2.818978102189781,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-1-segment-6",
+            "type": "line",
+            "x1": 1205.3255474452556,
+            "y1": 297,
+            "x2": 1350.3766423357665,
+            "y2": 297,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 2.818978102189781,
+            "enter": "draw",
+            "dur": 0.43795620437956195,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-1-point-6",
+            "type": "circle",
+            "cx": 1350.3766423357665,
+            "cy": 297,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 3.256934306569343,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-1-segment-7",
+            "type": "line",
+            "x1": 1350.3766423357665,
+            "y1": 297,
+            "x2": 1500.262773722628,
+            "y2": 297,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 3.256934306569343,
+            "enter": "draw",
+            "dur": 0.45255474452554756,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-1-point-7",
+            "type": "circle",
+            "cx": 1500.262773722628,
+            "cy": 297,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 3.7094890510948906,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-1-segment-8",
+            "type": "line",
+            "x1": 1500.262773722628,
+            "y1": 297,
+            "x2": 1650.148905109489,
+            "y2": 297,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 3.7094890510948906,
+            "enter": "draw",
+            "dur": 0.4525547445255471,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-1-point-8",
+            "type": "circle",
+            "cx": 1650.148905109489,
+            "cy": 297,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 4.162043795620438,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-0-1-segment-9",
+            "type": "line",
+            "x1": 1650.148905109489,
+            "y1": 297,
+            "x2": 1795.2000000000003,
+            "y2": 297,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 4.162043795620438,
+            "enter": "draw",
+            "dur": 0.43795620437956195,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-0-1-point-9",
+            "type": "circle",
+            "cx": 1795.2000000000003,
+            "cy": 297,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 4.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-unit",
+            "type": "text",
+            "text": "Drawdown from observed peak · %",
+            "x": 124.80000000000001,
+            "y": 470.52000000000004,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none",
+            "fit": 1670.4,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-grid-0",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 610.2,
+            "x2": 1795.2,
+            "y2": 610.2,
+            "stroke": "line",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-tick-0",
+            "type": "text",
+            "text": "-30",
+            "x": 422.4,
+            "y": 625.7520000000001,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-grid-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 502.20000000000005,
+            "x2": 1795.2,
+            "y2": 502.20000000000005,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-tick-1",
+            "type": "text",
+            "text": "0",
+            "x": 422.4,
+            "y": 517.7520000000001,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-date-grid-2024-01-01",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 502.20000000000005,
+            "x2": 470.4,
+            "y2": 610.2,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-date-grid-2024-06-01",
+            "type": "line",
+            "x1": 1205.3255474452556,
+            "y1": 502.20000000000005,
+            "x2": 1205.3255474452556,
+            "y2": 610.2,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-date-grid-2024-10-01",
+            "type": "line",
+            "x1": 1795.2000000000003,
+            "y1": 502.20000000000005,
+            "x2": 1795.2000000000003,
+            "y2": 610.2,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-0-point-0",
+            "type": "circle",
+            "cx": 470.4,
+            "cy": 502.20000000000005,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 0.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-0-area-1",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                470.4,
+                502.20000000000005
+              ],
+              [
+                470.4,
+                502.20000000000005
+              ],
+              [
+                620.2861313868614,
+                502.20000000000005
+              ],
+              [
+                620.2861313868614,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-1-0-segment-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 502.20000000000005,
+            "x2": 620.2861313868614,
+            "y2": 502.20000000000005,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 0.6,
+            "enter": "draw",
+            "dur": 0.45255474452554745,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-1-0-point-1",
+            "type": "circle",
+            "cx": 620.2861313868614,
+            "cy": 502.20000000000005,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 1.0525547445255474,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-0-area-2",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                620.2861313868614,
+                502.20000000000005
+              ],
+              [
+                620.2861313868614,
+                502.20000000000005
+              ],
+              [
+                760.5021897810219,
+                574.2
+              ],
+              [
+                760.5021897810219,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-1-0-segment-2",
+            "type": "line",
+            "x1": 620.2861313868614,
+            "y1": 502.20000000000005,
+            "x2": 760.5021897810219,
+            "y2": 574.2,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 1.0525547445255474,
+            "enter": "draw",
+            "dur": 0.42335766423357657,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-1-0-point-2",
+            "type": "circle",
+            "cx": 760.5021897810219,
+            "cy": 574.2,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 1.475912408759124,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-0-point-4",
+            "type": "circle",
+            "cx": 1055.4394160583943,
+            "cy": 592.2,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 2.3664233576642335,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-0-area-5",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                1055.4394160583943,
+                502.20000000000005
+              ],
+              [
+                1055.4394160583943,
+                592.2
+              ],
+              [
+                1205.3255474452556,
+                574.2
+              ],
+              [
+                1205.3255474452556,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-1-0-segment-5",
+            "type": "line",
+            "x1": 1055.4394160583943,
+            "y1": 592.2,
+            "x2": 1205.3255474452556,
+            "y2": 574.2,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 2.3664233576642335,
+            "enter": "draw",
+            "dur": 0.45255474452554756,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-1-0-point-5",
+            "type": "circle",
+            "cx": 1205.3255474452556,
+            "cy": 574.2,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 2.818978102189781,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-0-area-6",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                1205.3255474452556,
+                502.20000000000005
+              ],
+              [
+                1205.3255474452556,
+                574.2
+              ],
+              [
+                1350.3766423357665,
+                538.2
+              ],
+              [
+                1350.3766423357665,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-1-0-segment-6",
+            "type": "line",
+            "x1": 1205.3255474452556,
+            "y1": 574.2,
+            "x2": 1350.3766423357665,
+            "y2": 538.2,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 2.818978102189781,
+            "enter": "draw",
+            "dur": 0.43795620437956195,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-1-0-point-6",
+            "type": "circle",
+            "cx": 1350.3766423357665,
+            "cy": 538.2,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 3.256934306569343,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-0-area-7",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                1350.3766423357665,
+                502.20000000000005
+              ],
+              [
+                1350.3766423357665,
+                538.2
+              ],
+              [
+                1500.262773722628,
+                556.2
+              ],
+              [
+                1500.262773722628,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-1-0-segment-7",
+            "type": "line",
+            "x1": 1350.3766423357665,
+            "y1": 538.2,
+            "x2": 1500.262773722628,
+            "y2": 556.2,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 3.256934306569343,
+            "enter": "draw",
+            "dur": 0.45255474452554756,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-1-0-point-7",
+            "type": "circle",
+            "cx": 1500.262773722628,
+            "cy": 556.2,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 3.7094890510948906,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-0-area-8",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                1500.262773722628,
+                502.20000000000005
+              ],
+              [
+                1500.262773722628,
+                556.2
+              ],
+              [
+                1650.148905109489,
+                520.2
+              ],
+              [
+                1650.148905109489,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-1-0-segment-8",
+            "type": "line",
+            "x1": 1500.262773722628,
+            "y1": 556.2,
+            "x2": 1650.148905109489,
+            "y2": 520.2,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 3.7094890510948906,
+            "enter": "draw",
+            "dur": 0.4525547445255471,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-1-0-point-8",
+            "type": "circle",
+            "cx": 1650.148905109489,
+            "cy": 520.2,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 4.162043795620438,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-1-0-area-9",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                1650.148905109489,
+                502.20000000000005
+              ],
+              [
+                1650.148905109489,
+                520.2
+              ],
+              [
+                1795.2000000000003,
+                538.2
+              ],
+              [
+                1795.2000000000003,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "unfinished-path-1-0-segment-9",
+            "type": "line",
+            "x1": 1650.148905109489,
+            "y1": 520.2,
+            "x2": 1795.2000000000003,
+            "y2": 538.2,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 4.162043795620438,
+            "enter": "draw",
+            "dur": 0.43795620437956195,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-1-0-point-9",
+            "type": "circle",
+            "cx": 1795.2000000000003,
+            "cy": 538.2,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 4.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-unit",
+            "type": "text",
+            "text": "3-month sample SD · percentage points",
+            "x": 124.80000000000001,
+            "y": 697.32,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none",
+            "fit": 1670.4,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-grid-0",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 837,
+            "x2": 1795.2,
+            "y2": 837,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-tick-0",
+            "type": "text",
+            "text": "0",
+            "x": 422.4,
+            "y": 852.552,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-grid-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 729,
+            "x2": 1795.2,
+            "y2": 729,
+            "stroke": "line",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-tick-1",
+            "type": "text",
+            "text": "25",
+            "x": 422.4,
+            "y": 744.552,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-date-grid-2024-01-01",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 729,
+            "x2": 470.4,
+            "y2": 837,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-date-grid-2024-06-01",
+            "type": "line",
+            "x1": 1205.3255474452556,
+            "y1": 729,
+            "x2": 1205.3255474452556,
+            "y2": 837,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-date-grid-2024-10-01",
+            "type": "line",
+            "x1": 1795.2000000000003,
+            "y1": 729,
+            "x2": 1795.2000000000003,
+            "y2": 837,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-0-point-7",
+            "type": "circle",
+            "cx": 1500.262773722628,
+            "cy": 797.1944727456098,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 3.7094890510948906,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-0-segment-8",
+            "type": "line",
+            "x1": 1500.262773722628,
+            "y1": 797.1944727456098,
+            "x2": 1650.148905109489,
+            "y2": 792.8550672612904,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 3.7094890510948906,
+            "enter": "draw",
+            "dur": 0.4525547445255471,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-2-0-point-8",
+            "type": "circle",
+            "cx": 1650.148905109489,
+            "cy": 792.8550672612904,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 4.162043795620438,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-2-0-segment-9",
+            "type": "line",
+            "x1": 1650.148905109489,
+            "y1": 792.8550672612904,
+            "x2": 1795.2000000000003,
+            "y2": 794.1606015074452,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 4.162043795620438,
+            "enter": "draw",
+            "dur": 0.43795620437956195,
+            "drawEase": "linear"
+          },
+          {
+            "id": "unfinished-path-2-0-point-9",
+            "type": "circle",
+            "cx": 1795.2000000000003,
+            "cy": 794.1606015074452,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 4.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-date-0",
+            "type": "text",
+            "text": "Jan 2024",
+            "x": 470.4,
+            "y": 896.4,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "start",
+            "fit": 596.1600000000001,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-date-1",
+            "type": "text",
+            "text": "Jun 2024",
+            "x": 1205.3255474452556,
+            "y": 896.4,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 596.1600000000001,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-date-2",
+            "type": "text",
+            "text": "Oct 2024",
+            "x": 1795.2000000000003,
+            "y": 896.4,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 596.1600000000001,
+            "dur": 0
+          },
+          {
+            "id": "unfinished-path-source",
+            "type": "text",
+            "text": "Fictional monthly index · 2024. SD needs a complete window. Missing levels leave unseen peaks unknown.",
+            "x": 124.80000000000001,
+            "y": 961.2,
+            "size": 53.76,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "width": 1670.4,
+            "height": 91.80000000000001,
+            "dur": 0
+          }
+        ]
+      },
+      "camera": {
+        "move": "none"
+      },
+      "words": [],
+      "captions": []
+    }
+  ]
+}

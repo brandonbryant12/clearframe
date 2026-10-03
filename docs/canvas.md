@@ -41,6 +41,10 @@ Paint: `fill` and `stroke` take palette tokens (`bg, surface, ink, muted, accent
 { "type": "ellipse", "cx": 960, "cy": 540, "rx": 400, "ry": 180, "fill": "none", "stroke": "accent", "width": 3, "glow": true, "at": 0, "enter": "none" }
 ```
 
+## Explicit source placement
+
+Use `props.source` and optional `sourceSize` for the automatic footer. For a custom composition, `props.sourceElement` names one top-level static native text element used as visible attribution. It requires a `storyboard.sources` entry, `at:0`, `enter:"none"`, size at least 28, opaque `ink` fill, and no visual effects or opacity reduction, transforms, keys or exits. It cannot combine with `source` or `sourceSize`. Frame audits still check clipping, overlap and rendered type size. See [dated-series examples](time-series.md).
+
 ## Time
 
 | Field | Meaning |

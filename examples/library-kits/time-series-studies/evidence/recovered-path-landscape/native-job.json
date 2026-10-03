@@ -1,0 +1,1453 @@
+{
+  "version": 2,
+  "title": "Recovery and variability are different",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "frames": 1200,
+  "theme": {
+    "base": "paper",
+    "bg": "#f5f3ed",
+    "surface": "#e9e7df",
+    "ink": "#222831",
+    "muted": "#616b76",
+    "accent": "#315cce",
+    "accent2": "#c2641f",
+    "positive": "#17745c",
+    "negative": "#bd453c"
+  },
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.35
+  },
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "caption_style": "plate",
+  "text_motion": "lines",
+  "type": {
+    "id": "geometric",
+    "display": "space-grotesk",
+    "emphasis": "weight",
+    "upper": false,
+    "tracking": -0.02,
+    "leading": 1
+  },
+  "beats": [
+    {
+      "id": "recovered-path-basis",
+      "block": "canvas",
+      "frames": 600,
+      "start_frame": 0,
+      "cue_seconds": 0.35,
+      "transition": "cut",
+      "exit": "none",
+      "settle_seconds": 1.85,
+      "motion": {
+        "preset": "gentle",
+        "intensity": 0.35
+      },
+      "props": {
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "sourceElement": "recovered-path-basis-source",
+        "elements": [
+          {
+            "id": "recovered-path-basis-title",
+            "type": "text",
+            "text": "Read observed loss and variability",
+            "x": 124.80000000000001,
+            "y": 129.6,
+            "size": 72.96,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "fit": 1670.4,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-basis-0",
+            "type": "text",
+            "text": "Worst observed drawdown: -20%",
+            "x": 124.80000000000001,
+            "y": 313.2,
+            "size": 63.36,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "fade",
+            "width": 1670.4,
+            "height": 118.8,
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-basis-1",
+            "type": "text",
+            "text": "Drawdown = level ÷ highest observed level − 1",
+            "x": 124.80000000000001,
+            "y": 459,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "text",
+            "at": 0.55,
+            "enter": "fade",
+            "width": 1670.4,
+            "height": 118.8,
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-basis-2",
+            "type": "text",
+            "text": "3-month sample SD of monthly % changes; denominator n − 1.",
+            "x": 124.80000000000001,
+            "y": 604.8000000000001,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "text",
+            "at": 1.1,
+            "enter": "fade",
+            "width": 1670.4,
+            "height": 118.8,
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-basis-3",
+            "type": "text",
+            "text": "No annualization. Last episode recovered at an observed date.",
+            "x": 124.80000000000001,
+            "y": 750.6,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "text",
+            "at": 1.6500000000000001,
+            "enter": "fade",
+            "width": 1670.4,
+            "height": 118.8,
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-basis-source",
+            "type": "text",
+            "text": "Fictional monthly index · 2024. No unseen highs or lows are inferred.",
+            "x": 124.80000000000001,
+            "y": 961.2,
+            "size": 53.76,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "width": 1670.4,
+            "height": 91.80000000000001,
+            "dur": 0
+          }
+        ]
+      },
+      "camera": {
+        "move": "none"
+      },
+      "words": [],
+      "captions": []
+    },
+    {
+      "id": "recovered-path",
+      "block": "canvas",
+      "frames": 600,
+      "start_frame": 600,
+      "cue_seconds": 0.35,
+      "transition": "cut",
+      "exit": "none",
+      "settle_seconds": 4.95,
+      "motion": {
+        "preset": "gentle",
+        "intensity": 0.35
+      },
+      "props": {
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "sourceElement": "recovered-path-source",
+        "elements": [
+          {
+            "id": "recovered-path-title",
+            "type": "text",
+            "text": "Recovery and variability are different",
+            "x": 124.80000000000001,
+            "y": 129.6,
+            "size": 72.96,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "fit": 1670.4,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-unit",
+            "type": "text",
+            "text": "Level (blue) / observed peak (orange)",
+            "x": 124.80000000000001,
+            "y": 243.71999999999997,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none",
+            "fit": 1670.4,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-grid-0",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 383.4,
+            "x2": 1795.2,
+            "y2": 383.4,
+            "stroke": "line",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-tick-0",
+            "type": "text",
+            "text": "80",
+            "x": 422.4,
+            "y": 398.952,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-grid-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 275.4,
+            "x2": 1795.2,
+            "y2": 275.4,
+            "stroke": "line",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-tick-1",
+            "type": "text",
+            "text": "150",
+            "x": 422.4,
+            "y": 290.952,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-date-grid-2024-01-01",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 275.4,
+            "x2": 470.4,
+            "y2": 383.4,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-date-grid-2024-05-01",
+            "type": "line",
+            "x1": 1222.9859154929577,
+            "y1": 275.4,
+            "x2": 1222.9859154929577,
+            "y2": 383.4,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-date-grid-2024-08-01",
+            "type": "line",
+            "x1": 1795.2000000000003,
+            "y1": 275.4,
+            "x2": 1795.2000000000003,
+            "y2": 383.4,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-0-point-0",
+            "type": "circle",
+            "cx": 470.4,
+            "cy": 352.54285714285714,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 0.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-0-segment-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 352.54285714285714,
+            "x2": 663.2112676056338,
+            "y2": 321.68571428571425,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 0.6,
+            "enter": "draw",
+            "dur": 0.5821596244131456,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-0-point-1",
+            "type": "circle",
+            "cx": 663.2112676056338,
+            "cy": 321.68571428571425,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 1.1821596244131456,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-0-segment-2",
+            "type": "line",
+            "x1": 663.2112676056338,
+            "y1": 321.68571428571425,
+            "x2": 843.5830985915493,
+            "y2": 358.71428571428567,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 1.1821596244131456,
+            "enter": "draw",
+            "dur": 0.544600938967136,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-0-point-2",
+            "type": "circle",
+            "cx": 843.5830985915493,
+            "cy": 358.71428571428567,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 1.7267605633802816,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-0-segment-3",
+            "type": "line",
+            "x1": 843.5830985915493,
+            "y1": 358.71428571428567,
+            "x2": 1036.394366197183,
+            "y2": 340.2,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 1.7267605633802816,
+            "enter": "draw",
+            "dur": 0.5821596244131455,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-0-point-3",
+            "type": "circle",
+            "cx": 1036.394366197183,
+            "cy": 340.2,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 2.308920187793427,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-0-segment-4",
+            "type": "line",
+            "x1": 1036.394366197183,
+            "y1": 340.2,
+            "x2": 1222.9859154929577,
+            "y2": 321.68571428571425,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 2.308920187793427,
+            "enter": "draw",
+            "dur": 0.563380281690141,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-0-point-4",
+            "type": "circle",
+            "cx": 1222.9859154929577,
+            "cy": 321.68571428571425,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 2.872300469483568,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-0-segment-5",
+            "type": "line",
+            "x1": 1222.9859154929577,
+            "y1": 321.68571428571425,
+            "x2": 1415.7971830985916,
+            "y2": 303.1714285714286,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 2.872300469483568,
+            "enter": "draw",
+            "dur": 0.5821596244131455,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-0-point-5",
+            "type": "circle",
+            "cx": 1415.7971830985916,
+            "cy": 303.1714285714286,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 3.4544600938967136,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-0-segment-6",
+            "type": "line",
+            "x1": 1415.7971830985916,
+            "y1": 303.1714285714286,
+            "x2": 1602.3887323943663,
+            "y2": 313.35428571428565,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 3.4544600938967136,
+            "enter": "draw",
+            "dur": 0.563380281690141,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-0-point-6",
+            "type": "circle",
+            "cx": 1602.3887323943663,
+            "cy": 313.35428571428565,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 4.017840375586855,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-0-segment-7",
+            "type": "line",
+            "x1": 1602.3887323943663,
+            "y1": 313.35428571428565,
+            "x2": 1795.2000000000003,
+            "y2": 292.9885714285714,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 4.017840375586855,
+            "enter": "draw",
+            "dur": 0.5821596244131451,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-0-point-7",
+            "type": "circle",
+            "cx": 1795.2000000000003,
+            "cy": 292.9885714285714,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 4.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-1-point-0",
+            "type": "circle",
+            "cx": 470.4,
+            "cy": 352.54285714285714,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 0.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-1-segment-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 352.54285714285714,
+            "x2": 663.2112676056338,
+            "y2": 321.68571428571425,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 0.6,
+            "enter": "draw",
+            "dur": 0.5821596244131456,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-1-point-1",
+            "type": "circle",
+            "cx": 663.2112676056338,
+            "cy": 321.68571428571425,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 1.1821596244131456,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-1-segment-2",
+            "type": "line",
+            "x1": 663.2112676056338,
+            "y1": 321.68571428571425,
+            "x2": 843.5830985915493,
+            "y2": 321.68571428571425,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 1.1821596244131456,
+            "enter": "draw",
+            "dur": 0.544600938967136,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-1-point-2",
+            "type": "circle",
+            "cx": 843.5830985915493,
+            "cy": 321.68571428571425,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 1.7267605633802816,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-1-segment-3",
+            "type": "line",
+            "x1": 843.5830985915493,
+            "y1": 321.68571428571425,
+            "x2": 1036.394366197183,
+            "y2": 321.68571428571425,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 1.7267605633802816,
+            "enter": "draw",
+            "dur": 0.5821596244131455,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-1-point-3",
+            "type": "circle",
+            "cx": 1036.394366197183,
+            "cy": 321.68571428571425,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 2.308920187793427,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-1-segment-4",
+            "type": "line",
+            "x1": 1036.394366197183,
+            "y1": 321.68571428571425,
+            "x2": 1222.9859154929577,
+            "y2": 321.68571428571425,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 2.308920187793427,
+            "enter": "draw",
+            "dur": 0.563380281690141,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-1-point-4",
+            "type": "circle",
+            "cx": 1222.9859154929577,
+            "cy": 321.68571428571425,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 2.872300469483568,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-1-segment-5",
+            "type": "line",
+            "x1": 1222.9859154929577,
+            "y1": 321.68571428571425,
+            "x2": 1415.7971830985916,
+            "y2": 303.1714285714286,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 2.872300469483568,
+            "enter": "draw",
+            "dur": 0.5821596244131455,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-1-point-5",
+            "type": "circle",
+            "cx": 1415.7971830985916,
+            "cy": 303.1714285714286,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 3.4544600938967136,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-1-segment-6",
+            "type": "line",
+            "x1": 1415.7971830985916,
+            "y1": 303.1714285714286,
+            "x2": 1602.3887323943663,
+            "y2": 303.1714285714286,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 3.4544600938967136,
+            "enter": "draw",
+            "dur": 0.563380281690141,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-1-point-6",
+            "type": "circle",
+            "cx": 1602.3887323943663,
+            "cy": 303.1714285714286,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 4.017840375586855,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-0-1-segment-7",
+            "type": "line",
+            "x1": 1602.3887323943663,
+            "y1": 303.1714285714286,
+            "x2": 1795.2000000000003,
+            "y2": 292.9885714285714,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 4.017840375586855,
+            "enter": "draw",
+            "dur": 0.5821596244131451,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-0-1-point-7",
+            "type": "circle",
+            "cx": 1795.2000000000003,
+            "cy": 292.9885714285714,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 4.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-unit",
+            "type": "text",
+            "text": "Drawdown from observed peak · %",
+            "x": 124.80000000000001,
+            "y": 470.52000000000004,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none",
+            "fit": 1670.4,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-grid-0",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 610.2,
+            "x2": 1795.2,
+            "y2": 610.2,
+            "stroke": "line",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-tick-0",
+            "type": "text",
+            "text": "-25",
+            "x": 422.4,
+            "y": 625.7520000000001,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-grid-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 502.20000000000005,
+            "x2": 1795.2,
+            "y2": 502.20000000000005,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-tick-1",
+            "type": "text",
+            "text": "0",
+            "x": 422.4,
+            "y": 517.7520000000001,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-date-grid-2024-01-01",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 502.20000000000005,
+            "x2": 470.4,
+            "y2": 610.2,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-date-grid-2024-05-01",
+            "type": "line",
+            "x1": 1222.9859154929577,
+            "y1": 502.20000000000005,
+            "x2": 1222.9859154929577,
+            "y2": 610.2,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-date-grid-2024-08-01",
+            "type": "line",
+            "x1": 1795.2000000000003,
+            "y1": 502.20000000000005,
+            "x2": 1795.2000000000003,
+            "y2": 610.2,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-0-point-0",
+            "type": "circle",
+            "cx": 470.4,
+            "cy": 502.20000000000005,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 0.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-0-area-1",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                470.4,
+                502.20000000000005
+              ],
+              [
+                470.4,
+                502.20000000000005
+              ],
+              [
+                663.2112676056338,
+                502.20000000000005
+              ],
+              [
+                663.2112676056338,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-1-0-segment-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 502.20000000000005,
+            "x2": 663.2112676056338,
+            "y2": 502.20000000000005,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 0.6,
+            "enter": "draw",
+            "dur": 0.5821596244131456,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-1-0-point-1",
+            "type": "circle",
+            "cx": 663.2112676056338,
+            "cy": 502.20000000000005,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 1.1821596244131456,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-0-area-2",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                663.2112676056338,
+                502.20000000000005
+              ],
+              [
+                663.2112676056338,
+                502.20000000000005
+              ],
+              [
+                843.5830985915493,
+                588.6
+              ],
+              [
+                843.5830985915493,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-1-0-segment-2",
+            "type": "line",
+            "x1": 663.2112676056338,
+            "y1": 502.20000000000005,
+            "x2": 843.5830985915493,
+            "y2": 588.6,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 1.1821596244131456,
+            "enter": "draw",
+            "dur": 0.544600938967136,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-1-0-point-2",
+            "type": "circle",
+            "cx": 843.5830985915493,
+            "cy": 588.6,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 1.7267605633802816,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-0-area-3",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                843.5830985915493,
+                502.20000000000005
+              ],
+              [
+                843.5830985915493,
+                588.6
+              ],
+              [
+                1036.394366197183,
+                545.4000000000001
+              ],
+              [
+                1036.394366197183,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-1-0-segment-3",
+            "type": "line",
+            "x1": 843.5830985915493,
+            "y1": 588.6,
+            "x2": 1036.394366197183,
+            "y2": 545.4000000000001,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 1.7267605633802816,
+            "enter": "draw",
+            "dur": 0.5821596244131455,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-1-0-point-3",
+            "type": "circle",
+            "cx": 1036.394366197183,
+            "cy": 545.4000000000001,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 2.308920187793427,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-0-area-4",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                1036.394366197183,
+                502.20000000000005
+              ],
+              [
+                1036.394366197183,
+                545.4000000000001
+              ],
+              [
+                1222.9859154929577,
+                502.20000000000005
+              ],
+              [
+                1222.9859154929577,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-1-0-segment-4",
+            "type": "line",
+            "x1": 1036.394366197183,
+            "y1": 545.4000000000001,
+            "x2": 1222.9859154929577,
+            "y2": 502.20000000000005,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 2.308920187793427,
+            "enter": "draw",
+            "dur": 0.563380281690141,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-1-0-point-4",
+            "type": "circle",
+            "cx": 1222.9859154929577,
+            "cy": 502.20000000000005,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 2.872300469483568,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-0-area-5",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                1222.9859154929577,
+                502.20000000000005
+              ],
+              [
+                1222.9859154929577,
+                502.20000000000005
+              ],
+              [
+                1415.7971830985916,
+                502.20000000000005
+              ],
+              [
+                1415.7971830985916,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-1-0-segment-5",
+            "type": "line",
+            "x1": 1222.9859154929577,
+            "y1": 502.20000000000005,
+            "x2": 1415.7971830985916,
+            "y2": 502.20000000000005,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 2.872300469483568,
+            "enter": "draw",
+            "dur": 0.5821596244131455,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-1-0-point-5",
+            "type": "circle",
+            "cx": 1415.7971830985916,
+            "cy": 502.20000000000005,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 3.4544600938967136,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-0-area-6",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                1415.7971830985916,
+                502.20000000000005
+              ],
+              [
+                1415.7971830985916,
+                502.20000000000005
+              ],
+              [
+                1602.3887323943663,
+                523.8
+              ],
+              [
+                1602.3887323943663,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-1-0-segment-6",
+            "type": "line",
+            "x1": 1415.7971830985916,
+            "y1": 502.20000000000005,
+            "x2": 1602.3887323943663,
+            "y2": 523.8,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 3.4544600938967136,
+            "enter": "draw",
+            "dur": 0.563380281690141,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-1-0-point-6",
+            "type": "circle",
+            "cx": 1602.3887323943663,
+            "cy": 523.8,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 4.017840375586855,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-1-0-area-7",
+            "type": "poly",
+            "closed": true,
+            "points": [
+              [
+                1602.3887323943663,
+                502.20000000000005
+              ],
+              [
+                1602.3887323943663,
+                523.8
+              ],
+              [
+                1795.2000000000003,
+                502.20000000000005
+              ],
+              [
+                1795.2000000000003,
+                502.20000000000005
+              ]
+            ],
+            "fill": "accent2",
+            "opacity": 0.12,
+            "at": 4.75,
+            "enter": "fade",
+            "dur": 0.2
+          },
+          {
+            "id": "recovered-path-1-0-segment-7",
+            "type": "line",
+            "x1": 1602.3887323943663,
+            "y1": 523.8,
+            "x2": 1795.2000000000003,
+            "y2": 502.20000000000005,
+            "stroke": "accent2",
+            "width": 6.336,
+            "at": 4.017840375586855,
+            "enter": "draw",
+            "dur": 0.5821596244131451,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-1-0-point-7",
+            "type": "circle",
+            "cx": 1795.2000000000003,
+            "cy": 502.20000000000005,
+            "r": 8.064,
+            "fill": "accent2",
+            "at": 4.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-unit",
+            "type": "text",
+            "text": "3-month sample SD · percentage points",
+            "x": 124.80000000000001,
+            "y": 697.32,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none",
+            "fit": 1670.4,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-grid-0",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 837,
+            "x2": 1795.2,
+            "y2": 837,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-tick-0",
+            "type": "text",
+            "text": "0",
+            "x": 422.4,
+            "y": 852.552,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-grid-1",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 729,
+            "x2": 1795.2,
+            "y2": 729,
+            "stroke": "line",
+            "width": 2,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-tick-1",
+            "type": "text",
+            "text": "25",
+            "x": 422.4,
+            "y": 744.552,
+            "size": 51.839999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 268.79999999999995,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-date-grid-2024-01-01",
+            "type": "line",
+            "x1": 470.4,
+            "y1": 729,
+            "x2": 470.4,
+            "y2": 837,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-date-grid-2024-05-01",
+            "type": "line",
+            "x1": 1222.9859154929577,
+            "y1": 729,
+            "x2": 1222.9859154929577,
+            "y2": 837,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-date-grid-2024-08-01",
+            "type": "line",
+            "x1": 1795.2000000000003,
+            "y1": 729,
+            "x2": 1795.2000000000003,
+            "y2": 837,
+            "stroke": "line",
+            "width": 1,
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-0-point-3",
+            "type": "circle",
+            "cx": 1036.394366197183,
+            "cy": 745.1470740803538,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 2.308920187793427,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-0-segment-4",
+            "type": "line",
+            "x1": 1036.394366197183,
+            "y1": 745.1470740803538,
+            "x2": 1222.9859154929577,
+            "y2": 757.615366726299,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 2.308920187793427,
+            "enter": "draw",
+            "dur": 0.563380281690141,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-2-0-point-4",
+            "type": "circle",
+            "cx": 1222.9859154929577,
+            "cy": 757.615366726299,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 2.872300469483568,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-0-segment-5",
+            "type": "line",
+            "x1": 1222.9859154929577,
+            "y1": 757.615366726299,
+            "x2": 1415.7971830985916,
+            "y2": 831.5889002966126,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 2.872300469483568,
+            "enter": "draw",
+            "dur": 0.5821596244131455,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-2-0-point-5",
+            "type": "circle",
+            "cx": 1415.7971830985916,
+            "cy": 831.5889002966126,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 3.4544600938967136,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-0-segment-6",
+            "type": "line",
+            "x1": 1415.7971830985916,
+            "y1": 831.5889002966126,
+            "x2": 1602.3887323943663,
+            "y2": 798.1279020375797,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 3.4544600938967136,
+            "enter": "draw",
+            "dur": 0.563380281690141,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-2-0-point-6",
+            "type": "circle",
+            "cx": 1602.3887323943663,
+            "cy": 798.1279020375797,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 4.017840375586855,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-2-0-segment-7",
+            "type": "line",
+            "x1": 1602.3887323943663,
+            "y1": 798.1279020375797,
+            "x2": 1795.2000000000003,
+            "y2": 798.9143755172142,
+            "stroke": "accent",
+            "width": 6.336,
+            "at": 4.017840375586855,
+            "enter": "draw",
+            "dur": 0.5821596244131451,
+            "drawEase": "linear"
+          },
+          {
+            "id": "recovered-path-2-0-point-7",
+            "type": "circle",
+            "cx": 1795.2000000000003,
+            "cy": 798.9143755172142,
+            "r": 8.064,
+            "fill": "accent",
+            "at": 4.6,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-date-0",
+            "type": "text",
+            "text": "Jan 2024",
+            "x": 470.4,
+            "y": 896.4,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "start",
+            "fit": 596.1600000000001,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-date-1",
+            "type": "text",
+            "text": "May 2024",
+            "x": 1222.9859154929577,
+            "y": 896.4,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 596.1600000000001,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-date-2",
+            "type": "text",
+            "text": "Aug 2024",
+            "x": 1795.2000000000003,
+            "y": 896.4,
+            "size": 57.599999999999994,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 596.1600000000001,
+            "dur": 0
+          },
+          {
+            "id": "recovered-path-source",
+            "type": "text",
+            "text": "Fictional monthly index · 2024. SD needs a complete window. Missing levels leave unseen peaks unknown.",
+            "x": 124.80000000000001,
+            "y": 961.2,
+            "size": 53.76,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "width": 1670.4,
+            "height": 91.80000000000001,
+            "dur": 0
+          }
+        ]
+      },
+      "camera": {
+        "move": "none"
+      },
+      "words": [],
+      "captions": []
+    }
+  ]
+}

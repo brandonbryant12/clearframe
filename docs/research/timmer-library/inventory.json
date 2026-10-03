@@ -288,7 +288,7 @@
       "category": "Chart",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "Prototype: matched-date deflation and two native cases in landscape/vertical; continuous playback and master acceptance pending",
       "effort": "M",
       "sourceIds": [
         "S05",
@@ -302,7 +302,7 @@
         "currency",
         "return basis"
       ],
-      "existing": "delta, line and equation exist; deflation transform needs a transparent data adapter.",
+      "existing": "engine/lib/time-series.mjs deflates by an explicit dated price-index ratio. time-series-studies retains nominal/real paths, final differences, null price-index gaps and two price regimes with native evidence.",
       "guardrail": "Use matched base periods; price return and total return are different series.",
       "reuse": [
         "wages",
@@ -320,7 +320,7 @@
       "category": "Chart",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "Prototype: discrete level/growth/change-in-growth with linked dated panels; smoothing and continuous playback remain open",
       "effort": "M",
       "sourceIds": [
         "S14"
@@ -333,7 +333,7 @@
         "smoothing",
         "lag"
       ],
-      "existing": "line exists; linked derivatives and unit labeling are not packaged.",
+      "existing": "time-series-studies retains two monthly unannualized examples, one with a missing observation. Units distinguish levels, percent growth and percentage-point growth changes; dates align across native panels.",
       "guardrail": "Define discrete changes precisely; do not call every change in growth a second derivative.",
       "reuse": [
         "production",
@@ -351,7 +351,7 @@
       "category": "Chart",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "Partial prototype: observed drawdown/recovery and complete-window sample volatility; risk-adjusted returns and continuous playback remain open",
       "effort": "M",
       "sourceIds": [
         "S03",
@@ -366,7 +366,7 @@
         "risk-free series",
         "frequency"
       ],
-      "existing": "line and native shapes exist; peak-to-trough and rolling metrics require transforms.",
+      "existing": "time-series.mjs supplies observed peak episodes and complete-window sample SD. Native examples show recovered and unfinished paths, missing observations and unannualized SD of monthly percent changes. No risk-free series or risk-adjusted metric is implemented.",
       "guardrail": "Do not substitute raw price gain for risk-adjusted return. Mark incomplete recoveries.",
       "reuse": [
         "service reliability",
@@ -1756,7 +1756,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Partial implementation: finance helpers, observed-anchor rebasing, exact product decomposition, stock reconciliation, full-membership count/weight summaries and benchmark differences; rolling statistics, annualization and vintage alignment remain planned",
+      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown; vintage alignment and broader risk-adjusted metrics remain planned",
       "effort": "L",
       "sourceIds": [
         "S04",
@@ -1772,7 +1772,7 @@
         "transform",
         "method version"
       ],
-      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics.",
+      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics. engine/lib/time-series.mjs adds explicit price-basis conversion, anchored monthly/quarterly/annual growth, compounded annualization, complete-window sample SD and observed drawdown/recovery; see docs/time-series.md.",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "reuse": [
         "science",

@@ -1,0 +1,13 @@
+{
+  "source": "engine/lib/time-series.mjs",
+  "sourceSha256": "1776f38922c6a356b4623f1e91b3b426f89743114608f54f12424ecee25994ea",
+  "focusedTests": {
+    "passed": 5,
+    "scope": "Initial transform-only suite"
+  },
+  "independentAssertions": 7428,
+  "scope": "24 deterministic 12-month positive level sequences; lag 1/2/3/6, annualization on/off, growth changes, rolling sample SD windows 2/3/5 independently recomputed, running maxima drawdown, nominal times base-index/current-index deflation. Calendar anchors cover 1900 non-leap, 2000 leap, January-30 clipping/restoration, and quarterly month ends. No implementation test file edits.",
+  "finalFocusedTestsPassed": 6,
+  "fixtureAuditAssertions": 352,
+  "fixtureAuditMethod": "Independent Python decimal-to-Fraction arithmetic for all 12 audit results; sample SD independently recomputed with statistics.stdev; explicit dates and recovery status checked."
+}

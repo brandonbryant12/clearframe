@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/time-series-studies/specimens/slower-expansion-landscape/build/pipeline/2026-10-03T06-58-04-816Z-5b02c878/video.mp4",
+  "outputSha256": "a2e76c4503e4601ecb11ebe69cfecac7219ec88a1840c3b2d96f794459a0ec7d",
+  "inputId": "f801b69d68c18d5e555356437801fe6cd1299133d819a05eda746f135ec0d6fd",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "slower-expansion-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "slower-expansion-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "slower-expansion-basis: last frame",
+        "Before slower-expansion"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "slower-expansion: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "slower-expansion: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1199,
+      "time": 39.96666666666667,
+      "reasons": [
+        "slower-expansion: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

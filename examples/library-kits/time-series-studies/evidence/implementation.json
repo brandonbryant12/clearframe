@@ -1,0 +1,30 @@
+{
+  "modelVersion": 1,
+  "inputSha256": "afefe31ccff4116ad0ccee48c96c60cf166add73ed3b39e0b1a80f2f6fdd167b",
+  "sourceFiles": [
+    {
+      "path": "engine/lib/time-series.mjs",
+      "sha256": "1776f38922c6a356b4623f1e91b3b426f89743114608f54f12424ecee25994ea"
+    },
+    {
+      "path": "fframes/plot-data.mjs",
+      "sha256": "16fd41d99d74d8af3c53126aeb4c55940f5a5a12654b2382caaed046e1d5f4d6"
+    },
+    {
+      "path": "fframes/plots.mjs",
+      "sha256": "62cd51a7a400845b93b7725c64800f427fca65812b94143bf1ed55831294aed4"
+    },
+    {
+      "path": "fframes/catalog.mjs",
+      "sha256": "930439bfab0ee1c023ca7d2f8ff7e729b8b8438cad1e0dcbf4f1cac5704ba77e"
+    },
+    {
+      "path": "fframes/validators.mjs",
+      "sha256": "6524a6da73621ff78b7dae3082088d6767b760161b0da78cd837de5771d96192"
+    },
+    {
+      "path": "fframes/job.mjs",
+      "sha256": "de4a304de1002da87812e0434aaa92362847e8d8369e5f439c2244c1b5959ec8"
+    }
+  ]
+}

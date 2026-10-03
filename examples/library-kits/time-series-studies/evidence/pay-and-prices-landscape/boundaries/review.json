@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/time-series-studies/specimens/pay-and-prices-landscape/build/pipeline/2026-10-03T06-57-13-126Z-8c0cf155/video.mp4",
+  "outputSha256": "3183726e685306d531718051577db7b7df3f61721b205bf6e79e596c798b24d3",
+  "inputId": "178171dd6db102d2cc21b7ba08e85fb5120dcc4854e22a218bc9f1eebcdbd295",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "pay-and-prices-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "pay-and-prices-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "pay-and-prices-basis: last frame",
+        "Before pay-and-prices"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "pay-and-prices: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "pay-and-prices: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1199,
+      "time": 39.96666666666667,
+      "reasons": [
+        "pay-and-prices: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

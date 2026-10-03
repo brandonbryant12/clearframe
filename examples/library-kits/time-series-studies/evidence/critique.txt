@@ -1,0 +1,60 @@
+# budget-and-prices-landscape
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· budget-and-prices-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· budget-and-prices  Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# budget-and-prices-vertical
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· budget-and-prices-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· budget-and-prices  Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# interrupted-output-landscape
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· interrupted-output-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· interrupted-output Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# interrupted-output-vertical
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· interrupted-output-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· interrupted-output Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# pay-and-prices-landscape
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· pay-and-prices-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· pay-and-prices     Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# pay-and-prices-vertical
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· pay-and-prices-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· pay-and-prices     Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# recovered-path-landscape
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· recovered-path-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· recovered-path     Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# recovered-path-vertical
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· recovered-path-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· recovered-path     Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# slower-expansion-landscape
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· slower-expansion-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· slower-expansion   Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# slower-expansion-vertical
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· slower-expansion-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· slower-expansion   Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# unfinished-path-landscape
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· unfinished-path-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· unfinished-path    Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+
+# unfinished-path-vertical
+cinema 100/100 · 2 beats · 40s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· unfinished-path-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· unfinished-path    Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+

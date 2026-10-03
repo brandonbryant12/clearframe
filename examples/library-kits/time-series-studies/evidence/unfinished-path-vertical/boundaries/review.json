@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/time-series-studies/specimens/unfinished-path-vertical/build/pipeline/2026-10-03T06-58-43-740Z-1040b088/video.mp4",
+  "outputSha256": "418f6daed461ab226150eb2470fd0ae01ec104d0d91407d41c85712d7fdf897d",
+  "inputId": "23048cf2a1a22763f7cf8c55d39f374857664d8c3ea2bc1a16fc524af8c570cd",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "unfinished-path-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "unfinished-path-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "unfinished-path-basis: last frame",
+        "Before unfinished-path"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "unfinished-path: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "unfinished-path: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1199,
+      "time": 39.96666666666667,
+      "reasons": [
+        "unfinished-path: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

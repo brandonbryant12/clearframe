@@ -1,0 +1,22 @@
+✔ shared scales retain exact positions, including signed and logarithmic values (2.458458ms)
+✔ date spacing represents real elapsed days and validates the calendar in UTC (0.198584ms)
+✔ different sampling intervals follow one linear reveal clock (0.662834ms)
+✔ missing observations break lines and retain solitary points without inventing a bridge (0.683833ms)
+✔ input errors fail before pictures can hide units, domains, dates or missing values (0.42375ms)
+✔ labels move independently of data points and an annotation must name actual evidence (0.45275ms)
+✔ geometry validates and source jobs compile in all four frame presets without paid assets (17.815042ms)
+✔ linear stroke easing is explicit, bounded to draw entrances, and backward-compatible (0.287375ms)
+✔ deflation uses the dated index ratio, preserving sign, deflation and missingness (2.377333ms)
+✔ growth separates lagged change, annualized pace and percentage-point changes (0.528666ms)
+✔ period validation handles month ends and leap years, and rejects omitted periods (0.305916ms)
+✔ rolling sample SD uses complete windows and a fixed n-minus-one denominator (0.326583ms)
+✔ observed drawdowns retain equal-peak dates, recovery and unfinished episodes across gaps (0.36825ms)
+✔ custom source attribution must identify static native text, with an auditable source record (83.324ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 151.047958

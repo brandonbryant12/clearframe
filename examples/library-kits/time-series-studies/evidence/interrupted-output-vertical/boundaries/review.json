@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/time-series-studies/specimens/interrupted-output-vertical/build/pipeline/2026-10-03T06-57-00-384Z-fabda689/video.mp4",
+  "outputSha256": "3687c14e6ce23d449a5da676c3ab9ec0529c26276fcf1d804029577230114e84",
+  "inputId": "7646421ff91c139958cdfcf6b7b3389faf6f458bee387caea9a1ad0287cda1b8",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "interrupted-output-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "interrupted-output-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "interrupted-output-basis: last frame",
+        "Before interrupted-output"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "interrupted-output: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "interrupted-output: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1199,
+      "time": 39.96666666666667,
+      "reasons": [
+        "interrupted-output: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

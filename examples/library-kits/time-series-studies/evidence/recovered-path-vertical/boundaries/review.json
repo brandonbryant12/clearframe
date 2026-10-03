@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/time-series-studies/specimens/recovered-path-vertical/build/pipeline/2026-10-03T06-57-52-181Z-c0eaf337/video.mp4",
+  "outputSha256": "a45f58fb752fca37be908624e75ac589d07d1955d2199af93b6f701ec6f2ff2a",
+  "inputId": "a1e1898bafaf4e4b0f7f8cbf5d16a4854f18836d65744105f7d80555a91e8b79",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "recovered-path-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "recovered-path-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "recovered-path-basis: last frame",
+        "Before recovered-path"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "recovered-path: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "recovered-path: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1199,
+      "time": 39.96666666666667,
+      "reasons": [
+        "recovered-path: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}
