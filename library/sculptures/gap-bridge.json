@@ -9,5 +9,38 @@
   "posterPos": 0,
   "copy": "Use --pos 0 for the question poster with its visible gap. Hold the native sentence with a blank, then start the non-looping insertion clip on the answer beat and reveal the exact missing text. The physical piece carries no lettering.",
   "metaphor": "A visual completion metaphor, not an interactive input field, factual mechanical assembly, or proof that a learner supplied the correct answer.",
-  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+  "parameters": [
+    "theme",
+    "seed",
+    "duration",
+    "fps",
+    "vertical"
+  ],
+  "motion": {
+    "version": 1,
+    "clock": "qualitative-pose",
+    "phases": [
+      {
+        "id": "question",
+        "role": "hold",
+        "start": 0,
+        "end": 0.06,
+        "minSeconds": 0
+      },
+      {
+        "id": "insertion",
+        "role": "action",
+        "start": 0.06,
+        "end": 0.48,
+        "minSeconds": 0.25
+      },
+      {
+        "id": "answer",
+        "role": "hold",
+        "start": 0.48,
+        "end": 1,
+        "minSeconds": 0.5
+      }
+    ]
+  }
 }

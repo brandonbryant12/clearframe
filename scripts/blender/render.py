@@ -59,7 +59,8 @@ def main():
     # saved blend needs neither Python auto-execution nor a physics cache.
     for frame in range(1, config['frames'] + 2):
         scene.frame_set(frame)
-        update((frame - 1) / config['frames'], frame)
+        phase = config['motion']['poseSamples'][frame - 1] if config.get('motion') else (frame - 1) / config['frames']
+        update(phase, frame)
     bake_seconds = time.perf_counter() - bake_started
     scene.frame_set(1)
     bpy.context.view_layer.update()
@@ -70,6 +71,24 @@ def main():
                      for obj in scene.objects for r in range(4) for c in range(4))
     if config.get('loop') and loop_error > 0.0001:
         raise ValueError(f'Loop transforms fail to close: max error {loop_error}')
+    # Declared holds may not hide moving transforms, including camera/light
+    # objects. This is bounded transform evidence, not a shading/pixel check.
+    hold_errors = []
+    for phase in config.get('motion', {}).get('phases', []):
+        if phase['role'] != 'hold':
+            continue
+        scene.frame_set(phase['startFrame'] + 1)
+        bpy.context.view_layer.update()
+        baseline = {obj.name: obj.matrix_world.copy() for obj in scene.objects}
+        error = 0.0
+        for frame in range(phase['startFrame'] + 1, phase['endFrame'] + 1):
+            scene.frame_set(frame)
+            bpy.context.view_layer.update()
+            error = max(error, max(abs(obj.matrix_world[r][c] - baseline[obj.name][r][c])
+                                  for obj in scene.objects for r in range(4) for c in range(4)))
+        hold_errors.append({'id': phase['id'], 'frames': phase['endFrame'] - phase['startFrame'], 'maxTransformError': error})
+        if error > 0.0001:
+            raise ValueError(f'Declared hold {phase["id"]} has moving transforms: {error}')
     poster_frame = 1 + round((config['frames'] - 1) * config.get('pos', 0.5))
     scene.frame_set(poster_frame)
     scene.render.filepath = '//frames/frame-'
@@ -83,6 +102,8 @@ def main():
         'colorManagement': {'view': scene.view_settings.view_transform, 'look': scene.view_settings.look},
         'bakedMotion': True, 'requiresAutoExec': False,
         'loopMaxTransformError': loop_error,
+        'holdTransformChecks': hold_errors,
+        'motionClock': config.get('motion', {}).get('clock'),
         'objects': len(scene.objects),
         'meshVertices': sum(len(obj.data.vertices) for obj in scene.objects if obj.type == 'MESH'),
         'buildSeconds': build_seconds, 'bakeSeconds': bake_seconds,

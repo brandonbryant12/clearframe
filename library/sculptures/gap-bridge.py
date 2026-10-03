@@ -9,7 +9,7 @@ def build(config):
     insert = a.material('Contrasting missing piece', c['accent'], metallic=0.22, roughness=0.27, coat=0.3)
     metal = a.material('Precision guide rails', c['accent2'], metallic=0.7, roughness=0.25)
     base = a.material('Paper stone base', c['bg'], roughness=0.65, coat=0)
-    camera = a.studio(config, target=(0, 0, 1.0), scale=8.8)
+    camera = a.studio(config, target=(0, 0, 1.0), scale=8.8 if config['width'] >= config['height'] else 10.3)
     camera.location = (6.0, -12.0, 7.8)
     a.aim(camera, (0, 0, 1.0))
     a.box('Bridge display base', (6.4, 3.3, 0.2), (0, 0, 0.12), base, bevel=0.15)

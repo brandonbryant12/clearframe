@@ -7,5 +7,24 @@
   "loop": true,
   "copy": "Use as a qualitative full-frame cutaway. Add native labels only for an approved story; do not attach map labels, geological dates or measured elevations to this invented geometry.",
   "metaphor": "An invented paper landform. The contours, colours, layer count and heights are qualitative artwork, not geology, geography, probability or a measured dataset.",
-  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+  "parameters": [
+    "theme",
+    "seed",
+    "duration",
+    "fps",
+    "vertical"
+  ],
+  "motion": {
+    "version": 1,
+    "clock": "qualitative-pose",
+    "phases": [
+      {
+        "id": "cycle",
+        "role": "cycle",
+        "start": 0,
+        "end": 1,
+        "minSeconds": 1
+      }
+    ]
+  }
 }
