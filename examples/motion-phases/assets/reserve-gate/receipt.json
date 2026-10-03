@@ -1,0 +1,483 @@
+{
+  "version": 1,
+  "status": "ready-for-review",
+  "id": "reserve-gate",
+  "title": "A reserve with a controlled gate",
+  "recipe": {
+    "id": "reserve-gate",
+    "title": "A reserve with a controlled gate",
+    "use": "Availability, access rules, withheld resources and a release condition.",
+    "description": "A porcelain channel and two reservoirs are separated by an amber sluice. The gate lifts in guided rails, opening a clear connection, then holds.",
+    "theme": "research-paper",
+    "duration": 4,
+    "loop": false,
+    "posterPos": 0.85,
+    "copy": "Use a native title above the mechanism. The action occupies the middle; source and limitations belong below. A closed-state hold precedes one opening, followed by a settled hold.",
+    "metaphor": "Qualitative access mechanism only. There is no liquid or simulated flow; tank capacity, gate height, count and perspective do not encode data. Never label these dimensions as money or probability.",
+    "parameters": [
+      "theme",
+      "seed",
+      "duration",
+      "fps",
+      "vertical"
+    ],
+    "camera": "Fixed orthographic three-quarter view; portrait uses a separate world framing. Camera has no quantitative meaning.",
+    "motion": {
+      "version": 1,
+      "clock": "qualitative-pose",
+      "phases": [
+        {
+          "id": "closed",
+          "role": "hold",
+          "start": 0,
+          "end": 0.2,
+          "minSeconds": 0
+        },
+        {
+          "id": "opening",
+          "role": "action",
+          "start": 0.2,
+          "end": 0.65,
+          "minSeconds": 0.25
+        },
+        {
+          "id": "hold",
+          "role": "hold",
+          "start": 0.65,
+          "end": 1,
+          "minSeconds": 0.5
+        }
+      ]
+    }
+  },
+  "config": {
+    "id": "reserve-gate",
+    "width": 960,
+    "height": 540,
+    "fps": 12,
+    "frames": 48,
+    "seed": 17,
+    "theme": "research-paper",
+    "motion": {
+      "version": 1,
+      "clock": "qualitative-pose",
+      "frameConvention": "zero-based half-open; endpoint at frames is baked but not encoded",
+      "fps": 12,
+      "frames": 48,
+      "duration": 4,
+      "loopIntent": false,
+      "timing": "phase-retimed-pose",
+      "phases": [
+        {
+          "id": "closed",
+          "role": "hold",
+          "start": 0,
+          "end": 0.2,
+          "minSeconds": 0,
+          "startFrame": 0,
+          "endFrame": 12,
+          "startSeconds": 0,
+          "endSeconds": 1,
+          "duration": 1
+        },
+        {
+          "id": "opening",
+          "role": "action",
+          "start": 0.2,
+          "end": 0.65,
+          "minSeconds": 0.25,
+          "startFrame": 12,
+          "endFrame": 24,
+          "startSeconds": 1,
+          "endSeconds": 2,
+          "duration": 1
+        },
+        {
+          "id": "hold",
+          "role": "hold",
+          "start": 0.65,
+          "end": 1,
+          "minSeconds": 0.5,
+          "startFrame": 24,
+          "endFrame": 48,
+          "startSeconds": 2,
+          "endSeconds": 4,
+          "duration": 2
+        }
+      ],
+      "poseSamples": [
+        0,
+        0.016666666666666666,
+        0.03333333333333333,
+        0.05000000000000001,
+        0.06666666666666667,
+        0.08333333333333333,
+        0.10000000000000002,
+        0.11666666666666668,
+        0.13333333333333333,
+        0.15,
+        0.16666666666666666,
+        0.18333333333333335,
+        0.2,
+        0.23750000000000002,
+        0.275,
+        0.3125,
+        0.35,
+        0.3875,
+        0.42500000000000004,
+        0.4625,
+        0.5,
+        0.5375,
+        0.575,
+        0.6125,
+        0.65,
+        0.6645833333333333,
+        0.6791666666666667,
+        0.69375,
+        0.7083333333333334,
+        0.7229166666666667,
+        0.7375,
+        0.7520833333333333,
+        0.7666666666666667,
+        0.78125,
+        0.7958333333333334,
+        0.8104166666666667,
+        0.825,
+        0.8395833333333333,
+        0.8541666666666666,
+        0.86875,
+        0.8833333333333333,
+        0.8979166666666667,
+        0.9125000000000001,
+        0.9270833333333333,
+        0.9416666666666667,
+        0.95625,
+        0.9708333333333333,
+        0.9854166666666666,
+        1
+      ],
+      "safeTrimWindows": [
+        {
+          "id": "closed",
+          "startFrame": 0,
+          "endFrame": 12
+        },
+        {
+          "id": "hold",
+          "startFrame": 24,
+          "endFrame": 48
+        }
+      ],
+      "limitations": "Authored qualitative pose timing, not measured time or a new simulation. Holds and loop seams require rendered review."
+    },
+    "colors": {
+      "base": "research-paper",
+      "bg": "#fafafa",
+      "surface": "#eeedf2",
+      "ink": "#24272c",
+      "muted": "#656972",
+      "accent": "#24272c",
+      "accent2": "#b55c29",
+      "positive": "#4f7563",
+      "negative": "#b34058"
+    },
+    "samples": 16,
+    "pos": 0.85,
+    "still": false,
+    "draft": true,
+    "loop": false
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "c4f47526492e8e38e70352539e73eab5403dd4755bcc619e6fa56c1ffeae843d",
+    "scripts/blender/artkit.py": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347",
+    "library/sculptures/reserve-gate.py": "76294ff51f41d4c664a4002980c3a0e922c1926dabadd1e111d2c8e8029d9df2",
+    "library/sculptures/reserve-gate.json": "4f1941b42fab0194cb95183e7b9b92c67c6cefc75c260d82fa14ffb3c64a98a8"
+  },
+  "encoding": {
+    "transfer": "iec61966-2-1",
+    "primaries": "bt709",
+    "matrix": "bt709",
+    "range": "tv",
+    "note": "Preserve Blender display sRGB transfer; convert RGB to limited-range BT.709 YUV."
+  },
+  "startedAt": "2026-10-03T04:28:17.122Z",
+  "stages": [
+    {
+      "name": "blender",
+      "status": "passed",
+      "seconds": 27.044046875
+    },
+    {
+      "name": "encode",
+      "status": "passed",
+      "seconds": 0.195112083
+    },
+    {
+      "name": "verify",
+      "status": "passed",
+      "seconds": 0.05109120799999801
+    }
+  ],
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "2f84a3aecb9b8121c19cecb3c4ee9abcc0f45bd68955ce3af161661bec73722e",
+      "bytes": 116054
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "0838468d48abb1f12d7a3b63f98b3fd73db92428c5752f1d945c9d7d10d53aa2",
+      "bytes": 455701
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "0e8f5369ef3c13890adf08a32440fd1aa322a99f40b9e9f9464384cf5a092838",
+      "bytes": 46684
+    }
+  },
+  "blender": {
+    "version": 1,
+    "blenderVersion": "5.2.2 LTS",
+    "blenderBuildHash": "d13f752e3b9c",
+    "engine": "BLENDER_EEVEE",
+    "threads": 2,
+    "width": 960,
+    "height": 540,
+    "fps": 12,
+    "frames": 48,
+    "samples": 16,
+    "colorManagement": {
+      "view": "AgX",
+      "look": "AgX - Medium High Contrast"
+    },
+    "bakedMotion": true,
+    "requiresAutoExec": false,
+    "loopMaxTransformError": 1.100000023841858,
+    "holdTransformChecks": [
+      {
+        "id": "closed",
+        "frames": 12,
+        "maxTransformError": 0
+      },
+      {
+        "id": "hold",
+        "frames": 24,
+        "maxTransformError": 0
+      }
+    ],
+    "motionClock": "qualitative-pose",
+    "objects": 18,
+    "meshVertices": 352,
+    "buildSeconds": 0.020933207997586578,
+    "bakeSeconds": 0.004790792008861899,
+    "renderedFrames": [
+      {
+        "frame": 1,
+        "seconds": 0.9376907499972731
+      },
+      {
+        "frame": 2,
+        "seconds": 0.5364945839974098
+      },
+      {
+        "frame": 3,
+        "seconds": 0.5239402500155848
+      },
+      {
+        "frame": 4,
+        "seconds": 0.5336353329767007
+      },
+      {
+        "frame": 5,
+        "seconds": 0.5271185839956161
+      },
+      {
+        "frame": 6,
+        "seconds": 0.5205930419906508
+      },
+      {
+        "frame": 7,
+        "seconds": 0.5302417079801671
+      },
+      {
+        "frame": 8,
+        "seconds": 0.539125832990976
+      },
+      {
+        "frame": 9,
+        "seconds": 0.5164573749934789
+      },
+      {
+        "frame": 10,
+        "seconds": 0.5081176250241697
+      },
+      {
+        "frame": 11,
+        "seconds": 0.5127583330031484
+      },
+      {
+        "frame": 12,
+        "seconds": 0.5148401249898598
+      },
+      {
+        "frame": 13,
+        "seconds": 0.5195493329956662
+      },
+      {
+        "frame": 14,
+        "seconds": 0.5247347909898963
+      },
+      {
+        "frame": 15,
+        "seconds": 0.5335699589923024
+      },
+      {
+        "frame": 16,
+        "seconds": 0.5226267499965616
+      },
+      {
+        "frame": 17,
+        "seconds": 0.5156691249867436
+      },
+      {
+        "frame": 18,
+        "seconds": 0.5889697079837788
+      },
+      {
+        "frame": 19,
+        "seconds": 0.5489936670055613
+      },
+      {
+        "frame": 20,
+        "seconds": 0.527336583007127
+      },
+      {
+        "frame": 21,
+        "seconds": 0.5089645830157679
+      },
+      {
+        "frame": 22,
+        "seconds": 0.5217107079806738
+      },
+      {
+        "frame": 23,
+        "seconds": 0.5165123750048224
+      },
+      {
+        "frame": 24,
+        "seconds": 0.5337444170145318
+      },
+      {
+        "frame": 25,
+        "seconds": 0.5413669170229696
+      },
+      {
+        "frame": 26,
+        "seconds": 0.5220470409840345
+      },
+      {
+        "frame": 27,
+        "seconds": 0.5517535420076456
+      },
+      {
+        "frame": 28,
+        "seconds": 0.5463627910066862
+      },
+      {
+        "frame": 29,
+        "seconds": 0.5278011250193231
+      },
+      {
+        "frame": 30,
+        "seconds": 0.5005469169991557
+      },
+      {
+        "frame": 31,
+        "seconds": 0.5436825829965528
+      },
+      {
+        "frame": 32,
+        "seconds": 0.5162224590021651
+      },
+      {
+        "frame": 33,
+        "seconds": 0.5130043330136687
+      },
+      {
+        "frame": 34,
+        "seconds": 0.532224499998847
+      },
+      {
+        "frame": 35,
+        "seconds": 0.5386351670022123
+      },
+      {
+        "frame": 36,
+        "seconds": 0.5108442089986056
+      },
+      {
+        "frame": 37,
+        "seconds": 0.5572670419933274
+      },
+      {
+        "frame": 38,
+        "seconds": 0.5462562500033528
+      },
+      {
+        "frame": 39,
+        "seconds": 0.5326717910065781
+      },
+      {
+        "frame": 40,
+        "seconds": 0.5481691249879077
+      },
+      {
+        "frame": 41,
+        "seconds": 0.5794869159872178
+      },
+      {
+        "frame": 42,
+        "seconds": 0.5346611250133719
+      },
+      {
+        "frame": 43,
+        "seconds": 0.5535088339820504
+      },
+      {
+        "frame": 44,
+        "seconds": 0.5403007079730742
+      },
+      {
+        "frame": 45,
+        "seconds": 0.5514904580195434
+      },
+      {
+        "frame": 46,
+        "seconds": 0.5243264999880921
+      },
+      {
+        "frame": 47,
+        "seconds": 0.5319822920137085
+      },
+      {
+        "frame": 48,
+        "seconds": 0.5183474580117036
+      }
+    ],
+    "renderSeconds": 25.953328792005777,
+    "posterFrame": 41,
+    "status": "rendered"
+  },
+  "probe": {
+    "codec_name": "h264",
+    "width": 960,
+    "height": 540,
+    "color_space": "bt709",
+    "color_transfer": "iec61966-2-1",
+    "color_primaries": "bt709",
+    "avg_frame_rate": "12/1",
+    "nb_read_frames": "48"
+  },
+  "seconds": 27.300145500000003,
+  "finishedAt": "2026-10-03T04:28:44.423Z"
+}

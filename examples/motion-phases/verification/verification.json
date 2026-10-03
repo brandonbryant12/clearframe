@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "status": "passed-mechanical-checks",
+  "cases": [
+    {
+      "id": "gap-bridge",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/motion-phases/build/clips/gap-bridge",
+      "width": 540,
+      "height": 960,
+      "frames": 48,
+      "renderSeconds": 27.105051958,
+      "loop": false,
+      "loopTransformError": 1.8000001907348633,
+      "loopSeam": 2.1085069444444446,
+      "neighbourP95": 0.3715277777777778,
+      "finalHoldStep": 0.0011574074074074073,
+      "reloadPixelsMatch": true,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 0,
+        "maxDifference": 0,
+        "changedFraction": 0
+      },
+      "posterPixelSha256": "2391f3a3241b4f5c489e4af7c1da7b7894e0616f834d0601d5d61bdaaafe27c5",
+      "reloadPixelSha256": "2391f3a3241b4f5c489e4af7c1da7b7894e0616f834d0601d5d61bdaaafe27c5"
+    },
+    {
+      "id": "reserve-gate",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/motion-phases/build/clips/reserve-gate",
+      "width": 960,
+      "height": 540,
+      "frames": 48,
+      "renderSeconds": 27.300145500000003,
+      "loop": false,
+      "loopTransformError": 1.100000023841858,
+      "loopSeam": 1.400318287037037,
+      "neighbourP95": 0.24464699074074073,
+      "finalHoldStep": 0.0026041666666666665,
+      "reloadPixelsMatch": true,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 0,
+        "maxDifference": 0,
+        "changedFraction": 0
+      },
+      "posterPixelSha256": "3a3151a220bad20431cdd9afa8c6f6b807811e31d071da69aeb8bb969e2d7b0d",
+      "reloadPixelSha256": "3a3151a220bad20431cdd9afa8c6f6b807811e31d071da69aeb8bb969e2d7b0d"
+    }
+  ],
+  "startedAt": "2026-10-03T04:31:06.590Z",
+  "revision": "a941e07c2fbb370c6ea7f66650c8e09fd018bf48",
+  "dirty": true,
+  "finishedAt": "2026-10-03T04:31:10.399Z"
+}

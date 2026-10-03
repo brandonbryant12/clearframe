@@ -5,6 +5,7 @@ import crypto from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { palette } from '../../fframes/catalog.mjs';
+import { motionManifest, validateMotionContract } from './motion-phases.mjs';
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const library = path.join(repo, 'library/sculptures');
@@ -17,6 +18,7 @@ export function sculptures() {
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id) || !entry.title || !entry.use || !entry.theme || !Number.isFinite(entry.duration) || !fs.existsSync(path.join(library, id + '.py')))
       throw new Error(`Invalid sculpture recipe ${f}`);
     palette(entry.theme);
+    if (entry.motion) validateMotionContract(entry.motion, entry.loop);
     return { id, ...entry };
   });
 }
@@ -24,15 +26,19 @@ export function sculptures() {
 export function sculptureConfig(id, options = {}) {
   const recipe = sculptures().find(r => r.id === id);
   if (!recipe) throw new Error(`Unknown sculpture ${id}. Run clearframe sculptures.`);
-  const fps = options.fps ?? 24, duration = options.duration ?? recipe.duration, seed = options.seed ?? 17;
+  if (options.phaseSeconds !== undefined && (!recipe.motion || options.duration !== undefined)) throw new Error('Phase timing needs a declared motion contract and cannot be combined with --duration.');
+  const fps = options.fps ?? 24, duration = options.phaseSeconds && typeof options.phaseSeconds === 'object' && !Array.isArray(options.phaseSeconds)
+    ? Object.values(options.phaseSeconds).reduce((a, b) => a + b, 0) : options.duration ?? recipe.duration, seed = options.seed ?? 17;
   if (!Number.isInteger(fps) || fps < 12 || fps > 60) throw new Error('Sculpture fps must be an integer from 12 to 60.');
   if (!Number.isFinite(duration) || duration < 1 || duration > 12) throw new Error('Sculpture duration must be 1–12 seconds.');
   if (!Number.isSafeInteger(seed) || seed < 0 || seed > 2147483647) throw new Error('Sculpture seed must be an integer from 0 to 2147483647.');
   const pos = options.pos ?? recipe.posterPos ?? 0.5;
   if (!Number.isFinite(pos) || pos < 0 || pos > 1) throw new Error('Sculpture --pos must be 0–1.');
   const width = options.draft ? 960 : 1920, height = options.draft ? 540 : 1080;
+  const frames = Math.round(duration * fps);
+  const motion = recipe.motion ? motionManifest(recipe.motion, { frames, fps, loop: recipe.loop, phaseSeconds: options.phaseSeconds }) : undefined;
   return { id, recipe, width: options.vertical ? height : width, height: options.vertical ? width : height,
-    fps, frames: Math.round(duration * fps), seed, theme: options.theme ?? recipe.theme,
+    fps, frames, seed, theme: options.theme ?? recipe.theme, ...(motion ? { motion } : {}),
     colors: palette(options.theme ?? recipe.theme), samples: options.draft ? 16 : 48,
     pos, still: !!options.still, draft: !!options.draft, loop: !!recipe.loop };
 }
@@ -107,7 +113,7 @@ export async function renderSculpture(id, destination, options = {}) {
       report.probe = s;
       report.outputs['clip.mp4'] = { file: 'clip.mp4', sha256: sha(path.join(out, 'clip.mp4')), bytes: fs.statSync(path.join(out, 'clip.mp4')).size };
       json(path.join(out, 'asset.json'), { version: 1, title: recipe.title, kind: 'clip', file: 'clip.mp4', duration: config.frames / config.fps,
-        width: config.width, height: config.height, fps: config.fps, loop: recipe.loop, provenance: 'Original procedural Blender artwork; no factual data or text baked in.', receipt: 'receipt.json' });
+        width: config.width, height: config.height, fps: config.fps, loop: recipe.loop, ...(config.motion ? { motion: config.motion } : {}), provenance: 'Original procedural Blender artwork; no factual data or text baked in.', receipt: 'receipt.json' });
     }
     report.status = 'ready-for-review';
     fs.writeFileSync(path.join(out, 'README.md'), `# ${recipe.title}\n\n${recipe.description}\n\nUse: ${recipe.use}\n\n${recipe.copy}\n\n${recipe.metaphor}\n\nFiles: editable scene.blend (baked transforms; no auto-execution), poster.png, ${config.still ? 'one rendered still' : 'clip.mp4 and the PNG frame sequence'}, source scripts, render-config.json and receipt.json.\n\nThe receipt binds the exact source code, Blender version, settings and outputs. Inspect the clip, contact points and ${config.loop ? 'loop seam' : 'final settled hold'} before use.\n\nTo use in ClearFrame, copy clip.mp4 inside the film and register it as an asset with kind "clip". Place it with a video block or beat plate. Typography, figures, sources and narration remain native and editable.\n`);

@@ -1697,7 +1697,7 @@
       "category": "Camera / motion",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "proposed; not built",
+      "readiness": "Partial implementation: explicit initial/action/final holds for gate, bridge and quiz plus whole-cycle contracts for six loops; reusable anticipation/settle choreography and continuous review remain open",
       "effort": "M",
       "sourceIds": [
         "S02",
@@ -1711,7 +1711,7 @@
         "hold",
         "speech cue"
       ],
-      "existing": "native enter/keys and sculpture phases exist; exported shared phase markers are new.",
+      "existing": "Shared phase schema and bounded retiming planner; gate/bridge actual pose schedules and static transform checks; docs/motion-phases.md",
       "guardrail": "Retiming must not cut off settlement or evidence holds; loops and one-way reveals have different contracts.",
       "reuse": [
         "every reusable motion"
@@ -1842,8 +1842,8 @@
       "name": "Motion phase and retiming manifest",
       "category": "Tool",
       "priority": "Now",
-      "implementation": "New",
-      "readiness": "proposed; not built",
+      "implementation": "Extend",
+      "readiness": "Partial implementation: versioned sculpture phase manifests, custom pose timing, safe clip-selection plans and two retained verified drafts; automatic native cue integration and broader camera recipes remain open",
       "effort": "M",
       "sourceIds": [
         "S02",
@@ -1860,7 +1860,7 @@
         "hold",
         "loop endpoints"
       ],
-      "existing": "asset duration/FPS and native cues exist; semantic phase interchange is proposed.",
+      "existing": "engine/lib/motion-phases.mjs; sculpture --phase-seconds; nine recipe contracts; examples/motion-phases retained gate/bridge clips and independent review",
       "guardrail": "Distinguish a clip playback-rate change from a new simulation or exact source-time map.",
       "reuse": [
         "all mixed-media scenes"

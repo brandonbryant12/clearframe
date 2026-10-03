@@ -24,7 +24,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
   treatments [--json]                 art direction presets: look, motion, voice, sound and rules
   sculptures [--json]                original 3D asset recipes; optional offline Blender
   sculpture ID --out NEW-DIR [--draft] [--still] [--vertical] [--theme ID] [--duration 4] [--fps 24] [--seed N]
-                                      baked .blend + PNG + MP4, render receipts; --dry-run prints settings
+                                      baked .blend + PNG + MP4; --phase-seconds timing.json sets named phase durations; --dry-run prints settings
   types [--json]                      type voices: display family and emphasis per treatment (storyboard "type")
   reference <video> [--out dir]       cut rhythm, keyframe sheet, palette and motion of a reference film
   ingest <dir> --markdown report.md [--treatment noir]   evidence brief (figures, sources, tensions, tables) + storyboard + DIRECTION.md
@@ -107,6 +107,7 @@ async function main() {
     'to',
     'speakers',
     'fps',
+    'phase-seconds',
     'script',
     'model',
   ];
@@ -184,6 +185,7 @@ async function main() {
   if (cmd === 'sculpture') {
     const { sculptureConfig, renderSculpture } = await import('./lib/sculptures.mjs');
     const settings = { ...opts, duration: num('duration'), fps: num('fps') };
+    if (o['phase-seconds'] !== undefined) settings.phaseSeconds = JSON.parse(fs.readFileSync(o['phase-seconds'], 'utf8'));
     const config = sculptureConfig(positionals[0], settings);
     if (o['dry-run']) return console.log(JSON.stringify(config, null, 2));
     if (!o.out) throw new Error('sculpture needs --out NEW-DIRECTORY.');

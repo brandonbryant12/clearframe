@@ -9,5 +9,38 @@
   "posterPos": 0,
   "copy": "Use --pos 0 for an unrevealed question poster. Seed modulo three selects the left, middle or right tile (0, 1 or 2). Bind that index explicitly to the native correct answer. Keep question, options and explanation native, and start this non-looping clip only on the answer beat.",
   "metaphor": "An authored video selection, not a clickable quiz or learner response. Tile dimensions do not encode confidence, votes, difficulty or correctness probabilities.",
-  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+  "parameters": [
+    "theme",
+    "seed",
+    "duration",
+    "fps",
+    "vertical"
+  ],
+  "motion": {
+    "version": 1,
+    "clock": "qualitative-pose",
+    "phases": [
+      {
+        "id": "question",
+        "role": "hold",
+        "start": 0,
+        "end": 0.06,
+        "minSeconds": 0
+      },
+      {
+        "id": "selection",
+        "role": "action",
+        "start": 0.06,
+        "end": 0.46,
+        "minSeconds": 0.25
+      },
+      {
+        "id": "answer",
+        "role": "hold",
+        "start": 0.46,
+        "end": 1,
+        "minSeconds": 0.5
+      }
+    ]
+  }
 }

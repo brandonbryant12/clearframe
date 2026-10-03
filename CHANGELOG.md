@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Motion phase contracts.** All nine sculpture recipes expose named frame intervals and loop intent. `sculpture --phase-seconds timing.json` retimes deterministic poses and verifies static transform holds. A separate bounded playback planner preserves action/minimum holds and records exact encoded frame selections. Two retained draft clips prove phase timing and saved-scene reproduction; the portrait bridge framing now retains its plinth. See `docs/motion-phases.md`. Reservoir/conveyor/camera work and continuous playback acceptance remain open.
+
 - **Participation and benchmark assets.** Full-membership count/weight summaries and signed benchmark differences feed eight landscape/vertical specimens. Missing members stay in their denominators; observed zero size and missing metrics have distinct marks. Circle radii follow square roots so area encodes a separate amount. Native quantities remain fixed through fades, with retained source, encoded evidence and independent review; continuous playback remains pending.
 
 - **Drivers and flows.** Observed-anchor rebasing, exact two-factor decomposition and stock reconciliation feed twelve native landscape/vertical specimens. Original units and dates, missing observations, explicit interactions and unexplained residuals keep the quantities auditable. Shared-domain bars preserve proportional length and area through fades; retained source, clips and independent encoded review remain prototypes pending subjective continuous playback.

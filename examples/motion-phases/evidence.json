@@ -1,0 +1,251 @@
+{
+  "version": 1,
+  "status": "prototype",
+  "inventoryIds": [
+    "T05",
+    "M10"
+  ],
+  "limitations": "Timing foundation only. Continuous playback and native composition not observed; derivative playback examples are plans, not encoded videos.",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3701,
+      "sha256": "5ed0853358460e2a4edc39764e63c23c667cdeb9fe661ff984450c541a1dfa72"
+    },
+    {
+      "path": "REVIEW.md",
+      "bytes": 6265,
+      "sha256": "0caca8a6fb3df1bad292d528f316312bbc6cdacfdc004d385eef2426b7f88e26"
+    },
+    {
+      "path": "assets/LICENSE",
+      "bytes": 1099,
+      "sha256": "bde1fff290731a65c93efe5b2a5044acb9b0e4b2b9b99ed97871fab2ae8a16f1"
+    },
+    {
+      "path": "assets/README.md",
+      "bytes": 1011,
+      "sha256": "e0aa711831c636a9ba70b365189bacb3ba591f99604cf34b262f93dabc751e5c"
+    },
+    {
+      "path": "assets/gap-bridge/asset.json",
+      "bytes": 8039,
+      "sha256": "55909138950eb47ca0dc885cc93da77b5ec075f11d5bb0d4e5b9418f4dd01d50"
+    },
+    {
+      "path": "assets/gap-bridge/clip.mp4",
+      "bytes": 47137,
+      "sha256": "af1fb9621965b8b68347f3987e225369eadf4a90965d15bad68782cedc2b128a"
+    },
+    {
+      "path": "assets/gap-bridge/poster.png",
+      "bytes": 438457,
+      "sha256": "e9e496b3caf78759f9a5091ec1653ab926f388d310d788b44a25009e6df79170"
+    },
+    {
+      "path": "assets/gap-bridge/receipt.json",
+      "bytes": 11265,
+      "sha256": "d42a3d92cdf2c4061752e9eeeed4f9d4d5d67e6e6f5cc0f008dcd6acf86727ff"
+    },
+    {
+      "path": "assets/gap-bridge/render-config.json",
+      "bytes": 3335,
+      "sha256": "31c441513ece85b2e32f96a34f2c885aa8a39bc1988e7b00b8f616a859375e2b"
+    },
+    {
+      "path": "assets/gap-bridge/scene.blend",
+      "bytes": 110256,
+      "sha256": "73d5b68fd88c7f01be3b456f33063d1dea6122d625ada8c6f4d353ae3020a268"
+    },
+    {
+      "path": "assets/gap-bridge/source/artkit.py",
+      "bytes": 5744,
+      "sha256": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347"
+    },
+    {
+      "path": "assets/gap-bridge/source/gap-bridge.json",
+      "bytes": 1394,
+      "sha256": "ec4db4caca3dde9f79cb6228f6eb145bd4ef09126a6225bd0421218d591d8c6a"
+    },
+    {
+      "path": "assets/gap-bridge/source/gap-bridge.py",
+      "bytes": 2066,
+      "sha256": "ad613efc1d5456d146574f6463f1c21c522d1f91812af731864b42e3a963bca4"
+    },
+    {
+      "path": "assets/gap-bridge/source/render.py",
+      "bytes": 6320,
+      "sha256": "c4f47526492e8e38e70352539e73eab5403dd4755bcc619e6fa56c1ffeae843d"
+    },
+    {
+      "path": "assets/index.html",
+      "bytes": 6094,
+      "sha256": "5aa6a7f50dfa905af35e22ecb056894fafe8a1bdcdc1ead3b95a56737c582783"
+    },
+    {
+      "path": "assets/reserve-gate/asset.json",
+      "bytes": 7962,
+      "sha256": "964c0be178ec10e3b9fa3f3d036efb6db41cb5a3774fc3dac4484acfa6c7e08f"
+    },
+    {
+      "path": "assets/reserve-gate/clip.mp4",
+      "bytes": 46684,
+      "sha256": "0e8f5369ef3c13890adf08a32440fd1aa322a99f40b9e9f9464384cf5a092838"
+    },
+    {
+      "path": "assets/reserve-gate/poster.png",
+      "bytes": 455701,
+      "sha256": "0838468d48abb1f12d7a3b63f98b3fd73db92428c5752f1d945c9d7d10d53aa2"
+    },
+    {
+      "path": "assets/reserve-gate/receipt.json",
+      "bytes": 11380,
+      "sha256": "e49777e560b9bec26924f0e7ba2033ce681dfe328e90a794ed3a12c24b5f910f"
+    },
+    {
+      "path": "assets/reserve-gate/render-config.json",
+      "bytes": 3316,
+      "sha256": "ae1861d4ecdf787a25fd5fb38b888512df63a7dac248433424fa4346bb74ba83"
+    },
+    {
+      "path": "assets/reserve-gate/scene.blend",
+      "bytes": 116054,
+      "sha256": "2f84a3aecb9b8121c19cecb3c4ee9abcc0f45bd68955ce3af161661bec73722e"
+    },
+    {
+      "path": "assets/reserve-gate/source/artkit.py",
+      "bytes": 5744,
+      "sha256": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347"
+    },
+    {
+      "path": "assets/reserve-gate/source/render.py",
+      "bytes": 6320,
+      "sha256": "c4f47526492e8e38e70352539e73eab5403dd4755bcc619e6fa56c1ffeae843d"
+    },
+    {
+      "path": "assets/reserve-gate/source/reserve-gate.json",
+      "bytes": 1497,
+      "sha256": "4f1941b42fab0194cb95183e7b9b92c67c6cefc75c260d82fa14ffb3c64a98a8"
+    },
+    {
+      "path": "assets/reserve-gate/source/reserve-gate.py",
+      "bytes": 2053,
+      "sha256": "76294ff51f41d4c664a4002980c3a0e922c1926dabadd1e111d2c8e8029d9df2"
+    },
+    {
+      "path": "build-plans.mjs",
+      "bytes": 1392,
+      "sha256": "cd1a3ecfbb06758d6a901470bbb2762111ce858d2a30f0621db332b97cbf0d07"
+    },
+    {
+      "path": "package.mjs",
+      "bytes": 3094,
+      "sha256": "2b2cb8793b9607f6abbea84b87f9744b2040cf87792f6d27062edff55a0f97fe"
+    },
+    {
+      "path": "plans.json",
+      "bytes": 10426,
+      "sha256": "188547debf479c733af2430874b0eb8db3dcfe5f3ff8c76ce0f9ca5271dd792f"
+    },
+    {
+      "path": "review/gap-bridge/frame-000.png",
+      "bytes": 72608,
+      "sha256": "2f08a0f9fd68d4a80d03e5672c441c21a8d1c7d9979c0946a190e9819518a229"
+    },
+    {
+      "path": "review/gap-bridge/frame-005.png",
+      "bytes": 72339,
+      "sha256": "81159da0d53ed73a5fa50f7befb7ef4dc6bd95b8d8638c23132da8b981c19631"
+    },
+    {
+      "path": "review/gap-bridge/frame-006.png",
+      "bytes": 72332,
+      "sha256": "601e208326967ddac8c3466fff39709f3c51bef9359af98d4acd18f4fbd2c258"
+    },
+    {
+      "path": "review/gap-bridge/frame-015.png",
+      "bytes": 70175,
+      "sha256": "c92adad5c764b1ebdf5bcc1c498d872729f29eed410f500e5395468234068634"
+    },
+    {
+      "path": "review/gap-bridge/frame-023.png",
+      "bytes": 68455,
+      "sha256": "6e63f32c0cbcf2e46ffcf59ecc4eeeacfd7e63679c9c041c12f5704da640365f"
+    },
+    {
+      "path": "review/gap-bridge/frame-024.png",
+      "bytes": 68476,
+      "sha256": "1fe5895c6600c29d2514e0fac3354725b14afdd0a6da9f3151555b9bbaec1a67"
+    },
+    {
+      "path": "review/gap-bridge/frame-047.png",
+      "bytes": 68630,
+      "sha256": "35ba8103a059580df5eba0cfc77a2f6ef98b04ac4354027fc8b4336eb4424fb4"
+    },
+    {
+      "path": "review/reserve-gate/frame-000.png",
+      "bytes": 32105,
+      "sha256": "7e02ec14619987aa46189d17f8500f6ff9b9edbcbee2a393567ff262be9b7b1b"
+    },
+    {
+      "path": "review/reserve-gate/frame-011.png",
+      "bytes": 32118,
+      "sha256": "eec1482850461cd6a8d7fdc46173fc44ca0c3ca8a1eda07d2b6d67f967009297"
+    },
+    {
+      "path": "review/reserve-gate/frame-012.png",
+      "bytes": 32112,
+      "sha256": "d5f2c8863bf72ec059b00f6230881be781fe3e00831e00051a24af0ea02580c9"
+    },
+    {
+      "path": "review/reserve-gate/frame-018.png",
+      "bytes": 32528,
+      "sha256": "64aa856c77380a0e4b7b10caf50a686f6c5362585880689d3b873642214143f1"
+    },
+    {
+      "path": "review/reserve-gate/frame-023.png",
+      "bytes": 32404,
+      "sha256": "c08a626ce1029d694ffd07cff7b733a18d7aed0a2ad03a33b6318928d1aaee98"
+    },
+    {
+      "path": "review/reserve-gate/frame-024.png",
+      "bytes": 32350,
+      "sha256": "e5384a5deb9cb30cb84a6697cc929752735189c6f1819302bd06bed2bd2ac6cd"
+    },
+    {
+      "path": "review/reserve-gate/frame-047.png",
+      "bytes": 32462,
+      "sha256": "ef0ed5abc332f91d95b6c7341416d0f31525eeb203c63a88006d9738f38ea9b0"
+    },
+    {
+      "path": "timings/gap-bridge.json",
+      "bytes": 57,
+      "sha256": "ede5ff714c41950bbf16bcfa017ba1e695d30f2b2183f23242da25d6a8497d26"
+    },
+    {
+      "path": "timings/reserve-gate.json",
+      "bytes": 47,
+      "sha256": "9f25bf8db7ad23c9df46b26489b5e676a1d9f68ed5d81f6a5636257e8b84ca6f"
+    },
+    {
+      "path": "verification/REPORT.md",
+      "bytes": 495,
+      "sha256": "8adbe6b8f86c609dd46ee63777e8850471bb6b4bac00ab233584d69902b71da4"
+    },
+    {
+      "path": "verification/gap-bridge-reload/frame-0001.png",
+      "bytes": 438457,
+      "sha256": "98630f4549b8bcb4d80efcf3ba703336f8351e48f6f5a2553bf763eef81edc23"
+    },
+    {
+      "path": "verification/reserve-gate-reload/frame-0041.png",
+      "bytes": 455701,
+      "sha256": "db781eb1c8cf12ad15fac6d278b715ff644accad3f0fccb023d593c45e20b88f"
+    },
+    {
+      "path": "verification/verification.json",
+      "bytes": 1921,
+      "sha256": "00c20a8fe52c47ff6b8fcf312c16962a462cbeebbb3f9e1e9e4379e464f172c7"
+    }
+  ]
+}

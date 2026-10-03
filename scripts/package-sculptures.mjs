@@ -55,6 +55,7 @@ try {
       kind: 'clip', file: 'clip.mp4', poster: 'poster.png', editableScene: 'scene.blend', loop: r.config.loop,
       width: r.config.width, height: r.config.height, duration: r.config.frames / r.config.fps, fps: r.config.fps,
       configuration: r.config, sourceHashes: r.sourceHashes, outputs: r.outputs,
+      ...(r.config.motion ? { motion: r.config.motion } : {}),
       blender: { version: r.blender.blenderVersion, hash: r.blender.blenderBuildHash, samples: r.blender.samples, engine: r.blender.engine, requiresAutoExec: false },
       mechanicalStatus: r.status, visualAcceptance: 'Review in the context of the destination film.' }, null, 2) + '\n');
   }

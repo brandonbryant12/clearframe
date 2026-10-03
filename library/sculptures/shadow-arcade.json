@@ -7,5 +7,24 @@
   "loop": true,
   "copy": "Use the corridor as a full-frame insert or inspect the clear ground before placing a native title. Keep type out of the receding vault edges and moving shadows.",
   "metaphor": "An invented arcade and qualitative light study, not a reconstruction of a real building, a solar simulation, or a measured architectural plan.",
-  "parameters": ["theme", "seed", "duration", "fps", "vertical"]
+  "parameters": [
+    "theme",
+    "seed",
+    "duration",
+    "fps",
+    "vertical"
+  ],
+  "motion": {
+    "version": 1,
+    "clock": "qualitative-pose",
+    "phases": [
+      {
+        "id": "cycle",
+        "role": "cycle",
+        "start": 0,
+        "end": 1,
+        "minSeconds": 1
+      }
+    ]
+  }
 }

@@ -1,0 +1,482 @@
+{
+  "version": 1,
+  "status": "ready-for-review",
+  "id": "gap-bridge",
+  "title": "The missing connection",
+  "recipe": {
+    "id": "gap-bridge",
+    "title": "The missing connection",
+    "use": "A fill-in-the-blank answer, a missing step, a completed argument or a repaired connection.",
+    "description": "Two ceramic beam ends leave a real center gap. A contrasting insert aligns with two guide rails, descends into the space, and remains seated.",
+    "theme": "vellum",
+    "duration": 4,
+    "loop": false,
+    "posterPos": 0,
+    "copy": "Use --pos 0 for the question poster with its visible gap. Hold the native sentence with a blank, then start the non-looping insertion clip on the answer beat and reveal the exact missing text. The physical piece carries no lettering.",
+    "metaphor": "A visual completion metaphor, not an interactive input field, factual mechanical assembly, or proof that a learner supplied the correct answer.",
+    "parameters": [
+      "theme",
+      "seed",
+      "duration",
+      "fps",
+      "vertical"
+    ],
+    "motion": {
+      "version": 1,
+      "clock": "qualitative-pose",
+      "phases": [
+        {
+          "id": "question",
+          "role": "hold",
+          "start": 0,
+          "end": 0.06,
+          "minSeconds": 0
+        },
+        {
+          "id": "insertion",
+          "role": "action",
+          "start": 0.06,
+          "end": 0.48,
+          "minSeconds": 0.25
+        },
+        {
+          "id": "answer",
+          "role": "hold",
+          "start": 0.48,
+          "end": 1,
+          "minSeconds": 0.5
+        }
+      ]
+    }
+  },
+  "config": {
+    "id": "gap-bridge",
+    "width": 540,
+    "height": 960,
+    "fps": 12,
+    "frames": 48,
+    "seed": 17,
+    "theme": "vellum",
+    "motion": {
+      "version": 1,
+      "clock": "qualitative-pose",
+      "frameConvention": "zero-based half-open; endpoint at frames is baked but not encoded",
+      "fps": 12,
+      "frames": 48,
+      "duration": 4,
+      "loopIntent": false,
+      "timing": "phase-retimed-pose",
+      "phases": [
+        {
+          "id": "question",
+          "role": "hold",
+          "start": 0,
+          "end": 0.06,
+          "minSeconds": 0,
+          "startFrame": 0,
+          "endFrame": 6,
+          "startSeconds": 0,
+          "endSeconds": 0.5,
+          "duration": 0.5
+        },
+        {
+          "id": "insertion",
+          "role": "action",
+          "start": 0.06,
+          "end": 0.48,
+          "minSeconds": 0.25,
+          "startFrame": 6,
+          "endFrame": 24,
+          "startSeconds": 0.5,
+          "endSeconds": 2,
+          "duration": 1.5
+        },
+        {
+          "id": "answer",
+          "role": "hold",
+          "start": 0.48,
+          "end": 1,
+          "minSeconds": 0.5,
+          "startFrame": 24,
+          "endFrame": 48,
+          "startSeconds": 2,
+          "endSeconds": 4,
+          "duration": 2
+        }
+      ],
+      "poseSamples": [
+        0,
+        0.01,
+        0.02,
+        0.03,
+        0.04,
+        0.049999999999999996,
+        0.06,
+        0.08333333333333333,
+        0.10666666666666666,
+        0.13,
+        0.15333333333333332,
+        0.17666666666666667,
+        0.2,
+        0.22333333333333333,
+        0.24666666666666665,
+        0.27,
+        0.29333333333333333,
+        0.31666666666666665,
+        0.34,
+        0.36333333333333334,
+        0.38666666666666666,
+        0.41,
+        0.4333333333333333,
+        0.45666666666666667,
+        0.48,
+        0.5016666666666667,
+        0.5233333333333333,
+        0.5449999999999999,
+        0.5666666666666667,
+        0.5883333333333334,
+        0.61,
+        0.6316666666666666,
+        0.6533333333333333,
+        0.6749999999999999,
+        0.6966666666666667,
+        0.7183333333333334,
+        0.74,
+        0.7616666666666667,
+        0.7833333333333333,
+        0.8049999999999999,
+        0.8266666666666667,
+        0.8483333333333334,
+        0.8699999999999999,
+        0.8916666666666666,
+        0.9133333333333333,
+        0.935,
+        0.9566666666666668,
+        0.9783333333333333,
+        1
+      ],
+      "safeTrimWindows": [
+        {
+          "id": "question",
+          "startFrame": 0,
+          "endFrame": 6
+        },
+        {
+          "id": "answer",
+          "startFrame": 24,
+          "endFrame": 48
+        }
+      ],
+      "limitations": "Authored qualitative pose timing, not measured time or a new simulation. Holds and loop seams require rendered review."
+    },
+    "colors": {
+      "base": "vellum",
+      "bg": "#f3eee4",
+      "surface": "#dfd4c2",
+      "ink": "#292328",
+      "muted": "#665b60",
+      "accent": "#8e343d",
+      "accent2": "#545a83",
+      "positive": "#376850",
+      "negative": "#a13934"
+    },
+    "samples": 16,
+    "pos": 0,
+    "still": false,
+    "draft": true,
+    "loop": false
+  },
+  "sourceHashes": {
+    "scripts/blender/render.py": "c4f47526492e8e38e70352539e73eab5403dd4755bcc619e6fa56c1ffeae843d",
+    "scripts/blender/artkit.py": "0b4cb1ca5c1a1e204fca4a59e728fde7f49e01e08c55d024c27419fcc36da347",
+    "library/sculptures/gap-bridge.py": "ad613efc1d5456d146574f6463f1c21c522d1f91812af731864b42e3a963bca4",
+    "library/sculptures/gap-bridge.json": "ec4db4caca3dde9f79cb6228f6eb145bd4ef09126a6225bd0421218d591d8c6a"
+  },
+  "encoding": {
+    "transfer": "iec61966-2-1",
+    "primaries": "bt709",
+    "matrix": "bt709",
+    "range": "tv",
+    "note": "Preserve Blender display sRGB transfer; convert RGB to limited-range BT.709 YUV."
+  },
+  "startedAt": "2026-10-03T04:29:59.284Z",
+  "stages": [
+    {
+      "name": "blender",
+      "status": "passed",
+      "seconds": 26.877359042
+    },
+    {
+      "name": "encode",
+      "status": "passed",
+      "seconds": 0.17541016599999784
+    },
+    {
+      "name": "verify",
+      "status": "passed",
+      "seconds": 0.045673084000001835
+    }
+  ],
+  "outputs": {
+    "scene.blend": {
+      "file": "scene.blend",
+      "sha256": "73d5b68fd88c7f01be3b456f33063d1dea6122d625ada8c6f4d353ae3020a268",
+      "bytes": 110256
+    },
+    "poster.png": {
+      "file": "poster.png",
+      "sha256": "e9e496b3caf78759f9a5091ec1653ab926f388d310d788b44a25009e6df79170",
+      "bytes": 438457
+    },
+    "clip.mp4": {
+      "file": "clip.mp4",
+      "sha256": "af1fb9621965b8b68347f3987e225369eadf4a90965d15bad68782cedc2b128a",
+      "bytes": 47137
+    }
+  },
+  "blender": {
+    "version": 1,
+    "blenderVersion": "5.2.2 LTS",
+    "blenderBuildHash": "d13f752e3b9c",
+    "engine": "BLENDER_EEVEE",
+    "threads": 2,
+    "width": 540,
+    "height": 960,
+    "fps": 12,
+    "frames": 48,
+    "samples": 16,
+    "colorManagement": {
+      "view": "AgX",
+      "look": "AgX - Medium High Contrast"
+    },
+    "bakedMotion": true,
+    "requiresAutoExec": false,
+    "loopMaxTransformError": 1.8000001907348633,
+    "holdTransformChecks": [
+      {
+        "id": "question",
+        "frames": 6,
+        "maxTransformError": 0
+      },
+      {
+        "id": "answer",
+        "frames": 24,
+        "maxTransformError": 0
+      }
+    ],
+    "motionClock": "qualitative-pose",
+    "objects": 16,
+    "meshVertices": 88,
+    "buildSeconds": 0.018361916998401284,
+    "bakeSeconds": 0.0032680410076864064,
+    "renderedFrames": [
+      {
+        "frame": 1,
+        "seconds": 1.0178035419958178
+      },
+      {
+        "frame": 2,
+        "seconds": 0.49940454197349027
+      },
+      {
+        "frame": 3,
+        "seconds": 0.5177285830141045
+      },
+      {
+        "frame": 4,
+        "seconds": 0.5022866670042276
+      },
+      {
+        "frame": 5,
+        "seconds": 0.5334221669763792
+      },
+      {
+        "frame": 6,
+        "seconds": 0.5006312499754131
+      },
+      {
+        "frame": 7,
+        "seconds": 0.5199167499959003
+      },
+      {
+        "frame": 8,
+        "seconds": 0.5262172919756267
+      },
+      {
+        "frame": 9,
+        "seconds": 0.5360424999962561
+      },
+      {
+        "frame": 10,
+        "seconds": 0.49539520801045
+      },
+      {
+        "frame": 11,
+        "seconds": 0.5065450420079287
+      },
+      {
+        "frame": 12,
+        "seconds": 0.5059144579863641
+      },
+      {
+        "frame": 13,
+        "seconds": 0.520937541994499
+      },
+      {
+        "frame": 14,
+        "seconds": 0.5051662499899976
+      },
+      {
+        "frame": 15,
+        "seconds": 0.503985332994489
+      },
+      {
+        "frame": 16,
+        "seconds": 0.5228022499941289
+      },
+      {
+        "frame": 17,
+        "seconds": 0.526646249985788
+      },
+      {
+        "frame": 18,
+        "seconds": 0.5260082090098877
+      },
+      {
+        "frame": 19,
+        "seconds": 0.5033366669958923
+      },
+      {
+        "frame": 20,
+        "seconds": 0.5130743339832406
+      },
+      {
+        "frame": 21,
+        "seconds": 0.5015012500225566
+      },
+      {
+        "frame": 22,
+        "seconds": 0.5021312080207281
+      },
+      {
+        "frame": 23,
+        "seconds": 0.5238164170004893
+      },
+      {
+        "frame": 24,
+        "seconds": 0.512519208015874
+      },
+      {
+        "frame": 25,
+        "seconds": 0.49367037499905564
+      },
+      {
+        "frame": 26,
+        "seconds": 0.5137437079974916
+      },
+      {
+        "frame": 27,
+        "seconds": 0.5152353330049664
+      },
+      {
+        "frame": 28,
+        "seconds": 0.5303444169985596
+      },
+      {
+        "frame": 29,
+        "seconds": 0.5139501660014503
+      },
+      {
+        "frame": 30,
+        "seconds": 0.5019775830151048
+      },
+      {
+        "frame": 31,
+        "seconds": 0.5294933340046555
+      },
+      {
+        "frame": 32,
+        "seconds": 0.5128506250039209
+      },
+      {
+        "frame": 33,
+        "seconds": 0.49926495799445547
+      },
+      {
+        "frame": 34,
+        "seconds": 0.5426861250016373
+      },
+      {
+        "frame": 35,
+        "seconds": 0.5192927500174847
+      },
+      {
+        "frame": 36,
+        "seconds": 0.5365005419880617
+      },
+      {
+        "frame": 37,
+        "seconds": 0.5114784589968622
+      },
+      {
+        "frame": 38,
+        "seconds": 0.5323632920044474
+      },
+      {
+        "frame": 39,
+        "seconds": 0.5101650000142399
+      },
+      {
+        "frame": 40,
+        "seconds": 0.5121708750084508
+      },
+      {
+        "frame": 41,
+        "seconds": 0.518328834004933
+      },
+      {
+        "frame": 42,
+        "seconds": 0.505830459005665
+      },
+      {
+        "frame": 43,
+        "seconds": 0.5152648749935906
+      },
+      {
+        "frame": 44,
+        "seconds": 0.5247922080161516
+      },
+      {
+        "frame": 45,
+        "seconds": 0.5259621250152122
+      },
+      {
+        "frame": 46,
+        "seconds": 0.5336375000188127
+      },
+      {
+        "frame": 47,
+        "seconds": 0.5284972500230651
+      },
+      {
+        "frame": 48,
+        "seconds": 0.5253052090120036
+      }
+    ],
+    "renderSeconds": 25.29480912501458,
+    "posterFrame": 1,
+    "status": "rendered"
+  },
+  "probe": {
+    "codec_name": "h264",
+    "width": 540,
+    "height": 960,
+    "color_space": "bt709",
+    "color_transfer": "iec61966-2-1",
+    "color_primaries": "bt709",
+    "avg_frame_rate": "12/1",
+    "nb_read_frames": "48"
+  },
+  "seconds": 27.105051958,
+  "finishedAt": "2026-10-03T04:30:26.389Z"
+}
