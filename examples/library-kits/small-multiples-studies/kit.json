@@ -1,0 +1,893 @@
+{
+  "schemaVersion": 1,
+  "id": "small-multiples-studies",
+  "version": "0.1.0",
+  "kind": "story-kit",
+  "title": "Small-multiples studies",
+  "status": "prototype",
+  "inventoryIds": [
+    "C18"
+  ],
+  "purpose": "Compare ranked histories on shared axes and expand a selected panel without changing its domains.",
+  "tags": {
+    "purpose": [
+      "compare",
+      "rank",
+      "focus"
+    ],
+    "appearance": [
+      "paper",
+      "native-chart"
+    ],
+    "movement": [
+      "dated-reveal",
+      "rank-snapshot-cut",
+      "uniform-expansion",
+      "reading-hold"
+    ],
+    "format": [
+      "landscape",
+      "vertical"
+    ],
+    "subject": [
+      "delivery-duration",
+      "household-net-flow"
+    ]
+  },
+  "includes": {
+    "source": "inputs.json",
+    "calculations": "audit.json",
+    "composition": "build.mjs",
+    "preview": "preview.html",
+    "specimens": [
+      "specimens/delivery-ranks-landscape/storyboard.json",
+      "specimens/delivery-ranks-vertical/storyboard.json",
+      "specimens/household-ranks-landscape/storyboard.json",
+      "specimens/household-ranks-vertical/storyboard.json"
+    ]
+  },
+  "requires": {
+    "replay": [
+      "ClearFrame native compositor",
+      "bundled fonts"
+    ],
+    "preparation": [
+      "Node.js",
+      "FFmpeg",
+      "Python 3"
+    ]
+  },
+  "editable": {
+    "native": [
+      "data",
+      "copy",
+      "domains",
+      "ranking date",
+      "selection",
+      "colors",
+      "timing",
+      "layout"
+    ],
+    "fixedClip": []
+  },
+  "evidence": {
+    "summary": "evidence/summary.json",
+    "review": "REVIEW.md",
+    "encoded": "evidence/encoded-checks.json",
+    "implementation": "evidence/implementation.json",
+    "continuousPlayback": "unverified"
+  },
+  "provenance": {
+    "references": "README.md",
+    "inputSha256": "fc735a5033010d6bb0887bbcd7afb44fd84e2a2a3adb862bd0d81555f5e2bc98",
+    "modelVersion": 1
+  },
+  "license": "MIT for original files; bundled fonts retain OFL notices.",
+  "files": [
+    {
+      "path": "audit.json",
+      "bytes": 223405,
+      "sha256": "ba01ce26fd7d947bc26785e3c977d374c91332595dcda7e87fd09676cb5dacc1"
+    },
+    {
+      "path": "build.mjs",
+      "bytes": 2803,
+      "sha256": "d9447837e5f677fc2b1c6ce57d57a5e803322b59fb025c72b34279ea9b9c6817"
+    },
+    {
+      "path": "check-encoded.py",
+      "bytes": 8115,
+      "sha256": "19dbca101e7c42a7568a1e667bad461afce8473873753c4ef4970c7e031c1eab"
+    },
+    {
+      "path": "DIRECTION.md",
+      "bytes": 2975,
+      "sha256": "ec7b42efe0bba395fa856f75ac921ebcd3844c5910e77c3ca4cc669dffc6fe84"
+    },
+    {
+      "path": "evidence/critique.json",
+      "bytes": 7399,
+      "sha256": "8e28295ee822b1eee23ed63ddf080f8a86d31ef8dbe24e86bfbbc425841895d5"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/frame-0000.jpg",
+      "bytes": 49322,
+      "sha256": "7afeaf0aeabbc5b98b3cd8e9c4664d0765caaabf1184db515bfbe5c6624ce8c4"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/frame-0001.jpg",
+      "bytes": 49358,
+      "sha256": "c7934144566db1f2cb30004f1581e9d2bbbc8d5f32967537b659ec4c1a6bf68d"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/frame-0002.jpg",
+      "bytes": 54902,
+      "sha256": "51a1a1afae21721e22522f28f1ed7ed35cb94af486701f2842edc588866dcdc4"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/frame-0003.jpg",
+      "bytes": 55671,
+      "sha256": "4e2b25c5e06264beca5ff405331ca86ea4420a67e7cfd225da7276e1e7c8919e"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/frame-0004.jpg",
+      "bytes": 55667,
+      "sha256": "b57718bad3ef4ff1c265e266fc7761951d46e732cb21aa58c75fbb7f485056f0"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/frame-0005.jpg",
+      "bytes": 55849,
+      "sha256": "82e597d97ccd9ec128d7e8b4bae11325d144d56e18af64ccfe43499adea00c64"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/frame-0006.jpg",
+      "bytes": 53472,
+      "sha256": "d044f4d847628f98a78a827d3bdc5b24c1470e119f793eab8ba3c11e95ee1c41"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/frame-0007.jpg",
+      "bytes": 46943,
+      "sha256": "4f9c865e9f308e0b4b8a6d0a2ba9ea3f0271cdc4bce66bfd263b01ba315183c3"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/frame-0008.jpg",
+      "bytes": 43870,
+      "sha256": "3e496207faebcf2d39d1ad11fb6a76dac5135efa6d4099a89b21fc5f032aca83"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/index.html",
+      "bytes": 2191,
+      "sha256": "53451046ca4a809b8d5d352a10f6d397884ebfccb1d320a8159bb79962d61387"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/review.json",
+      "bytes": 1791,
+      "sha256": "8a1f4836c60b61f0b1fd3ee6f7f0f54eef3f2fc50da67c03eef10667bbe031fb"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/boundaries/strip.png",
+      "bytes": 102267,
+      "sha256": "d8aa0b6080a4e3cc0ce1a00fad84392cbb673a1b9562e7c7eed88d7d9b0bbefb"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/check.json",
+      "bytes": 271,
+      "sha256": "c390c23c56d1cad70f55d5cd4351ef1c78ab9a2fac931324f17ef3bc5081fab9"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/native-job.json",
+      "bytes": 120335,
+      "sha256": "0d048ba846fa18486041500bd997e3e0f63a660c88095123e9d050ca242c740d"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/phone.png",
+      "bytes": 864070,
+      "sha256": "e94d63fdb8c0a9ed5c59c9fe715888358f7ae758c65c99572caeebeff19ede13"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/qa.json",
+      "bytes": 18640,
+      "sha256": "a0b42af458cedce01eb71e54c62648fcd7a8bb471f18a9164944aad67e27bca2"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/seek.json",
+      "bytes": 1509,
+      "sha256": "09da4ba66037d0061cd038a7281a6e2fdd56d628906f230a398ec726787bdac8"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/sheet.png",
+      "bytes": 134051,
+      "sha256": "e49f4a1fc5a05da1309a5b95e21edcca02469b44ff6c28ad0029c9088f4bc399"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/timeline.png",
+      "bytes": 291377,
+      "sha256": "c7016fd046d27a8408619d547c115e3d5b71d596bba20c66f3275d26a8d417ef"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/video.mp4",
+      "bytes": 1155776,
+      "sha256": "edcea28c7eef78c6a35ea7031acf53efc5cf3e84f9e209c9b53ef2d8a4a28dfd"
+    },
+    {
+      "path": "evidence/delivery-ranks-landscape/video.mp4.json",
+      "bytes": 2742,
+      "sha256": "7ae1d25de4748baaf5ace6d86483653dd877b180f5f2935b03094829efb3a774"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/frame-0000.jpg",
+      "bytes": 77870,
+      "sha256": "2ef91ba372cd816242bd30c66a0b623b5854199062fd75a2d4936fa6afa92e8c"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/frame-0001.jpg",
+      "bytes": 77949,
+      "sha256": "99dfed15c5f0c0ce233a9fd0640969f239b97edb60a42c308d43267480355771"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/frame-0002.jpg",
+      "bytes": 85635,
+      "sha256": "2f66805ffe46856b73eeb217ed958cefb7c43156a125a5614c2c603165a6d7ae"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/frame-0003.jpg",
+      "bytes": 86484,
+      "sha256": "106378aa1cd4105d18f3d3940685e60ab81e54853a81752f3e1b1043e6fa3971"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/frame-0004.jpg",
+      "bytes": 86525,
+      "sha256": "ed22853cd129609ff19ad94ba35d12ca974b10897f7a878ab0898e2e058939d0"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/frame-0005.jpg",
+      "bytes": 86760,
+      "sha256": "6c2b6f6926b0e83c0c1126d4a56a8e46cccee69e957bc5ff09d23d5d9002c334"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/frame-0006.jpg",
+      "bytes": 82163,
+      "sha256": "419dfbf66f42a5fc900e38d372bea5cd3a987a94a0467b6bd69489746ff7b696"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/frame-0007.jpg",
+      "bytes": 72420,
+      "sha256": "7e21b8a095c4dfdaa2eda276a00f7303f05d3c77aa8d8a004a3a065325b6476c"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/frame-0008.jpg",
+      "bytes": 67273,
+      "sha256": "4cae65371ca4e5de1783675f1c0237da358d45e279b713d7f7b3d76a007b3952"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/index.html",
+      "bytes": 2191,
+      "sha256": "53451046ca4a809b8d5d352a10f6d397884ebfccb1d320a8159bb79962d61387"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/review.json",
+      "bytes": 1790,
+      "sha256": "497847da2dbd0d303b54417857949286558e0b6ea867274dee228840761a9191"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/boundaries/strip.png",
+      "bytes": 172841,
+      "sha256": "77d37029a63c1019fdb4be250029d060bf6ff90c0ca1b39b13acd4e8a606bef5"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/check.json",
+      "bytes": 271,
+      "sha256": "154c191157dfcedf798a33727813905165a9ec2233d891162682a45a42bbb782"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/native-job.json",
+      "bytes": 118369,
+      "sha256": "8d0ac6b43b4304a645fa29130ffb8a73f0bf24b757ac4ac3cb73de35d22dd1c5"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/phone.png",
+      "bytes": 1132483,
+      "sha256": "26f7939a474d02cd4286266a9dd1d0e81b3d1e74567df30d3b2a3bca1d07b7d1"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/qa.json",
+      "bytes": 18671,
+      "sha256": "295ee2de3389c8e8c42d3a347762689d79cba67b8940f7ce0a859e74e9343234"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/seek.json",
+      "bytes": 1509,
+      "sha256": "a638b98d889de8c010ed6c90a051250bcf31481e085535fb9d901751d2ae5bea"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/sheet.png",
+      "bytes": 223056,
+      "sha256": "56f3b5ba35b21ee98368383cea9b7da2583a927d1cfb7da575dace83846798ce"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/timeline.png",
+      "bytes": 256190,
+      "sha256": "78b71d600634ad79c0ec9e0d406007817fe8d871e7339f3f15e9a848d328aac1"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/video.mp4",
+      "bytes": 1024748,
+      "sha256": "f0a6c2f6e5296c1bda6165d920bf22afa3299d349fd50d73c18f453aaf5d557f"
+    },
+    {
+      "path": "evidence/delivery-ranks-vertical/video.mp4.json",
+      "bytes": 2742,
+      "sha256": "68ee4221de33e73ca2f9fcaf37370d27126d3ef3510670cfb1f9e573be710f81"
+    },
+    {
+      "path": "evidence/encoded-checks.json",
+      "bytes": 3499,
+      "sha256": "74041b7ec27a15d0882ea1828228e7584fc3f9a9b1cee7b88a54c78a680ec62a"
+    },
+    {
+      "path": "evidence/focused-checks.txt",
+      "bytes": 489,
+      "sha256": "6886ec64bd0424cd550eeae3e31c630936494162b3cddbdbe04cb0f3f818bbc4"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/frame-0000.jpg",
+      "bytes": 49826,
+      "sha256": "1fbadcf86f8104a21981d78842513157a7e961724cc33d0a4fd8bf00118c28fe"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/frame-0001.jpg",
+      "bytes": 49839,
+      "sha256": "e4d3a41088e700fa21d053249e892933649a023118c209adb76333bbaf309c10"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/frame-0002.jpg",
+      "bytes": 56501,
+      "sha256": "823a0c1a3ea598e913889e4f7a60a4b5a0dda2be2dfe797c170e1fe95153f925"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/frame-0003.jpg",
+      "bytes": 57126,
+      "sha256": "e00a50631bd6ac5e33b271ace33904e3a4b88e6ab86e20aad39f93025aa53948"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/frame-0004.jpg",
+      "bytes": 57139,
+      "sha256": "1c9e12ef0f1d852d30386806290d39f43a314dba0874f2fd441adc9a52463e8a"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/frame-0005.jpg",
+      "bytes": 57154,
+      "sha256": "814014cedbb22384d576a3459aa497c144aab4f5bbbc87bb82a39de04b7a98a0"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/frame-0006.jpg",
+      "bytes": 54509,
+      "sha256": "b03d8004e3d52b1a2eb86ab9725d64fed5d1e50e6f0c54ebc72e7eaa984339a4"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/frame-0007.jpg",
+      "bytes": 47653,
+      "sha256": "3cf7f586aedb524ac316bd15d7bfc93c0d9315626715dcc092f6767de6401b39"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/frame-0008.jpg",
+      "bytes": 45505,
+      "sha256": "a8fb5c19af37a46e98f25a9c8821533a7db67dd97c110aab7c1103d01bbf3eb1"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/index.html",
+      "bytes": 2191,
+      "sha256": "53451046ca4a809b8d5d352a10f6d397884ebfccb1d320a8159bb79962d61387"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/review.json",
+      "bytes": 1792,
+      "sha256": "c65cd368de54d1a4b451a6281072346f2a955f7edfc7578dd0b2ab3a7d87cb29"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/boundaries/strip.png",
+      "bytes": 103308,
+      "sha256": "51f9887d9d5323860dc4c78620e1dad25d691a6105c0ab16003d34aa8a1a629d"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/check.json",
+      "bytes": 271,
+      "sha256": "60b569f03e4552dba82f28b69fd88214e0edd506dd27377306430fd3278357ab"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/native-job.json",
+      "bytes": 112902,
+      "sha256": "b7008c482ef2155c2f9a07d58d67f8e8f74e25923e4c21d73cc8697398ea133a"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/phone.png",
+      "bytes": 919505,
+      "sha256": "74cbedd2a27584cbfae686b6bf8c7bcb8ecab3798418c2a63e6a799d0cb7a4ed"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/qa.json",
+      "bytes": 18662,
+      "sha256": "47ea14fba85b3b76595af0904aba7eed4fbd9eefe167062f3c8d6ac49803a8af"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/seek.json",
+      "bytes": 1509,
+      "sha256": "92cbeb5aa6c1b29de89cc81b8ce99b7745cdf25694871f6419e97266e856ab0c"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/sheet.png",
+      "bytes": 144074,
+      "sha256": "99c863301e271eee4ca17c838044a26b02aff1cbfe2acf8ff3a875bbd3d51a37"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/timeline.png",
+      "bytes": 303723,
+      "sha256": "b150d6b4acf285b4de6c2e1d1618527c55a8e9fdfdb4ca089683b0d819c3041e"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/video.mp4",
+      "bytes": 1288488,
+      "sha256": "12b76bf1281bb08dc60ed765baf7b1bb48757b10956e502a8c72bf231fd0560d"
+    },
+    {
+      "path": "evidence/household-ranks-landscape/video.mp4.json",
+      "bytes": 2735,
+      "sha256": "a551a38cecc8723cf12dda2c2e8db382e1f713a2ad21f7fd3c76b89976f34321"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/frame-0000.jpg",
+      "bytes": 80437,
+      "sha256": "0e3375220acd1518eaef430cd362ae262f08bb89a8b99fdeb43d849c2ecdab57"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/frame-0001.jpg",
+      "bytes": 80490,
+      "sha256": "23006cd40b5287eb2d85ef4289befdec64eb61ed211e6d64a353e8dd2a3e0cc4"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/frame-0002.jpg",
+      "bytes": 90377,
+      "sha256": "21a0e99ba24fb3a2818241c586389c637af1c3be8f141f5271a5c6bd90295d38"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/frame-0003.jpg",
+      "bytes": 90789,
+      "sha256": "45c4451635bf72803d7cd00061c395db867ca526ee4b2e707357f1eac0b5ab78"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/frame-0004.jpg",
+      "bytes": 90811,
+      "sha256": "8199cf8bb44d8212d7fb736e4cdc912e51372251700886c5b5418afd402b625f"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/frame-0005.jpg",
+      "bytes": 91016,
+      "sha256": "0c22950c5cb57abe66f13e821a19c76b825ee12ec9ea7d6f98ae2efafe6f92e5"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/frame-0006.jpg",
+      "bytes": 86480,
+      "sha256": "b9d915fadec359358fd7a045fb69cb61d9646fac4fb754faa7d82a207dec7f0a"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/frame-0007.jpg",
+      "bytes": 75381,
+      "sha256": "91601f6120a4e274df87a20a624e1ebd812ee9363d5b872fa8517aacdc95e9e9"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/frame-0008.jpg",
+      "bytes": 71952,
+      "sha256": "f8cf54a449e565e34cc2f0ff731530a6b1739752996174145f9c0dc48199eed5"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/index.html",
+      "bytes": 2191,
+      "sha256": "53451046ca4a809b8d5d352a10f6d397884ebfccb1d320a8159bb79962d61387"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/review.json",
+      "bytes": 1791,
+      "sha256": "4787a6337233b0bd23647f4cd6a65d661b158e55dc5c7e00ffff2b18399d045b"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/boundaries/strip.png",
+      "bytes": 173106,
+      "sha256": "95fcd015f1c496f87946cdb20fed80542ae9396cf6496486cba78e707d9e8965"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/check.json",
+      "bytes": 271,
+      "sha256": "7352a1e119c744fb22b03dd96eebc7a1a3d7280374222be665f3cc4810d7b77a"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/native-job.json",
+      "bytes": 110966,
+      "sha256": "4576e5427e1e07db07b85bb3f7796c6db192e037d1c21c9d982b9700df1dd0a3"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/phone.png",
+      "bytes": 1197565,
+      "sha256": "2fe131c1a911396fd5513152fce77435d5c4c3543ca644a53158852ac27bcf7c"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/qa.json",
+      "bytes": 18660,
+      "sha256": "7df571d23fd60b6725d8af8c4ed6c2a363974c9ef144b21109efc5722f99fd1b"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/seek.json",
+      "bytes": 1509,
+      "sha256": "632abd6f28eaeabde49a25023d44b65274884c2b5f39796d0ba160933bb8b06d"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/sheet.png",
+      "bytes": 240405,
+      "sha256": "53bb777d385d85a29550f7369e5b9c4212120d675d787e2b0073dfd3923cd8dd"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/timeline.png",
+      "bytes": 264531,
+      "sha256": "9a081703823743682ae37a3bdb1385ffce75c4f6c5d9ed7385e75f28c49d17e0"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/video.mp4",
+      "bytes": 1132402,
+      "sha256": "55048f72e1b5df8171940fcf3f1c33d8826e93e5c23b5b7e483702d273becc64"
+    },
+    {
+      "path": "evidence/household-ranks-vertical/video.mp4.json",
+      "bytes": 2735,
+      "sha256": "908e51d5340a6b990be0b621a20a7f54dc6f8fe9a925aa1326d173199fbfa790"
+    },
+    {
+      "path": "evidence/implementation.json",
+      "bytes": 813,
+      "sha256": "39fc3d17e58767c7a792658030a507df2995c07d912486d00941e7b2d62115e7"
+    },
+    {
+      "path": "evidence/independent-review/artifact-checks.json",
+      "bytes": 5561,
+      "sha256": "0816a6f01147f4e2b9d42c124a1bf903637b6f6cf47dc7a8d683efe4ff4890ee"
+    },
+    {
+      "path": "evidence/independent-review/contract-review.json",
+      "bytes": 850,
+      "sha256": "3e37255167aa2e82dd08a8a2493ec56c054059039e6a1310fa5879f209d8b3d6"
+    },
+    {
+      "path": "evidence/independent-review/contract-review.mjs",
+      "bytes": 5972,
+      "sha256": "9d98342c224e76c87b24d05454df5ef578ec693100c07d7bd69b5a68a3c14941"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-00.100000.png",
+      "bytes": 32917,
+      "sha256": "ebed946dffdf3b5e1b2c82f24b5d19059ff9e2224aa1adbbb60479317b97c266"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-01.200000.png",
+      "bytes": 33739,
+      "sha256": "fc0742b973044340b7f3caaa8653d6c00e5656cc303523624f753b1c032a036b"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-03.000000.png",
+      "bytes": 36165,
+      "sha256": "4c7ae4dad5ae2040527a32e8f870a00f5256a8d72c89d9f08ecd698eb6775fe8"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-05.000000.png",
+      "bytes": 37583,
+      "sha256": "9d890bf901e56942223e623ee353badd71eb1bef3d00e64e8c7335454969cbfa"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-27.900000.png",
+      "bytes": 37394,
+      "sha256": "5db27c34d17ebe80345005e20d60ab85714637e7ce7c10d367ba1efd31f1cb57"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-28.033333.png",
+      "bytes": 37961,
+      "sha256": "fd972b45a25bb4006ee6d96a30d3aea5c4aa43740b669a44cf1d2051078a1570"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-53.900000.png",
+      "bytes": 37770,
+      "sha256": "42aebdd76f9f601e0025ece68ef0e5b7b0ef3c787e47203b02a1953d6eb6c74e"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-54.100000.png",
+      "bytes": 35009,
+      "sha256": "467513f4bf3a385b602cb7c2a1dab99eb8e5910afb3631711a0e534ebfec85d7"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-54.400000.png",
+      "bytes": 22857,
+      "sha256": "1b293e83f360e8439869f7a3326b7ac28ee5f8d42992a82c9ff4b1568eed3680"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-54.700000.png",
+      "bytes": 22911,
+      "sha256": "4d2196ddef15fbf7ffd5354d6d7792f28fe36dbcb83708937549203da956e077"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-55.300000.png",
+      "bytes": 26013,
+      "sha256": "ac45a478eb363c7170f40ca72ca45b53163e7bf8271841ce3c2cc8a666ece786"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-56.100000.png",
+      "bytes": 29267,
+      "sha256": "7bd6ae5e2026d1d8dd36bf1301cad2356daa0a5ed42fcec2f944647d094b0ff8"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-landscape/encoded-77.900000.png",
+      "bytes": 29154,
+      "sha256": "c77cafd5357cbaac7b9013988cc803131c979c80598511c993914168a6d6e26e"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-00.100000.png",
+      "bytes": 56419,
+      "sha256": "6237aa5acf71ab6f97223388dad98f24e00c4542ecb91cf1e9d952c352b673e3"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-01.200000.png",
+      "bytes": 57699,
+      "sha256": "0060be7e882e4020dbbf91979949374f8720e7f7c0abb61bea72cad5db5862ed"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-03.000000.png",
+      "bytes": 60629,
+      "sha256": "0768aa494190d652854f8e03d1ed2208d90db6c80d83fd3e78f077d2918478e4"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-05.000000.png",
+      "bytes": 62530,
+      "sha256": "29a2b6837c89704f2c0a05b4c909be9af9151e40b4879819b90bcc623c63815c"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-27.900000.png",
+      "bytes": 61858,
+      "sha256": "48a9c27208c401024ce5f31ed3805b320294ed77e17ae565e4bdefbd9b974101"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-28.033333.png",
+      "bytes": 63371,
+      "sha256": "18952945cc4240c44904a43b434fdb1d964ca840efbb40575fc21129bec3541e"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-53.900000.png",
+      "bytes": 62990,
+      "sha256": "ff4dca22ee127b9d47dfc61d0d4eb96307e944c2fe7847640ad68d8b1b611751"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-54.100000.png",
+      "bytes": 58603,
+      "sha256": "a7680ffc22cb242db51e7ac6495bad6b70e1dffdeb704a15766154fc36757759"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-54.400000.png",
+      "bytes": 36508,
+      "sha256": "aadf367576f821a08b2ec7c322462395d980ca9da00ebaf9917790d6e83c92d0"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-54.700000.png",
+      "bytes": 36602,
+      "sha256": "ccc268e5690ffd82ca33238247c8201869e5a0b8d5477852b0ea91d797ac19db"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-55.300000.png",
+      "bytes": 42408,
+      "sha256": "f22d4ef7a2a2fcbc8a07db4abe831f961fd7233dbce1456aaeb0013962345536"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-56.100000.png",
+      "bytes": 47790,
+      "sha256": "184e147ee01f79070e87e549b2b31cc049d769664b63a47518a50795818bce40"
+    },
+    {
+      "path": "evidence/independent-review/delivery-ranks-vertical/encoded-77.900000.png",
+      "bytes": 47286,
+      "sha256": "e2caeeb0b3e4b2793b4850a67d33633fbdbebc86fc14f763becc9bdbef27d320"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-00.100000.png",
+      "bytes": 34430,
+      "sha256": "df9e3271e321f0cac0e25c19b9512ab790f2cfdbd57eeda5e38c6b37ed712546"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-01.200000.png",
+      "bytes": 35569,
+      "sha256": "ed1c32d43ac900e066879354d79c49f521969a65f46b44adb37dba511ae5e37b"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-03.000000.png",
+      "bytes": 38135,
+      "sha256": "970549c1c5fdc3345644902a41baea2d78bf2f6f8f2f86b1f5e6b4718d1749ea"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-05.000000.png",
+      "bytes": 39913,
+      "sha256": "f4a0702bd29e85a64083aab9226dd713c66641ce5e46736fc06a4d9c12fba169"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-27.900000.png",
+      "bytes": 39827,
+      "sha256": "e14e882a9f7e988b377365c9bb0ef58749eec333db98492440a510a28e9de02c"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-28.033333.png",
+      "bytes": 40215,
+      "sha256": "92bebb75ae3cc5ced5f0e74fad5f6a678f2ac1d3b814375108951d28c79a8483"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-53.900000.png",
+      "bytes": 40114,
+      "sha256": "c3fb111be61bed4b4b699384a5e6ccfae59722cddbe45938d84a40096b9db174"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-54.100000.png",
+      "bytes": 37283,
+      "sha256": "61f07572fc1844a7dab6fd23af5e8edc1d41c0c05b0be7d2c38dcbe4a5d9611f"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-54.400000.png",
+      "bytes": 23542,
+      "sha256": "2f0f7eb889fc68111a0208e0ee2b69258caba017aa7e1d07e1b9e065b72ce863"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-54.700000.png",
+      "bytes": 23559,
+      "sha256": "b0081fabe95f4c444926de88915cd56e812aec7aecca3106d3acecebdf42fb56"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-55.300000.png",
+      "bytes": 27547,
+      "sha256": "9cf84e5bbabbeb0f96cc847728db531c4f7f18df84137cb1593554f06a578c2c"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-56.100000.png",
+      "bytes": 31974,
+      "sha256": "be6568362429686d4b8f997db1b5bc600c2cc69d01fb2be54be4e1fcb0a69aca"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-landscape/encoded-77.900000.png",
+      "bytes": 31800,
+      "sha256": "6c2f0675d7d3d00de7547e5ee316dfd9f66ec6478ce4d48c7b6e8c9ceecba93d"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-00.100000.png",
+      "bytes": 58927,
+      "sha256": "6e78ae21cf022f28968458c4a74de3bbefc8894001185e761cf7cf396c773b64"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-01.200000.png",
+      "bytes": 60735,
+      "sha256": "457eb9cf02cad4a7896af85ba8b1771c53b6693526508b6b44f529f521b55971"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-03.000000.png",
+      "bytes": 64522,
+      "sha256": "fe0ef3e1177f103a9f5471010657caa86902097bf34de4e80dbca9da009425bf"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-05.000000.png",
+      "bytes": 67068,
+      "sha256": "5fc8d15c6e292b4f778ab4029258938db3223281dfdc83676809c1c76d9ad0ea"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-27.900000.png",
+      "bytes": 66238,
+      "sha256": "9fda202b7f7065b0f3b325b49463e0eb8205d4ce4bc4f2ecbe14af292c250270"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-28.033333.png",
+      "bytes": 66919,
+      "sha256": "d4c4a1aceefc9d395295b1d1fd68fcd07f0f0c9338d19c0f2bf0c8d8c738e89d"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-53.900000.png",
+      "bytes": 66821,
+      "sha256": "6f88bef6be37d32f8299b797b0955199969ddadddd2e93afdacea88c55d5eda6"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-54.100000.png",
+      "bytes": 62448,
+      "sha256": "a400ddaa0e95f6f012236c5946420e015b53de60a2fe159968a33922a1a6118b"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-54.400000.png",
+      "bytes": 38774,
+      "sha256": "db513027ea71afb0debbef7f2fb976740da3a5d24155c158b9f61f4ead231af0"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-54.700000.png",
+      "bytes": 38938,
+      "sha256": "ef84cf331bdf37b13d3a7b681573dfe5cb78067d3aac5c0034d5fa49f9f8adcc"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-55.300000.png",
+      "bytes": 45673,
+      "sha256": "c417702dbd7bd32770977931e709eb976e74bceb963e2e524247f1cfdb0df9b2"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-56.100000.png",
+      "bytes": 53463,
+      "sha256": "10f0f401b9ba585de37d4b37dda78e911b30e5397d78dc446f9cd89235baa5f1"
+    },
+    {
+      "path": "evidence/independent-review/household-ranks-vertical/encoded-77.900000.png",
+      "bytes": 52296,
+      "sha256": "63de7d36e95ea85814df87516891e4e2ea8ac28b82a4f9ed97965529f92b5db3"
+    },
+    {
+      "path": "evidence/independent-review/source-bindings.json",
+      "bytes": 2348,
+      "sha256": "1b0da9bd855371a807c128a95e869d1af009fad2e1e180fc16eabcd7db5be997"
+    },
+    {
+      "path": "evidence/node-tests.txt",
+      "bytes": 19413,
+      "sha256": "7b7f3e58c8db556195e36d58f19b7d205f83603ec7a08d745662863590e8f503"
+    },
+    {
+      "path": "evidence/summary.json",
+      "bytes": 4310,
+      "sha256": "f58b54734661da40de1dda003fcfa8805363eaeb9a346d599daa8c682e42479f"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 1680,
+      "sha256": "fc735a5033010d6bb0887bbcd7afb44fd84e2a2a3adb862bd0d81555f5e2bc98"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1099,
+      "sha256": "bde1fff290731a65c93efe5b2a5044acb9b0e4b2b9b99ed97871fab2ae8a16f1"
+    },
+    {
+      "path": "package.mjs",
+      "bytes": 7899,
+      "sha256": "17627de442d582086fe52649cbd4c36f1cadd24d18a3135f522c429113f65e4e"
+    },
+    {
+      "path": "preview.html",
+      "bytes": 2405,
+      "sha256": "df03dcfdbe4bc69436393a071d7a5ea915e2c825bbfd857d4599b30ec3001d65"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2559,
+      "sha256": "bf5d5eef4b0b82af33e09f85d5cd8a7b5b408fa004b5d6256060df239fd7fd36"
+    },
+    {
+      "path": "REVIEW.md",
+      "bytes": 8334,
+      "sha256": "57ad95544ab79b8cb5c91300fcea4c6a69a6fd14ba4ba6716e5a323fcc74be45"
+    },
+    {
+      "path": "specimens/delivery-ranks-landscape/storyboard.json",
+      "bytes": 112699,
+      "sha256": "a3f691a130c5e40b580166e3c2797ca682bd71984cad70d0f4618399532d84ea"
+    },
+    {
+      "path": "specimens/delivery-ranks-vertical/storyboard.json",
+      "bytes": 110732,
+      "sha256": "65cdef8a01739a2dc5d8d123251140c5f41a9d4b8583d4f7281d3bef93a124bb"
+    },
+    {
+      "path": "specimens/household-ranks-landscape/storyboard.json",
+      "bytes": 105760,
+      "sha256": "f09f95034a96de72998ee6b7b397ca6ef18a7c34802409a0be3fbe47f068cb5d"
+    },
+    {
+      "path": "specimens/household-ranks-vertical/storyboard.json",
+      "bytes": 103823,
+      "sha256": "69cc2b89b7371daac16b7a4d79d30a8559a872de1d13f5c7a0e6a1b5ea5013c8"
+    },
+    {
+      "path": "verify.mjs",
+      "bytes": 3047,
+      "sha256": "b9e8b25e0194246fe4c743ecaf702b15025fc9806baf6f270ae0afc98d7fb59a"
+    }
+  ]
+}

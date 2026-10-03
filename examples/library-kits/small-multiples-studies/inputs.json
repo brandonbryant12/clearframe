@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "asOf": "2024-06-30",
+  "provenance": "Original fictional monthly records; no external observations or forecasts.",
+  "dates": ["2024-01-31", "2024-02-29", "2024-03-31", "2024-04-30", "2024-05-31", "2024-06-30"],
+  "cases": [
+    {
+      "id": "delivery-ranks", "title": "Which delivery path is shorter?",
+      "unit": "Delivery duration · days", "domain": [0, 15], "ticks": [0, 5, 10, 15], "direction": "ascending", "selected": "gamma",
+      "source": "Fictional delivery records. Gaps are missing.",
+      "focus": "Same domains. Gamma shares first; Delta is unranked.",
+      "series": [
+        {"id": "alpha", "label": "Alpha", "values": [12, 10, 8, 7, 6, 5]},
+        {"id": "beta", "label": "Beta", "values": [6, 7, 8, 8, 9, 9]},
+        {"id": "gamma", "label": "Gamma", "values": [9, null, 8, 7, 6, 5]},
+        {"id": "delta", "label": "Delta", "values": [3, 4, 5, 7, 8, null]}
+      ]
+    },
+    {
+      "id": "household-ranks", "title": "Rank the monthly cash change",
+      "unit": "Monthly net flow · dollars", "domain": [-200, 300], "ticks": [-200, 0, 300], "direction": "descending", "selected": "delayed",
+      "source": "Fictional household flows, not balances or returns.",
+      "focus": "Same domains. Delayed still has a negative June flow.",
+      "series": [
+        {"id": "steady", "label": "Steady", "values": [200, 180, 160, 140, 120, 100]},
+        {"id": "seasonal", "label": "Seasonal", "values": [100, -50, 0, 200, 250, 150]},
+        {"id": "reserve", "label": "Reserve", "values": [0, 100, null, 120, 130, 150]},
+        {"id": "delayed", "label": "Delayed", "values": [-100, -200, -100, 0, 20, -50]}
+      ]
+    }
+  ]
+}

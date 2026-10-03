@@ -1,0 +1,128 @@
+{
+  "status": "prototype",
+  "continuousPlayback": "unverified",
+  "variants": [
+    {
+      "name": "delivery-ranks-landscape",
+      "pipelineId": "2026-10-03T09-30-57-734Z-371b0bf8",
+      "videoSha256": "edcea28c7eef78c6a35ea7031acf53efc5cf3e84f9e209c9b53ef2d8a4a28dfd",
+      "storyboardSha256": "a3f691a130c5e40b580166e3c2797ca682bd71984cad70d0f4618399532d84ea",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 297 frames: no problems found\n"
+        ],
+        "duration": 78,
+        "inputId": "82b0729438953d4540a0f86eadf73021506fe1d5b987d83a4d1ab9efd24ed955"
+      },
+      "qa": {
+        "seconds": 78,
+        "frames": 2340,
+        "changePerSecond": 0,
+        "heldSeconds": 76.17,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "delivery-ranks-vertical",
+      "pipelineId": "2026-10-03T09-31-23-222Z-77954651",
+      "videoSha256": "f0a6c2f6e5296c1bda6165d920bf22afa3299d349fd50d73c18f453aaf5d557f",
+      "storyboardSha256": "65cdef8a01739a2dc5d8d123251140c5f41a9d4b8583d4f7281d3bef93a124bb",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 297 frames: no problems found\n"
+        ],
+        "duration": 78,
+        "inputId": "bf981b05924b88b728e636321a5f9bc07dc88f36173d181866371065ef75e0fb"
+      },
+      "qa": {
+        "seconds": 78,
+        "frames": 2340,
+        "changePerSecond": 0,
+        "heldSeconds": 76.23,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "household-ranks-landscape",
+      "pipelineId": "2026-10-03T09-31-47-757Z-beb71801",
+      "videoSha256": "12b76bf1281bb08dc60ed765baf7b1bb48757b10956e502a8c72bf231fd0560d",
+      "storyboardSha256": "f09f95034a96de72998ee6b7b397ca6ef18a7c34802409a0be3fbe47f068cb5d",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 297 frames: no problems found\n"
+        ],
+        "duration": 78,
+        "inputId": "3e912bd77e1e32b3f69b7566285546da9e81aefb71e61062386152c1d5ec115b"
+      },
+      "qa": {
+        "seconds": 78,
+        "frames": 2340,
+        "changePerSecond": 0,
+        "heldSeconds": 76.17,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "household-ranks-vertical",
+      "pipelineId": "2026-10-03T09-32-12-992Z-40001d2c",
+      "videoSha256": "55048f72e1b5df8171940fcf3f1c33d8826e93e5c23b5b7e483702d273becc64",
+      "storyboardSha256": "69cc2b89b7371daac16b7a4d79d30a8559a872de1d13f5c7a0e6a1b5ea5013c8",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 297 frames: no problems found\n"
+        ],
+        "duration": 78,
+        "inputId": "4dfad8e82970a43293226eb0fde184be0c534065134b84b01ea84aafb4a292e3"
+      },
+      "qa": {
+        "seconds": 78,
+        "frames": 2340,
+        "changePerSecond": 0,
+        "heldSeconds": 76.23,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    }
+  ],
+  "tests": {
+    "pass": 192,
+    "fail": 0,
+    "skipped": 0
+  },
+  "encoded": {
+    "nativeMappingChecks": 2572,
+    "sampledFrames": 724,
+    "pointChecks": 11426,
+    "frontChecks": 210,
+    "missingColumnChecks": 736,
+    "disappearanceChecks": 3808,
+    "expansionPointChecks": 176,
+    "failures": 0
+  },
+  "limits": [
+    "Two to four panels, common observed date grid and shared linear numeric domain only",
+    "Cuts between explicit ranking dates; no inferred intermediate ranking or forecast vintage",
+    "Original fictional data; household flows are not balances or returns",
+    "Bounded encoded probes and phone-frame review, not continuous playback or final master acceptance",
+    "Square and 4:5 unreviewed"
+  ]
+}

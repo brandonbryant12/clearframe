@@ -317,6 +317,16 @@
           "T03"
         ]
       }
+    },
+    "small-multiples-studies": {
+      "cases": {
+        "delivery-ranks": [
+          "C18"
+        ],
+        "household-ranks": [
+          "C18"
+        ]
+      }
     }
   },
   "sourceOnly": {

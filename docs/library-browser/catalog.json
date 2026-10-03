@@ -1081,6 +1081,79 @@
       }
     },
     {
+      "id": "small-multiples-studies",
+      "title": "Small-multiples studies",
+      "purpose": "Compare ranked histories on shared axes and expand a selected panel without changing its domains.",
+      "status": "prototype",
+      "integrity": "verified",
+      "fileCount": 161,
+      "issues": [],
+      "inventoryIds": [
+        "C18"
+      ],
+      "manifest": "examples/library-kits/small-multiples-studies/kit.json",
+      "preview": "examples/library-kits/small-multiples-studies/preview.html",
+      "readme": "examples/library-kits/small-multiples-studies/README.md",
+      "review": "examples/library-kits/small-multiples-studies/REVIEW.md",
+      "sources": null,
+      "tags": {
+        "purpose": [
+          "compare",
+          "rank",
+          "focus"
+        ],
+        "appearance": [
+          "paper",
+          "native-chart"
+        ],
+        "movement": [
+          "dated-reveal",
+          "rank-snapshot-cut",
+          "uniform-expansion",
+          "reading-hold"
+        ],
+        "format": [
+          "landscape",
+          "vertical"
+        ],
+        "subject": [
+          "delivery-duration",
+          "household-net-flow"
+        ]
+      },
+      "editable": {
+        "native": [
+          "data",
+          "copy",
+          "domains",
+          "ranking date",
+          "selection",
+          "colors",
+          "timing",
+          "layout"
+        ],
+        "fixedClip": []
+      },
+      "requires": {
+        "replay": [
+          "ClearFrame native compositor",
+          "bundled fonts"
+        ],
+        "preparation": [
+          "Node.js",
+          "FFmpeg",
+          "Python 3"
+        ]
+      },
+      "evidence": {
+        "summary": "evidence/summary.json",
+        "review": "REVIEW.md",
+        "encoded": "evidence/encoded-checks.json",
+        "implementation": "evidence/implementation.json",
+        "continuousPlayback": "unverified"
+      }
+    },
+    {
       "id": "time-series-studies",
       "title": "Time-series studies",
       "purpose": "Explain matched-price deflation, discrete growth and observed drawdown with complete-window volatility.",
@@ -3894,6 +3967,132 @@
       "search": "sequence of returns under withdrawals explain retirement cashflows, ownership, benefit formulas and purchasing power with auditable native proportions. r09 compare reconcile explain paper geometric native fade shared-clock-reveal reading-hold retirement cashflow ownership rs03 sequence of returns under withdrawals the same returns in different orders travel through paired withdrawal timelines; final balances and missed payments reveal the difference. return sequence withdrawals opening balance cashflow timing shared scale cash runway endowment spending"
     },
     {
+      "id": "small-multiples-studies/delivery-ranks",
+      "kind": "example",
+      "title": "Which delivery path is shorter?",
+      "packageId": "small-multiples-studies",
+      "inventoryIds": [
+        "C18"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/small-multiples-studies/specimens/delivery-ranks-landscape/storyboard.json",
+          "video": "examples/library-kits/small-multiples-studies/evidence/delivery-ranks-landscape/video.mp4",
+          "poster": "examples/library-kits/small-multiples-studies/evidence/independent-review/delivery-ranks-landscape/encoded-00.100000.png",
+          "receipt": "examples/library-kits/small-multiples-studies/evidence/delivery-ranks-landscape/video.mp4.json",
+          "duration": 78,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/small-multiples-studies/specimens/delivery-ranks-vertical/storyboard.json",
+          "video": "examples/library-kits/small-multiples-studies/evidence/delivery-ranks-vertical/video.mp4",
+          "poster": "examples/library-kits/small-multiples-studies/evidence/independent-review/delivery-ranks-vertical/encoded-00.100000.png",
+          "receipt": "examples/library-kits/small-multiples-studies/evidence/delivery-ranks-vertical/video.mp4.json",
+          "duration": 78,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Compare ranked histories on shared axes and expand a selected panel without changing its domains.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "rank",
+        "focus"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart"
+      ],
+      "movement": [
+        "dated-reveal",
+        "rank-snapshot-cut",
+        "uniform-expansion",
+        "reading-hold"
+      ],
+      "subjects": [
+        "delivery-duration",
+        "household-net-flow"
+      ],
+      "collections": [
+        "participation",
+        "investment"
+      ],
+      "sourceIds": [
+        "S01",
+        "S13",
+        "X05"
+      ],
+      "search": "which delivery path is shorter? compare ranked histories on shared axes and expand a selected panel without changing its domains. c18 compare rank focus paper native-chart dated-reveal rank-snapshot-cut uniform-expansion reading-hold delivery-duration household-net-flow s01 s13 x05 ranked small multiples several compact charts share scale and time; a selected panel expands without silently changing either. series common dates sort key domain selected panel operational dashboards product comparisons research"
+    },
+    {
+      "id": "small-multiples-studies/household-ranks",
+      "kind": "example",
+      "title": "Rank the monthly cash change",
+      "packageId": "small-multiples-studies",
+      "inventoryIds": [
+        "C18"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/small-multiples-studies/specimens/household-ranks-landscape/storyboard.json",
+          "video": "examples/library-kits/small-multiples-studies/evidence/household-ranks-landscape/video.mp4",
+          "poster": "examples/library-kits/small-multiples-studies/evidence/independent-review/household-ranks-landscape/encoded-00.100000.png",
+          "receipt": "examples/library-kits/small-multiples-studies/evidence/household-ranks-landscape/video.mp4.json",
+          "duration": 78,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/small-multiples-studies/specimens/household-ranks-vertical/storyboard.json",
+          "video": "examples/library-kits/small-multiples-studies/evidence/household-ranks-vertical/video.mp4",
+          "poster": "examples/library-kits/small-multiples-studies/evidence/independent-review/household-ranks-vertical/encoded-00.100000.png",
+          "receipt": "examples/library-kits/small-multiples-studies/evidence/household-ranks-vertical/video.mp4.json",
+          "duration": 78,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Compare ranked histories on shared axes and expand a selected panel without changing its domains.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "rank",
+        "focus"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart"
+      ],
+      "movement": [
+        "dated-reveal",
+        "rank-snapshot-cut",
+        "uniform-expansion",
+        "reading-hold"
+      ],
+      "subjects": [
+        "delivery-duration",
+        "household-net-flow"
+      ],
+      "collections": [
+        "participation",
+        "investment"
+      ],
+      "sourceIds": [
+        "S01",
+        "S13",
+        "X05"
+      ],
+      "search": "rank the monthly cash change compare ranked histories on shared axes and expand a selected panel without changing its domains. c18 compare rank focus paper native-chart dated-reveal rank-snapshot-cut uniform-expansion reading-hold delivery-duration household-net-flow s01 s13 x05 ranked small multiples several compact charts share scale and time; a selected panel expands without silently changing either. series common dates sort key domain selected panel operational dashboards product comparisons research"
+    },
+    {
       "id": "time-series-studies/budget-and-prices",
       "kind": "example",
       "title": "A falling price index changes the gap",
@@ -4936,8 +5135,8 @@
         "C18"
       ],
       "medium": "Chart",
-      "statusText": "proposed; not built",
-      "guardrail": "Shared scales by default; disclose independent scales and maintain stable identities during resorting.",
+      "statusText": "Native prototype: two fictional cases with ranked shared-axis panels and uniform focus expansion in landscape/vertical; sampled source and encoded review retained; continuous playback and promotion pending",
+      "guardrail": "All compact panels share the same plotting rectangle and domains. Selection enlarges uniformly without changing data or domains. Missing ranks stay unranked; same full history across ranking cuts is not a publication vintage. Independent scales and broader layouts remain unreviewed.",
       "parameters": [
         "series",
         "common dates",
@@ -4945,10 +5144,13 @@
         "domain",
         "selected panel"
       ],
-      "related": [],
+      "related": [
+        "small-multiples-studies/delivery-ranks",
+        "small-multiples-studies/household-ranks"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],

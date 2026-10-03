@@ -581,7 +581,7 @@
       "category": "Chart",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "proposed; not built",
+      "readiness": "Native prototype: two fictional cases with ranked shared-axis panels and uniform focus expansion in landscape/vertical; sampled source and encoded review retained; continuous playback and promotion pending",
       "effort": "M",
       "sourceIds": [
         "S01",
@@ -596,8 +596,8 @@
         "domain",
         "selected panel"
       ],
-      "existing": "native line, bars and canvas provide parts; small-multiple layout is new.",
-      "guardrail": "Shared scales by default; disclose independent scales and maintain stable identities during resorting.",
+      "existing": "fframes/multiple-data.mjs and small-multiples.mjs preserve common dates/domains, competition ties and missing ranks. small-multiples-studies retains four native compositions with independent calculation and encoded checks; see docs/small-multiples.md.",
+      "guardrail": "All compact panels share the same plotting rectangle and domains. Selection enlarges uniformly without changing data or domains. Missing ranks stay unranked; same full history across ranking cuts is not a publication vintage. Independent scales and broader layouts remain unreviewed.",
       "reuse": [
         "operational dashboards",
         "product comparisons",

@@ -1,0 +1,82 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/small-multiples-studies/specimens/household-ranks-landscape/build/pipeline/2026-10-03T09-31-47-757Z-beb71801/video.mp4",
+  "outputSha256": "12b76bf1281bb08dc60ed765baf7b1bb48757b10956e502a8c72bf231fd0560d",
+  "inputId": "3e912bd77e1e32b3f69b7566285546da9e81aefb71e61062386152c1d5ec115b",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "first-rank: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "first-rank: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 839,
+      "time": 27.966666666666665,
+      "reasons": [
+        "first-rank: last frame",
+        "Before last-rank"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 840,
+      "time": 28,
+      "reasons": [
+        "last-rank: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 846,
+      "time": 28.2,
+      "reasons": [
+        "last-rank: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1619,
+      "time": 53.96666666666667,
+      "reasons": [
+        "last-rank: last frame",
+        "Before focus"
+      ],
+      "image": "frame-0005.jpg"
+    },
+    {
+      "frame": 1620,
+      "time": 54,
+      "reasons": [
+        "focus: first frame"
+      ],
+      "image": "frame-0006.jpg"
+    },
+    {
+      "frame": 1626,
+      "time": 54.2,
+      "reasons": [
+        "focus: entrance"
+      ],
+      "image": "frame-0007.jpg"
+    },
+    {
+      "frame": 2339,
+      "time": 77.96666666666667,
+      "reasons": [
+        "focus: last frame"
+      ],
+      "image": "frame-0008.jpg"
+    }
+  ]
+}

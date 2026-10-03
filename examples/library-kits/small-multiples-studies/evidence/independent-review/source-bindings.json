@@ -1,0 +1,20 @@
+{
+  "fframes/multiple-data.mjs": "e8bb2f1e3bf20ae750b11f6cd4e804410cfcffc89836fb4fc865de29af826097",
+  "fframes/small-multiples.mjs": "ad8de9a9f22f9d6b0bf21cd1da4a2e90e1c1abb62894225ceb53f561a60f7ce2",
+  "fframes/plot-data.mjs": "16fd41d99d74d8af3c53126aeb4c55940f5a5a12654b2382caaed046e1d5f4d6",
+  "test/small-multiples.test.mjs": "a0f578f5f6f17e43bfbf28f9ee820f16a23c90564a9981c4e3edab721512637f",
+  "docs/small-multiples.md": "44c23e473ddbcd98165e565e82c85f30abf15b49b20596a94c60e3ad917e3fc1",
+  "examples/library-kits/small-multiples-studies/inputs.json": "fc735a5033010d6bb0887bbcd7afb44fd84e2a2a3adb862bd0d81555f5e2bc98",
+  "examples/library-kits/small-multiples-studies/build.mjs": "d9447837e5f677fc2b1c6ce57d57a5e803322b59fb025c72b34279ea9b9c6817",
+  "examples/library-kits/small-multiples-studies/verify.mjs": "b9e8b25e0194246fe4c743ecaf702b15025fc9806baf6f270ae0afc98d7fb59a",
+  "examples/library-kits/small-multiples-studies/audit.json": "ba01ce26fd7d947bc26785e3c977d374c91332595dcda7e87fd09676cb5dacc1",
+  "examples/library-kits/small-multiples-studies/DIRECTION.md": "ec7b42efe0bba395fa856f75ac921ebcd3844c5910e77c3ca4cc669dffc6fe84",
+  "examples/library-kits/small-multiples-studies/README.md": "bf5d5eef4b0b82af33e09f85d5cd8a7b5b408fa004b5d6256060df239fd7fd36",
+  "examples/library-kits/small-multiples-studies/check-encoded.py": "19dbca101e7c42a7568a1e667bad461afce8473873753c4ef4970c7e031c1eab",
+  "examples/library-kits/small-multiples-studies/build/verification.json": "bb1198128596bd4121a9ebc44ab33d3579caea05cd2e953c13d9e0d79dee8df7",
+  "examples/library-kits/small-multiples-studies/build/encoded-checks.json": "74041b7ec27a15d0882ea1828228e7584fc3f9a9b1cee7b88a54c78a680ec62a",
+  "examples/library-kits/small-multiples-studies/evidence/critique.json": "8e28295ee822b1eee23ed63ddf080f8a86d31ef8dbe24e86bfbbc425841895d5",
+  "examples/library-kits/small-multiples-studies/evidence/independent-review/contract-review.mjs": "9d98342c224e76c87b24d05454df5ef578ec693100c07d7bd69b5a68a3c14941",
+  "examples/library-kits/small-multiples-studies/evidence/independent-review/contract-review.json": "3e37255167aa2e82dd08a8a2493ec56c054059039e6a1310fa5879f209d8b3d6",
+  "examples/library-kits/small-multiples-studies/evidence/independent-review/artifact-checks.json": "0816a6f01147f4e2b9d42c124a1bf903637b6f6cf47dc7a8d683efe4ff4890ee"
+}

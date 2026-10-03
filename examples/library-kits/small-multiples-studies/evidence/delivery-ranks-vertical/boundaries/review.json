@@ -1,0 +1,82 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/small-multiples-studies/specimens/delivery-ranks-vertical/build/pipeline/2026-10-03T09-31-23-222Z-77954651/video.mp4",
+  "outputSha256": "f0a6c2f6e5296c1bda6165d920bf22afa3299d349fd50d73c18f453aaf5d557f",
+  "inputId": "bf981b05924b88b728e636321a5f9bc07dc88f36173d181866371065ef75e0fb",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "first-rank: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "first-rank: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 839,
+      "time": 27.966666666666665,
+      "reasons": [
+        "first-rank: last frame",
+        "Before last-rank"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 840,
+      "time": 28,
+      "reasons": [
+        "last-rank: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 846,
+      "time": 28.2,
+      "reasons": [
+        "last-rank: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1619,
+      "time": 53.96666666666667,
+      "reasons": [
+        "last-rank: last frame",
+        "Before focus"
+      ],
+      "image": "frame-0005.jpg"
+    },
+    {
+      "frame": 1620,
+      "time": 54,
+      "reasons": [
+        "focus: first frame"
+      ],
+      "image": "frame-0006.jpg"
+    },
+    {
+      "frame": 1626,
+      "time": 54.2,
+      "reasons": [
+        "focus: entrance"
+      ],
+      "image": "frame-0007.jpg"
+    },
+    {
+      "frame": 2339,
+      "time": 77.96666666666667,
+      "reasons": [
+        "focus: last frame"
+      ],
+      "image": "frame-0008.jpg"
+    }
+  ]
+}

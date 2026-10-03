@@ -1,0 +1,210 @@
+[
+  {
+    "name": "delivery-ranks-landscape",
+    "summary": {
+      "cinema": 56,
+      "beats": 3,
+      "seconds": 78,
+      "families": 1,
+      "drawn": 3,
+      "imaged": 0,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 7
+    },
+    "findings": [
+      {
+        "level": "idea",
+        "where": "first-rank",
+        "message": "Held 28.0 s with nothing moving. Add a loop, a drift or split it into two beats."
+      },
+      {
+        "level": "idea",
+        "where": "last-rank",
+        "message": "Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats."
+      },
+      {
+        "level": "idea",
+        "where": "film",
+        "message": "No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Card per line: only 0 of 2 cuts carry anything across. Make runs of drawings one world, morph a shape into the next scene (same id), or cut on a whip."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Build, then freeze: 2 of 3 scenes stop moving once they land. Give each hold some life: a loop, particles, a dolly or truck, a plate drift, or lens.handheld."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Locked, flat camera: no depth and no camera move anywhere. Use z layers with a dolly or focus pull, a world whose camera travels, or a camera move on a revelation."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Screen-flat image: no light, lens or texture. Choose a lens (grade, bloom, letterbox, leak), add grain and a vignette, and light the subject (glow, shine, spotlight)."
+      }
+    ]
+  },
+  {
+    "name": "delivery-ranks-vertical",
+    "summary": {
+      "cinema": 56,
+      "beats": 3,
+      "seconds": 78,
+      "families": 1,
+      "drawn": 3,
+      "imaged": 0,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 7
+    },
+    "findings": [
+      {
+        "level": "idea",
+        "where": "first-rank",
+        "message": "Held 28.0 s with nothing moving. Add a loop, a drift or split it into two beats."
+      },
+      {
+        "level": "idea",
+        "where": "last-rank",
+        "message": "Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats."
+      },
+      {
+        "level": "idea",
+        "where": "film",
+        "message": "No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Card per line: only 0 of 2 cuts carry anything across. Make runs of drawings one world, morph a shape into the next scene (same id), or cut on a whip."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Build, then freeze: 2 of 3 scenes stop moving once they land. Give each hold some life: a loop, particles, a dolly or truck, a plate drift, or lens.handheld."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Locked, flat camera: no depth and no camera move anywhere. Use z layers with a dolly or focus pull, a world whose camera travels, or a camera move on a revelation."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Screen-flat image: no light, lens or texture. Choose a lens (grade, bloom, letterbox, leak), add grain and a vignette, and light the subject (glow, shine, spotlight)."
+      }
+    ]
+  },
+  {
+    "name": "household-ranks-landscape",
+    "summary": {
+      "cinema": 56,
+      "beats": 3,
+      "seconds": 78,
+      "families": 1,
+      "drawn": 3,
+      "imaged": 0,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 7
+    },
+    "findings": [
+      {
+        "level": "idea",
+        "where": "first-rank",
+        "message": "Held 28.0 s with nothing moving. Add a loop, a drift or split it into two beats."
+      },
+      {
+        "level": "idea",
+        "where": "last-rank",
+        "message": "Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats."
+      },
+      {
+        "level": "idea",
+        "where": "film",
+        "message": "No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Card per line: only 0 of 2 cuts carry anything across. Make runs of drawings one world, morph a shape into the next scene (same id), or cut on a whip."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Build, then freeze: 2 of 3 scenes stop moving once they land. Give each hold some life: a loop, particles, a dolly or truck, a plate drift, or lens.handheld."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Locked, flat camera: no depth and no camera move anywhere. Use z layers with a dolly or focus pull, a world whose camera travels, or a camera move on a revelation."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Screen-flat image: no light, lens or texture. Choose a lens (grade, bloom, letterbox, leak), add grain and a vignette, and light the subject (glow, shine, spotlight)."
+      }
+    ]
+  },
+  {
+    "name": "household-ranks-vertical",
+    "summary": {
+      "cinema": 56,
+      "beats": 3,
+      "seconds": 78,
+      "families": 1,
+      "drawn": 3,
+      "imaged": 0,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 7
+    },
+    "findings": [
+      {
+        "level": "idea",
+        "where": "first-rank",
+        "message": "Held 28.0 s with nothing moving. Add a loop, a drift or split it into two beats."
+      },
+      {
+        "level": "idea",
+        "where": "last-rank",
+        "message": "Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats."
+      },
+      {
+        "level": "idea",
+        "where": "film",
+        "message": "No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Card per line: only 0 of 2 cuts carry anything across. Make runs of drawings one world, morph a shape into the next scene (same id), or cut on a whip."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Build, then freeze: 2 of 3 scenes stop moving once they land. Give each hold some life: a loop, particles, a dolly or truck, a plate drift, or lens.handheld."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Locked, flat camera: no depth and no camera move anywhere. Use z layers with a dolly or focus pull, a world whose camera travels, or a camera move on a revelation."
+      },
+      {
+        "level": "idea",
+        "where": "cinema",
+        "message": "Screen-flat image: no light, lens or texture. Choose a lens (grade, bloom, letterbox, leak), add grain and a vignette, and light the subject (glow, shine, spotlight)."
+      }
+    ]
+  }
+]

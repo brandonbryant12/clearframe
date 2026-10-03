@@ -1,0 +1,12 @@
+✔ competition ranks preserve equal values, missing endpoints and stable identities (3.1315ms)
+✔ unmatched grids, missing ranking dates and ambiguous input reject (1.367833ms)
+✔ panel positions preserve shared elapsed dates and domains during uniform expansion (1.926458ms)
+✔ rank labels retain fractions and qualify residual rounding and multiyear spans (0.425084ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52.977791

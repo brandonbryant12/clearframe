@@ -1,0 +1,90 @@
+[
+  {
+    "project": "delivery-ranks-landscape",
+    "videoSha256": "edcea28c7eef78c6a35ea7031acf53efc5cf3e84f9e209c9b53ef2d8a4a28dfd",
+    "storyboardSha256": "a3f691a130c5e40b580166e3c2797ca682bd71984cad70d0f4618399532d84ea",
+    "nativeJobSha256": "0d048ba846fa18486041500bd997e3e0f63a660c88095123e9d050ca242c740d",
+    "inputSha256": "fc735a5033010d6bb0887bbcd7afb44fd84e2a2a3adb862bd0d81555f5e2bc98",
+    "checkerSha256": "19dbca101e7c42a7568a1e667bad461afce8473873753c4ef4970c7e031c1eab",
+    "nativeMappingChecks": 646,
+    "sampledFrames": 181,
+    "pointChecks": 2773,
+    "frontChecks": 51,
+    "missingColumnChecks": 264,
+    "disappearanceChecks": 952,
+    "expansionPointChecks": 40,
+    "failures": 0,
+    "tolerances": {
+      "geometryPixels": 1e-07,
+      "markRadiusAt720": 3,
+      "missingColumnRadiusAt720": 1,
+      "fadedPointRadiusAt720": 2
+    }
+  },
+  {
+    "project": "delivery-ranks-vertical",
+    "videoSha256": "f0a6c2f6e5296c1bda6165d920bf22afa3299d349fd50d73c18f453aaf5d557f",
+    "storyboardSha256": "65cdef8a01739a2dc5d8d123251140c5f41a9d4b8583d4f7281d3bef93a124bb",
+    "nativeJobSha256": "8d0ac6b43b4304a645fa29130ffb8a73f0bf24b757ac4ac3cb73de35d22dd1c5",
+    "inputSha256": "fc735a5033010d6bb0887bbcd7afb44fd84e2a2a3adb862bd0d81555f5e2bc98",
+    "checkerSha256": "19dbca101e7c42a7568a1e667bad461afce8473873753c4ef4970c7e031c1eab",
+    "nativeMappingChecks": 646,
+    "sampledFrames": 181,
+    "pointChecks": 2773,
+    "frontChecks": 51,
+    "missingColumnChecks": 264,
+    "disappearanceChecks": 952,
+    "expansionPointChecks": 40,
+    "failures": 0,
+    "tolerances": {
+      "geometryPixels": 1e-07,
+      "markRadiusAt720": 3,
+      "missingColumnRadiusAt720": 1,
+      "fadedPointRadiusAt720": 2
+    }
+  },
+  {
+    "project": "household-ranks-landscape",
+    "videoSha256": "12b76bf1281bb08dc60ed765baf7b1bb48757b10956e502a8c72bf231fd0560d",
+    "storyboardSha256": "f09f95034a96de72998ee6b7b397ca6ef18a7c34802409a0be3fbe47f068cb5d",
+    "nativeJobSha256": "b7008c482ef2155c2f9a07d58d67f8e8f74e25923e4c21d73cc8697398ea133a",
+    "inputSha256": "fc735a5033010d6bb0887bbcd7afb44fd84e2a2a3adb862bd0d81555f5e2bc98",
+    "checkerSha256": "19dbca101e7c42a7568a1e667bad461afce8473873753c4ef4970c7e031c1eab",
+    "nativeMappingChecks": 640,
+    "sampledFrames": 181,
+    "pointChecks": 2940,
+    "frontChecks": 54,
+    "missingColumnChecks": 104,
+    "disappearanceChecks": 952,
+    "expansionPointChecks": 48,
+    "failures": 0,
+    "tolerances": {
+      "geometryPixels": 1e-07,
+      "markRadiusAt720": 3,
+      "missingColumnRadiusAt720": 1,
+      "fadedPointRadiusAt720": 2
+    }
+  },
+  {
+    "project": "household-ranks-vertical",
+    "videoSha256": "55048f72e1b5df8171940fcf3f1c33d8826e93e5c23b5b7e483702d273becc64",
+    "storyboardSha256": "69cc2b89b7371daac16b7a4d79d30a8559a872de1d13f5c7a0e6a1b5ea5013c8",
+    "nativeJobSha256": "4576e5427e1e07db07b85bb3f7796c6db192e037d1c21c9d982b9700df1dd0a3",
+    "inputSha256": "fc735a5033010d6bb0887bbcd7afb44fd84e2a2a3adb862bd0d81555f5e2bc98",
+    "checkerSha256": "19dbca101e7c42a7568a1e667bad461afce8473873753c4ef4970c7e031c1eab",
+    "nativeMappingChecks": 640,
+    "sampledFrames": 181,
+    "pointChecks": 2940,
+    "frontChecks": 54,
+    "missingColumnChecks": 104,
+    "disappearanceChecks": 952,
+    "expansionPointChecks": 48,
+    "failures": 0,
+    "tolerances": {
+      "geometryPixels": 1e-07,
+      "markRadiusAt720": 3,
+      "missingColumnRadiusAt720": 1,
+      "fadedPointRadiusAt720": 2
+    }
+  }
+]

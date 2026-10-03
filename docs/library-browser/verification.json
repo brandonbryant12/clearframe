@@ -3,21 +3,21 @@
   "status": "source-prototype",
   "browserReview": "pending-scoped-localhost-approval-after-file-url-policy-rejection",
   "catalog": {
-    "packages": 10,
-    "examples": 49,
-    "nativeVariants": 96,
+    "packages": 11,
+    "examples": 51,
+    "nativeVariants": 100,
     "preparedInserts": 1,
     "inventoryItems": 71,
-    "manifestFiles": 3041,
+    "manifestFiles": 3202,
     "issues": 0
   },
   "tests": {
-    "nodePassed": 188,
+    "nodePassed": 192,
     "nodeFailed": 0,
     "focusedPassed": 4,
     "independentPassed": 17,
     "cliSmokePassed": 2,
-    "cliSmokeProvenance": "Current library-log and library-variation CLI smoke checks rerun for the static-anchor milestone; retained exact outputs"
+    "cliSmokeProvenance": "Retained recording/report CLI smoke from static-anchor milestone; command and ledger source unchanged"
   },
   "limits": [
     "No browser, accessibility or visual acceptance claimed",
@@ -32,23 +32,23 @@
     },
     {
       "path": "docs/library-browser/README.md",
-      "bytes": 6072,
-      "sha256": "a3f509cbef062d7c6e0af3bdadf4fbde613f3c9896a492cd1af14e2f4ae5227d"
+      "bytes": 6109,
+      "sha256": "d6380e8170019e2e50d195de44b102ea6f20d1328a591da663a6f439f5a5c393"
     },
     {
       "path": "docs/library-browser/app.js",
-      "bytes": 229397,
-      "sha256": "466c2e3d22811d4e3449476048b2244d2a3ffdd16956682213825b6f82050134"
+      "bytes": 235508,
+      "sha256": "cd18a6420de5203132b2a9f79f29b42efe7ed18b30825a2fa3bd1396845fb4ae"
     },
     {
       "path": "docs/library-browser/catalog.json",
-      "bytes": 268759,
-      "sha256": "0c7d5d88a895ba5e064713bfd7953fe9ebc8f63479b98c2cdb4b060d42f049b4"
+      "bytes": 276717,
+      "sha256": "d78e72bdd5564c9abb0576f6c306837e6c9a510cbe6fdf56046fc756a7aa3f1b"
     },
     {
       "path": "docs/library-browser/evidence/catalog-build.json",
       "bytes": 193,
-      "sha256": "feda31b9f5e9513a2e7727206ba1aa0c7cee69e8e23209d2fa41ca86fd94d5d7"
+      "sha256": "8eecfdc7e87ccbf304989b893c72b6211952828dabf96ec7902b9cc09af3e098"
     },
     {
       "path": "docs/library-browser/evidence/cli-smoke.json",
@@ -57,28 +57,28 @@
     },
     {
       "path": "docs/library-browser/evidence/node-tests.txt",
-      "bytes": 19013,
-      "sha256": "cf24a0b65be36147ae356915fe616d064ddaa5a7427cf35eeefa08da2214beaa"
+      "bytes": 19413,
+      "sha256": "7b7f3e58c8db556195e36d58f19b7d205f83603ec7a08d745662863590e8f503"
     },
     {
       "path": "docs/library-browser/evidence/source-review-checks.json",
-      "bytes": 8045,
-      "sha256": "b3106fddf1fef9671a734a961ca5e6a35b7f77f2b2f536ea34a81ea75af9222d"
+      "bytes": 8183,
+      "sha256": "78746dbfbb96e2f114489ae733b4624560b14c6b5f040632229ad08ab2849a1d"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.json",
-      "bytes": 2105,
-      "sha256": "c7ce1fbfa58f03b48324ef1aa03ead693251a0853ae7defd4c95f73277b98450"
+      "bytes": 2106,
+      "sha256": "2d629a15f70212b7f56a43387017826f6149b55fd51551a997102fe42b4624d0"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.mjs",
       "bytes": 8284,
-      "sha256": "42cd5b4df3192381e32cd30ea2be7f9e82ec9d5dcfa14e745fc7b992c4e2ef6e"
+      "sha256": "af3a0c2708eab5d29ea36b2d8dba40d3a563e738a8bfef5f08ef94435e8ff703"
     },
     {
       "path": "docs/library-browser/evidence/source-review.md",
-      "bytes": 8851,
-      "sha256": "6e78e1e3b634e42a59647ca20560d4ce67024bd410582a3353693ed195ac14e9"
+      "bytes": 9062,
+      "sha256": "23e3c6f13f4ed859125900488e416e287de861ca3458c56f4da9ba88cb985f4c"
     },
     {
       "path": "docs/library-browser/example-ledger.json",
@@ -102,13 +102,13 @@
     },
     {
       "path": "docs/research/timmer-library/asset-links.json",
-      "bytes": 5794,
-      "sha256": "87afcf84830427a55adc482a69040bedc965ca36ff8f24571f865e338b4b1370"
+      "bytes": 5969,
+      "sha256": "bb90149d6d33696399c9ec2ead1b5a6d43866380d822823b0efe1ea36fa542c4"
     },
     {
       "path": "docs/research/timmer-library/inventory.json",
-      "bytes": 77609,
-      "sha256": "36d747dadb572d4c53582d062a74fe41afe467e94d23c195df6c3e0e79ecd921"
+      "bytes": 78154,
+      "sha256": "8af55d74b3206de8d239dc1bb02829e0de245cb51463902629fef74b5385700a"
     },
     {
       "path": "engine/cli.mjs",
@@ -151,5 +151,5 @@
       "sha256": "e8c9ba3af3819cb5905141860431962f81900383e0ef0858dd16384df51017bc"
     }
   ],
-  "sourceRefresh": "Expectations catalog expansion; source UI unchanged from 3e27484, 17 independent checks rerun"
+  "sourceRefresh": "Ranked small-multiples catalog expansion; browser UI, CLI and ledger source unchanged from 4616757; 17 independent checks rerun"
 }

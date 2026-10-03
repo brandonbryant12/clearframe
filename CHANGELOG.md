@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Ranked small multiples.** Shared native panels retain full dated histories and fixed domains while order changes on an explicit observation date. Ties share rank, missing values stay unranked, and a selected panel enlarges uniformly. Four native specimens retain independent rank and encoded geometry evidence. See `docs/small-multiples.md`; continuous playback and final master acceptance remain open.
+
 - **Static prepared-asset anchors.** A source-bound export verifies every frame of a declared static range, projects named local points and reserves geometry-clear copy rectangles. Centered contain/cover helpers keep native labels editable. Eight native specimens retain source, projection and encoded evidence. Visibility, occlusion and moving tracking remain open. See `docs/asset-anchors.md`.
 
 - **Expectations prototypes.** Publication-aware forecast vintages, correctly spaced maturity quotes and descriptive scenario bands now have twelve native examples. Cutoffs preserve revision chronology; nulls break curves and complete-ensemble bands. Auditable source calculations and sampled encoded review remain separate from continuous playback acceptance. Forward-rate models remain open. See `docs/expectations.md`.

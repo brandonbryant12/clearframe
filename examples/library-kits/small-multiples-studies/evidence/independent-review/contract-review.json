@@ -1,0 +1,14 @@
+{
+  "status": "pass",
+  "assertions": 76588,
+  "rankCases": 9344,
+  "rankAssertions": 74640,
+  "geometryAndGuardAssertions": 1938,
+  "labelAssertions": 10,
+  "scope": "Exhaustive 2–4-member ranking combinations over eight signed/extreme/null values, both directions; stable IDs; retained history/domains; missing values; common leap-year date positions; uniformly scaled selected groups at four frame sizes; invalid-grid and numeric guards; exact or explicitly approximate rank labels and year-span labels. No rendering or continuous playback.",
+  "sourceHashes": {
+    "multiple-data.mjs": "e8bb2f1e3bf20ae750b11f6cd4e804410cfcffc89836fb4fc865de29af826097",
+    "small-multiples.mjs": "ad8de9a9f22f9d6b0bf21cd1da4a2e90e1c1abb62894225ceb53f561a60f7ce2",
+    "plot-data.mjs": "16fd41d99d74d8af3c53126aeb4c55940f5a5a12654b2382caaed046e1d5f4d6"
+  }
+}

@@ -6,13 +6,13 @@
     "passed": 4
   },
   "catalog": {
-    "packages": 10,
-    "examples": 49,
+    "packages": 11,
+    "examples": 51,
     "inventory": 71,
-    "existingSafeLocalReferences": 387,
+    "existingSafeLocalReferences": 403,
     "unresolvedSourceIds": 0,
     "matchingBundledLedgerSourceHashes": 4,
-    "nativeVariants": 96,
+    "nativeVariants": 100,
     "sourceInsertVariants": 1
   },
   "findings": [
@@ -93,7 +93,7 @@
     "passed": 4
   },
   "independentRegressionChecks": 17,
-  "finalVariantDurationChecks": 96,
+  "finalVariantDurationChecks": 100,
   "sourceHashes": {
     "engine/lib/library-browser.mjs": "829c57ccdd96541f1056f785f99a613d3b5b329d35e4c084fb77784c13913d59",
     "engine/lib/library-browser-build.mjs": "707dfd6f2a685ecffaa22d05f056e8f2394385fe4ef0e48ddf4732815f07c591",
@@ -101,23 +101,23 @@
     "engine/ui/library-browser/app.js": "0981e68ee87f195a3fd097b17703be0d9030b020562df26d9511224ae0b76ea8",
     "engine/ui/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
     "engine/ui/library-browser/style.css": "7457ba692f1c35216a06d83ce288be95082f43306840aaaa6b0116d93b22a1cf",
-    "docs/research/timmer-library/asset-links.json": "87afcf84830427a55adc482a69040bedc965ca36ff8f24571f865e338b4b1370",
+    "docs/research/timmer-library/asset-links.json": "bb90149d6d33696399c9ec2ead1b5a6d43866380d822823b0efe1ea36fa542c4",
     "test/library-browser.test.mjs": "e8c9ba3af3819cb5905141860431962f81900383e0ef0858dd16384df51017bc"
   },
   "finalBundleHashes": {
     "docs/library-browser/example-ledger.mjs": "d9e1ac01a058494fd8e4edc4a0e876492617dab39c97ce7d5de01f2d1876e979",
     "docs/library-browser/example-ledger.json": "d057d406e30fb4c7911757c9f2cd2f8ffc2ef054f635f7e9c668b973af962631",
-    "docs/library-browser/app.js": "466c2e3d22811d4e3449476048b2244d2a3ffdd16956682213825b6f82050134",
-    "docs/library-browser/catalog.json": "0c7d5d88a895ba5e064713bfd7953fe9ebc8f63479b98c2cdb4b060d42f049b4",
+    "docs/library-browser/app.js": "cd18a6420de5203132b2a9f79f29b42efe7ed18b30825a2fa3bd1396845fb4ae",
+    "docs/library-browser/catalog.json": "d78e72bdd5564c9abb0576f6c306837e6c9a510cbe6fdf56046fc756a7aa3f1b",
     "docs/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
     "docs/library-browser/style.css": "0c80ce1cd03abf96b895f46f19501e07a64df40ab74b03fa7e917ea8393b24cd",
     "docs/library-browser/DIRECTION.md": "449b761ae2abf2c44427e8917862cd5885b081f371683e363ed5d42c8754e975",
-    "docs/research/timmer-library/inventory.json": "36d747dadb572d4c53582d062a74fe41afe467e94d23c195df6c3e0e79ecd921",
-    "docs/research/timmer-library/asset-links.json": "87afcf84830427a55adc482a69040bedc965ca36ff8f24571f865e338b4b1370",
-    "docs/library-browser/evidence/catalog-build.json": "feda31b9f5e9513a2e7727206ba1aa0c7cee69e8e23209d2fa41ca86fd94d5d7",
-    "docs/library-browser/evidence/node-tests.txt": "cf24a0b65be36147ae356915fe616d064ddaa5a7427cf35eeefa08da2214beaa",
-    "docs/library-browser/evidence/source-review-regressions.mjs": "42cd5b4df3192381e32cd30ea2be7f9e82ec9d5dcfa14e745fc7b992c4e2ef6e",
-    "docs/library-browser/evidence/source-review-regressions.json": "c7ce1fbfa58f03b48324ef1aa03ead693251a0853ae7defd4c95f73277b98450",
+    "docs/research/timmer-library/inventory.json": "8af55d74b3206de8d239dc1bb02829e0de245cb51463902629fef74b5385700a",
+    "docs/research/timmer-library/asset-links.json": "bb90149d6d33696399c9ec2ead1b5a6d43866380d822823b0efe1ea36fa542c4",
+    "docs/library-browser/evidence/catalog-build.json": "8eecfdc7e87ccbf304989b893c72b6211952828dabf96ec7902b9cc09af3e098",
+    "docs/library-browser/evidence/node-tests.txt": "7b7f3e58c8db556195e36d58f19b7d205f83603ec7a08d745662863590e8f503",
+    "docs/library-browser/evidence/source-review-regressions.mjs": "af3a0c2708eab5d29ea36b2d8dba40d3a563e738a8bfef5f08ef94435e8ff703",
+    "docs/library-browser/evidence/source-review-regressions.json": "2d629a15f70212b7f56a43387017826f6149b55fd51551a997102fe42b4624d0",
     "engine/cli.mjs": "fde77dad87970c3aee7c7fa8a4eabb8031cfdc643b7be4ce9725c4704c9183c2",
     "docs/library-browser/evidence/cli-smoke.json": "3a3f6d897cadda4c38609e0d6f2c9f21294377830ef531719d3ede9c4856a084"
   },
@@ -160,22 +160,23 @@
     "independentRegressionsPassed": 17,
     "recordAndFormatIdentitiesUnique": true,
     "expectationsCaseMappingsMatch": true,
-    "engineAndUiComparisonScope": "Tracked library-browser, library-browser-build, variation-ledger and engine/ui/library-browser files only; engine/cli.mjs changed and is separately reviewed/bound.",
+    "engineAndUiComparisonScope": "Tracked library-browser, library-browser-build, variation-ledger and engine/ui/library-browser files unchanged since prior review; separately bound engine/cli.mjs also unchanged at this small-multiples refresh.",
     "anchorCaseMappingsMatch": true,
-    "currentProducerLedgerCliSmokePass": true
+    "smallMultiplesCaseMappingsMatch": true,
+    "cliSourceUnchangedSinceRetainedSmoke": true,
+    "retainedProducerLedgerCliSmokePass": true
   },
   "producerFullSuite": {
-    "passed": 188,
-    "total": 188,
+    "passed": 192,
+    "total": 192,
     "skipped": 0,
     "failed": 0,
     "reviewerReran": false,
     "note": "Producer reports current gated full-suite pass; reviewer inspected retained node-tests.txt summary."
   },
-  "refreshedAt": "2026-10-03T09:10:52.047399+00:00",
+  "refreshedAt": "2026-10-03T09:43:44.337321+00:00",
   "sourceChangesSincePriorReview": [
-    "docs/research/timmer-library/asset-links.json",
-    "engine/cli.mjs (new anchor command; separately bound)"
+    "docs/research/timmer-library/asset-links.json"
   ],
   "producerLedgerCliSmoke": {
     "checkedAt": "2026-10-03T09:08:50.558Z",
@@ -186,6 +187,6 @@
     "passed": 2,
     "reviewerReran": false,
     "sourceStoryboardHashMatches": true,
-    "scope": "Producer current rerun; retained results inspected. CLI changes add anchor help, definition flag, and guarded asset-anchors dispatch; not an unchanged-full-CLI claim."
+    "scope": "Retained producer smoke from the static-anchor milestone at checkedAt; not rerun for the small-multiples refresh. Current CLI hash is unchanged from that reviewed milestone; retained source storyboard hash still matches."
   }
 }
