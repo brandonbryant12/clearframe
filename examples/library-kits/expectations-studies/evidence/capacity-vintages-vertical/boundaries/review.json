@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/expectations-studies/specimens/capacity-vintages-vertical/build/pipeline/2026-10-03T07-57-17-142Z-8e8cd157/video.mp4",
+  "outputSha256": "3ff26b8759cc47cd741254683aeeaced937acd337a5433708c58c164c6154ad1",
+  "inputId": "babff920760d82faf1dff471fa39b9fa06f02102804b3111ad6163a226ef8c1a",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "capacity-vintages-0: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "capacity-vintages-0: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 779,
+      "time": 25.966666666666665,
+      "reasons": [
+        "capacity-vintages-0: last frame",
+        "Before capacity-vintages-1"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 780,
+      "time": 26,
+      "reasons": [
+        "capacity-vintages-1: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 786,
+      "time": 26.2,
+      "reasons": [
+        "capacity-vintages-1: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1559,
+      "time": 51.96666666666667,
+      "reasons": [
+        "capacity-vintages-1: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

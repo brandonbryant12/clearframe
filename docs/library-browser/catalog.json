@@ -589,6 +589,85 @@
       }
     },
     {
+      "id": "expectations-studies",
+      "title": "Expectations studies",
+      "purpose": "Explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes.",
+      "status": "prototype",
+      "integrity": "verified",
+      "fileCount": 371,
+      "issues": [],
+      "inventoryIds": [
+        "C04",
+        "C06",
+        "C12",
+        "T02"
+      ],
+      "manifest": "examples/library-kits/expectations-studies/kit.json",
+      "preview": "examples/library-kits/expectations-studies/preview.html",
+      "readme": "examples/library-kits/expectations-studies/README.md",
+      "review": "examples/library-kits/expectations-studies/REVIEW.md",
+      "sources": "examples/library-kits/expectations-studies/SOURCES.md",
+      "tags": {
+        "purpose": [
+          "compare",
+          "qualify",
+          "summarize-scenarios"
+        ],
+        "appearance": [
+          "paper",
+          "blue",
+          "orange"
+        ],
+        "movement": [
+          "shared-clock-reveal",
+          "reading-hold"
+        ],
+        "format": [
+          "landscape",
+          "vertical"
+        ],
+        "subject": [
+          "capacity",
+          "delivery",
+          "maturity-quotes",
+          "planning-scenarios"
+        ]
+      },
+      "editable": {
+        "native": [
+          "values",
+          "dates",
+          "units",
+          "domains",
+          "labels",
+          "palette",
+          "timing"
+        ],
+        "fixedClip": [
+          "Retained MP4 pixels; regenerate and review after source edits"
+        ]
+      },
+      "requires": {
+        "replay": [
+          "ClearFrame native compositor",
+          "paper palette",
+          "bundled fonts"
+        ],
+        "preparation": [
+          "Node.js",
+          "FFmpeg",
+          "Python 3"
+        ]
+      },
+      "evidence": {
+        "summary": "evidence/summary.json",
+        "review": "REVIEW.md",
+        "encoded": "evidence/encoded-checks.json",
+        "implementation": "evidence/implementation.json",
+        "continuousPlayback": "unverified"
+      }
+    },
+    {
       "id": "participation-and-benchmarks",
       "title": "Participation and benchmarks",
       "purpose": "Separate membership counts from weights and benchmark differences from an independent circle-area measure.",
@@ -1850,6 +1929,382 @@
         "S14"
       ],
       "search": "keep the unexplained difference visible explain event alignment, two-factor product changes and opening-to-closing stock reconciliation with auditable native quantities. c16 compare decompose reconcile paper blue orange violet shared-clock-reveal quantity-preserving-fade reading-hold finance operations adoption s05 s13 s14 flow versus stock reconciliation separate opening stock, net flows and valuation changes; reunite them at the ending balance. opening inflows outflows revaluation period inventory headcount reservoirs subscriptions"
+    },
+    {
+      "id": "expectations-studies/capacity-vintages",
+      "kind": "example",
+      "title": "Keep each forecast in its own vintage",
+      "packageId": "expectations-studies",
+      "inventoryIds": [
+        "C04"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/expectations-studies/specimens/capacity-vintages-landscape/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/capacity-vintages-landscape/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/capacity-vintages-landscape/51.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/capacity-vintages-landscape/video.mp4.json",
+          "duration": 52,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/expectations-studies/specimens/capacity-vintages-vertical/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/capacity-vintages-vertical/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/capacity-vintages-vertical/51.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/capacity-vintages-vertical/video.mp4.json",
+          "duration": 52,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "qualify",
+        "summarize-scenarios"
+      ],
+      "appearance": [
+        "paper",
+        "blue",
+        "orange"
+      ],
+      "movement": [
+        "shared-clock-reveal",
+        "reading-hold"
+      ],
+      "subjects": [
+        "capacity",
+        "delivery",
+        "maturity-quotes",
+        "planning-scenarios"
+      ],
+      "collections": [
+        "drivers",
+        "time"
+      ],
+      "sourceIds": [
+        "S02",
+        "S07",
+        "S13"
+      ],
+      "search": "keep each forecast in its own vintage explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes. c04 compare qualify summarize-scenarios paper blue orange shared-clock-reveal reading-hold capacity delivery maturity-quotes planning-scenarios s02 s07 s13 earnings revision ribbons a family of forecast-vintage lines approaches a reporting date; observed results replace the forecast marker at publication. estimate vintage target quarter release date actual revision demand forecasting project budgets weather"
+    },
+    {
+      "id": "expectations-studies/delivery-vintages",
+      "kind": "example",
+      "title": "A missing estimate stays missing",
+      "packageId": "expectations-studies",
+      "inventoryIds": [
+        "C04"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/expectations-studies/specimens/delivery-vintages-landscape/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/delivery-vintages-landscape/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/delivery-vintages-landscape/51.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/delivery-vintages-landscape/video.mp4.json",
+          "duration": 52,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/expectations-studies/specimens/delivery-vintages-vertical/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/delivery-vintages-vertical/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/delivery-vintages-vertical/51.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/delivery-vintages-vertical/video.mp4.json",
+          "duration": 52,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "qualify",
+        "summarize-scenarios"
+      ],
+      "appearance": [
+        "paper",
+        "blue",
+        "orange"
+      ],
+      "movement": [
+        "shared-clock-reveal",
+        "reading-hold"
+      ],
+      "subjects": [
+        "capacity",
+        "delivery",
+        "maturity-quotes",
+        "planning-scenarios"
+      ],
+      "collections": [
+        "drivers",
+        "time"
+      ],
+      "sourceIds": [
+        "S02",
+        "S07",
+        "S13"
+      ],
+      "search": "a missing estimate stays missing explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes. c04 compare qualify summarize-scenarios paper blue orange shared-clock-reveal reading-hold capacity delivery maturity-quotes planning-scenarios s02 s07 s13 earnings revision ribbons a family of forecast-vintage lines approaches a reporting date; observed results replace the forecast marker at publication. estimate vintage target quarter release date actual revision demand forecasting project budgets weather"
+    },
+    {
+      "id": "expectations-studies/maturity-gap",
+      "kind": "example",
+      "title": "Missing quotes do not fill themselves",
+      "packageId": "expectations-studies",
+      "inventoryIds": [
+        "C06"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/expectations-studies/specimens/maturity-gap-landscape/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/maturity-gap-landscape/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/maturity-gap-landscape/45.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/maturity-gap-landscape/video.mp4.json",
+          "duration": 46,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/expectations-studies/specimens/maturity-gap-vertical/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/maturity-gap-vertical/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/maturity-gap-vertical/45.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/maturity-gap-vertical/video.mp4.json",
+          "duration": 46,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "qualify",
+        "summarize-scenarios"
+      ],
+      "appearance": [
+        "paper",
+        "blue",
+        "orange"
+      ],
+      "movement": [
+        "shared-clock-reveal",
+        "reading-hold"
+      ],
+      "subjects": [
+        "capacity",
+        "delivery",
+        "maturity-quotes",
+        "planning-scenarios"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S05",
+        "S08",
+        "S11",
+        "S19"
+      ],
+      "search": "missing quotes do not fill themselves explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes. c06 compare qualify summarize-scenarios paper blue orange shared-clock-reveal reading-hold capacity delivery maturity-quotes planning-scenarios s05 s08 s11 s19 yield and forward-curve strip a flat maturity curve changes between dated observations; pin short and long ends while the middle bends. maturities values as-of spot/forward curve type delivery lead times term pricing capacity planning"
+    },
+    {
+      "id": "expectations-studies/maturity-slope",
+      "kind": "example",
+      "title": "A maturity curve is a dated snapshot",
+      "packageId": "expectations-studies",
+      "inventoryIds": [
+        "C06"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/expectations-studies/specimens/maturity-slope-landscape/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/maturity-slope-landscape/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/maturity-slope-landscape/45.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/maturity-slope-landscape/video.mp4.json",
+          "duration": 46,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/expectations-studies/specimens/maturity-slope-vertical/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/maturity-slope-vertical/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/maturity-slope-vertical/45.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/maturity-slope-vertical/video.mp4.json",
+          "duration": 46,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "qualify",
+        "summarize-scenarios"
+      ],
+      "appearance": [
+        "paper",
+        "blue",
+        "orange"
+      ],
+      "movement": [
+        "shared-clock-reveal",
+        "reading-hold"
+      ],
+      "subjects": [
+        "capacity",
+        "delivery",
+        "maturity-quotes",
+        "planning-scenarios"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S05",
+        "S08",
+        "S11",
+        "S19"
+      ],
+      "search": "a maturity curve is a dated snapshot explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes. c06 compare qualify summarize-scenarios paper blue orange shared-clock-reveal reading-hold capacity delivery maturity-quotes planning-scenarios s05 s08 s11 s19 yield and forward-curve strip a flat maturity curve changes between dated observations; pin short and long ends while the middle bends. maturities values as-of spot/forward curve type delivery lead times term pricing capacity planning"
+    },
+    {
+      "id": "expectations-studies/scenario-quantiles",
+      "kind": "example",
+      "title": "An incomplete ensemble leaves a gap",
+      "packageId": "expectations-studies",
+      "inventoryIds": [
+        "C12"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/expectations-studies/specimens/scenario-quantiles-landscape/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/scenario-quantiles-landscape/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/scenario-quantiles-landscape/45.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/scenario-quantiles-landscape/video.mp4.json",
+          "duration": 46,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/expectations-studies/specimens/scenario-quantiles-vertical/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/scenario-quantiles-vertical/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/scenario-quantiles-vertical/45.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/scenario-quantiles-vertical/video.mp4.json",
+          "duration": 46,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "qualify",
+        "summarize-scenarios"
+      ],
+      "appearance": [
+        "paper",
+        "blue",
+        "orange"
+      ],
+      "movement": [
+        "shared-clock-reveal",
+        "reading-hold"
+      ],
+      "subjects": [
+        "capacity",
+        "delivery",
+        "maturity-quotes",
+        "planning-scenarios"
+      ],
+      "collections": [
+        "time"
+      ],
+      "sourceIds": [
+        "S02",
+        "S10"
+      ],
+      "search": "an incomplete ensemble leaves a gap explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes. c12 compare qualify summarize-scenarios paper blue orange shared-clock-reveal reading-hold capacity delivery maturity-quotes planning-scenarios s02 s10 scenario fan and interval band observed history stops at a divider; clearly named alternative paths or computed intervals open beyond it. observed cutoff scenarios interval type method assumptions planning forecasting climate"
+    },
+    {
+      "id": "expectations-studies/scenario-range",
+      "kind": "example",
+      "title": "Three paths do not establish probabilities",
+      "packageId": "expectations-studies",
+      "inventoryIds": [
+        "C12"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/expectations-studies/specimens/scenario-range-landscape/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/scenario-range-landscape/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/scenario-range-landscape/45.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/scenario-range-landscape/video.mp4.json",
+          "duration": 46,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/expectations-studies/specimens/scenario-range-vertical/storyboard.json",
+          "video": "examples/library-kits/expectations-studies/evidence/scenario-range-vertical/video.mp4",
+          "poster": "examples/library-kits/expectations-studies/evidence/independent-review/scenario-range-vertical/45.9s.png",
+          "receipt": "examples/library-kits/expectations-studies/evidence/scenario-range-vertical/video.mp4.json",
+          "duration": 46,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "qualify",
+        "summarize-scenarios"
+      ],
+      "appearance": [
+        "paper",
+        "blue",
+        "orange"
+      ],
+      "movement": [
+        "shared-clock-reveal",
+        "reading-hold"
+      ],
+      "subjects": [
+        "capacity",
+        "delivery",
+        "maturity-quotes",
+        "planning-scenarios"
+      ],
+      "collections": [
+        "time"
+      ],
+      "sourceIds": [
+        "S02",
+        "S10"
+      ],
+      "search": "three paths do not establish probabilities explain publication-aware forecast vintages, dated maturity quotes and descriptive scenario envelopes. c12 compare qualify summarize-scenarios paper blue orange shared-clock-reveal reading-hold capacity delivery maturity-quotes planning-scenarios s02 s10 scenario fan and interval band observed history stops at a divider; clearly named alternative paths or computed intervals open beyond it. observed cutoff scenarios interval type method assumptions planning forecasting climate"
     },
     {
       "id": "participation-and-benchmarks/narrow-leadership",
@@ -3624,7 +4079,7 @@
         "C04"
       ],
       "medium": "Chart",
-      "statusText": "proposed; not built",
+      "statusText": "Native prototype: publication-aware vintages and actual revisions in two fictional cases with landscape/vertical source and sampled encoded review; continuous playback and promotion pending",
       "guardrail": "Forecasts retain their as-of dates. Do not use later revisions in an earlier view.",
       "parameters": [
         "estimate vintage",
@@ -3633,10 +4088,13 @@
         "actual",
         "revision"
       ],
-      "related": [],
+      "related": [
+        "expectations-studies/capacity-vintages",
+        "expectations-studies/delivery-vintages"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],
@@ -3703,7 +4161,7 @@
         "C06"
       ],
       "medium": "Chart",
-      "statusText": "proposed; not built",
+      "statusText": "Partial native prototype: dated supplied maturity quotes, nonuniform tenor spacing and null gaps in both formats; curve fitting, implied forward derivation and continuous playback remain open",
       "guardrail": "Term structures are not a future time-series forecast. Preserve nonuniform maturity spacing.",
       "parameters": [
         "maturities",
@@ -3712,10 +4170,13 @@
         "spot/forward",
         "curve type"
       ],
-      "related": [],
+      "related": [
+        "expectations-studies/maturity-gap",
+        "expectations-studies/maturity-slope"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],
@@ -3932,7 +4393,7 @@
         "C12"
       ],
       "medium": "Chart",
-      "statusText": "proposed; not built",
+      "statusText": "Native prototype: supplied min/max and empirical type-7 scenario bands with observed origin, equal weights and complete-ensemble gaps in both formats; probability models and continuous playback remain open",
       "guardrail": "A decorative fan is not a probability distribution. Use equal path weights unless supported probabilities are supplied.",
       "parameters": [
         "observed cutoff",
@@ -3941,10 +4402,13 @@
         "method",
         "assumptions"
       ],
-      "related": [],
+      "related": [
+        "expectations-studies/scenario-quantiles",
+        "expectations-studies/scenario-range"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],
@@ -5543,7 +6007,7 @@
         "T02"
       ],
       "medium": "Tool",
-      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown; vintage alignment and broader risk-adjusted metrics remain planned",
+      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization and descriptive scenario quantiles; forward models and broader risk-adjusted metrics remain planned",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "parameters": [
         "input hash",

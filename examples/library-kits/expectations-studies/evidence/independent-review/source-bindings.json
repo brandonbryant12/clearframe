@@ -1,0 +1,13 @@
+{
+  "inputs.json": "f8333660e6c9fb33c3ec1b734eb01a0e099ab0a6269fcdb93be8875419136dc3",
+  "audit.json": "f9ed3fe7eb5f07f44788210bb8024705f36a9227fac1b058669b758308657451",
+  "build.mjs": "d4a5b3f27441c244bf050f250d25826d18a41508ca1f2d5d5ccf33905d25b1e4",
+  "source/scene.mjs": "4121d6e568527a28952e9b2814b3c97a96931a4406afe6b22930a808e6d2170b",
+  "check-encoded.py": "189c1af2afc18078fcfa36ca9b9d9070b55543f240df1268e734c952006566cf",
+  "DIRECTION.md": "6d6bcff8c64d3f5d7c743945bec7d468d946f1fd1415b95e8dfdd5bca2891481",
+  "SOURCES.md": "6d9fbd28d3986ea0b1b2fa89f4ce324d70257ad731fa1a392bcfcacab0148706",
+  "build/verification.json": "8f6b5ae4b3981384fe3cf45fbd14844d13a3b3d083c6d3fb7688ee626e805428",
+  "evidence/critique.txt": "886e7b844f303e6d51c28423c10b9304e6e82bfe83dbb5e0d5401befc5dd7b26",
+  "engine/lib/expectations.mjs": "d36b7e44778d563a01e47d3b4eb2c8dd2517e6961e59ad98066f3b23b520e2b4",
+  "build/encoded-checks.json": "7c6e90de5a3901c1936df9e15107bf16e81c890a4e3570478c042134a3675fa8"
+}

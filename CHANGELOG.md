@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Expectations prototypes.** Publication-aware forecast vintages, correctly spaced maturity quotes and descriptive scenario bands now have twelve native examples. Cutoffs preserve revision chronology; nulls break curves and complete-ensemble bands. Auditable source calculations and sampled encoded review remain separate from continuous playback acceptance. Forward-rate models remain open. See `docs/expectations.md`.
+
 - **Library discovery and declared choices.** An offline browser indexes retained examples, explicit inventory mappings, editable sources and review evidence. Package lifecycle stays separate from manifest integrity. A source-bound ledger records mechanism, material, camera and story choices and reports repeated declared concepts without treating a new palette as novelty. Interactive desktop/phone browser review remains pending. See `docs/library-browser/README.md`.
 
 - **Dated series prototypes.** Matched-price deflation, period-aware growth and annualization, complete-window sample statistics and observed drawdown/recovery feed twelve native examples. Shared dates, distinct units, missing-value gaps and explicit native source elements keep comparisons auditable. See `docs/time-series.md`; risk-adjusted metrics, vintage alignment, continuous playback and final master acceptance remain open.

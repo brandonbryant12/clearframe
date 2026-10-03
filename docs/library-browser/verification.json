@@ -3,20 +3,21 @@
   "status": "source-prototype",
   "browserReview": "pending-scoped-localhost-approval-after-file-url-policy-rejection",
   "catalog": {
-    "packages": 8,
-    "examples": 39,
-    "nativeVariants": 76,
+    "packages": 9,
+    "examples": 45,
+    "nativeVariants": 88,
     "preparedInserts": 1,
     "inventoryItems": 71,
-    "manifestFiles": 2384,
+    "manifestFiles": 2755,
     "issues": 0
   },
   "tests": {
-    "nodePassed": 182,
+    "nodePassed": 185,
     "nodeFailed": 0,
     "focusedPassed": 4,
     "independentPassed": 17,
-    "cliSmokePassed": 2
+    "cliSmokePassed": 2,
+    "cliSmokeProvenance": "Retained milestone 6a checks; unchanged CLI source, not rerun for this catalog-only refresh"
   },
   "limits": [
     "No browser, accessibility or visual acceptance claimed",
@@ -31,23 +32,23 @@
     },
     {
       "path": "docs/library-browser/README.md",
-      "bytes": 6155,
-      "sha256": "84e688b2527b035244c57f3c5934e46b88413ccc50d853ec990d6ebd47781782"
+      "bytes": 6063,
+      "sha256": "bebe1225db5ec98fbabd3b68dd75802ceace0f57229043594f5b9ffeef3203cf"
     },
     {
       "path": "docs/library-browser/app.js",
-      "bytes": 204332,
-      "sha256": "bbedf974a4cf8c54169ced302a6dd8aa16048efbd26ba8374c6a04663e275c7c"
+      "bytes": 219651,
+      "sha256": "9fdc5dc0eb4d3cd120827f59e69a6bb08eb9272ba51e19b428cc9bbae6fea834"
     },
     {
       "path": "docs/library-browser/catalog.json",
-      "bytes": 236530,
-      "sha256": "84c393e522efe8e4f4e5f1f7a37e6dc9169d00e6148b41e1b3978af7b85144f6"
+      "bytes": 256058,
+      "sha256": "0aa842e03feea7e1ea4f17c47ff24c7271b80c7cc192dc5274df70f2adb41c1d"
     },
     {
       "path": "docs/library-browser/evidence/catalog-build.json",
       "bytes": 192,
-      "sha256": "679351af2c480321807a4e151707974afd41410192015ee598bbeb3a40f29065"
+      "sha256": "e84277a6f84f1b68e618bed60bb5c2bc8dabb5dc57bad68fe18c81bd3afbee19"
     },
     {
       "path": "docs/library-browser/evidence/cli-smoke.json",
@@ -56,28 +57,28 @@
     },
     {
       "path": "docs/library-browser/evidence/node-tests.txt",
-      "bytes": 18387,
-      "sha256": "e8ebcebb5f6138bb0cb4ab26e8ad4a16d0e5015b934fe713761efe3dd56ece70"
+      "bytes": 18694,
+      "sha256": "4e73a1bfff0c92d180626c3e979ecaf785c73d24ca33b618c1992bc7df7a745d"
     },
     {
       "path": "docs/library-browser/evidence/source-review-checks.json",
-      "bytes": 6109,
-      "sha256": "2d4b7ea8b42a3b53a5dc9c377cf1ab06769872773f319795dfb3dc40a10c95a9"
+      "bytes": 7105,
+      "sha256": "7ff4c9bd0fbae499fc4180e7e1c77b81e4c3e20d1273fee1f4d09980c6a2514e"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.json",
       "bytes": 2104,
-      "sha256": "ecb31d8769acd536334a4840f37d3770c8e78c6bb9ee375b79ebc4ee6f7a39d3"
+      "sha256": "37c4eb508830bfafeffb40f622a538727db3b41e2e0641e9b8921ca86af30f87"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.mjs",
       "bytes": 8282,
-      "sha256": "2d748d17e687589bbbd78041f495f55f33f88aee0c6bc8efa166216616aa83aa"
+      "sha256": "65addf40b1fbde5a1aaa37ea36f58020cae6efa4ccc60297a4b32794a0d38d53"
     },
     {
       "path": "docs/library-browser/evidence/source-review.md",
-      "bytes": 7722,
-      "sha256": "446ede72cff71a73e7c8612b67be3653a2daa4608f8291a1c358f221e42c6a16"
+      "bytes": 8188,
+      "sha256": "af7ea4a490a44140bff990a865bc6f60c09d13010038dd33d8554194843983e5"
     },
     {
       "path": "docs/library-browser/example-ledger.json",
@@ -101,13 +102,13 @@
     },
     {
       "path": "docs/research/timmer-library/asset-links.json",
-      "bytes": 5121,
-      "sha256": "f7d7d006b0a28d6da08fe22bb1cac0fb3deebfc41abd9dc5c4beea7a2911e918"
+      "bytes": 5520,
+      "sha256": "4e8915df820ede845fd7df904d25081a0d757ddca5f9ae98e3cad0bad7c2d81e"
     },
     {
       "path": "docs/research/timmer-library/inventory.json",
-      "bytes": 76001,
-      "sha256": "8e564c27aa26f0f68d58c1c8f6d463ee3791f5d15df4e9dd34dbe43396af5d8a"
+      "bytes": 77232,
+      "sha256": "fe6df5b29f78b8b15418fd79784d98c645107fcd5c9390cc47f64c8dd66fe3e6"
     },
     {
       "path": "engine/cli.mjs",
@@ -146,8 +147,9 @@
     },
     {
       "path": "test/library-browser.test.mjs",
-      "bytes": 5180,
-      "sha256": "b0848547a33d801801d39c3e90b2d9ebc75e8ac1d5c6704ed2dd14329cf736a6"
+      "bytes": 5170,
+      "sha256": "e8c9ba3af3819cb5905141860431962f81900383e0ef0858dd16384df51017bc"
     }
-  ]
+  ],
+  "sourceRefresh": "Expectations catalog expansion; source UI unchanged from 3e27484, 17 independent checks rerun"
 }

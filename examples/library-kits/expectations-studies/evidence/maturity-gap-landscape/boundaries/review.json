@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/expectations-studies/specimens/maturity-gap-landscape/build/pipeline/2026-10-03T08-06-23-421Z-a896224a/video.mp4",
+  "outputSha256": "036e8b950c60151fd1d5beb03fa702aaeae460c564587097805ad92cc9df6aaf",
+  "inputId": "3cc2dc3dd7133e0de06cddc5cf01cfe7debc9de20554908005245725c7292d1b",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "maturity-gap-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "maturity-gap-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "maturity-gap-basis: last frame",
+        "Before maturity-gap"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "maturity-gap: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "maturity-gap: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1379,
+      "time": 45.96666666666667,
+      "reasons": [
+        "maturity-gap: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

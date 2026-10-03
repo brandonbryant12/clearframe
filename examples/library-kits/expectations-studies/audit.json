@@ -1,0 +1,5234 @@
+{
+  "modelVersion": 1,
+  "inputSha256": "f8333660e6c9fb33c3ec1b734eb01a0e099ab0a6269fcdb93be8875419136dc3",
+  "results": [
+    {
+      "project": "capacity-vintages-landscape",
+      "recipe": "C04",
+      "caseId": "capacity-vintages",
+      "preset": "landscape",
+      "result": [
+        {
+          "modelVersion": 1,
+          "asOf": "2024-05-01",
+          "method": "latest-available-release-per-observation",
+          "vintages": [
+            {
+              "id": "January forecast",
+              "issuedAt": "2024-01-10",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 110
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 120
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 130
+                }
+              ]
+            },
+            {
+              "id": "March forecast",
+              "issuedAt": "2024-03-01",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 105
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 112
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 125
+                }
+              ]
+            }
+          ],
+          "actuals": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 98,
+              "releasedAt": "2024-04-15",
+              "state": "released",
+              "revisionCount": 1
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            }
+          ]
+        },
+        {
+          "modelVersion": 1,
+          "asOf": "2024-08-01",
+          "method": "latest-available-release-per-observation",
+          "vintages": [
+            {
+              "id": "January forecast",
+              "issuedAt": "2024-01-10",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 110
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 120
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 130
+                }
+              ]
+            },
+            {
+              "id": "March forecast",
+              "issuedAt": "2024-03-01",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 105
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 112
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 125
+                }
+              ]
+            }
+          ],
+          "actuals": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 101,
+              "releasedAt": "2024-06-20",
+              "state": "released",
+              "revisionCount": 2
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": 108,
+              "releasedAt": "2024-07-15",
+              "state": "released",
+              "revisionCount": 1
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            }
+          ]
+        }
+      ],
+      "scenes": [
+        {
+          "beat": "capacity-vintages-0",
+          "geometry": [
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 110,
+              "point": [
+                316.79999999999995,
+                523.8
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 120,
+              "point": [
+                1037.6393442622953,
+                486
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 130,
+              "point": [
+                1766.4,
+                448.19999999999993
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 105,
+              "point": [
+                316.79999999999995,
+                542.6999999999999
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 112,
+              "point": [
+                1037.6393442622953,
+                516.24
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 125,
+              "point": [
+                1766.4,
+                467.09999999999997
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 98,
+              "point": [
+                316.79999999999995,
+                569.16
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": null,
+              "point": null,
+              "at": 2.589071038251366
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": null,
+              "point": null,
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": false,
+            "margin": 105.6,
+            "type": 57.599999999999994,
+            "left": 316.79999999999995,
+            "right": 1766.4,
+            "top": 410.4,
+            "bottom": 637.1999999999999
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Forecast target / observed quarter end · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-03-31",
+                "2024-09-30"
+              ],
+              "ticks": [
+                "2024-03-31",
+                "2024-06-30",
+                "2024-09-30"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Quarter-end output · units",
+              "domain": [
+                80,
+                140
+              ],
+              "ticks": [
+                80,
+                100,
+                120,
+                140
+              ],
+              "decimals": 0
+            }
+          }
+        },
+        {
+          "beat": "capacity-vintages-1",
+          "geometry": [
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 110,
+              "point": [
+                316.79999999999995,
+                523.8
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 120,
+              "point": [
+                1037.6393442622953,
+                486
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 130,
+              "point": [
+                1766.4,
+                448.19999999999993
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 105,
+              "point": [
+                316.79999999999995,
+                542.6999999999999
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 112,
+              "point": [
+                1037.6393442622953,
+                516.24
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 125,
+              "point": [
+                1766.4,
+                467.09999999999997
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 101,
+              "point": [
+                316.79999999999995,
+                557.8199999999999
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 108,
+              "point": [
+                1037.6393442622953,
+                531.3599999999999
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": null,
+              "point": null,
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": false,
+            "margin": 105.6,
+            "type": 57.599999999999994,
+            "left": 316.79999999999995,
+            "right": 1766.4,
+            "top": 410.4,
+            "bottom": 637.1999999999999
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Forecast target / observed quarter end · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-03-31",
+                "2024-09-30"
+              ],
+              "ticks": [
+                "2024-03-31",
+                "2024-06-30",
+                "2024-09-30"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Quarter-end output · units",
+              "domain": [
+                80,
+                140
+              ],
+              "ticks": [
+                80,
+                100,
+                120,
+                140
+              ],
+              "decimals": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "capacity-vintages-vertical",
+      "recipe": "C04",
+      "caseId": "capacity-vintages",
+      "preset": "vertical",
+      "result": [
+        {
+          "modelVersion": 1,
+          "asOf": "2024-05-01",
+          "method": "latest-available-release-per-observation",
+          "vintages": [
+            {
+              "id": "January forecast",
+              "issuedAt": "2024-01-10",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 110
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 120
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 130
+                }
+              ]
+            },
+            {
+              "id": "March forecast",
+              "issuedAt": "2024-03-01",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 105
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 112
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 125
+                }
+              ]
+            }
+          ],
+          "actuals": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 98,
+              "releasedAt": "2024-04-15",
+              "state": "released",
+              "revisionCount": 1
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            }
+          ]
+        },
+        {
+          "modelVersion": 1,
+          "asOf": "2024-08-01",
+          "method": "latest-available-release-per-observation",
+          "vintages": [
+            {
+              "id": "January forecast",
+              "issuedAt": "2024-01-10",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 110
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 120
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 130
+                }
+              ]
+            },
+            {
+              "id": "March forecast",
+              "issuedAt": "2024-03-01",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 105
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 112
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 125
+                }
+              ]
+            }
+          ],
+          "actuals": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 101,
+              "releasedAt": "2024-06-20",
+              "state": "released",
+              "revisionCount": 2
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": 108,
+              "releasedAt": "2024-07-15",
+              "state": "released",
+              "revisionCount": 1
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            }
+          ]
+        }
+      ],
+      "scenes": [
+        {
+          "beat": "capacity-vintages-0",
+          "geometry": [
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 110,
+              "point": [
+                232.2,
+                1065.6
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 120,
+              "point": [
+                583.9672131147541,
+                972.8
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 130,
+              "point": [
+                939.6000000000001,
+                880
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 105,
+              "point": [
+                232.2,
+                1112
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 112,
+              "point": [
+                583.9672131147541,
+                1047.04
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 125,
+              "point": [
+                939.6000000000001,
+                926.4
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 98,
+              "point": [
+                232.2,
+                1176.96
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": null,
+              "point": null,
+              "at": 2.589071038251366
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": null,
+              "point": null,
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": true,
+            "margin": 113.39999999999999,
+            "type": 32.4,
+            "left": 232.2,
+            "right": 939.6,
+            "top": 787.1999999999999,
+            "bottom": 1344
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Forecast target / observed quarter end · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-03-31",
+                "2024-09-30"
+              ],
+              "ticks": [
+                "2024-03-31",
+                "2024-06-30",
+                "2024-09-30"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Quarter-end output · units",
+              "domain": [
+                80,
+                140
+              ],
+              "ticks": [
+                80,
+                100,
+                120,
+                140
+              ],
+              "decimals": 0
+            }
+          }
+        },
+        {
+          "beat": "capacity-vintages-1",
+          "geometry": [
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 110,
+              "point": [
+                232.2,
+                1065.6
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 120,
+              "point": [
+                583.9672131147541,
+                972.8
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 130,
+              "point": [
+                939.6000000000001,
+                880
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 105,
+              "point": [
+                232.2,
+                1112
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 112,
+              "point": [
+                583.9672131147541,
+                1047.04
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 125,
+              "point": [
+                939.6000000000001,
+                926.4
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 101,
+              "point": [
+                232.2,
+                1149.12
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 108,
+              "point": [
+                583.9672131147541,
+                1084.1599999999999
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": null,
+              "point": null,
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": true,
+            "margin": 113.39999999999999,
+            "type": 32.4,
+            "left": 232.2,
+            "right": 939.6,
+            "top": 787.1999999999999,
+            "bottom": 1344
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Forecast target / observed quarter end · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-03-31",
+                "2024-09-30"
+              ],
+              "ticks": [
+                "2024-03-31",
+                "2024-06-30",
+                "2024-09-30"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Quarter-end output · units",
+              "domain": [
+                80,
+                140
+              ],
+              "ticks": [
+                80,
+                100,
+                120,
+                140
+              ],
+              "decimals": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "delivery-vintages-landscape",
+      "recipe": "C04",
+      "caseId": "delivery-vintages",
+      "preset": "landscape",
+      "result": [
+        {
+          "modelVersion": 1,
+          "asOf": "2024-05-01",
+          "method": "latest-available-release-per-observation",
+          "vintages": [
+            {
+              "id": "January forecast",
+              "issuedAt": "2024-01-10",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 120
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": null
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 150
+                }
+              ]
+            },
+            {
+              "id": "March forecast",
+              "issuedAt": "2024-03-01",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 115
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 125
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 135
+                }
+              ]
+            }
+          ],
+          "actuals": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 112,
+              "releasedAt": "2024-04-15",
+              "state": "released",
+              "revisionCount": 1
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            }
+          ]
+        },
+        {
+          "modelVersion": 1,
+          "asOf": "2024-08-01",
+          "method": "latest-available-release-per-observation",
+          "vintages": [
+            {
+              "id": "January forecast",
+              "issuedAt": "2024-01-10",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 120
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": null
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 150
+                }
+              ]
+            },
+            {
+              "id": "March forecast",
+              "issuedAt": "2024-03-01",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 115
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 125
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 135
+                }
+              ]
+            }
+          ],
+          "actuals": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 109,
+              "releasedAt": "2024-06-20",
+              "state": "released",
+              "revisionCount": 2
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": 118,
+              "releasedAt": "2024-07-15",
+              "state": "released",
+              "revisionCount": 1
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            }
+          ]
+        }
+      ],
+      "scenes": [
+        {
+          "beat": "delivery-vintages-0",
+          "geometry": [
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 120,
+              "point": [
+                316.79999999999995,
+                523.8
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": null,
+              "point": null,
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 150,
+              "point": [
+                1766.4,
+                438.75
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 115,
+              "point": [
+                316.79999999999995,
+                537.9749999999999
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 125,
+              "point": [
+                1037.6393442622953,
+                509.62499999999994
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 135,
+              "point": [
+                1766.4,
+                481.275
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 112,
+              "point": [
+                316.79999999999995,
+                546.4799999999999
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": null,
+              "point": null,
+              "at": 2.589071038251366
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": null,
+              "point": null,
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": false,
+            "margin": 105.6,
+            "type": 57.599999999999994,
+            "left": 316.79999999999995,
+            "right": 1766.4,
+            "top": 410.4,
+            "bottom": 637.1999999999999
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Forecast target / observed quarter end · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-03-31",
+                "2024-09-30"
+              ],
+              "ticks": [
+                "2024-03-31",
+                "2024-06-30",
+                "2024-09-30"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Quarter-end deliveries · units",
+              "domain": [
+                80,
+                160
+              ],
+              "ticks": [
+                80,
+                120,
+                160
+              ],
+              "decimals": 0
+            }
+          }
+        },
+        {
+          "beat": "delivery-vintages-1",
+          "geometry": [
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 120,
+              "point": [
+                316.79999999999995,
+                523.8
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": null,
+              "point": null,
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 150,
+              "point": [
+                1766.4,
+                438.75
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 115,
+              "point": [
+                316.79999999999995,
+                537.9749999999999
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 125,
+              "point": [
+                1037.6393442622953,
+                509.62499999999994
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 135,
+              "point": [
+                1766.4,
+                481.275
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 109,
+              "point": [
+                316.79999999999995,
+                554.9849999999999
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 118,
+              "point": [
+                1037.6393442622953,
+                529.4699999999999
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": null,
+              "point": null,
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": false,
+            "margin": 105.6,
+            "type": 57.599999999999994,
+            "left": 316.79999999999995,
+            "right": 1766.4,
+            "top": 410.4,
+            "bottom": 637.1999999999999
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Forecast target / observed quarter end · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-03-31",
+                "2024-09-30"
+              ],
+              "ticks": [
+                "2024-03-31",
+                "2024-06-30",
+                "2024-09-30"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Quarter-end deliveries · units",
+              "domain": [
+                80,
+                160
+              ],
+              "ticks": [
+                80,
+                120,
+                160
+              ],
+              "decimals": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "delivery-vintages-vertical",
+      "recipe": "C04",
+      "caseId": "delivery-vintages",
+      "preset": "vertical",
+      "result": [
+        {
+          "modelVersion": 1,
+          "asOf": "2024-05-01",
+          "method": "latest-available-release-per-observation",
+          "vintages": [
+            {
+              "id": "January forecast",
+              "issuedAt": "2024-01-10",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 120
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": null
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 150
+                }
+              ]
+            },
+            {
+              "id": "March forecast",
+              "issuedAt": "2024-03-01",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 115
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 125
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 135
+                }
+              ]
+            }
+          ],
+          "actuals": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 112,
+              "releasedAt": "2024-04-15",
+              "state": "released",
+              "revisionCount": 1
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            }
+          ]
+        },
+        {
+          "modelVersion": 1,
+          "asOf": "2024-08-01",
+          "method": "latest-available-release-per-observation",
+          "vintages": [
+            {
+              "id": "January forecast",
+              "issuedAt": "2024-01-10",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 120
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": null
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 150
+                }
+              ]
+            },
+            {
+              "id": "March forecast",
+              "issuedAt": "2024-03-01",
+              "values": [
+                {
+                  "targetDate": "2024-03-31",
+                  "value": 115
+                },
+                {
+                  "targetDate": "2024-06-30",
+                  "value": 125
+                },
+                {
+                  "targetDate": "2024-09-30",
+                  "value": 135
+                }
+              ]
+            }
+          ],
+          "actuals": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 109,
+              "releasedAt": "2024-06-20",
+              "state": "released",
+              "revisionCount": 2
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": 118,
+              "releasedAt": "2024-07-15",
+              "state": "released",
+              "revisionCount": 1
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": null,
+              "releasedAt": null,
+              "state": "not-released",
+              "revisionCount": 0
+            }
+          ]
+        }
+      ],
+      "scenes": [
+        {
+          "beat": "delivery-vintages-0",
+          "geometry": [
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 120,
+              "point": [
+                232.2,
+                1065.6
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": null,
+              "point": null,
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 150,
+              "point": [
+                939.6000000000001,
+                856.8
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 115,
+              "point": [
+                232.2,
+                1100.4
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 125,
+              "point": [
+                583.9672131147541,
+                1030.8
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 135,
+              "point": [
+                939.6000000000001,
+                961.1999999999999
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 112,
+              "point": [
+                232.2,
+                1121.28
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": null,
+              "point": null,
+              "at": 2.589071038251366
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": null,
+              "point": null,
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": true,
+            "margin": 113.39999999999999,
+            "type": 32.4,
+            "left": 232.2,
+            "right": 939.6,
+            "top": 787.1999999999999,
+            "bottom": 1344
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Forecast target / observed quarter end · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-03-31",
+                "2024-09-30"
+              ],
+              "ticks": [
+                "2024-03-31",
+                "2024-06-30",
+                "2024-09-30"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Quarter-end deliveries · units",
+              "domain": [
+                80,
+                160
+              ],
+              "ticks": [
+                80,
+                120,
+                160
+              ],
+              "decimals": 0
+            }
+          }
+        },
+        {
+          "beat": "delivery-vintages-1",
+          "geometry": [
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 120,
+              "point": [
+                232.2,
+                1065.6
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": null,
+              "point": null,
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 150,
+              "point": [
+                939.6000000000001,
+                856.8
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 115,
+              "point": [
+                232.2,
+                1100.4
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 125,
+              "point": [
+                583.9672131147541,
+                1030.8
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "vintage-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": 135,
+              "point": [
+                939.6000000000001,
+                961.1999999999999
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 109,
+              "point": [
+                232.2,
+                1142.1599999999999
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-06-30",
+              "y": 118,
+              "point": [
+                583.9672131147541,
+                1079.52
+              ],
+              "at": 2.589071038251366
+            },
+            {
+              "series": "actual",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-09-30",
+              "y": null,
+              "point": null,
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": true,
+            "margin": 113.39999999999999,
+            "type": 32.4,
+            "left": 232.2,
+            "right": 939.6,
+            "top": 787.1999999999999,
+            "bottom": 1344
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Forecast target / observed quarter end · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-03-31",
+                "2024-09-30"
+              ],
+              "ticks": [
+                "2024-03-31",
+                "2024-06-30",
+                "2024-09-30"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Quarter-end deliveries · units",
+              "domain": [
+                80,
+                160
+              ],
+              "ticks": [
+                80,
+                120,
+                160
+              ],
+              "decimals": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "maturity-slope-landscape",
+      "recipe": "C06",
+      "caseId": "maturity-slope",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "kind": "par",
+        "unit": "percent-per-year",
+        "xMeaning": "remaining maturity in years, not a future observation date",
+        "interpolation": "none",
+        "tenors": [
+          {
+            "months": 1,
+            "years": 0.08333333333333333,
+            "label": "1 month"
+          },
+          {
+            "months": 6,
+            "years": 0.5,
+            "label": "6 months"
+          },
+          {
+            "months": 12,
+            "years": 1,
+            "label": "1 year"
+          },
+          {
+            "months": 24,
+            "years": 2,
+            "label": "2 years"
+          },
+          {
+            "months": 60,
+            "years": 5,
+            "label": "5 years"
+          },
+          {
+            "months": 120,
+            "years": 10,
+            "label": "10 years"
+          }
+        ],
+        "snapshots": [
+          {
+            "date": "2024-01-02",
+            "values": [
+              {
+                "months": 1,
+                "years": 0.08333333333333333,
+                "label": "1 month",
+                "value": 5.5
+              },
+              {
+                "months": 6,
+                "years": 0.5,
+                "label": "6 months",
+                "value": 5.2
+              },
+              {
+                "months": 12,
+                "years": 1,
+                "label": "1 year",
+                "value": 4.8
+              },
+              {
+                "months": 24,
+                "years": 2,
+                "label": "2 years",
+                "value": 4.3
+              },
+              {
+                "months": 60,
+                "years": 5,
+                "label": "5 years",
+                "value": 3.8
+              },
+              {
+                "months": 120,
+                "years": 10,
+                "label": "10 years",
+                "value": 3.5
+              }
+            ]
+          },
+          {
+            "date": "2024-07-02",
+            "values": [
+              {
+                "months": 1,
+                "years": 0.08333333333333333,
+                "label": "1 month",
+                "value": 2.5
+              },
+              {
+                "months": 6,
+                "years": 0.5,
+                "label": "6 months",
+                "value": 2.7
+              },
+              {
+                "months": 12,
+                "years": 1,
+                "label": "1 year",
+                "value": 3
+              },
+              {
+                "months": 24,
+                "years": 2,
+                "label": "2 years",
+                "value": 3.2
+              },
+              {
+                "months": 60,
+                "years": 5,
+                "label": "5 years",
+                "value": 3.8
+              },
+              {
+                "months": 120,
+                "years": 10,
+                "label": "10 years",
+                "value": 4.1
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        {
+          "beat": "maturity-slope",
+          "geometry": [
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": 0.08333333333333333,
+              "y": 5.5,
+              "point": [
+                328.87999999999994,
+                429.29999999999995
+              ],
+              "at": 0.6333333333333333
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": 0.5,
+              "y": 5.2,
+              "point": [
+                389.28,
+                440.64
+              ],
+              "at": 0.8
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": 1,
+              "y": 4.8,
+              "point": [
+                461.76,
+                455.76
+              ],
+              "at": 1
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 3,
+              "x": 2,
+              "y": 4.3,
+              "point": [
+                606.72,
+                474.65999999999997
+              ],
+              "at": 1.4
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 4,
+              "x": 5,
+              "y": 3.8,
+              "point": [
+                1041.6,
+                493.55999999999995
+              ],
+              "at": 2.6
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 5,
+              "x": 10,
+              "y": 3.5,
+              "point": [
+                1766.4,
+                504.9
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": 0.08333333333333333,
+              "y": 2.5,
+              "point": [
+                328.87999999999994,
+                542.6999999999999
+              ],
+              "at": 0.6333333333333333
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": 0.5,
+              "y": 2.7,
+              "point": [
+                389.28,
+                535.14
+              ],
+              "at": 0.8
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": 1,
+              "y": 3,
+              "point": [
+                461.76,
+                523.8
+              ],
+              "at": 1
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 3,
+              "x": 2,
+              "y": 3.2,
+              "point": [
+                606.72,
+                516.24
+              ],
+              "at": 1.4
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 4,
+              "x": 5,
+              "y": 3.8,
+              "point": [
+                1041.6,
+                493.55999999999995
+              ],
+              "at": 2.6
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 5,
+              "x": 10,
+              "y": 4.1,
+              "point": [
+                1766.4,
+                482.22
+              ],
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": false,
+            "margin": 105.6,
+            "type": 57.599999999999994,
+            "left": 316.79999999999995,
+            "right": 1766.4,
+            "top": 410.4,
+            "bottom": 637.1999999999999
+          },
+          "axes": {
+            "x": {
+              "type": "linear",
+              "label": "Remaining maturity · years",
+              "domain": [
+                0,
+                10
+              ],
+              "ticks": [
+                0,
+                2,
+                5,
+                10
+              ],
+              "decimals": 0
+            },
+            "y": {
+              "type": "linear",
+              "label": "par quote · % per year",
+              "domain": [
+                0,
+                6
+              ],
+              "ticks": [
+                0,
+                2,
+                4,
+                6
+              ],
+              "decimals": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "maturity-slope-vertical",
+      "recipe": "C06",
+      "caseId": "maturity-slope",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "kind": "par",
+        "unit": "percent-per-year",
+        "xMeaning": "remaining maturity in years, not a future observation date",
+        "interpolation": "none",
+        "tenors": [
+          {
+            "months": 1,
+            "years": 0.08333333333333333,
+            "label": "1 month"
+          },
+          {
+            "months": 6,
+            "years": 0.5,
+            "label": "6 months"
+          },
+          {
+            "months": 12,
+            "years": 1,
+            "label": "1 year"
+          },
+          {
+            "months": 24,
+            "years": 2,
+            "label": "2 years"
+          },
+          {
+            "months": 60,
+            "years": 5,
+            "label": "5 years"
+          },
+          {
+            "months": 120,
+            "years": 10,
+            "label": "10 years"
+          }
+        ],
+        "snapshots": [
+          {
+            "date": "2024-01-02",
+            "values": [
+              {
+                "months": 1,
+                "years": 0.08333333333333333,
+                "label": "1 month",
+                "value": 5.5
+              },
+              {
+                "months": 6,
+                "years": 0.5,
+                "label": "6 months",
+                "value": 5.2
+              },
+              {
+                "months": 12,
+                "years": 1,
+                "label": "1 year",
+                "value": 4.8
+              },
+              {
+                "months": 24,
+                "years": 2,
+                "label": "2 years",
+                "value": 4.3
+              },
+              {
+                "months": 60,
+                "years": 5,
+                "label": "5 years",
+                "value": 3.8
+              },
+              {
+                "months": 120,
+                "years": 10,
+                "label": "10 years",
+                "value": 3.5
+              }
+            ]
+          },
+          {
+            "date": "2024-07-02",
+            "values": [
+              {
+                "months": 1,
+                "years": 0.08333333333333333,
+                "label": "1 month",
+                "value": 2.5
+              },
+              {
+                "months": 6,
+                "years": 0.5,
+                "label": "6 months",
+                "value": 2.7
+              },
+              {
+                "months": 12,
+                "years": 1,
+                "label": "1 year",
+                "value": 3
+              },
+              {
+                "months": 24,
+                "years": 2,
+                "label": "2 years",
+                "value": 3.2
+              },
+              {
+                "months": 60,
+                "years": 5,
+                "label": "5 years",
+                "value": 3.8
+              },
+              {
+                "months": 120,
+                "years": 10,
+                "label": "10 years",
+                "value": 4.1
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        {
+          "beat": "maturity-slope",
+          "geometry": [
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": 0.08333333333333333,
+              "y": 5.5,
+              "point": [
+                238.095,
+                833.5999999999999
+              ],
+              "at": 0.6333333333333333
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": 0.5,
+              "y": 5.2,
+              "point": [
+                267.57,
+                861.4399999999999
+              ],
+              "at": 0.8
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": 1,
+              "y": 4.8,
+              "point": [
+                302.94,
+                898.56
+              ],
+              "at": 1
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 3,
+              "x": 2,
+              "y": 4.3,
+              "point": [
+                373.68,
+                944.9599999999999
+              ],
+              "at": 1.4
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 4,
+              "x": 5,
+              "y": 3.8,
+              "point": [
+                585.9000000000001,
+                991.3599999999999
+              ],
+              "at": 2.6
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 5,
+              "x": 10,
+              "y": 3.5,
+              "point": [
+                939.6000000000001,
+                1019.1999999999999
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": 0.08333333333333333,
+              "y": 2.5,
+              "point": [
+                238.095,
+                1112
+              ],
+              "at": 0.6333333333333333
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": 0.5,
+              "y": 2.7,
+              "point": [
+                267.57,
+                1093.44
+              ],
+              "at": 0.8
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": 1,
+              "y": 3,
+              "point": [
+                302.94,
+                1065.6
+              ],
+              "at": 1
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 3,
+              "x": 2,
+              "y": 3.2,
+              "point": [
+                373.68,
+                1047.04
+              ],
+              "at": 1.4
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 4,
+              "x": 5,
+              "y": 3.8,
+              "point": [
+                585.9000000000001,
+                991.3599999999999
+              ],
+              "at": 2.6
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 5,
+              "x": 10,
+              "y": 4.1,
+              "point": [
+                939.6000000000001,
+                963.52
+              ],
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": true,
+            "margin": 113.39999999999999,
+            "type": 32.4,
+            "left": 232.2,
+            "right": 939.6,
+            "top": 787.1999999999999,
+            "bottom": 1344
+          },
+          "axes": {
+            "x": {
+              "type": "linear",
+              "label": "Remaining maturity · years",
+              "domain": [
+                0,
+                10
+              ],
+              "ticks": [
+                0,
+                2,
+                5,
+                10
+              ],
+              "decimals": 0
+            },
+            "y": {
+              "type": "linear",
+              "label": "par quote · % per year",
+              "domain": [
+                0,
+                6
+              ],
+              "ticks": [
+                0,
+                2,
+                4,
+                6
+              ],
+              "decimals": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "maturity-gap-landscape",
+      "recipe": "C06",
+      "caseId": "maturity-gap",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "kind": "quoted",
+        "unit": "percent-per-year",
+        "xMeaning": "remaining maturity in years, not a future observation date",
+        "interpolation": "none",
+        "tenors": [
+          {
+            "months": 1,
+            "years": 0.08333333333333333,
+            "label": "1 month"
+          },
+          {
+            "months": 6,
+            "years": 0.5,
+            "label": "6 months"
+          },
+          {
+            "months": 12,
+            "years": 1,
+            "label": "1 year"
+          },
+          {
+            "months": 24,
+            "years": 2,
+            "label": "2 years"
+          },
+          {
+            "months": 60,
+            "years": 5,
+            "label": "5 years"
+          },
+          {
+            "months": 120,
+            "years": 10,
+            "label": "10 years"
+          }
+        ],
+        "snapshots": [
+          {
+            "date": "2024-01-02",
+            "values": [
+              {
+                "months": 1,
+                "years": 0.08333333333333333,
+                "label": "1 month",
+                "value": -0.5
+              },
+              {
+                "months": 6,
+                "years": 0.5,
+                "label": "6 months",
+                "value": -0.25
+              },
+              {
+                "months": 12,
+                "years": 1,
+                "label": "1 year",
+                "value": 0.2
+              },
+              {
+                "months": 24,
+                "years": 2,
+                "label": "2 years",
+                "value": null
+              },
+              {
+                "months": 60,
+                "years": 5,
+                "label": "5 years",
+                "value": 2
+              },
+              {
+                "months": 120,
+                "years": 10,
+                "label": "10 years",
+                "value": 2.5
+              }
+            ]
+          },
+          {
+            "date": "2024-07-02",
+            "values": [
+              {
+                "months": 1,
+                "years": 0.08333333333333333,
+                "label": "1 month",
+                "value": 0
+              },
+              {
+                "months": 6,
+                "years": 0.5,
+                "label": "6 months",
+                "value": 0.3
+              },
+              {
+                "months": 12,
+                "years": 1,
+                "label": "1 year",
+                "value": 0.6
+              },
+              {
+                "months": 24,
+                "years": 2,
+                "label": "2 years",
+                "value": 1.2
+              },
+              {
+                "months": 60,
+                "years": 5,
+                "label": "5 years",
+                "value": 2.3
+              },
+              {
+                "months": 120,
+                "years": 10,
+                "label": "10 years",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        {
+          "beat": "maturity-gap",
+          "geometry": [
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": 0.08333333333333333,
+              "y": -0.5,
+              "point": [
+                328.87999999999994,
+                614.52
+              ],
+              "at": 0.6333333333333333
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": 0.5,
+              "y": -0.25,
+              "point": [
+                389.28,
+                603.18
+              ],
+              "at": 0.8
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": 1,
+              "y": 0.2,
+              "point": [
+                461.76,
+                582.7679999999999
+              ],
+              "at": 1
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 3,
+              "x": 2,
+              "y": null,
+              "point": null,
+              "at": 1.4
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 4,
+              "x": 5,
+              "y": 2,
+              "point": [
+                1041.6,
+                501.12
+              ],
+              "at": 2.6
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 5,
+              "x": 10,
+              "y": 2.5,
+              "point": [
+                1766.4,
+                478.43999999999994
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": 0.08333333333333333,
+              "y": 0,
+              "point": [
+                328.87999999999994,
+                591.8399999999999
+              ],
+              "at": 0.6333333333333333
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": 0.5,
+              "y": 0.3,
+              "point": [
+                389.28,
+                578.232
+              ],
+              "at": 0.8
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": 1,
+              "y": 0.6,
+              "point": [
+                461.76,
+                564.6239999999999
+              ],
+              "at": 1
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 3,
+              "x": 2,
+              "y": 1.2,
+              "point": [
+                606.72,
+                537.4079999999999
+              ],
+              "at": 1.4
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 4,
+              "x": 5,
+              "y": 2.3,
+              "point": [
+                1041.6,
+                487.51199999999994
+              ],
+              "at": 2.6
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 5,
+              "x": 10,
+              "y": 3,
+              "point": [
+                1766.4,
+                455.76
+              ],
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": false,
+            "margin": 105.6,
+            "type": 57.599999999999994,
+            "left": 316.79999999999995,
+            "right": 1766.4,
+            "top": 410.4,
+            "bottom": 637.1999999999999
+          },
+          "axes": {
+            "x": {
+              "type": "linear",
+              "label": "Remaining maturity · years",
+              "domain": [
+                0,
+                10
+              ],
+              "ticks": [
+                0,
+                2,
+                5,
+                10
+              ],
+              "decimals": 0
+            },
+            "y": {
+              "type": "linear",
+              "label": "quoted yield · % per year",
+              "domain": [
+                -1,
+                4
+              ],
+              "ticks": [
+                -1,
+                0,
+                2,
+                4
+              ],
+              "decimals": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "maturity-gap-vertical",
+      "recipe": "C06",
+      "caseId": "maturity-gap",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "kind": "quoted",
+        "unit": "percent-per-year",
+        "xMeaning": "remaining maturity in years, not a future observation date",
+        "interpolation": "none",
+        "tenors": [
+          {
+            "months": 1,
+            "years": 0.08333333333333333,
+            "label": "1 month"
+          },
+          {
+            "months": 6,
+            "years": 0.5,
+            "label": "6 months"
+          },
+          {
+            "months": 12,
+            "years": 1,
+            "label": "1 year"
+          },
+          {
+            "months": 24,
+            "years": 2,
+            "label": "2 years"
+          },
+          {
+            "months": 60,
+            "years": 5,
+            "label": "5 years"
+          },
+          {
+            "months": 120,
+            "years": 10,
+            "label": "10 years"
+          }
+        ],
+        "snapshots": [
+          {
+            "date": "2024-01-02",
+            "values": [
+              {
+                "months": 1,
+                "years": 0.08333333333333333,
+                "label": "1 month",
+                "value": -0.5
+              },
+              {
+                "months": 6,
+                "years": 0.5,
+                "label": "6 months",
+                "value": -0.25
+              },
+              {
+                "months": 12,
+                "years": 1,
+                "label": "1 year",
+                "value": 0.2
+              },
+              {
+                "months": 24,
+                "years": 2,
+                "label": "2 years",
+                "value": null
+              },
+              {
+                "months": 60,
+                "years": 5,
+                "label": "5 years",
+                "value": 2
+              },
+              {
+                "months": 120,
+                "years": 10,
+                "label": "10 years",
+                "value": 2.5
+              }
+            ]
+          },
+          {
+            "date": "2024-07-02",
+            "values": [
+              {
+                "months": 1,
+                "years": 0.08333333333333333,
+                "label": "1 month",
+                "value": 0
+              },
+              {
+                "months": 6,
+                "years": 0.5,
+                "label": "6 months",
+                "value": 0.3
+              },
+              {
+                "months": 12,
+                "years": 1,
+                "label": "1 year",
+                "value": 0.6
+              },
+              {
+                "months": 24,
+                "years": 2,
+                "label": "2 years",
+                "value": 1.2
+              },
+              {
+                "months": 60,
+                "years": 5,
+                "label": "5 years",
+                "value": 2.3
+              },
+              {
+                "months": 120,
+                "years": 10,
+                "label": "10 years",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        {
+          "beat": "maturity-gap",
+          "geometry": [
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": 0.08333333333333333,
+              "y": -0.5,
+              "point": [
+                238.095,
+                1288.32
+              ],
+              "at": 0.6333333333333333
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": 0.5,
+              "y": -0.25,
+              "point": [
+                267.57,
+                1260.48
+              ],
+              "at": 0.8
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": 1,
+              "y": 0.2,
+              "point": [
+                302.94,
+                1210.368
+              ],
+              "at": 1
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 3,
+              "x": 2,
+              "y": null,
+              "point": null,
+              "at": 1.4
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 4,
+              "x": 5,
+              "y": 2,
+              "point": [
+                585.9000000000001,
+                1009.92
+              ],
+              "at": 2.6
+            },
+            {
+              "series": "date-0",
+              "seriesIndex": 0,
+              "index": 5,
+              "x": 10,
+              "y": 2.5,
+              "point": [
+                939.6000000000001,
+                954.24
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": 0.08333333333333333,
+              "y": 0,
+              "point": [
+                238.095,
+                1232.6399999999999
+              ],
+              "at": 0.6333333333333333
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": 0.5,
+              "y": 0.3,
+              "point": [
+                267.57,
+                1199.232
+              ],
+              "at": 0.8
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": 1,
+              "y": 0.6,
+              "point": [
+                302.94,
+                1165.824
+              ],
+              "at": 1
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 3,
+              "x": 2,
+              "y": 1.2,
+              "point": [
+                373.68,
+                1099.0079999999998
+              ],
+              "at": 1.4
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 4,
+              "x": 5,
+              "y": 2.3,
+              "point": [
+                585.9000000000001,
+                976.512
+              ],
+              "at": 2.6
+            },
+            {
+              "series": "date-1",
+              "seriesIndex": 1,
+              "index": 5,
+              "x": 10,
+              "y": 3,
+              "point": [
+                939.6000000000001,
+                898.56
+              ],
+              "at": 4.6
+            }
+          ],
+          "polygons": [],
+          "layout": {
+            "u": 1080,
+            "tall": true,
+            "margin": 113.39999999999999,
+            "type": 32.4,
+            "left": 232.2,
+            "right": 939.6,
+            "top": 787.1999999999999,
+            "bottom": 1344
+          },
+          "axes": {
+            "x": {
+              "type": "linear",
+              "label": "Remaining maturity · years",
+              "domain": [
+                0,
+                10
+              ],
+              "ticks": [
+                0,
+                2,
+                5,
+                10
+              ],
+              "decimals": 0
+            },
+            "y": {
+              "type": "linear",
+              "label": "quoted yield · % per year",
+              "domain": [
+                -1,
+                4
+              ],
+              "ticks": [
+                -1,
+                0,
+                2,
+                4
+              ],
+              "decimals": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "scenario-range-landscape",
+      "recipe": "C12",
+      "caseId": "scenario-range",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "origin": {
+          "date": "2024-03-31",
+          "value": 100
+        },
+        "history": [
+          {
+            "date": "2024-01-31",
+            "value": 90
+          },
+          {
+            "date": "2024-02-29",
+            "value": 95
+          },
+          {
+            "date": "2024-03-31",
+            "value": 100
+          }
+        ],
+        "scenarios": [
+          {
+            "id": "lower",
+            "label": "Lower path",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 95
+              },
+              {
+                "date": "2024-05-31",
+                "value": 90
+              },
+              {
+                "date": "2024-06-30",
+                "value": 80
+              },
+              {
+                "date": "2024-07-31",
+                "value": 70
+              }
+            ],
+            "weight": 0.3333333333333333
+          },
+          {
+            "id": "middle",
+            "label": "Middle path",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 105
+              },
+              {
+                "date": "2024-05-31",
+                "value": 110
+              },
+              {
+                "date": "2024-06-30",
+                "value": 115
+              },
+              {
+                "date": "2024-07-31",
+                "value": 120
+              }
+            ],
+            "weight": 0.3333333333333333
+          },
+          {
+            "id": "upper",
+            "label": "Upper path",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 110
+              },
+              {
+                "date": "2024-05-31",
+                "value": 125
+              },
+              {
+                "date": "2024-06-30",
+                "value": 135
+              },
+              {
+                "date": "2024-07-31",
+                "value": 145
+              }
+            ],
+            "weight": 0.3333333333333333
+          }
+        ],
+        "band": {
+          "kind": "range",
+          "method": "supplied-scenario-min-max"
+        },
+        "observations": [
+          {
+            "date": "2024-03-31",
+            "count": 3,
+            "complete": true,
+            "lower": 100,
+            "upper": 100,
+            "median": 100,
+            "missing": null
+          },
+          {
+            "date": "2024-04-30",
+            "count": 3,
+            "complete": true,
+            "lower": 95,
+            "upper": 110,
+            "median": 105,
+            "missing": null
+          },
+          {
+            "date": "2024-05-31",
+            "count": 3,
+            "complete": true,
+            "lower": 90,
+            "upper": 125,
+            "median": 110,
+            "missing": null
+          },
+          {
+            "date": "2024-06-30",
+            "count": 3,
+            "complete": true,
+            "lower": 80,
+            "upper": 135,
+            "median": 115,
+            "missing": null
+          },
+          {
+            "date": "2024-07-31",
+            "count": 3,
+            "complete": true,
+            "lower": 70,
+            "upper": 145,
+            "median": 120,
+            "missing": null
+          }
+        ],
+        "weighting": "equal scenario weights",
+        "interpretation": "descriptive range or quantiles of supplied scenarios; no likelihood, confidence or coverage claim",
+        "missingPolicy": "all supplied scenarios required at each date; no changing denominator"
+      },
+      "scenes": [
+        {
+          "beat": "scenario-range",
+          "geometry": [
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-01-31",
+              "y": 90,
+              "point": [
+                316.79999999999995,
+                561.5999999999999
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-02-29",
+              "y": 95,
+              "point": [
+                547.7802197802198,
+                549
+              ],
+              "at": 1.2373626373626374
+            },
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                794.6901098901099,
+                536.4
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                794.6901098901099,
+                536.4
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 95,
+              "point": [
+                1033.635164835165,
+                549
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": 90,
+              "point": [
+                1280.545054945055,
+                561.5999999999999
+              ],
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 80,
+              "point": [
+                1519.49010989011,
+                586.8
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 70,
+              "point": [
+                1766.4,
+                611.9999999999999
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "middle",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                794.6901098901099,
+                536.4
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "middle",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 105,
+              "point": [
+                1033.635164835165,
+                523.8
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "middle",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": 110,
+              "point": [
+                1280.545054945055,
+                511.19999999999993
+              ],
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "middle",
+              "seriesIndex": 2,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 115,
+              "point": [
+                1519.49010989011,
+                498.5999999999999
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "middle",
+              "seriesIndex": 2,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 120,
+              "point": [
+                1766.4,
+                486
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                794.6901098901099,
+                536.4
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 110,
+              "point": [
+                1033.635164835165,
+                511.19999999999993
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": 125,
+              "point": [
+                1280.545054945055,
+                473.4
+              ],
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 135,
+              "point": [
+                1519.49010989011,
+                448.19999999999993
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 145,
+              "point": [
+                1766.4,
+                423
+              ],
+              "at": 4.6
+            }
+          ],
+          "polygons": [
+            {
+              "index": 1,
+              "from": "2024-03-31",
+              "to": "2024-04-30",
+              "lower": [
+                100,
+                95
+              ],
+              "upper": [
+                100,
+                110
+              ],
+              "points": [
+                [
+                  794.6901098901099,
+                  536.4
+                ],
+                [
+                  794.6901098901099,
+                  536.4
+                ],
+                [
+                  1033.635164835165,
+                  511.19999999999993
+                ],
+                [
+                  1033.635164835165,
+                  549
+                ]
+              ]
+            },
+            {
+              "index": 2,
+              "from": "2024-04-30",
+              "to": "2024-05-31",
+              "lower": [
+                95,
+                90
+              ],
+              "upper": [
+                110,
+                125
+              ],
+              "points": [
+                [
+                  1033.635164835165,
+                  549
+                ],
+                [
+                  1033.635164835165,
+                  511.19999999999993
+                ],
+                [
+                  1280.545054945055,
+                  473.4
+                ],
+                [
+                  1280.545054945055,
+                  561.5999999999999
+                ]
+              ]
+            },
+            {
+              "index": 3,
+              "from": "2024-05-31",
+              "to": "2024-06-30",
+              "lower": [
+                90,
+                80
+              ],
+              "upper": [
+                125,
+                135
+              ],
+              "points": [
+                [
+                  1280.545054945055,
+                  561.5999999999999
+                ],
+                [
+                  1280.545054945055,
+                  473.4
+                ],
+                [
+                  1519.49010989011,
+                  448.19999999999993
+                ],
+                [
+                  1519.49010989011,
+                  586.8
+                ]
+              ]
+            },
+            {
+              "index": 4,
+              "from": "2024-06-30",
+              "to": "2024-07-31",
+              "lower": [
+                80,
+                70
+              ],
+              "upper": [
+                135,
+                145
+              ],
+              "points": [
+                [
+                  1519.49010989011,
+                  586.8
+                ],
+                [
+                  1519.49010989011,
+                  448.19999999999993
+                ],
+                [
+                  1766.4,
+                  423
+                ],
+                [
+                  1766.4,
+                  611.9999999999999
+                ]
+              ]
+            }
+          ],
+          "layout": {
+            "u": 1080,
+            "tall": false,
+            "margin": 105.6,
+            "type": 57.599999999999994,
+            "left": 316.79999999999995,
+            "right": 1766.4,
+            "top": 410.4,
+            "bottom": 637.1999999999999
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Observed dates, then scenario dates · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-01-31",
+                "2024-07-31"
+              ],
+              "ticks": [
+                "2024-01-31",
+                "2024-03-31",
+                "2024-07-31"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Illustrative output · units",
+              "domain": [
+                60,
+                150
+              ],
+              "ticks": [
+                60,
+                90,
+                120,
+                150
+              ],
+              "decimals": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "scenario-range-vertical",
+      "recipe": "C12",
+      "caseId": "scenario-range",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "origin": {
+          "date": "2024-03-31",
+          "value": 100
+        },
+        "history": [
+          {
+            "date": "2024-01-31",
+            "value": 90
+          },
+          {
+            "date": "2024-02-29",
+            "value": 95
+          },
+          {
+            "date": "2024-03-31",
+            "value": 100
+          }
+        ],
+        "scenarios": [
+          {
+            "id": "lower",
+            "label": "Lower path",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 95
+              },
+              {
+                "date": "2024-05-31",
+                "value": 90
+              },
+              {
+                "date": "2024-06-30",
+                "value": 80
+              },
+              {
+                "date": "2024-07-31",
+                "value": 70
+              }
+            ],
+            "weight": 0.3333333333333333
+          },
+          {
+            "id": "middle",
+            "label": "Middle path",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 105
+              },
+              {
+                "date": "2024-05-31",
+                "value": 110
+              },
+              {
+                "date": "2024-06-30",
+                "value": 115
+              },
+              {
+                "date": "2024-07-31",
+                "value": 120
+              }
+            ],
+            "weight": 0.3333333333333333
+          },
+          {
+            "id": "upper",
+            "label": "Upper path",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 110
+              },
+              {
+                "date": "2024-05-31",
+                "value": 125
+              },
+              {
+                "date": "2024-06-30",
+                "value": 135
+              },
+              {
+                "date": "2024-07-31",
+                "value": 145
+              }
+            ],
+            "weight": 0.3333333333333333
+          }
+        ],
+        "band": {
+          "kind": "range",
+          "method": "supplied-scenario-min-max"
+        },
+        "observations": [
+          {
+            "date": "2024-03-31",
+            "count": 3,
+            "complete": true,
+            "lower": 100,
+            "upper": 100,
+            "median": 100,
+            "missing": null
+          },
+          {
+            "date": "2024-04-30",
+            "count": 3,
+            "complete": true,
+            "lower": 95,
+            "upper": 110,
+            "median": 105,
+            "missing": null
+          },
+          {
+            "date": "2024-05-31",
+            "count": 3,
+            "complete": true,
+            "lower": 90,
+            "upper": 125,
+            "median": 110,
+            "missing": null
+          },
+          {
+            "date": "2024-06-30",
+            "count": 3,
+            "complete": true,
+            "lower": 80,
+            "upper": 135,
+            "median": 115,
+            "missing": null
+          },
+          {
+            "date": "2024-07-31",
+            "count": 3,
+            "complete": true,
+            "lower": 70,
+            "upper": 145,
+            "median": 120,
+            "missing": null
+          }
+        ],
+        "weighting": "equal scenario weights",
+        "interpretation": "descriptive range or quantiles of supplied scenarios; no likelihood, confidence or coverage claim",
+        "missingPolicy": "all supplied scenarios required at each date; no changing denominator"
+      },
+      "scenes": [
+        {
+          "beat": "scenario-range",
+          "geometry": [
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-01-31",
+              "y": 90,
+              "point": [
+                232.2,
+                1158.4
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-02-29",
+              "y": 95,
+              "point": [
+                344.9175824175824,
+                1127.4666666666667
+              ],
+              "at": 1.2373626373626374
+            },
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                465.40879120879123,
+                1096.5333333333333
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                465.40879120879123,
+                1096.5333333333333
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 95,
+              "point": [
+                582.0131868131868,
+                1127.4666666666667
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": 90,
+              "point": [
+                702.5043956043957,
+                1158.4
+              ],
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 80,
+              "point": [
+                819.1087912087912,
+                1220.2666666666667
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 70,
+              "point": [
+                939.6000000000001,
+                1282.1333333333332
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "middle",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                465.40879120879123,
+                1096.5333333333333
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "middle",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 105,
+              "point": [
+                582.0131868131868,
+                1065.6
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "middle",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": 110,
+              "point": [
+                702.5043956043957,
+                1034.6666666666665
+              ],
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "middle",
+              "seriesIndex": 2,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 115,
+              "point": [
+                819.1087912087912,
+                1003.7333333333333
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "middle",
+              "seriesIndex": 2,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 120,
+              "point": [
+                939.6000000000001,
+                972.8
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                465.40879120879123,
+                1096.5333333333333
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 110,
+              "point": [
+                582.0131868131868,
+                1034.6666666666665
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": 125,
+              "point": [
+                702.5043956043957,
+                941.8666666666666
+              ],
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 135,
+              "point": [
+                819.1087912087912,
+                880
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 145,
+              "point": [
+                939.6000000000001,
+                818.1333333333333
+              ],
+              "at": 4.6
+            }
+          ],
+          "polygons": [
+            {
+              "index": 1,
+              "from": "2024-03-31",
+              "to": "2024-04-30",
+              "lower": [
+                100,
+                95
+              ],
+              "upper": [
+                100,
+                110
+              ],
+              "points": [
+                [
+                  465.40879120879123,
+                  1096.5333333333333
+                ],
+                [
+                  465.40879120879123,
+                  1096.5333333333333
+                ],
+                [
+                  582.0131868131868,
+                  1034.6666666666665
+                ],
+                [
+                  582.0131868131868,
+                  1127.4666666666667
+                ]
+              ]
+            },
+            {
+              "index": 2,
+              "from": "2024-04-30",
+              "to": "2024-05-31",
+              "lower": [
+                95,
+                90
+              ],
+              "upper": [
+                110,
+                125
+              ],
+              "points": [
+                [
+                  582.0131868131868,
+                  1127.4666666666667
+                ],
+                [
+                  582.0131868131868,
+                  1034.6666666666665
+                ],
+                [
+                  702.5043956043957,
+                  941.8666666666666
+                ],
+                [
+                  702.5043956043957,
+                  1158.4
+                ]
+              ]
+            },
+            {
+              "index": 3,
+              "from": "2024-05-31",
+              "to": "2024-06-30",
+              "lower": [
+                90,
+                80
+              ],
+              "upper": [
+                125,
+                135
+              ],
+              "points": [
+                [
+                  702.5043956043957,
+                  1158.4
+                ],
+                [
+                  702.5043956043957,
+                  941.8666666666666
+                ],
+                [
+                  819.1087912087912,
+                  880
+                ],
+                [
+                  819.1087912087912,
+                  1220.2666666666667
+                ]
+              ]
+            },
+            {
+              "index": 4,
+              "from": "2024-06-30",
+              "to": "2024-07-31",
+              "lower": [
+                80,
+                70
+              ],
+              "upper": [
+                135,
+                145
+              ],
+              "points": [
+                [
+                  819.1087912087912,
+                  1220.2666666666667
+                ],
+                [
+                  819.1087912087912,
+                  880
+                ],
+                [
+                  939.6000000000001,
+                  818.1333333333333
+                ],
+                [
+                  939.6000000000001,
+                  1282.1333333333332
+                ]
+              ]
+            }
+          ],
+          "layout": {
+            "u": 1080,
+            "tall": true,
+            "margin": 113.39999999999999,
+            "type": 32.4,
+            "left": 232.2,
+            "right": 939.6,
+            "top": 787.1999999999999,
+            "bottom": 1344
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Observed dates, then scenario dates · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-01-31",
+                "2024-07-31"
+              ],
+              "ticks": [
+                "2024-01-31",
+                "2024-03-31",
+                "2024-07-31"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Illustrative output · units",
+              "domain": [
+                60,
+                150
+              ],
+              "ticks": [
+                60,
+                90,
+                120,
+                150
+              ],
+              "decimals": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "scenario-quantiles-landscape",
+      "recipe": "C12",
+      "caseId": "scenario-quantiles",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "origin": {
+          "date": "2024-03-31",
+          "value": 100
+        },
+        "history": [
+          {
+            "date": "2024-01-31",
+            "value": 90
+          },
+          {
+            "date": "2024-02-29",
+            "value": 95
+          },
+          {
+            "date": "2024-03-31",
+            "value": 100
+          }
+        ],
+        "scenarios": [
+          {
+            "id": "a",
+            "label": "Path A",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 80
+              },
+              {
+                "date": "2024-05-31",
+                "value": 75
+              },
+              {
+                "date": "2024-06-30",
+                "value": 70
+              },
+              {
+                "date": "2024-07-31",
+                "value": 65
+              }
+            ],
+            "weight": 0.2
+          },
+          {
+            "id": "b",
+            "label": "Path B",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 90
+              },
+              {
+                "date": "2024-05-31",
+                "value": 85
+              },
+              {
+                "date": "2024-06-30",
+                "value": 80
+              },
+              {
+                "date": "2024-07-31",
+                "value": 75
+              }
+            ],
+            "weight": 0.2
+          },
+          {
+            "id": "c",
+            "label": "Path C",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 100
+              },
+              {
+                "date": "2024-05-31",
+                "value": 100
+              },
+              {
+                "date": "2024-06-30",
+                "value": 100
+              },
+              {
+                "date": "2024-07-31",
+                "value": 100
+              }
+            ],
+            "weight": 0.2
+          },
+          {
+            "id": "d",
+            "label": "Path D",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 110
+              },
+              {
+                "date": "2024-05-31",
+                "value": 115
+              },
+              {
+                "date": "2024-06-30",
+                "value": 120
+              },
+              {
+                "date": "2024-07-31",
+                "value": 125
+              }
+            ],
+            "weight": 0.2
+          },
+          {
+            "id": "e",
+            "label": "Path E",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 120
+              },
+              {
+                "date": "2024-05-31",
+                "value": null
+              },
+              {
+                "date": "2024-06-30",
+                "value": 130
+              },
+              {
+                "date": "2024-07-31",
+                "value": 140
+              }
+            ],
+            "weight": 0.2
+          }
+        ],
+        "band": {
+          "kind": "quantile",
+          "lower": 0.25,
+          "upper": 0.75,
+          "method": "equal-weight-empirical-type-7"
+        },
+        "observations": [
+          {
+            "date": "2024-03-31",
+            "count": 5,
+            "complete": true,
+            "lower": 100,
+            "upper": 100,
+            "median": 100,
+            "missing": null
+          },
+          {
+            "date": "2024-04-30",
+            "count": 5,
+            "complete": true,
+            "lower": 90,
+            "upper": 110,
+            "median": 100,
+            "missing": null
+          },
+          {
+            "date": "2024-05-31",
+            "count": 4,
+            "complete": false,
+            "lower": null,
+            "upper": null,
+            "median": null,
+            "missing": "incomplete-scenario-set"
+          },
+          {
+            "date": "2024-06-30",
+            "count": 5,
+            "complete": true,
+            "lower": 80,
+            "upper": 120,
+            "median": 100,
+            "missing": null
+          },
+          {
+            "date": "2024-07-31",
+            "count": 5,
+            "complete": true,
+            "lower": 75,
+            "upper": 125,
+            "median": 100,
+            "missing": null
+          }
+        ],
+        "weighting": "equal scenario weights",
+        "interpretation": "descriptive range or quantiles of supplied scenarios; no likelihood, confidence or coverage claim",
+        "missingPolicy": "all supplied scenarios required at each date; no changing denominator"
+      },
+      "scenes": [
+        {
+          "beat": "scenario-quantiles",
+          "geometry": [
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-01-31",
+              "y": 90,
+              "point": [
+                316.79999999999995,
+                561.5999999999999
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-02-29",
+              "y": 95,
+              "point": [
+                547.7802197802198,
+                549
+              ],
+              "at": 1.2373626373626374
+            },
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                794.6901098901099,
+                536.4
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                794.6901098901099,
+                536.4
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 90,
+              "point": [
+                1033.635164835165,
+                561.5999999999999
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": null,
+              "point": null,
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 80,
+              "point": [
+                1519.49010989011,
+                586.8
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 75,
+              "point": [
+                1766.4,
+                599.4
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "median",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                794.6901098901099,
+                536.4
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "median",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 100,
+              "point": [
+                1033.635164835165,
+                536.4
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "median",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": null,
+              "point": null,
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "median",
+              "seriesIndex": 2,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 100,
+              "point": [
+                1519.49010989011,
+                536.4
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "median",
+              "seriesIndex": 2,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 100,
+              "point": [
+                1766.4,
+                536.4
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                794.6901098901099,
+                536.4
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 110,
+              "point": [
+                1033.635164835165,
+                511.19999999999993
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": null,
+              "point": null,
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 120,
+              "point": [
+                1519.49010989011,
+                486
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 125,
+              "point": [
+                1766.4,
+                473.4
+              ],
+              "at": 4.6
+            }
+          ],
+          "polygons": [
+            {
+              "index": 1,
+              "from": "2024-03-31",
+              "to": "2024-04-30",
+              "lower": [
+                100,
+                90
+              ],
+              "upper": [
+                100,
+                110
+              ],
+              "points": [
+                [
+                  794.6901098901099,
+                  536.4
+                ],
+                [
+                  794.6901098901099,
+                  536.4
+                ],
+                [
+                  1033.635164835165,
+                  511.19999999999993
+                ],
+                [
+                  1033.635164835165,
+                  561.5999999999999
+                ]
+              ]
+            },
+            {
+              "index": 4,
+              "from": "2024-06-30",
+              "to": "2024-07-31",
+              "lower": [
+                80,
+                75
+              ],
+              "upper": [
+                120,
+                125
+              ],
+              "points": [
+                [
+                  1519.49010989011,
+                  586.8
+                ],
+                [
+                  1519.49010989011,
+                  486
+                ],
+                [
+                  1766.4,
+                  473.4
+                ],
+                [
+                  1766.4,
+                  599.4
+                ]
+              ]
+            }
+          ],
+          "layout": {
+            "u": 1080,
+            "tall": false,
+            "margin": 105.6,
+            "type": 57.599999999999994,
+            "left": 316.79999999999995,
+            "right": 1766.4,
+            "top": 410.4,
+            "bottom": 637.1999999999999
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Observed dates, then scenario dates · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-01-31",
+                "2024-07-31"
+              ],
+              "ticks": [
+                "2024-01-31",
+                "2024-03-31",
+                "2024-07-31"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Illustrative output · units",
+              "domain": [
+                60,
+                150
+              ],
+              "ticks": [
+                60,
+                90,
+                120,
+                150
+              ],
+              "decimals": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "project": "scenario-quantiles-vertical",
+      "recipe": "C12",
+      "caseId": "scenario-quantiles",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "origin": {
+          "date": "2024-03-31",
+          "value": 100
+        },
+        "history": [
+          {
+            "date": "2024-01-31",
+            "value": 90
+          },
+          {
+            "date": "2024-02-29",
+            "value": 95
+          },
+          {
+            "date": "2024-03-31",
+            "value": 100
+          }
+        ],
+        "scenarios": [
+          {
+            "id": "a",
+            "label": "Path A",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 80
+              },
+              {
+                "date": "2024-05-31",
+                "value": 75
+              },
+              {
+                "date": "2024-06-30",
+                "value": 70
+              },
+              {
+                "date": "2024-07-31",
+                "value": 65
+              }
+            ],
+            "weight": 0.2
+          },
+          {
+            "id": "b",
+            "label": "Path B",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 90
+              },
+              {
+                "date": "2024-05-31",
+                "value": 85
+              },
+              {
+                "date": "2024-06-30",
+                "value": 80
+              },
+              {
+                "date": "2024-07-31",
+                "value": 75
+              }
+            ],
+            "weight": 0.2
+          },
+          {
+            "id": "c",
+            "label": "Path C",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 100
+              },
+              {
+                "date": "2024-05-31",
+                "value": 100
+              },
+              {
+                "date": "2024-06-30",
+                "value": 100
+              },
+              {
+                "date": "2024-07-31",
+                "value": 100
+              }
+            ],
+            "weight": 0.2
+          },
+          {
+            "id": "d",
+            "label": "Path D",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 110
+              },
+              {
+                "date": "2024-05-31",
+                "value": 115
+              },
+              {
+                "date": "2024-06-30",
+                "value": 120
+              },
+              {
+                "date": "2024-07-31",
+                "value": 125
+              }
+            ],
+            "weight": 0.2
+          },
+          {
+            "id": "e",
+            "label": "Path E",
+            "values": [
+              {
+                "date": "2024-03-31",
+                "value": 100
+              },
+              {
+                "date": "2024-04-30",
+                "value": 120
+              },
+              {
+                "date": "2024-05-31",
+                "value": null
+              },
+              {
+                "date": "2024-06-30",
+                "value": 130
+              },
+              {
+                "date": "2024-07-31",
+                "value": 140
+              }
+            ],
+            "weight": 0.2
+          }
+        ],
+        "band": {
+          "kind": "quantile",
+          "lower": 0.25,
+          "upper": 0.75,
+          "method": "equal-weight-empirical-type-7"
+        },
+        "observations": [
+          {
+            "date": "2024-03-31",
+            "count": 5,
+            "complete": true,
+            "lower": 100,
+            "upper": 100,
+            "median": 100,
+            "missing": null
+          },
+          {
+            "date": "2024-04-30",
+            "count": 5,
+            "complete": true,
+            "lower": 90,
+            "upper": 110,
+            "median": 100,
+            "missing": null
+          },
+          {
+            "date": "2024-05-31",
+            "count": 4,
+            "complete": false,
+            "lower": null,
+            "upper": null,
+            "median": null,
+            "missing": "incomplete-scenario-set"
+          },
+          {
+            "date": "2024-06-30",
+            "count": 5,
+            "complete": true,
+            "lower": 80,
+            "upper": 120,
+            "median": 100,
+            "missing": null
+          },
+          {
+            "date": "2024-07-31",
+            "count": 5,
+            "complete": true,
+            "lower": 75,
+            "upper": 125,
+            "median": 100,
+            "missing": null
+          }
+        ],
+        "weighting": "equal scenario weights",
+        "interpretation": "descriptive range or quantiles of supplied scenarios; no likelihood, confidence or coverage claim",
+        "missingPolicy": "all supplied scenarios required at each date; no changing denominator"
+      },
+      "scenes": [
+        {
+          "beat": "scenario-quantiles",
+          "geometry": [
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 0,
+              "x": "2024-01-31",
+              "y": 90,
+              "point": [
+                232.2,
+                1158.4
+              ],
+              "at": 0.6
+            },
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 1,
+              "x": "2024-02-29",
+              "y": 95,
+              "point": [
+                344.9175824175824,
+                1127.4666666666667
+              ],
+              "at": 1.2373626373626374
+            },
+            {
+              "series": "history",
+              "seriesIndex": 0,
+              "index": 2,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                465.40879120879123,
+                1096.5333333333333
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                465.40879120879123,
+                1096.5333333333333
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 90,
+              "point": [
+                582.0131868131868,
+                1158.4
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": null,
+              "point": null,
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 80,
+              "point": [
+                819.1087912087912,
+                1220.2666666666667
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "lower",
+              "seriesIndex": 1,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 75,
+              "point": [
+                939.6000000000001,
+                1251.2
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "median",
+              "seriesIndex": 2,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                465.40879120879123,
+                1096.5333333333333
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "median",
+              "seriesIndex": 2,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 100,
+              "point": [
+                582.0131868131868,
+                1096.5333333333333
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "median",
+              "seriesIndex": 2,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": null,
+              "point": null,
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "median",
+              "seriesIndex": 2,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 100,
+              "point": [
+                819.1087912087912,
+                1096.5333333333333
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "median",
+              "seriesIndex": 2,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 100,
+              "point": [
+                939.6000000000001,
+                1096.5333333333333
+              ],
+              "at": 4.6
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 0,
+              "x": "2024-03-31",
+              "y": 100,
+              "point": [
+                465.40879120879123,
+                1096.5333333333333
+              ],
+              "at": 1.9186813186813185
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 1,
+              "x": "2024-04-30",
+              "y": 110,
+              "point": [
+                582.0131868131868,
+                1034.6666666666665
+              ],
+              "at": 2.578021978021978
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 2,
+              "x": "2024-05-31",
+              "y": null,
+              "point": null,
+              "at": 3.2593406593406593
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 3,
+              "x": "2024-06-30",
+              "y": 120,
+              "point": [
+                819.1087912087912,
+                972.8
+              ],
+              "at": 3.918681318681319
+            },
+            {
+              "series": "upper",
+              "seriesIndex": 3,
+              "index": 4,
+              "x": "2024-07-31",
+              "y": 125,
+              "point": [
+                939.6000000000001,
+                941.8666666666666
+              ],
+              "at": 4.6
+            }
+          ],
+          "polygons": [
+            {
+              "index": 1,
+              "from": "2024-03-31",
+              "to": "2024-04-30",
+              "lower": [
+                100,
+                90
+              ],
+              "upper": [
+                100,
+                110
+              ],
+              "points": [
+                [
+                  465.40879120879123,
+                  1096.5333333333333
+                ],
+                [
+                  465.40879120879123,
+                  1096.5333333333333
+                ],
+                [
+                  582.0131868131868,
+                  1034.6666666666665
+                ],
+                [
+                  582.0131868131868,
+                  1158.4
+                ]
+              ]
+            },
+            {
+              "index": 4,
+              "from": "2024-06-30",
+              "to": "2024-07-31",
+              "lower": [
+                80,
+                75
+              ],
+              "upper": [
+                120,
+                125
+              ],
+              "points": [
+                [
+                  819.1087912087912,
+                  1220.2666666666667
+                ],
+                [
+                  819.1087912087912,
+                  972.8
+                ],
+                [
+                  939.6000000000001,
+                  941.8666666666666
+                ],
+                [
+                  939.6000000000001,
+                  1251.2
+                ]
+              ]
+            }
+          ],
+          "layout": {
+            "u": 1080,
+            "tall": true,
+            "margin": 113.39999999999999,
+            "type": 32.4,
+            "left": 232.2,
+            "right": 939.6,
+            "top": 787.1999999999999,
+            "bottom": 1344
+          },
+          "axes": {
+            "x": {
+              "type": "date",
+              "label": "Observed dates, then scenario dates · 2024",
+              "dateFormat": "month",
+              "domain": [
+                "2024-01-31",
+                "2024-07-31"
+              ],
+              "ticks": [
+                "2024-01-31",
+                "2024-03-31",
+                "2024-07-31"
+              ]
+            },
+            "y": {
+              "type": "linear",
+              "label": "Illustrative output · units",
+              "domain": [
+                60,
+                150
+              ],
+              "ticks": [
+                60,
+                90,
+                120,
+                150
+              ],
+              "decimals": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/expectations-studies/specimens/scenario-range-landscape/build/pipeline/2026-10-03T08-06-54-547Z-cba8bc3f/video.mp4",
+  "outputSha256": "4d46496d0a689497bb365c1a9c8452eea37442268ed150b576b316273ea27eaa",
+  "inputId": "27df523e4453ccfa8ca1cb6847b9d181761ef35e76c185bc0f180b8fc7e1cc41",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "scenario-range-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "scenario-range-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "scenario-range-basis: last frame",
+        "Before scenario-range"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "scenario-range: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "scenario-range: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1379,
+      "time": 45.96666666666667,
+      "reasons": [
+        "scenario-range: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

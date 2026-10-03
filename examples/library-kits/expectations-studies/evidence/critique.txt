@@ -1,0 +1,71 @@
+capacity-vintages-landscape
+cinema 100/100 · 2 beats · 52s · 1 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· capacity-vintages-0 Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· capacity-vintages-1 Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+capacity-vintages-vertical
+cinema 100/100 · 2 beats · 52s · 1 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· capacity-vintages-0 Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· capacity-vintages-1 Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+delivery-vintages-landscape
+cinema 100/100 · 2 beats · 52s · 1 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· delivery-vintages-0 Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· delivery-vintages-1 Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+delivery-vintages-vertical
+cinema 100/100 · 2 beats · 52s · 1 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· delivery-vintages-0 Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· delivery-vintages-1 Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+maturity-gap-landscape
+cinema 100/100 · 2 beats · 46s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· maturity-gap-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· maturity-gap       Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+maturity-gap-vertical
+cinema 100/100 · 2 beats · 46s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· maturity-gap-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· maturity-gap       Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+maturity-slope-landscape
+cinema 100/100 · 2 beats · 46s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· maturity-slope-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· maturity-slope     Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+maturity-slope-vertical
+cinema 100/100 · 2 beats · 46s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· maturity-slope-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· maturity-slope     Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+scenario-quantiles-landscape
+cinema 100/100 · 2 beats · 46s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· scenario-quantiles-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· scenario-quantiles Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+scenario-quantiles-vertical
+cinema 100/100 · 2 beats · 46s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· scenario-quantiles-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· scenario-quantiles Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+scenario-range-landscape
+cinema 100/100 · 2 beats · 46s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· scenario-range-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· scenario-range     Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.
+
+scenario-range-vertical
+cinema 100/100 · 2 beats · 46s · 2 scene families · 2 drawn · 0 with imagery · 0 graphic transitions · 0 colour blocks
+· scenario-range-basis Held 20.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· scenario-range     Held 26.0 s with nothing moving. Add a loop, a drift or split it into two beats.
+· film               No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak.

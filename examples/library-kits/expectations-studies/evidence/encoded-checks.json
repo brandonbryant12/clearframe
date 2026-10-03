@@ -1,0 +1,1361 @@
+[
+  {
+    "project": "capacity-vintages-landscape",
+    "videoSha256": "2240fff6acaa8f794701aad6653aa27f5f4183b41cb82bc32f7d8dee4514ca02",
+    "storyboardSha256": "899c456a76a12c37efcd1e89ef474737b6ebc22908f1ff67725bc7bbe210fe00",
+    "nativeMappingChecks": 149,
+    "sampledFrames": 112,
+    "pointChecks": 698,
+    "frontChecks": 18,
+    "missingColumnChecks": 153,
+    "bandInteriorChecks": 0,
+    "missingBandChecks": 0,
+    "occludedSamplesExcluded": 0,
+    "occlusionProofs": [],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "capacity-vintages-vertical",
+    "videoSha256": "3ff26b8759cc47cd741254683aeeaced937acd337a5433708c58c164c6154ad1",
+    "storyboardSha256": "7675f51a568c56f52277370fbba73c67ae0fc05608e552bfbcb89639c8b8e05c",
+    "nativeMappingChecks": 149,
+    "sampledFrames": 112,
+    "pointChecks": 698,
+    "frontChecks": 18,
+    "missingColumnChecks": 153,
+    "bandInteriorChecks": 0,
+    "missingBandChecks": 0,
+    "occludedSamplesExcluded": 0,
+    "occlusionProofs": [],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "delivery-vintages-landscape",
+    "videoSha256": "14f5b98921ecb1aa92d430be6fedf3343ee3804b942ab88d5146b1b1a80c5405",
+    "storyboardSha256": "2ac71fcc86248fc3d089257be9f368ab75e0d5b5227ef44c722621fba1777f3c",
+    "nativeMappingChecks": 117,
+    "sampledFrames": 112,
+    "pointChecks": 606,
+    "frontChecks": 10,
+    "missingColumnChecks": 255,
+    "bandInteriorChecks": 0,
+    "missingBandChecks": 0,
+    "occludedSamplesExcluded": 0,
+    "occlusionProofs": [],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "delivery-vintages-vertical",
+    "videoSha256": "0776d8024b2dd546349e7868381188d89dbd02635d0701567200a14def555d84",
+    "storyboardSha256": "4489f9bed18a17e9d3bf0300a193436a34e32d5db0ecc7682cf02410eabfd673",
+    "nativeMappingChecks": 117,
+    "sampledFrames": 112,
+    "pointChecks": 606,
+    "frontChecks": 10,
+    "missingColumnChecks": 255,
+    "bandInteriorChecks": 0,
+    "missingBandChecks": 0,
+    "occludedSamplesExcluded": 0,
+    "occlusionProofs": [],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "maturity-gap-landscape",
+    "videoSha256": "036e8b950c60151fd1d5beb03fa702aaeae460c564587097805ad92cc9df6aaf",
+    "storyboardSha256": "c73165d3b9782c5f317305bd29f783dc742a50d59d1a0de0074df5038a734c31",
+    "nativeMappingChecks": 111,
+    "sampledFrames": 96,
+    "pointChecks": 520,
+    "frontChecks": 6,
+    "missingColumnChecks": 51,
+    "bandInteriorChecks": 0,
+    "missingBandChecks": 0,
+    "occludedSamplesExcluded": 0,
+    "occlusionProofs": [],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "maturity-gap-vertical",
+    "videoSha256": "55fe087ae275adf9e913e42ef2f6c6419c6ff5e35cc65a68005f5e831b1c3e9c",
+    "storyboardSha256": "b37a51432fb6719ffcb448be189e1671096840cc5753b3b6c5ad8b45a7b8dcff",
+    "nativeMappingChecks": 111,
+    "sampledFrames": 96,
+    "pointChecks": 520,
+    "frontChecks": 6,
+    "missingColumnChecks": 51,
+    "bandInteriorChecks": 0,
+    "missingBandChecks": 0,
+    "occludedSamplesExcluded": 0,
+    "occlusionProofs": [],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "maturity-slope-landscape",
+    "videoSha256": "dae9accf0db96f9ae46dfbff014c8d0619387422da5cd7900a4d9669670382a3",
+    "storyboardSha256": "e07460ee2adee175bc4fd96d2084d6a56322098828087db7c3dbecb91de08087",
+    "nativeMappingChecks": 126,
+    "sampledFrames": 96,
+    "pointChecks": 522,
+    "frontChecks": 8,
+    "missingColumnChecks": 0,
+    "bandInteriorChecks": 0,
+    "missingBandChecks": 0,
+    "occludedSamplesExcluded": 46,
+    "occlusionProofs": [
+      {
+        "frame": 690,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 705,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 720,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 735,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 750,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 765,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 780,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 795,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 810,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 825,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 840,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 855,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 870,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 885,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 900,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 915,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 930,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 945,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 960,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 975,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 990,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1005,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1020,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1035,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1050,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1065,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1080,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1095,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1110,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1125,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1140,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1155,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1170,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1185,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1200,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1215,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1230,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1245,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1260,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1275,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1290,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1305,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1320,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1335,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1350,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1365,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      }
+    ],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "maturity-slope-vertical",
+    "videoSha256": "2cb725701d9ebbe55898500567b50437b69cf272f544af4b95274d1a119ac906",
+    "storyboardSha256": "31c18d27447c12e68468c4ba49ba23be6ef2baf3a152b8c3bf1a65027bdda284",
+    "nativeMappingChecks": 126,
+    "sampledFrames": 96,
+    "pointChecks": 522,
+    "frontChecks": 8,
+    "missingColumnChecks": 0,
+    "bandInteriorChecks": 0,
+    "missingBandChecks": 0,
+    "occludedSamplesExcluded": 46,
+    "occlusionProofs": [
+      {
+        "frame": 690,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 705,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 720,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 735,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 750,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 765,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 780,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 795,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 810,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 825,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 840,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 855,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 870,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 885,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 900,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 915,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 930,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 945,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 960,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 975,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 990,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1005,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1020,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1035,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1050,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1065,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1080,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1095,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1110,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1125,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1140,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1155,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1170,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1185,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1200,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1215,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1230,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1245,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1260,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1275,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1290,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1305,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1320,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1335,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1350,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1365,
+        "coveredColor": "accent",
+        "visibleLaterColor": "accent2",
+        "encodedLaterColorPresent": true
+      }
+    ],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "scenario-quantiles-landscape",
+    "videoSha256": "fddaa0571862f8d51dda5b4ef66856803c1f029f1109a438b194cbc7b68b958c",
+    "storyboardSha256": "74ba5ca880e572000fe3d4e0fa4a0905bd8c32888f2f44743e72d856d0bc2acf",
+    "nativeMappingChecks": 160,
+    "sampledFrames": 96,
+    "pointChecks": 632,
+    "frontChecks": 7,
+    "missingColumnChecks": 153,
+    "bandInteriorChecks": 246,
+    "missingBandChecks": 123,
+    "occludedSamplesExcluded": 47,
+    "occlusionProofs": [
+      {
+        "frame": 675,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 690,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 705,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 720,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 735,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 750,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 765,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 780,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 795,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 810,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 825,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 840,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 855,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 870,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 885,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 900,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 915,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 930,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 945,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 960,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 975,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 990,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1005,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1020,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1035,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1050,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1065,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1080,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1095,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1110,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1125,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1140,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1155,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1170,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1185,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1200,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1215,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1230,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1245,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1260,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1275,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1290,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1305,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1320,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1335,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1350,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1365,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      }
+    ],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "scenario-quantiles-vertical",
+    "videoSha256": "e744b799200ca06f5e83b920b9058fc658685376f2d14a162bf085e77d16fcd3",
+    "storyboardSha256": "777850665ea3ad9b43fa3d24fdeb2a3469e881d4c29f9801cceb677602a161c0",
+    "nativeMappingChecks": 160,
+    "sampledFrames": 96,
+    "pointChecks": 679,
+    "frontChecks": 7,
+    "missingColumnChecks": 153,
+    "bandInteriorChecks": 410,
+    "missingBandChecks": 123,
+    "occludedSamplesExcluded": 0,
+    "occlusionProofs": [],
+    "neutralMutedFrontProofs": [
+      {
+        "frame": 663,
+        "x": 331.65000000000003,
+        "y": 719.6799999999998,
+        "pixel": [
+          330,
+          719
+        ],
+        "rgb": [
+          108,
+          110,
+          109
+        ],
+        "paletteRGB": [
+          97,
+          107,
+          118
+        ],
+        "maxChannelDistance": 11,
+        "otherGeometryClearancePx": 11.34222222222229,
+        "positionTolerancePx": 3
+      }
+    ],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "scenario-range-landscape",
+    "videoSha256": "4d46496d0a689497bb365c1a9c8452eea37442268ed150b576b316273ea27eaa",
+    "storyboardSha256": "3326bec443bf9b533fc1012a7a91449df3979414556ddeb0a95a8c043150fed9",
+    "nativeMappingChecks": 219,
+    "sampledFrames": 96,
+    "pointChecks": 811,
+    "frontChecks": 10,
+    "missingColumnChecks": 0,
+    "bandInteriorChecks": 574,
+    "missingBandChecks": 0,
+    "occludedSamplesExcluded": 0,
+    "occlusionProofs": [],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  },
+  {
+    "project": "scenario-range-vertical",
+    "videoSha256": "87aac34aced5941cccf9e67352402366f931161978d69bcaa231681eefd695bb",
+    "storyboardSha256": "c9d0639f63a96ad9f1302d898045957878338d5765f8b5e631c3ac0a93360555",
+    "nativeMappingChecks": 219,
+    "sampledFrames": 96,
+    "pointChecks": 764,
+    "frontChecks": 10,
+    "missingColumnChecks": 0,
+    "bandInteriorChecks": 820,
+    "missingBandChecks": 0,
+    "occludedSamplesExcluded": 47,
+    "occlusionProofs": [
+      {
+        "frame": 675,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 690,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 705,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 720,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 735,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 750,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 765,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 780,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 795,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 810,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 825,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 840,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 855,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 870,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 885,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 900,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 915,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 930,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 945,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 960,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 975,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 990,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1005,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1020,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1035,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1050,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1065,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1080,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1095,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1110,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1125,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1140,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1155,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1170,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1185,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1200,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1215,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1230,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1245,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1260,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1275,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1290,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1305,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1320,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1335,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1350,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      },
+      {
+        "frame": 1365,
+        "coveredColor": "accent2",
+        "visibleLaterColor": "ink",
+        "encodedLaterColorPresent": true
+      }
+    ],
+    "neutralMutedFrontProofs": [],
+    "failures": 0,
+    "firstFailures": [],
+    "scope": "Independent chronology/maturity/empirical-rank formulas and native coordinates. 2Hz points, gaps and settled band interiors; four exact source-frame linear fronts per chart. Three-pixel point tolerance at width 720; not a full pixel census or continuous playback."
+  }
+]

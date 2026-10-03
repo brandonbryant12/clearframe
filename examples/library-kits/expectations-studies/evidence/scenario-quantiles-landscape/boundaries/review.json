@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/expectations-studies/specimens/scenario-quantiles-landscape/build/pipeline/2026-10-03T08-07-25-243Z-b7755bf2/video.mp4",
+  "outputSha256": "fddaa0571862f8d51dda5b4ef66856803c1f029f1109a438b194cbc7b68b958c",
+  "inputId": "01bf67756f51fa422d2b59bf6a88fb356d847976017a6f3b722370f941b5d5de",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "scenario-quantiles-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "scenario-quantiles-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "scenario-quantiles-basis: last frame",
+        "Before scenario-quantiles"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "scenario-quantiles: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "scenario-quantiles: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1379,
+      "time": 45.96666666666667,
+      "reasons": [
+        "scenario-quantiles: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

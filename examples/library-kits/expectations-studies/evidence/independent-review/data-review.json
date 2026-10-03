@@ -1,0 +1,22 @@
+{
+  "status": "pass",
+  "assertions": 1204,
+  "originalAssertions": 1178,
+  "regressionAssertions": 26,
+  "source": "engine/lib/expectations.mjs",
+  "sourceSha256": "d36b7e44778d563a01e47d3b4eb2c8dd2517e6961e59ad98066f3b23b520e2b4",
+  "scope": [
+    "Inclusive cutoff and shuffled actual-release revisions",
+    "Null withdrawal, zero rerelease, and hidden-future-prefix invariance",
+    "Nonuniform maturity normalization and all-null snapshots",
+    "Independent type-7 quantiles for 2–25 scenarios and four percentile pairs",
+    "Fixed scenario denominator, missing band and recovery",
+    "Two rejected maturity underflow/collapse counterexamples",
+    "Twenty-four exact equal-value quantile regressions at subnormal and bounded extremes"
+  ],
+  "resolvedFindings": [
+    "Positive distinct month tenors could become zero or duplicate normalized years; strict normalized-year monotonicity now rejects them.",
+    "Weighted endpoint interpolation could underflow equal subnormal values or round equal boundary values out of bounds; difference interpolation with rank clamping now preserves them."
+  ],
+  "limits": "Source/math validation and finite counterexamples; no continuous playback or interactive browser acceptance."
+}

@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/expectations-studies/specimens/maturity-slope-landscape/build/pipeline/2026-10-03T08-01-49-582Z-44a62b11/video.mp4",
+  "outputSha256": "dae9accf0db96f9ae46dfbff014c8d0619387422da5cd7900a4d9669670382a3",
+  "inputId": "bbcf3aa4b9c6dc48d2949eeaa89c5ea31a92f47ccf77266f9fc440cd37db0269",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "maturity-slope-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "maturity-slope-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "maturity-slope-basis: last frame",
+        "Before maturity-slope"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "maturity-slope: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "maturity-slope: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1379,
+      "time": 45.96666666666667,
+      "reasons": [
+        "maturity-slope: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

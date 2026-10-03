@@ -1,0 +1,11 @@
+✔ vintage snapshots retain publication identity and do not use later actual revisions (10.907542ms)
+✔ maturity curves preserve unequal tenor spacing, missing quotes and negative yields (0.381916ms)
+✔ scenario bands use the full declared ensemble and explicit empirical quantiles, never fill a missing path (0.688375ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 64.083667

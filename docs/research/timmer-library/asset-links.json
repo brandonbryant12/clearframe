@@ -279,6 +279,28 @@
           "C11"
         ]
       }
+    },
+    "expectations-studies": {
+      "cases": {
+        "capacity-vintages": [
+          "C04"
+        ],
+        "delivery-vintages": [
+          "C04"
+        ],
+        "maturity-slope": [
+          "C06"
+        ],
+        "maturity-gap": [
+          "C06"
+        ],
+        "scenario-range": [
+          "C12"
+        ],
+        "scenario-quantiles": [
+          "C12"
+        ]
+      }
     }
   },
   "sourceOnly": {

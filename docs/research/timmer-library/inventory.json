@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "asOf": "2026-10-02",
+  "asOf": "2026-10-03",
   "sourceManifest": "sources.json",
   "purpose": "General explanatory library: a macro research corpus and a complementary retirement collection; not a schedule to reproduce source videos.",
   "statusLegend": {
@@ -125,7 +125,7 @@
       "category": "Chart",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "Native prototype: publication-aware vintages and actual revisions in two fictional cases with landscape/vertical source and sampled encoded review; continuous playback and promotion pending",
       "effort": "M",
       "sourceIds": [
         "S02",
@@ -140,7 +140,7 @@
         "actual",
         "revision"
       ],
-      "existing": "line and timeline are available; vintage/actual state and a shared legend need composition.",
+      "existing": "engine/lib/expectations.mjs selects information available at each cutoff. expectations-studies retains dated forecast identities, revised actuals, null gaps and fixed-scale two-cutoff compositions; see docs/expectations.md.",
       "guardrail": "Forecasts retain their as-of dates. Do not use later revisions in an earlier view.",
       "reuse": [
         "demand forecasting",
@@ -191,7 +191,7 @@
       "category": "Chart",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "Partial native prototype: dated supplied maturity quotes, nonuniform tenor spacing and null gaps in both formats; curve fitting, implied forward derivation and continuous playback remain open",
       "effort": "L",
       "sourceIds": [
         "S05",
@@ -207,7 +207,7 @@
         "spot/forward",
         "curve type"
       ],
-      "existing": "line supports points; maturity spacing and synchronized curve snapshots are not a dedicated asset.",
+      "existing": "engine/lib/expectations.mjs normalizes supplied month tenors and preserves dated quote snapshots. expectations-studies has two native examples; connecting segments are visual guides, not fitted curves or future forecasts.",
       "guardrail": "Term structures are not a future time-series forecast. Preserve nonuniform maturity spacing.",
       "reuse": [
         "delivery lead times",
@@ -384,7 +384,7 @@
       "category": "Chart",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "Native prototype: supplied min/max and empirical type-7 scenario bands with observed origin, equal weights and complete-ensemble gaps in both formats; probability models and continuous playback remain open",
       "effort": "L",
       "sourceIds": [
         "S02",
@@ -398,7 +398,7 @@
         "method",
         "assumptions"
       ],
-      "existing": "scenario-fork is qualitative; quantitative bands and interval labels are new.",
+      "existing": "engine/lib/expectations.mjs computes complete-ensemble min/max, quantile boundaries and median. expectations-studies composes native fill only between consecutive complete future dates; no likelihood or confidence claim is made.",
       "guardrail": "A decorative fan is not a probability distribution. Use equal path weights unless supported probabilities are supplied.",
       "reuse": [
         "planning",
@@ -1756,7 +1756,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown; vintage alignment and broader risk-adjusted metrics remain planned",
+      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization and descriptive scenario quantiles; forward models and broader risk-adjusted metrics remain planned",
       "effort": "L",
       "sourceIds": [
         "S04",
@@ -1772,7 +1772,7 @@
         "transform",
         "method version"
       ],
-      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics. engine/lib/time-series.mjs adds explicit price-basis conversion, anchored monthly/quarterly/annual growth, compounded annualization, complete-window sample SD and observed drawdown/recovery; see docs/time-series.md.",
+      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics. engine/lib/time-series.mjs adds explicit price-basis conversion, anchored monthly/quarterly/annual growth, compounded annualization, complete-window sample SD and observed drawdown/recovery; see docs/time-series.md. engine/lib/expectations.mjs adds inclusive publication cutoffs with actual revisions, nonuniform maturity coordinates, and complete-ensemble descriptive scenario ranges/type-7 quantiles; see docs/expectations.md.",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "reuse": [
         "science",

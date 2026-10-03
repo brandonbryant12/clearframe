@@ -1,0 +1,19 @@
+# Expectations studies
+
+Question: what was known, when was it known, and what does the horizontal position actually mean?
+
+These original fictional examples fill three explanatory gaps: forecasts must keep their issue dates, yield curves must preserve remaining-maturity spacing, and scenario bands must disclose their descriptive calculation. They do not import publisher chart pixels or observed financial records.
+
+Alternatives considered: morphing every curve continuously; a perspective ribbon before a flat chart; and native fixed-scale comparisons with a deliberate change in information state. Choose the third. Morphing can invent intermediate vintages or quotes. Perspective obscures exact maturity spacing. Fixed native positions allow the data to carry the argument.
+
+C04 uses two twenty-six-second views of the same target-date axis. The first shows only forecasts and actuals available at its stated cutoff; the second shows the later available actual revision/release. Forecast issue dates remain in their labels and do not silently become today's estimate. The cut changes the information date while the target-date scale and existing forecast identities stay fixed. Missing forecasts break the line. A future unpublished vintage is deliberately present in the source fixture and absent from both rendered snapshots.
+
+C06 first explains the maturity basis, then compares two dated quote snapshots on a fixed numeric maturity axis. One month is one twelfth of a year; observations are not equally spaced categories. The first example changes slope, and the second includes negative quotations and a missing tenor. Dots are supplied quotes; straight connecting segments are visual guides, not fitted yields between tenors. No implied forward rate, discount-factor bootstrap or prediction is asserted.
+
+C12 first states how its band is computed, then reveals observed history and a visibly separated scenario region. One example shows the min/max range of three named, equally weighted supplied paths. The other uses the empirical 25th/75th percentiles and median of five supplied paths, with type-7 rank interpolation. These are descriptive summaries of an authored ensemble, not confidence intervals or probability forecasts. A missing member invalidates the band at that date; the denominator never shrinks. The band never extends into observed history.
+
+Use the paper theme, native geometric heading and Inter text/figures, fixed cameras and restrained fades. A common linear scan reveals comparable quantities on the same coordinate; no easing changes the encoded proportions. The filled scenario band appears after its boundary lines settle. Native source lines remain opaque and visible. Titles, units, issue dates, information cutoffs and limitations get the same importance as the plotted differences. Portrait receives its own layout. No narration, music or paid media is needed for these source specimens.
+
+Method inserts last twenty seconds and charts last twenty-six seconds, giving forty-six-second clips; the two-view vintage examples last fifty-two seconds. The final quantitative geometry holds for at least twenty seconds in each chart beat. There are no interpolated transitions between information states. Review actual native layout, native job mappings, bounded encoded edge positions, missing-data gaps, band boundaries and phone-size text. Inspect the complete encoded candidate as well as source arithmetic. Keep prototype status until continuous subjective playback, audio/accessibility decisions and final-master review are established.
+
+Decisions made under the authorized library build-out: retain exact publication chronology; leave unavailable data unavailable; label quoted yield basis rather than deriving unsupported forwards; use descriptive scenario labels rather than probability language; bound all arrays and arithmetic; stream and compact render evidence to protect the local disk reserve.

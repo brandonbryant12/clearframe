@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/expectations-studies/specimens/capacity-vintages-landscape/build/pipeline/2026-10-03T07-56-59-160Z-d89d8cca/video.mp4",
+  "outputSha256": "2240fff6acaa8f794701aad6653aa27f5f4183b41cb82bc32f7d8dee4514ca02",
+  "inputId": "b331ecee1b6c3cc1579fe83b9533499d54aa445f1f9592e9e70edc19287d00ed",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "capacity-vintages-0: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "capacity-vintages-0: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 779,
+      "time": 25.966666666666665,
+      "reasons": [
+        "capacity-vintages-0: last frame",
+        "Before capacity-vintages-1"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 780,
+      "time": 26,
+      "reasons": [
+        "capacity-vintages-1: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 786,
+      "time": 26.2,
+      "reasons": [
+        "capacity-vintages-1: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1559,
+      "time": 51.96666666666667,
+      "reasons": [
+        "capacity-vintages-1: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

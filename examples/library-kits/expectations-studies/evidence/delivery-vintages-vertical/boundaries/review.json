@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/expectations-studies/specimens/delivery-vintages-vertical/build/pipeline/2026-10-03T08-01-32-853Z-68ec51d3/video.mp4",
+  "outputSha256": "0776d8024b2dd546349e7868381188d89dbd02635d0701567200a14def555d84",
+  "inputId": "b7dcc452abfe03c182f36622fecc681cd3c217e2fdb29c405b77c12de5fd18d6",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "delivery-vintages-0: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "delivery-vintages-0: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 779,
+      "time": 25.966666666666665,
+      "reasons": [
+        "delivery-vintages-0: last frame",
+        "Before delivery-vintages-1"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 780,
+      "time": 26,
+      "reasons": [
+        "delivery-vintages-1: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 786,
+      "time": 26.2,
+      "reasons": [
+        "delivery-vintages-1: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1559,
+      "time": 51.96666666666667,
+      "reasons": [
+        "delivery-vintages-1: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

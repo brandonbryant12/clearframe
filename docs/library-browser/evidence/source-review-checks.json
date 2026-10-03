@@ -6,12 +6,14 @@
     "passed": 4
   },
   "catalog": {
-    "packages": 8,
-    "examples": 39,
+    "packages": 9,
+    "examples": 45,
     "inventory": 71,
-    "existingSafeLocalReferences": 307,
+    "existingSafeLocalReferences": 355,
     "unresolvedSourceIds": 0,
-    "matchingBundledLedgerSourceHashes": 4
+    "matchingBundledLedgerSourceHashes": 4,
+    "nativeVariants": 88,
+    "sourceInsertVariants": 1
   },
   "findings": [
     {
@@ -91,7 +93,7 @@
     "passed": 4
   },
   "independentRegressionChecks": 17,
-  "finalVariantDurationChecks": 76,
+  "finalVariantDurationChecks": 88,
   "sourceHashes": {
     "engine/lib/library-browser.mjs": "829c57ccdd96541f1056f785f99a613d3b5b329d35e4c084fb77784c13913d59",
     "engine/lib/library-browser-build.mjs": "707dfd6f2a685ecffaa22d05f056e8f2394385fe4ef0e48ddf4732815f07c591",
@@ -99,18 +101,23 @@
     "engine/ui/library-browser/app.js": "0981e68ee87f195a3fd097b17703be0d9030b020562df26d9511224ae0b76ea8",
     "engine/ui/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
     "engine/ui/library-browser/style.css": "7457ba692f1c35216a06d83ce288be95082f43306840aaaa6b0116d93b22a1cf",
-    "docs/research/timmer-library/asset-links.json": "f7d7d006b0a28d6da08fe22bb1cac0fb3deebfc41abd9dc5c4beea7a2911e918",
-    "test/library-browser.test.mjs": "b0848547a33d801801d39c3e90b2d9ebc75e8ac1d5c6704ed2dd14329cf736a6"
+    "docs/research/timmer-library/asset-links.json": "4e8915df820ede845fd7df904d25081a0d757ddca5f9ae98e3cad0bad7c2d81e",
+    "test/library-browser.test.mjs": "e8c9ba3af3819cb5905141860431962f81900383e0ef0858dd16384df51017bc"
   },
   "finalBundleHashes": {
     "docs/library-browser/example-ledger.mjs": "d9e1ac01a058494fd8e4edc4a0e876492617dab39c97ce7d5de01f2d1876e979",
     "docs/library-browser/example-ledger.json": "d057d406e30fb4c7911757c9f2cd2f8ffc2ef054f635f7e9c668b973af962631",
-    "docs/library-browser/app.js": "bbedf974a4cf8c54169ced302a6dd8aa16048efbd26ba8374c6a04663e275c7c",
-    "docs/library-browser/catalog.json": "84c393e522efe8e4f4e5f1f7a37e6dc9169d00e6148b41e1b3978af7b85144f6",
+    "docs/library-browser/app.js": "9fdc5dc0eb4d3cd120827f59e69a6bb08eb9272ba51e19b428cc9bbae6fea834",
+    "docs/library-browser/catalog.json": "0aa842e03feea7e1ea4f17c47ff24c7271b80c7cc192dc5274df70f2adb41c1d",
     "docs/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
     "docs/library-browser/style.css": "0c80ce1cd03abf96b895f46f19501e07a64df40ab74b03fa7e917ea8393b24cd",
     "docs/library-browser/DIRECTION.md": "449b761ae2abf2c44427e8917862cd5885b081f371683e363ed5d42c8754e975",
-    "docs/research/timmer-library/inventory.json": "8e564c27aa26f0f68d58c1c8f6d463ee3791f5d15df4e9dd34dbe43396af5d8a"
+    "docs/research/timmer-library/inventory.json": "fe6df5b29f78b8b15418fd79784d98c645107fcd5c9390cc47f64c8dd66fe3e6",
+    "docs/research/timmer-library/asset-links.json": "4e8915df820ede845fd7df904d25081a0d757ddca5f9ae98e3cad0bad7c2d81e",
+    "docs/library-browser/evidence/catalog-build.json": "e84277a6f84f1b68e618bed60bb5c2bc8dabb5dc57bad68fe18c81bd3afbee19",
+    "docs/library-browser/evidence/node-tests.txt": "4e73a1bfff0c92d180626c3e979ecaf785c73d24ca33b618c1992bc7df7a745d",
+    "docs/library-browser/evidence/source-review-regressions.mjs": "65addf40b1fbde5a1aaa37ea36f58020cae6efa4ccc60297a4b32794a0d38d53",
+    "docs/library-browser/evidence/source-review-regressions.json": "37c4eb508830bfafeffb40f622a538727db3b41e2e0641e9b8921ca86af30f87"
   },
   "finalBundleChecks": {
     "engineAndUiSourcesUnchanged": true,
@@ -148,12 +155,21 @@
     ],
     "catalogVerifiedFlag": true,
     "packageIssueCount": 0,
-    "independentRegressionsPassed": 17
+    "independentRegressionsPassed": 17,
+    "recordAndFormatIdentitiesUnique": true,
+    "expectationsCaseMappingsMatch": true
   },
   "producerFullSuite": {
-    "passed": 182,
-    "total": 182,
+    "passed": 185,
+    "total": 185,
+    "skipped": 0,
+    "failed": 0,
     "reviewerReran": false,
-    "note": "Producer reports final gated run outside sandbox passed; preceding sandbox run had a sips-only failure."
-  }
+    "note": "Producer reports current gated full-suite pass; reviewer inspected retained node-tests.txt summary."
+  },
+  "refreshedAt": "2026-10-03T08:19:47.806463+00:00",
+  "sourceChangesSincePriorReview": [
+    "docs/research/timmer-library/asset-links.json",
+    "test/library-browser.test.mjs"
+  ]
 }

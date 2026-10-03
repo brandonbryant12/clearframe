@@ -1,0 +1,610 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-10-03",
+  "provenance": "Original fictional scenarios and quotations. No observed market or company data.",
+  "cases": [
+    {
+      "id": "capacity-vintages",
+      "recipe": "C04",
+      "title": "Keep each forecast in its own vintage",
+      "unit": "Quarter-end output \u00b7 units",
+      "domain": [
+        80,
+        140
+      ],
+      "ticks": [
+        80,
+        100,
+        120,
+        140
+      ],
+      "targetDomain": [
+        "2024-03-31",
+        "2024-09-30"
+      ],
+      "cutoffs": [
+        "2024-05-01",
+        "2024-08-01"
+      ],
+      "vintages": [
+        {
+          "id": "January forecast",
+          "issuedAt": "2024-01-10",
+          "values": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 110
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": 120
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": 130
+            }
+          ]
+        },
+        {
+          "id": "March forecast",
+          "issuedAt": "2024-03-01",
+          "values": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 105
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": 112
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": 125
+            }
+          ]
+        },
+        {
+          "id": "Unpublished October forecast",
+          "issuedAt": "2024-10-01",
+          "values": [
+            {
+              "targetDate": "2024-12-31",
+              "value": 150
+            }
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "targetDate": "2024-03-31",
+          "releasedAt": "2024-04-15",
+          "value": 98
+        },
+        {
+          "targetDate": "2024-03-31",
+          "releasedAt": "2024-06-20",
+          "value": 101
+        },
+        {
+          "targetDate": "2024-06-30",
+          "releasedAt": "2024-07-15",
+          "value": 108
+        }
+      ],
+      "takeaways": [
+        "March actual: 98, released Apr 15. Later revisions are unavailable.",
+        "March revised to 101 on Jun 20; June actual 108 released Jul 15."
+      ]
+    },
+    {
+      "id": "delivery-vintages",
+      "recipe": "C04",
+      "title": "A missing estimate stays missing",
+      "unit": "Quarter-end deliveries \u00b7 units",
+      "domain": [
+        80,
+        160
+      ],
+      "ticks": [
+        80,
+        120,
+        160
+      ],
+      "targetDomain": [
+        "2024-03-31",
+        "2024-09-30"
+      ],
+      "cutoffs": [
+        "2024-05-01",
+        "2024-08-01"
+      ],
+      "vintages": [
+        {
+          "id": "January forecast",
+          "issuedAt": "2024-01-10",
+          "values": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 120
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": null
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": 150
+            }
+          ]
+        },
+        {
+          "id": "March forecast",
+          "issuedAt": "2024-03-01",
+          "values": [
+            {
+              "targetDate": "2024-03-31",
+              "value": 115
+            },
+            {
+              "targetDate": "2024-06-30",
+              "value": 125
+            },
+            {
+              "targetDate": "2024-09-30",
+              "value": 135
+            }
+          ]
+        },
+        {
+          "id": "Unpublished October forecast",
+          "issuedAt": "2024-10-01",
+          "values": [
+            {
+              "targetDate": "2024-12-31",
+              "value": 160
+            }
+          ]
+        }
+      ],
+      "releases": [
+        {
+          "targetDate": "2024-03-31",
+          "releasedAt": "2024-04-15",
+          "value": 112
+        },
+        {
+          "targetDate": "2024-03-31",
+          "releasedAt": "2024-06-20",
+          "value": 109
+        },
+        {
+          "targetDate": "2024-06-30",
+          "releasedAt": "2024-07-15",
+          "value": 118
+        }
+      ],
+      "takeaways": [
+        "No January estimate was supplied for June. No line bridges that gap.",
+        "March revised to 109 on Jun 20; June actual 118 released Jul 15."
+      ]
+    },
+    {
+      "id": "maturity-slope",
+      "recipe": "C06",
+      "title": "A maturity curve is a dated snapshot",
+      "unit": "par quote \u00b7 % per year",
+      "domain": [
+        0,
+        6
+      ],
+      "ticks": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "kind": "par",
+      "tenors": [
+        {
+          "months": 1,
+          "label": "1 month"
+        },
+        {
+          "months": 6,
+          "label": "6 months"
+        },
+        {
+          "months": 12,
+          "label": "1 year"
+        },
+        {
+          "months": 24,
+          "label": "2 years"
+        },
+        {
+          "months": 60,
+          "label": "5 years"
+        },
+        {
+          "months": 120,
+          "label": "10 years"
+        }
+      ],
+      "snapshots": [
+        {
+          "date": "2024-01-02",
+          "values": [
+            5.5,
+            5.2,
+            4.8,
+            4.3,
+            3.8,
+            3.5
+          ]
+        },
+        {
+          "date": "2024-07-02",
+          "values": [
+            2.5,
+            2.7,
+            3.0,
+            3.2,
+            3.8,
+            4.1
+          ]
+        }
+      ],
+      "takeaway": "The horizontal axis is remaining maturity, not the date of a future yield."
+    },
+    {
+      "id": "maturity-gap",
+      "recipe": "C06",
+      "title": "Missing quotes do not fill themselves",
+      "unit": "quoted yield \u00b7 % per year",
+      "domain": [
+        -1,
+        4
+      ],
+      "ticks": [
+        -1,
+        0,
+        2,
+        4
+      ],
+      "kind": "quoted",
+      "tenors": [
+        {
+          "months": 1,
+          "label": "1 month"
+        },
+        {
+          "months": 6,
+          "label": "6 months"
+        },
+        {
+          "months": 12,
+          "label": "1 year"
+        },
+        {
+          "months": 24,
+          "label": "2 years"
+        },
+        {
+          "months": 60,
+          "label": "5 years"
+        },
+        {
+          "months": 120,
+          "label": "10 years"
+        }
+      ],
+      "snapshots": [
+        {
+          "date": "2024-01-02",
+          "values": [
+            -0.5,
+            -0.25,
+            0.2,
+            null,
+            2.0,
+            2.5
+          ]
+        },
+        {
+          "date": "2024-07-02",
+          "values": [
+            0,
+            0.3,
+            0.6,
+            1.2,
+            2.3,
+            3
+          ]
+        }
+      ],
+      "takeaway": "No January quote at 2 years. The gap breaks both adjacent segments."
+    },
+    {
+      "id": "scenario-range",
+      "recipe": "C12",
+      "title": "Three paths do not establish probabilities",
+      "unit": "Illustrative output \u00b7 units",
+      "domain": [
+        60,
+        150
+      ],
+      "ticks": [
+        60,
+        90,
+        120,
+        150
+      ],
+      "history": [
+        {
+          "date": "2024-01-31",
+          "value": 90
+        },
+        {
+          "date": "2024-02-29",
+          "value": 95
+        },
+        {
+          "date": "2024-03-31",
+          "value": 100
+        }
+      ],
+      "band": {
+        "kind": "range"
+      },
+      "scenarios": [
+        {
+          "id": "lower",
+          "label": "Lower path",
+          "values": [
+            {
+              "date": "2024-03-31",
+              "value": 100
+            },
+            {
+              "date": "2024-04-30",
+              "value": 95
+            },
+            {
+              "date": "2024-05-31",
+              "value": 90
+            },
+            {
+              "date": "2024-06-30",
+              "value": 80
+            },
+            {
+              "date": "2024-07-31",
+              "value": 70
+            }
+          ]
+        },
+        {
+          "id": "middle",
+          "label": "Middle path",
+          "values": [
+            {
+              "date": "2024-03-31",
+              "value": 100
+            },
+            {
+              "date": "2024-04-30",
+              "value": 105
+            },
+            {
+              "date": "2024-05-31",
+              "value": 110
+            },
+            {
+              "date": "2024-06-30",
+              "value": 115
+            },
+            {
+              "date": "2024-07-31",
+              "value": 120
+            }
+          ]
+        },
+        {
+          "id": "upper",
+          "label": "Upper path",
+          "values": [
+            {
+              "date": "2024-03-31",
+              "value": 100
+            },
+            {
+              "date": "2024-04-30",
+              "value": 110
+            },
+            {
+              "date": "2024-05-31",
+              "value": 125
+            },
+            {
+              "date": "2024-06-30",
+              "value": 135
+            },
+            {
+              "date": "2024-07-31",
+              "value": 145
+            }
+          ]
+        }
+      ],
+      "takeaway": "Shading is the supplied min\u2013max range. No likelihoods are assigned."
+    },
+    {
+      "id": "scenario-quantiles",
+      "recipe": "C12",
+      "title": "An incomplete ensemble leaves a gap",
+      "unit": "Illustrative output \u00b7 units",
+      "domain": [
+        60,
+        150
+      ],
+      "ticks": [
+        60,
+        90,
+        120,
+        150
+      ],
+      "history": [
+        {
+          "date": "2024-01-31",
+          "value": 90
+        },
+        {
+          "date": "2024-02-29",
+          "value": 95
+        },
+        {
+          "date": "2024-03-31",
+          "value": 100
+        }
+      ],
+      "band": {
+        "kind": "quantile",
+        "lower": 0.25,
+        "upper": 0.75
+      },
+      "scenarios": [
+        {
+          "id": "a",
+          "label": "Path A",
+          "values": [
+            {
+              "date": "2024-03-31",
+              "value": 100
+            },
+            {
+              "date": "2024-04-30",
+              "value": 80
+            },
+            {
+              "date": "2024-05-31",
+              "value": 75
+            },
+            {
+              "date": "2024-06-30",
+              "value": 70
+            },
+            {
+              "date": "2024-07-31",
+              "value": 65
+            }
+          ]
+        },
+        {
+          "id": "b",
+          "label": "Path B",
+          "values": [
+            {
+              "date": "2024-03-31",
+              "value": 100
+            },
+            {
+              "date": "2024-04-30",
+              "value": 90
+            },
+            {
+              "date": "2024-05-31",
+              "value": 85
+            },
+            {
+              "date": "2024-06-30",
+              "value": 80
+            },
+            {
+              "date": "2024-07-31",
+              "value": 75
+            }
+          ]
+        },
+        {
+          "id": "c",
+          "label": "Path C",
+          "values": [
+            {
+              "date": "2024-03-31",
+              "value": 100
+            },
+            {
+              "date": "2024-04-30",
+              "value": 100
+            },
+            {
+              "date": "2024-05-31",
+              "value": 100
+            },
+            {
+              "date": "2024-06-30",
+              "value": 100
+            },
+            {
+              "date": "2024-07-31",
+              "value": 100
+            }
+          ]
+        },
+        {
+          "id": "d",
+          "label": "Path D",
+          "values": [
+            {
+              "date": "2024-03-31",
+              "value": 100
+            },
+            {
+              "date": "2024-04-30",
+              "value": 110
+            },
+            {
+              "date": "2024-05-31",
+              "value": 115
+            },
+            {
+              "date": "2024-06-30",
+              "value": 120
+            },
+            {
+              "date": "2024-07-31",
+              "value": 125
+            }
+          ]
+        },
+        {
+          "id": "e",
+          "label": "Path E",
+          "values": [
+            {
+              "date": "2024-03-31",
+              "value": 100
+            },
+            {
+              "date": "2024-04-30",
+              "value": 120
+            },
+            {
+              "date": "2024-05-31",
+              "value": null
+            },
+            {
+              "date": "2024-06-30",
+              "value": 130
+            },
+            {
+              "date": "2024-07-31",
+              "value": 140
+            }
+          ]
+        }
+      ],
+      "takeaway": "25th\u201375th empirical quantiles, not confidence limits. All five paths are required."
+    }
+  ]
+}

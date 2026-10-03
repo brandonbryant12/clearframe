@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/expectations-studies/specimens/maturity-slope-vertical/build/pipeline/2026-10-03T08-02-04-515Z-955bfef4/video.mp4",
+  "outputSha256": "2cb725701d9ebbe55898500567b50437b69cf272f544af4b95274d1a119ac906",
+  "inputId": "c416cb95799b326a1445eb5ed7b33e26ed8b6b7184cc41d8b7479425f4b2dc65",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "maturity-slope-basis: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "maturity-slope-basis: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "maturity-slope-basis: last frame",
+        "Before maturity-slope"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "maturity-slope: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "maturity-slope: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1379,
+      "time": 45.96666666666667,
+      "reasons": [
+        "maturity-slope: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}
