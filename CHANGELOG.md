@@ -2,6 +2,7 @@
 
 ## 0.5.0 — unreleased
 
+- **Correlation windows.** Native Pearson matrices retain paired monthly returns, explicit counts and undefined reasons; selected-pair charts preserve shared percent axes and missing gaps. Four original specimens and independent arithmetic/encoded review support a prototype. See `docs/correlations.md`; continuous playback and final master acceptance remain open.
 - **Ranked small multiples.** Shared native panels retain full dated histories and fixed domains while order changes on an explicit observation date. Ties share rank, missing values stay unranked, and a selected panel enlarges uniformly. Four native specimens retain independent rank and encoded geometry evidence. See `docs/small-multiples.md`; continuous playback and final master acceptance remain open.
 
 - **Static prepared-asset anchors.** A source-bound export verifies every frame of a declared static range, projects named local points and reserves geometry-clear copy rectangles. Centered contain/cover helpers keep native labels editable. Eight native specimens retain source, projection and encoded evidence. Visibility, occlusion and moving tracking remain open. See `docs/asset-anchors.md`.

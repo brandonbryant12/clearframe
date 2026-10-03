@@ -6,7 +6,7 @@ test('catalog links each specimen to its operation without turning file presence
  const d=await catalog();assert(d.packages.length>=8);assert(d.records.filter(r=>r.kind==='example').length>=39);
  const pension=d.records.find(r=>r.id==='retirement-mechanisms/r06');assert.deepEqual(pension.inventoryIds,['R06']);assert.equal(pension.status,'prototype');assert.equal(pension.integrity,'not-checked');
  const balance=d.records.find(r=>r.packageId==='balance-study');assert.equal(balance.variants[0].previewType,'prepared-insert');assert.equal(balance.status,'ready-for-review');
- assert(filtered(d,{query:'vesting'}).some(r=>r.id==='retirement-mechanisms/r03'));assert(filtered(d,{kind:'inventory',query:'C07'}).every(r=>!r.hasPreview));
+ assert(filtered(d,{query:'vesting'}).some(r=>r.id==='retirement-mechanisms/r03'));assert(filtered(d,{kind:'inventory',query:'C13'}).every(r=>!r.hasPreview));
  assert.equal(filtered(d,{status:'accepted'}).length,0);assert.equal(d.sources.length,27);
 });
 test('verified catalog disables altered or missing previews and preserves the declared package state',async()=>{
