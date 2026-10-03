@@ -1,0 +1,286 @@
+[
+  {
+    "name": "finite-project-landscape",
+    "pipelineId": "2026-10-03T11-13-40-915Z-43aea0f1",
+    "videoSha256": "8c6a7e10a3d210ae97f1365fcf41cf5633b487eafc0ce4d15c443e8a8fd33db0",
+    "times": [
+      0.1,
+      0.5,
+      0.9,
+      1.4,
+      3,
+      35.9,
+      36.033333,
+      36.3,
+      36.7,
+      37.8,
+      39.9,
+      71.9
+    ],
+    "width": 360,
+    "frames": [
+      {
+        "path": "evidence/independent-review/finite-project-landscape/0.1s.png",
+        "sha256": "5f0c7981653b898230cc7f866a75c604a0ae01ce97b2a85e3a3939cc798e14c6"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/0.5s.png",
+        "sha256": "f9af3ca45ee585281587c85f06d2e56f3d18b13b77936b60125121fc72a6155b"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/0.9s.png",
+        "sha256": "482b77a29b654f7e706992356531077f7deb50b50b928155715e5b1ef7ede582"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/1.4s.png",
+        "sha256": "45535f88df92a4cb4c1086a116ac884c5cf766ff6510656b341e9f4aadda74f1"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/3s.png",
+        "sha256": "45535f88df92a4cb4c1086a116ac884c5cf766ff6510656b341e9f4aadda74f1"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/35.9s.png",
+        "sha256": "78305ec3905ccb9f465399e53e854d461fcb64c42567d1c837664aecefef4acc"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/36.0333s.png",
+        "sha256": "5bb8b1bd0a59825e11e351d895cc84246995a6358d4931ed4055477aa3d1cd0d"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/36.3s.png",
+        "sha256": "017934b166d37542d116fff1463387989a0e6db271e29f7d12902277b1ec973c"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/36.7s.png",
+        "sha256": "218c481667afe15203375c5752328f5ca4b4a227397388e8b9b1a01e672973be"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/37.8s.png",
+        "sha256": "d770fab45a6a9699b8f8ca2d9e5930aaea8d3e0b755ebbb64128b94f5c677770"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/39.9s.png",
+        "sha256": "8c4c3e1cce9b55f8f51ee42213fcfb14da214b65ffd4b032dcd834bee6ef3cdc"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-landscape/71.9s.png",
+        "sha256": "6e8a4f679e99e4487042d31e0a58b4fcfcf8e231abd814fb942e3f03e35e0e28"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "finite-project-vertical",
+    "pipelineId": "2026-10-03T11-14-04-983Z-fd203692",
+    "videoSha256": "44c94f693de6f6feeb6fcf0c6cbb72f950089a86b1011fd78fa11906f885f3eb",
+    "times": [
+      0.1,
+      0.5,
+      0.9,
+      1.4,
+      3,
+      35.9,
+      36.033333,
+      36.3,
+      36.7,
+      37.8,
+      39.9,
+      71.9
+    ],
+    "width": 360,
+    "frames": [
+      {
+        "path": "evidence/independent-review/finite-project-vertical/0.1s.png",
+        "sha256": "c07213c269896a14d6e1dd887a979c040ff452568c414424dd93f96d6fdb8319"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/0.5s.png",
+        "sha256": "434266f7c8be71b9dd21a54cbc8bd9d3d5624f5ee6725f46f5d0a760d7755e50"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/0.9s.png",
+        "sha256": "8e697b969676491453844ed557bbf11c8a86c2f8d61f088d9d474be0c2eaad2e"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/1.4s.png",
+        "sha256": "542bdcd770a9bec21480f06617535765886b46fd35db56ba18d1dc982a8f0e02"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/3s.png",
+        "sha256": "d244286b7720dfc5e31e73493783a8004f61a6e869954ecf4c2b9650ff667e72"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/35.9s.png",
+        "sha256": "03f6ad30c010b1899b1883bb76081a673f322bbd7dedc3386d524826e2e39374"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/36.0333s.png",
+        "sha256": "d7dc1eb92246b7691af1a19702a9d6c09459eb868b62891d44a92aa73fa76743"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/36.3s.png",
+        "sha256": "a2155748b4244a4128ed58d3dcb82992d3c511b51fc02e23b44d0ae2ace12cff"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/36.7s.png",
+        "sha256": "e00ae65c5f68f3b78bc802697ac3e293e1f3f759aaf06c388dbd7662cfc8603c"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/37.8s.png",
+        "sha256": "38d112edc086474d7a23143307350d791df685db273d4be0dc42f000dca25fc3"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/39.9s.png",
+        "sha256": "e81fe6e5c71eb209bb7f1d190bad60714374d10667c4eca3da40e03f1e14e5bb"
+      },
+      {
+        "path": "evidence/independent-review/finite-project-vertical/71.9s.png",
+        "sha256": "bc24450fd4177b3dbbb7d11f2a979e6810fe6f043de7ae3b175bb8634ada5b7e"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "perpetual-payments-landscape",
+    "pipelineId": "2026-10-03T11-14-27-401Z-0e827052",
+    "videoSha256": "34a1ecca6a0371eadfe65c311672a7b83405ff3cb6e27de3e5b8281cc2e8727a",
+    "times": [
+      0.1,
+      0.5,
+      0.9,
+      1.4,
+      3,
+      35.9,
+      36.033333,
+      36.3,
+      36.7,
+      37.8,
+      39.9,
+      71.9
+    ],
+    "width": 360,
+    "frames": [
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/0.1s.png",
+        "sha256": "84ed1162fa6cb08631cf6865abae6e773531a144224c8c62f5646cfe833f63bb"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/0.5s.png",
+        "sha256": "4290c3ebb77f1667ed7049f4a62af30405b2f7358a577ce6a4df7c804ca0c0fd"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/0.9s.png",
+        "sha256": "b686c983b386995b67c7b2671422c9eea87997bc21d576202fff7f7b9341ef1b"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/1.4s.png",
+        "sha256": "52cc6ee9f147d1755dc8faf4858a41add2ec2203abde8e327ca336be30a2457d"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/3s.png",
+        "sha256": "52cc6ee9f147d1755dc8faf4858a41add2ec2203abde8e327ca336be30a2457d"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/35.9s.png",
+        "sha256": "5165d7ae6d107285714c74aeab5a1110f357e6391f3d2526ce34b1593236ff1d"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/36.0333s.png",
+        "sha256": "5c794aeb96afec769fb64638c760c22eac58f55235b979ada1372d43cf6213be"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/36.3s.png",
+        "sha256": "e02e87cda1f90120eeaa0aa34c2e1236029b1f6f8201937a380b3689d26e0665"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/36.7s.png",
+        "sha256": "e02e87cda1f90120eeaa0aa34c2e1236029b1f6f8201937a380b3689d26e0665"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/37.8s.png",
+        "sha256": "a46738c7ce6ab9b761a47131240fa56d5ff02195153e9a505c3af90e6d8e046b"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/39.9s.png",
+        "sha256": "ec321dd87924a1a8fa11e10f5c1259ad17d28ec10af3747abdee9d10129b4d6e"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-landscape/71.9s.png",
+        "sha256": "8bcf6fe8bdfda1bf1b6fabc9c0f827880cba38286e19bd661fd11fc6411068c9"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "perpetual-payments-vertical",
+    "pipelineId": "2026-10-03T11-14-51-664Z-3095718b",
+    "videoSha256": "52654042ad4f15b29c06ba3348cfa39fbfca4452bb743e46f8382e353a421e31",
+    "times": [
+      0.1,
+      0.5,
+      0.9,
+      1.4,
+      3,
+      35.9,
+      36.033333,
+      36.3,
+      36.7,
+      37.8,
+      39.9,
+      71.9
+    ],
+    "width": 360,
+    "frames": [
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/0.1s.png",
+        "sha256": "75bae5bc62cd8f93b888d032eb8bbdffe122961e84c41592f751f78cf966464b"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/0.5s.png",
+        "sha256": "2a163217942e06eb406d4c7aa627297f00bff7dc4d22cd0e3581cfd18d25d749"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/0.9s.png",
+        "sha256": "46368180fad428726e8be8009e874a485ebca516ea1d1e746847160ab2cb8ca9"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/1.4s.png",
+        "sha256": "96d555492b241cc113cc28e18170ed3867244aa1908de3addb23b42432ebc99d"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/3s.png",
+        "sha256": "96d555492b241cc113cc28e18170ed3867244aa1908de3addb23b42432ebc99d"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/35.9s.png",
+        "sha256": "11618b5b77985f70c4158509c754cb89036c57166401b3baa16a044ab6b9f0d4"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/36.0333s.png",
+        "sha256": "e319dc5d3b12dd85f56dc6e7ff005d026061c0f61ac93262eb99b11a08fe9040"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/36.3s.png",
+        "sha256": "cacf4bf0d14cd3bd97d15ae408507b4d7b694e522666b187ec816b2c1f665542"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/36.7s.png",
+        "sha256": "cacf4bf0d14cd3bd97d15ae408507b4d7b694e522666b187ec816b2c1f665542"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/37.8s.png",
+        "sha256": "7591c7a1d30988fcb006c65337e4848b9e3be580960392b00b8a0699b6640879"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/39.9s.png",
+        "sha256": "2246cf65ea3e1f117bb3a2450c5cc7aa689a07f9a6129d80eab434b112174593"
+      },
+      {
+        "path": "evidence/independent-review/perpetual-payments-vertical/71.9s.png",
+        "sha256": "1d881f1322d5409f310b69ce130ee68290b600f1ecf3406a650177de558e281a"
+      }
+    ],
+    "visuallyInspected": true
+  }
+]

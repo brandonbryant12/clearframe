@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/valuation-studies/specimens/perpetual-payments-landscape/build/pipeline/2026-10-03T11-14-27-401Z-0e827052/video.mp4",
+  "outputSha256": "34a1ecca6a0371eadfe65c311672a7b83405ff3cb6e27de3e5b8281cc2e8727a",
+  "inputId": "75688aa029921d9bdf94e2ff0eb6ac96a7ea3653fd59659e1bb934dc6f69ac0b",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "grid: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "grid: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 1079,
+      "time": 35.96666666666667,
+      "reasons": [
+        "grid: last frame",
+        "Before slice"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 1080,
+      "time": 36,
+      "reasons": [
+        "slice: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 1086,
+      "time": 36.2,
+      "reasons": [
+        "slice: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 2159,
+      "time": 71.96666666666667,
+      "reasons": [
+        "slice: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

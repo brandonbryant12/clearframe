@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "inputSha256": "377e281374fb73c2d5d5723ce115d3f5ca6c9edb98d39bee68b36917a033fae9",
+  "sourceFiles": [
+    {
+      "path": "fframes/valuation-data.mjs",
+      "sha256": "780a6ca096b2729c35880f86227fb3cefe5863b635e3d412bf7d5d8a6e05a3ba"
+    },
+    {
+      "path": "fframes/valuations.mjs",
+      "sha256": "ea0d86cada15550eccff838d788ea64ef40c17477678033a7b72fff1fd86030a"
+    },
+    {
+      "path": "fframes/plot-data.mjs",
+      "sha256": "16fd41d99d74d8af3c53126aeb4c55940f5a5a12654b2382caaed046e1d5f4d6"
+    },
+    {
+      "path": "fframes/job.mjs",
+      "sha256": "de4a304de1002da87812e0434aaa92362847e8d8369e5f439c2244c1b5959ec8"
+    },
+    {
+      "path": "fframes/native/src/canvas.rs",
+      "sha256": "82c1802b887e33bf2c7e7998e02e682b1f159e53dff2d06794831a9330ffc914"
+    }
+  ]
+}

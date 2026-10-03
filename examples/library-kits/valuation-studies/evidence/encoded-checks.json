@@ -1,0 +1,102 @@
+[
+  {
+    "project": "perpetual-payments-landscape",
+    "videoSha256": "34a1ecca6a0371eadfe65c311672a7b83405ff3cb6e27de3e5b8281cc2e8727a",
+    "storyboardSha256": "bd2d6b80a5fe9d18e8794da7e7fe236ada5b5611bef03eadb4c3fd790fda75c6",
+    "nativeJobSha256": "e750497ada00477114e31410d56417a19839b6252ef657608b9236647cc18001",
+    "inputSha256": "377e281374fb73c2d5d5723ce115d3f5ca6c9edb98d39bee68b36917a033fae9",
+    "checkerSha256": "7f295449b8058d1125efed9e2f5a9873714bcaf04d31636c6ab3cb4d6407de46",
+    "nativeMappingChecks": 258,
+    "arithmeticChecks": 90,
+    "sampledFrames": 169,
+    "cellFillChecks": 4776,
+    "undefinedFillChecks": 980,
+    "hiddenCellChecks": 444,
+    "pointChecks": 278,
+    "frontChecks": 7,
+    "invalidColumnChecks": 64,
+    "failures": 0,
+    "tolerances": {
+      "geometryPixels": 1e-07,
+      "arithmeticAbsolute": 1e-09,
+      "fillRgbPerChannel": 18,
+      "markRadiusAt720": 2,
+      "invalidColumnRadiusAt720": 1
+    }
+  },
+  {
+    "project": "perpetual-payments-vertical",
+    "videoSha256": "52654042ad4f15b29c06ba3348cfa39fbfca4452bb743e46f8382e353a421e31",
+    "storyboardSha256": "376672dab6eebf2559e06e02bc8defc342462f346e1f2a2e62670b2652811e67",
+    "nativeJobSha256": "42b3abdc7e9bb195a1755a980dacf6f971ae9259ac3895a95755a5fd9df079d9",
+    "inputSha256": "377e281374fb73c2d5d5723ce115d3f5ca6c9edb98d39bee68b36917a033fae9",
+    "checkerSha256": "7f295449b8058d1125efed9e2f5a9873714bcaf04d31636c6ab3cb4d6407de46",
+    "nativeMappingChecks": 258,
+    "arithmeticChecks": 90,
+    "sampledFrames": 169,
+    "cellFillChecks": 4776,
+    "undefinedFillChecks": 980,
+    "hiddenCellChecks": 444,
+    "pointChecks": 278,
+    "frontChecks": 7,
+    "invalidColumnChecks": 64,
+    "failures": 0,
+    "tolerances": {
+      "geometryPixels": 1e-07,
+      "arithmeticAbsolute": 1e-09,
+      "fillRgbPerChannel": 18,
+      "markRadiusAt720": 2,
+      "invalidColumnRadiusAt720": 1
+    }
+  },
+  {
+    "project": "finite-project-landscape",
+    "videoSha256": "8c6a7e10a3d210ae97f1365fcf41cf5633b487eafc0ce4d15c443e8a8fd33db0",
+    "storyboardSha256": "73231df84d1fd988e74dd0131cbff9ca0a451e80590295614aec0e32f7706dd7",
+    "nativeJobSha256": "23e98c3da423f4d6c13b6cadebfcf50c462cc2efb0049c1c4180d1c546a4b219",
+    "inputSha256": "377e281374fb73c2d5d5723ce115d3f5ca6c9edb98d39bee68b36917a033fae9",
+    "checkerSha256": "7f295449b8058d1125efed9e2f5a9873714bcaf04d31636c6ab3cb4d6407de46",
+    "nativeMappingChecks": 243,
+    "arithmeticChecks": 420,
+    "sampledFrames": 169,
+    "cellFillChecks": 4776,
+    "undefinedFillChecks": 0,
+    "hiddenCellChecks": 444,
+    "pointChecks": 215,
+    "frontChecks": 11,
+    "invalidColumnChecks": 0,
+    "failures": 0,
+    "tolerances": {
+      "geometryPixels": 1e-07,
+      "arithmeticAbsolute": 1e-09,
+      "fillRgbPerChannel": 18,
+      "markRadiusAt720": 2,
+      "invalidColumnRadiusAt720": 1
+    }
+  },
+  {
+    "project": "finite-project-vertical",
+    "videoSha256": "44c94f693de6f6feeb6fcf0c6cbb72f950089a86b1011fd78fa11906f885f3eb",
+    "storyboardSha256": "800997675e2a343ca28bdf2e94c33e49bbd5ef877406b7c4147844f416a0e72f",
+    "nativeJobSha256": "bf570ada47cea4bd4f8f9d8c418294e69953ac905b8a55baa065c9f4effb0ad0",
+    "inputSha256": "377e281374fb73c2d5d5723ce115d3f5ca6c9edb98d39bee68b36917a033fae9",
+    "checkerSha256": "7f295449b8058d1125efed9e2f5a9873714bcaf04d31636c6ab3cb4d6407de46",
+    "nativeMappingChecks": 243,
+    "arithmeticChecks": 420,
+    "sampledFrames": 169,
+    "cellFillChecks": 4776,
+    "undefinedFillChecks": 0,
+    "hiddenCellChecks": 444,
+    "pointChecks": 215,
+    "frontChecks": 11,
+    "invalidColumnChecks": 0,
+    "failures": 0,
+    "tolerances": {
+      "geometryPixels": 1e-07,
+      "arithmeticAbsolute": 1e-09,
+      "fillRgbPerChannel": 18,
+      "markRadiusAt720": 2,
+      "invalidColumnRadiusAt720": 1
+    }
+  }
+]

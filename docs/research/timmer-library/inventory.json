@@ -448,7 +448,7 @@
       "category": "Chart",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "Native prototype: explicit annual finite/perpetual cash-flow models, sampled heatmaps and controlled slices in landscape/vertical; broader models, continuous playback and final master acceptance remain open",
       "effort": "L",
       "sourceIds": [
         "S02",
@@ -463,7 +463,7 @@
         "terminal rule",
         "selected cell"
       ],
-      "existing": "native shapes can draw cells; a reviewed model and quantitative heatmap are new.",
+      "existing": "fframes/valuation-data.mjs and valuations.mjs retain annual-end timing, upfront outlay, fixed assumptions, invalid perpetual cells and exact sampled slices. valuation-studies includes two fictional subjects and four native specimens; see docs/valuations.md.",
       "guardrail": "Label model assumptions and invalid regions; perspective is reserved for a qualitative introduction.",
       "reuse": [
         "pricing",
@@ -1756,7 +1756,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership; forward models and broader risk-adjusted metrics remain planned",
+      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles, pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership, and explicit finite/perpetual cash-flow sensitivities; forward models and broader risk-adjusted metrics remain planned",
       "effort": "L",
       "sourceIds": [
         "S04",
@@ -1772,7 +1772,7 @@
         "transform",
         "method version"
       ],
-      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics. engine/lib/time-series.mjs adds explicit price-basis conversion, anchored monthly/quarterly/annual growth, compounded annualization, complete-window sample SD and observed drawdown/recovery; see docs/time-series.md. engine/lib/expectations.mjs adds inclusive publication cutoffs with actual revisions, nonuniform maturity coordinates, and complete-ensemble descriptive scenario ranges/type-7 quantiles; see docs/expectations.md. fframes/distribution-data.mjs retains original observations, explicit bins, null denominators and direct threshold comparisons; see docs/distributions.md.",
+      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics. engine/lib/time-series.mjs adds explicit price-basis conversion, anchored monthly/quarterly/annual growth, compounded annualization, complete-window sample SD and observed drawdown/recovery; see docs/time-series.md. engine/lib/expectations.mjs adds inclusive publication cutoffs with actual revisions, nonuniform maturity coordinates, and complete-ensemble descriptive scenario ranges/type-7 quantiles; see docs/expectations.md. fframes/distribution-data.mjs retains original observations, explicit bins, null denominators and direct threshold comparisons; see docs/distributions.md. fframes/valuation-data.mjs adds annual-end cash-flow sensitivity grids and exact controlled slices with explicit model domains; see docs/valuations.md.",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "reuse": [
         "science",

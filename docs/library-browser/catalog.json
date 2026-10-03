@@ -1381,6 +1381,81 @@
         "implementation": "evidence/implementation.json",
         "continuousPlayback": "unverified"
       }
+    },
+    {
+      "id": "valuation-studies",
+      "title": "Valuation studies",
+      "purpose": "Show evaluated growth and discount assumptions in a flat valuation grid, then inspect a slice while holding the other assumptions fixed.",
+      "status": "prototype",
+      "integrity": "verified",
+      "fileCount": 149,
+      "issues": [],
+      "inventoryIds": [
+        "C14"
+      ],
+      "manifest": "examples/library-kits/valuation-studies/kit.json",
+      "preview": "examples/library-kits/valuation-studies/preview.html",
+      "readme": "examples/library-kits/valuation-studies/README.md",
+      "review": "examples/library-kits/valuation-studies/REVIEW.md",
+      "sources": "examples/library-kits/valuation-studies/SOURCES.md",
+      "tags": {
+        "purpose": [
+          "compare",
+          "inspect-valuation",
+          "control-assumptions"
+        ],
+        "appearance": [
+          "paper",
+          "native-chart",
+          "heatmap"
+        ],
+        "movement": [
+          "cell-reveal",
+          "slice-draw",
+          "selected-cell",
+          "reading-hold"
+        ],
+        "format": [
+          "landscape",
+          "vertical"
+        ],
+        "subject": [
+          "discounted-cash-flow",
+          "growth",
+          "discount-rate"
+        ]
+      },
+      "editable": {
+        "native": [
+          "cash-flow assumptions",
+          "copy",
+          "rate grids",
+          "model",
+          "value scale",
+          "selected slice",
+          "timing",
+          "layout"
+        ],
+        "fixedClip": []
+      },
+      "requires": {
+        "replay": [
+          "ClearFrame native compositor",
+          "bundled fonts"
+        ],
+        "preparation": [
+          "Node.js",
+          "FFmpeg",
+          "Python 3"
+        ]
+      },
+      "evidence": {
+        "summary": "evidence/summary.json",
+        "review": "REVIEW.md",
+        "encoded": "evidence/encoded-checks.json",
+        "implementation": "evidence/implementation.json",
+        "continuousPlayback": "unverified"
+      }
     }
   ],
   "records": [
@@ -4867,6 +4942,134 @@
       "search": "a gap does not establish a recovery explain matched-price deflation, discrete growth and observed drawdown with complete-window volatility. c11 compare transform observe-risk paper blue orange shared-clock-reveal reading-hold pay budgets output index-paths s03 s04 x03 rolling risk and drawdown a path leaves its prior peak and fills the underwater distance; a separate window shows volatility or risk-adjusted performance. return basis peak rule window risk-free series frequency service reliability sales recovery capacity loss"
     },
     {
+      "id": "valuation-studies/finite-project",
+      "kind": "example",
+      "title": "Five-year project value",
+      "packageId": "valuation-studies",
+      "inventoryIds": [
+        "C14"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/valuation-studies/specimens/finite-project-landscape/storyboard.json",
+          "video": "examples/library-kits/valuation-studies/evidence/finite-project-landscape/video.mp4",
+          "poster": "examples/library-kits/valuation-studies/evidence/independent-review/finite-project-landscape/71.9s.png",
+          "receipt": "examples/library-kits/valuation-studies/evidence/finite-project-landscape/video.mp4.json",
+          "duration": 72,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/valuation-studies/specimens/finite-project-vertical/storyboard.json",
+          "video": "examples/library-kits/valuation-studies/evidence/finite-project-vertical/video.mp4",
+          "poster": "examples/library-kits/valuation-studies/evidence/independent-review/finite-project-vertical/71.9s.png",
+          "receipt": "examples/library-kits/valuation-studies/evidence/finite-project-vertical/video.mp4.json",
+          "duration": 72,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Show evaluated growth and discount assumptions in a flat valuation grid, then inspect a slice while holding the other assumptions fixed.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "inspect-valuation",
+        "control-assumptions"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart",
+        "heatmap"
+      ],
+      "movement": [
+        "cell-reveal",
+        "slice-draw",
+        "selected-cell",
+        "reading-hold"
+      ],
+      "subjects": [
+        "discounted-cash-flow",
+        "growth",
+        "discount-rate"
+      ],
+      "collections": [
+        "drivers"
+      ],
+      "sourceIds": [
+        "S02",
+        "S05",
+        "S18"
+      ],
+      "search": "five-year project value show evaluated growth and discount assumptions in a flat valuation grid, then inspect a slice while holding the other assumptions fixed. c14 compare inspect-valuation control-assumptions paper native-chart heatmap cell-reveal slice-draw selected-cell reading-hold discounted-cash-flow growth discount-rate s02 s05 s18 valuation sensitivity surface, flat first reveal a two-input heatmap, then trace one controlled cross-section while holding other model assumptions fixed. model growth range discount range terminal rule selected cell pricing engineering tradeoffs unit economics"
+    },
+    {
+      "id": "valuation-studies/perpetual-payments",
+      "kind": "example",
+      "title": "Perpetual payment model",
+      "packageId": "valuation-studies",
+      "inventoryIds": [
+        "C14"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/valuation-studies/specimens/perpetual-payments-landscape/storyboard.json",
+          "video": "examples/library-kits/valuation-studies/evidence/perpetual-payments-landscape/video.mp4",
+          "poster": "examples/library-kits/valuation-studies/evidence/independent-review/perpetual-payments-landscape/71.9s.png",
+          "receipt": "examples/library-kits/valuation-studies/evidence/perpetual-payments-landscape/video.mp4.json",
+          "duration": 72,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/valuation-studies/specimens/perpetual-payments-vertical/storyboard.json",
+          "video": "examples/library-kits/valuation-studies/evidence/perpetual-payments-vertical/video.mp4",
+          "poster": "examples/library-kits/valuation-studies/evidence/independent-review/perpetual-payments-vertical/71.9s.png",
+          "receipt": "examples/library-kits/valuation-studies/evidence/perpetual-payments-vertical/video.mp4.json",
+          "duration": 72,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Show evaluated growth and discount assumptions in a flat valuation grid, then inspect a slice while holding the other assumptions fixed.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "inspect-valuation",
+        "control-assumptions"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart",
+        "heatmap"
+      ],
+      "movement": [
+        "cell-reveal",
+        "slice-draw",
+        "selected-cell",
+        "reading-hold"
+      ],
+      "subjects": [
+        "discounted-cash-flow",
+        "growth",
+        "discount-rate"
+      ],
+      "collections": [
+        "drivers"
+      ],
+      "sourceIds": [
+        "S02",
+        "S05",
+        "S18"
+      ],
+      "search": "perpetual payment model show evaluated growth and discount assumptions in a flat valuation grid, then inspect a slice while holding the other assumptions fixed. c14 compare inspect-valuation control-assumptions paper native-chart heatmap cell-reveal slice-draw selected-cell reading-hold discounted-cash-flow growth discount-rate s02 s05 s18 valuation sensitivity surface, flat first reveal a two-input heatmap, then trace one controlled cross-section while holding other model assumptions fixed. model growth range discount range terminal rule selected cell pricing engineering tradeoffs unit economics"
+    },
+    {
       "id": "C01",
       "kind": "inventory",
       "title": "Shared-axis time-series comparison",
@@ -5390,7 +5593,7 @@
         "C14"
       ],
       "medium": "Chart",
-      "statusText": "proposed; not built",
+      "statusText": "Native prototype: explicit annual finite/perpetual cash-flow models, sampled heatmaps and controlled slices in landscape/vertical; broader models, continuous playback and final master acceptance remain open",
       "guardrail": "Label model assumptions and invalid regions; perspective is reserved for a qualitative introduction.",
       "parameters": [
         "model",
@@ -5399,10 +5602,13 @@
         "terminal rule",
         "selected cell"
       ],
-      "related": [],
+      "related": [
+        "valuation-studies/finite-project",
+        "valuation-studies/perpetual-payments"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],
@@ -6934,7 +7140,7 @@
         "T02"
       ],
       "medium": "Tool",
-      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership; forward models and broader risk-adjusted metrics remain planned",
+      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles, pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership, and explicit finite/perpetual cash-flow sensitivities; forward models and broader risk-adjusted metrics remain planned",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "parameters": [
         "input hash",

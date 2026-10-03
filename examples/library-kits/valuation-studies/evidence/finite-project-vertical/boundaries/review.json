@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/valuation-studies/specimens/finite-project-vertical/build/pipeline/2026-10-03T11-14-04-983Z-fd203692/video.mp4",
+  "outputSha256": "44c94f693de6f6feeb6fcf0c6cbb72f950089a86b1011fd78fa11906f885f3eb",
+  "inputId": "93aad567203ecb8a863d23e8836fd2542eea5fa7c301040b1c6f260a04bedff5",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "grid: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "grid: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 1079,
+      "time": 35.96666666666667,
+      "reasons": [
+        "grid: last frame",
+        "Before slice"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 1080,
+      "time": 36,
+      "reasons": [
+        "slice: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 1086,
+      "time": 36.2,
+      "reasons": [
+        "slice: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 2159,
+      "time": 71.96666666666667,
+      "reasons": [
+        "slice: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

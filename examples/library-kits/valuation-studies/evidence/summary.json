@@ -1,0 +1,131 @@
+{
+  "status": "prototype",
+  "continuousPlayback": "unverified",
+  "variants": [
+    {
+      "name": "finite-project-landscape",
+      "pipelineId": "2026-10-03T11-13-40-915Z-43aea0f1",
+      "videoSha256": "8c6a7e10a3d210ae97f1365fcf41cf5633b487eafc0ce4d15c443e8a8fd33db0",
+      "storyboardSha256": "73231df84d1fd988e74dd0131cbff9ca0a451e80590295614aec0e32f7706dd7",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+        ],
+        "duration": 72,
+        "inputId": "19a2814bc64f9ad7098deb00457bf58f5579139c97181d8727c7591ffcbd3899"
+      },
+      "qa": {
+        "seconds": 72,
+        "frames": 2160,
+        "changePerSecond": 0,
+        "heldSeconds": 71.07,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "finite-project-vertical",
+      "pipelineId": "2026-10-03T11-14-04-983Z-fd203692",
+      "videoSha256": "44c94f693de6f6feeb6fcf0c6cbb72f950089a86b1011fd78fa11906f885f3eb",
+      "storyboardSha256": "800997675e2a343ca28bdf2e94c33e49bbd5ef877406b7c4147844f416a0e72f",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+        ],
+        "duration": 72,
+        "inputId": "93aad567203ecb8a863d23e8836fd2542eea5fa7c301040b1c6f260a04bedff5"
+      },
+      "qa": {
+        "seconds": 72,
+        "frames": 2160,
+        "changePerSecond": 0,
+        "heldSeconds": 71.07,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "perpetual-payments-landscape",
+      "pipelineId": "2026-10-03T11-14-27-401Z-0e827052",
+      "videoSha256": "34a1ecca6a0371eadfe65c311672a7b83405ff3cb6e27de3e5b8281cc2e8727a",
+      "storyboardSha256": "bd2d6b80a5fe9d18e8794da7e7fe236ada5b5611bef03eadb4c3fd790fda75c6",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+        ],
+        "duration": 72,
+        "inputId": "75688aa029921d9bdf94e2ff0eb6ac96a7ea3653fd59659e1bb934dc6f69ac0b"
+      },
+      "qa": {
+        "seconds": 72,
+        "frames": 2160,
+        "changePerSecond": 0,
+        "heldSeconds": 71.07,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "perpetual-payments-vertical",
+      "pipelineId": "2026-10-03T11-14-51-664Z-3095718b",
+      "videoSha256": "52654042ad4f15b29c06ba3348cfa39fbfca4452bb743e46f8382e353a421e31",
+      "storyboardSha256": "376672dab6eebf2559e06e02bc8defc342462f346e1f2a2e62670b2652811e67",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+        ],
+        "duration": 72,
+        "inputId": "3f97c865a1325396d9152f1d68e5b44dfc89d337ff7306422d1e45504849344e"
+      },
+      "qa": {
+        "seconds": 72,
+        "frames": 2160,
+        "changePerSecond": 0,
+        "heldSeconds": 71.07,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    }
+  ],
+  "tests": {
+    "pass": 206,
+    "fail": 0,
+    "skipped": 0
+  },
+  "encoded": {
+    "nativeMappingChecks": 1002,
+    "arithmeticChecks": 1020,
+    "sampledFrames": 676,
+    "cellFillChecks": 19104,
+    "undefinedFillChecks": 1960,
+    "hiddenCellChecks": 1776,
+    "pointChecks": 986,
+    "frontChecks": 36,
+    "invalidColumnChecks": 128,
+    "failures": 0
+  },
+  "limits": [
+    "Fictional cash-flow assumptions; no observed prices, probabilities or forecasts",
+    "Annual end-of-period finite or growing-perpetuity models only; no two-stage terminal model",
+    "Sampled flat grid; connecting segments are visual guides and do not imply evaluated intermediate cases",
+    "Crowded data or new copy requires fresh layout review",
+    "Bounded encoded probes and phone-frame review, not continuous playback or final master acceptance",
+    "Square and 4:5 unreviewed"
+  ]
+}

@@ -1,0 +1,835 @@
+{
+  "schemaVersion": 1,
+  "id": "valuation-studies",
+  "version": "0.1.0",
+  "kind": "story-kit",
+  "title": "Valuation studies",
+  "status": "prototype",
+  "inventoryIds": [
+    "C14"
+  ],
+  "purpose": "Show evaluated growth and discount assumptions in a flat valuation grid, then inspect a slice while holding the other assumptions fixed.",
+  "tags": {
+    "purpose": [
+      "compare",
+      "inspect-valuation",
+      "control-assumptions"
+    ],
+    "appearance": [
+      "paper",
+      "native-chart",
+      "heatmap"
+    ],
+    "movement": [
+      "cell-reveal",
+      "slice-draw",
+      "selected-cell",
+      "reading-hold"
+    ],
+    "format": [
+      "landscape",
+      "vertical"
+    ],
+    "subject": [
+      "discounted-cash-flow",
+      "growth",
+      "discount-rate"
+    ]
+  },
+  "includes": {
+    "source": "inputs.json",
+    "calculations": "audit.json",
+    "composition": "build.mjs",
+    "preview": "preview.html",
+    "specimens": [
+      "specimens/finite-project-landscape/storyboard.json",
+      "specimens/finite-project-vertical/storyboard.json",
+      "specimens/perpetual-payments-landscape/storyboard.json",
+      "specimens/perpetual-payments-vertical/storyboard.json"
+    ]
+  },
+  "requires": {
+    "replay": [
+      "ClearFrame native compositor",
+      "bundled fonts"
+    ],
+    "preparation": [
+      "Node.js",
+      "FFmpeg",
+      "Python 3"
+    ]
+  },
+  "editable": {
+    "native": [
+      "cash-flow assumptions",
+      "copy",
+      "rate grids",
+      "model",
+      "value scale",
+      "selected slice",
+      "timing",
+      "layout"
+    ],
+    "fixedClip": []
+  },
+  "evidence": {
+    "summary": "evidence/summary.json",
+    "review": "REVIEW.md",
+    "encoded": "evidence/encoded-checks.json",
+    "implementation": "evidence/implementation.json",
+    "continuousPlayback": "unverified"
+  },
+  "provenance": {
+    "references": "SOURCES.md",
+    "inputSha256": "377e281374fb73c2d5d5723ce115d3f5ca6c9edb98d39bee68b36917a033fae9",
+    "modelVersion": 1
+  },
+  "license": "MIT for original files; bundled fonts retain OFL notices.",
+  "files": [
+    {
+      "path": "audit.json",
+      "bytes": 227434,
+      "sha256": "b903823116e937257f24b6d6bfdc25bc5bb95708ef61b1d20b35afb08a9e38b5"
+    },
+    {
+      "path": "build.mjs",
+      "bytes": 2484,
+      "sha256": "308ec859899aee9deb2f1c16ce129b0369995297df25a0a4ce8b34521c2e774a"
+    },
+    {
+      "path": "check-encoded.py",
+      "bytes": 9783,
+      "sha256": "7f295449b8058d1125efed9e2f5a9873714bcaf04d31636c6ab3cb4d6407de46"
+    },
+    {
+      "path": "DIRECTION.md",
+      "bytes": 2033,
+      "sha256": "88a847ca4dcd069c6af8b955646c3cee4dbed2c79b33db2f41736bc0b8002d4a"
+    },
+    {
+      "path": "evidence/critique.json",
+      "bytes": 3369,
+      "sha256": "9d9011f332fde98b96885e9560ff2a42d236c0ae960fa2ba9bf6439e64b1a284"
+    },
+    {
+      "path": "evidence/encoded-checks.json",
+      "bytes": 3831,
+      "sha256": "32939de6890cc76c8193e2da4122ec0a9c19baf32207d07f54786b108207e115"
+    },
+    {
+      "path": "evidence/finite-project-landscape/boundaries/frame-0000.jpg",
+      "bytes": 48199,
+      "sha256": "a845b85946e1701671bf6a194e930ee390b091a6e7fbbe04c41a9adbf935033c"
+    },
+    {
+      "path": "evidence/finite-project-landscape/boundaries/frame-0001.jpg",
+      "bytes": 48264,
+      "sha256": "6a1ff7f64754ebcb458afe0697d95b42370402f0fb92fe55b12015beab166192"
+    },
+    {
+      "path": "evidence/finite-project-landscape/boundaries/frame-0002.jpg",
+      "bytes": 63133,
+      "sha256": "533a466d73ac1cd8110efd790b2fc64ac22f846664e34c7d50f92496251778ff"
+    },
+    {
+      "path": "evidence/finite-project-landscape/boundaries/frame-0003.jpg",
+      "bytes": 50046,
+      "sha256": "71339bc37131f686d2cb74f7488b41bfd9f6a3d894a29e00ff8b41fe2fa32a72"
+    },
+    {
+      "path": "evidence/finite-project-landscape/boundaries/frame-0004.jpg",
+      "bytes": 50017,
+      "sha256": "de9aa8d2d133a1f8bfd3b11aae27df530f1d0595843e6c6ac2798d78bebe2b55"
+    },
+    {
+      "path": "evidence/finite-project-landscape/boundaries/frame-0005.jpg",
+      "bytes": 53740,
+      "sha256": "8eea965e56c639a9b4aafe5628b36c1acf8025dafbd19025c4b2204db0a78aa4"
+    },
+    {
+      "path": "evidence/finite-project-landscape/boundaries/index.html",
+      "bytes": 1719,
+      "sha256": "271771c33fa4a2a8014367234c419d84b0ab7952565e92f08d2b328cef3f4ac8"
+    },
+    {
+      "path": "evidence/finite-project-landscape/boundaries/review.json",
+      "bytes": 1293,
+      "sha256": "a1ede2a2386783bb6fc0927fd9bfdc4d2b497c8c31d1eb6a7a079ccd755abdc1"
+    },
+    {
+      "path": "evidence/finite-project-landscape/boundaries/strip.png",
+      "bytes": 78198,
+      "sha256": "5f8a5af617b539ddd43178f510b2a4b788afb27bca4a9ff4755ca9e1723c7c9a"
+    },
+    {
+      "path": "evidence/finite-project-landscape/check.json",
+      "bytes": 271,
+      "sha256": "eec5e6e7a1dfa9f2fc13e44ca83e95303b46ba43e20450c5bcbcf9259212bbbe"
+    },
+    {
+      "path": "evidence/finite-project-landscape/native-job.json",
+      "bytes": 31958,
+      "sha256": "23e98c3da423f4d6c13b6cadebfcf50c462cc2efb0049c1c4180d1c546a4b219"
+    },
+    {
+      "path": "evidence/finite-project-landscape/phone.png",
+      "bytes": 846637,
+      "sha256": "88fd189ca9e6a254aceef0775a891d3070de5957bf28c49301885d029344e81c"
+    },
+    {
+      "path": "evidence/finite-project-landscape/qa.json",
+      "bytes": 16981,
+      "sha256": "79c4a0a1449d09852f01fa007f8f1f47bfd0f669b38833ab4ed721b1246da369"
+    },
+    {
+      "path": "evidence/finite-project-landscape/seek.json",
+      "bytes": 1029,
+      "sha256": "636bff3f1baca37ea9b94a3f2775b8b4462f7bbb14587bce2071fdfc8f5e88d0"
+    },
+    {
+      "path": "evidence/finite-project-landscape/sheet.png",
+      "bytes": 103224,
+      "sha256": "634d463a0680ee57bf8d14446cea11f4cec0381641175bc00ba6d0395f8b8827"
+    },
+    {
+      "path": "evidence/finite-project-landscape/timeline.png",
+      "bytes": 271162,
+      "sha256": "addf1a514d8c008c6d986a557ac9e8cb74ff6eb910e0a7f1fb6bd8b3a4e006de"
+    },
+    {
+      "path": "evidence/finite-project-landscape/video.mp4",
+      "bytes": 1040806,
+      "sha256": "8c6a7e10a3d210ae97f1365fcf41cf5633b487eafc0ce4d15c443e8a8fd33db0"
+    },
+    {
+      "path": "evidence/finite-project-landscape/video.mp4.json",
+      "bytes": 2736,
+      "sha256": "31a699d7e561fc45ed1f5b69eb52ecafa5eaabf46df15d381ab9c1718486d23f"
+    },
+    {
+      "path": "evidence/finite-project-vertical/boundaries/frame-0000.jpg",
+      "bytes": 76347,
+      "sha256": "e83bdfece7d2ac9a4d130e5cb10250ef576a80e6cdd2dbe6c13e20f253c24a59"
+    },
+    {
+      "path": "evidence/finite-project-vertical/boundaries/frame-0001.jpg",
+      "bytes": 76355,
+      "sha256": "6ad328562c005fcfec85ca6abde330e3663298b398cfddafc524d993e4ea49a8"
+    },
+    {
+      "path": "evidence/finite-project-vertical/boundaries/frame-0002.jpg",
+      "bytes": 108414,
+      "sha256": "3969b10d6b12d7a13a896aaa65e13f37e68e164a5a7c576f5c7250739722192b"
+    },
+    {
+      "path": "evidence/finite-project-vertical/boundaries/frame-0003.jpg",
+      "bytes": 76699,
+      "sha256": "d76d16b60351a91b0c6eb0c1918872a84a6ef5c640ebc6ba5767f00c2b68e811"
+    },
+    {
+      "path": "evidence/finite-project-vertical/boundaries/frame-0004.jpg",
+      "bytes": 76733,
+      "sha256": "01e8c728224395832c5c6e795ca1c4a1c09825b72774bc74b1ff8eb862f69181"
+    },
+    {
+      "path": "evidence/finite-project-vertical/boundaries/frame-0005.jpg",
+      "bytes": 83131,
+      "sha256": "e0e8b7ff564e933628fca1272aafc64a119e933897169256fe1391965e70ff13"
+    },
+    {
+      "path": "evidence/finite-project-vertical/boundaries/index.html",
+      "bytes": 1719,
+      "sha256": "271771c33fa4a2a8014367234c419d84b0ab7952565e92f08d2b328cef3f4ac8"
+    },
+    {
+      "path": "evidence/finite-project-vertical/boundaries/review.json",
+      "bytes": 1292,
+      "sha256": "e36f074cabc2f2a3959846c64af16d73b1a0b7e0f77016d0e2aa8d23b0a25414"
+    },
+    {
+      "path": "evidence/finite-project-vertical/boundaries/strip.png",
+      "bytes": 133094,
+      "sha256": "525b74ce0a6b1e8dba6f6ee6a5e7ba449db3d2cfe8948380a01681e4f38395aa"
+    },
+    {
+      "path": "evidence/finite-project-vertical/check.json",
+      "bytes": 271,
+      "sha256": "83ac3ab16158a692b419f88f950e37c87e40ef2d5a842aab8d43a4dc96c15096"
+    },
+    {
+      "path": "evidence/finite-project-vertical/native-job.json",
+      "bytes": 31796,
+      "sha256": "bf570ada47cea4bd4f8f9d8c418294e69953ac905b8a55baa065c9f4effb0ad0"
+    },
+    {
+      "path": "evidence/finite-project-vertical/phone.png",
+      "bytes": 1067733,
+      "sha256": "4dc423fd728bed10a4a75eb8f3fac23439366f6639bc2146939850442879c7d5"
+    },
+    {
+      "path": "evidence/finite-project-vertical/qa.json",
+      "bytes": 16964,
+      "sha256": "f4e841cff9dd2e6ed637b939e64d3a75c85c393761d2adf5987b45c24045b10c"
+    },
+    {
+      "path": "evidence/finite-project-vertical/seek.json",
+      "bytes": 1029,
+      "sha256": "0a2685c5fc02793ceda6d9d2f8b3b77cca58328ad5eb2b4a4845c7aaa8fb59c1"
+    },
+    {
+      "path": "evidence/finite-project-vertical/sheet.png",
+      "bytes": 172496,
+      "sha256": "d4d759845cb6aaf946fc11f399233135a14bccdf0eb6008300fc7af67be66915"
+    },
+    {
+      "path": "evidence/finite-project-vertical/timeline.png",
+      "bytes": 248651,
+      "sha256": "929cedb84e9ed156ff5dab1826eb4d13d9b1271cd45a7ecb9209d9012ed69627"
+    },
+    {
+      "path": "evidence/finite-project-vertical/video.mp4",
+      "bytes": 876439,
+      "sha256": "44c94f693de6f6feeb6fcf0c6cbb72f950089a86b1011fd78fa11906f885f3eb"
+    },
+    {
+      "path": "evidence/finite-project-vertical/video.mp4.json",
+      "bytes": 2742,
+      "sha256": "1131adb5dac73ed10cf679ceded32e77cd4d90982ef3c635a73ab25f5154828c"
+    },
+    {
+      "path": "evidence/focused-checks.txt",
+      "bytes": 569,
+      "sha256": "daa58f1a35e843460c683527aa3278c9cb0241040a656da6b46a3e05e5586e44"
+    },
+    {
+      "path": "evidence/implementation.json",
+      "bytes": 809,
+      "sha256": "8469b1e096af0a743d65002dd4cfa6cc2b9b8727131b35ea8b6e4ffa6930bf11"
+    },
+    {
+      "path": "evidence/independent-review/artifact-check.mjs",
+      "bytes": 3256,
+      "sha256": "4a4902277aba258efb3a7ad03d5a4be559c5e3a6b3dc3dd6918c14dfbc793308"
+    },
+    {
+      "path": "evidence/independent-review/artifact-checks.json",
+      "bytes": 2934,
+      "sha256": "b69d924ce20ca58d45fa9facc82a2e9a79e5a32058ed1cbd845770295e543624"
+    },
+    {
+      "path": "evidence/independent-review/contract-check.json",
+      "bytes": 581,
+      "sha256": "09457ee216a78b7d69af08c6fb4f334b3925eedbfdc46a874e55ea989d4d231c"
+    },
+    {
+      "path": "evidence/independent-review/contract-check.mjs",
+      "bytes": 6493,
+      "sha256": "b415c67f207583a9c1b3c49ce95365bbf3ebf0660a229249687a5c9727947d50"
+    },
+    {
+      "path": "evidence/independent-review/decode-frames.py",
+      "bytes": 1153,
+      "sha256": "8a4fca3ac3ca8c12f9c4d974374c3388f8d91de4367b20c60a02ec20f13bf3c1"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/0.1s.png",
+      "bytes": 35158,
+      "sha256": "5f0c7981653b898230cc7f866a75c604a0ae01ce97b2a85e3a3939cc798e14c6"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/0.5s.png",
+      "bytes": 35798,
+      "sha256": "f9af3ca45ee585281587c85f06d2e56f3d18b13b77936b60125121fc72a6155b"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/0.9s.png",
+      "bytes": 40379,
+      "sha256": "482b77a29b654f7e706992356531077f7deb50b50b928155715e5b1ef7ede582"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/1.4s.png",
+      "bytes": 43669,
+      "sha256": "45535f88df92a4cb4c1086a116ac884c5cf766ff6510656b341e9f4aadda74f1"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/35.9s.png",
+      "bytes": 43286,
+      "sha256": "78305ec3905ccb9f465399e53e854d461fcb64c42567d1c837664aecefef4acc"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/36.0333s.png",
+      "bytes": 33724,
+      "sha256": "5bb8b1bd0a59825e11e351d895cc84246995a6358d4931ed4055477aa3d1cd0d"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/36.3s.png",
+      "bytes": 33685,
+      "sha256": "017934b166d37542d116fff1463387989a0e6db271e29f7d12902277b1ec973c"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/36.7s.png",
+      "bytes": 33947,
+      "sha256": "218c481667afe15203375c5752328f5ca4b4a227397388e8b9b1a01e672973be"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/37.8s.png",
+      "bytes": 34867,
+      "sha256": "d770fab45a6a9699b8f8ca2d9e5930aaea8d3e0b755ebbb64128b94f5c677770"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/39.9s.png",
+      "bytes": 36669,
+      "sha256": "8c4c3e1cce9b55f8f51ee42213fcfb14da214b65ffd4b032dcd834bee6ef3cdc"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/3s.png",
+      "bytes": 43669,
+      "sha256": "45535f88df92a4cb4c1086a116ac884c5cf766ff6510656b341e9f4aadda74f1"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-landscape/71.9s.png",
+      "bytes": 36820,
+      "sha256": "6e8a4f679e99e4487042d31e0a58b4fcfcf8e231abd814fb942e3f03e35e0e28"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/0.1s.png",
+      "bytes": 56619,
+      "sha256": "c07213c269896a14d6e1dd887a979c040ff452568c414424dd93f96d6fdb8319"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/0.5s.png",
+      "bytes": 58046,
+      "sha256": "434266f7c8be71b9dd21a54cbc8bd9d3d5624f5ee6725f46f5d0a760d7755e50"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/0.9s.png",
+      "bytes": 68787,
+      "sha256": "8e697b969676491453844ed557bbf11c8a86c2f8d61f088d9d474be0c2eaad2e"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/1.4s.png",
+      "bytes": 76531,
+      "sha256": "542bdcd770a9bec21480f06617535765886b46fd35db56ba18d1dc982a8f0e02"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/35.9s.png",
+      "bytes": 75865,
+      "sha256": "03f6ad30c010b1899b1883bb76081a673f322bbd7dedc3386d524826e2e39374"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/36.0333s.png",
+      "bytes": 54641,
+      "sha256": "d7dc1eb92246b7691af1a19702a9d6c09459eb868b62891d44a92aa73fa76743"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/36.3s.png",
+      "bytes": 54679,
+      "sha256": "a2155748b4244a4128ed58d3dcb82992d3c511b51fc02e23b44d0ae2ace12cff"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/36.7s.png",
+      "bytes": 55024,
+      "sha256": "e00ae65c5f68f3b78bc802697ac3e293e1f3f759aaf06c388dbd7662cfc8603c"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/37.8s.png",
+      "bytes": 56404,
+      "sha256": "38d112edc086474d7a23143307350d791df685db273d4be0dc42f000dca25fc3"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/39.9s.png",
+      "bytes": 59283,
+      "sha256": "e81fe6e5c71eb209bb7f1d190bad60714374d10667c4eca3da40e03f1e14e5bb"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/3s.png",
+      "bytes": 76526,
+      "sha256": "d244286b7720dfc5e31e73493783a8004f61a6e869954ecf4c2b9650ff667e72"
+    },
+    {
+      "path": "evidence/independent-review/finite-project-vertical/71.9s.png",
+      "bytes": 59372,
+      "sha256": "bc24450fd4177b3dbbb7d11f2a979e6810fe6f043de7ae3b175bb8634ada5b7e"
+    },
+    {
+      "path": "evidence/independent-review/frames.json",
+      "bytes": 10593,
+      "sha256": "9d75b30a1d6b8b658c40e1f193191f33053e8c83978f1e880f914cf1338d4021"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/0.1s.png",
+      "bytes": 33975,
+      "sha256": "84ed1162fa6cb08631cf6865abae6e773531a144224c8c62f5646cfe833f63bb"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/0.5s.png",
+      "bytes": 34651,
+      "sha256": "4290c3ebb77f1667ed7049f4a62af30405b2f7358a577ce6a4df7c804ca0c0fd"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/0.9s.png",
+      "bytes": 37930,
+      "sha256": "b686c983b386995b67c7b2671422c9eea87997bc21d576202fff7f7b9341ef1b"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/1.4s.png",
+      "bytes": 40800,
+      "sha256": "52cc6ee9f147d1755dc8faf4858a41add2ec2203abde8e327ca336be30a2457d"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/35.9s.png",
+      "bytes": 40288,
+      "sha256": "5165d7ae6d107285714c74aeab5a1110f357e6391f3d2526ce34b1593236ff1d"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/36.0333s.png",
+      "bytes": 33047,
+      "sha256": "5c794aeb96afec769fb64638c760c22eac58f55235b979ada1372d43cf6213be"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/36.3s.png",
+      "bytes": 33039,
+      "sha256": "e02e87cda1f90120eeaa0aa34c2e1236029b1f6f8201937a380b3689d26e0665"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/36.7s.png",
+      "bytes": 33039,
+      "sha256": "e02e87cda1f90120eeaa0aa34c2e1236029b1f6f8201937a380b3689d26e0665"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/37.8s.png",
+      "bytes": 33669,
+      "sha256": "a46738c7ce6ab9b761a47131240fa56d5ff02195153e9a505c3af90e6d8e046b"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/39.9s.png",
+      "bytes": 35883,
+      "sha256": "ec321dd87924a1a8fa11e10f5c1259ad17d28ec10af3747abdee9d10129b4d6e"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/3s.png",
+      "bytes": 40800,
+      "sha256": "52cc6ee9f147d1755dc8faf4858a41add2ec2203abde8e327ca336be30a2457d"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-landscape/71.9s.png",
+      "bytes": 35961,
+      "sha256": "8bcf6fe8bdfda1bf1b6fabc9c0f827880cba38286e19bd661fd11fc6411068c9"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/0.1s.png",
+      "bytes": 54803,
+      "sha256": "75bae5bc62cd8f93b888d032eb8bbdffe122961e84c41592f751f78cf966464b"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/0.5s.png",
+      "bytes": 56416,
+      "sha256": "2a163217942e06eb406d4c7aa627297f00bff7dc4d22cd0e3581cfd18d25d749"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/0.9s.png",
+      "bytes": 64124,
+      "sha256": "46368180fad428726e8be8009e874a485ebca516ea1d1e746847160ab2cb8ca9"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/1.4s.png",
+      "bytes": 71530,
+      "sha256": "96d555492b241cc113cc28e18170ed3867244aa1908de3addb23b42432ebc99d"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/35.9s.png",
+      "bytes": 71416,
+      "sha256": "11618b5b77985f70c4158509c754cb89036c57166401b3baa16a044ab6b9f0d4"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/36.0333s.png",
+      "bytes": 53900,
+      "sha256": "e319dc5d3b12dd85f56dc6e7ff005d026061c0f61ac93262eb99b11a08fe9040"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/36.3s.png",
+      "bytes": 53879,
+      "sha256": "cacf4bf0d14cd3bd97d15ae408507b4d7b694e522666b187ec816b2c1f665542"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/36.7s.png",
+      "bytes": 53879,
+      "sha256": "cacf4bf0d14cd3bd97d15ae408507b4d7b694e522666b187ec816b2c1f665542"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/37.8s.png",
+      "bytes": 55071,
+      "sha256": "7591c7a1d30988fcb006c65337e4848b9e3be580960392b00b8a0699b6640879"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/39.9s.png",
+      "bytes": 58760,
+      "sha256": "2246cf65ea3e1f117bb3a2450c5cc7aa689a07f9a6129d80eab434b112174593"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/3s.png",
+      "bytes": 71530,
+      "sha256": "96d555492b241cc113cc28e18170ed3867244aa1908de3addb23b42432ebc99d"
+    },
+    {
+      "path": "evidence/independent-review/perpetual-payments-vertical/71.9s.png",
+      "bytes": 58518,
+      "sha256": "1d881f1322d5409f310b69ce130ee68290b600f1ecf3406a650177de558e281a"
+    },
+    {
+      "path": "evidence/independent-review/source-bindings.json",
+      "bytes": 3011,
+      "sha256": "069ccf1a578ef59fc5b9d942d2873234d42ecccb16002c148658dad5559a578d"
+    },
+    {
+      "path": "evidence/node-tests.txt",
+      "bytes": 20685,
+      "sha256": "e7bc4191fe7cdabcd09af6ac627372c446242b296a28ef58d3f816bf8885c7a3"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/boundaries/frame-0000.jpg",
+      "bytes": 46720,
+      "sha256": "8c9220d32e30e79daaa087c786f0d63f5496b97e7b9cf8d4485472991f367288"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/boundaries/frame-0001.jpg",
+      "bytes": 46773,
+      "sha256": "3e2b4560a208f00036861949e01606f727260d26fee95fbe1b95e3c428ba577e"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/boundaries/frame-0002.jpg",
+      "bytes": 59089,
+      "sha256": "9bd517071cf1969d1417635e68f3d0977f134a8101302bba49bce64a30dadf11"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/boundaries/frame-0003.jpg",
+      "bytes": 48622,
+      "sha256": "681d501709740cdd19728ed1a8f7acc6debfeffcea456078aed554dfb14977fe"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/boundaries/frame-0004.jpg",
+      "bytes": 48663,
+      "sha256": "ec9f9ad07b717f7ac8171e3575a5e6387ab53b1cb3a4e210d860c714a48fcfba"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/boundaries/frame-0005.jpg",
+      "bytes": 52197,
+      "sha256": "cadfb19f439a1d44b48d223389aaecf5b24fa4a8cda50e9f1ea61604d3d40716"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/boundaries/index.html",
+      "bytes": 1719,
+      "sha256": "271771c33fa4a2a8014367234c419d84b0ab7952565e92f08d2b328cef3f4ac8"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/boundaries/review.json",
+      "bytes": 1297,
+      "sha256": "45d6db8c75eb7f86f247bca15c891ef7ec2e267ebb90eccb64eca4f536effbd3"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/boundaries/strip.png",
+      "bytes": 74303,
+      "sha256": "1dbd5333b35e86af1fa348657af8d2fc27c436f806cd3caf6455210c8ab9d1a0"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/check.json",
+      "bytes": 271,
+      "sha256": "4b2e5706dab235ef77c2f7b2c12fe88719961eba5fd5e7669a39522810610e76"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/native-job.json",
+      "bytes": 32631,
+      "sha256": "e750497ada00477114e31410d56417a19839b6252ef657608b9236647cc18001"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/phone.png",
+      "bytes": 810516,
+      "sha256": "438265ff617a3c6655206e647d33504696d3c858a6c9d9d5422a24d3a22e9ef2"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/qa.json",
+      "bytes": 16924,
+      "sha256": "75b46ce899f252712ff2b702fe0ed8a48f13e7a0b35f5b6b4241f839c22de012"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/seek.json",
+      "bytes": 1029,
+      "sha256": "261a7f61f16f527a9ebd94312c8055aa41fbf895697c31c92db245f8c5284833"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/sheet.png",
+      "bytes": 99664,
+      "sha256": "70608664cf34e51e20982d15d11519be4238717a6815bd94d2919abc1d7346a4"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/timeline.png",
+      "bytes": 258004,
+      "sha256": "9768728c65d96c600500c247fd96b7c5b8c581f0e59c9410b89fd462b5f959b8"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/video.mp4",
+      "bytes": 1003558,
+      "sha256": "34a1ecca6a0371eadfe65c311672a7b83405ff3cb6e27de3e5b8281cc2e8727a"
+    },
+    {
+      "path": "evidence/perpetual-payments-landscape/video.mp4.json",
+      "bytes": 2733,
+      "sha256": "02c70c5cdea5ebe20baff4aabfeb6915e368825f05f1ce28e0d2b9d018774365"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/boundaries/frame-0000.jpg",
+      "bytes": 73738,
+      "sha256": "fc9b6d17be7703a0b60abd32f2de1d14c0e869a0e383a024c2dad6407d62ef2b"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/boundaries/frame-0001.jpg",
+      "bytes": 73763,
+      "sha256": "a933582f28d3c4c4876da83fbf71503ffb49908367b90adf4eb17d95855ea7ad"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/boundaries/frame-0002.jpg",
+      "bytes": 100825,
+      "sha256": "a553c128ed7734217cd97a8d30e9b2703c3bb79dfaa38af393f0e5366fae064e"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/boundaries/frame-0003.jpg",
+      "bytes": 75599,
+      "sha256": "16131ccc50086c1b89690d3fb38cc2182e56c5b58a7b02b7ab21c0069c1432d1"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/boundaries/frame-0004.jpg",
+      "bytes": 75619,
+      "sha256": "2c66b11b8cd69ef802d1dc7f217c40ce68b8b7357b2fdd567acd6f298e0d4f80"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/boundaries/frame-0005.jpg",
+      "bytes": 81730,
+      "sha256": "3a2667dd7cde31b6d044fa1ac6b94eec62d374b19386c62f8072dc357cd2fcab"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/boundaries/index.html",
+      "bytes": 1719,
+      "sha256": "271771c33fa4a2a8014367234c419d84b0ab7952565e92f08d2b328cef3f4ac8"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/boundaries/review.json",
+      "bytes": 1296,
+      "sha256": "d9a286d991648f8baaeaa2e26405f3f55b81044220e189425b6feb96226b30c1"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/boundaries/strip.png",
+      "bytes": 127222,
+      "sha256": "c94044cd205b902a587378da1efe762750519f0059b911d35adc232104e3a444"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/check.json",
+      "bytes": 271,
+      "sha256": "aa56dd82b7102a0b924e8d5d9c02b88c7a3c85725f35046216bdea162d2d4865"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/native-job.json",
+      "bytes": 32570,
+      "sha256": "42b3abdc7e9bb195a1755a980dacf6f971ae9259ac3895a95755a5fd9df079d9"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/phone.png",
+      "bytes": 1031577,
+      "sha256": "21bb2756e35d80ff6b59220721525ee87837b757b0185337cd78e7214f48d753"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/qa.json",
+      "bytes": 16922,
+      "sha256": "56204bc3d48108d9528ae400a45dd985d182d9aea7c2c2039ea96b8206000960"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/seek.json",
+      "bytes": 1029,
+      "sha256": "15a67cad1b9fd2824f31400e8638ac60d84ee00ceaf1461483e2a1859955a139"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/sheet.png",
+      "bytes": 167721,
+      "sha256": "03b53b7ba903e1e8371bce5150bcba07725aaede64470754b21ecd7bbfefefdc"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/timeline.png",
+      "bytes": 240138,
+      "sha256": "a63a7b471c21379d6d8c8f0aea19798c1a269148cb358200cb6c1d8efa2adcfd"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/video.mp4",
+      "bytes": 848435,
+      "sha256": "52654042ad4f15b29c06ba3348cfa39fbfca4452bb743e46f8382e353a421e31"
+    },
+    {
+      "path": "evidence/perpetual-payments-vertical/video.mp4.json",
+      "bytes": 2742,
+      "sha256": "451e2f72352fc21de7aa65327a208050e327136d22dccef010f437b6ea87ba77"
+    },
+    {
+      "path": "evidence/summary.json",
+      "bytes": 4461,
+      "sha256": "f7ec8aa8df66c22ccf6df4ae85b5024876564282cf87a93f5af2632becb9ae38"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 1107,
+      "sha256": "377e281374fb73c2d5d5723ce115d3f5ca6c9edb98d39bee68b36917a033fae9"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1071,
+      "sha256": "85bcd5cc4def7de91ae7fff2fbb2bd16970a0ebe48c7318eaa5f46a9ff8f7fbc"
+    },
+    {
+      "path": "package.mjs",
+      "bytes": 8128,
+      "sha256": "e91e1fc65b3996e3045e7f0dc0c7955837f424a97281e0ab3b386ba229c20657"
+    },
+    {
+      "path": "preview.html",
+      "bytes": 2427,
+      "sha256": "715d1aa0bb70a31826c39f05a7327a9fb185c0fed28b02f26883d92309235d3e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2930,
+      "sha256": "38e416d1ae0f82d0ef693a855ecd49aca6598cc850f0c89a145ec254d8b4b3dc"
+    },
+    {
+      "path": "REVIEW.md",
+      "bytes": 9354,
+      "sha256": "ca87f4b7e0cf1e07c1e517ff7b22d0d985fb6b7f06b1f005af5de407272f2315"
+    },
+    {
+      "path": "SOURCES.md",
+      "bytes": 1710,
+      "sha256": "9840b8bb3c4a44929c56aa547a523d7e93639df7409cff8521115ca4ad13eb22"
+    },
+    {
+      "path": "specimens/finite-project-landscape/storyboard.json",
+      "bytes": 30225,
+      "sha256": "73231df84d1fd988e74dd0131cbff9ca0a451e80590295614aec0e32f7706dd7"
+    },
+    {
+      "path": "specimens/finite-project-vertical/storyboard.json",
+      "bytes": 30062,
+      "sha256": "800997675e2a343ca28bdf2e94c33e49bbd5ef877406b7c4147844f416a0e72f"
+    },
+    {
+      "path": "specimens/perpetual-payments-landscape/storyboard.json",
+      "bytes": 30876,
+      "sha256": "bd2d6b80a5fe9d18e8794da7e7fe236ada5b5611bef03eadb4c3fd790fda75c6"
+    },
+    {
+      "path": "specimens/perpetual-payments-vertical/storyboard.json",
+      "bytes": 30814,
+      "sha256": "376672dab6eebf2559e06e02bc8defc342462f346e1f2a2e62670b2652811e67"
+    },
+    {
+      "path": "verify.mjs",
+      "bytes": 3047,
+      "sha256": "b9e8b25e0194246fe4c743ecaf702b15025fc9806baf6f270ae0afc98d7fb59a"
+    }
+  ]
+}

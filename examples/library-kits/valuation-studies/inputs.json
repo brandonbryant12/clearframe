@@ -1,0 +1,8 @@
+{
+  "version":1,
+  "provenance":"Original fictional cash flows and model assumptions for software/design validation; no observed market values, forecasts, probabilities or investment recommendations.",
+  "cases":[
+    {"id":"perpetual-payments","title":"Perpetual payment model","source":"Fictional assumptions; constant growth model.","asOf":"2026-09-30","unit":"USD","cashFlowNow":4,"initialOutlay":0,"timing":"annual-end","terminal":{"kind":"growing-perpetuity"},"growthRates":[0,2,4],"discountRates":[2,4,6,8,10],"rateDecimals":0,"selected":{"growth":2,"discount":6},"slice":"discount","scale":{"min":0,"max":250,"ticks":[0,125,250],"decimals":2}},
+    {"id":"finite-project","title":"Five-year project value","source":"Fictional assumptions; finite project model.","asOf":"2026-09-30","unit":"USD","cashFlowNow":100,"initialOutlay":500,"timing":"annual-end","terminal":{"kind":"none","periods":5},"growthRates":[-10,0,10],"discountRates":[0,5,10,15,20],"rateDecimals":0,"selected":{"growth":0,"discount":10},"slice":"growth","scale":{"min":-300,"max":200,"ticks":[-300,-150,0,200],"decimals":2}}
+  ]
+}

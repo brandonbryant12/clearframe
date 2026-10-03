@@ -1,0 +1,13 @@
+✔ perpetual values retain invalid cells and slice exact existing evaluations (2.05ms)
+✔ finite terms include first future growth, upfront outlay and valid equal-rate zero (0.469208ms)
+✔ valuation rejects ambiguous or unsupported assumptions and clipped scales (0.4665ms)
+✔ native flat grid and slice preserve values, spacing, domain and invalid gaps (2.226042ms)
+✔ nonuniform native labels stay inside cells and reject crowded axes (0.436042ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48.986916

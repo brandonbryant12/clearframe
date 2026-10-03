@@ -1,0 +1,12 @@
+{
+  "status": "pass",
+  "comparisons": 33154,
+  "rejections": 30,
+  "geometryChecks": 306,
+  "method": "Exact BigInt integer-ratio period reference, supported cases and negative/zero inputs; source geometry, not encoded pixels",
+  "sourceHashes": {
+    "fframes/valuation-data.mjs": "780a6ca096b2729c35880f86227fb3cefe5863b635e3d412bf7d5d8a6e05a3ba",
+    "fframes/valuations.mjs": "ea0d86cada15550eccff838d788ea64ef40c17477678033a7b72fff1fd86030a",
+    "examples/library-kits/valuation-studies/inputs.json": "377e281374fb73c2d5d5723ce115d3f5ca6c9edb98d39bee68b36917a033fae9"
+  }
+}
