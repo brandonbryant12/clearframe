@@ -1,0 +1,226 @@
+[
+  {
+    "name": "load-temperature-landscape",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/phase-studies/evidence/load-temperature-landscape",
+    "pipelineId": "2026-10-03T13-03-02-316Z-6612703d",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+      ],
+      "duration": 72,
+      "inputId": "cc82badf3c942c1c7a11d2f31eb551cb5121e3d692ccbade36be96d691049871"
+    },
+    "qa": {
+      "seconds": 72,
+      "frames": 2160,
+      "changePerSecond": 0,
+      "heldSeconds": 72,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "35.6000s",
+        "36.5000s",
+        "37.5000s",
+        "39.5000s",
+        "71.6000s"
+      ],
+      "shuffled": [
+        "71.6000s",
+        "37.5000s",
+        "35.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "36.5000s",
+        "39.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "b908f01b533cb808896dd769a97c0dd3bf5e048a87579440945a09569c317e2d",
+        "1.5000s.png": "bcf496e5c0ce7f43fd935bf2a513219ed3ed062675e6401962abe3c4f5041fd5",
+        "3.5000s.png": "408312a7c6ddda7746b259a6cb96b6aa1af649e37749487c42d772763d962d70",
+        "35.6000s.png": "78d6f41aa2d15f0fe4a3f3fb1190c3001d6c2e23335a2d568c547727b30db988",
+        "36.5000s.png": "2cfda8189ba3056ae2635ec3e245083951ad2dcabc0a2650644d328d46f1fe82",
+        "37.5000s.png": "2cfda8189ba3056ae2635ec3e245083951ad2dcabc0a2650644d328d46f1fe82",
+        "39.5000s.png": "2cfda8189ba3056ae2635ec3e245083951ad2dcabc0a2650644d328d46f1fe82",
+        "71.6000s.png": "2cfda8189ba3056ae2635ec3e245083951ad2dcabc0a2650644d328d46f1fe82"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "load-temperature-vertical",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/phase-studies/evidence/load-temperature-vertical",
+    "pipelineId": "2026-10-03T13-03-25-942Z-8ca8200a",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+      ],
+      "duration": 72,
+      "inputId": "ca2fa5c73013a8af2c2123b513257e77f7ec3942a3fa237db3b211682f081069"
+    },
+    "qa": {
+      "seconds": 72,
+      "frames": 2160,
+      "changePerSecond": 0,
+      "heldSeconds": 72,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "35.6000s",
+        "36.5000s",
+        "37.5000s",
+        "39.5000s",
+        "71.6000s"
+      ],
+      "shuffled": [
+        "71.6000s",
+        "37.5000s",
+        "35.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "36.5000s",
+        "39.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "6badab489da6858d3eaeb92d5a1a95be682826db3d27d9dd275d7eb23f52e138",
+        "1.5000s.png": "7f3093611053a2daac9f70eee693ac93a1ee7fd80ef64fe6521a0711232704a4",
+        "3.5000s.png": "8cd2c793d5f0480b450259a7617e5330db3ec5433f30221e8b9bf7f882a626fb",
+        "35.6000s.png": "92476c50cc0649c9837dce23bba8382f987441844f972400e5ba8e585f3d1b5d",
+        "36.5000s.png": "d2e052c7e6b15e63425d69b9678de44aa75ad4541a0fb50e6426784c91f8397a",
+        "37.5000s.png": "d2e052c7e6b15e63425d69b9678de44aa75ad4541a0fb50e6426784c91f8397a",
+        "39.5000s.png": "d2e052c7e6b15e63425d69b9678de44aa75ad4541a0fb50e6426784c91f8397a",
+        "71.6000s.png": "d2e052c7e6b15e63425d69b9678de44aa75ad4541a0fb50e6426784c91f8397a"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "orders-inventory-landscape",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/phase-studies/evidence/orders-inventory-landscape",
+    "pipelineId": "2026-10-03T13-03-49-096Z-4812c13b",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+      ],
+      "duration": 72,
+      "inputId": "8b67aa36f2a7116e88e09b99cbaa9a59cae54c1f501214e403b825cfc97b694a"
+    },
+    "qa": {
+      "seconds": 72,
+      "frames": 2160,
+      "changePerSecond": 0,
+      "heldSeconds": 72,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "35.6000s",
+        "36.5000s",
+        "37.5000s",
+        "39.5000s",
+        "71.6000s"
+      ],
+      "shuffled": [
+        "71.6000s",
+        "37.5000s",
+        "35.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "36.5000s",
+        "39.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "3779b97cd4293e675e7b958d36b1aff92c24fc21a048eb6ddca49fa386002b29",
+        "1.5000s.png": "4977b8312ff597d3283634d3f0c6160f16685d5dc432a3e3c6287f9270450d52",
+        "3.5000s.png": "50303792bfe1b0465dfa8b817a839e4ca590263c9435137990dd03b56d5ca3ff",
+        "35.6000s.png": "cf507242cc22cce04db324a7d5a9f0b8629ef316515d40530a614ca541f5eb22",
+        "36.5000s.png": "e28743503c4ece66b5ed53cc501ad4551d725f2f5bebc12a394b1bc15f3ddc02",
+        "37.5000s.png": "e28743503c4ece66b5ed53cc501ad4551d725f2f5bebc12a394b1bc15f3ddc02",
+        "39.5000s.png": "e28743503c4ece66b5ed53cc501ad4551d725f2f5bebc12a394b1bc15f3ddc02",
+        "71.6000s.png": "e28743503c4ece66b5ed53cc501ad4551d725f2f5bebc12a394b1bc15f3ddc02"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "orders-inventory-vertical",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/phase-studies/evidence/orders-inventory-vertical",
+    "pipelineId": "2026-10-03T13-04-12-124Z-cd6c2e08",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+      ],
+      "duration": 72,
+      "inputId": "a000bea5463b627ac8d74bc4c773d3645cc55ac08267928beb45bf6fde33d80b"
+    },
+    "qa": {
+      "seconds": 72,
+      "frames": 2160,
+      "changePerSecond": 0,
+      "heldSeconds": 72,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "35.6000s",
+        "36.5000s",
+        "37.5000s",
+        "39.5000s",
+        "71.6000s"
+      ],
+      "shuffled": [
+        "71.6000s",
+        "37.5000s",
+        "35.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "36.5000s",
+        "39.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "76ede8c2d817d95275a4613cd564a2e5535f8b079a66f225757757af909fab04",
+        "1.5000s.png": "47b48e1e846631fb83614179ad6156049072f76de74fa6238f7156731db71c23",
+        "3.5000s.png": "c6cc45f9940fb6ad2368a986e470780a92d1f7828e8647d19cb7750c094b360f",
+        "35.6000s.png": "1c3c16dc5e5bbccbe08e0071fc88256848626d655d4b27c444995929faf02297",
+        "36.5000s.png": "b0bd6f5f86c4e72ce6627159b0652c8c0656825a223d238060de57bab71cbdf1",
+        "37.5000s.png": "b0bd6f5f86c4e72ce6627159b0652c8c0656825a223d238060de57bab71cbdf1",
+        "39.5000s.png": "b0bd6f5f86c4e72ce6627159b0652c8c0656825a223d238060de57bab71cbdf1",
+        "71.6000s.png": "b0bd6f5f86c4e72ce6627159b0652c8c0656825a223d238060de57bab71cbdf1"
+      },
+      "equal": true
+    }
+  }
+]

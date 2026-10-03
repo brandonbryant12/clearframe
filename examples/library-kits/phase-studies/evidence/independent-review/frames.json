@@ -1,0 +1,366 @@
+[
+  {
+    "name": "load-temperature-landscape",
+    "pipelineId": "2026-10-03T13-03-02-316Z-6612703d",
+    "videoSha256": "3acd723e12cfc86ebd7b9129dd8b38cd1628d04f6d67aa47957982f928e4a6ea",
+    "times": [
+      0.1,
+      0.9,
+      1.1,
+      2.3,
+      5.9,
+      7.1,
+      8.5,
+      9.5,
+      10.7,
+      11.7,
+      13.1,
+      35.9,
+      36.033333,
+      36.7,
+      39.9,
+      71.9
+    ],
+    "width": 360,
+    "frames": [
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/0.1s.png",
+        "sha256": "414d180a0bc94d7ac6ba6094a1f3bbcfe90b0e1f46d86ca753f1b970ce16a083"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/0.9s.png",
+        "sha256": "4969405fb3787570d32f9c33b8c53f7a67aee570e391c7c0937a5630f05e3851"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/1.1s.png",
+        "sha256": "30e888267f455419892cb3549b97f7c3f12837040230fb61bac1edbd667f1eb0"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/2.3s.png",
+        "sha256": "4393b4b045b41884b3cf0868e4f6841adb803b429913c544b61ed9309afae8ef"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/5.9s.png",
+        "sha256": "379b7ca834cc0a925564ac3783ef246b8130d9c3c55104c3ea59d59cae233c7f"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/7.1s.png",
+        "sha256": "ef01288f2c16b8d153f24203dc6bdd7668208799f0d1fe96969ad7edc50028e6"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/8.5s.png",
+        "sha256": "a533cf970f6703af336cf1d8234f7fc6433288c6b8284f1679d0137904c1af1c"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/9.5s.png",
+        "sha256": "50b2290d527fff95bd724640eb9814f3798505b4abe7face64955454b55251c5"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/10.7s.png",
+        "sha256": "16166067c82c2f0c993046b3fb56ada8dd3dc48e731a3e2e1a6e3cf306cd820f"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/11.7s.png",
+        "sha256": "e5727b09abfd0bce3ed9d6bf2e9b917bb3245a7d58f25171de7bc4c726600f39"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/13.1s.png",
+        "sha256": "c68f52bf6d8f868069ef7639b1bd102d356e838cab15dc7f32893c8d36b87fee"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/35.9s.png",
+        "sha256": "c246fc845b73d97705426d26bc14876eadadab4da7a73219c09ab0ef7535d7a4"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/36.0333s.png",
+        "sha256": "951099c5c600e1a1087fee4d8d083d544bcedc279e0b42420cc6ab7e50047326"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/36.7s.png",
+        "sha256": "6ef837309f5451b7234d66e37e15ec76d2d58751cbac4d833d880db49ea9ef2b"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/39.9s.png",
+        "sha256": "6ef837309f5451b7234d66e37e15ec76d2d58751cbac4d833d880db49ea9ef2b"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-landscape/71.9s.png",
+        "sha256": "376105c1c7ed94fb3319ef810559fd4e2ceb272eab46ed7bd1afd6b54ced05d3"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "load-temperature-vertical",
+    "pipelineId": "2026-10-03T13-03-25-942Z-8ca8200a",
+    "videoSha256": "f47d875234274a079841a629494e1939adf8951279e77267770e9cee95e6c009",
+    "times": [
+      0.1,
+      0.9,
+      1.1,
+      2.3,
+      5.9,
+      7.1,
+      8.5,
+      9.5,
+      10.7,
+      11.7,
+      13.1,
+      35.9,
+      36.033333,
+      36.7,
+      39.9,
+      71.9
+    ],
+    "width": 360,
+    "frames": [
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/0.1s.png",
+        "sha256": "6bd16986f36381f4f2e97a1c022e5a8c21667aec1c6e56349aab57ad53b01977"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/0.9s.png",
+        "sha256": "54ea90572d669889abbc9d41a100e9eb7b9e89cd9b7450b248a8d0ca938a7525"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/1.1s.png",
+        "sha256": "053e019b014399abb5ef21a7a7597d6e5b4c1e169247042ae25e2a97b04fd5bf"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/2.3s.png",
+        "sha256": "7a5ea361debec844b988eb6cce684879dad843fae0b65271856c305d700b623d"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/5.9s.png",
+        "sha256": "63d78d0801c0dc7627f951a4c8df96f3e856a77ec326ae7c0fdb8ab816cd955a"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/7.1s.png",
+        "sha256": "92743a97b6aa55629b66a6b3326f1962002d8cedb38f41e944503d5334c49951"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/8.5s.png",
+        "sha256": "f84986ad8a6640278352dfe85a7534a7ed01e1f39ebdbb8911a190d754f0cbd5"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/9.5s.png",
+        "sha256": "af3dbdebea60c692f45edae16858fe69ad953e12dd72056c5490299197519ae1"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/10.7s.png",
+        "sha256": "f7aa852ee9b7a194fbd6265fb7053cacb531edde8c148f16b6c8806aab60af1f"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/11.7s.png",
+        "sha256": "7790ec871af46873f9eb7d14cca17ff75b4f38325839a6b6dc0ac771d131b8e1"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/13.1s.png",
+        "sha256": "028b3b034bc7315ebe69e16af1739991cecf19117a2a654f04c78925c4d8e32f"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/35.9s.png",
+        "sha256": "afd6a1826080b406f68771b99808556c5ec7d5e0cd71cb01702c86de066d02b8"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/36.0333s.png",
+        "sha256": "442f244808e068c218b8fc3fd424076909692b17ff91e1178c3d0c4d6774d9c4"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/36.7s.png",
+        "sha256": "6f4b85026ac99525c5179847fca1653af66724249a9610bcfaed34c259edb0c0"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/39.9s.png",
+        "sha256": "6f4b85026ac99525c5179847fca1653af66724249a9610bcfaed34c259edb0c0"
+      },
+      {
+        "path": "evidence/independent-review/load-temperature-vertical/71.9s.png",
+        "sha256": "71a7fe981f8d3db92218ebd4906003be6cc405192242706c53db142c81398c7e"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "orders-inventory-landscape",
+    "pipelineId": "2026-10-03T13-03-49-096Z-4812c13b",
+    "videoSha256": "dc7dcae3cbf55dccb398bd39d257cc8f25134188d29df8912b085b3d17d366f7",
+    "times": [
+      0.1,
+      0.9,
+      1.1,
+      2.3,
+      5.9,
+      7.1,
+      8.5,
+      9.5,
+      10.7,
+      11.7,
+      13.1,
+      35.9,
+      36.033333,
+      36.7,
+      39.9,
+      71.9
+    ],
+    "width": 360,
+    "frames": [
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/0.1s.png",
+        "sha256": "8a712ea04a879f4db9d97f57331df2d555574b8673344d2fcb33820587dded49"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/0.9s.png",
+        "sha256": "5062c985d5bf9e393b2d59517c2a6e0cb346eb6f84d4548a3d472ca19a6d7d44"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/1.1s.png",
+        "sha256": "fa422eb12b43f6c78494eede55fbe03c768d8dcef2cedfbc801b5524a55f95a7"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/2.3s.png",
+        "sha256": "fd16edc748b335197c465e8721fe3b23f67f644eb70eeeb46a615bd760e9d92b"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/5.9s.png",
+        "sha256": "ebce307a99b9ca9c06035c2ab8aaaf0e65dda99f749ea79db4a600d6390ba0d3"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/7.1s.png",
+        "sha256": "478ba3c30bbc334e0fba5132a02a71f3c68250521aa7379827886b953a215ad1"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/8.5s.png",
+        "sha256": "8fe9d442804d306f4238b9f74741a88a9f9f20a1112f9dd8cd1441e3dc75a50b"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/9.5s.png",
+        "sha256": "e52c80eb03229900e9dd76ece1e1e551fe83b38ab045594eda0e41376a55e29e"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/10.7s.png",
+        "sha256": "ee499d150a19725f9570a4d8f8fcf0b2ae978d9617f3f44bd5ef4c8e3bdc35b0"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/11.7s.png",
+        "sha256": "8c7528beca5afe93532f11255749bc7165e88ec1b1de20c8f46905b9e7c51ada"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/13.1s.png",
+        "sha256": "05444cfed430f3d9932522f578d3e4ec56aefebc39689da4be6f5b70a57e4edc"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/35.9s.png",
+        "sha256": "9955394c32f4d6548f41514769e65065889f51ca05ebfc6f2e4db81815fd37e5"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/36.0333s.png",
+        "sha256": "f3f9cc8fb62387293da57041c109be8c2e740ad246bf0e4b91bef1a34224b9ee"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/36.7s.png",
+        "sha256": "58bbdb17c525af4ab35982a7b0664b35883888bb1da62b2abaaaac208016d38d"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/39.9s.png",
+        "sha256": "58bbdb17c525af4ab35982a7b0664b35883888bb1da62b2abaaaac208016d38d"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-landscape/71.9s.png",
+        "sha256": "3cf112d25f1157c19f3d71b0d872c6b57690149d84a9e5926037da5d99b452b2"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "orders-inventory-vertical",
+    "pipelineId": "2026-10-03T13-04-12-124Z-cd6c2e08",
+    "videoSha256": "08c747448fd54bb1d64924b3128eba4b1f9471c214335400d2e66a3e99d7771f",
+    "times": [
+      0.1,
+      0.9,
+      1.1,
+      2.3,
+      5.9,
+      7.1,
+      8.5,
+      9.5,
+      10.7,
+      11.7,
+      13.1,
+      35.9,
+      36.033333,
+      36.7,
+      39.9,
+      71.9
+    ],
+    "width": 360,
+    "frames": [
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/0.1s.png",
+        "sha256": "7d5e39220faacfbd6ff5ac01da8fdda8e2cc85f0b16af847b3431763e256223f"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/0.9s.png",
+        "sha256": "29e086d14126fc3f522ff818ac0c0449293ac9bf1406808733490bef4af84067"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/1.1s.png",
+        "sha256": "997625a75fa79c925db6142dd70ea58a550935887b87953aa7cd375c3fb329f0"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/2.3s.png",
+        "sha256": "fa1c1c051837998a849bbc709de37bc17964ef94d69edc732f772a0f528fb1dc"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/5.9s.png",
+        "sha256": "dd239c1ea967f520d304b80f67f7817d156215a8fc03cadebed7fc4ad5ceb475"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/7.1s.png",
+        "sha256": "8c385571110fc3d54a1a95bdf2f43509868f4485893668d874e630c0dd94d601"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/8.5s.png",
+        "sha256": "083ca9be4b4cfaf827be38c462a49ecd4dc71c21ca1724c0bd9c01b5cb19857b"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/9.5s.png",
+        "sha256": "1bb6513a73769de8910e25430d982f8525df650e9a6c5654fe8cda7c49800467"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/10.7s.png",
+        "sha256": "7bc9a0d11567a92e4a214ff4332665f105dedbd9c45ed7c1346bfbf7b8482d20"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/11.7s.png",
+        "sha256": "f42c180c12461e03925123cc21ce64c0835fa0c3bb10924616b2f8d18809fb2a"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/13.1s.png",
+        "sha256": "ebddc811be8c801da31104759a19205fea4f82c52b9fc6de3fcc0a48dc1c0b7a"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/35.9s.png",
+        "sha256": "2d43abf2b7e664037969ba0438e0edcd48337dd386eeb76542a4ba9ea390024b"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/36.0333s.png",
+        "sha256": "4a996afd585b28d4c0202e441366eb9de4b5c8842236c32cb66f882abd570f41"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/36.7s.png",
+        "sha256": "0427bcbeea03496d9bb2ede51451659a312502c3cab723c18c6ff1a01afc30a1"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/39.9s.png",
+        "sha256": "0427bcbeea03496d9bb2ede51451659a312502c3cab723c18c6ff1a01afc30a1"
+      },
+      {
+        "path": "evidence/independent-review/orders-inventory-vertical/71.9s.png",
+        "sha256": "454a769d39e8fd2013b4119040b97b8963c779d346af992a9ed6e20afb3a05b8"
+      }
+    ],
+    "visuallyInspected": true
+  }
+]

@@ -1,0 +1,132 @@
+{
+  "status": "prototype",
+  "continuousPlayback": "unverified",
+  "variants": [
+    {
+      "name": "load-temperature-landscape",
+      "pipelineId": "2026-10-03T13-03-02-316Z-6612703d",
+      "videoSha256": "3acd723e12cfc86ebd7b9129dd8b38cd1628d04f6d67aa47957982f928e4a6ea",
+      "storyboardSha256": "6ed46cd0cbed3e6257ea21068b82693ea2238da4aea714f4c6ec5f87d07679f4",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+        ],
+        "duration": 72,
+        "inputId": "cc82badf3c942c1c7a11d2f31eb551cb5121e3d692ccbade36be96d691049871"
+      },
+      "qa": {
+        "seconds": 72,
+        "frames": 2160,
+        "changePerSecond": 0,
+        "heldSeconds": 72,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "load-temperature-vertical",
+      "pipelineId": "2026-10-03T13-03-25-942Z-8ca8200a",
+      "videoSha256": "f47d875234274a079841a629494e1939adf8951279e77267770e9cee95e6c009",
+      "storyboardSha256": "f6eaf3ab43c4c963ed4e728f9873a7e05b2b31c2cc31fd64ce1ce152302453b5",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+        ],
+        "duration": 72,
+        "inputId": "ca2fa5c73013a8af2c2123b513257e77f7ec3942a3fa237db3b211682f081069"
+      },
+      "qa": {
+        "seconds": 72,
+        "frames": 2160,
+        "changePerSecond": 0,
+        "heldSeconds": 72,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "orders-inventory-landscape",
+      "pipelineId": "2026-10-03T13-03-49-096Z-4812c13b",
+      "videoSha256": "dc7dcae3cbf55dccb398bd39d257cc8f25134188d29df8912b085b3d17d366f7",
+      "storyboardSha256": "febd4998906f20d502cd35aabcf9926bdc7b40feb896e21abe6a8543c0a45482",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+        ],
+        "duration": 72,
+        "inputId": "8b67aa36f2a7116e88e09b99cbaa9a59cae54c1f501214e403b825cfc97b694a"
+      },
+      "qa": {
+        "seconds": 72,
+        "frames": 2160,
+        "changePerSecond": 0,
+        "heldSeconds": 72,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "orders-inventory-vertical",
+      "pipelineId": "2026-10-03T13-04-12-124Z-cd6c2e08",
+      "videoSha256": "08c747448fd54bb1d64924b3128eba4b1f9471c214335400d2e66a3e99d7771f",
+      "storyboardSha256": "95e31653ff5f50ac733e9451daf20836bd0ccb41a20ac47b9353b141c2289743",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+        ],
+        "duration": 72,
+        "inputId": "a000bea5463b627ac8d74bc4c773d3645cc55ac08267928beb45bf6fde33d80b"
+      },
+      "qa": {
+        "seconds": 72,
+        "frames": 2160,
+        "changePerSecond": 0,
+        "heldSeconds": 72,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    }
+  ],
+  "tests": {
+    "pass": 212,
+    "fail": 0,
+    "skipped": 0
+  },
+  "encoded": {
+    "nativeMappingChecks": 1352,
+    "arithmeticChecks": 680,
+    "sampledFrames": 680,
+    "pointInteriorChecks": 17584,
+    "observedDateChecks": 4396,
+    "missingDateChecks": 804,
+    "hiddenDateChecks": 920,
+    "frontChecks": 58,
+    "outlineRimChecks": 5088,
+    "gapChecks": 624,
+    "failures": 0
+  },
+  "limits": [
+    "Fictional dated paired observations; no real-world forecast or operating limit",
+    "Raw supplied pairs with no smoothing, inferred cycle, lead/lag or causal claim",
+    "Straight connecting segments are visual guides, not measured intermediate states",
+    "Crowded data or new copy requires fresh layout review",
+    "Bounded encoded probes and phone-frame review, not continuous playback or final master acceptance",
+    "Square and 4:5 unreviewed"
+  ]
+}

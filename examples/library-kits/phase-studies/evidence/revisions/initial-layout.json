@@ -1,0 +1,17 @@
+{
+  "errors": [
+    "trail: \"2026-01-31\" overlaps \"Dated observations; lines are guides onl…\" (12.6 s)",
+    "focus: \"2026-01-31\" overlaps \"2026-06-30: x -1, y 8\" (48.6 s)"
+  ],
+  "warnings": [
+    "trail: \"Orders fall; inventory stays above plan\" runs outside the title-safe area (keep type within 90% of the frame) (12.6 s)",
+    "trail: \"Original fictional observations · as of …\" runs outside the title-safe area (keep type within 90% of the frame) (12.6 s)",
+    "focus: \"Orders fall; inventory stays above plan\" runs outside the title-safe area (keep type within 90% of the frame) (48.6 s)",
+    "focus: \"Original fictional observations · as of …\" runs outside the title-safe area (keep type within 90% of the frame) (48.6 s)"
+  ],
+  "notes": [
+    "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 272 frames: no problems found\n"
+  ],
+  "duration": 72,
+  "inputId": "9a012f3cc25037f1e5fc55093815b682539bd220f11b1d7fd5595c7a9fbead5f"
+}

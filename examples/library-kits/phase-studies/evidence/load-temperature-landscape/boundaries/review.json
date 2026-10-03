@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/phase-studies/specimens/load-temperature-landscape/build/pipeline/2026-10-03T13-03-02-316Z-6612703d/video.mp4",
+  "outputSha256": "3acd723e12cfc86ebd7b9129dd8b38cd1628d04f6d67aa47957982f928e4a6ea",
+  "inputId": "cc82badf3c942c1c7a11d2f31eb551cb5121e3d692ccbade36be96d691049871",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "trail: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "trail: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 1079,
+      "time": 35.96666666666667,
+      "reasons": [
+        "trail: last frame",
+        "Before focus"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 1080,
+      "time": 36,
+      "reasons": [
+        "focus: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 1086,
+      "time": 36.2,
+      "reasons": [
+        "focus: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 2159,
+      "time": 71.96666666666667,
+      "reasons": [
+        "focus: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

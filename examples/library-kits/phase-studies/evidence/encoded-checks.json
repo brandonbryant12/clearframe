@@ -1,0 +1,264 @@
+[
+  {
+    "project": "orders-inventory-landscape",
+    "videoSha256": "dc7dcae3cbf55dccb398bd39d257cc8f25134188d29df8912b085b3d17d366f7",
+    "storyboardSha256": "febd4998906f20d502cd35aabcf9926bdc7b40feb896e21abe6a8543c0a45482",
+    "nativeJobSha256": "357775e95191d84a946607232097eed666c56a664513cc31164fb1c588c0460f",
+    "inputSha256": "87fd3cf0ab13902604b904d12d676ca996000e5b4dde287523bb4cd71eca1ec8",
+    "checkerSha256": "82e97c7757a5fc94afa5825998c9952547f0a531c812ff40fdd964786ef6601b",
+    "nativeMappingChecks": 351,
+    "arithmeticChecks": 170,
+    "sampledFrames": 168,
+    "pointInteriorChecks": 4640,
+    "observedDateChecks": 1160,
+    "missingDateChecks": 127,
+    "hiddenDateChecks": 225,
+    "frontChecks": 13,
+    "outlineRimChecks": 1280,
+    "gapChecks": 144,
+    "gapProbePositions": [
+      {
+        "point": [
+          986.88,
+          499.986
+        ],
+        "from": 6,
+        "to": 8,
+        "fraction": 0.2,
+        "clearanceAt720": 19.22375878863172
+      },
+      {
+        "point": [
+          1061.76,
+          536.652
+        ],
+        "from": 6,
+        "to": 8,
+        "fraction": 0.4,
+        "clearanceAt720": 38.44751757726343
+      },
+      {
+        "point": [
+          1136.64,
+          573.318
+        ],
+        "from": 6,
+        "to": 8,
+        "fraction": 0.6,
+        "clearanceAt720": 19.223758788631724
+      }
+    ],
+    "failures": 0,
+    "tolerances": {
+      "nativeGeometry": 1e-07,
+      "pointRgbPerChannel": 24,
+      "pointCoreRadiusFraction": 0.2,
+      "missingCenterRgbPerChannel": 18,
+      "ordinaryProbeRadiusAt720": 1,
+      "frontProbeRadiusAt720": 2,
+      "outlineMaximumRgb": 104,
+      "outlineRequiredAngularProbes": 6,
+      "outlineAngularProbes": 8,
+      "minimumGapClearanceAt720": 8
+    }
+  },
+  {
+    "project": "orders-inventory-vertical",
+    "videoSha256": "08c747448fd54bb1d64924b3128eba4b1f9471c214335400d2e66a3e99d7771f",
+    "storyboardSha256": "95e31653ff5f50ac733e9451daf20836bd0ccb41a20ac47b9353b141c2289743",
+    "nativeJobSha256": "b584f9692a53ebfa632aed275132e054cfee8cef6829404d6a7cff69e08daa0f",
+    "inputSha256": "87fd3cf0ab13902604b904d12d676ca996000e5b4dde287523bb4cd71eca1ec8",
+    "checkerSha256": "82e97c7757a5fc94afa5825998c9952547f0a531c812ff40fdd964786ef6601b",
+    "nativeMappingChecks": 351,
+    "arithmeticChecks": 170,
+    "sampledFrames": 168,
+    "pointInteriorChecks": 4640,
+    "observedDateChecks": 1160,
+    "missingDateChecks": 127,
+    "hiddenDateChecks": 225,
+    "frontChecks": 13,
+    "outlineRimChecks": 1280,
+    "gapChecks": 144,
+    "gapProbePositions": [
+      {
+        "point": [
+          365.03999999999996,
+          905.3760000000002
+        ],
+        "from": 6,
+        "to": 8,
+        "fraction": 0.2,
+        "clearanceAt720": 43.72849213162813
+      },
+      {
+        "point": [
+          420.93,
+          954.4320000000001
+        ],
+        "from": 6,
+        "to": 8,
+        "fraction": 0.4,
+        "clearanceAt720": 87.4569842632562
+      },
+      {
+        "point": [
+          476.82,
+          1003.4880000000002
+        ],
+        "from": 6,
+        "to": 8,
+        "fraction": 0.6,
+        "clearanceAt720": 43.84393577223651
+      }
+    ],
+    "failures": 0,
+    "tolerances": {
+      "nativeGeometry": 1e-07,
+      "pointRgbPerChannel": 24,
+      "pointCoreRadiusFraction": 0.2,
+      "missingCenterRgbPerChannel": 18,
+      "ordinaryProbeRadiusAt720": 1,
+      "frontProbeRadiusAt720": 2,
+      "outlineMaximumRgb": 104,
+      "outlineRequiredAngularProbes": 6,
+      "outlineAngularProbes": 8,
+      "minimumGapClearanceAt720": 8
+    }
+  },
+  {
+    "project": "load-temperature-landscape",
+    "videoSha256": "3acd723e12cfc86ebd7b9129dd8b38cd1628d04f6d67aa47957982f928e4a6ea",
+    "storyboardSha256": "6ed46cd0cbed3e6257ea21068b82693ea2238da4aea714f4c6ec5f87d07679f4",
+    "nativeJobSha256": "55aed8a86b34f15b0fdd374167c92864a772a7cb1ee34abdc069c40767a248d0",
+    "inputSha256": "87fd3cf0ab13902604b904d12d676ca996000e5b4dde287523bb4cd71eca1ec8",
+    "checkerSha256": "82e97c7757a5fc94afa5825998c9952547f0a531c812ff40fdd964786ef6601b",
+    "nativeMappingChecks": 325,
+    "arithmeticChecks": 170,
+    "sampledFrames": 172,
+    "pointInteriorChecks": 4152,
+    "observedDateChecks": 1038,
+    "missingDateChecks": 275,
+    "hiddenDateChecks": 235,
+    "frontChecks": 16,
+    "outlineRimChecks": 1264,
+    "gapChecks": 144,
+    "gapProbePositions": [
+      {
+        "point": [
+          1248.96,
+          535.3425000000001
+        ],
+        "from": 4,
+        "to": 7,
+        "fraction": 0.2,
+        "clearanceAt720": 15.631059253655529
+      },
+      {
+        "point": [
+          1211.52,
+          554.985
+        ],
+        "from": 4,
+        "to": 7,
+        "fraction": 0.4,
+        "clearanceAt720": 14.51164177750752
+      },
+      {
+        "point": [
+          1174.0800000000002,
+          574.6275
+        ],
+        "from": 4,
+        "to": 7,
+        "fraction": 0.6,
+        "clearanceAt720": 9.674427851671656
+      }
+    ],
+    "failures": 0,
+    "tolerances": {
+      "nativeGeometry": 1e-07,
+      "pointRgbPerChannel": 24,
+      "pointCoreRadiusFraction": 0.2,
+      "missingCenterRgbPerChannel": 18,
+      "ordinaryProbeRadiusAt720": 1,
+      "frontProbeRadiusAt720": 2,
+      "outlineMaximumRgb": 104,
+      "outlineRequiredAngularProbes": 6,
+      "outlineAngularProbes": 8,
+      "minimumGapClearanceAt720": 8
+    }
+  },
+  {
+    "project": "load-temperature-vertical",
+    "videoSha256": "f47d875234274a079841a629494e1939adf8951279e77267770e9cee95e6c009",
+    "storyboardSha256": "f6eaf3ab43c4c963ed4e728f9873a7e05b2b31c2cc31fd64ce1ce152302453b5",
+    "nativeJobSha256": "445d08731d9d5c0205496441157b9f4837e6e6b5a40b29e45c8e3c00d8f933d2",
+    "inputSha256": "87fd3cf0ab13902604b904d12d676ca996000e5b4dde287523bb4cd71eca1ec8",
+    "checkerSha256": "82e97c7757a5fc94afa5825998c9952547f0a531c812ff40fdd964786ef6601b",
+    "nativeMappingChecks": 325,
+    "arithmeticChecks": 170,
+    "sampledFrames": 172,
+    "pointInteriorChecks": 4152,
+    "observedDateChecks": 1038,
+    "missingDateChecks": 275,
+    "hiddenDateChecks": 235,
+    "frontChecks": 16,
+    "outlineRimChecks": 1264,
+    "gapChecks": 192,
+    "gapProbePositions": [
+      {
+        "point": [
+          560.655,
+          952.6800000000001
+        ],
+        "from": 4,
+        "to": 7,
+        "fraction": 0.2,
+        "clearanceAt720": 25.573957456756677
+      },
+      {
+        "point": [
+          532.71,
+          978.9600000000002
+        ],
+        "from": 4,
+        "to": 7,
+        "fraction": 0.4,
+        "clearanceAt720": 33.43570427030845
+      },
+      {
+        "point": [
+          504.765,
+          1005.2400000000001
+        ],
+        "from": 4,
+        "to": 7,
+        "fraction": 0.6,
+        "clearanceAt720": 22.290469513538998
+      },
+      {
+        "point": [
+          476.82,
+          1031.5200000000002
+        ],
+        "from": 4,
+        "to": 7,
+        "fraction": 0.8,
+        "clearanceAt720": 11.145234756769463
+      }
+    ],
+    "failures": 0,
+    "tolerances": {
+      "nativeGeometry": 1e-07,
+      "pointRgbPerChannel": 24,
+      "pointCoreRadiusFraction": 0.2,
+      "missingCenterRgbPerChannel": 18,
+      "ordinaryProbeRadiusAt720": 1,
+      "frontProbeRadiusAt720": 2,
+      "outlineMaximumRgb": 104,
+      "outlineRequiredAngularProbes": 6,
+      "outlineAngularProbes": 8,
+      "minimumGapClearanceAt720": 8
+    }
+  }
+]

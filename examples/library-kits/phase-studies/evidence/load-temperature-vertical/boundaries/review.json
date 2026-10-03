@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/phase-studies/specimens/load-temperature-vertical/build/pipeline/2026-10-03T13-03-25-942Z-8ca8200a/video.mp4",
+  "outputSha256": "f47d875234274a079841a629494e1939adf8951279e77267770e9cee95e6c009",
+  "inputId": "ca2fa5c73013a8af2c2123b513257e77f7ec3942a3fa237db3b211682f081069",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "trail: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "trail: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 1079,
+      "time": 35.96666666666667,
+      "reasons": [
+        "trail: last frame",
+        "Before focus"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 1080,
+      "time": 36,
+      "reasons": [
+        "focus: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 1086,
+      "time": 36.2,
+      "reasons": [
+        "focus: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 2159,
+      "time": 71.96666666666667,
+      "reasons": [
+        "focus: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

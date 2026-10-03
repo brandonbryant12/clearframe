@@ -377,6 +377,16 @@
           "M07"
         ]
       }
+    },
+    "phase-studies": {
+      "cases": {
+        "orders-inventory": [
+          "C15"
+        ],
+        "load-temperature": [
+          "C15"
+        ]
+      }
     }
   },
   "sourceOnly": {

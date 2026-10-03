@@ -1057,6 +1057,80 @@
       }
     },
     {
+      "id": "phase-studies",
+      "title": "Dated phase trails",
+      "purpose": "Show supplied paired observations on explicit axes, then inspect a dated point without inventing intervening states.",
+      "status": "prototype",
+      "integrity": "verified",
+      "fileCount": 170,
+      "issues": [],
+      "inventoryIds": [
+        "C15"
+      ],
+      "manifest": "examples/library-kits/phase-studies/kit.json",
+      "preview": "examples/library-kits/phase-studies/preview.html",
+      "readme": "examples/library-kits/phase-studies/README.md",
+      "review": "examples/library-kits/phase-studies/REVIEW.md",
+      "sources": "examples/library-kits/phase-studies/SOURCES.md",
+      "tags": {
+        "purpose": [
+          "compare",
+          "inspect-observations",
+          "show-missing-data"
+        ],
+        "appearance": [
+          "paper",
+          "native-chart",
+          "scatterplot"
+        ],
+        "movement": [
+          "dated-reveal",
+          "guide-draw",
+          "selected-point",
+          "reading-hold"
+        ],
+        "format": [
+          "landscape",
+          "vertical"
+        ],
+        "subject": [
+          "orders-inventory",
+          "load-temperature",
+          "paired-observations"
+        ]
+      },
+      "editable": {
+        "native": [
+          "paired observations",
+          "copy",
+          "axes",
+          "references",
+          "focus date",
+          "timing",
+          "layout"
+        ],
+        "fixedClip": []
+      },
+      "requires": {
+        "replay": [
+          "ClearFrame native compositor",
+          "bundled fonts"
+        ],
+        "preparation": [
+          "Node.js",
+          "FFmpeg",
+          "Python 3"
+        ]
+      },
+      "evidence": {
+        "summary": "evidence/summary.json",
+        "review": "REVIEW.md",
+        "encoded": "evidence/encoded-checks.json",
+        "implementation": "evidence/implementation.json",
+        "continuousPlayback": "unverified"
+      }
+    },
+    {
       "id": "physical-mechanisms",
       "title": "Physical mechanisms",
       "purpose": "Explain gated transfer and alternate-route release with reusable qualitative objects and native labels.",
@@ -3787,6 +3861,132 @@
       "search": "count the missing services too separate membership counts from weights and benchmark differences from an independent circle-area measure. c05 count weight compare-to-benchmark paper blue orange violet quantity-preserving-fade staged-reading reading-hold finance operations adoption s06 s07 s10 s17 market breadth tile field pull back from a few large leaders to equally sized constituent tiles; independently show how many meet the stated condition. constituents weights membership date threshold metric survey participation system health product adoption"
     },
     {
+      "id": "phase-studies/load-temperature",
+      "kind": "example",
+      "title": "A warm machine after load falls",
+      "packageId": "phase-studies",
+      "inventoryIds": [
+        "C15"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/phase-studies/specimens/load-temperature-landscape/storyboard.json",
+          "video": "examples/library-kits/phase-studies/evidence/load-temperature-landscape/video.mp4",
+          "poster": "examples/library-kits/phase-studies/evidence/independent-review/load-temperature-landscape/71.9s.png",
+          "receipt": "examples/library-kits/phase-studies/evidence/load-temperature-landscape/video.mp4.json",
+          "duration": 72,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/phase-studies/specimens/load-temperature-vertical/storyboard.json",
+          "video": "examples/library-kits/phase-studies/evidence/load-temperature-vertical/video.mp4",
+          "poster": "examples/library-kits/phase-studies/evidence/independent-review/load-temperature-vertical/71.9s.png",
+          "receipt": "examples/library-kits/phase-studies/evidence/load-temperature-vertical/video.mp4.json",
+          "duration": 72,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Show supplied paired observations on explicit axes, then inspect a dated point without inventing intervening states.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "inspect-observations",
+        "show-missing-data"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart",
+        "scatterplot"
+      ],
+      "movement": [
+        "dated-reveal",
+        "guide-draw",
+        "selected-point",
+        "reading-hold"
+      ],
+      "subjects": [
+        "orders-inventory",
+        "load-temperature",
+        "paired-observations"
+      ],
+      "collections": [
+        "time"
+      ],
+      "sourceIds": [
+        "S11",
+        "S14"
+      ],
+      "search": "a warm machine after load falls show supplied paired observations on explicit axes, then inspect a dated point without inventing intervening states. c15 compare inspect-observations show-missing-data paper native-chart scatterplot dated-reveal guide-draw selected-point reading-hold orders-inventory load-temperature paired-observations s11 s14 cycle clock and phase trail dated observed points appear at their supplied coordinates through four labeled quadrants; straight guides connect adjacent complete rows. x/y definitions zero/reference dates trail smoothing inventory cycles machine telemetry seasonality"
+    },
+    {
+      "id": "phase-studies/orders-inventory",
+      "kind": "example",
+      "title": "Orders fall; inventory stays above plan",
+      "packageId": "phase-studies",
+      "inventoryIds": [
+        "C15"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/phase-studies/specimens/orders-inventory-landscape/storyboard.json",
+          "video": "examples/library-kits/phase-studies/evidence/orders-inventory-landscape/video.mp4",
+          "poster": "examples/library-kits/phase-studies/evidence/independent-review/orders-inventory-landscape/71.9s.png",
+          "receipt": "examples/library-kits/phase-studies/evidence/orders-inventory-landscape/video.mp4.json",
+          "duration": 72,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/phase-studies/specimens/orders-inventory-vertical/storyboard.json",
+          "video": "examples/library-kits/phase-studies/evidence/orders-inventory-vertical/video.mp4",
+          "poster": "examples/library-kits/phase-studies/evidence/independent-review/orders-inventory-vertical/71.9s.png",
+          "receipt": "examples/library-kits/phase-studies/evidence/orders-inventory-vertical/video.mp4.json",
+          "duration": 72,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Show supplied paired observations on explicit axes, then inspect a dated point without inventing intervening states.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "inspect-observations",
+        "show-missing-data"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart",
+        "scatterplot"
+      ],
+      "movement": [
+        "dated-reveal",
+        "guide-draw",
+        "selected-point",
+        "reading-hold"
+      ],
+      "subjects": [
+        "orders-inventory",
+        "load-temperature",
+        "paired-observations"
+      ],
+      "collections": [
+        "time"
+      ],
+      "sourceIds": [
+        "S11",
+        "S14"
+      ],
+      "search": "orders fall; inventory stays above plan show supplied paired observations on explicit axes, then inspect a dated point without inventing intervening states. c15 compare inspect-observations show-missing-data paper native-chart scatterplot dated-reveal guide-draw selected-point reading-hold orders-inventory load-temperature paired-observations s11 s14 cycle clock and phase trail dated observed points appear at their supplied coordinates through four labeled quadrants; straight guides connect adjacent complete rows. x/y definitions zero/reference dates trail smoothing inventory cycles machine telemetry seasonality"
+    },
+    {
       "id": "physical-mechanisms/packet-routing",
       "kind": "example",
       "title": "A constrained path need not be the only path",
@@ -5985,12 +6185,12 @@
       "id": "C15",
       "kind": "inventory",
       "title": "Cycle clock and phase trail",
-      "description": "A point leaves a dated trail through four labeled quadrants; its turns explain changes in momentum.",
+      "description": "Dated observed points appear at their supplied coordinates through four labeled quadrants; straight guides connect adjacent complete rows.",
       "inventoryIds": [
         "C15"
       ],
       "medium": "Chart",
-      "statusText": "proposed; not built",
+      "statusText": "Prototype: two fictional dated-pair studies, four native landscape/portrait specimens, independent model and encoded/frame review; continuous playback and master acceptance pending",
       "guardrail": "Quadrants describe chosen variables, not a guaranteed repeating sequence or a market timer.",
       "parameters": [
         "x/y definitions",
@@ -5999,10 +6199,13 @@
         "trail",
         "smoothing"
       ],
-      "related": [],
+      "related": [
+        "phase-studies/load-temperature",
+        "phase-studies/orders-inventory"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],
@@ -6015,7 +6218,7 @@
         "S11",
         "S14"
       ],
-      "search": "cycle clock and phase trail a point leaves a dated trail through four labeled quadrants; its turns explain changes in momentum. c15 s11 s14 cycle clock and phase trail a point leaves a dated trail through four labeled quadrants; its turns explain changes in momentum. x/y definitions zero/reference dates trail smoothing inventory cycles machine telemetry seasonality"
+      "search": "cycle clock and phase trail dated observed points appear at their supplied coordinates through four labeled quadrants; straight guides connect adjacent complete rows. c15 s11 s14 cycle clock and phase trail dated observed points appear at their supplied coordinates through four labeled quadrants; straight guides connect adjacent complete rows. x/y definitions zero/reference dates trail smoothing inventory cycles machine telemetry seasonality"
     },
     {
       "id": "C16",
@@ -7502,7 +7705,7 @@
         "T02"
       ],
       "medium": "Tool",
-      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles, pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership, and explicit finite/perpetual cash-flow sensitivities; forward models and broader risk-adjusted metrics remain planned",
+      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles, pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership, and explicit finite/perpetual cash-flow sensitivities, and dated paired-observation phase trails; forward models and broader risk-adjusted metrics remain planned",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "parameters": [
         "input hash",

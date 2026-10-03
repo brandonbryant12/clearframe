@@ -1,0 +1,5054 @@
+{
+  "version": 1,
+  "inputSha256": "87fd3cf0ab13902604b904d12d676ca996000e5b4dde287523bb4cd71eca1ec8",
+  "results": [
+    {
+      "name": "orders-inventory-landscape",
+      "caseId": "orders-inventory",
+      "recipe": "C15",
+      "preset": "landscape",
+      "storyboardSha256": "febd4998906f20d502cd35aabcf9926bdc7b40feb896e21abe6a8543c0a45482",
+      "stages": [
+        {
+          "id": "trail",
+          "model": {
+            "version": 1,
+            "title": "Orders fall; inventory stays above plan",
+            "source": "Original fictional observations",
+            "asOf": "2026-09-30",
+            "x": {
+              "label": "Monthly orders change (%)",
+              "definition": "Supplied month-over-month order change in percent; zero separates increasing from decreasing orders.",
+              "domain": [
+                -4,
+                4
+              ],
+              "ticks": [
+                -4,
+                0,
+                4
+              ],
+              "reference": 0,
+              "decimals": 0
+            },
+            "y": {
+              "label": "Inventory vs plan (%)",
+              "definition": "Supplied inventory deviation from the same-month plan in percent; zero means on plan.",
+              "domain": [
+                -20,
+                20
+              ],
+              "ticks": [
+                -20,
+                0,
+                20
+              ],
+              "reference": 0,
+              "decimals": 0
+            },
+            "quadrants": {
+              "NE": "Up / above plan",
+              "NW": "Down / above plan",
+              "SW": "Down / below plan",
+              "SE": "Up / below plan"
+            },
+            "smoothing": "none",
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-31",
+                "day": 20484,
+                "x": -3,
+                "y": -12,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-02-28",
+                "day": 20512,
+                "x": -1,
+                "y": -8,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.11570247933884298
+              },
+              {
+                "index": 2,
+                "date": "2026-03-31",
+                "day": 20543,
+                "x": 2,
+                "y": -5,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.24380165289256198
+              },
+              {
+                "index": 3,
+                "date": "2026-04-30",
+                "day": 20573,
+                "x": 3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.3677685950413223
+              },
+              {
+                "index": 4,
+                "date": "2026-05-31",
+                "day": 20604,
+                "x": 1,
+                "y": 12,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.49586776859504134
+              },
+              {
+                "index": 5,
+                "date": "2026-06-30",
+                "day": 20634,
+                "x": -1,
+                "y": 8,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.6198347107438017
+              },
+              {
+                "index": 6,
+                "date": "2026-07-31",
+                "day": 20665,
+                "x": -3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.7479338842975206
+              },
+              {
+                "index": 7,
+                "date": "2026-08-31",
+                "day": 20696,
+                "x": -2,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.8760330578512396
+              },
+              {
+                "index": 8,
+                "date": "2026-09-30",
+                "day": 20726,
+                "x": 0,
+                "y": -10,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "x-reference",
+                "missing": [],
+                "time": 1
+              }
+            ],
+            "focus": {
+              "index": 5,
+              "date": "2026-06-30",
+              "day": 20634,
+              "x": -1,
+              "y": 8,
+              "valid": true,
+              "quadrant": "NW",
+              "boundary": null,
+              "missing": [],
+              "time": 0.6198347107438017
+            },
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-31",
+                "toDate": "2026-02-28",
+                "days": 28
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-02-28",
+                "toDate": "2026-03-31",
+                "days": 31
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-03-31",
+                "toDate": "2026-04-30",
+                "days": 30
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-04-30",
+                "toDate": "2026-05-31",
+                "days": 31
+              },
+              {
+                "from": 4,
+                "to": 5,
+                "fromDate": "2026-05-31",
+                "toDate": "2026-06-30",
+                "days": 30
+              },
+              {
+                "from": 5,
+                "to": 6,
+                "fromDate": "2026-06-30",
+                "toDate": "2026-07-31",
+                "days": 31
+              }
+            ],
+            "observed": 8,
+            "missing": 1,
+            "dateSpan": [
+              "2026-01-31",
+              "2026-09-30"
+            ],
+            "connectionPolicy": "Straight guides between adjacent complete supplied rows; null breaks the trail. Unlisted dates have no observation.",
+            "interpretation": "Quadrants describe the chosen variables and references, not a repeating cycle, forecast or timing signal."
+          },
+          "geometry": {
+            "box": [
+              787.1999999999999,
+              253.79999999999998,
+              1785.6000000000001,
+              777.6
+            ],
+            "reference": [
+              1286.4,
+              515.7
+            ],
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-31",
+                "day": 20484,
+                "x": -3,
+                "y": -12,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0,
+                "point": [
+                  912,
+                  672.84
+                ],
+                "at": 1
+              },
+              {
+                "index": 1,
+                "date": "2026-02-28",
+                "day": 20512,
+                "x": -1,
+                "y": -8,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.11570247933884298,
+                "point": [
+                  1161.6,
+                  620.46
+                ],
+                "at": 2.3884297520661155
+              },
+              {
+                "index": 2,
+                "date": "2026-03-31",
+                "day": 20543,
+                "x": 2,
+                "y": -5,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.24380165289256198,
+                "point": [
+                  1536,
+                  581.175
+                ],
+                "at": 3.925619834710744
+              },
+              {
+                "index": 3,
+                "date": "2026-04-30",
+                "day": 20573,
+                "x": 3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.3677685950413223,
+                "point": [
+                  1660.8000000000002,
+                  463.32
+                ],
+                "at": 5.413223140495868
+              },
+              {
+                "index": 4,
+                "date": "2026-05-31",
+                "day": 20604,
+                "x": 1,
+                "y": 12,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.49586776859504134,
+                "point": [
+                  1411.2,
+                  358.55999999999995
+                ],
+                "at": 6.950413223140496
+              },
+              {
+                "index": 5,
+                "date": "2026-06-30",
+                "day": 20634,
+                "x": -1,
+                "y": 8,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.6198347107438017,
+                "point": [
+                  1161.6,
+                  410.94
+                ],
+                "at": 8.43801652892562
+              },
+              {
+                "index": 6,
+                "date": "2026-07-31",
+                "day": 20665,
+                "x": -3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.7479338842975206,
+                "point": [
+                  912,
+                  463.32
+                ],
+                "at": 9.975206611570247
+              },
+              {
+                "index": 7,
+                "date": "2026-08-31",
+                "day": 20696,
+                "x": -2,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.8760330578512396,
+                "point": null,
+                "at": 11.512396694214875
+              },
+              {
+                "index": 8,
+                "date": "2026-09-30",
+                "day": 20726,
+                "x": 0,
+                "y": -10,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "x-reference",
+                "missing": [],
+                "time": 1,
+                "point": [
+                  1286.4,
+                  646.65
+                ],
+                "at": 13
+              }
+            ],
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-31",
+                "toDate": "2026-02-28",
+                "days": 28,
+                "p1": [
+                  912,
+                  672.84
+                ],
+                "p2": [
+                  1161.6,
+                  620.46
+                ],
+                "at": 1,
+                "end": 2.3884297520661155
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-02-28",
+                "toDate": "2026-03-31",
+                "days": 31,
+                "p1": [
+                  1161.6,
+                  620.46
+                ],
+                "p2": [
+                  1536,
+                  581.175
+                ],
+                "at": 2.3884297520661155,
+                "end": 3.925619834710744
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-03-31",
+                "toDate": "2026-04-30",
+                "days": 30,
+                "p1": [
+                  1536,
+                  581.175
+                ],
+                "p2": [
+                  1660.8000000000002,
+                  463.32
+                ],
+                "at": 3.925619834710744,
+                "end": 5.413223140495868
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-04-30",
+                "toDate": "2026-05-31",
+                "days": 31,
+                "p1": [
+                  1660.8000000000002,
+                  463.32
+                ],
+                "p2": [
+                  1411.2,
+                  358.55999999999995
+                ],
+                "at": 5.413223140495868,
+                "end": 6.950413223140496
+              },
+              {
+                "from": 4,
+                "to": 5,
+                "fromDate": "2026-05-31",
+                "toDate": "2026-06-30",
+                "days": 30,
+                "p1": [
+                  1411.2,
+                  358.55999999999995
+                ],
+                "p2": [
+                  1161.6,
+                  410.94
+                ],
+                "at": 6.950413223140496,
+                "end": 8.43801652892562
+              },
+              {
+                "from": 5,
+                "to": 6,
+                "fromDate": "2026-06-30",
+                "toDate": "2026-07-31",
+                "days": 31,
+                "p1": [
+                  1161.6,
+                  410.94
+                ],
+                "p2": [
+                  912,
+                  463.32
+                ],
+                "at": 8.43801652892562,
+                "end": 9.975206611570247
+              }
+            ],
+            "labels": [
+              {
+                "quadrant": "NW",
+                "box": [
+                  796.8,
+                  263.4,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Down",
+                  "above plan"
+                ]
+              },
+              {
+                "quadrant": "NE",
+                "box": [
+                  1564.0128000000002,
+                  263.4,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Up",
+                  "above plan"
+                ]
+              },
+              {
+                "quadrant": "SW",
+                "box": [
+                  796.8,
+                  525.3000000000001,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Down",
+                  "below plan"
+                ]
+              },
+              {
+                "quadrant": "SE",
+                "box": [
+                  1296,
+                  682.5856,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Up",
+                  "below plan"
+                ]
+              }
+            ],
+            "timeline": [
+              {
+                "index": 0,
+                "point": [
+                  787.1999999999999,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 1
+              },
+              {
+                "index": 1,
+                "point": [
+                  902.7173553719008,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 2.3884297520661155
+              },
+              {
+                "index": 2,
+                "point": [
+                  1030.6115702479337,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 3.925619834710744
+              },
+              {
+                "index": 3,
+                "point": [
+                  1154.3801652892562,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 5.413223140495868
+              },
+              {
+                "index": 4,
+                "point": [
+                  1282.2743801652894,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 6.950413223140496
+              },
+              {
+                "index": 5,
+                "point": [
+                  1406.0429752066116,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 8.43801652892562
+              },
+              {
+                "index": 6,
+                "point": [
+                  1533.9371900826445,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 9.975206611570247
+              },
+              {
+                "index": 7,
+                "point": [
+                  1661.831404958678,
+                  928.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 11.512396694214875
+              },
+              {
+                "index": 8,
+                "point": [
+                  1785.6000000000001,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 13
+              }
+            ]
+          }
+        },
+        {
+          "id": "focus",
+          "model": {
+            "version": 1,
+            "title": "Orders fall; inventory stays above plan",
+            "source": "Original fictional observations",
+            "asOf": "2026-09-30",
+            "x": {
+              "label": "Monthly orders change (%)",
+              "definition": "Supplied month-over-month order change in percent; zero separates increasing from decreasing orders.",
+              "domain": [
+                -4,
+                4
+              ],
+              "ticks": [
+                -4,
+                0,
+                4
+              ],
+              "reference": 0,
+              "decimals": 0
+            },
+            "y": {
+              "label": "Inventory vs plan (%)",
+              "definition": "Supplied inventory deviation from the same-month plan in percent; zero means on plan.",
+              "domain": [
+                -20,
+                20
+              ],
+              "ticks": [
+                -20,
+                0,
+                20
+              ],
+              "reference": 0,
+              "decimals": 0
+            },
+            "quadrants": {
+              "NE": "Up / above plan",
+              "NW": "Down / above plan",
+              "SW": "Down / below plan",
+              "SE": "Up / below plan"
+            },
+            "smoothing": "none",
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-31",
+                "day": 20484,
+                "x": -3,
+                "y": -12,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-02-28",
+                "day": 20512,
+                "x": -1,
+                "y": -8,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.11570247933884298
+              },
+              {
+                "index": 2,
+                "date": "2026-03-31",
+                "day": 20543,
+                "x": 2,
+                "y": -5,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.24380165289256198
+              },
+              {
+                "index": 3,
+                "date": "2026-04-30",
+                "day": 20573,
+                "x": 3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.3677685950413223
+              },
+              {
+                "index": 4,
+                "date": "2026-05-31",
+                "day": 20604,
+                "x": 1,
+                "y": 12,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.49586776859504134
+              },
+              {
+                "index": 5,
+                "date": "2026-06-30",
+                "day": 20634,
+                "x": -1,
+                "y": 8,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.6198347107438017
+              },
+              {
+                "index": 6,
+                "date": "2026-07-31",
+                "day": 20665,
+                "x": -3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.7479338842975206
+              },
+              {
+                "index": 7,
+                "date": "2026-08-31",
+                "day": 20696,
+                "x": -2,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.8760330578512396
+              },
+              {
+                "index": 8,
+                "date": "2026-09-30",
+                "day": 20726,
+                "x": 0,
+                "y": -10,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "x-reference",
+                "missing": [],
+                "time": 1
+              }
+            ],
+            "focus": {
+              "index": 5,
+              "date": "2026-06-30",
+              "day": 20634,
+              "x": -1,
+              "y": 8,
+              "valid": true,
+              "quadrant": "NW",
+              "boundary": null,
+              "missing": [],
+              "time": 0.6198347107438017
+            },
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-31",
+                "toDate": "2026-02-28",
+                "days": 28
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-02-28",
+                "toDate": "2026-03-31",
+                "days": 31
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-03-31",
+                "toDate": "2026-04-30",
+                "days": 30
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-04-30",
+                "toDate": "2026-05-31",
+                "days": 31
+              },
+              {
+                "from": 4,
+                "to": 5,
+                "fromDate": "2026-05-31",
+                "toDate": "2026-06-30",
+                "days": 30
+              },
+              {
+                "from": 5,
+                "to": 6,
+                "fromDate": "2026-06-30",
+                "toDate": "2026-07-31",
+                "days": 31
+              }
+            ],
+            "observed": 8,
+            "missing": 1,
+            "dateSpan": [
+              "2026-01-31",
+              "2026-09-30"
+            ],
+            "connectionPolicy": "Straight guides between adjacent complete supplied rows; null breaks the trail. Unlisted dates have no observation.",
+            "interpretation": "Quadrants describe the chosen variables and references, not a repeating cycle, forecast or timing signal."
+          },
+          "geometry": {
+            "box": [
+              787.1999999999999,
+              253.79999999999998,
+              1785.6000000000001,
+              777.6
+            ],
+            "reference": [
+              1286.4,
+              515.7
+            ],
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-31",
+                "day": 20484,
+                "x": -3,
+                "y": -12,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0,
+                "point": [
+                  912,
+                  672.84
+                ],
+                "at": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-02-28",
+                "day": 20512,
+                "x": -1,
+                "y": -8,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.11570247933884298,
+                "point": [
+                  1161.6,
+                  620.46
+                ],
+                "at": 0
+              },
+              {
+                "index": 2,
+                "date": "2026-03-31",
+                "day": 20543,
+                "x": 2,
+                "y": -5,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.24380165289256198,
+                "point": [
+                  1536,
+                  581.175
+                ],
+                "at": 0
+              },
+              {
+                "index": 3,
+                "date": "2026-04-30",
+                "day": 20573,
+                "x": 3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.3677685950413223,
+                "point": [
+                  1660.8000000000002,
+                  463.32
+                ],
+                "at": 0
+              },
+              {
+                "index": 4,
+                "date": "2026-05-31",
+                "day": 20604,
+                "x": 1,
+                "y": 12,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.49586776859504134,
+                "point": [
+                  1411.2,
+                  358.55999999999995
+                ],
+                "at": 0
+              },
+              {
+                "index": 5,
+                "date": "2026-06-30",
+                "day": 20634,
+                "x": -1,
+                "y": 8,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.6198347107438017,
+                "point": [
+                  1161.6,
+                  410.94
+                ],
+                "at": 0
+              },
+              {
+                "index": 6,
+                "date": "2026-07-31",
+                "day": 20665,
+                "x": -3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.7479338842975206,
+                "point": [
+                  912,
+                  463.32
+                ],
+                "at": 0
+              },
+              {
+                "index": 7,
+                "date": "2026-08-31",
+                "day": 20696,
+                "x": -2,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.8760330578512396,
+                "point": null,
+                "at": 0
+              },
+              {
+                "index": 8,
+                "date": "2026-09-30",
+                "day": 20726,
+                "x": 0,
+                "y": -10,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "x-reference",
+                "missing": [],
+                "time": 1,
+                "point": [
+                  1286.4,
+                  646.65
+                ],
+                "at": 0
+              }
+            ],
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-31",
+                "toDate": "2026-02-28",
+                "days": 28,
+                "p1": [
+                  912,
+                  672.84
+                ],
+                "p2": [
+                  1161.6,
+                  620.46
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-02-28",
+                "toDate": "2026-03-31",
+                "days": 31,
+                "p1": [
+                  1161.6,
+                  620.46
+                ],
+                "p2": [
+                  1536,
+                  581.175
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-03-31",
+                "toDate": "2026-04-30",
+                "days": 30,
+                "p1": [
+                  1536,
+                  581.175
+                ],
+                "p2": [
+                  1660.8000000000002,
+                  463.32
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-04-30",
+                "toDate": "2026-05-31",
+                "days": 31,
+                "p1": [
+                  1660.8000000000002,
+                  463.32
+                ],
+                "p2": [
+                  1411.2,
+                  358.55999999999995
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 4,
+                "to": 5,
+                "fromDate": "2026-05-31",
+                "toDate": "2026-06-30",
+                "days": 30,
+                "p1": [
+                  1411.2,
+                  358.55999999999995
+                ],
+                "p2": [
+                  1161.6,
+                  410.94
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 5,
+                "to": 6,
+                "fromDate": "2026-06-30",
+                "toDate": "2026-07-31",
+                "days": 31,
+                "p1": [
+                  1161.6,
+                  410.94
+                ],
+                "p2": [
+                  912,
+                  463.32
+                ],
+                "at": 0,
+                "end": 0
+              }
+            ],
+            "labels": [
+              {
+                "quadrant": "NW",
+                "box": [
+                  796.8,
+                  263.4,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Down",
+                  "above plan"
+                ]
+              },
+              {
+                "quadrant": "NE",
+                "box": [
+                  1564.0128000000002,
+                  263.4,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Up",
+                  "above plan"
+                ]
+              },
+              {
+                "quadrant": "SW",
+                "box": [
+                  796.8,
+                  525.3000000000001,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Down",
+                  "below plan"
+                ]
+              },
+              {
+                "quadrant": "SE",
+                "box": [
+                  1296,
+                  682.5856,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Up",
+                  "below plan"
+                ]
+              }
+            ],
+            "timeline": [
+              {
+                "index": 0,
+                "point": [
+                  787.1999999999999,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 1,
+                "point": [
+                  902.7173553719008,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 2,
+                "point": [
+                  1030.6115702479337,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 3,
+                "point": [
+                  1154.3801652892562,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 4,
+                "point": [
+                  1282.2743801652894,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 5,
+                "point": [
+                  1406.0429752066116,
+                  928.8
+                ],
+                "valid": true,
+                "selected": true,
+                "at": 0
+              },
+              {
+                "index": 6,
+                "point": [
+                  1533.9371900826445,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 7,
+                "point": [
+                  1661.831404958678,
+                  928.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 8,
+                "point": [
+                  1785.6000000000001,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "orders-inventory-vertical",
+      "caseId": "orders-inventory",
+      "recipe": "C15",
+      "preset": "vertical",
+      "storyboardSha256": "95e31653ff5f50ac733e9451daf20836bd0ccb41a20ac47b9353b141c2289743",
+      "stages": [
+        {
+          "id": "trail",
+          "model": {
+            "version": 1,
+            "title": "Orders fall; inventory stays above plan",
+            "source": "Original fictional observations",
+            "asOf": "2026-09-30",
+            "x": {
+              "label": "Monthly orders change (%)",
+              "definition": "Supplied month-over-month order change in percent; zero separates increasing from decreasing orders.",
+              "domain": [
+                -4,
+                4
+              ],
+              "ticks": [
+                -4,
+                0,
+                4
+              ],
+              "reference": 0,
+              "decimals": 0
+            },
+            "y": {
+              "label": "Inventory vs plan (%)",
+              "definition": "Supplied inventory deviation from the same-month plan in percent; zero means on plan.",
+              "domain": [
+                -20,
+                20
+              ],
+              "ticks": [
+                -20,
+                0,
+                20
+              ],
+              "reference": 0,
+              "decimals": 0
+            },
+            "quadrants": {
+              "NE": "Up / above plan",
+              "NW": "Down / above plan",
+              "SW": "Down / below plan",
+              "SE": "Up / below plan"
+            },
+            "smoothing": "none",
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-31",
+                "day": 20484,
+                "x": -3,
+                "y": -12,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-02-28",
+                "day": 20512,
+                "x": -1,
+                "y": -8,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.11570247933884298
+              },
+              {
+                "index": 2,
+                "date": "2026-03-31",
+                "day": 20543,
+                "x": 2,
+                "y": -5,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.24380165289256198
+              },
+              {
+                "index": 3,
+                "date": "2026-04-30",
+                "day": 20573,
+                "x": 3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.3677685950413223
+              },
+              {
+                "index": 4,
+                "date": "2026-05-31",
+                "day": 20604,
+                "x": 1,
+                "y": 12,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.49586776859504134
+              },
+              {
+                "index": 5,
+                "date": "2026-06-30",
+                "day": 20634,
+                "x": -1,
+                "y": 8,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.6198347107438017
+              },
+              {
+                "index": 6,
+                "date": "2026-07-31",
+                "day": 20665,
+                "x": -3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.7479338842975206
+              },
+              {
+                "index": 7,
+                "date": "2026-08-31",
+                "day": 20696,
+                "x": -2,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.8760330578512396
+              },
+              {
+                "index": 8,
+                "date": "2026-09-30",
+                "day": 20726,
+                "x": 0,
+                "y": -10,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "x-reference",
+                "missing": [],
+                "time": 1
+              }
+            ],
+            "focus": {
+              "index": 5,
+              "date": "2026-06-30",
+              "day": 20634,
+              "x": -1,
+              "y": 8,
+              "valid": true,
+              "quadrant": "NW",
+              "boundary": null,
+              "missing": [],
+              "time": 0.6198347107438017
+            },
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-31",
+                "toDate": "2026-02-28",
+                "days": 28
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-02-28",
+                "toDate": "2026-03-31",
+                "days": 31
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-03-31",
+                "toDate": "2026-04-30",
+                "days": 30
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-04-30",
+                "toDate": "2026-05-31",
+                "days": 31
+              },
+              {
+                "from": 4,
+                "to": 5,
+                "fromDate": "2026-05-31",
+                "toDate": "2026-06-30",
+                "days": 30
+              },
+              {
+                "from": 5,
+                "to": 6,
+                "fromDate": "2026-06-30",
+                "toDate": "2026-07-31",
+                "days": 31
+              }
+            ],
+            "observed": 8,
+            "missing": 1,
+            "dateSpan": [
+              "2026-01-31",
+              "2026-09-30"
+            ],
+            "connectionPolicy": "Straight guides between adjacent complete supplied rows; null breaks the trail. Unlisted dates have no observation.",
+            "interpretation": "Quadrants describe the chosen variables and references, not a repeating cycle, forecast or timing signal."
+          },
+          "geometry": {
+            "box": [
+              216,
+              576,
+              961.2,
+              1276.8000000000002
+            ],
+            "reference": [
+              588.6,
+              926.4000000000001
+            ],
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-31",
+                "day": 20484,
+                "x": -3,
+                "y": -12,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0,
+                "point": [
+                  309.15,
+                  1136.64
+                ],
+                "at": 1
+              },
+              {
+                "index": 1,
+                "date": "2026-02-28",
+                "day": 20512,
+                "x": -1,
+                "y": -8,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.11570247933884298,
+                "point": [
+                  495.45000000000005,
+                  1066.5600000000002
+                ],
+                "at": 2.3884297520661155
+              },
+              {
+                "index": 2,
+                "date": "2026-03-31",
+                "day": 20543,
+                "x": 2,
+                "y": -5,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.24380165289256198,
+                "point": [
+                  774.9000000000001,
+                  1014.0000000000001
+                ],
+                "at": 3.925619834710744
+              },
+              {
+                "index": 3,
+                "date": "2026-04-30",
+                "day": 20573,
+                "x": 3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.3677685950413223,
+                "point": [
+                  868.0500000000001,
+                  856.3200000000002
+                ],
+                "at": 5.413223140495868
+              },
+              {
+                "index": 4,
+                "date": "2026-05-31",
+                "day": 20604,
+                "x": 1,
+                "y": 12,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.49586776859504134,
+                "point": [
+                  681.75,
+                  716.16
+                ],
+                "at": 6.950413223140496
+              },
+              {
+                "index": 5,
+                "date": "2026-06-30",
+                "day": 20634,
+                "x": -1,
+                "y": 8,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.6198347107438017,
+                "point": [
+                  495.45000000000005,
+                  786.24
+                ],
+                "at": 8.43801652892562
+              },
+              {
+                "index": 6,
+                "date": "2026-07-31",
+                "day": 20665,
+                "x": -3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.7479338842975206,
+                "point": [
+                  309.15,
+                  856.3200000000002
+                ],
+                "at": 9.975206611570247
+              },
+              {
+                "index": 7,
+                "date": "2026-08-31",
+                "day": 20696,
+                "x": -2,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.8760330578512396,
+                "point": null,
+                "at": 11.512396694214875
+              },
+              {
+                "index": 8,
+                "date": "2026-09-30",
+                "day": 20726,
+                "x": 0,
+                "y": -10,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "x-reference",
+                "missing": [],
+                "time": 1,
+                "point": [
+                  588.6,
+                  1101.6000000000001
+                ],
+                "at": 13
+              }
+            ],
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-31",
+                "toDate": "2026-02-28",
+                "days": 28,
+                "p1": [
+                  309.15,
+                  1136.64
+                ],
+                "p2": [
+                  495.45000000000005,
+                  1066.5600000000002
+                ],
+                "at": 1,
+                "end": 2.3884297520661155
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-02-28",
+                "toDate": "2026-03-31",
+                "days": 31,
+                "p1": [
+                  495.45000000000005,
+                  1066.5600000000002
+                ],
+                "p2": [
+                  774.9000000000001,
+                  1014.0000000000001
+                ],
+                "at": 2.3884297520661155,
+                "end": 3.925619834710744
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-03-31",
+                "toDate": "2026-04-30",
+                "days": 30,
+                "p1": [
+                  774.9000000000001,
+                  1014.0000000000001
+                ],
+                "p2": [
+                  868.0500000000001,
+                  856.3200000000002
+                ],
+                "at": 3.925619834710744,
+                "end": 5.413223140495868
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-04-30",
+                "toDate": "2026-05-31",
+                "days": 31,
+                "p1": [
+                  868.0500000000001,
+                  856.3200000000002
+                ],
+                "p2": [
+                  681.75,
+                  716.16
+                ],
+                "at": 5.413223140495868,
+                "end": 6.950413223140496
+              },
+              {
+                "from": 4,
+                "to": 5,
+                "fromDate": "2026-05-31",
+                "toDate": "2026-06-30",
+                "days": 30,
+                "p1": [
+                  681.75,
+                  716.16
+                ],
+                "p2": [
+                  495.45000000000005,
+                  786.24
+                ],
+                "at": 6.950413223140496,
+                "end": 8.43801652892562
+              },
+              {
+                "from": 5,
+                "to": 6,
+                "fromDate": "2026-06-30",
+                "toDate": "2026-07-31",
+                "days": 31,
+                "p1": [
+                  495.45000000000005,
+                  786.24
+                ],
+                "p2": [
+                  309.15,
+                  856.3200000000002
+                ],
+                "at": 8.43801652892562,
+                "end": 9.975206611570247
+              }
+            ],
+            "labels": [
+              {
+                "quadrant": "NW",
+                "box": [
+                  223.56,
+                  583.56,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Down",
+                  "above plan"
+                ]
+              },
+              {
+                "quadrant": "NE",
+                "box": [
+                  596.16,
+                  583.56,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Up",
+                  "above plan"
+                ]
+              },
+              {
+                "quadrant": "SW",
+                "box": [
+                  223.56,
+                  933.96,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Down",
+                  "below plan"
+                ]
+              },
+              {
+                "quadrant": "SE",
+                "box": [
+                  596.16,
+                  1194.0400000000002,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Up",
+                  "below plan"
+                ]
+              }
+            ],
+            "timeline": [
+              {
+                "index": 0,
+                "point": [
+                  216,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 1
+              },
+              {
+                "index": 1,
+                "point": [
+                  302.2214876033058,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 2.3884297520661155
+              },
+              {
+                "index": 2,
+                "point": [
+                  397.6809917355372,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 3.925619834710744
+              },
+              {
+                "index": 3,
+                "point": [
+                  490.0611570247934,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 5.413223140495868
+              },
+              {
+                "index": 4,
+                "point": [
+                  585.5206611570248,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 6.950413223140496
+              },
+              {
+                "index": 5,
+                "point": [
+                  677.900826446281,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 8.43801652892562
+              },
+              {
+                "index": 6,
+                "point": [
+                  773.3603305785124,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 9.975206611570247
+              },
+              {
+                "index": 7,
+                "point": [
+                  868.8198347107439,
+                  1468.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 11.512396694214875
+              },
+              {
+                "index": 8,
+                "point": [
+                  961.2,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 13
+              }
+            ]
+          }
+        },
+        {
+          "id": "focus",
+          "model": {
+            "version": 1,
+            "title": "Orders fall; inventory stays above plan",
+            "source": "Original fictional observations",
+            "asOf": "2026-09-30",
+            "x": {
+              "label": "Monthly orders change (%)",
+              "definition": "Supplied month-over-month order change in percent; zero separates increasing from decreasing orders.",
+              "domain": [
+                -4,
+                4
+              ],
+              "ticks": [
+                -4,
+                0,
+                4
+              ],
+              "reference": 0,
+              "decimals": 0
+            },
+            "y": {
+              "label": "Inventory vs plan (%)",
+              "definition": "Supplied inventory deviation from the same-month plan in percent; zero means on plan.",
+              "domain": [
+                -20,
+                20
+              ],
+              "ticks": [
+                -20,
+                0,
+                20
+              ],
+              "reference": 0,
+              "decimals": 0
+            },
+            "quadrants": {
+              "NE": "Up / above plan",
+              "NW": "Down / above plan",
+              "SW": "Down / below plan",
+              "SE": "Up / below plan"
+            },
+            "smoothing": "none",
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-31",
+                "day": 20484,
+                "x": -3,
+                "y": -12,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-02-28",
+                "day": 20512,
+                "x": -1,
+                "y": -8,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.11570247933884298
+              },
+              {
+                "index": 2,
+                "date": "2026-03-31",
+                "day": 20543,
+                "x": 2,
+                "y": -5,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.24380165289256198
+              },
+              {
+                "index": 3,
+                "date": "2026-04-30",
+                "day": 20573,
+                "x": 3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.3677685950413223
+              },
+              {
+                "index": 4,
+                "date": "2026-05-31",
+                "day": 20604,
+                "x": 1,
+                "y": 12,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.49586776859504134
+              },
+              {
+                "index": 5,
+                "date": "2026-06-30",
+                "day": 20634,
+                "x": -1,
+                "y": 8,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.6198347107438017
+              },
+              {
+                "index": 6,
+                "date": "2026-07-31",
+                "day": 20665,
+                "x": -3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.7479338842975206
+              },
+              {
+                "index": 7,
+                "date": "2026-08-31",
+                "day": 20696,
+                "x": -2,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.8760330578512396
+              },
+              {
+                "index": 8,
+                "date": "2026-09-30",
+                "day": 20726,
+                "x": 0,
+                "y": -10,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "x-reference",
+                "missing": [],
+                "time": 1
+              }
+            ],
+            "focus": {
+              "index": 5,
+              "date": "2026-06-30",
+              "day": 20634,
+              "x": -1,
+              "y": 8,
+              "valid": true,
+              "quadrant": "NW",
+              "boundary": null,
+              "missing": [],
+              "time": 0.6198347107438017
+            },
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-31",
+                "toDate": "2026-02-28",
+                "days": 28
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-02-28",
+                "toDate": "2026-03-31",
+                "days": 31
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-03-31",
+                "toDate": "2026-04-30",
+                "days": 30
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-04-30",
+                "toDate": "2026-05-31",
+                "days": 31
+              },
+              {
+                "from": 4,
+                "to": 5,
+                "fromDate": "2026-05-31",
+                "toDate": "2026-06-30",
+                "days": 30
+              },
+              {
+                "from": 5,
+                "to": 6,
+                "fromDate": "2026-06-30",
+                "toDate": "2026-07-31",
+                "days": 31
+              }
+            ],
+            "observed": 8,
+            "missing": 1,
+            "dateSpan": [
+              "2026-01-31",
+              "2026-09-30"
+            ],
+            "connectionPolicy": "Straight guides between adjacent complete supplied rows; null breaks the trail. Unlisted dates have no observation.",
+            "interpretation": "Quadrants describe the chosen variables and references, not a repeating cycle, forecast or timing signal."
+          },
+          "geometry": {
+            "box": [
+              216,
+              576,
+              961.2,
+              1276.8000000000002
+            ],
+            "reference": [
+              588.6,
+              926.4000000000001
+            ],
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-31",
+                "day": 20484,
+                "x": -3,
+                "y": -12,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0,
+                "point": [
+                  309.15,
+                  1136.64
+                ],
+                "at": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-02-28",
+                "day": 20512,
+                "x": -1,
+                "y": -8,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.11570247933884298,
+                "point": [
+                  495.45000000000005,
+                  1066.5600000000002
+                ],
+                "at": 0
+              },
+              {
+                "index": 2,
+                "date": "2026-03-31",
+                "day": 20543,
+                "x": 2,
+                "y": -5,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.24380165289256198,
+                "point": [
+                  774.9000000000001,
+                  1014.0000000000001
+                ],
+                "at": 0
+              },
+              {
+                "index": 3,
+                "date": "2026-04-30",
+                "day": 20573,
+                "x": 3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.3677685950413223,
+                "point": [
+                  868.0500000000001,
+                  856.3200000000002
+                ],
+                "at": 0
+              },
+              {
+                "index": 4,
+                "date": "2026-05-31",
+                "day": 20604,
+                "x": 1,
+                "y": 12,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.49586776859504134,
+                "point": [
+                  681.75,
+                  716.16
+                ],
+                "at": 0
+              },
+              {
+                "index": 5,
+                "date": "2026-06-30",
+                "day": 20634,
+                "x": -1,
+                "y": 8,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.6198347107438017,
+                "point": [
+                  495.45000000000005,
+                  786.24
+                ],
+                "at": 0
+              },
+              {
+                "index": 6,
+                "date": "2026-07-31",
+                "day": 20665,
+                "x": -3,
+                "y": 4,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.7479338842975206,
+                "point": [
+                  309.15,
+                  856.3200000000002
+                ],
+                "at": 0
+              },
+              {
+                "index": 7,
+                "date": "2026-08-31",
+                "day": 20696,
+                "x": -2,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.8760330578512396,
+                "point": null,
+                "at": 0
+              },
+              {
+                "index": 8,
+                "date": "2026-09-30",
+                "day": 20726,
+                "x": 0,
+                "y": -10,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "x-reference",
+                "missing": [],
+                "time": 1,
+                "point": [
+                  588.6,
+                  1101.6000000000001
+                ],
+                "at": 0
+              }
+            ],
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-31",
+                "toDate": "2026-02-28",
+                "days": 28,
+                "p1": [
+                  309.15,
+                  1136.64
+                ],
+                "p2": [
+                  495.45000000000005,
+                  1066.5600000000002
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-02-28",
+                "toDate": "2026-03-31",
+                "days": 31,
+                "p1": [
+                  495.45000000000005,
+                  1066.5600000000002
+                ],
+                "p2": [
+                  774.9000000000001,
+                  1014.0000000000001
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-03-31",
+                "toDate": "2026-04-30",
+                "days": 30,
+                "p1": [
+                  774.9000000000001,
+                  1014.0000000000001
+                ],
+                "p2": [
+                  868.0500000000001,
+                  856.3200000000002
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-04-30",
+                "toDate": "2026-05-31",
+                "days": 31,
+                "p1": [
+                  868.0500000000001,
+                  856.3200000000002
+                ],
+                "p2": [
+                  681.75,
+                  716.16
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 4,
+                "to": 5,
+                "fromDate": "2026-05-31",
+                "toDate": "2026-06-30",
+                "days": 30,
+                "p1": [
+                  681.75,
+                  716.16
+                ],
+                "p2": [
+                  495.45000000000005,
+                  786.24
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 5,
+                "to": 6,
+                "fromDate": "2026-06-30",
+                "toDate": "2026-07-31",
+                "days": 31,
+                "p1": [
+                  495.45000000000005,
+                  786.24
+                ],
+                "p2": [
+                  309.15,
+                  856.3200000000002
+                ],
+                "at": 0,
+                "end": 0
+              }
+            ],
+            "labels": [
+              {
+                "quadrant": "NW",
+                "box": [
+                  223.56,
+                  583.56,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Down",
+                  "above plan"
+                ]
+              },
+              {
+                "quadrant": "NE",
+                "box": [
+                  596.16,
+                  583.56,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Up",
+                  "above plan"
+                ]
+              },
+              {
+                "quadrant": "SW",
+                "box": [
+                  223.56,
+                  933.96,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Down",
+                  "below plan"
+                ]
+              },
+              {
+                "quadrant": "SE",
+                "box": [
+                  596.16,
+                  1194.0400000000002,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Up",
+                  "below plan"
+                ]
+              }
+            ],
+            "timeline": [
+              {
+                "index": 0,
+                "point": [
+                  216,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 1,
+                "point": [
+                  302.2214876033058,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 2,
+                "point": [
+                  397.6809917355372,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 3,
+                "point": [
+                  490.0611570247934,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 4,
+                "point": [
+                  585.5206611570248,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 5,
+                "point": [
+                  677.900826446281,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": true,
+                "at": 0
+              },
+              {
+                "index": 6,
+                "point": [
+                  773.3603305785124,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 7,
+                "point": [
+                  868.8198347107439,
+                  1468.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 8,
+                "point": [
+                  961.2,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "load-temperature-landscape",
+      "caseId": "load-temperature",
+      "recipe": "C15",
+      "preset": "landscape",
+      "storyboardSha256": "6ed46cd0cbed3e6257ea21068b82693ea2238da4aea714f4c6ec5f87d07679f4",
+      "stages": [
+        {
+          "id": "trail",
+          "model": {
+            "version": 1,
+            "title": "A warm machine after load falls",
+            "source": "Original fictional observations",
+            "asOf": "2026-09-30",
+            "x": {
+              "label": "Load (% rated)",
+              "definition": "Supplied machine load as a percent of rated load. The authored comparison reference is 60 percent, not zero.",
+              "domain": [
+                20,
+                100
+              ],
+              "ticks": [
+                20,
+                60,
+                100
+              ],
+              "reference": 60,
+              "decimals": 0
+            },
+            "y": {
+              "label": "Temperature (°C)",
+              "definition": "Supplied measured-style temperature values; 70 degrees Celsius is an illustrative comparison reference, not a safety limit.",
+              "domain": [
+                30,
+                110
+              ],
+              "ticks": [
+                30,
+                70,
+                110
+              ],
+              "reference": 70,
+              "decimals": 0
+            },
+            "quadrants": {
+              "NE": "Higher load / warmer",
+              "NW": "Lower load / warmer",
+              "SW": "Lower load / cooler",
+              "SE": "Higher load / cooler"
+            },
+            "smoothing": "none",
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-01",
+                "day": 20454,
+                "x": 30,
+                "y": 40,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-01-03",
+                "day": 20456,
+                "x": 65,
+                "y": 50,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.1
+              },
+              {
+                "index": 2,
+                "date": "2026-01-05",
+                "day": 20458,
+                "x": 80,
+                "y": 85,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.2
+              },
+              {
+                "index": 3,
+                "date": "2026-01-09",
+                "day": 20462,
+                "x": 50,
+                "y": 95,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.4
+              },
+              {
+                "index": 4,
+                "date": "2026-01-12",
+                "day": 20465,
+                "x": 60,
+                "y": 70,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "both-references",
+                "missing": [],
+                "time": 0.55
+              },
+              {
+                "index": 5,
+                "date": "2026-01-13",
+                "day": 20466,
+                "x": 40,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.6
+              },
+              {
+                "index": 6,
+                "date": "2026-01-15",
+                "day": 20468,
+                "x": null,
+                "y": 80,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "x"
+                ],
+                "time": 0.7
+              },
+              {
+                "index": 7,
+                "date": "2026-01-17",
+                "day": 20470,
+                "x": 45,
+                "y": 55,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.8
+              },
+              {
+                "index": 8,
+                "date": "2026-01-21",
+                "day": 20474,
+                "x": 75,
+                "y": 65,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 1
+              }
+            ],
+            "focus": {
+              "index": 4,
+              "date": "2026-01-12",
+              "day": 20465,
+              "x": 60,
+              "y": 70,
+              "valid": true,
+              "quadrant": null,
+              "boundary": "both-references",
+              "missing": [],
+              "time": 0.55
+            },
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-01",
+                "toDate": "2026-01-03",
+                "days": 2
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-01-03",
+                "toDate": "2026-01-05",
+                "days": 2
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-01-05",
+                "toDate": "2026-01-09",
+                "days": 4
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-01-09",
+                "toDate": "2026-01-12",
+                "days": 3
+              },
+              {
+                "from": 7,
+                "to": 8,
+                "fromDate": "2026-01-17",
+                "toDate": "2026-01-21",
+                "days": 4
+              }
+            ],
+            "observed": 7,
+            "missing": 2,
+            "dateSpan": [
+              "2026-01-01",
+              "2026-01-21"
+            ],
+            "connectionPolicy": "Straight guides between adjacent complete supplied rows; null breaks the trail. Unlisted dates have no observation.",
+            "interpretation": "Quadrants describe the chosen variables and references, not a repeating cycle, forecast or timing signal."
+          },
+          "geometry": {
+            "box": [
+              787.1999999999999,
+              253.79999999999998,
+              1785.6000000000001,
+              777.6
+            ],
+            "reference": [
+              1286.4,
+              515.7
+            ],
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-01",
+                "day": 20454,
+                "x": 30,
+                "y": 40,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0,
+                "point": [
+                  912,
+                  712.125
+                ],
+                "at": 1
+              },
+              {
+                "index": 1,
+                "date": "2026-01-03",
+                "day": 20456,
+                "x": 65,
+                "y": 50,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.1,
+                "point": [
+                  1348.8000000000002,
+                  646.65
+                ],
+                "at": 2.2
+              },
+              {
+                "index": 2,
+                "date": "2026-01-05",
+                "day": 20458,
+                "x": 80,
+                "y": 85,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.2,
+                "point": [
+                  1536,
+                  417.48749999999995
+                ],
+                "at": 3.4000000000000004
+              },
+              {
+                "index": 3,
+                "date": "2026-01-09",
+                "day": 20462,
+                "x": 50,
+                "y": 95,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.4,
+                "point": [
+                  1161.6,
+                  352.0125
+                ],
+                "at": 5.800000000000001
+              },
+              {
+                "index": 4,
+                "date": "2026-01-12",
+                "day": 20465,
+                "x": 60,
+                "y": 70,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "both-references",
+                "missing": [],
+                "time": 0.55,
+                "point": [
+                  1286.4,
+                  515.7
+                ],
+                "at": 7.6000000000000005
+              },
+              {
+                "index": 5,
+                "date": "2026-01-13",
+                "day": 20466,
+                "x": 40,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.6,
+                "point": null,
+                "at": 8.2
+              },
+              {
+                "index": 6,
+                "date": "2026-01-15",
+                "day": 20468,
+                "x": null,
+                "y": 80,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "x"
+                ],
+                "time": 0.7,
+                "point": null,
+                "at": 9.399999999999999
+              },
+              {
+                "index": 7,
+                "date": "2026-01-17",
+                "day": 20470,
+                "x": 45,
+                "y": 55,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.8,
+                "point": [
+                  1099.2,
+                  613.9125
+                ],
+                "at": 10.600000000000001
+              },
+              {
+                "index": 8,
+                "date": "2026-01-21",
+                "day": 20474,
+                "x": 75,
+                "y": 65,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 1,
+                "point": [
+                  1473.6,
+                  548.4375
+                ],
+                "at": 13
+              }
+            ],
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-01",
+                "toDate": "2026-01-03",
+                "days": 2,
+                "p1": [
+                  912,
+                  712.125
+                ],
+                "p2": [
+                  1348.8000000000002,
+                  646.65
+                ],
+                "at": 1,
+                "end": 2.2
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-01-03",
+                "toDate": "2026-01-05",
+                "days": 2,
+                "p1": [
+                  1348.8000000000002,
+                  646.65
+                ],
+                "p2": [
+                  1536,
+                  417.48749999999995
+                ],
+                "at": 2.2,
+                "end": 3.4000000000000004
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-01-05",
+                "toDate": "2026-01-09",
+                "days": 4,
+                "p1": [
+                  1536,
+                  417.48749999999995
+                ],
+                "p2": [
+                  1161.6,
+                  352.0125
+                ],
+                "at": 3.4000000000000004,
+                "end": 5.800000000000001
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-01-09",
+                "toDate": "2026-01-12",
+                "days": 3,
+                "p1": [
+                  1161.6,
+                  352.0125
+                ],
+                "p2": [
+                  1286.4,
+                  515.7
+                ],
+                "at": 5.800000000000001,
+                "end": 7.6000000000000005
+              },
+              {
+                "from": 7,
+                "to": 8,
+                "fromDate": "2026-01-17",
+                "toDate": "2026-01-21",
+                "days": 4,
+                "p1": [
+                  1099.2,
+                  613.9125
+                ],
+                "p2": [
+                  1473.6,
+                  548.4375
+                ],
+                "at": 10.600000000000001,
+                "end": 13
+              }
+            ],
+            "labels": [
+              {
+                "quadrant": "NW",
+                "box": [
+                  796.8,
+                  263.4,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Lower load",
+                  "warmer"
+                ]
+              },
+              {
+                "quadrant": "NE",
+                "box": [
+                  1296,
+                  263.4,
+                  231.98592000000002,
+                  85.4144
+                ],
+                "rows": [
+                  "Higher load",
+                  "warmer"
+                ]
+              },
+              {
+                "quadrant": "SW",
+                "box": [
+                  796.8,
+                  525.3000000000001,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Lower load",
+                  "cooler"
+                ]
+              },
+              {
+                "quadrant": "SE",
+                "box": [
+                  1544.0140800000001,
+                  525.3000000000001,
+                  231.98592000000002,
+                  85.4144
+                ],
+                "rows": [
+                  "Higher load",
+                  "cooler"
+                ]
+              }
+            ],
+            "timeline": [
+              {
+                "index": 0,
+                "point": [
+                  787.1999999999999,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 1
+              },
+              {
+                "index": 1,
+                "point": [
+                  887.04,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 2.2
+              },
+              {
+                "index": 2,
+                "point": [
+                  986.88,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 3.4000000000000004
+              },
+              {
+                "index": 3,
+                "point": [
+                  1186.56,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 5.800000000000001
+              },
+              {
+                "index": 4,
+                "point": [
+                  1336.3200000000002,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 7.6000000000000005
+              },
+              {
+                "index": 5,
+                "point": [
+                  1386.24,
+                  928.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 8.2
+              },
+              {
+                "index": 6,
+                "point": [
+                  1486.08,
+                  928.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 9.399999999999999
+              },
+              {
+                "index": 7,
+                "point": [
+                  1585.92,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 10.600000000000001
+              },
+              {
+                "index": 8,
+                "point": [
+                  1785.6000000000001,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 13
+              }
+            ]
+          }
+        },
+        {
+          "id": "focus",
+          "model": {
+            "version": 1,
+            "title": "A warm machine after load falls",
+            "source": "Original fictional observations",
+            "asOf": "2026-09-30",
+            "x": {
+              "label": "Load (% rated)",
+              "definition": "Supplied machine load as a percent of rated load. The authored comparison reference is 60 percent, not zero.",
+              "domain": [
+                20,
+                100
+              ],
+              "ticks": [
+                20,
+                60,
+                100
+              ],
+              "reference": 60,
+              "decimals": 0
+            },
+            "y": {
+              "label": "Temperature (°C)",
+              "definition": "Supplied measured-style temperature values; 70 degrees Celsius is an illustrative comparison reference, not a safety limit.",
+              "domain": [
+                30,
+                110
+              ],
+              "ticks": [
+                30,
+                70,
+                110
+              ],
+              "reference": 70,
+              "decimals": 0
+            },
+            "quadrants": {
+              "NE": "Higher load / warmer",
+              "NW": "Lower load / warmer",
+              "SW": "Lower load / cooler",
+              "SE": "Higher load / cooler"
+            },
+            "smoothing": "none",
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-01",
+                "day": 20454,
+                "x": 30,
+                "y": 40,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-01-03",
+                "day": 20456,
+                "x": 65,
+                "y": 50,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.1
+              },
+              {
+                "index": 2,
+                "date": "2026-01-05",
+                "day": 20458,
+                "x": 80,
+                "y": 85,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.2
+              },
+              {
+                "index": 3,
+                "date": "2026-01-09",
+                "day": 20462,
+                "x": 50,
+                "y": 95,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.4
+              },
+              {
+                "index": 4,
+                "date": "2026-01-12",
+                "day": 20465,
+                "x": 60,
+                "y": 70,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "both-references",
+                "missing": [],
+                "time": 0.55
+              },
+              {
+                "index": 5,
+                "date": "2026-01-13",
+                "day": 20466,
+                "x": 40,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.6
+              },
+              {
+                "index": 6,
+                "date": "2026-01-15",
+                "day": 20468,
+                "x": null,
+                "y": 80,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "x"
+                ],
+                "time": 0.7
+              },
+              {
+                "index": 7,
+                "date": "2026-01-17",
+                "day": 20470,
+                "x": 45,
+                "y": 55,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.8
+              },
+              {
+                "index": 8,
+                "date": "2026-01-21",
+                "day": 20474,
+                "x": 75,
+                "y": 65,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 1
+              }
+            ],
+            "focus": {
+              "index": 4,
+              "date": "2026-01-12",
+              "day": 20465,
+              "x": 60,
+              "y": 70,
+              "valid": true,
+              "quadrant": null,
+              "boundary": "both-references",
+              "missing": [],
+              "time": 0.55
+            },
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-01",
+                "toDate": "2026-01-03",
+                "days": 2
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-01-03",
+                "toDate": "2026-01-05",
+                "days": 2
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-01-05",
+                "toDate": "2026-01-09",
+                "days": 4
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-01-09",
+                "toDate": "2026-01-12",
+                "days": 3
+              },
+              {
+                "from": 7,
+                "to": 8,
+                "fromDate": "2026-01-17",
+                "toDate": "2026-01-21",
+                "days": 4
+              }
+            ],
+            "observed": 7,
+            "missing": 2,
+            "dateSpan": [
+              "2026-01-01",
+              "2026-01-21"
+            ],
+            "connectionPolicy": "Straight guides between adjacent complete supplied rows; null breaks the trail. Unlisted dates have no observation.",
+            "interpretation": "Quadrants describe the chosen variables and references, not a repeating cycle, forecast or timing signal."
+          },
+          "geometry": {
+            "box": [
+              787.1999999999999,
+              253.79999999999998,
+              1785.6000000000001,
+              777.6
+            ],
+            "reference": [
+              1286.4,
+              515.7
+            ],
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-01",
+                "day": 20454,
+                "x": 30,
+                "y": 40,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0,
+                "point": [
+                  912,
+                  712.125
+                ],
+                "at": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-01-03",
+                "day": 20456,
+                "x": 65,
+                "y": 50,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.1,
+                "point": [
+                  1348.8000000000002,
+                  646.65
+                ],
+                "at": 0
+              },
+              {
+                "index": 2,
+                "date": "2026-01-05",
+                "day": 20458,
+                "x": 80,
+                "y": 85,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.2,
+                "point": [
+                  1536,
+                  417.48749999999995
+                ],
+                "at": 0
+              },
+              {
+                "index": 3,
+                "date": "2026-01-09",
+                "day": 20462,
+                "x": 50,
+                "y": 95,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.4,
+                "point": [
+                  1161.6,
+                  352.0125
+                ],
+                "at": 0
+              },
+              {
+                "index": 4,
+                "date": "2026-01-12",
+                "day": 20465,
+                "x": 60,
+                "y": 70,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "both-references",
+                "missing": [],
+                "time": 0.55,
+                "point": [
+                  1286.4,
+                  515.7
+                ],
+                "at": 0
+              },
+              {
+                "index": 5,
+                "date": "2026-01-13",
+                "day": 20466,
+                "x": 40,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.6,
+                "point": null,
+                "at": 0
+              },
+              {
+                "index": 6,
+                "date": "2026-01-15",
+                "day": 20468,
+                "x": null,
+                "y": 80,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "x"
+                ],
+                "time": 0.7,
+                "point": null,
+                "at": 0
+              },
+              {
+                "index": 7,
+                "date": "2026-01-17",
+                "day": 20470,
+                "x": 45,
+                "y": 55,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.8,
+                "point": [
+                  1099.2,
+                  613.9125
+                ],
+                "at": 0
+              },
+              {
+                "index": 8,
+                "date": "2026-01-21",
+                "day": 20474,
+                "x": 75,
+                "y": 65,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 1,
+                "point": [
+                  1473.6,
+                  548.4375
+                ],
+                "at": 0
+              }
+            ],
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-01",
+                "toDate": "2026-01-03",
+                "days": 2,
+                "p1": [
+                  912,
+                  712.125
+                ],
+                "p2": [
+                  1348.8000000000002,
+                  646.65
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-01-03",
+                "toDate": "2026-01-05",
+                "days": 2,
+                "p1": [
+                  1348.8000000000002,
+                  646.65
+                ],
+                "p2": [
+                  1536,
+                  417.48749999999995
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-01-05",
+                "toDate": "2026-01-09",
+                "days": 4,
+                "p1": [
+                  1536,
+                  417.48749999999995
+                ],
+                "p2": [
+                  1161.6,
+                  352.0125
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-01-09",
+                "toDate": "2026-01-12",
+                "days": 3,
+                "p1": [
+                  1161.6,
+                  352.0125
+                ],
+                "p2": [
+                  1286.4,
+                  515.7
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 7,
+                "to": 8,
+                "fromDate": "2026-01-17",
+                "toDate": "2026-01-21",
+                "days": 4,
+                "p1": [
+                  1099.2,
+                  613.9125
+                ],
+                "p2": [
+                  1473.6,
+                  548.4375
+                ],
+                "at": 0,
+                "end": 0
+              }
+            ],
+            "labels": [
+              {
+                "quadrant": "NW",
+                "box": [
+                  796.8,
+                  263.4,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Lower load",
+                  "warmer"
+                ]
+              },
+              {
+                "quadrant": "NE",
+                "box": [
+                  1296,
+                  263.4,
+                  231.98592000000002,
+                  85.4144
+                ],
+                "rows": [
+                  "Higher load",
+                  "warmer"
+                ]
+              },
+              {
+                "quadrant": "SW",
+                "box": [
+                  796.8,
+                  525.3000000000001,
+                  211.9872,
+                  85.4144
+                ],
+                "rows": [
+                  "Lower load",
+                  "cooler"
+                ]
+              },
+              {
+                "quadrant": "SE",
+                "box": [
+                  1544.0140800000001,
+                  525.3000000000001,
+                  231.98592000000002,
+                  85.4144
+                ],
+                "rows": [
+                  "Higher load",
+                  "cooler"
+                ]
+              }
+            ],
+            "timeline": [
+              {
+                "index": 0,
+                "point": [
+                  787.1999999999999,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 1,
+                "point": [
+                  887.04,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 2,
+                "point": [
+                  986.88,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 3,
+                "point": [
+                  1186.56,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 4,
+                "point": [
+                  1336.3200000000002,
+                  928.8
+                ],
+                "valid": true,
+                "selected": true,
+                "at": 0
+              },
+              {
+                "index": 5,
+                "point": [
+                  1386.24,
+                  928.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 6,
+                "point": [
+                  1486.08,
+                  928.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 7,
+                "point": [
+                  1585.92,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 8,
+                "point": [
+                  1785.6000000000001,
+                  928.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "load-temperature-vertical",
+      "caseId": "load-temperature",
+      "recipe": "C15",
+      "preset": "vertical",
+      "storyboardSha256": "f6eaf3ab43c4c963ed4e728f9873a7e05b2b31c2cc31fd64ce1ce152302453b5",
+      "stages": [
+        {
+          "id": "trail",
+          "model": {
+            "version": 1,
+            "title": "A warm machine after load falls",
+            "source": "Original fictional observations",
+            "asOf": "2026-09-30",
+            "x": {
+              "label": "Load (% rated)",
+              "definition": "Supplied machine load as a percent of rated load. The authored comparison reference is 60 percent, not zero.",
+              "domain": [
+                20,
+                100
+              ],
+              "ticks": [
+                20,
+                60,
+                100
+              ],
+              "reference": 60,
+              "decimals": 0
+            },
+            "y": {
+              "label": "Temperature (°C)",
+              "definition": "Supplied measured-style temperature values; 70 degrees Celsius is an illustrative comparison reference, not a safety limit.",
+              "domain": [
+                30,
+                110
+              ],
+              "ticks": [
+                30,
+                70,
+                110
+              ],
+              "reference": 70,
+              "decimals": 0
+            },
+            "quadrants": {
+              "NE": "Higher load / warmer",
+              "NW": "Lower load / warmer",
+              "SW": "Lower load / cooler",
+              "SE": "Higher load / cooler"
+            },
+            "smoothing": "none",
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-01",
+                "day": 20454,
+                "x": 30,
+                "y": 40,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-01-03",
+                "day": 20456,
+                "x": 65,
+                "y": 50,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.1
+              },
+              {
+                "index": 2,
+                "date": "2026-01-05",
+                "day": 20458,
+                "x": 80,
+                "y": 85,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.2
+              },
+              {
+                "index": 3,
+                "date": "2026-01-09",
+                "day": 20462,
+                "x": 50,
+                "y": 95,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.4
+              },
+              {
+                "index": 4,
+                "date": "2026-01-12",
+                "day": 20465,
+                "x": 60,
+                "y": 70,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "both-references",
+                "missing": [],
+                "time": 0.55
+              },
+              {
+                "index": 5,
+                "date": "2026-01-13",
+                "day": 20466,
+                "x": 40,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.6
+              },
+              {
+                "index": 6,
+                "date": "2026-01-15",
+                "day": 20468,
+                "x": null,
+                "y": 80,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "x"
+                ],
+                "time": 0.7
+              },
+              {
+                "index": 7,
+                "date": "2026-01-17",
+                "day": 20470,
+                "x": 45,
+                "y": 55,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.8
+              },
+              {
+                "index": 8,
+                "date": "2026-01-21",
+                "day": 20474,
+                "x": 75,
+                "y": 65,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 1
+              }
+            ],
+            "focus": {
+              "index": 4,
+              "date": "2026-01-12",
+              "day": 20465,
+              "x": 60,
+              "y": 70,
+              "valid": true,
+              "quadrant": null,
+              "boundary": "both-references",
+              "missing": [],
+              "time": 0.55
+            },
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-01",
+                "toDate": "2026-01-03",
+                "days": 2
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-01-03",
+                "toDate": "2026-01-05",
+                "days": 2
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-01-05",
+                "toDate": "2026-01-09",
+                "days": 4
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-01-09",
+                "toDate": "2026-01-12",
+                "days": 3
+              },
+              {
+                "from": 7,
+                "to": 8,
+                "fromDate": "2026-01-17",
+                "toDate": "2026-01-21",
+                "days": 4
+              }
+            ],
+            "observed": 7,
+            "missing": 2,
+            "dateSpan": [
+              "2026-01-01",
+              "2026-01-21"
+            ],
+            "connectionPolicy": "Straight guides between adjacent complete supplied rows; null breaks the trail. Unlisted dates have no observation.",
+            "interpretation": "Quadrants describe the chosen variables and references, not a repeating cycle, forecast or timing signal."
+          },
+          "geometry": {
+            "box": [
+              216,
+              576,
+              961.2,
+              1276.8000000000002
+            ],
+            "reference": [
+              588.6,
+              926.4000000000001
+            ],
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-01",
+                "day": 20454,
+                "x": 30,
+                "y": 40,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0,
+                "point": [
+                  309.15,
+                  1189.2000000000003
+                ],
+                "at": 1
+              },
+              {
+                "index": 1,
+                "date": "2026-01-03",
+                "day": 20456,
+                "x": 65,
+                "y": 50,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.1,
+                "point": [
+                  635.175,
+                  1101.6000000000001
+                ],
+                "at": 2.2
+              },
+              {
+                "index": 2,
+                "date": "2026-01-05",
+                "day": 20458,
+                "x": 80,
+                "y": 85,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.2,
+                "point": [
+                  774.9000000000001,
+                  795
+                ],
+                "at": 3.4000000000000004
+              },
+              {
+                "index": 3,
+                "date": "2026-01-09",
+                "day": 20462,
+                "x": 50,
+                "y": 95,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.4,
+                "point": [
+                  495.45000000000005,
+                  707.4000000000001
+                ],
+                "at": 5.800000000000001
+              },
+              {
+                "index": 4,
+                "date": "2026-01-12",
+                "day": 20465,
+                "x": 60,
+                "y": 70,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "both-references",
+                "missing": [],
+                "time": 0.55,
+                "point": [
+                  588.6,
+                  926.4000000000001
+                ],
+                "at": 7.6000000000000005
+              },
+              {
+                "index": 5,
+                "date": "2026-01-13",
+                "day": 20466,
+                "x": 40,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.6,
+                "point": null,
+                "at": 8.2
+              },
+              {
+                "index": 6,
+                "date": "2026-01-15",
+                "day": 20468,
+                "x": null,
+                "y": 80,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "x"
+                ],
+                "time": 0.7,
+                "point": null,
+                "at": 9.399999999999999
+              },
+              {
+                "index": 7,
+                "date": "2026-01-17",
+                "day": 20470,
+                "x": 45,
+                "y": 55,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.8,
+                "point": [
+                  448.875,
+                  1057.8000000000002
+                ],
+                "at": 10.600000000000001
+              },
+              {
+                "index": 8,
+                "date": "2026-01-21",
+                "day": 20474,
+                "x": 75,
+                "y": 65,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 1,
+                "point": [
+                  728.325,
+                  970.2
+                ],
+                "at": 13
+              }
+            ],
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-01",
+                "toDate": "2026-01-03",
+                "days": 2,
+                "p1": [
+                  309.15,
+                  1189.2000000000003
+                ],
+                "p2": [
+                  635.175,
+                  1101.6000000000001
+                ],
+                "at": 1,
+                "end": 2.2
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-01-03",
+                "toDate": "2026-01-05",
+                "days": 2,
+                "p1": [
+                  635.175,
+                  1101.6000000000001
+                ],
+                "p2": [
+                  774.9000000000001,
+                  795
+                ],
+                "at": 2.2,
+                "end": 3.4000000000000004
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-01-05",
+                "toDate": "2026-01-09",
+                "days": 4,
+                "p1": [
+                  774.9000000000001,
+                  795
+                ],
+                "p2": [
+                  495.45000000000005,
+                  707.4000000000001
+                ],
+                "at": 3.4000000000000004,
+                "end": 5.800000000000001
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-01-09",
+                "toDate": "2026-01-12",
+                "days": 3,
+                "p1": [
+                  495.45000000000005,
+                  707.4000000000001
+                ],
+                "p2": [
+                  588.6,
+                  926.4000000000001
+                ],
+                "at": 5.800000000000001,
+                "end": 7.6000000000000005
+              },
+              {
+                "from": 7,
+                "to": 8,
+                "fromDate": "2026-01-17",
+                "toDate": "2026-01-21",
+                "days": 4,
+                "p1": [
+                  448.875,
+                  1057.8000000000002
+                ],
+                "p2": [
+                  728.325,
+                  970.2
+                ],
+                "at": 10.600000000000001,
+                "end": 13
+              }
+            ],
+            "labels": [
+              {
+                "quadrant": "NW",
+                "box": [
+                  223.56,
+                  583.56,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Lower load",
+                  "warmer"
+                ]
+              },
+              {
+                "quadrant": "NE",
+                "box": [
+                  596.16,
+                  583.56,
+                  202.96,
+                  75.2
+                ],
+                "rows": [
+                  "Higher load",
+                  "warmer"
+                ]
+              },
+              {
+                "quadrant": "SW",
+                "box": [
+                  223.56,
+                  933.96,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Lower load",
+                  "cooler"
+                ]
+              },
+              {
+                "quadrant": "SE",
+                "box": [
+                  750.6800000000001,
+                  933.96,
+                  202.96,
+                  75.2
+                ],
+                "rows": [
+                  "Higher load",
+                  "cooler"
+                ]
+              }
+            ],
+            "timeline": [
+              {
+                "index": 0,
+                "point": [
+                  216,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 1
+              },
+              {
+                "index": 1,
+                "point": [
+                  290.52,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 2.2
+              },
+              {
+                "index": 2,
+                "point": [
+                  365.04,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 3.4000000000000004
+              },
+              {
+                "index": 3,
+                "point": [
+                  514.08,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 5.800000000000001
+              },
+              {
+                "index": 4,
+                "point": [
+                  625.8600000000001,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 7.6000000000000005
+              },
+              {
+                "index": 5,
+                "point": [
+                  663.12,
+                  1468.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 8.2
+              },
+              {
+                "index": 6,
+                "point": [
+                  737.64,
+                  1468.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 9.399999999999999
+              },
+              {
+                "index": 7,
+                "point": [
+                  812.1600000000001,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 10.600000000000001
+              },
+              {
+                "index": 8,
+                "point": [
+                  961.2,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 13
+              }
+            ]
+          }
+        },
+        {
+          "id": "focus",
+          "model": {
+            "version": 1,
+            "title": "A warm machine after load falls",
+            "source": "Original fictional observations",
+            "asOf": "2026-09-30",
+            "x": {
+              "label": "Load (% rated)",
+              "definition": "Supplied machine load as a percent of rated load. The authored comparison reference is 60 percent, not zero.",
+              "domain": [
+                20,
+                100
+              ],
+              "ticks": [
+                20,
+                60,
+                100
+              ],
+              "reference": 60,
+              "decimals": 0
+            },
+            "y": {
+              "label": "Temperature (°C)",
+              "definition": "Supplied measured-style temperature values; 70 degrees Celsius is an illustrative comparison reference, not a safety limit.",
+              "domain": [
+                30,
+                110
+              ],
+              "ticks": [
+                30,
+                70,
+                110
+              ],
+              "reference": 70,
+              "decimals": 0
+            },
+            "quadrants": {
+              "NE": "Higher load / warmer",
+              "NW": "Lower load / warmer",
+              "SW": "Lower load / cooler",
+              "SE": "Higher load / cooler"
+            },
+            "smoothing": "none",
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-01",
+                "day": 20454,
+                "x": 30,
+                "y": 40,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-01-03",
+                "day": 20456,
+                "x": 65,
+                "y": 50,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.1
+              },
+              {
+                "index": 2,
+                "date": "2026-01-05",
+                "day": 20458,
+                "x": 80,
+                "y": 85,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.2
+              },
+              {
+                "index": 3,
+                "date": "2026-01-09",
+                "day": 20462,
+                "x": 50,
+                "y": 95,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.4
+              },
+              {
+                "index": 4,
+                "date": "2026-01-12",
+                "day": 20465,
+                "x": 60,
+                "y": 70,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "both-references",
+                "missing": [],
+                "time": 0.55
+              },
+              {
+                "index": 5,
+                "date": "2026-01-13",
+                "day": 20466,
+                "x": 40,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.6
+              },
+              {
+                "index": 6,
+                "date": "2026-01-15",
+                "day": 20468,
+                "x": null,
+                "y": 80,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "x"
+                ],
+                "time": 0.7
+              },
+              {
+                "index": 7,
+                "date": "2026-01-17",
+                "day": 20470,
+                "x": 45,
+                "y": 55,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.8
+              },
+              {
+                "index": 8,
+                "date": "2026-01-21",
+                "day": 20474,
+                "x": 75,
+                "y": 65,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 1
+              }
+            ],
+            "focus": {
+              "index": 4,
+              "date": "2026-01-12",
+              "day": 20465,
+              "x": 60,
+              "y": 70,
+              "valid": true,
+              "quadrant": null,
+              "boundary": "both-references",
+              "missing": [],
+              "time": 0.55
+            },
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-01",
+                "toDate": "2026-01-03",
+                "days": 2
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-01-03",
+                "toDate": "2026-01-05",
+                "days": 2
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-01-05",
+                "toDate": "2026-01-09",
+                "days": 4
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-01-09",
+                "toDate": "2026-01-12",
+                "days": 3
+              },
+              {
+                "from": 7,
+                "to": 8,
+                "fromDate": "2026-01-17",
+                "toDate": "2026-01-21",
+                "days": 4
+              }
+            ],
+            "observed": 7,
+            "missing": 2,
+            "dateSpan": [
+              "2026-01-01",
+              "2026-01-21"
+            ],
+            "connectionPolicy": "Straight guides between adjacent complete supplied rows; null breaks the trail. Unlisted dates have no observation.",
+            "interpretation": "Quadrants describe the chosen variables and references, not a repeating cycle, forecast or timing signal."
+          },
+          "geometry": {
+            "box": [
+              216,
+              576,
+              961.2,
+              1276.8000000000002
+            ],
+            "reference": [
+              588.6,
+              926.4000000000001
+            ],
+            "points": [
+              {
+                "index": 0,
+                "date": "2026-01-01",
+                "day": 20454,
+                "x": 30,
+                "y": 40,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0,
+                "point": [
+                  309.15,
+                  1189.2000000000003
+                ],
+                "at": 0
+              },
+              {
+                "index": 1,
+                "date": "2026-01-03",
+                "day": 20456,
+                "x": 65,
+                "y": 50,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.1,
+                "point": [
+                  635.175,
+                  1101.6000000000001
+                ],
+                "at": 0
+              },
+              {
+                "index": 2,
+                "date": "2026-01-05",
+                "day": 20458,
+                "x": 80,
+                "y": 85,
+                "valid": true,
+                "quadrant": "NE",
+                "boundary": null,
+                "missing": [],
+                "time": 0.2,
+                "point": [
+                  774.9000000000001,
+                  795
+                ],
+                "at": 0
+              },
+              {
+                "index": 3,
+                "date": "2026-01-09",
+                "day": 20462,
+                "x": 50,
+                "y": 95,
+                "valid": true,
+                "quadrant": "NW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.4,
+                "point": [
+                  495.45000000000005,
+                  707.4000000000001
+                ],
+                "at": 0
+              },
+              {
+                "index": 4,
+                "date": "2026-01-12",
+                "day": 20465,
+                "x": 60,
+                "y": 70,
+                "valid": true,
+                "quadrant": null,
+                "boundary": "both-references",
+                "missing": [],
+                "time": 0.55,
+                "point": [
+                  588.6,
+                  926.4000000000001
+                ],
+                "at": 0
+              },
+              {
+                "index": 5,
+                "date": "2026-01-13",
+                "day": 20466,
+                "x": 40,
+                "y": null,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "y"
+                ],
+                "time": 0.6,
+                "point": null,
+                "at": 0
+              },
+              {
+                "index": 6,
+                "date": "2026-01-15",
+                "day": 20468,
+                "x": null,
+                "y": 80,
+                "valid": false,
+                "quadrant": null,
+                "boundary": null,
+                "missing": [
+                  "x"
+                ],
+                "time": 0.7,
+                "point": null,
+                "at": 0
+              },
+              {
+                "index": 7,
+                "date": "2026-01-17",
+                "day": 20470,
+                "x": 45,
+                "y": 55,
+                "valid": true,
+                "quadrant": "SW",
+                "boundary": null,
+                "missing": [],
+                "time": 0.8,
+                "point": [
+                  448.875,
+                  1057.8000000000002
+                ],
+                "at": 0
+              },
+              {
+                "index": 8,
+                "date": "2026-01-21",
+                "day": 20474,
+                "x": 75,
+                "y": 65,
+                "valid": true,
+                "quadrant": "SE",
+                "boundary": null,
+                "missing": [],
+                "time": 1,
+                "point": [
+                  728.325,
+                  970.2
+                ],
+                "at": 0
+              }
+            ],
+            "segments": [
+              {
+                "from": 0,
+                "to": 1,
+                "fromDate": "2026-01-01",
+                "toDate": "2026-01-03",
+                "days": 2,
+                "p1": [
+                  309.15,
+                  1189.2000000000003
+                ],
+                "p2": [
+                  635.175,
+                  1101.6000000000001
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 1,
+                "to": 2,
+                "fromDate": "2026-01-03",
+                "toDate": "2026-01-05",
+                "days": 2,
+                "p1": [
+                  635.175,
+                  1101.6000000000001
+                ],
+                "p2": [
+                  774.9000000000001,
+                  795
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 2,
+                "to": 3,
+                "fromDate": "2026-01-05",
+                "toDate": "2026-01-09",
+                "days": 4,
+                "p1": [
+                  774.9000000000001,
+                  795
+                ],
+                "p2": [
+                  495.45000000000005,
+                  707.4000000000001
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 3,
+                "to": 4,
+                "fromDate": "2026-01-09",
+                "toDate": "2026-01-12",
+                "days": 3,
+                "p1": [
+                  495.45000000000005,
+                  707.4000000000001
+                ],
+                "p2": [
+                  588.6,
+                  926.4000000000001
+                ],
+                "at": 0,
+                "end": 0
+              },
+              {
+                "from": 7,
+                "to": 8,
+                "fromDate": "2026-01-17",
+                "toDate": "2026-01-21",
+                "days": 4,
+                "p1": [
+                  448.875,
+                  1057.8000000000002
+                ],
+                "p2": [
+                  728.325,
+                  970.2
+                ],
+                "at": 0,
+                "end": 0
+              }
+            ],
+            "labels": [
+              {
+                "quadrant": "NW",
+                "box": [
+                  223.56,
+                  583.56,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Lower load",
+                  "warmer"
+                ]
+              },
+              {
+                "quadrant": "NE",
+                "box": [
+                  596.16,
+                  583.56,
+                  202.96,
+                  75.2
+                ],
+                "rows": [
+                  "Higher load",
+                  "warmer"
+                ]
+              },
+              {
+                "quadrant": "SW",
+                "box": [
+                  223.56,
+                  933.96,
+                  185.6,
+                  75.2
+                ],
+                "rows": [
+                  "Lower load",
+                  "cooler"
+                ]
+              },
+              {
+                "quadrant": "SE",
+                "box": [
+                  750.6800000000001,
+                  933.96,
+                  202.96,
+                  75.2
+                ],
+                "rows": [
+                  "Higher load",
+                  "cooler"
+                ]
+              }
+            ],
+            "timeline": [
+              {
+                "index": 0,
+                "point": [
+                  216,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 1,
+                "point": [
+                  290.52,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 2,
+                "point": [
+                  365.04,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 3,
+                "point": [
+                  514.08,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 4,
+                "point": [
+                  625.8600000000001,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": true,
+                "at": 0
+              },
+              {
+                "index": 5,
+                "point": [
+                  663.12,
+                  1468.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 6,
+                "point": [
+                  737.64,
+                  1468.8
+                ],
+                "valid": false,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 7,
+                "point": [
+                  812.1600000000001,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              },
+              {
+                "index": 8,
+                "point": [
+                  961.2,
+                  1468.8
+                ],
+                "valid": true,
+                "selected": false,
+                "at": 0
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

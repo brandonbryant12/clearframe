@@ -1,0 +1,10 @@
+{
+  "equal": true,
+  "files": {
+    "examples/library-kits/phase-studies/audit.json": "2befa42c8f8318a7da4c359ffb72bac1f3a9a17325cb8e93c8a893c033ec2a86",
+    "examples/library-kits/phase-studies/specimens/load-temperature-landscape/storyboard.json": "6ed46cd0cbed3e6257ea21068b82693ea2238da4aea714f4c6ec5f87d07679f4",
+    "examples/library-kits/phase-studies/specimens/load-temperature-vertical/storyboard.json": "f6eaf3ab43c4c963ed4e728f9873a7e05b2b31c2cc31fd64ce1ce152302453b5",
+    "examples/library-kits/phase-studies/specimens/orders-inventory-landscape/storyboard.json": "febd4998906f20d502cd35aabcf9926bdc7b40feb896e21abe6a8543c0a45482",
+    "examples/library-kits/phase-studies/specimens/orders-inventory-vertical/storyboard.json": "95e31653ff5f50ac733e9451daf20836bd0ccb41a20ac47b9353b141c2289743"
+  }
+}

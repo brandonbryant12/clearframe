@@ -1,0 +1,13 @@
+✔ phase quadrants preserve exact reference boundaries, chronology and missing pairs (3.24975ms)
+✔ phase input rejects sparse or invented observations, ambiguous scales and future dates (1.504042ms)
+✔ phase input remains immutable and rounded values are explicitly approximate (0.217666ms)
+✔ phase native markers map both axes and calendar time without closing gaps or interpolating states (4.143042ms)
+✔ phase layouts reject unsupported density and impossible label placement (0.693625ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 65.407625

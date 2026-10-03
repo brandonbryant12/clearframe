@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "modelCases": 1043,
+  "sceneCases": 144,
+  "assertions": 81655,
+  "negativeCases": 49,
+  "copyZones": 576,
+  "method": "Independent Gregorian ordinal, exact-reference truth table, exhaustive missing-row masks, inverse mapping equations and orientation-based polygon intersections. No render or full suite.",
+  "bindings": {
+    "fframes/phase-data.mjs": "55d7934e37c6f3000596930d78b8792c02522b81000c12052dbfa34c224ccb63",
+    "fframes/phases.mjs": "2edddd832dbc4baf8b9a20cebddc29b60aa8ffc5b1c93ec409c872ff470ba24f",
+    "examples/library-kits/phase-studies/inputs.json": "87fd3cf0ab13902604b904d12d676ca996000e5b4dde287523bb4cd71eca1ec8",
+    "examples/library-kits/phase-studies/evidence/independent-review/contract-check.mjs": "4f7230b7aea80e5fa48b71fad5dc31de0e775f64b0ae8056ab23f107817d6469"
+  }
+}

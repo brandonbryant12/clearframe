@@ -1,0 +1,36 @@
+{
+  "summary": {
+    "cinema": 100,
+    "beats": 2,
+    "seconds": 72,
+    "families": 1,
+    "drawn": 2,
+    "imaged": 0,
+    "graphicTransitions": 0,
+    "tones": 0,
+    "warnings": 1,
+    "ideas": 3
+  },
+  "findings": [
+    {
+      "level": "idea",
+      "where": "trail",
+      "message": "Held 36.0 s with nothing moving. Add a loop, a drift or split it into two beats."
+    },
+    {
+      "level": "warn",
+      "where": "trail",
+      "message": "127 words on screen for 36.0 s (3.5/s). Viewers read ~3 words a second while listening; cut the text or extend the beat."
+    },
+    {
+      "level": "idea",
+      "where": "focus",
+      "message": "Held 36.0 s with nothing moving. Add a loop, a drift or split it into two beats."
+    },
+    {
+      "level": "idea",
+      "where": "film",
+      "message": "No question is ever asked. Open a loop early (a question, a mystery, a flash-forward) and close it at the peak."
+    }
+  ]
+}
