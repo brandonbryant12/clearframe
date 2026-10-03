@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Source-informed research studies.** A white/charcoal/orange palette, restrained treatment, two native chart studies and an original porcelain reserve gate provide six landscape/vertical specimens. Reference observations are separated from adaptations; third-party chart pixels and data are excluded. Original inputs determine line positions, date-window boundaries and the endpoint percentage. Retained baked scenes, clips and independent review remain prototypes pending subjective continuous playback.
+
 - **Native retirement mechanism kit.** Nine original reusable recipes now have two fictional scenarios and separate landscape/vertical specimens. Exact matching bands, ownership stacks, balance reservoirs and fee-gap rectangles preserve proportional length and area; native formulas expose benefit and purchasing-power inputs. Retained calculations, clips, phone/boundary review, independent critique and bounded encoded-edge evidence distinguish implementation from visual acceptance. The kit remains a prototype pending subjective continuous playback and final promotion.
 
 - **Plot readability and phase identity.** Names stay visible throughout quantitative reveals; final values appear in a stable key. Wider portrait plotting and a larger, higher-contrast multiline source footer improve 360-pixel reading. Missing dates and retirement assumptions are explicit. Long-label, close-value, logarithmic and annotation specimens extend the retained review set; frame-order verification compares native pixels.

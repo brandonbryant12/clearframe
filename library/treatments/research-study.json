@@ -1,0 +1,7 @@
+{
+  "title":"Research on paper",
+  "when":"Paired measured series, clearly identified intervals and restrained explanatory inserts",
+  "film":{"theme":"research-paper","type":"inter","backdrop":"none","motion":{"preset":"gentle","intensity":0.3},"transition":"cut","sfx":"off"},
+  "beats":{"graphic":"fade"},
+  "rules":["Keep observations charcoal and a comparator orange on a white field.","Use sparse grids, a stable native key and explicit units; do not reproduce dense dual axes without necessity.","A translucent interval must have an explicit meaning and exact date boundaries.","Move emphasis, not the numerical scale; never let perspective imply a financial amount.","Pair any physical interpretation with native factual text and a qualitative limitation."]
+}
