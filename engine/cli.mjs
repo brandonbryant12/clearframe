@@ -22,6 +22,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
   muse [--seed N] [--light] [--json]  a seeded creative brief: twist, motif, camera, cuts, look, set pieces, music
   checkpoints <dir> [--mode guided|one-shot] [--json]   where a human decides (intent, truth, story, words, spend, picture, final) and what is open
   treatments [--json]                 art direction presets: look, motion, voice, sound and rules
+  asset-anchors ASSET-DIR --definition FILE --out NEW-JSON   export checked static anchors and copy zones
   sculptures [--json]                original 3D asset recipes; optional offline Blender
   sculpture ID --out NEW-DIR [--draft] [--still] [--vertical] [--theme ID] [--duration 4] [--fps 24] [--seed N]
                                       baked .blend + PNG + MP4; --phase-seconds timing.json sets named phase durations; --dry-run prints settings
@@ -115,6 +116,7 @@ async function main() {
     'model',
     'ledger',
     'choices',
+    'definition',
     'assets',
     'note',
   ];
@@ -201,6 +203,14 @@ async function main() {
   if (o.seed != null) {
     opts.seed = o.seed === 'random' ? Math.floor(Math.random() * 100000) : Number(o.seed);
     if (!Number.isInteger(opts.seed)) throw new Error('--seed must be an integer or "random"');
+  }
+  if (cmd === 'asset-anchors') {
+    if (!positionals[0] || !o.definition || !o.out) throw new Error('asset-anchors needs ASSET-DIR --definition FILE --out NEW-JSON');
+    const { enterGate } = await import('./lib/resource-gate.mjs');
+    if (await enterGate()) return;
+    const { exportAssetAnchors } = await import('./lib/asset-anchors.mjs');
+    const result = await exportAssetAnchors({assetDir:positionals[0],definition:JSON.parse(fs.readFileSync(o.definition,'utf8')),out:o.out});
+    return console.log(o.json ? JSON.stringify(result,null,2) : `${result.anchors.length} static anchors; ${result.copyZones.length} copy zones; ${result.checks.frames} source frames checked: ${path.resolve(o.out)}`);
   }
   if (cmd === 'sculptures') {
     const { sculptures } = await import('./lib/sculptures.mjs');
