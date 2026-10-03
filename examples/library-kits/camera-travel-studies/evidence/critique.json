@@ -1,0 +1,130 @@
+[
+  {
+    "name": "another-view-landscape",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 18,
+      "families": 1,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "another-view-vertical",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 18,
+      "families": 1,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "partial-route-landscape",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 18,
+      "families": 1,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "partial-route-vertical",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 18,
+      "families": 1,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "partial-summary-landscape",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 18,
+      "families": 1,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "partial-summary-vertical",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 18,
+      "families": 1,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "side-connection-landscape",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 18,
+      "families": 1,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  },
+  {
+    "name": "side-connection-vertical",
+    "summary": {
+      "cinema": 100,
+      "beats": 2,
+      "seconds": 18,
+      "families": 1,
+      "drawn": 2,
+      "imaged": 2,
+      "graphicTransitions": 0,
+      "tones": 0,
+      "warnings": 0,
+      "ideas": 0
+    },
+    "findings": []
+  }
+]

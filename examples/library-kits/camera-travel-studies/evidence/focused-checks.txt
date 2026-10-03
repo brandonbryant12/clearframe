@@ -1,0 +1,14 @@
+✔ camera paths preserve authored holds, optics and arbitrary seek order (109.093083ms)
+✔ analytic camera orbit and truck keep geometric invariants and exact holds (236.251542ms)
+✔ phase manifests preserve the old pose clock and expose exact half-open holds (15.9395ms)
+✔ named phase retiming quantizes cue boundaries and is available through the CLI (177.599708ms)
+✔ encoded frame plans retain all action, minimum holds and exact selected source times (2.296709ms)
+✔ malformed phase partitions are rejected before preparing outputs (1.093709ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 306.475917

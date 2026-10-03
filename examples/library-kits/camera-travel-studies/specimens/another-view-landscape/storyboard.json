@@ -1,0 +1,274 @@
+{
+  "version": 2,
+  "title": "Check another point of view",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "research-paper",
+  "type": "inter",
+  "backdrop": "none",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.3
+  },
+  "transition": "cut",
+  "sfx": "off",
+  "captions": false,
+  "music": false,
+  "assets": [
+    {
+      "id": "mechanism",
+      "kind": "clip",
+      "file": "media/clip.mp4"
+    },
+    {
+      "id": "settled",
+      "kind": "clip",
+      "file": "media/final-hold.mp4"
+    }
+  ],
+  "sources": [
+    {
+      "claim": "Methods review metaphor: Invented model; no research findings.",
+      "source": "Original ClearFrame procedural artwork and fictional explanatory scenario."
+    }
+  ],
+  "beats": [
+    {
+      "id": "mechanism",
+      "block": "canvas",
+      "duration": 8,
+      "camera": "none",
+      "exit": "none",
+      "plate": {
+        "asset": "mechanism",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "elements": [
+          {
+            "id": "header-band",
+            "type": "rect",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 334.8,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "footer-band",
+            "type": "rect",
+            "x": 0,
+            "y": 907.1999999999999,
+            "w": 1920,
+            "h": 172.8,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "qualification",
+            "type": "text",
+            "text": "Invented model; no research findings.",
+            "x": 153.6,
+            "y": 972,
+            "size": 55.68,
+            "width": 1612.8,
+            "height": 70.2,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "subject",
+            "type": "text",
+            "text": "Methods review metaphor",
+            "x": 153.6,
+            "y": 108,
+            "size": 46.08,
+            "width": 1612.8,
+            "height": 43.2,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "text"
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "text": "Check another point of view",
+            "x": 153.6,
+            "y": 178.20000000000002,
+            "size": 69.11999999999999,
+            "width": 1612.8,
+            "height": 88.56,
+            "fit": 1612.8,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "display"
+          },
+          {
+            "id": "phase-opening",
+            "type": "text",
+            "text": "Begin with one view",
+            "x": 153.6,
+            "y": 280.8,
+            "size": 51.839999999999996,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 1.1716666666666669,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-orbit",
+            "type": "text",
+            "text": "Change the viewing angle",
+            "x": 153.6,
+            "y": 280.8,
+            "size": 51.839999999999996,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 1.2916666666666667,
+            "enter": "fade",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 5.838333333333333,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-inspection",
+            "type": "text",
+            "text": "Keep the structure fixed",
+            "x": 153.6,
+            "y": 280.8,
+            "size": 51.839999999999996,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 5.958333333333333,
+            "enter": "fade",
+            "dur": 0.12
+          }
+        ]
+      }
+    },
+    {
+      "id": "reading-hold",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "transition": "cut",
+      "plate": {
+        "asset": "settled",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "elements": [
+          {
+            "id": "header-band",
+            "type": "rect",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 334.8,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "footer-band",
+            "type": "rect",
+            "x": 0,
+            "y": 907.1999999999999,
+            "w": 1920,
+            "h": 172.8,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "qualification",
+            "type": "text",
+            "text": "Invented model; no research findings.",
+            "x": 153.6,
+            "y": 972,
+            "size": 55.68,
+            "width": 1612.8,
+            "height": 70.2,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "subject",
+            "type": "text",
+            "text": "Methods review metaphor",
+            "x": 153.6,
+            "y": 108,
+            "size": 46.08,
+            "width": 1612.8,
+            "height": 43.2,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "text"
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "text": "Check another point of view",
+            "x": 153.6,
+            "y": 178.20000000000002,
+            "size": 69.11999999999999,
+            "width": 1612.8,
+            "height": 88.56,
+            "fit": 1612.8,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "display"
+          },
+          {
+            "id": "phase-inspection",
+            "type": "text",
+            "text": "Keep the structure fixed",
+            "x": 153.6,
+            "y": 280.8,
+            "size": 51.839999999999996,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          }
+        ]
+      }
+    }
+  ]
+}

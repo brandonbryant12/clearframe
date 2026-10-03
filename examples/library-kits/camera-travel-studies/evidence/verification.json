@@ -1,0 +1,450 @@
+[
+  {
+    "name": "another-view-landscape",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/evidence/another-view-landscape",
+    "pipelineId": "2026-10-03T11-54-09-374Z-5f8dc856",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 70 frames: no problems found\n"
+      ],
+      "duration": 18,
+      "inputId": "8a57dcd98557e114e84e0bd63397b3b8a00fc60e22b1ee6db51f72296d226fea"
+    },
+    "qa": {
+      "seconds": 18,
+      "frames": 540,
+      "changePerSecond": 0,
+      "heldSeconds": 18,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "7.6000s",
+        "8.5000s",
+        "9.5000s",
+        "11.5000s",
+        "17.6000s"
+      ],
+      "shuffled": [
+        "17.6000s",
+        "9.5000s",
+        "7.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "8.5000s",
+        "11.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "9e76cfda92e0817d16aa87ef71fee87d3c797e48a258a2d947cc96c67bb15bd9",
+        "1.5000s.png": "17d38f6367500544ed187baf30fef0f84e5157e158d008bbc55d4ef9fea74437",
+        "11.5000s.png": "d69044ebfdb98de25da448d1369ba354cd7b6cf11af853b6d1cdd8497650e9a9",
+        "17.6000s.png": "d69044ebfdb98de25da448d1369ba354cd7b6cf11af853b6d1cdd8497650e9a9",
+        "3.5000s.png": "ddc23bc5644b60a68c1f2eb463cd022e5bdb2091be2a623c644f3362ea862e0c",
+        "7.6000s.png": "257b4cd80f795ff718bb73c5491847a5acfdad0fb4e0558928afe26015e31bcb",
+        "8.5000s.png": "d69044ebfdb98de25da448d1369ba354cd7b6cf11af853b6d1cdd8497650e9a9",
+        "9.5000s.png": "d69044ebfdb98de25da448d1369ba354cd7b6cf11af853b6d1cdd8497650e9a9"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "another-view-vertical",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/evidence/another-view-vertical",
+    "pipelineId": "2026-10-03T11-54-17-522Z-eeccf575",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 70 frames: no problems found\n"
+      ],
+      "duration": 18,
+      "inputId": "3324c99e877751a196cf45aa5a22246f95d617bbb1f9df667cb7a2a8749aaf29"
+    },
+    "qa": {
+      "seconds": 18,
+      "frames": 540,
+      "changePerSecond": 0,
+      "heldSeconds": 15.76,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "7.6000s",
+        "8.5000s",
+        "9.5000s",
+        "11.5000s",
+        "17.6000s"
+      ],
+      "shuffled": [
+        "17.6000s",
+        "9.5000s",
+        "7.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "8.5000s",
+        "11.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "8f0f8442045cd1a6ea25b3866fb665fd4ce91b990c313c1a30d8442332fed3b6",
+        "1.5000s.png": "9ccb57999c2f25c5152f0a7cad18de4c2156e474a90779635d152eb03beaa51e",
+        "11.5000s.png": "4ee429e22a4daba9a3b9a91f7d8e255586e97403f95f5322fb460aecb5f5dc89",
+        "17.6000s.png": "4ee429e22a4daba9a3b9a91f7d8e255586e97403f95f5322fb460aecb5f5dc89",
+        "3.5000s.png": "6f4f36eae7226f62bb7dd8989c299345ce474e2dde6641fe2babcc5a8b830b4e",
+        "7.6000s.png": "c0f7274d31690545010247733c9fb87e82ab137a91528923bff3915404178370",
+        "8.5000s.png": "4ee429e22a4daba9a3b9a91f7d8e255586e97403f95f5322fb460aecb5f5dc89",
+        "9.5000s.png": "4ee429e22a4daba9a3b9a91f7d8e255586e97403f95f5322fb460aecb5f5dc89"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "partial-route-landscape",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/evidence/partial-route-landscape",
+    "pipelineId": "2026-10-03T11-54-25-746Z-c5770357",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 70 frames: no problems found\n"
+      ],
+      "duration": 18,
+      "inputId": "c2ef0e181d1fb3cd48d5bcad09b37c9eb7b023568572b78fc8676daddd6b35fc"
+    },
+    "qa": {
+      "seconds": 18,
+      "frames": 540,
+      "changePerSecond": 0,
+      "heldSeconds": 10,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "7.6000s",
+        "8.5000s",
+        "9.5000s",
+        "11.5000s",
+        "17.6000s"
+      ],
+      "shuffled": [
+        "17.6000s",
+        "9.5000s",
+        "7.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "8.5000s",
+        "11.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "9757a74320a2ebe2778ced5bbefe1d83b81f63307822f3e639a2f843136e0142",
+        "1.5000s.png": "1b1d1674035b79d349b4dd031cfabdf86fd8432aa1c24fac322659314e1a92ed",
+        "11.5000s.png": "d28410b2ad54aa2aa8810954982d8fdd0d6854f0e0789fb0b6af96c85c796cf8",
+        "17.6000s.png": "d28410b2ad54aa2aa8810954982d8fdd0d6854f0e0789fb0b6af96c85c796cf8",
+        "3.5000s.png": "978d5f8f848b5e62565eee849384e4e7c8d10fb257969ceb5218a8d4c488520e",
+        "7.6000s.png": "fa2c685435d0701e0beea80e2ce8a8e1571f8c303ec1e9b5587d042126f9fabc",
+        "8.5000s.png": "d28410b2ad54aa2aa8810954982d8fdd0d6854f0e0789fb0b6af96c85c796cf8",
+        "9.5000s.png": "d28410b2ad54aa2aa8810954982d8fdd0d6854f0e0789fb0b6af96c85c796cf8"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "partial-route-vertical",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/evidence/partial-route-vertical",
+    "pipelineId": "2026-10-03T11-54-33-838Z-bb6e0bc0",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 70 frames: no problems found\n"
+      ],
+      "duration": 18,
+      "inputId": "a727bc5b13b5a06df3118f60155d0f60a0ecdc6971c93397ad622bb7199d2b61"
+    },
+    "qa": {
+      "seconds": 18,
+      "frames": 540,
+      "changePerSecond": 0,
+      "heldSeconds": 12.73,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "7.6000s",
+        "8.5000s",
+        "9.5000s",
+        "11.5000s",
+        "17.6000s"
+      ],
+      "shuffled": [
+        "17.6000s",
+        "9.5000s",
+        "7.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "8.5000s",
+        "11.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "da25c47f24b16874080532f515ac512d196c1178f7d619631e052422953131d6",
+        "1.5000s.png": "3f183efd51dae88b8018add4e02fbb89aba79bc9d1401119869ad005afd067f6",
+        "11.5000s.png": "518b2349ed456b7ba8d5926336ef450e05515944be58105eafff4ca3af1258d5",
+        "17.6000s.png": "518b2349ed456b7ba8d5926336ef450e05515944be58105eafff4ca3af1258d5",
+        "3.5000s.png": "848ef96dac2ed3a850fa03a0750f4b316c9f698fd2e9ea2438bf973657e5302f",
+        "7.6000s.png": "035860d1f346df91c6b9d5b64df0497fe5630a5c2cabfccadc3e080948ee7718",
+        "8.5000s.png": "518b2349ed456b7ba8d5926336ef450e05515944be58105eafff4ca3af1258d5",
+        "9.5000s.png": "518b2349ed456b7ba8d5926336ef450e05515944be58105eafff4ca3af1258d5"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "partial-summary-landscape",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/evidence/partial-summary-landscape",
+    "pipelineId": "2026-10-03T11-54-41-623Z-b7056c73",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 70 frames: no problems found\n"
+      ],
+      "duration": 18,
+      "inputId": "848dcdd5464fe035b52d841aa2d649c3c7810eba6a21ca792c648c34944af181"
+    },
+    "qa": {
+      "seconds": 18,
+      "frames": 540,
+      "changePerSecond": 0,
+      "heldSeconds": 12.53,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "7.6000s",
+        "8.5000s",
+        "9.5000s",
+        "11.5000s",
+        "17.6000s"
+      ],
+      "shuffled": [
+        "17.6000s",
+        "9.5000s",
+        "7.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "8.5000s",
+        "11.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "c95bcb8b7ea4156803e7d5de872ac32b205a6c78ef14f0d24e1e2f5178ead9ea",
+        "1.5000s.png": "0d5fea5cba7b11cc3256bb201062a4780c904c2ade5f9fc1c6967c3a93b1774c",
+        "11.5000s.png": "2acd3f881dd713f6954dd21b8106625acf5641293fd6175717bf0c4881ac56a9",
+        "17.6000s.png": "2acd3f881dd713f6954dd21b8106625acf5641293fd6175717bf0c4881ac56a9",
+        "3.5000s.png": "e885c1f52da02af43a1437696ef39843987e3d0470cbb226f34ddb468a199336",
+        "7.6000s.png": "5d203849e8a9791aa7a3463964414ee4fbbc27b52ee4a2ff1ed029a0e3ce2baa",
+        "8.5000s.png": "2acd3f881dd713f6954dd21b8106625acf5641293fd6175717bf0c4881ac56a9",
+        "9.5000s.png": "2acd3f881dd713f6954dd21b8106625acf5641293fd6175717bf0c4881ac56a9"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "partial-summary-vertical",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/evidence/partial-summary-vertical",
+    "pipelineId": "2026-10-03T11-54-49-851Z-2fb68147",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 70 frames: no problems found\n"
+      ],
+      "duration": 18,
+      "inputId": "fcb2cb63f8766882f1cfa54cc1eb7129eb9c111a73353fb2a13c35e274935be3"
+    },
+    "qa": {
+      "seconds": 18,
+      "frames": 540,
+      "changePerSecond": 0,
+      "heldSeconds": 12.73,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "7.6000s",
+        "8.5000s",
+        "9.5000s",
+        "11.5000s",
+        "17.6000s"
+      ],
+      "shuffled": [
+        "17.6000s",
+        "9.5000s",
+        "7.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "8.5000s",
+        "11.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "fba9995257971c83ce452626c219414d52dda0087f6e16e2f12e358d5e651154",
+        "1.5000s.png": "0fab699458674535168e98db5786c9ec081a418dec87d63133ecafc72ee4a5a0",
+        "11.5000s.png": "8a87bd064a6be1a1cb04d6a6ee593dfbaf0a0bd4f46593a1936d81d2abcf1332",
+        "17.6000s.png": "8a87bd064a6be1a1cb04d6a6ee593dfbaf0a0bd4f46593a1936d81d2abcf1332",
+        "3.5000s.png": "2651eb92303c06864987f9cd648bf752735513c0794b8cf8b58aba053732d53e",
+        "7.6000s.png": "d9768859a8587051b5ef00c307fddf13cd21b9fafd2b9b18668f6d9a7fecbfe2",
+        "8.5000s.png": "8a87bd064a6be1a1cb04d6a6ee593dfbaf0a0bd4f46593a1936d81d2abcf1332",
+        "9.5000s.png": "8a87bd064a6be1a1cb04d6a6ee593dfbaf0a0bd4f46593a1936d81d2abcf1332"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "side-connection-landscape",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/evidence/side-connection-landscape",
+    "pipelineId": "2026-10-03T11-54-57-619Z-cc74eb4f",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 70 frames: no problems found\n"
+      ],
+      "duration": 18,
+      "inputId": "13b54474d1ad5287c5436120f703a94ffc9890fd779c41a46638acf54bf8f64e"
+    },
+    "qa": {
+      "seconds": 18,
+      "frames": 540,
+      "changePerSecond": 0,
+      "heldSeconds": 18,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "7.6000s",
+        "8.5000s",
+        "9.5000s",
+        "11.5000s",
+        "17.6000s"
+      ],
+      "shuffled": [
+        "17.6000s",
+        "9.5000s",
+        "7.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "8.5000s",
+        "11.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "d5c7db06be172ec5ff2c0679fe569d3e4cfbd9cfade09fee2e270f8316dff3a9",
+        "1.5000s.png": "bd57973bd061e2dfd36c9486882348f8d3b93a633761fe600b431a06e0f9417e",
+        "11.5000s.png": "ea561603ae179758a3fef9d62240424950ecfe37dd86a3fdee540cc078beb34f",
+        "17.6000s.png": "ea561603ae179758a3fef9d62240424950ecfe37dd86a3fdee540cc078beb34f",
+        "3.5000s.png": "63b02a5749bbf1acc9e4bbf51ffa6bca6afb3baab233dc3343d315ae65fb14a1",
+        "7.6000s.png": "748c40bf33ac8ae7101de6b4bcd5469f97ea2b5b72ff80b60fa8f056e86d637b",
+        "8.5000s.png": "ea561603ae179758a3fef9d62240424950ecfe37dd86a3fdee540cc078beb34f",
+        "9.5000s.png": "ea561603ae179758a3fef9d62240424950ecfe37dd86a3fdee540cc078beb34f"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "side-connection-vertical",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/evidence/side-connection-vertical",
+    "pipelineId": "2026-10-03T11-55-05-738Z-67f72a40",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 70 frames: no problems found\n"
+      ],
+      "duration": 18,
+      "inputId": "5a136e26603414b78fd1e70cb2d243715b98bfad96303d8e95db60fe0cb5ac71"
+    },
+    "qa": {
+      "seconds": 18,
+      "frames": 540,
+      "changePerSecond": 0,
+      "heldSeconds": 15.76,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "7.6000s",
+        "8.5000s",
+        "9.5000s",
+        "11.5000s",
+        "17.6000s"
+      ],
+      "shuffled": [
+        "17.6000s",
+        "9.5000s",
+        "7.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "8.5000s",
+        "11.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "d6cf74d868418bff2826fcfedd162f6dc82f75a2df532f038dce31af76b9564f",
+        "1.5000s.png": "ff2f7de5036c33fbf29deac3f22b0e276b28ebe151a44ee5e5d5f73bcd3a5a8b",
+        "11.5000s.png": "7cdd10ccdc526301a0276a99193fe21f5dd0b65f2285cdb11f9cdf66b8f55ba4",
+        "17.6000s.png": "7cdd10ccdc526301a0276a99193fe21f5dd0b65f2285cdb11f9cdf66b8f55ba4",
+        "3.5000s.png": "aecd3df37f69e6dceb59f5893e8e10e36728468e06ad01b6cbb5f12d1fe7722d",
+        "7.6000s.png": "f12e45de1e954710ec36a6060de978fe26ee150bef825c7187582452f8b3cc87",
+        "8.5000s.png": "7cdd10ccdc526301a0276a99193fe21f5dd0b65f2285cdb11f9cdf66b8f55ba4",
+        "9.5000s.png": "7cdd10ccdc526301a0276a99193fe21f5dd0b65f2285cdb11f9cdf66b8f55ba4"
+      },
+      "equal": true
+    }
+  }
+]

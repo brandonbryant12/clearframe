@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "passed-mechanical-checks",
+  "cases": [
+    {
+      "id": "inspection-orbit",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/build/renders/inspection-orbit-landscape/inspection-orbit",
+      "width": 960,
+      "height": 540,
+      "frames": 192,
+      "renderSeconds": 96.001132792,
+      "loop": false,
+      "loopTransformError": 27.944890022277832,
+      "loopSeam": 4.38599537037037,
+      "neighbourP95": 0.19675925925925927,
+      "finalHoldStep": 0.0027488425925925927,
+      "reloadPixelsMatch": true,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 0,
+        "maxDifference": 0,
+        "changedFraction": 0
+      },
+      "posterPixelSha256": "645f56dd6020eb94c1bf1850bd33acdae9ed91cf99b2e47109c153086d7d314a",
+      "reloadPixelSha256": "645f56dd6020eb94c1bf1850bd33acdae9ed91cf99b2e47109c153086d7d314a"
+    }
+  ],
+  "startedAt": "2026-10-03T11:47:37.311Z",
+  "revision": "2a11fc79a6dfde57ce23fa545d28a601ddfc2622",
+  "dirty": true,
+  "finishedAt": "2026-10-03T11:47:40.214Z"
+}

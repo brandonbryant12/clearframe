@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/specimens/another-view-landscape/build/pipeline/2026-10-03T11-54-09-374Z-5f8dc856/video.mp4",
+  "outputSha256": "9a11c33153f5ff197113edce0ff2756e0f785d93359c7e09f2f1f875a7612ee3",
+  "inputId": "8a57dcd98557e114e84e0bd63397b3b8a00fc60e22b1ee6db51f72296d226fea",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "mechanism: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "mechanism: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 239,
+      "time": 7.966666666666667,
+      "reasons": [
+        "mechanism: last frame",
+        "Before reading-hold"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 240,
+      "time": 8,
+      "reasons": [
+        "reading-hold: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 246,
+      "time": 8.2,
+      "reasons": [
+        "reading-hold: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 539,
+      "time": 17.966666666666665,
+      "reasons": [
+        "reading-hold: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

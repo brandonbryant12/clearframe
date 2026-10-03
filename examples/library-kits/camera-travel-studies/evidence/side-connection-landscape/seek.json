@@ -1,0 +1,33 @@
+{
+  "sequence": [
+    "0.5000s",
+    "1.5000s",
+    "3.5000s",
+    "7.6000s",
+    "8.5000s",
+    "9.5000s",
+    "11.5000s",
+    "17.6000s"
+  ],
+  "shuffled": [
+    "17.6000s",
+    "9.5000s",
+    "7.6000s",
+    "1.5000s",
+    "0.5000s",
+    "3.5000s",
+    "8.5000s",
+    "11.5000s"
+  ],
+  "hashes": {
+    "0.5000s.png": "d5c7db06be172ec5ff2c0679fe569d3e4cfbd9cfade09fee2e270f8316dff3a9",
+    "1.5000s.png": "bd57973bd061e2dfd36c9486882348f8d3b93a633761fe600b431a06e0f9417e",
+    "11.5000s.png": "ea561603ae179758a3fef9d62240424950ecfe37dd86a3fdee540cc078beb34f",
+    "17.6000s.png": "ea561603ae179758a3fef9d62240424950ecfe37dd86a3fdee540cc078beb34f",
+    "3.5000s.png": "63b02a5749bbf1acc9e4bbf51ffa6bca6afb3baab233dc3343d315ae65fb14a1",
+    "7.6000s.png": "748c40bf33ac8ae7101de6b4bcd5469f97ea2b5b72ff80b60fa8f056e86d637b",
+    "8.5000s.png": "ea561603ae179758a3fef9d62240424950ecfe37dd86a3fdee540cc078beb34f",
+    "9.5000s.png": "ea561603ae179758a3fef9d62240424950ecfe37dd86a3fdee540cc078beb34f"
+  },
+  "equal": true
+}

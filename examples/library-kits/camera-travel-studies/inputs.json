@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "basis": "Original illustrative scenarios. Camera moves, counts and dimensions encode no measured quantities. Portrait truck uses a narrower original arrangement and shorter travel.",
+  "cases": [
+    {
+      "id": "side-connection",
+      "mechanism": "inspection-orbit",
+      "subject": "System inspection",
+      "title": "Inspect the side connection",
+      "source": "Illustrative assembly; no measured capacity.",
+      "labels": {
+        "opening": "Begin with one view",
+        "orbit": "Move around the assembly",
+        "inspection": "Inspect the side channel"
+      }
+    },
+    {
+      "id": "another-view",
+      "mechanism": "inspection-orbit",
+      "subject": "Methods review metaphor",
+      "title": "Check another point of view",
+      "source": "Invented model; no research findings.",
+      "labels": {
+        "opening": "Begin with one view",
+        "orbit": "Change the viewing angle",
+        "inspection": "Keep the structure fixed"
+      }
+    },
+    {
+      "id": "partial-route",
+      "mechanism": "parallax-truck",
+      "subject": "Inspection sightline",
+      "title": "A screen hides part of the route",
+      "source": "Illustrative geometry; not an engineered model.",
+      "labels": {
+        "opening": "A partially hidden connection",
+        "truck": "Shift the sightline",
+        "inspection": "Some occlusion remains"
+      }
+    },
+    {
+      "id": "partial-summary",
+      "mechanism": "parallax-truck",
+      "subject": "Reporting metaphor",
+      "title": "Summaries leave things out",
+      "source": "Illustrative metaphor; no reporting data.",
+      "labels": {
+        "opening": "A partial view",
+        "truck": "Shift the view",
+        "inspection": "Still a partial view"
+      }
+    }
+  ]
+}

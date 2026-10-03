@@ -1,0 +1,506 @@
+[
+  {
+    "name": "another-view-landscape",
+    "videoSha256": "9a11c33153f5ff197113edce0ff2756e0f785d93359c7e09f2f1f875a7612ee3",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/0.1s.png",
+        "sha256": "19ffffda7d2c7ff814db234b1a95379fe03a7e5b79ef1327ca74d42878c077d2"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/1.2s.png",
+        "sha256": "618f6b70d72ac05bc3a16d3f34e42ac34b66a0ed1bb1153763d3d8f9f9c7d993"
+      },
+      {
+        "time": 1.4,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/1.4s.png",
+        "sha256": "6b059296f628eb2de9d509200dd042ad130ff0451ed4e719e2325daa22978056"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/3.6s.png",
+        "sha256": "dfb91398b73d5be8ae0157be8a0019ee2a88cd688b92802e9f1332e568b0eb6a"
+      },
+      {
+        "time": 5.8,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/5.8s.png",
+        "sha256": "8e794637c3a1b29cb5f25457d9c71d3c5760df8eae6c63c58d0b915a5eee7678"
+      },
+      {
+        "time": 6.1,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/6.1s.png",
+        "sha256": "029d51b430b4018423d93ab709f996dbc241daa41dffc79e409034e981d3128e"
+      },
+      {
+        "time": 7.966667,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/7.96667s.png",
+        "sha256": "4528beec5862f34c96e4ffd6612de10b5eb101c7a306076ffc180f92438ecc1b"
+      },
+      {
+        "time": 8.033333,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/8.03333s.png",
+        "sha256": "8a64fde10d5f4b985101bdd314d6303d46f144af2dea4ab1414de50d8923c9b4"
+      },
+      {
+        "time": 8.3,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/8.3s.png",
+        "sha256": "85f7f0f4cd2f49e9bc323e559276907b0905a637a814387c8eac7e651b43c100"
+      },
+      {
+        "time": 12.0,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/12s.png",
+        "sha256": "c3e7d9fb93b09d235ebada284972523b926d64e46fc73c14d956011f13b8861c"
+      },
+      {
+        "time": 17.9,
+        "path": "evidence/independent-review/native-frames/another-view-landscape/17.9s.png",
+        "sha256": "654edf96618ca00b9417fd343e43ecac43b283e56ee2d1422aa2b0e77535c222"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "another-view-vertical",
+    "videoSha256": "0dedf5da9d33ad38a223dde1f128719ef9216e1585cc7e069d39d6d9a7ac5674",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/0.1s.png",
+        "sha256": "77bc33ab3a3bfff8333c54b75b055717732fc01a1f9aec6c37bbcde7e53b4635"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/1.2s.png",
+        "sha256": "96a51fe8fcef4e50f248691a7c5297b84190002df450a53a5286f07814be0b47"
+      },
+      {
+        "time": 1.4,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/1.4s.png",
+        "sha256": "ef5b9a4eef01969beafe6ed331ef3f0ab8eddee15b458ae8b0c20ca2b184f504"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/3.6s.png",
+        "sha256": "532198d96b938c722dd0294910e41be1b53c18351892d89b85a20a70b2e6982e"
+      },
+      {
+        "time": 5.8,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/5.8s.png",
+        "sha256": "8fcc6e979a8ab225fe4bebded4d13df1fe8929f70c2082fc45de64eb55be5453"
+      },
+      {
+        "time": 6.1,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/6.1s.png",
+        "sha256": "1bc8eae0e2e5b29ec01801cd6335b60c944a855294fa631002c425d5a93d7aa1"
+      },
+      {
+        "time": 7.966667,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/7.96667s.png",
+        "sha256": "b7adf848c7085e1a144342c09f069c5230aa43b30210d5cc6322342c01d6f0ff"
+      },
+      {
+        "time": 8.033333,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/8.03333s.png",
+        "sha256": "a94d5f23d9475ebdd7d2d3c778c63fbfd3e101692082df645080eda758969256"
+      },
+      {
+        "time": 8.3,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/8.3s.png",
+        "sha256": "42ce942e0fdf1bbe1a30e49216a7739e32077969de83fe82022a475f8ded2160"
+      },
+      {
+        "time": 12.0,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/12s.png",
+        "sha256": "f49ed3aafa3811f96f609ec3045a75a2bbc2332fd32c660cb41eb4961bb2c2b6"
+      },
+      {
+        "time": 17.9,
+        "path": "evidence/independent-review/native-frames/another-view-vertical/17.9s.png",
+        "sha256": "ce97ae415613124e2c9db999d48f02bb28c5cd4cdc0df9d44ab38dd70adda27d"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "partial-route-landscape",
+    "videoSha256": "06574a60c75cf34e030ff9afed41de1c1574154b75de493f6cba4dfe27442d1e",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/0.1s.png",
+        "sha256": "3ed7d4349226e64a722a5402ad2f45edbc8f9a4689af541e44f0cabd550d29c9"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/1.2s.png",
+        "sha256": "9a5d0921baa398112f4c3aa0a1f80908f8c5cbf91a8807027aa293d23bba4bc7"
+      },
+      {
+        "time": 1.4,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/1.4s.png",
+        "sha256": "8d1206f3f070fbc33b094f2959fce628954aaa4a9c36839e26f57130a7f6a305"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/3.6s.png",
+        "sha256": "039bf8f231a240e0ebed89528c382f1ee33e3b6f7f54d6d9e7cb9153033337ce"
+      },
+      {
+        "time": 5.8,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/5.8s.png",
+        "sha256": "9305696df3f78ef7d991f829a475bf3e21a99524f63fe4521d92d9c728aedc79"
+      },
+      {
+        "time": 6.1,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/6.1s.png",
+        "sha256": "9e10c002613fa6a9af0e9151470df3484a52557b8b4b1481edb9ee50d7a275d6"
+      },
+      {
+        "time": 7.966667,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/7.96667s.png",
+        "sha256": "67837d12db34f0699bf33e4a8bd526b382334df530827e7010a9b28cbd8460ca"
+      },
+      {
+        "time": 8.033333,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/8.03333s.png",
+        "sha256": "d8cb15d28abc2adb05f10640e8afc096d2cac0d4cabad2b8ba57c5dfd1134c1e"
+      },
+      {
+        "time": 8.3,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/8.3s.png",
+        "sha256": "9912a4daa487a18d2c9f1a2acf8e579298a02ec44c3ff70f22134d3edebbf2d7"
+      },
+      {
+        "time": 12.0,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/12s.png",
+        "sha256": "87cacc7d951c27aab4758a580fb37e597ab4cc2065eda255b62161581f863153"
+      },
+      {
+        "time": 17.9,
+        "path": "evidence/independent-review/native-frames/partial-route-landscape/17.9s.png",
+        "sha256": "dbceeb69d3daa18142a2f403a7b1bb249f0a67ad0c3ffd05bd5bb87c837902f0"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "partial-route-vertical",
+    "videoSha256": "c6ce3c44884856f7f57d177f821adbbe8b8c3f355238895c3473ba643eb24614",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/0.1s.png",
+        "sha256": "35098a84a8926ccba4e811fedfcb43bdbf3f60b1e443e7e3037895cd00866eba"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/1.2s.png",
+        "sha256": "01daa314dfc90c7f0f1cf473d453f762766c660b6ea3886eb201836da36d2f8c"
+      },
+      {
+        "time": 1.4,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/1.4s.png",
+        "sha256": "14dd3bdcf17658f5782f3d231a3a4bdf7a260e46a2bf33a3bd001e6f856d7a2d"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/3.6s.png",
+        "sha256": "49e59dd43b1b5e6dfcea61976af21a341e318385eef1e181119f0283f87b2468"
+      },
+      {
+        "time": 5.8,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/5.8s.png",
+        "sha256": "b89c54e5cf5152b9ac485b9b10e0d3b8e930385c21b0db074bb56983ea59e6da"
+      },
+      {
+        "time": 6.1,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/6.1s.png",
+        "sha256": "c0f73b2b8709a4fdfc55c7b2a97367ae9c03488412ab8ac81f14985b3944fb50"
+      },
+      {
+        "time": 7.966667,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/7.96667s.png",
+        "sha256": "1e9aa41f9667fe209403f2f9641d9e4d671879292a8012b0ea264c387ed9c670"
+      },
+      {
+        "time": 8.033333,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/8.03333s.png",
+        "sha256": "c35b8cf75434a8767af90eb9c0a41380cc13fe2a8568bcce1757500d0cb1a5e1"
+      },
+      {
+        "time": 8.3,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/8.3s.png",
+        "sha256": "8d860f45b97176768157fa84e8bd09a69f2c6355b72f3b64c9231c55360db40f"
+      },
+      {
+        "time": 12.0,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/12s.png",
+        "sha256": "a576d6bffc41aa1df698c2b1224795fb39ce77a35192de131d12e1a636839ea0"
+      },
+      {
+        "time": 17.9,
+        "path": "evidence/independent-review/native-frames/partial-route-vertical/17.9s.png",
+        "sha256": "168bcc9e46c3d0dcfefdfab3cc407becc612ef84bd01d845b30e3d1183c3e504"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "partial-summary-landscape",
+    "videoSha256": "f06af2297a8f05bb79f4450bded6dc77291bfe37ccea4e737aa3b58ab5fee7e2",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/0.1s.png",
+        "sha256": "94ed460ea52a59be6bd0846ced46adc88eb281798598b4abcbbacf970ee67c6d"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/1.2s.png",
+        "sha256": "388246d5097e432c3b55dfe1023294f5b1893b104c5126be3f4aff6ef29cab41"
+      },
+      {
+        "time": 1.4,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/1.4s.png",
+        "sha256": "eb80881f96912d8c17b0aa5e008e26b12747ef5cb810c69ef6896df3e9805d56"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/3.6s.png",
+        "sha256": "2521ac03b53a2461d0a69c1b18274f9f3e901209e7c33bb1de54f524d8b75b2e"
+      },
+      {
+        "time": 5.8,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/5.8s.png",
+        "sha256": "a4a49c959b215a3944c0d490e4f1d3dc458bda5459775fcf9e2461783d250b37"
+      },
+      {
+        "time": 6.1,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/6.1s.png",
+        "sha256": "4500200b42609d237eaec2982d9b2cffb6627fe5c9ce076104802fad6fdbb6c3"
+      },
+      {
+        "time": 7.966667,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/7.96667s.png",
+        "sha256": "de8c8e29399510daf05a2b9226b795a374d8023982f1b98027964a0bb12daaf5"
+      },
+      {
+        "time": 8.033333,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/8.03333s.png",
+        "sha256": "3927c04be86fd753dcd27b3ab0e836cb9198dea6ddd22ca37d3f27e66dc0cef4"
+      },
+      {
+        "time": 8.3,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/8.3s.png",
+        "sha256": "e253deb6244322e4c5326416936e16fc2771220f4428cce6c6f1e3f6de15485a"
+      },
+      {
+        "time": 12.0,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/12s.png",
+        "sha256": "be55f40f6d71f4ab04d6df0d29f6d8fb1be3ba25d2e1ab807ce1470beb66b7c0"
+      },
+      {
+        "time": 17.9,
+        "path": "evidence/independent-review/native-frames/partial-summary-landscape/17.9s.png",
+        "sha256": "1d9245b06748622fe09a008f0bf547ec0106a681a9eba1f4a0052a9f120f2c1c"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "partial-summary-vertical",
+    "videoSha256": "142accf98a7235556d799749d6ae526c4de166dda361c2362720d8aba445cc2d",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/0.1s.png",
+        "sha256": "5f9e52d6220a66e496b34b8bcf454d4a5f0e3d67556ba16959b24bae29176619"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/1.2s.png",
+        "sha256": "68ef4236bcbad26239d30ba7459575f094e6f26210438294603b66f510386211"
+      },
+      {
+        "time": 1.4,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/1.4s.png",
+        "sha256": "a9394fdca789bf6121ea278ea78a61e9e780e60c10ee1178d8ea7fbab541f43e"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/3.6s.png",
+        "sha256": "c3c6f22290fb51382d7235950ad8848830a00676826d7a28c2c79cb46f6a1b0f"
+      },
+      {
+        "time": 5.8,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/5.8s.png",
+        "sha256": "1dedae5ee244b64a44380cbe149b58e962e12606f973707cd86e971da2fa39f4"
+      },
+      {
+        "time": 6.1,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/6.1s.png",
+        "sha256": "55fbfa0f732d2ee7a81af7390a89d5376a2e546106470e0157162ac7e034309c"
+      },
+      {
+        "time": 7.966667,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/7.96667s.png",
+        "sha256": "899c345fc56ec91c87c3122106906fd6af8596bfa57d01e03d9098bb688fd967"
+      },
+      {
+        "time": 8.033333,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/8.03333s.png",
+        "sha256": "03af5423a1afb65f889b3d9ef0555c2c8061c5beacdbd7365171c5d35be7ef60"
+      },
+      {
+        "time": 8.3,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/8.3s.png",
+        "sha256": "c5a1314cf85981cfec471aac4ae617d7c1d028e62d17a51edef09a8ed13bd770"
+      },
+      {
+        "time": 12.0,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/12s.png",
+        "sha256": "0a01b3a2b81d59787ffd4fa9d8c3faf581dc626110a9282dbdb3d10cf2bd28fd"
+      },
+      {
+        "time": 17.9,
+        "path": "evidence/independent-review/native-frames/partial-summary-vertical/17.9s.png",
+        "sha256": "84ff5da19c7972472675967391246d9b466bc014ec8ac8d4005f2778dedc2ab0"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "side-connection-landscape",
+    "videoSha256": "c94490035f2401910addc6229bd51592592b15e8408e019ffd8ba418b235b8b9",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/0.1s.png",
+        "sha256": "27af793f868597e0c94a1340e1d951bf4353ad6aef24f4e185e528a34fad3b02"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/1.2s.png",
+        "sha256": "e86b43f13ac1b1111880b352ec69f66723e444887d7b889cbec2757aabecd289"
+      },
+      {
+        "time": 1.4,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/1.4s.png",
+        "sha256": "45b2f2e4429ecc24ff211b393ba49100f7733b6c24fd86b0a683e5db5f579dfb"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/3.6s.png",
+        "sha256": "eaf2ca7b99b12f0c4554d21028e055858e913cbb6ad2e9d913ad6c59cd5746a9"
+      },
+      {
+        "time": 5.8,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/5.8s.png",
+        "sha256": "c56daeeaf17b2c5d32d430baec02fc73ad52276ba0b339af9fe8085e9d6b3a6c"
+      },
+      {
+        "time": 6.1,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/6.1s.png",
+        "sha256": "e1c7118b8dc8a1dd03c71b441579d3c30856c54e818e1c7d194fc5292f50487a"
+      },
+      {
+        "time": 7.966667,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/7.96667s.png",
+        "sha256": "254a8189b85eebffddf8d94a55eb7277a5fa6070cf799c53e213a8d60c17e7d5"
+      },
+      {
+        "time": 8.033333,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/8.03333s.png",
+        "sha256": "7e0477672b9b74b16d09d4ca9af0ea3d23c33402856b83279dc37edc21d6584a"
+      },
+      {
+        "time": 8.3,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/8.3s.png",
+        "sha256": "68027b927e582c020b877cc5032c2dbb6c98eaa3f42fb1e9a6ce1ee9674fdb68"
+      },
+      {
+        "time": 12.0,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/12s.png",
+        "sha256": "26b826cef1d2ab82dd5378b043304501b11266ad5315088ff88b86f97488b5a3"
+      },
+      {
+        "time": 17.9,
+        "path": "evidence/independent-review/native-frames/side-connection-landscape/17.9s.png",
+        "sha256": "f915bbc18c77997b9bd31acaeb92293153c036154e4211dce59fba4505b16bd8"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "side-connection-vertical",
+    "videoSha256": "d94b873f69f6949d83835b6ccebfee136572ad29ee635fae7e7666803eb4e04e",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/0.1s.png",
+        "sha256": "e4d9383ed19ad927846faf13799aacbcd4e514b4863557076a11439ed5de178a"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/1.2s.png",
+        "sha256": "bae233e656da0947b47f44fe33d89290deb1fd8ceab08cb8aab69999410cea25"
+      },
+      {
+        "time": 1.4,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/1.4s.png",
+        "sha256": "c8e098dd7fc42c5a8195ba7d34e1cda34460d6a7ec2d34b7f609fe885b1cb1b0"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/3.6s.png",
+        "sha256": "e2b0a3d3def076c2b83cd29b391c2f0721c097aa7cdd9563c71eb5bbcf02a5ec"
+      },
+      {
+        "time": 5.8,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/5.8s.png",
+        "sha256": "55c34bbda02a4378de96667554e95235affd02f6752595f23941d47182836415"
+      },
+      {
+        "time": 6.1,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/6.1s.png",
+        "sha256": "aca3a81717736b45e38285f162ee8d8e5662eb9ca67e74ce11c6a95e651b0c3c"
+      },
+      {
+        "time": 7.966667,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/7.96667s.png",
+        "sha256": "8bff333e236e42934bfc1a1822254f285039a477a5d33f58d1170c88e3ad2973"
+      },
+      {
+        "time": 8.033333,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/8.03333s.png",
+        "sha256": "baed56675c245065f94a47fda8ac6341f5fd185b3dca7b5836766b1ac9d43010"
+      },
+      {
+        "time": 8.3,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/8.3s.png",
+        "sha256": "7c6d80988fb762fedc21cc5100f6a8af0574da9b82f74dc44436987a861ea5e3"
+      },
+      {
+        "time": 12.0,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/12s.png",
+        "sha256": "19574c2cc4450573d19a78a48930067a5c800e5a643b3cfcb62b63b36e76ac69"
+      },
+      {
+        "time": 17.9,
+        "path": "evidence/independent-review/native-frames/side-connection-vertical/17.9s.png",
+        "sha256": "7475d594fb29dcc275144199f415d6bd27e6c28234a754b1cd23bb5f94e562de"
+      }
+    ],
+    "visuallyInspected": true
+  }
+]

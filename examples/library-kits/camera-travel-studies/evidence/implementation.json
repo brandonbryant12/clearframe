@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "inputSha256": "575b16ac3ffe663dad0da93fd08d4fc14123ed09fbce5c99e49b83f5c8b25b16",
+  "sourceFiles": [
+    {
+      "path": "scripts/blender/camera_rig.py",
+      "sha256": "8b69c6bcfc913a7fe6e3a3013404422fb73463cc7ab4948ce84fce2ee932ffe4"
+    },
+    {
+      "path": "scripts/blender/artkit.py",
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea"
+    },
+    {
+      "path": "scripts/blender/render.py",
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294"
+    },
+    {
+      "path": "engine/lib/sculptures.mjs",
+      "sha256": "34360ba6248f0ed4fa1ea1480f1738322d4d7363e58fc458ab7ea2a24b8efba9"
+    },
+    {
+      "path": "fframes/job.mjs",
+      "sha256": "de4a304de1002da87812e0434aaa92362847e8d8369e5f439c2244c1b5959ec8"
+    },
+    {
+      "path": "fframes/native/src/media.rs",
+      "sha256": "b5fc345642f8c0d31bd50a9976ff063ed87cf58370d90b0ee57d3051ce1779fe"
+    },
+    {
+      "path": "library/sculptures/inspection-orbit.py",
+      "sha256": "6e57373a31cdbd03317e480efcea7063b6813f1f1a88cd51d9d0cc5618dda006"
+    },
+    {
+      "path": "library/sculptures/inspection-orbit.json",
+      "sha256": "997d329c388e866598c9af7700e8b06fc3c6f7f5b7602e16a181352a8d0a5c50"
+    },
+    {
+      "path": "library/sculptures/parallax-truck.py",
+      "sha256": "bf21c28b125c56cfb25533c144132f94c7bee88170615d2d38b8bb6931148c55"
+    },
+    {
+      "path": "library/sculptures/parallax-truck.json",
+      "sha256": "2f0fad31e63c1049226477cea0813eb4b879fdf26e4c545315c17e306c60dfcc"
+    }
+  ]
+}

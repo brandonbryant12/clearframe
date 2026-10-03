@@ -1608,7 +1608,7 @@
       "category": "Camera / motion",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "partial prototype; fixed orthographic copy-safe fitting and two-format baked-frame checks; moving endpoints and general presets pending",
+      "readiness": "Partial prototype: authored landscape/portrait framing for fixed, pullback, orbit and truck examples with all-frame bounds checks; arbitrary-ratio automatic reframing, continuous playback and master acceptance remain open",
       "effort": "M",
       "sourceIds": [
         "S13",
@@ -1621,7 +1621,7 @@
         "aspect ratio",
         "endpoints"
       ],
-      "existing": "artkit.fit_camera reserves explicit normalized subject/copy bounds; physical-mechanisms verifies all baked frames in four source variants and reviews separate native landscape/vertical layouts. camera_rig.fit_perspective now fits independent landscape/portrait endpoints for three camera studies; arbitrary aspect reframing remains open.",
+      "existing": "artkit.fit_camera reserves explicit normalized subject/copy bounds; physical-mechanisms verifies all baked frames in four source variants and reviews separate native landscape/vertical layouts. camera_rig.fit_perspective now fits independent landscape/portrait endpoints for three camera studies; arbitrary aspect reframing remains open. camera-travel-studies includes a portrait-specific narrower truck scene and shorter travel with all-frame projected bounds; arbitrary automatic reframing remains open.",
       "guardrail": "A crop is not verified portrait composition; review each format.",
       "reuse": [
         "all formats"
@@ -1814,7 +1814,7 @@
       "category": "Tool",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "partial prototype; orbit, truck and broader rig presets remain",
+      "readiness": "Native/Blender prototype: deterministic pullback, focus, bounded analytic orbit and equal-translation truck paths with separately reviewed landscape/vertical examples; continuous playback, master acceptance and broader chase/visibility solving remain open",
       "effort": "L",
       "sourceIds": [
         "S06",
@@ -1830,7 +1830,7 @@
         "seed",
         "limits"
       ],
-      "existing": "camera_rig.py supplies complete deterministic poses, a Blender bake adapter and perspective endpoint fitting. Two pullbacks and a focus preset are retained in camera-studies; broader camera presets remain open.",
+      "existing": "scripts/blender/camera_rig.py supplies complete deterministic poses, a Blender bake adapter, perspective endpoint fitting and v2 analytic orbit/truck presets. camera-studies and camera-travel-studies retain editable scenes, bounded path/optics checks and native captions; see docs/camera-studies.md.",
       "guardrail": "Shared/project kits stay JSON-only. Bake transforms and avoid live random state or uncached physics.",
       "reuse": [
         "all 3D assets"
@@ -1843,7 +1843,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Partial implementation: fourteen recipe contracts, custom pose timing, safe clip-selection plans and retained drafts; physical-mechanisms and camera-studies bind native captions to source phases; general automatic cue integration remains open",
+      "readiness": "Partial implementation: sixteen recipe contracts, custom pose timing, safe clip-selection plans and retained drafts; physical-mechanisms and camera-studies bind native captions to source phases; general automatic cue integration remains open",
       "effort": "M",
       "sourceIds": [
         "S02",
@@ -1860,7 +1860,7 @@
         "hold",
         "loop endpoints"
       ],
-      "existing": "engine/lib/motion-phases.mjs; sculpture --phase-seconds; fourteen recipe contracts; examples/motion-phases gate/bridge and physical-mechanisms/camera-studies source-bound native cues and explicit still holds",
+      "existing": "engine/lib/motion-phases.mjs; sculpture --phase-seconds; sixteen recipe contracts; examples/motion-phases gate/bridge and physical-mechanisms/camera-studies/camera-travel-studies source-bound native cues and explicit still holds",
       "guardrail": "Distinguish a clip playback-rate change from a new simulation or exact source-time map.",
       "reuse": [
         "all mixed-media scenes"

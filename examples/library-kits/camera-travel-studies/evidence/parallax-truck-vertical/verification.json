@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "passed-mechanical-checks",
+  "cases": [
+    {
+      "id": "parallax-truck",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/build/renders/parallax-truck-vertical/parallax-truck",
+      "width": 540,
+      "height": 960,
+      "frames": 192,
+      "renderSeconds": 84.73027637500002,
+      "loop": false,
+      "loopTransformError": 2.200000047683716,
+      "loopSeam": 6.800202546296297,
+      "neighbourP95": 0.5503472222222222,
+      "finalHoldStep": 0.002025462962962963,
+      "reloadPixelsMatch": true,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 0,
+        "maxDifference": 0,
+        "changedFraction": 0
+      },
+      "posterPixelSha256": "39318591958a3a2b32cdf36c2463bf941ec6a10e5e776a3bd0a6ae5ec6c83e18",
+      "reloadPixelSha256": "39318591958a3a2b32cdf36c2463bf941ec6a10e5e776a3bd0a6ae5ec6c83e18"
+    }
+  ],
+  "startedAt": "2026-10-03T11:52:23.324Z",
+  "revision": "2a11fc79a6dfde57ce23fa545d28a601ddfc2622",
+  "dirty": true,
+  "finishedAt": "2026-10-03T11:52:26.028Z"
+}

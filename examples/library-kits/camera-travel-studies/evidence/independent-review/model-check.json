@@ -1,0 +1,15 @@
+{
+  "status": "pass",
+  "pathCases": 288,
+  "assertions": 1308504,
+  "negativeCases": 53,
+  "version1ExactSampleComparisons": 2412,
+  "baselineCommit": "2a11fc79a6dfde57ce23fa545d28a601ddfc2622",
+  "baselineSourceSha256": "3317be57d0c11bff11670902426460650ec639f7baeb98777a8af076640288d6",
+  "sourceSha256": "8b69c6bcfc913a7fe6e3a3013404422fb73463cc7ab4948ce84fce2ee932ffe4",
+  "tolerance": {
+    "relative": 2e-12,
+    "absoluteWorldUnits": 2e-10
+  },
+  "scope": "Pure path formulas, constraints, holds, serialization, mutation isolation and exact v1 baseline comparison; no Blender transforms or encoded pixels"
+}

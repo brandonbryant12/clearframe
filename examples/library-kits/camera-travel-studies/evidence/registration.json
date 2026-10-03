@@ -1,0 +1,1194 @@
+[
+  {
+    "name": "side-connection-landscape",
+    "sourceClipSha256": "d0a17ac45fd42adbc47030c99f309f93dad0d91d56c1ea659fb69e77695459b7",
+    "videoSha256": "c94490035f2401910addc6229bd51592592b15e8408e019ffd8ba418b235b8b9",
+    "storyboardSha256": "940ee541c0f2bd87eaae9c7b0356887e7a864b6d32f4884a221d18ace6fadc39",
+    "checkerSha256": "db2523e3241a9ddb7ed0d886d6446621385848e78039b42a95d8c2fba77ea60b",
+    "samples": [
+      {
+        "seconds": 0.0,
+        "sourceFrame": 0,
+        "nativeFrame": 0,
+        "meanAbsoluteRgb": 0.7599351671006944
+      },
+      {
+        "seconds": 0.5,
+        "sourceFrame": 12,
+        "nativeFrame": 15,
+        "meanAbsoluteRgb": 0.7630750868055556
+      },
+      {
+        "seconds": 1.0,
+        "sourceFrame": 24,
+        "nativeFrame": 30,
+        "meanAbsoluteRgb": 0.7602335611979166
+      },
+      {
+        "seconds": 1.5,
+        "sourceFrame": 36,
+        "nativeFrame": 45,
+        "meanAbsoluteRgb": 0.7841050889756944
+      },
+      {
+        "seconds": 2.0,
+        "sourceFrame": 48,
+        "nativeFrame": 60,
+        "meanAbsoluteRgb": 0.8114217122395834
+      },
+      {
+        "seconds": 2.5,
+        "sourceFrame": 60,
+        "nativeFrame": 75,
+        "meanAbsoluteRgb": 0.8044637044270834
+      },
+      {
+        "seconds": 3.0,
+        "sourceFrame": 72,
+        "nativeFrame": 90,
+        "meanAbsoluteRgb": 0.8660346137152778
+      },
+      {
+        "seconds": 3.5,
+        "sourceFrame": 84,
+        "nativeFrame": 105,
+        "meanAbsoluteRgb": 0.9165106879340278
+      },
+      {
+        "seconds": 4.0,
+        "sourceFrame": 96,
+        "nativeFrame": 120,
+        "meanAbsoluteRgb": 0.9072536892361112
+      },
+      {
+        "seconds": 4.5,
+        "sourceFrame": 108,
+        "nativeFrame": 135,
+        "meanAbsoluteRgb": 0.8877427842881944
+      },
+      {
+        "seconds": 5.0,
+        "sourceFrame": 120,
+        "nativeFrame": 150,
+        "meanAbsoluteRgb": 0.8865017361111112
+      },
+      {
+        "seconds": 5.5,
+        "sourceFrame": 132,
+        "nativeFrame": 165,
+        "meanAbsoluteRgb": 0.8677232530381944
+      },
+      {
+        "seconds": 6.0,
+        "sourceFrame": 144,
+        "nativeFrame": 180,
+        "meanAbsoluteRgb": 0.8519015842013888
+      },
+      {
+        "seconds": 6.5,
+        "sourceFrame": 156,
+        "nativeFrame": 195,
+        "meanAbsoluteRgb": 0.8559977213541666
+      },
+      {
+        "seconds": 7.0,
+        "sourceFrame": 168,
+        "nativeFrame": 210,
+        "meanAbsoluteRgb": 0.8551296657986112
+      },
+      {
+        "seconds": 7.5,
+        "sourceFrame": 180,
+        "nativeFrame": 225,
+        "meanAbsoluteRgb": 0.8550347222222222
+      },
+      {
+        "seconds": 8,
+        "sourceFrame": 191,
+        "nativeFrame": 240,
+        "meanAbsoluteRgb": 0.8540988498263888
+      },
+      {
+        "seconds": 8.5,
+        "sourceFrame": 191,
+        "nativeFrame": 255,
+        "meanAbsoluteRgb": 0.8093329535590278
+      },
+      {
+        "seconds": 10,
+        "sourceFrame": 191,
+        "nativeFrame": 300,
+        "meanAbsoluteRgb": 0.8093668619791666
+      },
+      {
+        "seconds": 14,
+        "sourceFrame": 191,
+        "nativeFrame": 420,
+        "meanAbsoluteRgb": 0.8093668619791666
+      },
+      {
+        "seconds": 17.5,
+        "sourceFrame": 191,
+        "nativeFrame": 525,
+        "meanAbsoluteRgb": 0.8092922634548612
+      }
+    ],
+    "maximumMeanAbsoluteRgb": 0.9165106879340278,
+    "threshold": 1.5,
+    "passed": true,
+    "crop": [
+      0.08,
+      0.35,
+      0.84,
+      0.46
+    ],
+    "scaledCrop": [
+      256,
+      192
+    ],
+    "limits": "Subject-region color registration at exact shared-clock samples; not exhaustive pixels, OCR or subjective playback."
+  },
+  {
+    "name": "side-connection-vertical",
+    "sourceClipSha256": "ee1fb2ec7550e5a7fcc8c18c1c6ada5c79ceb2e9a70988b26fcadfc1fca9fd6d",
+    "videoSha256": "d94b873f69f6949d83835b6ccebfee136572ad29ee635fae7e7666803eb4e04e",
+    "storyboardSha256": "f902f0c8b5f3b4c2cdc7a5fb689e44ae911f454606fc1a7e6b1829ee9a93a5c5",
+    "checkerSha256": "db2523e3241a9ddb7ed0d886d6446621385848e78039b42a95d8c2fba77ea60b",
+    "samples": [
+      {
+        "seconds": 0.0,
+        "sourceFrame": 0,
+        "nativeFrame": 0,
+        "meanAbsoluteRgb": 1.4740668402777777
+      },
+      {
+        "seconds": 0.5,
+        "sourceFrame": 12,
+        "nativeFrame": 15,
+        "meanAbsoluteRgb": 1.473876953125
+      },
+      {
+        "seconds": 1.0,
+        "sourceFrame": 24,
+        "nativeFrame": 30,
+        "meanAbsoluteRgb": 1.4742092556423612
+      },
+      {
+        "seconds": 1.5,
+        "sourceFrame": 36,
+        "nativeFrame": 45,
+        "meanAbsoluteRgb": 1.4730495876736112
+      },
+      {
+        "seconds": 2.0,
+        "sourceFrame": 48,
+        "nativeFrame": 60,
+        "meanAbsoluteRgb": 1.4552408854166667
+      },
+      {
+        "seconds": 2.5,
+        "sourceFrame": 60,
+        "nativeFrame": 75,
+        "meanAbsoluteRgb": 1.4585096571180556
+      },
+      {
+        "seconds": 3.0,
+        "sourceFrame": 72,
+        "nativeFrame": 90,
+        "meanAbsoluteRgb": 1.4326850043402777
+      },
+      {
+        "seconds": 3.5,
+        "sourceFrame": 84,
+        "nativeFrame": 105,
+        "meanAbsoluteRgb": 1.4347669813368056
+      },
+      {
+        "seconds": 4.0,
+        "sourceFrame": 96,
+        "nativeFrame": 120,
+        "meanAbsoluteRgb": 1.4236246744791667
+      },
+      {
+        "seconds": 4.5,
+        "sourceFrame": 108,
+        "nativeFrame": 135,
+        "meanAbsoluteRgb": 1.4532335069444444
+      },
+      {
+        "seconds": 5.0,
+        "sourceFrame": 120,
+        "nativeFrame": 150,
+        "meanAbsoluteRgb": 1.4542439778645833
+      },
+      {
+        "seconds": 5.5,
+        "sourceFrame": 132,
+        "nativeFrame": 165,
+        "meanAbsoluteRgb": 1.4573703342013888
+      },
+      {
+        "seconds": 6.0,
+        "sourceFrame": 144,
+        "nativeFrame": 180,
+        "meanAbsoluteRgb": 1.4633653428819444
+      },
+      {
+        "seconds": 6.5,
+        "sourceFrame": 156,
+        "nativeFrame": 195,
+        "meanAbsoluteRgb": 1.4623277452256944
+      },
+      {
+        "seconds": 7.0,
+        "sourceFrame": 168,
+        "nativeFrame": 210,
+        "meanAbsoluteRgb": 1.4637315538194444
+      },
+      {
+        "seconds": 7.5,
+        "sourceFrame": 180,
+        "nativeFrame": 225,
+        "meanAbsoluteRgb": 1.4626600477430556
+      },
+      {
+        "seconds": 8,
+        "sourceFrame": 191,
+        "nativeFrame": 240,
+        "meanAbsoluteRgb": 1.4631144205729167
+      },
+      {
+        "seconds": 8.5,
+        "sourceFrame": 191,
+        "nativeFrame": 255,
+        "meanAbsoluteRgb": 1.4650607638888888
+      },
+      {
+        "seconds": 10,
+        "sourceFrame": 191,
+        "nativeFrame": 300,
+        "meanAbsoluteRgb": 1.46563720703125
+      },
+      {
+        "seconds": 14,
+        "sourceFrame": 191,
+        "nativeFrame": 420,
+        "meanAbsoluteRgb": 1.46563720703125
+      },
+      {
+        "seconds": 17.5,
+        "sourceFrame": 191,
+        "nativeFrame": 525,
+        "meanAbsoluteRgb": 1.4654744466145833
+      }
+    ],
+    "maximumMeanAbsoluteRgb": 1.4742092556423612,
+    "threshold": 1.5,
+    "passed": true,
+    "crop": [
+      0.08,
+      0.35,
+      0.84,
+      0.46
+    ],
+    "scaledCrop": [
+      256,
+      192
+    ],
+    "limits": "Subject-region color registration at exact shared-clock samples; not exhaustive pixels, OCR or subjective playback."
+  },
+  {
+    "name": "another-view-landscape",
+    "sourceClipSha256": "d0a17ac45fd42adbc47030c99f309f93dad0d91d56c1ea659fb69e77695459b7",
+    "videoSha256": "9a11c33153f5ff197113edce0ff2756e0f785d93359c7e09f2f1f875a7612ee3",
+    "storyboardSha256": "0a6b9f887bfcef3f87cb0be3146938b6c26ae31eb023c44a29d51cf2ab88e251",
+    "checkerSha256": "db2523e3241a9ddb7ed0d886d6446621385848e78039b42a95d8c2fba77ea60b",
+    "samples": [
+      {
+        "seconds": 0.0,
+        "sourceFrame": 0,
+        "nativeFrame": 0,
+        "meanAbsoluteRgb": 0.7604302300347222
+      },
+      {
+        "seconds": 0.5,
+        "sourceFrame": 12,
+        "nativeFrame": 15,
+        "meanAbsoluteRgb": 0.7628309461805556
+      },
+      {
+        "seconds": 1.0,
+        "sourceFrame": 24,
+        "nativeFrame": 30,
+        "meanAbsoluteRgb": 0.7604234483506944
+      },
+      {
+        "seconds": 1.5,
+        "sourceFrame": 36,
+        "nativeFrame": 45,
+        "meanAbsoluteRgb": 0.7825520833333334
+      },
+      {
+        "seconds": 2.0,
+        "sourceFrame": 48,
+        "nativeFrame": 60,
+        "meanAbsoluteRgb": 0.8081800672743056
+      },
+      {
+        "seconds": 2.5,
+        "sourceFrame": 60,
+        "nativeFrame": 75,
+        "meanAbsoluteRgb": 0.8008083767361112
+      },
+      {
+        "seconds": 3.0,
+        "sourceFrame": 72,
+        "nativeFrame": 90,
+        "meanAbsoluteRgb": 0.8667399088541666
+      },
+      {
+        "seconds": 3.5,
+        "sourceFrame": 84,
+        "nativeFrame": 105,
+        "meanAbsoluteRgb": 0.9125637478298612
+      },
+      {
+        "seconds": 4.0,
+        "sourceFrame": 96,
+        "nativeFrame": 120,
+        "meanAbsoluteRgb": 0.9016316731770834
+      },
+      {
+        "seconds": 4.5,
+        "sourceFrame": 108,
+        "nativeFrame": 135,
+        "meanAbsoluteRgb": 0.8854166666666666
+      },
+      {
+        "seconds": 5.0,
+        "sourceFrame": 120,
+        "nativeFrame": 150,
+        "meanAbsoluteRgb": 0.8830973307291666
+      },
+      {
+        "seconds": 5.5,
+        "sourceFrame": 132,
+        "nativeFrame": 165,
+        "meanAbsoluteRgb": 0.8589138454861112
+      },
+      {
+        "seconds": 6.0,
+        "sourceFrame": 144,
+        "nativeFrame": 180,
+        "meanAbsoluteRgb": 0.8460218641493056
+      },
+      {
+        "seconds": 6.5,
+        "sourceFrame": 156,
+        "nativeFrame": 195,
+        "meanAbsoluteRgb": 0.8486124674479166
+      },
+      {
+        "seconds": 7.0,
+        "sourceFrame": 168,
+        "nativeFrame": 210,
+        "meanAbsoluteRgb": 0.8490125868055556
+      },
+      {
+        "seconds": 7.5,
+        "sourceFrame": 180,
+        "nativeFrame": 225,
+        "meanAbsoluteRgb": 0.8480360243055556
+      },
+      {
+        "seconds": 8,
+        "sourceFrame": 191,
+        "nativeFrame": 240,
+        "meanAbsoluteRgb": 0.8469984266493056
+      },
+      {
+        "seconds": 8.5,
+        "sourceFrame": 191,
+        "nativeFrame": 255,
+        "meanAbsoluteRgb": 0.8098619249131944
+      },
+      {
+        "seconds": 10,
+        "sourceFrame": 191,
+        "nativeFrame": 300,
+        "meanAbsoluteRgb": 0.8099636501736112
+      },
+      {
+        "seconds": 14,
+        "sourceFrame": 191,
+        "nativeFrame": 420,
+        "meanAbsoluteRgb": 0.8099636501736112
+      },
+      {
+        "seconds": 17.5,
+        "sourceFrame": 191,
+        "nativeFrame": 525,
+        "meanAbsoluteRgb": 0.8099161783854166
+      }
+    ],
+    "maximumMeanAbsoluteRgb": 0.9125637478298612,
+    "threshold": 1.5,
+    "passed": true,
+    "crop": [
+      0.08,
+      0.35,
+      0.84,
+      0.46
+    ],
+    "scaledCrop": [
+      256,
+      192
+    ],
+    "limits": "Subject-region color registration at exact shared-clock samples; not exhaustive pixels, OCR or subjective playback."
+  },
+  {
+    "name": "another-view-vertical",
+    "sourceClipSha256": "ee1fb2ec7550e5a7fcc8c18c1c6ada5c79ceb2e9a70988b26fcadfc1fca9fd6d",
+    "videoSha256": "0dedf5da9d33ad38a223dde1f128719ef9216e1585cc7e069d39d6d9a7ac5674",
+    "storyboardSha256": "7a13fb22d88b641d224d142b80641bcfc14aff0d68ee20394bf5c6149187a6dd",
+    "checkerSha256": "db2523e3241a9ddb7ed0d886d6446621385848e78039b42a95d8c2fba77ea60b",
+    "samples": [
+      {
+        "seconds": 0.0,
+        "sourceFrame": 0,
+        "nativeFrame": 0,
+        "meanAbsoluteRgb": 1.4737481011284723
+      },
+      {
+        "seconds": 0.5,
+        "sourceFrame": 12,
+        "nativeFrame": 15,
+        "meanAbsoluteRgb": 1.4735378689236112
+      },
+      {
+        "seconds": 1.0,
+        "sourceFrame": 24,
+        "nativeFrame": 30,
+        "meanAbsoluteRgb": 1.47406005859375
+      },
+      {
+        "seconds": 1.5,
+        "sourceFrame": 36,
+        "nativeFrame": 45,
+        "meanAbsoluteRgb": 1.47332763671875
+      },
+      {
+        "seconds": 2.0,
+        "sourceFrame": 48,
+        "nativeFrame": 60,
+        "meanAbsoluteRgb": 1.4561564127604167
+      },
+      {
+        "seconds": 2.5,
+        "sourceFrame": 60,
+        "nativeFrame": 75,
+        "meanAbsoluteRgb": 1.4631008572048612
+      },
+      {
+        "seconds": 3.0,
+        "sourceFrame": 72,
+        "nativeFrame": 90,
+        "meanAbsoluteRgb": 1.4309149848090277
+      },
+      {
+        "seconds": 3.5,
+        "sourceFrame": 84,
+        "nativeFrame": 105,
+        "meanAbsoluteRgb": 1.4359130859375
+      },
+      {
+        "seconds": 4.0,
+        "sourceFrame": 96,
+        "nativeFrame": 120,
+        "meanAbsoluteRgb": 1.4271511501736112
+      },
+      {
+        "seconds": 4.5,
+        "sourceFrame": 108,
+        "nativeFrame": 135,
+        "meanAbsoluteRgb": 1.4590928819444444
+      },
+      {
+        "seconds": 5.0,
+        "sourceFrame": 120,
+        "nativeFrame": 150,
+        "meanAbsoluteRgb": 1.4558308919270833
+      },
+      {
+        "seconds": 5.5,
+        "sourceFrame": 132,
+        "nativeFrame": 165,
+        "meanAbsoluteRgb": 1.4600830078125
+      },
+      {
+        "seconds": 6.0,
+        "sourceFrame": 144,
+        "nativeFrame": 180,
+        "meanAbsoluteRgb": 1.4616156684027777
+      },
+      {
+        "seconds": 6.5,
+        "sourceFrame": 156,
+        "nativeFrame": 195,
+        "meanAbsoluteRgb": 1.4615139431423612
+      },
+      {
+        "seconds": 7.0,
+        "sourceFrame": 168,
+        "nativeFrame": 210,
+        "meanAbsoluteRgb": 1.4641655815972223
+      },
+      {
+        "seconds": 7.5,
+        "sourceFrame": 180,
+        "nativeFrame": 225,
+        "meanAbsoluteRgb": 1.4624159071180556
+      },
+      {
+        "seconds": 8,
+        "sourceFrame": 191,
+        "nativeFrame": 240,
+        "meanAbsoluteRgb": 1.4604831271701388
+      },
+      {
+        "seconds": 8.5,
+        "sourceFrame": 191,
+        "nativeFrame": 255,
+        "meanAbsoluteRgb": 1.4640842013888888
+      },
+      {
+        "seconds": 10,
+        "sourceFrame": 191,
+        "nativeFrame": 300,
+        "meanAbsoluteRgb": 1.4647420247395833
+      },
+      {
+        "seconds": 14,
+        "sourceFrame": 191,
+        "nativeFrame": 420,
+        "meanAbsoluteRgb": 1.4647420247395833
+      },
+      {
+        "seconds": 17.5,
+        "sourceFrame": 191,
+        "nativeFrame": 525,
+        "meanAbsoluteRgb": 1.4645792643229167
+      }
+    ],
+    "maximumMeanAbsoluteRgb": 1.47406005859375,
+    "threshold": 1.5,
+    "passed": true,
+    "crop": [
+      0.08,
+      0.35,
+      0.84,
+      0.46
+    ],
+    "scaledCrop": [
+      256,
+      192
+    ],
+    "limits": "Subject-region color registration at exact shared-clock samples; not exhaustive pixels, OCR or subjective playback."
+  },
+  {
+    "name": "partial-route-landscape",
+    "sourceClipSha256": "7cb3cd520302d2ea03529465e2aba4bdf726e66489a0887b69e7b145c061b40f",
+    "videoSha256": "06574a60c75cf34e030ff9afed41de1c1574154b75de493f6cba4dfe27442d1e",
+    "storyboardSha256": "966dbf4e30dd77550573d87787bcc2dbeca40a8bf367028f9d969904cd19c2b4",
+    "checkerSha256": "db2523e3241a9ddb7ed0d886d6446621385848e78039b42a95d8c2fba77ea60b",
+    "samples": [
+      {
+        "seconds": 0.0,
+        "sourceFrame": 0,
+        "nativeFrame": 0,
+        "meanAbsoluteRgb": 0.9051784939236112
+      },
+      {
+        "seconds": 0.5,
+        "sourceFrame": 12,
+        "nativeFrame": 15,
+        "meanAbsoluteRgb": 0.9057956271701388
+      },
+      {
+        "seconds": 1.0,
+        "sourceFrame": 24,
+        "nativeFrame": 30,
+        "meanAbsoluteRgb": 0.9048529730902778
+      },
+      {
+        "seconds": 1.5,
+        "sourceFrame": 36,
+        "nativeFrame": 45,
+        "meanAbsoluteRgb": 0.9664781358506944
+      },
+      {
+        "seconds": 2.0,
+        "sourceFrame": 48,
+        "nativeFrame": 60,
+        "meanAbsoluteRgb": 1.0294460720486112
+      },
+      {
+        "seconds": 2.5,
+        "sourceFrame": 60,
+        "nativeFrame": 75,
+        "meanAbsoluteRgb": 1.0279337565104167
+      },
+      {
+        "seconds": 3.0,
+        "sourceFrame": 72,
+        "nativeFrame": 90,
+        "meanAbsoluteRgb": 1.0432467990451388
+      },
+      {
+        "seconds": 3.5,
+        "sourceFrame": 84,
+        "nativeFrame": 105,
+        "meanAbsoluteRgb": 1.04278564453125
+      },
+      {
+        "seconds": 4.0,
+        "sourceFrame": 96,
+        "nativeFrame": 120,
+        "meanAbsoluteRgb": 1.0388929578993056
+      },
+      {
+        "seconds": 4.5,
+        "sourceFrame": 108,
+        "nativeFrame": 135,
+        "meanAbsoluteRgb": 1.0083550347222223
+      },
+      {
+        "seconds": 5.0,
+        "sourceFrame": 120,
+        "nativeFrame": 150,
+        "meanAbsoluteRgb": 0.9933403862847222
+      },
+      {
+        "seconds": 5.5,
+        "sourceFrame": 132,
+        "nativeFrame": 165,
+        "meanAbsoluteRgb": 0.9521077473958334
+      },
+      {
+        "seconds": 6.0,
+        "sourceFrame": 144,
+        "nativeFrame": 180,
+        "meanAbsoluteRgb": 0.9043714735243056
+      },
+      {
+        "seconds": 6.5,
+        "sourceFrame": 156,
+        "nativeFrame": 195,
+        "meanAbsoluteRgb": 0.9069688585069444
+      },
+      {
+        "seconds": 7.0,
+        "sourceFrame": 168,
+        "nativeFrame": 210,
+        "meanAbsoluteRgb": 0.9061414930555556
+      },
+      {
+        "seconds": 7.5,
+        "sourceFrame": 180,
+        "nativeFrame": 225,
+        "meanAbsoluteRgb": 0.9063652886284722
+      },
+      {
+        "seconds": 8,
+        "sourceFrame": 191,
+        "nativeFrame": 240,
+        "meanAbsoluteRgb": 0.9048122829861112
+      },
+      {
+        "seconds": 8.5,
+        "sourceFrame": 191,
+        "nativeFrame": 255,
+        "meanAbsoluteRgb": 0.8590291341145834
+      },
+      {
+        "seconds": 10,
+        "sourceFrame": 191,
+        "nativeFrame": 300,
+        "meanAbsoluteRgb": 0.85894775390625
+      },
+      {
+        "seconds": 14,
+        "sourceFrame": 191,
+        "nativeFrame": 420,
+        "meanAbsoluteRgb": 0.85894775390625
+      },
+      {
+        "seconds": 17.5,
+        "sourceFrame": 191,
+        "nativeFrame": 525,
+        "meanAbsoluteRgb": 0.85894775390625
+      }
+    ],
+    "maximumMeanAbsoluteRgb": 1.0432467990451388,
+    "threshold": 1.5,
+    "passed": true,
+    "crop": [
+      0.08,
+      0.35,
+      0.84,
+      0.46
+    ],
+    "scaledCrop": [
+      256,
+      192
+    ],
+    "limits": "Subject-region color registration at exact shared-clock samples; not exhaustive pixels, OCR or subjective playback."
+  },
+  {
+    "name": "partial-route-vertical",
+    "sourceClipSha256": "e45f77166bb144d99b4707fb3b08bf7d7c1e9887e089b3e4c5c585a1adcaf8d6",
+    "videoSha256": "c6ce3c44884856f7f57d177f821adbbe8b8c3f355238895c3473ba643eb24614",
+    "storyboardSha256": "2bc651472ea296bb39f18d71dbf04d5d1bac7c20dffe68602459396a91c2421d",
+    "checkerSha256": "db2523e3241a9ddb7ed0d886d6446621385848e78039b42a95d8c2fba77ea60b",
+    "samples": [
+      {
+        "seconds": 0.0,
+        "sourceFrame": 0,
+        "nativeFrame": 0,
+        "meanAbsoluteRgb": 1.4482760959201388
+      },
+      {
+        "seconds": 0.5,
+        "sourceFrame": 12,
+        "nativeFrame": 15,
+        "meanAbsoluteRgb": 1.4466620551215277
+      },
+      {
+        "seconds": 1.0,
+        "sourceFrame": 24,
+        "nativeFrame": 30,
+        "meanAbsoluteRgb": 1.44921875
+      },
+      {
+        "seconds": 1.5,
+        "sourceFrame": 36,
+        "nativeFrame": 45,
+        "meanAbsoluteRgb": 1.4491780598958333
+      },
+      {
+        "seconds": 2.0,
+        "sourceFrame": 48,
+        "nativeFrame": 60,
+        "meanAbsoluteRgb": 1.4290296766493056
+      },
+      {
+        "seconds": 2.5,
+        "sourceFrame": 60,
+        "nativeFrame": 75,
+        "meanAbsoluteRgb": 1.4258355034722223
+      },
+      {
+        "seconds": 3.0,
+        "sourceFrame": 72,
+        "nativeFrame": 90,
+        "meanAbsoluteRgb": 1.3939005533854167
+      },
+      {
+        "seconds": 3.5,
+        "sourceFrame": 84,
+        "nativeFrame": 105,
+        "meanAbsoluteRgb": 1.4029473198784723
+      },
+      {
+        "seconds": 4.0,
+        "sourceFrame": 96,
+        "nativeFrame": 120,
+        "meanAbsoluteRgb": 1.3806559244791667
+      },
+      {
+        "seconds": 4.5,
+        "sourceFrame": 108,
+        "nativeFrame": 135,
+        "meanAbsoluteRgb": 1.3919542100694444
+      },
+      {
+        "seconds": 5.0,
+        "sourceFrame": 120,
+        "nativeFrame": 150,
+        "meanAbsoluteRgb": 1.3902384440104167
+      },
+      {
+        "seconds": 5.5,
+        "sourceFrame": 132,
+        "nativeFrame": 165,
+        "meanAbsoluteRgb": 1.3987087673611112
+      },
+      {
+        "seconds": 6.0,
+        "sourceFrame": 144,
+        "nativeFrame": 180,
+        "meanAbsoluteRgb": 1.4147406684027777
+      },
+      {
+        "seconds": 6.5,
+        "sourceFrame": 156,
+        "nativeFrame": 195,
+        "meanAbsoluteRgb": 1.4161919487847223
+      },
+      {
+        "seconds": 7.0,
+        "sourceFrame": 168,
+        "nativeFrame": 210,
+        "meanAbsoluteRgb": 1.4179890950520833
+      },
+      {
+        "seconds": 7.5,
+        "sourceFrame": 180,
+        "nativeFrame": 225,
+        "meanAbsoluteRgb": 1.4162529839409723
+      },
+      {
+        "seconds": 8,
+        "sourceFrame": 191,
+        "nativeFrame": 240,
+        "meanAbsoluteRgb": 1.415283203125
+      },
+      {
+        "seconds": 8.5,
+        "sourceFrame": 191,
+        "nativeFrame": 255,
+        "meanAbsoluteRgb": 1.40911865234375
+      },
+      {
+        "seconds": 10,
+        "sourceFrame": 191,
+        "nativeFrame": 300,
+        "meanAbsoluteRgb": 1.4095933702256944
+      },
+      {
+        "seconds": 14,
+        "sourceFrame": 191,
+        "nativeFrame": 420,
+        "meanAbsoluteRgb": 1.4095933702256944
+      },
+      {
+        "seconds": 17.5,
+        "sourceFrame": 191,
+        "nativeFrame": 525,
+        "meanAbsoluteRgb": 1.4095933702256944
+      }
+    ],
+    "maximumMeanAbsoluteRgb": 1.44921875,
+    "threshold": 1.5,
+    "passed": true,
+    "crop": [
+      0.08,
+      0.35,
+      0.84,
+      0.46
+    ],
+    "scaledCrop": [
+      256,
+      192
+    ],
+    "limits": "Subject-region color registration at exact shared-clock samples; not exhaustive pixels, OCR or subjective playback."
+  },
+  {
+    "name": "partial-summary-landscape",
+    "sourceClipSha256": "7cb3cd520302d2ea03529465e2aba4bdf726e66489a0887b69e7b145c061b40f",
+    "videoSha256": "f06af2297a8f05bb79f4450bded6dc77291bfe37ccea4e737aa3b58ab5fee7e2",
+    "storyboardSha256": "1d4699ee843ca193f5e973658834e8ceac1c74c83278390149bd41d6296ac3cd",
+    "checkerSha256": "db2523e3241a9ddb7ed0d886d6446621385848e78039b42a95d8c2fba77ea60b",
+    "samples": [
+      {
+        "seconds": 0.0,
+        "sourceFrame": 0,
+        "nativeFrame": 0,
+        "meanAbsoluteRgb": 0.8961724175347222
+      },
+      {
+        "seconds": 0.5,
+        "sourceFrame": 12,
+        "nativeFrame": 15,
+        "meanAbsoluteRgb": 0.8975965711805556
+      },
+      {
+        "seconds": 1.0,
+        "sourceFrame": 24,
+        "nativeFrame": 30,
+        "meanAbsoluteRgb": 0.8959418402777778
+      },
+      {
+        "seconds": 1.5,
+        "sourceFrame": 36,
+        "nativeFrame": 45,
+        "meanAbsoluteRgb": 0.9769151475694444
+      },
+      {
+        "seconds": 2.0,
+        "sourceFrame": 48,
+        "nativeFrame": 60,
+        "meanAbsoluteRgb": 1.0204196506076388
+      },
+      {
+        "seconds": 2.5,
+        "sourceFrame": 60,
+        "nativeFrame": 75,
+        "meanAbsoluteRgb": 1.0283949110243056
+      },
+      {
+        "seconds": 3.0,
+        "sourceFrame": 72,
+        "nativeFrame": 90,
+        "meanAbsoluteRgb": 1.0322197808159723
+      },
+      {
+        "seconds": 3.5,
+        "sourceFrame": 84,
+        "nativeFrame": 105,
+        "meanAbsoluteRgb": 1.0426025390625
+      },
+      {
+        "seconds": 4.0,
+        "sourceFrame": 96,
+        "nativeFrame": 120,
+        "meanAbsoluteRgb": 1.0333251953125
+      },
+      {
+        "seconds": 4.5,
+        "sourceFrame": 108,
+        "nativeFrame": 135,
+        "meanAbsoluteRgb": 1.0044487847222223
+      },
+      {
+        "seconds": 5.0,
+        "sourceFrame": 120,
+        "nativeFrame": 150,
+        "meanAbsoluteRgb": 0.9899495442708334
+      },
+      {
+        "seconds": 5.5,
+        "sourceFrame": 132,
+        "nativeFrame": 165,
+        "meanAbsoluteRgb": 0.9518025716145834
+      },
+      {
+        "seconds": 6.0,
+        "sourceFrame": 144,
+        "nativeFrame": 180,
+        "meanAbsoluteRgb": 0.9057278103298612
+      },
+      {
+        "seconds": 6.5,
+        "sourceFrame": 156,
+        "nativeFrame": 195,
+        "meanAbsoluteRgb": 0.9054361979166666
+      },
+      {
+        "seconds": 7.0,
+        "sourceFrame": 168,
+        "nativeFrame": 210,
+        "meanAbsoluteRgb": 0.9047919379340278
+      },
+      {
+        "seconds": 7.5,
+        "sourceFrame": 180,
+        "nativeFrame": 225,
+        "meanAbsoluteRgb": 0.9049343532986112
+      },
+      {
+        "seconds": 8,
+        "sourceFrame": 191,
+        "nativeFrame": 240,
+        "meanAbsoluteRgb": 0.9048326280381944
+      },
+      {
+        "seconds": 8.5,
+        "sourceFrame": 191,
+        "nativeFrame": 255,
+        "meanAbsoluteRgb": 0.85833740234375
+      },
+      {
+        "seconds": 10,
+        "sourceFrame": 191,
+        "nativeFrame": 300,
+        "meanAbsoluteRgb": 0.85821533203125
+      },
+      {
+        "seconds": 14,
+        "sourceFrame": 191,
+        "nativeFrame": 420,
+        "meanAbsoluteRgb": 0.85821533203125
+      },
+      {
+        "seconds": 17.5,
+        "sourceFrame": 191,
+        "nativeFrame": 525,
+        "meanAbsoluteRgb": 0.85821533203125
+      }
+    ],
+    "maximumMeanAbsoluteRgb": 1.0426025390625,
+    "threshold": 1.5,
+    "passed": true,
+    "crop": [
+      0.08,
+      0.35,
+      0.84,
+      0.46
+    ],
+    "scaledCrop": [
+      256,
+      192
+    ],
+    "limits": "Subject-region color registration at exact shared-clock samples; not exhaustive pixels, OCR or subjective playback."
+  },
+  {
+    "name": "partial-summary-vertical",
+    "sourceClipSha256": "e45f77166bb144d99b4707fb3b08bf7d7c1e9887e089b3e4c5c585a1adcaf8d6",
+    "videoSha256": "142accf98a7235556d799749d6ae526c4de166dda361c2362720d8aba445cc2d",
+    "storyboardSha256": "8e02716b36530d95b1f300f08a413f4a929eb16d24442e11d4a6711eafe5c5df",
+    "checkerSha256": "db2523e3241a9ddb7ed0d886d6446621385848e78039b42a95d8c2fba77ea60b",
+    "samples": [
+      {
+        "seconds": 0.0,
+        "sourceFrame": 0,
+        "nativeFrame": 0,
+        "meanAbsoluteRgb": 1.4537828233506944
+      },
+      {
+        "seconds": 0.5,
+        "sourceFrame": 12,
+        "nativeFrame": 15,
+        "meanAbsoluteRgb": 1.4513346354166667
+      },
+      {
+        "seconds": 1.0,
+        "sourceFrame": 24,
+        "nativeFrame": 30,
+        "meanAbsoluteRgb": 1.4538845486111112
+      },
+      {
+        "seconds": 1.5,
+        "sourceFrame": 36,
+        "nativeFrame": 45,
+        "meanAbsoluteRgb": 1.4522230360243056
+      },
+      {
+        "seconds": 2.0,
+        "sourceFrame": 48,
+        "nativeFrame": 60,
+        "meanAbsoluteRgb": 1.4298163519965277
+      },
+      {
+        "seconds": 2.5,
+        "sourceFrame": 60,
+        "nativeFrame": 75,
+        "meanAbsoluteRgb": 1.4294365776909723
+      },
+      {
+        "seconds": 3.0,
+        "sourceFrame": 72,
+        "nativeFrame": 90,
+        "meanAbsoluteRgb": 1.3941786024305556
+      },
+      {
+        "seconds": 3.5,
+        "sourceFrame": 84,
+        "nativeFrame": 105,
+        "meanAbsoluteRgb": 1.4005398220486112
+      },
+      {
+        "seconds": 4.0,
+        "sourceFrame": 96,
+        "nativeFrame": 120,
+        "meanAbsoluteRgb": 1.3856268988715277
+      },
+      {
+        "seconds": 4.5,
+        "sourceFrame": 108,
+        "nativeFrame": 135,
+        "meanAbsoluteRgb": 1.3943006727430556
+      },
+      {
+        "seconds": 5.0,
+        "sourceFrame": 120,
+        "nativeFrame": 150,
+        "meanAbsoluteRgb": 1.3899671766493056
+      },
+      {
+        "seconds": 5.5,
+        "sourceFrame": 132,
+        "nativeFrame": 165,
+        "meanAbsoluteRgb": 1.3911404079861112
+      },
+      {
+        "seconds": 6.0,
+        "sourceFrame": 144,
+        "nativeFrame": 180,
+        "meanAbsoluteRgb": 1.41290283203125
+      },
+      {
+        "seconds": 6.5,
+        "sourceFrame": 156,
+        "nativeFrame": 195,
+        "meanAbsoluteRgb": 1.4160630967881944
+      },
+      {
+        "seconds": 7.0,
+        "sourceFrame": 168,
+        "nativeFrame": 210,
+        "meanAbsoluteRgb": 1.4158596462673612
+      },
+      {
+        "seconds": 7.5,
+        "sourceFrame": 180,
+        "nativeFrame": 225,
+        "meanAbsoluteRgb": 1.4159206814236112
+      },
+      {
+        "seconds": 8,
+        "sourceFrame": 191,
+        "nativeFrame": 240,
+        "meanAbsoluteRgb": 1.4153849283854167
+      },
+      {
+        "seconds": 8.5,
+        "sourceFrame": 191,
+        "nativeFrame": 255,
+        "meanAbsoluteRgb": 1.4067857530381944
+      },
+      {
+        "seconds": 10,
+        "sourceFrame": 191,
+        "nativeFrame": 300,
+        "meanAbsoluteRgb": 1.4071044921875
+      },
+      {
+        "seconds": 14,
+        "sourceFrame": 191,
+        "nativeFrame": 420,
+        "meanAbsoluteRgb": 1.4071044921875
+      },
+      {
+        "seconds": 17.5,
+        "sourceFrame": 191,
+        "nativeFrame": 525,
+        "meanAbsoluteRgb": 1.4071044921875
+      }
+    ],
+    "maximumMeanAbsoluteRgb": 1.4538845486111112,
+    "threshold": 1.5,
+    "passed": true,
+    "crop": [
+      0.08,
+      0.35,
+      0.84,
+      0.46
+    ],
+    "scaledCrop": [
+      256,
+      192
+    ],
+    "limits": "Subject-region color registration at exact shared-clock samples; not exhaustive pixels, OCR or subjective playback."
+  }
+]

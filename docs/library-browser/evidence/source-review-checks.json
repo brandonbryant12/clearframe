@@ -6,13 +6,13 @@
     "passed": 4
   },
   "catalog": {
-    "packages": 14,
-    "examples": 57,
+    "packages": 15,
+    "examples": 61,
     "inventory": 71,
-    "existingSafeLocalReferences": 451,
+    "existingSafeLocalReferences": 483,
     "unresolvedSourceIds": 0,
     "matchingBundledLedgerSourceHashes": 4,
-    "nativeVariants": 112,
+    "nativeVariants": 120,
     "sourceInsertVariants": 1
   },
   "findings": [
@@ -90,10 +90,12 @@
   ],
   "finalFocusedTests": {
     "file": "test/library-browser.test.mjs",
-    "passed": 4
+    "passed": 4,
+    "producerLog": "docs/library-browser/evidence/focused-tests.txt",
+    "reviewerReran": false
   },
   "independentRegressionChecks": 17,
-  "finalVariantDurationChecks": 112,
+  "finalVariantDurationChecks": 120,
   "sourceHashes": {
     "engine/lib/library-browser.mjs": "829c57ccdd96541f1056f785f99a613d3b5b329d35e4c084fb77784c13913d59",
     "engine/lib/library-browser-build.mjs": "707dfd6f2a685ecffaa22d05f056e8f2394385fe4ef0e48ddf4732815f07c591",
@@ -101,25 +103,26 @@
     "engine/ui/library-browser/app.js": "0981e68ee87f195a3fd097b17703be0d9030b020562df26d9511224ae0b76ea8",
     "engine/ui/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
     "engine/ui/library-browser/style.css": "7457ba692f1c35216a06d83ce288be95082f43306840aaaa6b0116d93b22a1cf",
-    "docs/research/timmer-library/asset-links.json": "c1f67704b96e03fdd718d536a920ea15b4aedcb255b6af51ad0a0e38b30c2d9e",
+    "docs/research/timmer-library/asset-links.json": "b1922a92a582b664157db47f7f0a9b9d94078f2a752f7bcf7ccae8c82c88ebe1",
     "test/library-browser.test.mjs": "90c6ba724d71d3411d57a896239e85a73c27027e5e98b656384c2be2d48705c5"
   },
   "finalBundleHashes": {
     "docs/library-browser/example-ledger.mjs": "d9e1ac01a058494fd8e4edc4a0e876492617dab39c97ce7d5de01f2d1876e979",
     "docs/library-browser/example-ledger.json": "d057d406e30fb4c7911757c9f2cd2f8ffc2ef054f635f7e9c668b973af962631",
-    "docs/library-browser/app.js": "94fc9c6b35b203c65295be6b7fd83f04e643c6c66b8f568510edb3ec8c427ce1",
-    "docs/library-browser/catalog.json": "a9a68dbf20c3ec1625adbef45b4f27c0394ddc9f5ce83e253cd43ad2f6269237",
+    "docs/library-browser/app.js": "8240c701711e901b164bfd34ce5db25b4c4d929c7affa5822e6fbe5701b490a8",
+    "docs/library-browser/catalog.json": "8f379b0403a4e6f70ab16764767b0eea7ba4cb6e95c09d5c86bd6ec305310c2e",
     "docs/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
     "docs/library-browser/style.css": "0c80ce1cd03abf96b895f46f19501e07a64df40ab74b03fa7e917ea8393b24cd",
     "docs/library-browser/DIRECTION.md": "449b761ae2abf2c44427e8917862cd5885b081f371683e363ed5d42c8754e975",
-    "docs/research/timmer-library/inventory.json": "8cef3768e0c228a51d1a075314c9ce2da5b12b836197b61ab01cce063d6df59a",
-    "docs/research/timmer-library/asset-links.json": "c1f67704b96e03fdd718d536a920ea15b4aedcb255b6af51ad0a0e38b30c2d9e",
-    "docs/library-browser/evidence/catalog-build.json": "2ffa6a24a704e09df5caa3c25923c14b72ac465c7c4daa5ff459b6bf502685e8",
-    "docs/library-browser/evidence/node-tests.txt": "e7bc4191fe7cdabcd09af6ac627372c446242b296a28ef58d3f816bf8885c7a3",
-    "docs/library-browser/evidence/source-review-regressions.mjs": "e1f4408ce5f31ee1cc01bde46b847af287465e6e5a016bab5a6e7d67a7222322",
-    "docs/library-browser/evidence/source-review-regressions.json": "aed189672bd7c64e9310d2826757c5dcba60b1cd5484fdf6764096611ef79b71",
+    "docs/research/timmer-library/inventory.json": "3c21fd3582a0f207d58dd55f5a85f63d3597ea77ea6b669b86fa6597b2dc0f4b",
+    "docs/research/timmer-library/asset-links.json": "b1922a92a582b664157db47f7f0a9b9d94078f2a752f7bcf7ccae8c82c88ebe1",
+    "docs/library-browser/evidence/catalog-build.json": "acb86d7549f59f265bcf20220ab995260de1a894f6a766cced259518cb5611b9",
+    "docs/library-browser/evidence/node-tests.txt": "961a546eb4c1a6541af9b27cb72610ea42c0133449a7b0ad6f4fa0ca228b0ce9",
+    "docs/library-browser/evidence/source-review-regressions.mjs": "abadc53f5ead54a97d4c02e4d0256598897500da56f2d517e1fc12ae77318e7b",
+    "docs/library-browser/evidence/source-review-regressions.json": "ac3cfaff2d9a2ee3db081495e19a10f39aa178cebcf3c04fbd5821d558028ff7",
     "engine/cli.mjs": "fde77dad87970c3aee7c7fa8a4eabb8031cfdc643b7be4ce9725c4704c9183c2",
-    "docs/library-browser/evidence/cli-smoke.json": "3a3f6d897cadda4c38609e0d6f2c9f21294377830ef531719d3ede9c4856a084"
+    "docs/library-browser/evidence/cli-smoke.json": "3a3f6d897cadda4c38609e0d6f2c9f21294377830ef531719d3ede9c4856a084",
+    "docs/library-browser/evidence/focused-tests.txt": "1beb38ae427c36d46f58f8d38f335a8eba010cfe82fdfa4ab7c4230689b4d5a5"
   },
   "finalBundleChecks": {
     "engineAndUiSourcesUnchanged": true,
@@ -160,7 +163,7 @@
     "independentRegressionsPassed": 17,
     "recordAndFormatIdentitiesUnique": true,
     "expectationsCaseMappingsMatch": true,
-    "engineAndUiComparisonScope": "Tracked library-browser, library-browser-build, variation-ledger and engine/ui/library-browser files unchanged since prior review and b0f1fc8; separately bound engine/cli.mjs also unchanged at this valuation refresh.",
+    "engineAndUiComparisonScope": "Tracked library-browser, library-browser-build, variation-ledger and engine/ui/library-browser files unchanged since prior review and 2a11fc7; separately bound engine/cli.mjs also unchanged at this camera-travel refresh.",
     "anchorCaseMappingsMatch": true,
     "smallMultiplesCaseMappingsMatch": true,
     "cliSourceUnchangedSinceRetainedSmoke": true,
@@ -168,21 +171,21 @@
     "correlationCaseMappingsMatch": true,
     "distributionCaseMappingsMatch": true,
     "valuationCaseMappingsMatch": true,
-    "unbuiltFixtureC15IsPlannedWithoutPreview": true
+    "unbuiltFixtureC15IsPlannedWithoutPreview": true,
+    "cameraTravelCaseMappingsMatch": true
   },
   "producerFullSuite": {
-    "passed": 206,
-    "total": 206,
+    "passed": 207,
+    "total": 207,
     "skipped": 0,
     "failed": 0,
     "reviewerReran": false,
     "note": "Producer reports current gated full-suite pass; reviewer inspected retained node-tests.txt summary."
   },
-  "refreshedAt": "2026-10-03T11:26:46.958Z",
+  "refreshedAt": "2026-10-03T12:11:54.688Z",
   "sourceChangesSincePriorReview": [
-    "docs/research/timmer-library/asset-links.json (two C14 valuation mappings)",
-    "docs/research/timmer-library/inventory.json (C14 prototype scope and T02 cash-flow sensitivity support)",
-    "test/library-browser.test.mjs (unbuilt inventory fixture now C15; C14 has retained examples)"
+    "docs/research/timmer-library/asset-links.json (four camera-travel cases mapped exactly to T04 and M07)",
+    "docs/research/timmer-library/inventory.json (bounded T04/M07 prototype scope and sixteen T05 recipe contracts)"
   ],
   "producerLedgerCliSmoke": {
     "checkedAt": "2026-10-03T09:08:50.558Z",
@@ -193,6 +196,6 @@
     "passed": 2,
     "reviewerReran": false,
     "sourceStoryboardHashMatches": true,
-    "scope": "Retained producer smoke from the static-anchor milestone at checkedAt; not rerun for the valuation refresh. Current CLI hash is unchanged from that reviewed milestone; retained source storyboard hash still matches."
+    "scope": "Retained producer smoke from the static-anchor milestone at checkedAt; not rerun for the camera-travel refresh. Current CLI hash is unchanged from that reviewed milestone; retained source storyboard hash still matches."
   }
 }

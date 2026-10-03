@@ -1,0 +1,146 @@
+[
+  {
+    "name": "inspection-orbit-landscape",
+    "sourceClipSha256": "d0a17ac45fd42adbc47030c99f309f93dad0d91d56c1ea659fb69e77695459b7",
+    "sourceReceiptSha256": "f7026fb0e4999ec9da8ac06eace14847ee697459b150ed78c4d3d02f900df062",
+    "sceneSha256": "c6c9a51ee14a8849b9c5327fea1e76f016e2b2aea85101002a48af30f11d7fa9",
+    "cameraReportSha256": "56d91dc53016486d92171665d1405350073ede7509c3ac2dc6bd957ace82a80a",
+    "replayReportSha256": "309d13ec293b1ba4153a17ff4e0a723a0d77570449daff7344bd42ea7399dfc6",
+    "sourceHashes": {
+      "scripts/blender/render.py": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+      "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+      "scripts/blender/camera_rig.py": "8b69c6bcfc913a7fe6e3a3013404422fb73463cc7ab4948ce84fce2ee932ffe4",
+      "library/sculptures/inspection-orbit.py": "6e57373a31cdbd03317e480efcea7063b6813f1f1a88cd51d9d0cc5618dda006",
+      "library/sculptures/inspection-orbit.json": "997d329c388e866598c9af7700e8b06fc3c6f7f5b7602e16a181352a8d0a5c50"
+    },
+    "duration": 8,
+    "frames": 192,
+    "fps": 24,
+    "bakedFramesChecked": 193,
+    "sourceCaptures": 8,
+    "inspected": true,
+    "maxIndependentRecordedCameraError": 9.470643931308587e-07,
+    "staticDrift": 0,
+    "seekEqual": true,
+    "replayPixelsMatch": true,
+    "replayWithinTolerance": true,
+    "replayDifference": {
+      "changedChannels": 0,
+      "maxDifference": 0,
+      "changedFraction": 0
+    },
+    "holdTransformsAndOpticsExact": true,
+    "parallax": null
+  },
+  {
+    "name": "inspection-orbit-vertical",
+    "sourceClipSha256": "ee1fb2ec7550e5a7fcc8c18c1c6ada5c79ceb2e9a70988b26fcadfc1fca9fd6d",
+    "sourceReceiptSha256": "b58447c8beca3f07ac44c646abc535e1443cabd4a65605d6cdfdebf7da418c13",
+    "sceneSha256": "98c05ab0caec5cb94600d0d1297822e7ae0a19848a02abfd70c48dbbb2bf09de",
+    "cameraReportSha256": "adcfbcec2fe87a6807b55901d1569ef8ac088e4aefe8cd737ab3a5fb81c13558",
+    "replayReportSha256": "48b428cd5e1487ca538a41f076f39578d8527e1910cc21339246fa0f4f0d6469",
+    "sourceHashes": {
+      "scripts/blender/render.py": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+      "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+      "scripts/blender/camera_rig.py": "8b69c6bcfc913a7fe6e3a3013404422fb73463cc7ab4948ce84fce2ee932ffe4",
+      "library/sculptures/inspection-orbit.py": "6e57373a31cdbd03317e480efcea7063b6813f1f1a88cd51d9d0cc5618dda006",
+      "library/sculptures/inspection-orbit.json": "997d329c388e866598c9af7700e8b06fc3c6f7f5b7602e16a181352a8d0a5c50"
+    },
+    "duration": 8,
+    "frames": 192,
+    "fps": 24,
+    "bakedFramesChecked": 193,
+    "sourceCaptures": 8,
+    "inspected": true,
+    "maxIndependentRecordedCameraError": 9.422671247705239e-07,
+    "staticDrift": 0,
+    "seekEqual": true,
+    "replayPixelsMatch": false,
+    "replayWithinTolerance": true,
+    "replayDifference": {
+      "changedChannels": 1,
+      "maxDifference": 1,
+      "changedFraction": 6.430041152263375e-07
+    },
+    "holdTransformsAndOpticsExact": true,
+    "parallax": null
+  },
+  {
+    "name": "parallax-truck-landscape",
+    "sourceClipSha256": "7cb3cd520302d2ea03529465e2aba4bdf726e66489a0887b69e7b145c061b40f",
+    "sourceReceiptSha256": "56f8b4ca146b8bef2cb8c41c423818456bf5bd4668c83d7db508f7bc7bdee1b6",
+    "sceneSha256": "e5a28b81cfdfea0626b144f60484570b7ee1e434ad7403c038bd431efb5e5d03",
+    "cameraReportSha256": "a7b6e9e9c83f9b0fabf57e63431b5c0c471c00207af7e86046db5cad5b273db6",
+    "replayReportSha256": "605eac854ccf1b66b09ed4b432ebcc0c2868d25f5dc5c7e91f84c01bb7d46973",
+    "sourceHashes": {
+      "scripts/blender/render.py": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+      "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+      "scripts/blender/camera_rig.py": "8b69c6bcfc913a7fe6e3a3013404422fb73463cc7ab4948ce84fce2ee932ffe4",
+      "library/sculptures/parallax-truck.py": "bf21c28b125c56cfb25533c144132f94c7bee88170615d2d38b8bb6931148c55",
+      "library/sculptures/parallax-truck.json": "2f0fad31e63c1049226477cea0813eb4b879fdf26e4c545315c17e306c60dfcc"
+    },
+    "duration": 8,
+    "frames": 192,
+    "fps": 24,
+    "bakedFramesChecked": 193,
+    "sourceCaptures": 8,
+    "inspected": true,
+    "maxIndependentRecordedCameraError": 1.1601804317251663e-07,
+    "staticDrift": 0,
+    "seekEqual": true,
+    "replayPixelsMatch": true,
+    "replayWithinTolerance": true,
+    "replayDifference": {
+      "changedChannels": 0,
+      "maxDifference": 0,
+      "changedFraction": 0
+    },
+    "holdTransformsAndOpticsExact": true,
+    "parallax": {
+      "foregroundDisplacement": -0.30082762241363525,
+      "rearDisplacement": -0.27861738204956055,
+      "ratio": 1.079715917939836,
+      "depthRatio": 1.0797159312107698,
+      "ratioError": 1.3270933907350013e-08
+    }
+  },
+  {
+    "name": "parallax-truck-vertical",
+    "sourceClipSha256": "e45f77166bb144d99b4707fb3b08bf7d7c1e9887e089b3e4c5c585a1adcaf8d6",
+    "sourceReceiptSha256": "54c6453e810980fa09000f8b5f108e0a1f99b173058fe775dfc0e6e7bcaadc85",
+    "sceneSha256": "dbeaee762967c526b0dc4a22447f587730773885e575ab1bbfc0bd78ae69ca55",
+    "cameraReportSha256": "156c67641d117568897d234f91704acbf8ea64304409cdbfb33e136fdbf023db",
+    "replayReportSha256": "5f88cc2622e710cba3a96abb29a4d12445fed80f68b647a507005a80e2969c3a",
+    "sourceHashes": {
+      "scripts/blender/render.py": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+      "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+      "scripts/blender/camera_rig.py": "8b69c6bcfc913a7fe6e3a3013404422fb73463cc7ab4948ce84fce2ee932ffe4",
+      "library/sculptures/parallax-truck.py": "bf21c28b125c56cfb25533c144132f94c7bee88170615d2d38b8bb6931148c55",
+      "library/sculptures/parallax-truck.json": "2f0fad31e63c1049226477cea0813eb4b879fdf26e4c545315c17e306c60dfcc"
+    },
+    "duration": 8,
+    "frames": 192,
+    "fps": 24,
+    "bakedFramesChecked": 193,
+    "sourceCaptures": 8,
+    "inspected": true,
+    "maxIndependentRecordedCameraError": 5.8009021586258314e-08,
+    "staticDrift": 0,
+    "seekEqual": true,
+    "replayPixelsMatch": true,
+    "replayWithinTolerance": true,
+    "replayDifference": {
+      "changedChannels": 0,
+      "maxDifference": 0,
+      "changedFraction": 0
+    },
+    "holdTransformsAndOpticsExact": true,
+    "parallax": {
+      "foregroundDisplacement": -0.2787204086780548,
+      "rearDisplacement": -0.25733819603919983,
+      "ratio": 1.083089929780956,
+      "depthRatio": 1.0830899957677458,
+      "ratioError": 6.598678981006856e-08
+    }
+  }
+]

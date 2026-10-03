@@ -584,6 +584,91 @@
       }
     },
     {
+      "id": "camera-travel-studies",
+      "title": "Bounded camera travel",
+      "purpose": "Inspect another view with fixed-geometry orbit and truck moves while keeping native qualifications clear.",
+      "status": "prototype",
+      "integrity": "verified",
+      "fileCount": 410,
+      "issues": [],
+      "inventoryIds": [
+        "T04",
+        "M07"
+      ],
+      "manifest": "examples/library-kits/camera-travel-studies/kit.json",
+      "preview": "examples/library-kits/camera-travel-studies/preview.html",
+      "readme": "examples/library-kits/camera-travel-studies/README.md",
+      "review": "examples/library-kits/camera-travel-studies/REVIEW.md",
+      "sources": "examples/library-kits/camera-travel-studies/SOURCES.md",
+      "tags": {
+        "purpose": [
+          "inspect",
+          "change-view",
+          "explain-occlusion"
+        ],
+        "appearance": [
+          "paper",
+          "ceramic",
+          "graphite",
+          "blue",
+          "amber"
+        ],
+        "movement": [
+          "bounded-orbit",
+          "camera-truck",
+          "parallax",
+          "reading-hold"
+        ],
+        "format": [
+          "landscape",
+          "vertical"
+        ],
+        "subject": [
+          "system-inspection",
+          "methods-review",
+          "sightline",
+          "reporting"
+        ]
+      },
+      "editable": {
+        "native": [
+          "copy",
+          "phase labels",
+          "typography",
+          "held duration"
+        ],
+        "procedural": [
+          "scene geometry",
+          "camera",
+          "materials",
+          "source timing"
+        ],
+        "fixedClip": [
+          "Prepared pixels; regenerate and review after procedural changes"
+        ]
+      },
+      "requires": {
+        "replay": [
+          "ClearFrame native compositor",
+          "bundled fonts"
+        ],
+        "preparation": [
+          "Node.js",
+          "FFmpeg",
+          "Python 3",
+          "Blender for source regeneration"
+        ]
+      },
+      "evidence": {
+        "summary": "evidence/summary.json",
+        "review": "REVIEW.md",
+        "holds": "evidence/encoded-holds.json",
+        "registration": "evidence/registration.json",
+        "implementation": "evidence/implementation.json",
+        "continuousPlayback": "unverified"
+      }
+    },
+    {
       "id": "correlation-studies",
       "title": "Correlation studies",
       "purpose": "Compare explicit monthly Pearson windows and show the paired returns behind a selected relationship.",
@@ -2160,6 +2245,278 @@
         "S10"
       ],
       "search": "attention can move through depth reveal connections, surrounding context and depth with reusable authored camera paths and sharp native qualifications. m03 context selection focus connections porcelain mineral blue amber perspective-pullback rack-focus reading-hold infrastructure dependencies locations specimens inspection research-context s09 s10 rack focus from claim to evidence shift focus between physical layers while crisp native copy presents the qualification. planes aperture cue focus duration research product proof education"
+    },
+    {
+      "id": "camera-travel-studies/another-view",
+      "kind": "example",
+      "title": "Check another point of view",
+      "packageId": "camera-travel-studies",
+      "inventoryIds": [
+        "T04",
+        "M07"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/camera-travel-studies/specimens/another-view-landscape/storyboard.json",
+          "video": "examples/library-kits/camera-travel-studies/evidence/another-view-landscape/video.mp4",
+          "poster": "examples/library-kits/camera-travel-studies/evidence/another-view-landscape/sheet.png",
+          "receipt": "examples/library-kits/camera-travel-studies/evidence/another-view-landscape/video.mp4.json",
+          "duration": 18,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/camera-travel-studies/specimens/another-view-vertical/storyboard.json",
+          "video": "examples/library-kits/camera-travel-studies/evidence/another-view-vertical/video.mp4",
+          "poster": "examples/library-kits/camera-travel-studies/evidence/another-view-vertical/sheet.png",
+          "receipt": "examples/library-kits/camera-travel-studies/evidence/another-view-vertical/video.mp4.json",
+          "duration": 18,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Inspect another view with fixed-geometry orbit and truck moves while keeping native qualifications clear.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Blender + native",
+      "purposes": [
+        "inspect",
+        "change-view",
+        "explain-occlusion"
+      ],
+      "appearance": [
+        "paper",
+        "ceramic",
+        "graphite",
+        "blue",
+        "amber"
+      ],
+      "movement": [
+        "bounded-orbit",
+        "camera-truck",
+        "parallax",
+        "reading-hold"
+      ],
+      "subjects": [
+        "system-inspection",
+        "methods-review",
+        "sightline",
+        "reporting"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S06",
+        "S08",
+        "S11",
+        "S13",
+        "S17"
+      ],
+      "search": "check another point of view inspect another view with fixed-geometry orbit and truck moves while keeping native qualifications clear. t04 m07 inspect change-view explain-occlusion paper ceramic graphite blue amber bounded-orbit camera-truck parallax reading-hold system-inspection methods-review sightline reporting s06 s08 s11 s13 s17 small blender camera-rig library trusted built-in helpers create a few reusable dolly, orbit, truck, orthographic and focus rigs with baked keyframes. subject bounds path lens focus target seed limits all 3d assets macro-to-portrait reframe keep the subject and copy region explicit while authoring separate landscape and vertical camera endpoints. subject bounds copy safe area aspect ratio endpoints all formats"
+    },
+    {
+      "id": "camera-travel-studies/partial-route",
+      "kind": "example",
+      "title": "A screen hides part of the route",
+      "packageId": "camera-travel-studies",
+      "inventoryIds": [
+        "T04",
+        "M07"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/camera-travel-studies/specimens/partial-route-landscape/storyboard.json",
+          "video": "examples/library-kits/camera-travel-studies/evidence/partial-route-landscape/video.mp4",
+          "poster": "examples/library-kits/camera-travel-studies/evidence/partial-route-landscape/sheet.png",
+          "receipt": "examples/library-kits/camera-travel-studies/evidence/partial-route-landscape/video.mp4.json",
+          "duration": 18,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/camera-travel-studies/specimens/partial-route-vertical/storyboard.json",
+          "video": "examples/library-kits/camera-travel-studies/evidence/partial-route-vertical/video.mp4",
+          "poster": "examples/library-kits/camera-travel-studies/evidence/partial-route-vertical/sheet.png",
+          "receipt": "examples/library-kits/camera-travel-studies/evidence/partial-route-vertical/video.mp4.json",
+          "duration": 18,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Inspect another view with fixed-geometry orbit and truck moves while keeping native qualifications clear.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Blender + native",
+      "purposes": [
+        "inspect",
+        "change-view",
+        "explain-occlusion"
+      ],
+      "appearance": [
+        "paper",
+        "ceramic",
+        "graphite",
+        "blue",
+        "amber"
+      ],
+      "movement": [
+        "bounded-orbit",
+        "camera-truck",
+        "parallax",
+        "reading-hold"
+      ],
+      "subjects": [
+        "system-inspection",
+        "methods-review",
+        "sightline",
+        "reporting"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S06",
+        "S08",
+        "S11",
+        "S13",
+        "S17"
+      ],
+      "search": "a screen hides part of the route inspect another view with fixed-geometry orbit and truck moves while keeping native qualifications clear. t04 m07 inspect change-view explain-occlusion paper ceramic graphite blue amber bounded-orbit camera-truck parallax reading-hold system-inspection methods-review sightline reporting s06 s08 s11 s13 s17 small blender camera-rig library trusted built-in helpers create a few reusable dolly, orbit, truck, orthographic and focus rigs with baked keyframes. subject bounds path lens focus target seed limits all 3d assets macro-to-portrait reframe keep the subject and copy region explicit while authoring separate landscape and vertical camera endpoints. subject bounds copy safe area aspect ratio endpoints all formats"
+    },
+    {
+      "id": "camera-travel-studies/partial-summary",
+      "kind": "example",
+      "title": "Summaries leave things out",
+      "packageId": "camera-travel-studies",
+      "inventoryIds": [
+        "T04",
+        "M07"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/camera-travel-studies/specimens/partial-summary-landscape/storyboard.json",
+          "video": "examples/library-kits/camera-travel-studies/evidence/partial-summary-landscape/video.mp4",
+          "poster": "examples/library-kits/camera-travel-studies/evidence/partial-summary-landscape/sheet.png",
+          "receipt": "examples/library-kits/camera-travel-studies/evidence/partial-summary-landscape/video.mp4.json",
+          "duration": 18,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/camera-travel-studies/specimens/partial-summary-vertical/storyboard.json",
+          "video": "examples/library-kits/camera-travel-studies/evidence/partial-summary-vertical/video.mp4",
+          "poster": "examples/library-kits/camera-travel-studies/evidence/partial-summary-vertical/sheet.png",
+          "receipt": "examples/library-kits/camera-travel-studies/evidence/partial-summary-vertical/video.mp4.json",
+          "duration": 18,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Inspect another view with fixed-geometry orbit and truck moves while keeping native qualifications clear.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Blender + native",
+      "purposes": [
+        "inspect",
+        "change-view",
+        "explain-occlusion"
+      ],
+      "appearance": [
+        "paper",
+        "ceramic",
+        "graphite",
+        "blue",
+        "amber"
+      ],
+      "movement": [
+        "bounded-orbit",
+        "camera-truck",
+        "parallax",
+        "reading-hold"
+      ],
+      "subjects": [
+        "system-inspection",
+        "methods-review",
+        "sightline",
+        "reporting"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S06",
+        "S08",
+        "S11",
+        "S13",
+        "S17"
+      ],
+      "search": "summaries leave things out inspect another view with fixed-geometry orbit and truck moves while keeping native qualifications clear. t04 m07 inspect change-view explain-occlusion paper ceramic graphite blue amber bounded-orbit camera-truck parallax reading-hold system-inspection methods-review sightline reporting s06 s08 s11 s13 s17 small blender camera-rig library trusted built-in helpers create a few reusable dolly, orbit, truck, orthographic and focus rigs with baked keyframes. subject bounds path lens focus target seed limits all 3d assets macro-to-portrait reframe keep the subject and copy region explicit while authoring separate landscape and vertical camera endpoints. subject bounds copy safe area aspect ratio endpoints all formats"
+    },
+    {
+      "id": "camera-travel-studies/side-connection",
+      "kind": "example",
+      "title": "Inspect the side connection",
+      "packageId": "camera-travel-studies",
+      "inventoryIds": [
+        "T04",
+        "M07"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/camera-travel-studies/specimens/side-connection-landscape/storyboard.json",
+          "video": "examples/library-kits/camera-travel-studies/evidence/side-connection-landscape/video.mp4",
+          "poster": "examples/library-kits/camera-travel-studies/evidence/side-connection-landscape/sheet.png",
+          "receipt": "examples/library-kits/camera-travel-studies/evidence/side-connection-landscape/video.mp4.json",
+          "duration": 18,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/camera-travel-studies/specimens/side-connection-vertical/storyboard.json",
+          "video": "examples/library-kits/camera-travel-studies/evidence/side-connection-vertical/video.mp4",
+          "poster": "examples/library-kits/camera-travel-studies/evidence/side-connection-vertical/sheet.png",
+          "receipt": "examples/library-kits/camera-travel-studies/evidence/side-connection-vertical/video.mp4.json",
+          "duration": 18,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Inspect another view with fixed-geometry orbit and truck moves while keeping native qualifications clear.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Blender + native",
+      "purposes": [
+        "inspect",
+        "change-view",
+        "explain-occlusion"
+      ],
+      "appearance": [
+        "paper",
+        "ceramic",
+        "graphite",
+        "blue",
+        "amber"
+      ],
+      "movement": [
+        "bounded-orbit",
+        "camera-truck",
+        "parallax",
+        "reading-hold"
+      ],
+      "subjects": [
+        "system-inspection",
+        "methods-review",
+        "sightline",
+        "reporting"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S06",
+        "S08",
+        "S11",
+        "S13",
+        "S17"
+      ],
+      "search": "inspect the side connection inspect another view with fixed-geometry orbit and truck moves while keeping native qualifications clear. t04 m07 inspect change-view explain-occlusion paper ceramic graphite blue amber bounded-orbit camera-truck parallax reading-hold system-inspection methods-review sightline reporting s06 s08 s11 s13 s17 small blender camera-rig library trusted built-in helpers create a few reusable dolly, orbit, truck, orthographic and focus rigs with baked keyframes. subject bounds path lens focus target seed limits all 3d assets macro-to-portrait reframe keep the subject and copy region explicit while authoring separate landscape and vertical camera endpoints. subject bounds copy safe area aspect ratio endpoints all formats"
     },
     {
       "id": "correlation-studies/changing-pair",
@@ -6966,7 +7323,7 @@
         "M07"
       ],
       "medium": "Camera / motion",
-      "statusText": "partial prototype; fixed orthographic copy-safe fitting and two-format baked-frame checks; moving endpoints and general presets pending",
+      "statusText": "Partial prototype: authored landscape/portrait framing for fixed, pullback, orbit and truck examples with all-frame bounds checks; arbitrary-ratio automatic reframing, continuous playback and master acceptance remain open",
       "guardrail": "A crop is not verified portrait composition; review each format.",
       "parameters": [
         "subject bounds",
@@ -6974,10 +7331,15 @@
         "aspect ratio",
         "endpoints"
       ],
-      "related": [],
+      "related": [
+        "camera-travel-studies/another-view",
+        "camera-travel-studies/partial-route",
+        "camera-travel-studies/partial-summary",
+        "camera-travel-studies/side-connection"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],
@@ -7217,7 +7579,7 @@
         "T04"
       ],
       "medium": "Tool",
-      "statusText": "partial prototype; orbit, truck and broader rig presets remain",
+      "statusText": "Native/Blender prototype: deterministic pullback, focus, bounded analytic orbit and equal-translation truck paths with separately reviewed landscape/vertical examples; continuous playback, master acceptance and broader chase/visibility solving remain open",
       "guardrail": "Shared/project kits stay JSON-only. Bake transforms and avoid live random state or uncached physics.",
       "parameters": [
         "subject bounds",
@@ -7227,10 +7589,15 @@
         "seed",
         "limits"
       ],
-      "related": [],
+      "related": [
+        "camera-travel-studies/another-view",
+        "camera-travel-studies/partial-route",
+        "camera-travel-studies/partial-summary",
+        "camera-travel-studies/side-connection"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],
@@ -7253,7 +7620,7 @@
         "T05"
       ],
       "medium": "Tool",
-      "statusText": "Partial implementation: fourteen recipe contracts, custom pose timing, safe clip-selection plans and retained drafts; physical-mechanisms and camera-studies bind native captions to source phases; general automatic cue integration remains open",
+      "statusText": "Partial implementation: sixteen recipe contracts, custom pose timing, safe clip-selection plans and retained drafts; physical-mechanisms and camera-studies bind native captions to source phases; general automatic cue integration remains open",
       "guardrail": "Distinguish a clip playback-rate change from a new simulation or exact source-time map.",
       "parameters": [
         "fps",

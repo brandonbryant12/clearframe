@@ -1,0 +1,194 @@
+[
+  {
+    "name": "inspection-orbit-landscape",
+    "videoSha256": "d0a17ac45fd42adbc47030c99f309f93dad0d91d56c1ea659fb69e77695459b7",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-landscape/0.1s.png",
+        "sha256": "4b2007a4f358903931224b65e4299d7e8547bcd6b16951db744d57dddd8d3da7"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-landscape/1.2s.png",
+        "sha256": "72cc9e826f110a32e748504cf0f07cac98dd8848c52e803e2bf161e5622b98ea"
+      },
+      {
+        "time": 2.0,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-landscape/2s.png",
+        "sha256": "9738bfc11fd9b1a800cdcde690edb8dfb4025f4b699aeda7c77ca87ce1d730d6"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-landscape/3.6s.png",
+        "sha256": "012c822730eab459475d215b29610f14f1fd13b049fc52301dce30926f7dac0e"
+      },
+      {
+        "time": 4.5,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-landscape/4.5s.png",
+        "sha256": "de57607ad7e11a47ad60734299a62bad2ae006e881b1bd8df2c3bd42fa8af99b"
+      },
+      {
+        "time": 5.95,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-landscape/5.95s.png",
+        "sha256": "3a69b73e48f68be7224f49e0db3a8402cd5ba51b3b63925eed740c03848cc238"
+      },
+      {
+        "time": 6.5,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-landscape/6.5s.png",
+        "sha256": "60b4ddc0124c42f279c879c94f703b3dfb3d22b313125cb9d129440d33b52475"
+      },
+      {
+        "time": 7.95,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-landscape/7.95s.png",
+        "sha256": "27c9a4f3dc0ceeaaeef2061ea4dc44b7c83109dc267c915b297a26dbfa010444"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "inspection-orbit-vertical",
+    "videoSha256": "ee1fb2ec7550e5a7fcc8c18c1c6ada5c79ceb2e9a70988b26fcadfc1fca9fd6d",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-vertical/0.1s.png",
+        "sha256": "69c883cb2d40cdd72d8e18905d361748bb7b9d91d48d48228ab5707127093fc5"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-vertical/1.2s.png",
+        "sha256": "556c50cbe7c840fd6e385573f91f3f175fbf60c2fa0ac5c4f77aa93d361653a2"
+      },
+      {
+        "time": 2.0,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-vertical/2s.png",
+        "sha256": "568aef11d51b4acd3be3c0f23bebc1f48763a9533235638fb524389506388cfc"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-vertical/3.6s.png",
+        "sha256": "febb91021f1c2a8f735973666820f785cebf9b4943ab16a38cd6f632a2fbb035"
+      },
+      {
+        "time": 4.5,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-vertical/4.5s.png",
+        "sha256": "bd5703eed3b220d02dae82f02521952fe2b8510a4014c0acae34a47ee8f82b43"
+      },
+      {
+        "time": 5.95,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-vertical/5.95s.png",
+        "sha256": "6ba060b57fd2d4a2f82ad63af94635a9b64b4f59cdc0d39cce510e7198a81f2d"
+      },
+      {
+        "time": 6.5,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-vertical/6.5s.png",
+        "sha256": "d71722bca5953a801ac5a65b9ef39be50137b5df8c7097fb173fb6113d4efe65"
+      },
+      {
+        "time": 7.95,
+        "path": "evidence/independent-review/source-frames/inspection-orbit-vertical/7.95s.png",
+        "sha256": "c5a29262a90b64b243369ca5977b3caa32f656b9fb10c653cf97cbd6e59c27bb"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "parallax-truck-landscape",
+    "videoSha256": "7cb3cd520302d2ea03529465e2aba4bdf726e66489a0887b69e7b145c061b40f",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/source-frames/parallax-truck-landscape/0.1s.png",
+        "sha256": "51ee751bd70d72d881d6957a4667739e69f6c683dd46ab304bda2591b3ff0d28"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/source-frames/parallax-truck-landscape/1.2s.png",
+        "sha256": "0735c9abb8714535660837d9d188424bb4c0bfc7e2851830ff403168552bdc57"
+      },
+      {
+        "time": 2.0,
+        "path": "evidence/independent-review/source-frames/parallax-truck-landscape/2s.png",
+        "sha256": "8df1301f804b5fa02c5528c408d1740ad9f586ff0a2518988225947258344999"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/source-frames/parallax-truck-landscape/3.6s.png",
+        "sha256": "3e3efc5872661eff93a4bf62c001c2e26b5c7414e8617f63861b0e1057ccefcf"
+      },
+      {
+        "time": 4.5,
+        "path": "evidence/independent-review/source-frames/parallax-truck-landscape/4.5s.png",
+        "sha256": "bad7a5c94342e5d9740b6996592cdaf0f16642272dcd0d2a5a611ca9fc7564a0"
+      },
+      {
+        "time": 5.95,
+        "path": "evidence/independent-review/source-frames/parallax-truck-landscape/5.95s.png",
+        "sha256": "8e0280ddbc750d4dc4f8e4d2662cc9116f77e351656ed4413111895de9834898"
+      },
+      {
+        "time": 6.5,
+        "path": "evidence/independent-review/source-frames/parallax-truck-landscape/6.5s.png",
+        "sha256": "044d48ea239644be41c62287e550472aa61033531c2f3c73d5140ef439c2d5a1"
+      },
+      {
+        "time": 7.95,
+        "path": "evidence/independent-review/source-frames/parallax-truck-landscape/7.95s.png",
+        "sha256": "1fcb36d0015b87ff832dc865848675d784c6676d1d37a5f0a85f9d539f83a7cc"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "parallax-truck-vertical",
+    "videoSha256": "e45f77166bb144d99b4707fb3b08bf7d7c1e9887e089b3e4c5c585a1adcaf8d6",
+    "width": 360,
+    "frames": [
+      {
+        "time": 0.1,
+        "path": "evidence/independent-review/source-frames/parallax-truck-vertical/0.1s.png",
+        "sha256": "1afe0270b2956fa294cb467bbca553e96108431614d6ffb0f674adf9a3e2a08f"
+      },
+      {
+        "time": 1.2,
+        "path": "evidence/independent-review/source-frames/parallax-truck-vertical/1.2s.png",
+        "sha256": "b85c8e84dd1b2d76b07e45d096d286d504ce8e771fdef1f2bcba3e6aab0155ae"
+      },
+      {
+        "time": 2.0,
+        "path": "evidence/independent-review/source-frames/parallax-truck-vertical/2s.png",
+        "sha256": "22901f0a1e374b9c6c072e092ab053b50df4dd603707e684786c20d706d50830"
+      },
+      {
+        "time": 3.6,
+        "path": "evidence/independent-review/source-frames/parallax-truck-vertical/3.6s.png",
+        "sha256": "9f11aa477defac63fad9f59c6af9987b79ec339e844685e9986e30736bd6666d"
+      },
+      {
+        "time": 4.5,
+        "path": "evidence/independent-review/source-frames/parallax-truck-vertical/4.5s.png",
+        "sha256": "8716f6b7573c7ae0e37377c5f98fa351b14581723a8ae19370dfb4ab6750f114"
+      },
+      {
+        "time": 5.95,
+        "path": "evidence/independent-review/source-frames/parallax-truck-vertical/5.95s.png",
+        "sha256": "2409fc9e1506d50a23dd29fa7b6370afe612cc516fd0e1a00ac10f1880c315ed"
+      },
+      {
+        "time": 6.5,
+        "path": "evidence/independent-review/source-frames/parallax-truck-vertical/6.5s.png",
+        "sha256": "be6ee33c1eb7a7d4dec5b0c9b248624d09fcfeb10302ce0217825d61f854a319"
+      },
+      {
+        "time": 7.95,
+        "path": "evidence/independent-review/source-frames/parallax-truck-vertical/7.95s.png",
+        "sha256": "ec176bc041ff6a9d8ed2e2bd0fdad608022619296fa6c7a25e432b3ea45ee54a"
+      }
+    ],
+    "visuallyInspected": true
+  }
+]

@@ -3,16 +3,16 @@
   "status": "source-prototype",
   "browserReview": "pending-scoped-localhost-approval-after-file-url-policy-rejection",
   "catalog": {
-    "packages": 14,
-    "examples": 57,
-    "nativeVariants": 112,
+    "packages": 15,
+    "examples": 61,
+    "nativeVariants": 120,
     "preparedInserts": 1,
     "inventoryItems": 71,
-    "manifestFiles": 3655,
+    "manifestFiles": 4065,
     "issues": 0
   },
   "tests": {
-    "nodePassed": 206,
+    "nodePassed": 207,
     "nodeFailed": 0,
     "focusedPassed": 4,
     "independentPassed": 17,
@@ -32,23 +32,23 @@
     },
     {
       "path": "docs/library-browser/README.md",
-      "bytes": 6111,
-      "sha256": "9e7ffefaa13474032c2c114370970ab6fc0806a0428009a086f87a947703ed9f"
+      "bytes": 6110,
+      "sha256": "7d39f12316470f67d039a13613035f60ea67a385b25a6d9bb6623ece0a005c2f"
     },
     {
       "path": "docs/library-browser/app.js",
-      "bytes": 254011,
-      "sha256": "94fc9c6b35b203c65295be6b7fd83f04e643c6c66b8f568510edb3ec8c427ce1"
+      "bytes": 265782,
+      "sha256": "8240c701711e901b164bfd34ce5db25b4c4d929c7affa5822e6fbe5701b490a8"
     },
     {
       "path": "docs/library-browser/catalog.json",
-      "bytes": 300831,
-      "sha256": "a9a68dbf20c3ec1625adbef45b4f27c0394ddc9f5ce83e253cd43ad2f6269237"
+      "bytes": 315956,
+      "sha256": "8f379b0403a4e6f70ab16764767b0eea7ba4cb6e95c09d5c86bd6ec305310c2e"
     },
     {
       "path": "docs/library-browser/evidence/catalog-build.json",
       "bytes": 193,
-      "sha256": "2ffa6a24a704e09df5caa3c25923c14b72ac465c7c4daa5ff459b6bf502685e8"
+      "sha256": "acb86d7549f59f265bcf20220ab995260de1a894f6a766cced259518cb5611b9"
     },
     {
       "path": "docs/library-browser/evidence/cli-smoke.json",
@@ -57,28 +57,28 @@
     },
     {
       "path": "docs/library-browser/evidence/node-tests.txt",
-      "bytes": 20685,
-      "sha256": "e7bc4191fe7cdabcd09af6ac627372c446242b296a28ef58d3f816bf8885c7a3"
+      "bytes": 20752,
+      "sha256": "961a546eb4c1a6541af9b27cb72610ea42c0133449a7b0ad6f4fa0ca228b0ce9"
     },
     {
       "path": "docs/library-browser/evidence/source-review-checks.json",
-      "bytes": 8594,
-      "sha256": "cb06e64a46249d187750443e7888f0904adaa92b8c46add7a26645d779e2a0e1"
+      "bytes": 8801,
+      "sha256": "b979612255ef4ff1f59e7d88b1590af8f89cd98fb0bee049528e31e3c9063707"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.json",
       "bytes": 2106,
-      "sha256": "aed189672bd7c64e9310d2826757c5dcba60b1cd5484fdf6764096611ef79b71"
+      "sha256": "ac3cfaff2d9a2ee3db081495e19a10f39aa178cebcf3c04fbd5821d558028ff7"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.mjs",
       "bytes": 8284,
-      "sha256": "e1f4408ce5f31ee1cc01bde46b847af287465e6e5a016bab5a6e7d67a7222322"
+      "sha256": "abadc53f5ead54a97d4c02e4d0256598897500da56f2d517e1fc12ae77318e7b"
     },
     {
       "path": "docs/library-browser/evidence/source-review.md",
-      "bytes": 9519,
-      "sha256": "8eab7066ff742b03f836559ccefadffbe402ae10beab6203bc691bb6bc414b08"
+      "bytes": 9706,
+      "sha256": "19fecc73f882bd124d19e357d85c2f5451ae90c0855c9b295135338c66d238a9"
     },
     {
       "path": "docs/library-browser/example-ledger.json",
@@ -102,13 +102,13 @@
     },
     {
       "path": "docs/research/timmer-library/asset-links.json",
-      "bytes": 6479,
-      "sha256": "c1f67704b96e03fdd718d536a920ea15b4aedcb255b6af51ad0a0e38b30c2d9e"
+      "bytes": 6828,
+      "sha256": "b1922a92a582b664157db47f7f0a9b9d94078f2a752f7bcf7ccae8c82c88ebe1"
     },
     {
       "path": "docs/research/timmer-library/inventory.json",
-      "bytes": 79655,
-      "sha256": "8cef3768e0c228a51d1a075314c9ce2da5b12b836197b61ab01cce063d6df59a"
+      "bytes": 80211,
+      "sha256": "3c21fd3582a0f207d58dd55f5a85f63d3597ea77ea6b669b86fa6597b2dc0f4b"
     },
     {
       "path": "engine/cli.mjs",
@@ -151,5 +151,5 @@
       "sha256": "90c6ba724d71d3411d57a896239e85a73c27027e5e98b656384c2be2d48705c5"
     }
   ],
-  "sourceRefresh": "Valuation catalog expansion; browser UI, CLI and ledger source unchanged from b0f1fc8; planned-only fixture now C15; 17 independent checks rerun"
+  "sourceRefresh": "Camera travel catalog expansion; browser UI, CLI and ledger source unchanged from 2a11fc7; planned-only fixture now C15; 17 independent checks rerun"
 }

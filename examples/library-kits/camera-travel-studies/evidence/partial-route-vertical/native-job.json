@@ -1,0 +1,400 @@
+{
+  "version": 2,
+  "title": "A screen hides part of the route",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "frames": 540,
+  "theme": {
+    "base": "research-paper",
+    "bg": "#fafafa",
+    "surface": "#eeedf2",
+    "ink": "#24272c",
+    "muted": "#656972",
+    "accent": "#24272c",
+    "accent2": "#b55c29",
+    "positive": "#4f7563",
+    "negative": "#b34058"
+  },
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.3
+  },
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "caption_style": "plate",
+  "text_motion": "lines",
+  "beats": [
+    {
+      "id": "mechanism",
+      "block": "canvas",
+      "frames": 240,
+      "start_frame": 0,
+      "cue_seconds": 0.35,
+      "transition": "cut",
+      "exit": "none",
+      "settle_seconds": 6.078333333333333,
+      "motion": {
+        "preset": "gentle",
+        "intensity": 0.3
+      },
+      "props": {
+        "elements": [
+          {
+            "id": "header-band",
+            "type": "rect",
+            "x": 0,
+            "y": 0,
+            "w": 1080,
+            "h": 633.6,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "footer-band",
+            "type": "rect",
+            "x": 0,
+            "y": 1612.8,
+            "w": 1080,
+            "h": 307.2,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "qualification",
+            "type": "text",
+            "text": "Illustrative geometry; not an engineered model.",
+            "x": 113.39999999999999,
+            "y": 1699.2,
+            "size": 35.64,
+            "width": 853.2,
+            "height": 124.80000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          },
+          {
+            "id": "subject",
+            "type": "text",
+            "text": "Inspection sightline",
+            "x": 113.39999999999999,
+            "y": 230.39999999999998,
+            "size": 30.240000000000002,
+            "width": 853.2,
+            "height": 76.8,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "text",
+            "dur": 0
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "text": "A screen hides part of the route",
+            "x": 113.39999999999999,
+            "y": 345.59999999999997,
+            "size": 56.16,
+            "width": 853.2,
+            "height": 201.6,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "display",
+            "dur": 0
+          },
+          {
+            "id": "phase-opening",
+            "type": "text",
+            "text": "A partially hidden connection",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 1.1716666666666669,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-truck",
+            "type": "text",
+            "text": "Shift the sightline",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 1.2916666666666667,
+            "enter": "fade",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 5.838333333333333,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-inspection",
+            "type": "text",
+            "text": "Some occlusion remains",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 5.958333333333333,
+            "enter": "fade",
+            "dur": 0.12
+          }
+        ]
+      },
+      "camera": {
+        "move": "none"
+      },
+      "plate": {
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false,
+        "file": "e45f77166bb144d9.mp4",
+        "video": true
+      },
+      "words": [],
+      "captions": []
+    },
+    {
+      "id": "reading-hold",
+      "block": "canvas",
+      "frames": 300,
+      "start_frame": 240,
+      "cue_seconds": 0.35,
+      "transition": "cut",
+      "exit": "none",
+      "settle_seconds": 0.9,
+      "motion": {
+        "preset": "gentle",
+        "intensity": 0.3
+      },
+      "props": {
+        "elements": [
+          {
+            "id": "header-band",
+            "type": "rect",
+            "x": 0,
+            "y": 0,
+            "w": 1080,
+            "h": 633.6,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none",
+            "dur": 0,
+            "morph": {
+              "from": {
+                "id": "header-band",
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 1080,
+                "h": 633.6,
+                "fill": "#f3f2ef",
+                "at": 0,
+                "enter": "none",
+                "dur": 0
+              },
+              "dur": 0.8
+            }
+          },
+          {
+            "id": "footer-band",
+            "type": "rect",
+            "x": 0,
+            "y": 1612.8,
+            "w": 1080,
+            "h": 307.2,
+            "fill": "#f3f2ef",
+            "at": 0,
+            "enter": "none",
+            "dur": 0,
+            "morph": {
+              "from": {
+                "id": "footer-band",
+                "type": "rect",
+                "x": 0,
+                "y": 1612.8,
+                "w": 1080,
+                "h": 307.2,
+                "fill": "#f3f2ef",
+                "at": 0,
+                "enter": "none",
+                "dur": 0
+              },
+              "dur": 0.8
+            }
+          },
+          {
+            "id": "qualification",
+            "type": "text",
+            "text": "Illustrative geometry; not an engineered model.",
+            "x": 113.39999999999999,
+            "y": 1699.2,
+            "size": 35.64,
+            "width": 853.2,
+            "height": 124.80000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0,
+            "morph": {
+              "from": {
+                "id": "qualification",
+                "type": "text",
+                "text": "Illustrative geometry; not an engineered model.",
+                "x": 113.39999999999999,
+                "y": 1699.2,
+                "size": 35.64,
+                "width": 853.2,
+                "height": 124.80000000000001,
+                "font": "text",
+                "fill": "ink",
+                "at": 0,
+                "enter": "none",
+                "dur": 0
+              },
+              "dur": 0.8
+            }
+          },
+          {
+            "id": "subject",
+            "type": "text",
+            "text": "Inspection sightline",
+            "x": 113.39999999999999,
+            "y": 230.39999999999998,
+            "size": 30.240000000000002,
+            "width": 853.2,
+            "height": 76.8,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "text",
+            "dur": 0,
+            "morph": {
+              "from": {
+                "id": "subject",
+                "type": "text",
+                "text": "Inspection sightline",
+                "x": 113.39999999999999,
+                "y": 230.39999999999998,
+                "size": 30.240000000000002,
+                "width": 853.2,
+                "height": 76.8,
+                "fill": "ink",
+                "at": 0,
+                "enter": "none",
+                "font": "text",
+                "dur": 0
+              },
+              "dur": 0.8
+            }
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "text": "A screen hides part of the route",
+            "x": 113.39999999999999,
+            "y": 345.59999999999997,
+            "size": 56.16,
+            "width": 853.2,
+            "height": 201.6,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "display",
+            "dur": 0,
+            "morph": {
+              "from": {
+                "id": "title",
+                "type": "text",
+                "text": "A screen hides part of the route",
+                "x": 113.39999999999999,
+                "y": 345.59999999999997,
+                "size": 56.16,
+                "width": 853.2,
+                "height": 201.6,
+                "fill": "ink",
+                "at": 0,
+                "enter": "none",
+                "font": "display",
+                "dur": 0
+              },
+              "dur": 0.8
+            }
+          },
+          {
+            "id": "phase-inspection",
+            "type": "text",
+            "text": "Some occlusion remains",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0,
+            "morph": {
+              "from": {
+                "id": "phase-inspection",
+                "type": "text",
+                "text": "Some occlusion remains",
+                "x": 113.39999999999999,
+                "y": 576,
+                "size": 39.96,
+                "width": 853.2,
+                "height": 130.56,
+                "font": "text",
+                "fill": "ink",
+                "at": 0,
+                "enter": "none",
+                "dur": 0
+              },
+              "dur": 0.8
+            }
+          }
+        ]
+      },
+      "camera": {
+        "move": "none"
+      },
+      "plate": {
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false,
+        "file": "bf8e49b83ee275b8.mp4",
+        "video": true
+      },
+      "words": [],
+      "captions": []
+    }
+  ]
+}

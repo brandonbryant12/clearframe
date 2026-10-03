@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/camera-travel-studies/specimens/side-connection-landscape/build/pipeline/2026-10-03T11-54-57-619Z-cc74eb4f/video.mp4",
+  "outputSha256": "c94490035f2401910addc6229bd51592592b15e8408e019ffd8ba418b235b8b9",
+  "inputId": "13b54474d1ad5287c5436120f703a94ffc9890fd779c41a46638acf54bf8f64e",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "mechanism: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "mechanism: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 239,
+      "time": 7.966666666666667,
+      "reasons": [
+        "mechanism: last frame",
+        "Before reading-hold"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 240,
+      "time": 8,
+      "reasons": [
+        "reading-hold: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 246,
+      "time": 8.2,
+      "reasons": [
+        "reading-hold: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 539,
+      "time": 17.966666666666665,
+      "reasons": [
+        "reading-hold: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

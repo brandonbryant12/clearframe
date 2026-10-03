@@ -357,6 +357,26 @@
           "C14"
         ]
       }
+    },
+    "camera-travel-studies": {
+      "cases": {
+        "side-connection": [
+          "T04",
+          "M07"
+        ],
+        "another-view": [
+          "T04",
+          "M07"
+        ],
+        "partial-route": [
+          "T04",
+          "M07"
+        ],
+        "partial-summary": [
+          "T04",
+          "M07"
+        ]
+      }
     }
   },
   "sourceOnly": {

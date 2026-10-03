@@ -1,0 +1,234 @@
+[
+  {
+    "name": "another-view-landscape",
+    "pipelineId": "2026-10-03T11-54-09-374Z-5f8dc856",
+    "storyboardSha256": "0a6b9f887bfcef3f87cb0be3146938b6c26ae31eb023c44a29d51cf2ab88e251",
+    "videoSha256": "9a11c33153f5ff197113edce0ff2756e0f785d93359c7e09f2f1f875a7612ee3",
+    "sourceClipSha256": "d0a17ac45fd42adbc47030c99f309f93dad0d91d56c1ea659fb69e77695459b7",
+    "heldImageSha256": "4bc7c5d07a75b4de9f72c6bc8f24e422f466c0ad93045fb73f65dd7ca5538ab5",
+    "holdClipSha256": "c610f08907ea635b27ddbcad2b9d2e54887f1a3caaeeddce28593f7873b2c6dd",
+    "geometrySha256": "56d91dc53016486d92171665d1405350073ede7509c3ac2dc6bd957ace82a80a",
+    "projectedBounds": [
+      0.08,
+      0.17,
+      0.92,
+      0.68
+    ],
+    "frames": 540,
+    "anchorFrame": 225,
+    "holdFramesChecked": 315,
+    "maxHoldDifference": 0.18232783564814814,
+    "actionDifference": 7.280381944444445,
+    "boundaryDifference": 0.006221064814814815,
+    "thresholds": {
+      "hold": 0.5,
+      "action": 1,
+      "boundary": 0.1
+    },
+    "passed": true,
+    "limitations": "Mean absolute RGB difference in a 96px subject crop; no subjective playback or exhaustive pixel identity claim."
+  },
+  {
+    "name": "another-view-vertical",
+    "pipelineId": "2026-10-03T11-54-17-522Z-eeccf575",
+    "storyboardSha256": "7a13fb22d88b641d224d142b80641bcfc14aff0d68ee20394bf5c6149187a6dd",
+    "videoSha256": "0dedf5da9d33ad38a223dde1f128719ef9216e1585cc7e069d39d6d9a7ac5674",
+    "sourceClipSha256": "ee1fb2ec7550e5a7fcc8c18c1c6ada5c79ceb2e9a70988b26fcadfc1fca9fd6d",
+    "heldImageSha256": "7011a3e0bd53981ad64d8053ff8496cd16acd7236c722afa6ac950056c3282d6",
+    "holdClipSha256": "77690f93dce8105c1b651ab8b027e550a3ec47e58e48c27820b0c65eafba5bbd",
+    "geometrySha256": "adcfbcec2fe87a6807b55901d1569ef8ac088e4aefe8cd737ab3a5fb81c13558",
+    "projectedBounds": [
+      0.08,
+      0.17,
+      0.92,
+      0.68
+    ],
+    "frames": 540,
+    "anchorFrame": 225,
+    "holdFramesChecked": 315,
+    "maxHoldDifference": 0.20768229166666666,
+    "actionDifference": 9.068648726851851,
+    "boundaryDifference": 0.006546585648148148,
+    "thresholds": {
+      "hold": 0.5,
+      "action": 1,
+      "boundary": 0.1
+    },
+    "passed": true,
+    "limitations": "Mean absolute RGB difference in a 96px subject crop; no subjective playback or exhaustive pixel identity claim."
+  },
+  {
+    "name": "partial-route-landscape",
+    "pipelineId": "2026-10-03T11-54-25-746Z-c5770357",
+    "storyboardSha256": "966dbf4e30dd77550573d87787bcc2dbeca40a8bf367028f9d969904cd19c2b4",
+    "videoSha256": "06574a60c75cf34e030ff9afed41de1c1574154b75de493f6cba4dfe27442d1e",
+    "sourceClipSha256": "7cb3cd520302d2ea03529465e2aba4bdf726e66489a0887b69e7b145c061b40f",
+    "heldImageSha256": "ca9d366a4b06323cd5c61202f5fb987fc1a7ac5b96eeec373a06926359f9a75e",
+    "holdClipSha256": "ca97b05ecfb14cbe6939701fa1b74d958be32e6c24c165e8cd8a5582896ee276",
+    "geometrySha256": "a7b6e9e9c83f9b0fabf57e63431b5c0c471c00207af7e86046db5cad5b273db6",
+    "projectedBounds": [
+      0.08,
+      0.17,
+      0.92,
+      0.68
+    ],
+    "frames": 540,
+    "anchorFrame": 225,
+    "holdFramesChecked": 315,
+    "maxHoldDifference": 0.22728587962962962,
+    "actionDifference": 19.09201388888889,
+    "boundaryDifference": 0.005172164351851852,
+    "thresholds": {
+      "hold": 0.5,
+      "action": 1,
+      "boundary": 0.1
+    },
+    "passed": true,
+    "limitations": "Mean absolute RGB difference in a 96px subject crop; no subjective playback or exhaustive pixel identity claim."
+  },
+  {
+    "name": "partial-route-vertical",
+    "pipelineId": "2026-10-03T11-54-33-838Z-bb6e0bc0",
+    "storyboardSha256": "2bc651472ea296bb39f18d71dbf04d5d1bac7c20dffe68602459396a91c2421d",
+    "videoSha256": "c6ce3c44884856f7f57d177f821adbbe8b8c3f355238895c3473ba643eb24614",
+    "sourceClipSha256": "e45f77166bb144d99b4707fb3b08bf7d7c1e9887e089b3e4c5c585a1adcaf8d6",
+    "heldImageSha256": "a23ca3514b3fe14a3f2a182095d8dc519e38a07080b30d8d4c128edb7ec46cd7",
+    "holdClipSha256": "bf8e49b83ee275b858bd803eb9da6abe5590feaa99b4550948458288f85b3ff3",
+    "geometrySha256": "156c67641d117568897d234f91704acbf8ea64304409cdbfb33e136fdbf023db",
+    "projectedBounds": [
+      0.08,
+      0.17,
+      0.92,
+      0.68
+    ],
+    "frames": 540,
+    "anchorFrame": 225,
+    "holdFramesChecked": 315,
+    "maxHoldDifference": 0.16247106481481483,
+    "actionDifference": 14.15285011574074,
+    "boundaryDifference": 0.005714699074074074,
+    "thresholds": {
+      "hold": 0.5,
+      "action": 1,
+      "boundary": 0.1
+    },
+    "passed": true,
+    "limitations": "Mean absolute RGB difference in a 96px subject crop; no subjective playback or exhaustive pixel identity claim."
+  },
+  {
+    "name": "partial-summary-landscape",
+    "pipelineId": "2026-10-03T11-54-41-623Z-b7056c73",
+    "storyboardSha256": "1d4699ee843ca193f5e973658834e8ceac1c74c83278390149bd41d6296ac3cd",
+    "videoSha256": "f06af2297a8f05bb79f4450bded6dc77291bfe37ccea4e737aa3b58ab5fee7e2",
+    "sourceClipSha256": "7cb3cd520302d2ea03529465e2aba4bdf726e66489a0887b69e7b145c061b40f",
+    "heldImageSha256": "ca9d366a4b06323cd5c61202f5fb987fc1a7ac5b96eeec373a06926359f9a75e",
+    "holdClipSha256": "ca97b05ecfb14cbe6939701fa1b74d958be32e6c24c165e8cd8a5582896ee276",
+    "geometrySha256": "a7b6e9e9c83f9b0fabf57e63431b5c0c471c00207af7e86046db5cad5b273db6",
+    "projectedBounds": [
+      0.08,
+      0.17,
+      0.92,
+      0.68
+    ],
+    "frames": 540,
+    "anchorFrame": 225,
+    "holdFramesChecked": 315,
+    "maxHoldDifference": 0.22388599537037038,
+    "actionDifference": 19.089265046296298,
+    "boundaryDifference": 0.0019892939814814816,
+    "thresholds": {
+      "hold": 0.5,
+      "action": 1,
+      "boundary": 0.1
+    },
+    "passed": true,
+    "limitations": "Mean absolute RGB difference in a 96px subject crop; no subjective playback or exhaustive pixel identity claim."
+  },
+  {
+    "name": "partial-summary-vertical",
+    "pipelineId": "2026-10-03T11-54-49-851Z-2fb68147",
+    "storyboardSha256": "8e02716b36530d95b1f300f08a413f4a929eb16d24442e11d4a6711eafe5c5df",
+    "videoSha256": "142accf98a7235556d799749d6ae526c4de166dda361c2362720d8aba445cc2d",
+    "sourceClipSha256": "e45f77166bb144d99b4707fb3b08bf7d7c1e9887e089b3e4c5c585a1adcaf8d6",
+    "heldImageSha256": "a23ca3514b3fe14a3f2a182095d8dc519e38a07080b30d8d4c128edb7ec46cd7",
+    "holdClipSha256": "bf8e49b83ee275b858bd803eb9da6abe5590feaa99b4550948458288f85b3ff3",
+    "geometrySha256": "156c67641d117568897d234f91704acbf8ea64304409cdbfb33e136fdbf023db",
+    "projectedBounds": [
+      0.08,
+      0.17,
+      0.92,
+      0.68
+    ],
+    "frames": 540,
+    "anchorFrame": 225,
+    "holdFramesChecked": 315,
+    "maxHoldDifference": 0.15169270833333334,
+    "actionDifference": 14.164388020833334,
+    "boundaryDifference": 0.006257233796296296,
+    "thresholds": {
+      "hold": 0.5,
+      "action": 1,
+      "boundary": 0.1
+    },
+    "passed": true,
+    "limitations": "Mean absolute RGB difference in a 96px subject crop; no subjective playback or exhaustive pixel identity claim."
+  },
+  {
+    "name": "side-connection-landscape",
+    "pipelineId": "2026-10-03T11-54-57-619Z-cc74eb4f",
+    "storyboardSha256": "940ee541c0f2bd87eaae9c7b0356887e7a864b6d32f4884a221d18ace6fadc39",
+    "videoSha256": "c94490035f2401910addc6229bd51592592b15e8408e019ffd8ba418b235b8b9",
+    "sourceClipSha256": "d0a17ac45fd42adbc47030c99f309f93dad0d91d56c1ea659fb69e77695459b7",
+    "heldImageSha256": "4bc7c5d07a75b4de9f72c6bc8f24e422f466c0ad93045fb73f65dd7ca5538ab5",
+    "holdClipSha256": "c610f08907ea635b27ddbcad2b9d2e54887f1a3caaeeddce28593f7873b2c6dd",
+    "geometrySha256": "56d91dc53016486d92171665d1405350073ede7509c3ac2dc6bd957ace82a80a",
+    "projectedBounds": [
+      0.08,
+      0.17,
+      0.92,
+      0.68
+    ],
+    "frames": 540,
+    "anchorFrame": 225,
+    "holdFramesChecked": 315,
+    "maxHoldDifference": 0.18406394675925927,
+    "actionDifference": 7.27173755787037,
+    "boundaryDifference": 0.005316840277777778,
+    "thresholds": {
+      "hold": 0.5,
+      "action": 1,
+      "boundary": 0.1
+    },
+    "passed": true,
+    "limitations": "Mean absolute RGB difference in a 96px subject crop; no subjective playback or exhaustive pixel identity claim."
+  },
+  {
+    "name": "side-connection-vertical",
+    "pipelineId": "2026-10-03T11-55-05-738Z-67f72a40",
+    "storyboardSha256": "f902f0c8b5f3b4c2cdc7a5fb689e44ae911f454606fc1a7e6b1829ee9a93a5c5",
+    "videoSha256": "d94b873f69f6949d83835b6ccebfee136572ad29ee635fae7e7666803eb4e04e",
+    "sourceClipSha256": "ee1fb2ec7550e5a7fcc8c18c1c6ada5c79ceb2e9a70988b26fcadfc1fca9fd6d",
+    "heldImageSha256": "7011a3e0bd53981ad64d8053ff8496cd16acd7236c722afa6ac950056c3282d6",
+    "holdClipSha256": "77690f93dce8105c1b651ab8b027e550a3ec47e58e48c27820b0c65eafba5bbd",
+    "geometrySha256": "adcfbcec2fe87a6807b55901d1569ef8ac088e4aefe8cd737ab3a5fb81c13558",
+    "projectedBounds": [
+      0.08,
+      0.17,
+      0.92,
+      0.68
+    ],
+    "frames": 540,
+    "anchorFrame": 225,
+    "holdFramesChecked": 315,
+    "maxHoldDifference": 0.20337818287037038,
+    "actionDifference": 9.069697627314815,
+    "boundaryDifference": 0.004557291666666667,
+    "thresholds": {
+      "hold": 0.5,
+      "action": 1,
+      "boundary": 0.1
+    },
+    "passed": true,
+    "limitations": "Mean absolute RGB difference in a 96px subject crop; no subjective playback or exhaustive pixel identity claim."
+  }
+]

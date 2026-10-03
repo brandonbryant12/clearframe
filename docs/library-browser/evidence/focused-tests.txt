@@ -1,0 +1,12 @@
+✔ catalog links each specimen to its operation without turning file presence into acceptance (253.065667ms)
+✔ verified catalog disables altered or missing previews and preserves the declared package state (8.796334ms)
+✔ local references reject traversal, remote URLs and symlinks outside the package (1.327792ms)
+✔ variation ledger binds real source bytes and keeps material/camera variations within a repeated concept (3.279792ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 313.74675
