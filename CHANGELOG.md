@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Drivers and flows.** Observed-anchor rebasing, exact two-factor decomposition and stock reconciliation feed twelve native landscape/vertical specimens. Original units and dates, missing observations, explicit interactions and unexplained residuals keep the quantities auditable. Shared-domain bars preserve proportional length and area through fades; retained source, clips and independent encoded review remain prototypes pending subjective continuous playback.
+
 - **Source-informed research studies.** A white/charcoal/orange palette, restrained treatment, two native chart studies and an original porcelain reserve gate provide six landscape/vertical specimens. Reference observations are separated from adaptations; third-party chart pixels and data are excluded. Original inputs determine line positions, date-window boundaries and the endpoint percentage. Retained baked scenes, clips and independent review remain prototypes pending subjective continuous playback.
 
 - **Native retirement mechanism kit.** Nine original reusable recipes now have two fictional scenarios and separate landscape/vertical specimens. Exact matching bands, ownership stacks, balance reservoirs and fee-gap rectangles preserve proportional length and area; native formulas expose benefit and purchasing-power inputs. Retained calculations, clips, phone/boundary review, independent critique and bounded encoded-edge evidence distinguish implementation from visual acceptance. The kit remains a prototype pending subjective continuous playback and final promotion.
