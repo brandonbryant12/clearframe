@@ -1,50 +1,117 @@
 {
-  "version": 1,
+  "version": 2,
   "lifecycle": "prototype",
   "inventoryIds": [
     "T01",
     "C01"
   ],
-  "sourceBase": "d31f26912f3e60a0df27116ccbdb7d55ab76086d",
-  "sourceState": "Uncommitted implementation at capture; exact source file hashes below.",
+  "sourceBase": "fbcd89326c4b83fa6526661c1595f5075c0475e4",
+  "sourceState": "Uncommitted readability/proportion-audit revision at capture; exact source file hashes below.",
   "license": "MIT (repository); fictional inputs",
   "variants": {
-    "landscape": {
-      "pipelineRun": "2026-10-03T00-16-16-591Z-3eda8fd5",
+    "stress-landscape": {
+      "pipelineRun": "2026-10-03T00-40-50-306Z-2de0626a",
       "artifacts": {
-        "evidence/landscape/check.json": "0bd276b9a9c95e4ebf2f2bfa862df614cc13742552d7cc9849e2af075f8ad417",
-        "evidence/landscape/phone.png": "fefde156ccd71578fc3873e938d0a1b745102a313b70c290e384dd67cf8ef645",
-        "evidence/landscape/qa.json": "088c7043b366d58d92c50be498c440af05e50e705e10391c17e3a7456b7709e0",
-        "evidence/landscape/sheet.png": "0b8f618909de22bc724cee5093e9c3833e7d5520b99bd94c39e3bb4b114d97a8",
-        "evidence/landscape/timeline.png": "1dd10817259ce3670aff3dda909e427bdf302b14a89f24fc4a33f4fc19b79bc0",
-        "evidence/landscape/video.mp4": "ec2c09cb589ae61d13f4edadf6c41c133159d7107b1f45b16b2a4d6b6d30db92",
-        "evidence/landscape/video.mp4.json": "7e93e757c5ba0eafe010a6b423f2f695af7db1fef2a163d5a185cdbc04d1cd36"
+        "evidence/stress-landscape/boundaries.png": "aa7863c891b196ba7bb9554a23881e22c11b16a5babbf33bb803d3946032b4bf",
+        "evidence/stress-landscape/check.json": "86adf8deff062f1bdf77730e9c04e4c8db28341d73f67fe534e8f3c76aa5cda8",
+        "evidence/stress-landscape/phone.png": "338dd631cf27deac83e438f533165ca4538347c02372b9d1005ca251297e763f",
+        "evidence/stress-landscape/qa.json": "8aff1cc82d51ebf3902d42ebca3e93362280b7ab21f955e4e3fdef5d8b1d5dde",
+        "evidence/stress-landscape/seek.json": "ca12123e53fcc4917105be368d0cd96428d6a58f8e2b880846cb5ab760b18abd",
+        "evidence/stress-landscape/sheet.png": "89ffbf122063cc23c7280e915f2117f1fbeb5d3f201f54338080e7e486323c6d",
+        "evidence/stress-landscape/timeline.png": "88c4ad879e98a4587881dc0b0d7a1e96ffa16f63df6308b8c8cbe04fe46e90d7",
+        "evidence/stress-landscape/video.mp4": "e39bfaee6fc9f047ca2cb7b9a8013dbaf79fa8a9029e0e5dfe960f24a3f0a3cc",
+        "evidence/stress-landscape/video.mp4.json": "c39dc3229a0d1d6e536df69a634ea185a3fd326dee773feb674ac37a9c87614d"
+      }
+    },
+    "stress-vertical": {
+      "pipelineRun": "2026-10-03T00-40-56-771Z-fdced289",
+      "artifacts": {
+        "evidence/stress-vertical/boundaries.png": "f922403a7543b6115daefe4dd0dae15ff6b9dbd92725d3dec69f3ce57f658ba4",
+        "evidence/stress-vertical/check.json": "9c458e6165362e8978ad3a94030b01edff85e4cee528d464be82ef1a04e4885e",
+        "evidence/stress-vertical/phone.png": "a67e7b28987b886dbda58f2747cb700dcb09060b1a46acca2831e270e5c6c73a",
+        "evidence/stress-vertical/qa.json": "14b20b90f5bd3c1b16c38816cc419daeeac175dad8a147363297782ffb937334",
+        "evidence/stress-vertical/seek.json": "88c0ed876de4dc3e938d3acc2490c3d8ccc1d2e0c4dd1d7f3f568ef5b9818158",
+        "evidence/stress-vertical/sheet.png": "c05ca3a75bec24a165ec4cb4678a92356e84c5acbe2c64c70d5a1bd26907c949",
+        "evidence/stress-vertical/timeline.png": "e7bc6b90b61348c93ec420a23820480a906e9bf13b83c210ad108987472fc65a",
+        "evidence/stress-vertical/video.mp4": "6120396e20bd658c93a2389fc561b1c9fe2cb73136b37dbe14c00461b0920a09",
+        "evidence/stress-vertical/video.mp4.json": "bf07eeec7a83c3e256b411b60f80604ca3024ea8aa7220dfcb8807b7672caf9c"
+      }
+    },
+    "stress-square": {
+      "pipelineRun": "2026-10-03T00-41-02-892Z-48d9d504",
+      "artifacts": {
+        "evidence/stress-square/boundaries.png": "4acd1da9710fd59f23c85c733468213dd7ed16f1c00d3073887579a8b5427f9d",
+        "evidence/stress-square/check.json": "b265fafa3cd7d087da77d5636fb5f04b273e472c2ebdbbaf83ce269d9081e0e1",
+        "evidence/stress-square/phone.png": "13e72714d00da196788a3d15c17bf00d9eee87f09d141162159eb8955b1ad6e9",
+        "evidence/stress-square/qa.json": "b9826abf9bf652dfadb96b21665408acb461642ca88eff27832e54d33338bc41",
+        "evidence/stress-square/seek.json": "0000baf4c1c53a364d5caf72c97621facdd8044943400bc448fb4fb43bf21e70",
+        "evidence/stress-square/sheet.png": "9652e1ba356b13089d78e0994459e3ee4cad5b110e8ffd9ef0ecd8336b8580bf",
+        "evidence/stress-square/timeline.png": "c208cbe2a0d9f792121c91c35cca8886da65a86f56dccc4c3ccfa4ae0ea1b87d",
+        "evidence/stress-square/video.mp4": "880f36f858a34d645e47526b6ef36d77ee7215ca5b18f87502b38d62973b4d87",
+        "evidence/stress-square/video.mp4.json": "fec0f6b5f42282e7d7c083b54dc647015fc3684594d16c0dae9c60526bc6fb34"
+      }
+    },
+    "stress-portrait": {
+      "pipelineRun": "2026-10-03T00-41-06-705Z-10f0444a",
+      "artifacts": {
+        "evidence/stress-portrait/boundaries.png": "45aecd7795e490ba004ac10c1d949a679b3ae12fe57a8308b62ce76ba5da82cb",
+        "evidence/stress-portrait/check.json": "02c1f80511d10f79a8527ca998f24cd71f8bb6dddffff15be8789e5bc06b0841",
+        "evidence/stress-portrait/phone.png": "9c9a5dfea8085a3509bf47367af72a46cb688d597cbdaa168c82672cbef9afc4",
+        "evidence/stress-portrait/qa.json": "9971c3e17c27211d4790df3554308ff1a3161b9969ff206ee8c1e564b2e5cd31",
+        "evidence/stress-portrait/seek.json": "6a00504a5035aec89b50437c26b26c5096cefa8e0ae9b8cc4f223bee41d4e944",
+        "evidence/stress-portrait/sheet.png": "b2eb99f2e9d15829b88f8e33c75a03cdd6759a3723c4aaefbce7514c59f99891",
+        "evidence/stress-portrait/timeline.png": "c5409f13ac1bee857c9f9925277b0f6f449f3b9a75d6c8f434eaf3c3a66061d2",
+        "evidence/stress-portrait/video.mp4": "6220058325358e73ec32605afe45378703fcfc840609b294787d5872cb7407bb",
+        "evidence/stress-portrait/video.mp4.json": "bb541d67577ebd75d715e7600b9b9161b9e30c7517f1bde5bd4dd00748abc53f"
+      }
+    },
+    "landscape": {
+      "pipelineRun": "2026-10-03T00-34-04-056Z-cb71383b",
+      "artifacts": {
+        "evidence/landscape/boundaries.png": "59a5b0cd4b86726ad80d4f7004bfa1e3008859f6e47f91c28ba1ff658a625ca8",
+        "evidence/landscape/check.json": "c3f697686512f0b756c84a8dec185eb656f779eaa21efe0cbf5779cd75014315",
+        "evidence/landscape/phone.png": "d3261ed365d2012316e37cdf7413abea0e0b9dad6a00dcfd47c61b7094e2d83e",
+        "evidence/landscape/qa.json": "145c0b5764382f306706fa5822a41a1811e6abbd56dbec5354dcdb5ae68e6021",
+        "evidence/landscape/seek.json": "75cb2012b29078c2d24cadce2d1c5a0e555c571b3e7ef1b697564ffb50bc7317",
+        "evidence/landscape/sheet.png": "ef7686fcf1515d5104ed725b1c0d87b5326d27edf7d03a0e4500cb57aaf02d5c",
+        "evidence/landscape/timeline.png": "aeb0cb9c7dbb62c3641e2585051c2930c5a449be43e6dc5cea2f87850833eb84",
+        "evidence/landscape/video.mp4": "ef17d510427938f97c9dd0be1deb5e19d8d03260b351e3f112a7aa6e42d23c40",
+        "evidence/landscape/video.mp4.json": "397fdae6a4a2d9eec8f7c3736ccd78396c9e5979fea6bfc42975349c26c6e53a"
       }
     },
     "vertical": {
-      "pipelineRun": "2026-10-03T00-16-51-500Z-b3b0afe8",
+      "pipelineRun": "2026-10-03T00-34-13-005Z-26a1276e",
       "artifacts": {
-        "evidence/vertical/check.json": "8b578d2f80b482b0affe49ca371fb4e5a8599647b795d5c8272f460b15befa13",
-        "evidence/vertical/phone.png": "48eebeec6fc1a34e32e5c6340d24b7b7afe6679af1bc51d9a36cccfb790f2b7f",
-        "evidence/vertical/qa.json": "03d2ea3431b74a0afcc80399a8d16380073cea80f5e01448f10fce0c0ed6d3f1",
-        "evidence/vertical/sheet.png": "e8827fdd003cd63c583a011dd87480b3284da2a23bcae61cc7ea25f0ebd552ab",
-        "evidence/vertical/timeline.png": "7a9d05c5bb9fb460269351cba99f01a1c6fb13c16a0f9352da282e0a01a5b0ee",
-        "evidence/vertical/video.mp4": "e37440b6c88de484cbddb858d3b46fe0f8fffa6c068900af8d4be04f9c5c0e8c",
-        "evidence/vertical/video.mp4.json": "1e4aa876b440e26089454dd60053035b637b05225536356969df4e8435a06c46"
+        "evidence/vertical/boundaries.png": "b82115faf3f105eaea7838753765ce79ab181a3b4a72905a23d14a3b8933adb6",
+        "evidence/vertical/check.json": "4c685c0e39defa96affa1daf6a5accc0a31af95f25c255a9e7dae3e9148dcac1",
+        "evidence/vertical/phone.png": "5592a5ccf914c40c93a89a8a4e67dcbed848ac86a4fb8ab2bb665acf37f5692e",
+        "evidence/vertical/qa.json": "24b376e9d4ea952bb8750b80d79cf0ccf49236229eb475a2eb86a786db7b981b",
+        "evidence/vertical/seek.json": "4c742b21318213bfc08333f4609694ae6b0e12b9750ef22d0a4ec42a2258b7b4",
+        "evidence/vertical/sheet.png": "59bd16814883b14a7a93a564a5e701ba8df0cf7e4b89682958b7a4300f08a78f",
+        "evidence/vertical/timeline.png": "715231053049ccb511b6b45669efab5096a03a966978cdb2ed7dcdcf6017882b",
+        "evidence/vertical/video.mp4": "bcc045281e9357be7205768ba0b172505b997ddb858bcd5d0b70ca68ccc37e5d",
+        "evidence/vertical/video.mp4.json": "f158bfadff270ec779504fefc4e32ae802f4afd593bfd5a3c859e67b05b76b30"
       }
     }
   },
   "sourceHashes": {
     "fframes/plot-data.mjs": "16fd41d99d74d8af3c53126aeb4c55940f5a5a12654b2382caaed046e1d5f4d6",
-    "fframes/plots.mjs": "b68015ba77c8f175e4724e2fd2bd149999ef057798ef9c9b718c808c5bd9c8fe",
+    "fframes/plots.mjs": "62cd51a7a400845b93b7725c64800f427fca65812b94143bf1ed55831294aed4",
     "fframes/canvas.mjs": "421697695ccfc648dc6d2ff7339b3dd8bb85662d444aea55f4e11533509af781",
     "fframes/job.mjs": "d086a321664654cf992b1ef9aa337c34d2ad6e8339c1191311ced5bfff0b3257",
     "fframes/native/src/canvas.rs": "82c1802b887e33bf2c7e7998e02e682b1f159e53dff2d06794831a9330ffc914",
-    "fframes/native/src/speech.rs": "98d2d35f9bd40cf0af4840f2647e2e80d7b0fe0ccea1c949ce6d3fe586245e14",
-    "examples/quantitative-plots/build.mjs": "012480f665345147041d0f17e883e8010debe488db327536ba838f54753368e0",
+    "fframes/native/src/speech.rs": "38248443118e85590e08c4d08ca8bc63f4294da9a7cc411346b0ccac2a3bcf58",
+    "examples/quantitative-plots/build.mjs": "61333b7addaeb29da5b605582ed849031f3dd0cb140e619772e1637bb1ac8f3e",
     "examples/quantitative-plots/ledger.json": "5f4e2c38bed6ca785ce9c6549b40d522ba0948c5a464ba57d6c880caaa309c35",
-    "examples/quantitative-plots/landscape/storyboard.json": "f7ab3e865205b394fe19c4c8dd5713d25bbd4ba2f35d5aa3c59417c9aea866a8",
-    "examples/quantitative-plots/vertical/storyboard.json": "887619c7d808217e45616745929556dd990cce731e57975f5714155070ac7318"
+    "examples/quantitative-plots/landscape/storyboard.json": "3bfe1110f638e6ba3614e1beba01a95417c40ceb45b45a9204077e57485137fe",
+    "examples/quantitative-plots/vertical/storyboard.json": "b9d80ccf3d509e0449c904c7914e8bf94f642abb1cbb0ba4b1ef1ffeda56d40d",
+    "fframes/validators.mjs": "f13ff4118aebdf157cd9325260c4316f022af787e0e5743ef70f51bc856ed003",
+    "examples/quantitative-plots/verify.mjs": "86f10f0742a2b82ad2d3e020308e75eac24de4fc19464aeba95aece4982ce639",
+    "examples/quantitative-plots/check-encoded.py": "99bbe2a2bfa94630582294448225e06122dbb5c53c5dac975e8dce3fd358afbd",
+    "examples/quantitative-plots/stress-vertical/storyboard.json": "d86854119276aee095356f7712a9c215a08de75d4f8d7fef994b23372d77d52e",
+    "examples/quantitative-plots/stress-square/storyboard.json": "b004d934bfd04ccfa6e8a4f2e6d3fbb5c4a5709fa28735b7cfb0c3157a4eb2a2",
+    "examples/quantitative-plots/stress-portrait/storyboard.json": "8e30be9901fcdb31c1ed4d4602a9fef9ce99715ea8c1d06cf5831e35223f97be",
+    "examples/quantitative-plots/stress-landscape/storyboard.json": "66d35fb346b5abe833a517cfbcd94b9066a3002dd8e40bd6f6d5bb38cc052e71"
   },
   "verification": {
     "nodeTests": {
@@ -56,24 +123,30 @@
       "failed": 0
     },
     "nativeAudits": {
+      "variants": 6,
       "framesPerVariant": 90,
       "errors": 0,
       "warnings": 0
     },
-    "encodedVariants": {
-      "frames": 690,
-      "fps": 30,
-      "seconds": 23,
-      "pops": 0,
-      "audio": false
+    "encodedFrames": 3300,
+    "decodedProportionChecks": {
+      "nativeCoordinateChecks": 276,
+      "visibleObservationChecks": 23208,
+      "revealFrontChecks": 4060,
+      "futureColumnChecks": 2368,
+      "failures": 0
     },
-    "motionEvidence": "Decoded contact sheets, timeline and boundary frames; continuous playback and arbitrary-seek asset hash check remain outstanding.",
+    "seekOrder": {
+      "variants": 6,
+      "timesPerVariant": 5,
+      "pixelHashesEqual": true
+    },
+    "motionEvidence": "Full decoded sequences checked for observation positions and reveal fronts; contact/timeline/boundary frames inspected. Continuous real-time playback remains unverified after native player timeout.",
     "limits": [
-      "Phone text too small, especially landscape",
-      "Series identities and missing-data note appear after reveal",
-      "Log and annotation only source-tested; no visual specimens",
-      "Square and 4:5 only source-compiled",
-      "No artwork acceptance"
+      "Three/four-series visual arrangements not reviewed",
+      "Proportion pixel checks are bounded to the two-series fixtures; tolerance and occlusion exclusions in evidence/encoded-proportions.json",
+      "No area/volume encoding claim from line-plot checks",
+      "No full artwork acceptance without continuous playback review"
     ]
   }
 }

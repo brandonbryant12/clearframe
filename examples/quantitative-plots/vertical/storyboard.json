@@ -35,12 +35,12 @@
       "camera": "none",
       "props": {
         "plot": {
-          "title": "Contributions are only one part",
+          "title": "Contributions plus $442k growth",
           "asOf": "2026-10-02",
-          "source": "Hypothetical model · 6% yearly return; no forecast",
+          "source": "Illustration: $9k/year, 6% return. No fees/withdrawals.",
           "x": {
             "type": "linear",
-            "label": "Years · end-of-year contributions",
+            "label": "Years · year-end deposits",
             "domain": [
               0,
               30
@@ -55,6 +55,8 @@
           "y": {
             "type": "linear",
             "label": "Balance · USD thousands",
+            "prefix": "$",
+            "suffix": "k",
             "domain": [
               0,
               800
@@ -345,7 +347,7 @@
         "plot": {
           "title": "An absent reading is not zero",
           "asOf": "2026-10-02",
-          "source": "Hypothetical monitoring example · no measured site data",
+          "source": "Illustrative sensors. No measured site data.",
           "x": {
             "type": "date",
             "label": "Observation date · UTC",

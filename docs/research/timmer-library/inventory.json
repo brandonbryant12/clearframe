@@ -25,7 +25,7 @@
       "category": "Chart",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Prototype: native shared-axis lines, dated spacing and gaps rendered in landscape/vertical; phone readability and phase labelling fail independent review",
+      "readiness": "Prototype: explicit scales, date gaps and stable keys; sampled visual defects resolved; encoded proportionality checks pass; continuous playback and 3/4-series review remain open",
       "effort": "L",
       "sourceIds": [
         "S01",
@@ -1726,7 +1726,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "Partial implementation: strict plot data/scale contract and native geometry; automated checks pass, visual prototypes remain unaccepted",
+      "readiness": "Partial implementation: strict data/scale contract, native geometry and bounded encoded proportion checks; further marks and full artwork acceptance remain open",
       "effort": "L",
       "sourceIds": [
         "S05",

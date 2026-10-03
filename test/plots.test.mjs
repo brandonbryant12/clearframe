@@ -44,7 +44,8 @@ test('different sampling intervals follow one linear reveal clock',()=>{
   const visibleX=s=>s.x1+(s.x2-s.x1)*(clock-s.at)/s.dur;
   near(visibleX(a),visibleX(b));
   assert.equal(a.drawEase,'linear'); assert.equal(b.drawEase,'linear');
-  assert.equal(named(p,'plot-a-label').at,3.5);
+  assert.equal(named(p,'plot-a-label').at,0);
+  assert.equal(named(p,'plot-a-value').at,3.5);
   assert.throws(()=>expandPlotProps({plot:base},{...frame,duration:5}),/two seconds/);
 });
 
@@ -52,7 +53,8 @@ test('missing observations break lines and retain solitary points without invent
   const p=draw({...base,series:[{id:'a',label:'A',values:[{x:0,y:10},{x:5,y:null},{x:10,y:30}]}]});
   assert.equal(p.elements.filter(e=>e.id.includes('-segment-')).length,0);
   assert(named(p,'plot-a-point-0'));assert(named(p,'plot-a-point-2'));
-  assert(named(p,'plot-missing-note').text.includes('Gaps'));
+  assert(p.source.includes('Gap: 5'));
+  assert(p.sourceSize>=32);
   assert.throws(()=>draw({...base,series:[{id:'a',label:'A',values:[{x:0,y:null}]}]}),/all-missing/);
 });
 
@@ -70,7 +72,7 @@ test('input errors fail before pictures can hide units, domains, dates or missin
 test('labels move independently of data points and an annotation must name actual evidence',()=>{
   const p=draw({...base,series:base.series.map(s=>({...s,values:[{x:0,y:20},{x:10,y:50}]}))});
   assert.equal(named(p,'plot-a-point-1').cy,named(p,'plot-b-point-1').cy);
-  assert.notEqual(named(p,'plot-a-label').y,named(p,'plot-b-label').y);
+  assert.notEqual(named(p,'plot-a-label').x,named(p,'plot-b-label').x);
   assert.throws(()=>draw({...base,annotation:{seriesId:'a',x:3,label:'Invented',dx:0,dy:0}}),/actual/);
   assert(named(draw({...base,annotation:{seriesId:'a',x:5,label:'Illustrative midpoint',dx:.1,dy:-.1}}),'plot-annotation-point'));
 });

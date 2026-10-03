@@ -1,0 +1,202 @@
+{
+  "title": "Quantitative contract stress specimens",
+  "format": {
+    "preset": "square",
+    "fps": 30
+  },
+  "theme": "paper",
+  "type": "geometric",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.4
+  },
+  "backdrop": "none",
+  "transition": "cut",
+  "captions": false,
+  "music": false,
+  "sfx": "off",
+  "sources": [
+    {
+      "claim": "All observations are fictional test fixtures.",
+      "source": "examples/quantitative-plots/build.mjs",
+      "asOf": "2026-10-02"
+    }
+  ],
+  "beats": [
+    {
+      "id": "close-values",
+      "block": "canvas",
+      "duration": 8,
+      "camera": "none",
+      "props": {
+        "plot": {
+          "title": "Close values keep their identities",
+          "source": "Illustrative device endurance test.",
+          "asOf": "2026-10-02",
+          "x": {
+            "type": "linear",
+            "label": "Elapsed hours",
+            "domain": [
+              0,
+              10
+            ],
+            "ticks": [
+              0,
+              5,
+              10
+            ]
+          },
+          "y": {
+            "type": "linear",
+            "label": "Remaining charge · percent",
+            "domain": [
+              0,
+              100
+            ],
+            "ticks": [
+              0,
+              50,
+              100
+            ],
+            "suffix": "%"
+          },
+          "series": [
+            {
+              "id": "one",
+              "label": "High-capacity battery assembly",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 100
+                },
+                {
+                  "x": 5,
+                  "y": 70
+                },
+                {
+                  "x": 10,
+                  "y": 50
+                }
+              ]
+            },
+            {
+              "id": "two",
+              "label": "Standard-capacity battery pack",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 100
+                },
+                {
+                  "x": 5,
+                  "y": 68
+                },
+                {
+                  "x": 10,
+                  "y": 49
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "log-values",
+      "block": "canvas",
+      "duration": 8,
+      "camera": "none",
+      "props": {
+        "plot": {
+          "title": "Equal spacing, tenfold change",
+          "source": "Illustrative cultures, not lab observations.",
+          "asOf": "2026-10-02",
+          "x": {
+            "type": "linear",
+            "label": "Elapsed days",
+            "domain": [
+              0,
+              4
+            ],
+            "ticks": [
+              0,
+              2,
+              4
+            ]
+          },
+          "y": {
+            "type": "log",
+            "label": "Cell count",
+            "domain": [
+              1,
+              1000
+            ],
+            "ticks": [
+              1,
+              10,
+              100,
+              1000
+            ]
+          },
+          "series": [
+            {
+              "id": "first",
+              "label": "Culture A",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 1,
+                  "y": 10
+                },
+                {
+                  "x": 2,
+                  "y": 100
+                },
+                {
+                  "x": 4,
+                  "y": 1000
+                }
+              ]
+            },
+            {
+              "id": "second",
+              "label": "Culture B",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 1
+                },
+                {
+                  "x": 2,
+                  "y": 10
+                },
+                {
+                  "x": 4,
+                  "y": 100
+                }
+              ]
+            }
+          ],
+          "annotation": {
+            "seriesId": "first",
+            "x": 1,
+            "label": "10 cells",
+            "dx": 0.1,
+            "dy": -0.36
+          },
+          "motion": {
+            "at": 0.5,
+            "duration": 3
+          }
+        }
+      }
+    }
+  ]
+}

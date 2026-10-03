@@ -1,6 +1,6 @@
 # Shared-scale native plots
 
-`canvas.props.plot` turns explicit numeric inputs into native lines, observation markers, axes, direct labels and an optional annotation. It prepares editable geometry; text and quantities stay outside Blender. Inventory scope: T01/C01 foundation. Status: prototype; [rendered review](../examples/quantitative-plots/REVIEW.md) found phone-readability and reveal-label defects. Do not promote these examples as accepted assets.
+`canvas.props.plot` turns explicit numeric inputs into native lines, observation markers, axes, a stable series key, final values and an optional annotation. It prepares editable geometry; text and quantities stay outside Blender. Inventory scope: T01/C01 foundation. Status: prototype; three [rendered review](../examples/quantitative-plots/REVIEW.md) rounds resolved the sampled presentation defects, but continuous playback remains unverified. Do not promote these examples as accepted assets.
 
 ```json
 {
@@ -33,13 +33,13 @@ The storyboard must also contain a `sources` entry. The plot source and as-of da
 - Dates represent UTC calendar days with real elapsed spacing. February is not stretched to the same width as January. Invalid dates and mixed numeric/date inputs fail.
 - 1–4 uniquely identified series share the same scales. Values must be ordered, unique in x, finite, and inside both domains. At most 240 observations fit one picture; aggregate explicitly instead of silently sampling or clipping.
 - A null `y` breaks the line. It is never turned into zero or bridged. Isolated observations retain visible markers. Omitted or nonfinite y values fail. An all-missing series fails instead of drawing false evidence.
-- Lines end at actual observations. Direct labels can move to avoid collisions, but their leaders remain tied to exact data coordinates. An early final observation is disclosed. For multiple units, use separate plots instead of a dual axis.
+- Lines end at actual observations. The stable series key identifies colors throughout the reveal and keeps final values separate from near-coincident endpoints. An early final observation is disclosed. For multiple units, use separate plots instead of a dual axis.
 
 ## Animation and annotation
 
 `motion: "none"` shows a held picture. Otherwise every segment starts and ends according to its x coordinates on the same reveal clock. Native `drawEase: "linear"` ensures sampling density does not change the apparent passage of time. Other canvas drawings retain their existing easing. The piecewise-linear line describes interpolation between observations, not measured intermediate values.
 
-Final series labels arrive only when the reveal completes. A beat must retain two seconds after label settlement. Annotation is optional: `{seriesId, x, label, dx, dy}` names an exact nonmissing observation; offsets are fractions of plotting width/height in `[-0.5,0.5]`. Its anchor must remain in the plot with enough room for text. Inspect placement to avoid collisions with data.
+Series names appear from the start. Final numeric values arrive only when the reveal completes. A beat must retain two seconds after value settlement. Plot sources use a larger three-line native footer, including missing observation dates where present. Annotation is optional: `{seriesId, x, label, dx, dy}` names an exact nonmissing observation; offsets are fractions of plotting width/height in `[-0.5,0.5]`. Its anchor must remain in the plot with enough room for text. Inspect placement to avoid collisions with data.
 
 Do not combine plot shorthand with KPI, teaching, legacy chart, sketch, plates, worlds or depth cameras. Authored extra `elements` can add reviewed callouts. Generated element IDs are scoped to each beat so unrelated plots cannot accidentally morph into one another.
 
@@ -53,4 +53,4 @@ node engine/cli.mjs critique examples/quantitative-plots/landscape
 /Users/brandon/.local/bin/codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node engine/cli.mjs sheet examples/quantitative-plots/landscape --draft
 ```
 
-The specimens include a retirement ledger and a monitoring example with irregular dates and missing data, in landscape and vertical layouts. [Direction and review brief](../examples/quantitative-plots/DIRECTION.md). Compilation in four frame presets is source evidence; it does not establish legibility or motion quality. Rendered acceptance must be recorded separately.
+The specimens include a retirement ledger and a monitoring example with irregular dates and missing data, in landscape and vertical layouts. Long-label/close-value and log/annotation stress clips are rendered in all four presets. [Direction and review brief](../examples/quantitative-plots/DIRECTION.md). [Retained evidence](../examples/quantitative-plots/README.md) separates source checks, encoded quantitative checks, sampled visual review and the outstanding continuous-playback review. Three/four-series layouts need their own visual review.

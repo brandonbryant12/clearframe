@@ -1,5 +1,9 @@
 # Independent quantitative specimen review
 
+Earlier rounds are retained below. The current findings are in **Round 3** at the end of this document; they supersede earlier presentation findings only for the identified output revisions.
+
+## Round 1
+
 Reviewed 2026-10-02 against `DIRECTION.md`, the fresh-review rubric in `skills/clearframe-direction/SKILL.md`, and the high asset bar in `docs/research/timmer-library/BUILDOUT.md`.
 
 **Verdict: retain prototype.** The quantitative foundation is promising and the two subjects are substantively different. The present output does not meet the phone-legibility or complete motion-review bar. This is not final asset acceptance.
@@ -37,3 +41,80 @@ Reviewed 2026-10-02 against `DIRECTION.md`, the fresh-review rubric in `skills/c
 ## Acceptance boundary
 
 No substantive arithmetic or scale defect was found in the bounded checks above. Readability and explanatory labeling still require work, and continuous playback plus the requested label stress cases remain unverified. Use the engineering primitive experimentally; do not label these rendered specimens accepted yet.
+
+## Round 2
+
+Reviewed the six current entries in `build/verification.json`, not the earlier round's retained artifacts:
+
+| Variant | Pipeline run |
+|---|---|
+| landscape | `2026-10-03T00-34-04-056Z-cb71383b` |
+| vertical | `2026-10-03T00-34-13-005Z-26a1276e` |
+| stress-landscape | `2026-10-03T00-34-21-232Z-c95d5f2a` |
+| stress-vertical | `2026-10-03T00-34-27-514Z-cfb88d28` |
+| stress-square | `2026-10-03T00-34-33-536Z-9e11797f` |
+| stress-portrait | `2026-10-03T00-34-37-283Z-eca6e4ca` |
+
+**Verdict: substantial improvement; retain prototype pending one material annotation correction and complete playback review.** No new arithmetic, scale, or missing-data defect was found in the inspected evidence. The two-series foundation is useful engineering work. This is still not blanket artwork acceptance.
+
+### Evidence and limits
+
+Inspected all six current contact sheets and phone sheets. Independently decoded the actual MP4s and inspected every variant at 5.0 and 13.2 seconds at exactly 360 pixels wide, plus landscape and stress-vertical at 1.0 seconds, vertical at 12.0 seconds, and stress-square at 12.0 seconds. Temporary decoded review aids are under `/tmp/quantitative-independent-review-round2/`.
+
+The current verification manifest records no native-audit errors or warnings, zero QA pops, and equal native PNG hashes between forward and shuffled seeks at 1, 3, 5, 9 and 12 seconds for all six variants. This is bounded automated and deterministic-seek evidence; I read the recorded results rather than rerunning these checks.
+
+**Continuous real-time playback was not observed in this review.** The sheets and decoded states provide bounded encoded-sequence evidence: names precede numeric settlement, data progresses between samples, the gap survives intermediate states, and the resulting picture is stable across the sampled hold. They do not establish smooth motion between every frame, subjective pacing, or continuous-playback acceptance. Three- and four-series compositions were not visually covered and receive no visual acceptance from these two-series specimens. Retirement and sensor examples were inspected only in landscape and vertical; the additional square and portrait evidence concerns the stress examples.
+
+### First-round issues revisited
+
+1. **Source/assumptions readability: resolved in these samples.** The decoded 360-pixel frames now carry readable dark source text and dates. Landscape is dense but decipherable; the source no longer requires zooming into the contact sheet. Portrait no longer hides these facts in very small gray type.
+2. **Series identification during reveal: resolved.** At 1.0 seconds, the lines have named colored keys while final numbers are absent. Phone-sheet progression shows numbers arriving after the reveal. Sensor source copy includes the missing date during the action.
+3. **Retirement explanation: resolved.** The title names the derived $442k growth, the key gives $712k and $270k, and visible assumptions state $9k/year, 6% return, no fees/withdrawals, and year-end deposits. The illustration framing remains visible.
+4. **Portrait width/missing date: substantially resolved.** At 360 pixels the plot now spans roughly 236 pixels rather than 140. The source states the absent 2026-02-01 observation. The two-tick date axis is sparse but adequate for these specimens. At 12.0/13.2 seconds the blue line remains broken, preserves its negative observation, and restarts at the correct part of the date domain.
+5. **Stress and motion evidence: partly resolved.** Long names wrap without clipping and 50% versus 49% remain clearly attached to named key entries across all four stress shapes. The actual plotted endpoints remain close instead of being displaced to accommodate labels. Log ticks at 1/10/100/1000 are evenly spaced and explicitly labeled as log scale. Deterministic seek evidence is now recorded. Continuous playback is still unreviewed, and the log annotation introduces the defect below.
+
+### Remaining material presentation defect
+
+**The log annotation crosses the blue data line.** At 12.0 seconds in stress-square and 13.2 seconds in all four stress variants, the blue stroke runs through the “10 cells” label; its leader also follows the same data segment closely. The text is still decipherable but this is an avoidable collision in an asset specifically meant to demonstrate accurate native annotation. Move the callout into clear chart space and route its short leader back to the ring at the actual x=1, y=10 observation. Do not move the data or change the log mapping. Verify the corrected callout at 360 pixels in all four shapes.
+
+This is primarily a **composition choice** in the shared stress annotation's `dx`/`dy`. The audit passing illustrates a **tool limitation**: bounds checks alone do not prove annotation/data separation. A generalized collision detector is not required to fix this specimen.
+
+### Nonblocking craft observations
+
+- Landscape trades plotting height for much better text. The near-coincident battery traces visually merge at parts of the 360-pixel picture, but the key preserves both identities and their exact final values. A future explanation of tiny differences may warrant a separate zoomed or difference panel; changing this truthful shared scale is not required here.
+- Tall formats retain generous vertical spacing. They are now legible and deliberately composed, so additional tightening is optional rather than an acceptance blocker.
+
+After the callout correction, recheck only the affected stress presentation and preserve the explicit continuous-playback and series-count limits. Do not infer acceptance of arbitrary labels, arbitrary annotation offsets, or three/four-series compositions from these cases.
+
+## Round 3
+
+**Verdict: the remaining annotation defect is resolved in the four inspected shapes. No material presentation defect remains in this bounded review. Keep prototype status because continuous playback remains unverified.** This is not artwork acceptance or coverage of arbitrary plot configurations.
+
+The current stress revisions in `build/verification.json` are:
+
+| Variant | Pipeline run |
+|---|---|
+| stress-landscape | `2026-10-03T00-40-50-306Z-2de0626a` |
+| stress-vertical | `2026-10-03T00-40-56-771Z-fdced289` |
+| stress-square | `2026-10-03T00-41-02-892Z-48d9d504` |
+| stress-portrait | `2026-10-03T00-41-06-705Z-10f0444a` |
+
+The landscape and vertical subject clips retain their Round 2 run IDs. Their previous findings stand; this follow-up does not repeat the complete six-clip review.
+
+### Corrected annotation
+
+Independently decoded each revised stress MP4 at 13.2 seconds to exactly 360 pixels wide and inspected the result. “10 cells” now sits clear of the blue line in all four shapes. The leader returns to the outlined observation at x=1, y=10. The data point and log scale remain in place. The former text/data collision is resolved; no additional composition change is requested from these inspected frames. Temporary review images are at `/tmp/quantitative-independent-review-round3/`.
+
+### Proportionality evidence
+
+Read the recorded `build/encoded-proportions.json` results for all six current clips. The report records 3,300 frames decoded in total, zero failures in each clip, source-to-native point/tick coordinate checks at `1e-7` pixel tolerance, and encoded visible-observation, reveal-front, and future-stroke checks at 720-pixel width with a 3-pixel tolerance. Occluded samples are explicitly excluded. These results strengthen the evidence that mapped values and shared-clock intermediate states preserve their intended positions.
+
+This review did not independently rerun or audit the implementation of that checker. Every frame being decoded does **not** mean every possible geometry or every encoded pixel was proved. The declared checks concern two-series point centers, both-axis ticks, visible observations and reveal behavior in these fixtures. They do not establish area, angle, or volume encodings, arbitrary annotations, or three/four-series compositions. Mathematical proportionality remains a hard requirement for any later asset using those encodings, with its own applicable evidence.
+
+### Remaining acceptance limits
+
+- **Continuous playback remains unverified.** The author reported that the native-player attempt timed out. Decoded frame inspection, encoded-stream checking, zero-pop QA, and deterministic seeks are distinct from successful real-time playback review. No successful playback is claimed here.
+- **Three- and four-series visual layouts remain unreviewed.** Passing a source contract or two-series stress case is not visual evidence for those combinations.
+- Subject specimens remain reviewed in landscape and vertical; the four-shape review applies to the stress specimens. No broader format/fixture acceptance is implied.
+
+Retain the tested native/data foundation and the honest bounded visual evidence. Promotion to accepted artwork requires the remaining applicable motion review and should name the exact supported configurations.
