@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "passed-mechanical-checks",
+  "cases": [
+    {
+      "id": "reserve-gate",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/research-study/build/master-vertical/reserve-gate",
+      "width": 1080,
+      "height": 1920,
+      "frames": 144,
+      "renderSeconds": 672.70510175,
+      "loop": false,
+      "loopTransformError": 1.100000023841858,
+      "loopSeam": 1.1419270833333333,
+      "neighbourP95": 0.043547453703703706,
+      "finalHoldStep": 0,
+      "reloadPixelsMatch": true,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 0,
+        "maxDifference": 0,
+        "changedFraction": 0
+      },
+      "posterPixelSha256": "3d815b56b9efa3a0505df075759c1a547fdb8ac19fcc76720503ad10ba2dbeb0",
+      "reloadPixelSha256": "3d815b56b9efa3a0505df075759c1a547fdb8ac19fcc76720503ad10ba2dbeb0"
+    }
+  ],
+  "startedAt": "2026-10-03T03:00:21.733Z",
+  "revision": "696d0e096864c71a7ff7559902c464797d6a0524",
+  "dirty": true,
+  "finishedAt": "2026-10-03T03:00:27.440Z"
+}

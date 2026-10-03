@@ -1,0 +1,88 @@
+{
+  "version": 2,
+  "title": "One gate controls access",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "research-paper",
+  "type": "inter",
+  "backdrop": "none",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.3
+  },
+  "transition": "cut",
+  "sfx": "off",
+  "captions": false,
+  "music": false,
+  "assets": [
+    {
+      "id": "reserve-gate",
+      "kind": "clip",
+      "file": "media/clip.mp4"
+    }
+  ],
+  "sources": [
+    {
+      "claim": "The mechanism illustrates a closed path becoming accessible. Geometry does not encode data.",
+      "source": "Original procedural sculpture; qualitative illustration."
+    }
+  ],
+  "beats": [
+    {
+      "id": "gate",
+      "block": "canvas",
+      "duration": 6,
+      "camera": "none",
+      "exit": "none",
+      "plate": {
+        "asset": "reserve-gate",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "source": "Qualitative mechanism. No flow or quantity is represented.",
+        "sourceSize": 57.599999999999994,
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "id": "gate-title",
+            "type": "text",
+            "text": "One gate controls access",
+            "x": 105.6,
+            "y": 151.20000000000002,
+            "size": 78.72,
+            "width": 1708.8,
+            "height": 108,
+            "font": "display",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "gate-sequence",
+            "type": "text",
+            "text": "Closed → opening → open",
+            "x": 105.6,
+            "y": 248.4,
+            "size": 57.599999999999994,
+            "fit": 1708.8,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      }
+    }
+  ]
+}

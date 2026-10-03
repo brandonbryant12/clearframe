@@ -1,0 +1,32 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/research-study/gate-landscape/build/pipeline/2026-10-03T03-03-18-434Z-fcf18d41/video.mp4",
+  "outputSha256": "68b06f0b2fdf9649ae3fc094aee3a50217bce7c315e6e1ca16c48795b65b78e3",
+  "inputId": "59bf8b05055cae5035e115f7bbde5fc34ae14744e3549d4f1c2d3cc9616474c3",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "gate: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "gate: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 179,
+      "time": 5.966666666666667,
+      "reasons": [
+        "gate: last frame"
+      ],
+      "image": "frame-0002.jpg"
+    }
+  ]
+}

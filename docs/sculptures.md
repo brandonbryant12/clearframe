@@ -2,7 +2,7 @@
 
 ClearFrame can prepare an original Blender scene in the background, bake its motion and retain a video insert. FFFrames composes the final film, including its editable type, evidence, charts and sound. Blender is optional and is not involved in ordinary film rendering or copy revisions.
 
-The eight recipes use independent geometry, materials and motion. They are useful starting objects, not a finite set of permitted looks. Open the saved `.blend`, change a recipe, or author a new built-in recipe when the story calls for a different object. Palette and seed variations are refinements; a fresh direction should also change the silhouette, material, operation, camera or editorial role.
+The nine recipes use independent geometry, materials and motion. They are useful starting objects, not a finite set of permitted looks. Open the saved `.blend`, change a recipe, or author a new built-in recipe when the story calls for a different object. Palette and seed variations are refinements; a fresh direction should also change the silhouette, material, operation, camera or editorial role.
 
 | Recipe | Material and operation | Best use |
 |---|---|---|
@@ -14,6 +14,7 @@ The eight recipes use independent geometry, materials and motion. They are usefu
 | `strata-landform` | Pigmented laminates form a cutaway; the upper layers lift and reveal a contrasting band. | Inspection, hidden layers or a research discovery. |
 | `quiz-triptych` | Three identical ceramic tiles; one lifts and holds. | A staged multiple-choice reveal with native question and answer text. |
 | `gap-bridge` | A colored insert descends into the missing span and settles. | A fill-in-the-blank answer or completion metaphor. |
+| `reserve-gate` | An amber gate lifts between porcelain basins in graphite guides, then holds. | Qualitative access and release conditions; no liquid or amount encoding. |
 
 All are qualitative visual metaphors. Their dimensions, weights, layer counts and trajectories do not represent measurements. Adapt the geometry to the actual subject before using an assembly as a factual product diagram. Keep evidence and text native.
 
@@ -54,6 +55,8 @@ node scripts/package-sculptures.mjs /path/to/asset-root NEW-GALLERY-DIRECTORY
 ```
 
 The packager includes known receipt directories present in that asset root, so an older prepared set remains usable as the catalog grows. It refuses empty sets, unknown recipe IDs and changed source or output bytes.
+
+The [research-study kit](../examples/library-kits/research-study/README.md) adds the reserve gate in landscape and vertical with native type. Its source scenes and mechanical checks are retained; subjective continuous playback remains unverified, so it is a prototype. The original eight-asset gallery remains a separate prepared set.
 
 The original render configuration remains as provenance; its output paths describe the original machine. Use `sculpture` with a fresh output directory to regenerate an asset elsewhere. Full PNG sequences remain in the render evidence rather than the compact gallery.
 

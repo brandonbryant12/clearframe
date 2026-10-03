@@ -1,0 +1,32 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/research-study/gate-vertical/build/pipeline/2026-10-03T03-01-09-896Z-feb7e24d/video.mp4",
+  "outputSha256": "c11513001ba69fc7af37e3b07372270f724d86c4fd2188e1f75202e5191b305b",
+  "inputId": "48abc07ad18acecacdeae58278dbb72efb4459f47fbd6062ad10b1b556997184",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "gate: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "gate: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 179,
+      "time": 5.966666666666667,
+      "reasons": [
+        "gate: last frame"
+      ],
+      "image": "frame-0002.jpg"
+    }
+  ]
+}

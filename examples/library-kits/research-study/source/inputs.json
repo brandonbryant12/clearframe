@@ -1,0 +1,131 @@
+{
+  "asOf": "2026-10-02",
+  "provenance": "Original fictional data. Calendar labels are illustrative; future dates are not forecasts.",
+  "comparison": {
+    "title": "Capacity grows faster than demand",
+    "unit": "Index \u00b7 Jan 2026 = 100",
+    "dates": [
+      "2026-01-01",
+      "2026-03-01",
+      "2026-05-01",
+      "2026-07-01",
+      "2026-09-01",
+      "2026-11-01",
+      "2027-01-01"
+    ],
+    "series": [
+      {
+        "id": "capacity",
+        "label": "Capacity",
+        "values": [
+          100,
+          104,
+          109,
+          115,
+          123,
+          134,
+          142
+        ]
+      },
+      {
+        "id": "demand",
+        "label": "Demand",
+        "values": [
+          100,
+          104,
+          107,
+          110,
+          113,
+          118,
+          122
+        ]
+      }
+    ],
+    "yDomain": [
+      90,
+      150
+    ],
+    "yTicks": [
+      90,
+      110,
+      130,
+      150
+    ]
+  },
+  "interval": {
+    "title": "Delay declines in the observation window",
+    "unit": "Hours \u00b7 lower means less delay",
+    "dates": [
+      "2026-01-01",
+      "2026-02-01",
+      "2026-03-01",
+      "2026-04-01",
+      "2026-05-01",
+      "2026-06-01",
+      "2026-07-01",
+      "2026-08-01",
+      "2026-09-01",
+      "2026-10-01",
+      "2026-11-01",
+      "2026-12-01",
+      "2027-01-01"
+    ],
+    "series": [
+      {
+        "id": "observed",
+        "label": "Observed",
+        "values": [
+          38,
+          40,
+          39,
+          38,
+          34,
+          32,
+          29,
+          27,
+          25,
+          24,
+          22,
+          21,
+          20
+        ]
+      },
+      {
+        "id": "reference",
+        "label": "Reference",
+        "values": [
+          38,
+          39,
+          40,
+          40,
+          39,
+          39,
+          40,
+          40,
+          39,
+          39,
+          40,
+          40,
+          40
+        ]
+      }
+    ],
+    "yDomain": [
+      0,
+      50
+    ],
+    "yTicks": [
+      0,
+      10,
+      20,
+      30,
+      40,
+      50
+    ],
+    "window": [
+      "2026-07-01",
+      "2027-01-01"
+    ],
+    "windowMeaning": "Violet: Jul\u2013Jan observation window"
+  }
+}

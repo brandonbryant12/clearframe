@@ -1,0 +1,62 @@
+[
+  {
+    "variant": "comparison-landscape",
+    "framesDecoded": 360,
+    "nativeCoordinateChecks": 20,
+    "visibleObservationChecks": 1912,
+    "occludedSamplesExcluded": 1858,
+    "revealFrontChecks": 552,
+    "futureColumnChecks": 236,
+    "failures": 0,
+    "firstFailures": [],
+    "nativeTolerancePx": 1e-07,
+    "encodedTolerancePx": 3,
+    "encodedAuditWidth": 720,
+    "scope": "Two-series point centers, both-axis ticks and native date-window boundaries; decoded observation positions, shared-clock reveal fronts and absence of future strokes during reveals/holds. Not an area/volume encoding audit or subjective continuous playback."
+  },
+  {
+    "variant": "comparison-vertical",
+    "framesDecoded": 360,
+    "nativeCoordinateChecks": 20,
+    "visibleObservationChecks": 2492,
+    "occludedSamplesExcluded": 1278,
+    "revealFrontChecks": 602,
+    "futureColumnChecks": 236,
+    "failures": 0,
+    "firstFailures": [],
+    "nativeTolerancePx": 1e-07,
+    "encodedTolerancePx": 3,
+    "encodedAuditWidth": 720,
+    "scope": "Two-series point centers, both-axis ticks and native date-window boundaries; decoded observation positions, shared-clock reveal fronts and absence of future strokes during reveals/holds. Not an area/volume encoding audit or subjective continuous playback."
+  },
+  {
+    "variant": "interval-landscape",
+    "framesDecoded": 360,
+    "nativeCoordinateChecks": 38,
+    "visibleObservationChecks": 4484,
+    "occludedSamplesExcluded": 2514,
+    "revealFrontChecks": 592,
+    "futureColumnChecks": 236,
+    "failures": 0,
+    "firstFailures": [],
+    "nativeTolerancePx": 1e-07,
+    "encodedTolerancePx": 3,
+    "encodedAuditWidth": 720,
+    "scope": "Two-series point centers, both-axis ticks and native date-window boundaries; decoded observation positions, shared-clock reveal fronts and absence of future strokes during reveals/holds. Not an area/volume encoding audit or subjective continuous playback."
+  },
+  {
+    "variant": "interval-vertical",
+    "framesDecoded": 360,
+    "nativeCoordinateChecks": 38,
+    "visibleObservationChecks": 6340,
+    "occludedSamplesExcluded": 658,
+    "revealFrontChecks": 630,
+    "futureColumnChecks": 236,
+    "failures": 0,
+    "firstFailures": [],
+    "nativeTolerancePx": 1e-07,
+    "encodedTolerancePx": 3,
+    "encodedAuditWidth": 720,
+    "scope": "Two-series point centers, both-axis ticks and native date-window boundaries; decoded observation positions, shared-clock reveal fronts and absence of future strokes during reveals/holds. Not an area/volume encoding audit or subjective continuous playback."
+  }
+]

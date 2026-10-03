@@ -1,0 +1,32 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/research-study/interval-landscape/build/pipeline/2026-10-03T02-46-11-177Z-9e95a98f/video.mp4",
+  "outputSha256": "7541a272b4bbca439ed22d8cc4ae3b2ed817dbab0cd3fff95a5d342fd194b3fa",
+  "inputId": "3973a28282db795ae86b96775c65ecd4d37769f52d599215fbf8b5539bdf595b",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "interval: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "interval: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 359,
+      "time": 11.966666666666667,
+      "reasons": [
+        "interval: last frame"
+      ],
+      "image": "frame-0002.jpg"
+    }
+  ]
+}

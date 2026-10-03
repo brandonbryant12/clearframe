@@ -1,0 +1,24 @@
+{
+  "sequence": [
+    "1s",
+    "2s",
+    "3s",
+    "4s",
+    "5s"
+  ],
+  "shuffled": [
+    "5s",
+    "2s",
+    "4s",
+    "1s",
+    "3s"
+  ],
+  "hashes": {
+    "1s.png": "574cf44c25c7958fcad99322003f61b726dcfea2f9e5cabbaac68faabe12f003",
+    "2s.png": "df1224b28c729315d719fdb3b940f20a35b223566c63bf585be7ac9a7be74248",
+    "3s.png": "1d0a9390bffef2c1726dc521b2f67539189de52d9c3c4e054115a83014864c75",
+    "4s.png": "8de3a47d3fb72fc5cf4627256d48e853c0e913497d12d74ece72357db4ba7f16",
+    "5s.png": "a908baed2f69178383d919c73b497703065c35dcce4db8d40ab9975a6355b026"
+  },
+  "equal": true
+}

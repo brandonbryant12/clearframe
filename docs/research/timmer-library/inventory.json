@@ -1077,8 +1077,8 @@
       "name": "Reservoir with mechanical gates",
       "category": "Blender",
       "priority": "Next",
-      "implementation": "New",
-      "readiness": "proposed; not built",
+      "implementation": "Extend",
+      "readiness": "partial prototype; qualitative reserve-gate with two-format native compositions; fill/transfer scope unbuilt",
       "effort": "L",
       "sourceIds": [
         "S01",
@@ -1092,7 +1092,7 @@
         "camera",
         "materials"
       ],
-      "existing": "cash-lock is a native concept only; no corresponding Blender recipe yet.",
+      "existing": "library/sculptures/reserve-gate is an original porcelain/amber access mechanism with retained landscape/vertical scenes and native labels in the research-study kit. It has no liquid, transparent chambers, fill planes or staged quantity transfer; those parts of this inventory item remain unbuilt.",
       "guardrail": "Qualitative liquid levels by default; exact balances remain in native graphics.",
       "reuse": [
         "liquidity",

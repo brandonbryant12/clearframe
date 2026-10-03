@@ -1,0 +1,42 @@
+{
+  "observedDateUTC": "2026-10-03",
+  "scope": "Three chart images on one publisher page; not a comprehensive Timmer house-style claim.",
+  "references": [
+    {
+      "id": "liquidity",
+      "chartTitle": "Gold & Liquidity",
+      "visibleAsOfLiteral": "8/9/2026",
+      "publisherDate": "2026-09-22",
+      "publisherUrl": "https://www.kitco.com/news/article/2026-09-22/gold-worth-around-5k-yellow-metal-has-gone-pure-play-real-rates-pure-play",
+      "imageUrl": "https://www.kitco.com/_next/image?q=75&url=https%3A%2F%2Fstorage.googleapis.com%2Fkitco-image-prod%2F5453ad70-1148-498e-805c-2e96b768a298.jpeg&w=1200",
+      "bytes": 72335,
+      "sha256": "5492550ff0af20b9d2373b587879e21e1d853c753c602a54c6fa86777ad68d56",
+      "access": "Publisher reproduction inspected as pixels; direct original social post/date not independently verified.",
+      "redistributed": false
+    },
+    {
+      "id": "regimes",
+      "chartTitle": "Gold",
+      "visibleAsOfLiteral": "8/9/2026",
+      "publisherDate": "2026-09-22",
+      "publisherUrl": "https://www.kitco.com/news/article/2026-09-22/gold-worth-around-5k-yellow-metal-has-gone-pure-play-real-rates-pure-play",
+      "imageUrl": "https://www.kitco.com/_next/image?q=75&url=https%3A%2F%2Fstorage.googleapis.com%2Fkitco-image-prod%2Fbe0fdca8-8bd6-4745-84ae-2800cf6de6a8.jpeg&w=1200",
+      "bytes": 64740,
+      "sha256": "5bbbf16c006700051264eeca3acb4a4bda97c83d19a9a5f54df3031298654a39",
+      "access": "Publisher reproduction inspected as pixels; direct original social post/date not independently verified.",
+      "redistributed": false
+    },
+    {
+      "id": "trend",
+      "chartTitle": "The US Dollar",
+      "visibleAsOfLiteral": "8/23/2026",
+      "publisherDate": "2026-09-22",
+      "publisherUrl": "https://www.kitco.com/news/article/2026-09-22/gold-worth-around-5k-yellow-metal-has-gone-pure-play-real-rates-pure-play",
+      "imageUrl": "https://www.kitco.com/_next/image?q=75&url=https%3A%2F%2Fstorage.googleapis.com%2Fkitco-image-prod%2F34c4ef9d-38de-40a2-9430-688f803d5a8e.jpeg&w=1200",
+      "bytes": 69109,
+      "sha256": "07c0c560ab3d5fe2de49d974bf2726399d422977ebd5d8d9a8dc184b33cdfda1",
+      "access": "Publisher reproduction inspected as pixels; direct original social post/date not independently verified.",
+      "redistributed": false
+    }
+  ]
+}

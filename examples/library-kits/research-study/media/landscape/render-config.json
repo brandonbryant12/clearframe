@@ -1,0 +1,28 @@
+{
+  "id": "reserve-gate",
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "frames": 144,
+  "seed": 17,
+  "theme": "research-paper",
+  "colors": {
+    "base": "research-paper",
+    "bg": "#fafafa",
+    "surface": "#eeedf2",
+    "ink": "#24272c",
+    "muted": "#656972",
+    "accent": "#24272c",
+    "accent2": "#b55c29",
+    "positive": "#4f7563",
+    "negative": "#b34058"
+  },
+  "samples": 48,
+  "pos": 0.85,
+  "still": false,
+  "draft": false,
+  "loop": false,
+  "out": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/research-study/build/master-landscape/reserve-gate",
+  "sourceRoot": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/research-study/build/master-landscape/reserve-gate/source",
+  "sceneFile": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/research-study/build/master-landscape/reserve-gate/source/reserve-gate.py"
+}

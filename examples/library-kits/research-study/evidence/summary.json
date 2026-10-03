@@ -1,0 +1,150 @@
+{
+  "status": "prototype",
+  "continuousPlayback": "unverified",
+  "variants": [
+    {
+      "name": "comparison-landscape",
+      "pipelineId": "2026-10-03T02-46-02-000Z-a98df9a6",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 46 frames: no problems found\n"
+        ],
+        "duration": 12,
+        "inputId": "bb17f2aa9cb0a418842324f89bb743c3a1f4b44a3790b3a7f4740ddeec162d75"
+      },
+      "qa": {
+        "seconds": 12,
+        "frames": 360,
+        "changePerSecond": 0.06,
+        "heldSeconds": 12,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "comparison-vertical",
+      "pipelineId": "2026-10-03T02-46-06-752Z-25370514",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 46 frames: no problems found\n"
+        ],
+        "duration": 12,
+        "inputId": "2a01629bef83281d195ba31dcd2684b6e5a6bb9264f354d529aa77e2fbe3d00f"
+      },
+      "qa": {
+        "seconds": 12,
+        "frames": 360,
+        "changePerSecond": 0.02,
+        "heldSeconds": 12,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "gate-landscape",
+      "pipelineId": "2026-10-03T03-03-18-434Z-fcf18d41",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 24 frames: no problems found\n"
+        ],
+        "duration": 6,
+        "inputId": "59bf8b05055cae5035e115f7bbde5fc34ae14744e3549d4f1c2d3cc9616474c3"
+      },
+      "qa": {
+        "seconds": 6,
+        "frames": 180,
+        "changePerSecond": 0.23,
+        "heldSeconds": 6,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "gate-vertical",
+      "pipelineId": "2026-10-03T03-01-09-896Z-feb7e24d",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 24 frames: no problems found\n"
+        ],
+        "duration": 6,
+        "inputId": "48abc07ad18acecacdeae58278dbb72efb4459f47fbd6062ad10b1b556997184"
+      },
+      "qa": {
+        "seconds": 6,
+        "frames": 180,
+        "changePerSecond": 0.18,
+        "heldSeconds": 6,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "interval-landscape",
+      "pipelineId": "2026-10-03T02-46-11-177Z-9e95a98f",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 46 frames: no problems found\n"
+        ],
+        "duration": 12,
+        "inputId": "3973a28282db795ae86b96775c65ecd4d37769f52d599215fbf8b5539bdf595b"
+      },
+      "qa": {
+        "seconds": 12,
+        "frames": 360,
+        "changePerSecond": 0.11,
+        "heldSeconds": 12,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "interval-vertical",
+      "pipelineId": "2026-10-03T02-46-15-821Z-6790e8f4",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 46 frames: no problems found\n"
+        ],
+        "duration": 12,
+        "inputId": "582a995d184fc53b45c39ca893b94fda29e0b4b6618b655e93570dbbc92042ea"
+      },
+      "qa": {
+        "seconds": 12,
+        "frames": 360,
+        "changePerSecond": 0.03,
+        "heldSeconds": 12,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    }
+  ],
+  "limitations": [
+    "No source chart pixels redistributed",
+    "Three inspected images from one publisher page; direct social-post provenance unverified",
+    "Blender dimensions are qualitative",
+    "Square and 4:5 not reviewed"
+  ]
+}

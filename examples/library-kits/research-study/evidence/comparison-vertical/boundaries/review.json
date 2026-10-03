@@ -1,0 +1,32 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/research-study/comparison-vertical/build/pipeline/2026-10-03T02-46-06-752Z-25370514/video.mp4",
+  "outputSha256": "1f23f3aa85596a0c9ebb0a0b30076768b8fb76995761bc24186867974522c5b6",
+  "inputId": "2a01629bef83281d195ba31dcd2684b6e5a6bb9264f354d529aa77e2fbe3d00f",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "comparison: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "comparison: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 359,
+      "time": 11.966666666666667,
+      "reasons": [
+        "comparison: last frame"
+      ],
+      "image": "frame-0002.jpg"
+    }
+  ]
+}
