@@ -1,0 +1,69 @@
+{
+  "status": "exploratory-feedback-draft",
+  "files": {
+    "REVIEW.md": {
+      "sha256": "ecb5c0946ed06d13fbc5f53ae85983c48e0712fc79cf1a033f631676959e8576",
+      "bytes": 655
+    },
+    "asset.json": {
+      "sha256": "efff3a79651e1d517805bb6df5452392b6499f0f76342c30ce94587d1dfe3c63",
+      "bytes": 6817
+    },
+    "blender.json": {
+      "sha256": "0967e45817460b29ed7384c62f6d88db4884a12dfe8c2797686419a676072ed4",
+      "bytes": 15921
+    },
+    "clip.mp4": {
+      "sha256": "c5eed7d700c2049b6d264b9af2bce56fda73eb0db1e712b0ef3cfa4196a49f69",
+      "bytes": 424258
+    },
+    "ending-frame.png": {
+      "sha256": "8398132d175eab806069b106e9f6fc790e58e48e987e3426d1dbf2bef6558eb6",
+      "bytes": 50544
+    },
+    "frame-retention.json": {
+      "sha256": "eeccf72580dde4219bb5301111a120d0a831cdcbc2b8d5bba263e1ede7bb5dff",
+      "bytes": 189
+    },
+    "poster.png": {
+      "sha256": "44d045e5755e5aae95e38c924edfb0fb554803b704cf1d482fa93d63c18f8ad6",
+      "bytes": 449556
+    },
+    "receipt.json": {
+      "sha256": "7deb209574a55afded4fa3bdfa84277968373a80bc88ddd11625372ee03faeba",
+      "bytes": 28943
+    },
+    "render-config.json": {
+      "sha256": "c64a75d06c3f35d2d0417bcb2a24b2f543f70a1de0083ce0ea398af1cb8643b3",
+      "bytes": 7422
+    },
+    "scene.blend": {
+      "sha256": "9ab69688b93b2a3e4b313af2fe80827bab10f7f63523911b5dbf81a627e54106",
+      "bytes": 171007
+    },
+    "source/artkit.py": {
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+      "bytes": 8435
+    },
+    "source/camera_rig.py": {
+      "sha256": "8b69c6bcfc913a7fe6e3a3013404422fb73463cc7ab4948ce84fce2ee932ffe4",
+      "bytes": 13796
+    },
+    "source/graph-flight.json": {
+      "sha256": "fba64486c699ac648655aca8f085310998dcca9b1e87c3df974261c705d3f8bf",
+      "bytes": 1024
+    },
+    "source/graph-flight.py": {
+      "sha256": "a7d4e4e7f09e741627c5b04fe4b44f00c59b5e96f51fd3d6d1f899850ca6df85",
+      "bytes": 5300
+    },
+    "source/render.py": {
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+      "bytes": 7533
+    },
+    "timing.json": {
+      "sha256": "9dc5e602d76c10530bb126240aee252dc84a73960a9363b8d55cf889c1519867",
+      "bytes": 69
+    }
+  }
+}

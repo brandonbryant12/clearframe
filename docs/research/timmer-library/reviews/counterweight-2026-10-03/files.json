@@ -2,8 +2,8 @@
   "status": "rejected-for-visual-quality",
   "files": {
     "README.md": {
-      "sha256": "12971a0ade2df3e1afb3561b355f34d4273ee4109aa662ed8e83f991fe3dd99e",
-      "bytes": 3248
+      "sha256": "b06792a9b2f7cc29f6372a0a71b2845b0382976acabf053536ad3baf4dd620b6",
+      "bytes": 3374
     },
     "candidate.py": {
       "sha256": "67b5505e2cdb180a3830135914dfc4cd127afe95777129ff6173beefe1138c5d",

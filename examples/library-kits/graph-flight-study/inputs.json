@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "asOf": "2026-10-03",
+  "source": "Original fictional ClearFrame data; not observations, investment returns or forecasts.",
+  "cases": [
+    {
+      "id": "reserve-path",
+      "mechanism": "graph-flight",
+      "title": "Month-end reserve",
+      "context": "Eight fictional monthly observations",
+      "axis": "Reserve in hundreds of USD",
+      "valuePrefix": "$",
+      "valueMultiplier": 100,
+      "valueSuffix": "",
+      "periods": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug"
+      ],
+      "periodYear": 2025,
+      "values": [
+        18,
+        25,
+        22,
+        34,
+        42,
+        38,
+        53,
+        61
+      ],
+      "ticks": [
+        0,
+        20,
+        40,
+        60,
+        70
+      ]
+    },
+    {
+      "id": "seasonal-workload",
+      "mechanism": "graph-flight-seasonal",
+      "title": "Workload varies",
+      "context": "Six fictional monthly observations",
+      "axis": "Work hours per month",
+      "valuePrefix": "",
+      "valueMultiplier": 1,
+      "valueSuffix": " h",
+      "periods": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun"
+      ],
+      "periodYear": 2025,
+      "values": [
+        52,
+        31,
+        44,
+        27,
+        63,
+        48
+      ],
+      "ticks": [
+        0,
+        20,
+        40,
+        60,
+        80
+      ]
+    }
+  ]
+}

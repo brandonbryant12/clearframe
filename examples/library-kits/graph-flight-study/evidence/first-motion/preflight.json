@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "samples": 10001,
+  "cameraPointMinimumBarAabbClearance": 0.8442165135516997,
+  "requiredClearance": 0.25,
+  "limitation": "Numerical sample of analytic camera point versus bar bounds; not rendered visibility or a continuous proof."
+}

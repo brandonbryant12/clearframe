@@ -1,0 +1,50 @@
+{
+  "clip": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/graph-flight-study/media/reserve-path-landscape/clip.mp4",
+  "clipSha256": "3cc4df248b117b871922b5a73845f680ec39e0592e27f3b89dca496bab0f33d1",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 960,
+        "height": 540,
+        "r_frame_rate": "24/1",
+        "duration": "16.000000",
+        "nb_frames": "384"
+      }
+    ]
+  },
+  "frames": [
+    {
+      "time": 7.75,
+      "path": "/tmp/clearframe-graph-flight-review/slower-context/7.75s.png",
+      "sha256": "9c483c39aedc181b898cffdcc42bdffd38735e9947406c860c2aeefd6876df8d"
+    },
+    {
+      "time": 8.25,
+      "path": "/tmp/clearframe-graph-flight-review/slower-context/8.25s.png",
+      "sha256": "8340f2ca4e3eaea4df6a61dc7adc239c26fc1b15a41d35865bb9662dc317226e"
+    },
+    {
+      "time": 8.75,
+      "path": "/tmp/clearframe-graph-flight-review/slower-context/8.75s.png",
+      "sha256": "030b10d9a56a0093e3c54c483be6c381500f1f5e60f58329eafd84848dc62654"
+    },
+    {
+      "time": 9.25,
+      "path": "/tmp/clearframe-graph-flight-review/slower-context/9.25s.png",
+      "sha256": "991145cb4cbc381c054cf061a9215e646ec8f52fdda1c2d22cc8250dee40c652"
+    },
+    {
+      "time": 9.75,
+      "path": "/tmp/clearframe-graph-flight-review/slower-context/9.75s.png",
+      "sha256": "6b60d4d963ef61e35d605bad6bebf4b7fabc26ef866a7805f8a770e6411680b6"
+    },
+    {
+      "time": 10.25,
+      "path": "/tmp/clearframe-graph-flight-review/slower-context/10.25s.png",
+      "sha256": "de5983ff75a32404f1424ee1d4cf12e42a24518972c10bf954a7b116cdfbb7a1"
+    }
+  ],
+  "visuallyInspected": true
+}

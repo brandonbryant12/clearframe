@@ -1,0 +1,69 @@
+{
+  "status": "exploratory-feedback-draft",
+  "files": {
+    "REVIEW.md": {
+      "sha256": "df32b1e747fecd2ae79a571fc8aa9b7ef677f51c49aaaa88c826cb8f29360983",
+      "bytes": 1066
+    },
+    "asset.json": {
+      "sha256": "3660769c273b32b961365a8407d6e409de4765fdd0d4f6f0f343b536efd4a595",
+      "bytes": 5466
+    },
+    "blender.json": {
+      "sha256": "abcd9c312db208006d0e9c57db012a73919c49b29b37ab39aaefadfba177743f",
+      "bytes": 11759
+    },
+    "clip.mp4": {
+      "sha256": "3fe6e578ea785f9b9481d446215f158c31b1398f362ebd6b50c80544817924a1",
+      "bytes": 382807
+    },
+    "poster.png": {
+      "sha256": "b9fec00856d3a2cb6562951bb2f393957bd961db72c044ca73bca0a948d0d757",
+      "bytes": 460067
+    },
+    "preflight.json": {
+      "sha256": "8f123160ebc024afd9abfa73ae927797f91bcb087cab92934da0dc20ed65b797",
+      "bytes": 261
+    },
+    "receipt.json": {
+      "sha256": "da0df0a19f00e59f7f404c47ffddee5ae8d603ec763e4a5be54e8b492b24dabe",
+      "bytes": 22827
+    },
+    "render-config.json": {
+      "sha256": "e34a24b7bc2dd9dd7d785f20ae5b7f9948e867e28b0426316022276ac1a36235",
+      "bytes": 6051
+    },
+    "sampled-frames.png": {
+      "sha256": "04ddf376248583eeb20368a69cc607c67a58984c3f3573252c51d12f884f7e39",
+      "bytes": 176123
+    },
+    "scene.blend": {
+      "sha256": "3438d988e9527cfa7c67ba670516ef5c95d67cff03fd30a785a2231f6b56bdc6",
+      "bytes": 163164
+    },
+    "source/artkit.py": {
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+      "bytes": 8435
+    },
+    "source/camera_rig.py": {
+      "sha256": "8b69c6bcfc913a7fe6e3a3013404422fb73463cc7ab4948ce84fce2ee932ffe4",
+      "bytes": 13796
+    },
+    "source/graph-flight.json": {
+      "sha256": "fba64486c699ac648655aca8f085310998dcca9b1e87c3df974261c705d3f8bf",
+      "bytes": 1024
+    },
+    "source/graph-flight.py": {
+      "sha256": "e36bfff7adc8a27a5a3c953dd86513811ac540b953c250b64854b680bfc82770",
+      "bytes": 5300
+    },
+    "source/render.py": {
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+      "bytes": 7533
+    },
+    "test-timing.json": {
+      "sha256": "4de99a942f419622f4502759c2a94344d7ac320d43696b55abc6a5ae673ec38e",
+      "bytes": 57
+    }
+  }
+}

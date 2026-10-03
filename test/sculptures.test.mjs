@@ -15,8 +15,9 @@ test('optional Blender recipes can be explored without starting Blender', () => 
   assert.equal(config.frames, 78); assert.equal(config.seed, 9);
   assert.equal(sculptureConfig('quiz-triptych').pos, 0);
   assert.equal(sculptureConfig('gap-bridge').loop, false);
+  assert.equal(sculptureConfig('graph-flight', {duration:16,fps:24}).frames, 384);
   assert.ok(sculptures().every(s => s.copy && s.metaphor && typeof s.loop === 'boolean'));
-  for (const options of [{ fps: 0 }, { fps: 23.976 }, { duration: 13 }, { seed: -1 }, { pos: 1.1 }])
+  for (const options of [{ fps: 0 }, { fps: 23.976 }, { duration: 31 }, { seed: -1 }, { pos: 1.1 }])
     assert.throws(() => sculptureConfig('petal-reveal', options));
   assert.throws(() => sculptureConfig('../petal-reveal'), /Unknown sculpture/);
 });

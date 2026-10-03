@@ -1,0 +1,22 @@
+{
+  "reviewedAt": "2026-10-03T15:06:18.400594+00:00",
+  "scope": "Four actual rendered stills inspected with view_image; no continuous motion playback",
+  "files": {
+    "examples/library-kits/graph-flight-study/build/rig-looks-v2/landscape-end/poster.png": "b5c484158ba075c18065dbdecbcee0e71ec59749df24abe5cc1a24e7c7cbe968",
+    "examples/library-kits/graph-flight-study/build/rig-looks-v2/vertical-end/poster.png": "084b1fc6da5bd78e54b6b488917702b20dd1c94ef3cbbd2e2febadd541705b05",
+    "examples/library-kits/graph-flight-study/build/rig-looks-v2/landscape-flight/poster.png": "46b4f332c89d1cefd840883a036219a7358ef5754d0dc9a2a3ce9cebcb15df22",
+    "examples/library-kits/graph-flight-study/build/rig-looks-v2/vertical-flight/poster.png": "107225d85a887be457d2bbbe7ca83d3ca5ca58b971c0d60ebf70beed8d265577"
+  },
+  "result": "No additional blocking still finding for the next draft motion review",
+  "observations": [
+    "Both ending frames retain all eight bars, the complete shared baseline and the upright value/time grid.",
+    "Portrait ending has clear separated marks. The grid looks quieter and more consistent than the earlier wire-like rendering.",
+    "The flight still at approximately phase 0.34 is near an edge-on plane crossing; cropped marks and momentary loss of the full series are expected there. This single frame cannot establish how long the loss of context lasts.",
+    "The next motion review must check rapid recovery after each crossing, repeated near-edge silhouettes, pace of the turn and pullback, and stability of the final reading hold."
+  ],
+  "limits": [
+    "Not visual acceptance of the complete movement",
+    "No numerical labels or native data readout reviewed",
+    "No inference that collision-free geometry guarantees unobstructed views"
+  ]
+}

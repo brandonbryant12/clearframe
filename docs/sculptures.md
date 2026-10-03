@@ -2,7 +2,7 @@
 
 ClearFrame can prepare an original Blender scene in the background, bake its motion and retain a video insert. FFFrames composes the final film, including its editable type, evidence, charts and sound. Blender is optional and is not involved in ordinary film rendering or copy revisions.
 
-The sixteen recipes use independent geometry, materials and motion. They are useful starting objects, not a finite set of permitted looks. Open the saved `.blend`, change a recipe, or author a new built-in recipe when the story calls for a different object. Palette and seed variations are refinements; a fresh direction should also change the silhouette, material, operation, camera or editorial role.
+The sixteen established recipes use independent geometry, materials and motion. Two additional chart-flight recipes are exploratory source candidates; they have not joined an accepted library kit. They are useful starting objects, not a finite set of permitted looks. Open the saved `.blend`, change a recipe, or author a new built-in recipe when the story calls for a different object. Palette and seed variations are refinements; a fresh direction should also change the silhouette, material, operation, camera or editorial role.
 
 | Recipe | Material and operation | Best use |
 |---|---|---|
@@ -22,8 +22,10 @@ The sixteen recipes use independent geometry, materials and motion. They are use
 | `inspection-orbit` | One bounded orbit around a static open ceramic assembly. | Side connections and changing viewpoints; no measured internals. |
 | `parallax-truck` | Equal camera/target translation past foreground screens and a rear route. | Partial visibility and depth; no complete-visibility guarantee. |
 | `conveyor-bypass` | Ceramic packets queue at a narrow neck and travel through an opened alternate route. | Logistics or routing metaphor; no measured throughput. |
+| `graph-flight` (candidate) | Weave through eight rising flat bars, then reveal the full chart. | Original fictional reserve series; native labels and acceptance pending. |
+| `graph-flight-seasonal` (candidate) | The same bounded rig with six uneven observations. | Original fictional workload series; complete render review pending. |
 
-All are qualitative visual metaphors. Their dimensions, weights, layer counts and trajectories do not represent measurements. Adapt the geometry to the actual subject before using an assembly as a factual product diagram. Keep evidence and text native.
+The sixteen established recipes are qualitative visual metaphors. Their dimensions, weights, layer counts and trajectories do not represent measurements. Adapt the geometry to the actual subject before using an assembly as a factual product diagram. Keep evidence and text native.
 
 ## Invent a new operation
 
@@ -43,7 +45,7 @@ node engine/cli.mjs sculpture petal-reveal --duration 4 --out /tmp/petal-master
 node engine/cli.mjs sculpture petal-reveal --draft --still --vertical --theme vellum --seed 23 --out /tmp/petal-alternative
 ```
 
-Each destination must be new. `--dry-run` prints the configuration without starting Blender or creating files; `sculptures` also works without Blender installed. `--json` prints a machine-readable receipt. `--pos 0–1` selects the poster or single still phase. `--duration` accepts 1–12 seconds; `--fps` accepts an integer from 12–60. The frame count is rounded from duration × fps, and the actual duration is frames ÷ fps. `--seed N` repeats the same bounded construction; `--seed random` records the chosen seed.
+Each destination must be new. `--dry-run` prints the configuration without starting Blender or creating files; `sculptures` also works without Blender installed. `--json` prints a machine-readable receipt. `--pos 0–1` selects the poster or single still phase. `--duration` accepts 1–30 seconds; `--fps` accepts an integer from 12–60. The frame count is rounded from duration × fps, and the actual duration is frames ÷ fps. `--seed N` repeats the same bounded construction; `--seed random` records the chosen seed.
 
 All built-in recipes now expose a [motion phase contract](motion-phases.md). Default timing preserves their original pose clock. `--phase-seconds timing.json` can assign positive durations to every named phase, instead of `--duration`; the renderer retains the exact per-frame pose schedule and checks declared static holds. Phase minimums can reject an otherwise valid overall duration. The gate, quiz and bridge distinguish initial hold, action and final hold; continuous loops expose one complete cycle with no internal safe trim. The separate `planClipRetiming` helper produces an explicit encoded-frame selection plan with protected action and reading-hold checks. It does not render a new clip or change a native storyboard.
 

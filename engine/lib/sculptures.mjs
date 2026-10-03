@@ -30,7 +30,7 @@ export function sculptureConfig(id, options = {}) {
   const fps = options.fps ?? 24, duration = options.phaseSeconds && typeof options.phaseSeconds === 'object' && !Array.isArray(options.phaseSeconds)
     ? Object.values(options.phaseSeconds).reduce((a, b) => a + b, 0) : options.duration ?? recipe.duration, seed = options.seed ?? 17;
   if (!Number.isInteger(fps) || fps < 12 || fps > 60) throw new Error('Sculpture fps must be an integer from 12 to 60.');
-  if (!Number.isFinite(duration) || duration < 1 || duration > 12) throw new Error('Sculpture duration must be 1–12 seconds.');
+  if (!Number.isFinite(duration) || duration < 1 || duration > 30) throw new Error('Sculpture duration must be 1–30 seconds.');
   if (!Number.isSafeInteger(seed) || seed < 0 || seed > 2147483647) throw new Error('Sculpture seed must be an integer from 0 to 2147483647.');
   const pos = options.pos ?? recipe.posterPos ?? 0.5;
   if (!Number.isFinite(pos) || pos < 0 || pos > 1) throw new Error('Sculpture --pos must be 0–1.');
@@ -78,7 +78,7 @@ export async function renderSculpture(id, destination, options = {}) {
   fs.mkdirSync(out);
   fs.mkdirSync(path.join(out, 'frames'));
   const source = path.join(out, 'source'); fs.mkdirSync(source);
-  const sourceFiles = ['scripts/blender/render.py', 'scripts/blender/artkit.py', 'scripts/blender/camera_rig.py', `library/sculptures/${id}.py`, `library/sculptures/${id}.json`];
+  const sourceFiles = ['scripts/blender/render.py', 'scripts/blender/artkit.py', 'scripts/blender/camera_rig.py', 'scripts/blender/chart_scene.py', `library/sculptures/${id}.py`, `library/sculptures/${id}.json`];
   const hashes = Object.fromEntries(sourceFiles.map(file => {
     fs.copyFileSync(path.join(repo, file), path.join(source, path.basename(file)));
     return [file, sha(path.join(source, path.basename(file)))];

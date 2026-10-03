@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Chart-flight candidate.** A shared Blender camera weaves through a flat chart and pulls back to its complete bounds, with separate portrait geometry and explicit grid/bar clearance. Source timing now supports up to 30 seconds for slower moves. The study is exploratory; native labels, complete motion review and acceptance remain open. See `docs/camera-studies.md`.
+
 - **Conserved allocation trays.** Fixed-value native tiles retain identity and exact departure/transit/arrival accounting before an explicit shared-scale comparison. Four fictional budget/hour specimens have complete tray-frame count/position checks and independent review. A reading-density heuristic warning is retained with its rationale; continuous playback and final acceptance remain open. See `docs/allocations.md`.
 
 - **Dated phase trails.** Native paired-observation plots preserve explicit axes, calendar spacing, missing-pair breaks and reference equality. Four fictional specimens retain independent model and encoded review. Lines are guides without smoothing or causal inference. See `docs/phases.md`; continuous playback and final master acceptance remain open.

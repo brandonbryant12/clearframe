@@ -1,0 +1,22 @@
+[
+  {
+    "originalPath": "examples/library-kits/graph-flight-study/build/rig-looks-v2/landscape-end/poster.png",
+    "retainedPath": "evidence/review/stills/landscape-end/poster.png",
+    "sha256": "b5c484158ba075c18065dbdecbcee0e71ec59749df24abe5cc1a24e7c7cbe968"
+  },
+  {
+    "originalPath": "examples/library-kits/graph-flight-study/build/rig-looks-v2/vertical-end/poster.png",
+    "retainedPath": "evidence/review/stills/vertical-end/poster.png",
+    "sha256": "084b1fc6da5bd78e54b6b488917702b20dd1c94ef3cbbd2e2febadd541705b05"
+  },
+  {
+    "originalPath": "examples/library-kits/graph-flight-study/build/rig-looks-v2/landscape-flight/poster.png",
+    "retainedPath": "evidence/review/stills/landscape-flight/poster.png",
+    "sha256": "46b4f332c89d1cefd840883a036219a7358ef5754d0dc9a2a3ce9cebcb15df22"
+  },
+  {
+    "originalPath": "examples/library-kits/graph-flight-study/build/rig-looks-v2/vertical-flight/poster.png",
+    "retainedPath": "evidence/review/stills/vertical-flight/poster.png",
+    "sha256": "107225d85a887be457d2bbbe7ca83d3ca5ca58b971c0d60ebf70beed8d265577"
+  }
+]

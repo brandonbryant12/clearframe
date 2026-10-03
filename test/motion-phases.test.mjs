@@ -9,10 +9,10 @@ import { sculptureConfig, sculptures } from '../engine/lib/sculptures.mjs';
 
 test('phase manifests preserve the old pose clock and expose exact half-open holds', () => {
   for (const recipe of sculptures()) {
-    const c = sculptureConfig(recipe.id, { fps: 24, duration: 4 });
-    assert.deepEqual(c.motion.poseSamples, Array.from({ length: 97 }, (_, i) => i / 96));
+    const c = sculptureConfig(recipe.id, { fps: 24 });
+    assert.deepEqual(c.motion.poseSamples, Array.from({ length: c.frames + 1 }, (_, i) => i / c.frames));
     assert.equal(c.motion.phases[0].startFrame, 0);
-    assert.equal(c.motion.phases.at(-1).endFrame, 96);
+    assert.equal(c.motion.phases.at(-1).endFrame, c.frames);
     assert.equal(c.motion.loopIntent, recipe.loop);
   }
   const m = sculptureConfig('reserve-gate', { fps: 24 }).motion;
