@@ -11,6 +11,7 @@ import bpy
 
 here = Path(__file__).resolve().parent
 sys.path.insert(0, str(here))
+import camera_rig
 
 
 def main():
@@ -65,12 +66,17 @@ def main():
     scene.frame_set(1)
     bpy.context.view_layer.update()
     first_matrices = {obj.name: obj.matrix_world.copy() for obj in scene.objects}
+    first_optics = camera_rig.optics(scene.camera)
     scene.frame_set(config['frames'] + 1)
     bpy.context.view_layer.update()
     loop_error = max(abs(obj.matrix_world[r][c] - first_matrices[obj.name][r][c])
                      for obj in scene.objects for r in range(4) for c in range(4))
     if config.get('loop') and loop_error > 0.0001:
         raise ValueError(f'Loop transforms fail to close: max error {loop_error}')
+    last_optics = camera_rig.optics(scene.camera)
+    loop_optics_error = max(abs(last_optics[k]-v) for k, v in first_optics.items())
+    if config.get('loop') and loop_optics_error > .0001:
+        raise ValueError(f'Loop camera optics fail to close: max error {loop_optics_error}')
     # Declared holds may not hide moving transforms, including camera/light
     # objects. This is bounded transform evidence, not a shading/pixel check.
     hold_errors = []
@@ -80,15 +86,21 @@ def main():
         scene.frame_set(phase['startFrame'] + 1)
         bpy.context.view_layer.update()
         baseline = {obj.name: obj.matrix_world.copy() for obj in scene.objects}
+        base_optics = camera_rig.optics(scene.camera)
         error = 0.0
+        optics_error = 0.0
         for frame in range(phase['startFrame'] + 1, phase['endFrame'] + 1):
             scene.frame_set(frame)
             bpy.context.view_layer.update()
             error = max(error, max(abs(obj.matrix_world[r][c] - baseline[obj.name][r][c])
                                   for obj in scene.objects for r in range(4) for c in range(4)))
-        hold_errors.append({'id': phase['id'], 'frames': phase['endFrame'] - phase['startFrame'], 'maxTransformError': error})
+            current_optics = camera_rig.optics(scene.camera)
+            optics_error = max(optics_error, max(abs(current_optics[k]-v) for k, v in base_optics.items()))
+        hold_errors.append({'id': phase['id'], 'frames': phase['endFrame'] - phase['startFrame'], 'maxTransformError': error, 'maxCameraOpticsError': optics_error})
         if error > 0.0001:
             raise ValueError(f'Declared hold {phase["id"]} has moving transforms: {error}')
+        if optics_error > .0001:
+            raise ValueError(f'Declared hold {phase["id"]} has moving camera optics: {optics_error}')
     poster_frame = 1 + round((config['frames'] - 1) * config.get('pos', 0.5))
     scene.frame_set(poster_frame)
     scene.render.filepath = '//frames/frame-'
@@ -102,9 +114,12 @@ def main():
         'colorManagement': {'view': scene.view_settings.view_transform, 'look': scene.view_settings.look},
         'bakedMotion': True, 'requiresAutoExec': False,
         'loopMaxTransformError': loop_error,
+        'loopMaxCameraOpticsError': loop_optics_error,
         'holdTransformChecks': hold_errors,
         'motionClock': config.get('motion', {}).get('clock'),
         'framing': json.loads(scene.camera['clearframe_framing']) if scene.camera.get('clearframe_framing') else None,
+        'cameraRig': json.loads(scene.camera['clearframe_camera_rig']) if scene.camera.get('clearframe_camera_rig') else None,
+        'cameraReview': json.loads(scene.camera['clearframe_camera_review']) if scene.camera.get('clearframe_camera_review') else None,
         'objects': len(scene.objects),
         'meshVertices': sum(len(obj.data.vertices) for obj in scene.objects if obj.type == 'MESH'),
         'buildSeconds': build_seconds, 'bakeSeconds': bake_seconds,

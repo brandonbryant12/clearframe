@@ -2,7 +2,7 @@
 
 ClearFrame can prepare an original Blender scene in the background, bake its motion and retain a video insert. FFFrames composes the final film, including its editable type, evidence, charts and sound. Blender is optional and is not involved in ordinary film rendering or copy revisions.
 
-The eleven recipes use independent geometry, materials and motion. They are useful starting objects, not a finite set of permitted looks. Open the saved `.blend`, change a recipe, or author a new built-in recipe when the story calls for a different object. Palette and seed variations are refinements; a fresh direction should also change the silhouette, material, operation, camera or editorial role.
+The fourteen recipes use independent geometry, materials and motion. They are useful starting objects, not a finite set of permitted looks. Open the saved `.blend`, change a recipe, or author a new built-in recipe when the story calls for a different object. Palette and seed variations are refinements; a fresh direction should also change the silhouette, material, operation, camera or editorial role.
 
 | Recipe | Material and operation | Best use |
 |---|---|---|
@@ -16,6 +16,9 @@ The eleven recipes use independent geometry, materials and motion. They are usef
 | `gap-bridge` | A colored insert descends into the missing span and settles. | A fill-in-the-blank answer or completion metaphor. |
 | `reserve-gate` | An amber gate lifts between porcelain basins in graphite guides, then holds. | Qualitative access and release conditions; no liquid or amount encoding. |
 | `reservoir-transfer` | Transparent chambers, blue analytic fill and an amber gate stage redistribution and isolation. | Qualitative access or tank operation; no measured volume. |
+| `linked-system` | Perspective pullback from a control junction to connected branches. | Connections and dependencies; no measured flow. |
+| `hero-field` | Perspective pullback from a selected marker to a wider field. | Individual and context; illustrative counts only. |
+| `focus-depth` | Fixed camera racks focus between near and deeper objects. | Selective attention with crisp native qualifications. |
 | `conveyor-bypass` | Ceramic packets queue at a narrow neck and travel through an opened alternate route. | Logistics or routing metaphor; no measured throughput. |
 
 All are qualitative visual metaphors. Their dimensions, weights, layer counts and trajectories do not represent measurements. Adapt the geometry to the actual subject before using an assembly as a factual product diagram. Keep evidence and text native.
@@ -98,3 +101,5 @@ npm run verify:sculptures -- /tmp/one-sculpture --quick
 The harness checks retained hashes, poster and video geometry, frame counts, color tags, decoded loop continuity or a settled one-way reveal, and visible movement. It reopens every saved `.blend` with auto-execution disabled and compares the rendered poster pixels with the original. It records both pixel hashes and distinguishes exact equality from bounded EEVEE rounding: at most one 8-bit step in no more than 0.1% of channels. Reports retain failures as well as successful evidence. These are mechanical checks; source truth, useful direction and artistic acceptance remain separate review decisions.
 
 The reservoir-transfer and conveyor-bypass recipes add staged, qualitative physical operations with separate portrait framing. See [physical mechanisms](physical-mechanisms.md) for conserved geometry, contact checks, opt-in camera fitting and retained native examples.
+
+Three authored camera recipes add separately fitted perspective endpoints and optical focus with native caption bands. See [camera studies](camera-studies.md) for the deterministic path contract, optical hold checks and prototype evidence.
