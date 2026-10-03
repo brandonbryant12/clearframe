@@ -40,7 +40,7 @@ Research and podcast sources do not imply one style. `research-investigation` is
 
 Layers combine with any block: `plate` (image/clip behind or beside), `tone` (colour-blocked scene), `camera` (slow move, on by default) and `art` (canvas elements under/over). A film-level `texture` adds grain and vignette. Read `docs/canvas.md` and the `clearframe-canvas` skill before drawing.
 
-For multiple comparable time series, use `canvas.props.plot`: explicit shared domains and ticks, linear or dated x, linear or logarithmic y, null gaps, source/as-of and synchronized linear reveals. See [quantitative-plots.md](../../docs/quantitative-plots.md). Keep a two-second final-label hold and review portrait composition; source compilation does not establish visual acceptance.
+For multiple comparable time series, use `canvas.props.plot`: explicit shared domains and ticks, linear or dated x, linear or logarithmic y, null gaps, source/as-of and synchronized linear reveals. See [quantitative-plots.md](../../docs/quantitative-plots.md). Keep a two-second final-value hold and review portrait composition; source compilation does not establish visual acceptance.
 
 Colors, motion intensity, entrances, sources and reading time are authored choices. Read `docs/style.md`. Kinetic modes are highlight/reveal/word; follow `docs/speech.md` for the measured-timestamp requirement. For generated plates, use `docs/continuity.md` and inspect both joins.
 

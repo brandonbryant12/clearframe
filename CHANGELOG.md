@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Plot readability and phase identity.** Names stay visible throughout quantitative reveals; final values appear in a stable key. Wider portrait plotting and a larger, higher-contrast multiline source footer improve 360-pixel reading. Missing dates and retirement assumptions are explicit. Long-label, close-value, logarithmic and annotation specimens extend the retained review set; frame-order verification compares native pixels.
+
 - **Shared-scale native plots.** `canvas.props.plot` adds explicit numeric/calendar axes, comparable series, log y scales, missing-data gaps, direct labels and observation-linked annotations. A linear native stroke reveal keeps irregularly sampled series on one time coordinate. Prepared retirement and monitoring specimens cover landscape and vertical. Plot sources are required, and native layout helpers now receive the actual beat duration so final-reading holds are enforced.
 
 - **Auditable finance calculations.** Pure illustrative helpers for marginal matching, vesting ownership, salary/service benefit formulas, contribution/withdrawal ledgers, fee comparisons and purchasing power. Explicit cashflow ordering preserves losses and reports unfunded withdrawals and fees. Independently computed fixtures and reproducible examples establish source behavior; retirement visuals remain proposed.

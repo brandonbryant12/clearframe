@@ -420,6 +420,8 @@ export const VALIDATORS = {
     });
   },
   canvas: (p, h, frame = {}) => {
+    if(p.sourceSize != null && !(Number.isFinite(p.sourceSize) && p.sourceSize>=14 && p.sourceSize<=72))
+      h.fail('sourceSize must be 14–72 pixels');
     // A library sketch, redrawn for this frame, under the beat's own elements.
     if (p.sketch != null) {
       const [w, ht] = [frame.width ?? 1920, frame.height ?? 1080];
