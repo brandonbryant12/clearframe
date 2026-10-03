@@ -861,4 +861,34 @@ mod tests {
             assert_eq!(final_pixels.data, decoder.get_raw_frame().into_image().href().data);
         }
     }
+    #[test]
+    fn video_decoder_preserves_the_final_sample_when_output_duration_is_not_integral() {
+        use fframes::FFramesSyncedVideoFrame;
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/bframes-49-at-24fps.mp4");
+        unsafe {
+            // 49/24 seconds is 61.25 output frames at 30 fps. Rounding that
+            // duration to 61 must not discard the valid sample at 61/30.
+            let mut decoder = fframes::media::FFmpegDecoder::new(&path, 30, 1).unwrap();
+            assert!(decoder.decode_up_to(60).unwrap());
+            assert!((decoder.get_raw_frame().timestamp_seconds() - 2.0).abs() < 0.0001);
+            let final_pixels = decoder.get_raw_frame().into_image().href();
+            for _ in 0..2 {
+                assert!(decoder.decode_up_to(61).unwrap(), "61/30 seconds precedes the exact stream end at 49/24");
+                assert!((decoder.get_raw_frame().timestamp_seconds() - 2.0).abs() < 0.0001);
+                assert_eq!(final_pixels.data, decoder.get_raw_frame().into_image().href().data);
+            }
+            for _ in 0..2 {
+                assert!(!decoder.decode_up_to(62).unwrap(), "62/30 seconds is beyond the exact stream end");
+            }
+            assert!(decoder.decode_up_to(30).unwrap(), "backward seek after EOF must remain supported");
+            assert!((decoder.get_raw_frame().timestamp_seconds() - 1.0).abs() < 0.0001);
+            for _ in 0..2 {
+                assert!(decoder.decode_up_to(61).unwrap(), "seeking directly into the final interval must decode it");
+                assert!((decoder.get_raw_frame().timestamp_seconds() - 2.0).abs() < 0.0001);
+                assert_eq!(final_pixels.data, decoder.get_raw_frame().into_image().href().data);
+            }
+            assert!(!decoder.decode_up_to(62).unwrap());
+        }
+    }
 }

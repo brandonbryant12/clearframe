@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **FFFrames 1.2.0.** Pin the current stable renderer release and its dependency graph. Upstream now supplies delayed-frame draining. Replace the old media patch with one output-duration rounding fix after a new fractional-duration regression proves that unpatched 1.2 can lose a valid final sample. Preserve one Metal pipeline, two encoder workers and libx264 output; use upstream geometry-cache defaults.
+
 - **Chart-flight candidate.** A shared Blender camera weaves through a flat chart and pulls back to its complete bounds, with separate portrait geometry and explicit grid/bar clearance. Source timing now supports up to 30 seconds for slower moves. Four revised 18.5-second source drafts cover two datasets in both formats. Stable anchors register native date/value labels; the reading hold grows to five seconds. Matte pigment and a closed, checked backdrop resolve reverse-view glare and a portrait ceiling gap. The study is exploratory; encoded evidence and acceptance are tracked separately. See `docs/camera-studies.md`.
 
 - **Conserved allocation trays.** Fixed-value native tiles retain identity and exact departure/transit/arrival accounting before an explicit shared-scale comparison. Four fictional budget/hour specimens have complete tray-frame count/position checks and independent review. A reading-density heuristic warning is retained with its rationale; continuous playback and final acceptance remain open. See `docs/allocations.md`.
