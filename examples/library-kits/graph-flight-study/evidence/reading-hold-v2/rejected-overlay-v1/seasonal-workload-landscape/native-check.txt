@@ -1,0 +1,14 @@
+{
+  "errors": [],
+  "warnings": [
+    "chart-flight: \"20 h\" runs outside the title-safe area (keep type within 90% of the frame) (15.7 s)",
+    "chart-flight: \"40 h\" runs outside the title-safe area (keep type within 90% of the frame) (15.7 s)",
+    "chart-flight: \"60 h\" runs outside the title-safe area (keep type within 90% of the frame) (15.7 s)",
+    "chart-flight: \"80 h\" runs outside the title-safe area (keep type within 90% of the frame) (15.7 s)"
+  ],
+  "notes": [
+    "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 75 frames: no problems found\n"
+  ],
+  "duration": 18.5,
+  "inputId": "1bc76715a66529e2a94bf9eebdb4567c19f3f72cc114b8cb1ee3b1bbfa7a6df9"
+}

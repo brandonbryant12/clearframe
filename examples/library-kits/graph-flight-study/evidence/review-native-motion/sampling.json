@@ -1,0 +1,871 @@
+{
+  "scriptSha256": "1e79e335073df0813a2de51e55709cc50aabaeb3d821cf4a367bedfdf5d6fd00",
+  "fps": 24,
+  "sampleFramesZeroBased": [
+    0,
+    48,
+    96,
+    144,
+    162,
+    168,
+    174,
+    180,
+    186,
+    192,
+    198,
+    204,
+    210,
+    216,
+    222,
+    228,
+    234,
+    240,
+    246,
+    252,
+    276,
+    312,
+    322,
+    323,
+    324,
+    325,
+    327,
+    330,
+    336,
+    408,
+    443
+  ],
+  "cases": [
+    {
+      "name": "reserve-path-landscape",
+      "video": "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/native-video.mp4",
+      "videoSha256": "a21476d76ce052e89e9b75af171ee1c12d91a099467c741c957ac6a6e49c2d75",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 960,
+            "height": 540,
+            "r_frame_rate": "24/1",
+            "nb_frames": "444"
+          }
+        ],
+        "format": {
+          "duration": "18.500000"
+        }
+      },
+      "frames": [
+        {
+          "index": 0,
+          "seconds": 0.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-001.png",
+          "sha256": "8fae46e5cfb4d33ccf33b772e03617b0bf95ad3b210c4fd6625a723604eac06c"
+        },
+        {
+          "index": 48,
+          "seconds": 2.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-002.png",
+          "sha256": "3ac53100866c81d906d23aa37012b57f6c40d5a3e3a22cf402f0a4e2dfb9a981"
+        },
+        {
+          "index": 96,
+          "seconds": 4.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-003.png",
+          "sha256": "9a3dd070afddeadf7623870cd02e2c02308c103eb69c51c62ad9b18435bc424e"
+        },
+        {
+          "index": 144,
+          "seconds": 6.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-004.png",
+          "sha256": "71244d1e417ca7f43f4aef4fca098070ada40f71685942992b45e33e1a8ab63e"
+        },
+        {
+          "index": 162,
+          "seconds": 6.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-005.png",
+          "sha256": "ee1ead93fc87bd5ff39d533a45ea61fcb5878eac187df45015b8a06544d61700"
+        },
+        {
+          "index": 168,
+          "seconds": 7.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-006.png",
+          "sha256": "141b2780cc28c0abe4acd4e21392217be2a52f16d85c577523fed4987581b8d8"
+        },
+        {
+          "index": 174,
+          "seconds": 7.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-007.png",
+          "sha256": "9c70576b5382cb81b712363288f31a954c1b031e6162952b63f986b4e9a41ee8"
+        },
+        {
+          "index": 180,
+          "seconds": 7.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-008.png",
+          "sha256": "7b29393e2745c6ab37560699ae62fc40b5de5c0550373255ad0ec130da3faccd"
+        },
+        {
+          "index": 186,
+          "seconds": 7.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-009.png",
+          "sha256": "d7573221975851a2618494a02c00cfd668881359aaa1c960a3ffdd2346e96dbe"
+        },
+        {
+          "index": 192,
+          "seconds": 8.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-010.png",
+          "sha256": "ec820f998e2bfa57195299717103383f72c16d38012ce77d6206fd1280435ce8"
+        },
+        {
+          "index": 198,
+          "seconds": 8.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-011.png",
+          "sha256": "7804b58dbbff402ea5a1f026cef7189bf99eac6c250dfa21605d3a4a4f454d14"
+        },
+        {
+          "index": 204,
+          "seconds": 8.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-012.png",
+          "sha256": "fb6db95fec68dda5a28d35ac8a41628e8c6b1cdf1d6f3c08a87dd5f5de6a7971"
+        },
+        {
+          "index": 210,
+          "seconds": 8.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-013.png",
+          "sha256": "f3456d6c5e363ae1c81b841ed74f125f475a4d08998cdc539bcb7ae6edb7d21c"
+        },
+        {
+          "index": 216,
+          "seconds": 9.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-014.png",
+          "sha256": "b4afe224f3cd601b85199eaad7d2e6d24767d74003019940b337b2eed549abf7"
+        },
+        {
+          "index": 222,
+          "seconds": 9.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-015.png",
+          "sha256": "1bfff99fc2bbdc3bf50125f9b63133c8abc398f4cdbb40322cce43867ce78a73"
+        },
+        {
+          "index": 228,
+          "seconds": 9.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-016.png",
+          "sha256": "ce9bf35d1802b80b51975004ab48cca5461d1953d20c02b740e082af83681314"
+        },
+        {
+          "index": 234,
+          "seconds": 9.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-017.png",
+          "sha256": "7ed14b488c2b6ded9a5083cc8648f517bea60409553f0282322dea80e7474ba5"
+        },
+        {
+          "index": 240,
+          "seconds": 10.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-018.png",
+          "sha256": "ff03b770b6fced3102d25abd9636701de49b2472f28c7f52a1d228b08309d971"
+        },
+        {
+          "index": 246,
+          "seconds": 10.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-019.png",
+          "sha256": "8ea5ed1a182ab53eeb7cc34991830f0a5fafc79d388627ba46881d823b3b6222"
+        },
+        {
+          "index": 252,
+          "seconds": 10.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-020.png",
+          "sha256": "89788c01afcd607637c9aa94cff118575c20c361beccf5d9c89158d6635dc6c1"
+        },
+        {
+          "index": 276,
+          "seconds": 11.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-021.png",
+          "sha256": "af9e35ae560696d9e1835618111b7728a240bba621132663a54e7a4c33647c41"
+        },
+        {
+          "index": 312,
+          "seconds": 13.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-022.png",
+          "sha256": "60e3ea9f3b2ce339771ee6c5588297c43d1ec20cfce536fd5358f5204753c6ce"
+        },
+        {
+          "index": 322,
+          "seconds": 13.416666666666666,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-023.png",
+          "sha256": "abc6417f43d089675ae616c77ce6b95c7f0f7c9906488a7dd8c2db2c66ed57e3"
+        },
+        {
+          "index": 323,
+          "seconds": 13.458333333333334,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-024.png",
+          "sha256": "9e883916877b061d0f982541d14d2ab15f86f1ce8e77c95816ec03f8d1728f1f"
+        },
+        {
+          "index": 324,
+          "seconds": 13.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-025.png",
+          "sha256": "ef3079c026560221080fccc5ee6fdafac8e6f1e6dd11f661d93e1c88f3040eb4"
+        },
+        {
+          "index": 325,
+          "seconds": 13.541666666666666,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-026.png",
+          "sha256": "702f8be7d941ff503cfb384d90ee0a4726bf63e1a1e9bdabe0d9e2c9a8061ec3"
+        },
+        {
+          "index": 327,
+          "seconds": 13.625,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-027.png",
+          "sha256": "3c840781c93a3291f58ac5a698b372e5feea23e51c1beb77828555fdc74182bf"
+        },
+        {
+          "index": 330,
+          "seconds": 13.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-028.png",
+          "sha256": "ecd35c0c0952c6a11f4465a0e3cd3fbae9d754be7250dd5512bc6e79136edb48"
+        },
+        {
+          "index": 336,
+          "seconds": 14.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-029.png",
+          "sha256": "0fbf180ff61dc1b6ffe0569b0e9acbecb91d0edf85c1e0e020ebd0879f37c7f7"
+        },
+        {
+          "index": 408,
+          "seconds": 17.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-030.png",
+          "sha256": "3b801c5eb2f0074642ecda5405e867f9651c6fde93a6c2d13aa892ff8d316f97"
+        },
+        {
+          "index": 443,
+          "seconds": 18.458333333333332,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/frame-031.png",
+          "sha256": "b3abd907aa6517694e085fdde10745161fa694d39c4b931749e32137b85bbddc"
+        }
+      ]
+    },
+    {
+      "name": "reserve-path-vertical",
+      "video": "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/native-video.mp4",
+      "videoSha256": "e5cf3e61d577d780a0b0e9ae8e23a97833c4fb93812cdd7a98e50a4d1b14c85a",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 540,
+            "height": 960,
+            "r_frame_rate": "24/1",
+            "nb_frames": "444"
+          }
+        ],
+        "format": {
+          "duration": "18.500000"
+        }
+      },
+      "frames": [
+        {
+          "index": 0,
+          "seconds": 0.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-001.png",
+          "sha256": "4ab79bb97175fc8b83a3b6bb3f232d4cc59b0c670a87dba84b7515168d06f7b1"
+        },
+        {
+          "index": 48,
+          "seconds": 2.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-002.png",
+          "sha256": "652a6852e59bb2614d03a3b2c5dad64d0726eac12ad36de3063537dbfcf09a3d"
+        },
+        {
+          "index": 96,
+          "seconds": 4.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-003.png",
+          "sha256": "de65800a5ba32835031aac3ad93929daba90030ac8048e1cf5e75b4349182c2c"
+        },
+        {
+          "index": 144,
+          "seconds": 6.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-004.png",
+          "sha256": "d280561775ac8d2300396e2c38238197414657f8ad779ce11352fca94439267e"
+        },
+        {
+          "index": 162,
+          "seconds": 6.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-005.png",
+          "sha256": "c6865c1ac0a28f1c334a7cba92ea3be2e25cb3b2e1a359c82088d8afc11cc5f3"
+        },
+        {
+          "index": 168,
+          "seconds": 7.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-006.png",
+          "sha256": "9fe45ef30a6345856d2605ad08ecc46211fb40eababe9f14ed0b4ee92ef8a994"
+        },
+        {
+          "index": 174,
+          "seconds": 7.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-007.png",
+          "sha256": "786e0d454da86e0602cd036f6e2bf40680d639994a5761726ee1550b1a334b5a"
+        },
+        {
+          "index": 180,
+          "seconds": 7.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-008.png",
+          "sha256": "4b7dba6c9133562b4c4c5e475de016bb6d497cf5245f54cb2043559d0057c55c"
+        },
+        {
+          "index": 186,
+          "seconds": 7.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-009.png",
+          "sha256": "0a6a6e916fc48b391ca0908c9fdce75e0a8eaf56cb27847c36b4440628e198a6"
+        },
+        {
+          "index": 192,
+          "seconds": 8.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-010.png",
+          "sha256": "a22c771949da122ee8ac246875af9825d3473a6c599ad299ede27f3f0a73f8a6"
+        },
+        {
+          "index": 198,
+          "seconds": 8.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-011.png",
+          "sha256": "b5542a94ed2065c736a263c05bb6c24cdde042161d98dfecfc21be0c20125ab3"
+        },
+        {
+          "index": 204,
+          "seconds": 8.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-012.png",
+          "sha256": "5c56d783a0a6dbb9f7efb197cb93d3062b679a6aaf348267e5ac8b529e0f3d77"
+        },
+        {
+          "index": 210,
+          "seconds": 8.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-013.png",
+          "sha256": "27cd585658de5be8592ad4f9ee7c6cb2c0b7c8cb1db223b14866d90ea6761b41"
+        },
+        {
+          "index": 216,
+          "seconds": 9.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-014.png",
+          "sha256": "64a1cacb8cda67a4f2257f3f4bd0c62a29ea7e5421bb47c14fc43804c2c8b66d"
+        },
+        {
+          "index": 222,
+          "seconds": 9.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-015.png",
+          "sha256": "0753edd41c55dbe13136f9a810e9f9bfc43dba8e0ada23192d00bdc4521da8e6"
+        },
+        {
+          "index": 228,
+          "seconds": 9.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-016.png",
+          "sha256": "c5f691139f48572521bbff96c0056192fff2a867fa22eeb17b64d25df1201037"
+        },
+        {
+          "index": 234,
+          "seconds": 9.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-017.png",
+          "sha256": "b96008e944b9e39d06b15e8cabd4354208983480c635324b9c299ed9394cdff8"
+        },
+        {
+          "index": 240,
+          "seconds": 10.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-018.png",
+          "sha256": "8951b7b66918a38b392394d5fb1c8a77eefd2f6153a695774c8d37bbb65820f2"
+        },
+        {
+          "index": 246,
+          "seconds": 10.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-019.png",
+          "sha256": "4a50d10e30a6103b7cd708a361726b0caff4b86b2b98f7896101ea3770ed3ed6"
+        },
+        {
+          "index": 252,
+          "seconds": 10.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-020.png",
+          "sha256": "43a178e210d0df6925bebd88a982a84f8c7433d8e9936906e28ce2399556a31f"
+        },
+        {
+          "index": 276,
+          "seconds": 11.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-021.png",
+          "sha256": "34bc06e5280dd2845a69b7937e4ca7e45b71a1228455276fbedefb881ea06ea3"
+        },
+        {
+          "index": 312,
+          "seconds": 13.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-022.png",
+          "sha256": "28441f8a9585ba2d8d1510e56f661154a8c685846b7e06e8b15962ae77252e90"
+        },
+        {
+          "index": 322,
+          "seconds": 13.416666666666666,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-023.png",
+          "sha256": "5b11b29f036f8d2f909bd138df61b60fca61d4b4bc177d7a372582ec1abb96e0"
+        },
+        {
+          "index": 323,
+          "seconds": 13.458333333333334,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-024.png",
+          "sha256": "80454d65e8986ce7b53b5306a0ee9594752df9afffeb9008aa71c3d1af961780"
+        },
+        {
+          "index": 324,
+          "seconds": 13.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-025.png",
+          "sha256": "2957a606a90bb9739e94c352e6ea609801969d1de38355f47805ae85e2f29761"
+        },
+        {
+          "index": 325,
+          "seconds": 13.541666666666666,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-026.png",
+          "sha256": "62ffcc9c2788ce935c0ee9dfb8bb59617c7eb66e52644940fa34e7fbe3bb3357"
+        },
+        {
+          "index": 327,
+          "seconds": 13.625,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-027.png",
+          "sha256": "db3d3282d87c6a797fadbe2262def4b8a73ae991a074796433d8c55fa0953cd5"
+        },
+        {
+          "index": 330,
+          "seconds": 13.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-028.png",
+          "sha256": "01ee555ae91f1e5814a1efd447a21895124a4373eea0f26bf57c6d8b0c67102e"
+        },
+        {
+          "index": 336,
+          "seconds": 14.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-029.png",
+          "sha256": "f2556802adb39ec177f127ce6f5b78b5fb79cc7b3f8b398fa0b8b86062bea232"
+        },
+        {
+          "index": 408,
+          "seconds": 17.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-030.png",
+          "sha256": "cca8ce56930dc4aac6cb2d4dddcb315caae6c6d5d9539804a32bf590746ca389"
+        },
+        {
+          "index": 443,
+          "seconds": 18.458333333333332,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/frame-031.png",
+          "sha256": "2b4c35fdb3417c18342ec40aec6a75bb07a0815afb344f2fead628c7fa4002ed"
+        }
+      ]
+    },
+    {
+      "name": "seasonal-workload-landscape",
+      "video": "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/native-video.mp4",
+      "videoSha256": "9f0d5b6f2bf9789a053e31fdcd999edd08c44e60be238c60693b893efbca6db1",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 960,
+            "height": 540,
+            "r_frame_rate": "24/1",
+            "nb_frames": "444"
+          }
+        ],
+        "format": {
+          "duration": "18.500000"
+        }
+      },
+      "frames": [
+        {
+          "index": 0,
+          "seconds": 0.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-001.png",
+          "sha256": "875a7921e619cc801be9bbf8beb1fffed8a07d586e7d162120e5c81434f63b44"
+        },
+        {
+          "index": 48,
+          "seconds": 2.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-002.png",
+          "sha256": "75dda6397eddb72a526dd1e3468632b9eaffea5bff30cd0a2a3331a73d36dbc7"
+        },
+        {
+          "index": 96,
+          "seconds": 4.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-003.png",
+          "sha256": "4f36b1167d8c8e69b81379e11179ce38e9dd58601206a72cd400568f276aa055"
+        },
+        {
+          "index": 144,
+          "seconds": 6.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-004.png",
+          "sha256": "1db6e6223db1f5d1b51f27cc8f58a6e61d0928a7ac1f0d4fc31d5788e2f87fb9"
+        },
+        {
+          "index": 162,
+          "seconds": 6.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-005.png",
+          "sha256": "1aacc4a7ba76cc0423b0092ab6ac4fd213cacc72d1cc9eb091a2813fe9773414"
+        },
+        {
+          "index": 168,
+          "seconds": 7.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-006.png",
+          "sha256": "2c562e3b69999e0cf35cd05acfb09102728c6c351f41cf92be7664a6c3a185cf"
+        },
+        {
+          "index": 174,
+          "seconds": 7.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-007.png",
+          "sha256": "5ad69e1a874a7a1eab5179953245dff0a1e5ffb86fddce939162d16a64cfa4e1"
+        },
+        {
+          "index": 180,
+          "seconds": 7.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-008.png",
+          "sha256": "c4247851e8c21a8ab738e16917b41ecdf470c54f24eaa2019a7bd73145d31bd9"
+        },
+        {
+          "index": 186,
+          "seconds": 7.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-009.png",
+          "sha256": "34b80c72ad24c4f314f4d24601f9d603184a30d1ed4a4be6cc983b115ff123cb"
+        },
+        {
+          "index": 192,
+          "seconds": 8.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-010.png",
+          "sha256": "245efd83ce37663d7fec8a1d8fc113d9990d129d749befbe81a2db10ce236cba"
+        },
+        {
+          "index": 198,
+          "seconds": 8.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-011.png",
+          "sha256": "7128987c3d0bbd2e944da6b2fa83fe12a2886324bb95436b7cd1717fd4454006"
+        },
+        {
+          "index": 204,
+          "seconds": 8.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-012.png",
+          "sha256": "c41c9b4c00581918c01aa8dc0e9f5b38821d45c1f6867693d1d049f9eab2901c"
+        },
+        {
+          "index": 210,
+          "seconds": 8.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-013.png",
+          "sha256": "20b986524e37271c8048e734533b65fdb280e78e9e686f1c28d8866df4043254"
+        },
+        {
+          "index": 216,
+          "seconds": 9.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-014.png",
+          "sha256": "31113a0f89e14c701c616f512dff61f31196db9b5fe10f0ddaeb5d58898acc02"
+        },
+        {
+          "index": 222,
+          "seconds": 9.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-015.png",
+          "sha256": "54dc45e9f9ce9cdcb16ac34d241a744617200d4d3d18f04e063ca9c4e1c6ec2f"
+        },
+        {
+          "index": 228,
+          "seconds": 9.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-016.png",
+          "sha256": "745a66568d492b46aea2455fbb0db852ff9262a222126e6727a6c384244ad4a0"
+        },
+        {
+          "index": 234,
+          "seconds": 9.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-017.png",
+          "sha256": "ee0e71097416f2eb9376a82dff6e6600ac5f808aea78d7079287f7380860a4de"
+        },
+        {
+          "index": 240,
+          "seconds": 10.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-018.png",
+          "sha256": "b2d8efbe991fd5c936e9486f776c14583596f4741596b42675144ad517445f09"
+        },
+        {
+          "index": 246,
+          "seconds": 10.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-019.png",
+          "sha256": "ceed8cf1f6631a2c7f695d3c904f0b3f93473c805cee4bb0a050a6aa20bc0665"
+        },
+        {
+          "index": 252,
+          "seconds": 10.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-020.png",
+          "sha256": "a4ecfdccaf615d0cabec2a9210aab3e0eb4fece6ab210095a42c53f674707d2c"
+        },
+        {
+          "index": 276,
+          "seconds": 11.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-021.png",
+          "sha256": "68c74d05a71b0a4fdcead2bb71ca22e1dd5a27461d74ec0bc3c951752d261b14"
+        },
+        {
+          "index": 312,
+          "seconds": 13.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-022.png",
+          "sha256": "1924422620831a7695c4779535993310065af0ebc8f5f846adf1f861fdc26ca4"
+        },
+        {
+          "index": 322,
+          "seconds": 13.416666666666666,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-023.png",
+          "sha256": "24900cef6f6f2f8a419d75fb8a2fb3861f3644b86190a332c1d140be4b971931"
+        },
+        {
+          "index": 323,
+          "seconds": 13.458333333333334,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-024.png",
+          "sha256": "2a9d88a1f9a9e4e76fac2daab5b5640d368dc46bb2d6894c2687bbcec2bab578"
+        },
+        {
+          "index": 324,
+          "seconds": 13.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-025.png",
+          "sha256": "975bcbba678f7feb984ca83932f17ac7aefef7b035802a832e8c3046b06b792f"
+        },
+        {
+          "index": 325,
+          "seconds": 13.541666666666666,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-026.png",
+          "sha256": "90c4804f7b3169ad14468f718faa331da85d5ab5b14272385440a36435be1e7a"
+        },
+        {
+          "index": 327,
+          "seconds": 13.625,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-027.png",
+          "sha256": "8d45e732b038ae8e630ed25e87daa3ae0ffe7437c70e1e58cd8317c2d9640126"
+        },
+        {
+          "index": 330,
+          "seconds": 13.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-028.png",
+          "sha256": "4f84be909ee83280b4667195eba23125d52f6dccde0af62cb24678b217b6213c"
+        },
+        {
+          "index": 336,
+          "seconds": 14.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-029.png",
+          "sha256": "ba11a4accdbe4c43e4ae8a6e847b24c08b65b5a76f13541e8422c6bb0a47a384"
+        },
+        {
+          "index": 408,
+          "seconds": 17.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-030.png",
+          "sha256": "1a44173cc8412cbde3278b5607396e8485744acc7c82137d3b992b7c36a99203"
+        },
+        {
+          "index": 443,
+          "seconds": 18.458333333333332,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/frame-031.png",
+          "sha256": "faba74c02cc27026c173400a3cf215ef480a9ca9c54c39909301c0995666dfda"
+        }
+      ]
+    },
+    {
+      "name": "seasonal-workload-vertical",
+      "video": "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/native-video.mp4",
+      "videoSha256": "a242a4c3d0057db35cb4074fa0babcad80bd4936cf7195cab15ee68329b487f2",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "width": 540,
+            "height": 960,
+            "r_frame_rate": "24/1",
+            "nb_frames": "444"
+          }
+        ],
+        "format": {
+          "duration": "18.500000"
+        }
+      },
+      "frames": [
+        {
+          "index": 0,
+          "seconds": 0.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-001.png",
+          "sha256": "636f2eb613c246d4d0af7e21924b732c998fc3a3d01aed714823c69cf25a00e4"
+        },
+        {
+          "index": 48,
+          "seconds": 2.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-002.png",
+          "sha256": "26e53a44ec418bbf1dee3969f275c0acb9becd7e43800d2c6f35b9df2883f1aa"
+        },
+        {
+          "index": 96,
+          "seconds": 4.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-003.png",
+          "sha256": "26b60a7c63c0ce576095c5fece43bf6f30b3a85f3ff8935f8d50f5523805597d"
+        },
+        {
+          "index": 144,
+          "seconds": 6.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-004.png",
+          "sha256": "ec0faadb08456d10304ea027998bf3620f9281614dc1b51e48882d997081e8b6"
+        },
+        {
+          "index": 162,
+          "seconds": 6.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-005.png",
+          "sha256": "a649c276d3ac6ec4665426d00a062d69368c4370ee0979f8e882f9a8fd845d4d"
+        },
+        {
+          "index": 168,
+          "seconds": 7.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-006.png",
+          "sha256": "747ee49f6428d3c1bd0b25259a3b705316c67d24c60590ce68b2ad311e5d146e"
+        },
+        {
+          "index": 174,
+          "seconds": 7.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-007.png",
+          "sha256": "b149b0c19cc6f4ce2709ed2948440407962d41118547598cb0928eb6e6e11cdc"
+        },
+        {
+          "index": 180,
+          "seconds": 7.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-008.png",
+          "sha256": "284912fa335777a5a4a66f6396cd9d2577fb1e7c2c6f3a7423f0408a268cac96"
+        },
+        {
+          "index": 186,
+          "seconds": 7.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-009.png",
+          "sha256": "c66a3a677758a2c25de6556a2f2db79e8ed5645b27d182f48866e3996ee76a66"
+        },
+        {
+          "index": 192,
+          "seconds": 8.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-010.png",
+          "sha256": "d3a6c2efe748b3340ec115323d9540147def5803923dd5c5addeceeca275b465"
+        },
+        {
+          "index": 198,
+          "seconds": 8.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-011.png",
+          "sha256": "4f852addc5fbb2d63c6ac5ab0372936b537c04956fb76df83ff975d0ed80f1dd"
+        },
+        {
+          "index": 204,
+          "seconds": 8.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-012.png",
+          "sha256": "744d55c0090acbd322f90b47095aea64376be400d2c860a9bf44e723b9262fe1"
+        },
+        {
+          "index": 210,
+          "seconds": 8.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-013.png",
+          "sha256": "40de06a26f0f1b77ff2d953217782f35b7d693e314f5f02452ac09d8015ce769"
+        },
+        {
+          "index": 216,
+          "seconds": 9.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-014.png",
+          "sha256": "f1916b419f61b8b41d07d244c221b6a085474316125d8e197ffffc8a1b397eb9"
+        },
+        {
+          "index": 222,
+          "seconds": 9.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-015.png",
+          "sha256": "acd83309053572d8275971a81d359faca097fede49434658ec1b6fed4e7645d4"
+        },
+        {
+          "index": 228,
+          "seconds": 9.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-016.png",
+          "sha256": "b0d6ba39a04f5e1521e66ba6004a10594711a9d4738161ed12e0d92a1e834416"
+        },
+        {
+          "index": 234,
+          "seconds": 9.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-017.png",
+          "sha256": "2b3be72418473a8eb48a072ad4356f5d4b3a15a0902de020ad302270587bd750"
+        },
+        {
+          "index": 240,
+          "seconds": 10.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-018.png",
+          "sha256": "2152fe065b5b49483ef8ad9ec8fc9b9b2ac30619d815d53a9f19ee944179a903"
+        },
+        {
+          "index": 246,
+          "seconds": 10.25,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-019.png",
+          "sha256": "e1d68d01da6b4601fb779bf381b4c91cdcb2581adfbdf2e526c37b715c76c852"
+        },
+        {
+          "index": 252,
+          "seconds": 10.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-020.png",
+          "sha256": "2fa8fce9abb16a2312b03ec57c303519b1c1bc5c658a885f1758b42c226b5aad"
+        },
+        {
+          "index": 276,
+          "seconds": 11.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-021.png",
+          "sha256": "3e2928e79b99481a6b5e23b81d8996e30b6ad31a89754c8f64f69e1a13bda35d"
+        },
+        {
+          "index": 312,
+          "seconds": 13.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-022.png",
+          "sha256": "35fd9ede285cd6ac02fd23fd2e7db0b2a17e296c802a1e75bdd4152187a6eb3f"
+        },
+        {
+          "index": 322,
+          "seconds": 13.416666666666666,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-023.png",
+          "sha256": "9707d4034ee3ef87357924d9e29e1ae0e9294ea77fd3b8c0e9a8b484157df7e4"
+        },
+        {
+          "index": 323,
+          "seconds": 13.458333333333334,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-024.png",
+          "sha256": "242d78e7e3d804a6694f5561eec4e136b8d2209256de1c15b67a37ff93624387"
+        },
+        {
+          "index": 324,
+          "seconds": 13.5,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-025.png",
+          "sha256": "fdaf20d937f4b9545fb4e30a980baa095555cc9be2254d77e3554245e29cab9f"
+        },
+        {
+          "index": 325,
+          "seconds": 13.541666666666666,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-026.png",
+          "sha256": "2deee8683c38630e8b42237cbbd10b5cd277e27d68581bc6bfffc144402a8731"
+        },
+        {
+          "index": 327,
+          "seconds": 13.625,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-027.png",
+          "sha256": "2aa371a8c856331d9b36987316b83546ec4dc7926bb44aa3af0fdaf11b85f4cf"
+        },
+        {
+          "index": 330,
+          "seconds": 13.75,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-028.png",
+          "sha256": "2302990ab12b30e6c5fa059d1952ee704360a079bbf3e124fc1ddf3b74a1b44e"
+        },
+        {
+          "index": 336,
+          "seconds": 14.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-029.png",
+          "sha256": "b85a2a38179ecf9c4b1990ed98b60c3435c0b157e69580101e4419787e4f8ee0"
+        },
+        {
+          "index": 408,
+          "seconds": 17.0,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-030.png",
+          "sha256": "89cd8545de73578c452479de745937d863ac8e16cd76fb648e32691630b56b7b"
+        },
+        {
+          "index": 443,
+          "seconds": 18.458333333333332,
+          "path": "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/frame-031.png",
+          "sha256": "d38ee13174604e5646be897edcc1707161cc00133fb5c528ac8a149c3deb402a"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,566 @@
+{
+  "status": "pass",
+  "verifiedAt": "2026-10-03T17:08:34.601302+00:00",
+  "scriptSha256": "aa6c317c46f8eeeae042201ceb586197345b0cc1e97b7317b9ed703795dfdff1",
+  "sourceHashes": {
+    "scripts/blender/chart_scene.py": "26e3597c6d3a25a3b2dcbefe864426aecac4fd3901a5c08d8e657813312eabef",
+    "scripts/blender/camera_rig.py": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e",
+    "examples/library-kits/graph-flight-study/check-scene.py": "ffa251540a99b892f6691eebab1bd95c2ca87719319f5c708c65f1590078c6dd",
+    "examples/library-kits/graph-flight-study/check-encoded.py": "66a0a8ca3818470b7b4771cab8460277d3615f62da2880acb338f81171f9b7de",
+    "examples/library-kits/graph-flight-study/build.mjs": "9bc3384e2aa551ba3ee626fbb0d69de2b6933f95d0b741561e06b0694f0cf947",
+    "examples/library-kits/graph-flight-study/export-anchors.py": "9416485d41a4613648734f5fa6032f33db82726a85a0048586540a631dd6a46d",
+    "examples/library-kits/graph-flight-study/inputs.json": "8e46d37c12103f631511239468ad06ad9c5389de4fdbbe135c262c7d427aa5cd",
+    "examples/library-kits/graph-flight-study/timing-reading-hold-v2.json": "c777b7ed4fe5b18caaa89d1118c03a60f235d9bfd21b378e79575acceab84b97"
+  },
+  "cases": [
+    {
+      "name": "reserve-path-landscape",
+      "status": "bindings-pass",
+      "nativeVideoSha256": "a21476d76ce052e89e9b75af171ee1c12d91a099467c741c957ac6a6e49c2d75",
+      "nativeInputId": "a4e1de3d2bdba292f3495c7779bd2da22b3dfd1f825a303434a8ff8b8189bdf1",
+      "draft": true,
+      "encodedDimensions": [
+        960,
+        540
+      ],
+      "fps": 24,
+      "frames": 444,
+      "sourceChecks": {
+        "frames": 445,
+        "stageRays": 11125,
+        "ceilingVisibleFrames": 0,
+        "currentCheckerHashVerified": true
+      },
+      "labels": {
+        "fromSeconds": 13.5,
+        "fullSeconds": 13.75,
+        "readingEndSeconds": 18.5,
+        "fullyLabeledFrameCount": 114,
+        "valuesAndMonthsMatchInputs": true
+      },
+      "encodedCheck": {
+        "maximumEdgeErrorPixels": 2.2720186776335822,
+        "registrationSamples": 9,
+        "neighborComparisons": 18,
+        "colorFidelityAccepted": false
+      },
+      "nativeWarnings": [],
+      "qaFindings": [
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 4.25,
+          "frame": 102,
+          "beat": "chart-flight",
+          "local": 4.25,
+          "message": "hard change inside the beat over 2 frames (24.73)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 5.04,
+          "frame": 121,
+          "beat": "chart-flight",
+          "local": 5.04,
+          "message": "hard change inside the beat (13.89)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 5.96,
+          "frame": 143,
+          "beat": "chart-flight",
+          "local": 5.96,
+          "message": "hard change inside the beat over 2 frames (17.31)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 6.75,
+          "frame": 162,
+          "beat": "chart-flight",
+          "local": 6.75,
+          "message": "hard change inside the beat over 3 frames (18.33)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 7.71,
+          "frame": 185,
+          "beat": "chart-flight",
+          "local": 7.71,
+          "message": "hard change inside the beat (12.81)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 7.79,
+          "frame": 187,
+          "beat": "chart-flight",
+          "local": 7.79,
+          "message": "hard change inside the beat (24.1)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 8.17,
+          "frame": 196,
+          "beat": "chart-flight",
+          "local": 8.17,
+          "message": "hard change inside the beat over 8 frames (39.89)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 8.83,
+          "frame": 212,
+          "beat": "chart-flight",
+          "local": 8.83,
+          "message": "hard change inside the beat over 8 frames (21.84)"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 13.54,
+          "frame": 325,
+          "beat": "chart-flight",
+          "local": 13.54,
+          "end": 18.46,
+          "seconds": 4.96,
+          "message": "the picture barely changes for 4.96 s (13.54\u201318.46 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        }
+      ],
+      "artifactHashes": {
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/encoded-checks.json": "e32a1345172a7268e65feec49d4d6b91dd501ad4660ad10ce693bd4c1e9075cb",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/native-video.mp4": "a21476d76ce052e89e9b75af171ee1c12d91a099467c741c957ac6a6e49c2d75",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/ending-17s.png": "c3342175ba8db375637f307e8bb1983760f652c26067ad0ebd53372e52a3ed14",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/native-job.json": "a4604177908a46bfee23531e509f472d88eb4d7fa8b3140f197ccd0ca6195285",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/native-audit.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/bindings.json": "7575a93bde8f5f5a3008e160af75406ee16eb7b7cc5ee28a178e983de0e12aab",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/native-check.txt": "3b837729334c2579ab6074ef7cf027fba1dd00da8a91754fac8fa4182135a966",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/native-render.txt": "05cdfc38afe744aac5fdd4ccb41c5ce1a5ce8e6c9fbcae3862e7a46318e60896",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/native-qa.txt": "f84663d50351b60ef91721c86248e60da7a0622247e31b6c37a0bb8509229459",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/qa/phone.png": "811f7299898e33c564f3fac08abe736986d24a396423dd6c5aa1ebe0a4deb40a",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/qa/timeline.png": "502e3046c290c570ce84a8f16a7ea569759abefae3fc204f6e8718e61492be73",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/qa/qa.json": "85fd2d5eb16519e63c491ea90c273b418fecc79454385614d6ad803642a244ce",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-landscape/review/review.json": "b412246dc07176eb48a24a4d7f5e682c77516a43e960b5f4b517d7327953811d",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/reserve-path-landscape/receipt.json": "8462bb6e07bccf667baed3085a80237e62a51fda924f89ad2f1452d52512b9de",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/reserve-path-landscape/ending-anchors.json": "e12b19bc4615ef1ccc1fd0e21a8c57e02872d909c6ad01add590c282259b56a0",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/reserve-path-landscape/scene-checks.json": "25c0db96fb1ccb7dc2427102154054bf8d84492572a1d5a4090a75dbea216869",
+        "examples/library-kits/graph-flight-study/specimens/reading-hold-v2/reserve-path-landscape/storyboard.json": "700f9c26a23f63e91f9ecc770e3ced07308ab79d5b0b9a25c64cd52e6675ad4f"
+      }
+    },
+    {
+      "name": "reserve-path-vertical",
+      "status": "bindings-pass",
+      "nativeVideoSha256": "e5cf3e61d577d780a0b0e9ae8e23a97833c4fb93812cdd7a98e50a4d1b14c85a",
+      "nativeInputId": "e353f1fb2ade142e0bcabb27a25b7d7de4c484e4e9bfc41e67b0a7e271e50e48",
+      "draft": true,
+      "encodedDimensions": [
+        540,
+        960
+      ],
+      "fps": 24,
+      "frames": 444,
+      "sourceChecks": {
+        "frames": 445,
+        "stageRays": 11125,
+        "ceilingVisibleFrames": 0,
+        "currentCheckerHashVerified": true
+      },
+      "labels": {
+        "fromSeconds": 13.5,
+        "fullSeconds": 13.75,
+        "readingEndSeconds": 18.5,
+        "fullyLabeledFrameCount": 114,
+        "valuesAndMonthsMatchInputs": true
+      },
+      "encodedCheck": {
+        "maximumEdgeErrorPixels": 1.946010583177781,
+        "registrationSamples": 9,
+        "neighborComparisons": 18,
+        "colorFidelityAccepted": false
+      },
+      "nativeWarnings": [
+        "chart-flight: \"Month-end reserve\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+        "chart-flight: \"Jan\u2013Aug 2025 \u00b7 Fictional monthly observa\u2026\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+        "chart-flight: \"Original fictional data \u00b7 ClearFrame \u00b7 2\u2026\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+        "chart-flight: \"Reserve (USD)\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"$0\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"$2k\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"$4k\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"$6k\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"$7k\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"$1,800\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"$6,100\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)"
+      ],
+      "qaFindings": [
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 4.21,
+          "frame": 101,
+          "beat": "chart-flight",
+          "local": 4.21,
+          "message": "hard change inside the beat over 3 frames (41.78)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 5.08,
+          "frame": 122,
+          "beat": "chart-flight",
+          "local": 5.08,
+          "message": "hard change inside the beat over 2 frames (29.12)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 5.92,
+          "frame": 142,
+          "beat": "chart-flight",
+          "local": 5.92,
+          "message": "hard change inside the beat over 3 frames (29.64)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 6.75,
+          "frame": 162,
+          "beat": "chart-flight",
+          "local": 6.75,
+          "message": "hard change inside the beat over 3 frames (50.08)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 7.75,
+          "frame": 186,
+          "beat": "chart-flight",
+          "local": 7.75,
+          "message": "hard change inside the beat over 2 frames (44.58)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 8.04,
+          "frame": 193,
+          "beat": "chart-flight",
+          "local": 8.04,
+          "message": "hard change inside the beat over 15 frames (39.03)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 8.83,
+          "frame": 212,
+          "beat": "chart-flight",
+          "local": 8.83,
+          "message": "hard change inside the beat over 8 frames (52.69)"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 13.17,
+          "frame": 316,
+          "beat": "chart-flight",
+          "local": 13.17,
+          "end": 18.46,
+          "seconds": 5.33,
+          "message": "the picture barely changes for 5.33 s (13.17\u201318.46 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        }
+      ],
+      "artifactHashes": {
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/encoded-checks.json": "071d6a167ce5c91ef2f06c3e4ae61604587647b742bf2a05915fc5afad4b0d2a",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/native-video.mp4": "e5cf3e61d577d780a0b0e9ae8e23a97833c4fb93812cdd7a98e50a4d1b14c85a",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/ending-17s.png": "e069121dcdf31c459f1fee6abe70d30ff19d44c1607df42b24a7fbbb1f5bfcf0",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/native-job.json": "ee0d0f5f04a01ff1e57cb77ceb5f303a1fcd4c75604c655df65b58277b915c47",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/native-audit.json": "f762c9e1bf492309cd61b71d0cd40156df55359cfc2aaeacbf9d7d4e86b26a41",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/bindings.json": "9fbc9ecdeab77ac4b120254b7838446094ecb3c6209101401e333976753679be",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/native-check.txt": "1acab7ba6179207eb8022bf98c4f858475109c80bd9f266cca0319cf39fe996b",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/native-render.txt": "e6d5e42fc720a9d97fca53081217786f1dd3d1d19eb8ec3a70fe6e59b4dabc6e",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/native-qa.txt": "13c48e6489897958ef50361445376f75055b26dc3008e319156b19de270b02d7",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/qa/phone.png": "b9575511485e2d0daa5b4e92e7c162442cb38581c65747812791007daa0674f0",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/qa/timeline.png": "1dfbc7e82ea67972e6809fb58879480c1722a30af80ccf9e184aee8522120aa1",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/qa/qa.json": "2088e2bd1e7d12f663c17a49331b714964b9fbede9817fc14ea19694376b5da1",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/reserve-path-vertical/review/review.json": "38d75d26863bb555a23055a9b130d4b7b3e6b5be3b9722b33cbb1c8c1df8e3ea",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/reserve-path-vertical/receipt.json": "9ee24669a5f070090455dd7db88bd84cfd7d62b48a6332d3aecf0ff9e2ee4b0f",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/reserve-path-vertical/ending-anchors.json": "98c42e33845c69ee0c8d98a615d72df836925cc8f8d3f79b9b2f1fcd044888cd",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/reserve-path-vertical/scene-checks.json": "03374597ec4bf8d0c1a9a848aed08029a148ea0d56f59836b8e664b59c582d96",
+        "examples/library-kits/graph-flight-study/specimens/reading-hold-v2/reserve-path-vertical/storyboard.json": "9041b50f04495130d581a2bf4d45d9624ee9042dba72af4c8240ce76aae3b9e2"
+      }
+    },
+    {
+      "name": "seasonal-workload-landscape",
+      "status": "bindings-pass",
+      "nativeVideoSha256": "9f0d5b6f2bf9789a053e31fdcd999edd08c44e60be238c60693b893efbca6db1",
+      "nativeInputId": "9790114a44b6689053fef85a25ece4e60dab07d1c72db778c6140e3e2ac04eb8",
+      "draft": true,
+      "encodedDimensions": [
+        960,
+        540
+      ],
+      "fps": 24,
+      "frames": 444,
+      "sourceChecks": {
+        "frames": 445,
+        "stageRays": 11125,
+        "ceilingVisibleFrames": 0,
+        "currentCheckerHashVerified": true
+      },
+      "labels": {
+        "fromSeconds": 13.5,
+        "fullSeconds": 13.75,
+        "readingEndSeconds": 18.5,
+        "fullyLabeledFrameCount": 114,
+        "valuesAndMonthsMatchInputs": true
+      },
+      "encodedCheck": {
+        "maximumEdgeErrorPixels": 1.8852736596606121,
+        "registrationSamples": 9,
+        "neighborComparisons": 18,
+        "colorFidelityAccepted": false
+      },
+      "nativeWarnings": [],
+      "qaFindings": [
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 2.38,
+          "frame": 57,
+          "beat": "chart-flight",
+          "local": 2.38,
+          "message": "hard change inside the beat (14.8)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 3.75,
+          "frame": 90,
+          "beat": "chart-flight",
+          "local": 3.75,
+          "message": "hard change inside the beat (13.9)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 6.04,
+          "frame": 145,
+          "beat": "chart-flight",
+          "local": 6.04,
+          "message": "hard change inside the beat (14.03)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 6.13,
+          "frame": 147,
+          "beat": "chart-flight",
+          "local": 6.13,
+          "message": "hard change inside the beat (16.34)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 7.29,
+          "frame": 175,
+          "beat": "chart-flight",
+          "local": 7.29,
+          "message": "hard change inside the beat over 2 frames (17.26)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 7.83,
+          "frame": 188,
+          "beat": "chart-flight",
+          "local": 7.83,
+          "message": "hard change inside the beat over 8 frames (32.32)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 8.67,
+          "frame": 208,
+          "beat": "chart-flight",
+          "local": 8.67,
+          "message": "hard change inside the beat over 2 frames (20.71)"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 13.21,
+          "frame": 317,
+          "beat": "chart-flight",
+          "local": 13.21,
+          "end": 18.46,
+          "seconds": 5.29,
+          "message": "the picture barely changes for 5.29 s (13.21\u201318.46 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        }
+      ],
+      "artifactHashes": {
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/encoded-checks.json": "b5e10a565450661b50b7d6186c1eace892b3517470c89969a1c99fbf513e5a9e",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/native-video.mp4": "9f0d5b6f2bf9789a053e31fdcd999edd08c44e60be238c60693b893efbca6db1",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/ending-17s.png": "327a3a955b99343d868a4d6fd62728009dc40fdfc969a3f76f634fafe12daeb1",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/native-job.json": "aab2b8d45052c605118e07a6b7c167ab0459ee7f43f457b1907833950c9e201b",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/native-audit.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/bindings.json": "4ad9607a6562cfa0d4c8502f95c8225d24656e890334973b6c3a8c785c47d268",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/native-check.txt": "2330cc5799b6178385e619bb447d8f3b9756188ea222578fe7e806997703a7b6",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/native-render.txt": "e0a3a2ec3a5b596e2485ef4be10b8b756dfd5f9f9bd0a796502c11dea9178777",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/native-qa.txt": "caed49810a70d99a0d7f7d60920408426491c0c6491094f1fa5de4391f2d6d98",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/qa/phone.png": "7aa6b4bb7ce21d552af8da484b45e024bf9d189a09beca4d0b2e98cfd1023dc2",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/qa/timeline.png": "a104caa15d0bef0f2df0376748b6d8d7a71a2120f95499e8cb59ef2395c645ed",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/qa/qa.json": "4a9d597fc6475fe632cdb03f4d394b47a2ca1147e5aae22e6c271bad5fd09c61",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-landscape/review/review.json": "5f63fa4cbea6e1050bc1104035f2502dbf6b7d6257fa41749a6132fe98e2e7d8",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/seasonal-workload-landscape/receipt.json": "3da48cf2416a607b5fde5c24e530a224c562a3cd562723f0cb0519554e355282",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/seasonal-workload-landscape/ending-anchors.json": "4064b96169ff7baf7d921ab7cac4d94757d9499a2716ce3ee5948265fe458841",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/seasonal-workload-landscape/scene-checks.json": "95d4067c369cce39cf13b4312b6b9c36d8e8e6bb0244318df1e1ce2d31a20e15",
+        "examples/library-kits/graph-flight-study/specimens/reading-hold-v2/seasonal-workload-landscape/storyboard.json": "6471216c2738b8ff371d2dad3dabd96fd54d2d256ca47fc3561a032cbd0e3313"
+      }
+    },
+    {
+      "name": "seasonal-workload-vertical",
+      "status": "bindings-pass",
+      "nativeVideoSha256": "a242a4c3d0057db35cb4074fa0babcad80bd4936cf7195cab15ee68329b487f2",
+      "nativeInputId": "4052ed1e791171e8a8a53befd3f8ac159cb59bc4d9c5a42835e933f2217062e5",
+      "draft": true,
+      "encodedDimensions": [
+        540,
+        960
+      ],
+      "fps": 24,
+      "frames": 444,
+      "sourceChecks": {
+        "frames": 445,
+        "stageRays": 11125,
+        "ceilingVisibleFrames": 0,
+        "currentCheckerHashVerified": true
+      },
+      "labels": {
+        "fromSeconds": 13.5,
+        "fullSeconds": 13.75,
+        "readingEndSeconds": 18.5,
+        "fullyLabeledFrameCount": 114,
+        "valuesAndMonthsMatchInputs": true
+      },
+      "encodedCheck": {
+        "maximumEdgeErrorPixels": 2.3034735730528837,
+        "registrationSamples": 9,
+        "neighborComparisons": 18,
+        "colorFidelityAccepted": false
+      },
+      "nativeWarnings": [
+        "chart-flight: \"Workload varies\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+        "chart-flight: \"Jan\u2013Jun 2025 \u00b7 Fictional monthly observa\u2026\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+        "chart-flight: \"Original fictional data \u00b7 ClearFrame \u00b7 2\u2026\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+        "chart-flight: \"Work hours per month\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"0\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"20\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"40\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"60\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+        "chart-flight: \"80\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)"
+      ],
+      "qaFindings": [
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 2.25,
+          "frame": 54,
+          "beat": "chart-flight",
+          "local": 2.25,
+          "message": "hard change inside the beat over 3 frames (29.73)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 3.75,
+          "frame": 90,
+          "beat": "chart-flight",
+          "local": 3.75,
+          "message": "hard change inside the beat over 2 frames (34.65)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 4.96,
+          "frame": 119,
+          "beat": "chart-flight",
+          "local": 4.96,
+          "message": "hard change inside the beat over 3 frames (18.31)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 6.04,
+          "frame": 145,
+          "beat": "chart-flight",
+          "local": 6.04,
+          "message": "hard change inside the beat over 3 frames (43.78)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 7.25,
+          "frame": 174,
+          "beat": "chart-flight",
+          "local": 7.25,
+          "message": "hard change inside the beat over 2 frames (36.01)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 7.71,
+          "frame": 185,
+          "beat": "chart-flight",
+          "local": 7.71,
+          "message": "hard change inside the beat over 17 frames (28.6)"
+        },
+        {
+          "level": "note",
+          "kind": "jump",
+          "t": 8.63,
+          "frame": 207,
+          "beat": "chart-flight",
+          "local": 8.63,
+          "message": "hard change inside the beat over 5 frames (38.99)"
+        },
+        {
+          "level": "note",
+          "kind": "held",
+          "t": 13.08,
+          "frame": 314,
+          "beat": "chart-flight",
+          "local": 13.08,
+          "end": 18.46,
+          "seconds": 5.42,
+          "message": "the picture barely changes for 5.42 s (13.08\u201318.46 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing"
+        }
+      ],
+      "artifactHashes": {
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/encoded-checks.json": "a717f78f3ee361c99a3c5571970b26087fde9204d4f0663a5d294559c03c829a",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/native-video.mp4": "a242a4c3d0057db35cb4074fa0babcad80bd4936cf7195cab15ee68329b487f2",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/ending-17s.png": "909b56782128a035c0e7ab3a0369ffabc248f82edcf572baf8d831136cec474d",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/native-job.json": "8dff902c5e6bd176cc6b752eab0d3c3ffe5039ff719746395cbc9fc078dfbadb",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/native-audit.json": "2f24fe1405b22ddb82e47c0d92144424e18d3d73c478af88615875622e601282",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/bindings.json": "af399808b143f169ecde12fda9d898764e4fc817bf3fbe1c96c8c7905cc48a40",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/native-check.txt": "16da2b2748432831fcbe51e29e923ed0eea21155db7d4710338fca41b0c02786",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/native-render.txt": "55d12572543a2b33a433a44fbdca10536ce8d50f2b3b63237eb4531adc89151c",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/native-qa.txt": "df7961a4c39f03a81c9b7e9395d69385bfb6f3cd5fcf02fd8bc1a52d81a8835e",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/qa/phone.png": "fe1037844133b1ac62563358786a2feba613c6b670f832df19f89df6f36ee6d6",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/qa/timeline.png": "a316771e58ab08de91220171d937af96f29e2dc65a8c56614a2e733c77923542",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/qa/qa.json": "5f4cbab769837c95c5ac5358b4b829c8ca7906dbe454ab6a0177f4a97a3a12e7",
+        "examples/library-kits/graph-flight-study/evidence/reading-hold-v2/seasonal-workload-vertical/review/review.json": "146c7d5479e2766197ec13fb3b7c1b3582b302493a9d064ea0dcb22b611b5cff",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/seasonal-workload-vertical/receipt.json": "ca5d4830ac32e1f46e8c1264e94a8807010745c3d6c0b76e09f17e720d4fbb5a",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/seasonal-workload-vertical/ending-anchors.json": "c9a7cdc0ddab5feca853d8ca41901d244ecfc8687279b60ef8cb95b6352a0b0a",
+        "examples/library-kits/graph-flight-study/media/reading-hold-v2/seasonal-workload-vertical/scene-checks.json": "0d4216f799857c318889fec4c4cc9d802332defb8a5965f990c2f9fed9458507",
+        "examples/library-kits/graph-flight-study/specimens/reading-hold-v2/seasonal-workload-vertical/storyboard.json": "181fcf55b6a3fb3976276259726883c18602ec65efe90bcf6ce30560002d3d31"
+      }
+    }
+  ],
+  "limits": [
+    "Read-only verification of existing receipts, source hashes, retained encoded bytes, declared native elements, and input data. No re-render performed.",
+    "Renderer executable reproducibility is not independently established by this hash comparison.",
+    "This is not a source/native pixel-registration check or quantitative encoded bar-height measurement; those belong to the separate checker.",
+    "Native draft outputs are 960x540 or 540x960; authored full-size stills are not proof of full-resolution encoded output."
+  ]
+}

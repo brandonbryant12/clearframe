@@ -1,0 +1,28 @@
+{
+  "status": "pass",
+  "framesChecked": 445,
+  "minimumCameraClearance": 0.7373796076900787,
+  "maximumHeightError": 7.629394538355427e-08,
+  "maximumPoseError": 1.8681027711409115e-06,
+  "endingBounds": [
+    0.1000177413225174,
+    0.26420897245407104,
+    0.8993610143661499,
+    0.7351206541061401
+  ],
+  "seekEqual": true,
+  "backdropRayChecks": 11125,
+  "minimumBackdropNearMargin": 2.2233680617064238,
+  "maximumBackdropDistanceBound": 537.6277067174789,
+  "maximumBackdropRayDistance": 85.84844000259356,
+  "ceilingVisibleFrames": 0,
+  "checkerSha256": "ffa251540a99b892f6691eebab1bd95c2ca87719319f5c708c65f1590078c6dd",
+  "sceneSha256": "ad28282bf5659529bf37af0c669c90ea291d01a4e034447f98b72cd9faedf1ed",
+  "limits": "Baked-frame mesh bounds, closed-convex backdrop near/far containment and stage-only ray probes. All-screen coverage at sampled raster poses requires motion blur off; continuous-time path proof and picture quality are separate. No claim of unobscured intermediate chart views.",
+  "backdropMesh": {
+    "vertices": 1793,
+    "faces": 1793,
+    "closedConnectedConvex": true,
+    "worldTolerance": 0.0015999999999999999
+  }
+}

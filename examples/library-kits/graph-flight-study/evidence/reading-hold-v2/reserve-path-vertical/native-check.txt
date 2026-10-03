@@ -1,0 +1,21 @@
+{
+  "errors": [],
+  "warnings": [
+    "chart-flight: \"Month-end reserve\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+    "chart-flight: \"Jan–Aug 2025 · Fictional monthly observa…\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+    "chart-flight: \"Original fictional data · ClearFrame · 2…\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+    "chart-flight: \"Reserve (USD)\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"$0\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"$2k\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"$4k\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"$6k\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"$7k\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"$1,800\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"$6,100\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)"
+  ],
+  "notes": [
+    "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 75 frames: no problems found\n"
+  ],
+  "duration": 18.5,
+  "inputId": "e353f1fb2ade142e0bcabb27a25b7d7de4c484e4e9bfc41e67b0a7e271e50e48"
+}

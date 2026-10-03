@@ -1,0 +1,64 @@
+ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers
+rendering 444 frames
+frames 45/444 (10%) 0.1s
+frames 89/444 (20%) 0.3s
+frames 134/444 (30%) 0.5s
+frames 178/444 (40%) 0.6s
+frames 222/444 (50%) 0.8s
+frames 267/444 (60%) 0.9s
+frames 311/444 (70%) 1.1s
+frames 356/444 (80%) 1.3s
+frames 400/444 (90%) 1.4s
+frames 444/444 (100%) 1.5s
+encoding audio
+wrote /Users/brandon/Development/clearframe-finance-library/examples/library-kits/graph-flight-study/specimens/reading-hold-v2/reserve-path-landscape/build/native/b8e7faa7-e9fd-478d-ae2c-55f32dcaa008-raw.mp4 in 1.6s
+/Users/brandon/Development/clearframe-finance-library/examples/library-kits/graph-flight-study/specimens/reading-hold-v2/reserve-path-landscape/build/native/b8e7faa7-e9fd-478d-ae2c-55f32dcaa008-raw.mp4 frames 0..444 (0.00s..18.50s) 960x540 in 1.6s
+✓ FFFrames video → /Users/brandon/Development/clearframe-finance-library/examples/library-kits/graph-flight-study/specimens/reading-hold-v2/reserve-path-landscape/build/video.mp4
+{
+  "version": 2,
+  "renderer": "fframes",
+  "rendererSourceHash": "22f459c0567d07bbbfdb898a6822b69f18c4e5eb483dd13675439aae4d109c64",
+  "fontHashes": {
+    "ArchitectsDaughter-Regular.ttf": "6159718a08898e34bc1cb7354086141a5f9a70b73e54dbec27ead0d59a697359",
+    "ArchivoExpanded-ExtraBold.ttf": "6fb0fc66499459babd14863cd2ab0ebb25a2abf927df1d2e4ba0b51507aa1458",
+    "BebasNeue-Regular.ttf": "08e4623805102d819f58601e46e345648846075e363b2ceb23313c2d1c83ec73",
+    "BigShouldersDisplay-ExtraBold.ttf": "c41835ddbd7ae0fb8f42a0c2be7a02ec276a04dc40fefc2e8b0d65e4b470349b",
+    "DMSerifDisplay-Italic.ttf": "df74c0ac387baeaeb0fe4f2324e1668e6a3ed8c09cd9796fe162c71753e19e45",
+    "DMSerifDisplay-Regular.ttf": "8cc3643535edf039aa5d95440a8542735e9197e4f4b8d9303e980fefbf5ab616",
+    "IBMPlexMono-Medium.ttf": "a9b4c49bb299e05b5f6c481e7fb5e78943d2793249a0c8874ab574a2d1ea6755",
+    "InstrumentSerif-Italic.ttf": "08939b8bdf534afec24ae0ef5e03f948940cd9a8fe08e7fecbad040e62327385",
+    "InstrumentSerif-Regular.ttf": "498efd461f6ddfcb7a111bf9a565709d2085d48201d501ead960d93e84ffbb88",
+    "Inter-Regular.ttf": "9c8679361c31c51fbd9a93a654e736e6d5e7093a7ed1f572c45a4e63d8837d64",
+    "Inter-SemiBold.ttf": "36bc8547bfccdc3f2e4ca2e04e04efe790ff2e013936b1b560503520062af6c4",
+    "InterDisplay-Bold.ttf": "52cec4f8de638753c89cfb8c927eb0ec2c520a84acf2f27386e6c3c64388d7c5",
+    "InterDisplay-Figures.ttf": "b9f812a3acf0377a2dc98bf5e4c2e5f94d665d5852d836647db3bfaf24895b7b",
+    "InterDisplay-Light.ttf": "a29b2217202caeae2bbb2e6ee7f26aff4fcb9d67d52a01758351de9b249ff53e",
+    "InterDisplay-SemiBold.ttf": "1668dfc325832b74db13212597f838e1368a19a610a0b0b4a7a74f4278e7f23a",
+    "PlayfairDisplay-Bold.ttf": "c1e29313815ef233cff63dc7ae12d5ca2ee7b1e9f8a6e342ebc5bc38b194e966",
+    "PlayfairDisplay-BoldItalic.ttf": "3da065481a4c12fb810116d06d695a8e0a5d8f29dd30fc8f8230148e58145e80",
+    "SpaceGrotesk-Bold.ttf": "c2b0aab909db53ed247c1de6aae3877a557e33733e3f2b5c7215e0b740104170",
+    "SpaceGrotesk-Light.ttf": "ddd8f8f56673e24e82ca7de97353f3c0cf49c611ab8186f555dd47b671d2e8a9"
+  },
+  "revision": "bacfc3c3212d3d9429468435bfdc1ae2a21c7b3b",
+  "hashes": {
+    "storyboard.json": "700f9c26a23f63e91f9ecc770e3ced07308ab79d5b0b9a25c64cd52e6675ad4f",
+    "media/clip.mp4": "c19c6bf6b556ec51f9cf71407e2b79ba95aae9dc5bd87b5d404d308d321520df"
+  },
+  "inputId": "a4e1de3d2bdba292f3495c7779bd2da22b3dfd1f825a303434a8ff8b8189bdf1",
+  "draft": true,
+  "warnings": [],
+  "encoder": "draft (x264 veryfast, CRF 21)",
+  "width": 960,
+  "height": 540,
+  "authoredWidth": 1920,
+  "authoredHeight": 1080,
+  "scale": 0.5,
+  "fps": 24,
+  "frames": 444,
+  "seconds": 2.002990708,
+  "backend": "skia-metal",
+  "audio": false,
+  "colorSpace": "smpte170m",
+  "outputSha256": "a21476d76ce052e89e9b75af171ee1c12d91a099467c741c957ac6a6e49c2d75",
+  "voiceProviders": []
+}

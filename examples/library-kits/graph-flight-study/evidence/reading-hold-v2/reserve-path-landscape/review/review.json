@@ -1,0 +1,32 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/graph-flight-study/specimens/reading-hold-v2/reserve-path-landscape/build/video.mp4",
+  "outputSha256": "a21476d76ce052e89e9b75af171ee1c12d91a099467c741c957ac6a6e49c2d75",
+  "inputId": "a4e1de3d2bdba292f3495c7779bd2da22b3dfd1f825a303434a8ff8b8189bdf1",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "chart-flight: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 5,
+      "time": 0.20833333333333334,
+      "reasons": [
+        "chart-flight: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 443,
+      "time": 18.458333333333332,
+      "reasons": [
+        "chart-flight: last frame"
+      ],
+      "image": "frame-0002.jpg"
+    }
+  ]
+}

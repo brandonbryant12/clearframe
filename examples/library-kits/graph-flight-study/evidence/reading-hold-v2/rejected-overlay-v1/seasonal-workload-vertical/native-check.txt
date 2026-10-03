@@ -1,0 +1,19 @@
+{
+  "errors": [],
+  "warnings": [
+    "chart-flight: \"Workload varies\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+    "chart-flight: \"Jan–Jun 2025 · Fictional monthly observa…\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+    "chart-flight: \"Original fictional data · ClearFrame · 2…\" runs outside the title-safe area (keep type within the middle 80% of the frame) (6.5 s)",
+    "chart-flight: \"Work hours per month\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"0 h\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"20 h\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"40 h\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"60 h\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)",
+    "chart-flight: \"80 h\" runs outside the title-safe area (keep type within the middle 80% of the frame) (15.7 s)"
+  ],
+  "notes": [
+    "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 75 frames: no problems found\n"
+  ],
+  "duration": 18.5,
+  "inputId": "865e9ebe54991fa5e2b3330fb71f1abbc394fde3125924410ed691929195c76b"
+}

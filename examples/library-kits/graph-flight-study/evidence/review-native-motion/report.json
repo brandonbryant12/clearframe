@@ -1,0 +1,224 @@
+{
+  "status": "sampled-review-complete-continuous-acceptance-open",
+  "reviewedAt": "2026-10-03T17:08:34.649642+00:00",
+  "sourceHashes": {
+    "scripts/blender/chart_scene.py": "26e3597c6d3a25a3b2dcbefe864426aecac4fd3901a5c08d8e657813312eabef",
+    "scripts/blender/camera_rig.py": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e",
+    "examples/library-kits/graph-flight-study/check-scene.py": "ffa251540a99b892f6691eebab1bd95c2ca87719319f5c708c65f1590078c6dd",
+    "examples/library-kits/graph-flight-study/check-encoded.py": "66a0a8ca3818470b7b4771cab8460277d3615f62da2880acb338f81171f9b7de",
+    "examples/library-kits/graph-flight-study/build.mjs": "9bc3384e2aa551ba3ee626fbb0d69de2b6933f95d0b741561e06b0694f0cf947",
+    "examples/library-kits/graph-flight-study/export-anchors.py": "9416485d41a4613648734f5fa6032f33db82726a85a0048586540a631dd6a46d",
+    "examples/library-kits/graph-flight-study/inputs.json": "8e46d37c12103f631511239468ad06ad9c5389de4fdbbe135c262c7d427aa5cd",
+    "examples/library-kits/graph-flight-study/timing-reading-hold-v2.json": "c777b7ed4fe5b18caaa89d1118c03a60f235d9bfd21b378e79575acceab84b97"
+  },
+  "bindingsReportSha256": "f2c70cd3915a2c23722163993f10b812b210c536d249d9ba8b0e9f56a21dad9a",
+  "samplingManifestSha256": "1c3f969e35ff8a266fb1eea8492652d9f5d4bd7355d6f950743f2de3abd2fe0d",
+  "continuousHumanAcceptance": false,
+  "colorFidelityAccepted": false,
+  "reviewMethod": {
+    "independentlyExtractedFramesPerClip": 31,
+    "totalIndependentlyExtractedFrames": 124,
+    "exactFrameIndices": [
+      0,
+      48,
+      96,
+      144,
+      162,
+      168,
+      174,
+      180,
+      186,
+      192,
+      198,
+      204,
+      210,
+      216,
+      222,
+      228,
+      234,
+      240,
+      246,
+      252,
+      276,
+      312,
+      322,
+      323,
+      324,
+      325,
+      327,
+      330,
+      336,
+      408,
+      443
+    ],
+    "lateFlightSampleSpacingSeconds": 0.25,
+    "alsoInspected": [
+      "Four final authored-size ending-17s.png files",
+      "Four existing qa/phone.png contact sheets and qa/timeline.png contact sheets",
+      "Four native-check.txt, native-audit.json and qa.json reports",
+      "Four current source scene-checks.json and encoded-checks.json reports",
+      "Final check-encoded.py source and export-anchors.py projection conventions"
+    ]
+  },
+  "findings": [
+    "No backdrop arch, white reflective cap, or collision is visible in the inspected encoded samples. This is a sampled visual observation, not all-frame visual proof.",
+    "Native bands mask parts of close bars during the flight. Intermediate views are deliberately incomplete and cannot be used for common-scale screen comparisons.",
+    "Quarter-second samples show geometrically plausible close passes and turn; sparse edge-on views remain motion advisories rather than unreported defects.",
+    "No labels are visible at frame 324 (13.500s); frame 325 shows the fade; by frame 330 (13.750s) labels are fully legible. The final sampled frame 443 retains them.",
+    "The roughly five-second low-change ending aligns with the declared reading hold; it does not look like a missing scene in the inspected samples.",
+    "Both portrait check reports retain explicit 80-percent title-safe warnings. Actual inspected text is inside the image with no clipping.",
+    "Draft native videos are 960x540 or 540x960 at 24 fps for 444 frames (18.5s). Full authored-size stills do not establish full-resolution final video quality."
+  ],
+  "encodedCheckerAssessment": {
+    "disposition": "method defensible within explicit fixture and sampling scope",
+    "barHeightMethod": "Derives height from source values, axis domain, projected zero baselines and one common parallel-plane factor; per-bar exported top positions are not reused. Analytic distance-based factors independently agree within 1e-6.",
+    "barHeightTolerance": "Every fully labeled ending frame is checked at each bar centerline, with a 3px edge tolerance; this is bounded raster accuracy, not exact pixel or filled-area proof.",
+    "registrationMethod": "Removing only a constant per-channel bias is reasonable for spatial/timing consistency while retaining raw errors and leaving color fidelity unaccepted.",
+    "registrationScope": "Nine times per clip: 36 same-time samples and 72 adjacent comparisons total. Stationary or nearly stationary samples can tie adjacent frames; this does not uniquely prove every encoded frame clock.",
+    "notRerunByReviewer": "The reviewer inspected the code and independently verified current input/output hashes and analytic plane factors; the parent ran the full encoded checker."
+  },
+  "cases": [
+    {
+      "name": "reserve-path-landscape",
+      "nativeVideoSha256": "a21476d76ce052e89e9b75af171ee1c12d91a099467c741c957ac6a6e49c2d75",
+      "encodedSize": [
+        960,
+        540
+      ],
+      "visualDisposition": "sampled ending and material review pass; motion advisories require continuous human review",
+      "ending": [
+        "All fixture values and months visually present and separated.",
+        "No clipped final text or bars; header/footer bands clear the final chart labels.",
+        "Axis unit and upper tick no longer overlap or straddle the header boundary."
+      ],
+      "phone360": [
+        "Main bar values, month labels and title readable in the 360px preview extracted from the encoded video.",
+        "Landscape subtitle, axis unit and source text are very small at 360px; this is not a broad mobile-readability or accessibility certification."
+      ],
+      "motionAdvisories": [
+        "Nearly empty gray view with a narrow bar slice at 8.00s and edge-on chart at 9.00s."
+      ],
+      "encodedCheckerMethodReview": {
+        "expectedParallelPlaneScaleFromCameraDistance": 1.0020389017449498,
+        "reportedBaselineDerivedPlaneScale": 1.0020390824704417,
+        "absoluteScaleDifference": 1.8072549190506493e-07,
+        "maximumEdgeErrorPixels": 2.2720186776335822,
+        "maximumRawRgbMeanAbsoluteError": 1.6205263845350053,
+        "maximumBiasRemovedSpatialRgbMeanAbsoluteError": 1.8878376603549685
+      },
+      "reviewFigureHashes": {
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/late-flight.png": "20f6472e06f4484518fbbe67bbe8de955fa7a4615d49b63fa7f9ba018850a4b9",
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/label-reveal.png": "cb3e815a356686f8673ae9d0f0e6a8cdd8fb6328f1c9f07d55989f1474a92cac",
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-landscape/ending-phone-360.png": "909b845867c4beb2b4c09b10ea6049670e0cf09725de07c21cb8bcd1bdbaffac"
+      }
+    },
+    {
+      "name": "reserve-path-vertical",
+      "nativeVideoSha256": "e5cf3e61d577d780a0b0e9ae8e23a97833c4fb93812cdd7a98e50a4d1b14c85a",
+      "encodedSize": [
+        540,
+        960
+      ],
+      "visualDisposition": "sampled ending and material review pass; motion advisories require continuous human review",
+      "ending": [
+        "All fixture values and months visually present and separated.",
+        "No clipped final text or bars; header/footer bands clear the final chart labels.",
+        "Reserve portrait first value no longer touches the 2k tick."
+      ],
+      "phone360": [
+        "Main bar values, month labels and title readable in the 360px preview extracted from the encoded video.",
+        "Portrait secondary text is readable; ticks remain small."
+      ],
+      "motionAdvisories": [
+        "Close bars dominate around 7\u20138s; the short turn changes apparent bar order and tilt sharply."
+      ],
+      "encodedCheckerMethodReview": {
+        "expectedParallelPlaneScaleFromCameraDistance": 1.0047093947127654,
+        "reportedBaselineDerivedPlaneScale": 1.0047095114248399,
+        "absoluteScaleDifference": 1.167120744494099e-07,
+        "maximumEdgeErrorPixels": 1.946010583177781,
+        "maximumRawRgbMeanAbsoluteError": 2.8253337259521003,
+        "maximumBiasRemovedSpatialRgbMeanAbsoluteError": 2.2122606637524305
+      },
+      "reviewFigureHashes": {
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/late-flight.png": "e0d7b983ed4344495372c09c5eed02689d57a5f19317189bdbff08629727955f",
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/label-reveal.png": "49b68ed2fafbd4efcc8ffb8289cc6f4397f68a8b2a45483c8f3901b7e7017b09",
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/reserve-path-vertical/ending-phone-360.png": "45e608af5f8eef221cc79674dafdd9d663da9f6e0ca55006f180b16264f7aa0b"
+      }
+    },
+    {
+      "name": "seasonal-workload-landscape",
+      "nativeVideoSha256": "9f0d5b6f2bf9789a053e31fdcd999edd08c44e60be238c60693b893efbca6db1",
+      "encodedSize": [
+        960,
+        540
+      ],
+      "visualDisposition": "sampled ending and material review pass; motion advisories require continuous human review",
+      "ending": [
+        "All fixture values and months visually present and separated.",
+        "No clipped final text or bars; header/footer bands clear the final chart labels.",
+        "Axis unit and upper tick no longer overlap or straddle the header boundary."
+      ],
+      "phone360": [
+        "Main bar values, month labels and title readable in the 360px preview extracted from the encoded video.",
+        "Landscape subtitle, axis unit and source text are very small at 360px; this is not a broad mobile-readability or accessibility certification."
+      ],
+      "motionAdvisories": [
+        "Nearly empty gray views at 7.25s and 7.50s with the closest bar at the image edge."
+      ],
+      "encodedCheckerMethodReview": {
+        "expectedParallelPlaneScaleFromCameraDistance": 1.0027191592292934,
+        "reportedBaselineDerivedPlaneScale": 1.0027190963170776,
+        "absoluteScaleDifference": 6.291221588128337e-08,
+        "maximumEdgeErrorPixels": 1.8852736596606121,
+        "maximumRawRgbMeanAbsoluteError": 2.192872692441658,
+        "maximumBiasRemovedSpatialRgbMeanAbsoluteError": 2.372526160871008
+      },
+      "reviewFigureHashes": {
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/late-flight.png": "3b518044c33d43db95cdb58a9687cd437cab6a307af0b12aef4a773b18a715dd",
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/label-reveal.png": "382bd5f139b30d694d25989b3c917ddf1745bb5bf95bfa3be85c8a2d8b26cccd",
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-landscape/ending-phone-360.png": "918ff85ce118ae8e08047de1eceb2b5a1cb4afe85833142800b8b0763a1f9352"
+      }
+    },
+    {
+      "name": "seasonal-workload-vertical",
+      "nativeVideoSha256": "a242a4c3d0057db35cb4074fa0babcad80bd4936cf7195cab15ee68329b487f2",
+      "encodedSize": [
+        540,
+        960
+      ],
+      "visualDisposition": "sampled ending and material review pass; motion advisories require continuous human review",
+      "ending": [
+        "All fixture values and months visually present and separated.",
+        "No clipped final text or bars; header/footer bands clear the final chart labels.",
+        "Axis unit and upper tick no longer overlap or straddle the header boundary."
+      ],
+      "phone360": [
+        "Main bar values, month labels and title readable in the 360px preview extracted from the encoded video.",
+        "Portrait secondary text is readable; ticks remain small."
+      ],
+      "motionAdvisories": [
+        "Close bars dominate around 7\u20138s; the short turn changes apparent bar order and tilt sharply."
+      ],
+      "encodedCheckerMethodReview": {
+        "expectedParallelPlaneScaleFromCameraDistance": 1.006282520716901,
+        "reportedBaselineDerivedPlaneScale": 1.0062824733435032,
+        "absoluteScaleDifference": 4.7373397871197653e-08,
+        "maximumEdgeErrorPixels": 2.3034735730528837,
+        "maximumRawRgbMeanAbsoluteError": 2.8474763338132005,
+        "maximumBiasRemovedSpatialRgbMeanAbsoluteError": 2.2039930534056698
+      },
+      "reviewFigureHashes": {
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/late-flight.png": "4b80bd9ec6eda3db4bcf640e0b0cce09409a4af242540a90b6543a7be9545c77",
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/label-reveal.png": "59fd6247adc8155178bf46c873490840233b143c97e304019e15b80c20873ab6",
+        "examples/library-kits/graph-flight-study/evidence/review-native-motion/seasonal-workload-vertical/ending-phone-360.png": "15a9693ec5dc595d48f75cd57bf9c8b663fd53ee66d32fefbe189245c2922b18"
+      }
+    }
+  ],
+  "limits": [
+    "No uninterrupted normal-speed human playback acceptance was recorded.",
+    "No physical phone, platform overlay/crop, accessibility test, or color-calibrated display review was performed.",
+    "The selected frames cannot rule out every transient glitch between samples.",
+    "No new render, geometry/source change, or changes to earlier review evidence were made."
+  ]
+}

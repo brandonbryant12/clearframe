@@ -1,0 +1,32 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/graph-flight-study/specimens/reading-hold-v2/seasonal-workload-landscape/build/video.mp4",
+  "outputSha256": "9f0d5b6f2bf9789a053e31fdcd999edd08c44e60be238c60693b893efbca6db1",
+  "inputId": "9790114a44b6689053fef85a25ece4e60dab07d1c72db778c6140e3e2ac04eb8",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "chart-flight: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 5,
+      "time": 0.20833333333333334,
+      "reasons": [
+        "chart-flight: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 443,
+      "time": 18.458333333333332,
+      "reasons": [
+        "chart-flight: last frame"
+      ],
+      "image": "frame-0002.jpg"
+    }
+  ]
+}

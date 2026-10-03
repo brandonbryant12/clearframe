@@ -1,0 +1,32 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/graph-flight-study/specimens/reading-hold-v2/seasonal-workload-vertical/build/video.mp4",
+  "outputSha256": "a242a4c3d0057db35cb4074fa0babcad80bd4936cf7195cab15ee68329b487f2",
+  "inputId": "4052ed1e791171e8a8a53befd3f8ac159cb59bc4d9c5a42835e933f2217062e5",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "chart-flight: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 5,
+      "time": 0.20833333333333334,
+      "reasons": [
+        "chart-flight: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 443,
+      "time": 18.458333333333332,
+      "reasons": [
+        "chart-flight: last frame"
+      ],
+      "image": "frame-0002.jpg"
+    }
+  ]
+}

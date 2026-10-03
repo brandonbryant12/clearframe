@@ -1,0 +1,214 @@
+{
+  "name": "seasonal-workload-landscape",
+  "status": "pass",
+  "videoSha256": "9f0d5b6f2bf9789a053e31fdcd999edd08c44e60be238c60693b893efbca6db1",
+  "checkerSha256": "66a0a8ca3818470b7b4771cab8460277d3615f62da2880acb338f81171f9b7de",
+  "nativeJobSha256": "aab2b8d45052c605118e07a6b7c167ab0459ee7f43f457b1907833950c9e201b",
+  "bindingsSha256": "4ad9607a6562cfa0d4c8502f95c8225d24656e890334973b6c3a8c785c47d268",
+  "anchorsSha256": "4064b96169ff7baf7d921ab7cac4d94757d9499a2716ce3ee5948265fe458841",
+  "inputSha256": "8e46d37c12103f631511239468ad06ad9c5389de4fdbbe135c262c7d427aa5cd",
+  "encodedSize": [
+    960,
+    540
+  ],
+  "frames": 444,
+  "fps": 24,
+  "endingFramesChecked": 114,
+  "fullyLabeledHoldSeconds": 4.75,
+  "barCenterlineChecks": 684,
+  "gridBaselinePixels": 396.70547246932983,
+  "barBaselinePixels": 397.04999685287476,
+  "barToGridPlaneScale": 1.0027190963170776,
+  "maximumEdgeErrorPixels": 1.8852736596606121,
+  "edgeTolerancePixels": 3.0,
+  "registrationSamples": [
+    {
+      "frame": 12,
+      "meanAbsoluteRgb": 0.7199723528387322,
+      "channelBias": [
+        0.4172838296760711,
+        0.9576475966562173,
+        -0.09808646812957157
+      ],
+      "biasRemovedMeanAbsoluteRgb": 0.8127636182227388,
+      "adjacentFrameComparisons": [
+        {
+          "offset": -1,
+          "biasRemovedMeanAbsoluteRgb": 0.8135181426008135
+        },
+        {
+          "offset": 1,
+          "biasRemovedMeanAbsoluteRgb": 0.8473720890994996
+        }
+      ]
+    },
+    {
+      "frame": 48,
+      "meanAbsoluteRgb": 1.2312630616509928,
+      "channelBias": [
+        1.2190340909090909,
+        1.2149164054336468,
+        -0.4964309038662487
+      ],
+      "biasRemovedMeanAbsoluteRgb": 1.4341604229083136,
+      "adjacentFrameComparisons": [
+        {
+          "offset": -1,
+          "biasRemovedMeanAbsoluteRgb": 3.0244365450331125
+        },
+        {
+          "offset": 1,
+          "biasRemovedMeanAbsoluteRgb": 3.6679555352721214
+        }
+      ]
+    },
+    {
+      "frame": 96,
+      "meanAbsoluteRgb": 0.7808635928247997,
+      "channelBias": [
+        0.4118175287356322,
+        0.9342868338557994,
+        -0.04506922675026123
+      ],
+      "biasRemovedMeanAbsoluteRgb": 0.8631873539933417,
+      "adjacentFrameComparisons": [
+        {
+          "offset": -1,
+          "biasRemovedMeanAbsoluteRgb": 8.33437947281788
+        },
+        {
+          "offset": 1,
+          "biasRemovedMeanAbsoluteRgb": 3.436118472066288
+        }
+      ]
+    },
+    {
+      "frame": 144,
+      "meanAbsoluteRgb": 1.352401166840822,
+      "channelBias": [
+        1.5096394984326018,
+        1.1834835423197492,
+        -0.657869644723093
+      ],
+      "biasRemovedMeanAbsoluteRgb": 1.5824959617245629,
+      "adjacentFrameComparisons": [
+        {
+          "offset": -1,
+          "biasRemovedMeanAbsoluteRgb": 20.958802616884547
+        },
+        {
+          "offset": 1,
+          "biasRemovedMeanAbsoluteRgb": 26.98640527085245
+        }
+      ]
+    },
+    {
+      "frame": 192,
+      "meanAbsoluteRgb": 2.192872692441658,
+      "channelBias": [
+        2.618096917450366,
+        1.8178716039707419,
+        -1.303046630094044
+      ],
+      "biasRemovedMeanAbsoluteRgb": 2.372526160871008,
+      "adjacentFrameComparisons": [
+        {
+          "offset": -1,
+          "biasRemovedMeanAbsoluteRgb": 44.02804591354579
+        },
+        {
+          "offset": 1,
+          "biasRemovedMeanAbsoluteRgb": 32.925069524281284
+        }
+      ]
+    },
+    {
+      "frame": 228,
+      "meanAbsoluteRgb": 1.5297925374433996,
+      "channelBias": [
+        1.8322132967607105,
+        1.3453794409613375,
+        -0.7741020114942528
+      ],
+      "biasRemovedMeanAbsoluteRgb": 1.9384153908254915,
+      "adjacentFrameComparisons": [
+        {
+          "offset": -1,
+          "biasRemovedMeanAbsoluteRgb": 2.6223538641638795
+        },
+        {
+          "offset": 1,
+          "biasRemovedMeanAbsoluteRgb": 2.513051070247843
+        }
+      ]
+    },
+    {
+      "frame": 252,
+      "meanAbsoluteRgb": 1.6272357192615814,
+      "channelBias": [
+        2.0006596133751304,
+        1.4387473876698014,
+        -0.7697361546499477
+      ],
+      "biasRemovedMeanAbsoluteRgb": 1.9994489380265834,
+      "adjacentFrameComparisons": [
+        {
+          "offset": -1,
+          "biasRemovedMeanAbsoluteRgb": 2.026456866172353
+        },
+        {
+          "offset": 1,
+          "biasRemovedMeanAbsoluteRgb": 2.2744313993778476
+        }
+      ]
+    },
+    {
+      "frame": 288,
+      "meanAbsoluteRgb": 1.4771279606408916,
+      "channelBias": [
+        1.6712284482758621,
+        1.234508881922675,
+        -0.7418234064785789
+      ],
+      "biasRemovedMeanAbsoluteRgb": 1.8539447656485721,
+      "adjacentFrameComparisons": [
+        {
+          "offset": -1,
+          "biasRemovedMeanAbsoluteRgb": 3.4136698252596998
+        },
+        {
+          "offset": 1,
+          "biasRemovedMeanAbsoluteRgb": 3.568553988040855
+        }
+      ]
+    },
+    {
+      "frame": 318,
+      "meanAbsoluteRgb": 1.0647912312783003,
+      "channelBias": [
+        1.0571545193312435,
+        0.9903180512016719,
+        -0.43024098746081507
+      ],
+      "biasRemovedMeanAbsoluteRgb": 1.360020597975667,
+      "adjacentFrameComparisons": [
+        {
+          "offset": -1,
+          "biasRemovedMeanAbsoluteRgb": 1.7443087667082562
+        },
+        {
+          "offset": 1,
+          "biasRemovedMeanAbsoluteRgb": 1.631109369543428
+        }
+      ]
+    }
+  ],
+  "registrationCropY": [
+    0.23,
+    0.82
+  ],
+  "registrationBiasRemovedRgbTolerance": 2.5,
+  "adjacentFrameTieTolerance": 0.05,
+  "colorFidelityAccepted": false,
+  "limitations": "Checks blue centerlines and source/native timing crops, not OCR, color fidelity, exhaustive pixels, unobscured flight views or continuous playback quality. Timing comparison removes constant channel bias; raw color errors are retained."
+}

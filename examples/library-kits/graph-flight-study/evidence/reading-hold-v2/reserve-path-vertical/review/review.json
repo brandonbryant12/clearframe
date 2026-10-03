@@ -1,0 +1,32 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/graph-flight-study/specimens/reading-hold-v2/reserve-path-vertical/build/video.mp4",
+  "outputSha256": "e5cf3e61d577d780a0b0e9ae8e23a97833c4fb93812cdd7a98e50a4d1b14c85a",
+  "inputId": "e353f1fb2ade142e0bcabb27a25b7d7de4c484e4e9bfc41e67b0a7e271e50e48",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "chart-flight: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 5,
+      "time": 0.20833333333333334,
+      "reasons": [
+        "chart-flight: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 443,
+      "time": 18.458333333333332,
+      "reasons": [
+        "chart-flight: last frame"
+      ],
+      "image": "frame-0002.jpg"
+    }
+  ]
+}

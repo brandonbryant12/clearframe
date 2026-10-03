@@ -32,3 +32,10 @@ User requested that the ending zoom out to reveal the full chart. The revised dr
 ## Human pacing correction
 
 The user found the camera too fast. Supersede the four-second flight with ten seconds, increase the pullback to three seconds, and keep a 2.5-second full-chart hold. The new source pass is sixteen seconds at 24 fps; it renders new intermediate poses instead of slowing an encoded clip by repeating frames. Review the pacing and recovery from edge-on crossings before accepting the mechanism.
+
+
+### Reading-hold revision review
+
+The 18.5-second revision preserves the requested slower ten-second weave and three-second pullback, extending the complete-chart hold to five seconds. Native labels finish fading after 0.25 seconds. Retain the deliberate held ending despite the low-change QA advisory. Reject the open-backdrop portrait batch and first overlapping-label stills; both remain evidence, not candidates for reuse.
+
+Four native drafts now have encoded height/clock checks and sampled independent review. The near-bar hard-change advisories correspond to close passes; some landscape views become nearly empty or edge-on around 7–9 seconds. Those still need human normal-speed judgment. Fixed title/source bands obscure chart portions during the flight. The ending is the quantitative reading state. Portrait 80%-safe-area warnings, small landscape secondary text at 360px, and the unaccepted source/native color difference stay explicit. No master, accepted kit, or complete continuous-playback approval is claimed.

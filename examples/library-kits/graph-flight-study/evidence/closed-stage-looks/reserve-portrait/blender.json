@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "blenderVersion": "5.2.2 LTS",
+  "blenderBuildHash": "d13f752e3b9c",
+  "engine": "BLENDER_EEVEE",
+  "threads": 2,
+  "width": 540,
+  "height": 960,
+  "fps": 24,
+  "frames": 444,
+  "samples": 16,
+  "colorManagement": {
+    "view": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "bakedMotion": true,
+  "requiresAutoExec": false,
+  "loopMaxTransformError": 13.133334159851074,
+  "loopMaxCameraOpticsError": 24.0,
+  "holdTransformChecks": [
+    {
+      "id": "entry",
+      "frames": 12,
+      "maxTransformError": 0.0,
+      "maxCameraOpticsError": 0.0
+    },
+    {
+      "id": "reading",
+      "frames": 120,
+      "maxTransformError": 0.0,
+      "maxCameraOpticsError": 0.0
+    }
+  ],
+  "motionClock": "qualitative-pose",
+  "framing": null,
+  "cameraRig": {
+    "version": 3,
+    "clock": "qualitative-pose",
+    "projection": "perspective",
+    "dof": false,
+    "preset": "chart-flight",
+    "count": 8,
+    "spacing": 1.3,
+    "bar_width": 0.65,
+    "bar_depth": 0.055,
+    "chart_height": 11.9,
+    "amplitude": 4.2,
+    "clearance": 0.18,
+    "aspect": 0.5625,
+    "margin": 0.1,
+    "phases": [
+      0.08,
+      0.65,
+      0.84
+    ],
+    "eye_height": 5.1000000000000005
+  },
+  "cameraReview": {
+    "version": 2,
+    "status": "exploratory",
+    "values": [
+      18,
+      25,
+      22,
+      34,
+      42,
+      38,
+      53,
+      61
+    ],
+    "ticks": [
+      0,
+      20,
+      40,
+      60,
+      70
+    ],
+    "heightPerUnit": 0.17,
+    "layout": {
+      "spacing": 1.3,
+      "height": 11.9,
+      "unit": 0.17,
+      "center": 4.55,
+      "barWidth": 0.65,
+      "stageRadius": 40,
+      "stageHeight": 480,
+      "gridCorridor": [
+        3.4070000000000005,
+        6.793000000000001
+      ],
+      "path": {
+        "version": 3,
+        "clock": "qualitative-pose",
+        "projection": "perspective",
+        "dof": false,
+        "preset": "chart-flight",
+        "count": 8,
+        "spacing": 1.3,
+        "bar_width": 0.65,
+        "bar_depth": 0.055,
+        "chart_height": 11.9,
+        "amplitude": 4.2,
+        "clearance": 0.18,
+        "aspect": 0.5625,
+        "margin": 0.1,
+        "phases": [
+          0.08,
+          0.65,
+          0.84
+        ],
+        "eye_height": 5.1000000000000005
+      }
+    },
+    "purpose": "Flat data chart with declared camera clearance; perspective is not a common screen-space comparison."
+  },
+  "objects": 28,
+  "meshVertices": 1977,
+  "buildSeconds": 0.029452667018631473,
+  "bakeSeconds": 0.2548796249902807,
+  "renderedFrames": [
+    {
+      "frame": 228,
+      "seconds": 1.2634374170156661
+    }
+  ],
+  "renderSeconds": 1.2636493329773657,
+  "posterFrame": 228,
+  "status": "rendered"
+}

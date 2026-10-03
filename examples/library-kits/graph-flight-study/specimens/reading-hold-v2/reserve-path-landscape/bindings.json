@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "status": "compiled-unreviewed",
+  "inputSha256": "8e46d37c12103f631511239468ad06ad9c5389de4fdbbe135c262c7d427aa5cd",
+  "anchorSha256": "e12b19bc4615ef1ccc1fd0e21a8c57e02872d909c6ad01add590c282259b56a0",
+  "builderSha256": "9bc3384e2aa551ba3ee626fbb0d69de2b6933f95d0b741561e06b0694f0cf947",
+  "sourceClipSha256": "c19c6bf6b556ec51f9cf71407e2b79ba95aae9dc5bd87b5d404d308d321520df",
+  "storyboardSha256": "700f9c26a23f63e91f9ecc770e3ced07308ab79d5b0b9a25c64cd52e6675ad4f",
+  "fps": 24,
+  "frames": 444,
+  "labelsVisibleFromSeconds": 13.5,
+  "labelsFullyVisibleSeconds": 13.75
+}

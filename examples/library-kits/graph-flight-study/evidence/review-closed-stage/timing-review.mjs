@@ -1,0 +1,30 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import assert from 'node:assert/strict';
+import {pathToFileURL,fileURLToPath} from 'node:url';
+const root=process.argv[2]??'/Users/brandon/Development/clearframe-finance-library';
+const {sculptureConfig}=await import(pathToFileURL(path.join(root,'engine/lib/sculptures.mjs')));
+const {motionManifest}=await import(pathToFileURL(path.join(root,'engine/lib/motion-phases.mjs')));
+const timingFile='examples/library-kits/graph-flight-study/timing-reading-hold-v2.json';
+const timing=JSON.parse(fs.readFileSync(path.join(root,timingFile)));
+assert.deepEqual(timing,{entry:.5,flight:10,overview:3,reading:5});
+const cases=[];
+for(const id of ['graph-flight','graph-flight-seasonal']){
+ const c=sculptureConfig(id,{fps:24,phaseSeconds:timing});
+ assert.equal(c.frames,444);assert.equal(c.motion.timing,'phase-retimed-pose');
+ assert.deepEqual(c.motion.phases.map(p=>[p.startFrame,p.endFrame]),[[0,12],[12,252],[252,324],[324,444]]);
+ assert.deepEqual(c.motion.phases.map(p=>p.duration),[.5,10,3,5]);
+ assert.deepEqual([0,12,252,324,444].map(i=>c.motion.poseSamples[i]),[0,.08,.65,.84,1]);
+ assert(c.motion.poseSamples.every((p,i,a)=>p>=0&&p<=1&&(!i||p>=a[i-1])));
+ assert.equal(sculptureConfig(id,{duration:30,fps:24}).frames,720);
+ assert.throws(()=>sculptureConfig(id,{duration:30.01,fps:24}),/1–30 seconds/);
+ assert.throws(()=>motionManifest(c.recipe.motion,{frames:721,fps:24,loop:false}),/1–30 seconds/);
+ assert.throws(()=>sculptureConfig(id,{duration:16,phaseSeconds:timing}),/cannot be combined/);
+ cases.push({id,frames:c.frames,fps:24,timing:c.motion.timing,phases:c.motion.phases,defaultDuration:sculptureConfig(id).frames/24});
+}
+const sources=['engine/lib/sculptures.mjs','engine/lib/motion-phases.mjs','library/sculptures/graph-flight.json','library/sculptures/graph-flight-seasonal.json',timingFile];
+const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const report={status:'pass',reviewedAt:new Date().toISOString(),scriptSha256:sha(fileURLToPath(import.meta.url)),sourceHashes:Object.fromEntries(sources.map(f=>[f,sha(path.join(root,f))])),cases,scope:'Exact current phaseSeconds mapping at 24 fps and new upper duration bound; no render or speed acceptance',limits:['The explicit timing file produces the specified phase lengths. A duration-only/default invocation retains the recipe normalized phase proportions.','The existing per-phase minimum-duration and output-retiming-frame bounds remain separate from the total source-duration cap.','No visual claim about how the slower camera feels.']};
+fs.writeFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)),'timing-review.json'),JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify({status:report.status,recipes:cases.length,frames:444,phaseFrames:[12,240,72,120]}));

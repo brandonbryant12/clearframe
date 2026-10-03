@@ -1,0 +1,58 @@
+{
+  "status": "stills-pass-motion-pending",
+  "reviewedAt": "2026-10-03T16:26:01.785733+00:00",
+  "reviewer": "independent plot review agent",
+  "sourceHashes": {
+    "scripts/blender/camera_rig.py": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e",
+    "scripts/blender/chart_scene.py": "68219e7ee14c12bb50d6f025ca0847062b6642f61502780cec0de1ba628de9ed",
+    "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+    "scripts/blender/render.py": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+    "test/chart-flight.test.mjs": "87b8a931421c20f19b218732720e36dfd99912d50d016a37b2ca10887770e802",
+    "library/sculptures/graph-flight.py": "67a06f67b08623a48329c5821ddd17aa5f2bfbf4d4fe5c7083994a726a387945",
+    "library/sculptures/graph-flight.json": "c38e593384151be74506ddd58f9d678a8abb13b4f78d8549f990d375dc47ddd1",
+    "library/sculptures/graph-flight-seasonal.py": "312d33aad6514632fe2d7a8314a46ed2eda5d4eb1522fc404e359cf1059e3f97",
+    "library/sculptures/graph-flight-seasonal.json": "32c66f5eaa4c47835a7fb19281459907fa588287736fc6f55ae4a61d7c47ab70",
+    "engine/lib/sculptures.mjs": "6c06451fadbd1e2d3f023e79b5d2386b19f6825a7a71106af8e9dcd86f2f9d49",
+    "engine/lib/motion-phases.mjs": "52c8fb4d25f0829725687b59094735aa7f36225378e20b978368aa0118b3ccd9",
+    "examples/library-kits/graph-flight-study/timing-reading-hold.json": "c777b7ed4fe5b18caaa89d1118c03a60f235d9bfd21b378e79575acceab84b97"
+  },
+  "reviewedImages": [
+    {
+      "path": "examples/library-kits/graph-flight-study/build/reading-hold-looks/reverse-landscape-v4/poster.png",
+      "sha256": "1b09e2c2d4d4ae880380c8bfdb88d90c6f7ae6aeadae204f94010a89149bc288"
+    },
+    {
+      "path": "examples/library-kits/graph-flight-study/build/reading-hold-looks/ending-vertical-v4/poster.png",
+      "sha256": "80304157ad8cb5bf460a7dc186d22bd326979704292a0dd7c5c936338132da31"
+    }
+  ],
+  "sourceReview": {
+    "geometryChanged": false,
+    "cameraChanged": false,
+    "changes": [
+      "Replaced Principled surface with diffuse blue pigment; normal-only microbump unchanged.",
+      "Reduced rear edge-separation light from 1700 to 500."
+    ],
+    "reference": "Prior source hash b0e0667bbbdfa67417c7e63a24a1c810313162b33206cab9c36be90fbd501160 matches HEAD chart_scene.py; reviewed working diff contains only material and light changes."
+  },
+  "findings": [
+    "Reverse landscape still retains blue bar surfaces without the earlier white reflective caps; distant bars remain discernible. Nearest bar is cropped at right as expected for this passing closeup.",
+    "Portrait ending still displays all eight bars and complete chart grid with ample exterior room; no native labels are included in this still."
+  ],
+  "timing": {
+    "entrySeconds": 0.5,
+    "flightSeconds": 10,
+    "overviewSeconds": 3,
+    "readingSeconds": 5,
+    "totalSeconds": 18.5,
+    "fps": 24,
+    "frames": 444,
+    "potentialFullyLabeledHoldSeconds": 4.75,
+    "condition": "4.75 seconds applies only if native overlay continues to start at 13.5 seconds with its previous 0.25-second fade and lasts to the 18.5-second end."
+  },
+  "limits": [
+    "Two rendered stills reviewed; full encoded revised motion and native overlays are not accepted by this report.",
+    "Phone-size native-label readability needs the new final output.",
+    "The source-bound numerical geometry report has its own explicit 48-case scope and assumptions."
+  ]
+}

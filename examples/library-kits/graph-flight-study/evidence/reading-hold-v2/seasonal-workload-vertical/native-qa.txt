@@ -1,0 +1,10 @@
+18.5s · change 11.32/s (viral references 8–42; under 2 reads as held) · held 5.42s · 0 pop(s) · no audio · bt709/bt709/smpte170m/tv
+· 2.25s chart-flight     hard change inside the beat over 3 frames (29.73)
+· 3.75s chart-flight     hard change inside the beat over 2 frames (34.65)
+· 4.96s chart-flight     hard change inside the beat over 3 frames (18.31)
+· 6.04s chart-flight     hard change inside the beat over 3 frames (43.78)
+· 7.25s chart-flight     hard change inside the beat over 2 frames (36.01)
+· 7.71s chart-flight     hard change inside the beat over 17 frames (28.6)
+· 8.63s chart-flight     hard change inside the beat over 5 frames (38.99)
+· 13.08s chart-flight    the picture barely changes for 5.42 s (13.08–18.46 s): review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing
+examples/library-kits/graph-flight-study/specimens/reading-hold-v2/seasonal-workload-vertical/build/qa/timeline.png (one frame per second) · examples/library-kits/graph-flight-study/specimens/reading-hold-v2/seasonal-workload-vertical/build/qa/phone.png (360 px: read it as a phone would)

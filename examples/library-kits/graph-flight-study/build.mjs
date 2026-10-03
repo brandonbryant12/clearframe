@@ -13,9 +13,13 @@ const sha=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest
 const inputs=read(path.join(root,'inputs.json'));
 const candidates=inputs.cases.flatMap(item=>['landscape','vertical'].map(format=>({item,format,name:`${item.id}-${format}`})));
 const requested=process.argv.slice(2);
+const flag=requested.indexOf('--revision');
+const revision=flag<0?'':requested.splice(flag,2)[1];
+if(revision&&!/^[a-z0-9][a-z0-9-]{0,40}$/.test(revision))throw Error('Invalid revision name');
+if(flag>=0&&!revision)throw Error('Revision requires a name');
 if(!requested.length||requested.some(name=>!candidates.some(c=>c.name===name)))throw Error('Name the rendered variants to compile.');
 for(const {item,format,name} of candidates.filter(c=>requested.includes(c.name))){
-  const media=path.join(root,'media',name), receipt=read(path.join(media,'receipt.json'));
+  const media=path.join(root,'media',revision,name), receipt=read(path.join(media,'receipt.json'));
   const anchors=read(path.join(media,'ending-anchors.json'));
   if(receipt.status!=='ready-for-review'||anchors.status!=='pass'||receipt.config.loop)throw Error('Source evidence is not ready: '+name);
   for(const [file,key] of [['clip.mp4','sourceClipSha256'],['scene.blend','sceneSha256'],['receipt.json','receiptSha256']]){
@@ -33,18 +37,19 @@ for(const {item,format,name} of candidates.filter(c=>requested.includes(c.name))
   const text=(id,copy,x,y,size,extra={})=>({id,type:'text',text:copy,x,y,size,font:'text',fill:'ink',at:0,enter:'none',...extra});
   const value=v=>item.valuePrefix+(v*item.valueMultiplier).toLocaleString('en-US',{maximumFractionDigits:2})+item.valueSuffix;
   const tickValue=v=>{ const amount=v*item.valueMultiplier; return amount>=1000&&amount%1000===0 ? item.valuePrefix+(amount/1000)+'k'+item.valueSuffix : value(v); };
+  const axisTick=v=>item.valueSuffix ? String(v*item.valueMultiplier) : tickValue(v);
   const ending={at:reading.startSeconds,enter:'fade',dur:.25};
   const elements=[
-    {id:'header-band',type:'rect',x:0,y:0,w:width,h:vertical?300:220,fill:'#f3f2ef',at:0,enter:'none'},
-    {id:'footer-band',type:'rect',x:0,y:height-(vertical?270:185),w:width,h:vertical?270:185,fill:'#f3f2ef',at:0,enter:'none'},
+    {id:'header-band',type:'rect',x:0,y:0,w:width,h:vertical?290:220,fill:'#f3f2ef',at:0,enter:'none'},
+    {id:'footer-band',type:'rect',x:0,y:height-(vertical?220:185),w:width,h:vertical?220:185,fill:'#f3f2ef',at:0,enter:'none'},
     text('title',item.title,margin,vertical?130:125,vertical?64:60,{font:'display',width:width-2*margin}),
     text('context',`${item.periods[0]}–${item.periods.at(-1)} ${item.periodYear} · Fictional monthly observations`,margin,vertical?208:190,vertical?34:36,{width:width-2*margin}),
-    text('source',`Original fictional data · ClearFrame · ${inputs.asOf}`,margin,height-(vertical?130:80),vertical?30:32,{width:width-2*margin}),
-    text('axis-unit',item.axis,margin,vertical?280:287,vertical?32:36,ending),
-    ...anchors.ticks.map((a,i)=>text(`tick-${i}`,tickValue(a.value),a.point[0]*width-22,a.point[1]*height+12,vertical?30:34,{anchor:'end',...ending})),
+    text('source',`Original fictional data · ClearFrame · ${inputs.asOf}`,margin,height-(vertical?130:80),vertical?30:42,{width:width-2*margin}),
+    text('axis-unit',item.axis,vertical?margin:192,vertical?270:250,vertical?32:36,ending),
+    ...anchors.ticks.map((a,i)=>text(`tick-${i}`,axisTick(a.value),a.point[0]*width-(vertical?6:22),a.point[1]*height+12,vertical?24:40,{anchor:'end',...ending})),
     ...anchors.observations.flatMap((a,i)=>[
-      text(`month-${i}`,item.periods[i],a.base[0]*width,a.base[1]*height+(vertical?55:58),vertical?32:40,{anchor:'middle',...ending}),
-      text(`value-${i}`,value(a.value),a.top[0]*width,a.top[1]*height-18,vertical?30:38,{anchor:'middle',font:'figures',...ending})])
+      text(`month-${i}`,item.periods[i],a.base[0]*width,a.base[1]*height+(vertical?55:58),vertical?32:52,{anchor:'middle',...ending}),
+      text(`value-${i}`,value(a.value),a.top[0]*width,a.top[1]*height-(vertical&&i===0&&item.valuePrefix?52:18),vertical?32:48,{anchor:'middle',font:'figures',...ending})])
   ];
   const storyboard={version:2,title:item.title,format:{preset:format,fps:receipt.config.fps},theme:'research-paper',type:'inter',backdrop:'none',
     motion:{preset:'gentle',intensity:.3},transition:'cut',sfx:'off',captions:false,music:false,
@@ -53,7 +58,7 @@ for(const {item,format,name} of candidates.filter(c=>requested.includes(c.name))
     beats:[{id:'chart-flight',block:'canvas',duration:receipt.config.frames/receipt.config.fps,camera:'none',exit:'none',
       plate:{asset:'chart',side:'full',treatment:'none',drift:'none',scrim:0,loop:false},
       props:{sourceElement:'source',elements}}]};
-  const dir=path.join(root,'specimens',name);
+  const dir=path.join(root,'specimens',revision,name);
   fs.mkdirSync(path.join(dir,'media'),{recursive:true});
   fs.copyFileSync(path.join(media,'clip.mp4'),path.join(dir,'media/clip.mp4'));
   fs.writeFileSync(path.join(dir,'storyboard.json'),JSON.stringify(storyboard,null,2)+'\n');

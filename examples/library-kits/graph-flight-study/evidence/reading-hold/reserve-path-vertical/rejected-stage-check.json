@@ -1,0 +1,18 @@
+{
+  "status": "failed",
+  "framesChecked": 0,
+  "minimumCameraClearance": null,
+  "maximumHeightError": 0,
+  "maximumPoseError": 0,
+  "endingBounds": null,
+  "seekEqual": false,
+  "backdropRayChecks": 0,
+  "minimumBackdropNearMargin": null,
+  "maximumBackdropDistanceBound": 0,
+  "maximumBackdropRayDistance": 0,
+  "ceilingVisibleFrames": 0,
+  "checkerSha256": "67d451e093f7bfe5dd8b1646b2147642f7c8a0d79cfa832aa08172ef1d924c7a",
+  "sceneSha256": "e6069ccad661f1d1cb88a3ea3f8137aede24c1c7505a4d7c1e014dc77045e220",
+  "limits": "Baked-frame mesh bounds, closed-convex backdrop near/far containment and stage-only ray probes. All-screen coverage at sampled raster poses requires motion blur off; continuous-time path proof and picture quality are separate. No claim of unobscured intermediate chart views.",
+  "error": "('open backdrop edge', (768, 769), 1)"
+}

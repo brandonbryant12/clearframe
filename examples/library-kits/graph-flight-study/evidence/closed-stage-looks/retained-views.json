@@ -1,0 +1,65 @@
+{
+  "status": "prior-still-geometry-evidence",
+  "files": [
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/reserve-portrait/poster.png",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/reserve-portrait/poster.png",
+      "sha256": "1cf654fed70fc25a40b1c06ba0deae739937c0c29787b61acd81b798a22730c2"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/reserve-portrait/scene.blend",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/reserve-portrait/scene.blend",
+      "sha256": "4ed21c4ea45da465c45d778f367f2d8664fa406bd518c33baa0d2a9698f428d4"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/reserve-portrait/receipt.json",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/reserve-portrait/receipt.json",
+      "sha256": "ca3db426c98d8b4d08044a579d49bd9d418bd597f40c55a79a53fec7c14992ad"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/reserve-portrait/render-config.json",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/reserve-portrait/render-config.json",
+      "sha256": "21ce3fafec5e827df18db83199f3ca64ce16dd7cd1848167f639203d66bb08f9"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/reserve-portrait/blender.json",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/reserve-portrait/blender.json",
+      "sha256": "f3bad1aeeb22b8db5b9039aca2ee184eee2d9c019f07da83f8cdcd1ef9c4ebc7"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/reserve-portrait/scene-checks.json",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/reserve-portrait/scene-checks.json",
+      "sha256": "df4a333f34901446aa377f92dc67e451f00ecfd94687e1dfe737d8abdfeac34a"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/seasonal-portrait/poster.png",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/seasonal-portrait/poster.png",
+      "sha256": "4b7e01c625c08fc56c18a74a6b8e2964e6c46d24604d59fd75d86136edb8a597"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/seasonal-portrait/scene.blend",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/seasonal-portrait/scene.blend",
+      "sha256": "417521d1a8dbfd106eef7e2a78ed04006ad5bc56c01899d3d3074d00bc1ca715"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/seasonal-portrait/receipt.json",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/seasonal-portrait/receipt.json",
+      "sha256": "b51001758b18e522b9fdc2645ece28f571916cbc94212657f9fc240118005740"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/seasonal-portrait/render-config.json",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/seasonal-portrait/render-config.json",
+      "sha256": "c1c6555ac5697cafc1adfa265f2c37f136926604b9344072eeb9f648af1366bd"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/seasonal-portrait/blender.json",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/seasonal-portrait/blender.json",
+      "sha256": "8d2b8cc2a2650646f2210fd395d7348642340186e644fcbf6c1ed233070e11c0"
+    },
+    {
+      "observedPath": "examples/library-kits/graph-flight-study/build/closed-stage-looks/seasonal-portrait/scene-checks.json",
+      "retainedPath": "examples/library-kits/graph-flight-study/evidence/closed-stage-looks/seasonal-portrait/scene-checks.json",
+      "sha256": "a32ca28da5ad32b121680f49d74f38b6f4b4f3a67faba175f3e9cd067a56ab8d"
+    }
+  ]
+}

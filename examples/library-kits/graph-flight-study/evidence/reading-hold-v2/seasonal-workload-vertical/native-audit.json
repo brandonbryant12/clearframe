@@ -1,0 +1,92 @@
+[
+  {
+    "beat": "chart-flight",
+    "frame": 155,
+    "frames": 4,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"Workload varies\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 6.458333492279053,
+    "text": "Workload varies"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 155,
+    "frames": 4,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"Jan–Jun 2025 · Fictional monthly observa…\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 6.458333492279053,
+    "text": "Jan–Jun 2025 · Fictional monthly observations"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 155,
+    "frames": 4,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"Original fictional data · ClearFrame · 2…\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 6.458333492279053,
+    "text": "Original fictional data · ClearFrame · 2026-10-03"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"Work hours per month\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "Work hours per month"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"0\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "0"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"20\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "20"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"40\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "40"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"60\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "60"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"80\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "80"
+  }
+]

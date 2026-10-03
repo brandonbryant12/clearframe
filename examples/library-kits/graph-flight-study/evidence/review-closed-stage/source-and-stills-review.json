@@ -1,0 +1,95 @@
+{
+  "status": "source-and-stills-reviewed-final-motion-pending",
+  "reviewedAt": "2026-10-03T16:45:06.327492+00:00",
+  "sourceHashes": {
+    "scripts/blender/camera_rig.py": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e",
+    "scripts/blender/chart_scene.py": "26e3597c6d3a25a3b2dcbefe864426aecac4fd3901a5c08d8e657813312eabef",
+    "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+    "scripts/blender/render.py": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+    "test/chart-flight.test.mjs": "87b8a931421c20f19b218732720e36dfd99912d50d016a37b2ca10887770e802",
+    "library/sculptures/graph-flight.py": "67a06f67b08623a48329c5821ddd17aa5f2bfbf4d4fe5c7083994a726a387945",
+    "library/sculptures/graph-flight.json": "c38e593384151be74506ddd58f9d678a8abb13b4f78d8549f990d375dc47ddd1",
+    "library/sculptures/graph-flight-seasonal.py": "312d33aad6514632fe2d7a8314a46ed2eda5d4eb1522fc404e359cf1059e3f97",
+    "library/sculptures/graph-flight-seasonal.json": "32c66f5eaa4c47835a7fb19281459907fa588287736fc6f55ae4a61d7c47ab70",
+    "engine/lib/sculptures.mjs": "6c06451fadbd1e2d3f023e79b5d2386b19f6825a7a71106af8e9dcd86f2f9d49",
+    "engine/lib/motion-phases.mjs": "52c8fb4d25f0829725687b59094735aa7f36225378e20b978368aa0118b3ccd9",
+    "examples/library-kits/graph-flight-study/timing-reading-hold-v2.json": "c777b7ed4fe5b18caaa89d1118c03a60f235d9bfd21b378e79575acceab84b97",
+    "examples/library-kits/graph-flight-study/check-scene.py": "ffa251540a99b892f6691eebab1bd95c2ca87719319f5c708c65f1590078c6dd"
+  },
+  "previousChartSceneSha256": "68219e7ee14c12bb50d6f025ca0847062b6642f61502780cec0de1ba628de9ed",
+  "reviewedArtifacts": [
+    {
+      "path": "examples/library-kits/graph-flight-study/build/closed-stage-looks/reserve-portrait/poster.png",
+      "sha256": "1cf654fed70fc25a40b1c06ba0deae739937c0c29787b61acd81b798a22730c2"
+    },
+    {
+      "path": "examples/library-kits/graph-flight-study/build/closed-stage-looks/seasonal-portrait/poster.png",
+      "sha256": "4b7e01c625c08fc56c18a74a6b8e2964e6c46d24604d59fd75d86136edb8a597"
+    },
+    {
+      "path": "examples/library-kits/graph-flight-study/build/closed-stage-looks/reserve-portrait/scene-checks.json",
+      "sha256": "df4a333f34901446aa377f92dc67e451f00ecfd94687e1dfe737d8abdfeac34a"
+    },
+    {
+      "path": "examples/library-kits/graph-flight-study/build/closed-stage-looks/seasonal-portrait/scene-checks.json",
+      "sha256": "a32ca28da5ad32b121680f49d74f38b6f4b4f3a67faba175f3e9cd067a56ab8d"
+    },
+    {
+      "path": "examples/library-kits/graph-flight-study/evidence/reading-hold/reserve-path-vertical/rejected-stage-check.json",
+      "sha256": "7d80ac2d29b09eb9d464848637786168e2cf76c8ee07e1305e5ee7842f6f2ffb"
+    }
+  ],
+  "sourceChangesReviewed": [
+    "Camera path, chart bars, ticks and axes unchanged from previous source-bound review.",
+    "Stage wall raised to max(300,12*stageRadius), closed with seven dome rings and inward triangle fan. Far clip raised to max(300,40*stageRadius).",
+    "Checker validates planar nondegenerate inward supporting faces, convexity, opposite edge incidence two, and connected shell.",
+    "Checker requires perspective pinhole and no motion blur; camera and whole near rectangle must be within every shell halfspace at each baked pose.",
+    "Far bound uses actual world-space stage radial, bottom and pole extrema; per-pose stage rays compare camera-space hit depth to near/far.",
+    "Cap clipping has correct six halfspaces and conservative tolerance/screen expansion. For the frozen source, its declared 128-vertex spring ring matches the actual generated ring."
+  ],
+  "visualFindings": [
+    "Both actual portrait flight stills retain matte blue faces with no visible backdrop top-edge arch.",
+    "Nearest bars are cropped during intentional passing closeup; these are not endpoint or native-overlay readability views."
+  ],
+  "existingBlenderReports": [
+    {
+      "name": "reserve-portrait",
+      "reportSha256": "df4a333f34901446aa377f92dc67e451f00ecfd94687e1dfe737d8abdfeac34a",
+      "status": "pass",
+      "checkerSha256": "ec4cc0385ded30ddf025e897acdbfeb4bc93476d174f0ae8b509e94358494add",
+      "sceneSha256": "4ed21c4ea45da465c45d778f367f2d8664fa406bd518c33baa0d2a9698f428d4",
+      "framesChecked": 445,
+      "backdropRayChecks": 11125,
+      "ceilingVisibleFrames": 0,
+      "currentChecker": false
+    },
+    {
+      "name": "seasonal-portrait",
+      "reportSha256": "a32ca28da5ad32b121680f49d74f38b6f4b4f3a67faba175f3e9cd067a56ab8d",
+      "status": "pass",
+      "checkerSha256": "ec4cc0385ded30ddf025e897acdbfeb4bc93476d174f0ae8b509e94358494add",
+      "sceneSha256": "417521d1a8dbfd106eef7e2a78ed04006ad5bc56c01899d3d3074d00bc1ca715",
+      "framesChecked": 445,
+      "backdropRayChecks": 11125,
+      "ceilingVisibleFrames": 0,
+      "currentChecker": false
+    }
+  ],
+  "regressionEvidence": {
+    "path": "examples/library-kits/graph-flight-study/evidence/reading-hold/reserve-path-vertical/rejected-stage-check.json",
+    "status": "failed-as-expected",
+    "failure": "('open backdrop edge', (768, 769), 1)",
+    "checkerVersionCaveat": "Negative report and both successful still-scene reports predate the final checker hardening; their recorded checker hashes differ from the current hash."
+  },
+  "proofScope": [
+    "Independent pure Python report certifies the same 48 explicit camera-clearance layouts and ceiling-height separation, not arbitrary input coverage.",
+    "The reviewed Blender checker provides numerical all-screen geometry coverage at baked raster poses for a static closed convex stage, a perspective pinhole camera, and disabled motion blur.",
+    "Current recipe source creates unparented cameras and static unmodified stages. The checker is reviewed for this source contract, not arbitrary externally altered Blender scenes."
+  ],
+  "limits": [
+    "Fresh full-render Blender reports using the final checker are pending.",
+    "The two successful older checker reports are retained as prior-version evidence and are not relabeled as final-checker passes.",
+    "Full new encoded motion, native overlays and phone readability remain pending.",
+    "Floating-point support and clipping tests are numerical checks, not outward-rounded formal proofs."
+  ]
+}

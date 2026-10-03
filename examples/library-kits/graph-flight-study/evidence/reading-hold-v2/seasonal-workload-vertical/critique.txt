@@ -1,0 +1,15 @@
+{
+  "summary": {
+    "cinema": 100,
+    "beats": 1,
+    "seconds": 18.5,
+    "families": 1,
+    "drawn": 1,
+    "imaged": 1,
+    "graphicTransitions": 0,
+    "tones": 0,
+    "warnings": 0,
+    "ideas": 0
+  },
+  "findings": []
+}

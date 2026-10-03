@@ -1,0 +1,32 @@
+{
+  "sourceClipSha256": "c1f6429329341772185c92839e97debda42c582bb951b1f9967a9aa2fdb04e28",
+  "sheetSha256": "5ea63b4b2c5e07c9c21f36e2d59916c960d1321ae3c125ca9a5bddb0179ce625",
+  "indices": [
+    0,
+    24,
+    48,
+    72,
+    96,
+    120,
+    144,
+    168,
+    192,
+    216,
+    240,
+    264,
+    288,
+    312,
+    336,
+    360,
+    384,
+    408,
+    432
+  ],
+  "fps": 24,
+  "tile": [
+    5,
+    4
+  ],
+  "unusedTiles": 1,
+  "kind": "sampled-source-frames-not-continuous-playback"
+}

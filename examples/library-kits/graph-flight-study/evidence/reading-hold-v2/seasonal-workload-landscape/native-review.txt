@@ -1,0 +1,2 @@
+/Users/brandon/Development/clearframe-finance-library/examples/library-kits/graph-flight-study/specimens/reading-hold-v2/seasonal-workload-landscape/build/review-e0b3f18f-9132-4087-ac86-093735daab0e/index.html
+/Users/brandon/Development/clearframe-finance-library/examples/library-kits/graph-flight-study/specimens/reading-hold-v2/seasonal-workload-landscape/build/review-e0b3f18f-9132-4087-ac86-093735daab0e/strip.png (all 3 frames in order; labels in review.json)

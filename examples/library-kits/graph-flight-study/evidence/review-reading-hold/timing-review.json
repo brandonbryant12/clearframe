@@ -1,0 +1,134 @@
+{
+  "status": "pass",
+  "reviewedAt": "2026-10-03T16:26:02.583Z",
+  "scriptSha256": "2caad3f8432477bda305294dc62fe58c34aa9373805e8a3041ea390bffcb5392",
+  "sourceHashes": {
+    "engine/lib/sculptures.mjs": "6c06451fadbd1e2d3f023e79b5d2386b19f6825a7a71106af8e9dcd86f2f9d49",
+    "engine/lib/motion-phases.mjs": "52c8fb4d25f0829725687b59094735aa7f36225378e20b978368aa0118b3ccd9",
+    "library/sculptures/graph-flight.json": "c38e593384151be74506ddd58f9d678a8abb13b4f78d8549f990d375dc47ddd1",
+    "library/sculptures/graph-flight-seasonal.json": "32c66f5eaa4c47835a7fb19281459907fa588287736fc6f55ae4a61d7c47ab70",
+    "examples/library-kits/graph-flight-study/timing-reading-hold.json": "c777b7ed4fe5b18caaa89d1118c03a60f235d9bfd21b378e79575acceab84b97"
+  },
+  "cases": [
+    {
+      "id": "graph-flight",
+      "frames": 444,
+      "fps": 24,
+      "timing": "phase-retimed-pose",
+      "phases": [
+        {
+          "id": "entry",
+          "role": "hold",
+          "start": 0,
+          "end": 0.08,
+          "minSeconds": 0.5,
+          "startFrame": 0,
+          "endFrame": 12,
+          "startSeconds": 0,
+          "endSeconds": 0.5,
+          "duration": 0.5
+        },
+        {
+          "id": "flight",
+          "role": "action",
+          "start": 0.08,
+          "end": 0.65,
+          "minSeconds": 4,
+          "startFrame": 12,
+          "endFrame": 252,
+          "startSeconds": 0.5,
+          "endSeconds": 10.5,
+          "duration": 10
+        },
+        {
+          "id": "overview",
+          "role": "action",
+          "start": 0.65,
+          "end": 0.84,
+          "minSeconds": 1,
+          "startFrame": 252,
+          "endFrame": 324,
+          "startSeconds": 10.5,
+          "endSeconds": 13.5,
+          "duration": 3
+        },
+        {
+          "id": "reading",
+          "role": "hold",
+          "start": 0.84,
+          "end": 1,
+          "minSeconds": 1,
+          "startFrame": 324,
+          "endFrame": 444,
+          "startSeconds": 13.5,
+          "endSeconds": 18.5,
+          "duration": 5
+        }
+      ],
+      "defaultDuration": 16
+    },
+    {
+      "id": "graph-flight-seasonal",
+      "frames": 444,
+      "fps": 24,
+      "timing": "phase-retimed-pose",
+      "phases": [
+        {
+          "id": "entry",
+          "role": "hold",
+          "start": 0,
+          "end": 0.08,
+          "minSeconds": 0.5,
+          "startFrame": 0,
+          "endFrame": 12,
+          "startSeconds": 0,
+          "endSeconds": 0.5,
+          "duration": 0.5
+        },
+        {
+          "id": "flight",
+          "role": "action",
+          "start": 0.08,
+          "end": 0.65,
+          "minSeconds": 4,
+          "startFrame": 12,
+          "endFrame": 252,
+          "startSeconds": 0.5,
+          "endSeconds": 10.5,
+          "duration": 10
+        },
+        {
+          "id": "overview",
+          "role": "action",
+          "start": 0.65,
+          "end": 0.84,
+          "minSeconds": 1,
+          "startFrame": 252,
+          "endFrame": 324,
+          "startSeconds": 10.5,
+          "endSeconds": 13.5,
+          "duration": 3
+        },
+        {
+          "id": "reading",
+          "role": "hold",
+          "start": 0.84,
+          "end": 1,
+          "minSeconds": 1,
+          "startFrame": 324,
+          "endFrame": 444,
+          "startSeconds": 13.5,
+          "endSeconds": 18.5,
+          "duration": 5
+        }
+      ],
+      "defaultDuration": 16
+    }
+  ],
+  "scope": "Exact current phaseSeconds mapping at 24 fps and new upper duration bound; no render or speed acceptance",
+  "limits": [
+    "The explicit timing file produces the specified phase lengths. A duration-only/default invocation retains the recipe normalized phase proportions.",
+    "The existing per-phase minimum-duration and output-retiming-frame bounds remain separate from the total source-duration cap.",
+    "No visual claim about how the slower camera feels."
+  ]
+}

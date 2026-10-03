@@ -1,0 +1,2066 @@
+{
+  "version": 1,
+  "status": "exploratory-encoded-drafts-not-accepted",
+  "files": [
+    {
+      "path": "build-media.mjs",
+      "bytes": 3544,
+      "sha256": "3e32a3f4260651dad0bf6d34e78511064ae690e7efdcc21afe37404aec6ae00d"
+    },
+    {
+      "path": "build.mjs",
+      "bytes": 6501,
+      "sha256": "9bc3384e2aa551ba3ee626fbb0d69de2b6933f95d0b741561e06b0694f0cf947"
+    },
+    {
+      "path": "check-encoded.py",
+      "bytes": 9166,
+      "sha256": "66a0a8ca3818470b7b4771cab8460277d3615f62da2880acb338f81171f9b7de"
+    },
+    {
+      "path": "check-scene.py",
+      "bytes": 11503,
+      "sha256": "ffa251540a99b892f6691eebab1bd95c2ca87719319f5c708c65f1590078c6dd"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/blender.json",
+      "bytes": 2696,
+      "sha256": "f3bad1aeeb22b8db5b9039aca2ee184eee2d9c019f07da83f8cdcd1ef9c4ebc7"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/poster.png",
+      "bytes": 465382,
+      "sha256": "1cf654fed70fc25a40b1c06ba0deae739937c0c29787b61acd81b798a22730c2"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/receipt.json",
+      "bytes": 19164,
+      "sha256": "ca3db426c98d8b4d08044a579d49bd9d418bd597f40c55a79a53fec7c14992ad"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/render-config.json",
+      "bytes": 12527,
+      "sha256": "21ce3fafec5e827df18db83199f3ca64ce16dd7cd1848167f639203d66bb08f9"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/scene-checks.json",
+      "bytes": 1154,
+      "sha256": "df4a333f34901446aa377f92dc67e451f00ecfd94687e1dfe737d8abdfeac34a"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/scene.blend",
+      "bytes": 256218,
+      "sha256": "4ed21c4ea45da465c45d778f367f2d8664fa406bd518c33baa0d2a9698f428d4"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/source/artkit.py",
+      "bytes": 8435,
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/source/camera_rig.py",
+      "bytes": 19347,
+      "sha256": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/source/chart_scene.py",
+      "bytes": 8058,
+      "sha256": "26e3597c6d3a25a3b2dcbefe864426aecac4fd3901a5c08d8e657813312eabef"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/source/graph-flight.json",
+      "bytes": 1379,
+      "sha256": "c38e593384151be74506ddd58f9d678a8abb13b4f78d8549f990d375dc47ddd1"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/source/graph-flight.py",
+      "bytes": 238,
+      "sha256": "67a06f67b08623a48329c5821ddd17aa5f2bfbf4d4fe5c7083994a726a387945"
+    },
+    {
+      "path": "evidence/closed-stage-looks/reserve-portrait/source/render.py",
+      "bytes": 7533,
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294"
+    },
+    {
+      "path": "evidence/closed-stage-looks/retained-views.json",
+      "bytes": 4201,
+      "sha256": "cd0cd98e94895dfac66b3e4eb030670982148eb9bf7c21fabe5425c0e55697df"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/blender.json",
+      "bytes": 2670,
+      "sha256": "8d2b8cc2a2650646f2210fd395d7348642340186e644fcbf6c1ed233070e11c0"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/poster.png",
+      "bytes": 471094,
+      "sha256": "4b7e01c625c08fc56c18a74a6b8e2964e6c46d24604d59fd75d86136edb8a597"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/receipt.json",
+      "bytes": 19176,
+      "sha256": "b51001758b18e522b9fdc2645ece28f571916cbc94212657f9fc240118005740"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/render-config.json",
+      "bytes": 12548,
+      "sha256": "c1c6555ac5697cafc1adfa265f2c37f136926604b9344072eeb9f648af1366bd"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/scene-checks.json",
+      "bytes": 1153,
+      "sha256": "a32ca28da5ad32b121680f49d74f38b6f4b4f3a67faba175f3e9cd067a56ab8d"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/scene.blend",
+      "bytes": 245300,
+      "sha256": "417521d1a8dbfd106eef7e2a78ed04006ad5bc56c01899d3d3074d00bc1ca715"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/source/artkit.py",
+      "bytes": 8435,
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/source/camera_rig.py",
+      "bytes": 19347,
+      "sha256": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/source/chart_scene.py",
+      "bytes": 8058,
+      "sha256": "26e3597c6d3a25a3b2dcbefe864426aecac4fd3901a5c08d8e657813312eabef"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/source/graph-flight-seasonal.json",
+      "bytes": 1363,
+      "sha256": "32c66f5eaa4c47835a7fb19281459907fa588287736fc6f55ae4a61d7c47ab70"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/source/graph-flight-seasonal.py",
+      "bytes": 225,
+      "sha256": "312d33aad6514632fe2d7a8314a46ed2eda5d4eb1522fc404e359cf1059e3f97"
+    },
+    {
+      "path": "evidence/closed-stage-looks/seasonal-portrait/source/render.py",
+      "bytes": 7533,
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294"
+    },
+    {
+      "path": "evidence/reading-hold/reserve-path-landscape/source-sampled-frames.png",
+      "bytes": 157523,
+      "sha256": "a3d7cc568a3d7923c93edc71043f8edcda2f9ba077799af604f10e50dfac68ff"
+    },
+    {
+      "path": "evidence/reading-hold/reserve-path-vertical/rejected-stage-check.json",
+      "bytes": 858,
+      "sha256": "7d80ac2d29b09eb9d464848637786168e2cf76c8ee07e1305e5ee7842f6f2ffb"
+    },
+    {
+      "path": "evidence/reading-hold/reserve-path-vertical/source-sampled-frames.png",
+      "bytes": 499395,
+      "sha256": "fb07c73469da146c0cd9f05f74fcd464a6e2939629ba233af7179e85b8f7310f"
+    },
+    {
+      "path": "evidence/reading-hold-v2/REVIEW.md",
+      "bytes": 2330,
+      "sha256": "cc57d26644c68fe55539c0cce92a9ab94dff24fb4bd81b8263735d9fdfc28b89"
+    },
+    {
+      "path": "evidence/reading-hold-v2/node-tests.txt",
+      "bytes": 21879,
+      "sha256": "336644269cda13a21883f8ef1eb4248546198d8bea07fb3ae868b3825e05049f"
+    },
+    {
+      "path": "evidence/reading-hold-v2/registration-investigation.json",
+      "bytes": 1503,
+      "sha256": "2956f0cc9f79d05c014485f7543a198beb41679753cb37df6b8718ded00bed79"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/REJECTED.md",
+      "bytes": 293,
+      "sha256": "0b678b3278d40a3ebe6741c49d7d1894bbac080cc3e325bfcbdc78e706272217"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/build.mjs",
+      "bytes": 6364,
+      "sha256": "bf2e41a837b470267d6cf4de38a1e6b831c3cc00c252fea6e0a587eeb7e52f51"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/reserve-path-landscape/bindings.json",
+      "bytes": 596,
+      "sha256": "2163dbfcee35b70ac991fd5de94c29118618be42d9074993fbabbbddd44e0e4b"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/reserve-path-landscape/ending-17s.png",
+      "bytes": 308529,
+      "sha256": "37ab330043c476853b080429ccca039a9501092047f7ee37469b9a1cad0efceb"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/reserve-path-landscape/native-check.txt",
+      "bytes": 272,
+      "sha256": "12f36b0d07526e50ee076104612c1703783621d6b571a3ee3e5776642e3f899e"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/reserve-path-landscape/storyboard.json",
+      "bytes": 10810,
+      "sha256": "94b01e55644d71011ea5b38eeb8549bf7d9680a906f95acab840439061f16385"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/reserve-path-vertical/bindings.json",
+      "bytes": 596,
+      "sha256": "01e191d272e556f17cbab773df053e944f11048ff3800f83953a7b4f109545d3"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/reserve-path-vertical/ending-17s.png",
+      "bytes": 307653,
+      "sha256": "3686065e9b36edac82e661de0db71daed3c8eb630ba7497d236c199f9a96e5c6"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/reserve-path-vertical/native-check.txt",
+      "bytes": 1683,
+      "sha256": "62d8272915e389e800f4501105bf11e5b8ae34f67454ccf836adb1d7803f8b2b"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/reserve-path-vertical/storyboard.json",
+      "bytes": 10805,
+      "sha256": "7b6cc435dd6f1ff4253f40651ca1e5080815c362963500f76e95e76861b2cba5"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/seasonal-workload-landscape/bindings.json",
+      "bytes": 596,
+      "sha256": "044da9b74ff89b8ffe0ae8af4b49a829c3a5cea730fd460e63f9f6764184a636"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/seasonal-workload-landscape/ending-17s.png",
+      "bytes": 251427,
+      "sha256": "cb45cbe8c99fdca01da9c7ff10af617b7f6326336a61610d3777f92477546be4"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/seasonal-workload-landscape/native-check.txt",
+      "bytes": 706,
+      "sha256": "4b4c4aed835fabe33373c12e247c3cb300b6cadc369c1620e8a5b7c3f34cd7c1"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/seasonal-workload-landscape/storyboard.json",
+      "bytes": 9261,
+      "sha256": "aac3bd94605fcebb714edbeffa5caab39f42af200de536a7ff0ac42fb9ac8592"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/seasonal-workload-vertical/bindings.json",
+      "bytes": 596,
+      "sha256": "ae9830bb54a05010e6401a5782f4cb904aaea221ae40b7c943227d76c9caa628"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/seasonal-workload-vertical/ending-17s.png",
+      "bytes": 286813,
+      "sha256": "445fba37e70485f6d04efb8d63e9838b4bd89530cc2148b268ef8c08022bf2a4"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/seasonal-workload-vertical/native-check.txt",
+      "bytes": 1451,
+      "sha256": "8341bf53d017d5b7e5ca160584164095c432c0076fdef04cfb0d80bb70df171d"
+    },
+    {
+      "path": "evidence/reading-hold-v2/rejected-overlay-v1/seasonal-workload-vertical/storyboard.json",
+      "bytes": 9250,
+      "sha256": "a08409074b1e70b91d9ae3750fe805541af93429deb4df7f30e019cf4e2a5b80"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/bindings.json",
+      "bytes": 596,
+      "sha256": "7575a93bde8f5f5a3008e160af75406ee16eb7b7cc5ee28a178e983de0e12aab"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/critique.txt",
+      "bytes": 228,
+      "sha256": "f4c4f20447a63bb2facd59de7f26e790658b4e15adf15c7fee50c13cda6f4361"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/encoded-checks.json",
+      "bytes": 5898,
+      "sha256": "e32a1345172a7268e65feec49d4d6b91dd501ad4660ad10ce693bd4c1e9075cb"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/ending-17s.png",
+      "bytes": 303123,
+      "sha256": "c3342175ba8db375637f307e8bb1983760f652c26067ad0ebd53372e52a3ed14"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/native-audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/native-check.txt",
+      "bytes": 272,
+      "sha256": "3b837729334c2579ab6074ef7cf027fba1dd00da8a91754fac8fa4182135a966"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/native-job.json",
+      "bytes": 11005,
+      "sha256": "a4604177908a46bfee23531e509f472d88eb4d7fa8b3140f197ccd0ca6195285"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/native-qa.txt",
+      "bytes": 1270,
+      "sha256": "f84663d50351b60ef91721c86248e60da7a0622247e31b6c37a0bb8509229459"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/native-render-receipt.json",
+      "bytes": 2824,
+      "sha256": "1d76e811e0afb12b868c4b063f3aa15ceca4d9ad11718185e07347b7bc633259"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/native-render.txt",
+      "bytes": 3836,
+      "sha256": "05cdfc38afe744aac5fdd4ccb41c5ce1a5ce8e6c9fbcae3862e7a46318e60896"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/native-review.txt",
+      "bytes": 456,
+      "sha256": "1f75ee31580ed9e86dd31715753419c4104ae5fd50bf07cb0911249a51891df2"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/native-video.mp4",
+      "bytes": 570265,
+      "sha256": "a21476d76ce052e89e9b75af171ee1c12d91a099467c741c957ac6a6e49c2d75"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/qa/phone.png",
+      "bytes": 333828,
+      "sha256": "811f7299898e33c564f3fac08abe736986d24a396423dd6c5aa1ebe0a4deb40a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/qa/qa.json",
+      "bytes": 6884,
+      "sha256": "85fd2d5eb16519e63c491ea90c273b418fecc79454385614d6ad803642a244ce"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/qa/timeline.png",
+      "bytes": 178355,
+      "sha256": "502e3046c290c570ce84a8f16a7ea569759abefae3fc204f6e8718e61492be73"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/review/frame-0000.jpg",
+      "bytes": 25900,
+      "sha256": "7b1595fb60758886c3e94ee95303dc47687c2692407d170847850c067bb53c2a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/review/frame-0001.jpg",
+      "bytes": 25898,
+      "sha256": "4abd0584f8607fc45fcc90586d2d5274d674c8d50ac908a98ea574de8e446503"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/review/frame-0002.jpg",
+      "bytes": 43516,
+      "sha256": "d159b979253c7763acbf9738e745efa089b27767ff0aad2e093b11b64c74670a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/review/index.html",
+      "bytes": 1297,
+      "sha256": "3a133f9e55d031e9c5671e4ce127847dac1e70f699940ebac508e94aa2e8875a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/review/review.json",
+      "bytes": 845,
+      "sha256": "b412246dc07176eb48a24a4d7f5e682c77516a43e960b5f4b517d7327953811d"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/review/strip.png",
+      "bytes": 36979,
+      "sha256": "dd3aa3c968d7d80f0a5cf70619ec3a7517b866e1c177121783b36d29c8db3d0d"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/source-sampled-frames.json",
+      "bytes": 484,
+      "sha256": "5dab39e2d43ccff59d6bb0497d833746d8f866ae4a0c5fa1d8552574f27aa7be"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-landscape/source-sampled-frames.png",
+      "bytes": 144571,
+      "sha256": "19ce186a604d028476db443b1ae5b3900fe2dbceb59a8f507ab975bd00368b4a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/bindings.json",
+      "bytes": 596,
+      "sha256": "9fbc9ecdeab77ac4b120254b7838446094ecb3c6209101401e333976753679be"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/critique.txt",
+      "bytes": 228,
+      "sha256": "f4c4f20447a63bb2facd59de7f26e790658b4e15adf15c7fee50c13cda6f4361"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/encoded-checks.json",
+      "bytes": 5891,
+      "sha256": "071d6a167ce5c91ef2f06c3e4ae61604587647b742bf2a05915fc5afad4b0d2a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/ending-17s.png",
+      "bytes": 308604,
+      "sha256": "e069121dcdf31c459f1fee6abe70d30ff19d44c1607df42b24a7fbbb1f5bfcf0"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/native-audit.json",
+      "bytes": 3260,
+      "sha256": "f762c9e1bf492309cd61b71d0cd40156df55359cfc2aaeacbf9d7d4e86b26a41"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/native-check.txt",
+      "bytes": 1683,
+      "sha256": "1acab7ba6179207eb8022bf98c4f858475109c80bd9f266cca0319cf39fe996b"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/native-job.json",
+      "bytes": 11001,
+      "sha256": "ee0d0f5f04a01ff1e57cb77ceb5f303a1fcd4c75604c655df65b58277b915c47"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/native-qa.txt",
+      "bytes": 1237,
+      "sha256": "13c48e6489897958ef50361445376f75055b26dc3008e319156b19de270b02d7"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/native-render-receipt.json",
+      "bytes": 2831,
+      "sha256": "84350defc5dacce234e933da260b9c4c05180de5ab5881acc926e12c01b15d37"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/native-render.txt",
+      "bytes": 3840,
+      "sha256": "e6d5e42fc720a9d97fca53081217786f1dd3d1d19eb8ec3a70fe6e59b4dabc6e"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/native-review.txt",
+      "bytes": 454,
+      "sha256": "29b593c3836aec80e93bdadf290c763d0341b2726193ac2e017f7189cdeebe0b"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/native-video.mp4",
+      "bytes": 868888,
+      "sha256": "e5cf3e61d577d780a0b0e9ae8e23a97833c4fb93812cdd7a98e50a4d1b14c85a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/qa/phone.png",
+      "bytes": 936697,
+      "sha256": "b9575511485e2d0daa5b4e92e7c162442cb38581c65747812791007daa0674f0"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/qa/qa.json",
+      "bytes": 6793,
+      "sha256": "2088e2bd1e7d12f663c17a49331b714964b9fbede9817fc14ea19694376b5da1"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/qa/timeline.png",
+      "bytes": 272184,
+      "sha256": "1dfbc7e82ea67972e6809fb58879480c1722a30af80ccf9e184aee8522120aa1"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/review/frame-0000.jpg",
+      "bytes": 51901,
+      "sha256": "090a60997a9bb214bb4c0f87107c627fbec5e672b32694ef8f4daaa88674011a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/review/frame-0001.jpg",
+      "bytes": 51888,
+      "sha256": "794a0ecbf664ac62ff85fa1a5a2c6756b37e4600f179ae0aa191286cacc2d763"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/review/frame-0002.jpg",
+      "bytes": 73963,
+      "sha256": "f233446e6faaf39771b8a7d14fa96873b9f0936f477f36ccf1be7f2f5d6ca222"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/review/index.html",
+      "bytes": 1297,
+      "sha256": "3a133f9e55d031e9c5671e4ce127847dac1e70f699940ebac508e94aa2e8875a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/review/review.json",
+      "bytes": 844,
+      "sha256": "38d75d26863bb555a23055a9b130d4b7b3e6b5be3b9722b33cbb1c8c1df8e3ea"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/review/strip.png",
+      "bytes": 92554,
+      "sha256": "1b16fd9853bd41230fe61c9aca108a9a7049078028fa17dce94b012b2ac229c4"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/source-sampled-frames.json",
+      "bytes": 484,
+      "sha256": "6c1980cbf96ada01b99b8ee13aa23ebd2ead353f974fa9bc61041d9a30d533dc"
+    },
+    {
+      "path": "evidence/reading-hold-v2/reserve-path-vertical/source-sampled-frames.png",
+      "bytes": 437423,
+      "sha256": "5ea63b4b2c5e07c9c21f36e2d59916c960d1321ae3c125ca9a5bddb0179ce625"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/bindings.json",
+      "bytes": 596,
+      "sha256": "4ad9607a6562cfa0d4c8502f95c8225d24656e890334973b6c3a8c785c47d268"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/critique.txt",
+      "bytes": 228,
+      "sha256": "f4c4f20447a63bb2facd59de7f26e790658b4e15adf15c7fee50c13cda6f4361"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/encoded-checks.json",
+      "bytes": 5897,
+      "sha256": "b5e10a565450661b50b7d6186c1eace892b3517470c89969a1c99fbf513e5a9e"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/ending-17s.png",
+      "bytes": 248301,
+      "sha256": "327a3a955b99343d868a4d6fd62728009dc40fdfc969a3f76f634fafe12daeb1"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/native-audit.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/native-check.txt",
+      "bytes": 272,
+      "sha256": "2330cc5799b6178385e619bb447d8f3b9756188ea222578fe7e806997703a7b6"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/native-job.json",
+      "bytes": 9496,
+      "sha256": "aab2b8d45052c605118e07a6b7c167ab0459ee7f43f457b1907833950c9e201b"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/native-qa.txt",
+      "bytes": 1189,
+      "sha256": "caed49810a70d99a0d7f7d60920408426491c0c6491094f1fa5de4391f2d6d98"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/native-render-receipt.json",
+      "bytes": 2824,
+      "sha256": "b943ebb480948255cedbdf41b86d24d9f31e4981a0c1c6bd9cae390c8cd633d8"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/native-render.txt",
+      "bytes": 3851,
+      "sha256": "e0a3a2ec3a5b596e2485ef4be10b8b756dfd5f9f9bd0a796502c11dea9178777"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/native-review.txt",
+      "bytes": 466,
+      "sha256": "b0e895a0af155f9092e18a59b3393e0b547bba23b1b3decc9720a19602fbc2b8"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/native-video.mp4",
+      "bytes": 528326,
+      "sha256": "9f0d5b6f2bf9789a053e31fdcd999edd08c44e60be238c60693b893efbca6db1"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/qa/phone.png",
+      "bytes": 313983,
+      "sha256": "7aa6b4bb7ce21d552af8da484b45e024bf9d189a09beca4d0b2e98cfd1023dc2"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/qa/qa.json",
+      "bytes": 6667,
+      "sha256": "4a9d597fc6475fe632cdb03f4d394b47a2ca1147e5aae22e6c271bad5fd09c61"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/qa/timeline.png",
+      "bytes": 170423,
+      "sha256": "a104caa15d0bef0f2df0376748b6d8d7a71a2120f95499e8cb59ef2395c645ed"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/review/frame-0000.jpg",
+      "bytes": 25143,
+      "sha256": "a8f72c53725aa4ff9351fe63113ffb297274e5d154db09ac79a76d49a150bfff"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/review/frame-0001.jpg",
+      "bytes": 25148,
+      "sha256": "c964adf4e0acd00fb2c96e7d279ce5122c655ad2beb1c0eddb11929718d5fc26"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/review/frame-0002.jpg",
+      "bytes": 36703,
+      "sha256": "652c8b8cb8807f205c24dfce0b6235cbf7ab55aa1121a21f301ca87d82bd3d76"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/review/index.html",
+      "bytes": 1297,
+      "sha256": "3a133f9e55d031e9c5671e4ce127847dac1e70f699940ebac508e94aa2e8875a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/review/review.json",
+      "bytes": 850,
+      "sha256": "5f63fa4cbea6e1050bc1104035f2502dbf6b7d6257fa41749a6132fe98e2e7d8"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-landscape/review/strip.png",
+      "bytes": 34365,
+      "sha256": "4968bfc48f8ff1f6e63c8782f508133d00a7f0c7dc044db190aa5a89801913b5"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/bindings.json",
+      "bytes": 596,
+      "sha256": "af399808b143f169ecde12fda9d898764e4fc817bf3fbe1c96c8c7905cc48a40"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/critique.txt",
+      "bytes": 228,
+      "sha256": "f4c4f20447a63bb2facd59de7f26e790658b4e15adf15c7fee50c13cda6f4361"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/encoded-checks.json",
+      "bytes": 5902,
+      "sha256": "a717f78f3ee361c99a3c5571970b26087fde9204d4f0663a5d294559c03c829a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/ending-17s.png",
+      "bytes": 287628,
+      "sha256": "909b56782128a035c0e7ab3a0369ffabc248f82edcf572baf8d831136cec474d"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/native-audit.json",
+      "bytes": 2698,
+      "sha256": "2f24fe1405b22ddb82e47c0d92144424e18d3d73c478af88615875622e601282"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/native-check.txt",
+      "bytes": 1441,
+      "sha256": "16da2b2748432831fcbe51e29e923ed0eea21155db7d4710338fca41b0c02786"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/native-job.json",
+      "bytes": 9486,
+      "sha256": "8dff902c5e6bd176cc6b752eab0d3c3ffe5039ff719746395cbc9fc078dfbadb"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/native-qa.txt",
+      "bytes": 1246,
+      "sha256": "df7961a4c39f03a81c9b7e9395d69385bfb6f3cd5fcf02fd8bc1a52d81a8835e"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/native-render-receipt.json",
+      "bytes": 2823,
+      "sha256": "5f6a5b1caaf59a6ab968eb789ccb464c7d990ef312a61dc2855c74dd096c556e"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/native-render.txt",
+      "bytes": 3847,
+      "sha256": "55d12572543a2b33a433a44fbdca10536ce8d50f2b3b63237eb4531adc89151c"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/native-review.txt",
+      "bytes": 464,
+      "sha256": "f960b1ada62a9920e0de95aa39bb3759202b1c82a4cc98a99f6f39fdc73df231"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/native-video.mp4",
+      "bytes": 795399,
+      "sha256": "a242a4c3d0057db35cb4074fa0babcad80bd4936cf7195cab15ee68329b487f2"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/qa/phone.png",
+      "bytes": 918792,
+      "sha256": "fe1037844133b1ac62563358786a2feba613c6b670f832df19f89df6f36ee6d6"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/qa/qa.json",
+      "bytes": 6758,
+      "sha256": "5f4cbab769837c95c5ac5358b4b829c8ca7906dbe454ab6a0177f4a97a3a12e7"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/qa/timeline.png",
+      "bytes": 262383,
+      "sha256": "a316771e58ab08de91220171d937af96f29e2dc65a8c56614a2e733c77923542"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/review/frame-0000.jpg",
+      "bytes": 49983,
+      "sha256": "ea09848b4ed31fbf914c4b4bdafd8fca126c453f18022553e058a22260dc9d7d"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/review/frame-0001.jpg",
+      "bytes": 49986,
+      "sha256": "32049459d7639657f71beaeead3780c187bd64b55e73b37a0a94da87a58e550f"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/review/frame-0002.jpg",
+      "bytes": 72867,
+      "sha256": "e4ca169737006278448a52ac36443f7f80bff8b0cad55d0141aed655ec53e115"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/review/index.html",
+      "bytes": 1297,
+      "sha256": "3a133f9e55d031e9c5671e4ce127847dac1e70f699940ebac508e94aa2e8875a"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/review/review.json",
+      "bytes": 849,
+      "sha256": "146c7d5479e2766197ec13fb3b7c1b3582b302493a9d064ea0dcb22b611b5cff"
+    },
+    {
+      "path": "evidence/reading-hold-v2/seasonal-workload-vertical/review/strip.png",
+      "bytes": 89280,
+      "sha256": "43324c375d461b417006e3cfd6c3f18e76b502508d30bf081d4ef92f7417c32b"
+    },
+    {
+      "path": "evidence/review-closed-stage/recheck.py",
+      "bytes": 14984,
+      "sha256": "cd01baae784f39724de78e5f25d4058c74945409dbbbc19f2db4aa31e137b07c"
+    },
+    {
+      "path": "evidence/review-closed-stage/report.json",
+      "bytes": 84926,
+      "sha256": "b14b6da13881fea3bfc858022d5d6a87b72217bee95da4f0c4ebbd62e040b94d"
+    },
+    {
+      "path": "evidence/review-closed-stage/source-and-stills-review.json",
+      "bytes": 6324,
+      "sha256": "f09071589d980919a37e721d88b55342316fa73391dfa8e8afc54317c19f70e0"
+    },
+    {
+      "path": "evidence/review-closed-stage/timing-review.json",
+      "bytes": 3920,
+      "sha256": "9a18048fd49728c8f9a53debcb0c68d23cda27fd2e1ddffe7dfb5c019d25d21a"
+    },
+    {
+      "path": "evidence/review-closed-stage/timing-review.mjs",
+      "bytes": 2880,
+      "sha256": "09200cdf75fbe5465cabc2e35bf1a2818f272c3ceae0fa14abcd9df76c284d0a"
+    },
+    {
+      "path": "evidence/review-native-motion/README.md",
+      "bytes": 1266,
+      "sha256": "15988e27ba6beae1c8659560d2278228b1691a3277a5c7d24d27c96fb916667f"
+    },
+    {
+      "path": "evidence/review-native-motion/bindings-review.json",
+      "bytes": 30522,
+      "sha256": "f2c70cd3915a2c23722163993f10b812b210c536d249d9ba8b0e9f56a21dad9a"
+    },
+    {
+      "path": "evidence/review-native-motion/report.json",
+      "bytes": 13247,
+      "sha256": "2f071bf3b7f7647d186b59927ef42ed1ef1a9338cd55faafe396cf8a6885ba24"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/ending-phone-360.png",
+      "bytes": 43612,
+      "sha256": "909b845867c4beb2b4c09b10ea6049670e0cf09725de07c21cb8bcd1bdbaffac"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-001.png",
+      "bytes": 82477,
+      "sha256": "8fae46e5cfb4d33ccf33b772e03617b0bf95ad3b210c4fd6625a723604eac06c"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-002.png",
+      "bytes": 67520,
+      "sha256": "3ac53100866c81d906d23aa37012b57f6c40d5a3e3a22cf402f0a4e2dfb9a981"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-003.png",
+      "bytes": 75315,
+      "sha256": "9a3dd070afddeadf7623870cd02e2c02308c103eb69c51c62ad9b18435bc424e"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-004.png",
+      "bytes": 70861,
+      "sha256": "71244d1e417ca7f43f4aef4fca098070ada40f71685942992b45e33e1a8ab63e"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-005.png",
+      "bytes": 63461,
+      "sha256": "ee1ead93fc87bd5ff39d533a45ea61fcb5878eac187df45015b8a06544d61700"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-006.png",
+      "bytes": 53566,
+      "sha256": "141b2780cc28c0abe4acd4e21392217be2a52f16d85c577523fed4987581b8d8"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-007.png",
+      "bytes": 54347,
+      "sha256": "9c70576b5382cb81b712363288f31a954c1b031e6162952b63f986b4e9a41ee8"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-008.png",
+      "bytes": 53757,
+      "sha256": "7b29393e2745c6ab37560699ae62fc40b5de5c0550373255ad0ec130da3faccd"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-009.png",
+      "bytes": 49483,
+      "sha256": "d7573221975851a2618494a02c00cfd668881359aaa1c960a3ffdd2346e96dbe"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-010.png",
+      "bytes": 47163,
+      "sha256": "ec820f998e2bfa57195299717103383f72c16d38012ce77d6206fd1280435ce8"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-011.png",
+      "bytes": 75895,
+      "sha256": "7804b58dbbff402ea5a1f026cef7189bf99eac6c250dfa21605d3a4a4f454d14"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-012.png",
+      "bytes": 106074,
+      "sha256": "fb6db95fec68dda5a28d35ac8a41628e8c6b1cdf1d6f3c08a87dd5f5de6a7971"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-013.png",
+      "bytes": 99015,
+      "sha256": "f3456d6c5e363ae1c81b841ed74f125f475a4d08998cdc539bcb7ae6edb7d21c"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-014.png",
+      "bytes": 64915,
+      "sha256": "b4afe224f3cd601b85199eaad7d2e6d24767d74003019940b337b2eed549abf7"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-015.png",
+      "bytes": 85313,
+      "sha256": "1bfff99fc2bbdc3bf50125f9b63133c8abc398f4cdbb40322cce43867ce78a73"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-016.png",
+      "bytes": 93534,
+      "sha256": "ce9bf35d1802b80b51975004ab48cca5461d1953d20c02b740e082af83681314"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-017.png",
+      "bytes": 96945,
+      "sha256": "7ed14b488c2b6ded9a5083cc8648f517bea60409553f0282322dea80e7474ba5"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-018.png",
+      "bytes": 98025,
+      "sha256": "ff03b770b6fced3102d25abd9636701de49b2472f28c7f52a1d228b08309d971"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-019.png",
+      "bytes": 98474,
+      "sha256": "8ea5ed1a182ab53eeb7cc34991830f0a5fafc79d388627ba46881d823b3b6222"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-020.png",
+      "bytes": 91128,
+      "sha256": "89788c01afcd607637c9aa94cff118575c20c361beccf5d9c89158d6635dc6c1"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-021.png",
+      "bytes": 100659,
+      "sha256": "af9e35ae560696d9e1835618111b7728a240bba621132663a54e7a4c33647c41"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-022.png",
+      "bytes": 89950,
+      "sha256": "60e3ea9f3b2ce339771ee6c5588297c43d1ec20cfce536fd5358f5204753c6ce"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-023.png",
+      "bytes": 89589,
+      "sha256": "abc6417f43d089675ae616c77ce6b95c7f0f7c9906488a7dd8c2db2c66ed57e3"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-024.png",
+      "bytes": 90417,
+      "sha256": "9e883916877b061d0f982541d14d2ab15f86f1ce8e77c95816ec03f8d1728f1f"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-025.png",
+      "bytes": 90835,
+      "sha256": "ef3079c026560221080fccc5ee6fdafac8e6f1e6dd11f661d93e1c88f3040eb4"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-026.png",
+      "bytes": 133237,
+      "sha256": "702f8be7d941ff503cfb384d90ee0a4726bf63e1a1e9bdabe0d9e2c9a8061ec3"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-027.png",
+      "bytes": 142647,
+      "sha256": "3c840781c93a3291f58ac5a698b372e5feea23e51c1beb77828555fdc74182bf"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-028.png",
+      "bytes": 143105,
+      "sha256": "ecd35c0c0952c6a11f4465a0e3cd3fbae9d754be7250dd5512bc6e79136edb48"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-029.png",
+      "bytes": 143285,
+      "sha256": "0fbf180ff61dc1b6ffe0569b0e9acbecb91d0edf85c1e0e020ebd0879f37c7f7"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-030.png",
+      "bytes": 143209,
+      "sha256": "3b801c5eb2f0074642ecda5405e867f9651c6fde93a6c2d13aa892ff8d316f97"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/frame-031.png",
+      "bytes": 143219,
+      "sha256": "b3abd907aa6517694e085fdde10745161fa694d39c4b931749e32137b85bbddc"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/label-reveal.png",
+      "bytes": 215143,
+      "sha256": "cb3e815a356686f8673ae9d0f0e6a8cdd8fb6328f1c9f07d55989f1474a92cac"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-landscape/late-flight.png",
+      "bytes": 346248,
+      "sha256": "20f6472e06f4484518fbbe67bbe8de955fa7a4615d49b63fa7f9ba018850a4b9"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/ending-phone-360.png",
+      "bytes": 92285,
+      "sha256": "45e608af5f8eef221cc79674dafdd9d663da9f6e0ca55006f180b16264f7aa0b"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-001.png",
+      "bytes": 101910,
+      "sha256": "4ab79bb97175fc8b83a3b6bb3f232d4cc59b0c670a87dba84b7515168d06f7b1"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-002.png",
+      "bytes": 68076,
+      "sha256": "652a6852e59bb2614d03a3b2c5dad64d0726eac12ad36de3063537dbfcf09a3d"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-003.png",
+      "bytes": 91369,
+      "sha256": "de65800a5ba32835031aac3ad93929daba90030ac8048e1cf5e75b4349182c2c"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-004.png",
+      "bytes": 88696,
+      "sha256": "d280561775ac8d2300396e2c38238197414657f8ad779ce11352fca94439267e"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-005.png",
+      "bytes": 86431,
+      "sha256": "c6865c1ac0a28f1c334a7cba92ea3be2e25cb3b2e1a359c82088d8afc11cc5f3"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-006.png",
+      "bytes": 69585,
+      "sha256": "9fe45ef30a6345856d2605ad08ecc46211fb40eababe9f14ed0b4ee92ef8a994"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-007.png",
+      "bytes": 73726,
+      "sha256": "786e0d454da86e0602cd036f6e2bf40680d639994a5761726ee1550b1a334b5a"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-008.png",
+      "bytes": 63889,
+      "sha256": "4b7dba6c9133562b4c4c5e475de016bb6d497cf5245f54cb2043559d0057c55c"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-009.png",
+      "bytes": 75479,
+      "sha256": "0a6a6e916fc48b391ca0908c9fdce75e0a8eaf56cb27847c36b4440628e198a6"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-010.png",
+      "bytes": 80508,
+      "sha256": "a22c771949da122ee8ac246875af9825d3473a6c599ad299ede27f3f0a73f8a6"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-011.png",
+      "bytes": 87806,
+      "sha256": "b5542a94ed2065c736a263c05bb6c24cdde042161d98dfecfc21be0c20125ab3"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-012.png",
+      "bytes": 173684,
+      "sha256": "5c56d783a0a6dbb9f7efb197cb93d3062b679a6aaf348267e5ac8b529e0f3d77"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-013.png",
+      "bytes": 149278,
+      "sha256": "27cd585658de5be8592ad4f9ee7c6cb2c0b7c8cb1db223b14866d90ea6761b41"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-014.png",
+      "bytes": 78719,
+      "sha256": "64a1cacb8cda67a4f2257f3f4bd0c62a29ea7e5421bb47c14fc43804c2c8b66d"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-015.png",
+      "bytes": 122920,
+      "sha256": "0753edd41c55dbe13136f9a810e9f9bfc43dba8e0ada23192d00bdc4521da8e6"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-016.png",
+      "bytes": 133461,
+      "sha256": "c5f691139f48572521bbff96c0056192fff2a867fa22eeb17b64d25df1201037"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-017.png",
+      "bytes": 135230,
+      "sha256": "b96008e944b9e39d06b15e8cabd4354208983480c635324b9c299ed9394cdff8"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-018.png",
+      "bytes": 137041,
+      "sha256": "8951b7b66918a38b392394d5fb1c8a77eefd2f6153a695774c8d37bbb65820f2"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-019.png",
+      "bytes": 138365,
+      "sha256": "4a50d10e30a6103b7cd708a361726b0caff4b86b2b98f7896101ea3770ed3ed6"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-020.png",
+      "bytes": 122779,
+      "sha256": "43a178e210d0df6925bebd88a982a84f8c7433d8e9936906e28ce2399556a31f"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-021.png",
+      "bytes": 129424,
+      "sha256": "34bc06e5280dd2845a69b7937e4ca7e45b71a1228455276fbedefb881ea06ea3"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-022.png",
+      "bytes": 95766,
+      "sha256": "28441f8a9585ba2d8d1510e56f661154a8c685846b7e06e8b15962ae77252e90"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-023.png",
+      "bytes": 94930,
+      "sha256": "5b11b29f036f8d2f909bd138df61b60fca61d4b4bc177d7a372582ec1abb96e0"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-024.png",
+      "bytes": 94423,
+      "sha256": "80454d65e8986ce7b53b5306a0ee9594752df9afffeb9008aa71c3d1af961780"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-025.png",
+      "bytes": 95032,
+      "sha256": "2957a606a90bb9739e94c352e6ea609801969d1de38355f47805ae85e2f29761"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-026.png",
+      "bytes": 122998,
+      "sha256": "62ffcc9c2788ce935c0ee9dfb8bb59617c7eb66e52644940fa34e7fbe3bb3357"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-027.png",
+      "bytes": 128455,
+      "sha256": "db3d3282d87c6a797fadbe2262def4b8a73ae991a074796433d8c55fa0953cd5"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-028.png",
+      "bytes": 128630,
+      "sha256": "01ee555ae91f1e5814a1efd447a21895124a4373eea0f26bf57c6d8b0c67102e"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-029.png",
+      "bytes": 129110,
+      "sha256": "f2556802adb39ec177f127ce6f5b78b5fb79cc7b3f8b398fa0b8b86062bea232"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-030.png",
+      "bytes": 129180,
+      "sha256": "cca8ce56930dc4aac6cb2d4dddcb315caae6c6d5d9539804a32bf590746ca389"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/frame-031.png",
+      "bytes": 129609,
+      "sha256": "2b4c35fdb3417c18342ec40aec6a75bb07a0815afb344f2fead628c7fa4002ed"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/label-reveal.png",
+      "bytes": 201426,
+      "sha256": "49b68ed2fafbd4efcc8ffb8289cc6f4397f68a8b2a45483c8f3901b7e7017b09"
+    },
+    {
+      "path": "evidence/review-native-motion/reserve-path-vertical/late-flight.png",
+      "bytes": 573907,
+      "sha256": "e0d7b983ed4344495372c09c5eed02689d57a5f19317189bdbff08629727955f"
+    },
+    {
+      "path": "evidence/review-native-motion/sample-review.py",
+      "bytes": 2469,
+      "sha256": "1e79e335073df0813a2de51e55709cc50aabaeb3d821cf4a367bedfdf5d6fd00"
+    },
+    {
+      "path": "evidence/review-native-motion/sampling.json",
+      "bytes": 39027,
+      "sha256": "1c3f969e35ff8a266fb1eea8492652d9f5d4bd7355d6f950743f2de3abd2fe0d"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/ending-phone-360.png",
+      "bytes": 36984,
+      "sha256": "918ff85ce118ae8e08047de1eceb2b5a1cb4afe85833142800b8b0763a1f9352"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-001.png",
+      "bytes": 79740,
+      "sha256": "875a7921e619cc801be9bbf8beb1fffed8a07d586e7d162120e5c81434f63b44"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-002.png",
+      "bytes": 74689,
+      "sha256": "75dda6397eddb72a526dd1e3468632b9eaffea5bff30cd0a2a3331a73d36dbc7"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-003.png",
+      "bytes": 74571,
+      "sha256": "4f36b1167d8c8e69b81379e11179ce38e9dd58601206a72cd400568f276aa055"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-004.png",
+      "bytes": 65229,
+      "sha256": "1db6e6223db1f5d1b51f27cc8f58a6e61d0928a7ac1f0d4fc31d5788e2f87fb9"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-005.png",
+      "bytes": 56172,
+      "sha256": "1aacc4a7ba76cc0423b0092ab6ac4fd213cacc72d1cc9eb091a2813fe9773414"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-006.png",
+      "bytes": 54440,
+      "sha256": "2c562e3b69999e0cf35cd05acfb09102728c6c351f41cf92be7664a6c3a185cf"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-007.png",
+      "bytes": 50328,
+      "sha256": "5ad69e1a874a7a1eab5179953245dff0a1e5ffb86fddce939162d16a64cfa4e1"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-008.png",
+      "bytes": 50029,
+      "sha256": "c4247851e8c21a8ab738e16917b41ecdf470c54f24eaa2019a7bd73145d31bd9"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-009.png",
+      "bytes": 60168,
+      "sha256": "34b80c72ad24c4f314f4d24601f9d603184a30d1ed4a4be6cc983b115ff123cb"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-010.png",
+      "bytes": 94042,
+      "sha256": "245efd83ce37663d7fec8a1d8fc113d9990d129d749befbe81a2db10ce236cba"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-011.png",
+      "bytes": 102155,
+      "sha256": "7128987c3d0bbd2e944da6b2fa83fe12a2886324bb95436b7cd1717fd4454006"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-012.png",
+      "bytes": 92340,
+      "sha256": "c41c9b4c00581918c01aa8dc0e9f5b38821d45c1f6867693d1d049f9eab2901c"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-013.png",
+      "bytes": 63012,
+      "sha256": "20b986524e37271c8048e734533b65fdb280e78e9e686f1c28d8866df4043254"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-014.png",
+      "bytes": 81997,
+      "sha256": "31113a0f89e14c701c616f512dff61f31196db9b5fe10f0ddaeb5d58898acc02"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-015.png",
+      "bytes": 89158,
+      "sha256": "54dc45e9f9ce9cdcb16ac34d241a744617200d4d3d18f04e063ca9c4e1c6ec2f"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-016.png",
+      "bytes": 91324,
+      "sha256": "745a66568d492b46aea2455fbb0db852ff9262a222126e6727a6c384244ad4a0"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-017.png",
+      "bytes": 91859,
+      "sha256": "ee0e71097416f2eb9376a82dff6e6600ac5f808aea78d7079287f7380860a4de"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-018.png",
+      "bytes": 93244,
+      "sha256": "b2d8efbe991fd5c936e9486f776c14583596f4741596b42675144ad517445f09"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-019.png",
+      "bytes": 95372,
+      "sha256": "ceed8cf1f6631a2c7f695d3c904f0b3f93473c805cee4bb0a050a6aa20bc0665"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-020.png",
+      "bytes": 88475,
+      "sha256": "a4ecfdccaf615d0cabec2a9210aab3e0eb4fece6ab210095a42c53f674707d2c"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-021.png",
+      "bytes": 93939,
+      "sha256": "68c74d05a71b0a4fdcead2bb71ca22e1dd5a27461d74ec0bc3c951752d261b14"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-022.png",
+      "bytes": 81236,
+      "sha256": "1924422620831a7695c4779535993310065af0ebc8f5f846adf1f861fdc26ca4"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-023.png",
+      "bytes": 80600,
+      "sha256": "24900cef6f6f2f8a419d75fb8a2fb3861f3644b86190a332c1d140be4b971931"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-024.png",
+      "bytes": 80952,
+      "sha256": "2a9d88a1f9a9e4e76fac2daab5b5640d368dc46bb2d6894c2687bbcec2bab578"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-025.png",
+      "bytes": 81575,
+      "sha256": "975bcbba678f7feb984ca83932f17ac7aefef7b035802a832e8c3046b06b792f"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-026.png",
+      "bytes": 107289,
+      "sha256": "90c4804f7b3169ad14468f718faa331da85d5ab5b14272385440a36435be1e7a"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-027.png",
+      "bytes": 113802,
+      "sha256": "8d45e732b038ae8e630ed25e87daa3ae0ffe7437c70e1e58cd8317c2d9640126"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-028.png",
+      "bytes": 113974,
+      "sha256": "4f84be909ee83280b4667195eba23125d52f6dccde0af62cb24678b217b6213c"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-029.png",
+      "bytes": 114401,
+      "sha256": "ba11a4accdbe4c43e4ae8a6e847b24c08b65b5a76f13541e8422c6bb0a47a384"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-030.png",
+      "bytes": 114347,
+      "sha256": "1a44173cc8412cbde3278b5607396e8485744acc7c82137d3b992b7c36a99203"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/frame-031.png",
+      "bytes": 113147,
+      "sha256": "faba74c02cc27026c173400a3cf215ef480a9ca9c54c39909301c0995666dfda"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/label-reveal.png",
+      "bytes": 179721,
+      "sha256": "382bd5f139b30d694d25989b3c917ddf1745bb5bf95bfa3be85c8a2d8b26cccd"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-landscape/late-flight.png",
+      "bytes": 349924,
+      "sha256": "3b518044c33d43db95cdb58a9687cd437cab6a307af0b12aef4a773b18a715dd"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/ending-phone-360.png",
+      "bytes": 87858,
+      "sha256": "15a9693ec5dc595d48f75cd57bf9c8b663fd53ee66d32fefbe189245c2922b18"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-001.png",
+      "bytes": 95223,
+      "sha256": "636f2eb613c246d4d0af7e21924b732c998fc3a3d01aed714823c69cf25a00e4"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-002.png",
+      "bytes": 79713,
+      "sha256": "26e53a44ec418bbf1dee3969f275c0acb9becd7e43800d2c6f35b9df2883f1aa"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-003.png",
+      "bytes": 83232,
+      "sha256": "26b60a7c63c0ce576095c5fece43bf6f30b3a85f3ff8935f8d50f5523805597d"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-004.png",
+      "bytes": 95561,
+      "sha256": "ec0faadb08456d10304ea027998bf3620f9281614dc1b51e48882d997081e8b6"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-005.png",
+      "bytes": 76102,
+      "sha256": "a649c276d3ac6ec4665426d00a062d69368c4370ee0979f8e882f9a8fd845d4d"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-006.png",
+      "bytes": 61702,
+      "sha256": "747ee49f6428d3c1bd0b25259a3b705316c67d24c60590ce68b2ad311e5d146e"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-007.png",
+      "bytes": 60790,
+      "sha256": "b149b0c19cc6f4ce2709ed2948440407962d41118547598cb0928eb6e6e11cdc"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-008.png",
+      "bytes": 65676,
+      "sha256": "284912fa335777a5a4a66f6396cd9d2577fb1e7c2c6f3a7423f0408a268cac96"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-009.png",
+      "bytes": 79204,
+      "sha256": "c66a3a677758a2c25de6556a2f2db79e8ed5645b27d182f48866e3996ee76a66"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-010.png",
+      "bytes": 136566,
+      "sha256": "d3a6c2efe748b3340ec115323d9540147def5803923dd5c5addeceeca275b465"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-011.png",
+      "bytes": 186889,
+      "sha256": "4f852addc5fbb2d63c6ac5ab0372936b537c04956fb76df83ff975d0ed80f1dd"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-012.png",
+      "bytes": 150296,
+      "sha256": "744d55c0090acbd322f90b47095aea64376be400d2c860a9bf44e723b9262fe1"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-013.png",
+      "bytes": 85525,
+      "sha256": "40de06a26f0f1b77ff2d953217782f35b7d693e314f5f02452ac09d8015ce769"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-014.png",
+      "bytes": 126109,
+      "sha256": "f1916b419f61b8b41d07d244c221b6a085474316125d8e197ffffc8a1b397eb9"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-015.png",
+      "bytes": 137885,
+      "sha256": "acd83309053572d8275971a81d359faca097fede49434658ec1b6fed4e7645d4"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-016.png",
+      "bytes": 139008,
+      "sha256": "b0d6ba39a04f5e1521e66ba6004a10594711a9d4738161ed12e0d92a1e834416"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-017.png",
+      "bytes": 142065,
+      "sha256": "2b3be72418473a8eb48a072ad4356f5d4b3a15a0902de020ad302270587bd750"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-018.png",
+      "bytes": 140933,
+      "sha256": "2152fe065b5b49483ef8ad9ec8fc9b9b2ac30619d815d53a9f19ee944179a903"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-019.png",
+      "bytes": 141972,
+      "sha256": "e1d68d01da6b4601fb779bf381b4c91cdcb2581adfbdf2e526c37b715c76c852"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-020.png",
+      "bytes": 130476,
+      "sha256": "2fa8fce9abb16a2312b03ec57c303519b1c1bc5c658a885f1758b42c226b5aad"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-021.png",
+      "bytes": 131649,
+      "sha256": "3e2928e79b99481a6b5e23b81d8996e30b6ad31a89754c8f64f69e1a13bda35d"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-022.png",
+      "bytes": 98730,
+      "sha256": "35fd9ede285cd6ac02fd23fd2e7db0b2a17e296c802a1e75bdd4152187a6eb3f"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-023.png",
+      "bytes": 95027,
+      "sha256": "9707d4034ee3ef87357924d9e29e1ae0e9294ea77fd3b8c0e9a8b484157df7e4"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-024.png",
+      "bytes": 95867,
+      "sha256": "242d78e7e3d804a6694f5561eec4e136b8d2209256de1c15b67a37ff93624387"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-025.png",
+      "bytes": 96527,
+      "sha256": "fdaf20d937f4b9545fb4e30a980baa095555cc9be2254d77e3554245e29cab9f"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-026.png",
+      "bytes": 114332,
+      "sha256": "2deee8683c38630e8b42237cbbd10b5cd277e27d68581bc6bfffc144402a8731"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-027.png",
+      "bytes": 117834,
+      "sha256": "2aa371a8c856331d9b36987316b83546ec4dc7926bb44aa3af0fdaf11b85f4cf"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-028.png",
+      "bytes": 117640,
+      "sha256": "2302990ab12b30e6c5fa059d1952ee704360a079bbf3e124fc1ddf3b74a1b44e"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-029.png",
+      "bytes": 118047,
+      "sha256": "b85a2a38179ecf9c4b1990ed98b60c3435c0b157e69580101e4419787e4f8ee0"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-030.png",
+      "bytes": 118122,
+      "sha256": "89cd8545de73578c452479de745937d863ac8e16cd76fb648e32691630b56b7b"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/frame-031.png",
+      "bytes": 118204,
+      "sha256": "d38ee13174604e5646be897edcc1707161cc00133fb5c528ac8a149c3deb402a"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/label-reveal.png",
+      "bytes": 199534,
+      "sha256": "59fd6247adc8155178bf46c873490840233b143c97e304019e15b80c20873ab6"
+    },
+    {
+      "path": "evidence/review-native-motion/seasonal-workload-vertical/late-flight.png",
+      "bytes": 604151,
+      "sha256": "4b80bd9ec6eda3db4bcf640e0b0cce09409a4af242540a90b6543a7be9545c77"
+    },
+    {
+      "path": "evidence/review-native-motion/verify-bindings.py",
+      "bytes": 6437,
+      "sha256": "aa6c317c46f8eeeae042201ceb586197345b0cc1e97b7317b9ed703795dfdff1"
+    },
+    {
+      "path": "evidence/review-reading-hold/recheck.py",
+      "bytes": 14328,
+      "sha256": "108139052cca20993ee0fc2a6b1233520b6197f1a92bf8ee7ca3b7f1ee0acdbc"
+    },
+    {
+      "path": "evidence/review-reading-hold/report.json",
+      "bytes": 82653,
+      "sha256": "900548105fcb38169795cace603471b2951180f7b4dd295e661fd08847854d56"
+    },
+    {
+      "path": "evidence/review-reading-hold/stills-review.json",
+      "bytes": 3470,
+      "sha256": "fbb18f41858a66f38d58b7902d1d028316ccf1a1d34f63bea0cdd64ee483692b"
+    },
+    {
+      "path": "evidence/review-reading-hold/timing-review.json",
+      "bytes": 3917,
+      "sha256": "b1ea775450c850ae5ce209ef2adfa32585279dbf97cd1821a8aed3adfb5e8f91"
+    },
+    {
+      "path": "evidence/review-reading-hold/timing-review.mjs",
+      "bytes": 2877,
+      "sha256": "2caad3f8432477bda305294dc62fe58c34aa9373805e8a3041ea390bffcb5392"
+    },
+    {
+      "path": "export-anchors.py",
+      "bytes": 3293,
+      "sha256": "9416485d41a4613648734f5fa6032f33db82726a85a0048586540a631dd6a46d"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 1442,
+      "sha256": "8e46d37c12103f631511239468ad06ad9c5389de4fdbbe135c262c7d427aa5cd"
+    },
+    {
+      "path": "media/reading-hold/REJECTED.md",
+      "bytes": 515,
+      "sha256": "38d75b02c92baf0d7fe24036a2959a91486c79e847c24f43e6dcbb04ce10c038"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/asset.json",
+      "bytes": 11858,
+      "sha256": "68c9cdcc3562c071c763949af7b9775cb78bb6d32e19d187a364837162bd2dc8"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/blender.json",
+      "bytes": 33321,
+      "sha256": "da4bdc9607d0f89d71be02f20d8de58819f1d08d9822ba17f16360e180aae0ca"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/clip.mp4",
+      "bytes": 689909,
+      "sha256": "a902f2c6aba17cd18ddd81a64867a4e4a0170013f4526557d9983c246d37d17f"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/poster.png",
+      "bytes": 448442,
+      "sha256": "8f7aa349dd8649ead62d9bb2061eff35b3d3eb7e2b922dabd0a3e959495cbb97"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/receipt.json",
+      "bytes": 53916,
+      "sha256": "6f8470a5d4893b4bfe9da9598cca1ece376ad1415fda70f2f8a30cf1f19f4643"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/render-config.json",
+      "bytes": 12538,
+      "sha256": "d355add7e470924893221e93a74c78a1b60e55ea8c3088e6305665ada6f439cc"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/scene-checks.json",
+      "bytes": 561,
+      "sha256": "7a0b3802cb3d9c62442b0215cd558bf7d4427a35e8a8c88d363035f76833c358"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/scene.blend",
+      "bytes": 218259,
+      "sha256": "0d7cdff19a81eee0238809eb3e31bb7caecf0dc7a580605723dff1de2ef916aa"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/source/artkit.py",
+      "bytes": 8435,
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/source/camera_rig.py",
+      "bytes": 19347,
+      "sha256": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/source/chart_scene.py",
+      "bytes": 7500,
+      "sha256": "68219e7ee14c12bb50d6f025ca0847062b6642f61502780cec0de1ba628de9ed"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/source/graph-flight.json",
+      "bytes": 1379,
+      "sha256": "c38e593384151be74506ddd58f9d678a8abb13b4f78d8549f990d375dc47ddd1"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/source/graph-flight.py",
+      "bytes": 238,
+      "sha256": "67a06f67b08623a48329c5821ddd17aa5f2bfbf4d4fe5c7083994a726a387945"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-landscape/source/render.py",
+      "bytes": 7533,
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/asset.json",
+      "bytes": 11858,
+      "sha256": "211ec7afb575e06f03b50e580b676400dc8b9ff7acb004e2f1abdd9bc3b9ec86"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/blender.json",
+      "bytes": 33303,
+      "sha256": "8ac5e9cc2f9abccb4664cc2a5dc6ac61f0960642cef7f6480b82051dbbd0a172"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/clip.mp4",
+      "bytes": 1015436,
+      "sha256": "014ba0ec47b0678b7610c269f46bd4351ba7a1241a94fe4adb65671d30353e81"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/poster.png",
+      "bytes": 474527,
+      "sha256": "29eb39959495552547a84c8ec6b46b873c2c7ce95497f695ace31fa7c3f21edb"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/receipt.json",
+      "bytes": 53900,
+      "sha256": "cbb4745bd2cac7a789060fc5e85420df8d09d98b53bef2ab74487a73a885a560"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/render-config.json",
+      "bytes": 12535,
+      "sha256": "8a85de375606279ab39bc64631763d98af71e7d8df55965f54d1da3987d921fc"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/scene-checks.json",
+      "bytes": 562,
+      "sha256": "3669a187bf2c51bad15022a956dc460695ab34b7583dc6bbce8120f7447d9e1c"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/scene.blend",
+      "bytes": 226267,
+      "sha256": "e6069ccad661f1d1cb88a3ea3f8137aede24c1c7505a4d7c1e014dc77045e220"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/source/artkit.py",
+      "bytes": 8435,
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/source/camera_rig.py",
+      "bytes": 19347,
+      "sha256": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/source/chart_scene.py",
+      "bytes": 7500,
+      "sha256": "68219e7ee14c12bb50d6f025ca0847062b6642f61502780cec0de1ba628de9ed"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/source/graph-flight.json",
+      "bytes": 1379,
+      "sha256": "c38e593384151be74506ddd58f9d678a8abb13b4f78d8549f990d375dc47ddd1"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/source/graph-flight.py",
+      "bytes": 238,
+      "sha256": "67a06f67b08623a48329c5821ddd17aa5f2bfbf4d4fe5c7083994a726a387945"
+    },
+    {
+      "path": "media/reading-hold/reserve-path-vertical/source/render.py",
+      "bytes": 7533,
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/asset.json",
+      "bytes": 11861,
+      "sha256": "10c97fa5cf2c64e1f872e955311cc2ae2e94632c70f4615fd57750dc70c42e1c"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/blender.json",
+      "bytes": 33292,
+      "sha256": "27bac6b54f0bb7e4d067c0d869d72aaaeb5ab1c2867191840b344877d3f509eb"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/clip.mp4",
+      "bytes": 646407,
+      "sha256": "d903e1675b6cb31f3e19cf103160a93d91c6a04e8c29e3f3abdf21ea3e939529"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/poster.png",
+      "bytes": 438882,
+      "sha256": "0c17200ddd8dce3946e7d2df0a9a777ccd488fd6eddfc6146991928bffcd4b39"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/receipt.json",
+      "bytes": 53926,
+      "sha256": "caec71356e7395bbb0d93b5f6db32ef9af9a0fb5099a4bacc2045fe708265adc"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/render-config.json",
+      "bytes": 12571,
+      "sha256": "d284534b16e5a87d911749cca9dea71e9388f0d9178915132e4757d608cac098"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/scene-checks.json",
+      "bytes": 560,
+      "sha256": "5ffcaacc7805f3922e685fc73460619a5def1fa6fb531570913dcc373f8e056f"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/scene.blend",
+      "bytes": 209917,
+      "sha256": "e09952ccb28689ea149f522172d3ca4d98ad27a48dbb54fcca020461ec056973"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/source/artkit.py",
+      "bytes": 8435,
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/source/camera_rig.py",
+      "bytes": 19347,
+      "sha256": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/source/chart_scene.py",
+      "bytes": 7500,
+      "sha256": "68219e7ee14c12bb50d6f025ca0847062b6642f61502780cec0de1ba628de9ed"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/source/graph-flight-seasonal.json",
+      "bytes": 1363,
+      "sha256": "32c66f5eaa4c47835a7fb19281459907fa588287736fc6f55ae4a61d7c47ab70"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/source/graph-flight-seasonal.py",
+      "bytes": 225,
+      "sha256": "312d33aad6514632fe2d7a8314a46ed2eda5d4eb1522fc404e359cf1059e3f97"
+    },
+    {
+      "path": "media/reading-hold/seasonal-workload-landscape/source/render.py",
+      "bytes": 7533,
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/asset.json",
+      "bytes": 11858,
+      "sha256": "68c9cdcc3562c071c763949af7b9775cb78bb6d32e19d187a364837162bd2dc8"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/blender.json",
+      "bytes": 33338,
+      "sha256": "66a94142cd1652f441c4d870c6397d654d94c98a021918f70557fed512918324"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/clip.mp4",
+      "bytes": 692929,
+      "sha256": "c19c6bf6b556ec51f9cf71407e2b79ba95aae9dc5bd87b5d404d308d321520df"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/ending-anchors.json",
+      "bytes": 4087,
+      "sha256": "e12b19bc4615ef1ccc1fd0e21a8c57e02872d909c6ad01add590c282259b56a0"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/poster.png",
+      "bytes": 448441,
+      "sha256": "2768194a2842d45a8da0d46155f3b703dea3e039ae9ec9f79d27b7ade46769c4"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/receipt.json",
+      "bytes": 53935,
+      "sha256": "8462bb6e07bccf667baed3085a80237e62a51fda924f89ad2f1452d52512b9de"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/render-config.json",
+      "bytes": 12547,
+      "sha256": "e8f0c9210e2274efd0193d4b72cc66e2a43d7c1991371577d947a5b4a264d957"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/scene-checks.json",
+      "bytes": 1138,
+      "sha256": "25c0db96fb1ccb7dc2427102154054bf8d84492572a1d5a4090a75dbea216869"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/scene.blend",
+      "bytes": 248684,
+      "sha256": "9d831658da6d2ef328e2524a7cdc07eb17c3b6ec2ebe27beb5457c1bd8bc70fe"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/source/artkit.py",
+      "bytes": 8435,
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/source/camera_rig.py",
+      "bytes": 19347,
+      "sha256": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/source/chart_scene.py",
+      "bytes": 8058,
+      "sha256": "26e3597c6d3a25a3b2dcbefe864426aecac4fd3901a5c08d8e657813312eabef"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/source/graph-flight.json",
+      "bytes": 1379,
+      "sha256": "c38e593384151be74506ddd58f9d678a8abb13b4f78d8549f990d375dc47ddd1"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/source/graph-flight.py",
+      "bytes": 238,
+      "sha256": "67a06f67b08623a48329c5821ddd17aa5f2bfbf4d4fe5c7083994a726a387945"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-landscape/source/render.py",
+      "bytes": 7533,
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/asset.json",
+      "bytes": 11858,
+      "sha256": "211ec7afb575e06f03b50e580b676400dc8b9ff7acb004e2f1abdd9bc3b9ec86"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/blender.json",
+      "bytes": 33322,
+      "sha256": "8415ee1ee4bfe5fc5960721a31d12a66474aab6efebf3e4107adcc1181246055"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/clip.mp4",
+      "bytes": 994877,
+      "sha256": "c1f6429329341772185c92839e97debda42c582bb951b1f9967a9aa2fdb04e28"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/ending-anchors.json",
+      "bytes": 4085,
+      "sha256": "98c42e33845c69ee0c8d98a615d72df836925cc8f8d3f79b9b2f1fcd044888cd"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/poster.png",
+      "bytes": 473540,
+      "sha256": "cb962138bc083fab5f9634c6ee56f9e2b1c9f015145bcc6530d5a299fb650140"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/receipt.json",
+      "bytes": 53923,
+      "sha256": "9ee24669a5f070090455dd7db88bd84cfd7d62b48a6332d3aecf0ff9e2ee4b0f"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/render-config.json",
+      "bytes": 12544,
+      "sha256": "0cab7cbca1842ca9b4bcafc4e42fa1e7c5ae970809bdea032b653e7639570922"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/scene-checks.json",
+      "bytes": 1154,
+      "sha256": "03374597ec4bf8d0c1a9a848aed08029a148ea0d56f59836b8e664b59c582d96"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/scene.blend",
+      "bytes": 256350,
+      "sha256": "c3dd5b11fff17f52ab0c0a0b953315e86980cbd6484234838905d3287fc6d468"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/source/artkit.py",
+      "bytes": 8435,
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/source/camera_rig.py",
+      "bytes": 19347,
+      "sha256": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/source/chart_scene.py",
+      "bytes": 8058,
+      "sha256": "26e3597c6d3a25a3b2dcbefe864426aecac4fd3901a5c08d8e657813312eabef"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/source/graph-flight.json",
+      "bytes": 1379,
+      "sha256": "c38e593384151be74506ddd58f9d678a8abb13b4f78d8549f990d375dc47ddd1"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/source/graph-flight.py",
+      "bytes": 238,
+      "sha256": "67a06f67b08623a48329c5821ddd17aa5f2bfbf4d4fe5c7083994a726a387945"
+    },
+    {
+      "path": "media/reading-hold-v2/reserve-path-vertical/source/render.py",
+      "bytes": 7533,
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/asset.json",
+      "bytes": 11861,
+      "sha256": "10c97fa5cf2c64e1f872e955311cc2ae2e94632c70f4615fd57750dc70c42e1c"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/blender.json",
+      "bytes": 33301,
+      "sha256": "8c58904f2586bde1f6d6c51617fcc1f051ad477c3cdda916bf24125c1cde352b"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/clip.mp4",
+      "bytes": 643892,
+      "sha256": "2075b5e223e2c634cc440d9746bbd3cc25c309ad82ecc733dcaaa0033b5f7f9f"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/ending-anchors.json",
+      "bytes": 3346,
+      "sha256": "4064b96169ff7baf7d921ab7cac4d94757d9499a2716ce3ee5948265fe458841"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/poster.png",
+      "bytes": 438877,
+      "sha256": "c761e31bf0105fd683a980e1aa19702e4ecb613ec0fac48623d34d2123d9c9ff"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/receipt.json",
+      "bytes": 53933,
+      "sha256": "3da48cf2416a607b5fde5c24e530a224c562a3cd562723f0cb0519554e355282"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/render-config.json",
+      "bytes": 12580,
+      "sha256": "65937ec6a64979f9fa171749871e29982851a3b1f99472020b8158d328ebac20"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/scene-checks.json",
+      "bytes": 1152,
+      "sha256": "95d4067c369cce39cf13b4312b6b9c36d8e8e6bb0244318df1e1ce2d31a20e15"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/scene.blend",
+      "bytes": 240929,
+      "sha256": "ad28282bf5659529bf37af0c669c90ea291d01a4e034447f98b72cd9faedf1ed"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/source/artkit.py",
+      "bytes": 8435,
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/source/camera_rig.py",
+      "bytes": 19347,
+      "sha256": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/source/chart_scene.py",
+      "bytes": 8058,
+      "sha256": "26e3597c6d3a25a3b2dcbefe864426aecac4fd3901a5c08d8e657813312eabef"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/source/graph-flight-seasonal.json",
+      "bytes": 1363,
+      "sha256": "32c66f5eaa4c47835a7fb19281459907fa588287736fc6f55ae4a61d7c47ab70"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/source/graph-flight-seasonal.py",
+      "bytes": 225,
+      "sha256": "312d33aad6514632fe2d7a8314a46ed2eda5d4eb1522fc404e359cf1059e3f97"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-landscape/source/render.py",
+      "bytes": 7533,
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/asset.json",
+      "bytes": 11861,
+      "sha256": "632b67a936a33e3e086d02fe10dab9dcb9bce2df2f5d41e4a63896c3247eb5ef"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/blender.json",
+      "bytes": 33291,
+      "sha256": "72b68ff06bb71355c4de8b95029e786d10fa612954eee4a9be96f9ada0182da9"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/clip.mp4",
+      "bytes": 889161,
+      "sha256": "36b48f47cd13b7b7534ca30bc8b1f539eae282cfa003fb73a3a9c898e03439c2"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/ending-anchors.json",
+      "bytes": 3347,
+      "sha256": "c9a7cdc0ddab5feca853d8ca41901d244ecfc8687279b60ef8cb95b6352a0b0a"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/poster.png",
+      "bytes": 451556,
+      "sha256": "8500480bc8659c9051bfbd8ad803de4ede5912cb0a0852f46e5a4411574b47f8"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/receipt.json",
+      "bytes": 53928,
+      "sha256": "ca5d4830ac32e1f46e8c1264e94a8807010745c3d6c0b76e09f17e720d4fbb5a"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/render-config.json",
+      "bytes": 12577,
+      "sha256": "f2437fbd38f1ce1e163e7f07aa4c7014503795196c0f144a19309655d6f011ec"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/scene-checks.json",
+      "bytes": 1153,
+      "sha256": "0d4216f799857c318889fec4c4cc9d802332defb8a5965f990c2f9fed9458507"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/scene.blend",
+      "bytes": 245253,
+      "sha256": "8aef3c5f5d9297541764b4cb864cc44c7af462f0f4016baf1bfb5efff96610ba"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/source/artkit.py",
+      "bytes": 8435,
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/source/camera_rig.py",
+      "bytes": 19347,
+      "sha256": "9836ea1438779dd98bf61ce91f0e10f4adc90adf3957aaff813e0a6c8022130e"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/source/chart_scene.py",
+      "bytes": 8058,
+      "sha256": "26e3597c6d3a25a3b2dcbefe864426aecac4fd3901a5c08d8e657813312eabef"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/source/graph-flight-seasonal.json",
+      "bytes": 1363,
+      "sha256": "32c66f5eaa4c47835a7fb19281459907fa588287736fc6f55ae4a61d7c47ab70"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/source/graph-flight-seasonal.py",
+      "bytes": 225,
+      "sha256": "312d33aad6514632fe2d7a8314a46ed2eda5d4eb1522fc404e359cf1059e3f97"
+    },
+    {
+      "path": "media/reading-hold-v2/seasonal-workload-vertical/source/render.py",
+      "bytes": 7533,
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294"
+    },
+    {
+      "path": "specimens/reading-hold-v2/reserve-path-landscape/bindings.json",
+      "bytes": 596,
+      "sha256": "7575a93bde8f5f5a3008e160af75406ee16eb7b7cc5ee28a178e983de0e12aab"
+    },
+    {
+      "path": "specimens/reading-hold-v2/reserve-path-landscape/media/clip.mp4",
+      "bytes": 692929,
+      "sha256": "c19c6bf6b556ec51f9cf71407e2b79ba95aae9dc5bd87b5d404d308d321520df"
+    },
+    {
+      "path": "specimens/reading-hold-v2/reserve-path-landscape/storyboard.json",
+      "bytes": 10810,
+      "sha256": "700f9c26a23f63e91f9ecc770e3ced07308ab79d5b0b9a25c64cd52e6675ad4f"
+    },
+    {
+      "path": "specimens/reading-hold-v2/reserve-path-vertical/bindings.json",
+      "bytes": 596,
+      "sha256": "9fbc9ecdeab77ac4b120254b7838446094ecb3c6209101401e333976753679be"
+    },
+    {
+      "path": "specimens/reading-hold-v2/reserve-path-vertical/media/clip.mp4",
+      "bytes": 994877,
+      "sha256": "c1f6429329341772185c92839e97debda42c582bb951b1f9967a9aa2fdb04e28"
+    },
+    {
+      "path": "specimens/reading-hold-v2/reserve-path-vertical/storyboard.json",
+      "bytes": 10805,
+      "sha256": "9041b50f04495130d581a2bf4d45d9624ee9042dba72af4c8240ce76aae3b9e2"
+    },
+    {
+      "path": "specimens/reading-hold-v2/seasonal-workload-landscape/bindings.json",
+      "bytes": 596,
+      "sha256": "4ad9607a6562cfa0d4c8502f95c8225d24656e890334973b6c3a8c785c47d268"
+    },
+    {
+      "path": "specimens/reading-hold-v2/seasonal-workload-landscape/media/clip.mp4",
+      "bytes": 643892,
+      "sha256": "2075b5e223e2c634cc440d9746bbd3cc25c309ad82ecc733dcaaa0033b5f7f9f"
+    },
+    {
+      "path": "specimens/reading-hold-v2/seasonal-workload-landscape/storyboard.json",
+      "bytes": 9251,
+      "sha256": "6471216c2738b8ff371d2dad3dabd96fd54d2d256ca47fc3561a032cbd0e3313"
+    },
+    {
+      "path": "specimens/reading-hold-v2/seasonal-workload-vertical/bindings.json",
+      "bytes": 596,
+      "sha256": "af399808b143f169ecde12fda9d898764e4fc817bf3fbe1c96c8c7905cc48a40"
+    },
+    {
+      "path": "specimens/reading-hold-v2/seasonal-workload-vertical/media/clip.mp4",
+      "bytes": 889161,
+      "sha256": "36b48f47cd13b7b7534ca30bc8b1f539eae282cfa003fb73a3a9c898e03439c2"
+    },
+    {
+      "path": "specimens/reading-hold-v2/seasonal-workload-vertical/storyboard.json",
+      "bytes": 9240,
+      "sha256": "181fcf55b6a3fb3976276259726883c18602ec65efe90bcf6ce30560002d3d31"
+    },
+    {
+      "path": "timing-reading-hold-v2.json",
+      "bytes": 68,
+      "sha256": "c777b7ed4fe5b18caaa89d1118c03a60f235d9bfd21b378e79575acceab84b97"
+    },
+    {
+      "path": "timing-reading-hold.json",
+      "bytes": 68,
+      "sha256": "c777b7ed4fe5b18caaa89d1118c03a60f235d9bfd21b378e79575acceab84b97"
+    }
+  ]
+}

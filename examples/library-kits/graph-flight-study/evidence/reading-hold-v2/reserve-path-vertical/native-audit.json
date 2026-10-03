@@ -1,0 +1,112 @@
+[
+  {
+    "beat": "chart-flight",
+    "frame": 155,
+    "frames": 4,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"Month-end reserve\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 6.458333492279053,
+    "text": "Month-end reserve"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 155,
+    "frames": 4,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"Jan–Aug 2025 · Fictional monthly observa…\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 6.458333492279053,
+    "text": "Jan–Aug 2025 · Fictional monthly observations"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 155,
+    "frames": 4,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"Original fictional data · ClearFrame · 2…\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 6.458333492279053,
+    "text": "Original fictional data · ClearFrame · 2026-10-03"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"Reserve (USD)\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "Reserve (USD)"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"$0\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "$0"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"$2k\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "$2k"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"$4k\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "$4k"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"$6k\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "$6k"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"$7k\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "$7k"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"$1,800\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "$1,800"
+  },
+  {
+    "beat": "chart-flight",
+    "frame": 377,
+    "frames": 2,
+    "kind": "safe",
+    "level": "warning",
+    "message": "\"$6,100\" runs outside the title-safe area (keep type within the middle 80% of the frame)",
+    "seconds": 15.708333015441895,
+    "text": "$6,100"
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "originalCriterion": "raw RGB mean absolute difference <2.5",
+  "failure": {
+    "case": "reserve-path-vertical",
+    "frame": 228,
+    "rawMeanAbsoluteRgb": 2.73727369890503
+  },
+  "sameFrame": {
+    "channelBias": [
+      -0.3525029446407538,
+      1.5611569166339485,
+      -2.8118570867687476
+    ],
+    "correlation": 0.9976195314557914,
+    "absoluteRgbPercentiles50_90_95_99": [
+      2,
+      6,
+      7,
+      11
+    ]
+  },
+  "neighbors": {
+    "previousMean": 4.411149282380142,
+    "nextMean": 4.290427736334686
+  },
+  "sourceTags": [
+    "bt709",
+    "iec61966-2-1",
+    "bt709",
+    "tv"
+  ],
+  "nativeTags": [
+    "smpte170m",
+    "bt709",
+    "bt709",
+    "tv"
+  ],
+  "decision": "Separate spatial/clock comparison from color fidelity. Remove only constant channel bias, retain all raw differences and compare adjacent frames. Color fidelity remains unaccepted; the threshold was not raised.",
+  "heightCalibration": {
+    "originalFailure": {
+      "case": "seasonal-workload-vertical",
+      "frame": 330,
+      "barValue": 63,
+      "gridPlanePredictedTop": 291.29936385154724,
+      "barPlaneProjectedTop": 290.1137924194336,
+      "detectedFirstBlueRow": 288
+    },
+    "cause": "Tick plane is behind the front faces of the bars. Parallel perspective planes have different projected scales.",
+    "correction": "Use grid ticks plus one common bar-zero baseline to calibrate parallel-plane scale about image center; no per-bar top anchors are used. Keep 3-pixel tolerance."
+  }
+}

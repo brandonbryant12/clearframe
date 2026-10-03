@@ -1,0 +1,16 @@
+{
+  "status": "pass",
+  "framesChecked": 445,
+  "minimumCameraClearance": 0.7373796076900787,
+  "maximumHeightError": 7.629394538355427e-08,
+  "maximumPoseError": 1.8681027711409115e-06,
+  "endingBounds": [
+    0.1000177413225174,
+    0.26420897245407104,
+    0.8993610143661499,
+    0.7351206541061401
+  ],
+  "seekEqual": true,
+  "sceneSha256": "e09952ccb28689ea149f522172d3ca4d98ad27a48dbb54fcca020461ec056973",
+  "limits": "Baked-frame mesh bounds and full ending projection; continuous path proof is separate. No claim of unobscured intermediate views."
+}
