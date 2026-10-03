@@ -37,7 +37,7 @@ def chart_layout(config, values, ticks):
     stage_radius=max(40, -rig.path_at(path,1)['location'][1]+3,
                      (2*math.ceil(len(values)/2)-(len(values)-1)/2)*step+3)
     return {'spacing':step,'height':height,'unit':unit,'center':(len(values)-1)*step/2,
-            'barWidth':width,'stageRadius':stage_radius,'gridCorridor':list(corridor),'path':path}
+            'barWidth':width,'stageRadius':stage_radius,'stageHeight':max(300,12*stage_radius),'gridCorridor':list(corridor),'path':path}
 
 
 def chart_heights(phase, values, unit, phases):
@@ -53,8 +53,13 @@ def build_chart(config, values, ticks):
     path = layout["path"]
     import bpy
     import artkit as a
-    blue=a.material('Satin blue ceramic','#3465aa',roughness=.23,coat=.20)
-    bsdf=blue.node_tree.nodes.get('Principled BSDF');nodes=blue.node_tree.nodes;links=blue.node_tree.links
+    blue=a.material('Matte blue pigment','#3465aa',roughness=.35,coat=0)
+    nodes=blue.node_tree.nodes;links=blue.node_tree.links
+    nodes.remove(nodes.get('Principled BSDF'))
+    bsdf=nodes.new('ShaderNodeBsdfDiffuse')
+    bsdf.inputs['Color'].default_value=a.linear_rgba('#3465aa')
+    bsdf.inputs['Roughness'].default_value=.35
+    links.new(bsdf.outputs[0],nodes.get('Material Output').inputs['Surface'])
     coords=nodes.new('ShaderNodeTexCoord');noise=nodes.new('ShaderNodeTexNoise');noise.inputs['Scale'].default_value=120;noise.inputs['Detail'].default_value=2
     bump=nodes.new('ShaderNodeBump');bump.inputs['Strength'].default_value=.025;bump.inputs['Distance'].default_value=.004
     links.new(coords.outputs['Object'],noise.inputs['Vector']);links.new(noise.outputs['Fac'],bump.inputs['Height']);links.new(bump.outputs['Normal'],bsdf.inputs['Normal'])
@@ -69,7 +74,12 @@ def build_chart(config, values, ticks):
     # A continuous cyclorama removes the floor/world horizon without haze.
     radius=layout['stageRadius']
     rings=[(radius,-.015),(radius+4,.35),(radius+8,1.5),(radius+11,3.5),
-           (radius+13,6.5),(radius+14,11),(radius+14,60)]
+           (radius+13,6.5),(radius+14,11),(radius+14,layout['stageHeight'])]
+    outer_radius=radius+14
+    # A rounded closed ceiling also covers supported paths that see zenith.
+    for k in range(1,8):
+        angle=k*math.pi/16
+        rings.append((outer_radius*math.cos(angle),layout['stageHeight']+outer_radius*math.sin(angle)))
     vertices=[];faces=[];segments=128
     for radius,z in rings:
         for j in range(segments):
@@ -77,6 +87,9 @@ def build_chart(config, values, ticks):
     faces.append(tuple(range(segments)))
     for row in range(len(rings)-1):
         for j in range(segments):faces.append((row*segments+j,(row+1)*segments+j,(row+1)*segments+(j+1)%segments,row*segments+(j+1)%segments))
+    pole=len(vertices);vertices.append((center,0,layout['stageHeight']+outer_radius))
+    last_ring=(len(rings)-1)*segments
+    for j in range(segments):faces.append((last_ring+j,pole,last_ring+(j+1)%segments))
     mesh=bpy.data.meshes.new('Continuous studio surface');mesh.from_pydata(vertices,[],faces);mesh.update()
     stage=bpy.data.objects.new('Seamless stage',mesh);bpy.context.collection.objects.link(stage);mesh.materials.append(base)
     for poly in mesh.polygons:poly.use_smooth=poly.index>0
@@ -99,10 +112,10 @@ def build_chart(config, values, ticks):
         bars.append(bar)
     world=bpy.data.worlds.new('Neutral studio sky');bpy.context.scene.world=world;world.use_nodes=True;world.node_tree.nodes['Background'].inputs[0].default_value=(.88,.93,1,1);world.node_tree.nodes['Background'].inputs[1].default_value=.35
     key=a.light('Long grazing key',(center-4.5,-9,height+3),(center,0,height/3),2400,12);key.data.shape='RECTANGLE';key.data.size_y=3
-    a.light('Edge separation',(center+3.5,6,height+4),(center,0,height/3),1700,8).data.use_shadow=False
+    a.light('Edge separation',(center+3.5,6,height+4),(center,0,height/3),500,8).data.use_shadow=False
     a.light('Soft entry fill',(-4,-1,5),(4,0,1),550,6).data.use_shadow=False
     data=bpy.data.cameras.new('Camera');camera=bpy.data.objects.new('Camera',data);bpy.context.collection.objects.link(camera);bpy.context.scene.camera=camera
-    data.type='PERSP';data.lens=32;data.clip_start=.05;data.clip_end=300;data.dof.use_dof=False
+    data.type='PERSP';data.lens=32;data.clip_start=.05;data.clip_end=max(300,40*layout['stageRadius']);data.dof.use_dof=False
     camera['clearframe_graph_flight']=json.dumps({'version':2,'status':'exploratory','values':values,'ticks':ticks,'heightPerUnit':unit,'layout':layout,'purpose':'Flat data chart with declared camera clearance; perspective is not a common screen-space comparison.'})
     camera['clearframe_camera_review']=camera['clearframe_graph_flight']
     camera_update = rig.bind(camera, path)
