@@ -1,0 +1,39 @@
+# Independent source review — library browser and variation ledger
+
+**Source verdict: no remaining material source/data finding after the fixes below. Browser review remains pending.** This is not a browser acceptance or accessibility certification. No browser, server or alternate preview route was started by this reviewer. The requested localhost preview still requires authorization after the reported file-URL rejection.
+
+Reviewed 2026-10-03. Scope: `engine/lib/library-browser*.mjs`, `variation-ledger.mjs`, `engine/ui/library-browser/`, catalog mappings, example ledger, focused tests and browser direction. The reviewer changed only files in this evidence directory. Reviewed source hashes are retained in `source-review-checks.json`; implementation or generated-bundle changes after that snapshot require appropriate rechecking.
+
+## Evidence
+
+The focused library-browser suite passes 4/4. The same 17 independent regressions were rerun successfully against the final snapshot. The producer reports a final gated full-suite pass of 182/182 outside the sandbox after an initial sandbox sips-only failure; the reviewer did not rerun that full suite. The reviewer also wrote and ran 17 independent bounded source/data checks in `source-review-regressions.mjs`; results are retained in `source-review-regressions.json`. These checks create and remove their own temporary fixtures and static output. They do not run a browser, renderer, server or full package hash sweep.
+
+The current catalog contains eight packages, 39 example records and 71 inventory records. All 307 non-null local variant references resolve inside their permitted roots. All 76 receipt-backed variant durations equal the receipt's frame count divided by FPS. Record and format identities are unique, and every research source ID used by a record resolves. All four bundled example-ledger hashes match the named current storyboards. The final generated app embeds exactly the retained ledger and catalog JSON and marks those four source hashes verified. Final engine/UI source hashes are unchanged from the reviewed implementation. The refreshed evidence also hashes the generated app, HTML, CSS, catalog, ledger, declaration generator and current inventory. The declaration generator now records the current time for a new source/choice identity and preserves the original declaration time for an unchanged identity; it no longer invents fixed example timestamps. File identity and declared lifecycle remain distinct; no existing example becomes accepted merely because files exist or their hashes match.
+
+Focused fixtures cover verified, changed and missing media; missing audit mappings; missing storyboard retention; unsafe path rejection; source-hash proof states; normalized repetition labels; embedded-data escaping; and the ledger writer lock. Package-wide media hashing was intentionally left to the producer's separate verification run.
+
+## Findings resolved in source
+
+1. **Incorrect media duration.** The first catalog used `receipt.seconds`, which measures encoding elapsed time. This understated 64 variants; approval-network landscape appeared as 3.5686 seconds instead of 300/30 = 10 seconds. The final implementation uses validated frame count/FPS, then an explicit duration field, and never the encoder's elapsed seconds. All 76 current receipt-backed variants pass the independent comparison.
+
+2. **Example identity lost in generic titles.** Audit recipe names replaced authored titles, giving different examples identical labels and removing their distinguishing wording from search. The final catalog retains authored titles and uses a friendly inventory name only for the retirement fixtures' generic Rxx placeholder title. An independent search for “growing more slowly” now returns the intended slower-expansion example; pay and budget cases have distinct titles. Inventory operation terms remain searchable.
+
+3. **Missing audit broadened operation mappings.** A verified fixture mapped to C01 before deleting its audit, then incorrectly mapped to both C01 and C02 afterward. The final explicit case map survives a missing audit. Without that map or a usable audit, an ambiguous multi-operation package yields no inferred operation mapping. A missing storyboard now retains an inspectable example record while disabling its source and native preview links. The fixture verifies that declared prototype status stays unchanged while integrity issues remain visible.
+
+4. **Format-switch focus loss.** The format handler originally removed its own focused button through `replaceChildren()` with no focus restoration. The replacement code explicitly focuses the selected replacement format button. This is resolved at the source-logic level; actual keyboard focus behavior, focus visibility and tab order still need browser verification.
+
+5. **Duplicate normalized labels escaped repetition grouping.** `['Balance']` and `['Balance', 'balance']` initially formed different signatures despite the same normalized concept. The final canonicalizer deduplicates after case/whitespace normalization. The independent counterexample now forms one repeated concept. Material and camera differences remain context rather than claims of a new mechanism/story concept.
+
+6. **Initial ledger provenance was overstated.** A custom initial ledger was only schema-validated, but the UI used language implying recorded source bytes. The builder now hashes each named storyboard and supplies verified/changed/missing/unreadable states. The reviewer exercised all four states with independent fixtures. Browser imports remain explicitly unchecked declarations. Current bundled example history is labelled as examples, not fabricated production use.
+
+## Link, import and UI logic
+
+Local catalog references reject traversal, absolute paths, remote schemes, backslashes and symlinks outside the relevant root. Local browser URLs encode path components. Research links require HTTPS and use `noopener`. Imported ledger project paths and labels are displayed as text; imported asset IDs can only resolve to existing catalog records. Text rendering uses `textContent`, and embedded JSON escapes HTML script delimiters. A malicious-looking `</script>` title remained escaped in a generated temporary bundle. Invalid imported asset URLs are rejected. This is a bounded source review, not a penetration test.
+
+The variation writer hashes actual storyboard bytes, uses a file lock and atomic rename, and refuses to mix example/project ledgers. The independent lock fixture prevented a second writer and left source bytes unchanged. Repetition remains a report of declared labels; the code neither infers semantic novelty nor changes the film.
+
+The UI has labelled native controls, result-count announcements, pressed states for choices, visible-focus CSS, a skip link, non-autoplay video controls and explicit stopping of the previous video. Selection/format changes, imports, exports and errors have identifiable code paths. These observations do not establish rendered contrast, phone layout, screen-reader behavior, playback/seek behavior, download behavior or browser link handling.
+
+## Remaining review gate
+
+After the scoped browser preview is authorized, inspect desktop and phone layouts, keyboard navigation and format focus, filters and no-result states, actual video play/seek, source links, and ledger import/export/error recovery. The distributable browser bundle has now been regenerated and its exact files are bound in `source-review-checks.json`; use those files for the pending interactive review. It may be described as a source prototype. Interactive browser acceptance and any stronger publication-readiness claim remain pending.

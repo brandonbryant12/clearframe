@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "collections": [
+    {
+      "id": "drivers",
+      "name": "Drivers and counterforces",
+      "items": [
+        "C03",
+        "C04",
+        "C14",
+        "I01",
+        "B01",
+        "B05",
+        "M03"
+      ]
+    },
+    {
+      "id": "participation",
+      "name": "Many parts, one headline",
+      "items": [
+        "C05",
+        "C08",
+        "C18",
+        "I08",
+        "B08",
+        "M02"
+      ]
+    },
+    {
+      "id": "flows",
+      "name": "Flows, stores and constraints",
+      "items": [
+        "C16",
+        "I02",
+        "I05",
+        "I07",
+        "B04",
+        "B09",
+        "M05"
+      ]
+    },
+    {
+      "id": "time",
+      "name": "Time, expectation and changing regimes",
+      "items": [
+        "C01",
+        "C02",
+        "C04",
+        "C10",
+        "C11",
+        "C12",
+        "C15",
+        "C17",
+        "B12",
+        "M08"
+      ]
+    },
+    {
+      "id": "relationships",
+      "name": "Relationships and diversification",
+      "items": [
+        "C07",
+        "C08",
+        "I04",
+        "I09",
+        "B06",
+        "B13",
+        "M04"
+      ]
+    },
+    {
+      "id": "investment",
+      "name": "Investment and delayed payoff",
+      "items": [
+        "C10",
+        "C18",
+        "I06",
+        "I07",
+        "B11",
+        "M01"
+      ]
+    },
+    {
+      "id": "retirement",
+      "name": "Retirement, ownership and income",
+      "items": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09",
+        "C01",
+        "C09",
+        "C16",
+        "T02",
+        "I02",
+        "I07",
+        "I09",
+        "I10",
+        "I11",
+        "B04",
+        "B10",
+        "M10"
+      ]
+    }
+  ],
+  "packages": {
+    "balance-study": {
+      "inventoryIds": [
+        "I01",
+        "B01"
+      ],
+      "insert": "media/counterweight-mobile/clip.mp4",
+      "poster": "media/counterweight-mobile/poster.png",
+      "cases": {
+        "balance-study": [
+          "I01",
+          "B01"
+        ]
+      }
+    },
+    "research-study": {
+      "inventoryIds": [
+        "C01",
+        "B04"
+      ],
+      "cases": {
+        "comparison": [
+          "C01"
+        ],
+        "interval": [
+          "C01"
+        ],
+        "gate": [
+          "B04"
+        ]
+      }
+    },
+    "retirement-mechanisms": {
+      "inventoryIds": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08",
+        "R09"
+      ],
+      "cases": {
+        "r01": [
+          "R01"
+        ],
+        "r02": [
+          "R02"
+        ],
+        "r03": [
+          "R03"
+        ],
+        "r04": [
+          "R04"
+        ],
+        "r05": [
+          "R05"
+        ],
+        "r06": [
+          "R06"
+        ],
+        "r07": [
+          "R07"
+        ],
+        "r08": [
+          "R08"
+        ],
+        "r09": [
+          "R09"
+        ]
+      }
+    },
+    "camera-studies": {
+      "cases": {
+        "approval-network": [
+          "M01"
+        ],
+        "shared-infrastructure": [
+          "M01"
+        ],
+        "location-network": [
+          "M02"
+        ],
+        "specimen-field": [
+          "M02"
+        ],
+        "surface-inspection": [
+          "M03"
+        ],
+        "research-context": [
+          "M03"
+        ]
+      }
+    },
+    "physical-mechanisms": {
+      "cases": {
+        "resource-release": [
+          "B04"
+        ],
+        "water-transfer": [
+          "B04"
+        ],
+        "warehouse-bypass": [
+          "B09"
+        ],
+        "packet-routing": [
+          "B09"
+        ]
+      }
+    },
+    "drivers-and-flows": {
+      "cases": {
+        "cohort-adoption": [
+          "C02"
+        ],
+        "earnings-and-income": [
+          "C03"
+        ],
+        "fund-assets": [
+          "C16"
+        ],
+        "price-and-volume": [
+          "C03"
+        ],
+        "project-recovery": [
+          "C02"
+        ],
+        "warehouse-units": [
+          "C16"
+        ]
+      }
+    },
+    "participation-and-benchmarks": {
+      "cases": {
+        "narrow-leadership": [
+          "C05"
+        ],
+        "relative-completion": [
+          "C08"
+        ],
+        "relative-price": [
+          "C08"
+        ],
+        "service-health": [
+          "C05"
+        ]
+      }
+    },
+    "time-series-studies": {
+      "cases": {
+        "budget-and-prices": [
+          "C09"
+        ],
+        "interrupted-output": [
+          "C10"
+        ],
+        "pay-and-prices": [
+          "C09"
+        ],
+        "recovered-path": [
+          "C11"
+        ],
+        "slower-expansion": [
+          "C10"
+        ],
+        "unfinished-path": [
+          "C11"
+        ]
+      }
+    }
+  },
+  "sourceOnly": {
+    "B02": [
+      "library/sculptures/strata-landform.json",
+      "library/sculptures/strata-landform.py"
+    ],
+    "B03": [
+      "library/sculptures/ribbon-thread.json",
+      "library/sculptures/ribbon-thread.py"
+    ],
+    "B14": [
+      "library/sculptures/shadow-arcade.json",
+      "library/sculptures/shadow-arcade.py"
+    ]
+  }
+}

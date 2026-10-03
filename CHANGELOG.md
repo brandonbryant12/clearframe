@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Library discovery and declared choices.** An offline browser indexes retained examples, explicit inventory mappings, editable sources and review evidence. Package lifecycle stays separate from manifest integrity. A source-bound ledger records mechanism, material, camera and story choices and reports repeated declared concepts without treating a new palette as novelty. Interactive desktop/phone browser review remains pending. See `docs/library-browser/README.md`.
+
 - **Dated series prototypes.** Matched-price deflation, period-aware growth and annualization, complete-window sample statistics and observed drawdown/recovery feed twelve native examples. Shared dates, distinct units, missing-value gaps and explicit native source elements keep comparisons auditable. See `docs/time-series.md`; risk-adjusted metrics, vintage alignment, continuous playback and final master acceptance remain open.
 
 - **Authored camera prototypes.** Three original Blender recipes add detail-to-system and hero-to-field pullbacks plus a fixed-camera focus transfer. Complete deterministic poses, endpoint fitting and optical hold checks support separately composed landscape and portrait examples with sharp native qualifications. See `docs/camera-studies.md`; continuous playback and final master review remain pending.

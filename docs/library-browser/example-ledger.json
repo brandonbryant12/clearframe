@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "kind": "examples",
+  "title": "Example decisions",
+  "entries": [
+    {
+      "id": "e15fbcb5abdba8d795a68299225e34e2989eb88b96302b97605efbc3e79e4c3b",
+      "title": "Open the path, then transfer",
+      "project": "examples/library-kits/physical-mechanisms/specimens/water-transfer-landscape",
+      "recordedAt": "2026-10-03T07:35:37.315Z",
+      "storyboardSha256": "7e59fc856834b17cc42589b8210cf9297566ca3e1534b85fbab236a8e50ea699",
+      "assets": [
+        "physical-mechanisms/water-transfer",
+        "B04"
+      ],
+      "choices": {
+        "mechanisms": [
+          "Reservoir and gate"
+        ],
+        "materials": [
+          "Porcelain, graphite and transparent panels"
+        ],
+        "camera": [
+          "Fixed orthographic"
+        ],
+        "story": [
+          "Separate, open, transfer, isolate"
+        ]
+      },
+      "note": "Reuses the same authored reservoir as resource access; a new subject does not imply a new physical model."
+    },
+    {
+      "id": "2266061c982450f3c9afac425ef3ba87cc99ff88249dbe874c4c5ac6d7938540",
+      "title": "Availability has a release condition",
+      "project": "examples/library-kits/physical-mechanisms/specimens/resource-release-landscape",
+      "recordedAt": "2026-10-03T07:35:37.315Z",
+      "storyboardSha256": "cfe1504351ee084cfc16be6dd4585b1f7d61720e1b8d502c454a4dd4cc8004a8",
+      "assets": [
+        "physical-mechanisms/resource-release",
+        "B04"
+      ],
+      "choices": {
+        "mechanisms": [
+          "Reservoir and gate"
+        ],
+        "materials": [
+          "Porcelain, graphite and transparent panels"
+        ],
+        "camera": [
+          "Fixed orthographic"
+        ],
+        "story": [
+          "Separate, open, transfer, isolate"
+        ]
+      },
+      "note": "Example of intentional reuse with a different explanatory subject."
+    },
+    {
+      "id": "8e02169482e9b0e25a8714a2203d6dbac2602cede00a9114c99986246095280d",
+      "title": "A junction belongs to a system",
+      "project": "examples/library-kits/camera-studies/specimens/shared-infrastructure-landscape",
+      "recordedAt": "2026-10-03T07:35:37.315Z",
+      "storyboardSha256": "80c21a9798a1d2b86078448b2165c402d8dc51276b9dd26a97b39bf7c9ce0720",
+      "assets": [
+        "camera-studies/shared-infrastructure",
+        "M01"
+      ],
+      "choices": {
+        "mechanisms": [
+          "Connected manifold"
+        ],
+        "materials": [
+          "Mineral and ceramic"
+        ],
+        "camera": [
+          "Detail-to-system dolly"
+        ],
+        "story": [
+          "Reveal the system around one junction"
+        ]
+      },
+      "note": "Apparent pipe size and perspective do not encode measured amounts."
+    },
+    {
+      "id": "afd00bfaced12c6bf8fd1705218c1c63afc9126eb99c3528d0327ffd0e052f9e",
+      "title": "Still rising, but growing more slowly",
+      "project": "examples/library-kits/time-series-studies/specimens/slower-expansion-landscape",
+      "recordedAt": "2026-10-03T07:35:37.315Z",
+      "storyboardSha256": "03e1c63aa84c03fb7acd7ddd9a4b5629562f4a49a9d4e3fe3a946bbb27da81a3",
+      "assets": [
+        "time-series-studies/slower-expansion",
+        "C10"
+      ],
+      "choices": {
+        "mechanisms": [
+          "Linked dated panels"
+        ],
+        "materials": [
+          "Native lines and type"
+        ],
+        "camera": [
+          "Fixed quantitative view"
+        ],
+        "story": [
+          "Separate level, growth and change in growth"
+        ]
+      },
+      "note": "One date coordinate links three different units; the fictional growth rate falls while the level rises."
+    }
+  ]
+}

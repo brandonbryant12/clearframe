@@ -77,3 +77,5 @@ Choose native charts for exact quantities and Blender for physical appearance or
 ## Finding the next package
 
 Use the [finance-inspired inventory](research/timmer-library/index.html) to filter proposed work by medium, readiness and priority. Its research spans 2025-10-02 through 2026-10-02 and treats Timmer's material as a creative stress test for a general-purpose library. An inventory entry is not a built asset.
+
+Use the [retained-example browser](library-browser/index.html) for actual package media and source links. `library-browser --verify` checks a snapshot of manifest files; it does not change package lifecycle. The separate [creative-choice ledger](library-browser/README.md) records actual storyboard hashes with declared decisions and keeps example history distinct from project history. Interactive browser verification remains pending.

@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "status": "source-prototype",
+  "browserReview": "pending-scoped-localhost-approval-after-file-url-policy-rejection",
+  "catalog": {
+    "packages": 8,
+    "examples": 39,
+    "nativeVariants": 76,
+    "preparedInserts": 1,
+    "inventoryItems": 71,
+    "manifestFiles": 2384,
+    "issues": 0
+  },
+  "tests": {
+    "nodePassed": 182,
+    "nodeFailed": 0,
+    "focusedPassed": 4,
+    "independentPassed": 17,
+    "cliSmokePassed": 2
+  },
+  "limits": [
+    "No browser, accessibility or visual acceptance claimed",
+    "No existing asset lifecycle promoted",
+    "General candidate-sheet review remains open"
+  ],
+  "files": [
+    {
+      "path": "docs/library-browser/DIRECTION.md",
+      "bytes": 3024,
+      "sha256": "449b761ae2abf2c44427e8917862cd5885b081f371683e363ed5d42c8754e975"
+    },
+    {
+      "path": "docs/library-browser/README.md",
+      "bytes": 6155,
+      "sha256": "84e688b2527b035244c57f3c5934e46b88413ccc50d853ec990d6ebd47781782"
+    },
+    {
+      "path": "docs/library-browser/app.js",
+      "bytes": 204332,
+      "sha256": "bbedf974a4cf8c54169ced302a6dd8aa16048efbd26ba8374c6a04663e275c7c"
+    },
+    {
+      "path": "docs/library-browser/catalog.json",
+      "bytes": 236530,
+      "sha256": "84c393e522efe8e4f4e5f1f7a37e6dc9169d00e6148b41e1b3978af7b85144f6"
+    },
+    {
+      "path": "docs/library-browser/evidence/catalog-build.json",
+      "bytes": 192,
+      "sha256": "679351af2c480321807a4e151707974afd41410192015ee598bbeb3a40f29065"
+    },
+    {
+      "path": "docs/library-browser/evidence/cli-smoke.json",
+      "bytes": 217,
+      "sha256": "1ab879d3f41422886fc84f608abf8d53f1a5ad26bb684aa383486ed0d9dfdc2c"
+    },
+    {
+      "path": "docs/library-browser/evidence/node-tests.txt",
+      "bytes": 18387,
+      "sha256": "e8ebcebb5f6138bb0cb4ab26e8ad4a16d0e5015b934fe713761efe3dd56ece70"
+    },
+    {
+      "path": "docs/library-browser/evidence/source-review-checks.json",
+      "bytes": 6109,
+      "sha256": "2d4b7ea8b42a3b53a5dc9c377cf1ab06769872773f319795dfb3dc40a10c95a9"
+    },
+    {
+      "path": "docs/library-browser/evidence/source-review-regressions.json",
+      "bytes": 2104,
+      "sha256": "ecb31d8769acd536334a4840f37d3770c8e78c6bb9ee375b79ebc4ee6f7a39d3"
+    },
+    {
+      "path": "docs/library-browser/evidence/source-review-regressions.mjs",
+      "bytes": 8282,
+      "sha256": "2d748d17e687589bbbd78041f495f55f33f88aee0c6bc8efa166216616aa83aa"
+    },
+    {
+      "path": "docs/library-browser/evidence/source-review.md",
+      "bytes": 7722,
+      "sha256": "446ede72cff71a73e7c8612b67be3653a2daa4608f8291a1c358f221e42c6a16"
+    },
+    {
+      "path": "docs/library-browser/example-ledger.json",
+      "bytes": 3661,
+      "sha256": "d057d406e30fb4c7911757c9f2cd2f8ffc2ef054f635f7e9c668b973af962631"
+    },
+    {
+      "path": "docs/library-browser/example-ledger.mjs",
+      "bytes": 2451,
+      "sha256": "d9e1ac01a058494fd8e4edc4a0e876492617dab39c97ce7d5de01f2d1876e979"
+    },
+    {
+      "path": "docs/library-browser/index.html",
+      "bytes": 3324,
+      "sha256": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334"
+    },
+    {
+      "path": "docs/library-browser/style.css",
+      "bytes": 6885,
+      "sha256": "0c80ce1cd03abf96b895f46f19501e07a64df40ab74b03fa7e917ea8393b24cd"
+    },
+    {
+      "path": "docs/research/timmer-library/asset-links.json",
+      "bytes": 5121,
+      "sha256": "f7d7d006b0a28d6da08fe22bb1cac0fb3deebfc41abd9dc5c4beea7a2911e918"
+    },
+    {
+      "path": "docs/research/timmer-library/inventory.json",
+      "bytes": 76001,
+      "sha256": "8e564c27aa26f0f68d58c1c8f6d463ee3791f5d15df4e9dd34dbe43396af5d8a"
+    },
+    {
+      "path": "engine/cli.mjs",
+      "bytes": 33471,
+      "sha256": "75ff718e190480b54f702d59b64a91fc7e70c76aee91f003770903714b4084cd"
+    },
+    {
+      "path": "engine/lib/library-browser-build.mjs",
+      "bytes": 2348,
+      "sha256": "707dfd6f2a685ecffaa22d05f056e8f2394385fe4ef0e48ddf4732815f07c591"
+    },
+    {
+      "path": "engine/lib/library-browser.mjs",
+      "bytes": 9003,
+      "sha256": "829c57ccdd96541f1056f785f99a613d3b5b329d35e4c084fb77784c13913d59"
+    },
+    {
+      "path": "engine/lib/variation-ledger.mjs",
+      "bytes": 5125,
+      "sha256": "5a5119ff4eefcd877eaad7d837b7bea90d63bf684758b5103a24f561924a9eb6"
+    },
+    {
+      "path": "engine/ui/library-browser/app.js",
+      "bytes": 13150,
+      "sha256": "0981e68ee87f195a3fd097b17703be0d9030b020562df26d9511224ae0b76ea8"
+    },
+    {
+      "path": "engine/ui/library-browser/index.html",
+      "bytes": 3324,
+      "sha256": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334"
+    },
+    {
+      "path": "engine/ui/library-browser/style.css",
+      "bytes": 6894,
+      "sha256": "7457ba692f1c35216a06d83ce288be95082f43306840aaaa6b0116d93b22a1cf"
+    },
+    {
+      "path": "test/library-browser.test.mjs",
+      "bytes": 5180,
+      "sha256": "b0848547a33d801801d39c3e90b2d9ebc75e8ac1d5c6704ed2dd14329cf736a6"
+    }
+  ]
+}

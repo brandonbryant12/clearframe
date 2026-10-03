@@ -1873,7 +1873,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "proposed; not built",
+      "readiness": "Source prototype implemented: offline browser indexes retained packages and inventory with explicit mappings, previews, source links and separate file integrity; interactive desktop/phone browser review pending",
       "effort": "M",
       "sourceIds": [
         "S01",
@@ -1887,7 +1887,7 @@
         "file links",
         "source IDs"
       ],
-      "existing": "offline sculpture gallery exists; this research delivers a local searchable planning catalog.",
+      "existing": "engine/cli.mjs library-browser; engine/lib/library-browser*.mjs; engine/ui/library-browser; docs/library-browser/index.html; explicit asset-links.json",
       "guardrail": "Planning records are not installed assets; previews of existing media are distinguished from concepts.",
       "reuse": [
         "all library discovery"
@@ -1930,7 +1930,7 @@
       "category": "Tool",
       "priority": "Next",
       "implementation": "Extend",
-      "readiness": "proposed; not built",
+      "readiness": "Partial source prototype: exact-storyboard-hash ledger, declared mechanism/story repetition report, example thumbnails and import/export UI; interactive browser review and general candidate-sheet review remain pending",
       "effort": "M",
       "sourceIds": [
         "S01",
@@ -1945,7 +1945,7 @@
         "preview",
         "review notes"
       ],
-      "existing": "sheet, looks, critique and QA exist; cross-film variation memory/reporting is new.",
+      "existing": "library-log and library-variation commands; engine/lib/variation-ledger.mjs; docs/library-browser example decisions; sheet, looks, critique and QA remain available for film review",
       "guardrail": "Novel color or a new seed alone is not a new concept; never force a less truthful visual for variety.",
       "reuse": [
         "all recurring series"

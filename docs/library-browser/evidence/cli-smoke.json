@@ -1,0 +1,15 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "command": "library-log",
+      "exitCode": 0,
+      "entries": 1
+    },
+    {
+      "command": "library-variation",
+      "exitCode": 0,
+      "entries": 1
+    }
+  ]
+}

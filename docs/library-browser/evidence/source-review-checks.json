@@ -1,0 +1,159 @@
+{
+  "reviewStage": "source-review-complete-browser-pending",
+  "browserReview": "pending authorization; no browser, server or alternate preview route used by reviewer",
+  "focusedTests": {
+    "file": "test/library-browser.test.mjs",
+    "passed": 4
+  },
+  "catalog": {
+    "packages": 8,
+    "examples": 39,
+    "inventory": 71,
+    "existingSafeLocalReferences": 307,
+    "unresolvedSourceIds": 0,
+    "matchingBundledLedgerSourceHashes": 4
+  },
+  "findings": [
+    {
+      "id": "duration",
+      "observed": "64 variants use encoder elapsed receipt.seconds as media duration",
+      "example": {
+        "variant": "camera-studies/approval-network landscape",
+        "reportedSeconds": 3.568643667,
+        "frames": 300,
+        "fps": 30,
+        "actualSeconds": 10
+      },
+      "status": "resolved-in-source",
+      "browserVerified": null
+    },
+    {
+      "id": "specimen-title",
+      "observed": "Audit recipe overwrites authored example title; query slower returns no records despite slower-expansion",
+      "status": "resolved-in-source",
+      "browserVerified": null
+    },
+    {
+      "id": "missing-audit-mapping",
+      "fixture": {
+        "validAuditInventoryIds": [
+          "C01"
+        ],
+        "afterDeletingAuditInventoryIds": [
+          "C01",
+          "C02"
+        ],
+        "packageIds": [
+          "C01",
+          "C02"
+        ]
+      },
+      "observed": "Verified missing audit broadens operation mapping to every package operation",
+      "status": "resolved-in-source",
+      "browserVerified": null
+    },
+    {
+      "id": "format-focus",
+      "evidenceType": "static-source",
+      "observed": "Format button handler replaces selection subtree containing the focused button without focus restoration",
+      "status": "resolved-in-source",
+      "browserVerified": false
+    },
+    {
+      "id": "canonical-label-duplicates",
+      "fixture": {
+        "firstMechanisms": [
+          "Balance"
+        ],
+        "secondMechanisms": [
+          "Balance",
+          "balance"
+        ],
+        "sameStory": [
+          "Reveal"
+        ],
+        "repeatedGroups": 0
+      },
+      "observed": "Case-normalized duplicate labels prevent repetition grouping",
+      "status": "resolved-in-source",
+      "browserVerified": null
+    },
+    {
+      "id": "initial-ledger-provenance",
+      "evidenceType": "static-source",
+      "observed": "Custom initial ledger is only schema-validated, while imported:false displays recorded-from-files language",
+      "status": "resolved-in-source",
+      "browserVerified": null
+    }
+  ],
+  "finalFocusedTests": {
+    "file": "test/library-browser.test.mjs",
+    "passed": 4
+  },
+  "independentRegressionChecks": 17,
+  "finalVariantDurationChecks": 76,
+  "sourceHashes": {
+    "engine/lib/library-browser.mjs": "829c57ccdd96541f1056f785f99a613d3b5b329d35e4c084fb77784c13913d59",
+    "engine/lib/library-browser-build.mjs": "707dfd6f2a685ecffaa22d05f056e8f2394385fe4ef0e48ddf4732815f07c591",
+    "engine/lib/variation-ledger.mjs": "5a5119ff4eefcd877eaad7d837b7bea90d63bf684758b5103a24f561924a9eb6",
+    "engine/ui/library-browser/app.js": "0981e68ee87f195a3fd097b17703be0d9030b020562df26d9511224ae0b76ea8",
+    "engine/ui/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
+    "engine/ui/library-browser/style.css": "7457ba692f1c35216a06d83ce288be95082f43306840aaaa6b0116d93b22a1cf",
+    "docs/research/timmer-library/asset-links.json": "f7d7d006b0a28d6da08fe22bb1cac0fb3deebfc41abd9dc5c4beea7a2911e918",
+    "test/library-browser.test.mjs": "b0848547a33d801801d39c3e90b2d9ebc75e8ac1d5c6704ed2dd14329cf736a6"
+  },
+  "finalBundleHashes": {
+    "docs/library-browser/example-ledger.mjs": "d9e1ac01a058494fd8e4edc4a0e876492617dab39c97ce7d5de01f2d1876e979",
+    "docs/library-browser/example-ledger.json": "d057d406e30fb4c7911757c9f2cd2f8ffc2ef054f635f7e9c668b973af962631",
+    "docs/library-browser/app.js": "bbedf974a4cf8c54169ced302a6dd8aa16048efbd26ba8374c6a04663e275c7c",
+    "docs/library-browser/catalog.json": "84c393e522efe8e4f4e5f1f7a37e6dc9169d00e6148b41e1b3978af7b85144f6",
+    "docs/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
+    "docs/library-browser/style.css": "0c80ce1cd03abf96b895f46f19501e07a64df40ab74b03fa7e917ea8393b24cd",
+    "docs/library-browser/DIRECTION.md": "449b761ae2abf2c44427e8917862cd5885b081f371683e363ed5d42c8754e975",
+    "docs/research/timmer-library/inventory.json": "8e564c27aa26f0f68d58c1c8f6d463ee3791f5d15df4e9dd34dbe43396af5d8a"
+  },
+  "finalBundleChecks": {
+    "engineAndUiSourcesUnchanged": true,
+    "embeddedCatalogMatchesJson": true,
+    "embeddedLedgerMatchesJson": true,
+    "ledgerEntries": [
+      {
+        "id": "e15fbcb5abdba8d795a68299225e34e2989eb88b96302b97605efbc3e79e4c3b",
+        "recordedAt": "2026-10-03T07:35:37.315Z",
+        "storyboardHashMatches": true,
+        "embeddedLedgerMatches": true,
+        "embeddedProof": "verified"
+      },
+      {
+        "id": "2266061c982450f3c9afac425ef3ba87cc99ff88249dbe874c4c5ac6d7938540",
+        "recordedAt": "2026-10-03T07:35:37.315Z",
+        "storyboardHashMatches": true,
+        "embeddedLedgerMatches": true,
+        "embeddedProof": "verified"
+      },
+      {
+        "id": "8e02169482e9b0e25a8714a2203d6dbac2602cede00a9114c99986246095280d",
+        "recordedAt": "2026-10-03T07:35:37.315Z",
+        "storyboardHashMatches": true,
+        "embeddedLedgerMatches": true,
+        "embeddedProof": "verified"
+      },
+      {
+        "id": "afd00bfaced12c6bf8fd1705218c1c63afc9126eb99c3528d0327ffd0e052f9e",
+        "recordedAt": "2026-10-03T07:35:37.315Z",
+        "storyboardHashMatches": true,
+        "embeddedLedgerMatches": true,
+        "embeddedProof": "verified"
+      }
+    ],
+    "catalogVerifiedFlag": true,
+    "packageIssueCount": 0,
+    "independentRegressionsPassed": 17
+  },
+  "producerFullSuite": {
+    "passed": 182,
+    "total": 182,
+    "reviewerReran": false,
+    "note": "Producer reports final gated run outside sandbox passed; preceding sandbox run had a sips-only failure."
+  }
+}

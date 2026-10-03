@@ -64,6 +64,9 @@ const HELP = `ClearFrame — FFFrames motion graphics
 
 Library: palettes, treatments, sketches and playbooks are files in library/ (see library/README.md).
 A project's own library/ overrides them by id; --library DIR (or CLEARFRAME_LIBRARY) adds a shared one.
+  library-browser [--out DIR] [--verify] [--ledger FILE]  build an offline browser of retained examples and inventory
+  library-log <project> --choices FILE --ledger FILE [--assets R03,C01] [--note TEXT]  record declared choices with the current source hash
+  library-variation --ledger FILE     report recent declared mechanism/story repetitions
 
 FFFrames is the only active renderer. Preview produces a review MP4.
 Draft permits estimated timing; --scale 0.25–1 reduces review resolution only (default 1).
@@ -110,6 +113,10 @@ async function main() {
     'phase-seconds',
     'script',
     'model',
+    'ledger',
+    'choices',
+    'assets',
+    'note',
   ];
   const booleans = [
     'still',
@@ -128,6 +135,7 @@ async function main() {
     'dry-run',
     'light',
     'loop',
+    'verify',
   ];
   const { values: o, positionals } = parseArgs({
     args,
@@ -138,6 +146,25 @@ async function main() {
     ]),
   });
   if (!cmd || cmd === 'help' || o.help) return console.log(HELP);
+  if (cmd === 'library-browser') {
+    const { buildLibraryBrowser } = await import('./lib/library-browser-build.mjs');
+    const result = await buildLibraryBrowser({out:o.out,verify:o.verify,ledgerFile:o.ledger});
+    console.log(o.json ? JSON.stringify(result,null,2) : `${result.examples} examples, ${result.inventory} inventory items: ${result.path}\n${result.verified?'Hashes checked':'Hashes not checked'}; ${result.issues.length} file issues.`);
+    if(result.issues.length)process.exitCode=1;
+    return;
+  }
+  if (cmd === 'library-log') {
+    if(!positionals[0]||!o.choices||!o.ledger)throw Error('library-log needs a project, --choices FILE and --ledger FILE');
+    const {recordProject}=await import('./lib/variation-ledger.mjs');
+    const result=recordProject({project:positionals[0],choices:JSON.parse(fs.readFileSync(o.choices,'utf8')),ledgerFile:o.ledger,assets:o.assets?.split(',')??[],note:o.note??''});
+    return console.log(o.json?JSON.stringify(result,null,2):`${result.added?'Recorded':'Already recorded'} source ${result.id} in ${path.resolve(o.ledger)}`);
+  }
+  if (cmd === 'library-variation') {
+    if(!o.ledger)throw Error('library-variation needs --ledger FILE');
+    const {summarizeVariation}=await import('./lib/variation-ledger.mjs');
+    const result=summarizeVariation(JSON.parse(fs.readFileSync(o.ledger,'utf8')));
+    return console.log(JSON.stringify(result,null,2));
+  }
   // --library DIR layers a shared library (brand kit, team templates) like CLEARFRAME_LIBRARY.
   if (o.library) {
     process.env.CLEARFRAME_LIBRARY = [process.env.CLEARFRAME_LIBRARY, path.resolve(o.library)]

@@ -1,0 +1,77 @@
+{
+  "reviewedAt": "2026-10-03T07:36:02.120Z",
+  "scope": "Focused source/data fixtures only; no browser, server, renderer or full package hash sweep",
+  "results": [
+    {
+      "name": "Current catalog has 8 kits, 39 examples, 71 inventory items",
+      "passed": true
+    },
+    {
+      "name": "Safe existing local variant links",
+      "passed": true,
+      "count": 307
+    },
+    {
+      "name": "Media durations equal frame count divided by FPS",
+      "passed": true,
+      "count": 76
+    },
+    {
+      "name": "Authored specimen titles distinguish operation examples",
+      "passed": true
+    },
+    {
+      "name": "All record research IDs resolve",
+      "passed": true
+    },
+    {
+      "name": "Verified fixture preserves declared prototype lifecycle",
+      "passed": true
+    },
+    {
+      "name": "Changed video disables preview without changing lifecycle",
+      "passed": true
+    },
+    {
+      "name": "Missing video remains an inspectable issue",
+      "passed": true
+    },
+    {
+      "name": "Explicit case mapping survives missing audit without broadening",
+      "passed": true
+    },
+    {
+      "name": "Ambiguous package mapping is unavailable when audit is missing",
+      "passed": true
+    },
+    {
+      "name": "Missing storyboard keeps record, disables source and media",
+      "passed": true
+    },
+    {
+      "name": "Traversal, remote references, absolute paths and escape symlinks reject",
+      "passed": true
+    },
+    {
+      "name": "Case/whitespace duplicate labels remain one declared concept",
+      "passed": true
+    },
+    {
+      "name": "Unsafe imported asset URL cannot become a library link",
+      "passed": true
+    },
+    {
+      "name": "Initial ledger distinguishes verified/changed/missing/unreadable source bytes",
+      "passed": true
+    },
+    {
+      "name": "Embedded ledger text escapes HTML script delimiters",
+      "passed": true
+    },
+    {
+      "name": "Ledger lock prevents concurrent writer and preserves source bytes",
+      "passed": true
+    }
+  ],
+  "browserReview": "pending explicit browser-preview authorization"
+}

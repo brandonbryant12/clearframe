@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ClearFrame library</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<a class="skip" href="#selection">Skip to selected asset</a>
+<header><div><h1>ClearFrame library</h1><p>Find a visual operation. Inspect the motion. Adapt the source.</p></div><a href="#choices">Creative choices</a></header>
+<main>
+<section class="discovery" aria-label="Find assets">
+<div class="searchline"><label class="search">Search the library<input id="query" type="search" placeholder="Try vesting, missing data, pullback or C09" autocomplete="off"></label><div class="tabs" role="group" aria-label="Catalog view"><button id="examples-tab" aria-pressed="true">Examples</button><button id="inventory-tab" aria-pressed="false">Inventory</button></div></div>
+<div class="filters"><label>Collection<select id="collection"></select></label><label>Purpose<select id="purpose"></select></label><label>Medium<select id="medium"></select></label><label id="status-label">Package status<select id="status"></select></label><label class="checkbox"><input id="preview-only" type="checkbox">With video</label><button id="reset" class="quiet">Reset filters</button></div>
+</section>
+<div class="workbench">
+<section class="results" aria-label="Search results"><p id="count" role="status" aria-live="polite"></p><div id="results"></div></section>
+<section id="selection" class="selection" tabindex="-1" aria-label="Selected asset"></section>
+<aside id="inspector" aria-label="Source and evidence"></aside>
+</div>
+<section id="choices" class="choices" aria-labelledby="choices-title"><div class="choices-heading"><div><h2 id="choices-title">Creative choices</h2><p>Review recent mechanism, material, camera and story decisions.</p></div><div class="actions"><button id="restore-ledger">Example decisions</button><button id="empty-ledger">New project ledger</button><button id="export-ledger">Export JSON</button></div></div>
+<div id="ledger-summary"></div><div id="ledger-entries" class="ledger-entries"></div>
+<details class="import"><summary>Import a ledger</summary><p>Paste a ClearFrame ledger to inspect it here. Imported source hashes are declarations until checked against the actual project. Import replaces this browser session; export to keep changes.</p><label for="ledger-input">Ledger JSON</label><textarea id="ledger-input" rows="5" spellcheck="false"></textarea><button id="import-ledger">Import JSON</button><p id="ledger-message" role="status"></p></details>
+<details><summary>Record a project's choices</summary><p>Use the CLI to bind your declared choices to the current storyboard. Set mechanisms, materials, camera and story in a choices JSON file.</p><pre>node engine/cli.mjs library-log my-film --choices choices.json --ledger my-series.json --assets R03</pre><p>The ledger never changes a film. A repeated operation can be the most truthful choice.</p></details>
+</section>
+</main>
+<footer><p id="catalog-proof"></p><p>Examples use illustrative inputs. Read the package's sources, assumptions and review before adapting it.</p></footer>
+<noscript>This browser needs JavaScript. Package files remain available in examples/library-kits.</noscript>
+<script src="app.js"></script>
+</body></html>
