@@ -1,0 +1,60 @@
+{
+  "title": "A reservoir transfer behind clear panels",
+  "description": "A framed pair of transparent chambers exposes blue analytic fill planes. A guided amber gate lifts, the levels equalize, and the gate reseals before the reading hold.",
+  "use": "Resource availability, buffer redistribution and a staged liquid transfer.",
+  "theme": "research-paper",
+  "duration": 8,
+  "loop": false,
+  "posterPos": 0.55,
+  "copy": "Place exact balances in native graphics; leave the chamber levels unlabelled. Use the final static hold for the condition or consequence.",
+  "metaphor": "Qualitative geometry, not fluid simulation or measured balances. Equal floor areas and conserved authored volume maintain internal consistency; perspective and levels are not financial encodings.",
+  "parameters": [
+    "theme",
+    "seed",
+    "duration",
+    "fps",
+    "vertical",
+    "phaseSeconds"
+  ],
+  "motion": {
+    "version": 1,
+    "clock": "qualitative-pose",
+    "phases": [
+      {
+        "id": "ready",
+        "role": "hold",
+        "start": 0,
+        "end": 0.12,
+        "minSeconds": 0
+      },
+      {
+        "id": "opening",
+        "role": "action",
+        "start": 0.12,
+        "end": 0.28,
+        "minSeconds": 0.25
+      },
+      {
+        "id": "transfer",
+        "role": "action",
+        "start": 0.28,
+        "end": 0.68,
+        "minSeconds": 0.5
+      },
+      {
+        "id": "closing",
+        "role": "settle",
+        "start": 0.68,
+        "end": 0.8,
+        "minSeconds": 0.25
+      },
+      {
+        "id": "hold",
+        "role": "hold",
+        "start": 0.8,
+        "end": 1,
+        "minSeconds": 0.5
+      }
+    ]
+  }
+}

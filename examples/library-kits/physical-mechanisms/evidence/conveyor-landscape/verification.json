@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "passed-mechanical-checks",
+  "cases": [
+    {
+      "id": "conveyor-bypass",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/physical-mechanisms/build/renders/conveyor-landscape/conveyor-bypass",
+      "width": 960,
+      "height": 540,
+      "frames": 192,
+      "renderSeconds": 102.51916795899999,
+      "loop": false,
+      "loopTransformError": 5.800000190734863,
+      "loopSeam": 0.75,
+      "neighbourP95": 0.1808449074074074,
+      "finalHoldStep": 0.01099537037037037,
+      "reloadPixelsMatch": true,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 0,
+        "maxDifference": 0,
+        "changedFraction": 0
+      },
+      "posterPixelSha256": "57db9618fc8006340c0a4e4662d4fb6ef89d7dffac07d2909f090acb5948d0b6",
+      "reloadPixelSha256": "57db9618fc8006340c0a4e4662d4fb6ef89d7dffac07d2909f090acb5948d0b6"
+    }
+  ],
+  "startedAt": "2026-10-03T05:08:19.137Z",
+  "revision": "45c32d9ad128841058f80ebcf4b977265ac67c28",
+  "dirty": true,
+  "finishedAt": "2026-10-03T05:08:21.515Z"
+}

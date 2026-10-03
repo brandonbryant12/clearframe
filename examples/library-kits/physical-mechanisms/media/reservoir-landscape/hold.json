@@ -1,0 +1,12 @@
+{
+  "sourceClipSha256": "309050de4eec62c901c215cf91c25989f510bd55215bce0fd746c57e07cc0c46",
+  "sourceFrame": 191,
+  "sourceFps": 24,
+  "file": "final-frame.png",
+  "sha256": "c049389221e08f6fd49df70b69a71a19f7f8e8bee6c5aeef3cd279eac60661d4",
+  "holdClip": "final-hold.mp4",
+  "holdClipSha256": "f9610fe3f071053db03e0c2fbfb8b30bc0911e2cf6ee1356f2cc544760551fca",
+  "sourceYuvSha256": "f4a083cd57109780f1e4313d73c3e90ab66146479b277b927a9e058160e8ca38",
+  "holdYuvEndpointsEqual": true,
+  "purpose": "Explicit native reading hold; lossless source-YUV final frame clone, no new motion or simulation."
+}

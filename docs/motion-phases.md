@@ -2,7 +2,7 @@
 
 Prepared motion can expose named frame intervals so an editor can place native evidence after the object settles. This is a timing contract for qualitative artwork. It is not a financial timeline, a measured event clock, or a physics simulation.
 
-All nine built-in sculpture recipes now declare `motion.version: 1` and `clock: "qualitative-pose"`. The gate, bridge and quiz declare initial hold, action and final hold phases. The six continuously moving loops declare one `cycle`; a nominal open-looking pose does not imply that the camera, light or every object has stopped.
+All eleven built-in sculpture recipes now declare `motion.version: 1` and `clock: "qualitative-pose"`. The gate, bridge and quiz declare initial hold, action and final hold phases. The reservoir and conveyor add staged transfer/closure and queue/bypass phases. The six continuously moving loops declare one `cycle`; a nominal open-looking pose does not imply that the camera, light or every object has stopped.
 
 ## Authoring
 

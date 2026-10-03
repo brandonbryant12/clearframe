@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "id": "reservoir-transfer",
+  "status": "passed",
+  "framesChecked": 193,
+  "clipSha256": "309050de4eec62c901c215cf91c25989f510bd55215bce0fd746c57e07cc0c46",
+  "sourceHashes": {
+    "scripts/blender/render.py": "63a05859b48fea5c6a08be18fa8948368add552321755c18e5675381bffe4d7c",
+    "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+    "library/sculptures/reservoir-transfer.py": "f73c2bd508e6580ff71bd4088aa5705c5555cba01622ff2572428acae344dfe6",
+    "library/sculptures/reservoir-transfer.json": "456b5b65d5ad762913405fbad0429c4de7366ea2c8a916ce543acf2e9d3e6f57"
+  },
+  "safe": [
+    0.08,
+    0.15,
+    0.92,
+    0.76
+  ],
+  "projectedBounds": [
+    0.28427422046661377,
+    0.15301978588104248,
+    0.7157257199287415,
+    0.7569802403450012
+  ],
+  "minimumPacketSeparation": null,
+  "maxVolumeDrift": 4.688898549431997e-07,
+  "maxFloorDrift": 3.3378601049793843e-08,
+  "endpointIncluded": true,
+  "limitations": "Baked geometric invariants and projected bounding boxes only; no physics or exhaustive rendered occlusion test."
+}

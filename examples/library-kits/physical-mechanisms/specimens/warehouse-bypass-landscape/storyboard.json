@@ -1,0 +1,260 @@
+{
+  "version": 2,
+  "title": "A queue can use another route",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "research-paper",
+  "type": "inter",
+  "backdrop": "none",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.3
+  },
+  "transition": "cut",
+  "sfx": "off",
+  "captions": false,
+  "music": false,
+  "assets": [
+    {
+      "id": "mechanism",
+      "kind": "clip",
+      "file": "media/clip.mp4"
+    },
+    {
+      "id": "settled",
+      "kind": "clip",
+      "file": "media/final-hold.mp4"
+    }
+  ],
+  "sources": [
+    {
+      "claim": "Warehouse routing: Illustrative routing. Tokens and speed do not encode throughput.",
+      "source": "Original ClearFrame procedural artwork and fictional explanatory scenario."
+    }
+  ],
+  "beats": [
+    {
+      "id": "mechanism",
+      "block": "canvas",
+      "duration": 8,
+      "camera": "none",
+      "exit": "none",
+      "plate": {
+        "asset": "mechanism",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "source": "Illustrative routing. Tokens and speed do not encode throughput.",
+        "sourceSize": 55.68,
+        "elements": [
+          {
+            "id": "subject",
+            "type": "text",
+            "text": "Warehouse routing",
+            "x": 153.6,
+            "y": 108,
+            "size": 36.48,
+            "width": 1612.8,
+            "height": 43.2,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "text"
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "text": "A queue can use another route",
+            "x": 153.6,
+            "y": 178.20000000000002,
+            "size": 61.44,
+            "width": 1612.8,
+            "height": 88.56,
+            "fit": 1612.8,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "display"
+          },
+          {
+            "id": "phase-ready",
+            "type": "text",
+            "text": "Incoming work",
+            "x": 153.6,
+            "y": 237.6,
+            "size": 48,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 0.7133333333333334,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-approach",
+            "type": "text",
+            "text": "Approach the narrow neck",
+            "x": 153.6,
+            "y": 237.6,
+            "size": 48,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 0.8333333333333334,
+            "enter": "fade",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 2.13,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-queued",
+            "type": "text",
+            "text": "The queue waits",
+            "x": 153.6,
+            "y": 237.6,
+            "size": 48,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 2.25,
+            "enter": "fade",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 2.9216666666666664,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-opening",
+            "type": "text",
+            "text": "Open an alternate passage",
+            "x": 153.6,
+            "y": 237.6,
+            "size": 48,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 3.0416666666666665,
+            "enter": "fade",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 3.755,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-release",
+            "type": "text",
+            "text": "Follow the bypass",
+            "x": 153.6,
+            "y": 237.6,
+            "size": 48,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 3.875,
+            "enter": "fade",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 6.296666666666667,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-hold",
+            "type": "text",
+            "text": "Clear of the constraint",
+            "x": 153.6,
+            "y": 237.6,
+            "size": 48,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 6.416666666666667,
+            "enter": "fade",
+            "dur": 0.12
+          }
+        ]
+      }
+    },
+    {
+      "id": "reading-hold",
+      "block": "canvas",
+      "duration": 2,
+      "camera": "none",
+      "exit": "none",
+      "transition": "cut",
+      "plate": {
+        "asset": "settled",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "source": "Illustrative routing. Tokens and speed do not encode throughput.",
+        "sourceSize": 55.68,
+        "elements": [
+          {
+            "id": "subject",
+            "type": "text",
+            "text": "Warehouse routing",
+            "x": 153.6,
+            "y": 108,
+            "size": 36.48,
+            "width": 1612.8,
+            "height": 43.2,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "text"
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "text": "A queue can use another route",
+            "x": 153.6,
+            "y": 178.20000000000002,
+            "size": 61.44,
+            "width": 1612.8,
+            "height": 88.56,
+            "fit": 1612.8,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "display"
+          },
+          {
+            "id": "phase-hold",
+            "type": "text",
+            "text": "Clear of the constraint",
+            "x": 153.6,
+            "y": 237.6,
+            "size": 48,
+            "width": 1612.8,
+            "height": 73.44000000000001,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          }
+        ]
+      }
+    }
+  ]
+}

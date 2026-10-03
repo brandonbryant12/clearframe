@@ -1,0 +1,67 @@
+{
+  "title": "A queued conveyor finds another passage",
+  "description": "Four ceramic packets approach a narrow neck, wait, and travel through a separately opened U-shaped bypass.",
+  "use": "Logistics bottlenecks, work queues and alternate network paths.",
+  "theme": "research-paper",
+  "duration": 8,
+  "loop": false,
+  "posterPos": 0.55,
+  "copy": "Name the constraint with native copy while packets wait. Explain the alternate route after its gate opens. Keep rates, quantities and measured delay in native graphics.",
+  "metaphor": "Deterministic qualitative routing, not simulated throughput, congestion or transit time. Token count, speed and route dimensions encode no evidence.",
+  "parameters": [
+    "theme",
+    "seed",
+    "duration",
+    "fps",
+    "vertical",
+    "phaseSeconds"
+  ],
+  "motion": {
+    "version": 1,
+    "clock": "qualitative-pose",
+    "phases": [
+      {
+        "id": "ready",
+        "role": "hold",
+        "start": 0,
+        "end": 0.1,
+        "minSeconds": 0
+      },
+      {
+        "id": "approach",
+        "role": "action",
+        "start": 0.1,
+        "end": 0.28,
+        "minSeconds": 0.25
+      },
+      {
+        "id": "queued",
+        "role": "hold",
+        "start": 0.28,
+        "end": 0.38,
+        "minSeconds": 0.25
+      },
+      {
+        "id": "opening",
+        "role": "action",
+        "start": 0.38,
+        "end": 0.48,
+        "minSeconds": 0.25
+      },
+      {
+        "id": "release",
+        "role": "action",
+        "start": 0.48,
+        "end": 0.8,
+        "minSeconds": 0.5
+      },
+      {
+        "id": "hold",
+        "role": "hold",
+        "start": 0.8,
+        "end": 1,
+        "minSeconds": 0.5
+      }
+    ]
+  }
+}

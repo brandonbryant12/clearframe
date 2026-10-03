@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "passed-mechanical-checks",
+  "cases": [
+    {
+      "id": "reservoir-transfer",
+      "directory": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/physical-mechanisms/build/renders/reservoir-landscape/reservoir-transfer",
+      "width": 960,
+      "height": 540,
+      "frames": 192,
+      "renderSeconds": 153.995849292,
+      "loop": false,
+      "loopTransformError": 0.5400000810623169,
+      "loopSeam": 1.1390335648148149,
+      "neighbourP95": 0.1205150462962963,
+      "finalHoldStep": 0.010127314814814815,
+      "reloadPixelsMatch": false,
+      "reloadWithinTolerance": true,
+      "reloadDifference": {
+        "changedChannels": 1,
+        "maxDifference": 1,
+        "changedFraction": 6.430041152263375e-7
+      },
+      "posterPixelSha256": "c062f886b5793990b41c0b53b9af0450667ae875206de5964f8b75e2688adbaa",
+      "reloadPixelSha256": "1fbeb00aeabc987fef890aa5aa146567f9781b14fdb0b3c753b6090115c55b69"
+    }
+  ],
+  "startedAt": "2026-10-03T05:03:55.134Z",
+  "revision": "45c32d9ad128841058f80ebcf4b977265ac67c28",
+  "dirty": true,
+  "finishedAt": "2026-10-03T05:03:57.558Z"
+}

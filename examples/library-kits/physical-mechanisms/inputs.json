@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "basis": "Original illustrative subjects. These use the same reusable mechanisms; they are not independently simulated systems or measured datasets.",
+  "cases": [
+    {
+      "id": "resource-release",
+      "mechanism": "reservoir",
+      "title": "Availability has a release condition",
+      "subject": "Resource access",
+      "source": "Illustrative access policy. Levels do not represent money.",
+      "labels": { "ready": "Held separately", "opening": "Release condition met", "transfer": "Resources redistribute", "closing": "Access closes", "hold": "Hold the settled state" }
+    },
+    {
+      "id": "water-transfer",
+      "mechanism": "reservoir",
+      "title": "Open the path, then transfer",
+      "subject": "Tank operation",
+      "source": "Illustrative water transfer; no fluid simulation or measurements.",
+      "labels": { "ready": "Unequal levels", "opening": "Open the gate", "transfer": "Levels equalize", "closing": "Isolate the chambers", "hold": "The levels have settled" }
+    },
+    {
+      "id": "warehouse-bypass",
+      "mechanism": "conveyor",
+      "title": "A queue can use another route",
+      "subject": "Warehouse routing",
+      "source": "Illustrative routing. Tokens and speed do not encode throughput.",
+      "labels": { "ready": "Incoming work", "approach": "Approach the narrow neck", "queued": "The queue waits", "opening": "Open an alternate passage", "release": "Follow the bypass", "hold": "Clear of the constraint" }
+    },
+    {
+      "id": "packet-routing",
+      "mechanism": "conveyor",
+      "title": "A constrained path need not be the only path",
+      "subject": "Network routing metaphor",
+      "source": "Illustrative network metaphor; no measured capacity or latency.",
+      "labels": { "ready": "Packets approach", "approach": "A constrained path", "queued": "Packets wait", "opening": "An alternate path opens", "release": "Packets take the detour", "hold": "The route is available" }
+    }
+  ]
+}

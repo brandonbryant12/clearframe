@@ -2,6 +2,7 @@
 
 ## 0.5.0 — unreleased
 
+- **Reservoir and conveyor prototypes.** Two original Blender mechanisms add conserved analytic fill, staged gates, a spaced queue and a bypass route. Opt-in orthographic framing reserves copy space; four source clips retain baked geometry and saved-scene checks. Eight native examples reuse source phase cues and an explicit still reading hold. See `docs/physical-mechanisms.md`; continuous playback and final master acceptance remain pending.
 - **Motion phase contracts.** All nine sculpture recipes expose named frame intervals and loop intent. `sculpture --phase-seconds timing.json` retimes deterministic poses and verifies static transform holds. A separate bounded playback planner preserves action/minimum holds and records exact encoded frame selections. Two retained draft clips prove phase timing and saved-scene reproduction; the portrait bridge framing now retains its plinth. See `docs/motion-phases.md`. Reservoir/conveyor/camera work and continuous playback acceptance remain open.
 
 - **Participation and benchmark assets.** Full-membership count/weight summaries and signed benchmark differences feed eight landscape/vertical specimens. Missing members stay in their denominators; observed zero size and missing metrics have distinct marks. Circle radii follow square roots so area encodes a separate amount. Native quantities remain fixed through fades, with retained source, encoded evidence and independent review; continuous playback remains pending.

@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "id": "conveyor-bypass",
+  "status": "passed",
+  "framesChecked": 193,
+  "clipSha256": "f42e7aa4c7b88a1e03cdbbb05854490c27f940787b4c650ee3e952988c5942b6",
+  "sourceHashes": {
+    "scripts/blender/render.py": "63a05859b48fea5c6a08be18fa8948368add552321755c18e5675381bffe4d7c",
+    "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+    "library/sculptures/conveyor-bypass.py": "b8c18c5c2f8ca6359e3d22c14b798b8912bc09fc76585b299ba222cf76854dde",
+    "library/sculptures/conveyor-bypass.json": "c994d86a9d7bf0504d39bede7780374bd54f082caac30cad5591d6ae229ef729"
+  },
+  "safe": [
+    0.08,
+    0.15,
+    0.92,
+    0.76
+  ],
+  "projectedBounds": [
+    0.2292352169752121,
+    0.15301984548568726,
+    0.7707647085189819,
+    0.7569802403450012
+  ],
+  "minimumPacketSeparation": 0.601047201158675,
+  "maxVolumeDrift": 0,
+  "maxFloorDrift": 0,
+  "endpointIncluded": true,
+  "limitations": "Baked geometric invariants and projected bounding boxes only; no physics or exhaustive rendered occlusion test."
+}

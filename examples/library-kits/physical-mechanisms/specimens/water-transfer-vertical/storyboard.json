@@ -1,0 +1,240 @@
+{
+  "version": 2,
+  "title": "Open the path, then transfer",
+  "format": {
+    "preset": "vertical",
+    "fps": 30
+  },
+  "theme": "research-paper",
+  "type": "inter",
+  "backdrop": "none",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.3
+  },
+  "transition": "cut",
+  "sfx": "off",
+  "captions": false,
+  "music": false,
+  "assets": [
+    {
+      "id": "mechanism",
+      "kind": "clip",
+      "file": "media/clip.mp4"
+    },
+    {
+      "id": "settled",
+      "kind": "clip",
+      "file": "media/final-hold.mp4"
+    }
+  ],
+  "sources": [
+    {
+      "claim": "Tank operation: Illustrative water transfer; no fluid simulation or measurements.",
+      "source": "Original ClearFrame procedural artwork and fictional explanatory scenario."
+    }
+  ],
+  "beats": [
+    {
+      "id": "mechanism",
+      "block": "canvas",
+      "duration": 8,
+      "camera": "none",
+      "exit": "none",
+      "plate": {
+        "asset": "mechanism",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "source": "Illustrative water transfer; no fluid simulation or measurements.",
+        "sourceSize": 38.879999999999995,
+        "elements": [
+          {
+            "id": "subject",
+            "type": "text",
+            "text": "Tank operation",
+            "x": 113.39999999999999,
+            "y": 230.39999999999998,
+            "size": 30.240000000000002,
+            "width": 853.2,
+            "height": 76.8,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "text"
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "text": "Open the path, then transfer",
+            "x": 113.39999999999999,
+            "y": 345.59999999999997,
+            "size": 56.16,
+            "width": 853.2,
+            "height": 201.6,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "display"
+          },
+          {
+            "id": "phase-ready",
+            "type": "text",
+            "text": "Unequal levels",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 0.88,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-opening",
+            "type": "text",
+            "text": "Open the gate",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 1,
+            "enter": "fade",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 2.13,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-transfer",
+            "type": "text",
+            "text": "Levels equalize",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 2.25,
+            "enter": "fade",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 5.338333333333333,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-closing",
+            "type": "text",
+            "text": "Isolate the chambers",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 5.458333333333333,
+            "enter": "fade",
+            "dur": 0.12,
+            "exit": "fade",
+            "exitAt": 6.296666666666667,
+            "exitDur": 0.12
+          },
+          {
+            "id": "phase-hold",
+            "type": "text",
+            "text": "The levels have settled",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 6.416666666666667,
+            "enter": "fade",
+            "dur": 0.12
+          }
+        ]
+      }
+    },
+    {
+      "id": "reading-hold",
+      "block": "canvas",
+      "duration": 2,
+      "camera": "none",
+      "exit": "none",
+      "transition": "cut",
+      "plate": {
+        "asset": "settled",
+        "side": "full",
+        "treatment": "none",
+        "drift": "none",
+        "scrim": 0,
+        "loop": false
+      },
+      "props": {
+        "source": "Illustrative water transfer; no fluid simulation or measurements.",
+        "sourceSize": 38.879999999999995,
+        "elements": [
+          {
+            "id": "subject",
+            "type": "text",
+            "text": "Tank operation",
+            "x": 113.39999999999999,
+            "y": 230.39999999999998,
+            "size": 30.240000000000002,
+            "width": 853.2,
+            "height": 76.8,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "text"
+          },
+          {
+            "id": "title",
+            "type": "text",
+            "text": "Open the path, then transfer",
+            "x": 113.39999999999999,
+            "y": 345.59999999999997,
+            "size": 56.16,
+            "width": 853.2,
+            "height": 201.6,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "font": "display"
+          },
+          {
+            "id": "phase-hold",
+            "type": "text",
+            "text": "The levels have settled",
+            "x": 113.39999999999999,
+            "y": 576,
+            "size": 39.96,
+            "width": 853.2,
+            "height": 130.56,
+            "font": "text",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none",
+            "dur": 0
+          }
+        ]
+      }
+    }
+  ]
+}

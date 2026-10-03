@@ -1078,7 +1078,7 @@
       "category": "Blender",
       "priority": "Next",
       "implementation": "Extend",
-      "readiness": "partial prototype; qualitative reserve-gate with two-format native compositions; fill/transfer scope unbuilt",
+      "readiness": "prototype; transparent reservoir transfer and access gate retained in both formats; continuous playback and master acceptance pending",
       "effort": "L",
       "sourceIds": [
         "S01",
@@ -1092,7 +1092,7 @@
         "camera",
         "materials"
       ],
-      "existing": "library/sculptures/reserve-gate is an original porcelain/amber access mechanism with retained landscape/vertical scenes and native labels in the research-study kit. It has no liquid, transparent chambers, fill planes or staged quantity transfer; those parts of this inventory item remain unbuilt.",
+      "existing": "library/sculptures/reservoir-transfer adds transparent chambers, conserved analytic fill volumes and staged gate/transfer/closure. physical-mechanisms retains four native uses across landscape/vertical with baked geometry and source-bound cues. The earlier reserve-gate remains in research-study.",
       "guardrail": "Qualitative liquid levels by default; exact balances remain in native graphics.",
       "reuse": [
         "liquidity",
@@ -1240,7 +1240,7 @@
       "category": "Blender",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "prototype; queued packets and bypass gate retained in both formats; continuous playback and master acceptance pending",
       "effort": "M",
       "sourceIds": [
         "S08",
@@ -1254,7 +1254,7 @@
         "alternate route",
         "phase"
       ],
-      "existing": "queue and pipeline are native starting points; no Blender conveyor yet.",
+      "existing": "library/sculptures/conveyor-bypass; physical-mechanisms retains source scenes, clearance checks and warehouse/network native adaptations in landscape and vertical.",
       "guardrail": "Use deterministic keyframes. Do not claim simulated throughput from an aesthetic animation.",
       "reuse": [
         "logistics",
@@ -1608,7 +1608,7 @@
       "category": "Camera / motion",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "proposed; not built",
+      "readiness": "partial prototype; fixed orthographic copy-safe fitting and two-format baked-frame checks; moving endpoints and general presets pending",
       "effort": "M",
       "sourceIds": [
         "S13",
@@ -1621,7 +1621,7 @@
         "aspect ratio",
         "endpoints"
       ],
-      "existing": "viewTall and sculpture --vertical exist; reusable asset framing presets need packaging.",
+      "existing": "artkit.fit_camera reserves explicit normalized subject/copy bounds; physical-mechanisms verifies all baked frames in four source variants and reviews separate native landscape/vertical layouts.",
       "guardrail": "A crop is not verified portrait composition; review each format.",
       "reuse": [
         "all formats"
@@ -1843,7 +1843,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Partial implementation: versioned sculpture phase manifests, custom pose timing, safe clip-selection plans and two retained verified drafts; automatic native cue integration and broader camera recipes remain open",
+      "readiness": "Partial implementation: eleven recipe contracts, custom pose timing, safe clip-selection plans and retained drafts; physical-mechanisms binds native captions to source phases; general automatic cue integration remains open",
       "effort": "M",
       "sourceIds": [
         "S02",
@@ -1860,7 +1860,7 @@
         "hold",
         "loop endpoints"
       ],
-      "existing": "engine/lib/motion-phases.mjs; sculpture --phase-seconds; nine recipe contracts; examples/motion-phases retained gate/bridge clips and independent review",
+      "existing": "engine/lib/motion-phases.mjs; sculpture --phase-seconds; eleven recipe contracts; examples/motion-phases gate/bridge and physical-mechanisms source-bound native cues and explicit still holds",
       "guardrail": "Distinguish a clip playback-rate change from a new simulation or exact source-time map.",
       "reuse": [
         "all mixed-media scenes"
