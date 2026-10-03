@@ -3,16 +3,16 @@
   "status": "source-prototype",
   "browserReview": "pending-scoped-localhost-approval-after-file-url-policy-rejection",
   "catalog": {
-    "packages": 12,
-    "examples": 53,
-    "nativeVariants": 104,
+    "packages": 13,
+    "examples": 55,
+    "nativeVariants": 108,
     "preparedInserts": 1,
     "inventoryItems": 71,
-    "manifestFiles": 3361,
+    "manifestFiles": 3506,
     "issues": 0
   },
   "tests": {
-    "nodePassed": 196,
+    "nodePassed": 201,
     "nodeFailed": 0,
     "focusedPassed": 4,
     "independentPassed": 17,
@@ -32,23 +32,23 @@
     },
     {
       "path": "docs/library-browser/README.md",
-      "bytes": 6109,
-      "sha256": "16072dfecd209a05b689d3e1653b71de94e8e7b4a0c808d591bd0fc8450eafa1"
+      "bytes": 6111,
+      "sha256": "db64cb82c35c31084ee081d918d1cd56920c6334b2cdbec94ecf3b21ea902996"
     },
     {
       "path": "docs/library-browser/app.js",
-      "bytes": 241597,
-      "sha256": "c5ae7f667860a12082b215d745c03a6e4bb9a419b8fa1f149d722940a4520d21"
+      "bytes": 247792,
+      "sha256": "0c22a8663df2fcc8936a40bbb55a6f4d9381bb1092d94d87652d35074fe0f57d"
     },
     {
       "path": "docs/library-browser/catalog.json",
-      "bytes": 284693,
-      "sha256": "939972dc4c9686bd3c94b317faf407391b6cb17dfc7b43ca053618c65850606a"
+      "bytes": 292725,
+      "sha256": "6676ffcafc2f5ae0687bbf3bf8bc3237598835738ddffcb0dc109a330ac6c9f7"
     },
     {
       "path": "docs/library-browser/evidence/catalog-build.json",
       "bytes": 193,
-      "sha256": "9e58433019c5d91a9fde5dcf1e360c1902df06505a9188d9dad860be838df052"
+      "sha256": "a31485d5bb2a26512fb18e0fa719dadd9c44002db7155fcf5d3405b0f5a3b2ef"
     },
     {
       "path": "docs/library-browser/evidence/cli-smoke.json",
@@ -57,28 +57,28 @@
     },
     {
       "path": "docs/library-browser/evidence/node-tests.txt",
-      "bytes": 19848,
-      "sha256": "191cc8fe1a594131c8d92fc186f4d7935327c934d834eb3bc6b82a57a9d8ab77"
+      "bytes": 20214,
+      "sha256": "36be94973d4501f307ca033183dd64f0679469579688b7b63ffe913c3a0e50c3"
     },
     {
       "path": "docs/library-browser/evidence/source-review-checks.json",
-      "bytes": 8371,
-      "sha256": "4823d5b7a1b1fdf034783347d0a827aeb0d09ac3928cc41263af9c4f1d3e728c"
+      "bytes": 8530,
+      "sha256": "16059214b9144caf40fd3359f546d55bee8953b2a9f1264b560d78a43c7a0f31"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.json",
       "bytes": 2106,
-      "sha256": "5921ea28de2ad4d47caf4463435a0f2b41da73e0f401f193001eaa62325ed789"
+      "sha256": "5299b99f0f80ef11e1de42c42febc08ce8fc74619e9cbad38400a9b9c9d4ce7a"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.mjs",
       "bytes": 8284,
-      "sha256": "25e0c22eba88de8d0007404277fe61cae3487a81a338449983cb4808cfc6d6f6"
+      "sha256": "f3aa951d3bc61de42932c98520a9aea4380d407aa1fab19657b092305a48a2c9"
     },
     {
       "path": "docs/library-browser/evidence/source-review.md",
-      "bytes": 9253,
-      "sha256": "273952766a97ca7cef9da7511c87e0e43f4dea7a979e52c95068b7b6ca7be705"
+      "bytes": 9478,
+      "sha256": "98928cfff527337ced0cfe1cf786faee4f1285749b1eb0b2fbc08cd7a2fa8368"
     },
     {
       "path": "docs/library-browser/example-ledger.json",
@@ -102,13 +102,13 @@
     },
     {
       "path": "docs/research/timmer-library/asset-links.json",
-      "bytes": 6137,
-      "sha256": "15fc58fa307ca396e540bc0f2a3cab2986c4414c9f6c7b7cba31ef9866835d24"
+      "bytes": 6307,
+      "sha256": "73478c0e97b9e9a57f925bb7043d979ac876caf99bdddec1a6d505cc84b3fdb2"
     },
     {
       "path": "docs/research/timmer-library/inventory.json",
-      "bytes": 78553,
-      "sha256": "b0328453e1284d6e68317ee1eec67a8bd393c38e1980c3d181c210b335cdc7ca"
+      "bytes": 79083,
+      "sha256": "8b80cd50d357af2232064c09387ed0d59f9eb0541a0135b2b93c8c2f06fa06be"
     },
     {
       "path": "engine/cli.mjs",
@@ -148,8 +148,8 @@
     {
       "path": "test/library-browser.test.mjs",
       "bytes": 5170,
-      "sha256": "8a80084fef934cffc4a778aa8eb4f415e03e670cfde55b7f8943722b1b6e546c"
+      "sha256": "2815326144fb9b407a7f7a72450f4afb54fdeeca2b6f9f3da412bf70d898d2ed"
     }
   ],
-  "sourceRefresh": "Correlation-window catalog expansion; browser UI, CLI and ledger source unchanged from 2d8c79c; planned-only fixture now C13; 17 independent checks rerun"
+  "sourceRefresh": "Distribution catalog expansion; browser UI, CLI and ledger source unchanged from a837e90; planned-only fixture now C14; 17 independent checks rerun"
 }

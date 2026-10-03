@@ -337,6 +337,16 @@
           "C07"
         ]
       }
+    },
+    "distribution-studies": {
+      "cases": {
+        "monthly-change": [
+          "C13"
+        ],
+        "service-delay": [
+          "C13"
+        ]
+      }
     }
   },
   "sourceOnly": {

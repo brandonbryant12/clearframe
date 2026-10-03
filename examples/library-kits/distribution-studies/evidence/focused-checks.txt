@@ -1,0 +1,13 @@
+✔ histogram endpoints, nulls and exact threshold equality are explicit (2.031875ms)
+✔ unequal bins use density whose area integrates to one (0.489458ms)
+✔ invalid and misleading histogram contracts fail explicitly (0.397625ms)
+✔ native distribution geometry retains full bins and exact observation x positions across focus (1.298333ms)
+✔ scene rejects collapsed bars and packs selected outlines without overlap (0.526667ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 49.771417

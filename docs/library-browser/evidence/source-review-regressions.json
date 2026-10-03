@@ -1,20 +1,20 @@
 {
-  "reviewedAt": "2026-10-03T10:17:23.786Z",
+  "reviewedAt": "2026-10-03T10:51:58.096Z",
   "scope": "Focused source/data fixtures only; no browser, server, renderer or full package hash sweep",
   "results": [
     {
-      "name": "Current catalog has 12 kits, 53 examples, 71 inventory items",
+      "name": "Current catalog has 13 kits, 55 examples, 71 inventory items",
       "passed": true
     },
     {
       "name": "Safe existing local variant links",
       "passed": true,
-      "count": 419
+      "count": 435
     },
     {
       "name": "Media durations equal frame count divided by FPS",
       "passed": true,
-      "count": 104
+      "count": 108
     },
     {
       "name": "Authored specimen titles distinguish operation examples",

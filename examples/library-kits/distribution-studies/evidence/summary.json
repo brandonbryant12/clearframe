@@ -1,0 +1,130 @@
+{
+  "status": "prototype",
+  "continuousPlayback": "unverified",
+  "variants": [
+    {
+      "name": "monthly-change-landscape",
+      "pipelineId": "2026-10-03T10-40-33-335Z-f04ff890",
+      "videoSha256": "bb6d9d30e7985dcde2f43863488edb2f5a3d216831aed2e3396d9b76ced93834",
+      "storyboardSha256": "5c9745806c8f1bdd9bf0ba8accd0b10638d5754fc6d262249116aed0407cc2e2",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 242 frames: no problems found\n"
+        ],
+        "duration": 64,
+        "inputId": "93bb59b215c55d2884383c4ac97f39a75aa5b7b03574d950d6b7579d4e7f59b5"
+      },
+      "qa": {
+        "seconds": 64,
+        "frames": 1920,
+        "changePerSecond": 0,
+        "heldSeconds": 62.5,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "monthly-change-vertical",
+      "pipelineId": "2026-10-03T10-40-53-286Z-34e96c60",
+      "videoSha256": "f5e4c36a5582539c723c617dcb2377957811c02697bf41c3e1d7b0cd3f340484",
+      "storyboardSha256": "2e1c9791215ca7a2c421b8283d0520b08ae2025a5ba2ff002d39cf058a5afef7",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 242 frames: no problems found\n"
+        ],
+        "duration": 64,
+        "inputId": "c7c1eda3eb259883b9c2b698cf8f07e9ba5b15de3fac970d0524e920e18c8f35"
+      },
+      "qa": {
+        "seconds": 64,
+        "frames": 1920,
+        "changePerSecond": 0,
+        "heldSeconds": 62.53,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "service-delay-landscape",
+      "pipelineId": "2026-10-03T10-41-12-986Z-3384ca50",
+      "videoSha256": "b0cb10f8dbd806a338af03808cfd5b92aa17d2e341d6b8d479a979628922cb8e",
+      "storyboardSha256": "749d8e43b10e308f21bfaf5dca07bc6c39a221931151881ced8dfb1727817c5b",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 242 frames: no problems found\n"
+        ],
+        "duration": 64,
+        "inputId": "f1e79a54911cc81d0d2b32ab0e22648a6853c5ee0b03f4e433b3123011657f43"
+      },
+      "qa": {
+        "seconds": 64,
+        "frames": 1920,
+        "changePerSecond": 0,
+        "heldSeconds": 62.7,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "service-delay-vertical",
+      "pipelineId": "2026-10-03T10-41-32-961Z-ef6595ac",
+      "videoSha256": "202e91aae3d43effe031ed12902c0b8402d18bf3b9c2222f48466225e4bb6970",
+      "storyboardSha256": "624ce1982946158f2af63c30fb5c354361cee084ef5598035fd3af1cc514276c",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 242 frames: no problems found\n"
+        ],
+        "duration": 64,
+        "inputId": "4bfbb64cf9f9495c1fdbf0b126d07f8030f1be01d440bec99b732207f0aa6b26"
+      },
+      "qa": {
+        "seconds": 64,
+        "frames": 1920,
+        "changePerSecond": 0,
+        "heldSeconds": 62.73,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    }
+  ],
+  "tests": {
+    "pass": 201,
+    "fail": 0,
+    "skipped": 0
+  },
+  "encoded": {
+    "nativeMappingChecks": 1534,
+    "arithmeticChecks": 128,
+    "sampledFrames": 596,
+    "barFillChecks": 2285,
+    "frontChecks": 92,
+    "aboveFrontChecks": 92,
+    "pointChecks": 14304,
+    "outlineChecks": 4488,
+    "thresholdChecks": 252,
+    "failures": 0
+  },
+  "limits": [
+    "Fictional unweighted observations; no fitted distribution or future probability",
+    "Exact supplied thresholds; no partial-bin interpolation",
+    "Crowded data or new copy requires fresh layout review",
+    "Bounded encoded probes and phone-frame review, not continuous playback or final master acceptance",
+    "Square and 4:5 unreviewed"
+  ]
+}

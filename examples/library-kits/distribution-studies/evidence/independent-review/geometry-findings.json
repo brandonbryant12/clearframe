@@ -1,0 +1,30 @@
+{
+  "status": "resolved; final encoded frames independently inspected",
+  "findings": [
+    {
+      "id": "positive-bar-collapse",
+      "reproduction": "Count sample [0,0,1], edges [0,1,2], y.max=1e308, 1080x1920.",
+      "observedBeforeFix": [
+        {
+          "count": 2,
+          "barHeight": 0
+        },
+        {
+          "count": 1,
+          "barHeight": 0
+        }
+      ],
+      "resolution": "Scene rejects positive bars below one native pixel; independent collapse regression passes."
+    },
+    {
+      "id": "selected-outline-overlap",
+      "reproduction": "Two qualifying duplicate values at width 1080; dot radius 5.94.",
+      "observedBeforeFix": {
+        "packingDistance": 16.632,
+        "requiredDistanceIncludingRingAndStroke": 17.444
+      },
+      "resolution": "Packing uses 3*r+3 with 3px outline strokes and ring-inclusive bottom bounds in both beats; independent pairwise distance regressions pass."
+    }
+  ],
+  "resolvedCompositionSha256": "f02b19cfe37b8e8477ba0b3061d2aff720d365256e7a6a9395110e97b83e23c2"
+}

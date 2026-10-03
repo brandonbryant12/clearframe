@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/distribution-studies/specimens/service-delay-vertical/build/pipeline/2026-10-03T10-41-32-961Z-ef6595ac/video.mp4",
+  "outputSha256": "202e91aae3d43effe031ed12902c0b8402d18bf3b9c2222f48466225e4bb6970",
+  "inputId": "4bfbb64cf9f9495c1fdbf0b126d07f8030f1be01d440bec99b732207f0aa6b26",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "distribution: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "distribution: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 959,
+      "time": 31.966666666666665,
+      "reasons": [
+        "distribution: last frame",
+        "Before threshold"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 960,
+      "time": 32,
+      "reasons": [
+        "threshold: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 966,
+      "time": 32.2,
+      "reasons": [
+        "threshold: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1919,
+      "time": 63.96666666666667,
+      "reasons": [
+        "threshold: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

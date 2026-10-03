@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "assertions": 284219,
+  "modelCases": 10212,
+  "modelAssertions": 280718,
+  "guardAssertions": 35,
+  "geometryAssertions": 3272,
+  "kitAuditAssertions": 194,
+  "reference": "Independent boundary-count bin assignment; exact observed threshold comparisons; density count/(observed n times bin width); direct native affine positions and ring-inclusive distances.",
+  "formulaSource": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda33e.htm",
+  "scope": "Bounded source, math, scene and current fictional kit audit only; no render, browser, continuous playback or full repository suite.",
+  "inputSha256": "f7e1a8048e975662f861bef9b5c27b8a23ec8dc1b719df7ffa05e2d8a0925d60",
+  "auditSha256": "fdbf899b6ae1c751b8bc9936be47fd82528714e9c2921ac0610747823d66fc3a",
+  "sourceHashes": {
+    "distribution-data.mjs": "32c7a44e886d0690b1688f23bfd0d7177c98eb2a2b5d947947036fc85053cafb",
+    "distributions.mjs": "f02b19cfe37b8e8477ba0b3061d2aff720d365256e7a6a9395110e97b83e23c2"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "project": "monthly-change-landscape",
+  "frame": 974,
+  "width": 720,
+  "videoSha256": "bb6d9d30e7985dcde2f43863488edb2f5a3d216831aed2e3396d9b76ced93834",
+  "imageSha256": "982f159c9cd3841d558e44d57e2b8d99117a5db61cf856edde5f546d1f09a23d",
+  "nativePoint": [
+    700.8,
+    833.88
+  ],
+  "strokeWidth": 3,
+  "probes": [
+    {
+      "side": -1,
+      "expected": [
+        257.652,
+        312.705
+      ],
+      "radius": 1,
+      "darkSupport": {
+        "position": [
+          257,
+          313
+        ],
+        "rgb": [
+          75,
+          77,
+          76
+        ]
+      }
+    },
+    {
+      "side": 1,
+      "expected": [
+        267.948,
+        312.705
+      ],
+      "radius": 1,
+      "darkSupport": {
+        "position": [
+          267,
+          314
+        ],
+        "rgb": [
+          48,
+          62,
+          103
+        ]
+      }
+    }
+  ],
+  "note": "Independently decoded and visually inspected final exact frame, retaining maxRGB<160 and one-pixel outline predicate."
+}

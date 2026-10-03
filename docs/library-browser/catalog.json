@@ -659,6 +659,81 @@
       }
     },
     {
+      "id": "distribution-studies",
+      "title": "Distribution studies",
+      "purpose": "Build a histogram from supplied observations and show exact threshold membership while retaining the complete distribution.",
+      "status": "prototype",
+      "integrity": "verified",
+      "fileCount": 145,
+      "issues": [],
+      "inventoryIds": [
+        "C13"
+      ],
+      "manifest": "examples/library-kits/distribution-studies/kit.json",
+      "preview": "examples/library-kits/distribution-studies/preview.html",
+      "readme": "examples/library-kits/distribution-studies/README.md",
+      "review": "examples/library-kits/distribution-studies/REVIEW.md",
+      "sources": "examples/library-kits/distribution-studies/SOURCES.md",
+      "tags": {
+        "purpose": [
+          "compare",
+          "inspect-distribution",
+          "count-thresholds"
+        ],
+        "appearance": [
+          "paper",
+          "native-chart",
+          "histogram"
+        ],
+        "movement": [
+          "zero-baseline-grow",
+          "threshold-draw",
+          "observation-outline",
+          "reading-hold"
+        ],
+        "format": [
+          "landscape",
+          "vertical"
+        ],
+        "subject": [
+          "sample-distribution",
+          "signed-changes",
+          "service-delays"
+        ]
+      },
+      "editable": {
+        "native": [
+          "observations",
+          "copy",
+          "bins",
+          "mode",
+          "y scale",
+          "threshold",
+          "timing",
+          "layout"
+        ],
+        "fixedClip": []
+      },
+      "requires": {
+        "replay": [
+          "ClearFrame native compositor",
+          "bundled fonts"
+        ],
+        "preparation": [
+          "Node.js",
+          "FFmpeg",
+          "Python 3"
+        ]
+      },
+      "evidence": {
+        "summary": "evidence/summary.json",
+        "review": "REVIEW.md",
+        "encoded": "evidence/encoded-checks.json",
+        "implementation": "evidence/implementation.json",
+        "continuousPlayback": "unverified"
+      }
+    },
+    {
       "id": "drivers-and-flows",
       "title": "Drivers and flows",
       "purpose": "Explain event alignment, two-factor product changes and opening-to-closing stock reconciliation with auditable native quantities.",
@@ -2138,6 +2213,128 @@
         "S16"
       ],
       "search": "missing months change the sample compare explicit monthly pearson windows and show the paired returns behind a selected relationship. c07 compare relate inspect-missing-data paper native-chart signed-matrix cell-reveal window-cut synchronized-return-reveal reading-hold monthly-returns correlation paired-observations s09 s10 s16 correlation regime matrix a signed matrix changes by window while selected pairs expand into synchronized miniature charts. return series window frequency method min observations sensor relationships research demand planning"
+    },
+    {
+      "id": "distribution-studies/monthly-change",
+      "kind": "example",
+      "title": "Monthly net changes",
+      "packageId": "distribution-studies",
+      "inventoryIds": [
+        "C13"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/distribution-studies/specimens/monthly-change-landscape/storyboard.json",
+          "video": "examples/library-kits/distribution-studies/evidence/monthly-change-landscape/video.mp4",
+          "poster": "examples/library-kits/distribution-studies/evidence/independent-review/monthly-change-landscape/encoded-00.100000.png",
+          "receipt": "examples/library-kits/distribution-studies/evidence/monthly-change-landscape/video.mp4.json",
+          "duration": 64,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/distribution-studies/specimens/monthly-change-vertical/storyboard.json",
+          "video": "examples/library-kits/distribution-studies/evidence/monthly-change-vertical/video.mp4",
+          "poster": "examples/library-kits/distribution-studies/evidence/independent-review/monthly-change-vertical/encoded-00.100000.png",
+          "receipt": "examples/library-kits/distribution-studies/evidence/monthly-change-vertical/video.mp4.json",
+          "duration": 64,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Build a histogram from supplied observations and show exact threshold membership while retaining the complete distribution.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "inspect-distribution",
+        "count-thresholds"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart",
+        "histogram"
+      ],
+      "movement": [
+        "zero-baseline-grow",
+        "threshold-draw",
+        "observation-outline",
+        "reading-hold"
+      ],
+      "subjects": [
+        "sample-distribution",
+        "signed-changes",
+        "service-delays"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S02",
+        "S10"
+      ],
+      "search": "monthly net changes build a histogram from supplied observations and show exact threshold membership while retaining the complete distribution. c13 compare inspect-distribution count-thresholds paper native-chart histogram zero-baseline-grow threshold-draw observation-outline reading-hold sample-distribution signed-changes service-delays s02 s10 distribution and tail lens build a histogram from samples, then highlight a supplied threshold; retain the whole distribution as context. observations bins threshold density/count sample size quality control research latency"
+    },
+    {
+      "id": "distribution-studies/service-delay",
+      "kind": "example",
+      "title": "Unequal bins, honest area",
+      "packageId": "distribution-studies",
+      "inventoryIds": [
+        "C13"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/distribution-studies/specimens/service-delay-landscape/storyboard.json",
+          "video": "examples/library-kits/distribution-studies/evidence/service-delay-landscape/video.mp4",
+          "poster": "examples/library-kits/distribution-studies/evidence/independent-review/service-delay-landscape/encoded-00.100000.png",
+          "receipt": "examples/library-kits/distribution-studies/evidence/service-delay-landscape/video.mp4.json",
+          "duration": 64,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/distribution-studies/specimens/service-delay-vertical/storyboard.json",
+          "video": "examples/library-kits/distribution-studies/evidence/service-delay-vertical/video.mp4",
+          "poster": "examples/library-kits/distribution-studies/evidence/independent-review/service-delay-vertical/encoded-00.100000.png",
+          "receipt": "examples/library-kits/distribution-studies/evidence/service-delay-vertical/video.mp4.json",
+          "duration": 64,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Build a histogram from supplied observations and show exact threshold membership while retaining the complete distribution.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "compare",
+        "inspect-distribution",
+        "count-thresholds"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart",
+        "histogram"
+      ],
+      "movement": [
+        "zero-baseline-grow",
+        "threshold-draw",
+        "observation-outline",
+        "reading-hold"
+      ],
+      "subjects": [
+        "sample-distribution",
+        "signed-changes",
+        "service-delays"
+      ],
+      "collections": [],
+      "sourceIds": [
+        "S02",
+        "S10"
+      ],
+      "search": "unequal bins, honest area build a histogram from supplied observations and show exact threshold membership while retaining the complete distribution. c13 compare inspect-distribution count-thresholds paper native-chart histogram zero-baseline-grow threshold-draw observation-outline reading-hold sample-distribution signed-changes service-delays s02 s10 distribution and tail lens build a histogram from samples, then highlight a supplied threshold; retain the whole distribution as context. observations bins threshold density/count sample size quality control research latency"
     },
     {
       "id": "drivers-and-flows/cohort-adoption",
@@ -5156,7 +5353,7 @@
         "C13"
       ],
       "medium": "Chart",
-      "statusText": "proposed; not built",
+      "statusText": "native prototype; explicit sample bins and exact threshold membership reviewed in landscape/vertical; continuous playback and final master acceptance pending",
       "guardrail": "Do not invent a bell curve or tail probability from an opinion about risk.",
       "parameters": [
         "observations",
@@ -5165,10 +5362,13 @@
         "density/count",
         "sample size"
       ],
-      "related": [],
+      "related": [
+        "distribution-studies/monthly-change",
+        "distribution-studies/service-delay"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],
@@ -6734,7 +6934,7 @@
         "T02"
       ],
       "medium": "Tool",
-      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles and pairwise monthly Pearson correlations; forward models and broader risk-adjusted metrics remain planned",
+      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership; forward models and broader risk-adjusted metrics remain planned",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "parameters": [
         "input hash",

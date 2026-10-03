@@ -1,0 +1,23 @@
+{
+  "fframes/distribution-data.mjs": "32c7a44e886d0690b1688f23bfd0d7177c98eb2a2b5d947947036fc85053cafb",
+  "fframes/distributions.mjs": "f02b19cfe37b8e8477ba0b3061d2aff720d365256e7a6a9395110e97b83e23c2",
+  "test/distributions.test.mjs": "20f88dfc44a051d44414f9404cb912bec59a1398b86ce1237a1fcf188b229a00",
+  "docs/distributions.md": "187483266baeb3bd013ba89a87eaccf6c7049d3e734a9f34a43da47ebab4bcf9",
+  "examples/library-kits/distribution-studies/inputs.json": "f7e1a8048e975662f861bef9b5c27b8a23ec8dc1b719df7ffa05e2d8a0925d60",
+  "examples/library-kits/distribution-studies/build.mjs": "b538c4a9843b5fca9feafa4d0612e5f3abbdc733bcefc88b99d98a6cc53c0c90",
+  "examples/library-kits/distribution-studies/verify.mjs": "b9e8b25e0194246fe4c743ecaf702b15025fc9806baf6f270ae0afc98d7fb59a",
+  "examples/library-kits/distribution-studies/audit.json": "fdbf899b6ae1c751b8bc9936be47fd82528714e9c2921ac0610747823d66fc3a",
+  "examples/library-kits/distribution-studies/DIRECTION.md": "886d2c106c194892c9a878e497913f3ce42fd663ad09d269566b879160c64af8",
+  "examples/library-kits/distribution-studies/README.md": "08d2f72db4adc1fa34f0e52e92fe996d18b224803510c4b8282bf0807bba6ed5",
+  "examples/library-kits/distribution-studies/SOURCES.md": "35ea3151e9e648cf04ba07ce18446a5a3330d367b0ec2888b2d145f5a2880180",
+  "examples/library-kits/distribution-studies/check-encoded.py": "b3bc775e95365338852213f973ec6653a52a07efc3d0dd2e669f45fa28b4af4b",
+  "examples/library-kits/distribution-studies/build/verification.json": "078a5c6b721a5c987323187d806fa396f4594d40ecd951831426141255051635",
+  "examples/library-kits/distribution-studies/build/encoded-checks.json": "1b7404a2036fda93c57e63cf854ba85520f2322be98dce5c39b29909dccc0fee",
+  "examples/library-kits/distribution-studies/build/node-tests.txt": "36be94973d4501f307ca033183dd64f0679469579688b7b63ffe913c3a0e50c3",
+  "examples/library-kits/distribution-studies/evidence/critique.json": "a106e7657c8b82f6afe1e7a7eaad622b9d212653fbc306cc6d3c47288255951f",
+  "examples/library-kits/distribution-studies/evidence/independent-review/contract-review.mjs": "aef99ab8533be9c0c5c8ad78337352abb9fbbeb3e202c51ac13d0bb194d0095a",
+  "examples/library-kits/distribution-studies/evidence/independent-review/contract-review.json": "74b2dfb1c7ba0d9822ceff0da1133932b5348a9f847147510549354667d94e99",
+  "examples/library-kits/distribution-studies/evidence/independent-review/artifact-checks.json": "7bfb449026fe4e912982c0b6d3b177fe25c129e2b02d98db9acb6969a18ace3e",
+  "examples/library-kits/distribution-studies/evidence/independent-review/geometry-findings.json": "e7a084c08476f092abe9ca44e19b825c8c45adcd3a929f1233d3cafc2ac3854e",
+  "examples/library-kits/distribution-studies/evidence/independent-review/outline-974-review.json": "9e1ac76c10128bb2735c1095d86e696f5f7fef3bc4f11414d713868b5a251954"
+}

@@ -416,7 +416,7 @@
       "category": "Chart",
       "priority": "Next",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "native prototype; explicit sample bins and exact threshold membership reviewed in landscape/vertical; continuous playback and final master acceptance pending",
       "effort": "L",
       "sourceIds": [
         "S02",
@@ -430,7 +430,7 @@
         "density/count",
         "sample size"
       ],
-      "existing": "bars can form bins but computed histograms and probability-area semantics are not packaged.",
+      "existing": "fframes/distribution-data.mjs and distributions.mjs implement explicit count/density bins, null counts and exact threshold membership with native observation strips. distribution-studies retains two fictional cases and four specimens; see docs/distributions.md.",
       "guardrail": "Do not invent a bell curve or tail probability from an opinion about risk.",
       "reuse": [
         "quality control",
@@ -1756,7 +1756,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles and pairwise monthly Pearson correlations; forward models and broader risk-adjusted metrics remain planned",
+      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership; forward models and broader risk-adjusted metrics remain planned",
       "effort": "L",
       "sourceIds": [
         "S04",
@@ -1772,7 +1772,7 @@
         "transform",
         "method version"
       ],
-      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics. engine/lib/time-series.mjs adds explicit price-basis conversion, anchored monthly/quarterly/annual growth, compounded annualization, complete-window sample SD and observed drawdown/recovery; see docs/time-series.md. engine/lib/expectations.mjs adds inclusive publication cutoffs with actual revisions, nonuniform maturity coordinates, and complete-ensemble descriptive scenario ranges/type-7 quantiles; see docs/expectations.md.",
+      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics. engine/lib/time-series.mjs adds explicit price-basis conversion, anchored monthly/quarterly/annual growth, compounded annualization, complete-window sample SD and observed drawdown/recovery; see docs/time-series.md. engine/lib/expectations.mjs adds inclusive publication cutoffs with actual revisions, nonuniform maturity coordinates, and complete-ensemble descriptive scenario ranges/type-7 quantiles; see docs/expectations.md. fframes/distribution-data.mjs retains original observations, explicit bins, null denominators and direct threshold comparisons; see docs/distributions.md.",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "reuse": [
         "science",

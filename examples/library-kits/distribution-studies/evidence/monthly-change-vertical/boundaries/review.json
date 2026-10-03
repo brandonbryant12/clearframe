@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/distribution-studies/specimens/monthly-change-vertical/build/pipeline/2026-10-03T10-40-53-286Z-34e96c60/video.mp4",
+  "outputSha256": "f5e4c36a5582539c723c617dcb2377957811c02697bf41c3e1d7b0cd3f340484",
+  "inputId": "c7c1eda3eb259883b9c2b698cf8f07e9ba5b15de3fac970d0524e920e18c8f35",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "distribution: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "distribution: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 959,
+      "time": 31.966666666666665,
+      "reasons": [
+        "distribution: last frame",
+        "Before threshold"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 960,
+      "time": 32,
+      "reasons": [
+        "threshold: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 966,
+      "time": 32.2,
+      "reasons": [
+        "threshold: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1919,
+      "time": 63.96666666666667,
+      "reasons": [
+        "threshold: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}
