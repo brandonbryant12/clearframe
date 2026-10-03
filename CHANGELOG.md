@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Valuation sensitivities.** Native sampled heatmaps and controlled cross-sections share explicit annual cash-flow models, upfront outlays and terminal rules. Invalid perpetual cells stay distinct from valid zero and negative finite results. Four original specimens retain independent calculations and encoded evidence. See `docs/valuations.md`; continuous playback and final master acceptance remain open.
+
 - **Distribution and tail views.** Explicit count/density bins retain original sample membership, null counts and exact threshold comparisons. Four native specimens keep the complete histogram visible while outlining qualifying observations. Independent arithmetic and encoded review support a prototype; see `docs/distributions.md`. Continuous playback and final master acceptance remain open.
 
 - **Correlation windows.** Native Pearson matrices retain paired monthly returns, explicit counts and undefined reasons; selected-pair charts preserve shared percent axes and missing gaps. Four original specimens and independent arithmetic/encoded review support a prototype. See `docs/correlations.md`; continuous playback and final master acceptance remain open.
