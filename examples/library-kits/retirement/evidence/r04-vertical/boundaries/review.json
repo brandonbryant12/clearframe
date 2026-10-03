@@ -1,0 +1,107 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/retirement/specimens/r04-vertical/build/pipeline/2026-10-03T02-17-34-752Z-5c935bf9/video.mp4",
+  "outputSha256": "d2c0eeeeb124a7355beb8f64635aaa73efa9a3e5bd4e163d2abe8105e3678554",
+  "inputId": "47ca816d52a1b4a93fb31bbb266e1a6ca89c043897f7622a1db168f812ad436a",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "fees-on-reserve-trace: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "fees-on-reserve-trace: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 299,
+      "time": 9.966666666666667,
+      "reasons": [
+        "fees-on-reserve-trace: last frame",
+        "Before fees-on-reserve-fee-gap"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 300,
+      "time": 10,
+      "reasons": [
+        "fees-on-reserve-fee-gap: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 306,
+      "time": 10.2,
+      "reasons": [
+        "fees-on-reserve-fee-gap: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "fees-on-reserve-fee-gap: last frame",
+        "Before fees-with-loss-trace"
+      ],
+      "image": "frame-0005.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "fees-with-loss-trace: first frame"
+      ],
+      "image": "frame-0006.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "fees-with-loss-trace: entrance"
+      ],
+      "image": "frame-0007.jpg"
+    },
+    {
+      "frame": 899,
+      "time": 29.966666666666665,
+      "reasons": [
+        "fees-with-loss-trace: last frame",
+        "Before fees-with-loss-fee-gap"
+      ],
+      "image": "frame-0008.jpg"
+    },
+    {
+      "frame": 900,
+      "time": 30,
+      "reasons": [
+        "fees-with-loss-fee-gap: first frame"
+      ],
+      "image": "frame-0009.jpg"
+    },
+    {
+      "frame": 906,
+      "time": 30.2,
+      "reasons": [
+        "fees-with-loss-fee-gap: entrance"
+      ],
+      "image": "frame-0010.jpg"
+    },
+    {
+      "frame": 1199,
+      "time": 39.96666666666667,
+      "reasons": [
+        "fees-with-loss-fee-gap: last frame"
+      ],
+      "image": "frame-0011.jpg"
+    }
+  ]
+}

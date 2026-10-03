@@ -1,0 +1,107 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/retirement/specimens/r05-vertical/build/pipeline/2026-10-03T02-15-04-197Z-b39c31b9/video.mp4",
+  "outputSha256": "de5a97dadeda83ee9c4735345bf98859fba1604df89d3a0a3b249a1e26393564",
+  "inputId": "c1fa9e50f2812b1e6c7e95fa852639c1c939381df9987984209110e5163fd123",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "depleted-account-trace: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "depleted-account-trace: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 299,
+      "time": 9.966666666666667,
+      "reasons": [
+        "depleted-account-trace: last frame",
+        "Before depleted-account-payment"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 300,
+      "time": 10,
+      "reasons": [
+        "depleted-account-payment: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 306,
+      "time": 10.2,
+      "reasons": [
+        "depleted-account-payment: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 629,
+      "time": 20.966666666666665,
+      "reasons": [
+        "depleted-account-payment: last frame",
+        "Before funded-account-trace"
+      ],
+      "image": "frame-0005.jpg"
+    },
+    {
+      "frame": 630,
+      "time": 21,
+      "reasons": [
+        "funded-account-trace: first frame"
+      ],
+      "image": "frame-0006.jpg"
+    },
+    {
+      "frame": 636,
+      "time": 21.2,
+      "reasons": [
+        "funded-account-trace: entrance"
+      ],
+      "image": "frame-0007.jpg"
+    },
+    {
+      "frame": 929,
+      "time": 30.966666666666665,
+      "reasons": [
+        "funded-account-trace: last frame",
+        "Before funded-account-payment"
+      ],
+      "image": "frame-0008.jpg"
+    },
+    {
+      "frame": 930,
+      "time": 31,
+      "reasons": [
+        "funded-account-payment: first frame"
+      ],
+      "image": "frame-0009.jpg"
+    },
+    {
+      "frame": 936,
+      "time": 31.2,
+      "reasons": [
+        "funded-account-payment: entrance"
+      ],
+      "image": "frame-0010.jpg"
+    },
+    {
+      "frame": 1259,
+      "time": 41.96666666666667,
+      "reasons": [
+        "funded-account-payment: last frame"
+      ],
+      "image": "frame-0011.jpg"
+    }
+  ]
+}

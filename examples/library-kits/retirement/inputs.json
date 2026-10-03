@@ -1,0 +1,604 @@
+[
+  {
+    "id": "steady-additions",
+    "recipe": "R01",
+    "title": "Two contributions build one account",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD, rounded. Year-end additions; 6% assumed return, not a forecast.",
+    "inputs": {
+      "periodUnit": "Years",
+      "capacity": 100000,
+      "inspectPeriod": 4,
+      "account": {
+        "openingBalance": 10000,
+        "cashflowTiming": "end",
+        "periods": [
+          {
+            "label": "Year 1",
+            "returnRate": 0.06,
+            "employee": 6000,
+            "employer": 3000
+          },
+          {
+            "label": "Year 2",
+            "returnRate": 0.06,
+            "employee": 6000,
+            "employer": 3000
+          },
+          {
+            "label": "Year 3",
+            "returnRate": 0.06,
+            "employee": 6000,
+            "employer": 3000
+          },
+          {
+            "label": "Year 4",
+            "returnRate": 0.06,
+            "employee": 6000,
+            "employer": 3000
+          },
+          {
+            "label": "Year 5",
+            "returnRate": 0.06,
+            "employee": 6000,
+            "employer": 3000
+          },
+          {
+            "label": "Year 6",
+            "returnRate": 0.06,
+            "employee": 6000,
+            "employer": 3000
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "losses-with-additions",
+    "recipe": "R01",
+    "title": "Adding money does not prevent losses",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD, rounded. Year-end additions and supplied returns; no forecast.",
+    "inputs": {
+      "periodUnit": "Years",
+      "capacity": 50000,
+      "inspectPeriod": 1,
+      "account": {
+        "openingBalance": 30000,
+        "cashflowTiming": "end",
+        "periods": [
+          {
+            "label": "Year 1",
+            "returnRate": -0.1,
+            "employee": 3000,
+            "employer": 1000
+          },
+          {
+            "label": "Year 2",
+            "returnRate": -0.2,
+            "employee": 3000,
+            "employer": 1000
+          },
+          {
+            "label": "Year 3",
+            "returnRate": 0.1,
+            "employee": 3000,
+            "employer": 1000
+          },
+          {
+            "label": "Year 4",
+            "returnRate": 0.06,
+            "employee": 3000,
+            "employer": 1000
+          },
+          {
+            "label": "Year 5",
+            "returnRate": 0.04,
+            "employee": 3000,
+            "employer": 1000
+          },
+          {
+            "label": "Year 6",
+            "returnRate": 0.03,
+            "employee": 3000,
+            "employer": 1000
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "single-match",
+    "recipe": "R02",
+    "title": "A match applies only to eligible contributions",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD/year, rounded. 50% match through 6% of pay; no true-up assumed.",
+    "inputs": {
+      "domain": 3000,
+      "match": {
+        "compensation": 60000,
+        "employeeContribution": 3600,
+        "tiers": [
+          {
+            "through": 0.06,
+            "rate": 0.5
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "tiered-match",
+    "recipe": "R02",
+    "title": "Each match band has its own rate",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD/year, rounded. Supplied marginal tiers; no true-up assumed.",
+    "inputs": {
+      "domain": 4000,
+      "match": {
+        "compensation": 80000,
+        "employeeContribution": 6400,
+        "tiers": [
+          {
+            "through": 0.03,
+            "rate": 1
+          },
+          {
+            "through": 0.05,
+            "rate": 0.5
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "graded-ownership",
+    "recipe": "R03",
+    "title": "Ownership changes; the total does not",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD, rounded. Supplied service schedule; ownership is not withdrawal eligibility.",
+    "inputs": {
+      "vesting": {
+        "employeeBalance": 20000,
+        "employerBalance": 10000,
+        "creditedService": 3,
+        "schedule": [
+          {
+            "service": 0,
+            "fraction": 0
+          },
+          {
+            "service": 1,
+            "fraction": 0.2
+          },
+          {
+            "service": 2,
+            "fraction": 0.4
+          },
+          {
+            "service": 3,
+            "fraction": 0.6
+          },
+          {
+            "service": 4,
+            "fraction": 0.8
+          },
+          {
+            "service": 5,
+            "fraction": 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "cliff-ownership",
+    "recipe": "R03",
+    "title": "A cliff changes ownership at one threshold",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD, rounded. Supplied cliff schedule; ownership is not withdrawal eligibility.",
+    "inputs": {
+      "vesting": {
+        "employeeBalance": 12000,
+        "employerBalance": 6000,
+        "creditedService": 2,
+        "schedule": [
+          {
+            "service": 0,
+            "fraction": 0
+          },
+          {
+            "service": 3,
+            "fraction": 1
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "fees-on-reserve",
+    "recipe": "R04",
+    "title": "Small rates compound into a balance gap",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD, rounded. 5% annual return; no cashflows. Fees after return; no forecast.",
+    "inputs": {
+      "periodUnit": "Years",
+      "gapDomain": [
+        0,
+        20000
+      ],
+      "comparison": {
+        "baselineFeeRate": 0.001,
+        "comparisonFeeRate": 0.01,
+        "account": {
+          "openingBalance": 100000,
+          "cashflowTiming": "end",
+          "periods": [
+            {
+              "label": "Year 1",
+              "returnRate": 0.05
+            },
+            {
+              "label": "Year 2",
+              "returnRate": 0.05
+            },
+            {
+              "label": "Year 3",
+              "returnRate": 0.05
+            },
+            {
+              "label": "Year 4",
+              "returnRate": 0.05
+            },
+            {
+              "label": "Year 5",
+              "returnRate": 0.05
+            },
+            {
+              "label": "Year 6",
+              "returnRate": 0.05
+            },
+            {
+              "label": "Year 7",
+              "returnRate": 0.05
+            },
+            {
+              "label": "Year 8",
+              "returnRate": 0.05
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "fees-with-loss",
+    "recipe": "R04",
+    "title": "The same return path, different fees",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD. Returns −15/8/5/10/6/4% yearly; +$6k year-end. Fees after return; no forecast.",
+    "inputs": {
+      "periodUnit": "Years",
+      "gapDomain": [
+        0,
+        15000
+      ],
+      "comparison": {
+        "baselineFeeRate": 0.002,
+        "comparisonFeeRate": 0.018,
+        "account": {
+          "openingBalance": 50000,
+          "cashflowTiming": "end",
+          "periods": [
+            {
+              "label": "Year 1",
+              "returnRate": -0.15,
+              "employee": 6000
+            },
+            {
+              "label": "Year 2",
+              "returnRate": 0.08,
+              "employee": 6000
+            },
+            {
+              "label": "Year 3",
+              "returnRate": 0.05,
+              "employee": 6000
+            },
+            {
+              "label": "Year 4",
+              "returnRate": 0.1,
+              "employee": 6000
+            },
+            {
+              "label": "Year 5",
+              "returnRate": 0.06,
+              "employee": 6000
+            },
+            {
+              "label": "Year 6",
+              "returnRate": 0.04,
+              "employee": 6000
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "depleted-account",
+    "recipe": "R05",
+    "title": "A request can outlast the account",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD, rounded. End-period withdrawals, zero returns/fees; no adequacy claim.",
+    "inputs": {
+      "periodUnit": "Years",
+      "capacity": 30000,
+      "inspectPeriod": 2,
+      "account": {
+        "openingBalance": 30000,
+        "cashflowTiming": "end",
+        "periods": [
+          {
+            "label": "Year 1",
+            "returnRate": 0,
+            "withdrawal": 12000
+          },
+          {
+            "label": "Year 2",
+            "returnRate": 0,
+            "withdrawal": 12000
+          },
+          {
+            "label": "Year 3",
+            "returnRate": 0,
+            "withdrawal": 12000
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "funded-account",
+    "recipe": "R05",
+    "title": "Funded withdrawals still change the balance",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD, rounded. End-year $5k requests, 4% assumed return; no forecast.",
+    "inputs": {
+      "periodUnit": "Years",
+      "capacity": 100000,
+      "inspectPeriod": 4,
+      "account": {
+        "openingBalance": 100000,
+        "cashflowTiming": "end",
+        "periods": [
+          {
+            "label": "Year 1",
+            "returnRate": 0.04,
+            "withdrawal": 5000
+          },
+          {
+            "label": "Year 2",
+            "returnRate": 0.04,
+            "withdrawal": 5000
+          },
+          {
+            "label": "Year 3",
+            "returnRate": 0.04,
+            "withdrawal": 5000
+          },
+          {
+            "label": "Year 4",
+            "returnRate": 0.04,
+            "withdrawal": 5000
+          },
+          {
+            "label": "Year 5",
+            "returnRate": 0.04,
+            "withdrawal": 5000
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "adjusted-benefit",
+    "recipe": "R06",
+    "title": "A benefit is a formula, not an account",
+    "asOf": "2026-10-02",
+    "source": "Illustrative salary × service formula. USD, rounded; supplied 90% adjustment.",
+    "inputs": {
+      "benefit": {
+        "annualCompensation": 80000,
+        "creditedYears": 30,
+        "annualAccrualRate": 0.015,
+        "adjustmentFactor": 0.9
+      }
+    }
+  },
+  {
+    "id": "unadjusted-benefit",
+    "recipe": "R06",
+    "title": "Each factor has a different unit",
+    "asOf": "2026-10-02",
+    "source": "Illustrative salary × service formula. USD, rounded; supplied 100% adjustment.",
+    "inputs": {
+      "benefit": {
+        "annualCompensation": 70000,
+        "creditedYears": 20,
+        "annualAccrualRate": 0.02,
+        "adjustmentFactor": 1
+      }
+    }
+  },
+  {
+    "id": "fixed-quotes",
+    "recipe": "R07",
+    "title": "Amounts come with different conditions",
+    "asOf": "2026-10-02",
+    "source": "Fictional USD quotes. Lifetimes unknown; no value equivalence or ranking.",
+    "inputs": {
+      "quotes": [
+        {
+          "label": "Lump sum",
+          "amount": 350000,
+          "basis": "one-time",
+          "conditions": "No further payments in this quoted offer."
+        },
+        {
+          "label": "Single life",
+          "amount": 2300,
+          "basis": "per month",
+          "conditions": "Until participant death. No survivor payment; no COLA."
+        },
+        {
+          "label": "Joint survivor",
+          "amount": 2000,
+          "basis": "per month",
+          "conditions": "Then $1,000/month to survivor. No COLA; lifetimes unknown."
+        }
+      ]
+    }
+  },
+  {
+    "id": "conditional-quotes",
+    "recipe": "R07",
+    "title": "Read the conditions beside the amount",
+    "asOf": "2026-10-02",
+    "source": "Fictional USD quotes. Terms supplied; no actuarial valuation or ranking.",
+    "inputs": {
+      "quotes": [
+        {
+          "label": "Lump sum",
+          "amount": 280000,
+          "basis": "one-time",
+          "conditions": "No further payments in this quoted offer."
+        },
+        {
+          "label": "Life + guarantee",
+          "amount": 1750,
+          "basis": "per month",
+          "conditions": "10-year payment guarantee, then participant life. No COLA."
+        },
+        {
+          "label": "Survivor + COLA",
+          "amount": 1500,
+          "basis": "per month",
+          "conditions": "75% to survivor; assumed 2% yearly COLA. Lifetimes unknown."
+        }
+      ]
+    }
+  },
+  {
+    "id": "rising-prices",
+    "recipe": "R08",
+    "title": "A fixed payment buys less as prices rise",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD/month. Y0 prices are the real-value base; no COLA or forecast.",
+    "inputs": {
+      "periodUnit": "Years from Y0",
+      "basePeriod": "Y0",
+      "baseIndex": 100,
+      "amounts": [
+        3000,
+        3000,
+        3000,
+        3000,
+        3000
+      ],
+      "priceIndices": [
+        100,
+        105,
+        110,
+        120,
+        125
+      ]
+    }
+  },
+  {
+    "id": "falling-prices",
+    "recipe": "R08",
+    "title": "Purchasing power can also rise",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD/month. Y0 prices are the real-value base; no COLA or forecast.",
+    "inputs": {
+      "periodUnit": "Years from Y0",
+      "basePeriod": "Y0",
+      "baseIndex": 100,
+      "amounts": [
+        2500,
+        2500,
+        2500,
+        2500,
+        2500
+      ],
+      "priceIndices": [
+        100,
+        98,
+        95,
+        96,
+        94
+      ]
+    }
+  },
+  {
+    "id": "return-order",
+    "recipe": "R09",
+    "title": "Withdrawals make the order matter",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD, rounded. $15k end-year requests; same return set, no forecast.",
+    "inputs": {
+      "openingBalance": 100000,
+      "capacity": 120000,
+      "cashflowTiming": "end",
+      "withdrawals": [
+        15000,
+        15000,
+        15000,
+        15000
+      ],
+      "orderA": [
+        -0.25,
+        0.15,
+        0.1,
+        0.08
+      ],
+      "orderB": [
+        0.08,
+        0.1,
+        0.15,
+        -0.25
+      ]
+    }
+  },
+  {
+    "id": "return-order-depletion",
+    "recipe": "R09",
+    "title": "Depletion does not erase the shortfall",
+    "asOf": "2026-10-02",
+    "source": "Illustrative USD, rounded. $20k end-year requests; same return set, no forecast.",
+    "inputs": {
+      "openingBalance": 60000,
+      "capacity": 80000,
+      "cashflowTiming": "end",
+      "withdrawals": [
+        20000,
+        20000,
+        20000,
+        20000
+      ],
+      "orderA": [
+        -0.25,
+        0.15,
+        0.1,
+        0.08
+      ],
+      "orderB": [
+        0.08,
+        0.1,
+        0.15,
+        -0.25
+      ]
+    }
+  }
+]

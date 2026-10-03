@@ -1,0 +1,416 @@
+{
+  "title": "R08: retirement mechanism specimens",
+  "format": {
+    "preset": "vertical",
+    "fps": 30
+  },
+  "theme": "paper",
+  "type": "geometric",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.35
+  },
+  "backdrop": "none",
+  "transition": "cut",
+  "captions": false,
+  "music": false,
+  "sfx": "off",
+  "sources": [
+    {
+      "claim": "rising-prices: all amounts, rules and outcomes are fictional illustrations.",
+      "source": "source/fixtures.mjs; audit.json",
+      "asOf": "2026-10-02"
+    },
+    {
+      "claim": "falling-prices: all amounts, rules and outcomes are fictional illustrations.",
+      "source": "source/fixtures.mjs; audit.json",
+      "asOf": "2026-10-02"
+    }
+  ],
+  "beats": [
+    {
+      "id": "rising-prices-trace",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "plot": {
+          "title": "A fixed payment buys less as prices rise",
+          "asOf": "2026-10-02",
+          "source": "Illustrative USD/month. Y0 prices are the real-value base; no COLA or forecast.",
+          "x": {
+            "type": "linear",
+            "label": "Years from Y0",
+            "domain": [
+              0,
+              4
+            ],
+            "ticks": [
+              0,
+              2,
+              4
+            ],
+            "decimals": 0
+          },
+          "y": {
+            "type": "linear",
+            "label": "USD/month, thousands",
+            "domain": [
+              0,
+              3
+            ],
+            "ticks": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "prefix": "$",
+            "suffix": "k",
+            "decimals": 1
+          },
+          "series": [
+            {
+              "id": "nominal",
+              "label": "Nominal payment",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 3
+                },
+                {
+                  "x": 1,
+                  "y": 3
+                },
+                {
+                  "x": 2,
+                  "y": 3
+                },
+                {
+                  "x": 3,
+                  "y": 3
+                },
+                {
+                  "x": 4,
+                  "y": 3
+                }
+              ]
+            },
+            {
+              "id": "real",
+              "label": "Y0 purchasing power",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 3
+                },
+                {
+                  "x": 1,
+                  "y": 2.8571428571428568
+                },
+                {
+                  "x": 2,
+                  "y": 2.727272727272727
+                },
+                {
+                  "x": 3,
+                  "y": 2.5
+                },
+                {
+                  "x": 4,
+                  "y": 2.4
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 3.5
+          }
+        }
+      }
+    },
+    {
+      "id": "rising-prices-deflate",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "source": "Illustrative USD/month. Y0 prices are the real-value base; no COLA or forecast. · 2026-10-02",
+        "sourceSize": 33.48,
+        "view": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "elements": [
+          {
+            "id": "rising-prices-deflate-title",
+            "type": "text",
+            "text": "Year 4: convert to Y0 purchasing power",
+            "x": 118.8,
+            "y": 268.8,
+            "size": 44.28,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "width": 842.4,
+            "height": 192
+          },
+          {
+            "id": "rising-prices-deflate-base",
+            "type": "text",
+            "text": "Price index: Y0 = 100; year 4 = 125",
+            "x": 118.8,
+            "y": 614.4,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 842.4
+          },
+          {
+            "id": "rising-prices-deflate-rule",
+            "type": "text",
+            "text": "Real payment = nominal × base index ÷ current index",
+            "x": 118.8,
+            "y": 825.6,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0.5,
+            "enter": "fade",
+            "width": 842.4,
+            "height": 100.44,
+            "dur": 0.25
+          },
+          {
+            "id": "rising-prices-deflate-substitution",
+            "type": "text",
+            "text": "$3,000 × 100 ÷ 125",
+            "x": 118.8,
+            "y": 1132.8,
+            "size": 48.54599999999999,
+            "fill": "ink",
+            "font": "figures",
+            "at": 1.5,
+            "enter": "fade",
+            "fit": 842.4,
+            "dur": 0.25
+          },
+          {
+            "id": "rising-prices-deflate-result",
+            "type": "text",
+            "text": "≈ $2,400 / month in Y0 dollars",
+            "x": 118.8,
+            "y": 1382.3999999999999,
+            "size": 38.501999999999995,
+            "fill": "ink",
+            "font": "figures",
+            "at": 2.5,
+            "enter": "fade",
+            "fit": 842.4,
+            "dur": 0.25
+          }
+        ]
+      }
+    },
+    {
+      "id": "falling-prices-trace",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "plot": {
+          "title": "Purchasing power can also rise",
+          "asOf": "2026-10-02",
+          "source": "Illustrative USD/month. Y0 prices are the real-value base; no COLA or forecast.",
+          "x": {
+            "type": "linear",
+            "label": "Years from Y0",
+            "domain": [
+              0,
+              4
+            ],
+            "ticks": [
+              0,
+              2,
+              4
+            ],
+            "decimals": 0
+          },
+          "y": {
+            "type": "linear",
+            "label": "USD/month, thousands",
+            "domain": [
+              0,
+              3
+            ],
+            "ticks": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "prefix": "$",
+            "suffix": "k",
+            "decimals": 1
+          },
+          "series": [
+            {
+              "id": "nominal",
+              "label": "Nominal payment",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 2.5
+                },
+                {
+                  "x": 1,
+                  "y": 2.5
+                },
+                {
+                  "x": 2,
+                  "y": 2.5
+                },
+                {
+                  "x": 3,
+                  "y": 2.5
+                },
+                {
+                  "x": 4,
+                  "y": 2.5
+                }
+              ]
+            },
+            {
+              "id": "real",
+              "label": "Y0 purchasing power",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 2.5
+                },
+                {
+                  "x": 1,
+                  "y": 2.5510204081632657
+                },
+                {
+                  "x": 2,
+                  "y": 2.631578947368421
+                },
+                {
+                  "x": 3,
+                  "y": 2.604166666666667
+                },
+                {
+                  "x": 4,
+                  "y": 2.6595744680851063
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 3.5
+          }
+        }
+      }
+    },
+    {
+      "id": "falling-prices-deflate",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "source": "Illustrative USD/month. Y0 prices are the real-value base; no COLA or forecast. · 2026-10-02",
+        "sourceSize": 33.48,
+        "view": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "elements": [
+          {
+            "id": "falling-prices-deflate-title",
+            "type": "text",
+            "text": "Year 4: convert to Y0 purchasing power",
+            "x": 118.8,
+            "y": 268.8,
+            "size": 44.28,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "width": 842.4,
+            "height": 192
+          },
+          {
+            "id": "falling-prices-deflate-base",
+            "type": "text",
+            "text": "Price index: Y0 = 100; year 4 = 94",
+            "x": 118.8,
+            "y": 614.4,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 842.4
+          },
+          {
+            "id": "falling-prices-deflate-rule",
+            "type": "text",
+            "text": "Real payment = nominal × base index ÷ current index",
+            "x": 118.8,
+            "y": 825.6,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0.5,
+            "enter": "fade",
+            "width": 842.4,
+            "height": 100.44,
+            "dur": 0.25
+          },
+          {
+            "id": "falling-prices-deflate-substitution",
+            "type": "text",
+            "text": "$2,500 × 100 ÷ 94",
+            "x": 118.8,
+            "y": 1132.8,
+            "size": 48.54599999999999,
+            "fill": "ink",
+            "font": "figures",
+            "at": 1.5,
+            "enter": "fade",
+            "fit": 842.4,
+            "dur": 0.25
+          },
+          {
+            "id": "falling-prices-deflate-result",
+            "type": "text",
+            "text": "≈ $2,660 / month in Y0 dollars",
+            "x": 118.8,
+            "y": 1382.3999999999999,
+            "size": 38.501999999999995,
+            "fill": "ink",
+            "font": "figures",
+            "at": 2.5,
+            "enter": "fade",
+            "fit": 842.4,
+            "dur": 0.25
+          }
+        ]
+      }
+    }
+  ]
+}

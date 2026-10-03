@@ -1,0 +1,11 @@
+{
+  "command": "/Users/brandon/.local/bin/codex-heavy -- npm test",
+  "tests": 156,
+  "passed": 156,
+  "failed": 0,
+  "workers": 2,
+  "focusedRetirementTests": 5,
+  "nativeRendererSourceChangedInThisMilestone": false,
+  "sourceProjects": 18,
+  "note": "Contract tests and focused calculation/geometry fixtures passed after the final R08 timing edit. These are engineering checks, not subjective playback approval."
+}

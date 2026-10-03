@@ -1959,8 +1959,8 @@
       "name": "Contribution streams and compounding",
       "category": "Retirement recipe",
       "priority": "Now",
-      "implementation": "New",
-      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
+      "implementation": "Extend",
+      "readiness": "Native prototype implemented: two fictional scenarios in landscape and vertical; calculation and rendered review evidence retained; continuous playback and promotion remain pending",
       "effort": "M",
       "visual": "Employee and employer streams enter an account; native traces distinguish principal from investment gains or losses.",
       "parameters": [
@@ -1969,7 +1969,7 @@
         "period returns",
         "timing convention"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
+      "existing": "examples/library-kits/retirement supplies editable native recipes, 18 specimen projects, exact calculation inputs, proportional rectangle checks, clips and independent review. Built on engine/lib/finance.mjs and canvas.props.plot. Broader metaphor/rail variants remain proposed; no accepted artwork claim.",
       "dependsOn": [
         "C01",
         "T02",
@@ -1990,8 +1990,8 @@
       "name": "Employer match thresholds",
       "category": "Retirement recipe",
       "priority": "Now",
-      "implementation": "New",
-      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
+      "implementation": "Extend",
+      "readiness": "Native prototype implemented: two fictional scenarios in landscape and vertical; calculation and rendered review evidence retained; continuous playback and promotion remain pending",
       "effort": "M",
       "visual": "A contribution travels along a rule strip; each match tier fills only as eligible contributions reach it.",
       "parameters": [
@@ -2001,7 +2001,7 @@
         "period basis",
         "true-up policy"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
+      "existing": "examples/library-kits/retirement supplies editable native recipes, 18 specimen projects, exact calculation inputs, proportional rectangle checks, clips and independent review. Built on engine/lib/finance.mjs and canvas.props.plot. Broader metaphor/rail variants remain proposed; no accepted artwork claim.",
       "dependsOn": [
         "T02",
         "I07"
@@ -2020,8 +2020,8 @@
       "name": "Vesting ownership timeline",
       "category": "Retirement recipe",
       "priority": "Now",
-      "implementation": "New",
-      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
+      "implementation": "Extend",
+      "readiness": "Native prototype implemented: two fictional scenarios in landscape and vertical; calculation and rendered review evidence retained; continuous playback and promotion remain pending",
       "effort": "M",
       "visual": "A timeline changes ownership of the employer compartment while the employee compartment stays separate.",
       "parameters": [
@@ -2031,7 +2031,7 @@
         "employer balance",
         "plan source"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
+      "existing": "examples/library-kits/retirement supplies editable native recipes, 18 specimen projects, exact calculation inputs, proportional rectangle checks, clips and independent review. Built on engine/lib/finance.mjs and canvas.props.plot. Broader metaphor/rail variants remain proposed; no accepted artwork claim.",
       "dependsOn": [
         "T02",
         "M10"
@@ -2050,8 +2050,8 @@
       "name": "Fee drag comparison",
       "category": "Retirement recipe",
       "priority": "Now",
-      "implementation": "New",
-      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
+      "implementation": "Extend",
+      "readiness": "Native prototype implemented: two fictional scenarios in landscape and vertical; calculation and rendered review evidence retained; continuous playback and promotion remain pending",
       "effort": "M",
       "visual": "Two aligned balances share one return/contribution path; the ending gap separates fees paid from lost growth.",
       "parameters": [
@@ -2062,7 +2062,7 @@
         "contributions",
         "time horizon"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
+      "existing": "examples/library-kits/retirement supplies editable native recipes, 18 specimen projects, exact calculation inputs, proportional rectangle checks, clips and independent review. Built on engine/lib/finance.mjs and canvas.props.plot. Broader metaphor/rail variants remain proposed; no accepted artwork claim.",
       "dependsOn": [
         "C01",
         "T02"
@@ -2081,8 +2081,8 @@
       "name": "Accumulation to withdrawals",
       "category": "Retirement recipe",
       "priority": "Next",
-      "implementation": "New",
-      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
+      "implementation": "Extend",
+      "readiness": "Native prototype implemented: two fictional scenarios in landscape and vertical; calculation and rendered review evidence retained; continuous playback and promotion remain pending",
       "effort": "M",
       "visual": "A reservoir switches from inflows to a measured payout stream; unfunded withdrawals remain visible after depletion.",
       "parameters": [
@@ -2093,7 +2093,7 @@
         "fees",
         "cashflow timing"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
+      "existing": "examples/library-kits/retirement supplies editable native recipes, 18 specimen projects, exact calculation inputs, proportional rectangle checks, clips and independent review. Built on engine/lib/finance.mjs and canvas.props.plot. Broader metaphor/rail variants remain proposed; no accepted artwork claim.",
       "dependsOn": [
         "C16",
         "I02",
@@ -2114,8 +2114,8 @@
       "name": "Pension benefit formula build",
       "category": "Retirement recipe",
       "priority": "Now",
-      "implementation": "New",
-      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
+      "implementation": "Extend",
+      "readiness": "Native prototype implemented: two fictional scenarios in landscape and vertical; calculation and rendered review evidence retained; continuous playback and promotion remain pending",
       "effort": "M",
       "visual": "Salary, service and accrual factors enter a native formula one at a time before resolving to an annual and monthly amount.",
       "parameters": [
@@ -2125,7 +2125,7 @@
         "accrual factor",
         "plan adjustments"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
+      "existing": "examples/library-kits/retirement supplies editable native recipes, 18 specimen projects, exact calculation inputs, proportional rectangle checks, clips and independent review. Built on engine/lib/finance.mjs and canvas.props.plot. Broader metaphor/rail variants remain proposed; no accepted artwork claim.",
       "dependsOn": [
         "T02",
         "I10"
@@ -2144,8 +2144,8 @@
       "name": "Payout choices and conditions",
       "category": "Retirement recipe",
       "priority": "Next",
-      "implementation": "New",
-      "readiness": "Proposed recipe; requires calculation and visual evidence",
+      "implementation": "Extend",
+      "readiness": "Native prototype implemented: two fictional scenarios in landscape and vertical; calculation and rendered review evidence retained; continuous playback and promotion remain pending",
       "effort": "M",
       "visual": "Parallel payment rails compare a lump sum, single-life stream and survivor stream with conditions and unknowns visible.",
       "parameters": [
@@ -2156,7 +2156,7 @@
         "guarantee period",
         "valuation assumptions"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built.",
+      "existing": "examples/library-kits/retirement supplies editable native recipes, 18 specimen projects, exact calculation inputs, proportional rectangle checks, clips and independent review. Built on engine/lib/finance.mjs and canvas.props.plot. Broader metaphor/rail variants remain proposed; no accepted artwork claim. R07 presents supplied quotations and conditions; actuarial valuation is deliberately not implemented.",
       "dependsOn": [
         "I09",
         "C16"
@@ -2175,8 +2175,8 @@
       "name": "Fixed income and purchasing power",
       "category": "Retirement recipe",
       "priority": "Next",
-      "implementation": "New",
-      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
+      "implementation": "Extend",
+      "readiness": "Native prototype implemented: two fictional scenarios in landscape and vertical; calculation and rendered review evidence retained; continuous playback and promotion remain pending",
       "effort": "M",
       "visual": "A fixed payment stays level while the native real-value trace changes; a basket insert supplies the physical analogy.",
       "parameters": [
@@ -2186,7 +2186,7 @@
         "COLA policy",
         "currency"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
+      "existing": "examples/library-kits/retirement supplies editable native recipes, 18 specimen projects, exact calculation inputs, proportional rectangle checks, clips and independent review. Built on engine/lib/finance.mjs and canvas.props.plot. Broader metaphor/rail variants remain proposed; no accepted artwork claim.",
       "dependsOn": [
         "C09",
         "I11",
@@ -2206,8 +2206,8 @@
       "name": "Sequence of returns under withdrawals",
       "category": "Retirement recipe",
       "priority": "Next",
-      "implementation": "New",
-      "readiness": "Calculation helper implemented and source-tested; reusable visual recipe and motion review remain planned",
+      "implementation": "Extend",
+      "readiness": "Native prototype implemented: two fictional scenarios in landscape and vertical; calculation and rendered review evidence retained; continuous playback and promotion remain pending",
       "effort": "M",
       "visual": "The same returns in different orders travel through paired withdrawal timelines; final balances and missed payments reveal the difference.",
       "parameters": [
@@ -2217,7 +2217,7 @@
         "cashflow timing",
         "shared scale"
       ],
-      "existing": "Build from the existing native canvas, timeline, equation and flow primitives. Shared calculation adapters and composed specimens remain to be built. Calculation foundation: engine/lib/finance.mjs, with explicit assumptions and fixtures. This does not establish visual acceptance.",
+      "existing": "examples/library-kits/retirement supplies editable native recipes, 18 specimen projects, exact calculation inputs, proportional rectangle checks, clips and independent review. Built on engine/lib/finance.mjs and canvas.props.plot. Broader metaphor/rail variants remain proposed; no accepted artwork claim.",
       "dependsOn": [
         "C01",
         "R05"

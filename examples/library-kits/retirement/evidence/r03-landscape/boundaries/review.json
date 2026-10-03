@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/retirement/specimens/r03-landscape/build/pipeline/2026-10-03T02-11-00-105Z-92af5d38/video.mp4",
+  "outputSha256": "44895f4502df73db2842a336ccc8451c9407ba6a479e63982f88ed7ce79bdfc6",
+  "inputId": "4f5791da5d21ded6f8abdf729224ef28caa697b6539088ae700b53d839ac0cbf",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "graded-ownership-ownership: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "graded-ownership-ownership: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 269,
+      "time": 8.966666666666667,
+      "reasons": [
+        "graded-ownership-ownership: last frame",
+        "Before cliff-ownership-ownership"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 270,
+      "time": 9,
+      "reasons": [
+        "cliff-ownership-ownership: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 276,
+      "time": 9.2,
+      "reasons": [
+        "cliff-ownership-ownership: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 539,
+      "time": 17.966666666666665,
+      "reasons": [
+        "cliff-ownership-ownership: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

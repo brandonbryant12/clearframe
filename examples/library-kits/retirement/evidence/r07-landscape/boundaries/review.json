@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/retirement/specimens/r07-landscape/build/pipeline/2026-10-03T02-12-25-815Z-ee355450/video.mp4",
+  "outputSha256": "b722bf2d1d23b5a25d112c55952ae44cde709420854bb352f8e21348d9de83fa",
+  "inputId": "3ff76aa4f958ac20f89c3e47fbc6f448b6c9ba400eb17235cc9ea4a8b7799c42",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "fixed-quotes-quotes: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "fixed-quotes-quotes: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 389,
+      "time": 12.966666666666667,
+      "reasons": [
+        "fixed-quotes-quotes: last frame",
+        "Before conditional-quotes-quotes"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 390,
+      "time": 13,
+      "reasons": [
+        "conditional-quotes-quotes: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 396,
+      "time": 13.2,
+      "reasons": [
+        "conditional-quotes-quotes: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 779,
+      "time": 25.966666666666665,
+      "reasons": [
+        "conditional-quotes-quotes: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

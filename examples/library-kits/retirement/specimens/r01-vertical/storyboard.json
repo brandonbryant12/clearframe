@@ -1,0 +1,671 @@
+{
+  "title": "R01: retirement mechanism specimens",
+  "format": {
+    "preset": "vertical",
+    "fps": 30
+  },
+  "theme": "paper",
+  "type": "geometric",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.35
+  },
+  "backdrop": "none",
+  "transition": "cut",
+  "captions": false,
+  "music": false,
+  "sfx": "off",
+  "sources": [
+    {
+      "claim": "steady-additions: all amounts, rules and outcomes are fictional illustrations.",
+      "source": "source/fixtures.mjs; audit.json",
+      "asOf": "2026-10-02"
+    },
+    {
+      "claim": "losses-with-additions: all amounts, rules and outcomes are fictional illustrations.",
+      "source": "source/fixtures.mjs; audit.json",
+      "asOf": "2026-10-02"
+    }
+  ],
+  "beats": [
+    {
+      "id": "steady-additions-trace",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "plot": {
+          "title": "Two contributions build one account",
+          "asOf": "2026-10-02",
+          "source": "Illustrative USD, rounded. Year-end additions; 6% assumed return, not a forecast.",
+          "x": {
+            "type": "linear",
+            "label": "Years",
+            "domain": [
+              0,
+              6
+            ],
+            "ticks": [
+              0,
+              3,
+              6
+            ],
+            "decimals": 0
+          },
+          "y": {
+            "type": "linear",
+            "label": "USD thousands",
+            "domain": [
+              0,
+              80
+            ],
+            "ticks": [
+              0,
+              20,
+              40,
+              60,
+              80
+            ],
+            "prefix": "$",
+            "suffix": "k",
+            "decimals": 0
+          },
+          "series": [
+            {
+              "id": "account",
+              "label": "Account balance",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 10
+                },
+                {
+                  "x": 1,
+                  "y": 19.6
+                },
+                {
+                  "x": 2,
+                  "y": 29.776
+                },
+                {
+                  "x": 3,
+                  "y": 40.56256
+                },
+                {
+                  "x": 4,
+                  "y": 51.99631359999999
+                },
+                {
+                  "x": 5,
+                  "y": 64.11609241599999
+                },
+                {
+                  "x": 6,
+                  "y": 76.96305796096
+                }
+              ]
+            },
+            {
+              "id": "added",
+              "label": "Opening + added",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 10
+                },
+                {
+                  "x": 1,
+                  "y": 19
+                },
+                {
+                  "x": 2,
+                  "y": 28
+                },
+                {
+                  "x": 3,
+                  "y": 37
+                },
+                {
+                  "x": 4,
+                  "y": 46
+                },
+                {
+                  "x": 5,
+                  "y": 55
+                },
+                {
+                  "x": 6,
+                  "y": 64
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 3.5
+          }
+        }
+      }
+    },
+    {
+      "id": "steady-additions-flows",
+      "block": "canvas",
+      "duration": 11,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "source": "Illustrative USD, rounded. Year-end additions; 6% assumed return, not a forecast. · 2026-10-02 Capacity scale $100,000.",
+        "sourceSize": 33.48,
+        "view": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "elements": [
+          {
+            "id": "steady-additions-flows-title",
+            "type": "text",
+            "text": "Year 5 reconciles",
+            "x": 118.8,
+            "y": 268.8,
+            "size": 44.28,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "width": 842.4,
+            "height": 192
+          },
+          {
+            "id": "steady-additions-flows-tank-0-name",
+            "type": "text",
+            "text": "Opening balance",
+            "x": 160.92000000000002,
+            "y": 592.6379999999999,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 252.71999999999997
+          },
+          {
+            "id": "steady-additions-flows-tank-0-outline",
+            "type": "rect",
+            "x": 160.92000000000002,
+            "y": 614.4,
+            "w": 252.71999999999997,
+            "h": 537.6,
+            "fill": "none",
+            "at": 0,
+            "enter": "none",
+            "stroke": "muted",
+            "width": 2
+          },
+          {
+            "id": "steady-additions-flows-tank-0-fill",
+            "type": "rect",
+            "x": 160.92000000000002,
+            "y": 872.4678180864,
+            "w": 252.71999999999997,
+            "h": 279.53218191359997,
+            "fill": "accent",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "steady-additions-flows-tank-0-value",
+            "type": "text",
+            "text": "$51,996",
+            "x": 287.28,
+            "y": 1192.176,
+            "size": 40.175999999999995,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 252.71999999999997
+          },
+          {
+            "id": "steady-additions-flows-tank-1-name",
+            "type": "text",
+            "text": "Closing balance",
+            "x": 666.3600000000001,
+            "y": 592.6379999999999,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 252.71999999999997
+          },
+          {
+            "id": "steady-additions-flows-tank-1-outline",
+            "type": "rect",
+            "x": 666.3600000000001,
+            "y": 614.4,
+            "w": 252.71999999999997,
+            "h": 537.6,
+            "fill": "none",
+            "at": 0,
+            "enter": "none",
+            "stroke": "muted",
+            "width": 2
+          },
+          {
+            "id": "steady-additions-flows-tank-1-fill",
+            "type": "rect",
+            "x": 666.3600000000001,
+            "y": 807.311887171584,
+            "w": 252.71999999999997,
+            "h": 344.688112828416,
+            "fill": "accent2",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "steady-additions-flows-tank-1-value",
+            "type": "text",
+            "text": "$64,116",
+            "x": 792.7200000000001,
+            "y": 1192.176,
+            "size": 40.175999999999995,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 252.71999999999997
+          },
+          {
+            "id": "steady-additions-flows-contributors",
+            "type": "text",
+            "text": "Employee $6,000 + employer $3,000",
+            "x": 118.8,
+            "y": 432,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 842.4
+          },
+          {
+            "id": "steady-additions-flows-flow",
+            "type": "line",
+            "x1": 423.68399999999997,
+            "y1": 883.2,
+            "x2": 656.3160000000001,
+            "y2": 883.2,
+            "stroke": "ink",
+            "width": 3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "steady-additions-flows-flow-label",
+            "type": "text",
+            "text": "Year 5",
+            "x": 540,
+            "y": 863.1120000000001,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 252.72000000000014
+          },
+          {
+            "id": "steady-additions-flows-accounting",
+            "type": "text",
+            "text": "$9,000 added · $3,120 gain/loss · $0 fees",
+            "x": 118.8,
+            "y": 1382.3999999999999,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 842.4
+          },
+          {
+            "id": "steady-additions-flows-withdrawals",
+            "type": "text",
+            "text": "$0 paid · $0 unfunded",
+            "x": 118.8,
+            "y": 1456.0559999999998,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none",
+            "fit": 842.4
+          }
+        ]
+      }
+    },
+    {
+      "id": "losses-with-additions-trace",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "plot": {
+          "title": "Adding money does not prevent losses",
+          "asOf": "2026-10-02",
+          "source": "Illustrative USD, rounded. Year-end additions and supplied returns; no forecast.",
+          "x": {
+            "type": "linear",
+            "label": "Years",
+            "domain": [
+              0,
+              6
+            ],
+            "ticks": [
+              0,
+              3,
+              6
+            ],
+            "decimals": 0
+          },
+          "y": {
+            "type": "linear",
+            "label": "USD thousands",
+            "domain": [
+              0,
+              60
+            ],
+            "ticks": [
+              0,
+              20,
+              40,
+              60
+            ],
+            "prefix": "$",
+            "suffix": "k",
+            "decimals": 0
+          },
+          "series": [
+            {
+              "id": "account",
+              "label": "Account balance",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 30
+                },
+                {
+                  "x": 1,
+                  "y": 31
+                },
+                {
+                  "x": 2,
+                  "y": 28.8
+                },
+                {
+                  "x": 3,
+                  "y": 35.68
+                },
+                {
+                  "x": 4,
+                  "y": 41.820800000000006
+                },
+                {
+                  "x": 5,
+                  "y": 47.493632000000005
+                },
+                {
+                  "x": 6,
+                  "y": 52.918440960000005
+                }
+              ]
+            },
+            {
+              "id": "added",
+              "label": "Opening + added",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 30
+                },
+                {
+                  "x": 1,
+                  "y": 34
+                },
+                {
+                  "x": 2,
+                  "y": 38
+                },
+                {
+                  "x": 3,
+                  "y": 42
+                },
+                {
+                  "x": 4,
+                  "y": 46
+                },
+                {
+                  "x": 5,
+                  "y": 50
+                },
+                {
+                  "x": 6,
+                  "y": 54
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 3.5
+          }
+        }
+      }
+    },
+    {
+      "id": "losses-with-additions-flows",
+      "block": "canvas",
+      "duration": 11,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "source": "Illustrative USD, rounded. Year-end additions and supplied returns; no forecast. · 2026-10-02 Capacity scale $50,000.",
+        "sourceSize": 33.48,
+        "view": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "elements": [
+          {
+            "id": "losses-with-additions-flows-title",
+            "type": "text",
+            "text": "Year 2 reconciles",
+            "x": 118.8,
+            "y": 268.8,
+            "size": 44.28,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "width": 842.4,
+            "height": 192
+          },
+          {
+            "id": "losses-with-additions-flows-tank-0-name",
+            "type": "text",
+            "text": "Opening balance",
+            "x": 160.92000000000002,
+            "y": 592.6379999999999,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 252.71999999999997
+          },
+          {
+            "id": "losses-with-additions-flows-tank-0-outline",
+            "type": "rect",
+            "x": 160.92000000000002,
+            "y": 614.4,
+            "w": 252.71999999999997,
+            "h": 537.6,
+            "fill": "none",
+            "at": 0,
+            "enter": "none",
+            "stroke": "muted",
+            "width": 2
+          },
+          {
+            "id": "losses-with-additions-flows-tank-0-fill",
+            "type": "rect",
+            "x": 160.92000000000002,
+            "y": 818.688,
+            "w": 252.71999999999997,
+            "h": 333.312,
+            "fill": "accent",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "losses-with-additions-flows-tank-0-value",
+            "type": "text",
+            "text": "$31,000",
+            "x": 287.28,
+            "y": 1192.176,
+            "size": 40.175999999999995,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 252.71999999999997
+          },
+          {
+            "id": "losses-with-additions-flows-tank-1-name",
+            "type": "text",
+            "text": "Closing balance",
+            "x": 666.3600000000001,
+            "y": 592.6379999999999,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 252.71999999999997
+          },
+          {
+            "id": "losses-with-additions-flows-tank-1-outline",
+            "type": "rect",
+            "x": 666.3600000000001,
+            "y": 614.4,
+            "w": 252.71999999999997,
+            "h": 537.6,
+            "fill": "none",
+            "at": 0,
+            "enter": "none",
+            "stroke": "muted",
+            "width": 2
+          },
+          {
+            "id": "losses-with-additions-flows-tank-1-fill",
+            "type": "rect",
+            "x": 666.3600000000001,
+            "y": 842.3424,
+            "w": 252.71999999999997,
+            "h": 309.6576,
+            "fill": "accent2",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "losses-with-additions-flows-tank-1-value",
+            "type": "text",
+            "text": "$28,800",
+            "x": 792.7200000000001,
+            "y": 1192.176,
+            "size": 40.175999999999995,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 252.71999999999997
+          },
+          {
+            "id": "losses-with-additions-flows-contributors",
+            "type": "text",
+            "text": "Employee $3,000 + employer $1,000",
+            "x": 118.8,
+            "y": 432,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 842.4
+          },
+          {
+            "id": "losses-with-additions-flows-flow",
+            "type": "line",
+            "x1": 423.68399999999997,
+            "y1": 883.2,
+            "x2": 656.3160000000001,
+            "y2": 883.2,
+            "stroke": "ink",
+            "width": 3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "losses-with-additions-flows-flow-label",
+            "type": "text",
+            "text": "Year 2",
+            "x": 540,
+            "y": 863.1120000000001,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 252.72000000000014
+          },
+          {
+            "id": "losses-with-additions-flows-accounting",
+            "type": "text",
+            "text": "$4,000 added · −$6,200 gain/loss · $0 fees",
+            "x": 118.8,
+            "y": 1382.3999999999999,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 842.4
+          },
+          {
+            "id": "losses-with-additions-flows-withdrawals",
+            "type": "text",
+            "text": "$0 paid · $0 unfunded",
+            "x": 118.8,
+            "y": 1456.0559999999998,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none",
+            "fit": 842.4
+          }
+        ]
+      }
+    }
+  ]
+}

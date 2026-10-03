@@ -1,0 +1,457 @@
+{
+  "status": "prototype",
+  "variants": [
+    {
+      "project": "r01-landscape",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-16-52-823Z-cad815c6",
+      "inputId": "a74886391e3ded34a85525d069706963ca0e85687bbe24bfa674604aa9218a08",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 165 frames: no problems found\n"
+        ],
+        "duration": 42,
+        "inputId": "a74886391e3ded34a85525d069706963ca0e85687bbe24bfa674604aa9218a08"
+      },
+      "qa": {
+        "seconds": 42,
+        "frames": 1260,
+        "changePerSecond": 0,
+        "heldSeconds": 42,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r01-landscape"
+    },
+    {
+      "project": "r01-vertical",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-17-07-491Z-dd72fb4f",
+      "inputId": "f6df30b1d1de06fa57a56e272ec396cea80780a405420dd49d01e325b695da99",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 165 frames: no problems found\n"
+        ],
+        "duration": 42,
+        "inputId": "f6df30b1d1de06fa57a56e272ec396cea80780a405420dd49d01e325b695da99"
+      },
+      "qa": {
+        "seconds": 42,
+        "frames": 1260,
+        "changePerSecond": 0,
+        "heldSeconds": 42,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r01-vertical"
+    },
+    {
+      "project": "r02-landscape",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-10-47-194Z-0c0285f5",
+      "inputId": "e617940bf1bac3fad849ac85a29701dcf8ef596e4689668fb9e1b4bf0dde6a62",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 71 frames: no problems found\n"
+        ],
+        "duration": 18,
+        "inputId": "e617940bf1bac3fad849ac85a29701dcf8ef596e4689668fb9e1b4bf0dde6a62"
+      },
+      "qa": {
+        "seconds": 18,
+        "frames": 540,
+        "changePerSecond": 0,
+        "heldSeconds": 16.97,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r02-landscape"
+    },
+    {
+      "project": "r02-vertical",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-10-53-720Z-67fab474",
+      "inputId": "39db6b48f22b01ee05083602cce78dd7f26ce240a205fc52d99f511515c8db58",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 71 frames: no problems found\n"
+        ],
+        "duration": 18,
+        "inputId": "39db6b48f22b01ee05083602cce78dd7f26ce240a205fc52d99f511515c8db58"
+      },
+      "qa": {
+        "seconds": 18,
+        "frames": 540,
+        "changePerSecond": 0,
+        "heldSeconds": 17.9,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r02-vertical"
+    },
+    {
+      "project": "r03-landscape",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-11-00-105Z-92af5d38",
+      "inputId": "4f5791da5d21ded6f8abdf729224ef28caa697b6539088ae700b53d839ac0cbf",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 71 frames: no problems found\n"
+        ],
+        "duration": 18,
+        "inputId": "4f5791da5d21ded6f8abdf729224ef28caa697b6539088ae700b53d839ac0cbf"
+      },
+      "qa": {
+        "seconds": 18,
+        "frames": 540,
+        "changePerSecond": 0,
+        "heldSeconds": 15.2,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r03-landscape"
+    },
+    {
+      "project": "r03-vertical",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-11-07-419Z-a1398942",
+      "inputId": "60d6a130ed4f5a6bace21232b423a0daa3f6258654caab61af0e736bd43faf80",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 71 frames: no problems found\n"
+        ],
+        "duration": 18,
+        "inputId": "60d6a130ed4f5a6bace21232b423a0daa3f6258654caab61af0e736bd43faf80"
+      },
+      "qa": {
+        "seconds": 18,
+        "frames": 540,
+        "changePerSecond": 0,
+        "heldSeconds": 15.26,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r03-vertical"
+    },
+    {
+      "project": "r04-landscape",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-17-21-281Z-9f4a3cf7",
+      "inputId": "8c82790efef8ee0aaf613a117900df1f58c9595fbb36f76a15a41de20643eefa",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 156 frames: no problems found\n"
+        ],
+        "duration": 40,
+        "inputId": "8c82790efef8ee0aaf613a117900df1f58c9595fbb36f76a15a41de20643eefa"
+      },
+      "qa": {
+        "seconds": 40,
+        "frames": 1200,
+        "changePerSecond": 0,
+        "heldSeconds": 37.26,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r04-landscape"
+    },
+    {
+      "project": "r04-vertical",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-17-34-752Z-5c935bf9",
+      "inputId": "47ca816d52a1b4a93fb31bbb266e1a6ca89c043897f7622a1db168f812ad436a",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 156 frames: no problems found\n"
+        ],
+        "duration": 40,
+        "inputId": "47ca816d52a1b4a93fb31bbb266e1a6ca89c043897f7622a1db168f812ad436a"
+      },
+      "qa": {
+        "seconds": 40,
+        "frames": 1200,
+        "changePerSecond": 0,
+        "heldSeconds": 37.26,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r04-vertical"
+    },
+    {
+      "project": "r05-landscape",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-14-49-616Z-550fed7f",
+      "inputId": "65821c0236ab007a13df590e85df41783d6efae822636698a1030ee32c1c800d",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 165 frames: no problems found\n"
+        ],
+        "duration": 42,
+        "inputId": "65821c0236ab007a13df590e85df41783d6efae822636698a1030ee32c1c800d"
+      },
+      "qa": {
+        "seconds": 42,
+        "frames": 1260,
+        "changePerSecond": 0,
+        "heldSeconds": 42,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r05-landscape"
+    },
+    {
+      "project": "r05-vertical",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-15-04-197Z-b39c31b9",
+      "inputId": "c1fa9e50f2812b1e6c7e95fa852639c1c939381df9987984209110e5163fd123",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 165 frames: no problems found\n"
+        ],
+        "duration": 42,
+        "inputId": "c1fa9e50f2812b1e6c7e95fa852639c1c939381df9987984209110e5163fd123"
+      },
+      "qa": {
+        "seconds": 42,
+        "frames": 1260,
+        "changePerSecond": 0,
+        "heldSeconds": 42,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r05-vertical"
+    },
+    {
+      "project": "r06-landscape",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-12-11-718Z-9b811bc8",
+      "inputId": "adef8ec444c5a5efb8f230aa0f0b909be769af5e3960d2bed3bc972cd301eb06",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 78 frames: no problems found\n"
+        ],
+        "duration": 20,
+        "inputId": "adef8ec444c5a5efb8f230aa0f0b909be769af5e3960d2bed3bc972cd301eb06"
+      },
+      "qa": {
+        "seconds": 20,
+        "frames": 600,
+        "changePerSecond": 0,
+        "heldSeconds": 19.74,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r06-landscape"
+    },
+    {
+      "project": "r06-vertical",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-12-18-890Z-dbd1157e",
+      "inputId": "831e7c5bc0f6b2cd1a5a632b777715af88d73010dc8284e32b148a122d5aa226",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 78 frames: no problems found\n"
+        ],
+        "duration": 20,
+        "inputId": "831e7c5bc0f6b2cd1a5a632b777715af88d73010dc8284e32b148a122d5aa226"
+      },
+      "qa": {
+        "seconds": 20,
+        "frames": 600,
+        "changePerSecond": 0,
+        "heldSeconds": 20,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r06-vertical"
+    },
+    {
+      "project": "r07-landscape",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-12-25-815Z-ee355450",
+      "inputId": "3ff76aa4f958ac20f89c3e47fbc6f448b6c9ba400eb17235cc9ea4a8b7799c42",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 101 frames: no problems found\n"
+        ],
+        "duration": 26,
+        "inputId": "3ff76aa4f958ac20f89c3e47fbc6f448b6c9ba400eb17235cc9ea4a8b7799c42"
+      },
+      "qa": {
+        "seconds": 26,
+        "frames": 780,
+        "changePerSecond": 0,
+        "heldSeconds": 26,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r07-landscape"
+    },
+    {
+      "project": "r07-vertical",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-12-36-043Z-e113133a",
+      "inputId": "b2cf3ec166eb6eae472cfce651da87313d3f613f0f6b0295c47576448f536189",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 101 frames: no problems found\n"
+        ],
+        "duration": 26,
+        "inputId": "b2cf3ec166eb6eae472cfce651da87313d3f613f0f6b0295c47576448f536189"
+      },
+      "qa": {
+        "seconds": 26,
+        "frames": 780,
+        "changePerSecond": 0,
+        "heldSeconds": 26,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r07-vertical"
+    },
+    {
+      "project": "r08-landscape",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-20-39-961Z-0a7e5a79",
+      "inputId": "e61399e36f3f5c55667aa4b4ee764bab3bcecfaa1ee4cb661c378dee3e74db8e",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 156 frames: no problems found\n"
+        ],
+        "duration": 40,
+        "inputId": "e61399e36f3f5c55667aa4b4ee764bab3bcecfaa1ee4cb661c378dee3e74db8e"
+      },
+      "qa": {
+        "seconds": 40,
+        "frames": 1200,
+        "changePerSecond": 0.01,
+        "heldSeconds": 39.74,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r08-landscape"
+    },
+    {
+      "project": "r08-vertical",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-20-53-783Z-30d755c3",
+      "inputId": "560ff9fda986af53742e7bfa69f0e4f3da1649ed8ac1bf8d573a63ad15d288ee",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 156 frames: no problems found\n"
+        ],
+        "duration": 40,
+        "inputId": "560ff9fda986af53742e7bfa69f0e4f3da1649ed8ac1bf8d573a63ad15d288ee"
+      },
+      "qa": {
+        "seconds": 40,
+        "frames": 1200,
+        "changePerSecond": 0,
+        "heldSeconds": 40,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r08-vertical"
+    },
+    {
+      "project": "r09-landscape",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-12-59-602Z-491b17a7",
+      "inputId": "184061f8bee6843734266cb5add6e6b2092fe48be43708f253eac1d95021230a",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 185 frames: no problems found\n"
+        ],
+        "duration": 47,
+        "inputId": "184061f8bee6843734266cb5add6e6b2092fe48be43708f253eac1d95021230a"
+      },
+      "qa": {
+        "seconds": 47,
+        "frames": 1410,
+        "changePerSecond": 0,
+        "heldSeconds": 46.03,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r09-landscape"
+    },
+    {
+      "project": "r09-vertical",
+      "status": "prototype",
+      "pipelineId": "2026-10-03T02-13-15-872Z-b0647f28",
+      "inputId": "452c235a2f12578c99a49d3ae25c1ec6cd362bed1ad1faf8f0a443989f0ac2b8",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 185 frames: no problems found\n"
+        ],
+        "duration": 47,
+        "inputId": "452c235a2f12578c99a49d3ae25c1ec6cd362bed1ad1faf8f0a443989f0ac2b8"
+      },
+      "qa": {
+        "seconds": 47,
+        "frames": 1410,
+        "changePerSecond": 0,
+        "heldSeconds": 46.07,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "files": "evidence/r09-vertical"
+    }
+  ],
+  "continuousPlayback": "unverified",
+  "sourceChecks": "See test/retirement-kit.test.mjs and REVIEW.md; no claim of exhaustive future-input validation."
+}

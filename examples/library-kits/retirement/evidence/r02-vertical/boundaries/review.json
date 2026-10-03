@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/retirement/specimens/r02-vertical/build/pipeline/2026-10-03T02-10-53-720Z-67fab474/video.mp4",
+  "outputSha256": "0b0a39e46ebacd0dcc1225add85a07c2a4649b8e613d47307deb09e9ed585740",
+  "inputId": "39db6b48f22b01ee05083602cce78dd7f26ce240a205fc52d99f511515c8db58",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "single-match-tiers: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "single-match-tiers: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 269,
+      "time": 8.966666666666667,
+      "reasons": [
+        "single-match-tiers: last frame",
+        "Before tiered-match-tiers"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 270,
+      "time": 9,
+      "reasons": [
+        "tiered-match-tiers: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 276,
+      "time": 9.2,
+      "reasons": [
+        "tiered-match-tiers: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 539,
+      "time": 17.966666666666665,
+      "reasons": [
+        "tiered-match-tiers: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

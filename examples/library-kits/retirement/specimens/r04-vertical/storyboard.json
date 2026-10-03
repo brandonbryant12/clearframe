@@ -1,0 +1,621 @@
+{
+  "title": "R04: retirement mechanism specimens",
+  "format": {
+    "preset": "vertical",
+    "fps": 30
+  },
+  "theme": "paper",
+  "type": "geometric",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.35
+  },
+  "backdrop": "none",
+  "transition": "cut",
+  "captions": false,
+  "music": false,
+  "sfx": "off",
+  "sources": [
+    {
+      "claim": "fees-on-reserve: all amounts, rules and outcomes are fictional illustrations.",
+      "source": "source/fixtures.mjs; audit.json",
+      "asOf": "2026-10-02"
+    },
+    {
+      "claim": "fees-with-loss: all amounts, rules and outcomes are fictional illustrations.",
+      "source": "source/fixtures.mjs; audit.json",
+      "asOf": "2026-10-02"
+    }
+  ],
+  "beats": [
+    {
+      "id": "fees-on-reserve-trace",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "plot": {
+          "title": "Small rates compound into a balance gap",
+          "asOf": "2026-10-02",
+          "source": "Illustrative USD, rounded. 5% annual return; no cashflows. Fees after return; no forecast.",
+          "x": {
+            "type": "linear",
+            "label": "Years",
+            "domain": [
+              0,
+              8
+            ],
+            "ticks": [
+              0,
+              4,
+              8
+            ],
+            "decimals": 0
+          },
+          "y": {
+            "type": "linear",
+            "label": "USD thousands",
+            "domain": [
+              0,
+              150
+            ],
+            "ticks": [
+              0,
+              50,
+              100,
+              150
+            ],
+            "prefix": "$",
+            "suffix": "k",
+            "decimals": 0
+          },
+          "series": [
+            {
+              "id": "baseline",
+              "label": "0.1% fee",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 100
+                },
+                {
+                  "x": 1,
+                  "y": 104.895
+                },
+                {
+                  "x": 2,
+                  "y": 110.02961025
+                },
+                {
+                  "x": 3,
+                  "y": 115.4155596717375
+                },
+                {
+                  "x": 4,
+                  "y": 121.06515131766905
+                },
+                {
+                  "x": 5,
+                  "y": 126.99129047466894
+                },
+                {
+                  "x": 6,
+                  "y": 133.20751414340396
+                },
+                {
+                  "x": 7,
+                  "y": 139.7280219607236
+                },
+                {
+                  "x": 8,
+                  "y": 146.56770863570102
+                }
+              ]
+            },
+            {
+              "id": "comparison",
+              "label": "1% fee",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 100
+                },
+                {
+                  "x": 1,
+                  "y": 103.95
+                },
+                {
+                  "x": 2,
+                  "y": 108.05602499999999
+                },
+                {
+                  "x": 3,
+                  "y": 112.3242379875
+                },
+                {
+                  "x": 4,
+                  "y": 116.76104538800625
+                },
+                {
+                  "x": 5,
+                  "y": 121.3731066808325
+                },
+                {
+                  "x": 6,
+                  "y": 126.1673443947254
+                },
+                {
+                  "x": 7,
+                  "y": 131.15095449831708
+                },
+                {
+                  "x": 8,
+                  "y": 136.3314172010006
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 3.5
+          }
+        }
+      }
+    },
+    {
+      "id": "fees-on-reserve-fee-gap",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "source": "Illustrative USD, rounded. 5% annual return; no cashflows. Fees after return; no forecast. · 2026-10-02",
+        "sourceSize": 33.48,
+        "view": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "elements": [
+          {
+            "id": "fees-on-reserve-fee-gap-title",
+            "type": "text",
+            "text": "The gap is more than fees paid",
+            "x": 118.8,
+            "y": 268.8,
+            "size": 44.28,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "width": 842.4,
+            "height": 192
+          },
+          {
+            "id": "fees-on-reserve-fee-gap-zero",
+            "type": "line",
+            "x1": 118.8,
+            "y1": 1267.2,
+            "x2": 961.2,
+            "y2": 1267.2,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "fees-on-reserve-fee-gap-driver-0",
+            "type": "rect",
+            "x": 191.808,
+            "y": 984.5761236452936,
+            "w": 134.784,
+            "h": 282.62387635470645,
+            "fill": "accent",
+            "at": 0.5,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "id": "fees-on-reserve-fee-gap-driver-0-value",
+            "type": "text",
+            "text": "$8,659",
+            "x": 259.2,
+            "y": 969.5101236452936,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 261.144
+          },
+          {
+            "id": "fees-on-reserve-fee-gap-driver-0-label",
+            "type": "text",
+            "text": "Extra fees",
+            "x": 259.2,
+            "y": 1317.42,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "width": 261.144,
+            "height": 100.44
+          },
+          {
+            "id": "fees-on-reserve-fee-gap-driver-1",
+            "type": "rect",
+            "x": 472.60800000000006,
+            "y": 933.0874475713761,
+            "w": 134.784,
+            "h": 51.48867607391753,
+            "fill": "accent",
+            "at": 0.9,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "id": "fees-on-reserve-fee-gap-driver-1-value",
+            "type": "text",
+            "text": "$1,577",
+            "x": 540,
+            "y": 918.021447571376,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 261.144
+          },
+          {
+            "id": "fees-on-reserve-fee-gap-driver-1-label",
+            "type": "text",
+            "text": "Growth gap",
+            "x": 540,
+            "y": 1317.42,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "width": 261.144,
+            "height": 100.44
+          },
+          {
+            "id": "fees-on-reserve-fee-gap-driver-2",
+            "type": "rect",
+            "x": 753.408,
+            "y": 933.0874475713761,
+            "w": 134.784,
+            "h": 334.112552428624,
+            "fill": "ink",
+            "at": 1.3,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "id": "fees-on-reserve-fee-gap-driver-2-value",
+            "type": "text",
+            "text": "$10,236",
+            "x": 820.8,
+            "y": 918.021447571376,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 261.144
+          },
+          {
+            "id": "fees-on-reserve-fee-gap-driver-2-label",
+            "type": "text",
+            "text": "Ending gap",
+            "x": 820.8,
+            "y": 1317.42,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "width": 261.144,
+            "height": 100.44
+          }
+        ]
+      }
+    },
+    {
+      "id": "fees-with-loss-trace",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "plot": {
+          "title": "The same return path, different fees",
+          "asOf": "2026-10-02",
+          "source": "Illustrative USD. Returns −15/8/5/10/6/4% yearly; +$6k year-end. Fees after return; no forecast.",
+          "x": {
+            "type": "linear",
+            "label": "Years",
+            "domain": [
+              0,
+              6
+            ],
+            "ticks": [
+              0,
+              3,
+              6
+            ],
+            "decimals": 0
+          },
+          "y": {
+            "type": "linear",
+            "label": "USD thousands",
+            "domain": [
+              0,
+              100
+            ],
+            "ticks": [
+              0,
+              50,
+              100
+            ],
+            "prefix": "$",
+            "suffix": "k",
+            "decimals": 0
+          },
+          "series": [
+            {
+              "id": "baseline",
+              "label": "0.2% fee",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 50
+                },
+                {
+                  "x": 1,
+                  "y": 48.415
+                },
+                {
+                  "x": 2,
+                  "y": 58.1836236
+                },
+                {
+                  "x": 3,
+                  "y": 66.97061917044
+                },
+                {
+                  "x": 4,
+                  "y": 79.52034572530903
+                },
+                {
+                  "x": 5,
+                  "y": 90.12298333588991
+                },
+                {
+                  "x": 6,
+                  "y": 99.54044686398686
+                }
+              ]
+            },
+            {
+              "id": "comparison",
+              "label": "1.8% fee",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 50
+                },
+                {
+                  "x": 1,
+                  "y": 47.735
+                },
+                {
+                  "x": 2,
+                  "y": 56.625831600000005
+                },
+                {
+                  "x": 3,
+                  "y": 64.38689496276
+                },
+                {
+                  "x": 4,
+                  "y": 75.55072393877336
+                },
+                {
+                  "x": 5,
+                  "y": 84.64225956234797
+                },
+                {
+                  "x": 6,
+                  "y": 92.44344684583474
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 3.5
+          }
+        }
+      }
+    },
+    {
+      "id": "fees-with-loss-fee-gap",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "source": "Illustrative USD. Returns −15/8/5/10/6/4% yearly; +$6k year-end. Fees after return; no forecast. · 2026-10-02",
+        "sourceSize": 33.48,
+        "view": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "elements": [
+          {
+            "id": "fees-with-loss-fee-gap-title",
+            "type": "text",
+            "text": "The gap is more than fees paid",
+            "x": 118.8,
+            "y": 268.8,
+            "size": 44.28,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "width": 842.4,
+            "height": 192
+          },
+          {
+            "id": "fees-with-loss-fee-gap-zero",
+            "type": "line",
+            "x1": 118.8,
+            "y1": 1267.2,
+            "x2": 961.2,
+            "y2": 1267.2,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "fees-with-loss-fee-gap-driver-0",
+            "type": "rect",
+            "x": 191.808,
+            "y": 995.246490707826,
+            "w": 134.784,
+            "h": 271.9535092921741,
+            "fill": "accent",
+            "at": 0.5,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "id": "fees-with-loss-fee-gap-driver-0-value",
+            "type": "text",
+            "text": "$6,249",
+            "x": 259.2,
+            "y": 980.1804907078259,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 261.144
+          },
+          {
+            "id": "fees-with-loss-fee-gap-driver-0-label",
+            "type": "text",
+            "text": "Extra fees",
+            "x": 259.2,
+            "y": 1317.42,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "width": 261.144,
+            "height": 100.44
+          },
+          {
+            "id": "fees-with-loss-fee-gap-driver-1",
+            "type": "rect",
+            "x": 472.60800000000006,
+            "y": 958.338559210019,
+            "w": 134.784,
+            "h": 36.907931497807,
+            "fill": "accent",
+            "at": 0.9,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "id": "fees-with-loss-fee-gap-driver-1-value",
+            "type": "text",
+            "text": "$848",
+            "x": 540,
+            "y": 943.2725592100189,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 261.144
+          },
+          {
+            "id": "fees-with-loss-fee-gap-driver-1-label",
+            "type": "text",
+            "text": "Growth gap",
+            "x": 540,
+            "y": 1317.42,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "width": 261.144,
+            "height": 100.44
+          },
+          {
+            "id": "fees-with-loss-fee-gap-driver-2",
+            "type": "rect",
+            "x": 753.408,
+            "y": 958.338559210019,
+            "w": 134.784,
+            "h": 308.8614407899811,
+            "fill": "ink",
+            "at": 1.3,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "id": "fees-with-loss-fee-gap-driver-2-value",
+            "type": "text",
+            "text": "$7,097",
+            "x": 820.8,
+            "y": 943.2725592100189,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "fit": 261.144
+          },
+          {
+            "id": "fees-with-loss-fee-gap-driver-2-label",
+            "type": "text",
+            "text": "Ending gap",
+            "x": 820.8,
+            "y": 1317.42,
+            "size": 33.48,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "anchor": "middle",
+            "width": 261.144,
+            "height": 100.44
+          }
+        ]
+      }
+    }
+  ]
+}

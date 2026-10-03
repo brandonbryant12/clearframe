@@ -1,0 +1,4544 @@
+{
+  "modelVersion": 1,
+  "inputsSha256": "c6c5f866a9471a86c7b05de18869cbc80e0b9398abf45d8bde83e0a8b4da2a91",
+  "results": [
+    {
+      "recipe": "R01",
+      "preset": "landscape",
+      "project": "specimens/r01-landscape",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "steady-additions",
+          "recipe": "R01",
+          "preset": "landscape",
+          "audit": {
+            "ledger": {
+              "modelVersion": 1,
+              "openingBalance": 10000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 10000,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 600,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 19600
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 19600,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 1176,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 29776
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 29776,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 1786.56,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 40562.56
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 40562.56,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 2433.7535999999996,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 51996.313599999994
+                },
+                {
+                  "label": "Year 5",
+                  "opening": 51996.313599999994,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 3119.7788159999996,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 64116.09241599999
+                },
+                {
+                  "label": "Year 6",
+                  "opening": 64116.09241599999,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 3846.9655449599995,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 76963.05796096
+                }
+              ],
+              "totals": {
+                "employee": 36000,
+                "employer": 18000,
+                "gain": 12963.057960959999,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 0,
+                "shortfall": 0
+              },
+              "closingBalance": 76963.05796096
+            }
+          },
+          "geometry": [
+            {
+              "kind": "reservoir",
+              "id": "tank-0-fill",
+              "value": 51996.313599999994,
+              "capacity": 100000,
+              "pixelHeight": 123.54324111359999,
+              "pixelArea": 62621.598055661554,
+              "boxH": 237.6,
+              "boxW": 506.87999999999994,
+              "beat": "steady-additions-flows"
+            },
+            {
+              "kind": "reservoir",
+              "id": "tank-1-fill",
+              "value": 64116.09241599999,
+              "capacity": 100000,
+              "pixelHeight": 152.33983558041598,
+              "pixelArea": 77218.01585900124,
+              "boxH": 237.6,
+              "boxW": 506.87999999999994,
+              "beat": "steady-additions-flows"
+            }
+          ]
+        },
+        {
+          "caseId": "losses-with-additions",
+          "recipe": "R01",
+          "preset": "landscape",
+          "audit": {
+            "ledger": {
+              "modelVersion": 1,
+              "openingBalance": 30000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 30000,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": -0.1,
+                  "gain": -3000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 31000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 31000,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": -0.2,
+                  "gain": -6200,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 28800
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 28800,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": 0.1,
+                  "gain": 2880,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 35680
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 35680,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": 0.06,
+                  "gain": 2140.7999999999997,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 41820.8
+                },
+                {
+                  "label": "Year 5",
+                  "opening": 41820.8,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": 0.04,
+                  "gain": 1672.832,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 47493.632000000005
+                },
+                {
+                  "label": "Year 6",
+                  "opening": 47493.632000000005,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": 0.03,
+                  "gain": 1424.80896,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 52918.44096000001
+                }
+              ],
+              "totals": {
+                "employee": 18000,
+                "employer": 6000,
+                "gain": -1081.5590400000003,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 0,
+                "shortfall": 0
+              },
+              "closingBalance": 52918.44096000001
+            }
+          },
+          "geometry": [
+            {
+              "kind": "reservoir",
+              "id": "tank-0-fill",
+              "value": 31000,
+              "capacity": 50000,
+              "pixelHeight": 147.312,
+              "pixelArea": 74669.50656,
+              "boxH": 237.6,
+              "boxW": 506.87999999999994,
+              "beat": "losses-with-additions-flows"
+            },
+            {
+              "kind": "reservoir",
+              "id": "tank-1-fill",
+              "value": 28800,
+              "capacity": 50000,
+              "pixelHeight": 136.8576,
+              "pixelArea": 69370.38028799999,
+              "boxH": 237.6,
+              "boxW": 506.87999999999994,
+              "beat": "losses-with-additions-flows"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R01",
+      "preset": "vertical",
+      "project": "specimens/r01-vertical",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "steady-additions",
+          "recipe": "R01",
+          "preset": "vertical",
+          "audit": {
+            "ledger": {
+              "modelVersion": 1,
+              "openingBalance": 10000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 10000,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 600,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 19600
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 19600,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 1176,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 29776
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 29776,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 1786.56,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 40562.56
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 40562.56,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 2433.7535999999996,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 51996.313599999994
+                },
+                {
+                  "label": "Year 5",
+                  "opening": 51996.313599999994,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 3119.7788159999996,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 64116.09241599999
+                },
+                {
+                  "label": "Year 6",
+                  "opening": 64116.09241599999,
+                  "employee": 6000,
+                  "employer": 3000,
+                  "returnRate": 0.06,
+                  "gain": 3846.9655449599995,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 76963.05796096
+                }
+              ],
+              "totals": {
+                "employee": 36000,
+                "employer": 18000,
+                "gain": 12963.057960959999,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 0,
+                "shortfall": 0
+              },
+              "closingBalance": 76963.05796096
+            }
+          },
+          "geometry": [
+            {
+              "kind": "reservoir",
+              "id": "tank-0-fill",
+              "value": 51996.313599999994,
+              "capacity": 100000,
+              "pixelHeight": 279.53218191359997,
+              "pixelArea": 70643.37301320498,
+              "boxH": 537.6,
+              "boxW": 252.71999999999997,
+              "beat": "steady-additions-flows"
+            },
+            {
+              "kind": "reservoir",
+              "id": "tank-1-fill",
+              "value": 64116.09241599999,
+              "capacity": 100000,
+              "pixelHeight": 344.688112828416,
+              "pixelArea": 87109.57987399728,
+              "boxH": 537.6,
+              "boxW": 252.71999999999997,
+              "beat": "steady-additions-flows"
+            }
+          ]
+        },
+        {
+          "caseId": "losses-with-additions",
+          "recipe": "R01",
+          "preset": "vertical",
+          "audit": {
+            "ledger": {
+              "modelVersion": 1,
+              "openingBalance": 30000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 30000,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": -0.1,
+                  "gain": -3000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 31000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 31000,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": -0.2,
+                  "gain": -6200,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 28800
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 28800,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": 0.1,
+                  "gain": 2880,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 35680
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 35680,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": 0.06,
+                  "gain": 2140.7999999999997,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 41820.8
+                },
+                {
+                  "label": "Year 5",
+                  "opening": 41820.8,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": 0.04,
+                  "gain": 1672.832,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 47493.632000000005
+                },
+                {
+                  "label": "Year 6",
+                  "opening": 47493.632000000005,
+                  "employee": 3000,
+                  "employer": 1000,
+                  "returnRate": 0.03,
+                  "gain": 1424.80896,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0,
+                  "closing": 52918.44096000001
+                }
+              ],
+              "totals": {
+                "employee": 18000,
+                "employer": 6000,
+                "gain": -1081.5590400000003,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 0,
+                "shortfall": 0
+              },
+              "closingBalance": 52918.44096000001
+            }
+          },
+          "geometry": [
+            {
+              "kind": "reservoir",
+              "id": "tank-0-fill",
+              "value": 31000,
+              "capacity": 50000,
+              "pixelHeight": 333.312,
+              "pixelArea": 84234.60863999999,
+              "boxH": 537.6,
+              "boxW": 252.71999999999997,
+              "beat": "losses-with-additions-flows"
+            },
+            {
+              "kind": "reservoir",
+              "id": "tank-1-fill",
+              "value": 28800,
+              "capacity": 50000,
+              "pixelHeight": 309.6576,
+              "pixelArea": 78256.66867199999,
+              "boxH": 537.6,
+              "boxW": 252.71999999999997,
+              "beat": "losses-with-additions-flows"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R02",
+      "preset": "landscape",
+      "project": "specimens/r02-landscape",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "single-match",
+          "recipe": "R02",
+          "preset": "landscape",
+          "audit": {
+            "match": {
+              "modelVersion": 1,
+              "tiers": [
+                {
+                  "from": 0,
+                  "through": 0.06,
+                  "rate": 0.5,
+                  "eligible": 3600,
+                  "matched": 1800
+                }
+              ],
+              "employerContribution": 1800,
+              "aboveMatchThreshold": 0
+            }
+          },
+          "geometry": [
+            {
+              "kind": "stack",
+              "id": "row-0-part-0",
+              "value": 1800,
+              "domain": 3000,
+              "pixelLength": 932.6591999999998,
+              "pixelArea": 77716.62581759997,
+              "span": 1554.4319999999998,
+              "barH": 83.32799999999999,
+              "beat": "single-match-tiers"
+            }
+          ]
+        },
+        {
+          "caseId": "tiered-match",
+          "recipe": "R02",
+          "preset": "landscape",
+          "audit": {
+            "match": {
+              "modelVersion": 1,
+              "tiers": [
+                {
+                  "from": 0,
+                  "through": 0.03,
+                  "rate": 1,
+                  "eligible": 2400,
+                  "matched": 2400
+                },
+                {
+                  "from": 0.03,
+                  "through": 0.05,
+                  "rate": 0.5,
+                  "eligible": 1600,
+                  "matched": 800
+                }
+              ],
+              "employerContribution": 3200,
+              "aboveMatchThreshold": 2400
+            }
+          },
+          "geometry": [
+            {
+              "kind": "stack",
+              "id": "row-0-part-0",
+              "value": 2400,
+              "domain": 4000,
+              "pixelLength": 932.6591999999998,
+              "pixelArea": 31964.09610239999,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "tiered-match-tiers"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-0",
+              "value": 800,
+              "domain": 4000,
+              "pixelLength": 310.8864,
+              "pixelArea": 10654.6987008,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "tiered-match-tiers"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-0",
+              "value": 0,
+              "domain": 4000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "tiered-match-tiers"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R02",
+      "preset": "vertical",
+      "project": "specimens/r02-vertical",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "single-match",
+          "recipe": "R02",
+          "preset": "vertical",
+          "audit": {
+            "match": {
+              "modelVersion": 1,
+              "tiers": [
+                {
+                  "from": 0,
+                  "through": 0.06,
+                  "rate": 0.5,
+                  "eligible": 3600,
+                  "matched": 1800
+                }
+              ],
+              "employerContribution": 1800,
+              "aboveMatchThreshold": 0
+            }
+          },
+          "geometry": [
+            {
+              "kind": "stack",
+              "id": "row-0-part-0",
+              "value": 1800,
+              "domain": 3000,
+              "pixelLength": 465.00480000000005,
+              "pixelArea": 21795.704985599998,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "single-match-tiers"
+            }
+          ]
+        },
+        {
+          "caseId": "tiered-match",
+          "recipe": "R02",
+          "preset": "vertical",
+          "audit": {
+            "match": {
+              "modelVersion": 1,
+              "tiers": [
+                {
+                  "from": 0,
+                  "through": 0.03,
+                  "rate": 1,
+                  "eligible": 2400,
+                  "matched": 2400
+                },
+                {
+                  "from": 0.03,
+                  "through": 0.05,
+                  "rate": 0.5,
+                  "eligible": 1600,
+                  "matched": 800
+                }
+              ],
+              "employerContribution": 3200,
+              "aboveMatchThreshold": 2400
+            }
+          },
+          "geometry": [
+            {
+              "kind": "stack",
+              "id": "row-0-part-0",
+              "value": 2400,
+              "domain": 4000,
+              "pixelLength": 465.00480000000005,
+              "pixelArea": 21795.704985599998,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "tiered-match-tiers"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-0",
+              "value": 800,
+              "domain": 4000,
+              "pixelLength": 155.0016,
+              "pixelArea": 7265.234995199999,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "tiered-match-tiers"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-0",
+              "value": 0,
+              "domain": 4000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "tiered-match-tiers"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R03",
+      "preset": "landscape",
+      "project": "specimens/r03-landscape",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "graded-ownership",
+          "recipe": "R03",
+          "preset": "landscape",
+          "audit": {
+            "current": {
+              "modelVersion": 1,
+              "vestedFraction": 0.6,
+              "employeeOwned": 20000,
+              "employerOwned": 6000,
+              "employerUnvested": 4000,
+              "totalOwned": 26000
+            },
+            "snapshots": [
+              {
+                "creditedService": 0,
+                "modelVersion": 1,
+                "vestedFraction": 0,
+                "employeeOwned": 20000,
+                "employerOwned": 0,
+                "employerUnvested": 10000,
+                "totalOwned": 20000
+              },
+              {
+                "creditedService": 3,
+                "modelVersion": 1,
+                "vestedFraction": 0.6,
+                "employeeOwned": 20000,
+                "employerOwned": 6000,
+                "employerUnvested": 4000,
+                "totalOwned": 26000
+              },
+              {
+                "creditedService": 5,
+                "modelVersion": 1,
+                "vestedFraction": 1,
+                "employeeOwned": 20000,
+                "employerOwned": 10000,
+                "employerUnvested": 0,
+                "totalOwned": 30000
+              }
+            ]
+          },
+          "geometry": [
+            {
+              "kind": "stack",
+              "id": "row-0-part-0",
+              "value": 20000,
+              "domain": 30000,
+              "pixelLength": 1036.2879999999998,
+              "pixelArea": 35515.662335999994,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-0-part-1",
+              "value": 0,
+              "domain": 30000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-0-part-2",
+              "value": 10000,
+              "domain": 30000,
+              "pixelLength": 518.1439999999999,
+              "pixelArea": 17757.831167999997,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-0",
+              "value": 20000,
+              "domain": 30000,
+              "pixelLength": 1036.2879999999998,
+              "pixelArea": 35515.662335999994,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-1",
+              "value": 6000,
+              "domain": 30000,
+              "pixelLength": 310.8863999999999,
+              "pixelArea": 10654.698700799996,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-2",
+              "value": 4000,
+              "domain": 30000,
+              "pixelLength": 207.25759999999997,
+              "pixelArea": 7103.132467199998,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-0",
+              "value": 20000,
+              "domain": 30000,
+              "pixelLength": 1036.2879999999998,
+              "pixelArea": 35515.662335999994,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-1",
+              "value": 10000,
+              "domain": 30000,
+              "pixelLength": 518.1439999999999,
+              "pixelArea": 17757.831167999997,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-2",
+              "value": 0,
+              "domain": 30000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "graded-ownership-ownership"
+            }
+          ]
+        },
+        {
+          "caseId": "cliff-ownership",
+          "recipe": "R03",
+          "preset": "landscape",
+          "audit": {
+            "current": {
+              "modelVersion": 1,
+              "vestedFraction": 0,
+              "employeeOwned": 12000,
+              "employerOwned": 0,
+              "employerUnvested": 6000,
+              "totalOwned": 12000
+            },
+            "snapshots": [
+              {
+                "creditedService": 0,
+                "modelVersion": 1,
+                "vestedFraction": 0,
+                "employeeOwned": 12000,
+                "employerOwned": 0,
+                "employerUnvested": 6000,
+                "totalOwned": 12000
+              },
+              {
+                "creditedService": 2,
+                "modelVersion": 1,
+                "vestedFraction": 0,
+                "employeeOwned": 12000,
+                "employerOwned": 0,
+                "employerUnvested": 6000,
+                "totalOwned": 12000
+              },
+              {
+                "creditedService": 3,
+                "modelVersion": 1,
+                "vestedFraction": 1,
+                "employeeOwned": 12000,
+                "employerOwned": 6000,
+                "employerUnvested": 0,
+                "totalOwned": 18000
+              }
+            ]
+          },
+          "geometry": [
+            {
+              "kind": "stack",
+              "id": "row-0-part-0",
+              "value": 12000,
+              "domain": 18000,
+              "pixelLength": 1036.2879999999998,
+              "pixelArea": 35515.662335999994,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-0-part-1",
+              "value": 0,
+              "domain": 18000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-0-part-2",
+              "value": 6000,
+              "domain": 18000,
+              "pixelLength": 518.1439999999999,
+              "pixelArea": 17757.831167999997,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-0",
+              "value": 12000,
+              "domain": 18000,
+              "pixelLength": 1036.2879999999998,
+              "pixelArea": 35515.662335999994,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-1",
+              "value": 0,
+              "domain": 18000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-2",
+              "value": 6000,
+              "domain": 18000,
+              "pixelLength": 518.1439999999999,
+              "pixelArea": 17757.831167999997,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-0",
+              "value": 12000,
+              "domain": 18000,
+              "pixelLength": 1036.2879999999998,
+              "pixelArea": 35515.662335999994,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-1",
+              "value": 6000,
+              "domain": 18000,
+              "pixelLength": 518.1439999999999,
+              "pixelArea": 17757.831167999997,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-2",
+              "value": 0,
+              "domain": 18000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 1554.4319999999998,
+              "barH": 34.272,
+              "beat": "cliff-ownership-ownership"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R03",
+      "preset": "vertical",
+      "project": "specimens/r03-vertical",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "graded-ownership",
+          "recipe": "R03",
+          "preset": "vertical",
+          "audit": {
+            "current": {
+              "modelVersion": 1,
+              "vestedFraction": 0.6,
+              "employeeOwned": 20000,
+              "employerOwned": 6000,
+              "employerUnvested": 4000,
+              "totalOwned": 26000
+            },
+            "snapshots": [
+              {
+                "creditedService": 0,
+                "modelVersion": 1,
+                "vestedFraction": 0,
+                "employeeOwned": 20000,
+                "employerOwned": 0,
+                "employerUnvested": 10000,
+                "totalOwned": 20000
+              },
+              {
+                "creditedService": 3,
+                "modelVersion": 1,
+                "vestedFraction": 0.6,
+                "employeeOwned": 20000,
+                "employerOwned": 6000,
+                "employerUnvested": 4000,
+                "totalOwned": 26000
+              },
+              {
+                "creditedService": 5,
+                "modelVersion": 1,
+                "vestedFraction": 1,
+                "employeeOwned": 20000,
+                "employerOwned": 10000,
+                "employerUnvested": 0,
+                "totalOwned": 30000
+              }
+            ]
+          },
+          "geometry": [
+            {
+              "kind": "stack",
+              "id": "row-0-part-0",
+              "value": 20000,
+              "domain": 30000,
+              "pixelLength": 516.672,
+              "pixelArea": 24217.449984,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-0-part-1",
+              "value": 0,
+              "domain": 30000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-0-part-2",
+              "value": 10000,
+              "domain": 30000,
+              "pixelLength": 258.336,
+              "pixelArea": 12108.724992,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-0",
+              "value": 20000,
+              "domain": 30000,
+              "pixelLength": 516.672,
+              "pixelArea": 24217.449984,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-1",
+              "value": 6000,
+              "domain": 30000,
+              "pixelLength": 155.0016,
+              "pixelArea": 7265.234995199999,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-2",
+              "value": 4000,
+              "domain": 30000,
+              "pixelLength": 103.3344,
+              "pixelArea": 4843.489996799999,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-0",
+              "value": 20000,
+              "domain": 30000,
+              "pixelLength": 516.672,
+              "pixelArea": 24217.449984,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-1",
+              "value": 10000,
+              "domain": 30000,
+              "pixelLength": 258.336,
+              "pixelArea": 12108.724992,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "graded-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-2",
+              "value": 0,
+              "domain": 30000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "graded-ownership-ownership"
+            }
+          ]
+        },
+        {
+          "caseId": "cliff-ownership",
+          "recipe": "R03",
+          "preset": "vertical",
+          "audit": {
+            "current": {
+              "modelVersion": 1,
+              "vestedFraction": 0,
+              "employeeOwned": 12000,
+              "employerOwned": 0,
+              "employerUnvested": 6000,
+              "totalOwned": 12000
+            },
+            "snapshots": [
+              {
+                "creditedService": 0,
+                "modelVersion": 1,
+                "vestedFraction": 0,
+                "employeeOwned": 12000,
+                "employerOwned": 0,
+                "employerUnvested": 6000,
+                "totalOwned": 12000
+              },
+              {
+                "creditedService": 2,
+                "modelVersion": 1,
+                "vestedFraction": 0,
+                "employeeOwned": 12000,
+                "employerOwned": 0,
+                "employerUnvested": 6000,
+                "totalOwned": 12000
+              },
+              {
+                "creditedService": 3,
+                "modelVersion": 1,
+                "vestedFraction": 1,
+                "employeeOwned": 12000,
+                "employerOwned": 6000,
+                "employerUnvested": 0,
+                "totalOwned": 18000
+              }
+            ]
+          },
+          "geometry": [
+            {
+              "kind": "stack",
+              "id": "row-0-part-0",
+              "value": 12000,
+              "domain": 18000,
+              "pixelLength": 516.672,
+              "pixelArea": 24217.449984,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-0-part-1",
+              "value": 0,
+              "domain": 18000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-0-part-2",
+              "value": 6000,
+              "domain": 18000,
+              "pixelLength": 258.336,
+              "pixelArea": 12108.724992,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-0",
+              "value": 12000,
+              "domain": 18000,
+              "pixelLength": 516.672,
+              "pixelArea": 24217.449984,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-1",
+              "value": 0,
+              "domain": 18000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-2",
+              "value": 6000,
+              "domain": 18000,
+              "pixelLength": 258.336,
+              "pixelArea": 12108.724992,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-0",
+              "value": 12000,
+              "domain": 18000,
+              "pixelLength": 516.672,
+              "pixelArea": 24217.449984,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-1",
+              "value": 6000,
+              "domain": 18000,
+              "pixelLength": 258.336,
+              "pixelArea": 12108.724992,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "cliff-ownership-ownership"
+            },
+            {
+              "kind": "stack",
+              "id": "row-2-part-2",
+              "value": 0,
+              "domain": 18000,
+              "pixelLength": 0,
+              "pixelArea": 0,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "cliff-ownership-ownership"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R04",
+      "preset": "landscape",
+      "project": "specimens/r04-landscape",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "fees-on-reserve",
+          "recipe": "R04",
+          "preset": "landscape",
+          "audit": {
+            "comparison": {
+              "modelVersion": 1,
+              "baseline": {
+                "modelVersion": 1,
+                "openingBalance": 100000,
+                "cashflowTiming": "end",
+                "feeTiming": "after return, before end-of-period cashflows",
+                "rows": [
+                  {
+                    "label": "Year 1",
+                    "opening": 100000,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5000,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 105,
+                    "fees": 105,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 104895
+                  },
+                  {
+                    "label": "Year 2",
+                    "opening": 104895,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5244.75,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 110.13975,
+                    "fees": 110.13975,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 110029.61025
+                  },
+                  {
+                    "label": "Year 3",
+                    "opening": 110029.61025,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5501.4805125,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 115.5310907625,
+                    "fees": 115.5310907625,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 115415.5596717375
+                  },
+                  {
+                    "label": "Year 4",
+                    "opening": 115415.5596717375,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5770.777983586875,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 121.18633765532438,
+                    "fees": 121.18633765532438,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 121065.15131766905
+                  },
+                  {
+                    "label": "Year 5",
+                    "opening": 121065.15131766905,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6053.257565883453,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 127.1184088835525,
+                    "fees": 127.1184088835525,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 126991.29047466895
+                  },
+                  {
+                    "label": "Year 6",
+                    "opening": 126991.29047466895,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6349.5645237334475,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 133.3408549984024,
+                    "fees": 133.3408549984024,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 133207.51414340397
+                  },
+                  {
+                    "label": "Year 7",
+                    "opening": 133207.51414340397,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6660.375707170198,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 139.86788985057416,
+                    "fees": 139.86788985057416,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 139728.0219607236
+                  },
+                  {
+                    "label": "Year 8",
+                    "opening": 139728.0219607236,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6986.40109803618,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 146.71442305875976,
+                    "fees": 146.71442305875976,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 146567.708635701
+                  }
+                ],
+                "totals": {
+                  "employee": 0,
+                  "employer": 0,
+                  "gain": 47566.607390910154,
+                  "fees": 998.8987552091131,
+                  "unpaidFees": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0
+                },
+                "closingBalance": 146567.708635701
+              },
+              "comparison": {
+                "modelVersion": 1,
+                "openingBalance": 100000,
+                "cashflowTiming": "end",
+                "feeTiming": "after return, before end-of-period cashflows",
+                "rows": [
+                  {
+                    "label": "Year 1",
+                    "opening": 100000,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5000,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1050,
+                    "fees": 1050,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 103950
+                  },
+                  {
+                    "label": "Year 2",
+                    "opening": 103950,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5197.5,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1091.475,
+                    "fees": 1091.475,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 108056.025
+                  },
+                  {
+                    "label": "Year 3",
+                    "opening": 108056.025,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5402.80125,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1134.5882625,
+                    "fees": 1134.5882625,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 112324.2379875
+                  },
+                  {
+                    "label": "Year 4",
+                    "opening": 112324.2379875,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5616.211899375001,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1179.4044988687501,
+                    "fees": 1179.4044988687501,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 116761.04538800626
+                  },
+                  {
+                    "label": "Year 5",
+                    "opening": 116761.04538800626,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5838.052269400313,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1225.9909765740658,
+                    "fees": 1225.9909765740658,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 121373.10668083251
+                  },
+                  {
+                    "label": "Year 6",
+                    "opening": 121373.10668083251,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6068.655334041626,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1274.4176201487414,
+                    "fees": 1274.4176201487414,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 126167.3443947254
+                  },
+                  {
+                    "label": "Year 7",
+                    "opening": 126167.3443947254,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6308.36721973627,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1324.7571161446167,
+                    "fees": 1324.7571161446167,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 131150.95449831706
+                  },
+                  {
+                    "label": "Year 8",
+                    "opening": 131150.95449831706,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6557.547724915854,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1377.085022232329,
+                    "fees": 1377.085022232329,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 136331.4172010006
+                  }
+                ],
+                "totals": {
+                  "employee": 0,
+                  "employer": 0,
+                  "gain": 45989.13569746906,
+                  "fees": 9657.718496468504,
+                  "unpaidFees": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0
+                },
+                "closingBalance": 136331.4172010006
+              },
+              "endingBalanceDifference": 10236.291434700426,
+              "chargedFeeDifference": 8658.81974125939,
+              "gainDifference": 1577.4716934410972,
+              "fundedWithdrawalDifference": 0
+            }
+          },
+          "geometry": [
+            {
+              "kind": "waterfall",
+              "id": "driver-0",
+              "from": 0,
+              "to": 8658.81974125939,
+              "domain": [
+                0,
+                20000
+              ],
+              "pixelHeight": 158.97593044952248,
+              "span": 367.20000000000005,
+              "pixelArea": 42976.9171340021,
+              "barW": 270.33599999999996,
+              "beat": "fees-on-reserve-fee-gap"
+            },
+            {
+              "kind": "waterfall",
+              "id": "driver-1",
+              "from": 8658.81974125939,
+              "to": 10236.291434700488,
+              "domain": [
+                0,
+                20000
+              ],
+              "pixelHeight": 28.962380291578484,
+              "span": 367.20000000000005,
+              "pixelArea": 7829.57403850416,
+              "barW": 270.33599999999996,
+              "beat": "fees-on-reserve-fee-gap"
+            },
+            {
+              "kind": "waterfall",
+              "id": "driver-2",
+              "from": 0,
+              "to": 10236.291434700488,
+              "domain": [
+                0,
+                20000
+              ],
+              "pixelHeight": 187.93831074110096,
+              "span": 367.20000000000005,
+              "pixelArea": 50806.49117250626,
+              "barW": 270.33599999999996,
+              "beat": "fees-on-reserve-fee-gap"
+            }
+          ]
+        },
+        {
+          "caseId": "fees-with-loss",
+          "recipe": "R04",
+          "preset": "landscape",
+          "audit": {
+            "comparison": {
+              "modelVersion": 1,
+              "baseline": {
+                "modelVersion": 1,
+                "openingBalance": 50000,
+                "cashflowTiming": "end",
+                "feeTiming": "after return, before end-of-period cashflows",
+                "rows": [
+                  {
+                    "label": "Year 1",
+                    "opening": 50000,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": -0.15,
+                    "gain": -7500,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 85,
+                    "fees": 85,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 48415
+                  },
+                  {
+                    "label": "Year 2",
+                    "opening": 48415,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.08,
+                    "gain": 3873.2000000000003,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 104.57639999999999,
+                    "fees": 104.57639999999999,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 58183.6236
+                  },
+                  {
+                    "label": "Year 3",
+                    "opening": 58183.6236,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 2909.18118,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 122.18560956,
+                    "fees": 122.18560956,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 66970.61917044
+                  },
+                  {
+                    "label": "Year 4",
+                    "opening": 66970.61917044,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.1,
+                    "gain": 6697.061917044,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 147.335362174968,
+                    "fees": 147.335362174968,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 79520.34572530903
+                  },
+                  {
+                    "label": "Year 5",
+                    "opening": 79520.34572530903,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.06,
+                    "gain": 4771.220743518542,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 168.58313293765514,
+                    "fees": 168.58313293765514,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 90122.98333588992
+                  },
+                  {
+                    "label": "Year 6",
+                    "opening": 90122.98333588992,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.04,
+                    "gain": 3604.919333435597,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 187.45580533865103,
+                    "fees": 187.45580533865103,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 99540.44686398686
+                  }
+                ],
+                "totals": {
+                  "employee": 36000,
+                  "employer": 0,
+                  "gain": 14355.583173998139,
+                  "fees": 815.1363100112742,
+                  "unpaidFees": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0
+                },
+                "closingBalance": 99540.44686398686
+              },
+              "comparison": {
+                "modelVersion": 1,
+                "openingBalance": 50000,
+                "cashflowTiming": "end",
+                "feeTiming": "after return, before end-of-period cashflows",
+                "rows": [
+                  {
+                    "label": "Year 1",
+                    "opening": 50000,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": -0.15,
+                    "gain": -7500,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 764.9999999999999,
+                    "fees": 764.9999999999999,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 47735
+                  },
+                  {
+                    "label": "Year 2",
+                    "opening": 47735,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.08,
+                    "gain": 3818.8,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 927.9684,
+                    "fees": 927.9684,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 56625.831600000005
+                  },
+                  {
+                    "label": "Year 3",
+                    "opening": 56625.831600000005,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 2831.2915800000005,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 1070.22821724,
+                    "fees": 1070.22821724,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 64386.89496276
+                  },
+                  {
+                    "label": "Year 4",
+                    "opening": 64386.89496276,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.1,
+                    "gain": 6438.689496276001,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 1274.860520262648,
+                    "fees": 1274.860520262648,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 75550.72393877336
+                  },
+                  {
+                    "label": "Year 5",
+                    "opening": 75550.72393877336,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.06,
+                    "gain": 4533.043436326401,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 1441.5078127517957,
+                    "fees": 1441.5078127517957,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 84642.25956234797
+                  },
+                  {
+                    "label": "Year 6",
+                    "opening": 84642.25956234797,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.04,
+                    "gain": 3385.690382493919,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 1584.5030990071539,
+                    "fees": 1584.5030990071539,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 92443.44684583474
+                  }
+                ],
+                "totals": {
+                  "employee": 36000,
+                  "employer": 0,
+                  "gain": 13507.514895096323,
+                  "fees": 7064.068049261597,
+                  "unpaidFees": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0
+                },
+                "closingBalance": 92443.44684583474
+              },
+              "endingBalanceDifference": 7097.000018152117,
+              "chargedFeeDifference": 6248.931739250323,
+              "gainDifference": 848.0682789018156,
+              "fundedWithdrawalDifference": 0
+            }
+          },
+          "geometry": [
+            {
+              "kind": "waterfall",
+              "id": "driver-0",
+              "from": 0,
+              "to": 6248.931739250323,
+              "domain": [
+                0,
+                15000
+              ],
+              "pixelHeight": 152.973848976848,
+              "span": 367.20000000000005,
+              "pixelArea": 41354.33843700517,
+              "barW": 270.33599999999996,
+              "beat": "fees-with-loss-fee-gap"
+            },
+            {
+              "kind": "waterfall",
+              "id": "driver-1",
+              "from": 6248.931739250323,
+              "to": 7097.000018152138,
+              "domain": [
+                0,
+                15000
+              ],
+              "pixelHeight": 20.76071146751633,
+              "span": 367.20000000000005,
+              "pixelArea": 5612.3676952824935,
+              "barW": 270.33599999999996,
+              "beat": "fees-with-loss-fee-gap"
+            },
+            {
+              "kind": "waterfall",
+              "id": "driver-2",
+              "from": 0,
+              "to": 7097.000018152138,
+              "domain": [
+                0,
+                15000
+              ],
+              "pixelHeight": 173.73456044436432,
+              "span": 367.20000000000005,
+              "pixelArea": 46966.70613228766,
+              "barW": 270.33599999999996,
+              "beat": "fees-with-loss-fee-gap"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R04",
+      "preset": "vertical",
+      "project": "specimens/r04-vertical",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "fees-on-reserve",
+          "recipe": "R04",
+          "preset": "vertical",
+          "audit": {
+            "comparison": {
+              "modelVersion": 1,
+              "baseline": {
+                "modelVersion": 1,
+                "openingBalance": 100000,
+                "cashflowTiming": "end",
+                "feeTiming": "after return, before end-of-period cashflows",
+                "rows": [
+                  {
+                    "label": "Year 1",
+                    "opening": 100000,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5000,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 105,
+                    "fees": 105,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 104895
+                  },
+                  {
+                    "label": "Year 2",
+                    "opening": 104895,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5244.75,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 110.13975,
+                    "fees": 110.13975,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 110029.61025
+                  },
+                  {
+                    "label": "Year 3",
+                    "opening": 110029.61025,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5501.4805125,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 115.5310907625,
+                    "fees": 115.5310907625,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 115415.5596717375
+                  },
+                  {
+                    "label": "Year 4",
+                    "opening": 115415.5596717375,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5770.777983586875,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 121.18633765532438,
+                    "fees": 121.18633765532438,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 121065.15131766905
+                  },
+                  {
+                    "label": "Year 5",
+                    "opening": 121065.15131766905,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6053.257565883453,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 127.1184088835525,
+                    "fees": 127.1184088835525,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 126991.29047466895
+                  },
+                  {
+                    "label": "Year 6",
+                    "opening": 126991.29047466895,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6349.5645237334475,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 133.3408549984024,
+                    "fees": 133.3408549984024,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 133207.51414340397
+                  },
+                  {
+                    "label": "Year 7",
+                    "opening": 133207.51414340397,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6660.375707170198,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 139.86788985057416,
+                    "fees": 139.86788985057416,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 139728.0219607236
+                  },
+                  {
+                    "label": "Year 8",
+                    "opening": 139728.0219607236,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6986.40109803618,
+                    "feeRate": 0.001,
+                    "feeAmount": 0,
+                    "assessedFees": 146.71442305875976,
+                    "fees": 146.71442305875976,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 146567.708635701
+                  }
+                ],
+                "totals": {
+                  "employee": 0,
+                  "employer": 0,
+                  "gain": 47566.607390910154,
+                  "fees": 998.8987552091131,
+                  "unpaidFees": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0
+                },
+                "closingBalance": 146567.708635701
+              },
+              "comparison": {
+                "modelVersion": 1,
+                "openingBalance": 100000,
+                "cashflowTiming": "end",
+                "feeTiming": "after return, before end-of-period cashflows",
+                "rows": [
+                  {
+                    "label": "Year 1",
+                    "opening": 100000,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5000,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1050,
+                    "fees": 1050,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 103950
+                  },
+                  {
+                    "label": "Year 2",
+                    "opening": 103950,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5197.5,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1091.475,
+                    "fees": 1091.475,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 108056.025
+                  },
+                  {
+                    "label": "Year 3",
+                    "opening": 108056.025,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5402.80125,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1134.5882625,
+                    "fees": 1134.5882625,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 112324.2379875
+                  },
+                  {
+                    "label": "Year 4",
+                    "opening": 112324.2379875,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5616.211899375001,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1179.4044988687501,
+                    "fees": 1179.4044988687501,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 116761.04538800626
+                  },
+                  {
+                    "label": "Year 5",
+                    "opening": 116761.04538800626,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 5838.052269400313,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1225.9909765740658,
+                    "fees": 1225.9909765740658,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 121373.10668083251
+                  },
+                  {
+                    "label": "Year 6",
+                    "opening": 121373.10668083251,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6068.655334041626,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1274.4176201487414,
+                    "fees": 1274.4176201487414,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 126167.3443947254
+                  },
+                  {
+                    "label": "Year 7",
+                    "opening": 126167.3443947254,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6308.36721973627,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1324.7571161446167,
+                    "fees": 1324.7571161446167,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 131150.95449831706
+                  },
+                  {
+                    "label": "Year 8",
+                    "opening": 131150.95449831706,
+                    "employee": 0,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 6557.547724915854,
+                    "feeRate": 0.01,
+                    "feeAmount": 0,
+                    "assessedFees": 1377.085022232329,
+                    "fees": 1377.085022232329,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 136331.4172010006
+                  }
+                ],
+                "totals": {
+                  "employee": 0,
+                  "employer": 0,
+                  "gain": 45989.13569746906,
+                  "fees": 9657.718496468504,
+                  "unpaidFees": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0
+                },
+                "closingBalance": 136331.4172010006
+              },
+              "endingBalanceDifference": 10236.291434700426,
+              "chargedFeeDifference": 8658.81974125939,
+              "gainDifference": 1577.4716934410972,
+              "fundedWithdrawalDifference": 0
+            }
+          },
+          "geometry": [
+            {
+              "kind": "waterfall",
+              "id": "driver-0",
+              "from": 0,
+              "to": 8658.81974125939,
+              "domain": [
+                0,
+                20000
+              ],
+              "pixelHeight": 282.62387635470645,
+              "span": 652.8000000000001,
+              "pixelArea": 38093.176550592754,
+              "barW": 134.784,
+              "beat": "fees-on-reserve-fee-gap"
+            },
+            {
+              "kind": "waterfall",
+              "id": "driver-1",
+              "from": 8658.81974125939,
+              "to": 10236.291434700488,
+              "domain": [
+                0,
+                20000
+              ],
+              "pixelHeight": 51.48867607391753,
+              "span": 652.8000000000001,
+              "pixelArea": 6939.8497159469,
+              "barW": 134.784,
+              "beat": "fees-on-reserve-fee-gap"
+            },
+            {
+              "kind": "waterfall",
+              "id": "driver-2",
+              "from": 0,
+              "to": 10236.291434700488,
+              "domain": [
+                0,
+                20000
+              ],
+              "pixelHeight": 334.112552428624,
+              "span": 652.8000000000001,
+              "pixelArea": 45033.02626653965,
+              "barW": 134.784,
+              "beat": "fees-on-reserve-fee-gap"
+            }
+          ]
+        },
+        {
+          "caseId": "fees-with-loss",
+          "recipe": "R04",
+          "preset": "vertical",
+          "audit": {
+            "comparison": {
+              "modelVersion": 1,
+              "baseline": {
+                "modelVersion": 1,
+                "openingBalance": 50000,
+                "cashflowTiming": "end",
+                "feeTiming": "after return, before end-of-period cashflows",
+                "rows": [
+                  {
+                    "label": "Year 1",
+                    "opening": 50000,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": -0.15,
+                    "gain": -7500,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 85,
+                    "fees": 85,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 48415
+                  },
+                  {
+                    "label": "Year 2",
+                    "opening": 48415,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.08,
+                    "gain": 3873.2000000000003,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 104.57639999999999,
+                    "fees": 104.57639999999999,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 58183.6236
+                  },
+                  {
+                    "label": "Year 3",
+                    "opening": 58183.6236,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 2909.18118,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 122.18560956,
+                    "fees": 122.18560956,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 66970.61917044
+                  },
+                  {
+                    "label": "Year 4",
+                    "opening": 66970.61917044,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.1,
+                    "gain": 6697.061917044,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 147.335362174968,
+                    "fees": 147.335362174968,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 79520.34572530903
+                  },
+                  {
+                    "label": "Year 5",
+                    "opening": 79520.34572530903,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.06,
+                    "gain": 4771.220743518542,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 168.58313293765514,
+                    "fees": 168.58313293765514,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 90122.98333588992
+                  },
+                  {
+                    "label": "Year 6",
+                    "opening": 90122.98333588992,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.04,
+                    "gain": 3604.919333435597,
+                    "feeRate": 0.002,
+                    "feeAmount": 0,
+                    "assessedFees": 187.45580533865103,
+                    "fees": 187.45580533865103,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 99540.44686398686
+                  }
+                ],
+                "totals": {
+                  "employee": 36000,
+                  "employer": 0,
+                  "gain": 14355.583173998139,
+                  "fees": 815.1363100112742,
+                  "unpaidFees": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0
+                },
+                "closingBalance": 99540.44686398686
+              },
+              "comparison": {
+                "modelVersion": 1,
+                "openingBalance": 50000,
+                "cashflowTiming": "end",
+                "feeTiming": "after return, before end-of-period cashflows",
+                "rows": [
+                  {
+                    "label": "Year 1",
+                    "opening": 50000,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": -0.15,
+                    "gain": -7500,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 764.9999999999999,
+                    "fees": 764.9999999999999,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 47735
+                  },
+                  {
+                    "label": "Year 2",
+                    "opening": 47735,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.08,
+                    "gain": 3818.8,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 927.9684,
+                    "fees": 927.9684,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 56625.831600000005
+                  },
+                  {
+                    "label": "Year 3",
+                    "opening": 56625.831600000005,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.05,
+                    "gain": 2831.2915800000005,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 1070.22821724,
+                    "fees": 1070.22821724,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 64386.89496276
+                  },
+                  {
+                    "label": "Year 4",
+                    "opening": 64386.89496276,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.1,
+                    "gain": 6438.689496276001,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 1274.860520262648,
+                    "fees": 1274.860520262648,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 75550.72393877336
+                  },
+                  {
+                    "label": "Year 5",
+                    "opening": 75550.72393877336,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.06,
+                    "gain": 4533.043436326401,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 1441.5078127517957,
+                    "fees": 1441.5078127517957,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 84642.25956234797
+                  },
+                  {
+                    "label": "Year 6",
+                    "opening": 84642.25956234797,
+                    "employee": 6000,
+                    "employer": 0,
+                    "returnRate": 0.04,
+                    "gain": 3385.690382493919,
+                    "feeRate": 0.018,
+                    "feeAmount": 0,
+                    "assessedFees": 1584.5030990071539,
+                    "fees": 1584.5030990071539,
+                    "unpaidFees": 0,
+                    "requestedWithdrawal": 0,
+                    "withdrawn": 0,
+                    "shortfall": 0,
+                    "closing": 92443.44684583474
+                  }
+                ],
+                "totals": {
+                  "employee": 36000,
+                  "employer": 0,
+                  "gain": 13507.514895096323,
+                  "fees": 7064.068049261597,
+                  "unpaidFees": 0,
+                  "withdrawn": 0,
+                  "shortfall": 0
+                },
+                "closingBalance": 92443.44684583474
+              },
+              "endingBalanceDifference": 7097.000018152117,
+              "chargedFeeDifference": 6248.931739250323,
+              "gainDifference": 848.0682789018156,
+              "fundedWithdrawalDifference": 0
+            }
+          },
+          "geometry": [
+            {
+              "kind": "waterfall",
+              "id": "driver-0",
+              "from": 0,
+              "to": 6248.931739250323,
+              "domain": [
+                0,
+                15000
+              ],
+              "pixelHeight": 271.9535092921741,
+              "span": 652.8000000000001,
+              "pixelArea": 36654.98179643639,
+              "barW": 134.784,
+              "beat": "fees-with-loss-fee-gap"
+            },
+            {
+              "kind": "waterfall",
+              "id": "driver-1",
+              "from": 6248.931739250323,
+              "to": 7097.000018152138,
+              "domain": [
+                0,
+                15000
+              ],
+              "pixelHeight": 36.907931497807,
+              "span": 652.8000000000001,
+              "pixelArea": 4974.598639000418,
+              "barW": 134.784,
+              "beat": "fees-with-loss-fee-gap"
+            },
+            {
+              "kind": "waterfall",
+              "id": "driver-2",
+              "from": 0,
+              "to": 7097.000018152138,
+              "domain": [
+                0,
+                15000
+              ],
+              "pixelHeight": 308.8614407899811,
+              "span": 652.8000000000001,
+              "pixelArea": 41629.58043543681,
+              "barW": 134.784,
+              "beat": "fees-with-loss-fee-gap"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R05",
+      "preset": "landscape",
+      "project": "specimens/r05-landscape",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "depleted-account",
+          "recipe": "R05",
+          "preset": "landscape",
+          "audit": {
+            "ledger": {
+              "modelVersion": 1,
+              "openingBalance": 30000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 30000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0,
+                  "gain": 0,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 12000,
+                  "withdrawn": 12000,
+                  "shortfall": 0,
+                  "closing": 18000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 18000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0,
+                  "gain": 0,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 12000,
+                  "withdrawn": 12000,
+                  "shortfall": 0,
+                  "closing": 6000
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 6000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0,
+                  "gain": 0,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 12000,
+                  "withdrawn": 6000,
+                  "shortfall": 6000,
+                  "closing": 0
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": 0,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 30000,
+                "shortfall": 6000
+              },
+              "closingBalance": 0
+            }
+          },
+          "geometry": [
+            {
+              "kind": "reservoir",
+              "id": "tank-0-fill",
+              "value": 6000,
+              "capacity": 30000,
+              "pixelHeight": 47.52,
+              "pixelArea": 24086.937599999997,
+              "boxH": 237.6,
+              "boxW": 506.87999999999994,
+              "beat": "depleted-account-payment"
+            },
+            {
+              "kind": "reservoir",
+              "id": "tank-1-fill",
+              "value": 0,
+              "capacity": 30000,
+              "pixelHeight": 0,
+              "pixelArea": 0,
+              "boxH": 237.6,
+              "boxW": 506.87999999999994,
+              "beat": "depleted-account-payment"
+            }
+          ]
+        },
+        {
+          "caseId": "funded-account",
+          "recipe": "R05",
+          "preset": "landscape",
+          "audit": {
+            "ledger": {
+              "modelVersion": 1,
+              "openingBalance": 100000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 100000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.04,
+                  "gain": 4000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 5000,
+                  "withdrawn": 5000,
+                  "shortfall": 0,
+                  "closing": 99000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 99000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.04,
+                  "gain": 3960,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 5000,
+                  "withdrawn": 5000,
+                  "shortfall": 0,
+                  "closing": 97960
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 97960,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.04,
+                  "gain": 3918.4,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 5000,
+                  "withdrawn": 5000,
+                  "shortfall": 0,
+                  "closing": 96878.4
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 96878.4,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.04,
+                  "gain": 3875.136,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 5000,
+                  "withdrawn": 5000,
+                  "shortfall": 0,
+                  "closing": 95753.536
+                },
+                {
+                  "label": "Year 5",
+                  "opening": 95753.536,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.04,
+                  "gain": 3830.14144,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 5000,
+                  "withdrawn": 5000,
+                  "shortfall": 0,
+                  "closing": 94583.67744
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": 19583.67744,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 25000,
+                "shortfall": 0
+              },
+              "closingBalance": 94583.67744
+            }
+          },
+          "geometry": [
+            {
+              "kind": "reservoir",
+              "id": "tank-0-fill",
+              "value": 95753.536,
+              "capacity": 100000,
+              "pixelHeight": 227.51040153599996,
+              "pixelArea": 115320.47233056765,
+              "boxH": 237.6,
+              "boxW": 506.87999999999994,
+              "beat": "funded-account-payment"
+            },
+            {
+              "kind": "reservoir",
+              "id": "tank-1-fill",
+              "value": 94583.67744,
+              "capacity": 100000,
+              "pixelHeight": 224.73081759744,
+              "pixelArea": 113911.55682379036,
+              "boxH": 237.6,
+              "boxW": 506.87999999999994,
+              "beat": "funded-account-payment"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R05",
+      "preset": "vertical",
+      "project": "specimens/r05-vertical",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "depleted-account",
+          "recipe": "R05",
+          "preset": "vertical",
+          "audit": {
+            "ledger": {
+              "modelVersion": 1,
+              "openingBalance": 30000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 30000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0,
+                  "gain": 0,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 12000,
+                  "withdrawn": 12000,
+                  "shortfall": 0,
+                  "closing": 18000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 18000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0,
+                  "gain": 0,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 12000,
+                  "withdrawn": 12000,
+                  "shortfall": 0,
+                  "closing": 6000
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 6000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0,
+                  "gain": 0,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 12000,
+                  "withdrawn": 6000,
+                  "shortfall": 6000,
+                  "closing": 0
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": 0,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 30000,
+                "shortfall": 6000
+              },
+              "closingBalance": 0
+            }
+          },
+          "geometry": [
+            {
+              "kind": "reservoir",
+              "id": "tank-0-fill",
+              "value": 6000,
+              "capacity": 30000,
+              "pixelHeight": 107.52,
+              "pixelArea": 27172.454399999995,
+              "boxH": 537.6,
+              "boxW": 252.71999999999997,
+              "beat": "depleted-account-payment"
+            },
+            {
+              "kind": "reservoir",
+              "id": "tank-1-fill",
+              "value": 0,
+              "capacity": 30000,
+              "pixelHeight": 0,
+              "pixelArea": 0,
+              "boxH": 537.6,
+              "boxW": 252.71999999999997,
+              "beat": "depleted-account-payment"
+            }
+          ]
+        },
+        {
+          "caseId": "funded-account",
+          "recipe": "R05",
+          "preset": "vertical",
+          "audit": {
+            "ledger": {
+              "modelVersion": 1,
+              "openingBalance": 100000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 100000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.04,
+                  "gain": 4000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 5000,
+                  "withdrawn": 5000,
+                  "shortfall": 0,
+                  "closing": 99000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 99000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.04,
+                  "gain": 3960,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 5000,
+                  "withdrawn": 5000,
+                  "shortfall": 0,
+                  "closing": 97960
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 97960,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.04,
+                  "gain": 3918.4,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 5000,
+                  "withdrawn": 5000,
+                  "shortfall": 0,
+                  "closing": 96878.4
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 96878.4,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.04,
+                  "gain": 3875.136,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 5000,
+                  "withdrawn": 5000,
+                  "shortfall": 0,
+                  "closing": 95753.536
+                },
+                {
+                  "label": "Year 5",
+                  "opening": 95753.536,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.04,
+                  "gain": 3830.14144,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 5000,
+                  "withdrawn": 5000,
+                  "shortfall": 0,
+                  "closing": 94583.67744
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": 19583.67744,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 25000,
+                "shortfall": 0
+              },
+              "closingBalance": 94583.67744
+            }
+          },
+          "geometry": [
+            {
+              "kind": "reservoir",
+              "id": "tank-0-fill",
+              "value": 95753.536,
+              "capacity": 100000,
+              "pixelHeight": 514.771009536,
+              "pixelArea": 130092.92952993789,
+              "boxH": 537.6,
+              "boxW": 252.71999999999997,
+              "beat": "funded-account-payment"
+            },
+            {
+              "kind": "reservoir",
+              "id": "tank-1-fill",
+              "value": 94583.67744,
+              "capacity": 100000,
+              "pixelHeight": 508.48184991744006,
+              "pixelArea": 128503.53311113543,
+              "boxH": 537.6,
+              "boxW": 252.71999999999997,
+              "beat": "funded-account-payment"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R06",
+      "preset": "landscape",
+      "project": "specimens/r06-landscape",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "adjusted-benefit",
+          "recipe": "R06",
+          "preset": "landscape",
+          "audit": {
+            "benefit": {
+              "modelVersion": 1,
+              "formula": "salary-times-service",
+              "annual": 32400,
+              "monthly": 2700
+            }
+          },
+          "geometry": []
+        },
+        {
+          "caseId": "unadjusted-benefit",
+          "recipe": "R06",
+          "preset": "landscape",
+          "audit": {
+            "benefit": {
+              "modelVersion": 1,
+              "formula": "salary-times-service",
+              "annual": 28000,
+              "monthly": 2333.3333333333335
+            }
+          },
+          "geometry": []
+        }
+      ]
+    },
+    {
+      "recipe": "R06",
+      "preset": "vertical",
+      "project": "specimens/r06-vertical",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "adjusted-benefit",
+          "recipe": "R06",
+          "preset": "vertical",
+          "audit": {
+            "benefit": {
+              "modelVersion": 1,
+              "formula": "salary-times-service",
+              "annual": 32400,
+              "monthly": 2700
+            }
+          },
+          "geometry": []
+        },
+        {
+          "caseId": "unadjusted-benefit",
+          "recipe": "R06",
+          "preset": "vertical",
+          "audit": {
+            "benefit": {
+              "modelVersion": 1,
+              "formula": "salary-times-service",
+              "annual": 28000,
+              "monthly": 2333.3333333333335
+            }
+          },
+          "geometry": []
+        }
+      ]
+    },
+    {
+      "recipe": "R07",
+      "preset": "landscape",
+      "project": "specimens/r07-landscape",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "fixed-quotes",
+          "recipe": "R07",
+          "preset": "landscape",
+          "audit": {
+            "quotes": [
+              {
+                "label": "Lump sum",
+                "amount": 350000,
+                "basis": "one-time",
+                "conditions": "No further payments in this quoted offer."
+              },
+              {
+                "label": "Single life",
+                "amount": 2300,
+                "basis": "per month",
+                "conditions": "Until participant death. No survivor payment; no COLA."
+              },
+              {
+                "label": "Joint survivor",
+                "amount": 2000,
+                "basis": "per month",
+                "conditions": "Then $1,000/month to survivor. No COLA; lifetimes unknown."
+              }
+            ],
+            "comparison": "No present-value or lifetime-total equivalence is asserted."
+          },
+          "geometry": []
+        },
+        {
+          "caseId": "conditional-quotes",
+          "recipe": "R07",
+          "preset": "landscape",
+          "audit": {
+            "quotes": [
+              {
+                "label": "Lump sum",
+                "amount": 280000,
+                "basis": "one-time",
+                "conditions": "No further payments in this quoted offer."
+              },
+              {
+                "label": "Life + guarantee",
+                "amount": 1750,
+                "basis": "per month",
+                "conditions": "10-year payment guarantee, then participant life. No COLA."
+              },
+              {
+                "label": "Survivor + COLA",
+                "amount": 1500,
+                "basis": "per month",
+                "conditions": "75% to survivor; assumed 2% yearly COLA. Lifetimes unknown."
+              }
+            ],
+            "comparison": "No present-value or lifetime-total equivalence is asserted."
+          },
+          "geometry": []
+        }
+      ]
+    },
+    {
+      "recipe": "R07",
+      "preset": "vertical",
+      "project": "specimens/r07-vertical",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "fixed-quotes",
+          "recipe": "R07",
+          "preset": "vertical",
+          "audit": {
+            "quotes": [
+              {
+                "label": "Lump sum",
+                "amount": 350000,
+                "basis": "one-time",
+                "conditions": "No further payments in this quoted offer."
+              },
+              {
+                "label": "Single life",
+                "amount": 2300,
+                "basis": "per month",
+                "conditions": "Until participant death. No survivor payment; no COLA."
+              },
+              {
+                "label": "Joint survivor",
+                "amount": 2000,
+                "basis": "per month",
+                "conditions": "Then $1,000/month to survivor. No COLA; lifetimes unknown."
+              }
+            ],
+            "comparison": "No present-value or lifetime-total equivalence is asserted."
+          },
+          "geometry": []
+        },
+        {
+          "caseId": "conditional-quotes",
+          "recipe": "R07",
+          "preset": "vertical",
+          "audit": {
+            "quotes": [
+              {
+                "label": "Lump sum",
+                "amount": 280000,
+                "basis": "one-time",
+                "conditions": "No further payments in this quoted offer."
+              },
+              {
+                "label": "Life + guarantee",
+                "amount": 1750,
+                "basis": "per month",
+                "conditions": "10-year payment guarantee, then participant life. No COLA."
+              },
+              {
+                "label": "Survivor + COLA",
+                "amount": 1500,
+                "basis": "per month",
+                "conditions": "75% to survivor; assumed 2% yearly COLA. Lifetimes unknown."
+              }
+            ],
+            "comparison": "No present-value or lifetime-total equivalence is asserted."
+          },
+          "geometry": []
+        }
+      ]
+    },
+    {
+      "recipe": "R08",
+      "preset": "landscape",
+      "project": "specimens/r08-landscape",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "rising-prices",
+          "recipe": "R08",
+          "preset": "landscape",
+          "audit": {
+            "nominal": [
+              3000,
+              3000,
+              3000,
+              3000,
+              3000
+            ],
+            "priceIndices": [
+              100,
+              105,
+              110,
+              120,
+              125
+            ],
+            "baseIndex": 100,
+            "basePeriod": "Y0",
+            "real": [
+              3000,
+              2857.142857142857,
+              2727.272727272727,
+              2500,
+              2400
+            ]
+          },
+          "geometry": []
+        },
+        {
+          "caseId": "falling-prices",
+          "recipe": "R08",
+          "preset": "landscape",
+          "audit": {
+            "nominal": [
+              2500,
+              2500,
+              2500,
+              2500,
+              2500
+            ],
+            "priceIndices": [
+              100,
+              98,
+              95,
+              96,
+              94
+            ],
+            "baseIndex": 100,
+            "basePeriod": "Y0",
+            "real": [
+              2500,
+              2551.0204081632655,
+              2631.578947368421,
+              2604.166666666667,
+              2659.574468085106
+            ]
+          },
+          "geometry": []
+        }
+      ]
+    },
+    {
+      "recipe": "R08",
+      "preset": "vertical",
+      "project": "specimens/r08-vertical",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "rising-prices",
+          "recipe": "R08",
+          "preset": "vertical",
+          "audit": {
+            "nominal": [
+              3000,
+              3000,
+              3000,
+              3000,
+              3000
+            ],
+            "priceIndices": [
+              100,
+              105,
+              110,
+              120,
+              125
+            ],
+            "baseIndex": 100,
+            "basePeriod": "Y0",
+            "real": [
+              3000,
+              2857.142857142857,
+              2727.272727272727,
+              2500,
+              2400
+            ]
+          },
+          "geometry": []
+        },
+        {
+          "caseId": "falling-prices",
+          "recipe": "R08",
+          "preset": "vertical",
+          "audit": {
+            "nominal": [
+              2500,
+              2500,
+              2500,
+              2500,
+              2500
+            ],
+            "priceIndices": [
+              100,
+              98,
+              95,
+              96,
+              94
+            ],
+            "baseIndex": 100,
+            "basePeriod": "Y0",
+            "real": [
+              2500,
+              2551.0204081632655,
+              2631.578947368421,
+              2604.166666666667,
+              2659.574468085106
+            ]
+          },
+          "geometry": []
+        }
+      ]
+    },
+    {
+      "recipe": "R09",
+      "preset": "landscape",
+      "project": "specimens/r09-landscape",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "return-order",
+          "recipe": "R09",
+          "preset": "landscape",
+          "audit": {
+            "a": {
+              "modelVersion": 1,
+              "openingBalance": 100000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 100000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": -0.25,
+                  "gain": -25000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 60000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 60000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.15,
+                  "gain": 9000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 54000
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 54000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.1,
+                  "gain": 5400,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 44400
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 44400,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.08,
+                  "gain": 3552,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 32952
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": -7048,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 60000,
+                "shortfall": 0
+              },
+              "closingBalance": 32952
+            },
+            "b": {
+              "modelVersion": 1,
+              "openingBalance": 100000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 100000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.08,
+                  "gain": 8000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 93000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 93000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.1,
+                  "gain": 9300,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 87300
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 87300,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.15,
+                  "gain": 13095,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 85395
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 85395,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": -0.25,
+                  "gain": -21348.75,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 49046.25
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": 9046.25,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 60000,
+                "shortfall": 0
+              },
+              "closingBalance": 49046.25
+            },
+            "returnsA": [
+              -0.25,
+              0.15,
+              0.1,
+              0.08
+            ],
+            "returnsB": [
+              0.08,
+              0.1,
+              0.15,
+              -0.25
+            ]
+          },
+          "geometry": []
+        },
+        {
+          "caseId": "return-order-depletion",
+          "recipe": "R09",
+          "preset": "landscape",
+          "audit": {
+            "a": {
+              "modelVersion": 1,
+              "openingBalance": 60000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 60000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": -0.25,
+                  "gain": -15000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 20000,
+                  "shortfall": 0,
+                  "closing": 25000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 25000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.15,
+                  "gain": 3750,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 20000,
+                  "shortfall": 0,
+                  "closing": 8750
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 8750,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.1,
+                  "gain": 875,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 9625,
+                  "shortfall": 10375,
+                  "closing": 0
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 0,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.08,
+                  "gain": 0,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 0,
+                  "shortfall": 20000,
+                  "closing": 0
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": -10375,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 49625,
+                "shortfall": 30375
+              },
+              "closingBalance": 0
+            },
+            "b": {
+              "modelVersion": 1,
+              "openingBalance": 60000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 60000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.08,
+                  "gain": 4800,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 20000,
+                  "shortfall": 0,
+                  "closing": 44800
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 44800,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.1,
+                  "gain": 4480,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 20000,
+                  "shortfall": 0,
+                  "closing": 29280
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 29280,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.15,
+                  "gain": 4392,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 20000,
+                  "shortfall": 0,
+                  "closing": 13672
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 13672,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": -0.25,
+                  "gain": -3418,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 10254,
+                  "shortfall": 9746,
+                  "closing": 0
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": 10254,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 70254,
+                "shortfall": 9746
+              },
+              "closingBalance": 0
+            },
+            "returnsA": [
+              -0.25,
+              0.15,
+              0.1,
+              0.08
+            ],
+            "returnsB": [
+              0.08,
+              0.1,
+              0.15,
+              -0.25
+            ]
+          },
+          "geometry": [
+            {
+              "kind": "stack",
+              "id": "row-0-part-0",
+              "value": 49625,
+              "domain": 80000,
+              "pixelLength": 964.2335999999998,
+              "pixelArea": 49569.32090879999,
+              "span": 1554.4319999999998,
+              "barH": 51.408,
+              "beat": "return-order-depletion-shortfalls"
+            },
+            {
+              "kind": "stack",
+              "id": "row-0-part-1",
+              "value": 30375,
+              "domain": 80000,
+              "pixelLength": 590.1983999999999,
+              "pixelArea": 30340.919347199993,
+              "span": 1554.4319999999998,
+              "barH": 51.408,
+              "beat": "return-order-depletion-shortfalls"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-0",
+              "value": 70254,
+              "domain": 80000,
+              "pixelLength": 1365.0633215999999,
+              "pixelArea": 70175.17523681279,
+              "span": 1554.4319999999998,
+              "barH": 51.408,
+              "beat": "return-order-depletion-shortfalls"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-1",
+              "value": 9746,
+              "domain": 80000,
+              "pixelLength": 189.36867839999996,
+              "pixelArea": 9735.0650191872,
+              "span": 1554.4319999999998,
+              "barH": 51.408,
+              "beat": "return-order-depletion-shortfalls"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "recipe": "R09",
+      "preset": "vertical",
+      "project": "specimens/r09-vertical",
+      "sourceChecks": {
+        "errors": [],
+        "warnings": []
+      },
+      "cases": [
+        {
+          "caseId": "return-order",
+          "recipe": "R09",
+          "preset": "vertical",
+          "audit": {
+            "a": {
+              "modelVersion": 1,
+              "openingBalance": 100000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 100000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": -0.25,
+                  "gain": -25000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 60000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 60000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.15,
+                  "gain": 9000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 54000
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 54000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.1,
+                  "gain": 5400,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 44400
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 44400,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.08,
+                  "gain": 3552,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 32952
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": -7048,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 60000,
+                "shortfall": 0
+              },
+              "closingBalance": 32952
+            },
+            "b": {
+              "modelVersion": 1,
+              "openingBalance": 100000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 100000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.08,
+                  "gain": 8000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 93000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 93000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.1,
+                  "gain": 9300,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 87300
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 87300,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.15,
+                  "gain": 13095,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 85395
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 85395,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": -0.25,
+                  "gain": -21348.75,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 15000,
+                  "withdrawn": 15000,
+                  "shortfall": 0,
+                  "closing": 49046.25
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": 9046.25,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 60000,
+                "shortfall": 0
+              },
+              "closingBalance": 49046.25
+            },
+            "returnsA": [
+              -0.25,
+              0.15,
+              0.1,
+              0.08
+            ],
+            "returnsB": [
+              0.08,
+              0.1,
+              0.15,
+              -0.25
+            ]
+          },
+          "geometry": []
+        },
+        {
+          "caseId": "return-order-depletion",
+          "recipe": "R09",
+          "preset": "vertical",
+          "audit": {
+            "a": {
+              "modelVersion": 1,
+              "openingBalance": 60000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 60000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": -0.25,
+                  "gain": -15000,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 20000,
+                  "shortfall": 0,
+                  "closing": 25000
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 25000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.15,
+                  "gain": 3750,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 20000,
+                  "shortfall": 0,
+                  "closing": 8750
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 8750,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.1,
+                  "gain": 875,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 9625,
+                  "shortfall": 10375,
+                  "closing": 0
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 0,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.08,
+                  "gain": 0,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 0,
+                  "shortfall": 20000,
+                  "closing": 0
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": -10375,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 49625,
+                "shortfall": 30375
+              },
+              "closingBalance": 0
+            },
+            "b": {
+              "modelVersion": 1,
+              "openingBalance": 60000,
+              "cashflowTiming": "end",
+              "feeTiming": "after return, before end-of-period cashflows",
+              "rows": [
+                {
+                  "label": "Year 1",
+                  "opening": 60000,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.08,
+                  "gain": 4800,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 20000,
+                  "shortfall": 0,
+                  "closing": 44800
+                },
+                {
+                  "label": "Year 2",
+                  "opening": 44800,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.1,
+                  "gain": 4480,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 20000,
+                  "shortfall": 0,
+                  "closing": 29280
+                },
+                {
+                  "label": "Year 3",
+                  "opening": 29280,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": 0.15,
+                  "gain": 4392,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 20000,
+                  "shortfall": 0,
+                  "closing": 13672
+                },
+                {
+                  "label": "Year 4",
+                  "opening": 13672,
+                  "employee": 0,
+                  "employer": 0,
+                  "returnRate": -0.25,
+                  "gain": -3418,
+                  "feeRate": 0,
+                  "feeAmount": 0,
+                  "assessedFees": 0,
+                  "fees": 0,
+                  "unpaidFees": 0,
+                  "requestedWithdrawal": 20000,
+                  "withdrawn": 10254,
+                  "shortfall": 9746,
+                  "closing": 0
+                }
+              ],
+              "totals": {
+                "employee": 0,
+                "employer": 0,
+                "gain": 10254,
+                "fees": 0,
+                "unpaidFees": 0,
+                "withdrawn": 70254,
+                "shortfall": 9746
+              },
+              "closingBalance": 0
+            },
+            "returnsA": [
+              -0.25,
+              0.15,
+              0.1,
+              0.08
+            ],
+            "returnsB": [
+              0.08,
+              0.1,
+              0.15,
+              -0.25
+            ]
+          },
+          "geometry": [
+            {
+              "kind": "stack",
+              "id": "row-0-part-0",
+              "value": 49625,
+              "domain": 80000,
+              "pixelLength": 480.74715,
+              "pixelArea": 22533.580414799995,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "return-order-depletion-shortfalls"
+            },
+            {
+              "kind": "stack",
+              "id": "row-0-part-1",
+              "value": 30375,
+              "domain": 80000,
+              "pixelLength": 294.26085,
+              "pixelArea": 13792.594561199998,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "return-order-depletion-shortfalls"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-0",
+              "value": 70254,
+              "domain": 80000,
+              "pixelLength": 680.5926504,
+              "pixelArea": 31900.738709548797,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "return-order-depletion-shortfalls"
+            },
+            {
+              "kind": "stack",
+              "id": "row-1-part-1",
+              "value": 9746,
+              "domain": 80000,
+              "pixelLength": 94.4153496,
+              "pixelArea": 4425.436266451199,
+              "span": 775.008,
+              "barH": 46.87199999999999,
+              "beat": "return-order-depletion-shortfalls"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

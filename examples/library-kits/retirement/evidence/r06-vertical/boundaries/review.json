@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/retirement/specimens/r06-vertical/build/pipeline/2026-10-03T02-12-18-890Z-dbd1157e/video.mp4",
+  "outputSha256": "a1d818281f52f1e8a0efeafb00e61887bb3282890be676ebd11103a1d2cba07c",
+  "inputId": "831e7c5bc0f6b2cd1a5a632b777715af88d73010dc8284e32b148a122d5aa226",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "adjusted-benefit-formula: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "adjusted-benefit-formula: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 299,
+      "time": 9.966666666666667,
+      "reasons": [
+        "adjusted-benefit-formula: last frame",
+        "Before unadjusted-benefit-formula"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 300,
+      "time": 10,
+      "reasons": [
+        "unadjusted-benefit-formula: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 306,
+      "time": 10.2,
+      "reasons": [
+        "unadjusted-benefit-formula: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "unadjusted-benefit-formula: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

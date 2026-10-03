@@ -1,0 +1,132 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/retirement/specimens/r09-vertical/build/pipeline/2026-10-03T02-13-15-872Z-b0647f28/video.mp4",
+  "outputSha256": "c8fc484d0e57cc556817861a55ba72730f781ec7f7f39390871f06655c577ed6",
+  "inputId": "452c235a2f12578c99a49d3ae25c1ec6cd362bed1ad1faf8f0a443989f0ac2b8",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "return-order-orders: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "return-order-orders: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 269,
+      "time": 8.966666666666667,
+      "reasons": [
+        "return-order-orders: last frame",
+        "Before return-order-trace"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 270,
+      "time": 9,
+      "reasons": [
+        "return-order-trace: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 276,
+      "time": 9.2,
+      "reasons": [
+        "return-order-trace: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 569,
+      "time": 18.966666666666665,
+      "reasons": [
+        "return-order-trace: last frame",
+        "Before return-order-depletion-orders"
+      ],
+      "image": "frame-0005.jpg"
+    },
+    {
+      "frame": 570,
+      "time": 19,
+      "reasons": [
+        "return-order-depletion-orders: first frame"
+      ],
+      "image": "frame-0006.jpg"
+    },
+    {
+      "frame": 576,
+      "time": 19.2,
+      "reasons": [
+        "return-order-depletion-orders: entrance"
+      ],
+      "image": "frame-0007.jpg"
+    },
+    {
+      "frame": 839,
+      "time": 27.966666666666665,
+      "reasons": [
+        "return-order-depletion-orders: last frame",
+        "Before return-order-depletion-trace"
+      ],
+      "image": "frame-0008.jpg"
+    },
+    {
+      "frame": 840,
+      "time": 28,
+      "reasons": [
+        "return-order-depletion-trace: first frame"
+      ],
+      "image": "frame-0009.jpg"
+    },
+    {
+      "frame": 846,
+      "time": 28.2,
+      "reasons": [
+        "return-order-depletion-trace: entrance"
+      ],
+      "image": "frame-0010.jpg"
+    },
+    {
+      "frame": 1139,
+      "time": 37.96666666666667,
+      "reasons": [
+        "return-order-depletion-trace: last frame",
+        "Before return-order-depletion-shortfalls"
+      ],
+      "image": "frame-0011.jpg"
+    },
+    {
+      "frame": 1140,
+      "time": 38,
+      "reasons": [
+        "return-order-depletion-shortfalls: first frame"
+      ],
+      "image": "frame-0012.jpg"
+    },
+    {
+      "frame": 1146,
+      "time": 38.2,
+      "reasons": [
+        "return-order-depletion-shortfalls: entrance"
+      ],
+      "image": "frame-0013.jpg"
+    },
+    {
+      "frame": 1409,
+      "time": 46.96666666666667,
+      "reasons": [
+        "return-order-depletion-shortfalls: last frame"
+      ],
+      "image": "frame-0014.jpg"
+    }
+  ]
+}

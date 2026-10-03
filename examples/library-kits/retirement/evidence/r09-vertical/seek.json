@@ -1,0 +1,25 @@
+{
+  "project": "r09-vertical",
+  "sequence": [
+    "1s",
+    "2s",
+    "5s",
+    "10s",
+    "14s"
+  ],
+  "shuffled": [
+    "14s",
+    "2s",
+    "10s",
+    "1s",
+    "5s"
+  ],
+  "hashes": {
+    "10s.png": "be3c87c5a58ef7cf34ebed80454e26c92df29b1f656a8bbac73691c86732ca2a",
+    "14s.png": "9880216aa74d943249c88c2c748994354076506ff819d67c567d8a91ffc65e46",
+    "1s.png": "26047a4464ed053ff337362ed3585552c9746a640e5b1a650668d2ee4ebf34c4",
+    "2s.png": "26047a4464ed053ff337362ed3585552c9746a640e5b1a650668d2ee4ebf34c4",
+    "5s.png": "26047a4464ed053ff337362ed3585552c9746a640e5b1a650668d2ee4ebf34c4"
+  },
+  "equal": true
+}

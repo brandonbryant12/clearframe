@@ -1,0 +1,953 @@
+{
+  "title": "R09: retirement mechanism specimens",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "paper",
+  "type": "geometric",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.35
+  },
+  "backdrop": "none",
+  "transition": "cut",
+  "captions": false,
+  "music": false,
+  "sfx": "off",
+  "sources": [
+    {
+      "claim": "return-order: all amounts, rules and outcomes are fictional illustrations.",
+      "source": "source/fixtures.mjs; audit.json",
+      "asOf": "2026-10-02"
+    },
+    {
+      "claim": "return-order-depletion: all amounts, rules and outcomes are fictional illustrations.",
+      "source": "source/fixtures.mjs; audit.json",
+      "asOf": "2026-10-02"
+    }
+  ],
+  "beats": [
+    {
+      "id": "return-order-orders",
+      "block": "canvas",
+      "duration": 9,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "source": "Illustrative USD, rounded. $15k end-year requests; same return set, no forecast. · 2026-10-02",
+        "sourceSize": 59.519999999999996,
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "id": "return-order-orders-title",
+            "type": "text",
+            "text": "Same returns, different order",
+            "x": 115.19999999999999,
+            "y": 151.20000000000002,
+            "size": 78.72,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "width": 1689.6,
+            "height": 108
+          },
+          {
+            "id": "return-order-orders-order-0-name",
+            "type": "text",
+            "text": "Order A",
+            "x": 115.19999999999999,
+            "y": 271.9680000000001,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-orders-order-0-0-year",
+            "type": "text",
+            "text": "1",
+            "x": 115.19999999999999,
+            "y": 352.32000000000005,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-orders-order-0-0-return",
+            "type": "text",
+            "text": "-25%",
+            "x": 115.19999999999999,
+            "y": 426.72,
+            "size": 68.448,
+            "fill": "negative",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-orders-order-0-1-year",
+            "type": "text",
+            "text": "2",
+            "x": 537.5999999999999,
+            "y": 352.32000000000005,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-orders-order-0-1-return",
+            "type": "text",
+            "text": "15%",
+            "x": 537.5999999999999,
+            "y": 426.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-orders-order-0-2-year",
+            "type": "text",
+            "text": "3",
+            "x": 960,
+            "y": 352.32000000000005,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-orders-order-0-2-return",
+            "type": "text",
+            "text": "10%",
+            "x": 960,
+            "y": 426.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-orders-order-0-3-year",
+            "type": "text",
+            "text": "4",
+            "x": 1382.3999999999999,
+            "y": 352.32000000000005,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-orders-order-0-3-return",
+            "type": "text",
+            "text": "8%",
+            "x": 1382.3999999999999,
+            "y": 426.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-orders-order-1-name",
+            "type": "text",
+            "text": "Order B",
+            "x": 115.19999999999999,
+            "y": 487.9680000000001,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-orders-order-1-0-year",
+            "type": "text",
+            "text": "1",
+            "x": 115.19999999999999,
+            "y": 568.32,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-orders-order-1-0-return",
+            "type": "text",
+            "text": "8%",
+            "x": 115.19999999999999,
+            "y": 642.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-orders-order-1-1-year",
+            "type": "text",
+            "text": "2",
+            "x": 537.5999999999999,
+            "y": 568.32,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-orders-order-1-1-return",
+            "type": "text",
+            "text": "10%",
+            "x": 537.5999999999999,
+            "y": 642.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-orders-order-1-2-year",
+            "type": "text",
+            "text": "3",
+            "x": 960,
+            "y": 568.32,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-orders-order-1-2-return",
+            "type": "text",
+            "text": "15%",
+            "x": 960,
+            "y": 642.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-orders-order-1-3-year",
+            "type": "text",
+            "text": "4",
+            "x": 1382.3999999999999,
+            "y": 568.32,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-orders-order-1-3-return",
+            "type": "text",
+            "text": "-25%",
+            "x": 1382.3999999999999,
+            "y": 642.72,
+            "size": 68.448,
+            "fill": "negative",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-orders-requests",
+            "type": "text",
+            "text": "$60,000 requested in each path",
+            "x": 115.19999999999999,
+            "y": 788.4,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "width": 1689.6,
+            "height": 124.99199999999999
+          }
+        ]
+      }
+    },
+    {
+      "id": "return-order-trace",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "plot": {
+          "title": "Withdrawals make the order matter",
+          "asOf": "2026-10-02",
+          "source": "Illustrative USD, rounded. $15k end-year requests; same return set, no forecast.",
+          "x": {
+            "type": "linear",
+            "label": "Years",
+            "domain": [
+              0,
+              4
+            ],
+            "ticks": [
+              0,
+              2,
+              4
+            ],
+            "decimals": 0
+          },
+          "y": {
+            "type": "linear",
+            "label": "USD thousands",
+            "domain": [
+              0,
+              150
+            ],
+            "ticks": [
+              0,
+              50,
+              100,
+              150
+            ],
+            "prefix": "$",
+            "suffix": "k",
+            "decimals": 0
+          },
+          "series": [
+            {
+              "id": "a",
+              "label": "Order A balance",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 100
+                },
+                {
+                  "x": 1,
+                  "y": 60
+                },
+                {
+                  "x": 2,
+                  "y": 54
+                },
+                {
+                  "x": 3,
+                  "y": 44.4
+                },
+                {
+                  "x": 4,
+                  "y": 32.952
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": "Order B balance",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 100
+                },
+                {
+                  "x": 1,
+                  "y": 93
+                },
+                {
+                  "x": 2,
+                  "y": 87.3
+                },
+                {
+                  "x": 3,
+                  "y": 85.395
+                },
+                {
+                  "x": 4,
+                  "y": 49.04625
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 3.5
+          }
+        }
+      }
+    },
+    {
+      "id": "return-order-depletion-orders",
+      "block": "canvas",
+      "duration": 9,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "source": "Illustrative USD, rounded. $20k end-year requests; same return set, no forecast. · 2026-10-02",
+        "sourceSize": 59.519999999999996,
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "id": "return-order-depletion-orders-title",
+            "type": "text",
+            "text": "Same returns, different order",
+            "x": 115.19999999999999,
+            "y": 151.20000000000002,
+            "size": 78.72,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "width": 1689.6,
+            "height": 108
+          },
+          {
+            "id": "return-order-depletion-orders-order-0-name",
+            "type": "text",
+            "text": "Order A",
+            "x": 115.19999999999999,
+            "y": 271.9680000000001,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-orders-order-0-0-year",
+            "type": "text",
+            "text": "1",
+            "x": 115.19999999999999,
+            "y": 352.32000000000005,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-orders-order-0-0-return",
+            "type": "text",
+            "text": "-25%",
+            "x": 115.19999999999999,
+            "y": 426.72,
+            "size": 68.448,
+            "fill": "negative",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-depletion-orders-order-0-1-year",
+            "type": "text",
+            "text": "2",
+            "x": 537.5999999999999,
+            "y": 352.32000000000005,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-orders-order-0-1-return",
+            "type": "text",
+            "text": "15%",
+            "x": 537.5999999999999,
+            "y": 426.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-depletion-orders-order-0-2-year",
+            "type": "text",
+            "text": "3",
+            "x": 960,
+            "y": 352.32000000000005,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-orders-order-0-2-return",
+            "type": "text",
+            "text": "10%",
+            "x": 960,
+            "y": 426.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-depletion-orders-order-0-3-year",
+            "type": "text",
+            "text": "4",
+            "x": 1382.3999999999999,
+            "y": 352.32000000000005,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-orders-order-0-3-return",
+            "type": "text",
+            "text": "8%",
+            "x": 1382.3999999999999,
+            "y": 426.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-depletion-orders-order-1-name",
+            "type": "text",
+            "text": "Order B",
+            "x": 115.19999999999999,
+            "y": 487.9680000000001,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-orders-order-1-0-year",
+            "type": "text",
+            "text": "1",
+            "x": 115.19999999999999,
+            "y": 568.32,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-orders-order-1-0-return",
+            "type": "text",
+            "text": "8%",
+            "x": 115.19999999999999,
+            "y": 642.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-depletion-orders-order-1-1-year",
+            "type": "text",
+            "text": "2",
+            "x": 537.5999999999999,
+            "y": 568.32,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-orders-order-1-1-return",
+            "type": "text",
+            "text": "10%",
+            "x": 537.5999999999999,
+            "y": 642.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-depletion-orders-order-1-2-year",
+            "type": "text",
+            "text": "3",
+            "x": 960,
+            "y": 568.32,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-orders-order-1-2-return",
+            "type": "text",
+            "text": "15%",
+            "x": 960,
+            "y": 642.72,
+            "size": 68.448,
+            "fill": "positive",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-depletion-orders-order-1-3-year",
+            "type": "text",
+            "text": "4",
+            "x": 1382.3999999999999,
+            "y": 568.32,
+            "size": 50.592,
+            "fill": "muted",
+            "font": "text",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-orders-order-1-3-return",
+            "type": "text",
+            "text": "-25%",
+            "x": 1382.3999999999999,
+            "y": 642.72,
+            "size": 68.448,
+            "fill": "negative",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "fit": 359.03999999999996
+          },
+          {
+            "id": "return-order-depletion-orders-requests",
+            "type": "text",
+            "text": "$80,000 requested in each path",
+            "x": 115.19999999999999,
+            "y": 788.4,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "width": 1689.6,
+            "height": 124.99199999999999
+          }
+        ]
+      }
+    },
+    {
+      "id": "return-order-depletion-trace",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "plot": {
+          "title": "Depletion does not erase the shortfall",
+          "asOf": "2026-10-02",
+          "source": "Illustrative USD, rounded. $20k end-year requests; same return set, no forecast.",
+          "x": {
+            "type": "linear",
+            "label": "Years",
+            "domain": [
+              0,
+              4
+            ],
+            "ticks": [
+              0,
+              2,
+              4
+            ],
+            "decimals": 0
+          },
+          "y": {
+            "type": "linear",
+            "label": "USD thousands",
+            "domain": [
+              0,
+              80
+            ],
+            "ticks": [
+              0,
+              20,
+              40,
+              60,
+              80
+            ],
+            "prefix": "$",
+            "suffix": "k",
+            "decimals": 0
+          },
+          "series": [
+            {
+              "id": "a",
+              "label": "Order A balance",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 60
+                },
+                {
+                  "x": 1,
+                  "y": 25
+                },
+                {
+                  "x": 2,
+                  "y": 8.75
+                },
+                {
+                  "x": 3,
+                  "y": 0
+                },
+                {
+                  "x": 4,
+                  "y": 0
+                }
+              ]
+            },
+            {
+              "id": "b",
+              "label": "Order B balance",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 60
+                },
+                {
+                  "x": 1,
+                  "y": 44.8
+                },
+                {
+                  "x": 2,
+                  "y": 29.28
+                },
+                {
+                  "x": 3,
+                  "y": 13.672
+                },
+                {
+                  "x": 4,
+                  "y": 0
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 3.5
+          }
+        }
+      }
+    },
+    {
+      "id": "return-order-depletion-shortfalls",
+      "block": "canvas",
+      "duration": 9,
+      "camera": "none",
+      "exit": "none",
+      "props": {
+        "source": "Illustrative USD, rounded. Blue: paid; orange: unfunded requests. · 2026-10-02",
+        "sourceSize": 59.519999999999996,
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "elements": [
+          {
+            "id": "return-order-depletion-shortfalls-title",
+            "type": "text",
+            "text": "The same requests, different shortfalls",
+            "x": 115.19999999999999,
+            "y": 151.20000000000002,
+            "size": 78.72,
+            "fill": "ink",
+            "font": "display",
+            "at": 0,
+            "enter": "none",
+            "width": 1689.6,
+            "height": 108
+          },
+          {
+            "id": "return-order-depletion-shortfalls-row-0-name",
+            "type": "text",
+            "text": "Order A",
+            "x": 182.784,
+            "y": 334.8,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none",
+            "width": 1103.6467199999997,
+            "height": 130.944
+          },
+          {
+            "id": "return-order-depletion-shortfalls-row-0-total",
+            "type": "text",
+            "text": "$30,375 unfunded",
+            "x": 1737.216,
+            "y": 334.8,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 450.7852799999999
+          },
+          {
+            "id": "return-order-depletion-shortfalls-row-0-track",
+            "type": "rect",
+            "x": 182.784,
+            "y": 361.584,
+            "w": 1554.4319999999998,
+            "h": 51.408,
+            "fill": "surface",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-shortfalls-row-0-part-0",
+            "type": "rect",
+            "x": 182.784,
+            "y": 361.584,
+            "w": 964.2335999999998,
+            "h": 51.408,
+            "fill": "accent",
+            "at": 0.45,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "id": "return-order-depletion-shortfalls-row-0-part-1",
+            "type": "rect",
+            "x": 1147.0175999999997,
+            "y": 361.584,
+            "w": 590.1983999999999,
+            "h": 51.408,
+            "fill": "accent2",
+            "at": 0.45,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "id": "return-order-depletion-shortfalls-row-1-name",
+            "type": "text",
+            "text": "Order B",
+            "x": 182.784,
+            "y": 518.4,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "semibold",
+            "at": 0,
+            "enter": "none",
+            "width": 1103.6467199999997,
+            "height": 130.944
+          },
+          {
+            "id": "return-order-depletion-shortfalls-row-1-total",
+            "type": "text",
+            "text": "$9,746 unfunded",
+            "x": 1737.216,
+            "y": 518.4,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "figures",
+            "at": 0,
+            "enter": "none",
+            "anchor": "end",
+            "fit": 450.7852799999999
+          },
+          {
+            "id": "return-order-depletion-shortfalls-row-1-track",
+            "type": "rect",
+            "x": 182.784,
+            "y": 545.184,
+            "w": 1554.4319999999998,
+            "h": 51.408,
+            "fill": "surface",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "id": "return-order-depletion-shortfalls-row-1-part-0",
+            "type": "rect",
+            "x": 182.784,
+            "y": 545.184,
+            "w": 1365.0633215999999,
+            "h": 51.408,
+            "fill": "accent",
+            "at": 0.9,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "id": "return-order-depletion-shortfalls-row-1-part-1",
+            "type": "rect",
+            "x": 1547.8473215999998,
+            "y": 545.184,
+            "w": 189.36867839999996,
+            "h": 51.408,
+            "fill": "accent2",
+            "at": 0.9,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "id": "return-order-depletion-shortfalls-scale",
+            "type": "text",
+            "text": "Shared scale: $0–$80,000 USD",
+            "x": 182.784,
+            "y": 788.4,
+            "size": 59.519999999999996,
+            "fill": "ink",
+            "font": "text",
+            "at": 0,
+            "enter": "none",
+            "fit": 1554.4319999999998
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/retirement/specimens/r08-vertical/build/pipeline/2026-10-03T02-20-53-783Z-30d755c3/video.mp4",
+  "outputSha256": "02ec29e202a39e26828c0f71825aeff5bf2eff0eb07d143593b3cae5cbf5456a",
+  "inputId": "560ff9fda986af53742e7bfa69f0e4f3da1649ed8ac1bf8d573a63ad15d288ee",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "rising-prices-trace: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "rising-prices-trace: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 299,
+      "time": 9.966666666666667,
+      "reasons": [
+        "rising-prices-trace: last frame",
+        "Before rising-prices-deflate"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 300,
+      "time": 10,
+      "reasons": [
+        "rising-prices-deflate: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 306,
+      "time": 10.2,
+      "reasons": [
+        "rising-prices-deflate: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 599,
+      "time": 19.966666666666665,
+      "reasons": [
+        "rising-prices-deflate: last frame",
+        "Before falling-prices-trace"
+      ],
+      "image": "frame-0005.jpg"
+    },
+    {
+      "frame": 600,
+      "time": 20,
+      "reasons": [
+        "falling-prices-trace: first frame"
+      ],
+      "image": "frame-0006.jpg"
+    },
+    {
+      "frame": 606,
+      "time": 20.2,
+      "reasons": [
+        "falling-prices-trace: entrance"
+      ],
+      "image": "frame-0007.jpg"
+    },
+    {
+      "frame": 899,
+      "time": 29.966666666666665,
+      "reasons": [
+        "falling-prices-trace: last frame",
+        "Before falling-prices-deflate"
+      ],
+      "image": "frame-0008.jpg"
+    },
+    {
+      "frame": 900,
+      "time": 30,
+      "reasons": [
+        "falling-prices-deflate: first frame"
+      ],
+      "image": "frame-0009.jpg"
+    },
+    {
+      "frame": 906,
+      "time": 30.2,
+      "reasons": [
+        "falling-prices-deflate: entrance"
+      ],
+      "image": "frame-0010.jpg"
+    },
+    {
+      "frame": 1199,
+      "time": 39.96666666666667,
+      "reasons": [
+        "falling-prices-deflate: last frame"
+      ],
+      "image": "frame-0011.jpg"
+    }
+  ]
+}

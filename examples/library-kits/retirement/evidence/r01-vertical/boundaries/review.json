@@ -1,0 +1,107 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/retirement/specimens/r01-vertical/build/pipeline/2026-10-03T02-17-07-491Z-dd72fb4f/video.mp4",
+  "outputSha256": "0cc8ddb0cb9c6247348cacc3061072f470ce86e0e56fab199ec3b96d2f79ec48",
+  "inputId": "f6df30b1d1de06fa57a56e272ec396cea80780a405420dd49d01e325b695da99",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "steady-additions-trace: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "steady-additions-trace: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 299,
+      "time": 9.966666666666667,
+      "reasons": [
+        "steady-additions-trace: last frame",
+        "Before steady-additions-flows"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 300,
+      "time": 10,
+      "reasons": [
+        "steady-additions-flows: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 306,
+      "time": 10.2,
+      "reasons": [
+        "steady-additions-flows: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 629,
+      "time": 20.966666666666665,
+      "reasons": [
+        "steady-additions-flows: last frame",
+        "Before losses-with-additions-trace"
+      ],
+      "image": "frame-0005.jpg"
+    },
+    {
+      "frame": 630,
+      "time": 21,
+      "reasons": [
+        "losses-with-additions-trace: first frame"
+      ],
+      "image": "frame-0006.jpg"
+    },
+    {
+      "frame": 636,
+      "time": 21.2,
+      "reasons": [
+        "losses-with-additions-trace: entrance"
+      ],
+      "image": "frame-0007.jpg"
+    },
+    {
+      "frame": 929,
+      "time": 30.966666666666665,
+      "reasons": [
+        "losses-with-additions-trace: last frame",
+        "Before losses-with-additions-flows"
+      ],
+      "image": "frame-0008.jpg"
+    },
+    {
+      "frame": 930,
+      "time": 31,
+      "reasons": [
+        "losses-with-additions-flows: first frame"
+      ],
+      "image": "frame-0009.jpg"
+    },
+    {
+      "frame": 936,
+      "time": 31.2,
+      "reasons": [
+        "losses-with-additions-flows: entrance"
+      ],
+      "image": "frame-0010.jpg"
+    },
+    {
+      "frame": 1259,
+      "time": 41.96666666666667,
+      "reasons": [
+        "losses-with-additions-flows: last frame"
+      ],
+      "image": "frame-0011.jpg"
+    }
+  ]
+}

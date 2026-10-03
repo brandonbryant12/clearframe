@@ -1,0 +1,452 @@
+[
+  {
+    "project": "r02-landscape",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "95722d896bd63791daa2e2131baef1a23d44760606a9289637d2e85fd8746259",
+      "14s.png": "1b5d9ad1cc8416c9f8822e3df541cd8dd4a00e2a75fdf45980d1a4e6a780d4e6",
+      "1s.png": "8452bd543a03b800005b607286e5e8740964f9f324b8513be48b227a4f249ef3",
+      "2s.png": "8452bd543a03b800005b607286e5e8740964f9f324b8513be48b227a4f249ef3",
+      "5s.png": "8452bd543a03b800005b607286e5e8740964f9f324b8513be48b227a4f249ef3"
+    },
+    "equal": true
+  },
+  {
+    "project": "r02-vertical",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "b8acbd51506d8bfbc735cda08b40ab1d26efcd12e65bdadf7812375e7f404cbb",
+      "14s.png": "e4f21b44344178a38d84827997b2c78739348900373590600cfc588aed932be6",
+      "1s.png": "657eedf3fbed21c7e02d499d103098596911689cd93b0fd9d2be08c90da1e25d",
+      "2s.png": "657eedf3fbed21c7e02d499d103098596911689cd93b0fd9d2be08c90da1e25d",
+      "5s.png": "657eedf3fbed21c7e02d499d103098596911689cd93b0fd9d2be08c90da1e25d"
+    },
+    "equal": true
+  },
+  {
+    "project": "r03-landscape",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "008a2edbbd59ca1871d14b1b6354c49de781246220aa87145782f68f60b46a38",
+      "14s.png": "e5ee98b36f7c8cfca2cfe5b6b0473d669d8fc82ead2ab4cca020e57510589aee",
+      "1s.png": "021218273b7da5053f0dbe64ec8d9edc04a5b973346a21e6db88bec1811b9e97",
+      "2s.png": "422624d4b22eae8fbf9140de285d970da1027c1f1e69ce8380d8b022068b2b5e",
+      "5s.png": "422624d4b22eae8fbf9140de285d970da1027c1f1e69ce8380d8b022068b2b5e"
+    },
+    "equal": true
+  },
+  {
+    "project": "r03-vertical",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "f9a552cfbf0bc76b71c90931ab5b0af54cb3ed020329f9811225b496a7a9b0e7",
+      "14s.png": "65aba281b6ba6e2635f69a155d9d8c067ac5058c326b6784f4126f90c2b3a1ce",
+      "1s.png": "c0f86a9404090c94e4db518f5de78a4b5f0b4101c58289f9aa3ff9977fa50318",
+      "2s.png": "c82db139bb0a5e1f9179bfc68d3b581e06a209f2d961ff838bfbf1169f04adcb",
+      "5s.png": "c82db139bb0a5e1f9179bfc68d3b581e06a209f2d961ff838bfbf1169f04adcb"
+    },
+    "equal": true
+  },
+  {
+    "project": "r06-landscape",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "53f75a3fd8f9f4ffc6bdd2f011b18e4e94cc697557f4886a93aa6f7315c83797",
+      "14s.png": "51f9e173a8e11f3580232dad1e03e35e08bcfcf38acda0fb2b91d682194d8e15",
+      "1s.png": "c51b92be1f44ff38a4bb70e658e47a7796720cd6f5cf99bb4a01e09658389e5e",
+      "2s.png": "080d89ef66885128b031b03f2446e56b73a8aebdfdaff12f67effa41c30e25d2",
+      "5s.png": "1b56eed324df28440fd11fbea632bba7be184c52df4629adc4f5115bfe223628"
+    },
+    "equal": true
+  },
+  {
+    "project": "r06-vertical",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "4a6b3fd880eaf5abfc4b93a98973a8e3e50392ef77afe26588c552fae6b38358",
+      "14s.png": "7b528d573a8b0c6e75faaa9d8afd98e55bb1b179b1fe4378a1dca915bd68ad95",
+      "1s.png": "b0e555f42b20dd31f45ff1f99b6013dddc595302351c6c7891179ffac3dcb97a",
+      "2s.png": "545ee9b977ee77a4052958ce12941ca6fde5727f3e695a7eb9bd47058dbac779",
+      "5s.png": "082bcc8416f1256d6b9d44b767e22661f0c0cfcbe3239fbf2726f2e4388a8bc6"
+    },
+    "equal": true
+  },
+  {
+    "project": "r07-landscape",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "f566a5f6288d5a017f34c3548b6a6d9804fa1df75320df519714ca6410a9beeb",
+      "14s.png": "b3db3ade65301435f5d4f91580c009a87c1196130a4461f57f610695c8cd4fca",
+      "1s.png": "f566a5f6288d5a017f34c3548b6a6d9804fa1df75320df519714ca6410a9beeb",
+      "2s.png": "f566a5f6288d5a017f34c3548b6a6d9804fa1df75320df519714ca6410a9beeb",
+      "5s.png": "f566a5f6288d5a017f34c3548b6a6d9804fa1df75320df519714ca6410a9beeb"
+    },
+    "equal": true
+  },
+  {
+    "project": "r07-vertical",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "e9ea355b5b37298b91b5b28902487797b0ee08eddc5442da3b7a36ef91bbfbf3",
+      "14s.png": "8220a8b70313ccef089f3b42e15b61f7803d51365d618e54a68f3ff439aebe69",
+      "1s.png": "e9ea355b5b37298b91b5b28902487797b0ee08eddc5442da3b7a36ef91bbfbf3",
+      "2s.png": "e9ea355b5b37298b91b5b28902487797b0ee08eddc5442da3b7a36ef91bbfbf3",
+      "5s.png": "e9ea355b5b37298b91b5b28902487797b0ee08eddc5442da3b7a36ef91bbfbf3"
+    },
+    "equal": true
+  },
+  {
+    "project": "r09-landscape",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "ad90cd17652671e773e0f0b819133dedc6ad8b5b14168bf2157c3d83b2b1631f",
+      "14s.png": "04d262f3b92a6273fb350a6164a79758e30a5e847dde8cf198ba71ffc202c147",
+      "1s.png": "5e259f25bfa459d0493add4503736d2fb39e3ef0ff84896592e859ccdaab13ea",
+      "2s.png": "5e259f25bfa459d0493add4503736d2fb39e3ef0ff84896592e859ccdaab13ea",
+      "5s.png": "5e259f25bfa459d0493add4503736d2fb39e3ef0ff84896592e859ccdaab13ea"
+    },
+    "equal": true
+  },
+  {
+    "project": "r09-vertical",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "be3c87c5a58ef7cf34ebed80454e26c92df29b1f656a8bbac73691c86732ca2a",
+      "14s.png": "9880216aa74d943249c88c2c748994354076506ff819d67c567d8a91ffc65e46",
+      "1s.png": "26047a4464ed053ff337362ed3585552c9746a640e5b1a650668d2ee4ebf34c4",
+      "2s.png": "26047a4464ed053ff337362ed3585552c9746a640e5b1a650668d2ee4ebf34c4",
+      "5s.png": "26047a4464ed053ff337362ed3585552c9746a640e5b1a650668d2ee4ebf34c4"
+    },
+    "equal": true
+  },
+  {
+    "project": "r05-landscape",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "9928f9631d260fc3d5c673ace1bc0a504bdfb354e526f1659b916ceadc38ffe4",
+      "14s.png": "3d8248a6d2721ecfc2cc23d1b4d13dac1004825b69963e078f900c28f3b7094f",
+      "1s.png": "a88b32c7fead55b3671067e13f51e2bc6cc836ae6e0993d9fead1c915056b324",
+      "2s.png": "14297b3904bf0305adf51d3dad17a2687f3513b0b4e0a2d3b3ef4f4813224606",
+      "5s.png": "52a1264cf47893744695361daa7fef99ce25016bc72b549cb2885069c3c30322"
+    },
+    "equal": true
+  },
+  {
+    "project": "r05-vertical",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "95557038f94c35ed61a6df4e5873c86f726d5e38a49b045f8829d74205400c1c",
+      "14s.png": "2284f240299918509f3853fb86309409775bf74c7226bd79e7b37ccb4b0c7782",
+      "1s.png": "1b3d211ebacc45be6a2cd0a902fdfcf660d0e781ea56697aeaba4692db184ce9",
+      "2s.png": "190c1a601ec3424ff504cf49a8a999141ed71d92758c388bd2097779b028b324",
+      "5s.png": "9c0f75a149be949d65ffdea62752ba7d636cd964d7a802ce89a941ea4795af45"
+    },
+    "equal": true
+  },
+  {
+    "project": "r01-landscape",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "e20736670e5d1f62bab6b30ee32868865d598101a2d9cc25d226fa7e2ac3dd2c",
+      "14s.png": "bc2ff599319468318f6dd78441de21adc4db0403f835c2d6638dfdbbf2edaa13",
+      "1s.png": "1aaf04f075fbd2f4c3eb82c2c596995c570cc6d763dd961ca81ea80bbc9d199c",
+      "2s.png": "658ff8c31e3e4b149b63f1e162624f1bd9b187df249f71dd2f039c8ebe6e89dd",
+      "5s.png": "fdadcac67fb0305a894d31f15779b44b7886297c7745900d0012ac1861188e4a"
+    },
+    "equal": true
+  },
+  {
+    "project": "r01-vertical",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "3940dfd631c65a02d295b183fe76342f972972baa7b50e2b39012800635ad026",
+      "14s.png": "9027f01eac55489dcc34add7058e701167db312e8c6b6798d72ad77830d84ca5",
+      "1s.png": "6d2cf1a439cb6146c59fcbff963c46e4f81f2ebd53459d3600988952a7f479b1",
+      "2s.png": "3a714cf6ca3c3b2d628786d416266faf2d29159fe5c17291eef9f56cbb09077d",
+      "5s.png": "84df294e4debbbe209d0f1b596789d13763a4b9b0b705538f1a729ca1595eef6"
+    },
+    "equal": true
+  },
+  {
+    "project": "r04-landscape",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "d25f82f8e3d3934f1dd988293fe4bdc53fed89c2d42aa9288a65ab946f87c8f1",
+      "14s.png": "1dc6f7bae966ffdf95e6ff6184969bf3491a9fa532ceefd7971e9f9636703041",
+      "1s.png": "a28e22f2da989286e53db7c44a15b98744792aa2ca68cb3abee9801ea5b8f4ce",
+      "2s.png": "ec3996b95b8cab1b6aeb32677bfb069a43f557bb37f5e5081e842fd0ab9ccfae",
+      "5s.png": "66834799b1dcd43044a7d0a28df1287cf16d576111beaaf146851861d00465e5"
+    },
+    "equal": true
+  },
+  {
+    "project": "r04-vertical",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "6c895e8033191d96816aa9bdd37c710feb4bd0cc0dba8c5eef8d40cdb0cb0d38",
+      "14s.png": "adb328bfbb7fc7c388a18ac3a86d1d2c1b998489d0bbf11a6f8cf9b985f562d0",
+      "1s.png": "d63a948e78c893ed69370ed965e2b3d1a96c8344a03bf8df6687814803c8ce94",
+      "2s.png": "ff4c60ebc9ada28aee7eea50efefacadc98400dfb5884bf846447d5ddd8afbbf",
+      "5s.png": "1417bb4f075920097eb8c51f57e46fd7da2837021933649a31b837cb0cd1cefa"
+    },
+    "equal": true
+  },
+  {
+    "project": "r08-landscape",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "98420d50343998c62e61f4bb45ba116678e1f4e32f4cf4cd880dd61ff7393d3a",
+      "14s.png": "4449f1e6ad30cf90a506fda44808075242869ffaeb93ee3001a6fd148b89f0a3",
+      "1s.png": "5cb5f07be336a7a5ea828063950066b74a3668e156c259fcf8f94393ce1d21cf",
+      "2s.png": "f58141b9121fc845ffd6375ab0c9cce0fbe674d54eeda8db3b85bd86b653b437",
+      "5s.png": "6417c34e9e5b14ee6a112ec50659bb0db82b6682f8559ca8751b621441d0baef"
+    },
+    "equal": true
+  },
+  {
+    "project": "r08-vertical",
+    "sequence": [
+      "1s",
+      "2s",
+      "5s",
+      "10s",
+      "14s"
+    ],
+    "shuffled": [
+      "14s",
+      "2s",
+      "10s",
+      "1s",
+      "5s"
+    ],
+    "hashes": {
+      "10s.png": "61ebfb448c97005ce2b6b44b69f77426ae82b5eab502f3e6cf7ba8d1d6c4e128",
+      "14s.png": "70e1655f00dff634f54cff72bd1606001aba5887e0b749f028dc14b004a2bf4d",
+      "1s.png": "1c253974c64017ce72f7c6d2f5f17bb693102d0ab4f363f0bf18fcda8148860d",
+      "2s.png": "edbc9f275f8f22e5b440bff5f9f728d9fee363048e662ae96778815626869066",
+      "5s.png": "deb54b1a1ceec347014f8cc7d0359a78e725c25aeba10d4fd0bd192cb583bad9"
+    },
+    "equal": true
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "project": "r03-landscape",
+  "sequence": [
+    "1s",
+    "2s",
+    "5s",
+    "10s",
+    "14s"
+  ],
+  "shuffled": [
+    "14s",
+    "2s",
+    "10s",
+    "1s",
+    "5s"
+  ],
+  "hashes": {
+    "10s.png": "008a2edbbd59ca1871d14b1b6354c49de781246220aa87145782f68f60b46a38",
+    "14s.png": "e5ee98b36f7c8cfca2cfe5b6b0473d669d8fc82ead2ab4cca020e57510589aee",
+    "1s.png": "021218273b7da5053f0dbe64ec8d9edc04a5b973346a21e6db88bec1811b9e97",
+    "2s.png": "422624d4b22eae8fbf9140de285d970da1027c1f1e69ce8380d8b022068b2b5e",
+    "5s.png": "422624d4b22eae8fbf9140de285d970da1027c1f1e69ce8380d8b022068b2b5e"
+  },
+  "equal": true
+}

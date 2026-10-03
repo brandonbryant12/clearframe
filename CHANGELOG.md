@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Native retirement mechanism kit.** Nine original reusable recipes now have two fictional scenarios and separate landscape/vertical specimens. Exact matching bands, ownership stacks, balance reservoirs and fee-gap rectangles preserve proportional length and area; native formulas expose benefit and purchasing-power inputs. Retained calculations, clips, phone/boundary review, independent critique and bounded encoded-edge evidence distinguish implementation from visual acceptance. The kit remains a prototype pending subjective continuous playback and final promotion.
+
 - **Plot readability and phase identity.** Names stay visible throughout quantitative reveals; final values appear in a stable key. Wider portrait plotting and a larger, higher-contrast multiline source footer improve 360-pixel reading. Missing dates and retirement assumptions are explicit. Long-label, close-value, logarithmic and annotation specimens extend the retained review set; frame-order verification compares native pixels.
 
 - **Shared-scale native plots.** `canvas.props.plot` adds explicit numeric/calendar axes, comparable series, log y scales, missing-data gaps, direct labels and observation-linked annotations. A linear native stroke reveal keeps irregularly sampled series on one time coordinate. Prepared retirement and monitoring specimens cover landscape and vertical. Plot sources are required, and native layout helpers now receive the actual beat duration so final-reading holds are enforced.

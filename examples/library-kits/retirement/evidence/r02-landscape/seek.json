@@ -1,0 +1,25 @@
+{
+  "project": "r02-landscape",
+  "sequence": [
+    "1s",
+    "2s",
+    "5s",
+    "10s",
+    "14s"
+  ],
+  "shuffled": [
+    "14s",
+    "2s",
+    "10s",
+    "1s",
+    "5s"
+  ],
+  "hashes": {
+    "10s.png": "95722d896bd63791daa2e2131baef1a23d44760606a9289637d2e85fd8746259",
+    "14s.png": "1b5d9ad1cc8416c9f8822e3df541cd8dd4a00e2a75fdf45980d1a4e6a780d4e6",
+    "1s.png": "8452bd543a03b800005b607286e5e8740964f9f324b8513be48b227a4f249ef3",
+    "2s.png": "8452bd543a03b800005b607286e5e8740964f9f324b8513be48b227a4f249ef3",
+    "5s.png": "8452bd543a03b800005b607286e5e8740964f9f324b8513be48b227a4f249ef3"
+  },
+  "equal": true
+}
