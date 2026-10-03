@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "version": 1,
+  "sourceHashes": {
+    "scripts/blender/render.py": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+    "scripts/blender/artkit.py": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+    "scripts/blender/camera_rig.py": "8b69c6bcfc913a7fe6e3a3013404422fb73463cc7ab4948ce84fce2ee932ffe4",
+    "library/sculptures/counterweight-mobile.py": "67b5505e2cdb180a3830135914dfc4cd127afe95777129ff6173beefe1138c5d",
+    "library/sculptures/counterweight-mobile.json": "61e5edb8eac736abaec7e27d4e2ea8a825ac4a7e97ef397d300175982216b14f"
+  },
+  "sceneSha256": "689acd8f9cc5996613a557456f65f56dccdc9f95413bfa593ef23a1d5c8f10a4",
+  "framesChecked": 145,
+  "assertions": 3408,
+  "bounds": [
+    0.47679221630096436,
+    0.1610446274280548,
+    0.8632078766822815,
+    0.7690603137016296
+  ],
+  "maxConnectionError": 9.748898493297079e-07,
+  "maxLoopTransformError": 3.429011054889572e-17,
+  "seekEqual": true,
+  "limits": "Baked geometry and conservative screen bounds only; no force simulation, exhaustive rendered occlusion test or continuous subjective playback."
+}

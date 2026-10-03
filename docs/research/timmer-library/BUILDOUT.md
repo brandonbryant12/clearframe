@@ -263,3 +263,9 @@ The Python/NumPy checker independently verifies 1,028 arithmetic assertions and 
 Independent picture review covers 72 actual decoded phone frames, including both directions of the work-hour round trip. One reading-density heuristic warning per clip is retained with explicit rationale: critique accumulates 118 or 128 words from successive mutually exclusive readouts, while an actual state contains 63–66 whitespace-delimited words with mostly persistent wording. This supports a bounded silent component study, not continuous reading-pace or final-film acceptance. Long ending comparison holds are intentional.
 
 The catalog expands to seventeen packages and 65 examples, with 128 native variants plus one prepared insert. I04 remains **prototype**. New copy, units, timing, denser trays, square/4:5, fractional-token allocations, continuous subjective playback and final master acceptance remain open. Interactive browser authorization remains pending; the larger library goal stays active.
+
+## Visual quality correction — October 3, 2026
+
+The user rejected the counterbalance direction as cheap and low quality and emphasized that details matter. The [counterweight craft review](reviews/counterweight-2026-10-03/README.md) retains the actual draft stills, mechanically passing evidence and interrupted render receipt. The framing experiment was withdrawn; the published recipe and historical assets remain unchanged. No new asset or acceptance is claimed.
+
+For subsequent candidates, art-directed still and close-detail review precede substantial motion rendering and packaging. Review explanatory purpose, designed form, construction/contact details, coherent materials, lighting, composition and native typography. Then inspect a short encoded motion pass. Numerical and deterministic checks remain required, but their success cannot satisfy this craft gate. Prioritize improving one convincing exemplar over expanding more unapproved variants.

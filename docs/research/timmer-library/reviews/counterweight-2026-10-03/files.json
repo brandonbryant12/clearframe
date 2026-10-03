@@ -1,0 +1,49 @@
+{
+  "status": "rejected-for-visual-quality",
+  "files": {
+    "README.md": {
+      "sha256": "12971a0ade2df3e1afb3561b355f34d4273ee4109aa662ed8e83f991fe3dd99e",
+      "bytes": 3248
+    },
+    "candidate.py": {
+      "sha256": "67b5505e2cdb180a3830135914dfc4cd127afe95777129ff6173beefe1138c5d",
+      "bytes": 4356
+    },
+    "geometry.json": {
+      "sha256": "2aa83979916ac0f12e019a22fc3f752ab43fe4e99e36471419dda3f95c4f4f6f",
+      "bytes": 1132
+    },
+    "interrupted-receipt.json": {
+      "sha256": "e2143b81b6d13197b844cb209008d2760ce9393d02d8c9cfb4d4c7073b285ab6",
+      "bytes": 7716
+    },
+    "landscape.png": {
+      "sha256": "914a838723084ffaa100e3a93dc03c0167dd487c6aceba18d25605aa7c7c78d5",
+      "bytes": 384227
+    },
+    "portrait.png": {
+      "sha256": "f63bf9f8941ea31fd902d38c166b4995703db3bd0f994d03d919acfcee122a74",
+      "bytes": 328134
+    },
+    "source/artkit.py": {
+      "sha256": "82012aac0931d55d37bbe6e1c08494449e8f6891a236439aaa9f58af366084ea",
+      "bytes": 8435
+    },
+    "source/camera_rig.py": {
+      "sha256": "8b69c6bcfc913a7fe6e3a3013404422fb73463cc7ab4948ce84fce2ee932ffe4",
+      "bytes": 13796
+    },
+    "source/counterweight-mobile.json": {
+      "sha256": "61e5edb8eac736abaec7e27d4e2ea8a825ac4a7e97ef397d300175982216b14f",
+      "bytes": 888
+    },
+    "source/counterweight-mobile.py": {
+      "sha256": "67b5505e2cdb180a3830135914dfc4cd127afe95777129ff6173beefe1138c5d",
+      "bytes": 4356
+    },
+    "source/render.py": {
+      "sha256": "6f4a303612907309bd10621b85eb477d351a92045e6eddcc299f51da7f94c294",
+      "bytes": 7533
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "title": "A balance of decisions",
+  "use": "Trade-offs, dependencies, competing priorities and reflective editorial titles.",
+  "description": "A two-tier brass mobile transfers a slow rocking motion through articulated beams and hanging ceramic counterweights.",
+  "theme": "forest",
+  "duration": 6,
+  "loop": true,
+  "copy": "Use the connected motion to introduce a trade-off, then cut to native evidence. A single short line can sit beside the hanging forms.",
+  "metaphor": "A choreographed sculpture, not a physics simulation or a chart of actual weights or values.",
+  "parameters": [
+    "theme",
+    "seed",
+    "duration",
+    "fps",
+    "vertical"
+  ],
+  "motion": {
+    "version": 1,
+    "clock": "qualitative-pose",
+    "phases": [
+      {
+        "id": "cycle",
+        "role": "cycle",
+        "start": 0,
+        "end": 1,
+        "minSeconds": 1
+      }
+    ]
+  }
+}
