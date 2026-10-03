@@ -5,6 +5,7 @@ import { loadStoryboard } from './project.mjs';
 import { computeTiming, tokenize } from './timing.mjs';
 import { rules } from '../../fframes/registry.mjs';
 import { elementsExtent as extent } from '../../fframes/canvas.mjs';
+import { expandPlotProps } from '../../fframes/plots.mjs';
 import { createJob } from '../../fframes/job.mjs';
 import { sketch, expandArt, sketchPreset } from '../../fframes/sketches.mjs';
 
@@ -15,6 +16,8 @@ import { sketch, expandArt, sketchPreset } from '../../fframes/sketches.mjs';
 function asDrawn(b, { width = 1920, height = 1080 } = {}) {
   try {
     if (b.art?.sketch) b = { ...b, art: expandArt(b.art, { width, height }) };
+    if (b.block === 'canvas' && b.props?.plot)
+      return { ...b, props: expandPlotProps(b.props, { width, height, beatId: b.id }) };
   } catch {
     // createJob below reports invalid references as author-facing errors.
   }

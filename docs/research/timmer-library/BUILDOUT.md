@@ -8,7 +8,7 @@ Authorized October 2, 2026: extend the general library with retirement, build th
 |---|---|---|
 | 0 — Durable inventory | Original package and 62-item macro inventory; add nine retirement recipes and primary references | Source validated; visual status unchanged |
 | 1 — Calculation contracts | T02 foundation: contribution ledger, tiered match, ownership, fee comparison, pension formula and cashflow fixtures | Implemented; focused calculation checks pass |
-| 2 — Quantitative drawings | T01/C01 explicit scales, multiseries comparison, missing data, dates, annotations and native labels | Planned |
+| 2 — Quantitative drawings | T01/C01 explicit scales, multiseries comparison, missing data, dates, annotations and native labels | Engineering foundation implemented; rendered prototypes fail phone/phase-label review |
 | 3 — Retirement specimens | R01–R09: reusable native recipes, two distinct example subjects, landscape/portrait compositions | Planned |
 | 4 — Drivers, participation and flows | Reconciled decomposition, breadth/count versus weight, relative performance and stocks/flows | Planned |
 | 5 — Physical mechanisms and cameras | Curate existing B01–B03; build reservoir/gate/conveyor and reusable camera/phase contracts | Planned |
@@ -51,6 +51,7 @@ Milestone 0 validation: inventory generation resolves all 71 entries and 27 sour
 ## Published milestones
 
 - **0:** `470159b` pushed to `main`; remote branch verified at that commit. Package, 71-entry inventory, nine retirement recipes and acceptance criteria.
-- **1:** calculation implementation in `engine/lib/finance.mjs`; [contract and reproduction](../../finance-calculations.md). Ten focused checks pass, including closed-form annuity fixtures, hand-calculated matching and fees, loss/depletion cases, and ordering/validation. Five generated examples retain their input SHA-256. T02 remains partial: statistical transforms and the chart data contract are still planned. R01–R09 remain unreviewed visual proposals.
+- **1:** `d31f269` pushed to `main`; calculation implementation in `engine/lib/finance.mjs`; [contract and reproduction](../../finance-calculations.md). Ten focused checks pass, including closed-form annuity fixtures, hand-calculated matching and fees, loss/depletion cases, and ordering/validation. Five generated examples retain their input SHA-256. T02 remains partial: statistical transforms are still planned. R01–R09 remain unreviewed visual proposals.
+- **2a:** quantitative input/native drawing foundation, [prototype evidence](../../../examples/quantitative-plots/README.md). Full Node suite 151/151, native suite 64/64, both 90-frame native audits clean; two 23-second 690-frame clips pass encoded QA with zero detected one-frame pops. Independent review retains **prototype** status: phone text is too small, series identities appear late, and playback/edge-case review is incomplete. Source hashes, clips, receipts and critique are retained. These are engineering results, not accepted artwork.
 
-Next: T01/C01 source contracts and native quantitative compositions. Rendering remains subject to the disk reserve; no generated visual candidate is accepted yet.
+Next: fix quantitative presentation at 360 px, establish series identities and missing-data context before the reveal, make the growth explanation explicit, and review motion plus long/near-coincident labels. Add logarithmic/annotation specimens and arbitrary-seek evidence before promotion. Then build the retirement recipes on the accepted foundation. Rendering remains subject to the disk reserve; no generated visual candidate is accepted yet.

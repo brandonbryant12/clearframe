@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "lifecycle": "prototype",
+  "inventoryIds": [
+    "T01",
+    "C01"
+  ],
+  "sourceBase": "d31f26912f3e60a0df27116ccbdb7d55ab76086d",
+  "sourceState": "Uncommitted implementation at capture; exact source file hashes below.",
+  "license": "MIT (repository); fictional inputs",
+  "variants": {
+    "landscape": {
+      "pipelineRun": "2026-10-03T00-16-16-591Z-3eda8fd5",
+      "artifacts": {
+        "evidence/landscape/check.json": "0bd276b9a9c95e4ebf2f2bfa862df614cc13742552d7cc9849e2af075f8ad417",
+        "evidence/landscape/phone.png": "fefde156ccd71578fc3873e938d0a1b745102a313b70c290e384dd67cf8ef645",
+        "evidence/landscape/qa.json": "088c7043b366d58d92c50be498c440af05e50e705e10391c17e3a7456b7709e0",
+        "evidence/landscape/sheet.png": "0b8f618909de22bc724cee5093e9c3833e7d5520b99bd94c39e3bb4b114d97a8",
+        "evidence/landscape/timeline.png": "1dd10817259ce3670aff3dda909e427bdf302b14a89f24fc4a33f4fc19b79bc0",
+        "evidence/landscape/video.mp4": "ec2c09cb589ae61d13f4edadf6c41c133159d7107b1f45b16b2a4d6b6d30db92",
+        "evidence/landscape/video.mp4.json": "7e93e757c5ba0eafe010a6b423f2f695af7db1fef2a163d5a185cdbc04d1cd36"
+      }
+    },
+    "vertical": {
+      "pipelineRun": "2026-10-03T00-16-51-500Z-b3b0afe8",
+      "artifacts": {
+        "evidence/vertical/check.json": "8b578d2f80b482b0affe49ca371fb4e5a8599647b795d5c8272f460b15befa13",
+        "evidence/vertical/phone.png": "48eebeec6fc1a34e32e5c6340d24b7b7afe6679af1bc51d9a36cccfb790f2b7f",
+        "evidence/vertical/qa.json": "03d2ea3431b74a0afcc80399a8d16380073cea80f5e01448f10fce0c0ed6d3f1",
+        "evidence/vertical/sheet.png": "e8827fdd003cd63c583a011dd87480b3284da2a23bcae61cc7ea25f0ebd552ab",
+        "evidence/vertical/timeline.png": "7a9d05c5bb9fb460269351cba99f01a1c6fb13c16a0f9352da282e0a01a5b0ee",
+        "evidence/vertical/video.mp4": "e37440b6c88de484cbddb858d3b46fe0f8fffa6c068900af8d4be04f9c5c0e8c",
+        "evidence/vertical/video.mp4.json": "1e4aa876b440e26089454dd60053035b637b05225536356969df4e8435a06c46"
+      }
+    }
+  },
+  "sourceHashes": {
+    "fframes/plot-data.mjs": "16fd41d99d74d8af3c53126aeb4c55940f5a5a12654b2382caaed046e1d5f4d6",
+    "fframes/plots.mjs": "b68015ba77c8f175e4724e2fd2bd149999ef057798ef9c9b718c808c5bd9c8fe",
+    "fframes/canvas.mjs": "421697695ccfc648dc6d2ff7339b3dd8bb85662d444aea55f4e11533509af781",
+    "fframes/job.mjs": "d086a321664654cf992b1ef9aa337c34d2ad6e8339c1191311ced5bfff0b3257",
+    "fframes/native/src/canvas.rs": "82c1802b887e33bf2c7e7998e02e682b1f159e53dff2d06794831a9330ffc914",
+    "fframes/native/src/speech.rs": "98d2d35f9bd40cf0af4840f2647e2e80d7b0fe0ccea1c949ce6d3fe586245e14",
+    "examples/quantitative-plots/build.mjs": "012480f665345147041d0f17e883e8010debe488db327536ba838f54753368e0",
+    "examples/quantitative-plots/ledger.json": "5f4e2c38bed6ca785ce9c6549b40d522ba0948c5a464ba57d6c880caaa309c35",
+    "examples/quantitative-plots/landscape/storyboard.json": "f7ab3e865205b394fe19c4c8dd5713d25bbd4ba2f35d5aa3c59417c9aea866a8",
+    "examples/quantitative-plots/vertical/storyboard.json": "887619c7d808217e45616745929556dd990cce731e57975f5714155070ac7318"
+  },
+  "verification": {
+    "nodeTests": {
+      "passed": 151,
+      "failed": 0
+    },
+    "nativeTests": {
+      "passed": 64,
+      "failed": 0
+    },
+    "nativeAudits": {
+      "framesPerVariant": 90,
+      "errors": 0,
+      "warnings": 0
+    },
+    "encodedVariants": {
+      "frames": 690,
+      "fps": 30,
+      "seconds": 23,
+      "pops": 0,
+      "audio": false
+    },
+    "motionEvidence": "Decoded contact sheets, timeline and boundary frames; continuous playback and arbitrary-seek asset hash check remain outstanding.",
+    "limits": [
+      "Phone text too small, especially landscape",
+      "Series identities and missing-data note appear after reveal",
+      "Log and annotation only source-tested; no visual specimens",
+      "Square and 4:5 only source-compiled",
+      "No artwork acceptance"
+    ]
+  }
+}

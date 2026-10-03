@@ -76,6 +76,7 @@ export function teachingElements(p, { width = 1920, height = 1080, duration } = 
 export function expandTeachingProps(input, frame) {
   if (input?.teaching == null) return input;
   const { teaching, ...rest } = structuredClone(input);
+  check(rest.plot == null, 'cannot combine teaching with plot');
   check(rest.kpi == null && rest.chart == null && rest.sketch == null && rest.plates == null, 'cannot combine teaching with kpi, chart, sketch or plates shorthand');
   const p = teachingSpec(teaching, rest.source), drawn = teachingElements(p, frame);
   if (frame.beatId) for (const el of drawn) if (el.id) el.id = `${frame.beatId}-${el.id}`;

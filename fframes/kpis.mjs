@@ -204,6 +204,7 @@ export function kpiElements(spec, { width = 1920, height = 1080 } = {}) {
 export function expandKPIProps(input, frame) {
   if (input?.kpi == null) return input;
   const { kpi, ...rest } = structuredClone(input);
+  check(rest.plot == null, 'cannot combine kpi with plot');
   check(rest.teaching == null && rest.chart == null && rest.sketch == null && rest.plates == null, 'cannot combine shorthand teaching, chart, sketch or plates in the same canvas');
   const p = kpiSpec(kpi, rest.source);
   if (frame.duration != null && ['reveal', 'stagger'].includes(p.motion.preset)) {

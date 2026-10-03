@@ -25,7 +25,7 @@
       "category": "Chart",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "proposed; not built",
+      "readiness": "Prototype: native shared-axis lines, dated spacing and gaps rendered in landscape/vertical; phone readability and phase labelling fail independent review",
       "effort": "L",
       "sourceIds": [
         "S01",
@@ -41,7 +41,7 @@
         "missing samples",
         "focus range"
       ],
-      "existing": "line block is single-series; canvas paths exist. Reusable multiseries/date/legend semantics need work.",
+      "existing": "canvas.props.plot implements explicit common scales, direct endpoint labels, synchronized reveals and null gaps. See examples/quantitative-plots/REVIEW.md; focus-range treatments remain planned.",
       "guardrail": "Do not independently normalize or rescale lines without an explicit label. Break gaps instead of inventing data.",
       "reuse": [
         "science",
@@ -1726,7 +1726,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "New",
-      "readiness": "proposed; not built",
+      "readiness": "Partial implementation: strict plot data/scale contract and native geometry; automated checks pass, visual prototypes remain unaccepted",
       "effort": "L",
       "sourceIds": [
         "S05",
@@ -1743,7 +1743,7 @@
         "missing policy",
         "source"
       ],
-      "existing": "existing native validation is a foundation; chart-specific rules need extension.",
+      "existing": "fframes/plot-data.mjs and plots.mjs implement bounded comparable series, linear/date x, linear/log y, ticks, source/as-of and observation annotations. Threshold and interval marks remain planned.",
       "guardrail": "Do not weaken existing native number/source integrity checks.",
       "reuse": [
         "all quantitative graphics"

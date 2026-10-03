@@ -53,6 +53,14 @@ fn finite(v: &Value) -> bool {
         _ => true,
     }
 }
+
+// Quantitative paths can follow a shared time coordinate without easing each data interval.
+fn stroke_reveal(local: f32, duration: f32, ease: &str) -> f32 {
+    if duration <= 0.0 {
+        return 1.0;
+    }
+    if ease == "linear" { motion::clamp01(local / duration) } else { motion::out_cubic(local / duration) }
+}
 fn paint_ok(v: Option<&Value>) -> bool {
     match v {
         None => true,
@@ -91,6 +99,11 @@ pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut us
         let enter = s(el, "enter");
         if !enter.is_empty() && !ENTERS.contains(&enter) {
             return Err("unknown canvas entrance");
+        }
+        if el.get("drawEase").is_some()
+            && (enter != "draw" || !["out", "linear"].contains(&s(el, "drawEase")))
+        {
+            return Err("drawEase needs enter draw and must be out or linear");
         }
         let exit = s(el, "exit");
         if !exit.is_empty() && !EXITS.contains(&exit) {
@@ -725,7 +738,7 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
             return fframes::svgr!(<g />);
         }
 
-        let draw = if enter == "draw" { if dur <= 0.0 { 1.0 } else { motion::out_cubic(local / dur) } } else { 1.0 };
+        let draw = if enter == "draw" { stroke_reveal(local, dur, s(el, "drawEase")) } else { 1.0 };
         let draw = if exit == "undraw" { draw * (1.0 - q) } else { draw };
         let mosaic = el.get("mosaic").filter(|m| m.as_bool() == Some(true) || m.is_object());
         let shape = match mosaic {
@@ -1687,11 +1700,22 @@ mod tests {
         assert!((x - 100.0).abs() < 1e-3 && (y - 100.0).abs() < 1e-3 && (angle - PI / 2.0).abs() < 1e-3);
     }
     #[test]
+    fn quantitative_strokes_share_linear_time_and_preserve_existing_easing() {
+        assert_eq!(stroke_reveal(0.5, 2.0, "linear"), 0.25);
+        assert_eq!(stroke_reveal(-1.0, 2.0, "linear"), 0.0);
+        assert_eq!(stroke_reveal(3.0, 2.0, "linear"), 1.0);
+        assert_eq!(stroke_reveal(0.5, 2.0, ""), motion::out_cubic(0.25));
+        assert_eq!(stroke_reveal(0.5, 2.0, "out"), motion::out_cubic(0.25));
+        assert!(validate(&serde_json::json!({"elements":[{"type":"line","x2":10,"y2":20,"enter":"draw","drawEase":"linear"}]})).is_ok());
+        assert!(validate(&serde_json::json!({"elements":[{"type":"line","x2":10,"y2":20,"enter":"fade","drawEase":"linear"}]})).is_err());
+    }
+    #[test]
     fn every_canvas_effect_is_a_pure_function_of_the_frame() {
         let job = serde_json::json!({"version":2,"width":1920,"height":1080,"fps":30,"frames":90,"beats":[
             {"id":"a","block":"canvas","frames":90,"start_frame":0,"cue_seconds":0,"levels":[0,10,40,80,60,30,20,50,90,70],"props":{"elements":[
                 {"type":"circle","cx":300,"cy":300,"r":40,"fill":"accent","rough":{"amount":3,"boil":8},"at":0,"dur":1},
                 {"type":"path","d":"M 100 800 C 500 400 900 400 1300 800","stroke":"ink","rough":{},"at":0.2,"dur":1},
+                {"type":"line","x1":100,"y1":700,"x2":900,"y2":300,"stroke":"accent","enter":"draw","drawEase":"linear","at":0.1,"dur":1.7},
                 {"type":"circle","cx":100,"cy":800,"r":20,"fill":"accent2","at":0,"dur":0.3,"fps":12,
                  "along":{"d":"M 100 800 C 500 400 900 400 1300 800","at":0,"dur":2,"loop":true},"echo":{"count":5,"lag":0.08,"to":"accent"}},
                 {"type":"rect","x":1500,"y":200,"w":200,"h":200,"at":0,"dur":0,"morph":{"from":{"type":"circle","cx":1400,"cy":300,"r":60},"dur":1}},

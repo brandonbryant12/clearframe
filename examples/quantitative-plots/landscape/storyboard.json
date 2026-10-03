@@ -1,0 +1,437 @@
+{
+  "title": "Shared scales — two explanatory specimens",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "paper",
+  "type": "geometric",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.4
+  },
+  "backdrop": "none",
+  "transition": "cut",
+  "captions": false,
+  "music": false,
+  "sfx": "off",
+  "sources": [
+    {
+      "claim": "All amounts, contribution rules, returns and temperatures are fictional illustrations.",
+      "source": "examples/quantitative-plots/build.mjs",
+      "asOf": "2026-10-02"
+    },
+    {
+      "claim": "Account uses $6000 employee plus $3000 employer at each year end for 30 years, with a hypothetical 6% effective annual return and no fees or withdrawals.",
+      "source": "engine/lib/finance.mjs accountLedger; retained ledger.json",
+      "asOf": "2026-10-02"
+    }
+  ],
+  "beats": [
+    {
+      "id": "retirement-growth",
+      "block": "canvas",
+      "duration": 10,
+      "camera": "none",
+      "props": {
+        "plot": {
+          "title": "Contributions are only one part",
+          "asOf": "2026-10-02",
+          "source": "Hypothetical model · 6% yearly return; no forecast",
+          "x": {
+            "type": "linear",
+            "label": "Years · end-of-year contributions",
+            "domain": [
+              0,
+              30
+            ],
+            "ticks": [
+              0,
+              10,
+              20,
+              30
+            ]
+          },
+          "y": {
+            "type": "linear",
+            "label": "Balance · USD thousands",
+            "domain": [
+              0,
+              800
+            ],
+            "ticks": [
+              0,
+              200,
+              400,
+              600,
+              800
+            ]
+          },
+          "series": [
+            {
+              "id": "balance",
+              "label": "Account balance",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 9
+                },
+                {
+                  "x": 2,
+                  "y": 18.54
+                },
+                {
+                  "x": 3,
+                  "y": 28.6524
+                },
+                {
+                  "x": 4,
+                  "y": 39.371544
+                },
+                {
+                  "x": 5,
+                  "y": 50.73383664
+                },
+                {
+                  "x": 6,
+                  "y": 62.7778668384
+                },
+                {
+                  "x": 7,
+                  "y": 75.54453884870401
+                },
+                {
+                  "x": 8,
+                  "y": 89.07721117962625
+                },
+                {
+                  "x": 9,
+                  "y": 103.42184385040382
+                },
+                {
+                  "x": 10,
+                  "y": 118.62715448142805
+                },
+                {
+                  "x": 11,
+                  "y": 134.74478375031373
+                },
+                {
+                  "x": 12,
+                  "y": 151.82947077533257
+                },
+                {
+                  "x": 13,
+                  "y": 169.93923902185253
+                },
+                {
+                  "x": 14,
+                  "y": 189.13559336316368
+                },
+                {
+                  "x": 15,
+                  "y": 209.48372896495349
+                },
+                {
+                  "x": 16,
+                  "y": 231.05275270285068
+                },
+                {
+                  "x": 17,
+                  "y": 253.9159178650217
+                },
+                {
+                  "x": 18,
+                  "y": 278.150872936923
+                },
+                {
+                  "x": 19,
+                  "y": 303.8399253131384
+                },
+                {
+                  "x": 20,
+                  "y": 331.0703208319267
+                },
+                {
+                  "x": 21,
+                  "y": 359.93454008184233
+                },
+                {
+                  "x": 22,
+                  "y": 390.53061248675283
+                },
+                {
+                  "x": 23,
+                  "y": 422.96244923595805
+                },
+                {
+                  "x": 24,
+                  "y": 457.34019619011553
+                },
+                {
+                  "x": 25,
+                  "y": 493.7806079615225
+                },
+                {
+                  "x": 26,
+                  "y": 532.4074444392138
+                },
+                {
+                  "x": 27,
+                  "y": 573.3518911055667
+                },
+                {
+                  "x": 28,
+                  "y": 616.7530045719005
+                },
+                {
+                  "x": 29,
+                  "y": 662.7581848462146
+                },
+                {
+                  "x": 30,
+                  "y": 711.5236759369875
+                }
+              ]
+            },
+            {
+              "id": "contributed",
+              "label": "Contributions",
+              "values": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 1,
+                  "y": 9
+                },
+                {
+                  "x": 2,
+                  "y": 18
+                },
+                {
+                  "x": 3,
+                  "y": 27
+                },
+                {
+                  "x": 4,
+                  "y": 36
+                },
+                {
+                  "x": 5,
+                  "y": 45
+                },
+                {
+                  "x": 6,
+                  "y": 54
+                },
+                {
+                  "x": 7,
+                  "y": 63
+                },
+                {
+                  "x": 8,
+                  "y": 72
+                },
+                {
+                  "x": 9,
+                  "y": 81
+                },
+                {
+                  "x": 10,
+                  "y": 90
+                },
+                {
+                  "x": 11,
+                  "y": 99
+                },
+                {
+                  "x": 12,
+                  "y": 108
+                },
+                {
+                  "x": 13,
+                  "y": 117
+                },
+                {
+                  "x": 14,
+                  "y": 126
+                },
+                {
+                  "x": 15,
+                  "y": 135
+                },
+                {
+                  "x": 16,
+                  "y": 144
+                },
+                {
+                  "x": 17,
+                  "y": 153
+                },
+                {
+                  "x": 18,
+                  "y": 162
+                },
+                {
+                  "x": 19,
+                  "y": 171
+                },
+                {
+                  "x": 20,
+                  "y": 180
+                },
+                {
+                  "x": 21,
+                  "y": 189
+                },
+                {
+                  "x": 22,
+                  "y": 198
+                },
+                {
+                  "x": 23,
+                  "y": 207
+                },
+                {
+                  "x": 24,
+                  "y": 216
+                },
+                {
+                  "x": 25,
+                  "y": 225
+                },
+                {
+                  "x": 26,
+                  "y": 234
+                },
+                {
+                  "x": 27,
+                  "y": 243
+                },
+                {
+                  "x": 28,
+                  "y": 252
+                },
+                {
+                  "x": 29,
+                  "y": 261
+                },
+                {
+                  "x": 30,
+                  "y": 270
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "missing-observations",
+      "block": "canvas",
+      "duration": 13,
+      "camera": "none",
+      "props": {
+        "plot": {
+          "title": "An absent reading is not zero",
+          "asOf": "2026-10-02",
+          "source": "Hypothetical monitoring example · no measured site data",
+          "x": {
+            "type": "date",
+            "label": "Observation date · UTC",
+            "domain": [
+              "2026-01-01",
+              "2026-04-01"
+            ],
+            "ticks": [
+              "2026-01-01",
+              "2026-02-01",
+              "2026-03-01",
+              "2026-04-01"
+            ],
+            "dateFormat": "month"
+          },
+          "y": {
+            "type": "linear",
+            "label": "Temperature · degrees C",
+            "domain": [
+              -10,
+              30
+            ],
+            "ticks": [
+              -10,
+              0,
+              10,
+              20,
+              30
+            ]
+          },
+          "series": [
+            {
+              "id": "north",
+              "label": "North sensor",
+              "values": [
+                {
+                  "x": "2026-01-01",
+                  "y": 3
+                },
+                {
+                  "x": "2026-01-12",
+                  "y": -2
+                },
+                {
+                  "x": "2026-02-01",
+                  "y": null
+                },
+                {
+                  "x": "2026-03-01",
+                  "y": 13
+                },
+                {
+                  "x": "2026-04-01",
+                  "y": 22
+                }
+              ]
+            },
+            {
+              "id": "south",
+              "label": "South sensor",
+              "values": [
+                {
+                  "x": "2026-01-01",
+                  "y": 8
+                },
+                {
+                  "x": "2026-02-01",
+                  "y": 4
+                },
+                {
+                  "x": "2026-03-01",
+                  "y": 17
+                },
+                {
+                  "x": "2026-04-01",
+                  "y": 26
+                }
+              ]
+            }
+          ],
+          "motion": {
+            "at": 0.5,
+            "duration": 4
+          }
+        }
+      }
+    }
+  ]
+}

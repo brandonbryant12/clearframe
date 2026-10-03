@@ -33,6 +33,7 @@ import { rules } from './registry.mjs';
 import { expandArt } from './sketches.mjs';
 import { expandKPIProps } from './kpis.mjs';
 import { expandTeachingProps } from './teaching.mjs';
+import { expandPlotProps } from './plots.mjs';
 import { captionCues, findWord } from '../engine/lib/timing.mjs';
 
 const unit = v => Number.isFinite(v) && v >= 0 && v <= 1;
@@ -164,9 +165,9 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   const frame = 1 / timing.fps,
     source = sb.beats[b.index],
     spec = rules(b.block);
-  const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.duration };
+  const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.dur };
   const authoredProps = b.block === 'canvas'
-    ? expandTeachingProps(expandKPIProps(b.props ?? {}, helperFrame), helperFrame)
+    ? expandPlotProps(expandTeachingProps(expandKPIProps(b.props ?? {}, helperFrame), helperFrame), helperFrame)
     : (b.props ?? {});
   const props = normalizeProps(b.block, authoredProps, {
     vertical: film.vertical,
@@ -219,6 +220,8 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     return end;
   };
   if (b.block === 'canvas') {
+    if (b.props?.plot != null && !sb.sources.length)
+      throw new Error('Quantitative plots need a storyboard.sources entry.');
     settle = Math.max(settle, scheduleArt(props.elements, at, props.stagger ?? 0));
     // Camera depth keys resolve their spoken cues; like camera drift, they never hold the beat.
     for (const k of [...(props.dolly ?? []), ...(props.focus?.keys ?? [])]) {
