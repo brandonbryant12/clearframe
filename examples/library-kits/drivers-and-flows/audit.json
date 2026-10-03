@@ -1,0 +1,1638 @@
+{
+  "modelVersion": 1,
+  "inputSha256": "b04684c1e0c2b320ef9d992aa3c1a189ce37cda9492bba9644c9ba49a28a80ad",
+  "asOf": "2026-10-02",
+  "frequency": "Explicit observations and period endpoints; no automatic annualization, interpolation or dividend reinvestment.",
+  "results": [
+    {
+      "project": "cohort-adoption-landscape",
+      "recipe": "C02",
+      "caseId": "cohort-adoption",
+      "preset": "landscape",
+      "result": [
+        {
+          "id": "newer",
+          "label": "Newer cohort",
+          "modelVersion": 1,
+          "method": "observed-anchor-ratio",
+          "baseDate": "2026-01-01",
+          "baseIndex": 100,
+          "baseValue": 100,
+          "observations": [
+            {
+              "date": "2026-01-01",
+              "elapsedDays": 0,
+              "value": 100,
+              "index": 100
+            },
+            {
+              "date": "2026-01-31",
+              "elapsedDays": 30,
+              "value": 108,
+              "index": 108
+            },
+            {
+              "date": "2026-03-02",
+              "elapsedDays": 60,
+              "value": 118,
+              "index": 118
+            },
+            {
+              "date": "2026-04-01",
+              "elapsedDays": 90,
+              "value": 123,
+              "index": 123
+            }
+          ]
+        },
+        {
+          "id": "older",
+          "label": "Older cohort",
+          "modelVersion": 1,
+          "method": "observed-anchor-ratio",
+          "baseDate": "2024-01-01",
+          "baseIndex": 100,
+          "baseValue": 80,
+          "observations": [
+            {
+              "date": "2024-01-01",
+              "elapsedDays": 0,
+              "value": 80,
+              "index": 100
+            },
+            {
+              "date": "2024-01-31",
+              "elapsedDays": 30,
+              "value": 90,
+              "index": 112.5
+            },
+            {
+              "date": "2024-03-01",
+              "elapsedDays": 60,
+              "value": 104,
+              "index": 130
+            },
+            {
+              "date": "2024-03-31",
+              "elapsedDays": 90,
+              "value": 112,
+              "index": 140
+            },
+            {
+              "date": "2024-04-30",
+              "elapsedDays": 120,
+              "value": 116,
+              "index": 145
+            },
+            {
+              "date": "2024-05-30",
+              "elapsedDays": 150,
+              "value": 118,
+              "index": 147.5
+            },
+            {
+              "date": "2024-06-29",
+              "elapsedDays": 180,
+              "value": 114,
+              "index": 142.5
+            }
+          ]
+        }
+      ],
+      "geometry": []
+    },
+    {
+      "project": "cohort-adoption-vertical",
+      "recipe": "C02",
+      "caseId": "cohort-adoption",
+      "preset": "vertical",
+      "result": [
+        {
+          "id": "newer",
+          "label": "Newer cohort",
+          "modelVersion": 1,
+          "method": "observed-anchor-ratio",
+          "baseDate": "2026-01-01",
+          "baseIndex": 100,
+          "baseValue": 100,
+          "observations": [
+            {
+              "date": "2026-01-01",
+              "elapsedDays": 0,
+              "value": 100,
+              "index": 100
+            },
+            {
+              "date": "2026-01-31",
+              "elapsedDays": 30,
+              "value": 108,
+              "index": 108
+            },
+            {
+              "date": "2026-03-02",
+              "elapsedDays": 60,
+              "value": 118,
+              "index": 118
+            },
+            {
+              "date": "2026-04-01",
+              "elapsedDays": 90,
+              "value": 123,
+              "index": 123
+            }
+          ]
+        },
+        {
+          "id": "older",
+          "label": "Older cohort",
+          "modelVersion": 1,
+          "method": "observed-anchor-ratio",
+          "baseDate": "2024-01-01",
+          "baseIndex": 100,
+          "baseValue": 80,
+          "observations": [
+            {
+              "date": "2024-01-01",
+              "elapsedDays": 0,
+              "value": 80,
+              "index": 100
+            },
+            {
+              "date": "2024-01-31",
+              "elapsedDays": 30,
+              "value": 90,
+              "index": 112.5
+            },
+            {
+              "date": "2024-03-01",
+              "elapsedDays": 60,
+              "value": 104,
+              "index": 130
+            },
+            {
+              "date": "2024-03-31",
+              "elapsedDays": 90,
+              "value": 112,
+              "index": 140
+            },
+            {
+              "date": "2024-04-30",
+              "elapsedDays": 120,
+              "value": 116,
+              "index": 145
+            },
+            {
+              "date": "2024-05-30",
+              "elapsedDays": 150,
+              "value": 118,
+              "index": 147.5
+            },
+            {
+              "date": "2024-06-29",
+              "elapsedDays": 180,
+              "value": 114,
+              "index": 142.5
+            }
+          ]
+        }
+      ],
+      "geometry": []
+    },
+    {
+      "project": "project-recovery-landscape",
+      "recipe": "C02",
+      "caseId": "project-recovery",
+      "preset": "landscape",
+      "result": [
+        {
+          "id": "newer",
+          "label": "Newer project",
+          "modelVersion": 1,
+          "method": "observed-anchor-ratio",
+          "baseDate": "2026-02-01",
+          "baseIndex": 100,
+          "baseValue": 200,
+          "observations": [
+            {
+              "date": "2026-02-01",
+              "elapsedDays": 0,
+              "value": 200,
+              "index": 100
+            },
+            {
+              "date": "2026-03-03",
+              "elapsedDays": 30,
+              "value": 190,
+              "index": 95
+            },
+            {
+              "date": "2026-04-02",
+              "elapsedDays": 60,
+              "value": 220,
+              "index": 110.00000000000001
+            },
+            {
+              "date": "2026-05-02",
+              "elapsedDays": 90,
+              "value": 250,
+              "index": 125
+            }
+          ]
+        },
+        {
+          "id": "older",
+          "label": "Older project",
+          "modelVersion": 1,
+          "method": "observed-anchor-ratio",
+          "baseDate": "2023-02-01",
+          "baseIndex": 100,
+          "baseValue": 50,
+          "observations": [
+            {
+              "date": "2023-02-01",
+              "elapsedDays": 0,
+              "value": 50,
+              "index": 100
+            },
+            {
+              "date": "2023-03-03",
+              "elapsedDays": 30,
+              "value": 55,
+              "index": 110.00000000000001
+            },
+            {
+              "date": "2023-04-02",
+              "elapsedDays": 60,
+              "value": 60,
+              "index": 120
+            },
+            {
+              "date": "2023-05-02",
+              "elapsedDays": 90,
+              "value": 68,
+              "index": 136
+            },
+            {
+              "date": "2023-06-01",
+              "elapsedDays": 120,
+              "value": null,
+              "index": null
+            },
+            {
+              "date": "2023-07-01",
+              "elapsedDays": 150,
+              "value": 62.5,
+              "index": 125
+            },
+            {
+              "date": "2023-07-31",
+              "elapsedDays": 180,
+              "value": 65,
+              "index": 130
+            }
+          ]
+        }
+      ],
+      "geometry": []
+    },
+    {
+      "project": "project-recovery-vertical",
+      "recipe": "C02",
+      "caseId": "project-recovery",
+      "preset": "vertical",
+      "result": [
+        {
+          "id": "newer",
+          "label": "Newer project",
+          "modelVersion": 1,
+          "method": "observed-anchor-ratio",
+          "baseDate": "2026-02-01",
+          "baseIndex": 100,
+          "baseValue": 200,
+          "observations": [
+            {
+              "date": "2026-02-01",
+              "elapsedDays": 0,
+              "value": 200,
+              "index": 100
+            },
+            {
+              "date": "2026-03-03",
+              "elapsedDays": 30,
+              "value": 190,
+              "index": 95
+            },
+            {
+              "date": "2026-04-02",
+              "elapsedDays": 60,
+              "value": 220,
+              "index": 110.00000000000001
+            },
+            {
+              "date": "2026-05-02",
+              "elapsedDays": 90,
+              "value": 250,
+              "index": 125
+            }
+          ]
+        },
+        {
+          "id": "older",
+          "label": "Older project",
+          "modelVersion": 1,
+          "method": "observed-anchor-ratio",
+          "baseDate": "2023-02-01",
+          "baseIndex": 100,
+          "baseValue": 50,
+          "observations": [
+            {
+              "date": "2023-02-01",
+              "elapsedDays": 0,
+              "value": 50,
+              "index": 100
+            },
+            {
+              "date": "2023-03-03",
+              "elapsedDays": 30,
+              "value": 55,
+              "index": 110.00000000000001
+            },
+            {
+              "date": "2023-04-02",
+              "elapsedDays": 60,
+              "value": 60,
+              "index": 120
+            },
+            {
+              "date": "2023-05-02",
+              "elapsedDays": 90,
+              "value": 68,
+              "index": 136
+            },
+            {
+              "date": "2023-06-01",
+              "elapsedDays": 120,
+              "value": null,
+              "index": null
+            },
+            {
+              "date": "2023-07-01",
+              "elapsedDays": 150,
+              "value": 62.5,
+              "index": 125
+            },
+            {
+              "date": "2023-07-31",
+              "elapsedDays": 180,
+              "value": 65,
+              "index": 130
+            }
+          ]
+        }
+      ],
+      "geometry": []
+    },
+    {
+      "project": "earnings-and-income-landscape",
+      "recipe": "C03",
+      "caseId": "earnings-and-income",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "method": "two-factor-with-explicit-interaction",
+        "factors": [
+          {
+            "id": "earnings",
+            "label": "Earnings",
+            "start": 10,
+            "end": 11
+          },
+          {
+            "id": "multiple",
+            "label": "Multiple",
+            "start": 20,
+            "end": 18
+          }
+        ],
+        "opening": 200,
+        "endingProduct": 198,
+        "additiveTotal": 4,
+        "combinedValue": 202,
+        "change": 2,
+        "changeFraction": 0.01,
+        "parts": [
+          {
+            "id": "earnings",
+            "label": "Earnings",
+            "amount": 20,
+            "kind": "factor",
+            "fraction": 0.1
+          },
+          {
+            "id": "multiple",
+            "label": "Multiple",
+            "amount": -20,
+            "kind": "factor",
+            "fraction": -0.1
+          },
+          {
+            "id": "interaction",
+            "label": "Interaction",
+            "amount": -2,
+            "kind": "interaction",
+            "fraction": -0.01
+          },
+          {
+            "id": "income",
+            "label": "Cash income",
+            "amount": 4,
+            "kind": "additive",
+            "fraction": 0.02
+          }
+        ],
+        "arithmeticDifference": 0
+      },
+      "geometry": [
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-opening",
+          "row": "opening",
+          "from": 0,
+          "to": 0,
+          "amount": 0,
+          "total": true,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 0.4,
+          "duration": 0.25,
+          "color": "ink"
+        },
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-earnings",
+          "row": "earnings",
+          "from": 0,
+          "to": 10,
+          "amount": 10,
+          "total": false,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 0.8500000000000001,
+          "duration": 0.25,
+          "color": "accent"
+        },
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-multiple",
+          "row": "multiple",
+          "from": 10,
+          "to": 0,
+          "amount": -10,
+          "total": false,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 1.3,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-interaction",
+          "row": "interaction",
+          "from": 0,
+          "to": -1,
+          "amount": -1,
+          "total": false,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 1.75,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-income",
+          "row": "income",
+          "from": -1,
+          "to": 1,
+          "amount": 2,
+          "total": false,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 2.2,
+          "duration": 0.25,
+          "color": "accent"
+        },
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-closing",
+          "row": "closing",
+          "from": 0,
+          "to": 1,
+          "amount": 1,
+          "total": true,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 2.65,
+          "duration": 0.25,
+          "color": "ink"
+        }
+      ]
+    },
+    {
+      "project": "earnings-and-income-vertical",
+      "recipe": "C03",
+      "caseId": "earnings-and-income",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "method": "two-factor-with-explicit-interaction",
+        "factors": [
+          {
+            "id": "earnings",
+            "label": "Earnings",
+            "start": 10,
+            "end": 11
+          },
+          {
+            "id": "multiple",
+            "label": "Multiple",
+            "start": 20,
+            "end": 18
+          }
+        ],
+        "opening": 200,
+        "endingProduct": 198,
+        "additiveTotal": 4,
+        "combinedValue": 202,
+        "change": 2,
+        "changeFraction": 0.01,
+        "parts": [
+          {
+            "id": "earnings",
+            "label": "Earnings",
+            "amount": 20,
+            "kind": "factor",
+            "fraction": 0.1
+          },
+          {
+            "id": "multiple",
+            "label": "Multiple",
+            "amount": -20,
+            "kind": "factor",
+            "fraction": -0.1
+          },
+          {
+            "id": "interaction",
+            "label": "Interaction",
+            "amount": -2,
+            "kind": "interaction",
+            "fraction": -0.01
+          },
+          {
+            "id": "income",
+            "label": "Cash income",
+            "amount": 4,
+            "kind": "additive",
+            "fraction": 0.02
+          }
+        ],
+        "arithmeticDifference": 0
+      },
+      "geometry": [
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-opening",
+          "row": "opening",
+          "from": 0,
+          "to": 0,
+          "amount": 0,
+          "total": true,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 0.4,
+          "duration": 0.25,
+          "color": "ink"
+        },
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-earnings",
+          "row": "earnings",
+          "from": 0,
+          "to": 10,
+          "amount": 10,
+          "total": false,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 0.8500000000000001,
+          "duration": 0.25,
+          "color": "accent"
+        },
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-multiple",
+          "row": "multiple",
+          "from": 10,
+          "to": 0,
+          "amount": -10,
+          "total": false,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 1.3,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-interaction",
+          "row": "interaction",
+          "from": 0,
+          "to": -1,
+          "amount": -1,
+          "total": false,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 1.75,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-income",
+          "row": "income",
+          "from": -1,
+          "to": 1,
+          "amount": 2,
+          "total": false,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 2.2,
+          "duration": 0.25,
+          "color": "accent"
+        },
+        {
+          "beat": "earnings-and-income",
+          "id": "bar-closing",
+          "row": "closing",
+          "from": 0,
+          "to": 1,
+          "amount": 1,
+          "total": true,
+          "domain": [
+            -5,
+            15
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 2.65,
+          "duration": 0.25,
+          "color": "ink"
+        }
+      ]
+    },
+    {
+      "project": "price-and-volume-landscape",
+      "recipe": "C03",
+      "caseId": "price-and-volume",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "method": "two-factor-with-explicit-interaction",
+        "factors": [
+          {
+            "id": "volume",
+            "label": "Volume",
+            "start": 100,
+            "end": 120
+          },
+          {
+            "id": "price",
+            "label": "Unit price",
+            "start": 50,
+            "end": 45
+          }
+        ],
+        "opening": 5000,
+        "endingProduct": 5400,
+        "additiveTotal": 0,
+        "combinedValue": 5400,
+        "change": 400,
+        "changeFraction": 0.08,
+        "parts": [
+          {
+            "id": "volume",
+            "label": "Volume",
+            "amount": 1000,
+            "kind": "factor",
+            "fraction": 0.2
+          },
+          {
+            "id": "price",
+            "label": "Unit price",
+            "amount": -500,
+            "kind": "factor",
+            "fraction": -0.1
+          },
+          {
+            "id": "interaction",
+            "label": "Interaction",
+            "amount": -100,
+            "kind": "interaction",
+            "fraction": -0.02
+          }
+        ],
+        "arithmeticDifference": 0
+      },
+      "geometry": [
+        {
+          "beat": "price-and-volume",
+          "id": "bar-opening",
+          "row": "opening",
+          "from": 0,
+          "to": 0,
+          "amount": 0,
+          "total": true,
+          "domain": [
+            -5,
+            25
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 0.4,
+          "duration": 0.25,
+          "color": "ink"
+        },
+        {
+          "beat": "price-and-volume",
+          "id": "bar-volume",
+          "row": "volume",
+          "from": 0,
+          "to": 20,
+          "amount": 20,
+          "total": false,
+          "domain": [
+            -5,
+            25
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 0.8500000000000001,
+          "duration": 0.25,
+          "color": "accent"
+        },
+        {
+          "beat": "price-and-volume",
+          "id": "bar-price",
+          "row": "price",
+          "from": 20,
+          "to": 10,
+          "amount": -10,
+          "total": false,
+          "domain": [
+            -5,
+            25
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 1.3,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "price-and-volume",
+          "id": "bar-interaction",
+          "row": "interaction",
+          "from": 10,
+          "to": 8,
+          "amount": -2,
+          "total": false,
+          "domain": [
+            -5,
+            25
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 1.75,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "price-and-volume",
+          "id": "bar-closing",
+          "row": "closing",
+          "from": 0,
+          "to": 8,
+          "amount": 8,
+          "total": true,
+          "domain": [
+            -5,
+            25
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 2.2,
+          "duration": 0.25,
+          "color": "ink"
+        }
+      ]
+    },
+    {
+      "project": "price-and-volume-vertical",
+      "recipe": "C03",
+      "caseId": "price-and-volume",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "method": "two-factor-with-explicit-interaction",
+        "factors": [
+          {
+            "id": "volume",
+            "label": "Volume",
+            "start": 100,
+            "end": 120
+          },
+          {
+            "id": "price",
+            "label": "Unit price",
+            "start": 50,
+            "end": 45
+          }
+        ],
+        "opening": 5000,
+        "endingProduct": 5400,
+        "additiveTotal": 0,
+        "combinedValue": 5400,
+        "change": 400,
+        "changeFraction": 0.08,
+        "parts": [
+          {
+            "id": "volume",
+            "label": "Volume",
+            "amount": 1000,
+            "kind": "factor",
+            "fraction": 0.2
+          },
+          {
+            "id": "price",
+            "label": "Unit price",
+            "amount": -500,
+            "kind": "factor",
+            "fraction": -0.1
+          },
+          {
+            "id": "interaction",
+            "label": "Interaction",
+            "amount": -100,
+            "kind": "interaction",
+            "fraction": -0.02
+          }
+        ],
+        "arithmeticDifference": 0
+      },
+      "geometry": [
+        {
+          "beat": "price-and-volume",
+          "id": "bar-opening",
+          "row": "opening",
+          "from": 0,
+          "to": 0,
+          "amount": 0,
+          "total": true,
+          "domain": [
+            -5,
+            25
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 0.4,
+          "duration": 0.25,
+          "color": "ink"
+        },
+        {
+          "beat": "price-and-volume",
+          "id": "bar-volume",
+          "row": "volume",
+          "from": 0,
+          "to": 20,
+          "amount": 20,
+          "total": false,
+          "domain": [
+            -5,
+            25
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 0.8500000000000001,
+          "duration": 0.25,
+          "color": "accent"
+        },
+        {
+          "beat": "price-and-volume",
+          "id": "bar-price",
+          "row": "price",
+          "from": 20,
+          "to": 10,
+          "amount": -10,
+          "total": false,
+          "domain": [
+            -5,
+            25
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 1.3,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "price-and-volume",
+          "id": "bar-interaction",
+          "row": "interaction",
+          "from": 10,
+          "to": 8,
+          "amount": -2,
+          "total": false,
+          "domain": [
+            -5,
+            25
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 1.75,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "price-and-volume",
+          "id": "bar-closing",
+          "row": "closing",
+          "from": 0,
+          "to": 8,
+          "amount": 8,
+          "total": true,
+          "domain": [
+            -5,
+            25
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 2.2,
+          "duration": 0.25,
+          "color": "ink"
+        }
+      ]
+    },
+    {
+      "project": "fund-assets-landscape",
+      "recipe": "C16",
+      "caseId": "fund-assets",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "method": "opening-plus-signed-changes-and-explicit-residual",
+        "opening": 120,
+        "closing": 132,
+        "netChange": 12,
+        "suppliedNetChange": 7,
+        "explainedClosing": 127,
+        "residual": 5,
+        "components": [
+          {
+            "id": "inflows",
+            "label": "Subscriptions",
+            "amount": 40,
+            "kind": "supplied"
+          },
+          {
+            "id": "outflows",
+            "label": "Redemptions",
+            "amount": -25,
+            "kind": "supplied"
+          },
+          {
+            "id": "valuation",
+            "label": "Revaluation",
+            "amount": -8,
+            "kind": "supplied"
+          },
+          {
+            "id": "residual",
+            "label": "Unexplained",
+            "amount": 5,
+            "kind": "residual"
+          }
+        ]
+      },
+      "geometry": [
+        {
+          "beat": "fund-assets",
+          "id": "bar-opening",
+          "row": "opening",
+          "from": 0,
+          "to": 120,
+          "amount": 120,
+          "total": true,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 0.4,
+          "duration": 0.25,
+          "color": "ink"
+        },
+        {
+          "beat": "fund-assets",
+          "id": "bar-inflows",
+          "row": "inflows",
+          "from": 120,
+          "to": 160,
+          "amount": 40,
+          "total": false,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 0.8500000000000001,
+          "duration": 0.25,
+          "color": "accent"
+        },
+        {
+          "beat": "fund-assets",
+          "id": "bar-outflows",
+          "row": "outflows",
+          "from": 160,
+          "to": 135,
+          "amount": -25,
+          "total": false,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 1.3,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "fund-assets",
+          "id": "bar-valuation",
+          "row": "valuation",
+          "from": 135,
+          "to": 127,
+          "amount": -8,
+          "total": false,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 1.75,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "fund-assets",
+          "id": "bar-residual",
+          "row": "residual",
+          "from": 127,
+          "to": 132,
+          "amount": 5,
+          "total": false,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 2.2,
+          "duration": 0.25,
+          "color": "#796499"
+        },
+        {
+          "beat": "fund-assets",
+          "id": "bar-closing",
+          "row": "closing",
+          "from": 0,
+          "to": 132,
+          "amount": 132,
+          "total": true,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 2.65,
+          "duration": 0.25,
+          "color": "ink"
+        }
+      ]
+    },
+    {
+      "project": "fund-assets-vertical",
+      "recipe": "C16",
+      "caseId": "fund-assets",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "method": "opening-plus-signed-changes-and-explicit-residual",
+        "opening": 120,
+        "closing": 132,
+        "netChange": 12,
+        "suppliedNetChange": 7,
+        "explainedClosing": 127,
+        "residual": 5,
+        "components": [
+          {
+            "id": "inflows",
+            "label": "Subscriptions",
+            "amount": 40,
+            "kind": "supplied"
+          },
+          {
+            "id": "outflows",
+            "label": "Redemptions",
+            "amount": -25,
+            "kind": "supplied"
+          },
+          {
+            "id": "valuation",
+            "label": "Revaluation",
+            "amount": -8,
+            "kind": "supplied"
+          },
+          {
+            "id": "residual",
+            "label": "Unexplained",
+            "amount": 5,
+            "kind": "residual"
+          }
+        ]
+      },
+      "geometry": [
+        {
+          "beat": "fund-assets",
+          "id": "bar-opening",
+          "row": "opening",
+          "from": 0,
+          "to": 120,
+          "amount": 120,
+          "total": true,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 0.4,
+          "duration": 0.25,
+          "color": "ink"
+        },
+        {
+          "beat": "fund-assets",
+          "id": "bar-inflows",
+          "row": "inflows",
+          "from": 120,
+          "to": 160,
+          "amount": 40,
+          "total": false,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 0.8500000000000001,
+          "duration": 0.25,
+          "color": "accent"
+        },
+        {
+          "beat": "fund-assets",
+          "id": "bar-outflows",
+          "row": "outflows",
+          "from": 160,
+          "to": 135,
+          "amount": -25,
+          "total": false,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 1.3,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "fund-assets",
+          "id": "bar-valuation",
+          "row": "valuation",
+          "from": 135,
+          "to": 127,
+          "amount": -8,
+          "total": false,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 1.75,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "fund-assets",
+          "id": "bar-residual",
+          "row": "residual",
+          "from": 127,
+          "to": 132,
+          "amount": 5,
+          "total": false,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 2.2,
+          "duration": 0.25,
+          "color": "#796499"
+        },
+        {
+          "beat": "fund-assets",
+          "id": "bar-closing",
+          "row": "closing",
+          "from": 0,
+          "to": 132,
+          "amount": 132,
+          "total": true,
+          "domain": [
+            0,
+            180
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 2.65,
+          "duration": 0.25,
+          "color": "ink"
+        }
+      ]
+    },
+    {
+      "project": "warehouse-units-landscape",
+      "recipe": "C16",
+      "caseId": "warehouse-units",
+      "preset": "landscape",
+      "result": {
+        "modelVersion": 1,
+        "method": "opening-plus-signed-changes-and-explicit-residual",
+        "opening": 80,
+        "closing": 58,
+        "netChange": -22,
+        "suppliedNetChange": -20,
+        "explainedClosing": 60,
+        "residual": -2,
+        "components": [
+          {
+            "id": "received",
+            "label": "Received",
+            "amount": 35,
+            "kind": "supplied"
+          },
+          {
+            "id": "shipped",
+            "label": "Shipped",
+            "amount": -50,
+            "kind": "supplied"
+          },
+          {
+            "id": "write-offs",
+            "label": "Write-offs",
+            "amount": -5,
+            "kind": "supplied"
+          },
+          {
+            "id": "residual",
+            "label": "Unexplained",
+            "amount": -2,
+            "kind": "residual"
+          }
+        ]
+      },
+      "geometry": [
+        {
+          "beat": "warehouse-units",
+          "id": "bar-opening",
+          "row": "opening",
+          "from": 0,
+          "to": 80,
+          "amount": 80,
+          "total": true,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 0.4,
+          "duration": 0.25,
+          "color": "ink"
+        },
+        {
+          "beat": "warehouse-units",
+          "id": "bar-received",
+          "row": "received",
+          "from": 80,
+          "to": 115,
+          "amount": 35,
+          "total": false,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 0.8500000000000001,
+          "duration": 0.25,
+          "color": "accent"
+        },
+        {
+          "beat": "warehouse-units",
+          "id": "bar-shipped",
+          "row": "shipped",
+          "from": 115,
+          "to": 65,
+          "amount": -50,
+          "total": false,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 1.3,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "warehouse-units",
+          "id": "bar-write-offs",
+          "row": "write-offs",
+          "from": 65,
+          "to": 60,
+          "amount": -5,
+          "total": false,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 1.75,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "warehouse-units",
+          "id": "bar-residual",
+          "row": "residual",
+          "from": 60,
+          "to": 58,
+          "amount": -2,
+          "total": false,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 2.2,
+          "duration": 0.25,
+          "color": "#796499"
+        },
+        {
+          "beat": "warehouse-units",
+          "id": "bar-closing",
+          "row": "closing",
+          "from": 0,
+          "to": 58,
+          "amount": 58,
+          "total": true,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 748.8000000000001,
+          "barH": 31.68,
+          "at": 2.65,
+          "duration": 0.25,
+          "color": "ink"
+        }
+      ]
+    },
+    {
+      "project": "warehouse-units-vertical",
+      "recipe": "C16",
+      "caseId": "warehouse-units",
+      "preset": "vertical",
+      "result": {
+        "modelVersion": 1,
+        "method": "opening-plus-signed-changes-and-explicit-residual",
+        "opening": 80,
+        "closing": 58,
+        "netChange": -22,
+        "suppliedNetChange": -20,
+        "explainedClosing": 60,
+        "residual": -2,
+        "components": [
+          {
+            "id": "received",
+            "label": "Received",
+            "amount": 35,
+            "kind": "supplied"
+          },
+          {
+            "id": "shipped",
+            "label": "Shipped",
+            "amount": -50,
+            "kind": "supplied"
+          },
+          {
+            "id": "write-offs",
+            "label": "Write-offs",
+            "amount": -5,
+            "kind": "supplied"
+          },
+          {
+            "id": "residual",
+            "label": "Unexplained",
+            "amount": -2,
+            "kind": "residual"
+          }
+        ]
+      },
+      "geometry": [
+        {
+          "beat": "warehouse-units",
+          "id": "bar-opening",
+          "row": "opening",
+          "from": 0,
+          "to": 80,
+          "amount": 80,
+          "total": true,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 0.4,
+          "duration": 0.25,
+          "color": "ink"
+        },
+        {
+          "beat": "warehouse-units",
+          "id": "bar-received",
+          "row": "received",
+          "from": 80,
+          "to": 115,
+          "amount": 35,
+          "total": false,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 0.8500000000000001,
+          "duration": 0.25,
+          "color": "accent"
+        },
+        {
+          "beat": "warehouse-units",
+          "id": "bar-shipped",
+          "row": "shipped",
+          "from": 115,
+          "to": 65,
+          "amount": -50,
+          "total": false,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 1.3,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "warehouse-units",
+          "id": "bar-write-offs",
+          "row": "write-offs",
+          "from": 65,
+          "to": 60,
+          "amount": -5,
+          "total": false,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 1.75,
+          "duration": 0.25,
+          "color": "accent2"
+        },
+        {
+          "beat": "warehouse-units",
+          "id": "bar-residual",
+          "row": "residual",
+          "from": 60,
+          "to": 58,
+          "amount": -2,
+          "total": false,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 2.2,
+          "duration": 0.25,
+          "color": "#796499"
+        },
+        {
+          "beat": "warehouse-units",
+          "id": "bar-closing",
+          "row": "closing",
+          "from": 0,
+          "to": 58,
+          "amount": 58,
+          "total": true,
+          "domain": [
+            0,
+            120
+          ],
+          "span": 421.19999999999993,
+          "barH": 17.82,
+          "at": 2.65,
+          "duration": 0.25,
+          "color": "ink"
+        }
+      ]
+    }
+  ]
+}

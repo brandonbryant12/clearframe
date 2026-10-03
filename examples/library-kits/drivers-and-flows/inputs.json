@@ -1,0 +1,323 @@
+{
+  "asOf": "2026-10-02",
+  "provenance": "All subjects, dates and values are original fictional fixtures, not market or operating evidence.",
+  "frequency": "Explicit observations and period endpoints; no automatic annualization, interpolation or dividend reinvestment.",
+  "cases": [
+    {
+      "id": "cohort-adoption",
+      "recipe": "C02",
+      "title": "Equal bases reveal different paths",
+      "unit": "Index \u00b7 each launch = 100",
+      "domain": [
+        90,
+        150
+      ],
+      "ticks": [
+        90,
+        110,
+        130,
+        150
+      ],
+      "elapsedDomain": [
+        0,
+        180
+      ],
+      "elapsedTicks": [
+        0,
+        90,
+        180
+      ],
+      "series": [
+        {
+          "id": "newer",
+          "label": "Newer cohort",
+          "baseDate": "2026-01-01",
+          "observations": [
+            {
+              "date": "2026-01-01",
+              "value": 100
+            },
+            {
+              "date": "2026-01-31",
+              "value": 108
+            },
+            {
+              "date": "2026-03-02",
+              "value": 118
+            },
+            {
+              "date": "2026-04-01",
+              "value": 123
+            }
+          ]
+        },
+        {
+          "id": "older",
+          "label": "Older cohort",
+          "baseDate": "2024-01-01",
+          "observations": [
+            {
+              "date": "2024-01-01",
+              "value": 80
+            },
+            {
+              "date": "2024-01-31",
+              "value": 90
+            },
+            {
+              "date": "2024-03-01",
+              "value": 104
+            },
+            {
+              "date": "2024-03-31",
+              "value": 112
+            },
+            {
+              "date": "2024-04-30",
+              "value": 116
+            },
+            {
+              "date": "2024-05-30",
+              "value": 118
+            },
+            {
+              "date": "2024-06-29",
+              "value": 114
+            }
+          ]
+        }
+      ],
+      "rawUnit": "Active subscriptions"
+    },
+    {
+      "id": "project-recovery",
+      "recipe": "C02",
+      "title": "A past recovery is not a forecast",
+      "unit": "Index \u00b7 each restart = 100",
+      "domain": [
+        80,
+        150
+      ],
+      "ticks": [
+        80,
+        100,
+        125,
+        150
+      ],
+      "elapsedDomain": [
+        0,
+        180
+      ],
+      "elapsedTicks": [
+        0,
+        90,
+        180
+      ],
+      "series": [
+        {
+          "id": "newer",
+          "label": "Newer project",
+          "baseDate": "2026-02-01",
+          "observations": [
+            {
+              "date": "2026-02-01",
+              "value": 200
+            },
+            {
+              "date": "2026-03-03",
+              "value": 190
+            },
+            {
+              "date": "2026-04-02",
+              "value": 220
+            },
+            {
+              "date": "2026-05-02",
+              "value": 250
+            }
+          ]
+        },
+        {
+          "id": "older",
+          "label": "Older project",
+          "baseDate": "2023-02-01",
+          "observations": [
+            {
+              "date": "2023-02-01",
+              "value": 50
+            },
+            {
+              "date": "2023-03-03",
+              "value": 55
+            },
+            {
+              "date": "2023-04-02",
+              "value": 60
+            },
+            {
+              "date": "2023-05-02",
+              "value": 68
+            },
+            {
+              "date": "2023-06-01",
+              "value": null
+            },
+            {
+              "date": "2023-07-01",
+              "value": 62.5
+            },
+            {
+              "date": "2023-07-31",
+              "value": 65
+            }
+          ]
+        }
+      ],
+      "rawUnit": "Daily output \u00b7 units/day"
+    },
+    {
+      "id": "earnings-and-income",
+      "recipe": "C03",
+      "title": "Interaction belongs in the return",
+      "unit": "Percent of opening value",
+      "domain": [
+        -5,
+        15
+      ],
+      "ticks": [
+        -5,
+        0,
+        5,
+        10,
+        15
+      ],
+      "first": {
+        "id": "earnings",
+        "label": "Earnings",
+        "start": 10,
+        "end": 11
+      },
+      "second": {
+        "id": "multiple",
+        "label": "Multiple",
+        "start": 20,
+        "end": 18
+      },
+      "additions": [
+        {
+          "id": "income",
+          "label": "Cash income",
+          "amount": 4
+        }
+      ],
+      "basis": "One hypothetical share. Cash is held, not reinvested; no fees or tax. This is not a total-return index.",
+      "factorBasis": "Earnings: USD/share \u00b7 multiple: \u00d7 earnings"
+    },
+    {
+      "id": "price-and-volume",
+      "recipe": "C03",
+      "title": "Volume and price multiply",
+      "unit": "Percent of opening revenue",
+      "domain": [
+        -5,
+        25
+      ],
+      "ticks": [
+        -5,
+        0,
+        10,
+        20,
+        25
+      ],
+      "first": {
+        "id": "volume",
+        "label": "Volume",
+        "start": 100,
+        "end": 120
+      },
+      "second": {
+        "id": "price",
+        "label": "Unit price",
+        "start": 50,
+        "end": 45
+      },
+      "additions": [],
+      "basis": "Hypothetical units sold \u00d7 unit price; no other revenue components. Arithmetic attribution, not a causal finding.",
+      "factorBasis": "Volume: units \u00b7 unit price: USD/unit"
+    },
+    {
+      "id": "fund-assets",
+      "recipe": "C16",
+      "title": "An asset change is more than flows",
+      "unit": "Illustrative USD millions",
+      "opening": 120,
+      "closing": 132,
+      "domain": [
+        0,
+        180
+      ],
+      "ticks": [
+        0,
+        60,
+        120,
+        180
+      ],
+      "components": [
+        {
+          "id": "inflows",
+          "label": "Subscriptions",
+          "amount": 40
+        },
+        {
+          "id": "outflows",
+          "label": "Redemptions",
+          "amount": -25
+        },
+        {
+          "id": "valuation",
+          "label": "Revaluation",
+          "amount": -8
+        }
+      ],
+      "period": "One hypothetical reporting period",
+      "basis": "Observed closing 132; supplied flows and valuation explain 127. The remaining 5 is unexplained."
+    },
+    {
+      "id": "warehouse-units",
+      "recipe": "C16",
+      "title": "Keep the unexplained difference visible",
+      "unit": "Illustrative inventory units",
+      "opening": 80,
+      "closing": 58,
+      "domain": [
+        0,
+        120
+      ],
+      "ticks": [
+        0,
+        40,
+        80,
+        120
+      ],
+      "components": [
+        {
+          "id": "received",
+          "label": "Received",
+          "amount": 35
+        },
+        {
+          "id": "shipped",
+          "label": "Shipped",
+          "amount": -50
+        },
+        {
+          "id": "write-offs",
+          "label": "Write-offs",
+          "amount": -5
+        }
+      ],
+      "period": "One hypothetical stock count",
+      "basis": "Recorded movements explain 60 units. The observed count is 58; the 2-unit shortfall has no assigned cause."
+    }
+  ]
+}

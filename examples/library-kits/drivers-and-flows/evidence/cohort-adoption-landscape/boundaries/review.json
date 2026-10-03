@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/drivers-and-flows/specimens/cohort-adoption-landscape/build/pipeline/2026-10-03T03-33-10-294Z-7c92f0a1/video.mp4",
+  "outputSha256": "9985f51e65400944d3c5433eeeedca761a2f668351e85ef2728896955c44e619",
+  "inputId": "44996fc26d7c1eee320d56dcd6345abd60ddb6414ead7a80ad8010aa886f4b12",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "cohort-adoption-bases: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "cohort-adoption-bases: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 269,
+      "time": 8.966666666666667,
+      "reasons": [
+        "cohort-adoption-bases: last frame",
+        "Before cohort-adoption"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 270,
+      "time": 9,
+      "reasons": [
+        "cohort-adoption: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 276,
+      "time": 9.2,
+      "reasons": [
+        "cohort-adoption: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 689,
+      "time": 22.966666666666665,
+      "reasons": [
+        "cohort-adoption: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

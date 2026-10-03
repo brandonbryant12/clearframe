@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/drivers-and-flows/specimens/warehouse-units-vertical/build/pipeline/2026-10-03T03-34-43-615Z-807db683/video.mp4",
+  "outputSha256": "23132dbf9e1982a5cf356bfb75e43e2baef4d3184dda011e2e4c2f5ff8ff193b",
+  "inputId": "543d188577b58e7eb4f1d14a3a3c909cc582189ab660b87ae83ecf5f81c0ce4c",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "warehouse-units: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "warehouse-units: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 419,
+      "time": 13.966666666666667,
+      "reasons": [
+        "warehouse-units: last frame",
+        "Before warehouse-units-check"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 420,
+      "time": 14,
+      "reasons": [
+        "warehouse-units-check: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 426,
+      "time": 14.2,
+      "reasons": [
+        "warehouse-units-check: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 719,
+      "time": 23.966666666666665,
+      "reasons": [
+        "warehouse-units-check: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/drivers-and-flows/specimens/project-recovery-landscape/build/pipeline/2026-10-03T03-34-19-121Z-74d72c98/video.mp4",
+  "outputSha256": "2c80e2d2fc57e4e93980f23bd06edf9b9982deb44f754a65e378f2c2ad556769",
+  "inputId": "452d949466db2daac62891ffd2aa3c79288e6b38b5ca81c7976a50553c5afa6c",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "project-recovery-bases: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "project-recovery-bases: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 269,
+      "time": 8.966666666666667,
+      "reasons": [
+        "project-recovery-bases: last frame",
+        "Before project-recovery"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 270,
+      "time": 9,
+      "reasons": [
+        "project-recovery: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 276,
+      "time": 9.2,
+      "reasons": [
+        "project-recovery: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 689,
+      "time": 22.966666666666665,
+      "reasons": [
+        "project-recovery: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

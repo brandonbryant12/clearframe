@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/drivers-and-flows/specimens/earnings-and-income-landscape/build/pipeline/2026-10-03T03-33-26-974Z-e0e14af5/video.mp4",
+  "outputSha256": "c1f4d593912b4d679de96e877f6bd8ef832df39401ea49dcee28bc5d0893c59b",
+  "inputId": "8ed23746b8986c5be7e57768d7387f5ae9032dcfb3b87cc649cd0a64571dfebb",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "earnings-and-income-inputs: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "earnings-and-income-inputs: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 359,
+      "time": 11.966666666666667,
+      "reasons": [
+        "earnings-and-income-inputs: last frame",
+        "Before earnings-and-income"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 360,
+      "time": 12,
+      "reasons": [
+        "earnings-and-income: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 366,
+      "time": 12.2,
+      "reasons": [
+        "earnings-and-income: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 779,
+      "time": 25.966666666666665,
+      "reasons": [
+        "earnings-and-income: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

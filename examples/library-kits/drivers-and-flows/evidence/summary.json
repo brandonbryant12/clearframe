@@ -1,0 +1,288 @@
+{
+  "status": "prototype",
+  "continuousPlayback": "unverified",
+  "variants": [
+    {
+      "name": "cohort-adoption-landscape",
+      "pipelineId": "2026-10-03T03-33-10-294Z-7c92f0a1",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 90 frames: no problems found\n"
+        ],
+        "duration": 23,
+        "inputId": "44996fc26d7c1eee320d56dcd6345abd60ddb6414ead7a80ad8010aa886f4b12"
+      },
+      "qa": {
+        "seconds": 23,
+        "frames": 690,
+        "changePerSecond": 0,
+        "heldSeconds": 22.97,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "cohort-adoption-vertical",
+      "pipelineId": "2026-10-03T03-33-18-837Z-4111a046",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 90 frames: no problems found\n"
+        ],
+        "duration": 23,
+        "inputId": "588f7665422b2ef6bcd450011866bd46ee981c07e1e5d694d20c2cb148fe568e"
+      },
+      "qa": {
+        "seconds": 23,
+        "frames": 690,
+        "changePerSecond": 0,
+        "heldSeconds": 23,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "earnings-and-income-landscape",
+      "pipelineId": "2026-10-03T03-33-26-974Z-e0e14af5",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 100 frames: no problems found\n"
+        ],
+        "duration": 26,
+        "inputId": "8ed23746b8986c5be7e57768d7387f5ae9032dcfb3b87cc649cd0a64571dfebb"
+      },
+      "qa": {
+        "seconds": 26,
+        "frames": 780,
+        "changePerSecond": 0,
+        "heldSeconds": 24.53,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "earnings-and-income-vertical",
+      "pipelineId": "2026-10-03T03-33-36-317Z-f4b670c1",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 100 frames: no problems found\n"
+        ],
+        "duration": 26,
+        "inputId": "6b6f084ad36cd267836bd5a9831445b93d8d6c5d17f5fbd1decb6052c111a853"
+      },
+      "qa": {
+        "seconds": 26,
+        "frames": 780,
+        "changePerSecond": 0,
+        "heldSeconds": 26,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "fund-assets-landscape",
+      "pipelineId": "2026-10-03T03-33-44-843Z-132ec23d",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 93 frames: no problems found\n"
+        ],
+        "duration": 24,
+        "inputId": "19a583a8bff4b8285ef0c93d313c30506cf1ac08df08da9daf3a51a843fdd4c8"
+      },
+      "qa": {
+        "seconds": 24,
+        "frames": 720,
+        "changePerSecond": 0,
+        "heldSeconds": 23,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "fund-assets-vertical",
+      "pipelineId": "2026-10-03T03-33-53-334Z-4d180333",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 93 frames: no problems found\n"
+        ],
+        "duration": 24,
+        "inputId": "fc50229bec75c552e2a9fbcdb985fb1e010fccd5368bb5dd008681a0431b8581"
+      },
+      "qa": {
+        "seconds": 24,
+        "frames": 720,
+        "changePerSecond": 0,
+        "heldSeconds": 24,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "price-and-volume-landscape",
+      "pipelineId": "2026-10-03T03-34-01-333Z-5652e866",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 100 frames: no problems found\n"
+        ],
+        "duration": 26,
+        "inputId": "0b99182fb4c964c59e011d182ed9a6e3ee3e3483f56cb5c157b0f1bfadac0b18"
+      },
+      "qa": {
+        "seconds": 26,
+        "frames": 780,
+        "changePerSecond": 0,
+        "heldSeconds": 24.9,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "price-and-volume-vertical",
+      "pipelineId": "2026-10-03T03-34-10-124Z-0942b233",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 100 frames: no problems found\n"
+        ],
+        "duration": 26,
+        "inputId": "6afd70eea40299f7d88d2787c84b6070501f1ec269db4afd4f73336c07bf3c13"
+      },
+      "qa": {
+        "seconds": 26,
+        "frames": 780,
+        "changePerSecond": 0,
+        "heldSeconds": 26,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "project-recovery-landscape",
+      "pipelineId": "2026-10-03T03-34-19-121Z-74d72c98",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 90 frames: no problems found\n"
+        ],
+        "duration": 23,
+        "inputId": "452d949466db2daac62891ffd2aa3c79288e6b38b5ca81c7976a50553c5afa6c"
+      },
+      "qa": {
+        "seconds": 23,
+        "frames": 690,
+        "changePerSecond": 0,
+        "heldSeconds": 22.97,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "project-recovery-vertical",
+      "pipelineId": "2026-10-03T03-34-27-422Z-7cdb1dcb",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 90 frames: no problems found\n"
+        ],
+        "duration": 23,
+        "inputId": "941f0654ac01b689c4805c53007c447c3d955893319ac96e36336e16285b65b3"
+      },
+      "qa": {
+        "seconds": 23,
+        "frames": 690,
+        "changePerSecond": 0,
+        "heldSeconds": 23,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "warehouse-units-landscape",
+      "pipelineId": "2026-10-03T03-34-35-247Z-a98b02d7",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 93 frames: no problems found\n"
+        ],
+        "duration": 24,
+        "inputId": "67a60f69f74515c17bf31fd37c79776f0dbee960e6405613ead1838f50393471"
+      },
+      "qa": {
+        "seconds": 24,
+        "frames": 720,
+        "changePerSecond": 0,
+        "heldSeconds": 23,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "warehouse-units-vertical",
+      "pipelineId": "2026-10-03T03-34-43-615Z-807db683",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 93 frames: no problems found\n"
+        ],
+        "duration": 24,
+        "inputId": "543d188577b58e7eb4f1d14a3a3c909cc582189ab660b87ae83ecf5f81c0ce4c"
+      },
+      "qa": {
+        "seconds": 24,
+        "frames": 720,
+        "changePerSecond": 0,
+        "heldSeconds": 24,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    }
+  ],
+  "limitations": [
+    "Original fictional inputs; no forecasts or causal attribution",
+    "Cash is separate and not reinvested",
+    "Residuals remain unexplained",
+    "Square and 4:5 not reviewed"
+  ]
+}

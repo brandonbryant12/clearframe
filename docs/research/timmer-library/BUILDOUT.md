@@ -12,7 +12,7 @@ Additional user direction: include a small set of [Timmer-inspired style studies
 | 1 — Calculation contracts | T02 foundation: contribution ledger, tiered match, ownership, fee comparison, pension formula and cashflow fixtures | Implemented; focused calculation checks pass |
 | 2 — Quantitative drawings | T01/C01 explicit scales, multiseries comparison, missing data, dates, annotations and native labels | Engineering foundation and proportion checks implemented; sampled defects resolved; continuous playback still unverified |
 | 3 — Retirement specimens | R01–R09: reusable native recipes, two distinct scenarios, landscape/vertical compositions | Native prototypes and review evidence implemented; continuous playback and promotion pending |
-| 4 — Drivers, participation and flows | Reconciled decomposition, breadth/count versus weight, relative performance and stocks/flows | Planned |
+| 4 — Drivers, participation and flows | Reconciled decomposition, breadth/count versus weight, relative performance and stocks/flows | C02/C03/C16 native prototypes implemented; breadth/count versus weight and broader relative-performance work remain |
 | 5 — Physical mechanisms and cameras | Curate existing B01–B03; build reservoir/gate/conveyor and reusable camera/phase contracts | Planned |
 | 6 — Remaining collections | Curves, relationships, uncertainty, long horizons, delayed payoff and supporting tools | Planned |
 
@@ -58,7 +58,7 @@ Milestone 0 validation: inventory generation resolves all 71 entries and 27 sour
 
 Milestone 2b (`5d3bd0c`, pushed to `main`, remote hash verified) evidence: the two main examples now show readable source/assumptions and stable series names. Long labels, close values, log scales and annotation are rendered in four shapes. Three independent review rounds found no remaining material defect in the inspected frames. Six clips pass native audit/QA; shuffled native seeks match. A bounded independent checker streams 3,300 encoded frames with 276 source/native coordinate checks, 23,208 visible observation checks, 4,060 reveal-front checks and 2,368 future-column checks, with zero failures. Exact tolerances/exclusions are in the linked prototype evidence. These line checks do not establish area/volume correctness for future infographics.
 
-Next: complete continuous playback review when the native player is responsive, and review three/four-series arrangements. Keep building the retirement recipes and other collections with the same mathematical-proportion requirements. The scoped style studies are now tracked in milestone 4. Rendering remains subject to the disk reserve; no generated visual candidate is accepted yet.
+Next: complete continuous playback review when the native player is responsive, and review three/four-series arrangements. Keep building the retirement recipes and other collections with the same mathematical-proportion requirements. The scoped style studies are tracked in milestone 3b. Rendering remains subject to the disk reserve; no generated visual candidate is accepted yet.
 
 ## Milestone 3 — native retirement mechanism kit
 
@@ -70,10 +70,20 @@ The full Node contract suite passes 156/156; five focused retirement tests check
 
 Status remains **prototype**. Encoded sampling and automated checks do not establish subjective continuous playback or finished-film pacing. Landscape and vertical are the demonstrated forms; square/4:5 and arbitrary new copy need review. The original inventory's broader 3D metaphors remain work, and the small Timmer image-derived style study is documented separately below. No source chart imagery was used to claim a derived look in the retirement milestone.
 
-## Milestone 4 — source-informed research studies
+## Milestone 3b — source-informed research studies
+
+Published as `10fdc4c` on `main`; exact remote hash verified.
 
 The [research-study kit](../../../examples/library-kits/research-study/README.md) adds two native chart studies and an original Blender reserve gate in landscape and vertical. Three actual chart images were inspected from one publisher page; direct social-post provenance and broader post coverage remain open. Source images and market values are not redistributed. The source-to-adaptation table distinguishes observed hierarchy/color from our native simplification and original 3D interpretation.
 
 The palette/treatment use the existing library system. Explicit date/value geometry and a derived endpoint percentage preserve mathematical meaning; the gate encodes access qualitatively. The native pipeline, encoded probes, scene reproduction and independent review have separate retained reports. All remain prototypes while continuous playback is unverified. B04 is only partial: the new gate has no transparent chambers, fill planes or quantity transfer. Full seven-collection build-out remains active.
 
 Validation: the full Node suite passes 157/157. Six native clips total 60 seconds / 1,800 frames; all pipeline checks and encoded QA pass with zero layout findings or detected one-frame pops, and forward/shuffled seeks agree. The four chart clips pass 116 independent native coordinate/tick/window checks and bounded pixel probes across 1,440 decoded frames: 15,228 visible observation probes, 2,376 reveal-front probes and 944 future-column checks, zero failures. Both 144-frame Blender masters reproduce their poster pixels exactly after reopening with Python auto-execution disabled and settle at the end. The independent review and exact probe exclusions remain in the kit.
+
+## Milestone 4a — drivers and flows
+
+The [drivers-and-flows kit](../../../examples/library-kits/drivers-and-flows/README.md) implements C02/C03/C16 with six original fictional subjects and twelve native landscape/vertical clips. Original dates and units remain visible before event alignment. Two-factor product changes expose interaction and separate additions. Signed bridges reconcile observed closing stocks with supplied changes and explicitly unexplained residuals. Shared domains and equal bar thickness preserve value-to-length and rectangle-area ratios through fades; missing observations remain gaps.
+
+T02 now includes [observed-anchor rebasing, product decomposition and stock reconciliation](../../data-transforms.md). Helpers reject unsupported inputs, retain input hashes and avoid intermediate display rounding. These are bounded algebraic models; they do not implement reinvested total-return indices, causal attribution, rolling statistics, annualization or vintage alignment. Broader participation and relative-performance work remains.
+
+Status remains **prototype** while subjective continuous playback is unverified. Native source-bound pipeline reports, independent encoded proportions and sampled reviewer evidence are retained in the kit. The full Node suite passes 162/162. All twelve native pipelines pass with zero layout findings or detected one-frame pops, and forward/shuffled seeks agree. Independent encoded checks stream 8,760 frames and pass 160 native mappings, 29,820 rectangle-edge probes (344 during visible fades), 11,226 observation probes, 3,062 reveal-front probes, 2,036 future-column checks and 782 missing-column checks, with zero failures. Exact exclusions and tolerances are retained in the kit; this is bounded geometry evidence, not subjective continuous playback.

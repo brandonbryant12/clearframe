@@ -1,0 +1,1624 @@
+{
+  "schemaVersion": 1,
+  "id": "drivers-and-flows",
+  "version": "0.1.0",
+  "kind": "story-kit",
+  "title": "Drivers and flows",
+  "status": "prototype",
+  "purpose": "Explain event alignment, two-factor product changes and opening-to-closing stock reconciliation with auditable native quantities.",
+  "inventoryIds": [
+    "C02",
+    "C03",
+    "C16",
+    "T02"
+  ],
+  "tags": {
+    "purpose": [
+      "compare",
+      "decompose",
+      "reconcile"
+    ],
+    "appearance": [
+      "paper",
+      "blue",
+      "orange",
+      "violet"
+    ],
+    "movement": [
+      "shared-clock-reveal",
+      "quantity-preserving-fade",
+      "reading-hold"
+    ],
+    "format": [
+      "landscape",
+      "vertical"
+    ],
+    "subject": [
+      "finance",
+      "operations",
+      "adoption"
+    ]
+  },
+  "includes": {
+    "source": "inputs.json",
+    "calculations": "audit.json",
+    "composition": "source/bridge.mjs",
+    "specimens": [
+      "specimens/cohort-adoption-landscape/storyboard.json",
+      "specimens/cohort-adoption-vertical/storyboard.json",
+      "specimens/earnings-and-income-landscape/storyboard.json",
+      "specimens/earnings-and-income-vertical/storyboard.json",
+      "specimens/fund-assets-landscape/storyboard.json",
+      "specimens/fund-assets-vertical/storyboard.json",
+      "specimens/price-and-volume-landscape/storyboard.json",
+      "specimens/price-and-volume-vertical/storyboard.json",
+      "specimens/project-recovery-landscape/storyboard.json",
+      "specimens/project-recovery-vertical/storyboard.json",
+      "specimens/warehouse-units-landscape/storyboard.json",
+      "specimens/warehouse-units-vertical/storyboard.json"
+    ],
+    "preview": "preview.html"
+  },
+  "requires": {
+    "replay": [
+      "ClearFrame native compositor",
+      "paper palette",
+      "bundled Inter fonts"
+    ],
+    "preparation": [
+      "Node.js",
+      "FFmpeg",
+      "Python 3 for encoded verification",
+      "native renderer setup"
+    ]
+  },
+  "editable": {
+    "native": [
+      "values",
+      "dates",
+      "units",
+      "labels",
+      "domains",
+      "palette",
+      "timing"
+    ],
+    "fixedClip": [
+      "Retained MP4 pixels; regenerate and review after source edits"
+    ]
+  },
+  "evidence": {
+    "summary": "evidence/summary.json",
+    "review": "REVIEW.md",
+    "proportions": "evidence/encoded-proportions.json",
+    "continuousPlayback": "unverified"
+  },
+  "provenance": {
+    "references": "SOURCES.md",
+    "data": "Original fictional inputs; no copied market trajectories",
+    "inputSha256": "b04684c1e0c2b320ef9d992aa3c1a189ce37cda9492bba9644c9ba49a28a80ad",
+    "modelVersion": 1
+  },
+  "license": "MIT for original files. Bundled fonts retain OFL notices.",
+  "files": [
+    {
+      "path": "audit.json",
+      "bytes": 39415,
+      "sha256": "d9d02bd05e2ea12c9bdf1817f312db91016e21059f512251c77492ba0f353875"
+    },
+    {
+      "path": "build.mjs",
+      "bytes": 7630,
+      "sha256": "2c4a7c1f193b879f53b7f2b17ff5363be1ffa3afd642b10767cf8971dae8ed1c"
+    },
+    {
+      "path": "check-encoded.py",
+      "bytes": 9985,
+      "sha256": "d1a5d6c54f1bceed96d76edecb16eb330d011302a7a6fde419c78020e652527a"
+    },
+    {
+      "path": "DIRECTION.md",
+      "bytes": 3298,
+      "sha256": "41f7d1cff5ac85649ddcfd40ecbad9fef6c4eee6af8cbe48449c91bb1d18ed67"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/boundaries/frame-0000.jpg",
+      "bytes": 36166,
+      "sha256": "ee6755c04290035172b24100f7a8bbac04bf2e3e40a36671088ad414fdf34267"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/boundaries/frame-0001.jpg",
+      "bytes": 38815,
+      "sha256": "82cb117266846548dd8c0f971d9f946a4d46d66366ecf0ba017d3daaf4aae74e"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/boundaries/frame-0002.jpg",
+      "bytes": 57870,
+      "sha256": "9cdbbe5ab2ee52e7c46b77dd8c8e22f50162f184e9ba2a9df539fd1d7cf2dd48"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/boundaries/frame-0003.jpg",
+      "bytes": 54890,
+      "sha256": "3cc7b4bba59287f7661e111bf5b873a2583df63d55629aa61ca9df2ab16477e5"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/boundaries/frame-0004.jpg",
+      "bytes": 59067,
+      "sha256": "11712d9fc882464e8a5ba722f7afad29862b12ef0176a9a17859ab6c22efd6fb"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/boundaries/frame-0005.jpg",
+      "bytes": 69824,
+      "sha256": "c88ac702ae829c7e0ef4c044cd9554403499e74c2822091b08b143713c4e2afc"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/boundaries/index.html",
+      "bytes": 1799,
+      "sha256": "de1eb380c8fa7be091f8c88ff3cf51565f94fa247fc9fce80b38fe03a83cd0f3"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/boundaries/review.json",
+      "bytes": 1380,
+      "sha256": "42f478aebc1a00f991e2e4543637cca563bd234cf341b23716ce895bd1cdb8bd"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/boundaries/strip.png",
+      "bytes": 114532,
+      "sha256": "a5e0c162ba967d6d7ae5838bd34460795b488c8466086caf89b906daa8325a04"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/check.json",
+      "bytes": 270,
+      "sha256": "915fc5d04e4734a2a092a9e1cafeac9e56cab7b9042eb6055b86b4058a9799b7"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/phone.png",
+      "bytes": 423403,
+      "sha256": "fe6d53996f1a71d5f6056ec9f90df71807640e8d2b79953f5ee38a0c4c8ac415"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/qa.json",
+      "bytes": 6731,
+      "sha256": "a8de76b566c12c9b61443cf717e0599c563f7601d3c00c516903f96c8a239189"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/seek.json",
+      "bytes": 1023,
+      "sha256": "d04c75798d06360577139a061d1041ed8d1c493ae496aa86773fe7be6989393c"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/sheet.png",
+      "bytes": 120723,
+      "sha256": "9baee10bc341e2bb30249dfdc5d9caf50c5f8d37d4b63518873481606c809197"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/timeline.png",
+      "bytes": 151364,
+      "sha256": "a529e6466449ecca63a5d0195002e131b322e8947dfb2ae078cc0094b8607747"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/video.mp4",
+      "bytes": 541656,
+      "sha256": "9985f51e65400944d3c5433eeeedca761a2f668351e85ef2728896955c44e619"
+    },
+    {
+      "path": "evidence/cohort-adoption-landscape/video.mp4.json",
+      "bytes": 2741,
+      "sha256": "3d06d7232eb8fbe17288181a8fd6bbead39674460788a915878ba6dd686d2f2b"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/boundaries/frame-0000.jpg",
+      "bytes": 42909,
+      "sha256": "40a92437de7b6793d3dcff09a477dce6f4de96d2f053aed9ebbf427a87322ed4"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/boundaries/frame-0001.jpg",
+      "bytes": 46000,
+      "sha256": "300faf64b7bdbbaf94cc88382ef59c5e3cc6b25e3ae5b968406e3c16874aee38"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/boundaries/frame-0002.jpg",
+      "bytes": 66336,
+      "sha256": "c06271aeefb78e9b4d6d9a11df9cdc97e092beca328b336ca1fab1faf8f54f4a"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/boundaries/frame-0003.jpg",
+      "bytes": 63248,
+      "sha256": "4e4126f058ccd896275a2918f811857b9277923cbca797efe872131a81d01c7b"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/boundaries/frame-0004.jpg",
+      "bytes": 66967,
+      "sha256": "59c1fc13413d31bbc7a4ac30e1f09f93eb676f0ef604bcb63ed8e2e5484a3322"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/boundaries/frame-0005.jpg",
+      "bytes": 83242,
+      "sha256": "ad4eca9446bc0f939e040c851dd399576f99d1f851d9ae815275c2d55102ef56"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/boundaries/index.html",
+      "bytes": 1799,
+      "sha256": "de1eb380c8fa7be091f8c88ff3cf51565f94fa247fc9fce80b38fe03a83cd0f3"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/boundaries/review.json",
+      "bytes": 1379,
+      "sha256": "8b4eb4262b5aba4458e60fa92cdb92244ea92cbca27b99905d0caf420ceacfbd"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/boundaries/strip.png",
+      "bytes": 117598,
+      "sha256": "45705be235a9821db2d94ce961a43ea8eec0f1d112d8edcaba4c2d529fd9c304"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/check.json",
+      "bytes": 270,
+      "sha256": "12768d92ba70b14b429b5f40de86886e5b7469fa019822f9ca3e9b8bd2a42979"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/phone.png",
+      "bytes": 419478,
+      "sha256": "5ff788eb1ec08cb33335a863899bf1e6e2b37e557203b142359fd1e6bc0425c0"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/qa.json",
+      "bytes": 6717,
+      "sha256": "158eddff22f5534f09a32afdae240c7a133408c162ee9251c229b9a34d1bef50"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/seek.json",
+      "bytes": 1023,
+      "sha256": "261aa16abaceeaa89e3d8a6398b88eb4bea374ff2fbc3d6b880b4bfb0bbcf507"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/sheet.png",
+      "bytes": 140134,
+      "sha256": "10001205dcf2184b74b27e7e7b8da5bb7036e0b4ececf34e830d471c1002c7e5"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/timeline.png",
+      "bytes": 99348,
+      "sha256": "768ea09ca75666c29da71f7cbc054b5c3803276f512c2e24451addf3552e327a"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/video.mp4",
+      "bytes": 367912,
+      "sha256": "53b8a8cb44b1a3aaa237b4d47cb7fc481b0cee5b56baef41947253300b860f25"
+    },
+    {
+      "path": "evidence/cohort-adoption-vertical/video.mp4.json",
+      "bytes": 2734,
+      "sha256": "ceec2ef3e6cbaabd2ee218486e066956a1a5463041b8dc56ed6bd3b6d53e6106"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/boundaries/frame-0000.jpg",
+      "bytes": 35540,
+      "sha256": "9b3b42c2a74589bfd2446f840fb08b6bb9434d1fa936541341dc2473dafa0a56"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/boundaries/frame-0001.jpg",
+      "bytes": 39519,
+      "sha256": "f50a7eb4e26811e80e49cc9ea5b7763088e5d1694b60e9ca7b9cf1ade8599db9"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/boundaries/frame-0002.jpg",
+      "bytes": 61884,
+      "sha256": "8e33e3e8cb1bf789196f0a7d4a0c550e02e8d8b2c28164eb5c955e95d1801936"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/boundaries/frame-0003.jpg",
+      "bytes": 34160,
+      "sha256": "4cf8521c3ed37d0d8677c5848cba3d593ab192bcb3bbb21c93b6489137051e50"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/boundaries/frame-0004.jpg",
+      "bytes": 38247,
+      "sha256": "be316ae0612721f1030a6781b147b3cfe5ec455f710a6aae6770d11e2f2dd706"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/boundaries/frame-0005.jpg",
+      "bytes": 57580,
+      "sha256": "838936c38d083ac10ee16a3e2cf48c690a4bf23dadbd1be36de69d01fc4e3fce"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/boundaries/index.html",
+      "bytes": 1833,
+      "sha256": "5d2cb311139766c9d02f87183ea8a69d865d0dd309a348cd4daa89c2f02a75cc"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/boundaries/review.json",
+      "bytes": 1418,
+      "sha256": "bd21d2898dde05279e677f932e325ede7f566928496c05d9c50a2112832f31f4"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/boundaries/strip.png",
+      "bytes": 97765,
+      "sha256": "d22a9f6a05b419bc844a3377385a8bece86555a08ec98a50e438a4772946dbd6"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/check.json",
+      "bytes": 271,
+      "sha256": "471741c267b8de9919bde34a8334c966c702bdb329c0aaa4aaa836f068c66a3e"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/phone.png",
+      "bytes": 351529,
+      "sha256": "7b1d1eda3f97b16bc220477c30598d349f89ff0a56554b765992d42a4d698691"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/qa.json",
+      "bytes": 7426,
+      "sha256": "9fa6334f9b541136acb10d415d20f148bf52314d9f911ac097be5d8e203f5246"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/seek.json",
+      "bytes": 1029,
+      "sha256": "5cb821b4c125d1d7fbafc030df9c85deaed4e1446bf454c2b24fad0423f87ca2"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/sheet.png",
+      "bytes": 111260,
+      "sha256": "ca941c7d7504b6b50f66f6e100cabd1da5a06337377ce9a553d2fa0c6b882538"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/timeline.png",
+      "bytes": 166290,
+      "sha256": "a30ae1cf2e508e4e9db2fd8e84aac205b675dd0a8d1f92936bf5cb1d9fc7fcdf"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/video.mp4",
+      "bytes": 540799,
+      "sha256": "c1f4d593912b4d679de96e877f6bd8ef832df39401ea49dcee28bc5d0893c59b"
+    },
+    {
+      "path": "evidence/earnings-and-income-landscape/video.mp4.json",
+      "bytes": 2740,
+      "sha256": "6ff8f22ced1cbd2c12a7ba7ccb6ba5d9543642f7e4d29cadd3f05c14e90f2ca5"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/boundaries/frame-0000.jpg",
+      "bytes": 41074,
+      "sha256": "315ff472848eceb3e0198da789f75b46cab01f4353b5ee8b12dc4ff70abf7d08"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/boundaries/frame-0001.jpg",
+      "bytes": 45251,
+      "sha256": "27f5ba87b07a7a58eaade2cff705191b8dad3711c5e287024b823ee92a326d8c"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/boundaries/frame-0002.jpg",
+      "bytes": 68220,
+      "sha256": "5f653b2da352b584956bc8f76290dceb3de8803a0c8a306b705959d9f347fe08"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/boundaries/frame-0003.jpg",
+      "bytes": 43855,
+      "sha256": "b33a7f26a164b5c8c895ea876cf5d42f29b6810875654ae66308e1d655162cfb"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/boundaries/frame-0004.jpg",
+      "bytes": 47925,
+      "sha256": "1774a78e20c0a72435cadf20dd6d97085ebb9a5ab7223294b0c303bdfa3d383f"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/boundaries/frame-0005.jpg",
+      "bytes": 67651,
+      "sha256": "a6a57cf684755b6cec5ca8bc76166ed05ab3930a207acdcc360c7d4d36720400"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/boundaries/index.html",
+      "bytes": 1833,
+      "sha256": "5d2cb311139766c9d02f87183ea8a69d865d0dd309a348cd4daa89c2f02a75cc"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/boundaries/review.json",
+      "bytes": 1417,
+      "sha256": "25142b1ef59d3d7b15d1629f32152fc7f0bdc16b8c547c47cfc431eb71bd3fb9"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/boundaries/strip.png",
+      "bytes": 100411,
+      "sha256": "5993e7a2a090c8307445a88729a368ece97422ae891650779b1fed6654245853"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/check.json",
+      "bytes": 271,
+      "sha256": "6ddd585ec9971476b26977ba581c4da0874fa268f8be1df93d258403b0824029"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/phone.png",
+      "bytes": 393604,
+      "sha256": "73c32b998184d893651862ca933315548e4b752586355f4b384f1b6790bb1181"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/qa.json",
+      "bytes": 7403,
+      "sha256": "6c4fb41fa68588435b9c8932594adcb9eed7e91df556d203fdc7e857aca9309b"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/seek.json",
+      "bytes": 1029,
+      "sha256": "87826c93d591f9278fcc46c1c44d3a0508a2dfadb33bdc79510d7a46aaed3ea9"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/sheet.png",
+      "bytes": 125325,
+      "sha256": "45e79838ac82d548f8a3065828449dc12a5266030446b1f0f63c102e8bead6e5"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/timeline.png",
+      "bytes": 83648,
+      "sha256": "10d6cd29770a84590cb8324e5de84c199d6876f3a839f121a197bd9ec7f6ca0c"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/video.mp4",
+      "bytes": 347255,
+      "sha256": "03e215f511de32d29d0264a729464d6d0df1244fd6caa1b416f8bb297df4c051"
+    },
+    {
+      "path": "evidence/earnings-and-income-vertical/video.mp4.json",
+      "bytes": 2734,
+      "sha256": "60b9ec2c4a1115a39884635f517ed45f23613fc2508f07b9538f98d4d42cab35"
+    },
+    {
+      "path": "evidence/encoded-proportions.json",
+      "bytes": 10069,
+      "sha256": "c18310b5256417f2c925b2c6a5ea9e75aca2ab172da88b4928be7188e8137dc0"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/boundaries/frame-0000.jpg",
+      "bytes": 32915,
+      "sha256": "ae47143f0da1bbaeca45b46d78babae8006a638efec7a2fa1501c7bf8270ed85"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/boundaries/frame-0001.jpg",
+      "bytes": 36498,
+      "sha256": "2be401d60dc213b44963f4fc58c5abeeea4ea0575b02308ce1551981b30e070b"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/boundaries/frame-0002.jpg",
+      "bytes": 56272,
+      "sha256": "fec5d09d74e29e0e089b7b1fd99614023dbae9655a29424997e9e1c3c2ce99a4"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/boundaries/frame-0003.jpg",
+      "bytes": 38023,
+      "sha256": "6bd54e7172f87006f0de334cc0b05602338e354c2935376ecdf6157af9e6e16f"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/boundaries/frame-0004.jpg",
+      "bytes": 42462,
+      "sha256": "7c533ec9d9488b2d29ea9e5475c9b1633d0ef3d9d683e27f07998c1c130bfbfe"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/boundaries/frame-0005.jpg",
+      "bytes": 63389,
+      "sha256": "95e97349acc4e0b8554dd4832cc23f2e7b22ac842eaa58e7e2f4a9e71ba4b210"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/boundaries/index.html",
+      "bytes": 1780,
+      "sha256": "b2590b24e22da0f2ad092c0686071ba8f3d77a1205a615e679aa3484afab4b5d"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/boundaries/review.json",
+      "bytes": 1357,
+      "sha256": "332b40cdca35c71db53b389203c8222b6e18fd2c681eff857b08c4d1c6533b73"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/boundaries/strip.png",
+      "bytes": 97419,
+      "sha256": "0ef6923c8f2c309b0b2e702c7c5b7e73a99a34aea5882b66ecbbdea1fce5b3e7"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/check.json",
+      "bytes": 270,
+      "sha256": "cc3dff600bc877efd816670c1c361d949d7765fb86017c2555b49e181519ebd1"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/phone.png",
+      "bytes": 384593,
+      "sha256": "4a45f65951bba27d98b594edb791f185947c8d85be52745fb623e82eaeaa813d"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/qa.json",
+      "bytes": 6820,
+      "sha256": "d06df2554764ad886964e87f08972d107d38058d3277fcc057e12918ead42238"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/seek.json",
+      "bytes": 1029,
+      "sha256": "48d9e7d1acc1a7b93e0c5fd8dca1621b5bb17c37a8e0105eddd8780bbe587291"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/sheet.png",
+      "bytes": 112146,
+      "sha256": "35617445af812f1561e3f563f664082063ec652c1b9794af3049379e52e81129"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/timeline.png",
+      "bytes": 136880,
+      "sha256": "442fbcffb7727ebe198f8b9bbe5b1a390561ed7f6b4434daa286696cbfd0d653"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/video.mp4",
+      "bytes": 545156,
+      "sha256": "e33fa71a907d2707549be7a8d1359922516d784d3b6576b8e6e8a1ce36ee61c6"
+    },
+    {
+      "path": "evidence/fund-assets-landscape/video.mp4.json",
+      "bytes": 2734,
+      "sha256": "9c192df53f48bfde5bff0ae88ccffee0d625b8e8be22a5b18ab874d21a5786a9"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/boundaries/frame-0000.jpg",
+      "bytes": 42431,
+      "sha256": "16364810de7217be66b1a9df3d768f10c0979803cd4db7209c3a0745ef1d3111"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/boundaries/frame-0001.jpg",
+      "bytes": 46274,
+      "sha256": "3e60f1b5014476de2342938f40313efb428fe3201e5bf19c9dc928807dbc03b6"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/boundaries/frame-0002.jpg",
+      "bytes": 66866,
+      "sha256": "7174d1bd2d938d86e37ff5540d221c77fab4146ff0f40e0d10d0464fb157c16f"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/boundaries/frame-0003.jpg",
+      "bytes": 44972,
+      "sha256": "562399e6cb642b3121260c41d76371ec7cc329f90896f7ad43a1d578c6ea525e"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/boundaries/frame-0004.jpg",
+      "bytes": 49597,
+      "sha256": "25f8ea03c7596ebb7d39f57e91006335bf42408b4ec624c10ae8c5fc8f1d7ef4"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/boundaries/frame-0005.jpg",
+      "bytes": 69602,
+      "sha256": "c7e6b1f0c0e44bca9351f3efbcf2db76a8011f9bfe82de28882447bfefa1a58c"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/boundaries/index.html",
+      "bytes": 1780,
+      "sha256": "b2590b24e22da0f2ad092c0686071ba8f3d77a1205a615e679aa3484afab4b5d"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/boundaries/review.json",
+      "bytes": 1356,
+      "sha256": "9aa6684864da6f634855a122f4fc83c71d1a608d41b090177132f1fea7268e4b"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/boundaries/strip.png",
+      "bytes": 102756,
+      "sha256": "33e0239d3414ad36743bb4813389b983ced160fd512882b42bdf5a0ebb912b2f"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/check.json",
+      "bytes": 270,
+      "sha256": "812e334ed86614e0aae776b79c3f83ba7c374c17826bfacb01d028843a666fad"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/phone.png",
+      "bytes": 383850,
+      "sha256": "f13b278d16209e16d5b01efb234fbb5572a30205ca32b2922dde48fc0417f231"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/qa.json",
+      "bytes": 6796,
+      "sha256": "f0c31b904e5f5d3d2bcefac36b47e54491d9c9ad910f205f83b9e31f62271daa"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/seek.json",
+      "bytes": 1029,
+      "sha256": "6fcd3cfc1f9368b986f639939983cba805e54333856d5231d0db4bcc58b4c9bc"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/sheet.png",
+      "bytes": 124817,
+      "sha256": "67a3930d49c9c87ae7f3a0893e41e9e2a5d582545b1fd261805ca256315ac46f"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/timeline.png",
+      "bytes": 91000,
+      "sha256": "8631d8ad639f59675983fb2921dca865caeb7967f76c8673f8b5eb3d5e975c6a"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/video.mp4",
+      "bytes": 350810,
+      "sha256": "5218ce7d5d9a37d74996c67d11874197d93d1fa420ef4bbdbea6044b33ef2968"
+    },
+    {
+      "path": "evidence/fund-assets-vertical/video.mp4.json",
+      "bytes": 2741,
+      "sha256": "4b6c1f76b2f52c138ba6745859f56c06ee68d9f0ccdebe336780b02a1c465b05"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-landscape/11s.png",
+      "bytes": 45530,
+      "sha256": "90571b31cb28aaa33b8e505c7472559896730651002773519134aeb62da931b6"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-landscape/14s.png",
+      "bytes": 51811,
+      "sha256": "820e1877e29bc1c3b58ffd1fadddca0a03643ff8f731606cf7fe5ac62104bb14"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-landscape/22.9s.png",
+      "bytes": 51801,
+      "sha256": "8f4f3573217de2e9afb8ee9c47b4becfbeca45958d153063038400234c310c5a"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-landscape/3s.png",
+      "bytes": 43915,
+      "sha256": "7278085e6a9cdfb52743d60ad019d23c66f300a77679c6233986837271f1c3ec"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-landscape/8.9s.png",
+      "bytes": 44300,
+      "sha256": "0b277a11e662f466cb293afa9c03ccd06d092fb3c3bbbe51afd4bd78f96478b2"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-landscape/9.03s.png",
+      "bytes": 42154,
+      "sha256": "80039be98ad94eb7ab0ac6d9c61bbed68a28f518b4da1e880a181380268230d3"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-vertical/11s.png",
+      "bytes": 51411,
+      "sha256": "ab2bab92850a1457b989c3385bfa5a5846d1ff0d5bc027a7abec69d413a48485"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-vertical/14s.png",
+      "bytes": 59525,
+      "sha256": "620cc29350a9a101d9c730ff06dfd7d4f4e3612fa330a1e5860ace5af56abbba"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-vertical/22.9s.png",
+      "bytes": 59377,
+      "sha256": "8e3e67da88f7cd4978760ea334054aa3977524093a44ba4c2bea4322268a53a2"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-vertical/3s.png",
+      "bytes": 48384,
+      "sha256": "98e1435a8baa47c84af68e66f7a937dd7b037c03ceb5cb3248c3a21718b9f26a"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-vertical/8.9s.png",
+      "bytes": 48829,
+      "sha256": "d1908c7b7747ee35445addb825a7324db95327285d38cb1aa2d546aebec300eb"
+    },
+    {
+      "path": "evidence/independent-review/cohort-adoption-vertical/9.03s.png",
+      "bytes": 45539,
+      "sha256": "62402f9d3f8190a788fce2ed29aa7284a5ecee7f8c7ea5647885070de05be4c8"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-landscape/11.9s.png",
+      "bytes": 46691,
+      "sha256": "43ca20266d3f857d5902f4ecf48c3c1f5ed5437cfdcb4fa181c65b202fe31791"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-landscape/12.03s.png",
+      "bytes": 25428,
+      "sha256": "c9c7cc6635c184dc63c90fc81d0e0c9b0604dc0f68c2eadd64609a62ef3f9220"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-landscape/13.45s.png",
+      "bytes": 33508,
+      "sha256": "e0ea841fffe9d87de3a48405913e929fc58a81b09dfb99ce3a0f78a32d3724f1"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-landscape/16s.png",
+      "bytes": 40988,
+      "sha256": "75b01edde1bd3ff3a060d142af67593ca4608f933fd5572b3a415be706a3f9a3"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-landscape/25.9s.png",
+      "bytes": 41032,
+      "sha256": "79630e7dbe1659dbcb53145ead6980dd40611ee5f85457e1c0672d2a0ade8251"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-landscape/4.5s.png",
+      "bytes": 46577,
+      "sha256": "e9a93cb164f85ae23c9e7f40a47ddcbc1c129e661b26e3b018a7df5b59f79c7e"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-vertical/11.9s.png",
+      "bytes": 50374,
+      "sha256": "3906d30c607e754bf888e9a9fec3ae5cb3315b4548f509b0140ad06eca7c27ea"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-vertical/12.03s.png",
+      "bytes": 28719,
+      "sha256": "4e94caae7d90aefc79f886a8352c4348b229acd0f0c2ff3082ffb529131286a2"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-vertical/13.45s.png",
+      "bytes": 37891,
+      "sha256": "032c38063c3a1ea3baaf87d69c1d61ebc179697a068a3d28973ed87a1931ce88"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-vertical/16s.png",
+      "bytes": 46079,
+      "sha256": "cb902fb7fcfdaa7de19f7bbba0b609381314f19f4e1ca536891cd8c27835feda"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-vertical/25.9s.png",
+      "bytes": 45849,
+      "sha256": "ff72b25d4c1eb00d75ade30d1ae536fd6cb148d3a2d817a287a2aed62fcefda2"
+    },
+    {
+      "path": "evidence/independent-review/earnings-and-income-vertical/4.5s.png",
+      "bytes": 50237,
+      "sha256": "eccae8583c712227ba6b4afbb4c0ed1dd9fb4441665fba8801d1524b55f5326f"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-landscape/1.45s.png",
+      "bytes": 33931,
+      "sha256": "c02c9586db3e4d49ca8eb6dd84e1d32d69a0e0ea4bb7fe69eff961badb46f072"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-landscape/13.9s.png",
+      "bytes": 40403,
+      "sha256": "2eec117b4c2946cab149e913122bff721e343e74e9a0ae45ebbd268dc7cd0856"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-landscape/14.03s.png",
+      "bytes": 29880,
+      "sha256": "97d0ac894c3ea61826947e23dd7e808d87f7e83c1dff9280385bf2ec937949b6"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-landscape/17s.png",
+      "bytes": 47532,
+      "sha256": "1ed3fbf6c530dc616a82a9cc993b775ea44d7e366a3496e7e71165e62af32269"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-landscape/23.9s.png",
+      "bytes": 48073,
+      "sha256": "6e5b4dff097e3dcdaa5987ab68544dddb170cea7b3028b37c8f37bac1444c4aa"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-landscape/3.5s.png",
+      "bytes": 40520,
+      "sha256": "d06e7a91b4b21124291d2a7f900eaf169d04801ac5eb6e075fa0bede5392e7ad"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-vertical/1.45s.png",
+      "bytes": 38658,
+      "sha256": "18787660cd3f7b858da6b760d79df568a2158bf6a883521923acd52bf1041f34"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-vertical/13.9s.png",
+      "bytes": 45208,
+      "sha256": "b6e21857513ace1f7596297433b0a40f7dd24db96489733d130786783fa5d3f4"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-vertical/14.03s.png",
+      "bytes": 32815,
+      "sha256": "eaf97f832e0bc54d24bb6e7f9d01b8fa59e00548d97fc54947045fd6d5abcd10"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-vertical/17s.png",
+      "bytes": 50429,
+      "sha256": "0a89d2cd77b15e7d9931d03a3e49ca92e41f82da579304cfb84294d14f9b6627"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-vertical/23.9s.png",
+      "bytes": 51407,
+      "sha256": "ff815c9a77407ea66afcfd2e1ad55c7af42e0e6b41e70299e137a9dd92a8274b"
+    },
+    {
+      "path": "evidence/independent-review/fund-assets-vertical/3.5s.png",
+      "bytes": 45688,
+      "sha256": "3b0d6f5e14a4dd35dbf15f2536612b1d5a8dcbee3436dde90793c455919f8dd0"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-landscape/11.9s.png",
+      "bytes": 48531,
+      "sha256": "dae2e9eaba7ab1fe800ea3d1842c6e056ecc88d1c30e299b9e8d4f18b287af12"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-landscape/12.03s.png",
+      "bytes": 24955,
+      "sha256": "107d9fb690ed440373de80b3101e22738b6f50e332b10d10c31eccc62e380208"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-landscape/13.45s.png",
+      "bytes": 32968,
+      "sha256": "7297b3184b6be4d0ffe7a76dc9102daea91f6c70a3cc03776edaf949eea0c9bb"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-landscape/16s.png",
+      "bytes": 37815,
+      "sha256": "67a055e9dbfeef0e5fc73a7c45d18e22fe36456aa4a6c6aa1ac8ef055f3dd0f0"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-landscape/25.9s.png",
+      "bytes": 37892,
+      "sha256": "dd8671332f377daa953a2bd9a894353113b6b8958cc0f5b22c101d565164c531"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-landscape/4.5s.png",
+      "bytes": 48414,
+      "sha256": "be141836dca1a2a3ffb3cecb9595950c820d70270c000d14243ac0de590a84a5"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-vertical/11.9s.png",
+      "bytes": 51972,
+      "sha256": "52a3a155d20dd0deea7580ad226defe8bcb1cfff61037eff2e16ac8227d3807b"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-vertical/12.03s.png",
+      "bytes": 28185,
+      "sha256": "afb9f427018b3aeb777ac35e6ca03e33315bbc42d38fbb83ce52d11ce53e67b0"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-vertical/13.45s.png",
+      "bytes": 37343,
+      "sha256": "d6b81971b2f33927ab15b5f15a0ed3c1c72b5e9473ec366508146aa2a35be802"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-vertical/16s.png",
+      "bytes": 42596,
+      "sha256": "6aa558851ec93b43be8d092b28c6f5512ee4485f702bee89f6700adfec694330"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-vertical/25.9s.png",
+      "bytes": 42304,
+      "sha256": "5f1becf101f6769ee62a66f44b6a96d409ac228ed932143853f85413b4bb0496"
+    },
+    {
+      "path": "evidence/independent-review/price-and-volume-vertical/4.5s.png",
+      "bytes": 51725,
+      "sha256": "ac476392c2b8286e7b04d98e315c7f0413a85d041d9ae8352fd6b13dee6f7f3b"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-landscape/11s.png",
+      "bytes": 45523,
+      "sha256": "39af1b4a067a9686c8c175acc201be2bee99d4cc3bf3540c270151e68487a0ba"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-landscape/14s.png",
+      "bytes": 51107,
+      "sha256": "5e45fccbeace6a26e9098f98d4d769c212701d885346df91ec7d07175bf0d74d"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-landscape/22.9s.png",
+      "bytes": 51176,
+      "sha256": "f541d668f86b394b623cff5ea3045e3f7d6cbaf065132d6a32ec0dbdb498df80"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-landscape/3s.png",
+      "bytes": 44760,
+      "sha256": "e2b2b32b81f508e3dce64f9863a75176dc83a78bda5f319a1dde5972dc05d0d3"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-landscape/8.9s.png",
+      "bytes": 45190,
+      "sha256": "15dd8ac3818f86f2746dabacb9a763a7a21878f46164f65b1b464d3636cb3b69"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-landscape/9.03s.png",
+      "bytes": 42092,
+      "sha256": "548ee73bca27ae7bac3d956639cf42bfb72dc7c577c42bca429eddc9a9f99a9a"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-vertical/11s.png",
+      "bytes": 51174,
+      "sha256": "2c98c56c8dd087e7980716d94d31540e3496c416e23dd26a248ccd2eafa5e70e"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-vertical/14s.png",
+      "bytes": 58739,
+      "sha256": "ee4514bdaa5394e06af8d155af8308a8d5cf6afb48b363f7b8d94bf6139ab2df"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-vertical/22.9s.png",
+      "bytes": 58957,
+      "sha256": "675d58b4bf49b3eebd6f63439416a706a10fa990b7793d191c91db2a0225cb75"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-vertical/3s.png",
+      "bytes": 49273,
+      "sha256": "e602bb4421f6f44903ececcb30937fe90f5288fd3d2c2387381db0d9ef896849"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-vertical/8.9s.png",
+      "bytes": 49720,
+      "sha256": "d721c130efd674d0440ee68ba7d933d15138bd8522c158bfbc0b58f0bbb78f07"
+    },
+    {
+      "path": "evidence/independent-review/project-recovery-vertical/9.03s.png",
+      "bytes": 45942,
+      "sha256": "5a95416cb4c3caab022868dfd172345037728bca2c86e1987bfa04b0c595f356"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-landscape/1.45s.png",
+      "bytes": 33637,
+      "sha256": "e702e8bcfd697928245d6058a16b536d208f53dc5fd79fb8b06fc6de26ff47f7"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-landscape/13.9s.png",
+      "bytes": 39677,
+      "sha256": "e19e407dbbef564eee6b0cac5cc27c3cb686a393334915282cd8e4b9167e1c93"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-landscape/14.03s.png",
+      "bytes": 30381,
+      "sha256": "70693f0dd5c4734333a28b4446ad39e2e3856eb3b36711f503f268290a820d58"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-landscape/17s.png",
+      "bytes": 48020,
+      "sha256": "c1afec359bb42780cb8d727679fce021023d29266e1f0d6886545ddf5b29a4bb"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-landscape/23.9s.png",
+      "bytes": 48350,
+      "sha256": "9d3dd5d6565e49af45361aab692c4477b990d670a1feecd893685d1219ccff18"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-landscape/3.5s.png",
+      "bytes": 39772,
+      "sha256": "686a24bd3e703296f5aa4007ce2859e767b2304d161456a5ebc4856eb4ef9ce6"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-vertical/1.45s.png",
+      "bytes": 38270,
+      "sha256": "9fc06d9f2d032e294024d260254bb768b20bebec2b159c9fa796e04392f545ab"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-vertical/13.9s.png",
+      "bytes": 44570,
+      "sha256": "49334a9a0d2d305e69faa42e180c23ac63f1508c6c71cfdd3b5270b8beb2dc2c"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-vertical/14.03s.png",
+      "bytes": 33363,
+      "sha256": "c6a6f45ad80f9d92faea861351e4990c703933bfc18a2adcd97fa258e2edf3c7"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-vertical/17s.png",
+      "bytes": 50778,
+      "sha256": "406199e26964b172530247c1f105e1554b5a5d0c5885cecb4a923816650a1720"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-vertical/23.9s.png",
+      "bytes": 51872,
+      "sha256": "0a5b2e41f0c9df02553d283645fb272b649e957b42194094a7e67b8f3065bd4c"
+    },
+    {
+      "path": "evidence/independent-review/warehouse-units-vertical/3.5s.png",
+      "bytes": 44867,
+      "sha256": "3e6d5cc08f6629513c7d4237e0531a47220664e98a4d9970eb196b20278a62b6"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/boundaries/frame-0000.jpg",
+      "bytes": 34684,
+      "sha256": "cd11e1d607f1c7bf22ec1d9877646707be9280ecc63eab0db74b121fb9b00b84"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/boundaries/frame-0001.jpg",
+      "bytes": 38780,
+      "sha256": "831330cba3500a7f5a1b6aa10b28b61f563c707587c62b393da380d39dba9a8e"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/boundaries/frame-0002.jpg",
+      "bytes": 64068,
+      "sha256": "78f788cb9ad79756831efbf88c468d6929442959909d91185ae575a10e456eee"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/boundaries/frame-0003.jpg",
+      "bytes": 33555,
+      "sha256": "aff3045a5aa6b61f0deefb0c78a31c76811624b4ec72eb1b5c08bd6cb5bd3607"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/boundaries/frame-0004.jpg",
+      "bytes": 37692,
+      "sha256": "f851f7bc99c8b0d391e9003697d346b2120df62b4333aa8ffc7656ad922bb4f7"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/boundaries/frame-0005.jpg",
+      "bytes": 53662,
+      "sha256": "4af98aa308dcde5968792f3a028ca85a6ebeedfac20b26ad3e537a14004bbf90"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/boundaries/index.html",
+      "bytes": 1812,
+      "sha256": "e279621195695e801816b36de90b7318f81bdae602a1079591b7150c6ecbd38f"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/boundaries/review.json",
+      "bytes": 1394,
+      "sha256": "074397cd833a01cb003e00b1d5d2f093fd612809d8df0230e0ec2d0133831fda"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/boundaries/strip.png",
+      "bytes": 97585,
+      "sha256": "14d779f19ce12facb433457906acadfd96f0b52ca4b45f91257cc77b56af6cbf"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/check.json",
+      "bytes": 271,
+      "sha256": "3cf2da56b9fc55bb5ec7eb8892f39858482f33ffefbffc8e7d9a5c8f48cadb89"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/phone.png",
+      "bytes": 345344,
+      "sha256": "05889d87ccc15df9631a0de56746aae3b3762694976fe5c61daa4db56d3fdccd"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/qa.json",
+      "bytes": 7398,
+      "sha256": "4d7c537a7c93f5d6432a4ea0f5cb2f0ec329d4d94678a489096e8fb9cdb1a13b"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/seek.json",
+      "bytes": 1029,
+      "sha256": "5dff5aa56e14548ce70ca54fb381ef20949c7c7ca71c52f498cc78961fc07ca3"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/sheet.png",
+      "bytes": 109176,
+      "sha256": "3bd08e40891c0e90f0f9d407d543c39cb169fda5638267cbdd9a227522949595"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/timeline.png",
+      "bytes": 161061,
+      "sha256": "406092a90371aef8318148a2622f2425d11567981e0750e5e2d306b57a8c0fe5"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/video.mp4",
+      "bytes": 525701,
+      "sha256": "765a9a7175cda383bc2defbe67357109e660e57839ee6605f34ad902877518c7"
+    },
+    {
+      "path": "evidence/price-and-volume-landscape/video.mp4.json",
+      "bytes": 2740,
+      "sha256": "5e08bd48b9616b70dc7ac9c307901083d3537410f341ec4d84af9e7a2977f5a4"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/boundaries/frame-0000.jpg",
+      "bytes": 39691,
+      "sha256": "67b6a23e0d8b450ad7e3d9c36296c26d576fd6dc1dcb6eae6a1eded226768116"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/boundaries/frame-0001.jpg",
+      "bytes": 43793,
+      "sha256": "5f92158ac6b3401ada082c5d0ed3662b2d40982a7f479e1a242b2835d3a3a205"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/boundaries/frame-0002.jpg",
+      "bytes": 69867,
+      "sha256": "610efd7600acd1671d84c16195fddee91f3bbd20aa30727b41b427e5d2329390"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/boundaries/frame-0003.jpg",
+      "bytes": 42589,
+      "sha256": "ff00e0055ef797b918c99988f75573c5a596be0ee6a7ff2a7884a2b56372b03c"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/boundaries/frame-0004.jpg",
+      "bytes": 46711,
+      "sha256": "5df57b38bc77c3f4113b10dc999103b627adcea483abff062965b7426d5d76fb"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/boundaries/frame-0005.jpg",
+      "bytes": 63880,
+      "sha256": "83379fd50e786e070bf219c1a0176c2c5f9e4c2912c2868028aface4164fd1d0"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/boundaries/index.html",
+      "bytes": 1812,
+      "sha256": "e279621195695e801816b36de90b7318f81bdae602a1079591b7150c6ecbd38f"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/boundaries/review.json",
+      "bytes": 1393,
+      "sha256": "ed2997ba18526da7a588d8e70c005067c20a8ae219f7134f4774dbe059301ab5"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/boundaries/strip.png",
+      "bytes": 99300,
+      "sha256": "a6352c9041556472490815e5db49d65e8be0ef0bff77d1867b5df84974ba4906"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/check.json",
+      "bytes": 271,
+      "sha256": "99fe0577e2698ffcb8372de996ede2736c3e0759b46056c3d658a034d556d36a"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/phone.png",
+      "bytes": 382734,
+      "sha256": "7e3ec248e58df61d5718a6707cdd718a778b7902688b9b7a4e9b4484258be29e"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/qa.json",
+      "bytes": 7335,
+      "sha256": "6c2ea665edf01186039cbfef555da276855422184316e0dfd098426bffc43586"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/seek.json",
+      "bytes": 1029,
+      "sha256": "e682ea9906e73c5671ac7fec83d321bfad3b0a2518beb6bf920609a2a7d42d1a"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/sheet.png",
+      "bytes": 122728,
+      "sha256": "3c47358aeecd58e51b1269a4ba1fc31563f91448107d26444753566ec9d1f786"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/timeline.png",
+      "bytes": 82416,
+      "sha256": "068ba268c2565324ebaec3de054db6f44451826d8a37281dd942c27af26ef072"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/video.mp4",
+      "bytes": 345465,
+      "sha256": "b15a7818dd5cb04f53932763599050784c69a6912d665329bc3495c3e7887140"
+    },
+    {
+      "path": "evidence/price-and-volume-vertical/video.mp4.json",
+      "bytes": 2740,
+      "sha256": "d66ff4011a52879d0e4a1c0a939075c59beae96b13d17991ed60ee7417b99dfb"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/boundaries/frame-0000.jpg",
+      "bytes": 36310,
+      "sha256": "25a6eaf7dfb74d9f70d5d20d9fed675a5f4411f5a72e83569a4b2e10e167ba08"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/boundaries/frame-0001.jpg",
+      "bytes": 38993,
+      "sha256": "ad558ef62877a39f8742b47584ba2f8e240f981e8aca80b929e7019d2938f24e"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/boundaries/frame-0002.jpg",
+      "bytes": 58817,
+      "sha256": "5fd95bc97bcef05c6970b957c18d5b94ade4932a0bcc3d26a999cb786fb6a85d"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/boundaries/frame-0003.jpg",
+      "bytes": 53628,
+      "sha256": "f17a9f047e4e4c0bbb032703427289ab6dafd70b25e7a12aec6e5a65954a1300"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/boundaries/frame-0004.jpg",
+      "bytes": 57602,
+      "sha256": "83c1a9451ef62e01f8ab6f1cf73f8dd52bae0a955ccaf7a606fec79610c47790"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/boundaries/frame-0005.jpg",
+      "bytes": 67291,
+      "sha256": "376432b8f3390f25d1299246f1f98078f9795b6a1bb981d9f3e8d27b50661017"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/boundaries/index.html",
+      "bytes": 1806,
+      "sha256": "d735e909ecb8e49a2c2809c3ee590158c881dad46f096170a377ca5f4763ceea"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/boundaries/review.json",
+      "bytes": 1388,
+      "sha256": "ec223fa49eff3d625757ce402af23f35c1a7fae6935071666074cd1ca1751516"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/boundaries/strip.png",
+      "bytes": 113778,
+      "sha256": "fd218fd240c62456b96f29744dddb6809a9a16fe703a8862520f744cd3540f65"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/check.json",
+      "bytes": 270,
+      "sha256": "2cb2b246e82fb0c2c416955016f9091de6aa51237392c24e7c09862ef2136a2a"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/phone.png",
+      "bytes": 417681,
+      "sha256": "9b0716e15fe9ca643f589c0cf49ba479cf22cbdf203a1a9f13e35619086debb3"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/qa.json",
+      "bytes": 6717,
+      "sha256": "2dc49f95bb3b863e79dcc164e8642377a1cf30ac579804b6b64f677f83487d22"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/seek.json",
+      "bytes": 1023,
+      "sha256": "21f05e9edd1e20e18167bb74943c6a5b304d6f86f693325eea80ae413b4a2e6f"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/sheet.png",
+      "bytes": 120698,
+      "sha256": "6b583af23e7ebdbfb02749d8b2b8a9e120a0d2102278d9a77ab06f69695ff6d3"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/timeline.png",
+      "bytes": 147646,
+      "sha256": "8120ce01d667d7304fe0103c33006f9d1bddf08e429ed8ac02418285fccd04d9"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/video.mp4",
+      "bytes": 542171,
+      "sha256": "2c80e2d2fc57e4e93980f23bd06edf9b9982deb44f754a65e378f2c2ad556769"
+    },
+    {
+      "path": "evidence/project-recovery-landscape/video.mp4.json",
+      "bytes": 2740,
+      "sha256": "0ad34f1924c7f44d2130cf268ef29a6dadaa329eacd2f7f9d31769ae6157673d"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/boundaries/frame-0000.jpg",
+      "bytes": 43201,
+      "sha256": "9acbe0f5866a086ee6765c4a576dd7c7c840a7e3797b9866257b3b1ca4f3a5bb"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/boundaries/frame-0001.jpg",
+      "bytes": 46293,
+      "sha256": "b04e6c8d8ed3375dae043b7c5b5e94cd04f70013c74be0e2b73e52897f8cc85b"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/boundaries/frame-0002.jpg",
+      "bytes": 67420,
+      "sha256": "aff11329fb770da95b3acdc9cbef1577c58cc22783f02c8bdfbe10987757a5e9"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/boundaries/frame-0003.jpg",
+      "bytes": 63039,
+      "sha256": "7ab3757c84a83e4b63c8d503a4662c00bf3447e8871a4154d4332c3d73a299f8"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/boundaries/frame-0004.jpg",
+      "bytes": 66879,
+      "sha256": "f89d68f43530db755e3fd04f7860cc519a9e1af992c6d1dfa15d8709b7aef878"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/boundaries/frame-0005.jpg",
+      "bytes": 82104,
+      "sha256": "abe486e5456122dc7cc24d69abfd6b9c38a95daf506372c83ecf47cc5df0ba9d"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/boundaries/index.html",
+      "bytes": 1806,
+      "sha256": "d735e909ecb8e49a2c2809c3ee590158c881dad46f096170a377ca5f4763ceea"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/boundaries/review.json",
+      "bytes": 1387,
+      "sha256": "8cf8c1fb3ecad49c3b3fac38d93546569539071aedb8e1fa1216b45d6346f34c"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/boundaries/strip.png",
+      "bytes": 118129,
+      "sha256": "ee6bc15f4ea1c93c726cdd0df66459fc531f91f0e32507417ee5f1b4de102a2d"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/check.json",
+      "bytes": 270,
+      "sha256": "6af8698bd1ec77bd38246ec40743abf9269ae8b12c929d72ca7c787c72c6e195"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/phone.png",
+      "bytes": 419910,
+      "sha256": "140efeb2db14099907493efb08882dabdc14ce3d538a4b9768f9c27f9ea4af29"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/qa.json",
+      "bytes": 6673,
+      "sha256": "60a311894b753c499fb39c5087fdb60ae891715b093000c498bdf6a20b899f21"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/seek.json",
+      "bytes": 1023,
+      "sha256": "172e0e80a1b111bd0a45d9313afec5016ec1a7c8447e1ab7194ec7767b4e2d11"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/sheet.png",
+      "bytes": 140611,
+      "sha256": "a6ab644e57fb98f4f09138993a63f49b27f96a7e8a121916d6e1c2110811db6f"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/timeline.png",
+      "bytes": 98955,
+      "sha256": "45df38391840d2c14d020a6ec92b4445a8f3c33eb6e0297f29d75c9b2c5280da"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/video.mp4",
+      "bytes": 365775,
+      "sha256": "650a4e0ebda039a46c00f4fe15f47f7ec9156bbd2768bb50e643b78c29fd7dfc"
+    },
+    {
+      "path": "evidence/project-recovery-vertical/video.mp4.json",
+      "bytes": 2740,
+      "sha256": "13b007affc94bca343bb9f77cfa1251847098301dd7575fa02cfedeaf88282a4"
+    },
+    {
+      "path": "evidence/source-checks.txt",
+      "bytes": 16266,
+      "sha256": "68637b19a67a571e544e2561c9e2e57130ee0ebf0093252f52ef7d35b86f2bdc"
+    },
+    {
+      "path": "evidence/summary.json",
+      "bytes": 8537,
+      "sha256": "d8a720e35276c97ef00283fa1dca022a41f8a3fff1de5caa77387e4b7fa0efbc"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/boundaries/frame-0000.jpg",
+      "bytes": 34840,
+      "sha256": "d63f267514f3f10e74b80f26e967d5de6e0c38c32f7a1650307efeb21f0a4fa8"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/boundaries/frame-0001.jpg",
+      "bytes": 38331,
+      "sha256": "92215d694ac15034546fc1b9db5e5aa4f5e396971d2873f2d2352098ed234278"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/boundaries/frame-0002.jpg",
+      "bytes": 56072,
+      "sha256": "53d9970cac8d8ce77bad622e953d06b774b1d4b515eb0aaeba947c38b25ff9be"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/boundaries/frame-0003.jpg",
+      "bytes": 38622,
+      "sha256": "2273618ddd69af06b65fb2f171e82e03f77466df68f7a9ae0b1e483cb4375186"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/boundaries/frame-0004.jpg",
+      "bytes": 43359,
+      "sha256": "7c3449bf06776bbfe6c42c673e7d14651047df215e0c6fca5fe9d7cc8b932bcd"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/boundaries/frame-0005.jpg",
+      "bytes": 63891,
+      "sha256": "c113c49ff56fdcad9f61474bb81079c29773b4f1013d611b1cae3e1d8489e4b2"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/boundaries/index.html",
+      "bytes": 1808,
+      "sha256": "3b3e2655e33cfc8343a0c8043051356359ab1a3be044253b21d79e9a632a2d70"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/boundaries/review.json",
+      "bytes": 1389,
+      "sha256": "cda0cd6988bc915a300009a82643323dfb04b555fa39d1c8afe9a4fe9d38199d"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/boundaries/strip.png",
+      "bytes": 102123,
+      "sha256": "5cc60ead57a44d750227cdaa78867918c5534dcdf91e745e4ce2d94fdfa7d807"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/check.json",
+      "bytes": 270,
+      "sha256": "180369d9836c33f3b80a04632061777f4d749ccc558d7db22c36a9b7b92b95e3"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/phone.png",
+      "bytes": 378992,
+      "sha256": "4924a4600fe3c0ce367151425fa070c18251167e8b58e5b4ac3a40e5a80aaceb"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/qa.json",
+      "bytes": 6856,
+      "sha256": "079242a7853dff1eef24ae0992029c773614b8a95bb2fc95ad8a59bd12eb2463"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/seek.json",
+      "bytes": 1029,
+      "sha256": "7589982f3b85ac470448d17635c865d5cfb78d5952e42dfe3a4c3f7dc827a780"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/sheet.png",
+      "bytes": 111695,
+      "sha256": "8edb67a873007c06977d9074249b2f34adfd6474a28217e11b3c5e61a18769c7"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/timeline.png",
+      "bytes": 135185,
+      "sha256": "b3887e67f1ebfa060167217087b71e4823ed3e3833d991184e28b0ef6ee0e3af"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/video.mp4",
+      "bytes": 540923,
+      "sha256": "4440c14b0f304d3aeb3c9dfedebe1452c92e4bc0a881ffb7b9e4b4a5c4a3c821"
+    },
+    {
+      "path": "evidence/warehouse-units-landscape/video.mp4.json",
+      "bytes": 2740,
+      "sha256": "8e5767e91af0bfb83dc224ae6be570f851f5683a1967adaf119816e8f46cbc96"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/boundaries/frame-0000.jpg",
+      "bytes": 43839,
+      "sha256": "b410ec112532d3b46f257a46291a801abf59c18517c677a03cb3ef4707976244"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/boundaries/frame-0001.jpg",
+      "bytes": 47697,
+      "sha256": "1a36ceba82336c060b41f9876d098f6bd4d5aa176564aa307e84c3cdd4546e96"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/boundaries/frame-0002.jpg",
+      "bytes": 66116,
+      "sha256": "a2a6124e919daeb469692450d37725e38656b46807791591cbc0bafdf2573514"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/boundaries/frame-0003.jpg",
+      "bytes": 45625,
+      "sha256": "98078e8b5f2339e0ab4cbbb556baeecf4a25199ffede38409108e120b7db794d"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/boundaries/frame-0004.jpg",
+      "bytes": 50464,
+      "sha256": "967db37207bc0b438ee81156d8126a364a71a246a45d305016ba2b23ec42a1aa"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/boundaries/frame-0005.jpg",
+      "bytes": 70282,
+      "sha256": "27caee6f0664f7e34f2b2c064c9b3f84f9147b584f8e91d8c856ad7faa0f4326"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/boundaries/index.html",
+      "bytes": 1808,
+      "sha256": "3b3e2655e33cfc8343a0c8043051356359ab1a3be044253b21d79e9a632a2d70"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/boundaries/review.json",
+      "bytes": 1388,
+      "sha256": "97387777c003cf4b1ea4880657eef0ce7d3ccffc1731260ceb02dac50fbb1688"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/boundaries/strip.png",
+      "bytes": 103451,
+      "sha256": "5fabc77344f27f643251cba5c764319dcdfc612384ee569cdfa4429952cac4f7"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/check.json",
+      "bytes": 270,
+      "sha256": "213d9810aa6fc453a03132e9958543e7aff22654a9168aadf30239a7901e26bc"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/phone.png",
+      "bytes": 381969,
+      "sha256": "b10261ab00b42651cb0f0255234abfb2c9354b81ee0fdd666b3ce469cccedb2e"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/qa.json",
+      "bytes": 6819,
+      "sha256": "a81dbf59a9b3b1190e3451030a7b210cf104ff7cb882d7f5e0fdaa85370183ed"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/seek.json",
+      "bytes": 1029,
+      "sha256": "590d05c1d1f032d09d54cf7acdb271d8c4b299f201b76a0b89f5bb5c4ce32c4a"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/sheet.png",
+      "bytes": 124486,
+      "sha256": "624f7675c5f3aeb254bcf9eb2eddea971e2cacac1a3e62f22ee5c7b62766413c"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/timeline.png",
+      "bytes": 91168,
+      "sha256": "a40cb296142776d5e39766bac2b5f5ec76194ff316922c80a7dc9926647c5bd3"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/video.mp4",
+      "bytes": 351776,
+      "sha256": "23132dbf9e1982a5cf356bfb75e43e2baef4d3184dda011e2e4c2f5ff8ff193b"
+    },
+    {
+      "path": "evidence/warehouse-units-vertical/video.mp4.json",
+      "bytes": 2740,
+      "sha256": "61e1f10bd5c394cf55bcf05733c6c9fa9514dc7111ad6eeec2d8db2b0fe944f6"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 7233,
+      "sha256": "b04684c1e0c2b320ef9d992aa3c1a189ce37cda9492bba9644c9ba49a28a80ad"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1099,
+      "sha256": "bde1fff290731a65c93efe5b2a5044acb9b0e4b2b9b99ed97871fab2ae8a16f1"
+    },
+    {
+      "path": "package.mjs",
+      "bytes": 6174,
+      "sha256": "a6bcbb3b6c647c3f66c27134ec5e8e1a55cf6084f63b80dc9a6499cbc2f873d3"
+    },
+    {
+      "path": "preview.html",
+      "bytes": 5919,
+      "sha256": "5e5ce7ac86938a0e397fd7c3a663ef4f04d806510ef919c4787b0a2a07fd36ab"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3741,
+      "sha256": "27702f9738ac481fa63f0793a50fc60df59983319e1ec42714f56291cd829b39"
+    },
+    {
+      "path": "REVIEW.md",
+      "bytes": 10987,
+      "sha256": "57ecf533868c625dcffe3e9161d0e95f634093dd237c3d7cb3ba192881ef042b"
+    },
+    {
+      "path": "source/bridge.mjs",
+      "bytes": 3650,
+      "sha256": "53ca7e6fbcccb94f044edd20a4baee1dd2762f19df176fd42769fa2f90aaee66"
+    },
+    {
+      "path": "SOURCES.md",
+      "bytes": 1459,
+      "sha256": "af81f573f4e2d4b4d3743c8e3e9f79bb4345b2cebf179ab818cd2e95453b7932"
+    },
+    {
+      "path": "specimens/cohort-adoption-landscape/storyboard.json",
+      "bytes": 21822,
+      "sha256": "fb2b44473cae78343447193444602e34eb798f81ba80ef4a5fdd1b47e9960993"
+    },
+    {
+      "path": "specimens/cohort-adoption-vertical/storyboard.json",
+      "bytes": 21338,
+      "sha256": "798e35f987595753c0b20264de82d6e883c9ece5b16cfcd1cfc41dccb17fadcb"
+    },
+    {
+      "path": "specimens/earnings-and-income-landscape/storyboard.json",
+      "bytes": 16265,
+      "sha256": "2ead7b4979288b743643bbb70af3ab98d877268a5ff2742835dd8719315433bf"
+    },
+    {
+      "path": "specimens/earnings-and-income-vertical/storyboard.json",
+      "bytes": 16396,
+      "sha256": "637503307c35a8aaf6cd3987b2ed87625a14de82ed499ad65b1c0625c0ea98df"
+    },
+    {
+      "path": "specimens/fund-assets-landscape/storyboard.json",
+      "bytes": 15613,
+      "sha256": "272135ef3e276fefffd49f6829222297b142ecc27af7112f6613cd6a3855b52f"
+    },
+    {
+      "path": "specimens/fund-assets-vertical/storyboard.json",
+      "bytes": 15606,
+      "sha256": "8de371fa56c76883e8320bdc7580c2c2f2934eb8e0216556f90bcb6b847e4be7"
+    },
+    {
+      "path": "specimens/price-and-volume-landscape/storyboard.json",
+      "bytes": 14794,
+      "sha256": "d70af61221280765d51a42b9e0f7e53ef8018bdc71ee02b3797eeb744979837d"
+    },
+    {
+      "path": "specimens/price-and-volume-vertical/storyboard.json",
+      "bytes": 14812,
+      "sha256": "45dcda9e6666fc3e3370f37569802c99f3b9cef6fd291ad9d9705c065fd2fe8e"
+    },
+    {
+      "path": "specimens/project-recovery-landscape/storyboard.json",
+      "bytes": 20731,
+      "sha256": "b56e70f36f9653be07d2e370e21ee397a4c6f0faca8ea812dffb3fb7d3985261"
+    },
+    {
+      "path": "specimens/project-recovery-vertical/storyboard.json",
+      "bytes": 20558,
+      "sha256": "f921358f0da5eabcdcacaa3a7068fca99ccc1dc831e34838ca294f6f6f06215e"
+    },
+    {
+      "path": "specimens/warehouse-units-landscape/storyboard.json",
+      "bytes": 15812,
+      "sha256": "86cbfbfbd2d6634ef572b3467145047cc9ce5fdaddcf3d113a7d06fbd0875653"
+    },
+    {
+      "path": "specimens/warehouse-units-vertical/storyboard.json",
+      "bytes": 15815,
+      "sha256": "29fc6665e55fef9703341d9e46bd217cb48f635ab5b88f6079a1d3b8d84236c9"
+    },
+    {
+      "path": "verify.mjs",
+      "bytes": 2003,
+      "sha256": "f03134b0d95bb5a4269891d7d62c7449634bb8b7d2733662eaa997c97941d040"
+    }
+  ]
+}

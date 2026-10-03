@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/drivers-and-flows/specimens/fund-assets-vertical/build/pipeline/2026-10-03T03-33-53-334Z-4d180333/video.mp4",
+  "outputSha256": "5218ce7d5d9a37d74996c67d11874197d93d1fa420ef4bbdbea6044b33ef2968",
+  "inputId": "fc50229bec75c552e2a9fbcdb985fb1e010fccd5368bb5dd008681a0431b8581",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "fund-assets: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "fund-assets: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 419,
+      "time": 13.966666666666667,
+      "reasons": [
+        "fund-assets: last frame",
+        "Before fund-assets-check"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 420,
+      "time": 14,
+      "reasons": [
+        "fund-assets-check: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 426,
+      "time": 14.2,
+      "reasons": [
+        "fund-assets-check: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 719,
+      "time": 23.966666666666665,
+      "reasons": [
+        "fund-assets-check: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

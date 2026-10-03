@@ -58,8 +58,8 @@
       "name": "Indexed performance and historical analog",
       "category": "Chart",
       "priority": "Now",
-      "implementation": "New",
-      "readiness": "proposed; not built",
+      "implementation": "Extend",
+      "readiness": "Native prototype: two original cases, landscape/vertical source, calculation and encoded review evidence; continuous playback and promotion pending",
       "effort": "M",
       "sourceIds": [
         "S01",
@@ -74,7 +74,7 @@
         "series",
         "event anchors"
       ],
-      "existing": "line and timeline can supply marks; normalization and aligned comparison are not packaged.",
+      "existing": "Observed-anchor rebasing, original units/dates, shared elapsed-day scale, explicit missing values and older-only continuation shading are packaged in examples/library-kits/drivers-and-flows.",
       "guardrail": "Label elapsed time and base; never animate the old future as the predicted new future.",
       "reuse": [
         "product cohorts",
@@ -91,8 +91,8 @@
       "name": "Return-driver decomposition",
       "category": "Chart",
       "priority": "Now",
-      "implementation": "New",
-      "readiness": "proposed; not built",
+      "implementation": "Extend",
+      "readiness": "Native prototype: two original cases, landscape/vertical source, calculation and encoded review evidence; continuous playback and promotion pending",
       "effort": "L",
       "sourceIds": [
         "S05",
@@ -107,7 +107,7 @@
         "interaction residual",
         "units"
       ],
-      "existing": "bars, equation and native contribution stacks exist; signed waterfall and exact decomposition do not.",
+      "existing": "Exact two-factor product bridge retains interaction and separate additive income; proportional signed native bars show percentage-point contributions and percent change. Cash is not reinvested; see examples/library-kits/drivers-and-flows.",
       "guardrail": "Multiplicative drivers are not naively additive. Show interaction/residual or use a declared log attribution method.",
       "reuse": [
         "revenue analysis",
@@ -512,8 +512,8 @@
       "name": "Flow versus stock reconciliation",
       "category": "Chart",
       "priority": "Now",
-      "implementation": "New",
-      "readiness": "proposed; not built",
+      "implementation": "Extend",
+      "readiness": "Native prototype: two original cases, landscape/vertical source, calculation and encoded review evidence; continuous playback and promotion pending",
       "effort": "M",
       "sourceIds": [
         "S05",
@@ -528,7 +528,7 @@
         "revaluation",
         "period"
       ],
-      "existing": "cash-lock and native stacks exist; a signed reconciliation bridge needs composition.",
+      "existing": "Signed native bridges reconcile independent opening/closing stocks with supplied changes and explicit unexplained residuals; fund assets and warehouse inventory cover both residual signs. See examples/library-kits/drivers-and-flows.",
       "guardrail": "AUM changes are not fund flows; preserve residuals and units.",
       "reuse": [
         "inventory",
@@ -1755,8 +1755,8 @@
       "name": "Auditable data transforms",
       "category": "Tool",
       "priority": "Now",
-      "implementation": "New",
-      "readiness": "Partial implementation: finance calculation helpers pass focused tests; statistical transforms and visual integration remain planned",
+      "implementation": "Extend",
+      "readiness": "Partial implementation: finance helpers plus observed-anchor rebasing, exact product decomposition and stock reconciliation; rolling statistics, annualization and vintage alignment remain planned",
       "effort": "L",
       "sourceIds": [
         "S04",
@@ -1772,7 +1772,7 @@
         "transform",
         "method version"
       ],
-      "existing": "source entries and render receipts exist; reusable finance/data transform layer does not. engine/lib/finance.mjs now provides illustrative account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion; see docs/finance-calculations.md.",
+      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md.",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "reuse": [
         "science",

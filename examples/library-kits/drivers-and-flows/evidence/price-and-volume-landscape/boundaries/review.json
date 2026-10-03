@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/drivers-and-flows/specimens/price-and-volume-landscape/build/pipeline/2026-10-03T03-34-01-333Z-5652e866/video.mp4",
+  "outputSha256": "765a9a7175cda383bc2defbe67357109e660e57839ee6605f34ad902877518c7",
+  "inputId": "0b99182fb4c964c59e011d182ed9a6e3ee3e3483f56cb5c157b0f1bfadac0b18",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "price-and-volume-inputs: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "price-and-volume-inputs: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 359,
+      "time": 11.966666666666667,
+      "reasons": [
+        "price-and-volume-inputs: last frame",
+        "Before price-and-volume"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 360,
+      "time": 12,
+      "reasons": [
+        "price-and-volume: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 366,
+      "time": 12.2,
+      "reasons": [
+        "price-and-volume: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 779,
+      "time": 25.966666666666665,
+      "reasons": [
+        "price-and-volume: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

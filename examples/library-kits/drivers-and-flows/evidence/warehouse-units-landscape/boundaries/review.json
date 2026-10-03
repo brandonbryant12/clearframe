@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/drivers-and-flows/specimens/warehouse-units-landscape/build/pipeline/2026-10-03T03-34-35-247Z-a98b02d7/video.mp4",
+  "outputSha256": "4440c14b0f304d3aeb3c9dfedebe1452c92e4bc0a881ffb7b9e4b4a5c4a3c821",
+  "inputId": "67a60f69f74515c17bf31fd37c79776f0dbee960e6405613ead1838f50393471",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "warehouse-units: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "warehouse-units: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 419,
+      "time": 13.966666666666667,
+      "reasons": [
+        "warehouse-units: last frame",
+        "Before warehouse-units-check"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 420,
+      "time": 14,
+      "reasons": [
+        "warehouse-units-check: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 426,
+      "time": 14.2,
+      "reasons": [
+        "warehouse-units-check: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 719,
+      "time": 23.966666666666665,
+      "reasons": [
+        "warehouse-units-check: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}
