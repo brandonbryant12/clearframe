@@ -26,6 +26,8 @@ def _minimum_norm(start, end):
 
 
 def validate(path):
+    if isinstance(path, dict) and type(path.get('version')) is int and path['version'] == 3:
+        return _validate_chart_flight(path)
     if isinstance(path, dict) and type(path.get('version')) is int and path['version'] == 2:
         return _validate_preset(path)
     if not isinstance(path, dict) or set(path) != {'version', 'clock', 'projection', 'dof', 'keys'}:
@@ -62,6 +64,8 @@ def validate(path):
 def path_at(path, phase):
     validate(path)
     number(phase, 0, 1, 'sample phase')
+    if path['version'] == 3:
+        return _chart_flight_at(path, phase)
     if path['version'] == 2:
         return _preset_at(path, phase)
     keys = path['keys']
@@ -103,6 +107,9 @@ def bind(camera, path):
     camera.data.type = 'PERSP' if path['projection'] == 'perspective' else 'ORTHO'
     camera.data.dof.use_dof = path['dof']
     camera.data.dof.focus_object = None
+    if path['version'] == 3:
+        camera.data.sensor_fit = 'HORIZONTAL'
+        camera.data.sensor_width = 36
     camera['clearframe_camera_rig'] = json.dumps(path)
     def update(phase, frame):
         pose = path_at(path, phase)
@@ -252,3 +259,89 @@ def make_truck(pose, translation, move=(.16, .74), projection='perspective', dof
     return validate({'version': 2, 'clock': 'qualitative-pose', 'projection': projection, 'dof': dof,
                      'preset': 'truck', 'pose': copy.deepcopy(pose), 'translation': copy.deepcopy(translation),
                      'move': list(move), 'ease': ease})
+
+
+def make_chart_flight(*, count, spacing, bar_width, bar_depth, chart_height,
+                      amplitude, clearance, aspect, margin=.10,
+                      phases=(.08, .65, .84), eye_height=None):
+    """Weave across a flat X/Z chart, then reveal its full declared bounds.
+
+    Bars must be centered at i*spacing on y=0. The declared chart extends half
+    a spacing beyond the outer bars, from z=0 to chart_height. This rig protects
+    the camera point plus clearance against those rectangular bar envelopes;
+    it does not guarantee visibility, avoidance of other objects or good pacing.
+    The endpoint uses a 36 mm horizontal sensor and a 48 mm lens.
+    """
+    return validate({'version': 3, 'clock': 'qualitative-pose', 'projection': 'perspective',
+                     'dof': False, 'preset': 'chart-flight', 'count': count, 'spacing': spacing,
+                     'bar_width': bar_width, 'bar_depth': bar_depth, 'chart_height': chart_height,
+                     'amplitude': amplitude, 'clearance': clearance, 'aspect': aspect,
+                     'margin': margin, 'phases': list(phases),
+                     'eye_height': chart_height*.4 if eye_height is None else eye_height})
+
+
+def _validate_chart_flight(path):
+    fields = {'version', 'clock', 'projection', 'dof', 'preset', 'count', 'spacing',
+              'bar_width', 'bar_depth', 'chart_height', 'amplitude', 'clearance',
+              'aspect', 'margin', 'phases', 'eye_height'}
+    if set(path) != fields or path['clock'] != 'qualitative-pose' or path['projection'] != 'perspective' or path['dof'] is not False or path['preset'] != 'chart-flight':
+        raise ValueError('Unsupported chart-flight contract.')
+    if type(path['count']) is not int or not 2 <= path['count'] <= 12:
+        raise ValueError('Chart flight needs 2–12 equally spaced bars.')
+    for field, limits in {'spacing': (.5, 10), 'bar_width': (.05, 5), 'bar_depth': (.001, 1),
+                          'chart_height': (.5, 30), 'amplitude': (.5, 20), 'clearance': (.01, 2),
+                          'aspect': (.4, 2.5), 'margin': (.05, .25)}.items():
+        number(path[field], *limits, field)
+    number(path['eye_height'], .01, path['chart_height']-.01, 'eye height')
+    phases = path['phases']
+    if not isinstance(phases, list) or len(phases) != 3:
+        raise ValueError('Chart flight needs entry, pullback and ending phase boundaries.')
+    for phase in phases:
+        number(phase, 0, 1, 'chart phase')
+    if not 0 < phases[0] < phases[1] < phases[2] < 1:
+        raise ValueError('Chart flight phases must leave nonempty entry and ending holds.')
+    # When X lies inside an expanded bar envelope, cosine gives an exact lower
+    # bound on |Y|. Outside that X interval the camera already clears the bar.
+    half = path['bar_width']/2 + path['clearance']
+    if half >= path['spacing']/2 or path['amplitude']*math.cos(math.pi*half/path['spacing']) <= path['bar_depth']/2+path['clearance']:
+        raise ValueError('The weave cannot clear the expanded bar envelopes.')
+    # Pullback begins on the front side and remains there. Its entire Y range
+    # must clear the bars, including a particularly small final chart fit.
+    if _chart_flight_at(path, 1)['location'][1] >= -path['bar_depth']/2-path['clearance']:
+        raise ValueError('The fitted overview is too close to the chart plane.')
+    return path
+
+
+def _chart_flight_at(path, phase):
+    def ease(value):
+        value = max(0, min(1, value))
+        return value*value*(3-2*value)
+    entry, pullback, ending = path['phases']
+    step, count, height = path['spacing'], path['count'], path['chart_height']
+    center = (count-1)*step/2
+    # End on an even slot in front of the chart, at or beyond its last bar. This makes
+    # the whole pullback clear analytically, for either odd or even bar counts.
+    end_x = 2*math.ceil((count-1)/2)*step
+    t = ease((phase-entry)/(pullback-entry))
+    x = end_x*t
+    y = -path['amplitude']*math.cos(math.pi*x/step)
+    z = path['eye_height']
+    location = [x, y, z]
+    target = [x+2.2*step, 0, z-.04*height]
+    # Turn around the final real bar, before looking past it into empty space.
+    # The turn stays within .4 spacing of that bar's X center, where |Y| is
+    # at least amplitude*cos(.4*pi). Thus the X look direction can reverse
+    # without passing through a camera/target coincidence or a vertical pole.
+    last_x=(count-1)*step
+    turn_start=last_x-.4*step
+    turn_end=min(last_x+.4*step,end_x)
+    turn = ease((x-turn_start)/(turn_end-turn_start))
+    target = [a+(b-a)*turn for a, b in zip(target, [center, 0, height/2])]
+    u = ease((phase-pullback)/(ending-pullback))
+    frame_width = max(count*step, height*path['aspect'])/(1-2*path['margin'])
+    distance = frame_width*48/36
+    end_location, end_target = [center, -distance, height/2], [center, 0, height/2]
+    location = end_location if u == 1 else [a+(b-a)*u for a, b in zip(location, end_location)]
+    target = end_target if u == 1 else [a+(b-a)*u for a, b in zip(target, end_target)]
+    return {'location': location, 'target': target, 'lens': 24+24*u, 'scale': 10,
+            'shift_x': 0, 'shift_y': 0, 'focus': math.dist(location, target), 'fstop': 8}

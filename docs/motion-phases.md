@@ -22,7 +22,7 @@ node engine/cli.mjs sculpture reserve-gate --draft --fps 12 \
   --out /tmp/retimed-gate
 ```
 
-`--phase-seconds` and `--duration` are mutually exclusive. Each phase must be positive, the total must be 1–12 seconds, and the existing 12–60 integer FPS limit applies. Cumulative requested boundaries round to the nearest output frame. Empty phases and phase durations below their declared minimum are rejected. A phase-retimed action traverses the same canonical pose range over its new frame interval; a hold remains static. This changes authored motion speed. It does not recompute physical forces or measured events.
+`--phase-seconds` and `--duration` are mutually exclusive. Each phase must be positive, the total must be 1–30 seconds, and the existing 12–60 integer FPS limit applies. Cumulative requested boundaries round to the nearest output frame. Empty phases and phase durations below their declared minimum are rejected. A phase-retimed action traverses the same canonical pose range over its new frame interval; a hold remains static. This changes authored motion speed. It does not recompute physical forces or measured events.
 
 The current reveal contracts require at least 0.25 seconds of action and 0.5 seconds of final hold. These are minimum mechanical safeguards, **not** enough time to read arbitrary evidence. Lengthen the final hold to the native text and narration's needs. Existing full-cycle recipes require at least one second and expose no safe internal trim.
 

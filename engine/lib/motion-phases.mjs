@@ -23,12 +23,12 @@ export function validateMotionContract(contract, loop) {
 
 export function motionManifest(contract, { frames, fps, loop, phaseSeconds } = {}) {
   validateMotionContract(contract, loop);
-  if (!Number.isInteger(fps) || fps < 12 || fps > 60 || !Number.isInteger(frames) || frames < fps || frames > 12 * fps) fail('use 12–60 integer fps and 1–12 seconds of frames');
+  if (!Number.isInteger(fps) || fps < 12 || fps > 60 || !Number.isInteger(frames) || frames < fps || frames > 30 * fps) fail('use 12–60 integer fps and 1–30 seconds of frames');
   if (phaseSeconds !== undefined) {
     if (!object(phaseSeconds) || Object.keys(phaseSeconds).length !== contract.phases.length || contract.phases.some(p => !finite(phaseSeconds[p.id]) || phaseSeconds[p.id] <= 0)) fail('phaseSeconds must give positive seconds for every phase, with no extra names');
   }
   const total = phaseSeconds && Object.values(phaseSeconds).reduce((a, b) => a + b, 0);
-  if (phaseSeconds && (total < 1 - 1e-9 || total > 12 + 1e-9 || Math.round(total * fps) !== frames)) fail('phase durations must match the requested frame count and total 1–12 seconds');
+  if (phaseSeconds && (total < 1 - 1e-9 || total > 30 + 1e-9 || Math.round(total * fps) !== frames)) fail('phase durations must match the requested frame count and total 1–30 seconds');
   let elapsed = 0, priorEnd = 0;
   const phases = contract.phases.map((p, index) => {
     elapsed += phaseSeconds ? phaseSeconds[p.id] : 0;
