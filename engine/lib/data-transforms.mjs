@@ -84,3 +84,46 @@ export function reconcileStock(input){
     netChange:number(closing-opening,'net change'),suppliedNetChange,explainedClosing,residual,
     components:[...supplied.map(p=>({...p,kind:'supplied'})),{id:'residual',label:'Unexplained',amount:residual,kind:'residual'}]};
 }
+
+/** Count share and weight share retain the full dated membership denominator.
+ * Missing observations are a separate state, never silently dropped or treated as failures.
+ */
+export function summarizeMembership(input){
+  object(input,['membershipDate','metricAsOf','condition','members'],'membership');
+  utcDay(input.membershipDate);utcDay(input.metricAsOf);
+  object(input.condition,['operator','threshold'],'condition');
+  const {operator}=input.condition,threshold=number(input.condition.threshold,'threshold');
+  check(['gt','gte','lt','lte'].includes(operator),'operator must be gt, gte, lt or lte');
+  check(Array.isArray(input.members)&&input.members.length>=1&&input.members.length<=100,'members needs 1–100 records');
+  const seen=new Set(),members=input.members.map((p,i)=>{
+    object(p,['id','label','value','weight'],`members[${i}]`);id(p.id,`members[${i}].id`);check(!seen.has(p.id),'member identifiers must be unique');seen.add(p.id);
+    label(p.label,`members[${i}].label`);const weight=number(p.weight,`members[${i}].weight`);check(weight>=0,'weights must be nonnegative');
+    const value=p.value===null?null:number(p.value,`members[${i}].value`);
+    const meets=value===null?null:({gt:()=>value>threshold,gte:()=>value>=threshold,lt:()=>value<threshold,lte:()=>value<=threshold})[operator]();
+    return{id:p.id,label:p.label,value,weight,state:meets===null?'missing':meets?'meets':'other'};
+  });
+  const totalWeight=sum(members.map(p=>p.weight));check(totalWeight>0,'membership needs a positive total weight');
+  const groups=['meets','other','missing'].map(state=>{
+    const rows=members.filter(p=>p.state===state),weight=sum(rows.map(p=>p.weight));
+    return{state,count:rows.length,weight,countFraction:rows.length/members.length,weightFraction:weight/totalWeight};
+  });
+  return{modelVersion:DATA_MODEL_VERSION,method:'full-membership-count-and-weight-shares',membershipDate:input.membershipDate,metricAsOf:input.metricAsOf,
+    condition:{operator,threshold},totalCount:members.length,totalWeight,observedCount:members.filter(p=>p.state!=='missing').length,
+    observedWeight:sum(members.filter(p=>p.state!=='missing').map(p=>p.weight)),groups,
+    members:members.map(p=>({...p,weightFraction:p.weight/totalWeight}))};
+}
+
+/** Signed difference in the original metric's units, never a ratio or return index.
+ * A missing observation has no relative endpoint. Optional size stays nonnegative.
+ */
+export function benchmarkDifferences(input){
+  object(input,['benchmark','items'],'benchmark comparison');
+  const benchmark=number(input.benchmark,'benchmark');check(Array.isArray(input.items)&&input.items.length>=1&&input.items.length<=12,'items needs 1–12 records');
+  const seen=new Set(),items=input.items.map((p,i)=>{
+    object(p,['id','label','value','size'],`items[${i}]`);id(p.id,`items[${i}].id`);check(!seen.has(p.id),'item identifiers must be unique');seen.add(p.id);
+    label(p.label,`items[${i}].label`);const value=p.value===null?null:number(p.value,`items[${i}].value`);
+    const size=p.size===undefined?null:number(p.size,`items[${i}].size`);check(size===null||size>=0,'size must be nonnegative');
+    return{id:p.id,label:p.label,value,size,difference:value===null?null:number(value-benchmark,'difference')};
+  });
+  return{modelVersion:DATA_MODEL_VERSION,method:'signed-metric-difference',benchmark,items};
+}

@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Participation and benchmark assets.** Full-membership count/weight summaries and signed benchmark differences feed eight landscape/vertical specimens. Missing members stay in their denominators; observed zero size and missing metrics have distinct marks. Circle radii follow square roots so area encodes a separate amount. Native quantities remain fixed through fades, with retained source, encoded evidence and independent review; continuous playback remains pending.
+
 - **Drivers and flows.** Observed-anchor rebasing, exact two-factor decomposition and stock reconciliation feed twelve native landscape/vertical specimens. Original units and dates, missing observations, explicit interactions and unexplained residuals keep the quantities auditable. Shared-domain bars preserve proportional length and area through fades; retained source, clips and independent encoded review remain prototypes pending subjective continuous playback.
 
 - **Source-informed research studies.** A white/charcoal/orange palette, restrained treatment, two native chart studies and an original porcelain reserve gate provide six landscape/vertical specimens. Reference observations are separated from adaptations; third-party chart pixels and data are excluded. Original inputs determine line positions, date-window boundaries and the endpoint percentage. Retained baked scenes, clips and independent review remain prototypes pending subjective continuous playback.
