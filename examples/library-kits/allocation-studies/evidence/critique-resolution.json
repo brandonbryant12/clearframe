@@ -1,0 +1,51 @@
+{
+  "status": "retained-for-prototype",
+  "critiqueSha256": "0505cdcc9be2765dfeea1b8194d18195fbc8a26998155445e45b09c530eec90d",
+  "inputSha256": "340f0ecf711b662ee858b42743f1ee2f4b426c8b652fec15e7e80682e27487b5",
+  "warnings": [
+    {
+      "name": "household-plan-landscape",
+      "findings": [
+        {
+          "level": "warn",
+          "where": "trays",
+          "message": "118 words on screen for 22.0 s (5.4/s). Viewers read ~3 words a second while listening; cut the text or extend the beat."
+        }
+      ]
+    },
+    {
+      "name": "household-plan-vertical",
+      "findings": [
+        {
+          "level": "warn",
+          "where": "trays",
+          "message": "118 words on screen for 22.0 s (5.4/s). Viewers read ~3 words a second while listening; cut the text or extend the beat."
+        }
+      ]
+    },
+    {
+      "name": "work-hour-plan-landscape",
+      "findings": [
+        {
+          "level": "warn",
+          "where": "trays",
+          "message": "128 words on screen for 34.0 s (3.8/s). Viewers read ~3 words a second while listening; cut the text or extend the beat."
+        }
+      ]
+    },
+    {
+      "name": "work-hour-plan-vertical",
+      "findings": [
+        {
+          "level": "warn",
+          "where": "trays",
+          "message": "128 words on screen for 34.0 s (3.8/s). Viewers read ~3 words a second while listening; cut the text or extend the beat."
+        }
+      ]
+    }
+  ],
+  "rationale": "The heuristic accumulates distinct wording from mutually exclusive readout states. Independent visible-state and phone-frame review retains the actual numeric update intervals and picture limits. This is a silent component study, not continuous reading-pace or final film acceptance.",
+  "sourceEvidence": "independent-review/contract-check.json",
+  "visualEvidence": "../REVIEW.md",
+  "continuousPlayback": "unverified"
+}

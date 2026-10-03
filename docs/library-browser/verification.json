@@ -3,16 +3,16 @@
   "status": "source-prototype",
   "browserReview": "pending-scoped-localhost-approval-after-file-url-policy-rejection",
   "catalog": {
-    "packages": 16,
-    "examples": 63,
-    "nativeVariants": 124,
+    "packages": 17,
+    "examples": 65,
+    "nativeVariants": 128,
     "preparedInserts": 1,
     "inventoryItems": 71,
-    "manifestFiles": 4235,
+    "manifestFiles": 4411,
     "issues": 0
   },
   "tests": {
-    "nodePassed": 212,
+    "nodePassed": 217,
     "nodeFailed": 0,
     "focusedPassed": 4,
     "independentPassed": 17,
@@ -32,23 +32,23 @@
     },
     {
       "path": "docs/library-browser/README.md",
-      "bytes": 6110,
-      "sha256": "4e23371bce4a64d61e1679eaea7a64d6619a1dac47a6484d674259d7131a19d6"
+      "bytes": 6112,
+      "sha256": "83cb4d494e1c808deb6e7cd47c95d20b417947a24026770f8c115617a1da3828"
     },
     {
       "path": "docs/library-browser/app.js",
-      "bytes": 271974,
-      "sha256": "42221560032e3a46743851684e9d09c5c029a1ffe332f6e419882298cc20270c"
+      "bytes": 277899,
+      "sha256": "07cf8c1b204365324394d8f6e1f5e9f8b2a9654b9cae3a71f5f67f66c50bfdf5"
     },
     {
       "path": "docs/library-browser/catalog.json",
-      "bytes": 324006,
-      "sha256": "7a4bf5cedb54b945e11305a27b58e6ab8e8cbc344d5ef818014d9adf97720d72"
+      "bytes": 331778,
+      "sha256": "84bd637df79bb973616e2abf83d872ff216fdd68b2dcff192b3d3da465e791d6"
     },
     {
       "path": "docs/library-browser/evidence/catalog-build.json",
       "bytes": 193,
-      "sha256": "76e0b0f4cf9aed620b5602512c789e47f45d1a86360f976f2810835f59ddf759"
+      "sha256": "77c62fae80124263e17f16e241d9f5f865a0e4ac34191d739b18508f86914b99"
     },
     {
       "path": "docs/library-browser/evidence/cli-smoke.json",
@@ -57,28 +57,28 @@
     },
     {
       "path": "docs/library-browser/evidence/node-tests.txt",
-      "bytes": 21273,
-      "sha256": "ad2f3d6457fce47315e3ebe144c8ad2b2d64776f69e3f8393f2b30ace4a2695f"
+      "bytes": 21760,
+      "sha256": "5e85074d85123ecfb08dcc6ac83ba6a3e909d1ed8315314cc20a343a452502da"
     },
     {
       "path": "docs/library-browser/evidence/source-review-checks.json",
-      "bytes": 8937,
-      "sha256": "835be1bd2ef89a3bfd9bd8c42780352eed75d630a28ad48f17b779b180cda701"
+      "bytes": 8987,
+      "sha256": "74e5962c38d9e686867ffad85679137928bdf74434c55200c7f0fc0c6e69f964"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.json",
       "bytes": 2106,
-      "sha256": "ef263ec4332f1e71997d79ecf1a6ebc84d2ad4c89436ba05390aa41eb8fe341b"
+      "sha256": "a84e52fd414a79269b888ea7d2480f03317fcb472f5b7bcf831c3324be8936d4"
     },
     {
       "path": "docs/library-browser/evidence/source-review-regressions.mjs",
       "bytes": 8284,
-      "sha256": "87d01c4d863ad8aae1d46b74661ef4ad2bac195b7fb06b210ad62e86b57e091d"
+      "sha256": "0a837edf1c3b6512577d977f7e605ce6f9099bb0669bd5b4b6e6be2f8a82ddcd"
     },
     {
       "path": "docs/library-browser/evidence/source-review.md",
-      "bytes": 9741,
-      "sha256": "862859a250ce5939ae2e35a019e081414b56d355ffa763c34ec17bd38e19cd87"
+      "bytes": 9857,
+      "sha256": "786962e1dfc60bdce3125e1c16711c069a6feab2fa19e32f1c03619043c543ce"
     },
     {
       "path": "docs/library-browser/example-ledger.json",
@@ -102,13 +102,13 @@
     },
     {
       "path": "docs/research/timmer-library/asset-links.json",
-      "bytes": 6996,
-      "sha256": "686ed831a96ebd930ec775f20dc1a553efe063312dac610b31a6ed744a029200"
+      "bytes": 7165,
+      "sha256": "ed17488c9ee33c46c5e42c1425d4a8a3d395a26f9e440e9b4d82060e60d1e744"
     },
     {
       "path": "docs/research/timmer-library/inventory.json",
-      "bytes": 80714,
-      "sha256": "fcad92117ab113f743b5d07ebdb50f4e1cab030330fd26cd33366a1d14e5db8d"
+      "bytes": 81368,
+      "sha256": "f4affeac8a927f931b2da78c12df170f3ca8993dd70e1276f405ee92f0ba70d3"
     },
     {
       "path": "engine/cli.mjs",
@@ -151,5 +151,5 @@
       "sha256": "45d9ea5eeee37a87d69ad31f637e42d03c69c8f1c81b3a0ac016d9efcf57b7e0"
     }
   ],
-  "sourceRefresh": "Phase-trail catalog expansion; browser UI, CLI and ledger source unchanged from 3064551; planned-only fixture now C17; 17 independent checks rerun"
+  "sourceRefresh": "Allocation catalog expansion; browser UI, CLI and ledger source unchanged from 73ab864; C17 remains the planned-only fixture; 17 independent checks rerun"
 }

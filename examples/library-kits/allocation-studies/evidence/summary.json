@@ -1,0 +1,134 @@
+{
+  "status": "prototype",
+  "continuousPlayback": "unverified",
+  "variants": [
+    {
+      "name": "household-plan-landscape",
+      "pipelineId": "2026-10-03T13-39-11-457Z-3e42e3cf",
+      "videoSha256": "5a34f411d0e06db69725d3bb9994c3e1024436d9bd48b8784c79973b1eede129",
+      "storyboardSha256": "0eee8a61f2944eedab611071d0bfa240096403523bdbfd862b59d63d6083363a",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 176 frames: no problems found\n"
+        ],
+        "duration": 46,
+        "inputId": "cf348e05500469b86823cc40c6d55ff2e915e88df49c29002d6102b273c7125e"
+      },
+      "qa": {
+        "seconds": 46,
+        "frames": 1380,
+        "changePerSecond": 0,
+        "heldSeconds": 46,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "household-plan-vertical",
+      "pipelineId": "2026-10-03T13-39-26-424Z-0233f906",
+      "videoSha256": "1e0122283096efdc37986d180fc19ca9414ca61a93f8e5d7da3e99938ee7172c",
+      "storyboardSha256": "698a050f447877aa53d835f30b361c3b7743cc765fff5c4cb250c3632e61d4c5",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 176 frames: no problems found\n"
+        ],
+        "duration": 46,
+        "inputId": "d786283d3de7270b12a0980e5f65880104b0d1b888d3c025b7fda937da5bdd61"
+      },
+      "qa": {
+        "seconds": 46,
+        "frames": 1380,
+        "changePerSecond": 0,
+        "heldSeconds": 46,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "work-hour-plan-landscape",
+      "pipelineId": "2026-10-03T13-39-41-781Z-a9eabe53",
+      "videoSha256": "8579ea9a20101078c6de806aafcc92712bf5b1eb8ee3b43cd86037845c6e20b1",
+      "storyboardSha256": "52dab2dd2f85727024f4a2e0f2f9b20b3e9ad292fa5a47e06b705f9581aafecd",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 221 frames: no problems found\n"
+        ],
+        "duration": 58,
+        "inputId": "3a7bd241945292f5248bfb6010e96056fadd7bd4bc25814c32415a4bd63989c2"
+      },
+      "qa": {
+        "seconds": 58,
+        "frames": 1740,
+        "changePerSecond": 0,
+        "heldSeconds": 58,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    },
+    {
+      "name": "work-hour-plan-vertical",
+      "pipelineId": "2026-10-03T13-40-00-416Z-a91d645e",
+      "videoSha256": "d073703da2b0a2f3ac6f50941b4c12c67d375f9194c4873191ccc739542fcf93",
+      "storyboardSha256": "7296ce03185b2d0f9dd7e7b8a1acf9ebee7e57aa6867c5be57fc523c0376084f",
+      "check": {
+        "errors": [],
+        "warnings": [],
+        "notes": [
+          "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 221 frames: no problems found\n"
+        ],
+        "duration": 58,
+        "inputId": "8e8513a5085cf66ae264e60c90530518975c1b9b28e4cb88a315294a12373a1d"
+      },
+      "qa": {
+        "seconds": 58,
+        "frames": 1740,
+        "changePerSecond": 0,
+        "heldSeconds": 58,
+        "pops": 0,
+        "loudness": null,
+        "color": "bt709/bt709/smpte170m/tv"
+      },
+      "seekEqual": true
+    }
+  ],
+  "tests": {
+    "pass": 217,
+    "fail": 0,
+    "skipped": 0
+  },
+  "encoded": {
+    "nativeMappingChecks": 2048,
+    "arithmeticChecks": 1028,
+    "sampledFrames": 3560,
+    "allTrayFrames": 3360,
+    "componentCountChecks": 3360,
+    "tokenPoseChecks": 75360,
+    "tokenCoreChecks": 376800,
+    "outsideBoundsChecks": 3360,
+    "barChecks": 3600,
+    "failures": 0
+  },
+  "retainedCritiqueWarnings": 4,
+  "critiqueRationale": "evidence/critique-resolution.json",
+  "limits": [
+    "Fictional fixed-pool plans; no inflow, spending, loss, return or optimization model",
+    "Equal tiles encode equal declared amounts, not equal risk, productivity or benefit",
+    "Whole tokens only; native geometry is exact while compressed pixel areas are approximate",
+    "One reading-density warning per clip retained with explicit source and sampled-picture rationale",
+    "Crowded data or new copy requires fresh layout review",
+    "Bounded encoded probes and phone-frame review, not continuous playback or final master acceptance",
+    "Square and 4:5 unreviewed"
+  ]
+}

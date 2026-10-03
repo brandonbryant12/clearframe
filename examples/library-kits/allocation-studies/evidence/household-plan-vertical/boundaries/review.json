@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/allocation-studies/specimens/household-plan-vertical/build/pipeline/2026-10-03T13-39-26-424Z-0233f906/video.mp4",
+  "outputSha256": "1e0122283096efdc37986d180fc19ca9414ca61a93f8e5d7da3e99938ee7172c",
+  "inputId": "d786283d3de7270b12a0980e5f65880104b0d1b888d3c025b7fda937da5bdd61",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "trays: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "trays: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 659,
+      "time": 21.966666666666665,
+      "reasons": [
+        "trays: last frame",
+        "Before comparison"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 660,
+      "time": 22,
+      "reasons": [
+        "comparison: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 666,
+      "time": 22.2,
+      "reasons": [
+        "comparison: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1379,
+      "time": 45.96666666666667,
+      "reasons": [
+        "comparison: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

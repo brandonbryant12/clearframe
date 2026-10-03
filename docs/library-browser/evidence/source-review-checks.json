@@ -6,13 +6,13 @@
     "passed": 4
   },
   "catalog": {
-    "packages": 16,
-    "examples": 63,
+    "packages": 17,
+    "examples": 65,
     "inventory": 71,
-    "existingSafeLocalReferences": 499,
+    "existingSafeLocalReferences": 515,
     "unresolvedSourceIds": 0,
     "matchingBundledLedgerSourceHashes": 4,
-    "nativeVariants": 124,
+    "nativeVariants": 128,
     "sourceInsertVariants": 1
   },
   "findings": [
@@ -95,7 +95,7 @@
     "reviewerReran": false
   },
   "independentRegressionChecks": 17,
-  "finalVariantDurationChecks": 124,
+  "finalVariantDurationChecks": 128,
   "sourceHashes": {
     "engine/lib/library-browser.mjs": "829c57ccdd96541f1056f785f99a613d3b5b329d35e4c084fb77784c13913d59",
     "engine/lib/library-browser-build.mjs": "707dfd6f2a685ecffaa22d05f056e8f2394385fe4ef0e48ddf4732815f07c591",
@@ -103,26 +103,26 @@
     "engine/ui/library-browser/app.js": "0981e68ee87f195a3fd097b17703be0d9030b020562df26d9511224ae0b76ea8",
     "engine/ui/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
     "engine/ui/library-browser/style.css": "7457ba692f1c35216a06d83ce288be95082f43306840aaaa6b0116d93b22a1cf",
-    "docs/research/timmer-library/asset-links.json": "686ed831a96ebd930ec775f20dc1a553efe063312dac610b31a6ed744a029200",
+    "docs/research/timmer-library/asset-links.json": "ed17488c9ee33c46c5e42c1425d4a8a3d395a26f9e440e9b4d82060e60d1e744",
     "test/library-browser.test.mjs": "45d9ea5eeee37a87d69ad31f637e42d03c69c8f1c81b3a0ac016d9efcf57b7e0"
   },
   "finalBundleHashes": {
     "docs/library-browser/example-ledger.mjs": "d9e1ac01a058494fd8e4edc4a0e876492617dab39c97ce7d5de01f2d1876e979",
     "docs/library-browser/example-ledger.json": "d057d406e30fb4c7911757c9f2cd2f8ffc2ef054f635f7e9c668b973af962631",
-    "docs/library-browser/app.js": "42221560032e3a46743851684e9d09c5c029a1ffe332f6e419882298cc20270c",
-    "docs/library-browser/catalog.json": "7a4bf5cedb54b945e11305a27b58e6ab8e8cbc344d5ef818014d9adf97720d72",
+    "docs/library-browser/app.js": "07cf8c1b204365324394d8f6e1f5e9f8b2a9654b9cae3a71f5f67f66c50bfdf5",
+    "docs/library-browser/catalog.json": "84bd637df79bb973616e2abf83d872ff216fdd68b2dcff192b3d3da465e791d6",
     "docs/library-browser/index.html": "c32086e7c82066e4c25389897f8636d5bcbc05c3c192a097e642cd659f740334",
     "docs/library-browser/style.css": "0c80ce1cd03abf96b895f46f19501e07a64df40ab74b03fa7e917ea8393b24cd",
     "docs/library-browser/DIRECTION.md": "449b761ae2abf2c44427e8917862cd5885b081f371683e363ed5d42c8754e975",
-    "docs/research/timmer-library/inventory.json": "fcad92117ab113f743b5d07ebdb50f4e1cab030330fd26cd33366a1d14e5db8d",
-    "docs/research/timmer-library/asset-links.json": "686ed831a96ebd930ec775f20dc1a553efe063312dac610b31a6ed744a029200",
-    "docs/library-browser/evidence/catalog-build.json": "76e0b0f4cf9aed620b5602512c789e47f45d1a86360f976f2810835f59ddf759",
-    "docs/library-browser/evidence/node-tests.txt": "ad2f3d6457fce47315e3ebe144c8ad2b2d64776f69e3f8393f2b30ace4a2695f",
-    "docs/library-browser/evidence/source-review-regressions.mjs": "87d01c4d863ad8aae1d46b74661ef4ad2bac195b7fb06b210ad62e86b57e091d",
-    "docs/library-browser/evidence/source-review-regressions.json": "ef263ec4332f1e71997d79ecf1a6ebc84d2ad4c89436ba05390aa41eb8fe341b",
+    "docs/research/timmer-library/inventory.json": "f4affeac8a927f931b2da78c12df170f3ca8993dd70e1276f405ee92f0ba70d3",
+    "docs/research/timmer-library/asset-links.json": "ed17488c9ee33c46c5e42c1425d4a8a3d395a26f9e440e9b4d82060e60d1e744",
+    "docs/library-browser/evidence/catalog-build.json": "77c62fae80124263e17f16e241d9f5f865a0e4ac34191d739b18508f86914b99",
+    "docs/library-browser/evidence/node-tests.txt": "5e85074d85123ecfb08dcc6ac83ba6a3e909d1ed8315314cc20a343a452502da",
+    "docs/library-browser/evidence/source-review-regressions.mjs": "0a837edf1c3b6512577d977f7e605ce6f9099bb0669bd5b4b6e6be2f8a82ddcd",
+    "docs/library-browser/evidence/source-review-regressions.json": "a84e52fd414a79269b888ea7d2480f03317fcb472f5b7bcf831c3324be8936d4",
     "engine/cli.mjs": "fde77dad87970c3aee7c7fa8a4eabb8031cfdc643b7be4ce9725c4704c9183c2",
     "docs/library-browser/evidence/cli-smoke.json": "3a3f6d897cadda4c38609e0d6f2c9f21294377830ef531719d3ede9c4856a084",
-    "docs/library-browser/evidence/focused-tests.txt": "f434cad424bb6f617a1fc47960c88f76b4e01fcc4777e933666bedbc64d3b716"
+    "docs/library-browser/evidence/focused-tests.txt": "6190f879d8f0d27df332349e65ef5960c1a3b1c9a4e0ec56f688bc3bcc5b34db"
   },
   "finalBundleChecks": {
     "engineAndUiSourcesUnchanged": true,
@@ -163,7 +163,7 @@
     "independentRegressionsPassed": 17,
     "recordAndFormatIdentitiesUnique": true,
     "expectationsCaseMappingsMatch": true,
-    "engineAndUiComparisonScope": "Tracked library-browser, library-browser-build, variation-ledger and engine/ui/library-browser files unchanged since prior review and 3064551; separately bound engine/cli.mjs also unchanged at this phase-studies refresh.",
+    "engineAndUiComparisonScope": "Tracked library-browser, library-browser-build, variation-ledger and engine/ui/library-browser files unchanged since prior review and 3064551; separately bound engine/cli.mjs, example ledger and focused fixture unchanged at this allocation-studies refresh from 73ab864.",
     "anchorCaseMappingsMatch": true,
     "smallMultiplesCaseMappingsMatch": true,
     "cliSourceUnchangedSinceRetainedSmoke": true,
@@ -173,21 +173,21 @@
     "valuationCaseMappingsMatch": true,
     "cameraTravelCaseMappingsMatch": true,
     "unbuiltFixtureC17IsPlannedWithoutPreview": true,
-    "phaseCaseMappingsMatch": true
+    "phaseCaseMappingsMatch": true,
+    "allocationCaseMappingsMatch": true
   },
   "producerFullSuite": {
-    "passed": 212,
-    "total": 212,
+    "passed": 217,
+    "total": 217,
     "skipped": 0,
     "failed": 0,
     "reviewerReran": false,
     "note": "Producer reports current gated full-suite pass; reviewer inspected retained node-tests.txt summary."
   },
-  "refreshedAt": "2026-10-03T13:14:28.401654+00:00",
+  "refreshedAt": "2026-10-03T13:58:41.277400+00:00",
   "sourceChangesSincePriorReview": [
-    "docs/research/timmer-library/asset-links.json (two phase-studies cases mapped exactly to C15)",
-    "docs/research/timmer-library/inventory.json (bounded C15 prototype scope and dated paired-observation support in T02)",
-    "test/library-browser.test.mjs (planned-only inventory fixture changed from C15 to C17)"
+    "docs/research/timmer-library/asset-links.json (two allocation-studies cases mapped exactly to I04)",
+    "docs/research/timmer-library/inventory.json (bounded I04 prototype scope; separate B13 Blender proposal remains unbuilt; integer allocation support added to T02)"
   ],
   "producerLedgerCliSmoke": {
     "checkedAt": "2026-10-03T09:08:50.558Z",
@@ -198,6 +198,6 @@
     "passed": 2,
     "reviewerReran": false,
     "sourceStoryboardHashMatches": true,
-    "scope": "Retained producer smoke from the static-anchor milestone at checkedAt; not rerun for the phase-studies refresh. Current CLI hash is unchanged from that reviewed milestone; retained source storyboard hash still matches."
+    "scope": "Retained producer smoke from the static-anchor milestone at checkedAt; not rerun for the allocation-studies refresh. Current CLI hash is unchanged from that reviewed milestone; retained source storyboard hash still matches."
   }
 }

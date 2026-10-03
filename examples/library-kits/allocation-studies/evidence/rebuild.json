@@ -1,0 +1,10 @@
+{
+  "equal": true,
+  "files": {
+    "examples/library-kits/allocation-studies/audit.json": "049cab72cbf619d3d989aea70ebed9ee79d35217c8ba0e7fb44bc76bc51a8684",
+    "examples/library-kits/allocation-studies/specimens/household-plan-landscape/storyboard.json": "0eee8a61f2944eedab611071d0bfa240096403523bdbfd862b59d63d6083363a",
+    "examples/library-kits/allocation-studies/specimens/household-plan-vertical/storyboard.json": "698a050f447877aa53d835f30b361c3b7743cc765fff5c4cb250c3632e61d4c5",
+    "examples/library-kits/allocation-studies/specimens/work-hour-plan-landscape/storyboard.json": "52dab2dd2f85727024f4a2e0f2f9b20b3e9ad292fa5a47e06b705f9581aafecd",
+    "examples/library-kits/allocation-studies/specimens/work-hour-plan-vertical/storyboard.json": "7296ce03185b2d0f9dd7e7b8a1acf9ebee7e57aa6867c5be57fc523c0376084f"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/allocation-studies/specimens/work-hour-plan-landscape/build/pipeline/2026-10-03T13-39-41-781Z-a9eabe53/video.mp4",
+  "outputSha256": "8579ea9a20101078c6de806aafcc92712bf5b1eb8ee3b43cd86037845c6e20b1",
+  "inputId": "3a7bd241945292f5248bfb6010e96056fadd7bd4bc25814c32415a4bd63989c2",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "trays: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "trays: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 1019,
+      "time": 33.96666666666667,
+      "reasons": [
+        "trays: last frame",
+        "Before comparison"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 1020,
+      "time": 34,
+      "reasons": [
+        "comparison: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 1026,
+      "time": 34.2,
+      "reasons": [
+        "comparison: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1739,
+      "time": 57.96666666666667,
+      "reasons": [
+        "comparison: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

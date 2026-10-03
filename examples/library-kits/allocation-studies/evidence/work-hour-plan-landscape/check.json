@@ -1,0 +1,9 @@
+{
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 221 frames: no problems found\n"
+  ],
+  "duration": 58,
+  "inputId": "3a7bd241945292f5248bfb6010e96056fadd7bd4bc25814c32415a4bd63989c2"
+}

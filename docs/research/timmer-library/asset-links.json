@@ -387,6 +387,16 @@
           "C15"
         ]
       }
+    },
+    "allocation-studies": {
+      "cases": {
+        "household-plan": [
+          "I04"
+        ],
+        "work-hour-plan": [
+          "I04"
+        ]
+      }
     }
   },
   "sourceOnly": {

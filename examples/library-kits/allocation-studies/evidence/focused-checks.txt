@@ -1,0 +1,13 @@
+✔ allocation preserves exact units, source availability and token identities through round trips (3.640042ms)
+✔ departure and arrival have explicit half-open accounting states at every event (1.456125ms)
+✔ allocation rejects invented precision, overdraws, sparse plans and ambiguous groups (0.797334ms)
+✔ native trays keep one constant-size token and translation-only tracks for both layouts (1.583417ms)
+✔ final comparison uses shared zero-based count lengths with exact zero handling (0.263291ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52.017792

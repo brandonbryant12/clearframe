@@ -1,0 +1,226 @@
+[
+  {
+    "name": "household-plan-landscape",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/allocation-studies/evidence/household-plan-landscape",
+    "pipelineId": "2026-10-03T13-39-11-457Z-3e42e3cf",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 176 frames: no problems found\n"
+      ],
+      "duration": 46,
+      "inputId": "cf348e05500469b86823cc40c6d55ff2e915e88df49c29002d6102b273c7125e"
+    },
+    "qa": {
+      "seconds": 46,
+      "frames": 1380,
+      "changePerSecond": 0,
+      "heldSeconds": 46,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "21.6000s",
+        "22.5000s",
+        "23.5000s",
+        "25.5000s",
+        "45.6000s"
+      ],
+      "shuffled": [
+        "45.6000s",
+        "23.5000s",
+        "21.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "22.5000s",
+        "25.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "ec3e3287124d04c009ea2e45cf017ce6488e47fd19fa4e9afb58a76ee6d760f2",
+        "1.5000s.png": "ec3e3287124d04c009ea2e45cf017ce6488e47fd19fa4e9afb58a76ee6d760f2",
+        "21.6000s.png": "11b1ecd78b5a78f8da819c0bb0956b517afd12e5398d75cf0439318c20af72f2",
+        "22.5000s.png": "d65cde2dc3ae1f91eec5293300fbc0d2cae814945ecad7c05ba87ee0faad69db",
+        "23.5000s.png": "d65cde2dc3ae1f91eec5293300fbc0d2cae814945ecad7c05ba87ee0faad69db",
+        "25.5000s.png": "d65cde2dc3ae1f91eec5293300fbc0d2cae814945ecad7c05ba87ee0faad69db",
+        "3.5000s.png": "0371f00d6a51bc2b06b7617a36140272c41078811ba26974ff0c69a35456cb5b",
+        "45.6000s.png": "d65cde2dc3ae1f91eec5293300fbc0d2cae814945ecad7c05ba87ee0faad69db"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "household-plan-vertical",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/allocation-studies/evidence/household-plan-vertical",
+    "pipelineId": "2026-10-03T13-39-26-424Z-0233f906",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 176 frames: no problems found\n"
+      ],
+      "duration": 46,
+      "inputId": "d786283d3de7270b12a0980e5f65880104b0d1b888d3c025b7fda937da5bdd61"
+    },
+    "qa": {
+      "seconds": 46,
+      "frames": 1380,
+      "changePerSecond": 0,
+      "heldSeconds": 46,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "21.6000s",
+        "22.5000s",
+        "23.5000s",
+        "25.5000s",
+        "45.6000s"
+      ],
+      "shuffled": [
+        "45.6000s",
+        "23.5000s",
+        "21.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "22.5000s",
+        "25.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "fc519eae0aeb4267c4971b4fdfd4f21d9f74189784c7ff9ba805cd9f2597cfc9",
+        "1.5000s.png": "fc519eae0aeb4267c4971b4fdfd4f21d9f74189784c7ff9ba805cd9f2597cfc9",
+        "21.6000s.png": "88db2cb84958df329482517d131b7b6945756c117b50b1e16a23f812390fb6e9",
+        "22.5000s.png": "798823992387cc75c3f2c903f4b8d3acb06da4f96632e50a8753c341b0b7dcbf",
+        "23.5000s.png": "798823992387cc75c3f2c903f4b8d3acb06da4f96632e50a8753c341b0b7dcbf",
+        "25.5000s.png": "798823992387cc75c3f2c903f4b8d3acb06da4f96632e50a8753c341b0b7dcbf",
+        "3.5000s.png": "ef8e8d3de0921bd363c42e45b0e93f9c26c14c32062c8991d5fca2ae27686cf2",
+        "45.6000s.png": "798823992387cc75c3f2c903f4b8d3acb06da4f96632e50a8753c341b0b7dcbf"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "work-hour-plan-landscape",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/allocation-studies/evidence/work-hour-plan-landscape",
+    "pipelineId": "2026-10-03T13-39-41-781Z-a9eabe53",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 221 frames: no problems found\n"
+      ],
+      "duration": 58,
+      "inputId": "3a7bd241945292f5248bfb6010e96056fadd7bd4bc25814c32415a4bd63989c2"
+    },
+    "qa": {
+      "seconds": 58,
+      "frames": 1740,
+      "changePerSecond": 0,
+      "heldSeconds": 58,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "33.6000s",
+        "34.5000s",
+        "35.5000s",
+        "37.5000s",
+        "57.6000s"
+      ],
+      "shuffled": [
+        "57.6000s",
+        "35.5000s",
+        "33.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "34.5000s",
+        "37.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "a3bf7da5e851af80136ce21f46616c37fdb93d5789b3b395bb9f0cda48964299",
+        "1.5000s.png": "a3bf7da5e851af80136ce21f46616c37fdb93d5789b3b395bb9f0cda48964299",
+        "3.5000s.png": "97ba152fa12a3c12da1f76641832151a5b218e2fa6b5a95bcc42e34432dd64fd",
+        "33.6000s.png": "9c1e69facb2c04ff48ecc2203498074c3d03c77eedb5920ef9254867141a2133",
+        "34.5000s.png": "ee5995e21841490f5dbc3d3a1200cfe9c46fb7ee767775144b93bca013a4b23b",
+        "35.5000s.png": "ee5995e21841490f5dbc3d3a1200cfe9c46fb7ee767775144b93bca013a4b23b",
+        "37.5000s.png": "ee5995e21841490f5dbc3d3a1200cfe9c46fb7ee767775144b93bca013a4b23b",
+        "57.6000s.png": "ee5995e21841490f5dbc3d3a1200cfe9c46fb7ee767775144b93bca013a4b23b"
+      },
+      "equal": true
+    }
+  },
+  {
+    "name": "work-hour-plan-vertical",
+    "dir": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/allocation-studies/evidence/work-hour-plan-vertical",
+    "pipelineId": "2026-10-03T13-40-00-416Z-a91d645e",
+    "check": {
+      "errors": [],
+      "warnings": [],
+      "notes": [
+        "ClearFrame backend: skia-metal; one GPU pipeline, two encoder workers\nchecked 221 frames: no problems found\n"
+      ],
+      "duration": 58,
+      "inputId": "8e8513a5085cf66ae264e60c90530518975c1b9b28e4cb88a315294a12373a1d"
+    },
+    "qa": {
+      "seconds": 58,
+      "frames": 1740,
+      "changePerSecond": 0,
+      "heldSeconds": 58,
+      "pops": 0,
+      "loudness": null,
+      "color": "bt709/bt709/smpte170m/tv"
+    },
+    "seek": {
+      "sequence": [
+        "0.5000s",
+        "1.5000s",
+        "3.5000s",
+        "33.6000s",
+        "34.5000s",
+        "35.5000s",
+        "37.5000s",
+        "57.6000s"
+      ],
+      "shuffled": [
+        "57.6000s",
+        "35.5000s",
+        "33.6000s",
+        "1.5000s",
+        "0.5000s",
+        "3.5000s",
+        "34.5000s",
+        "37.5000s"
+      ],
+      "hashes": {
+        "0.5000s.png": "1ad70283b16b6b3bce0d1fca8a3a8f0ec8b023fb778f11f51d9f48f204a47dc5",
+        "1.5000s.png": "1ad70283b16b6b3bce0d1fca8a3a8f0ec8b023fb778f11f51d9f48f204a47dc5",
+        "3.5000s.png": "8a8e6364dcb99ea9d468a23fa7595ddad5ecaef8f68752712d118676d18aadae",
+        "33.6000s.png": "0bb6a4fea55cb0b58ca064226b925939c7bb724dbab3574130b8aea7cdab6c55",
+        "34.5000s.png": "2f611b09708d6c8a6ad236e8eee26d3640618239b9c6202acd441c681723e7b7",
+        "35.5000s.png": "2f611b09708d6c8a6ad236e8eee26d3640618239b9c6202acd441c681723e7b7",
+        "37.5000s.png": "2f611b09708d6c8a6ad236e8eee26d3640618239b9c6202acd441c681723e7b7",
+        "57.6000s.png": "2f611b09708d6c8a6ad236e8eee26d3640618239b9c6202acd441c681723e7b7"
+      },
+      "equal": true
+    }
+  }
+]

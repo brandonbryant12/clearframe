@@ -332,6 +332,79 @@
   ],
   "packages": [
     {
+      "id": "allocation-studies",
+      "title": "Allocation trays",
+      "purpose": "Show explicit fixed-quantum transfers with parked-plus-transit conservation, then compare exact before/after allocations.",
+      "status": "prototype",
+      "integrity": "verified",
+      "fileCount": 176,
+      "issues": [],
+      "inventoryIds": [
+        "I04"
+      ],
+      "manifest": "examples/library-kits/allocation-studies/kit.json",
+      "preview": "examples/library-kits/allocation-studies/preview.html",
+      "readme": "examples/library-kits/allocation-studies/README.md",
+      "review": "examples/library-kits/allocation-studies/REVIEW.md",
+      "sources": "examples/library-kits/allocation-studies/SOURCES.md",
+      "tags": {
+        "purpose": [
+          "reallocate",
+          "reconcile",
+          "compare"
+        ],
+        "appearance": [
+          "paper",
+          "native-chart",
+          "equal-tiles"
+        ],
+        "movement": [
+          "token-transfer",
+          "quantitative-cut",
+          "reading-hold"
+        ],
+        "format": [
+          "landscape",
+          "vertical"
+        ],
+        "subject": [
+          "budgets",
+          "work-hours",
+          "fixed-pool"
+        ]
+      },
+      "editable": {
+        "native": [
+          "bucket labels",
+          "integer counts",
+          "fixed quantum",
+          "explicit transfers",
+          "copy",
+          "timing",
+          "layout"
+        ],
+        "fixedClip": []
+      },
+      "requires": {
+        "replay": [
+          "ClearFrame native compositor",
+          "bundled fonts"
+        ],
+        "preparation": [
+          "Node.js",
+          "FFmpeg",
+          "Python 3 with NumPy"
+        ]
+      },
+      "evidence": {
+        "summary": "evidence/summary.json",
+        "review": "REVIEW.md",
+        "encoded": "evidence/encoded-checks.json",
+        "implementation": "evidence/implementation.json",
+        "continuousPlayback": "unverified"
+      }
+    },
+    {
       "id": "anchor-studies",
       "title": "Anchor studies",
       "purpose": "Attach editable native labels to source-bound static prepared-asset points and reserved copy zones.",
@@ -1618,6 +1691,132 @@
     }
   ],
   "records": [
+    {
+      "id": "allocation-studies/household-plan",
+      "kind": "example",
+      "title": "Make room for a larger buffer",
+      "packageId": "allocation-studies",
+      "inventoryIds": [
+        "I04"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/allocation-studies/specimens/household-plan-landscape/storyboard.json",
+          "video": "examples/library-kits/allocation-studies/evidence/household-plan-landscape/video.mp4",
+          "poster": "examples/library-kits/allocation-studies/evidence/independent-review/household-plan-landscape/45.9s.png",
+          "receipt": "examples/library-kits/allocation-studies/evidence/household-plan-landscape/video.mp4.json",
+          "duration": 46,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/allocation-studies/specimens/household-plan-vertical/storyboard.json",
+          "video": "examples/library-kits/allocation-studies/evidence/household-plan-vertical/video.mp4",
+          "poster": "examples/library-kits/allocation-studies/evidence/independent-review/household-plan-vertical/45.9s.png",
+          "receipt": "examples/library-kits/allocation-studies/evidence/household-plan-vertical/video.mp4.json",
+          "duration": 46,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Show explicit fixed-quantum transfers with parked-plus-transit conservation, then compare exact before/after allocations.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "reallocate",
+        "reconcile",
+        "compare"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart",
+        "equal-tiles"
+      ],
+      "movement": [
+        "token-transfer",
+        "quantitative-cut",
+        "reading-hold"
+      ],
+      "subjects": [
+        "budgets",
+        "work-hours",
+        "fixed-pool"
+      ],
+      "collections": [
+        "relationships"
+      ],
+      "sourceIds": [
+        "S05",
+        "S09",
+        "S12"
+      ],
+      "search": "make room for a larger buffer show explicit fixed-quantum transfers with parked-plus-transit conservation, then compare exact before/after allocations. i04 reallocate reconcile compare paper native-chart equal-tiles token-transfer quantitative-cut reading-hold budgets work-hours fixed-pool s05 s09 s12 allocation trays move labeled tokens between compartments while keeping total count constant; finish on an exact native allocation chart. buckets weights rebalance rule before/after budgets resource allocation scheduling"
+    },
+    {
+      "id": "allocation-studies/work-hour-plan",
+      "kind": "example",
+      "title": "Shift planned hours toward upkeep",
+      "packageId": "allocation-studies",
+      "inventoryIds": [
+        "I04"
+      ],
+      "variants": [
+        {
+          "id": "landscape",
+          "source": "examples/library-kits/allocation-studies/specimens/work-hour-plan-landscape/storyboard.json",
+          "video": "examples/library-kits/allocation-studies/evidence/work-hour-plan-landscape/video.mp4",
+          "poster": "examples/library-kits/allocation-studies/evidence/independent-review/work-hour-plan-landscape/57.9s.png",
+          "receipt": "examples/library-kits/allocation-studies/evidence/work-hour-plan-landscape/video.mp4.json",
+          "duration": 58,
+          "previewType": "native-specimen"
+        },
+        {
+          "id": "vertical",
+          "source": "examples/library-kits/allocation-studies/specimens/work-hour-plan-vertical/storyboard.json",
+          "video": "examples/library-kits/allocation-studies/evidence/work-hour-plan-vertical/video.mp4",
+          "poster": "examples/library-kits/allocation-studies/evidence/independent-review/work-hour-plan-vertical/57.9s.png",
+          "receipt": "examples/library-kits/allocation-studies/evidence/work-hour-plan-vertical/video.mp4.json",
+          "duration": 58,
+          "previewType": "native-specimen"
+        }
+      ],
+      "description": "Show explicit fixed-quantum transfers with parked-plus-transit conservation, then compare exact before/after allocations.",
+      "hasPreview": true,
+      "status": "prototype",
+      "integrity": "verified",
+      "medium": "Native",
+      "purposes": [
+        "reallocate",
+        "reconcile",
+        "compare"
+      ],
+      "appearance": [
+        "paper",
+        "native-chart",
+        "equal-tiles"
+      ],
+      "movement": [
+        "token-transfer",
+        "quantitative-cut",
+        "reading-hold"
+      ],
+      "subjects": [
+        "budgets",
+        "work-hours",
+        "fixed-pool"
+      ],
+      "collections": [
+        "relationships"
+      ],
+      "sourceIds": [
+        "S05",
+        "S09",
+        "S12"
+      ],
+      "search": "shift planned hours toward upkeep show explicit fixed-quantum transfers with parked-plus-transit conservation, then compare exact before/after allocations. i04 reallocate reconcile compare paper native-chart equal-tiles token-transfer quantitative-cut reading-hold budgets work-hours fixed-pool s05 s09 s12 allocation trays move labeled tokens between compartments while keeping total count constant; finish on an exact native allocation chart. buckets weights rebalance rule before/after budgets resource allocation scheduling"
+    },
     {
       "id": "anchor-studies/access-gate",
       "kind": "example",
@@ -6457,7 +6656,7 @@
         "I04"
       ],
       "medium": "Infographic",
-      "statusText": "proposed; not built",
+      "statusText": "Native prototype: two fictional fixed-quantum plans, four landscape/portrait specimens, exact token ledger and all-tray-frame encoded conservation checks; continuous playback and master acceptance pending",
       "guardrail": "Show weights separately from risk contribution. Rebalancing does not guarantee protection.",
       "parameters": [
         "buckets",
@@ -6465,10 +6664,13 @@
         "rebalance rule",
         "before/after"
       ],
-      "related": [],
+      "related": [
+        "allocation-studies/household-plan",
+        "allocation-studies/work-hour-plan"
+      ],
       "sourceFiles": [],
       "hasPreview": false,
-      "status": "planned",
+      "status": "has-example",
       "integrity": "not-applicable",
       "purposes": [],
       "appearance": [],
@@ -7705,7 +7907,7 @@
         "T02"
       ],
       "medium": "Tool",
-      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles, pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership, and explicit finite/perpetual cash-flow sensitivities, and dated paired-observation phase trails; forward models and broader risk-adjusted metrics remain planned",
+      "statusText": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles, pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership, and explicit finite/perpetual cash-flow sensitivities, and dated paired-observation phase trails, and conserved integer token allocations; forward models and broader risk-adjusted metrics remain planned",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "parameters": [
         "input hash",

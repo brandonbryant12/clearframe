@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "modelCases": 324,
+  "sceneCases": 32,
+  "assertions": 481271,
+  "negativeCases": 70,
+  "clockStates": 24121,
+  "sweptLegPairs": 5376,
+  "sampledTokenPairs": 211206,
+  "readingStates": [
+    {
+      "title": "Make room for a larger buffer",
+      "duration": 22,
+      "minVisibleWhitespaceWords": 64,
+      "maxVisibleWhitespaceWords": 66,
+      "transitSeconds": 2.4,
+      "intermediateSettledSeconds": 0.6,
+      "finalSettledSeconds": 7.6
+    },
+    {
+      "title": "Shift planned hours toward upkeep",
+      "duration": 34,
+      "minVisibleWhitespaceWords": 63,
+      "maxVisibleWhitespaceWords": 65,
+      "transitSeconds": 2.4,
+      "intermediateSettledSeconds": 0.6,
+      "finalSettledSeconds": 7.600000000000001
+    }
+  ],
+  "seed": "0x4a110c",
+  "method": "Independent per-token owner/slot ledger; BigInt amount/share references; event boundary accounting; exact swept rectangles plus arbitrary-order sampled native translation tracks and live readouts.",
+  "bindings": {
+    "fframes/allocation-data.mjs": "343ab6164b0666e4214582be74bbd07a5cb2b3695c0db1f0ba9b87017756f089",
+    "fframes/allocations.mjs": "9f377ecc995acac250ec6edddcbfea6278ae92a958e904485e2a28bae5b6725a",
+    "examples/library-kits/allocation-studies/inputs.json": "340f0ecf711b662ee858b42743f1ee2f4b426c8b652fec15e7e80682e27487b5",
+    "examples/library-kits/allocation-studies/evidence/independent-review/contract-check.mjs": "c50afb4de7551af4ad9cb5b9782766230a1fb1aeb465e37e2000ab3b09a4cc66"
+  }
+}

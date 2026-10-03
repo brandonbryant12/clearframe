@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/allocation-studies/specimens/work-hour-plan-vertical/build/pipeline/2026-10-03T13-40-00-416Z-a91d645e/video.mp4",
+  "outputSha256": "d073703da2b0a2f3ac6f50941b4c12c67d375f9194c4873191ccc739542fcf93",
+  "inputId": "8e8513a5085cf66ae264e60c90530518975c1b9b28e4cb88a315294a12373a1d",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "trays: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "trays: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 1019,
+      "time": 33.96666666666667,
+      "reasons": [
+        "trays: last frame",
+        "Before comparison"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 1020,
+      "time": 34,
+      "reasons": [
+        "comparison: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 1026,
+      "time": 34.2,
+      "reasons": [
+        "comparison: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1739,
+      "time": 57.96666666666667,
+      "reasons": [
+        "comparison: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Conserved allocation trays.** Fixed-value native tiles retain identity and exact departure/transit/arrival accounting before an explicit shared-scale comparison. Four fictional budget/hour specimens have complete tray-frame count/position checks and independent review. A reading-density heuristic warning is retained with its rationale; continuous playback and final acceptance remain open. See `docs/allocations.md`.
+
 - **Dated phase trails.** Native paired-observation plots preserve explicit axes, calendar spacing, missing-pair breaks and reference equality. Four fictional specimens retain independent model and encoded review. Lines are guides without smoothing or causal inference. See `docs/phases.md`; continuous playback and final master acceptance remain open.
 
 - **Bounded camera travel.** Analytic orbit and equal-translation truck presets preserve fixed optics and exact holds. Two original Blender scenes support eight native compositions with separate portrait framing and source-bound review. See `docs/camera-studies.md`; continuous playback and master acceptance remain open.

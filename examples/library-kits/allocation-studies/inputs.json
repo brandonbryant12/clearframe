@@ -1,0 +1,42 @@
+{
+  "provenance": "Original fictional plans. Equal tiles encode a fixed declared amount, not equal risk, productivity or benefit. Listed transfers reassign an unchanged total; no returns, spending, losses, fees, arrivals or optimization are modeled.",
+  "cases": [
+    {
+      "id": "household-plan",
+      "title": "Make room for a larger buffer",
+      "source": "Original fictional allocation",
+      "asOf": "2026-09-30",
+      "period": "Monthly household plan",
+      "quantum": {"minorUnits": 10000, "decimals": 2, "displayDecimals": 0, "unit": "USD"},
+      "buckets": [
+        {"id": "bills", "label": "Bills", "count": 12},
+        {"id": "flexible", "label": "Flexible", "count": 6},
+        {"id": "buffer", "label": "Buffer", "count": 2}
+      ],
+      "moves": [
+        {"from": "bills", "to": "buffer", "count": 2},
+        {"from": "flexible", "to": "buffer", "count": 2}
+      ],
+      "qualification": "A plan change only; no spending, earnings or protection is modeled."
+    },
+    {
+      "id": "work-hour-plan",
+      "title": "Shift planned hours toward upkeep",
+      "source": "Original fictional allocation",
+      "asOf": "2026-09-30",
+      "period": "Weekly work-hour plan",
+      "quantum": {"minorUnits": 2, "decimals": 0, "displayDecimals": 0, "unit": "hours"},
+      "buckets": [
+        {"id": "assembly", "label": "Assembly", "count": 12},
+        {"id": "quality", "label": "Quality", "count": 8},
+        {"id": "upkeep", "label": "Upkeep", "count": 4}
+      ],
+      "moves": [
+        {"from": "assembly", "to": "upkeep", "count": 4},
+        {"from": "quality", "to": "upkeep", "count": 2},
+        {"from": "upkeep", "to": "quality", "count": 2}
+      ],
+      "qualification": "Hours are equal units, not equal output. The listed round trip is retained."
+    }
+  ]
+}

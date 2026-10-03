@@ -707,7 +707,7 @@
       "category": "Infographic",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "proposed; not built",
+      "readiness": "Native prototype: two fictional fixed-quantum plans, four landscape/portrait specimens, exact token ledger and all-tray-frame encoded conservation checks; continuous playback and master acceptance pending",
       "effort": "M",
       "sourceIds": [
         "S05",
@@ -721,7 +721,7 @@
         "rebalance rule",
         "before/after"
       ],
-      "existing": "donut, waffle and kpi stack exist; conservation choreography is new.",
+      "existing": "fframes/allocation-data.mjs and allocations.mjs preserve whole-token identities, integer amounts and explicit departure/transit/arrival accounting. allocation-studies has four native specimens and exact final count bars; see docs/allocations.md.",
       "guardrail": "Show weights separately from risk contribution. Rebalancing does not guarantee protection.",
       "reuse": [
         "budgets",
@@ -1383,7 +1383,7 @@
         "move order",
         "camera"
       ],
-      "existing": "quiz-triptych is an adjacent source; generalized conservation choreography is new.",
+      "existing": "I04 now supplies an exact fixed-quantum transfer ledger and native tray choreography. The separate Blender mosaic geometry and rig remain unbuilt; quiz-triptych is an adjacent source.",
       "guardrail": "Token count is qualitative unless a declared unit reconciles to weights; no risk equivalence implied.",
       "reuse": [
         "budgets",
@@ -1756,7 +1756,7 @@
       "category": "Tool",
       "priority": "Now",
       "implementation": "Extend",
-      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles, pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership, and explicit finite/perpetual cash-flow sensitivities, and dated paired-observation phase trails; forward models and broader risk-adjusted metrics remain planned",
+      "readiness": "Partial implementation: finance, rebasing, decomposition, reconciliation, membership/benchmark summaries, deflation, period-aware growth/annualization, rolling sample statistics and observed drawdown, publication-aware vintages, maturity normalization, descriptive scenario quantiles, pairwise monthly Pearson correlations and explicit sample count/density bins with exact threshold membership, and explicit finite/perpetual cash-flow sensitivities, and dated paired-observation phase trails, and conserved integer token allocations; forward models and broader risk-adjusted metrics remain planned",
       "effort": "L",
       "sourceIds": [
         "S04",
@@ -1772,7 +1772,7 @@
         "transform",
         "method version"
       ],
-      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics. engine/lib/time-series.mjs adds explicit price-basis conversion, anchored monthly/quarterly/annual growth, compounded annualization, complete-window sample SD and observed drawdown/recovery; see docs/time-series.md. engine/lib/expectations.mjs adds inclusive publication cutoffs with actual revisions, nonuniform maturity coordinates, and complete-ensemble descriptive scenario ranges/type-7 quantiles; see docs/expectations.md. fframes/distribution-data.mjs retains original observations, explicit bins, null denominators and direct threshold comparisons; see docs/distributions.md. fframes/valuation-data.mjs adds annual-end cash-flow sensitivity grids and exact controlled slices with explicit model domains; see docs/valuations.md. fframes/phase-data.mjs adds dated paired observations with missing-row segments and explicit reference equality; see docs/phases.md.",
+      "existing": "engine/lib/finance.mjs provides account ledgers, marginal matching, vesting, fees, salary/service benefits and price-basis conversion. engine/lib/data-transforms.mjs adds rebasing with UTC elapsed days/null preservation, two-factor decomposition with explicit interaction and stock reconciliation with unexplained residuals. Original input hashes and native integration evidence are retained; see docs/data-transforms.md. It also preserves full membership in count/weight summaries and computes signed benchmark differences while retaining zero sizes and missing metrics. engine/lib/time-series.mjs adds explicit price-basis conversion, anchored monthly/quarterly/annual growth, compounded annualization, complete-window sample SD and observed drawdown/recovery; see docs/time-series.md. engine/lib/expectations.mjs adds inclusive publication cutoffs with actual revisions, nonuniform maturity coordinates, and complete-ensemble descriptive scenario ranges/type-7 quantiles; see docs/expectations.md. fframes/distribution-data.mjs retains original observations, explicit bins, null denominators and direct threshold comparisons; see docs/distributions.md. fframes/valuation-data.mjs adds annual-end cash-flow sensitivity grids and exact controlled slices with explicit model domains; see docs/valuations.md. fframes/phase-data.mjs adds dated paired observations with missing-row segments and explicit reference equality; see docs/phases.md. fframes/allocation-data.mjs adds exact minor-unit quantum amounts, persistent tokens and explicit transfer-state accounting; see docs/allocations.md.",
       "guardrail": "Record revisions, missingness and assumptions; no chart-image digitization treated as exact data.",
       "reuse": [
         "science",

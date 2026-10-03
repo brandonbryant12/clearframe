@@ -1,0 +1,57 @@
+{
+  "video": "/Users/brandon/Development/clearframe-finance-library/examples/library-kits/allocation-studies/specimens/household-plan-landscape/build/pipeline/2026-10-03T13-39-11-457Z-3e42e3cf/video.mp4",
+  "outputSha256": "5a34f411d0e06db69725d3bb9994c3e1024436d9bd48b8784c79973b1eede129",
+  "inputId": "cf348e05500469b86823cc40c6d55ff2e915e88df49c29002d6102b273c7125e",
+  "draft": true,
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "reasons": [
+        "trays: first frame"
+      ],
+      "image": "frame-0000.jpg"
+    },
+    {
+      "frame": 6,
+      "time": 0.2,
+      "reasons": [
+        "trays: entrance"
+      ],
+      "image": "frame-0001.jpg"
+    },
+    {
+      "frame": 659,
+      "time": 21.966666666666665,
+      "reasons": [
+        "trays: last frame",
+        "Before comparison"
+      ],
+      "image": "frame-0002.jpg"
+    },
+    {
+      "frame": 660,
+      "time": 22,
+      "reasons": [
+        "comparison: first frame"
+      ],
+      "image": "frame-0003.jpg"
+    },
+    {
+      "frame": 666,
+      "time": 22.2,
+      "reasons": [
+        "comparison: entrance"
+      ],
+      "image": "frame-0004.jpg"
+    },
+    {
+      "frame": 1379,
+      "time": 45.96666666666667,
+      "reasons": [
+        "comparison: last frame"
+      ],
+      "image": "frame-0005.jpg"
+    }
+  ]
+}

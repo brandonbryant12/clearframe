@@ -1,0 +1,414 @@
+[
+  {
+    "name": "household-plan-landscape",
+    "pipelineId": "2026-10-03T13-39-11-457Z-3e42e3cf",
+    "videoSha256": "5a34f411d0e06db69725d3bb9994c3e1024436d9bd48b8784c79973b1eede129",
+    "times": [
+      0.1,
+      2.9,
+      3.6,
+      5.5,
+      6.6,
+      8.5,
+      9.6,
+      11.5,
+      12.6,
+      14.5,
+      21.9,
+      22.033333,
+      22.6,
+      45.9
+    ],
+    "width": 360,
+    "duration": 46,
+    "cut": 22,
+    "frames": [
+      {
+        "path": "evidence/independent-review/household-plan-landscape/0.1s.png",
+        "sha256": "b085c0a91d9c0c431cc5de0b5e8518f3cfa0523e0ed952b1e641fa6025c2bfd0"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/2.9s.png",
+        "sha256": "b51edcd21672f6132f450bb5b07438a0883070b1ada0d2f6d3d885ef53c0e116"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/3.6s.png",
+        "sha256": "ec861e026ce64b3cb5acc6ab57c1905dff806f1bc57e25bdd13ddb2f06dc4be4"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/5.5s.png",
+        "sha256": "ff4431114547c9c6c9fb94cd1dba5302bf05f5c4305f8a7d72504e055695c1de"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/6.6s.png",
+        "sha256": "76501f1c8132b342cd3e652776bf83e099ee8ed18c0879f774bc42d1c3ebd18d"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/8.5s.png",
+        "sha256": "150b81fef0dee4bd6eb95b12d973fd1b2994ddb7c19fb2ca2b3bc6ea993eb3e3"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/9.6s.png",
+        "sha256": "536a5309785d6bd1dd293befc53ca4fa496c7d87815129dc1e5562427039750f"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/11.5s.png",
+        "sha256": "8f389e6b1c4c4acb3aa3307d20ea43fbf8efacdd2a173c89a2f19f14a1b436a7"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/12.6s.png",
+        "sha256": "884d659759bf5e00a5bac818f70a6bd3003762329a963384ceec71696f2601c7"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/14.5s.png",
+        "sha256": "0dafb178ede8f947de86112c8d5134c405c7ee3e206eeb5ce826c46c82ce26df"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/21.9s.png",
+        "sha256": "1f6cb216716682af1f4597708e1e13e97bbb8a08b42f78c9b66b75059be5834a"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/22.0333s.png",
+        "sha256": "a61a0b55aff84da35e8f76656c0fe28c6332f0fb4603e0060846f5bb33769ef6"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/22.6s.png",
+        "sha256": "4985b7f26a106ff1592c021d537b7e565ca61c8a1e3bc1f28e3ae9da885a09ac"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-landscape/45.9s.png",
+        "sha256": "f32b287b93622afb4f70a30d93a145bb59b11ce2e06dbce05ea6b41b8106ed34"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "household-plan-vertical",
+    "pipelineId": "2026-10-03T13-39-26-424Z-0233f906",
+    "videoSha256": "1e0122283096efdc37986d180fc19ca9414ca61a93f8e5d7da3e99938ee7172c",
+    "times": [
+      0.1,
+      2.9,
+      3.6,
+      5.5,
+      6.6,
+      8.5,
+      9.6,
+      11.5,
+      12.6,
+      14.5,
+      21.9,
+      22.033333,
+      22.6,
+      45.9
+    ],
+    "width": 360,
+    "duration": 46,
+    "cut": 22,
+    "frames": [
+      {
+        "path": "evidence/independent-review/household-plan-vertical/0.1s.png",
+        "sha256": "5a378eb617e14fbf176ec0cb2fa0f049f1d83fa2b65561cdc83eeedc4bcf44cd"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/2.9s.png",
+        "sha256": "09b71d4eb546f2ac5c575fa3225879c61b01930fa22473e2949b88065cbf9c47"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/3.6s.png",
+        "sha256": "80c0b035b1e7075324acca3cf11909750e0d19bee06003f0272f824799c8b808"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/5.5s.png",
+        "sha256": "08c6706d53f5708077a9d1299000483380d575002debe56919c0df8bb1e2d1a6"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/6.6s.png",
+        "sha256": "7f5d3304520c2b6c2041b85885108fc3f332c5eeacbe703f747b3764dc112e96"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/8.5s.png",
+        "sha256": "1aa3205cf344cbab13832b84b3c46523e77e647d82765374e3cfe0ff99c70b62"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/9.6s.png",
+        "sha256": "73f5f75fcda7de86f94c9dbf79f625d1af92bf68512fe35dfedbacfd4fdff206"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/11.5s.png",
+        "sha256": "fbd4f2616d8c6e960bc4acc79e85ab7a98bd19a86f8de9521ce3f99a79c5d1f3"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/12.6s.png",
+        "sha256": "9f51d0d89b6cac415f41f557d2b03cd98da9ead75a6b1acb9025a68f593bb4f7"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/14.5s.png",
+        "sha256": "5c3fb530747a734408488e4241e9f1ab35b6dda9bbeacca6a890543bd030a096"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/21.9s.png",
+        "sha256": "6fc370ce95cfa6af2c5a0c22e4e9701aa87d4aa7a598c896eea381c555a20618"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/22.0333s.png",
+        "sha256": "62cbd61496d7d254b7fbd03073318b35189a2fa45ee10e09c5c0bdb9c5f98b72"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/22.6s.png",
+        "sha256": "c7ae09091059350a19c23e5c633b6e6b6c33b3412d45af8a6ac2676b5ac32480"
+      },
+      {
+        "path": "evidence/independent-review/household-plan-vertical/45.9s.png",
+        "sha256": "de95cf0b11a036910c9dab5bf912c0014031fbbe1371c83d91b4375af19b2f52"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "work-hour-plan-landscape",
+    "pipelineId": "2026-10-03T13-39-41-781Z-a9eabe53",
+    "videoSha256": "8579ea9a20101078c6de806aafcc92712bf5b1eb8ee3b43cd86037845c6e20b1",
+    "times": [
+      0.1,
+      2.9,
+      3.6,
+      5.5,
+      6.6,
+      8.5,
+      9.6,
+      11.5,
+      12.6,
+      14.5,
+      15.6,
+      17.5,
+      18.6,
+      20.5,
+      21.6,
+      23.5,
+      24.6,
+      26.5,
+      33.9,
+      34.033333,
+      34.6,
+      57.9
+    ],
+    "width": 360,
+    "duration": 58,
+    "cut": 34,
+    "frames": [
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/0.1s.png",
+        "sha256": "93309bf74978089e7705aa51efa3841839ba93d52ac8c048665b9ed7a87f4a7f"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/2.9s.png",
+        "sha256": "b4647e3f2393bd97173a58219fb6b14fcf779f5334e801afb267c87c25bf9b43"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/3.6s.png",
+        "sha256": "611e00b7fa8a4c1d2427f56935001675a2064a2978bc90110648748d9af77a4d"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/5.5s.png",
+        "sha256": "dfd50ad1ab98d59f5ec57fbd7f4416468b29dc7b96a453c53b9353522993a2ad"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/6.6s.png",
+        "sha256": "4b97ac733cca90b5ad9c2ba1e79e2a996bd4a07601257e7fd01d1de34bd2967c"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/8.5s.png",
+        "sha256": "ab69d5b5eedf9bc0fac0da02bdb8b3cee0f33fbac9f53170d33c72f07e19bca8"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/9.6s.png",
+        "sha256": "21acf6b8b7a69ae3b7e686de72e2906aa530f3ba20b5478e8162ab2c634f5d27"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/11.5s.png",
+        "sha256": "a453448d694d2c581db9ee95c6072956c22e49f9794ed2fbd32e08948e4be8bf"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/12.6s.png",
+        "sha256": "b606dacb6ad87fb9591c9dc9d88e6edc49929eb472ce3f433a0e2a7cc821c255"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/14.5s.png",
+        "sha256": "5325945c9a76cbd6609f7a22c2142753e246f5bbab7ee271d53c4551744b8e89"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/15.6s.png",
+        "sha256": "83968270b55b01119ba9222a4fbf2ff300db55a4566e52cfb847d44d95f44923"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/17.5s.png",
+        "sha256": "6c7625b9eb72ef73a314c308d1094d7ef629738afb2baa4b71c682dc1c3374cc"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/18.6s.png",
+        "sha256": "bf565e86bb2a72f521686d2ba39b6c8c740192aa5173c3b32ba3e994e5870efd"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/20.5s.png",
+        "sha256": "06991a57abdbee00f668820ef6da507026f9e6cc1cc83eaf80e09cad2b01018c"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/21.6s.png",
+        "sha256": "f61f8c6dd61c251d03fcd4cae2e525a38d836d8a89b286c18cdf2d677894f837"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/23.5s.png",
+        "sha256": "160dd26354dabf656d93e142116cdc9c081db17c4ea895699a90a3368b4f3a58"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/24.6s.png",
+        "sha256": "234cd70216c68244334f43792b17bc25a95837ab92ce66d33d78e91eddb9483c"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/26.5s.png",
+        "sha256": "6b2bcfb3534ebd889375a71e9eaf7201db0040dad66b04daffffa57275b6133e"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/33.9s.png",
+        "sha256": "79397ba7e3c1806e3ed0bfd648eb113d27036267b05f47d317459ca1f277f3f6"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/34.0333s.png",
+        "sha256": "2fc9d6279034d0feceb6e554b7cc7e36b64ef074e149c0a748106800244b165f"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/34.6s.png",
+        "sha256": "f420ce1e8a1f3e2e94bb5dd247febeddeef383bf1201028271edf46be6c3ea43"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-landscape/57.9s.png",
+        "sha256": "f2bf1dd5790d15d9944105991edb9d51bfa2b3213f602194ab05a0b6daba9bc4"
+      }
+    ],
+    "visuallyInspected": true
+  },
+  {
+    "name": "work-hour-plan-vertical",
+    "pipelineId": "2026-10-03T13-40-00-416Z-a91d645e",
+    "videoSha256": "d073703da2b0a2f3ac6f50941b4c12c67d375f9194c4873191ccc739542fcf93",
+    "times": [
+      0.1,
+      2.9,
+      3.6,
+      5.5,
+      6.6,
+      8.5,
+      9.6,
+      11.5,
+      12.6,
+      14.5,
+      15.6,
+      17.5,
+      18.6,
+      20.5,
+      21.6,
+      23.5,
+      24.6,
+      26.5,
+      33.9,
+      34.033333,
+      34.6,
+      57.9
+    ],
+    "width": 360,
+    "duration": 58,
+    "cut": 34,
+    "frames": [
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/0.1s.png",
+        "sha256": "a719a509ce25303f516d861e8a7aa69a3e4f9ef2d96dd40df5dc07cb8110b787"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/2.9s.png",
+        "sha256": "940066cc34e3f189ca20ec2e300c33a937039d161b193e32725e7eb2938fbb4e"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/3.6s.png",
+        "sha256": "eff25819d9ba1217d660e64949093dbe95a6a66e30fc4d6a68b76838c7d32e9a"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/5.5s.png",
+        "sha256": "c21de799372c4386f8f40fb9d62b04bfe627d27403ceb7a91dfca5e0a0f5f237"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/6.6s.png",
+        "sha256": "e7c33da4f7c2322e76e82b189b5699439af8cb9ad3af0f8446153fde6cf4789b"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/8.5s.png",
+        "sha256": "ec260eaed17783d2fd119c49e8e428352e7dd0090c535f28fba5ae55e1636197"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/9.6s.png",
+        "sha256": "0bab743afe07406d704603e3c4e6bce2aeeabfe40b79238f806b5071eaa169ff"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/11.5s.png",
+        "sha256": "313897cb9c87515fb94615ac6db0666360a1a411141b88392583514b616b575b"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/12.6s.png",
+        "sha256": "06144e46b6ebb5a8225802b46e0e6fb54402cd60bc5ce08a382f3adc99140ead"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/14.5s.png",
+        "sha256": "a2e383d1018a1dd687368dc539ed0c900afcbad8c5a3d9b493445dde123a618c"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/15.6s.png",
+        "sha256": "42d5341d37b47a95fe85bb449fd38e5109cb67e54ee1228dca83e4a553dc194f"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/17.5s.png",
+        "sha256": "24b8634c17182464cc254bfc7e0a7be45caa1317c9236d06f52af50213ea690c"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/18.6s.png",
+        "sha256": "6d300327343450dbbcb38c26baa194a8809d17f353d951513442e38680485fd5"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/20.5s.png",
+        "sha256": "803b1e451cc8da7f7a14caf4ca1ac48d91a872721ab9e8e5b1bcde821f5656ae"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/21.6s.png",
+        "sha256": "c1a8b50904e1aa14900a48edc69f5659d2f454873cf526ece6a91bd1a526bb6c"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/23.5s.png",
+        "sha256": "a8a6241053001d0ca1b30c8d766cb148d33020da759a4f1d0b144d0914234249"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/24.6s.png",
+        "sha256": "d3ac8e7ed161b56812835bb6c56478bcaba956007e2ee5525c88db746e4ec330"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/26.5s.png",
+        "sha256": "a3ad432dfc2efb439a79e8b9b28440f046bd7fe8d5911d8052f0c5ee365c4e7b"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/33.9s.png",
+        "sha256": "5a4e3059abb8e07bfc560f6c843f3d0709d7aa0bc239f861fa9d7bfea9a2cbc2"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/34.0333s.png",
+        "sha256": "369376f75ce0d07b76e598109911188b2058a5b6ccc44df081e5a5d5e6ad11d2"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/34.6s.png",
+        "sha256": "bc3502147e99b1def6fa90e6c980fe2f1d119fe7ec4a3287f85dcc87920de0e7"
+      },
+      {
+        "path": "evidence/independent-review/work-hour-plan-vertical/57.9s.png",
+        "sha256": "d02a51652dfcde129a27ed1ec8c0f528a94e3288e00ad811eb721d2710c366f4"
+      }
+    ],
+    "visuallyInspected": true
+  }
+]
