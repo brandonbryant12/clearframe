@@ -147,6 +147,8 @@ Worlds move the camera across a plane. Depth moves it *into* the picture.
 
 ## Design the frame
 
+For quantities over time, use [`props.plot`](quantitative-plots.md): comparable native lines share explicit axes, real elapsed-date spacing and one reveal clock; null observations leave gaps. Raw line/path/poly elements can set `enter: "draw", drawEase: "linear"` when a stroke must track time uniformly. Other drawing entrances retain their existing eased motion. Final values and source labels need an authored reading hold.
+
 - **One idea, drawn.** Draw the mechanism the narration explains, not the words it says. A route for a journey, orbits for an ecosystem, a balance for a trade-off, a pipe for a flow, a network for spread.
 - **Stage it.** Establish the ground first (a rule, an axis, a faint path in `line`), then the subject, then the change. Cue the change to the stressed word with `say`.
 - **Draw, don't fade.** Strokes that draw on, arrows that ride their tip and markers that travel along paths read as explanation. A fade is a pause, not an idea.

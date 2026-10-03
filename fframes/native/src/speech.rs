@@ -384,17 +384,20 @@ impl<'a, 'c, 'm> Draw<'a, 'c, 'm> {
     pub(crate) fn footer(&self) -> Svgr<'a> {
         let env = &self.b.environment;
         let tall = env.height > env.width;
-        let source_y = self.floor.min(env.height)
+        let source_y = (self.floor.min(env.height)
             - if env.captions && self.floor >= env.height {
                 if tall { 320.0 } else { 160.0 }
             } else if env.framed && self.floor >= env.height {
                 128.0
             } else {
                 92.0
-            };
+            }).min(env.height * if tall { 0.94 } else { 0.95 } - 60.0);
+        let source_margin = env.width * if tall { 0.1 } else { 0.05 };
+        let source_x = self.area.x.max(source_margin);
+        let source_right = (self.area.x + self.area.w).min(env.width - source_margin);
         let (source, _) = self.para(
             s(self.props(), "source"),
-            Area { x: self.area.x, y: source_y, w: self.area.w, h: 60.0 },
+            Area { x: source_x, y: source_y, w: (source_right - source_x).max(1.0), h: 60.0 },
             Style::text(22.0),
             &self.p.muted,
             Align::Left,

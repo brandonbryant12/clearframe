@@ -55,6 +55,7 @@ const COMMON = [
   'origin',
   'blend',
   'enter',
+  'drawEase',
   'at',
   'say',
   'dur',
@@ -224,6 +225,8 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       );
     }
     if (el.enter != null && !ENTERS.includes(el.enter)) fail(`${at}.enter must be one of ${ENTERS.join(', ')}`);
+    if (el.drawEase != null && (el.enter !== 'draw' || !['out','linear'].includes(el.drawEase)))
+      fail(`${at}.drawEase needs enter draw and must be out or linear`);
     if (el.exit != null && !EXITS.includes(el.exit)) fail(`${at}.exit must be one of ${EXITS.join(', ')}`);
     if ((el.exitAt != null || el.exitSay != null) && el.exit == null) el.exit = 'fade';
     if (['type', 'scramble'].includes(el.enter) && el.type !== 'text')
@@ -920,7 +923,9 @@ export function elementsExtent(elements) {
           chars = String(
             el.count ? `${el.count.prefix ?? ''}${el.count.to}${el.count.suffix ?? ''}` : (el.text ?? ''),
           ).length;
-        const w = el.width ?? chars * size * (el.font === 'mono' ? 0.62 : 0.54);
+        // Native single-line fitting caps the advance. Do not report the unfitted title
+        // outside its camera while the renderer correctly shrinks it into this width.
+        const w = el.width ?? Math.min(el.fit ?? Infinity, chars * size * (el.font === 'mono' ? 0.62 : 0.54));
         const x0 = el.anchor === 'middle' ? n('x') - w / 2 : el.anchor === 'end' ? n('x') - w : n('x');
         grow(dx + x0, dy + n('y') - size * 0.8, dx + x0 + w, dy + n('y') + size * 0.25);
       } else if (el.type === 'path' && typeof el.d === 'string') {

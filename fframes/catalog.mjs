@@ -517,6 +517,8 @@ export const BLOCKS = [
         'A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars|stack|number, values: [{label, value, highlight, id}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (the note replaces a heading: an annotation on the stressed word)',
       kpi:
         'Editable native dimensional KPI: {form: pedestal|comparison|rail|seesaw|stack, label, unit?, value?, values?:[{label,value}], total?, domain?:[0,max], prefix?, suffix?, decimals?:0–3, motion?:none|reveal|stagger|emphasis|{preset,duration,stagger}, focus?, source?}. Comparison front heights share one zero-based scale; rail and stack lengths use an explicit total. Seesaw has two comparable values and qualitative tilt. Seesaw/stack require a unit. Every form needs an exact visible source. See docs/kpi-direction.md.',
+      plot:
+        'Sourced multiseries line plot: {title, x:{type:linear|date,label,domain,ticks,...}, y:{type:linear|log,label,domain,ticks,...}, series:[{id,label,values:[{x,y}]}], asOf, source?, motion?:none|{at,duration}, annotation?}. Dates preserve elapsed spacing, null y leaves a gap, all series share explicit scales and a linear reveal clock. See docs/quantitative-plots.md.',
       teaching:
         'Editable pause/answer/explanation: {form:choice|gap, phase:question|answer, prompt, explanation, layout?:full|split, motion?:fade|none, revealAt?, explainAt?, source?}. Choice uses options:[2–3 strings] and correctIndex; gap uses before, answer and optional after. Use separate beats for reading and answer holds. Split reserves landscape right-half imagery. See docs/teaching-sequences.md.',
       sketch:

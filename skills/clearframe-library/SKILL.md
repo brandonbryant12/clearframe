@@ -40,6 +40,8 @@ Research and podcast sources do not imply one style. `research-investigation` is
 
 Layers combine with any block: `plate` (image/clip behind or beside), `tone` (colour-blocked scene), `camera` (slow move, on by default) and `art` (canvas elements under/over). A film-level `texture` adds grain and vignette. Read `docs/canvas.md` and the `clearframe-canvas` skill before drawing.
 
+For multiple comparable time series, use `canvas.props.plot`: explicit shared domains and ticks, linear or dated x, linear or logarithmic y, null gaps, source/as-of and synchronized linear reveals. See [quantitative-plots.md](../../docs/quantitative-plots.md). Keep a two-second final-label hold and review portrait composition; source compilation does not establish visual acceptance.
+
 Colors, motion intensity, entrances, sources and reading time are authored choices. Read `docs/style.md`. Kinetic modes are highlight/reveal/word; follow `docs/speech.md` for the measured-timestamp requirement. For generated plates, use `docs/continuity.md` and inspect both joins.
 
 Use `gallery` to review all blocks in a theme/aspect ratio. A new block touches four places: authoring metadata and example in `fframes/catalog.mjs`; prop validation in `fframes/validators.mjs`; runtime rules in `fframes/registry.mjs` (cue delay, staged items, when values settle, sound events, critique family); and the renderer in `fframes/native/src/` (`story.rs`, `speech.rs`, `charts.rs`, `diagrams.rs`, `media.rs` or `canvas.rs`, registered in `lib.rs` `BLOCKS` and dispatched in `compositor.rs`). Shared timing values live only in `fframes/constants.json`. A parity test fails if the renderer and catalog block lists diverge. Do not copy archived browser components into the active path.
