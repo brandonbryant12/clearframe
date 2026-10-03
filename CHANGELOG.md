@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Dated series prototypes.** Matched-price deflation, period-aware growth and annualization, complete-window sample statistics and observed drawdown/recovery feed twelve native examples. Shared dates, distinct units, missing-value gaps and explicit native source elements keep comparisons auditable. See `docs/time-series.md`; risk-adjusted metrics, vintage alignment, continuous playback and final master acceptance remain open.
+
 - **Authored camera prototypes.** Three original Blender recipes add detail-to-system and hero-to-field pullbacks plus a fixed-camera focus transfer. Complete deterministic poses, endpoint fitting and optical hold checks support separately composed landscape and portrait examples with sharp native qualifications. See `docs/camera-studies.md`; continuous playback and final master review remain pending.
 
 - **Reservoir and conveyor prototypes.** Two original Blender mechanisms add conserved analytic fill, staged gates, a spaced queue and a bypass route. Opt-in orthographic framing reserves copy space; four source clips retain baked geometry and saved-scene checks. Eight native examples reuse source phase cues and an explicit still reading hold. See `docs/physical-mechanisms.md`; continuous playback and final master acceptance remain pending.

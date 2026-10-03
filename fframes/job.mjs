@@ -233,9 +233,11 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     }
     props.dolly?.sort((a, b) => a.at - b.at);
     props.focus?.keys?.sort((a, b) => a.at - b.at);
-    if (hasCount(props.elements) && (!props.source || !sb.sources.length))
+    if (props.sourceElement && !sb.sources.length) throw new Error('sourceElement requires storyboard.sources.');
+    const visibleSource = props.source || props.sourceElement;
+    if (hasCount(props.elements) && (!visibleSource || !sb.sources.length))
       throw new Error('Counted numbers need visible props.source and a storyboard.sources entry.');
-    if (hasDigits(props.elements) && !props.source)
+    if (hasDigits(props.elements) && !visibleSource)
       report.warnings.push(`${b.id}: canvas text contains digits; if they are figures, add a visible source.`);
   }
   const art = source.art != null ? artLayers(source.art, b.id, { width: timing.width, height: timing.height, duration: b.dur }) : null;
