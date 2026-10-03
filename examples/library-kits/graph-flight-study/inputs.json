@@ -8,7 +8,7 @@
       "mechanism": "graph-flight",
       "title": "Month-end reserve",
       "context": "Eight fictional monthly observations",
-      "axis": "Reserve in hundreds of USD",
+      "axis": "Reserve (USD)",
       "valuePrefix": "$",
       "valueMultiplier": 100,
       "valueSuffix": "",

@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "errors": [],
+  "warnings": [],
+  "framesChecked": 65,
+  "duration": 16,
+  "inputId": "e2412ab918521c85a4fad25e0f908520a18c4140f108138cca9b48bbd65b40c6",
+  "command": "node engine/cli.mjs check examples/library-kits/graph-flight-study/specimens/reserve-path-landscape --draft",
+  "scope": "Native diagnostics; not encoded full-motion verification."
+}
