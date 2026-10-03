@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Native sRGB output tags.** Correct the finisher’s transfer signal in MP4 and H.264 while preserving the actual SMPTE 170M matrix and all encoded picture samples. Real silent/audio mux tests and four retained stream-copy comparisons verify the correction; receipts now expose all color properties and JavaScript finisher hashes. Arbitrary imported-media normalization and player acceptance remain open. See `docs/research/fframes-color-transfer/README.md`.
+
 - **FFFrames 1.2.0.** Pin the current stable renderer release and its dependency graph. Upstream now supplies delayed-frame draining. Replace the old media patch with one output-duration rounding fix after a new fractional-duration regression proves that unpatched 1.2 can lose a valid final sample. Preserve one Metal pipeline, two encoder workers and libx264 output; use upstream geometry-cache defaults.
 
 - **Chart-flight color evidence.** Four FFFrames 1.2 re-encodes of the retained source pass 36 direct decoded crop comparisons without channel-bias subtraction. Hash-bound evidence and a fresh-output replay helper document the lossy tolerance; different transfer tags leave color-managed playback unverified, while material accuracy, camera polish and final acceptance remain open. See `examples/library-kits/graph-flight-study/README.md`.

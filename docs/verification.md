@@ -33,7 +33,7 @@ A 12.5-second vertical speech fixture produced 375 frames, audio, and measured w
 
 All 360 frames across the bars, funnel and video boundary fixtures passed strict native inspection without warnings. The final-frame regression verifies the exact final B-frame, rejects a frame beyond the clip, and reproduces the final frame after a backward seek. The decoder patch and provenance are under `fframes/native/vendor/fframes-media/`.
 
-Baseline records: `build/native-verified-final/verification.json`, `build/speech-smoke/build/video.mp4.json` and `build/speech-smoke/build/audio-review.json`. Source, fonts, inputs and outputs are hashed in render receipts. The active codec conversion and tags are SMPTE170M.
+Baseline records: `build/native-verified-final/verification.json`, `build/speech-smoke/build/video.mp4.json` and `build/speech-smoke/build/audio-review.json`. Source, fonts, inputs and outputs are hashed in render receipts. The active matrix conversion and matrix tag are SMPTE170M. The native working transfer is sRGB (IEC 61966-2-1), with BT.709 primaries and limited range; see the [transfer-signaling correction](research/fframes-color-transfer/README.md). Historical receipts retain their original tags.
 
 ## GitHub expansion verification
 

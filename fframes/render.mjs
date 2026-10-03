@@ -90,6 +90,14 @@ export async function renderProject(root, { draft = false, out, noAudio = false,
       backend: process.platform === 'darwin' ? 'skia-metal' : 'cpu',
       audio: !!probe.audio,
       colorSpace: probe.video.color_space ?? null,
+      colorTransfer: probe.video.color_transfer ?? null,
+      colorPrimaries: probe.video.color_primaries ?? null,
+      colorRange: probe.video.color_range ?? null,
+      // The native source hash excludes the JavaScript finishing step.
+      finishingSourceHashes: {
+        'fframes/render.mjs': sha256(fs.readFileSync(new URL(import.meta.url))),
+        'engine/lib/audio.mjs': sha256(fs.readFileSync(new URL('../engine/lib/audio.mjs', import.meta.url))),
+      },
       outputSha256: sha256(fs.readFileSync(output)),
       voiceProviders: [...new Set(ctx.timing.beats.map(b => b.vo?.provider).filter(Boolean))],
     };
