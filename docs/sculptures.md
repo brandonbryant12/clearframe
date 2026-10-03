@@ -2,7 +2,7 @@
 
 ClearFrame can prepare an original Blender scene in the background, bake its motion and retain a video insert. FFFrames composes the final film, including its editable type, evidence, charts and sound. Blender is optional and is not involved in ordinary film rendering or copy revisions.
 
-The fourteen recipes use independent geometry, materials and motion. They are useful starting objects, not a finite set of permitted looks. Open the saved `.blend`, change a recipe, or author a new built-in recipe when the story calls for a different object. Palette and seed variations are refinements; a fresh direction should also change the silhouette, material, operation, camera or editorial role.
+The sixteen recipes use independent geometry, materials and motion. They are useful starting objects, not a finite set of permitted looks. Open the saved `.blend`, change a recipe, or author a new built-in recipe when the story calls for a different object. Palette and seed variations are refinements; a fresh direction should also change the silhouette, material, operation, camera or editorial role.
 
 | Recipe | Material and operation | Best use |
 |---|---|---|
@@ -19,6 +19,8 @@ The fourteen recipes use independent geometry, materials and motion. They are us
 | `linked-system` | Perspective pullback from a control junction to connected branches. | Connections and dependencies; no measured flow. |
 | `hero-field` | Perspective pullback from a selected marker to a wider field. | Individual and context; illustrative counts only. |
 | `focus-depth` | Fixed camera racks focus between near and deeper objects. | Selective attention with crisp native qualifications. |
+| `inspection-orbit` | One bounded orbit around a static open ceramic assembly. | Side connections and changing viewpoints; no measured internals. |
+| `parallax-truck` | Equal camera/target translation past foreground screens and a rear route. | Partial visibility and depth; no complete-visibility guarantee. |
 | `conveyor-bypass` | Ceramic packets queue at a narrow neck and travel through an opened alternate route. | Logistics or routing metaphor; no measured throughput. |
 
 All are qualitative visual metaphors. Their dimensions, weights, layer counts and trajectories do not represent measurements. Adapt the geometry to the actual subject before using an assembly as a factual product diagram. Keep evidence and text native.

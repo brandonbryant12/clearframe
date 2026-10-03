@@ -26,6 +26,8 @@ def _minimum_norm(start, end):
 
 
 def validate(path):
+    if isinstance(path, dict) and type(path.get('version')) is int and path['version'] == 2:
+        return _validate_preset(path)
     if not isinstance(path, dict) or set(path) != {'version', 'clock', 'projection', 'dof', 'keys'}:
         raise ValueError('Camera path fields must be version, clock, projection, dof and keys.')
     if type(path['version']) is not int or path['version'] != 1 or path['clock'] != 'qualitative-pose' or path['projection'] not in ('perspective', 'orthographic') or not isinstance(path['dof'], bool):
@@ -60,6 +62,8 @@ def validate(path):
 def path_at(path, phase):
     validate(path)
     number(phase, 0, 1, 'sample phase')
+    if path['version'] == 2:
+        return _preset_at(path, phase)
     keys = path['keys']
     for a, b in zip(keys, keys[1:]):
         if phase <= b['phase']:
@@ -180,3 +184,71 @@ def fit_perspective(camera, objects, target, safe=(.08, .15, .92, .70)):
     if bounds is None or bounds[0] < safe[0]-1e-5 or bounds[1] < safe[1]-1e-5 or bounds[2] > safe[2]+1e-5 or bounds[3] > safe[3]+1e-5:
         raise ValueError('Perspective endpoint fit did not converge inside the safe rectangle.')
     return {'safe': list(safe), 'bounds': list(bounds), 'subjectNames': [o.name for o in objects]}
+
+
+# Version 2 stores an analytic move, not a polygonal approximation of an orbit.
+def _validate_preset(path):
+    fields = {'version', 'clock', 'projection', 'dof', 'preset', 'pose', 'move', 'ease'}
+    parameter = 'degrees' if path.get('preset') == 'orbit' else 'translation'
+    if set(path) != fields | {parameter} or path.get('preset') not in ('orbit', 'truck'):
+        raise ValueError('Unsupported analytic camera preset fields.')
+    if path['ease'] not in ('linear', 'smooth'):
+        raise ValueError('Preset ease must be linear or smooth.')
+    if not isinstance(path['pose'], dict) or set(path['pose']) != set(POSE_FIELDS):
+        raise ValueError('Preset pose must contain exactly the complete pose fields.')
+    # Reuse complete-pose, optical and phase validation without changing v1.
+    make_path(path['pose'], path['pose'], path['move'], path['projection'], path['dof'])
+    if path['clock'] != 'qualitative-pose':
+        raise ValueError('Preset clock must be qualitative-pose.')
+    start = path['pose']
+    if path['preset'] == 'orbit':
+        number(path['degrees'], -170, 170, 'orbit degrees')
+        if abs(path['degrees']) < .01:
+            raise ValueError('Orbit arc must be at least .01 degree.')
+        radius = math.hypot(*(p-t for p, t in zip(start['location'][:2], start['target'][:2])))
+        # Conservative full-circle envelope, valid for every intermediate angle.
+        if radius < .001 or any(abs(t)+radius > 10000 for t in start['target'][:2]):
+            raise ValueError('Orbit radius or world envelope exceeds the supported range.')
+    else:
+        delta = path['translation']
+        if not isinstance(delta, (list, tuple)) or len(delta) != 3:
+            raise ValueError('Truck translation must have three components.')
+        for v in delta:
+            number(v, -10000, 10000, 'truck translation')
+        if math.dist(delta, (0, 0, 0)) < .001:
+            raise ValueError('Truck translation must move at least .001 world unit.')
+        end = _preset_at(path, 1)
+        make_path(start, end, path['move'], path['projection'], path['dof'])
+    return path
+
+
+def _preset_at(path, phase):
+    t = min(1.0, max(0.0, (phase-path['move'][0])/(path['move'][1]-path['move'][0])))
+    if path['ease'] == 'smooth':
+        t = t*t*(3-2*t)
+    pose = copy.deepcopy(path['pose'])
+    if t == 0:
+        return pose
+    if path['preset'] == 'orbit':
+        angle = math.radians(path['degrees'])*t
+        x, y = (p-c for p, c in zip(pose['location'][:2], pose['target'][:2]))
+        pose['location'] = [pose['target'][0]+x*math.cos(angle)-y*math.sin(angle),
+                            pose['target'][1]+x*math.sin(angle)+y*math.cos(angle), pose['location'][2]]
+    else:
+        for name in ('location', 'target'):
+            pose[name] = [p+d*t for p, d in zip(pose[name], path['translation'])]
+    return pose
+
+
+def make_orbit(pose, degrees, move=(.16, .74), projection='perspective', dof=False, ease='smooth'):
+    """Rotate about a fixed target on world Z; radius, height and optics stay fixed."""
+    return validate({'version': 2, 'clock': 'qualitative-pose', 'projection': projection, 'dof': dof,
+                     'preset': 'orbit', 'pose': copy.deepcopy(pose), 'degrees': degrees,
+                     'move': list(move), 'ease': ease})
+
+
+def make_truck(pose, translation, move=(.16, .74), projection='perspective', dof=False, ease='smooth'):
+    """Translate camera and look target equally; orientation and optics stay fixed."""
+    return validate({'version': 2, 'clock': 'qualitative-pose', 'projection': projection, 'dof': dof,
+                     'preset': 'truck', 'pose': copy.deepcopy(pose), 'translation': copy.deepcopy(translation),
+                     'move': list(move), 'ease': ease})
