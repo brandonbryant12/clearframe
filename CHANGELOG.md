@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Distribution and tail views.** Explicit count/density bins retain original sample membership, null counts and exact threshold comparisons. Four native specimens keep the complete histogram visible while outlining qualifying observations. Independent arithmetic and encoded review support a prototype; see `docs/distributions.md`. Continuous playback and final master acceptance remain open.
+
 - **Correlation windows.** Native Pearson matrices retain paired monthly returns, explicit counts and undefined reasons; selected-pair charts preserve shared percent axes and missing gaps. Four original specimens and independent arithmetic/encoded review support a prototype. See `docs/correlations.md`; continuous playback and final master acceptance remain open.
 - **Ranked small multiples.** Shared native panels retain full dated histories and fixed domains while order changes on an explicit observation date. Ties share rank, missing values stay unranked, and a selected panel enlarges uniformly. Four native specimens retain independent rank and encoded geometry evidence. See `docs/small-multiples.md`; continuous playback and final master acceptance remain open.
 
