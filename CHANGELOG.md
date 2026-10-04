@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Headline figures.** `props.stat` shows one sourced number with a kicker, a label and a change line. The figure counts up natively, and the change is green or red by whether a rise is good news for that measure (`good: up|down|neutral`). The finance kit opens with inflation and retirement-balance examples. See `docs/stat.md`.
+
 - **Signed bar charts.** `props.bars` draws editorial bar charts that share the plot's layout: an honest zero baseline, positive and negative colours, vertical (time) or horizontal (ranked categories), an optional dashed reference line, and labels that thin or relocate instead of colliding. The finance kit adds annual returns, contributions and monthly flows. See `docs/bars.md`.
 
 - **Runway footage and a footage-led workflow.** Clip assets can select Runway Dev models (`seedance2_5`, `seedance2`, `seedance2_fast`, `gen4.5`) next to Omni and Veo, with first/last keyframes, credit estimates in `plan`, inline or uploaded images and plain moderation errors (`skills/runway-video`). `docs/hero-footage.md` records a keyframe-first workflow for sizzle reels and trailers: approved stills, last-frame continuation, provider routing, cutting to the measured drop, native type over plates and frame-verified review.

@@ -25,6 +25,53 @@
  ],
  "beats": [
   {
+   "id": "headline-rate",
+   "block": "canvas",
+   "duration": 6,
+   "camera": "none",
+   "exit": "none",
+   "props": {
+    "stat": {
+     "source": "Illustrative data",
+     "asOf": "2026-10-04",
+     "kicker": "Inflation, last twelve months",
+     "value": 3.1,
+     "decimals": 1,
+     "suffix": "%",
+     "label": "Consumer prices rose more slowly than a year ago",
+     "change": {
+      "value": -0.6,
+      "suffix": " pts",
+      "context": "vs a year earlier",
+      "good": "down"
+     }
+    }
+   }
+  },
+  {
+   "id": "headline-money",
+   "block": "canvas",
+   "duration": 6,
+   "camera": "none",
+   "exit": "none",
+   "props": {
+    "stat": {
+     "source": "Illustrative data",
+     "asOf": "2026-10-04",
+     "kicker": "Typical retirement balance",
+     "value": 87500,
+     "prefix": "$",
+     "label": "Median 401(k) balance, savers aged 55–64",
+     "change": {
+      "value": 6.2,
+      "decimals": 1,
+      "suffix": "%",
+      "context": "in one year"
+     }
+    }
+   }
+  },
+  {
    "id": "compounding",
    "block": "canvas",
    "duration": 9,

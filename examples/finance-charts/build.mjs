@@ -34,6 +34,8 @@ const recessions = [
 const years = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 const yearTicks = (...ys) => ys.map(y => `${y}-12-31`);
 
+const statBeat = (id, stat, duration = 6) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
+  props: { stat: { source, asOf, ...stat } } });
 const barsBeat = (id, bars, duration = 7) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
   props: { bars: { source, asOf, ...bars } } });
 const beat = (id, plot, duration = 9) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
@@ -42,6 +44,16 @@ const beat = (id, plot, duration = 9) => ({ id, block: 'canvas', duration, camer
 function beats(shape) {
   const tall = shape !== 'landscape';
   return [
+    statBeat('headline-rate', {
+      kicker: 'Inflation, last twelve months', value: 3.1, decimals: 1, suffix: '%',
+      label: 'Consumer prices rose more slowly than a year ago',
+      change: { value: -0.6, suffix: ' pts', context: 'vs a year earlier', good: 'down' },
+    }),
+    statBeat('headline-money', {
+      kicker: 'Typical retirement balance', value: 87500, prefix: '$',
+      label: 'Median 401(k) balance, savers aged 55–64',
+      change: { value: 6.2, decimals: 1, suffix: '%', context: 'in one year' },
+    }),
     beat('compounding', {
       title: 'Markets compound through every drawdown',
       x: { type: 'date', label: 'Year', domain: ['1990-03-31', '2025-12-31'], dateFormat: 'year',

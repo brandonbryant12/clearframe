@@ -7,6 +7,7 @@ import { rules } from '../../fframes/registry.mjs';
 import { elementsExtent as extent } from '../../fframes/canvas.mjs';
 import { expandPlotProps } from '../../fframes/plots.mjs';
 import { expandBarsProps } from '../../fframes/bars.mjs';
+import { expandStatProps } from '../../fframes/stat.mjs';
 import { createJob } from '../../fframes/job.mjs';
 import { roughStandIns } from '../../fframes/prepare.mjs';
 import { sketch, expandArt, sketchPreset } from '../../fframes/sketches.mjs';
@@ -22,6 +23,8 @@ function asDrawn(b, { width = 1920, height = 1080 } = {}) {
       return { ...b, props: expandPlotProps(b.props, { width, height, beatId: b.id }) };
     if (b.block === 'canvas' && b.props?.bars)
       return { ...b, props: expandBarsProps(b.props, { width, height, beatId: b.id }) };
+    if (b.block === 'canvas' && b.props?.stat)
+      return { ...b, props: expandStatProps(b.props, { width, height, beatId: b.id }) };
   } catch {
     // createJob below reports invalid references as author-facing errors.
   }
