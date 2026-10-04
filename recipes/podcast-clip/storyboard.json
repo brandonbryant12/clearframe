@@ -15,8 +15,7 @@
   "backdrop": "glow",
   "chrome": false,
   "captions": false,
-  "music": {},
-  "sfx": "subtle",
+  "music": false,
   "texture": {
     "grain": 0.3,
     "vignette": 0.5

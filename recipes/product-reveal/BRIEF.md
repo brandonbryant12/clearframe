@@ -2,6 +2,6 @@
 
 Audience: Customers and press at a launch
 
-Inputs: The product (a drawing like the ring here, or a render), two sourced specs, the name, availability
+Inputs: The product (a render, a drawing or a 3D solid), two sourced specs, the name, availability
 
-Light the object; never decorate around it. The ring is drawn from a few ellipses (library/playbooks/_product-reveal.mjs): redraw your own product the same way, or place a render as an image element on the stage. Replace both specs with real figures and their sources; every number keeps its unit and what it is compared with.
+Light the object; don't decorate around it. Replace the solid with the product (an image element or a drawing) and the specs with real, sourced figures.

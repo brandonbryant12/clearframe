@@ -15,8 +15,7 @@
   "backdrop": "none",
   "chrome": false,
   "captions": false,
-  "music": {},
-  "sfx": "subtle",
+  "music": false,
   "sources": [
     {
       "id": "sample",

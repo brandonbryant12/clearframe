@@ -15,8 +15,7 @@
   "backdrop": "none",
   "chrome": false,
   "captions": false,
-  "music": {},
-  "sfx": "subtle",
+  "music": false,
   "texture": {
     "grain": 0.2,
     "vignette": 0.35
@@ -55,7 +54,136 @@
         "source": "Illustrative sample data · replace before publishing"
       },
       "art": {
-        "sketch": "ambient"
+        "under": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1080,
+            "h": 1920,
+            "kind": "dust",
+            "count": 36,
+            "fill": "ink",
+            "opacity": 0.35,
+            "size": 3,
+            "at": 0
+          },
+          {
+            "type": "circle",
+            "cx": 162,
+            "cy": 384,
+            "r": 422.4,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 9,
+              "amount": 18
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 885.6,
+            "cy": 576,
+            "r": 576,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "float",
+              "period": 11.5,
+              "amount": 22
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 756,
+            "cy": 1632,
+            "r": 384,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 14,
+              "amount": 26
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 324,
+            "cy": 1536,
+            "r": 307.2,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "float",
+              "period": 16.5,
+              "amount": 30
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 540,
+            "cy": 864,
+            "r": 230.4,
+            "fill": {
+              "gradient": [
+                "ink",
+                "ink"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 19,
+              "amount": 34
+            }
+          }
+        ]
       },
       "camera": {
         "move": "in",
@@ -94,8 +222,8 @@
             "type": "ellipse",
             "cx": 540,
             "cy": 960,
-            "rx": 669.6,
-            "ry": 384,
+            "rx": 324,
+            "ry": 230.4,
             "fill": {
               "gradient": [
                 "accent",
@@ -104,93 +232,31 @@
               "radial": true,
               "fade": true
             },
-            "opacity": 0.22,
-            "origin": [
-              540,
-              960
-            ],
-            "at": 0,
-            "enter": "none",
-            "keys": [
-              {
-                "at": 0,
-                "scaleY": 0.18,
-                "dur": 0
-              },
-              {
-                "at": 0.2,
-                "scaleY": 1,
-                "dur": 2.6,
-                "ease": "inOut",
-                "hold": false
-              }
-            ]
-          },
-          {
-            "type": "particles",
-            "x": 0,
-            "y": 537.6,
-            "w": 1080,
-            "h": 844.8,
-            "kind": "dust",
-            "count": 46,
-            "fill": "ink",
-            "opacity": 0.45,
-            "size": 3,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "line",
-            "x1": 540,
-            "y1": 960,
-            "x2": 32.39999999999998,
-            "y2": 960,
-            "stroke": "ink",
-            "width": 3,
-            "cap": "round",
-            "glow": {
-              "blur": 16,
-              "opacity": 0.9
-            },
-            "at": 0.25,
-            "enter": "draw",
-            "dur": 1.8
-          },
-          {
-            "type": "line",
-            "x1": 540,
-            "y1": 960,
-            "x2": 1047.6,
-            "y2": 960,
-            "stroke": "ink",
-            "width": 3,
-            "cap": "round",
-            "glow": {
-              "blur": 16,
-              "opacity": 0.9
-            },
-            "at": 0.25,
-            "enter": "draw",
-            "dur": 1.8
-          },
-          {
-            "type": "circle",
-            "cx": 540,
-            "cy": 960,
-            "r": 6.5,
-            "fill": "ink",
-            "glow": {
-              "blur": 22,
-              "opacity": 1
-            },
-            "at": 0,
-            "enter": "none",
+            "opacity": 0.08,
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 1.6,
             "loop": {
               "type": "pulse",
-              "period": 1.6,
-              "amount": 0.25
+              "period": 2.4,
+              "amount": 0.06
             }
+          },
+          {
+            "type": "line",
+            "x1": 475.2,
+            "y1": 960,
+            "x2": 604.8,
+            "y2": 960,
+            "stroke": "ink",
+            "width": 2,
+            "cap": "round",
+            "glow": {
+              "blur": 8
+            },
+            "at": 0.4,
+            "enter": "draw",
+            "dur": 1.2
           }
         ]
       }

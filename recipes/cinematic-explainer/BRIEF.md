@@ -4,4 +4,4 @@ Audience: Anyone who should understand how something works, told as a film rathe
 
 Inputs: A place or system with three to five stops, the question it answers, one sourced figure, the takeaway
 
-Shots, not slides (docs/cinema.md): wide establishing shot, an insert for the question, medium shots travelling one world, an insert for the figure, a silence, then the pull-back over the whole world, inside the same matte throughout. The world is drawn in section (library/playbooks/_cinematic-explainer.mjs) so the payoff is visible: redraw it for your system and keep the ground cut away. Replace the sample figure and its source before publishing.
+Shots, not slides (docs/cinema.md): wide establishing shot, an insert for the question, medium shots travelling one world, an insert for the figure, a silence, then the pull-back. Replace the sample figure and its source before publishing.

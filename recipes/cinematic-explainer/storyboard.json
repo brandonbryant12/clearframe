@@ -15,8 +15,7 @@
   "backdrop": "none",
   "chrome": false,
   "captions": false,
-  "music": {},
-  "sfx": "subtle",
+  "music": false,
   "texture": {
     "grain": 0.3,
     "vignette": 0.45,
@@ -25,13 +24,14 @@
   "lens": {
     "grade": "teal-orange",
     "gradeAmount": 0.5,
-    "bloom": 0.2,
+    "bloom": 0.35,
     "leak": 0.1,
-    "handheld": 0.12,
-    "blur": 0.4
+    "handheld": 0.15,
+    "blur": 0.5
   },
   "heading": "bottom",
   "textMotion": "words",
+  "sfx": "subtle",
   "sources": [
     {
       "id": "sample",
@@ -49,1634 +49,207 @@
     {
       "id": "establish",
       "block": "canvas",
-      "transition": "cut",
       "vo": "Every morning, a city of millions wakes up thirsty.",
       "props": {
         "elements": [
           {
             "type": "rect",
-            "x": -192,
-            "y": -216,
-            "w": 2304,
-            "h": 864,
+            "x": -384,
+            "y": -324,
+            "w": 2688,
+            "h": 1036.8,
             "fill": {
               "gradient": [
                 "bg",
                 "surface",
-                "accent2",
-                "accent"
+                "accent2"
               ],
               "angle": 90
             },
             "at": 0,
-            "enter": "none"
+            "dur": 0
           },
           {
-            "type": "ellipse",
-            "cx": 1344,
-            "cy": 648,
-            "rx": 806.4,
-            "ry": 367.2,
+            "type": "rect",
+            "x": -384,
+            "y": 669.6,
+            "w": 2688,
+            "h": 648,
+            "fill": "surface",
+            "at": 0,
+            "dur": 0
+          },
+          {
+            "type": "circle",
+            "cx": 1113.6,
+            "cy": 669.6,
+            "r": 540,
             "fill": {
               "gradient": [
-                "ink",
-                "accent"
+                "accent2",
+                "accent2"
               ],
               "radial": true,
               "fade": true
             },
-            "opacity": 0.6,
-            "z": 10,
-            "at": 0,
-            "enter": "none"
+            "opacity": 0.45,
+            "z": 14,
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 2
           },
           {
-            "type": "path",
-            "d": "M -192 648 V 536.3 H -138.4 V 648 Z M -129.7 648 V 308.4 H -9 V 648 Z M -2.8 648 V 481.1 H 107.9 V 648 Z M 118.1 648 V 574.5 H 245 V 648 Z M 254.4 648 V 518.9 H 357.7 V 648 Z M 368.8 648 V 576.7 H 425 V 648 Z M 434.6 648 V 372.9 H 551.2 V 648 Z M 560.1 648 V 578.7 H 626.9 V 648 Z M 629.5 648 V 545.1 H 735.9 V 648 Z M 739.1 648 V 548.5 H 871.7 V 648 Z M 890.2 648 V 497.9 H 1028.7 V 648 Z M 1031.6 648 V 338.2 H 1104.9 V 648 Z M 1121.5 648 V 540.1 H 1169.7 V 648 Z M 1187.6 648 V 492.6 H 1325.7 V 648 Z M 1333.2 648 V 544.1 H 1400.2 V 648 Z M 1416.5 648 V 524.2 H 1470.7 V 648 Z M 1480.5 648 V 333.2 H 1578.6 V 648 Z M 1588.2 648 V 575.8 H 1657.7 V 648 Z M 1671 648 V 398.9 H 1777.2 V 648 Z M 1794.3 648 V 536.3 H 1842.4 V 648 Z M 1851.4 648 V 528.9 H 1913.3 V 648 Z M 1928.9 648 V 469.5 H 1994.6 V 648 Z M 1995.1 648 V 543.3 H 2046.1 V 648 Z M 2058.5 648 V 574.2 H 2184.7 V 648 Z",
-            "fill": "muted",
-            "opacity": 0.4,
-            "stroke": "none",
-            "z": 5,
-            "at": 0,
-            "enter": "none"
+            "type": "circle",
+            "cx": 1113.6,
+            "cy": 702,
+            "r": 70.2,
+            "fill": "ink",
+            "z": 14,
+            "glow": {
+              "blur": 40,
+              "color": "accent2",
+              "opacity": 1
+            },
+            "at": 0.2,
+            "enter": "fade",
+            "dur": 1.2,
+            "keys": [
+              {
+                "at": 0.4,
+                "y": -108,
+                "dur": 8,
+                "ease": "out"
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "z": 6,
+            "at": 0.05,
+            "enter": "rise",
+            "dur": 0.8,
+            "dist": 40,
+            "children": [
+              {
+                "type": "path",
+                "d": "M -384 630.4 C -328 636.4 -160 664.2 -48 666.5 C 64 668.8 176 644.7 288 644.4 C 400 644.1 512 667.3 624 664.6 C 736 661.9 848 631.7 960 628.1 C 1072 624.5 1184 640.7 1296 643.1 C 1408 645.6 1520 640 1632 642.8 C 1744 645.6 1856 658 1968 660 C 2080 662 2248 655.5 2304 654.6 L 2304 1296 L -384 1296 Z",
+                "fill": "surface",
+                "stroke": "none",
+                "at": 0,
+                "dur": 0
+              },
+              {
+                "type": "path",
+                "d": "M -384 630.4 C -328 636.4 -160 664.2 -48 666.5 C 64 668.8 176 644.7 288 644.4 C 400 644.1 512 667.3 624 664.6 C 736 661.9 848 631.7 960 628.1 C 1072 624.5 1184 640.7 1296 643.1 C 1408 645.6 1520 640 1632 642.8 C 1744 645.6 1856 658 1968 660 C 2080 662 2248 655.5 2304 654.6 L 2304 1296 L -384 1296 Z",
+                "fill": "muted",
+                "stroke": "none",
+                "opacity": 0.4,
+                "at": 0,
+                "dur": 0
+              }
+            ]
           },
           {
             "type": "rect",
-            "x": -192,
-            "y": 475.2,
-            "w": 2304,
-            "h": 216,
+            "x": -384,
+            "y": 669.6,
+            "w": 2688,
+            "h": 108,
             "fill": {
               "gradient": [
-                "accent",
-                "accent"
+                "ink",
+                "ink"
               ],
-              "angle": 270,
+              "angle": 90,
               "fade": true
             },
-            "opacity": 0.35,
-            "z": 4,
-            "at": 0,
-            "enter": "none",
+            "opacity": 0.12,
+            "z": 5.7,
+            "at": 0.6,
+            "enter": "fade",
+            "dur": 2,
             "loop": {
               "type": "float",
-              "period": 14,
-              "amount": 8
+              "period": 11,
+              "amount": 14
             }
           },
           {
+            "type": "group",
+            "z": 2.4,
+            "at": 0.15000000000000002,
+            "enter": "rise",
+            "dur": 0.8,
+            "dist": 40,
+            "children": [
+              {
+                "type": "path",
+                "d": "M -384 718.3 C -328 721.9 -160 735.2 -48 739.9 C 64 744.6 176 751.8 288 746.6 C 400 741.4 512 712.5 624 708.5 C 736 704.5 848 723.6 960 722.8 C 1072 722 1184 707.8 1296 703.7 C 1408 699.7 1520 693.8 1632 698.5 C 1744 703.2 1856 730.2 1968 732.1 C 2080 734 2248 713.6 2304 709.9 L 2304 1296 L -384 1296 Z",
+                "fill": "surface",
+                "stroke": "none",
+                "at": 0,
+                "dur": 0
+              }
+            ]
+          },
+          {
             "type": "rect",
-            "x": -153.6,
-            "y": 715.9,
-            "w": 278.4,
-            "h": 384.1,
+            "x": -384,
+            "y": 756,
+            "w": 2688,
+            "h": 108,
             "fill": {
               "gradient": [
-                "surface",
-                "bg"
+                "ink",
+                "ink"
               ],
-              "angle": 90
+              "angle": 90,
+              "fade": true
             },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 136.3,
-            "y": 718,
-            "w": 266.4,
-            "h": 382,
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg"
-              ],
-              "angle": 90
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 414.3,
-            "y": 728.5,
-            "w": 248.5,
-            "h": 371.5,
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg"
-              ],
-              "angle": 90
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 674.2,
-            "y": 693.8,
-            "w": 216,
-            "h": 406.2,
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg"
-              ],
-              "angle": 90
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 901.7,
-            "y": 718.4,
-            "w": 184.4,
-            "h": 381.6,
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg"
-              ],
-              "angle": 90
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 1097.6,
-            "y": 682.5,
-            "w": 250.6,
-            "h": 417.5,
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg"
-              ],
-              "angle": 90
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 1359.7,
-            "y": 762.1,
-            "w": 231.6,
-            "h": 337.9,
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg"
-              ],
-              "angle": 90
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 1602.9,
-            "y": 751.5,
-            "w": 261.4,
-            "h": 348.5,
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg"
-              ],
-              "angle": 90
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 1875.8,
-            "y": 776,
-            "w": 277,
-            "h": 324,
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg"
-              ],
-              "angle": 90
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": -153.6,
-            "y": 715.9,
-            "w": 278.4,
-            "h": 3,
-            "fill": "accent",
-            "opacity": 0.45,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 136.3,
-            "y": 718,
-            "w": 266.4,
-            "h": 3,
-            "fill": "accent",
-            "opacity": 0.45,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 414.3,
-            "y": 728.5,
-            "w": 248.5,
-            "h": 3,
-            "fill": "accent",
-            "opacity": 0.45,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 674.2,
-            "y": 693.8,
-            "w": 216,
-            "h": 3,
-            "fill": "accent",
-            "opacity": 0.45,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 901.7,
-            "y": 718.4,
-            "w": 184.4,
-            "h": 3,
-            "fill": "accent",
-            "opacity": 0.45,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 1097.6,
-            "y": 682.5,
-            "w": 250.6,
-            "h": 3,
-            "fill": "accent",
-            "opacity": 0.45,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 1359.7,
-            "y": 762.1,
-            "w": 231.6,
-            "h": 3,
-            "fill": "accent",
-            "opacity": 0.45,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 1602.9,
-            "y": 751.5,
-            "w": 261.4,
-            "h": 3,
-            "fill": "accent",
-            "opacity": 0.45,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 1875.8,
-            "y": 776,
-            "w": 277,
-            "h": 3,
-            "fill": "accent",
-            "opacity": 0.45,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": -5.6,
-            "y": 741.9,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 28.4,
-            "y": 741.9,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.3,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": -73.6,
-            "y": 785.9,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 62.4,
-            "y": 785.9,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.8,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": -73.6,
-            "y": 829.9,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": -5.6,
-            "y": 829.9,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 96.4,
-            "y": 829.9,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": -39.6,
-            "y": 873.9,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": -5.6,
-            "y": 873.9,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 28.4,
-            "y": 873.9,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 96.4,
-            "y": 873.9,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.7,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 250.3,
-            "y": 744,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.1,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 216.3,
-            "y": 788,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 318.3,
-            "y": 788,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.8,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 318.3,
-            "y": 832,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 352.3,
-            "y": 832,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.6,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 182.3,
-            "y": 876,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.9,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 284.3,
-            "y": 876,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.3,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 318.3,
-            "y": 876,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.1,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 426.3,
-            "y": 754.5,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.2,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 460.3,
-            "y": 754.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.9,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 562.3,
-            "y": 754.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.2,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 528.3,
-            "y": 798.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.8,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 596.3,
-            "y": 798.5,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 630.3,
-            "y": 798.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.8,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 460.3,
-            "y": 842.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.2,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 426.3,
-            "y": 886.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.6,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 562.3,
-            "y": 886.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.7,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 686.2,
-            "y": 719.8,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.8,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 754.2,
-            "y": 719.8,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.7,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 822.2,
-            "y": 719.8,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.7,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 686.2,
-            "y": 763.8,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 754.2,
-            "y": 763.8,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 788.2,
-            "y": 763.8,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.6,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 822.2,
-            "y": 763.8,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.6,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 686.2,
-            "y": 807.8,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.1,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 754.2,
-            "y": 807.8,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.2,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 947.7,
-            "y": 744.4,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.1,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1015.7,
-            "y": 744.4,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.9,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 913.7,
-            "y": 788.4,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.1,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 947.7,
-            "y": 788.4,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 913.7,
-            "y": 832.4,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.7,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1015.7,
-            "y": 832.4,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.7,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 981.7,
-            "y": 876.4,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1015.7,
-            "y": 876.4,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.6,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1109.6,
-            "y": 708.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1143.6,
-            "y": 708.5,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.7,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1211.6,
-            "y": 708.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.3,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1279.6,
-            "y": 708.5,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.9,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1245.6,
-            "y": 752.5,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1279.6,
-            "y": 752.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.3,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1143.6,
-            "y": 796.5,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
+            "opacity": 0.12,
+            "z": 2.1,
             "at": 0.6,
             "enter": "fade",
-            "dur": 0.25
+            "dur": 2,
+            "loop": {
+              "type": "float",
+              "period": 14,
+              "amount": 14
+            }
           },
           {
-            "type": "rect",
-            "x": 1245.6,
-            "y": 796.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1177.6,
-            "y": 840.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.3,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1313.6,
-            "y": 840.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.8,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1405.7,
-            "y": 788.1,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.6,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1439.7,
-            "y": 788.1,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1507.7,
-            "y": 788.1,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1541.7,
-            "y": 788.1,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.2,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1439.7,
-            "y": 832.1,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.3,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1371.7,
-            "y": 876.1,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.2,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1405.7,
-            "y": 876.1,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.3,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1439.7,
-            "y": 876.1,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.9,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1473.7,
-            "y": 876.1,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.3,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1371.7,
-            "y": 920.1,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.3,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1818.9,
-            "y": 777.5,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1648.9,
-            "y": 821.5,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1614.9,
-            "y": 865.5,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1750.9,
-            "y": 865.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.5,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1614.9,
-            "y": 909.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.9,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1648.9,
-            "y": 909.5,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.8,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1955.8,
-            "y": 802,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.6,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1989.8,
-            "y": 802,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 2023.8,
-            "y": 802,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.1,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 2057.8,
-            "y": 802,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 1.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1887.8,
-            "y": 890,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.8,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 2091.8,
-            "y": 890,
-            "w": 14,
-            "h": 20,
-            "fill": "ink",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 0.7,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "rect",
-            "x": 1989.8,
-            "y": 934,
-            "w": 14,
-            "h": 20,
-            "fill": "accent",
-            "opacity": 0.85,
-            "z": 1.2,
-            "at": 2.4,
-            "enter": "fade",
-            "dur": 0.25
-          },
-          {
-            "type": "path",
-            "d": "M 348.7 728.5 L 352.2 665.5 M 372.2 728.5 L 373.4 665.5 M 395.8 728.5 L 394.6 665.5 M 419.3 728.5 L 415.8 665.5 M 348.7 728.5 L 415.9 665.5 M 419.3 728.5 L 352.1 665.5",
-            "fill": "none",
-            "stroke": "bg",
-            "width": 4.9,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 342,
-            "y": 574.5,
-            "w": 84,
-            "h": 91,
-            "fill": {
-              "gradient": [
-                "bg",
-                "surface"
-              ],
-              "angle": 0
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "path",
-            "d": "M 342 592.7 L 426 592.7 M 342 615.5 L 426 615.5 M 342 638.2 L 426 638.2 M 342 656.4 L 426 656.4",
-            "fill": "none",
-            "stroke": "bg",
-            "width": 2.8,
-            "opacity": 0.8,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "poly",
-            "points": [
-              [
-                337,
-                576.5
-              ],
-              [
-                384,
-                536.3
-              ],
-              [
-                431,
-                576.5
-              ]
-            ],
-            "closed": true,
-            "fill": {
-              "gradient": [
-                "bg",
-                "surface"
-              ],
-              "angle": 0
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "line",
-            "x1": 424,
-            "y1": 578.5,
-            "x2": 424,
-            "y2": 661.5,
-            "stroke": "accent",
-            "width": 2.8,
-            "opacity": 0.5,
-            "glow": {
-              "blur": 5.6,
-              "opacity": 0.7
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "path",
-            "d": "M 1047.5 718.4 L 1050.3 668.9 M 1066 718.4 L 1066.9 668.9 M 1084.4 718.4 L 1083.5 668.9 M 1102.9 718.4 L 1100.1 668.9 M 1047.5 718.4 L 1100.3 668.9 M 1102.9 718.4 L 1050.1 668.9",
-            "fill": "none",
-            "stroke": "bg",
-            "width": 3.9,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 1042.2,
-            "y": 597.4,
-            "w": 66,
-            "h": 71.5,
-            "fill": {
-              "gradient": [
-                "bg",
-                "surface"
-              ],
-              "angle": 0
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "path",
-            "d": "M 1042.2 611.7 L 1108.2 611.7 M 1042.2 629.6 L 1108.2 629.6 M 1042.2 647.4 L 1108.2 647.4 M 1042.2 661.8 L 1108.2 661.8",
-            "fill": "none",
-            "stroke": "bg",
-            "width": 2.2,
-            "opacity": 0.8,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "poly",
-            "points": [
-              [
-                1038.2,
-                599.4
-              ],
-              [
-                1075.2,
-                567.4
-              ],
-              [
-                1112.2,
-                599.4
-              ]
-            ],
-            "closed": true,
-            "fill": {
-              "gradient": [
-                "bg",
-                "surface"
-              ],
-              "angle": 0
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "line",
-            "x1": 1106.2,
-            "y1": 601.4,
-            "x2": 1106.2,
-            "y2": 664.9,
-            "stroke": "accent",
-            "width": 2.2,
-            "opacity": 0.5,
-            "glow": {
-              "blur": 4.4,
-              "opacity": 0.7
-            },
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
+            "type": "group",
+            "z": 0.5,
+            "at": 0.25,
+            "enter": "rise",
+            "dur": 0.8,
+            "dist": 40,
+            "children": [
+              {
+                "type": "path",
+                "d": "M -384 836.9 C -328 830.6 -160 802.9 -48 799 C 64 795.1 176 815.9 288 813.3 C 400 810.7 512 783.5 624 783.3 C 736 783.1 848 798.6 960 812 C 1072 825.4 1184 869.4 1296 863.9 C 1408 858.4 1520 783.8 1632 778.9 C 1744 774 1856 835.6 1968 834.6 C 2080 833.6 2248 783.3 2304 773 L 2304 1296 L -384 1296 Z",
+                "fill": "bg",
+                "stroke": "none",
+                "at": 0,
+                "dur": 0
+              }
+            ]
           },
           {
             "type": "particles",
-            "x": 1152,
-            "y": 518.4,
-            "w": 96,
-            "h": 172.8,
-            "kind": "embers",
-            "count": 12,
-            "seed": 5,
-            "size": 9,
-            "speed": 0.5,
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "kind": "dust",
+            "count": 30,
             "fill": "ink",
-            "opacity": 0.25,
-            "blur": 4,
-            "z": 1.2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": -192,
-            "y": 928.8,
-            "w": 1190.4,
-            "h": 324,
-            "fill": "bg",
+            "opacity": 0.35,
+            "size": 4,
             "z": -0.3,
             "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "path",
-            "d": "M 186.2 928.8 L 198.3 712.8 M 266.9 928.8 L 270.9 712.8 M 347.5 928.8 L 343.5 712.8 M 428.2 928.8 L 416.1 712.8 M 186.2 928.8 L 416.6 712.8 M 428.2 928.8 L 197.8 712.8",
-            "fill": "none",
-            "stroke": "bg",
-            "width": 16.8,
-            "z": -0.3,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 163.2,
-            "y": 400.8,
-            "w": 288,
-            "h": 312,
-            "fill": {
-              "gradient": [
-                "bg",
-                "surface",
-                "accent"
-              ],
-              "angle": 0
-            },
-            "z": -0.3,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "path",
-            "d": "M 163.2 463.2 L 451.2 463.2 M 163.2 541.2 L 451.2 541.2 M 163.2 619.2 L 451.2 619.2 M 163.2 681.6 L 451.2 681.6",
-            "fill": "none",
-            "stroke": "bg",
-            "width": 9.6,
-            "opacity": 0.8,
-            "z": -0.3,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "poly",
-            "points": [
-              [
-                145.9,
-                402.8
-              ],
-              [
-                307.2,
-                269.8
-              ],
-              [
-                468.5,
-                402.8
-              ]
-            ],
-            "closed": true,
-            "fill": {
-              "gradient": [
-                "bg",
-                "surface"
-              ],
-              "angle": 0
-            },
-            "z": -0.3,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "line",
-            "x1": 449.2,
-            "y1": 404.8,
-            "x2": 449.2,
-            "y2": 708.8,
-            "stroke": "accent",
-            "width": 9.6,
-            "opacity": 0.9,
-            "glow": {
-              "blur": 19.2,
-              "opacity": 0.7
-            },
-            "z": -0.3,
-            "at": 0,
-            "enter": "none"
+            "enter": "fade",
+            "dur": 1
           }
         ],
         "view": [
@@ -1687,11 +260,11 @@
         ],
         "viewFrom": [
           0,
-          -64.8,
+          75.6,
           1920,
           1080
         ],
-        "viewDur": 9
+        "viewDur": 8
       }
     },
     {
@@ -1704,78 +277,6 @@
         "emphasis": [
           "come from"
         ]
-      },
-      "art": {
-        "under": [
-          {
-            "type": "path",
-            "d": "M 1180 -40 L 1180 140 Q 1180 200 1240 200 L 1600 200",
-            "fill": "none",
-            "stroke": "surface",
-            "width": 70,
-            "cap": "round",
-            "join": "round",
-            "blur": 6,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "path",
-            "d": "M 1180 230 C 1150 290 1140 320 1140 345 A 40 40 0 0 0 1220 345 C 1220 320 1210 290 1180 230 Z",
-            "fill": {
-              "gradient": [
-                "ink",
-                "accent2"
-              ],
-              "angle": 90
-            },
-            "stroke": "none",
-            "opacity": 0.55,
-            "blur": 3,
-            "origin": [
-              1180,
-              230
-            ],
-            "at": 0,
-            "enter": "none",
-            "keys": [
-              {
-                "at": 0,
-                "scale": 0.6,
-                "dur": 0
-              },
-              {
-                "at": 0,
-                "scale": 1.1,
-                "dur": 3,
-                "ease": "inOut"
-              }
-            ]
-          },
-          {
-            "type": "ellipse",
-            "cx": 960,
-            "cy": 900,
-            "rx": 900,
-            "ry": 120,
-            "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
-              "radial": true,
-              "fade": true
-            },
-            "opacity": 0.18,
-            "at": 0,
-            "enter": "none",
-            "loop": {
-              "type": "pulse",
-              "period": 4,
-              "amount": 0.05
-            }
-          }
-        ]
       }
     },
     {
@@ -1786,344 +287,66 @@
       "props": {
         "world": "journey",
         "view": [
-          80,
-          70,
-          1680,
-          945
+          0,
+          0,
+          1920,
+          1080
         ],
-        "viewFrom": [
-          -120,
-          -60,
-          2160,
-          1215
-        ],
-        "viewAt": 0,
-        "viewDur": 4,
         "elements": [
           {
-            "at": 0,
-            "enter": "none",
             "type": "rect",
-            "x": -700,
-            "y": -1600,
-            "w": 6600,
+            "x": -1200,
+            "y": 820,
+            "w": 8000,
             "h": 2400,
+            "fill": "surface",
+            "enter": "none",
+            "at": 0
+          },
+          {
+            "type": "path",
+            "d": "M 0 820 L 260 520 L 420 660 L 640 380 L 900 700 L 1100 560 L 1350 820 Z",
             "fill": {
               "gradient": [
-                "bg",
-                "bg",
-                "surface",
-                "accent2"
-              ],
-              "angle": 90
-            }
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "ellipse",
-            "cx": 4600,
-            "cy": 640,
-            "rx": 3000,
-            "ry": 1000,
-            "fill": {
-              "gradient": [
-                "accent",
-                "accent"
-              ],
-              "radial": true,
-              "fade": true
-            },
-            "opacity": 0.55
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "particles",
-            "x": -600,
-            "y": -1500,
-            "w": 6400,
-            "h": 1300,
-            "kind": "stars",
-            "count": 60,
-            "seed": 3,
-            "size": 2,
-            "fill": "ink",
-            "opacity": 0.35
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M -600 600 C -516.7 563.3 -250 401.7 -100 380 C 50 358.3 166.7 476.7 300 470 C 433.3 463.3 566.7 331.7 700 340 C 833.3 348.3 983.3 476.7 1100 520 C 1216.7 563.3 1283.3 580 1400 600 C 1516.7 620 1733.3 633.3 1800 640 L 1800 760 L -600 760 Z",
-            "fill": "muted",
-            "opacity": 0.3,
-            "stroke": "none",
-            "z": 3
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M -600 760 C -533.3 720 -320 591.7 -200 520 C -80 448.3 36.7 345 120 330 C 203.3 315 233.3 443.3 300 430 C 366.7 416.7 443.3 251.7 520 250 C 596.7 248.3 696.7 375 760 420 C 823.3 465 860 490 900 520 C 940 550 970 570 1000 600 C 1030 630 1046.7 676.3 1080 700 C 1113.3 723.7 1140 734.7 1200 742 C 1260 749.3 1393.7 767.7 1440 744 C 1486.3 720.3 1461.3 613.7 1478 600 C 1494.7 586.3 1503 649.3 1540 662 C 1577 674.7 1590 673 1700 676 C 1810 679 1516.7 679.3 2200 680 C 2883.3 680.7 5200 680 5800 680 L 5800 2300 L -600 2300 Z",
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg",
-                "bg"
-              ],
-              "angle": 90
-            },
-            "stroke": "none"
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M 120 330 C 150 346.7 270 413.3 300 430 M 520 250 C 560 278.3 696.7 375 760 420 C 823.3 465 860 490 900 520 C 940 550 983.3 586.7 1000 600",
-            "fill": "none",
-            "stroke": "accent",
-            "width": 5,
-            "opacity": 0.7,
-            "glow": {
-              "blur": 8,
-              "opacity": 0.6
-            }
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M -600 473.6 C -566.7 478.4 -466.7 491.6 -400 502.5 C -333.3 513.4 -266.7 526 -200 538.9 C -133.3 551.8 -66.7 566.3 0 580 C 66.7 593.7 133.3 608.2 200 621.1 C 266.7 634 333.3 646.6 400 657.5 C 466.7 668.4 533.3 677.9 600 686.4 C 666.7 694.9 733.3 701.5 800 708.2 C 866.7 714.9 933.3 720.2 1000 726.6 C 1066.7 733 1133.3 743.8 1200 746.4 C 1266.7 749 1333.3 742.2 1400 742 C 1466.7 741.8 1533.3 743.2 1600 745.4 C 1666.7 747.6 1733.3 751.5 1800 755 C 1866.7 758.6 1933.3 763.3 2000 766.7 C 2066.7 770.1 2133.3 773.8 2200 775.6 C 2266.7 777.5 2333.3 778.3 2400 777.8 C 2466.7 777.3 2533.3 775.1 2600 772.4 C 2666.7 769.7 2733.3 765.3 2800 761.6 C 2866.7 757.9 2933.3 753.3 3000 750.2 C 3066.7 747.1 3133.3 744.2 3200 743 C 3266.7 741.8 3333.3 741.8 3400 743 C 3466.7 744.2 3533.3 747.2 3600 750.3 C 3666.7 753.4 3733.3 758.1 3800 761.8 C 3866.7 765.5 3933.3 769.8 4000 772.5 C 4066.7 775.2 4133.3 777.3 4200 777.8 C 4266.7 778.3 4333.3 777.4 4400 775.5 C 4466.7 773.6 4533.3 770.1 4600 766.6 C 4666.7 763.2 4733.3 758.3 4800 754.8 C 4866.7 751.3 4933.3 747.4 5000 745.3 C 5066.7 743.2 5133.3 741.8 5200 742 C 5266.7 742.2 5333.3 744.1 5400 746.5 C 5466.7 749 5533.3 753.1 5600 756.7 C 5666.7 760.4 5766.7 766.5 5800 768.4",
-            "fill": "none",
-            "stroke": "muted",
-            "width": 3,
-            "opacity": 0.22
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M -600 714.9 C -566.7 719.8 -466.7 733.9 -400 744.1 C -333.3 754.3 -266.7 765.7 -200 775.9 C -133.3 786.1 -66.7 796.4 0 805.1 C 66.7 813.8 133.3 821.6 200 827.9 C 266.7 834.2 333.3 838.9 400 843 C 466.7 847.1 533.3 849.5 600 852.5 C 666.7 855.5 733.3 857.5 800 861 C 866.7 864.5 933.3 868 1000 873.3 C 1066.7 878.6 1133.3 888.3 1200 892.7 C 1266.7 897.1 1333.3 896.6 1400 899.6 C 1466.7 902.6 1533.3 907.2 1600 910.9 C 1666.7 914.6 1733.3 919 1800 921.8 C 1866.7 924.6 1933.3 927 2000 927.7 C 2066.7 928.4 2133.3 927.7 2200 926 C 2266.7 924.3 2333.3 920.8 2400 917.4 C 2466.7 914 2533.3 909.3 2600 905.7 C 2666.7 902.1 2733.3 898.1 2800 895.8 C 2866.7 893.5 2933.3 892 3000 892 C 3066.7 892 3133.3 893.6 3200 895.9 C 3266.7 898.2 3333.3 902.2 3400 905.8 C 3466.7 909.4 3533.3 914.2 3600 917.6 C 3666.7 921 3733.3 924.3 3800 926 C 3866.7 927.7 3933.3 928.4 4000 927.7 C 4066.7 927 4133.3 924.5 4200 921.7 C 4266.7 918.9 4333.3 914.4 4400 910.7 C 4466.7 907 4533.3 902.5 4600 899.5 C 4666.7 896.5 4733.3 893.7 4800 892.7 C 4866.7 891.7 4933.3 891.9 5000 893.3 C 5066.7 894.7 5133.3 897.9 5200 901.1 C 5266.7 904.3 5333.3 909 5400 912.7 C 5466.7 916.4 5533.3 920.6 5600 923.1 C 5666.7 925.6 5766.7 927.1 5800 927.9",
-            "fill": "none",
-            "stroke": "muted",
-            "width": 3,
-            "opacity": 0.26
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M -600 970 C -566.7 973.5 -466.7 984.9 -400 991.1 C -333.3 997.4 -266.7 1003.3 -200 1007.5 C -133.3 1011.7 -66.7 1014.6 0 1016.4 C 66.7 1018.2 133.3 1018.2 200 1018.2 C 266.7 1018.2 333.3 1016.9 400 1016.6 C 466.7 1016.3 533.3 1015.5 600 1016.4 C 666.7 1017.3 733.3 1018.8 800 1022 C 866.7 1025.2 933.3 1029.9 1000 1035.4 C 1066.7 1040.9 1133.3 1049.8 1200 1055 C 1266.7 1060.2 1333.3 1063.3 1400 1066.7 C 1466.7 1070.1 1533.3 1073.8 1600 1075.6 C 1666.7 1077.4 1733.3 1078.3 1800 1077.8 C 1866.7 1077.3 1933.3 1075.1 2000 1072.4 C 2066.7 1069.7 2133.3 1065.3 2200 1061.6 C 2266.7 1057.9 2333.3 1053.3 2400 1050.2 C 2466.7 1047.1 2533.3 1044.2 2600 1043 C 2666.7 1041.8 2733.3 1041.8 2800 1043 C 2866.7 1044.2 2933.3 1047.2 3000 1050.3 C 3066.7 1053.4 3133.3 1058.1 3200 1061.8 C 3266.7 1065.5 3333.3 1069.8 3400 1072.5 C 3466.7 1075.2 3533.3 1077.3 3600 1077.8 C 3666.7 1078.3 3733.3 1077.4 3800 1075.5 C 3866.7 1073.6 3933.3 1070.1 4000 1066.6 C 4066.7 1063.1 4133.3 1058.4 4200 1054.8 C 4266.7 1051.3 4333.3 1047.4 4400 1045.3 C 4466.7 1043.2 4533.3 1041.8 4600 1042 C 4666.7 1042.2 4733.3 1044.1 4800 1046.5 C 4866.7 1049 4933.3 1053.1 5000 1056.7 C 5066.7 1060.4 5133.3 1065.1 5200 1068.4 C 5266.7 1071.7 5333.3 1074.9 5400 1076.4 C 5466.7 1077.9 5533.3 1078.4 5600 1077.5 C 5666.7 1076.6 5766.7 1072.1 5800 1071",
-            "fill": "none",
-            "stroke": "muted",
-            "width": 3,
-            "opacity": 0.3
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M -600 1225.1 C -566.7 1225.6 -466.7 1228.3 -400 1227.9 C -333.3 1227.6 -266.7 1225.6 -200 1223 C -133.3 1220.4 -66.7 1216.2 0 1212.5 C 66.7 1208.8 133.3 1204.2 200 1201 C 266.7 1197.8 333.3 1194.7 400 1193.3 C 466.7 1191.9 533.3 1191.7 600 1192.7 C 666.7 1193.8 733.3 1196.6 800 1199.6 C 866.7 1202.6 933.3 1207.2 1000 1210.9 C 1066.7 1214.6 1133.3 1219 1200 1221.8 C 1266.7 1224.6 1333.3 1227 1400 1227.7 C 1466.7 1228.4 1533.3 1227.7 1600 1226 C 1666.7 1224.3 1733.3 1220.8 1800 1217.4 C 1866.7 1214 1933.3 1209.3 2000 1205.7 C 2066.7 1202.1 2133.3 1198.1 2200 1195.8 C 2266.7 1193.5 2333.3 1192 2400 1192 C 2466.7 1192 2533.3 1193.6 2600 1195.9 C 2666.7 1198.2 2733.3 1202.2 2800 1205.8 C 2866.7 1209.4 2933.3 1214.2 3000 1217.6 C 3066.7 1221 3133.3 1224.3 3200 1226 C 3266.7 1227.7 3333.3 1228.4 3400 1227.7 C 3466.7 1227 3533.3 1224.5 3600 1221.7 C 3666.7 1218.9 3733.3 1214.4 3800 1210.7 C 3866.7 1207 3933.3 1202.5 4000 1199.5 C 4066.7 1196.5 4133.3 1193.7 4200 1192.7 C 4266.7 1191.7 4333.3 1191.9 4400 1193.3 C 4466.7 1194.7 4533.3 1197.9 4600 1201.1 C 4666.7 1204.3 4733.3 1209 4800 1212.7 C 4866.7 1216.4 4933.3 1220.6 5000 1223.1 C 5066.7 1225.6 5133.3 1227.6 5200 1227.9 C 5266.7 1228.2 5333.3 1227.1 5400 1225.1 C 5466.7 1223.1 5533.3 1219.2 5600 1215.7 C 5666.7 1212.2 5766.7 1206 5800 1204",
-            "fill": "none",
-            "stroke": "muted",
-            "width": 3,
-            "opacity": 0.33999999999999997
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "ellipse",
-            "cx": 2400,
-            "cy": 1330,
-            "rx": 2300,
-            "ry": 120,
-            "fill": {
-              "gradient": [
-                "accent2",
-                "accent2"
-              ],
-              "radial": true,
-              "fade": true
-            },
-            "opacity": 0.22
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M 1286.5 882 h 0.1 M 3097 1591.9 h 0.1 M 447.2 831.2 h 0.1 M 3815.2 1344.9 h 0.1 M 2939.8 1423.9 h 0.1 M -311.3 1581 h 0.1 M 1523.9 1242.5 h 0.1 M 4148.3 1355 h 0.1 M 2794.5 1474.4 h 0.1 M 5684.4 1017.6 h 0.1 M 1390.3 1551.2 h 0.1 M 1904 1171.6 h 0.1 M 958.9 928.2 h 0.1 M 1979.5 864.5 h 0.1 M 1187.4 1063.7 h 0.1 M 1509.2 959.4 h 0.1 M 3262.5 1327.3 h 0.1 M 1243.1 1255.5 h 0.1 M 1643.8 1021.2 h 0.1 M 1977.6 1437.6 h 0.1 M 559.5 833.1 h 0.1 M 3058.8 1238.8 h 0.1 M 427.2 903.2 h 0.1 M 3881.5 1126.6 h 0.1 M 417 1130 h 0.1 M 2055.4 1520 h 0.1 M -64.4 1427.4 h 0.1 M 1904.6 1003.8 h 0.1 M 2080.1 868.5 h 0.1 M 4192.7 821.8 h 0.1 M -314.9 1308.2 h 0.1 M 2721.6 1191 h 0.1 M 2101.7 973.3 h 0.1 M -227.2 1259.1 h 0.1 M 2989.2 1600.7 h 0.1 M 4164.9 1028 h 0.1 M 3214.4 1467.9 h 0.1 M 1291.1 1602 h 0.1 M 761.9 1538.2 h 0.1 M 389.2 1548.2 h 0.1 M -78.7 1028.6 h 0.1 M 5497.3 1015.4 h 0.1 M 2552.3 1068.5 h 0.1 M 2690.1 1143 h 0.1 M 4135.9 920.7 h 0.1 M 5396.8 1257.4 h 0.1 M 5084.8 1614.1 h 0.1 M 164.5 1205.5 h 0.1 M 2689 991.8 h 0.1 M 4809.5 1033.8 h 0.1 M -166.8 1116.4 h 0.1 M 3190.9 1501.1 h 0.1 M 2667.5 998.9 h 0.1 M 1053.6 854 h 0.1 M 4598.6 908.3 h 0.1 M 2560.3 1125.1 h 0.1 M 628.9 1401.9 h 0.1 M 978.6 1093.8 h 0.1 M 3403.3 1163.7 h 0.1 M 4229.5 1117.7 h 0.1 M 346 1300.5 h 0.1 M 64.2 1187.1 h 0.1 M 3551.5 889.8 h 0.1 M 2307.2 1610.5 h 0.1 M 692.4 990.2 h 0.1 M 3595.4 1549.2 h 0.1 M 2470.5 1547.5 h 0.1 M -272.2 937 h 0.1 M 159.1 885.9 h 0.1 M 2503.2 937.6 h 0.1 M 3535.2 1380 h 0.1 M 4236.9 1227.5 h 0.1 M -63.5 821.1 h 0.1 M 3552.8 1132.9 h 0.1 M 1783.8 1440 h 0.1 M 236.9 908.2 h 0.1 M 1508.1 1145.3 h 0.1 M 3342.7 889.3 h 0.1 M 37.3 1180.9 h 0.1 M 2344.4 1360.9 h 0.1 M 4357.8 1322 h 0.1 M 3093 1358.2 h 0.1 M 680 1554.6 h 0.1 M 3884.5 1404.5 h 0.1 M 2261 1084.8 h 0.1 M -107.4 1128.4 h 0.1 M 380.3 1109.4 h 0.1 M 1733.1 1498.5 h 0.1 M 2589.6 1403.5 h 0.1 M 5333.2 1110.6 h 0.1 M 1721 1474.2 h 0.1 M 4566.2 1023.3 h 0.1 M -466.6 977 h 0.1 M 3706.4 1223.3 h 0.1 M 314.3 1125 h 0.1 M 3589.1 1256.7 h 0.1 M 4287.8 1222.2 h 0.1 M 3669.4 1537.9 h 0.1 M 2534.2 1214.9 h 0.1 M 2211.2 1243.9 h 0.1 M 4375.8 1374.3 h 0.1 M 3330.7 924 h 0.1 M 1489.2 1005.8 h 0.1 M 763.3 1538.1 h 0.1 M 1172.5 935.5 h 0.1 M 5228.9 1117.3 h 0.1 M 5502.2 1366.3 h 0.1 M 2474.7 1617.4 h 0.1 M -242.3 1487.1 h 0.1 M 2332.6 1149.5 h 0.1 M 944.4 1222.2 h 0.1 M 5399.9 1286.6 h 0.1 M 1772.4 994.4 h 0.1 M -176.4 850.3 h 0.1 M 20.8 1163.7 h 0.1 M -495 1486 h 0.1 M 2789 1518.7 h 0.1 M 1339.4 1269.9 h 0.1 M 3510 821.4 h 0.1 M 3729.7 1396.6 h 0.1 M 2015.6 890.4 h 0.1 M 4288.3 1399.2 h 0.1 M 3556.7 1107.4 h 0.1 M 4411.3 1265.4 h 0.1 M 3248.5 1331.6 h 0.1 M 1719.4 1270.9 h 0.1 M 2192.8 1150.5 h 0.1 M 2225.1 1088.8 h 0.1 M 3989.8 1112.9 h 0.1 M 5088 1475.2 h 0.1 M 974.6 1612.4 h 0.1 M 1621.4 1231 h 0.1 M 4543.4 1243.8 h 0.1 M 5055.8 1637.6 h 0.1 M 2944.4 1361.9 h 0.1 M 2252.4 1321.5 h 0.1 M 4074.1 1624.2 h 0.1 M 818.3 894.6 h 0.1 M 3271.7 1077.4 h 0.1 M 3368.9 1255.2 h 0.1",
-            "fill": "none",
-            "stroke": "muted",
-            "width": 7,
-            "cap": "round",
-            "opacity": 0.18
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M -600 760 C -533.3 720 -320 591.7 -200 520 C -80 448.3 36.7 345 120 330 C 203.3 315 233.3 443.3 300 430 C 366.7 416.7 443.3 251.7 520 250 C 596.7 248.3 696.7 375 760 420 C 823.3 465 860 490 900 520 C 940 550 970 570 1000 600 C 1030 630 1046.7 676.3 1080 700 C 1113.3 723.7 1140 734.7 1200 742 C 1260 749.3 1393.7 767.7 1440 744 C 1486.3 720.3 1461.3 613.7 1478 600 C 1494.7 586.3 1503 649.3 1540 662 C 1577 674.7 1590 673 1700 676 C 1810 679 1516.7 679.3 2200 680 C 2883.3 680.7 5200 680 5800 680",
-            "fill": "none",
-            "stroke": "accent",
-            "width": 3,
-            "opacity": 0.5
-          },
-          {
-            "type": "group",
-            "at": 0,
-            "enter": "none",
-            "z": 0.6,
-            "loop": {
-              "type": "float",
-              "period": 9,
-              "amount": 10
-            },
-            "children": [
-              {
-                "at": 0,
-                "enter": "none",
-                "type": "path",
-                "d": "M 600 372 A 57.1 51.4 0 0 1 689.4 298.4 A 36.8 33.1 0 0 1 753 247.6 A 47.1 42.4 0 0 1 831.4 226.6 A 68.4 61.5 0 0 1 921.5 246.5 A 54.7 49.2 0 0 1 1015 257.1 A 45.1 40.6 0 0 1 1085.2 293 A 59.3 53.4 0 0 1 1160 372 Q 880 381.6 600 372 Z",
-                "fill": {
-                  "gradient": [
-                    "ink",
-                    "muted",
-                    "surface"
-                  ],
-                  "angle": 90
-                },
-                "stroke": "none",
-                "opacity": 0.94
-              },
-              {
-                "at": 0,
-                "enter": "none",
-                "type": "path",
-                "d": "M 600 372 A 57.1 51.4 0 0 1 689.4 298.4 A 36.8 33.1 0 0 1 753 247.6 A 47.1 42.4 0 0 1 831.4 226.6 A 68.4 61.5 0 0 1 921.5 246.5 A 54.7 49.2 0 0 1 1015 257.1 A 45.1 40.6 0 0 1 1085.2 293 A 59.3 53.4 0 0 1 1160 372 Q 880 381.6 600 372 Z",
-                "fill": "none",
-                "stroke": "accent",
-                "width": 2.5,
-                "opacity": 0.35
-              },
-              {
-                "at": 0,
-                "enter": "none",
-                "type": "path",
-                "d": "M 40 410 A 84.3 75.9 0 0 1 155.5 313.6 A 59.6 53.7 0 0 1 230.1 275.5 A 92.1 82.9 0 0 1 367.2 251 A 86.7 78 0 0 1 500.4 272.7 A 63.5 57.2 0 0 1 608.3 286 A 40.4 36.4 0 0 1 679.5 318.5 A 78.1 70.3 0 0 1 800 410 Q 420 422 40 410 Z",
-                "fill": {
-                  "gradient": [
-                    "ink",
-                    "muted",
-                    "surface"
-                  ],
-                  "angle": 90
-                },
-                "stroke": "none",
-                "opacity": 0.94
-              },
-              {
-                "at": 0,
-                "enter": "none",
-                "type": "path",
-                "d": "M 40 410 A 84.3 75.9 0 0 1 155.5 313.6 A 59.6 53.7 0 0 1 230.1 275.5 A 92.1 82.9 0 0 1 367.2 251 A 86.7 78 0 0 1 500.4 272.7 A 63.5 57.2 0 0 1 608.3 286 A 40.4 36.4 0 0 1 679.5 318.5 A 78.1 70.3 0 0 1 800 410 Q 420 422 40 410 Z",
-                "fill": "none",
-                "stroke": "accent",
-                "width": 2.5,
-                "opacity": 0.35
-              }
-            ]
-          },
-          {
-            "type": "particles",
-            "x": 120,
-            "y": 220,
-            "w": 1050,
-            "h": 420,
-            "kind": "rain",
-            "count": 120,
-            "seed": 6,
-            "fill": "accent2",
-            "opacity": 0.6,
-            "say": "rain",
-            "enter": "fade",
-            "dur": 0.6
-          },
-          {
-            "type": "path",
-            "d": "M 1008 612 L 1476 612 L 1476 744 L 1200 744 L 1080 702 Z",
-            "fill": {
-              "gradient": [
-                "accent2",
+                "muted",
                 "surface"
               ],
               "angle": 90
             },
             "stroke": "none",
-            "say": "collected",
-            "enter": "wipe-up",
-            "dur": 1
+            "width": 4,
+            "at": 0.1,
+            "dur": 1.4,
+            "z": 1.2
           },
           {
-            "type": "line",
-            "x1": 1012,
-            "y1": 613,
-            "x2": 1474,
-            "y2": 613,
-            "stroke": "ink",
-            "width": 2,
-            "opacity": 0.6,
-            "say": "collected",
-            "enter": "draw",
-            "dur": 0.8
+            "type": "particles",
+            "x": 150,
+            "y": 140,
+            "w": 900,
+            "h": 560,
+            "kind": "rain",
+            "count": 80,
+            "fill": "accent2",
+            "say": "rain",
+            "opacity": 0.5
           },
           {
-            "type": "poly",
-            "points": [
-              [
-                1472,
-                590
-              ],
-              [
-                1500,
-                590
-              ],
-              [
-                1548,
-                748
-              ],
-              [
-                1472,
-                748
-              ]
-            ],
-            "closed": true,
-            "fill": {
-              "gradient": [
-                "ink",
-                "muted"
-              ],
-              "angle": 0
-            },
-            "at": 0,
-            "enter": "none"
+            "type": "path",
+            "d": "M 1100 820 Q 1300 900 1560 860 L 1560 960 Q 1300 1000 1060 900 Z",
+            "fill": "accent2",
+            "say": "collected"
           },
           {
             "type": "text",
             "text": "Reservoir",
-            "x": 1240,
-            "y": 540,
+            "x": 1600,
+            "y": 950,
             "size": 56,
             "font": "bold",
             "fill": "ink",
-            "anchor": "middle",
-            "say": "reservoir",
-            "shadow": {
-              "blur": 12,
-              "opacity": 0.8
-            },
-            "exitAt": 9,
-            "exit": "fade"
+            "anchor": "start",
+            "say": "reservoir"
           }
         ]
       }
@@ -2131,348 +354,80 @@
     {
       "id": "plant",
       "block": "canvas",
-      "vo": "From there, a pipe carries it to a plant that filters and cleans it.",
+      "vo": "But first, a pipe carries it to a plant that filters and cleans it.",
       "tail": 0.7,
       "props": {
         "world": "journey",
         "view": [
-          2120,
-          160,
-          1600,
-          900
+          1500,
+          0,
+          1920,
+          1080
         ],
-        "viewAt": 0,
-        "viewDur": 1.5,
         "elements": [
           {
             "type": "path",
-            "d": "M 1505 744 L 1505 790 L 2620 790 L 2620 640 L 2700 640",
-            "fill": "none",
-            "stroke": "surface",
-            "width": 30,
-            "join": "round",
-            "cap": "round",
-            "at": 0,
-            "enter": "draw",
-            "dur": 2
-          },
-          {
-            "type": "path",
-            "d": "M 1505 744 L 1505 790 L 2620 790 L 2620 640 L 2700 640",
-            "fill": "none",
+            "d": "M 1560 900 L 2300 900 L 2300 760 L 2700 760",
             "stroke": "accent2",
-            "width": 14,
-            "join": "round",
-            "cap": "round",
+            "width": 22,
+            "say": "pipe",
+            "dur": 1.4,
             "glow": {
               "blur": 10,
-              "opacity": 0.7
-            },
-            "at": 0,
-            "enter": "draw",
-            "dur": 2
-          },
-          {
-            "type": "path",
-            "d": "M 1505 744 L 1505 790 L 2620 790 L 2620 640 L 2700 640",
-            "fill": "none",
-            "stroke": "ink",
-            "width": 4,
-            "dash": [
-              10,
-              34
-            ],
-            "cap": "round",
-            "opacity": 0.8,
-            "at": 0,
-            "enter": "draw",
-            "dur": 2,
-            "loop": {
-              "type": "dash",
-              "period": 1.2
+              "opacity": 0.8
             }
           },
           {
             "type": "rect",
             "x": 2700,
-            "y": 520,
-            "w": 540,
-            "h": 164,
-            "r": 8,
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg"
-              ],
-              "angle": 90
-            },
-            "stroke": "muted",
-            "width": 3,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "poly",
-            "points": [
-              [
-                2690,
-                522
-              ],
-              [
-                2970,
-                430
-              ],
-              [
-                3250,
-                522
-              ]
-            ],
-            "closed": true,
-            "fill": {
-              "gradient": [
-                "muted",
-                "surface"
-              ],
-              "angle": 0
-            },
-            "stroke": "muted",
-            "width": 3,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "line",
-            "x1": 2970,
-            "y1": 432,
-            "x2": 3250,
-            "y2": 522,
-            "stroke": "accent",
-            "width": 3,
-            "opacity": 0.6,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 2730,
             "y": 560,
-            "w": 120,
-            "h": 104,
-            "r": 4,
-            "fill": "bg",
-            "stroke": "muted",
-            "width": 2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 2880,
-            "y": 560,
-            "w": 120,
-            "h": 104,
-            "r": 4,
-            "fill": "bg",
-            "stroke": "muted",
-            "width": 2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 2734,
-            "y": 590,
-            "w": 112,
-            "h": 70,
-            "fill": {
-              "gradient": [
-                "accent2",
-                "surface"
-              ],
-              "angle": 90
-            },
-            "say": "filters",
-            "enter": "wipe-up",
-            "dur": 0.8
-          },
-          {
-            "type": "rect",
-            "x": 2884,
-            "y": 590,
-            "w": 112,
-            "h": 70,
-            "fill": {
-              "gradient": [
-                "accent2",
-                "surface"
-              ],
-              "angle": 90
-            },
-            "say": "filters",
-            "enter": "wipe-up",
-            "dur": 0.8
-          },
-          {
-            "type": "line",
-            "x1": 2750,
-            "y1": 625,
-            "x2": 2830,
-            "y2": 625,
-            "stroke": "ink",
-            "width": 3,
-            "origin": [
-              2790,
-              625
-            ],
-            "say": "filters",
-            "loop": {
-              "type": "spin",
-              "period": 3
-            }
-          },
-          {
-            "type": "line",
-            "x1": 2900,
-            "y1": 625,
-            "x2": 2980,
-            "y2": 625,
-            "stroke": "ink",
-            "width": 3,
-            "origin": [
-              2940,
-              625
-            ],
-            "say": "filters",
-            "loop": {
-              "type": "spin",
-              "period": 3
-            }
-          },
-          {
-            "type": "rect",
-            "x": 3040,
-            "y": 560,
-            "w": 170,
-            "h": 104,
-            "r": 4,
-            "fill": "bg",
-            "stroke": "muted",
-            "width": 2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "rect",
-            "x": 3044,
-            "y": 570,
-            "w": 162,
-            "h": 22,
-            "fill": "accent2",
-            "opacity": 0.8,
-            "say": "cleans",
-            "enter": "wipe",
-            "dur": 0.6
-          },
-          {
-            "type": "rect",
-            "x": 3044,
-            "y": 592,
-            "w": 162,
-            "h": 26,
-            "fill": "muted",
-            "opacity": 0.8,
-            "say": "cleans",
-            "enter": "wipe",
-            "dur": 0.6
-          },
-          {
-            "type": "rect",
-            "x": 3044,
-            "y": 618,
-            "w": 162,
-            "h": 22,
-            "fill": "accent",
-            "opacity": 0.55,
-            "say": "cleans",
-            "enter": "wipe",
-            "dur": 0.6
-          },
-          {
-            "type": "rect",
-            "x": 3044,
-            "y": 640,
-            "w": 162,
-            "h": 20,
+            "w": 520,
+            "h": 260,
+            "r": 10,
             "fill": "surface",
-            "opacity": 0.8,
-            "say": "cleans",
-            "enter": "wipe",
-            "dur": 0.6
-          },
-          {
-            "type": "path",
-            "d": "M 3240 640 L 3330 640",
-            "fill": "none",
-            "stroke": "surface",
-            "width": 30,
-            "join": "round",
-            "cap": "round",
-            "say": "cleans",
-            "enter": "draw",
-            "dur": 1.4
-          },
-          {
-            "type": "path",
-            "d": "M 3240 640 L 3330 640",
-            "fill": "none",
-            "stroke": "accent2",
-            "width": 14,
-            "join": "round",
-            "cap": "round",
-            "glow": {
-              "blur": 10,
-              "opacity": 0.7
-            },
-            "say": "cleans",
-            "enter": "draw",
-            "dur": 1.4
-          },
-          {
-            "type": "path",
-            "d": "M 3240 640 L 3330 640",
-            "fill": "none",
             "stroke": "ink",
             "width": 4,
-            "dash": [
-              10,
-              34
-            ],
-            "cap": "round",
-            "opacity": 0.8,
-            "say": "cleans",
-            "enter": "draw",
-            "dur": 1.4,
+            "enter": "grow-y",
+            "say": "plant"
+          },
+          {
+            "type": "circle",
+            "cx": 2830,
+            "cy": 690,
+            "r": 70,
+            "fill": "none",
+            "stroke": "accent",
+            "width": 10,
+            "say": "filters",
             "loop": {
-              "type": "dash",
-              "period": 1.2
+              "type": "spin",
+              "period": 3
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 3090,
+            "cy": 690,
+            "r": 70,
+            "fill": "none",
+            "stroke": "accent",
+            "width": 10,
+            "say": "cleans",
+            "loop": {
+              "type": "spin",
+              "period": 3
             }
           },
           {
             "type": "text",
             "text": "Treatment",
-            "x": 2970,
-            "y": 380,
+            "x": 2960,
+            "y": 520,
             "size": 56,
             "font": "bold",
             "fill": "ink",
             "anchor": "middle",
-            "say": "plant",
-            "shadow": {
-              "blur": 12,
-              "opacity": 0.8
-            },
-            "exitAt": 9,
-            "exit": "fade"
+            "say": "plant"
           }
         ]
       }
@@ -2482,1647 +437,159 @@
       "block": "canvas",
       "vo": "Then a second network runs it under the streets, to every tap.",
       "tail": 0.7,
-      "hold": 0.5,
       "props": {
         "world": "journey",
         "view": [
-          3560,
-          150,
-          1600,
-          900
+          3300,
+          0,
+          1920,
+          1080
         ],
-        "viewAt": 0,
-        "viewDur": 1.5,
         "elements": [
           {
             "type": "path",
-            "d": "M 3330 640 L 3330 800 L 5600 800",
-            "fill": "none",
-            "stroke": "surface",
-            "width": 30,
-            "join": "round",
-            "cap": "round",
-            "at": 0,
-            "enter": "draw",
-            "dur": 2.2
-          },
-          {
-            "type": "path",
-            "d": "M 3330 640 L 3330 800 L 5600 800",
-            "fill": "none",
+            "d": "M 3220 760 L 3500 760 L 3500 900 L 4900 900",
             "stroke": "accent2",
-            "width": 14,
-            "join": "round",
-            "cap": "round",
+            "width": 22,
+            "say": "network",
+            "dur": 1.4,
             "glow": {
               "blur": 10,
-              "opacity": 0.7
-            },
-            "at": 0,
-            "enter": "draw",
-            "dur": 2.2
-          },
-          {
-            "type": "path",
-            "d": "M 3330 640 L 3330 800 L 5600 800",
-            "fill": "none",
-            "stroke": "ink",
-            "width": 4,
-            "dash": [
-              10,
-              34
-            ],
-            "cap": "round",
-            "opacity": 0.8,
-            "at": 0,
-            "enter": "draw",
-            "dur": 2.2,
-            "loop": {
-              "type": "dash",
-              "period": 1.2
+              "opacity": 0.8
             }
           },
           {
             "type": "group",
-            "at": 0,
-            "enter": "none",
+            "say": "streets",
+            "stagger": 0.15,
             "children": [
               {
-                "at": 0,
-                "enter": "none",
-                "type": "group",
-                "children": [
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3690,
-                    "y": 380,
-                    "w": 200,
-                    "h": 300,
-                    "fill": {
-                      "gradient": [
-                        "surface",
-                        "muted",
-                        "surface"
-                      ],
-                      "angle": 0
-                    },
-                    "opacity": 0.95
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3684,
-                    "y": 368,
-                    "w": 212,
-                    "h": 14,
-                    "fill": "surface",
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3884,
-                    "y": 380,
-                    "w": 6,
-                    "h": 300,
-                    "fill": "accent",
-                    "opacity": 0.35
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3712,
-                    "y": 400,
-                    "w": 40,
-                    "h": 56,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3764,
-                    "y": 400,
-                    "w": 40,
-                    "h": 56,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3816,
-                    "y": 400,
-                    "w": 40,
-                    "h": 56,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3712,
-                    "y": 492,
-                    "w": 40,
-                    "h": 56,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3764,
-                    "y": 492,
-                    "w": 40,
-                    "h": 56,
-                    "fill": "accent",
-                    "opacity": 0.85,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3816,
-                    "y": 492,
-                    "w": 40,
-                    "h": 56,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3712,
-                    "y": 584,
-                    "w": 40,
-                    "h": 56,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3764,
-                    "y": 584,
-                    "w": 40,
-                    "h": 56,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3816,
-                    "y": 584,
-                    "w": 40,
-                    "h": 56,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3768,
-                    "y": 610,
-                    "w": 44,
-                    "h": 70,
-                    "fill": "bg",
-                    "stroke": "muted",
-                    "width": 1.5
-                  }
-                ]
+                "type": "path",
+                "d": "M 3900 820 L 3900 680 L 4010 600 L 4120 680 L 4120 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
               },
               {
-                "at": 0,
-                "enter": "none",
-                "type": "group",
-                "children": [
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3935,
-                    "y": 599,
-                    "w": 10,
-                    "h": 81,
-                    "fill": "bg"
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "circle",
-                    "cx": 3940,
-                    "cy": 572,
-                    "r": 50.4,
-                    "fill": {
-                      "gradient": [
-                        "positive",
-                        "surface"
-                      ],
-                      "angle": 60
-                    },
-                    "opacity": 0.85
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "circle",
-                    "cx": 3909.4,
-                    "cy": 593.6,
-                    "r": 39.6,
-                    "fill": {
-                      "gradient": [
-                        "positive",
-                        "surface"
-                      ],
-                      "angle": 60
-                    },
-                    "opacity": 0.85
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "circle",
-                    "cx": 3968.8,
-                    "cy": 597.2,
-                    "r": 41.4,
-                    "fill": {
-                      "gradient": [
-                        "positive",
-                        "surface"
-                      ],
-                      "angle": 60
-                    },
-                    "opacity": 0.85
-                  }
-                ]
+                "type": "path",
+                "d": "M 4200 820 L 4200 680 L 4310 600 L 4420 680 L 4420 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
               },
               {
-                "at": 0,
-                "enter": "none",
-                "type": "group",
-                "children": [
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 3980,
-                    "y": 490,
-                    "w": 170,
-                    "h": 190,
-                    "fill": {
-                      "gradient": [
-                        "surface",
-                        "muted",
-                        "surface"
-                      ],
-                      "angle": 0
-                    },
-                    "opacity": 0.95
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "poly",
-                    "points": [
-                      [
-                        3966,
-                        492
-                      ],
-                      [
-                        4065,
-                        380
-                      ],
-                      [
-                        4164,
-                        492
-                      ]
-                    ],
-                    "closed": true,
-                    "fill": {
-                      "gradient": [
-                        "bg",
-                        "surface",
-                        "muted"
-                      ],
-                      "angle": 0
-                    }
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "line",
-                    "x1": 4065,
-                    "y1": 380,
-                    "x2": 4164,
-                    "y2": 492,
-                    "stroke": "accent",
-                    "width": 3,
-                    "opacity": 0.6
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4095.6,
-                    "y": 384,
-                    "w": 26,
-                    "h": 70,
-                    "fill": "surface",
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4006,
-                    "y": 520,
-                    "w": 40,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4045.3333333333335,
-                    "y": 520,
-                    "w": 40,
-                    "h": 52,
-                    "fill": "accent",
-                    "opacity": 0.85,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4084.6666666666665,
-                    "y": 520,
-                    "w": 40,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4006,
-                    "y": 600,
-                    "w": 40,
-                    "h": 80,
-                    "fill": "bg",
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4080,
-                    "y": 608,
-                    "w": 44,
-                    "h": 48,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4144,
-                    "y": 608,
-                    "w": 44,
-                    "h": 48,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  }
-                ]
+                "type": "path",
+                "d": "M 4500 820 L 4500 680 L 4610 600 L 4720 680 L 4720 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
               },
               {
-                "at": 0,
-                "enter": "none",
-                "type": "group",
-                "children": [
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4250,
-                    "y": 496,
-                    "w": 300,
-                    "h": 184,
-                    "fill": {
-                      "gradient": [
-                        "accent",
-                        "muted",
-                        "surface"
-                      ],
-                      "angle": 90
-                    }
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4250,
-                    "y": 496,
-                    "w": 300,
-                    "h": 184,
-                    "fill": {
-                      "gradient": [
-                        "ink",
-                        "ink"
-                      ],
-                      "radial": true,
-                      "fade": true
-                    },
-                    "opacity": 0.16
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4280,
-                    "y": 610,
-                    "w": 44,
-                    "h": 50,
-                    "fill": {
-                      "gradient": [
-                        "accent2",
-                        "accent"
-                      ],
-                      "angle": 90
-                    },
-                    "stroke": "surface",
-                    "width": 4
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4280,
-                    "y": 518,
-                    "w": 44,
-                    "h": 50,
-                    "fill": {
-                      "gradient": [
-                        "accent2",
-                        "accent"
-                      ],
-                      "angle": 90
-                    },
-                    "stroke": "surface",
-                    "width": 4
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "line",
-                    "x1": 4470,
-                    "y1": 496,
-                    "x2": 4470,
-                    "y2": 524,
-                    "stroke": "bg",
-                    "width": 2
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "path",
-                    "d": "M 4454 536 h 32 l -6 -12 h -20 Z",
-                    "fill": "bg",
-                    "stroke": "none"
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "ellipse",
-                    "cx": 4470,
-                    "cy": 552,
-                    "rx": 60,
-                    "ry": 36,
-                    "fill": {
-                      "gradient": [
-                        "ink",
-                        "accent"
-                      ],
-                      "radial": true,
-                      "fade": true
-                    },
-                    "opacity": 0.35
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4360,
-                    "y": 546,
-                    "w": 80,
-                    "h": 5,
-                    "fill": "surface"
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4238,
-                    "y": 496,
-                    "w": 14,
-                    "h": 184,
-                    "fill": "bg",
-                    "stroke": "muted",
-                    "width": 2
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4548,
-                    "y": 496,
-                    "w": 14,
-                    "h": 184,
-                    "fill": "bg",
-                    "stroke": "muted",
-                    "width": 2
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4238,
-                    "y": 583,
-                    "w": 324,
-                    "h": 10,
-                    "fill": "bg",
-                    "stroke": "muted",
-                    "width": 2
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4238,
-                    "y": 492,
-                    "w": 324,
-                    "h": 10,
-                    "fill": "bg",
-                    "stroke": "muted",
-                    "width": 2
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "poly",
-                    "points": [
-                      [
-                        4224,
-                        494
-                      ],
-                      [
-                        4400,
-                        414
-                      ],
-                      [
-                        4576,
-                        494
-                      ],
-                      [
-                        4554,
-                        494
-                      ],
-                      [
-                        4400,
-                        434
-                      ],
-                      [
-                        4246,
-                        494
-                      ]
-                    ],
-                    "closed": true,
-                    "fill": {
-                      "gradient": [
-                        "surface",
-                        "muted"
-                      ],
-                      "angle": 0
-                    },
-                    "stroke": "bg",
-                    "width": 2
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "line",
-                    "x1": 4400,
-                    "y1": 414,
-                    "x2": 4576,
-                    "y2": 494,
-                    "stroke": "accent",
-                    "width": 3,
-                    "opacity": 0.7
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4350,
-                    "y": 644,
-                    "w": 120,
-                    "h": 36,
-                    "fill": "surface",
-                    "stroke": "bg",
-                    "width": 2
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4344,
-                    "y": 638,
-                    "w": 132,
-                    "h": 7,
-                    "fill": "ink",
-                    "opacity": 0.85
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "path",
-                    "d": "M 4374 638 q 26 16 52 0",
-                    "fill": "bg",
-                    "stroke": "ink",
-                    "width": 2,
-                    "opacity": 0.9
-                  }
-                ]
-              },
-              {
-                "at": 0,
-                "enter": "none",
-                "type": "group",
-                "children": [
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4640,
-                    "y": 290,
-                    "w": 230,
-                    "h": 390,
-                    "fill": {
-                      "gradient": [
-                        "surface",
-                        "muted",
-                        "surface"
-                      ],
-                      "angle": 0
-                    },
-                    "opacity": 0.95
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4864,
-                    "y": 290,
-                    "w": 6,
-                    "h": 390,
-                    "fill": "accent",
-                    "opacity": 0.35
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4660,
-                    "y": 314,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4707.5,
-                    "y": 314,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "accent",
-                    "opacity": 0.85,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4755,
-                    "y": 314,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4802.5,
-                    "y": 314,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4660,
-                    "y": 402,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4707.5,
-                    "y": 402,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "accent",
-                    "opacity": 0.85,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4755,
-                    "y": 402,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4802.5,
-                    "y": 402,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4660,
-                    "y": 490,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4707.5,
-                    "y": 490,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "accent",
-                    "opacity": 0.85,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4755,
-                    "y": 490,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4802.5,
-                    "y": 490,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4660,
-                    "y": 578,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4707.5,
-                    "y": 578,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "accent",
-                    "opacity": 0.85,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4755,
-                    "y": 578,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4802.5,
-                    "y": 578,
-                    "w": 36,
-                    "h": 52,
-                    "fill": "bg",
-                    "opacity": 0.75,
-                    "stroke": "muted",
-                    "width": 1.5
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4670,
-                    "y": 276,
-                    "w": 60,
-                    "h": 14,
-                    "fill": "surface"
-                  }
-                ]
-              },
-              {
-                "at": 0,
-                "enter": "none",
-                "type": "group",
-                "children": [
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "rect",
-                    "x": 4955,
-                    "y": 581,
-                    "w": 10,
-                    "h": 99.00000000000001,
-                    "fill": "bg"
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "circle",
-                    "cx": 4960,
-                    "cy": 548,
-                    "r": 61.60000000000001,
-                    "fill": {
-                      "gradient": [
-                        "positive",
-                        "surface"
-                      ],
-                      "angle": 60
-                    },
-                    "opacity": 0.85
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "circle",
-                    "cx": 4922.6,
-                    "cy": 574.4,
-                    "r": 48.400000000000006,
-                    "fill": {
-                      "gradient": [
-                        "positive",
-                        "surface"
-                      ],
-                      "angle": 60
-                    },
-                    "opacity": 0.85
-                  },
-                  {
-                    "at": 0,
-                    "enter": "none",
-                    "type": "circle",
-                    "cx": 4995.2,
-                    "cy": 578.8,
-                    "r": 50.6,
-                    "fill": {
-                      "gradient": [
-                        "positive",
-                        "surface"
-                      ],
-                      "angle": 60
-                    },
-                    "opacity": 0.85
-                  }
-                ]
+                "type": "path",
+                "d": "M 4800 820 L 4800 680 L 4910 600 L 5020 680 L 5020 820 Z",
+                "fill": "surface",
+                "stroke": "ink",
+                "width": 4
               }
             ]
-          },
-          {
-            "type": "rect",
-            "x": 3340,
-            "y": 676,
-            "w": 1700,
-            "h": 8,
-            "fill": "surface",
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "path",
-            "d": "M 3790 800 L 3790 666 M 4060 800 L 4060 666 M 4366 800 L 4366 650 M 4800 800 L 4800 666 M 4366 650 L 4366 614 L 4400 614",
-            "fill": "none",
-            "stroke": "surface",
-            "width": 30,
-            "join": "round",
-            "cap": "round",
-            "say": "every",
-            "enter": "draw",
-            "dur": 0.8
-          },
-          {
-            "type": "path",
-            "d": "M 3790 800 L 3790 666 M 4060 800 L 4060 666 M 4366 800 L 4366 650 M 4800 800 L 4800 666 M 4366 650 L 4366 614 L 4400 614",
-            "fill": "none",
-            "stroke": "accent2",
-            "width": 14,
-            "join": "round",
-            "cap": "round",
-            "glow": {
-              "blur": 10,
-              "opacity": 0.7
-            },
-            "say": "every",
-            "enter": "draw",
-            "dur": 0.8
-          },
-          {
-            "type": "path",
-            "d": "M 3790 800 L 3790 666 M 4060 800 L 4060 666 M 4366 800 L 4366 650 M 4800 800 L 4800 666 M 4366 650 L 4366 614 L 4400 614",
-            "fill": "none",
-            "stroke": "ink",
-            "width": 4,
-            "dash": [
-              10,
-              34
-            ],
-            "cap": "round",
-            "opacity": 0.8,
-            "say": "every",
-            "enter": "draw",
-            "dur": 0.8,
-            "loop": {
-              "type": "dash",
-              "period": 1.2
-            }
-          },
-          {
-            "type": "rect",
-            "x": 3779,
-            "y": 650,
-            "w": 22,
-            "h": 18,
-            "r": 3,
-            "fill": "bg",
-            "stroke": "ink",
-            "width": 2,
-            "say": "every",
-            "enter": "pop",
-            "dur": 0.3
-          },
-          {
-            "type": "rect",
-            "x": 4049,
-            "y": 650,
-            "w": 22,
-            "h": 18,
-            "r": 3,
-            "fill": "bg",
-            "stroke": "ink",
-            "width": 2,
-            "say": "every",
-            "enter": "pop",
-            "dur": 0.3
-          },
-          {
-            "type": "rect",
-            "x": 4789,
-            "y": 650,
-            "w": 22,
-            "h": 18,
-            "r": 3,
-            "fill": "bg",
-            "stroke": "ink",
-            "width": 2,
-            "say": "every",
-            "enter": "pop",
-            "dur": 0.3
-          },
-          {
-            "type": "path",
-            "d": "M 4398 614 L 4406 614 L 4406 624",
-            "fill": "none",
-            "stroke": "ink",
-            "width": 7,
-            "cap": "round",
-            "join": "round",
-            "say": "tap",
-            "enter": "draw",
-            "dur": 0.4
-          },
-          {
-            "type": "circle",
-            "cx": 4406,
-            "cy": 630,
-            "r": 4.5,
-            "fill": "accent2",
-            "glow": {
-              "blur": 8
-            },
-            "say": "tap",
-            "loop": {
-              "type": "float",
-              "period": 1.2,
-              "amount": 4
-            }
           },
           {
             "type": "text",
             "text": "Your tap",
             "x": 4400,
-            "y": 386,
-            "size": 48,
+            "y": 540,
+            "size": 56,
             "font": "bold",
             "fill": "ink",
             "anchor": "middle",
-            "say": "every",
-            "shadow": {
-              "blur": 12,
-              "opacity": 0.8
-            },
-            "exitAt": 7,
-            "exit": "fade"
+            "say": "every"
+          },
+          {
+            "type": "circle",
+            "cx": 4610,
+            "cy": 860,
+            "r": 12,
+            "fill": "accent2",
+            "say": "tap",
+            "loop": {
+              "type": "float",
+              "period": 1.2,
+              "amount": 8
+            }
           }
         ]
       }
     },
     {
       "id": "hidden",
-      "block": "canvas",
+      "block": "stat",
       "vo": "Nine in ten metres of that journey run underground.",
-      "hold": 1,
+      "tone": "accent",
       "props": {
-        "world": "journey",
-        "view": [
-          3440,
-          588,
-          1440,
-          810
-        ],
-        "viewAt": 0,
-        "viewDur": 1.6,
-        "source": "Illustrative sample data · replace before publishing",
-        "elements": [
-          {
-            "type": "path",
-            "d": "M 3330 800 L 5600 800",
-            "fill": "none",
-            "stroke": "accent2",
-            "width": 40,
-            "opacity": 0.45,
-            "glow": {
-              "blur": 30,
-              "opacity": 1
-            },
-            "say": "underground",
-            "enter": "draw",
-            "dur": 0.9,
-            "exitAt": 6.4,
-            "exit": "fade"
-          },
-          {
-            "type": "text",
-            "text": "0",
-            "x": 3560,
-            "y": 1040,
-            "size": 210,
-            "font": "display",
-            "fill": "ink",
-            "at": 1.5,
-            "enter": "fade",
-            "dur": 0.2,
-            "count": {
-              "from": 0,
-              "to": 90,
-              "dur": 1.2,
-              "suffix": "%"
-            },
-            "exitAt": 6.4,
-            "exit": "fade"
-          },
-          {
-            "type": "text",
-            "text": "of the pipe's length runs underground",
-            "x": 4130,
-            "y": 1010,
-            "size": 44,
-            "font": "semibold",
-            "fill": "accent2",
-            "width": 640,
-            "at": 1.8,
-            "enter": "rise",
-            "dur": 0.5,
-            "exitAt": 6.4,
-            "exit": "fade"
-          }
-        ]
-      }
+        "value": 90,
+        "suffix": "%",
+        "label": "of the pipe is out of sight",
+        "align": "center",
+        "land": "underground",
+        "source": "Illustrative sample data · replace before publishing"
+      },
+      "transition": "panel"
     },
     {
       "id": "silence",
       "block": "canvas",
-      "hold": 1,
-      "sfx": [
-        {
-          "src": "drop",
-          "at": 1.2,
-          "volume": 0.7
-        }
-      ],
+      "hold": 0.6,
       "props": {
         "elements": [
           {
-            "at": 0,
-            "enter": "none",
-            "type": "rect",
-            "x": -100,
-            "y": -100,
-            "w": 2120,
-            "h": 1280,
-            "fill": {
-              "gradient": [
-                "muted",
-                "surface",
-                "bg"
-              ],
-              "angle": 0
-            }
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M -60 -100 V 600 M 100 -100 V 600 M 260 -100 V 600 M 420 -100 V 600 M 580 -100 V 600 M 740 -100 V 600 M 900 -100 V 600 M 1060 -100 V 600 M 1220 -100 V 600 M 1380 -100 V 600 M 1540 -100 V 600 M 1700 -100 V 600 M 1860 -100 V 600 M -100 -60 H 2020 M -100 100 H 2020 M -100 260 H 2020 M -100 420 H 2020 M -100 580 H 2020",
-            "fill": "none",
-            "stroke": "bg",
-            "width": 3,
-            "opacity": 0.35
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "rect",
-            "x": -100,
-            "y": 600,
-            "w": 2120,
-            "h": 600,
-            "fill": {
-              "gradient": [
-                "surface",
-                "bg"
-              ],
-              "angle": 90
-            }
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "rect",
-            "x": -100,
-            "y": 596,
-            "w": 2120,
-            "h": 6,
-            "fill": "muted",
-            "opacity": 0.5
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "ellipse",
-            "cx": 960,
-            "cy": 790,
-            "rx": 660,
-            "ry": 150,
-            "fill": {
-              "gradient": [
-                "ink",
-                "muted",
-                "surface"
-              ],
-              "angle": 0
-            }
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "ellipse",
-            "cx": 960,
-            "cy": 800,
-            "rx": 590,
-            "ry": 122,
-            "fill": {
-              "gradient": [
-                "bg",
-                "surface",
-                "muted"
-              ],
-              "angle": 90
-            }
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "ellipse",
-            "cx": 960,
-            "cy": 822,
-            "rx": 520,
-            "ry": 92,
-            "fill": {
-              "gradient": [
-                "accent2",
-                "surface",
-                "bg"
-              ],
-              "angle": 0
-            },
-            "opacity": 0.75
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "ellipse",
-            "cx": 760,
-            "cy": 812,
-            "rx": 210,
-            "ry": 26,
-            "fill": {
-              "gradient": [
-                "ink",
-                "ink"
-              ],
-              "radial": true,
-              "fade": true
-            },
-            "opacity": 0.22
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "line",
-            "x1": 960,
-            "y1": 790,
-            "x2": 960,
-            "y2": 860,
-            "stroke": "muted",
-            "width": 26,
-            "opacity": 0.18,
-            "blur": 4
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "rect",
-            "x": 300,
-            "y": 150,
-            "w": 120,
-            "h": 120,
-            "r": 16,
-            "fill": {
-              "gradient": [
-                "ink",
-                "muted",
-                "surface"
-              ],
-              "angle": 0
-            }
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "rect",
-            "x": 420,
-            "y": 178,
-            "w": 400,
-            "h": 64,
-            "fill": {
-              "gradient": [
-                "surface",
-                "ink",
-                "muted",
-                "bg"
-              ],
-              "angle": 90
-            }
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M 820 178 A 160 160 0 0 1 980 338 L 916 338 A 96 96 0 0 0 820 242 Z",
-            "fill": {
-              "gradient": [
-                "ink",
-                "muted",
-                "surface"
-              ],
-              "angle": 45
-            },
-            "stroke": "none"
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "rect",
-            "x": 916,
-            "y": 336,
-            "w": 64,
-            "h": 40,
-            "fill": {
-              "gradient": [
-                "bg",
-                "muted",
-                "ink",
-                "surface"
-              ],
-              "angle": 0
-            }
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "ellipse",
-            "cx": 948,
-            "cy": 376,
-            "rx": 32,
-            "ry": 9,
-            "fill": "bg",
-            "stroke": "muted",
-            "width": 2
-          },
-          {
-            "at": 0,
-            "enter": "none",
-            "type": "path",
-            "d": "M 430 190 L 816 190 A 148 148 0 0 1 960 330",
-            "fill": "none",
-            "stroke": "ink",
-            "width": 4,
-            "cap": "round",
-            "opacity": 0.85
-          },
-          {
             "type": "circle",
-            "cx": 948,
-            "cy": 388,
-            "r": 12,
-            "fill": {
-              "gradient": [
-                "ink",
-                "accent2"
-              ],
-              "angle": 90
-            },
+            "cx": 960,
+            "cy": 380,
+            "r": 14,
+            "fill": "accent2",
             "glow": {
-              "blur": 12
+              "blur": 16
             },
-            "at": 0.15,
-            "dur": 0.45,
-            "enter": "grow",
+            "at": 0.2,
+            "dur": 0.3,
             "keys": [
               {
-                "at": 0.6,
-                "y": 432,
-                "dur": 0.6,
+                "at": 0.5,
+                "y": 180,
+                "dur": 0.7,
                 "ease": "in"
               },
               {
                 "at": 1.2,
                 "opacity": 0,
-                "dur": 0.05
+                "dur": 0.1
               }
             ]
           },
           {
             "type": "ellipse",
-            "cx": 948,
-            "cy": 820,
-            "rx": 420,
-            "ry": 72,
+            "cx": 960,
+            "cy": 574,
+            "rx": 30,
+            "ry": 8,
             "fill": "none",
-            "stroke": "ink",
+            "stroke": "accent2",
             "width": 3,
-            "opacity": 0.7,
             "at": 1.2,
             "enter": "pop",
-            "dur": 0.15,
+            "dur": 0.2,
             "keys": [
               {
                 "at": 1.2,
-                "scale": 0.08,
-                "dur": 0
-              },
-              {
-                "at": 1.2,
-                "scale": 1,
-                "dur": 1.8,
+                "scale": 6,
+                "dur": 1.4,
                 "ease": "out"
               },
               {
                 "at": 1.4,
                 "opacity": 0,
-                "dur": 1.4
+                "dur": 1.2
               }
-            ],
-            "origin": [
-              948,
-              820
-            ]
-          },
-          {
-            "type": "ellipse",
-            "cx": 948,
-            "cy": 820,
-            "rx": 420,
-            "ry": 72,
-            "fill": "none",
-            "stroke": "ink",
-            "width": 3,
-            "opacity": 0.7,
-            "at": 1.4,
-            "enter": "pop",
-            "dur": 0.15,
-            "keys": [
-              {
-                "at": 1.4,
-                "scale": 0.08,
-                "dur": 0
-              },
-              {
-                "at": 1.4,
-                "scale": 1,
-                "dur": 1.8,
-                "ease": "out"
-              },
-              {
-                "at": 1.6,
-                "opacity": 0,
-                "dur": 1.4
-              }
-            ],
-            "origin": [
-              948,
-              820
-            ]
-          },
-          {
-            "type": "ellipse",
-            "cx": 948,
-            "cy": 820,
-            "rx": 420,
-            "ry": 72,
-            "fill": "none",
-            "stroke": "ink",
-            "width": 3,
-            "opacity": 0.7,
-            "at": 1.6,
-            "enter": "pop",
-            "dur": 0.15,
-            "keys": [
-              {
-                "at": 1.6,
-                "scale": 0.08,
-                "dur": 0
-              },
-              {
-                "at": 1.6,
-                "scale": 1,
-                "dur": 1.8,
-                "ease": "out"
-              },
-              {
-                "at": 1.8,
-                "opacity": 0,
-                "dur": 1.4
-              }
-            ],
-            "origin": [
-              948,
-              820
             ]
           }
         ]
@@ -4133,225 +600,42 @@
       "block": "canvas",
       "vo": "One journey, most of it out of sight.",
       "tail": 0.7,
-      "hold": 1.2,
       "props": {
         "world": "journey",
         "view": [
-          -200,
-          -900,
-          5300,
-          2981.3
+          -100,
+          -700,
+          5200,
+          2925
         ],
-        "viewFrom": [
-          3560,
-          150,
-          1600,
-          900
-        ],
-        "viewAt": 0,
-        "viewDur": 2.4,
         "elements": [
           {
             "type": "text",
             "text": "One journey",
-            "x": 2500,
-            "y": -40,
-            "size": 190,
-            "font": "serif-display",
-            "fill": "ink",
+            "x": 2600,
+            "y": 300,
+            "size": 140,
+            "font": "display",
+            "fill": "accent",
             "anchor": "middle",
-            "at": 2.1,
-            "enter": "rise",
-            "dur": 0.6,
-            "exitAt": 3.8,
-            "exitDur": 0.4,
-            "exit": "fade"
-          },
-          {
-            "type": "rect",
-            "x": 870,
-            "y": 448,
-            "w": 740,
-            "h": 124,
-            "r": 62,
-            "fill": "bg",
-            "opacity": 0.72,
-            "at": 2.2,
-            "enter": "fade",
-            "dur": 0.5,
-            "exitAt": 3.8,
-            "exitDur": 0.4,
-            "exit": "fade"
-          },
-          {
-            "type": "text",
-            "text": "RESERVOIR",
-            "x": 1240,
-            "y": 540,
-            "size": 84,
-            "font": "semibold",
-            "tracking": 0.2,
-            "fill": "ink",
-            "anchor": "middle",
-            "at": 2.2,
-            "enter": "fade",
-            "dur": 0.5,
-            "exitAt": 3.8,
-            "exitDur": 0.4,
-            "exit": "fade"
-          },
-          {
-            "type": "rect",
-            "x": 2590,
-            "y": 238,
-            "w": 760,
-            "h": 124,
-            "r": 62,
-            "fill": "bg",
-            "opacity": 0.72,
-            "at": 2.4,
-            "enter": "fade",
-            "dur": 0.5,
-            "exitAt": 3.8,
-            "exitDur": 0.4,
-            "exit": "fade"
-          },
-          {
-            "type": "text",
-            "text": "TREATMENT",
-            "x": 2970,
-            "y": 330,
-            "size": 84,
-            "font": "semibold",
-            "tracking": 0.2,
-            "fill": "ink",
-            "anchor": "middle",
-            "at": 2.4,
-            "enter": "fade",
-            "dur": 0.5,
-            "exitAt": 3.8,
-            "exitDur": 0.4,
-            "exit": "fade"
-          },
-          {
-            "type": "rect",
-            "x": 4080,
-            "y": 108,
-            "w": 640,
-            "h": 124,
-            "r": 62,
-            "fill": "bg",
-            "opacity": 0.72,
-            "at": 2.5,
-            "enter": "fade",
-            "dur": 0.5,
-            "exitAt": 3.8,
-            "exitDur": 0.4,
-            "exit": "fade"
-          },
-          {
-            "type": "text",
-            "text": "YOUR TAP",
-            "x": 4400,
-            "y": 200,
-            "size": 84,
-            "font": "semibold",
-            "tracking": 0.2,
-            "fill": "ink",
-            "anchor": "middle",
-            "at": 2.5,
-            "enter": "fade",
-            "dur": 0.5,
-            "exitAt": 3.8,
-            "exitDur": 0.4,
-            "exit": "fade"
-          },
-          {
-            "type": "path",
-            "d": "M 1505 790 L 2620 790 M 3330 800 L 5600 800",
-            "fill": "none",
-            "stroke": "accent2",
-            "width": 60,
-            "opacity": 0.5,
-            "glow": {
-              "blur": 40,
-              "opacity": 1
-            },
-            "say": "sight",
-            "enter": "draw",
-            "dur": 1.2,
-            "exitAt": 3.8,
-            "exitDur": 0.4,
-            "exit": "fade"
-          },
-          {
-            "type": "text",
-            "text": "most of it out of sight",
-            "x": 2300,
-            "y": 1130,
-            "size": 180,
-            "font": "serif-display-italic",
-            "fill": "accent2",
-            "anchor": "middle",
-            "say": "sight",
-            "exitAt": 3.8,
-            "exitDur": 0.4,
-            "exit": "fade"
+            "say": "journey"
           }
         ]
       }
     },
     {
       "id": "end",
-      "block": "canvas",
+      "block": "endcard",
       "vo": "So follow the water in your own city.",
-      "hold": 0.8,
-      "transition": "cut",
       "props": {
-        "world": "journey",
-        "view": [
-          3310,
-          -60,
-          2140,
-          1203.8
+        "support": "Find your reservoir.",
+        "action": "Start at the tap",
+        "source": "Illustrative sample data · replace before publishing",
+        "text": "Follow the water.",
+        "emphasis": [
+          "water"
         ],
-        "viewFrom": [
-          3380,
-          -20,
-          2000,
-          1125
-        ],
-        "viewAt": 0,
-        "viewDur": 4.5,
-        "elements": [
-          {
-            "type": "text",
-            "text": "Follow the water.",
-            "x": 3700,
-            "y": 232,
-            "size": 96,
-            "font": "serif-display-italic",
-            "fill": "ink",
-            "anchor": "start",
-            "at": 1.4,
-            "enter": "rise",
-            "dur": 0.8
-          },
-          {
-            "type": "text",
-            "text": "START AT THE TAP",
-            "x": 3704,
-            "y": 296,
-            "size": 38,
-            "font": "semibold",
-            "tracking": 0.3,
-            "fill": "accent",
-            "anchor": "start",
-            "at": 2,
-            "enter": "fade",
-            "dur": 0.6
-          }
-        ]
+        "emphasisStyle": "serif"
       }
     }
   ]

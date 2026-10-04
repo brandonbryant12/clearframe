@@ -15,8 +15,7 @@
   "backdrop": "none",
   "chrome": false,
   "captions": true,
-  "music": {},
-  "sfx": "subtle",
+  "music": false,
   "texture": {
     "grain": 0.2,
     "vignette": 0.35
@@ -57,7 +56,136 @@
         "source": "Illustrative sample data · replace before publishing"
       },
       "art": {
-        "sketch": "ambient"
+        "under": [
+          {
+            "type": "particles",
+            "x": 0,
+            "y": 0,
+            "w": 1080,
+            "h": 1920,
+            "kind": "dust",
+            "count": 36,
+            "fill": "ink",
+            "opacity": 0.35,
+            "size": 3,
+            "at": 0
+          },
+          {
+            "type": "circle",
+            "cx": 162,
+            "cy": 384,
+            "r": 422.4,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 9,
+              "amount": 18
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 885.6,
+            "cy": 576,
+            "r": 576,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "float",
+              "period": 11.5,
+              "amount": 22
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 756,
+            "cy": 1632,
+            "r": 384,
+            "fill": {
+              "gradient": [
+                "accent",
+                "accent"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 14,
+              "amount": 26
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 324,
+            "cy": 1536,
+            "r": 307.2,
+            "fill": {
+              "gradient": [
+                "accent2",
+                "accent2"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "float",
+              "period": 16.5,
+              "amount": 30
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 540,
+            "cy": 864,
+            "r": 230.4,
+            "fill": {
+              "gradient": [
+                "ink",
+                "ink"
+              ],
+              "radial": true,
+              "fade": true
+            },
+            "opacity": 0.3,
+            "enter": "fade",
+            "at": 0,
+            "dur": 1.2,
+            "loop": {
+              "type": "orbit",
+              "period": 19,
+              "amount": 34
+            }
+          }
+        ]
       },
       "camera": {
         "move": "in",
