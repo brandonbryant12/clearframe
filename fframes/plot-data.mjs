@@ -77,7 +77,7 @@ function axisSpec(input, name) {
 }
 
 export function plotSpec(input, source) {
-  own(input, ['title','x','y','series','asOf','source','motion','annotation'], 'plot');
+  own(input, ['title','x','y','series','asOf','source','motion','annotation','bands','area'], 'plot');
   const p = structuredClone(input);
   text(p.title, 'title', 70); utcDay(p.asOf);
   check(p.source == null || source == null || p.source === source, 'source conflicts with props.source');
@@ -107,6 +107,18 @@ export function plotSpec(input, source) {
     check(finite(p.motion.at) && p.motion.at >= 0 && p.motion.at <= 10, 'motion.at must be 0–10 seconds');
     check(finite(p.motion.duration) && p.motion.duration >= 0.2 && p.motion.duration <= 20, 'motion.duration must be 0.2–20 seconds');
   }
+  if (p.bands != null) {
+    check(Array.isArray(p.bands) && p.bands.length >= 1 && p.bands.length <= 8, 'bands needs 1–8 x ranges');
+    let previous = -Infinity;
+    for (const [i, b] of p.bands.entries()) {
+      own(b, ['from','to','label'], `bands[${i}]`);
+      const from = axisValue(b.from, p.x.type), to = axisValue(b.to, p.x.type);
+      axisPosition(b.from, p.x); axisPosition(b.to, p.x);
+      check(from < to && from >= previous, 'bands must be increasing, non-overlapping x ranges'); previous = to;
+      if (b.label != null) text(b.label, `bands[${i}].label`, 24);
+    }
+  }
+  check(p.area == null || typeof p.area === 'boolean', 'area must be true or false');
   if (p.annotation != null) {
     own(p.annotation, ['seriesId','x','label','dx','dy'], 'annotation');
     text(p.annotation.label, 'annotation.label', 45);

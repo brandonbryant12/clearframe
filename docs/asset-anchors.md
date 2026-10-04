@@ -3,9 +3,9 @@
 `asset-anchors` exports named points and reserved copy rectangles for a verified static range in a prepared Blender asset. The original scene, clip and receipt remain unchanged. Native text and leaders use the exported geometry through `placeAnchors` and `labelInZone` in `engine/lib/asset-anchors.mjs`.
 
 ```sh
-node engine/cli.mjs asset-anchors examples/library-kits/physical-mechanisms/media/reservoir-landscape \
-  --definition examples/library-kits/anchor-studies/definitions/reservoir-landscape.json \
-  --out /tmp/reservoir-anchors-new.json --json
+node engine/cli.mjs asset-anchors examples/sculptures/gap-bridge \
+  --definition bridge-anchors.json \
+  --out /tmp/bridge-anchors.json --json
 ```
 
 The command enters the shared heavy-process gate. It requires Blender, an existing ready/baked receipt, matching file hashes and the 20 GiB free-space reserve. The destination must be new. Scene scripts are disabled. Preparation reads the trusted saved scene; it does not render or save it.
@@ -20,8 +20,4 @@ The manifest binds the scene, clip, receipt, definition and exporter. `verifyAnc
 
 These helpers do not measure glyphs, fit copy, solve collisions, detect visibility or track moving labels. Native layout checks and encoded visual review remain required. Changing camera, geometry, source pixels or framing requires a fresh export and review. The range applies only to the held source pose; it says nothing about earlier moving frames.
 
-## Retained examples
-
-[Anchor studies](../examples/library-kits/anchor-studies/README.md) reuses the original reservoir and conveyor assets in four editorial cases, each independently composed for landscape and vertical. Eight seconds of source motion lead to a twenty-second native annotation hold. The explicitly looped hold clip contains 48 identical lossless frames matching source frame 191; the action clip is not looped.
-
-This is the partial static branch of T03. Per-frame tracking, occlusion intervals, arbitrary cross-renderer camera matching, square/4:5 layouts, subjective continuous playback and final master acceptance remain open.
+Per-frame tracking, occlusion intervals, arbitrary cross-renderer camera matching and square/4:5 layouts remain open.

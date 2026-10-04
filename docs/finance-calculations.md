@@ -2,7 +2,7 @@
 
 `engine/lib/finance.mjs` prepares auditable numeric inputs for explanatory graphics. These pure functions do not render anything or obtain live data. No expected returns, tax limits, plan provisions or payment quotes are built in. Model version: **1**.
 
-The first implementation supports T02 and the calculation portions of R01–R06, R08 and R09. The broader chart/statistics transforms remain future work. The [retirement kit](../examples/library-kits/retirement/README.md) now provides R01–R09 native visual prototypes with retained review evidence. R07 displays supplied payout quotations and conditions; it deliberately does not compute actuarial valuation or imply equivalence. Visual acceptance remains separate from calculation correctness.
+The first implementation supports T02 and the calculation portions of R01–R06, R08 and R09. The broader chart/statistics transforms remain future work. R07 displays supplied payout quotations and conditions; it deliberately does not compute actuarial valuation or imply equivalence. Visual acceptance remains separate from calculation correctness.
 
 ## Contracts
 

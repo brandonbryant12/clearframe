@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {phaseTrail} from '../fframes/phase-data.mjs';
 import {phaseScene,phaseValue} from '../fframes/phases.mjs';
-const inputs=JSON.parse(fs.readFileSync(new URL('../examples/library-kits/phase-studies/inputs.json',import.meta.url)));
+const inputs=JSON.parse(fs.readFileSync(new URL('../test/fixtures/phase-inputs.json',import.meta.url)));
 const sample=i=>{const{id,...data}=structuredClone(inputs.cases[i]);return data;};
 
 test('phase quadrants preserve exact reference boundaries, chronology and missing pairs',()=>{

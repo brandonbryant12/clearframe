@@ -80,7 +80,8 @@ export function createJob(sb, timing, { draft = false } = {}) {
   const frame = frameChrome(sb, beats, report);
   fitGraphicTransitions(beats, timing, report);
   filmWarnings(sb, timing, film.theme, report);
-  if (beats.some(b => b.frames < 1) || beats.reduce((n, b) => n + b.frames, 0) !== timing.frames)
+  // A beat that failed to prepare is already reported; the timeline gap it leaves is not a second problem.
+  if (beats.length === timing.beats.length && (beats.some(b => b.frames < 1) || beats.reduce((n, b) => n + b.frames, 0) !== timing.frames))
     report.errors.push('Every beat must span at least one frame and cover the complete timeline.');
   const job = {
     version: 2,

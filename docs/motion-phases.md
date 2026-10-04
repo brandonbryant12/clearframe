@@ -2,7 +2,7 @@
 
 Prepared motion can expose named frame intervals so an editor can place native evidence after the object settles. This is a timing contract for qualitative artwork. It is not a financial timeline, a measured event clock, or a physics simulation.
 
-All fourteen built-in sculpture recipes now declare `motion.version: 1` and `clock: "qualitative-pose"`. The gate, bridge and quiz declare initial hold, action and final hold phases. The reservoir and conveyor add staged transfer/closure and queue/bypass phases. The three camera studies add held start, pullback or focus action, and held ending phases. Camera optics now participate in hold checks. The six continuously moving loops declare one `cycle`; a nominal open-looking pose does not imply that the camera, light or every object has stopped.
+All eight built-in sculpture recipes declare `motion.version: 1` and `clock: "qualitative-pose"`. `gap-bridge` and `quiz-triptych` declare an initial hold, an action and a final hold (`question`, `insertion`/`selection`, `answer`). The six continuously moving loops declare one `cycle`; a nominal open-looking pose does not imply that the camera, light or every object has stopped. Camera optics participate in hold checks.
 
 ## Authoring
 
@@ -13,13 +13,13 @@ Default rendering keeps the original pose input exactly: encoded frame `i` evalu
 To give specific phases a different duration, supply every phase in seconds:
 
 ```json
-{ "closed": 1, "opening": 1, "hold": 2 }
+{ "question": 1, "insertion": 1, "answer": 2 }
 ```
 
 ```sh
-node engine/cli.mjs sculpture reserve-gate --draft --fps 12 \
-  --phase-seconds examples/motion-phases/timings/reserve-gate.json \
-  --out /tmp/retimed-gate
+node engine/cli.mjs sculpture gap-bridge --draft --fps 12 \
+  --phase-seconds timing.json \
+  --out /tmp/retimed-bridge
 ```
 
 `--phase-seconds` and `--duration` are mutually exclusive. Each phase must be positive, the total must be 1–30 seconds, and the existing 12–60 integer FPS limit applies. Cumulative requested boundaries round to the nearest output frame. Empty phases and phase durations below their declared minimum are rejected. A phase-retimed action traverses the same canonical pose range over its new frame interval; a hold remains static. This changes authored motion speed. It does not recompute physical forces or measured events.
@@ -52,10 +52,10 @@ const plan = planClipRetiming(asset.motion, {
 });
 ```
 
-The example applies to the 48-frame gate above. It keeps source frames 6–41, doubles their playback duration to six seconds and produces 144 output frame selections. Each source frame repeats four times. The output retains a three-second final hold. `sourceFrames` and `sourceSeconds` describe the selected encoded source frame and its actual timestamp; they do not interpolate poses or pretend to be a new simulation.
+The example applies to the 48-frame bridge above. It keeps source frames 6–41, doubles their playback duration to six seconds and produces 144 output frame selections. Each source frame repeats four times. The output retains a three-second final hold. `sourceFrames` and `sourceSeconds` describe the selected encoded source frame and its actual timestamp; they do not interpolate poses or pretend to be a new simulation.
 
 Rates are positive 0.25–4; output FPS is an integer 12–60; output is bounded to 2,880 frames. Output frame count rounds to the nearest integer, so the manifest reports both requested and effective playback rate. Selection uses `start + floor(outputIndex × sourceCount / outputCount)`. Faster plans can drop frames; the final encoded source frame is not guaranteed to be selected. Review the resulting cadence and seam if applying a plan externally.
 
 Trims must land inside declared holds and preserve every non-hold phase. Playback may not drop an entire action or shorten a phase below its minimum. `readHoldSeconds` optionally requires a minimum final reading hold. A one-way reveal never becomes a loop. A full loop retains only its loop intent, and needs seam review after frame selection. Reverse playback and partial-cycle edits are intentionally outside this helper.
 
-The [retained examples](../examples/motion-phases/README.md) separate pure planning checks, actual Blender output, saved-scene reproduction and sampled encoded review. Native films do not automatically consume these sidecars; apply their resolved cue times when composing native evidence.
+Native films do not automatically consume these sidecars; apply their resolved cue times when composing native evidence.

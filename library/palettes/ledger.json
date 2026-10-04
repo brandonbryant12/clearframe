@@ -1,0 +1,14 @@
+{
+  "order": 36,
+  "notes": "Deep navy with sea-glass teal and brass. Financial-services charts and market commentary; quiet surfaces, bright data.",
+  "colors": {
+    "bg": "#0d1726",
+    "surface": "#172539",
+    "ink": "#eef2f6",
+    "muted": "#93a3b8",
+    "accent": "#4fc1b0",
+    "accent2": "#e3ad57",
+    "positive": "#62c48d",
+    "negative": "#e86f63"
+  }
+}

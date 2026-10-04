@@ -1,6 +1,6 @@
 # Expectations and information dates
 
-`engine/lib/expectations.mjs` prepares auditable native chart inputs. The [expectations studies kit](../examples/library-kits/expectations-studies/README.md) retains original fictional fixtures, unrounded calculations, twelve landscape/vertical clips and independent review. Its lifecycle is prototype.
+`engine/lib/expectations.mjs` prepares auditable native chart inputs. Its lifecycle is prototype.
 
 ## Available information
 

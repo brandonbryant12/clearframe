@@ -1,45 +1,17 @@
-# Authored camera studies
+# Blender camera rig
 
-Three original Blender recipes make the point of view part of an explanation. `linked-system` moves from a control junction to its connections. `hero-field` pulls back from an amber marker to its surrounding field. `focus-depth` holds the camera still while shifting focus from a near surface to a deeper structure. Their geometry, apparent size, marker count and timing are qualitative; they are not measured data.
+`scripts/blender/camera_rig.py` gives sculpture recipes a deterministic, authored camera. It exposes a pure `path_at(path, phase)` sampler and a Blender `bind(camera, path)` adapter that bakes the path into keyframes with no live handler. Paths run on the `qualitative-pose` clock: phase 0–1, with recipe phase timing deciding elapsed seconds.
 
-The [camera-studies kit](../examples/library-kits/camera-studies/README.md) pairs each recipe with two editable explanatory subjects in separately fitted landscape and portrait layouts. Native caption bands keep claims and qualifications sharp throughout the camera move. A final two-second static clip extends the source hold without restarting the scene. The kit remains a prototype pending continuous subjective playback and master review. Stable close-up grain on the field markers is tracked for the master surface-quality pass.
+## Path versions
 
-## Deterministic camera path
+- **Version 1 — keyed path.** Two to thirty-two strictly increasing complete keys from phase 0 to 1. `make_path(start, end)` holds the first pose to .16, moves to the end at .74, then holds. Location, target and optics are sampled together; keys that cross the target or the vertical roll pole are rejected.
+- **Version 2 — orbit and truck.** `make_orbit(pose, degrees)` rotates the camera's horizontal offset about a fixed target (0.01–170°, analytic angle, fixed radius, height and optics). `make_truck(pose, translation)` moves camera and target together so the relative view stays fixed.
+- **Versions 3–4 — chart flight.** `make_chart_flight` weaves between the bars of a flat X/Z chart (2–12 bars) and pulls back to the complete chart, with continuous clearance checks against expanded bar envelopes. Version 4 (`target_policy='bounded-chart'`) stops the look-ahead at the last bar. No chart scene ships with the library: a POV flight through bars reads poorly at video speed, so treat it as a building block, not a finished shot.
 
-`scripts/blender/camera_rig.py` exposes a pure `path_at(path, phase)` sampler and a Blender `bind(camera, path)` adapter. Version 1 uses the `qualitative-pose` clock and two to thirty-two strictly increasing complete keys spanning phase zero through one. Each key declares location, target, focal length, orthographic scale, horizontal/vertical shift, focus distance, aperture and incoming `linear` or `smooth` easing. Projection and depth-of-field enablement are fixed for the path. This is an internal trusted-recipe contract, not a new storyboard field or cross-renderer camera interchange format.
+## Framing
 
-`make_path(start, end)` holds the first pose to phase .16, moves to the end at .74, then holds it. Recipe phase timing determines elapsed time. Locations, targets and optics are sampled together; keys that cross the camera target or the vertical roll pole are rejected. A named target point is explicit, not inferred from a mesh. The adapter bakes every source frame plus the endpoint; saved scenes require no Python handlers or auto-execution.
+`fit_perspective(camera, objects, target, safe)` is an opt-in endpoint solver. It keeps authored direction and lens, adjusts distance and lens shift, and uses projected mesh bounds. Landscape and portrait endpoints are solved independently.
 
-The renderer now checks camera optics as well as world transforms during declared holds and loop closure. A fixed camera matrix cannot hide changing focus, lens, scale or aperture. These checks do not prove materials, particles or arbitrary shader animation are static.
+The renderer checks camera optics as well as world transforms during declared holds and loop closure, so a fixed matrix cannot hide changing focus, lens or aperture.
 
-## Framing and evidence boundaries
-
-`fit_perspective(camera, objects, target, safe)` is an opt-in endpoint solver. It preserves authored direction and lens, adjusts distance and lens shift, and uses Blender's projected mesh bounds. Landscape and portrait endpoints are solved independently. It does not preserve apparent quantitative scale, avoid collisions or prove visibility. An opening can intentionally crop surrounding context; the selected hero must remain within its declared safe region, and the ending system must fit.
-
-The kit's separate checker compares all baked frame poses to the retained path, tests static noncamera geometry, checks hero bounds throughout and complete mesh/curve bounds in the final hold, then revisits frames out of order. The two pullbacks retain constant focal length; the focus study changes only focus distance. Encoded focus and hold probes, saved-scene replay and an independent sampled review supplement those geometric checks. Exact scope, hashes and results belong to the retained evidence, not these general APIs.
-
-Not implemented here: a camera chase, explosion focus chase, perspective matching of measured charts, collision avoidance, automatic arbitrary-ratio reframing, or a portable pose contract shared with the native compositor. The existing native `world`, `dolly` and `focus` tools remain available for native scenes.
-
-
-## Bounded orbit and truck presets
-
-Version 2 adds `make_orbit(pose, degrees)` and `make_truck(pose, translation)` in the same trusted helper. It preserves the version-1 complete-key path contract. `path_at` samples either version and `bind` bakes either one with no live handler.
-
-The orbit rotates the camera's horizontal offset about the fixed target on world Z. Cylindrical radius, camera height, target and optics stay fixed. It uses the analytic angle, not linear chords between sampled keys. Supported signed arcs are 0.01–170 degrees; this is a bounded inspection move, not a full spin or closed loop. The conservative full-circle world envelope must stay inside the existing coordinate bounds.
-
-The truck applies the same authored translation to camera and target. Their relative vector, orientation, focus and other optics stay fixed. It accepts an arbitrary three-dimensional translation within the existing world bounds; the supplied scenes demonstrate lateral moves. Neither preset changes lens scale to fake travel. Both retain nonempty opening and ending holds, with linear or smoothstep progress during the declared move interval (default .16–.74). Timing uses the existing qualitative phase clock, not calendar time or measured transit time.
-
-The [camera travel studies](../examples/library-kits/camera-travel-studies/README.md) demonstrate an open assembly and foreground screens with a rear connection. Portrait truck geometry is deliberately narrower with shorter travel so the relation remains readable; it is not a crop or a claim of dimensional equivalence. A changed sightline can leave some occlusion. New geometry, arcs, travel, optics or aspect ratios require fresh whole-path bounds and encoded review; no general collision, visibility or automatic framing guarantee is provided.
-
-
-## Chart flight candidate
-
-Version 3 adds `make_chart_flight` for an original flat X/Z chart: 2–12 equally spaced bars, explicit world-space bar width/depth, chart height, camera clearance, lateral amplitude, aspect, margin and phase boundaries. The analytic camera weaves between bar envelopes, turns toward the chart from its front side, then pulls back to a centered complete overview. It uses a fixed 36 mm horizontal sensor and ends at 48 mm; native labels remain separate. Perspective during the move does not preserve screen-space quantitative scale.
-
-The shared `chart_scene.py` uses zero-based heights from explicit values/ticks and chooses a constant camera height inside a horizontal grid corridor. Starting at the first bar avoids crossing the value axis; the surrounding stage grows to enclose the camera and chart. Portrait compresses time spacing, increases chart height and widens camera stand-off. Zero observations remain exactly zero. Bar growth is an authored reveal, not intermediate data.
-
-The [graph-flight study](../examples/library-kits/graph-flight-study/DIRECTION.md) is an exploratory candidate, not an accepted kit. Human feedback established a full-chart ending and rejected the initial pace. The current timing is a ten-second flight, three-second pullback and five-second ending hold, plus a half-second opening. Source assets and named phase durations now support 1–30 seconds so longer camera moves do not require repeating encoded frames. Earlier recipes retain their existing timings.
-
-The rig checks continuous clearance against expanded bar envelopes. The shared scene additionally separates horizontal grid levels from the flight and verifies actual baked mesh envelopes and the ending projection. These are bounded checks for this flat chart construction, not arbitrary collision avoidance or a guarantee that intermediate bars remain unobscured. Four revised 18.5-second source clips cover both datasets and formats. Native labels use exact stable ending anchors, with a quarter-second fade and 4.75-second fully labeled hold. Encoded review and final acceptance are recorded in the study; it remains outside the catalog.
-
-The revised chart backdrop is a closed convex shell rather than an open cyclorama. Saved-scene checks verify connectivity, opposite edge winding, convex halfspaces, near-rectangle containment and far-plane coverage at every baked pose, plus 25 stage rays per pose. The four fixtures additionally keep the rounded ceiling outside the view. These checks assume static stage geometry, perspective projection, no depth of field and no motion blur; they do not prove continuous bar visibility. The earlier open-stage portrait defect is retained as a failed regression.
+Tests: `test/camera-presets.test.mjs`, `test/camera-paths.test.mjs`, `test/chart-flight.test.mjs`.

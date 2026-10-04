@@ -1,6 +1,6 @@
 # Dated series: price basis, growth and observed risk
 
-`engine/lib/time-series.mjs` provides versioned, pure transformations of observed records. The [time-series studies kit](../examples/library-kits/time-series-studies/README.md) retains original fictional input, native sources, exact results and reviewed landscape/vertical drafts. These are prototypes; continuous subjective playback and final master acceptance remain pending.
+`engine/lib/time-series.mjs` provides versioned, pure transformations of observed records. These are prototypes; continuous subjective playback and final master acceptance remain pending.
 
 ```js
 import {deflateSeries,growthSeries,rollingStatistics,drawdownSeries} from '../engine/lib/time-series.mjs';
@@ -32,4 +32,4 @@ The kit's rolling SD measures three consecutive monthly **percent changes** in p
 
 A canvas can use `props.sourceElement: 'credit-id'` when an explicit source element fits its composition better than the automatic footer. It must name one top-level native text element, present at time zero with `enter:'none'`, size at least 28, opaque `ink` fill, and no visual effects or opacity reduction, transformations, keys or exits. A storyboard source record is required. It cannot combine with `source` or `sourceSize`. Native frame audits still check visible bounds, overlap and rendered font size. This names actual attribution text; it is not an exemption from showing a source.
 
-Use ordinary `props.source` / `sourceSize` for the automatic footer. For either mode, reserve enough reading time and inspect the encoded phone frames. See the kit's [methodological sources](../examples/library-kits/time-series-studies/SOURCES.md), [direction](../examples/library-kits/time-series-studies/DIRECTION.md) and [review](../examples/library-kits/time-series-studies/REVIEW.md).
+Use ordinary `props.source` / `sourceSize` for the automatic footer. For either mode, reserve enough reading time and inspect the encoded phone frames.

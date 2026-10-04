@@ -32,3 +32,9 @@ fframes/assets/fonts/source/*
 # Reproducible Python bytecode from procedural recipe inspection.
 __pycache__/
 *.pyc
+
+# Renders, review evidence and receipts are outputs, not library assets. Keep them in build/ or a
+# project's own folder; test/repo-hygiene.test.mjs fails if binaries land outside the allowlist.
+**/evidence/
+**/specimens/
+**/*-receipt.json

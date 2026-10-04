@@ -25,7 +25,7 @@ test('shared scales retain exact positions, including signed and logarithmic val
   assert.equal(axisPosition(0,{type:'linear',domain:[-10,10]}),.5);
   near(axisPosition(10,{type:'log',domain:[1,100]}),.5);
   assert.throws(()=>axisPosition(0,{type:'log',domain:[1,100]}));
-  const p=draw({...base,motion:'none'}),L=plotLayout(frame);
+  const p=draw({...base,motion:'none'}),L=plotLayout(frame,{xLabel:base.x.type!=='date'});
   near(named(p,'plot-a-point-1').cy,L.bottom-.4*(L.bottom-L.top));
   assert.equal(named(p,'plot-a-point-0').cy,named(p,'plot-b-point-0').cy);
 });

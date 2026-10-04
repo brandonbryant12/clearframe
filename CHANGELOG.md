@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Editorial plots, finance templates and a lean repository.** `props.plot` was redesigned for video: the plot fills the frame, the key and axes are quiet, values sit at the line ends, and overlapping tick labels fail at authoring time. New `bands` shade regimes such as recessions and `area` adds a soft fill. The `ledger` palette suits financial-services content, and `examples/finance-charts/` holds six template beats (compounding, purchasing power, real versus nominal, yield curve, drawdowns, scenarios) as JSON. The October 2–3 showcase kits, prop-metaphor sculptures, chart-flight study, library browser and about 450 MB of retained render evidence were removed: they did not meet a professional visual bar and stored outputs as if they were assets. Engine builders, finance calculations and their tests remain. `test/repo-hygiene.test.mjs` keeps renders out of the repository. A beat that fails validation no longer also reports a misleading timeline error.
+
 - **Bounded chart-flight target.** `make_chart_flight(..., target_policy='bounded-chart')` writes a version 4 path whose look-ahead stops at the last real bar, so the camera never frames empty space past the data; version 3 paths replay unchanged. The chart scene uses it with a wider margin.
 
 - **Scored beds keep playing.** A music bed with an explicit `arc` or `sections` no longer ducks out or inserts scripted silences under voiceless beats; those beats are picture-led.

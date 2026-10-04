@@ -25,4 +25,4 @@ Native bars use their real bin widths and a zero baseline. A linear scaleY revea
 
 Focus retains the complete histogram, adds two segments of the exact threshold line clear of axis/strip labels, outlines qualifying dots and states the direct count. Native count labels have background clearance from the threshold stroke. There is no fitted bell curve, partial-bin shading, tail-area interpolation, weighted sample or prediction. All copy, bins, scales, observations, timing and source remain editable.
 
-The [distribution studies](../examples/library-kits/distribution-studies/README.md) demonstrate equal-width signed monthly changes and unequal-width service delays in landscape and vertical. NIST's formula is linked in the [method provenance](../examples/library-kits/distribution-studies/SOURCES.md). Other aspect ratios, arbitrary copy/data density, subjective continuous playback and final master acceptance remain unreviewed. The library asset stays a prototype.
+Other aspect ratios, arbitrary copy/data density, subjective continuous playback and final master acceptance remain unreviewed. The library asset stays a prototype.

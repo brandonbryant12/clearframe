@@ -28,4 +28,4 @@ The matrix uses one fixed −1/0/+1 color scale across all windows. Signs and na
 
 Correlation does not establish causation, prediction or significance. Pairwise deletion can yield a matrix that is not positive semidefinite; do not treat this result as a validated portfolio covariance model. Other return conventions, frequencies, methods, statistical inference, arbitrary labels/layouts and continuous playback acceptance remain outside the reviewed prototype.
 
-See the [correlation studies](../examples/library-kits/correlation-studies/README.md) and [method provenance](../examples/library-kits/correlation-studies/SOURCES.md). The two fictional three-member cases are reviewed independently in landscape and portrait. Four-member math coverage is distinct from visual acceptance of a four-member specimen.
+The two fictional three-member cases are reviewed independently in landscape and portrait. Four-member math coverage is distinct from visual acceptance of a four-member specimen.

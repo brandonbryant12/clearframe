@@ -78,7 +78,7 @@ export async function renderSculpture(id, destination, options = {}) {
   fs.mkdirSync(out);
   fs.mkdirSync(path.join(out, 'frames'));
   const source = path.join(out, 'source'); fs.mkdirSync(source);
-  const sourceFiles = ['scripts/blender/render.py', 'scripts/blender/artkit.py', 'scripts/blender/camera_rig.py', 'scripts/blender/chart_scene.py', `library/sculptures/${id}.py`, `library/sculptures/${id}.json`];
+  const sourceFiles = ['scripts/blender/render.py', 'scripts/blender/artkit.py', 'scripts/blender/camera_rig.py', `library/sculptures/${id}.py`, `library/sculptures/${id}.json`];
   const hashes = Object.fromEntries(sourceFiles.map(file => {
     fs.copyFileSync(path.join(repo, file), path.join(source, path.basename(file)));
     return [file, sha(path.join(source, path.basename(file)))];

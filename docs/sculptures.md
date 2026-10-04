@@ -14,16 +14,6 @@ The sixteen established recipes use independent geometry, materials and motion. 
 | `strata-landform` | Pigmented laminates form a cutaway; the upper layers lift and reveal a contrasting band. | Inspection, hidden layers or a research discovery. |
 | `quiz-triptych` | Three identical ceramic tiles; one lifts and holds. | A staged multiple-choice reveal with native question and answer text. |
 | `gap-bridge` | A colored insert descends into the missing span and settles. | A fill-in-the-blank answer or completion metaphor. |
-| `reserve-gate` | An amber gate lifts between porcelain basins in graphite guides, then holds. | Qualitative access and release conditions; no liquid or amount encoding. |
-| `reservoir-transfer` | Transparent chambers, blue analytic fill and an amber gate stage redistribution and isolation. | Qualitative access or tank operation; no measured volume. |
-| `linked-system` | Perspective pullback from a control junction to connected branches. | Connections and dependencies; no measured flow. |
-| `hero-field` | Perspective pullback from a selected marker to a wider field. | Individual and context; illustrative counts only. |
-| `focus-depth` | Fixed camera racks focus between near and deeper objects. | Selective attention with crisp native qualifications. |
-| `inspection-orbit` | One bounded orbit around a static open ceramic assembly. | Side connections and changing viewpoints; no measured internals. |
-| `parallax-truck` | Equal camera/target translation past foreground screens and a rear route. | Partial visibility and depth; no complete-visibility guarantee. |
-| `conveyor-bypass` | Ceramic packets queue at a narrow neck and travel through an opened alternate route. | Logistics or routing metaphor; no measured throughput. |
-| `graph-flight` (candidate) | Weave through eight rising flat bars, then reveal the full chart. | Original fictional reserve series; native labels and acceptance pending. |
-| `graph-flight-seasonal` (candidate) | The same bounded rig with six uneven observations. | Original fictional workload series; complete render review pending. |
 
 The sixteen established recipes are qualitative visual metaphors. Their dimensions, weights, layer counts and trajectories do not represent measurements. Adapt the geometry to the actual subject before using an assembly as a factual product diagram. Keep evidence and text native.
 
@@ -67,7 +57,6 @@ node scripts/package-sculptures.mjs /path/to/asset-root NEW-GALLERY-DIRECTORY
 
 The packager includes known receipt directories present in that asset root, so an older prepared set remains usable as the catalog grows. It refuses empty sets, unknown recipe IDs and changed source or output bytes.
 
-The [research-study kit](../examples/library-kits/research-study/README.md) adds the reserve gate in landscape and vertical with native type. Its source scenes and mechanical checks are retained; subjective continuous playback remains unverified, so it is a prototype. The original eight-asset gallery remains a separate prepared set.
 
 The original render configuration remains as provenance; its output paths describe the original machine. Use `sculpture` with a fresh output directory to regenerate an asset elsewhere. Full PNG sequences remain in the render evidence rather than the compact gallery.
 
@@ -104,6 +93,4 @@ npm run verify:sculptures -- /tmp/one-sculpture --quick
 
 The harness checks retained hashes, poster and video geometry, frame counts, color tags, decoded loop continuity or a settled one-way reveal, and visible movement. It reopens every saved `.blend` with auto-execution disabled and compares the rendered poster pixels with the original. It records both pixel hashes and distinguishes exact equality from bounded EEVEE rounding: at most one 8-bit step in no more than 0.1% of channels. Reports retain failures as well as successful evidence. These are mechanical checks; source truth, useful direction and artistic acceptance remain separate review decisions.
 
-The reservoir-transfer and conveyor-bypass recipes add staged, qualitative physical operations with separate portrait framing. See [physical mechanisms](physical-mechanisms.md) for conserved geometry, contact checks, opt-in camera fitting and retained native examples.
-
-Three authored camera recipes add separately fitted perspective endpoints and optical focus with native caption bands. See [camera studies](camera-studies.md) for the deterministic path contract, optical hold checks and prototype evidence.
+Recipes can use the deterministic camera presets in `scripts/blender/camera_rig.py`; see [camera rig](camera-studies.md).

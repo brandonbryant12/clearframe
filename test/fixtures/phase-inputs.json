@@ -1,0 +1,187 @@
+{
+  "provenance": "Original fictional paired observations for layout and calculation review. They are not economic or machine measurements. References and quadrant labels are authored definitions, not forecasts or a guaranteed repeating cycle.",
+  "cases": [
+    {
+      "id": "orders-inventory",
+      "title": "Orders fall; inventory stays above plan",
+      "source": "Original fictional observations",
+      "asOf": "2026-09-30",
+      "x": {
+        "label": "Monthly orders change (%)",
+        "definition": "Supplied month-over-month order change in percent; zero separates increasing from decreasing orders.",
+        "domain": [
+          -4,
+          4
+        ],
+        "ticks": [
+          -4,
+          0,
+          4
+        ],
+        "reference": 0,
+        "decimals": 0
+      },
+      "y": {
+        "label": "Inventory vs plan (%)",
+        "definition": "Supplied inventory deviation from the same-month plan in percent; zero means on plan.",
+        "domain": [
+          -20,
+          20
+        ],
+        "ticks": [
+          -20,
+          0,
+          20
+        ],
+        "reference": 0,
+        "decimals": 0
+      },
+      "quadrants": {
+        "NE": "Up / above plan",
+        "NW": "Down / above plan",
+        "SW": "Down / below plan",
+        "SE": "Up / below plan"
+      },
+      "smoothing": "none",
+      "focusDate": "2026-06-30",
+      "points": [
+        {
+          "date": "2026-01-31",
+          "x": -3,
+          "y": -12
+        },
+        {
+          "date": "2026-02-28",
+          "x": -1,
+          "y": -8
+        },
+        {
+          "date": "2026-03-31",
+          "x": 2,
+          "y": -5
+        },
+        {
+          "date": "2026-04-30",
+          "x": 3,
+          "y": 4
+        },
+        {
+          "date": "2026-05-31",
+          "x": 1,
+          "y": 12
+        },
+        {
+          "date": "2026-06-30",
+          "x": -1,
+          "y": 8
+        },
+        {
+          "date": "2026-07-31",
+          "x": -3,
+          "y": 4
+        },
+        {
+          "date": "2026-08-31",
+          "x": -2,
+          "y": null
+        },
+        {
+          "date": "2026-09-30",
+          "x": 0,
+          "y": -10
+        }
+      ]
+    },
+    {
+      "id": "load-temperature",
+      "title": "A warm machine after load falls",
+      "source": "Original fictional observations",
+      "asOf": "2026-09-30",
+      "x": {
+        "label": "Load (% rated)",
+        "definition": "Supplied machine load as a percent of rated load. The authored comparison reference is 60 percent, not zero.",
+        "domain": [
+          20,
+          100
+        ],
+        "ticks": [
+          20,
+          60,
+          100
+        ],
+        "reference": 60,
+        "decimals": 0
+      },
+      "y": {
+        "label": "Temperature (°C)",
+        "definition": "Supplied measured-style temperature values; 70 degrees Celsius is an illustrative comparison reference, not a safety limit.",
+        "domain": [
+          30,
+          110
+        ],
+        "ticks": [
+          30,
+          70,
+          110
+        ],
+        "reference": 70,
+        "decimals": 0
+      },
+      "quadrants": {
+        "NE": "Higher load / warmer",
+        "NW": "Lower load / warmer",
+        "SW": "Lower load / cooler",
+        "SE": "Higher load / cooler"
+      },
+      "smoothing": "none",
+      "focusDate": "2026-01-12",
+      "points": [
+        {
+          "date": "2026-01-01",
+          "x": 30,
+          "y": 40
+        },
+        {
+          "date": "2026-01-03",
+          "x": 65,
+          "y": 50
+        },
+        {
+          "date": "2026-01-05",
+          "x": 80,
+          "y": 85
+        },
+        {
+          "date": "2026-01-09",
+          "x": 50,
+          "y": 95
+        },
+        {
+          "date": "2026-01-12",
+          "x": 60,
+          "y": 70
+        },
+        {
+          "date": "2026-01-13",
+          "x": 40,
+          "y": null
+        },
+        {
+          "date": "2026-01-15",
+          "x": null,
+          "y": 80
+        },
+        {
+          "date": "2026-01-17",
+          "x": 45,
+          "y": 55
+        },
+        {
+          "date": "2026-01-21",
+          "x": 75,
+          "y": 65
+        }
+      ]
+    }
+  ]
+}

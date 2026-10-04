@@ -1,6 +1,6 @@
 # Shared-scale native plots
 
-`canvas.props.plot` turns explicit numeric inputs into native lines, observation markers, axes, a stable series key, final values and an optional annotation. It prepares editable geometry; text and quantities stay outside Blender. Inventory scope: T01/C01 foundation. Status: prototype; three [rendered review](../examples/quantitative-plots/REVIEW.md) rounds resolved the sampled presentation defects, but continuous playback remains unverified. Do not promote these examples as accepted assets.
+`canvas.props.plot` turns explicit numeric inputs into native lines, observation markers, axes, a stable series key, final values and an optional annotation. It prepares editable geometry; text and quantities stay outside Blender. It is the workhorse for market history, real-versus-nominal, yields and any series over time; see the [finance chart kit](../examples/finance-charts/README.md).
 
 ```json
 {
@@ -43,14 +43,11 @@ Series names appear from the start. Final numeric values arrive only when the re
 
 Do not combine plot shorthand with KPI, teaching, legacy chart, sketch, plates, worlds or depth cameras. Authored extra `elements` can add reviewed callouts. Generated element IDs are scoped to each beat so unrelated plots cannot accidentally morph into one another.
 
-## Reproduction and evidence
+## Layout
 
-```sh
-node examples/quantitative-plots/build.mjs
-node --test --test-concurrency=2 test/plots.test.mjs
-node engine/cli.mjs critique examples/quantitative-plots/landscape
-# After the disk/resource preflight:
-/Users/brandon/.local/bin/codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node engine/cli.mjs sheet examples/quantitative-plots/landscape --draft
-```
+The plot fills the frame's middle band: one-line title (two lines in vertical frames), a series key, the unit label, then the plot. Terminal values sit at the line ends and are pushed apart so close endpoints never collide. Long series (more than 16 observations) draw as a clean line with an end dot; short series keep a dot per observation. Tick labels that would print over each other fail at authoring time with the offending pair named, so choose fewer or wider ticks rather than discovering the collision in review.
 
-The specimens include a retirement ledger and a monitoring example with irregular dates and missing data, in landscape and vertical layouts. Long-label/close-value and log/annotation stress clips are rendered in all four presets. [Direction and review brief](../examples/quantitative-plots/DIRECTION.md). [Retained evidence](../examples/quantitative-plots/README.md) separates source checks, encoded quantitative checks, sampled visual review and the outstanding continuous-playback review. Three/four-series layouts need their own visual review.
+- `bands: [{from, to, label?}]` (1–8, increasing, non-overlapping x ranges) shade regimes such as recessions or rate cycles behind the line.
+- `area: true` adds a soft fill under the first series.
+
+Tests: `node --test test/plots.test.mjs`. Check a layout with `node engine/cli.mjs still DIR --at SECONDS --draft` in every format you will ship.
