@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { buildViewer, saveNote, fileType } from '../engine/lib/viewer.mjs';
+import { buildViewer, saveNote, setNoteState, replyToNote, fileType } from '../engine/lib/viewer.mjs';
 
 const clip = (file, size = '320x568') => {
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -58,6 +58,13 @@ test('notes on an outside film are saved beside it with their pin', () => {
   const n = saveNote(dir, { version: 'v2', at: 3.5, text: 'Tighter cut here', by: 'Ana', element: 'win', pin: { x: .4, y: .6 } });
   assert.equal(n.id, 'n001');
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, 'notes.json'))).notes[0].pin, { x: .4, y: .6 });
+  assert.deepEqual(n.tags, []);
+  const tagged = saveNote(dir, { version: 'v2', at: 4, text: 'Hold longer #pacing #Type', by: 'Ana' });
+  assert.deepEqual(tagged.tags, ['pacing', 'type']);
+  assert.equal(setNoteState(dir, tagged.id, { resolved: true, by: 'Bo' }).state, 'Resolved');
+  assert.equal(setNoteState(dir, tagged.id, { resolved: false }).resolved, false);
+  assert.deepEqual(replyToNote(dir, tagged.id, { text: 'Agreed', by: 'Bo' }).replies.map(r => r.text), ['Agreed']);
+  assert.throws(() => setNoteState(dir, 'n999', { resolved: true }), /No note/);
   assert.throws(() => saveNote(dir, { version: 'v2', at: 1, text: ' ' }), /needs text/);
   assert.throws(() => saveNote(dir, { version: 'v2', at: 1, text: 'x', pin: { x: 2, y: 0 } }), /pin/);
   fs.rmSync(dir, { recursive: true, force: true });

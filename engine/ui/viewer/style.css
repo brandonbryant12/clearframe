@@ -179,3 +179,20 @@ h2 { font-size: 20px; margin: 36px 0 14px; }
 .row { display: flex; gap: 10px; align-items: center; justify-content: space-between; }
 .stage video { cursor: pointer; }
 @media (max-width: 900px) { .mrow { grid-template-columns: 1fr; } .scenecard { grid-template-columns: 1fr; } .scenecard img { width: 100%; } }
+
+/* Note threads */
+.thread { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: grid; gap: 6px; }
+.thread.resolved { opacity: .7; }
+.thead { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ttime { background: var(--panel2); border: 0; border-radius: 6px; padding: 2px 8px; font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; }
+.tactions { margin-left: auto; display: flex; gap: 12px; }
+.link { background: none; border: 0; color: var(--accent); font-weight: 600; padding: 0; }
+.tag-chip { color: var(--gold); font-weight: 600; }
+.reply { margin-left: 18px; padding-left: 10px; border-left: 2px solid var(--line); }
+.replybox { display: flex; gap: 8px; align-items: flex-start; }
+.replybox textarea { flex: 1; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font: inherit; }
+.pin.done { background: var(--good); opacity: .65; }
+.pinmark.done { color: var(--good); opacity: .6; }
+.notecard { min-width: min(560px, 90vw); }
+.notefilter { margin-bottom: 12px; }
+.replybox[hidden], .terror[hidden] { display: none; }
