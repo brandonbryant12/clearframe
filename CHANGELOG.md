@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Viewer review workspace.** Each film now opens with a lens over the picture (text outlined with font, size and colour), a scrub timeline with scene, narration, music, sound, media and note lanes, a live "In this moment" panel, scene cards, a file browser that previews images, SVG, video, audio (waveforms), fonts (live specimens), text, documents and 3D files, and notes pinned to a point and moment. `viewer --serve` saves notes into the engine's review record; outside films described by `film.json` (for example in the git-ignored `real-examples/`) sit alongside ClearFrame films.
+
 - **Small multiples.** `props.multiples` draws 2–9 small lines on one shared scale in the chart system: each panel passes the plot's data contract, ticks sit on the outer edges, and a highlighted series takes `accent2` while the rest recede. The finance kit adds a six-asset-class beat.
 
 - **Viewer.** `viewer [folder]` writes a self-contained HTML page for non-technical reviewers: films with every version (label, date, draft/final, approval, notes), side-by-side comparison kept in step, downloads, and the building blocks (chart templates in wide and tall, 3D elements, palettes). `examples/market-update` is a demo film with two versions. See `docs/viewer.md`.

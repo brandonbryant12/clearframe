@@ -38,3 +38,6 @@ __pycache__/
 **/evidence/
 **/specimens/
 **/*-receipt.json
+
+# Real client and personal projects for the viewer; never committed.
+real-examples/

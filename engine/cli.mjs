@@ -43,7 +43,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
   sketch [name] [--vertical]          canvas starting compositions (route, orbit, pipeline…) as JSON
   doctor | build                      native dependencies and compiler
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]
-  viewer [folder] [--out build/viewer] [--no-render]   one HTML page: every film and its versions, plus the building blocks
+  viewer [folders…] [--serve] [--port 4317] [--out build/viewer] [--no-render]   one HTML page: films, versions, lens, timeline, notes, building blocks
   plan <dir>                          approximate generation cost and cache state
   voice <dir> [--draft] [--dry-run]    free local voice, or Gemini 3.8 TTS as one continuous take (--dry-run prints the request)
   music <dir> [--draft]                local bed or paid Lyria MP3
@@ -140,6 +140,7 @@ async function main() {
     'speakers',
     'fps',
     'phase-seconds',
+    'port',
     'script',
     'model',
     'definition',
@@ -188,6 +189,7 @@ async function main() {
     'light',
     'loop',
     'verify',
+    'serve',
     'rough',
     'agent',
     'no-verify',
@@ -422,9 +424,15 @@ async function main() {
   }
   if (cmd === 'build') return console.log(await native.buildNative(opts));
   if (cmd === 'viewer') {
-    const { buildViewer } = await import('./lib/viewer.mjs');
-    const r = await buildViewer({ root: positionals[0] ?? 'examples', out: o.out ?? 'build/viewer', render: !o['no-render'] });
-    return console.log(`${r.films} film(s), ${r.versions} version(s), ${r.charts} chart preview(s) → ${path.relative(process.cwd(), r.file)}\nOpen it in a browser (double-click works).`);
+    const { buildViewer, serveViewer } = await import('./lib/viewer.mjs');
+    const root = positionals.length ? positionals : ['examples', 'real-examples'];
+    if (o.serve) {
+      const s = await serveViewer({ root, out: o.out ?? 'build/viewer', render: !o['no-render'], port: num('port') ?? 4317 });
+      console.log(`${s.films} film(s), ${s.versions} version(s). Viewer with note saving: ${s.url}\nPress Ctrl+C to stop.`);
+      return new Promise(() => {});
+    }
+    const r = await buildViewer({ root, out: o.out ?? 'build/viewer', render: !o['no-render'] });
+    return console.log(`${r.films} film(s), ${r.versions} version(s), ${r.charts} chart preview(s), ${r.fonts} font(s) → ${path.relative(process.cwd(), r.file)}\nOpen it in a browser (double-click works), or add --serve to save notes into the films.`);
   }
   if (cmd === 'gallery') {
     const dir = path.resolve(positionals[0] ?? 'build/native-gallery');
