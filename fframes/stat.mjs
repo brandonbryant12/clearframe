@@ -60,7 +60,8 @@ export function statElements(p, frame) {
     Object.assign(k, { id: 'stat-kicker', y: valueY - valueSize * 1.05, font: 'semibold', fill: 'muted', upper: true, tracking: .08, ...arrive(at * .5) });
     elements.push(k);
   }
-  elements.push({ id: 'stat-value', type: 'text', text, x, y: valueY, size: valueSize, fill: 'ink', font: 'display', fit: W,
+  // Tabular figures while counting: proportional digits make the suffix jump as widths change.
+  elements.push({ id: 'stat-value', type: 'text', text, x, y: valueY, size: valueSize, fill: 'ink', font: p.count && p.motion !== 'none' ? 'figures' : 'display', fit: W,
     ...(p.count && p.motion !== 'none'
       ? { at, enter: 'fade', dur: 0.2, count: { from: 0, to: Math.abs(p.value), decimals: p.decimals, prefix: `${p.value < 0 ? '−' : ''}${p.prefix}`, suffix: p.suffix, dur } }
       : arrive(at)) });
