@@ -69,3 +69,23 @@ test('notes on an outside film are saved beside it with their pin', () => {
   assert.throws(() => saveNote(dir, { version: 'v2', at: 1, text: 'x', pin: { x: 2, y: 0 } }), /pin/);
   fs.rmSync(dir, { recursive: true, force: true });
 });
+
+test('each film is placed in its stage of production, with boards before the first render', async t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-stages-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const film = (name, files) => { const dir = path.join(root, name); fs.mkdirSync(dir, { recursive: true }); for (const [f, body] of Object.entries(files)) fs.writeFileSync(path.join(dir, f), typeof body === 'string' ? body : JSON.stringify(body)); };
+  const statement = (id, placeholder) => ({ id, block: 'statement', duration: 3, vo: `Line ${id}.`, ...(placeholder ? { placeholder } : {}), props: { title: `Scene ${id}` } });
+  film('idea', { 'brief.md': '# Gold and rates\n\n**The one idea:** gold moves against real rates.\n' });
+  film('script', { 'storyboard.json': { version: 2, title: 'Script', beats: [{ id: 't', block: 'title', props: { title: 'Script' } }, statement('a', 'Line chart: the index'), statement('b', 'Bar chart: returns')] } });
+  film('boards', { 'storyboard.json': { version: 2, title: 'Boards', beats: [statement('a'), statement('b', 'Line chart: the index'), statement('c')] }, 'brief.md': '# Boards\n' });
+  const r = await buildViewer({ root: [root], out: path.join(root, 'viewer'), render: false });
+  const data = dataOf(r.file), byTitle = title => data.films.find(f => f.title === title);
+  assert.deepEqual(['Gold and rates', 'Script', 'Boards'].map(x => byTitle(x).stage.id), ['brief', 'script', 'storyboard']);
+  assert.equal(byTitle('Gold and rates').stage.next, 'Write the script and a scene list');
+  assert.match(byTitle('Gold and rates').brief, /gold moves against real rates/);
+  const boards = byTitle('Boards').boards;
+  assert.deepEqual(boards.map(b => [b.number, b.seconds, b.narration]), [[1, 3, 'Line a.'], [2, 3, 'Line b.'], [3, 3, 'Line c.']]);
+  assert.equal(boards[1].placeholder, 'Line chart: the index');
+  assert.ok(boards.every(b => b.image === null), 'no board stills when render is off');
+  assert.equal(byTitle('Boards').brief, '# Boards\n');
+});

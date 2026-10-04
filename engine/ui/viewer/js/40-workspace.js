@@ -3,15 +3,17 @@ function film(id, selected, panel = 'moment') {
   tabs('films');
   const f = data.films.find(x => x.id === id);
   if (!f) return films();
+  if (!f.versions.length) return preview(f, panel);
   const v = f.versions.find(x => x.id === selected) ?? f.versions.at(-1);
   const lensOn = store.get('cf-lens', true), open = n => notesFor(f, n).filter(x => !x.resolved).length;
-  app.innerHTML = `<a class="back" href="#/films">← All films</a>
+  app.innerHTML = `<a class="back" href="#/films">← Studio</a>
     <div class="filmhead"><div><h1>${esc(f.title)}</h1><p class="lede">${plural(f.versions.length, 'version')} · ${plural(v.scenes.length, 'scene')} · ${plural(f.files.length, 'file')} · <span>${esc(f.folder)}</span></p>${f.about ? `<p class="lede">${esc(f.about)}</p>` : ''}</div>
     <div class="toolbar">
       <button class="btn ${lensOn ? 'on' : ''}" id="lens" aria-pressed="${lensOn}" title="Outline the text on screen with its font, size and colour (L)">◎ Lens</button>
       <button class="btn primary" id="addnote" title="Pause and click on the picture to pin a note (N)">+ Note</button>
       ${f.versions.length > 1 ? `<a class="btn" href="#/compare/${f.id}">Compare</a>` : ''}
       <a class="btn" href="${esc(v.video)}" download>Download</a></div></div>
+    ${stepper(f)}
     <div class="film">
       <div class="left">
         <div class="stage ${f.shape}" id="stage">
@@ -22,7 +24,7 @@ function film(id, selected, panel = 'moment') {
           <span class="now"><span class="name">${versionName(v)}</span> ${qualityChip(v)} ${approvedChip(v)}</span></div>
         <div class="timeline" id="timeline" aria-label="Timeline: drag to scrub"></div>
         <div class="panels">
-          <div class="subnav" role="tablist">${[['moment', 'In this moment'], ['scenes', 'Scenes'], ['files', 'Files'], ['fonts', 'Fonts'], ['notes', `Notes (${open(v)} open)`]]
+          <div class="subnav" role="tablist">${[['moment', 'In this moment'], ['scenes', 'Scenes'], ['files', 'Files'], ['fonts', 'Fonts'], ['notes', `Notes (${open(v)} open)`], ...(f.brief ? [['brief', 'Brief']] : [])]
             .map(([k, t]) => `<button data-panel="${k}" aria-pressed="${k === panel}">${t}</button>`).join('')}</div>
           <div id="panel"></div>
         </div>
@@ -61,7 +63,7 @@ function workspace(f, v, initialPanel) {
   // ---- timeline
   const pct = t => `${Math.max(0, Math.min(100, t / T * 100))}%`;
   const notesLane = () => notesFor(f, v).map(n => `<button class="pinmark ${n.resolved ? 'done' : ''}" style="left:${pct(n.at ?? 0)}" data-seek="${n.at ?? 0}" title="${esc(n.text)}">●</button>`).join('');
-  const lanes = [['Scenes', v.scenes.map(s => `<button class="seg scene" style="left:${pct(s.start)};width:${pct(s.end - s.start)}" data-seek="${s.start}" title="${esc(`${s.number}. ${s.kind}`)}"><span>${s.number}. ${esc(s.kind)}</span></button>`).join('')]];
+  const lanes = [['Scenes', v.scenes.map(s => `<button class="seg scene ${s.placeholder ? 'todo' : ''}" style="left:${pct(s.start)};width:${pct(s.end - s.start)}" data-seek="${s.start}" title="${esc(s.placeholder ? `${s.number}. To design: ${s.placeholder}` : `${s.number}. ${s.kind}`)}"><span>${s.number}. ${esc(s.kind)}</span></button>`).join('')]];
   if (v.lanes.narration.length) lanes.push(['Narration', v.lanes.narration.map(n => `<span class="seg voice" style="left:${pct(n.start)};width:${pct(n.end - n.start)}" title="${esc(n.text)}"></span>`).join('')]);
   if (v.lanes.music.length) lanes.push(['Music', v.lanes.music.map(m => `<span class="seg music" style="left:${pct(m.start)};width:${pct(m.end - m.start)}" title="${esc(m.name)}"><span>${esc(m.name)}</span></span>`).join('')]);
   if (v.lanes.sfx.length) lanes.push(['Sound', v.lanes.sfx.map(s => `<span class="tick" style="left:${pct(s.t)}" title="${esc(s.name)} at ${clock(s.t)}"></span>`).join('')]);
@@ -143,7 +145,7 @@ function workspace(f, v, initialPanel) {
       const colors = [...new Map(els.filter(e => e.color.hex).map(e => [e.color.hex, e.color])).values()];
       const files = (s?.media ?? []).map(m => f.files.find(x => x.name === m) ?? { name: m });
       panelEl.innerHTML = s ? `<div class="moment">
-        <div class="mrow"><div class="mlabel">Scene</div><div><b>${s.number}. ${esc(s.kind)}</b> <span class="meta">${clock(s.start)}–${clock(s.end)}</span>${s.onScreen.length ? `<div>${s.onScreen.map(x => `<span class="quote">${esc(x)}</span>`).join(' ')}</div>` : ''}${s.description ? `<div class="meta">${esc(s.description)}</div>` : ''}</div></div>
+        <div class="mrow"><div class="mlabel">Scene</div><div><b>${s.number}. ${esc(s.kind)}</b> <span class="meta">${clock(s.start)}–${clock(s.end)}</span>${s.placeholder ? `<div class="todoline">To design: ${esc(s.placeholder)}</div>` : ''}${s.onScreen.length ? `<div>${s.onScreen.map(x => `<span class="quote">${esc(x)}</span>`).join(' ')}</div>` : ''}${s.description ? `<div class="meta">${esc(s.description)}</div>` : ''}</div></div>
         <div class="mrow"><div class="mlabel">Narration</div><div>${line ? `“${esc(line.text)}”` : s.narration ? `<span class="meta">${esc(s.narration)}</span>` : '<span class="meta">None</span>'}</div></div>
         <div class="mrow"><div class="mlabel">Music</div><div>${music ? esc(music.name) : '<span class="meta">None</span>'}${sound.length ? ` · <span class="meta">sound: ${sound.map(x => esc(x.name)).join(', ')}</span>` : ''}</div></div>
         <div class="mrow"><div class="mlabel">On screen</div><div class="els">${els.length ? els.map(e => `<div class="el ${hoverEl === e.id ? 'hot' : ''}"><span class="swatch" style="background:${esc(e.color.hex ?? 'transparent')}"></span><span class="txt" style="font-family:'${esc(e.font)}'">${esc(e.text)}</span><span class="meta">${esc(fontName(e.font))}${e.size ? ` · ${e.size}px` : ''} · ${esc(e.color.token ?? '')} ${esc(e.color.hex ?? '')}</span></div>`).join('') : '<span class="meta">No text outlined in this shot</span>'}</div></div>
@@ -155,7 +157,7 @@ function workspace(f, v, initialPanel) {
     } else if (!soft && panel === 'scenes') {
       panelEl.innerHTML = `<div class="scenes">${v.scenes.map(x => `<button class="scenecard ${x === s ? 'current' : ''}" data-seek="${x.start}">
         <img src="${esc(x.thumb ?? '')}" alt=""><div><div><b>${x.number}. ${esc(x.kind)}</b> <span class="meta">${clock(x.start)} · ${length(x.end - x.start)}</span></div>
-        ${x.onScreen.map(q => `<div class="quote">${esc(q)}</div>`).join('')}${x.narration ? `<div class="meta">“${esc(x.narration)}”</div>` : ''}${x.description ? `<div class="meta">${esc(x.description)}</div>` : ''}
+        ${x.placeholder ? `<div class="todoline">To design: ${esc(x.placeholder)}</div>` : ''}${x.onScreen.map(q => `<div class="quote">${esc(q)}</div>`).join('')}${x.narration ? `<div class="meta">“${esc(x.narration)}”</div>` : ''}${x.description ? `<div class="meta">${esc(x.description)}</div>` : ''}
         ${x.source ? `<div class="meta">Source: ${esc(x.source)}</div>` : ''}</div></button>`).join('') || '<div class="meta">No storyboard for this version.</div>'}</div>`;
       panelEl.onclick = e => { const b = e.target.closest('[data-seek]'); if (b) seek(Number(b.dataset.seek)); };
     } else if (!soft && panel === 'files') {
@@ -173,6 +175,9 @@ function workspace(f, v, initialPanel) {
       bindThreads(panelEl, f, v, refreshNotes, seek);
       panelEl.querySelectorAll('[data-filter]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); filter = b.dataset.filter; drawPanel(); }));
       document.getElementById('export')?.addEventListener('click', e => { e.stopPropagation(); exportLocal(f, v); });
+    } else if (!soft && panel === 'brief') {
+      panelEl.onclick = null;
+      panelEl.innerHTML = `<div class="brief">${markdown(f.brief)}</div>`;
     }
   }
   for (const b of app.querySelectorAll('[data-panel]')) b.onclick = () => {
@@ -208,3 +213,46 @@ function workspace(f, v, initialPanel) {
   fit();
 }
 let workspaceKeys = null;
+
+/** A film before its first render: its storyboard frames, its brief and its files. */
+function preview(f, initial) {
+  const views = [...(f.boards.length ? [['boards', 'Boards']] : []), ...(f.brief ? [['brief', 'Brief']] : []), ...(f.files.length ? [['files', 'Files']] : [])];
+  let view = views.some(([k]) => k === initial) ? initial : views[0]?.[0];
+  const total = f.boards.reduce((s, b) => s + b.seconds, 0), todo = f.boards.filter(b => b.placeholder).length;
+  let start = 0;
+  const timed = f.boards.map(b => { const x = { ...b, start }; start += b.seconds; return x; });
+  app.innerHTML = `<a class="back" href="#/films">← Studio</a>
+    <div class="filmhead"><div><h1>${esc(f.title)}</h1><p class="lede">${f.boards.length ? `${plural(f.boards.length, 'scene')} · about ${length(total)}${todo ? ` · ${plural(todo, 'scene')} still to design` : ''} · ` : ''}<span>${esc(f.folder)}</span></p></div></div>
+    ${stepper(f)}
+    ${views.length > 1 ? `<div class="subnav" role="tablist">${views.map(([k, t]) => `<button data-view="${k}" aria-pressed="${k === view}">${t}</button>`).join('')}</div>` : ''}
+    <div id="view"></div>`;
+  const el = document.getElementById('view');
+  const draw = () => {
+    if (view === 'boards') {
+      el.innerHTML = `<div class="boards ${f.shape}">${timed.map((b, i) => `<figure class="boardcard ${b.placeholder ? 'todo' : ''}">
+        <button class="thumb ${f.shape}" data-board="${i}" aria-label="Open scene ${b.number}">${b.image ? `<img src="${esc(b.image)}" alt="" loading="lazy">` : `<span class="briefglyph">${esc(b.kind)}</span>`}<span class="badge chip">${b.number}</span></button>
+        <figcaption><div><b>${esc(b.kind)}</b> <span class="meta">${clock(b.start)} · ${length(b.seconds)}</span></div>
+          ${b.placeholder ? `<div class="todoline">To design: ${esc(b.placeholder)}</div>` : b.onScreen.map(q => `<div class="quote">${esc(q)}</div>`).join('')}
+          ${b.narration ? `<div class="vo">“${esc(b.narration)}”</div>` : ''}
+          ${b.source ? `<div class="meta">Source: ${esc(b.source)}</div>` : ''}</figcaption></figure>`).join('')}</div>`;
+      el.onclick = e => {
+        const b = timed[e.target.closest('[data-board]')?.dataset.board];
+        if (b?.image) lightbox(`<img src="${esc(b.image)}" alt=""><div class="row" style="margin-top:10px"><span class="meta">${b.number}. ${esc(b.kind)}${b.narration ? ` · “${esc(b.narration)}”` : ''}</span><button class="btn" data-close>Close</button></div>`);
+      };
+    } else if (view === 'brief') {
+      el.onclick = null;
+      el.innerHTML = `<div class="brief">${markdown(f.brief)}</div>`;
+    } else if (view === 'files') {
+      el.onclick = null;
+      const groups = [...new Set(f.files.map(x => x.group))];
+      el.innerHTML = groups.map(g => `<h3>${esc(g)}</h3><div class="files">${f.files.filter(x => x.group === g).map(x => fileCard(x)).join('')}</div>`).join('');
+      bindFiles(el);
+    } else el.innerHTML = '<div class="empty">Nothing to show yet. Add a brief.md or a storyboard to this folder.</div>';
+  };
+  for (const b of app.querySelectorAll('[data-view]')) b.onclick = () => {
+    view = b.dataset.view;
+    for (const x of app.querySelectorAll('[data-view]')) x.setAttribute('aria-pressed', String(x === b));
+    draw();
+  };
+  draw();
+}

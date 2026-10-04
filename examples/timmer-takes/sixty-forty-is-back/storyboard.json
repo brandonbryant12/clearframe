@@ -1,0 +1,460 @@
+{
+ "version": 2,
+ "title": "The 60/40 portfolio is back",
+ "format": {
+  "preset": "landscape",
+  "fps": 30
+ },
+ "theme": "ledger",
+ "type": "geometric",
+ "backdrop": "none",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.35
+ },
+ "transition": "cut",
+ "sfx": "subtle",
+ "captions": false,
+ "voice": {
+  "provider": "gemini",
+  "voice": "Charon",
+  "style": "calm, assured, warm; a strategist explaining one chart"
+ },
+ "music": {
+  "model": "lyria-3.5",
+  "prompt": "Understated modern piano and soft pulse, confident and calm",
+  "bpm": 90,
+  "key": "D major",
+  "volume": 0.16
+ },
+ "sources": [
+  {
+   "claim": "All series are illustrative, not market data.",
+   "source": "Illustrative data",
+   "asOf": "2026-10-04"
+  }
+ ],
+ "beats": [
+  {
+   "id": "open",
+   "block": "title",
+   "duration": 4,
+   "props": {
+    "kicker": "The long view",
+    "title": "The 60/40 portfolio is back"
+   }
+  },
+  {
+   "id": "yield",
+   "block": "canvas",
+   "duration": 9,
+   "camera": "none",
+   "exit": "none",
+   "vo": "For the first time in over a decade, bonds pay a real income again: a ten-year yield above four percent.",
+   "props": {
+    "stat": {
+     "kicker": "Ten-year government bond yield",
+     "value": 4.3,
+     "decimals": 1,
+     "suffix": "%",
+     "label": "Bonds pay a real income again",
+     "source": "Illustrative data",
+     "asOf": "2026-10-04",
+     "change": {
+      "value": 2.8,
+      "decimals": 1,
+      "suffix": " pts",
+      "context": "vs five years earlier",
+      "good": "up"
+     }
+    }
+   }
+  },
+  {
+   "id": "rolling",
+   "block": "canvas",
+   "duration": 9,
+   "camera": "none",
+   "exit": "none",
+   "vo": "That matters, because a balanced portfolio’s returns have tracked the yield it started with.",
+   "props": {
+    "plot": {
+     "title": "Balanced returns follow the starting yield",
+     "source": "Illustrative data",
+     "asOf": "2026-10-04",
+     "x": {
+      "type": "date",
+      "label": "Year",
+      "domain": [
+       "2000-12-31",
+       "2025-12-31"
+      ],
+      "dateFormat": "year",
+      "ticks": [
+       "2000-12-31",
+       "2010-12-31",
+       "2025-12-31"
+      ]
+     },
+     "y": {
+      "type": "linear",
+      "label": "Percent",
+      "domain": [
+       0,
+       10
+      ],
+      "ticks": [
+       0,
+       5,
+       10
+      ],
+      "suffix": "%"
+     },
+     "series": [
+      {
+       "id": "start-yield",
+       "label": "Starting bond yield",
+       "values": [
+        {
+         "x": "2000-12-31",
+         "y": 6.2
+        },
+        {
+         "x": "2001-12-31",
+         "y": 6
+        },
+        {
+         "x": "2002-12-31",
+         "y": 5.8
+        },
+        {
+         "x": "2003-12-31",
+         "y": 5.5
+        },
+        {
+         "x": "2004-12-31",
+         "y": 5.3
+        },
+        {
+         "x": "2005-12-31",
+         "y": 5.1
+        },
+        {
+         "x": "2006-12-31",
+         "y": 4.9
+        },
+        {
+         "x": "2007-12-31",
+         "y": 4.7
+        },
+        {
+         "x": "2008-12-31",
+         "y": 4.4
+        },
+        {
+         "x": "2009-12-31",
+         "y": 4.2
+        },
+        {
+         "x": "2010-12-31",
+         "y": 4
+        },
+        {
+         "x": "2011-12-31",
+         "y": 3.8
+        },
+        {
+         "x": "2012-12-31",
+         "y": 3.6
+        },
+        {
+         "x": "2013-12-31",
+         "y": 3.3
+        },
+        {
+         "x": "2014-12-31",
+         "y": 3.1
+        },
+        {
+         "x": "2015-12-31",
+         "y": 2.9
+        },
+        {
+         "x": "2016-12-31",
+         "y": 2.7
+        },
+        {
+         "x": "2017-12-31",
+         "y": 2.5
+        },
+        {
+         "x": "2018-12-31",
+         "y": 2.2
+        },
+        {
+         "x": "2019-12-31",
+         "y": 2
+        },
+        {
+         "x": "2020-12-31",
+         "y": 1.8
+        },
+        {
+         "x": "2021-12-31",
+         "y": 1.6
+        },
+        {
+         "x": "2022-12-31",
+         "y": 2.3
+        },
+        {
+         "x": "2023-12-31",
+         "y": 2.9
+        },
+        {
+         "x": "2024-12-31",
+         "y": 3.6
+        },
+        {
+         "x": "2025-12-31",
+         "y": 4.3
+        }
+       ]
+      },
+      {
+       "id": "next-ten",
+       "label": "Next 10 years, 60/40",
+       "values": [
+        {
+         "x": "2000-12-31",
+         "y": 7.4
+        },
+        {
+         "x": "2001-12-31",
+         "y": 7.7
+        },
+        {
+         "x": "2002-12-31",
+         "y": 7.5
+        },
+        {
+         "x": "2003-12-31",
+         "y": 6.8
+        },
+        {
+         "x": "2004-12-31",
+         "y": 6
+        },
+        {
+         "x": "2005-12-31",
+         "y": 5.6
+        },
+        {
+         "x": "2006-12-31",
+         "y": 5.8
+        },
+        {
+         "x": "2007-12-31",
+         "y": 6.1
+        },
+        {
+         "x": "2008-12-31",
+         "y": 6.1
+        },
+        {
+         "x": "2009-12-31",
+         "y": 5.5
+        },
+        {
+         "x": "2010-12-31",
+         "y": 4.7
+        },
+        {
+         "x": "2011-12-31",
+         "y": 4.2
+        },
+        {
+         "x": "2012-12-31",
+         "y": 4.2
+        },
+        {
+         "x": "2013-12-31",
+         "y": 4.5
+        },
+        {
+         "x": "2014-12-31",
+         "y": 4.6
+        },
+        {
+         "x": "2015-12-31",
+         "y": 4.2
+        }
+       ]
+      }
+     ],
+     "motion": {
+      "at": 0.6,
+      "duration": 4
+     }
+    }
+   }
+  },
+  {
+   "id": "years",
+   "block": "canvas",
+   "duration": 8,
+   "camera": "none",
+   "exit": "none",
+   "vo": "Twenty twenty-two was the exception that made headlines: stocks and bonds fell together.",
+   "props": {
+    "bars": {
+     "title": "A bad year, not a broken idea",
+     "unit": "60/40 calendar-year return",
+     "source": "Illustrative data",
+     "asOf": "2026-10-04",
+     "suffix": "%",
+     "decimals": 0,
+     "values": [
+      {
+       "label": "2016",
+       "value": 1.2,
+       "highlight": false
+      },
+      {
+       "label": "2017",
+       "value": -4.6,
+       "highlight": false
+      },
+      {
+       "label": "2018",
+       "value": 22.4,
+       "highlight": false
+      },
+      {
+       "label": "2019",
+       "value": 12.8,
+       "highlight": false
+      },
+      {
+       "label": "2020",
+       "value": 6.9,
+       "highlight": false
+      },
+      {
+       "label": "2021",
+       "value": 14.1,
+       "highlight": false
+      },
+      {
+       "label": "2022",
+       "value": 11,
+       "highlight": true
+      },
+      {
+       "label": "2023",
+       "value": -1.9,
+       "highlight": false
+      },
+      {
+       "label": "2024",
+       "value": 16.5,
+       "highlight": false
+      },
+      {
+       "label": "2025",
+       "value": 9.9,
+       "highlight": false
+      }
+     ],
+     "domain": [
+      -20,
+      30
+     ],
+     "ticks": [
+      -20,
+      0,
+      10,
+      20,
+      30
+     ],
+     "reference": {
+      "value": 8.3,
+      "label": "Average"
+     }
+    }
+   }
+  },
+  {
+   "id": "odds",
+   "block": "canvas",
+   "duration": 8,
+   "camera": "none",
+   "exit": "none",
+   "vo": "Across twenty-six years, only four ended lower.",
+   "props": {
+    "distribution": {
+     "title": "How often a balanced year ends in each range",
+     "unit": "60/40 calendar-year returns, 2000–2025",
+     "source": "Illustrative data",
+     "asOf": "2026-10-04",
+     "observations": [
+      11.5,
+      13.2,
+      -2.1,
+      21.8,
+      14.7,
+      10.2,
+      -16,
+      15.6,
+      12.1,
+      9.4,
+      5.6,
+      17.3,
+      3.9,
+      8.8,
+      18.2,
+      10.1,
+      1.2,
+      -4.6,
+      22.4,
+      12.8,
+      6.9,
+      14.1,
+      11,
+      -1.9,
+      16.5,
+      9.9
+     ],
+     "edges": [
+      -20,
+      -10,
+      0,
+      10,
+      20,
+      30
+     ],
+     "suffix": "%",
+     "threshold": {
+      "value": 0,
+      "relation": "lt",
+      "label": "Losing years"
+     },
+     "marker": {
+      "value": 9.9,
+      "label": "2025"
+     }
+    }
+   }
+  },
+  {
+   "id": "close",
+   "block": "endcard",
+   "duration": 5,
+   "props": {
+    "kicker": "The long view",
+    "title": "Balance is back",
+    "support": "Illustrative figures. Talk to your advisor about your plan."
+   }
+  }
+ ]
+}

@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Studio lifecycle.** The viewer's films page is a studio board in three columns (pre-production, production, post-production) with stage chips, open notes, the next step and search. Every film page has a lifecycle stepper. Films without a video open on boards (stills drawn from the storyboard, with narration, on-screen words and placeholder notes) and their brief; rendered films gain a Brief tab, and placeholder scenes are hatched on the timeline. `examples/timmer-takes/` adds five market-commentary films, one at each stage from brief to final.
+
 - **Note threads.** Notes can be resolved, reopened and replied to (saved to the film with `viewer --serve`, or in the browser otherwise); `#tags` group them, and the notes panel filters by open, resolved, all or tag. Resolved pins and markers fade. The viewer's server code is split into `engine/lib/viewer/` modules and the page into ordered scripts in `engine/ui/viewer/js/`.
 
 - **Viewer review workspace.** Each film now opens with a lens over the picture (text outlined with font, size and colour), a scrub timeline with scene, narration, music, sound, media and note lanes, a live "In this moment" panel, scene cards, a file browser that previews images, SVG, video, audio (waveforms), fonts (live specimens), text, documents and 3D files, and notes pinned to a point and moment. `viewer --serve` saves notes into the engine's review record; outside films described by `film.json` (for example in the git-ignored `real-examples/`) sit alongside ClearFrame films.

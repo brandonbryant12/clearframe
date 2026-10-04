@@ -1,0 +1,98 @@
+{
+ "version": 2,
+ "title": "Earnings carry the market",
+ "format": {
+  "preset": "landscape",
+  "fps": 30
+ },
+ "theme": "ledger",
+ "type": "geometric",
+ "backdrop": "none",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.35
+ },
+ "transition": "cut",
+ "sfx": "subtle",
+ "captions": false,
+ "voice": {
+  "provider": "gemini",
+  "voice": "Charon",
+  "style": "calm, assured, warm; a strategist explaining one chart"
+ },
+ "music": {
+  "model": "lyria-3.5",
+  "prompt": "Understated modern piano and soft pulse, confident and calm",
+  "bpm": 90,
+  "key": "D major",
+  "volume": 0.16
+ },
+ "sources": [
+  {
+   "claim": "All series are illustrative, not market data.",
+   "source": "Illustrative data",
+   "asOf": "2026-10-04"
+  }
+ ],
+ "beats": [
+  {
+   "id": "open",
+   "block": "title",
+   "duration": 4,
+   "props": {
+    "kicker": "The long view",
+    "title": "Earnings carry the market"
+   }
+  },
+  {
+   "id": "price-and-earnings",
+   "block": "statement",
+   "duration": 9,
+   "vo": "Over the long run, stock prices follow earnings. Put the two lines together and they rise almost in step.",
+   "placeholder": "Line chart: index level and trailing earnings, both indexed to 100, 1990 to 2025",
+   "props": {
+    "title": "Line chart"
+   }
+  },
+  {
+   "id": "gaps",
+   "block": "statement",
+   "duration": 8,
+   "vo": "The gaps between them are where sentiment lives: prices run ahead in booms and fall behind in fear.",
+   "placeholder": "Line chart: price-to-earnings ratio with the 2000 and 2009 extremes called out",
+   "props": {
+    "title": "Line chart"
+   }
+  },
+  {
+   "id": "growth",
+   "block": "statement",
+   "duration": 7,
+   "vo": "Earnings have grown about seven percent a year, and that growth is most of what investors have been paid for.",
+   "placeholder": "Headline figure: 7% average annual earnings growth",
+   "props": {
+    "title": "Headline figure"
+   }
+  },
+  {
+   "id": "this-year",
+   "block": "statement",
+   "duration": 7,
+   "vo": "This year, earnings rose faster than prices, which leaves valuations a little lower than they started.",
+   "placeholder": "Bar chart: this year’s change in price, earnings and the P/E multiple",
+   "props": {
+    "title": "Bar chart"
+   }
+  },
+  {
+   "id": "close",
+   "block": "endcard",
+   "duration": 5,
+   "props": {
+    "kicker": "The long view",
+    "title": "Follow the earnings",
+    "support": "Illustrative figures. Talk to your advisor about your plan."
+   }
+  }
+ ]
+}

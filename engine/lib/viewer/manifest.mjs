@@ -4,6 +4,8 @@ import path from 'node:path';
 import { readJSON, slug, rel, fileHash, duration, frameSize, frameAt } from './media.mjs';
 import { describeFile, walkFiles, byGroup } from './files.mjs';
 import { noteView } from './notes.mjs';
+import { manifestStage, stageInfo } from './stages.mjs';
+import { briefOf, hasBrief } from './boards.mjs';
 
 
 /** A film made outside ClearFrame, described by film.json: versions, scenes, lanes, fonts and files. */
@@ -39,14 +41,15 @@ export function manifestFilm(dir, ctx) {
   const versionFiles = new Set(m.versions.map(v => path.join(dir, v.file)));
   const files = walkFiles(dir).filter(f => !versionFiles.has(f) && !['film.json', 'notes.json'].includes(path.basename(f)));
   return { id, kind: 'external', title, folder: path.relative(process.cwd(), dir), shape: (versions.at(-1).frame.height > versions.at(-1).frame.width) ? 'tall' : 'wide',
-    beats: versions.at(-1).scenes.length, versions, files: files.map(f => describeFile(f, dir, out, media, fonts)).sort(byGroup), notesTo: 'film', about: m.about ?? null };
+    beats: versions.at(-1).scenes.length, versions, files: files.map(f => describeFile(f, dir, out, media, fonts)).sort(byGroup), notesTo: 'film', about: m.about ?? null,
+    stage: stageInfo(manifestStage(m, versions), { openNotes: versions.at(-1).notes.filter(n => !n.resolved).length }), brief: briefOf(dir), boards: [], updatedAt: versions.at(-1).createdAt };
 }
 
 /** Folders under `root` that hold a storyboard or a film.json, skipping build output. */
 export function findFilms(root, depth = 4) {
   const found = [];
   const walk = (dir, d) => {
-    if (fs.existsSync(path.join(dir, 'storyboard.json')) || fs.existsSync(path.join(dir, 'film.json'))) { found.push(dir); return; }
+    if (fs.existsSync(path.join(dir, 'storyboard.json')) || fs.existsSync(path.join(dir, 'film.json')) || hasBrief(dir)) { found.push(dir); return; }
     if (d >= depth) return;
     for (const e of fs.readdirSync(dir, { withFileTypes: true }))
       if (e.isDirectory() && !e.name.startsWith('.') && !['node_modules', 'build', 'review', 'assets', 'source'].includes(e.name)) walk(path.join(dir, e.name), d + 1);
@@ -55,3 +58,12 @@ export function findFilms(root, depth = 4) {
   return found;
 }
 
+
+/** A film that is only a brief so far. */
+export function briefFilm(dir, ctx) {
+  const text = briefOf(dir), title = text?.match(/^#\s+(.+)$/m)?.[1] ?? path.basename(dir);
+  const files = walkFiles(dir).filter(f => !/^brief\.md$/i.test(path.basename(f)));
+  return { id: slug(path.relative(process.cwd(), dir)), kind: 'brief', title, folder: path.relative(process.cwd(), dir), shape: 'wide', beats: 0, versions: [],
+    files: files.map(f => describeFile(f, dir, ctx.out, ctx.media, ctx.fonts)).sort(byGroup), notesTo: null, stage: stageInfo('brief'), brief: text, boards: [],
+    updatedAt: fs.statSync(path.join(dir, fs.existsSync(path.join(dir, 'brief.md')) ? 'brief.md' : 'BRIEF.md')).mtime.toISOString() };
+}

@@ -7,6 +7,8 @@ import { FACE_SETS } from '../../../fframes/type.mjs';
 import { FONT_DIR, readJSON, slug, rel, fileHash, duration, frameSize, frameAt } from './media.mjs';
 import { describeFile, walkFiles, fileType, byGroup } from './files.mjs';
 import { noteView } from './notes.mjs';
+import { clearframeStage, stageInfo } from './stages.mjs';
+import { boards, briefOf } from './boards.mjs';
 
 
 /** Canvas font names → bundled files (mirrors text_font in fframes/native/src/canvas_geometry.rs). */
@@ -84,7 +86,7 @@ export function clearframeVersion(dir, sb, r, i, ctx) {
     }
     if (['title', 'endcard', 'statement', 'quote', 'chapter', 'kinetic'].includes(b.block)) { use(faces.bold, 'Titles and headlines'); use(faces.regular, 'Titles and headlines'); }
     const thumb = frameAt(v.file, media, `${prefix}-scene-${slug(b.id)}`, end - 0.35, 480);
-    sceneList.push({ number: k + 1, id: b.id, start, end, ...describeBeat(b), narration: b.vo ?? null, elements, thumb: thumb && rel(out, thumb),
+    sceneList.push({ number: k + 1, id: b.id, start, end, ...describeBeat(b), narration: b.vo ?? null, placeholder: b.placeholder ?? null, elements, thumb: thumb && rel(out, thumb),
       media: beatMedia(b, vsb, dir) });
   }
   if (voice?.emphasis === 'weight') use(faces.light, 'Headline emphasis');
@@ -96,7 +98,7 @@ export function clearframeVersion(dir, sb, r, i, ctx) {
   const mark = seconds * .35, settled = sceneList.find(s => s.start <= mark && s.end > mark) ?? sceneList[0];
   const approved = decisions.find(d => d.action === 'accept' && d.revision === r.id);
   return {
-    id: r.id, number: i + 1, label: r.label ?? null, createdAt: r.createdAt, seconds, quality: { final: 'Final', draft: 'Draft', rough: 'Rough cut' }[v.profile] ?? 'Draft',
+    id: r.id, number: i + 1, profile: v.profile ?? 'draft', placeholders: r.placeholders ?? [], label: r.label ?? null, createdAt: r.createdAt, seconds, quality: { final: 'Final', draft: 'Draft', rough: 'Rough cut' }[v.profile] ?? 'Draft',
     approved: approved ? { by: approved.by ?? null, said: approved.said ?? null } : null,
     notes: notes.filter(n => n.revision === r.id).map(n => noteView(n, { pins, engine: true })),
     video: rel(out, v.file), poster: (p => p && rel(out, p))(frameAt(v.file, media, `${prefix}-poster`, settled ? settled.end - .35 : mark)),
@@ -106,7 +108,7 @@ export function clearframeVersion(dir, sb, r, i, ctx) {
   };
 }
 
-export function clearframeFilm(dir, ctx) {
+export async function clearframeFilm(dir, ctx) {
   const sb = readJSON(path.join(dir, 'storyboard.json'), {});
   const id = slug(path.relative(process.cwd(), dir)), title = sb.title ?? path.basename(dir);
   const fctx = { ...ctx, notes: readNotes(dir), decisions: readDecisions(dir).filter(d => d.role === 'human'), pins: readJSON(path.join(dir, 'review/viewer-pins.json'), {}), film: id, title };
@@ -121,10 +123,13 @@ export function clearframeFilm(dir, ctx) {
       video: rel(ctx.out, loose), poster: (p => p && rel(ctx.out, p))(frameAt(loose, ctx.media, `${id}-latest-${fileHash(loose)}`, seconds * .35)),
       frame: frameSize(loose) ?? { width: 1920, height: 1080 }, colors: {}, scenes: [], lanes: { narration: [], music: [], sfx: [] }, fonts: [], look: {} });
   }
-  if (!versions.length) return null;
   const files = ['assets', 'source', 'media'].flatMap(s => walkFiles(path.join(dir, s))).filter(f => !/\.tmp\./.test(f) && fileType(f) !== 'text' || /\.(md|txt|srt|vtt)$/.test(f));
   const preset = sb.format?.preset ?? 'landscape';
+  const openNotes = versions.at(-1)?.notes.filter(n => !n.resolved).length ?? 0;
   return { id, kind: 'clearframe', title, folder: path.relative(process.cwd(), dir), shape: preset === 'vertical' || preset === 'portrait' ? 'tall' : 'wide',
-    beats: (sb.beats ?? []).length, versions, files: files.map(f => describeFile(f, dir, ctx.out, ctx.media, ctx.fonts)).sort(byGroup), notesTo: 'engine' };
+    beats: (sb.beats ?? []).length, versions, files: files.map(f => describeFile(f, dir, ctx.out, ctx.media, ctx.fonts)).sort(byGroup), notesTo: 'engine',
+    stage: stageInfo(clearframeStage(sb, versions.at(-1), openNotes), { openNotes }), brief: briefOf(dir),
+    // Before the first render, scenes are seen as boards drawn from the storyboard.
+    boards: versions.length ? [] : await boards(dir, sb, ctx), updatedAt: versions.at(-1)?.createdAt ?? fs.statSync(path.join(dir, 'storyboard.json')).mtime.toISOString() };
 }
 

@@ -9,9 +9,24 @@ node engine/cli.mjs viewer --serve                 # http://127.0.0.1:4317/… w
 node engine/cli.mjs viewer --no-render             # skip chart previews (faster)
 ```
 
+## Studio
+
+Every film sits in a column for its phase of production, with a stage chip, its open notes and the next step. A search box filters by title, folder or stage.
+
+| Phase | Stage | What exists | What the film page shows |
+| --- | --- | --- | --- |
+| Pre-production | Brief | `brief.md` only | The brief |
+| | Script | A storyboard whose scenes are mostly `placeholder` slates | Boards: narration and what each scene must show |
+| | Storyboard | A designed storyboard, nothing rendered | Boards: a still of every scene, its words, narration and source |
+| Production | Rough cut | A render made with `--rough`, or one that still has placeholders | The review workspace; placeholder scenes are hatched on the timeline |
+| Post-production | In review | A draft render | The review workspace |
+| | Final | A final render | The review workspace |
+
+Pre-processing (brief, script, storyboard) is planning; production makes the picture; post-processing (review rounds, final render) shapes and finishes it. Boards are stills drawn straight from the storyboard, so a film has pictures before it has a video; they are cached in `build/viewer/media/` and redrawn when a scene changes. A `brief.md` beside any film appears as its Brief tab. An outside film can name its stage in `film.json` (`"stage": "rough"`). `examples/timmer-takes/` holds five market-commentary films, one at each stage.
+
 ## Films
 
-A poster wall of every film. Opening one gives a review workspace:
+Every film page shows a lifecycle stepper and the next step. Once a film has a video it opens as a review workspace:
 
 - **Lens.** Outlines every piece of text on the frame with its font, size and colour. Hover a box to highlight it in the panel below.
 - **Timeline.** Drag anywhere to scrub. Lanes show scenes, narration lines, music, sound effects, media and notes; hover for the time and that scene's thumbnail. Space plays and pauses; the arrow keys step.

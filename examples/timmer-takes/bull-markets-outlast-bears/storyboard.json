@@ -1,0 +1,155 @@
+{
+ "version": 2,
+ "title": "Bull markets outlast bears",
+ "format": {
+  "preset": "landscape",
+  "fps": 30
+ },
+ "theme": "ledger",
+ "type": "geometric",
+ "backdrop": "none",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.35
+ },
+ "transition": "cut",
+ "sfx": "subtle",
+ "captions": false,
+ "voice": {
+  "provider": "gemini",
+  "voice": "Charon",
+  "style": "calm, assured, warm; a strategist explaining one chart"
+ },
+ "music": {
+  "model": "lyria-3.5",
+  "prompt": "Understated modern piano and soft pulse, confident and calm",
+  "bpm": 90,
+  "key": "D major",
+  "volume": 0.16
+ },
+ "sources": [
+  {
+   "claim": "All series are illustrative, not market data.",
+   "source": "Illustrative data",
+   "asOf": "2026-10-04"
+  }
+ ],
+ "beats": [
+  {
+   "id": "open",
+   "block": "title",
+   "duration": 4,
+   "props": {
+    "kicker": "The long view",
+    "title": "Bull markets outlast bears"
+   }
+  },
+  {
+   "id": "averages",
+   "block": "canvas",
+   "duration": 9,
+   "camera": "none",
+   "exit": "none",
+   "vo": "Since nineteen fifty, the average bull market has run about five years. The average bear, about fourteen months.",
+   "props": {
+    "stat": {
+     "kicker": "Average bull market since 1950",
+     "value": 64,
+     "suffix": " months",
+     "label": "Bear markets have averaged about fourteen months",
+     "source": "Illustrative data",
+     "asOf": "2026-10-04"
+    }
+   }
+  },
+  {
+   "id": "cycles",
+   "block": "canvas",
+   "duration": 9,
+   "camera": "none",
+   "exit": "none",
+   "vo": "Line them up and the pattern is plain: long climbs, short falls.",
+   "props": {
+    "bars": {
+     "title": "Long climbs, short falls",
+     "unit": "Length of each market cycle, months",
+     "source": "Illustrative data",
+     "asOf": "2026-10-04",
+     "orientation": "horizontal",
+     "values": [
+      {
+       "label": "1950s bull",
+       "value": 86,
+       "highlight": false
+      },
+      {
+       "label": "1960s bull",
+       "value": 74,
+       "highlight": false
+      },
+      {
+       "label": "1970s bear",
+       "value": 21,
+       "highlight": true
+      },
+      {
+       "label": "1980s bull",
+       "value": 60,
+       "highlight": false
+      },
+      {
+       "label": "2000s bear",
+       "value": 31,
+       "highlight": true
+      },
+      {
+       "label": "2009 bull",
+       "value": 132,
+       "highlight": false
+      },
+      {
+       "label": "2020 bear",
+       "value": 1,
+       "highlight": true
+      },
+      {
+       "label": "2022 bear",
+       "value": 9,
+       "highlight": true
+      }
+     ],
+     "domain": [
+      0,
+      140
+     ],
+     "ticks": [
+      0,
+      70,
+      140
+     ],
+     "colors": "single"
+    }
+   }
+  },
+  {
+   "id": "log-chart",
+   "block": "statement",
+   "duration": 8,
+   "vo": "On a log scale, every bear market since nineteen fifty is a dip in a rising line.",
+   "placeholder": "Line chart: the index since 1950 on a log scale, bear markets shaded",
+   "props": {
+    "title": "Every bear market since 1950"
+   }
+  },
+  {
+   "id": "close",
+   "block": "endcard",
+   "duration": 5,
+   "props": {
+    "kicker": "The long view",
+    "title": "Time in the market",
+    "support": "Illustrative figures. Talk to your advisor about your plan."
+   }
+  }
+ ]
+}

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { UI, FONT_DIR, slug } from './media.mjs';
 import { FontRegistry } from './files.mjs';
 import { clearframeFilm, bundled } from './clearframe.mjs';
-import { manifestFilm, findFilms } from './manifest.mjs';
+import { manifestFilm, findFilms, briefFilm } from './manifest.mjs';
 import { chartTemplates, palettes, elements3d } from './library.mjs';
 
 export async function buildViewer({ root = ['examples', 'real-examples'], out = 'build/viewer', render = true } = {}) {
@@ -14,9 +14,13 @@ export async function buildViewer({ root = ['examples', 'real-examples'], out = 
   fs.mkdirSync(media, { recursive: true });
   const fonts = new FontRegistry();
   for (const f of fs.readdirSync(FONT_DIR).filter(f => f.endsWith('.ttf'))) bundled(fonts, f);
-  const ctx = { out, media, fonts };
-  const films = findFilms(roots).map(d => fs.existsSync(path.join(d, 'film.json')) ? manifestFilm(d, ctx) : clearframeFilm(d, ctx)).filter(Boolean)
-    .sort((a, b) => Date.parse(b.versions.at(-1).createdAt) - Date.parse(a.versions.at(-1).createdAt));
+  const ctx = { out, media, fonts, render };
+  const films = [];
+  for (const d of findFilms(roots)) {
+    const f = fs.existsSync(path.join(d, 'film.json')) ? manifestFilm(d, ctx) : fs.existsSync(path.join(d, 'storyboard.json')) ? await clearframeFilm(d, ctx) : briefFilm(d, ctx);
+    if (f) films.push(f);
+  }
+  films.sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt));
   const data = { generatedAt: new Date().toISOString(), roots: roots.map(r => path.relative(process.cwd(), r) || '.'), films,
     library: { charts: await chartTemplates(out, media, { render }), palettes: palettes(), elements: elements3d(out), fonts: fonts.list(out) } };
   fs.writeFileSync(path.join(out, 'fonts.css'), fonts.css());
