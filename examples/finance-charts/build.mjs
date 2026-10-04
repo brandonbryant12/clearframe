@@ -26,6 +26,9 @@ const index = marketIndex();
 const trough = index.filter(p => p.x >= '2008-01-01' && p.x <= '2010-12-31').reduce((a, b) => b.y < a.y ? b : a);
 let peak = 0;
 const drawdown = index.map(p => { peak = Math.max(peak, p.y); return { x: p.x, y: Math.round((p.y / peak - 1) * 1000) / 10 }; });
+// Illustrative calendar-year returns with a realistic spread (not a market record).
+const annualReturns = [-3, 30, 8, 10, 1, 37, 23, 33, 29, 21, -9, -12, -22, 29, 11, 5, 16, 6, -37, 26, 15, 2, 16, 32, 14, 1, 12, 22, -4, 31, 18, 29, -18, 26, 25, 17]
+  .map((value, i) => ({ year: String(1990 + i), value }));
 const recessions = [
   { from: '2001-03-31', to: '2001-12-31', label: 'Recession' },
   { from: '2007-12-31', to: '2009-06-30', label: 'Recession' },
@@ -34,6 +37,8 @@ const recessions = [
 const years = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 const yearTicks = (...ys) => ys.map(y => `${y}-12-31`);
 
+const distributionBeat = (id, distribution, duration = 8) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
+  props: { distribution: { source, asOf, ...distribution } } });
 const statBeat = (id, stat, duration = 6) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
   props: { stat: { source, asOf, ...stat } } });
 const barsBeat = (id, bars, duration = 7) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
@@ -115,6 +120,14 @@ function beats(shape) {
         .map(([label, value]) => ({ label: tall && label !== '2016' && label !== '2025' ? `’${label.slice(2)}` : label, value })),
       domain: [-20, 40], ticks: [-20, 0, 20, 40], suffix: '%',
       reference: { value: 15.8, label: 'Average' },
+    }),
+    distributionBeat('return-distribution', {
+      title: 'How often a year ends in each range',
+      unit: `Calendar-year returns, ${annualReturns[0].year}–${annualReturns.at(-1).year}`,
+      observations: annualReturns.map(r => r.value),
+      edges: [-40, -30, -20, -10, 0, 10, 20, 30, 40], suffix: '%',
+      threshold: { value: 0, relation: 'lt', label: 'Losing years' },
+      marker: { value: annualReturns.at(-1).value, label: annualReturns.at(-1).year },
     }),
     barsBeat('contributions', {
       title: 'Where this year’s return came from',

@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Distribution charts.** `props.distribution` turns the existing exact histogram math into an editorial beat: counts on the bars, the qualifying side toned, a threshold sentence in the header ("Losing years: 7 of 36") and an optional latest-year marker. See `docs/distribution-charts.md`.
+
 - **Headline figures.** `props.stat` shows one sourced number with a kicker, a label and a change line. The figure counts up natively, and the change is green or red by whether a rise is good news for that measure (`good: up|down|neutral`). The finance kit opens with inflation and retirement-balance examples. See `docs/stat.md`.
 
 - **Signed bar charts.** `props.bars` draws editorial bar charts that share the plot's layout: an honest zero baseline, positive and negative colours, vertical (time) or horizontal (ranked categories), an optional dashed reference line, and labels that thin or relocate instead of colliding. The finance kit adds annual returns, contributions and monthly flows. See `docs/bars.md`.

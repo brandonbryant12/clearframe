@@ -1,6 +1,6 @@
 # Finance chart templates
 
-Eleven editorial beats for market and personal-finance commentary, in the `ledger` palette. Each is a `canvas` beat using `props.stat` ([docs](../../docs/stat.md)), `props.plot` ([docs](../../docs/quantitative-plots.md)) or `props.bars` ([docs](../../docs/bars.md)), so it stays native, editable and sourced.
+Twelve editorial beats for market and personal-finance commentary, in the `ledger` palette. Each is a `canvas` beat using `props.stat` ([docs](../../docs/stat.md)), `props.plot` ([docs](../../docs/quantitative-plots.md)), `props.bars` ([docs](../../docs/bars.md)) or `props.distribution` ([docs](../../docs/distribution-charts.md)), so it stays native, editable and sourced.
 
 | Beat | Pattern | Use it for |
 |---|---|---|
@@ -13,6 +13,7 @@ Eleven editorial beats for market and personal-finance commentary, in the `ledge
 | `drawdowns` | Decline from prior peak with recession bands | Risk, recovery time, the cost of volatility |
 | `scenarios` | History, then three projections inside a shaded band | Planning ranges, return assumptions, outcomes by rate |
 | `annual-returns` | Signed vertical bars with an average line | Calendar-year returns, any yearly signed series |
+| `return-distribution` | Histogram with a counted threshold and the latest year marked | Return distributions, odds of a loss, any "how often" question |
 | `contributions` | Ranked horizontal bars, signed | Contribution to return, sector or factor attribution |
 | `flows` | Twelve signed monthly bars | Fund flows, cash flows, net buying and selling |
 
@@ -33,4 +34,4 @@ Renders go to `build/` and are never committed.
 
 ## Not yet at this bar
 
-The JavaScript scene builders for histograms (`fframes/distributions.mjs`), small multiples, correlation windows, valuation grids, phase trails, allocation tiles and baskets are calculation-correct and tested, but their layouts are still cramped, as the line plot's were before its redesign. Give each the same pass (frame-filling layout, quiet axes, collision checks, a template beat here) before using it in a finished film.
+The JavaScript scene builders for small multiples, correlation windows, valuation grids, phase trails, allocation tiles and baskets are calculation-correct and tested, but their layouts are still cramped, as the line plot's were before its redesign. Give each the same pass (frame-filling layout, quiet axes, collision checks, a template beat here) before using it in a finished film.

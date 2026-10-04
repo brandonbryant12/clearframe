@@ -1,5 +1,7 @@
 # Native distributions and exact thresholds
 
+For storyboards, use [`props.distribution`](distribution-charts.md), which lays this model out in the editorial chart system. The builder below remains for scripted scenes.
+
 `distribution` in `fframes/distribution-data.mjs` counts supplied observations into explicit bins. `distributionScene` in `fframes/distributions.mjs` prepares a native histogram and exact observation strip, with optional threshold focus.
 
 ```js
