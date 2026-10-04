@@ -88,11 +88,11 @@ test('Lyria RealTime: one field per client message, setup first', () => {
   assert.throws(() => rt.messages({ prompts: [], scale: 'H_MAJOR' }));
 });
 
-test('Veo: predictLongRunning body — string durationSeconds, inlineData image, constraints', () => {
+test('Veo: predictLongRunning body — integer durationSeconds, inlineData image, constraints', () => {
   const body = veo.buildRequest({ prompt: 'slow drift', seconds: 4 });
   assert.deepEqual(body, {
     instances: [{ prompt: 'slow drift' }],
-    parameters: { aspectRatio: '16:9', resolution: '720p', durationSeconds: '4' },
+    parameters: { aspectRatio: '16:9', resolution: '720p', durationSeconds: 4 },
   });
   assert.throws(() => veo.buildRequest({ prompt: 'x', resolution: '1080p', seconds: 4 }), /requires seconds=8/);
   assert.throws(

@@ -68,7 +68,7 @@ POST https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-lite-genera
 ```
 ```json
 { "instances": [{ "prompt": "…", "image": { "inlineData": { "mimeType": "image/jpeg", "data": "<b64>" } } }],
-  "parameters": { "aspectRatio": "16:9", "resolution": "720p", "durationSeconds": "4" } }
+  "parameters": { "aspectRatio": "16:9", "resolution": "720p", "durationSeconds": 4 } }
 ```
 - **Polling:** poll `GET /v1beta/{operation.name}` until `done`, read `response.generateVideoResponse.generatedSamples[0].video.uri`, then download it with the API-key header, following redirects.
 - **Constraints:** 1080p and 4k require 8 s, Lite has no 4k, and `personGeneration` rules depend on mode. `negativePrompt` is not documented.

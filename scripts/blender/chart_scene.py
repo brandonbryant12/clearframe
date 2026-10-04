@@ -33,7 +33,7 @@ def chart_layout(config, values, ticks):
     eye_height=sum(corridor)/2
     path=rig.make_chart_flight(count=len(values),spacing=step,bar_width=width,bar_depth=.055,
         chart_height=height,amplitude=amplitude,clearance=.18,aspect=config['width']/config['height'],
-        eye_height=eye_height)
+        eye_height=eye_height,margin=.16,target_policy='bounded-chart')
     stage_radius=max(40, -rig.path_at(path,1)['location'][1]+3,
                      (2*math.ceil(len(values)/2)-(len(values)-1)/2)*step+3)
     return {'spacing':step,'height':height,'unit':unit,'center':(len(values)-1)*step/2,

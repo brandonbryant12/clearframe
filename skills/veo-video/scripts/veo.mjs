@@ -5,7 +5,7 @@
 // Contract (verified against ai.google.dev/gemini-api/docs/veo, 2026-09-27):
 //   POST https://generativelanguage.googleapis.com/v1beta/models/{model}:predictLongRunning   header: x-goog-api-key
 //   { instances: [{ prompt, image?: { inlineData: { mimeType, data } }, lastFrame?: { inlineData: {...} } }],
-//     parameters: { aspectRatio: "16:9"|"9:16", resolution: "720p"|"1080p"|"4k", durationSeconds: "4"|"6"|"8",
+//     parameters: { aspectRatio: "16:9"|"9:16", resolution: "720p"|"1080p"|"4k", durationSeconds: 4|6|8 (integer),
 //                   personGeneration?: "allow_all" (text→video) | "allow_adult" (image→video), seed? } }
 //   → { name: "<operation>" }; poll GET /v1beta/{name} until done:true
 //   → response.generateVideoResponse.generatedSamples[0].video.uri ; download it WITH the x-goog-api-key header (follow redirects)
@@ -58,7 +58,7 @@ export function buildRequest({
   const instance = { prompt };
   if (image) instance.image = inline(image);
   if (lastFrame) instance.lastFrame = inline(lastFrame);
-  const parameters = { aspectRatio: aspect, resolution, durationSeconds: String(seconds) };
+  const parameters = { aspectRatio: aspect, resolution, durationSeconds: +seconds };
   if (seed != null) parameters.seed = +seed;
   if (personGeneration) parameters.personGeneration = personGeneration;
   return { instances: [instance], parameters };

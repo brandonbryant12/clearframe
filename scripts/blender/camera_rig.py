@@ -26,7 +26,7 @@ def _minimum_norm(start, end):
 
 
 def validate(path):
-    if isinstance(path, dict) and type(path.get('version')) is int and path['version'] == 3:
+    if isinstance(path, dict) and type(path.get('version')) is int and path['version'] in (3, 4):
         return _validate_chart_flight(path)
     if isinstance(path, dict) and type(path.get('version')) is int and path['version'] == 2:
         return _validate_preset(path)
@@ -64,7 +64,7 @@ def validate(path):
 def path_at(path, phase):
     validate(path)
     number(phase, 0, 1, 'sample phase')
-    if path['version'] == 3:
+    if path['version'] in (3, 4):
         return _chart_flight_at(path, phase)
     if path['version'] == 2:
         return _preset_at(path, phase)
@@ -107,7 +107,7 @@ def bind(camera, path):
     camera.data.type = 'PERSP' if path['projection'] == 'perspective' else 'ORTHO'
     camera.data.dof.use_dof = path['dof']
     camera.data.dof.focus_object = None
-    if path['version'] == 3:
+    if path['version'] in (3, 4):
         camera.data.sensor_fit = 'HORIZONTAL'
         camera.data.sensor_width = 36
     camera['clearframe_camera_rig'] = json.dumps(path)
@@ -263,7 +263,7 @@ def make_truck(pose, translation, move=(.16, .74), projection='perspective', dof
 
 def make_chart_flight(*, count, spacing, bar_width, bar_depth, chart_height,
                       amplitude, clearance, aspect, margin=.10,
-                      phases=(.08, .65, .84), eye_height=None):
+                      phases=(.08, .65, .84), eye_height=None, target_policy='look-ahead'):
     """Weave across a flat X/Z chart, then reveal its full declared bounds.
 
     Bars must be centered at i*spacing on y=0. The declared chart extends half
@@ -272,7 +272,11 @@ def make_chart_flight(*, count, spacing, bar_width, bar_depth, chart_height,
     it does not guarantee visibility, avoidance of other objects or good pacing.
     The endpoint uses a 36 mm horizontal sensor and a 48 mm lens.
     """
-    return validate({'version': 3, 'clock': 'qualitative-pose', 'projection': 'perspective',
+    if target_policy not in ('look-ahead', 'bounded-chart'):
+        raise ValueError('Unsupported chart target policy.')
+    return validate({'version': 4 if target_policy == 'bounded-chart' else 3,
+                     **({'target_policy': target_policy} if target_policy == 'bounded-chart' else {}),
+                     'clock': 'qualitative-pose', 'projection': 'perspective',
                      'dof': False, 'preset': 'chart-flight', 'count': count, 'spacing': spacing,
                      'bar_width': bar_width, 'bar_depth': bar_depth, 'chart_height': chart_height,
                      'amplitude': amplitude, 'clearance': clearance, 'aspect': aspect,
@@ -284,6 +288,10 @@ def _validate_chart_flight(path):
     fields = {'version', 'clock', 'projection', 'dof', 'preset', 'count', 'spacing',
               'bar_width', 'bar_depth', 'chart_height', 'amplitude', 'clearance',
               'aspect', 'margin', 'phases', 'eye_height'}
+    if path.get('version') == 4:
+        fields.add('target_policy')
+        if path.get('target_policy') != 'bounded-chart':
+            raise ValueError('Version 4 requires the bounded-chart target policy.')
     if set(path) != fields or path['clock'] != 'qualitative-pose' or path['projection'] != 'perspective' or path['dof'] is not False or path['preset'] != 'chart-flight':
         raise ValueError('Unsupported chart-flight contract.')
     if type(path['count']) is not int or not 2 <= path['count'] <= 12:
@@ -327,12 +335,13 @@ def _chart_flight_at(path, phase):
     y = -path['amplitude']*math.cos(math.pi*x/step)
     z = path['eye_height']
     location = [x, y, z]
-    target = [x+2.2*step, 0, z-.04*height]
+    last_x=(count-1)*step
+    ahead=min(x+2.2*step,last_x) if path['version'] == 4 else x+2.2*step
+    target = [ahead, 0, z-.04*height]
     # Turn around the final real bar, before looking past it into empty space.
     # The turn stays within .4 spacing of that bar's X center, where |Y| is
     # at least amplitude*cos(.4*pi). Thus the X look direction can reverse
     # without passing through a camera/target coincidence or a vertical pole.
-    last_x=(count-1)*step
     turn_start=last_x-.4*step
     turn_end=min(last_x+.4*step,end_x)
     turn = ease((x-turn_start)/(turn_end-turn_start))

@@ -184,7 +184,8 @@ export function musicSections(timing, sb) {
   // A film with silent beats is scored to its edit: a build that climbs into each silence,
   // the silence itself, and a hit that carries whatever follows.
   const silences = timing.beats.filter(b => !b.vo && b.dur >= 0.8);
-  if (silences.length) {
+  // An explicit chapter arc wins: voiceless beats there are picture-led, not scripted silences.
+  if (silences.length && !sb.music?.arc) {
     const out = [];
     let from = 0;
     silences.forEach((s, i) => {

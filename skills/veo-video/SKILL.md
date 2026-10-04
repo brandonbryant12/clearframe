@@ -32,7 +32,7 @@ In a scene: `<video src="assets/clips/atrium-move.mp4" data-start="hook" muted p
 ```json
 { "instances": [{ "prompt": "…",
     "image": { "inlineData": { "mimeType": "image/jpeg", "data": "<base64>" } } }],
-  "parameters": { "aspectRatio": "16:9", "resolution": "720p", "durationSeconds": "4" } }
+  "parameters": { "aspectRatio": "16:9", "resolution": "720p", "durationSeconds": 4 } }
 ```
 1. The call returns `{ "name": "<operation>" }`.
 2. Poll `GET https://generativelanguage.googleapis.com/v1beta/<operation>` every ~10 s until `"done": true`. Latency runs from 11 s to 6 min.
@@ -40,7 +40,7 @@ In a scene: `<video src="assets/clips/atrium-move.mp4" data-start="hook" muted p
 
 Constraints:
 - `aspectRatio`: `16:9` or `9:16`.
-- `durationSeconds`: `"4"`, `"6"` or `"8"`, sent as strings as the docs show. 1080p and 4k require 8 s, and Lite has no 4k.
+- `durationSeconds`: `4`, `6` or `8`, sent as an integer (live calls on 2026-10-04 accepted integers; the string form in older docs is unverified). 1080p and 4k require 8 s, and Lite has no 4k.
 - `personGeneration`: `allow_all` is the only value for text-to-video and `allow_adult` the only value for image-to-video. ClearFrame omits it, and the prompts avoid people.
 - `lastFrame` (interpolation) requires `image`.
 - `referenceImages` and extension are available on 3.1 and 3.1 Fast only.

@@ -2,6 +2,12 @@
 
 ## 0.5.0 — unreleased
 
+- **Bounded chart-flight target.** `make_chart_flight(..., target_policy='bounded-chart')` writes a version 4 path whose look-ahead stops at the last real bar, so the camera never frames empty space past the data; version 3 paths replay unchanged. The chart scene uses it with a wider margin.
+
+- **Scored beds keep playing.** A music bed with an explicit `arc` or `sections` no longer ducks out or inserts scripted silences under voiceless beats; those beats are picture-led.
+
+- **Veo durations as integers.** `veo.mjs` sends `durationSeconds` as an integer, the form live calls accepted on 2026-10-04; the contract test and docs follow.
+
 - **Google generation field notes.** `docs/google-generation-field-notes.md` records one paid 9:16 sizzle production (2026-10-04): Veo 3.1 Standard was ~80% of the spend, last-frame continuation, late-clip drift, Lyria length/drop vs BPM behaviour, Nano Banana Pro keyframe sizing, and where Gemini 3.1 Pro review was reliable. Veo/Lyria skills and the contracts doc link to it, with `gemini-3-pro-image` and `lyria-3-pro-preview` prices added.
 
 - **Chart-flight overlay evidence.** Retain a still-reviewed compact attribution panel and delayed header experiment in both formats, with unchanged data labels and plate timing. Portrait header safety improves; seven inherited data-label warnings, camera craft and motion acceptance remain open. See `examples/library-kits/graph-flight-study/evidence/compact-overlay-v1/README.md`.

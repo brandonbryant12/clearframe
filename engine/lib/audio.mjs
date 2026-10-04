@@ -215,7 +215,7 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
     // Silent beats are silent: any bed (composed or draft) dips to nothing through them,
     // with 60 ms ramps so the cut to silence never clicks.
     const gate = timing.beats
-      .filter(b => !b.vo && b.dur >= 0.8)
+      .filter(b => !m.scored && !b.vo && b.dur >= 0.8)
       .map(b => `(1-clip((t-${(b.start - 0.06).toFixed(3)})/0.06,0,1)*clip((${(b.end + 0.06).toFixed(3)}-t)/0.06,0,1))`)
       .join('*');
     filters.push(

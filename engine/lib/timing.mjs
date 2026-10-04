@@ -345,6 +345,8 @@ function musicInfo(root, sb, beats) {
     fadeIn: sb.music.fadeIn,
     fadeOut: sb.music.fadeOut,
     offset: sb.music.offset ?? 0,
+    // A bed scored to an explicit arc keeps playing under voiceless beats.
+    scored: Boolean(sb.music.arc || sb.music.sections),
   };
   // The drop lands on the key picture: the song starts so that its drop (measured, or given in
   // song seconds) plays at a beat's start or a cue in it. A negative offset delays the song.
