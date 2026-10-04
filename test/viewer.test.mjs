@@ -1,0 +1,32 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { buildViewer } from '../engine/lib/viewer.mjs';
+
+test('the viewer lists films with their latest video and the library, in one self-contained page', async t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-viewer-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const film = path.join(root, 'films', 'quarterly');
+  fs.mkdirSync(path.join(film, 'build'), { recursive: true });
+  fs.writeFileSync(path.join(film, 'storyboard.json'), JSON.stringify({ version: 2, title: 'Quarterly <review>', format: { preset: 'vertical' }, beats: [{ id: 'a' }, { id: 'b' }] }));
+  const made = spawnSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', 'color=c=navy:s=320x568:d=1', '-pix_fmt', 'yuv420p', path.join(film, 'build/video.mp4')]);
+  assert.equal(made.status, 0, String(made.stderr));
+  fs.mkdirSync(path.join(root, 'empty'), { recursive: true });
+  const out = path.join(root, 'viewer');
+  const r = await buildViewer({ root, out, render: false });
+  assert.equal(r.films, 1); assert.equal(r.versions, 1);
+  const html = fs.readFileSync(r.file, 'utf8');
+  const data = JSON.parse(html.match(/<script id="data" type="application\/json">(.*?)<\/script>/s)[1]);
+  const f = data.films[0];
+  assert.equal(f.title, 'Quarterly <review>');
+  assert.equal(f.shape, 'tall'); assert.equal(f.beats, 2);
+  assert.equal(f.versions[0].video, '../films/quarterly/build/video.mp4');
+  assert.ok(fs.existsSync(path.join(out, f.versions[0].poster)), 'a poster frame is extracted');
+  assert.ok(!html.includes('Quarterly <review>'), 'titles are escaped inside the embedded data');
+  assert.ok(data.library.palettes.some(p => p.id === 'ledger'));
+  assert.ok(data.library.charts.length >= 1 && data.library.charts.every(c => c.image === null), 'no renders when render is off');
+  assert.ok(!/\/\*(STYLE|APP)\*\//.test(html) && !html.includes('"/*DATA*/"'), 'template slots are filled');
+});

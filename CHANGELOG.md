@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Viewer.** `viewer [folder]` writes a self-contained HTML page for non-technical reviewers: films with every version (label, date, draft/final, approval, notes), side-by-side comparison kept in step, downloads, and the building blocks (chart templates in wide and tall, 3D elements, palettes). `examples/market-update` is a demo film with two versions. See `docs/viewer.md`.
+
 - **Distribution charts.** `props.distribution` turns the existing exact histogram math into an editorial beat: counts on the bars, the qualifying side toned, a threshold sentence in the header ("Losing years: 7 of 36") and an optional latest-year marker. See `docs/distribution-charts.md`.
 
 - **Headline figures.** `props.stat` shows one sourced number with a kicker, a label and a change line. The figure counts up natively, and the change is green or red by whether a rise is good news for that measure (`good: up|down|neutral`). The finance kit opens with inflation and retirement-balance examples. See `docs/stat.md`.
