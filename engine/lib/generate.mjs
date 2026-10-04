@@ -14,6 +14,15 @@ import * as image from '../../skills/gemini-image/scripts/image.mjs';
 import * as music from '../../skills/lyria-music/scripts/music.mjs';
 import * as veo from '../../skills/veo-video/scripts/veo.mjs';
 import * as omni from '../../skills/gemini-omni/scripts/omni.mjs';
+import * as runway from '../../skills/runway-video/scripts/runway.mjs';
+
+/** The skill that serves a clip model: Gemini Omni, Veo or Runway (Seedance, Gen-4.5). */
+export function clipProvider(model) {
+  if (model === omni.MODEL) return omni;
+  if (Object.hasOwn(veo.MODELS, model)) return veo;
+  if (Object.hasOwn(runway.MODELS, model)) return runway;
+  throw new Error(`Unsupported video model ${model}`);
+}
 import { clipSpec } from './continuity.mjs';
 import { palette } from '../../fframes/catalog.mjs';
 import { mediaDuration } from './util.mjs';
@@ -459,10 +468,8 @@ export async function clips(root, { only, force = false, budget } = {}) {
     log.ok('Clips are up to date.');
     return;
   }
-  for (const { spec } of todo)
-    if (spec.model !== omni.MODEL && !Object.hasOwn(veo.MODELS, spec.model))
-      throw new Error(`Unsupported video model ${spec.model}`);
-  const estimate = todo.reduce((n, { spec }) => n + (spec.model === omni.MODEL ? omni : veo).estimateCost(spec), 0);
+  for (const { spec } of todo) clipProvider(spec.model);
+  const estimate = todo.reduce((n, { spec }) => n + clipProvider(spec.model).estimateCost(spec), 0);
   log.step(
     `${todo.length} generated insert(s), approximately ${money(estimate)}. Omni duration and final charges can vary; this is an estimate, not a billing cap.`,
   );
@@ -476,7 +483,13 @@ export async function clips(root, { only, force = false, budget } = {}) {
       if (spec.model === omni.MODEL) {
         result = await omni.generateVideo(spec);
         fs.writeFileSync(stage, result.data);
-      } else
+      } else if (clipProvider(spec.model) === runway)
+        // Two references are the opening and closing keyframes; one is the opening frame.
+        result = await runway.generateVideo(
+          { ...spec, images: spec.refs.slice(0, 2) },
+          { out: stage, onPoll: () => process.stdout.write('.') },
+        );
+      else
         await veo.generateVideo(
           { ...spec, image: spec.refs[0] },
           { out: stage, onPoll: () => process.stdout.write('.') },
@@ -489,7 +502,7 @@ export async function clips(root, { only, force = false, budget } = {}) {
         ...saved,
         seconds,
         requestedSeconds: spec.seconds,
-        interactionId: result?.interactionId,
+        interactionId: result?.interactionId ?? result?.taskId,
         usage: result?.usage,
         createdAt: new Date().toISOString(),
       });
@@ -562,7 +575,7 @@ export function plan(root) {
         kind: 'clip',
         id: a.id,
         detail: `~${spec.seconds}s ${spec.resolution} ${spec.model}`,
-        cost: done ? 0 : (spec.model === omni.MODEL ? omni : veo).estimateCost(spec),
+        cost: done ? 0 : clipProvider(spec.model).estimateCost(spec),
         status: done ? 'cached' : 'todo',
       });
     }

@@ -34,4 +34,6 @@ Duration is requested in the prompt and can vary. The built-in estimate currentl
 
 Continuity requires judgment: compare the last native frame, first clip frame, last clip frame and next native frame. Match color, subject position, scale, lighting and movement. The native media frame, typography and palette connect the treatment; the shared narration/music continues across the cut. Clip audio is excluded from the mix. Review for unwanted text, visual artifacts, identity drift and misleading realism. Prompts and references guide consistency; they cannot guarantee it.
 
+Footage-led films (sizzle, trailer, brand spot) invert this balance; see [footage-led films](hero-footage.md) and the [Runway skill](../skills/runway-video/SKILL.md) for keyframe-first generation, provider routing and cutting to music.
+
 Official contracts: [Omni](https://ai.google.dev/gemini-api/docs/omni), [pricing](https://ai.google.dev/gemini-api/docs/pricing), [Files API](https://ai.google.dev/gemini-api/docs/files). Verified 2026-09-28. Veo remains available only when an asset explicitly selects a supported Veo model.
