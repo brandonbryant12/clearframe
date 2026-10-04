@@ -31,7 +31,7 @@ POST https://generativelanguage.googleapis.com/v1beta/interactions
 ```
 - **Response:** `steps[type=model_output].content[type=image] → { mime_type, data }`.
 - **Sizes:** `512` (3.1 Flash only), `1K`, `2K`, `4K`, with an uppercase K.
-- **Models and pricing:** `gemini-3.1-flash-image` ($0.067 per image at 1K, $0.101 at 2K), `gemini-3.1-flash-lite-image` ($0.0336, 1K only) and `gemini-3-pro-image`.
+- **Models and pricing:** `gemini-3.1-flash-image` ($0.067 per image at 1K, $0.101 at 2K), `gemini-3.1-flash-lite-image` ($0.0336, 1K only) and `gemini-3-pro-image` ($0.134 at 1K/2K, $0.24 at 4K; checked 2026-10-04). Pro at 9:16 `2K` returns 1536×2752.
 - **Retired:** Imagen is shut down on the Gemini API, and `gemini-2.5-flash-image` shuts down 2026-10-02.
 - **Sources:** [image-generation](https://ai.google.dev/gemini-api/docs/image-generation) · [interactions API reference](https://ai.google.dev/api/interactions-api)
 
@@ -46,7 +46,7 @@ MP3 request path corrected on 2026-09-28; tests use mocked responses, not paid g
 - **Response:** `steps[type=model_output].content[]` holds a `text` block (structure) and an `audio` block.
 - **Output:** 44.1 kHz stereo, MP3 by default. Use that default without a MIME override. The guide mentions WAV but its examples show only `type`; the previous inferred WAV override failed in use. `--format` accepts `mp3` only. Convert MP3 locally if WAV is required.
 - **Files:** the engine requests MP3, saves using the returned MIME (`audio/mpeg` or `audio/mp3` → `.mp3`), and records the active filename in `bed.json`. Unsupported response types fail instead of being mislabeled as MP3. Draft and RealTime music still use locally produced WAV.
-- **Pricing:** `lyria-3.5` is $0.08 per song and `lyria-3-clip-preview` $0.04 per 30 s clip.
+- **Pricing:** `lyria-3.5` is $0.08 per song and `lyria-3-clip-preview` $0.04 per 30 s clip. `lyria-3-pro-preview` (legacy) is $0.08 per song (checked 2026-10-04).
 - **Not documented:** a negative prompt or a seed.
 - **Sources:** [music-generation](https://ai.google.dev/gemini-api/docs/music-generation) · [Lyria prompt guide](https://ai.google.dev/gemini-api/docs/lyria-prompt-guide)
 
@@ -75,6 +75,10 @@ POST https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-lite-genera
 - **Output:** MP4 at 24 fps with audio. Files are retained for 2 days.
 - **Pricing:** Lite $0.05/s at 720p and $0.08/s at 1080p; Fast $0.10, $0.12 and $0.30; Standard $0.40, $0.40 and $0.60.
 - **Sources:** [veo](https://ai.google.dev/gemini-api/docs/veo) · [pricing](https://ai.google.dev/gemini-api/docs/pricing) · [deprecations](https://ai.google.dev/gemini-api/docs/deprecations)
+
+## Field notes
+
+Observed behaviour, costs and reviewer reliability from a real paid production (2026-10-04): `docs/google-generation-field-notes.md`.
 
 ## Keeping this current
 

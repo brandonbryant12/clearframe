@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Google generation field notes.** `docs/google-generation-field-notes.md` records one paid 9:16 sizzle production (2026-10-04): Veo 3.1 Standard was ~80% of the spend, last-frame continuation, late-clip drift, Lyria length/drop vs BPM behaviour, Nano Banana Pro keyframe sizing, and where Gemini 3.1 Pro review was reliable. Veo/Lyria skills and the contracts doc link to it, with `gemini-3-pro-image` and `lyria-3-pro-preview` prices added.
+
 - **Chart-flight candidate.** A shared Blender camera weaves through a flat chart and pulls back to its complete bounds, with separate portrait geometry and explicit grid/bar clearance. Source timing now supports up to 30 seconds for slower moves. Four revised 18.5-second source drafts cover two datasets in both formats. Stable anchors register native date/value labels; the reading hold grows to five seconds. Matte pigment and a closed, checked backdrop resolve reverse-view glare and a portrait ceiling gap. The study is exploratory; encoded evidence and acceptance are tracked separately. See `docs/camera-studies.md`.
 
 - **Conserved allocation trays.** Fixed-value native tiles retain identity and exact departure/transit/arrival accounting before an explicit shared-scale comparison. Four fictional budget/hour specimens have complete tray-frame count/position checks and independent review. A reading-density heuristic warning is retained with its rationale; continuous playback and final acceptance remain open. See `docs/allocations.md`.

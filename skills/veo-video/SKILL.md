@@ -53,7 +53,7 @@ Constraints:
 | `veo-3.1-fast-generate-preview` | $0.10/s | $0.12/s | $0.30/s |
 | `veo-3.1-generate-preview` | $0.40/s | $0.40/s | $0.60/s |
 
-A 4 s Lite clip at 720p costs $0.20. Upscaling a 720p plate under grain and a vignette at 1080p is usually invisible; use 1080p (8 s, $0.64) only for full-bleed hero plates.
+A 4 s Lite clip at 720p costs $0.20. In a 2026-10-04 sizzle production, Standard at 1080p was 80% of the spend and only about 3 s of each 8 s clip was used: explore on Lite or Fast, and keep Standard for close-ups (see `docs/google-generation-field-notes.md`). Upscaling a 720p plate under grain and a vignette at 1080p is usually invisible; use 1080p (8 s, $0.64) only for full-bleed hero plates.
 
 ## Prompt recipes (calm plates)
 
@@ -65,8 +65,10 @@ Structure: **camera move → subject → light → palette → pace → exclusio
 
 **Image-to-video from a Gemini still** is the house technique. Generate the look with `gemini-image`, then animate it, so every plate matches the theme's palette.
 
+**Continuing a shot:** pass the previous clip's last frame as `image` and describe the camera move away from it. That produced a seamless pull-out in one production. Also add "consistent lighting, no lens flares" to counter late-clip drift, and expect actions prompted for "the end" to land mid-clip. Field notes: `docs/google-generation-field-notes.md`.
+
 ## Don't
 
 - Don't rely on it for text, numbers, charts, UI, logos, faces or recognisable people.
-- No fast motion, handheld shake, whip pans or "epic" drone swoops. They fight the calm grammar.
+- No fast motion, handheld shake, whip pans or "epic" drone swoops. They fight the calm grammar. A `sizzle` or `trailer` brief may ask for that energy; then follow the field notes above.
 - Don't generate footage to fill time. If a beat feels empty, the script or the visual idea is the problem.
