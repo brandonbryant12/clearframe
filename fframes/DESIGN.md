@@ -9,3 +9,9 @@ The Node finisher strips upstream's empty audio stream, mixes narration/music/sf
 Final speech-following scenes reject estimates, missing words, transcript mismatch, overlapping intervals and changed audio. Imported offsets use the original recording clock; import does not trim silence. Display seeks are frame-pure and preserve gaps. Transcription correctness still needs human review.
 
 Local Rust execution is trusted development execution, not a sandbox for hostile generated code. Hosted use requires an isolated worker and separate credentials policy. CPU/Metal output and font rendering need independent platform verification.
+
+## Native color working convention
+
+Native graphics use sRGB picture values. The encoder applies a BT.601 limited-range matrix; the finisher signals BT.709 primaries, IEC 61966-2-1/sRGB transfer, SMPTE 170M matrix and limited range in both the H.264 stream and MP4 container. These are distinct properties. Metadata signaling does not convert a transfer curve or matrix. Receipts record the actual four color properties plus hashes for the JavaScript renderer finalization and audio/mux modules.
+
+Prepared media should conform to the sRGB graphics convention. Arbitrary imported video and wide-gamut/HDR/ICC inputs are not automatically normalized by this contract. BT.709 delivery requires explicit pixel conversion. See the [source trace and bounded remux evidence](../docs/research/fframes-color-transfer/README.md); player appearance and arbitrary-media normalization remain separate verification work.

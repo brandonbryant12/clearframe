@@ -10,7 +10,7 @@ default = ["metal"]
 metal = ["dep:fframes_skia_renderer"]
 
 [dependencies]
-fframes = { git = "https://github.com/dmtrKovalenko/fframes", rev = "bacfc3c3212d3d9429468435bfdc1ae2a21c7b3b", features = ["cli", "compile-time-svgtree", "h264", "libav-agree-gpl"] }
+fframes = { git = "https://github.com/dmtrKovalenko/fframes", rev = "055bb6b9dcbbcca6532206847d43ea8e81fa2a0b", features = ["cli", "compile-time-svgtree", "h264", "libav-agree-gpl"] }
 # The same shaper usvgr renders with, already in the lock graph; used for exact text metrics.
 rustybuzz = "0.12"
 # Already in the lock graph through usvgr: parses, normalizes and measures authored path data.
@@ -19,7 +19,7 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-fframes_skia_renderer = { git = "https://github.com/dmtrKovalenko/fframes", rev = "bacfc3c3212d3d9429468435bfdc1ae2a21c7b3b", features = ["metal"], optional = true }
+fframes_skia_renderer = { git = "https://github.com/dmtrKovalenko/fframes", rev = "055bb6b9dcbbcca6532206847d43ea8e81fa2a0b", features = ["metal"], optional = true }
 
 [profile.release]
 debug = false

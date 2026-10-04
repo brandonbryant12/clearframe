@@ -1,34 +1,25 @@
-# Pinned FFFrames media decoder patch
+# FFFrames 1.2.0 fractional-duration patch
 
-Source: https://github.com/dmtrKovalenko/fframes/tree/bacfc3c3212d3d9429468435bfdc1ae2a21c7b3b/fframes-media
+Source: https://github.com/dmtrKovalenko/fframes/tree/055bb6b9dcbbcca6532206847d43ea8e81fa2a0b/fframes-media
 
-Upstream version: `1.0.1`, revision `bacfc3c3212d3d9429468435bfdc1ae2a21c7b3b`.
-License: MIT; the upstream license is included as `LICENSE.txt`.
+Upstream version: `1.2.0`, revision `055bb6b9dcbbcca6532206847d43ea8e81fa2a0b`.
+License: MIT; the exact upstream notice is included as `LICENSE.txt`.
 
-This directory contains the upstream `src/` files and manifest. The manifest's
-workspace dependencies are expanded to their exact upstream dependency declarations
-so this crate can be patched independently; `webvtt-parser` remains pinned to the
-same Git revision. Upstream audio test fixtures are omitted because they are not
-needed by the application or the renderer's regression tests.
+The source files match this revision except one duration conversion in
+`src/video_decoder.rs`. The standalone manifest expands workspace dependencies
+and lints; unused upstream audio fixtures are omitted.
 
-Only `src/video_decoder.rs` changes runtime behavior. At demuxer EOF, the upstream
-decoder returned `false` immediately. H.264 B-frames can still be buffered, which
-made a valid clip's final frame disappear. The patch sends the FFmpeg drain packet
-and receives delayed frames until the requested presentation timestamp or decoder
-EOF. The decoder also recognizes the final frame's actual presentation interval
-when a film samples faster than its source clip. This uses the decoded frame's
-duration and the known stream end, without estimating duration from average FPS.
-Requests at or beyond the stream end return false before seeking. It preserves
-missing-frame behavior beyond the clip and returns demuxer read errors rather
-than treating them as ordinary EOF. It does not extend a short clip or substitute
-imagery.
+Upstream 1.2 supplies delayed-frame draining and final-sample preservation. Its
+exclusive output-frame bound rounds the stream duration to the nearest frame.
+For a 49-frame, 24 fps clip sampled at 30 fps, the true bound is 61.25: offset 61
+is still within the clip, but upstream rounds to 61 and reports EOF. This patch
+uses `av_rescale_q_rnd(..., AV_ROUND_UP)`. The exclusive integer bound becomes 62,
+so offset 61 is visible and 62 is absent. Integer durations are unchanged, and
+looping uses the same corrected bound. Decoder, seek and pixel conversion logic
+are otherwise upstream code. Unknown duration handling is not changed here.
 
-The application test `video_decoder_drains_exact_last_b_frame_and_survives_backward_seeks`
-checks frame 119 of a 120-frame H.264 clip, verifies its timestamp and pixels differ
-from frame 118, rejects frame 120, seeks backward, and reproduces the final pixels.
-`video_decoder_preserves_the_final_sample_interval_at_a_higher_output_rate`
-samples that fixture at 60 fps: requests 238 and 239 share the actual final frame,
-240 and a far post-end request fail, repeated requests remain stable, and a
-backward seek followed by a direct seek into the final interval reproduces it.
-Remove this patch after upgrading to a pinned upstream revision with equivalent
-decoder draining and final-interval handling and passing the same regressions.
+The existing two B-frame/backward-seek regressions remain. The new
+`video_decoder_preserves_the_final_sample_when_output_duration_is_not_integral`
+regression fails on unpatched 1.2 at offset 61 and checks repeated calls, exclusive
+end behavior and backward/direct seeks. Its small synthetic fixture and creation
+provenance are under `native/tests/fixtures/bframes-49-at-24fps.*`.

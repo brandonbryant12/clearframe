@@ -306,24 +306,24 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
   return output;
 }
 
-// The renderer encodes BT.601 limited range and tags only the matrix; players then guess the
-// primaries and transfer, and guesses differ (one of the export bugs that never shows in a
-// still). Tag what the pixels are, losslessly: BT.709 primaries and transfer (the sRGB
-// primaries), the BT.601 matrix they were encoded with, TV range, square pixels.
+// The native renderer applies a BT.601 limited-range matrix to sRGB picture values;
+// it does not convert their transfer curve to BT.709. sRGB shares BT.709 primaries,
+// but has its own transfer function (H.264 VUI value 13). Preserve the actual matrix
+// and tag the transfer in both the bitstream and container without changing pixels.
 const TAGS = [
   '-bsf:v',
-  'h264_metadata=colour_primaries=1:transfer_characteristics=1:matrix_coefficients=6:video_full_range_flag=0:sample_aspect_ratio=1/1',
+  'h264_metadata=colour_primaries=1:transfer_characteristics=13:matrix_coefficients=6:video_full_range_flag=0:sample_aspect_ratio=1/1',
   '-color_primaries',
   'bt709',
   '-color_trc',
-  'bt709',
+  'iec61966-2-1',
   '-colorspace',
   'smpte170m',
   '-color_range',
   'tv',
 ];
 
-/** Mux silent video + mixed audio into the deliverable. */
+/** Mux native sRGB/BT.601 video + mixed audio into the deliverable. */
 export async function mux(video, audio, output) {
   if (!audio) {
     await ffmpeg(['-y', '-i', video, '-map', '0:v:0', '-c:v', 'copy', ...TAGS, '-movflags', '+faststart', output]);

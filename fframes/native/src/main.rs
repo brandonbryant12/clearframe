@@ -123,6 +123,7 @@ fn run_canvas<const W: usize, const H: usize, const RATE: usize>(
                     concurrency_policy: SkiaPipelineConcurrencyPolicy::OnePipeline,
                     encoder_threads: 2,
                     buffer_queue_size: 2,
+                    ..Default::default()
                 },
             )?)
             .run())
