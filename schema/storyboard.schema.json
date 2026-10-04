@@ -89,7 +89,9 @@
             "newsprint",
             "constructivist",
             "deco",
-            "lcd"
+            "lcd",
+            "ledger",
+            "research-paper"
           ]
         },
         {
@@ -128,7 +130,9 @@
                 "newsprint",
                 "constructivist",
                 "deco",
-                "lcd"
+                "lcd",
+                "ledger",
+                "research-paper"
               ]
             },
             "bg": {
@@ -656,39 +660,6 @@
           },
           "note": {
             "type": "string"
-          },
-          "speaker": {
-            "type": "string",
-            "description": "Speaker id from storyboard.speakers (recordings: set by ingest)"
-          },
-          "placeholder": {
-            "description": "A picture not made yet: a rough cut (--rough) shows a labelled slate over the beat's own words; any other render refuses it (docs/editing.md)",
-            "oneOf": [
-              {
-                "type": "string",
-                "maxLength": 140
-              },
-              {
-                "type": "object",
-                "required": [
-                  "text"
-                ],
-                "properties": {
-                  "text": {
-                    "type": "string",
-                    "maxLength": 140
-                  }
-                },
-                "additionalProperties": false
-              }
-            ]
-          },
-          "was": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Beat ids this beat was made from (split, merge); keeps notes and acceptance attached across the change"
           },
           "transitionColor": {
             "enum": [
@@ -2367,6 +2338,9 @@
                     },
                     "plot": {
                       "description": "Sourced multiseries line plot: {title, x:{type:linear|date,label,domain,ticks,...}, y:{type:linear|log,label,domain,ticks,...}, series:[{id,label,values:[{x,y}]}], asOf, source?, motion?:none|{at,duration}, annotation?}. Dates preserve elapsed spacing, null y leaves a gap, all series share explicit scales and a linear reveal clock. See docs/quantitative-plots.md."
+                    },
+                    "bars": {
+                      "description": "Signed editorial bar chart: {title, unit, values:[{label, value, highlight?}], domain:[min≤0, max≥0], ticks, decimals?, prefix?, suffix?, orientation?: vertical|horizontal, reference?: {value, label}, colors?: sign|single, asOf, source?, motion?: none|{at,duration}}. Bars grow from zero in order; negative values take the negative colour. See docs/bars.md."
                     },
                     "teaching": {
                       "description": "Editable pause/answer/explanation: {form:choice|gap, phase:question|answer, prompt, explanation, layout?:full|split, motion?:fade|none, revealAt?, explainAt?, source?}. Choice uses options:[2–3 strings] and correctIndex; gap uses before, answer and optional after. Use separate beats for reading and answer holds. Split reserves landscape right-half imagery. See docs/teaching-sequences.md."

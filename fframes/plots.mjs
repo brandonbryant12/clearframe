@@ -56,9 +56,9 @@ function endLabelPositions(targets, gap, top, bottom) {
 
 
 /** Landscape titles stay on one line; tall frames wrap to two lines and move the key down to make room. */
-const titleLines = (title, L, width) => L.shape === 'landscape' ? 1 : textWidth(title, L.titleType * .93) > width ? 2 : 1;
-const titleShift = (title, L, width) => (titleLines(title, L, width) - 1) * L.titleType * 1.2;
-function titleText(title, L, width) {
+export const titleLines = (title, L, width) => L.shape === 'landscape' ? 1 : textWidth(title, L.titleType * .93) > width ? 2 : 1;
+export const titleShift = (title, L, width) => (titleLines(title, L, width) - 1) * L.titleType * 1.2;
+export function titleText(title, L, width) {
   if (titleLines(title, L, width) === 1) return text('plot-title', title, L.margin, L.titleY, L.titleType, { fit: width, font: 'display' });
   return text('plot-title', title, L.margin, L.titleY, L.titleType, { width, height: L.titleType * 2.5, font: 'display' });
 }

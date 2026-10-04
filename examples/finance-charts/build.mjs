@@ -34,6 +34,8 @@ const recessions = [
 const years = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 const yearTicks = (...ys) => ys.map(y => `${y}-12-31`);
 
+const barsBeat = (id, bars, duration = 7) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
+  props: { bars: { source, asOf, ...bars } } });
 const beat = (id, plot, duration = 9) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
   props: { plot: { source, asOf, motion: { at: 0.6, duration: 4 }, ...plot } } });
 
@@ -94,6 +96,29 @@ function beats(shape) {
       ],
       bands: [{ from: '2025-12-31', to: '2035-12-31', label: 'Projection' }],
     }, 10),
+    barsBeat('annual-returns', {
+      title: 'Most years are good. Some are not.',
+      unit: 'Calendar-year total return',
+      values: [['2016', 12], ['2017', 22], ['2018', -4], ['2019', 31], ['2020', 18], ['2021', 29], ['2022', -18], ['2023', 26], ['2024', 25], ['2025', 17]]
+        .map(([label, value]) => ({ label: tall && label !== '2016' && label !== '2025' ? `’${label.slice(2)}` : label, value })),
+      domain: [-20, 40], ticks: [-20, 0, 20, 40], suffix: '%',
+      reference: { value: 15.8, label: 'Average' },
+    }),
+    barsBeat('contributions', {
+      title: 'Where this year’s return came from',
+      unit: 'Contribution to return, percentage points',
+      orientation: 'horizontal',
+      values: [['Technology', 6.1], ['Financials', 2.4], ['Health care', 1.2], ['Industrials', 1.0], ['Consumer', 0.6], ['Energy', -0.8], ['Utilities', -0.3]]
+        .map(([label, value]) => ({ label, value })),
+      domain: [-2, 8], ticks: [-2, 0, 2, 4, 6, 8], decimals: 1, suffix: ' pp',
+    }),
+    barsBeat('flows', {
+      title: 'Money left in the spring, then came back',
+      unit: 'Net fund flows, $ billions',
+      values: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        .map((label, i) => ({ label, value: [4.2, 2.8, -3.5, -6.1, -2.4, 1.1, 3.9, 5.2, 4.4, 6.0, 3.1, 2.2][i] })),
+      domain: [-8, 8], ticks: [-8, -4, 0, 4, 8], decimals: 1, prefix: '$',
+    }),
   ];
 }
 

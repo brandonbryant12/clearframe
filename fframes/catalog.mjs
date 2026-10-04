@@ -521,6 +521,8 @@ export const BLOCKS = [
       sourceSize: 'Canvas source font size, 14–72 px; reserves a three-line footer when set.',
       plot:
         'Sourced multiseries line plot: {title, x:{type:linear|date,label,domain,ticks,...}, y:{type:linear|log,label,domain,ticks,...}, series:[{id,label,values:[{x,y}]}], asOf, source?, motion?:none|{at,duration}, annotation?}. Dates preserve elapsed spacing, null y leaves a gap, all series share explicit scales and a linear reveal clock. See docs/quantitative-plots.md.',
+      bars:
+        'Signed editorial bar chart: {title, unit, values:[{label, value, highlight?}], domain:[min≤0, max≥0], ticks, decimals?, prefix?, suffix?, orientation?: vertical|horizontal, reference?: {value, label}, colors?: sign|single, asOf, source?, motion?: none|{at,duration}}. Bars grow from zero in order; negative values take the negative colour. See docs/bars.md.',
       teaching:
         'Editable pause/answer/explanation: {form:choice|gap, phase:question|answer, prompt, explanation, layout?:full|split, motion?:fade|none, revealAt?, explainAt?, source?}. Choice uses options:[2–3 strings] and correctIndex; gap uses before, answer and optional after. Use separate beats for reading and answer holds. Split reserves landscape right-half imagery. See docs/teaching-sequences.md.',
       sketch:

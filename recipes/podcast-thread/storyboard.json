@@ -1,0 +1,228 @@
+{
+  "version": 2,
+  "title": "Follow one podcast idea as a spacious visual essay",
+  "logline": "Follow one podcast idea as a spacious visual essay",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "forest",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": {},
+  "sfx": "off",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.15
+  },
+  "textMotion": "words",
+  "type": "bookish",
+  "sources": [
+    {
+      "claim": "All sample narration is an authored demonstration of the visual essay arc",
+      "source": "Illustrative script, not a quotation, transcript or attributed podcast excerpt"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "question",
+      "block": "statement",
+      "vo": "Sometimes we hear the words, but miss the thought behind them.",
+      "props": {
+        "text": "What are we really hearing?",
+        "align": "center",
+        "emphasis": [
+          "hearing"
+        ],
+        "source": "Illustrative script · replace with an exact recorded excerpt"
+      },
+      "art": {
+        "sketch": "ribbon-wave",
+        "seed": 13,
+        "opacity": 0.22,
+        "drift": 0.18
+      }
+    },
+    {
+      "id": "tangle",
+      "block": "canvas",
+      "vo": "Someone is still explaining, and we are already rehearsing an answer. Their question and our response get tangled together.",
+      "props": {
+        "world": "conversation-thread",
+        "viewAt": 0,
+        "source": "Illustrative script · the thread is a metaphor",
+        "elements": [
+          {
+            "type": "ellipse",
+            "cx": 960,
+            "cy": 561.6,
+            "rx": 537.6,
+            "ry": 280.8,
+            "fill": "wash",
+            "opacity": 0.65,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "path",
+            "d": "M 38.4,626.4 C 384,583.2 556.8,226.8 902.4,410.4 C 1286.4,658.8 825.6,961.2 748.8,702 C 595.2,345.6 1286.4,313.2 1209.6,658.8 C 1113.6,950.4 825.6,669.6 979.2,540 C 1171.2,378 1459.2,615.6 1881.6,594",
+            "fill": "none",
+            "stroke": "muted",
+            "opacity": 0.24,
+            "width": 27,
+            "cap": "round",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "path",
+            "d": "M 38.4,626.4 C 384,583.2 556.8,226.8 902.4,410.4 C 1286.4,658.8 825.6,961.2 748.8,702 C 595.2,345.6 1286.4,313.2 1209.6,658.8 C 1113.6,950.4 825.6,669.6 979.2,540 C 1171.2,378 1459.2,615.6 1881.6,594",
+            "fill": "none",
+            "stroke": "accent",
+            "width": 8.64,
+            "cap": "round",
+            "at": 0.2,
+            "enter": "draw",
+            "dur": 3.4
+          },
+          {
+            "type": "circle",
+            "cx": 0,
+            "cy": 0,
+            "r": 12.96,
+            "fill": "ink",
+            "origin": [
+              0,
+              0
+            ],
+            "at": 0,
+            "enter": "none",
+            "along": {
+              "d": "M 38.4,626.4 C 384,583.2 556.8,226.8 902.4,410.4 C 1286.4,658.8 825.6,961.2 748.8,702 C 595.2,345.6 1286.4,313.2 1209.6,658.8 C 1113.6,950.4 825.6,669.6 979.2,540 C 1171.2,378 1459.2,615.6 1881.6,594",
+              "at": 0.2,
+              "dur": 4.6,
+              "ease": "inOut"
+            }
+          }
+        ],
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "viewFrom": [
+          -86.39999999999999,
+          -48.6,
+          2092.8,
+          1177.2
+        ],
+        "viewDur": 4.6
+      },
+      "transition": "cut",
+      "hold": 0.5
+    },
+    {
+      "id": "open",
+      "block": "canvas",
+      "vo": "A pause makes a little room. Before answering, we can ask what the other person most wants us to understand.",
+      "props": {
+        "world": "conversation-thread",
+        "viewAt": 0,
+        "source": "Illustrative script · meter follows the narration audio",
+        "elements": [
+          {
+            "type": "ellipse",
+            "cx": 2649.6,
+            "cy": 561.6,
+            "rx": 556.8,
+            "ry": 280.8,
+            "fill": "wash2",
+            "opacity": 0.55,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "path",
+            "d": "M 1881.6,594 C 2092.8,583.2 2227.2,324 2630.4,313.2 C 3187.2,302.4 3283.2,842.4 2688,842.4 C 2112,842.4 2131.2,388.8 2630.4,432 C 3033.6,475.2 3225.6,637.2 3571.2,637.2",
+            "fill": "none",
+            "stroke": "muted",
+            "opacity": 0.24,
+            "width": 27,
+            "cap": "round",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "path",
+            "d": "M 1881.6,594 C 2092.8,583.2 2227.2,324 2630.4,313.2 C 3187.2,302.4 3283.2,842.4 2688,842.4 C 2112,842.4 2131.2,388.8 2630.4,432 C 3033.6,475.2 3225.6,637.2 3571.2,637.2",
+            "fill": "none",
+            "stroke": "accent2",
+            "width": 8.64,
+            "cap": "round",
+            "at": 0.2,
+            "enter": "draw",
+            "dur": 3.4
+          },
+          {
+            "type": "meter",
+            "x": 2496,
+            "y": 518.4,
+            "w": 307.2,
+            "h": 86.4,
+            "style": "wave",
+            "bars": 30,
+            "fill": "ink",
+            "stroke": "ink",
+            "width": 3,
+            "opacity": 0.8,
+            "at": 1.7,
+            "enter": "fade",
+            "dur": 0.9
+          }
+        ],
+        "view": [
+          1689.6,
+          0,
+          1920,
+          1080
+        ],
+        "viewDur": 2.6
+      },
+      "transition": "cut",
+      "hold": 2.8
+    },
+    {
+      "id": "reframe",
+      "block": "statement",
+      "vo": "The conversation changes when understanding becomes the next step.",
+      "props": {
+        "text": "Make room to understand.",
+        "align": "center",
+        "emphasis": [
+          "understand"
+        ],
+        "source": "Illustrative script · use the speaker's actual conclusion"
+      },
+      "art": {
+        "sketch": "ribbon-wave",
+        "seed": 13,
+        "opacity": 0.22,
+        "drift": 0.18
+      }
+    }
+  ]
+}

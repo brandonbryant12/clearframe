@@ -2132,6 +2132,216 @@
      ]
     }
    }
+  },
+  {
+   "id": "annual-returns",
+   "block": "canvas",
+   "duration": 7,
+   "camera": "none",
+   "exit": "none",
+   "props": {
+    "bars": {
+     "source": "Illustrative data",
+     "asOf": "2026-10-04",
+     "title": "Most years are good. Some are not.",
+     "unit": "Calendar-year total return",
+     "values": [
+      {
+       "label": "2016",
+       "value": 12
+      },
+      {
+       "label": "2017",
+       "value": 22
+      },
+      {
+       "label": "2018",
+       "value": -4
+      },
+      {
+       "label": "2019",
+       "value": 31
+      },
+      {
+       "label": "2020",
+       "value": 18
+      },
+      {
+       "label": "2021",
+       "value": 29
+      },
+      {
+       "label": "2022",
+       "value": -18
+      },
+      {
+       "label": "2023",
+       "value": 26
+      },
+      {
+       "label": "2024",
+       "value": 25
+      },
+      {
+       "label": "2025",
+       "value": 17
+      }
+     ],
+     "domain": [
+      -20,
+      40
+     ],
+     "ticks": [
+      -20,
+      0,
+      20,
+      40
+     ],
+     "suffix": "%",
+     "reference": {
+      "value": 15.8,
+      "label": "Average"
+     }
+    }
+   }
+  },
+  {
+   "id": "contributions",
+   "block": "canvas",
+   "duration": 7,
+   "camera": "none",
+   "exit": "none",
+   "props": {
+    "bars": {
+     "source": "Illustrative data",
+     "asOf": "2026-10-04",
+     "title": "Where this year’s return came from",
+     "unit": "Contribution to return, percentage points",
+     "orientation": "horizontal",
+     "values": [
+      {
+       "label": "Technology",
+       "value": 6.1
+      },
+      {
+       "label": "Financials",
+       "value": 2.4
+      },
+      {
+       "label": "Health care",
+       "value": 1.2
+      },
+      {
+       "label": "Industrials",
+       "value": 1
+      },
+      {
+       "label": "Consumer",
+       "value": 0.6
+      },
+      {
+       "label": "Energy",
+       "value": -0.8
+      },
+      {
+       "label": "Utilities",
+       "value": -0.3
+      }
+     ],
+     "domain": [
+      -2,
+      8
+     ],
+     "ticks": [
+      -2,
+      0,
+      2,
+      4,
+      6,
+      8
+     ],
+     "decimals": 1,
+     "suffix": " pp"
+    }
+   }
+  },
+  {
+   "id": "flows",
+   "block": "canvas",
+   "duration": 7,
+   "camera": "none",
+   "exit": "none",
+   "props": {
+    "bars": {
+     "source": "Illustrative data",
+     "asOf": "2026-10-04",
+     "title": "Money left in the spring, then came back",
+     "unit": "Net fund flows, $ billions",
+     "values": [
+      {
+       "label": "Jan",
+       "value": 4.2
+      },
+      {
+       "label": "Feb",
+       "value": 2.8
+      },
+      {
+       "label": "Mar",
+       "value": -3.5
+      },
+      {
+       "label": "Apr",
+       "value": -6.1
+      },
+      {
+       "label": "May",
+       "value": -2.4
+      },
+      {
+       "label": "Jun",
+       "value": 1.1
+      },
+      {
+       "label": "Jul",
+       "value": 3.9
+      },
+      {
+       "label": "Aug",
+       "value": 5.2
+      },
+      {
+       "label": "Sep",
+       "value": 4.4
+      },
+      {
+       "label": "Oct",
+       "value": 6
+      },
+      {
+       "label": "Nov",
+       "value": 3.1
+      },
+      {
+       "label": "Dec",
+       "value": 2.2
+      }
+     ],
+     "domain": [
+      -8,
+      8
+     ],
+     "ticks": [
+      -8,
+      -4,
+      0,
+      4,
+      8
+     ],
+     "decimals": 1,
+     "prefix": "$"
+    }
+   }
   }
  ]
 }

@@ -1,0 +1,174 @@
+{
+  "version": 2,
+  "title": "Dimensional data — editable native templates",
+  "logline": "Dimensional data — editable native templates",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "porcelain",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": {},
+  "sfx": "off",
+  "type": "geometric",
+  "sources": [
+    {
+      "claim": "All metrics in this demonstration are invented illustrative values.",
+      "source": "Native dimensional KPI demonstration"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "headline",
+      "block": "canvas",
+      "duration": 5.5,
+      "camera": "none",
+      "props": {
+        "source": "Illustrative values · replace before publishing",
+        "kpi": {
+          "form": "pedestal",
+          "label": "Quarter revenue",
+          "unit": "USD millions",
+          "value": 12.4,
+          "prefix": "$",
+          "suffix": "M",
+          "decimals": 1,
+          "motion": {
+            "preset": "reveal",
+            "duration": 0.8
+          }
+        }
+      }
+    },
+    {
+      "id": "comparison",
+      "block": "canvas",
+      "duration": 6,
+      "camera": "none",
+      "props": {
+        "source": "Illustrative values · replace before publishing",
+        "kpi": {
+          "form": "comparison",
+          "label": "Completion rate",
+          "unit": "Percent of assigned work",
+          "suffix": "%",
+          "domain": [
+            0,
+            100
+          ],
+          "values": [
+            {
+              "label": "Before",
+              "value": 54
+            },
+            {
+              "label": "After",
+              "value": 72
+            }
+          ],
+          "motion": {
+            "preset": "stagger",
+            "duration": 0.9,
+            "stagger": 0.2
+          }
+        }
+      }
+    },
+    {
+      "id": "progress",
+      "block": "canvas",
+      "duration": 5.5,
+      "camera": "none",
+      "props": {
+        "source": "Illustrative values · replace before publishing",
+        "kpi": {
+          "form": "rail",
+          "label": "Project delivery",
+          "unit": "Tasks completed",
+          "value": 72,
+          "total": 100,
+          "motion": {
+            "preset": "emphasis",
+            "duration": 1.2
+          }
+        }
+      }
+    },
+    {
+      "id": "contributions",
+      "block": "canvas",
+      "duration": 6.5,
+      "camera": "none",
+      "props": {
+        "source": "Illustrative values · replace before publishing",
+        "kpi": {
+          "form": "stack",
+          "label": "Where the work goes",
+          "unit": "Hours per week",
+          "total": 40,
+          "values": [
+            {
+              "label": "Delivery",
+              "value": 20
+            },
+            {
+              "label": "Planning",
+              "value": 10
+            },
+            {
+              "label": "Support",
+              "value": 6
+            }
+          ],
+          "motion": {
+            "preset": "stagger",
+            "duration": 0.55,
+            "stagger": 0.12
+          }
+        }
+      }
+    },
+    {
+      "id": "balance",
+      "block": "canvas",
+      "duration": 6,
+      "camera": "none",
+      "props": {
+        "source": "Illustrative values · replace before publishing",
+        "kpi": {
+          "form": "seesaw",
+          "label": "Requests by channel",
+          "unit": "Requests this week",
+          "values": [
+            {
+              "label": "Email",
+              "value": 24
+            },
+            {
+              "label": "Chat",
+              "value": 36
+            }
+          ],
+          "motion": {
+            "preset": "reveal",
+            "duration": 1.1
+          }
+        }
+      }
+    }
+  ]
+}

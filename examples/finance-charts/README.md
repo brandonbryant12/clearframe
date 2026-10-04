@@ -1,6 +1,6 @@
 # Finance chart templates
 
-Six editorial chart beats for market and personal-finance commentary, in the `ledger` palette. Each is a `canvas` beat using `props.plot` ([docs](../../docs/quantitative-plots.md)), so it stays native, editable and sourced.
+Nine editorial chart beats for market and personal-finance commentary, in the `ledger` palette. Each is a `canvas` beat using `props.plot` ([docs](../../docs/quantitative-plots.md)) or `props.bars` ([docs](../../docs/bars.md)), so it stays native, editable and sourced.
 
 | Beat | Pattern | Use it for |
 |---|---|---|
@@ -10,6 +10,9 @@ Six editorial chart beats for market and personal-finance commentary, in the `le
 | `yield-curve` | Two snapshots on a linear x axis | Yield curves, term structures, any cross-section at two dates |
 | `drawdowns` | Decline from prior peak with recession bands | Risk, recovery time, the cost of volatility |
 | `scenarios` | History, then three projections inside a shaded band | Planning ranges, return assumptions, outcomes by rate |
+| `annual-returns` | Signed vertical bars with an average line | Calendar-year returns, any yearly signed series |
+| `contributions` | Ranked horizontal bars, signed | Contribution to return, sector or factor attribution |
+| `flows` | Twelve signed monthly bars | Fund flows, cash flows, net buying and selling |
 
 ## Use
 

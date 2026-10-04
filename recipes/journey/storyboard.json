@@ -15,7 +15,8 @@
   "backdrop": "paper",
   "chrome": false,
   "captions": false,
-  "music": false,
+  "music": {},
+  "sfx": "subtle",
   "texture": {
     "grain": 0.3
   },

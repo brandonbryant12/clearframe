@@ -1,0 +1,146 @@
+{
+  "version": 2,
+  "title": "Ways of seeing: three native material studies",
+  "logline": "Ways of seeing: three native material studies",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "vellum",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": {},
+  "sfx": "off",
+  "textMotion": "lines",
+  "type": "didone",
+  "sources": [],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "aperture",
+      "block": "canvas",
+      "duration": 5.5,
+      "camera": "none",
+      "props": {
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "viewTall": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "elements": [
+          {
+            "type": "text",
+            "text": "Through paper",
+            "x": 142,
+            "y": 470,
+            "size": 88,
+            "fit": 770,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      },
+      "art": {
+        "sketch": "die-cut-aperture",
+        "seed": 17
+      }
+    },
+    {
+      "id": "interference",
+      "block": "canvas",
+      "duration": 7.5,
+      "camera": "none",
+      "transition": "iris",
+      "tone": "invert",
+      "props": {
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "viewTall": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "elements": [
+          {
+            "type": "text",
+            "text": "Between lines",
+            "x": 142,
+            "y": 470,
+            "size": 88,
+            "fit": 770,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      },
+      "art": {
+        "sketch": "moire-signal",
+        "seed": 29
+      }
+    },
+    {
+      "id": "opening",
+      "block": "canvas",
+      "duration": 6.5,
+      "camera": "none",
+      "transition": "panel",
+      "props": {
+        "view": [
+          0,
+          0,
+          1920,
+          1080
+        ],
+        "viewTall": [
+          0,
+          0,
+          1080,
+          1920
+        ],
+        "elements": [
+          {
+            "type": "text",
+            "text": "Into light",
+            "x": 142,
+            "y": 470,
+            "size": 88,
+            "fit": 770,
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      },
+      "art": {
+        "sketch": "folded-louvers",
+        "seed": 43
+      }
+    }
+  ]
+}
