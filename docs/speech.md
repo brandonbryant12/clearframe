@@ -38,3 +38,9 @@ After alignment, inspect transitions, silence gaps and the first/last word, then
 [Google transcription contract](https://ai.google.dev/gemini-api/docs/transcribe): use word timestamps under `transcription_config.mode`, with type `verbatim`. Recognition can be wrong; the framework validates consistency, while a listening review establishes accuracy.
 
 Kinetic phrase grouping also respects `maxGap` (default 0.6 seconds) and `maxDuration` (default 4 seconds). A pause or a long phrase starts a new group before `maxWords` is reached. A single timed word stays whole even if longer than the phrase limit. After rendering, `review DIR` extracts frames immediately before/at/after the first and last words of each beat from the actual MP4; use `--beat ID` for a focused check.
+
+## Editing a recording
+
+A recording imported with `ingest --audio` keeps its master (`source/recording.wav`) and its transcript on the master's clock (`source/words.json`). Cutting words, sentences or pauses (`cut`), splitting and merging beats (`split`, `merge`) and undoing any of it (`uncut`) rebuild each beat's slice from that master; see `docs/editing.md`. Cuts start and end inside pauses and last whole frames, so kept words move by exact sample counts and **measured timings stay measured**; words that were interpolated stay estimates. Editing a recorded beat's `vo` by hand breaks this: the text no longer matches the audio, the beat loses its recording and falls back to estimated timing. Re-align (`align --whisper --beat ID`) only after replacing audio; a source edit does not need it.
+
+Generated narration is different: changing one line re-records the whole take it belongs to (the film by default, a chapter with `voice.takes: "chapter"`), so batch line edits before a paid take. Re-recording part of a take is not supported.

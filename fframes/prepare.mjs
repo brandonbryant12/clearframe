@@ -10,12 +10,168 @@ import { voiceLevels } from '../engine/lib/levels.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 import { computeTiming, captionCues, toSRT, toVTT, assetSrc } from '../engine/lib/timing.mjs';
 import { writeJSON, readJSON } from '../engine/lib/util.mjs';
+import { phase } from '../engine/lib/runlog.mjs';
 
-export async function prepareProject(root, { draft = false } = {}) {
+/**
+ * Rough cuts stand in for what isn't made yet, and only for what is declared:
+ * - a beat with `placeholder` (or a generated asset nobody has paid for) becomes a labelled
+ *   slate over its own words, on its own clock;
+ * - a canvas or art element marked `unfinished` (true or a short note) renders as drawn.
+ * `allowed` lists exactly the text those stand-ins and unfinished elements show, which is all
+ * a rough frame audit may treat as unfinished craft. Outside --rough both are errors.
+ */
+export function roughStandIns(root, sb, timing, { rough = false } = {}) {
+  const placeholders = [],
+    allowed = [],
+    unfinished = [];
+  const missing = b => {
+    const ids = new Set();
+    const walk = v => {
+      if (Array.isArray(v)) v.forEach(walk);
+      else if (v && typeof v === 'object')
+        for (const [k, x] of Object.entries(v)) {
+          if (k === 'asset' && typeof x === 'string') ids.add(x);
+          else if (k === 'plates' && typeof x === 'string') ['far', 'mid', 'near'].forEach(l => ids.add(`${x}-${l}`));
+          else walk(x);
+        }
+    };
+    walk([b.props, b.art, b.plate]);
+    return [...ids].filter(id => {
+      const a = sb.assets.find(a => a.id === id);
+      return a && !a.file && a.prompt && !assetSrc(root, a);
+    });
+  };
+  const beats = sb.beats.map((raw, i) => {
+    // Elements marked unfinished: the flag is checked here and never reaches the renderer.
+    const marked = [];
+    const strip = list =>
+      Array.isArray(list)
+        ? list.map(el => {
+            if (!el || typeof el !== 'object' || Array.isArray(el)) return el;
+            const { unfinished: u, ...rest } = el;
+            if (u != null) {
+              if (!(u === true || (typeof u === 'string' && u.trim() && u.length <= 140)))
+                throw new Error(`${raw.id}: unfinished must be true or a note up to 140 characters.`);
+              marked.push({ el: rest, note: u === true ? null : u });
+            }
+            return Array.isArray(rest.children) ? { ...rest, children: strip(rest.children) } : rest;
+          })
+        : list;
+    let b = raw;
+    if (raw.props?.elements || raw.art) {
+      b = {
+        ...raw,
+        ...(raw.props?.elements ? { props: { ...raw.props, elements: strip(raw.props.elements) } } : {}),
+        ...(raw.art && typeof raw.art === 'object' ? { art: { ...raw.art, ...(raw.art.under ? { under: strip(raw.art.under) } : {}), ...(raw.art.over ? { over: strip(raw.art.over) } : {}) } } : {}),
+      };
+      if (marked.length) {
+        if (!rough)
+          throw new Error(
+            `${raw.id}: ${marked.length} element(s) marked unfinished (${marked.map(m => m.el.id ?? m.el.type).join(', ')}); finish them, or render a rough cut with --rough.`,
+          );
+        timing.beats[i] = { ...timing.beats[i], props: b.props ?? timing.beats[i].props };
+        for (const m of marked) {
+          unfinished.push({ beat: raw.id, element: m.el.id ?? m.el.type, ...(m.note ? { note: m.note } : {}) });
+          if (m.el.type === 'text' && m.el.text != null)
+            allowed.push({ beat: raw.id, text: String(m.el.text), why: `marked unfinished${m.note ? `: ${m.note}` : ''}` });
+        }
+      } else b = raw;
+    }
+    const declared = typeof b.placeholder === 'string' ? b.placeholder : b.placeholder?.text;
+    if (b.placeholder != null && !(typeof declared === 'string' && declared.trim() && declared.length <= 140))
+      throw new Error(`${b.id}: placeholder must be a description up to 140 characters (or {text}).`);
+    const pending = missing(b);
+    if (!declared && !pending.length) return b;
+    if (!rough)
+      throw new Error(
+        declared
+          ? `${b.id} is a declared placeholder (“${declared}”); author it, or render a rough cut with --rough.`
+          : `${b.id}: generated asset ${pending.join(', ')} is not made yet; run images/clips within the budget, or render a rough cut with --rough.`,
+      );
+    const what = declared ?? `generated ${pending.join(', ')} not made yet`;
+    const tb = timing.beats[i],
+      W = timing.width,
+      H = timing.height,
+      m = Math.round(Math.min(W, H) * 0.035);
+    // A dashed frame and a label inside the title-safe area, in the second accent: unmistakably
+    // a stand-in, never mistaken for design.
+    const label = `PLACEHOLDER · ${what}`.slice(0, 72);
+    const slate = {
+      over: [
+        { type: 'rect', x: m, y: m, w: W - 2 * m, h: H - 2 * m, r: 18, fill: 'none', stroke: 'accent2', width: 3, dash: [16, 12], opacity: 0.8, enter: 'none' },
+        { type: 'text', text: label, x: Math.round(W * 0.06), y: Math.round(H * 0.06) + 36, size: 34, font: 'mono', fill: 'accent2', anchor: 'start', fit: Math.round(W * 0.88), enter: 'none' },
+      ],
+    };
+    const spoken = tb.vo?.words?.length > 0;
+    const stand = spoken
+      ? { block: 'kinetic', props: { mode: 'highlight', align: 'center', maxWords: H > W ? 5 : 8 } }
+      : { block: 'statement', props: { kicker: 'Placeholder', text: what.slice(0, 90) } };
+    placeholders.push({ beat: b.id, reason: what, declared: !!declared, label, ...(pending.length ? { assets: pending } : {}) });
+    allowed.push({ beat: b.id, text: label, why: 'placeholder slate' });
+    if (!spoken) allowed.push({ beat: b.id, text: 'Placeholder', why: 'placeholder slate' }, { beat: b.id, text: what.slice(0, 90), why: 'placeholder slate' });
+    const keep = ['id', 'vo', 'speaker', 'chapter', 'transition', 'exit', 'motion', 'duration', 'lead', 'tail', 'hold', 'min'];
+    timing.beats[i] = { ...tb, ...stand };
+    return { ...Object.fromEntries(keep.filter(k => b[k] !== undefined).map(k => [k, b[k]])), ...stand, art: slate };
+  });
+  return { sb: { ...sb, beats }, timing, placeholders, unfinished, allowed };
+}
+
+const norm = s =>
+  String(s ?? '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+/** Every piece of text a prepared beat can show: props, art, label, speaker, captions, words. */
+function shownText(jb) {
+  const out = [];
+  const walk = v => {
+    if (typeof v === 'string') out.push(v);
+    else if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === 'object') Object.values(v).forEach(walk);
+  };
+  walk([jb.props, jb.art, jb.label, jb.speaker, (jb.captions ?? []).map(c => c.text)]);
+  out.push((jb.words ?? []).map(w => w.text).join(' '));
+  return out;
+}
+
+/**
+ * Sort frame-audit findings. Errors stay errors, in every profile, unless the profile is rough
+ * and the finding is provably about declared unfinished text: its text is part of a placeholder
+ * slate or of an element marked `unfinished` in that beat, and part of nothing else the beat
+ * shows. A finding without text, or about text that also appears in finished type (a source
+ * line, a label, a caption), is never relaxed: roughness says nothing about what text means.
+ */
+export function classifyAudit(findings, { rough = false, allowed = [], job } = {}) {
+  const errors = [],
+    warnings = [],
+    craft = [];
+  for (const a of findings) {
+    const line = `${a.beat}: ${a.message} (${Number(a.seconds ?? 0).toFixed(1)} s)`;
+    if (a.level !== 'error') {
+      warnings.push(line);
+      continue;
+    }
+    const text = norm(a.text);
+    const mine = rough && text ? allowed.filter(x => x.beat === a.beat && norm(x.text).includes(text)) : [];
+    const jb = job?.beats?.find(x => x.id === a.beat);
+    // Relaxed only if every place the beat shows this text is a declared stand-in.
+    const everywhere = jb ? shownText(jb).filter(t => norm(t).includes(text)).length : Infinity;
+    if (mine.length && everywhere <= mine.length) craft.push(`${line} [${mine[0].why}]`);
+    else errors.push(line);
+  }
+  return { errors, warnings, craft };
+}
+
+/** Prepare synchronously (nothing in preparation waits); prepareProject is the async form. */
+export async function prepareProject(root, options) {
+  return prepareProjectSync(root, options);
+}
+export function prepareProjectSync(root, { draft = false, rough = false } = {}) {
   root = fs.realpathSync(root);
-  const sb = loadStoryboard(root),
-    timing = computeTiming(root);
-  const result = createJob(sb, timing, { draft });
+  const loaded = loadStoryboard(root),
+    computed = computeTiming(root);
+  const { sb, timing, placeholders, unfinished, allowed } = roughStandIns(root, loaded, computed, { rough });
+  const result = createJob(sb, timing, { draft: draft || rough });
   if (result.errors.length) throw new Error(result.errors.join('\n'));
   const timingBeat = i => timing.beats[i];
   const dir = path.join(root, 'build/native'),
@@ -167,11 +323,14 @@ export async function prepareProject(root, { draft = false } = {}) {
     revision: readJSON(path.join(ROOT, 'upstream.json')).revision,
     hashes,
     inputId: sha256(JSON.stringify({ job: result.job, hashes, rendererSourceHash, fontHashes })),
-    draft,
+    draft: draft || rough,
+    profile: rough ? 'rough' : draft ? 'draft' : 'final',
+    ...(placeholders.length ? { placeholders } : {}),
+    ...(unfinished.length ? { unfinished } : {}),
     warnings: result.warnings,
   };
   writeJSON(path.join(dir, 'manifest.json'), manifest);
-  return { ...result, root, sb, timing, dir, media, manifest };
+  return { ...result, root, sb, timing, dir, media, manifest, placeholders, unfinished, allowed };
 }
 export function unchanged(ctx) {
   if (rendererHash() !== ctx.manifest.rendererSourceHash)
@@ -192,30 +351,50 @@ export async function nativeCommand(ctx, command, args = [], capture = false) {
 }
 export async function checkProject(root, options = {}) {
   let ctx;
+  const profile = options.rough ? 'rough' : options.draft ? 'draft' : 'final';
   try {
-    ctx = await prepareProject(root, options);
+    ctx = await phase('prepare', () => prepareProject(root, options));
   } catch (e) {
-    return { errors: [e.message], warnings: [], notes: [] };
+    return { profile, errors: [e.message], warnings: [], notes: [], craft: [], placeholders: [] };
   }
   const errors = [],
-    notes = [];
+    notes = [],
+    craft = [];
   const warnings = [...ctx.warnings];
   try {
-    notes.push(withoutCameraCuts(await nativeCommand(ctx, 'inspect', ['--fail-on', 'error'], true), ctx.job));
+    notes.push(
+      withoutCameraCuts(
+        await phase('inspect', () => nativeCommand(ctx, 'inspect', ['--fail-on', 'error'], true)),
+        ctx.job,
+      ),
+    );
   } catch (e) {
     errors.push(e.message);
   }
   // The frame audit: held type cut by the frame or the letterbox, printed over other type or
-  // the subject, or too small to read. A director would send any of these back.
+  // the subject, or too small to read. A director would send any of these back. A rough cut
+  // relaxes only what is declared unfinished (see classifyAudit); everything else still fails.
   try {
     const file = path.join(ctx.dir, 'audit.json');
-    await nativeCommand(ctx, '--audit', [file], true);
-    for (const a of readJSON(file))
-      (a.level === 'error' ? errors : warnings).push(`${a.beat}: ${a.message} (${a.seconds.toFixed(1)} s)`);
+    await phase('audit', () => nativeCommand(ctx, '--audit', [file], true));
+    const sorted = classifyAudit(readJSON(file), { rough: options.rough, allowed: ctx.allowed, job: ctx.job });
+    errors.push(...sorted.errors);
+    warnings.push(...sorted.warnings);
+    craft.push(...sorted.craft);
   } catch (e) {
     errors.push(`frame audit failed: ${e.message}`);
   }
-  return { errors, warnings, notes, duration: ctx.timing.duration, inputId: ctx.manifest.inputId };
+  return {
+    profile,
+    errors,
+    warnings,
+    notes,
+    craft,
+    placeholders: ctx.placeholders,
+    unfinished: ctx.unfinished,
+    duration: ctx.timing.duration,
+    inputId: ctx.manifest.inputId,
+  };
 }
 
 /** Drop "cut off by the canvas edge" notes inside moves that carry type past the edge on

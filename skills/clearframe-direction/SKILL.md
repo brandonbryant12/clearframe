@@ -10,7 +10,9 @@ The goal is not to summarise the document on slides. It is a short film with a q
 ## 1. Ingest
 - Ideas/documents with brand assets: `clearframe start DIR --idea "..." --document report.md --brand brand.json --playbook NAME`. Read BRIEF.md, EVIDENCE.md and BRAND.md. It copies local assets and source hashes, preserves sample attribution and leaves the story to you. See `docs/intake.md`. Use `pipeline DIR --draft --scale 0.5` for a retained smaller first review, then check full-resolution output before delivery.
 - Research reports (markdown): `clearframe ingest DIR --markdown report.md`. It writes `BRIEF.md`: every figure with its sentence and source, tensions, questions, quotes, chart-ready tables and the source list, plus a research-digest storyboard to rewrite. Convert PDF/Docs to markdown or text first (`pdftotext -layout`, `textutil -convert txt`).
-- Recordings (podcasts, interviews, talks): `clearframe ingest DIR --audio episode.wav --words words.json [--script script.txt] [--from s --to s] [--vertical]`. Beats replay the recording gaplessly with measured word timings. A script (`HOST: …` lines or JSON turns) provides spelling and speakers. For word timestamps, use local Whisper (`whisper episode.wav --word_timestamps True --output_format json`, free) or Gemini transcription (paid).
+- Recordings (podcasts, interviews, talks): `clearframe ingest DIR --audio episode.wav --words words.json [--script script.txt] [--from s --to s] [--vertical]`. Beats replay the recording gaplessly with measured word timings. A script (`HOST: …` lines or JSON turns) provides spelling and speakers. For word timestamps, use local Whisper (`whisper episode.wav --word_timestamps True --output_format json`, free) or Gemini transcription (paid). Then `clearframe paper DIR`: the paper edit (chapters, timecodes, speakers, the picture each beat is meant to get, the transcript) is the plan the person reads. The recording is the narration: keep it as recorded unless they ask for cuts (`--suggest-cuts` lists filler words, doubled words and long pauses as proposals; struck words come back with `cut --paper`).
+
+**Long recordings (several minutes) are not long short films.** The beat counts and per-minute quotas below are for 60–90 s films. For a long recording, choose a small number of deliberate visual ideas (a world for the central mechanism, the few numbers that matter, speaker plates), mark where pictures will go with `placeholder`, and leave most beats as their captions for the rough cut. The person's notes on that rough cut decide which other moments deserve a picture. Work chapter by chapter (`preview DIR --chapter NAME`) and say how much of the film is covered.
 
 ## 2. Find the story (before any visuals)
 Write these four lines at the top of `DIRECTION.md`:
@@ -55,7 +57,7 @@ Fill the beat plan table in `DIRECTION.md`: purpose, picture, **shot scale** and
 3. `sheet DIR --draft` and open it; `still --grid` to place art; `render DIR --draft`.
 
 ## 6. Fresh review
-Ask a separate reviewer (a fresh subagent, with no authorship bias) to judge the sheet and draft against `DIRECTION.md` using this rubric. Collect specific, actionable notes:
+Run reviewer rounds on the fine cut, after the person has seen the rough cut and their notes are in (one-shot: after your rough-cut decision); polishing every beat before anyone has seen motion is the most expensive way to find out a structural note. Ask a separate reviewer (a fresh subagent, with no authorship bias) to judge the sheet and draft against `DIRECTION.md` using this rubric. Collect specific, actionable notes:
 - **Hook.** Does the first frame make you want the second? Is the question clear by 5 s?
 - **Story.** Read only the `vo` lines: is it an argument with a turn, or a list? Does each beat follow from the last?
 - **Pictures.** Does each beat show a different idea? Are there three similar frames in a row? Is anything a heading over bullets?
