@@ -17,7 +17,7 @@ test('bins count every observation and the threshold sentence states the exact s
   assert.equal(named(p, 'distribution-bar-3').fill, 'accent');
   assert.equal(named(p, 'distribution-marker-label').text, '2025');
   const tall = named(p, 'distribution-bar-4'), short = named(p, 'distribution-bar-0');
-  assert.ok(Math.abs(tall.h / short.h - 3) < 1e-9, 'bar height is proportional to count');
+  assert.ok(Math.abs(tall.h / short.h - 4) < 1e-9, 'bar height is proportional to count (4 of 1)');
 });
 
 test('histograms reject silent exclusion and unlabeled thresholds', () => {
