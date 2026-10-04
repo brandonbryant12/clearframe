@@ -8,6 +8,8 @@ addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft') v.currentTime -= e.shiftKey ? 5 : 1;
   if (e.key === 'l' || e.key === 'L') workspaceKeys?.lens();
   if (e.key === 'n' || e.key === 'N') workspaceKeys?.note();
+  if (e.key === ',' || e.key === '.') workspaceKeys?.step(e.key === '.' ? 1 : -1);
+  if (e.key === 'o' || e.key === 'O') workspaceKeys?.loop();
 });
 
 function route() {

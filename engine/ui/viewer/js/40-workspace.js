@@ -5,7 +5,7 @@ function film(id, selected, panel = 'moment') {
   if (!f) return films();
   if (!f.versions.length) return preview(f, panel);
   const v = f.versions.find(x => x.id === selected) ?? f.versions.at(-1);
-  const lensOn = store.get('cf-lens', true), open = n => notesFor(f, n).filter(x => !x.resolved).length;
+  const lensOn = store.get('cf-lens', true), open = n => notesFor(f, n).filter(x => !x.resolved).length, diff = changes(f, v);
   app.innerHTML = `<a class="back" href="#/films">← Studio</a>
     <div class="filmhead"><div><h1>${esc(f.title)}</h1><p class="lede">${plural(f.versions.length, 'version')} · ${plural(v.scenes.length, 'scene')} · ${plural(f.files.length, 'file')} · <span>${esc(f.folder)}</span></p>${f.about ? `<p class="lede">${esc(f.about)}</p>` : ''}</div>
     <div class="toolbar">
@@ -20,11 +20,14 @@ function film(id, selected, panel = 'moment') {
           <video id="video" preload="auto" playsinline poster="${esc(v.poster ?? '')}" src="${esc(v.video)}"></video>
           <div class="overlay" id="overlay"><div class="content" id="content"></div></div>
         </div>
-        <div class="transport"><button class="btn icon" id="play" aria-label="Play (space)">▶</button><span class="time" id="time">0:00 / ${length(v.seconds)}</span>
+        <div class="transport"><button class="btn icon" id="play" aria-label="Play (space)">▶</button>
+          <button class="btn icon" id="back1" aria-label="Back one frame (,)" title="Back one frame (,)">‹</button><button class="btn icon" id="fwd1" aria-label="Forward one frame (.)" title="Forward one frame (.)">›</button>
+          <span class="time" id="time">0:00 / ${length(v.seconds)}</span><span class="meta frameno" id="frameno"></span>
+          <button class="btn small" id="speed" title="Playback speed">1×</button><button class="btn small" id="loop" aria-pressed="false" title="Loop this scene (O)">⟲ Scene</button>
           <span class="now"><span class="name">${versionName(v)}</span> ${qualityChip(v)} ${approvedChip(v)}</span></div>
         <div class="timeline" id="timeline" aria-label="Timeline: drag to scrub"></div>
         <div class="panels">
-          <div class="subnav" role="tablist">${[['moment', 'In this moment'], ['scenes', 'Scenes'], ['files', 'Files'], ['fonts', 'Fonts'], ['notes', `Notes (${open(v)} open)`], ...(f.brief ? [['brief', 'Brief']] : [])]
+          <div class="subnav" role="tablist">${[['moment', 'In this moment'], ['scenes', 'Scenes'], ['files', 'Files'], ['fonts', 'Fonts'], ['notes', `Notes (${open(v)} open)`], ...(diff ? [['changes', `What changed (${diff.count})`]] : []), ...(f.brief ? [['brief', 'Brief']] : [])]
             .map(([k, t]) => `<button data-panel="${k}" aria-pressed="${k === panel}">${t}</button>`).join('')}</div>
           <div id="panel"></div>
         </div>
@@ -35,7 +38,7 @@ function film(id, selected, panel = 'moment') {
           <div><div class="v">Version ${x.number}${x === f.versions.at(-1) ? ' <span class="meta">(latest)</span>' : ''}</div>
           ${x.label ? `<div class="label">${esc(x.label)}</div>` : ''}
           <div class="meta">${when(x.createdAt)} · ${length(x.seconds)}</div>
-          <div>${qualityChip(x)} ${approvedChip(x)} ${open(x) ? `<span class="chip">${plural(open(x), 'open note')}</span>` : ''}</div></div>
+          <div>${qualityChip(x)} ${approvedChip(x)} ${open(x) ? `<span class="chip">${plural(open(x), 'open note')}</span>` : ''} ${changes(f, x)?.count ? `<span class="chip changed">${plural(changes(f, x).count, 'change')}</span>` : ''}</div></div>
         </a>`).join('')}</aside>
     </div>`;
   workspace(f, v, panel);
@@ -63,7 +66,8 @@ function workspace(f, v, initialPanel) {
   // ---- timeline
   const pct = t => `${Math.max(0, Math.min(100, t / T * 100))}%`;
   const notesLane = () => notesFor(f, v).map(n => `<button class="pinmark ${n.resolved ? 'done' : ''}" style="left:${pct(n.at ?? 0)}" data-seek="${n.at ?? 0}" title="${esc(n.text)}">●</button>`).join('');
-  const lanes = [['Scenes', v.scenes.map(s => `<button class="seg scene ${s.placeholder ? 'todo' : ''}" style="left:${pct(s.start)};width:${pct(s.end - s.start)}" data-seek="${s.start}" title="${esc(s.placeholder ? `${s.number}. To design: ${s.placeholder}` : `${s.number}. ${s.kind}`)}"><span>${s.number}. ${esc(s.kind)}</span></button>`).join('')]];
+  const changed = new Map((changes(f, v)?.scenes ?? []).map(c => [c.scene, c.change]));
+  const lanes = [['Scenes', v.scenes.map(s => `<button class="seg scene ${s.placeholder ? 'todo' : ''} ${changed.has(s) ? 'changed' : ''}" style="left:${pct(s.start)};width:${pct(s.end - s.start)}" data-seek="${s.start}" title="${esc(s.placeholder ? `${s.number}. To design: ${s.placeholder}` : `${s.number}. ${s.kind}`)}"><span>${s.number}. ${esc(s.kind)}</span></button>`).join('')]];
   if (v.lanes.narration.length) lanes.push(['Narration', v.lanes.narration.map(n => `<span class="seg voice" style="left:${pct(n.start)};width:${pct(n.end - n.start)}" title="${esc(n.text)}"></span>`).join('')]);
   if (v.lanes.music.length) lanes.push(['Music', v.lanes.music.map(m => `<span class="seg music" style="left:${pct(m.start)};width:${pct(m.end - m.start)}" title="${esc(m.name)}"><span>${esc(m.name)}</span></span>`).join('')]);
   if (v.lanes.sfx.length) lanes.push(['Sound', v.lanes.sfx.map(s => `<span class="tick" style="left:${pct(s.t)}" title="${esc(s.name)} at ${clock(s.t)}"></span>`).join('')]);
@@ -175,6 +179,9 @@ function workspace(f, v, initialPanel) {
       bindThreads(panelEl, f, v, refreshNotes, seek);
       panelEl.querySelectorAll('[data-filter]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); filter = b.dataset.filter; drawPanel(); }));
       document.getElementById('export')?.addEventListener('click', e => { e.stopPropagation(); exportLocal(f, v); });
+    } else if (!soft && panel === 'changes') {
+      panelEl.innerHTML = changesPanel(f, v);
+      panelEl.onclick = e => { const b = e.target.closest('[data-seek]'); if (b) seek(Number(b.dataset.seek)); };
     } else if (!soft && panel === 'brief') {
       panelEl.onclick = null;
       panelEl.innerHTML = `<div class="brief">${markdown(f.brief)}</div>`;
@@ -191,17 +198,29 @@ function workspace(f, v, initialPanel) {
   play.onclick = () => video.paused ? video.play() : video.pause();
   video.addEventListener('play', () => { play.textContent = '❚❚'; });
   video.addEventListener('pause', () => { play.textContent = '▶'; });
+  const fps = v.look?.fps ?? 30, frameno = document.getElementById('frameno');
+  const step = n => { video.pause(); video.currentTime = Math.max(0, Math.min(T, (Math.round(video.currentTime * fps) + n) / fps + 0.001)); };
+  document.getElementById('back1').onclick = () => step(-1);
+  document.getElementById('fwd1').onclick = () => step(1);
+  const speeds = [1, 0.5, 0.25, 2], speedBtn = document.getElementById('speed');
+  speedBtn.onclick = () => { video.playbackRate = speeds[(speeds.indexOf(video.playbackRate) + 1) % speeds.length]; speedBtn.textContent = `${video.playbackRate}×`; };
+  let loopScene = null;
+  const loopBtn = document.getElementById('loop');
+  const toggleLoop = () => { loopScene = loopScene ? null : sceneAt(video.currentTime); loopBtn.setAttribute('aria-pressed', String(!!loopScene)); loopBtn.classList.toggle('on', !!loopScene); loopBtn.textContent = loopScene ? `⟲ Scene ${loopScene.number}` : '⟲ Scene'; };
+  loopBtn.onclick = toggleLoop;
   const toggleLens = () => { lens = !lens; store.set('cf-lens', lens); const b = document.getElementById('lens'); b.classList.toggle('on', lens); b.setAttribute('aria-pressed', String(lens)); drawOverlay(video.currentTime); };
   document.getElementById('lens').onclick = toggleLens;
   document.getElementById('addnote').onclick = () => { video.pause(); setNoting(!noting); };
-  workspaceKeys = { lens: toggleLens, note: () => { video.pause(); setNoting(!noting); } };
+  workspaceKeys = { lens: toggleLens, note: () => { video.pause(); setNoting(!noting); }, step, loop: toggleLoop };
   let raf = 0;
   const tick = () => {
     const t = video.currentTime;
+    if (loopScene && !video.paused && (t >= loopScene.end - 0.02 || t < loopScene.start)) video.currentTime = loopScene.start + 0.01;
     if (t !== last) {
       last = t;
       playhead.style.left = `calc(var(--lname) + (100% - var(--lname)) * ${t / T})`;
       time.textContent = `${clock(t)} / ${length(T)}`;
+      frameno.textContent = `frame ${Math.round(t * fps)}`;
       drawOverlay(t);
       if (panel === 'moment') drawPanel(true);
     }
@@ -255,4 +274,36 @@ function preview(f, initial) {
     draw();
   };
   draw();
+}
+
+/** What changed from the previous version: scenes added, removed, reworded, redesigned or retimed, and notes answered. */
+function changes(f, v) {
+  const i = f.versions.indexOf(v), prev = f.versions[i - 1];
+  if (!prev || !prev.scenes.length || !v.scenes.length) return null;
+  const key = s => s.id ?? `#${s.number}`, before = new Map(prev.scenes.map(s => [key(s), s]));
+  const len = s => s.end - s.start, same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+  const scenes = v.scenes.map(s => {
+    const p = before.get(key(s));
+    if (!p) return { scene: s, change: 'added', what: ['New scene'] };
+    const what = [];
+    if (p.placeholder && !s.placeholder) what.push('Designed (was a placeholder)');
+    else if (p.kind !== s.kind) what.push(`Now a ${s.kind.toLowerCase()} (was a ${p.kind.toLowerCase()})`);
+    if (!same(p.onScreen, s.onScreen)) what.push({ was: p.onScreen.join(' · '), now: s.onScreen.join(' · '), label: 'Words' });
+    if (!same(p.narration, s.narration)) what.push({ was: p.narration ?? '', now: s.narration ?? '', label: 'Narration' });
+    if (!same(p.media, s.media)) what.push('Different media');
+    if (Math.abs(len(p) - len(s)) > 0.05) what.push(`${len(s) > len(p) ? 'Longer' : 'Shorter'}: ${len(p).toFixed(1)}s → ${len(s).toFixed(1)}s`);
+    return what.length ? { scene: s, change: 'changed', what } : null;
+  }).filter(Boolean);
+  const removed = prev.scenes.filter(p => !v.scenes.some(s => key(s) === key(p)));
+  const answered = notesFor(f, prev).filter(n => n.resolved).length, asked = notesFor(f, prev).length;
+  return { prev, scenes, removed, answered, asked, count: scenes.length + removed.length };
+}
+
+function changesPanel(f, v) {
+  const d = changes(f, v);
+  const item = w => typeof w === 'string' ? `<div>${esc(w)}</div>` : `<div><span class="mlabel">${esc(w.label)}</span> <del>${esc(w.was) || '—'}</del> <ins>${esc(w.now) || '—'}</ins></div>`;
+  return `<div class="changes"><p class="meta">Compared with ${versionName(d.prev)}: ${plural(d.count, 'scene change')}, length ${length(d.prev.seconds)} → ${length(v.seconds)}${d.asked ? `, ${d.answered} of ${plural(d.asked, 'note')} on that version resolved` : ''}.</p>
+    ${d.scenes.map(c => `<button class="change" data-seek="${c.scene.start}"><span class="ttime">${clock(c.scene.start)}</span><div><div><b>${c.scene.number}. ${esc(c.scene.kind)}</b> <span class="chip ${c.change}">${c.change === 'added' ? 'Added' : 'Changed'}</span></div>${c.what.map(item).join('')}</div></button>`).join('')}
+    ${d.removed.map(p => `<div class="change"><span class="ttime">—</span><div><div><b>${esc(p.kind)}</b> <span class="chip removed">Removed</span></div>${p.onScreen.length ? `<div><del>${esc(p.onScreen.join(' · '))}</del></div>` : ''}</div></div>`).join('')}
+    ${d.count ? '' : '<div class="meta">Same scenes as before; the changes are in the picture or sound.</div>'}</div>`;
 }

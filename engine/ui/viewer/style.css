@@ -254,3 +254,21 @@ h2 { font-size: 20px; margin: 36px 0 14px; }
 .column { grid-template-columns: minmax(0, 1fr); }
 .column > *, .board > * { min-width: 0; }
 @media (max-width: 600px) { .stepper li:not(.current) .lbl { display: none; } .stepper li + li::before { width: 14px; margin: 0 6px; } }
+
+/* Transport: frame step, speed, scene loop. */
+.btn.small { padding: 5px 10px; font-size: 13px; }
+.transport .btn.icon + .btn.icon { margin-left: -6px; }
+.frameno { font-variant-numeric: tabular-nums; min-width: 72px; }
+
+/* What changed between versions. */
+.seg.scene.changed { box-shadow: inset 0 -3px 0 var(--accent); }
+.chip.changed, .chip.added { background: rgba(79, 193, 176, .14); color: var(--accent); }
+.chip.removed { background: rgba(232, 106, 96, .14); color: #ef8a80; }
+.changes { display: grid; gap: 10px; }
+.change { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; color: var(--ink); font: inherit; }
+button.change { cursor: pointer; }
+button.change:hover { border-color: #35435a; }
+.change > div { display: grid; gap: 4px; }
+.change del { color: #ef8a80; text-decoration: line-through; text-decoration-color: rgba(239,138,128,.6); }
+.change ins { color: var(--good); text-decoration: none; margin-left: 6px; }
+.change .mlabel { display: inline-block; min-width: 76px; }
