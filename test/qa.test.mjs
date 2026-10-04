@@ -8,6 +8,8 @@ import { execFileSync } from 'node:child_process';
 import { timeFindings, deliveryFindings, pictureDifference, qaProject } from '../engine/lib/qa.mjs';
 import { findDrop, findTempo, cutsOnGrid } from '../engine/lib/beatmap.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
+import { ffmpeg } from '../engine/lib/util.mjs';
+import { validateVideo } from '../fframes/render.mjs';
 
 test('qa finds a one-frame pop, a jumping world seam and a held stretch under the voice', () => {
   const fps = 30,
@@ -114,6 +116,12 @@ test('encoded QA writes per-shot held findings and analysis metadata', async t =
   ]);
   const result = await qaProject(root);
   assert.equal(result.summary.frames, 180);
+  const geometry = { width: 640, height: 360, fps: 30, frames: 180 };
+  validateVideo(path.join(root, 'build/video.mp4'), geometry);
+  assert.throws(
+    () => validateVideo(path.join(root, 'build/video.mp4'), { ...geometry, frames: 181 }),
+    /decoded frame count differ/,
+  );
   assert.deepEqual(
     result.findings.filter(f => f.kind === 'held').map(f => [f.beat, f.seconds]),
     [
@@ -125,6 +133,41 @@ test('encoded QA writes per-shot held findings and analysis metadata', async t =
   assert.equal(report.heldAnalysis.advisory, true);
   assert.match(report.heldAnalysis.region, /excluding authored letterbox/);
   assert.ok(fs.statSync(path.join(result.dir, 'phone.png')).size > 0);
+});
+
+test('shared QA sheets preserve sampled pixels and partial rows in both orientations', async t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-qa-sheets-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  for (const [width, height] of [[640, 360], [360, 640]]) {
+    const portrait = height > width;
+    const dir = path.join(root, portrait ? 'portrait' : 'landscape');
+    fs.mkdirSync(path.join(dir, 'build'), { recursive: true });
+    const frames = 286, fps = 30, seconds = frames / fps;
+    fs.writeFileSync(path.join(dir, 'storyboard.json'), JSON.stringify({
+      format: { width, height, fps },
+      beats: [{ id: 'motion', block: 'statement', duration: seconds, props: { text: 'Moving picture' } }],
+    }));
+    const video = path.join(dir, 'build/video.mp4');
+    await ffmpeg([
+      '-f', 'lavfi', '-i', `testsrc2=s=${width}x${height}:r=${fps}`,
+      '-frames:v', String(frames), '-c:v', 'libx264', '-threads', '2', video,
+    ]);
+    const result = await qaProject(dir);
+    assert.equal(result.summary.frames, frames);
+    for (const [name, thumb, columns] of [
+      ['timeline', portrait ? 160 : 240, portrait ? 10 : 8],
+      ['phone', 360, portrait ? 6 : 4],
+    ]) {
+      const reference = path.join(dir, `${name}-reference.png`);
+      // Independent single-output decode: catch shared-graph sampling, scaling and EOF regressions.
+      await ffmpeg([
+        '-i', video, '-an', '-vf',
+        `fps=1,scale=${thumb}:-2,tile=${columns}x${Math.ceil(seconds / columns)}:padding=4:margin=4:color=0x161b22`,
+        '-frames:v', '1', '-threads', '1', reference,
+      ]);
+      assert.deepEqual(fs.readFileSync(path.join(result.dir, `${name}.png`)), fs.readFileSync(reference));
+    }
+  }
 });
 
 test('beat map: the drop where the bass jumps and stays, tempo from onsets, cuts against the grid', () => {

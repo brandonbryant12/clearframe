@@ -56,6 +56,8 @@
 
 - **Library packaging and expansion plan.** Documented asset-pack, style-kit and story-kit conventions using the existing library layout and loader. Added a portable Balance study kit with retained Blender media, shared JSON style, four native sketch variants and a source integration specimen. A dated, source-linked Timmer research inventory proposes 71 reusable chart, infographic, Blender, camera, tooling and retirement entries; its offline searchable view distinguishes existing ingredients from unbuilt work. Adds a milestone build-out goal and explicit calculation, art-direction, motion and format acceptance criteria. No renderer refactor or new Blender render is included.
 
+- **Less repeated decoding.** Encoded QA shares a video decode between timeline and phone sheets and caps analysis/loudness workers at two. Final rendering validates decoded dimensions, frame rate and frame count after muxing, eliminating the duplicate silent-file pass. Local same-input measurements show 20% faster QA and 5% faster complete production runs, with identical QA reports, review sheets and final MP4 bytes. Blender experiments did not establish a worthwhile improvement and were left out. See `docs/performance.md` for measurements and limits.
+
 - **Complete dimensional-art setup.** The native setup guide separates optional Blender preparation from dependency-free native KPI/teaching forms and bundled-asset reuse. It documents executable checks, `BLENDER_BIN`, FFmpeg/Git requirements, disk/worker limits and copy-and-run feature/teaching replay commands.
 
 Portable intake, varied source directions, financial mechanisms and smaller review copies join the native pipeline.

@@ -81,7 +81,7 @@ node engine/cli.mjs pipeline my-film --draft --scale 0.5
 
 Research and podcasts can start from an evidence investigation, a mechanism, field notes, a visual essay, kinetic type or a drawn explanation. [Source adaptation and creative freedom](docs/source-playbooks.md) · [Custom directions](library/README.md#directions). The agent still authors the film from the actual source.
 
-Financial arcs: `cash-flow`, `scenario-lab` and `risk-tradeoffs`, with native animated mechanisms. [Intake and brand kit](docs/intake.md) · [Financial playbooks](docs/financial-playbooks.md) · [Free example](examples/financial-intake/README.md). The focus is a mature standalone production pipeline, exercised through its CLI before any host integration. [Production method and harness](docs/production.md).
+Financial arcs: `cash-flow`, `scenario-lab` and `risk-tradeoffs`, with native animated mechanisms. [Intake and brand kit](docs/intake.md) · [Financial playbooks](docs/financial-playbooks.md) · [Free example](examples/financial-intake/README.md). The focus is a mature standalone production pipeline, exercised through its CLI before any host integration. [Production method and harness](docs/production.md) · [Measured pipeline efficiencies](docs/performance.md).
 
 ## From a document or recording
 

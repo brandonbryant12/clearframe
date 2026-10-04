@@ -41,7 +41,10 @@ function grid(width, height) {
 function decode(file, w, h) {
   const r = spawnSync(
     ffmpegBin(),
-    ['-v', 'error', '-i', file, '-an', '-vf', `scale=${w}:${h}:flags=area,format=gray`, '-f', 'rawvideo', '-'],
+    [
+      '-v', 'error', '-threads', '2', '-filter_threads', '2', '-i', file, '-an',
+      '-vf', `scale=${w}:${h}:flags=area,format=gray`, '-threads', '2', '-f', 'rawvideo', '-',
+    ],
     { maxBuffer: 2 ** 31 - 1 },
   );
   if (r.status !== 0) throw new Error(`ffmpeg could not decode ${file}: ${r.stderr}`);
@@ -197,7 +200,10 @@ function probeStreams(file) {
 function measureLoudness(file) {
   const r = spawnSync(
     ffmpegBin(),
-    ['-hide_banner', '-nostats', '-i', file, '-map', '0:a:0', '-af', 'ebur128=peak=true', '-f', 'null', '-'],
+    [
+      '-hide_banner', '-nostats', '-threads', '2', '-filter_threads', '2', '-i', file,
+      '-map', '0:a:0', '-af', 'ebur128=peak=true', '-threads', '2', '-f', 'null', '-',
+    ],
     { encoding: 'utf8', maxBuffer: 2 ** 28 },
   );
   const tail = r.stderr.slice(r.stderr.lastIndexOf('Summary:'));
@@ -206,19 +212,25 @@ function measureLoudness(file) {
   return i ? { integrated: Number(i[1]), peak: p ? Number(p[1]) : null } : null;
 }
 
-/** One frame per second, tiled: the whole timeline, boring stretches included. */
-async function sheet(file, out, { width, columns, seconds }) {
-  const rows = Math.max(1, Math.ceil(Math.ceil(seconds) / columns));
+/** Share the decode and one-second samples; keep each sheet's original tile geometry. */
+async function sheets(file, dir, { portrait, seconds }) {
+  const sizes = [
+    { name: 'timeline', width: portrait ? 160 : 240, columns: portrait ? 10 : 8 },
+    { name: 'phone', width: 360, columns: portrait ? 6 : 4 },
+  ];
+  const filters = sizes.map(({ name, width, columns }, i) => {
+    const rows = Math.max(1, Math.ceil(Math.ceil(seconds) / columns));
+    return `[sample${i}]scale=${width}:-2,tile=${columns}x${rows}:padding=4:margin=4:color=0x161b22[${name}]`;
+  });
   await ffmpeg([
     '-y',
     '-i',
     file,
-    '-an',
-    '-vf',
-    `fps=1,scale=${width}:-2,tile=${columns}x${rows}:padding=4:margin=4:color=0x161b22`,
-    '-frames:v',
-    '1',
-    out,
+    '-filter_complex',
+    ['[0:v:0]fps=1,split=2[sample0][sample1]', ...filters].join(';'),
+    ...sizes.flatMap(({ name }) => [
+      '-map', `[${name}]`, '-frames:v', '1', '-threads', '1', path.join(dir, `${name}.png`),
+    ]),
   ]);
 }
 
@@ -314,12 +326,7 @@ export async function qaProject(root, { video, loop = false } = {}) {
   const portrait = v.height > v.width;
   // The phone sheet is what a viewer's thumb sees: 360 px wide frames.
   const seconds = n / fps;
-  await sheet(file, path.join(dir, 'timeline.png'), {
-    width: portrait ? 160 : 240,
-    columns: portrait ? 10 : 8,
-    seconds,
-  });
-  await sheet(file, path.join(dir, 'phone.png'), { width: 360, columns: portrait ? 6 : 4, seconds });
+  await sheets(file, dir, { portrait, seconds });
   const change = second.filter(Number.isFinite);
   const summary = {
     seconds: r2(n / fps),

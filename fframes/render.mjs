@@ -66,12 +66,12 @@ export async function renderProject(root, { draft = false, out, noAudio = false,
       '-an',
       silent,
     ]);
-    validateVideo(silent, expected);
     const soundCues = soundDesign(ctx.job, ctx.sb.sfx);
     // The cue sheet, for review: what plays where (bench waveforms mark these).
     writeJSON(path.join(root, 'build/cues.json'), soundCues);
     const track = noAudio ? null : await mix(root, ctx.timing, audio, ctx.sb.mix, soundCues);
     await mux(silent, track, finished);
+    // Decode/count the complete deliverable once, after muxing and before publication.
     const probe = validateVideo(finished, expected);
     unchanged(ctx);
     fs.mkdirSync(path.dirname(output), { recursive: true });
