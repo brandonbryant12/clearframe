@@ -37,6 +37,7 @@ import { expandPlotProps } from './plots.mjs';
 import { expandBarsProps } from './bars.mjs';
 import { expandStatProps } from './stat.mjs';
 import { expandHistogramProps } from './histogram.mjs';
+import { expandMultiplesProps } from './multiples.mjs';
 import { captionCues, findWord } from '../engine/lib/timing.mjs';
 
 const unit = v => Number.isFinite(v) && v >= 0 && v <= 1;
@@ -171,7 +172,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     spec = rules(b.block);
   const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.dur };
   const authoredProps = b.block === 'canvas'
-    ? expandHistogramProps(expandStatProps(expandBarsProps(expandPlotProps(expandTeachingProps(expandKPIProps(b.props ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
+    ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBarsProps(expandPlotProps(expandTeachingProps(expandKPIProps(b.props ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
     : (b.props ?? {});
   const props = normalizeProps(b.block, authoredProps, {
     vertical: film.vertical,
@@ -224,7 +225,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     return end;
   };
   if (b.block === 'canvas') {
-    if ((b.props?.plot != null || b.props?.bars != null || b.props?.stat != null || b.props?.distribution != null) && !sb.sources.length)
+    if ((b.props?.plot != null || b.props?.bars != null || b.props?.stat != null || b.props?.distribution != null || b.props?.multiples != null) && !sb.sources.length)
       throw new Error('Quantitative plots need a storyboard.sources entry.');
     settle = Math.max(settle, scheduleArt(props.elements, at, props.stagger ?? 0));
     // Camera depth keys resolve their spoken cues; like camera drift, they never hold the beat.

@@ -2,6 +2,8 @@
 
 ## 0.5.0 — unreleased
 
+- **Small multiples.** `props.multiples` draws 2–9 small lines on one shared scale in the chart system: each panel passes the plot's data contract, ticks sit on the outer edges, and a highlighted series takes `accent2` while the rest recede. The finance kit adds a six-asset-class beat.
+
 - **Viewer.** `viewer [folder]` writes a self-contained HTML page for non-technical reviewers: films with every version (label, date, draft/final, approval, notes), side-by-side comparison kept in step, downloads, and the building blocks (chart templates in wide and tall, 3D elements, palettes). `examples/market-update` is a demo film with two versions. See `docs/viewer.md`.
 
 - **Distribution charts.** `props.distribution` turns the existing exact histogram math into an editorial beat: counts on the bars, the qualifying side toned, a threshold sentence in the header ("Losing years: 7 of 36") and an optional latest-year marker. See `docs/distribution-charts.md`.

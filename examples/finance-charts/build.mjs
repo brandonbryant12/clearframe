@@ -29,6 +29,10 @@ const drawdown = index.map(p => { peak = Math.max(peak, p.y); return { x: p.x, y
 // Illustrative calendar-year returns with a realistic spread (not a market record).
 const annualReturns = [-3, 30, 8, 10, 1, 37, 23, 33, 29, 21, -9, -12, -22, 29, 11, 5, 16, 6, -37, 26, 15, 2, 16, 32, 14, 1, 12, 22, -4, 31, 18, 29, -18, 26, 25, 17]
   .map((value, i) => ({ year: String(1990 + i), value }));
+// Illustrative ten-year growth of 100 by asset class (annual steps, not market data).
+const assetPaths = { us: [12, 22, -4, 31, 18, 29, -18, 26, 25, 17], intl: [1, 25, -14, 22, 8, 11, -14, 18, 4, 9], bonds: [3, 4, 0, 9, 8, -2, -13, 6, 1, 4],
+  reits: [8, 5, -4, 26, -5, 41, -25, 12, 5, 6], commodities: [11, 2, -11, 8, -3, 27, 16, -8, 5, 3], cash: [0.3, 0.9, 1.9, 2.2, 0.5, 0.1, 1.5, 5.1, 5.2, 4.3] };
+const grow = r => r.reduce((a, x, i) => [...a, { x: `${2016 + i}-12-31`, y: Math.round(a.at(-1).y * (1 + x / 100) * 10) / 10 }], [{ x: '2015-12-31', y: 100 }]);
 const recessions = [
   { from: '2001-03-31', to: '2001-12-31', label: 'Recession' },
   { from: '2007-12-31', to: '2009-06-30', label: 'Recession' },
@@ -37,6 +41,8 @@ const recessions = [
 const years = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 const yearTicks = (...ys) => ys.map(y => `${y}-12-31`);
 
+const multiplesBeat = (id, multiples, duration = 9) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
+  props: { multiples: { source, asOf, ...multiples } } });
 const distributionBeat = (id, distribution, duration = 8) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
   props: { distribution: { source, asOf, ...distribution } } });
 const statBeat = (id, stat, duration = 6) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
@@ -120,6 +126,15 @@ function beats(shape) {
         .map(([label, value]) => ({ label: tall && label !== '2016' && label !== '2025' ? `’${label.slice(2)}` : label, value })),
       domain: [-20, 40], ticks: [-20, 0, 20, 40], suffix: '%',
       reference: { value: 15.8, label: 'Average' },
+    }),
+    multiplesBeat('asset-classes', {
+      title: 'Ten years, six asset classes, one scale',
+      unit: 'Growth of 100, 2015–2025',
+      x: { type: 'date', label: 'Year', domain: ['2015-12-31', '2025-12-31'], dateFormat: 'year', ticks: yearTicks(2015, 2025) },
+      y: { type: 'linear', label: 'Value of 100 invested', domain: [50, 400], ticks: [50, 400] },
+      series: [['us', 'US stocks'], ['intl', 'International'], ['bonds', 'Bonds'], ['reits', 'Real estate'], ['commodities', 'Commodities'], ['cash', 'Cash']]
+        .map(([id, label]) => ({ id, label, values: grow(assetPaths[id]) })),
+      highlight: 'us',
     }),
     distributionBeat('return-distribution', {
       title: 'How often a year ends in each range',

@@ -523,6 +523,8 @@ export const BLOCKS = [
         'Sourced multiseries line plot: {title, x:{type:linear|date,label,domain,ticks,...}, y:{type:linear|log,label,domain,ticks,...}, series:[{id,label,values:[{x,y}]}], asOf, source?, motion?:none|{at,duration}, annotation?}. Dates preserve elapsed spacing, null y leaves a gap, all series share explicit scales and a linear reveal clock. See docs/quantitative-plots.md.',
       bars:
         'Signed editorial bar chart: {title, unit, values:[{label, value, highlight?}], domain:[min≤0, max≥0], ticks, decimals?, prefix?, suffix?, orientation?: vertical|horizontal, reference?: {value, label}, colors?: sign|single, asOf, source?, motion?: none|{at,duration}}. Bars grow from zero in order; negative values take the negative colour. See docs/bars.md.',
+      multiples:
+        'Small multiples: {title, unit, x, y (one shared scale, as plot), series:[2–9 {id,label,values:[{x,y}]}], highlight?: id, asOf, source?, motion?}. One small line per series in a grid; ticks on the outer edges; the highlighted panel takes accent2 and the others recede. See docs/small-multiples.md.',
       distribution:
         'Editorial histogram: {title, unit, observations:[number|null], edges:[2–12 equal bins], threshold:{value, relation: lt|lte|gt|gte, label}, marker?:{value, label}, prefix?, suffix?, decimals?, tone?: negative|highlight, asOf, source?, motion?}. Counts sit on the bars; the threshold line states how many outcomes qualify. See docs/distribution-charts.md.',
       stat:
