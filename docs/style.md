@@ -20,7 +20,7 @@ A film is not a slide deck with narration. The usual tells: every beat the same 
 - **Vary the frame.** Alternate full-bleed moments (`plate`, `tone`, kinetic `stack`, a centred statement) with dense information scenes. Two data scenes in a row want different layouts; a split `plate` beside a `stat` is a different picture from a `stat` on a colour block.
 - **Draw the mechanism.** When the narration explains how or why, use `canvas` (a route, a flow, a balance, a network) instead of a list of words.
 - **Carry motion across cuts.** Use `panel`, `iris` or `whip` at a turn in the story (not every cut); `cut` for rhythm; `push` for sequence.
-- **Never freeze.** Every scene has a slow camera by default; add a loop to the subject, a drifting plate, or ambient art under held text.
+- **Move with purpose.** The renderer has an automatic slow push, but business/technical films use `business` (film `camera: none`, `lens.handheld: 0`). Hold text still for reading; animate the change being explained. Never add shake to satisfy a score.
 - **Punctuate.** One or two `tone` scenes per minute, on the numbers or verdicts that matter.
 
 ## Typography

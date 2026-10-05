@@ -20,7 +20,7 @@ export function applyTreatment(sb, id, { recording = false } = {}) {
   // A playbook's own cutting (cut, dissolve) is part of its grammar: the treatment's film-wide
   // transition only replaces the default fade, never a playbook's choice.
   const cutting = sb.transition && sb.transition !== 'fade' ? sb.transition : null;
-  const visual = ['theme', 'type', 'backdrop', 'texture', 'motion', 'textMotion', 'frame', 'sfx', 'lens', 'heading', 'chrome'];
+  const visual = ['theme', 'type', 'backdrop', 'texture', 'motion', 'textMotion', 'frame', 'sfx', 'lens', 'camera', 'heading', 'chrome'];
   Object.assign(sb, structuredClone(recording ? Object.fromEntries(Object.entries(film).filter(([key]) => visual.includes(key))) : film));
   if (cutting) sb.transition = cutting;
   if (voice && !recording) sb.voice = { ...(sb.voice ?? {}), ...voice };
@@ -30,6 +30,7 @@ export function applyTreatment(sb, id, { recording = false } = {}) {
   );
   sb.beats.forEach((b, i) => {
     const p = b.props ?? {};
+    if (t.beats.camera != null) b.camera ??= structuredClone(t.beats.camera);
     if (t.beats.emphasisStyle && ['title', 'statement', 'endcard'].includes(b.block) && p.emphasis && !p.emphasisStyle)
       p.emphasisStyle = t.beats.emphasisStyle;
     if (t.beats.kinetic && b.block === 'kinetic' && !p.mode) p.mode = t.beats.kinetic;

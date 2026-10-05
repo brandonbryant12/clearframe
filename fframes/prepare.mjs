@@ -11,6 +11,7 @@ import { loadStoryboard } from '../engine/lib/project.mjs';
 import { computeTiming, captionCues, toSRT, toVTT, assetSrc } from '../engine/lib/timing.mjs';
 import { writeJSON, readJSON } from '../engine/lib/util.mjs';
 import { phase } from '../engine/lib/runlog.mjs';
+import { footageProblems } from '../engine/lib/continuity.mjs';
 
 /**
  * Rough cuts stand in for what isn't made yet, and only for what is declared:
@@ -204,6 +205,7 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
     if (!rel) throw new Error(`${where}: asset ${a.id} is missing; import it or run images/clips.`);
     return rel;
   };
+  const footage = [];
   for (const b of result.job.beats) {
     const images = [];
     eachElement(b.props.elements, el => {
@@ -245,10 +247,11 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
           encoding: 'utf8',
         });
         const duration = Number(JSON.parse(probe.stdout || '{}').format?.duration);
-        if (!b.plate.loop && !(duration - (b.plate.offset ?? 0) + 1 / result.job.fps >= b.frames / result.job.fps))
+        if (!(duration - (b.plate.offset ?? 0) + 1 / result.job.fps >= b.frames / result.job.fps))
           throw new Error(
-            `${b.id}: plate footage is shorter than the beat; set loop, trim the beat or use a longer clip.`,
+            `${b.id}: plate footage is shorter than the beat; trim the beat or use a longer clip; B-roll does not loop.`,
           );
+        footage.push({ beat: b.id, index: result.job.beats.indexOf(b), source: rel, offset: b.plate.offset ?? 0, seconds: b.frames / result.job.fps });
       }
     }
   }
@@ -277,8 +280,13 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
         const duration = Number(JSON.parse(probe.stdout).format?.duration);
         if (!Number.isFinite(duration) || duration - (prop.offset ?? 0) + 1 / timing.fps < b.frames / timing.fps)
           throw new Error(`${b.id}: clip is shorter than the authored beat; trim the beat or provide a longer clip.`);
+        footage.push({ beat: b.id, index: result.job.beats.indexOf(b), source: rel, offset: prop.offset ?? 0, seconds: b.frames / timing.fps });
       }
     }
+  // The same footage shown again over the same seconds is a loop by another name.
+  const reuse = footageProblems(footage);
+  if (reuse.errors.length) throw new Error(reuse.errors.join(' '));
+  result.warnings.push(...reuse.warnings);
   for (const b of timing.beats)
     if (b.vo?.src) {
       record(path.join(root, b.vo.src));

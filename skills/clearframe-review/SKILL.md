@@ -63,3 +63,5 @@ node engine/cli.mjs decide DIR r006 --checkpoint rough --reason "one-shot: all n
 ## Reporting
 
 `revisions DIR`, `diff DIR rA [rB]`, `checkpoints DIR` (Rough cut and Final close on decisions; coverage by chapter for long films), `runlog DIR` (measured time only; gaps between commands are not work). When you summarize, separate: rendered (a revision exists), applied (a candidate exists), accepted (a person said so).
+
+The studio keeps feedback available on Final exports. Use Whole-cut note for overall pacing, tone or direction; use + Note for a pinned moment. Never attach overall feedback to timestamp zero. Reopen threads when the reviewer requests changes; final export quality does not mean the person accepted the cut. Review the selected version in the Storyboard grid.

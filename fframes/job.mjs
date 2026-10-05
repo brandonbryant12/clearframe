@@ -179,6 +179,8 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     width: timing.width,
     height: timing.height,
     assets: sb.assets,
+    // Spoken cues resolve before a system diagram compiles, so its derived timing is exact.
+    resolve: cueResolver(b, frame),
   });
   const motion = { ...film.motion, ...source.motion };
   if (!validMotion(motion)) throw new Error('Invalid beat motion');
@@ -248,7 +250,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   const art = source.art != null ? artLayers(source.art, b.id, { width: timing.width, height: timing.height, duration: b.dur }) : null;
   if (art) settle = Math.max(settle, scheduleArt(art.under, at), scheduleArt(art.over, at));
   const paced = keepPace(b, source, props, art, at, { sb, report });
-  const layers = beatLayers(source, b, sb);
+  const layers = beatLayers(source, b, sb, report);
   if (layers.camera?.to) {
     const c = layers.camera;
     c.at = c.say != null ? cue(c.say) : (c.at ?? 0.6);
@@ -441,10 +443,15 @@ function keepPace(b, source, props, art, at, { sb, report }) {
 }
 
 /** Tone, graphic-transition style, frame label, speaker, camera and plate. */
-function beatLayers(source, b, sb) {
+function beatLayers(source, b, sb, report) {
   const out = {};
   // The lens is resolved per beat: film settings, then the beat's own.
   const lens = { ...(sb.lens ?? {}), ...(lensSpec(source.lens) ?? {}) };
+  const steady = steadyFilm(sb);
+  if (steady && lens.handheld > 0)
+    report.warnings.push(`${source.id}: this is a steady film (camera: none${sb.treatment === 'business' ? ', business treatment' : ''}) but the lens adds handheld sway; set lens.handheld: 0 unless the brief explicitly calls for it.`);
+  if (source.plate && (source.plate.side ?? 'full') === 'full')
+    report.warnings.push(`${source.id}: inspect native text over background media at opening, middle, end and lighting changes, including 360 px. Blur/scrim alone does not prove legibility; use a split or opaque panel if needed.`);
   if (lens.letterbox === false) lens.letterbox = 0;
   if (Object.keys(lens).length) out.lens = lens;
   const heading = source.heading ?? sb.heading;
@@ -483,8 +490,14 @@ function beatLayers(source, b, sb) {
       id: source.speaker,
       continues: b.index > 0 && sb.beats[b.index - 1].speaker === source.speaker,
     };
-  if (source.camera != null) {
-    const camera = typeof source.camera === 'string' ? { move: source.camera } : structuredClone(source.camera);
+  // The film's camera is the default for beats without their own, resolved here so a beat
+  // added after `new` still follows it. A system diagram is a reading frame: it holds still
+  // unless someone asks for a move.
+  if (sb.camera != null && (typeof sb.camera === 'object' && sb.camera.to != null))
+    throw new Error('the film camera is a default move; push to a detail (camera.to) on a beat');
+  const authoredCamera = source.camera ?? sb.camera ?? (b.block === 'canvas' && source.props?.diagram != null ? 'none' : null);
+  if (authoredCamera != null) {
+    const camera = typeof authoredCamera === 'string' ? { move: authoredCamera } : structuredClone(authoredCamera);
     if (
       !camera ||
       typeof camera !== 'object' ||
@@ -506,7 +519,40 @@ function beatLayers(source, b, sb) {
     out.camera = camera;
   }
   if (source.plate != null) out.plate = plateSpec(source.plate, b.block);
+  // A steady film's plates hold still too; a drift is something a beat asks for.
+  if (out.plate && steady) out.plate.drift ??= 'none';
+  motionStack(source, b, sb, out, lens, report);
   return out;
+}
+
+/** A film whose default camera is still: business films and any storyboard with camera none. */
+export const steadyFilm = sb =>
+  sb.treatment === 'business' || (typeof sb.camera === 'string' ? sb.camera : sb.camera?.move) === 'none';
+
+/**
+ * Whole-frame motion has several independent sources — the scene camera, the handheld lens,
+ * a drifting plate and the movement inside footage. Each is fine alone; stacked they read as
+ * shake, and nothing moving inside the footage can be steadied by the native camera.
+ */
+function motionStack(source, b, sb, out, lens, report) {
+  const moves = [];
+  const cam = out.camera, move = cam?.to ? 'push' : (cam?.move ?? 'auto');
+  const holds = ['kinetic', 'video', 'annotate', 'breathing'].includes(b.block);
+  if (move === 'push') moves.push('a push to a detail');
+  else if (move === 'auto' ? !holds : move !== 'none') moves.push(move === 'auto' ? 'the automatic slow push' : `camera ${move}`);
+  if (lens.handheld > 0) moves.push(`handheld ${lens.handheld}`);
+  if (out.plate && (out.plate.drift ?? 'in') !== 'none') moves.push(`plate drift ${out.plate.drift ?? 'in'}`);
+  const ref = out.plate ?? (b.block === 'video' ? source.props : null);
+  const asset = ref?.asset != null ? sb.assets?.find(a => a.id === ref.asset) : null;
+  const footage = !!ref && (asset?.kind === 'clip' || /\.(mp4|mov|webm|m4v)$/i.test(ref.file ?? ''));
+  if (footage && (lens.handheld > 0 || (out.plate && (out.plate.drift ?? 'in') !== 'none')))
+    report.warnings.push(
+      `${source.id}: footage carries its own camera motion; ${moves.filter(m => m.startsWith('handheld') || m.startsWith('plate')).join(' and ')} on top of it reads as shake. Set plate.drift: "none" and lens.handheld: 0 for this beat, and ask the generator for a locked camera.`,
+    );
+  else if (moves.length >= 3 || (moves.length >= 2 && lens.handheld > 0))
+    report.warnings.push(
+      `${source.id}: ${moves.join(', ')} move the whole frame at once. Keep the one move that reveals something and still the rest.`,
+    );
 }
 
 function plateSpec(input, block) {
@@ -521,6 +567,8 @@ function plateSpec(input, block) {
   if (plate.treatment != null && !TREATMENTS.includes(plate.treatment))
     throw new Error(`plate.treatment must be ${TREATMENTS.join(', ')}`);
   if (plate.drift != null && !DRIFTS.includes(plate.drift)) throw new Error(`plate.drift must be ${DRIFTS.join(', ')}`);
+  if (plate.loop != null && typeof plate.loop !== 'boolean') throw new Error('plate.loop must be boolean');
+  if (plate.loop === true) throw new Error('B-roll must cover the beat without looping; trim the scene, select a source range or provide a longer clip.');
   if (plate.scrim != null && !unit(plate.scrim)) throw new Error('plate.scrim must be 0–1');
   if (plate.focus != null && !(Array.isArray(plate.focus) && plate.focus.length === 2 && plate.focus.every(unit)))
     throw new Error('plate.focus must be [x, y] from 0 to 1');
@@ -593,6 +641,14 @@ function linkMorphs(beats, sb, timing, { warnings }) {
       if (keys?.length)
         warnings.push(`${beats[i].id}: morph source "${el.id}" has keys; the morph starts from its unkeyed geometry.`);
       el.morph = { from: { ...state, at: 0, dur: 0, enter: 'none' }, dur: el.morphDur ?? 0.8 };
+      // A group's contents arrive with it; they are already on screen across the cut, while
+      // later changes inside the group (a status redrawn, a pulse) keep their own times.
+      if (el.type === 'group') {
+        const arrived = el.at ?? 0;
+        eachElement(el.children, child => {
+          if ((child.at ?? 0) <= arrived + 1e-6) Object.assign(child, { at: 0, dur: 0, enter: 'none' });
+        });
+      }
       Object.assign(el, { enter: 'none', at: 0, dur: 0 });
       delete el.morphDur;
       delete from.exit;

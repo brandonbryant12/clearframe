@@ -59,3 +59,11 @@ A folder with a `film.json` appears alongside ClearFrame films. Every other file
 The chart templates in wide and tall formats with what each is for (copy a beat for an editor), every typeface as a live specimen, the prepared 3D elements, and the colour palettes.
 
 Posters, waveforms, chart previews, `fonts.css` and the page live in `build/viewer/` (ignored by git); videos and files are linked in place, not copied. Run the command again to refresh.
+
+## Notes through the final cut
+
+Final is an export quality, not a lock on feedback. Every rendered version keeps **+ Note**, **Whole-cut note**, replies, Resolve and Reopen. Whole-cut notes belong to the watched version, have no timestamp or picture pin, and do not move the playhead. New open notes return a final cut to In review while preserving its Final quality label.
+
+The Storyboard panel stays available after rendering: a grid of the selected version's scene frames, narration and timings; selecting a card seeks to that scene. Before the first render, Boards still shows the planned storyboard. These are different views of the plan and the rendered cut.
+
+Dragging the timeline pauses playback and leaves the player at the chosen time, including after pointer cancellation. A note pins the time when its composer opened. Two notes at the same time open their own threads. The local server reloads persisted threads when the film is reopened, without resetting the playhead. Download browser-only notes before moving to another machine.

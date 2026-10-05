@@ -1,0 +1,301 @@
+{
+  "version": 2,
+  "title": "Explain a pull request",
+  "logline": "Explain a pull request",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "paper",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": {},
+  "sfx": "subtle",
+  "lens": {
+    "handheld": 0
+  },
+  "camera": "none",
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "before",
+      "block": "canvas",
+      "vo": "Today a report request waits while the API builds the whole report inline, so a slow query holds the user's connection open.",
+      "min": 7,
+      "props": {
+        "title": "Today the request waits for the work",
+        "diagram": {
+          "nodes": [
+            {
+              "id": "user",
+              "label": "User",
+              "kind": "user"
+            },
+            {
+              "id": "api",
+              "label": "API"
+            },
+            {
+              "id": "builder",
+              "label": "Report builder"
+            },
+            {
+              "id": "db",
+              "label": "Database",
+              "kind": "database"
+            }
+          ],
+          "edges": [
+            {
+              "from": "user",
+              "to": "api",
+              "label": "request"
+            },
+            {
+              "from": "api",
+              "to": "builder",
+              "label": "inline"
+            },
+            {
+              "from": "builder",
+              "to": "db",
+              "label": "query"
+            }
+          ],
+          "steps": [
+            {
+              "at": 1.8,
+              "send": [
+                "user",
+                "api",
+                "builder",
+                "db"
+              ],
+              "label": "POST /reports"
+            },
+            {
+              "at": 4.2,
+              "set": {
+                "api": "error"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "change",
+      "block": "canvas",
+      "vo": "This change puts a job queue between them. The API answers at once, and a worker builds the report from the queue.",
+      "min": 7.5,
+      "props": {
+        "title": "The change: hand the work to a queue",
+        "diagram": {
+          "nodes": [
+            {
+              "id": "user",
+              "label": "User",
+              "kind": "user"
+            },
+            {
+              "id": "api",
+              "label": "API"
+            },
+            {
+              "id": "queue",
+              "label": "Job queue",
+              "kind": "queue"
+            },
+            {
+              "id": "builder",
+              "label": "Report builder"
+            },
+            {
+              "id": "db",
+              "label": "Database",
+              "kind": "database"
+            }
+          ],
+          "edges": [
+            {
+              "from": "user",
+              "to": "api",
+              "label": "request"
+            },
+            {
+              "from": "api",
+              "to": "builder",
+              "label": "inline"
+            },
+            {
+              "from": "api",
+              "to": "queue",
+              "label": "enqueue"
+            },
+            {
+              "from": "queue",
+              "to": "builder",
+              "flow": true
+            },
+            {
+              "from": "builder",
+              "to": "db",
+              "label": "query"
+            }
+          ],
+          "steps": [
+            {
+              "at": 0.9,
+              "remove": "api-builder"
+            },
+            {
+              "at": 1.7,
+              "add": "queue"
+            },
+            {
+              "at": 2.9,
+              "send": [
+                "user",
+                "api"
+              ],
+              "label": "request"
+            },
+            {
+              "at": 3.65,
+              "send": [
+                "api",
+                "user"
+              ],
+              "label": "accepted"
+            },
+            {
+              "at": 3.65,
+              "send": [
+                "api",
+                "queue"
+              ]
+            },
+            {
+              "at": 4.6,
+              "send": [
+                "queue",
+                "builder",
+                "db"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "states",
+      "block": "canvas",
+      "vo": "Each job now has an explicit state. A failure is retried, and the report is marked complete only when it is written.",
+      "min": 7,
+      "props": {
+        "title": "Every job has a visible state",
+        "diagram": {
+          "nodes": [
+            {
+              "id": "queued",
+              "label": "Queued",
+              "kind": "state"
+            },
+            {
+              "id": "running",
+              "label": "Running",
+              "kind": "state"
+            },
+            {
+              "id": "failed",
+              "label": "Failed",
+              "kind": "state"
+            },
+            {
+              "id": "done",
+              "label": "Complete",
+              "kind": "state"
+            }
+          ],
+          "edges": [
+            {
+              "from": "queued",
+              "to": "running",
+              "label": "start"
+            },
+            {
+              "from": "running",
+              "to": "done",
+              "label": "written"
+            },
+            {
+              "from": "running",
+              "to": "failed",
+              "label": "error"
+            },
+            {
+              "from": "failed",
+              "to": "running",
+              "label": "retry"
+            }
+          ],
+          "steps": [
+            {
+              "at": 1.4,
+              "send": [
+                "queued",
+                "running"
+              ]
+            },
+            {
+              "at": 2.4,
+              "send": [
+                "running",
+                "failed"
+              ]
+            },
+            {
+              "at": 3.15,
+              "set": {
+                "failed": "error"
+              }
+            },
+            {
+              "at": 3.6,
+              "send": [
+                "failed",
+                "running",
+                "done"
+              ]
+            },
+            {
+              "at": 5.1,
+              "set": {
+                "failed": "neutral",
+                "done": "added"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

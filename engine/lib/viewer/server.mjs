@@ -4,7 +4,7 @@ import path from 'node:path';
 import http from 'node:http';
 import { rel } from './media.mjs';
 import { buildViewer } from './build.mjs';
-import { saveNote, setNoteState, replyToNote } from './notes.mjs';
+import { saveNote, setNoteState, replyToNote, loadViewerNotes } from './notes.mjs';
 
 export async function serveViewer({ root, out = 'build/viewer', port = 4317, render = true } = {}) {
   const base = process.cwd(), built = await buildViewer({ root, out, render });
@@ -14,6 +14,10 @@ export async function serveViewer({ root, out = 'build/viewer', port = 4317, ren
     const url = new URL(req.url, 'http://localhost');
     const reply = (code, body) => { res.writeHead(code, { 'content-type': 'application/json' }); res.end(JSON.stringify(body)); };
     if (url.pathname === '/api/ping') return reply(200, { ok: true });
+    if (url.pathname === '/api/notes' && req.method === 'GET') {
+      const dir = built.dirs[url.searchParams.get('film')];
+      return dir ? reply(200, { notes: loadViewerNotes(dir) }) : reply(404, { error: 'Unknown film' });
+    }
     const actions = { '/api/notes': (dir, b) => saveNote(dir, b), '/api/notes/state': (dir, b) => setNoteState(dir, b.id, b), '/api/notes/reply': (dir, b) => replyToNote(dir, b.id, b) };
     if (actions[url.pathname] && req.method === 'POST') {
       let raw = '';

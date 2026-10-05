@@ -1,5 +1,12 @@
 # Changelog
 
+## Studio feedback and technical films
+
+- **System diagrams that change over time.** `canvas.props.diagram` declares components with stable identities (user, service, database, queue, state, external), connectors (labelled, dashed, flowing) and groups; `steps` add, remove (marked, then gone, with their connectors), replace in place, re-status, and `send` requests hop by hop along the connections, cued to narration. Layout ranks components along the connections for wide and tall frames; connectors get separate ports and runs, two-way pairs and self-loops, and detour around components on screen; labels are placed where they collide least. Timing that would show a dangling or early connector, an overlap or an unreadable label fails with the reason. Consecutive beats sharing node ids morph (a morphing group's contents now stay on screen across the cut). `clearframe sketch architecture|component-change|state-machine` prints an editable diagram; the `pr-walkthrough` playbook carries before/change/states diagrams.
+- **Steady films.** A film-level `camera` is the default for every beat without its own (so beats added after `new` keep it); `camera: "none"` also stills plate drift. The `business` treatment sets it with `lens.handheld: 0`. Diagram beats hold still by default. `check` warns when camera, handheld, plate drift and footage motion stack, and when handheld or drift sits on footage.
+- **B-roll coverage.** Looping B-roll is rejected; `plan` reports footage that cannot cover beat plus offset, beats longer than one generated take, and repeated source seconds; `clips` refuses to pay for a take too short for its beats; `check` rejects an adjacent beat repeating the same seconds of a clip. Placement and moving-background legibility review are explicit.
+- **Studio.** Whole-cut notes, final-cut feedback, persisted-thread reload, paused/cancel-safe scrubbing, distinct pins at equal timestamps, and a storyboard grid after rendering.
+
 ## 0.5.0 — unreleased
 
 - **What changed and frame-accurate review.** The viewer compares each version with the one before it, scene by scene (added, removed, reworded, redesigned, retimed, notes resolved), underlines changed scenes on the timeline and counts changes in the version list. The transport adds frame stepping, playback speed and a scene loop.

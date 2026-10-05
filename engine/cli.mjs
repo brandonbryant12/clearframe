@@ -10,7 +10,7 @@ import { REVIEW, reviewCommand } from './lib/review-cli.mjs';
 import { BLOCKS, THEMES, THEME_NOTES, MOTIONS, TRANSITIONS, BACKDROPS, markdownCatalog } from '../fframes/catalog.mjs';
 import { playbooks, scaffold, writeGallery } from '../fframes/playbooks.mjs';
 import { ICONS, ICON_SOURCE } from '../fframes/icons.mjs';
-import { sketches, sketch } from '../fframes/sketches.mjs';
+import { sketches, sketch, sketchByName } from '../fframes/sketches.mjs';
 import { treatments } from '../fframes/treatments.mjs';
 import { directions, directionOptions, directionMarkdown, directionRefs } from '../fframes/directions.mjs';
 import { useProject, types } from '../fframes/library.mjs';
@@ -400,6 +400,9 @@ async function main() {
           .join('\n') +
           '\n\nclearframe sketch NAME [--vertical] prints canvas props to adapt; ambient prints an art.under layer.',
       );
+    // A system diagram prints its editable source, not hundreds of compiled shapes.
+    const source = sketchByName(positionals[0]);
+    if (source?.diagram) return console.log(JSON.stringify({ title: 'Your headline', diagram: source.diagram }, null, 1));
     return console.log(JSON.stringify(sketch(positionals[0], o.vertical ? 'vertical' : 'landscape'), null, 1));
   }
   if (cmd === 'motions')

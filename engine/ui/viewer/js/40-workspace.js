@@ -11,6 +11,7 @@ function film(id, selected, panel = 'moment') {
     <div class="toolbar">
       <button class="btn ${lensOn ? 'on' : ''}" id="lens" aria-pressed="${lensOn}" title="Outline the text on screen with its font, size and colour (L)">◎ Lens</button>
       <button class="btn primary" id="addnote" title="Pause and click on the picture to pin a note (N)">+ Note</button>
+      <button class="btn" id="wholeNote">Whole-cut note</button>
       ${f.versions.length > 1 ? `<a class="btn" href="#/compare/${f.id}">Compare</a>` : ''}
       <a class="btn" href="${esc(v.video)}" download>Download</a></div></div>
     ${stepper(f)}
@@ -27,7 +28,7 @@ function film(id, selected, panel = 'moment') {
           <span class="now"><span class="name">${versionName(v)}</span> ${qualityChip(v)} ${approvedChip(v)}</span></div>
         <div class="timeline" id="timeline" aria-label="Timeline: drag to scrub"></div>
         <div class="panels">
-          <div class="subnav" role="tablist">${[['moment', 'In this moment'], ['scenes', 'Scenes'], ['files', 'Files'], ['fonts', 'Fonts'], ['notes', `Notes (${open(v)} open)`], ...(diff ? [['changes', `What changed (${diff.count})`]] : []), ...(f.brief ? [['brief', 'Brief']] : [])]
+          <div class="subnav" role="tablist">${[['moment', 'In this moment'], ['scenes', 'Storyboard'], ['files', 'Files'], ['fonts', 'Fonts'], ['notes', `Notes (${open(v)} open)`], ...(diff ? [['changes', `What changed (${diff.count})`]] : []), ...(f.brief ? [['brief', 'Brief']] : [])]
             .map(([k, t]) => `<button data-panel="${k}" aria-pressed="${k === panel}">${t}</button>`).join('')}</div>
           <div id="panel"></div>
         </div>
@@ -42,6 +43,18 @@ function film(id, selected, panel = 'moment') {
         </a>`).join('')}</aside>
     </div>`;
   workspace(f, v, panel);
+  // HTML contains a snapshot; reload the durable notes without touching the playhead.
+  const currentStage = document.getElementById('stage');
+  serverReady.then(async () => {
+    if (!server) return;
+    try {
+      const r = await fetch(`/api/notes?film=${encodeURIComponent(f.id)}`);
+      if (!r.ok) return;
+      const { notes } = await r.json();
+      for (const version of f.versions) version.notes = notes.filter(n => n.version === version.id);
+      if (document.getElementById('stage') === currentStage) currentStage.dispatchEvent(new Event('notesupdated'));
+    } catch {}
+  });
 }
 
 function workspace(f, v, initialPanel) {
@@ -51,7 +64,7 @@ function workspace(f, v, initialPanel) {
   const T = v.seconds || video.duration || 1;
   const sceneAt = t => v.scenes.find(s => t >= s.start && t < s.end) ?? v.scenes.at(-1);
   const visible = t => { const s = sceneAt(t); return s ? s.elements.filter(e => e.box && e.at <= t + 0.05) : []; };
-  const seek = t => { video.currentTime = Math.max(0, Math.min(T, t)) + 0.01; };
+  const seek = t => { video.currentTime = Math.max(0, Math.min(T, t)); };
 
   // Fit the overlay to the picture inside the letterbox.
   function fit() {
@@ -60,12 +73,12 @@ function workspace(f, v, initialPanel) {
     if (h > r.height) { h = r.height; w = h * aspect; }
     Object.assign(content.style, { left: `${(r.width - w) / 2}px`, top: `${(r.height - h) / 2}px`, width: `${w}px`, height: `${h}px` });
   }
-  new ResizeObserver(fit).observe(video);
+  const resize = new ResizeObserver(fit); resize.observe(video);
   video.addEventListener('loadedmetadata', fit);
 
   // ---- timeline
   const pct = t => `${Math.max(0, Math.min(100, t / T * 100))}%`;
-  const notesLane = () => notesFor(f, v).map(n => `<button class="pinmark ${n.resolved ? 'done' : ''}" style="left:${pct(n.at ?? 0)}" data-seek="${n.at ?? 0}" title="${esc(n.text)}">●</button>`).join('');
+  const notesLane = () => notesFor(f, v).filter(n => n.at != null).map(n => `<button data-note="${esc(n.id)}" class="pinmark ${n.resolved ? 'done' : ''}" style="left:${pct(n.at ?? 0)}" data-seek="${n.at ?? 0}" title="${esc(n.text)}">●</button>`).join('');
   const changed = new Map((changes(f, v)?.scenes ?? []).map(c => [c.scene, c.change]));
   const lanes = [['Scenes', v.scenes.map(s => `<button class="seg scene ${s.placeholder ? 'todo' : ''} ${changed.has(s) ? 'changed' : ''}" style="left:${pct(s.start)};width:${pct(s.end - s.start)}" data-seek="${s.start}" title="${esc(s.placeholder ? `${s.number}. To design: ${s.placeholder}` : `${s.number}. ${s.kind}`)}"><span>${s.number}. ${esc(s.kind)}</span></button>`).join('')]];
   if (v.lanes.narration.length) lanes.push(['Narration', v.lanes.narration.map(n => `<span class="seg voice" style="left:${pct(n.start)};width:${pct(n.end - n.start)}" title="${esc(n.text)}"></span>`).join('')]);
@@ -79,7 +92,7 @@ function workspace(f, v, initialPanel) {
   const tracks = timeline.querySelector('.lanes'), playhead = document.getElementById('playhead'), hovertime = document.getElementById('hovertime');
   const timeFromX = x => { const r = timeline.querySelector('.track').getBoundingClientRect(); return Math.max(0, Math.min(T, (x - r.left) / r.width * T)); };
   let dragging = false;
-  tracks.addEventListener('pointerdown', e => { if (e.target.closest('.pinmark')) return; dragging = true; tracks.setPointerCapture(e.pointerId); video.currentTime = timeFromX(e.clientX); });
+  tracks.addEventListener('pointerdown', e => { if (e.button !== 0 || e.target.closest('.pinmark') || !e.target.closest('.track')) return; video.pause(); dragging = true; tracks.setPointerCapture(e.pointerId); video.currentTime = timeFromX(e.clientX); });
   tracks.addEventListener('pointermove', e => {
     const t = timeFromX(e.clientX), r = timeline.querySelector('.track').getBoundingClientRect();
     hovertime.hidden = e.clientX < r.left; hovertime.style.left = `${e.clientX - tracks.getBoundingClientRect().left}px`;
@@ -87,8 +100,9 @@ function workspace(f, v, initialPanel) {
     if (dragging) video.currentTime = t;
   });
   tracks.addEventListener('pointerleave', () => { hovertime.hidden = true; });
-  tracks.addEventListener('pointerup', () => { dragging = false; });
-  timeline.addEventListener('click', e => { const b = e.target.closest('.pinmark'); if (b) { const n = notesFor(f, v).find(x => Math.abs((x.at ?? 0) - Number(b.dataset.seek)) < 1e-6); seek(Number(b.dataset.seek)); if (n) showThread(n); } });
+  for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) tracks.addEventListener(event, () => { dragging = false; });
+  timeline.style.touchAction = 'none';
+  timeline.addEventListener('click', e => { const b = e.target.closest('.pinmark'); if (b) { const n = notesFor(f, v).find(x => x.id === b.dataset.note); seek(Number(b.dataset.seek)); if (n) showThread(n); } });
 
   // ---- lens and pins
   function drawOverlay(t) {
@@ -108,12 +122,13 @@ function workspace(f, v, initialPanel) {
     compose({ x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height }, el?.dataset.el ?? null, e.clientX - s.left, e.clientY - s.top);
   });
 
-  function compose(pin, element, px, py) {
-    setNoting(false);
-    const at = video.currentTime, card = document.createElement('div');
+  function compose(pin, element, px, py, whole = false) {
+    video.pause(); setNoting(false);
+    stage.querySelector('.composer')?.remove();
+    const at = whole ? null : video.currentTime, card = document.createElement('div');
     card.className = 'composer';
-    card.style.left = `${Math.min(px, stage.clientWidth - 320)}px`; card.style.top = `${Math.min(py + 12, stage.clientHeight - 190)}px`;
-    card.innerHTML = `<div class="meta">Note at ${clock(at)}${element ? ` · on “${esc(v.scenes.flatMap(s => s.elements).find(x => x.id === element)?.text ?? '')}”` : ''}</div>
+    card.style.left = `${Math.max(0, Math.min(px, stage.clientWidth - 320))}px`; card.style.top = `${Math.max(0, Math.min(py + 12, stage.clientHeight - 190))}px`;
+    card.innerHTML = `<div class="meta">${whole ? 'Whole-cut note' : `Note at ${clock(at)}`} · ${esc(versionName(v))}${element ? ` · on “${esc(v.scenes.flatMap(s => s.elements).find(x => x.id === element)?.text ?? '')}”` : ''}</div>
       <textarea rows="3" placeholder="What should change here? Add #tags to group notes."></textarea>
       <div class="row"><input placeholder="Your name" value="${esc(store.get('cf-name', ''))}"><button class="btn" data-x>Cancel</button><button class="btn primary" data-save>Save</button></div>`;
     stage.appendChild(card);
@@ -123,21 +138,28 @@ function workspace(f, v, initialPanel) {
       const text = card.querySelector('textarea').value.trim(), by = card.querySelector('input').value.trim();
       if (!text) return;
       store.set('cf-name', by);
-      try { await addNoteTo(f, v, { version: v.id, at, text, by: by || null, element, pin }); }
+      try { await addNoteTo(f, v, { version: v.id, at, scope: whole ? 'film' : 'beat', text, by: by || null, element, pin }); }
       catch (x) { card.querySelector('.meta').textContent = x.message; return; }
       card.remove(); refreshNotes();
     };
   }
   function showThread(n) {
-    video.pause(); seek(n.at ?? 0);
+    video.pause(); if (n.at != null) seek(n.at);
     lightbox(`<div class="notecard">${thread(n, {})}<div class="row" style="margin-top:10px"><span></span><button class="btn" data-close>Close</button></div></div>`);
     bindThreads(box.querySelector('.notecard'), f, v, () => { refreshNotes(); const m = notesFor(f, v).find(x => x.id === n.id); if (m) box.querySelector('.thread').outerHTML = thread(m); }, null);
   }
   function refreshNotes() {
+    const open = notesFor(f, v).filter(n => !n.resolved).length;
+    if (v === f.versions.at(-1) && (v.quality === 'Final' || f.stage.id === 'final')) {
+      f.stage = { ...f.stage, id: open ? 'review' : 'final', label: open ? 'In review' : 'Final', index: open ? 4 : 5, next: open ? 'Address the open notes' : 'Deliver' };
+    }
+    document.querySelector('.nextstep')?.remove();
+    document.querySelector('.stepper')?.replaceWith(document.createRange().createContextualFragment(stepper(f)));
     timeline.querySelector('[data-lane="Notes"]').innerHTML = notesLane();
     document.querySelector('[data-panel="notes"]').textContent = `Notes (${notesFor(f, v).filter(x => !x.resolved).length} open)`;
     drawOverlay(video.currentTime); drawPanel();
   }
+  stage.addEventListener('notesupdated', refreshNotes);
   const setNoting = on => { noting = on; document.getElementById('addnote').classList.toggle('on', on); drawOverlay(video.currentTime); };
 
   // ---- panels
@@ -159,7 +181,7 @@ function workspace(f, v, initialPanel) {
       </div>` : '<div class="meta">Play or scrub to see what is on screen.</div>';
       if (!soft) bindFiles(panelEl);
     } else if (!soft && panel === 'scenes') {
-      panelEl.innerHTML = `<div class="scenes">${v.scenes.map(x => `<button class="scenecard ${x === s ? 'current' : ''}" data-seek="${x.start}">
+      panelEl.innerHTML = `<div class="boards ${f.shape}">${v.scenes.map(x => `<button class="scenecard boardcard ${x === s ? 'current' : ''}" data-seek="${x.start}">
         <img src="${esc(x.thumb ?? '')}" alt=""><div><div><b>${x.number}. ${esc(x.kind)}</b> <span class="meta">${clock(x.start)} · ${length(x.end - x.start)}</span></div>
         ${x.placeholder ? `<div class="todoline">To design: ${esc(x.placeholder)}</div>` : ''}${x.onScreen.map(q => `<div class="quote">${esc(q)}</div>`).join('')}${x.narration ? `<div class="meta">“${esc(x.narration)}”</div>` : ''}${x.description ? `<div class="meta">${esc(x.description)}</div>` : ''}
         ${x.source ? `<div class="meta">Source: ${esc(x.source)}</div>` : ''}</div></button>`).join('') || '<div class="meta">No storyboard for this version.</div>'}</div>`;
@@ -211,6 +233,7 @@ function workspace(f, v, initialPanel) {
   const toggleLens = () => { lens = !lens; store.set('cf-lens', lens); const b = document.getElementById('lens'); b.classList.toggle('on', lens); b.setAttribute('aria-pressed', String(lens)); drawOverlay(video.currentTime); };
   document.getElementById('lens').onclick = toggleLens;
   document.getElementById('addnote').onclick = () => { video.pause(); setNoting(!noting); };
+  document.getElementById('wholeNote').onclick = () => compose(null, null, 16, 16, true);
   workspaceKeys = { lens: toggleLens, note: () => { video.pause(); setNoting(!noting); }, step, loop: toggleLoop };
   let raf = 0;
   const tick = () => {
@@ -227,7 +250,7 @@ function workspace(f, v, initialPanel) {
     raf = requestAnimationFrame(tick);
   };
   tick();
-  stopLoop = () => { cancelAnimationFrame(raf); workspaceKeys = null; };
+  stopLoop = () => { cancelAnimationFrame(raf); resize.disconnect(); video.pause(); workspaceKeys = null; };
   drawPanel();
   fit();
 }

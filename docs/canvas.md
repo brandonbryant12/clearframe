@@ -160,7 +160,7 @@ For quantities over time, use [`props.plot`](quantitative-plots.md): comparable 
 - **Draw, don't fade.** Strokes that draw on, arrows that ride their tip and markers that travel along paths read as explanation. A fade is a pause, not an idea.
 - **Scale contrast.** One large element, several small ones. Big numbers and words in `bold`, labels at 36–44 px, nothing smaller than 28 px at 1080p.
 - **Colour with intent.** `ink` for structure, `accent` for the subject, `accent2` for the contrast or result, `line`/`muted` for scaffolding. Two accents per frame is plenty.
-- **Keep it alive.** After everything lands, something should still breathe: a `pulse` on the subject, a `dash` loop on a connector, `float` on ambient shapes, or the scene camera.
+- **Hold deliberately.** Business diagrams remain still after a reveal so viewers can read. Use pulse, dash, float or a camera move only when the brief calls for it.
 - **Leave the text layer clear.** Keep art away from the header and source line and within 90 px of the frame edge. Check with `still --grid`.
 - **Be honest.** Illustrative shapes must not imply data they do not have. Proportions that encode quantities (bar heights, areas) must be computed from the real values, or use a chart block.
 
@@ -185,3 +185,5 @@ These combine with any block, including `canvas`:
 Use `art: {sketch: "glass-orbits", seed: 17, opacity: 0.8, drift: 0.5}` beneath any block. Extra `under` elements are drawn above the generated group (outside its `opacity` and `drift`); `over` stays above the block. `seed` gives each material a different, reproducible arrangement (lens angles, petal count, fold corners, lobe direction) that keeps the copy region as clear as the reference layout; without a seed you get the atlas layout. `drift` (0–1) pushes the art in by up to 8% about the frame centre over the beat, with a small sideways travel whose direction the seed picks: a parallax move under steady copy that never holds the beat. Use about 0.5 for professional films and 0.8 for playful or arena work. Only `layer: "under"` sketches without a camera/world are eligible. For a complete canvas scene use `props.sketch`. The new materials reserve the left half or portrait top for short native copy; centred blocks may need manual placement. See [image direction](image-direction.md) and the [material atlas](design/material-studies/index.html).
 
 For readable canvas attribution, `sourceSize` accepts 14–72 native pixels and reserves up to three lines at that size. Plots set this from frame width; other canvases keep the existing footer unless they opt in. Reserve that space in the drawing and inspect phone-size output.
+
+For canned architecture diagrams, state machines and component replacements, see [system diagrams](system-diagrams.md).

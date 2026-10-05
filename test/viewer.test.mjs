@@ -89,3 +89,28 @@ test('each film is placed in its stage of production, with boards before the fir
   assert.ok(boards.every(b => b.image === null), 'no board stills when render is off');
   assert.equal(byTitle('Boards').brief, '# Boards\n');
 });
+
+test('whole-cut notes on a final remain unpinned and can be resolved, reopened and reloaded', async t => {
+  const { snapshot, attachVideo } = await import('../engine/lib/revisions.mjs');
+  const { loadViewerNotes } = await import('../engine/lib/viewer/notes.mjs');
+  const { readNotes } = await import('../engine/lib/notes.mjs');
+  const { clearframeStage } = await import('../engine/lib/viewer/stages.mjs');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-final-notes-'));
+  t.after(() => fs.rmSync(dir, {recursive:true,force:true}));
+  const sb = {version:2,title:'Final',music:false,beats:[{id:'a',block:'statement',duration:3,props:{title:'Stable frame'}}]};
+  fs.writeFileSync(path.join(dir,'storyboard.json'),JSON.stringify(sb));
+  const {revision} = await snapshot(dir);
+  clip(path.join(dir, 'final.mp4'));
+  attachVideo(dir, revision.id, {file:path.join(dir,'final.mp4'),profile:'final',receipt:{frames:30}});
+  const n = saveNote(dir,{version:revision.id,scope:'film',text:'Overall pacing needs a pass',by:'Ana'});
+  assert.equal(n.at,null); assert.equal(n.scope,'film'); assert.equal(n.pin,null);
+  assert.equal(readNotes(dir)[0].anchor,null);
+  assert.equal(setNoteState(dir,n.id,{resolved:true}).resolved,true);
+  assert.equal(setNoteState(dir,n.id,{resolved:false}).resolved,false);
+  assert.equal(loadViewerNotes(dir)[0].version,revision.id);
+  assert.equal(clearframeStage(sb,{profile:'final'},1),'review');
+  assert.equal(clearframeStage(sb,{profile:'final'},0),'final');
+  const moment = saveNote(dir,{version:revision.id,at:1.2,text:'Keep this moment'});
+  assert.equal(moment.at,1.2);
+  assert.throws(()=>saveNote(dir,{version:revision.id,at:-1,text:'Bad time'}),/nonnegative/);
+});

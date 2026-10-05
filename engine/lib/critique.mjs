@@ -10,9 +10,10 @@ import { expandBarsProps } from '../../fframes/bars.mjs';
 import { expandStatProps } from '../../fframes/stat.mjs';
 import { expandHistogramProps } from '../../fframes/histogram.mjs';
 import { expandMultiplesProps } from '../../fframes/multiples.mjs';
-import { createJob } from '../../fframes/job.mjs';
+import { createJob, steadyFilm } from '../../fframes/job.mjs';
 import { roughStandIns } from '../../fframes/prepare.mjs';
 import { sketch, expandArt, sketchPreset } from '../../fframes/sketches.mjs';
+import { diagramElements } from '../../fframes/system-diagrams.mjs';
 
 /**
  * A beat as it will be drawn: a canvas built from a library sketch is judged on the sketch's
@@ -31,6 +32,11 @@ function asDrawn(b, { width = 1920, height = 1080 } = {}) {
       return { ...b, props: expandHistogramProps(b.props, { width, height, beatId: b.id }) };
     if (b.block === 'canvas' && b.props?.stat)
       return { ...b, props: expandStatProps(b.props, { width, height, beatId: b.id }) };
+    // A system diagram is judged on the shapes it compiles to (spoken cues count from 0 here).
+    if (b.block === 'canvas' && b.props?.diagram) {
+      const { diagram, ...rest } = b.props;
+      return { ...b, props: { ...rest, elements: [...diagramElements(diagram, { width, height }), ...(rest.elements ?? [])] } };
+    }
   } catch {
     // createJob below reports invalid references as author-facing errors.
   }
@@ -58,9 +64,11 @@ const typeCard = b =>
   b.block === 'canvas' && (b.props?.elements ?? []).length > 0 && b.props.elements.every(el => el.type === 'text');
 const family = b => (typeCard(b) ? 'type card' : FAMILY[b.block]);
 // A shape with the same id in consecutive canvas beats morphs across the cut: a match cut.
+// A system diagram's nodes keep their ids too.
+const shapeIds = b => [...(b?.props?.elements ?? []).map(el => el.id), ...(b?.props?.diagram?.nodes ?? []).map(n => `diagram-node-${n.id}`)].filter(Boolean);
 const matched = (a, b) => {
-  const ids = new Set((a?.props?.elements ?? []).map(el => el.id).filter(Boolean));
-  return (b?.props?.elements ?? []).some(el => el.id && ids.has(el.id));
+  const ids = new Set(shapeIds(a));
+  return shapeIds(b).some(id => ids.has(id));
 };
 const CONNECTOR =
   /\b(but|so|therefore|because|which means|that's why|that is why|yet|instead|until|unless|except|however|then again|this means|the result|meanwhile|now)\b/i;
@@ -130,7 +138,7 @@ function onScreenWords(props) {
 
 const has = (v, re) => re.test(JSON.stringify(v ?? {}));
 const DEPTH = /"(z|dolly|focus|depth|tilt)"\s*:/;
-const LIFE = /"(loop|keys|along|dolly)"\s*:|"type"\s*:\s*"particles"/;
+const LIFE = /"(loop|keys|along|dolly|steps)"\s*:|"type"\s*:\s*"particles"/;
 
 /**
  * The eight tells of a slideshow (docs/cinema.md), measured from the storyboard. Each tell
@@ -148,8 +156,10 @@ export function cinemaScore(sb, beats, timed, transitions) {
     b.block === 'canvas' && (b.props?.world || b.props?.viewFrom || b.props?.dolly || b.props?.focus?.keys);
   // A graphic wipe hides a cut rather than carrying anything across it: half credit.
   let carried = 0;
+  // A system diagram's components keep their ids, so a shared node carries across the cut.
+  const diagramIds = b => (b.props?.diagram?.nodes ?? []).map(n => `diagram-node-${n.id}`);
   const ids = b =>
-    new Set([...(b.props?.elements ?? []).map(el => el.id), ...(b.props?.chart ? ['chart'] : [])].filter(Boolean));
+    new Set([...(b.props?.elements ?? []).map(el => el.id), ...diagramIds(b), ...(b.props?.chart ? ['chart'] : [])].filter(Boolean));
   const chartIds = b =>
     b.props?.chart ? b.props.chart.values.map(v => `${b.props.chart.id ?? 'chart'}-${v.id ?? v.label}`) : [];
   for (let i = 1; i < n; i++) {
@@ -176,11 +186,12 @@ export function cinemaScore(sb, beats, timed, transitions) {
     has(b.art, LIFE) ||
     (b.camera && b.camera !== 'none' && b.camera?.move !== 'none' && (b.camera?.amount ?? 0.5) >= 0.6) ||
     b.block === 'kinetic';
+  const steady = steadyFilm(sb);
   const frozen = beats.filter(b => !alive(b)).length;
-  if (frozen / n > 0.5)
+  if (!steady && frozen / n > 0.5)
     tell(
       'Build, then freeze',
-      `${frozen} of ${n} scenes stop moving once they land. Give each hold some life: a loop, particles, a dolly or truck, a plate drift, or lens.handheld.`,
+      `${frozen} of ${n} scenes stop moving once they land. Inspect these holds against the brief. For business films, keep reading frames steady; reveal a meaningful change or shorten an accidental hold. Camera shake is not a remedy.`,
     );
   // 3. Headings on every scene.
   // A heading at the bottom is still a heading: a chart with a caption under it reads as a slide.
@@ -195,7 +206,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
   const moved = beats.some(
     b => b.props?.viewFrom || b.props?.world || (b.camera && b.camera !== 'none' && b.camera !== 'auto'),
   );
-  if (!deep && !moved)
+  if (!steady && !deep && !moved)
     tell(
       'Locked, flat camera',
       'no depth and no camera move anywhere. Use z layers with a dolly or focus pull, a world whose camera travels, or a camera move on a revelation.',
@@ -529,9 +540,9 @@ export function critique(root) {
     const moving =
       (b.camera !== 'none' && b.camera?.move !== 'none') ||
       b.plate ||
-      JSON.stringify(b.props ?? {}).match(/"loop"|"keys"|"along"/);
+      JSON.stringify(b.props ?? {}).match(/"loop"|"keys"|"along"|"steps"/);
     if (d > 8 && !moving && b.block !== 'kinetic')
-      add('idea', b.id, `Held ${d.toFixed(1)} s with nothing moving. Add a loop, a drift or split it into two beats.`);
+      add('idea', b.id, `Held ${d.toFixed(1)} s with nothing moving. Inspect the reading hold; shorten it or reveal the next meaningful change if it feels stalled. Do not add camera shake.`);
     if (d > 0 && words / d > 3.2 && b.block !== 'kinetic')
       add(
         'warn',

@@ -107,6 +107,7 @@ const VALIDATE = {
         'captions',
         'note',
         'lens',
+        'camera',
         'heading',
         'textMotion',
         'type',

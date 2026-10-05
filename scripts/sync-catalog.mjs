@@ -52,6 +52,18 @@ const schema = {
     captions: { enum: [true, false, 'auto', 'off', 'pop'] },
     sfx: { enum: [true, false, 'off', 'subtle', 'normal', 'punchy'] },
     treatment: text,
+    camera: {
+      description: 'Film default camera for beats without their own: "none" makes a steady film (no automatic push; plates hold still unless a beat asks)',
+      oneOf: [
+        { enum: ['auto', 'none', 'in', 'out', 'left', 'right', 'up', 'down'] },
+        {
+          type: 'object',
+          additionalProperties: false,
+          properties: { move: { enum: ['auto', 'none', 'in', 'out', 'left', 'right', 'up', 'down'] }, amount: { type: 'number', minimum: 0, maximum: 1 } },
+        },
+      ],
+    },
+    lens: { type: 'object', description: 'Film lens: letterbox, grade, gradeAmount, bloom, aberration, leak, handheld (sway; 0 for business), blur' },
     speakers: object,
     frame: {
       oneOf: [
@@ -183,6 +195,10 @@ const schema = {
                 properties: {
                   move: { enum: ['auto', 'none', 'in', 'out', 'left', 'right', 'up', 'down'] },
                   amount: { type: 'number', minimum: 0, maximum: 1 },
+                  to: { type: 'array', minItems: 4, maxItems: 4, items: { type: 'number' }, description: 'Push to a detail: frame-pixel rect [x, y, w, h]' },
+                  at: { type: 'number', minimum: 0 },
+                  say: text,
+                  dur: { type: 'number', minimum: 0.2, maximum: 8 },
                 },
               },
             ],
@@ -200,7 +216,7 @@ const schema = {
               scrim: { type: 'number', minimum: 0, maximum: 1 },
               focus: { type: 'array', minItems: 2, maxItems: 2, items: { type: 'number', minimum: 0, maximum: 1 } },
               offset: { type: 'number', minimum: 0 },
-              loop: bool,
+              loop: { const: false, description: 'B-roll never loops; provide sufficient source coverage or shorten the beat.' },
             },
           },
           art: {
