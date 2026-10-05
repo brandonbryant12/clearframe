@@ -270,7 +270,7 @@ All 45 built-in playbooks, scaffolded with their sample copy, prepared as rough 
 
 ## Measurements
 
-From `scripts/engine-bench.mjs` (2026-10-05T19:54:12.714Z), Apple M1, 8589934592, each command run 2× (best shown). Same project, resolution, frame rate and encoder settings for both engines: final libx264 CRF 16 medium; range libx264 CRF 21 veryfast at full scale. Picture only — audio finishing is shared and identical. "Peak" sums the engine process and its children (the scene engine's FFmpeg encoder included). These describe this machine and these projects only.
+From `scripts/engine-bench.mjs` (2026-10-05T19:54:12.714Z), Apple M1 with 8 GB, each command run 2× (best shown). Same project, resolution, frame rate and encoder settings for both engines: final libx264 CRF 16 medium; range libx264 CRF 21 veryfast at full scale. Picture only — audio finishing is shared and identical. "Peak" sums the engine process and its children (the scene engine's FFmpeg encoder included). These describe this machine and these projects only.
 
 | Project | Format | Frames | Engine | Cold start + still (ms) | Warm still (ms) | 60-frame range (ms) | Full (ms) | Full fps | Peak RSS (MiB) | Peak temp (MiB) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |

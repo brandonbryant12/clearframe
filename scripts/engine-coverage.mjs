@@ -103,7 +103,7 @@ for (const p of [...parity].sort((a, b) => a.playbook.localeCompare(b.playbook))
 out.push('');
 if (bench) {
   out.push('## Measurements', '');
-  out.push(`From \`scripts/engine-bench.mjs\` (${bench.when}), ${bench.host.join(', ')}, each command run ${bench.repeat}× (best shown). Same project, resolution, frame rate and encoder settings for both engines: final libx264 CRF 16 medium; range libx264 CRF 21 veryfast at full scale. Picture only — audio finishing is shared and identical. "Peak" sums the engine process and its children (the scene engine's FFmpeg encoder included). These describe this machine and these projects only.`, '');
+  out.push(`From \`scripts/engine-bench.mjs\` (${bench.when}), ${bench.host[0]} with ${Math.round(Number(bench.host[1]) / 2 ** 30)} GB, each command run ${bench.repeat}× (best shown). Same project, resolution, frame rate and encoder settings for both engines: final libx264 CRF 16 medium; range libx264 CRF 21 veryfast at full scale. Picture only — audio finishing is shared and identical. "Peak" sums the engine process and its children (the scene engine's FFmpeg encoder included). These describe this machine and these projects only.`, '');
   out.push(row(['Project', 'Format', 'Frames', 'Engine', 'Cold start + still (ms)', 'Warm still (ms)', '60-frame range (ms)', 'Full (ms)', 'Full fps', 'Peak RSS (MiB)', 'Peak temp (MiB)']), row(Array(11).fill('---')));
   const label = p => ({ film: 'long-form recording (7.6 min, synthetic voices)', 'footage-h': 'stage-footage landscape', 'footage-v': 'stage-footage vertical' })[p] ?? p;
   for (const s of bench.summary) out.push(row([label(s.project), s.format, s.frames, s.engine, s.coldStillMs, s.warmStillMs, s.rangeMs, s.fullMs, s.fullFps, s.peakMiB, s.tempMiB]));
