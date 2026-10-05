@@ -1,0 +1,29 @@
+{
+  "title": "Business clarity",
+  "when": "Business reports, architecture walkthroughs and pull request explainers",
+  "film": {
+    "theme": "paper",
+    "type": "inter",
+    "backdrop": "none",
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.4
+    },
+    "transition": "cut",
+    "sfx": "subtle",
+    "lens": {
+      "handheld": 0,
+      "blur": 0
+    }
+  },
+  "beats": {
+    "camera": "none",
+    "rough": false
+  },
+  "rules": [
+    "Keep the camera locked while people read. Move only to reveal a specific relationship.",
+    "Use staged nodes and drawn connectors for technical explanations.",
+    "No repeating B-roll. Match the clip and source offset to the beat, or shorten the beat.",
+    "Inspect background footage with native text at the start, middle and end, including a phone-size frame. Blur alone does not establish readability."
+  ]
+}

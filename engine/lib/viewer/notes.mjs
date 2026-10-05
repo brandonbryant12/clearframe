@@ -2,7 +2,7 @@
 // (ClearFrame films) or the film's own notes.json (films described by film.json).
 import fs from 'node:fs';
 import path from 'node:path';
-import { addNote, setNoteStatus, updateNote } from '../notes.mjs';
+import { addNote, setNoteStatus, updateNote, readNotes } from '../notes.mjs';
 import { readJSON } from './media.mjs';
 
 const isManifest = dir => fs.existsSync(path.join(dir, 'film.json'));
@@ -26,6 +26,7 @@ export function noteView(n, { pins = {}, engine = false } = {}) {
   return {
     id: n.id, text: n.text, by: (engine ? n.author?.name ?? n.author : n.by) ?? null, createdAt: n.createdAt ?? null,
     at: engine ? n.anchor?.at ?? null : n.at ?? null,
+    scope: n.scope ?? (n.at == null && !n.anchor ? 'film' : 'beat'),
     element: (engine ? n.anchor?.element ?? pins[n.id]?.element : n.element) ?? null,
     pin: pin?.x != null ? { x: pin.x, y: pin.y } : null,
     resolved, state: resolved ? (engine ? `${RESOLVED[status]}${status === 'applied' && n.resolution?.revision ? ` in ${n.resolution.revision}` : ''}` : 'Resolved') : status === 'question' ? 'Question' : 'Open',
@@ -34,18 +35,21 @@ export function noteView(n, { pins = {}, engine = false } = {}) {
 }
 
 /** Record a note: anchored to its moment (and, where the engine knows it, the element under the pin). */
-export function saveNote(dir, { version, at, text, by, element, pin }) {
+export function saveNote(dir, { version, at, text, by, element, pin, scope }) {
   text = cleanText(text);
+  const whole = scope === 'film' || at == null;
+  if (!whole && !(Number.isFinite(at) && at >= 0)) throw new Error('Note time must be a nonnegative number');
+  if (whole && (pin != null || element != null)) throw new Error('Whole-cut notes cannot have a picture pin');
   if (pin != null && !(Number.isFinite(pin.x) && Number.isFinite(pin.y) && pin.x >= 0 && pin.x <= 1 && pin.y >= 0 && pin.y <= 1)) throw new Error('pin needs x and y between 0 and 1');
   if (isManifest(dir)) {
     const data = manifestNotes(dir);
-    const note = { id: `n${String(data.notes.length + 1).padStart(3, '0')}`, version, at: Number(at) || 0, text, by: by || null, element: element ?? null,
+    const note = { id: `n${String(data.notes.length + 1).padStart(3, '0')}`, version, at: whole ? null : at, scope: whole ? 'film' : 'beat', text, by: by || null, element: element ?? null,
       pin: pin ?? null, status: 'open', replies: [], createdAt: new Date().toISOString() };
     data.notes.push(note);
     writeManifestNotes(dir, data);
     return noteView(note);
   }
-  const args = { text, revision: version === 'latest' ? undefined : version, at: Number(at) || 0, by: by || undefined, via: 'viewer' };
+  const args = { text, revision: version === 'latest' ? undefined : version, ...(whole ? { scope: 'film' } : { at }), by: by || undefined, via: 'viewer' };
   // Authored elements anchor in the engine; generated chart parts anchor to the moment, and the viewer keeps the element.
   let note;
   try { note = addNote(dir, { ...args, element: element ?? undefined }); }
@@ -85,4 +89,11 @@ export function replyToNote(dir, id, { text, by } = {}) {
   }
   const n = updateNote(dir, id, x => { (x.replies ??= []).push(reply); });
   return noteView(n, { pins: readJSON(pinsFile(dir), {}), engine: true });
+}
+
+/** Reload persisted threads without rebuilding the viewer or resetting playback. */
+export function loadViewerNotes(dir) {
+  if (isManifest(dir)) return manifestNotes(dir).notes.map(n => ({ ...noteView(n), version: n.version }));
+  const pins = readJSON(pinsFile(dir), {});
+  return readNotes(dir).map(n => ({ ...noteView(n, { pins, engine: true }), version: n.revision }));
 }

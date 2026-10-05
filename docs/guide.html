@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ClearFrame guide: a living document (docs/guide.html).
-  Last updated: 2026-10-02. Covers CHANGELOG 0.5.0 (unreleased).
+  Last updated: 2026-10-05. Covers CHANGELOG 0.5.0 (unreleased).
 
   WHEN UPDATING, CONSULT (sources of truth, roughly in this order):
     - CHANGELOG.md: newest section first. It feeds "What's new" and anything it changes below.
@@ -566,6 +566,7 @@
           <li><a href="#vocabulary"><span class="n">06</span>Direction vocabulary</a></li>
           <li><a href="#commands"><span class="n">07</span>Command reference</a></li>
           <li><a href="#troubleshooting"><span class="n">08</span>Troubleshooting &amp; FAQ</a></li>
+          <li><a href="#technical-feedback">Technical films and review</a></li>
           <li><a href="#whats-new"><span class="n">09</span>What's new</a></li>
           <li><a href="#maintaining"><span class="n">10</span>Keeping this current</a></li>
         </ol>
@@ -581,7 +582,7 @@
       <h1>The ClearFrame guide <em>how it works, and how to direct it</em></h1>
       <p class="lede">ClearFrame turns research reports, podcasts, scripts and briefs into narrated motion-graphics films, drawn natively in Rust. This guide covers the pipeline, the vocabulary and, above all, how to ask for a film worth watching.</p>
       <ul class="meta">
-        <li class="updated">Last updated: 2026-10-02</li>
+        <li class="updated">Last updated: 2026-10-05</li>
         <li>Covers 0.5.0 (unreleased)</li>
         <li>33 blocks · 19 palettes</li>
         <li>Open creative library · editable storyboards</li>
@@ -589,7 +590,12 @@
     </header>
 
     <!-- ================= 01 WHAT IT IS ================= -->
-    <section class="topic" id="what-it-is">
+    <section class="topic" id="technical-feedback"><h2>Technical films and review</h2>
+<p>Start a PR explainer with <code>new FILM --playbook pr-walkthrough --treatment business</code>. Native user, service, database, queue and state nodes connect with animated paths. The architecture, state-machine and component-change sketches show the patterns; <code>canvas.props.diagram</code> makes the nodes and edges editable. <a href="system-diagrams.md">Diagram contract</a>.</p>
+<p>Business frames stay steady: <code>lens.handheld: 0</code>, beat <code>camera: none</code>, plate <code>drift: none</code>. Motion explains a change; a reading hold is valid.</p>
+<p>Choose background or half-screen B-roll before generation. Match measured footage to the beat and offset; looping short footage is rejected. Inspect text against moving footage at opening, middle, end and lighting changes, including phone size. Blur alone is insufficient. <a href="continuity.md">B-roll review</a>.</p>
+<p>Final cuts remain open for notes and replies. Whole-cut notes have no timestamp. Dragging the timeline pauses playback, and the Storyboard grid remains available after rendering. <a href="viewer.md">Studio review</a>.</p></section>
+<section class="topic" id="what-it-is">
       <p class="kicker"><span class="num">01</span><span class="serif">the short version</span></p>
       <h2>What it is</h2>
       <p>ClearFrame is an agent-directed motion-graphics system. A model (usually Claude) reads your material and writes one <code>storyboard.json</code>. A native Rust/SVG renderer, <strong>FFFrames</strong>, then draws every frame: display type, counting numbers, honest charts, diagrams, hand-drawn canvases and captions, each timed to the words of the narration. Google models supply voice, music, stills and the occasional footage insert, but only when you ask for them and set a budget. It has no browser engine, no timeline editor and no npm runtime dependencies. You direct in words, and the storyboard is the whole film.</p>
@@ -891,9 +897,9 @@ node engine/cli.mjs runlog my-podcast                      <span class="c"># mea
           <thead><tr><th>Tell</th><th>What answers it</th></tr></thead>
           <tbody>
             <tr><td>A card per line</td><td class="wrap">Carry something across each cut: a <code>world</code>, a morph by shared <code>id</code>, a match cut, <code>whip</code> or <code>flash</code>, or a cut between two moving cameras</td></tr>
-            <tr><td>Build, then freeze</td><td class="wrap">Life in every hold: loops, <code>particles</code>, a <code>dolly</code> or truck, a plate drift, <code>lens.handheld</code></td></tr>
+            <tr><td>Build, then freeze</td><td class="wrap">Inspect each hold against the brief. Keep business reading frames steady; reveal meaningful changes or shorten accidental holds. Never add shake to satisfy the score.</td></tr>
             <tr><td>A heading on every scene</td><td class="wrap">Titles in the picture, lower thirds (<code>heading: "bottom"</code>), or no title at all</td></tr>
-            <tr><td>Locked, flat camera</td><td class="wrap">Three planes with <code>z</code>, and a camera that moves: a dolly, a truck, a rack <code>focus</code></td></tr>
+            <tr><td>Locked, flat camera</td><td class="wrap">For cinematic work, depth and a purposeful move can help. The business treatment deliberately keeps reading frames locked.</td></tr>
             <tr><td>Small subject, big room</td><td class="wrap">Shot-scale variety: full-bleed type, plates, tones, close camera rects</td></tr>
             <tr><td>The same grammar every beat</td><td class="wrap">Alternate wide and close, dense and bare; give turns a different cut</td></tr>
             <tr><td>A screen-flat image</td><td class="wrap">A <code>lens</code> (grade, bloom, letterbox, leak), grain, and light in the scene (<code>glow</code>, <code>shine</code>, <code>spotlight</code>)</td></tr>
@@ -1825,7 +1831,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
     </section>
 
     <footer class="end">
-      <p>ClearFrame guide · Last updated: 2026-10-02 · Sources: README.md, AGENTS.md, CHANGELOG.md, docs/, skills/clearframe*/, examples/night-city, and the CLI.</p>
+      <p>ClearFrame guide · Last updated: 2026-10-05 · Sources: README.md, AGENTS.md, CHANGELOG.md, docs/, skills/clearframe*/, examples/night-city, and the CLI.</p>
     </footer>
   </main>
 </div>

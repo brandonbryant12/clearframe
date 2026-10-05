@@ -533,6 +533,7 @@ export const BLOCKS = [
         'Editable pause/answer/explanation: {form:choice|gap, phase:question|answer, prompt, explanation, layout?:full|split, motion?:fade|none, revealAt?, explainAt?, source?}. Choice uses options:[2–3 strings] and correctIndex; gap uses before, answer and optional after. Use separate beats for reading and answer holds. Split reserves landscape right-half imagery. See docs/teaching-sequences.md.',
       sketch:
         'A library sketch drawn under any elements, redrawn for this frame (clearframe sketch lists them); its camera (view, dolly, focus) applies unless the beat sets its own',
+      diagram: 'Native system diagram: {direction?:auto|horizontal|vertical, nodes:[{id,label,kind?:service|database|user|queue|state,status?:neutral|added|removed|active,x?,y?,at?|say?,exitAt?|exitSay?}], edges:[{id?,from,to,label?,status?,at?|say?,exitAt?|exitSay?}]}. Up to six nodes; normalized positions and drawn connectors. See docs/system-diagrams.md.',
       sketchText: 'Replacement words for a sketch’s placeholder type: {"TITLE": "Your words"}',
       seed: 'Varies a sketch’s seeded layout (buildings, ridges, swell)',
       plates:

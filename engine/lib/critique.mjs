@@ -176,11 +176,12 @@ export function cinemaScore(sb, beats, timed, transitions) {
     has(b.art, LIFE) ||
     (b.camera && b.camera !== 'none' && b.camera?.move !== 'none' && (b.camera?.amount ?? 0.5) >= 0.6) ||
     b.block === 'kinetic';
+  const steadyBusiness = sb.treatment === 'business';
   const frozen = beats.filter(b => !alive(b)).length;
-  if (frozen / n > 0.5)
+  if (!steadyBusiness && frozen / n > 0.5)
     tell(
       'Build, then freeze',
-      `${frozen} of ${n} scenes stop moving once they land. Give each hold some life: a loop, particles, a dolly or truck, a plate drift, or lens.handheld.`,
+      `${frozen} of ${n} scenes stop moving once they land. Inspect these holds against the brief. For business films, keep reading frames steady; reveal a meaningful change or shorten an accidental hold. Camera shake is not a remedy.`,
     );
   // 3. Headings on every scene.
   // A heading at the bottom is still a heading: a chart with a caption under it reads as a slide.
@@ -195,7 +196,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
   const moved = beats.some(
     b => b.props?.viewFrom || b.props?.world || (b.camera && b.camera !== 'none' && b.camera !== 'auto'),
   );
-  if (!deep && !moved)
+  if (!steadyBusiness && !deep && !moved)
     tell(
       'Locked, flat camera',
       'no depth and no camera move anywhere. Use z layers with a dolly or focus pull, a world whose camera travels, or a camera move on a revelation.',
@@ -531,7 +532,7 @@ export function critique(root) {
       b.plate ||
       JSON.stringify(b.props ?? {}).match(/"loop"|"keys"|"along"/);
     if (d > 8 && !moving && b.block !== 'kinetic')
-      add('idea', b.id, `Held ${d.toFixed(1)} s with nothing moving. Add a loop, a drift or split it into two beats.`);
+      add('idea', b.id, `Held ${d.toFixed(1)} s with nothing moving. Inspect the reading hold; shorten it or reveal the next meaningful change if it feels stalled. Do not add camera shake.`);
     if (d > 0 && words / d > 3.2 && b.block !== 'kinetic')
       add(
         'warn',

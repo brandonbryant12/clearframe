@@ -245,9 +245,9 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
           encoding: 'utf8',
         });
         const duration = Number(JSON.parse(probe.stdout || '{}').format?.duration);
-        if (!b.plate.loop && !(duration - (b.plate.offset ?? 0) + 1 / result.job.fps >= b.frames / result.job.fps))
+        if (!(duration - (b.plate.offset ?? 0) + 1 / result.job.fps >= b.frames / result.job.fps))
           throw new Error(
-            `${b.id}: plate footage is shorter than the beat; set loop, trim the beat or use a longer clip.`,
+            `${b.id}: plate footage is shorter than the beat; trim the beat or use a longer clip; B-roll does not loop.`,
           );
       }
     }

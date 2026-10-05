@@ -17,7 +17,7 @@ export function clearframeStage(sb, latest, openNotes = 0) {
   if (!sb?.beats?.length) return 'brief';
   if (latest) {
     if (latest.profile === 'rough' || latest.placeholders?.length) return 'rough';
-    if (latest.profile === 'final') return 'final';
+    if (latest.profile === 'final') return openNotes ? 'review' : 'final';
     return 'review';
   }
   const body = sb.beats.filter(b => !isTitle(b)), placeholders = body.filter(b => b.placeholder).length;
@@ -25,7 +25,7 @@ export function clearframeStage(sb, latest, openNotes = 0) {
 }
 
 /** A film.json may name its stage; otherwise a Final latest version is final and anything else is in review. */
-export const manifestStage = (m, versions) => STAGES.some(s => s.id === m.stage) ? m.stage : versions.at(-1)?.quality === 'Final' ? 'final' : versions.length ? 'review' : 'storyboard';
+export const manifestStage = (m, versions) => versions.at(-1)?.notes?.some(n => !n.resolved) && (m.stage === 'final' || versions.at(-1)?.quality === 'Final') ? 'review' : STAGES.some(s => s.id === m.stage) ? m.stage : versions.at(-1)?.quality === 'Final' ? 'final' : versions.length ? 'review' : 'storyboard';
 
 export function stageInfo(id, { openNotes = 0 } = {}) {
   const s = STAGES.find(x => x.id === id) ?? STAGES[0];

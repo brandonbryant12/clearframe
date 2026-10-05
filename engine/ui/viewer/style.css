@@ -272,3 +272,9 @@ button.change:hover { border-color: #35435a; }
 .change del { color: #ef8a80; text-decoration: line-through; text-decoration-color: rgba(239,138,128,.6); }
 .change ins { color: var(--good); text-decoration: none; margin-left: 6px; }
 .change .mlabel { display: inline-block; min-width: 76px; }
+
+/* Storyboard remains a visual sequence after the first render. */
+.boards .scenecard { grid-template-columns: 1fr; align-content: start; }
+.boards .scenecard img { width: 100%; }
+.boards.tall .scenecard img { aspect-ratio: 9 / 16; max-height: 360px; }
+.composer { max-width: calc(100% - 16px); }

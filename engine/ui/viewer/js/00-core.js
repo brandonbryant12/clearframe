@@ -14,7 +14,7 @@ const store = {
   set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
 };
 let server = false, stopLoop = null;
-if (location.protocol.startsWith('http')) fetch('/api/ping').then(r => { server = r.ok; }).catch(() => {});
+const serverReady = location.protocol.startsWith('http') ? fetch('/api/ping').then(r => { server = r.ok; }).catch(() => {}) : Promise.resolve();
 
 /** POST to the local viewer server; throws the server's message on failure. */
 async function api(path, body) {

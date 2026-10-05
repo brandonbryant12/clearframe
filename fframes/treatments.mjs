@@ -30,6 +30,7 @@ export function applyTreatment(sb, id, { recording = false } = {}) {
   );
   sb.beats.forEach((b, i) => {
     const p = b.props ?? {};
+    if (t.beats.camera != null) b.camera ??= structuredClone(t.beats.camera);
     if (t.beats.emphasisStyle && ['title', 'statement', 'endcard'].includes(b.block) && p.emphasis && !p.emphasisStyle)
       p.emphasisStyle = t.beats.emphasisStyle;
     if (t.beats.kinetic && b.block === 'kinetic' && !p.mode) p.mode = t.beats.kinetic;

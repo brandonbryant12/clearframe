@@ -37,3 +37,13 @@ Continuity requires judgment: compare the last native frame, first clip frame, l
 Footage-led films (sizzle, trailer, brand spot) invert this balance; see [footage-led films](hero-footage.md) and the [Runway skill](../skills/runway-video/SKILL.md) for keyframe-first generation, provider routing and cutting to music.
 
 Official contracts: [Omni](https://ai.google.dev/gemini-api/docs/omni), [pricing](https://ai.google.dev/gemini-api/docs/pricing), [Files API](https://ai.google.dev/gemini-api/docs/files). Verified 2026-09-28. Veo remains available only when an asset explicitly selects a supported Veo model.
+
+## B-roll composition and coverage
+
+Choose the placement before generating: `plate.side: "full"` for background footage under native text; `"left"` or `"right"` for a half-screen composition. Use split placement for detailed text, charts or busy footage. For a full background, start with `scrim: 0.8`, `drift: "none"` and a suitable palette treatment. A scrim value is a starting point, not a readability guarantee. Blur alone does not ensure contrast.
+
+Plan Gemini Omni Flash footage for the actual beat duration plus its source `offset` and edit handles. A generated take's measured duration wins over the requested duration. `check` rejects short footage and `plate.loop: true`; use a longer take, trim the scene without clipping narration, or author a sequence of different shots. Never loop, silently freeze the tail, or slow footage merely to fill a timing gap.
+
+Before approving the rough cut, inspect decoded frames at the beginning, middle, end and every major lighting/movement change. Read the headline, labels, numbers, sources and captions at full size and on a 360 px phone view. Watch the full beat to catch moving contrast failures. Increase the scrim, use an opaque native panel, switch to a split, or choose another shot when text cannot be read immediately. Record the frames and decision in DIRECTION.md. Existing geometry audits cannot certify contrast over changing footage.
+
+For business work, request a locked camera, restrained subject motion and no handheld sway in the generation prompt. Also set `lens.handheld: 0`, beat `camera: "none"`, and plate `drift: "none"` in the native composition. These control different layers; a stable native camera cannot remove shake baked into footage. Keep generated audio excluded. Run `plan` before paid calls and use the existing authorized budget; no paid generation is needed to test these authoring rules.

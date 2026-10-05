@@ -167,3 +167,5 @@ Rules for layers:
 | Defaults and rules that express a look | Behaviour every film needs |
 
 If an idea needs code only to arrange existing elements, write a built-in sketch module. If it needs the renderer to draw something new, it belongs in the engine. After that, add a library item that shows it off.
+
+The `business` treatment supplies beat `camera: none` defaults while preserving authored moves. `pr-walkthrough` uses the `architecture`, `component-change` and `state-machine` sketches. These compose the shared native `props.diagram` node/edge vocabulary; see [system diagrams](../docs/system-diagrams.md).

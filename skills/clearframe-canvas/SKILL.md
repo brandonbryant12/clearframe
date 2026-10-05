@@ -22,7 +22,7 @@ Read [docs/canvas.md](../../docs/canvas.md) for the element reference. The fixed
 - `accent` for the subject, `accent2` for the result or contrast, `ink` for structure, `line`/`muted` for scaffolding. Palette tokens follow `tone` and the theme; avoid raw hex unless it is brand colour.
 - Declare `fill` on stroked shapes. Wireframe orbits, contour rings, pulse rectangles and helmet outlines need `fill: "none"`; a stroke alone leaves rect/circle/ellipse solid accent-filled. Choose an explicit colour for intentional fills.
 - Motion explains: `draw` for paths and connections, `along` for things that travel, `grow-y` for quantities, `pop` for arrivals, `keys` for change, `exit` for things that stop being true. Use fades only for background layers.
-- Something breathes after everything lands: `pulse` the subject, `dash` loop the connector, `float` ambient shapes.
+- Keep reading holds still for business and technical films. Use ambient loops only when they serve the brief; never add wobble to clear a held-frame warning.
 - Build, then transform: draw the problem, `exit` part of it on a cue, draw the fix in the same frame. One canvas beat can carry two or three ideas if the voice walks through them.
 - Plan a world on its map: `node engine/cli.mjs world DIR` draws everything with each beat's camera rect numbered. Stations in story order, with no camera move re-crossing earlier material.
 - Travel instead of cutting. When the story is a journey, a process or a map, make consecutive canvas beats one `world` with camera `view: [x, y, w, h]` per beat: each draws only what is new, the camera glides between, and the last beat pulls out to show the whole (docs/canvas.md, Worlds).
@@ -38,3 +38,5 @@ Read [docs/canvas.md](../../docs/canvas.md) for the element reference. The fixed
 ## Honesty
 
 Drawings are illustrations. If a shape's size encodes a quantity, compute it from the real values and say so; otherwise use `bars`, `magnitude` or `waffle`. Counted numbers (`count`) need a visible `source` and a storyboard `sources` entry. Do not draw logos, real people or maps implying precise geography you have not verified.
+
+For technical systems, start with `props.diagram` or `sketch architecture|state-machine|component-change`; see [system diagrams](../../docs/system-diagrams.md). Use native user, service, database, queue and state nodes with drawn connectors and timed additions/removals. Custom `elements` and `art.over` add user-authored drawings.

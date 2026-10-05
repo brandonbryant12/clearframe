@@ -19,6 +19,7 @@ function editLocal(f, id, change) {
 function swapNote(v, updated) { const i = v.notes.findIndex(x => x.id === updated.id); if (i >= 0) v.notes[i] = updated; else v.notes.push(updated); }
 
 async function addNoteTo(f, v, note) {
+  await serverReady;
   if (server) { const saved = await api('/api/notes', { film: f.id, ...note }); v.notes.push(saved); return saved; }
   const list = store.get(localKey(f.id), []), saved = { ...note, id: `local-${Date.now()}`, createdAt: new Date().toISOString(), replies: [] };
   list.push(saved); store.set(localKey(f.id), list);
@@ -40,7 +41,7 @@ async function replyNote(f, v, n, text) {
 const linkTags = text => esc(text).replace(/#([\p{L}\p{N}_-]+)/gu, '<span class="tag-chip">#$1</span>');
 function thread(n, { open = false } = {}) {
   return `<div class="thread ${n.resolved ? 'resolved' : ''}" data-note="${esc(n.id)}">
-    <div class="thead"><button class="ttime" data-seek="${n.at ?? 0}">${clock(n.at ?? 0)}</button><b>${esc(n.by ?? 'Note')}</b>
+    <div class="thead">${n.at == null ? '<span class="ttime">Whole cut</span>' : `<button class="ttime" data-seek="${n.at}">${clock(n.at)}</button>`}<b>${esc(n.by ?? 'Note')}</b>
       <span class="chip ${n.resolved ? 'approved' : ''}">${esc(n.state)}</span>${n.local ? '<span class="chip">this browser</span>' : ''}
       <span class="tactions">${n.resolved ? '<button class="link" data-act="reopen">Reopen</button>' : '<button class="link" data-act="resolve">✓ Resolve</button>'}
       <button class="link" data-act="reply">Reply</button></span></div>
@@ -78,7 +79,7 @@ function notesPanel(f, v, filter) {
 }
 
 function exportLocal(f, v) {
-  const notes = store.get(localKey(f.id), []).filter(n => n.version === v.id).map(n => ({ revision: n.version, at: n.at, text: n.text, by: n.by, element: n.element, pin: n.pin, replies: n.replies }));
+  const notes = store.get(localKey(f.id), []).filter(n => n.version === v.id).map(n => ({ revision: n.version, at: n.at, text: n.text, by: n.by, scope: n.scope, element: n.element, pin: n.pin, replies: n.replies }));
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify({ film: f.id, notes }, null, 2)], { type: 'application/json' }));
   a.download = `${f.id}-${v.id}-notes.json`; a.click();

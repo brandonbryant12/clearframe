@@ -248,7 +248,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
   const art = source.art != null ? artLayers(source.art, b.id, { width: timing.width, height: timing.height, duration: b.dur }) : null;
   if (art) settle = Math.max(settle, scheduleArt(art.under, at), scheduleArt(art.over, at));
   const paced = keepPace(b, source, props, art, at, { sb, report });
-  const layers = beatLayers(source, b, sb);
+  const layers = beatLayers(source, b, sb, report);
   if (layers.camera?.to) {
     const c = layers.camera;
     c.at = c.say != null ? cue(c.say) : (c.at ?? 0.6);
@@ -441,10 +441,14 @@ function keepPace(b, source, props, art, at, { sb, report }) {
 }
 
 /** Tone, graphic-transition style, frame label, speaker, camera and plate. */
-function beatLayers(source, b, sb) {
+function beatLayers(source, b, sb, report) {
   const out = {};
   // The lens is resolved per beat: film settings, then the beat's own.
   const lens = { ...(sb.lens ?? {}), ...(lensSpec(source.lens) ?? {}) };
+  if (sb.treatment === 'business' && lens.handheld > 0)
+    report.warnings.push(`${source.id}: business treatment has handheld camera shake; set lens.handheld: 0 unless the brief explicitly calls for it.`);
+  if (source.plate && (source.plate.side ?? 'full') === 'full')
+    report.warnings.push(`${source.id}: inspect native text over background media at opening, middle, end and lighting changes, including 360 px. Blur/scrim alone does not prove legibility; use a split or opaque panel if needed.`);
   if (lens.letterbox === false) lens.letterbox = 0;
   if (Object.keys(lens).length) out.lens = lens;
   const heading = source.heading ?? sb.heading;
@@ -521,6 +525,8 @@ function plateSpec(input, block) {
   if (plate.treatment != null && !TREATMENTS.includes(plate.treatment))
     throw new Error(`plate.treatment must be ${TREATMENTS.join(', ')}`);
   if (plate.drift != null && !DRIFTS.includes(plate.drift)) throw new Error(`plate.drift must be ${DRIFTS.join(', ')}`);
+  if (plate.loop != null && typeof plate.loop !== 'boolean') throw new Error('plate.loop must be boolean');
+  if (plate.loop === true) throw new Error('B-roll must cover the beat without looping; trim the scene, select a source range or provide a longer clip.');
   if (plate.scrim != null && !unit(plate.scrim)) throw new Error('plate.scrim must be 0–1');
   if (plate.focus != null && !(Array.isArray(plate.focus) && plate.focus.length === 2 && plate.focus.every(unit)))
     throw new Error('plate.focus must be [x, y] from 0 to 1');

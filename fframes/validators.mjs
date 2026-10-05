@@ -1,3 +1,4 @@
+import { diagramElements } from './system-diagrams.mjs';
 // Prop validation and normalization for each native block. `normalizeProps` (catalog.mjs)
 // runs the checks every block shares, then the block's validator here. A validator may fill
 // defaults (decimals, scales, orientation) so the renderer never guesses.
@@ -420,6 +421,10 @@ export const VALIDATORS = {
     });
   },
   canvas: (p, h, frame = {}) => {
+    if (p.diagram != null) {
+      try { p.elements = [...diagramElements(p.diagram, frame), ...(p.elements ?? [])]; } catch (e) { h.fail(e.message); }
+      delete p.diagram;
+    }
     if (p.sourceElement != null) {
       if (typeof p.sourceElement !== 'string' || !p.sourceElement.trim() || p.source || p.sourceSize != null)
         h.fail('sourceElement needs an element id and cannot combine with source/sourceSize');

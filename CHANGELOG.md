@@ -1,5 +1,12 @@
 # Changelog
 
+## Studio feedback and technical films
+
+- Native system diagrams: users, services, databases, queues, states, drawn connectors, and timed component replacement; PR walkthrough starters.
+- Business treatment with a locked camera and no handheld shake; authoring guidance preserves reading holds.
+- Reject looping B-roll and require sufficient source coverage; placement and moving-background legibility review are explicit.
+- Studio whole-cut notes, final-cut feedback, persisted-thread reload, paused/cancel-safe scrubbing, distinct pins at equal timestamps, and storyboard grid after rendering.
+
 ## 0.5.0 — unreleased
 
 - **What changed and frame-accurate review.** The viewer compares each version with the one before it, scene by scene (added, removed, reworded, redesigned, retimed, notes resolved), underlines changed scenes on the timeline and counts changes in the version list. The transport adds frame stepping, playback speed and a scene loop.

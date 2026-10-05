@@ -782,7 +782,8 @@
                 "minimum": 0
               },
               "loop": {
-                "type": "boolean"
+                "const": false,
+                "description": "B-roll never loops; provide sufficient source coverage or shorten the beat."
               }
             }
           },
@@ -2356,6 +2357,9 @@
                     },
                     "sketch": {
                       "description": "A library sketch drawn under any elements, redrawn for this frame (clearframe sketch lists them); its camera (view, dolly, focus) applies unless the beat sets its own"
+                    },
+                    "diagram": {
+                      "description": "Native system diagram: {direction?:auto|horizontal|vertical, nodes:[{id,label,kind?:service|database|user|queue|state,status?:neutral|added|removed|active,x?,y?,at?|say?,exitAt?|exitSay?}], edges:[{id?,from,to,label?,status?,at?|say?,exitAt?|exitSay?}]}. Up to six nodes; normalized positions and drawn connectors. See docs/system-diagrams.md."
                     },
                     "sketchText": {
                       "description": "Replacement words for a sketch’s placeholder type: {\"TITLE\": \"Your words\"}"

@@ -184,6 +184,8 @@ test('beat layers validate art, camera, tone and plate, and pass them to the ren
     ['plate', { side: 'left' }, /asset or file/],
     ['plate', { file: 'a.jpg', treatment: 'sepia' }, /plate.treatment/],
     ['plate', { file: 'a.jpg', focus: [2, 0] }, /focus/],
+    ['plate', { file: 'clip.mp4', loop: true }, /without looping/],
+    ['plate', { file: 'clip.mp4', loop: 'false' }, /boolean/],
   ]) {
     const copy = structuredClone(sb);
     copy.beats[0][field] = value;

@@ -79,3 +79,5 @@ Open the letterbox (`"letterbox": false` on a beat) only for the payoff.
 4. Review every beat longer than 8–10 seconds at its opening, through any TTS pause, and after the reveal. `qa` held warnings are review prompts: slow pushes, noir lighting and deliberate pauses can trigger them. Keep the cinematic rhythm and record intentional holds in DIRECTION.md; never add frantic motion just to clear a threshold.
 
 Ask a fresh reviewer to judge it as film, not slides, against the eight tells in `docs/cinema.md`.
+
+Business and technical films use the `business` treatment by default. A cinema score does not override their stable reading frames: use `lens.handheld: 0`, per-beat `camera: none`, and plate `drift: none`. Preserve intentional holds. Add handheld only when the brief explicitly calls for that visual language.
