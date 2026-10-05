@@ -339,15 +339,11 @@ impl Engine {
         gpu::read_rgba(self.gpu.as_mut(), &mut self.surface, pixels)
     }
 
+    /// The frame as PNG (see [`encode_png`]).
     pub fn png(&mut self) -> Result<Vec<u8>, String> {
-        if let Some(g) = self.gpu.as_mut() {
-            g.context.flush_and_submit_surface(&mut self.surface, None);
-        }
-        let image = self.surface.image_snapshot();
-        let data = image
-            .encode(self.gpu.as_mut().map(|g| &mut g.context), sk::EncodedImageFormat::PNG, None)
-            .ok_or("PNG encoding failed")?;
-        Ok(data.as_bytes().to_vec())
+        let mut pixels = Vec::new();
+        self.read(&mut pixels)?;
+        encode_png(&pixels, self.width, self.height)
     }
 
     /// The block layer's tree for one beat at a film frame (frame audit).
@@ -362,6 +358,22 @@ impl Engine {
     pub fn blocks_inspect(&mut self, beat: usize, local: usize, frame: usize) -> Result<Vec<(fframes::diagnostics::Severity, String, String)>, String> {
         self.blocks.inspect(beat, local, frame)
     }
+}
+
+/// Straight RGBA rows as PNG. Review stills favour speed: one filter and light compression (a
+/// grain-textured 1080p frame at zlib's default effort takes hundreds of milliseconds).
+pub fn encode_png(pixels: &[u8], width: i32, height: i32) -> Result<Vec<u8>, String> {
+    let mut pixels = pixels.to_vec();
+    let info = ImageInfo::new((width, height), ColorType::RGBA8888, AlphaType::Unpremul, None);
+    let pixmap = sk::Pixmap::new(&info, &mut pixels, width as usize * 4).ok_or("PNG pixmap")?;
+    let mut options = sk::png_encoder::Options::default();
+    options.filter_flags = sk::png_encoder::FilterFlag::SUB;
+    options.z_lib_level = 2;
+    let mut out = Vec::new();
+    if !sk::png_encoder::encode(&pixmap, &mut out, &options) {
+        return Err("PNG encoding failed".into());
+    }
+    Ok(out)
 }
 
 fn paint_color(hex: &str) -> sk::Color {

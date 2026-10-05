@@ -1,8 +1,9 @@
 # FFFrames production work
 
-Read `../skills/clearframe-fframes/SKILL.md` and `SETUP.md`. FFFrames is the default and only active renderer.
+Read `../skills/clearframe-fframes/SKILL.md` and `SETUP.md`. This crate draws the inside of every block. The scene engine (`../scene/`, the default renderer) calls it for each beat as an SVG input layer and composites the film itself; `--engine fframes` still renders whole films with this crate (comparison, recovery). Block changes show in both engines; film-level changes (backdrop, texture, lens, chrome, frame, dissolves) must be made in both `lib.rs`/`design.rs`/`lens.rs` and `../scene/native/src/film.rs`/`compose.rs` until FFFrames retires.
 
 - Prefer supported blocks and JSON props. Extend catalog validation, native dispatch, examples and relevant regression tests together. Modules: `text.rs` (shaping/fitting), `design.rs` (palettes/backdrops), `motion.rs` (curves/exits), `scenes.rs` (grid, helpers, story blocks), `charts.rs`, `diagrams.rs`, `media.rs`.
+- Keep `with_part`/`with_text_alpha` (lib.rs) and `scenes::PART`: the scene engine draws a beat's ground (tone, plate) and content separately around native stage layers.
 - `render_frame` is a pure function of the requested frame and prepared inputs. Use native SVG trees, bundled font metrics and native media decoding; no browser fallback.
 - Measure text only through `text.rs` (rustybuzz, bundled fonts). Check wide, narrow and dense variants, source labels and caption reserves. Counters use the tabular `Figures` face.
 - Speech word intervals are local to their beat, end-exclusive and ordered. Preserve silence gaps and backward seeking. Never manufacture missing timestamps.

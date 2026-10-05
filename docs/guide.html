@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ClearFrame guide: a living document (docs/guide.html).
-  Last updated: 2026-10-05. Covers CHANGELOG 0.5.0 (unreleased).
+  Last updated: 2026-10-05. Covers CHANGELOG 0.5.0 (unreleased), including the scene engine.
 
   WHEN UPDATING, CONSULT (sources of truth, roughly in this order):
     - CHANGELOG.md: newest section first. It feeds "What's new" and anything it changes below.
@@ -9,6 +9,7 @@
       (these are cheap and print the exact current lists; they don't build or render anything)
     - schema/storyboard.schema.json: film and beat fields (transition, exit, tone, camera, plate, captions, textMotion, heading, sfx, format)
     - fframes/canvas.mjs: canvas element types, enters, exits, loops, keys, eases, fonts, colour tokens, effects (glow, shadow, rough, echo, depth, behind)
+    - docs/scene-engine.md and scene/{compile,recipes,code,engine}.mjs: the scene engine, native stages and what they refuse; docs/scene-engine-coverage.md (generated)
     - library/ (README.md + one file per palette, treatment, sketch, playbook and optional direction): what each item sets
     - README.md, AGENTS.md, docs/canvas.md, docs/style.md, docs/ideas.md, docs/speech.md, docs/continuity.md
     - docs/editing.md and docs/collaboration.md: review state, notes, keeps, decisions, previews, recording edits, the journey
@@ -599,7 +600,7 @@
 <section class="topic" id="what-it-is">
       <p class="kicker"><span class="num">01</span><span class="serif">the short version</span></p>
       <h2>What it is</h2>
-      <p>ClearFrame is an agent-directed motion-graphics system. A model (usually Claude) reads your material and writes one <code>storyboard.json</code>. A native Rust/SVG renderer, <strong>FFFrames</strong>, then draws every frame: display type, counting numbers, honest charts, diagrams, hand-drawn canvases and captions, each timed to the words of the narration. Google models supply voice, music, stills and the occasional footage insert, but only when you ask for them and set a budget. It has no browser engine, no timeline editor and no npm runtime dependencies. You direct in words, and the storyboard is the whole film.</p>
+      <p>ClearFrame is an agent-directed motion-graphics system. A model (usually Claude) reads your material and writes one <code>storyboard.json</code>. The <strong>scene engine</strong> then draws every frame on the GPU (Skia on Metal) from a compiled scene plan: native stages — actors that keep their identity, packets on links, code edits read from a commit, footage, materials, particles, a moving camera with real motion blur — and the blocks' display type, counting numbers, honest charts, diagrams, hand-drawn canvases and captions (drawn by the FFFrames block code inside it), each timed to the words of the narration. Google models supply voice, music, stills and the occasional footage insert, but only when you ask for them and set a budget. It has no browser engine, no timeline editor and no npm runtime dependencies. You direct in words, and the storyboard is the whole film.</p>
 
       <div class="cards">
         <div class="card">
@@ -625,7 +626,7 @@
         <li><strong>Not a slide-deck maker.</strong> If the result looks like slides, the film has failed. <code>critique</code> and the review loop exist to catch that.</li>
         <li><strong>Not a text-to-video generator.</strong> Facts, charts and labels are drawn natively. Generated footage is a sparing insert (the default review threshold is 20% of runtime) with its own audio discarded, and it never carries information.</li>
         <li><strong>Not a fact-checker.</strong> It refuses numbers that have no visible source, but it can't tell whether the source is right. The facts are your responsibility.</li>
-        <li><strong>Not a GUI or a browser renderer.</strong> The old HTML/GSAP engine is archived for recovery only. FFFrames is the only active renderer.</li>
+        <li><strong>Not a GUI or a browser renderer.</strong> The old HTML/GSAP engine is archived for recovery only. The scene engine renders by default; <code>--engine fframes</code> renders a film the previous way, for comparison or to recover an older project.</li>
       </ul>
     </section>
 
@@ -639,7 +640,7 @@
         <div class="diagram-scroll">
           <svg viewBox="0 0 900 452" role="img" aria-labelledby="pipeline-title pipeline-desc">
             <title id="pipeline-title">ClearFrame pipeline</title>
-            <desc id="pipeline-desc">Material goes through ingest into a brief and direction, then into storyboard.json, then voice and measured word timings, then job.json, the FFFrames Rust renderer and the MP4. A review loop (critique, check, sheet, draft MP4, fresh review) sends film choices back to the storyboard and tool problems back to the engine.</desc>
+            <desc id="pipeline-desc">Material goes through ingest into a brief and direction, then into storyboard.json, then voice and measured word timings, then job.json and plan.json, the scene engine and the MP4. A review loop (critique, check, sheet, draft MP4, fresh review) sends film choices back to the storyboard and tool problems back to the engine.</desc>
             <defs>
               <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0 0 L10 5 L0 10 z"/></marker>
               <marker id="ah-accent" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head accent" d="M0 0 L10 5 L0 10 z"/></marker>
@@ -686,8 +687,8 @@
 
             <rect class="dg-box" x="472" y="230" width="191" height="120" rx="12"/>
             <text class="dg-label" x="490" y="258">06 · RENDER</text>
-            <text class="dg-title" x="490" y="286">FFFrames</text>
-            <text class="dg-detail" x="490" y="312">Rust · SVG</text>
+            <text class="dg-title" x="490" y="286">Scene engine</text>
+            <text class="dg-detail" x="490" y="312">Skia · GPU</text>
             <text class="dg-detail" x="490" y="332">frame by frame</text>
 
             <rect class="dg-box" x="237" y="230" width="191" height="120" rx="12"/>
@@ -730,8 +731,8 @@
         <li><strong>Ingest &amp; direction</strong><code>ingest --markdown</code> writes BRIEF.md (figures with their sentences and sources, tensions, questions, quotes, tables) and a storyboard for you to rewrite. <code>ingest --audio</code> imports a recording as beats. <code>new DIR --playbook NAME --treatment ID</code> scaffolds a film from a starting arc and writes DIRECTION.md. The story spine goes at the top of DIRECTION.md: the question, the misconception, the turn and the payoff.</li>
         <li><strong><code>storyboard.json</code></strong>This is the single source. It holds the film settings (palette, motion, text motion, captions, sound, voice) and an ordered list of beats. Each beat is a block with validated props, a <code>vo</code> line and optional layers. It is checked against <code>schema/storyboard.schema.json</code> and per-block validators.</li>
         <li><strong>Voice &amp; timing</strong><code>voice --draft</code> records a free local voice. Without <code>--draft</code>, it calls Gemini TTS, which is paid. <code>align --whisper</code> measures word timings locally for free, <code>align --words</code> imports a word file, and <code>align --transcribe</code> is paid. A beat lasts lead + voice + tail, which defaults to 0.25 s + voice + 0.6 s. Measured timings are tied to the hash of the audio file.</li>
-        <li><strong><code>job.json</code></strong>The engine turns every spoken cue into a time, schedules staged items so they finish inside their beat, prepares the media and writes <code>build/native/job.json</code> and <code>build/timing.json</code>.</li>
-        <li><strong>FFFrames</strong>The Rust renderer draws each frame as a pure function of the frame number and the prepared inputs. There is no random state and no wall-clock animation, so any frame can be re-rendered exactly.</li>
+        <li><strong><code>job.json</code> + <code>plan.json</code></strong>The engine turns every spoken cue into a time, schedules staged items so they finish inside their beat, compiles native stages into the scene plan, prepares the media under content-hash names and writes <code>build/native/job.json</code>, <code>build/native/plan.json</code> and <code>build/timing.json</code>.</li>
+        <li><strong>Scene engine</strong>The Rust engine draws each frame on the GPU as a pure function of the frame number and the prepared inputs: the film's backdrop, texture, lens and chrome, each beat's block content (the FFFrames block code, as an input layer), native stages between and over them, and dissolves as two real layers. There is no random state and no wall-clock animation, so any frame can be re-rendered exactly, and stills, sheets, previews and the final all call the same frame. <a href="scene-engine.md">Scene engine</a>.</li>
         <li><strong>MP4</strong><code>render --draft</code> (or <code>preview</code>) uses a fast encoder, about 3× faster than the final. The final render verifies dimensions, FPS and decoded frames, then writes <code>build/video.mp4</code> with a provenance file recording input hashes, renderer revision, encoder, audio provenance, output hash and colour space.</li>
       </ol>
 
@@ -787,6 +788,12 @@ node engine/cli.mjs runlog my-podcast                      <span class="c"># mea
           <div>
             <p><strong>Declare fills on outlines.</strong> Stroked circles, ellipses and rectangles still default to a solid accent fill. Set <code>fill: "none"</code> for contour rings and wireframes, or an explicit colour for a filled shape. The checks warn about omissions in canvas and nested art.</p>
             <p><code>canvas</code> is a beat you draw. It offers 13 element types with entrances, keyframes, motion along paths, loops and exits, all cueable to speech. Any beat can also carry <code>art.under</code> / <code>art.over</code> layers made of the same elements, placed in frame pixels: an arrow onto a bar, a circle round a number. Start from a <code>sketch</code> and place things with <code>still --grid</code>. <code>view: "auto"</code> fits a drawing into the space below the title.</p>
+          </div>
+        </div>
+        <div class="concept" id="concept-stages">
+          <h3>Native stages<small>identities that move</small></h3>
+          <div>
+            <p>A <code>stage</code> is drawn by the engine itself on the GPU. Say what happens and the recipe places it: <code>actors</code> (a card per component, its id is its identity), <code>links</code> that follow them, <code>events</code> — <code>send</code> a packet along a link, <code>state</code>, <code>pulse</code>, <code>move</code>, <code>callout</code>, <code>burst</code>, <code>camera</code> — each cued to a spoken word. <code>code: {commit, file, window}</code> shows an edit read from git with lines that keep their place. Elements use the canvas vocabulary plus <code>video</code>, <code>shader</code>, <code>material</code>, <code>connector</code>, <code>attach</code> and large <code>particles</code>; <code>shutter</code> adds real motion blur. Use a <code>stage</code> block for the whole picture, a beat <code>stage</code> under or over any block, or film <code>stages</code> that keep the same actors across several beats. <a href="scene-engine.md#native-stages">Stages</a>.</p>
           </div>
         </div>
         <div class="concept" id="concept-worlds">
@@ -1419,6 +1426,24 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
         </table>
       </div>
 
+      <h3 id="vocab-stages">Stages</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>actors</code></td><td class="wrap">Cards with an icon, label and status light; kinds service, database, user, users, queue, process, external, file, client, phone, timer, lock, note, state.</td></tr>
+            <tr><td><code>links</code></td><td class="wrap">Connectors that follow their actors (<code>route</code> curve, straight, elbow; <code>dashed</code>; <code>label</code>).</td></tr>
+            <tr><td><code>events</code></td><td class="wrap"><code>send</code> (a packet along a link; a reply runs backwards; <code>burst</code> on arrival), <code>pulse</code>, <code>highlight</code>, <code>state</code> (neutral, active, added, done, removed, error, waiting), <code>move</code>, <code>show</code>, <code>hide</code>, <code>connect</code>, <code>disconnect</code>, <code>callout</code>, <code>burst</code>, <code>camera</code> (<code>follow</code> an actor).</td></tr>
+            <tr><td><code>code</code></td><td class="wrap">An editor from <code>commit</code> + <code>file</code> (+ <code>base</code>, <code>window</code>), <code>before</code>/<code>after</code>, or <code>lines</code> + <code>steps</code>; kept lines move, insertions open room, removals close up.</td></tr>
+            <tr><td><code>video</code> · <code>shader</code> · <code>material</code></td><td class="wrap">Footage as a GPU texture (never looped; <code>hold</code> to freeze on purpose); SkSL materials noise, sheen, halftone, grain, glass, chrome, gold, thermal, scanlines, neon.</td></tr>
+            <tr><td><code>particles</code></td><td class="wrap">The canvas kinds plus <code>burst</code>, <code>stream</code> (along a link) and <code>field</code>, up to 4,000.</td></tr>
+            <tr><td><code>connector</code> · <code>attach</code> · <code>along: {path}</code> · <code>camera: false</code></td><td class="wrap">Join, ride and travel other elements; pin type to the screen while the camera moves.</td></tr>
+            <tr><td><code>camera</code> · <code>shutter</code> · <code>ground</code></td><td class="wrap">A 2.5D camera (pan, zoom, roll, dolly, depth of field); temporal motion blur; a full-frame material behind the stage.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small">Stages refuse canvas-only features (<code>rough</code>, <code>print</code>, <code>mosaic</code>, <code>morph</code>, <code>solid</code>, <code>meter</code>, <code>loop: level</code>) by name; draw those in a <code>canvas</code> beat or <code>art</code>.</p>
+
       <h3 id="vocab-canvas">Canvas elements</h3>
       <div class="table-wrap">
         <table>
@@ -1620,7 +1645,8 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
           <tbody>
             <tr class="group"><td colspan="2">Set up</td></tr>
             <tr><td><code>doctor</code></td><td class="wrap">Checks native dependencies, codecs and disk headroom.</td></tr>
-            <tr><td><code>build</code></td><td class="wrap">Compiles the native renderer (warm cache, one Cargo job).<span class="badge heavy">heavy lock</span></td></tr>
+            <tr><td><code>build [--all]</code></td><td class="wrap">Compiles the scene engine (or, with <code>--engine fframes</code>, FFFrames; <code>--all</code> both): warm cache, one Cargo job.<span class="badge heavy">heavy lock</span></td></tr>
+            <tr><td><code>--engine scene|fframes</code></td><td class="wrap">On any command: which engine draws (default <code>scene</code>; <code>CLEARFRAME_ENGINE</code> or storyboard <code>engine</code> do the same). FFFrames refuses films with native stages.</td></tr>
             <tr><td><code>gallery DIR [--sketches]</code></td><td class="wrap">Renders every block (or sketch) in a theme and aspect, to review the vocabulary.</td></tr>
             <tr class="group"><td colspan="2">Start &amp; choose</td></tr>
             <tr><td><code>new DIR --playbook P --treatment T</code></td><td class="wrap">Scaffolds a storyboard and DIRECTION.md (<code>--theme</code>, <code>--vertical</code>).</td></tr>
@@ -1707,6 +1733,10 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
           <h3>The rough cut still fails the frame audit</h3>
           <p><code>--rough</code> relaxes only text that is declared unfinished: a placeholder slate, or an element marked <code>unfinished</code>. A clipped source line, a covered label or a too-small caption is still an error, because roughness says nothing about whether text that informs is readable. Fix it, or, if it really is a stand-in, mark that element <code>unfinished</code> (a final render will refuse it until it is finished).</p>
         </div>
+        <div id="faq-stage-engine">
+          <h3>"only the scene engine draws them" / "uses rough, which the canvas block draws"</h3>
+          <p>The first means the film has native stages but asked for <code>--engine fframes</code>: drop the flag (or <code>engine</code> in the storyboard). The second means a stage element uses a canvas-only feature; move that element into a <code>canvas</code> beat or <code>art</code>, or remove the feature. Nothing is dropped silently.</p>
+        </div>
         <div id="faq-disk">
           <h3>"Native build needs N GiB free"</h3>
           <p>The build refuses to start below <strong>10 GiB</strong> free with a warm cache, or <strong>25 GiB</strong> for a cold build. <code>doctor</code> flags headroom below 20 GiB (warm) or 30 GiB (cold). Free up space rather than deleting the warm cache: a cold rebuild needs far more.</p>
@@ -1766,6 +1796,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
     <section class="topic" id="whats-new">
       <p class="kicker"><span class="num">09</span><span class="serif">0.5.0, unreleased</span></p>
       <h2>What's new</h2>
+      <p><strong>The scene engine.</strong> Every film now renders with ClearFrame's own GPU scene engine (Skia on Metal): a compiled scene plan evaluated frame by frame, with the backdrop, texture, lens, chrome and dissolves composited natively and each block's content drawn by the FFFrames block code inside it. Native <code>stage</code>s add actors that keep their identity, links, packets, callouts, code edits read from a commit, footage as GPU textures, SkSL materials, particles, a 2.5D camera and real motion blur. All 45 playbooks render through it; <code>--engine fframes</code> keeps the previous renderer for comparison. Measured speed and memory, per project, are in the <a href="scene-engine-coverage.md#measurements">coverage report</a>. <a href="scene-engine.md">Scene engine</a>.</p>
       <p><strong>A viewer for everyone else.</strong> <code>viewer</code> writes one double-clickable HTML page: every film with its versions, a lens over the picture showing each text element's font, size and colour, a scrub timeline with scene, narration, music, sound and note lanes, previews of every project file (images, SVG, video, audio, fonts, 3D), notes pinned to the picture (saved into the film with <code>--serve</code>), and the building blocks in plain language. See <a href="viewer.md">viewer</a>.</p>
       <p><strong>Footage-led films.</strong> Clip assets can select Runway models (<code>seedance2_5</code> with first and last keyframes, <code>gen4.5</code> for cheap drafts) alongside Omni and Veo; <code>plan</code> estimates credits and moderation failures explain how to reframe or reroute. <a href="hero-footage.md">Footage-led films</a> covers keyframe stills before motion, last-frame continuation, provider routing and cutting to the measured drop.</p>
       <p><strong>Editorial plots and a finance palette.</strong> <code>props.plot</code> now fills the frame with a one-line title, a quiet key and axes, values at the line ends, optional regime <code>bands</code> and an <code>area</code> fill; overlapping tick labels fail at authoring time. <code>props.bars</code> adds signed editorial bar charts (vertical or horizontal, honest zero baseline, an optional average line) in the same system; see <a href="bars.md">bars</a>. <code>props.stat</code> is a headline figure that counts up, with a change line coloured by whether a rise is good news (<a href="stat.md">headline figures</a>). <code>props.distribution</code> counts outcomes into bins with a stated threshold share and a latest-year marker (<a href="distribution-charts.md">distribution charts</a>). <code>props.multiples</code> puts up to nine small lines on one shared scale with one highlighted (<a href="small-multiples.md">small multiples</a>). The <code>ledger</code> palette (navy, teal, brass) suits financial-services content. Showcase kits and retained render evidence were removed: the library keeps sources, and renders belong in <code>build/</code>.</p>

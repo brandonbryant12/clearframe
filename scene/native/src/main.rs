@@ -103,17 +103,48 @@ fn range_of(spec: Option<&String>, total: usize) -> Result<(usize, usize), Strin
     }
 }
 
+/// Stills: the GPU draws frame after frame while up to two worker threads compress and write
+/// the previous ones (the two-worker limit).
 fn write_frames(engine: &mut Engine, frames: &[usize], dir: &Path) -> Result<Vec<String>, String> {
     std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
+    let (w, h) = (engine.width, engine.height);
+    let (tx, rx) = std::sync::mpsc::sync_channel::<(PathBuf, Vec<u8>)>(2);
+    let rx = std::sync::Arc::new(std::sync::Mutex::new(rx));
+    let workers: Vec<_> = (0..2.min(frames.len()))
+        .map(|_| {
+            let rx = rx.clone();
+            std::thread::spawn(move || -> Result<(), String> {
+                loop {
+                    let job = rx.lock().unwrap().recv();
+                    let Ok((file, pixels)) = job else { return Ok(()) };
+                    let png = compose::encode_png(&pixels, w, h)?;
+                    std::fs::write(&file, png).map_err(|e| format!("{}: {e}", file.display()))?;
+                }
+            })
+        })
+        .collect();
     let mut files = vec![];
+    let mut failure = None;
     for &f in frames {
-        engine.render(f)?;
-        let png = engine.png()?;
+        let mut pixels = Vec::new();
+        if let Err(e) = engine.render(f).and_then(|_| engine.read(&mut pixels)) {
+            failure = Some(e);
+            break;
+        }
         let file = dir.join(format!("frame-{f:06}.png"));
-        std::fs::write(&file, png).map_err(|e| e.to_string())?;
         files.push(file.to_string_lossy().into_owned());
+        if tx.send((file, pixels)).is_err() {
+            break;
+        }
     }
-    Ok(files)
+    drop(tx);
+    for worker in workers {
+        worker.join().map_err(|_| "a still writer panicked".to_string())??;
+    }
+    match failure {
+        Some(e) => Err(e),
+        None => Ok(files),
+    }
 }
 
 fn render(engine: &mut Engine, a: usize, b: usize, out: &Path, draft: bool) -> Result<serde_json::Value, String> {

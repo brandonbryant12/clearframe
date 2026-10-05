@@ -62,4 +62,4 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 6. `clearframe captions` has been exported. Vertical deliverables have captions burned in.
 7. The delivery message lists the sources, what was AI-generated (voice, music, images, footage) and the spend.
 
-- FFFrames native rendering uses the pinned upstream crate and GPL-enabled codecs; review upstream and codec licensing for your distribution. Bundled Inter includes its OFL notice. Archived browser dependencies are not installed by the active package.
+- The scene engine links the pinned FFFrames crates (block layer, footage decoding; GPL-enabled libav) and skia-safe (MIT; Skia BSD-3), and encodes with the system FFmpeg/libx264 (GPL); review upstream and codec licensing for your distribution. Bundled Inter includes its OFL notice. Archived browser dependencies are not installed by the active package.

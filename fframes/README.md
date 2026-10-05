@@ -1,6 +1,6 @@
-# Production FFFrames renderer
+# FFFrames block code and renderer
 
-This is ClearFrame's only active renderer. Use the root CLI (`node engine/cli.mjs`); `node fframes/cli.mjs` is an alias. No separate `fframes.json` or per-film Rust project is needed.
+This crate draws the inside of ClearFrame's blocks. The default renderer is the scene engine (`../scene/`, [design](../docs/scene-engine.md)), which calls this code for each beat as an SVG input layer; `--engine fframes` renders whole films with this crate, for comparison and recovery. Use the root CLI (`node engine/cli.mjs`); `node fframes/cli.mjs` is an alias. No separate `fframes.json` or per-film Rust project is needed.
 
 - [Setup](SETUP.md): native tools, pinned dependencies and resource limits.
 - [Design](DESIGN.md): storyboard → prepared job → native render → shared audio mix.

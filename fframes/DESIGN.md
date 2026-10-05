@@ -1,5 +1,7 @@
 # Native rendering contract
 
+This describes the FFFrames job and renderer. With the default scene engine the same job is prepared, a scene plan is compiled beside it, and the engine composites the film itself while this code draws each beat's block content ([scene engine](../docs/scene-engine.md)); the finisher, receipts and colour conventions below apply to both.
+
 The root CLI loads `storyboard.json`, computes narration-led beat lengths, validates block props and prepares `build/native/job.json`. Version 2 jobs contain canvas/FPS, expanded palette, motion, contiguous frame spans, normalized block data, local word intervals and caption phrases. Project media is copied under content-hash names; fonts are bundled. A manifest records input hashes and upstream revision.
 
 The reusable Rust binary reads the job at runtime. Content changes do not recompile it; renderer source changes invalidate the build marker. Every block reads local frame time. Numbers/charts use monotonic interpolation; spring motion affects only decorative entrances. Six transitions are scene entrances, not overlapping scene composites. Font advances determine wrapping. Native image/video blocks use prepared local media.

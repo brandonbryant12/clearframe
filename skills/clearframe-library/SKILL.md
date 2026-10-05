@@ -1,6 +1,6 @@
 ---
 name: clearframe-library
-description: Choose and combine 33 FFFrames blocks, canvas sketches, beat layers (plate, tone, camera, art) and adaptable narrative playbooks. Use for graphic selection, palette and motion variation, charts, diagrams, drawings, media plates, kinetic text and native library extensions.
+description: Choose and combine 33 blocks plus native GPU stages, canvas sketches, beat layers (plate, tone, camera, art) and adaptable narrative playbooks. Use for graphic selection, palette and motion variation, charts, diagrams, drawings, media plates, kinetic text and native library extensions.
 ---
 
 # Native visual library

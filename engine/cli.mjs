@@ -41,7 +41,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
   motions [--json]                    presets, entrances, exits and backdrops
   icons [--json]                      95 bundled Tabler icons and provenance
   sketch [name] [--vertical]          canvas starting compositions (route, orbit, pipeline…) as JSON
-  doctor | build                      native dependencies and compiler
+  doctor | build [--all]              native dependencies; compile the scene engine (--all: and FFFrames)
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]
   viewer [folders…] [--serve] [--port 4317] [--out build/viewer] [--no-render]   one HTML page: films, versions, lens, timeline, notes, building blocks
   plan <dir>                          approximate generation cost and cache state
@@ -93,7 +93,8 @@ Review and edit (docs/editing.md; state in DIR/review/)
 Library: palettes, treatments, sketches and playbooks are files in library/ (see library/README.md).
 A project's own library/ overrides them by id; --library DIR (or CLEARFRAME_LIBRARY) adds a shared one.
 
-FFFrames is the only active renderer. Preview produces a review MP4.
+The scene engine renders (docs/scene-engine.md); --engine fframes uses the FFFrames renderer instead
+(films with native stages need the scene engine). build [--all] compiles it. Preview produces a review MP4.
 Draft permits estimated timing; --scale 0.25–1 reduces review resolution only (default 1).
 Rough (--rough, a draft for first review) also renders declared placeholders (a beat's "placeholder", or a
 generated asset not paid for yet) as labelled slates, and canvas/art elements marked "unfinished" as drawn.

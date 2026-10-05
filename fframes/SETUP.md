@@ -25,6 +25,15 @@ No npm packages are required for the active Node workflow. `npm ci` can establis
 /Users/brandon/.local/bin/codex-heavy -- npm test
 ```
 
+## The scene engine
+
+The default renderer, `scene/native` (`clearframe-scene`), needs nothing beyond the requirements above: it links the same pinned FFFrames crates and the same prebuilt Skia binaries (`skia-safe 0.153.3`), and it encodes through the `ffmpeg` on `PATH` (libx264). `node engine/cli.mjs build` compiles it into `scene/.cache/target` (ignored) with one Cargo job through the heavy gate; when that target is empty it is first seeded from `fframes/.cache/metal` by copy-on-write, so a warm FFFrames cache avoids a cold Skia/FFmpeg build. `build --all` compiles both engines; `--engine fframes` on any command renders with this crate instead. Allow the same disk headroom as the FFFrames build (the two targets together take about 4–5 GiB on this Mac). Engine tests:
+
+```sh
+/Users/brandon/.local/bin/codex-heavy -- env CARGO_TARGET_DIR=scene/.cache/target cargo test --manifest-path scene/native/Cargo.toml --release --locked --jobs 1 -- --test-threads=2
+node --test test/scene-engine.test.mjs
+```
+
 ## Optional dimensional art setup
 
 | Functionality | Additional requirement |

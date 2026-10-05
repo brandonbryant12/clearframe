@@ -1,11 +1,11 @@
 ---
 name: clearframe-fframes
-description: Develop and verify the production FFFrames Rust/SVG renderer used by ClearFrame. Use for native block implementation, media decoding, typography, frame timing, rendering diagnostics and native setup.
+description: Develop and verify the FFFrames Rust/SVG block code that draws the inside of ClearFrame's blocks (inside the scene engine, or whole films with --engine fframes). Use for block implementation, block typography and layout, media decoding and FFFrames setup.
 ---
 
 # Production native renderer
 
-Read `fframes/README.md`, `fframes/SETUP.md`, `fframes/DESIGN.md` and `fframes/AGENTS.md`. All active rendering uses FFFrames. A single storyboard selects native blocks; there is no second scene map or per-film Cargo crate.
+Read `fframes/README.md`, `fframes/SETUP.md`, `fframes/DESIGN.md` and `fframes/AGENTS.md`. The default renderer is the scene engine (`docs/scene-engine.md`, `skills/clearframe-scene/SKILL.md`); it draws each beat's block content with this crate as an SVG input layer and composites everything else natively. `--engine fframes` renders whole films with this crate. A single storyboard selects blocks; there is no second scene map or per-film Cargo crate.
 
 1. Use the root CLI for prepare/check/still/sheet/render workflows. Build once, then pass content as runtime JSON. Renderer sources, upstream revision and Cargo.lock determine build cache invalidation.
 2. Extend catalog metadata/validation and native code together. Inspect the public upstream API in the pinned checkout rather than assuming browser/SVG-string behavior. Module ownership under `native/src/`:
