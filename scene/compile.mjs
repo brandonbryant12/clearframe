@@ -48,6 +48,8 @@ function resolveTimes(list, cue, where) {
       el.exitAt = cue(el.exitSay);
       delete el.exitSay;
     }
+    // An exit time without an exit kind fades out (as canvas elements do).
+    if (el.exitAt != null && el.exit == null) el.exit = 'fade';
     for (const k of el.keys ?? [])
       if (k.say != null) {
         k.at = cue(k.say);
@@ -100,7 +102,7 @@ export function compilePlan({ root, sb, timing, job, stage, assetFile }, { rough
 
   const add = ({ id, spec, start, frames, beat, z, cue, where, fade }) => {
     const end = frames / fps;
-    const { elements, camera } = compileStage(spec, { cue, end, where, frame, staged: p => provenance.push({ layer: id, ...p }) });
+    const { elements, camera } = compileStage(spec, { cue, end, where, frame, root, staged: p => provenance.push({ layer: id, ...p }) });
     resolveTimes(elements, cue, where);
     each(elements, el => {
       if (el.at != null && el.at > end - 1 / fps + 1e-7)

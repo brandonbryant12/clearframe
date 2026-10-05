@@ -48,7 +48,7 @@ function edgeGap(w, h, dx, dy, margin = 14) {
  * Compile one stage spec into native elements and a camera. `cue(v, fallback)` turns seconds or
  * a spoken word into layer seconds; `end` is the layer length in seconds.
  */
-export function compileStage(spec, { cue, end, where, frame, staged }) {
+export function compileStage(spec, { cue, end, where, frame, staged, root }) {
   if (!spec || typeof spec !== 'object' || Array.isArray(spec)) fail(where, 'a stage is an object');
   for (const k of Object.keys(spec)) if (!STAGE_KEYS.includes(k) && !['title', 'kicker', 'source', 'support', 'land'].includes(k)) fail(where, `unknown stage key ${k} (${STAGE_KEYS.join(', ')})`);
   const at = (v, fallback) => (v == null ? fallback : cue(v));
@@ -108,9 +108,10 @@ export function compileStage(spec, { cue, end, where, frame, staged }) {
       arrow: l.arrow ?? 'end', at: appear, enter: 'draw', dur: 0.7, keys: [],
       ...(l.dashed ? { dash: [10, 12], loop: { type: 'dash', period: 1.6 } } : {}),
     };
-    links.set(id, { spec: l, el, appear, from: l.from, to: l.to });
+    const label = l.label ? { type: 'text', id: `${id}.label`, text: String(l.label).slice(0, 32), attach: { to: id, dx: 0, dy: -24 }, anchor: 'middle', size: 24, font: 'mono', fill: 'muted', at: appear + 0.3, enter: 'fade' } : null;
+    links.set(id, { spec: l, el, label, appear, from: l.from, to: l.to });
     out.links.push(el);
-    if (l.label) out.links.push({ type: 'text', id: `${id}.label`, text: String(l.label).slice(0, 32), attach: { to: id, dx: 0, dy: -24 }, anchor: 'middle', size: 24, font: 'mono', fill: 'muted', at: appear + 0.3, enter: 'fade' });
+    if (label) out.links.push(label);
   });
   const findLink = (from, to, w0) => {
     for (const [id, l] of links) {
@@ -185,7 +186,11 @@ export function compileStage(spec, { cue, end, where, frame, staged }) {
       case 'hide': {
         const a = actor(ev.actor, w0);
         Object.assign(a.group, { exitAt: t, exit: ev.exit ?? 'fade', exitDur: ev.dur ?? 0.4 });
-        for (const l of links.values()) if (l.from === ev.actor || l.to === ev.actor) Object.assign(l.el, { exitAt: t, exit: 'fade', exitDur: ev.dur ?? 0.4 });
+        for (const l of links.values())
+          if (l.from === ev.actor || l.to === ev.actor) {
+            Object.assign(l.el, { exitAt: t, exit: 'fade', exitDur: ev.dur ?? 0.4 });
+            if (l.label) Object.assign(l.label, { exitAt: t, exit: 'fade', exitDur: ev.dur ?? 0.4 });
+          }
         break;
       }
       case 'connect': {
@@ -196,6 +201,7 @@ export function compileStage(spec, { cue, end, where, frame, staged }) {
       case 'disconnect': {
         const l = links.get(ev.link) ?? fail(w0, `no link ${ev.link}`);
         Object.assign(l.el, { exitAt: t, exit: 'undraw', exitDur: ev.dur ?? 0.5 });
+        if (l.label) Object.assign(l.label, { exitAt: t, exit: 'fade', exitDur: ev.dur ?? 0.5 });
         break;
       }
       case 'callout': {
@@ -233,7 +239,7 @@ export function compileStage(spec, { cue, end, where, frame, staged }) {
   }
   // Keys must run in time order; events are authored in any order.
   for (const a of actors.values()) for (const el of [a.group, a.card, a.dot]) el.keys.sort((p, q) => p.at - q.at);
-  const code = spec.code ? [codeElement(spec.code, { cue: v => at(v, null), where: `${where}.code`, staged })] : [];
+  const code = spec.code ? [codeElement(spec.code, { cue: v => at(v, null), where: `${where}.code`, staged, root })] : [];
   const camera = spec.camera ? structuredClone(spec.camera) : {};
   if (camera.keys) camera.keys = camera.keys.map(k => ({ ...k, at: at(k.say ?? k.at, 0), say: undefined }));
   if (camera.focus?.keys) camera.focus.keys = camera.focus.keys.map(k => ({ ...k, at: at(k.say ?? k.at, 0), say: undefined }));

@@ -120,13 +120,24 @@ export function codeElement(spec, { cue, where, staged, root = process.cwd() }) 
   const a = before ? lines(before) : [],
     b = after ? lines(after) : [];
   let ops = diffLines(a, b);
-  // Show the change with `context` unchanged lines around it (or an explicit window).
-  const context = spec.context ?? 3;
+  // Show the change with `context` unchanged lines around it, or an explicit `window`:
+  // [first, last] line numbers of the new file (removed lines between them come along).
   const changed = ops.map((o, i) => (o.op === 'keep' ? -1 : i)).filter(i => i >= 0);
   if (!changed.length) throw new Error(`${where}: before and after are identical; nothing to show`);
-  const [first, last] = [Math.max(0, changed[0] - context), Math.min(ops.length - 1, changed.at(-1) + context)];
+  let first, last;
+  if (spec.window) {
+    const [lo, hi] = spec.window;
+    if (!(Number.isInteger(lo) && Number.isInteger(hi) && lo >= 1 && hi >= lo)) throw new Error(`${where}: window is [first, last] line numbers of the new file`);
+    const inside = ops.map((o, i) => (o.op !== 'del' && o.b + 1 >= lo && o.b + 1 <= hi ? i : -1)).filter(i => i >= 0);
+    if (!inside.length) throw new Error(`${where}: window ${lo}–${hi} holds no lines of the new file`);
+    [first, last] = [inside[0], inside.at(-1)];
+    if (!ops.slice(first, last + 1).some(o => o.op !== 'keep')) throw new Error(`${where}: window ${lo}–${hi} shows no change`);
+  } else {
+    const context = spec.context ?? 3;
+    [first, last] = [Math.max(0, changed[0] - context), Math.min(ops.length - 1, changed.at(-1) + context)];
+  }
   ops = ops.slice(first, last + 1);
-  if (ops.length > 60) throw new Error(`${where}: the change spans ${ops.length} lines; show one hunk at a time with base/commit or before/after`);
+  if (ops.length > 60) throw new Error(`${where}: the change spans ${ops.length} lines; narrow it with window: [first, last]`);
   const id = (o, i) => `${o.op[0]}${o.op === 'add' ? o.b : o.a}-${i}`;
   const linesOut = ops.map((o, i) => {
     const raw = o.op === 'add' ? b[o.b] : a[o.a];
@@ -138,6 +149,15 @@ export function codeElement(spec, { cue, where, staged, root = process.cwd() }) 
   const when = spec.say != null || spec.at != null ? cue(spec.say ?? spec.at) : 1.2;
   el.lines = linesOut;
   el.title = title ?? '';
+  // Fit the editor into `h`: the size drops to show every row, but never below what a viewer
+  // can read; too many rows is an error, not small type.
+  if (spec.h != null) {
+    const rows = Math.max(ops.filter(o => o.op !== 'add').length, ops.filter(o => o.op !== 'del').length);
+    const leading = spec.leading ?? 1.5;
+    const fit = Math.floor(spec.h / (rows * leading + (el.title ? 1.9 : 0) + 1.8));
+    if (fit < 20) throw new Error(`${where}: ${rows} rows do not fit ${spec.h} px at a readable size (they would be ${fit} px); narrow the window or give the editor more height`);
+    el.size = Math.min(el.size, fit);
+  }
   el.steps = [
     { at: 0, show: show(['keep', 'del']) },
     { at: when, show: show(['keep', 'add']), add: show(['add']), remove: show(['del']), focus: spec.focus === false ? [] : show(['add']) },

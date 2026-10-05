@@ -304,6 +304,10 @@ pub struct Scope<'a> {
     pub errors: Vec<String>,
     /// Draw at a subframe time for motion blur: footage stays on its frame.
     pub sample: bool,
+    /// The placement pass: positions and routes are recorded, nothing is drawn.
+    pub locating: bool,
+    /// Group nesting: the camera and depth apply once, at the layer's top level.
+    pub depth: u32,
 }
 
 impl Scope<'_> {
@@ -386,8 +390,21 @@ pub fn element_bounds(el: &Value) -> (f32, f32, f32, f32) {
     bounds(el, &measure_el)
 }
 
-/// Draw `list` at layer time `now`. `inherited` is the entrance time children fall back to.
+/// Draw a layer's `list` at layer time `now`. Every element is placed first (twice, so an
+/// element can follow one listed after it), then drawn in order: a connector can sit under
+/// the actors it joins, and a label can ride an element drawn later.
 pub fn draw(canvas: &Canvas, scope: &mut Scope, list: &[Value], inherited: f32, stagger: f32, now: f32) {
+    let errors = scope.errors.len();
+    scope.locating = true;
+    for _ in 0..2 {
+        draw_list(canvas, scope, list, inherited, stagger, now);
+    }
+    scope.locating = false;
+    scope.errors.truncate(errors);
+    draw_list(canvas, scope, list, inherited, stagger, now);
+}
+
+fn draw_list(canvas: &Canvas, scope: &mut Scope, list: &[Value], inherited: f32, stagger: f32, now: f32) {
     for (i, el) in list.iter().enumerate() {
         element(canvas, scope, el, inherited + i as f32 * stagger, now);
     }
@@ -509,10 +526,10 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
     let kind = s(el, "type");
     if kind == "path" {
         if let (Some(id), Some(info)) = (el.get("id").and_then(Value::as_str), path_info(s(el, "d"))) {
-            scope.routes.entry(id.to_owned()).or_insert(info);
+            scope.routes.insert(id.to_owned(), info);
         }
     }
-    if let Some(echo) = el.get("echo") {
+    if let Some(echo) = el.get("echo").filter(|_| !scope.locating) {
         return echoed(canvas, scope, el, echo, default_at, now);
     }
     let at = f(el, "at", default_at);
@@ -538,7 +555,7 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
     };
     let dur = f(el, "dur", default_dur).max(0.0);
     let local = now - at;
-    if local < 0.0 {
+    if local < 0.0 && !scope.locating {
         return;
     }
     let exit = s(el, "exit");
@@ -554,10 +571,11 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
         Some(e) if exit == "none" && now >= e => 1.0,
         _ => 0.0,
     };
-    if q >= 1.0 {
+    if q >= 1.0 && !scope.locating {
         return;
     }
-    let e = if dur <= 0.0 { Enter::DONE } else { scope.motion.enter_over(local, dur) };
+    // Placing an element before it enters: where it will rest.
+    let e = if dur <= 0.0 || local < 0.0 { Enter::DONE } else { scope.motion.enter_over(local, dur) };
     let grow = if dur <= 0.0 { 1.0 } else { scope.motion.grow(local, dur) };
     let (bx, by, bw, bh) = element_bounds(el);
     let origin = el
@@ -709,14 +727,18 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
     if let Some(id) = el.get("id").and_then(Value::as_str) {
         scope.origins.insert(id.to_owned(), (origin.0 + pose.dx, origin.1 + pose.dy));
     }
-    if pose.alpha <= 0.001 {
+    if scope.locating || pose.alpha <= 0.001 || q >= 1.0 || local < 0.0 {
         return;
     }
     // Depth: perspective scale and depth of field from the layer camera.
-    let z = num(el, "z");
-    let view = match scope.camera.matrix(z.unwrap_or(0.0)) {
-        Some(v) => v,
-        None => return,
+    let z = if scope.depth == 0 { num(el, "z") } else { None };
+    let view = if scope.depth > 0 {
+        (Matrix::new_identity(), 1.0, 1.0)
+    } else {
+        match scope.camera.matrix(z.unwrap_or(0.0)) {
+            Some(v) => v,
+            None => return,
+        }
     };
     let draw_on = if enter == "draw" {
         if dur <= 0.0 {
@@ -1155,7 +1177,9 @@ fn shape(canvas: &Canvas, scope: &mut Scope, el: &Value, draw: f32, dash_shift: 
                 canvas.save_layer_alpha_f(None, alpha);
             }
             let children = arr(el, "children");
-            self::draw(canvas, scope, children, at, f(el, "stagger", 0.0), now);
+            scope.depth += 1;
+            draw_list(canvas, scope, children, at, f(el, "stagger", 0.0), now);
+            scope.depth -= 1;
             if alpha < 0.999 {
                 canvas.restore();
             }

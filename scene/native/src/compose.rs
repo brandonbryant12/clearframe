@@ -239,6 +239,8 @@ impl Engine {
             texts: vec![],
             errors: vec![],
             sample: false,
+            locating: false,
+            depth: 0,
         }
     }
 

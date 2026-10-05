@@ -1,0 +1,261 @@
+{
+  "version": 2,
+  "title": "Why a finished packet jumped to the corner",
+  "logline": "A pull-request explainer drawn on native GPU stages: one stage that persists across beats, a packet on a wire, and the fix read from the exact commit.",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "paper",
+  "type": "inter",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.6
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "camera": "none",
+  "lens": {
+    "handheld": 0
+  },
+  "captions": false,
+  "music": false,
+  "sources": [
+    {
+      "id": "branch",
+      "title": "ClearFrame, branch codex/gpu-scene-engine, commit a18779c (fframes/native/src/canvas_geometry.rs)"
+    }
+  ],
+  "stages": [
+    {
+      "id": "route",
+      "from": "symptom",
+      "to": "cause",
+      "z": "under",
+      "shutter": 0.5,
+      "actors": [
+        {
+          "id": "start",
+          "label": "Route start",
+          "kind": "state",
+          "x": 420,
+          "y": 600,
+          "at": 0.3
+        },
+        {
+          "id": "end",
+          "label": "Route end",
+          "kind": "state",
+          "x": 1500,
+          "y": 600,
+          "at": 0.5
+        }
+      ],
+      "links": [
+        {
+          "id": "wire",
+          "from": "start",
+          "to": "end",
+          "label": "along",
+          "bend": 0.28,
+          "at": 0.9
+        }
+      ],
+      "events": [
+        {
+          "do": "send",
+          "from": "start",
+          "to": "end",
+          "say": "packet",
+          "dur": 1.6,
+          "label": "packet",
+          "arrive": true
+        },
+        {
+          "do": "state",
+          "actor": "end",
+          "status": "error",
+          "say": "corner"
+        },
+        {
+          "do": "callout",
+          "actor": "end",
+          "side": "top",
+          "text": "the last step is zero length",
+          "say": {
+            "beat": "cause",
+            "say": "zero"
+          }
+        },
+        {
+          "do": "camera",
+          "follow": "end",
+          "zoom": 1.2,
+          "say": {
+            "beat": "cause",
+            "say": "flattening"
+          },
+          "dur": 1.6
+        },
+        {
+          "do": "hide",
+          "actor": "start",
+          "say": {
+            "beat": "cause",
+            "say": "flattening"
+          },
+          "dur": 0.6
+        }
+      ],
+      "over": [
+        {
+          "type": "circle",
+          "id": "ghost",
+          "cx": 0,
+          "cy": 0,
+          "r": 13,
+          "fill": "negative",
+          "glow": {
+            "blur": 10,
+            "opacity": 0.8
+          },
+          "attach": {
+            "to": "end",
+            "dx": -1500,
+            "dy": -600
+          },
+          "enter": "pop",
+          "exit": "fade",
+          "say": "jumps",
+          "exitSay": {
+            "beat": "cause",
+            "say": "curve"
+          }
+        },
+        {
+          "type": "text",
+          "id": "ghost.label",
+          "text": "\u2026and reappears here",
+          "attach": {
+            "to": "ghost",
+            "dx": 170,
+            "dy": 120
+          },
+          "size": 28,
+          "font": "strong",
+          "fill": "negative",
+          "say": "jumps",
+          "exitSay": {
+            "beat": "cause",
+            "say": "curve"
+          }
+        }
+      ]
+    }
+  ],
+  "beats": [
+    {
+      "id": "symptom",
+      "block": "stage",
+      "vo": "A packet travels along its route, reaches the end, and then jumps back to the corner of the frame.",
+      "min": 7,
+      "props": {
+        "title": "A finished packet jumped to the corner",
+        "source": "Observed while building the scene engine, commit a18779c"
+      }
+    },
+    {
+      "id": "cause",
+      "block": "stage",
+      "vo": "The route is a curve flattened into short segments. The flattening can leave a zero length step at the end, and the old loop skipped it without returning the end point.",
+      "min": 8,
+      "props": {
+        "title": "The last step had no length",
+        "source": "fframes/native/src/canvas_geometry.rs at a18779c"
+      }
+    },
+    {
+      "id": "fix",
+      "block": "stage",
+      "vo": "The fix remembers the last real point, so a packet that has arrived stays where it arrived.",
+      "min": 7,
+      "props": {
+        "title": "Remember the last real point",
+        "source": "git show a18779c -- fframes/native/src/canvas_geometry.rs",
+        "code": {
+          "commit": "a18779c",
+          "file": "fframes/native/src/canvas_geometry.rs",
+          "repo": "../..",
+          "x": 140,
+          "y": 250,
+          "w": 1640,
+          "size": 30,
+          "say": "remembers",
+          "window": [
+            346,
+            362
+          ],
+          "h": 660
+        }
+      }
+    },
+    {
+      "id": "result",
+      "block": "stage",
+      "vo": "Both engines share the fix: the canvas block and the new native stages.",
+      "min": 5,
+      "props": {
+        "title": "One fix, both engines",
+        "source": "Same commit: canvas_geometry.rs and scene/native/src/geometry.rs",
+        "shutter": 0.5,
+        "ground": {
+          "material": "noise",
+          "opacity": 0.18,
+          "colors": [
+            "bg",
+            "wash",
+            "accent"
+          ]
+        },
+        "actors": [
+          {
+            "id": "canvas",
+            "label": "Canvas block",
+            "kind": "file",
+            "x": 560,
+            "y": 600,
+            "at": 0.2
+          },
+          {
+            "id": "stage",
+            "label": "Native stage",
+            "kind": "service",
+            "x": 1360,
+            "y": 600,
+            "at": 0.4
+          }
+        ],
+        "events": [
+          {
+            "do": "state",
+            "actor": "canvas",
+            "status": "done",
+            "say": "canvas"
+          },
+          {
+            "do": "state",
+            "actor": "stage",
+            "status": "done",
+            "say": "native"
+          },
+          {
+            "do": "burst",
+            "actor": "stage",
+            "say": "stages",
+            "count": 320
+          }
+        ]
+      }
+    }
+  ]
+}
