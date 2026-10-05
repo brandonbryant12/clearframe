@@ -71,9 +71,14 @@ pub fn backdrop(canvas: &Canvas, kind: &str, w: f32, h: f32, p: &Palette, second
             {
                 let mut paint = Paint::default();
                 paint.set_shader(perlin_noise_shader::fractal_noise(freq, octaves, seed, None));
-                let m = [0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, slope, intercept];
+                // The SVG filter curves the noise's alpha, then the rect's opacity scales the
+                // result. Skia applies paint alpha before the colour filter, so the opacity is
+                // folded into the curve instead (the curve stays below 1, so clamping agrees).
+                let m = [
+                    0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5,
+                    0.0, 0.0, 0.0, slope * alpha, intercept * alpha,
+                ];
                 paint.set_color_filter(color_filters::matrix_row_major(&m, None));
-                paint.set_alpha_f(alpha);
                 canvas.draw_rect(Rect::from_wh(w, h), &paint);
             }
         }
@@ -177,13 +182,26 @@ pub fn grain(canvas: &Canvas, texture: &Value, w: f32, h: f32, p: &Palette, seco
     let seed = if animate { ((seconds * 8.0).floor() as i32 % 97 + 1) as f32 } else { 7.0 };
     let opacity = g * if p.dark { 0.16 } else { 0.12 };
     let mut paint = Paint::default();
-    paint.set_shader(perlin_noise_shader::fractal_noise((0.85, 0.85), 2, seed, None));
-    let m = [0.33, 0.33, 0.33, 0.0, 0.0, 0.33, 0.33, 0.33, 0.0, 0.0, 0.33, 0.33, 0.33, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0];
-    paint.set_color_filter(color_filters::matrix_row_major(&m, None));
+    paint.set_shader(grain_shader(seed));
     canvas.save_layer_alpha_f(None, opacity);
     paint.set_blend_mode(BlendMode::Overlay);
     canvas.draw_rect(Rect::from_wh(w, h), &paint);
     canvas.restore();
+}
+
+/// Fractal noise desaturated to grey, as the FFFrames SVG converter draws its grain: it feeds
+/// the turbulence's premultiplied channels to the grey matrix, which makes the grain darker than
+/// the spec's unpremultiplied reading. Films keep the look they were reviewed with.
+fn grain_shader(seed: f32) -> Option<sk::Shader> {
+    thread_local! {
+        static EFFECT: sk::RuntimeEffect = sk::RuntimeEffect::make_for_shader(
+            "uniform shader noise; half4 main(float2 p) { half4 c = noise.eval(p); half g = 0.33 * (c.r + c.g + c.b); return half4(half3(g * c.a), c.a); }",
+            None,
+        )
+        .expect("grain shader");
+    }
+    let noise = perlin_noise_shader::fractal_noise((0.85, 0.85), 2, seed, None)?;
+    EFFECT.with(|e| e.make_shader(sk::Data::new_empty(), &[noise.into()], None))
 }
 
 /// A labelled coordinate grid for placing art (review aid; never in deliverables).

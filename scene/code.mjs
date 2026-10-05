@@ -62,8 +62,9 @@ export function diffLines(a, b) {
     j = 0;
   while (i < n || j < m) {
     if (i < n && j < m && a[i] === b[j]) ops.push({ op: 'keep', a: i++, b: j++ });
-    else if (j < m && (i >= n || lcs[i][j + 1] >= lcs[i + 1][j])) ops.push({ op: 'add', b: j++ });
-    else ops.push({ op: 'del', a: i++ });
+    // Removals before insertions, as a reader expects a replaced line to read.
+    else if (i < n && (j >= m || lcs[i + 1][j] >= lcs[i][j + 1])) ops.push({ op: 'del', a: i++ });
+    else ops.push({ op: 'add', b: j++ });
   }
   return ops;
 }

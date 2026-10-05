@@ -96,15 +96,19 @@ export async function engineCommand(ctx, command, args = [], capture = false) {
   const bin = await buildEngine(engine);
   if (engine === 'fframes')
     return run(bin, ['--job', path.join(ctx.dir, 'job.json'), '--media', ctx.media, command, ...args], { capture, cwd: ctx.dir });
-  const flags = [];
-  const rest = [];
+  return run(bin, sceneArgs(path.join(ctx.dir, 'plan.json'), command, args), { capture, cwd: ctx.dir, env: sceneEnv() });
+}
+
+/** FFFrames-style command words → scene engine arguments (`--draft`/`--scale` become globals). */
+export function sceneArgs(plan, command, args = []) {
+  const flags = [],
+    rest = [];
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--draft') flags.push('--draft');
     else if (args[i] === '--scale') flags.push('--scale', args[++i]);
     else rest.push(args[i]);
   }
-  const words = command === '--audit' ? ['audit', ...rest] : [command, ...rest];
-  return run(bin, ['--plan', path.join(ctx.dir, 'plan.json'), ...flags, ...words], { capture, cwd: ctx.dir, env: sceneEnv() });
+  return ['--plan', plan, ...flags, ...(command === '--audit' ? ['audit', ...rest] : [command, ...rest])];
 }
 
 export const backendOf = engine => (engine === 'fframes' ? 'fframes skia-metal' : process.platform === 'darwin' ? 'scene skia-metal' : 'scene skia-raster');

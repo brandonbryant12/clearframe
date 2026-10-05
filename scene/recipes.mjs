@@ -131,6 +131,7 @@ export function compileStage(spec, { cue, end, where, frame, staged, root }) {
     const id = ev.id ?? `${ev.do}-${++n}`;
     switch (ev.do) {
       case 'send': {
+        if (!ev.via) [actor(ev.from, w0), actor(ev.to, w0)];
         const route = ev.via ? { id: ev.via, forward: ev.reverse !== true } : findLink(ev.from, ev.to, w0);
         if (!links.has(route.id)) fail(w0, `no link ${route.id}`);
         const dur = ev.dur ?? 1.0;
