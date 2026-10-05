@@ -47,3 +47,31 @@ export function clipSpec(root, sb, a, { allowMissing = false } = {}) {
     throw new Error('Generated inserts must request 0–10 seconds');
   return { ...spec, hash: hashOf(spec), refs: references.map(r => path.resolve(root, r.file)) };
 }
+
+/**
+ * B-roll coverage, before anything is paid for or rendered. Each use of footage needs
+ * `offset + beat seconds` of source; one generated take holds at most `maxTake` seconds; and
+ * two uses that show the same source seconds again are a loop by another name — an error on
+ * adjacent beats, a warning elsewhere (a deliberate callback). `uses` are
+ * {beat, index, source, offset, seconds, have}, `have` being the source length known so far.
+ */
+export function footageProblems(uses, { maxTake = 10 } = {}) {
+  const errors = [], warnings = [];
+  for (const u of uses) {
+    const need = u.offset + u.seconds;
+    if (need > maxTake + 1e-3 && u.generated)
+      errors.push(`${u.beat}: ${need.toFixed(1)} s of ${u.source} is needed but one generated take is at most ${maxTake} s; shorten the beat, or cut it into different shots.`);
+    else if (u.have != null && u.have + 1e-3 < need)
+      errors.push(`${u.beat}: ${u.source} covers ${u.have.toFixed(1)} s but the beat needs ${need.toFixed(1)} s from offset ${u.offset} s; ask for a longer take (seconds), shorten the beat, or add a different shot. B-roll never loops or freezes to fill time.`);
+  }
+  for (let i = 0; i < uses.length; i++)
+    for (let j = i + 1; j < uses.length; j++) {
+      const [a, b] = [uses[i], uses[j]];
+      if (a.source !== b.source) continue;
+      const shared = Math.min(a.offset + a.seconds, b.offset + b.seconds) - Math.max(a.offset, b.offset);
+      if (shared <= 0.1) continue;
+      const message = `${b.beat} repeats ${shared.toFixed(1)} s of ${a.source} already shown in ${a.beat}; use a different source range (offset) or a different shot.`;
+      (Math.abs(a.index - b.index) === 1 ? errors : warnings).push(message);
+    }
+  return { errors, warnings };
+}

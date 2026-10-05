@@ -14,14 +14,14 @@
     "lens": {
       "handheld": 0,
       "blur": 0
-    }
+    },
+    "camera": "none"
   },
   "beats": {
-    "camera": "none",
     "rough": false
   },
   "rules": [
-    "Keep the camera locked while people read. Move only to reveal a specific relationship.",
+    "Keep the camera locked while people read (film camera: none). Move only to reveal a specific relationship: a push to the detail, a diagram step, a morph.",
     "Use staged nodes and drawn connectors for technical explanations.",
     "No repeating B-roll. Match the clip and source offset to the beat, or shorten the beat.",
     "Inspect background footage with native text at the start, middle and end, including a phone-size frame. Blur alone does not establish readability."

@@ -533,7 +533,7 @@ export const BLOCKS = [
         'Editable pause/answer/explanation: {form:choice|gap, phase:question|answer, prompt, explanation, layout?:full|split, motion?:fade|none, revealAt?, explainAt?, source?}. Choice uses options:[2–3 strings] and correctIndex; gap uses before, answer and optional after. Use separate beats for reading and answer holds. Split reserves landscape right-half imagery. See docs/teaching-sequences.md.',
       sketch:
         'A library sketch drawn under any elements, redrawn for this frame (clearframe sketch lists them); its camera (view, dolly, focus) applies unless the beat sets its own',
-      diagram: 'Native system diagram: {direction?:auto|horizontal|vertical, nodes:[{id,label,kind?:service|database|user|queue|state,status?:neutral|added|removed|active,x?,y?,at?|say?,exitAt?|exitSay?}], edges:[{id?,from,to,label?,status?,at?|say?,exitAt?|exitSay?}]}. Up to six nodes; normalized positions and drawn connectors. See docs/system-diagrams.md.',
+      diagram: 'Native system diagram whose components keep their identity while the story changes it: {direction?:auto|horizontal|vertical, area?:[x,y,w,h], nodes:[{id,label,kind?:service|database|user|queue|state|external,status?:neutral|active|added|removed|error,x?,y?,replaces?,at?|say?,exitAt?|exitSay?}], edges:[{id?,from,to,label?,status?,style?:solid|dashed,flow?,at?|say?}], steps?:[{at|say, add|remove|replace+with|set:{id:status}|send:[node ids] (+label, dur)}], groups?:[{id,label,nodes}]}. Up to 8 nodes, laid out in ranks along the edges; connectors wait for both ends, leave with removed components and route around others. Shared ids morph across consecutive canvas beats. clearframe sketch architecture|component-change|state-machine prints a starting diagram. See docs/system-diagrams.md.',
       sketchText: 'Replacement words for a sketch’s placeholder type: {"TITLE": "Your words"}',
       seed: 'Varies a sketch’s seeded layout (buildings, ridges, swell)',
       plates:
@@ -665,7 +665,7 @@ export function palette(theme = 'paper') {
   return result;
 }
 
-export function normalizeProps(name, input = {}, { vertical = false, width, height, assets = [] } = {}) {
+export function normalizeProps(name, input = {}, { vertical = false, width, height, assets = [], resolve } = {}) {
   const meta = blockByName(name);
   if (!meta) throw new Error(`No native block "${name}". Run clearframe blocks; legacy scenes need an explicit port.`);
   const p = structuredClone(input);
@@ -727,6 +727,7 @@ export function normalizeProps(name, input = {}, { vertical = false, width, heig
     width: width ?? (vertical ? 1080 : 1920),
     height: height ?? (vertical ? 1920 : 1080),
     assets,
+    resolve,
   });
   if (p.decimals != null && (!Number.isInteger(p.decimals) || p.decimals < 0 || p.decimals > 8))
     fail('decimals must be 0–8');

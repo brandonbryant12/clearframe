@@ -240,6 +240,50 @@
     "treatment": {
       "type": "string"
     },
+    "camera": {
+      "description": "Film default camera for beats without their own: \"none\" makes a steady film (no automatic push; plates hold still unless a beat asks)",
+      "oneOf": [
+        {
+          "enum": [
+            "auto",
+            "none",
+            "in",
+            "out",
+            "left",
+            "right",
+            "up",
+            "down"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "move": {
+              "enum": [
+                "auto",
+                "none",
+                "in",
+                "out",
+                "left",
+                "right",
+                "up",
+                "down"
+              ]
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        }
+      ]
+    },
+    "lens": {
+      "type": "object",
+      "description": "Film lens: letterbox, grade, gradeAmount, bloom, aberration, leak, handheld (sway; 0 for business), blur"
+    },
     "speakers": {
       "type": "object"
     },
@@ -714,6 +758,27 @@
                     "type": "number",
                     "minimum": 0,
                     "maximum": 1
+                  },
+                  "to": {
+                    "type": "array",
+                    "minItems": 4,
+                    "maxItems": 4,
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Push to a detail: frame-pixel rect [x, y, w, h]"
+                  },
+                  "at": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "say": {
+                    "type": "string"
+                  },
+                  "dur": {
+                    "type": "number",
+                    "minimum": 0.2,
+                    "maximum": 8
                   }
                 }
               }
@@ -2359,7 +2424,7 @@
                       "description": "A library sketch drawn under any elements, redrawn for this frame (clearframe sketch lists them); its camera (view, dolly, focus) applies unless the beat sets its own"
                     },
                     "diagram": {
-                      "description": "Native system diagram: {direction?:auto|horizontal|vertical, nodes:[{id,label,kind?:service|database|user|queue|state,status?:neutral|added|removed|active,x?,y?,at?|say?,exitAt?|exitSay?}], edges:[{id?,from,to,label?,status?,at?|say?,exitAt?|exitSay?}]}. Up to six nodes; normalized positions and drawn connectors. See docs/system-diagrams.md."
+                      "description": "Native system diagram whose components keep their identity while the story changes it: {direction?:auto|horizontal|vertical, area?:[x,y,w,h], nodes:[{id,label,kind?:service|database|user|queue|state|external,status?:neutral|active|added|removed|error,x?,y?,replaces?,at?|say?,exitAt?|exitSay?}], edges:[{id?,from,to,label?,status?,style?:solid|dashed,flow?,at?|say?}], steps?:[{at|say, add|remove|replace+with|set:{id:status}|send:[node ids] (+label, dur)}], groups?:[{id,label,nodes}]}. Up to 8 nodes, laid out in ranks along the edges; connectors wait for both ends, leave with removed components and route around others. Shared ids morph across consecutive canvas beats. clearframe sketch architecture|component-change|state-machine prints a starting diagram. See docs/system-diagrams.md."
                     },
                     "sketchText": {
                       "description": "Replacement words for a sketch’s placeholder type: {\"TITLE\": \"Your words\"}"

@@ -9,7 +9,7 @@
   "theme": "paper",
   "motion": {
     "preset": "gentle",
-    "intensity": 0.4
+    "intensity": 0.65
   },
   "transition": "cut",
   "backdrop": "none",
@@ -18,9 +18,9 @@
   "music": {},
   "sfx": "subtle",
   "lens": {
-    "handheld": 0,
-    "blur": 0
+    "handheld": 0
   },
+  "camera": "none",
   "sources": [
     {
       "id": "sample",
@@ -38,593 +38,264 @@
     {
       "id": "before",
       "block": "canvas",
-      "camera": "none",
-      "duration": 5,
+      "vo": "Today a report request waits while the API builds the whole report inline, so a slow query holds the user's connection open.",
+      "min": 7,
       "props": {
-        "title": "Follow the request",
-        "elements": [
-          {
-            "type": "path",
-            "id": "diagram-edge-user-api",
-            "d": "M 513.2 572.4 H 654.3 V 572.4 H 795.4",
-            "stroke": "accent",
-            "fill": "none",
-            "width": 3.7800000000000002,
-            "arrow": "end",
-            "head": 15.120000000000001,
-            "enter": "draw",
-            "dur": 0.6,
-            "at": 0.35
-          },
-          {
-            "type": "text",
-            "id": "diagram-edge-user-api-label",
-            "text": "request",
-            "x": 654.3,
-            "y": 555.12,
-            "size": 31.968000000000004,
-            "fit": 262.19999999999993,
-            "anchor": "middle",
-            "fill": "ink",
-            "font": "mono",
-            "enter": "fade",
-            "at": 0.35
-          },
-          {
-            "type": "path",
-            "id": "diagram-edge-api-db",
-            "d": "M 1124.6 572.4 H 1265.7 V 572.4 H 1406.8000000000002",
-            "stroke": "accent",
-            "fill": "none",
-            "width": 3.7800000000000002,
-            "arrow": "end",
-            "head": 15.120000000000001,
-            "enter": "draw",
-            "dur": 0.6,
-            "at": 1.1
-          },
-          {
-            "type": "text",
-            "id": "diagram-edge-api-db-label",
-            "text": "query",
-            "x": 1265.7,
-            "y": 555.12,
-            "size": 31.968000000000004,
-            "fit": 262.2000000000003,
-            "anchor": "middle",
-            "fill": "ink",
-            "font": "mono",
-            "enter": "fade",
-            "at": 1.1
-          },
-          {
-            "type": "group",
-            "id": "diagram-node-user",
-            "enter": "fade",
-            "dur": 0.3,
-            "at": 0,
-            "children": [
-              {
-                "type": "rect",
-                "x": 192.00000000000003,
-                "y": 480.59999999999997,
-                "w": 313.2,
-                "h": 183.60000000000002,
-                "r": 16,
-                "fill": "surface",
-                "stroke": "muted",
-                "width": 3
-              },
-              {
-                "type": "circle",
-                "cx": 242.11200000000002,
-                "cy": 554.04,
-                "r": 20.196,
-                "fill": "none",
-                "stroke": "muted",
-                "width": 3
-              },
-              {
-                "type": "path",
-                "d": "M 213.92400000000004 612.792 Q 242.11200000000002 557.712 270.3 612.792",
-                "fill": "none",
-                "stroke": "muted",
-                "width": 3
-              },
-              {
-                "type": "text",
-                "text": "User",
-                "x": 386.184,
-                "y": 585.9864,
-                "size": 39.96,
-                "fit": 197.316,
-                "anchor": "middle",
-                "fill": "ink",
-                "font": "strong"
+        "title": "Today the request waits for the work",
+        "diagram": {
+          "nodes": [
+            {
+              "id": "user",
+              "label": "User",
+              "kind": "user"
+            },
+            {
+              "id": "api",
+              "label": "API"
+            },
+            {
+              "id": "builder",
+              "label": "Report builder"
+            },
+            {
+              "id": "db",
+              "label": "Database",
+              "kind": "database"
+            }
+          ],
+          "edges": [
+            {
+              "from": "user",
+              "to": "api",
+              "label": "request"
+            },
+            {
+              "from": "api",
+              "to": "builder",
+              "label": "inline"
+            },
+            {
+              "from": "builder",
+              "to": "db",
+              "label": "query"
+            }
+          ],
+          "steps": [
+            {
+              "at": 1.8,
+              "send": [
+                "user",
+                "api",
+                "builder",
+                "db"
+              ],
+              "label": "POST /reports"
+            },
+            {
+              "at": 4.2,
+              "set": {
+                "api": "error"
               }
-            ]
-          },
-          {
-            "type": "group",
-            "id": "diagram-node-api",
-            "enter": "fade",
-            "dur": 0.3,
-            "at": 0,
-            "children": [
-              {
-                "type": "rect",
-                "x": 803.4,
-                "y": 480.59999999999997,
-                "w": 313.2,
-                "h": 183.60000000000002,
-                "r": 16,
-                "fill": "surface",
-                "stroke": "accent",
-                "width": 3
-              },
-              {
-                "type": "text",
-                "text": "API",
-                "x": 960,
-                "y": 585.9864,
-                "size": 39.96,
-                "fit": 266.21999999999997,
-                "anchor": "middle",
-                "fill": "ink",
-                "font": "strong"
-              }
-            ]
-          },
-          {
-            "type": "group",
-            "id": "diagram-node-db",
-            "enter": "fade",
-            "dur": 0.3,
-            "at": 0,
-            "children": [
-              {
-                "type": "path",
-                "d": "M 1414.8000000000002 504.46799999999996 C 1414.8000000000002 456.73199999999997 1728.0000000000002 456.73199999999997 1728.0000000000002 504.46799999999996 V 640.332 C 1728.0000000000002 688.0680000000001 1414.8000000000002 688.0680000000001 1414.8000000000002 640.332 Z",
-                "fill": "surface",
-                "stroke": "muted",
-                "width": 3
-              },
-              {
-                "type": "ellipse",
-                "cx": 1571.4,
-                "cy": 504.46799999999996,
-                "rx": 156.6,
-                "ry": 23.868000000000002,
-                "fill": "none",
-                "stroke": "muted",
-                "width": 3
-              },
-              {
-                "type": "text",
-                "text": "Database",
-                "x": 1571.4,
-                "y": 585.9864,
-                "size": 39.96,
-                "fit": 266.21999999999997,
-                "anchor": "middle",
-                "fill": "ink",
-                "font": "strong"
-              }
-            ]
-          }
-        ]
+            }
+          ]
+        }
       }
     },
     {
       "id": "change",
       "block": "canvas",
-      "camera": "none",
-      "duration": 6,
+      "vo": "This change puts a job queue between them. The API answers at once, and a worker builds the report from the queue.",
+      "min": 7.5,
       "props": {
-        "title": "Replace the direct handoff",
-        "elements": [
-          {
-            "type": "path",
-            "id": "diagram-edge-client-old",
-            "d": "M 513.2 572.4 H 654.3 V 572.4 H 795.4",
-            "stroke": "negative",
-            "fill": "none",
-            "width": 3.7800000000000002,
-            "arrow": "end",
-            "head": 15.120000000000001,
-            "enter": "draw",
-            "dur": 0.6,
-            "at": 0.35,
-            "exitAt": 2,
-            "exit": "fade"
-          },
-          {
-            "type": "path",
-            "id": "diagram-edge-client-queue",
-            "d": "M 513.2 572.4 H 654.3 V 572.4 H 795.4",
-            "stroke": "positive",
-            "fill": "none",
-            "width": 3.7800000000000002,
-            "arrow": "end",
-            "head": 15.120000000000001,
-            "enter": "draw",
-            "dur": 0.6,
-            "at": 2.8
-          },
-          {
-            "type": "path",
-            "id": "diagram-edge-queue-worker",
-            "d": "M 1124.6 572.4 H 1265.7 V 572.4 H 1406.8000000000002",
-            "stroke": "positive",
-            "fill": "none",
-            "width": 3.7800000000000002,
-            "arrow": "end",
-            "head": 15.120000000000001,
-            "enter": "draw",
-            "dur": 0.6,
-            "at": 3.3
-          },
-          {
-            "type": "group",
-            "id": "diagram-node-client",
-            "enter": "fade",
-            "dur": 0.3,
-            "at": 0,
-            "children": [
-              {
-                "type": "rect",
-                "x": 192.00000000000003,
-                "y": 480.59999999999997,
-                "w": 313.2,
-                "h": 183.60000000000002,
-                "r": 16,
-                "fill": "surface",
-                "stroke": "muted",
-                "width": 3
-              },
-              {
-                "type": "circle",
-                "cx": 242.11200000000002,
-                "cy": 554.04,
-                "r": 20.196,
-                "fill": "none",
-                "stroke": "muted",
-                "width": 3
-              },
-              {
-                "type": "path",
-                "d": "M 213.92400000000004 612.792 Q 242.11200000000002 557.712 270.3 612.792",
-                "fill": "none",
-                "stroke": "muted",
-                "width": 3
-              },
-              {
-                "type": "text",
-                "text": "Client",
-                "x": 386.184,
-                "y": 585.9864,
-                "size": 39.96,
-                "fit": 197.316,
-                "anchor": "middle",
-                "fill": "ink",
-                "font": "strong"
-              }
-            ]
-          },
-          {
-            "type": "group",
-            "id": "diagram-node-old",
-            "enter": "fade",
-            "dur": 0.3,
-            "at": 0,
-            "exitAt": 2,
-            "exit": "fade",
-            "children": [
-              {
-                "type": "rect",
-                "x": 803.4,
-                "y": 480.59999999999997,
-                "w": 313.2,
-                "h": 183.60000000000002,
-                "r": 16,
-                "fill": "surface",
-                "stroke": "negative",
-                "width": 3
-              },
-              {
-                "type": "text",
-                "text": "Old worker",
-                "x": 960,
-                "y": 585.9864,
-                "size": 39.96,
-                "fit": 266.21999999999997,
-                "anchor": "middle",
-                "fill": "ink",
-                "font": "strong"
-              },
-              {
-                "type": "text",
-                "text": "−",
-                "x": 1107.6,
-                "y": 510.56999999999994,
-                "size": 27.971999999999998,
-                "anchor": "end",
-                "fill": "negative",
-                "font": "bold"
-              }
-            ]
-          },
-          {
-            "type": "group",
-            "id": "diagram-node-queue",
-            "enter": "fade",
-            "dur": 0.3,
-            "at": 2.5,
-            "children": [
-              {
-                "type": "rect",
-                "x": 803.4,
-                "y": 480.59999999999997,
-                "w": 313.2,
-                "h": 183.60000000000002,
-                "r": 16,
-                "fill": "surface",
-                "stroke": "positive",
-                "width": 3
-              },
-              {
-                "type": "line",
-                "x1": 840.9839999999999,
-                "y1": 532.0079999999999,
-                "x2": 878.568,
-                "y2": 532.0079999999999,
-                "stroke": "positive",
-                "width": 3
-              },
-              {
-                "type": "line",
-                "x1": 840.9839999999999,
-                "y1": 570.564,
-                "x2": 878.568,
-                "y2": 570.564,
-                "stroke": "positive",
-                "width": 3
-              },
-              {
-                "type": "line",
-                "x1": 840.9839999999999,
-                "y1": 609.12,
-                "x2": 878.568,
-                "y2": 609.12,
-                "stroke": "positive",
-                "width": 3
-              },
-              {
-                "type": "text",
-                "text": "Queue",
-                "x": 997.584,
-                "y": 585.9864,
-                "size": 39.96,
-                "fit": 197.316,
-                "anchor": "middle",
-                "fill": "ink",
-                "font": "strong"
-              },
-              {
-                "type": "text",
-                "text": "+",
-                "x": 1107.6,
-                "y": 510.56999999999994,
-                "size": 27.971999999999998,
-                "anchor": "end",
-                "fill": "positive",
-                "font": "bold"
-              }
-            ]
-          },
-          {
-            "type": "group",
-            "id": "diagram-node-worker",
-            "enter": "fade",
-            "dur": 0.3,
-            "at": 3,
-            "children": [
-              {
-                "type": "rect",
-                "x": 1414.8000000000002,
-                "y": 480.59999999999997,
-                "w": 313.2,
-                "h": 183.60000000000002,
-                "r": 16,
-                "fill": "surface",
-                "stroke": "positive",
-                "width": 3
-              },
-              {
-                "type": "text",
-                "text": "Worker",
-                "x": 1571.4,
-                "y": 585.9864,
-                "size": 39.96,
-                "fit": 266.21999999999997,
-                "anchor": "middle",
-                "fill": "ink",
-                "font": "strong"
-              },
-              {
-                "type": "text",
-                "text": "+",
-                "x": 1719.0000000000002,
-                "y": 510.56999999999994,
-                "size": 27.971999999999998,
-                "anchor": "end",
-                "fill": "positive",
-                "font": "bold"
-              }
-            ]
-          }
-        ]
+        "title": "The change: hand the work to a queue",
+        "diagram": {
+          "nodes": [
+            {
+              "id": "user",
+              "label": "User",
+              "kind": "user"
+            },
+            {
+              "id": "api",
+              "label": "API"
+            },
+            {
+              "id": "queue",
+              "label": "Job queue",
+              "kind": "queue"
+            },
+            {
+              "id": "builder",
+              "label": "Report builder"
+            },
+            {
+              "id": "db",
+              "label": "Database",
+              "kind": "database"
+            }
+          ],
+          "edges": [
+            {
+              "from": "user",
+              "to": "api",
+              "label": "request"
+            },
+            {
+              "from": "api",
+              "to": "builder",
+              "label": "inline"
+            },
+            {
+              "from": "api",
+              "to": "queue",
+              "label": "enqueue"
+            },
+            {
+              "from": "queue",
+              "to": "builder",
+              "flow": true
+            },
+            {
+              "from": "builder",
+              "to": "db",
+              "label": "query"
+            }
+          ],
+          "steps": [
+            {
+              "at": 0.9,
+              "remove": "api-builder"
+            },
+            {
+              "at": 1.7,
+              "add": "queue"
+            },
+            {
+              "at": 2.9,
+              "send": [
+                "user",
+                "api"
+              ],
+              "label": "request"
+            },
+            {
+              "at": 3.65,
+              "send": [
+                "api",
+                "user"
+              ],
+              "label": "accepted"
+            },
+            {
+              "at": 3.65,
+              "send": [
+                "api",
+                "queue"
+              ]
+            },
+            {
+              "at": 4.6,
+              "send": [
+                "queue",
+                "builder",
+                "db"
+              ]
+            }
+          ]
+        }
       }
     },
     {
       "id": "states",
       "block": "canvas",
-      "camera": "none",
-      "duration": 5,
+      "vo": "Each job now has an explicit state. A failure is retried, and the report is marked complete only when it is written.",
+      "min": 7,
       "props": {
-        "title": "Make each state explicit",
-        "elements": [
-          {
-            "type": "path",
-            "id": "diagram-edge-idle-running",
-            "d": "M 513.2 572.4 H 654.3 V 572.4 H 795.4",
-            "stroke": "accent",
-            "fill": "none",
-            "width": 3.7800000000000002,
-            "arrow": "end",
-            "head": 15.120000000000001,
-            "enter": "draw",
-            "dur": 0.6,
-            "at": 0.35
-          },
-          {
-            "type": "text",
-            "id": "diagram-edge-idle-running-label",
-            "text": "start",
-            "x": 654.3,
-            "y": 555.12,
-            "size": 31.968000000000004,
-            "fit": 262.19999999999993,
-            "anchor": "middle",
-            "fill": "ink",
-            "font": "mono",
-            "enter": "fade",
-            "at": 0.35
-          },
-          {
-            "type": "path",
-            "id": "diagram-edge-running-done",
-            "d": "M 1124.6 572.4 H 1265.7 V 572.4 H 1406.8000000000002",
-            "stroke": "accent",
-            "fill": "none",
-            "width": 3.7800000000000002,
-            "arrow": "end",
-            "head": 15.120000000000001,
-            "enter": "draw",
-            "dur": 0.6,
-            "at": 1.2
-          },
-          {
-            "type": "text",
-            "id": "diagram-edge-running-done-label",
-            "text": "success",
-            "x": 1265.7,
-            "y": 555.12,
-            "size": 31.968000000000004,
-            "fit": 262.2000000000003,
-            "anchor": "middle",
-            "fill": "ink",
-            "font": "mono",
-            "enter": "fade",
-            "at": 1.2
-          },
-          {
-            "type": "group",
-            "id": "diagram-node-idle",
-            "enter": "fade",
-            "dur": 0.3,
-            "at": 0,
-            "children": [
-              {
-                "type": "rect",
-                "x": 192.00000000000003,
-                "y": 480.59999999999997,
-                "w": 313.2,
-                "h": 183.60000000000002,
-                "r": 91.80000000000001,
-                "fill": "surface",
-                "stroke": "muted",
-                "width": 3
-              },
-              {
-                "type": "text",
-                "text": "Idle",
-                "x": 348.6,
-                "y": 585.9864,
-                "size": 39.96,
-                "fit": 266.21999999999997,
-                "anchor": "middle",
-                "fill": "ink",
-                "font": "strong"
+        "title": "Every job has a visible state",
+        "diagram": {
+          "nodes": [
+            {
+              "id": "queued",
+              "label": "Queued",
+              "kind": "state"
+            },
+            {
+              "id": "running",
+              "label": "Running",
+              "kind": "state"
+            },
+            {
+              "id": "failed",
+              "label": "Failed",
+              "kind": "state"
+            },
+            {
+              "id": "done",
+              "label": "Complete",
+              "kind": "state"
+            }
+          ],
+          "edges": [
+            {
+              "from": "queued",
+              "to": "running",
+              "label": "start"
+            },
+            {
+              "from": "running",
+              "to": "done",
+              "label": "written"
+            },
+            {
+              "from": "running",
+              "to": "failed",
+              "label": "error"
+            },
+            {
+              "from": "failed",
+              "to": "running",
+              "label": "retry"
+            }
+          ],
+          "steps": [
+            {
+              "at": 1.4,
+              "send": [
+                "queued",
+                "running"
+              ]
+            },
+            {
+              "at": 2.4,
+              "send": [
+                "running",
+                "failed"
+              ]
+            },
+            {
+              "at": 3.15,
+              "set": {
+                "failed": "error"
               }
-            ]
-          },
-          {
-            "type": "group",
-            "id": "diagram-node-running",
-            "enter": "fade",
-            "dur": 0.3,
-            "at": 0,
-            "children": [
-              {
-                "type": "rect",
-                "x": 803.4,
-                "y": 480.59999999999997,
-                "w": 313.2,
-                "h": 183.60000000000002,
-                "r": 91.80000000000001,
-                "fill": "surface",
-                "stroke": "accent",
-                "width": 3
-              },
-              {
-                "type": "text",
-                "text": "Running",
-                "x": 960,
-                "y": 585.9864,
-                "size": 39.96,
-                "fit": 266.21999999999997,
-                "anchor": "middle",
-                "fill": "ink",
-                "font": "strong"
+            },
+            {
+              "at": 3.6,
+              "send": [
+                "failed",
+                "running",
+                "done"
+              ]
+            },
+            {
+              "at": 5.1,
+              "set": {
+                "failed": "neutral",
+                "done": "added"
               }
-            ]
-          },
-          {
-            "type": "group",
-            "id": "diagram-node-done",
-            "enter": "fade",
-            "dur": 0.3,
-            "at": 0,
-            "children": [
-              {
-                "type": "rect",
-                "x": 1414.8000000000002,
-                "y": 480.59999999999997,
-                "w": 313.2,
-                "h": 183.60000000000002,
-                "r": 91.80000000000001,
-                "fill": "surface",
-                "stroke": "muted",
-                "width": 3
-              },
-              {
-                "type": "text",
-                "text": "Complete",
-                "x": 1571.4,
-                "y": 585.9864,
-                "size": 39.96,
-                "fit": 266.21999999999997,
-                "anchor": "middle",
-                "fill": "ink",
-                "font": "strong"
-              }
-            ]
-          }
-        ]
+            }
+          ]
+        }
       }
     }
-  ],
-  "type": "inter",
-  "treatment": "business"
+  ]
 }

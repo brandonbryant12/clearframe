@@ -3,7 +3,7 @@ import path from 'node:path';
 import { BLOCKS, palette } from './catalog.mjs';
 import { writeJSON, ffmpeg } from '../engine/lib/util.mjs';
 import { wireframePNG } from './wireframe.mjs';
-import { sketches, sketch, expandArt, SKETCH_FRAMES as SKETCH_SIZE } from './sketches.mjs';
+import { sketches, sketch, sketchByName, expandArt, SKETCH_FRAMES as SKETCH_SIZE } from './sketches.mjs';
 import { items, vendor } from './library.mjs';
 import { muse, museMarkdown } from './muse.mjs';
 import { applyTreatment, directionTemplate, treatmentById } from './treatments.mjs';
@@ -33,6 +33,7 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
     sfx: book.sfx ?? 'subtle',
     ...(book.texture ? { texture: book.texture } : {}),
     ...(book.lens ? { lens: book.lens } : {}),
+    ...(book.camera ? { camera: book.camera } : {}),
     ...(book.heading ? { heading: book.heading } : {}),
     ...(book.textMotion ? { textMotion: book.textMotion } : {}),
     ...(book.type ? { type: book.type } : {}),
@@ -63,7 +64,17 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
       expandArt(b.art, { width, height });
     }
     const name = b.props?.sketch;
+    // A system-diagram sketch stays declarative: its diagram compiles for the real frame and
+    // remains editable (ids, steps, labels) instead of becoming hundreds of drawn shapes.
+    const diagram = name && sketchByName(name)?.diagram;
+    if (diagram) {
+      b.props.diagram ??= structuredClone(diagram);
+      delete b.props.sketch;
+      continue;
+    }
     if (!name) {
+      // A diagram lays itself out for the frame; a landscape view would squeeze it.
+      if (b.props?.diagram) continue;
       if ((vertical || book.format === 'vertical') && b.block === 'canvas' && b.props && b.props.view == null)
         b.props.view = [1920, 1080];
       continue;

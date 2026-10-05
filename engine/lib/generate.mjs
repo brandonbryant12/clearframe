@@ -23,7 +23,7 @@ export function clipProvider(model) {
   if (Object.hasOwn(runway.MODELS, model)) return runway;
   throw new Error(`Unsupported video model ${model}`);
 }
-import { clipSpec } from './continuity.mjs';
+import { clipSpec, footageProblems } from './continuity.mjs';
 import { palette } from '../../fframes/catalog.mjs';
 import { mediaDuration } from './util.mjs';
 
@@ -469,6 +469,11 @@ export async function clips(root, { only, force = false, budget } = {}) {
     return;
   }
   for (const { spec } of todo) clipProvider(spec.model);
+  // Refuse to pay for footage that cannot cover its beats without looping or repeating.
+  const making = new Set(todo.map(({ a }) => a.id));
+  const asked = id => sb.assets.find(a => a.id === id).seconds ?? 4;
+  const short = footageProblems(footageUses(sb, computeTiming(root), P).filter(u => making.has(u.source)).map(u => ({ ...u, have: asked(u.source) }))).errors;
+  if (short.length) throw new Error(`Not generating: ${short.join(' ')}`);
   const estimate = todo.reduce((n, { spec }) => n + clipProvider(spec.model).estimateCost(spec), 0);
   log.step(
     `${todo.length} generated insert(s), approximately ${money(estimate)}. Omni duration and final charges can vary; this is an estimate, not a billing cap.`,
@@ -511,6 +516,20 @@ export async function clips(root, { only, force = false, budget } = {}) {
       fs.rmSync(stage, { force: true });
     }
   }
+}
+
+/** Where the film shows generated clips: one entry per beat that uses one (plate or video). */
+function footageUses(sb, timing, P) {
+  const uses = [];
+  for (const b of timing.beats) {
+    const src = sb.beats[b.index], ref = src.plate ?? (src.block === 'video' ? src.props : null);
+    const a = ref?.asset != null ? sb.assets.find(x => x.id === ref.asset && x.kind === 'clip') : null;
+    if (!a || a.file) continue;
+    // A made take's measured length wins over the length that was asked for.
+    const made = assetMeta(P.clips, a.id)?.seconds;
+    uses.push({ beat: b.id, index: b.index, source: a.id, offset: ref.offset ?? 0, seconds: b.end - b.start, have: made ?? a.seconds ?? 4, generated: true });
+  }
+  return uses;
 }
 
 // ------------------------------------------------------------------ plan
@@ -581,7 +600,9 @@ export function plan(root) {
     }
   }
   const clipSecs = sb.assets.filter(a => a.kind === 'clip').reduce((s, a) => s + (a.seconds ?? 4), 0);
+  const footage = footageProblems(footageUses(sb, timing, P));
   return {
+    footage,
     rows,
     total: rows.reduce((s, r) => s + r.cost, 0),
     duration: timing.duration,

@@ -5,41 +5,275 @@
   "theme": "paper",
   "motion": "gentle",
   "backdrop": "none",
+  "transition": "cut",
   "format": "landscape",
   "lens": {
     "handheld": 0
   },
+  "camera": "none",
   "beats": [
     {
       "id": "before",
       "block": "canvas",
-      "camera": "none",
-      "duration": 5,
+      "vo": "Today a report request waits while the API builds the whole report inline, so a slow query holds the user's connection open.",
+      "min": 7,
       "props": {
-        "title": "Follow the request",
-        "sketch": "architecture"
+        "title": "Today the request waits for the work",
+        "diagram": {
+          "nodes": [
+            {
+              "id": "user",
+              "label": "User",
+              "kind": "user"
+            },
+            {
+              "id": "api",
+              "label": "API"
+            },
+            {
+              "id": "builder",
+              "label": "Report builder"
+            },
+            {
+              "id": "db",
+              "label": "Database",
+              "kind": "database"
+            }
+          ],
+          "edges": [
+            {
+              "from": "user",
+              "to": "api",
+              "label": "request"
+            },
+            {
+              "from": "api",
+              "to": "builder",
+              "label": "inline"
+            },
+            {
+              "from": "builder",
+              "to": "db",
+              "label": "query"
+            }
+          ],
+          "steps": [
+            {
+              "at": 1.8,
+              "send": [
+                "user",
+                "api",
+                "builder",
+                "db"
+              ],
+              "label": "POST /reports"
+            },
+            {
+              "at": 4.2,
+              "set": {
+                "api": "error"
+              }
+            }
+          ]
+        }
       }
     },
     {
       "id": "change",
       "block": "canvas",
-      "camera": "none",
-      "duration": 6,
+      "vo": "This change puts a job queue between them. The API answers at once, and a worker builds the report from the queue.",
+      "min": 7.5,
       "props": {
-        "title": "Replace the direct handoff",
-        "sketch": "component-change"
+        "title": "The change: hand the work to a queue",
+        "diagram": {
+          "nodes": [
+            {
+              "id": "user",
+              "label": "User",
+              "kind": "user"
+            },
+            {
+              "id": "api",
+              "label": "API"
+            },
+            {
+              "id": "queue",
+              "label": "Job queue",
+              "kind": "queue"
+            },
+            {
+              "id": "builder",
+              "label": "Report builder"
+            },
+            {
+              "id": "db",
+              "label": "Database",
+              "kind": "database"
+            }
+          ],
+          "edges": [
+            {
+              "from": "user",
+              "to": "api",
+              "label": "request"
+            },
+            {
+              "from": "api",
+              "to": "builder",
+              "label": "inline"
+            },
+            {
+              "from": "api",
+              "to": "queue",
+              "label": "enqueue"
+            },
+            {
+              "from": "queue",
+              "to": "builder",
+              "flow": true
+            },
+            {
+              "from": "builder",
+              "to": "db",
+              "label": "query"
+            }
+          ],
+          "steps": [
+            {
+              "at": 0.9,
+              "remove": "api-builder"
+            },
+            {
+              "at": 1.7,
+              "add": "queue"
+            },
+            {
+              "at": 2.9,
+              "send": [
+                "user",
+                "api"
+              ],
+              "label": "request"
+            },
+            {
+              "at": 3.65,
+              "send": [
+                "api",
+                "user"
+              ],
+              "label": "accepted"
+            },
+            {
+              "at": 3.65,
+              "send": [
+                "api",
+                "queue"
+              ]
+            },
+            {
+              "at": 4.6,
+              "send": [
+                "queue",
+                "builder",
+                "db"
+              ]
+            }
+          ]
+        }
       }
     },
     {
       "id": "states",
       "block": "canvas",
-      "camera": "none",
-      "duration": 5,
+      "vo": "Each job now has an explicit state. A failure is retried, and the report is marked complete only when it is written.",
+      "min": 7,
       "props": {
-        "title": "Make each state explicit",
-        "sketch": "state-machine"
+        "title": "Every job has a visible state",
+        "diagram": {
+          "nodes": [
+            {
+              "id": "queued",
+              "label": "Queued",
+              "kind": "state"
+            },
+            {
+              "id": "running",
+              "label": "Running",
+              "kind": "state"
+            },
+            {
+              "id": "failed",
+              "label": "Failed",
+              "kind": "state"
+            },
+            {
+              "id": "done",
+              "label": "Complete",
+              "kind": "state"
+            }
+          ],
+          "edges": [
+            {
+              "from": "queued",
+              "to": "running",
+              "label": "start"
+            },
+            {
+              "from": "running",
+              "to": "done",
+              "label": "written"
+            },
+            {
+              "from": "running",
+              "to": "failed",
+              "label": "error"
+            },
+            {
+              "from": "failed",
+              "to": "running",
+              "label": "retry"
+            }
+          ],
+          "steps": [
+            {
+              "at": 1.4,
+              "send": [
+                "queued",
+                "running"
+              ]
+            },
+            {
+              "at": 2.4,
+              "send": [
+                "running",
+                "failed"
+              ]
+            },
+            {
+              "at": 3.15,
+              "set": {
+                "failed": "error"
+              }
+            },
+            {
+              "at": 3.6,
+              "send": [
+                "failed",
+                "running",
+                "done"
+              ]
+            },
+            {
+              "at": 5.1,
+              "set": {
+                "failed": "neutral",
+                "done": "added"
+              }
+            }
+          ]
+        }
       }
     }
   ],
-  "note": "Illustrative system only: replace nodes, edges, labels and timing from the actual diff. Do not imply deployment or runtime proof from source changes. Use the business treatment. Show the trigger, old path, changed path and verified result; keep labels native."
+  "note": "Illustrative system only: rebuild the nodes, edges, steps and narration from the actual diff. Keep component ids stable across beats so the diagram morphs instead of redrawing; cue steps to narration with say once the voice is recorded. Do not imply deployment or runtime proof from source changes; cite the tests or runs that verified the change. Use the business treatment (film camera: none)."
 }

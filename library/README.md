@@ -139,7 +139,7 @@ A sketch should draw a mechanism, a place or a purposeful material composition, 
 
 - Each beat is a storyboard beat. Its `props` are checked against the block when a project is made.
 - A canvas beat can name a sketch instead of listing elements: `"props": {"sketch": "tunnel"}` draws it when the project is made, together with the sketch's own camera (`view`, `viewFrom`, `dolly`, `focus`). Any of those set on the beat win. `"sketchText": {"TITLE": "SIGNAL"}` replaces a sketch's placeholder type. Vertical films redraw every sketch beat for the tall frame.
-- A playbook can set the film's look: `theme`, `motion`, `backdrop`, `texture`, `lens`, `heading`, `textMotion` and `transition`. A treatment applied on top still wins.
+- A playbook can set the film's look: `theme`, `motion`, `backdrop`, `texture`, `lens`, `camera` (the default for beats without their own; `none` for a steady film), `heading`, `textMotion` and `transition`. A treatment applied on top still wins.
 - Optional `sources` holds `claim`/`source` entries (with `asOf` when useful), or `id`/`title` entries. They are copied intact into a scaffold, so a playbook can preserve its illustrative assumptions and arithmetic.
 - Sample figures must be marked as illustrative, with `source: "Illustrative sample data · replace before publishing"`.
 - A playbook is a starting structure, not a template to fill in. Keep it to the arc and let the author adapt it.
@@ -168,4 +168,4 @@ Rules for layers:
 
 If an idea needs code only to arrange existing elements, write a built-in sketch module. If it needs the renderer to draw something new, it belongs in the engine. After that, add a library item that shows it off.
 
-The `business` treatment supplies beat `camera: none` defaults while preserving authored moves. `pr-walkthrough` uses the `architecture`, `component-change` and `state-machine` sketches. These compose the shared native `props.diagram` node/edge vocabulary; see [system diagrams](../docs/system-diagrams.md).
+The `business` treatment sets the film camera to `none` (a default for every beat without its own) while preserving authored moves. `pr-walkthrough` carries editable `props.diagram` sources whose shared node ids morph from beat to beat; the `architecture`, `component-change` and `state-machine` sketches expose their `diagram` so `clearframe sketch NAME` prints it, and a playbook beat that names one keeps the diagram declarative. See [system diagrams](../docs/system-diagrams.md).

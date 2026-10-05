@@ -80,4 +80,4 @@ Open the letterbox (`"letterbox": false` on a beat) only for the payoff.
 
 Ask a fresh reviewer to judge it as film, not slides, against the eight tells in `docs/cinema.md`.
 
-Business and technical films use the `business` treatment by default. A cinema score does not override their stable reading frames: use `lens.handheld: 0`, per-beat `camera: none`, and plate `drift: none`. Preserve intentional holds. Add handheld only when the brief explicitly calls for that visual language.
+Business and technical films use the `business` treatment by default: film `camera: "none"` (every beat without its own camera, including beats added later), `lens.handheld: 0`, and plates that hold still unless a beat asks. The cinema score does not penalise their reading holds. Whole-frame motion has four independent sources — scene camera, handheld lens, plate drift and the motion inside footage — and `check` warns when they stack (handheld or drift on footage reads as shake). Keep the one move that reveals something. Add handheld only when the brief explicitly calls for that visual language.
