@@ -189,13 +189,13 @@ pub fn grain(canvas: &Canvas, texture: &Value, w: f32, h: f32, p: &Palette, seco
     canvas.restore();
 }
 
-/// Fractal noise desaturated to grey, as the FFFrames SVG converter draws its grain: it feeds
-/// the turbulence's premultiplied channels to the grey matrix, which makes the grain darker than
-/// the spec's unpremultiplied reading. Films keep the look they were reviewed with.
+/// Fractal noise turned to opaque grey, as the FFFrames grain filter does (its colour matrix
+/// averages the noise's channels and sets alpha to 1): the grain's strength is the layer's
+/// opacity alone.
 fn grain_shader(seed: f32) -> Option<sk::Shader> {
     thread_local! {
         static EFFECT: sk::RuntimeEffect = sk::RuntimeEffect::make_for_shader(
-            "uniform shader noise; half4 main(float2 p) { half4 c = noise.eval(p); half g = 0.33 * (c.r + c.g + c.b); return half4(half3(g * c.a), c.a); }",
+            "uniform shader noise; half4 main(float2 p) { half4 c = noise.eval(p); half3 u = c.a > 0.0 ? c.rgb / c.a : half3(0); half g = 0.33 * (u.r + u.g + u.b); return half4(half3(g), 1); }",
             None,
         )
         .expect("grain shader");
@@ -448,6 +448,7 @@ pub fn letterbox(canvas: &Canvas, bar: f32, w: f32, h: f32) {
         return;
     }
     let mut p = Paint::default();
+    p.set_anti_alias(true);
     p.set_color4f(Color4f::new(0.0, 0.0, 0.0, 1.0), None);
     canvas.draw_rect(Rect::from_xywh(0.0, 0.0, w, bar), &p);
     canvas.draw_rect(Rect::from_xywh(0.0, h - bar, w, bar), &p);

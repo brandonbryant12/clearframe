@@ -415,7 +415,7 @@ export async function snapshot(root, { ctx, kind = 'snapshot', label, reason, no
       ...(by ? { by } : {}),
       contentId,
       inputId: ctx.manifest.inputId,
-      renderer: { sourceHash: ctx.manifest.rendererSourceHash, revision: ctx.manifest.revision, fonts: fingerprint(ctx.manifest.fontHashes) },
+      renderer: { engine: ctx.manifest.renderer, sourceHash: ctx.manifest.rendererSourceHash, revision: ctx.manifest.revision, fonts: fingerprint(ctx.manifest.fontHashes), ...(ctx.manifest.planSha256 ? { plan: ctx.manifest.planSha256 } : {}) },
       frames: timeline.frames,
       fps: timeline.fps,
       duration: timeline.duration,

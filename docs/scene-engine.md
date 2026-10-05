@@ -102,7 +102,7 @@ Each frame places every element first (twice, so an element can follow one liste
 
 The engine composites the film itself instead of building one SVG tree per frame:
 
-- **backdrop** `grid, dots, glow, paper, mosaic`, **texture** grain/vignette, `chrome`, the editorial `frame`, the review grid — native Skia drawing with the same geometry, timing and palette rules as `fframes/native/src/{lib,design}.rs`. Paper and grain use Skia's implementation of the SVG fractal-noise function; the grain reproduces how the FFFrames converter read that noise (premultiplied), so existing films keep their reviewed look.
+- **backdrop** `grid, dots, glow, paper, mosaic`, **texture** grain/vignette, `chrome`, the editorial `frame`, the review grid — native Skia drawing with the same geometry, timing and palette rules as `fframes/native/src/{lib,design}.rs`. Paper and grain use Skia's implementation of the SVG fractal-noise function with the same colour matrices (grain is opaque grey at the texture's opacity), so existing films keep their reviewed look; `scripts/engine-effects.mjs` measures every backdrop, texture and lens setting against FFFrames.
 - **lens**: grade (the same saturation matrix and transfer tables), bloom (threshold, blur, screen) and chromatic aberration (channel split and offset) as one GPU image-filter graph over the picture; handheld, light leaks and letterbox bars with the same curves.
 - **dissolves** are two real layers: the outgoing beat (its block content and its native layers) runs on under the incoming one, whose layer fades up; the outgoing words clear in the first third.
 

@@ -15,7 +15,7 @@ import { types } from '../fframes/library.mjs';
 import { playbooks } from '../fframes/playbooks.mjs';
 import { BACKDROPS } from '../fframes/catalog.mjs';
 
-const { values } = parseArgs({ options: { parity: { type: 'string', default: 'build/parity/report.json' }, bench: { type: 'string', default: 'build/bench-engines/bench.json' }, fx: { type: 'string', default: 'build/spike/fx2/report.json' }, out: { type: 'string', default: 'docs/scene-engine-coverage.md' } } });
+const { values } = parseArgs({ options: { parity: { type: 'string', default: 'build/parity/report.json' }, bench: { type: 'string', default: 'build/bench-engines/bench.json' }, fx: { type: 'string', default: 'build/engine-effects/report.json' }, out: { type: 'string', default: 'docs/scene-engine-coverage.md' } } });
 const read = f => (fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : null);
 const parity = read(values.parity) ?? [];
 const bench = read(values.bench);
@@ -32,16 +32,17 @@ out.push('- **refused on stages** — available in canvas/art (block layer) but 
 out.push('- **unverified** — not exercised by a test, harness or rendered fixture in this change.', '');
 
 out.push('## Film-level compositing', '');
-out.push(row(['Feature', 'State', 'PSNR vs FFFrames (dB, one 960×540 draft still)']), row(['---', '---', '---']));
+out.push('Measured by `scripts/engine-effects.mjs` (frame 30 of a one-beat film per setting, draft scale 960×540 or 540×960).', '');
+out.push(row(['Feature', 'State', 'PSNR vs FFFrames (dB)']), row(['---', '---', '---']));
 const fxdb = name => fx?.find(r => r[0] === name)?.[1] ?? '—';
 const film = [
   ['Background colour, block content (no effects)', 'replaced (compositor) + block layer', 'plain'],
   ['Backdrop paper', 'replaced', 'paper'], ['Backdrop glow', 'replaced', 'glow'], ['Backdrop glow on a dark palette', 'replaced', 'noirGlow'],
   ['Backdrop grid', 'replaced', 'grid'], ['Backdrop dots', 'replaced', 'dots'], ['Backdrop mosaic', 'replaced', 'mosaic'],
-  ['Texture grain (static)', 'replaced (same noise function; pattern differs per pixel, mean within one code value)', 'grain'], ['Texture film (animated grain + vignette)', 'replaced', 'grainAnim'],
+  ['Texture grain (static)', 'replaced', 'grain'], ['Texture grain on a dark palette', 'replaced', 'grainDark'], ['Animated grain on a dark palette', 'replaced', 'grainDarkAnim'], ['Texture film (animated grain + vignette)', 'replaced', 'grainAnim'],
   ['Texture vignette', 'replaced', 'vignette'], ['Lens grade teal-orange', 'replaced', 'teal'], ['Lens grade mono', 'replaced', 'mono'], ['Lens grade sepia', 'replaced', 'sepia'],
   ['Lens bloom (dark palettes)', 'replaced', 'bloomDark'], ['Lens aberration', 'replaced', 'aberration'], ['Lens leak', 'replaced', 'leak'],
-  ['Lens letterbox', 'replaced (bar edge anti-aliasing differs on one row)', 'letterbox'], ['Lens handheld', 'replaced', 'handheld'],
+  ['Lens letterbox', 'replaced', 'letterbox'], ['Lens handheld', 'replaced', 'handheld'],
   ['Film chrome (title + progress)', 'replaced', 'chrome'], ['Editorial frame (brand, label, footers, rail)', 'replaced', 'frame'],
   ['Vertical canvas with film texture and warm grade', 'replaced', 'vertical'],
 ];
