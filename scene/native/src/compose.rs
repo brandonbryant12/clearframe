@@ -184,7 +184,7 @@ impl Engine {
             if let Err(e) = self.blocks.draw(canvas, index, local, frame, words, 1, lw, lh) {
                 errors.push(e);
             }
-            self.layers_of(canvas, Some(&id), Depth::Under, beat_frame, errors);
+            self.layers_of(canvas, Some(&id), Depth::Under, beat_frame, words, errors);
             if let Err(e) = self.blocks.draw(canvas, index, local, frame, words, 2, lw, lh) {
                 errors.push(e);
             }
@@ -192,25 +192,27 @@ impl Engine {
             errors.push(e);
         }
         if over {
-            self.layers_of(canvas, Some(&id), Depth::Over, beat_frame, errors);
+            self.layers_of(canvas, Some(&id), Depth::Over, beat_frame, words, errors);
         }
     }
 
     fn stages(&mut self, canvas: &Canvas, frame: usize, z: Depth, errors: &mut Vec<String>) {
-        self.layers_of(canvas, None, z, frame, errors);
+        self.layers_of(canvas, None, z, frame, 1.0, errors);
     }
 
-    fn layers_of(&mut self, canvas: &Canvas, beat: Option<&str>, z: Depth, frame: usize, errors: &mut Vec<String>) {
+    fn layers_of(&mut self, canvas: &Canvas, beat: Option<&str>, z: Depth, frame: usize, words: f32, errors: &mut Vec<String>) {
         let picked: Vec<usize> = self
             .plan
             .layers
             .iter()
             .enumerate()
-            .filter(|(_, l)| l.beat.as_deref() == beat && l.z == z && frame >= l.start && frame < l.start + l.frames)
+            // A beat's own layers run on with the beat (a dissolve shows the outgoing beat past
+            // its last frame); stages are drawn over their span.
+            .filter(|(_, l)| l.beat.as_deref() == beat && l.z == z && frame >= l.start && (beat.is_some() || frame < l.start + l.frames))
             .map(|(i, _)| i)
             .collect();
         for i in picked {
-            if let Err(e) = self.layer(canvas, i, frame) {
+            if let Err(e) = self.layer(canvas, i, frame, words) {
                 errors.push(e);
             }
         }
@@ -241,11 +243,12 @@ impl Engine {
             sample: false,
             locating: false,
             depth: 0,
+            words: 1.0,
         }
     }
 
     /// Draw native layer `index` at film frame `frame` (motion-blurred when it has a shutter).
-    fn layer(&mut self, canvas: &Canvas, index: usize, frame: usize) -> Result<(), String> {
+    fn layer(&mut self, canvas: &Canvas, index: usize, frame: usize, words: f32) -> Result<(), String> {
         let layer = self.plan.layers[index].clone();
         let fps = self.plan.format.fps as f32;
         let t = self.plan.layer_seconds(&layer, frame as f32);
@@ -271,6 +274,7 @@ impl Engine {
                 canvas.save_layer_alpha_f(None, alpha);
             }
             let mut scope = Self::scope(&mut self.media, &self.film, &layer, &palette, fps, pixel, t, self.logical);
+            scope.words = words;
             nodes::draw(canvas, &mut scope, &layer.elements, 0.0, 0.0, t);
             if alpha < 0.999 {
                 canvas.restore();
@@ -297,14 +301,16 @@ impl Engine {
         let mut errors = vec![];
         let mut texts = vec![];
         for k in 0..samples {
+            // The shutter never opens before the layer exists.
             let offset = (k as f32 / (samples - 1) as f32 - 0.5) * layer.shutter;
-            let ts = t + offset / fps;
+            let ts = (t + offset / fps).max(0.0);
             let sc = scratch.canvas();
             sc.clear(sk::Color::TRANSPARENT);
             sc.save();
             sc.set_matrix(&matrix.into());
             let mut scope = Self::scope(&mut self.media, &self.film, &layer, &palette, fps, pixel, ts, self.logical);
             scope.sample = true;
+            scope.words = words;
             nodes::draw(sc, &mut scope, &layer.elements, 0.0, 0.0, ts);
             sc.restore();
             errors.extend(scope.errors);

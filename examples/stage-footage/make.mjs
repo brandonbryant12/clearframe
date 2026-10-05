@@ -23,9 +23,9 @@ for (const c of clips) fs.copyFileSync(path.join(here, '../sculptures', c, 'clip
 
 const [W, H] = tall ? [1080, 1920] : [1920, 1080];
 const video = (id, clip, box, extra = {}) => ({ type: 'video', id, file: `assets/clips/${clip}.mp4`, x: box[0], y: box[1], w: box[2], h: box[3], enter: 'none', ...extra });
-const scrim = { type: 'rect', id: 'scrim', x: 0, y: tall ? H * 0.55 : H * 0.5, w: W, h: tall ? H * 0.45 : H * 0.5, fill: { gradient: ['bg', 'bg'], angle: 90, fade: false }, opacity: 0.0, enter: 'none' };
-const shade = { type: 'rect', id: 'shade', x: 0, y: tall ? H * 0.58 : H * 0.55, w: W, h: tall ? H * 0.42 : H * 0.45, fill: { gradient: ['#000000', '#000000'], angle: 90 }, opacity: 0.55, enter: 'none' };
-const title = (text, say, y, size) => ({ type: 'text', text, x: tall ? 120 : 120, y, size, font: 'display', fill: '#ffffff', width: W - 240, say, enter: 'rise' });
+// A soft fall-off from clear to dark under the type (the last gradient stop fades out).
+const shade = { type: 'rect', id: 'shade', x: 0, y: tall ? H * 0.5 : H * 0.45, w: W, h: tall ? H * 0.5 : H * 0.55, fill: { gradient: ['#000000', '#000000'], angle: 270, fade: true }, opacity: 0.8, enter: 'none' };
+const title = (text, say, y, size) => ({ type: 'text', text, x: tall ? 120 : 120, y, size, font: 'display', fill: '#ffffff', width: W - 240, say, enter: 'rise', camera: false });
 
 const sb = {
   title: 'Sculpture studies, natively framed',
@@ -40,7 +40,7 @@ const sb = {
   sources: [{ id: 'studies', title: 'ClearFrame sculpture studies (examples/sculptures), original Blender renders' }],
   beats: [
     {
-      id: 'reveal', block: 'stage', duration: 3.6, transition: 'cut',
+      id: 'reveal', block: 'stage', duration: 3.2, transition: 'cut',
       vo: 'Four studies, one release.',
       props: {
         shutter: 0.5,
@@ -52,7 +52,7 @@ const sb = {
       },
     },
     {
-      id: 'pair', block: 'stage', duration: 3.4,
+      id: 'pair', block: 'stage', duration: 3.2,
       vo: 'A bridge, and a thread.',
       props: {
         elements: tall
@@ -70,7 +70,7 @@ const sb = {
       },
     },
     {
-      id: 'core', block: 'stage', duration: 3.8,
+      id: 'core', block: 'stage', duration: 3.2,
       vo: 'Then the core opens.',
       props: {
         shutter: 0.5,

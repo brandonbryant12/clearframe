@@ -498,7 +498,7 @@ export const BLOCKS = [
       code: 'Editor whose lines keep their identity: {commit, file, base?, repo?, context?} from git, or {before, after}, or {lines, steps}; {x, y, w, size, title, say|at, focus, gutter}',
       ground: 'A full-frame GPU material behind the stage: {material: noise|sheen|halftone|grain|glass|chrome|gold|thermal|scanlines, colors, opacity, scale, speed, z}',
       under: 'Native elements (canvas dialect) drawn first',
-      elements: 'Native elements drawn after under, before actors — rect|circle|ellipse|line|path|poly|text|icon|image|video|group|particles|spotlight|shader|code|connector; see docs/scene-engine.md',
+      elements: 'Native elements drawn after under, before actors — rect|circle|ellipse|line|path|poly|text|icon|image|video|group|particles|spotlight|shader|code|connector (camera: false pins one to the screen); see docs/scene-engine.md',
       over: 'Native elements drawn last',
       camera: 'The stage camera: {x, y, zoom, rotate, z, keys: [{at|say, x, y, zoom, rotate, z, dur, ease}], focus: {z, aperture, keys}}',
       shutter: 'Motion-blur shutter, 0–1 of a frame (0.5 = 180°); 0 for none',

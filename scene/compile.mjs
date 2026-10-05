@@ -116,7 +116,9 @@ export function compilePlan({ root, sb, timing, job, stage, assetFile }, { rough
         if (el.type === 'video') {
           const duration = probeDuration(file);
           // Footage is shown from its entrance to its exit (or the stage's end).
-          const shown = Math.max(0, Math.min(el.exitAt ?? end, end) - (el.at ?? 0)) * (el.rate ?? 1);
+          // A dissolve into the next beat keeps this beat's picture on screen while it fades.
+          const tail = beat ? dissolveTail(beat) : 0;
+          const shown = Math.max(0, Math.min(el.exitAt ?? end + tail, end + tail) - (el.at ?? 0)) * (el.rate ?? 1);
           const need = (el.offset ?? 0) + shown;
           if (!el.hold && need > duration + 1 / fps + 1e-6)
             throw new Error(`${where}: footage ${rel} is ${duration.toFixed(2)} s but the stage shows ${need.toFixed(2)} s of it (offset ${el.offset ?? 0} s); trim the shot or use a longer clip. Footage never loops, and freezes only with hold: true.`);
@@ -145,6 +147,12 @@ export function compilePlan({ root, sb, timing, job, stage, assetFile }, { rough
     layers.push(layer);
   };
 
+  // Seconds a beat stays on screen under the next beat's dissolve (the compositor's span).
+  const dissolveTail = id => {
+    const i = job.beats.findIndex(b => b.id === id);
+    const next = job.beats[i + 1];
+    return next?.transition === 'dissolve' ? Math.max(1, Math.min(Math.floor(0.7 * fps), Math.floor(next.frames / 2))) / fps : 0;
+  };
   const beatCue = b => (value, fallback = 0) => {
     if (value == null) return fallback;
     if (typeof value === 'number') {

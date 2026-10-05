@@ -308,6 +308,9 @@ pub struct Scope<'a> {
     pub locating: bool,
     /// Group nesting: the camera and depth apply once, at the layer's top level.
     pub depth: u32,
+    /// Opacity of type: below 1 while an outgoing beat runs on under a dissolve (its words
+    /// clear first; only the pictures cross), as in the block layer.
+    pub words: f32,
 }
 
 impl Scope<'_> {
@@ -731,8 +734,10 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
         return;
     }
     // Depth: perspective scale and depth of field from the layer camera.
-    let z = if scope.depth == 0 { num(el, "z") } else { None };
-    let view = if scope.depth > 0 {
+    // `camera: false` pins an element to the screen (type over a moving shot).
+    let pinned = el.get("camera").and_then(Value::as_bool) == Some(false);
+    let z = if scope.depth == 0 && !pinned { num(el, "z") } else { None };
+    let view = if scope.depth > 0 || pinned {
         (Matrix::new_identity(), 1.0, 1.0)
     } else {
         match scope.camera.matrix(z.unwrap_or(0.0)) {
@@ -1231,6 +1236,10 @@ fn shine(canvas: &Canvas, scope: &Scope, el: &Value, now: f32, settled: f32, (bx
 
 #[allow(clippy::too_many_arguments)]
 fn text_element(canvas: &Canvas, scope: &mut Scope, el: &Value, fill: &Fill, reveal: f32, local: f32, alpha: f32, material: Option<&(String, materials::Params)>) {
+    let alpha = alpha * scope.words;
+    if alpha <= 0.001 {
+        return;
+    }
     let font = fonts::element_font(el);
     let mut size = f(el, "size", 48.0).max(0.2);
     let mut tracking = f(el, "tracking", 0.0) * size;
