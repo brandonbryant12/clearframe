@@ -240,7 +240,7 @@ impl Engine {
             routes: Default::default(),
             texts: vec![],
             errors: vec![],
-            sample: false,
+            sample: 0.0,
             locating: false,
             depth: 0,
             words: 1.0,
@@ -309,7 +309,7 @@ impl Engine {
             sc.save();
             sc.set_matrix(&matrix.into());
             let mut scope = Self::scope(&mut self.media, &self.film, &layer, &palette, fps, pixel, ts, self.logical);
-            scope.sample = true;
+            scope.sample = ts - t;
             scope.words = words;
             nodes::draw(sc, &mut scope, &layer.elements, 0.0, 0.0, ts);
             sc.restore();

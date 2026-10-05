@@ -302,8 +302,9 @@ pub struct Scope<'a> {
     pub routes: HashMap<String, Arc<PathInfo>>,
     pub texts: Vec<TextMark>,
     pub errors: Vec<String>,
-    /// Draw at a subframe time for motion blur: footage stays on its frame.
-    pub sample: bool,
+    /// Seconds this motion-blur sample sits from the frame's own time: footage stays on the
+    /// frame's decoded picture across the shutter instead of blending two source frames.
+    pub sample: f32,
     /// The placement pass: positions and routes are recorded, nothing is drawn.
     pub locating: bool,
     /// Group nesting: the camera and depth apply once, at the layer's top level.
@@ -1424,7 +1425,7 @@ fn picture(canvas: &Canvas, scope: &Scope, el: &Value, image: &sk::Image, alpha:
 /// frame is an error unless the author asked to `hold` the last frame.
 fn footage(canvas: &Canvas, scope: &mut Scope, el: &Value, local: f32, alpha: f32) {
     let key = s(el, "file");
-    let seconds = f(el, "offset", 0.0) + local * f(el, "rate", 1.0);
+    let seconds = f(el, "offset", 0.0) + (local - scope.sample) * f(el, "rate", 1.0);
     let (w, h) = (f(el, "w", 0.0), f(el, "h", 0.0));
     let px = scope.pixel * scope.camera.zoom.max(1.0);
     let frame = scope.media.frame(key, seconds, (w * px) as u32, (h * px) as u32);
