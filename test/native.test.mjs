@@ -26,8 +26,8 @@ function project(t, sb) {
   writeJSON(path.join(dir, 'storyboard.json'), sb);
   return dir;
 }
-test('all 33 catalog examples validate in landscape and vertical without mutating author input', () => {
-  assert.equal(BLOCKS.length, 33);
+test('all 34 catalog examples (33 blocks and the stage) validate in landscape and vertical without mutating author input', () => {
+  assert.equal(BLOCKS.length, 34);
   for (const b of BLOCKS)
     for (const vertical of [false, true]) {
       const before = JSON.stringify(b.example);

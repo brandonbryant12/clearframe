@@ -15,11 +15,15 @@ import { types } from '../fframes/library.mjs';
 import { playbooks } from '../fframes/playbooks.mjs';
 import { BACKDROPS } from '../fframes/catalog.mjs';
 
-const { values } = parseArgs({ options: { parity: { type: 'string', default: 'build/parity/report.json' }, bench: { type: 'string', default: 'build/bench-engines/bench.json' }, fx: { type: 'string', default: 'build/engine-effects/report.json' }, out: { type: 'string', default: 'docs/scene-engine-coverage.md' } } });
+const { values } = parseArgs({ options: { parity: { type: 'string', default: 'build/parity/report.json' }, bench: { type: 'string', default: 'build/bench-engines/bench.json' }, fx: { type: 'string', default: 'build/engine-effects/report.json' }, gallery: { type: 'string', default: 'build/parity-gallery/report.json' }, out: { type: 'string', default: 'docs/scene-engine-coverage.md' } } });
 const read = f => (fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : null);
 const parity = read(values.parity) ?? [];
 const bench = read(values.bench);
 const fx = read(values.fx);
+const gallery = read(values.gallery) ?? [];
+// PSNR of one gallery beat (a block or a sketch) in a gallery project, e.g. blocks-landscape.
+const galleryDb = (project, beat) => gallery.find(g => g.playbook === project)?.psnr?.find(p => p.beat === beat)?.db;
+const fmt = db => (db == null ? '—' : db >= 98 ? 'identical' : db.toFixed(1));
 const sculptures = fs.readdirSync('library/sculptures').filter(f => f.endsWith('.json')).map(f => f.slice(0, -5));
 const row = cells => `| ${cells.join(' | ')} |`;
 const out = [];
@@ -55,11 +59,13 @@ out.push(`\nBackdrops in the catalog: ${BACKDROPS.join(', ')} — all drawn nati
 
 out.push('## Blocks', '');
 out.push(`${BLOCKS.length} blocks. Their internals are drawn by the block layer in both engines; film-level effects around them are native. \`stage\` is new and native.`, '');
-out.push(row(['Block', 'Category', 'State', 'Playbooks exercising it (parity run)']), row(['---', '---', '---', '---']));
+out.push('The block gallery (`clearframe gallery`, every catalog example, landscape and vertical) is drawn by both engines; PSNR is per block.', '');
+out.push(row(['Block', 'Category', 'State', 'Gallery PSNR landscape / vertical (dB)', 'Playbooks exercising it (parity run)']), row(['---', '---', '---', '---', '---']));
 for (const b of BLOCKS) {
   const used = parity.filter(p => p.blocks?.includes(b.name)).map(p => p.playbook);
   const state = b.name === 'stage' ? 'native' : 'block layer';
-  out.push(row([`\`${b.name}\``, b.category, state, used.length ? `${used.length}: ${used.slice(0, 6).join(', ')}${used.length > 6 ? ', …' : ''}` : 'unverified (no built-in playbook uses it; covered by Rust and Node tests)']));
+  const g = b.name === 'stage' ? 'scene engine only (fixtures)' : `${fmt(galleryDb('blocks-landscape', b.name))} / ${fmt(galleryDb('blocks-vertical', b.name))}`;
+  out.push(row([`\`${b.name}\``, b.category, state, g, used.length ? `${used.length}: ${used.slice(0, 6).join(', ')}${used.length > 6 ? ', …' : ''}` : 'none (gallery only)']));
 }
 out.push('');
 out.push('## Canvas features on native stages', '');
@@ -75,8 +81,10 @@ for (const [f, s] of [
 out.push('');
 
 out.push('## Sketches', '');
-out.push(`${sketches().length} public sketches expand into canvas elements in \`fframes/sketches.mjs\`, so they are drawn by the **block layer** in both engines. Each appears in the playbooks below where a playbook uses it; the rest are covered by the existing sketch tests (\`test/art-direction-studies.test.mjs\`, \`test/canvas.test.mjs\`) and are otherwise unverified in this change.`, '');
-out.push(sketches().map(s => `\`${s.id}\``).join(', '), '');
+out.push(`${sketches().length} public sketches expand into canvas elements in \`fframes/sketches.mjs\`, so they are drawn by the **block layer** in both engines. The sketch gallery (\`clearframe gallery DIR --sketches\`, landscape and vertical) is drawn by both engines; PSNR per sketch:`, '');
+out.push(row(['Sketch', 'Landscape (dB)', 'Vertical (dB)']), row(['---', '---', '---']));
+for (const sk of sketches()) out.push(row([`\`${sk.id}\``, fmt(galleryDb('sketches-landscape', sk.id)), fmt(galleryDb('sketches-vertical', sk.id))]));
+out.push('', '`globe`, `component-change` and `state-machine` were left out of the measured sketch gallery: the gallery cannot prepare them on `main` either (a `tilt` value the canvas validator rejects; elements cued after the gallery beat ends), identically under `--engine fframes`. They are unverified here. The block and sketch galleries\' sample copy also fails a few frame-audit checks (a quote mark over its text in vertical, overlapping route labels, a marquee word at the edge) — identical errors under both engines.', '');
 
 out.push('## Treatments, type voices and directions', '');
 out.push(`${treatments().length} treatments set palette, backdrop, texture, lens, motion, transitions and type. Film-level settings are **replaced** (native) with measured parity above; block content stays in the block layer. ${types().length} type voices resolve to the same bundled font files in both engines (native type shapes with the same rustybuzz measurement and draws the same glyph ids). ${directions().length} directions are authoring guidance and do not touch the renderer.`, '');
@@ -97,7 +105,8 @@ if (bench) {
   out.push('## Measurements', '');
   out.push(`From \`scripts/engine-bench.mjs\` (${bench.when}), ${bench.host.join(', ')}, each command run ${bench.repeat}× (best shown). Same project, resolution, frame rate and encoder settings for both engines: final libx264 CRF 16 medium; range libx264 CRF 21 veryfast at full scale. Picture only — audio finishing is shared and identical. "Peak" sums the engine process and its children (the scene engine's FFmpeg encoder included). These describe this machine and these projects only.`, '');
   out.push(row(['Project', 'Format', 'Frames', 'Engine', 'Cold start + still (ms)', 'Warm still (ms)', '60-frame range (ms)', 'Full (ms)', 'Full fps', 'Peak RSS (MiB)', 'Peak temp (MiB)']), row(Array(11).fill('---')));
-  for (const s of bench.summary) out.push(row([s.project, s.format, s.frames, s.engine, s.coldStillMs, s.warmStillMs, s.rangeMs, s.fullMs, s.fullFps, s.peakMiB, s.tempMiB]));
+  const label = p => ({ film: 'long-form recording (7.6 min, synthetic voices)', 'footage-h': 'stage-footage landscape', 'footage-v': 'stage-footage vertical' })[p] ?? p;
+  for (const s of bench.summary) out.push(row([label(s.project), s.format, s.frames, s.engine, s.coldStillMs, s.warmStillMs, s.rangeMs, s.fullMs, s.fullFps, s.peakMiB, s.tempMiB]));
   out.push('');
 }
 fs.writeFileSync(values.out, out.join('\n') + '\n');

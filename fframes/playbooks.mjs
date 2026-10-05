@@ -240,7 +240,10 @@ export async function writeGallery(dir, { vertical = false, theme = 'paper', onl
   fs.writeFileSync(path.join(dir, 'assets/demo.png'), wireframePNG(colors));
   const sb = storyboardFor('concept-explainer', { theme, vertical });
   sb.title = 'Native building blocks';
-  sb.beats = BLOCKS.filter(b => !only || only.includes(b.name)).map(b => ({
+  // The stage block is drawn only by the scene engine; an FFFrames gallery leaves it out.
+  const { engineFor } = await import('../scene/engine.mjs');
+  const drawable = b => b.name !== 'stage' || engineFor() === 'scene';
+  sb.beats = BLOCKS.filter(b => drawable(b) && (!only || only.includes(b.name))).map(b => ({
     id: b.name,
     block: b.name,
     duration: GALLERY_SECONDS[b.name] ?? 4,

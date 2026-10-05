@@ -5,7 +5,10 @@
 // says where the engines agree; block internals are drawn by the same code in both, so a low
 // score points at film-level compositing (backdrop, grain, lens, chrome) or a defect.
 //
-//   codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node scripts/engine-parity.mjs OUT [playbook …]
+//   codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node scripts/engine-parity.mjs OUT [playbook | project-dir …]
+//
+// A project directory (one with storyboard.json, e.g. from `clearframe gallery DIR [--sketches]`)
+// is compared as it is instead of being scaffolded.
 //
 // Writes OUT/report.json and OUT/<playbook>/{scene,fframes}/*.png. Sample copy and declared
 // placeholders render as rough stand-ins: this measures the engines, not the films.
@@ -18,7 +21,8 @@ import { engineCommand } from '../scene/engine.mjs';
 
 const OUT = path.resolve(process.argv[2] ?? 'build/engine-parity');
 const only = process.argv.slice(3);
-const books = playbooks().map(p => p.id).filter(id => !only.length || only.includes(id));
+const dirs = only.filter(a => fs.existsSync(path.join(a, 'storyboard.json'))).map(a => path.resolve(a));
+const books = dirs.length ? [] : playbooks().map(p => p.id).filter(id => !only.length || only.includes(id));
 fs.mkdirSync(OUT, { recursive: true });
 
 function psnr(a, b) {
@@ -45,9 +49,9 @@ async function frames(root, engine, times, dir) {
 }
 
 const report = [];
-for (const id of books) {
-  const root = path.join(OUT, id);
-  const row = { playbook: id };
+for (const id of [...books, ...dirs]) {
+  const root = path.isAbsolute(id) ? id : path.join(OUT, id);
+  const row = { playbook: path.isAbsolute(id) ? path.basename(id) : id, ...(path.isAbsolute(id) ? { project: id } : {}) };
   try {
     if (!fs.existsSync(path.join(root, 'storyboard.json'))) scaffold(root, { playbook: id });
     process.env.CLEARFRAME_ENGINE = 'scene';
@@ -59,8 +63,9 @@ for (const id of books) {
     row.blocks = [...new Set(ctx.job.beats.map(b => b.block))];
     row.format = `${ctx.job.width}x${ctx.job.height}@${ctx.job.fps}`;
     const times = ctx.timing.beats.map(b => Math.min(b.end - 1 / ctx.timing.fps, b.start + b.dur * 0.65));
-    const scene = await frames(root, 'scene', times, path.join(root, 'stills/scene'));
-    const legacy = await frames(root, 'fframes', times, path.join(root, 'stills/fframes'));
+    const stillsDir = path.join(OUT, row.playbook, 'stills');
+    const scene = await frames(root, 'scene', times, path.join(stillsDir, 'scene'));
+    const legacy = await frames(root, 'fframes', times, path.join(stillsDir, 'fframes'));
     row.ms = { scene: Math.round(scene.ms), fframes: Math.round(legacy.ms) };
     row.psnr = scene.files.map((f, i) => ({ beat: ctx.job.beats[i]?.id, block: ctx.job.beats[i]?.block, db: legacy.files[i] ? psnr(f, legacy.files[i]) : null }));
     row.minPsnr = Math.min(...row.psnr.map(p => p.db ?? 0));
@@ -70,7 +75,7 @@ for (const id of books) {
     row.error = e.message.slice(0, 2000);
   }
   report.push(row);
-  console.log(`${row.ok ? '✓' : '✗'} ${id} ${row.format ?? ''} min PSNR ${row.minPsnr?.toFixed?.(1) ?? '—'} dB ${row.error ? row.error.split('\n')[0] : row.check?.errors?.[0]?.split('\n')[0] ?? ''}`);
+  console.log(`${row.ok ? '✓' : '✗'} ${row.playbook} ${row.format ?? ''} min PSNR ${row.minPsnr?.toFixed?.(1) ?? '—'} dB ${row.error ? row.error.split('\n')[0] : row.check?.errors?.[0]?.split('\n')[0] ?? ''}`);
   fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
 }
 const ok = report.filter(r => r.ok).length;
