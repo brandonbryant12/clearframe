@@ -5,7 +5,9 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { eachElement, usesLevels } from './canvas.mjs';
 import { createJob } from './job.mjs';
-import { ROOT, sha256, rendererHash, buildNative, run } from './native-build.mjs';
+import { ROOT, sha256 } from './native-build.mjs';
+import { engineFor, engineHash, engineCommand } from '../scene/engine.mjs';
+import { compilePlan, writePlan } from '../scene/compile.mjs';
 import { voiceLevels } from '../engine/lib/levels.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 import { computeTiming, captionCues, toSRT, toVTT, assetSrc } from '../engine/lib/timing.mjs';
@@ -283,6 +285,23 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
         footage.push({ beat: b.id, index: result.job.beats.indexOf(b), source: rel, offset: prop.offset ?? 0, seconds: b.frames / timing.fps });
       }
     }
+  // Native stages: compiled into the scene plan (only the scene engine draws them).
+  const engine = engineFor(sb);
+  const staged = sb.beats.some(b => b.block === 'stage' || b.stage != null) || (sb.stages ?? []).length > 0;
+  if (engine === 'fframes' && staged)
+    throw new Error('This film has native stages (a stage block, a beat stage or film stages); only the scene engine draws them. Remove CLEARFRAME_ENGINE=fframes / engine: "fframes".');
+  let compiled = null;
+  if (engine === 'scene') {
+    compiled = compilePlan({ root, sb, timing, job: result.job, stage, assetFile }, { rough });
+    result.warnings.push(...compiled.warnings);
+    footage.push(...compiled.footage);
+    for (const jb of result.job.beats) {
+      if (compiled.settle[jb.id] != null)
+        jb.settle_seconds = Math.max(jb.settle_seconds, Math.min(compiled.settle[jb.id], jb.frames / result.job.fps));
+      // The block layer of a stage beat draws only its heading and source line.
+      if (jb.block === 'stage') jb.props = Object.fromEntries(Object.entries(jb.props).filter(([k]) => ['title', 'kicker', 'source', 'land'].includes(k)));
+    }
+  }
   // The same footage shown again over the same seconds is a loop by another name.
   const reuse = footageProblems(footage);
   if (reuse.errors.length) throw new Error(reuse.errors.join(' '));
@@ -313,6 +332,9 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
   for (const f of fs.readdirSync(media))
     if (!neededMedia.has(f) && fs.statSync(path.join(media, f)).isFile()) fs.unlinkSync(path.join(media, f));
   writeJSON(path.join(dir, 'job.json'), result.job);
+  const planFile = path.join(dir, 'plan.json');
+  if (compiled) writePlan(dir, compiled.plan);
+  else fs.rmSync(planFile, { force: true });
   writeJSON(path.join(root, 'build/timing.json'), timing);
   fs.writeFileSync(path.join(root, 'build/captions.srt'), toSRT(captionCues(timing)));
   fs.writeFileSync(path.join(root, 'build/captions.vtt'), toVTT(captionCues(timing)));
@@ -322,15 +344,18 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
       .filter(f => /\.ttf$/i.test(f))
       .map(f => [f, sha256(fs.readFileSync(path.join(ROOT, 'assets/fonts', f)))]),
   );
-  const rendererSourceHash = rendererHash();
+  const rendererSourceHash = engineHash(engine);
+  const planSha256 = compiled ? sha256(fs.readFileSync(planFile)) : null;
   const manifest = {
     version: 2,
-    renderer: 'fframes',
+    renderer: engine,
     rendererSourceHash,
     fontHashes,
+    // FFFrames is the scene engine's block layer (and the whole renderer with engine fframes).
     revision: readJSON(path.join(ROOT, 'upstream.json')).revision,
+    ...(planSha256 ? { planSha256, provenance: compiled.provenance } : {}),
     hashes,
-    inputId: sha256(JSON.stringify({ job: result.job, hashes, rendererSourceHash, fontHashes })),
+    inputId: sha256(JSON.stringify({ job: result.job, hashes, rendererSourceHash, fontHashes, planSha256 })),
     draft: draft || rough,
     profile: rough ? 'rough' : draft ? 'draft' : 'final',
     ...(placeholders.length ? { placeholders } : {}),
@@ -341,7 +366,7 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
   return { ...result, root, sb, timing, dir, media, manifest, placeholders, unfinished, allowed };
 }
 export function unchanged(ctx) {
-  if (rendererHash() !== ctx.manifest.rendererSourceHash)
+  if (engineHash(ctx.manifest.renderer) !== ctx.manifest.rendererSourceHash)
     throw new Error('Renderer source changed during the render; run again.');
   for (const [file, hash] of Object.entries(ctx.manifest.fontHashes))
     if (sha256(fs.readFileSync(path.join(ROOT, 'assets/fonts', file))) !== hash)
@@ -350,13 +375,8 @@ export function unchanged(ctx) {
     if (sha256(fs.readFileSync(path.join(ctx.root, file))) !== hash)
       throw new Error(`Input changed during render: ${file}. Run again.`);
 }
-export async function nativeCommand(ctx, command, args = [], capture = false) {
-  const bin = await buildNative();
-  return run(bin, ['--job', path.join(ctx.dir, 'job.json'), '--media', ctx.media, command, ...args], {
-    capture,
-    cwd: ctx.dir,
-  });
-}
+/** Run a command with the project's engine (see scene/engine.mjs). */
+export const nativeCommand = engineCommand;
 export async function checkProject(root, options = {}) {
   let ctx;
   const profile = options.rough ? 'rough' : options.draft ? 'draft' : 'final';

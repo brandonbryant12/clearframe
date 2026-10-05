@@ -155,6 +155,9 @@ pub(crate) fn phrase_window(
 thread_local! {
     /// The opacity of scene type: below 1 only while a scene runs on under a dissolve.
     pub(crate) static TEXT_ALPHA: std::cell::Cell<f32> = const { std::cell::Cell::new(1.0) };
+    /// Which part of a beat to draw: 0 everything, 1 only its ground (tone and plate), 2 all
+    /// but its ground. The scene engine draws native layers between the two.
+    pub(crate) static PART: std::cell::Cell<u8> = const { std::cell::Cell::new(0) };
 }
 
 /// Words that lean on the next one: a phrase should not end on them.

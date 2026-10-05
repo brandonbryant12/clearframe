@@ -5,13 +5,32 @@ use serde_json::Value;
 
 pub mod audit;
 pub mod constants;
-mod design;
-mod icons;
-mod lens;
-mod motion;
+pub mod design;
+pub mod icons;
+pub mod lens;
+pub mod motion;
 mod scenes;
 pub mod text;
 pub use scenes::{format_number, zero_scale};
+
+/// Draw only part of a beat: 0 the whole beat, 1 only its ground (tone and plate), 2 all but
+/// its ground. The ClearFrame scene engine draws native layers between the two.
+pub fn with_part<T>(part: u8, render: impl FnOnce() -> T) -> T {
+    scenes::PART.with(|p| p.set(part));
+    let out = render();
+    scenes::PART.with(|p| p.set(0));
+    out
+}
+
+/// Draw `render` with the words of the beat at `alpha` (1 is normal). The ClearFrame scene
+/// engine composes dissolves itself and uses this for the outgoing beat, whose words clear
+/// before the pictures cross, as `NativeFilm::render_frame` does.
+pub fn with_text_alpha<T>(alpha: f32, render: impl FnOnce() -> T) -> T {
+    scenes::TEXT_ALPHA.with(|a| a.set(alpha));
+    let out = render();
+    scenes::TEXT_ALPHA.with(|a| a.set(1.0));
+    out
+}
 
 pub const BLOCKS: &[&str] = &[
     "title",
@@ -47,6 +66,9 @@ pub const BLOCKS: &[&str] = &[
     "checklist",
     "annotate",
     "canvas",
+    // A beat whose picture is drawn by the scene engine's native layers: the block layer
+    // keeps its heading, source line, captions, speaker and transitions.
+    "stage",
 ];
 /// Scene entrances. `panel`, `iris` and `whip` are graphic transitions: the outgoing scene's
 /// exit and the incoming entrance share one continuous movement across the cut.

@@ -1,0 +1,33 @@
+[package]
+name = "clearframe-scene"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+publish = false
+description = "ClearFrame's GPU scene engine: a deterministic scene plan evaluated per frame and composited with Skia on Metal."
+
+[[bin]]
+name = "clearframe-scene"
+path = "src/main.rs"
+
+[dependencies]
+# Block internals not yet ported to native scene nodes are drawn from the existing block code as
+# SVG input layers (the compatibility path). Its frame loop, encoder and film compositing are unused.
+clearframe-native = { path = "../../fframes/native", default-features = false }
+fframes = { git = "https://github.com/dmtrKovalenko/fframes", rev = "055bb6b9dcbbcca6532206847d43ea8e81fa2a0b", features = ["cli", "compile-time-svgtree", "h264", "libav-agree-gpl"] }
+# Re-exports skia-safe (same prebuilt Skia binaries as the lock graph) and draws usvg trees onto a Skia canvas.
+fframes_skia_renderer = { git = "https://github.com/dmtrKovalenko/fframes", rev = "055bb6b9dcbbcca6532206847d43ea8e81fa2a0b", features = ["metal"] }
+kurbo = "0.11.3"
+# Already in the lock graph through fframes_skia_renderer: raw Metal handles for the Skia context.
+foreign-types-shared = "0.3.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[profile.release]
+debug = false
+lto = false
+
+[patch."https://github.com/dmtrKovalenko/fframes"]
+fframes-media = { path = "../../fframes/native/vendor/fframes-media" }
+
+[workspace]

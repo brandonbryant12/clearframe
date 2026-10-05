@@ -5,7 +5,7 @@
 // Full license and per-file source/SHA256: fframes/assets/icons/tabler/{LICENSE,manifest.json}.
 use fframes::Svgr;
 
-fn paths(name: &str) -> Option<&'static [&'static str]> {
+pub fn paths(name: &str) -> Option<&'static [&'static str]> {
     match name {
         "alert" => Some(&[
             "M12 9v4",
@@ -404,7 +404,7 @@ fn paths(name: &str) -> Option<&'static [&'static str]> {
     }
 }
 
-pub(crate) fn supported(name: &str) -> bool {
+pub fn supported(name: &str) -> bool {
     paths(name).is_some()
 }
 

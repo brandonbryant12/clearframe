@@ -105,6 +105,7 @@ Paid generation needs GEMINI_API_KEY; rendering and word-file imports are free.
 async function main() {
   const [cmd, ...args] = process.argv.slice(2);
   const strings = [
+    'engine',
     'duration',
     'scale',
     'idea',
@@ -172,6 +173,7 @@ async function main() {
     'checkpoint',
   ];
   const booleans = [
+    'all',
     'still',
     'draft',
     'force',
@@ -205,6 +207,12 @@ async function main() {
     ]),
   });
   if (!cmd || cmd === 'help' || o.help) return console.log(HELP);
+  // --engine fframes draws with the FFFrames renderer (comparison and recovery); scene is the default.
+  if (o.engine) {
+    const { ENGINES } = await import('../scene/engine.mjs');
+    if (!ENGINES.includes(o.engine)) throw new Error(`--engine must be ${ENGINES.join(' or ')}`);
+    process.env.CLEARFRAME_ENGINE = o.engine;
+  }
   // --library DIR layers a shared library (brand kit, team templates) like CLEARFRAME_LIBRARY.
   if (o.library) {
     process.env.CLEARFRAME_LIBRARY = [process.env.CLEARFRAME_LIBRARY, path.resolve(o.library)]
@@ -425,7 +433,12 @@ async function main() {
     if (rows.some(r => !r.ok)) process.exitCode = 1;
     return;
   }
-  if (cmd === 'build') return console.log(await native.buildNative(opts));
+  if (cmd === 'build') {
+    const { buildEngine, engineFor } = await import('../scene/engine.mjs');
+    if (o.all) return console.log([await buildEngine('scene'), await native.buildNative(opts)].join('\n'));
+    const engine = engineFor();
+    return console.log(engine === 'fframes' ? await native.buildNative(opts) : await buildEngine(engine));
+  }
   if (cmd === 'viewer') {
     const { buildViewer, serveViewer } = await import('./lib/viewer.mjs');
     const root = positionals.length ? positionals : ['examples', 'real-examples'];

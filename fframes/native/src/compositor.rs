@@ -107,6 +107,7 @@ pub fn render<'a>(b: &'a Beat, frame: Frame, ctx: &FFramesContext<'a, '_>) -> Sv
         "annotate" => d.annotate(),
         "kinetic" => d.kinetic(),
         "canvas" => d.canvas(),
+        "stage" => empty(),
         _ => panic!("unsupported block {}", b.block),
     };
     // A push to a detail moves the picture only: the heading and source stay readable.
@@ -262,6 +263,12 @@ fn iris<'a>(d: &Draw<'a, '_, '_>, progress: f32, window: bool) -> Svgr<'a> {
 /// next scene's entrance. Neither cross-dissolves two scenes; graphic transitions (panel,
 /// iris, whip) are one movement split across the cut.
 fn scene_motion<'a>(d: &Draw<'a, '_, '_>, plate: Svgr<'a>, content: Svgr<'a>, footer: Svgr<'a>) -> Svgr<'a> {
+    let part = super::PART.with(|p| p.get());
+    let (plate, content, footer) = match part {
+        1 => (plate, empty(), empty()),
+        2 => (empty(), content, footer),
+        _ => (plate, content, footer),
+    };
     let b = d.b;
     let env = &b.environment;
     let (w, h) = (env.width, env.height);
@@ -375,7 +382,7 @@ fn scene_motion<'a>(d: &Draw<'a, '_, '_>, plate: Svgr<'a>, content: Svgr<'a>, fo
     if clip <= 0.0 {
         return layer(d, footer, exit_opacity, &exit_transform, None, h);
     }
-    let tone = if b.tone.as_deref().is_some_and(|t| !t.is_empty() && t != "none") {
+    let tone = if part != 2 && b.tone.as_deref().is_some_and(|t| !t.is_empty() && t != "none") {
         rect(0.0, 0.0, w, h, &d.p.bg)
     } else {
         empty()
@@ -400,6 +407,9 @@ fn scene_motion<'a>(d: &Draw<'a, '_, '_>, plate: Svgr<'a>, content: Svgr<'a>, fo
     } else {
         scene
     };
+    if part == 1 {
+        return scene;
+    }
     fframes::svgr!(<g>{scene}{cover}{exit_cover}</g>)
 }
 

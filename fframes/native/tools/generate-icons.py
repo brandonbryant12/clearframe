@@ -52,7 +52,7 @@ header = """// SPDX-License-Identifier: MIT
 // Full license and per-file source/SHA256: fframes/assets/icons/tabler/{LICENSE,manifest.json}.
 use fframes::Svgr;
 
-fn paths(name: &str) -> Option<&'static [&'static str]> {
+pub fn paths(name: &str) -> Option<&'static [&'static str]> {
     match name {
 """
 output = [header]
@@ -65,7 +65,7 @@ output.append("""        _ => None,
     }
 }
 
-pub(crate) fn supported(name: &str) -> bool { paths(name).is_some() }
+pub fn supported(name: &str) -> bool { paths(name).is_some() }
 
 /// Only an enumerated, locally pinned icon is allowed; props never supply SVG.
 pub(crate) fn render<'a>(name: &str, x: f32, y: f32, size: f32, color: &str) -> Svgr<'a> {

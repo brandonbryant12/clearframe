@@ -40,7 +40,7 @@ pub enum Font {
 }
 
 impl Font {
-    const ALL: [Font; 19] = [
+    pub const ALL: [Font; 19] = [
         Font::Text,
         Font::TextStrong,
         Font::DisplayLight,
@@ -96,7 +96,8 @@ impl Font {
     pub fn italic(self) -> bool {
         matches!(self, Font::SerifItalic | Font::SerifDisplayItalic | Font::DidoneItalic)
     }
-    fn file(self) -> &'static str {
+    /// The bundled file this face is drawn from.
+    pub fn file(self) -> &'static str {
         match self {
             Font::Text => "Inter-Regular.ttf",
             Font::TextStrong => "Inter-SemiBold.ttf",
@@ -303,8 +304,34 @@ pub fn measure(font: Font, text: &str, size: f32, tracking: f32) -> f32 {
     units as f32 * size / face.units_per_em() as f32 + tracking * clusters.len().saturating_sub(1) as f32
 }
 
+/// Shaped glyphs of one line: (glyph id, x offset of its origin, y offset), in pixels at
+/// `size`, with letter-spacing between clusters applied exactly as `measure` counts it. The
+/// ClearFrame scene engine draws these ids with the same font file, so native text and the
+/// measurements that laid it out agree.
+pub fn shape(font: Font, text: &str, size: f32, tracking: f32) -> Vec<(u16, f32, f32)> {
+    if text.is_empty() {
+        return vec![];
+    }
+    let face = &faces()[font.index()];
+    let mut buffer = rustybuzz::UnicodeBuffer::new();
+    buffer.push_str(text);
+    let output = rustybuzz::shape(face, &[], buffer);
+    let k = size / face.units_per_em() as f32;
+    let (mut x, mut last) = (0.0f32, None);
+    let mut glyphs = Vec::with_capacity(output.len());
+    for (info, pos) in output.glyph_infos().iter().zip(output.glyph_positions()) {
+        if last.is_some_and(|c| c != info.cluster) {
+            x += tracking;
+        }
+        last = Some(info.cluster);
+        glyphs.push((info.glyph_id as u16, x + pos.x_offset as f32 * k, -pos.y_offset as f32 * k));
+        x += pos.x_advance as f32 * k;
+    }
+    glyphs
+}
+
 /// Ascender and descender as fractions of the em (descender is positive).
-fn vertical_metrics(font: Font) -> (f32, f32) {
+pub fn vertical_metrics(font: Font) -> (f32, f32) {
     let face = &faces()[font.index()];
     let em = face.units_per_em() as f32;
     (face.ascender() as f32 / em, -(face.descender() as f32) / em)

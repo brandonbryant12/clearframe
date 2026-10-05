@@ -336,24 +336,27 @@ pub(super) fn arrowhead(x: f32, y: f32, angle: f32, head: f32) -> String {
     )
 }
 
-/// Point and direction at `fraction` of a polyline's length.
+/// Point and direction at `fraction` of a polyline's length. Zero-length segments (a flattened
+/// curve can end with one) are skipped; the end of the line is its last real point.
 pub(super) fn along(points: &[(f32, f32)], fraction: f32) -> Option<((f32, f32), f32)> {
     let total: f32 = points.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum();
     if total <= 0.0 {
         return None;
     }
     let mut remaining = total * fraction.clamp(0.0, 1.0);
+    let mut last = None;
     for w in points.windows(2) {
         let seg = (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1);
         if seg <= 1e-6 {
             continue;
         }
-        if remaining <= seg || std::ptr::eq(w, points.windows(2).last()?) {
+        let angle = (w[1].1 - w[0].1).atan2(w[1].0 - w[0].0);
+        if remaining <= seg {
             let t = (remaining / seg).clamp(0.0, 1.0);
-            let p = (w[0].0 + (w[1].0 - w[0].0) * t, w[0].1 + (w[1].1 - w[0].1) * t);
-            return Some((p, (w[1].1 - w[0].1).atan2(w[1].0 - w[0].0)));
+            return Some(((w[0].0 + (w[1].0 - w[0].0) * t, w[0].1 + (w[1].1 - w[0].1) * t), angle));
         }
         remaining -= seg;
+        last = Some((w[1], angle));
     }
-    None
+    last
 }

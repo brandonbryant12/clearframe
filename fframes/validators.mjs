@@ -420,6 +420,18 @@ export const VALIDATORS = {
       h.required(it.text, 'items.text');
     });
   },
+  // Stage structure is compiled and checked by scene/compile.mjs (it needs the narration for
+  // spoken cues); here only its shape.
+  stage: (p, h) => {
+    for (const key of ['actors', 'links', 'events', 'under', 'elements', 'over'])
+      if (p[key] != null && !Array.isArray(p[key])) h.fail(`${key} must be a list`);
+    for (const key of ['code', 'ground', 'camera', 'motion'])
+      if (p[key] != null && (typeof p[key] !== 'object' || Array.isArray(p[key]))) h.fail(`${key} must be an object`);
+    if (p.shutter != null && !(Number.isFinite(p.shutter) && p.shutter >= 0 && p.shutter <= 1)) h.fail('shutter must be 0–1');
+    if (p.samples != null && !(Number.isInteger(p.samples) && p.samples >= 1 && p.samples <= 32)) h.fail('samples must be 1–32');
+    if (p.z != null && !['under', 'over'].includes(p.z)) h.fail('z must be under or over');
+    if (p.support != null) h.fail('a stage draws its own picture; put supporting words in an element');
+  },
   canvas: (p, h, frame = {}) => {
     if (p.diagram != null) {
       try { p.elements = [...diagramElements(p.diagram, frame), ...(p.elements ?? [])]; } catch (e) { h.fail(e.message); }

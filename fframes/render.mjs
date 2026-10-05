@@ -4,7 +4,8 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { THEMES, palette } from './catalog.mjs';
-import { buildNative, sha256 } from './native-build.mjs';
+import { sha256 } from './native-build.mjs';
+import { buildEngine, backendOf } from '../scene/engine.mjs';
 import { COVER } from './constants.mjs';
 import { prepareProject, nativeCommand, unchanged } from './prepare.mjs';
 import { renderGeometry } from './render-geometry.mjs';
@@ -36,7 +37,8 @@ export function validateVideo(file, { width, height, fps, frames }) {
     throw new Error('Native output dimensions, frame rate or decoded frame count differ from the storyboard.');
   return { video: v, audio: streams.find(s => s.codec_type === 'audio') ?? null };
 }
-// The encoder settings live in fframes/native/src/main.rs; these labels describe them.
+// The encoder settings live in scene/native/src/encode.rs (and fframes/native/src/main.rs for
+// the FFFrames engine); both use these values. These labels describe them.
 export const ENCODERS = { draft: 'draft (x264 veryfast, CRF 21)', final: 'final (x264 medium, CRF 16)' };
 
 /** Upstream segment concatenation can end the MP4 edit list one frame early at some lengths
@@ -92,7 +94,7 @@ export async function renderProject(
   const start = performance.now();
   const fast = draft || rough;
   try {
-    await phase('native-build', () => buildNative());
+    await phase('native-build', () => buildEngine(ctx.manifest.renderer));
     // Scale only the output raster; layout, frame rate, speech and source media clocks stay authored.
     await phase('native-render', () => nativeCommand(ctx, 'render', [...(fast ? ['--draft', '--scale', String(scale)] : []), '-o', raw]), {
       frames: ctx.job.frames,
@@ -119,7 +121,9 @@ export async function renderProject(
       fps: ctx.job.fps,
       frames: ctx.job.frames,
       seconds: (performance.now() - start) / 1000,
-      backend: process.platform === 'darwin' ? 'skia-metal' : 'cpu',
+      engine: ctx.manifest.renderer,
+      backend: backendOf(ctx.manifest.renderer),
+      ...(ctx.manifest.planSha256 ? { planSha256: ctx.manifest.planSha256 } : {}),
       audio: !!probe.audio,
       colorSpace: probe.video.color_space ?? null,
       colorTransfer: probe.video.color_transfer ?? null,
@@ -135,7 +139,7 @@ export async function renderProject(
       ...(fast ? { notValidated: unvalidated(ctx, check) } : {}),
     };
     writeJSON(`${output}.json`, report);
-    log.ok(`FFFrames video → ${output}`);
+    log.ok(`${ctx.manifest.renderer === 'fframes' ? 'FFFrames' : 'Scene engine'} video → ${output}`);
     record({ frames: ctx.job.frames, profile: ctx.manifest.profile });
     if (revision) {
       // Whatever a person could watch gets a revision, so a note can say which cut it was about.
@@ -291,7 +295,7 @@ export async function renderRange(
     shots = path.join(ctx.dir, `${token}-range-frames`);
   const start = performance.now();
   try {
-    await phase('native-build', () => buildNative());
+    await phase('native-build', () => buildEngine(ctx.manifest.renderer));
     await phase('native-render', () => nativeCommand(ctx, 'render', [`${a}..${b}`, '--draft', '--scale', '1', '-o', raw]), { frames });
     await phase('timeline', () => packetTimeline(raw, silent));
     await phase('validate', () => validateVideo(silent, { ...ctx.job, frames }));
@@ -358,6 +362,7 @@ export async function renderRange(
       kind: 'range-preview',
       profile: ctx.manifest.profile,
       inputId: ctx.manifest.inputId,
+      engine: ctx.manifest.renderer,
       rendererSourceHash: ctx.manifest.rendererSourceHash,
       rendererRevision: ctx.manifest.revision,
       range: { frames: [a, b], seconds: [a / fps, b / fps], fps, handles },

@@ -90,6 +90,9 @@ export const REGISTRY = {
   annotate: { family: 'media', ...staged('pins', 0.7, 0.6, e => e + 0.05) },
   kinetic: { family: 'speech' },
   canvas: { family: 'drawing' }, // elements are scheduled by canvas.mjs
+  // A native GPU stage: its layers are compiled and scheduled by scene/compile.mjs, which also
+  // raises the beat's settle time to its last arrival.
+  stage: { family: 'drawing' },
 };
 
 function heroNumber(b, add, t) {
