@@ -8,7 +8,7 @@
 //
 //   node scripts/demo-clips.mjs --out DIR [--studio http://127.0.0.1:4317] [--cdp http://127.0.0.1:9333]
 //          [--film projects-why-the-tide-turns-twice] [--scene title] [--field props.elements.1.text]
-//          [--only name,name]
+//          [--min 10] [--only name,name]
 //
 // --film must be a film you own for demos: the edit clip changes one title and undoes it, and the
 // stop clip sends one message to its agent (the free model) and stops it. Nothing is approved or
@@ -19,13 +19,13 @@ import { spawnSync } from 'node:child_process';
 import { parseArgs } from 'node:util';
 import { chrome, tab, sleep } from './demo-cdp.mjs';
 
-const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, film: { type: 'string' }, scene: { type: 'string' }, field: { type: 'string' }, text: { type: 'string' }, only: { type: 'string' } } });
-if (!o.out) { console.error('Usage: node scripts/demo-clips.mjs --out DIR [--studio URL] [--cdp URL] [--film FILM] [--scene ID] [--field PATH] [--text TEXT] [--only a,b]'); process.exit(2); }
+const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, film: { type: 'string' }, scene: { type: 'string' }, field: { type: 'string' }, text: { type: 'string' }, min: { type: 'string' }, only: { type: 'string' } } });
+if (!o.out) { console.error('Usage: node scripts/demo-clips.mjs --out DIR [--studio URL] [--cdp URL] [--film FILM] [--scene ID] [--field PATH] [--text TEXT] [--min S] [--only a,b]'); process.exit(2); }
 const STUDIO = (o.studio ?? 'http://127.0.0.1:4317').replace(/\/$/, ''), OUT = path.resolve(o.out);
 const FILM = o.film ?? 'projects-why-the-tide-turns-twice', SCENE = o.scene ?? 'title', FIELD = o.field ?? 'props.elements.1.text';
 const NEW_TEXT = o.text ?? 'Why does the sea turn around twice a day?';
 const only = o.only ? new Set(o.only.split(',')) : null;
-const W = 1600, H = 900, SCALE = 2, MAX_W = 520;
+const W = 1600, H = 900, SCALE = 2, MAX_W = 520, MIN = Number(o.min ?? 10);
 fs.mkdirSync(OUT, { recursive: true });
 
 // ------------------------------------------------------------------ page helpers
@@ -85,10 +85,11 @@ async function record(page, name, clip, act) {
   const end = frames.at(-1).t + 400;
   fs.writeFileSync(path.join(dir, 'list.txt'), frames.map((x, i) => `file '${x.f}'\nduration ${(((frames[i + 1]?.t ?? end) - x.t) / 1000).toFixed(4)}`).join('\n') + `\nfile '${frames.at(-1).f}'\n`);
   const out = path.join(OUT, `${name}.mp4`);
-  const r = spawnSync('ffmpeg', ['-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', path.join(dir, 'list.txt'), '-vf', 'fps=30,scale=trunc(iw/2)*2:trunc(ih/2)*2,format=yuv420p', '-c:v', 'libx264', '-crf', '16', '-preset', 'medium', '-movflags', '+faststart', '-an', out], { encoding: 'utf8' });
+  const r = spawnSync('ffmpeg', ['-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', path.join(dir, 'list.txt'), '-vf', `fps=30,scale=trunc(iw/2)*2:trunc(ih/2)*2,tpad=stop_mode=clone:stop_duration=${Math.max(0, MIN - (end - frames[0].t) / 1000).toFixed(2)},format=yuv420p`, '-c:v', 'libx264', '-crf', '16', '-preset', 'medium', '-movflags', '+faststart', '-an', out], { encoding: 'utf8' });
   if (r.status !== 0) throw new Error(r.stderr);
   fs.rmSync(dir, { recursive: true, force: true });
-  return { file: `${name}.mp4`, seconds: Math.round((end - frames[0].t) / 100) / 10, frames: frames.length, region: clip, scale: SCALE };
+  // Footage never loops in a film, so a short clip holds its last frame (the screen at rest) to --min seconds.
+  return { file: `${name}.mp4`, seconds: Math.max(MIN, Math.round((end - frames[0].t) / 100) / 10), action: Math.round((end - frames[0].t) / 100) / 10, frames: frames.length, region: clip, scale: SCALE };
 }
 const clearComposer = () => {
   document.querySelector('.st-compose [data-act="scope"]')?.click();
