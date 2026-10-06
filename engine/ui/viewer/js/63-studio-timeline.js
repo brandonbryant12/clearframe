@@ -7,11 +7,13 @@ function pxPerSecond() {
   const w = Math.max(320, (el?.clientWidth ?? 900) - 16);
   return (w / Math.max(1, c.duration)) * S.zoom;
 }
+/** Zoom about the playhead: it stays where it was on screen. */
 function setZoom(z) {
-  const el = document.getElementById('st-tl-scroll'), before = pxPerSecond();
+  const el = document.getElementById('st-tl-scroll'), x = el ? S.t * pxPerSecond() - el.scrollLeft : 0;
   S.zoom = Math.max(1, Math.min(64, z)); store.set('cf-studio-zoom', S.zoom);
   render(['timeline']);
-  if (el) el.scrollLeft = Math.max(0, S.t * pxPerSecond() - el.clientWidth / 2 + (el.scrollLeft - S.t * before + el.clientWidth / 2) * 0);
+  const after = document.getElementById('st-tl-scroll');
+  if (after) after.scrollLeft = Math.max(0, S.t * pxPerSecond() - x);
 }
 function tickStep(pps) { for (const s of [1 / 30, 0.1, 0.25, 0.5, 1, 2, 5, 10, 15, 30, 60, 120, 300]) if (s * pps >= 64) return s; return 600; }
 

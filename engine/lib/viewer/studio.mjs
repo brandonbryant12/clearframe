@@ -84,8 +84,13 @@ function stageCallbacks(dir, sb) {
 
 const analyses = new Map();
 /** Timing, the engine's job checks and pickable text boxes for a storyboard (cached by content). */
+/** Narration files change without the storyboard changing (a draft voice, an alignment): they key the analysis too. */
+function voStamp(dir) {
+  const vo = path.join(dir, 'assets', 'vo');
+  try { return fs.readdirSync(vo).filter(f => f.endsWith('.json')).map(f => fs.statSync(path.join(vo, f)).mtimeMs).reduce((a, b) => Math.max(a, b), 0); } catch { return 0; }
+}
 export function analyse(dir, sb, raw = stringify(sb)) {
-  const key = `${dir}\0${sha(raw)}`;
+  const key = `${dir}\0${sha(raw)}\0${voStamp(dir)}`;
   if (analyses.has(key)) return analyses.get(key);
   const out = { errors: [], warnings: [], timing: null, boxes: {} };
   let timing, loaded, job;

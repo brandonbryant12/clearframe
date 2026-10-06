@@ -396,7 +396,7 @@ const ACTIONS = {
   select: el => { select(el.dataset.beat, { element: el.dataset.element ?? null }); if (el.closest('.st-left')) document.getElementById('st')?.classList.remove('show-left'); },
   element: el => { S.sel.element = el.dataset.element || null; if (el.dataset.beat && el.dataset.beat !== S.sel.beat) select(el.dataset.beat, { element: S.sel.element }); else invalidate(['right', 'monitor']); },
   still: () => S.sel.beat && startJob('still', { beat: S.sel.beat, pos: S.monitor.pos ?? 0.6 }).catch(() => {}),
-  stillAt: () => startJob('still', { at: Number(S.t.toFixed(3)) }).then(r => { S.pendingAt = r.id; }).catch(() => {}),
+  stillAt: () => startJob('still', { at: Number(S.t.toFixed(3)) }).then(r => { S.monitor.atJob = r.id; S.monitor.section = null; invalidate(['monitor']); }).catch(() => {}),
   section: () => previewSection(),
   draft: () => confirmJob('draft'),
   check: () => startJob('check').catch(() => {}),

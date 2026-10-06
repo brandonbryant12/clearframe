@@ -1,6 +1,6 @@
 # Studio and review
 
-`clearframe viewer --serve` opens the local editing studio. ClearFrame projects open a working copy with a scene browser, native preview monitor, contextual properties and zoomable sequence. The standalone HTML also retains rendered-film review. Double-click `build/viewer/index.html`, or run with `--serve` so notes save straight into each film.
+`clearframe viewer --serve` opens the local editing studio: each ClearFrame film opens as one workspace for editing, previewing, reviewing and delivering. The standalone HTML (no server) keeps the read-only rendered-film review. Double-click `build/viewer/index.html`, or run with `--serve` so notes save straight into each film.
 
 ```sh
 node engine/cli.mjs viewer                         # films under examples/ and real-examples/
@@ -11,13 +11,70 @@ node engine/cli.mjs viewer --no-render             # skip chart previews (faster
 
 ## Editing workspace
 
-Open a ClearFrame project from the studio board. **Story** edits narration and scene names; **Design** edits on-screen text and explicit duration; **Review** opens immutable rendered versions and edit history. Drag the gutters to resize the scene browser and inspector. Scene selection is shared by the browser, inspector and timeline. Working timeline durations are estimates until narration is prepared.
+Open a ClearFrame project from the studio board (with `--serve`). The workspace has four regions around one selection and one playhead:
 
-Changes save into `storyboard.json` when a field loses focus. Undo/redo persists in `review/studio-history.json`. Stale clients cannot overwrite changes made by another editor; reload the working copy first. An external edit begins a new undo history on the next studio command. Imported recorded speech must use source cuts, rather than text edits.
+- **Browser** (left): *Scenes* (drag to reorder; dots mark scenes edited since the latest render, engine errors and placeholders), *Script* (every scene's narration in order; a recording appears as its transcript), *Library* (blocks, drawings, palettes, type voices, motion, transitions and treatments, each with an action), *Assets* (project pictures and clips: drag onto the monitor or use *Plate*) and *Brief* (the brief and the film's sources). Below 1180 px wide it becomes a drawer.
+- **Monitor** (centre): the *Working copy* (native stills and section previews of the saved storyboard), a *Rendered* version (with its notes pinned to the picture) or *Compare* (render against working copy, before against after an edit, or a candidate's passages; wipe or side by side). A badge always says what is showing and whether it matches the working copy. Text on a still can be clicked to select its element; the selected shape is outlined.
+- **Inspector** (right): *Inspect* (the selected scene or element), *Film* (format, palette, type, motion, cutting, lens, frame, captions, sound, sources, treatments), *Review* and *Deliver*.
+- **Timeline** (bottom): picture, narration, notes and music lanes on the engine's own timing (see below). Drag the ruler to scrub, a scene to reorder it, its right edge to set its duration; shift-click selects a run of scenes for a section preview; ⌘-scroll or `=`/`-`/`0` zoom.
 
-**Preview selected scene** draws a native still. **Render rough cut** prepares free local draft narration and a half-size rough cut. Jobs use the shared heavy-process gate and run one at a time. The preview indicates whether it matches the saved working copy; rendered revisions remain separate from editable source. No paid generation is triggered by these actions.
+**Story**, **Design**, **Review** and **Deliver** (keys 1–4) are arrangements of these panels, not separate pages. Panel sizes, the last arrangement, the open inspector sections and the selected scene persist in this browser. ⌘K opens a command palette over every action, scene, version, block, palette and treatment; `?` lists the shortcuts (space, J/K/L, ←/→ frame, ↑/↓ scene, ⌥↑/⌥↓ move, ⌘Z/⇧⌘Z, ⌘↩ still, ⇧⌘↩ section, ⌘D, ⌫, N).
 
-The local JSON API exposes state, commands and jobs under `/api/studio/`. UI actions and automation share the same command implementation, validation, stale-write check and history.
+### Edits
+
+Each field saves when it loses focus or on Enter (⌘↩ in a text area) as one command, and each command is one step of undo. Before anything is written, the command builds the candidate film with the engine's own job builder (and the stage compiler for stages). If that adds an error, nothing is saved and the engine's reason appears under the field, with the value still in it; Esc restores the saved value. Problems already in the file do not block unrelated edits.
+
+| Command | What it does |
+|---|---|
+| `set` | One value at a dotted path on the film or a scene (`props.data.2.value`, `art.under.0.fill`, `motion.intensity`); `null` removes it (and removes a list item). Only schema fields, and props the block has, are accepted. |
+| `move` | A scene to a new position; ids never change. |
+| `insert` | A catalog block after the selection, with the catalog's sample content and its "replace before publishing" source; or a canvas sketch. New silent scenes are six seconds long. Scenery sketches go behind a scene as `art`. |
+| `duplicate` · `delete` | Not for recorded scenes: a recording plays once, and its scenes go when their words are cut. |
+| `treatment` | The treatment's film look and scene defaults (`applyTreatment`), in one step. |
+| `batch` | Several of the above as one undo step. |
+| `undo` · `redo` | Persisted in `review/studio-history.json`. |
+
+History compares canonical JSON, so reformatting the file is not a change. An edit made outside the studio (by hand, or by a CLI tool that is not `studio`) starts a new history on the next command. If the history was written but the storyboard was not (a crash between the two), that step is dropped. Commands take the project's review lock (the one `cut`, `revise` and the other review commands use) and fail at once if another process holds it. Stale clients cannot overwrite newer edits: every command carries the content hash it was made against, and the UI queues its commands so that each one uses the previous result.
+
+The same commands run from the command line, with the same history:
+
+```sh
+node engine/cli.mjs studio film                      # scenes, timing, engine errors, undo/redo
+node engine/cli.mjs studio film set props.text '"A clearer line"' --beat open
+node engine/cli.mjs studio film insert bars --beat open
+node engine/cli.mjs studio film move --beat bars --to 2
+node engine/cli.mjs studio film undo
+node engine/cli.mjs studio film history
+```
+
+An open studio picks up edits made this way within a few seconds.
+
+### Narration and recordings
+
+Script narration (`vo` with no audio yet, or a generated take) is edited as text. A generated take is re-recorded as a whole when narration is next made; rough cuts use a free local draft voice. Narration imported with its audio is never retyped. For an imported recording (`ingest --audio`), the narration is its transcript: select words (click, shift-click) in the inspector, the Script panel or the zoomed narration lane, then **Cut** (the engine plans the cut first and shows what goes; the cut records your name and is rebuilt from the master), **Split before** a word, or **Merge with next**. Undo of a cut is the engine's exact `uncut` (the same audio, byte for byte), and redo cuts the same words again by identity. Splits and merges are kept in `review/edits.jsonl`; their inverse is a merge or a split, not an undo. Narration imported per scene with `speech` is read-only; re-import it to change it.
+
+### Previews and jobs
+
+- **Live stills.** After a selection or an edit, the selected scene's native still is rendered from the saved working copy (about a second on this machine). Results are cached by content, so going back to a version you have seen is instant. *Frame at playhead* renders the exact frame under the playhead.
+- **Preview section** (⇧⌘↩) renders the selected scenes (shift-click for a run) from the full prepared timeline, with half-second handles, the film's own mix and a clock checked against frames drawn directly (`preview --beats`). It plays in the monitor on the film's clock.
+- **Rough cut** (`draft --rough --scale 0.5`, free draft narration) and **Final** (`render`, prepared narration only) save revisions. The film refreshes in place when they finish.
+- **Check** (`check --draft`), **Captions** (`captions`) and a note's **candidate** (`revise --note`) and **rejection** (`reject --by --said`) also run as jobs.
+
+Jobs run one at a time through the shared heavy-work gate, in order; the status bar shows the running job, its progress and "waiting for the gate". Any job can be cancelled while queued or running (its whole process group stops). Each result records the working copy's hash at the start, and if the source changed while it ran it is marked "may not match". Stills and sections never pause editing. Rough cuts, finals, candidates and rejections pause edits (the server refuses commands) until they finish or are cancelled. A failed render shows the engine's findings under the monitor, with a link to each scene named. Outputs live in the viewer's `studio/` folder, pruned to the newest 60 files and 400 MB. The job list survives a page reload; jobs interrupted by a server restart are marked so. Children stop with the server. No job makes paid calls.
+
+### Timing
+
+The timeline uses the engine's own timing of the saved working copy (`computeTiming`): narration-led scenes take the narration's length, and scenes whose narration is estimated (no audio, or no measured word timings) are marked. With a rendered version on the monitor, the timeline switches to that version's frames and says so. The transport's timecode is minutes:seconds:frames. Browser video seeking is approximate (about one frame); the native still is the frame-exact reference.
+
+### Review and delivery
+
+Notes belong to the rendered version you watched, never to the working copy. In **Review**: choose a version, press N (or *+ Note*) and click the picture, or add a whole-cut note; reply; resolve (your name is required, and *Won't change* closes a note without a change) or reopen. *Edit this scene* switches to the working copy with that scene selected. Once a note's scenes have changed, *Make candidate* runs `revise`: the engine checks the edit stays inside the note's scenes, saves a candidate revision and renders before/after passages, which play together in Compare. The note then reads "applied · awaiting a verdict". **Record acceptance** and **Record rejection** require the person's name and their own words, typed in the dialog; nothing is filled in for them except a name typed earlier in this browser. They call the engine's `accept` and `reject`. Applied is not accepted.
+
+**Deliver** lists, honestly, the engine's errors and warnings, the latest native check (and whether it ran on this working copy), estimated narration, placeholders, whether the newest render matches the working copy, and whether a person accepted it. It also has rough-cut, final, caption and download actions.
+
+### Local API
+
+Under `/api/studio/`: `GET state?film=` (storyboard, hash, history, engine timing, errors and warnings, pickable text boxes, narration kinds, changes since the newest render, whether edits are paused), `GET schema` (the field contracts), `GET jobs?film=`, `GET film?film=` (the film's versions and notes, rebuilt), `GET review?film=` (decisions, keeps, checkpoints), `POST command`, `POST jobs`, `POST jobs/cancel` and `POST accept`. The server answers only on 127.0.0.1 with a local Host header. Every POST (the notes endpoints too) must be JSON from the same origin. Malformed paths return 400, dotfiles are never served, and byte ranges are validated.
 
 ## Studio board
 
