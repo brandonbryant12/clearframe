@@ -96,3 +96,14 @@ Build it together, Whole film:
 ```text
 None of the three exactly. I recorded short 16:9 screen clips of the real controls at 2×, so they fill the frame with real pixels and no zoom; they are in assets/uploads and source/clips.json says what each one shows: modes.mp4 (switching modes), conversation.mp4 (a saved reply and its film status), scope.mp4 (Ask the agent pins a scene, then typing), undo.mp4 (a hand edit, ⌘Z, ⇧⌘Z), stop.mp4 (a request sent, then Stop), sound.mp4 (takes, free draft voice, priced Google button), approval.mp4 (the approval dialog opened and cancelled) and deliver.mp4 (Render final, Download). Use them as video scenes, fit cover, no camera push and no pins, in place of the pictures in 03 Two ways (modes), 04 Conversation, 05 Scope, 06 By hand (undo), 08 Sound, 09 Approval and 10 Export, keeping each scene's narration and title; drop the camera pushes that failed. After 04, add one short scene for stop.mp4 with the narration "And you can stop it at any moment." Keep 02 and 07 Review as they are. Check, then render a new rough cut.
 ```
+
+The agent answered with eight clip scenes and the stop scene, checked (the conversation clip was at
+first shorter than its estimated beat; binding the real draft narration fixed it) and rendered r003.
+
+## 7. Full-frame clips (Make it for me)
+
+Assets → **Add files…**: `home.mp4`. In the Agent column: **Make it for me**, scope Whole film:
+
+```text
+r003 is a big step: the clips read. One problem on a phone: the video block draws each clip in a wide band above its title, so fit cover crops the top and bottom off. Approval never shows the dialog, Scope shows the reply instead of the scope chip, and Sound cuts off the Google button. Make every clip scene a full-frame stage instead: one video element at x 0, y 0, w 1920, h 1080, fit contain (the clips are exactly 16:9, so nothing is cropped), offset 0 and hold true (the clip holds its last frame once the action ends), with no title, kicker or caption drawn over it; the narration names what is on screen. Replace the picture in 02 Start with what you want with home.mp4 (just added: a person typing the brief) the same way. Keep the narration and the order. Check, then render a new rough cut and tell me its actual size and length.
+```

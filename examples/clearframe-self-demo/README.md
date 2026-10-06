@@ -120,3 +120,19 @@ watchable throughout.
   opened and cancelled, and Render final and Download. `clips.json` says what each one exercised.
   The edit and stop clips act on a task-owned demo film (one free-model request, stopped); the rest
   only look.
+
+**4e. Clips in, rough cut r003.** Answered in Build it together with the clips added through Assets.
+The agent replaced seven stills with clip scenes and added the stop scene; its first check failed
+because the conversation clip (10.4 s) was shorter than the beat estimated from word count, which it
+fixed by binding the real draft narration rather than looping or trimming. r003: 12 scenes, 67.1 s,
+960×540 rough cut, engine clean. A 360 px phone sheet showed the clips' UI text reading at last, but
+the `video` block draws footage in a wide band above its title, so `fit: cover` cropped the dialog,
+the scope chip and the Google button out of their scenes.
+
+- **Fixed in the engine-facing tools during this step** (Codex rounds 6–7): the agent now reports
+  measured outputs (the half-size rough cut, the draft voice) apart from settings, narration records
+  name the OS voice that actually spoke, and older records are presented with their Google values
+  labelled as settings at the time. The viewer was restarted to load them, after checking both the
+  demo and the separate Codex film were idle (logged in the coordination log).
+- **Clip lengths:** footage never loops; each clip holds its final frame (the screen at rest) for the
+  rest of its scene. `clips.json` records each file's encoded length, its action and its held seconds.
