@@ -126,3 +126,17 @@ scene "Stop", layer 0 (the video), the **offset** field: typed `4.7`, ⌘Enter. 
 
 Review: **Resolve…** on note n001 (fixed in r002–r004), name `Demo director`, **Resolved**.
 Deliver: **Render final**. No Google sound: the final keeps the free draft narration and music bed.
+
+## 11. After the fresh review of r005
+
+A fresh reviewer (Codex) decoded r005 and found three teaching errors: Stop never appears in its
+1.7 s scene; the selected mode contradicts the line being spoken; the approval dialog says no film
+budget is set while the narration says "within the film's budget". Two clips were re-recorded:
+`modes.mp4` with each card chosen on its spoken cue (`--cues 1.8,4.9`, from the scene's measured word
+timing) and `approval.mp4` after setting that demo film's budget to $0.50 by hand (`--budget 0.5`).
+Assets → **Add files…** (saved under new names, never replacing the old ones). Make it for me, Whole
+film:
+
+```text
+A fresh review of r005 found three things to fix. I re-recorded two clips (just added; the uploads were saved under new names, see Assets): the modes clip now selects Make it for me as that line is spoken and Build it together as its line is spoken, and the approval clip shows a real film budget ($0.50 set on that film), so "within the film's budget" is true. Use them in 03 Two ways and 09 Approval, changing only the video file. The Stop scene ends before the clip shows Stop: give that scene a 1.0 s tail and set its clip offset to 4.3, so Stop is visible, pressed, and the composer is back at rest before the cut. Keep the narration. Check, then render a new rough cut and tell me its actual size and length.
+```

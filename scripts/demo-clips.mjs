@@ -9,7 +9,7 @@
 //
 //   node scripts/demo-clips.mjs --out DIR [--studio http://127.0.0.1:4317] [--cdp http://127.0.0.1:9333]
 //          [--film projects-why-the-tide-turns-twice] [--done projects-flash-then-rumble] [--scene title] [--field props.elements.25.text]
-//          [--min 10] [--only name,name]
+//          [--min 10] [--cues 1.8,4.9] [--budget 0.5] [--only name,name]
 //   node scripts/demo-clips.mjs --out DIR --extend --min 16 [--only name]   (hold existing clips longer)
 //
 // --film must be a film you own for demos: the edit clip changes one title and undoes it, and the
@@ -24,7 +24,7 @@ import { parseArgs } from 'node:util';
 import { chrome, tab, sleep } from './demo-cdp.mjs';
 import { gateIsInherited } from '../engine/lib/resource-gate.mjs';
 
-const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, film: { type: 'string' }, done: { type: 'string' }, scene: { type: 'string' }, field: { type: 'string' }, text: { type: 'string' }, min: { type: 'string' }, extend: { type: 'boolean' }, only: { type: 'string' } } });
+const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, film: { type: 'string' }, done: { type: 'string' }, scene: { type: 'string' }, field: { type: 'string' }, text: { type: 'string' }, min: { type: 'string' }, cues: { type: 'string' }, budget: { type: 'string' }, extend: { type: 'boolean' }, only: { type: 'string' } } });
 if (!o.out) { console.error('Usage: node scripts/demo-clips.mjs --out DIR [--studio URL] [--cdp URL] [--film FILM] [--scene ID] [--field PATH] [--text TEXT] [--min S] [--only a,b]'); process.exit(2); }
 const STUDIO = (o.studio ?? 'http://127.0.0.1:4317').replace(/\/$/, ''), OUT = path.resolve(o.out);
 const FILM = o.film ?? 'projects-why-the-tide-turns-twice', DONE = o.done ?? 'projects-flash-then-rumble', SCENE = o.scene ?? 'title', FIELD = o.field ?? 'props.elements.25.text';
@@ -132,12 +132,18 @@ const CLIPS = {
   },
   async modes(page) {
     await open(page, '#/films'); await until(page, () => !!document.querySelector('.home-mode label'));
+    await page.evaluate(() => document.querySelector('.home-mode label:nth-of-type(1)').click()); // start on Make it for me
     await page.evaluate(CURSOR);
     const clip = frame([await rect(page, '.home-mode label:nth-of-type(1)'), await rect(page, '.home-mode label:nth-of-type(2)')], 720); // both cards side by side
+    // Each card is chosen as its name is spoken (--cues: seconds into the clip, from the narration's word timing).
+    const [makeAt, togetherAt] = (o.cues ?? '1.8,4.9').split(',').map(Number);
     const r = await record(page, 'modes', clip, async () => {
-      await sleep(500); await click(page, '.home-mode label:nth-of-type(2)'); await sleep(1300); await click(page, '.home-mode label:nth-of-type(1)'); await sleep(1100);
+      const t0 = Date.now(), at = s => sleep(Math.max(0, s * 1000 - 750 - (Date.now() - t0)));
+      await at(makeAt); await click(page, '.home-mode label:nth-of-type(1)');
+      await at(togetherAt); await click(page, '.home-mode label:nth-of-type(2)'); await sleep(2500);
     });
-    return { ...r, exercised: 'Switched the new-film form from Make it for me to Build it together and back (nothing created).' };
+    await page.evaluate(() => document.querySelector('.home-mode label:nth-of-type(1)').click());
+    return { ...r, cues: { 'Make it for me': makeAt, 'Build it together': togetherAt }, exercised: `Chose Make it for me at ${makeAt} s and Build it together at ${togetherAt} s, as the narration names each (nothing created).` };
   },
   async scope(page) {
     await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
@@ -241,6 +247,13 @@ const CLIPS = {
     await page.evaluate(() => document.querySelector('[data-act="right"][data-tab="sound"]')?.click());
     await until(page, () => !!document.querySelector('[data-act="soundPaid"][data-kind="voice"]:not([disabled])'), 15000);
     const button = '[data-act="soundPaid"][data-kind="voice"]';
+    // --budget: set the film budget by hand first (a person's setting), so the dialog shows the film's cap.
+    if (o.budget) {
+      const field = '#st-right input[data-path="budget"]';
+      await page.evaluate(s => document.querySelector(s)?.closest('details')?.setAttribute('open', ''), field); await sleep(300);
+      await page.evaluate((s, v) => { const e = document.querySelector(s); e.focus(); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); }, field, o.budget);
+      await key(page, 'Enter', 'Enter', 4); await sleep(1500);
+    }
     await page.evaluate(s => document.querySelector(s).scrollIntoView({ block: 'center' }), button); await sleep(300);
     // Measure the dialog once off camera, then close it, so the recording can frame it.
     await page.evaluate(s => document.querySelector(s).click(), button); await until(page, () => !!document.getElementById('pay-by'));
@@ -252,7 +265,7 @@ const CLIPS = {
       await sleep(300); await page.evaluate(s => document.querySelector(s).click(), button); await sleep(1600);
       await point(page, '.st-dialog .st-check'); await sleep(900); await click(page, '.st-dialog [data-act="close"]'); await sleep(900);
     });
-    return { ...r, exercised: 'Opened Generate with Google… for narration, showing the estimate and the approval it needs, then Cancel: nothing generated or charged.' };
+    return { ...r, ...(o.budget ? { budget: Number(o.budget) } : {}), exercised: `${o.budget ? `Set the film budget to $${o.budget} by hand, then opened` : 'Opened'} Generate with Google… for narration, showing the estimate and the approval it needs, then Cancel: nothing generated or charged.` };
   },
 };
 
