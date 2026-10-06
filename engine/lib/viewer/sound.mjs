@@ -14,7 +14,7 @@ import { computeTiming, estimateDuration } from '../timing.mjs';
 import { readJSON } from '../util.mjs';
 import { planTakes } from '../takes.mjs';
 import { findMusicBed } from '../music-files.mjs';
-import { plan } from '../generate.mjs';
+import { plan, approvedSoundSpecs } from '../generate.mjs';
 import { narrationOf } from './studio.mjs';
 import * as tts from '../../../skills/gemini-tts/scripts/tts.mjs';
 import * as lyria from '../../../skills/lyria-music/scripts/music.mjs';
@@ -86,8 +86,11 @@ export function soundState(dir, base = process.cwd()) {
 export function basisOf(dir, kind, s = soundState(dir)) {
   const hash = crypto.createHash('sha256').update(fs.readFileSync(path.join(dir, 'storyboard.json'))).digest('hex').slice(0, 16);
   const cost = Math.round((kind === 'voice' ? s.narration.cost ?? 0 : s.music.cost ?? 0) * 1e6) / 1e6;
-  return kind === 'voice' ? { kind, hash, model: s.narration.model, voice: s.narration.voice, style: s.narration.style, takes: (s.narration.takes ?? []).filter(t => t.cost > 0).map(t => t.id), cost }
-    : { kind, hash, model: s.music.model, prompt: s.music.prompt, bpm: s.music.bpm, cost };
+  // The exact provider requests (content hashes) this approval covers; the run refuses any others.
+  let specs = [];
+  try { specs = approvedSoundSpecs(dir, kind); } catch {}
+  return kind === 'voice' ? { kind, hash, model: s.narration.model, voice: s.narration.voice, style: s.narration.style, takes: (s.narration.takes ?? []).filter(t => t.cost > 0).map(t => t.id), cost, specs }
+    : { kind, hash, model: s.music.model, prompt: s.music.prompt, bpm: s.music.bpm, cost, specs };
 }
 export const sameBasis = (a, b) => !!a && !!b && JSON.stringify(Object.keys(b).sort().map(k => [k, a[k]])) === JSON.stringify(Object.keys(b).sort().map(k => [k, b[k]]));
 

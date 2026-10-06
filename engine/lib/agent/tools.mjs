@@ -167,7 +167,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       if (input.id && !list.length) throw fail('No such job for this film.');
       while (input.id && Date.now() < until && !TERMINAL.has(list[0].status)) { await new Promise(r => setTimeout(r, 1000)); list = pick(); }
       const view = j => [`${j.label} (job ${j.id}): ${j.status}${j.progress != null && j.status === 'running' ? ` ${Math.round(j.progress * 100)}%` : ''}`,
-        j.status === 'complete' ? `  output: ${j.url ?? 'none'}${j.matches === false ? ' — the film changed while or since it rendered; it may not match' : ''}${j.revision ? `; saved revision ${j.revision}` : ''}` : null,
+        j.status === 'complete' ? `  output (for the person to view in the studio; you cannot see images, so judge by the engine's checks): ${j.url ?? 'none'}${j.matches === false ? ' — the film changed while or since it rendered; it may not match' : ''}${j.revision ? `; saved revision ${j.revision}` : ''}` : null,
         j.errors?.length ? `  engine errors: ${j.errors.join('; ')}` : null, j.status === 'failed' && !j.errors?.length ? `  log: ${clip(j.log?.slice(-1200), 1200)}` : null,
         j.result?.errors ? `  check: ${j.result.errors.length} errors, ${j.result.warnings.length} warnings${j.result.errors.length ? `: ${j.result.errors.slice(0, 6).join('; ')}` : ''}` : null].filter(Boolean).join('\n');
       return { content: list.map(view).join('\n') || 'No render jobs yet for this film.', metadata: { summary: list.length === 1 ? `${list[0].label}: ${list[0].status}` : `${list.length} jobs`, job: input.id ?? null } };

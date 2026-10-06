@@ -10,6 +10,7 @@ import crypto from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { checkId } from '../store.mjs';
+import { approvedSoundSpecs } from '../generate.mjs';
 
 const sha = s => crypto.createHash('sha256').update(s).digest('hex');
 /**
@@ -74,7 +75,7 @@ const KINDS = {
   reject: { heavy: true, edits: false, label: j => `Reject ${j.revision}` },
   // Sound: free local drafts, or Google (paid) only with an approved budget the engine enforces.
   voice: { heavy: true, edits: false, label: j => (j.paid ? `Google narration (approved up to $${j.budget.toFixed(2)})` : 'Free draft narration') },
-  music: { heavy: false, edits: false, label: j => (j.paid ? `Google music bed (approved up to $${j.budget.toFixed(2)})` : 'Free draft music bed') },
+  music: { heavy: true, edits: false, label: j => (j.paid ? `Google music bed (approved up to $${j.budget.toFixed(2)})` : 'Free draft music bed') },
 };
 
 /** `cli` and `gate` default to the real CLI and the heavy-work gate; tests pass a stand-in CLI and gate: null. */
@@ -150,11 +151,24 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
     const j = queue.shift();
     running = j; j.status = 'running'; j.startedAt = new Date().toISOString();
     pin(j);
+    // A paid run generates exactly what was approved, or nothing: refuse here if it changed while
+    // queued; the engine checks again after any wait for the heavy-work gate (CLEARFRAME_APPROVED_SOUND).
+    if (j.paid) {
+      let now = null;
+      try { now = approvedSoundSpecs(j.dir, j.kind); } catch {}
+      if (JSON.stringify(now) !== JSON.stringify(j.approval?.basis?.specs ?? null)) {
+        j.status = 'failed'; j.finishedAt = new Date().toISOString();
+        j.errors = [`The ${j.kind === 'voice' ? 'narration' : 'music'} changed after it was approved, so nothing was generated or charged. Review and approve it again.`];
+        j.log += `${j.errors[0]}\n`;
+        running = null; persist(); return next();
+      }
+    }
     const gated = KINDS[j.kind].heavy && !!gate && fs.existsSync(gate);
     const a = [cli, ...args(j)];
     // Detached: the child leads its own process group, so cancelling reaches the renderer too.
     const child = spawn(gated ? gate : process.execPath, gated ? ['--', process.execPath, ...a] : a, {
-      cwd: base, detached: true, stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, ...(gated ? { CLEARFRAME_HEAVY_HELD: '1' } : {}), NO_COLOR: '1', FORCE_COLOR: '0' } });
+      cwd: base, detached: true, stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, ...(gated ? { CLEARFRAME_HEAVY_HELD: '1' } : {}), NO_COLOR: '1', FORCE_COLOR: '0',
+        ...(j.paid ? { CLEARFRAME_APPROVED_SOUND: JSON.stringify({ kind: j.kind, specs: j.approval.basis.specs }) } : {}) } });
     j.child = child;
     const log = c => {
       const text = c.toString();

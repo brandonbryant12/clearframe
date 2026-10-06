@@ -104,9 +104,15 @@ free local drafts ClearFrame always had. The Sound tab (inspector) shows, per fi
   the film budget, and every approved spend.
 
 Paid generation only runs after a person approves an amount: the dialog says what will be generated,
-the estimate, and asks for your name and an explicit tick. The approval must cover today's estimate,
-the approved amount becomes the engine's `--budget` (it refuses anything costlier), and the approval
-is appended to `PROJECT/review/spend.jsonl`. The agent cannot spend: `clearframe_sound` can queue
+the estimate, and asks for your name and an explicit tick. The approval must cover today's estimate
+and is bound to the exact provider requests shown (content hashes of each narration take, or of the
+music request). The film budget, when set, is a ceiling on every run: $0 turns paid generation off,
+and an estimate above it is refused. The engine's `--budget` is the smaller of the approval and the
+film budget. A run generates exactly what was approved or nothing: the job queue refuses to start it
+if the content changed while it waited, and the engine re-derives the requests from the storyboard it
+is about to send (after any wait for the heavy-work gate) and refuses before any provider call if they
+differ (`CLEARFRAME_APPROVED_SOUND`). Each approval is a durable intent consumed once (a retry returns
+the same job) and is appended to `PROJECT/review/spend.jsonl`. The agent cannot spend: `clearframe_sound` can queue
 free drafts and *request* Google generation with a reason; the request appears in the conversation
 and goes through the same approval. A film whose narration is an imported recording is never
 regenerated (it is edited by cutting words).

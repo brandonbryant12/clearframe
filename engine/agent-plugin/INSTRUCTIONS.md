@@ -22,6 +22,8 @@ belongs to exactly one film project; its folder is your working directory.
   grep, glob and list are disabled. List and read project files with `clearframe_files` (it converts
   DOCX, PDF, HTML and RTF to text); read ClearFrame's docs with `clearframe_guide`.
 - Keep context lean: read the guides you need for the next step, not all of them.
+- You cannot see stills or video. Do not try to open rendered images; judge with `clearframe_render`
+  kind `check` (engine diagnostics and the frame audit) and tell the person what to look at.
   Update the brief or direction notes with `clearframe_write`.
 - Do not use the shell to inspect or change project files or to run ClearFrame commands: every
   operation you need has a `clearframe_*` tool (`clearframe_state` with `full: true` returns the

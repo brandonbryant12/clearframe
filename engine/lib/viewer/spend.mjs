@@ -4,6 +4,7 @@
 // request waits in the conversation until the person approves or declines it.
 import fs from 'node:fs';
 import crypto from 'node:crypto';
+import path from 'node:path';
 import { reviewPath } from '../store.mjs';
 import { estimate, providers, soundState, basisOf, sameBasis } from './sound.mjs';
 import { SOUND_GRANT } from './studio-jobs.mjs';
@@ -60,9 +61,17 @@ export function startSound(dir, film, jobs, body) {
   if (cost <= 0) throw fail(kind === 'voice' ? 'The Google narration already matches every line: nothing to generate.' : 'The Google music bed already matches this film. Choose “Generate a new bed” to replace it.', 409);
   const approved = Number(body.approve);
   if (!(Number.isFinite(approved) && approved >= cents(cost) && approved <= 50)) throw fail(`The estimate is now $${cents(cost).toFixed(2)}; approve at least that amount.`, 409);
+  // The film budget (Sound → Cost and approvals) is a ceiling on every run, on top of each approval.
+  const raw = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8')), cap = raw.budget;
+  if (cap != null && Number.isFinite(cap)) {
+    if (cap <= 0) throw fail('This film’s budget is $0, so paid generation is off. Raise the film budget in Sound → Cost and approvals to allow it.', 409);
+    if (cost > cap) throw fail(`The estimate ($${cents(cost).toFixed(2)}) is over this film’s budget ($${cap.toFixed(2)}). Raise the film budget to allow it.`, 409);
+  }
+  const budget = cap != null && Number.isFinite(cap) ? Math.min(approved, cap) : approved;
+  if (!basis.specs?.length) throw fail('Could not work out exactly what would be generated; nothing was started.', 409);
   if (jobs.list(film).some(j => j.kind === kind && j.paid && ['queued', 'waiting', 'running'].includes(j.status))) throw fail(`Google ${kind === 'voice' ? 'narration' : 'music'} is already being generated for this film.`, 409);
-  const approval = { intent, by, approved, estimate: cost, basis };
-  const r = jobs.start(dir, { film, kind }, grant(kind, { paid: true, budget: approved, force, approval }));
+  const approval = { intent, by, approved, budget, estimate: cost, basis };
+  const r = jobs.start(dir, { film, kind }, grant(kind, { paid: true, budget, force, approval }));
   writeIntent(dir, intent, { kind, job: r.id, by, approved, estimate: cost, basis, at: new Date().toISOString() });
   fs.appendFileSync(reviewPath(dir, 'spend.jsonl'), JSON.stringify({ at: new Date().toISOString(), kind, provider: 'google', estimate: cost, approved, by, job: r.id, intent, request: intent.startsWith('spend-') ? intent : null, basis }) + '\n');
   return { ...r, estimate: cost, approved };

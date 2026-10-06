@@ -238,7 +238,7 @@ function progressHTML(conv) {
   const read = tools.some(p => p.own ? ['state', 'files', 'guide', 'catalog', 'notes'].includes(p.tool) : p.tool === 'read');
   const edits = tools.filter(p => p.own && p.tool === 'edit' && p.status === 'completed'), beats = [...new Set(edits.flatMap(p => p.beats ?? []))];
   const draft = tools.filter(p => p.job).map(p => S.jobs.find(j => j.id === p.job)).filter(j => j?.kind === 'draft').at(-1);
-  const steps = [['Read the brief', read], [edits.length ? `${plural(beats.length || edits.length, beats.length ? 'scene' : 'change')} ${beats.length ? 'changed' : 'made'}` : 'Write the scenes', edits.length > 0],
+  const steps = [['Read the film', read], [edits.length ? `${plural(beats.length || edits.length, beats.length ? 'scene' : 'change')} ${beats.length ? 'changed' : 'made'}` : 'Write the scenes', edits.length > 0],
     [draft ? `Rough cut · ${draft.status}${draft.progress != null && draft.status === 'running' ? ` ${Math.round(draft.progress * 100)}%` : ''}` : 'Render the rough cut', draft?.status === 'complete'],
     ['Ready to watch', draft?.status === 'complete' && draft.revision]];
   const at = steps.findIndex(x => !x[1]);

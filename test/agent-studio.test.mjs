@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { PassThrough } from 'node:stream';
+import { fileURLToPath } from 'node:url';
 import { createAgent, resolveScope, cleanScope, contextBlock, transcript } from '../engine/lib/agent/agent.mjs';
 import { scopeViolation, inside } from '../engine/lib/agent/tools.mjs';
 import { readLink, updateLink } from '../engine/lib/agent/links.mjs';
@@ -413,4 +414,81 @@ test('the working mode persists with the project and travels with every message'
   assert.match(client.calls.prompts[0].text, /working mode: one-shot/);
   assert.equal(client.calls.prompts[0].metadata.clearframe.mode, 'oneshot');
   assert.throws(() => agent.setMode(a, 'yolo'), /one-shot or together/);
+});
+
+// ------------------------------------------------------------------ paid sound runs exactly what was approved, within the film budget
+
+test('the film budget caps every paid run: $0 turns paid generation off, a lower cap refuses, the engine gets the smaller limit', async t => {
+  const { startSound } = await import('../engine/lib/viewer/spend.mjs');
+  const { soundState } = await import('../engine/lib/viewer/sound.mjs');
+  const { d, jobs, started } = soundFixture(t);
+  const setBudget = b => { const sb = JSON.parse(fs.readFileSync(path.join(d, 'storyboard.json'), 'utf8')); sb.budget = b; fs.writeFileSync(path.join(d, 'storyboard.json'), JSON.stringify(sb)); };
+  const go = (approve, intent) => startSound(d, 'f', jobs, { kind: 'music', paid: true, by: 'Ana', approve, intent, basis: soundState(d).basis.music });
+  setBudget(0);
+  assert.throws(() => go(0.08, 'intent-budget00'), /budget is \$0/);
+  setBudget(0.05);
+  assert.throws(() => go(0.08, 'intent-budget01'), /over this film’s budget/);
+  assert.equal(started.length, 0);
+  setBudget(0.1);
+  go(0.5, 'intent-budget02');
+  assert.equal(started.at(-1).budget, 0.1, 'the engine budget is the smaller of the approval and the film cap');
+});
+
+/** A music approval for the film as it is now, run through the real job queue. */
+async function queuedMusic(t, { cli, gate = null }) {
+  const { startSound } = await import('../engine/lib/viewer/spend.mjs');
+  const { soundState } = await import('../engine/lib/viewer/sound.mjs');
+  const { createStudioJobs } = await import('../engine/lib/viewer/studio-jobs.mjs');
+  const { d } = soundFixture(t);
+  const sb = JSON.parse(fs.readFileSync(path.join(d, 'storyboard.json'), 'utf8')); sb.music = { prompt: 'calm piano' }; fs.writeFileSync(path.join(d, 'storyboard.json'), JSON.stringify(sb));
+  const q = createStudioJobs({ base: d, out: path.join(d, 'build/viewer'), cli, gate });
+  t.after(() => q.stopAll());
+  return { d, q, approve: () => startSound(d, 'f', q, { kind: 'music', paid: true, by: 'Ana', approve: 0.08, intent: `intent-${Math.random().toString(36).slice(2, 12)}`, basis: soundState(d).basis.music }),
+    change: () => { const x = JSON.parse(fs.readFileSync(path.join(d, 'storyboard.json'), 'utf8')); x.music.prompt = 'aggressive drums'; fs.writeFileSync(path.join(d, 'storyboard.json'), JSON.stringify(x)); } };
+}
+const settle = async (q, id, ms = 30000) => { const until = Date.now() + ms; for (;;) { const j = q.list('f').find(x => x.id === id); if (['complete', 'failed', 'cancelled'].includes(j?.status)) return j; if (Date.now() > until) throw new Error(`job still ${j?.status}`); await new Promise(r => setTimeout(r, 25)); } };
+
+test('content changed while a paid run waits in the queue is never generated', async t => {
+  const dir = tmp(t), cli = path.join(dir, 'stub.mjs');
+  // A stand-in CLI: "check" takes a moment; "music" records what it would have generated.
+  fs.writeFileSync(cli, `import fs from 'node:fs'; import path from 'node:path'; const [kind, d] = process.argv.slice(2);
+    if (kind === 'check') await new Promise(r => setTimeout(r, 300));
+    if (kind === 'music') fs.writeFileSync(path.join(d, 'generated.json'), fs.readFileSync(path.join(d, 'storyboard.json')));`);
+  const { d, q, approve, change } = await queuedMusic(t, { cli });
+  q.start(d, { film: 'f', kind: 'check' });
+  const r = approve();
+  change();
+  const j = await settle(q, r.id);
+  assert.equal(j.status, 'failed');
+  assert.match(j.errors.join(' '), /changed after it was approved, so nothing was generated or charged/);
+  assert.ok(!fs.existsSync(path.join(d, 'generated.json')), 'the generator never ran');
+});
+
+test('content changed while a paid run waits for the heavy-work gate is refused by the engine before any provider call', async t => {
+  const dir = tmp(t), mark = path.join(dir, 'open'), gate = path.join(dir, 'gate.sh');
+  fs.writeFileSync(gate, `#!/bin/sh\nwhile [ ! -f "${mark}" ]; do sleep 0.05; done\nshift\nexec "$@"\n`); fs.chmodSync(gate, 0o755);
+  const base = process.env.GEMINI_API_BASE; process.env.GEMINI_API_BASE = 'http://127.0.0.1:9/unreachable';
+  t.after(() => { if (base == null) delete process.env.GEMINI_API_BASE; else process.env.GEMINI_API_BASE = base; });
+  const { q, approve, change } = await queuedMusic(t, { cli: fileURLToPath(new URL('../engine/cli.mjs', import.meta.url)), gate });
+  const r = approve();
+  await new Promise(res => setTimeout(res, 300));
+  assert.equal(q.list('f').find(x => x.id === r.id).status, 'running', 'started, holding at the gate');
+  change(); fs.writeFileSync(mark, '');
+  const j = await settle(q, r.id, 60000);
+  assert.equal(j.status, 'failed');
+  assert.match(j.log, /changed after it was approved[^\n]*nothing was generated or charged/);
+  assert.doesNotMatch(j.log, /Lyria \(/, 'it stopped before preparing a provider request');
+});
+
+test('unchanged approved content passes the engine check and only then reaches the provider (unreachable here)', async t => {
+  const dir = tmp(t), mark = path.join(dir, 'open'), gate = path.join(dir, 'gate.sh');
+  fs.writeFileSync(gate, `#!/bin/sh\nshift\nexec "$@"\n`); fs.chmodSync(gate, 0o755);
+  const base = process.env.GEMINI_API_BASE; process.env.GEMINI_API_BASE = 'http://127.0.0.1:9/unreachable';
+  t.after(() => { if (base == null) delete process.env.GEMINI_API_BASE; else process.env.GEMINI_API_BASE = base; });
+  const { q, approve } = await queuedMusic(t, { cli: fileURLToPath(new URL('../engine/cli.mjs', import.meta.url)), gate });
+  const j = await settle(q, approve().id, 60000);
+  assert.doesNotMatch(j.log, /changed after it was approved/);
+  assert.match(j.log, /Lyria \(/, 'it went on to prepare the request it was approved for');
+  assert.equal(j.status, 'failed', 'and the unreachable stand-in endpoint failed it: no provider was contacted');
+  assert.ok(mark);
 });
