@@ -107,14 +107,13 @@ export async function voice(root, { draft = false, force = false, only, budget, 
       );
     if (!draft && sb.voice.provider === 'gemini') {
       assertApproved('voice', soundSpecs(sb, 'voice'));
-      const secs = planTakes(sb)
-        .flatMap(t => t.beats)
-        .reduce((a, b) => a + estimateDuration(b.vo, sb.voice.wpm), 0);
+      // Only takes the recorder will actually make count: unchanged takes are kept, never re-bought.
+      const { takeCurrent } = await import('./takes.mjs');
+      const todo = planTakes(sb).filter(t => force || !takeCurrent(root, sb, t, sb.voice.provider));
+      const secs = todo.flatMap(t => t.beats).reduce((a, b) => a + estimateDuration(b.vo, sb.voice.wpm), 0);
       const cost = tts.estimateCost({ seconds: secs, model: sb.voice.model });
-      const takes = planTakes(sb).length;
-      log.step(
-        `Gemini TTS: ${takes === 1 ? 'one continuous take' : `${takes} continuous takes`}, ~${secs.toFixed(0)}s of speech, ≈ ${money(cost)}`,
-      );
+      if (!todo.length) log.ok('Google narration is up to date: every take matches.');
+      else log.step(`Gemini TTS: ${todo.length === 1 ? 'one continuous take' : `${todo.length} continuous takes`} (${todo.map(t => t.id).join(', ')}), ~${secs.toFixed(0)}s of speech, ≈ ${money(cost)}`);
       guardBudget(cost, budget ?? sb.budget);
     } else
       log.step(

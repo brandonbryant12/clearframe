@@ -761,3 +761,4 @@ body.home .btn.primary { background: #9aaef9; color: #121420; }
 .st-timeline { overflow: hidden; }
 .st-tl-body { overflow-y: auto; overflow-x: hidden; align-items: start; }
 .st-tl-body > .st-tl-scroll { overflow-x: auto; overflow-y: hidden; }
+.st-progress.quiet { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; box-shadow: none; }

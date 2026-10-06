@@ -502,3 +502,31 @@ test('a person can set the film budget; an agent cannot change it', t => {
   assert.throws(() => studioCommand(d, { hash: studioState(d).hash, command: 'batch', ops: [{ command: 'set', target: 'film', path: 'budget', value: null }] }, { actor: { by: 'agent', run: 'msg_x' } }), /Only a person/);
   assert.equal(studioState(d).storyboard.budget, 0);
 });
+
+test('Google narration for one changed chapter is approved, budgeted and generated alone; the cached take is kept', async t => {
+  const { loadStoryboard, paths } = await import('../engine/lib/project.mjs');
+  const { planTakes, takeSpec } = await import('../engine/lib/takes.mjs');
+  const { hashOf, pcmToWav } = await import('../engine/lib/util.mjs');
+  const { voice } = await import('../engine/lib/generate.mjs');
+  const { soundState } = await import('../engine/lib/viewer/sound.mjs');
+  const d = project(t, { version: 2, title: 'Takes', voice: { takes: 'chapter' }, music: false, beats: [
+    { id: 'a', block: 'title', chapter: 'kept', vo: 'Keep going. '.repeat(200), props: { text: 'Kept' } },
+    { id: 'b', block: 'title', chapter: 'new', vo: 'One step today.', props: { text: 'New' } }] });
+  // take-01 is already a Google take for exactly this text.
+  const sb = loadStoryboard(d), P = paths(d), kept = planTakes(sb)[0], hash = hashOf(takeSpec(sb, kept, sb.voice.provider)), wav = pcmToWav(Buffer.alloc(48000), 24000);
+  fs.mkdirSync(path.join(P.vo, 'takes'), { recursive: true });
+  fs.writeFileSync(path.join(P.vo, 'a.wav'), wav); fs.writeFileSync(path.join(P.vo, 'a.json'), JSON.stringify({ provider: 'gemini', take: { hash }, textHash: hashOf(sb.beats[0].vo) }));
+  fs.writeFileSync(path.join(P.vo, 'takes', `${kept.id}.wav`), wav); fs.writeFileSync(path.join(P.vo, 'takes', `${kept.id}.json`), JSON.stringify({ hash }));
+  const env = { key: process.env.GEMINI_API_KEY, base: process.env.GEMINI_API_BASE }, realFetch = globalThis.fetch, sent = [];
+  process.env.GEMINI_API_KEY = 'test-not-a-real-key'; process.env.GEMINI_API_BASE = 'http://127.0.0.1:9/unreachable';
+  globalThis.fetch = async (url, init) => { sent.push(String(init?.body ?? '')); throw new Error('stand-in: no provider in tests'); };
+  t.after(() => { globalThis.fetch = realFetch; for (const [k, v] of [['GEMINI_API_KEY', env.key], ['GEMINI_API_BASE', env.base]]) if (v == null) delete process.env[k]; else process.env[k] = v; });
+  const s = soundState(d, os.tmpdir());
+  assert.deepEqual(s.narration.takes.map(x => [x.id, x.cost > 0]), [['take-01', false], ['take-02', true]]);
+  const approval = Math.ceil(s.narration.cost * 100) / 100;
+  // The budget is the approval for the changed take alone; the run gets past the budget to the (stand-in) provider…
+  await assert.rejects(voice(d, { budget: approval }), /stand-in: no provider/);
+  // …with exactly the changed take's text, and never the kept one.
+  assert.ok(sent.length >= 1 && sent.every(b => b.includes('One step today.') && !b.includes('Keep going.')));
+  assert.equal(JSON.parse(fs.readFileSync(path.join(P.vo, 'takes', `${kept.id}.json`), 'utf8')).hash, hash, 'the cached take is untouched');
+});

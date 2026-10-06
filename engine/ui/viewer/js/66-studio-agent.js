@@ -188,7 +188,7 @@ function chatHTML() {
   const unsent = [...a.outbox.map(o => ({ ...o, state: a.sending.has(o.id) || !o.failed ? 'sending' : 'failed', error: o.failed })), ...(conv?.pending ?? []).filter(p => !a.outbox.some(o => o.id === p.id))];
   body += unsent.map(o => `<article class="st-msg user pending" data-key="o-${esc(o.id)}"><header>${scopeChip(o.scope?.kind === 'film' ? null : o.scope, o.scope?.kind === 'film' ? 'quiet' : '')}<span class="st-chip ${o.state === 'failed' ? 'bad' : ''}">${o.state === 'failed' ? 'Not confirmed · retry is safe' : 'Sending…'}</span></header><div class="st-msg-body">${esc(o.text).replace(/\n/g, '<br>')}</div>
     ${o.state === 'failed' ? `<p class="st-msg-warn">${esc(o.error ?? '')}</p><div class="st-addrow"><button class="st-btn small" data-act="resend" data-id="${esc(o.id)}">Retry</button><button class="st-btn small ghost" data-act="discard" data-id="${esc(o.id)}">Discard</button></div>` : ''}</article>`).join('');
-  if (running && !conv.messages.at(-1)?.parts?.length && conv.messages.at(-1)?.role === 'user') body += '<div class="st-step"><i class="st-spinner small"></i><span>Thinking…</span></div>';
+  body += firstResponse(conv);
   // Waiting on the person: approvals and questions.
   body += (conv?.permissions ?? []).map(p => `<div class="st-ask" data-key="p-${esc(p.id)}" role="group" aria-label="Approval needed"><b>The agent asks to ${esc({ shell: 'run a shell command', webfetch: 'fetch a web page', websearch: 'search the web' }[p.action] ?? `use ${p.action}`)}</b>
     ${p.resources.map(r => `<pre class="st-code">${esc(r)}</pre>`).join('')}${p.message ? `<p>${esc(p.message)}</p>` : ''}
@@ -227,6 +227,25 @@ function chatAfterRender() {
 }
 
 /**
+ * Before the model's first word: say so, with time since the message was sent (the server's
+ * persisted send time, so a reload neither resets the clock nor sends anything again).
+ */
+function firstResponse(conv) {
+  const last = conv?.messages.at(-1);
+  if (!conv?.running || last?.role !== 'user') return '';
+  return waiting(last, 'Sent. Waiting for the model’s first response…');
+}
+
+/** What the film itself is, regardless of the last request: the newest render and whether it is current. */
+function filmStatusHTML() {
+  const v = S.f.versions.at(-1), ch = S.st.changes;
+  if (!v) return '<div class="st-progress quiet" role="status"><span class="st-muted">Film: not rendered yet.</span> <button class="st-btn small" data-act="draft">Render the rough cut</button></div>';
+  const edits = ch ? ch.edited.length + ch.added.length + ch.removed.length + (ch.film ? 1 : 0) + (ch.reordered ? 1 : 0) : 0;
+  return `<div class="st-progress quiet" role="status"><span><b>Film:</b> ${esc(versionName(v))} · ${esc(v.quality)}${edits ? ` · ${plural(edits, 'change')} since` : ' · matches the working copy'}${v.approved ? ' · accepted' : ''}</span>
+    <div class="st-addrow"><button class="st-btn small primary" data-act="watch" data-rev="${esc(v.id)}">Watch ${esc(v.id)}</button>${edits ? '<button class="st-btn small" data-act="draft">Render again</button>' : ''}</div></div>`;
+}
+
+/**
  * One-shot: where the newest request stands, from what actually happened (tool results and jobs),
  * never from what the agent says: read → write → rough cut → ready to watch. Stop, undo and inspect.
  */
@@ -238,6 +257,9 @@ function progressHTML(conv) {
   const read = tools.some(p => p.own ? ['state', 'files', 'guide', 'catalog', 'notes'].includes(p.tool) : p.tool === 'read');
   const edits = tools.filter(p => p.own && p.tool === 'edit' && p.status === 'completed'), beats = [...new Set(edits.flatMap(p => p.beats ?? []))];
   const draft = tools.filter(p => p.job).map(p => S.jobs.find(j => j.id === p.job)).filter(j => j?.kind === 'draft').at(-1);
+  // A request that changed nothing and rendered nothing (a question, a review) is not a build: show
+  // the film's real state, not four unchecked build steps. While such a request runs, say only that.
+  if (!edits.length && !draft) return done ? filmStatusHTML() : `<div class="st-progress quiet" role="status"><span class="st-muted">Working on your request…</span><div class="st-addrow"><button class="st-btn small danger" data-act="stop">Stop</button></div></div>`;
   const steps = [['Read the film', read], [edits.length ? `${plural(beats.length || edits.length, beats.length ? 'scene' : 'change')} ${beats.length ? 'changed' : 'made'}` : 'Write the scenes', edits.length > 0],
     [draft ? `Rough cut · ${draft.status}${draft.progress != null && draft.status === 'running' ? ` ${Math.round(draft.progress * 100)}%` : ''}` : 'Render the rough cut', draft?.status === 'complete'],
     ['Ready to watch', draft?.status === 'complete' && draft.revision]];

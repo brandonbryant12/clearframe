@@ -144,3 +144,37 @@ test('a sound reply is labelled with the working copy it was asked for, not the 
   await flush();
   assert.deepEqual(calls, ['A', 'B'], 'the newer working copy is then read');
 });
+
+// ------------------------------------------------------------------ the conversation's progress (66-studio-agent.js)
+
+function agentUI(S) {
+  const c = vm.createContext({ S, ACTIONS: {}, store: { get: (k, f) => f, set() {} }, crypto: globalThis.crypto, Date,
+    esc: s => String(s), plural: (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`, clock: s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`,
+    versionName: v => `Version ${v.number}`, beatById: () => null });
+  vm.runInContext(fs.readFileSync(new URL('../engine/ui/viewer/js/66-studio-agent.js', import.meta.url), 'utf8'), c);
+  return c;
+}
+const film = { st: { history: [], changes: { edited: [], added: [], removed: [], film: false, reordered: false } }, jobs: [], f: { versions: [{ id: 'r002', number: 2, quality: 'Final' }] } };
+
+test('before the first word, the conversation says it is waiting, timed from when the message was sent (a reload keeps the clock)', () => {
+  const sent = Date.now() - 125000, conv = { running: true, messages: [{ role: 'user', id: 'msg_a', at: sent }] };
+  for (let reload = 0; reload < 2; reload++) {
+    const html = vm.runInContext('firstResponse', agentUI(structuredClone(film)))(conv);
+    assert.match(html, /Waiting for the model’s first response/);
+    assert.match(html, /2:0[5-6]/, 'elapsed since the send, not since the page opened');
+    assert.match(html, /Stop, then Send now/, 'past 90 s it says how to recover');
+  }
+  assert.equal(vm.runInContext('firstResponse', agentUI(structuredClone(film)))({ running: false, messages: conv.messages }), '');
+});
+
+test('a finished question does not reset the build strip: the film\'s real render state and Watch stay; a build keeps its steps', () => {
+  const c = agentUI(structuredClone(film)), progress = vm.runInContext('progressHTML', c);
+  const question = { mode: 'oneshot', messages: [{ role: 'user', id: 'msg_q' }, { role: 'assistant', parts: [{ type: 'text', text: 'We drew the two scenes; the export is r002.' }] }, { role: 'idle', outcome: 'succeeded' }] };
+  const html = progress(question);
+  assert.match(html, /Film:.*Version 2 · Final · matches the working copy/);
+  assert.match(html, /data-act="watch" data-rev="r002"/);
+  assert.doesNotMatch(html, /Write the scenes|Render the rough cut/);
+  const build = { mode: 'oneshot', messages: [{ role: 'user', id: 'msg_b' }, { role: 'assistant', parts: [{ type: 'tool', own: true, tool: 'edit', status: 'completed', beats: ['a'] }] }] };
+  assert.match(progress(build), /1 scene changed[\s\S]*Render the rough cut/);
+  assert.match(progress({ ...question, messages: question.messages.slice(0, 1) }), /Working on your request/, 'a question still running is not shown as a build');
+});
