@@ -1,4 +1,4 @@
-import { round, rng } from '../../fframes/sketch-kit.mjs';
+import { round, rng } from '../../film/sketch-kit.mjs';
 
 // One person in a crowd: rows of simple silhouettes standing in depth, every row a little
 // hazier, one figure lit in the accent. Focus starts on the front row and racks back to the

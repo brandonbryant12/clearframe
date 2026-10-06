@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Engine measurements on the same prepared projects: the scene engine against FFFrames, at the
-// same resolution, frame rate and encoder settings (libx264, final CRF 16 medium; the range uses
-// draft CRF 21 veryfast at full scale, as `revise` does). Measured separately:
+// Renderer measurements on prepared projects at their own resolution, frame rate and encoder
+// settings (libx264, final CRF 16 medium; the range uses draft CRF 21 veryfast at full scale, as
+// `revise` does). Measured separately:
 //   cold   process start, GPU/font/media setup and one still (a new process each time)
 //   warm   per-still cost inside one process (ten stills minus one, over nine)
 //   range  60 frames from the middle of the film, encoded
@@ -16,9 +16,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
 import { parseArgs } from 'node:util';
-import { prepareProject } from '../fframes/prepare.mjs';
-import { buildEngine, engineBinary, sceneArgs, sceneEnv } from '../scene/engine.mjs';
-import { nativeEnv } from '../fframes/native-build.mjs';
+import { prepareProject } from '../film/prepare.mjs';
+import { buildScene, sceneArgs, sceneEnv } from '../scene/engine.mjs';
 
 const { values, positionals } = parseArgs({ allowPositionals: true, options: { repeat: { type: 'string', default: '2' } } });
 const [OUT, ...projects] = positionals.map(p => path.resolve(p));
@@ -60,22 +59,17 @@ function measure(bin, args, { cwd, env, temp }) {
 
 const rows = [];
 for (const root of projects) {
-  for (const engine of ['scene', 'fframes']) {
-    process.env.CLEARFRAME_ENGINE = engine;
+  {
+    const engine = 'scene';
     let ctx;
     try {
       ctx = await prepareProject(root, { draft: false });
-    } catch (e) {
-      if (/only the scene engine/.test(e.message)) {
-        console.log(`${path.basename(root)}: native stages; FFFrames cannot draw it, scene engine only`);
-        continue;
-      }
+    } catch {
       ctx = await prepareProject(root, { draft: true, rough: true });
     }
-    await buildEngine(engine);
-    const bin = engineBinary(engine);
-    const env = engine === 'scene' ? sceneEnv() : nativeEnv();
-    const argv = (cmd, args) => (engine === 'scene' ? sceneArgs(path.join(ctx.dir, 'plan.json'), cmd, args) : ['--job', path.join(ctx.dir, 'job.json'), '--media', ctx.media, cmd, ...args]);
+    const bin = await buildScene();
+    const env = sceneEnv();
+    const argv = (cmd, args) => sceneArgs(path.join(ctx.dir, 'plan.json'), cmd, args);
     const frames = ctx.job.frames,
       fps = ctx.job.fps,
       mid = Math.floor(frames / 2);
@@ -96,13 +90,12 @@ for (const root of projects) {
     await run('range', 'render', [`${a}..${a + 60}`, '--draft', '--scale', '1', '-o', path.join(tmp, 'range.mp4')], true);
     await run('full', 'render', ['-o', path.join(tmp, 'full.mp4')], true);
   }
-  delete process.env.CLEARFRAME_ENGINE;
 }
 fs.rmSync(path.join(OUT, 'tmp'), { recursive: true, force: true });
 // Warm per-still: (ten stills − one still) / 9, from the same run index.
 const summary = [];
 for (const p of new Set(rows.map(r => r.project)))
-  for (const engine of ['scene', 'fframes']) {
+  for (const engine of ['scene']) {
     const of = m => rows.filter(r => r.project === p && r.engine === engine && r.measure === m);
     const best = m => Math.min(...of(m).map(r => r.ms));
     const full = of('full');

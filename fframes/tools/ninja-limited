@@ -1,3 +1,0 @@
-#!/bin/sh
-# Skia's build script otherwise leaves Ninja at its CPU-derived default.
-exec "${FFRAMES_NINJA:-/opt/homebrew/bin/ninja}" "$@" -j 2

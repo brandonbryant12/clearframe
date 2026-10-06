@@ -6,7 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { ffmpeg, writeJSON } from './util.mjs';
-import { THEMES } from '../../fframes/catalog.mjs';
+import { THEMES } from '../../film/catalog.mjs';
 
 const probe = file => {
   const r = spawnSync(

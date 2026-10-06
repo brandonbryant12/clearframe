@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Every ClearFrame canvas × every frame rate through the scene engine: a two-beat film with a
+// Every ClearFrame canvas × every frame rate through the renderer: a two-beat film with a
 // block, a dissolve and a native stage (a packet on a link, text pinned to the screen, motion
 // blur) rendered in full and as a mid-motion range. Checks the decoded dimensions, frame rate
 // and frame count, and that a still drawn directly matches the same frame decoded from the full
@@ -9,10 +9,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { prepareProject } from '../fframes/prepare.mjs';
+import { prepareProject } from '../film/prepare.mjs';
 import { engineCommand } from '../scene/engine.mjs';
-import { validateVideo } from '../fframes/render.mjs';
-import { CANVASES, FRAME_RATES } from '../fframes/catalog.mjs';
+import { validateVideo } from '../film/render.mjs';
+import { CANVASES, FRAME_RATES } from '../film/catalog.mjs';
 
 const OUT = path.resolve(process.argv[2] ?? 'build/engine-formats');
 fs.mkdirSync(OUT, { recursive: true });
@@ -23,7 +23,6 @@ const psnr = (a, b) => {
 };
 const decode = (video, n, file) => spawnSync('ffmpeg', ['-v', 'error', '-y', '-i', video, '-vf', `select=eq(n\\,${n})`, '-fps_mode', 'passthrough', '-frames:v', '1', file]);
 const rows = [];
-delete process.env.CLEARFRAME_ENGINE;
 for (const [w, h] of CANVASES)
   for (const fps of FRAME_RATES) {
     const name = `${w}x${h}@${fps}`;

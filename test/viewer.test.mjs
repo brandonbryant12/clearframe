@@ -28,7 +28,7 @@ test('the viewer lists ClearFrame and outside films with versions, scenes, lanes
   clip(path.join(outside, 'versions/v1.mp4')); clip(path.join(outside, 'versions/v2.mp4'));
   fs.mkdirSync(path.join(outside, 'brand'), { recursive: true });
   fs.writeFileSync(path.join(outside, 'brand/logo.svg'), '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"/>');
-  fs.copyFileSync('fframes/assets/fonts/Inter-Regular.ttf', path.join(outside, 'Face-Bold.ttf'));
+  fs.copyFileSync('film/assets/fonts/Inter-Regular.ttf', path.join(outside, 'Face-Bold.ttf'));
   fs.writeFileSync(path.join(outside, 'film.json'), JSON.stringify({ title: 'Reel', versions: [{ id: 'v1', file: 'versions/v1.mp4' }, { id: 'v2', file: 'versions/v2.mp4', label: 'Final cut' }],
     scenes: [{ start: 0, end: 1, kind: 'Hero', elements: [{ text: 'WIN', font: 'Face-Bold.ttf', box: [10, 10, 100, 40], at: 0.2 }] }],
     lanes: { sfx: [{ t: 0.5, name: 'Boom' }] }, fonts: [{ file: 'Face-Bold.ttf', used: ['Slogan'] }] }));

@@ -1,4 +1,4 @@
-import { round, rng, smoothPath } from '../../fframes/sketch-kit.mjs';
+import { round, rng, smoothPath } from '../../film/sketch-kit.mjs';
 
 // A transmission mast on a ridge at first light: a lattice tower against a sky warming from night
 // to dawn, its beacon blinking, rings of signal rolling out from the tip over a valley filled with

@@ -1,6 +1,6 @@
 # The scene engine
 
-ClearFrame renders every film with the **scene engine** (`scene/`): a ClearFrame-owned scene plan evaluated frame by frame and composited with Skia on the GPU (Metal on macOS). The FFFrames renderer is still in the repository and selectable, for comparison and for recovering older projects, and its block code still draws the inside of the 33 blocks (see [what is native](#what-is-native-and-what-is-not)). It is not retired.
+ClearFrame renders every film with the **scene engine** (`scene/`), its only renderer: a ClearFrame-owned scene plan evaluated frame by frame and drawn with Skia on the GPU (Metal on macOS). It draws everything on screen itself: the 33 blocks, native stages, film compositing and footage. Its dependencies are Skia, Metal, a text shaper and the FFmpeg tools. FFFrames, which drew ClearFrame films until October 2026, is retired; its revision and notice are kept in `archive/fframes/`.
 
 This page is the design and the authoring reference. The plan review that chose this design is summarised under [Decisions](#decisions); [coverage](scene-engine-coverage.md) lists every block, sketch, treatment and playbook with its state.
 
@@ -8,7 +8,7 @@ This page is the design and the authoring reference. The plan review that chose 
 
 ```
 storyboard.json ─► timing, words, sources, data transforms           (unchanged)
-                ─► createJob (fframes/job.mjs)  → build/native/job.json   block validation and scheduling
+                ─► createJob (film/job.mjs)  → build/native/job.json   block validation and scheduling
                 ─► compilePlan (scene/compile.mjs) → build/native/plan.json  native stages, cues resolved,
                                                                           media staged by content hash
 clearframe-scene --plan plan.json  (scene/native, Rust)
@@ -22,24 +22,18 @@ clearframe-scene --plan plan.json  (scene/native, Rust)
 
 Every frame is a pure function of its number and the prepared inputs (job, plan, staged media, bundled fonts). There is no wall-clock state, no random state and no live generation in the engine.
 
-## Choosing the engine
+## Identity and builds
 
-| How | Effect |
-|---|---|
-| default | `scene` |
-| `--engine fframes` on any command, `CLEARFRAME_ENGINE=fframes`, or `"engine": "fframes"` in the storyboard | the FFFrames renderer draws the whole film, as before this change |
-| a film with native stages and `fframes` | refused: *only the scene engine draws them* (nothing is silently dropped) |
+The prepared manifest and every receipt record the renderer's source hash (its Rust sources, `Cargo.toml`, `Cargo.lock` and the shared `film/constants.json`), the plan's SHA-256, font hashes and input hashes. A render fails if any of them change during the render.
 
-The prepared manifest and every receipt record `renderer`/`engine`, the engine's source hash (for the scene engine: its own sources plus the block layer it draws), the plan's SHA-256, font hashes and input hashes. A render fails if any of them change during the render.
-
-`clearframe build` builds the selected engine; `clearframe build --all` builds both. The scene engine's Cargo target lives in `scene/.cache/target` (ignored); a cold target is seeded from the FFFrames cache by copy-on-write. Builds use one Cargo job through `codex-heavy`, like the FFFrames build.
+`clearframe build` builds the renderer, and every render command builds it first when its sources changed. The Cargo target lives in `scene/.cache/target` (ignored). Builds use one Cargo job through `codex-heavy`. `skia-safe` is pinned with the feature set rust-skia publishes prebuilt binaries for (`gl, metal, svg`), so Skia itself is never compiled.
 
 ## Native stages
 
 A **stage** is a list of native elements the engine draws itself, on the GPU, on its own clock. Three places declare one; all compile with the same recipes:
 
 ```jsonc
-// 1. A stage block: the beat's picture is native. The block layer still draws the heading,
+// 1. A stage block: the beat's picture is a native stage. The block still draws the heading,
 //    the source line, captions, the speaker tag and the transitions.
 { "id": "flow", "block": "stage", "vo": "…",
   "props": { "title": "How a stop request travels", "source": "…",
@@ -58,7 +52,7 @@ Times are seconds on the stage's clock or spoken cues (`say`): a word in the bea
 
 ### Elements: the canvas dialect, drawn natively
 
-Stage elements use the canvas block's vocabulary ([canvas.md](canvas.md)): `rect, circle, ellipse, line, path, poly, text, icon, image, group, particles, spotlight` with `fill/stroke` tokens and gradients, `enter` (fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, scramble, blur, none), `at/say/dur`, `keys` (x, y, scale, rotate, opacity, scaleX, scaleY, blur, tiltX, tiltY — and now **fill/stroke colours**), `along`, `loop` (spin, pulse, float, sway, orbit, dash, blink, rock), `exit`/`exitAt`/`exitSay`, `echo`, `tilt`, `shine`, `glow`, `shadow`, `blur`, `blend`, `z`, `fps`. The rules (default entrances and durations, keys easing from the previous state, values that never overshoot, stroke draw-on) follow `fframes/native/src/canvas.rs`, so an element means the same thing in a canvas and on a stage.
+Stage elements use the canvas block's vocabulary ([canvas.md](canvas.md)): `rect, circle, ellipse, line, path, poly, text, icon, image, group, particles, spotlight` with `fill/stroke` tokens and gradients, `enter` (fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, scramble, blur, none), `at/say/dur`, `keys` (x, y, scale, rotate, opacity, scaleX, scaleY, blur, tiltX, tiltY — and now **fill/stroke colours**), `along`, `loop` (spin, pulse, float, sway, orbit, dash, blink, rock), `exit`/`exitAt`/`exitSay`, `echo`, `tilt`, `shine`, `glow`, `shadow`, `blur`, `blend`, `z`, `fps`. The rules (default entrances and durations, keys easing from the previous state, values that never overshoot, stroke draw-on) follow the canvas block (`scene/native/src/blocks/canvas.rs`), so an element means the same thing in a canvas and on a stage.
 
 Features the canvas block draws but stages do not — `rough`, `print`, `mosaic`, `morph`, `solid`, `meter`, `loop: level` — are **refused by name** when a stage uses them (`box uses rough, which the canvas block draws; native stages do not`). Keep them in a `canvas` beat or `art`.
 
@@ -66,7 +60,7 @@ New element types and properties only the engine draws:
 
 | | |
 |---|---|
-| `video` | Footage as a GPU texture: `{file|asset, x, y, w, h, r, fit: cover|contain, focusX, focusY, offset, rate, hold, treatment}`. Decoded in order at the size drawn (at most six decoders, two frames each; never a raw cache of the clip). A clip shorter than its time on screen — including a following dissolve — fails at prepare time; footage never loops, and freezes only with `hold: true`. |
+| `video` | Footage as a GPU texture: `{file|asset, x, y, w, h, r, fit: cover|contain, focusX, focusY, offset, rate, hold, treatment}`. Decoded at the size drawn (see [footage](#footage)). A clip shorter than its time on screen — including a following dissolve — fails at prepare time; footage never loops, and freezes only with `hold: true`. |
 | `shader` | A rectangle filled with an SkSL material (below). |
 | `material` | On any shape or text: `noise, sheen, halftone, grain, glass, chrome, gold, thermal, scanlines` (SkSL runtime shaders over the element's bounds, palette colours, seeded and time-driven) or `neon` (a bright core with a glow). `{name, colors: [tokens], scale, amount, speed, seed}`. |
 | `particles` | The canvas kinds (dust, embers, rain, snow, bubbles, stars) plus `burst` (seeded emitter: velocity, spread, angle, gravity, drag, life), `stream` (particles flowing along a path element by id) and `field` (a noise-steered drift). Up to 4,000 per element, batched by opacity. Pure functions of time. |
@@ -98,27 +92,34 @@ Each frame places every element first (twice, so an element can follow one liste
 
 `shutter` (0–1 of a frame) with `samples` (default 8, at most 32) is **temporal motion blur**: the stage is evaluated at `samples` instants across the open shutter and accumulated in half float. Footage stays on its decoded frame inside one output frame. It costs about one stage draw per sample; leave it off for still stages.
 
+## Blocks
+
+The 33 blocks are drawn by `scene/native/src/blocks/` (the block code ClearFrame has always owned, moved into the renderer). Each block builds a **display list** for its frame (`draw::Node`): groups with a transform, opacity, clip, mask, blend mode or filter; shapes (Skia paths with fills, gradients and strokes); text runs; and pictures. `draw::paint` draws it on the frame's GPU canvas, and the frame audit reads the same tree, so what is judged is exactly what is drawn.
+
+- **Type** is shaped once, with rustybuzz over the bundled OFL fonts. The same shaping measures, wraps and fits the text, and the glyphs are drawn by id with Skia typefaces built from those files, so measurement and pixels cannot disagree. A text that does not fit its box fails the frame, with the scene and box named, instead of spilling.
+- **Effects** keep SVG filter semantics (`fx.rs`): shadows, glows, blurs, image treatments (mono, duotone, tint, blur, soft), the thermal look and worn print are Skia image-filter graphs confined to their region, in linear-light or sRGB as authored.
+- **Shared code** sits beside the renderer, not inside a block: `text` (faces, shaping, layout, fitting), `design` (palettes and colour arithmetic), `motion` (easing, entrances and exits), `icons` (the pinned Tabler subset), `numbers` (grouping, signs, zero baselines), `audit` (the frame audit) and `constants` (timings shared with `film/`).
+
+A beat with native `under` layers is drawn in two parts: its ground (tone, plate), then the stage, then its content. That way a stage sits between a plate and the heading.
+
 ## Film-level compositing
 
-The engine composites the film itself instead of building one SVG tree per frame:
+The engine composites the film itself:
 
-- **backdrop** `grid, dots, glow, paper, mosaic`, **texture** grain/vignette, `chrome`, the editorial `frame`, the review grid — native Skia drawing with the same geometry, timing and palette rules as `fframes/native/src/{lib,design}.rs`. Paper and grain use Skia's implementation of the SVG fractal-noise function with the same colour matrices (grain is opaque grey at the texture's opacity), so existing films keep their reviewed look; `scripts/engine-effects.mjs` measures every backdrop, texture and lens setting against FFFrames.
-- **lens**: grade (the same saturation matrix and transfer tables), bloom (threshold, blur, screen) and chromatic aberration (channel split and offset) as one GPU image-filter graph over the picture; handheld, light leaks and letterbox bars with the same curves.
-- **dissolves** are two real layers: the outgoing beat (its block content and its native layers) runs on under the incoming one, whose layer fades up; the outgoing words clear in the first third.
+- **Backdrop** `grid, dots, glow, paper, mosaic`, **texture** (grain and vignette), `chrome`, the editorial `frame` and the review grid. Paper and grain are Skia's fractal noise with fixed colour matrices; grain is opaque grey at the texture's opacity.
+- **Lens**: grade (a saturation matrix and transfer tables), bloom (threshold, blur, screen) and chromatic aberration (channel split and offset), as one GPU image-filter graph over the picture. Handheld, light leaks and letterbox bars are drawn over it.
+- **Dissolves** are two real layers: the outgoing beat (its block and its native layers) runs on under the incoming one, whose layer fades up. The outgoing words clear in the first third.
 
-Block content is drawn by `fframes/native` (below) between the engine's own layers; a beat with native `under` layers is drawn in two parts — its ground (tone, plate), then the stage, then its content — so a stage sits between a plate and the heading.
+## Footage
 
-## What is native and what is not
+Footage (stage `video` elements, plates and the `video` block) is decoded by the `ffmpeg` and `ffprobe` tools, which ClearFrame already needs to encode and mix:
 
-| Part | Drawn by | Notes |
-|---|---|---|
-| Film compositing (backdrop, texture, lens, chrome, frame, letterbox, dissolves, guides) | scene engine | Native Skia/GPU. |
-| Native stages (stage block, beat stages, film stages): all element types above | scene engine | Native Skia/GPU; SkSL materials; footage textures; motion blur. |
-| The inside of the 33 blocks (titles, charts, diagrams, canvas, kinetic speech, captions, speaker tags, plates, entrances/exits, graphic transitions) | `fframes/native` block code, as an **SVG input layer** | Converted to a usvg tree and drawn by `fframes_skia_renderer::render::render_tree` into the engine's own GPU canvas. Pixel-identical block code in both engines; this is the compatibility path. |
-| Encoding | scene engine → FFmpeg (libx264, 2 threads) | Same CRF/preset/AQ and BT.601 limited-range conversion as before; the finisher's tags are unchanged. |
-| Audio, captions files, receipts, revisions, Studio | unchanged | The engine only replaces picture rendering. |
+- **Bounded memory.** Each open clip is one `ffmpeg` process streaming RGBA through a pipe, at no more than the size drawn. At most six clips are open at once, each holding one frame. There is never a raw cache of a clip.
+- **Exact timing.** `ffprobe` lists the clip's presentation timestamps once. Film time *t* shows the latest source frame at or before *t*. The clip ends at the end of its last sample: the end is exclusive and rounded up to the film's frame grid, so 49 frames at 24 fps still show their final sample at frame 61 of a 30 fps film.
+- **Any order.** Small forward steps read on through the pipe. A backward step or a far jump restarts the decoder with an accurate seek just before the wanted frame, so every frame comes out the same in any order.
+- **Colour.** FFmpeg's `scale` filter converts with the source's tagged matrix and range. Untagged sources are BT.601 limited range.
 
-So FFFrames is still a dependency: its SVG tree builder (usvgr), its Skia tree renderer and its media crate (footage decoding, vendored with its patch). Its frame loop, encoder, previewer-driven film compositing and fixed `const W, H, FPS` video type are no longer used by the default engine. Porting each block's internals to native elements, then removing the SVG input layer, is the remaining migration ([coverage](scene-engine-coverage.md)).
+The decoder's regression tests (a delayed final B-frame, a higher film rate, a non-integral end, and backward seeks) use the fixtures in `scene/native/tests/fixtures`.
 
 ## Commands and the serve protocol
 
@@ -126,9 +127,9 @@ So FFFrames is still a dependency: its SVG tree builder (usvgr), its Skia tree r
 
 | | |
 |---|---|
-| `frame 120,4.2s -o DIR` | PNG stills (frames, or seconds rounded to the nearest frame as FFFrames resolved them) |
+| `frame 120,4.2s -o DIR` | PNG stills (frames, or seconds rounded to the nearest frame) |
 | `render [A..B] -o OUT.mp4 [--report R.json]` | H.264 of film frames [A, B) on the film's own clock; draw and readback times in the report |
-| `inspect [--every 0.25s]` | sampled block-converter diagnostics plus native errors and clipped native type, in the FFFrames report format `check` reads; exit 2 on errors |
+| `inspect [--every 0.25s]` | sampled frames that cannot be drawn (overflowing text, missing media, stage errors) and type cut by the canvas edge, in the text report `check` reads; exit 2 on errors |
 | `audit FILE` | the frame audit (held type cut by the frame or letterbox, over other type or a subject, too small) over block type **and** native type |
 | `bench [A..B]` | draw + readback per frame, without encoding |
 | `serve` | JSON lines on stdin: `{id, cmd: open|frame|render|inspect|audit|info|quit, …}`; the GPU context, fonts, decoders and shader programs stay warm between requests |
@@ -142,15 +143,16 @@ A range is film frames [A, B) of the full plan: every beat keeps its place, a st
 ## Decisions
 
 - **Independent implementation, no Psychopomp code.** The upstream repository has no license (re-checked through the GitHub API on 2026-10-05: `license: null`, `main` 6fca3bc). Ideas are taken from the research (actors with persistent identity, an event vocabulary compiled to time tracks, packets on connectors, callouts riding moving objects, stepped code diffs); no upstream code or assets.
-- **Skia (Ganesh/Metal) directly, not wgpu.** Skia gives shaped text with the bundled fonts, anti-aliased vectors, image filters and SkSL runtime shaders, and it can draw the SVG input layers into the same canvas — one compositor, not two. `skia-safe 0.153.3` with the prebuilt-binary feature set was already in the lock graph and warm cache. wgpu would have needed a new text/vector stack plus Skia/resvg for SVG content, and a cold build of new crates on an 8 GB machine.
+- **Skia (Ganesh/Metal) directly, not wgpu.** Skia gives anti-aliased vectors, gradients, image filters, SkSL runtime shaders and glyph drawing in one GPU canvas. `skia-safe 0.153.3` with a prebuilt-binary feature set builds without compiling Skia. wgpu would have needed a new text and vector stack, plus a cold build of new crates on an 8 GB machine.
+- **One renderer, no fallback.** FFFrames was removed outright rather than kept selectable. The block code was always ClearFrame's own and was moved, not rewritten: layout, fitting, chart scales, diagram geometry, speech and caption timing are the same functions. Only their output changed, from an SVG tree for usvg to a display list for Skia.
+- **A display list, not SVG text.** Blocks build typed nodes from Skia values. There are no id references, no converter and no per-frame SVG parsing; SVG remains only an asset format.
+- **Footage through the FFmpeg tools.** One process per open clip replaced a statically linked FFmpeg and a vendored decoder patch, and the same exact-end rule is now a tested property of `media.rs`.
 - **One authoring language.** The storyboard is the only authored document; stages use the canvas element dialect; recipes compile in JavaScript (no Rust per film, no Rust rebuild per content change); the plan is a compiled, hashed artifact.
-- **Integrate first, port blocks after.** All 45 playbooks render through the new engine from the first commit, with block internals as SVG input layers; each block can then be ported with the old output as its pixel oracle.
 
 ## Limits
 
-- The block internals are still FFFrames SVG; their look is unchanged and so is their cost.
+- The canvas element dialect has two implementations: the canvas block (`blocks/canvas*.rs`) and native stages (`nodes.rs`). Stages refuse the canvas-only features by name.
 - Particles are batched draws, not GPU compute; thousands, not millions.
 - Motion blur multiplies a stage's draw cost by its samples.
-- Readback plus an FFmpeg pipe replaces FFFrames' in-process GPU YUV conversion: see [measured results](scene-engine-coverage.md#measurements) before assuming either is faster.
 - GPU output is deterministic on one backend; bit-identical pixels across GPUs are not promised. The raster fallback (no Metal) is untested outside macOS.
 - `serve` keeps one plan open; reopening leaks the previous job's parsed film (small) for the life of the process.

@@ -3,8 +3,8 @@
 // Writes docs/media/{blocks.jpg, blocks-vertical.jpg, looks.png, data-story.jpg}.
 import fs from 'node:fs';
 import path from 'node:path';
-import { writeGallery, scaffold } from '../fframes/playbooks.mjs';
-import { sheetProject, lookbookProject } from '../fframes/production.mjs';
+import { writeGallery, scaffold } from '../film/playbooks.mjs';
+import { sheetProject, lookbookProject } from '../film/production.mjs';
 import { ffmpeg } from '../engine/lib/util.mjs';
 
 const work = path.resolve('build/docs-media');

@@ -1,7 +1,7 @@
 //! H.264 through an FFmpeg child process: straight RGBA frames on a pipe, converted with the
-//! BT.601 limited-range matrix the FFFrames encoder applied (sRGB picture values; the finisher
-//! tags primaries/transfer/matrix/range), libx264 with the same quality settings as before and
-//! at most two encoder threads. A bounded queue of two frames keeps memory flat: drawing the
+//! BT.601 limited-range matrix (sRGB picture values; the finisher tags primaries, transfer,
+//! matrix and range), libx264 at the draft and final quality settings, at most two encoder
+//! threads. A bounded queue of two frames keeps memory flat: drawing the
 //! next frame overlaps encoding of the last.
 use std::io::Write;
 use std::path::Path;
@@ -35,7 +35,16 @@ impl Encoder {
             .args(["-vf", "scale=in_range=full:out_range=tv:out_color_matrix=bt601,format=yuv420p"])
             .args(["-c:v", "libx264", "-preset", preset, "-crf", crf, "-g", "250", "-qmin", "0", "-qmax", "69"])
             .args(["-x264-params", "aq-mode=3", "-threads", "2"])
-            .args(["-color_primaries", "bt709", "-color_trc", "iec61966-2-1", "-colorspace", "smpte170m", "-color_range", "tv"])
+            .args([
+                "-color_primaries",
+                "bt709",
+                "-color_trc",
+                "iec61966-2-1",
+                "-colorspace",
+                "smpte170m",
+                "-color_range",
+                "tv",
+            ])
             .args(["-an", "-movflags", "+faststart"])
             .arg(out)
             .stdin(Stdio::piped())
@@ -62,7 +71,8 @@ impl Encoder {
 
     pub fn finish(mut self) -> Result<usize, String> {
         drop(self.tx.take());
-        let wrote = self.writer.take().map(|w| w.join().unwrap_or(Err("encoder writer panicked".into()))).unwrap_or(Ok(()));
+        let wrote =
+            self.writer.take().map(|w| w.join().unwrap_or(Err("encoder writer panicked".into()))).unwrap_or(Ok(()));
         let out = self.child.wait_with_output().map_err(|e| e.to_string())?;
         if !out.status.success() {
             return Err(format!("ffmpeg failed: {}", String::from_utf8_lossy(&out.stderr)));

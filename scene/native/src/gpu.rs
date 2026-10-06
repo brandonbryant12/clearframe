@@ -1,7 +1,7 @@
 //! The engine's own Metal device, Skia GPU context and render surfaces. One context per
 //! process; every surface lives on it, so layers, footage textures and shader programs stay
 //! resident between frames.
-use fframes_skia_renderer::skia_safe::{
+use skia_safe::{
     self as sk, AlphaType, ColorType, ImageInfo, Surface,
     gpu::{self, DirectContext, SurfaceOrigin},
 };
@@ -17,22 +17,19 @@ impl Gpu {
     pub fn new() -> Result<Option<Self>, String> {
         #[cfg(target_os = "macos")]
         {
-            use fframes_skia_renderer::metal::metal_rs;
             use foreign_types_shared::ForeignType;
+            use metal as metal_rs;
             let device = metal_rs::Device::system_default().ok_or("no Metal device")?;
             let queue = device.new_command_queue();
             let backend = unsafe {
-                gpu::mtl::BackendContext::new(
-                    device.as_ptr() as gpu::mtl::Handle,
-                    queue.as_ptr() as gpu::mtl::Handle,
-                )
+                gpu::mtl::BackendContext::new(device.as_ptr() as gpu::mtl::Handle, queue.as_ptr() as gpu::mtl::Handle)
             };
             let mut options = gpu::ContextOptions::new();
             options.glyph_cache_texture_maximum_bytes = 64 * 1024 * 1024;
             options.allow_path_mask_caching = true;
             options.runtime_program_cache_size = 256;
-            let context =
-                gpu::direct_contexts::make_metal(&backend, Some(&options)).ok_or("Skia could not create a Metal context")?;
+            let context = gpu::direct_contexts::make_metal(&backend, Some(&options))
+                .ok_or("Skia could not create a Metal context")?;
             // The context holds its own references to the device and queue.
             Ok(Some(Gpu { context, backend: "skia-metal" }))
         }

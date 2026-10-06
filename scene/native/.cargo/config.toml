@@ -2,7 +2,6 @@
 jobs = 1
 
 [env]
-FFRAMES_NUM_THREADS = { value = "2", force = true }
 RAYON_NUM_THREADS = { value = "2", force = true }
 CMAKE_BUILD_PARALLEL_LEVEL = { value = "2", force = true }
 NUM_JOBS = { value = "2", force = true }

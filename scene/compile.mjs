@@ -14,7 +14,7 @@ import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { compileStage } from './recipes.mjs';
 import { findWord } from '../engine/lib/timing.mjs';
-import { ENTRANCE } from '../fframes/constants.mjs';
+import { ENTRANCE } from '../film/constants.mjs';
 
 export const PLAN_KIND = 'clearframe.scene';
 export const PLAN_VERSION = 1;

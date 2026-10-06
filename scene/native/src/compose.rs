@@ -3,38 +3,37 @@
 //! 1. background colour, then — inside the lens layer (grade, bloom and aberration as one GPU
 //!    filter graph) and the handheld transform — the backdrop, vignette, every beat on screen
 //!    and the film chrome;
-//! 2. for each beat: its ground (tone, plate) from the block layer, native `under` layers,
-//!    the block content, native `over` layers. A dissolve draws the outgoing beat under the
+//! 2. for each beat: its ground (tone, plate) from its block, native `under` layers, the
+//!    block content, native `over` layers. A dissolve draws the outgoing beat under the
 //!    incoming one as two real layers;
 //! 3. stages (native layers spanning beats) around the beats;
 //! 4. light leaks, the editorial frame, grain, letterbox bars and review guides on top.
 //!
 //! Native layers with a shutter are sampled several times inside the frame interval and
 //! accumulated in half-float, which is real temporal motion blur rather than a smear.
+use crate::blocks::{self, Ctx, Film};
+use crate::design::Palette;
+use crate::draw::{self, Node};
 use crate::film;
 use crate::gpu::{self, Gpu};
-use crate::legacy::{self, Layers};
+use crate::lens::Lens;
 use crate::media::Media;
+use crate::motion::{self, MotionStyle};
 use crate::nodes::{self, Camera, Scope, TextMark};
 use crate::plan::{Depth, Layer, Plan};
-use clearframe_native::Film;
-use clearframe_native::design::Palette;
-use clearframe_native::lens::Lens;
-use clearframe_native::motion::{self, MotionStyle};
-use fframes_skia_renderer::skia_safe::{
-    self as sk, AlphaType, BlendMode, Canvas, ColorType, ImageInfo, Paint, Rect, Surface, gpu as skgpu,
-};
+use skia_safe::{self as sk, AlphaType, BlendMode, Canvas, ColorType, ImageInfo, Paint, Rect, Surface, gpu as skgpu};
+use std::cell::RefCell;
 use std::path::Path;
 
 pub struct Engine {
     pub plan: Plan,
     pub film: Film,
-    blocks: Box<dyn Layers>,
+    /// Staged media and output scale, shared by blocks and native layers.
+    ctx: Ctx,
     pub gpu: Option<Gpu>,
     pub surface: Surface,
     scratch: Option<Surface>,
     accum: Option<Surface>,
-    media: Media,
     /// Output pixels.
     pub width: i32,
     pub height: i32,
@@ -52,7 +51,9 @@ impl Engine {
         let media_dir = plan.media_path();
         crate::fonts::use_dir(&media_dir);
         let film = Film::read(&plan.job_path().to_string_lossy()).map_err(|e| format!("{}: {e}", plan.job))?;
-        if (film.width as u32, film.height as u32, film.fps as u32, film.frames) != (plan.format.width, plan.format.height, plan.format.fps, plan.format.frames) {
+        if (film.width as u32, film.height as u32, film.fps as u32, film.frames)
+            != (plan.format.width, plan.format.height, plan.format.fps, plan.format.frames)
+        {
             return Err("the plan's format does not match its block job; prepare again".into());
         }
         for layer in &plan.layers {
@@ -62,12 +63,12 @@ impl Engine {
                 }
             }
         }
-        let blocks = legacy::open(&plan.job_path(), &media_dir)?;
         if !(scale.is_finite() && scale > 0.0 && scale <= 2.0) {
             return Err("scale must be greater than zero and at most 2".into());
         }
-        // Even dimensions, rounded as FFFrames' VideoSize::new_scaled (fframes/render-geometry.mjs).
-        let even = |n: u32| if scale == 1.0 { n as i32 } else { (((n as f32 * scale) / 2.0).round() as i32 * 2).max(2) };
+        // Even dimensions, rounded as film/render-geometry.mjs does.
+        let even =
+            |n: u32| if scale == 1.0 { n as i32 } else { (((n as f32 * scale) / 2.0).round() as i32 * 2).max(2) };
         let (width, height) = (even(plan.format.width), even(plan.format.height));
         if width < 2 || height < 2 {
             return Err("scaled output must have positive even dimensions".into());
@@ -76,9 +77,25 @@ impl Engine {
         let logical = (plan.format.width as f32 * k, plan.format.height as f32 * k);
         let mut gpu = Gpu::new()?;
         let surface = gpu::surface(gpu.as_mut(), width, height)?;
-        let media = Media::new(&media_dir, plan.format.fps as usize);
+        let ctx = Ctx {
+            media: RefCell::new(Media::new(&media_dir, plan.format.fps as usize)),
+            scale: width as f32 / logical.0,
+        };
         let palette = Palette::from_theme(&film.theme);
-        Ok(Engine { plan, film, blocks, gpu, surface, scratch: None, accum: None, media, width, height, logical, palette, marks: vec![] })
+        Ok(Engine {
+            plan,
+            film,
+            ctx,
+            gpu,
+            surface,
+            scratch: None,
+            accum: None,
+            width,
+            height,
+            logical,
+            palette,
+            marks: vec![],
+        })
     }
 
     pub fn backend(&self) -> &'static str {
@@ -158,7 +175,16 @@ impl Engine {
             let tone = self.film.beats[i].tone.clone().unwrap_or_default();
             let palette = Palette::from_theme(&self.film.theme).toned(&tone);
             let label = self.film.beats[i].label.clone();
-            film::frame(canvas, &spec, &label, lw, lh, &palette, frame as f32 / self.film.frames.max(1) as f32, &mut self.marks);
+            film::frame(
+                canvas,
+                &spec,
+                &label,
+                lw,
+                lh,
+                &palette,
+                frame as f32 / self.film.frames.max(1) as f32,
+                &mut self.marks,
+            );
         }
         film::grain(canvas, &self.film.texture, lw, lh, &self.palette, seconds);
         film::letterbox(canvas, bar, lw, lh);
@@ -172,24 +198,33 @@ impl Engine {
 
     /// One beat at its own frame `local`: ground, native under layers, block content, native
     /// over layers. Without native layers the block layer is drawn whole.
-    fn beat(&mut self, canvas: &Canvas, index: usize, local: usize, frame: usize, words: f32, errors: &mut Vec<String>) {
+    fn beat(
+        &mut self,
+        canvas: &Canvas,
+        index: usize,
+        local: usize,
+        frame: usize,
+        words: f32,
+        errors: &mut Vec<String>,
+    ) {
         let id = self.film.beats[index].id.clone();
-        let (lw, lh) = self.logical;
         let has = |z: Depth| self.plan.layers.iter().any(|l| l.beat.as_deref() == Some(id.as_str()) && l.z == z);
         let (under, over) = (has(Depth::Under), has(Depth::Over));
         // The layer's own clock follows the beat frame being drawn (a dissolve's outgoing beat
         // runs on past its end).
         let beat_frame = self.film.beats[index].start_frame + local;
+        let block = |part: u8, errors: &mut Vec<String>| match self.block(index, local, frame, words, part) {
+            Ok(node) => draw::paint(canvas, &node),
+            Err(e) => errors.push(e),
+        };
         if under {
-            if let Err(e) = self.blocks.draw(canvas, index, local, frame, words, 1, lw, lh) {
-                errors.push(e);
-            }
+            block(1, errors);
             self.layers_of(canvas, Some(&id), Depth::Under, beat_frame, words, errors);
-            if let Err(e) = self.blocks.draw(canvas, index, local, frame, words, 2, lw, lh) {
-                errors.push(e);
-            }
-        } else if let Err(e) = self.blocks.draw(canvas, index, local, frame, words, 0, lw, lh) {
-            errors.push(e);
+            self.block(index, local, frame, words, 2)
+                .map(|n| draw::paint(canvas, &n))
+                .unwrap_or_else(|e| errors.push(e));
+        } else {
+            block(0, errors);
         }
         if over {
             self.layers_of(canvas, Some(&id), Depth::Over, beat_frame, words, errors);
@@ -200,7 +235,15 @@ impl Engine {
         self.layers_of(canvas, None, z, frame, 1.0, errors);
     }
 
-    fn layers_of(&mut self, canvas: &Canvas, beat: Option<&str>, z: Depth, frame: usize, words: f32, errors: &mut Vec<String>) {
+    fn layers_of(
+        &mut self,
+        canvas: &Canvas,
+        beat: Option<&str>,
+        z: Depth,
+        frame: usize,
+        words: f32,
+        errors: &mut Vec<String>,
+    ) {
         let picked: Vec<usize> = self
             .plan
             .layers
@@ -208,7 +251,12 @@ impl Engine {
             .enumerate()
             // A beat's own layers run on with the beat (a dissolve shows the outgoing beat past
             // its last frame); stages are drawn over their span.
-            .filter(|(_, l)| l.beat.as_deref() == beat && l.z == z && frame >= l.start && (beat.is_some() || frame < l.start + l.frames))
+            .filter(|(_, l)| {
+                l.beat.as_deref() == beat
+                    && l.z == z
+                    && frame >= l.start
+                    && (beat.is_some() || frame < l.start + l.frames)
+            })
             .map(|(i, _)| i)
             .collect();
         for i in picked {
@@ -218,7 +266,16 @@ impl Engine {
         }
     }
 
-    fn scope<'m>(media: &'m mut Media, film: &Film, layer: &Layer, palette: &Palette, fps: f32, pixel: f32, t: f32, view: (f32, f32)) -> Scope<'m> {
+    fn scope<'m>(
+        media: &'m mut Media,
+        film: &Film,
+        layer: &Layer,
+        palette: &Palette,
+        fps: f32,
+        pixel: f32,
+        t: f32,
+        view: (f32, f32),
+    ) -> Scope<'m> {
         let motion = layer
             .motion
             .as_ref()
@@ -273,14 +330,17 @@ impl Engine {
             if alpha < 0.999 {
                 canvas.save_layer_alpha_f(None, alpha);
             }
-            let mut scope = Self::scope(&mut self.media, &self.film, &layer, &palette, fps, pixel, t, self.logical);
+            let mut media = self.ctx.media.borrow_mut();
+            let mut scope = Self::scope(&mut media, &self.film, &layer, &palette, fps, pixel, t, self.logical);
             scope.words = words;
             nodes::draw(canvas, &mut scope, &layer.elements, 0.0, 0.0, t);
             if alpha < 0.999 {
                 canvas.restore();
             }
-            self.marks.extend(scope.texts);
-            return if scope.errors.is_empty() { Ok(()) } else { Err(scope.errors.join("\n")) };
+            let (texts, errors) = (scope.texts, scope.errors);
+            drop(media);
+            self.marks.extend(texts);
+            return if errors.is_empty() { Ok(()) } else { Err(errors.join("\n")) };
         }
         // Temporal motion blur: `samples` evaluations spread over the open shutter, summed at
         // equal weight in a half-float surface, then composited once.
@@ -288,11 +348,22 @@ impl Engine {
         let matrix = canvas.local_to_device_as_3x3();
         if self.accum.is_none() {
             let info = ImageInfo::new((w, h), ColorType::RGBAF16, AlphaType::Premul, None);
-            self.accum = Some(match self.gpu.as_mut() {
-                Some(g) => skgpu::surfaces::render_target(&mut g.context, skgpu::Budgeted::Yes, &info, None, skgpu::SurfaceOrigin::TopLeft, None, false, None),
-                None => sk::surfaces::raster(&info, None, None),
-            }
-            .ok_or("cannot create the motion-blur accumulation surface")?);
+            self.accum = Some(
+                match self.gpu.as_mut() {
+                    Some(g) => skgpu::surfaces::render_target(
+                        &mut g.context,
+                        skgpu::Budgeted::Yes,
+                        &info,
+                        None,
+                        skgpu::SurfaceOrigin::TopLeft,
+                        None,
+                        false,
+                        None,
+                    ),
+                    None => sk::surfaces::raster(&info, None, None),
+                }
+                .ok_or("cannot create the motion-blur accumulation surface")?,
+            );
             self.scratch = Some(gpu::surface(self.gpu.as_mut(), w, h)?);
         }
         let mut accum = self.accum.clone().unwrap();
@@ -308,7 +379,8 @@ impl Engine {
             sc.clear(sk::Color::TRANSPARENT);
             sc.save();
             sc.set_matrix(&matrix.into());
-            let mut scope = Self::scope(&mut self.media, &self.film, &layer, &palette, fps, pixel, ts, self.logical);
+            let mut media = self.ctx.media.borrow_mut();
+            let mut scope = Self::scope(&mut media, &self.film, &layer, &palette, fps, pixel, ts, self.logical);
             scope.sample = ts - t;
             scope.words = words;
             nodes::draw(sc, &mut scope, &layer.elements, 0.0, 0.0, ts);
@@ -339,24 +411,31 @@ impl Engine {
         gpu::read_rgba(self.gpu.as_mut(), &mut self.surface, pixels)
     }
 
-    /// The frame as PNG (see [`encode_png`]).
-    pub fn png(&mut self) -> Result<Vec<u8>, String> {
-        let mut pixels = Vec::new();
-        self.read(&mut pixels)?;
-        encode_png(&pixels, self.width, self.height)
+    /// Beat `index`'s block at its frame `local` (film frame `frame`). A block that cannot be
+    /// drawn (text that does not fit its box, missing media) fails the frame with its reason.
+    fn block(&self, index: usize, local: usize, frame: usize, words: f32, part: u8) -> Result<Node, String> {
+        let film = &self.film;
+        let ctx = &self.ctx;
+        std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            blocks::draw_beat(film, index, local, frame, ctx, words, part)
+        }))
+        .map_err(|e| {
+            let why = e
+                .downcast_ref::<String>()
+                .cloned()
+                .or_else(|| e.downcast_ref::<&str>().map(|s| s.to_string()))
+                .unwrap_or_default();
+            format!("beat {} at frame {frame}: {why}", film.beats[index].id)
+        })
     }
 
-    /// The block layer's tree for one beat at a film frame (frame audit).
-    pub fn block_tree(&mut self, frame: usize) -> Result<(String, fframes::usvgr::Tree), String> {
+    /// The block drawn at a film frame, in format pixels (the frame audit's units).
+    pub fn block_tree(&mut self, frame: usize) -> Result<(String, Node), String> {
         let i = self.beat_at(frame);
         let b = &self.film.beats[i];
-        let id = b.id.clone();
-        let local = frame - b.start_frame;
-        Ok((id, self.blocks.tree(i, local, frame)?))
-    }
-
-    pub fn blocks_inspect(&mut self, beat: usize, local: usize, frame: usize) -> Result<Vec<(fframes::diagnostics::Severity, String, String)>, String> {
-        self.blocks.inspect(beat, local, frame)
+        let (id, local) = (b.id.clone(), frame - b.start_frame);
+        let k = self.plan.format.width as f32 / self.logical.0;
+        Ok((id, self.block(i, local, frame, 1.0, 0)?.scale(k, k)))
     }
 }
 

@@ -1,4 +1,4 @@
-import { round, rng } from '../../fframes/sketch-kit.mjs';
+import { round, rng } from '../../film/sketch-kit.mjs';
 
 // Open water at night: swell lines rolling at three depths (slower and fainter with
 // distance), a low moon, and its reflection breaking into dashes that shimmer on the water.

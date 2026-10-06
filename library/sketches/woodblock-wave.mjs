@@ -1,4 +1,4 @@
-import { tall, round } from '../../fframes/sketch-kit.mjs';
+import { tall, round } from '../../film/sketch-kit.mjs';
 
 // A woodblock view of a rising sea: a bokashi sky (Prussian blue printed into the paper), a
 // combed swell cut in swelling lines, one great wave curling over with foam claws along its

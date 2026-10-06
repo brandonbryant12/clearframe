@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { barsSpec, expandBarsProps } from '../fframes/bars.mjs';
+import { barsSpec, expandBarsProps } from '../film/bars.mjs';
 
 const base = { title: 'Annual returns', unit: 'Total return', asOf: '2026-10-04', source: 'Illustrative data',
   values: [{ label: '2023', value: 26 }, { label: '2024', value: -18 }, { label: '2025', value: 12 }],

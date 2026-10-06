@@ -1,7 +1,7 @@
 {
   "name": "clearframe",
   "version": "0.4.0",
-  "description": "Agent-directed motion graphics with a native FFFrames renderer: display typography, honest animated charts, measured speech-following text and selective Google media.",
+  "description": "Agent-directed motion graphics with a native GPU renderer (Skia on Metal): display typography, honest animated charts, measured speech-following text and selective Google media.",
   "type": "module",
   "license": "MIT",
   "bin": {
@@ -9,9 +9,8 @@
   },
   "scripts": {
     "cf": "node engine/cli.mjs",
-    "cf:fframes": "node engine/cli.mjs",
     "test": "node --test --test-concurrency=2 test/*.test.mjs",
-    "test:fframes": "node --test --test-concurrency=2 test/native.test.mjs",
+    "test:native": "node --test --test-concurrency=2 test/native.test.mjs test/scene-engine.test.mjs",
     "catalog:sync": "node scripts/sync-catalog.mjs",
     "verify:pipeline": "node scripts/verify-pipeline.mjs",
     "verify:sculptures": "node scripts/verify-sculptures.mjs"
@@ -29,17 +28,15 @@
     "lyria",
     "veo",
     "explainer",
-    "fframes",
+    "skia",
     "kinetic-text"
   ],
   "files": [
     "engine",
-    "fframes/*.mjs",
-    "fframes/*.md",
-    "fframes/upstream.json",
-    "fframes/native",
-    "fframes/assets",
-    "fframes/tools",
+    "film/*.mjs",
+    "film/*.md",
+    "film/assets",
+    "scene",
     "skills",
     "library",
     "recipes",

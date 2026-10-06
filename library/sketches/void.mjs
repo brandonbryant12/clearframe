@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // A cold open: darkness, dust drifting close to the lens, and one far light. Focus starts
 // on the dust and racks to the light, while the camera creeps forward.

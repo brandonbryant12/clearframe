@@ -1,6 +1,6 @@
 # From idea, document and brand to a film
 
-ClearFrame is a standalone, agent-directed proof of concept. Its inputs and outputs are local files, suitable for a future host to call through the CLI. This workflow uses the existing native FFFrames renderer; it adds no HyperFrames dependency, service, browser runtime or Content Studio integration.
+ClearFrame is a standalone, agent-directed proof of concept. Its inputs and outputs are local files, suitable for a future host to call through the CLI. This workflow uses the native renderer (`scene/native`); it adds no HyperFrames dependency, service, browser runtime or Content Studio integration.
 
 ```sh
 node engine/cli.mjs start film \

@@ -1,37 +1,36 @@
 // Native integration checks. Run through codex-heavy, after the Node contract suite.
 import fs from 'node:fs';
 import path from 'node:path';
-import { writeGallery } from '../fframes/playbooks.mjs';
+import { writeGallery } from '../film/playbooks.mjs';
 import {
   checkProject,
   sheetProject,
   renderProject,
   stillProject,
   lookbookProject,
-  buildNative,
+  buildScene,
   run,
-  ROOT,
-} from '../fframes/production.mjs';
+} from '../film/production.mjs';
+import { SCENE, sceneEnv } from '../scene/engine.mjs';
 import { reviewProject } from '../engine/lib/review.mjs';
-import { blockByName } from '../fframes/catalog.mjs';
+import { blockByName } from '../film/catalog.mjs';
 import { writeJSON, ffmpeg } from '../engine/lib/util.mjs';
 const out = path.resolve(process.argv[2] ?? 'build/native-verified');
 if (fs.existsSync(out)) throw new Error('Verification output exists; retain or move it before rerunning.');
 fs.mkdirSync(out, { recursive: true });
 const reports = [];
-await buildNative();
+await buildScene();
 await run('cargo', [
   'test',
   '--manifest-path',
-  ROOT + '/native/Cargo.toml',
+  path.join(SCENE, 'native/Cargo.toml'),
   '--release',
   '--locked',
   '--jobs',
   '1',
-  '--lib',
   '--',
   '--test-threads=2',
-]);
+], { env: sceneEnv() });
 for (const [name, vertical, theme] of [
   ['landscape', false, 'paper'],
   ['vertical', true, 'ink'],

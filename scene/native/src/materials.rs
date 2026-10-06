@@ -1,7 +1,7 @@
 //! GPU materials: SkSL runtime shaders that paint a shape (or a whole layer) as a function of
 //! position, a seed and scene time. Deterministic per backend: the same frame number and inputs
 //! give the same shader evaluation. Colours always come from the film palette.
-use fframes_skia_renderer::skia_safe::{Matrix, RuntimeEffect, Shader, runtime_effect::RuntimeShaderBuilder};
+use skia_safe::{Matrix, RuntimeEffect, Shader, runtime_effect::RuntimeShaderBuilder};
 use std::cell::RefCell;
 use std::collections::HashMap;
 
@@ -28,7 +28,9 @@ float2 uv(float2 p) { return (p - bounds.xy) / max(bounds.zw, float2(1)); }
 /// (name, body). Each body defines `half4 main(float2 p)` and may use COMMON.
 const PRESETS: &[(&str, &str)] = &[
     // A slow flowing field between two palette colours: auroras, heat, liquid light.
-    ("noise", r#"
+    (
+        "noise",
+        r#"
 half4 main(float2 p) {
     float2 q = uv(p) * 3.0 / max(scale, 0.05);
     float2 w = float2(fbm(q + float2(0, time * 0.12)), fbm(q + float2(5.2, 1.3) - time * 0.09));
@@ -36,9 +38,12 @@ half4 main(float2 p) {
     half3 col = mix(c0.rgb, c1.rgb, half(smoothstep(0.25, 0.8, n)));
     col = mix(col, c2.rgb, half(amount * pow(smoothstep(0.55, 0.95, n), 2.0)));
     return half4(col, 1) * c0.a;
-}"#),
+}"#,
+    ),
     // Brushed metal catching a moving light: a banded reflection with a travelling specular.
-    ("sheen", r#"
+    (
+        "sheen",
+        r#"
 half4 main(float2 p) {
     float2 q = uv(p);
     float band = 0.5 + 0.5 * sin((q.x * 1.3 + q.y * 0.6) * 9.0 / max(scale, 0.05));
@@ -48,9 +53,12 @@ half4 main(float2 p) {
     half3 col = mix(c0.rgb * 0.82, c1.rgb, half(0.35 * band + brush));
     col = mix(col, c2.rgb, half(amount * spec));
     return half4(col, 1) * c0.a;
-}"#),
+}"#,
+    ),
     // An offset-print dot screen: dot size follows a soft diagonal tone ramp of the fill.
-    ("halftone", r#"
+    (
+        "halftone",
+        r#"
 half4 main(float2 p) {
     float cell = 9.0 * max(scale, 0.2);
     float a = 0.785398;
@@ -62,17 +70,23 @@ half4 main(float2 p) {
     float d = length(f) - radius;
     float ink = 1.0 - smoothstep(-0.06, 0.06, d);
     return half4(mix(c1.rgb, c0.rgb, half(ink)), 1) * c0.a;
-}"#),
+}"#,
+    ),
     // Film grain in the fill colour, changing eight times a second.
-    ("grain", r#"
+    (
+        "grain",
+        r#"
 half4 main(float2 p) {
     float tick = floor(time * 8.0);
     float g = hash(floor(p / max(scale, 0.5)) + tick * 7.13) - 0.5;
     half3 col = c0.rgb + half(g * 0.22 * amount);
     return half4(col, 1) * c0.a;
-}"#),
+}"#,
+    ),
     // Glass: a cool translucent body, darker at the rim, a soft caustic and a sharp edge highlight.
-    ("glass", r#"
+    (
+        "glass",
+        r#"
 half4 main(float2 p) {
     float2 q = uv(p);
     float2 e = min(q, 1.0 - q);
@@ -83,9 +97,12 @@ half4 main(float2 p) {
     col = mix(col, c2.rgb, half(0.55 * hi * amount + 0.3 * rim));
     half alpha = half(0.62 + 0.3 * rim) * c0.a;
     return half4(col * alpha, alpha);
-}"#),
+}"#,
+    ),
     // Chrome: a horizon reflection (dark ground, bright sky band) that slides as time passes.
-    ("chrome", r#"
+    (
+        "chrome",
+        r#"
 half4 main(float2 p) {
     float2 q = uv(p);
     float y = q.y + 0.15 * sin(q.x * 3.0 + time * 0.4) + 0.05 * (fbm(q * 6.0) - 0.5);
@@ -94,9 +111,12 @@ half4 main(float2 p) {
     half3 col = mix(ground, c2.rgb, half(clamp(sky + (1.0 - y) * 0.35, 0.0, 1.0)));
     col = mix(col, c0.rgb, 0.18);
     return half4(col, 1) * c0.a;
-}"#),
+}"#,
+    ),
     // Gold leaf: warm metallic bands with a slow glint.
-    ("gold", r#"
+    (
+        "gold",
+        r#"
 half4 main(float2 p) {
     float2 q = uv(p);
     float b = 0.5 + 0.5 * sin((q.y * 2.5 - q.x * 0.8) * 6.283 / max(scale, 0.05) + fbm(q * 5.0) * 2.0);
@@ -105,28 +125,36 @@ half4 main(float2 p) {
     half3 col = mix(dark, mid, half(b));
     col = mix(col, light, half(glint * amount + 0.25 * b * b));
     return half4(mix(col, c0.rgb, 0.12), 1) * c0.a;
-}"#),
+}"#,
+    ),
     // Thermal camera ramp: cold to hot across a flowing field.
-    ("thermal", r#"
+    (
+        "thermal",
+        r#"
 half4 main(float2 p) {
     float2 q = uv(p);
     float t = clamp(0.65 * (1.0 - q.y) + 0.45 * fbm(q * 3.0 / max(scale, 0.05) + time * 0.1) - 0.1, 0.0, 1.0);
     half3 a = half3(0.05, 0.02, 0.25), b = half3(0.55, 0.0, 0.55), c = half3(0.95, 0.35, 0.05), d = half3(1.0, 0.95, 0.6);
     half3 col = t < 0.33 ? mix(a, b, half(t / 0.33)) : t < 0.66 ? mix(b, c, half((t - 0.33) / 0.33)) : mix(c, d, half((t - 0.66) / 0.34));
     return half4(col, 1) * c0.a;
-}"#),
+}"#,
+    ),
     // CRT / monitor lines over the fill, rolling slowly.
-    ("scanlines", r#"
+    (
+        "scanlines",
+        r#"
 half4 main(float2 p) {
     float line = 0.5 + 0.5 * sin((p.y + time * 18.0) * 3.14159 / (2.0 * max(scale, 0.5)));
     half3 col = c0.rgb * half(1.0 - 0.28 * amount * line);
     float roll = smoothstep(0.0, 0.08, abs(fract(uv(p).y - time * 0.07) - 0.5));
     col *= half(0.92 + 0.08 * roll);
     return half4(col, 1) * c0.a;
-}"#),
+}"#,
+    ),
 ];
 
-pub const NAMES: &[&str] = &["noise", "sheen", "halftone", "grain", "glass", "chrome", "gold", "thermal", "scanlines", "neon"];
+pub const NAMES: &[&str] =
+    &["noise", "sheen", "halftone", "grain", "glass", "chrome", "gold", "thermal", "scanlines", "neon"];
 
 thread_local! {
     static EFFECTS: RefCell<HashMap<&'static str, RuntimeEffect>> = RefCell::new(HashMap::new());

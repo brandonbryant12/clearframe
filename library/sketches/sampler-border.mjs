@@ -1,4 +1,4 @@
-import { tall, round } from '../../fframes/sketch-kit.mjs';
+import { tall, round } from '../../film/sketch-kit.mjs';
 
 // A sampler's frame, cross-stitched on linen: an outer border in madder red, an inner one in
 // indigo, a heart in each corner and a row of small diamonds along the foot. It lies under a

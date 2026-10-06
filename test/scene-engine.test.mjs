@@ -1,33 +1,29 @@
-// The scene engine's JavaScript side: engine choice, command mapping, stage recipes, commit-
-// grounded code and the plan the engine reads. Rendering itself is covered by the Rust tests
-// (scene/native) and by scripts/engine-parity.mjs.
+// The renderer's JavaScript side: command mapping, stage recipes, commit-grounded code and the
+// plan the renderer reads. Rendering itself is covered by the Rust tests (scene/native) and by
+// scripts/engine-parity.mjs against retained reference stills.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { engineFor, sceneArgs } from '../scene/engine.mjs';
+import { sceneArgs, sceneHash } from '../scene/engine.mjs';
 import { compileStage } from '../scene/recipes.mjs';
 import { codeElement, diffLines, highlight, gitSides } from '../scene/code.mjs';
-import { prepareProjectSync } from '../fframes/prepare.mjs';
+import { prepareProjectSync } from '../film/prepare.mjs';
 import { writeJSON } from '../engine/lib/util.mjs';
 
 const frame = { width: 1920, height: 1080 };
 const stage = (spec, end = 6) => compileStage(spec, { cue: v => (typeof v === 'number' ? v : 1), end, where: 'b', frame });
 
-test('the scene engine is the default; fframes stays selectable and nothing else is', t => {
-  const saved = process.env.CLEARFRAME_ENGINE;
-  t.after(() => (saved == null ? delete process.env.CLEARFRAME_ENGINE : (process.env.CLEARFRAME_ENGINE = saved)));
-  delete process.env.CLEARFRAME_ENGINE;
-  assert.equal(engineFor({}), 'scene');
-  assert.equal(engineFor({ engine: 'fframes' }), 'fframes');
-  process.env.CLEARFRAME_ENGINE = 'scene';
-  assert.equal(engineFor({ engine: 'fframes' }), 'scene', 'the environment wins');
-  process.env.CLEARFRAME_ENGINE = 'browser';
-  assert.throws(() => engineFor({}), /scene or fframes/);
+test('the renderer identity covers its sources, lockfile and the shared constants', () => {
+  assert.match(sceneHash(), /^[0-9a-f]{64}$/);
+  const manifest = fs.readFileSync(new URL('../scene/native/Cargo.toml', import.meta.url), 'utf8');
+  const lock = fs.readFileSync(new URL('../scene/native/Cargo.lock', import.meta.url), 'utf8');
+  for (const text of [manifest, lock]) assert.doesNotMatch(text, /fframes|usvgr|ffmpeg-sys/i, 'no FFFrames crate is a dependency');
+  assert.match(manifest, /skia-safe = \{ version = "=0\.153\.3"/);
 });
 
-test('FFFrames command words map onto the scene engine with draft and scale as globals', () => {
+test('command words map onto the renderer with draft and scale as globals', () => {
   assert.deepEqual(sceneArgs('p.json', 'render', ['10..20', '--draft', '--scale', '1', '-o', 'raw.mp4']), [
     '--plan', 'p.json', '--draft', '--scale', '1', 'render', '10..20', '-o', 'raw.mp4',
   ]);
@@ -106,7 +102,7 @@ test('code from git names the exact commit and blobs it shows', () => {
   assert.match(seen[0].blobs.after, /^[0-9a-f]{40}$/);
 });
 
-test('a stage beat compiles into the plan; its block layer keeps only the heading; fframes refuses it', t => {
+test('a stage beat compiles into the plan and its block keeps only the heading', t => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-stage-'));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
   writeJSON(path.join(dir, 'storyboard.json'), {
@@ -126,9 +122,6 @@ test('a stage beat compiles into the plan; its block layer keeps only the headin
     ],
     stages: [{ id: 'glow', from: 'flow', z: 'over', elements: [{ type: 'particles', kind: 'field', x: 0, y: 0, w: 1920, h: 1080, count: 600 }] }],
   });
-  const saved = process.env.CLEARFRAME_ENGINE;
-  t.after(() => (saved == null ? delete process.env.CLEARFRAME_ENGINE : (process.env.CLEARFRAME_ENGINE = saved)));
-  delete process.env.CLEARFRAME_ENGINE;
   const ctx = prepareProjectSync(dir, { draft: true });
   const plan = JSON.parse(fs.readFileSync(path.join(ctx.dir, 'plan.json'), 'utf8'));
   assert.equal(plan.kind, 'clearframe.scene');
@@ -138,8 +131,6 @@ test('a stage beat compiles into the plan; its block layer keeps only the headin
   assert.ok(ctx.job.beats[0].settle_seconds >= 2.5, 'the packet arrives before the exit may start');
   assert.equal(ctx.manifest.renderer, 'scene');
   assert.match(ctx.manifest.planSha256, /^[0-9a-f]{64}$/);
-  process.env.CLEARFRAME_ENGINE = 'fframes';
-  assert.throws(() => prepareProjectSync(dir, { draft: true }), /only the scene engine draws them/);
 });
 
 test('native stages refuse canvas-only features by name instead of dropping them', t => {
@@ -149,8 +140,5 @@ test('native stages refuse canvas-only features by name instead of dropping them
     title: 'Stage', music: false,
     beats: [{ id: 'x', block: 'statement', duration: 3, props: { text: 'Hello' }, stage: { elements: [{ type: 'rect', id: 'box', w: 10, h: 10, rough: true }] } }],
   });
-  const saved = process.env.CLEARFRAME_ENGINE;
-  t.after(() => (saved == null ? delete process.env.CLEARFRAME_ENGINE : (process.env.CLEARFRAME_ENGINE = saved)));
-  delete process.env.CLEARFRAME_ENGINE;
   assert.throws(() => prepareProjectSync(dir, { draft: true }), /box uses rough, which the canvas block draws/);
 });

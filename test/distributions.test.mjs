@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {distribution} from '../fframes/distribution-data.mjs';import {distributionScene} from '../fframes/distributions.mjs';
+import {distribution} from '../film/distribution-data.mjs';import {distributionScene} from '../film/distributions.mjs';
 const input=()=>({title:'Sample',source:'Fictional sample.',asOf:'2026-09-30',unit:'dollars',observations:[-2,-1,0,1,2,null],edges:[-2,0,2],mode:'count',threshold:{value:0,relation:'gte'},y:{max:4,ticks:[0,2,4],decimals:0}});
 test('histogram endpoints, nulls and exact threshold equality are explicit',()=>{const x=input(),old=structuredClone(x),m=distribution(x);assert.deepEqual(m.bins.map(b=>b.count),[2,3]);assert.equal(m.n,5);assert.equal(m.missing,1);assert.deepEqual(m.threshold.members,[2,3,4]);assert.deepEqual(x,old);for(const [relation,count]of [['gte',3],['gt',2],['lte',3],['lt',2]])assert.equal(distribution({...x,threshold:{value:0,relation}}).threshold.count,count);});
 test('unequal bins use density whose area integrates to one',()=>{const x=input();x.edges=[-2,-1,2];x.mode='density';x.y={max:1,ticks:[0,1],decimals:0};const m=distribution(x);assert.deepEqual(m.bins.map(b=>b.count),[1,4]);assert.ok(Math.abs(m.bins.reduce((s,b)=>s+b.height*b.width,0)-1)<1e-15);x.mode='count';assert.throws(()=>distribution(x),/equal-width/);});

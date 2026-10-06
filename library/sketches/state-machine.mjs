@@ -1,6 +1,6 @@
 // A state machine whose current state moves: transitions draw once, then the token and the
 // highlighted state follow the story (including a failure and its retry).
-import { diagramElements } from '../../fframes/system-diagrams.mjs';
+import { diagramElements } from '../../film/system-diagrams.mjs';
 const diagram = {
   nodes: [
     { id: 'idle', label: 'Queued', kind: 'state' },

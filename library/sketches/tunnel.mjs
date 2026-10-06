@@ -1,4 +1,4 @@
-import { round, seen } from '../../fframes/sketch-kit.mjs';
+import { round, seen } from '../../film/sketch-kit.mjs';
 
 // Fly through a sequence of gates toward a light. Rings sit at increasing depth, each
 // drawn at its apparent size; the camera dollies through them and focus follows the

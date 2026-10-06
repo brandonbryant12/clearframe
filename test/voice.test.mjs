@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { planTakes, takeSpec } from '../engine/lib/takes.mjs';
 import { buildRequest } from '../skills/gemini-tts/scripts/tts.mjs';
-import { mosaicSpec } from '../fframes/canvas.mjs';
+import { mosaicSpec } from '../film/canvas.mjs';
 
 const film = (voice = {}) => ({
   voice: { voice: 'Charon', style: 'warm, curious', wpm: 150, takes: 'film', ...voice },

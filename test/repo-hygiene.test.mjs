@@ -6,8 +6,8 @@ import fs from 'node:fs';
 // The library holds sources. Renders, evidence and review media belong in build/ (ignored).
 // Binaries are allowed only where they are the reusable asset or a fixture.
 const ALLOWED = [
-  /^fframes\/assets\//,                     // bundled fonts and icons
-  /^fframes\/native\/tests\/fixtures\//,    // decoder fixtures
+  /^film\/assets\//,                        // bundled fonts and icons
+  /^scene\/native\/tests\/fixtures\//,      // decoder fixtures
   /^examples\/sculptures\/[^/]+\//,         // prepared 3D clips, posters and editable scenes
   /^docs\/media\//,                         // guide illustrations
   /^docs\/design\/material-studies\/[^/]+\.png$/,
@@ -29,6 +29,6 @@ test('build caches and compiler output are never tracked', () => {
   const files = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
   const cached = files.filter(f => /(^|\/)\.cache\/|(^|\/)target\/(release|debug)\//.test(f));
   assert.deepEqual(cached.slice(0, 5), [], `${cached.length} build-cache files are tracked; they belong in the ignored .cache/ folders`);
-  for (const dir of ['fframes/.cache/metal', 'scene/.cache/target'])
+  for (const dir of ['scene/.cache/target'])
     assert.ok(execFileSync('git', ['check-ignore', '-q', `${dir}/x`, '--no-index'], { encoding: 'utf8' }) === '', `${dir} must be ignored`);
 });

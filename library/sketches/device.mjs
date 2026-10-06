@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // A product window in space: a browser window swings in from edge-on over a sky, settles at
 // an angle and keeps turning gently, with small UI chips floating around it. The window holds a

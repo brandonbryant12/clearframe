@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { statSpec, expandStatProps } from '../fframes/stat.mjs';
+import { statSpec, expandStatProps } from '../film/stat.mjs';
 
 const base = { kicker: 'Inflation', value: 3.1, decimals: 1, suffix: '%', label: 'Consumer prices, last twelve months',
   change: { value: -0.6, suffix: ' pts', context: 'vs a year earlier', good: 'down' }, asOf: '2026-10-04', source: 'Illustrative data' };

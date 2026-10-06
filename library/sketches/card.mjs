@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // A trailer's type card, set like a poster: a short lead line in wide-tracked caps over one or
 // two huge words that fill the frame. The words sharpen out of blur, a light sweeps across

@@ -1,11 +1,11 @@
 ---
 name: clearframe-engine
-description: Author, validate and render ClearFrame storyboard.json projects with the scene engine (FFFrames selectable). Use for timing, native block props, importing speech, media assets, captions, diagnostics and delivery.
+description: Author, validate and render ClearFrame storyboard.json projects with the scene engine (Skia on Metal, the only renderer). Use for timing, native block props, importing speech, media assets, captions, diagnostics and delivery.
 ---
 
 # Engine contract
 
-Read `README.md`, `docs/style.md` and the schema at `schema/storyboard.schema.json`. The shared Node layer owns project loading, media generation, timing and audio. `fframes/production.mjs` prepares a version 2 block job and `scene/compile.mjs` the scene plan (`build/native/plan.json`); `scene/engine.mjs` runs the scene engine (default) or FFFrames (`--engine fframes`, `CLEARFRAME_ENGINE`, or storyboard `engine`). Native GPU stages (`stage` block, beat `stage`, film `stages`): `skills/clearframe-scene/SKILL.md`.
+Read `README.md`, `docs/style.md` and the schema at `schema/storyboard.schema.json`. The shared Node layer owns project loading, media generation, timing and audio. `film/production.mjs` prepares a version 2 block job and `scene/compile.mjs` the scene plan (`build/native/plan.json`); `scene/engine.mjs` builds and runs the renderer. Native GPU stages (`stage` block, beat `stage`, film `stages`): `skills/clearframe-scene/SKILL.md`.
 
 `start DIR --idea ... --document ... --brand ...` gathers portable inputs (see `docs/intake.md`), writes evidence and brand briefs, copies assets unchanged and records hashes. It creates a starter for the directing agent to rewrite, not a finished film. No paid calls run.
 
@@ -50,12 +50,12 @@ Compilation uses one Cargo job and names the lock holder while waiting. Small ch
 
 Outputs: `build/native/job.json`, `build/native/plan.json`, prepared media/manifest, `build/timing.json`, SRT/VTT, review PNGs, `build/video.mp4` and its provenance JSON. Final rendering verifies dimensions, FPS, decoded frames and unchanged inputs. Original media remains in `assets/`. An explicit existing `--out` requires `--force` to overwrite.
 
-Custom visuals belong in the native catalog and Rust renderer; update validation, tests and examples together. There is no legacy JavaScript scene fallback. See the scene skill for native stages and film compositing and the FFFrames skill for block internals. Native diagnostics cannot replace visual, source and listening review.
+Custom visuals belong in the native catalog and Rust renderer; update validation, tests and examples together. There is no legacy JavaScript scene fallback. See the scene skill for native stages and film compositing and the blocks skill (`clearframe-blocks`) for block internals. Native diagnostics cannot replace visual, source and listening review.
 
 Creative starting points: `directions [research|podcast] [--json]`; `new/start/ingest --direction ID`. Explicit playbook/treatment/theme overrides win. Shared custom profiles and their references travel with the project. Audio import styles pictures while preserving recorded source/timing.
 
 Optional 3D assets: read `docs/sculptures.md`, inspect `sculptures`, then use `sculpture ID --draft --still --out NEW-DIR` before a draft motion pass or master. This is a separate Blender asset pass; normal rendering remains native (approved clips also play as stage `video` elements). Keep factual text editable, retain exact source/scene receipts, and reuse the approved clip for copy revisions. Review motion, contact and portrait framing before inclusion.
 
-Native dimensional metrics use `canvas.props.kpi` (`pedestal`, `comparison`, `rail`, `seesaw`, `stack`), expanded by `fframes/kpis.mjs` into existing native primitives. Values, source, shared scale and bounded `none|reveal|stagger|emphasis` motion remain authored data. Headline values may be signed; other forms require nonnegative values. Rails and stacks require a positive total; seesaws require two comparable values and express qualitative balance. Changing figures never invokes Blender. See `docs/kpi-direction.md` and `examples/dimensional-kpis/`.
+Native dimensional metrics use `canvas.props.kpi` (`pedestal`, `comparison`, `rail`, `seesaw`, `stack`), expanded by `film/kpis.mjs` into existing native primitives. Values, source, shared scale and bounded `none|reveal|stagger|emphasis` motion remain authored data. Headline values may be signed; other forms require nonnegative values. Rails and stacks require a positive total; seesaws require two comparable values and express qualitative balance. Changing figures never invokes Blender. See `docs/kpi-direction.md` and `examples/dimensional-kpis/`.
 
 For educational video, `canvas.props.teaching` separates question and answer phases with native type and an explanation. Use `choice` or `gap`, readable holds and the source contract in `docs/teaching-sequences.md`. Optional quiz/gap sculptures are one-way clips: retain an unrevealed question poster, align the selected tile with the correct answer, then play the answer reveal once. Review an encoded question frame to ensure it does not leak the answer.

@@ -7,16 +7,16 @@ import { writeJSON } from './lib/util.mjs';
 import { startRun, finishRun } from './lib/runlog.mjs';
 import { parseTime } from './lib/notes.mjs';
 import { REVIEW, reviewCommand } from './lib/review-cli.mjs';
-import { BLOCKS, THEMES, THEME_NOTES, MOTIONS, TRANSITIONS, BACKDROPS, markdownCatalog } from '../fframes/catalog.mjs';
-import { playbooks, scaffold, writeGallery } from '../fframes/playbooks.mjs';
-import { ICONS, ICON_SOURCE } from '../fframes/icons.mjs';
-import { sketches, sketch, sketchByName } from '../fframes/sketches.mjs';
-import { treatments } from '../fframes/treatments.mjs';
-import { directions, directionOptions, directionMarkdown, directionRefs } from '../fframes/directions.mjs';
-import { useProject, types } from '../fframes/library.mjs';
-import * as native from '../fframes/production.mjs';
+import { BLOCKS, THEMES, THEME_NOTES, MOTIONS, TRANSITIONS, BACKDROPS, markdownCatalog } from '../film/catalog.mjs';
+import { playbooks, scaffold, writeGallery } from '../film/playbooks.mjs';
+import { ICONS, ICON_SOURCE } from '../film/icons.mjs';
+import { sketches, sketch, sketchByName } from '../film/sketches.mjs';
+import { treatments } from '../film/treatments.mjs';
+import { directions, directionOptions, directionMarkdown, directionRefs } from '../film/directions.mjs';
+import { useProject, types } from '../film/library.mjs';
+import * as native from '../film/production.mjs';
 
-const HELP = `ClearFrame — FFFrames motion graphics
+const HELP = `ClearFrame — motion graphics
 
   new <dir> [--direction ID] [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical] [--seed N|random]
   start <dir> [--idea text] [--document report.md ...] [--brand brand.json] [--audience text] [--takeaway text]
@@ -41,7 +41,7 @@ const HELP = `ClearFrame — FFFrames motion graphics
   motions [--json]                    presets, entrances, exits and backdrops
   icons [--json]                      95 bundled Tabler icons and provenance
   sketch [name] [--vertical]          canvas starting compositions (route, orbit, pipeline…) as JSON
-  doctor | build [--all]              native dependencies; compile the scene engine (--all: and FFFrames)
+  doctor | build                      tools and disk headroom; compile the renderer
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]
   viewer [folders…] [--serve] [--port 4317] [--out build/viewer] [--no-render]   one HTML page: films, versions, lens, timeline, notes, building blocks
   plan <dir>                          approximate generation cost and cache state
@@ -93,8 +93,8 @@ Review and edit (docs/editing.md; state in DIR/review/)
 Library: palettes, treatments, sketches and playbooks are files in library/ (see library/README.md).
 A project's own library/ overrides them by id; --library DIR (or CLEARFRAME_LIBRARY) adds a shared one.
 
-The scene engine renders (docs/scene-engine.md); --engine fframes uses the FFFrames renderer instead
-(films with native stages need the scene engine). build [--all] compiles it. Preview produces a review MP4.
+The renderer is scene/native (Skia on Metal; docs/scene-engine.md); build compiles it when its sources
+change, and every render command does so too. Preview produces a review MP4.
 Draft permits estimated timing; --scale 0.25–1 reduces review resolution only (default 1).
 Rough (--rough, a draft for first review) also renders declared placeholders (a beat's "placeholder", or a
 generated asset not paid for yet) as labelled slates, and canvas/art elements marked "unfinished" as drawn.
@@ -106,7 +106,6 @@ Paid generation needs GEMINI_API_KEY; rendering and word-file imports are free.
 async function main() {
   const [cmd, ...args] = process.argv.slice(2);
   const strings = [
-    'engine',
     'duration',
     'scale',
     'idea',
@@ -174,7 +173,6 @@ async function main() {
     'checkpoint',
   ];
   const booleans = [
-    'all',
     'still',
     'draft',
     'force',
@@ -208,12 +206,6 @@ async function main() {
     ]),
   });
   if (!cmd || cmd === 'help' || o.help) return console.log(HELP);
-  // --engine fframes draws with the FFFrames renderer (comparison and recovery); scene is the default.
-  if (o.engine) {
-    const { ENGINES } = await import('../scene/engine.mjs');
-    if (!ENGINES.includes(o.engine)) throw new Error(`--engine must be ${ENGINES.join(' or ')}`);
-    process.env.CLEARFRAME_ENGINE = o.engine;
-  }
   // --library DIR layers a shared library (brand kit, team templates) like CLEARFRAME_LIBRARY.
   if (o.library) {
     process.env.CLEARFRAME_LIBRARY = [process.env.CLEARFRAME_LIBRARY, path.resolve(o.library)]
@@ -242,7 +234,7 @@ async function main() {
   };
   if (opts.scale != null) {
     if (!['render', 'preview', 'draft', 'pipeline'].includes(cmd)) throw new Error('--scale is only supported by render, preview, draft and pipeline');
-    const { renderGeometry } = await import('../fframes/render-geometry.mjs');
+    const { renderGeometry } = await import('../film/render-geometry.mjs');
     renderGeometry({ width: 1920, height: 1080 }, { scale: opts.scale, draft: o.draft || ['preview', 'draft'].includes(cmd) });
   }
   if (opts.budget != null && opts.budget < 0) throw new Error('budget must be nonnegative');
@@ -281,7 +273,7 @@ async function main() {
       `${report.title}: ${report.status} in ${report.seconds.toFixed(1)}s. Assets and receipt: ${path.resolve(o.out)}`);
   }
   if (cmd === 'muse') {
-    const { muse, museMarkdown } = await import('../fframes/muse.mjs');
+    const { muse, museMarkdown } = await import('../film/muse.mjs');
     const m = muse(opts.seed ?? Math.floor(Math.random() * 100000), { dark: !o.light });
     return console.log(o.json ? JSON.stringify(m, null, 2) : museMarkdown(m));
   }
@@ -435,10 +427,7 @@ async function main() {
     return;
   }
   if (cmd === 'build') {
-    const { buildEngine, engineFor } = await import('../scene/engine.mjs');
-    if (o.all) return console.log([await buildEngine('scene'), await native.buildNative(opts)].join('\n'));
-    const engine = engineFor();
-    return console.log(engine === 'fframes' ? await native.buildNative(opts) : await buildEngine(engine));
+    return console.log(await native.buildScene(opts));
   }
   if (cmd === 'viewer') {
     const { buildViewer, serveViewer } = await import('./lib/viewer.mjs');
@@ -458,14 +447,14 @@ async function main() {
   }
   if (cmd === 'ingest') {
     const { ingestMarkdown, ingestRecording } = await import('./lib/ingest.mjs');
-    const { vendor } = await import('../fframes/library.mjs');
-    const { applyTreatment, directionTemplate, treatmentById } = await import('../fframes/treatments.mjs');
+    const { vendor } = await import('../film/library.mjs');
+    const { applyTreatment, directionTemplate, treatmentById } = await import('../film/treatments.mjs');
     const chosen = directionOptions(opts);
     if (chosen.treatment && !treatmentById(chosen.treatment)) throw new Error(`Unknown treatment ${chosen.treatment}`);
     const dir = path.resolve(positionals[0] ?? '.');
     startRun(dir, cmd, args);
     if (o.markdown) {
-      const { storyboardFor, artSketches } = await import('../fframes/playbooks.mjs');
+      const { storyboardFor, artSketches } = await import('../film/playbooks.mjs');
       // A film look starts from its genre's shots (cinematic → cinematic-explainer), not a deck.
       const playbook = chosen.playbook ?? (chosen.treatment && treatmentById(chosen.treatment)?.playbook) ?? 'research-digest';
       const r = ingestMarkdown(dir, o.markdown, {

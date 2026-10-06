@@ -1,6 +1,6 @@
 # Native graphics and occasional Omni inserts
 
-Use `gemini-omni-1.1-flash` for a brief establishing shot, atmosphere or an otherwise difficult visual. Keep the story's facts, labels, numbers, charts and speech-following typography in native FFFrames blocks. The default review threshold is 20% generated footage, configurable with `continuity.maxGeneratedShare`.
+Use `gemini-omni-1.1-flash` for a brief establishing shot, atmosphere or an otherwise difficult visual. Keep the story's facts, labels, numbers, charts and speech-following typography in native blocks. The default review threshold is 20% generated footage, configurable with `continuity.maxGeneratedShare`.
 
 ```json
 {

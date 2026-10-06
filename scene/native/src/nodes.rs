@@ -8,29 +8,45 @@
 //!
 //! Elements can be attached to other elements by id (`attach: {to, dx, dy}`, a callout riding a
 //! moving actor) and ride another element's route (`along: {path: id}`, a packet on a wire).
+use crate::design::{self, Palette};
 use crate::fonts;
 use crate::geometry::*;
 use crate::materials;
 use crate::media::Media;
+use crate::motion::{self, Enter, MotionStyle};
 use crate::paint::{self, Fill};
-use clearframe_native::design::{self, Palette};
-use clearframe_native::motion::{self, Enter, MotionStyle};
-use clearframe_native::text::{self, Font, Style};
-use fframes_skia_renderer::skia_safe::{
+use crate::text::{self, Font, Style};
+use serde_json::Value;
+use skia_safe::{
     self as sk, BlendMode, Canvas, ClipOp, Matrix, Paint, PaintCap, PaintJoin, PaintStyle, Point, RRect, Rect,
     SamplingOptions, TileMode, color_filters, dash_path_effect, image_filters,
 };
-use serde_json::Value;
 use std::collections::HashMap;
 use std::f32::consts::TAU;
 use std::sync::Arc;
 
 pub const TYPES: &[&str] = &[
-    "rect", "circle", "ellipse", "line", "path", "poly", "text", "icon", "image", "group", "particles", "spotlight", "video",
-    "shader", "code", "connector",
+    "rect",
+    "circle",
+    "ellipse",
+    "line",
+    "path",
+    "poly",
+    "text",
+    "icon",
+    "image",
+    "group",
+    "particles",
+    "spotlight",
+    "video",
+    "shader",
+    "code",
+    "connector",
 ];
-pub const ENTERS: &[&str] =
-    &["fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type", "scramble", "blur", "none"];
+pub const ENTERS: &[&str] = &[
+    "fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type",
+    "scramble", "blur", "none",
+];
 pub const EXITS: &[&str] = &["fade", "shrink", "fall", "lift", "undraw", "wipe", "blur", "none"];
 pub const LOOPS: &[&str] = &["spin", "pulse", "float", "sway", "orbit", "dash", "blink", "rock"];
 /// Canvas features the native evaluator does not draw. A plan using them is refused with the
@@ -67,7 +83,8 @@ pub fn validate(elements: &[Value], depth: usize, count: &mut usize) -> Result<(
             return Err(format!("{name}: unknown native element type {kind:?}"));
         }
         for key in BLOCK_ONLY {
-            if el.get(*key).is_some() || (s(el, "loop") == *key) || el.get("loop").is_some_and(|l| s(l, "type") == *key) {
+            if el.get(*key).is_some() || (s(el, "loop") == *key) || el.get("loop").is_some_and(|l| s(l, "type") == *key)
+            {
                 return Err(format!("{name}: `{key}` is drawn by the canvas block, not native layers"));
             }
         }
@@ -117,8 +134,10 @@ pub fn validate(elements: &[Value], depth: usize, count: &mut usize) -> Result<(
         }
         match kind {
             "path" if path_info(s(el, "d")).is_none() => return Err(format!("{name}: path data could not be parsed")),
-            "poly" if !(2..=2000).contains(&points(el).len()) => return Err(format!("{name}: poly needs 2–2000 points")),
-            "icon" if !clearframe_native::icons::supported(s(el, "name")) => {
+            "poly" if !(2..=2000).contains(&points(el).len()) => {
+                return Err(format!("{name}: poly needs 2–2000 points"));
+            }
+            "icon" if !crate::icons::supported(s(el, "name")) => {
                 return Err(format!("{name}: unknown icon {:?}", s(el, "name")));
             }
             "image" | "video" if s(el, "file").is_empty() => return Err(format!("{name}: needs a prepared file")),
@@ -266,10 +285,8 @@ impl Camera {
         }
         let p = (1.0 + z) / dz;
         let depth = 1.0 / (1.0 + z.max(-0.85));
-        let target = (
-            self.look0.0 + depth * (self.look.0 - self.look0.0),
-            self.look0.1 + depth * (self.look.1 - self.look0.1),
-        );
+        let target =
+            (self.look0.0 + depth * (self.look.0 - self.look0.0), self.look0.1 + depth * (self.look.1 - self.look0.1));
         let mut m = Matrix::translate((self.view.0 / 2.0, self.view.1 / 2.0));
         m.pre_rotate(self.rotate, None);
         m.pre_scale((self.zoom * p, self.zoom * p), None);
@@ -347,7 +364,7 @@ fn keyed(el: &Value, now: f32) -> [f32; 8] {
         if now < start {
             break;
         }
-        let dur = f(key, "dur", clearframe_native::constants::get().canvas.key);
+        let dur = f(key, "dur", crate::constants::get().canvas.key);
         let k = if dur <= 1e-3 { 1.0 } else { ease(s(key, "ease"), (now - start) / dur) };
         for (i, name) in KEYS.iter().enumerate() {
             if let Some(v) = num(key, name) {
@@ -369,9 +386,12 @@ fn keyed_tilt(el: &Value, now: f32) -> (f32, f32) {
         if now < start {
             break;
         }
-        let dur = f(key, "dur", clearframe_native::constants::get().canvas.key);
+        let dur = f(key, "dur", crate::constants::get().canvas.key);
         let k = if dur <= 1e-3 { 1.0 } else { ease(s(key, "ease"), (now - start) / dur) };
-        t = (num(key, "tiltX").map_or(t.0, |v| t.0 + (v - t.0) * k), num(key, "tiltY").map_or(t.1, |v| t.1 + (v - t.1) * k));
+        t = (
+            num(key, "tiltX").map_or(t.0, |v| t.0 + (v - t.0) * k),
+            num(key, "tiltY").map_or(t.1, |v| t.1 + (v - t.1) * k),
+        );
     }
     t
 }
@@ -380,7 +400,12 @@ fn measure_el(el: &Value) -> f32 {
     let size = f(el, "size", 48.0);
     let value = if el.get("count").is_some() {
         let c = &el["count"];
-        clearframe_native::format_number(f(c, "to", 0.0) as f64, f(c, "decimals", 0.0) as usize, s(c, "prefix"), s(c, "suffix"))
+        crate::numbers::format_number(
+            f(c, "to", 0.0) as f64,
+            f(c, "decimals", 0.0) as usize,
+            s(c, "prefix"),
+            s(c, "suffix"),
+        )
     } else if flag(el, "upper") {
         s(el, "text").to_uppercase()
     } else {
@@ -419,7 +444,10 @@ fn draw_list(canvas: &Canvas, scope: &mut Scope, list: &[Value], inherited: f32,
 fn connector_path(scope: &Scope, el: &Value) -> Option<Value> {
     let offset = |key: &str| {
         let a = arr(el, key);
-        (a.first().and_then(Value::as_f64).unwrap_or(0.0) as f32, a.get(1).and_then(Value::as_f64).unwrap_or(0.0) as f32)
+        (
+            a.first().and_then(Value::as_f64).unwrap_or(0.0) as f32,
+            a.get(1).and_then(Value::as_f64).unwrap_or(0.0) as f32,
+        )
     };
     let (a, b) = (scope.origins.get(s(el, "from"))?, scope.origins.get(s(el, "to"))?);
     let (fo, to) = (offset("fromOffset"), offset("toOffset"));
@@ -477,7 +505,7 @@ fn keyed_paint(scope: &Scope, el: &Value, now: f32) -> Option<Value> {
                 break;
             }
             let Some(target) = key.get(field).and_then(Value::as_str) else { continue };
-            let dur = f(key, "dur", clearframe_native::constants::get().canvas.key);
+            let dur = f(key, "dur", crate::constants::get().canvas.key);
             let k = if dur <= 1e-3 { 1.0 } else { ease(s(key, "ease"), (now - start) / dur) };
             let to = paint::token(&scope.palette, target, fallback);
             color = match (color, to) {
@@ -547,7 +575,7 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
         },
         other => other,
     };
-    let c = &clearframe_native::constants::get().canvas;
+    let c = &crate::constants::get().canvas;
     let text_len = s(el, "text").chars().count() as f32;
     let default_dur = match enter {
         "draw" => c.draw,
@@ -592,7 +620,16 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
             "grow-y" => (bx + bw / 2.0, by + bh),
             _ => (bx + bw / 2.0, by + bh / 2.0),
         });
-    let mut pose = Pose { dx: 0.0, dy: 0.0, sx: 1.0, sy: 1.0, rotate: f(el, "rotate", 0.0), alpha: f(el, "opacity", 1.0), tx: 0.0, ty: 0.0 };
+    let mut pose = Pose {
+        dx: 0.0,
+        dy: 0.0,
+        sx: 1.0,
+        sy: 1.0,
+        rotate: f(el, "rotate", 0.0),
+        alpha: f(el, "opacity", 1.0),
+        tx: 0.0,
+        ty: 0.0,
+    };
     (pose.tx, pose.ty) = keyed_tilt(el, now);
     let distance = scope.motion.distance(f(el, "dist", 48.0));
     match enter {
@@ -645,9 +682,14 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
                 if let Some(contour) = info.contours.iter().find(|c| c.len() > 1) {
                     let start = f(route, "at", at);
                     let span = f(route, "dur", c.along).max(0.001);
-                    let lap = if flag(route, "loop") && now > start { ((now - start) / span).fract() } else { (now - start) / span };
+                    let lap = if flag(route, "loop") && now > start {
+                        ((now - start) / span).fract()
+                    } else {
+                        (now - start) / span
+                    };
                     let k = ease(if s(route, "ease").is_empty() { "inOut" } else { s(route, "ease") }, lap);
-                    let k = num(route, "from").unwrap_or(0.0) + (num(route, "to").unwrap_or(1.0) - num(route, "from").unwrap_or(0.0)) * k;
+                    let k = num(route, "from").unwrap_or(0.0)
+                        + (num(route, "to").unwrap_or(1.0) - num(route, "from").unwrap_or(0.0)) * k;
                     if let Some(((px, py), angle)) = along(contour, k) {
                         pose.dx += px - origin.0;
                         pose.dy += py - origin.1;
@@ -671,7 +713,11 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
                 pose.dx += tx + f(a, "dx", 0.0) - origin.0;
                 pose.dy += ty + f(a, "dy", 0.0) - origin.1;
             }
-            None => scope.errors.push(format!("{}: attach names {:?}, which is not drawn earlier in this layer", s(el, "id"), s(a, "to"))),
+            None => scope.errors.push(format!(
+                "{}: attach names {:?}, which is not drawn earlier in this layer",
+                s(el, "id"),
+                s(a, "to")
+            )),
         }
     }
     let mut dash_shift = 0.0;
@@ -786,7 +832,10 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
         canvas.rotate(pose.rotate, None);
         let (a, b) = (pose.tx.to_radians(), pose.ty.to_radians());
         canvas.concat(&Matrix::new_all(b.cos(), 0.0, 0.0, a.sin() * b.sin(), a.cos(), 0.0, 0.0, 0.0, 1.0));
-        canvas.scale((if pose.sx.abs() < 1e-4 { 1e-4 } else { pose.sx }, if pose.sy.abs() < 1e-4 { 1e-4 } else { pose.sy }));
+        canvas.scale((
+            if pose.sx.abs() < 1e-4 { 1e-4 } else { pose.sx },
+            if pose.sy.abs() < 1e-4 { 1e-4 } else { pose.sy },
+        ));
         canvas.translate((-ox, -oy));
     }
     // One layer carries opacity, blur, glow, shadow and blend so overlapping parts of the
@@ -845,7 +894,9 @@ fn echoed(canvas: &Canvas, scope: &mut Scope, el: &Value, echo: &Value, at: f32,
     let lag = f(echo, "lag", 0.0).max(0.0);
     let fade = f(echo, "fade", 0.72).clamp(0.0, 1.0);
     let step = echo.get("step");
-    let (sx, sy, sr, ss) = step.map_or((0.0, 0.0, 0.0, 0.0), |st| (f(st, "x", 0.0), f(st, "y", 0.0), f(st, "rotate", 0.0), f(st, "scale", 0.0)));
+    let (sx, sy, sr, ss) = step.map_or((0.0, 0.0, 0.0, 0.0), |st| {
+        (f(st, "x", 0.0), f(st, "y", 0.0), f(st, "rotate", 0.0), f(st, "scale", 0.0))
+    });
     let to = echo.get("to").and_then(Value::as_str).and_then(|t| paint::token(&scope.palette, t, "accent"));
     let (bx, by, bw, bh) = element_bounds(el);
     let (ox, oy) = (bx + bw / 2.0, by + bh / 2.0);
@@ -907,7 +958,9 @@ fn effects_filter(scope: &Scope, el: &Value, blur: f32) -> Option<sk::ImageFilte
     if blur > 0.05 {
         filter = image_filters::blur((blur, blur), TileMode::Decal, None, None);
     }
-    let opt = |v: Option<&Value>, key: &str, d: f32| v.and_then(|v| v.get(key)).and_then(Value::as_f64).map_or(d, |x| x as f32);
+    let opt = |v: Option<&Value>, key: &str, d: f32| {
+        v.and_then(|v| v.get(key)).and_then(Value::as_f64).map_or(d, |x| x as f32)
+    };
     if let Some(sh) = shadow {
         let color = scope.color(sh.get("color"), "#000000").unwrap_or_else(|| "#000000".into());
         filter = image_filters::drop_shadow(
@@ -929,7 +982,8 @@ fn effects_filter(scope: &Scope, el: &Value, blur: f32) -> Option<sk::ImageFilte
                 let tint = scope.color(Some(c), "accent").unwrap_or_else(|| scope.palette.accent.clone());
                 let [r, gr, b] = design::parse(&tint).unwrap_or([1.0, 1.0, 1.0]);
                 // Alpha of the source, coloured with the tint.
-                let m = [0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 0.0, 0.0, gr, 0.0, 0.0, 0.0, 0.0, b, 0.0, 0.0, 0.0, alpha, 0.0];
+                let m =
+                    [0.0, 0.0, 0.0, 0.0, r, 0.0, 0.0, 0.0, 0.0, gr, 0.0, 0.0, 0.0, 0.0, b, 0.0, 0.0, 0.0, alpha, 0.0];
                 image_filters::color_filter(
                     color_filters::matrix_row_major(&m, None),
                     image_filters::blur((radius, radius), TileMode::Decal, source.clone(), None),
@@ -937,7 +991,10 @@ fn effects_filter(scope: &Scope, el: &Value, blur: f32) -> Option<sk::ImageFilte
                 )
             }
             None => {
-                let m = [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, alpha, 0.0];
+                let m = [
+                    1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, alpha,
+                    0.0,
+                ];
                 image_filters::color_filter(
                     color_filters::matrix_row_major(&m, None),
                     image_filters::blur((radius, radius), TileMode::Decal, source.clone(), None),
@@ -950,7 +1007,14 @@ fn effects_filter(scope: &Scope, el: &Value, blur: f32) -> Option<sk::ImageFilte
     filter
 }
 
-fn stroke_paint(color: &Fill, width: f32, cap: &str, join: &str, bounds: (f32, f32, f32, f32), alpha: f32) -> Option<Paint> {
+fn stroke_paint(
+    color: &Fill,
+    width: f32,
+    cap: &str,
+    join: &str,
+    bounds: (f32, f32, f32, f32),
+    alpha: f32,
+) -> Option<Paint> {
     let mut p = Paint::default();
     p.set_anti_alias(true);
     if !color.apply(&mut p, bounds, alpha) {
@@ -971,7 +1035,13 @@ fn stroke_paint(color: &Fill, width: f32, cap: &str, join: &str, bounds: (f32, f
     Some(p)
 }
 
-fn material_params(scope: &Scope, el: &Value, base: Option<&str>, bounds: (f32, f32, f32, f32), now: f32) -> Option<(String, materials::Params)> {
+fn material_params(
+    scope: &Scope,
+    el: &Value,
+    base: Option<&str>,
+    bounds: (f32, f32, f32, f32),
+    now: f32,
+) -> Option<(String, materials::Params)> {
     let m = el.get("material")?;
     let name = m.as_str().or_else(|| m.get("name").and_then(Value::as_str))?.to_owned();
     let token = |i: usize, fallback: &str| -> [f32; 4] {
@@ -999,7 +1069,17 @@ fn material_params(scope: &Scope, el: &Value, base: Option<&str>, bounds: (f32, 
 }
 
 #[allow(clippy::too_many_arguments)]
-fn shape(canvas: &Canvas, scope: &mut Scope, el: &Value, draw: f32, dash_shift: f32, reveal: f32, local: f32, now: f32, alpha: f32) {
+fn shape(
+    canvas: &Canvas,
+    scope: &mut Scope,
+    el: &Value,
+    draw: f32,
+    dash_shift: f32,
+    reveal: f32,
+    local: f32,
+    now: f32,
+    alpha: f32,
+) {
     let kind = s(el, "type");
     let filled_default = if matches!(kind, "line" | "path" | "poly") { "none" } else { "accent" };
     let mut fill = scope.fill(el.get("fill"), filled_default);
@@ -1043,18 +1123,16 @@ fn shape(canvas: &Canvas, scope: &mut Scope, el: &Value, draw: f32, dash_shift: 
         fill.apply(&mut fill_paint, bounds, alpha * fill_alpha)
     };
     let stroke_color = if has_stroke { stroke.clone() } else { fill.clone() };
-    let mut stroke_p = if !stroke.is_none() || drawing {
-        stroke_paint(&stroke_color, width, cap, join, bounds, alpha)
-    } else {
-        None
-    };
+    let mut stroke_p =
+        if !stroke.is_none() || drawing { stroke_paint(&stroke_color, width, cap, join, bounds, alpha) } else { None };
     if let (Some(p), Some(effect)) = (stroke_p.as_mut(), dash_effect) {
         p.set_path_effect(effect);
     }
     match kind {
         "rect" => {
             let r = f(el, "r", 0.0);
-            let rect = Rect::from_xywh(f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0).max(0.0), f(el, "h", 0.0).max(0.0));
+            let rect =
+                Rect::from_xywh(f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0).max(0.0), f(el, "h", 0.0).max(0.0));
             let rr = RRect::new_rect_xy(rect, r, r);
             if has_fill {
                 canvas.draw_rrect(rr, &fill_paint);
@@ -1065,7 +1143,11 @@ fn shape(canvas: &Canvas, scope: &mut Scope, el: &Value, draw: f32, dash_shift: 
         }
         "circle" | "ellipse" => {
             let (cx, cy) = (f(el, "cx", 0.0), f(el, "cy", 0.0));
-            let (rx, ry) = if kind == "circle" { (f(el, "r", 0.0), f(el, "r", 0.0)) } else { (f(el, "rx", 0.0), f(el, "ry", 0.0)) };
+            let (rx, ry) = if kind == "circle" {
+                (f(el, "r", 0.0), f(el, "r", 0.0))
+            } else {
+                (f(el, "rx", 0.0), f(el, "ry", 0.0))
+            };
             let oval = Rect::from_xywh(cx - rx.max(0.0), cy - ry.max(0.0), 2.0 * rx.max(0.0), 2.0 * ry.max(0.0));
             if has_fill {
                 canvas.draw_oval(oval, &fill_paint);
@@ -1128,7 +1210,7 @@ fn shape(canvas: &Canvas, scope: &mut Scope, el: &Value, draw: f32, dash_shift: 
             let size = f(el, "size", 64.0);
             let color = scope.fill(el.get("stroke").or(el.get("fill")), "accent");
             if let (Some(paths), Some(mut p)) =
-                (clearframe_native::icons::paths(s(el, "name")), stroke_paint(&color, 2.0, "round", "round", bounds, alpha))
+                (crate::icons::paths(s(el, "name")), stroke_paint(&color, 2.0, "round", "round", bounds, alpha))
             {
                 canvas.save();
                 canvas.translate((f(el, "x", 0.0) - size / 2.0, f(el, "y", 0.0) - size / 2.0));
@@ -1149,7 +1231,8 @@ fn shape(canvas: &Canvas, scope: &mut Scope, el: &Value, draw: f32, dash_shift: 
         "video" => footage(canvas, scope, el, local, alpha),
         "shader" => {
             let r = f(el, "r", 0.0);
-            let rect = Rect::from_xywh(f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0).max(0.0), f(el, "h", 0.0).max(0.0));
+            let rect =
+                Rect::from_xywh(f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0).max(0.0), f(el, "h", 0.0).max(0.0));
             if has_fill {
                 canvas.draw_rrect(RRect::new_rect_xy(rect, r, r), &fill_paint);
             }
@@ -1162,7 +1245,11 @@ fn shape(canvas: &Canvas, scope: &mut Scope, el: &Value, draw: f32, dash_shift: 
             if el.get("cx").is_some() {
                 p.add_circle((f(el, "cx", 0.0), f(el, "cy", 0.0)), f(el, "r", f(el, "radius", 24.0)), None);
             } else {
-                p.add_rrect(RRect::new_rect_xy(Rect::from_xywh(x, y, w, h), f(el, "radius", 24.0), f(el, "radius", 24.0)), None, None);
+                p.add_rrect(
+                    RRect::new_rect_xy(Rect::from_xywh(x, y, w, h), f(el, "radius", 24.0), f(el, "radius", 24.0)),
+                    None,
+                    None,
+                );
             }
             let p = p.detach();
             let color = scope.fill(el.get("fill"), "bg");
@@ -1217,7 +1304,11 @@ fn shine(canvas: &Canvas, scope: &Scope, el: &Value, now: f32, settled: f32, (bx
     let cy = y0 + h0 / 2.0;
     let color = scope.color(sh.get("color"), "#ffffff").unwrap_or_else(|| "#ffffff".into());
     let a = f(sh, "opacity", 0.85).clamp(0.0, 1.0);
-    let colors = [paint::color(paint::hex(&color, 0.0)), paint::color(paint::hex(&color, a)), paint::color(paint::hex(&color, 0.0))];
+    let colors = [
+        paint::color(paint::hex(&color, 0.0)),
+        paint::color(paint::hex(&color, a)),
+        paint::color(paint::hex(&color, 0.0)),
+    ];
     let mut local = Matrix::new_identity();
     local.set_rotate(angle, Some(Point::new(cx, cy)));
     let shader = sk::gradient_shader::linear(
@@ -1236,7 +1327,16 @@ fn shine(canvas: &Canvas, scope: &Scope, el: &Value, now: f32, settled: f32, (bx
 }
 
 #[allow(clippy::too_many_arguments)]
-fn text_element(canvas: &Canvas, scope: &mut Scope, el: &Value, fill: &Fill, reveal: f32, local: f32, alpha: f32, material: Option<&(String, materials::Params)>) {
+fn text_element(
+    canvas: &Canvas,
+    scope: &mut Scope,
+    el: &Value,
+    fill: &Fill,
+    reveal: f32,
+    local: f32,
+    alpha: f32,
+    material: Option<&(String, materials::Params)>,
+) {
     let alpha = alpha * scope.words;
     if alpha <= 0.001 {
         return;
@@ -1248,8 +1348,13 @@ fn text_element(canvas: &Canvas, scope: &mut Scope, el: &Value, fill: &Fill, rev
     if let Some(count) = el.get("count") {
         let (from, to) = (f(count, "from", 0.0) as f64, f(count, "to", 0.0) as f64);
         let decimals = f(count, "decimals", 0.0) as usize;
-        let g = scope.motion.grow(local, f(count, "dur", clearframe_native::constants::get().canvas.count));
-        value = clearframe_native::format_number(from + (to - from) * g as f64, decimals, s(count, "prefix"), s(count, "suffix"));
+        let g = scope.motion.grow(local, f(count, "dur", crate::constants::get().canvas.count));
+        value = crate::numbers::format_number(
+            from + (to - from) * g as f64,
+            decimals,
+            s(count, "prefix"),
+            s(count, "suffix"),
+        );
     }
     if flag(el, "upper") {
         value = value.to_uppercase();
@@ -1295,7 +1400,14 @@ fn text_element(canvas: &Canvas, scope: &mut Scope, el: &Value, fill: &Fill, rev
     }
     let mut runs: Vec<(String, f32, f32, f32)> = vec![]; // text, left, baseline, width
     if let Some(width) = num(el, "width") {
-        let style = Style { font, size, leading: f(el, "leading", 1.15), tracking: f(el, "tracking", 0.0), upper: false, balance: true };
+        let style = Style {
+            font,
+            size,
+            leading: f(el, "leading", 1.15),
+            tracking: f(el, "tracking", 0.0),
+            upper: false,
+            balance: true,
+        };
         let max_h = f(el, "height", size * 8.0).max(size);
         let layout = match text::fit(&value, style, width.max(1.0), max_h) {
             Ok(l) => l,
@@ -1336,7 +1448,12 @@ fn text_element(canvas: &Canvas, scope: &mut Scope, el: &Value, fill: &Fill, rev
         let final_w = match el.get("count") {
             Some(c) => fonts::measure(
                 font,
-                &clearframe_native::format_number(f(c, "to", 0.0) as f64, f(c, "decimals", 0.0) as usize, s(c, "prefix"), s(c, "suffix")),
+                &crate::numbers::format_number(
+                    f(c, "to", 0.0) as f64,
+                    f(c, "decimals", 0.0) as usize,
+                    s(c, "prefix"),
+                    s(c, "suffix"),
+                ),
                 size,
                 tracking,
             )
@@ -1382,10 +1499,15 @@ fn treatment_filter(scope: &Scope, name: &str) -> Option<sk::ColorFilter> {
             // Luminance mapped from the palette's darkest colour to its accent (tint keeps more photo).
             let dark = if p.dark { rgb(&p.bg) } else { rgb(&p.ink) };
             let light = if name == "tint" { rgb(&p.surface) } else { rgb(&p.accent) };
-            let row = |i: usize| [(light[i] - dark[i]) * lr, (light[i] - dark[i]) * lg, (light[i] - dark[i]) * lb, 0.0, dark[i]];
+            let row = |i: usize| {
+                [(light[i] - dark[i]) * lr, (light[i] - dark[i]) * lg, (light[i] - dark[i]) * lb, 0.0, dark[i]]
+            };
             let (r, g, b) = (row(0), row(1), row(2));
             Some(color_filters::matrix_row_major(
-                &[r[0], r[1], r[2], r[3], r[4], g[0], g[1], g[2], g[3], g[4], b[0], b[1], b[2], b[3], b[4], 0.0, 0.0, 0.0, 1.0, 0.0],
+                &[
+                    r[0], r[1], r[2], r[3], r[4], g[0], g[1], g[2], g[3], g[4], b[0], b[1], b[2], b[3], b[4], 0.0, 0.0,
+                    0.0, 1.0, 0.0,
+                ],
                 None,
             ))
         }
@@ -1497,7 +1619,11 @@ fn particles(canvas: &Canvas, scope: &mut Scope, el: &Value, fill: &Fill, now: f
         "stream" => {
             // Particles flowing along a route element: a current, traffic, a signal.
             let Some(info) = el.get("path").and_then(Value::as_str).and_then(|id| scope.routes.get(id).cloned()) else {
-                scope.errors.push(format!("{}: stream path {:?} is not an earlier path element", s(el, "id"), s(el, "path")));
+                scope.errors.push(format!(
+                    "{}: stream path {:?} is not an earlier path element",
+                    s(el, "id"),
+                    s(el, "path")
+                ));
                 return;
             };
             let Some(contour) = info.contours.iter().find(|c| c.len() > 1) else { return };
@@ -1509,7 +1635,11 @@ fn particles(canvas: &Canvas, scope: &mut Scope, el: &Value, fill: &Fill, now: f
                 if let Some(((px, py), ang)) = along(contour, u) {
                     let off = (unit(i, 2) - 0.5) * 2.0 * jitter;
                     let edge = (u / 0.06).min((1.0 - u) / 0.06).min(1.0);
-                    push(Point::new(px - ang.sin() * off, py + ang.cos() * off), base * (0.5 + unit(i, 4)), edge * (0.5 + 0.5 * unit(i, 5)));
+                    push(
+                        Point::new(px - ang.sin() * off, py + ang.cos() * off),
+                        base * (0.5 + unit(i, 4)),
+                        edge * (0.5 + 0.5 * unit(i, 5)),
+                    );
                 }
             }
         }
@@ -1520,9 +1650,11 @@ fn particles(canvas: &Canvas, scope: &mut Scope, el: &Value, fill: &Fill, now: f
             for i in 0..count {
                 let (u, v) = (unit(i, 0), unit(i, 1));
                 let ph = unit(i, 3) * TAU;
-                let px = x + (u * w + flow * (t * 0.31 + ph).sin() + 0.6 * flow * (t * 0.17 + v * 6.0).cos()).rem_euclid(w);
+                let px =
+                    x + (u * w + flow * (t * 0.31 + ph).sin() + 0.6 * flow * (t * 0.17 + v * 6.0).cos()).rem_euclid(w);
                 let py = y + (v * h + flow * (t * 0.23 + ph * 1.7).cos() + 12.0 * t * (unit(i, 2) - 0.5)).rem_euclid(h);
-                let edge = ((px - x).min(x + w - px) / (w * 0.06)).min((py - y).min(y + h - py) / (h * 0.08)).clamp(0.0, 1.0);
+                let edge =
+                    ((px - x).min(x + w - px) / (w * 0.06)).min((py - y).min(y + h - py) / (h * 0.08)).clamp(0.0, 1.0);
                 push(Point::new(px, py), base * (0.5 + unit(i, 4)), edge * (0.35 + 0.65 * unit(i, 5)));
             }
         }
@@ -1548,7 +1680,11 @@ fn particles(canvas: &Canvas, scope: &mut Scope, el: &Value, fill: &Fill, now: f
                 let px = x + (unit(i, 0) * w + vx * v * t + sway * (t * 0.7 * v + phase).sin()).rem_euclid(w);
                 let py = y + (unit(i, 1) * h + vy * v * t).rem_euclid(h);
                 let edge = ((px - x).min(x + w - px) / (w * 0.08)).min((py - y).min(y + h - py) / (h * 0.12));
-                let flicker = if kind == "embers" { 0.45 + 0.55 * (t * 5.0 * v + phase).sin().abs() } else { 0.35 + 0.65 * unit(i, 5) };
+                let flicker = if kind == "embers" {
+                    0.45 + 0.55 * (t * 5.0 * v + phase).sin().abs()
+                } else {
+                    0.35 + 0.65 * unit(i, 5)
+                };
                 push(Point::new(px, py), size * (0.5 + unit(i, 4)), motion::clamp01(edge) * flicker);
             }
         }
@@ -1599,7 +1735,9 @@ fn code(canvas: &Canvas, scope: &mut Scope, el: &Value, now: f32, alpha: f32) {
     let cur = &steps[idx];
     let prev = if idx > 0 { &steps[idx - 1] } else { cur };
     let q = if idx > 0 { motion::in_out_cubic((now - f(cur, "at", 0.0)) / dur) } else { 1.0 };
-    let ids = |st: &Value, key: &str| -> Vec<String> { arr(st, key).iter().filter_map(Value::as_str).map(str::to_owned).collect() };
+    let ids = |st: &Value, key: &str| -> Vec<String> {
+        arr(st, key).iter().filter_map(Value::as_str).map(str::to_owned).collect()
+    };
     let shown_now = ids(cur, "show");
     let shown_before = ids(prev, "show");
     let added = ids(cur, "add");
@@ -1659,7 +1797,11 @@ fn code(canvas: &Canvas, scope: &mut Scope, el: &Value, now: f32, alpha: f32) {
         let is_added = added.iter().any(|i| i == id);
         let is_removed = removed.iter().any(|i| i == id) || after.is_none();
         let focused = focus.iter().any(|i| i == id);
-        let dim = if !focus.is_empty() && !focused && !is_added { 1.0 - 0.55 * q.max(if idx == 0 { 1.0 } else { 0.0 }) } else { 1.0 };
+        let dim = if !focus.is_empty() && !focused && !is_added {
+            1.0 - 0.55 * q.max(if idx == 0 { 1.0 } else { 0.0 })
+        } else {
+            1.0
+        };
         // Change washes fade over a second and a half after the edit lands.
         let wash = if is_added {
             Some((p.positive.clone(), (1.0 - motion::clamp01((since - dur) / 1.5)) * 0.85 + 0.15))
@@ -1720,7 +1862,12 @@ fn code(canvas: &Canvas, scope: &mut Scope, el: &Value, now: f32, alpha: f32) {
             let m = canvas.local_to_device_as_3x3();
             let r = m.map_rect(Rect::from_xywh(start_x, baseline - size * 0.74, cx - start_x, size * 0.98)).0;
             let scale = (m.scale_x().powi(2) + m.skew_y().powi(2)).sqrt();
-            scope.texts.push(TextMark { text: full, rect: r, size: size * scale / scope.pixel, alpha: alpha * a * dim });
+            scope.texts.push(TextMark {
+                text: full,
+                rect: r,
+                size: size * scale / scope.pixel,
+                alpha: alpha * a * dim,
+            });
         }
     }
     canvas.restore();

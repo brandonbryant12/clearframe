@@ -1,12 +1,16 @@
-//! Checks before a render: `inspect` (converter diagnostics of the block layers and native
-//! layer errors over sampled frames, in the FFFrames report format the Node `check` reads) and
-//! the frame audit (held type cut by the frame or the letterbox, printed over other type or a
+//! Checks before a render: `inspect` (frames that cannot be drawn and type cut by the canvas
+//! edge, over sampled frames, in the text report the Node `check` reads) and the frame audit (held type cut by the frame or the letterbox, printed over other type or a
 //! subject, or too small), judged over block type *and* native type together.
+use crate::audit::{self, Scan, Seen};
 use crate::compose::Engine;
+use crate::lens::Lens;
 use crate::nodes::TextMark;
-use clearframe_native::audit::{self, Scan, Seen};
-use clearframe_native::lens::Lens;
-use fframes::diagnostics::Severity;
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+enum Severity {
+    Warning,
+    Error,
+}
 
 struct Finding {
     severity: Severity,
@@ -43,7 +47,8 @@ fn scan(engine: &mut Engine, frame: usize) -> Result<Scan, String> {
     // Letterbox bars are drawn by the engine, not the block layer.
     let i = engine.film.beats.iter().rposition(|b| b.start_frame <= frame).unwrap_or(0);
     let lens = Lens::from(&engine.film.beats[i].lens);
-    let bar = crate::film::bar(&lens, engine.logical.0, engine.logical.1) * engine.plan.format.width as f32 / engine.logical.0;
+    let bar = crate::film::bar(&lens, engine.logical.0, engine.logical.1) * engine.plan.format.width as f32
+        / engine.logical.0;
     let (w, h) = (engine.plan.format.width as f32, engine.plan.format.height as f32);
     if bar > 0.25 {
         out.bars.push([0.0, 0.0, w, bar]);
@@ -84,7 +89,8 @@ pub fn audit(engine: &mut Engine) -> Result<serde_json::Value, String> {
     Ok(serde_json::Value::Array(report))
 }
 
-/// Sampled diagnostics in the FFFrames `inspect` text format. Returns (report, failed).
+/// Sampled diagnostics as text (one finding per line, `Error`/`Warning` first). Returns
+/// (report, failed).
 pub fn inspect(engine: &mut Engine, every_seconds: f32) -> Result<(String, bool), String> {
     let fps = engine.plan.format.fps as f32;
     let total = engine.plan.format.frames;
@@ -101,23 +107,20 @@ pub fn inspect(engine: &mut Engine, every_seconds: f32) -> Result<(String, bool)
     let mut findings: Vec<Finding> = vec![];
     for &frame in &frames {
         let i = engine.film.beats.iter().rposition(|b| b.start_frame <= frame).unwrap_or(0);
-        let (beat_id, local) = (engine.film.beats[i].id.clone(), frame - engine.film.beats[i].start_frame);
-        let native = engine.plan.layers.iter().any(|l| l.beat.as_deref() == Some(beat_id.as_str()));
+        let beat_id = engine.film.beats[i].id.clone();
         let mut found: Vec<(Severity, String, String)> = vec![];
-        for (sev, key, message) in engine.blocks_inspect(i, local, frame)? {
-            // A beat whose picture is native has an empty block layer by design.
-            if native && message == "frame is empty" {
-                continue;
-            }
-            found.push((sev, key, message));
-        }
         if let Err(e) = engine.render(frame) {
             for line in e.lines() {
-                found.push((Severity::Error, format!("native:{line}"), line.to_owned()));
+                found.push((Severity::Error, format!("render:{line}"), line.to_owned()));
             }
         }
         let marks = engine.marks.clone();
-        for s in seen(engine, &marks) {
+        let mut texts = seen(engine, &marks);
+        if let Ok((_, tree)) = engine.block_tree(frame) {
+            // Type under a clip or mask is cut on purpose (a reveal, a framed view).
+            texts.extend(audit::scan(&tree).texts.into_iter().filter(|t| !t.masked));
+        }
+        for s in texts {
             let [x, y, rw, rh] = s.rect;
             let inside = x >= -0.5 && y >= -0.5 && x + rw <= w + 0.5 && y + rh <= h + 0.5;
             let outside = x + rw < 0.0 || y + rh < 0.0 || x > w || y > h;
@@ -125,14 +128,14 @@ pub fn inspect(engine: &mut Engine, every_seconds: f32) -> Result<(String, bool)
                 found.push((
                     Severity::Warning,
                     format!("text_clipped:{}", s.text),
-                    format!("text \"{}\" is cut off by the canvas edge (x={x:.0} y={y:.0} w={rw:.0} h={rh:.0})", s.text),
+                    format!(
+                        "text \"{}\" is cut off by the canvas edge (x={x:.0} y={y:.0} w={rw:.0} h={rh:.0})",
+                        s.text
+                    ),
                 ));
             }
         }
         for (severity, key, message) in found {
-            if severity == Severity::Info {
-                continue;
-            }
             match findings.iter_mut().find(|f| f.key == key) {
                 Some(f) => {
                     f.last = frame;
@@ -141,7 +144,15 @@ pub fn inspect(engine: &mut Engine, every_seconds: f32) -> Result<(String, bool)
                         f.beats.push(beat_id.clone());
                     }
                 }
-                None => findings.push(Finding { severity, key, message, first: frame, last: frame, frames: 1, beats: vec![beat_id.clone()] }),
+                None => findings.push(Finding {
+                    severity,
+                    key,
+                    message,
+                    first: frame,
+                    last: frame,
+                    frames: 1,
+                    beats: vec![beat_id.clone()],
+                }),
             }
         }
     }

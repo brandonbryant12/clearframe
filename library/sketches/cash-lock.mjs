@@ -1,4 +1,4 @@
-import { body, tall, round } from '../../fframes/sketch-kit.mjs';
+import { body, tall, round } from '../../film/sketch-kit.mjs';
 
 export default {
   name: 'cash-lock',

@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { kpiSpec, expandKPIProps, seesawAngle } from '../fframes/kpis.mjs';
-import { normalizeElements, eachElement } from '../fframes/canvas.mjs';
-import { scaffold } from '../fframes/playbooks.mjs';
+import { kpiSpec, expandKPIProps, seesawAngle } from '../film/kpis.mjs';
+import { normalizeElements, eachElement } from '../film/canvas.mjs';
+import { scaffold } from '../film/playbooks.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
-import { createJob } from '../fframes/job.mjs';
+import { createJob } from '../film/job.mjs';
 
 const source = 'Illustrative test values';
 const frame = { width: 1920, height: 1080 };

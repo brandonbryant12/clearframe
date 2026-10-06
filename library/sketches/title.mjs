@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // The main title: one frame-filling word that arrives as a silhouette cut out of light opening
 // behind it, then fills with brushed metal and catches a sweep, over one tracked line of context.

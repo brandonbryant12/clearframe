@@ -1,5 +1,5 @@
 import test from'node:test';import assert from'node:assert/strict';import fs from'node:fs';
-import{allocationPlan,allocationClock,allocationState,allocationAmount}from'../fframes/allocation-data.mjs';import{allocationScene}from'../fframes/allocations.mjs';
+import{allocationPlan,allocationClock,allocationState,allocationAmount}from'../film/allocation-data.mjs';import{allocationScene}from'../film/allocations.mjs';
 const fixtures=JSON.parse(fs.readFileSync(new URL('../test/fixtures/allocation-inputs.json',import.meta.url))).cases.map(({id,...c})=>c);
 test('allocation preserves exact units, source availability and token identities through round trips',()=>{
  const original=structuredClone(fixtures[1]),m=allocationPlan(original);assert.deepEqual(original,fixtures[1]);assert.deepEqual(m.after.map(b=>b.count),[8,8,8]);assert.equal(m.totalMinorUnits,48);assert.equal(m.grossTransfers,8);assert.equal(m.changedOwners,4);assert.equal(new Set(m.tokens.map(t=>t.id)).size,24);assert.deepEqual(m.after.map(b=>b.shareLabel),['≈33.3%','≈33.3%','≈33.3%']);

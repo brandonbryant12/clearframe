@@ -2,7 +2,7 @@
 
 **Start here:** [`docs/guide.html`](docs/guide.html) is the guide to how ClearFrame works and how to prompt it for great films. Open it in a browser.
 
-Agent-directed motion graphics rendered natively by the **ClearFrame scene engine** (Skia on the GPU; `docs/scene-engine.md`). A film is one `storyboard.json`, recorded speech and optional media. The engine composites each frame from a compiled scene plan: native GPU stages (actors, packets, commit-grounded code, footage, materials, particles, camera and motion blur) and the blocks' type, numbers, charts, diagrams and captions (drawn by the FFFrames block code, which still renders whole films with `--engine fframes`); Google models supply speech, music, images and the occasional footage insert.
+Agent-directed motion graphics rendered natively by the **ClearFrame scene engine** (Skia on the GPU; `docs/scene-engine.md`). A film is one `storyboard.json`, recorded speech and optional media. The engine draws every frame itself from a compiled scene plan. It draws native GPU stages (actors, packets, commit-grounded code, footage, materials, particles, camera and motion blur) and the blocks' type, numbers, charts, diagrams and captions. Google models supply speech, music, images and the occasional footage insert.
 
 ![Every native block, paper palette](docs/media/blocks.jpg)
 
@@ -50,9 +50,9 @@ Agent-directed motion graphics rendered natively by the **ClearFrame scene engin
 
 ## Start
 
-Requires Node 20.10+, Rust 1.88+, FFmpeg/ffprobe and native codecs. Follow [native setup](fframes/SETUP.md) before the first build. There are no npm runtime dependencies and no browser.
+Requires Node 20.10+, Rust 1.88+ and FFmpeg/ffprobe with libx264. Follow [native setup](film/SETUP.md) before the first build. There are no npm runtime dependencies and no browser.
 
-Blender is an **optional separate installation** for preparing new 3D sculpture assets. The bundled clips, native KPI forms and teaching templates work without it. See [dimensional art setup](fframes/SETUP.md#optional-dimensional-art-setup) for executable checks, `BLENDER_BIN`, resource limits and replay commands using the included assets. No pip packages, addons or new npm dependencies are required.
+Blender is an **optional separate installation** for preparing new 3D sculpture assets. The bundled clips, native KPI forms and teaching templates work without it. See [dimensional art setup](film/SETUP.md#optional-dimensional-art-setup) for executable checks, `BLENDER_BIN`, resource limits and replay commands using the included assets. No pip packages, addons or new npm dependencies are required.
 
 ```sh
 node engine/cli.mjs doctor
@@ -67,7 +67,7 @@ node engine/cli.mjs render my-film --draft     # fast review MP4
 node engine/cli.mjs render my-film             # final encode
 ```
 
-Open the contact sheet, then watch and listen to the MP4. `build/video.mp4.json` records input hashes, renderer revision, encoder, audio provenance, output hash and color space. Drafts keep authored layout and frame rate, allow provisional voice timing, and use a fast encoder. Optional `--scale 0.5` writes a smaller review copy; final output stays at authored resolution.
+Open the contact sheet, then watch and listen to the MP4. `build/video.mp4.json` records input hashes, the renderer's source hash, encoder, audio provenance, output hash and color space. Drafts keep authored layout and frame rate, allow provisional voice timing, and use a fast encoder. Optional `--scale 0.5` writes a smaller review copy; final output stays at authored resolution.
 
 ## From an idea, document and brand
 
@@ -131,8 +131,8 @@ node engine/cli.mjs gallery build/gallery-ink --vertical --theme ink
 /Users/brandon/.local/bin/codex-heavy -- node scripts/verify-native.mjs build/native-verification-new
 ```
 
-`engine/` owns orchestration, timing, generation and audio. `fframes/catalog.mjs` owns block metadata, `validators.mjs` prop validation, `registry.mjs` per-block runtime rules, `constants.json` shared timing, `playbooks.mjs`/`treatments.mjs`/`sketches.mjs` starting points, `job.mjs` storyboard → job, `prepare.mjs`/`render.mjs` media and outputs (re-exported by `production.mjs`). The Rust renderer in `fframes/native/src/` is split into `text` (shaping and fitting), `design` (palettes, tones, backdrops, texture), `motion` (curves, exits), `constants` (shared timing), `scenes` (layout grid and helpers), `story`, `speech`, `compositor` (camera, plates, transitions), `canvas` (author-drawn elements), `charts`, `diagrams` and `media`. `npm run catalog:sync` regenerates the schema, block reference and recipes. Native compilation and the production pipeline take the machine-wide `codex-heavy` lock (one Cargo job); retain 20 GiB free for warm builds and allow 30 GiB for cold builds. `doctor` warns below 20 GiB. On other machines without the local gate, run `npm test` directly and serialize expensive work.
+`engine/` owns orchestration, timing, generation and audio. `film/catalog.mjs` owns block metadata, `validators.mjs` prop validation, `registry.mjs` per-block runtime rules, `constants.json` shared timing, `playbooks.mjs`/`treatments.mjs`/`sketches.mjs` starting points, `job.mjs` storyboard → job, `prepare.mjs`/`render.mjs` media and outputs (re-exported by `production.mjs`). The Rust renderer is `scene/native/src/`. Its frame order and film-level layers live in `compose`/`film`; its native stages in `nodes`; footage in `media`. The display list and filters are `draw`/`fx`. Shared modules are `text` (shaping and fitting), `design` (palettes, tones), `motion` (curves, exits), `numbers`, `icons`, `audit` and `constants` (shared timing). The blocks are in `blocks/`: `scenes` (layout grid and helpers), `story`, `speech`, `compositor` (camera, plates, transitions), `canvas` (author-drawn elements), `charts`, `diagrams` and `media`. `npm run catalog:sync` regenerates the schema, block reference and recipes. Native compilation and the production pipeline take the machine-wide `codex-heavy` lock (one Cargo job); the build refuses to start below 10 GiB free with a warm cache or 25 GiB cold, and `doctor` reports the same headroom. On other machines without the local gate, run `npm test` directly and serialize expensive work.
 
-Fonts are static instances derived from the pinned OFL Inter source (`fframes/native/tools/generate-fonts.py`); icons are 95 MIT Tabler outlines at a pinned revision (`fetch-icons.py`, `generate-icons.py`). The retired HTML/GSAP engine is preserved in [archive/](archive/README.md) for recovery only.
+Fonts are static instances derived from the pinned OFL Inter source (`scene/native/tools/generate-fonts.py`); icons are 95 MIT Tabler outlines at a pinned revision (`fetch-icons.py`, `generate-icons.py`). The retired HTML/GSAP engine is preserved in [archive/](archive/README.md) for recovery only.
 
-[Changelog](CHANGELOG.md) · [Verification evidence](docs/verification.md) · [GitHub research and reuse policy](docs/research/2026-github-video-patterns.md) · [Migration notes](docs/fframes-migration.md)
+[Changelog](CHANGELOG.md) · [Verification evidence](docs/verification.md) · [GitHub research and reuse policy](docs/research/2026-github-video-patterns.md) · [Migration history](docs/fframes-migration.md)

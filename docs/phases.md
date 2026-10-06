@@ -1,6 +1,6 @@
 # Dated phase trails
 
-`fframes/phase-data.mjs` validates paired x/y observations, and `fframes/phases.mjs` composes their dated trail as native canvas elements. This is the C15 cycle/phase concept expressed as a declared observation plot. It does not fit a cycle, predict a turn or infer causation.
+`film/phase-data.mjs` validates paired x/y observations, and `film/phases.mjs` composes their dated trail as native canvas elements. This is the C15 cycle/phase concept expressed as a declared observation plot. It does not fit a cycle, predict a turn or infer causation.
 
 Call `phaseTrail(input)` with a title, source, as-of date, x/y specifications, four quadrant labels, dated points, an existing `focusDate` and `smoothing: "none"`. Each axis declares a label including units, a prose definition, a finite increasing domain, three to six explicit ticks, an interior comparison reference and zero to six displayed decimals. Ticks include the domain endpoints and reference and must be exactly representable at the declared display precision. Linear positions preserve the supplied values; the helper never clips or independently normalizes data.
 

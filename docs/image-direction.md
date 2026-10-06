@@ -9,7 +9,7 @@ Use image generation to discover a picture: its silhouette, material, light, spa
 | A complex organic subject plus exact branded messaging | Hybrid: approved raster subject, native background, logo, typography and data. |
 | Exact logo, product UI, factual chart or named font | Use the approved source asset or supported native font. Never regenerate it to approximate identity. |
 
-The deterministic guarantee begins with the saved storyboard, assets, palette, fonts and renderer version. Re-running imagegen is not part of rendering. Palette paints resolve to specified colours; shading, blending, antialiasing and encoded video colour conversion produce derived pixel colours. If every flat region must equal a swatch, use opaque solid fills and verify the actual export. A native role such as `bold` selects a bundled font; it does not install an arbitrary named brand font. Check `fframes/assets/fonts/provenance.json` and the font roles in `docs/canvas.md` before promising an exact face.
+The deterministic guarantee begins with the saved storyboard, assets, palette, fonts and renderer version. Re-running imagegen is not part of rendering. Palette paints resolve to specified colours; shading, blending, antialiasing and encoded video colour conversion produce derived pixel colours. If every flat region must equal a swatch, use opaque solid fills and verify the actual export. A native role such as `bold` selects a bundled font; it does not install an arbitrary named brand font. Check `film/assets/fonts/provenance.json` and the font roles in `docs/canvas.md` before promising an exact face.
 
 ## A bounded two-pass exploration
 

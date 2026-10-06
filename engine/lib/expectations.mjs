@@ -1,5 +1,5 @@
 // Prepared expectations: publication-aware vintages, maturity curves and declared scenarios.
-import {utcDay} from '../../fframes/plot-data.mjs';
+import {utcDay} from '../../film/plot-data.mjs';
 export const EXPECTATIONS_VERSION=1;
 const check=(ok,message)=>{if(!ok)throw Error(`expectations: ${message}`);};
 const object=(v,keys,name)=>{check(v&&typeof v==='object'&&!Array.isArray(v),`${name} must be an object`);for(const k of Object.keys(v))check(keys.includes(k),`unknown ${name}.${k}`);};

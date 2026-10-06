@@ -1,4 +1,4 @@
-import { tall, round, body } from '../../fframes/sketch-kit.mjs';
+import { tall, round, body } from '../../film/sketch-kit.mjs';
 
 export default {
   name: 'versus',

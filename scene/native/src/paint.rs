@@ -1,9 +1,9 @@
 //! Palette tokens, colours and gradients as Skia paints. Tokens resolve exactly as the canvas
-//! block resolves them (`clearframe_native::design::Palette`), so a native layer and a block
+//! block resolves them (`crate::design::Palette`), so a native layer and a block
 //! drawn in the same film use the same colours.
-use clearframe_native::design::{self, Palette};
-use fframes_skia_renderer::skia_safe::{self as sk, Color4f, Point, Shader, TileMode, gradient_shader};
+use crate::design::{self, Palette};
 use serde_json::Value;
+use skia_safe::{self as sk, Color4f, Point, Shader, TileMode, gradient_shader};
 
 pub const TOKENS: &[&str] =
     &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "none"];

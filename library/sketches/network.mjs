@@ -1,4 +1,4 @@
-import { round, body } from '../../fframes/sketch-kit.mjs';
+import { round, body } from '../../film/sketch-kit.mjs';
 
 export default {
   name: 'network',

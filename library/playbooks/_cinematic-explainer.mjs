@@ -5,7 +5,7 @@
 // network under the streets to every tap. The ground is cut away, so the payoff (most of the
 // journey is out of sight) is visible when the camera pulls back over the whole of it.
 import fs from 'node:fs';
-import { smoothPath, rng } from '../../fframes/sketch-kit.mjs';
+import { smoothPath, rng } from '../../film/sketch-kit.mjs';
 
 const r = v => Math.round(v * 10) / 10;
 const rand = rng(12);

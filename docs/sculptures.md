@@ -1,6 +1,6 @@
 # Original 3D assets, prepared once
 
-ClearFrame can prepare an original Blender scene in the background, bake its motion and retain a video insert. FFFrames composes the final film, including its editable type, evidence, charts and sound. Blender is optional and is not involved in ordinary film rendering or copy revisions.
+ClearFrame can prepare an original Blender scene in the background, bake its motion and retain a video insert. The native renderer composes the final film, including its editable type, evidence, charts and sound. Blender is optional and is not involved in ordinary film rendering or copy revisions.
 
 The sixteen established recipes use independent geometry, materials and motion. Two additional chart-flight recipes are exploratory source candidates; they have not joined an accepted library kit. They are useful starting objects, not a finite set of permitted looks. Open the saved `.blend`, change a recipe, or author a new built-in recipe when the story calls for a different object. Palette and seed variations are refinements; a fresh direction should also change the silhouette, material, operation, camera or editorial role.
 

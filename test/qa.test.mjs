@@ -9,7 +9,7 @@ import { timeFindings, deliveryFindings, pictureDifference, qaProject } from '..
 import { findDrop, findTempo, cutsOnGrid } from '../engine/lib/beatmap.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
 import { ffmpeg } from '../engine/lib/util.mjs';
-import { validateVideo } from '../fframes/render.mjs';
+import { validateVideo } from '../film/render.mjs';
 
 test('qa finds a one-frame pop, a jumping world seam and a held stretch under the voice', () => {
   const fps = 30,

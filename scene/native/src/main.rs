@@ -9,19 +9,29 @@
 //!     bench [A..B]                 draw + readback timings without encoding
 //!     serve                        JSON lines on stdin: the engine stays open between requests
 #![allow(deprecated)] // skia-safe's gradient_shader/perlin_noise_shader modules, still supported in 0.153
+mod audit;
+mod blocks;
 mod compose;
+mod constants;
+mod design;
+mod draw;
 mod encode;
 mod film;
 mod fonts;
+mod fx;
 mod geometry;
 mod gpu;
+mod icons;
 mod inspect;
-mod legacy;
+mod lens;
 mod materials;
 mod media;
+mod motion;
 mod nodes;
+mod numbers;
 mod paint;
 mod plan;
+mod text;
 
 use compose::Engine;
 use std::io::{BufRead, Write};
@@ -48,7 +58,10 @@ fn parse() -> Result<Args, String> {
         }
     }
     if a.command.is_empty() {
-        return Err("usage: clearframe-scene --plan PLAN [--scale S] [--draft] info|frame|render|inspect|audit|bench|serve".into());
+        return Err(
+            "usage: clearframe-scene --plan PLAN [--scale S] [--draft] info|frame|render|inspect|audit|bench|serve"
+                .into(),
+        );
     }
     Ok(a)
 }
@@ -74,14 +87,16 @@ fn positional(rest: &[String]) -> Vec<String> {
     out
 }
 
-/// `120`, `4.2s` → film frames (seconds round to the nearest frame, as FFFrames resolved them).
+/// `120`, `4.2s` → film frames (seconds round to the nearest frame).
 fn frames_of(list: &str, fps: u32, total: usize) -> Result<Vec<usize>, String> {
     list.split(',')
         .filter(|s| !s.trim().is_empty())
         .map(|s| {
             let s = s.trim();
             let f = match s.strip_suffix('s') {
-                Some(sec) => (sec.parse::<f64>().map_err(|_| format!("bad time {s}"))? * fps as f64).round().max(0.0) as usize,
+                Some(sec) => {
+                    (sec.parse::<f64>().map_err(|_| format!("bad time {s}"))? * fps as f64).round().max(0.0) as usize
+                }
                 None => s.parse::<usize>().map_err(|_| format!("bad frame {s}"))?,
             };
             if f >= total { Err(format!("{s} is outside the film (0..{total} frames)")) } else { Ok(f) }
@@ -94,7 +109,8 @@ fn range_of(spec: Option<&String>, total: usize) -> Result<(usize, usize), Strin
         None => Ok((0, total)),
         Some(r) => {
             let (a, b) = r.split_once("..").ok_or("a range is A..B")?;
-            let (a, b): (usize, usize) = (a.parse().map_err(|_| "bad range start")?, b.parse().map_err(|_| "bad range end")?);
+            let (a, b): (usize, usize) =
+                (a.parse().map_err(|_| "bad range start")?, b.parse().map_err(|_| "bad range end")?);
             if a >= b || b > total {
                 return Err(format!("range {a}..{b} is outside the film (0..{total})"));
             }
@@ -149,7 +165,13 @@ fn write_frames(engine: &mut Engine, frames: &[usize], dir: &Path) -> Result<Vec
 
 fn render(engine: &mut Engine, a: usize, b: usize, out: &Path, draft: bool) -> Result<serde_json::Value, String> {
     let ffmpeg = std::env::var("CLEARFRAME_FFMPEG").unwrap_or_else(|_| "ffmpeg".into());
-    let settings = encode::Settings { width: engine.width, height: engine.height, fps: engine.plan.format.fps, draft, ffmpeg: &ffmpeg };
+    let settings = encode::Settings {
+        width: engine.width,
+        height: engine.height,
+        fps: engine.plan.format.fps,
+        draft,
+        ffmpeg: &ffmpeg,
+    };
     let mut enc = encode::Encoder::start(out, &settings)?;
     let start = Instant::now();
     let (mut draw_ms, mut read_ms) = (0.0f64, 0.0f64);
@@ -231,8 +253,11 @@ fn serve(mut engine: Engine, draft: bool) -> Result<(), String> {
                 })
             }
             "frame" => {
-                let frames: Vec<usize> =
-                    req.get("frames").and_then(|v| v.as_array()).map(|a| a.iter().filter_map(|x| x.as_u64().map(|n| n as usize)).collect()).unwrap_or_default();
+                let frames: Vec<usize> = req
+                    .get("frames")
+                    .and_then(|v| v.as_array())
+                    .map(|a| a.iter().filter_map(|x| x.as_u64().map(|n| n as usize)).collect())
+                    .unwrap_or_default();
                 let dir = PathBuf::from(req.get("dir").and_then(|v| v.as_str()).unwrap_or("."));
                 write_frames(&mut engine, &frames, &dir).map(|files| serde_json::json!({"files": files}))
             }
@@ -244,7 +269,8 @@ fn serve(mut engine: Engine, draft: bool) -> Result<(), String> {
                     .unwrap_or((0, engine.plan.format.frames));
                 render(&mut engine, a, b, &out, req.get("draft").and_then(|v| v.as_bool()).unwrap_or(draft))
             }
-            "inspect" => inspect::inspect(&mut engine, 0.25).map(|(text, failed)| serde_json::json!({"report": text, "failed": failed})),
+            "inspect" => inspect::inspect(&mut engine, 0.25)
+                .map(|(text, failed)| serde_json::json!({"report": text, "failed": failed})),
             "audit" => inspect::audit(&mut engine),
             other => Err(format!("unknown command {other:?}")),
         };
@@ -288,7 +314,13 @@ fn run() -> Result<ExitCode, String> {
             let pos = positional(rest);
             let (a, b) = range_of(pos.first(), engine.plan.format.frames)?;
             let out = PathBuf::from(option(rest, "-o").ok_or("render needs -o OUT.mp4")?);
-            eprintln!("ClearFrame engine: scene ({}), {}x{} at {} fps, frames {a}..{b}", engine.backend(), engine.width, engine.height, engine.plan.format.fps);
+            eprintln!(
+                "ClearFrame engine: scene ({}), {}x{} at {} fps, frames {a}..{b}",
+                engine.backend(),
+                engine.width,
+                engine.height,
+                engine.plan.format.fps
+            );
             let mut report = render(&mut engine, a, b, &out, args.draft)?;
             report["openMs"] = (opened.as_secs_f64() * 1e3).into();
             if let Some(r) = option(rest, "--report") {

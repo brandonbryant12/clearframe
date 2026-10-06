@@ -140,7 +140,12 @@ mod tests {
     fn layers_must_lie_inside_the_film_and_validate_their_elements() {
         assert!(plan(serde_json::json!([])).is_ok());
         assert!(plan(serde_json::json!([{"id":"a","start":30,"frames":40,"elements":[]}])).is_err());
-        assert!(plan(serde_json::json!([{"id":"a","start":0,"frames":60,"elements":[{"type":"warp-drive"}]}])).is_err());
-        assert!(plan(serde_json::json!([{"id":"a","start":0,"frames":60,"elements":[{"type":"rect","w":10,"h":10}]}])).is_ok());
+        assert!(
+            plan(serde_json::json!([{"id":"a","start":0,"frames":60,"elements":[{"type":"warp-drive"}]}])).is_err()
+        );
+        assert!(
+            plan(serde_json::json!([{"id":"a","start":0,"frames":60,"elements":[{"type":"rect","w":10,"h":10}]}]))
+                .is_ok()
+        );
     }
 }

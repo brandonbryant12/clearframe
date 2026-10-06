@@ -48,7 +48,7 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 
 ## 6. Rights
 
-- Fonts ship with the engine under open licences (Inter, Instrument Serif, IBM Plex Mono, Architects Daughter: SIL OFL 1.1, pinned google/fonts revisions with hashes in fframes/assets/fonts/provenance.json).
+- Fonts ship with the engine under open licences (Inter, Instrument Serif, IBM Plex Mono, Architects Daughter: SIL OFL 1.1, pinned google/fonts revisions with hashes in film/assets/fonts/provenance.json).
 - Don't prompt music "in the style of" a named artist. Lyria blocks it, and you shouldn't want it.
 - Only use brand assets (logos, marks, colours) the requester owns or is authorised to use.
 
@@ -62,4 +62,4 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 6. `clearframe captions` has been exported. Vertical deliverables have captions burned in.
 7. The delivery message lists the sources, what was AI-generated (voice, music, images, footage) and the spend.
 
-- The scene engine links the pinned FFFrames crates (block layer, footage decoding; GPL-enabled libav) and skia-safe (MIT; Skia BSD-3), and encodes with the system FFmpeg/libx264 (GPL); review upstream and codec licensing for your distribution. Bundled Inter includes its OFL notice. Archived browser dependencies are not installed by the active package.
+- The renderer links skia-safe (MIT; Skia BSD-3), metal (MIT/Apache-2.0), rustybuzz (MIT) and kurbo (MIT/Apache-2.0). It encodes and decodes through the system FFmpeg tools (libx264 is GPL), as separate processes; review codec licensing for your distribution. Bundled Inter includes its OFL notice. Archived browser dependencies are not installed by the active package.

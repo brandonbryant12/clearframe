@@ -35,14 +35,14 @@ test('observed drawdowns retain equal-peak dates, recovery and unfinished episod
 });
 
 test('custom source attribution must identify static native text, with an auditable source record',async()=>{
- const {normalizeProps}=await import('../fframes/catalog.mjs');
+ const {normalizeProps}=await import('../film/catalog.mjs');
  const props={sourceElement:'credit',elements:[{id:'credit',type:'text',text:'Fictional monthly records · 2024',x:120,y:950,size:48,fill:'ink',at:0,enter:'none'}]};
  assert.equal(normalizeProps('canvas',props,{width:1920,height:1080}).sourceElement,'credit');
  for(const mutation of [{id:'wrong'},{text:''},{at:1},{enter:'fade'},{opacity:0},{fill:'bg'},{blur:60},{mosaic:true},{rough:true},{shine:true},{size:20},{exit:'fade'},{keys:[]},{type:'rect'}])
   assert.throws(()=>normalizeProps('canvas',{...props,elements:[{...props.elements[0],...mutation}]},{width:1920,height:1080}),/sourceElement/);
  assert.throws(()=>normalizeProps('canvas',{...props,source:'duplicate'},{width:1920,height:1080}),/sourceElement/);
  const fs=await import('node:fs'),os=await import('node:os'),path=await import('node:path');
- const {loadStoryboard}=await import('../engine/lib/project.mjs'),{computeTiming}=await import('../engine/lib/timing.mjs'),{createJob}=await import('../fframes/job.mjs');
+ const {loadStoryboard}=await import('../engine/lib/project.mjs'),{computeTiming}=await import('../engine/lib/timing.mjs'),{createJob}=await import('../film/job.mjs');
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cf-source-element-'));
  try{
   const sb={format:{preset:'landscape'},music:false,captions:false,sources:[],beats:[{id:'sourced',block:'canvas',duration:6,props}]};

@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {rankSeries} from '../fframes/multiple-data.mjs';import {multipleScene,multipleLayout,rankLabel} from '../fframes/small-multiples.mjs';
+import {rankSeries} from '../film/multiple-data.mjs';import {multipleScene,multipleLayout,rankLabel} from '../film/small-multiples.mjs';
 const date=['2024-01-31','2024-03-31','2024-06-30'];
 const fixture=()=>({rankAt:date[2],direction:'descending',plot:{title:'Common records',asOf:date[2],source:'Fictional records',x:{type:'date',label:'Date',domain:[date[0],date[2]],ticks:[date[0],date[2]],dateFormat:'month'},y:{type:'linear',label:'Dollars',domain:[-20,40],ticks:[-20,0,40]},motion:'none',series:[['d',[5,8,null]],['b',[20,null,10]],['a',[-10,5,10]],['c',[0,12,-5]]].map(([id,values])=>({id,label:id.toUpperCase(),values:values.map((y,i)=>({x:date[i],y}))}))}});
 test('competition ranks preserve equal values, missing endpoints and stable identities',()=>{

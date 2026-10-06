@@ -9,9 +9,9 @@ import { computeTiming } from './timing.mjs';
 import { loadStoryboard } from './project.mjs';
 import { ffmpeg, ffmpegBin, writeJSON } from './util.mjs';
 import { measureDrop } from './beatmap.mjs';
-import { sha256 } from '../../fframes/native-build.mjs';
-import { reviewGeometry } from '../../fframes/render-geometry.mjs';
-import { COVER } from '../../fframes/constants.mjs';
+import { sha256 } from '../../scene/engine.mjs';
+import { reviewGeometry } from '../../film/render-geometry.mjs';
+import { COVER } from '../../film/constants.mjs';
 
 // Analysis grid: the long side at 128 px is enough to see a pop or a jump, and small enough
 // to hold a few minutes of film in memory.

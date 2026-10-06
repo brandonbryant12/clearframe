@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 
 export const ROOT = path.resolve(new URL('../../..', import.meta.url).pathname);
 export const UI = path.join(ROOT, 'engine/ui/viewer');
-export const FONT_DIR = path.join(ROOT, 'fframes/assets/fonts');
+export const FONT_DIR = path.join(ROOT, 'film/assets/fonts');
 export const readJSON = (f, fallback = null) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fallback; } };
 export const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'item';
 export const hash = s => crypto.createHash('sha256').update(s).digest('hex').slice(0, 12);

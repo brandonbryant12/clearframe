@@ -1,4 +1,4 @@
-import { round, tall } from '../../fframes/sketch-kit.mjs';
+import { round, tall } from '../../film/sketch-kit.mjs';
 
 // A pair of camera stations, redrawn for the frame instead of cropped. The
 // thread continues at the same anchor in both shots and never depicts data.

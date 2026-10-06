@@ -1,12 +1,12 @@
 //! Geometry for native elements: parsed paths (as Skia paths and flattened outlines), bounds,
 //! stroke lengths, travel along a route and arrowheads. Semantics follow the canvas block
-//! (`fframes/native/src/canvas_geometry.rs`) so an element means the same thing in both.
-use fframes_skia_renderer::skia_safe as sk;
+//! (`blocks/canvas_geometry.rs`) so an element means the same thing in both.
 use kurbo::{BezPath, ParamCurveArclen, PathEl, Shape};
 use serde_json::Value;
+use skia_safe as sk;
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::f32::consts::{PI, TAU};
-use std::cell::RefCell;
 use std::sync::Arc;
 
 pub struct PathInfo {
@@ -205,7 +205,9 @@ pub fn outline(el: &Value) -> Vec<(f32, f32)> {
     match s(el, "type") {
         "line" => vec![(f(el, "x1", 0.0), f(el, "y1", 0.0)), (f(el, "x2", 0.0), f(el, "y2", 0.0))],
         "poly" => points(el),
-        "path" => path_info(s(el, "d")).and_then(|p| p.contours.iter().rev().find(|c| c.len() > 1).cloned()).unwrap_or_default(),
+        "path" => path_info(s(el, "d"))
+            .and_then(|p| p.contours.iter().rev().find(|c| c.len() > 1).cloned())
+            .unwrap_or_default(),
         _ => vec![],
     }
 }

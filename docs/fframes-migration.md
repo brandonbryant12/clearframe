@@ -1,6 +1,8 @@
-# FFFrames migration
+# FFFrames migration (historical)
 
-FFFrames is the sole active renderer. The root CLI owns the end-to-end workflow; `fframes/cli.mjs` is an alias. Browser-only runtime, renderer, templates, recipes, tests and instructions are preserved under `archive/browser`, outside package dependencies and test discovery. Original comparison code is in `archive/comparison`; ignored frozen runs are retained.
+> Historical record of the move from the browser renderer to FFFrames (2026). FFFrames itself was retired in October 2026; ClearFrame now renders with its own renderer (`scene/native`, [design](scene-engine.md)). The vocabulary notes below still describe what the native catalog does and does not emulate.
+
+At the time of writing, FFFrames was the sole active renderer. The root CLI owns the end-to-end workflow; `film/cli.mjs` is an alias. Browser-only runtime, renderer, templates, recipes, tests and instructions are preserved under `archive/browser`, outside package dependencies and test discovery. Original comparison code is in `archive/comparison`; ignored frozen runs are retained.
 
 New projects contain one `storyboard.json`, optional brief and media. The old separate `fframes.json` scene map is retired. Content is runtime JSON, so changing words, colors, values, motion or layout selection does not rebuild Rust. Supported canvases are landscape 1920×1080, vertical 1080×1920, square 1080×1080, portrait 1080×1350 and compact 640×360; FPS 24/25/30/50/60.
 

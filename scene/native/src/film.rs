@@ -1,29 +1,35 @@
 //! Film-level picture, drawn natively: the persistent backdrop, vignette and grain, the film
 //! chrome and editorial frame, and the lens (grade, bloom and aberration as GPU image filters
-//! over the composed picture, a handheld drift, light leaks and letterbox bars). Values and
-//! looks follow the FFFrames compositor (`fframes/native/src/{lib,design,lens}.rs`) so a film
-//! keeps its look when it moves to this engine; grain and paper use Skia's implementation of
-//! the same fractal-noise function the SVG path used.
+//! over the composed picture, a handheld drift, light leaks and letterbox bars). Grain and
+//! paper are Skia's fractal noise (the SVG `feTurbulence` function).
+use crate::design::{self, Palette};
 use crate::fonts;
+use crate::lens::{self, Lens};
 use crate::nodes::TextMark;
 use crate::paint::{self, hex};
-use clearframe_native::design::{self, Palette};
-use clearframe_native::lens::{self, Lens};
-use clearframe_native::text::{self, Font};
-use fframes_skia_renderer::skia_safe::{
+use crate::text::{self, Font};
+use serde_json::Value;
+use skia_safe::{
     self as sk, BlendMode, Canvas, Color4f, ImageFilter, Paint, PaintStyle, Point, Rect, TileMode, color_filters,
     gradient_shader, image_filters, perlin_noise_shader,
 };
-use serde_json::Value;
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::f32::consts::TAU;
-use std::cell::RefCell;
 use std::rc::Rc;
 
 fn radial(cx: f32, cy: f32, r: f32, stops: &[(f32, &str, f32)]) -> Option<sk::Shader> {
     let colors: Vec<sk::Color> = stops.iter().map(|(_, c, a)| paint::color(hex(c, *a))).collect();
     let pos: Vec<f32> = stops.iter().map(|(o, _, _)| *o).collect();
-    gradient_shader::radial(Point::new(cx, cy), r.max(1.0), colors.as_slice(), Some(pos.as_slice()), TileMode::Clamp, None, None)
+    gradient_shader::radial(
+        Point::new(cx, cy),
+        r.max(1.0),
+        colors.as_slice(),
+        Some(pos.as_slice()),
+        TileMode::Clamp,
+        None,
+        None,
+    )
 }
 
 /// Persistent film background; every layer a pure function of film seconds.
@@ -75,8 +81,26 @@ pub fn backdrop(canvas: &Canvas, kind: &str, w: f32, h: f32, p: &Palette, second
                 // result. Skia applies paint alpha before the colour filter, so the opacity is
                 // folded into the curve instead (the curve stays below 1, so clamping agrees).
                 let m = [
-                    0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5,
-                    0.0, 0.0, 0.0, slope * alpha, intercept * alpha,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.5,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.5,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.5,
+                    0.0,
+                    0.0,
+                    0.0,
+                    slope * alpha,
+                    intercept * alpha,
                 ];
                 paint.set_color_filter(color_filters::matrix_row_major(&m, None));
                 canvas.draw_rect(Rect::from_wh(w, h), &paint);
@@ -131,8 +155,16 @@ fn mosaic_bed(canvas: &Canvas, w: f32, h: f32, p: &Palette) {
                 out.close();
             }
         }
-        let (toward, grout) = if p.dark { ("#ffffff", design::mix(&p.bg, "#000000", 0.5)) } else { ("#000000", design::mix(&p.bg, "#000000", 0.3)) };
-        let shades = paths.into_iter().enumerate().map(|(i, mut d)| (design::mix(&p.bg, toward, 0.02 + 0.03 * i as f32), d.detach())).collect();
+        let (toward, grout) = if p.dark {
+            ("#ffffff", design::mix(&p.bg, "#000000", 0.5))
+        } else {
+            ("#000000", design::mix(&p.bg, "#000000", 0.3))
+        };
+        let shades = paths
+            .into_iter()
+            .enumerate()
+            .map(|(i, mut d)| (design::mix(&p.bg, toward, 0.02 + 0.03 * i as f32), d.detach()))
+            .collect();
         let bed = Rc::new((grout, shades));
         CACHE.with(|c| c.borrow_mut().insert(key, bed.clone()));
         bed
@@ -168,7 +200,12 @@ pub fn vignette(canvas: &Canvas, texture: &Value, w: f32, h: f32, p: &Palette) {
     let edge = if p.dark { "#000000" } else { p.ink.as_str() };
     let strength = v * if p.dark { 0.55 } else { 0.22 };
     let mut paint = Paint::default();
-    paint.set_shader(radial(w / 2.0, h / 2.0, (w * w + h * h).sqrt() * 0.56, &[(0.45, edge, 0.0), (1.0, edge, strength)]));
+    paint.set_shader(radial(
+        w / 2.0,
+        h / 2.0,
+        (w * w + h * h).sqrt() * 0.56,
+        &[(0.45, edge, 0.0), (1.0, edge, strength)],
+    ));
     canvas.draw_rect(Rect::from_wh(w, h), &paint);
 }
 
@@ -189,9 +226,8 @@ pub fn grain(canvas: &Canvas, texture: &Value, w: f32, h: f32, p: &Palette, seco
     canvas.restore();
 }
 
-/// Fractal noise turned to opaque grey, as the FFFrames grain filter does (its colour matrix
-/// averages the noise's channels and sets alpha to 1): the grain's strength is the layer's
-/// opacity alone.
+/// Fractal noise turned to opaque grey (the channels averaged, alpha set to 1): the grain's
+/// strength is the layer's opacity alone.
 fn grain_shader(seed: f32) -> Option<sk::Shader> {
     thread_local! {
         static EFFECT: sk::RuntimeEffect = sk::RuntimeEffect::make_for_shader(
@@ -244,7 +280,17 @@ pub fn chrome(canvas: &Canvas, title: &str, w: f32, p: &Palette, progress: f32, 
 }
 
 #[allow(clippy::too_many_arguments)]
-fn draw_text(canvas: &Canvas, value: &str, x: f32, y: f32, font: Font, size: f32, tracking: f32, paint: &Paint, marks: &mut Vec<TextMark>) {
+fn draw_text(
+    canvas: &Canvas,
+    value: &str,
+    x: f32,
+    y: f32,
+    font: Font,
+    size: f32,
+    tracking: f32,
+    paint: &Paint,
+    marks: &mut Vec<TextMark>,
+) {
     if value.is_empty() {
         return;
     }
@@ -257,11 +303,21 @@ fn draw_text(canvas: &Canvas, value: &str, x: f32, y: f32, font: Font, size: f32
 
 /// The editorial frame: brand, section label, footers and a progress rail, in the colours of
 /// the scene on screen (a toned scene re-derives them).
-pub fn frame(canvas: &Canvas, spec: &Value, label: &str, w: f32, h: f32, p: &Palette, progress: f32, marks: &mut Vec<TextMark>) {
+pub fn frame(
+    canvas: &Canvas,
+    spec: &Value,
+    label: &str,
+    w: f32,
+    h: f32,
+    p: &Palette,
+    progress: f32,
+    marks: &mut Vec<TextMark>,
+) {
     let text_of = |key: &str| spec.get(key).and_then(Value::as_str).unwrap_or("").to_owned();
     let margin = if w / h > 1.3 { 120.0 } else { 86.0 };
     let brand = text_of("brand");
-    let label = if spec.get("label").and_then(Value::as_bool) == Some(false) { String::new() } else { label.to_uppercase() };
+    let label =
+        if spec.get("label").and_then(Value::as_bool) == Some(false) { String::new() } else { label.to_uppercase() };
     let (left, right) = (text_of("left").to_uppercase(), text_of("right").to_uppercase());
     let mono = Font::Mono;
     let mut ink = Paint::default();
@@ -292,11 +348,24 @@ pub fn frame(canvas: &Canvas, spec: &Value, label: &str, w: f32, h: f32, p: &Pal
 
 fn look(name: &str) -> Option<(f32, [f32; 6], [f32; 6], [f32; 6])> {
     Some(match name {
-        "teal-orange" => {
-            (1.08, [0.0, 0.17, 0.40, 0.64, 0.86, 1.0], [0.02, 0.20, 0.41, 0.61, 0.80, 0.96], [0.08, 0.26, 0.43, 0.58, 0.74, 0.88])
-        }
-        "warm" => (1.04, [0.0, 0.22, 0.43, 0.63, 0.82, 1.0], [0.0, 0.20, 0.40, 0.60, 0.79, 0.97], [0.0, 0.17, 0.35, 0.54, 0.73, 0.90]),
-        "cool" => (0.96, [0.0, 0.17, 0.36, 0.56, 0.76, 0.94], [0.0, 0.20, 0.40, 0.60, 0.80, 0.98], [0.03, 0.24, 0.44, 0.64, 0.83, 1.0]),
+        "teal-orange" => (
+            1.08,
+            [0.0, 0.17, 0.40, 0.64, 0.86, 1.0],
+            [0.02, 0.20, 0.41, 0.61, 0.80, 0.96],
+            [0.08, 0.26, 0.43, 0.58, 0.74, 0.88],
+        ),
+        "warm" => (
+            1.04,
+            [0.0, 0.22, 0.43, 0.63, 0.82, 1.0],
+            [0.0, 0.20, 0.40, 0.60, 0.79, 0.97],
+            [0.0, 0.17, 0.35, 0.54, 0.73, 0.90],
+        ),
+        "cool" => (
+            0.96,
+            [0.0, 0.17, 0.36, 0.56, 0.76, 0.94],
+            [0.0, 0.20, 0.40, 0.60, 0.80, 0.98],
+            [0.03, 0.24, 0.44, 0.64, 0.83, 1.0],
+        ),
         "bleach" => {
             let c = [0.0, 0.12, 0.36, 0.66, 0.90, 1.0];
             (0.5, c, c, c)
@@ -309,7 +378,12 @@ fn look(name: &str) -> Option<(f32, [f32; 6], [f32; 6], [f32; 6])> {
             let c = [0.0, 0.06, 0.26, 0.62, 0.90, 1.0];
             (0.0, c, c, c)
         }
-        "sepia" => (0.0, [0.05, 0.28, 0.50, 0.70, 0.87, 1.0], [0.03, 0.22, 0.42, 0.62, 0.80, 0.94], [0.02, 0.15, 0.32, 0.50, 0.68, 0.80]),
+        "sepia" => (
+            0.0,
+            [0.05, 0.28, 0.50, 0.70, 0.87, 1.0],
+            [0.03, 0.22, 0.42, 0.62, 0.80, 0.94],
+            [0.02, 0.15, 0.32, 0.50, 0.68, 0.80],
+        ),
         _ => return None,
     })
 }
@@ -342,10 +416,26 @@ pub fn lens_filter(l: &Lens, h: f32) -> Option<ImageFilter> {
     if let Some((sat, r, g, b)) = graded {
         let s = 1.0 + (sat - 1.0) * l.grade_amount;
         let m = [
-            0.213 + 0.787 * s, 0.715 - 0.715 * s, 0.072 - 0.072 * s, 0.0, 0.0,
-            0.213 - 0.213 * s, 0.715 + 0.285 * s, 0.072 - 0.072 * s, 0.0, 0.0,
-            0.213 - 0.213 * s, 0.715 - 0.715 * s, 0.072 + 0.928 * s, 0.0, 0.0,
-            0.0, 0.0, 0.0, 1.0, 0.0,
+            0.213 + 0.787 * s,
+            0.715 - 0.715 * s,
+            0.072 - 0.072 * s,
+            0.0,
+            0.0,
+            0.213 - 0.213 * s,
+            0.715 + 0.285 * s,
+            0.072 - 0.072 * s,
+            0.0,
+            0.0,
+            0.213 - 0.213 * s,
+            0.715 - 0.715 * s,
+            0.072 + 0.928 * s,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
         ];
         last = image_filters::color_filter(matrix(m), last, None);
         let (tr, tg, tb) = (table(r, l.grade_amount), table(g, l.grade_amount), table(b, l.grade_amount));
@@ -355,13 +445,17 @@ pub fn lens_filter(l: &Lens, h: f32) -> Option<ImageFilter> {
         let spread = (8.0 + 22.0 * l.bloom) * h / 1080.0;
         let gain = 0.3 + 0.6 * l.bloom;
         let hi = image_filters::color_filter(
-            matrix([2.5, 0.0, 0.0, 0.0, -1.5, 0.0, 2.5, 0.0, 0.0, -1.5, 0.0, 0.0, 2.5, 0.0, -1.5, 0.0, 0.0, 0.0, 1.0, 0.0]),
+            matrix([
+                2.5, 0.0, 0.0, 0.0, -1.5, 0.0, 2.5, 0.0, 0.0, -1.5, 0.0, 0.0, 2.5, 0.0, -1.5, 0.0, 0.0, 0.0, 1.0, 0.0,
+            ]),
             last.clone(),
             None,
         );
         let glow = image_filters::blur((spread, spread), TileMode::Decal, hi, None);
         let glow = image_filters::color_filter(
-            matrix([gain, 0.0, 0.0, 0.0, 0.0, 0.0, gain, 0.0, 0.0, 0.0, 0.0, 0.0, gain, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0]),
+            matrix([
+                gain, 0.0, 0.0, 0.0, 0.0, 0.0, gain, 0.0, 0.0, 0.0, 0.0, 0.0, gain, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+            ]),
             glow,
             None,
         );
@@ -375,7 +469,8 @@ pub fn lens_filter(l: &Lens, h: f32) -> Option<ImageFilter> {
             m[18] = 1.0;
             m
         };
-        let r = image_filters::offset((px, 0.0), image_filters::color_filter(matrix(only(0)), last.clone(), None), None);
+        let r =
+            image_filters::offset((px, 0.0), image_filters::color_filter(matrix(only(0)), last.clone(), None), None);
         let g = image_filters::color_filter(matrix(only(1)), last.clone(), None);
         let b = image_filters::offset((-px, 0.0), image_filters::color_filter(matrix(only(2)), last, None), None);
         let rg = image_filters::blend(BlendMode::Screen, g, r, None);
@@ -390,7 +485,9 @@ pub fn handheld(canvas: &Canvas, amount: f32, seconds: f32, w: f32, h: f32) {
         return;
     }
     let wave = |f: [f32; 3], p: [f32; 3]| {
-        0.6 * (TAU * f[0] * seconds + p[0]).sin() + 0.3 * (TAU * f[1] * seconds + p[1]).sin() + 0.1 * (TAU * f[2] * seconds + p[2]).sin()
+        0.6 * (TAU * f[0] * seconds + p[0]).sin()
+            + 0.3 * (TAU * f[1] * seconds + p[1]).sin()
+            + 0.1 * (TAU * f[2] * seconds + p[2]).sin()
     };
     let reach = amount * 0.006 * w;
     let dx = reach * wave([0.19, 0.53, 1.37], [1.3, 0.2, 2.1]);
@@ -472,6 +569,9 @@ mod tests {
         assert_eq!(noir[255], 255);
         assert_eq!(noir[51], (0.06f32 * 255.0).round() as u8);
         assert!(lens_filter(&Lens::from(&Value::Null), 1080.0).is_none());
-        assert!(lens_filter(&Lens::from(&serde_json::json!({"grade":"teal-orange","bloom":0.5,"aberration":0.3})), 1080.0).is_some());
+        assert!(
+            lens_filter(&Lens::from(&serde_json::json!({"grade":"teal-orange","bloom":0.5,"aberration":0.3})), 1080.0)
+                .is_some()
+        );
     }
 }

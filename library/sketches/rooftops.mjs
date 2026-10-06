@@ -1,4 +1,4 @@
-import { round, rng } from '../../fframes/sketch-kit.mjs';
+import { round, rng } from '../../film/sketch-kit.mjs';
 
 // City rooftops at sunrise: wooden water tanks on their stilts in the foreground, the low sun
 // behind a hazy skyline, windows coming on one by one as the city wakes, and steam from a vent.

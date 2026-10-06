@@ -1,6 +1,6 @@
 // A component replaced in place: the old path is shown working, marked and removed, the new
 // pieces arrive in its slot, and the same request takes the new route.
-import { diagramElements } from '../../fframes/system-diagrams.mjs';
+import { diagramElements } from '../../film/system-diagrams.mjs';
 const diagram = {
   nodes: [
     { id: 'client', label: 'Client', kind: 'user' },

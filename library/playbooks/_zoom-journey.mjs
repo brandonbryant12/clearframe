@@ -5,7 +5,7 @@
 // carries finer bays only where the camera will look; the city's lights are the specks seen from
 // orbit; the window is in that city's street.
 import fs from 'node:fs';
-import { smoothPath, rng } from '../../fframes/sketch-kit.mjs';
+import { smoothPath, rng } from '../../film/sketch-kit.mjs';
 
 const r = v => Math.round(v * 10) / 10;
 const rand = rng(21);

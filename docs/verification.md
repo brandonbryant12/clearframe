@@ -1,5 +1,58 @@
 # Native verification
 
+## FFFrames retirement — 2026-10-05
+
+Run on the same Apple Silicon iMac (M1, 8 GB). Every step was free and local, the heavy steps went through the codex-heavy gate with one Cargo job, and all evidence is in the ignored `build/retire/`. The reference for every comparison was the evidence this branch recorded before FFFrames was removed: stills in `build/parity`, `build/parity-gallery` and `build/engine-effects`, and fixture MP4s in `build/fixtures`. No second renderer was kept.
+
+- **Dependencies:**
+  - `cargo tree -i` for `fframes`, `fframes_skia_renderer`, `fframes-media`, `usvgr` and `ffmpeg-sys-fframes` reports *did not match any packages*.
+  - The direct dependencies are `foreign-types-shared, kurbo, metal, rustybuzz, serde, serde_json, skia-safe`. The lockfile has 90 packages.
+  - `otool -L` on the binary lists only system frameworks.
+  - `test/scene-engine.test.mjs` refuses `fframes`, `usvgr` or `ffmpeg-sys` in the manifest or lockfile.
+- **Tests:** 72 Rust tests in `scene/native` pass: block code, the display list, decoder regressions (final B-frame, higher film rate, fractional end) and a colour round-trip. The Node suite passes 308 of 308 (`npm test` through the gate).
+- **Library** (`scripts/engine-parity.mjs --reference build/parity`): all 45 playbooks prepare, check and draw. Over 262 moments the minimum PSNR against the FFFrames-era stills is 43.6 dB and the median 57.0 dB. The frame audit's findings are unchanged, including brand-spot and style-relay's sample-copy errors.
+- **Galleries:**
+  - Blocks: landscape minimum 50.7 dB (median 52.2), vertical minimum 49.7 dB (median 51.1).
+  - Sketches: median 54.5 dB, with a minimum of 36.8 dB on a dense halftone field. The lowest sketches were inspected and read the same.
+  - Gallery audit findings are unchanged.
+- **Effects** (`scripts/engine-effects.mjs --reference build/engine-effects`): all 23 film-level settings are at least 50.3 dB.
+- **Formats** (`scripts/engine-formats.mjs`): 25 of 25 canvas × frame-rate combinations pass, with exact dimensions, rates and decoded frame counts, and still/full and still/range agreement above the neighbouring frame.
+- **Inspection fixes.** Inspecting the comparisons found and fixed three problems:
+  - Text was drawn as glyph masks with Skia's text contrast; it is now drawn as glyph outlines, which raised text-heavy frames from 33–38 dB to 50+ dB.
+  - Text gradients spanned the glyph outline instead of SVG's metric text box.
+  - Material shaders on outlined text were evaluated at a shifted origin.
+- **Footage colour:**
+  - The bundled Blender clips are encoded and tagged BT.709. The old decoder always converted with BT.601, which shifted reds: a solid (200, 50, 75) came back as (187, 32, 75). The new decoder follows the tags and returns (200, 49, 75).
+  - Untagged BT.601 clips are unchanged.
+- **Fixtures** (whole-video PSNR against the earlier MP4s): finance landscape 60.8 and vertical 61.2 dB, dimensional KPIs 63.3, teaching sequences 66.4, material studies 53.0, research 49.1, teaching-3D 46.2, stage-pr 39.0, stage-materials 38.7, night-city 38.5, stage footage landscape 35.7 and vertical 30.1.
+  - Drawn from the same prepared plans with the pre-retirement binary, the lower films agree at 52.4 dB (night-city), 47–59 dB (stage-pr) and 38–49 dB (stage-materials). The rest of their gap is inputs that changed after those MP4s were made, glyph-edge anti-aliasing, and the BT.709 correction in footage.
+  - The teaching-3D trajectory completes its pipeline (check, sheet, render, QA, phone sheet, timeline, boundaries) with the same QA findings as before.
+  - The feature-launch trajectory still fails on looping B-roll, as before.
+- **Review loop:** `scripts/review-e2e.mjs` passes 21 of 21 checks.
+- **Studio, over its HTTP API only** (the browser extension was not connected):
+  - A note posted with a pin, a `#pace` tag and a reply reached the engine's review record on the right beat and revision.
+  - After an edit to that beat, `revise` produced a candidate whose preview clock checks at 46.2, 46.2 and 42.4 dB.
+  - A scripted acceptance, labelled as not a person, was recorded.
+  - A final render, with free local narration aligned by Whisper, produced revision r003 with audio and `smpte170m/iec61966-2-1/bt709/tv` tags.
+- **Measurements** (`scripts/engine-bench.mjs`, best of two runs): full exports matched the pre-retirement scene engine within a few percent:
+
+  | Project | After (s) | Before (s) |
+  |---|---|---|
+  | native-explainer | 4.6 | 4.6 |
+  | trailer | 23.3 | 23.5 |
+  | vertical-short | 6.7 | 7.2 |
+  | cash-flow | 16.9 | 18.6 |
+  | 7.6-minute recording | 311 | 319 |
+  | data-story | 45.8 | 36.5 |
+
+  data-story, which is text-dense, was slower, which fits text now being drawn as outline paths. Against FFFrames alone (measured earlier the same day), exports are 1.1–2.0× faster. Peak memory is about 660–890 MiB, which includes the FFmpeg encoder. These numbers describe this machine and these projects only.
+
+**Limits.**
+- Studio was not checked visually in a browser.
+- The seven-minute film is synthetic.
+- There are no Linux or raster runs.
+- PSNR measures agreement with the previous look, not quality. The lowest frames were inspected by eye.
+
 ## Review and edit loop — 2026-10-01
 
 Run on the same Apple Silicon iMac with the warm renderer (the worktree reused a renderer binary built from byte-identical sources, matched by `rendererHash`).
@@ -45,7 +98,7 @@ Contact sheets were opened and visually reviewed in landscape, vertical, square 
 
 A 12.5-second vertical speech fixture produced 375 frames, audio, and measured word timing with no check warnings. It rendered and finished in 4.45 seconds. Highlight/reveal/word contact sheets were inspected. The fixture concatenates isolated OS-TTS words with known sample/silence boundaries: it proves the renderer clock and import/mix integration, not recognition accuracy on natural continuous speech. Audio stream presence, silence windows and levels were checked programmatically; no subjective listening result is claimed.
 
-All 360 frames across the bars, funnel and video boundary fixtures passed strict native inspection without warnings. The final-frame regression verifies the exact final B-frame, rejects a frame beyond the clip, and reproduces the final frame after a backward seek. The decoder patch and provenance are under `fframes/native/vendor/fframes-media/`.
+All 360 frames across the bars, funnel and video boundary fixtures passed strict native inspection without warnings. The final-frame regression verifies the exact final B-frame, rejects a frame beyond the clip, and reproduces the final frame after a backward seek. The decoder patch and provenance are under `film/native/vendor/fframes-media/`.
 
 Baseline records: `build/native-verified-final/verification.json`, `build/speech-smoke/build/video.mp4.json` and `build/speech-smoke/build/audio-review.json`. Source, fonts, inputs and outputs are hashed in render receipts. The active matrix conversion and matrix tag are SMPTE170M. The native working transfer is sRGB (IEC 61966-2-1), with BT.709 primaries and limited range; see the [transfer-signaling correction](research/fframes-color-transfer/README.md). Historical receipts retain their original tags.
 

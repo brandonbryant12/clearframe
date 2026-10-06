@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { utcDay, axisPosition, axisLabel, plotSpec } from '../fframes/plot-data.mjs';
-import { expandPlotProps, plotLayout } from '../fframes/plots.mjs';
-import { normalizeElements } from '../fframes/canvas.mjs';
+import { utcDay, axisPosition, axisLabel, plotSpec } from '../film/plot-data.mjs';
+import { expandPlotProps, plotLayout } from '../film/plots.mjs';
+import { normalizeElements } from '../film/canvas.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
-import { createJob } from '../fframes/job.mjs';
+import { createJob } from '../film/job.mjs';
 const source='Hypothetical illustration';
 const frame={width:1920,height:1080,duration:7};
 const base={title:'Two paths, one scale',asOf:'2026-10-02',source,

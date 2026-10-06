@@ -660,9 +660,9 @@ async function writeRecording(
   root,
   { audio, words: wordsInput, script, from = 0, to, fps = 30, vertical = false, speakers = {}, theme, title, treatment, direction, playbook, brand },
 ) {
-  const { directionOptions, directionMarkdown, directionRefs } = await import('../../fframes/directions.mjs');
-  const { applyTreatment, directionTemplate, treatmentById } = await import('../../fframes/treatments.mjs');
-  const { vendor, item } = await import('../../fframes/library.mjs');
+  const { directionOptions, directionMarkdown, directionRefs } = await import('../../film/directions.mjs');
+  const { applyTreatment, directionTemplate, treatmentById } = await import('../../film/treatments.mjs');
+  const { vendor, item } = await import('../../film/library.mjs');
   ({ treatment, playbook } = directionOptions({ direction, treatment, playbook }));
   if (treatment && !treatmentById(treatment)) throw new Error(`Unknown treatment ${treatment}`);
   if (playbook && !item('playbooks', playbook)) throw new Error(`Unknown playbook ${playbook}`);
@@ -851,7 +851,7 @@ export async function ingestRecording(destination, options = {}) {
   if (fs.existsSync(root) && (!fs.statSync(root).isDirectory() || fs.readdirSync(root).length))
     throw new Error(`${root} is not empty; ingest a recording into a new directory.`);
   const { readBrand } = await import('./brand.mjs');
-  const { useProject } = await import('../../fframes/library.mjs');
+  const { useProject } = await import('../../film/library.mjs');
   useProject(null);
   const brand = readBrand(options.brand && path.resolve(options.brand));
   fs.mkdirSync(path.dirname(root), { recursive: true });

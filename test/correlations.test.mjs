@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {correlationMatrix} from '../fframes/correlation-data.mjs';
-import {correlationScene,correlationColor} from '../fframes/correlations.mjs';
+import {correlationMatrix} from '../film/correlation-data.mjs';
+import {correlationScene,correlationColor} from '../film/correlations.mjs';
 const dates=['2024-01-31','2024-02-29','2024-03-31','2024-04-30','2024-05-31','2024-06-30'];
 const input=()=>({plot:{title:'Aligned returns',source:'Fictional monthly simple returns.',asOf:'2024-06-30',x:{type:'date',label:'Month end',domain:[dates[0],dates.at(-1)],ticks:[dates[0],dates.at(-1)],dateFormat:'month'},y:{type:'linear',label:'Monthly return',domain:[-5,5],ticks:[-5,0,5],suffix:'%'},series:[{id:'a',label:'A',values:[-3,-2,-1,1,2,3].map((y,i)=>({x:dates[i],y}))},{id:'b',label:'B',values:[3,2,1,-1,-2,-3].map((y,i)=>({x:dates[i],y}))}],motion:'none'},method:'pearson',frequency:'monthly',returnType:'simple-percent',window:{start:dates[0],end:dates.at(-1)},minObservations:3});
 test('correlation uses only paired dates and keeps undefined separate from zero',()=>{
