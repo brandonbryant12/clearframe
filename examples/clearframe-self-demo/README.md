@@ -71,4 +71,31 @@ that through the product.
 
 ### 4. Revisions
 
-(Recorded as they happen; see `prompts.md` for the exact text.)
+Exact text and selections are in `prompts.md`; each step's evidence (screenshots, the scope and mode
+at send time, which scenes changed, the agent's reply) is in the external `process/steps.jsonl`.
+
+**4a. Together, one scene.** Build it together, scene "06 By hand" pinned as the scope, asked for a
+proposal. The agent asked to run `sips` to read the picture's size (denied in the studio's
+permission card), proposed without changing anything, and on the quick reply "Yes — go with your
+recommendation." made one labelled edit ("Crop scene 06 in so the inspector fills the frame":
+`fit: cover` and a slow push-in) to that scene only. *Undo these edits* returned the film exactly
+to its prior state; ⇧⌘Z restored the edit.
+
+- **Gap found and fixed:** the agent has no shell, so it could not learn a picture's size.
+  `clearframe_files` now lists width×height for PNG, JPEG, GIF and WebP (commit `6df49d5`).
+
+**4b. A review note, handed to the agent.** In Review, a note on the rendered r001 at 0:22 in
+"04 Conversation" by "Demo director"; *Ask the agent* on the note (scope: the note) in Make it for
+me. One labelled edit to that scene only, the conversation close-up, and a still to check it. The
+agent pointed out that `captures.json` measured pins only on the full screenshots.
+
+- **Gap found and fixed:** `scripts/demo-captures.mjs` now records each close-up's crop and the pins
+  inside it, normalised to the close-up. A second capture pass produced close-ups with identical
+  sizes, so its measurements apply to the pictures already in the film.
+
+**4c. Whole film, Make it for me → rough cut r002.** Close-ups for Scope, Review, Sound and Export in
+one labelled edit; r002 rendered (63.7 s, engine clean). Director's review of r002: the wide
+close-ups (scope composer, review thread, the two modes) now read on a phone; the tall ones
+(conversation, inspector, sound and readiness panels) still sit small in a wide frame, the "By hand"
+cover crop lands on two meaningless coordinate fields, and the agent placed the close-up pins at the
+centre (0.5, 0.5) for lack of measurements.
