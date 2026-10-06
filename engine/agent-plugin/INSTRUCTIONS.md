@@ -49,6 +49,14 @@ rough cut is half size with the free draft voice, whatever the Google settings s
 record (`assets/vo/*.json`, read with `clearframe_files`) says who spoke the line in `spokenBy`;
 `googleSettingsAtTheTime` in an older draft record is a setting, never the voice that was used.
 
+## Notes
+
+People watch a cut and leave sticky notes on it: a moment, often a spot on the picture ("pinned top
+left, on “3.1%”"), and what should change. They usually send several at once. Read them with
+`clearframe_notes`, change only what each one points at, render the new cut, then answer each note
+you acted on (`clearframe_notes` with `answer`: one plain line on what you changed). The person
+marks it done or reopens it; answering is not approval. If a note is unclear, ask instead of guessing.
+
 ## Scope
 
 Each message carries a `<clearframe-context>` block: the scope the person selected (whole film, a

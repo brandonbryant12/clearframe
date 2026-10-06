@@ -1,12 +1,13 @@
 // Where a film is in production, from what exists on disk:
 // pre-production (brief, script, storyboard) → production (rough cut) → post-production (in review, final).
 export const STAGES = [
-  { id: 'brief', label: 'Brief', phase: 'Pre-production', next: 'Write the script and a scene list' },
-  { id: 'script', label: 'Script', phase: 'Pre-production', next: 'Design each scene from the templates' },
-  { id: 'storyboard', label: 'Storyboard', phase: 'Pre-production', next: 'Record a draft voice and render a rough cut' },
-  { id: 'rough', label: 'Rough cut', phase: 'Production', next: 'Replace placeholders, then render a draft for review' },
-  { id: 'review', label: 'In review', phase: 'Post-production', next: 'Address the open notes' },
-  { id: 'final', label: 'Final', phase: 'Post-production', next: 'Deliver' },
+  // `next` is what the person looking at the film can do now, in their words.
+  { id: 'brief', label: 'Brief', phase: 'Pre-production', next: 'Read the brief, then ask for a first cut' },
+  { id: 'script', label: 'Script', phase: 'Pre-production', next: 'Read the script and leave notes' },
+  { id: 'storyboard', label: 'Storyboard', phase: 'Pre-production', next: 'Look through the scenes and leave notes' },
+  { id: 'rough', label: 'Rough cut', phase: 'Production', next: 'Watch it and leave notes' },
+  { id: 'review', label: 'In review', phase: 'Post-production', next: 'Send your notes to the agent' },
+  { id: 'final', label: 'Final', phase: 'Post-production', next: 'Ready to share' },
 ];
 export const PHASES = ['Pre-production', 'Production', 'Post-production'];
 
@@ -29,6 +30,6 @@ export const manifestStage = (m, versions) => versions.at(-1)?.notes?.some(n => 
 
 export function stageInfo(id, { openNotes = 0 } = {}) {
   const s = STAGES.find(x => x.id === id) ?? STAGES[0];
-  const next = id === 'review' && !openNotes ? 'Render the final' : id === 'final' && openNotes ? 'Address the open notes' : s.next;
+  const next = id === 'review' && !openNotes ? 'Watch it, then approve it or leave notes' : id === 'final' && openNotes ? 'Send your notes to the agent' : s.next;
   return { id: s.id, label: s.label, phase: s.phase, index: STAGES.indexOf(s), next };
 }

@@ -61,10 +61,10 @@ export function startSound(dir, film, jobs, body) {
   if (cost <= 0) throw fail(kind === 'voice' ? 'The Google narration already matches every line: nothing to generate.' : 'The Google music bed already matches this film. Choose “Generate a new bed” to replace it.', 409);
   const approved = Number(body.approve);
   if (!(Number.isFinite(approved) && approved >= cents(cost) && approved <= 50)) throw fail(`The estimate is now $${cents(cost).toFixed(2)}; approve at least that amount.`, 409);
-  // The film budget (Sound → Cost and approvals) is a ceiling on every run, on top of each approval.
+  // The film budget (the storyboard's `budget`, set by a person) is a ceiling on every run, on top of each approval.
   const raw = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8')), cap = raw.budget;
   if (cap != null && Number.isFinite(cap)) {
-    if (cap <= 0) throw fail('This film’s budget is $0, so paid generation is off. Raise the film budget in Sound → Cost and approvals to allow it.', 409);
+    if (cap <= 0) throw fail('This film’s budget is $0, so paid generation is off. Raise the film budget (clearframe studio DIR set budget N) to allow it.', 409);
     if (cost > cap) throw fail(`The estimate ($${cents(cost).toFixed(2)}) is over this film’s budget ($${cap.toFixed(2)}). Raise the film budget to allow it.`, 409);
   }
   const budget = cap != null && Number.isFinite(cap) ? Math.min(approved, cap) : approved;
@@ -91,7 +91,7 @@ export function requestSpend(dir, { kind, reason }) {
 }
 export const spendRequests = dir => (readLink(dir).spend ?? []);
 
-/** The person's answer to an agent's request. Approval starts the paid job exactly like the Sound tab. */
+/** The person's answer to an agent's request. Approval starts the paid job through startSound. */
 export function answerSpend(dir, film, jobs, { id, decision, by, approve, basis }) {
   const req = spendRequests(dir).find(s => s.id === id);
   if (req?.state === 'approved' && decision === 'approve') return { id: req.job, duplicate: true, approved: req.approved };

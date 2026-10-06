@@ -5,7 +5,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { studioState, studioCommand, studioSchema, planOps } from '../viewer/studio.mjs';
-import { loadViewerNotes } from '../viewer/notes.mjs';
+import { loadViewerNotes, answerNote } from '../viewer/notes.mjs';
 import { touched } from './agent.mjs';
 import { soundState } from '../viewer/sound.mjs';
 import { startSound, requestSpend } from '../viewer/spend.mjs';
@@ -211,8 +211,12 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
     },
 
     notes({ dir, input }) {
+      if (input.answer) {
+        const a = input.answer, n = answerNote(dir, String(a.id ?? ''), { said: a.said, revision: a.revision });
+        return { content: `${n.id} marked as acted on: “${n.answer}”. The person decides whether it is done.`, metadata: { summary: `Answered note ${n.id}` } };
+      }
       const all = loadViewerNotes(dir).filter(n => input.all || !n.resolved);
-      return { content: all.map(n => `${n.id} [${n.state}] ${n.version ?? ''}${n.at != null ? ` at ${sec(n.at)}` : ' (whole film)'}${n.element ? ` element ${n.element}` : ''}: ${n.text}${n.by ? ` — ${n.by}` : ''}${n.replies.map(r => `\n   ↳ ${r.by ?? ''}: ${r.text}`).join('')}`).join('\n') || 'No review notes.',
+      return { content: all.map(n => `${n.id} [${n.state}] ${n.version ?? ''}${n.at != null ? ` at ${sec(n.at)}` : ' (whole film)'}${n.where ? ` · pinned ${n.where} of the frame${n.on ? `, on “${n.on}”` : ''}` : ''}${n.element ? ` element ${n.element}` : ''}: ${n.text}${n.by ? ` — ${n.by}` : ''}${n.answer ? `\n   ↳ you answered: ${n.answer}` : ''}${n.replies.map(r => `\n   ↳ ${r.by ?? ''}: ${r.text}`).join('')}`).join('\n') || 'No review notes.',
         metadata: { summary: `${all.length} note${all.length === 1 ? '' : 's'}` } };
     },
 

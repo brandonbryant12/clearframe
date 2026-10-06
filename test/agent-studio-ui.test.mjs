@@ -1,11 +1,11 @@
-// The Agent column's outbox (66-studio-agent.js), run in a VM with browser storage cloned through
+// The agent pane's outbox (40-agent.js), run in a VM with browser storage cloned through
 // JSON as localStorage would: durable ids survive failures and reloads, transient state never does.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
-const source = fs.readFileSync(new URL('../engine/ui/viewer/js/66-studio-agent.js', import.meta.url), 'utf8').split('// ------------------------------------------------------------------ scope')[0];
+const source = fs.readFileSync(new URL('../engine/ui/viewer/js/40-agent.js', import.meta.url), 'utf8').split('// ------------------------------------------------------------------ the conversation on the page')[0];
 const ID = 'msg_cfabcdefghijklmnopqrstuvwx', ID2 = 'msg_cfzyxwvutsrqponmlkjihgfedc';
 const entry = (id, text) => ({ id, submission: id, text, scope: { kind: 'film' }, delivery: 'queue' });
 
@@ -62,9 +62,9 @@ test('a second message sent while the first is in flight: each goes once, and on
   assert.deepEqual(JSON.parse(saved.get('cf-agent-outbox:film')), []);
 });
 
-// ------------------------------------------------------------------ home: uploads belong to their draft (32-home.js)
+// ------------------------------------------------------------------ home: uploads belong to their draft (20-home.js)
 
-const home = fs.readFileSync(new URL('../engine/ui/viewer/js/32-home.js', import.meta.url), 'utf8');
+const home = fs.readFileSync(new URL('../engine/ui/viewer/js/20-home.js', import.meta.url), 'utf8');
 function homePage(saved, { upload, create = async () => ({ id: 'projects-x', film: { title: 'X', files: [] } }) } = {}) {
   const calls = [];
   const el = () => ({ value: '', textContent: '', disabled: false, dataset: {}, focus() {}, insertAdjacentHTML() {}, querySelectorAll: () => [], querySelector: () => null });
@@ -108,73 +108,35 @@ test('an upload that finishes after its draft was replaced never writes into the
   assert.equal(JSON.parse(saved.get('cf-new-film')).request, 'req-bbbbbbbb');
 });
 
-// ------------------------------------------------------------------ Sound tab: one request per working copy (67-studio-sound.js)
-
-function soundPage(respond) {
-  const calls = [];
-  const c = vm.createContext({ RIGHT_TABS: [], ACTIONS: {}, S: { id: 'film', st: { hash: 'A' } }, Promise, crypto: globalThis.crypto,
-    esc: s => String(s), currentSession: x => x === c.S, invalidate: () => { c.renders = (c.renders ?? 0) + 1; },
-    call: url => { calls.push(c.S.st.hash); return respond(calls.length); } });
-  vm.runInContext(fs.readFileSync(new URL('../engine/ui/viewer/js/67-studio-sound.js', import.meta.url), 'utf8'), c);
-  return { c, calls };
-}
-const flush = () => new Promise(r => setImmediate(r));
-
-test('a failing sound read is held for that working copy: rendering again does not refetch; retry or an edit does', async () => {
-  const { c, calls } = soundPage(() => Promise.reject(Object.assign(new Error('plan failed'), { status: 500 })));
-  for (let i = 0; i < 5; i++) { vm.runInContext('soundPanel()', c); await flush(); }
-  assert.equal(calls.length, 1, 'one request, however often the panel renders');
-  assert.match(vm.runInContext('soundPanel()', c), /Could not read the film’s sound: plan failed[\s\S]*Try again/);
-  vm.runInContext('loadSound({ retry: true })', c); await flush();
-  assert.equal(calls.length, 2);
-  c.S.st.hash = 'B'; vm.runInContext('soundPanel()', c); await flush();
-  assert.equal(calls.length, 3, 'a new working copy is read once');
-});
-
-test('a sound reply is labelled with the working copy it was asked for, not the one current when it lands', async () => {
-  let answer;
-  const { c, calls } = soundPage(() => new Promise(r => { answer = r; }));
-  vm.runInContext('soundPanel()', c);
-  vm.runInContext('soundPanel()', c);
-  assert.equal(calls.length, 1, 'one request in flight at a time');
-  c.S.st.hash = 'B';
-  answer({ narration: {}, music: {} }); await flush(); await flush();
-  assert.equal(c.S.soundHash, 'A');
-  assert.match(vm.runInContext("S.sound = null; soundPanel()", c), /Reading/, 'the stale reply is not shown as current; the panel reads again');
-  await flush();
-  assert.deepEqual(calls, ['A', 'B'], 'the newer working copy is then read');
-});
-
-// ------------------------------------------------------------------ the conversation's progress (66-studio-agent.js)
+// ------------------------------------------------------------------ the conversation on the page (40-agent.js)
 
 function agentUI(S) {
-  const c = vm.createContext({ S, ACTIONS: {}, store: { get: (k, f) => f, set() {} }, crypto: globalThis.crypto, Date,
+  const c = vm.createContext({ S, store: { get: (k, f) => f, set() {} }, crypto: globalThis.crypto, Date, toast() {},
     esc: s => String(s), plural: (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`, clock: s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`,
-    versionName: v => `Version ${v.number}`, beatById: () => null });
-  vm.runInContext(fs.readFileSync(new URL('../engine/ui/viewer/js/66-studio-agent.js', import.meta.url), 'utf8'), c);
+    markdown: s => `<p>${s}</p>`, when: () => '' });
+  vm.runInContext(fs.readFileSync(new URL('../engine/ui/viewer/js/40-agent.js', import.meta.url), 'utf8'), c);
   return c;
 }
-const film = { st: { history: [], changes: { edited: [], added: [], removed: [], film: false, reordered: false } }, jobs: [], f: { versions: [{ id: 'r002', number: 2, quality: 'Final' }] } };
 
 test('before the first word, the conversation says it is waiting, timed from when the message was sent (a reload keeps the clock)', () => {
   const sent = Date.now() - 125000, conv = { running: true, messages: [{ role: 'user', id: 'msg_a', at: sent }] };
   for (let reload = 0; reload < 2; reload++) {
-    const html = vm.runInContext('firstResponse', agentUI(structuredClone(film)))(conv);
+    const html = vm.runInContext('firstResponse', agentUI({ id: 'film' }))(conv);
     assert.match(html, /Waiting for the model’s first response/);
     assert.match(html, /2:0[5-6]/, 'elapsed since the send, not since the page opened');
     assert.match(html, /Stop, then Send now/, 'past 90 s it says how to recover');
   }
-  assert.equal(vm.runInContext('firstResponse', agentUI(structuredClone(film)))({ running: false, messages: conv.messages }), '');
+  assert.equal(vm.runInContext('firstResponse', agentUI({ id: 'film' }))({ running: false, messages: conv.messages }), '');
 });
 
-test('a finished question does not reset the build strip: the film\'s real render state and Watch stay; a build keeps its steps', () => {
-  const c = agentUI(structuredClone(film)), progress = vm.runInContext('progressHTML', c);
-  const question = { mode: 'oneshot', messages: [{ role: 'user', id: 'msg_q' }, { role: 'assistant', parts: [{ type: 'text', text: 'We drew the two scenes; the export is r002.' }] }, { role: 'idle', outcome: 'succeeded' }] };
-  const html = progress(question);
-  assert.match(html, /Film:.*Version 2 · Final · matches the working copy/);
-  assert.match(html, /data-act="watch" data-rev="r002"/);
-  assert.doesNotMatch(html, /Write the scenes|Render the rough cut/);
-  const build = { mode: 'oneshot', messages: [{ role: 'user', id: 'msg_b' }, { role: 'assistant', parts: [{ type: 'tool', own: true, tool: 'edit', status: 'completed', beats: ['a'] }] }] };
-  assert.match(progress(build), /1 scene changed[\s\S]*Render the rough cut/);
-  assert.match(progress({ ...question, messages: question.messages.slice(0, 1) }), /Working on your request/, 'a question still running is not shown as a build');
+test('a request reads as one block: every step folded into one line, then what the agent said', () => {
+  const tool = (title, extra = {}) => ({ type: 'tool', title, status: 'completed', ...extra });
+  const msgs = [{ role: 'assistant', parts: [tool('Read the film'), { type: 'text', text: 'Looking at scene 2.' }] }, { role: 'assistant', parts: [tool('Changed the kicker', { own: true, tool: 'edit' })] },
+    { role: 'assistant', parts: [tool('Answered note n003', { own: true, tool: 'notes' }), { type: 'text', text: 'Done: the kicker reads INFLATION, PAST YEAR.' }] }];
+  const html = vm.runInContext('runHTML', agentUI({ id: 'film' }))(msgs, { running: false, messages: msgs }, false);
+  assert.equal((html.match(/<details class="steps">/g) ?? []).length, 1, 'one line of steps for the whole request');
+  assert.match(html, /3 steps · 1 change to the film/);
+  assert.match(html, /Looking at scene 2\.[\s\S]*Done: the kicker reads/, 'the replies follow, in order');
+  const live = vm.runInContext('runHTML', agentUI({ id: 'film' }))([{ role: 'assistant', parts: [tool('Read the film'), { type: 'tool', title: 'Queued draft', status: 'running' }] }], { running: true }, true);
+  assert.match(live, /spin[\s\S]*Queued draft/, 'while it works, the line says what it is doing now');
 });

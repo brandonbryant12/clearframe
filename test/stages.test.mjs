@@ -22,8 +22,8 @@ test('an outside film can name its stage; otherwise its latest version decides',
 });
 
 test('the next step follows the open notes', () => {
-  assert.equal(stageInfo('review', { openNotes: 2 }).next, 'Address the open notes');
-  assert.equal(stageInfo('review').next, 'Render the final');
-  assert.equal(stageInfo('final', { openNotes: 1 }).next, 'Address the open notes');
+  assert.equal(stageInfo('review', { openNotes: 2 }).next, 'Send your notes to the agent');
+  assert.equal(stageInfo('review').next, 'Watch it, then approve it or leave notes');
+  assert.equal(stageInfo('final', { openNotes: 1 }).next, 'Send your notes to the agent');
   assert.deepEqual([stageInfo('rough').phase, stageInfo('final').index], ['Production', 5]);
 });

@@ -289,7 +289,7 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
       }
       if (kind === 'captions') j.draft = body.draft !== false;
       if (kind === 'voice' || kind === 'music') {
-        if (!grant?.[SOUND_GRANT] || grant.kind !== kind) throw Object.assign(new Error('Narration and music are made through the Sound tab, which checks approvals.'), { status: 403 });
+        if (!grant?.[SOUND_GRANT] || grant.kind !== kind) throw Object.assign(new Error('Narration and music are made through the sound endpoint, which checks approvals.'), { status: 403 });
         j.paid = grant.paid === true; j.force = grant.force === true;
         if (j.paid) {
           // The gate checked a named approval covering today's estimate; the engine refuses past this budget.

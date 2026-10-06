@@ -310,7 +310,7 @@ export function studioCommand(dir, body, { actor = null } = {}) {
     if (command?.startsWith('recording.')) return recordingCommand(dir, h, ok, raw, body);
     const sb = JSON.parse(raw), ops = command === 'batch' ? body.ops : [body];
     // The spending ceiling is the person's to set: an agent's edit may not raise or remove it.
-    if (actor?.by === 'agent' && Array.isArray(ops) && ops.some(touchesBudget)) throw fail('Only a person can change the film budget (Sound → Cost and approvals).');
+    if (actor?.by === 'agent' && Array.isArray(ops) && ops.some(touchesBudget)) throw fail('Only a person can change the film budget (clearframe studio DIR set budget N).');
     if (!Array.isArray(ops) || !ops.length || ops.length > 200) throw fail('A batch holds 1–200 changes.');
     const labels = ops.map(op => { if (op?.command === 'batch' || op?.command?.startsWith?.('recording.') || ['undo', 'redo'].includes(op?.command)) throw fail('That command cannot be batched.'); return applyOp(dir, sb, op); });
     const errors = validateStoryboard(sb);

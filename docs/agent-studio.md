@@ -5,8 +5,8 @@ creates the project, links one [OpenCode](https://opencode.ai) conversation to i
 brief. The agent builds through the same validated, undoable studio commands and native preview
 queue as the panels, so you can talk to it and edit by hand in the same workspace.
 
-This page is the setup and operating contract. The editing workspace itself is described in
-`docs/viewer.md`; review rounds in `docs/editing.md`.
+This page is the setup and operating contract. The page itself (watch, sticky notes, the Agent
+tab) is described in `docs/viewer.md`; review rounds in `docs/editing.md`.
 
 ## Set up a computer
 
@@ -38,12 +38,10 @@ input, output and cache cost in OpenCode's catalog; see https://opencode.ai/docs
 no account or key. It has been used for every end-to-end run of this studio, including the plugin
 tools and permissions below.
 
-ClearFrame never switches a film to a paid model by itself. In the studio, the model chip in the
-Agent column opens **Agent settings**: the runtime's state, the models in its catalog (free ones
-first, each marked free or paid), and provider connections. Choosing a paid model asks for
-confirmation. Provider keys found in the environment (for example `GEMINI_API_KEY`) are picked up
-automatically; a key pasted in settings goes straight to the runtime's own OpenCode credential
-store and is never written to the page or the project.
+ClearFrame never switches a film to a paid model by itself. *Settings* in a film's Agent tab lists
+the models in the runtime's catalog (free ones first, each marked free or paid); choosing a paid one
+needs a tick. Provider keys found in the environment of the process that starts the studio (for
+example `GEMINI_API_KEY`) are picked up automatically by the runtime and never reach the page.
 
 Things learned getting the free tier to work (keep them):
 
@@ -54,7 +52,7 @@ Things learned getting the free tier to work (keep them):
 - **Do not deny the shell tool.** OpenCode's free tier answers `403 provider.auth: "OpenCode's free
   tier can only be used from within OpenCode"` when the built-in shell tool is denied (a blanket
   `{action: '*', effect: 'deny'}` does the same). The studio keeps shell (and web fetch/search)
-  behind **approval** instead: the agent can ask, and the request appears in the Agent column with
+  behind **approval** instead: the agent can ask, and the request appears in the conversation with
   the exact command; nothing runs until you allow it. Denying `edit` is fine, and the studio does.
 - **The catalog loads asynchronously.** Right after start `model.list` returns `{ location, data: [] }`;
   the studio waits (up to 45 s) for the default model to appear before calling it missing.
@@ -68,33 +66,36 @@ Things learned getting the free tier to work (keep them):
 
 ## Two ways to direct
 
-Each film has a working mode, chosen on the home page and switchable at any time in the Agent
-column; it is saved with the project (`review/agent.json`) and sent with every message.
+Each film has a working mode, saved with the project (`review/agent.json`) and sent with every
+message. Films made on the home page start in one-shot; *Settings* in the Agent tab switches it.
 
-- **Make it for me (one-shot).** The agent carries a request through to something you can watch
+- **Just do it (one-shot).** The agent carries a request through to something you can watch
   without stopping to ask: for a new film it replaces the starter, renders a full-length rough cut
-  through the native queue and reports what is ready and what is a placeholder. A progress strip
-  shows what actually happened (brief read, scenes changed, rough cut queued/rendering/done, ready to
-  watch) from tool results and jobs, never from the agent's own claims, with Stop, Inspect changes,
-  Undo all of it and Watch.
-- **Build it together.** The agent proposes a plan and waits, makes one change at a time, shows it
-  with a still or section, and ends with one question when the decision is yours; quick replies
-  ("Yes, go ahead", "Show me a preview first", "Not yet — explain the options") answer in one click.
+  through the native queue and reports what is ready and what is a placeholder. The Agent tab's
+  status line and its folded steps show what actually happened (each tool call, the render's
+  progress) from tool results and jobs, never from the agent's own claims; *Stop* interrupts and
+  *Undo the agent's last changes* takes the newest request's edits back in one step.
+- **Check with me first (together).** The agent proposes a plan and waits, makes one change at a
+  time, and ends with one question when the decision is yours; quick replies ("Yes, go ahead.",
+  "Show me first.", "Explain the options.") answer in one click.
 
-Manual editing works the same in both: every panel, the timeline and undo stay live, and the agent
-re-reads the film before each change (a stale edit is refused, never merged over yours).
+The page has no hand-editing panels: you direct with notes and words. `clearframe studio DIR …` edits
+from a terminal through the same validated, undoable path, and the agent re-reads the film before
+each change (a stale edit is refused, never merged over someone else's).
 
 ## Google sound (narration and music)
 
 Sound is adapter-based; Google is the first paid provider for both speech and music, beside the
-free local drafts ClearFrame always had. The Sound tab (inspector) shows, per film:
+free local drafts ClearFrame always had. Ask the agent for it ("record the narration with Google",
+"a calmer music bed"): its `clearframe_sound` tool reads what follows, queues free drafts, and
+*requests* paid generation, which appears in the conversation for your approval.
 
 - **Narration**: the Google voice (Gemini TTS prebuilt voices) and a short delivery style; the
   narration takes (one continuous take per film by default) with who made each line (free draft,
-  Google, an imported recording), whether the words still match, measured word timing, and a
-  player per line. *Record free draft voice* uses this computer's voice and never replaces a Google
-  take whose words are unchanged. *Generate with Google…* records only the takes whose words, voice,
-  style or model changed (the engine caches by take), at the estimate shown.
+  Google, an imported recording), whether the words still match, and measured word timing. A free
+  draft uses this computer's voice and never replaces a Google take whose words are unchanged. Google
+  generation records only the takes whose words, voice, style or model changed (the engine caches by
+  take), at the estimate shown.
   A draft take records the OS voice that actually spoke it (`osVoice`, carried forward when a take
   is reused, since the draft voice is not part of a take's hash), never the Google voice and style it
   is set to. Older draft records that noted only the Google setting are shown as "unrecorded OS
@@ -105,14 +106,12 @@ free local drafts ClearFrame always had. The Sound tab (inspector) shows, per fi
   apart from "settings for Google", and `clearframe_job` reports each rough cut's or final's
   measured size, length and sound (a rough cut is half the project size).
 - **Music**: direction (style and instruments; sections follow the edit), the Lyria model and its
-  price, the current bed with a player, *Make free draft bed*, and *Generate with Google…* (a new
-  Google bed replaces the current one).
-- **Mix**: music level, ducking under the voice, fades, sound effects, loudness, and *Hear the
-  selected section* (a native section preview with the full mix).
-- **Cost and approvals**: the engine's `plan` (what is cached, draft-only or to do, and its cost),
-  the film budget, and every approved spend.
+  price, a free draft bed, or a Google bed (which replaces the current one).
+- **Cost**: the engine's `plan` (what is cached, draft-only or to do, and its cost), the film budget
+  (`budget` on the storyboard; a person sets it, for example `clearframe studio DIR set budget 5`, and
+  an agent's edit may not change it), and every approved spend in `review/spend.jsonl`.
 
-Paid generation only runs after a person approves an amount: the dialog says what will be generated,
+Paid generation only runs after a person approves an amount: the approval says what will be generated,
 the estimate, and asks for your name and an explicit tick. The approval must cover today's estimate
 and is bound to the exact provider requests shown (content hashes of each narration take, or of the
 music request). The film budget, when set, is a ceiling on every run: $0 turns paid generation off,
@@ -137,7 +136,7 @@ Setup on a computer:
    shell. The studio only reports whether the key is present; it never shows, stores or sends it to
    the page. (OpenCode also picks the variable up for Google chat models; ClearFrame does not use a
    paid chat model unless you choose one.)
-3. Without a key, everything free still works and the Sound tab says what is missing.
+3. Without a key, everything free still works and the agent says what is missing.
 
 Verification status: the free draft paths, the estimates, approvals, refusals (no name, approval
 below the estimate, no key, recorded narration) and the job queue were exercised; **no paid Google
@@ -174,7 +173,7 @@ studio serves films' media from there). Dot folders are never served by the stud
   down; the plugin's tool calls fail politely until it is back ("the studio is not running") and
   succeed again afterwards (each start writes a new bridge token).
 - **Service restarts keep everything.** Sessions are in the runtime's database; a film reopens its
-  conversation by id. If the database was removed, the studio says so in the Agent column and starts
+  conversation by id. If the database was removed, the studio says so in the Agent tab and starts
   a new conversation with your next message.
 - **Stop the runtime:** `clearframe agent stop`. Stopping the viewer (Ctrl+C) stops its render jobs,
   not the OpenCode service.
@@ -185,24 +184,26 @@ studio serves films' media from there). Dot folders are never served by the stud
 
 ## Working with the agent
 
-- **Start from an idea.** The home page form takes the idea, an optional title, format (landscape or
-  vertical), kind of film (any playbook, or the agent's choice), look (any treatment, or the agent's
-  choice), audience and takeaway, and source documents (PDF, DOCX, Markdown, text, HTML, RTF, CSV,
-  JSON, up to 25 MB each). Creating runs the same intake as `clearframe start` and sends your brief
-  as the conversation's first message.
-- **Scope.** Each message is about something: the whole film, a scene, a layer, a range of scenes, the
-  moment under the playhead, a review note, or a file. Pin it from the composer's scope menu or from
-  "Ask the agent" on a scene, layer, note or file. The scope is snapshotted when pinned and does not
-  follow your later navigation; the chip on each message shows what it was about. The studio
-  **enforces** it: an edit outside a scene/range/moment scope, or touching anything but the pinned
-  element of a layer scope, is refused and nothing is written; the agent has to ask you to widen it.
-  A whole-cut note and a file are context only and do not limit edits.
+- **Start from an idea.** The home page asks *What are we making?*: your words, wide or tall, and
+  any files (PDF, DOCX, Markdown, text, HTML, RTF, CSV, JSON up to 25 MB each; pictures, footage and
+  sound). *Make it* runs the same intake as `clearframe start` and sends your words as the
+  conversation's first message; the agent chooses the kind of film and the look.
+- **Notes are the main way in.** Sticky notes left on a cut (a moment, a spot on the picture and the
+  words under it) are saved as review notes; *Send N notes to the agent* sends one message listing
+  them. With a single note the message is scoped to it, so edits are held to that note's scene; with
+  several it is about the whole film. After acting, the agent answers each note in one line
+  (`clearframe_notes` with `answer`, which marks it `applied`); the person then says *Looks good* or
+  *Not yet*. Answering is never approval.
+- **Scope.** Each message is about something, snapshotted when it is sent: the whole film, or a note
+  (its scene). The studio **enforces** it: an edit outside a note's scene is refused and nothing is
+  written; the agent has to ask you to widen it. (The server also accepts scene, layer, range,
+  moment and file scopes from other clients.)
 - **Queue, steer, stop.** While the agent works, Enter queues a follow-up (it runs after the current
   reply), "Send now" delivers it at the agent's next step, and Stop interrupts the reply. Queued
   messages can be sent now or removed.
 - **Approvals and questions** appear in the conversation and wait for you.
-- **Undo.** Each agent edit is one step in the shared undo history. "Undo these edits" under a reply
-  undoes all of that reply's edits as one step while they are the newest changes.
+- **Undo.** Each agent edit is one step in the shared undo history. "Undo the agent's last changes"
+  undoes all of the newest request's edits as one step while they are the newest changes.
 - **Nothing is sent twice.** Each message gets an id in the browser before it is sent and stays in
   an outbox (in the browser's storage) until the server confirms it; OpenCode treats a repeated id as
   the same message. A refresh, a lost reply or "Retry" cannot duplicate a prompt. A new film's create
@@ -220,7 +221,7 @@ runs them for the one project the calling session belongs to:
 | `clearframe_edit` | up to 200 operations as one validated, hash-checked, undoable step, held to the message's scope |
 | `clearframe_render` | still, section, check, draft (rough cut) or captions through the studio's single render queue |
 | `clearframe_job` | a render's status, output, errors; can wait up to 90 s |
-| `clearframe_notes` | review notes and replies |
+| `clearframe_notes` | review notes (with where each is pinned and the words under it) and replies; `answer` marks a note acted on with one line |
 | `clearframe_files` | list the project's files; read a source document (DOCX, PDF, HTML and RTF converted to text) |
 | `clearframe_write` | replace `brief.md`/`BRIEF.md` or `DIRECTION.md` |
 | `clearframe_guide` | ClearFrame's craft guides (the `skills/` SKILL.md files) |
@@ -248,7 +249,7 @@ uploaded page cannot act on the studio.
 | You see | Do |
 | --- | --- |
 | "OpenCode did not start" | `clearframe agent doctor`; check `.clearframe/opencode/data/opencode/log/opencode.log`; `npm install` if the binary is missing |
-| "The model … is not in this runtime's catalog" | the catalog could not load (network) or the model was removed: retry, or choose another model in Agent settings |
+| "The model … is not in this runtime's catalog" | the catalog could not load (network) or the model was removed: retry, or choose another model in the Agent tab's Settings |
 | a 403 "free tier" error on a reply | someone changed the runtime's permissions to deny the shell; restore `engine/lib/agent/runtime.mjs` defaults and restart (`clearframe agent stop`) |
 | "Another ClearFrame studio … runs this folder's agent" | use the studio already running, or stop it |
 | tool calls say the studio is not running | restart `clearframe viewer --serve`; the conversation continues |
@@ -259,7 +260,7 @@ requests from this computer.
 
 ## A worked example
 
-`examples/clearframe-self-demo` is a product demo of this studio made through it: the brief and
+`examples/clearframe-self-demo` is a product demo of the previous studio layout (panels, inspector, timeline) made through it: the brief and
 uploads on the home page, one-shot and together revisions, scoped notes, hand edits, rough cuts and
 the final, with every prompt, the storyboard, the agent's decision log and the scripts that recorded
 the studio's own screens (`scripts/demo-captures.mjs`, `scripts/demo-clips.mjs`).

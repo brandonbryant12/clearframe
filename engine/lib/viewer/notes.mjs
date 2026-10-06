@@ -15,6 +15,12 @@ const cleanText = (text, max = 2000) => {
 };
 const tagsOf = text => [...new Set((text.match(/#[\p{L}\p{N}_-]+/gu) ?? []).map(t => t.slice(1).toLowerCase()))];
 
+/** Where a pin sits on the frame, in words an agent (or a person) can follow. */
+export function spotWords({ x, y }) {
+  const row = y < 1 / 3 ? 'top' : y > 2 / 3 ? 'bottom' : 'middle', col = x < 1 / 3 ? 'left' : x > 2 / 3 ? 'right' : 'centre';
+  return row === 'middle' && col === 'centre' ? 'centre' : `${row} ${col}`;
+}
+
 // Engine states, in the words a reviewer uses.
 const RESOLVED = { applied: 'Applied', accepted: 'Resolved', dismissed: "Won't change" };
 
@@ -28,7 +34,9 @@ export function noteView(n, { pins = {}, engine = false } = {}) {
     at: engine ? n.anchor?.at ?? null : n.at ?? null,
     scope: n.scope ?? (n.at == null && !n.anchor ? 'film' : 'beat'),
     element: (engine ? n.anchor?.element ?? pins[n.id]?.element : n.element) ?? null,
-    pin: pin?.x != null ? { x: pin.x, y: pin.y } : null,
+    pin: pin?.x != null ? { x: pin.x, y: pin.y } : null, where: pin?.x != null ? spotWords(pin) : null, on: typeof pin?.on === 'string' ? pin.on : null,
+    // The raw status, and the agent's one-line answer when it acted on the note.
+    status, changedIn: engine && status === 'applied' ? n.resolution?.revision ?? null : null, answer: engine && status === 'applied' ? n.resolution?.summary ?? null : null,
     resolved, state: resolved ? (engine ? `${RESOLVED[status]}${status === 'applied' && n.resolution?.revision ? ` in ${n.resolution.revision}` : ''}` : 'Resolved') : status === 'question' ? 'Question' : 'Open',
     tags: tagsOf(n.text ?? ''), replies: (n.replies ?? []).map(r => ({ text: r.text, by: r.by ?? null, at: r.at ?? null })),
   };
@@ -41,6 +49,8 @@ export function saveNote(dir, { version, at, text, by, element, pin, scope }) {
   if (!whole && !(Number.isFinite(at) && at >= 0)) throw new Error('Note time must be a nonnegative number');
   if (whole && (pin != null || element != null)) throw new Error('Whole-cut notes cannot have a picture pin');
   if (pin != null && !(Number.isFinite(pin.x) && Number.isFinite(pin.y) && pin.x >= 0 && pin.x <= 1 && pin.y >= 0 && pin.y <= 1)) throw new Error('pin needs x and y between 0 and 1');
+  // A pin keeps the words on screen under it, so the note can say what was pointed at.
+  if (pin != null) pin = { x: pin.x, y: pin.y, ...(typeof pin.on === 'string' && pin.on.trim() ? { on: pin.on.trim().slice(0, 200) } : {}) };
   if (isManifest(dir)) {
     const data = manifestNotes(dir);
     const note = { id: `n${String(data.notes.length + 1).padStart(3, '0')}`, version, at: whole ? null : at, scope: whole ? 'film' : 'beat', text, by: by || null, element: element ?? null,
@@ -98,4 +108,15 @@ export function loadViewerNotes(dir) {
   if (isManifest(dir)) return manifestNotes(dir).notes.map(n => ({ ...noteView(n), version: n.version }));
   const pins = readJSON(pinsFile(dir), {});
   return readNotes(dir).map(n => ({ ...noteView(n, { pins, engine: true }), version: n.revision }));
+}
+
+/** The agent's answer to a note it acted on: applied, with what it changed in one line. A person still decides. */
+export function answerNote(dir, id, { said, revision } = {}) {
+  said = cleanText(said, 400);
+  if (isManifest(dir)) throw new Error('Notes on a film made outside ClearFrame are answered by people.');
+  const n = readNotes(dir).find(x => x.id === id);
+  if (!n) throw new Error(`No note ${id}.`);
+  if (n.status === 'accepted' || n.status === 'dismissed') throw new Error(`${id} is already closed by a person.`);
+  setNoteStatus(dir, id, 'applied', { revision: revision ?? undefined, reason: said, by: 'agent' });
+  return loadViewerNotes(dir).find(x => x.id === id);
 }

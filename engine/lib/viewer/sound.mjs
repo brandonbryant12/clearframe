@@ -37,7 +37,7 @@ export function providers() {
 const url = (base, file) => '/' + path.relative(base, file).split(path.sep).map(encodeURIComponent).join('/');
 const voiceOf = (P, id) => readJSON(path.join(P.vo, `${id}.json`), null);
 
-/** Everything the Sound tab needs, for one film. `base` is the folder the studio serves. */
+/** A film's sound (narration, music, what Google would cost), for the agent and approvals. `base` is the folder the studio serves. */
 export function soundState(dir, base = process.cwd()) {
   const sb = loadStoryboard(dir), P = paths(dir);
   let timing = null, costs = null, planError = null;

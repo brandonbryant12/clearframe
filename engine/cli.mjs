@@ -445,7 +445,7 @@ async function main() {
       return new Promise(() => {});
     }
     const r = await buildViewer({ root, out: o.out ?? 'build/viewer', render: !o['no-render'] });
-    return console.log(`${r.films} film(s), ${r.versions} version(s), ${r.charts} chart preview(s), ${r.fonts} font(s) → ${path.relative(process.cwd(), r.file)}\nOpen it in a browser (double-click works), or add --serve to save notes into the films.`);
+    return console.log(`${r.films} film(s), ${r.versions} version(s) → ${path.relative(process.cwd(), r.file)}\nOpen it in a browser (double-click works) to watch and take notes, or run with --serve to work with the agent.`);
   }
   if (cmd === 'agent') {
     // The studio's OpenCode runtime: isolated folders, the service, its model catalog (docs/agent-studio.md).

@@ -72,7 +72,7 @@ export async function serveViewer({ root, out = 'build/viewer', port = 4317, ren
       if (p === '/api/ping') return reply(200, { ok: true, studio: true });
       if (p === '/api/studio/schema') return reply(200, studioSchema());
       if (p === '/api/studio/jobs') return reply(200, { jobs: jobs.list(url.searchParams.get('film')) });
-      if (p === '/api/films') return reply(200, { generatedAt: built.data.generatedAt, roots: built.data.roots, films: built.data.films, projects: path.relative(base, projectRoot) || '.', agent: !!agent });
+      if (p === '/api/films') return reply(200, { generatedAt: built.data.generatedAt, roots: built.data.roots, films: built.data.films.map(freshNotes), projects: path.relative(base, projectRoot) || '.', agent: !!agent });
       if (p === '/api/agent/status') return reply(200, { enabled: !!agent, disabled: agentOff, runtime: runtime?.status() ?? null, projects: path.relative(base, projectRoot) || '.' });
       if (p === '/api/agent/catalog') return reply(200, await startCatalog());
       if (agent && p === '/api/agent/models') return reply(200, { models: await agent.models() });
@@ -146,6 +146,17 @@ export async function serveViewer({ root, out = 'build/viewer', port = 4317, ren
       }
       return reply(404, { error: 'Unknown studio endpoint' });
     } catch (e) { return reply(e.status ?? 400, { error: e.message, ...(e.errors ? { errors: e.errors } : {}) }); }
+  }
+
+  /** A film with its notes as they are now (the agent answers them while the page is open), not as they were at build. */
+  function freshNotes(f) {
+    const dir = built.dirs[f.id];
+    if (!dir || f.kind !== 'clearframe' || !f.versions.length) return f;
+    let notes;
+    try { notes = loadViewerNotes(dir); } catch { return f; }
+    const ids = new Set(f.versions.map(v => v.id)), latest = f.versions.at(-1).id;
+    return { ...f, versions: f.versions.map(v => ({ ...v, notes: [...notes.filter(n => n.version === v.id),
+      ...(v.id === latest ? notes.filter(n => n.version && !ids.has(n.version)).map(n => ({ ...n, earlier: n.version, earlierAt: n.at, at: null, pin: null, element: null })) : [])] })) };
   }
 
   /** Starting points the new-film form offers: playbooks, treatments and directions from the library. */
