@@ -73,3 +73,26 @@ Scope menu: **Whole film** (still Make it for me):
 ```text
 Good. Do the same for the other scenes whose screenshot is small: Scope (scope-composer.png), Review (review-thread.png), Sound (sound-panel.png) and Export (deliver-panel.png) — use the close-up so the UI reads on a phone; pins only where they still point at something in the close-up. Keep the narration. Then render a new rough cut and tell me when it is ready.
 ```
+
+## 5. Together: the tall close-ups
+
+Assets → **Add files…**: the second capture pass's `captures.json` (saved as `source/captures-2.json`,
+with each close-up's crop and the pins measured inside it). **Build it together**, scope Whole film:
+
+```text
+r002 reads much better in the wide close-ups (Scope, Review). The tall ones still read small: Conversation, By hand, Sound and Export are tall columns in a wide frame, and their pins sit at the centre instead of on the controls. I added the capture manifest again (source/captures-2.json): each close-up now has its crop and the pins measured inside it. Propose how to make these four scenes readable on a phone, for example the beat camera pushing in on the part each line talks about, using the measured pins. Keep the narration. Wait for my answer; after it, apply and render a new rough cut.
+```
+
+The agent proposed (nothing changed before the answer). Quick reply: `Yes — go with your recommendation.`
+The engine refused the render (the push threw the annotate legend off-frame); the agent ran a check
+instead of rendering blind and asked the person to choose between three options.
+
+## 6. Recorded clips instead of zoomed screenshots
+
+Assets → **Add files…**: `modes.mp4`, `conversation.mp4`, `scope.mp4`, `undo.mp4`, `stop.mp4`,
+`sound.mp4`, `approval.mp4`, `deliver.mp4` and `clips.json` (from `scripts/demo-clips.mjs`). Still
+Build it together, Whole film:
+
+```text
+None of the three exactly. I recorded short 16:9 screen clips of the real controls at 2×, so they fill the frame with real pixels and no zoom; they are in assets/uploads and source/clips.json says what each one shows: modes.mp4 (switching modes), conversation.mp4 (a saved reply and its film status), scope.mp4 (Ask the agent pins a scene, then typing), undo.mp4 (a hand edit, ⌘Z, ⇧⌘Z), stop.mp4 (a request sent, then Stop), sound.mp4 (takes, free draft voice, priced Google button), approval.mp4 (the approval dialog opened and cancelled) and deliver.mp4 (Render final, Download). Use them as video scenes, fit cover, no camera push and no pins, in place of the pictures in 03 Two ways (modes), 04 Conversation, 05 Scope, 06 By hand (undo), 08 Sound, 09 Approval and 10 Export, keeping each scene's narration and title; drop the camera pushes that failed. After 04, add one short scene for stop.mp4 with the narration "And you can stop it at any moment." Keep 02 and 07 Review as they are. Check, then render a new rough cut.
+```

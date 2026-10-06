@@ -99,3 +99,24 @@ close-ups (scope composer, review thread, the two modes) now read on a phone; th
 (conversation, inspector, sound and readiness panels) still sit small in a wide frame, the "By hand"
 cover crop lands on two meaningless coordinate fields, and the agent placed the close-up pins at the
 centre (0.5, 0.5) for lack of measurements.
+
+**4d. Together, whole film: the tall close-ups.** The second capture manifest was added through
+Assets (`source/captures-2.json`). Asked for a proposal, the agent corrected every pin to its measured
+position (it also found the Scope pin it had placed at the centre) and proposed word-cued camera
+pushes; nothing changed before the answer. After "Yes", the engine refused the render: pushing into
+an `annotate` scene throws its own pin legend, caption and label off the frame. The agent ran a
+check rather than rendering blind, explained why (the legend sits beside the picture; a phone needs
+2.5–4.5× and that zoom is soft), and handed the decision back with three options. r002 stayed
+watchable throughout.
+
+- **What this showed:** zooming screenshots cannot make tall UI read on a phone without losing the
+  labels or sharpness. Codex's round-6 review reached the same verdict independently, and added
+  that a slideshow of stills cannot show a stop, an undo or a mode switch at all.
+- **Fixed for the demo:** `scripts/demo-clips.mjs` records real interactions (real mouse and
+  keyboard events, a drawn cursor) in a tight 16:9 box at 2×, about 500 CSS px wide so UI text reads
+  at 360 px. Eight clips: switching modes, a saved reply and its status, Ask the agent pinning a
+  scene, a hand edit with ⌘Z and ⇧⌘Z (the film then verified back to its starting hash), a request
+  stopped while the agent waited (film unchanged), the sound takes and buttons, the Google approval
+  opened and cancelled, and Render final and Download. `clips.json` says what each one exercised.
+  The edit and stop clips act on a task-owned demo film (one free-model request, stopped); the rest
+  only look.
