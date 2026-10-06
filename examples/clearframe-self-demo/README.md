@@ -23,6 +23,10 @@ final MP4, review stills, QA sheets and the OpenCode session database.
 rendered by the studio running commit `809b413` (the viewer was last restarted at `c06683f`; later
 commits before the final touched only the demo scripts and docs).
 
+**Who acted.** Every browser step was driven by Claude through Chrome's DevTools Protocol, with real
+mouse and keyboard events; "Demo director" is that operator's name in the studio. No human decision,
+review or acceptance is recorded by this process.
+
 **Setup.** `node engine/cli.mjs viewer --serve` (port 4317) on macOS arm64; OpenCode 2.0.24 from
 `node_modules`, isolated under `.clearframe/opencode`; model `opencode/big-pickle` (free). Headless
 Chrome 154 (one profile, remote debugging on 9333) drove the browser the way a person would.
@@ -167,7 +171,11 @@ with sound**; output SHA-256 `d653266a…6c95` (the receipt's `outputSha256`, ma
 outside Git). Narration: the free OS draft voice (`local`, `os-tts`); music: the free draft bed at
 0.22, ducked. No Google generation; total cost $0.
 
-- **Gap found and fixed:** the studio job for the final reported no revision (and so no measured
+- **Gaps found and fixed:** a note pinned to a revision whose video had been pruned (n001 on r001)
+  was listed under no version and could not be resolved; such notes are now listed with the latest
+  version, labelled with their own revision (`a359b79`, `7cd1a5f`), and n001 was then resolved in
+  Review. Version labels were also renumbered when old videos were pruned (r005 showed as Version 3);
+  they now come from the revision (`d64d902`). And the studio job for the final reported no revision (and so no measured
   video), because a final prints its receipt as JSON (`"revision": "r007"`); fixed in `e77519d`.
 
 ### 6. QA of the final

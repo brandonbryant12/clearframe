@@ -1,7 +1,8 @@
 # Prompts and selections, exactly as entered
 
 Everything the person typed or chose in the studio while making this film, in order. Nothing here
-was sent by any other route. The agent's replies are kept in the OpenCode session (not committed).
+was sent by any other route. "The person" and "Demo director" are the scripted operator (Claude,
+driving the browser as a person would); no human decision or acceptance is recorded by these steps. The agent's replies are kept in the OpenCode session (not committed).
 
 ## 1. Home page (new film)
 
@@ -122,10 +123,13 @@ Watching r005: the stop scene (1.7 s) ended before the clip reached its Stop pre
 scene "Stop", layer 0 (the video), the **offset** field: typed `4.7`, ⌘Enter. One undo step
 ("Change elements offset in Stop"), engine clean.
 
-## 10. Close the note, render the final
+## 10. Render the final; close the note
 
-Review: **Resolve…** on note n001 (fixed in r002–r004), name `Demo director`, **Resolved**.
-Deliver: **Render final**. No Google sound: the final keeps the free draft narration and music bed.
+Deliver: **Render final** → **Render** (§12). No Google sound: the final keeps the free draft
+narration and music bed. Note n001 (fixed in r002–r004) could not be resolved at first: it was
+pinned to r001, whose video had been pruned, so no version listed it. After that fix (`a359b79`,
+`7cd1a5f`) it appeared in Review labelled "on r001": **Resolve…**, name `Demo director`,
+**Resolved**.
 
 ## 11. After the fresh review of r005
 
