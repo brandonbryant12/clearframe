@@ -64,7 +64,7 @@ export default {
           cy,
           size,
           spin: [0, 9, 0],
-          tilt: [-22, -20, 0],
+          tilt: [-22, -20],
           perspective: 0.15,
           fill: 'bg',
           stroke: 'muted',

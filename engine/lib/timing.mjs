@@ -192,8 +192,8 @@ export function blockTail(name) {
 }
 
 /** Compute the full timeline for a project. Pure file reads; cheap enough to run per request. */
-export function computeTiming(root) {
-  const sb = loadStoryboard(root);
+export function computeTiming(root, { storyboard } = {}) {
+  const sb = loadStoryboard(root, storyboard);
   const { fps, width, height } = sb.format;
   const beats = [];
   let cursor = 0;

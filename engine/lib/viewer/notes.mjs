@@ -63,7 +63,7 @@ export function saveNote(dir, { version, at, text, by, element, pin, scope }) {
 }
 
 /** Resolve or reopen. In the engine a reviewer's resolution is `accepted`; reopening is `open`. */
-export function setNoteState(dir, id, { resolved, by } = {}) {
+export function setNoteState(dir, id, { resolved, by, dismiss = false } = {}) {
   if (typeof resolved !== 'boolean') throw new Error('resolved is true or false');
   if (isManifest(dir)) {
     const data = manifestNotes(dir), n = data.notes.find(x => x.id === id);
@@ -73,7 +73,9 @@ export function setNoteState(dir, id, { resolved, by } = {}) {
     writeManifestNotes(dir, data);
     return noteView(n);
   }
-  const n = setNoteStatus(dir, id, resolved ? 'accepted' : 'open', { by: by || undefined });
+  // In the engine a resolution is a person's acceptance (or their "won't change"): it names them.
+  if (resolved && !String(by ?? '').trim()) throw new Error('Resolving a note records who decided: enter your name first.');
+  const n = setNoteStatus(dir, id, resolved ? (dismiss ? 'dismissed' : 'accepted') : 'open', { by: by || undefined });
   return noteView(n, { pins: readJSON(pinsFile(dir), {}), engine: true });
 }
 

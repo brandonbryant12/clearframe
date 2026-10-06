@@ -34,3 +34,12 @@ export async function buildViewer({ root = ['examples', 'real-examples'], out = 
     dirs: Object.fromEntries(findFilms(roots).map(d => [slug(path.relative(process.cwd(), d)), d])) };
 }
 
+
+/** One ClearFrame film as the page sees it, rebuilt after a render (no board stills drawn). */
+export async function filmData(dir, { out = 'build/viewer' } = {}) {
+  out = path.resolve(out);
+  const media = path.join(out, 'media'), fonts = new FontRegistry();
+  fs.mkdirSync(media, { recursive: true });
+  for (const f of fs.readdirSync(FONT_DIR).filter(f => f.endsWith('.ttf'))) bundled(fonts, f);
+  return clearframeFilm(dir, { out, media, fonts, render: false });
+}

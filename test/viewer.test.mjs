@@ -105,7 +105,8 @@ test('whole-cut notes on a final remain unpinned and can be resolved, reopened a
   const n = saveNote(dir,{version:revision.id,scope:'film',text:'Overall pacing needs a pass',by:'Ana'});
   assert.equal(n.at,null); assert.equal(n.scope,'film'); assert.equal(n.pin,null);
   assert.equal(readNotes(dir)[0].anchor,null);
-  assert.equal(setNoteState(dir,n.id,{resolved:true}).resolved,true);
+  assert.throws(()=>setNoteState(dir,n.id,{resolved:true}),/your name/);
+  assert.equal(setNoteState(dir,n.id,{resolved:true,by:'Ana'}).resolved,true);
   assert.equal(setNoteState(dir,n.id,{resolved:false}).resolved,false);
   assert.equal(loadViewerNotes(dir)[0].version,revision.id);
   assert.equal(clearframeStage(sb,{profile:'final'},1),'review');

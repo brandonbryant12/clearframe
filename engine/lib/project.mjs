@@ -28,10 +28,11 @@ export function resolveProject(dir) {
   return root;
 }
 
-export function loadStoryboard(root) {
+export function loadStoryboard(root, given) {
   // The project's own library/ (palettes, treatments, sketches, playbooks) overrides the built-ins.
   useProject(root);
-  const sb = readJSON(path.join(root, 'storyboard.json'));
+  // `given`: a candidate storyboard (the studio validates an edit before writing it).
+  const sb = given ? structuredClone(given) : readJSON(path.join(root, 'storyboard.json'));
   const errors = validateStoryboard(sb);
   if (errors.length) throw new Error(`storyboard.json is invalid:\n  - ${errors.join('\n  - ')}`);
   const preset = PRESETS[sb.format?.preset] ?? PRESETS.landscape;

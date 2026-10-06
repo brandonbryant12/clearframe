@@ -43,7 +43,10 @@ const HELP = `ClearFrame — motion graphics
   sketch [name] [--vertical]          canvas starting compositions (route, orbit, pipeline…) as JSON
   doctor | build                      tools and disk headroom; compile the renderer
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]
-  viewer [folders…] [--serve] [--port 4317] [--out build/viewer] [--no-render]   one HTML page: films, versions, lens, timeline, notes, building blocks
+  viewer [folders…] [--serve] [--port 4317] [--out build/viewer] [--no-render]   one HTML page: films, versions, lens, timeline, notes, building blocks;
+                                      with --serve, ClearFrame films open in the editing studio (docs/viewer.md)
+  studio <dir> [state|history|undo|redo|set PATH VALUE [--beat ID]|insert BLOCK [--beat AFTER]|sketch NAME|move --beat ID --to N|duplicate|delete --beat ID|treatment ID] [--json]
+                                      the studio's validated, undoable edits from the command line (shared history with the UI)
   plan <dir>                          approximate generation cost and cache state
   voice <dir> [--draft] [--dry-run]    free local voice, or Gemini 3.8 TTS as one continuous take (--dry-run prints the request)
   music <dir> [--draft]                local bed or paid Lyria MP3
@@ -525,6 +528,29 @@ async function main() {
     return console.log(beatmapText(r));
   }
   const dir = resolveProject(positionals[0]);
+  if (cmd === 'studio') {
+    // The studio's own commands: the same validation, stale-write check and undo history as the UI.
+    const { studioState, studioCommand } = await import('./lib/viewer/studio.mjs');
+    const [, verb = 'state', ...rest] = positionals;
+    const value = v => { try { return JSON.parse(v); } catch { return v; } };
+    const show = s => console.log(o.json ? JSON.stringify(s, null, 2) : [
+      `${s.storyboard.beats.length} scenes · ${s.timing?.duration ?? '?'} s${s.timing?.estimated ? ' (narration timing estimated)' : ''}`,
+      s.errors.length ? `the engine refuses this working copy:\n  ${s.errors.join('\n  ')}` : 'the engine accepts this working copy',
+      `undo: ${s.undoLabel ?? '—'} · redo: ${s.redoLabel ?? '—'}${s.externalChanges ? ' · edited outside the studio since its last command' : ''}`,
+    ].join('\n'));
+    if (verb === 'state') return show(studioState(dir));
+    if (verb === 'history') return console.log(studioState(dir).history.map(h => `${h.applied ? '•' : '○'} ${h.at.slice(0, 19).replace('T', ' ')}  ${h.label}`).join('\n') || 'No studio edits yet.');
+    const body = ['undo', 'redo'].includes(verb) ? { command: verb }
+      : verb === 'set' ? { command: 'set', target: o.beat ? 'beat' : 'film', beat: o.beat, path: rest[0], value: rest.length > 1 ? value(rest.slice(1).join(' ')) : null }
+      : verb === 'insert' ? { command: 'insert', block: rest[0], after: o.beat }
+      : verb === 'sketch' ? { command: 'insert', sketch: rest[0], after: o.beat }
+      : verb === 'move' ? { command: 'move', beat: o.beat, to: Number(o.to) - 1 }
+      : ['duplicate', 'delete'].includes(verb) ? { command: verb, beat: o.beat }
+      : verb === 'treatment' ? { command: 'treatment', id: rest[0] }
+      : null;
+    if (!body) throw new Error('studio DIR [state|history|undo|redo|set PATH VALUE [--beat ID]|insert BLOCK|sketch NAME [--beat AFTER]|move --beat ID --to N|duplicate|delete --beat ID|treatment ID]');
+    return show(studioCommand(dir, { ...body, hash: studioState(dir).hash }));
+  }
   startRun(dir, cmd, args);
   if (REVIEW.has(cmd)) return reviewCommand(cmd, dir, o, opts, positionals);
   if (['plan', 'voice', 'music', 'images', 'clips'].includes(cmd)) {

@@ -13,10 +13,11 @@ addEventListener('keydown', e => {
 });
 
 function route() {
-  close(); stopLoop?.(); stopLoop = null;
+  close(); stopLoop?.(); stopLoop = null; studioCleanup?.(); studioCleanup = null;
   const [path, query] = location.hash.split('?'), [, page, a, b, c] = path.split('/');
   const start = Number(new URLSearchParams(query ?? '').get('t'));
   if (page === 'film') {
+    if (!b && data.films.find(f => f.id === a)?.kind === 'clearframe') { studio(a); return; }
     film(a, b, c);
     if (start > 0) { const v = document.getElementById('video'); const go = () => { v.currentTime = start; }; v.readyState ? go() : v.addEventListener('loadedmetadata', go, { once: true }); }
   } else if (page === 'compare') compare(a);
