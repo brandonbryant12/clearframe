@@ -170,7 +170,8 @@ export function studioState(dir) {
 const SAFE = /^(?:[A-Za-z_][\w-]*|\d+)$/, BAD = new Set(['__proto__', 'constructor', 'prototype']);
 const SCHEMA = JSON.parse(fs.readFileSync(path.join(ROOT, 'schema/storyboard.schema.json'), 'utf8'));
 const BEAT_KEYS = new Set(Object.keys(SCHEMA.properties.beats.items.properties).filter(k => !['id', 'block'].includes(k)).concat('placeholder', 'speaker', 'stage'));
-const FILM_KEYS = new Set(Object.keys(SCHEMA.properties).filter(k => !['$schema', 'version', 'beats', 'assets', 'budget', 'speakers', 'continuity'].includes(k)).concat('stages'));
+const FILM_KEYS = new Set(Object.keys(SCHEMA.properties).filter(k => !['$schema', 'version', 'beats', 'assets', 'speakers', 'continuity'].includes(k)).concat('stages'));
+const touchesBudget = op => ['set', 'film.set'].includes(op?.command) && (op.target ?? (op.beat == null ? 'film' : 'beat')) === 'film' && String(op.path ?? op.field ?? '').split('.')[0] === 'budget';
 function parts(p) {
   const list = String(p ?? '').split('.');
   if (!p || list.some(x => !SAFE.test(x) || BAD.has(x))) throw fail(`Unsupported property path “${p}”.`);
@@ -212,6 +213,7 @@ function applyOp(dir, sb, op) {
     if (target === 'film') {
       if (!FILM_KEYS.has(p[0])) throw fail(`The studio does not edit “${p[0]}” for the whole film.`);
       if (p[0] === 'title' && (typeof value !== 'string' || !value.trim() || value.length > 300)) throw fail('A film needs a title shorter than 300 characters.');
+      if (p[0] === 'budget' && (p.length > 1 || (value != null && !(Number.isFinite(value) && value >= 0 && value <= 1000)))) throw fail('The film budget is an amount in dollars between 0 and 1000 (empty for none).');
       setAt(sb, p, value);
       return `${value == null ? 'Clear' : 'Set'} film ${p.join(' ')}`;
     }
@@ -307,6 +309,8 @@ export function studioCommand(dir, body, { actor = null } = {}) {
     if (command === 'undoRun') return undoRun(dir, h, ok, body.run);
     if (command?.startsWith('recording.')) return recordingCommand(dir, h, ok, raw, body);
     const sb = JSON.parse(raw), ops = command === 'batch' ? body.ops : [body];
+    // The spending ceiling is the person's to set: an agent's edit may not raise or remove it.
+    if (actor?.by === 'agent' && Array.isArray(ops) && ops.some(touchesBudget)) throw fail('Only a person can change the film budget (Sound → Cost and approvals).');
     if (!Array.isArray(ops) || !ops.length || ops.length > 200) throw fail('A batch holds 1–200 changes.');
     const labels = ops.map(op => { if (op?.command === 'batch' || op?.command?.startsWith?.('recording.') || ['undo', 'redo'].includes(op?.command)) throw fail('That command cannot be batched.'); return applyOp(dir, sb, op); });
     const errors = validateStoryboard(sb);

@@ -291,7 +291,7 @@ async function cancelJob(id) { const session = S; try { await call('/api/studio/
 // ------------------------------------------------------------------ layout shell
 
 function shell() {
-  const w = k => { const d = { left: 260, right: 340, timeline: 220, chat: 400 }[k], v = store.get(`cf-studio-${k}`, d); return Number.isFinite(v) ? v : d; };
+  const w = k => { const d = { left: 260, right: 340, timeline: 252, chat: 400 }[k], v = store.get(`cf-studio-${k}`, d); return Number.isFinite(v) ? v : d; };
   app.innerHTML = `<div class="st ${S.agent.open ? 'chat-on' : ''}" id="st" style="--left:${w('left')}px;--right:${w('right')}px;--tl:${w('timeline')}px;--chat:${w('chat')}px">
     <header class="st-top" id="st-top"></header>
     <aside class="st-left" id="st-left" aria-label="Browser"></aside>

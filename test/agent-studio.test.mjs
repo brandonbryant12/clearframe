@@ -492,3 +492,13 @@ test('unchanged approved content passes the engine check and only then reaches t
   assert.equal(j.status, 'failed', 'and the unreachable stand-in endpoint failed it: no provider was contacted');
   assert.ok(mark);
 });
+
+test('a person can set the film budget; an agent cannot change it', t => {
+  const d = project(t);
+  const set = (value, actor) => studioCommand(d, { hash: studioState(d).hash, command: 'set', target: 'film', path: 'budget', value }, actor ? { actor } : {});
+  assert.equal(set(0).storyboard.budget, 0);
+  assert.throws(() => set(-1), /between 0 and 1000/);
+  assert.throws(() => set(5, { by: 'agent', run: 'msg_x' }), /Only a person/);
+  assert.throws(() => studioCommand(d, { hash: studioState(d).hash, command: 'batch', ops: [{ command: 'set', target: 'film', path: 'budget', value: null }] }, { actor: { by: 'agent', run: 'msg_x' } }), /Only a person/);
+  assert.equal(studioState(d).storyboard.budget, 0);
+});

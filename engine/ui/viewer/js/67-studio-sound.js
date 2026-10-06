@@ -98,15 +98,18 @@ function approveSound(kind, { request = null } = {}) {
   let paying = false;
   const est = kind === 'voice' ? n.cost : (m.made === 'lyria' && m.current ? (s.providers.music.find(p => p.id === 'google').models.find(x => x.id === m.model)?.price ?? 0.08) : m.cost);
   const cap = Math.ceil(est * 100 - 1e-9) / 100 || 0.01;
+  const filmCap = Number.isFinite(S.st.storyboard.budget) ? S.st.storyboard.budget : null, blocked = filmCap != null && (filmCap <= 0 || est > filmCap);
   const what = kind === 'voice' ? `${plural(n.takes.filter(t => t.cost > 0).length, 'take')} with Gemini TTS (${esc(n.model)}, voice ${esc(n.voice)}${n.style ? `, “${esc(n.style)}”` : ''}), ~${n.takes.filter(t => t.cost > 0).reduce((a, t) => a + t.seconds, 0).toFixed(0)}s of speech`
     : `a ${m.seconds}s music bed with ${esc(m.model)}${m.prompt ? `: “${esc(m.prompt.slice(0, 80))}”` : ''}`;
   overlay(`<div class="st-dialog" role="dialog" aria-modal="true" aria-labelledby="pay-t"><h2 id="pay-t">Approve Google ${kind === 'voice' ? 'narration' : 'music'}</h2>
     <p>Generate ${what}.</p><p>Estimated cost <b>${money(est)}</b>. You approve up to <b>${money(cap)}</b>; the engine refuses to spend more.</p>
+    ${filmCap == null ? '<p class="st-hint-text">No film budget is set (Sound → Cost and approvals); each run is limited by its approval alone.</p>' : blocked ? `<p class="st-alert warn">This film’s budget is ${money(filmCap)}${filmCap <= 0 ? ', so paid generation is off' : `, below this estimate`}. Raise it in Sound → Cost and approvals first.</p>` : `<p class="st-hint-text">Film budget ${money(filmCap)}: the engine’s limit is the smaller of it and your approval.</p>`}
+    <p class="st-hint-text">It will generate exactly what is shown here. If the film or these settings change before it runs, nothing is generated or charged and you approve again.</p>
     ${request ? `<p class="st-muted">Asked by the agent: “${esc(request.reason)}”</p>` : ''}
     <div class="st-field"><label for="pay-by">Your name (recorded with the approval)</label><input id="pay-by" value="${esc(S.name ?? '')}" autocomplete="name"></div>
     <label class="st-check"><input type="checkbox" id="pay-ok"> I approve spending up to ${money(cap)} on Google for this film</label>
     <p class="st-hint-text" id="pay-msg" role="status"></p>
-    <div class="st-dialog-actions"><button class="st-btn" data-act="close">Cancel</button><button class="st-btn primary" data-act="pay">Approve and generate</button></div></div>`, {
+    <div class="st-dialog-actions"><button class="st-btn" data-act="close">Cancel</button><button class="st-btn primary" data-act="pay" ${blocked ? 'disabled' : ''}>Approve and generate</button></div></div>`, {
     pay: async btn => {
       const by = document.getElementById('pay-by').value.trim(), ok = document.getElementById('pay-ok').checked, msg = document.getElementById('pay-msg');
       if (paying) return;

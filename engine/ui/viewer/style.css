@@ -757,3 +757,7 @@ body.home .btn.primary { background: #9aaef9; color: #121420; }
 .home-mode .meta { margin: 0; font-size: 12px; }
 @media (max-width: 600px) { .home-mode > div { grid-template-columns: 1fr; } }
 .st-check input[type="checkbox"] { width: auto; flex: none; margin: 0; }
+/* Many lanes (picture, narration, notes, music): the timeline scrolls vertically as one, never under the status bar. */
+.st-timeline { overflow: hidden; }
+.st-tl-body { overflow-y: auto; overflow-x: hidden; align-items: start; }
+.st-tl-body > .st-tl-scroll { overflow-x: auto; overflow-y: hidden; }
