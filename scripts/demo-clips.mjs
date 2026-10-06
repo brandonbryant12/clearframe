@@ -10,6 +10,7 @@
 //   node scripts/demo-clips.mjs --out DIR [--studio http://127.0.0.1:4317] [--cdp http://127.0.0.1:9333]
 //          [--film projects-why-the-tide-turns-twice] [--done projects-flash-then-rumble] [--scene title] [--field props.elements.25.text]
 //          [--min 10] [--only name,name]
+//   node scripts/demo-clips.mjs --out DIR --extend --min 16 [--only name]   (hold existing clips longer)
 //
 // --film must be a film you own for demos: the edit clip changes one title and undoes it, and the
 // stop clip sends one message to its agent (the free model) and stops it. Nothing is approved or
@@ -23,7 +24,7 @@ import { parseArgs } from 'node:util';
 import { chrome, tab, sleep } from './demo-cdp.mjs';
 import { gateIsInherited } from '../engine/lib/resource-gate.mjs';
 
-const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, film: { type: 'string' }, done: { type: 'string' }, scene: { type: 'string' }, field: { type: 'string' }, text: { type: 'string' }, min: { type: 'string' }, only: { type: 'string' } } });
+const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, film: { type: 'string' }, done: { type: 'string' }, scene: { type: 'string' }, field: { type: 'string' }, text: { type: 'string' }, min: { type: 'string' }, extend: { type: 'boolean' }, only: { type: 'string' } } });
 if (!o.out) { console.error('Usage: node scripts/demo-clips.mjs --out DIR [--studio URL] [--cdp URL] [--film FILM] [--scene ID] [--field PATH] [--text TEXT] [--min S] [--only a,b]'); process.exit(2); }
 const STUDIO = (o.studio ?? 'http://127.0.0.1:4317').replace(/\/$/, ''), OUT = path.resolve(o.out);
 const FILM = o.film ?? 'projects-why-the-tide-turns-twice', DONE = o.done ?? 'projects-flash-then-rumble', SCENE = o.scene ?? 'title', FIELD = o.field ?? 'props.elements.25.text';
@@ -80,6 +81,13 @@ const keycap = (page, label, clip) => page.evaluate((label, c) => {
 async function type(page, text, ms = 38) { for (const ch of text) { await page.send('Input.insertText', { text: ch }); await sleep(ms); } }
 async function key(page, k, code, modifiers = 0) { for (const type of ['keyDown', 'keyUp']) await page.send('Input.dispatchKeyEvent', { type, key: k, code, modifiers, windowsVirtualKeyCode: k.length === 1 ? k.toUpperCase().charCodeAt(0) : k === 'Enter' ? 13 : 0 }); }
 
+function encode(args) {
+  const gate = path.join(os.homedir(), '.local/bin/codex-heavy'), gated = !gateIsInherited() && fs.existsSync(gate);
+  const r = gated ? spawnSync(gate, ['--', 'env', 'CLEARFRAME_HEAVY_HELD=1', 'ffmpeg', ...args], { encoding: 'utf8' }) : spawnSync('ffmpeg', args, { encoding: 'utf8' });
+  if (r.status !== 0) throw new Error(r.stderr);
+}
+const probe = f => Number(spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f], { encoding: 'utf8' }).stdout) || null;
+
 /** Record `clip` (a 16:9 page box) at 2× while `act` runs; returns the MP4's name and length. */
 async function record(page, name, clip, act) {
   const dir = path.join(OUT, `.${name}-frames`); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir);
@@ -92,12 +100,10 @@ async function record(page, name, clip, act) {
   // Encoding is the heavy part: two encoder and filter threads, under the shared heavy-work gate
   // (codex-heavy) unless an outer gate is already held. Recording the browser is light and stays outside.
   const args = ['-loglevel', 'error', '-y', '-nostdin', '-threads', '2', '-filter_threads', '2', '-f', 'concat', '-safe', '0', '-i', path.join(dir, 'list.txt'), '-vf', `fps=30,scale=trunc(iw/2)*2:trunc(ih/2)*2,tpad=stop_mode=clone:stop_duration=${Math.max(0, MIN - (end - frames[0].t) / 1000).toFixed(2)},format=yuv420p`, '-c:v', 'libx264', '-threads', '2', '-crf', '16', '-preset', 'medium', '-movflags', '+faststart', '-an', out];
-  const gate = path.join(os.homedir(), '.local/bin/codex-heavy'), gated = !gateIsInherited() && fs.existsSync(gate);
-  const r = gated ? spawnSync(gate, ['--', 'env', 'CLEARFRAME_HEAVY_HELD=1', 'ffmpeg', ...args], { encoding: 'utf8' }) : spawnSync('ffmpeg', args, { encoding: 'utf8' });
-  if (r.status !== 0) throw new Error(r.stderr);
+  encode(args);
   fs.rmSync(dir, { recursive: true, force: true });
   // Footage never loops in a film, so a short clip holds its last frame (the screen at rest) to --min seconds.
-  const seconds = Number(spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', out], { encoding: 'utf8' }).stdout) || null;
+  const seconds = probe(out);
   const action = Math.round((end - frames[0].t) / 100) / 10;
   // seconds is the file as encoded; the last `held` seconds repeat the final frame.
   return { file: `${name}.mp4`, seconds, action, held: seconds ? Math.max(0, Math.round((seconds - action) * 10) / 10) : null, frames: frames.length, region: clip, scale: SCALE };
@@ -224,6 +230,21 @@ const CLIPS = {
   },
 };
 
+// --extend: lengthen clips already recorded to --min seconds by holding their last frame longer
+// (written as NAME-Ns.mp4 beside them; nothing is recaptured).
+if (o.extend) {
+  const m = JSON.parse(fs.readFileSync(path.join(OUT, 'clips.json'), 'utf8'));
+  for (const [name, clip] of Object.entries(m.clips)) {
+    if (only && !only.has(name)) continue;
+    const src = path.join(OUT, clip.file), now = probe(src), file = `${name}-${MIN}s.mp4`;
+    encode(['-loglevel', 'error', '-y', '-nostdin', '-threads', '2', '-filter_threads', '2', '-i', src, '-vf', `tpad=stop_mode=clone:stop_duration=${Math.max(0, MIN - now).toFixed(2)},format=yuv420p`, '-c:v', 'libx264', '-threads', '2', '-crf', '16', '-preset', 'medium', '-movflags', '+faststart', '-an', path.join(OUT, file)]);
+    const seconds = probe(path.join(OUT, file));
+    m.clips[`${name}-${MIN}s`] = { ...clip, file, seconds, held: Math.round((seconds - clip.action) * 10) / 10, extendedFrom: clip.file };
+    console.log(`${file}: ${seconds}s (${clip.action}s of action)`);
+  }
+  fs.writeFileSync(path.join(OUT, 'clips.json'), JSON.stringify(m, null, 2) + '\n');
+  process.exit(0);
+}
 const c = await chrome(o.cdp);
 const page = await tab(c.base);
 await page.send('Page.enable');
