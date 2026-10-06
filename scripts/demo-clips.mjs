@@ -7,22 +7,23 @@
 // px wide, so UI text still reads on a phone), as an H.264 MP4 at 30 fps.
 //
 //   node scripts/demo-clips.mjs --out DIR [--studio http://127.0.0.1:4317] [--cdp http://127.0.0.1:9333]
-//          [--film projects-why-the-tide-turns-twice] [--scene title] [--field props.elements.1.text]
+//          [--film projects-why-the-tide-turns-twice] [--done projects-flash-then-rumble] [--scene title] [--field props.elements.25.text]
 //          [--min 10] [--only name,name]
 //
 // --film must be a film you own for demos: the edit clip changes one title and undoes it, and the
 // stop clip sends one message to its agent (the free model) and stops it. Nothing is approved or
-// generated: the approval dialog is cancelled. clips.json records what each clip exercised.
+// generated: the approval dialog is cancelled. --done is a film with a conversation and a final; it
+// is only looked at. clips.json records what each clip exercised.
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { parseArgs } from 'node:util';
 import { chrome, tab, sleep } from './demo-cdp.mjs';
 
-const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, film: { type: 'string' }, scene: { type: 'string' }, field: { type: 'string' }, text: { type: 'string' }, min: { type: 'string' }, only: { type: 'string' } } });
+const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, film: { type: 'string' }, done: { type: 'string' }, scene: { type: 'string' }, field: { type: 'string' }, text: { type: 'string' }, min: { type: 'string' }, only: { type: 'string' } } });
 if (!o.out) { console.error('Usage: node scripts/demo-clips.mjs --out DIR [--studio URL] [--cdp URL] [--film FILM] [--scene ID] [--field PATH] [--text TEXT] [--min S] [--only a,b]'); process.exit(2); }
 const STUDIO = (o.studio ?? 'http://127.0.0.1:4317').replace(/\/$/, ''), OUT = path.resolve(o.out);
-const FILM = o.film ?? 'projects-why-the-tide-turns-twice', SCENE = o.scene ?? 'title', FIELD = o.field ?? 'props.elements.1.text';
+const FILM = o.film ?? 'projects-why-the-tide-turns-twice', DONE = o.done ?? 'projects-flash-then-rumble', SCENE = o.scene ?? 'title', FIELD = o.field ?? 'props.elements.25.text';
 const NEW_TEXT = o.text ?? 'Why does the sea turn around twice a day?';
 const only = o.only ? new Set(o.only.split(',')) : null;
 const W = 1600, H = 900, SCALE = 2, MAX_W = 520, MIN = Number(o.min ?? 10);
@@ -127,6 +128,9 @@ const CLIPS = {
     await page.evaluate(() => document.querySelector('.st-layouts [data-layout="design"]')?.click()); await sleep(600);
     await page.evaluate(s => document.querySelector(`[data-scene-row="${s}"]`)?.click(), SCENE); await sleep(700);
     await page.evaluate(() => document.querySelector('[data-act="right"][data-tab="inspect"]')?.click()); await sleep(800);
+    // A layer's fields show once the layer is selected (props.elements.N.text → layer props.elements.N).
+    const layer = FIELD.split('.').slice(0, -1).join('.');
+    await page.evaluate(l => document.querySelector(`#st-right [data-act="element"][data-element="${l}"]`)?.click(), layer); await sleep(700);
     const field = `#st-right [data-path="${FIELD}"]`;
     await until(page, s => !!document.querySelector(s), 8000, field).catch(() => {});
     if (!(await rect(page, field))) throw new Error(`no field ${FIELD} for scene ${SCENE}`);
@@ -159,6 +163,36 @@ const CLIPS = {
     await sleep(3000);
     const after = await filmState(page);
     return { ...r, exercised: `Sent a request in Make it for me and pressed Stop while the agent was working; ${after.hash === before.hash ? 'the film was unchanged' : 'the film CHANGED before the stop: undo it'}.`, unchanged: after.hash === before.hash };
+  },
+  async conversation(page) {
+    await open(page, `#/film/${DONE}`); await until(page, () => !!document.querySelector('#st-chat-log .st-progress'));
+    await page.evaluate(() => { const l = document.getElementById('st-chat-log'); l.scrollTop = l.scrollHeight; }); await sleep(500);
+    await page.evaluate(CURSOR);
+    const strip = '#st-chat-log .st-progress:last-of-type';
+    const clip = frame([await rect(page, strip)]);
+    const r = await record(page, 'conversation', clip, async () => { await sleep(500); await point(page, strip); await sleep(1500); await point(page, '#st-chat-input'); await sleep(1200); });
+    return { ...r, exercised: 'Looked at a saved conversation: the reply and the film status it reports (nothing sent).' };
+  },
+  async sound(page) {
+    await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
+    await page.evaluate(() => document.querySelector('[data-act="right"][data-tab="sound"]')?.click());
+    const draft = '[data-act="soundDraft"][data-kind="voice"]', paid = '[data-act="soundPaid"][data-kind="voice"]';
+    await until(page, s => !!document.querySelector(s), 15000, draft);
+    await page.evaluate(s => document.querySelector(s).scrollIntoView({ block: 'center' }), draft); await sleep(400);
+    await page.evaluate(CURSOR);
+    const clip = frame([await rect(page, '.st-takes'), await rect(page, draft), await rect(page, paid)]);
+    const r = await record(page, 'sound', clip, async () => { await sleep(500); await point(page, '.st-takes'); await sleep(1300); await point(page, draft); await sleep(1300); await point(page, paid); await sleep(1300); });
+    return { ...r, exercised: 'Looked at the narration takes, the free draft voice and the priced Google button (nothing clicked).' };
+  },
+  async deliver(page) {
+    await open(page, `#/film/${DONE}`); await until(page, () => !!document.getElementById('st-chat-log'));
+    await page.evaluate(() => document.querySelector('.st-layouts [data-layout="deliver"]')?.click()); await sleep(1500);
+    const download = '#st-right a[download]', final = '#st-right [data-act="final"]';
+    await page.evaluate(s => document.querySelector(s)?.scrollIntoView({ block: 'center' }), download); await sleep(500);
+    await page.evaluate(CURSOR);
+    const clip = frame([await rect(page, final), await rect(page, download)]);
+    const r = await record(page, 'deliver', clip, async () => { await sleep(500); await point(page, final); await sleep(1500); await point(page, download); await sleep(1500); });
+    return { ...r, exercised: 'Looked at Render final and the Download link of a film with a final (nothing rendered or downloaded).' };
   },
   async approval(page) {
     await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
