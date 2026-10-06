@@ -7,17 +7,21 @@ the native renderer. This folder holds everything needed to reproduce it except 
 | File | What |
 | --- | --- |
 | `script.md` | The scene plan and narration given to the agent (uploaded with the brief) |
-| `prompts.md` | Every prompt and selection the person made, in order, exactly as entered |
-| `storyboard.json` | The film's final storyboard (written by the agent and the person through the studio) |
+| `prompts.md` | Every prompt, selection and hand edit the person made, in order, exactly as entered |
+| `storyboard.json` | The final film's storyboard (r007), written by the agent and the person through the studio |
+| `DIRECTION.md` | The agent's own decision log, written in the project as it worked |
+| `captures.json` | The capture manifest uploaded with the brief (stills, close-ups, measured pins) |
+| `clips.json` | The ten screen recordings the final uses: scene, project file, in point, region, presses |
 | `README.md` | This process record |
 
-Not in Git (kept outside the worktree, see "Evidence"): the UI captures, rough cuts, the final MP4,
-review stills and the OpenCode session database.
+Not in Git (kept outside the worktree, see "Evidence"): the stills, the clips, every rough cut, the
+final MP4, review stills, QA sheets and the OpenCode session database.
 
 ## How it was made (process record)
 
-**Tested revision.** Studio code at main `a114b31` (PR #7) plus this branch's fixes; the commit that
-rendered the final is listed in "Final render".
+**Tested revision.** Studio code at main `a114b31` (PR #7) plus this branch's fixes. The final was
+rendered by the studio running commit `809b413` (the viewer was last restarted at `c06683f`; later
+commits before the final touched only the demo scripts and docs).
 
 **Setup.** `node engine/cli.mjs viewer --serve` (port 4317) on macOS arm64; OpenCode 2.0.24 from
 `node_modules`, isolated under `.clearframe/opencode`; model `opencode/big-pickle` (free). Headless
@@ -145,3 +149,66 @@ any correction: "960×540, 67.1s as encoded — the half-size rough", narration 
 voice (OS voice), not a Google voice". On the 360 px sheet every clip scene reads: the brief being
 typed, both modes, the film status, the scope chip, ⌘Z on a hand edit, the priced Google button
 and the approval's exact amount, Render final and Download. Only 07 Review was still a small still.
+
+**4g. A fresh review of r005, and r006.** An independent reviewer decoded r005 and found three
+teaching errors: Stop never appeared in its 1.7 s scene; the selected mode contradicted the line
+being spoken; the approval dialog said no film budget was set while the narration said "within the
+film's budget". Two clips were re-recorded (modes chosen on the narration's measured word times;
+the approval after setting that demo film's budget to $0.50 by hand) and the agent swapped them in,
+widened the Stop scene and rendered r006 (66.6 s). Checking r006's decoded frames confirmed the
+modes and the budget; it also showed the stop clip's cursor gliding to a different Stop button
+outside the recorded box. The stop clip was re-recorded against the composer's Stop, with every
+press time recorded (Stop at 6.3 s), and set by hand (file, in point 5.1 s).
+
+### 5. Final render (r007)
+
+Deliver → Render final → Render. **r007: 1920×1080, 30 fps, 66.6 s (1,998 frames), H.264 CRF 16,
+with sound**; output SHA-256 `d653266a…6c95` (the receipt's `outputSha256`, matched by the copy kept
+outside Git). Narration: the free OS draft voice (`local`, `os-tts`); music: the free draft bed at
+0.22, ducked. No Google generation; total cost $0.
+
+- **Gap found and fixed:** the studio job for the final reported no revision (and so no measured
+  video), because a final prints its receipt as JSON (`"revision": "r007"`); fixed in `e77519d`.
+
+### 6. QA of the final
+
+- `qa` (under `codex-heavy`): 0 one-frame pops; −14.1 LUFS integrated, −1.5 dBFS peak; BT.709 tags.
+  Its "barely changes" advisories cover the screen recordings resting while the narration explains
+  (each clip rests on its final frame, `hold: true`; `clips.json` gives each clip's action and held
+  seconds). Hard changes inside scenes are the clips' own actions (the undo, the dialog closing).
+- 360 px phone sheet (`qa`'s `phone.png`) and decoded frames at the review's timestamps were read
+  scene by scene: the brief being typed, each mode selected on its line, the film status, Stop shown,
+  pressed and at rest, the scope chip, ⌘Z on a hand edit, the review note, the free and priced sound
+  buttons, the approval's estimate, cap and $0.50 film budget, Render final and Download.
+- Not established here: continuous human playback, physical-device viewing, speech intelligibility
+  on a phone speaker, or human creative acceptance (none is recorded).
+
+### What was exercised versus pictured
+
+- **Exercised through the studio on this film:** the home form and Create (Make it for me), the
+  conversation and its tools, Build it together with a proposal and quick reply, scene, note and
+  whole-film scopes, a denied shell request, *Undo these edits* and ⇧⌘Z, a review note handed to the
+  agent, uploads through Assets, hand edits in the inspector (clip in points and file), rough cuts
+  r001–r006 and the final r007.
+- **Exercised on task-owned demo films and recorded as clips:** typing a brief, switching modes,
+  pinning a scene, a hand edit with ⌘Z/⇧⌘Z (restored, verified by hash), a request stopped while the
+  agent waited (film unchanged), setting a film budget, opening and cancelling the Google approval.
+- **Only pictured:** Render final and Download on another film's Deliver panel, and the Google
+  approval itself (never approved; nothing paid).
+
+### Reproduce
+
+1. `node engine/cli.mjs viewer --serve` and a Chrome with `--remote-debugging-port=9333`.
+2. Stills and pins: `node scripts/demo-captures.mjs --out DIR --cdp http://127.0.0.1:9333`.
+3. Clips: `node scripts/demo-clips.mjs --out DIR --cdp http://127.0.0.1:9333 --cues 1.8,4.9 --budget 0.5`
+   (encoding runs under `codex-heavy`; `--film` and `--done` must be films you own for demos).
+4. On the home page, the form and files in `prompts.md` §1; then each later section in order. The free
+   model's wording will differ from run to run; the storyboard here is what this run produced.
+
+### Evidence (outside Git)
+
+`/Users/brandon/Documents/clearframe-browser-agent-2026-10-06/demo/`: `captures-pass-a/`,
+`captures-pass-b/`, `clips/` (with `clips.json`), `r001/`–`r006/` (rough cuts, contact and phone
+sheets, verification frames), `final/` (the r007 master, `qa.log`, `phone.png`, `timeline.png`),
+`process/` (`steps.jsonl`: every prompt with its scope and mode, every applied change with the scenes
+it touched, replies, denials and hand edits; numbered screenshots).
