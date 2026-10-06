@@ -65,8 +65,12 @@ async function point(page, selector) {
   await page.evaluate((x, y) => { document.getElementById('demo-cursor').style.transform = `translate(${x}px,${y}px)`; }, x, y);
   await sleep(650); return { x, y };
 }
+// Each press and shortcut while recording, in seconds from the clip's first frame (clips.json `clicks`).
+let rec = null;
+const mark = what => rec && rec.marks.push({ what, at: Math.round((Date.now() - rec.t0) / 100) / 10 });
 async function click(page, selector) {
   const { x, y } = await point(page, selector);
+  mark(selector);
   await page.evaluate(() => { const c = document.getElementById('demo-cursor'); c.classList.remove('tap'); void c.offsetWidth; c.classList.add('tap'); });
   for (const type of ['mousePressed', 'mouseReleased']) await page.send('Input.dispatchMouseEvent', { type, x, y, button: 'left', clickCount: 1 });
   await sleep(350);
@@ -79,7 +83,7 @@ const keycap = (page, label, clip) => page.evaluate((label, c) => {
   clearTimeout(k._t); k._t = setTimeout(() => { k.style.opacity = '0'; }, 1300);
 }, label, clip);
 async function type(page, text, ms = 38) { for (const ch of text) { await page.send('Input.insertText', { text: ch }); await sleep(ms); } }
-async function key(page, k, code, modifiers = 0) { for (const type of ['keyDown', 'keyUp']) await page.send('Input.dispatchKeyEvent', { type, key: k, code, modifiers, windowsVirtualKeyCode: k.length === 1 ? k.toUpperCase().charCodeAt(0) : k === 'Enter' ? 13 : 0 }); }
+async function key(page, k, code, modifiers = 0) { mark(`${modifiers & 4 ? '⌘' : ''}${modifiers & 8 ? '⇧' : ''}${k}`); for (const type of ['keyDown', 'keyUp']) await page.send('Input.dispatchKeyEvent', { type, key: k, code, modifiers, windowsVirtualKeyCode: k.length === 1 ? k.toUpperCase().charCodeAt(0) : k === 'Enter' ? 13 : 0 }); }
 
 function encode(args) {
   const gate = path.join(os.homedir(), '.local/bin/codex-heavy'), gated = !gateIsInherited() && fs.existsSync(gate);
@@ -92,6 +96,7 @@ const probe = f => Number(spawnSync('ffprobe', ['-v', 'error', '-show_entries', 
 async function record(page, name, clip, act) {
   const dir = path.join(OUT, `.${name}-frames`); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir);
   const frames = []; let on = true;
+  rec = { t0: Date.now(), marks: [] };
   const loop = (async () => { while (on) { const r = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 92, clip: { ...clip, scale: SCALE } }); const f = path.join(dir, `f${String(frames.length).padStart(5, '0')}.jpg`); fs.writeFileSync(f, Buffer.from(r.data, 'base64')); frames.push({ f, t: Date.now() }); } })();
   try { await act(); } finally { on = false; await loop; }
   const end = frames.at(-1).t + 400;
@@ -106,7 +111,8 @@ async function record(page, name, clip, act) {
   const seconds = probe(out);
   const action = Math.round((end - frames[0].t) / 100) / 10;
   // seconds is the file as encoded; the last `held` seconds repeat the final frame.
-  return { file: `${name}.mp4`, seconds, action, held: seconds ? Math.max(0, Math.round((seconds - action) * 10) / 10) : null, frames: frames.length, region: clip, scale: SCALE };
+  const clicks = rec.marks; rec = null;
+  return { file: `${name}.mp4`, seconds, action, clicks, held: seconds ? Math.max(0, Math.round((seconds - action) * 10) / 10) : null, frames: frames.length, region: clip, scale: SCALE };
 }
 const clearComposer = () => {
   document.querySelector('.st-compose [data-act="scope"]')?.click();
@@ -193,8 +199,8 @@ const CLIPS = {
     const clip = frame([await rect(page, '.st-compose')]);
     const r = await record(page, 'stop', clip, async () => {
       await sleep(400); await click(page, '#st-chat-input'); await type(page, 'Tighten every line of narration by a few words.'); await sleep(300); await key(page, 'Enter', 'Enter');
-      await until(page, () => !!document.querySelector('[data-act="stop"]'), 15000); await sleep(1800);
-      await click(page, '[data-act="stop"]'); await until(page, () => !document.querySelector('[data-act="stop"]'), 20000).catch(() => {}); await sleep(1500);
+      await until(page, () => !!document.querySelector('.st-compose [data-act="stop"]'), 15000); await sleep(1800);
+      await click(page, '.st-compose [data-act="stop"]'); await until(page, () => !document.querySelector('.st-compose [data-act="stop"]'), 20000).catch(() => {}); await sleep(1500);
     });
     await sleep(3000);
     const after = await filmState(page);

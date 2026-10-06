@@ -140,3 +140,12 @@ film:
 ```text
 A fresh review of r005 found three things to fix. I re-recorded two clips (just added; the uploads were saved under new names, see Assets): the modes clip now selects Make it for me as that line is spoken and Build it together as its line is spoken, and the approval clip shows a real film budget ($0.50 set on that film), so "within the film's budget" is true. Use them in 03 Two ways and 09 Approval, changing only the video file. The Stop scene ends before the clip shows Stop: give that scene a 1.0 s tail and set its clip offset to 4.3, so Stop is visible, pressed, and the composer is back at rest before the cut. Keep the narration. Check, then render a new rough cut and tell me its actual size and length.
 ```
+
+## 12. Stop, by hand; the final
+
+r006 checked frame by frame: the modes and the budget were right, but the cursor in the stop clip
+glided to a different Stop button outside the recorded box. `stop.mp4` was re-recorded against the
+composer's Stop (`clips.json` now records each press: Stop at 6.3 s) and added through Assets
+(saved as `assets/uploads/stop-2.mp4`). Design layout, scene "Stop", layer 0: **file**
+`assets/uploads/stop-2.mp4` ⌘Enter, **offset** `5.1` ⌘Enter (1.2 s of Stop showing, the press, then
+1.5 s at rest in the 2.7 s scene). Deliver: **Render final** → **Render**.
