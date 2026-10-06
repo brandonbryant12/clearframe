@@ -189,6 +189,9 @@ test('the studio server refuses malformed paths, dotfiles, bad ranges, unknown e
   assert.equal((await fetch(base + '/api/notes', { method: 'POST', headers: { 'content-type': 'text/plain' }, body: JSON.stringify({ film: id, text: 'x' }) })).status, 415);
   assert.equal((await post('/api/notes', { film: id, text: 'x' }, { origin: 'http://evil.example' })).status, 403);
   assert.equal((await post('/api/studio/command', { film: id, command: 'set' }, { origin: 'http://evil.example' })).status, 403);
+  const home = await fetch(base + '/', { redirect: 'manual' });
+  assert.equal(home.status, 302);
+  assert.equal(home.headers.get('location'), '/' + rel(s.file));
   const state = await (await get(`/api/studio/state?film=${id}`)).json();
   assert.equal(state.timing.beats.length, 1);
   const ok = await post('/api/studio/command', { film: id, hash: state.hash, command: 'set', target: 'beat', beat: 'a', path: 'props.text', value: 'Hello' });

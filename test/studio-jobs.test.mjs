@@ -61,6 +61,7 @@ test('changing media or narration with the storyboard unchanged makes the old pr
   assert.equal((await done(first.id)).cached, true);
   assert.equal(jobs.start(A, { film: 'A', kind: 'still', beat: 'a' }).id, first.id, 'unchanged inputs reuse the preview');
   fs.writeFileSync(path.join(A, 'assets', 'img', 'plate.png'), 'new picture');
+  assert.equal(jobs.list('A').find(j => j.id === first.id).matches, false, 'the UI sees a stale still without requesting another render');
   const second = jobs.start(A, { film: 'A', kind: 'still', beat: 'a' });
   assert.notEqual(second.id, first.id); await done(second.id);
   fs.mkdirSync(path.join(A, 'assets', 'vo'), { recursive: true });

@@ -92,7 +92,9 @@ export async function serveViewer({ root, out = 'build/viewer', port = 4317, ren
 
   // Static files under the working folder, never dotfiles; byte ranges so videos scrub.
   function serveStatic(req, res, url) {
-    const wanted = url.pathname === '/' ? `/${rel(base, built.file)}` : decodeURIComponent(url.pathname);
+    // Keep document-relative film media and fonts relative to the built viewer directory.
+    if (url.pathname === '/') { res.writeHead(302, { location: '/' + rel(base, built.file).split('/').map(encodeURIComponent).join('/') }); return res.end(); }
+    const wanted = decodeURIComponent(url.pathname);
     const file = path.resolve(base, '.' + wanted);
     const hidden = path.relative(base, file).split(path.sep).some(s => s.startsWith('.'));
     if (!file.startsWith(base + path.sep) || hidden || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); return res.end('Not found'); }

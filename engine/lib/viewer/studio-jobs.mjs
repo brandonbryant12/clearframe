@@ -74,7 +74,7 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
   const jobs = new Map(), queue = [];
   let running = null;
   const store = path.join(out, 'studio');
-  const persist = () => { try { fs.mkdirSync(store, { recursive: true }); fs.writeFileSync(path.join(store, 'jobs.json'), JSON.stringify([...jobs.values()].map(view))); } catch {} };
+  const persist = () => { try { fs.mkdirSync(store, { recursive: true }); fs.writeFileSync(path.join(store, 'jobs.json'), JSON.stringify([...jobs.values()].map(j => ({ ...view(j), dir: j.dir })))); } catch {} };
   const view = ({ dir, child, killTimer, ...j }) => j;
   // Jobs from an earlier server run come back as history; anything unfinished was interrupted.
   try {
@@ -207,7 +207,17 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
   return {
     /** The job that pauses source edits on this film, if any (queued ones count: their input is the source as it will be). */
     pausing: dir => [running, ...queue].find(j => j && j.dir === dir && KINDS[j.kind].edits === false) ?? null,
-    list: film => [...jobs.values()].filter(j => !film || j.film === film).map(view),
+    list(film) {
+      const prints = new Map();
+      return [...jobs.values()].filter(j => !film || j.film === film).map(j => {
+        const result = view(j);
+        if (KINDS[j.kind]?.cache && j.status === 'complete') {
+          if (j.dir && !prints.has(j.dir)) prints.set(j.dir, inputPrint(j.dir));
+          result.matches = !!(j.matches && j.print && prints.get(j.dir) === j.print && fs.existsSync(j.output));
+        }
+        return result;
+      });
+    },
     start(dir, body) {
       const { film, kind } = body;
       if (!KINDS[kind]) throw new Error('Unknown studio job.');

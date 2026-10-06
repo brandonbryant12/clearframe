@@ -2,6 +2,9 @@
 // morphed in place, so a field you are typing in keeps its caret while the rest refreshes.
 // Edits go through one queued command path (the same one agents use); previews are native jobs.
 let S = null, studioCleanup = null;
+// A route change abandons queued work and late replies from the previous workspace.
+const currentSession = session => !!session && S === session && !session.disposed;
+const requireSession = session => { if (!currentSession(session)) throw Object.assign(new Error('Workspace closed'), { name: 'AbortError' }); };
 // Read-only handle for local automation and debugging (the page never reads it back).
 globalThis.clearframeStudio = () => S;
 const LAYOUTS = {
@@ -66,22 +69,23 @@ async function studio(id) {
   tabs('films'); document.body.classList.add('editing');
   app.innerHTML = '<div class="studio-loading" role="status">Opening the working copy…</div>';
   const layout = store.get('cf-studio-layout', 'design');
-  S = { id, f, st: null, schema: null, review: null, jobs: [], queue: Promise.resolve(), saving: 0, disposed: false, timers: [],
+  const session = S = { id, f, st: null, schema: null, review: null, jobs: [], queue: Promise.resolve(), saving: 0, disposed: false, timers: [],
     sel: { beat: null, element: null, words: null, note: null }, layout: LAYOUTS[layout] ? layout : 'design',
     left: null, right: null, monitor: { source: 'working', rev: f.versions.at(-1)?.id ?? null, compare: 'rendered', wipe: 0.5, side: false },
     t: 0, zoom: store.get('cf-studio-zoom', 1), fieldErrors: {}, drafts: {}, auto: store.get('cf-studio-auto', true), noting: false, filter: 'open',
     lib: store.get('cf-studio-lib', 'blocks'), dirtyStill: null, open: store.get('cf-studio-open', {}), name: store.get('cf-name', '') };
   const L = LAYOUTS[S.layout]; S.left = L.left; S.right = L.right; S.monitor.source = L.monitor === 'rendered' && S.f.versions.length ? 'rendered' : 'working';
-  const cleanup = () => { if (!S) return; S.disposed = true; S.timers.forEach(clearTimeout); clearInterval(S.poller); document.body.classList.remove('editing'); removeEventListener('keydown', studioKeys, true); S.resize?.disconnect(); S = null; };
+  const cleanup = () => { session.disposed = true; session.timers.forEach(clearTimeout); clearInterval(session.poller); session.resize?.disconnect(); if (S !== session) return; document.body.classList.remove('editing'); removeEventListener('keydown', studioKeys, true); S = null; };
   studioCleanup = cleanup; stopLoop = cleanup;
   try {
-    await serverReady; if (!server) throw Error('Run `clearframe viewer --serve` to edit this film: the studio saves into the project through the local server.');
-    [S.st, S.schema] = await Promise.all([call(`/api/studio/state?film=${encodeURIComponent(id)}`), call('/api/studio/schema')]);
+    await serverReady; requireSession(session); if (!server) throw Error('Run `clearframe viewer --serve` to edit this film: the studio saves into the project through the local server.');
+    const [state, schema] = await Promise.all([call(`/api/studio/state?film=${encodeURIComponent(id)}`), call('/api/studio/schema')]);
+    requireSession(session); session.st = state; session.schema = schema;
   } catch (e) {
-    if (S && !S.disposed) app.innerHTML = `<div class="studio-loading"><h1>Open the editing studio</h1><p>${esc(e.message)}</p><a class="btn" href="#/film/${id}/${f.versions.at(-1)?.id ?? 'review'}">View the film and its notes</a></div>`;
+    if (currentSession(session)) app.innerHTML = `<div class="studio-loading"><h1>Open the editing studio</h1><p>${esc(e.message)}</p><a class="btn" href="#/film/${id}/${f.versions.at(-1)?.id ?? 'review'}">View the film and its notes</a></div>`;
     return;
   }
-  if (!S || S.disposed) return;
+  if (!currentSession(session)) return;
   S.sel.beat = store.get(`cf-studio-sel:${id}`, null);
   if (!S.st.storyboard.beats.some(b => b.id === S.sel.beat)) S.sel.beat = S.st.storyboard.beats[0]?.id;
   S.t = workingBeat(S.sel.beat)?.start ?? 0;
@@ -90,6 +94,7 @@ async function studio(id) {
   S.resize = new ResizeObserver(() => invalidate(['timeline'])); S.resize.observe(document.getElementById('st-timeline'));
   addEventListener('keydown', studioKeys, true);
   await refreshJobs(true);
+  if (!currentSession(session)) return;
   S && (S.poller = setInterval(() => { refreshJobs(); watchSource(); }, 1500));
   autoStill();
 }
@@ -120,26 +125,27 @@ function status(text, tone = '') { S && (S.statusText = text, S.statusTone = ton
 
 /** Run commands one after another, each against the hash the previous one produced. */
 function cmd(body, { key, draft } = {}) {
+  const session = S;
   const run = async () => {
-    if (!S) return;
-    S.saving++; status('Saving…');
+    requireSession(session);
+    session.saving++; status('Saving…');
     try {
       const r = await call('/api/studio/command', { film: S.id, hash: S.st.hash, ...body });
-      if (!S) return r;
+      requireSession(session);
       if (key) { delete S.fieldErrors[key]; delete S.drafts[key]; }
       acceptState(r);
       status(body.command === 'undo' ? `Undone: ${S.lastLabel ?? 'last change'}` : body.command === 'redo' ? `Redone: ${r.undoLabel ?? ''}` : `Saved · ${r.undoLabel ?? 'no change'}`);
       S.lastLabel = r.undoLabel;
       return r;
     } catch (e) {
-      if (!S) throw e;
+      if (!currentSession(session)) throw e;
       if (key) { S.fieldErrors[key] = e.message.replace(/^Not saved — the engine would refuse this:\n/, 'Not saved: '); if (draft != null) S.drafts[key] = draft; }
       status(e.message.replace(/^Not saved — the engine would refuse this:\n/, 'Not saved: ').split('\n')[0], 'error');
       if (e.status === 409 && /changed elsewhere/.test(e.message)) await reloadState('The working copy changed outside the studio; reloaded it.');
       throw e;
-    } finally { if (S) { S.saving--; invalidate(); } }
+    } finally { session.saving--; if (currentSession(session)) invalidate(); }
   };
-  const p = S.queue.then(run, run); S.queue = p.catch(() => {}); return p;
+  const p = session.queue.then(run, run); session.queue = p.catch(() => {}); return p;
 }
 function acceptState(r) {
   S.st = r;
@@ -150,33 +156,36 @@ function acceptState(r) {
   autoStill();
 }
 /** Edits from elsewhere (an agent's `clearframe studio` command, another tab) appear here without a reload. */
-let watching = false, lastWatch = 0;
 async function watchSource() {
-  if (!S || watching || S.saving || Date.now() - lastWatch < 3000 || document.hidden) return;
-  watching = true; lastWatch = Date.now();
+  const session = S;
+  if (!session || session.watching || session.saving || Date.now() - (session.lastWatch ?? 0) < 3000 || document.hidden) return;
+  session.watching = true; session.lastWatch = Date.now();
   try {
     const r = await call(`/api/studio/state?film=${encodeURIComponent(S.id)}`);
-    if (S && !S.saving && r.hash !== S.st.hash) { acceptState(r); status(r.externalChanges ? 'The working copy was changed outside the studio; reloaded it.' : `Updated by another editor: ${r.undoLabel ?? 'a change'}`, 'warn'); }
-  } catch {} finally { watching = false; }
+    if (currentSession(session) && !S.saving && r.hash !== S.st.hash) { acceptState(r); status(r.externalChanges ? 'The working copy was changed outside the studio; reloaded it.' : `Updated by another editor: ${r.undoLabel ?? 'a change'}`, 'warn'); }
+  } catch {} finally { session.watching = false; }
 }
 async function reloadState(message) {
-  try { const r = await call(`/api/studio/state?film=${encodeURIComponent(S.id)}`); if (!S) return; acceptState(r); if (message) status(message, 'warn'); } catch (e) { status(e.message, 'error'); }
+  const session = S; if (!session) return;
+  try { const r = await call(`/api/studio/state?film=${encodeURIComponent(S.id)}`); if (!currentSession(session)) return; acceptState(r); if (message) status(message, 'warn'); } catch (e) { if (currentSession(session)) status(e.message, 'error'); }
 }
 async function refreshFilm() {
+  const session = S; if (!session) return;
   try {
     const f = await call(`/api/studio/film?film=${encodeURIComponent(S.id)}`);
-    if (!S) return;
+    if (!currentSession(session)) return;
     const i = data.films.findIndex(x => x.id === S.id); if (i >= 0) data.films[i] = f;
     const newest = f.versions.at(-1)?.id;
     S.f = f;
     if (!f.versions.some(v => v.id === S.monitor.rev)) S.monitor.rev = newest;
     invalidate();
-  } catch (e) { status(`Could not refresh the film: ${e.message}`, 'error'); }
+  } catch (e) { if (currentSession(session)) status(`Could not refresh the film: ${e.message}`, 'error'); }
 }
 async function refreshNotes() {
+  const session = S; if (!session) return;
   try {
     const { notes } = await call(`/api/notes?film=${encodeURIComponent(S.id)}`);
-    if (!S) return;
+    if (!currentSession(session)) return;
     for (const v of S.f.versions) v.notes = notes.filter(n => n.version === v.id);
     invalidate();
   } catch {}
@@ -202,12 +211,12 @@ function elementAt(b, p) { if (!b || !p) return null; let o = b; for (const k of
 // ------------------------------------------------------------------ jobs and previews
 
 async function refreshJobs(first = false) {
-  if (!S) return;
+  const session = S; if (!session) return;
   let list;
   try { list = (await call(`/api/studio/jobs?film=${encodeURIComponent(S.id)}`)).jobs; } catch { return; }
-  if (!S) return;
+  if (!currentSession(session)) return;
   const before = new Map(S.jobs.map(j => [j.id, j.status]));
-  const sig = list.map(j => `${j.id}:${j.status}:${j.progress ?? ''}`).join('|');
+  const sig = list.map(j => `${j.id}:${j.status}:${j.progress ?? ''}:${j.matches}`).join('|');
   if (sig === S.jobSig && !first) return;
   S.jobSig = sig;
   S.jobs = list;
@@ -223,9 +232,12 @@ async function refreshJobs(first = false) {
     if (j.status === 'complete' && j.kind === 'section' && S.pendingSection === j.id) { S.monitor.section = j.id; S.monitor.source = 'working'; }
   }
   if (film) await refreshFilm();
+  if (!currentSession(session)) return;
   if (state) await reloadState();
+  if (!currentSession(session)) return;
   if (film && S && !S.monitor.rev) S.monitor.rev = S.f.versions.at(-1)?.id ?? null;
   invalidate(['top', 'left', 'monitor', 'right', 'status']);
+  autoStill();
 }
 const activeJobs = () => S.jobs.filter(j => ['queued', 'waiting', 'running'].includes(j.status));
 /** Newest still of a beat (any version of the working copy), and whether it shows the current one. */
@@ -237,27 +249,34 @@ function stillFor(beat) {
   return { current, latest, previous, running: S.jobs.find(j => j.kind === 'still' && j.beat === beat && ['queued', 'waiting', 'running'].includes(j.status)) };
 }
 async function startJob(kind, extra = {}, { quiet = false } = {}) {
+  const session = S;
   try {
-    await S.queue;
+    await session.queue;
+    requireSession(session);
     const r = await call('/api/studio/jobs', { film: S.id, hash: S.st.hash, kind, ...extra });
+    requireSession(session);
     if (!quiet) status(r.cached ? 'Up to date: already rendered from this version of the working copy' : `${{ still: 'Still', section: 'Section preview', check: 'Check', draft: 'Rough cut', final: 'Final render', captions: 'Captions', revise: 'Candidate', reject: 'Rejection' }[kind]} queued`);
     await refreshJobs();
+    requireSession(session);
     return r;
-  } catch (e) { status(e.message, 'error'); throw e; }
+  } catch (e) { if (currentSession(session)) status(e.message, 'error'); throw e; }
 }
 /** Keep the selected scene's still current: after a selection or an edit, render it if it is missing or stale. */
 function autoStill() {
   if (!S || !S.auto || S.monitor.source !== 'working' || S.monitor.section) return;
+  const session = S;
   clearTimeout(S.autoTimer);
   S.autoTimer = setTimeout(() => {
-    if (!S || !S.sel.beat || S.st.errors.length) return;
+    if (!currentSession(session) || !S.sel.beat || S.st.errors.length) return;
     const s = stillFor(S.sel.beat);
     if (s.current || s.running || activeJobs().some(j => j.kind !== 'still')) return;
+    // Unknown input provenance cannot become current by rendering it repeatedly. Manual retry remains available.
+    if (s.latest?.hash === S.st.hash && !s.latest.print) return;
     startJob('still', { beat: S.sel.beat, pos: 0.6 }, { quiet: true }).catch(() => {});
   }, 450);
   S.timers.push(S.autoTimer);
 }
-async function cancelJob(id) { try { await call('/api/studio/jobs/cancel', { id }); status('Cancelling…'); refreshJobs(); } catch (e) { status(e.message, 'error'); } }
+async function cancelJob(id) { const session = S; try { await call('/api/studio/jobs/cancel', { id }); requireSession(session); status('Cancelling…'); refreshJobs(); } catch (e) { if (currentSession(session)) status(e.message, 'error'); } }
 
 // ------------------------------------------------------------------ layout shell
 
@@ -472,7 +491,7 @@ function setSource(src) {
   if (nb) S.t = nb.start + into * (nb.end - nb.start);
   invalidate(); autoStill();
 }
-async function loadReview() { try { const r = await call(`/api/studio/review?film=${encodeURIComponent(S.id)}`); if (S) { S.review = r; invalidate(['right']); } } catch {} }
+async function loadReview() { const session = S; if (!session) return; try { const r = await call(`/api/studio/review?film=${encodeURIComponent(S.id)}`); if (currentSession(session)) { S.review = r; invalidate(['right']); } } catch {} }
 function confirmJob(kind) {
   const text = kind === 'draft'
     ? 'Render a full-length rough cut at half size? It records free local draft narration where none exists, runs the engine checks and saves a revision. Editing pauses until it finishes (or you cancel).'

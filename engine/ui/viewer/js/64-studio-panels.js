@@ -176,13 +176,14 @@ function decide(action, d) {
     <label class="st-field"><span>What they said</span><textarea name="said" rows="3" required placeholder="Their words, e.g. “yes, much clearer”"></textarea></label>
     <div class="st-dialog-actions"><button type="button" class="st-btn" data-act="close">Cancel</button><button class="st-btn primary" data-act="ok">${action === 'accept' ? 'Record acceptance' : 'Reject'}</button></div></form>`, {
     ok: async a => {
+      const session = S;
       const by = a.form.by.value.trim(), said = a.form.said.value.trim();
       if (!by) return a.form.by.focus(); if (!said) return a.form.said.focus();
       S.name = by; store.set('cf-name', by); closeOverlay();
       try {
-        if (action === 'accept') { await call('/api/studio/accept', { film: S.id, revision: rev, note, by, said }); status(`Recorded: ${by} accepted ${rev}`); await Promise.all([refreshFilm(), refreshNotes(), loadReview()]); }
+        if (action === 'accept') { await call('/api/studio/accept', { film: S.id, revision: rev, note, by, said }); requireSession(session); status(`Recorded: ${by} accepted ${rev}`); await Promise.all([refreshFilm(), refreshNotes(), loadReview()]); }
         else await startJob('reject', { revision: rev, note, by, said });
-      } catch (e) { status(e.message, 'error'); }
+      } catch (e) { if (currentSession(session)) status(e.message, 'error'); }
     } });
 }
 

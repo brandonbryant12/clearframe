@@ -235,13 +235,15 @@ function pickWord(el, e) {
   invalidate(['right', 'left', 'timeline']);
 }
 async function recordingEdit(command, beatId) {
+  const session = S;
   const w = S.sel.words, beat = beatId ?? w?.beat ?? S.sel.beat;
   const base = command === 'recording.cut' ? { from: { beat, k: Math.min(w.a, w.b) }, to: { beat, k: Math.max(w.a, w.b) } } : command === 'recording.split' ? { k: Math.min(w.a, w.b) } : {};
   let plan = '';
   if (command === 'recording.cut') {
     try { const r = await call('/api/studio/command', { film: S.id, hash: S.st.hash, command, beat, ...base, by: S.name || 'preview', dryRun: true }); plan = `<p>Cut “${esc(r.plan.words)}” — ${r.plan.seconds.toFixed(2)} s of recording${r.plan.beats.some(x => x.deleted) ? '; a scene left without words goes with it' : ''}. Later scenes move earlier by the same amount. Undo puts back the exact audio.</p>`; }
-    catch (e) { status(e.message, 'error'); return; }
+    catch (e) { if (currentSession(session)) status(e.message, 'error'); return; }
   }
+  if (!currentSession(session)) return;
   const title = { 'recording.cut': 'Cut from the recording', 'recording.split': 'Split this scene', 'recording.merge': 'Merge with the next scene' }[command];
   const detail = { 'recording.split': '<p>The scene splits in the pause before the selected word, on a frame boundary. The edit log keeps it; a merge joins them again.</p>', 'recording.merge': '<p>The next scene’s recording joins this one; its picture is dropped. The edit log keeps it; split again to separate them.</p>' }[command] ?? '';
   overlay(`<form class="st-dialog" role="dialog" aria-modal="true" aria-labelledby="rec-t"><h2 id="rec-t">${title}</h2>${plan}${detail}

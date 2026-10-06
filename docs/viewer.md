@@ -134,3 +134,5 @@ Final is an export quality, not a lock on feedback. Every rendered version keeps
 The Storyboard panel stays available after rendering: a grid of the selected version's scene frames, narration and timings; selecting a card seeks to that scene. Before the first render, Boards still shows the planned storyboard. These are different views of the plan and the rendered cut.
 
 Dragging the timeline pauses playback and leaves the player at the chosen time, including after pointer cancellation. A note pins the time when its composer opened. Two notes at the same time open their own threads. The local server reloads persisted threads when the film is reopened, without resetting the playhead. Download browser-only notes before moving to another machine.
+
+Preview reuse is scoped to the project and its input files, including media and narration. A result made while those inputs changed is marked stale. Switching films abandons unsent edits and ignores late responses from the previous workspace; a save already sent still completes for its original film.
