@@ -256,3 +256,10 @@ uploaded page cannot act on the studio.
 
 Remote use is not supported: the studio and its agent bind to 127.0.0.1 and trust only same-origin
 requests from this computer.
+
+## A worked example
+
+`examples/clearframe-self-demo` is a product demo of this studio made through it: the brief and
+uploads on the home page, one-shot and together revisions, scoped notes, hand edits, rough cuts and
+the final, with every prompt, the storyboard, the agent's decision log and the scripts that recorded
+the studio's own screens (`scripts/demo-captures.mjs`, `scripts/demo-clips.mjs`).
