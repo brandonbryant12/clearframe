@@ -50,7 +50,9 @@ export function soundState(dir, base = process.cwd()) {
     const beats = t.beats.map(b => {
       const m = voiceOf(P, b.id), wav = path.join(P.vo, `${b.id}.wav`), r = row('voice', b.id);
       return { id: b.id, words: b.vo.split(/\s+/).length, seconds: Math.round(estimateDuration(b.vo, sb.voice.wpm) * 10) / 10,
-        made: m?.provider ?? null, voice: m?.voice ?? null, at: m?.createdAt ?? null, audio: fs.existsSync(wav) ? url(base, wav) : null,
+        // What spoke the line, from its own record: a draft is the OS voice it noted (older drafts noted
+        // only the Google setting, so their voice is unknown), never today's settings.
+        made: m?.provider ?? null, model: m?.model ?? null, voice: m ? (m.provider === 'local' ? m.osVoice ?? 'unrecorded OS voice' : m.voice ?? null) : null, at: m?.createdAt ?? null, audio: fs.existsSync(wav) ? url(base, wav) : null,
         current: r?.status === 'cached', draftOnly: r?.status === 'draft only', cost: r?.cost ?? 0, measured: m?.alignment?.kind === 'measured' };
     });
     const google = beats.every(b => b.current), stale = beats.some(b => b.made === 'gemini' && !b.current);

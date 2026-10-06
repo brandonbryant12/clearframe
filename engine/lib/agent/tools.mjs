@@ -21,6 +21,42 @@ export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearfr
   speech: 'docs/speech.md', authoring: 'engine/agent-plugin/AUTHORING.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };
 const TEXT_EXT = new Set(['.md', '.markdown', '.txt', '.csv', '.json', '.srt', '.vtt', '.docx', '.html', '.htm', '.rtf', '.pdf']);
 const SKIP = new Set(['review', 'build', 'node_modules']);
+/**
+ * A narration record as the agent should read it: who actually spoke the line first. Draft lines
+ * written before ClearFrame noted the OS voice carry the film's Google voice and style in `voice` and
+ * `style`; those are settings, so they are moved under `googleSettingsAtTheTime`, never shown as used.
+ */
+export function voiceRecord(raw) {
+  let m; try { m = JSON.parse(raw); } catch { return raw; }
+  if (!m || m.provider !== 'local') return raw;
+  const { voice, style, osVoice, ...rest } = m, legacy = !('osVoice' in m);
+  const record = { provider: 'local', spokenBy: osVoice ? `free OS draft voice "${osVoice}"` : 'free OS draft voice (which one was not recorded)', ...rest,
+    ...(legacy && (voice || style) ? { googleSettingsAtTheTime: { voice, style }, note: 'Older draft record: voice and style were the film\'s Google settings when the draft was made, not what spoke it. No Google take exists for this line.' } : {}) };
+  return JSON.stringify(record, null, 2);
+}
+
+/** A picture's pixel size from its header (PNG, JPEG, GIF, WebP), or null: the agent has no shell to ask. */
+export function pictureSize(file) {
+  let b;
+  try { const fd = fs.openSync(file, 'r'); b = Buffer.alloc(65536); b = b.subarray(0, fs.readSync(fd, b, 0, b.length, 0)); fs.closeSync(fd); } catch { return null; }
+  if (b.length >= 24 && b.readUInt32BE(0) === 0x89504e47 && b.toString('ascii', 12, 16) === 'IHDR') return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
+  if (b.length >= 10 && b.toString('ascii', 0, 3) === 'GIF') return { width: b.readUInt16LE(6), height: b.readUInt16LE(8) };
+  if (b.length >= 30 && b.toString('ascii', 0, 4) === 'RIFF' && b.toString('ascii', 8, 12) === 'WEBP') {
+    const kind = b.toString('ascii', 12, 16);
+    if (kind === 'VP8X') return { width: 1 + b.readUIntLE(24, 3), height: 1 + b.readUIntLE(27, 3) };
+    if (kind === 'VP8 ') return { width: b.readUInt16LE(26) & 0x3fff, height: b.readUInt16LE(28) & 0x3fff };
+    if (kind === 'VP8L') { const v = b.readUInt32LE(21); return { width: 1 + (v & 0x3fff), height: 1 + ((v >> 14) & 0x3fff) }; }
+  }
+  if (b.length >= 4 && b[0] === 0xff && b[1] === 0xd8) {
+    for (let i = 2; i + 9 < b.length;) {
+      if (b[i] !== 0xff) { i++; continue; }
+      const m = b[i + 1];
+      if (m >= 0xc0 && m <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(m)) return { width: b.readUInt16BE(i + 7), height: b.readUInt16BE(i + 5) };
+      i += 2 + b.readUInt16BE(i + 2);
+    }
+  }
+  return null;
+}
 const getAt = (o, p) => { for (const k of String(p).split('.')) { if (o == null) return undefined; o = o[k]; } return o; };
 const without = (o, p) => { const c = structuredClone(o), parts = p.split('.'), last = parts.pop(); const parent = getAt(c, parts.join('.')); if (parent && typeof parent === 'object') delete parent[last]; return c; };
 
@@ -88,7 +124,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       const notes = (() => { try { return loadViewerNotes(dir).filter(n => !n.resolved); } catch { return []; } })();
       const active = jobs.list(filmId(dir)).filter(j => !TERMINAL.has(j.status));
       const lines = [
-        `Film: ${sb.title} — ${t ? `${t.width}×${t.height} at ${t.fps} fps, ${sec(t.duration)}${t.estimated ? ' (narration timing estimated)' : ''}` : 'timing unavailable'}`,
+        `Film: ${sb.title} — project format ${t ? `${t.width}×${t.height} at ${t.fps} fps, ${sec(t.duration)}${t.estimated ? ' (narration timing estimated)' : ''}; finals render at this size, rough cuts at half size (${Math.round(t.width / 2)}×${Math.round(t.height / 2)})` : 'timing unavailable'}`,
         `Look: theme ${typeof sb.theme === 'string' ? sb.theme : sb.theme?.base ?? 'default'}, type ${sb.type ?? 'default'}, motion ${sb.motion?.preset ?? sb.motion ?? 'default'}${sb.transition ? `, transition ${typeof sb.transition === 'string' ? sb.transition : sb.transition.type}` : ''}${f.preset ? `, format ${f.preset}` : ''}`,
         `Hash: ${st.hash}  (pass this to clearframe_edit)`,
         `Undo: ${st.undoLabel ?? '—'} · Redo: ${st.redoLabel ?? '—'}${st.externalChanges ? ' · edited outside the studio' : ''}`,
@@ -168,6 +204,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       while (input.id && Date.now() < until && !TERMINAL.has(list[0].status)) { await new Promise(r => setTimeout(r, 1000)); list = pick(); }
       const view = j => [`${j.label} (job ${j.id}): ${j.status}${j.progress != null && j.status === 'running' ? ` ${Math.round(j.progress * 100)}%` : ''}`,
         j.status === 'complete' ? `  output (for the person to view in the studio; you cannot see images, so judge by the engine's checks): ${j.url ?? 'none'}${j.matches === false ? ' — the film changed while or since it rendered; it may not match' : ''}${j.revision ? `; saved revision ${j.revision}` : ''}` : null,
+        j.media ? `  actual video: ${j.media.width}×${j.media.height}, ${sec(j.media.duration)} as encoded${j.media.authored ? ` (the film itself is ${sec(j.media.authored)}; the file rounds up to whole frames and audio)` : ''}, ${j.media.audio ? 'with sound' : 'silent'}${j.kind === 'draft' ? ' (a half-size rough cut, not the project size; its narration and music are what the Sound status says was actually made)' : ''}` : null,
         j.errors?.length ? `  engine errors: ${j.errors.join('; ')}` : null, j.status === 'failed' && !j.errors?.length ? `  log: ${clip(j.log?.slice(-1200), 1200)}` : null,
         j.result?.errors ? `  check: ${j.result.errors.length} errors, ${j.result.warnings.length} warnings${j.result.errors.length ? `: ${j.result.errors.slice(0, 6).join('; ')}` : ''}` : null].filter(Boolean).join('\n');
       return { content: list.map(view).join('\n') || 'No render jobs yet for this film.', metadata: { summary: list.length === 1 ? `${list[0].label}: ${list[0].status}` : `${list.length} jobs`, job: input.id ?? null } };
@@ -186,7 +223,8 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
         if (!TEXT_EXT.has(ext)) throw fail('That file is not a readable document (Markdown, text, CSV, JSON, captions, DOCX, HTML, RTF or PDF).');
         if (fs.statSync(file).size > 25e6) throw fail('That document is larger than 25 MB.');
         let text;
-        if (['.md', '.markdown', '.txt', '.json', '.srt', '.vtt'].includes(ext)) text = fs.readFileSync(file, 'utf8');
+        if (/^assets\/vo\/.*\.json$/.test(path.relative(dir, file).split(path.sep).join('/'))) text = voiceRecord(fs.readFileSync(file, 'utf8'));
+        else if (['.md', '.markdown', '.txt', '.json', '.srt', '.vtt'].includes(ext)) text = fs.readFileSync(file, 'utf8');
         else { const { documentMarkdown } = await import('../ingest.mjs'); text = documentMarkdown(file); }
         return { content: text.length > 120000 ? `${text.slice(0, 120000)}\n\n[Truncated: ${text.length.toLocaleString('en-US')} characters in all.]` : text, metadata: { summary: `Read ${input.read}` } };
       }
@@ -195,7 +233,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
         for (const e of fs.readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
           if (e.name.startsWith('.') || e.isSymbolicLink() || (depth === 0 && SKIP.has(e.name)) || out.length >= 400) continue;
           const f = path.join(d, e.name);
-          if (e.isDirectory()) { if (depth < 5) walk(f, depth + 1); } else out.push(`${path.relative(dir, f)} (${Math.max(1, Math.round(fs.statSync(f).size / 1024))} KB)`);
+          if (e.isDirectory()) { if (depth < 5) walk(f, depth + 1); } else { const px = /\.(png|jpe?g|gif|webp)$/i.test(e.name) && pictureSize(f); out.push(`${path.relative(dir, f)} (${px ? `${px.width}×${px.height} px, ` : ''}${Math.max(1, Math.round(fs.statSync(f).size / 1024))} KB)`); }
         }
       };
       walk(dir, 0);
@@ -226,10 +264,14 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       }
       const s = soundState(dir, base);
       const n = s.narration, m = s.music, google = s.providers.speech.find(p => p.id === 'google');
+      const made = t => { const by = [...new Set(t.beats.map(b => (b.made === 'local' ? `free draft voice (${b.model ?? 'os-tts'}, ${b.voice})` : b.made ? `${b.made} ${b.model ?? ''} voice ${b.voice}`.replace(/\s+/g, ' ') : 'not made yet')))];
+        return `${by.join(' + ')}${t.status === 'google-changed' ? ', words changed since the Google take' : ''}${t.cost ? ` (Google take ≈$${t.cost.toFixed(3)} if approved)` : ''}`; };
       return { content: [
         `Google sound: ${google.ready ? 'available (paid; needs the person\'s approval)' : `not configured — ${google.needs}`}`,
-        n.recorded ? 'Narration: the source recording (edit by cutting words; not regenerated).' : `Narration: voice ${n.voice}${n.style ? `, style "${n.style}"` : ''}, ${n.lines} lines in ${n.takes.length} take(s): ${n.takes.map(t => `${t.id} ${t.status}${t.cost ? ` (≈$${t.cost.toFixed(3)} to generate)` : ''}`).join('; ')}`,
-        m.off ? 'Music: off.' : `Music: ${m.made ? `${m.made} bed${m.current ? ' (current)' : ''}` : 'none yet'}; model ${m.model}; prompt "${m.prompt || 'derived from the edit'}"; level ${m.volume}${m.duck ? ', ducked under the voice' : ''}${m.cost ? `; Google bed ≈$${m.cost.toFixed(2)}` : ''}.`,
+        ...(n.recorded ? ['Narration: the source recording (edit by cutting words; not regenerated).'] : [
+          `Narration as made (what the film plays now): ${n.lines} lines in ${n.takes.length} take(s): ${n.takes.map(t => `${t.id} ${made(t)}`).join('; ')}`,
+          `Narration settings for Google (apply only to takes Google generates): voice ${n.voice}${n.style ? `, style "${n.style}"` : ''}, model ${n.model}. Never say a draft take used this voice or style.`]),
+        m.off ? 'Music: off.' : `Music as made: ${m.made ? `${m.made === 'local' ? 'free draft bed (made on this computer)' : `${m.made} bed`}${m.current ? ' (current)' : ''}` : 'none yet'}. Settings for Google: model ${m.model}; prompt "${m.prompt || 'derived from the edit'}"; level ${m.volume}${m.duck ? ', ducked under the voice' : ''}${m.cost ? `; Google bed ≈$${m.cost.toFixed(2)}` : ''}.`,
         'Change voice, style, music prompt, model and levels with clearframe_edit (film paths voice.voice, voice.style, music.prompt, music.model, music.volume, music.duck). Free drafts: action draft-voice / draft-music. Paid Google generation: action request with kind and reason.',
       ].join('\n'), metadata: { summary: `Sound: ${n.recorded ? 'recorded narration' : `${n.takes.length} take(s)`}, music ${m.off ? 'off' : m.made ?? 'none'}` } };
     },

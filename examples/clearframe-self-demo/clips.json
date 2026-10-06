@@ -1,0 +1,208 @@
+{
+  "recordedAt": "2026-10-06T14:54:29.952Z",
+  "studio": "http://127.0.0.1:4317",
+  "film": "projects-why-the-tide-turns-twice",
+  "viewport": {
+    "width": 1600,
+    "height": 900
+  },
+  "note": "Clips used in the final (r007), in film order; projectFile is the name the studio saved the upload under (never replacing an earlier upload). Recipe: scripts/demo-clips.mjs.",
+  "clips": {
+    "home": {
+      "scene": "stage",
+      "projectFile": "assets/uploads/home.mp4",
+      "offset": 0,
+      "file": "home.mp4",
+      "seconds": 10.4,
+      "action": 7.2,
+      "held": 3.2,
+      "frames": 143,
+      "region": {
+        "x": 728,
+        "y": 128,
+        "width": 498,
+        "height": 280
+      },
+      "scale": 2,
+      "exercised": "Typed an idea and a title into the new-film form (not created; the form was cleared afterwards)."
+    },
+    "modes": {
+      "scene": "stage-2",
+      "projectFile": "assets/uploads/modes-2.mp4",
+      "offset": 0,
+      "file": "modes.mp4",
+      "seconds": 10.4,
+      "action": 8,
+      "held": 2.4,
+      "frames": 158,
+      "region": {
+        "x": 728,
+        "y": 326,
+        "width": 691,
+        "height": 389
+      },
+      "scale": 2,
+      "cues": {
+        "Make it for me": 1.8,
+        "Build it together": 4.9
+      },
+      "exercised": "Chose Make it for me at 1.8 s and Build it together at 4.9 s, as the narration names each (nothing created)."
+    },
+    "conversation": {
+      "scene": "stage-3",
+      "projectFile": "assets/uploads/conversation.mp4",
+      "offset": 0,
+      "file": "conversation.mp4",
+      "seconds": 10,
+      "action": 4.9,
+      "frames": 101,
+      "region": {
+        "x": 1201,
+        "y": 287,
+        "width": 399,
+        "height": 224
+      },
+      "scale": 2,
+      "exercised": "Looked at a saved conversation: the reply and the film status it reports (nothing sent)."
+    },
+    "stop": {
+      "scene": "stage-4",
+      "projectFile": "assets/uploads/stop-2.mp4",
+      "offset": 5.1,
+      "file": "stop.mp4",
+      "seconds": 10.4,
+      "action": 8.6,
+      "clicks": [
+        {
+          "what": "#st-chat-input",
+          "at": 1.1
+        },
+        {
+          "what": "Enter",
+          "at": 3.7
+        },
+        {
+          "what": ".st-compose [data-act=\"stop\"]",
+          "at": 6.3
+        }
+      ],
+      "held": 1.8,
+      "frames": 167,
+      "region": {
+        "x": 1173,
+        "y": 412,
+        "width": 427,
+        "height": 240
+      },
+      "scale": 2,
+      "exercised": "Sent a request in Make it for me and pressed Stop while the agent was working; the film was unchanged.",
+      "unchanged": true
+    },
+    "scope": {
+      "scene": "stage-5",
+      "projectFile": "assets/uploads/scope.mp4",
+      "offset": 0,
+      "file": "scope.mp4",
+      "seconds": 10,
+      "action": 5.2,
+      "frames": 112,
+      "region": {
+        "x": 1074,
+        "y": 244,
+        "width": 520,
+        "height": 293
+      },
+      "scale": 2,
+      "exercised": "Ask the agent on a selected scene pinned it as the scope; a message was typed and not sent."
+    },
+    "undo": {
+      "scene": "stage-6",
+      "projectFile": "assets/uploads/undo.mp4",
+      "offset": 0,
+      "file": "undo.mp4",
+      "seconds": 10,
+      "action": 9.5,
+      "frames": 198,
+      "region": {
+        "x": 862,
+        "y": 246,
+        "width": 326,
+        "height": 183
+      },
+      "scale": 2,
+      "exercised": "Replaced a text layer by hand, ⌘Z restored \"Why does the tide turn twice a day?\", ⇧⌘Z re-applied it; the film was then undone to its starting state (verified by hash).",
+      "restored": true
+    },
+    "review": {
+      "scene": "stage-10",
+      "projectFile": "assets/uploads/review.mp4",
+      "offset": 0,
+      "file": "review.mp4",
+      "seconds": 10.4,
+      "action": 5.2,
+      "held": 5.2,
+      "frames": 105,
+      "region": {
+        "x": 853,
+        "y": 255,
+        "width": 344,
+        "height": 194
+      },
+      "scale": 2,
+      "exercised": "Looked at a review note pinned to a rendered cut and its Ask the agent link (nothing sent)."
+    },
+    "sound": {
+      "scene": "stage-7",
+      "projectFile": "assets/uploads/sound.mp4",
+      "offset": 0,
+      "file": "sound.mp4",
+      "seconds": 10,
+      "action": 6.7,
+      "frames": 139,
+      "region": {
+        "x": 853,
+        "y": 233,
+        "width": 344,
+        "height": 194
+      },
+      "scale": 2,
+      "exercised": "Looked at the narration takes, the free draft voice and the priced Google button (nothing clicked)."
+    },
+    "approval": {
+      "scene": "stage-8",
+      "projectFile": "assets/uploads/approval-2.mp4",
+      "offset": 0,
+      "file": "approval.mp4",
+      "seconds": 10.4,
+      "action": 5.7,
+      "held": 4.7,
+      "frames": 117,
+      "region": {
+        "x": 500,
+        "y": 139,
+        "width": 600,
+        "height": 338
+      },
+      "scale": 2,
+      "budget": 0.5,
+      "exercised": "Set the film budget to $0.5 by hand, then opened Generate with Google… for narration, showing the estimate and the approval it needs, then Cancel: nothing generated or charged."
+    },
+    "deliver": {
+      "scene": "stage-9",
+      "projectFile": "assets/uploads/deliver.mp4",
+      "offset": 0,
+      "file": "deliver.mp4",
+      "seconds": 10,
+      "action": 5.2,
+      "frames": 107,
+      "region": {
+        "x": 703,
+        "y": 328,
+        "width": 465,
+        "height": 261
+      },
+      "scale": 2,
+      "exercised": "Looked at Render final and the Download link of a film with a final (nothing rendered or downloaded)."
+    }
+  }
+}

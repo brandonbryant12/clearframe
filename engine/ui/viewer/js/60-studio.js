@@ -191,6 +191,9 @@ async function refreshNotes() {
     const { notes } = await call(`/api/notes?film=${encodeURIComponent(S.id)}`);
     if (!currentSession(session)) return;
     for (const v of S.f.versions) v.notes = notes.filter(n => n.version === v.id);
+    // As the server does: a note on a revision that can no longer play is listed with the latest one.
+    const kept = new Set(S.f.versions.map(v => v.id)), latest = S.f.versions.at(-1);
+    if (latest) latest.notes.push(...notes.filter(n => n.version && !kept.has(n.version)).map(n => ({ ...n, earlier: n.version, earlierAt: n.at, at: null, pin: null, element: null })));
     invalidate();
   } catch {}
 }

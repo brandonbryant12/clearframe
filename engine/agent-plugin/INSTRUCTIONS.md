@@ -43,7 +43,11 @@ Each message's context says how the person wants to work, and they can switch at
   change at a time; show it with a still or section; end with one clear question when the decision
   is theirs.
 
-In both, never claim something is finished, rendered or approved unless a tool result says so.
+In both, never claim something is finished, rendered or approved unless a tool result says so,
+and report outputs as measured (`clearframe_job` "actual video", `clearframe_sound` "as made"): a
+rough cut is half size with the free draft voice, whatever the Google settings say. A narration
+record (`assets/vo/*.json`, read with `clearframe_files`) says who spoke the line in `spokenBy`;
+`googleSettingsAtTheTime` in an older draft record is a setting, never the voice that was used.
 
 ## Scope
 

@@ -7,7 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import crypto from 'node:crypto';
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { checkId } from '../store.mjs';
 import { approvedSoundSpecs } from '../generate.mjs';
@@ -77,6 +77,16 @@ const KINDS = {
   voice: { heavy: true, edits: false, label: j => (j.paid ? `Google narration (approved up to $${j.budget.toFixed(2)})` : 'Free draft narration') },
   music: { heavy: true, edits: false, label: j => (j.paid ? `Google music bed (approved up to $${j.budget.toFixed(2)})` : 'Free draft music bed') },
 };
+
+/** What a rendered file actually is (not what the project asks for): size, length and whether it has sound. */
+export function probeMedia(file) {
+  const r = spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=codec_type,width,height:format=duration', '-of', 'json', file], { encoding: 'utf8' });
+  if (r.status !== 0) return null;
+  try {
+    const { streams = [], format = {} } = JSON.parse(r.stdout), v = streams.find(x => x.codec_type === 'video');
+    return { width: v?.width ?? null, height: v?.height ?? null, duration: Number(format.duration) || null, audio: streams.some(x => x.codec_type === 'audio') };
+  } catch { return null; }
+}
 
 /** `cli` and `gate` default to the real CLI and the heavy-work gate; tests pass a stand-in CLI and gate: null. */
 export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI, gate = GATE, keepJobs = KEEP_JOBS }) {
@@ -216,7 +226,8 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
     }
     if (j.kind === 'check') { try { const r = JSON.parse(j.log.slice(j.log.indexOf('{'))); j.result = { errors: r.errors ?? [], warnings: r.warnings ?? [], craft: r.craft ?? [] }; } catch {} }
     const url = f => f && '/' + path.relative(base, path.resolve(base, f)).split(path.sep).map(encodeURIComponent).join('/');
-    if (['draft', 'final'].includes(j.kind)) j.revision = /revision (r\d{3,})/.exec(j.log)?.[1] ?? null;
+    // A rough cut logs "revision r005"; a final prints its receipt, with "revision": "r005".
+    if (['draft', 'final'].includes(j.kind)) j.revision = /revision"?:? "?(r\d{3,})/.exec(j.log)?.[1] ?? null;
     if (['revise', 'reject'].includes(j.kind)) {
       let r = null;
       try { r = JSON.parse(j.log.slice(j.log.indexOf('{'), j.log.lastIndexOf('}') + 1)); } catch {}
@@ -225,6 +236,13 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
       j.revision = j.kind === 'revise' ? r?.revision ?? null : j.revision;
     }
     if (j.kind === 'final') j.url = '/' + path.relative(base, path.join(j.dir, 'build/video.mp4')).split(path.sep).map(encodeURIComponent).join('/');
+    // The saved revision's video as it actually came out (a rough cut is half the project size).
+    if (['draft', 'final'].includes(j.kind) && j.revision) {
+      try {
+        const rev = JSON.parse(fs.readFileSync(path.join(j.dir, 'review', 'revisions', j.revision, 'revision.json'), 'utf8')), v = rev.videos?.at(-1);
+        if (v?.object) { j.media = probeMedia(path.join(j.dir, v.object)); if (j.media) j.media.authored = rev.duration ?? null; j.url ??= url(path.join(j.dir, v.object)); }
+      } catch {}
+    }
   }
 
   return {

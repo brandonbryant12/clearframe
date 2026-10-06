@@ -1,0 +1,288 @@
+{
+  "version": 2,
+  "title": "ClearFrame, made with ClearFrame",
+  "logline": "You direct; the agent builds; nothing changes or costs money without you.",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "midnight",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "fade",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": false,
+  "music": {},
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.2,
+    "vignette": 0.35
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.25,
+    "bloom": 0.2,
+    "handheld": 0,
+    "blur": 0.5
+  },
+  "heading": "bottom",
+  "textMotion": "words",
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "title",
+      "block": "title",
+      "vo": "This film was made in ClearFrame, by talking to it.",
+      "props": {
+        "kicker": "ClearFrame studio",
+        "text": "This film was made by talking to it.",
+        "support": "You direct. The agent builds."
+      },
+      "art": {
+        "sketch": "ambient"
+      },
+      "camera": {
+        "move": "in",
+        "amount": 0.8
+      },
+      "label": "01 Title"
+    },
+    {
+      "id": "stage",
+      "block": "stage",
+      "label": "02 Describe",
+      "props": {
+        "elements": [
+          {
+            "type": "video",
+            "file": "assets/uploads/home.mp4",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "fit": "contain",
+            "offset": 0,
+            "hold": true
+          }
+        ]
+      },
+      "vo": "Start with what you want: an idea, a script or a report, plus the format and the look."
+    },
+    {
+      "id": "stage-2",
+      "block": "stage",
+      "label": "03 Two ways",
+      "props": {
+        "elements": [
+          {
+            "type": "video",
+            "file": "assets/uploads/modes-2.mp4",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "fit": "contain",
+            "offset": 0,
+            "hold": true
+          }
+        ]
+      },
+      "vo": "Then choose how to work. Make it for me takes the brief to a rough cut you can watch. Build it together proposes, and asks before each step."
+    },
+    {
+      "id": "stage-3",
+      "block": "stage",
+      "label": "04 Conversation",
+      "props": {
+        "elements": [
+          {
+            "type": "video",
+            "file": "assets/uploads/conversation.mp4",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "fit": "contain",
+            "offset": 0,
+            "hold": true
+          }
+        ]
+      },
+      "vo": "OpenCode runs on your computer and connects to a free hosted model. The conversation is saved with the film, and the panel shows what really happened."
+    },
+    {
+      "id": "stage-4",
+      "block": "stage",
+      "label": "Stop",
+      "props": {
+        "elements": [
+          {
+            "type": "video",
+            "file": "assets/uploads/stop-2.mp4",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "fit": "contain",
+            "offset": 5.1,
+            "hold": true
+          }
+        ]
+      },
+      "vo": "And you can stop it at any moment.",
+      "tail": 1
+    },
+    {
+      "id": "stage-5",
+      "block": "stage",
+      "label": "05 Scope",
+      "props": {
+        "elements": [
+          {
+            "type": "video",
+            "file": "assets/uploads/scope.mp4",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "fit": "contain",
+            "offset": 0,
+            "hold": true
+          }
+        ]
+      },
+      "vo": "Point at exactly what to change: a scene, a layer, a moment, or a review note. Edits outside that scope are refused."
+    },
+    {
+      "id": "stage-6",
+      "block": "stage",
+      "label": "06 By hand",
+      "props": {
+        "elements": [
+          {
+            "type": "video",
+            "file": "assets/uploads/undo.mp4",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "fit": "contain",
+            "offset": 0,
+            "hold": true
+          }
+        ]
+      },
+      "vo": "Every field is still yours to edit by hand, and every change, yours or the agent's, is one step of undo."
+    },
+    {
+      "id": "stage-10",
+      "block": "stage",
+      "label": "07 Review",
+      "props": {
+        "elements": [
+          {
+            "type": "video",
+            "file": "assets/uploads/review.mp4",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "fit": "contain",
+            "offset": 0,
+            "hold": true
+          }
+        ]
+      },
+      "vo": "Render a rough cut, leave notes on the picture, and hand a note to the agent."
+    },
+    {
+      "id": "stage-7",
+      "block": "stage",
+      "label": "08 Sound",
+      "props": {
+        "elements": [
+          {
+            "type": "video",
+            "file": "assets/uploads/sound.mp4",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "fit": "contain",
+            "offset": 0,
+            "hold": true
+          }
+        ]
+      },
+      "vo": "Draft narration and music are free. Google voices and music cost money,"
+    },
+    {
+      "id": "stage-8",
+      "block": "stage",
+      "label": "09 Approval",
+      "props": {
+        "elements": [
+          {
+            "type": "video",
+            "file": "assets/uploads/approval-2.mp4",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "fit": "contain",
+            "offset": 0,
+            "hold": true
+          }
+        ]
+      },
+      "vo": "so nothing is generated until you approve exactly what will be made, within the film's budget."
+    },
+    {
+      "id": "stage-9",
+      "block": "stage",
+      "label": "10 Export",
+      "props": {
+        "elements": [
+          {
+            "type": "video",
+            "file": "assets/uploads/deliver.mp4",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "fit": "contain",
+            "offset": 0,
+            "hold": true
+          }
+        ]
+      },
+      "vo": "When it's ready, render the final, and download it."
+    },
+    {
+      "id": "endcard",
+      "block": "endcard",
+      "vo": "Describe it, direct it, export it.",
+      "props": {
+        "title": "Describe it. Direct it. Export it.",
+        "support": "ClearFrame studio",
+        "action": "docs/agent-studio.md"
+      },
+      "label": "11 End"
+    }
+  ],
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Illustrative sample data · replace before publishing"
+    }
+  ]
+}

@@ -1,0 +1,493 @@
+{
+  "capturedAt": "2026-10-06T13:11:13.273Z",
+  "studio": "http://127.0.0.1:4317",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "tour": "projects-why-the-tide-turns-twice",
+  "done": "projects-flash-then-rumble",
+  "captures": {
+    "home": {
+      "file": "home.png",
+      "closeups": [
+        "home-modes.png"
+      ],
+      "pins": [
+        {
+          "label": "Describe the film",
+          "detail": "An idea, or a report, script or notes",
+          "selector": "#nf-idea",
+          "x": 0.642,
+          "y": 0.211,
+          "box": {
+            "x": 0.47,
+            "y": 0.157,
+            "w": 0.345,
+            "h": 0.106
+          }
+        },
+        {
+          "label": "Choose how to collaborate",
+          "detail": "Make it for me, or Build it together",
+          "selector": ".home-mode",
+          "x": 0.642,
+          "y": 0.482,
+          "box": {
+            "x": 0.47,
+            "y": 0.423,
+            "w": 0.345,
+            "h": 0.118
+          }
+        },
+        {
+          "label": "Add sources and pictures",
+          "detail": "Documents for the agent, pictures for the film",
+          "selector": "#nf-add",
+          "x": 0.528,
+          "y": 0.611,
+          "box": {
+            "x": 0.47,
+            "y": 0.593,
+            "w": 0.118,
+            "h": 0.038
+          }
+        },
+        {
+          "label": "Create and start building",
+          "detail": "A project folder and its own conversation",
+          "selector": "#nf-go",
+          "x": 0.758,
+          "y": 0.676,
+          "box": {
+            "x": 0.701,
+            "y": 0.654,
+            "w": 0.114,
+            "h": 0.043
+          }
+        }
+      ],
+      "focus": {
+        "x": 0.47,
+        "y": 0.423,
+        "w": 0.345,
+        "h": 0.118
+      }
+    },
+    "conversation": {
+      "file": "conversation.png",
+      "closeups": [
+        "conversation-column.png"
+      ],
+      "pins": [
+        {
+          "label": "A persisted conversation",
+          "detail": "Saved with the project; survives restarts",
+          "selector": "#st-chat-log",
+          "x": 0.896,
+          "y": 0.356,
+          "box": {
+            "x": 0.792,
+            "y": 0.129,
+            "w": 0.208,
+            "h": 0.454
+          }
+        },
+        {
+          "label": "Two ways to direct",
+          "detail": "Switch at any time",
+          "selector": ".st-modes",
+          "x": 0.896,
+          "y": 0.106,
+          "box": {
+            "x": 0.792,
+            "y": 0.084,
+            "w": 0.208,
+            "h": 0.045
+          }
+        },
+        {
+          "label": "The film’s real state",
+          "detail": "Rendered, current, Watch",
+          "selector": ".st-progress",
+          "x": 0.896,
+          "y": 0.536,
+          "box": {
+            "x": 0.799,
+            "y": 0.494,
+            "w": 0.193,
+            "h": 0.083
+          }
+        },
+        {
+          "label": "Write the next step",
+          "detail": "Enter sends; queued while it works",
+          "selector": "#st-chat-input",
+          "x": 0.896,
+          "y": 0.657,
+          "box": {
+            "x": 0.798,
+            "y": 0.619,
+            "w": 0.195,
+            "h": 0.075
+          }
+        }
+      ],
+      "focus": {
+        "x": 0.792,
+        "y": 0.129,
+        "w": 0.208,
+        "h": 0.454
+      }
+    },
+    "scope": {
+      "file": "scope.png",
+      "closeups": [
+        "scope-composer.png"
+      ],
+      "pins": [
+        {
+          "label": "Pick a scene",
+          "detail": "Or a layer, a range, a moment, a note, a file",
+          "selector": "[data-scene-row=\"curve\"]",
+          "x": 0.068,
+          "y": 0.341,
+          "box": {
+            "x": 0.006,
+            "y": 0.315,
+            "w": 0.123,
+            "h": 0.053
+          }
+        },
+        {
+          "label": "Ask about exactly this",
+          "detail": "Pins the scope to the message",
+          "selector": ".st-sel-actions [data-act=\"askScene\"]",
+          "x": 0.749,
+          "y": 0.165,
+          "box": {
+            "x": 0.723,
+            "y": 0.153,
+            "w": 0.052,
+            "h": 0.024
+          }
+        },
+        {
+          "label": "The scope travels with the message",
+          "detail": "Edits outside it are refused",
+          "selector": ".st-compose-scope",
+          "x": 0.896,
+          "y": 0.601,
+          "box": {
+            "x": 0.798,
+            "y": 0.591,
+            "w": 0.195,
+            "h": 0.021
+          }
+        },
+        {
+          "label": "Manual controls stay live",
+          "detail": "Every field is one undoable step",
+          "selector": "#st-right",
+          "x": 0.701,
+          "y": 0.389,
+          "box": {
+            "x": 0.612,
+            "y": 0.043,
+            "w": 0.177,
+            "h": 0.694
+          }
+        }
+      ],
+      "focus": {
+        "x": 0.798,
+        "y": 0.591,
+        "w": 0.195,
+        "h": 0.021
+      }
+    },
+    "layer": {
+      "file": "layer.png",
+      "closeups": [
+        "layer-inspector.png"
+      ],
+      "pins": [
+        {
+          "label": "One layer selected",
+          "detail": "Picked on the picture or in the layer list",
+          "selector": "[data-act=\"askLayer\"]",
+          "x": 0.669,
+          "y": 0.201,
+          "box": {
+            "x": 0.618,
+            "y": 0.189,
+            "w": 0.101,
+            "h": 0.024
+          }
+        },
+        {
+          "label": "Its own fields",
+          "detail": "Edit text, timing, colour by hand",
+          "selector": "#st-right [data-path^=\"props.elements.0.\"]",
+          "x": 0.701,
+          "y": 0.298,
+          "box": {
+            "x": 0.623,
+            "y": 0.275,
+            "w": 0.155,
+            "h": 0.047
+          }
+        },
+        {
+          "label": "Or ask the agent about it",
+          "detail": "Only this element may change",
+          "selector": "[data-act=\"askLayer\"]",
+          "x": 0.669,
+          "y": 0.201,
+          "box": {
+            "x": 0.618,
+            "y": 0.189,
+            "w": 0.101,
+            "h": 0.024
+          }
+        }
+      ],
+      "focus": {
+        "x": 0.618,
+        "y": 0.189,
+        "w": 0.101,
+        "h": 0.024
+      }
+    },
+    "review": {
+      "file": "review.png",
+      "closeups": [
+        "review-thread.png"
+      ],
+      "pins": [
+        {
+          "label": "Watch a rendered cut",
+          "detail": "Rough cuts and finals are saved revisions",
+          "selector": "#st-monitor",
+          "x": 0.374,
+          "y": 0.389,
+          "box": {
+            "x": 0.138,
+            "y": 0.043,
+            "w": 0.471,
+            "h": 0.694
+          }
+        },
+        {
+          "label": "Notes on the picture",
+          "detail": "Pinned to the moment you watched",
+          "selector": ".st-thread",
+          "x": 0.701,
+          "y": 0.355,
+          "box": {
+            "x": 0.618,
+            "y": 0.309,
+            "w": 0.165,
+            "h": 0.094
+          }
+        },
+        {
+          "label": "Hand a note to the agent",
+          "detail": "Its scene becomes the scope",
+          "selector": "[data-act=\"askNote\"]",
+          "x": 0.716,
+          "y": 0.387,
+          "box": {
+            "x": 0.696,
+            "y": 0.379,
+            "w": 0.041,
+            "h": 0.016
+          }
+        },
+        {
+          "label": "Undo, redo",
+          "detail": "Every agent edit is one step",
+          "selector": "[data-act=\"undo\"]",
+          "x": 0.787,
+          "y": 0.021,
+          "box": {
+            "x": 0.778,
+            "y": 0.007,
+            "w": 0.018,
+            "h": 0.028
+          }
+        }
+      ],
+      "focus": {
+        "x": 0.618,
+        "y": 0.309,
+        "w": 0.165,
+        "h": 0.094
+      }
+    },
+    "sound": {
+      "file": "sound.png",
+      "closeups": [
+        "sound-panel.png",
+        "sound-approval.png"
+      ],
+      "pins": [
+        {
+          "label": "Free drafts or Google",
+          "detail": "Draft audio costs nothing",
+          "selector": ".st-sound-head",
+          "x": 0.701,
+          "y": 0.116,
+          "box": {
+            "x": 0.618,
+            "y": 0.095,
+            "w": 0.165,
+            "h": 0.042
+          }
+        },
+        {
+          "label": "Voice and delivery",
+          "detail": "Gemini TTS voices",
+          "selector": "[data-path=\"voice.voice\"]",
+          "x": 0.701,
+          "y": 0.211,
+          "box": {
+            "x": 0.618,
+            "y": 0.196,
+            "w": 0.165,
+            "h": 0.029
+          }
+        },
+        {
+          "label": "Takes and players",
+          "detail": "Only changed takes regenerate",
+          "selector": ".st-takes",
+          "x": 0.701,
+          "y": 0.399,
+          "box": {
+            "x": 0.618,
+            "y": 0.369,
+            "w": 0.165,
+            "h": 0.059
+          }
+        },
+        {
+          "label": "Music direction",
+          "detail": "Lyria, shaped to the edit",
+          "selector": "[data-path=\"music.prompt\"]",
+          "x": 0.701,
+          "y": 0.652,
+          "box": {
+            "x": 0.618,
+            "y": 0.629,
+            "w": 0.165,
+            "h": 0.047
+          }
+        }
+      ],
+      "focus": {
+        "x": 0.618,
+        "y": 0.369,
+        "w": 0.165,
+        "h": 0.059
+      },
+      "extra": {
+        "file": "sound-approval-full.png",
+        "pins": [
+          {
+            "label": "Exactly what will be generated",
+            "detail": "Bound to these words, voice and model",
+            "selector": ".st-dialog p",
+            "x": 0.5,
+            "y": 0.168,
+            "box": {
+              "x": 0.385,
+              "y": 0.15,
+              "w": 0.23,
+              "h": 0.035
+            }
+          },
+          {
+            "label": "Your name",
+            "detail": "Recorded with the approval",
+            "selector": "#pay-by",
+            "x": 0.5,
+            "y": 0.36,
+            "box": {
+              "x": 0.385,
+              "y": 0.345,
+              "w": 0.23,
+              "h": 0.03
+            }
+          },
+          {
+            "label": "An explicit approval",
+            "detail": "Up to an amount; the film budget caps it",
+            "selector": ".st-dialog .st-check",
+            "x": 0.5,
+            "y": 0.402,
+            "box": {
+              "x": 0.385,
+              "y": 0.394,
+              "w": 0.23,
+              "h": 0.017
+            }
+          }
+        ]
+      }
+    },
+    "deliver": {
+      "file": "deliver.png",
+      "closeups": [
+        "deliver-panel.png"
+      ],
+      "pins": [
+        {
+          "label": "Readiness at a glance",
+          "detail": "Checks, timing, placeholders, acceptance",
+          "selector": "#st-right .st-sec",
+          "x": 0.701,
+          "y": 0.256,
+          "box": {
+            "x": 0.618,
+            "y": 0.091,
+            "w": 0.165,
+            "h": 0.33
+          }
+        },
+        {
+          "label": "The rendered film",
+          "detail": "Final at full size",
+          "selector": "#st-monitor",
+          "x": 0.374,
+          "y": 0.389,
+          "box": {
+            "x": 0.138,
+            "y": 0.043,
+            "w": 0.471,
+            "h": 0.694
+          }
+        },
+        {
+          "label": "Download",
+          "detail": "The MP4 from the saved revision",
+          "selector": "#st-monitor [download], #st-monitor a[href$=\".mp4\"], [data-act=\"final\"]",
+          "x": 0.584,
+          "y": 0.064,
+          "box": {
+            "x": 0.564,
+            "y": 0.052,
+            "w": 0.04,
+            "h": 0.024
+          }
+        }
+      ],
+      "focus": {
+        "x": 0.618,
+        "y": 0.091,
+        "w": 0.165,
+        "h": 0.33
+      }
+    }
+  }
+}

@@ -1,0 +1,307 @@
+#!/usr/bin/env node
+// Short screen recordings of real studio interactions for the self-demo (examples/clearframe-self-demo):
+// what a still cannot show, such as a mode switching, a scope pinned, a hand edit undone and redone,
+// a running reply stopped, and the Google approval opened and cancelled. Each clip drives a running
+// `clearframe viewer --serve` over the DevTools Protocol with real mouse and keyboard events and a
+// drawn cursor, and records a tight 16:9 region around the controls involved at 2× (about 500 CSS
+// px wide, so UI text still reads on a phone), as an H.264 MP4 at 30 fps, encoded with two threads
+// under the codex-heavy gate. A clip shorter than --min holds its last frame (the screen at rest).
+//
+//   node scripts/demo-clips.mjs --out DIR [--studio http://127.0.0.1:4317] [--cdp http://127.0.0.1:9333]
+//          [--film projects-why-the-tide-turns-twice] [--done projects-flash-then-rumble] [--scene title] [--field props.elements.25.text]
+//          [--min 10] [--cues 1.8,4.9] [--budget 0.5] [--only name,name]
+//   node scripts/demo-clips.mjs --out DIR --extend --min 16 [--only name]   (hold existing clips longer)
+//
+// --film must be a film you own for demos: the edit clip changes one title and undoes it, and the
+// stop clip sends one message to its agent (the free model) and stops it. Nothing is approved or
+// generated: the approval dialog is cancelled. --done is a film with a conversation and a final; it
+// is only looked at. clips.json records what each clip exercised.
+import fs from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
+import { spawnSync } from 'node:child_process';
+import { parseArgs } from 'node:util';
+import { chrome, tab, sleep } from './demo-cdp.mjs';
+import { gateIsInherited } from '../engine/lib/resource-gate.mjs';
+
+const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, film: { type: 'string' }, done: { type: 'string' }, scene: { type: 'string' }, field: { type: 'string' }, text: { type: 'string' }, min: { type: 'string' }, cues: { type: 'string' }, budget: { type: 'string' }, extend: { type: 'boolean' }, only: { type: 'string' } } });
+if (!o.out) { console.error('Usage: node scripts/demo-clips.mjs --out DIR [--studio URL] [--cdp URL] [--film FILM] [--scene ID] [--field PATH] [--text TEXT] [--min S] [--only a,b]'); process.exit(2); }
+const STUDIO = (o.studio ?? 'http://127.0.0.1:4317').replace(/\/$/, ''), OUT = path.resolve(o.out);
+const FILM = o.film ?? 'projects-why-the-tide-turns-twice', DONE = o.done ?? 'projects-flash-then-rumble', SCENE = o.scene ?? 'title', FIELD = o.field ?? 'props.elements.25.text';
+const NEW_TEXT = o.text ?? 'Why does the sea turn around twice a day?';
+const only = o.only ? new Set(o.only.split(',')) : null;
+const W = 1600, H = 900, SCALE = 2, MAX_W = 520, MIN = Number(o.min ?? 10);
+fs.mkdirSync(OUT, { recursive: true });
+
+// ------------------------------------------------------------------ page helpers
+const until = async (page, test, ms = 20000, ...args) => { const end = Date.now() + ms; while (Date.now() < end) { if (await page.evaluate(test, ...args)) return true; await sleep(200); } throw new Error(`timed out waiting for ${test}`); };
+const api = (page, url, body) => page.evaluate((url, body) => fetch(url, body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : {}).then(r => r.json()), url, body ?? null);
+async function open(page, hash) {
+  await page.send('Page.navigate', { url: `${STUDIO}/build/viewer/index.html${hash}` });
+  await sleep(1200); await page.evaluate(() => location.reload()); await sleep(2200);
+}
+const rect = (page, selector) => page.evaluate(s => { const r = document.querySelector(s)?.getBoundingClientRect(); return r && r.width ? { x: r.left, y: r.top, w: r.width, h: r.height } : null; }, selector);
+/** The smallest 16:9 box (at most MAX_W wide) around these rects, padded and kept on the page. */
+function frame(rects, maxW = MAX_W) {
+  const rs = rects.filter(Boolean); if (!rs.length) throw new Error('nothing to frame');
+  const x0 = Math.min(...rs.map(r => r.x)) - 14, y0 = Math.min(...rs.map(r => r.y)) - 14, x1 = Math.max(...rs.map(r => r.x + r.w)) + 14, y1 = Math.max(...rs.map(r => r.y + r.h)) + 14;
+  let w = Math.max(x1 - x0, ((y1 - y0) * 16) / 9, 320); w = Math.min(w, maxW); const h = (w * 9) / 16;
+  const x = Math.min(Math.max(0, (x0 + x1) / 2 - w / 2), W - w), y = Math.min(Math.max(0, (y0 + y1) / 2 - h / 2), H - h);
+  return { x: Math.round(x), y: Math.round(y), width: Math.round(w), height: Math.round(h) };
+}
+
+// A drawn cursor (the screenshot has none) that glides to targets and pulses on a click.
+const CURSOR = () => {
+  if (document.getElementById('demo-cursor')) return;
+  const c = document.createElement('div'); c.id = 'demo-cursor';
+  c.innerHTML = '<svg width="22" height="30" viewBox="0 0 22 30"><path d="M2 2 L2 24 L8 18.5 L12.5 28 L16 26.4 L11.6 17 L19.5 17 Z" fill="#fff" stroke="#111" stroke-width="1.6" stroke-linejoin="round"/></svg><i></i>';
+  c.style.cssText = 'position:fixed;left:0;top:0;z-index:2147483647;pointer-events:none;transition:transform .55s cubic-bezier(.3,.7,.2,1);transform:translate(800px,450px);filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))';
+  const s = document.createElement('style'); s.textContent = '#demo-cursor i{position:absolute;left:-14px;top:-14px;width:28px;height:28px;border-radius:50%;border:2px solid #9db4ff;opacity:0}#demo-cursor.tap i{animation:demotap .45s ease-out}@keyframes demotap{from{opacity:.9;transform:scale(.4)}to{opacity:0;transform:scale(1.4)}}';
+  document.head.append(s); document.body.append(c);
+};
+async function point(page, selector) {
+  const r = await rect(page, selector); if (!r) throw new Error(`no ${selector}`);
+  const x = r.x + Math.min(r.w / 2, 40), y = r.y + r.h / 2;
+  await page.evaluate((x, y) => { document.getElementById('demo-cursor').style.transform = `translate(${x}px,${y}px)`; }, x, y);
+  await sleep(650); return { x, y };
+}
+// Each press and shortcut while recording, in seconds from the clip's first frame (clips.json `clicks`).
+let rec = null;
+const mark = what => rec && rec.marks.push({ what, at: Math.round((Date.now() - rec.t0) / 100) / 10 });
+async function click(page, selector) {
+  const { x, y } = await point(page, selector);
+  mark(selector);
+  await page.evaluate(() => { const c = document.getElementById('demo-cursor'); c.classList.remove('tap'); void c.offsetWidth; c.classList.add('tap'); });
+  for (const type of ['mousePressed', 'mouseReleased']) await page.send('Input.dispatchMouseEvent', { type, x, y, button: 'left', clickCount: 1 });
+  await sleep(350);
+}
+/** A keycap at the foot of the recorded box, for shortcuts the cursor cannot show. */
+const keycap = (page, label, clip) => page.evaluate((label, c) => {
+  let k = document.getElementById('demo-key');
+  if (!k) { k = document.createElement('div'); k.id = 'demo-key'; document.body.append(k); }
+  k.textContent = label; k.style.cssText = `position:fixed;z-index:2147483647;pointer-events:none;left:${c.x + c.width / 2}px;top:${c.y + c.height - 46}px;transform:translateX(-50%);padding:5px 12px;border-radius:8px;background:rgba(20,22,34,.92);color:#fff;font:600 15px/1.3 system-ui;border:1px solid rgba(157,180,255,.7);transition:opacity .3s;opacity:1`;
+  clearTimeout(k._t); k._t = setTimeout(() => { k.style.opacity = '0'; }, 1300);
+}, label, clip);
+async function type(page, text, ms = 38) { for (const ch of text) { await page.send('Input.insertText', { text: ch }); await sleep(ms); } }
+async function key(page, k, code, modifiers = 0) { mark(`${modifiers & 4 ? '⌘' : ''}${modifiers & 8 ? '⇧' : ''}${k}`); for (const type of ['keyDown', 'keyUp']) await page.send('Input.dispatchKeyEvent', { type, key: k, code, modifiers, windowsVirtualKeyCode: k.length === 1 ? k.toUpperCase().charCodeAt(0) : k === 'Enter' ? 13 : 0 }); }
+
+function encode(args) {
+  const gate = path.join(os.homedir(), '.local/bin/codex-heavy'), gated = !gateIsInherited() && fs.existsSync(gate);
+  const r = gated ? spawnSync(gate, ['--', 'env', 'CLEARFRAME_HEAVY_HELD=1', 'ffmpeg', ...args], { encoding: 'utf8' }) : spawnSync('ffmpeg', args, { encoding: 'utf8' });
+  if (r.status !== 0) throw new Error(r.stderr);
+}
+const probe = f => Number(spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f], { encoding: 'utf8' }).stdout) || null;
+
+/** Record `clip` (a 16:9 page box) at 2× while `act` runs; returns the MP4's name and length. */
+async function record(page, name, clip, act) {
+  const dir = path.join(OUT, `.${name}-frames`); fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir);
+  const frames = []; let on = true;
+  rec = { t0: Date.now(), marks: [] };
+  const loop = (async () => { while (on) { const r = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 92, clip: { ...clip, scale: SCALE } }); const f = path.join(dir, `f${String(frames.length).padStart(5, '0')}.jpg`); fs.writeFileSync(f, Buffer.from(r.data, 'base64')); frames.push({ f, t: Date.now() }); } })();
+  try { await act(); } finally { on = false; await loop; }
+  const end = frames.at(-1).t + 400;
+  fs.writeFileSync(path.join(dir, 'list.txt'), frames.map((x, i) => `file '${x.f}'\nduration ${(((frames[i + 1]?.t ?? end) - x.t) / 1000).toFixed(4)}`).join('\n') + `\nfile '${frames.at(-1).f}'\n`);
+  const out = path.join(OUT, `${name}.mp4`);
+  // Encoding is the heavy part: two encoder and filter threads, under the shared heavy-work gate
+  // (codex-heavy) unless an outer gate is already held. Recording the browser is light and stays outside.
+  const args = ['-loglevel', 'error', '-y', '-nostdin', '-threads', '2', '-filter_threads', '2', '-f', 'concat', '-safe', '0', '-i', path.join(dir, 'list.txt'), '-vf', `fps=30,scale=trunc(iw/2)*2:trunc(ih/2)*2,tpad=stop_mode=clone:stop_duration=${Math.max(0, MIN - (end - frames[0].t) / 1000).toFixed(2)},format=yuv420p`, '-c:v', 'libx264', '-threads', '2', '-crf', '16', '-preset', 'medium', '-movflags', '+faststart', '-an', out];
+  encode(args);
+  fs.rmSync(dir, { recursive: true, force: true });
+  // Footage never loops in a film, so a short clip holds its last frame (the screen at rest) to --min seconds.
+  const seconds = probe(out);
+  const action = Math.round((end - frames[0].t) / 100) / 10;
+  // seconds is the file as encoded; the last `held` seconds repeat the final frame.
+  const clicks = rec.marks; rec = null;
+  return { file: `${name}.mp4`, seconds, action, clicks, held: seconds ? Math.max(0, Math.round((seconds - action) * 10) / 10) : null, frames: frames.length, region: clip, scale: SCALE };
+}
+const clearComposer = () => {
+  document.querySelector('.st-compose [data-act="scope"]')?.click();
+  const t = document.getElementById('st-chat-input'); if (t) { t.value = ''; t.dispatchEvent(new Event('input', { bubbles: true })); }
+};
+const filmState = page => api(page, `${STUDIO}/api/studio/state?film=${FILM}`);
+
+// ------------------------------------------------------------------ the clips
+const CLIPS = {
+  async home(page) {
+    await open(page, '#/films'); await until(page, () => !!document.getElementById('nf-idea'));
+    await page.evaluate(() => { for (const id of ['nf-idea', 'nf-title']) { const e = document.getElementById(id); e.value = ''; e.dispatchEvent(new Event('input', { bubbles: true })); } });
+    await page.evaluate(CURSOR);
+    // The idea field is wider than a readable crop: frame its left part, where the text starts.
+    const idea = await rect(page, '#nf-idea'), title = await rect(page, '#nf-title');
+    const clip = frame([{ ...idea, w: 470 }, { ...title, w: Math.min(title.w, 470) }]);
+    const r = await record(page, 'home', clip, async () => {
+      await sleep(400); await click(page, '#nf-idea'); await type(page, 'Why the tide turns twice a day, for curious kids.', 32); await sleep(500);
+      await click(page, '#nf-title'); await type(page, 'Why the tide turns twice', 40); await sleep(1200);
+    });
+    await page.evaluate(() => { for (const id of ['nf-idea', 'nf-title']) { const e = document.getElementById(id); e.value = ''; e.dispatchEvent(new Event('input', { bubbles: true })); } });
+    return { ...r, exercised: 'Typed an idea and a title into the new-film form (not created; the form was cleared afterwards).' };
+  },
+  async modes(page) {
+    await open(page, '#/films'); await until(page, () => !!document.querySelector('.home-mode label'));
+    await page.evaluate(() => document.querySelector('.home-mode label:nth-of-type(1)').click()); // start on Make it for me
+    await page.evaluate(CURSOR);
+    const clip = frame([await rect(page, '.home-mode label:nth-of-type(1)'), await rect(page, '.home-mode label:nth-of-type(2)')], 720); // both cards side by side
+    // Each card is chosen as its name is spoken (--cues: seconds into the clip, from the narration's word timing).
+    const [makeAt, togetherAt] = (o.cues ?? '1.8,4.9').split(',').map(Number);
+    const r = await record(page, 'modes', clip, async () => {
+      const t0 = Date.now(), at = s => sleep(Math.max(0, s * 1000 - 750 - (Date.now() - t0)));
+      await at(makeAt); await click(page, '.home-mode label:nth-of-type(1)');
+      await at(togetherAt); await click(page, '.home-mode label:nth-of-type(2)'); await sleep(2500);
+    });
+    await page.evaluate(() => document.querySelector('.home-mode label:nth-of-type(1)').click());
+    return { ...r, cues: { 'Make it for me': makeAt, 'Build it together': togetherAt }, exercised: `Chose Make it for me at ${makeAt} s and Build it together at ${togetherAt} s, as the narration names each (nothing created).` };
+  },
+  async scope(page) {
+    await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
+    await page.evaluate(clearComposer); // start unscoped, with no draft left in the composer
+    await page.evaluate(s => document.querySelector(`[data-scene-row="${s}"]`)?.click(), SCENE); await sleep(700);
+    await page.evaluate(() => document.querySelector('[data-act="right"][data-tab="inspect"]')?.click()); await sleep(500);
+    await page.evaluate(CURSOR);
+    const clip = frame([await rect(page, '.st-compose'), await rect(page, '.st-sel-actions [data-act="askScene"]')]);
+    const r = await record(page, 'scope', clip, async () => {
+      await sleep(400); await click(page, '.st-sel-actions [data-act="askScene"]'); await sleep(900);
+      await type(page, 'Make this headline shorter.'); await sleep(1400);
+    });
+    await page.evaluate(clearComposer);
+    return { ...r, exercised: 'Ask the agent on a selected scene pinned it as the scope; a message was typed and not sent.' };
+  },
+  async undo(page) {
+    await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
+    await page.evaluate(() => document.querySelector('.st-layouts [data-layout="design"]')?.click()); await sleep(600);
+    await page.evaluate(s => document.querySelector(`[data-scene-row="${s}"]`)?.click(), SCENE); await sleep(700);
+    await page.evaluate(() => document.querySelector('[data-act="right"][data-tab="inspect"]')?.click()); await sleep(800);
+    // A layer's fields show once the layer is selected (props.elements.N.text → layer props.elements.N).
+    const layer = FIELD.split('.').slice(0, -1).join('.');
+    await page.evaluate(l => document.querySelector(`#st-right [data-act="element"][data-element="${l}"]`)?.click(), layer); await sleep(700);
+    const field = `#st-right [data-path="${FIELD}"]`;
+    await until(page, s => !!document.querySelector(s), 8000, field).catch(() => {});
+    if (!(await rect(page, field))) throw new Error(`no field ${FIELD} for scene ${SCENE}`);
+    await page.evaluate(s => document.querySelector(s).scrollIntoView({ block: 'center' }), field); await sleep(300);
+    const before = await filmState(page), title = await page.evaluate(s => document.querySelector(s).value, field);
+    await page.evaluate(CURSOR);
+    const clip = frame([await rect(page, field)]);
+    const r = await record(page, 'undo', clip, async () => {
+      await sleep(400); await click(page, field); await page.evaluate(s => document.querySelector(s).select(), field); await sleep(250);
+      await type(page, NEW_TEXT, 45); await key(page, 'Enter', 'Enter', 4); // ⌘Enter commits a field
+      await sleep(1800); await keycap(page, '⌘Z  Undo', clip); await key(page, 'z', 'KeyZ', 4); await sleep(1800);
+      await keycap(page, '⇧⌘Z  Redo', clip); await key(page, 'Z', 'KeyZ', 12); await sleep(1800);
+    });
+    await page.evaluate(() => document.querySelector('[data-act="undo"]')?.click()); await sleep(1500); // leave the film as it was
+    const after = await filmState(page);
+    return { ...r, exercised: `Replaced a text layer by hand, ⌘Z restored "${title}", ⇧⌘Z re-applied it; the film was then undone to its starting state (${after.hash === before.hash ? 'verified by hash' : 'NOT back: check the film'}).`, restored: after.hash === before.hash };
+  },
+  async stop(page) {
+    await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
+    await page.evaluate(() => document.querySelector('[data-act="mode"][data-mode="oneshot"]')?.click()); await sleep(600);
+    await page.evaluate(clearComposer); await sleep(300);
+    const before = await filmState(page);
+    await page.evaluate(CURSOR);
+    const clip = frame([await rect(page, '.st-compose')]);
+    const r = await record(page, 'stop', clip, async () => {
+      await sleep(400); await click(page, '#st-chat-input'); await type(page, 'Tighten every line of narration by a few words.'); await sleep(300); await key(page, 'Enter', 'Enter');
+      await until(page, () => !!document.querySelector('.st-compose [data-act="stop"]'), 15000); await sleep(1800);
+      await click(page, '.st-compose [data-act="stop"]'); await until(page, () => !document.querySelector('.st-compose [data-act="stop"]'), 20000).catch(() => {}); await sleep(1500);
+    });
+    await sleep(3000);
+    const after = await filmState(page);
+    return { ...r, exercised: `Sent a request in Make it for me and pressed Stop while the agent was working; ${after.hash === before.hash ? 'the film was unchanged' : 'the film CHANGED before the stop: undo it'}.`, unchanged: after.hash === before.hash };
+  },
+  async conversation(page) {
+    await open(page, `#/film/${DONE}`); await until(page, () => !!document.querySelector('#st-chat-log .st-progress'));
+    await page.evaluate(() => { const l = document.getElementById('st-chat-log'); l.scrollTop = l.scrollHeight; }); await sleep(500);
+    await page.evaluate(CURSOR);
+    const strip = '#st-chat-log .st-progress:last-of-type';
+    const clip = frame([await rect(page, strip)]);
+    const r = await record(page, 'conversation', clip, async () => { await sleep(500); await point(page, strip); await sleep(1500); await point(page, '#st-chat-input'); await sleep(1200); });
+    return { ...r, exercised: 'Looked at a saved conversation: the reply and the film status it reports (nothing sent).' };
+  },
+  async review(page) {
+    await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
+    await page.evaluate(() => document.querySelector('.st-layouts [data-layout="review"]')?.click()); await sleep(1500);
+    await until(page, () => !!document.querySelector('.st-thread [data-act="askNote"]'), 15000);
+    await page.evaluate(() => document.querySelector('.st-thread').scrollIntoView({ block: 'center' })); await sleep(400);
+    await page.evaluate(CURSOR);
+    const clip = frame([await rect(page, '.st-thread')]);
+    const r = await record(page, 'review', clip, async () => {
+      await sleep(500); await point(page, '.st-thread p, .st-thread .st-note-text'); await sleep(1500); await point(page, '.st-thread [data-act="askNote"]'); await sleep(1500);
+    });
+    return { ...r, exercised: 'Looked at a review note pinned to a rendered cut and its Ask the agent link (nothing sent).' };
+  },
+  async sound(page) {
+    await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
+    await page.evaluate(() => document.querySelector('[data-act="right"][data-tab="sound"]')?.click());
+    const draft = '[data-act="soundDraft"][data-kind="voice"]', paid = '[data-act="soundPaid"][data-kind="voice"]';
+    await until(page, s => !!document.querySelector(s), 15000, draft);
+    await page.evaluate(s => document.querySelector(s).scrollIntoView({ block: 'center' }), draft); await sleep(400);
+    await page.evaluate(CURSOR);
+    const clip = frame([await rect(page, '.st-takes'), await rect(page, draft), await rect(page, paid)]);
+    const r = await record(page, 'sound', clip, async () => { await sleep(500); await point(page, '.st-takes'); await sleep(1300); await point(page, draft); await sleep(1300); await point(page, paid); await sleep(1300); });
+    return { ...r, exercised: 'Looked at the narration takes, the free draft voice and the priced Google button (nothing clicked).' };
+  },
+  async deliver(page) {
+    await open(page, `#/film/${DONE}`); await until(page, () => !!document.getElementById('st-chat-log'));
+    await page.evaluate(() => document.querySelector('.st-layouts [data-layout="deliver"]')?.click()); await sleep(1500);
+    const download = '#st-right a[download]', final = '#st-right [data-act="final"]';
+    await page.evaluate(s => document.querySelector(s)?.scrollIntoView({ block: 'center' }), download); await sleep(500);
+    await page.evaluate(CURSOR);
+    const clip = frame([await rect(page, final), await rect(page, download)]);
+    const r = await record(page, 'deliver', clip, async () => { await sleep(500); await point(page, final); await sleep(1500); await point(page, download); await sleep(1500); });
+    return { ...r, exercised: 'Looked at Render final and the Download link of a film with a final (nothing rendered or downloaded).' };
+  },
+  async approval(page) {
+    await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
+    await page.evaluate(() => document.querySelector('[data-act="right"][data-tab="sound"]')?.click());
+    await until(page, () => !!document.querySelector('[data-act="soundPaid"][data-kind="voice"]:not([disabled])'), 15000);
+    const button = '[data-act="soundPaid"][data-kind="voice"]';
+    // --budget: set the film budget by hand first (a person's setting), so the dialog shows the film's cap.
+    if (o.budget) {
+      const field = '#st-right input[data-path="budget"]';
+      await page.evaluate(s => document.querySelector(s)?.closest('details')?.setAttribute('open', ''), field); await sleep(300);
+      await page.evaluate((s, v) => { const e = document.querySelector(s); e.focus(); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); }, field, o.budget);
+      await key(page, 'Enter', 'Enter', 4); await sleep(1500);
+    }
+    await page.evaluate(s => document.querySelector(s).scrollIntoView({ block: 'center' }), button); await sleep(300);
+    // Measure the dialog once off camera, then close it, so the recording can frame it.
+    await page.evaluate(s => document.querySelector(s).click(), button); await until(page, () => !!document.getElementById('pay-by'));
+    const parts = [await rect(page, '.st-dialog .st-check'), await rect(page, '.st-dialog [data-act="close"]'), await rect(page, '.st-dialog p')];
+    await page.evaluate(() => document.querySelector('.st-dialog [data-act="close"]').click()); await sleep(600);
+    await page.evaluate(CURSOR);
+    const clip = frame(parts, 600);
+    const r = await record(page, 'approval', clip, async () => {
+      await sleep(300); await page.evaluate(s => document.querySelector(s).click(), button); await sleep(1600);
+      await point(page, '.st-dialog .st-check'); await sleep(900); await click(page, '.st-dialog [data-act="close"]'); await sleep(900);
+    });
+    return { ...r, ...(o.budget ? { budget: Number(o.budget) } : {}), exercised: `${o.budget ? `Set the film budget to $${o.budget} by hand, then opened` : 'Opened'} Generate with Google… for narration, showing the estimate and the approval it needs, then Cancel: nothing generated or charged.` };
+  },
+};
+
+// --extend: lengthen clips already recorded to --min seconds by holding their last frame longer
+// (written as NAME-Ns.mp4 beside them; nothing is recaptured).
+if (o.extend) {
+  const m = JSON.parse(fs.readFileSync(path.join(OUT, 'clips.json'), 'utf8'));
+  for (const [name, clip] of Object.entries(m.clips)) {
+    if (only && !only.has(name)) continue;
+    const src = path.join(OUT, clip.file), now = probe(src), file = `${name}-${MIN}s.mp4`;
+    encode(['-loglevel', 'error', '-y', '-nostdin', '-threads', '2', '-filter_threads', '2', '-i', src, '-vf', `tpad=stop_mode=clone:stop_duration=${Math.max(0, MIN - now).toFixed(2)},format=yuv420p`, '-c:v', 'libx264', '-threads', '2', '-crf', '16', '-preset', 'medium', '-movflags', '+faststart', '-an', path.join(OUT, file)]);
+    const seconds = probe(path.join(OUT, file));
+    m.clips[`${name}-${MIN}s`] = { ...clip, file, seconds, held: Math.round((seconds - clip.action) * 10) / 10, extendedFrom: clip.file };
+    console.log(`${file}: ${seconds}s (${clip.action}s of action)`);
+  }
+  fs.writeFileSync(path.join(OUT, 'clips.json'), JSON.stringify(m, null, 2) + '\n');
+  process.exit(0);
+}
+const c = await chrome(o.cdp);
+const page = await tab(c.base);
+await page.send('Page.enable');
+await page.send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile: false });
+const prior = fs.existsSync(path.join(OUT, 'clips.json')) ? JSON.parse(fs.readFileSync(path.join(OUT, 'clips.json'), 'utf8')).clips : {};
+const manifest = { recordedAt: new Date().toISOString(), studio: STUDIO, film: FILM, viewport: { width: W, height: H }, clips: { ...prior } };
+try {
+  for (const [name, run] of Object.entries(CLIPS)) {
+    if (only && !only.has(name)) continue;
+    process.stdout.write(`${name}… `);
+    manifest.clips[name] = await run(page);
+    console.log(`${manifest.clips[name].seconds}s`);
+  }
+} finally { await page.close(); c.stop(); fs.writeFileSync(path.join(OUT, 'clips.json'), JSON.stringify(manifest, null, 2) + '\n'); }
+console.log(`${Object.keys(manifest.clips).length} clips → ${path.relative(process.cwd(), OUT)}/clips.json`);

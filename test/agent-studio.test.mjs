@@ -9,7 +9,7 @@ import path from 'node:path';
 import { PassThrough } from 'node:stream';
 import { fileURLToPath } from 'node:url';
 import { createAgent, resolveScope, cleanScope, contextBlock, transcript } from '../engine/lib/agent/agent.mjs';
-import { scopeViolation, inside } from '../engine/lib/agent/tools.mjs';
+import { scopeViolation, inside, pictureSize, createTools, voiceRecord } from '../engine/lib/agent/tools.mjs';
 import { readLink, updateLink } from '../engine/lib/agent/links.mjs';
 import { uploadToProject, uploadToDraft, createProject, safeName, projectsRoot } from '../engine/lib/agent/projects.mjs';
 import { createRuntime, runtimeConfig, agentPaths, PERMISSIONS } from '../engine/lib/agent/runtime.mjs';
@@ -304,7 +304,7 @@ test('the runtime is isolated, keeps the shell behind approval (the free tier re
   assert.equal(rule('shell'), 'ask'); assert.equal(rule('edit'), 'deny'); assert.equal(rule('external_directory'), 'deny');
   assert.ok(!PERMISSIONS.some(r => r.action === '*'), 'no blanket deny: the free tier refuses it');
   const reads = PERMISSIONS.filter(r => r.action === 'read' && r.effect === 'deny').map(r => r.resource);
-  assert.deepEqual(reads.sort(), ['../*', '/*', '~*'], 'reads stay inside the session folder (OpenCode\'s own boundary is the git worktree)');
+  assert.deepEqual(reads.sort(), ['*assets/vo/*.json', '../*', '/*', '~*'], 'reads stay inside the session folder (OpenCode\'s own boundary is the git worktree); narration records go through clearframe_files');
   for (const a of ['grep', 'glob', 'list']) assert.equal(rule(a), 'deny');
 });
 
@@ -536,8 +536,61 @@ test('pictures given with a new film on the home page land in assets/uploads; do
   const draft = 'req-media12345';
   await uploadToDraft(uploads, draft, stream('# Notes\nA script.'), 'script.md');
   await uploadToDraft(uploads, draft, stream('not really a png'), 'home.png');
-  const dir = createProject(root, uploads, { request: draft, idea: 'A demo of the studio', documents: ['script.md', 'home.png'] });
+  await uploadToDraft(uploads, draft, stream('{"captures":{}}'), 'captures.json');
+  const dir = createProject(root, uploads, { request: draft, idea: 'A demo of the studio', documents: ['script.md', 'home.png', 'captures.json'] });
   assert.ok(fs.existsSync(path.join(dir, 'assets/uploads/home.png')));
+  assert.equal(fs.readFileSync(path.join(dir, 'source/captures.json'), 'utf8'), '{"captures":{}}', 'JSON the intake cannot read is kept in source/ as it is');
   assert.ok(fs.readdirSync(path.join(dir, 'source')).length, 'the document went through the intake');
   assert.ok(!fs.existsSync(path.join(uploads, draft)), 'the draft folder is cleared');
+});
+
+test('the agent learns picture dimensions from file headers (it has no shell to ask)', t => {
+  const d = tmp(t), png = Buffer.alloc(33), gif = Buffer.from('GIF89a\x20\x03\x58\x02', 'latin1');
+  Buffer.from([0x89, 0x50, 0x4e, 0x47, 13, 10, 26, 10]).copy(png); png.write('IHDR', 12, 'ascii'); png.writeUInt32BE(848, 16); png.writeUInt32BE(1546, 20);
+  // JPEG: SOI, an APP0 segment to skip, then SOF0 with height 540 and width 960.
+  const jpg = Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0, 4, 0, 0, 0xff, 0xc0, 0, 11, 8, 0x02, 0x1c, 0x03, 0xc0, 1, 1, 0x11, 0, 0, 0]);
+  for (const [n, b] of [['a.png', png], ['b.gif', gif], ['c.jpg', jpg], ['d.png', Buffer.from('not a picture')]]) fs.writeFileSync(path.join(d, n), b);
+  assert.deepEqual(pictureSize(path.join(d, 'a.png')), { width: 848, height: 1546 });
+  assert.deepEqual(pictureSize(path.join(d, 'b.gif')), { width: 800, height: 600 });
+  assert.deepEqual(pictureSize(path.join(d, 'c.jpg')), { width: 960, height: 540 });
+  assert.equal(pictureSize(path.join(d, 'd.png')), null);
+});
+
+test('the agent hears what was actually made: a half-size rough cut and draft voice, apart from the Google settings', async t => {
+  const d = project(t, { ...SB, voice: { provider: 'gemini', voice: 'Charon', style: 'warm and unhurried' }, beats: SB.beats.map(b => ({ ...b, vo: `The ${b.id} line.` })) });
+  // An older draft take recorded the film's Google voice and style although the OS voice made it.
+  fs.mkdirSync(path.join(d, 'assets/vo'), { recursive: true });
+  for (const b of SB.beats) fs.writeFileSync(path.join(d, `assets/vo/${b.id}.json`), JSON.stringify({ provider: 'local', model: 'os-tts', voice: 'Charon', style: 'warm and unhurried', text: `The ${b.id} line.`, words: [] }));
+  const jobs = { list: () => [{ id: 'j1', kind: 'draft', label: 'Rough cut (half size)', status: 'complete', revision: 'r001', url: '/v.mp4', media: { width: 960, height: 540, duration: 11, audio: true } }] };
+  const tools = createTools({ base: d, jobs, filmOf: () => 'f', pauseOf: () => null, currentScope: () => null });
+  const sound = (await tools.sound({ dir: d, input: {} })).content;
+  const asMade = sound.split('\n').find(l => l.startsWith('Narration as made'));
+  assert.match(asMade, /free draft voice \(os-tts, unrecorded OS voice\)/, 'an older draft that noted only the Google setting is not given a voice');
+  assert.doesNotMatch(asMade, /Charon|warm/, 'a draft take is not described with the Google voice or style');
+  assert.match(sound, /Narration settings for Google .*voice Charon, style "warm and unhurried"/);
+  assert.match((await tools.job({ dir: d, input: {} })).content, /actual video: 960×540, 11(\.0)?s as encoded, with sound \(a half-size rough cut/);
+  assert.match((await tools.state({ dir: d, input: {} })).content, /project format \d+×\d+ .*rough cuts at half size/);
+});
+
+test('a draft line reports the OS voice that spoke it, not today\'s setting or the Google voice', async t => {
+  const { soundState } = await import('../engine/lib/viewer/sound.mjs');
+  const beats = SB.beats.map(b => ({ ...b, vo: `The ${b.id} line.` }));
+  // Made with Alex, then only the draft-voice setting changed to Samantha (no regeneration).
+  const d = project(t, { ...SB, voice: { provider: 'gemini', voice: 'Charon', style: 'soft, slow, reassuring', draftVoice: 'Samantha' }, beats });
+  fs.mkdirSync(path.join(d, 'assets/vo'), { recursive: true });
+  const rec = (id, m) => fs.writeFileSync(path.join(d, `assets/vo/${id}.json`), JSON.stringify({ provider: 'local', model: 'os-tts', text: `The ${id} line.`, words: [], ...m }));
+  rec('a', { voice: null, style: '', osVoice: 'Alex' });
+  rec('b', { voice: 'Charon', style: 'soft, slow, reassuring' }); // written before OS voices were noted
+  rec('c', { voice: null, style: '', osVoice: 'Alex' });
+  const voices = Object.fromEntries(soundState(d).narration.takes.flatMap(x => x.beats).map(b => [b.id, b.voice]));
+  assert.deepEqual(voices, { a: 'Alex', b: 'unrecorded OS voice', c: 'Alex' });
+  // The raw record, as the agent reads it, never presents the Google voice or style as what spoke.
+  const legacy = JSON.parse(voiceRecord(fs.readFileSync(path.join(d, 'assets/vo/b.json'), 'utf8')));
+  assert.match(legacy.spokenBy, /OS draft voice \(which one was not recorded\)/);
+  assert.equal(legacy.voice, undefined); assert.equal(legacy.style, undefined);
+  assert.deepEqual(legacy.googleSettingsAtTheTime, { voice: 'Charon', style: 'soft, slow, reassuring' });
+  assert.match(JSON.parse(voiceRecord(fs.readFileSync(path.join(d, 'assets/vo/a.json'), 'utf8'))).spokenBy, /"Alex"/);
+  const tools = createTools({ base: d, jobs: { list: () => [] }, filmOf: () => 'f', pauseOf: () => null, currentScope: () => null });
+  assert.match((await tools.files({ dir: d, input: { read: 'assets/vo/b.json' } })).content, /googleSettingsAtTheTime/);
+  assert.match(contextBlock({ film: { title: 'F', folder: 'f' } }), /never by the Google voice or style/, 'every message carries the reporting rule');
 });

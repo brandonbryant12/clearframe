@@ -10,6 +10,8 @@ import { updateLink, readLink } from './links.mjs';
 
 const fail = (message, status = 400) => Object.assign(new Error(message), { status });
 export const DOCS = new Set(['.md', '.markdown', '.txt', '.pdf', '.docx', '.html', '.htm', '.rtf', '.csv', '.json']);
+/** What the `start` intake can read (ingest.documentMarkdown); other DOCS are kept, not ingested. */
+export const INTAKE = new Set(['.md', '.markdown', '.txt', '.pdf', '.docx', '.html', '.htm', '.rtf', '.csv']);
 export const MEDIA = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.mp4', '.mov', '.webm', '.wav', '.mp3', '.m4a', '.srt', '.vtt']);
 export const MAX_UPLOAD = { doc: 25e6, media: 500e6 };
 
@@ -114,7 +116,9 @@ export function createProject(root, uploads, body) {
     if (!fs.existsSync(file)) throw fail(`The upload ${f} is missing; add it again.`);
     return file;
   });
-  const documents = uploaded.filter(f => DOCS.has(path.extname(f).toLowerCase())), media = uploaded.filter(f => MEDIA.has(path.extname(f).toLowerCase()));
+  // The intake reads prose documents; other accepted files (JSON data) are kept in source/ as they are.
+  const ext = f => path.extname(f).toLowerCase();
+  const documents = uploaded.filter(f => INTAKE.has(ext(f))), kept = uploaded.filter(f => DOCS.has(ext(f)) && !INTAKE.has(ext(f))), media = uploaded.filter(f => MEDIA.has(ext(f)));
   const opt = (v, re) => (typeof v === 'string' && re.test(v) ? v : undefined);
   fs.mkdirSync(root, { recursive: true });
   // Reserve the folder atomically: mkdir fails if a concurrent create took the name first.
@@ -129,9 +133,10 @@ export function createProject(root, uploads, body) {
     vertical: body.format === 'vertical' || undefined,
   }); } catch (e) { fs.rmSync(dir, { recursive: true, force: true }); throw e.status ? e : fail(e.message); }
   // Pictures and footage given with the brief: into assets/uploads/, never replacing a file.
-  if (media.length) {
-    const into = path.join(dir, 'assets', 'uploads'); fs.mkdirSync(into, { recursive: true });
-    for (const f of media) for (let n = 1; ; n++) { try { fs.copyFileSync(f, path.join(into, variant(path.basename(f), n)), fs.constants.COPYFILE_EXCL); break; } catch (e) { if (e.code !== 'EEXIST') throw e; } }
+  for (const [files, rel] of [[kept, 'source'], [media, path.join('assets', 'uploads')]]) {
+    if (!files.length) continue;
+    const into = path.join(dir, rel); fs.mkdirSync(into, { recursive: true });
+    for (const f of files) for (let n = 1; ; n++) { try { fs.copyFileSync(f, path.join(into, variant(path.basename(f), n)), fs.constants.COPYFILE_EXCL); break; } catch (e) { if (e.code !== 'EEXIST') throw e; } }
   }
   updateLink(dir, l => ({ ...l, createdBy: request, createdAt: new Date().toISOString(), mode: body.mode === 'together' ? 'together' : 'oneshot' }));
   fs.rmSync(draftDir, { recursive: true, force: true });

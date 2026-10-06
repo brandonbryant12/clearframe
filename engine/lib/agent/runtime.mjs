@@ -36,6 +36,8 @@ export const PERMISSIONS = [
   { action: 'edit', resource: '*', effect: 'deny' },
   { action: 'external_directory', resource: '*', effect: 'deny' },
   ...['../*', '/*', '~*'].map(resource => ({ action: 'read', resource, effect: 'deny' })),
+  // Narration records are read through clearframe_files, which says what actually spoke each line.
+  { action: 'read', resource: '*assets/vo/*.json', effect: 'deny' },
   ...['grep', 'glob', 'list'].map(action => ({ action, resource: '*', effect: 'deny' })),
   { action: 'skill', resource: '*', effect: 'deny' },
   { action: 'skill', resource: 'clearframe*', effect: 'allow' },

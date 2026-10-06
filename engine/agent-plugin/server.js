@@ -28,7 +28,7 @@ const TOOLS = [
   ['job', 'Status of one render job (or the newest ones for this film): queued, waiting, running with progress, complete with its output and whether it still matches the working copy, failed with the engine\'s errors, or cancelled. wait (seconds, up to 90) waits for it to finish.',
     obj({ id: str('Job id'), wait: { type: 'number' } })],
   ['notes', 'Review notes people left on rendered revisions of this film: text, time, scene, status and replies.', obj({ all: { type: 'boolean', description: 'Include resolved notes' } })],
-  ['files', 'List the project\'s files (sources, assets, renders) with sizes, or read one source document as text: Markdown, text, CSV, JSON, SRT/VTT, and DOCX, HTML, RTF or PDF converted to text. Paths are relative to the project.',
+  ['files', 'List the project\'s files (sources, assets, renders) with sizes and picture dimensions, or read one source document as text: Markdown, text, CSV, JSON, SRT/VTT, and DOCX, HTML, RTF or PDF converted to text. Paths are relative to the project.',
     obj({ read: str('Relative path of a document to read') })],
   ['write', 'Replace the film\'s brief (brief.md) or direction notes (DIRECTION.md) with new Markdown. The storyboard itself only changes through clearframe_edit.',
     obj({ file: { type: 'string', enum: ['brief', 'direction'] }, text: str('Complete new Markdown') }, ['file', 'text'])],

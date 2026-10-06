@@ -2,9 +2,10 @@
 // Capture real studio UI for the self-demo (examples/clearframe-self-demo): drives a running
 // `clearframe viewer --serve` in Chrome over the DevTools Protocol (no extra dependencies), saves a
 // 1920×1080 overview and 2× close-ups of each state, and writes captures.json with each control's
-// measured position (normalised 0–1) so the agent can place pins and focus regions exactly; it
-// cannot see the pictures. Read-only for films: it opens panels and dialogs, types into the
-// composer without sending, and cancels the paid-approval dialog. Never sends, approves or edits.
+// measured position (normalised 0–1; each close-up also gets its crop and the pins inside it) so the
+// agent can place pins and focus regions exactly; it cannot see the pictures. Read-only for films:
+// it opens panels and dialogs, types into the composer without sending, and cancels the
+// paid-approval dialog. Never sends, approves or edits.
 //
 //   node scripts/demo-captures.mjs --out DIR [--studio http://127.0.0.1:4317] [--cdp http://127.0.0.1:9333]
 //          [--tour projects-why-the-tide-turns-twice] [--done projects-flash-then-rumble] [--only name,name]
@@ -14,9 +15,8 @@
 // --done is a film with a final render and a conversation.
 import fs from 'node:fs';
 import path from 'node:path';
-import os from 'node:os';
-import { spawn } from 'node:child_process';
 import { parseArgs } from 'node:util';
+import { chrome as launch, tab, sleep } from './demo-cdp.mjs';
 
 const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, tour: { type: 'string' }, done: { type: 'string' }, only: { type: 'string' } } });
 if (!o.out) { console.error('Usage: node scripts/demo-captures.mjs --out DIR [--studio URL] [--cdp URL] [--tour FILM] [--done FILM] [--only a,b]'); process.exit(2); }
@@ -24,27 +24,6 @@ const STUDIO = (o.studio ?? 'http://127.0.0.1:4317').replace(/\/$/, ''), OUT = p
 const TOUR = o.tour ?? 'projects-why-the-tide-turns-twice', DONE = o.done ?? 'projects-flash-then-rumble';
 const only = o.only ? new Set(o.only.split(',')) : null;
 fs.mkdirSync(OUT, { recursive: true });
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-// ------------------------------------------------------------------ a minimal DevTools client
-async function chrome() {
-  if (o.cdp) return { base: o.cdp.replace(/\/$/, ''), stop() {} };
-  const bin = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', port = 9400 + Math.floor(Math.random() * 400);
-  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-demo-chrome-'));
-  const p = spawn(bin, ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, '--no-first-run', '--hide-scrollbars', 'about:blank'], { stdio: 'ignore' });
-  for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${port}/json/version`); break; } catch { await sleep(200); } }
-  return { base: `http://127.0.0.1:${port}`, stop() { p.kill(); fs.rmSync(profile, { recursive: true, force: true }); } };
-}
-async function tab(base) {
-  const t = await (await fetch(`${base}/json/new?about:blank`, { method: 'PUT' })).json();
-  const ws = new WebSocket(t.webSocketDebuggerUrl);
-  await new Promise((r, j) => { ws.onopen = r; ws.onerror = j; });
-  let id = 0; const wait = new Map();
-  ws.onmessage = m => { const d = JSON.parse(m.data); if (d.id && wait.has(d.id)) { const { ok, no } = wait.get(d.id); wait.delete(d.id); d.error ? no(new Error(d.error.message)) : ok(d.result); } };
-  const send = (method, params = {}) => new Promise((ok, no) => { const n = ++id; wait.set(n, { ok, no }); ws.send(JSON.stringify({ id: n, method, params })); });
-  const evaluate = async (fn, ...args) => { const r = await send('Runtime.evaluate', { expression: `(${fn})(...${JSON.stringify(args)})`, awaitPromise: true, returnByValue: true }); if (r.exceptionDetails) throw new Error(r.exceptionDetails.exception?.description ?? 'page error'); return r.result.value; };
-  return { send, evaluate, close: async () => { ws.close(); await fetch(`${base}/json/close/${t.id}`).catch(() => {}); } };
-}
 
 // ------------------------------------------------------------------ the states
 const W = 1920, H = 1080;
@@ -67,7 +46,17 @@ async function shoot(page, name, { clip = null, scale = 1 } = {}) {
   if (clip) { c = await page.evaluate(s => { const r = document.querySelector(s)?.getBoundingClientRect(); return r && { x: Math.max(0, r.left - 12), y: Math.max(0, r.top - 12), width: r.width + 24, height: r.height + 24 }; }, clip); if (!c) throw new Error(`no ${clip}`); }
   const r = await page.send('Page.captureScreenshot', { format: 'png', ...(c ? { clip: { ...c, scale } } : {}) });
   fs.writeFileSync(path.join(OUT, `${name}.png`), Buffer.from(r.data, 'base64'));
-  return `${name}.png`;
+  if (!c) return `${name}.png`;
+  // A close-up keeps its crop of the full frame so its pins can be re-expressed within it.
+  const f = n => Math.round(n * 1000) / 1000;
+  return { file: `${name}.png`, crop: { x: f(c.x / W), y: f(c.y / H), w: f(c.width / W), h: f(c.height / H) } };
+}
+/** Pins whose box lies inside a close-up's crop, normalised to the close-up picture itself. */
+function closeupPins(shot, pins) {
+  const { crop } = shot, f = n => Math.round(n * 1000) / 1000, inside = b => b.x >= crop.x - 0.002 && b.y >= crop.y - 0.002 && b.x + b.w <= crop.x + crop.w + 0.002 && b.y + b.h <= crop.y + crop.h + 0.002;
+  const at = (v, o, s) => f(Math.min(1, Math.max(0, (v - o) / s)));
+  return { ...shot, pins: pins.filter(p => p.box && inside(p.box)).map(p => ({ ...p, x: at(p.x, crop.x, crop.w), y: at(p.y, crop.y, crop.h),
+    box: { x: at(p.box.x, crop.x, crop.w), y: at(p.box.y, crop.y, crop.h), w: f(p.box.w / crop.w), h: f(p.box.h / crop.h) } })) };
 }
 
 const STATES = {
@@ -143,7 +132,7 @@ const STATES = {
   },
 };
 
-const c = await chrome();
+const c = await launch(o.cdp);
 const page = await tab(c.base);
 await page.send('Page.enable');
 await page.send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile: false });
@@ -152,7 +141,8 @@ try {
   for (const [name, run] of Object.entries(STATES)) {
     if (only && !only.has(name)) continue;
     process.stdout.write(`${name}… `);
-    manifest.captures[name] = await run(page);
+    const shot = await run(page), pins = [...shot.pins, ...(shot.extra?.pins ?? [])];
+    manifest.captures[name] = { ...shot, closeups: shot.closeups.map(x => closeupPins(x, pins)) };
     console.log('ok');
   }
 } finally { await page.close(); c.stop(); }

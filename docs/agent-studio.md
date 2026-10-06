@@ -95,6 +95,15 @@ free local drafts ClearFrame always had. The Sound tab (inspector) shows, per fi
   player per line. *Record free draft voice* uses this computer's voice and never replaces a Google
   take whose words are unchanged. *Generate with Google…* records only the takes whose words, voice,
   style or model changed (the engine caches by take), at the estimate shown.
+  A draft take records the OS voice that actually spoke it (`osVoice`, carried forward when a take
+  is reused, since the draft voice is not part of a take's hash), never the Google voice and style it
+  is set to. Older draft records that noted only the Google setting are shown as "unrecorded OS
+  voice"; files are not rewritten (that would change render inputs), but `clearframe_files` presents
+  their Google values under `googleSettingsAtTheTime`, and the agent's own file reader cannot open
+  `assets/vo/*.json` directly. Every message's context repeats the reporting rule, so sessions that
+  began before it still follow it; the agent's `clearframe_sound` keeps "as made"
+  apart from "settings for Google", and `clearframe_job` reports each rough cut's or final's
+  measured size, length and sound (a rough cut is half the project size).
 - **Music**: direction (style and instruments; sections follow the edit), the Lyria model and its
   price, the current bed with a player, *Make free draft bed*, and *Generate with Google…* (a new
   Google bed replaces the current one).
@@ -247,3 +256,10 @@ uploaded page cannot act on the studio.
 
 Remote use is not supported: the studio and its agent bind to 127.0.0.1 and trust only same-origin
 requests from this computer.
+
+## A worked example
+
+`examples/clearframe-self-demo` is a product demo of this studio made through it: the brief and
+uploads on the home page, one-shot and together revisions, scoped notes, hand edits, rough cuts and
+the final, with every prompt, the storyboard, the agent's decision log and the scripts that recorded
+the studio's own screens (`scripts/demo-captures.mjs`, `scripts/demo-clips.mjs`).
