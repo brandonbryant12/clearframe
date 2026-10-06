@@ -203,6 +203,18 @@ const CLIPS = {
     const r = await record(page, 'conversation', clip, async () => { await sleep(500); await point(page, strip); await sleep(1500); await point(page, '#st-chat-input'); await sleep(1200); });
     return { ...r, exercised: 'Looked at a saved conversation: the reply and the film status it reports (nothing sent).' };
   },
+  async review(page) {
+    await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
+    await page.evaluate(() => document.querySelector('.st-layouts [data-layout="review"]')?.click()); await sleep(1500);
+    await until(page, () => !!document.querySelector('.st-thread [data-act="askNote"]'), 15000);
+    await page.evaluate(() => document.querySelector('.st-thread').scrollIntoView({ block: 'center' })); await sleep(400);
+    await page.evaluate(CURSOR);
+    const clip = frame([await rect(page, '.st-thread')]);
+    const r = await record(page, 'review', clip, async () => {
+      await sleep(500); await point(page, '.st-thread p, .st-thread .st-note-text'); await sleep(1500); await point(page, '.st-thread [data-act="askNote"]'); await sleep(1500);
+    });
+    return { ...r, exercised: 'Looked at a review note pinned to a rendered cut and its Ask the agent link (nothing sent).' };
+  },
   async sound(page) {
     await open(page, `#/film/${FILM}`); await until(page, () => !!document.getElementById('st-chat-log'));
     await page.evaluate(() => document.querySelector('[data-act="right"][data-tab="sound"]')?.click());
