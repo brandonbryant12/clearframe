@@ -1,5 +1,9 @@
 # Changelog
 
+## Editing studio
+
+- A local editing workspace puts the scene browser, native preview, contextual inspector and zoomable sequence in one window. Edit scene text, narration, duration and order; changes save through shared commands with persistent undo/redo and stale-write protection. Native scene previews and rough-cut jobs run through the shared resource gate. Rendered revisions retain their review notes.
+
 ## Scene engine
 
 - **FFFrames is retired; the scene engine is ClearFrame's only renderer.** `scene/native` (`clearframe-scene`) draws everything on screen itself. There is no `--engine` option, no `CLEARFRAME_ENGINE` and no storyboard `engine`. No FFFrames crate (`fframes*`, `usvgr`, `svgr`, `ffmpeg-sys-fframes`) appears in `Cargo.toml`, `Cargo.lock` or the dependency graph. The FFFrames revision and MIT notice moved to `archive/fframes/`.

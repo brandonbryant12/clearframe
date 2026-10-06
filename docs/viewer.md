@@ -1,6 +1,6 @@
-# Viewer
+# Studio and review
 
-`clearframe viewer` writes one HTML page for people who watch, review and approve films rather than build them. Double-click `build/viewer/index.html`, or run with `--serve` so notes save straight into each film.
+`clearframe viewer --serve` opens the local editing studio. ClearFrame projects open a working copy with a scene browser, native preview monitor, contextual properties and zoomable sequence. The standalone HTML also retains rendered-film review. Double-click `build/viewer/index.html`, or run with `--serve` so notes save straight into each film.
 
 ```sh
 node engine/cli.mjs viewer                         # films under examples/ and real-examples/
@@ -9,7 +9,17 @@ node engine/cli.mjs viewer --serve                 # http://127.0.0.1:4317/… w
 node engine/cli.mjs viewer --no-render             # skip chart previews (faster)
 ```
 
-## Studio
+## Editing workspace
+
+Open a ClearFrame project from the studio board. **Story** edits narration and scene names; **Design** edits on-screen text and explicit duration; **Review** opens immutable rendered versions and edit history. Drag the gutters to resize the scene browser and inspector. Scene selection is shared by the browser, inspector and timeline. Working timeline durations are estimates until narration is prepared.
+
+Changes save into `storyboard.json` when a field loses focus. Undo/redo persists in `review/studio-history.json`. Stale clients cannot overwrite changes made by another editor; reload the working copy first. An external edit begins a new undo history on the next studio command. Imported recorded speech must use source cuts, rather than text edits.
+
+**Preview selected scene** draws a native still. **Render rough cut** prepares free local draft narration and a half-size rough cut. Jobs use the shared heavy-process gate and run one at a time. The preview indicates whether it matches the saved working copy; rendered revisions remain separate from editable source. No paid generation is triggered by these actions.
+
+The local JSON API exposes state, commands and jobs under `/api/studio/`. UI actions and automation share the same command implementation, validation, stale-write check and history.
+
+## Studio board
 
 Every film sits in a column for its phase of production, with a stage chip, its open notes and the next step. A search box filters by title, folder or stage.
 
