@@ -37,6 +37,28 @@ function guardBudget(total, budget) {
   }
 }
 
+// ------------------------------------------------------------------ approved sound
+/**
+ * The exact provider requests a paid narration or music run would send, as content hashes: one per
+ * take (or per line), or one for the bed. A person's approval in the studio is bound to these; the
+ * run re-derives them from the storyboard it is about to send and refuses if they differ, after any
+ * queue or heavy-work-gate wait, before any provider call (CLEARFRAME_APPROVED_SOUND).
+ */
+export function soundSpecs(sb, kind, timing) {
+  if (kind === 'music') return sb.music ? [hashOf(musicSpec(sb, timing))] : [];
+  if (sb.voice.takes !== 'beat') return planTakes(sb).map(t => hashOf(takeSpec(sb, t, sb.voice.provider)));
+  return sb.beats.filter(b => b.vo).map(b => hashOf(voiceSpec(sb, b, sb.voice.provider)));
+}
+export const approvedSoundSpecs = (root, kind) => { const sb = loadStoryboard(root); return soundSpecs(sb, kind, kind === 'music' ? computeTiming(root) : null); };
+function assertApproved(kind, specs) {
+  const raw = process.env.CLEARFRAME_APPROVED_SOUND;
+  if (!raw) return;
+  let a;
+  try { a = JSON.parse(raw); } catch { throw new Error('The sound approval passed to this run is unreadable; nothing was generated.'); }
+  if (a.kind !== kind || JSON.stringify(a.specs) !== JSON.stringify(specs))
+    throw new Error(`The ${kind === 'voice' ? 'narration' : 'music'} changed after it was approved (words, voice, style, direction or model), so nothing was generated or charged. Review and approve it again.`);
+}
+
 // ------------------------------------------------------------------ voice
 function voiceSpec(sb, b, provider) {
   return {
@@ -84,14 +106,14 @@ export async function voice(root, { draft = false, force = false, only, budget, 
         `${styled.length} beat(s) set their own style; a continuous take uses voice.style for every line so the voice stays consistent. Shape delivery with the words, punctuation and a few inline tags instead (voice.perBeatStyle: true sends them anyway).`,
       );
     if (!draft && sb.voice.provider === 'gemini') {
-      const secs = planTakes(sb)
-        .flatMap(t => t.beats)
-        .reduce((a, b) => a + estimateDuration(b.vo, sb.voice.wpm), 0);
+      assertApproved('voice', soundSpecs(sb, 'voice'));
+      // Only takes the recorder will actually make count: unchanged takes are kept, never re-bought.
+      const { takeCurrent } = await import('./takes.mjs');
+      const todo = planTakes(sb).filter(t => force || !takeCurrent(root, sb, t, sb.voice.provider));
+      const secs = todo.flatMap(t => t.beats).reduce((a, b) => a + estimateDuration(b.vo, sb.voice.wpm), 0);
       const cost = tts.estimateCost({ seconds: secs, model: sb.voice.model });
-      const takes = planTakes(sb).length;
-      log.step(
-        `Gemini TTS: ${takes === 1 ? 'one continuous take' : `${takes} continuous takes`}, ~${secs.toFixed(0)}s of speech, ≈ ${money(cost)}`,
-      );
+      if (!todo.length) log.ok('Google narration is up to date: every take matches.');
+      else log.step(`Gemini TTS: ${todo.length === 1 ? 'one continuous take' : `${todo.length} continuous takes`} (${todo.map(t => t.id).join(', ')}), ~${secs.toFixed(0)}s of speech, ≈ ${money(cost)}`);
       guardBudget(cost, budget ?? sb.budget);
     } else
       log.step(
@@ -144,6 +166,7 @@ export async function voice(root, { draft = false, force = false, only, budget, 
     return;
   }
   if (provider === 'gemini') {
+    assertApproved('voice', soundSpecs(sb, 'voice'));
     const secs = todo.reduce((a, x) => a + estimateDuration(x.b.vo, sb.voice.wpm), 0);
     const cost = tts.estimateCost({ seconds: secs, model: sb.voice.model });
     log.step(
@@ -315,6 +338,7 @@ export async function scoreMusic(root, { draft = false, force = false, budget } 
     return;
   }
   if (model === 'lyria-realtime') {
+    assertApproved('music', [hashOf(spec)]);
     const { stream } = await import('../../skills/lyria-music/scripts/realtime.mjs');
     log.step(`Lyria RealTime: streaming ${seconds}s (experimental)…`);
     const buf = await stream(spec, { seconds });
@@ -327,6 +351,7 @@ export async function scoreMusic(root, { draft = false, force = false, budget } 
     log.ok('Music → assets/music/bed.wav');
     return;
   }
+  assertApproved('music', [hashOf(spec)]);
   const cost = music.estimateCost({ model });
   log.step(`Lyria (${model}): ${seconds}s bed, ≈ ${money(cost)}`);
   guardBudget(cost, budget ?? sb.budget);

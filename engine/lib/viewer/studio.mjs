@@ -158,7 +158,7 @@ export function studioState(dir) {
     storyboard: sb, hash: sha(raw),
     canUndo: ok && h.cursor > 0 && at?.undo !== false, canRedo: ok && h.cursor < h.entries.length && next?.redo !== false,
     undoLabel: ok && at ? at.label : null, redoLabel: ok && next ? next.label : null,
-    history: h.entries.map(({ label, at, kind }, i) => ({ label, at, kind: kind ?? 'edit', applied: i < h.cursor })), externalChanges: !ok,
+    history: h.entries.map(({ label, at, kind, by, run }, i) => ({ label, at, kind: kind ?? 'edit', by: by ?? 'person', run: run ?? null, applied: i < h.cursor })), externalChanges: !ok,
     timing: a.timing, errors: a.errors, warnings: a.warnings, boxes: a.boxes,
     narration: Object.fromEntries(sb.beats.map(b => [b.id, narrationOf(dir, b)])),
     changes: changesSince(dir, sb),
@@ -170,7 +170,8 @@ export function studioState(dir) {
 const SAFE = /^(?:[A-Za-z_][\w-]*|\d+)$/, BAD = new Set(['__proto__', 'constructor', 'prototype']);
 const SCHEMA = JSON.parse(fs.readFileSync(path.join(ROOT, 'schema/storyboard.schema.json'), 'utf8'));
 const BEAT_KEYS = new Set(Object.keys(SCHEMA.properties.beats.items.properties).filter(k => !['id', 'block'].includes(k)).concat('placeholder', 'speaker', 'stage'));
-const FILM_KEYS = new Set(Object.keys(SCHEMA.properties).filter(k => !['$schema', 'version', 'beats', 'assets', 'budget', 'speakers', 'continuity'].includes(k)).concat('stages'));
+const FILM_KEYS = new Set(Object.keys(SCHEMA.properties).filter(k => !['$schema', 'version', 'beats', 'assets', 'speakers', 'continuity'].includes(k)).concat('stages'));
+const touchesBudget = op => ['set', 'film.set'].includes(op?.command) && (op.target ?? (op.beat == null ? 'film' : 'beat')) === 'film' && String(op.path ?? op.field ?? '').split('.')[0] === 'budget';
 function parts(p) {
   const list = String(p ?? '').split('.');
   if (!p || list.some(x => !SAFE.test(x) || BAD.has(x))) throw fail(`Unsupported property path “${p}”.`);
@@ -212,6 +213,7 @@ function applyOp(dir, sb, op) {
     if (target === 'film') {
       if (!FILM_KEYS.has(p[0])) throw fail(`The studio does not edit “${p[0]}” for the whole film.`);
       if (p[0] === 'title' && (typeof value !== 'string' || !value.trim() || value.length > 300)) throw fail('A film needs a title shorter than 300 characters.');
+      if (p[0] === 'budget' && (p.length > 1 || (value != null && !(Number.isFinite(value) && value >= 0 && value <= 1000)))) throw fail('The film budget is an amount in dollars between 0 and 1000 (empty for none).');
       setAt(sb, p, value);
       return `${value == null ? 'Clear' : 'Set'} film ${p.join(' ')}`;
     }
@@ -293,19 +295,28 @@ function locked(dir, fn) {
   return withLock(dir, fn);
 }
 
-/** Run a studio command against the hash the client last saw; returns the new state. */
-export function studioCommand(dir, body) {
+/**
+ * Run a studio command against the hash the client last saw; returns the new state. `actor` marks
+ * who made the change (an agent run is `{ by: 'agent', run }`) so its steps can be undone together.
+ */
+export function studioCommand(dir, body, { actor = null } = {}) {
   return locked(dir, () => {
     const raw = read(dir);
     if (body.hash !== sha(raw)) throw Object.assign(new Error('This film changed elsewhere. Reload the working copy before editing.'), { status: 409 });
     const h = loadHistory(dir, raw), ok = aligned(h, raw);
     const { command } = body;
     if (command === 'undo' || command === 'redo') return step(dir, h, ok, command === 'undo');
+    if (command === 'undoRun') return undoRun(dir, h, ok, body.run);
     if (command?.startsWith('recording.')) return recordingCommand(dir, h, ok, raw, body);
     const sb = JSON.parse(raw), ops = command === 'batch' ? body.ops : [body];
+    // The spending ceiling is the person's to set: an agent's edit may not raise or remove it.
+    if (actor?.by === 'agent' && Array.isArray(ops) && ops.some(touchesBudget)) throw fail('Only a person can change the film budget (Sound → Cost and approvals).');
     if (!Array.isArray(ops) || !ops.length || ops.length > 200) throw fail('A batch holds 1–200 changes.');
     const labels = ops.map(op => { if (op?.command === 'batch' || op?.command?.startsWith?.('recording.') || ['undo', 'redo'].includes(op?.command)) throw fail('That command cannot be batched.'); return applyOp(dir, sb, op); });
     const errors = validateStoryboard(sb);
+    // The renderer's own limit on declared stand-ins (checked there only for rough cuts).
+    for (const b of sb.beats) if (b.placeholder != null && !(typeof b.placeholder === 'string' ? b.placeholder.trim() && b.placeholder.length <= 140 : typeof b.placeholder?.text === 'string' && b.placeholder.text.length <= 140))
+      errors.push(`${b.id}: placeholder must be a description up to 140 characters (or {text})`);
     if (errors.length) throw fail(errors.join('\n'));
     if (canonical(sb) === canonical(JSON.parse(raw))) return { ...studioState(dir), created: ops.map(o => o.created).filter(Boolean) };
     const added = newErrors(dir, JSON.parse(raw), sb);
@@ -313,12 +324,21 @@ export function studioCommand(dir, body) {
     const after = stringify(sb);
     if (!ok) { h.entries = []; h.cursor = 0; }
     h.entries = h.entries.slice(0, h.cursor);
-    h.entries.push({ before: raw, after, label: body.label ?? (labels.length === 1 ? labels[0] : `${labels.length} changes`), at: new Date().toISOString(), kind: 'edit' });
+    const label = typeof body.label === 'string' && body.label.trim() ? body.label.trim().slice(0, 120) : labels.length === 1 ? labels[0] : `${labels.length} changes`;
+    h.entries.push({ before: raw, after, label, at: new Date().toISOString(), kind: 'edit', ...(actor ? { by: actor.by, run: actor.run ?? null } : {}) });
     h.cursor = h.entries.length; trim(h);
     atomic(historyFile(dir), JSON.stringify(h));
     atomic(path.join(dir, 'storyboard.json'), after);
     return { ...studioState(dir), created: ops.map(o => o.created).filter(Boolean) };
   });
+}
+
+/** Apply operations to a copy, without validating or writing: what a batch would change. */
+export function planOps(dir, ops) {
+  const raw = read(dir), after = JSON.parse(raw);
+  if (!Array.isArray(ops) || !ops.length || ops.length > 200) throw fail('A batch holds 1–200 changes.');
+  for (const op of ops) { if (!op || typeof op !== 'object' || ['batch', 'undo', 'redo', 'undoRun'].includes(op.command) || String(op.command ?? '').startsWith('recording.')) throw fail('That command cannot be batched.'); applyOp(dir, after, structuredClone(op)); }
+  return { before: JSON.parse(raw), after, hash: sha(raw) };
 }
 
 function step(dir, h, ok, undo) {
@@ -338,6 +358,23 @@ function step(dir, h, ok, undo) {
   h.cursor += undo ? -1 : 1;
   atomic(historyFile(dir), JSON.stringify(h));
   atomic(path.join(dir, 'storyboard.json'), undo ? item.before : item.after);
+  return studioState(dir);
+}
+
+/** Undo every step one agent run made, as one change, when they are the newest steps. */
+function undoRun(dir, h, ok, run) {
+  if (!ok) throw fail('Nothing to undo: the film was changed outside the studio.');
+  if (typeof run !== 'string' || !run) throw fail('Name the run to undo.');
+  let i = h.cursor;
+  while (i > 0 && h.entries[i - 1].run === run && (h.entries[i - 1].kind ?? 'edit') === 'edit') i--;
+  if (i === h.cursor) {
+    if (h.entries.slice(0, h.cursor).some(e => e.run === run)) throw fail('Later edits came after that run: undo them first, or undo its steps one by one.');
+    throw fail('That run made no edits that are still applied.');
+  }
+  const first = h.entries[i];
+  h.cursor = i;
+  atomic(historyFile(dir), JSON.stringify(h));
+  atomic(path.join(dir, 'storyboard.json'), first.before);
   return studioState(dir);
 }
 

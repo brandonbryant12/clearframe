@@ -38,3 +38,8 @@ __pycache__/
 
 # Real client and personal projects for the viewer; never committed.
 real-examples/
+
+# The browser studio: films made in the browser, and its private runtime state (OpenCode sessions,
+# saved provider credentials, bridge token). Never committed; see docs/agent-studio.md.
+/projects/
+.clearframe/

@@ -30,7 +30,7 @@ export async function buildViewer({ root = ['examples', 'real-examples'], out = 
     .replace('"/*DATA*/"', () => JSON.stringify(data).replace(/</g, '\\u003c'));
   const file = path.join(out, 'index.html');
   fs.writeFileSync(file, html);
-  return { file, films: films.length, versions: films.reduce((n, f) => n + f.versions.length, 0), charts: data.library.charts.length, fonts: data.library.fonts.length,
+  return { file, data, films: films.length, versions: films.reduce((n, f) => n + f.versions.length, 0), charts: data.library.charts.length, fonts: data.library.fonts.length,
     dirs: Object.fromEntries(findFilms(roots).map(d => [slug(path.relative(process.cwd(), d)), d])) };
 }
 

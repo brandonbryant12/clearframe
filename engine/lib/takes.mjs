@@ -212,6 +212,17 @@ async function heardWordsMany(files, tokenLists, language) {
 }
 
 /** Record (or reuse) every take and split it into per-beat takes with word timings. */
+/**
+ * Whether a take is already recorded for exactly this spec (take and every one of its lines). The
+ * recorder skips such takes, so they cost nothing; budgets and estimates use the same test.
+ */
+export function takeCurrent(root, sb, take, provider) {
+  const P = paths(root), hash = hashOf(takeSpec(sb, take, provider));
+  const meta = readJSON(path.join(P.vo, 'takes', `${take.id}.json`), null);
+  return meta?.hash === hash && fs.existsSync(path.join(P.vo, 'takes', `${take.id}.wav`))
+    && take.beats.every(b => readJSON(path.join(P.vo, `${b.id}.json`), null)?.take?.hash === hash && fs.existsSync(path.join(P.vo, `${b.id}.wav`)));
+}
+
 export async function recordTakes(root, sb, { draft, force, synthesize }) {
   const P = paths(root),
     dir = path.join(P.vo, 'takes'),
@@ -225,12 +236,7 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
       hash = hashOf(spec);
     const wav = path.join(dir, `${take.id}.wav`),
       meta = readJSON(path.join(dir, `${take.id}.json`), null);
-    const beatsCurrent = take.beats.every(
-      b =>
-        readJSON(path.join(P.vo, `${b.id}.json`), null)?.take?.hash === hash &&
-        fs.existsSync(path.join(P.vo, `${b.id}.wav`)),
-    );
-    if (!force && meta?.hash === hash && fs.existsSync(wav) && beatsCurrent) continue;
+    if (!force && takeCurrent(root, sb, take, provider)) continue;
     if (
       !force &&
       draft &&

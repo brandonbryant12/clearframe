@@ -48,5 +48,9 @@
     "!examples/*/build",
     "!recipes/*/build"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "@opencode/cli": "2.0.24",
+    "@opencode/client": "2.0.24",
+    "@opencode/plugin": "2.0.24"
+  }
 }

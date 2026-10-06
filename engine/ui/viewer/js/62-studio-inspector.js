@@ -30,7 +30,7 @@ function section(id, title, body, { open = true, count } = {}) {
 function rightHTML() {
   fieldSeq = 0;
   const tabs = `<div class="st-tabs" role="tablist" aria-label="Inspector">${RIGHT_TABS.map(([k, t]) => `<button role="tab" data-act="right" data-tab="${k}" aria-selected="${S.right === k}">${t}${k === 'review' ? openNotesBadge() : ''}</button>`).join('')}</div>`;
-  const body = S.right === 'film' ? filmInspector() : S.right === 'review' ? reviewPanel() : S.right === 'deliver' ? deliverPanel() : sceneInspector();
+  const body = S.right === 'film' ? filmInspector() : S.right === 'sound' ? soundPanel() : S.right === 'review' ? reviewPanel() : S.right === 'deliver' ? deliverPanel() : sceneInspector();
   return `${tabs}<div class="st-panel-body" id="st-right-body">${body}</div>`;
 }
 function openNotesBadge() { const v = shownVersion() ?? S.f.versions.at(-1); const n = v ? notesFor(S.f, v).filter(x => /^Applied/.test(x.state ?? '') || !x.resolved).length : 0; return n ? ` <span class="st-count">${n}</span>` : ''; }
@@ -46,12 +46,13 @@ function sceneInspector() {
     <h2>${esc(sceneName(b))}</h2>
     <div class="st-sel-meta"><span>Scene ${i + 1} of ${beatsOf().length}</span><span>${wb ? `${wb.dur.toFixed(2)} s${b.duration == null ? ' (from narration)' : ''}` : ''}</span><span class="st-mono">${esc(b.id)}</span></div>
     <div class="st-sel-actions"><button class="st-btn small" data-act="move" data-beat="${esc(b.id)}" data-dir="-1" ${i === 0 ? 'disabled' : ''} title="Move earlier (⌥↑)">↑</button><button class="st-btn small" data-act="move" data-beat="${esc(b.id)}" data-dir="1" ${i === beatsOf().length - 1 ? 'disabled' : ''} title="Move later (⌥↓)">↓</button>
-      <button class="st-btn small" data-act="duplicate" data-beat="${esc(b.id)}" title="Duplicate (⌘D)">Duplicate</button><button class="st-btn small danger" data-act="remove" data-beat="${esc(b.id)}" title="Delete (⌫); undo brings it back">Delete</button></div>
+      <button class="st-btn small" data-act="duplicate" data-beat="${esc(b.id)}" title="Duplicate (⌘D)">Duplicate</button><button class="st-btn small danger" data-act="remove" data-beat="${esc(b.id)}" title="Delete (⌫); undo brings it back">Delete</button>
+      <button class="st-btn small" data-act="askScene" title="Pin this scene as the agent's scope and write to it">Ask the agent</button></div>
     ${errs.length ? `<div class="st-alert bad" role="alert">${errs.map(esc).join('<br>')}</div>` : ''}
     ${b.placeholder ? `<div class="st-alert warn">Placeholder: ${esc(b.placeholder)} — renders as a labelled slate in rough cuts. <button class="st-link" data-act="clear" data-scope="beat" data-beat="${esc(b.id)}" data-path="placeholder">Mark designed</button></div>` : ''}</div>`;
   const sel = S.sel.element && elementAt(b, S.sel.element);
   return head
-    + (sel ? elementEditor(b, S.sel.element, sel) : '')
+    + (sel ? `<div class="st-addrow"><button class="st-btn small" data-act="askLayer">Ask the agent about this layer</button></div>${elementEditor(b, S.sel.element, sel)}` : '')
     + section('content', 'Content', contentFields(b, meta))
     + section('layers', 'Layers', layersPanel(b), { count: layerCount(b) || undefined })
     + section('narration', 'Narration', narrationFields(b, n, wb))
@@ -318,12 +319,7 @@ function filmInspector() {
     + section('film-frame', 'Frame and captions', F({ path: 'captions', label: 'Captions', type: 'enum', value: sb.captions, options: [{ value: 'auto', label: 'auto' }, { value: true, label: 'on' }, { value: 'pop', label: 'pop' }, { value: false, label: 'off' }], placeholder: 'auto', clear: true })
       + (frame && typeof frame === 'object' ? ['brand', 'left', 'right'].map(k => F({ path: `frame.${k}`, label: `Frame ${k}`, value: frame[k], clear: true })).join('') + F({ path: 'frame.label', label: 'Section label', type: 'bool', value: frame.label !== false }) + F({ path: 'frame.progress', label: 'Progress rail', type: 'bool', value: frame.progress !== false })
         : F({ path: 'frame', label: 'Editorial frame', type: 'bool', value: !!frame })), { open: false })
-    + section('film-sound', 'Sound', (music === false ? `<p class="st-muted">No music. <button class="st-link" data-act="setv" data-scope="film" data-path="music" data-value='{}'>Add a music bed</button> (made with <code>music DIR --draft</code> for free, or Lyria when you choose).</p>`
-        : F({ path: 'music.volume', label: 'Music level', type: 'range', min: 0, max: 1, step: 0.01, value: music?.volume, clear: true, hint: `Default ${S.schema.defaults.music.volume}` }) + F({ path: 'music.duck', label: 'Duck under the voice', type: 'bool', value: music?.duck ?? true }) + `<button class="st-link" data-act="setv" data-scope="film" data-path="music" data-value="false">No music</button>`)
-      + F({ path: 'sfx', label: 'Sound effects', type: 'enum', value: sb.sfx, options: enumOf(['off', 'subtle', 'normal', 'punchy']), placeholder: 'off', clear: true })
-      + F({ path: 'mix.loudness', label: 'Loudness (LUFS)', type: 'number', min: -30, max: -8, step: 0.5, value: sb.mix?.loudness, placeholder: String(S.schema.defaults.mix.loudness), clear: true })
-      + F({ path: 'voice.voice', label: 'Voice', value: sb.voice?.voice, placeholder: S.schema.defaults.voice.voice, clear: true, hint: 'Used when narration is generated (paid); rough cuts use a free local draft voice.' })
-      + F({ path: 'voice.style', label: 'Voice style', value: sb.voice?.style, clear: true }), { open: false })
+    + section('film-sound', 'Sound', '<p class="st-hint-text">Narration, music, the mix and Google generation are in the <button class="st-link" data-act="right" data-tab="sound">Sound</button> tab.</p>')
     + section('film-sources', 'Sources', tableField(null, 'sources', 'Sources', (sb.sources ?? []).map(s => typeof s === 'string' ? { title: s } : s), 'Every displayed number cites one of these, visibly.', 'film'), { open: false })
     + section('film-treatments', 'Treatments', `<p class="st-hint-text">A treatment sets the film’s look, motion, voice style and scene defaults in one undoable step.</p><div class="st-list">${S.schema.treatments.map(t => `<div class="st-li"><div><b>${esc(t.title ?? t.id)}</b>${sb.treatment === t.id ? ' <span class="st-chip ok">applied</span>' : ''}<p class="st-muted">${esc(t.when ?? '')}</p></div><button class="st-btn small" data-act="treatment" data-id="${esc(t.id)}">Apply</button></div>`).join('')}</div>`, { open: false });
 }

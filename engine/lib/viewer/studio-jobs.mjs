@@ -10,8 +10,14 @@ import crypto from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { checkId } from '../store.mjs';
+import { approvedSoundSpecs } from '../generate.mjs';
 
 const sha = s => crypto.createHash('sha256').update(s).digest('hex');
+/**
+ * Narration and music jobs start only with a grant made by the studio's sound gate (spend.mjs), never
+ * from request fields: a paid one carries the budget a named person approved for exactly that content.
+ */
+export const SOUND_GRANT = Symbol('clearframe sound grant');
 const hashOf = dir => sha(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'));
 const CLI = fileURLToPath(new URL('../../cli.mjs', import.meta.url));
 const GATE = path.join(os.homedir(), '.local/bin/codex-heavy');
@@ -67,6 +73,9 @@ const KINDS = {
   captions: { heavy: false, label: () => 'Caption files' },
   revise: { heavy: true, edits: false, label: j => `Candidate for ${j.note}` },
   reject: { heavy: true, edits: false, label: j => `Reject ${j.revision}` },
+  // Sound: free local drafts, or Google (paid) only with an approved budget the engine enforces.
+  voice: { heavy: true, edits: false, label: j => (j.paid ? `Google narration (approved up to $${j.budget.toFixed(2)})` : 'Free draft narration') },
+  music: { heavy: true, edits: false, label: j => (j.paid ? `Google music bed (approved up to $${j.budget.toFixed(2)})` : 'Free draft music bed') },
 };
 
 /** `cli` and `gate` default to the real CLI and the heavy-work gate; tests pass a stand-in CLI and gate: null. */
@@ -120,6 +129,7 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
     if (j.kind === 'final') return ['render', j.dir];
     if (j.kind === 'captions') return ['captions', j.dir, ...(j.draft ? ['--draft'] : [])];
     if (j.kind === 'revise') return ['revise', j.dir, '--note', j.note, '--json'];
+    if (j.kind === 'voice' || j.kind === 'music') return [j.kind, j.dir, ...(j.paid ? ['--budget', String(j.budget)] : ['--draft']), ...(j.force ? ['--force'] : [])];
     if (j.kind === 'reject') return ['reject', j.dir, j.revision, ...(j.note ? ['--note', j.note] : []), '--by', j.by, '--said', j.said, '--json'];
   }
 
@@ -141,11 +151,24 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
     const j = queue.shift();
     running = j; j.status = 'running'; j.startedAt = new Date().toISOString();
     pin(j);
+    // A paid run generates exactly what was approved, or nothing: refuse here if it changed while
+    // queued; the engine checks again after any wait for the heavy-work gate (CLEARFRAME_APPROVED_SOUND).
+    if (j.paid) {
+      let now = null;
+      try { now = approvedSoundSpecs(j.dir, j.kind); } catch {}
+      if (JSON.stringify(now) !== JSON.stringify(j.approval?.basis?.specs ?? null)) {
+        j.status = 'failed'; j.finishedAt = new Date().toISOString();
+        j.errors = [`The ${j.kind === 'voice' ? 'narration' : 'music'} changed after it was approved, so nothing was generated or charged. Review and approve it again.`];
+        j.log += `${j.errors[0]}\n`;
+        running = null; persist(); return next();
+      }
+    }
     const gated = KINDS[j.kind].heavy && !!gate && fs.existsSync(gate);
     const a = [cli, ...args(j)];
     // Detached: the child leads its own process group, so cancelling reaches the renderer too.
     const child = spawn(gated ? gate : process.execPath, gated ? ['--', process.execPath, ...a] : a, {
-      cwd: base, detached: true, stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, ...(gated ? { CLEARFRAME_HEAVY_HELD: '1' } : {}), NO_COLOR: '1', FORCE_COLOR: '0' } });
+      cwd: base, detached: true, stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, ...(gated ? { CLEARFRAME_HEAVY_HELD: '1' } : {}), NO_COLOR: '1', FORCE_COLOR: '0',
+        ...(j.paid ? { CLEARFRAME_APPROVED_SOUND: JSON.stringify({ kind: j.kind, specs: j.approval.basis.specs }) } : {}) } });
     j.child = child;
     const log = c => {
       const text = c.toString();
@@ -218,7 +241,7 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
         return result;
       });
     },
-    start(dir, body) {
+    start(dir, body, grant = null) {
       const { film, kind } = body;
       if (!KINDS[kind]) throw new Error('Unknown studio job.');
       const hash = hashOf(dir);
@@ -247,6 +270,16 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
         j.output = path.join(store, 'sections', `${id}.mp4`);
       }
       if (kind === 'captions') j.draft = body.draft !== false;
+      if (kind === 'voice' || kind === 'music') {
+        if (!grant?.[SOUND_GRANT] || grant.kind !== kind) throw Object.assign(new Error('Narration and music are made through the Sound tab, which checks approvals.'), { status: 403 });
+        j.paid = grant.paid === true; j.force = grant.force === true;
+        if (j.paid) {
+          // The gate checked a named approval covering today's estimate; the engine refuses past this budget.
+          j.budget = Number(grant.budget);
+          if (!(Number.isFinite(j.budget) && j.budget > 0 && j.budget <= 50)) throw new Error('A paid generation needs an approved budget between $0 and $50.');
+          j.approval = grant.approval;
+        }
+      }
       if (kind === 'revise') j.note = checkId('note', body.note);
       if (kind === 'reject') {
         j.revision = checkId('revision', body.revision);

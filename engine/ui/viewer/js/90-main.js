@@ -14,6 +14,7 @@ addEventListener('keydown', e => {
 
 function route() {
   close(); stopLoop?.(); stopLoop = null; studioCleanup?.(); studioCleanup = null;
+  document.body.classList.remove('home'); homeCleanup?.();
   const [path, query] = location.hash.split('?'), [, page, a, b, c] = path.split('/');
   const start = Number(new URLSearchParams(query ?? '').get('t'));
   if (page === 'film') {

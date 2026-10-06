@@ -43,8 +43,10 @@ const HELP = `ClearFrame — motion graphics
   sketch [name] [--vertical]          canvas starting compositions (route, orbit, pipeline…) as JSON
   doctor | build                      tools and disk headroom; compile the renderer
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]
-  viewer [folders…] [--serve] [--port 4317] [--out build/viewer] [--no-render]   one HTML page: films, versions, lens, timeline, notes, building blocks;
-                                      with --serve, ClearFrame films open in the editing studio (docs/viewer.md)
+  viewer [folders…] [--serve] [--port 4317] [--out build/viewer] [--no-render] [--projects projects] [--no-agent]
+                                      one HTML page: films, versions, lens, timeline, notes, building blocks; with --serve, the
+                                      browser studio: new films, an OpenCode conversation per film, editing (docs/agent-studio.md)
+  agent [status|doctor|start|stop]    the studio's isolated OpenCode runtime (docs/agent-studio.md)
   studio <dir> [state|history|undo|redo|set PATH VALUE [--beat ID]|insert BLOCK [--beat AFTER]|sketch NAME|move --beat ID --to N|duplicate|delete --beat ID|treatment ID] [--json]
                                       the studio's validated, undoable edits from the command line (shared history with the UI)
   plan <dir>                          approximate generation cost and cache state
@@ -174,6 +176,7 @@ async function main() {
     'before',
     'release',
     'checkpoint',
+    'projects',
   ];
   const booleans = [
     'still',
@@ -199,6 +202,7 @@ async function main() {
     'no-verify',
     'suggest-cuts',
     'shared',
+    'no-agent',
   ];
   const { values: o, positionals } = parseArgs({
     args,
@@ -436,12 +440,33 @@ async function main() {
     const { buildViewer, serveViewer } = await import('./lib/viewer.mjs');
     const root = positionals.length ? positionals : ['examples', 'real-examples'];
     if (o.serve) {
-      const s = await serveViewer({ root, out: o.out ?? 'build/viewer', render: !o['no-render'], port: num('port') ?? 4317 });
-      console.log(`${s.films} film(s), ${s.versions} version(s). Viewer with note saving: ${s.url}\nPress Ctrl+C to stop.`);
+      const s = await serveViewer({ root, out: o.out ?? 'build/viewer', render: !o['no-render'], port: num('port') ?? 4317, projects: o.projects, agent: !o['no-agent'] });
+      console.log(`${s.films} film(s), ${s.versions} version(s). Studio: http://127.0.0.1:${s.server.address().port}/\nNew films go to ${path.relative(process.cwd(), s.projects) || '.'}/${s.agent ? '; the agent runtime (OpenCode) starts with the first conversation' : ''}.\nPress Ctrl+C to stop.`);
       return new Promise(() => {});
     }
     const r = await buildViewer({ root, out: o.out ?? 'build/viewer', render: !o['no-render'] });
     return console.log(`${r.films} film(s), ${r.versions} version(s), ${r.charts} chart preview(s), ${r.fonts} font(s) → ${path.relative(process.cwd(), r.file)}\nOpen it in a browser (double-click works), or add --serve to save notes into the films.`);
+  }
+  if (cmd === 'agent') {
+    // The studio's OpenCode runtime: isolated folders, the service, its model catalog (docs/agent-studio.md).
+    const { createRuntime, agentPaths, opencodeBinary, OPENCODE_VERSION, DEFAULT_MODEL } = await import('./lib/agent/runtime.mjs');
+    const verb = positionals[0] ?? 'status', paths = agentPaths(), rt = createRuntime();
+    const { Service } = await import('@opencode/client/service');
+    if (verb === 'stop') { await rt.stop(); return console.log('Stopped the studio\'s OpenCode service. Conversations are kept and resume when it next starts.'); }
+    if (verb === 'start') { await rt.client(); const list = await rt.catalog(); const s = rt.status(); console.log(`OpenCode ${s.version} running (pid ${s.pid}); catalog ${s.catalog}, ${list.length} models; default ${DEFAULT_MODEL.providerID}/${DEFAULT_MODEL.id}.`); if (s.hint) console.log(s.hint); return process.exit(0); }
+    const running = await Service.discover({ file: paths.registration }).catch(() => null);
+    const rows = [
+      ['OpenCode binary', opencodeBinary(), fs.existsSync(opencodeBinary()) ? 'present' : 'MISSING: run npm install'],
+      ['Version', OPENCODE_VERSION, ''],
+      ['Studio state', paths.state, 'never served; holds the runtime folders and bridge token'],
+      ['Runtime data (sessions, saved credentials)', paths.env.XDG_DATA_HOME, ''],
+      ['Service registration', paths.registration, running ? 'running' : 'not running'],
+      ['Config', paths.config, ''],
+      ['Log', path.join(paths.env.XDG_DATA_HOME, 'opencode', 'log'), ''],
+      ['Default model', `${DEFAULT_MODEL.providerID}/${DEFAULT_MODEL.id}`, 'free (OpenCode Zen)'],
+    ];
+    if (verb === 'doctor' || verb === 'status') return console.log(o.json ? JSON.stringify(Object.fromEntries(rows.map(([k, v, n]) => [k, { value: v, note: n }])), null, 2) : rows.map(([k, v, n]) => `${k.padEnd(44)} ${v}${n ? `  (${n})` : ''}`).join('\n'));
+    throw new Error('agent [status|doctor|start|stop]');
   }
   if (cmd === 'gallery') {
     const dir = path.resolve(positionals[0] ?? 'build/native-gallery');
