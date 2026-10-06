@@ -98,7 +98,9 @@ export function clearframeVersion(dir, sb, r, i, ctx) {
   const mark = seconds * .35, settled = sceneList.find(s => s.start <= mark && s.end > mark) ?? sceneList[0];
   const approved = decisions.find(d => d.action === 'accept' && d.revision === r.id);
   return {
-    id: r.id, number: i + 1, profile: v.profile ?? 'draft', placeholders: r.placeholders ?? [], label: r.label ?? null, createdAt: r.createdAt, seconds, quality: { final: 'Final', draft: 'Draft', rough: 'Rough cut' }[v.profile] ?? 'Draft',
+    // A version's number is its revision's own (r005 → Version 5): it never shifts when older
+    // videos are pruned, so notes pinned to a revision keep matching the label people see.
+    id: r.id, number: Number(/^r(\d+)$/.exec(r.id)?.[1]) || i + 1, profile: v.profile ?? 'draft', placeholders: r.placeholders ?? [], label: r.label ?? null, createdAt: r.createdAt, seconds, quality: { final: 'Final', draft: 'Draft', rough: 'Rough cut' }[v.profile] ?? 'Draft',
     approved: approved ? { by: approved.by ?? null, said: approved.said ?? null } : null,
     notes: notes.filter(n => n.revision === r.id).map(n => noteView(n, { pins, engine: true })),
     video: rel(out, v.file), poster: (p => p && rel(out, p))(frameAt(v.file, media, `${prefix}-poster`, settled ? settled.end - .35 : mark)),
@@ -112,7 +114,7 @@ export async function clearframeFilm(dir, ctx) {
   const sb = readJSON(path.join(dir, 'storyboard.json'), {});
   const id = slug(path.relative(process.cwd(), dir)), title = sb.title ?? path.basename(dir);
   const fctx = { ...ctx, notes: readNotes(dir), decisions: readDecisions(dir).filter(d => d.role === 'human'), pins: readJSON(path.join(dir, 'review/viewer-pins.json'), {}), film: id, title };
-  const versions = listRevisions(dir).map((r, i) => clearframeVersion(dir, sb, r, i, fctx)).filter(Boolean).map((v, i) => ({ ...v, number: i + 1 }));
+  const versions = listRevisions(dir).map((r, i) => clearframeVersion(dir, sb, r, i, fctx)).filter(Boolean);
   // Sound cues describe the latest build only.
   const cues = readJSON(path.join(dir, 'build/cues.json'), []);
   if (versions.length && Array.isArray(cues)) versions.at(-1).lanes.sfx = cues.map(c => ({ t: c.t, name: c.name }));

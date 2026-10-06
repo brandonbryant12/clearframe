@@ -115,3 +115,18 @@ test('whole-cut notes on a final remain unpinned and can be resolved, reopened a
   assert.equal(moment.at,1.2);
   assert.throws(()=>saveNote(dir,{version:revision.id,at:-1,text:'Bad time'}),/nonnegative/);
 });
+
+test('version numbers come from the revision: pruning an older video never renumbers later ones', async t => {
+  const { filmData } = await import('../engine/lib/viewer/build.mjs');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-viewer-versions-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(root, 'storyboard.json'), JSON.stringify({ version: 2, title: 'Film', beats: [{ id: 'a', block: 'title', duration: 1, props: { text: 'A' } }] }));
+  for (const [i, keep] of [[1, false], [2, true], [3, true]]) {
+    const id = `r00${i}`, hash = String(i).repeat(64), object = `review/objects/${hash.slice(0, 2)}/${hash}.mp4`;
+    if (keep) clip(path.join(root, object), '64x36'); // r001's video was pruned; its record remains
+    fs.mkdirSync(path.join(root, 'review/revisions', id), { recursive: true });
+    fs.writeFileSync(path.join(root, 'review/revisions', id, 'revision.json'), JSON.stringify({ id, kind: 'render', label: 'Rough cut', duration: 1, createdAt: new Date(2026, 9, 6, 9, i).toISOString(), videos: [{ profile: 'rough', object, sha256: hash }] }));
+  }
+  const f = await filmData(root, { out: path.join(root, 'build/viewer') });
+  assert.deepEqual(f.versions.map(v => [v.id, v.number]), [['r002', 2], ['r003', 3]], 'r003 stays Version 3 when r001 can no longer play');
+});
