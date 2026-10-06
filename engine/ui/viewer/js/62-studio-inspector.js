@@ -46,12 +46,13 @@ function sceneInspector() {
     <h2>${esc(sceneName(b))}</h2>
     <div class="st-sel-meta"><span>Scene ${i + 1} of ${beatsOf().length}</span><span>${wb ? `${wb.dur.toFixed(2)} s${b.duration == null ? ' (from narration)' : ''}` : ''}</span><span class="st-mono">${esc(b.id)}</span></div>
     <div class="st-sel-actions"><button class="st-btn small" data-act="move" data-beat="${esc(b.id)}" data-dir="-1" ${i === 0 ? 'disabled' : ''} title="Move earlier (⌥↑)">↑</button><button class="st-btn small" data-act="move" data-beat="${esc(b.id)}" data-dir="1" ${i === beatsOf().length - 1 ? 'disabled' : ''} title="Move later (⌥↓)">↓</button>
-      <button class="st-btn small" data-act="duplicate" data-beat="${esc(b.id)}" title="Duplicate (⌘D)">Duplicate</button><button class="st-btn small danger" data-act="remove" data-beat="${esc(b.id)}" title="Delete (⌫); undo brings it back">Delete</button></div>
+      <button class="st-btn small" data-act="duplicate" data-beat="${esc(b.id)}" title="Duplicate (⌘D)">Duplicate</button><button class="st-btn small danger" data-act="remove" data-beat="${esc(b.id)}" title="Delete (⌫); undo brings it back">Delete</button>
+      <button class="st-btn small" data-act="askScene" title="Pin this scene as the agent's scope and write to it">Ask the agent</button></div>
     ${errs.length ? `<div class="st-alert bad" role="alert">${errs.map(esc).join('<br>')}</div>` : ''}
     ${b.placeholder ? `<div class="st-alert warn">Placeholder: ${esc(b.placeholder)} — renders as a labelled slate in rough cuts. <button class="st-link" data-act="clear" data-scope="beat" data-beat="${esc(b.id)}" data-path="placeholder">Mark designed</button></div>` : ''}</div>`;
   const sel = S.sel.element && elementAt(b, S.sel.element);
   return head
-    + (sel ? elementEditor(b, S.sel.element, sel) : '')
+    + (sel ? `<div class="st-addrow"><button class="st-btn small" data-act="askLayer">Ask the agent about this layer</button></div>${elementEditor(b, S.sel.element, sel)}` : '')
     + section('content', 'Content', contentFields(b, meta))
     + section('layers', 'Layers', layersPanel(b), { count: layerCount(b) || undefined })
     + section('narration', 'Narration', narrationFields(b, n, wb))

@@ -174,7 +174,7 @@ test('the studio server refuses malformed paths, dotfiles, bad ranges, unknown e
   fs.writeFileSync(path.join(film, 'storyboard.json'), JSON.stringify({ version: 2, title: 'Served', music: false, beats: [{ id: 'a', block: 'title', duration: 3, props: { text: 'Hi' } }] }));
   fs.writeFileSync(path.join(film, '.env'), 'SECRET=1');
   fs.writeFileSync(path.join(film, 'clip.txt'), '0123456789');
-  const s = await serveViewer({ root: [root], out: path.join(root, 'viewer'), port: 0, render: false });
+  const s = await serveViewer({ root: [root], out: path.join(root, 'viewer'), port: 0, render: false, agent: false });
   t.after(() => s.server.close());
   const base = `http://127.0.0.1:${s.server.address().port}`, rel = p => path.relative(process.cwd(), p).split(path.sep).join('/');
   const id = Object.keys(s.dirs)[0];

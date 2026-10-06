@@ -62,12 +62,32 @@ function assetsPanel() {
   const b = beatById(S.sel.beat);
   const usable = x => ['image', 'video'].includes(x.type);
   const groups = [...new Set(files.map(x => x.group))];
-  return files.length ? `<p class="st-hint-text">Drag a picture or clip onto the monitor to make it the selected scene’s plate, or use the buttons.</p>${groups.map(g => `<h3 class="st-h3">${esc(g)}</h3><div class="st-assets">${files.filter(x => x.group === g).map(x => `<div class="st-asset" ${usable(x) ? `draggable="true" data-dragfile="${esc(x.name)}"` : ''}>
+  const add = `<div class="st-addrow"><button class="st-btn small" data-act="pickFiles">Add files…</button><input type="file" multiple hidden data-onchange="upload" aria-label="Add files to this film"><span class="st-hint-text">Documents go to <code>source/</code>; pictures, footage and sound to <code>assets/uploads/</code>.</span></div>${S.uploads?.length ? `<ul class="st-uploads">${S.uploads.map(u => `<li>${esc(u.name)} · ${esc(u.state)}</li>`).join('')}</ul>` : ''}`;
+  return add + (files.length ? `<p class="st-hint-text">Drag a picture or clip onto the monitor to make it the selected scene’s plate, or use the buttons.</p>${groups.map(g => `<h3 class="st-h3">${esc(g)}</h3><div class="st-assets">${files.filter(x => x.group === g).map(x => `<div class="st-asset" ${usable(x) ? `draggable="true" data-dragfile="${esc(x.name)}"` : ''}>
       <span class="st-asset-thumb">${x.type === 'image' || x.type === 'svg' ? `<img src="${esc(x.path)}" alt="" loading="lazy">` : x.type === 'video' ? `<img src="${esc(x.poster ?? '')}" alt="" loading="lazy"><i>▶</i>` : x.type === 'audio' && x.wave ? `<img src="${esc(x.wave)}" alt="">` : `<i>${esc(x.type)}</i>`}</span>
       <span class="st-asset-name" title="${esc(x.name)}">${esc(x.name.split('/').pop())}</span>
+ ${['doc', 'text', 'pdf', 'data'].includes(x.type) || /\.(md|txt|pdf|docx|html?|rtf|csv|json)$/i.test(x.name) ? `<button class="st-link" data-act="askAsset" data-file="${esc(x.name)}">Ask the agent</button>` : ''}
       ${usable(x) ? `<span class="st-li-actions"><button class="st-btn small" data-act="useAsset" data-file="${esc(x.name)}" data-as="plate" ${b ? '' : 'disabled'}>Plate</button>${b && ['image', 'video', 'annotate'].includes(b.block) && (b.block === 'video') === (x.type === 'video') ? `<button class="st-btn small" data-act="useAsset" data-file="${esc(x.name)}" data-as="file">Use in scene</button>` : ''}</span>` : `<a class="st-link" href="${esc(x.path)}" target="_blank" rel="noopener">Open</a>`}</div>`).join('')}</div>`).join('')}`
-    : '<div class="st-empty-panel"><p>No project assets yet.</p><p class="st-hint-text">Put images and clips in <code>assets/</code> (or <code>media/</code>) beside the storyboard; they appear here, ready to place. Generated stills come from <code>images DIR</code> after <code>plan DIR</code>.</p></div>';
+    : '<div class="st-empty-panel"><p>No project assets yet.</p><p class="st-hint-text">Add files above, or put images and clips in <code>assets/</code> beside the storyboard; they appear here, ready to place. Generated stills come from <code>images DIR</code> after <code>plan DIR</code>.</p></div>');
 }
+/** Upload files into this film only; a route change mid-upload keeps them in the film they were meant for. */
+ACTIONS.pickFiles = el => el.parentElement.querySelector('input[type=file]')?.click();
+ACTIONS.upload = async el => {
+  const session = S, files = [...el.files]; el.value = '';
+  session.uploads = files.map(f => ({ name: f.name, state: 'waiting' }));
+  invalidate(['left']);
+  for (const [i, f] of files.entries()) {
+    const u = session.uploads[i]; u.state = 'uploading';
+    if (currentSession(session)) invalidate(['left']);
+    try {
+      const r = await fetch(`/api/upload?film=${encodeURIComponent(session.id)}&name=${encodeURIComponent(f.name)}`, { method: 'POST', headers: { 'x-clearframe-upload': '1', 'content-type': 'application/octet-stream' }, body: f });
+      const j = await r.json().catch(() => ({}));
+      u.state = r.ok ? `saved as ${j.file}` : `refused: ${j.error ?? r.status}`;
+    } catch (e) { u.state = `failed: ${e.message}`; }
+    if (currentSession(session)) invalidate(['left']);
+  }
+  if (currentSession(session)) { await refreshFilm(); if (currentSession(session)) status(`${plural(files.length, 'file')} processed — see Assets`); }
+};
 ACTIONS.useAsset = el => useAsset(el.dataset.file, el.dataset.as);
 function useAsset(file, as = 'plate') {
   const b = beatById(S.sel.beat); if (!b) return;
@@ -119,6 +139,7 @@ function threadHTML(v, n) {
       ${status === 'open' && changed ? `<button class="st-link" data-act="revise" data-note="${esc(n.id)}" title="Save a candidate revision for this note and render before/after passages">Make candidate</button>` : ''}
       ${status === 'applied' && cand ? `<button class="st-link" data-act="accept" data-rev="${esc(cand)}" data-note="${esc(n.id)}">Record acceptance…</button><button class="st-link" data-act="reject" data-rev="${esc(cand)}" data-note="${esc(n.id)}">Record rejection…</button>` : ''}
       <button class="st-link" data-act="thread" data-op="reply" data-note="${esc(n.id)}">Reply</button>
+      ${status !== 'resolved' ? `<button class="st-link" data-act="askNote" data-note="${esc(n.id)}" title="Pin this note as the agent's scope">Ask the agent</button>` : ''}
       ${status === 'resolved' ? `<button class="st-link" data-act="thread" data-op="reopen" data-note="${esc(n.id)}">Reopen</button>` : status === 'open' ? `<button class="st-link" data-act="thread" data-op="resolve" data-note="${esc(n.id)}">Resolve…</button>` : ''}</footer></article>`;
 }
 function threadAction(el) {

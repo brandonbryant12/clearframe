@@ -1,0 +1,6 @@
+{
+  "name": "clearframe-studio-opencode-plugin",
+  "private": true,
+  "type": "module",
+  "description": "OpenCode plugin: ClearFrame studio tools, bridged to the local viewer server (engine/lib/agent)."
+}

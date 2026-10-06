@@ -74,6 +74,7 @@ async function studio(id) {
     left: null, right: null, monitor: { source: 'working', rev: f.versions.at(-1)?.id ?? null, compare: 'rendered', wipe: 0.5, side: false },
     t: 0, zoom: store.get('cf-studio-zoom', 1), fieldErrors: {}, drafts: {}, auto: store.get('cf-studio-auto', true), noting: false, filter: 'open',
     lib: store.get('cf-studio-lib', 'blocks'), dirtyStill: null, open: store.get('cf-studio-open', {}), name: store.get('cf-name', '') };
+  agentInit(session);
   const L = LAYOUTS[S.layout]; S.left = L.left; S.right = L.right; S.monitor.source = L.monitor === 'rendered' && S.f.versions.length ? 'rendered' : 'working';
   const cleanup = () => { session.disposed = true; session.timers.forEach(clearTimeout); clearInterval(session.poller); session.resize?.disconnect(); if (S !== session) return; document.body.classList.remove('editing'); removeEventListener('keydown', studioKeys, true); S = null; };
   studioCleanup = cleanup; stopLoop = cleanup;
@@ -95,8 +96,9 @@ async function studio(id) {
   addEventListener('keydown', studioKeys, true);
   await refreshJobs(true);
   if (!currentSession(session)) return;
-  S && (S.poller = setInterval(() => { refreshJobs(); watchSource(); }, 1500));
+  S && (S.poller = setInterval(() => { refreshJobs(); watchSource(); refreshAgent(); }, 600));
   autoStill();
+  if (S.agent.outbox.length) flushOutbox(); else refreshAgent(true);
 }
 
 // ------------------------------------------------------------------ state helpers
@@ -212,6 +214,8 @@ function elementAt(b, p) { if (!b || !p) return null; let o = b; for (const k of
 
 async function refreshJobs(first = false) {
   const session = S; if (!session) return;
+  if (!first && Date.now() - (session.lastJobs ?? 0) < 1400) return;
+  session.lastJobs = Date.now();
   let list;
   try { list = (await call(`/api/studio/jobs?film=${encodeURIComponent(S.id)}`)).jobs; } catch { return; }
   if (!currentSession(session)) return;
@@ -281,21 +285,23 @@ async function cancelJob(id) { const session = S; try { await call('/api/studio/
 // ------------------------------------------------------------------ layout shell
 
 function shell() {
-  const w = k => store.get(`cf-studio-${k}`, { left: 260, right: 340, timeline: 220 }[k]);
-  app.innerHTML = `<div class="st" id="st" style="--left:${w('left')}px;--right:${w('right')}px;--tl:${w('timeline')}px">
+  const w = k => { const d = { left: 260, right: 340, timeline: 220, chat: 400 }[k], v = store.get(`cf-studio-${k}`, d); return Number.isFinite(v) ? v : d; };
+  app.innerHTML = `<div class="st ${S.agent.open ? 'chat-on' : ''}" id="st" style="--left:${w('left')}px;--right:${w('right')}px;--tl:${w('timeline')}px;--chat:${w('chat')}px">
     <header class="st-top" id="st-top"></header>
     <aside class="st-left" id="st-left" aria-label="Browser"></aside>
     <div class="st-gutter" data-resize="left" role="separator" aria-orientation="vertical" aria-label="Resize browser" tabindex="0"></div>
     <section class="st-center" id="st-monitor" aria-label="Monitor"></section>
     <div class="st-gutter" data-resize="right" role="separator" aria-orientation="vertical" aria-label="Resize inspector" tabindex="0"></div>
     <aside class="st-right" id="st-right" aria-label="Inspector"></aside>
+    <div class="st-gutter" data-resize="chat" role="separator" aria-orientation="vertical" aria-label="Resize the agent" tabindex="0"></div>
+    <section class="st-chat" id="st-chat" aria-label="Agent conversation"></section>
     <div class="st-hgutter" data-resize="timeline" role="separator" aria-orientation="horizontal" aria-label="Resize timeline" tabindex="0"></div>
     <section class="st-timeline" id="st-timeline" aria-label="Timeline"></section>
     <footer class="st-status" id="st-status"></footer>
     <div class="st-overlay" id="st-overlay" hidden></div>
   </div>`;
 }
-const REGIONS = { top: () => topHTML(), left: () => leftHTML(), monitor: () => monitorHTML(), right: () => rightHTML(), timeline: () => timelineHTML(), status: () => statusHTML() };
+const REGIONS = { top: () => topHTML(), left: () => leftHTML(), monitor: () => monitorHTML(), right: () => rightHTML(), timeline: () => timelineHTML(), status: () => statusHTML(), chat: () => chatHTML() };
 let pending = new Set(), frame = 0;
 function invalidate(which = Object.keys(REGIONS)) {
   for (const k of which) pending.add(k);
@@ -321,6 +327,7 @@ function topHTML() {
       <button class="st-btn" data-act="still" title="Native still of the selected scene (⌘↩)">Still</button>
       <button class="st-btn" data-act="section" title="Render the selected scenes with their neighbours' handles and the film's sound (⇧⌘↩)">Preview section</button>
       <button class="st-btn primary" data-act="draft" title="Full-length rough cut at half size with free draft narration; saves a revision">Rough cut</button>
+      <button class="st-btn ${S.agent?.open ? 'on' : ''}" data-act="chat" aria-pressed="${!!S.agent?.open}" title="Talk to the agent (⌘J)">Agent${S.agent?.conv?.running ? ' <i class="st-spinner small" aria-label="working"></i>' : S.agent?.conv?.permissions?.length ? ' <span class="st-count">!</span>' : ''}</button>
     </div>`;
 }
 
@@ -335,7 +342,7 @@ function statusHTML() {
 }
 
 function afterRender() {
-  bindMonitor();
+  bindMonitor(); chatAfterRender();
   const tl = document.getElementById('st-tl-scroll');
   if (tl && S.followPlayhead) { const ph = tl.querySelector('.st-playhead'); if (ph) { const x = ph.offsetLeft; if (x < tl.scrollLeft || x > tl.scrollLeft + tl.clientWidth - 40) tl.scrollLeft = x - tl.clientWidth / 3; } }
 }
@@ -372,13 +379,13 @@ function bindStudio() {
   root.addEventListener('toggle', e => { const d = e.target; if (d.tagName === 'DETAILS' && d.dataset.section) { S.open[d.dataset.section] = d.open; store.set('cf-studio-open', S.open); } }, true);
   // Gutters: drag or arrow keys.
   root.querySelectorAll('[data-resize]').forEach(g => {
-    const k = g.dataset.resize, axis = k === 'timeline' ? 'y' : 'x', sign = k === 'right' || k === 'timeline' ? -1 : 1, lim = { left: [180, 520], right: [260, 560], timeline: [120, 520] }[k];
+    const k = g.dataset.resize, axis = k === 'timeline' ? 'y' : 'x', sign = ['right', 'timeline', 'chat'].includes(k) ? -1 : 1, lim = { left: [180, 520], right: [260, 560], timeline: [120, 520], chat: [320, 760] }[k];
     const set = v => { v = Math.max(lim[0], Math.min(lim[1], v)); root.style.setProperty(`--${k === 'timeline' ? 'tl' : k}`, `${v}px`); store.set(`cf-studio-${k}`, v); };
     const now = () => parseFloat(getComputedStyle(root).getPropertyValue(`--${k === 'timeline' ? 'tl' : k}`));
     g.onpointerdown = e => { e.preventDefault(); g.setPointerCapture(e.pointerId); const p0 = axis === 'x' ? e.clientX : e.clientY, v0 = now(); g.onpointermove = ev => set(v0 + ((axis === 'x' ? ev.clientX : ev.clientY) - p0) * sign); g.onpointerup = () => { g.onpointermove = null; }; };
     g.onkeydown = e => { const d = { ArrowLeft: -16, ArrowRight: 16, ArrowUp: -16, ArrowDown: 16 }[e.key]; if (d) { e.preventDefault(); set(now() + d * sign * (axis === 'y' ? 1 : 1)); } };
   });
-  bindTimeline(root); bindDrops(root);
+  bindTimeline(root); bindDrops(root); bindChat(root);
 }
 
 /** Commit one inspector field as a command (its key carries any refusal back to the field). */

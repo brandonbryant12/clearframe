@@ -158,7 +158,7 @@ export function studioState(dir) {
     storyboard: sb, hash: sha(raw),
     canUndo: ok && h.cursor > 0 && at?.undo !== false, canRedo: ok && h.cursor < h.entries.length && next?.redo !== false,
     undoLabel: ok && at ? at.label : null, redoLabel: ok && next ? next.label : null,
-    history: h.entries.map(({ label, at, kind }, i) => ({ label, at, kind: kind ?? 'edit', applied: i < h.cursor })), externalChanges: !ok,
+    history: h.entries.map(({ label, at, kind, by, run }, i) => ({ label, at, kind: kind ?? 'edit', by: by ?? 'person', run: run ?? null, applied: i < h.cursor })), externalChanges: !ok,
     timing: a.timing, errors: a.errors, warnings: a.warnings, boxes: a.boxes,
     narration: Object.fromEntries(sb.beats.map(b => [b.id, narrationOf(dir, b)])),
     changes: changesSince(dir, sb),
@@ -293,14 +293,18 @@ function locked(dir, fn) {
   return withLock(dir, fn);
 }
 
-/** Run a studio command against the hash the client last saw; returns the new state. */
-export function studioCommand(dir, body) {
+/**
+ * Run a studio command against the hash the client last saw; returns the new state. `actor` marks
+ * who made the change (an agent run is `{ by: 'agent', run }`) so its steps can be undone together.
+ */
+export function studioCommand(dir, body, { actor = null } = {}) {
   return locked(dir, () => {
     const raw = read(dir);
     if (body.hash !== sha(raw)) throw Object.assign(new Error('This film changed elsewhere. Reload the working copy before editing.'), { status: 409 });
     const h = loadHistory(dir, raw), ok = aligned(h, raw);
     const { command } = body;
     if (command === 'undo' || command === 'redo') return step(dir, h, ok, command === 'undo');
+    if (command === 'undoRun') return undoRun(dir, h, ok, body.run);
     if (command?.startsWith('recording.')) return recordingCommand(dir, h, ok, raw, body);
     const sb = JSON.parse(raw), ops = command === 'batch' ? body.ops : [body];
     if (!Array.isArray(ops) || !ops.length || ops.length > 200) throw fail('A batch holds 1–200 changes.');
@@ -313,12 +317,21 @@ export function studioCommand(dir, body) {
     const after = stringify(sb);
     if (!ok) { h.entries = []; h.cursor = 0; }
     h.entries = h.entries.slice(0, h.cursor);
-    h.entries.push({ before: raw, after, label: body.label ?? (labels.length === 1 ? labels[0] : `${labels.length} changes`), at: new Date().toISOString(), kind: 'edit' });
+    const label = typeof body.label === 'string' && body.label.trim() ? body.label.trim().slice(0, 120) : labels.length === 1 ? labels[0] : `${labels.length} changes`;
+    h.entries.push({ before: raw, after, label, at: new Date().toISOString(), kind: 'edit', ...(actor ? { by: actor.by, run: actor.run ?? null } : {}) });
     h.cursor = h.entries.length; trim(h);
     atomic(historyFile(dir), JSON.stringify(h));
     atomic(path.join(dir, 'storyboard.json'), after);
     return { ...studioState(dir), created: ops.map(o => o.created).filter(Boolean) };
   });
+}
+
+/** Apply operations to a copy, without validating or writing: what a batch would change. */
+export function planOps(dir, ops) {
+  const raw = read(dir), after = JSON.parse(raw);
+  if (!Array.isArray(ops) || !ops.length || ops.length > 200) throw fail('A batch holds 1–200 changes.');
+  for (const op of ops) { if (!op || typeof op !== 'object' || ['batch', 'undo', 'redo', 'undoRun'].includes(op.command) || String(op.command ?? '').startsWith('recording.')) throw fail('That command cannot be batched.'); applyOp(dir, after, structuredClone(op)); }
+  return { before: JSON.parse(raw), after, hash: sha(raw) };
 }
 
 function step(dir, h, ok, undo) {
@@ -338,6 +351,23 @@ function step(dir, h, ok, undo) {
   h.cursor += undo ? -1 : 1;
   atomic(historyFile(dir), JSON.stringify(h));
   atomic(path.join(dir, 'storyboard.json'), undo ? item.before : item.after);
+  return studioState(dir);
+}
+
+/** Undo every step one agent run made, as one change, when they are the newest steps. */
+function undoRun(dir, h, ok, run) {
+  if (!ok) throw fail('Nothing to undo: the film was changed outside the studio.');
+  if (typeof run !== 'string' || !run) throw fail('Name the run to undo.');
+  let i = h.cursor;
+  while (i > 0 && h.entries[i - 1].run === run && (h.entries[i - 1].kind ?? 'edit') === 'edit') i--;
+  if (i === h.cursor) {
+    if (h.entries.slice(0, h.cursor).some(e => e.run === run)) throw fail('Later edits came after that run: undo them first, or undo its steps one by one.');
+    throw fail('That run made no edits that are still applied.');
+  }
+  const first = h.entries[i];
+  h.cursor = i;
+  atomic(historyFile(dir), JSON.stringify(h));
+  atomic(path.join(dir, 'storyboard.json'), first.before);
   return studioState(dir);
 }
 

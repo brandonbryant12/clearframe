@@ -7,16 +7,24 @@ const stageChip = s => `<span class="chip stage s-${esc(s.id)}">${esc(s.label)}<
 const briefLine = md => { const lines = md.split('\n').map(l => l.replace(/[#*`]/g, '').trim()).filter(Boolean); return (lines.find(l => /^the one idea:/i.test(l)) ?? lines[1] ?? lines[0] ?? '').replace(/^the one idea:\s*/i, ''); };
 const openCount = f => f.versions.at(-1)?.notes.filter(n => !n.resolved).length ?? 0;
 
-/** The studio board: every film in its phase of production, newest first within a stage. */
+/** Home: a new film from an idea (with the local server and agent), then every film in its phase of production. */
 function films(query = store.get('cf-query', '')) {
-  tabs('films');
+  tabs('films'); document.body.classList.add('home');
+  app.innerHTML = '<div id="home-top"></div><div id="home-board"></div>';
+  board(query);
+  mountHome();
+}
+
+/** The studio board: every film in its phase of production, newest first within a stage. */
+function board(query = store.get('cf-query', '')) {
+  const el = document.getElementById('home-board'); if (!el) return;
   if (!data.films.length) {
-    app.innerHTML = `<h1>Studio</h1><div class="empty">No films found in ${esc(data.roots.join(', '))} yet. Add a brief.md, a storyboard or a film.json, then run the viewer again.</div>`;
+    el.innerHTML = `<h2 class="home-h2">Films</h2><div class="empty">${S_HOME.agent ? 'No films yet. Describe one above to start.' : `No films found in ${esc(data.roots.join(', '))} yet. Add a brief.md, a storyboard or a film.json, then run the viewer again.`}</div>`;
     return;
   }
   const q = query.trim().toLowerCase(), shown = data.films.filter(f => !q || `${f.title} ${f.folder} ${f.stage.label}`.toLowerCase().includes(q));
   const counts = STAGE_ORDER.map(id => [id, data.films.filter(f => f.stage.id === id).length]).filter(([, n]) => n);
-  app.innerHTML = `<div class="filmhead"><div><h1>Studio</h1><p class="lede">Every film from brief to final. Open one to read its brief, flip through its boards, or watch, scrub and note a cut.</p></div>
+  el.innerHTML = `<div class="filmhead"><div><h2 class="home-h2">Films</h2><p class="lede">Every film from brief to final. Open one to talk to its agent, edit it, or watch, scrub and note a cut.</p></div>
     <input class="search" id="search" placeholder="Find a film" value="${esc(query)}" aria-label="Find a film"></div>
     <div class="stagecounts">${counts.map(([id, n]) => `${stageChip(data.films.find(f => f.stage.id === id).stage)} <span class="meta">${n}</span>`).join(' ')}</div>
     <div class="board">${PHASES.map(([phase, about]) => {
@@ -24,7 +32,7 @@ function films(query = store.get('cf-query', '')) {
       return `<section class="column"><h2>${phase}</h2><p class="meta">${about}</p>${list.map(filmCard).join('') || '<div class="meta empty small">Nothing here</div>'}</section>`;
     }).join('')}</div>`;
   const input = document.getElementById('search');
-  input.oninput = () => { store.set('cf-query', input.value); const pos = input.selectionStart; films(input.value); const i = document.getElementById('search'); i.focus(); i.setSelectionRange(pos, pos); };
+  input.oninput = () => { store.set('cf-query', input.value); const pos = input.selectionStart; board(input.value); const i = document.getElementById('search'); i.focus(); i.setSelectionRange(pos, pos); };
 }
 
 function filmCard(f) {

@@ -13,6 +13,9 @@ function paletteEntries() {
     A('Film settings', () => { S.right = 'film'; invalidate(['right']); }, '', 'View'), A('Keyboard shortcuts', () => openHelp(), '?', 'View'),
     ...(b ? [A(`Duplicate “${sceneName(b)}”`, () => ACTIONS.duplicate({ dataset: { beat: b.id } }), '⌘D', 'Scene'), A(`Delete “${sceneName(b)}”`, () => cmd({ command: 'delete', beat: b.id }).catch(() => {}), '⌫', 'Scene'),
       A(`Move “${sceneName(b)}” earlier`, () => ACTIONS.move({ dataset: { beat: b.id, dir: '-1' } }), '⌥↑', 'Scene'), A(`Move “${sceneName(b)}” later`, () => ACTIONS.move({ dataset: { beat: b.id, dir: '1' } }), '⌥↓', 'Scene')] : []),
+    A(`${S.agent.open ? 'Hide' : 'Show'} the agent`, () => toggleChat(), '⌘J', 'Agent'), A('Ask the agent about the whole film', () => pinScope('film'), '', 'Agent'),
+    ...(b ? [A(`Ask the agent about “${sceneName(b)}”`, () => pinScope('scene'), '', 'Agent')] : []), A('Ask the agent about the moment under the playhead', () => pinScope('moment'), '', 'Agent'),
+    A('Agent model and providers', () => openAgentSettings(), '', 'Agent'),
     A('Add a note on the picture', () => toggleNoting(), 'N', 'Review'), A('Add a whole-cut note', () => composeNote(null), '', 'Review'),
     ...beatsOf().map((x, i) => A(`Go to scene ${i + 1}: ${sceneName(x)}`, () => select(x.id), '', 'Go to')),
     ...S.f.versions.map(v => A(`Watch ${versionName(v)} (${v.quality})`, () => { S.monitor.rev = v.id; setSource('rendered'); }, '', 'Go to')),
@@ -44,7 +47,7 @@ function openPalette() {
   draw();
 }
 function openHelp() {
-  const keys = [['⌘K', 'Command palette'], ['1 – 4', 'Story · Design · Review · Deliver'], ['Space / K', 'Play or pause'], ['J / L', 'Back / forward one second'], ['← / →', 'One frame (⇧ one second)'], ['↑ / ↓', 'Previous / next scene'],
+  const keys = [['⌘K', 'Command palette'], ['⌘J', 'Show or hide the agent'], ['↩ in the composer', 'Send (queues while the agent works); ⌘↩ sends now'], ['1 – 4', 'Story · Design · Review · Deliver'], ['Space / K', 'Play or pause'], ['J / L', 'Back / forward one second'], ['← / →', 'One frame (⇧ one second)'], ['↑ / ↓', 'Previous / next scene'],
     ['⌥↑ / ⌥↓', 'Move the scene earlier / later'], ['⌘Z / ⇧⌘Z', 'Undo / redo (shared with automation)'], ['⌘↩', 'Native still of the scene'], ['⇧⌘↩', 'Preview the section with sound'], ['⌘D', 'Duplicate the scene'],
     ['⌫', 'Delete the scene (undo restores it)'], ['N', 'Note on the picture (rendered versions)'], ['= / − / 0', 'Zoom the timeline in / out / fit'], ['⇧-click', 'Select a run of scenes or words'], ['Enter / ⌘↩', 'Save a field'], ['Esc', 'Revert a field, close a dialog, clear the element']];
   overlay(`<div class="st-dialog" role="dialog" aria-modal="true" aria-labelledby="help-t"><h2 id="help-t">Keyboard</h2><dl class="st-keys">${keys.map(([k, d]) => `<dt><kbd>${esc(k)}</kbd></dt><dd>${esc(d)}</dd>`).join('')}</dl>
@@ -56,6 +59,9 @@ function studioKeys(e) {
   const mod = e.metaKey || e.ctrlKey, o = document.getElementById('st-overlay');
   if (mod && e.key.toLowerCase() === 'k') { e.preventDefault(); e.stopPropagation(); return o && !o.hidden ? closeOverlay() : openPalette(); }
   if (o && !o.hidden) { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeOverlay(); } return; }
+  if (mod && e.key.toLowerCase() === 'j') { e.preventDefault(); e.stopPropagation(); return toggleChat(); }
+  // The agent composer owns Enter, ⌘Enter and Escape; editor shortcuts never swallow its input.
+  if (document.activeElement?.id === 'st-chat-input') return;
   const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName) || document.activeElement?.isContentEditable;
   const handled = () => { e.preventDefault(); e.stopPropagation(); };
   // In a field ⌘↩ saves it (the field's own handler); elsewhere it previews.
