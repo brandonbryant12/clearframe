@@ -1,7 +1,7 @@
 // Building blocks: chart templates (rendered previews), palettes and prepared 3D elements.
 import fs from 'node:fs';
 import path from 'node:path';
-import { stillProject } from '../../../fframes/render.mjs';
+import { stillProject } from '../../../film/render.mjs';
 import { ROOT, readJSON, hash, rel } from './media.mjs';
 
 

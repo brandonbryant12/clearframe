@@ -32,7 +32,7 @@ The [Google music guide](https://ai.google.dev/gemini-api/docs/music-generation#
 
 - New browser tests failed against the previous implementation for all three chart layouts, suffix persistence and focus configuration; they pass after the changes.
 - 42 tests passed, including the existing render smoke test, landscape/portrait block QA, FFFrames bridge tests, forward/backward seeks, focus changes, zero/invalid bars, mocked Lyria generation and cache/write failures.
-- Full suite: `FFMPEG_PATH="$PWD/fframes/tools/ffmpeg-limited" /Users/brandon/.local/bin/codex-heavy -- node --test --test-concurrency=1 test/*.test.mjs fframes/test/*.test.mjs`.
+- Full suite: `FFMPEG_PATH="$PWD/fframes/tools/ffmpeg-limited" /Users/brandon/.local/bin/codex-heavy -- node --test --test-concurrency=1 test/*.test.mjs film/test/*.test.mjs`.
 - Reviewed contact sheets for five representative beats in each orientation, under `build/framework-regressions/{landscape,vertical}/contact-sheet.png`. Their automated QA reported no errors or warnings. This also exposed the portrait source overlap, now covered by a dedicated test.
 - No paid Google generation was performed. Request tests prove client behavior, not live provider availability.
 

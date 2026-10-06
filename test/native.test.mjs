@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { BLOCKS, normalizeProps, palette, precision } from '../fframes/catalog.mjs';
-import { playbooks, scaffold, storyboardFor } from '../fframes/playbooks.mjs';
-import { createJob, missingGlyph } from '../fframes/production.mjs';
-import { THEMES, findPhrase } from '../fframes/catalog.mjs';
-import { wireframePNG } from '../fframes/wireframe.mjs';
+import { BLOCKS, normalizeProps, palette, precision } from '../film/catalog.mjs';
+import { playbooks, scaffold, storyboardFor } from '../film/playbooks.mjs';
+import { createJob, missingGlyph } from '../film/production.mjs';
+import { THEMES, findPhrase } from '../film/catalog.mjs';
+import { wireframePNG } from '../film/wireframe.mjs';
 import { computeTiming, findWord, toSRT } from '../engine/lib/timing.mjs';
 import { loadStoryboard, validateStoryboard } from '../engine/lib/project.mjs';
 import { pcmToWav, writeJSON, hashOf } from '../engine/lib/util.mjs';
@@ -16,7 +16,7 @@ import { alignSpeech, transcriptionRequest, transcribeSpeech } from '../engine/l
 import { clipSpec } from '../engine/lib/continuity.mjs';
 import * as omni from '../skills/gemini-omni/scripts/omni.mjs';
 import { fileName, downloadVideo, uploadAudio } from '../engine/lib/google-files.mjs';
-import { ICONS, ICON_SOURCE } from '../fframes/icons.mjs';
+import { ICONS, ICON_SOURCE } from '../film/icons.mjs';
 import { reviewSamples, reviewProject } from '../engine/lib/review.mjs';
 import crypto from 'node:crypto';
 
@@ -26,8 +26,8 @@ function project(t, sb) {
   writeJSON(path.join(dir, 'storyboard.json'), sb);
   return dir;
 }
-test('all 33 catalog examples validate in landscape and vertical without mutating author input', () => {
-  assert.equal(BLOCKS.length, 33);
+test('all 34 catalog examples (33 blocks and the stage) validate in landscape and vertical without mutating author input', () => {
+  assert.equal(BLOCKS.length, 34);
   for (const b of BLOCKS)
     for (const vertical of [false, true]) {
       const before = JSON.stringify(b.example);
@@ -125,7 +125,7 @@ test('graphic contracts reject unknown assets and invalid phase clocks while pre
 test('all bundled icon bytes match the MIT source manifest', () => {
   assert.equal(ICONS.length, 95);
   assert.equal(ICON_SOURCE.license, 'MIT');
-  const dir = new URL('../fframes/assets/icons/tabler/', import.meta.url),
+  const dir = new URL('../film/assets/icons/tabler/', import.meta.url),
     manifest = JSON.parse(fs.readFileSync(new URL('manifest.json', dir)));
   assert.match(fs.readFileSync(new URL('LICENSE', dir), 'utf8'), /^MIT License/);
   for (const f of manifest.files)
@@ -530,7 +530,7 @@ test('upload refuses a redirecting or foreign resumable destination', async t =>
   await assert.rejects(uploadAudio(file, { key: 'test' }), /Invalid resumable/);
 });
 
-const native = file => fs.readFileSync(new URL(`../fframes/native/src/${file}`, import.meta.url), 'utf8');
+const native = file => fs.readFileSync(new URL(`../scene/native/src/${file}`, import.meta.url), 'utf8');
 const job = (t, beats, extra = {}) => {
   const sb = { ...storyboardFor('concept-explainer'), ...extra, beats };
   const root = project(t, sb);
@@ -539,7 +539,7 @@ const job = (t, beats, extra = {}) => {
 
 test('the renderer and catalog agree on every block name, and the fallback is paper', () => {
   const rust = [
-    ...native('lib.rs')
+    ...native('blocks/mod.rs')
       .match(/pub const BLOCKS: &\[&str\] = &\[([\s\S]*?)\];/)[1]
       .matchAll(/"([a-z-]+)"/g),
   ].map(m => m[1]);
@@ -707,7 +707,7 @@ test('staged items of every sequence block fit inside their beat', t => {
   );
 });
 test('bundled font instances and their tabular figures match recorded provenance', () => {
-  const dir = new URL('../fframes/assets/fonts/', import.meta.url),
+  const dir = new URL('../film/assets/fonts/', import.meta.url),
     provenance = JSON.parse(fs.readFileSync(new URL('provenance.json', dir)));
   const files = [
     ...provenance.files,

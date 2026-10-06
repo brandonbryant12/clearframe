@@ -1,4 +1,4 @@
-import { tall, round, body, smoothPath } from '../../fframes/sketch-kit.mjs';
+import { tall, round, body, smoothPath } from '../../film/sketch-kit.mjs';
 
 export default {
   name: 'route',

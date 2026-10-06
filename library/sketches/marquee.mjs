@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // A poster end card ringed by a marquee: a line of type runs around all four edges of the frame
 // (top and bottom one way, the sides the other), while the title is set big inside an arch.

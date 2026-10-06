@@ -1,4 +1,4 @@
-import { round, rng } from '../../fframes/sketch-kit.mjs';
+import { round, rng } from '../../film/sketch-kit.mjs';
 
 // A city at night in three planes: a hazy far skyline, a darker midground with lit windows
 // that come and go, and two foreground towers cutting the frame edges. The camera trucks

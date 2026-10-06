@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // A turning globe: a graticule on a dark body, places marked, and routes that lift off the
 // surface and draw on one after another. The places are real cities; the routes between

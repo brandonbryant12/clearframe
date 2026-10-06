@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { histogramSpec, expandHistogramProps } from '../fframes/histogram.mjs';
+import { histogramSpec, expandHistogramProps } from '../film/histogram.mjs';
 
 const base = { title: 'Calendar-year returns', unit: 'Returns, 2016–2025', asOf: '2026-10-04', source: 'Illustrative data',
   observations: [12, 22, -4, 31, 18, 29, -18, 26, 25, 17], edges: [-20, -10, 0, 10, 20, 30, 40], suffix: '%',

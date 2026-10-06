@@ -8,7 +8,7 @@
     {
       "name": "clearframe",
       "source": ".",
-      "description": "FFFrames video skills and native engine: playbooks, graphics, palettes, measured speech-following text, Gemini TTS, Lyria MP3 and sparse Omni inserts."
+      "description": "Video skills and a native GPU renderer: playbooks, graphics, palettes, measured speech-following text, Gemini TTS, Lyria MP3 and sparse Omni inserts."
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { round, tall } from '../../fframes/sketch-kit.mjs';
+import { round, tall } from '../../film/sketch-kit.mjs';
 
 export default {
   name: 'evidence-desk',

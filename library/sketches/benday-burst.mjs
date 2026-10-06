@@ -1,4 +1,4 @@
-import { tall, round } from '../../fframes/sketch-kit.mjs';
+import { tall, round } from '../../film/sketch-kit.mjs';
 
 // A newsstand moment, after the 1938 covers: a burst in process red printed a little off
 // register under its black key line, focus lines driving in from the edges, a Ben-Day sky

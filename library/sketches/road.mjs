@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // A night highway in true perspective: lane dashes and streetlights stand at real depths,
 // so as the camera drives forward they rush toward the lens and pass by. Taillights hold

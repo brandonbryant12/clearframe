@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { renderGeometry, reviewGeometry } from '../fframes/render-geometry.mjs';
+import { renderGeometry, reviewGeometry } from '../film/render-geometry.mjs';
 
 test('review raster scales independently of authored geometry, with encoder-safe dimensions', () => {
   assert.deepEqual(renderGeometry({ width: 1920, height: 1080 }, { draft: true, scale: 0.5 }), { width: 960, height: 540, scale: 0.5 });

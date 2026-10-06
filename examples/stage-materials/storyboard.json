@@ -1,0 +1,393 @@
+{
+  "version": 2,
+  "title": "Materials, in depth",
+  "logline": "A title study on native stages: GPU materials on type and surfaces, a depth set flown through with a rack focus, particles on a route. No footage, no generated images.",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "noir",
+  "type": "didone",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.7
+  },
+  "transition": "dissolve",
+  "backdrop": "none",
+  "texture": {
+    "grain": 0.35,
+    "vignette": 0.6
+  },
+  "lens": {
+    "grade": "warm",
+    "gradeAmount": 0.35,
+    "bloom": 0.35
+  },
+  "captions": false,
+  "music": false,
+  "beats": [
+    {
+      "id": "gold",
+      "block": "stage",
+      "transition": "cut",
+      "duration": 5,
+      "props": {
+        "ground": {
+          "material": "noise",
+          "colors": [
+            "bg",
+            "surface",
+            "accent2"
+          ],
+          "opacity": 0.6,
+          "scale": 1.6,
+          "speed": 0.5
+        },
+        "shutter": 0.5,
+        "camera": {
+          "keys": [
+            {
+              "at": 0.4,
+              "zoom": 1.06,
+              "dur": 4.2,
+              "ease": "inOut"
+            }
+          ]
+        },
+        "elements": [
+          {
+            "type": "text",
+            "id": "word",
+            "text": "Material",
+            "x": 960,
+            "y": 560,
+            "anchor": "middle",
+            "size": 210,
+            "font": "didone",
+            "fill": "accent2",
+            "material": {
+              "name": "gold",
+              "scale": 0.8
+            },
+            "enter": "rise",
+            "at": 0.3,
+            "dur": 1.1,
+            "shine": {
+              "at": 2.0,
+              "dur": 1.4
+            },
+            "shadow": {
+              "blur": 26,
+              "opacity": 0.55,
+              "dy": 14
+            }
+          },
+          {
+            "type": "text",
+            "id": "sub",
+            "text": "studies in light, drawn natively",
+            "x": 960,
+            "y": 660,
+            "anchor": "middle",
+            "size": 40,
+            "font": "serif-italic",
+            "fill": "ink",
+            "enter": "fade",
+            "at": 1.4,
+            "camera": false
+          },
+          {
+            "type": "particles",
+            "id": "motes",
+            "kind": "field",
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080,
+            "count": 1400,
+            "size": 1.8,
+            "flow": 26,
+            "fill": "accent2",
+            "opacity": 0.55,
+            "enter": "fade",
+            "at": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "depth",
+      "block": "stage",
+      "duration": 6,
+      "props": {
+        "camera": {
+          "keys": [
+            {
+              "at": 0.3,
+              "z": 0.55,
+              "dur": 5.2,
+              "ease": "inOut"
+            }
+          ],
+          "focus": {
+            "z": 3,
+            "aperture": 1.2,
+            "keys": [
+              {
+                "at": 2.6,
+                "z": 0.9,
+                "dur": 1.6
+              }
+            ]
+          }
+        },
+        "shutter": 0.5,
+        "elements": [
+          {
+            "type": "shader",
+            "id": "far",
+            "x": -200,
+            "y": -120,
+            "w": 2320,
+            "h": 1320,
+            "material": {
+              "name": "noise",
+              "colors": [
+                "bg",
+                "accent",
+                "accent2"
+              ],
+              "scale": 2.2,
+              "amount": 0.4
+            },
+            "z": 3,
+            "enter": "fade",
+            "at": 0,
+            "opacity": 0.8
+          },
+          {
+            "type": "rect",
+            "id": "slab-a",
+            "x": 360,
+            "y": 300,
+            "w": 520,
+            "h": 520,
+            "r": 28,
+            "fill": "surface",
+            "material": {
+              "name": "glass",
+              "colors": [
+                "surface",
+                "accent",
+                "ink"
+              ]
+            },
+            "z": 1.6,
+            "enter": "fade",
+            "at": 0.2
+          },
+          {
+            "type": "rect",
+            "id": "slab-b",
+            "x": 1080,
+            "y": 240,
+            "w": 460,
+            "h": 600,
+            "r": 28,
+            "fill": "accent",
+            "material": {
+              "name": "chrome",
+              "colors": [
+                "accent",
+                "bg",
+                "ink"
+              ]
+            },
+            "z": 0.9,
+            "enter": "fade",
+            "at": 0.5
+          },
+          {
+            "type": "circle",
+            "id": "orb",
+            "cx": 980,
+            "cy": 760,
+            "r": 120,
+            "fill": "accent2",
+            "material": {
+              "name": "sheen",
+              "colors": [
+                "accent2",
+                "accent",
+                "ink"
+              ]
+            },
+            "z": 0.2,
+            "enter": "pop",
+            "at": 0.8,
+            "glow": {
+              "blur": 26,
+              "opacity": 0.6
+            }
+          },
+          {
+            "type": "rect",
+            "id": "screen",
+            "x": 560,
+            "y": 820,
+            "w": 800,
+            "h": 140,
+            "r": 18,
+            "fill": "surface",
+            "material": {
+              "name": "halftone",
+              "colors": [
+                "accent",
+                "surface"
+              ],
+              "scale": 1.1
+            },
+            "z": 0.45,
+            "enter": "fade",
+            "at": 1.0
+          },
+          {
+            "type": "text",
+            "id": "label",
+            "text": "Depth, then focus",
+            "x": 120,
+            "y": 160,
+            "size": 64,
+            "font": "didone",
+            "fill": "ink",
+            "enter": "rise",
+            "at": 0.4,
+            "camera": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "route",
+      "block": "stage",
+      "duration": 5,
+      "props": {
+        "ground": {
+          "material": "scanlines",
+          "colors": [
+            "bg"
+          ],
+          "opacity": 0.35
+        },
+        "elements": [
+          {
+            "type": "path",
+            "id": "current",
+            "d": "M 140 760 C 520 420 860 940 1220 560 S 1560 420 1640 520",
+            "stroke": "accent",
+            "width": 6,
+            "enter": "draw",
+            "at": 0.2,
+            "dur": 1.6,
+            "glow": {
+              "blur": 16,
+              "opacity": 0.7
+            }
+          },
+          {
+            "type": "particles",
+            "id": "flow",
+            "kind": "stream",
+            "path": "current",
+            "count": 900,
+            "rate": 0.22,
+            "size": 3,
+            "jitter": 10,
+            "fill": "accent2",
+            "enter": "fade",
+            "at": 1.2
+          },
+          {
+            "type": "circle",
+            "id": "rider",
+            "cx": 0,
+            "cy": 0,
+            "r": 16,
+            "fill": "ink",
+            "along": {
+              "path": "current",
+              "at": 1.6,
+              "dur": 2.6,
+              "ease": "inOut"
+            },
+            "at": 1.6,
+            "enter": "pop",
+            "glow": {
+              "blur": 18,
+              "opacity": 0.9
+            }
+          },
+          {
+            "type": "text",
+            "id": "tag",
+            "text": "a stream rides the route",
+            "attach": {
+              "to": "rider",
+              "dx": 0,
+              "dy": -46
+            },
+            "anchor": "middle",
+            "size": 34,
+            "font": "serif-italic",
+            "fill": "ink",
+            "at": 1.8,
+            "enter": "fade"
+          }
+        ]
+      }
+    },
+    {
+      "id": "paper",
+      "block": "stage",
+      "duration": 4.5,
+      "tone": "invert",
+      "props": {
+        "elements": [
+          {
+            "type": "text",
+            "id": "end",
+            "text": "Type is a surface too",
+            "x": 960,
+            "y": 560,
+            "anchor": "middle",
+            "size": 120,
+            "font": "didone",
+            "fill": "ink",
+            "material": {
+              "name": "halftone",
+              "colors": [
+                "ink",
+                "bg"
+              ],
+              "scale": 0.5,
+              "amount": 1
+            },
+            "enter": "type",
+            "at": 0.3
+          },
+          {
+            "type": "rect",
+            "id": "rule",
+            "x": 660,
+            "y": 620,
+            "w": 600,
+            "h": 6,
+            "fill": "accent",
+            "enter": "grow-x",
+            "at": 1.4
+          }
+        ]
+      }
+    }
+  ]
+}

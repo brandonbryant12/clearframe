@@ -1,0 +1,7 @@
+[build]
+jobs = 1
+
+[env]
+RAYON_NUM_THREADS = { value = "2", force = true }
+CMAKE_BUILD_PARALLEL_LEVEL = { value = "2", force = true }
+NUM_JOBS = { value = "2", force = true }

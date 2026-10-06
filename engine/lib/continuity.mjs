@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { palette } from '../../fframes/catalog.mjs';
+import { palette } from '../../film/catalog.mjs';
 import { hashOf } from './util.mjs';
 import { audioHash } from './word-timing.mjs';
 import { MODEL } from '../../skills/gemini-omni/scripts/omni.mjs';

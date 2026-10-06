@@ -1,4 +1,4 @@
-import { round, rng, smoothPath } from '../../fframes/sketch-kit.mjs';
+import { round, rng, smoothPath } from '../../film/sketch-kit.mjs';
 
 // A harbor before dawn: container cranes on the quay with their warning lights, a lighthouse on
 // the breakwater sweeping its beam through the haze, the far shore asleep across the water with a

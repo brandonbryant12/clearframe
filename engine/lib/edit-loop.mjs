@@ -5,9 +5,9 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { renderRange, cutPassage, frameRange } from '../../fframes/render.mjs';
-import { prepareProject, prepareProjectSync } from '../../fframes/prepare.mjs';
-import { useProject } from '../../fframes/library.mjs';
+import { renderRange, cutPassage, frameRange } from '../../film/render.mjs';
+import { prepareProject, prepareProjectSync } from '../../film/prepare.mjs';
+import { useProject } from '../../film/library.mjs';
 import { expandAssets } from './plates.mjs';
 import {
   impact,

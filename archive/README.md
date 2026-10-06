@@ -1,5 +1,9 @@
 # Retired rendering paths
 
-`browser/` preserves the previous HTML/GSAP source, its existing fixes, projects, templates, recipes, tests and agent instructions. `comparison/` preserves the first FFFrames experiment and paired-evaluation documentation. These are historical recovery materials, excluded from active package dependencies, commands and tests.
+These folders are historical recovery materials, kept out of active package dependencies, commands and tests:
 
-The production path is the root CLI plus `fframes/native`. Old custom scene APIs are not emulated. Recover the former layout/import paths in a separate checkout if you need to run the historical engine; these relocated archival sources are not a second installed application. Generated media and old build outputs stay ignored.
+- `browser/` keeps the earlier HTML/GSAP source, with its fixes, projects, templates, recipes, tests and agent instructions.
+- `comparison/` keeps the first FFFrames experiment and its paired-evaluation documentation.
+- `fframes/` records the FFFrames revision that drew ClearFrame films until October 2026, with its MIT notice. No FFFrames code or crate remains in the active renderer.
+
+The production path is the root CLI, with `film/` for the job, prepare and render steps and `scene/native` for the renderer. Old scene APIs are not emulated. To run a historical engine, recover its layout and import paths in a separate checkout; these relocated sources are not a second installed application. Generated media and old build outputs stay ignored.

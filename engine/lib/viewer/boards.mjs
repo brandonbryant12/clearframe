@@ -2,7 +2,7 @@
 // Placeholder scenes render as their labelled slates (the rough profile).
 import fs from 'node:fs';
 import path from 'node:path';
-import { stillProject } from '../../../fframes/render.mjs';
+import { stillProject } from '../../../film/render.mjs';
 import { hash, rel, readJSON } from './media.mjs';
 import { describeBeat } from './clearframe.mjs';
 

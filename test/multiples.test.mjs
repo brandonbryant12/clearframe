@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { multiplesSpec, expandMultiplesProps } from '../fframes/multiples.mjs';
+import { multiplesSpec, expandMultiplesProps } from '../film/multiples.mjs';
 
 const series = ['a', 'b', 'c', 'd'].map((id, k) => ({ id, label: id.toUpperCase(), values: [{ x: 0, y: 100 }, { x: 5, y: 100 + 20 * k }, { x: 10, y: 100 + 50 * k }] }));
 const base = { title: 'Growth of 100', unit: 'Index', x: { type: 'linear', label: 'Years', domain: [0, 10], ticks: [0, 10] },

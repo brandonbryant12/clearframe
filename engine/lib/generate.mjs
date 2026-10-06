@@ -24,7 +24,7 @@ export function clipProvider(model) {
   throw new Error(`Unsupported video model ${model}`);
 }
 import { clipSpec, footageProblems } from './continuity.mjs';
-import { palette } from '../../fframes/catalog.mjs';
+import { palette } from '../../film/catalog.mjs';
 import { mediaDuration } from './util.mjs';
 
 const money = n => `$${n.toFixed(n < 0.1 ? 4 : 2)}`;

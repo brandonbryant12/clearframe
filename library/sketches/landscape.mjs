@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // A data landscape: rows of lit columns standing on a floor at increasing depth. Each
 // column grows from its base (front, top and side faces converging on one vanishing

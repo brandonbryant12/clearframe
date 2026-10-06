@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // A signal in the dark: a hairline of light across black, a point of light at its heart with an
 // anamorphic streak, and a waveform that begins to tremble out of the flat line and grows, its

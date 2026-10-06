@@ -1,9 +1,9 @@
 // Regenerate public authoring references from the native vocabulary.
 import fs from 'node:fs';
-import { BLOCKS, THEMES, MOTIONS, TRANSITIONS, BACKDROPS, FRAME_RATES, markdownCatalog } from '../fframes/catalog.mjs';
-import { wireframePNG } from '../fframes/wireframe.mjs';
-import { playbooks, storyboardFor } from '../fframes/playbooks.mjs';
-import { types } from '../fframes/library.mjs';
+import { BLOCKS, THEMES, MOTIONS, TRANSITIONS, BACKDROPS, FRAME_RATES, markdownCatalog } from '../film/catalog.mjs';
+import { wireframePNG } from '../film/wireframe.mjs';
+import { playbooks, storyboardFor } from '../film/playbooks.mjs';
+import { types } from '../film/library.mjs';
 const text = { type: 'string' },
   number = { type: 'number' },
   bool = { type: 'boolean' },
@@ -23,7 +23,7 @@ const palette = {
 };
 const schema = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
-  title: 'ClearFrame FFFrames storyboard',
+  title: 'ClearFrame storyboard',
   type: 'object',
   required: ['beats'],
   additionalProperties: false,
@@ -263,7 +263,7 @@ for (const b of playbooks()) {
 }
 fs.writeFileSync(
   'recipes/README.md',
-  '# Narrative playbooks\n\nGenerated from fframes/playbooks.mjs. These are adaptable starting structures with illustrative content; replace claims and sources before publishing. Use `clearframe new DIR --playbook NAME`.\n\n' +
+  '# Narrative playbooks\n\nGenerated from film/playbooks.mjs. These are adaptable starting structures with illustrative content; replace claims and sources before publishing. Use `clearframe new DIR --playbook NAME`.\n\n' +
     playbooks()
       .map(b => `- **${b.id}**: ${b.title}. Inputs: ${b.inputs}.`)
       .join('\n') +

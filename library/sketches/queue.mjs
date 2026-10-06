@@ -1,4 +1,4 @@
-import { round, seen, tall } from '../../fframes/sketch-kit.mjs';
+import { round, seen, tall } from '../../film/sketch-kit.mjs';
 
 // A queue in depth: cards standing in line on a gridded floor, receding to a lit counter at
 // the vanishing point. One card, partway back, is ours (accent). The picture is there on the

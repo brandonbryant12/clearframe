@@ -1,4 +1,4 @@
-import { round, rng } from '../../fframes/sketch-kit.mjs';
+import { round, rng } from '../../film/sketch-kit.mjs';
 
 // Power lines at dusk in one-point perspective: lattice pylons march from the near left to the
 // last light on the horizon, their wires sagging between them, and pulses of light race down the

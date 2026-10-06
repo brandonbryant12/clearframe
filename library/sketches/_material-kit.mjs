@@ -1,6 +1,6 @@
 // Original vector artwork helpers. No imported imagery, fonts, random state or runtime APIs.
-import { round, rng } from '../../fframes/sketch-kit.mjs';
-export { round, smoothPath, rng } from '../../fframes/sketch-kit.mjs';
+import { round, rng } from '../../film/sketch-kit.mjs';
+export { round, smoothPath, rng } from '../../film/sketch-kit.mjs';
 export const still = (type, props) => ({ type, at: 0, enter: 'none', ...props });
 export const group = (children, props = {}) => still('group', { children, ...props });
 export const line = (a, b, props = {}) => still('line', {

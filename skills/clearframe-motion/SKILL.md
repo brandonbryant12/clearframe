@@ -1,6 +1,6 @@
 ---
 name: clearframe-motion
-description: Design native FFFrames motion, color, typography and scene rhythm — the principles that make a ClearFrame video feel like motion graphics rather than narrated slides. Use for visual variety, pacing, transitions, camera, plates, tones, kinetic type, entrances and cue timing.
+description: Design native motion, color, typography and scene rhythm — the principles that make a ClearFrame video feel like motion graphics rather than narrated slides. Use for visual variety, pacing, transitions, camera, plates, tones, kinetic type, entrances and cue timing.
 ---
 
 # Motion that serves the story

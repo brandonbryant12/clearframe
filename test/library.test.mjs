@@ -4,15 +4,15 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { items, item, palettes, useProject, libraryDirs } from '../fframes/library.mjs';
-import { palette } from '../fframes/catalog.mjs';
-import { sketch } from '../fframes/sketches.mjs';
-import { normalizeElements } from '../fframes/canvas.mjs';
-import { treatmentById } from '../fframes/treatments.mjs';
-import { scaffold } from '../fframes/playbooks.mjs';
+import { items, item, palettes, useProject, libraryDirs } from '../film/library.mjs';
+import { palette } from '../film/catalog.mjs';
+import { sketch } from '../film/sketches.mjs';
+import { normalizeElements } from '../film/canvas.mjs';
+import { treatmentById } from '../film/treatments.mjs';
+import { scaffold } from '../film/playbooks.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
-import { createJob } from '../fframes/job.mjs';
+import { createJob } from '../film/job.mjs';
 
 const write = (root, rel, value) => {
   fs.mkdirSync(path.dirname(path.join(root, rel)), { recursive: true });
@@ -86,7 +86,7 @@ test('a project library adds and overrides items by id, JSON only', () => {
 });
 
 test('a creative seed is reproducible, varies the look and the set pieces, and briefs the director', async t => {
-  const { muse } = await import('../fframes/muse.mjs');
+  const { muse } = await import('../film/muse.mjs');
   assert.deepEqual(muse(42), muse(42));
   const draws = new Set([1, 2, 3, 4, 5, 6, 7, 8].map(s => JSON.stringify([muse(s).palette, muse(s).twist])));
   assert.ok(draws.size >= 6, 'different seeds start somewhere different');
@@ -114,7 +114,7 @@ test('a creative seed is reproducible, varies the look and the set pieces, and b
 });
 
 test('material art is reproducible, palette-driven and valid in all four frame shapes', async () => {
-  const { expandArt } = await import('../fframes/sketches.mjs');
+  const { expandArt } = await import('../film/sketches.mjs');
   const names = ['lightwell','contour-field','paper-fold','glass-orbits','bubble-cluster','ribbon-wave','petal-burst','inflated-loop','arena-grid','prism-shards'];
   for (const name of names) for (const preset of ['landscape','vertical','square','portrait']) {
     const a = sketch(name, preset, { seed: 17 });
@@ -137,7 +137,7 @@ test('material art is reproducible, palette-driven and valid in all four frame s
 });
 
 test('material seeds vary the layout without pushing the art into the copy region', async () => {
-  const { elementsExtent } = await import('../fframes/canvas.mjs');
+  const { elementsExtent } = await import('../film/canvas.mjs');
   const names = ['lightwell','contour-field','paper-fold','glass-orbits','bubble-cluster','ribbon-wave','petal-burst','inflated-loop','arena-grid','prism-shards'];
   // The subject only: soft washes, floor lines, dust and full-bleed planes are atmosphere.
   const subject = els => els.filter(e => !e.fill?.fade && !['line', 'particles'].includes(e.type) && !(e.points ?? []).some(p => p[1] > 2000));
@@ -156,7 +156,7 @@ test('material seeds vary the layout without pushing the art into the copy regio
 });
 
 test('art drift pushes the sketch in over the beat from frame-based keys and never holds the beat', async () => {
-  const { expandArt } = await import('../fframes/sketches.mjs');
+  const { expandArt } = await import('../film/sketches.mjs');
   const still = expandArt({ sketch: 'prism-shards', seed: 4 }, { width: 1920, height: 1080, duration: 6 }).under[0];
   assert.equal(still.keys, undefined, 'no drift unless asked');
   const [left, right] = [3, 4].map(seed => expandArt({ sketch: 'prism-shards', seed, drift: 1 }, { width: 1920, height: 1080, duration: 6 }).under[0]);

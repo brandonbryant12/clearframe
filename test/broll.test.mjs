@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { footageProblems } from '../engine/lib/continuity.mjs';
-import { storyboardFor } from '../fframes/playbooks.mjs';
+import { storyboardFor } from '../film/playbooks.mjs';
 import { writeJSON } from '../engine/lib/util.mjs';
 
 test('coverage, the one-take ceiling and repeated seconds are found before rendering', () => {

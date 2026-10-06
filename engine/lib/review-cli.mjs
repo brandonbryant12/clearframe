@@ -84,7 +84,7 @@ export async function reviewCommand(cmd, dir, o, opts, positionals) {
   const json = v => console.log(JSON.stringify(v, null, 2));
 
   if (cmd === 'range') {
-    const { renderRange } = await import('../../fframes/render.mjs');
+    const { renderRange } = await import('../../film/render.mjs');
     let beats = list(o.beats);
     let span = o.range ? rangeOf(o) : {};
     if (o.note) {

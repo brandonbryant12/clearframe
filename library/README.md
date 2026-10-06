@@ -111,7 +111,7 @@ A sketch is canvas props (`elements`, and optionally `world`). There are two way
   ```
   - The shape keys are `landscape`, `vertical`, `square` and `portrait`.
   - A missing shape falls back to `vertical` or `landscape`, whichever matches the frame's orientation.
-- **Module (built-ins only).** A `.mjs` file exports `{ name, order, summary, use, build(w, h) }` and lays out from the frame size. The helpers in `fframes/sketch-kit.mjs` are:
+- **Module (built-ins only).** A `.mjs` file exports `{ name, order, summary, use, build(w, h) }` and lays out from the frame size. The helpers in `film/sketch-kit.mjs` are:
   - `body`: the safe content box;
   - `round`;
   - `tall`;
@@ -162,8 +162,8 @@ Rules for layers:
 
 | Put it in the library | Put it in the engine |
 |---|---|
-| A new colour scheme, a house style, a new narrative arc | A new element type, effect or block (`fframes/native/src`, `fframes/catalog.mjs`) |
-| A composition of existing elements (a sketch) | A new validation or timing rule (`fframes/job.mjs`, `engine/lib/critique.mjs`) |
+| A new colour scheme, a house style, a new narrative arc | A new element type, effect or block (`scene/native/src`, `film/catalog.mjs`) |
+| A composition of existing elements (a sketch) | A new validation or timing rule (`film/job.mjs`, `engine/lib/critique.mjs`) |
 | Defaults and rules that express a look | Behaviour every film needs |
 
 If an idea needs code only to arrange existing elements, write a built-in sketch module. If it needs the renderer to draw something new, it belongs in the engine. After that, add a library item that shows it off.

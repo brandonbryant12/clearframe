@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // The silence before an impact: a seam of light across the dark. A bright core is there on the
 // first frame; a line opens from it to both edges while a band of light widens around it, with

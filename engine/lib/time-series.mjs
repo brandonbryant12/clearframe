@@ -1,5 +1,5 @@
 // Period-aware transformations for observed series; no interpolation or forecasts.
-import {utcDay} from '../../fframes/plot-data.mjs';
+import {utcDay} from '../../film/plot-data.mjs';
 export const TIME_SERIES_VERSION=1;
 const check=(ok,m)=>{if(!ok)throw Error(`time series: ${m}`);};
 const own=(v,keys,name)=>{check(v&&typeof v==='object'&&!Array.isArray(v),`${name} must be an object`);for(const k of Object.keys(v))check(keys.includes(k),`unknown ${name}.${k}`);};

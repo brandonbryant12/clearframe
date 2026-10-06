@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { teachingSpec, expandTeachingProps } from '../fframes/teaching.mjs';
-import { normalizeElements } from '../fframes/canvas.mjs';
+import { teachingSpec, expandTeachingProps } from '../film/teaching.mjs';
+import { normalizeElements } from '../film/canvas.mjs';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { scaffold } from '../fframes/playbooks.mjs';
+import { scaffold } from '../film/playbooks.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
-import { createJob } from '../fframes/job.mjs';
+import { createJob } from '../film/job.mjs';
 
 const source = 'Arithmetic example';
 const choice = { form: 'choice', phase: 'question', prompt: 'What changed from 4% to 5%?', options: ['1 percent', '5 percent', '1 percentage point'], correctIndex: 2, explanation: 'The rates differ by 1 percentage point. The relative increase is 25%.' };

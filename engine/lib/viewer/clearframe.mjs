@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { listRevisions, revisionVideo, loadRevision } from '../revisions.mjs';
 import { readNotes, readDecisions } from '../notes.mjs';
-import { FACE_SETS } from '../../../fframes/type.mjs';
+import { FACE_SETS } from '../../../film/type.mjs';
 import { FONT_DIR, readJSON, slug, rel, fileHash, duration, frameSize, frameAt } from './media.mjs';
 import { describeFile, walkFiles, fileType, byGroup } from './files.mjs';
 import { noteView } from './notes.mjs';
@@ -11,7 +11,7 @@ import { clearframeStage, stageInfo } from './stages.mjs';
 import { boards, briefOf } from './boards.mjs';
 
 
-/** Canvas font names → bundled files (mirrors text_font in fframes/native/src/canvas_geometry.rs). */
+/** Canvas font names → bundled files (mirrors text_font in scene/native/src/blocks/canvas_geometry.rs). */
 export const FONT_FILES = {
   text: 'Inter-Regular.ttf', regular: 'Inter-Regular.ttf', strong: 'Inter-SemiBold.ttf', light: 'InterDisplay-Light.ttf',
   bold: 'InterDisplay-Bold.ttf', figures: 'InterDisplay-Figures.ttf', display: 'InterDisplay-SemiBold.ttf', semibold: 'InterDisplay-SemiBold.ttf',

@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { item } from '../fframes/library.mjs';
-import { sketch, expandArt, SKETCH_FRAMES } from '../fframes/sketches.mjs';
-import { normalizeElements, elementsExtent } from '../fframes/canvas.mjs';
-import { scaffold } from '../fframes/playbooks.mjs';
-import { createJob } from '../fframes/job.mjs';
+import { item } from '../film/library.mjs';
+import { sketch, expandArt, SKETCH_FRAMES } from '../film/sketches.mjs';
+import { normalizeElements, elementsExtent } from '../film/canvas.mjs';
+import { scaffold } from '../film/playbooks.mjs';
+import { createJob } from '../film/job.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 

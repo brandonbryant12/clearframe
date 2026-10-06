@@ -4,7 +4,7 @@ import path from 'node:path';
 import { readJSON } from './util.mjs';
 import { measuredRate } from './voice-rates.mjs';
 import { expandAssets, alphaBounds } from './plates.mjs';
-import { useProject } from '../../fframes/library.mjs';
+import { useProject } from '../../film/library.mjs';
 
 export const PRESETS = {
   landscape: { width: 1920, height: 1080, fps: 30 },

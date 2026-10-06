@@ -1,0 +1,32 @@
+[package]
+name = "clearframe-scene"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+publish = false
+description = "ClearFrame's renderer: a deterministic scene plan evaluated per frame and drawn with Skia on Metal."
+
+[[bin]]
+name = "clearframe-scene"
+path = "src/main.rs"
+
+[dependencies]
+# rust-skia publishes prebuilt Skia binaries for fixed feature sets; `gl, metal, svg` (with
+# ganesh and textlayout implied) is the macOS Metal key, so Skia is never compiled from source.
+# `svg` is used only to read SVG asset files.
+skia-safe = { version = "=0.153.3", features = ["gl", "metal", "svg", "binary-cache"] }
+# The Metal device and command queue handed to Skia's Ganesh context.
+metal = "0.32.0"
+foreign-types-shared = "0.3.1"
+# Text shaping over the bundled font files: measurement, wrapping and drawn glyphs agree.
+rustybuzz = "0.12"
+# Authored path data: parsing, flattening and arc length for routes and draw-on.
+kurbo = "0.11.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[profile.release]
+debug = false
+lto = false
+
+[workspace]

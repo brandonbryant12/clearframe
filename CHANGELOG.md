@@ -1,5 +1,33 @@
 # Changelog
 
+## Scene engine
+
+- **FFFrames is retired; the scene engine is ClearFrame's only renderer.** `scene/native` (`clearframe-scene`) draws everything on screen itself. There is no `--engine` option, no `CLEARFRAME_ENGINE` and no storyboard `engine`. No FFFrames crate (`fframes*`, `usvgr`, `svgr`, `ffmpeg-sys-fframes`) appears in `Cargo.toml`, `Cargo.lock` or the dependency graph. The FFFrames revision and MIT notice moved to `archive/fframes/`.
+- **Blocks draw a display list.** The 33 blocks (`scene/native/src/blocks/`, the block code ClearFrame always owned, moved rather than rewritten) build a `draw::Node` tree for each frame: groups with transform, opacity, clip, mask, blend or filter; shapes; text runs; pictures. One painter draws it on the GPU and the frame audit reads it. SVG filter graphs (shadows, glows, treatments, thermal, worn print) are Skia image-filter graphs with SVG semantics (`fx.rs`). Type is drawn as the outlines of the glyphs that measured it, and text boxes use font metrics, as SVG did.
+- **Shared modules.** Typography and shaping (`text`), palettes (`design`), motion, icons, numbers and the audit are crate modules beside the renderer. The JS pipeline moved from `fframes/` to `film/`, and the bundled fonts to `film/assets/`.
+- **Footage through the FFmpeg tools.** `media.rs` replaces FFFrames' decoder and its vendored patch. Each open clip is one `ffmpeg` pipe at the drawn size, and timing comes from `ffprobe` timestamps. The end is exclusive and rounded up to the film's frame grid. Backward and far seeks restart at an accurate seek, and colour follows the source's tags (untagged: BT.601). The B-frame, higher-rate and fractional-end regressions moved with it.
+- **Fixed: footage colour.** The bundled Blender clips are encoded and tagged BT.709, but the old decoder always converted with BT.601, which shifted reds: a solid (200, 50, 75) came back as (187, 32, 75). The new decoder follows the tags and returns (200, 49, 75), and a colour round-trip test covers it. Untagged clips are still decoded as BT.601.
+- **Dependencies:** `skia-safe 0.153.3` (prebuilt-binary feature set), `metal`, `rustybuzz`, `kurbo`, `serde`. The release binary is 19 MB (it was 41 MB) and a warm build of the crate takes about 45 s.
+- **The scene engine renders every film.** It evaluates a compiled scene plan (`build/native/plan.json`, `clearframe.scene` v1, hashed into the manifest and receipts) frame by frame and composites it with Skia on Metal: backdrop, texture, lens (grade, bloom and aberration as one GPU filter graph; handheld, leak, letterbox), chrome, the editorial frame and dissolves as two real layers.
+- **Native stages.** A `stage` block, a beat `stage` (under or over any block) and film `stages` (one layer across beats) draw native elements on the GPU. They use the canvas element dialect, plus:
+  - colour keys, `connector`, `attach` and `along: {path}`;
+  - `video`: footage as a texture, never looped, with coverage that includes a following dissolve;
+  - `shader` and `material` (SkSL);
+  - particle systems up to 4,000;
+  - commit-grounded `code` edits;
+  - a 2.5D camera with depth of field, and temporal motion blur.
+
+  Canvas-only features are refused on stages by name.
+- **Checks see all type.** `inspect` reports frames that cannot be drawn and type cut by the canvas edge. The frame audit judges block type and native type together (cut by the frame or letterbox, over other type, too small). Native errors fail `check`: a missing route or attachment, an overflowing text box, short footage.
+- **Measured against the FFFrames-era stills.** `scripts/engine-parity.mjs --reference DIR` and `scripts/engine-effects.mjs --reference DIR` redraw the moments of an earlier run and report PSNR, so changes are measured without a second renderer.
+  - **Playbooks:** all 45 draw; against the retained FFFrames stills the minimum is 43.6 dB and the median 57.0 dB.
+  - **Galleries:** every block is at least 49.7 dB in landscape and vertical. Sketches have a median of 54.5 dB; the lowest are dense halftone and rough-stroke fields.
+  - **Effects:** every film-level setting is at least 50.3 dB.
+  - **Audit:** the frame audit's findings are unchanged.
+- **Measured.** Full exports match the pre-retirement scene engine within a few percent on five projects; data-story, which is text-dense, went from 36.5 s to 45.8 s, which fits text being drawn as outline paths. That is 1.1–2.0× faster than FFFrames alone measured earlier the same day (`docs/scene-engine-coverage.md#measurements`).
+- **Fixes.** A traveller on a curved route no longer snaps back to its origin when it arrives (a flattened curve can end in a zero-length step).
+- **Examples.** `examples/stage-pr` is a PR explainer on a persistent stage, with a code edit read from a commit. `examples/stage-footage/make.mjs` builds portrait and landscape footage stages from the bundled sculpture clips.
+
 ## Studio feedback and technical films
 
 - **System diagrams that change over time.** `canvas.props.diagram` declares components with stable identities (user, service, database, queue, state, external), connectors (labelled, dashed, flowing) and groups; `steps` add, remove (marked, then gone, with their connectors), replace in place, re-status, and `send` requests hop by hop along the connections, cued to narration. Layout ranks components along the connections for wide and tall frames; connectors get separate ports and runs, two-way pairs and self-loops, and detour around components on screen; labels are placed where they collide least. Timing that would show a dangling or early connector, an overlap or an unreadable label fails with the reason. Consecutive beats sharing node ids morph (a morphing group's contents now stay on screen across the cut). `clearframe sketch architecture|component-change|state-machine` prints an editable diagram; the `pr-walkthrough` playbook carries before/change/states diagrams.

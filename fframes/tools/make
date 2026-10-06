@@ -1,4 +1,0 @@
-#!/bin/sh
-# ffmpeg-sys-next 9 chooses make -j from physical CPU count, ignoring NUM_JOBS.
-# GNU make uses the last -j option. Keep this PATH override local to FFFrames builds.
-exec /usr/bin/make "$@" -j 2

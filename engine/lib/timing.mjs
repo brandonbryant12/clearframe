@@ -5,10 +5,10 @@ import path from 'node:path';
 import { loadStoryboard, paths } from './project.mjs';
 import { hashOf, readJSON, round, snap, wavDuration } from './util.mjs';
 import { findMusicBed } from './music-files.mjs';
-import { blockByName } from '../../fframes/catalog.mjs';
+import { blockByName } from '../../film/catalog.mjs';
 import { audioHash, validateWords, wordKey } from './word-timing.mjs';
 import { planTakes } from './takes.mjs';
-import { COVER } from '../../fframes/constants.mjs';
+import { COVER } from '../../film/constants.mjs';
 import { analyseTrack } from './beatmap.mjs';
 
 const PAUSES = [
@@ -271,7 +271,7 @@ export function computeTiming(root) {
     duration,
     frames: Math.round(duration * fps),
     theme: sb.theme ?? 'paper',
-    // Recorded for reference; the native job (fframes/production.mjs) is authoritative.
+    // Recorded for reference; the native job (film/production.mjs) is authoritative.
     look: {
       backdrop: sb.backdrop ?? 'none',
       chrome: sb.chrome === true,

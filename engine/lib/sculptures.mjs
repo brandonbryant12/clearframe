@@ -1,10 +1,10 @@
-// Optional, offline Blender asset production. The final film still uses FFFrames.
+// Optional, offline Blender asset production. The film itself is drawn by the native renderer.
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { palette } from '../../fframes/catalog.mjs';
+import { palette } from '../../film/catalog.mjs';
 import { motionManifest, validateMotionContract } from './motion-phases.mjs';
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');

@@ -1,6 +1,6 @@
 // A request through a small service architecture: one declaration, one request travelling it.
 // `clearframe sketch architecture` prints this diagram to adapt in canvas props.diagram.
-import { diagramElements } from '../../fframes/system-diagrams.mjs';
+import { diagramElements } from '../../film/system-diagrams.mjs';
 const diagram = {
   nodes: [
     { id: 'user', label: 'User', kind: 'user' },

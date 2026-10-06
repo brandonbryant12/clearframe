@@ -1,4 +1,4 @@
-import { round, smoothPath, rng } from '../../fframes/sketch-kit.mjs';
+import { round, smoothPath, rng } from '../../film/sketch-kit.mjs';
 
 // Dawn over layered hills: a sky warming toward the horizon, the sun rising behind three
 // ridges that fade with distance (atmospheric perspective), mist between them, and a slow

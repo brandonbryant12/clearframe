@@ -139,7 +139,7 @@ node engine/cli.mjs preview film --note n012
 node engine/cli.mjs preview film --chapter "The explosion"
 ```
 
-A preview renders frames [a, b) of the **full prepared timeline** (FFFrames' range render): every beat keeps its place, neighbours, world state, carried elements and transitions, so nothing is simulated by deleting surrounding scenes. Beats are widened by the transitions into and out of them (at least half a second, or the cover of a graphic transition) and by `--handles` seconds (default 2), clamped to the film. The receipt (`review/previews/NAME.mp4.json`) records:
+A preview renders frames [a, b) of the **full prepared timeline** (the renderer's range render): every beat keeps its place, neighbours, world state, carried elements and transitions, so nothing is simulated by deleting surrounding scenes. Beats are widened by the transitions into and out of them (at least half a second, or the cover of a graphic transition) and by `--handles` seconds (default 2), clamped to the film. The receipt (`review/previews/NAME.mp4.json`) records:
 
 - the frame range, its film seconds, the beats covered (with where each sits in the preview) and the input id;
 - **clock check**: the first and last frames, and the first cut inside the range, are drawn directly by the renderer at their film positions and compared with the decoded preview (PSNR); each must match at least as well as its neighbours in the preview, so an off-by-one clock fails wherever the picture moves (a still picture cannot tell, and there an off-by-one is invisible). `--no-verify` skips it;

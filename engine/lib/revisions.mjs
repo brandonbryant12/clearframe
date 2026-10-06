@@ -6,7 +6,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { prepareProject, prepareProjectSync } from '../../fframes/prepare.mjs';
+import { prepareProject, prepareProjectSync } from '../../film/prepare.mjs';
 import { planTakes } from './takes.mjs';
 import { loadStoryboard } from './project.mjs';
 import { isRecorded, sourceSegments, readEdits } from './recording.mjs';
@@ -169,7 +169,7 @@ export function reviewTimeline(ctx) {
     sound: fingerprint({ raw: pick(filmRaw, SOUND_KEYS), music: timing.music?.src ? manifest.hashes[timing.music.src] ?? null : null }),
     voice: fingerprint(filmRaw.voice ?? null),
     data: fingerprint({ sources: filmRaw.sources ?? [], assets: filmRaw.assets ?? [] }),
-    renderer: fingerprint({ renderer: manifest.rendererSourceHash, fonts: manifest.fontHashes, revision: manifest.revision }),
+    renderer: fingerprint({ renderer: manifest.rendererSourceHash, fonts: manifest.fontHashes }),
   };
   const planned = new Map();
   try {
@@ -415,7 +415,7 @@ export async function snapshot(root, { ctx, kind = 'snapshot', label, reason, no
       ...(by ? { by } : {}),
       contentId,
       inputId: ctx.manifest.inputId,
-      renderer: { sourceHash: ctx.manifest.rendererSourceHash, revision: ctx.manifest.revision, fonts: fingerprint(ctx.manifest.fontHashes) },
+      renderer: { sourceHash: ctx.manifest.rendererSourceHash, fonts: fingerprint(ctx.manifest.fontHashes), plan: ctx.manifest.planSha256 },
       frames: timeline.frames,
       fps: timeline.fps,
       duration: timeline.duration,

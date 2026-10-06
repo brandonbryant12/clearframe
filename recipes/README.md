@@ -1,6 +1,6 @@
 # Narrative playbooks
 
-Generated from fframes/playbooks.mjs. These are adaptable starting structures with illustrative content; replace claims and sources before publishing. Use `clearframe new DIR --playbook NAME`.
+Generated from film/playbooks.mjs. These are adaptable starting structures with illustrative content; replace claims and sources before publishing. Use `clearframe new DIR --playbook NAME`.
 
 - **concept-explainer**: Explain a mechanism. Inputs: One concept, an example, a caveat.
 - **quarterly-update**: Report progress with context. Inputs: Comparable metrics, dates, denominators, decisions.

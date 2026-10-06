@@ -1,4 +1,4 @@
-import { tall, round } from '../../fframes/sketch-kit.mjs';
+import { tall, round } from '../../film/sketch-kit.mjs';
 
 // A level on a 1989 handheld: a city in two shades laid in LCD pixels, a pixel sun, a ground
 // row, a small player who hops right in stepped motion, and a status bar. Every shape is a

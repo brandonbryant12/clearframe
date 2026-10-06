@@ -1,4 +1,4 @@
-import { round } from '../../fframes/sketch-kit.mjs';
+import { round } from '../../film/sketch-kit.mjs';
 
 // An event-poster opener: jagged rays radiate from a disc and turn slowly, the disc pops in on
 // the beat, and the title wipes across it. The rays are a field, not decoration: they keep the

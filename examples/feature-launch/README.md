@@ -8,7 +8,7 @@ Three materially different concepts are recorded in `concepts.json`: a material 
 
 The included `storyboard.json` links to the ready clips and posters in the sibling `examples/sculptures/` gallery. Its portable CLI evidence marks the substituted output-directory placeholder. For a fresh run with original receipts and separate review outputs, use the script below.
 
-From the repository root, use the included master set. Follow [native setup](../../fframes/SETUP.md); no Blender installation is required for this replay. The reference storyboard uses sibling assets and is not directly renderable: the script below copies them into a self-contained project.
+From the repository root, use the included master set. Follow [native setup](../../film/SETUP.md); no Blender installation is required for this replay. The reference storyboard uses sibling assets and is not directly renderable: the script below copies them into a self-contained project.
 
 ```sh
 node scripts/trajectories/feature-launch.mjs --asset-root examples/sculptures --out /tmp/clearframe-launch-draft --render

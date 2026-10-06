@@ -1,4 +1,4 @@
-import { tall, round } from '../../fframes/sketch-kit.mjs';
+import { tall, round } from '../../film/sketch-kit.mjs';
 
 export default {
   name: 'burst',

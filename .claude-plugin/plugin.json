@@ -1,6 +1,6 @@
 {
   "name": "clearframe",
-  "description": "Direct, build and review FFFrames motion graphics: 32 native blocks, 24 playbooks, 8 palettes, choreographed motion, measured speech-following text and selective Google media.",
+  "description": "Direct, build and review native motion graphics: 33 blocks plus GPU stages, 24 playbooks, 8 palettes, choreographed motion, measured speech-following text and selective Google media.",
   "version": "0.3.0",
   "author": {
     "name": "Brandon Bryant",
@@ -18,6 +18,6 @@
     "lyria",
     "veo",
     "agent-skills",
-    "fframes"
+    "skia"
   ]
 }

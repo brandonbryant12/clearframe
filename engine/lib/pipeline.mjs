@@ -4,11 +4,11 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { critique } from './critique.mjs';
 import { voice } from './generate.mjs';
-import { checkProject, sheetProject, renderProject } from '../../fframes/production.mjs';
+import { checkProject, sheetProject, renderProject } from '../../film/production.mjs';
 import { qaProject } from './qa.mjs';
 import { reviewProject } from './review.mjs';
-import { sha256 } from '../../fframes/native-build.mjs';
-import { renderGeometry } from '../../fframes/render-geometry.mjs';
+import { sha256 } from '../../scene/engine.mjs';
+import { renderGeometry } from '../../film/render-geometry.mjs';
 import { writeJSON, log } from './util.mjs';
 import { loadStoryboard } from './project.mjs';
 

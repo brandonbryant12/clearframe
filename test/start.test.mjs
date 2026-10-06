@@ -7,10 +7,10 @@ import { spawnSync } from 'node:child_process';
 import { startProject } from '../engine/lib/start.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
-import { createJob } from '../fframes/job.mjs';
-import { wireframePNG } from '../fframes/wireframe.mjs';
-import { palette } from '../fframes/catalog.mjs';
-import { useProject } from '../fframes/library.mjs';
+import { createJob } from '../film/job.mjs';
+import { wireframePNG } from '../film/wireframe.mjs';
+import { palette } from '../film/catalog.mjs';
+import { useProject } from '../film/library.mjs';
 import { inspectSVG } from '../engine/lib/svg-assets.mjs';
 
 const json = file => JSON.parse(fs.readFileSync(file, 'utf8'));

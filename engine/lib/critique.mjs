@@ -3,17 +3,17 @@
 // taste: it points at where to look; the sheet and a fresh reviewer decide.
 import { loadStoryboard } from './project.mjs';
 import { computeTiming, tokenize } from './timing.mjs';
-import { rules } from '../../fframes/registry.mjs';
-import { elementsExtent as extent } from '../../fframes/canvas.mjs';
-import { expandPlotProps } from '../../fframes/plots.mjs';
-import { expandBarsProps } from '../../fframes/bars.mjs';
-import { expandStatProps } from '../../fframes/stat.mjs';
-import { expandHistogramProps } from '../../fframes/histogram.mjs';
-import { expandMultiplesProps } from '../../fframes/multiples.mjs';
-import { createJob, steadyFilm } from '../../fframes/job.mjs';
-import { roughStandIns } from '../../fframes/prepare.mjs';
-import { sketch, expandArt, sketchPreset } from '../../fframes/sketches.mjs';
-import { diagramElements } from '../../fframes/system-diagrams.mjs';
+import { rules } from '../../film/registry.mjs';
+import { elementsExtent as extent } from '../../film/canvas.mjs';
+import { expandPlotProps } from '../../film/plots.mjs';
+import { expandBarsProps } from '../../film/bars.mjs';
+import { expandStatProps } from '../../film/stat.mjs';
+import { expandHistogramProps } from '../../film/histogram.mjs';
+import { expandMultiplesProps } from '../../film/multiples.mjs';
+import { createJob, steadyFilm } from '../../film/job.mjs';
+import { roughStandIns } from '../../film/prepare.mjs';
+import { sketch, expandArt, sketchPreset } from '../../film/sketches.mjs';
+import { diagramElements } from '../../film/system-diagrams.mjs';
 
 /**
  * A beat as it will be drawn: a canvas built from a library sketch is judged on the sketch's

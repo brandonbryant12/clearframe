@@ -5,8 +5,8 @@ import path from 'node:path';
 import { draftVoice, speechSegments } from '../engine/lib/audio.mjs';
 import { pcmToWav, wavDuration, writeJSON, ffmpeg } from '../engine/lib/util.mjs';
 import { importSpeech } from '../engine/lib/speech.mjs';
-import { scaffold } from '../fframes/playbooks.mjs';
-import { checkProject, renderProject, sheetProject } from '../fframes/production.mjs';
+import { scaffold } from '../film/playbooks.mjs';
+import { checkProject, renderProject, sheetProject } from '../film/production.mjs';
 const root = path.resolve(process.argv[2] ?? 'build/speech-smoke');
 if (fs.existsSync(path.join(root, 'storyboard.json')))
   throw new Error('Smoke fixture already exists; choose a new output path in the script to retain evidence.');

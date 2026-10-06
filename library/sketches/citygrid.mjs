@@ -1,4 +1,4 @@
-import { round, rng } from '../../fframes/sketch-kit.mjs';
+import { round, rng } from '../../film/sketch-kit.mjs';
 
 // A city at night seen from a plane: thousands of lights laid out in true perspective, sized by
 // their distance, along a street grid turned against the view; boulevards brighter, a black river

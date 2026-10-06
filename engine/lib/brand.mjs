@@ -2,8 +2,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { palette } from '../../fframes/catalog.mjs';
-import { contrast, typeById, vendor } from '../../fframes/library.mjs';
+import { palette } from '../../film/catalog.mjs';
+import { contrast, typeById, vendor } from '../../film/library.mjs';
 import { writeJSON } from './util.mjs';
 import { rasterizeSVG } from './svg-assets.mjs';
 

@@ -94,7 +94,7 @@ export async function prepare(assetRoot, out, { final = false } = {}) {
   const disk = fs.statfsSync(out); assert(disk.bavail * disk.bsize >= 20 * 2 ** 30, 'Keep at least 20 GiB free before derivative rendering.');
   fs.mkdirSync(path.join(out, 'assets/img'), { recursive: true }); fs.mkdirSync(path.join(out, 'assets/clips'), { recursive: true }); fs.mkdirSync(path.join(out, 'logs'));
   copyVerified(fileURLToPath(import.meta.url), path.join(out, 'source/authoring-source.mjs'));
-  write(path.join(out, 'source/helper-hashes.json'), Object.fromEntries(['fframes/teaching.mjs', 'fframes/job.mjs'].map(file => [file, hash(path.join(repo, file))])));
+  write(path.join(out, 'source/helper-hashes.json'), Object.fromEntries(['film/teaching.mjs', 'film/job.mjs'].map(file => [file, hash(path.join(repo, file))])));
   const manifest = [], derivatives = [], startedAt = new Date().toISOString(), start = performance.now();
   for (const { id, folder, receipt: r, receiptBytes } of inputs) {
     const retained = path.join(out, 'source/artifacts', id), kept = {};

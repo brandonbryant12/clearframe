@@ -5,7 +5,7 @@ description: Choose, choreograph and honestly animate numbers and charts in Clea
 
 # Numbers and charts in motion
 
-A chart in a video is not a chart on a page. The viewer can't pause, re-read or hover, so every chart must answer **one question**, reveal it **in the order it is spoken**, and **point** at the answer. All numeric blocks are native FFFrames renderers; run `node engine/cli.mjs blocks NAME` for exact props.
+A chart in a video is not a chart on a page. The viewer can't pause, re-read or hover, so every chart must answer **one question**, reveal it **in the order it is spoken**, and **point** at the answer. All numeric blocks are drawn natively by the renderer from validated props, so values, scales and sources are exactly what the storyboard says; run `node engine/cli.mjs blocks NAME` for exact props.
 
 ## Pick the form
 

@@ -1,8 +1,8 @@
 // Portable intake for an agent-directed film. No generation, guessing of claims, or paid calls.
 import fs from 'node:fs';
 import path from 'node:path';
-import { scaffold, artSketches } from '../../fframes/playbooks.mjs';
-import { vendor, useProject } from '../../fframes/library.mjs';
+import { scaffold, artSketches } from '../../film/playbooks.mjs';
+import { vendor, useProject } from '../../film/library.mjs';
 import { documentMarkdown, parseResearch, briefMarkdown } from './ingest.mjs';
 import { writeJSON } from './util.mjs';
 import { readBrand, copyInput, applyBrand } from './brand.mjs';

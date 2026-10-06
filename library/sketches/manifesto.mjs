@@ -1,4 +1,4 @@
-import { tall, round } from '../../fframes/sketch-kit.mjs';
+import { tall, round } from '../../film/sketch-kit.mjs';
 
 // A constructivist poster in two inks on cream: a red circle, a black bar driving up the
 // diagonal with the word reversed out of it, a red wedge striking into the circle and a

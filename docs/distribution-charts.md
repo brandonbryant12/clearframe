@@ -1,6 +1,6 @@
 # Distribution charts
 
-`canvas.props.distribution` shows how often outcomes landed in each range: calendar-year returns, monthly changes, wait times. Counting comes from [`fframes/distribution-data.mjs`](distributions.md) (explicit bins, left-closed edges, nulls excluded and disclosed); the layout shares the plot's frame and type.
+`canvas.props.distribution` shows how often outcomes landed in each range: calendar-year returns, monthly changes, wait times. Counting comes from [`film/distribution-data.mjs`](distributions.md) (explicit bins, left-closed edges, nulls excluded and disclosed); the layout shares the plot's frame and type.
 
 ```json
 {

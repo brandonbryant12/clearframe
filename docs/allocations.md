@@ -1,6 +1,6 @@
 # Fixed-quantum allocation trays
 
-`fframes/allocation-data.mjs` prepares a conserved integer token ledger. `fframes/allocations.mjs` draws it as native moving tiles and an exact before/after count chart. The separate B13 Blender mosaic remains unbuilt.
+`film/allocation-data.mjs` prepares a conserved integer token ledger. `film/allocations.mjs` draws it as native moving tiles and an exact before/after count chart. The separate B13 Blender mosaic remains unbuilt.
 
 Call `allocationPlan(input)` with title, source, as-of date, period, qualification, quantum, buckets and an explicit ordered list of moves. The quantum declares `minorUnits` (a positive safe integer up to 1e9), `decimals` (0–6), `displayDecimals` (0–decimals) and a unit label. For example, `{minorUnits:10000, decimals:2, displayDecimals:0, unit:"USD"}` means one tile represents exactly 100 USD. Display precision must represent that quantum exactly; the formatter does not round it.
 
