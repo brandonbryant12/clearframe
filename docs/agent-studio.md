@@ -95,6 +95,10 @@ free local drafts ClearFrame always had. The Sound tab (inspector) shows, per fi
   player per line. *Record free draft voice* uses this computer's voice and never replaces a Google
   take whose words are unchanged. *Generate with Google…* records only the takes whose words, voice,
   style or model changed (the engine caches by take), at the estimate shown.
+  A draft take is recorded as the OS voice (`os-tts`, the film's `draftVoice` or the system default),
+  never as the Google voice and style it is set to; the agent's `clearframe_sound` keeps "as made"
+  apart from "settings for Google", and `clearframe_job` reports each rough cut's or final's
+  measured size, length and sound (a rough cut is half the project size).
 - **Music**: direction (style and instruments; sections follow the edit), the Lyria model and its
   price, the current bed with a player, *Make free draft bed*, and *Generate with Google…* (a new
   Google bed replaces the current one).

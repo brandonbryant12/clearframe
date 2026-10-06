@@ -110,7 +110,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       const notes = (() => { try { return loadViewerNotes(dir).filter(n => !n.resolved); } catch { return []; } })();
       const active = jobs.list(filmId(dir)).filter(j => !TERMINAL.has(j.status));
       const lines = [
-        `Film: ${sb.title} — ${t ? `${t.width}×${t.height} at ${t.fps} fps, ${sec(t.duration)}${t.estimated ? ' (narration timing estimated)' : ''}` : 'timing unavailable'}`,
+        `Film: ${sb.title} — project format ${t ? `${t.width}×${t.height} at ${t.fps} fps, ${sec(t.duration)}${t.estimated ? ' (narration timing estimated)' : ''}; finals render at this size, rough cuts at half size (${Math.round(t.width / 2)}×${Math.round(t.height / 2)})` : 'timing unavailable'}`,
         `Look: theme ${typeof sb.theme === 'string' ? sb.theme : sb.theme?.base ?? 'default'}, type ${sb.type ?? 'default'}, motion ${sb.motion?.preset ?? sb.motion ?? 'default'}${sb.transition ? `, transition ${typeof sb.transition === 'string' ? sb.transition : sb.transition.type}` : ''}${f.preset ? `, format ${f.preset}` : ''}`,
         `Hash: ${st.hash}  (pass this to clearframe_edit)`,
         `Undo: ${st.undoLabel ?? '—'} · Redo: ${st.redoLabel ?? '—'}${st.externalChanges ? ' · edited outside the studio' : ''}`,
@@ -190,6 +190,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       while (input.id && Date.now() < until && !TERMINAL.has(list[0].status)) { await new Promise(r => setTimeout(r, 1000)); list = pick(); }
       const view = j => [`${j.label} (job ${j.id}): ${j.status}${j.progress != null && j.status === 'running' ? ` ${Math.round(j.progress * 100)}%` : ''}`,
         j.status === 'complete' ? `  output (for the person to view in the studio; you cannot see images, so judge by the engine's checks): ${j.url ?? 'none'}${j.matches === false ? ' — the film changed while or since it rendered; it may not match' : ''}${j.revision ? `; saved revision ${j.revision}` : ''}` : null,
+        j.media ? `  actual video: ${j.media.width}×${j.media.height}, ${sec(j.media.duration)}, ${j.media.audio ? 'with sound' : 'silent'}${j.kind === 'draft' ? ' (a half-size rough cut, not the project size; its narration and music are what the Sound status says was actually made)' : ''}` : null,
         j.errors?.length ? `  engine errors: ${j.errors.join('; ')}` : null, j.status === 'failed' && !j.errors?.length ? `  log: ${clip(j.log?.slice(-1200), 1200)}` : null,
         j.result?.errors ? `  check: ${j.result.errors.length} errors, ${j.result.warnings.length} warnings${j.result.errors.length ? `: ${j.result.errors.slice(0, 6).join('; ')}` : ''}` : null].filter(Boolean).join('\n');
       return { content: list.map(view).join('\n') || 'No render jobs yet for this film.', metadata: { summary: list.length === 1 ? `${list[0].label}: ${list[0].status}` : `${list.length} jobs`, job: input.id ?? null } };
@@ -248,10 +249,14 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       }
       const s = soundState(dir, base);
       const n = s.narration, m = s.music, google = s.providers.speech.find(p => p.id === 'google');
+      const made = t => { const by = [...new Set(t.beats.map(b => (b.made === 'local' ? `free draft voice (${b.model ?? 'os-tts'}, ${b.voice})` : b.made ? `${b.made} ${b.model ?? ''} voice ${b.voice}`.replace(/\s+/g, ' ') : 'not made yet')))];
+        return `${by.join(' + ')}${t.status === 'google-changed' ? ', words changed since the Google take' : ''}${t.cost ? ` (Google take ≈$${t.cost.toFixed(3)} if approved)` : ''}`; };
       return { content: [
         `Google sound: ${google.ready ? 'available (paid; needs the person\'s approval)' : `not configured — ${google.needs}`}`,
-        n.recorded ? 'Narration: the source recording (edit by cutting words; not regenerated).' : `Narration: voice ${n.voice}${n.style ? `, style "${n.style}"` : ''}, ${n.lines} lines in ${n.takes.length} take(s): ${n.takes.map(t => `${t.id} ${t.status}${t.cost ? ` (≈$${t.cost.toFixed(3)} to generate)` : ''}`).join('; ')}`,
-        m.off ? 'Music: off.' : `Music: ${m.made ? `${m.made} bed${m.current ? ' (current)' : ''}` : 'none yet'}; model ${m.model}; prompt "${m.prompt || 'derived from the edit'}"; level ${m.volume}${m.duck ? ', ducked under the voice' : ''}${m.cost ? `; Google bed ≈$${m.cost.toFixed(2)}` : ''}.`,
+        ...(n.recorded ? ['Narration: the source recording (edit by cutting words; not regenerated).'] : [
+          `Narration as made (what the film plays now): ${n.lines} lines in ${n.takes.length} take(s): ${n.takes.map(t => `${t.id} ${made(t)}`).join('; ')}`,
+          `Narration settings for Google (apply only to takes Google generates): voice ${n.voice}${n.style ? `, style "${n.style}"` : ''}, model ${n.model}. Never say a draft take used this voice or style.`]),
+        m.off ? 'Music: off.' : `Music as made: ${m.made ? `${m.made === 'local' ? 'free draft bed (made on this computer)' : `${m.made} bed`}${m.current ? ' (current)' : ''}` : 'none yet'}. Settings for Google: model ${m.model}; prompt "${m.prompt || 'derived from the edit'}"; level ${m.volume}${m.duck ? ', ducked under the voice' : ''}${m.cost ? `; Google bed ≈$${m.cost.toFixed(2)}` : ''}.`,
         'Change voice, style, music prompt, model and levels with clearframe_edit (film paths voice.voice, voice.style, music.prompt, music.model, music.volume, music.duck). Free drafts: action draft-voice / draft-music. Paid Google generation: action request with kind and reason.',
       ].join('\n'), metadata: { summary: `Sound: ${n.recorded ? 'recorded narration' : `${n.takes.length} take(s)`}, music ${m.off ? 'off' : m.made ?? 'none'}` } };
     },

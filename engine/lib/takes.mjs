@@ -353,8 +353,9 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
         textHash: hashOf(b.vo),
         provider,
         model: provider === 'local' ? 'os-tts' : spec.model,
-        voice: spec.voice,
-        style: spec.parts[i].style,
+        // A draft take is the OS voice; the Google voice and style are settings, not what it used.
+        voice: provider === 'local' ? sb.voice.draftVoice ?? 'system default' : spec.voice,
+        style: provider === 'local' ? '' : spec.parts[i].style,
         text: b.vo,
         duration: sliceDur,
         take: { id: take.id, index: i, count: take.beats.length, hash },

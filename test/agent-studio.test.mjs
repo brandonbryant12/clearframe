@@ -9,7 +9,7 @@ import path from 'node:path';
 import { PassThrough } from 'node:stream';
 import { fileURLToPath } from 'node:url';
 import { createAgent, resolveScope, cleanScope, contextBlock, transcript } from '../engine/lib/agent/agent.mjs';
-import { scopeViolation, inside, pictureSize } from '../engine/lib/agent/tools.mjs';
+import { scopeViolation, inside, pictureSize, createTools } from '../engine/lib/agent/tools.mjs';
 import { readLink, updateLink } from '../engine/lib/agent/links.mjs';
 import { uploadToProject, uploadToDraft, createProject, safeName, projectsRoot } from '../engine/lib/agent/projects.mjs';
 import { createRuntime, runtimeConfig, agentPaths, PERMISSIONS } from '../engine/lib/agent/runtime.mjs';
@@ -554,4 +554,20 @@ test('the agent learns picture dimensions from file headers (it has no shell to 
   assert.deepEqual(pictureSize(path.join(d, 'b.gif')), { width: 800, height: 600 });
   assert.deepEqual(pictureSize(path.join(d, 'c.jpg')), { width: 960, height: 540 });
   assert.equal(pictureSize(path.join(d, 'd.png')), null);
+});
+
+test('the agent hears what was actually made: a half-size rough cut and draft voice, apart from the Google settings', async t => {
+  const d = project(t, { ...SB, voice: { provider: 'gemini', voice: 'Charon', style: 'warm and unhurried' }, beats: SB.beats.map(b => ({ ...b, vo: `The ${b.id} line.` })) });
+  // An older draft take recorded the film's Google voice and style although the OS voice made it.
+  fs.mkdirSync(path.join(d, 'assets/vo'), { recursive: true });
+  for (const b of SB.beats) fs.writeFileSync(path.join(d, `assets/vo/${b.id}.json`), JSON.stringify({ provider: 'local', model: 'os-tts', voice: 'Charon', style: 'warm and unhurried', text: `The ${b.id} line.`, words: [] }));
+  const jobs = { list: () => [{ id: 'j1', kind: 'draft', label: 'Rough cut (half size)', status: 'complete', revision: 'r001', url: '/v.mp4', media: { width: 960, height: 540, duration: 11, audio: true } }] };
+  const tools = createTools({ base: d, jobs, filmOf: () => 'f', pauseOf: () => null, currentScope: () => null });
+  const sound = (await tools.sound({ dir: d, input: {} })).content;
+  const asMade = sound.split('\n').find(l => l.startsWith('Narration as made'));
+  assert.match(asMade, /free draft voice \(os-tts, system default\)/);
+  assert.doesNotMatch(asMade, /Charon|warm/, 'a draft take is not described with the Google voice or style');
+  assert.match(sound, /Narration settings for Google .*voice Charon, style "warm and unhurried"/);
+  assert.match((await tools.job({ dir: d, input: {} })).content, /actual video: 960×540, 11(\.0)?s, with sound \(a half-size rough cut/);
+  assert.match((await tools.state({ dir: d, input: {} })).content, /project format \d+×\d+ .*rough cuts at half size/);
 });

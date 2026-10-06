@@ -42,3 +42,12 @@ Rough cuts record a free local draft voice automatically; a music bed is separat
 with `clearframe_sound` action `draft-music`). Google narration
 (Gemini TTS) and music (Lyria) are paid: use `clearframe_sound` to see their state and cost, and to
 *request* generation; the person approves the spend in the studio. Never assume approval.
+
+## Report what was made
+
+Describe outputs from what the tools measured, not from the film's settings: a rough cut's size is
+the `actual video` line of `clearframe_job` (half the project size), and its narration and music are
+the "as made" lines of `clearframe_sound`. A draft take is the free operating-system voice; the
+Google voice and style are settings for a paid take that has not been made. Say "draft voice" and
+"a 960×540 rough cut"; never name the Google voice or the project size for something that was not
+made with them.
