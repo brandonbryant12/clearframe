@@ -226,7 +226,8 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
     }
     if (j.kind === 'check') { try { const r = JSON.parse(j.log.slice(j.log.indexOf('{'))); j.result = { errors: r.errors ?? [], warnings: r.warnings ?? [], craft: r.craft ?? [] }; } catch {} }
     const url = f => f && '/' + path.relative(base, path.resolve(base, f)).split(path.sep).map(encodeURIComponent).join('/');
-    if (['draft', 'final'].includes(j.kind)) j.revision = /revision (r\d{3,})/.exec(j.log)?.[1] ?? null;
+    // A rough cut logs "revision r005"; a final prints its receipt, with "revision": "r005".
+    if (['draft', 'final'].includes(j.kind)) j.revision = /revision"?:? "?(r\d{3,})/.exec(j.log)?.[1] ?? null;
     if (['revise', 'reject'].includes(j.kind)) {
       let r = null;
       try { r = JSON.parse(j.log.slice(j.log.indexOf('{'), j.log.lastIndexOf('}') + 1)); } catch {}

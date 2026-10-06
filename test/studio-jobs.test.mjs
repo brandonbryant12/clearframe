@@ -125,3 +125,24 @@ test('a cached preview whose job was evicted is not returned; a new job is liste
   assert.ok(get(again.id), 'the answer is a job the list shows');
   await done(again.id);
 });
+
+test('a final knows its revision from its receipt and reports the video as it came out', async t => {
+  const { spawnSync } = await import('node:child_process');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-jobs-final-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const d = path.join(root, 'film'); fs.mkdirSync(d, { recursive: true }); fs.writeFileSync(path.join(d, 'storyboard.json'), JSON.stringify(BOARD));
+  const video = path.join(d, 'review/objects/ab', `${'ab'.repeat(32)}.mp4`); fs.mkdirSync(path.dirname(video), { recursive: true });
+  assert.equal(spawnSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', 'color=c=navy:s=64x36:d=1', '-pix_fmt', 'yuv420p', video]).status, 0);
+  fs.mkdirSync(path.join(d, 'review/revisions/r002'), { recursive: true });
+  fs.writeFileSync(path.join(d, 'review/revisions/r002/revision.json'), JSON.stringify({ id: 'r002', duration: 0.97, videos: [{ profile: 'final', object: path.relative(d, video) }] }));
+  // The real final prints its receipt as JSON, with "revision": "r002", not "revision r002".
+  const cli = path.join(root, 'final-cli.mjs');
+  fs.writeFileSync(cli, `import fs from 'node:fs'; fs.mkdirSync(${JSON.stringify(path.join(d, 'build'))}, { recursive: true }); fs.writeFileSync(${JSON.stringify(path.join(d, 'build/video.mp4'))}, 'x'); console.log(JSON.stringify({ profile: 'final', revision: 'r002' }, null, 2));`);
+  const jobs = createStudioJobs({ base: root, out: path.join(root, 'viewer'), cli, gate: null });
+  t.after(() => jobs.stopAll());
+  const { id } = jobs.start(d, { film: 'film', kind: 'final' });
+  let j; for (let i = 0; i < 400 && !['complete', 'failed'].includes((j = jobs.list().find(x => x.id === id))?.status); i++) await sleep(25);
+  assert.equal(j.status, 'complete', j.log);
+  assert.equal(j.revision, 'r002');
+  assert.deepEqual([j.media?.width, j.media?.height, j.media?.authored], [64, 36, 0.97]);
+});
