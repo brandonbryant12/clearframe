@@ -96,7 +96,9 @@ async function studio(id) {
   addEventListener('keydown', studioKeys, true);
   await refreshJobs(true);
   if (!currentSession(session)) return;
-  S && (S.poller = setInterval(() => { refreshJobs(); watchSource(); refreshAgent(); }, 600));
+  // Notes can arrive from another tab or the CLI: read them on open and now and then.
+  refreshNotes();
+  S && (S.poller = setInterval(() => { refreshJobs(); watchSource(); refreshAgent(); if (Date.now() - (S.lastNotes ?? 0) > 15000 && !document.hidden) { S.lastNotes = Date.now(); refreshNotes(); } }, 600));
   autoStill();
   if (S.agent.outbox.length) flushOutbox(); else refreshAgent(true);
 }

@@ -20,9 +20,14 @@ export const DEFAULT_MODEL = { providerID: 'opencode', id: 'big-pickle' };
  * refuses requests whose built-in shell tool is denied outright (403 "free tier can only be used
  * from within OpenCode"), so shell and web stay available behind a person's approval ("ask") and
  * appear as approval cards in the browser. Direct file edits are denied: storyboard changes go
- * through clearframe_edit, which validates them and records undo history. Reading outside the
- * project is denied; skills other than ClearFrame's are denied so unrelated globally installed
- * skills cannot steer a film.
+ * through clearframe_edit, which validates them and records undo history. OpenCode's own
+ * "external directory" boundary is the git worktree, not the session's folder (a project inside
+ * this repository could read the whole repository), so reads are held to the project explicitly:
+ * a read's resource is its path relative to the session folder, and anything starting with `../`,
+ * `/` or `~` is outside. grep, glob and list match their pattern rather than their folder, so they
+ * are denied; clearframe_files lists and reads the project instead. Skills other than ClearFrame's
+ * are denied so unrelated globally installed skills cannot steer a film. Verified against the free
+ * model (none of these rules trips the free-tier refusal; only denying shell does).
  */
 export const PERMISSIONS = [
   { action: 'shell', resource: '*', effect: 'ask' },
@@ -30,6 +35,8 @@ export const PERMISSIONS = [
   { action: 'websearch', resource: '*', effect: 'ask' },
   { action: 'edit', resource: '*', effect: 'deny' },
   { action: 'external_directory', resource: '*', effect: 'deny' },
+  ...['../*', '/*', '~*'].map(resource => ({ action: 'read', resource, effect: 'deny' })),
+  ...['grep', 'glob', 'list'].map(action => ({ action, resource: '*', effect: 'deny' })),
   { action: 'skill', resource: '*', effect: 'deny' },
   { action: 'skill', resource: 'clearframe*', effect: 'allow' },
 ];

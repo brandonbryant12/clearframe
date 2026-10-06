@@ -47,6 +47,10 @@ store and is never written to the page or the project.
 
 Things learned getting the free tier to work (keep them):
 
+- **Read containment is explicit.** OpenCode's `external_directory` rule covers paths outside the git
+  worktree, not outside the session folder. The studio denies reads of `../*`, `/*` and `~*` (a read's
+  resource is relative to the session folder; absolute paths inside the project are relativised
+  first) and denies grep/glob/list. None of these trips the free-tier refusal.
 - **Do not deny the shell tool.** OpenCode's free tier answers `403 provider.auth: "OpenCode's free
   tier can only be used from within OpenCode"` when the built-in shell tool is denied (a blanket
   `{action: '*', effect: 'deny'}` does the same). The studio keeps shell (and web fetch/search)
@@ -141,9 +145,14 @@ runs them for the one project the calling session belongs to:
 | `clearframe_write` | replace `brief.md`/`BRIEF.md` or `DIRECTION.md` |
 | `clearframe_guide` | ClearFrame's craft guides (the `skills/` SKILL.md files) |
 
-OpenCode's own read, glob and grep work inside the project folder. Direct file edits are denied;
-reading outside the project is denied; shell, web fetch and web search need your approval; only
-ClearFrame's skills are allowed. Final renders, acceptance and paid generation stay with the person.
+OpenCode's own read tool works inside the project folder only: its permission resource is the path
+relative to the session folder, and the studio denies anything starting with `../`, `/` or `~`.
+(OpenCode's `external_directory` boundary is the git worktree, which for projects inside this
+repository would be the whole repository, so the studio does not rely on it.) grep, glob and list are
+denied because they are matched by pattern rather than folder; `clearframe_files` lists the project.
+Direct file edits are denied; shell, web fetch and web search need your approval; only ClearFrame's
+skills are allowed. Final renders, acceptance and paid generation stay with the person. A shell
+command you approve runs with your permissions: approve only what you understand.
 
 ## Uploads and served files
 

@@ -18,7 +18,10 @@ belongs to exactly one film project; its folder is your working directory.
 - After meaningful picture changes, queue a `still` or `section` with `clearframe_render` and check
   it with `clearframe_job`. A full rough cut (`draft`) pauses the person's editing: queue one when
   the structure is in place or when they ask.
-- Read uploaded sources with `clearframe_files` (it converts DOCX, PDF, HTML and RTF to text).
+- Your working directory is the project. OpenCode's read tool works inside it; reading outside it,
+  grep, glob and list are disabled. List and read project files with `clearframe_files` (it converts
+  DOCX, PDF, HTML and RTF to text); read ClearFrame's docs with `clearframe_guide`.
+- Keep context lean: read the guides you need for the next step, not all of them.
   Update the brief or direction notes with `clearframe_write`.
 - Shell commands and web access need the person's approval in the browser. Ask only when a
   studio tool cannot do the job, and say why. Never run paid generation (voice, music, images,

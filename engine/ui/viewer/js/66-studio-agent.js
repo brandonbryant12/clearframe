@@ -7,10 +7,16 @@
 const AGENT_POLL_BUSY = 1200, AGENT_POLL_IDLE = 5000;
 const newSubmission = () => `msg_cf${Array.from(crypto.getRandomValues(new Uint8Array(24)), b => 'abcdefghijklmnopqrstuvwxyz0123456789'[b % 36]).join('')}`;
 const outboxKey = id => `cf-agent-outbox:${id}`;
+// Only durable fields are stored: whether a send is in flight is this page's state, never saved,
+// so a reload (or a crash mid-send) always retries with the same id.
+const DURABLE = ['id', 'submission', 'text', 'scope', 'delivery', 'hash', 'revision', 't', 'at', 'failed'];
+const durable = o => Object.fromEntries(DURABLE.filter(k => o[k] !== undefined).map(k => [k, o[k]]));
+const saveOutbox = session => store.set(outboxKey(session.id), session.agent.outbox.map(durable));
+const loadOutbox = id => (Array.isArray(store.get(outboxKey(id), [])) ? store.get(outboxKey(id), []) : []).filter(o => o && typeof o.id === 'string' && typeof o.text === 'string').map(durable);
 const SCOPE_LABEL = { film: 'Whole film', scene: 'Scene', layer: 'Layer', range: 'Range', moment: 'Moment', note: 'Note', asset: 'File' };
 
 function agentInit(session) {
-  session.agent = { conv: null, draft: store.get(`cf-agent-draft:${session.id}`, ''), scope: store.get(`cf-agent-scope:${session.id}`, null), outbox: store.get(outboxKey(session.id), []),
+  session.agent = { conv: null, draft: store.get(`cf-agent-draft:${session.id}`, ''), scope: store.get(`cf-agent-scope:${session.id}`, null), outbox: loadOutbox(session.id), sending: new Set(),
     open: store.get('cf-agent-open', true), lastPoll: 0, polling: false, edits: null, error: null, scrolledUp: false, menu: false };
 }
 const agentBusy = a => !!a?.conv && (a.conv.running || a.conv.queued?.length || a.conv.pending?.some(p => p.state === 'sending') || a.conv.permissions?.length || a.conv.forms?.length || a.conv.runtime?.state === 'starting' || a.conv.runtime?.catalog === 'loading') || !!a?.outbox?.length;
@@ -29,11 +35,12 @@ async function refreshAgent(force = false) {
     const edits = conv.messages.flatMap(m => m.parts ?? []).filter(p => p.type === 'tool' && p.own && p.tool === 'edit' && p.status === 'completed').length;
     const jobsQueued = conv.messages.flatMap(m => m.parts ?? []).filter(p => p.type === 'tool' && p.job).length;
     const changed = a.edits != null && edits > a.edits, queued = a.jobs != null && jobsQueued > a.jobs;
+    const flag = c => `${!!c?.running}:${c?.permissions?.length ?? 0}`, topChanged = flag(a.conv) !== flag(conv);
     a.edits = edits; a.jobs = jobsQueued; a.conv = conv;
     // Anything the server now knows about leaves the outbox.
     const known = new Set([...conv.messages.filter(m => m.role === 'user').map(m => m.id), ...conv.queued.map(q => q.id), ...conv.pending.map(p => p.id)]);
-    if (a.outbox.some(o => known.has(o.id))) { a.outbox = a.outbox.filter(o => !known.has(o.id)); store.set(outboxKey(session.id), a.outbox); }
-    invalidate(['chat']);
+    if (a.outbox.some(o => known.has(o.id))) { a.outbox = a.outbox.filter(o => !known.has(o.id)); saveOutbox(session); }
+    invalidate(topChanged ? ['chat', 'top'] : ['chat']);
     if (changed) { await reloadState(); if (currentSession(session)) status(`Agent: ${S.st.undoLabel ?? 'edited the film'}`); }
     if (queued && currentSession(session)) refreshJobs();
   } catch (e) {
@@ -46,17 +53,18 @@ async function refreshAgent(force = false) {
 async function flushOutbox() {
   const session = S, a = session?.agent; if (!a) return;
   for (const o of [...a.outbox]) {
-    if (o.inflight) continue;
-    o.inflight = true;
+    if (a.sending.has(o.id)) continue;
+    a.sending.add(o.id);
     try {
-      await call('/api/agent/prompt', { film: session.id, ...o, inflight: undefined, failed: undefined });
+      const { failed, ...body } = durable(o);
+      await call('/api/agent/prompt', { film: session.id, ...body });
       if (!currentSession(session)) return;
-      a.outbox = a.outbox.filter(x => x.id !== o.id); store.set(outboxKey(session.id), a.outbox);
+      a.outbox = a.outbox.filter(x => x.id !== o.id); saveOutbox(session);
     } catch (e) {
       if (!currentSession(session)) return;
-      o.failed = e.message; store.set(outboxKey(session.id), a.outbox);
+      const kept = a.outbox.find(x => x.id === o.id); if (kept) { kept.failed = e.message; saveOutbox(session); }
       if (e.status && e.status < 500) { status(`Not sent: ${e.message}`, 'error'); }
-    } finally { o.inflight = false; }
+    } finally { a.sending.delete(o.id); }
   }
   if (currentSession(session)) { invalidate(['chat']); refreshAgent(true); }
 }
@@ -68,7 +76,7 @@ function sendMessage(delivery = 'queue') {
   const o = { id: newSubmission(), submission: undefined, text, scope: a.scope ?? { kind: 'film' }, delivery, hash: S.st.hash,
     revision: working ? S.st.changes?.revision ?? null : S.monitor.rev, t: Number(S.t.toFixed(2)), at: new Date().toISOString() };
   o.submission = o.id;
-  a.outbox.push(o); store.set(outboxKey(S.id), a.outbox);
+  a.outbox.push(o); saveOutbox(S);
   a.draft = ''; store.set(`cf-agent-draft:${S.id}`, '');
   a.scrolledUp = false;
   const box = document.getElementById('st-chat-input'); if (box) box.value = '';
@@ -107,6 +115,11 @@ function chatText(md) {
   // Fenced code stays verbatim; the rest is the viewer's small Markdown reader.
   return String(md ?? '').split(/```[\w-]*\n?/).map((part, i) => (i % 2 ? `<pre class="st-code">${esc(part.replace(/\n$/, ''))}</pre>` : markdown(part))).join('');
 }
+/** A live step says how long it has been silent, and what to do if the provider stalls. */
+function waiting(m, label) {
+  const secs = Math.max(0, Math.round((Date.now() - (m.at ?? Date.now())) / 1000));
+  return `<div class="st-step"><i class="st-spinner small"></i><span>${label} <em class="st-elapsed">${clock(secs)}</em>${secs > 90 ? '<em>No output for a while: the model provider may be slow or stalled. Stop, then Send now (or write again) to retry.</em>' : ''}</span></div>`;
+}
 const toolIcon = p => (p.status === 'completed' ? '<i class="st-ti ok" aria-label="done">✓</i>' : p.status === 'error' ? '<i class="st-ti bad" aria-label="failed">✕</i>' : '<i class="st-spinner small" aria-label="running"></i>');
 
 function runFooter(run, msgs) {
@@ -114,12 +127,13 @@ function runFooter(run, msgs) {
   const edits = tools.filter(p => p.tool === 'edit' && p.status === 'completed'), beats = [...new Set(edits.flatMap(p => p.beats ?? []))];
   const jobs = [...new Set(tools.filter(p => p.job).map(p => p.job))].map(id => S.jobs.find(j => j.id === id)).filter(Boolean);
   if (!edits.length && !jobs.length) return '';
-  const applied = (S.st.history ?? []).filter(h => h.run === run && h.applied).length;
+  const done = (S.st.history ?? []).filter(h => h.applied), applied = done.filter(h => h.run === run).length;
+  const newest = applied && done.at(-1)?.run === run && done.slice(done.findIndex(h => h.run === run)).every(h => h.run === run);
   return `<div class="st-run">
     ${edits.length ? `<div><b>${plural(edits.length, 'edit')}</b>${beats.length ? ` to ${beats.map(id => beatById(id) ? `<button class="st-link" data-act="select" data-beat="${esc(id)}">${esc(sceneName(beatById(id)))}</button>` : `<s>${esc(id)}</s>`).join(', ')}` : ' to film settings'}
-      ${applied ? `<button class="st-btn small" data-act="undoRun" data-run="${esc(run)}" title="Undo every edit this reply made, as one step (only while they are the newest edits)">Undo these edits</button>` : '<span class="st-muted">· undone</span>'}</div>` : ''}
+      ${newest ? `<button class="st-btn small" data-act="undoRun" data-run="${esc(run)}" title="Undo every edit this reply made, as one step">Undo these edits</button>` : applied ? '<span class="st-muted">· later edits since (undo them first, or use ⌘Z)</span>' : '<span class="st-muted">· undone</span>'}</div>` : ''}
     ${jobs.map(j => `<div class="st-run-job"><span class="st-chip ${j.status === 'complete' ? (j.matches === false ? 'warn' : 'ok') : j.status === 'failed' ? 'bad' : ''}">${esc(j.label)} · ${esc(j.status)}${j.progress != null && j.status === 'running' ? ` ${Math.round(j.progress * 100)}%` : ''}</span>
-      ${j.status === 'complete' && j.kind === 'still' && j.url ? `<button class="st-link" data-act="select" data-beat="${esc(j.beat ?? '')}">Show</button>` : ''}${j.status === 'complete' && j.kind === 'section' ? `<button class="st-link" data-act="openSection" data-job="${esc(j.id)}">Play</button>` : ''}
+      ${j.status === 'complete' && j.kind === 'still' && j.url ? `<button class="st-link" data-act="select" data-beat="${esc(j.beat ?? '')}">Show</button>` : ''}${j.status === 'complete' && ['draft', 'final'].includes(j.kind) && j.revision ? `<button class="st-btn small primary" data-act="watch" data-rev="${esc(j.revision)}">Watch ${j.kind === 'draft' ? 'the rough cut' : 'the final'} (${esc(j.revision)})</button>` : ''}${j.status === 'failed' ? `<span class="st-muted">${esc((j.errors ?? []).slice(0, 2).join('; ') || 'see Jobs')}</span>` : ''}${j.status === 'complete' && j.kind === 'section' ? `<button class="st-link" data-act="openSection" data-job="${esc(j.id)}">Play</button>` : ''}
       ${['queued', 'waiting', 'running'].includes(j.status) ? `<button class="st-link" data-act="cancel" data-job="${esc(j.id)}">Cancel</button>` : ''}</div>`).join('')}
   </div>`;
 }
@@ -128,23 +142,23 @@ function transcriptHTMLChat(conv) {
   const out = [];
   let run = null, runMsgs = [];
   const closeRun = () => { if (run) out.push(runFooter(run, runMsgs)); run = null; runMsgs = []; };
-  for (const m of conv.messages) {
+  conv.messages.forEach((m, k) => {
     if (m.role === 'user') {
       closeRun(); run = m.id;
       out.push(`<article class="st-msg user" data-key="m-${esc(m.id)}"><header>${m.scope && m.scope.kind !== 'film' ? scopeChip(m.scope) : scopeChip(null, 'quiet')}<time>${when(new Date(m.at).toISOString())}</time></header><div class="st-msg-body">${esc(m.text).replace(/\n/g, '<br>')}</div></article>`);
     } else if (m.role === 'assistant') {
       runMsgs.push(m);
       const parts = m.parts.map((p, i) => p.type === 'text' ? `<div class="st-msg-text">${chatText(p.text)}</div>`
-        : p.type === 'reasoning' ? `<details class="st-reason" data-key="r-${esc(m.id)}-${i}"><summary>Thinking</summary><p>${esc(p.text)}</p></details>`
+        : p.type === 'reasoning' ? (!p.text.trim() ? (m.done || i < m.parts.length - 1 ? '' : waiting(m, 'Thinking…')) : `<details class="st-reason" data-key="r-${esc(m.id)}-${i}"><summary>Thinking${m.done || i < m.parts.length - 1 ? '' : '…'}</summary><p>${esc(p.text)}</p></details>`)
         : `<div class="st-step ${p.status}" data-key="t-${esc(p.id)}">${toolIcon(p)}<span><b>${esc(p.title)}</b>${p.summary && p.summary !== p.title ? `<em>${esc(p.summary)}</em>` : ''}${p.error ? `<em class="bad">${esc(p.error)}</em>` : ''}</span></div>`).join('');
-      out.push(`<article class="st-msg agent" data-key="m-${esc(m.id)}">${parts || (m.done ? '' : '<div class="st-step"><i class="st-spinner small"></i><span>Working…</span></div>')}
-        ${m.stopped ? '<p class="st-msg-sys">Stopped.</p>' : ''}${m.retry ? `<p class="st-msg-warn">Retrying (attempt ${m.retry.attempt}): ${esc(m.retry.message)}</p>` : ''}
+      out.push(`<article class="st-msg agent" data-key="m-${esc(m.id)}">${parts || (m.done || !conv.running ? '' : waiting(m, 'Working…'))}
+        ${m.stopped && !(conv.messages[k + 1]?.role === 'idle' && conv.messages[k + 1].outcome === 'interrupted') ? '<p class="st-msg-sys">Stopped.</p>' : ''}${m.retry ? `<p class="st-msg-warn">Retrying (attempt ${m.retry.attempt}): ${esc(m.retry.message)}</p>` : ''}
         ${m.error ? `<div class="st-msg-error"><b>${esc(m.error.message)}</b>${m.error.hint ? `<p>${esc(m.error.hint)}</p>` : ''}<button class="st-btn small" data-act="agentRetry">Try again</button></div>` : ''}</article>`);
     } else if (m.role === 'idle') {
       if (m.outcome !== 'succeeded') out.push(`<p class="st-msg-sys" data-key="m-${esc(m.id)}">${m.outcome === 'interrupted' ? 'Stopped.' : 'This reply failed.'}</p>`);
       closeRun();
     } else if (m.role === 'note') out.push(`<p class="st-msg-sys" data-key="m-${esc(m.id)}">${esc(m.text)}</p>`);
-  }
+  });
   closeRun();
   return out.join('');
 }
@@ -167,8 +181,8 @@ function chatHTML() {
   if (conv && !conv.messages.length && !a.outbox.length && !conv.pending.length) body += `<div class="st-chat-empty"><p>Talk to the agent to build this film. It reads the storyboard, edits through the same undoable steps as the panels, and renders native previews you can watch here.</p>
     <div class="st-suggest">${['Turn the brief into a first cut: rewrite every scene for this idea', 'Make the opening hook stronger', 'Suggest a palette and treatment that fit the story', 'What would make this feel less like slides?'].map(t => `<button class="st-btn small" data-act="suggest" data-text="${esc(t)}">${esc(t)}</button>`).join('')}</div></div>`;
   // Not yet confirmed by the server: sending, or failed with a reason.
-  const unsent = [...a.outbox.map(o => ({ ...o, state: o.failed ? 'failed' : 'sending', error: o.failed })), ...(conv?.pending ?? []).filter(p => !a.outbox.some(o => o.id === p.id))];
-  body += unsent.map(o => `<article class="st-msg user pending" data-key="o-${esc(o.id)}"><header>${scopeChip(o.scope?.kind === 'film' ? null : o.scope, o.scope?.kind === 'film' ? 'quiet' : '')}<span class="st-chip ${o.state === 'failed' ? 'bad' : ''}">${o.state === 'failed' ? 'Not sent' : 'Sending…'}</span></header><div class="st-msg-body">${esc(o.text).replace(/\n/g, '<br>')}</div>
+  const unsent = [...a.outbox.map(o => ({ ...o, state: a.sending.has(o.id) || !o.failed ? 'sending' : 'failed', error: o.failed })), ...(conv?.pending ?? []).filter(p => !a.outbox.some(o => o.id === p.id))];
+  body += unsent.map(o => `<article class="st-msg user pending" data-key="o-${esc(o.id)}"><header>${scopeChip(o.scope?.kind === 'film' ? null : o.scope, o.scope?.kind === 'film' ? 'quiet' : '')}<span class="st-chip ${o.state === 'failed' ? 'bad' : ''}">${o.state === 'failed' ? 'Not confirmed · retry is safe' : 'Sending…'}</span></header><div class="st-msg-body">${esc(o.text).replace(/\n/g, '<br>')}</div>
     ${o.state === 'failed' ? `<p class="st-msg-warn">${esc(o.error ?? '')}</p><div class="st-addrow"><button class="st-btn small" data-act="resend" data-id="${esc(o.id)}">Retry</button><button class="st-btn small ghost" data-act="discard" data-id="${esc(o.id)}">Discard</button></div>` : ''}</article>`).join('');
   if (running && !conv.messages.at(-1)?.parts?.length && conv.messages.at(-1)?.role === 'user') body += '<div class="st-step"><i class="st-spinner small"></i><span>Thinking…</span></div>';
   // Waiting on the person: approvals and questions.
@@ -177,7 +191,7 @@ function chatHTML() {
     <p class="st-hint-text">Shell commands can change files outside the studio's undo history and can spend money (paid generation). Allow only what you understand.</p>
     <div class="st-addrow"><button class="st-btn small" data-act="permit" data-id="${esc(p.id)}" data-decision="once">Allow once</button>${p.save?.length ? `<button class="st-btn small" data-act="permit" data-id="${esc(p.id)}" data-decision="always">Always allow</button>` : ''}<button class="st-btn small danger" data-act="permit" data-id="${esc(p.id)}" data-decision="reject">Deny</button></div></div>`).join('');
   body += (conv?.forms ?? []).map(f => formHTML(f)).join('');
-  if (conv?.queued?.length) body += `<div class="st-queue"><h3 class="st-h3">Queued after this reply</h3>${conv.queued.map(q => `<div class="st-queued" data-key="q-${esc(q.id)}">${q.scope && q.scope.kind !== 'film' ? scopeChip(q.scope) : ''}<p>${esc(q.text)}</p><div class="st-addrow"><button class="st-btn small" data-act="steer" data-id="${esc(q.id)}" title="Deliver now: the agent reads it at its next step">Send now</button><button class="st-btn small ghost" data-act="unqueue" data-id="${esc(q.id)}">Remove</button></div></div>`).join('')}</div>`;
+  if (conv?.queued?.length) body += `<div class="st-queue"><h3 class="st-h3">${running ? 'Queued after this reply' : 'Waiting: the agent is stopped'}</h3>${running ? '' : '<p class="st-hint-text">Send one now to continue, or remove it.</p>'}${conv.queued.map(q => `<div class="st-queued" data-key="q-${esc(q.id)}">${q.scope && q.scope.kind !== 'film' ? scopeChip(q.scope) : ''}<p>${esc(q.text)}</p><div class="st-addrow"><button class="st-btn small" data-act="steer" data-id="${esc(q.id)}" title="Deliver now: the agent reads it at its next step">Send now</button><button class="st-btn small ghost" data-act="unqueue" data-id="${esc(q.id)}">Remove</button></div></div>`).join('')}</div>`;
   const s = a.scope;
   const menu = a.menu ? `<div class="st-scope-menu" role="menu">${[['film', 'Whole film'], ['scene', `This scene${beatById(S.sel.beat) ? `: ${sceneName(beatById(S.sel.beat))}` : ''}`], ['layer', S.sel.element ? 'Selected layer' : 'Selected layer (select one first)'], ['range', S.sel.range?.length ? `Selected range (${S.sel.range.length} scenes)` : 'Range (shift-click scenes first)'], ['moment', `Moment at ${timecode(S.t, fpsOf())}`]]
     .map(([k, t]) => `<button role="menuitem" data-act="scope" data-kind="${k}">${esc(t)}</button>`).join('')}<p class="st-hint-text">Notes and files: use “Ask the agent” on a review note or an asset.</p></div>` : '';
@@ -215,6 +229,7 @@ async function agentPost(path, body, done) {
 }
 Object.assign(ACTIONS, {
   chat: () => toggleChat(),
+  watch: (el, again) => { if (!S.f.versions.some(v => v.id === el.dataset.rev)) { if (again === true) return status(`${el.dataset.rev} is not listed yet; open Review.`, 'warn'); const session = S; refreshFilm().then(() => currentSession(session) && ACTIONS.watch(el, true)); return; } S.monitor.rev = el.dataset.rev; setSource('rendered'); requestAnimationFrame(() => monitorVideo()?.play?.().catch(() => {})); },
   scopeMenu: () => { S.agent.menu = !S.agent.menu; invalidate(['chat']); },
   scope: el => pinScope(el.dataset.kind),
   askScene: () => pinScope('scene'), askLayer: () => pinScope('layer'), askRange: () => pinScope('range'), askMoment: () => pinScope('moment'),
@@ -231,8 +246,8 @@ Object.assign(ACTIONS, {
     if (!el.dataset.cancel) for (const i of form.querySelectorAll('[data-key]')) answer[i.dataset.key] = i.dataset.type === 'bool' ? i.checked : i.multiple ? [...i.selectedOptions].map(o => o.value) : i.dataset.type === 'number' ? Number(i.value) : i.value;
     agentPost('/api/agent/form', { id: el.dataset.id, answer, cancel: !!el.dataset.cancel });
   },
-  resend: el => { const o = S.agent.outbox.find(x => x.id === el.dataset.id); if (o) { delete o.failed; invalidate(['chat']); flushOutbox(); } else { const p = S.agent.conv?.pending.find(x => x.id === el.dataset.id); if (p) { S.agent.outbox.push({ id: p.id, submission: p.id, text: p.text, scope: p.scope, delivery: p.delivery ?? 'queue', hash: S.st.hash }); store.set(outboxKey(S.id), S.agent.outbox); flushOutbox(); } } },
-  discard: el => { S.agent.outbox = S.agent.outbox.filter(x => x.id !== el.dataset.id); store.set(outboxKey(S.id), S.agent.outbox); agentPost('/api/agent/discard', { submission: el.dataset.id }); invalidate(['chat']); },
+  resend: el => { const o = S.agent.outbox.find(x => x.id === el.dataset.id); if (o) { delete o.failed; saveOutbox(S); invalidate(['chat']); flushOutbox(); } else { const p = S.agent.conv?.pending.find(x => x.id === el.dataset.id); if (p) { S.agent.outbox.push({ id: p.id, submission: p.id, text: p.text, scope: p.scope, delivery: p.delivery ?? 'queue', hash: S.st.hash }); saveOutbox(S); flushOutbox(); } } },
+  discard: el => { S.agent.outbox = S.agent.outbox.filter(x => x.id !== el.dataset.id); saveOutbox(S); agentPost('/api/agent/discard', { submission: el.dataset.id }); invalidate(['chat']); },
   agentRetry: () => { S.agent.draft = S.agent.draft || 'Please try that again.'; invalidate(['chat']); requestAnimationFrame(() => document.getElementById('st-chat-input')?.focus()); },
   agentRefresh: () => refreshAgent(true),
   agentStart: () => { const session = S; call('/api/agent/start', {}).then(() => currentSession(session) && refreshAgent(true)).catch(e => currentSession(session) && status(e.message, 'error')); },

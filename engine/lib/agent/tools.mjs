@@ -148,6 +148,8 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       if (input.kind === 'still') Object.assign(body, input.beat ? { beat: input.beat, pos: input.pos ?? 0.6 } : { at: input.at });
       if (input.kind === 'section') Object.assign(body, { beats: input.beats, handles: 0.5 });
       if (input.kind === 'captions') body.draft = true;
+      // A rough cut is the first look: declared placeholders render as labelled slates (draft --rough).
+      if (input.kind === 'draft') body.rough = true;
       const r = jobs.start(dir, body);
       const j = jobs.list(body.film).find(x => x.id === r.id);
       return { content: `${r.cached ? 'Already rendered for this exact version' : 'Queued'}: ${j?.label ?? input.kind} (job ${r.id}). The person can watch or cancel it in the studio; follow it with clearframe_job.`,
@@ -209,7 +211,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       const file = GUIDES[input.topic];
       if (!file) throw fail(`Unknown guide. Topics: ${Object.keys(GUIDES).join(', ')}.`);
       const text = fs.readFileSync(path.join(ROOT, file), 'utf8');
-      return { content: clip(text, 60000), metadata: { summary: `Read the ${input.topic} guide` } };
+      return { content: text.length > 30000 ? `${text.slice(0, 30000)}\n\n[Truncated at 30,000 of ${text.length.toLocaleString('en-US')} characters.]` : text, metadata: { summary: `Read the ${input.topic} guide` } };
     },
   };
 }

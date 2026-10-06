@@ -292,6 +292,9 @@ test('the runtime is isolated, keeps the shell behind approval (the free tier re
   const rule = a => PERMISSIONS.filter(r => r.action === a && r.resource === '*').at(-1)?.effect;
   assert.equal(rule('shell'), 'ask'); assert.equal(rule('edit'), 'deny'); assert.equal(rule('external_directory'), 'deny');
   assert.ok(!PERMISSIONS.some(r => r.action === '*'), 'no blanket deny: the free tier refuses it');
+  const reads = PERMISSIONS.filter(r => r.action === 'read' && r.effect === 'deny').map(r => r.resource);
+  assert.deepEqual(reads.sort(), ['../*', '/*', '~*'], 'reads stay inside the session folder (OpenCode\'s own boundary is the git worktree)');
+  for (const a of ['grep', 'glob', 'list']) assert.equal(rule(a), 'deny');
 });
 
 test('a slow start that is superseded by a stop cannot overwrite the newer state', async t => {
