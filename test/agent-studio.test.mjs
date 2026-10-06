@@ -536,8 +536,10 @@ test('pictures given with a new film on the home page land in assets/uploads; do
   const draft = 'req-media12345';
   await uploadToDraft(uploads, draft, stream('# Notes\nA script.'), 'script.md');
   await uploadToDraft(uploads, draft, stream('not really a png'), 'home.png');
-  const dir = createProject(root, uploads, { request: draft, idea: 'A demo of the studio', documents: ['script.md', 'home.png'] });
+  await uploadToDraft(uploads, draft, stream('{"captures":{}}'), 'captures.json');
+  const dir = createProject(root, uploads, { request: draft, idea: 'A demo of the studio', documents: ['script.md', 'home.png', 'captures.json'] });
   assert.ok(fs.existsSync(path.join(dir, 'assets/uploads/home.png')));
+  assert.equal(fs.readFileSync(path.join(dir, 'source/captures.json'), 'utf8'), '{"captures":{}}', 'JSON the intake cannot read is kept in source/ as it is');
   assert.ok(fs.readdirSync(path.join(dir, 'source')).length, 'the document went through the intake');
   assert.ok(!fs.existsSync(path.join(uploads, draft)), 'the draft folder is cleared');
 });
