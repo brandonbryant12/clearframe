@@ -21,6 +21,20 @@ export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearfr
   speech: 'docs/speech.md', authoring: 'engine/agent-plugin/AUTHORING.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };
 const TEXT_EXT = new Set(['.md', '.markdown', '.txt', '.csv', '.json', '.srt', '.vtt', '.docx', '.html', '.htm', '.rtf', '.pdf']);
 const SKIP = new Set(['review', 'build', 'node_modules']);
+/**
+ * A narration record as the agent should read it: who actually spoke the line first. Draft lines
+ * written before ClearFrame noted the OS voice carry the film's Google voice and style in `voice` and
+ * `style`; those are settings, so they are moved under `googleSettingsAtTheTime`, never shown as used.
+ */
+export function voiceRecord(raw) {
+  let m; try { m = JSON.parse(raw); } catch { return raw; }
+  if (!m || m.provider !== 'local') return raw;
+  const { voice, style, osVoice, ...rest } = m, legacy = !('osVoice' in m);
+  const record = { provider: 'local', spokenBy: osVoice ? `free OS draft voice "${osVoice}"` : 'free OS draft voice (which one was not recorded)', ...rest,
+    ...(legacy && (voice || style) ? { googleSettingsAtTheTime: { voice, style }, note: 'Older draft record: voice and style were the film\'s Google settings when the draft was made, not what spoke it. No Google take exists for this line.' } : {}) };
+  return JSON.stringify(record, null, 2);
+}
+
 /** A picture's pixel size from its header (PNG, JPEG, GIF, WebP), or null: the agent has no shell to ask. */
 export function pictureSize(file) {
   let b;
@@ -190,7 +204,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       while (input.id && Date.now() < until && !TERMINAL.has(list[0].status)) { await new Promise(r => setTimeout(r, 1000)); list = pick(); }
       const view = j => [`${j.label} (job ${j.id}): ${j.status}${j.progress != null && j.status === 'running' ? ` ${Math.round(j.progress * 100)}%` : ''}`,
         j.status === 'complete' ? `  output (for the person to view in the studio; you cannot see images, so judge by the engine's checks): ${j.url ?? 'none'}${j.matches === false ? ' — the film changed while or since it rendered; it may not match' : ''}${j.revision ? `; saved revision ${j.revision}` : ''}` : null,
-        j.media ? `  actual video: ${j.media.width}×${j.media.height}, ${sec(j.media.duration)}, ${j.media.audio ? 'with sound' : 'silent'}${j.kind === 'draft' ? ' (a half-size rough cut, not the project size; its narration and music are what the Sound status says was actually made)' : ''}` : null,
+        j.media ? `  actual video: ${j.media.width}×${j.media.height}, ${sec(j.media.duration)} as encoded${j.media.authored ? ` (the film itself is ${sec(j.media.authored)}; the file rounds up to whole frames and audio)` : ''}, ${j.media.audio ? 'with sound' : 'silent'}${j.kind === 'draft' ? ' (a half-size rough cut, not the project size; its narration and music are what the Sound status says was actually made)' : ''}` : null,
         j.errors?.length ? `  engine errors: ${j.errors.join('; ')}` : null, j.status === 'failed' && !j.errors?.length ? `  log: ${clip(j.log?.slice(-1200), 1200)}` : null,
         j.result?.errors ? `  check: ${j.result.errors.length} errors, ${j.result.warnings.length} warnings${j.result.errors.length ? `: ${j.result.errors.slice(0, 6).join('; ')}` : ''}` : null].filter(Boolean).join('\n');
       return { content: list.map(view).join('\n') || 'No render jobs yet for this film.', metadata: { summary: list.length === 1 ? `${list[0].label}: ${list[0].status}` : `${list.length} jobs`, job: input.id ?? null } };
@@ -209,7 +223,8 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
         if (!TEXT_EXT.has(ext)) throw fail('That file is not a readable document (Markdown, text, CSV, JSON, captions, DOCX, HTML, RTF or PDF).');
         if (fs.statSync(file).size > 25e6) throw fail('That document is larger than 25 MB.');
         let text;
-        if (['.md', '.markdown', '.txt', '.json', '.srt', '.vtt'].includes(ext)) text = fs.readFileSync(file, 'utf8');
+        if (/^assets\/vo\/.*\.json$/.test(path.relative(dir, file).split(path.sep).join('/'))) text = voiceRecord(fs.readFileSync(file, 'utf8'));
+        else if (['.md', '.markdown', '.txt', '.json', '.srt', '.vtt'].includes(ext)) text = fs.readFileSync(file, 'utf8');
         else { const { documentMarkdown } = await import('../ingest.mjs'); text = documentMarkdown(file); }
         return { content: text.length > 120000 ? `${text.slice(0, 120000)}\n\n[Truncated: ${text.length.toLocaleString('en-US')} characters in all.]` : text, metadata: { summary: `Read ${input.read}` } };
       }

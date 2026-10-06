@@ -237,7 +237,10 @@ export function createStudioJobs({ base, out, onDone = async () => {}, cli = CLI
     if (j.kind === 'final') j.url = '/' + path.relative(base, path.join(j.dir, 'build/video.mp4')).split(path.sep).map(encodeURIComponent).join('/');
     // The saved revision's video as it actually came out (a rough cut is half the project size).
     if (['draft', 'final'].includes(j.kind) && j.revision) {
-      try { const v = JSON.parse(fs.readFileSync(path.join(j.dir, 'review', 'revisions', j.revision, 'revision.json'), 'utf8')).videos?.at(-1); if (v?.object) { j.media = probeMedia(path.join(j.dir, v.object)); j.url ??= url(path.join(j.dir, v.object)); } } catch {}
+      try {
+        const rev = JSON.parse(fs.readFileSync(path.join(j.dir, 'review', 'revisions', j.revision, 'revision.json'), 'utf8')), v = rev.videos?.at(-1);
+        if (v?.object) { j.media = probeMedia(path.join(j.dir, v.object)); if (j.media) j.media.authored = rev.duration ?? null; j.url ??= url(path.join(j.dir, v.object)); }
+      } catch {}
     }
   }
 

@@ -64,6 +64,8 @@ export function contextBlock({ film, scope, hash, revision, t, mode }) {
   if (t != null) lines.push(`playhead: ${t}s`);
   if (hash) lines.push(`working copy hash when sent: ${hash}`);
   if (revision) lines.push(`revision on screen: ${revision}`);
+  // Every message carries this, so sessions that began before the rule still follow it.
+  lines.push('reporting: describe outputs as measured (clearframe_job "actual video", clearframe_sound "as made"); a draft line was spoken by the OS voice, never by the Google voice or style it is set to');
   return `\n\n<clearframe-context>\n${lines.join('\n')}\n</clearframe-context>`;
 }
 

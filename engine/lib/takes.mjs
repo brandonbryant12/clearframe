@@ -69,6 +69,13 @@ export function takeSpec(sb, take, provider) {
   };
 }
 
+/** The OS voice a draft take speaks with: one name, or one per speaker for a cast. */
+export function draftVoicesOf(sb, spec) {
+  if (!spec.cast) return sb.voice.draftVoice ?? 'system default';
+  const pool = ['Samantha', 'Daniel', 'Karen', 'Moira', 'Rishi', 'Tessa'];
+  return Object.fromEntries(spec.cast.map((c, i) => [c.speaker, sb.voice.cast[c.speaker]?.draftVoice ?? pool[i % pool.length]]));
+}
+
 /** Draft takes with the OS voice: one continuous call per take (per part when a cast needs several voices). */
 async function draftTake(sb, spec, out) {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-take-'));
@@ -93,11 +100,7 @@ async function draftTake(sb, spec, out) {
       await cleanVoice(f, out);
       return null;
     }
-    const voices = {},
-      pool = ['Samantha', 'Daniel', 'Karen', 'Moira', 'Rishi', 'Tessa'];
-    spec.cast.forEach((c, i) => {
-      voices[c.speaker] = sb.voice.cast[c.speaker]?.draftVoice ?? pool[i % pool.length];
-    });
+    const voices = draftVoicesOf(sb, spec);
     const files = spec.parts.map((p, i) => {
       const f = path.join(tmp, `p${i}.aiff`);
       say(clean(p.text), voices[p.speaker], f);
@@ -245,10 +248,17 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
       log.dim(`  ${take.id}: keeping real takes (use --force to replace with a draft)`);
       continue;
     }
-    let bounds = null;
-    if (!force && meta?.hash === hash && fs.existsSync(wav)) bounds = meta.bounds ?? null;
-    else if (provider === 'local') bounds = await draftTake(sb, spec, wav);
-    else {
+    let bounds = null,
+      // The OS voice that actually spoke a draft take. A reused take keeps its own record (the draft
+      // voice is not part of the take's hash); one recorded before voices were noted stays unknown.
+      osVoice = null;
+    if (!force && meta?.hash === hash && fs.existsSync(wav)) {
+      bounds = meta.bounds ?? null;
+      osVoice = meta.osVoice ?? null;
+    } else if (provider === 'local') {
+      osVoice = draftVoicesOf(sb, spec);
+      bounds = await draftTake(sb, spec, wav);
+    } else {
       await synthesize(spec, wav);
     }
     // Record the take as soon as it exists, so a later failure never pays for it twice.
@@ -257,9 +267,10 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
       provider,
       beats: take.beats.map(b => b.id),
       bounds,
+      ...(provider === 'local' ? { osVoice } : {}),
       createdAt: new Date().toISOString(),
     });
-    pending.push({ take, spec, hash, wav, bounds, tokensPerBeat: take.beats.map(b => tokenize(b.vo).map(t => t.w)) });
+    pending.push({ take, spec, hash, wav, bounds, osVoice, tokensPerBeat: take.beats.map(b => tokenize(b.vo).map(t => t.w)) });
   }
   // Pass 2: one recognizer pass for all of them.
   const alignedAll = await heardWordsMany(
@@ -268,7 +279,7 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
     sb.voice.language,
   );
   // Pass 3: split each take into beats.
-  for (const [n, { take, spec, hash, wav, bounds, tokensPerBeat }] of pending.entries()) {
+  for (const [n, { take, spec, hash, wav, bounds, osVoice, tokensPerBeat }] of pending.entries()) {
     const { rate, pcm } = readPCM(wav),
       duration = pcm.length / 2 / rate;
     let perBeat = null,
@@ -353,8 +364,10 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
         textHash: hashOf(b.vo),
         provider,
         model: provider === 'local' ? 'os-tts' : spec.model,
-        // A draft take is the OS voice; the Google voice and style are settings, not what it used.
-        voice: provider === 'local' ? sb.voice.draftVoice ?? 'system default' : spec.voice,
+        // A draft take is the OS voice that spoke it (null if never recorded); the Google voice and
+        // style are settings, not what it used.
+        voice: provider === 'local' ? null : spec.voice,
+        ...(provider === 'local' ? { osVoice: (typeof osVoice === 'object' && osVoice ? osVoice[b.speaker] : osVoice) ?? null } : {}),
         style: provider === 'local' ? '' : spec.parts[i].style,
         text: b.vo,
         duration: sliceDur,

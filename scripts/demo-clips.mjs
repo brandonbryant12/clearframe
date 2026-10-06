@@ -4,7 +4,8 @@
 // a running reply stopped, and the Google approval opened and cancelled. Each clip drives a running
 // `clearframe viewer --serve` over the DevTools Protocol with real mouse and keyboard events and a
 // drawn cursor, and records a tight 16:9 region around the controls involved at 2× (about 500 CSS
-// px wide, so UI text still reads on a phone), as an H.264 MP4 at 30 fps.
+// px wide, so UI text still reads on a phone), as an H.264 MP4 at 30 fps, encoded with two threads
+// under the codex-heavy gate. A clip shorter than --min holds its last frame (the screen at rest).
 //
 //   node scripts/demo-clips.mjs --out DIR [--studio http://127.0.0.1:4317] [--cdp http://127.0.0.1:9333]
 //          [--film projects-why-the-tide-turns-twice] [--done projects-flash-then-rumble] [--scene title] [--field props.elements.25.text]
@@ -16,9 +17,11 @@
 // is only looked at. clips.json records what each clip exercised.
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { parseArgs } from 'node:util';
 import { chrome, tab, sleep } from './demo-cdp.mjs';
+import { gateIsInherited } from '../engine/lib/resource-gate.mjs';
 
 const { values: o } = parseArgs({ options: { out: { type: 'string' }, studio: { type: 'string' }, cdp: { type: 'string' }, film: { type: 'string' }, done: { type: 'string' }, scene: { type: 'string' }, field: { type: 'string' }, text: { type: 'string' }, min: { type: 'string' }, only: { type: 'string' } } });
 if (!o.out) { console.error('Usage: node scripts/demo-clips.mjs --out DIR [--studio URL] [--cdp URL] [--film FILM] [--scene ID] [--field PATH] [--text TEXT] [--min S] [--only a,b]'); process.exit(2); }
@@ -86,11 +89,18 @@ async function record(page, name, clip, act) {
   const end = frames.at(-1).t + 400;
   fs.writeFileSync(path.join(dir, 'list.txt'), frames.map((x, i) => `file '${x.f}'\nduration ${(((frames[i + 1]?.t ?? end) - x.t) / 1000).toFixed(4)}`).join('\n') + `\nfile '${frames.at(-1).f}'\n`);
   const out = path.join(OUT, `${name}.mp4`);
-  const r = spawnSync('ffmpeg', ['-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', path.join(dir, 'list.txt'), '-vf', `fps=30,scale=trunc(iw/2)*2:trunc(ih/2)*2,tpad=stop_mode=clone:stop_duration=${Math.max(0, MIN - (end - frames[0].t) / 1000).toFixed(2)},format=yuv420p`, '-c:v', 'libx264', '-crf', '16', '-preset', 'medium', '-movflags', '+faststart', '-an', out], { encoding: 'utf8' });
+  // Encoding is the heavy part: two encoder and filter threads, under the shared heavy-work gate
+  // (codex-heavy) unless an outer gate is already held. Recording the browser is light and stays outside.
+  const args = ['-loglevel', 'error', '-y', '-nostdin', '-threads', '2', '-filter_threads', '2', '-f', 'concat', '-safe', '0', '-i', path.join(dir, 'list.txt'), '-vf', `fps=30,scale=trunc(iw/2)*2:trunc(ih/2)*2,tpad=stop_mode=clone:stop_duration=${Math.max(0, MIN - (end - frames[0].t) / 1000).toFixed(2)},format=yuv420p`, '-c:v', 'libx264', '-threads', '2', '-crf', '16', '-preset', 'medium', '-movflags', '+faststart', '-an', out];
+  const gate = path.join(os.homedir(), '.local/bin/codex-heavy'), gated = !gateIsInherited() && fs.existsSync(gate);
+  const r = gated ? spawnSync(gate, ['--', 'env', 'CLEARFRAME_HEAVY_HELD=1', 'ffmpeg', ...args], { encoding: 'utf8' }) : spawnSync('ffmpeg', args, { encoding: 'utf8' });
   if (r.status !== 0) throw new Error(r.stderr);
   fs.rmSync(dir, { recursive: true, force: true });
   // Footage never loops in a film, so a short clip holds its last frame (the screen at rest) to --min seconds.
-  return { file: `${name}.mp4`, seconds: Math.max(MIN, Math.round((end - frames[0].t) / 100) / 10), action: Math.round((end - frames[0].t) / 100) / 10, frames: frames.length, region: clip, scale: SCALE };
+  const seconds = Number(spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', out], { encoding: 'utf8' }).stdout) || null;
+  const action = Math.round((end - frames[0].t) / 100) / 10;
+  // seconds is the file as encoded; the last `held` seconds repeat the final frame.
+  return { file: `${name}.mp4`, seconds, action, held: seconds ? Math.max(0, Math.round((seconds - action) * 10) / 10) : null, frames: frames.length, region: clip, scale: SCALE };
 }
 const clearComposer = () => {
   document.querySelector('.st-compose [data-act="scope"]')?.click();
