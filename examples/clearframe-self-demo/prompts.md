@@ -107,3 +107,11 @@ Assets → **Add files…**: `home.mp4`. In the Agent column: **Make it for me**
 ```text
 r003 is a big step: the clips read. One problem on a phone: the video block draws each clip in a wide band above its title, so fit cover crops the top and bottom off. Approval never shows the dialog, Scope shows the reply instead of the scope chip, and Sound cuts off the Google button. Make every clip scene a full-frame stage instead: one video element at x 0, y 0, w 1920, h 1080, fit contain (the clips are exactly 16:9, so nothing is cropped), offset 0 and hold true (the clip holds its last frame once the action ends), with no title, kicker or caption drawn over it; the narration names what is on screen. Replace the picture in 02 Start with what you want with home.mp4 (just added: a person typing the brief) the same way. Keep the narration and the order. Check, then render a new rough cut and tell me its actual size and length.
 ```
+
+## 8. The review scene and the music bed (Make it for me)
+
+Assets → **Add files…**: `review.mp4`. Make it for me, Whole film:
+
+```text
+r004 reads on a phone. Two last things: make 07 Watch, note, hand it over a full-frame clip stage like the others, with review.mp4 (just added: a review note and its Ask the agent link), and add the free draft music bed under the narration (no Google music). Check, then render a new rough cut and tell me its actual size, length and what the narration and music actually are.
+```

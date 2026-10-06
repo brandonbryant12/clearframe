@@ -136,3 +136,12 @@ the scope chip and the Google button out of their scenes.
   demo and the separate Codex film were idle (logged in the coordination log).
 - **Clip lengths:** footage never loops; each clip holds its final frame (the screen at rest) for the
   rest of its scene. `clips.json` records each file's encoded length, its action and its held seconds.
+
+**4f. Full-frame clips, rough cut r004.** Make it for me, with `home.mp4` added. The agent rebuilt
+every clip scene as a stage with one full-frame `video` element (`fit: contain`, so a 16:9 clip is
+not cropped; `hold: true`, so it rests on its last frame), nothing drawn over it, and the home
+clip in scene 02. r004: 67.1 s, engine clean. Its report used the new measured facts unprompted by
+any correction: "960×540, 67.1s as encoded — the half-size rough", narration "the free local draft
+voice (OS voice), not a Google voice". On the 360 px sheet every clip scene reads: the brief being
+typed, both modes, the film status, the scope chip, ⌘Z on a hand edit, the priced Google button
+and the approval's exact amount, Render final and Download. Only 07 Review was still a small still.
