@@ -310,6 +310,9 @@ export function studioCommand(dir, body, { actor = null } = {}) {
     if (!Array.isArray(ops) || !ops.length || ops.length > 200) throw fail('A batch holds 1–200 changes.');
     const labels = ops.map(op => { if (op?.command === 'batch' || op?.command?.startsWith?.('recording.') || ['undo', 'redo'].includes(op?.command)) throw fail('That command cannot be batched.'); return applyOp(dir, sb, op); });
     const errors = validateStoryboard(sb);
+    // The renderer's own limit on declared stand-ins (checked there only for rough cuts).
+    for (const b of sb.beats) if (b.placeholder != null && !(typeof b.placeholder === 'string' ? b.placeholder.trim() && b.placeholder.length <= 140 : typeof b.placeholder?.text === 'string' && b.placeholder.text.length <= 140))
+      errors.push(`${b.id}: placeholder must be a description up to 140 characters (or {text})`);
     if (errors.length) throw fail(errors.join('\n'));
     if (canonical(sb) === canonical(JSON.parse(raw))) return { ...studioState(dir), created: ops.map(o => o.created).filter(Boolean) };
     const added = newErrors(dir, JSON.parse(raw), sb);

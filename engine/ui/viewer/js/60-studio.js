@@ -232,6 +232,8 @@ async function refreshJobs(first = false) {
     if (first || was === j.status || !['complete', 'failed', 'cancelled'].includes(j.status)) continue;
     if (j.status === 'complete' && ['draft', 'final', 'revise', 'reject'].includes(j.kind)) { film = true; state = true; }
     if (j.status === 'complete' && j.kind === 'reject') state = true;
+    // New narration changes the timing; a new bed changes the mix.
+    if (['voice', 'music'].includes(j.kind) && ['complete', 'failed'].includes(j.status)) { state = true; S.soundHash = null; S.soundFetch = null; }
     if (j.status === 'complete') status(`${j.label} · done${j.matches === false ? ' (you edited while it ran: it may not match)' : ''}`);
     if (j.status === 'failed') status(`${j.label} failed — open the job for details`, 'error');
     if (j.status === 'complete' && j.kind === 'draft' && j.revision) { S.monitor.rev = null; }
@@ -276,6 +278,8 @@ function autoStill() {
     if (!currentSession(session) || !S.sel.beat || S.st.errors.length) return;
     const s = stillFor(S.sel.beat);
     if (s.current || s.running || activeJobs().some(j => j.kind !== 'still')) return;
+    // A still that failed for this exact working copy fails again: show the failure, retry only on request or after an edit.
+    if (S.jobs.some(j => j.kind === 'still' && j.beat === S.sel.beat && j.hash === S.st.hash && j.status === 'failed')) return;
     // Unknown input provenance cannot become current by rendering it repeatedly. Manual retry remains available.
     if (s.latest?.hash === S.st.hash && !s.latest.print) return;
     startJob('still', { beat: S.sel.beat, pos: 0.6 }, { quiet: true }).catch(() => {});
@@ -418,7 +422,7 @@ function getPath(o, p) { for (const k of String(p).split('.')) { if (o == null) 
 const ACTIONS = {
   layout: el => setLayout(el.dataset.layout),
   left: el => { S.left = el.dataset.tab; invalidate(['left']); },
-  right: el => { S.right = el.dataset.tab; if (['review', 'deliver'].includes(S.right)) loadReview(); invalidate(['right']); },
+  right: el => { S.right = el.dataset.tab; if (['review', 'deliver'].includes(S.right)) loadReview(); if (S.right === 'sound') { S.soundHash = null; S.soundFetch = null; } invalidate(['right']); },
   undo: () => cmd({ command: 'undo' }).catch(() => {}),
   redo: () => cmd({ command: 'redo' }).catch(() => {}),
   select: el => { select(el.dataset.beat, { element: el.dataset.element ?? null }); if (el.closest('.st-left')) document.getElementById('st')?.classList.remove('show-left'); },

@@ -32,8 +32,10 @@ const TOOLS = [
     obj({ read: str('Relative path of a document to read') })],
   ['write', 'Replace the film\'s brief (brief.md) or direction notes (DIRECTION.md) with new Markdown. The storyboard itself only changes through clearframe_edit.',
     obj({ file: { type: 'string', enum: ['brief', 'direction'] }, text: str('Complete new Markdown') }, ['file', 'text'])],
-  ['guide', 'Read ClearFrame craft guidance (instead of reading files outside the project): clearframe (start here), library (blocks and playbooks), cinema, canvas, dataviz, motion, script, integrity, direction, engine, review, scene (native stages); and the longer notes: style, cinema-notes, canvas-notes, ideas, speech, images, editing, continuity.',
-    obj({ topic: { type: 'string', enum: ['clearframe', 'library', 'cinema', 'canvas', 'dataviz', 'motion', 'script', 'integrity', 'direction', 'engine', 'review', 'scene', 'style', 'cinema-notes', 'canvas-notes', 'ideas', 'speech', 'images', 'editing', 'continuity'] } }, ['topic'])],
+  ['sound', 'The film\'s sound: narration takes and music bed (free local draft, Google, or recorded), what Google generation would cost, and whether it is available. action draft-voice / draft-music queues a free draft. action request (kind voice|music, reason) asks the person to approve paid Google generation; it never runs without their approval.',
+    obj({ action: { type: 'string', enum: ['status', 'draft-voice', 'draft-music', 'request'] }, kind: { type: 'string', enum: ['voice', 'music'] }, reason: str('Why this is worth paying for now') })],
+  ['guide', 'Read ClearFrame craft guidance (instead of reading files outside the project): authoring (short: start here for a first cut), clearframe, library (blocks and playbooks), cinema, canvas, dataviz, motion, script, integrity, direction, engine, review, scene (native stages); and the longer notes: style, cinema-notes, canvas-notes, ideas, speech, images, editing, continuity.',
+    obj({ topic: { type: 'string', enum: ['authoring', 'clearframe', 'library', 'cinema', 'canvas', 'dataviz', 'motion', 'script', 'integrity', 'direction', 'engine', 'review', 'scene', 'style', 'cinema-notes', 'canvas-notes', 'ideas', 'speech', 'images', 'editing', 'continuity'] } }, ['topic'])],
 ];
 
 function bridge(file) {

@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 import { studioState, studioCommand, studioSchema, planOps } from '../viewer/studio.mjs';
 import { loadViewerNotes } from '../viewer/notes.mjs';
 import { touched } from './agent.mjs';
+import { soundState } from '../viewer/sound.mjs';
+import { startSound, requestSpend } from '../viewer/spend.mjs';
 import { canonical } from '../store.mjs';
 
 const ROOT = fileURLToPath(new URL('../../..', import.meta.url));
@@ -16,7 +18,7 @@ const skill = n => `skills/${n}/SKILL.md`;
 export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearframe-library'), cinema: skill('clearframe-cinema'), canvas: skill('clearframe-canvas'), dataviz: skill('clearframe-dataviz'),
   motion: skill('clearframe-motion'), script: skill('clearframe-script'), integrity: skill('clearframe-integrity'), direction: skill('clearframe-direction'), engine: skill('clearframe-engine'),
   review: skill('clearframe-review'), scene: skill('clearframe-scene'), style: 'docs/style.md', 'cinema-notes': 'docs/cinema.md', 'canvas-notes': 'docs/canvas.md', ideas: 'docs/ideas.md',
-  speech: 'docs/speech.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };
+  speech: 'docs/speech.md', authoring: 'engine/agent-plugin/AUTHORING.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };
 const TEXT_EXT = new Set(['.md', '.markdown', '.txt', '.csv', '.json', '.srt', '.vtt', '.docx', '.html', '.htm', '.rtf', '.pdf']);
 const SKIP = new Set(['review', 'build', 'node_modules']);
 const getAt = (o, p) => { for (const k of String(p).split('.')) { if (o == null) return undefined; o = o[k]; } return o; };
@@ -205,6 +207,29 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       const file = path.join(dir, names.find(n => fs.existsSync(path.join(dir, n))) ?? names[0]);
       atomic(file, input.text.replace(/\s*$/, '\n'));
       return { content: `Saved ${path.basename(file)}.`, metadata: { summary: `Rewrote ${path.basename(file)}` } };
+    },
+
+    sound({ dir, input }) {
+      const action = input.action ?? 'status';
+      if (action === 'draft-voice' || action === 'draft-music') {
+        const r = startSound(dir, filmId(dir), jobs, { kind: action === 'draft-voice' ? 'voice' : 'music', paid: false });
+        return { content: `Queued the free ${action === 'draft-voice' ? 'draft narration' : 'draft music bed'} (job ${r.id}); follow it with clearframe_job.`, metadata: { summary: action === 'draft-voice' ? 'Free draft narration' : 'Free draft music bed', job: r.id } };
+      }
+      if (action === 'request') {
+        if (!['voice', 'music'].includes(input.kind)) throw fail('Request narration (voice) or music.');
+        if (typeof input.reason !== 'string' || !input.reason.trim()) throw fail('Say why the person should pay for it.');
+        const r = requestSpend(dir, input);
+        return { content: r.id ? `Asked the person to approve about $${r.estimate.toFixed(3)} for Google ${input.kind === 'voice' ? 'narration' : 'music'} (${r.detail}). Nothing runs until they approve it in the studio; do not wait for it — continue or finish your reply.` : r.note,
+          metadata: { summary: r.id ? `Asked to approve ≈$${r.estimate.toFixed(3)} for Google ${input.kind === 'voice' ? 'narration' : 'music'}` : 'Already up to date', spend: r.id } };
+      }
+      const s = soundState(dir, base);
+      const n = s.narration, m = s.music, google = s.providers.speech.find(p => p.id === 'google');
+      return { content: [
+        `Google sound: ${google.ready ? 'available (paid; needs the person\'s approval)' : `not configured — ${google.needs}`}`,
+        n.recorded ? 'Narration: the source recording (edit by cutting words; not regenerated).' : `Narration: voice ${n.voice}${n.style ? `, style "${n.style}"` : ''}, ${n.lines} lines in ${n.takes.length} take(s): ${n.takes.map(t => `${t.id} ${t.status}${t.cost ? ` (≈$${t.cost.toFixed(3)} to generate)` : ''}`).join('; ')}`,
+        m.off ? 'Music: off.' : `Music: ${m.made ? `${m.made} bed${m.current ? ' (current)' : ''}` : 'none yet'}; model ${m.model}; prompt "${m.prompt || 'derived from the edit'}"; level ${m.volume}${m.duck ? ', ducked under the voice' : ''}${m.cost ? `; Google bed ≈$${m.cost.toFixed(2)}` : ''}.`,
+        'Change voice, style, music prompt, model and levels with clearframe_edit (film paths voice.voice, voice.style, music.prompt, music.model, music.volume, music.duck). Free drafts: action draft-voice / draft-music. Paid Google generation: action request with kind and reason.',
+      ].join('\n'), metadata: { summary: `Sound: ${n.recorded ? 'recorded narration' : `${n.takes.length} take(s)`}, music ${m.off ? 'off' : m.made ?? 'none'}` } };
     },
 
     guide({ input }) {

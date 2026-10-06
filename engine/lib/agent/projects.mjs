@@ -127,7 +127,7 @@ export function createProject(root, uploads, body) {
     takeaway: typeof body.takeaway === 'string' && body.takeaway.trim() ? body.takeaway.trim().slice(0, 400) : undefined,
     vertical: body.format === 'vertical' || undefined,
   }); } catch (e) { fs.rmSync(dir, { recursive: true, force: true }); throw e.status ? e : fail(e.message); }
-  updateLink(dir, l => ({ ...l, createdBy: request, createdAt: new Date().toISOString() }));
+  updateLink(dir, l => ({ ...l, createdBy: request, createdAt: new Date().toISOString(), mode: body.mode === 'together' ? 'together' : 'oneshot' }));
   fs.rmSync(draftDir, { recursive: true, force: true });
   created.set(request, dir);
   return dir;

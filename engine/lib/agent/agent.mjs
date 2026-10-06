@@ -47,8 +47,15 @@ export function resolveScope(dir, scope) {
 }
 
 /** The context block appended to what the person typed, so the agent works on what they meant. */
-export function contextBlock({ film, scope, hash, revision, t }) {
+export const MODES = {
+  oneshot: 'one-shot — carry the request through to a watchable result without stopping for approval at each step: plan briefly, edit in a few labelled batches, render the rough cut (clearframe_render draft) and follow it to the end, then report what is ready and what is a placeholder. Ask only when you are blocked.',
+  together: 'together — the person is directing: work in small steps they can follow. Propose a short plan before large changes and wait for their answer; make one change at a time; show it with a still or a section preview; end your reply with one clear question when a decision is theirs.',
+};
+export const modeOf = l => (l.mode in MODES ? l.mode : 'together');
+
+export function contextBlock({ film, scope, hash, revision, t, mode }) {
   const lines = [`film: ${film.title} (${film.folder})`];
+  if (mode) lines.push(`working mode: ${MODES[mode] ?? mode}`);
   const s = scope ?? { kind: 'film' };
   const beats = s.beats?.length ? s.beats.join(', ') : null;
   lines.push(`scope: ${{ film: 'the whole film', scene: `scene ${beats}`, layer: `layer ${s.element} in scene ${beats}`, range: `time range ${s.from ?? '?'}s–${s.to ?? '?'}s (scenes ${beats})`,
@@ -69,6 +76,7 @@ function toolView(part, dir) {
     state: () => input.beat ? `Read scene ${input.beat}` : 'Read the film', catalog: () => `Looked up ${input.topic}${input.name ? ` ${input.name}` : ''}`,
     edit: () => input.label ?? 'Edited the film', render: () => `Queued ${input.kind}${input.beat ? ` of ${input.beat}` : input.beats ? ` of ${input.beats.join(', ')}` : ''}`,
     job: () => 'Checked a render', notes: () => 'Read review notes', files: () => input.read ? `Read ${input.read}` : 'Listed project files', write: () => `Rewrote ${input.file === 'brief' ? 'the brief' : 'direction notes'}`,
+    sound: () => input.action === 'request' ? `Asked to approve Google ${input.kind === 'music' ? 'music' : 'narration'}` : input.action?.startsWith('draft') ? `Queued a free ${input.action === 'draft-music' ? 'music bed' : 'draft voice'}` : 'Checked the sound',
     guide: () => `Read the ${input.topic} guide`,
   };
   const builtin = { read: () => `Read ${relp(input.filePath ?? input.path)}`, glob: () => `Searched files ${clip(input.pattern, 80)}`, grep: () => `Searched for ${clip(input.pattern, 80)}`,
@@ -94,7 +102,7 @@ export function transcript(messages, dir) {
   for (const m of messages ?? []) {
     if (m.type === 'user') {
       const cf = m.metadata?.clearframe ?? {};
-      out.push({ id: m.id, role: 'user', at: m.time?.created, text: typeof cf.text === 'string' ? cf.text : m.text.replace(/\n*<clearframe-context>[\s\S]*<\/clearframe-context>\s*$/, ''), scope: cf.scope ?? null, hash: cf.hash ?? null, revision: cf.revision ?? null });
+      out.push({ id: m.id, role: 'user', at: m.time?.created, text: typeof cf.text === 'string' ? cf.text : m.text.replace(/\n*<clearframe-context>[\s\S]*<\/clearframe-context>\s*$/, ''), scope: cf.scope ?? null, hash: cf.hash ?? null, revision: cf.revision ?? null, mode: cf.mode ?? null });
     } else if (m.type === 'assistant') {
       const parts = (m.content ?? []).map(p => p.type === 'text' ? { type: 'text', text: p.text } : p.type === 'reasoning' ? { type: 'reasoning', text: clip(p.text, 2000) } : p.type === 'tool' ? toolView(p, dir) : null).filter(Boolean);
       out.push({ id: m.id, role: 'assistant', at: m.time?.created, done: !!m.time?.completed, parts, error: errorView(m.error) || null, stopped: m.error?.type === 'aborted', model: m.model ? `${m.model.providerID}/${m.model.id}` : null, cost: m.cost ?? 0, retry: m.retry ? { attempt: m.retry.attempt, message: clip(m.retry.error?.message, 300) } : null });
@@ -166,7 +174,7 @@ export function createAgent({ base = process.cwd(), runtime, jobs, dirs, filmOf,
     const status = runtime.status();
     const link = readLink(dir);
     const pending = (link.submissions ?? []).filter(s => s.state !== 'sent').map(({ id, text, scope, state, error, at, delivery }) => ({ id, text, scope, state, error, at, delivery }));
-    const base = { runtime: status, linked: !!link.sessionID, model: link.model ? `${link.model.providerID}/${link.model.id}` : `${DEFAULT_MODEL.providerID}/${DEFAULT_MODEL.id}`, pending,
+    const base = { runtime: status, linked: !!link.sessionID, mode: modeOf(link), spend: (link.spend ?? []).slice(-10), model: link.model ? `${link.model.providerID}/${link.model.id}` : `${DEFAULT_MODEL.providerID}/${DEFAULT_MODEL.id}`, pending,
       lost: (link.previous ?? []).length ? link.previous.at(-1) : null };
     if (!link.sessionID) return { ...base, messages: [], running: false, queued: [], permissions: [], forms: [] };
     return guard(async c => {
@@ -201,8 +209,9 @@ export function createAgent({ base = process.cwd(), runtime, jobs, dirs, filmOf,
     try {
       return await guard(async c => {
         const { sessionID } = await session(dir);
-        await c.session.prompt({ sessionID, id, text: text + contextBlock({ film, scope, hash, revision, t }), delivery,
-          metadata: { clearframe: { text, scope, hash, revision, t, film: path.relative(base, dir) } } });
+        const mode = modeOf(readLink(dir));
+        await c.session.prompt({ sessionID, id, text: text + contextBlock({ film, scope, hash, revision, t, mode }), delivery,
+          metadata: { clearframe: { text, scope, hash, revision, t, mode, film: path.relative(base, dir) } } });
         updateLink(dir, l => { const s = l.submissions.find(x => x.id === id); if (s) { s.state = 'sent'; delete s.error; } });
         return { submission: id, state: 'sent' };
       });
@@ -218,6 +227,7 @@ export function createAgent({ base = process.cwd(), runtime, jobs, dirs, filmOf,
 
   return {
     reindex, conversation, prompt, session,
+    setMode(dir, mode) { if (!(mode in MODES)) throw fail('Choose one-shot or together.'); updateLink(dir, l => ({ ...l, mode })); return { mode }; },
     discard(dir, id) { checkSubmission(id); updateLink(dir, l => { l.submissions = l.submissions.filter(s => s.id !== id || s.state === 'sent'); }); return { ok: true }; },
     interrupt: dir => guard(c => c.session.interrupt({ sessionID: sid(dir), resume: false })),
     cancelQueued: (dir, inboxID) => guard(c => c.session.inbox.cancel({ sessionID: sid(dir), inboxID: String(inboxID) })).then(() => ({ ok: true })),

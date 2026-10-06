@@ -310,3 +310,97 @@ test('a slow start that is superseded by a stop cannot overwrite the newer state
   assert.match(String((await starting).message), /superseded/);
   assert.equal(rt.status().state, 'stopped');
 });
+
+// ------------------------------------------------------------------ sound: free drafts at once, Google only with a named approval covering the estimate
+
+function soundFixture(t) {
+  const sb = structuredClone(SB); sb.music = {}; sb.beats[0].vo = 'Light arrives first.'; sb.beats[1].vo = 'Sound follows, slowly.';
+  const d = project(t, sb), started = [];
+  const jobs = { list: () => started.map((b, k) => ({ id: `job${k + 1}`, kind: b.kind, paid: b.paid, status: b.status ?? 'queued' })),
+    start: (dir, body, grant) => { started.push({ ...body, paid: grant?.paid ?? false, budget: grant?.budget, grant }); return { id: `job${started.length}` }; } };
+  const key = process.env.GEMINI_API_KEY; process.env.GEMINI_API_KEY = 'test-not-a-real-key';
+  t.after(() => { if (key == null) delete process.env.GEMINI_API_KEY; else process.env.GEMINI_API_KEY = key; });
+  return { d, jobs, started };
+}
+
+test('paid sound needs a durable intent, a name, the basis that was shown and an approval covering the estimate; nothing calls a provider', async t => {
+  const { startSound, spendLog } = await import('../engine/lib/viewer/spend.mjs');
+  const { soundState } = await import('../engine/lib/viewer/sound.mjs');
+  const { d, jobs, started } = soundFixture(t);
+  const s = soundState(d, os.tmpdir()), basis = s.basis.voice, ask = { kind: 'voice', paid: true, by: 'Ana', approve: 0.01, basis };
+  assert.ok(s.narration.cost > 0 && s.narration.takes.length === 1, 'one continuous take to generate');
+  assert.throws(() => startSound(d, 'f', jobs, { ...ask }), /approval it belongs to/);
+  assert.throws(() => startSound(d, 'f', jobs, { ...ask, intent: 'intent-aaaaaaaa', by: '' }), /who approved/);
+  assert.throws(() => startSound(d, 'f', jobs, { ...ask, intent: 'intent-aaaaaaaa', approve: 0 }), /approve at least/);
+  assert.throws(() => startSound(d, 'f', jobs, { ...ask, intent: 'intent-aaaaaaaa', basis: { ...basis, voice: 'Puck' } }), /changed since you opened/);
+  assert.equal(started.length, 0, 'every refusal before a job');
+  const r = startSound(d, 'f', jobs, { ...ask, intent: 'intent-aaaaaaaa' });
+  assert.equal(started.at(-1).budget, 0.01, 'the approved amount is the engine\'s budget');
+  assert.equal(spendLog(d).at(-1).by, 'Ana'); assert.equal(spendLog(d).at(-1).intent, 'intent-aaaaaaaa');
+  // A double-click, a retry after a lost reply, or a concurrent duplicate: the same job, no new charge.
+  const again = [startSound(d, 'f', jobs, { ...ask, intent: 'intent-aaaaaaaa' }), startSound(d, 'f', jobs, { ...ask, intent: 'intent-aaaaaaaa' })];
+  assert.deepEqual(again.map(x => [x.id, x.duplicate]), [[r.id, true], [r.id, true]]);
+  assert.equal(started.length, 1); assert.equal(spendLog(d).length, 1);
+  // A second approval while the first runs is refused; another kind is not.
+  assert.throws(() => startSound(d, 'f', jobs, { ...ask, intent: 'intent-bbbbbbbb' }), /already being generated/);
+  // The content changed after the dialog opened: the old dialog cannot approve it at the same price.
+  const sb = JSON.parse(fs.readFileSync(path.join(d, 'storyboard.json'), 'utf8')); sb.music.prompt = 'louder drums'; fs.writeFileSync(path.join(d, 'storyboard.json'), JSON.stringify(sb));
+  const mb = soundState(d, os.tmpdir()).basis.music;
+  sb.music.prompt = 'something else'; fs.writeFileSync(path.join(d, 'storyboard.json'), JSON.stringify(sb));
+  assert.throws(() => startSound(d, 'f', jobs, { kind: 'music', paid: true, by: 'Ana', approve: 0.08, basis: mb, intent: 'intent-cccccccc' }), /changed since/);
+  delete process.env.GEMINI_API_KEY;
+  assert.throws(() => startSound(d, 'f', jobs, { kind: 'music', paid: true, by: 'Ana', approve: 1, basis: soundState(d).basis.music, intent: 'intent-dddddddd' }), /GEMINI_API_KEY/);
+});
+
+test('an agent can only ask; the person\'s approval of that request starts it once', async t => {
+  const { requestSpend, answerSpend, spendLog } = await import('../engine/lib/viewer/spend.mjs');
+  const { soundState } = await import('../engine/lib/viewer/sound.mjs');
+  const { d, jobs, started } = soundFixture(t);
+  const ask = requestSpend(d, { kind: 'music', reason: 'A real bed for review' });
+  assert.throws(() => answerSpend(d, 'f', jobs, { id: ask.id, decision: 'approve', by: '', approve: 1, basis: soundState(d).basis.music }), /who approved/);
+  assert.equal(started.length, 0, 'nothing ran without a person');
+  const a = answerSpend(d, 'f', jobs, { id: ask.id, decision: 'approve', by: 'Ana', approve: 0.08, basis: soundState(d).basis.music });
+  const b = answerSpend(d, 'f', jobs, { id: ask.id, decision: 'approve', by: 'Ana', approve: 0.08, basis: soundState(d).basis.music });
+  assert.equal(b.id, a.id); assert.equal(started.length, 1); assert.equal(spendLog(d).length, 1);
+  assert.throws(() => answerSpend(d, 'f', jobs, { id: ask.id, decision: 'decline', by: 'Ana' }), /already answered/);
+});
+
+test('narration and music never start without the sound gate, through the job queue or over HTTP', async t => {
+  const { createStudioJobs } = await import('../engine/lib/viewer/studio-jobs.mjs');
+  const { d } = soundFixture(t);
+  const q = createStudioJobs({ base: d, out: path.join(d, 'build/viewer'), cli: '/bin/true', gate: null });
+  for (const kind of ['voice', 'music']) {
+    assert.throws(() => q.start(d, { film: 'f', kind, paid: true, budget: 5, approval: { by: 'forged' } }), e => e.status === 403);
+    assert.throws(() => q.start(d, { film: 'f', kind }, { kind, paid: true, budget: 5 }), e => e.status === 403, 'a look-alike grant without the server symbol');
+  }
+  assert.deepEqual(q.list('f'), []);
+  // Over HTTP: the generic jobs endpoint refuses paid (and free) sound; the sound endpoint wants an approval.
+  const { serveViewer } = await import('../engine/lib/viewer/server.mjs');
+  const root = path.dirname(d), cwd = process.cwd(); process.chdir(root);
+  const sv = await serveViewer({ root: [d], out: path.join(root, 'viewer'), port: 0, render: false, agent: false }).finally(() => process.chdir(cwd));
+  t.after(() => new Promise(r => sv.server.close(r)));
+  const film = Object.keys(sv.dirs)[0], port = sv.server.address().port;
+  const post = (p, b) => fetch(`http://127.0.0.1:${port}${p}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ film, ...b }) }).then(async r => [r.status, (await r.json()).error]);
+  for (const kind of ['voice', 'music']) assert.equal((await post('/api/studio/jobs', { kind, paid: true, budget: 5 }))[0], 403);
+  const [code, err] = await post('/api/studio/sound', { kind: 'music', paid: true, by: 'x', approve: 5 });
+  assert.equal(code, 400); assert.match(err, /approval it belongs to/);
+  assert.deepEqual(sv.jobs.list(film), [], 'nothing was queued');
+});
+
+test('a recorded film\'s narration is never regenerated', async t => {
+  const { recordedProject } = await import('./fixtures.mjs');
+  const { estimate } = await import('../engine/lib/viewer/sound.mjs');
+  const { root } = await recordedProject(t);
+  assert.throws(() => estimate(root, 'voice'), /recording itself/);
+});
+
+test('the working mode persists with the project and travels with every message', async t => {
+  const a = project(t), client = fakeClient(), agent = agentFor([a], client);
+  assert.equal((await agent.conversation(a)).mode, 'together');
+  agent.setMode(a, 'oneshot');
+  assert.equal(readLink(a).mode, 'oneshot');
+  await agent.prompt(a, { submission: 'msg_cfmodemodemodemodemodemode', text: 'Go' });
+  assert.match(client.calls.prompts[0].text, /working mode: one-shot/);
+  assert.equal(client.calls.prompts[0].metadata.clearframe.mode, 'oneshot');
+  assert.throws(() => agent.setMode(a, 'yolo'), /one-shot or together/);
+});

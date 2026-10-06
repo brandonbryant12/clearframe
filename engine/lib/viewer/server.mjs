@@ -11,6 +11,8 @@ import { buildViewer, filmData } from './build.mjs';
 import { saveNote, setNoteState, replyToNote, loadViewerNotes } from './notes.mjs';
 import { addDecision, setNoteStatus, readDecisions, readKeeps } from '../notes.mjs';
 import { checkId } from '../store.mjs';
+import { soundState } from './sound.mjs';
+import { startSound, spendLog, answerSpend } from './spend.mjs';
 import { createRuntime, agentPaths } from '../agent/runtime.mjs';
 import { createAgent } from '../agent/agent.mjs';
 import { projectsRoot, createProject, findCreated, uploadToProject, uploadToDraft } from '../agent/projects.mjs';
@@ -80,6 +82,7 @@ export async function serveViewer({ root, out = 'build/viewer', port = 4317, ren
       if (p === '/api/notes') return reply(200, { notes: loadViewerNotes(dir) });
       if (p === '/api/studio/state') return reply(200, { ...studioState(dir), paused: pauseOf(dir) });
       if (p === '/api/studio/film') return reply(200, await filmData(dir, { out }));
+      if (p === '/api/studio/sound') return reply(200, { ...soundState(dir, base), spend: spendLog(dir).slice(-20) });
       if (p === '/api/studio/review') return reply(200, { decisions: readDecisions(dir), keeps: readKeeps(dir), ...(await checkpointsOf(dir)) });
       if (agent && p === '/api/agent/conversation') return reply(200, await agent.conversation(dir));
       return reply(404, { error: 'Unknown studio endpoint' });
@@ -125,18 +128,20 @@ export async function serveViewer({ root, out = 'build/viewer', port = 4317, ren
     const notes = { '/api/notes': () => saveNote(dir, body), '/api/notes/state': () => setNoteState(dir, body.id, body), '/api/notes/reply': () => replyToNote(dir, body.id, body) };
     try {
       if (notes[p]) return reply(200, notes[p]());
-      if (p === '/api/studio/jobs') return reply(202, jobs.start(dir, body));
+      if (p === '/api/studio/jobs') return reply(202, jobs.start(dir, body)); // narration and music: /api/studio/sound only
       if (p === '/api/studio/command') {
         const paused = pauseOf(dir);
         if (paused) return reply(409, { error: `${paused.label} is using the working copy. Cancel it or wait for it to finish before editing.`, paused });
         return reply(200, { ...studioCommand(dir, body), paused: null });
       }
       if (p === '/api/studio/accept') return reply(200, accept(dir, body));
+      if (p === '/api/studio/sound') return reply(202, startSound(dir, body.film, jobs, body));
+      if (agent && p === '/api/agent/spend') return reply(200, answerSpend(dir, body.film, jobs, body));
       if (agent && p.startsWith('/api/agent/')) {
         const verb = p.slice('/api/agent/'.length);
         const run = { prompt: () => agent.prompt(dir, body), discard: () => agent.discard(dir, body.submission), interrupt: () => agent.interrupt(dir),
           'queue/cancel': () => agent.cancelQueued(dir, body.id), 'queue/steer': () => agent.steerQueued(dir, body.id), permission: () => agent.permission(dir, body),
-          form: () => agent.form(dir, body), model: () => agent.setModel(dir, body.model), session: () => agent.session(dir).then(l => ({ linked: !!l.sessionID })) }[verb];
+          form: () => agent.form(dir, body), model: () => agent.setModel(dir, body.model), mode: () => agent.setMode(dir, body.mode), session: () => agent.session(dir).then(l => ({ linked: !!l.sessionID })) }[verb];
         if (run) return reply(200, await run());
       }
       return reply(404, { error: 'Unknown studio endpoint' });

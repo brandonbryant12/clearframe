@@ -47,6 +47,8 @@ function homeForm() {
         <label>Kind of film<select id="nf-playbook"><option value="">Let the agent choose</option>${pb.map(p => `<option value="${esc(p.id)}" ${f.playbook === p.id ? 'selected' : ''}>${esc(p.title)}</option>`).join('')}</select></label>
         <label>Look<select id="nf-treatment"><option value="">Let the agent choose</option>${tr.map(t => `<option value="${esc(t.id)}" ${f.treatment === t.id ? 'selected' : ''}>${esc(t.title ?? t.id)}</option>`).join('')}</select></label>
       </div>
+      <fieldset class="home-mode"><legend>How should the agent work?</legend><div>${[['oneshot', 'Make it for me', 'It writes the film and renders a full-length rough cut, then reports. You review, then refine.'], ['together', 'Build it together', 'It reads the brief, proposes a plan and asks before each step. You decide as it goes.']]
+        .map(([v, t, d]) => `<label><input type="radio" name="nf-mode" value="${v}" ${(f.mode ?? 'oneshot') === v ? 'checked' : ''}><span><b>${t}</b>${d}</span></label>`).join('')}</div><p class="meta">You can switch at any time in the studio.</p></fieldset>
       <details class="home-more" ${f.audience || f.takeaway ? 'open' : ''}><summary>Audience and takeaway</summary><div class="home-grid two">
         <label>Who it is for<input id="nf-audience" value="${esc(f.audience ?? '')}" placeholder="Curious teenagers, no physics background"></label>
         <label>What they should remember<input id="nf-takeaway" value="${esc(f.takeaway ?? '')}" placeholder="Two bulges: one toward the Moon, one away"></label></div></details>
@@ -71,7 +73,7 @@ function homeForm() {
 function readForm() {
   const v = id => document.getElementById(id)?.value ?? '';
   return { idea: v('nf-idea'), title: v('nf-title'), playbook: v('nf-playbook'), treatment: v('nf-treatment'), audience: v('nf-audience'), takeaway: v('nf-takeaway'),
-    format: document.querySelector('input[name="nf-format"]:checked')?.value ?? 'landscape' };
+    format: document.querySelector('input[name="nf-format"]:checked')?.value ?? 'landscape', mode: document.querySelector('input[name="nf-mode"]:checked')?.value ?? 'oneshot' };
 }
 const progress = (text, tone = '') => { const p = document.getElementById('nf-progress'); if (p) { p.textContent = text; p.dataset.tone = tone; } };
 
@@ -124,7 +126,9 @@ function firstMessage(f, film) {
     pb ? `Starting structure: ${pb.title}` : 'Starting structure: your choice (the project started from a general starter)', tr ? `Look: ${tr.title ?? tr.id}` : null,
     f.documents?.length ? `Sources you gave (${f.documents.join(', ')}) are in the project as ${(film.files ?? []).map(x => x.name).filter(n => /^source\//.test(n)).join(', ') || 'source/'}; the intake summarised them in BRIEF.md and EVIDENCE.md. Read them with clearframe_files before writing; tie every number to its source.` : null,
     '', `The project "${film.title}" starts from a playbook with sample scenes, narration, numbers and sources. Replace all of it with this film's own: rewrite or replace every scene and its narration, remove sample figures and sources, keep it a film rather than slides, and group the work into a few clearly labelled edits. Where a picture is not designed yet, mark that scene "placeholder" with what it should become; never leave sample content.`,
-    'Then make the first cut I can watch: queue a rough cut with clearframe_render (kind draft), follow it with clearframe_job until it finishes, fix any engine errors it reports and queue it again if needed. Finish by telling me briefly what the cut contains, which scenes are placeholders, and what you need from me.'].filter(x => x != null && x !== false).join('\n');
+    f.mode === 'together'
+      ? 'We are building this together. Read the brief and sources, then propose a short plan: the scenes in order (one line each, with what the picture does), the look, and the voice. Change nothing yet; end by asking me to confirm or adjust.'
+      : 'Start with clearframe_guide topic authoring (short). Then make the first cut I can watch: queue a rough cut with clearframe_render (kind draft), follow it with clearframe_job until it finishes, fix any engine errors it reports and queue it again if needed. Finish by telling me briefly what the cut contains, which scenes are placeholders, and what you need from me.'].filter(x => x != null && x !== false).join('\n');
 }
 
 async function createFilm(resume = false) {
@@ -145,7 +149,7 @@ async function createFilm(resume = false) {
   try {
     progress(resume ? 'Finishing the film you started…' : 'Creating the project…');
     const made = await call('/api/projects', { request: cur.request, idea: cur.idea, title: cur.title, playbook: cur.playbook || undefined, treatment: cur.treatment || undefined,
-      format: cur.format, audience: cur.audience, takeaway: cur.takeaway, documents: cur.documents ?? [] });
+      format: cur.format, mode: cur.mode, audience: cur.audience, takeaway: cur.takeaway, documents: cur.documents ?? [] });
     await refreshFilms();
     progress('Starting the agent and sending the brief…');
     const film = made.film ?? data.films.find(x => x.id === made.id) ?? { title: cur.title || 'the film' };

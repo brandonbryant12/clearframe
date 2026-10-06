@@ -66,6 +66,70 @@ Things learned getting the free tier to work (keep them):
 - `OPENCODE_CONFIG_DIR` alone does not isolate a runtime: data (sessions, saved credentials), state
   and cache would still be global. The studio sets all four XDG folders.
 
+## Two ways to direct
+
+Each film has a working mode, chosen on the home page and switchable at any time in the Agent
+column; it is saved with the project (`review/agent.json`) and sent with every message.
+
+- **Make it for me (one-shot).** The agent carries a request through to something you can watch
+  without stopping to ask: for a new film it replaces the starter, renders a full-length rough cut
+  through the native queue and reports what is ready and what is a placeholder. A progress strip
+  shows what actually happened (brief read, scenes changed, rough cut queued/rendering/done, ready to
+  watch) from tool results and jobs, never from the agent's own claims, with Stop, Inspect changes,
+  Undo all of it and Watch.
+- **Build it together.** The agent proposes a plan and waits, makes one change at a time, shows it
+  with a still or section, and ends with one question when the decision is yours; quick replies
+  ("Yes, go ahead", "Show me a preview first", "Not yet — explain the options") answer in one click.
+
+Manual editing works the same in both: every panel, the timeline and undo stay live, and the agent
+re-reads the film before each change (a stale edit is refused, never merged over yours).
+
+## Google sound (narration and music)
+
+Sound is adapter-based; Google is the first paid provider for both speech and music, beside the
+free local drafts ClearFrame always had. The Sound tab (inspector) shows, per film:
+
+- **Narration**: the Google voice (Gemini TTS prebuilt voices) and a short delivery style; the
+  narration takes (one continuous take per film by default) with who made each line (free draft,
+  Google, an imported recording), whether the words still match, measured word timing, and a
+  player per line. *Record free draft voice* uses this computer's voice and never replaces a Google
+  take whose words are unchanged. *Generate with Google…* records only the takes whose words, voice,
+  style or model changed (the engine caches by take), at the estimate shown.
+- **Music**: direction (style and instruments; sections follow the edit), the Lyria model and its
+  price, the current bed with a player, *Make free draft bed*, and *Generate with Google…* (a new
+  Google bed replaces the current one).
+- **Mix**: music level, ducking under the voice, fades, sound effects, loudness, and *Hear the
+  selected section* (a native section preview with the full mix).
+- **Cost and approvals**: the engine's `plan` (what is cached, draft-only or to do, and its cost),
+  the film budget, and every approved spend.
+
+Paid generation only runs after a person approves an amount: the dialog says what will be generated,
+the estimate, and asks for your name and an explicit tick. The approval must cover today's estimate,
+the approved amount becomes the engine's `--budget` (it refuses anything costlier), and the approval
+is appended to `PROJECT/review/spend.jsonl`. The agent cannot spend: `clearframe_sound` can queue
+free drafts and *request* Google generation with a reason; the request appears in the conversation
+and goes through the same approval. A film whose narration is an imported recording is never
+regenerated (it is edited by cutting words).
+
+Setup on a computer:
+
+1. A Google AI Studio (Gemini API) key with billing enabled for the paid models:
+   `gemini-3.8-flash-tts` (narration, about $0.0023 per 10 s of speech) and `lyria-3.5`
+   (about $0.08 per bed) or `lyria-3-clip-preview` (30 s, about $0.04). Prices are the engine's
+   estimates (`skills/gemini-tts`, `skills/lyria-music`); check Google's pricing page.
+2. Put it in the environment of the process that starts the studio, for example
+   `export GEMINI_API_KEY=…` in your shell profile, then start `clearframe viewer --serve` from that
+   shell. The studio only reports whether the key is present; it never shows, stores or sends it to
+   the page. (OpenCode also picks the variable up for Google chat models; ClearFrame does not use a
+   paid chat model unless you choose one.)
+3. Without a key, everything free still works and the Sound tab says what is missing.
+
+Verification status: the free draft paths, the estimates, approvals, refusals (no name, approval
+below the estimate, no key, recorded narration) and the job queue were exercised; **no paid Google
+generation was run while building this** (no spend merely to test). The Google calls themselves are
+the engine's existing `voice`/`music` commands (`skills/gemini-tts`, `skills/lyria-music`), which
+predate the studio.
+
 ## What the studio owns, and where
 
 Everything lives under the working folder you started the studio in:
@@ -74,6 +138,7 @@ Everything lives under the working folder you started the studio in:
 | --- | --- | --- |
 | `projects/` (or `--projects DIR`, `CLEARFRAME_PROJECTS`) | films made in the browser, one folder each, ordinary ClearFrame projects | no (`.gitignore`) |
 | `PROJECT/review/agent.json` | the film's one conversation id, its model, and your sent messages (ids and words only) | with the project |
+| `PROJECT/review/spend.jsonl` | every approved paid generation: what, estimate, approved amount, who, job | with the project |
 | `PROJECT/review/studio-history.json` | undo history, including the agent's edits (marked `by: agent` with the request they answer) | with the project |
 | `.clearframe/opencode/{config,data,state,cache,xdg-config}` | the isolated OpenCode runtime: config ClearFrame writes, sessions database, saved provider credentials, service registration, logs | never |
 | `.clearframe/agent/bridge.json` | the private URL and token the OpenCode plugin uses to reach this studio (mode 600) | never |

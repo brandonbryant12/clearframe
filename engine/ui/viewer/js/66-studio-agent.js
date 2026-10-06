@@ -171,13 +171,16 @@ function chatHTML() {
   const state = !conv ? (a.error ? 'error' : 'loading') : rt?.state === 'error' ? 'error' : running ? 'running' : rt?.state === 'ready' ? 'ready' : conv.linked ? 'starting' : 'idle';
   const head = `<header class="st-chat-head"><h2>Agent</h2><span class="st-chat-state s-${state}" role="status">${{ loading: 'Connecting…', error: 'Needs attention', running: 'Working', ready: 'Ready', starting: 'Starting OpenCode…', idle: 'Not started' }[state]}</span>
     <button class="st-chip-btn" data-act="agentSettings" title="Model, providers and runtime">${esc(model.split('/').pop())}</button>
-    <button class="st-btn ghost small" data-act="chat" aria-label="Hide the agent (⌘J)" title="Hide (⌘J)">✕</button></header>`;
+    <button class="st-btn ghost small" data-act="chat" aria-label="Hide the agent (⌘J)" title="Hide (⌘J)">✕</button></header>
+    <div class="st-modes" role="radiogroup" aria-label="How the agent works">${[['oneshot', 'Make it for me', 'The agent carries each request through to a result you can watch, then reports.'], ['together', 'Build it together', 'The agent proposes, makes one change at a time, shows it, and asks you to decide.']]
+      .map(([k, t, d]) => `<button role="radio" aria-checked="${(conv?.mode ?? 'together') === k}" data-act="mode" data-mode="${k}" title="${esc(d)}">${t}</button>`).join('')}</div>`;
   let body = '';
   if (a.error && !conv) body += `<div class="st-msg-error"><b>${esc(a.error)}</b><p>The studio server may have stopped. Start it with <code>clearframe viewer --serve</code>, then retry.</p><button class="st-btn small" data-act="agentRefresh">Retry</button></div>`;
   if (rt?.state === 'error') body += `<div class="st-msg-error"><b>OpenCode did not start: ${esc(rt.error)}</b>${rt.hint ? `<p>${esc(rt.hint)}</p>` : ''}<button class="st-btn small" data-act="agentStart">Retry</button> <button class="st-link" data-act="agentSettings">Setup</button></div>`;
   if (rt && rt.state === 'ready' && ['empty', 'missing-model'].includes(rt.catalog)) body += `<div class="st-msg-warn"><b>${esc(rt.hint ?? 'The model catalog is not ready.')}</b> <button class="st-link" data-act="agentSettings">Choose a model</button></div>`;
   if (conv?.lost) body += `<p class="st-msg-sys">The earlier conversation for this film is not in this runtime any more (${esc(conv.lost.sessionID)}); a new one starts with your next message.</p>`;
   if (conv) body += transcriptHTMLChat(conv);
+  if (conv) body += progressHTML(conv) + quickReplies(conv);
   if (conv && !conv.messages.length && !a.outbox.length && !conv.pending.length) body += `<div class="st-chat-empty"><p>Talk to the agent to build this film. It reads the storyboard, edits through the same undoable steps as the panels, and renders native previews you can watch here.</p>
     <div class="st-suggest">${['Turn the brief into a first cut: rewrite every scene for this idea', 'Make the opening hook stronger', 'Suggest a palette and treatment that fit the story', 'What would make this feel less like slides?'].map(t => `<button class="st-btn small" data-act="suggest" data-text="${esc(t)}">${esc(t)}</button>`).join('')}</div></div>`;
   // Not yet confirmed by the server: sending, or failed with a reason.
@@ -191,6 +194,8 @@ function chatHTML() {
     <p class="st-hint-text">Shell commands can change files outside the studio's undo history and can spend money (paid generation). Allow only what you understand.</p>
     <div class="st-addrow"><button class="st-btn small" data-act="permit" data-id="${esc(p.id)}" data-decision="once">Allow once</button>${p.save?.length ? `<button class="st-btn small" data-act="permit" data-id="${esc(p.id)}" data-decision="always">Always allow</button>` : ''}<button class="st-btn small danger" data-act="permit" data-id="${esc(p.id)}" data-decision="reject">Deny</button></div></div>`).join('');
   body += (conv?.forms ?? []).map(f => formHTML(f)).join('');
+  body += (conv?.spend ?? []).filter(x => x.state === 'pending').map(x => `<div class="st-ask" data-key="sp-${esc(x.id)}" role="group" aria-label="Spending approval"><b>The agent asks to spend about ${x.estimate < 0.01 ? `$${x.estimate.toFixed(4)}` : `$${x.estimate.toFixed(2)}`} on Google ${x.kind === 'voice' ? 'narration' : 'music'}</b><p>${esc(x.detail ?? '')}${x.reason ? ` — “${esc(x.reason)}”` : ''}</p>
+    <div class="st-addrow"><button class="st-btn small primary" data-act="spendApprove" data-id="${esc(x.id)}">Review and approve…</button><button class="st-btn small ghost" data-act="spendDecline" data-id="${esc(x.id)}">Decline</button></div></div>`).join('');
   if (conv?.queued?.length) body += `<div class="st-queue"><h3 class="st-h3">${running ? 'Queued after this reply' : 'Waiting: the agent is stopped'}</h3>${running ? '' : '<p class="st-hint-text">Send one now to continue, or remove it.</p>'}${conv.queued.map(q => `<div class="st-queued" data-key="q-${esc(q.id)}">${q.scope && q.scope.kind !== 'film' ? scopeChip(q.scope) : ''}<p>${esc(q.text)}</p><div class="st-addrow"><button class="st-btn small" data-act="steer" data-id="${esc(q.id)}" title="Deliver now: the agent reads it at its next step">Send now</button><button class="st-btn small ghost" data-act="unqueue" data-id="${esc(q.id)}">Remove</button></div></div>`).join('')}</div>`;
   const s = a.scope;
   const menu = a.menu ? `<div class="st-scope-menu" role="menu">${[['film', 'Whole film'], ['scene', `This scene${beatById(S.sel.beat) ? `: ${sceneName(beatById(S.sel.beat))}` : ''}`], ['layer', S.sel.element ? 'Selected layer' : 'Selected layer (select one first)'], ['range', S.sel.range?.length ? `Selected range (${S.sel.range.length} scenes)` : 'Range (shift-click scenes first)'], ['moment', `Moment at ${timecode(S.t, fpsOf())}`]]
@@ -220,6 +225,37 @@ function chatAfterRender() {
   if (!log.dataset.bound) { log.dataset.bound = '1'; log.addEventListener('scroll', () => { if (S?.agent) S.agent.scrolledUp = log.scrollHeight - log.scrollTop - log.clientHeight > 40; }, { passive: true }); }
 }
 
+/**
+ * One-shot: where the newest request stands, from what actually happened (tool results and jobs),
+ * never from what the agent says: read → write → rough cut → ready to watch. Stop, undo and inspect.
+ */
+function progressHTML(conv) {
+  if (conv.mode !== 'oneshot') return '';
+  const lastUser = conv.messages.map(m => m.role).lastIndexOf('user'); if (lastUser < 0) return '';
+  const run = conv.messages[lastUser].id, after = conv.messages.slice(lastUser + 1), tools = after.flatMap(m => m.parts ?? []).filter(p => p.type === 'tool');
+  const done = after.some(m => m.role === 'idle'), outcome = after.find(m => m.role === 'idle')?.outcome;
+  const read = tools.some(p => p.own ? ['state', 'files', 'guide', 'catalog', 'notes'].includes(p.tool) : p.tool === 'read');
+  const edits = tools.filter(p => p.own && p.tool === 'edit' && p.status === 'completed'), beats = [...new Set(edits.flatMap(p => p.beats ?? []))];
+  const draft = tools.filter(p => p.job).map(p => S.jobs.find(j => j.id === p.job)).filter(j => j?.kind === 'draft').at(-1);
+  const steps = [['Read the brief', read], [edits.length ? `${plural(beats.length || edits.length, beats.length ? 'scene' : 'change')} ${beats.length ? 'changed' : 'made'}` : 'Write the scenes', edits.length > 0],
+    [draft ? `Rough cut · ${draft.status}${draft.progress != null && draft.status === 'running' ? ` ${Math.round(draft.progress * 100)}%` : ''}` : 'Render the rough cut', draft?.status === 'complete'],
+    ['Ready to watch', draft?.status === 'complete' && draft.revision]];
+  const at = steps.findIndex(x => !x[1]);
+  return `<div class="st-progress" role="group" aria-label="Build progress"><ol>${steps.map(([t, ok], i) => `<li class="${ok ? 'done' : i === at && !done ? 'now' : ''}"><i>${ok ? '✓' : i + 1}</i>${esc(t)}</li>`).join('')}</ol>
+    <div class="st-addrow">${!done ? '<button class="st-btn small danger" data-act="stop">Stop</button>' : outcome !== 'succeeded' ? `<span class="st-muted">${outcome === 'interrupted' ? 'Stopped' : 'Did not finish'}</span>` : ''}
+      ${draft?.status === 'complete' && draft.revision ? `<button class="st-btn small primary" data-act="watch" data-rev="${esc(draft.revision)}">Watch ${esc(draft.revision)}</button>` : ''}
+      ${beats.length && beatById(beats[0]) ? `<button class="st-btn small" data-act="select" data-beat="${esc(beats[0])}">Inspect changes</button>` : ''}
+      ${edits.length && (S.st.history ?? []).filter(h => h.applied).at(-1)?.run === run ? `<button class="st-btn small" data-act="undoRun" data-run="${esc(run)}">Undo all of it</button>` : ''}
+      ${done && !draft && edits.length ? '<button class="st-btn small" data-act="draft">Render the rough cut</button>' : ''}</div></div>`;
+}
+/** Together: when the agent ends on a question, answer in one click (the composer still takes anything). */
+function quickReplies(conv) {
+  if (conv.mode !== 'together' || conv.running || conv.queued.length || conv.permissions.length) return '';
+  const last = conv.messages.filter(m => m.role === 'assistant').at(-1), text = last?.parts.filter(p => p.type === 'text').map(p => p.text).join(' ').trim() ?? '';
+  if (!/\?\s*$/.test(text) || conv.messages.at(-1)?.role === 'user') return '';
+  return `<div class="st-quick" role="group" aria-label="Quick replies">${['Yes, go ahead.', 'Show me a preview first.', 'Not yet — explain the options.'].map(t => `<button class="st-btn small" data-act="quick" data-text="${esc(t)}">${esc(t)}</button>`).join('')}</div>`;
+}
+
 // ------------------------------------------------------------------ actions
 
 async function agentPost(path, body, done) {
@@ -229,6 +265,8 @@ async function agentPost(path, body, done) {
 }
 Object.assign(ACTIONS, {
   chat: () => toggleChat(),
+  mode: el => agentPost('/api/agent/mode', { mode: el.dataset.mode }, () => status(el.dataset.mode === 'oneshot' ? 'Make it for me: the agent carries each request through to a result, then reports.' : 'Build it together: the agent proposes and asks before each step.')),
+  quick: el => { S.agent.draft = el.dataset.text; sendMessage('queue'); },
   watch: (el, again) => { if (!S.f.versions.some(v => v.id === el.dataset.rev)) { if (again === true) return status(`${el.dataset.rev} is not listed yet; open Review.`, 'warn'); const session = S; refreshFilm().then(() => currentSession(session) && ACTIONS.watch(el, true)); return; } S.monitor.rev = el.dataset.rev; setSource('rendered'); requestAnimationFrame(() => monitorVideo()?.play?.().catch(() => {})); },
   scopeMenu: () => { S.agent.menu = !S.agent.menu; invalidate(['chat']); },
   scope: el => pinScope(el.dataset.kind),
@@ -275,7 +313,7 @@ async function openAgentSettings() {
     <div class="st-dialog-actions"><button class="st-btn" data-act="close">Close</button></div></div>`, {
     model: async el => {
       const sel = document.getElementById('ag-model'), opt = sel?.selectedOptions[0]; if (!sel) return;
-      if (opt?.dataset.free !== '1' && !confirm(`${opt.textContent}\n\nThis model is billed by its provider to the account connected in this runtime. Use it for this film?`)) return;
+      if (opt?.dataset.free !== '1' && !document.getElementById('ag-paid')?.checked) { document.getElementById('ag-msg').textContent = `${opt.textContent}: this model is billed by its provider to the account connected here. Tick “I understand this model is paid” to use it.`; return; }
       try { await call('/api/agent/model', { film: session.id, model: sel.value }); if (currentSession(session)) { status(`This film now talks to ${sel.value}.`); closeOverlay(); refreshAgent(true); } } catch (e) { if (currentSession(session)) document.getElementById('ag-msg').textContent = e.message; }
     },
     connect: async () => {
@@ -299,6 +337,7 @@ async function openAgentSettings() {
     <p class="st-hint-text">An isolated OpenCode ${esc(rt?.version ?? '')} owned by this studio: its sessions and saved provider keys live in <code>.clearframe/opencode</code>. Setup and recovery: <code>docs/agent-studio.md</code>, or run <code>clearframe agent doctor</code>.</p>
     <h3 class="st-h3">Model for this film</h3>
     ${models.length ? `<div class="st-addrow"><select id="ag-model" class="st-select" aria-label="Model">${models.map(m => `<option value="${esc(m.id)}" data-free="${m.free ? 1 : 0}" ${m.id === current ? 'selected' : ''}>${esc(m.name)} — ${esc(m.provider)}${m.free ? ' · free' : ' · paid'}</option>`).join('')}</select><button class="st-btn small primary" data-act="model">Use</button></div>
+      <label class="st-hint-text"><input type="checkbox" id="ag-paid"> I understand a paid model bills its provider account</label>
       <p class="st-hint-text">Big Pickle (OpenCode Zen) is free and is the default. Paid models bill the provider account connected here; ClearFrame never switches to one on its own.</p>` : '<p class="st-muted">Models appear once OpenCode has started and loaded its catalog.</p>'}
     <h3 class="st-h3">Providers</h3>
     ${integrations.filter(i => i.connected).length ? `<ul class="st-decisions">${integrations.filter(i => i.connected).map(i => `<li><b>${esc(i.name)}</b> <span class="st-muted">${esc(i.via.join(', '))}</span></li>`).join('')}</ul>` : '<p class="st-muted">No provider keys connected; free OpenCode Zen models still work.</p>'}
