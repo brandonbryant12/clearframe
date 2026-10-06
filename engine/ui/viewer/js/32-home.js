@@ -52,8 +52,8 @@ function homeForm() {
       <details class="home-more" ${f.audience || f.takeaway ? 'open' : ''}><summary>Audience and takeaway</summary><div class="home-grid two">
         <label>Who it is for<input id="nf-audience" value="${esc(f.audience ?? '')}" placeholder="Curious teenagers, no physics background"></label>
         <label>What they should remember<input id="nf-takeaway" value="${esc(f.takeaway ?? '')}" placeholder="Two bulges: one toward the Moon, one away"></label></div></details>
-      <div class="home-sources"><button type="button" class="btn" id="nf-add">Add source documents…</button><input type="file" id="nf-files" multiple hidden accept=".md,.markdown,.txt,.pdf,.docx,.html,.htm,.rtf,.csv,.json">
-        <span class="meta">Reports, scripts, transcripts or notes (PDF, DOCX, Markdown, text, HTML, CSV). The agent reads them; numbers stay tied to their sources.</span>
+      <div class="home-sources"><button type="button" class="btn" id="nf-add">Add sources and pictures…</button><input type="file" id="nf-files" multiple hidden accept=".md,.markdown,.txt,.pdf,.docx,.html,.htm,.rtf,.csv,.json,.png,.jpg,.jpeg,.webp,.gif,.svg,.mp4,.mov,.webm,.wav,.mp3,.m4a">
+        <span class="meta">Reports, scripts, transcripts or notes (PDF, DOCX, Markdown, text, HTML, CSV) for the agent to read, and pictures, footage or sound to use in the film (assets/uploads/).</span>
         <ul class="home-files" id="nf-list">${(f.documents ?? []).map(d => `<li>${esc(d)} <button type="button" class="link" data-remove="${esc(d)}" aria-label="Remove ${esc(d)}">Remove</button></li>`).join('')}</ul></div>
       <div class="home-go"><span class="home-agent" title="${esc(rt?.error ?? '')}"><i class="dot s-${esc(rt?.state ?? 'stopped')}"></i>Agent: Big Pickle (free, OpenCode Zen) · OpenCode ${esc(rt?.version ?? '2.0.24')}${rt?.state === 'error' ? ' · needs attention' : ''}</span>
         <button class="btn primary" type="submit" id="nf-go">Create and start building</button></div>
@@ -124,7 +124,7 @@ function firstMessage(f, film) {
     f.title.trim() && `Title: ${f.title.trim()}`, `Format: ${f.format === 'vertical' ? 'vertical 9:16' : 'landscape 16:9'}`,
     f.audience.trim() && `Audience: ${f.audience.trim()}`, f.takeaway.trim() && `Takeaway: ${f.takeaway.trim()}`,
     pb ? `Starting structure: ${pb.title}` : 'Starting structure: your choice (the project started from a general starter)', tr ? `Look: ${tr.title ?? tr.id}` : null,
-    f.documents?.length ? `Sources you gave (${f.documents.join(', ')}) are in the project as ${(film.files ?? []).map(x => x.name).filter(n => /^source\//.test(n)).join(', ') || 'source/'}; the intake summarised them in BRIEF.md and EVIDENCE.md. Read them with clearframe_files before writing; tie every number to its source.` : null,
+    f.documents?.length ? `Files I gave (${f.documents.join(', ')}) are in the project: documents as ${(film.files ?? []).map(x => x.name).filter(n => /^source\//.test(n)).join(', ') || 'source/'} (summarised in BRIEF.md and EVIDENCE.md), pictures and media in ${(film.files ?? []).map(x => x.name).filter(n => /^assets\/uploads\//.test(n)).join(', ') || 'none'}. Read the documents with clearframe_files before writing; tie every number to its source.` : null,
     '', `The project "${film.title}" starts from a playbook with sample scenes, narration, numbers and sources. Replace all of it with this film's own: rewrite or replace every scene and its narration, remove sample figures and sources, keep it a film rather than slides, and group the work into a few clearly labelled edits. Where a picture is not designed yet, mark that scene "placeholder" with what it should become; never leave sample content.`,
     f.mode === 'together'
       ? 'We are building this together. Read the brief and sources, then propose a short plan: the scenes in order (one line each, with what the picture does), the look, and the voice. Change nothing yet; end by asking me to confirm or adjust.'

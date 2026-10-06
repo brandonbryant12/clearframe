@@ -87,11 +87,11 @@ export async function uploadToProject(dir, req, rawName) {
 /** Uploads for a film that does not exist yet wait in a draft folder in studio state. */
 export async function uploadToDraft(uploads, draft, req, rawName) {
   if (typeof draft !== 'string' || !/^[a-z0-9-]{8,64}$/.test(draft)) throw fail('Unknown draft.');
+  // Documents feed the intake; pictures, footage and sound go to the film's assets/uploads/.
   const { name, kind } = safeName(rawName);
-  if (kind !== 'doc') throw fail('Add documents here (Markdown, text, PDF, DOCX, HTML, RTF, CSV, JSON); add pictures and footage inside the film.', 415);
   const folder = path.join(uploads, draft);
   fs.mkdirSync(folder, { recursive: true });
-  const r = await receive(req, folder, name, MAX_UPLOAD.doc);
+  const r = await receive(req, folder, name, MAX_UPLOAD[kind]);
   return { file: r.name, size: r.size };
 }
 
@@ -109,11 +109,12 @@ export function createProject(root, uploads, body) {
   if (!idea && !(body.documents ?? []).length) throw fail('Describe the film, or add a source document.');
   if (idea.length > 8000) throw fail('Keep the idea under 8,000 characters; add longer material as a document.');
   const draftDir = path.join(uploads, request);
-  const documents = (Array.isArray(body.documents) ? body.documents : []).map(f => {
+  const uploaded = (Array.isArray(body.documents) ? body.documents : []).map(f => {
     const file = path.join(draftDir, path.basename(String(f)));
     if (!fs.existsSync(file)) throw fail(`The upload ${f} is missing; add it again.`);
     return file;
   });
+  const documents = uploaded.filter(f => DOCS.has(path.extname(f).toLowerCase())), media = uploaded.filter(f => MEDIA.has(path.extname(f).toLowerCase()));
   const opt = (v, re) => (typeof v === 'string' && re.test(v) ? v : undefined);
   fs.mkdirSync(root, { recursive: true });
   // Reserve the folder atomically: mkdir fails if a concurrent create took the name first.
@@ -127,6 +128,11 @@ export function createProject(root, uploads, body) {
     takeaway: typeof body.takeaway === 'string' && body.takeaway.trim() ? body.takeaway.trim().slice(0, 400) : undefined,
     vertical: body.format === 'vertical' || undefined,
   }); } catch (e) { fs.rmSync(dir, { recursive: true, force: true }); throw e.status ? e : fail(e.message); }
+  // Pictures and footage given with the brief: into assets/uploads/, never replacing a file.
+  if (media.length) {
+    const into = path.join(dir, 'assets', 'uploads'); fs.mkdirSync(into, { recursive: true });
+    for (const f of media) for (let n = 1; ; n++) { try { fs.copyFileSync(f, path.join(into, variant(path.basename(f), n)), fs.constants.COPYFILE_EXCL); break; } catch (e) { if (e.code !== 'EEXIST') throw e; } }
+  }
   updateLink(dir, l => ({ ...l, createdBy: request, createdAt: new Date().toISOString(), mode: body.mode === 'together' ? 'together' : 'oneshot' }));
   fs.rmSync(draftDir, { recursive: true, force: true });
   created.set(request, dir);

@@ -530,3 +530,14 @@ test('Google narration for one changed chapter is approved, budgeted and generat
   assert.ok(sent.length >= 1 && sent.every(b => b.includes('One step today.') && !b.includes('Keep going.')));
   assert.equal(JSON.parse(fs.readFileSync(path.join(P.vo, 'takes', `${kept.id}.json`), 'utf8')).hash, hash, 'the cached take is untouched');
 });
+
+test('pictures given with a new film on the home page land in assets/uploads; documents feed the intake', async t => {
+  const base = tmp(t), root = projectsRoot(base, 'projects'), uploads = path.join(base, '.clearframe/uploads');
+  const draft = 'req-media12345';
+  await uploadToDraft(uploads, draft, stream('# Notes\nA script.'), 'script.md');
+  await uploadToDraft(uploads, draft, stream('not really a png'), 'home.png');
+  const dir = createProject(root, uploads, { request: draft, idea: 'A demo of the studio', documents: ['script.md', 'home.png'] });
+  assert.ok(fs.existsSync(path.join(dir, 'assets/uploads/home.png')));
+  assert.ok(fs.readdirSync(path.join(dir, 'source')).length, 'the document went through the intake');
+  assert.ok(!fs.existsSync(path.join(uploads, draft)), 'the draft folder is cleared');
+});
