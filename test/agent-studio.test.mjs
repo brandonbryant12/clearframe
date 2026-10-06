@@ -9,7 +9,7 @@ import path from 'node:path';
 import { PassThrough } from 'node:stream';
 import { fileURLToPath } from 'node:url';
 import { createAgent, resolveScope, cleanScope, contextBlock, transcript } from '../engine/lib/agent/agent.mjs';
-import { scopeViolation, inside } from '../engine/lib/agent/tools.mjs';
+import { scopeViolation, inside, pictureSize } from '../engine/lib/agent/tools.mjs';
 import { readLink, updateLink } from '../engine/lib/agent/links.mjs';
 import { uploadToProject, uploadToDraft, createProject, safeName, projectsRoot } from '../engine/lib/agent/projects.mjs';
 import { createRuntime, runtimeConfig, agentPaths, PERMISSIONS } from '../engine/lib/agent/runtime.mjs';
@@ -542,4 +542,16 @@ test('pictures given with a new film on the home page land in assets/uploads; do
   assert.equal(fs.readFileSync(path.join(dir, 'source/captures.json'), 'utf8'), '{"captures":{}}', 'JSON the intake cannot read is kept in source/ as it is');
   assert.ok(fs.readdirSync(path.join(dir, 'source')).length, 'the document went through the intake');
   assert.ok(!fs.existsSync(path.join(uploads, draft)), 'the draft folder is cleared');
+});
+
+test('the agent learns picture dimensions from file headers (it has no shell to ask)', t => {
+  const d = tmp(t), png = Buffer.alloc(33), gif = Buffer.from('GIF89a\x20\x03\x58\x02', 'latin1');
+  Buffer.from([0x89, 0x50, 0x4e, 0x47, 13, 10, 26, 10]).copy(png); png.write('IHDR', 12, 'ascii'); png.writeUInt32BE(848, 16); png.writeUInt32BE(1546, 20);
+  // JPEG: SOI, an APP0 segment to skip, then SOF0 with height 540 and width 960.
+  const jpg = Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0, 4, 0, 0, 0xff, 0xc0, 0, 11, 8, 0x02, 0x1c, 0x03, 0xc0, 1, 1, 0x11, 0, 0, 0]);
+  for (const [n, b] of [['a.png', png], ['b.gif', gif], ['c.jpg', jpg], ['d.png', Buffer.from('not a picture')]]) fs.writeFileSync(path.join(d, n), b);
+  assert.deepEqual(pictureSize(path.join(d, 'a.png')), { width: 848, height: 1546 });
+  assert.deepEqual(pictureSize(path.join(d, 'b.gif')), { width: 800, height: 600 });
+  assert.deepEqual(pictureSize(path.join(d, 'c.jpg')), { width: 960, height: 540 });
+  assert.equal(pictureSize(path.join(d, 'd.png')), null);
 });

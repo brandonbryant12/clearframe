@@ -21,6 +21,28 @@ export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearfr
   speech: 'docs/speech.md', authoring: 'engine/agent-plugin/AUTHORING.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };
 const TEXT_EXT = new Set(['.md', '.markdown', '.txt', '.csv', '.json', '.srt', '.vtt', '.docx', '.html', '.htm', '.rtf', '.pdf']);
 const SKIP = new Set(['review', 'build', 'node_modules']);
+/** A picture's pixel size from its header (PNG, JPEG, GIF, WebP), or null: the agent has no shell to ask. */
+export function pictureSize(file) {
+  let b;
+  try { const fd = fs.openSync(file, 'r'); b = Buffer.alloc(65536); b = b.subarray(0, fs.readSync(fd, b, 0, b.length, 0)); fs.closeSync(fd); } catch { return null; }
+  if (b.length >= 24 && b.readUInt32BE(0) === 0x89504e47 && b.toString('ascii', 12, 16) === 'IHDR') return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
+  if (b.length >= 10 && b.toString('ascii', 0, 3) === 'GIF') return { width: b.readUInt16LE(6), height: b.readUInt16LE(8) };
+  if (b.length >= 30 && b.toString('ascii', 0, 4) === 'RIFF' && b.toString('ascii', 8, 12) === 'WEBP') {
+    const kind = b.toString('ascii', 12, 16);
+    if (kind === 'VP8X') return { width: 1 + b.readUIntLE(24, 3), height: 1 + b.readUIntLE(27, 3) };
+    if (kind === 'VP8 ') return { width: b.readUInt16LE(26) & 0x3fff, height: b.readUInt16LE(28) & 0x3fff };
+    if (kind === 'VP8L') { const v = b.readUInt32LE(21); return { width: 1 + (v & 0x3fff), height: 1 + ((v >> 14) & 0x3fff) }; }
+  }
+  if (b.length >= 4 && b[0] === 0xff && b[1] === 0xd8) {
+    for (let i = 2; i + 9 < b.length;) {
+      if (b[i] !== 0xff) { i++; continue; }
+      const m = b[i + 1];
+      if (m >= 0xc0 && m <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(m)) return { width: b.readUInt16BE(i + 7), height: b.readUInt16BE(i + 5) };
+      i += 2 + b.readUInt16BE(i + 2);
+    }
+  }
+  return null;
+}
 const getAt = (o, p) => { for (const k of String(p).split('.')) { if (o == null) return undefined; o = o[k]; } return o; };
 const without = (o, p) => { const c = structuredClone(o), parts = p.split('.'), last = parts.pop(); const parent = getAt(c, parts.join('.')); if (parent && typeof parent === 'object') delete parent[last]; return c; };
 
@@ -195,7 +217,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
         for (const e of fs.readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
           if (e.name.startsWith('.') || e.isSymbolicLink() || (depth === 0 && SKIP.has(e.name)) || out.length >= 400) continue;
           const f = path.join(d, e.name);
-          if (e.isDirectory()) { if (depth < 5) walk(f, depth + 1); } else out.push(`${path.relative(dir, f)} (${Math.max(1, Math.round(fs.statSync(f).size / 1024))} KB)`);
+          if (e.isDirectory()) { if (depth < 5) walk(f, depth + 1); } else { const px = /\.(png|jpe?g|gif|webp)$/i.test(e.name) && pictureSize(f); out.push(`${path.relative(dir, f)} (${px ? `${px.width}×${px.height} px, ` : ''}${Math.max(1, Math.round(fs.statSync(f).size / 1024))} KB)`); }
         }
       };
       walk(dir, 0);
