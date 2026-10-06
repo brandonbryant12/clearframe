@@ -2,9 +2,10 @@
 // Capture real studio UI for the self-demo (examples/clearframe-self-demo): drives a running
 // `clearframe viewer --serve` in Chrome over the DevTools Protocol (no extra dependencies), saves a
 // 1920×1080 overview and 2× close-ups of each state, and writes captures.json with each control's
-// measured position (normalised 0–1) so the agent can place pins and focus regions exactly; it
-// cannot see the pictures. Read-only for films: it opens panels and dialogs, types into the
-// composer without sending, and cancels the paid-approval dialog. Never sends, approves or edits.
+// measured position (normalised 0–1; each close-up also gets its crop and the pins inside it) so the
+// agent can place pins and focus regions exactly; it cannot see the pictures. Read-only for films:
+// it opens panels and dialogs, types into the composer without sending, and cancels the
+// paid-approval dialog. Never sends, approves or edits.
 //
 //   node scripts/demo-captures.mjs --out DIR [--studio http://127.0.0.1:4317] [--cdp http://127.0.0.1:9333]
 //          [--tour projects-why-the-tide-turns-twice] [--done projects-flash-then-rumble] [--only name,name]
@@ -67,7 +68,17 @@ async function shoot(page, name, { clip = null, scale = 1 } = {}) {
   if (clip) { c = await page.evaluate(s => { const r = document.querySelector(s)?.getBoundingClientRect(); return r && { x: Math.max(0, r.left - 12), y: Math.max(0, r.top - 12), width: r.width + 24, height: r.height + 24 }; }, clip); if (!c) throw new Error(`no ${clip}`); }
   const r = await page.send('Page.captureScreenshot', { format: 'png', ...(c ? { clip: { ...c, scale } } : {}) });
   fs.writeFileSync(path.join(OUT, `${name}.png`), Buffer.from(r.data, 'base64'));
-  return `${name}.png`;
+  if (!c) return `${name}.png`;
+  // A close-up keeps its crop of the full frame so its pins can be re-expressed within it.
+  const f = n => Math.round(n * 1000) / 1000;
+  return { file: `${name}.png`, crop: { x: f(c.x / W), y: f(c.y / H), w: f(c.width / W), h: f(c.height / H) } };
+}
+/** Pins whose box lies inside a close-up's crop, normalised to the close-up picture itself. */
+function closeupPins(shot, pins) {
+  const { crop } = shot, f = n => Math.round(n * 1000) / 1000, inside = b => b.x >= crop.x - 0.002 && b.y >= crop.y - 0.002 && b.x + b.w <= crop.x + crop.w + 0.002 && b.y + b.h <= crop.y + crop.h + 0.002;
+  const at = (v, o, s) => f(Math.min(1, Math.max(0, (v - o) / s)));
+  return { ...shot, pins: pins.filter(p => p.box && inside(p.box)).map(p => ({ ...p, x: at(p.x, crop.x, crop.w), y: at(p.y, crop.y, crop.h),
+    box: { x: at(p.box.x, crop.x, crop.w), y: at(p.box.y, crop.y, crop.h), w: f(p.box.w / crop.w), h: f(p.box.h / crop.h) } })) };
 }
 
 const STATES = {
@@ -152,7 +163,8 @@ try {
   for (const [name, run] of Object.entries(STATES)) {
     if (only && !only.has(name)) continue;
     process.stdout.write(`${name}… `);
-    manifest.captures[name] = await run(page);
+    const shot = await run(page), pins = [...shot.pins, ...(shot.extra?.pins ?? [])];
+    manifest.captures[name] = { ...shot, closeups: shot.closeups.map(x => closeupPins(x, pins)) };
     console.log('ok');
   }
 } finally { await page.close(); c.stop(); }

@@ -33,3 +33,43 @@ The project "ClearFrame, made with ClearFrame" starts from a playbook with sampl
 Start with clearframe_guide topic authoring (short). Then make the first cut I can watch: queue a rough cut with clearframe_render (kind draft), follow it with clearframe_job until it finishes, fix any engine errors it reports and queue it again if needed. Finish by telling me briefly what the cut contains, which scenes are placeholders, and what you need from me.
 ```
 
+
+## 2. Together: one scene, proposal first
+
+After watching rough cut r001. In the Agent column: **Build it together**. In the scene list: scene
+"06 By hand", then **Ask the agent** in the inspector (scope: that scene).
+
+```text
+This picture is a tall, narrow column and reads tiny, especially on a phone. Propose how to make it readable without changing the narration, and wait for my answer.
+```
+
+The agent asked to run a shell command to read the picture's size; **Deny**. It proposed without
+changing anything. Quick reply button:
+
+```text
+Yes — go with your recommendation.
+```
+
+Then **Undo these edits** on the change card (the scene went back exactly) and ⇧⌘Z to restore it.
+
+## 3. A review note, handed to the agent
+
+Review layout; scene "Conversation" selected; **+ Note**; clicked the picture. Note by "Demo director":
+
+```text
+On a phone this screenshot is unreadable: the UI is a quarter of the frame. Show the conversation itself big.
+```
+
+**Ask the agent** on the note (scope: the note), **Make it for me**:
+
+```text
+Fix this note: use the conversation close-up (assets/uploads/conversation-column.png) for this scene so the conversation fills the frame and reads on a phone. Keep the narration. Then render a still of the scene to check it.
+```
+
+## 4. The same fix, whole film
+
+Scope menu: **Whole film** (still Make it for me):
+
+```text
+Good. Do the same for the other scenes whose screenshot is small: Scope (scope-composer.png), Review (review-thread.png), Sound (sound-panel.png) and Export (deliver-panel.png) — use the close-up so the UI reads on a phone; pins only where they still point at something in the close-up. Keep the narration. Then render a new rough cut and tell me when it is ready.
+```
