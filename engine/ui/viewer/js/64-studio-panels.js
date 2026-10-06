@@ -129,10 +129,10 @@ function reviewPanel() {
     + (v ? `<div class="st-panel-foot"><button class="st-btn small" data-act="accept" data-rev="${esc(v.id)}">Record acceptance of ${esc(versionName(v))}…</button></div>` : '');
 }
 function threadHTML(v, n) {
-  const scene = n.at != null ? v.scenes.find(s => n.at >= s.start && n.at < s.end) : null;
+  const scene = n.at != null && !n.earlier ? v.scenes.find(s => n.at >= s.start && n.at < s.end) : null;
   const editable = scene && beatById(scene.id), changed = scene && changedBeats().has(scene.id), status = noteStatus(n), cand = /in (r\d{3,})/.exec(n.state ?? '')?.[1];
   return `<article class="st-thread ${status === 'resolved' ? 'done' : ''} ${S.sel.note === n.id ? 'on' : ''}" data-key="t-${esc(n.id)}">
-    <header>${n.at == null ? '<span class="st-chip">whole cut</span>' : `<button class="st-time" data-act="thread" data-op="seek" data-note="${esc(n.id)}">${timecode(n.at, v.look?.fps ?? 30)}</button>`}<b>${esc(n.by ?? 'Note')}</b><span class="st-chip ${status === 'resolved' ? 'ok' : status === 'applied' ? 'warn' : ''}">${esc(status === 'applied' ? `${n.state} · awaiting a verdict` : n.state)}</span>${scene ? `<span class="st-muted">${esc(sceneName(beatById(scene.id)) || scene.kind)}</span>` : ''}</header>
+    <header>${n.earlier ? `<span class="st-chip" title="Its video is no longer kept">on ${esc(n.earlier)}</span>` : n.at == null ? '<span class="st-chip">whole cut</span>' : `<button class="st-time" data-act="thread" data-op="seek" data-note="${esc(n.id)}">${timecode(n.at, v.look?.fps ?? 30)}</button>`}<b>${esc(n.by ?? 'Note')}</b><span class="st-chip ${status === 'resolved' ? 'ok' : status === 'applied' ? 'warn' : ''}">${esc(status === 'applied' ? `${n.state} · awaiting a verdict` : n.state)}</span>${scene ? `<span class="st-muted">${esc(sceneName(beatById(scene.id)) || scene.kind)}</span>` : ''}</header>
     <p>${linkTags(n.text)}</p>
     ${n.replies.map(r => `<p class="st-reply"><b>${esc(r.by ?? 'Reply')}</b> ${linkTags(r.text)} <span class="st-muted">${when(r.at)}</span></p>`).join('')}
     <footer>${editable ? `<button class="st-link" data-act="thread" data-op="edit" data-note="${esc(n.id)}">Edit this scene</button>` : ''}

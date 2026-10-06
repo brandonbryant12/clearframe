@@ -115,6 +115,11 @@ export async function clearframeFilm(dir, ctx) {
   const id = slug(path.relative(process.cwd(), dir)), title = sb.title ?? path.basename(dir);
   const fctx = { ...ctx, notes: readNotes(dir), decisions: readDecisions(dir).filter(d => d.role === 'human'), pins: readJSON(path.join(dir, 'review/viewer-pins.json'), {}), film: id, title };
   const versions = listRevisions(dir).map((r, i) => clearframeVersion(dir, sb, r, i, fctx)).filter(Boolean);
+  // Notes on a revision whose video is no longer kept stay reachable: listed with the latest version,
+  // labelled with their own revision, with no seek or picture pin (that picture is gone).
+  const playable = new Set(versions.map(v => v.id));
+  const orphans = fctx.notes.filter(n => n.revision && !playable.has(n.revision));
+  if (versions.length && orphans.length) versions.at(-1).notes.push(...orphans.map(n => ({ ...noteView(n, { pins: fctx.pins, engine: true }), earlier: n.revision, earlierAt: n.anchor?.at ?? null, at: null, pin: null, element: null })));
   // Sound cues describe the latest build only.
   const cues = readJSON(path.join(dir, 'build/cues.json'), []);
   if (versions.length && Array.isArray(cues)) versions.at(-1).lanes.sfx = cues.map(c => ({ t: c.t, name: c.name }));
