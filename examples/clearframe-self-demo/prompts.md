@@ -115,3 +115,14 @@ Assets → **Add files…**: `review.mp4`. Make it for me, Whole film:
 ```text
 r004 reads on a phone. Two last things: make 07 Watch, note, hand it over a full-frame clip stage like the others, with review.mp4 (just added: a review note and its Ask the agent link), and add the free draft music bed under the narration (no Google music). Check, then render a new rough cut and tell me its actual size, length and what the narration and music actually are.
 ```
+
+## 9. A hand edit (no agent)
+
+Watching r005: the stop scene (1.7 s) ended before the clip reached its Stop press. Design layout,
+scene "Stop", layer 0 (the video), the **offset** field: typed `4.7`, ⌘Enter. One undo step
+("Change elements offset in Stop"), engine clean.
+
+## 10. Close the note, render the final
+
+Review: **Resolve…** on note n001 (fixed in r002–r004), name `Demo director`, **Resolved**.
+Deliver: **Render final**. No Google sound: the final keeps the free draft narration and music bed.
