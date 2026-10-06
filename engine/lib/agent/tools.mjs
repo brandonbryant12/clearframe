@@ -126,6 +126,8 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       const paused = pauseOf(dir);
       if (paused) throw fail(`${paused.label} is using the working copy. Wait for it (clearframe_job) before editing.`, 409);
       if (typeof input.label !== 'string' || !input.label.trim()) throw fail('Give the change a short label for the undo history.');
+      // Some models send the operations as JSON text; accept that, refuse anything else.
+      if (typeof input.ops === 'string') { try { input.ops = JSON.parse(input.ops); } catch { throw fail('ops must be an array of operations (or that array as JSON text).'); } }
       const plan = planOps(dir, input.ops);
       if (input.hash !== plan.hash) throw fail('The film changed since you read it (the person or another editor saved a change). Call clearframe_state and make your change on the current version.', 409);
       // Which request this call answers, from the call's own message: fails closed when it cannot be told.

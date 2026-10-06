@@ -38,6 +38,8 @@ function fakeClient({ gate } = {}) {
       active: async () => ({}), inbox: { list: async () => [] }, form: { list: async () => [] },
     },
     permission: { list: async () => [] },
+    // The persisted history (survives compaction); a test can make it differ from the context.
+    message: { list: async ({ sessionID, order }) => { const h = c.histories?.get(sessionID) ?? contexts.get(sessionID); if (h instanceof Error) throw h; const data = [...(h ?? [])]; return { data: order === 'desc' ? data.reverse() : data, cursor: {} }; } },
   };
   return c;
 }
@@ -226,10 +228,18 @@ test('if the request cannot be identified, nothing is changed', async t => {
   const { d, client, edit } = bridged(t, [user('msg_A', { kind: 'scene', beats: ['a'] }), asst('msg_M1')]);
   await assert.rejects(edit('msg_unknown', setText('a', 'x')), e => e.status === 409);
   await assert.rejects(edit(null, setText('a', 'x')), e => e.status === 409);
-  client.contexts.set('ses_1', new Error('socket hang up'));
+  client.histories = new Map([['ses_1', new Error('socket hang up')]]);
   await assert.rejects(edit('msg_M1', setText('a', 'x')), e => e.status === 503);
   assert.equal(studioState(d).storyboard.beats[0].props.text, 'First');
   assert.equal(studioState(d).history.length, 0);
+});
+
+test('after OpenCode compacts the conversation, an edit is still held to the request it answers', async t => {
+  const { d, client, edit } = bridged(t, [{ id: 'msg_C', type: 'compaction' }, asst('msg_M1')]);
+  client.histories = new Map([['ses_1', [user('msg_A', { kind: 'scene', beats: ['a'] }), asst('msg_M0'), { id: 'msg_C', type: 'compaction' }, asst('msg_M1')]]]);
+  await assert.rejects(edit('msg_M1', setText('b', 'Out of scope')), e => e.status === 409 && /limited this request/.test(e.message));
+  await edit('msg_M1', setText('a', 'In scope'));
+  assert.equal(studioState(d).history.at(-1).run, 'msg_A');
 });
 
 test('a tool call from a session no project links to is refused', async t => {

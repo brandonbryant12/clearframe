@@ -179,6 +179,7 @@ function chatHTML() {
   if (rt?.state === 'error') body += `<div class="st-msg-error"><b>OpenCode did not start: ${esc(rt.error)}</b>${rt.hint ? `<p>${esc(rt.hint)}</p>` : ''}<button class="st-btn small" data-act="agentStart">Retry</button> <button class="st-link" data-act="agentSettings">Setup</button></div>`;
   if (rt && rt.state === 'ready' && ['empty', 'missing-model'].includes(rt.catalog)) body += `<div class="st-msg-warn"><b>${esc(rt.hint ?? 'The model catalog is not ready.')}</b> <button class="st-link" data-act="agentSettings">Choose a model</button></div>`;
   if (conv?.lost) body += `<p class="st-msg-sys">The earlier conversation for this film is not in this runtime any more (${esc(conv.lost.sessionID)}); a new one starts with your next message.</p>`;
+  if (conv?.earlier) body += '<p class="st-msg-sys">Showing the latest 300 messages; the whole conversation is kept.</p>';
   if (conv) body += transcriptHTMLChat(conv);
   if (conv) body += progressHTML(conv) + quickReplies(conv);
   if (conv && !conv.messages.length && !a.outbox.length && !conv.pending.length) body += `<div class="st-chat-empty"><p>Talk to the agent to build this film. It reads the storyboard, edits through the same undoable steps as the panels, and renders native previews you can watch here.</p>
@@ -252,8 +253,9 @@ function progressHTML(conv) {
 function quickReplies(conv) {
   if (conv.mode !== 'together' || conv.running || conv.queued.length || conv.permissions.length) return '';
   const last = conv.messages.filter(m => m.role === 'assistant').at(-1), text = last?.parts.filter(p => p.type === 'text').map(p => p.text).join(' ').trim() ?? '';
-  if (!/\?\s*$/.test(text) || conv.messages.at(-1)?.role === 'user') return '';
-  return `<div class="st-quick" role="group" aria-label="Quick replies">${['Yes, go ahead.', 'Show me a preview first.', 'Not yet — explain the options.'].map(t => `<button class="st-btn small" data-act="quick" data-text="${esc(t)}">${esc(t)}</button>`).join('')}</div>`;
+  // A question, even wrapped in Markdown emphasis or quotes, at the end of the agent's reply.
+  if (!/\?[\s*_`"'”)\]]*$/.test(text) || conv.messages.at(-1)?.role === 'user') return '';
+  return `<div class="st-quick" role="group" aria-label="Quick replies">${['Yes — go with your recommendation.', 'Show me a preview first.', 'Not yet — explain the options.'].map(t => `<button class="st-btn small" data-act="quick" data-text="${esc(t)}">${esc(t)}</button>`).join('')}</div>`;
 }
 
 // ------------------------------------------------------------------ actions

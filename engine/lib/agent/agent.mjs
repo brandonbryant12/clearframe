@@ -127,6 +127,23 @@ export function touched(before, after) {
 export function createAgent({ base = process.cwd(), runtime, jobs, dirs, filmOf, pauseOf }) {
   let index = new Map();
   const verified = new Set();
+  /**
+   * The persisted conversation, oldest first. session.context is what the model sees and loses the
+   * person's earlier messages when OpenCode compacts; message.list keeps everything.
+   */
+  async function history(c, sessionID, { until = null, limit = 300, pages = 10 } = {}) {
+    const out = [];
+    let cursor;
+    for (let i = 0; i < pages; i++) {
+      // The first page sets the order; OpenCode refuses an order alongside a cursor.
+      const r = await c.message.list({ sessionID, limit: Math.min(limit, 200), ...(cursor ? { cursor } : { order: 'desc' }) });
+      const page = Array.isArray(r) ? r : r?.data ?? [];
+      out.push(...page);
+      cursor = r?.cursor?.next;
+      if (!cursor || !page.length || out.length >= limit || (until && until(out))) return { messages: out.reverse(), more: !!cursor };
+    }
+    return { messages: out.reverse(), more: !!cursor };
+  }
   const reindex = () => { index = sessionIndex(dirs()); return index; };
   const client = () => runtime.client();
   const guard = async fn => { try { return await fn(await client()); } catch (e) { runtime.lost(e); throw e.status ? e : fail(e.message, 502); } };
@@ -181,14 +198,14 @@ export function createAgent({ base = process.cwd(), runtime, jobs, dirs, filmOf,
       await session(dir, { create: false });
       const sid = readLink(dir).sessionID;
       if (!sid) return { ...base, linked: false, messages: [], running: false, queued: [], permissions: [], forms: [] };
-      const [ctx, active, inbox, perms, forms, info] = await Promise.all([
-        c.session.context({ sessionID: sid }), c.session.active(), c.session.inbox.list({ sessionID: sid }).catch(() => []),
+      const [{ messages: ctx, more }, active, inbox, perms, forms, info] = await Promise.all([
+        history(c, sid), c.session.active(), c.session.inbox.list({ sessionID: sid }).catch(() => []),
         c.permission.list({ sessionID: sid }).catch(() => []), c.session.form.list({ sessionID: sid }).catch(() => []), c.session.get({ sessionID: sid }).catch(() => null)]);
       const messages = transcript(ctx, dir);
       const seen = new Set(messages.filter(m => m.role === 'user').map(m => m.id));
       const queued = (inbox ?? []).filter(i => i.type === 'user').map(i => ({ id: i.id, text: i.payload?.metadata?.clearframe?.text ?? clip(i.payload?.text, 2000), scope: i.payload?.metadata?.clearframe?.scope ?? null, delivery: i.delivery }));
       const inQueue = new Set(queued.map(q => q.id));
-      return { ...base, sessionID: sid, messages, running: !!active?.[sid], queued, cost: info?.cost ?? 0, outcome: info?.outcome ?? null,
+      return { ...base, sessionID: sid, messages, earlier: more, running: !!active?.[sid], queued, cost: info?.cost ?? 0, outcome: info?.outcome ?? null,
         pending: base.pending.filter(p => !seen.has(p.id) && !inQueue.has(p.id)),
         permissions: (perms ?? []).map(p => ({ id: p.id, action: p.action, resources: (p.resources ?? []).slice(0, 8).map(r => clip(r, 300)), message: clip(p.message, 400), save: p.save ?? [] })),
         forms: (forms ?? []).map(f => ({ id: f.id, title: clip(f.title, 300), fields: f.fields })) };
@@ -302,7 +319,9 @@ export function createAgent({ base = process.cwd(), runtime, jobs, dirs, filmOf,
    */
   async function currentScope(sessionID, messageID) {
     let ctx;
-    try { ctx = await (await client()).session.context({ sessionID }); }
+    // From the persisted history, not the model's (compactable) context: the request survives compaction.
+    const answered = list => { const k = list.findIndex(m => m.id === messageID); return k >= 0 && list.slice(k + 1).some(m => m.type === 'user'); };
+    try { ctx = (await history(await client(), sessionID, { limit: 2000, pages: 20, until: answered })).messages; }
     catch { throw fail('Could not confirm which request this edit answers (OpenCode did not respond), so nothing was changed. Try the edit again.', 503); }
     const i = typeof messageID === 'string' ? ctx.findIndex(m => m.id === messageID) : -1;
     if (i < 0) throw fail('This edit does not come from a reply in this film\'s conversation, so nothing was changed.', 409);
