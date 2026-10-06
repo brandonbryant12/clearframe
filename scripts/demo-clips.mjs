@@ -116,6 +116,20 @@ const filmState = page => api(page, `${STUDIO}/api/studio/state?film=${FILM}`);
 
 // ------------------------------------------------------------------ the clips
 const CLIPS = {
+  async home(page) {
+    await open(page, '#/films'); await until(page, () => !!document.getElementById('nf-idea'));
+    await page.evaluate(() => { for (const id of ['nf-idea', 'nf-title']) { const e = document.getElementById(id); e.value = ''; e.dispatchEvent(new Event('input', { bubbles: true })); } });
+    await page.evaluate(CURSOR);
+    // The idea field is wider than a readable crop: frame its left part, where the text starts.
+    const idea = await rect(page, '#nf-idea'), title = await rect(page, '#nf-title');
+    const clip = frame([{ ...idea, w: 470 }, { ...title, w: Math.min(title.w, 470) }]);
+    const r = await record(page, 'home', clip, async () => {
+      await sleep(400); await click(page, '#nf-idea'); await type(page, 'Why the tide turns twice a day, for curious kids.', 32); await sleep(500);
+      await click(page, '#nf-title'); await type(page, 'Why the tide turns twice', 40); await sleep(1200);
+    });
+    await page.evaluate(() => { for (const id of ['nf-idea', 'nf-title']) { const e = document.getElementById(id); e.value = ''; e.dispatchEvent(new Event('input', { bubbles: true })); } });
+    return { ...r, exercised: 'Typed an idea and a title into the new-film form (not created; the form was cleared afterwards).' };
+  },
   async modes(page) {
     await open(page, '#/films'); await until(page, () => !!document.querySelector('.home-mode label'));
     await page.evaluate(CURSOR);
