@@ -413,7 +413,7 @@ async function main() {
     if (!positionals[0]) return console.log('clearframe find "what you want to show" [--kind block,sketch,...] [--json] | find --id kind:name | find --index');
     const hits = find(positionals.join(' '), { kinds: o.kind?.split(','), limit: 10 });
     if (o.json) return console.log(JSON.stringify(hits, null, 1));
-    return console.log(hits.map(line).join('\n') + '\n\nfind --id KIND:NAME for the exact authoring of one.');
+    return console.log(hits.map(line).join('\n') + '\n\nfind --id KIND:NAME for the exact authoring of one; sketch NAME [--vertical] prints a sketch\'s drawing to copy and adapt.');
   }
   if (cmd === 'sketch') {
     if (!positionals[0])
