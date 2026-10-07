@@ -1,5 +1,20 @@
 # Changelog
 
+## research-digest's street, authored for portrait
+
+- **research-digest's street beats have authored 9:16 cameras (`viewTall`).**
+  - `mechanism` follows the late bus.
+  - `boarding` lands on its arrival at the crowded stop.
+  - `catches` holds both buses whole.
+  - `evidence`, `practice` and `trial` keep one steady frame: the arrivals chart above the whole street it describes.
+  - The chart's heading, caption and row labels get portrait sizes through `tall`.
+- **Before.** The global reframe cut the buses in half under the chart, and `boarding` sliced the late bus. On main, the label was cut off.
+- **Measured.**
+  - Vertical `check`: 22 warnings on main and 19 with the global reframe, now 3. The street beats are clean; the three left are the `hook` and `end` captions.
+  - `qa`: 0 pops. The decoded 3 fps strip shows the bus arriving at the stop and a blurred camera tilt up to the chart.
+  - `practice` and `trial` are flagged as near-holds over the same spans as in landscape, where the view is also steady while the rows build.
+  - Landscape stills at 15 s and 30 s are byte-identical.
+
 ## A playbook scene can be composed again for portrait
 
 - **A playbook beat can carry `tall` props, which replace its props when the project is made vertical.** This is for a composition the camera cannot rescue: viewTall only moves the camera, and the global reframe only frames what is drawn. The props are drawn on a 1080×1920 canvas. Landscape scaffolds drop them, and stay byte-identical.
