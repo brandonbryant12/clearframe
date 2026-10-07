@@ -242,7 +242,19 @@ test('several journeys in one beat share the keyframe budget, or are refused cle
   const route = n => [{ form: 'row', ids: ['a'], at: 0 }, ...Array.from({ length: n }, (_, i) => ({ form: 'travel', ids: ['a'], center: [500 + i * 300, 400 + i * 50], at: 2 + i * 2 }))];
   const g = expandCastProps({ cast: { objects: objects1, formations: route(3) } }, { ...wide, beatId: 't', duration: 9 }, {}).elements.find(e => e.id === 't-cast-a');
   assert.ok(g.keys.length <= 24, `three journeys fit the 24-keyframe budget (${g.keys.length})`);
-  assert.throws(() => expandCastProps({ cast: { objects: objects1, formations: route(6) } }, { ...wide, beatId: 't', duration: 15 }, {}), /travels .* more than one object can carry .* move some of it to the next beat/);
+  assert.throws(() => expandCastProps({ cast: { objects: objects1, formations: route(6) } }, { ...wide, beatId: 't', duration: 15 }, {}), /more moves in this beat than one object can carry .* move some of it to the next beat/);
+  // Journeys leave room for the moves that come after them (director repro: three journeys, then a wave).
+  for (const after of [{ form: 'wave', ids: ['a'], at: 8 }, { form: 'exit', ids: ['a'], at: 8 }, { form: 'hero', hero: 'a', at: 8 }])
+    for (const extra of [[], [{ form: 'wave', ids: ['a'], at: 9 }]]) {
+      const els = expandCastProps({ cast: { objects: objects1, formations: [...route(3), after, ...extra] } }, { ...wide, beatId: 't', duration: 11 }, {}).elements;
+      const a = els.find(e => e.id === 't-cast-a');
+      assert.ok(a.keys.length <= 24, `three journeys then ${after.form}${extra.length ? ' and a wave' : ''}: ${a.keys.length} keys`);
+    }
+  // A swap's cause, travelling first, keeps room for working at the object.
+  const swap = { objects: [{ id: 'a', shape: 'ticket' }, { id: 'b', shape: 'person' }, { id: 'c', icon: 'check' }],
+    formations: [{ form: 'row', ids: ['a', 'b'], at: 0 }, ...[1, 2, 3].map(i => ({ form: 'travel', ids: ['b'], to: 'a', at: i * 1.5 })), { form: 'swap', out: 'a', in: 'c', by: ['b'], at: 7 }] };
+  const b = expandCastProps({ cast: swap }, { ...wide, beatId: 's', duration: 9 }, {}).elements.find(e => e.id === 's-cast-b');
+  assert.ok(b.keys.length <= 24, `journeys then a swap's cause: ${b.keys.length} keys`);
 });
 
 test('a cast names only objects it declared', () => {

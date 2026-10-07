@@ -33,7 +33,7 @@ A film made of one layout per line reads as a slideshow, however well each layou
   - `drawn`: pen on paper. A hand-drawn ink outline, the colour hatched in, icons in ink, and type and threads by hand. It suits explainers, onboarding and lessons.
   - `print`: a two-colour press, with the colour laid in a dot screen slightly off register and worn, and poster type. It suits editorial and campaign films.
   Choose by the audience and the rest of the film's treatment, not for variety's sake.
-- **Formations** (1–12 per beat) each move some objects. Give a scene a move for each clause of its narration; a cast that holds still for seconds reads as a slide. Each move goes on a spoken word (`say`) or at seconds (`at`). An uncued formation follows the previous one by 1.6 s. `ids` limits a formation to those objects; without it, every object still on screen takes part.
+- **Formations** (1–12 per beat) each move some objects. Time them by the content: a step the narration describes gets its move on the word that names it, and a moment that needs reading or feeling can hold. Each move goes on a spoken word (`say`) or at seconds (`at`). An uncued formation follows the previous one by 1.6 s. `ids` limits a formation to those objects; without it, every object still on screen takes part.
 
 | `form` | What happens |
 |---|---|

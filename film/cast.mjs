@@ -83,6 +83,9 @@ export function castSpec(input, known = new Map(), knownLook = null) {
   return { objects, formations, seed: input.seed ?? 0, look: input.look ?? knownLook ?? 'tiles' };
 }
 
+// Keyframes a move adds to an object it touches (a swap's cause works at it; a hub pulses per arrival).
+const KEYS_PER_MOVE = g => ({ wave: 2, swap: 5, merge: 2 * Math.max(1, (g.ids ?? []).length), split: 3, fill: 1, emerge: 1 })[g.form] ?? 1;
+
 /** Where each object stands in one formation: {x, y, scale, rotate, opacity}. */
 export function formationTargets(f, ids, frame, { size, seed = 0, current = new Map(), extent = () => [size / 2, size / 2] }) {
   // A heading takes a band of the frame (`frame.top` or `frame.bottom`); the cast keeps to the rest.
@@ -343,12 +346,16 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
           const cr = (k0, k1, k2, k3) => 0.5 * (2 * k1 + (-k0 + k2) * l + (2 * k0 - 5 * k1 + 4 * k2 - k3) * l * l + (-k0 + 3 * k1 - 3 * k2 + k3) * l * l * l);
           return { x: cr(a.x, b.x, c.x, d.x), y: cr(a.y, b.y, c.y, d.y) };
         };
-        // The element's keyframe budget (24) is shared by every route it takes in this beat: this
-        // one gets its share of what is left. Too many journeys for one beat is an authoring error,
-        // never a silently dropped move or an invalid scene.
-        const routes = spec.formations.filter((g, j) => j >= k && g.form === 'travel' && (g.ids ?? []).includes(id)).length;
-        const n = Math.min(16, Math.floor((23 - el.keys.length) / routes)), t0 = t + i * st;
-        check(n >= 4, `${id} travels ${routes > 1 ? `${routes} more times` : 'again'} after ${el.keys.length} moves in this beat, more than one object can carry (24 keyframes); move some of it to the next beat`);
+        // The element's keyframe budget (24) is shared by every route it takes in this beat, after
+        // setting aside what its later moves will need: this route gets its share of the rest. Too
+        // much for one beat is an authoring error, never a silently dropped move or an invalid scene.
+        const touches = g => g.form === 'swap' ? [g.out, g.in, ...(g.by ?? [])].includes(id) : g.form === 'merge' ? g.into === id || (g.ids ?? []).includes(id)
+          : g.form === 'split' ? g.from === id || (g.ids ?? []).includes(id) : !['mark', 'camera'].includes(g.form) && (!g.ids || g.ids.includes(id));
+        const later = spec.formations.filter((g, j) => j > k && touches(g));
+        const routes = 1 + later.filter(g => g.form === 'travel').length;
+        const reserve = later.filter(g => g.form !== 'travel').reduce((sum, g) => sum + KEYS_PER_MOVE(g), 0);
+        const n = Math.min(16, Math.floor((23 - el.keys.length - reserve) / routes)), t0 = t + i * st;
+        check(n >= 4, `${id} has more moves in this beat than one object can carry (24 keyframes: ${routes} journey${routes > 1 ? 's' : ''} and ${later.length - routes + 1} other move${later.length - routes + 1 === 1 ? '' : 's'} after ${el.keys.length} keys); move some of it to the next beat`);
         for (let j = 1; j <= n; j++) {
           const q = at(ease(j / n));
           el.keys.push({ at: t0 + (dur * (j - 1)) / n, x: q.x - base.x, y: q.y - base.y, dur: dur / n, ease: 'linear' });
@@ -552,6 +559,8 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
     elements.unshift(g);
   }
   for (const { el } of groups.values()) el.keys.sort((a, b) => a.at - b.at);
+  // The last word on the budget: a scene the renderer would refuse is refused here, by name.
+  for (const [id, { el }] of groups) check(el.keys.length <= 24, `${id} has more moves in this beat than one object can carry (${el.keys.length} of 24 keyframes); move some of them to the next beat`);
   const depth = new Map([...groups].map(([id, { el }]) => [el, pose.get(id)?.z ?? 0]));
   const drawn = [...under, ...[...elements].sort((a, b) => depth.get(a) - depth.get(b)), ...words];
   const moved = camKeys.length || camera.zoom !== 1 || camera.x || camera.y;

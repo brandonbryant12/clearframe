@@ -9,7 +9,8 @@
 ## Fill and travel geometry (director review, midnight)
 
 - **`fill` covers the frame for every object shape.** The cover scale used the object's nominal size, so a phone filled only 1419 px of a 1920 frame (and a page or a ticket fell short too). It is now computed from the flat colour's real extent, allowing for its rounded corners, and through the carried camera's zoom and pan. A shape's parts (a person's head) fade with its face. Encoded check: the frames on both sides of each cut are one flat colour, for a phone filled through a 0.7× panned camera and for a wide word pill, in landscape and vertical.
-- **Several journeys in one beat share the 24-keyframe budget.** Each route gets its share of what is left, so the director's repro (one ticket travelling three times) now fits. Journeys that cannot fit are refused with a message to move some to the next beat, instead of producing an invalid scene.
+- **Several journeys in one beat share the 24-keyframe budget,** after setting aside what the object's later moves need (a wave, an exit, a hero, a swap's cause, a merge's pulses). Three journeys followed by a wave now fit (director repro: 25 keys, now 23). A final pass refuses, by name, any object whose moves still exceed the budget, and tells you to move some to the next beat. The scene is refused rather than made invalid.
+- The studio agent can read the full stage contract (`clearframe_guide` topic `scene-notes`, `docs/scene-engine.md`). In live run 4 it tried to open that file directly and was denied.
 
 ## Casts hold up better under real authoring (live run 3)
 
@@ -18,7 +19,7 @@ The free agent's third live run, on the current studio path, built a title card 
 - **`spread`.** A `spread` of 4 or less (the agent wrote `1` and `1.1`) is read as a multiple of the default instead of pixels.
 - **Small casts.** A cast of four or fewer gets larger objects. The size is set by the cast's first beat and kept, so adding objects later never resizes them at a cut.
 
-Cast scenes also hold the camera still by default, as diagrams do. Previously `check` warned about an automatic push that the cast linking then removed. The guide now asks for a move per clause of the narration, each cued to one word of it.
+Cast scenes also hold the camera still by default, as diagrams do. Previously `check` warned about an automatic push that the cast linking then removed. The guide now asks for the move a narrated step describes, on the word that names it, and keeps intentional holds.
 
 ## Composed cast objects
 

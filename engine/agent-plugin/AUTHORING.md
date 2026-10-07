@@ -44,9 +44,10 @@ Pick from what the material actually contains:
   `fill` grows one object into the whole frame so the next scene — a chart, a figure, a card, a
   stage — plays on its colour, and `emerge` brings it back into the cast later: the cast and the
   film's other pictures share one continuous shot. Declare the objects
-  in the first cast scene; later scenes list only formations. Give each scene a move for each clause
-  of its line, cued with `say` to one word from that clause; a cast that sits still for four seconds
-  reads as a slide. Insert a `canvas` scene and `set` its
+  in the first cast scene; later scenes list only formations. Time the moves by what the line says:
+  each step the narration describes (they merge, it goes first, it reaches the customer) gets its
+  move on the word that names it (`say`, one word); a figure, a quote or a moment that needs reading
+  or feeling can hold still. What to fix is a picture that never shows the step being described. Insert a `canvas` scene and `set` its
   whole `props` (path `props`) so none of the sample drawing remains. Consecutive cast scenes cut
   invisibly, and one storyboard serves landscape and vertical. Icon names are in `clearframe_catalog`
   topic `canvas`; the full contract (looks, marks, every move) is `clearframe_guide` topic `cast`.
