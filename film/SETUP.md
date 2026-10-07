@@ -55,7 +55,7 @@ node engine/cli.mjs sculpture petal-reveal --draft --still --dry-run
 node engine/cli.mjs sculpture petal-reveal --draft --still --out /tmp/clearframe-petal-setup
 ```
 
-`doctor` checks the renderer's toolchain (Rust, Cargo, FFmpeg with libx264, ffprobe, disk); verify the optional Blender executable with the commands above. `sculptures` and `--dry-run` work without Blender. A still pass produces a poster and scene; omit `--still` and use a new output directory for a clip. Asset rendering requires at least 20 GiB free, enters the shared heavy-process gate when available, and caps Blender/FFmpeg CPU threads at two.
+`doctor` checks the renderer's toolchain (Rust, Cargo, FFmpeg with libx264, ffprobe, disk) and that the bundled fonts match their recorded hashes; verify the optional Blender executable with the commands above. `sculptures` and `--dry-run` work without Blender. A still pass produces a poster and scene; omit `--still` and use a new output directory for a clip. Asset rendering requires at least 20 GiB free, enters the shared heavy-process gate when available, and caps Blender/FFmpeg CPU threads at two.
 
 No Blender installation is needed for these replays from the bundled masters. Run the scripts from the repository root to prepare self-contained film projects; the reference storyboards in `examples/feature-launch` and `examples/teaching-3d` are source templates, not directly renderable projects.
 
