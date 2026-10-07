@@ -173,6 +173,20 @@ test('copies merge into one, and later split back out of it', () => {
   assert.throws(() => expandCastProps({ cast: { objects, formations: [{ form: 'merge', ids: ['a'], into: 'a', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /merge folds ids into one other object/);
 });
 
+test('an object travels a curved route to another, drawing its trail beneath the cast', () => {
+  const els = expandCastProps({ cast: { look: 'drawn', objects: [{ id: 't', icon: 'mail', enter: 'none' }, { id: 'e', icon: 'user', color: 'surface', enter: 'none' }],
+    formations: [{ form: 'cluster', ids: ['t'], center: [300, 700], at: 0 }, { form: 'cluster', ids: ['e'], center: [1600, 400], at: 0 }, { form: 'travel', ids: ['t'], to: 'e', via: [[900, 250]], at: 1, dur: 2 }] } },
+    { ...wide, beatId: 'j', duration: 5 }, {}).elements;
+  const trail = els[0], t = els.find(e => e.id === 'j-cast-t'), moves = t.keys.filter(k => k.at >= 1);
+  assert.equal(trail.type, 'path'); assert.equal(trail.enter, 'draw'); assert.ok(trail.rough, 'the trail is drawn by hand, first, under the cast');
+  assert.ok(moves.length >= 10 && t.keys.length <= 24, 'the route is followed, not a straight slide, within the keyframe budget');
+  const mid = moves[Math.floor(moves.length / 2)];
+  assert.ok(t.y + mid.y < 500, `it bows up through the waypoint (${(t.y + mid.y).toFixed(0)})`);
+  const end = { x: t.x + moves.at(-1).x, y: t.y + moves.at(-1).y };
+  assert.ok(Math.hypot(end.x - 1600, end.y - 400) > 162, 'and stops beside where it was going, not on it');
+  assert.throws(() => expandCastProps({ cast: { objects, formations: [{ form: 'travel', ids: ['a'], at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /travel\) moves ids to another object/);
+});
+
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);

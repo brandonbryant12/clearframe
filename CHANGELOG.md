@@ -1,5 +1,9 @@
 # Changelog
 
+## Casts travel
+
+- **`travel`** sends cast objects along a curved route to another object, arriving beside it, or to a point. The route can pass through `via` waypoints, such as a road or a pipe drawn as scenery, and a pen trail sketches itself just ahead of the traveller. Arrivals are kept inside the title-safe area, and route samples stay within the canvas's 24-keyframe budget. Reference: `examples/cast-journey` ("One ticket, one journey"), in which a ticket travels desk → engineering → customer through three stations drawn under the cast. check 0/0, 0 pops in both shapes.
+
 ## Casts: merge and split
 
 - **`merge`** folds copies into one object (`into`). Each flies in and is absorbed, and the one it joins pulses as it lands. **`split`** is the reverse: objects burst out of one (`from`) into a ring around it, either objects it absorbed earlier or new ones. These are the causal shapes behind "duplicates merge" and "one request fans out". The free agent had faked a merge with a cluster and an exit in its live run. The `process-cast` playbook now folds its repeat into the first report.

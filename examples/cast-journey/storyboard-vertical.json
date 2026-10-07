@@ -1,0 +1,644 @@
+{
+ "version": 2,
+ "title": "One ticket, one journey",
+ "logline": "A drawn world: a support ticket travels to engineering, becomes a fix, and travels on to the customer who asked.",
+ "format": {
+  "preset": "vertical",
+  "fps": 30
+ },
+ "theme": "paper",
+ "type": "geometric",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.7
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "lens": {
+  "handheld": 0
+ },
+ "texture": {
+  "grain": 0.35,
+  "vignette": 0.3
+ },
+ "captions": false,
+ "music": false,
+ "beats": [
+  {
+   "id": "desk",
+   "block": "canvas",
+   "vo": "A ticket lands on the support desk.",
+   "min": 3,
+   "props": {
+    "elements": [
+     {
+      "type": "rect",
+      "id": "desk-plot",
+      "x": 120,
+      "y": 1340,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "desk-name",
+      "text": "Support desk",
+      "x": 300,
+      "y": 1314,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "rect",
+      "id": "eng-plot",
+      "x": 600,
+      "y": 820,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "eng-name",
+      "text": "Engineering",
+      "x": 780,
+      "y": 794,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "rect",
+      "id": "home-plot",
+      "x": 120,
+      "y": 300,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "home-name",
+      "text": "Customer",
+      "x": 300,
+      "y": 274,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     }
+    ],
+    "cast": {
+     "look": "drawn",
+     "objects": [
+      {
+       "id": "ticket",
+       "icon": "mail",
+       "color": "accent",
+       "enter": "drop"
+      },
+      {
+       "id": "engineer",
+       "icon": "user",
+       "color": "surface",
+       "enter": "none"
+      },
+      {
+       "id": "customer",
+       "icon": "user",
+       "color": "accent2",
+       "enter": "none"
+      }
+     ],
+     "formations": [
+      {
+       "form": "cluster",
+       "ids": [
+        "engineer"
+       ],
+       "center": [
+        780,
+        978
+       ],
+       "at": 0
+      },
+      {
+       "form": "cluster",
+       "ids": [
+        "customer"
+       ],
+       "center": [
+        300,
+        458
+       ],
+       "at": 0
+      },
+      {
+       "form": "cluster",
+       "ids": [
+        "ticket"
+       ],
+       "center": [
+        300,
+        1498
+       ],
+       "say": "ticket"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "route",
+   "block": "canvas",
+   "vo": "It travels to engineering, where someone can fix it.",
+   "tail": 0.6,
+   "props": {
+    "elements": [
+     {
+      "type": "rect",
+      "id": "desk-plot",
+      "x": 120,
+      "y": 1340,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "desk-name",
+      "text": "Support desk",
+      "x": 300,
+      "y": 1314,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "rect",
+      "id": "eng-plot",
+      "x": 600,
+      "y": 820,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "eng-name",
+      "text": "Engineering",
+      "x": 780,
+      "y": 794,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "rect",
+      "id": "home-plot",
+      "x": 120,
+      "y": 300,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "home-name",
+      "text": "Customer",
+      "x": 300,
+      "y": 274,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     }
+    ],
+    "cast": {
+     "formations": [
+      {
+       "form": "travel",
+       "ids": [
+        "ticket"
+       ],
+       "to": "engineer",
+       "via": [
+        [
+         760,
+         1380
+        ]
+       ],
+       "say": "travels",
+       "dur": 2.2
+      },
+      {
+       "form": "mark",
+       "mark": "circle",
+       "ids": [
+        "engineer"
+       ],
+       "say": "someone"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "fix",
+   "block": "canvas",
+   "vo": "There, it becomes a fix.",
+   "tail": 1.1,
+   "props": {
+    "elements": [
+     {
+      "type": "rect",
+      "id": "desk-plot",
+      "x": 120,
+      "y": 1340,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "desk-name",
+      "text": "Support desk",
+      "x": 300,
+      "y": 1314,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "rect",
+      "id": "eng-plot",
+      "x": 600,
+      "y": 820,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "eng-name",
+      "text": "Engineering",
+      "x": 780,
+      "y": 794,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "rect",
+      "id": "home-plot",
+      "x": 120,
+      "y": 300,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "home-name",
+      "text": "Customer",
+      "x": 300,
+      "y": 274,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     }
+    ],
+    "cast": {
+     "objects": [
+      {
+       "id": "patch",
+       "icon": "code",
+       "color": "positive"
+      }
+     ],
+     "formations": [
+      {
+       "form": "swap",
+       "out": "ticket",
+       "in": "patch",
+       "by": [
+        "engineer"
+       ],
+       "say": "fix",
+       "dur": 0.7
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "home",
+   "block": "canvas",
+   "vo": "And the fix travels on, to the customer who asked.",
+   "min": 4.5,
+   "props": {
+    "elements": [
+     {
+      "type": "rect",
+      "id": "desk-plot",
+      "x": 120,
+      "y": 1340,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "desk-name",
+      "text": "Support desk",
+      "x": 300,
+      "y": 1314,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "rect",
+      "id": "eng-plot",
+      "x": 600,
+      "y": 820,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "eng-name",
+      "text": "Engineering",
+      "x": 780,
+      "y": 794,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "rect",
+      "id": "home-plot",
+      "x": 120,
+      "y": 300,
+      "w": 360,
+      "h": 280,
+      "r": 36,
+      "fill": "surface",
+      "stroke": "muted",
+      "width": 3,
+      "rough": {
+       "amount": 1.2,
+       "passes": 2,
+       "fill": "hachure",
+       "gap": 22,
+       "angle": 30,
+       "hatchWidth": 2
+      },
+      "opacity": 0.8,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "home-name",
+      "text": "Customer",
+      "x": 300,
+      "y": 274,
+      "size": 40,
+      "font": "hand",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none"
+     }
+    ],
+    "cast": {
+     "formations": [
+      {
+       "form": "cluster",
+       "ids": [
+        "engineer"
+       ],
+       "center": [
+        780,
+        978
+       ],
+       "at": 0.2,
+       "dur": 0.9
+      },
+      {
+       "form": "travel",
+       "ids": [
+        "patch"
+       ],
+       "to": "customer",
+       "via": [
+        [
+         400,
+         760
+        ]
+       ],
+       "say": "travels",
+       "dur": 2.2
+      },
+      {
+       "form": "wave",
+       "ids": [
+        "customer"
+       ],
+       "say": "asked"
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

@@ -16,7 +16,7 @@ const own = (o, keys, name) => {
   check(o && typeof o === 'object' && !Array.isArray(o), `${name} must be an object`);
   for (const k of Object.keys(o)) check(keys.includes(k), `unknown ${name}.${k}`);
 };
-export const FORMS = ['scatter', 'row', 'column', 'line', 'ring', 'cluster', 'hero', 'exit', 'swap', 'wave', 'mark', 'camera', 'fill', 'emerge', 'merge', 'split'];
+export const FORMS = ['scatter', 'row', 'column', 'line', 'ring', 'cluster', 'hero', 'exit', 'swap', 'wave', 'mark', 'camera', 'fill', 'emerge', 'merge', 'split', 'travel'];
 // The scene tone an object's colour floods the frame with when it fills it (docs/canvas.md, tone).
 export const FILL_TONES = { accent: 'accent', accent2: 'accent2', surface: 'surface', ink: 'invert' };
 export const LOOKS = ['tiles', 'drawn', 'print'];
@@ -46,11 +46,15 @@ export function castSpec(input, known = new Map(), knownLook = null) {
   check(objects.size >= 1 && objects.size <= 16, 'a cast has 1–16 objects (declare them in its first beat)');
   check(Array.isArray(input.formations) && input.formations.length >= 1 && input.formations.length <= 12, 'formations needs 1–12 entries');
   const formations = input.formations.map((f, i) => {
-    own(f, ['form', 'say', 'at', 'ids', 'hero', 'word', 'center', 'spread', 'scale', 'dur', 'stagger', 'ease', 'thread', 'beside', 'on', 'out', 'in', 'by', 'mark', 'to', 'color', 'zoom', 'into', 'from'], `formations[${i}]`);
+    own(f, ['form', 'say', 'at', 'ids', 'hero', 'word', 'center', 'spread', 'scale', 'dur', 'stagger', 'ease', 'thread', 'beside', 'on', 'out', 'in', 'by', 'mark', 'to', 'color', 'zoom', 'into', 'from', 'via', 'trail'], `formations[${i}]`);
     if (f.form === 'mark') {
       check(MARKS.includes(f.mark) && Array.isArray(f.ids) && f.ids.length >= 1, `formations[${i}] (mark) is a ${MARKS.join(', ')} on ids`);
       check((f.mark === 'arrow') === (f.to != null) && [].concat(f.to ?? []).every(id => objects.has(id)), `formations[${i}]: an arrow mark points to another object or a list of them (to), and only an arrow does`);
-    } else check(f.mark == null && f.to == null, `formations[${i}]: mark and to belong to form mark`);
+    } else if (f.form === 'travel') {
+      check(f.ids?.length >= 1 && ((f.to != null && objects.has(f.to) && !f.ids.includes(f.to)) !== (f.center != null)), `formations[${i}] (travel) moves ids to another object (to) or a point (center)`);
+      check(f.via == null || (Array.isArray(f.via) && f.via.length <= 6 && f.via.every(v => Array.isArray(v) && v.length === 2 && v.every(finite))), `formations[${i}].via is up to 6 [x, y] waypoints in frame pixels`);
+    } else check(f.mark == null && f.to == null, `formations[${i}]: mark and to belong to form mark (or travel)`);
+    check(f.via == null && f.trail == null || f.form === 'travel', `formations[${i}]: via and trail belong to form travel`);
     check(f.color == null || COLORS.includes(f.color), `formations[${i}].color is ${COLORS.join(', ')}`);
     if (f.form === 'swap') check(objects.has(f.out) && objects.has(f.in) && f.out !== f.in, `formations[${i}] (swap) names out and in, two objects`);
     check(f.beside == null || objects.has(f.beside), `formations[${i}].beside names an object`);
@@ -226,7 +230,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
   let cam = { ...camera };
   const camKeys = [];
   const u = Math.min(frame.width, frame.height), size = u * 0.15;
-  const pose = new Map(state), groups = new Map(), elements = [], words = [], notes = [], edges = {};
+  const pose = new Map(state), groups = new Map(), elements = [], words = [], notes = [], edges = {}, under = [];
   // Draw order carries across cuts too: an object keeps its depth, new ones and anything acting on
   // another come forward.
   let carried = [], top = Math.max(0, ...[...state.values()].map(p => p.z ?? 0));
@@ -249,6 +253,49 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
   spec.formations.forEach((f, k) => {
     const t = times[k], stagger = f.stagger ?? 0.06, dur = f.dur ?? 1.1;
     const ids = f.form === 'swap' ? [f.out, f.in] : f.ids ?? [...spec.objects.keys()].filter(id => alive(id) && (f.form !== 'exit' || pose.has(id)));
+    // A journey: objects follow a curved route (through `via` waypoints, say a road or a pipe drawn as
+    // scenery) to another object or a point, and a hand-drawn trail draws itself behind them. A
+    // convoy shares the route. The route sketches itself a little ahead of the traveller, and stays
+    // until the cast next moves.
+    if (f.form === 'travel') {
+      const st = f.stagger ?? 0.3, ease = x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+      ids.filter(id => pose.has(id) && alive(id)).forEach((id, i) => {
+        const p = pose.get(id), { el, base } = group(id);
+        let end = f.center ? { x: f.center[0], y: f.center[1] } : pose.get(f.to);
+        if (!f.center) {
+          // Arrive beside the destination, not on it.
+          const dx = p.x - end.x, dy = p.y - end.y, d = Math.hypot(dx, dy) || 1, gap = size * ((end.scale ?? 1) * 0.5 + 0.75 + i * 0.9);
+          end = { x: end.x + (dx / d) * gap, y: end.y + (dy / d) * gap };
+        }
+        // Whole inside the title-safe area, clear of a heading, like every placed object.
+        const W = frame.width, H = frame.height, [mx, my] = H > W ? [W * 0.1, H * 0.06] : [W * 0.05, H * 0.05];
+        const [hw, hh] = objectExtent(spec.objects.get(id), size).map(v => v * (p.scale ?? 1) * 1.16);
+        end = { x: Math.min(Math.max(end.x, mx + hw), W - mx - hw), y: Math.min(Math.max(end.y, Math.max(my, frame.top ?? 0) + hh), Math.min(H - my, frame.bottom ?? H) - hh) };
+        // Waypoints, or one gentle bend; a Catmull-Rom curve through them, sampled for the keys.
+        const mid = { x: (p.x + end.x) / 2, y: (p.y + end.y) / 2 }, len = Math.hypot(end.x - p.x, end.y - p.y) || 1, bend = len * 0.22 * (hash(`${id}${k}`) > 0.5 ? 1 : -1);
+        const pts = [p, ...(f.via ?? [[mid.x - ((end.y - p.y) / len) * bend, mid.y + ((end.x - p.x) / len) * bend]]).map(([x, y]) => ({ x, y })), end];
+        const at = (u) => {
+          const seg = Math.min(pts.length - 2, Math.floor(u * (pts.length - 1))), l = u * (pts.length - 1) - seg;
+          const [a, b, c, d] = [pts[Math.max(0, seg - 1)], pts[seg], pts[seg + 1], pts[Math.min(pts.length - 1, seg + 2)]];
+          const cr = (k0, k1, k2, k3) => 0.5 * (2 * k1 + (-k0 + k2) * l + (2 * k0 - 5 * k1 + 4 * k2 - k3) * l * l + (-k0 + 3 * k1 - 3 * k2 + k3) * l * l * l);
+          return { x: cr(a.x, b.x, c.x, d.x), y: cr(a.y, b.y, c.y, d.y) };
+        };
+        // As many samples as the element's keyframe budget leaves (24 per element), at least six.
+        const n = Math.max(6, Math.min(16, 23 - el.keys.length)), t0 = t + i * st;
+        for (let j = 1; j <= n; j++) {
+          const q = at(ease(j / n));
+          el.keys.push({ at: t0 + (dur * (j - 1)) / n, x: q.x - base.x, y: q.y - base.y, dur: dur / n, ease: 'linear' });
+        }
+        pose.set(id, { ...p, x: end.x, y: end.y });
+        if (f.trail !== false && i === 0) {
+          const d = Array.from({ length: n + 1 }, (_, j) => { const q = at(j / n); return `${j ? 'L' : 'M'}${q.x.toFixed(1)} ${q.y.toFixed(1)}`; }).join(' ');
+          under.push({ type: 'path', id: `cast-trail-${k}-${id}`, d, fill: 'none', stroke: 'muted', width: Math.max(4, size * 0.035), cap: 'round', join: 'round', dash: [size * 0.12, size * 0.1],
+            ...(spec.look === 'drawn' ? { rough: { amount: 1, passes: 1 } } : {}), at: t0, enter: 'draw', dur: dur * 0.75, drawEase: 'linear',
+            ...(until(k) != null ? { exitAt: until(k), exit: 'fade' } : frame.duration > t0 + dur + 1.2 ? { exitAt: frame.duration - 0.4, exit: 'fade' } : {}) });
+        }
+      });
+      return;
+    }
     // Causal shapes: copies fold into one (each flies in and is absorbed; the one they join gives a
     // pulse as each lands), and one breaks out into several (they burst from it into a ring around
     // it, new objects or ones it absorbed earlier).
@@ -432,7 +479,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
   }
   for (const { el } of groups.values()) el.keys.sort((a, b) => a.at - b.at);
   const depth = new Map([...groups].map(([id, { el }]) => [el, pose.get(id)?.z ?? 0]));
-  const drawn = [...elements].sort((a, b) => depth.get(a) - depth.get(b)).concat(words);
+  const drawn = [...under, ...[...elements].sort((a, b) => depth.get(a) - depth.get(b)), ...words];
   const moved = camKeys.length || camera.zoom !== 1 || camera.x || camera.y;
   // The stage is there from frame one (its contents keep their own entrances).
   const stage = { type: 'group', id: 'cast-stage', x: 0, y: 0, at: 0, enter: 'none', origin: [frame.width / 2, frame.height / 2], children: drawn,

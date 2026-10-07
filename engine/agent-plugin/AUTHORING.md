@@ -38,7 +38,7 @@ Pick from what the material actually contains:
   pills) persist through consecutive scenes and re-form on spoken words: `scatter`, `line`, `ring`,
   `cluster`, `hero` (one steps forward, the rest recede), `swap` (one becomes another in place;
   `by` names what causes it), `merge` (copies fold into one, `into`), `split` (several burst out of
-  one, `from`), `wave` (a pulse runs through a sequence), `mark` (a pen circle,
+  one, `from`), `travel` (a journey along a drawn route, `to` another object, `via` waypoints), `wave` (a pulse runs through a sequence), `mark` (a pen circle,
   underline, cross or arrow), `camera` (a carried push in or pull back), `exit`. `look: "drawn"`
   draws the cast by hand for explainers and lessons, and `"print"` gives editorial films a press look.
   `fill` grows one object into the whole frame so the next scene — a chart, a figure, a card, a
