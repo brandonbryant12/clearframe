@@ -218,6 +218,33 @@ test('a small cast gets room, a small spread is a multiple, and the rest return 
   }
 });
 
+test('fill covers the whole frame for any object shape, through a zoomed and panned camera', () => {
+  const kinds = [{ shape: 'phone' }, { shape: 'doc' }, { shape: 'ticket' }, { word: 'Login crash' }, { icon: 'file' }];
+  for (const frame of [wide, { width: 1080, height: 1920 }])
+    for (const kind of kinds)
+      for (const camera of [null, { form: 'camera', zoom: 0.7, on: 'side', at: 0.5 }]) {
+        const cast = { objects: [{ id: 'x', color: 'accent2', size: 120, ...kind }, { id: 'side', icon: 'star' }],
+          formations: [{ form: 'row', at: 0 }, ...(camera ? [camera] : []), { form: 'fill', ids: ['x'], at: 2 }] };
+        const carry = {};
+        expandCastProps({ cast }, { ...frame, beatId: 'f' }, { carry });
+        const p = carry.state.get('x'), cam = carry.camera, el = expandCastProps({ cast }, { ...frame, beatId: 'f' }, {}).elements;
+        const find = (els, id) => { for (const e of els) { if (e.id === id) return e; const c = e.children && find(e.children, id); if (c) return c; } };
+        const solid = find(el, 'f-cast-x-solid'), k = p.scale * cam.zoom;
+        // The solid's inscribed rectangle, through the camera, around where the object ends up.
+        const cx = frame.width / 2 + cam.x, cy = frame.height / 2 + cam.y, a = (solid.w / 2 - 0.293 * solid.r) * k, b = (solid.h / 2 - 0.293 * solid.r) * k;
+        const what = `${JSON.stringify(kind)} ${frame.width}x${frame.height}${camera ? ' with camera' : ''}`;
+        assert.ok(cx - a <= 0 && cx + a >= frame.width && cy - b <= 0 && cy + b >= frame.height, `fill covers the frame: ${what}`);
+      }
+});
+
+test('several journeys in one beat share the keyframe budget, or are refused clearly', () => {
+  const objects1 = [{ id: 'a', shape: 'ticket' }];
+  const route = n => [{ form: 'row', ids: ['a'], at: 0 }, ...Array.from({ length: n }, (_, i) => ({ form: 'travel', ids: ['a'], center: [500 + i * 300, 400 + i * 50], at: 2 + i * 2 }))];
+  const g = expandCastProps({ cast: { objects: objects1, formations: route(3) } }, { ...wide, beatId: 't', duration: 9 }, {}).elements.find(e => e.id === 't-cast-a');
+  assert.ok(g.keys.length <= 24, `three journeys fit the 24-keyframe budget (${g.keys.length})`);
+  assert.throws(() => expandCastProps({ cast: { objects: objects1, formations: route(6) } }, { ...wide, beatId: 't', duration: 15 }, {}), /travels .* more than one object can carry .* move some of it to the next beat/);
+});
+
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);

@@ -1,5 +1,10 @@
 # Changelog
 
+## Fill and travel geometry (director review, midnight)
+
+- **`fill` covers the frame for every object shape.** The cover scale used the object's nominal size, so a phone filled only 1419 px of a 1920 frame (and a page or a ticket fell short too). It is now computed from the flat colour's real extent, allowing for its rounded corners, and through the carried camera's zoom and pan. A shape's parts (a person's head) fade with its face. Encoded check: the frames on both sides of each cut are one flat colour, for a phone filled through a 0.7× panned camera and for a wide word pill, in landscape and vertical.
+- **Several journeys in one beat share the 24-keyframe budget.** Each route gets its share of what is left, so the director's repro (one ticket travelling three times) now fits. Journeys that cannot fit are refused with a message to move some to the next beat, instead of producing an invalid scene.
+
 ## Casts hold up better under real authoring (live run 3)
 
 The free agent's third live run, on the current studio path, built a title card and five cast scenes. Its draft exposed three engine affordances, now fixed:

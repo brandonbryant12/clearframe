@@ -343,8 +343,12 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
           const cr = (k0, k1, k2, k3) => 0.5 * (2 * k1 + (-k0 + k2) * l + (2 * k0 - 5 * k1 + 4 * k2 - k3) * l * l + (-k0 + 3 * k1 - 3 * k2 + k3) * l * l * l);
           return { x: cr(a.x, b.x, c.x, d.x), y: cr(a.y, b.y, c.y, d.y) };
         };
-        // As many samples as the element's keyframe budget leaves (24 per element), at least six.
-        const n = Math.max(6, Math.min(16, 23 - el.keys.length)), t0 = t + i * st;
+        // The element's keyframe budget (24) is shared by every route it takes in this beat: this
+        // one gets its share of what is left. Too many journeys for one beat is an authoring error,
+        // never a silently dropped move or an invalid scene.
+        const routes = spec.formations.filter((g, j) => j >= k && g.form === 'travel' && (g.ids ?? []).includes(id)).length;
+        const n = Math.min(16, Math.floor((23 - el.keys.length) / routes)), t0 = t + i * st;
+        check(n >= 4, `${id} travels ${routes > 1 ? `${routes} more times` : 'again'} after ${el.keys.length} moves in this beat, more than one object can carry (24 keyframes); move some of it to the next beat`);
         for (let j = 1; j <= n; j++) {
           const q = at(ease(j / n));
           el.keys.push({ at: t0 + (dur * (j - 1)) / n, x: q.x - base.x, y: q.y - base.y, dur: dur / n, ease: 'linear' });
@@ -401,9 +405,13 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       const id = ids[0], p = pose.get(id);
       if (!p || (f.form === 'emerge' && !p.filled)) { notes.push(`${f.form} on ${id}: it ${p ? 'has not filled the frame' : 'is not on screen'}, so nothing moves`); return; }
       const { el, base } = group(id), o = spec.objects.get(id), s = o.size ?? size, solid = el.children.find(c => c.id.endsWith('-solid'));
-      const faces = el.children.filter(c => c.type === 'icon' || c.type === 'text' || /-detail\d+$/.test(c.id));
+      const faces = el.children.filter(c => c.type === 'icon' || c.type === 'text' || /-(detail|part)\d+$/.test(c.id));
       if (f.form === 'fill') {
-        const cover = (Math.hypot(frame.width, frame.height) / (s * Math.min(1, cam.zoom))) * 1.15;
+        // Large enough that the flat colour (a rounded rectangle) covers the whole frame through the
+        // camera: its inscribed rectangle (half-extent less 0.293 r at each corner) must reach the
+        // frame edges, after the camera's zoom and pan move the middle of the stage.
+        const a = solid.w / 2 - 0.293 * solid.r, b = solid.h / 2 - 0.293 * solid.r, z = cam.zoom;
+        const cover = Math.max((frame.width / 2 + Math.abs(cam.x)) / (z * a), (frame.height / 2 + Math.abs(cam.y)) / (z * b)) * 1.06;
         el.keys.push({ at: t, x: frame.width / 2 - base.x, y: frame.height / 2 - base.y, scale: cover, rotate: 0, opacity: 1, dur, ease: f.ease ?? 'in' });
         solid.keys.push({ at: t, opacity: 1, dur: dur * 0.6 });
         for (const c of faces) c.keys = [...(c.keys ?? [{ at: 0, opacity: 1, dur: 0 }]), { at: t, opacity: 0, dur: dur * 0.4 }];
