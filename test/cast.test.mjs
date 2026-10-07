@@ -88,7 +88,51 @@ test('objects stay inside the title-safe area, marks ride with their object, and
   assert.ok(cross && cross.rough && cross.exitAt == null, 'the cross is drawn by hand inside the object, and leaves with it');
   assert.ok(b.children.find(c => c.id.endsWith('-tile')).rough?.fill === 'hachure', 'the drawn look hatches the tile');
   assert.equal(carry.look, 'drawn');
+  // Under a heading the cast keeps below it.
+  const headed = expandCastProps({ title: 'Reports arrive', cast: { objects: [1, 2, 3, 4, 5, 6].map(i => ({ id: `o${i}`, icon: 'mail' })), formations: [{ form: 'scatter', at: 0 }, { form: 'ring', at: 1 }] } }, { ...tall, beatId: 'h', duration: 4 }, {}).elements;
+  for (const g of headed.filter(e => e.type === 'group'))
+    for (const y of [g.y, ...g.keys.filter(k => k.y != null).map(k => g.y + k.y)]) assert.ok(y - 0.58 * 162 >= 430, `${g.id} stays under the heading (${y.toFixed(0)})`);
   assert.throws(() => expandCastProps({ cast: { look: 'print', formations: [{ form: 'wave', at: 0 }] } }, { ...tall, beatId: 'y' }, { objects: carry.objects, state: carry.state, look: carry.look }), /look is set once/);
+});
+
+test('the camera holds the whole cast, stands on frame one, and carries its zoom across the cut', () => {
+  const carry = {}, ctx = () => ({ state: carry.state, objects: carry.objects, threads: carry.threads, look: carry.look, camera: carry.camera, carry });
+  const one = expandCastProps({ cast: { objects, formations: [{ form: 'hero', hero: 'b', at: 0 }, { form: 'camera', zoom: 1.2, on: 'b', at: 0.5 }] } }, { ...wide, beatId: 'p' }, ctx()).elements;
+  assert.equal(one.length, 1); assert.equal(one[0].id, 'p-cast-stage'); assert.equal(one[0].enter, 'none');
+  assert.equal(one[0].keys.at(-1).scale, 1.2);
+  const two = expandCastProps({ cast: { formations: [{ form: 'wave', at: 0 }] } }, { ...wide, beatId: 'q' }, ctx()).elements;
+  assert.deepEqual([two[0].keys[0].at, two[0].keys[0].scale, two[0].keys[0].dur], [0, 1.2, 0], 'the next beat starts where the camera stopped');
+  const three = expandCastProps({ cast: { formations: [{ form: 'camera', zoom: 1, at: 0 }] } }, { ...wide, beatId: 'r' }, ctx()).elements;
+  assert.equal(three[0].keys.at(-1).scale, 1);
+  assert.ok(expandCastProps({ cast: { formations: [{ form: 'wave', at: 0 }] } }, { ...wide, beatId: 's' }, ctx()).elements.length > 1, 'back at rest, no stage is needed');
+});
+
+test('an object fills the frame and the next scene plays on its colour; it emerges back where it was', async t => {
+  const fs = await import('node:fs'), os = await import('node:os'), path = await import('node:path');
+  const { computeTiming } = await import('../engine/lib/timing.mjs');
+  const { loadStoryboard } = await import('../engine/lib/project.mjs');
+  const { createJob } = await import('../film/job.mjs');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-fill-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(dir, 'storyboard.json'), JSON.stringify({ version: 2, title: 'Fill', format: { preset: 'landscape' }, theme: 'paper', transition: 'fade',
+    beats: [{ id: 'one', block: 'canvas', vo: 'One piece becomes the whole screen.', props: { cast: { objects: [...objects, { id: 'd', icon: 'chart-bar', color: 'accent2' }],
+      formations: [{ form: 'hero', hero: 'd', at: 0 }, { form: 'fill', ids: ['d'], say: 'whole' }] } } },
+    { id: 'mid', block: 'statement', vo: 'This is the moment.', props: { text: 'The moment' } },
+    { id: 'two', block: 'canvas', vo: 'And then it goes back.', props: { cast: { formations: [{ form: 'emerge', ids: ['d'], at: 0 }] } } }] }));
+  const { job, errors } = createJob(loadStoryboard(dir), computeTiming(dir), { draft: true });
+  assert.deepEqual(errors, []);
+  const [one, mid, two] = job.beats;
+  assert.equal(mid.tone, 'accent2', 'the scene after the fill takes the object’s colour as its tone');
+  assert.deepEqual([one.exit, mid.transition, mid.exit, two.transition], ['none', 'cut', 'none', 'cut'], 'cuts on one colour, both ways');
+  const d = (els, id) => { for (const e of els) { if (e.id === id) return e; const c = e.children && d(e.children, id); if (c) return c; } };
+  const grown = d(one.props.elements, 'one-cast-d'), back = d(two.props.elements, 'two-cast-d');
+  assert.ok(grown.keys.at(-1).scale > 10, 'it grows past the frame');
+  assert.equal(back.keys[0].scale, grown.keys.at(-1).scale, 'and comes back from exactly there');
+  assert.equal(back.keys.at(-1).scale, 2.3, 'to the pose it had before');
+  const icon = back.children.find(c => c.type === 'icon');
+  assert.deepEqual([icon.keys[0].opacity, icon.keys.at(-1).opacity, icon.opacity], [0, 1, undefined], 'its face returns by keys, never a base opacity');
+  assert.throws(() => expandCastProps({ cast: { objects, formations: [{ form: 'fill', ids: ['a'], at: 0 }, { form: 'wave', at: 1 }] } }, { ...wide, beatId: 'z' }, {}), /fill is the last move/);
+  assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'g', icon: 'file', color: 'positive' }], formations: [{ form: 'fill', ids: ['g'], at: 0 }] } }, { ...wide, beatId: 'z' }, {}), /accent, accent2, surface or ink/);
 });
 
 test('a cast names only objects it declared', () => {

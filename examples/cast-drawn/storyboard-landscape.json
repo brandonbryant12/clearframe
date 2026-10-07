@@ -211,6 +211,12 @@
        "say": "on-call"
       },
       {
+       "form": "camera",
+       "zoom": 1.18,
+       "say": "on-call",
+       "dur": 2.4
+      },
+      {
        "form": "cluster",
        "ids": [
         "engineer"
@@ -253,6 +259,12 @@
        "hero": "patch",
        "scale": 1.5,
        "at": 0.2
+      },
+      {
+       "form": "camera",
+       "zoom": 1,
+       "at": 0.2,
+       "dur": 1.6
       },
       {
        "form": "ring",

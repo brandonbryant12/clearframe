@@ -23,6 +23,13 @@
  },
  "captions": false,
  "music": false,
+ "sources": [
+  {
+   "id": "render",
+   "title": "clearframe draft of examples/cast-study, 520 frames in 6.3 s on an 8 GB iMac (README)",
+   "date": "2026-10-06"
+  }
+ ],
  "beats": [
   {
    "id": "pile",
@@ -113,7 +120,7 @@
    "id": "moment",
    "block": "canvas",
    "vo": "One piece becomes the moment on screen.",
-   "tail": 0.6,
+   "tail": 0.8,
    "props": {
     "cast": {
      "formations": [
@@ -122,9 +129,30 @@
        "hero": "chart",
        "say": "becomes",
        "word": "the moment"
+      },
+      {
+       "form": "fill",
+       "ids": [
+        "chart"
+       ],
+       "say": "screen",
+       "dur": 0.9
       }
      ]
     }
+   }
+  },
+  {
+   "id": "figure",
+   "block": "stat",
+   "vo": "Here, about six seconds to render the whole draft.",
+   "props": {
+    "value": 6.3,
+    "decimals": 1,
+    "suffix": " s",
+    "label": "to render the 17-second first draft",
+    "align": "center",
+    "source": "Measured 2026-10-06 on an 8 GB iMac (examples/cast-study README)"
    }
   },
   {
@@ -148,6 +176,14 @@
       }
      ],
      "formations": [
+      {
+       "form": "emerge",
+       "ids": [
+        "chart"
+       ],
+       "at": 0,
+       "dur": 1
+      },
       {
        "form": "cluster",
        "ids": [

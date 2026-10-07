@@ -1,5 +1,12 @@
 # Changelog
 
+## Casts hand off to any scene, and carry a camera
+
+- **`fill` and `emerge`.** A cast object travels to the middle and grows past the edges, its face fading as its colour floods the frame. The next scene, of any block, plays on that colour: the job sets its `tone` and cuts on one flat colour. `emerge` brings the object back out of that scene's colour, to where it stood before it filled, in a later cast beat. The cast can now hand a moment to a chart, a figure, a card or a stage and take it back, instead of the whole film being formations. `examples/cast-study` fills its chart into a sourced figure (6.3 s to render the first draft) and brings it back.
+- **A carried camera** (`form: "camera"`, `zoom`, optional `on`): one stage holds the whole cast and pushes in or pulls back about the frame's middle, most of the way toward an object. It carries across cuts like the objects. `examples/cast-drawn` closes in on the crash as the engineer takes it and steps back for the replies.
+- **A cast keeps below a canvas heading** (`title` or `kicker`), as stages do.
+- Fixed while building them: a carried camera's stage took the default entrance, so its first half-second was blank paper. Faces hidden by a base opacity never came back when keyed visible (keys multiply a base opacity), so hidden states are keys from frame one.
+
 ## The agent can start from the right playbook; doctor checks fonts
 
 - **`playbook` studio command** (`{command: "playbook", id}`): start the film over from a playbook's scenes and look, keeping its title, format and sources. It is refused when the narration is a recording. The agent picks one by what the material is, who it is for and what it needs (`clearframe_catalog` topic `playbooks`) instead of always rebuilding the general starter. It is undoable like any edit.

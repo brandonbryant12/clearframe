@@ -42,6 +42,9 @@ A film made of one layout per line reads as a slideshow, however well each layou
 | `hero` | `hero: id` steps forward at 2.3× (`scale`) while the rest recede into a quiet ring. `word` types a line under it. |
 | `swap` | `out` becomes `in` in place: the old shrinks away where it stood, the new grows into its pose. `by: [ids]` names what causes the change: those objects travel onto it and work at it, it gives under each stroke, and the change lands on the cue. |
 | `wave` | A pulse runs through `ids` in order where they stand (each lifts and settles): a sequence playing, a signal travelling. Nothing moves for good, and threads stay. |
+| `camera` | `zoom` (0.6–2.5) pushes in or pulls back on the whole cast, about the middle of the frame and most of the way toward `on: id` if given. The camera carries across cuts like the objects; `zoom: 1` returns it. Use it for a reason: closing in on the moment that matters, stepping back for the resolution. |
+| `fill` | The object travels to the middle and grows past the edges. Its face fades and its colour floods the frame. The next scene, of any block (a chart, a figure, a card, a stage), plays on that colour as its `tone`, with a cut on one flat colour. It must be the beat's last move, and the object must be `accent`, `accent2`, `surface` or `ink` (the colours a scene can take as a tone). |
+| `emerge` | The way back: the first move of a later cast beat. The object starts as the whole frame, in the colour of the scene before (which takes it as its tone), and shrinks back to where it stood before it filled, its face returning. |
 | `exit` | Objects leave along the line from the centre through where they stand, and stay gone unless a later formation names them (they come back from where they left). |
 | `mark` | A pen mark drawn on the cast where it stands, cued like any move. `mark: circle` loops what matters, `underline` puts a line under it, and `cross` strikes through what is set aside. `arrow` with `to: id` or `to: [ids]` draws a bowed arrow from each of `ids` to each target. `color` overrides the pen (accent2; negative for a cross). A mark on one object belongs to it: it moves and scales with the object and leaves with it. Otherwise marks fade when the cast next moves, or before the cut. |
 
@@ -62,6 +65,10 @@ A cast lays itself out for the frame, so it cannot be combined with `view`, `vie
 Consecutive cast beats are joined with a cut, no exit, and a still camera (unless the beat sets one). A non-cut transition between them is warned about, because it would hide the continuity. A hero's `word` fades before the cut when nothing replaces it.
 
 Frames remain a pure function of time: the formations compile once into keys on stable groups.
+
+## Handing off to other scenes
+
+A cast need not carry the whole film. `fill` hands one object's colour to the next scene, so a chart tile becomes the chart, a figure or a card, and `emerge` brings it back into the cast afterwards. The job sets the in-between scene's `tone` and the cuts on both sides; a tone the author already set that differs is warned about, and so is a non-cut transition. This is how a cast meets the film's other mechanisms without a slideshow cut. `examples/cast-study` fills the chart into a sourced figure and brings it back.
 
 ## When to use it
 

@@ -31,7 +31,7 @@ function asDrawn(b, { width = 1920, height = 1080 } = {}) {
     if (b.block === 'canvas' && b.props?.bars)
       return { ...b, props: expandBarsProps(b.props, { width, height, beatId: b.id }) };
     if (b.block === 'canvas' && b.props?.cast)
-      return { ...b, _cast: true, props: expandCastProps(b.props, { width, height, beatId: b.id }, { state: castCarry.state, objects: castCarry.objects, threads: castCarry.threads, look: castCarry.look, carry: castCarry }) };
+      return { ...b, _cast: true, props: expandCastProps(b.props, { width, height, beatId: b.id }, { state: castCarry.state, objects: castCarry.objects, threads: castCarry.threads, look: castCarry.look, camera: castCarry.camera, carry: castCarry }) };
     if (b.block === 'canvas' && b.props?.bridge)
       return { ...b, props: expandBridgeProps(b.props, { width, height, beatId: b.id }) };
     if (b.block === 'canvas' && b.props?.multiples)

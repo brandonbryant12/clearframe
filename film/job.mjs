@@ -84,7 +84,7 @@ export function createJob(sb, timing, { draft = false } = {}) {
   }
   mirrorExitStyles(beats);
   linkMorphs(beats, sb, timing, report);
-  linkCasts(beats, sb, timing, report);
+  linkCasts(beats, sb, timing, report, cast);
   linkWorlds(beats, sb, timing, report);
   const frame = frameChrome(sb, beats, report);
   fitGraphicTransitions(beats, timing, report);
@@ -177,7 +177,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     spec = rules(b.block);
   const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.dur };
   const castProps = b.block === 'canvas' && b.props?.cast != null
-    ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, look: cast.look, cue: cueResolver(b, frame), carry: cast, notes: report.warnings })
+    ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, look: cast.look, camera: cast.camera, cue: cueResolver(b, frame), carry: cast, notes: report.warnings })
     : b.props;
   const authoredProps = b.block === 'canvas'
     ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(expandKPIProps(castProps ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
@@ -643,7 +643,22 @@ function mirrorExitStyles(beats) {
  * picture must not move under them: consecutive cast beats cut (no exit, no transition) and hold
  * the camera still unless the author set one.
  */
-function linkCasts(beats, sb, timing, { warnings }) {
+function linkCasts(beats, sb, timing, { warnings }, cast = {}) {
+  // A cast object that fills the frame hands the next scene its colour (that scene's tone), and one
+  // that emerges comes out of the last scene's: a cut on one flat colour, so the handoff is unbroken.
+  for (let i = 0; i < beats.length; i++) {
+    const edges = cast.edges?.[beats[i].id];
+    for (const [tone, j] of [[edges?.fill, i + 1], [edges?.emerge, i - 1]]) {
+      if (!tone || !beats[j]) continue;
+      const src = sb.beats[timing.beats[j].index];
+      if (src.props?.cast != null) continue;
+      if (src.tone && src.tone !== tone) { warnings.push(`${beats[j].id}: its tone ${src.tone} differs from the ${tone} the cast hands it in ${beats[i].id}; the cut will flash.`); continue; }
+      const [a, b] = j > i ? [beats[i], beats[j]] : [beats[j], beats[i]], authored = sb.beats[timing.beats[beats.indexOf(b)].index].transition;
+      beats[j].tone = tone;
+      if (authored && authored !== 'cut') { warnings.push(`${b.id}: a ${authored} transition hides the colour handoff from the cast; use cut.`); continue; }
+      a.exit = 'none'; b.transition = 'cut';
+    }
+  }
   for (let i = 1; i < beats.length; i++) {
     const [srcA, srcB] = [sb.beats[timing.beats[i - 1].index], sb.beats[timing.beats[i].index]];
     if (srcA.props?.cast == null || srcB.props?.cast == null || beats[i].block !== 'canvas' || beats[i - 1].block !== 'canvas') continue;

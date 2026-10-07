@@ -38,8 +38,11 @@ Pick from what the material actually contains:
   pills) persist through consecutive scenes and re-form on spoken words: `scatter`, `line`, `ring`,
   `cluster`, `hero` (one steps forward, the rest recede), `swap` (one becomes another in place;
   `by` names what causes it), `wave` (a pulse runs through a sequence), `mark` (a pen circle,
-  underline, cross or arrow), `exit`. `look: "drawn"` draws the cast by hand for explainers and
-  lessons, and `"print"` gives editorial films a press look. Declare the objects
+  underline, cross or arrow), `camera` (a carried push in or pull back), `exit`. `look: "drawn"`
+  draws the cast by hand for explainers and lessons, and `"print"` gives editorial films a press look.
+  `fill` grows one object into the whole frame so the next scene — a chart, a figure, a card, a
+  stage — plays on its colour, and `emerge` brings it back into the cast later: the cast and the
+  film's other pictures share one continuous shot. Declare the objects
   in the first cast scene; later scenes list only formations. Insert a `canvas` scene and `set` its
   whole `props` (path `props`) so none of the sample drawing remains. Consecutive cast scenes cut
   invisibly, and one storyboard serves landscape and vertical. Icon names are in `clearframe_catalog`

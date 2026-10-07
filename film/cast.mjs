@@ -16,7 +16,9 @@ const own = (o, keys, name) => {
   check(o && typeof o === 'object' && !Array.isArray(o), `${name} must be an object`);
   for (const k of Object.keys(o)) check(keys.includes(k), `unknown ${name}.${k}`);
 };
-export const FORMS = ['scatter', 'row', 'column', 'line', 'ring', 'cluster', 'hero', 'exit', 'swap', 'wave', 'mark'];
+export const FORMS = ['scatter', 'row', 'column', 'line', 'ring', 'cluster', 'hero', 'exit', 'swap', 'wave', 'mark', 'camera', 'fill', 'emerge'];
+// The scene tone an object's colour floods the frame with when it fills it (docs/canvas.md, tone).
+export const FILL_TONES = { accent: 'accent', accent2: 'accent2', surface: 'surface', ink: 'invert' };
 export const LOOKS = ['tiles', 'drawn', 'print'];
 const MARKS = ['circle', 'underline', 'cross', 'arrow'];
 const ENTERS = ['pop', 'drop', 'rise', 'left', 'right', 'fade', 'none'];
@@ -44,7 +46,7 @@ export function castSpec(input, known = new Map(), knownLook = null) {
   check(objects.size >= 1 && objects.size <= 16, 'a cast has 1–16 objects (declare them in its first beat)');
   check(Array.isArray(input.formations) && input.formations.length >= 1 && input.formations.length <= 12, 'formations needs 1–12 entries');
   const formations = input.formations.map((f, i) => {
-    own(f, ['form', 'say', 'at', 'ids', 'hero', 'word', 'center', 'spread', 'scale', 'dur', 'stagger', 'ease', 'thread', 'beside', 'on', 'out', 'in', 'by', 'mark', 'to', 'color'], `formations[${i}]`);
+    own(f, ['form', 'say', 'at', 'ids', 'hero', 'word', 'center', 'spread', 'scale', 'dur', 'stagger', 'ease', 'thread', 'beside', 'on', 'out', 'in', 'by', 'mark', 'to', 'color', 'zoom'], `formations[${i}]`);
     if (f.form === 'mark') {
       check(MARKS.includes(f.mark) && Array.isArray(f.ids) && f.ids.length >= 1, `formations[${i}] (mark) is a ${MARKS.join(', ')} on ids`);
       check((f.mark === 'arrow') === (f.to != null) && [].concat(f.to ?? []).every(id => objects.has(id)), `formations[${i}]: an arrow mark points to another object or a list of them (to), and only an arrow does`);
@@ -63,6 +65,12 @@ export function castSpec(input, known = new Map(), knownLook = null) {
     check(f.word == null || (typeof f.word === 'string' && f.word.length <= 24), `formations[${i}].word is up to 24 characters`);
     check(f.center == null || (Array.isArray(f.center) && f.center.length === 2 && f.center.every(finite)), `formations[${i}].center is [x, y] in frame pixels`);
     for (const k of ['spread', 'scale', 'dur', 'stagger']) check(f[k] == null || (finite(f[k]) && f[k] >= 0), `formations[${i}].${k} is a positive number`);
+    check(f.form === 'camera' ? finite(f.zoom) && f.zoom >= 0.6 && f.zoom <= 2.5 : f.zoom == null, `formations[${i}]: zoom (0.6–2.5) belongs to form camera, which needs it`);
+    if (f.form === 'fill' || f.form === 'emerge') {
+      check(f.ids?.length === 1, `formations[${i}] (${f.form}) names one object in ids`);
+      check(FILL_TONES[objects.get(f.ids[0])?.color ?? 'accent'] != null, `formations[${i}] (${f.form}): ${f.ids[0]} must be accent, accent2, surface or ink, the colours a scene can take as its tone`);
+      check(f.form === 'fill' ? i === input.formations.length - 1 : i === 0, `formations[${i}]: ${f.form === 'fill' ? 'fill is the last move of its beat (the next scene starts in its colour)' : 'emerge is the first move of its beat (it comes out of the scene before)'}`);
+    }
     return f;
   });
   return { objects, formations, seed: input.seed ?? 0, look: input.look ?? knownLook ?? 'tiles' };
@@ -70,20 +78,21 @@ export function castSpec(input, known = new Map(), knownLook = null) {
 
 /** Where each object stands in one formation: {x, y, scale, rotate, opacity}. */
 export function formationTargets(f, ids, frame, { size, seed = 0, current = new Map() }) {
-  const { width: W, height: H } = frame, tall = H > W, u = Math.min(W, H);
+  // Below a heading the cast keeps to the space under it (`frame.top`).
+  const { width: W, height: H } = frame, tall = H > W, u = Math.min(W, H), top = frame.top ?? 0, A = H - top;
   // `beside` sets the formation next to an object where it now stands, on the side facing the middle
   // of the frame (up and to the right of an object in the middle), so it never runs off an edge.
   const near = f.beside != null ? current.get(f.beside) : null;
   const sx = near && near.x > W / 2 + 1 ? -1 : 1, sy = near && near.y < H / 2 - 1 ? 1 : -1;
   // `on` centres the formation on an object where it stands (a small ring around it, a pile on it).
   const host = f.on != null ? current.get(f.on) : null;
-  const [cx, cy] = f.center ?? (host ? [host.x, host.y] : near ? [near.x + sx * size * (near.scale ?? 1) * 0.95, near.y + sy * size * (near.scale ?? 1) * 0.75] : [W / 2, H / 2]);
+  const [cx, cy] = f.center ?? (host ? [host.x, host.y] : near ? [near.x + sx * size * (near.scale ?? 1) * 0.95, near.y + sy * size * (near.scale ?? 1) * 0.75] : [W / 2, top + A / 2]);
   const spread = f.spread ?? u * 0.34, scale = f.scale ?? 1, n = ids.length, out = new Map();
   const place = (id, x, y, extra = {}) => out.set(id, { x, y, scale, rotate: 0, opacity: 1, ...extra });
   const form = f.form === 'line' ? (tall ? 'column' : 'row') : f.form;
   if (form === 'scatter') {
     // A sunflower spiral spread over the frame, jittered by the id: even coverage, never a grid.
-    const rx = (tall ? W * 0.36 : W * 0.38) * (f.spread ? f.spread / (u * 0.34) : 1), ry = (tall ? H * 0.34 : H * 0.33) * (f.spread ? f.spread / (u * 0.34) : 1);
+    const rx = (tall ? W * 0.36 : W * 0.38) * (f.spread ? f.spread / (u * 0.34) : 1), ry = (tall ? A * 0.34 : A * 0.33) * (f.spread ? f.spread / (u * 0.34) : 1);
     const pts = ids.map((id, i) => {
       const r = Math.sqrt((i + 0.5) / n), a = i * 2.39996 + seed + hash(`${id}${seed}`) * 0.6;
       return [Math.cos(a) * r * rx, Math.sin(a) * r * ry];
@@ -92,14 +101,14 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
     const [mx, my] = [0, 1].map(k => pts.reduce((s, p) => s + p[k], 0) / n);
     ids.forEach((id, i) => place(id, cx + pts[i][0] - mx, cy + pts[i][1] - my, { rotate: (hash(`${id}r${seed}`) - 0.5) * 28, scale: scale * (0.85 + hash(`${id}s`) * 0.25) }));
   } else if (form === 'row' || form === 'column') {
-    const along = form === 'row' ? Math.min(W * 0.84, size * 2 * n) : Math.min(H * 0.66, size * 1.9 * n);
+    const along = form === 'row' ? Math.min(W * 0.84, size * 2 * n) : Math.min(A * 0.66, size * 1.9 * n);
     ids.forEach((id, i) => {
       const d = n === 1 ? 0 : -along / 2 + along * (i / (n - 1)) * (n - 1) / n + along / (2 * n);
       place(id, form === 'row' ? cx + d : cx, form === 'row' ? cy : cy + d);
     });
   } else if (form === 'ring') {
     // An ellipse with the frame's proportions, kept clear of its edges.
-    const rx = Math.min(spread * (tall ? 0.8 : 1.25), W / 2 - size * 0.9), ry = Math.min(spread * (tall ? 1.25 : 0.8), H / 2 - size * 0.9);
+    const rx = Math.min(spread * (tall ? 0.8 : 1.25), W / 2 - size * 0.9), ry = Math.min(spread * (tall ? 1.25 : 0.8), A / 2 - size * 0.9);
     ids.forEach((id, i) => { const a = -Math.PI / 2 + (i / n) * Math.PI * 2; place(id, cx + Math.cos(a) * rx, cy + Math.sin(a) * ry); });
   } else if (form === 'cluster') {
     // Hexagonal packing outward from the centre: a pile of objects touching.
@@ -118,7 +127,7 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
     place(f.hero, heroAt[0], heroAt[1], { scale: (f.scale ?? 2.3) });
     others.forEach((id, i) => {
       const a = -Math.PI / 2 + ((i + 0.5) / others.length) * Math.PI * 2;
-      out.set(id, { x: cx + Math.cos(a) * (tall ? W * 0.4 : W * 0.42), y: cy + Math.sin(a) * (tall ? H * 0.36 : H * 0.4), scale: 0.6, rotate: 0, opacity: 0.35 });
+      out.set(id, { x: cx + Math.cos(a) * (tall ? W * 0.4 : W * 0.42), y: cy + Math.sin(a) * (tall ? A * 0.36 : A * 0.4), scale: 0.6, rotate: 0, opacity: 0.35 });
     });
   } else if (form === 'swap') {
     // One becomes another in place: the old shrinks away where it stands, the new grows into its pose.
@@ -139,7 +148,7 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
     for (const t of out.values()) {
       const half = size * (t.scale ?? 1) * 0.58;
       t.x = Math.min(Math.max(t.x, mx + half), W - mx - half);
-      t.y = Math.min(Math.max(t.y, my + half), H - my - half);
+      t.y = Math.min(Math.max(t.y, Math.max(my, top) + half), H - my - half);
     }
   }
   return out;
@@ -159,17 +168,24 @@ const LOOK = {
     mark: o => (o.color === 'surface' ? 'ink' : 'bg'), font: 'poster', label: 'semibold', shadow: false },
 };
 
-/** The object as drawn: a group centred on its position (a tile with an icon, or a word on a pill). */
+/**
+ * The object as drawn: a group centred on its position (a tile with an icon, or a word on a pill).
+ * One that has filled the frame is drawn as its flat colour, its face hidden, until it emerges.
+ */
 function objectElement(o, id, size, base, enter, look = 'tiles') {
   const s = o.size ?? size, children = [], L = LOOK[look];
+  // Hidden and shown by keys from frame one (a base opacity would multiply every later key).
+  const face = el => (base.filled ? { ...el, keys: [{ at: 0, opacity: 0, dur: 0 }] } : el);
   if (o.word) {
     const w = Math.max(s * 1.4, o.word.length * s * 0.36 + s * 0.6);
     children.push({ type: 'rect', id: `${id}-tile`, x: -w / 2, y: -s * 0.36, w, h: s * 0.72, r: s * 0.36, fill: o.color, enter: 'none', ...L.tile(s) },
-      { type: 'text', id: `${id}-word`, text: o.word, x: 0, y: s * 0.13, size: s * (look === 'drawn' ? 0.4 : 0.34), font: L.font, fill: look === 'drawn' || o.color !== 'ink' ? 'ink' : 'bg', anchor: 'middle', fit: w - s * 0.4, enter: 'none' });
+      face({ type: 'text', id: `${id}-word`, text: o.word, x: 0, y: s * 0.13, size: s * (look === 'drawn' ? 0.4 : 0.34), font: L.font, fill: look === 'drawn' || o.color !== 'ink' ? 'ink' : 'bg', anchor: 'middle', fit: w - s * 0.4, enter: 'none' }));
   } else {
     children.push({ type: 'rect', id: `${id}-tile`, x: -s / 2, y: -s / 2, w: s, h: s, r: s * 0.26, fill: o.color, enter: 'none', ...L.tile(s) },
-      { type: 'icon', id: `${id}-icon`, name: o.icon, x: 0, y: 0, size: s * 0.52, stroke: L.mark(o), enter: 'none' });
+      face({ type: 'icon', id: `${id}-icon`, name: o.icon, x: 0, y: 0, size: s * 0.52, stroke: L.mark(o), enter: 'none' }));
   }
+  const { x, y, w, h, r } = children[0];
+  children.splice(1, 0, { type: 'rect', id: `${id}-solid`, x, y, w, h, r, fill: o.color, enter: 'none', keys: [{ at: 0, opacity: base.filled ? 1 : 0, dur: 0 }] });
   if (o.label) children.push({ type: 'text', id: `${id}-label`, text: o.label, x: 0, y: s * 0.5 + s * 0.34, size: Math.max(22, s * (look === 'drawn' ? 0.24 : 0.2)), font: L.label, fill: look === 'drawn' ? 'ink' : 'muted', anchor: 'middle', enter: 'none' });
   // The starting pose is a key at 0, so every later key is absolute (opacity and rotation never compound).
   return { type: 'group', id, x: base.x, y: base.y, shadow: L.shadow, children, ...enter,
@@ -181,9 +197,13 @@ function objectElement(o, id, size, base, enter, look = 'tiles') {
  * Elements for one beat's cast, and the state it ends in. `state`: Map id → pose carried from the
  * previous beat; `cue(v)` resolves a word or seconds to beat time.
  */
-export function castElements(spec, frame, { state = new Map(), threads = [], cue = v => (typeof v === 'number' ? v : 0) } = {}) {
+export function castElements(spec, frame, { state = new Map(), threads = [], camera = { zoom: 1, x: 0, y: 0 }, cue = v => (typeof v === 'number' ? v : 0) } = {}) {
+  // The camera: one stage holding the whole cast, scaled about the frame's middle and panned toward
+  // what it looks at. It carries across cuts like the objects do.
+  let cam = { ...camera };
+  const camKeys = [];
   const u = Math.min(frame.width, frame.height), size = u * 0.15;
-  const pose = new Map(state), groups = new Map(), elements = [], words = [], notes = [];
+  const pose = new Map(state), groups = new Map(), elements = [], words = [], notes = [], edges = {};
   // Draw order carries across cuts too: an object keeps its depth, new ones and anything acting on
   // another come forward.
   let carried = [], top = Math.max(0, ...[...state.values()].map(p => p.z ?? 0));
@@ -200,12 +220,45 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cue
   const times = [];
   spec.formations.forEach((f, k) => times.push(f.say != null ? cue(f.say) : f.at ?? (k === 0 ? 0 : times[k - 1] + 1.6)));
   // A thread or word lasts until the next formation that moves the cast (a wave or a mark leaves it standing).
-  const until = k => times.find((_, j) => j > k && !['wave', 'mark'].includes(spec.formations[j].form));
+  const until = k => times.find((_, j) => j > k && !['wave', 'mark', 'camera'].includes(spec.formations[j].form));
   // An object that has exited stays gone unless a formation names it again.
   const alive = id => !pose.get(id)?.gone;
   spec.formations.forEach((f, k) => {
     const t = times[k], stagger = f.stagger ?? 0.06, dur = f.dur ?? 1.1;
     const ids = f.form === 'swap' ? [f.out, f.in] : f.ids ?? [...spec.objects.keys()].filter(id => alive(id) && (f.form !== 'exit' || pose.has(id)));
+    // An object can become the frame: it travels to the middle and grows past the edges as its face
+    // fades and its colour floods in, and the next scene plays on that colour (the job sets its
+    // tone and cuts). `emerge` is the way back: out of the last scene's colour, to where it was.
+    if (f.form === 'fill' || f.form === 'emerge') {
+      const id = ids[0], p = pose.get(id);
+      if (!p || (f.form === 'emerge' && !p.filled)) { notes.push(`${f.form} on ${id}: it ${p ? 'has not filled the frame' : 'is not on screen'}, so nothing moves`); return; }
+      const { el, base } = group(id), o = spec.objects.get(id), s = o.size ?? size, solid = el.children.find(c => c.id.endsWith('-solid'));
+      const faces = el.children.filter(c => c.type === 'icon' || c.type === 'text');
+      if (f.form === 'fill') {
+        const cover = (Math.hypot(frame.width, frame.height) / (s * Math.min(1, cam.zoom))) * 1.15;
+        el.keys.push({ at: t, x: frame.width / 2 - base.x, y: frame.height / 2 - base.y, scale: cover, rotate: 0, opacity: 1, dur, ease: f.ease ?? 'in' });
+        solid.keys.push({ at: t, opacity: 1, dur: dur * 0.6 });
+        for (const c of faces) c.keys = [...(c.keys ?? [{ at: 0, opacity: 1, dur: 0 }]), { at: t, opacity: 0, dur: dur * 0.4 }];
+        pose.set(id, { x: frame.width / 2, y: frame.height / 2, scale: cover, rotate: 0, opacity: 1, z: ++top, filled: { ...p, filled: undefined } });
+        edges.fill = FILL_TONES[o.color];
+      } else {
+        const back = p.filled;
+        el.keys.push({ at: t, x: back.x - base.x, y: back.y - base.y, scale: back.scale ?? 1, rotate: back.rotate ?? 0, opacity: back.opacity ?? 1, dur, ease: f.ease ?? 'out' });
+        solid.keys.push({ at: t + dur * 0.35, opacity: 0, dur: dur * 0.5 });
+        for (const c of faces) c.keys = [...(c.keys ?? [{ at: 0, opacity: 0, dur: 0 }]), { at: t + dur * 0.45, opacity: 1, dur: dur * 0.4 }];
+        pose.set(id, { ...back, z: p.z });
+        edges.emerge = FILL_TONES[o.color];
+      }
+      return;
+    }
+    // The camera pushes in (zoom above 1) or pulls back, toward `on` where it stands now: most of
+    // the way, so the rest of the cast stays in the picture.
+    if (f.form === 'camera') {
+      const p = f.on != null ? pose.get(f.on) : null, z = f.zoom;
+      cam = { zoom: z, x: p ? -z * (p.x - frame.width / 2) * 0.7 : 0, y: p ? -z * (p.y - frame.height / 2) * 0.7 : 0 };
+      camKeys.push({ at: t, scale: cam.zoom, x: cam.x, y: cam.y, dur: f.dur ?? 1.8, ease: f.ease ?? 'inOut' });
+      return;
+    }
     // A wave runs through the objects in order where they stand, each lifting as it passes: a
     // sequence playing, a signal travelling. Nothing moves for good.
     if (f.form === 'wave') {
@@ -322,7 +375,12 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cue
   }
   for (const { el } of groups.values()) el.keys.sort((a, b) => a.at - b.at);
   const depth = new Map([...groups].map(([id, { el }]) => [el, pose.get(id)?.z ?? 0]));
-  return { elements: [...elements].sort((a, b) => depth.get(a) - depth.get(b)).concat(words), state: pose, threads: carried, notes };
+  const drawn = [...elements].sort((a, b) => depth.get(a) - depth.get(b)).concat(words);
+  const moved = camKeys.length || camera.zoom !== 1 || camera.x || camera.y;
+  // The stage is there from frame one (its contents keep their own entrances).
+  const stage = { type: 'group', id: 'cast-stage', x: 0, y: 0, at: 0, enter: 'none', origin: [frame.width / 2, frame.height / 2], children: drawn,
+    keys: [{ at: 0, scale: camera.zoom, x: camera.x, y: camera.y, dur: 0 }, ...camKeys] };
+  return { elements: moved ? [stage] : drawn, state: pose, threads: carried, notes, camera: cam, edges };
 }
 
 export function expandCastProps(input, frame, ctx = {}) {
@@ -331,12 +389,15 @@ export function expandCastProps(input, frame, ctx = {}) {
   for (const key of ['plot', 'bars', 'bridge', 'stat', 'distribution', 'multiples', 'kpi', 'teaching', 'chart', 'sketch', 'view', 'viewFrom', 'world'])
     check(rest[key] == null, `cannot combine cast with ${key} (a cast lays itself out for the frame)`);
   const spec = castSpec(cast, ctx.objects ?? new Map(), ctx.look ?? null);
-  const { elements, state, threads, notes } = castElements(spec, frame, { state: ctx.state, threads: ctx.threads, cue: ctx.cue });
+  // A heading takes the top of the frame (as on stages); the cast keeps below it.
+  if (rest.title || rest.kicker) frame = { ...frame, top: frame.height > frame.width ? 430 : 300 };
+  const { elements, state, threads, notes, camera, edges } = castElements(spec, frame, { state: ctx.state, threads: ctx.threads, camera: ctx.camera, cue: ctx.cue });
   for (const n of notes) ctx.notes?.push(`${frame.beatId ?? 'cast'}: ${n}`);
   if (frame.beatId) {
     const prefix = el => { el.id = `${frame.beatId}-${el.id}`; for (const c of el.children ?? []) prefix(c); };
     elements.forEach(prefix);
   }
-  if (ctx.carry) Object.assign(ctx.carry, { state, objects: spec.objects, threads, look: spec.look });
+  if (ctx.carry) Object.assign(ctx.carry, { state, objects: spec.objects, threads, look: spec.look, camera,
+    ...(edges.fill || edges.emerge ? { edges: { ...ctx.carry.edges, [frame.beatId]: edges } } : {}) });
   return { ...rest, view: [0, 0, frame.width, frame.height], elements: [...elements, ...(rest.elements ?? [])] };
 }

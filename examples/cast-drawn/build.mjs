@@ -24,10 +24,10 @@ const beats = [
       { form: 'mark', mark: 'underline', ids: ['crash'], say: 'first' }] } },
   { id: 'fix', vo: 'The on-call engineer takes it, and it becomes a fix.', tail: 1,
     cast: { objects: [{ id: 'engineer', icon: 'user', color: 'surface', enter: 'drop' }, { id: 'patch', icon: 'code', color: 'positive' }],
-      formations: [{ form: 'hero', hero: 'crash', say: 'on-call' }, { form: 'cluster', ids: ['engineer'], beside: 'crash', say: 'engineer' },
+      formations: [{ form: 'hero', hero: 'crash', say: 'on-call' }, { form: 'camera', zoom: 1.18, say: 'on-call', dur: 2.4 }, { form: 'cluster', ids: ['engineer'], beside: 'crash', say: 'engineer' },
         { form: 'swap', out: 'crash', in: 'patch', by: ['engineer'], say: 'fix', dur: 0.7 }] } },
   { id: 'reply', vo: 'When it ships, everyone who reported it hears back.', min: 4.5,
-    cast: { formations: [{ form: 'exit', ids: ['engineer'], at: 0.1, dur: 0.7 }, { form: 'hero', hero: 'patch', scale: 1.5, at: 0.2 },
+    cast: { formations: [{ form: 'exit', ids: ['engineer'], at: 0.1, dur: 0.7 }, { form: 'hero', hero: 'patch', scale: 1.5, at: 0.2 }, { form: 'camera', zoom: 1, at: 0.2, dur: 1.6 },
       { form: 'ring', ids: ['mail', 'chat2', 'review', 'mail2', 'chat'], say: 'everyone', spread: 460, dur: 1 },
       { form: 'mark', mark: 'arrow', ids: ['patch'], to: ['mail2', 'chat2'], say: 'hears', color: 'ink' }] } },
 ];
