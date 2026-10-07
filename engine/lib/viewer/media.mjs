@@ -9,6 +9,15 @@ export const UI = path.join(ROOT, 'engine/ui/viewer');
 export const FONT_DIR = path.join(ROOT, 'film/assets/fonts');
 export const readJSON = (f, fallback = null) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fallback; } };
 export const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'item';
+/**
+ * A film's id: its folder path as a slug. A folder name with a stray leading or trailing dash
+ * ("…-for-the-", from an older project namer) would share the id of the same name without it,
+ * so it carries a short hash of its path; every other film keeps its plain id.
+ */
+export const filmId = dir => {
+  const rel = path.relative(process.cwd(), dir), id = slug(rel);
+  return /^-|-$/.test(path.basename(rel)) ? `${id}-${crypto.createHash('sha1').update(rel).digest('hex').slice(0, 6)}` : id;
+};
 export const hash = s => crypto.createHash('sha256').update(s).digest('hex').slice(0, 12);
 export const rel = (from, file) => path.relative(from, file).split(path.sep).join('/');
 export const fileHash = f => { const s = fs.statSync(f); return hash(`${f}:${s.size}:${s.mtimeMs}`); };

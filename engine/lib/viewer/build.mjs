@@ -1,7 +1,7 @@
 // Assemble the page: every film, its versions, scenes and notes, in one self-contained HTML file.
 import fs from 'node:fs';
 import path from 'node:path';
-import { UI, FONT_DIR, slug } from './media.mjs';
+import { UI, FONT_DIR, slug, filmId } from './media.mjs';
 import { FontRegistry } from './files.mjs';
 import { clearframeFilm, bundled } from './clearframe.mjs';
 import { manifestFilm, findFilms, briefFilm } from './manifest.mjs';
@@ -28,7 +28,7 @@ export async function buildViewer({ root = ['examples', 'real-examples'], out = 
   const file = path.join(out, 'index.html');
   fs.writeFileSync(file, html);
   return { file, data, films: films.length, versions: films.reduce((n, f) => n + f.versions.length, 0),
-    dirs: Object.fromEntries(findFilms(roots).map(d => [slug(path.relative(process.cwd(), d)), d])) };
+    dirs: Object.fromEntries(findFilms(roots).map(d => [filmId(d), d])) };
 }
 
 

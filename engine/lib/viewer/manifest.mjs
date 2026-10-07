@@ -1,7 +1,7 @@
 // Films made elsewhere, described by film.json, and finding films on disk.
 import fs from 'node:fs';
 import path from 'node:path';
-import { readJSON, slug, rel, fileHash, duration, frameSize, frameAt } from './media.mjs';
+import { readJSON, slug, filmId, rel, fileHash, duration, frameSize, frameAt } from './media.mjs';
 import { describeFile, walkFiles, byGroup } from './files.mjs';
 import { noteView } from './notes.mjs';
 import { manifestStage, stageInfo } from './stages.mjs';
@@ -12,7 +12,7 @@ import { briefOf, hasBrief } from './boards.mjs';
 export function manifestFilm(dir, ctx) {
   const m = readJSON(path.join(dir, 'film.json'));
   if (!m?.versions?.length) return null;
-  const { out, media, fonts } = ctx, id = slug(path.relative(process.cwd(), dir)), title = m.title ?? path.basename(dir);
+  const { out, media, fonts } = ctx, id = filmId(dir), title = m.title ?? path.basename(dir);
   const notes = readJSON(path.join(dir, 'notes.json'), { notes: [] }).notes;
   const fontList = (m.fonts ?? []).map(f => ({ entry: fonts.add(path.join(dir, f.file), { family: f.family, style: f.style, license: f.license, origin: title }), roles: f.used ?? [] })).filter(x => x.entry);
   for (const { entry, roles } of fontList) { entry.films.add(title); roles.forEach(r => entry.uses.add(r)); }
@@ -63,7 +63,7 @@ export function findFilms(root, depth = 4) {
 export function briefFilm(dir, ctx) {
   const text = briefOf(dir), title = text?.match(/^#\s+(.+)$/m)?.[1] ?? path.basename(dir);
   const files = walkFiles(dir).filter(f => !/^brief\.md$/i.test(path.basename(f)));
-  return { id: slug(path.relative(process.cwd(), dir)), kind: 'brief', title, folder: path.relative(process.cwd(), dir), shape: 'wide', beats: 0, versions: [],
+  return { id: filmId(dir), kind: 'brief', title, folder: path.relative(process.cwd(), dir), shape: 'wide', beats: 0, versions: [],
     files: files.map(f => describeFile(f, dir, ctx.out, ctx.media, ctx.fonts)).sort(byGroup), notesTo: null, stage: stageInfo('brief'), brief: text, boards: [],
     updatedAt: fs.statSync(path.join(dir, fs.existsSync(path.join(dir, 'brief.md')) ? 'brief.md' : 'BRIEF.md')).mtime.toISOString() };
 }

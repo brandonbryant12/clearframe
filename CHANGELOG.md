@@ -4,7 +4,7 @@
 
 - **A stage holding only `code` makes the code the picture.** By default the editor takes the stage area: 84% of its width, larger type, and an inline before/after diff centred down it. It used to sit in the corner like an editor beside a diagram, leaving most of the frame empty. Author-set `x`, `y`, `w` and `size` still win.
 - **The authoring guide gives the copyable form.** It shows `{"block":"stage","props":{"code":{"before","after","title","say"}}}` (or a commit and file from git) next to the mechanism and evidence scenes it pairs with. In the fourth live run, given a PR brief, the free agent recognised a code change as stage material but avoided stages as "complex".
-- Film folders named from a long idea no longer end in a dash ("…-for-the-").
+- Film folders named from a long idea no longer end in a dash ("…-for-the-"). A folder that already does keeps a distinct film id (a short hash is added): it used to share its id with the same name without the dash, so the studio could address neither.
 
 ## Fill and travel geometry (director review, midnight)
 

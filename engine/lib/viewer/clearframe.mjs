@@ -4,7 +4,7 @@ import path from 'node:path';
 import { listRevisions, revisionVideo, loadRevision } from '../revisions.mjs';
 import { readNotes, readDecisions } from '../notes.mjs';
 import { FACE_SETS } from '../../../film/type.mjs';
-import { FONT_DIR, readJSON, slug, rel, fileHash, duration, frameSize, frameAt } from './media.mjs';
+import { FONT_DIR, readJSON, slug, filmId, rel, fileHash, duration, frameSize, frameAt } from './media.mjs';
 import { describeFile, walkFiles, fileType, byGroup } from './files.mjs';
 import { noteView } from './notes.mjs';
 import { clearframeStage, stageInfo } from './stages.mjs';
@@ -112,7 +112,7 @@ export function clearframeVersion(dir, sb, r, i, ctx) {
 
 export async function clearframeFilm(dir, ctx) {
   const sb = readJSON(path.join(dir, 'storyboard.json'), {});
-  const id = slug(path.relative(process.cwd(), dir)), title = sb.title ?? path.basename(dir);
+  const id = filmId(dir), title = sb.title ?? path.basename(dir);
   const fctx = { ...ctx, notes: readNotes(dir), decisions: readDecisions(dir).filter(d => d.role === 'human'), pins: readJSON(path.join(dir, 'review/viewer-pins.json'), {}), film: id, title };
   const versions = listRevisions(dir).map((r, i) => clearframeVersion(dir, sb, r, i, fctx)).filter(Boolean);
   // Notes on a revision whose video is no longer kept stay reachable: listed with the latest version,

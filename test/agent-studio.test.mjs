@@ -610,3 +610,10 @@ test('a film folder named from a long idea never ends in a dash', () => {
   assert.equal(slugify('A 30-second explainer of a pull request, for the engineers who review'), 'a-30-second-explainer-of-a-pull-request-for-the');
   assert.equal(slugify('—'), 'film');
 });
+
+test('two film folders that differ by a stray dash keep different ids', async () => {
+  const { filmId } = await import('../engine/lib/viewer/media.mjs');
+  const a = filmId('build/x/a-30-second-explainer-for-the'), b = filmId('build/x/a-30-second-explainer-for-the-');
+  assert.equal(a, 'build-x-a-30-second-explainer-for-the', 'a clean folder keeps its plain id');
+  assert.notEqual(a, b);
+});
