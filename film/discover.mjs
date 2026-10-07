@@ -91,13 +91,26 @@ const MECHANISMS = [
 
 let cache = null, cacheKey = null;
 /** Every entry: {id, kind, name, title, about, when, needs, ref}. Rebuilt when the library layers change. */
+/** A sketch's fillable placeholder words and voice-cued moments, read from one drawing (~0.5 ms). */
+function slots(name) {
+  const text = new Set(), cues = new Set();
+  const walk = list => (list ?? []).forEach(el => {
+    if (el.type === 'text' && /^[A-Z][A-Z0-9_]{2,}$/.test(el.text)) text.add(el.text);
+    for (const c of [el.cue, el.exitCue, el.along?.cue, ...(el.keys ?? []).map(k => k.cue)]) if (c) cues.add(c);
+    walk(el.children);
+  });
+  try { walk(sketchByName(name).build(1920, 1080, {}).elements); } catch {}
+  return { text: [...text], cues: [...cues] };
+}
+const slotText = ({ text, cues }) => [text.length ? `sketchText ${text.join(', ')}` : '', cues.length ? `sketchSay ${cues.join(', ')}` : ''].filter(Boolean).join('; ');
+
 export function entries() {
   const key = libraryDirs().join('|');
   if (cache && cacheKey === key) return cache;
   const out = [];
   const add = (kind, name, title, about, when, needs, ref) => out.push({ id: `${kind}:${name}`, kind, name, title: clean(title || name), about: clean(about), when: clean(when), needs: clean(needs), ref });
   for (const b of BLOCKS) add('block', b.name, b.name, b.summary, b.category, Object.keys(b.props ?? {}).slice(0, 8).join(', '), `blocks ${b.name}`);
-  for (const s of items('sketches')) add('sketch', s.id, s.id, s.summary, s.use, s.layer ? 'background art layer' : 'canvas', `sketch ${s.id}`);
+  for (const s of items('sketches')) add('sketch', s.id, s.id, s.summary, s.use, [s.layer ? 'background art layer' : 'canvas', slotText(slots(s.id))].filter(Boolean).join('; '), `sketch ${s.id}`);
   for (const p of items('playbooks')) add('playbook', p.id, p.title, `${p.title}: ${p.beats?.length ?? 0} scenes`, p.audience, p.inputs, `new DIR --playbook ${p.id}`);
   for (const d of items('directions')) add('direction', d.id, d.title, d.story, d.when, (d.materials ?? []).join(', '), `new DIR --direction ${d.id}`);
   for (const t of items('treatments')) add('treatment', t.id, t.title, t.title, t.when, '', `new DIR --treatment ${t.id}`);
@@ -181,7 +194,7 @@ export function find(query, { limit = 8, kinds = null, perKind = 3 } = {}) {
 }
 
 /** One line per entry: `kind:name — what it is (when).` */
-export const line = e => `${e.id} — ${e.about || e.title}${e.when && e.when !== e.about ? ` · when: ${e.when.slice(0, 140)}` : ''}`;
+export const line = e => `${e.id} — ${e.about || e.title}${e.when && e.when !== e.about ? ` · when: ${e.when.slice(0, 140)}` : ''}${e.kind === 'sketch' && e.needs.includes('sketch') ? ` · fill: ${e.needs.split('; ').slice(1).join('; ')}` : ''}`;
 
 /** Exact authoring details for one entry: how to use it, a copyable example where one exists, its reference. */
 export async function detail(id) {
@@ -192,18 +205,12 @@ export async function detail(id) {
     const b = BLOCKS.find(x => x.name === e.name);
     Object.assign(out, { props: Object.keys(b.props ?? {}), example: { block: b.name, props: b.example } });
   } else if (e.kind === 'sketch') {
-    // Its placeholder type and named moments, read from one drawing, so the example shows what to fill.
-    const text = new Set(), cues = new Set();
-    const walk = list => (list ?? []).forEach(el => {
-      if (el.type === 'text' && /^[A-Z][A-Z0-9_]{2,}$/.test(el.text)) text.add(el.text);
-      for (const c of [el.cue, el.exitCue, el.along?.cue, ...(el.keys ?? []).map(k => k.cue)]) if (c) cues.add(c);
-      walk(el.children);
-    });
-    try { walk(sketchByName(e.name).build(1920, 1080, {}).elements); } catch {}
+    // Its placeholder type and named moments, so the example shows what to fill.
+    const { text, cues } = slots(e.name);
     out.example = { block: 'canvas', props: { sketch: e.name,
-      ...(text.size ? { sketchText: Object.fromEntries([...text].map(t => [t, 'your words'])) } : {}),
-      ...(cues.size ? { sketchSay: Object.fromEntries([...cues].map(c => [c, 'a spoken word'])) } : {}) } };
-    out.note = `node engine/cli.mjs sketch ${e.name} prints the elements to adapt.${cues.size ? ' sketchSay lands each named moment on a word of the narration.' : ''}`;
+      ...(text.length ? { sketchText: Object.fromEntries(text.map(t => [t, 'your words'])) } : {}),
+      ...(cues.length ? { sketchSay: Object.fromEntries(cues.map(c => [c, 'a spoken word'])) } : {}) } };
+    out.note = `node engine/cli.mjs sketch ${e.name} prints the elements to adapt.${cues.length ? ' sketchSay lands each named moment on a word of the narration.' : ''}`;
   } else if (e.kind === 'playbook') {
     const p = items('playbooks').find(x => x.id === e.name);
     out.scenes = p.beats.map(b => `${b.id} (${b.block}${b.props?.sketch ? `: ${b.props.sketch}` : ''})${b.vo ? `: ${clean(b.vo).slice(0, 80)}` : ''}`);
