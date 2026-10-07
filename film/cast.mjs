@@ -19,7 +19,7 @@ const own = (o, keys, name) => {
 export const FORMS = ['scatter', 'row', 'column', 'line', 'ring', 'cluster', 'hero', 'exit', 'swap', 'wave', 'mark', 'camera', 'fill', 'emerge', 'merge', 'split', 'travel'];
 // The scene tone an object's colour floods the frame with when it fills it (docs/canvas.md, tone).
 export const FILL_TONES = { accent: 'accent', accent2: 'accent2', surface: 'surface', ink: 'invert' };
-export const LOOKS = ['tiles', 'drawn', 'print'];
+export const LOOKS = ['tiles', 'drawn', 'print', 'pixel'];
 const MARKS = ['circle', 'underline', 'cross', 'arrow'];
 const ENTERS = ['pop', 'drop', 'rise', 'left', 'right', 'fade', 'none'];
 const COLORS = ['accent', 'accent2', 'positive', 'negative', 'ink', 'muted', 'surface'];
@@ -185,14 +185,22 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
  * How each look draws an object's tile, its mark and its type. `tiles` are flat rounded tiles with a
  * soft shadow; `drawn` is pen on paper (an ink outline drawn by hand, the colour hatched in, the
  * icon in ink, type in a hand); `print` is a two-colour press (the colour laid in a dot screen,
- * slightly off register, with worn ink).
+ * slightly off register, with worn ink); `pixel` is pixel art (the body and its details laid in
+ * square screen cells with a one-cell ink outline, type in mono).
  */
+const pixelCell = s => Math.max(6, Math.round(s * 0.07));
 const LOOK = {
-  tiles: { tile: () => ({}), mark: o => (o.color === 'surface' ? 'ink' : 'bg'), font: 'strong', label: 'semibold', shadow: true },
-  drawn: { tile: s => ({ stroke: 'ink', width: Math.max(3, s * 0.028), rough: { amount: 1.4, passes: 2, fill: 'hachure', gap: Math.max(5, s * 0.055), angle: -38, hatchWidth: Math.max(3, s * 0.03) } }),
+  tiles: { about: 'flat rounded tiles with a soft shadow: clean product and business explainers',
+    tile: () => ({}), mark: o => (o.color === 'surface' ? 'ink' : 'bg'), font: 'strong', label: 'semibold', shadow: true },
+  drawn: { about: 'pen on paper: an ink outline drawn by hand, colour hatched in, type in a hand; warm, human, a story told on a notepad',
+    tile: s => ({ stroke: 'ink', width: Math.max(3, s * 0.028), rough: { amount: 1.4, passes: 2, fill: 'hachure', gap: Math.max(5, s * 0.055), angle: -38, hatchWidth: Math.max(3, s * 0.03) } }),
     mark: () => 'ink', font: 'hand', label: 'hand', shadow: false },
-  print: { tile: s => ({ print: { screen: 'dots', cell: Math.max(5, Math.round(s * 0.055)), angle: 45, register: [Math.round(s * 0.025), -Math.round(s * 0.015)], wear: 0.25 } }),
+  print: { about: 'a two-colour press: colour in a dot screen, slightly off register, worn ink; editorial, retro, poster',
+    tile: s => ({ print: { screen: 'dots', cell: Math.max(5, Math.round(s * 0.055)), angle: 45, register: [Math.round(s * 0.025), -Math.round(s * 0.015)], wear: 0.25 } }),
     mark: o => (o.color === 'surface' ? 'ink' : 'bg'), font: 'poster', label: 'semibold', shadow: false },
+  pixel: { about: 'pixel art: bodies and details laid in square screen cells with a one-cell outline, mono type; games, retro tech, playful systems (pairs with the lcd palette)',
+    tile: s => ({ stroke: 'ink', width: Math.max(3, s * 0.03), mosaic: { style: 'pixel', tile: pixelCell(s), outline: true } }),
+    mark: () => 'ink', font: 'mono', label: 'mono', shadow: false },
 };
 
 /**
@@ -202,33 +210,81 @@ const LOOK = {
  */
 const SHAPES = {
   // A page with a folded corner and lines of text.
-  doc: { extent: [0.36, 0.5], draw: (s, d) => ({ body: { x: -0.36 * s, y: -0.5 * s, w: 0.72 * s, h: s, r: 0.05 * s },
+  doc: { about: 'a page with a folded corner and lines of text: a report, a ticket body, a file, a document', extent: [0.36, 0.5], draw: (s, d) => ({ body: { x: -0.36 * s, y: -0.5 * s, w: 0.72 * s, h: s, r: 0.05 * s },
     details: [{ type: 'poly', points: [[0.16 * s, -0.5 * s], [0.36 * s, -0.3 * s], [0.16 * s, -0.3 * s]], closed: true, fill: d, opacity: 0.85 },
       ...[-0.16, -0.02, 0.12, 0.26].map((y, i) => ({ type: 'line', x1: -0.22 * s, y1: y * s, x2: (i === 3 ? 0.06 : 0.2) * s, y2: y * s, stroke: d, width: 0.045 * s, cap: 'round' }))] }) },
   // A speech bubble with three dots.
-  bubble: { extent: [0.5, 0.44], draw: (s, d, c) => ({ body: { x: -0.5 * s, y: -0.44 * s, w: s, h: 0.7 * s, r: 0.3 * s },
+  bubble: { about: 'a speech bubble: a message, a request, a complaint, a reply, a chat', extent: [0.5, 0.44], draw: (s, d, c) => ({ body: { x: -0.5 * s, y: -0.44 * s, w: s, h: 0.7 * s, r: 0.3 * s },
     details: [{ type: 'poly', points: [[-0.3 * s, 0.2 * s], [-0.06 * s, 0.2 * s], [-0.36 * s, 0.44 * s]], closed: true, fill: c, body: true },
       ...[-0.2, 0, 0.2].map(x => ({ type: 'circle', cx: x * s, cy: -0.09 * s, r: 0.06 * s, fill: d }))] }) },
   // A phone with its screen lit.
-  phone: { extent: [0.28, 0.5], draw: (s, d) => ({ body: { x: -0.28 * s, y: -0.5 * s, w: 0.56 * s, h: s, r: 0.09 * s },
+  phone: { about: 'a phone with its screen lit: a user, an app, a notification, mobile', extent: [0.28, 0.5], draw: (s, d) => ({ body: { x: -0.28 * s, y: -0.5 * s, w: 0.56 * s, h: s, r: 0.09 * s },
     details: [{ type: 'rect', x: -0.22 * s, y: -0.38 * s, w: 0.44 * s, h: 0.7 * s, r: 0.03 * s, fill: d, opacity: 0.9 },
       { type: 'line', x1: -0.07 * s, y1: 0.42 * s, x2: 0.07 * s, y2: 0.42 * s, stroke: d, width: 0.035 * s, cap: 'round' }] }) },
   // A card holding a small bar chart.
-  card: { extent: [0.5, 0.38], draw: (s, d) => ({ body: { x: -0.5 * s, y: -0.38 * s, w: s, h: 0.76 * s, r: 0.07 * s },
+  card: { about: 'a card holding a small bar chart: a dashboard, a metric, a report with numbers', extent: [0.5, 0.38], draw: (s, d) => ({ body: { x: -0.5 * s, y: -0.38 * s, w: s, h: 0.76 * s, r: 0.07 * s },
     details: [...[0.18, 0.34, 0.25, 0.44].map((h, i) => ({ type: 'rect', x: (-0.32 + i * 0.17) * s, y: (0.24 - h) * s, w: 0.11 * s, h: h * s, r: 0.015 * s, fill: d })),
       { type: 'line', x1: -0.38 * s, y1: 0.26 * s, x2: 0.38 * s, y2: 0.26 * s, stroke: d, width: 0.03 * s, cap: 'round' }] }) },
   // A person: head and shoulders.
-  person: { extent: [0.4, 0.5], draw: (s, d, c) => ({ body: { x: -0.4 * s, y: 0.04 * s, w: 0.8 * s, h: 0.46 * s, r: 0.23 * s },
+  person: { about: 'head and shoulders: a user, a customer, an engineer, a team member', extent: [0.4, 0.5], draw: (s, d, c) => ({ body: { x: -0.4 * s, y: 0.04 * s, w: 0.8 * s, h: 0.46 * s, r: 0.23 * s },
     details: [{ type: 'circle', cx: 0, cy: -0.24 * s, r: 0.21 * s, fill: c, body: true }] }) },
   // A ticket stub: a perforation and two notches.
-  ticket: { extent: [0.5, 0.28], draw: (s, d) => ({ body: { x: -0.5 * s, y: -0.28 * s, w: s, h: 0.56 * s, r: 0.05 * s },
+  ticket: { about: 'a ticket stub with a perforation: a support ticket, an order, a booking, a queue item', extent: [0.5, 0.28], draw: (s, d) => ({ body: { x: -0.5 * s, y: -0.28 * s, w: s, h: 0.56 * s, r: 0.05 * s },
     details: [{ type: 'line', x1: 0.22 * s, y1: -0.2 * s, x2: 0.22 * s, y2: 0.2 * s, stroke: d, width: 0.03 * s, dash: [0.05 * s, 0.05 * s] },
       ...[-1, 1].map(k => ({ type: 'circle', cx: 0.22 * s, cy: k * 0.28 * s, r: 0.07 * s, fill: 'bg' })),
       ...[-0.08, 0.08].map((y, i) => ({ type: 'line', x1: -0.36 * s, y1: y * s, x2: (i ? -0.04 : 0.06) * s, y2: y * s, stroke: d, width: 0.04 * s, cap: 'round' }))] }) },
   // A parcel with its lid and tape.
-  box: { extent: [0.41, 0.4], draw: (s, d) => ({ body: { x: -0.41 * s, y: -0.35 * s, w: 0.82 * s, h: 0.75 * s, r: 0.04 * s },
+  box: { about: 'a parcel with its lid and tape: a delivery, a package, a release, a shipment', extent: [0.41, 0.4], draw: (s, d) => ({ body: { x: -0.41 * s, y: -0.35 * s, w: 0.82 * s, h: 0.75 * s, r: 0.04 * s },
     details: [{ type: 'line', x1: -0.41 * s, y1: -0.14 * s, x2: 0.41 * s, y2: -0.14 * s, stroke: d, width: 0.035 * s },
       { type: 'rect', x: -0.06 * s, y: -0.35 * s, w: 0.12 * s, h: 0.75 * s, fill: d, opacity: 0.55 }] }) },
+  // A server rack: three units, each with a slot and a light.
+  server: { about: 'a server rack with three lit units: a backend, infrastructure, a service, compute', extent: [0.36, 0.5], draw: (s, d) => ({ body: { x: -0.36 * s, y: -0.5 * s, w: 0.72 * s, h: s, r: 0.05 * s },
+    details: [...[-0.17, 0.16].map(y => ({ type: 'line', x1: -0.36 * s, y1: y * s, x2: 0.36 * s, y2: y * s, stroke: d, width: 0.03 * s })),
+      ...[-0.33, 0, 0.33].flatMap(y => [{ type: 'line', x1: -0.24 * s, y1: y * s, x2: 0.04 * s, y2: y * s, stroke: d, width: 0.05 * s, cap: 'round' },
+        { type: 'circle', cx: 0.2 * s, cy: y * s, r: 0.05 * s, fill: d }])] }) },
+  // A database: a cylinder with its rim and two bands.
+  database: { about: 'a database cylinder: stored data, records, a warehouse, the source of truth', extent: [0.38, 0.5], draw: (s, d, c) => ({ body: { x: -0.38 * s, y: -0.38 * s, w: 0.76 * s, h: 0.8 * s, r: 0.06 * s },
+    details: [{ type: 'ellipse', cx: 0, cy: -0.38 * s, rx: 0.38 * s, ry: 0.12 * s, fill: c, body: true },
+      { type: 'ellipse', cx: 0, cy: -0.38 * s, rx: 0.3 * s, ry: 0.07 * s, fill: 'none', stroke: d, width: 0.03 * s },
+      ...[-0.06, 0.18].map(y => ({ type: 'line', x1: -0.38 * s, y1: y * s, x2: 0.38 * s, y2: y * s, stroke: d, width: 0.035 * s }))] }) },
+  // A cloud: a soft pill with two puffs.
+  cloud: { about: 'a cloud: a hosted service, the internet, somewhere else, an outside system', extent: [0.5, 0.5], draw: (s, d, c) => ({ body: { x: -0.5 * s, y: -0.1 * s, w: s, h: 0.42 * s, r: 0.21 * s },
+    details: [{ type: 'circle', cx: -0.16 * s, cy: -0.1 * s, r: 0.24 * s, fill: c, body: true }, { type: 'circle', cx: 0.16 * s, cy: -0.18 * s, r: 0.3 * s, fill: c, body: true }] }) },
+  // A coin with a rim and its mark.
+  coin: { about: 'a coin: money, cost, price, revenue, a payment', extent: [0.42, 0.42], draw: (s, d) => ({ body: { x: -0.42 * s, y: -0.42 * s, w: 0.84 * s, h: 0.84 * s, r: 0.42 * s },
+    details: [{ type: 'circle', cx: 0, cy: 0, r: 0.31 * s, fill: 'none', stroke: d, width: 0.035 * s },
+      { type: 'text', text: '$', x: 0, y: 0.15 * s, size: 0.42 * s, font: 'strong', fill: d, anchor: 'middle' }] }) },
+  // A padlock: a body, a shackle and a keyhole.
+  lock: { about: 'a padlock: security, permission, privacy, something closed until it is unlocked', extent: [0.36, 0.5], draw: (s, d, c) => ({ body: { x: -0.36 * s, y: -0.08 * s, w: 0.72 * s, h: 0.58 * s, r: 0.08 * s },
+    details: [{ type: 'path', d: `M ${-0.22 * s} ${-0.08 * s} L ${-0.22 * s} ${-0.24 * s} C ${-0.22 * s} ${-0.56 * s} ${0.22 * s} ${-0.56 * s} ${0.22 * s} ${-0.24 * s} L ${0.22 * s} ${-0.08 * s}`, fill: 'none', stroke: c, width: 0.1 * s, cap: 'round' },
+      { type: 'circle', cx: 0, cy: 0.14 * s, r: 0.08 * s, fill: d }, { type: 'rect', x: -0.03 * s, y: 0.16 * s, w: 0.06 * s, h: 0.16 * s, r: 0.02 * s, fill: d }] }) },
+  // A light bulb with its base and filament.
+  bulb: { about: 'a light bulb: an idea, insight, a fix that occurs to someone, inspiration', extent: [0.32, 0.5], draw: (s, d, c) => ({ body: { x: -0.32 * s, y: -0.5 * s, w: 0.64 * s, h: 0.64 * s, r: 0.32 * s },
+    details: [{ type: 'rect', x: -0.15 * s, y: 0.12 * s, w: 0.3 * s, h: 0.28 * s, r: 0.05 * s, fill: c, body: true },
+      ...[0.22, 0.31].map(y => ({ type: 'line', x1: -0.13 * s, y1: y * s, x2: 0.13 * s, y2: y * s, stroke: d, width: 0.03 * s })),
+      { type: 'path', d: `M ${-0.08 * s} ${0.1 * s} L ${-0.08 * s} ${-0.06 * s} Q 0 ${-0.2 * s} ${0.08 * s} ${-0.06 * s} L ${0.08 * s} ${0.1 * s}`, fill: 'none', stroke: d, width: 0.035 * s, cap: 'round' }] }) },
+  // A clock face with two hands.
+  clock: { about: 'a clock: time, waiting, a deadline, latency, a schedule', extent: [0.44, 0.44], draw: (s, d) => ({ body: { x: -0.44 * s, y: -0.44 * s, w: 0.88 * s, h: 0.88 * s, r: 0.44 * s },
+    details: [...[[0, -1], [1, 0], [0, 1], [-1, 0]].map(([x, y]) => ({ type: 'line', x1: x * 0.3 * s, y1: y * 0.3 * s, x2: x * 0.36 * s, y2: y * 0.36 * s, stroke: d, width: 0.04 * s, cap: 'round' })),
+      { type: 'line', x1: 0, y1: 0, x2: 0, y2: -0.24 * s, stroke: d, width: 0.05 * s, cap: 'round' },
+      { type: 'line', x1: 0, y1: 0, x2: 0.17 * s, y2: 0.06 * s, stroke: d, width: 0.05 * s, cap: 'round' }, { type: 'circle', cx: 0, cy: 0, r: 0.05 * s, fill: d }] }) },
+  // An envelope with its flap.
+  envelope: { about: 'an envelope: an email, a notification, an invitation, a message sent', extent: [0.5, 0.32], draw: (s, d) => ({ body: { x: -0.5 * s, y: -0.32 * s, w: s, h: 0.64 * s, r: 0.05 * s },
+    details: [{ type: 'poly', points: [[-0.46 * s, -0.28 * s], [0, 0.06 * s], [0.46 * s, -0.28 * s]], closed: false, fill: 'none', stroke: d, width: 0.045 * s }] }) },
+  // A delivery truck: the cargo box, the cab and two wheels.
+  truck: { about: 'a delivery truck: shipping, logistics, getting something to someone, fulfilment', extent: [0.5, 0.36], draw: (s, d, c) => ({ body: { x: -0.5 * s, y: -0.36 * s, w: 0.62 * s, h: 0.5 * s, r: 0.04 * s },
+    details: [{ type: 'rect', x: 0.14 * s, y: -0.18 * s, w: 0.32 * s, h: 0.32 * s, r: 0.07 * s, fill: c, body: true },
+      { type: 'rect', x: 0.22 * s, y: -0.12 * s, w: 0.15 * s, h: 0.1 * s, r: 0.02 * s, fill: d },
+      ...[-0.3, 0.27].map(x => ({ type: 'circle', cx: x * s, cy: 0.2 * s, r: 0.11 * s, fill: 'ink' }))] }) },
+  // A flag on a pole: a goal reached.
+  flag: { about: 'a flag on a pole: a milestone, a goal, a launch, a finish line, arrival', extent: [0.4, 0.5], draw: (s, d) => ({ body: { x: -0.24 * s, y: -0.46 * s, w: 0.62 * s, h: 0.36 * s, r: 0.03 * s },
+    details: [{ type: 'line', x1: -0.28 * s, y1: -0.5 * s, x2: -0.28 * s, y2: 0.5 * s, stroke: 'ink', width: 0.05 * s, cap: 'round' }] }) },
+};
+
+/** What the cast can draw, for the discovery index: shapes and looks with what each evokes. */
+export const CAST_CATALOG = {
+  shapes: Object.entries(SHAPES).map(([id, v]) => ({ id, about: v.about })),
+  looks: Object.entries(LOOK).map(([id, v]) => ({ id, about: v.about })),
 };
 
 /** Half the width and height an object takes: a tile is square; a word pill is as long as its word. */
@@ -260,7 +316,8 @@ function objectElement(o, id, size, base, enter, look = 'tiles') {
     children.push(under({ type: 'rect', id: `${id}-tile`, ...body, fill: o.color, enter: 'none', ...L.tile(s) }));
     details.forEach(({ body: part, ...el }, k) => children.push(part
       ? under({ ...el, id: `${id}-part${k}`, enter: 'none', ...L.tile(s) })
-      : face({ ...el, id: `${id}-detail${k}`, enter: 'none', ...(look === 'drawn' && el.type !== 'circle' ? { rough: { amount: 0.8, passes: 1 } } : {}) })));
+      : face({ ...el, id: `${id}-detail${k}`, enter: 'none', ...(look === 'drawn' && el.type !== 'circle' ? { rough: { amount: 0.8, passes: 1 } } : {}),
+        ...(look === 'pixel' && el.type !== 'text' && el.fill !== 'none' ? { mosaic: { style: 'pixel', tile: pixelCell(s) } } : {}) })));
   } else {
     children.push(under({ type: 'rect', id: `${id}-tile`, x: -s / 2, y: -s / 2, w: s, h: s, r: s * 0.26, fill: o.color, enter: 'none', ...L.tile(s) }),
       face({ type: 'icon', id: `${id}-icon`, name: o.icon, x: 0, y: 0, size: s * 0.52, stroke: L.mark(o), enter: 'none' }));

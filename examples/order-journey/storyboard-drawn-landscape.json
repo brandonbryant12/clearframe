@@ -1,0 +1,267 @@
+{
+ "version": 2,
+ "title": "Order journey, drawn",
+ "logline": "An order travels from a tap to a doorstep: the same cast moves, in a look chosen for the audience.",
+ "format": {
+  "preset": "landscape",
+  "fps": 30
+ },
+ "theme": "ink",
+ "type": "geometric",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.7
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "lens": {
+  "handheld": 0
+ },
+ "captions": false,
+ "music": false,
+ "beats": [
+  {
+   "id": "order",
+   "block": "canvas",
+   "vo": "Someone taps Buy, and the order flies to the server.",
+   "tail": 0.4,
+   "props": {
+    "cast": {
+     "look": "drawn",
+     "objects": [
+      {
+       "id": "phone",
+       "shape": "phone",
+       "color": "accent",
+       "size": 270,
+       "enter": "none",
+       "float": false
+      },
+      {
+       "id": "server",
+       "shape": "server",
+       "color": "surface",
+       "size": 280,
+       "enter": "none",
+       "float": false
+      },
+      {
+       "id": "database",
+       "shape": "database",
+       "color": "accent2",
+       "size": 230,
+       "enter": "none",
+       "float": false
+      },
+      {
+       "id": "truck",
+       "shape": "truck",
+       "color": "accent",
+       "size": 320,
+       "enter": "none",
+       "float": false
+      },
+      {
+       "id": "flag",
+       "shape": "flag",
+       "color": "accent2",
+       "size": 260,
+       "enter": "none",
+       "float": false
+      },
+      {
+       "id": "order",
+       "shape": "envelope",
+       "color": "accent2",
+       "size": 190,
+       "float": false
+      }
+     ],
+     "formations": [
+      {
+       "form": "cluster",
+       "ids": [
+        "phone"
+       ],
+       "center": [
+        250,
+        600
+       ],
+       "at": 0
+      },
+      {
+       "form": "cluster",
+       "ids": [
+        "server"
+       ],
+       "center": [
+        760,
+        520
+       ],
+       "at": 0
+      },
+      {
+       "form": "cluster",
+       "ids": [
+        "database"
+       ],
+       "center": [
+        760,
+        860
+       ],
+       "at": 0
+      },
+      {
+       "form": "cluster",
+       "ids": [
+        "truck"
+       ],
+       "center": [
+        1250,
+        640
+       ],
+       "at": 0
+      },
+      {
+       "form": "cluster",
+       "ids": [
+        "flag"
+       ],
+       "center": [
+        1690,
+        600
+       ],
+       "at": 0
+      },
+      {
+       "form": "split",
+       "from": "phone",
+       "ids": [
+        "order"
+       ],
+       "say": "Buy",
+       "spread": 0.6
+      },
+      {
+       "form": "travel",
+       "ids": [
+        "order"
+       ],
+       "to": "server",
+       "say": "flies",
+       "dur": 1.2
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "stock",
+   "block": "canvas",
+   "vo": "It checks the stock.",
+   "tail": 0.6,
+   "props": {
+    "cast": {
+     "formations": [
+      {
+       "form": "wave",
+       "ids": [
+        "server",
+        "database"
+       ],
+       "say": "checks"
+      },
+      {
+       "form": "mark",
+       "mark": "underline",
+       "ids": [
+        "database"
+       ],
+       "say": "stock"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "pack",
+   "block": "canvas",
+   "vo": "The order becomes a parcel,",
+   "tail": 0.2,
+   "props": {
+    "cast": {
+     "objects": [
+      {
+       "id": "parcel",
+       "shape": "box",
+       "color": "accent2",
+       "size": 200,
+       "float": false
+      }
+     ],
+     "formations": [
+      {
+       "form": "swap",
+       "out": "order",
+       "in": "parcel",
+       "by": [
+        "server"
+       ],
+       "say": "parcel",
+       "dur": 0.6
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "ship",
+   "block": "canvas",
+   "vo": "rides the truck to the door,",
+   "tail": 0.2,
+   "props": {
+    "cast": {
+     "formations": [
+      {
+       "form": "merge",
+       "ids": [
+        "parcel"
+       ],
+       "into": "truck",
+       "say": "rides",
+       "dur": 0.8
+      },
+      {
+       "form": "travel",
+       "ids": [
+        "truck"
+       ],
+       "to": "flag",
+       "say": "door",
+       "dur": 1.4
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "done",
+   "block": "canvas",
+   "vo": "and arrives.",
+   "hold": 1.4,
+   "props": {
+    "cast": {
+     "formations": [
+      {
+       "form": "wave",
+       "ids": [
+        "flag"
+       ],
+       "say": "arrives"
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

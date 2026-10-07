@@ -197,7 +197,7 @@ test('composed objects are drawn things with their own extent, in every look', (
       if (look === 'print') assert.ok(body.print, `${g.id} is printed`);
     }
   }
-  assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'q', shape: 'cloud' }], formations: [{ form: 'row', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /shape is doc, bubble/);
+  assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'q', shape: 'dragon' }], formations: [{ form: 'row', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /shape is doc, bubble/);
   assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'q', shape: 'doc', icon: 'file' }], formations: [{ form: 'row', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /one of an icon, a word or a shape/);
 });
 

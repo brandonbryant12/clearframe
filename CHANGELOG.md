@@ -1,5 +1,16 @@
 # Changelog
 
+## Ten new cast objects and a pixel look
+
+- **Ten composed cast shapes for product, business and systems stories:**
+  - `server`, a rack with lit units; `database`, a cylinder; `cloud`; `coin`;
+  - `lock`, a padlock; `bulb`, an idea; `clock`;
+  - `envelope`, a message; `truck`, a delivery; `flag`, a milestone.
+  - They take every look, alongside the existing page, bubble, phone, card, person, ticket and parcel.
+- **A `pixel` look.** Bodies and details are laid in square screen cells with a one-cell outline, and type is mono. It is drawn with the existing mosaic `pixel` style, so the renderer is unchanged. It suits games, retro tech and playful launches; pair it with `lcd`.
+- **Every shape and look carries a one-line description** of what it evokes, which the library index reads.
+- **`examples/order-journey` tells one idea in two looks.** An order travels from a tap to a doorstep, drawn on `ink` and in pixel art on `lcd`, in both shapes. It is 14 s, and `check` reports 0 errors in all four variants.
+
 ## A flood covers the frame whatever the shape's body
 
 - **Fill now places the object so its flat colour, which is its body, centres on the frame.** 9d2869a made a shape's flood colour its body exactly, but fill still centred the object's own origin. A person's shoulders hang below that origin, so on a tall frame the flood started at y 1210 of 1920 and could never cover the top (director repro).

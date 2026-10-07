@@ -23,7 +23,7 @@ A film made of one layout per line reads as a slideshow, however well each layou
 
 - **Objects** are declared in the first beat that uses the cast; later beats may add more. Each is `{id, icon | word | shape, color, label?, size?, float?, enter?}`:
   - `icon` is any icon name (`clearframe catalog canvas`), drawn on a rounded tile. `word` (up to 14 characters) is drawn on a pill.
-  - `shape` is a composed object, a small drawn thing rather than an icon on a tile. The shapes are `doc` (a page with a folded corner and lines), `bubble` (a speech bubble), `phone`, `card` (a card holding a small bar chart), `person` (head and shoulders), `ticket` (a stub with a perforation) and `box` (a parcel with tape). Each takes the look, so in `drawn` it is drawn by hand and hatched. Prefer a shape when the thing has one: a report is a page, a customer is a person.
+  - `shape` is a composed object, a small drawn thing rather than an icon on a tile. The shapes are `doc` (a page with a folded corner and lines), `bubble` (a speech bubble), `phone`, `card` (a card holding a small bar chart), `person` (head and shoulders), `ticket` (a stub with a perforation), `box` (a parcel with tape), `server` (a rack with lit units), `database` (a cylinder), `cloud`, `coin`, `lock` (a padlock), `bulb` (an idea), `clock`, `envelope` (a message), `truck` (a delivery) and `flag` (a milestone). `node engine/cli.mjs find "WHAT IT IS"` names the shape that fits a thing. Each takes the look, so in `drawn` it is drawn by hand and hatched. Prefer a shape when the thing has one: a report is a page, a customer is a person.
   - `color` is a palette role (`accent`, `accent2`, `positive`, `negative`, `ink`, `muted`, `surface`).
   - `label` is a small caption under the tile.
   - `float` (default on) gives a slow idle drift.
@@ -32,6 +32,7 @@ A film made of one layout per line reads as a slideshow, however well each layou
   - `tiles` (default): flat rounded tiles with a soft shadow, for clean product and business films.
   - `drawn`: pen on paper. A hand-drawn ink outline, the colour hatched in, icons in ink, and type and threads by hand. It suits explainers, onboarding and lessons.
   - `print`: a two-colour press, with the colour laid in a dot screen slightly off register and worn, and poster type. It suits editorial and campaign films.
+  - `pixel`: pixel art. Bodies and details are laid in square screen cells with a one-cell ink outline, and type is mono. It suits games, retro tech, developer audiences and playful launch teasers; pair it with the `lcd` palette.
   Choose by the audience and the rest of the film's treatment, not for variety's sake.
 - **Formations** (1–12 per beat) each move some objects. Time them by the content: a step the narration describes gets its move on the word that names it, and a moment that needs reading or feeling can hold. Each move goes on a spoken word (`say`) or at seconds (`at`). An uncued formation follows the previous one by 1.6 s. `ids` limits a formation to those objects; without it, every object still on screen takes part.
 
@@ -88,6 +89,7 @@ Start from the playbook: `new DIR --playbook process-cast [--vertical]` scaffold
 - `examples/cast-study`: tiles. One cast, five moves, 17 s.
 - `examples/cast-journey`: `travel` through a drawn world (three stations as scenery).
 - `examples/night-shift`: a curated study. Split, travel, a camera lean into `fill`, the real code on the fill's colour, `emerge`, `swap` `by`, `merge`, and type as the clock.
+- `examples/order-journey`: one idea in two looks. An order travels from a tap to a doorstep, drawn on `ink` and in pixel art on `lcd`, with the composed shapes `phone`, `envelope`, `server`, `database`, `box`, `truck` and `flag`.
 - `examples/cast-drawn`: the drawn look with marks. Bug triage in 24 s: copies ringed and crossed out, the first underlined, replies drawn back.
 
 Tests: `test/cast.test.mjs`.
