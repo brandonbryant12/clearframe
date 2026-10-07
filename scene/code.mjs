@@ -109,9 +109,10 @@ export function fitCode(el, area) {
   if (area) {
     // An editor drawn for a wider frame takes this frame's height too, not its old height.
     if (el.x + el.w > area.right + 1 && el.h != null) delete el.h;
-    el.x = Math.max(el.x, area.left);
-    el.w = Math.min(el.w, area.right - el.x);
-    if (el.y < area.top) el.y = area.top;
+    // The whole editor moves inside the area: never wider than it, never starting past its edges.
+    el.w = Math.min(el.w, area.right - area.left);
+    el.x = Math.min(Math.max(el.x, area.left), area.right - el.w);
+    el.y = Math.min(Math.max(el.y, area.top), area.bottom - CODE_MIN_SIZE * 4);
     if (el.h == null) el.maxH = area.bottom - el.y;
     else el.h = Math.min(el.h, area.bottom - el.y);
   }

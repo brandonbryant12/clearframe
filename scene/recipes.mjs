@@ -77,15 +77,21 @@ export function fitStage(spec, frame, area) {
   // A centred column: the authored spacing (capped at 420 px), never more than the area holds.
   const pad = maxH / 2 + 50, k = Math.min(1, (area.right - area.left - maxW) / Math.max(1, y1 - y0));
   const span = Math.min(bottom - top - 2 * pad, x1 - x0, 420 * Math.max(1, actors.length - 1)), mid = (top + bottom) / 2;
-  const map = (x, y) => ({
-    x: Math.round(frame.width / 2 + (Number.isFinite(y) ? (y - (y0 + y1) / 2) * k : 0)),
-    y: Math.round(x1 > x0 && Number.isFinite(x) ? mid - span / 2 + (x - x0) / (x1 - x0) * span : mid),
-  });
+  // The axes swap: authored x (left to right) becomes y (top to bottom), authored y becomes x.
+  const newX = y => Math.round(frame.width / 2 + (y - (y0 + y1) / 2) * k);
+  const newY = x => Math.round(x1 > x0 ? mid - span / 2 + (x - x0) / (x1 - x0) * span : mid);
+  // A point names only the axes it was authored with; an axis it left out stays where it is.
+  const remap = p => {
+    const [hasX, hasY] = [Number.isFinite(p.x), Number.isFinite(p.y)], [ox, oy] = [p.x, p.y];
+    delete p.x; delete p.y;
+    if (hasX) p.y = newY(ox);
+    if (hasY) p.x = newX(oy);
+  };
   const out = structuredClone(spec);
-  for (const a of out.actors) Object.assign(a, map(a.x, a.y));
-  for (const e of out.events ?? []) if (e?.do === 'move') { const m = map(e.x, e.y); if (Number.isFinite(e.x)) e.y = m.y; if (Number.isFinite(e.y)) e.x = m.x; if (!Number.isFinite(e.y)) delete e.x; if (!Number.isFinite(e.x)) delete e.y; }
-  for (const key of out.camera?.keys ?? []) if (Number.isFinite(key.x) || Number.isFinite(key.y)) Object.assign(key, map(key.x, key.y));
-  for (const e of out.events ?? []) if (e?.do === 'camera' && (Number.isFinite(e.x) || Number.isFinite(e.y))) Object.assign(e, map(e.x, e.y));
+  for (const a of out.actors) remap(a);
+  for (const e of out.events ?? []) if (e?.do === 'move' || (e?.do === 'camera' && !e.follow)) remap(e);
+  for (const key of out.camera?.keys ?? []) remap(key);
+  if (out.camera && (Number.isFinite(out.camera.x) || Number.isFinite(out.camera.y))) remap(out.camera);
   return { spec: out, note: `drawn for a wide frame; its ${actors.length} actors were laid down the tall frame in the same order. Give the stage tall positions for exact placement.` };
 }
 

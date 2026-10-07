@@ -24,6 +24,29 @@ test('a long line shrinks the type to fit, but never below a readable size; past
   assert.equal(pieces.map(p => p.spans.map(s => s.text).join('')).join('').replace(/\s+/g, ''), long.replace(/\s+/g, ''), 'wrapping loses no characters');
 });
 
+test('an editor placed past the area is moved inside it whole, never given a negative width', () => {
+  const area = stageArea(tall);
+  for (const [x, y, w] of [[1400, 500, 800], [900, 1900, 2000], [-300, 0, 400]]) {
+    const el = fitCode({ x, y, w, size: 26, gutter: true, lines: [{ id: 'a', indent: 0, spans: [{ text: 'const value = 1;', role: 'plain' }] }], steps: [{ at: 0, show: ['a'] }] }, area);
+    assert.ok(el.w > 0 && el.x >= area.left && el.x + el.w <= area.right + 1e-9, `x ${x} w ${w} → x ${el.x} w ${el.w}`);
+    assert.ok(el.y >= area.top && el.y < area.bottom, `y ${y} → ${el.y}`);
+  }
+});
+
+test('re-laid moves and camera keys keep only the axes they were authored with', () => {
+  const area = stageArea(tall);
+  const spec = { actors: [{ id: 'a', x: 200, y: 400 }, { id: 'b', x: 1500, y: 400 }],
+    events: [{ do: 'move', actor: 'a', at: 1, y: 500 }, { do: 'move', actor: 'b', at: 2, x: 1700 }, { do: 'camera', at: 3, x: 900 }],
+    camera: { keys: [{ at: 0, y: 450, zoom: 1.1 }] } };
+  const { spec: out } = fitStage(spec, tall, area);
+  const a = out.actors.find(x => x.id === 'a'), [yOnly, xOnly, cam] = out.events, key = out.camera.keys[0];
+  assert.ok(Number.isFinite(yOnly.x) && yOnly.y === undefined, 'a vertical move becomes a horizontal one and leaves the adapted y alone');
+  assert.ok(yOnly.x !== a.x, 'it still moves');
+  assert.ok(Number.isFinite(xOnly.y) && xOnly.x === undefined && xOnly.y > out.actors.find(x => x.id === 'b').y, 'a move right becomes a move down');
+  assert.ok(Number.isFinite(cam.y) && cam.x === undefined, 'a camera pan along x becomes a pan along y');
+  assert.ok(Number.isFinite(key.x) && key.y === undefined && key.zoom === 1.1, 'camera keys map their own axes and keep the rest');
+});
+
 test('code that fits is left as authored', () => {
   const el = fitCode({ x: 120, y: 320, w: 1100, size: 26, gutter: true, lines: [{ id: 'a', indent: 0, spans: [{ text: 'let x = 1;', role: 'plain' }] }], steps: [{ at: 0, show: ['a'] }] }, stageArea(wide));
   assert.deepEqual([el.x, el.w, el.size, el.lines.length], [120, 1100, 26, 1]);
