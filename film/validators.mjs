@@ -454,21 +454,15 @@ export const VALIDATORS = {
       const preset = ht > w * 1.1 ? (ht > w * 1.5 ? 'vertical' : 'portrait') : w > ht * 1.1 ? 'landscape' : 'square';
       let drawn;
       try {
-        drawn = sketch(p.sketch, preset, { seed: p.seed });
+        drawn = sketch(p.sketch, preset, { seed: p.seed, text: p.sketchText, say: p.sketchSay });
       } catch (e) {
         h.fail(e.message);
       }
-      const words = p.sketchText ?? {};
-      const retext = list =>
-        list.forEach(el => {
-          if (el.type === 'text' && words[el.text] != null) el.text = words[el.text];
-          if (el.children) retext(el.children);
-        });
-      retext(drawn.elements);
       p.elements = [...drawn.elements, ...(p.elements ?? [])];
       for (const k of ['view', 'viewFrom', 'viewDur', 'dolly', 'focus']) if (drawn[k] != null) p[k] ??= drawn[k];
       delete p.sketch;
       delete p.sketchText;
+      delete p.sketchSay;
       delete p.seed;
     }
     // A chart drawn as shapes with stable ids, so it can morph into the next beat's chart.

@@ -38,6 +38,7 @@ Choose by audience. A look picked only for variety reads as a gimmick.
 | Explain how our API caches requests, to engineers | `playbook:pr-walkthrough`, `sketch:architecture`, `mechanism:stage`, `cast-shape:server`/`database`, `treatment:blueprint` | A stage with real actors and `send` events, plus a `code-scene` for the cache key. Engineers trust the mechanism they can see. |
 | A playful teaser for a retro game launch | `cast-look:pixel`, `palette:lcd`, `sketch:pixel-skyline`, `treatment:trailer`, `cast-shape:flag` | Pixel art on `lcd` with stepped motion and a trailer rhythm. The look is the promise of the game. |
 | Quarterly revenue results for the board | `playbook:quarterly-update`, `block:stat`/`delta`, `example:market-update`, `cast-shape:coin` | Figures first, each with a source, and one drawn driver at most. A board wants the number and its reason, not a metaphor. |
+| Why the app was slow at night (a post-mortem) | `sketch:searchlight`, `example:lights-on`, `playbook:research-investigation`, `palette:noir` | A torch finding each cause in a dark room, then the lights coming on. A post-mortem is a search, and the reveal that it was one problem is the payoff. |
 | How a support ticket travels through the team | `example:cast-journey`, `cast-shape:ticket`, `cast-move:travel`, `playbook:process-cast`, `mechanism:world` | One ticket travelling through a drawn world of stations. Following one thing is easier than reading a flowchart. |
 
 ## Signs the concepts are too close

@@ -1,0 +1,41 @@
+{
+ "version": 2,
+ "title": "Lights on",
+ "logline": "Three slow-downs nobody had looked at turn out to be one problem.",
+ "format": {
+  "preset": "landscape",
+  "fps": 30
+ },
+ "theme": "noir",
+ "type": "geometric",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.6
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "captions": false,
+ "music": false,
+ "beats": [
+  {
+   "id": "search",
+   "block": "canvas",
+   "hold": 1.2,
+   "vo": "Nobody looks in here. First, old logs filling the disk. Then a retry queue that never empties. And a nightly job that runs every minute. Lights on: it was one problem all along.",
+   "props": {
+    "sketch": "searchlight",
+    "sketchText": {
+     "FIRST": "Old logs",
+     "SECOND": "Retry queue",
+     "THIRD": "Nightly job"
+    },
+    "sketchSay": {
+     "FIRST": "logs",
+     "SECOND": "queue",
+     "THIRD": "job",
+     "ALL": "Lights"
+    }
+   }
+  }
+ ]
+}

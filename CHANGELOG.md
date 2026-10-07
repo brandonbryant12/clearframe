@@ -1,5 +1,14 @@
 # Changelog
 
+## A search in the dark, and sketches that follow the voice
+
+- **The `searchlight` sketch** is a dark storeroom searched by one torch. The light finds three things on the shelves in turn (a crate, a stack of files, a machine with a blinking light), each labelled as it is found, and then the lamps come on and a thread joins them.
+  - It is for discovery and investigation: what nobody had looked at, a hidden cause, an audit.
+  - It lays itself out for wide and tall frames, and is best on a dark palette.
+- **`sketchSay` lands a sketch's named moments on spoken words**, as `sketchText` names its placeholders: `{"FIRST": "logs", "ALL": "Lights"}`. A sketch marks a moment with `cue` on an element, a key or an exit and keeps its default seconds when no word is given. Cue names never reach the plan. One helper now fills both maps for canvas beats, playbook scaffolds and critique.
+- **`find --id sketch:NAME`** lists a sketch's placeholder words and cues in its example, ready to fill.
+- **`examples/lights-on`** is a 14 s study in both shapes: three slow-downs nobody had looked at turn out to be one problem. `check` reports 0 errors.
+
 ## Ask the library in plain words
 
 - **`find "what you want to show"`** searches one generated index of everything a film can be built from:

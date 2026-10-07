@@ -51,15 +51,8 @@ function asDrawn(b, { width = 1920, height = 1080 } = {}) {
   if (b.block !== 'canvas' || !b.props?.sketch) return b;
   const preset = sketchPreset(width, height);
   try {
-    const d = sketch(b.props.sketch, preset, { seed: b.props.seed }),
-      words = b.props.sketchText ?? {};
-    const retext = list =>
-      list.forEach(el => {
-        if (el.type === 'text' && words[el.text] != null) el.text = words[el.text];
-        if (el.children) retext(el.children);
-      });
-    retext(d.elements);
-    const { sketch: _s, sketchText: _t, ...rest } = b.props;
+    const d = sketch(b.props.sketch, preset, { seed: b.props.seed, text: b.props.sketchText, say: b.props.sketchSay });
+    const { sketch: _s, sketchText: _t, sketchSay: _y, ...rest } = b.props;
     return { ...b, props: { ...d, ...rest, elements: [...d.elements, ...(b.props.elements ?? [])] } };
   } catch {
     return b;

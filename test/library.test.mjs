@@ -268,5 +268,10 @@ test('the library index finds a short mixed shortlist and gives one entry exact 
   const { compileStage } = await import('../scene/recipes.mjs');
   const { expandCastProps } = await import('../film/cast.mjs');
   compileStage((await detail('mechanism:stage')).example.props, { cue: () => 1, end: 6, where: 'stage', frame: { width: 1920, height: 1080 } });
+  // A sketch's named moments land on spoken words, and the cue names never reach the plan.
+  const { sketch } = await import('../film/sketches.mjs');
+  const lit = JSON.stringify(sketch('searchlight', 'vertical', { text: { FIRST: 'Old logs' }, say: { FIRST: 'logs', ALL: 'Lights' } }).elements);
+  assert.ok(lit.includes('"say":"logs"') && lit.includes('"exitSay":"Lights"') && lit.includes('Old logs') && !lit.includes('"cue"'), 'sketchSay cues a sketch');
+  assert.deepEqual(Object.keys((await detail('sketch:searchlight')).example.props.sketchSay).sort(), ['ALL', 'FIRST', 'SECOND', 'THIRD'], 'detail lists the cues to fill');
   for (const move of ['swap', 'merge', 'hero', 'mark']) expandCastProps((await detail(`cast-move:${move}`)).example.props, { width: 1080, height: 1920, beatId: 'b', duration: 4 }, { cue: () => 1, carry: {}, notes: [] });
 });

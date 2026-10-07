@@ -577,6 +577,7 @@ export const BLOCKS = [
         'A library sketch drawn under any elements, redrawn for this frame (clearframe sketch lists them); its camera (view, dolly, focus) applies unless the beat sets its own',
       diagram: 'Native system diagram whose components keep their identity while the story changes it: {direction?:auto|horizontal|vertical, area?:[x,y,w,h], nodes:[{id,label,kind?:service|database|user|queue|state|external,status?:neutral|active|added|removed|error,x?,y?,replaces?,at?|say?,exitAt?|exitSay?}], edges:[{id?,from,to,label?,status?,style?:solid|dashed,flow?,at?|say?}], steps?:[{at|say, add|remove|replace+with|set:{id:status}|send:[node ids] (+label, dur)}], groups?:[{id,label,nodes}]}. Up to 8 nodes, laid out in ranks along the edges; connectors wait for both ends, leave with removed components and route around others. Shared ids morph across consecutive canvas beats. clearframe sketch architecture|component-change|state-machine prints a starting diagram. See docs/system-diagrams.md.',
       sketchText: 'Replacement words for a sketch’s placeholder type: {"TITLE": "Your words"}',
+      sketchSay: 'Spoken words for a sketch’s named moments, so they land on the voice: {"FIRST": "logs"} (each sketch’s use lists its cues)',
       seed: 'Varies a sketch’s seeded layout (buildings, ridges, swell)',
       plates:
         'A generated depth plate set staged in depth: the id of an image asset declared with layers: true (its far, mid and near layers at z 6, 1.2 and -0.35), under any elements; adds a slow dolly unless the beat sets a camera',

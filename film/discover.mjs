@@ -12,6 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { BLOCKS } from './catalog.mjs';
 import { items, libraryDirs, LIBRARY } from './library.mjs';
+import { sketchByName } from './sketches.mjs';
 import { CAST_CATALOG } from './cast.mjs';
 import { ICONS } from './icons.mjs';
 
@@ -185,8 +186,18 @@ export async function detail(id) {
     const b = BLOCKS.find(x => x.name === e.name);
     Object.assign(out, { props: Object.keys(b.props ?? {}), example: { block: b.name, props: b.example } });
   } else if (e.kind === 'sketch') {
-    out.example = { block: 'canvas', props: { sketch: e.name } };
-    out.note = `node engine/cli.mjs sketch ${e.name} prints the elements to adapt.`;
+    // Its placeholder type and named moments, read from one drawing, so the example shows what to fill.
+    const text = new Set(), cues = new Set();
+    const walk = list => (list ?? []).forEach(el => {
+      if (el.type === 'text' && /^[A-Z][A-Z0-9_]{2,}$/.test(el.text)) text.add(el.text);
+      for (const c of [el.cue, el.exitCue, ...(el.keys ?? []).map(k => k.cue)]) if (c) cues.add(c);
+      walk(el.children);
+    });
+    try { walk(sketchByName(e.name).build(1920, 1080, {}).elements); } catch {}
+    out.example = { block: 'canvas', props: { sketch: e.name,
+      ...(text.size ? { sketchText: Object.fromEntries([...text].map(t => [t, 'your words'])) } : {}),
+      ...(cues.size ? { sketchSay: Object.fromEntries([...cues].map(c => [c, 'a spoken word'])) } : {}) } };
+    out.note = `node engine/cli.mjs sketch ${e.name} prints the elements to adapt.${cues.size ? ' sketchSay lands each named moment on a word of the narration.' : ''}`;
   } else if (e.kind === 'playbook') {
     const p = items('playbooks').find(x => x.id === e.name);
     out.scenes = p.beats.map(b => `${b.id} (${b.block}${b.props?.sketch ? `: ${b.props.sketch}` : ''})${b.vo ? `: ${clean(b.vo).slice(0, 80)}` : ''}`);

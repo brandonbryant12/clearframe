@@ -10,12 +10,39 @@ export { smoothPath } from './sketch-kit.mjs';
 export const sketches = () => items('sketches');
 export const sketchByName = name => item('sketches', name);
 
-/** A sketch's props for a frame preset; `seed` varies its layout (buildings, ridges, swell). */
-export function sketch(name, preset = 'landscape', { seed } = {}) {
+/**
+ * Fill a drawn sketch's placeholders: type ("TITLE") from `text`, and named moments (`cue: "FIND"`
+ * on an element or a key, `exitCue` on an exit) from `say`, so they land on spoken words instead of
+ * their default seconds. Unfilled cues keep their seconds; cue names never reach the plan.
+ */
+export function fillSketch(list, { text = {}, say = {} } = {}) {
+  for (const el of list ?? []) {
+    if (el.type === 'text' && text[el.text] != null) el.text = text[el.text];
+    for (const t of [el, ...(el.keys ?? [])]) {
+      if (t.cue != null && say[t.cue] != null) {
+        t.say = say[t.cue];
+        delete t.at;
+      }
+      delete t.cue;
+    }
+    if (el.exitCue != null && say[el.exitCue] != null) {
+      el.exitSay = say[el.exitCue];
+      delete el.exitAt;
+    }
+    delete el.exitCue;
+    if (el.children) fillSketch(el.children, { text, say });
+  }
+  return list;
+}
+
+/** A sketch's props for a frame preset; `seed` varies its layout (buildings, ridges, swell); `text` and `say` fill its placeholders. */
+export function sketch(name, preset = 'landscape', { seed, text, say } = {}) {
   const s = sketchByName(name);
   if (!s) throw new Error(`Unknown sketch ${name}. Run clearframe sketch to list them.`);
   const [w, h] = frames[preset] ?? frames.landscape;
-  return s.build(w, h, { seed });
+  const drawn = s.build(w, h, { seed });
+  fillSketch(drawn.elements, { text, say });
+  return drawn;
 }
 export const SKETCH_FRAMES = frames;
 
@@ -38,6 +65,7 @@ export function expandArt(art, { width = 1920, height = 1080, duration = 8 } = {
   const source = sketchByName(art.sketch);
   if (!source) throw new Error(`Unknown sketch ${art.sketch}. Run clearframe sketch to list them.`);
   const drawn = source.build(width, height, { seed: art.seed });
+  fillSketch(drawn.elements);
   if (drawn.layer !== 'under' || ['view', 'viewFrom', 'dolly', 'focus', 'world'].some(k => drawn[k] != null))
     throw new Error(`art.sketch "${art.sketch}" is not a background layer; use props.sketch on a canvas beat`);
   if (art.under != null && !Array.isArray(art.under)) throw new Error('art.under must be an element array');

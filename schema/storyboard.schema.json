@@ -2509,6 +2509,9 @@
                     "sketchText": {
                       "description": "Replacement words for a sketch’s placeholder type: {\"TITLE\": \"Your words\"}"
                     },
+                    "sketchSay": {
+                      "description": "Spoken words for a sketch’s named moments, so they land on the voice: {\"FIRST\": \"logs\"} (each sketch’s use lists its cues)"
+                    },
                     "seed": {
                       "description": "Varies a sketch’s seeded layout (buildings, ridges, swell)"
                     },
