@@ -190,7 +190,7 @@ export async function detail(id) {
     const text = new Set(), cues = new Set();
     const walk = list => (list ?? []).forEach(el => {
       if (el.type === 'text' && /^[A-Z][A-Z0-9_]{2,}$/.test(el.text)) text.add(el.text);
-      for (const c of [el.cue, el.exitCue, ...(el.keys ?? []).map(k => k.cue)]) if (c) cues.add(c);
+      for (const c of [el.cue, el.exitCue, el.along?.cue, ...(el.keys ?? []).map(k => k.cue)]) if (c) cues.add(c);
       walk(el.children);
     });
     try { walk(sketchByName(e.name).build(1920, 1080, {}).elements); } catch {}

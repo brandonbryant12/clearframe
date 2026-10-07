@@ -273,5 +273,6 @@ test('the library index finds a short mixed shortlist and gives one entry exact 
   const lit = JSON.stringify(sketch('searchlight', 'vertical', { text: { FIRST: 'Old logs' }, say: { FIRST: 'logs', ALL: 'Lights' } }).elements);
   assert.ok(lit.includes('"say":"logs"') && lit.includes('"exitSay":"Lights"') && lit.includes('Old logs') && !lit.includes('"cue"'), 'sketchSay cues a sketch');
   assert.deepEqual(Object.keys((await detail('sketch:searchlight')).example.props.sketchSay).sort(), ['ALL', 'FIRST', 'SECOND', 'THIRD'], 'detail lists the cues to fill');
+  assert.ok(JSON.stringify(sketch('pixel-chain', 'landscape', { say: { ROLL: 'rolls' } }).elements).includes('"say":"rolls"'), 'a route takes its cue too');
   for (const move of ['swap', 'merge', 'hero', 'mark']) expandCastProps((await detail(`cast-move:${move}`)).example.props, { width: 1080, height: 1920, beatId: 'b', duration: 4 }, { cue: () => 1, carry: {}, notes: [] });
 });

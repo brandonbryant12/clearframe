@@ -12,13 +12,13 @@ export const sketchByName = name => item('sketches', name);
 
 /**
  * Fill a drawn sketch's placeholders: type ("TITLE") from `text`, and named moments (`cue: "FIND"`
- * on an element or a key, `exitCue` on an exit) from `say`, so they land on spoken words instead of
+ * on an element, a key or an `along` route, `exitCue` on an exit) from `say`, so they land on spoken words instead of
  * their default seconds. Unfilled cues keep their seconds; cue names never reach the plan.
  */
 export function fillSketch(list, { text = {}, say = {} } = {}) {
   for (const el of list ?? []) {
     if (el.type === 'text' && text[el.text] != null) el.text = text[el.text];
-    for (const t of [el, ...(el.keys ?? [])]) {
+    for (const t of [el, ...(el.keys ?? []), ...(el.along ? [el.along] : [])]) {
       if (t.cue != null && say[t.cue] != null) {
         t.say = say[t.cue];
         delete t.at;

@@ -1,0 +1,41 @@
+{
+ "version": 2,
+ "title": "Chain reaction",
+ "logline": "One merge sets off the whole release, link by link.",
+ "format": {
+  "preset": "landscape",
+  "fps": 30
+ },
+ "theme": "lcd",
+ "type": "geometric",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.6
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "captions": false,
+ "music": false,
+ "beats": [
+  {
+   "id": "chain",
+   "block": "canvas",
+   "hold": 1.4,
+   "vo": "One merge. A signal runs the checks. The gate opens, every build rolls down the line, and the release goes live.",
+   "props": {
+    "sketch": "pixel-chain",
+    "sketchText": {
+     "TITLE": "Release day",
+     "RESULT": "Live"
+    },
+    "sketchSay": {
+     "PRESS": "merge",
+     "SIGNAL": "signal",
+     "OPEN": "gate",
+     "ROLL": "rolls",
+     "RESULT": "live"
+    }
+   }
+  }
+ ]
+}

@@ -1,5 +1,15 @@
 # Changelog
 
+## One action sets off the rest: a pixel chain reaction
+
+- **The `pixel-chain` sketch is a handheld game level of cause and effect.**
+  - A player steps on a plate, a signal runs cell by cell along a buried wire and up a gate post, and the gate drops.
+  - Crates roll through it and down the level into a machine, whose screen lights with the result.
+  - Each link starts where the last one ended. Moving things step at 8 fps, and the level is laid out per shape (stairs on a wide frame, a shaft on a tall one).
+  - It suits automation, triggers and pipelines; pair it with `lcd`.
+- **`sketchSay` also cues an `along` route**, so the crates roll on a spoken word.
+- **`examples/chain-reaction`** is a release told this way in both shapes, 10 s. `check` reports 0 errors and 0 warnings.
+
 ## A search in the dark, and sketches that follow the voice
 
 - **The `searchlight` sketch** is a dark storeroom searched by one torch. The light finds three things on the shelves in turn (a crate, a stack of files, a machine with a blinking light), each labelled as it is found, and then the lamps come on and a thread joins them.
