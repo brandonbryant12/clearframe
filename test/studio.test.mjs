@@ -87,6 +87,13 @@ test('batches, inserts, duplicates, deletes and treatments are single undoable s
   assert.ok(s.storyboard.sources.some(x => /sample/i.test(x.title)), 'sample content is labelled and cited');
   s = run(d, { command: 'batch', label: 'A named scene, filled', ops: [{ command: 'insert', block: 'canvas', after: 'bars', id: 'pile' }, { command: 'set', target: 'beat', beat: 'pile', path: 'props', value: { cast: { objects: [{ id: 'a', icon: 'file' }], formations: [{ form: 'scatter', at: 0 }] } } }] });
   assert.deepEqual(s.storyboard.beats.map(b => b.id), ['a', 'bars', 'pile', 'b']); assert.ok(s.storyboard.beats[2].props.cast);
+  // Narration sets a new scene's length; the six-second placeholder length goes, a chosen one stays.
+  s = run(d, { command: 'set', target: 'beat', beat: 'pile', path: 'vo', value: 'Reports arrive from everywhere.' });
+  assert.equal(s.storyboard.beats[2].duration, undefined); assert.match(s.undoLabel, /follows the narration/);
+  s = run(d, { command: 'set', target: 'beat', beat: 'pile', path: 'duration', value: 4.5 });
+  s = run(d, { command: 'set', target: 'beat', beat: 'pile', path: 'vo', value: 'Reports arrive.' });
+  assert.equal(s.storyboard.beats[2].duration, 4.5);
+  for (let i = 0; i < 3; i++) s = run(d, { command: 'undo' });
   assert.throws(() => run(d, { command: 'insert', block: 'canvas', id: 'pile' }), /already a scene/);
   s = run(d, { command: 'undo' });
   // A film stage spans the scenes it was drawn for, so starting over from a playbook takes it away.

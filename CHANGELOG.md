@@ -1,5 +1,9 @@
 # Changelog
 
+## Inserted scenes follow their narration
+
+- **A scene the studio inserts is six seconds long only until it speaks.** Setting its narration removes that placeholder length, so the voice sets it (hold longer with `tail` or `min`), and the undo label says so. A duration someone chose is kept. In live runs 3 and 5 every inserted scene stayed at exactly 6 s whatever its narration: run 3's scenes held 3 to 11 words each for 6 s, and run 5's first cut ran 42 s for a 30-second brief until the agent hand-set durations.
+
 ## A new object can travel in
 
 - **`travel` brings an object that is not yet on screen (or has left) in from just past the frame edge** its `enter` names (left by default), level with where it is going. In live run 5 the free agent declared a "regex" pill whose first move was to travel onto the edit operation; the move was silently skipped, so the regex never appeared and the later swap lost its cause. Re-rendered from the agent's unchanged storyboard, the regex now enters along a drawn route and the swap has its cause.

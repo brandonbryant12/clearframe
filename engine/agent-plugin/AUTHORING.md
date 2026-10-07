@@ -83,8 +83,9 @@ Pick from what the material actually contains:
 Mix mechanisms where the story turns, and let the audience decide the register: a briefing for
 executives can hold steady figures; a walkthrough for new hires wants the thing itself on screen.
 
-- Narration-led scenes take their length from `vo` (about 150 words a minute). Silent scenes need
-  `duration` (seconds). Link scenes causally in the narration (but, so, because), not "and then".
+- Narration-led scenes take their length from `vo` (about 150 words a minute): an inserted scene's
+  six-second placeholder length goes when you give it narration. Hold a scene longer with `tail` or
+  `min`, not `duration`. Silent scenes need `duration` (seconds). Link scenes causally in the narration (but, so, because), not "and then".
 - Card props: `title` `{ kicker, text, support }`; `statement` `{ text, emphasis: ["word"], support }`;
   `stat` `{ value, suffix, label, context, source }` — every number needs a matching film `sources`
   entry (`{ id, title, date?, url? }`) and its `source` line on screen; `endcard`

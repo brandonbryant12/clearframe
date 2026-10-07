@@ -228,6 +228,13 @@ function applyOp(dir, sb, op) {
       if (n.kind === 'recording') throw fail('This narration is the recording itself: select words in the narration lane and cut them instead.');
       if (n.kind === 'imported') throw fail('This narration was imported with its audio; re-import it with `speech` to change the words.');
       if (value != null && typeof value !== 'string') throw fail('Narration is text.');
+      // A new scene is six seconds long until it speaks; once it has narration the voice sets its
+      // length (hold longer with tail or min). A duration someone chose is left alone.
+      if (typeof value === 'string' && value.trim() && b.duration === INSERTED_DURATION) {
+        delete b.duration;
+        setAt(b, p, value);
+        return `Change vo in ${name} (its length now follows the narration)`;
+      }
     }
     if (p[0] === 'duration' && value != null && !(Number.isFinite(value) && value >= 0.1 && value <= 3600)) throw fail('Duration must be between 0.1 and 3600 seconds.');
     if (p[0] === 'label' && value != null && (typeof value !== 'string' || value.length > 40)) throw fail('A scene label is up to 40 characters.');
@@ -252,13 +259,13 @@ function applyOp(dir, sb, op) {
       const f = sb.format ?? {}, preset = PRESETS[f.preset] ?? PRESETS.landscape;
       const props = sketch(op.sketch, sketchPreset(f.width ?? preset.width, f.height ?? preset.height));
       if (props.layer) throw fail(`${op.sketch} is scenery: add it to a scene as background art instead.`);
-      beat = { id: op.id ?? uniqueId(sb, op.sketch), block: 'canvas', label: short(op.sketch), duration: 6, props };
+      beat = { id: op.id ?? uniqueId(sb, op.sketch), block: 'canvas', label: short(op.sketch), duration: INSERTED_DURATION, props };
     } else {
       const meta = blockByName(op.block);
       if (!meta) throw fail(`No native block “${op.block}”.`);
       // A new scene is silent and six seconds long (kinetic type needs words to follow), until you write its narration.
       beat = { id: op.id ?? uniqueId(sb, op.block), block: op.block, label: short(meta.name[0].toUpperCase() + meta.name.slice(1)),
-        ...(op.block === 'kinetic' ? { vo: 'Write the line these words follow.' } : { duration: 6 }), props: structuredClone(meta.example) };
+        ...(op.block === 'kinetic' ? { vo: 'Write the line these words follow.' } : { duration: INSERTED_DURATION }), props: structuredClone(meta.example) };
       // Catalog examples carry the sample-source line; numbers need a matching sources entry to render.
       if (meta.example.source && !(sb.sources ?? []).some(s => s.title === meta.example.source)) sb.sources = [...(sb.sources ?? []), { id: uniqueSource(sb), title: meta.example.source }];
     }
@@ -307,6 +314,7 @@ function applyOp(dir, sb, op) {
   }
   throw fail('Unknown studio command.');
 }
+const INSERTED_DURATION = 6;
 const uniqueSource = sb => { let n = 1; while ((sb.sources ?? []).some(s => s.id === `sample${n > 1 ? n : ''}`)) n++; return `sample${n > 1 ? n : ''}`; };
 
 /** Refuse fast when another process (a CLI cut, a revise) holds the project's review lock. */
