@@ -2079,6 +2079,68 @@
             "exitAt": 6.4,
             "exit": "fade"
           }
+        ],
+        "viewTall": [
+          3410,
+          -356,
+          1300,
+          2311
+        ]
+      },
+      "tall": {
+        "elements": [
+          {
+            "type": "path",
+            "d": "M 3330 800 L 5600 800",
+            "fill": "none",
+            "stroke": "accent2",
+            "width": 40,
+            "opacity": 0.45,
+            "glow": {
+              "blur": 30,
+              "opacity": 1
+            },
+            "say": "underground",
+            "enter": "draw",
+            "dur": 0.9,
+            "exitAt": 6.4,
+            "exit": "fade"
+          },
+          {
+            "type": "text",
+            "text": "0",
+            "x": 3700,
+            "y": 1040,
+            "size": 210,
+            "font": "display",
+            "fill": "ink",
+            "at": 1.5,
+            "enter": "fade",
+            "dur": 0.2,
+            "count": {
+              "from": 0,
+              "to": 90,
+              "dur": 1.2,
+              "suffix": "%"
+            },
+            "exitAt": 6.4,
+            "exit": "fade"
+          },
+          {
+            "type": "text",
+            "text": "of the pipe's length runs underground",
+            "x": 3700,
+            "y": 1124,
+            "size": 44,
+            "font": "semibold",
+            "fill": "accent2",
+            "width": 640,
+            "at": 1.8,
+            "enter": "rise",
+            "dur": 0.5,
+            "exitAt": 6.4,
+            "exit": "fade"
+          }
         ]
       }
     },
