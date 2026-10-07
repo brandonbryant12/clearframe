@@ -276,5 +276,11 @@ test('the library index finds a short mixed shortlist and gives one entry exact 
   assert.ok(JSON.stringify(sketch('pixel-chain', 'landscape', { say: { ROLL: 'rolls' } }).elements).includes('"say":"rolls"'), 'a route takes its cue too');
   assert.throws(() => sketch('searchlight', 'landscape', { say: { FIRTS: 'logs' } }), /FIRTS.*FIRST/, 'a misspelt moment names the real ones');
   assert.ok(find('a handmade launch for our app').some(h => h.id === 'sketch:cut-paper'), 'everyday craft words reach the paper workbench');
+  // The studio agent can take a sketch's drawn elements to adapt the picture itself.
+  const { createTools } = await import('../engine/lib/agent/tools.mjs');
+  const project = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-sketch-'));
+  const tools = createTools({ base: project, jobs: null, filmOf: () => null, pauseOf: () => null, currentScope: () => null });
+  const drawn = JSON.parse((await tools.catalog({ dir: project, input: { topic: 'sketch', name: 'untangle', shape: 'vertical', sketchSay: { FLOW: 'flows' } } })).content);
+  assert.ok(drawn.shape === 'vertical' && JSON.stringify(drawn.elements).includes('"say":"flows"'), 'catalog topic sketch returns filled elements for the shape');
   for (const move of ['swap', 'merge', 'hero', 'mark']) expandCastProps((await detail(`cast-move:${move}`)).example.props, { width: 1080, height: 1920, beatId: 'b', duration: 4 }, { cue: () => 1, carry: {}, notes: [] });
 });

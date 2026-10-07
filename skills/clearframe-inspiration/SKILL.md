@@ -69,7 +69,7 @@ What you can change, from lightest to deepest:
 | The words | `sketchText` fills a sketch's placeholder type. Cast objects take `label`, and blocks take their props. | `{"FIRST": "Stale logs"}` |
 | When things happen | `sketchSay` lands a sketch's named moments on narration words. Cast moves and canvas elements take `say`. | `{"ALL": "Lights"}` |
 | The look | `theme` (palette), `type`, the cast `look`, and the stage `material` (`dither`, `chrome`…) on a shape or a ground. | `"theme": "noir"` |
-| What is drawn | Copy the sketch's elements and edit them: other icons, fewer cards, other positions. In a build script, `sketch(name, preset, {text, say})` from `film/sketches.mjs` returns the filled elements to change; by hand, `node engine/cli.mjs sketch NAME [--vertical]` prints them. Put the result in `props.elements` (without `props.sketch`). | `examples/checkout-at-night` |
+| What is drawn | Copy the sketch's elements and edit them: other icons, fewer cards, other positions. In the studio, `clearframe_catalog` topic `sketch` (name, `sketchText`, `sketchSay`) returns the filled elements for the film's shape. In a build script, `sketch(name, preset, {text, say})` from `film/sketches.mjs` does the same. By hand, `node engine/cli.mjs sketch NAME [--vertical]` prints them. Put the result in `props.elements` (without `props.sketch`). | `examples/checkout-at-night` |
 | A new reusable picture | A sketch module, or a JSON sketch in the project's `library/sketches/`, so other films can use it by name. | `library/README.md` |
 
 - **Start light.** Change words and cues first; copy elements only when the picture itself must change, such as a different number of things, different objects, or a different layout.

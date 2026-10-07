@@ -204,6 +204,17 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
           useProject(dir);
           return JSON.stringify(await detail(String(input.name ?? '')), null, 1);
         },
+        // A sketch's drawn elements for this film's frame shape (words and moments filled), so the
+        // picture itself can be adapted: copy them into props.elements and edit what the brief needs.
+        sketch: async () => {
+          const { useProject } = await import('../../../film/library.mjs'), { sketch } = await import('../../../film/sketches.mjs');
+          useProject(dir);
+          let shape = input.shape;
+          if (!shape) try { shape = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8')).format?.preset; } catch {}
+          shape = ['vertical', 'portrait', 'square'].includes(shape) ? shape : 'landscape';
+          const drawn = sketch(String(input.name ?? ''), shape, { text: input.sketchText, say: input.sketchSay });
+          return JSON.stringify({ shape, note: 'This sketch drawn for this frame shape, with any sketchText and sketchSay filled. To change the picture itself, put these elements in a canvas beat\'s props.elements (instead of props.sketch) and edit only what the brief needs: icons, labels, positions, how many.', ...drawn }, null, 1);
+        },
       }[topic];
       if (!out) throw fail('Unknown catalog topic.');
       return Promise.resolve(out()).then(text => ({ content: clip(text, 120000), metadata: { summary: `Looked up ${topic}${input.name ? ` ${input.name}` : ''}${input.query ? `: ${String(input.query).slice(0, 60)}` : ''}` } }));
