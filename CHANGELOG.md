@@ -1,5 +1,12 @@
 # Changelog
 
+## Growth as a plant: the seedling sketch
+
+- **The `seedling` sketch shows growth in three stages.** A seed puts down roots and a shoot, the stem draws up with leaves unfolding at each stage, and a flower opens at the top. Each stage is labelled at its height, and the grown plant sways.
+  - It suits a community or customer base growing, compounding, a habit, a product maturing.
+  - It draws stages, not amounts. It works on light and dark palettes and keeps its labels clear of the leaves on tall frames.
+- **`examples/community-grows`** shows it in both shapes, 11 s. `check` reports 0 errors and 0 warnings.
+
 ## Scraps become one product: a cut-paper workbench
 
 - **The `cut-paper` sketch is a workbench of scraps that become a product.** Scraps of coloured paper lie scattered and turned on a cutting mat. On a spoken word they fly into place, each landing a moment after the last, and become one product card: a frame, a title bar, a picture, lines of copy and a button. The card lifts off the mat as its name types in. Soft shadows keep every layer a separate piece of paper, and a slow push-in keeps the bench alive.

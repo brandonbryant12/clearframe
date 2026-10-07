@@ -109,7 +109,7 @@ export function entries() {
   for (const s of CAST_CATALOG.shapes) add('cast-shape', s.id, s.id, s.about, s.about, 'a cast object: {"shape": "' + s.id + '"}', 'docs/cast.md');
   for (const l of CAST_CATALOG.looks) add('cast-look', l.id, l.id, l.about, l.about, 'cast look', 'docs/cast.md');
   for (const [ids, text] of tableRows(read('docs/scene-engine.md'), '### Elements'))
-    add('stage-element', ids[0].replace(/[^a-z:]+.*$/, '') || ids[0], ids.join(', '), firstSentence(text), text, 'a stage', 'docs/scene-engine.md');
+    add('stage-element', ids[0].replace(/[^a-z:]+.*$/, '') || ids[0], ids.join(', '), firstSentence(text), text.slice(firstSentence(text).length), 'a stage', 'docs/scene-engine.md');
   for (const [name, about, when, needs, ref] of MECHANISMS) add('mechanism', name, name, about, when, needs, ref);
   for (const dir of fs.existsSync(path.join(ROOT, 'examples')) ? fs.readdirSync(path.join(ROOT, 'examples')) : []) {
     const md = read(`examples/${dir}/README.md`);
@@ -140,7 +140,7 @@ const SYNONYMS = {
 };
 const words = t => String(t ?? '').toLowerCase().match(/[a-z0-9]+/g) ?? [];
 // Words that say nothing about which picture fits.
-const STOP = new Set('a an the and or of to in on for with about our your their we it its is are be this that these those how why what show make made video film clip one two second seconds minute minutes long some into from at by as so very just'.split(' '));
+const STOP = new Set('a an the and or of to in on for with about our your their we it its is are be this that these those how why what show make made video film clip one two second seconds minute minutes long keep keeps some into from at by as so very just'.split(' '));
 
 /**
  * A short, mixed shortlist for what someone wants to make: at most `perKind` from any one kind so
