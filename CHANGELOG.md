@@ -1,5 +1,15 @@
 # Changelog
 
+## Casts the agent can actually use
+
+The free studio agent's second live run chose a cast for the support-triage brief: six word pills, a "queue" panel behind them, and the film's bottom headings. Its draft exposed four engine defects, now fixed:
+- Elements added to a cast beat drew over the cast. They are now scenery beneath it.
+- Word pills were sized like tiles ("Login crash" about 740 px wide) and were cut off at the frame edge. Pills are now sized from their word, and the safe-area clamp uses each object's real extent.
+- A scatter of wide pills piled them on top of each other. It now pushes overlapping objects apart, deterministically.
+- A cast kept clear only of top headings. It now keeps clear of bottom headings too.
+
+The agent's own storyboard, re-rendered unchanged with the fixes, plays as one continuous cast (check 0/0). Regression drafts of `cast-study`, `cast-drawn` and the `process-cast` playbook are unchanged: check 0/0 and 0 pops.
+
 ## Casts hand off to any scene, and carry a camera
 
 - **`fill` and `emerge`.** A cast object travels to the middle and grows past the edges, its face fading as its colour floods the frame. The next scene, of any block, plays on that colour: the job sets its `tone` and cuts on one flat colour. `emerge` brings the object back out of that scene's colour, to where it stood before it filled, in a later cast beat. The cast can now hand a moment to a chart, a figure, a card or a stage and take it back, instead of the whole film being formations. `examples/cast-study` fills its chart into a sourced figure (6.3 s to render the first draft) and brings it back.

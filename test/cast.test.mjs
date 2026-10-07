@@ -135,6 +135,26 @@ test('an object fills the frame and the next scene plays on its colour; it emerg
   assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'g', icon: 'file', color: 'positive' }], formations: [{ form: 'fill', ids: ['g'], at: 0 }] } }, { ...wide, beatId: 'z' }, {}), /accent, accent2, surface or ink/);
 });
 
+test('word pills fit their words and stay whole in the frame; scenery sits under the cast; a bottom heading is kept clear', () => {
+  // The free agent's first cast (live run 2): six pills, a panel drawn behind them, headings at the bottom.
+  const words = ['Login crash', 'Login crash', 'Blank screen', 'Blank screen', 'Slow search', 'Export fails'];
+  const cast = { objects: words.map((word, i) => ({ id: `b${i}`, word, color: i % 2 ? 'accent2' : 'accent' })), formations: [{ form: 'scatter', at: 0 }] };
+  const panel = { type: 'rect', x: 240, y: 110, w: 1440, h: 620, fill: 'surface', at: 0, enter: 'none' };
+  const els = expandCastProps({ title: 'Reports arrive', elements: [panel], cast }, { ...wide, beatId: 'r', duration: 6 }, { heading: 'bottom' }).elements;
+  assert.equal(els[0].type, 'rect', 'the author’s panel is drawn first, under the cast');
+  const pills = els.filter(e => e.type === 'group');
+  const boxes = pills.map(g => { const tile = g.children.find(c => c.id.endsWith('-tile')), s = g.keys[0].scale; return { x0: g.x + tile.x * s, x1: g.x + (tile.x + tile.w) * s, y1: g.y + (tile.y + tile.h) * s, w: tile.w }; });
+  for (const b of boxes) {
+    assert.ok(b.w < 480, `a pill is about as long as its word (${b.w.toFixed(0)} px)`);
+    assert.ok(b.x0 >= 96 && b.x1 <= 1824, `a pill stays whole in the frame (${b.x0.toFixed(0)}–${b.x1.toFixed(0)})`);
+    assert.ok(b.y1 <= 1080 * 0.66, `and above the bottom heading (${b.y1.toFixed(0)})`);
+  }
+  for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+    const [a, b] = [pills[i], pills[j]];
+    assert.ok(Math.abs(a.x - b.x) > 40 || Math.abs(a.y - b.y) > 40, `${a.id} and ${b.id} do not land on each other`);
+  }
+});
+
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);

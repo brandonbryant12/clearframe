@@ -77,9 +77,9 @@ export function castSpec(input, known = new Map(), knownLook = null) {
 }
 
 /** Where each object stands in one formation: {x, y, scale, rotate, opacity}. */
-export function formationTargets(f, ids, frame, { size, seed = 0, current = new Map() }) {
-  // Below a heading the cast keeps to the space under it (`frame.top`).
-  const { width: W, height: H } = frame, tall = H > W, u = Math.min(W, H), top = frame.top ?? 0, A = H - top;
+export function formationTargets(f, ids, frame, { size, seed = 0, current = new Map(), extent = () => [size / 2, size / 2] }) {
+  // A heading takes a band of the frame (`frame.top` or `frame.bottom`); the cast keeps to the rest.
+  const { width: W, height: H } = frame, tall = H > W, u = Math.min(W, H), top = frame.top ?? 0, bottom = frame.bottom ?? H, A = bottom - top;
   // `beside` sets the formation next to an object where it now stands, on the side facing the middle
   // of the frame (up and to the right of an object in the middle), so it never runs off an edge.
   const near = f.beside != null ? current.get(f.beside) : null;
@@ -99,6 +99,21 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
     });
     // A few points of a spiral lean to one side; centre them so the pile sits in the frame's middle.
     const [mx, my] = [0, 1].map(k => pts.reduce((s, p) => s + p[k], 0) / n);
+    // Wide objects (word pills) would land on each other: push overlapping pairs apart along their
+    // shallower overlap until none touch. Deterministic, a few dozen passes at most.
+    const box = ids.map(id => extent(id).map(v => v * scale + size * 0.08));
+    for (let pass = 0; pass < 40; pass++) {
+      let moved = false;
+      for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+        const dx = pts[j][0] - pts[i][0], dy = pts[j][1] - pts[i][1];
+        const ox = box[i][0] + box[j][0] - Math.abs(dx), oy = box[i][1] + box[j][1] - Math.abs(dy);
+        if (ox <= 0 || oy <= 0) continue;
+        moved = true;
+        if (ox / (box[i][0] + box[j][0]) < oy / (box[i][1] + box[j][1])) { const d = (dx >= 0 ? 1 : -1) * ox / 2; pts[i][0] -= d; pts[j][0] += d; }
+        else { const d = (dy >= 0 ? 1 : -1) * oy / 2; pts[i][1] -= d; pts[j][1] += d; }
+      }
+      if (!moved) break;
+    }
     ids.forEach((id, i) => place(id, cx + pts[i][0] - mx, cy + pts[i][1] - my, { rotate: (hash(`${id}r${seed}`) - 0.5) * 28, scale: scale * (0.85 + hash(`${id}s`) * 0.25) }));
   } else if (form === 'row' || form === 'column') {
     const along = form === 'row' ? Math.min(W * 0.84, size * 2 * n) : Math.min(A * 0.66, size * 1.9 * n);
@@ -145,10 +160,10 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
   // formation set beside an object near an edge, or a wide ring, is pulled back in.
   if (form !== 'exit') {
     const [mx, my] = tall ? [W * 0.1, H * 0.06] : [W * 0.05, H * 0.05];
-    for (const t of out.values()) {
-      const half = size * (t.scale ?? 1) * 0.58;
-      t.x = Math.min(Math.max(t.x, mx + half), W - mx - half);
-      t.y = Math.min(Math.max(t.y, Math.max(my, top) + half), H - my - half);
+    for (const [id, t] of out) {
+      const [hw, hh] = extent(id).map(v => v * (t.scale ?? 1) * 1.16);
+      t.x = Math.min(Math.max(t.x, mx + hw), W - mx - hw);
+      t.y = Math.min(Math.max(t.y, Math.max(my, top) + hh), Math.min(H - my, bottom) - hh);
     }
   }
   return out;
@@ -168,6 +183,12 @@ const LOOK = {
     mark: o => (o.color === 'surface' ? 'ink' : 'bg'), font: 'poster', label: 'semibold', shadow: false },
 };
 
+/** Half the width and height an object takes: a tile is square; a word pill is as long as its word. */
+export function objectExtent(o, size) {
+  const s = o.size ?? size;
+  return o.word ? [Math.max(s * 0.6, o.word.length * s * 0.3 * 0.29 + s * 0.25), s * 0.3] : [s / 2, s / 2];
+}
+
 /**
  * The object as drawn: a group centred on its position (a tile with an icon, or a word on a pill).
  * One that has filled the frame is drawn as its flat colour, its face hidden, until it emerges.
@@ -177,9 +198,9 @@ function objectElement(o, id, size, base, enter, look = 'tiles') {
   // Hidden and shown by keys from frame one (a base opacity would multiply every later key).
   const face = el => (base.filled ? { ...el, keys: [{ at: 0, opacity: 0, dur: 0 }] } : el);
   if (o.word) {
-    const w = Math.max(s * 1.4, o.word.length * s * 0.36 + s * 0.6);
-    children.push({ type: 'rect', id: `${id}-tile`, x: -w / 2, y: -s * 0.36, w, h: s * 0.72, r: s * 0.36, fill: o.color, enter: 'none', ...L.tile(s) },
-      face({ type: 'text', id: `${id}-word`, text: o.word, x: 0, y: s * 0.13, size: s * (look === 'drawn' ? 0.4 : 0.34), font: L.font, fill: look === 'drawn' || o.color !== 'ink' ? 'ink' : 'bg', anchor: 'middle', fit: w - s * 0.4, enter: 'none' }));
+    const [hw, hh] = objectExtent(o, size), fs = s * (look === 'drawn' ? 0.36 : 0.3);
+    children.push({ type: 'rect', id: `${id}-tile`, x: -hw, y: -hh, w: hw * 2, h: hh * 2, r: hh, fill: o.color, enter: 'none', ...L.tile(s) },
+      face({ type: 'text', id: `${id}-word`, text: o.word, x: 0, y: fs * 0.36, size: fs, font: L.font, fill: look === 'drawn' || o.color !== 'ink' ? 'ink' : 'bg', anchor: 'middle', fit: hw * 2 - s * 0.3, enter: 'none' }));
   } else {
     children.push({ type: 'rect', id: `${id}-tile`, x: -s / 2, y: -s / 2, w: s, h: s, r: s * 0.26, fill: o.color, enter: 'none', ...L.tile(s) },
       face({ type: 'icon', id: `${id}-icon`, name: o.icon, x: 0, y: 0, size: s * 0.52, stroke: L.mark(o), enter: 'none' }));
@@ -318,7 +339,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       const { el, base } = group(f.out), s0 = c.scale ?? 1, [x, y] = [c.x - base.x, c.y - base.y];
       for (const [dt, k] of [[0.42, 0.95], [0.28, 1.02], [0.14, 0.95]]) el.keys.push({ at: t - dt, x, y, scale: s0 * k, dur: 0.12 });
     }
-    const targets = formationTargets(f, ids, frame, { size, seed: spec.seed + k, current: pose });
+    const targets = formationTargets(f, ids, frame, { size, seed: spec.seed + k, current: pose, extent: id => objectExtent(spec.objects.get(id), size) });
     [...targets.keys()].forEach((id, i) => {
       const to = targets.get(id), at = Math.max(0, t + i * stagger), o = spec.objects.get(id);
       if (!groups.has(id)) {
@@ -390,7 +411,9 @@ export function expandCastProps(input, frame, ctx = {}) {
     check(rest[key] == null, `cannot combine cast with ${key} (a cast lays itself out for the frame)`);
   const spec = castSpec(cast, ctx.objects ?? new Map(), ctx.look ?? null);
   // A heading takes the top of the frame (as on stages); the cast keeps below it.
-  if (rest.title || rest.kicker) frame = { ...frame, top: frame.height > frame.width ? 430 : 300 };
+  if (rest.title || rest.kicker) frame = { ...frame, ...(ctx.heading === 'bottom'
+    ? { bottom: frame.height - (frame.height > frame.width ? 430 : frame.height * 0.34) }
+    : { top: frame.height > frame.width ? 430 : 300 }) };
   const { elements, state, threads, notes, camera, edges } = castElements(spec, frame, { state: ctx.state, threads: ctx.threads, camera: ctx.camera, cue: ctx.cue });
   for (const n of notes) ctx.notes?.push(`${frame.beatId ?? 'cast'}: ${n}`);
   if (frame.beatId) {
@@ -399,5 +422,6 @@ export function expandCastProps(input, frame, ctx = {}) {
   }
   if (ctx.carry) Object.assign(ctx.carry, { state, objects: spec.objects, threads, look: spec.look, camera,
     ...(edges.fill || edges.emerge ? { edges: { ...ctx.carry.edges, [frame.beatId]: edges } } : {}) });
-  return { ...rest, view: [0, 0, frame.width, frame.height], elements: [...elements, ...(rest.elements ?? [])] };
+  // Elements the author adds are scenery for the cast (a panel, a label beside it): drawn beneath it.
+  return { ...rest, view: [0, 0, frame.width, frame.height], elements: [...(rest.elements ?? []), ...elements] };
 }

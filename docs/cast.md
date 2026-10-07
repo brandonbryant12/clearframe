@@ -60,7 +60,7 @@ Each beat ends with every object's pose (place, scale, rotation, opacity), its d
 
 Threads keep cause before effect: each segment draws once both of its ends have arrived. If a formation is cued so late that it cannot settle before the beat ends, its thread is left out (and not carried), and `check` names the cue to move or the tail to add.
 
-A cast lays itself out for the frame, so it cannot be combined with `view`, `viewFrom` or `world`.
+A cast lays itself out for the frame, so it cannot be combined with `view`, `viewFrom` or `world`. It keeps clear of the scene's heading, whether at the top or the bottom. Word pills are as long as their words, and every object, pill or tile, is kept whole inside the title-safe area; a scatter pushes apart objects that would land on each other. Elements you add to a cast beat (a panel, a label, a route) are scenery and are drawn beneath the cast.
 
 Consecutive cast beats are joined with a cut, no exit, and a still camera (unless the beat sets one). A non-cut transition between them is warned about, because it would hide the continuity. A hero's `word` fades before the cut when nothing replaces it.
 
