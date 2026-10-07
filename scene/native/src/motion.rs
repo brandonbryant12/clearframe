@@ -36,6 +36,51 @@ pub fn bump(x: f32) -> f32 {
     (PI * clamp01(x)).sin()
 }
 
+// Rate functions adapted from 3b1b/manim (MIT, Copyright (c) 2020-2026 3Blue1Brown LLC),
+// manimlib/utils/rate_functions.py at fafa083a4fb274bba9cabde0b6e2f50ba6da0622 (see
+// scene/native/THIRD_PARTY.md). Inputs are clamped to [0, 1]; "there and back" curves end where
+// they began, so a key that uses one returns its element to the pose it started from.
+
+/// Zero first and second derivatives at both ends: bezier([0, 0, 0, 1, 1, 1]).
+pub fn smooth(t: f32) -> f32 {
+    let t = clamp01(t);
+    let s = 1.0 - t;
+    t * t * t * (10.0 * s * s + 5.0 * s * t + t * t)
+}
+/// A one-dimensional Bézier curve through `points` (Bernstein form).
+fn bezier(points: &[f32], t: f32) -> f32 {
+    let n = points.len() - 1;
+    let mut binom = 1.0f32;
+    let mut sum = 0.0f32;
+    for (k, p) in points.iter().enumerate() {
+        sum += binom * t.powi(k as i32) * (1.0 - t).powi((n - k) as i32) * p;
+        binom = binom * (n - k) as f32 / (k + 1) as f32;
+    }
+    sum
+}
+/// The named rate functions, by the name a key, route or entrance uses.
+pub fn named(name: &str, x: f32) -> Option<f32> {
+    let t = clamp01(x);
+    Some(match name {
+        "smooth" => smooth(t),
+        "rushInto" => 2.0 * smooth(0.5 * t),
+        "rushFrom" => 2.0 * smooth(0.5 * (t + 1.0)) - 1.0,
+        "slowInto" => (1.0 - (1.0 - t) * (1.0 - t)).sqrt(),
+        "doubleSmooth" => if t < 0.5 { 0.5 * smooth(2.0 * t) } else { 0.5 * (1.0 + smooth(2.0 * t - 1.0)) },
+        "thereAndBack" => smooth(if t < 0.5 { 2.0 * t } else { 2.0 * (1.0 - t) }),
+        "thereAndBackPause" => {
+            let (p, a) = (1.0 / 3.0, 2.0 / (1.0 - 1.0 / 3.0));
+            if t < 0.5 - p / 2.0 { smooth(a * t) } else if t < 0.5 + p / 2.0 { 1.0 } else { smooth(a - a * t) }
+        }
+        "runningStart" => bezier(&[0.0, 0.0, -0.5, -0.5, 1.0, 1.0, 1.0], t),
+        "overshoot" => bezier(&[0.0, 0.0, 1.5, 1.5, 1.0, 1.0], t),
+        "wiggle" => smooth(if t < 0.5 { 2.0 * t } else { 2.0 * (1.0 - t) }) * (2.0 * PI * t).sin(),
+        "lingering" => if t > 0.8 { 1.0 } else { t / 0.8 },
+        "decay" => 1.0 - (-t / 0.1).exp(),
+        _ => return None,
+    })
+}
+
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Preset {
     Gentle,
@@ -196,6 +241,21 @@ pub fn exit_progress(time: f32, scene_seconds: f32, duration: f32, earliest: f32
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn manim_rate_functions_keep_their_defining_shapes() {
+        let f = |n: &str, x: f32| named(n, x).unwrap();
+        for n in ["smooth", "rushInto", "rushFrom", "slowInto", "doubleSmooth", "runningStart", "overshoot", "lingering"] {
+            assert!(f(n, 0.0).abs() < 1e-5 && (f(n, 1.0) - 1.0).abs() < 1e-5, "{n} runs 0 → 1");
+        }
+        for n in ["thereAndBack", "thereAndBackPause", "wiggle"] {
+            assert!(f(n, 0.0).abs() < 1e-5 && f(n, 1.0).abs() < 1e-5, "{n} returns to where it began");
+        }
+        assert!((f("smooth", 0.5) - 0.5).abs() < 1e-6 && (f("thereAndBack", 0.5) - 1.0).abs() < 1e-6);
+        assert!(f("thereAndBackPause", 0.45) == 1.0, "the pause holds at the top");
+        assert!(f("runningStart", 0.2) < 0.0, "a running start pulls back first");
+        assert!((0..100).any(|i| f("overshoot", i as f32 / 100.0) > 1.0), "overshoot passes its target");
+        assert!(f("decay", 1.0) > 0.9999 && named("nope", 0.5).is_none());
+    }
     #[test]
     fn curves_start_at_zero_end_at_one_and_clamp() {
         for curve in [out_cubic, out_quart, out_expo, in_out_cubic, in_cubic, spring] {

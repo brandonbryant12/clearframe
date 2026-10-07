@@ -1,5 +1,21 @@
 # Changelog
 
+## Explanations: a picture that changes
+
+- **Four canvas props draw how something behaves**, from a stated formula or a seeded simulation, cued to the voice (`film/explain.mjs`). They expand into plain elements, so they combine with a beat's own elements and work as `place` panels.
+  - `graph`: an input moves through a function; a point rides the curve and dashed guides follow it to both axes; marks pop on cue. Functions: linear, power (a·xᵖ), exponential, logistic, saturating, log, an M/M/1 queue (`measure: inSystem | waiting | time`), wave, bell, constant. A formula that is not real across the domain is refused by name.
+  - `accumulate`: midpoint steps under a rate appear in order, then stack into a column normalised to the plot height. Zero steps add nothing.
+  - `estimate`: seeded simulated measurements arrive; the running average draws inside a ±1 standard-error band (spread/√n, not a confidence guarantee); `gather` slides the same dots into the spread. `bias` centres the samples off the true value. Always labelled Simulated.
+  - `field`: drift, swirl, source, sink, saddle or valley. Arrows show the push; particles follow RK4-integrated streamlines at a constant pace. A qualitative picture, not a fitted model.
+  - Labels over the picture (graph marks, estimate and field labels) carry a halo in the background colour; graph mark labels turn inward near the right edge and rise clear of the curve.
+- **`after`** on an element, key or `along` route: seconds after its `say` word.
+- **Rate functions adapted from Manim** (3b1b/manim, MIT, at `fafa083`; `scene/native/THIRD_PARTY.md`) on any key: `smooth`, `rushInto`, `rushFrom`, `slowInto`, `doubleSmooth`, `thereAndBack`, `thereAndBackPause`, `runningStart`, `overshoot`, `wiggle`, `lingering`, `decay`. Nothing from 3b1b/videos (CC BY-NC-SA) is included.
+- **Discovery.** `find` surfaces `mechanism:graph`, `accumulate`, `estimate`, `field` and `rate-functions`, each with cross-domain uses, scope and a copyable beat ("how an input changes an output", "spread of outcomes", "accumulating small changes"). The `cast` mechanism now also answers "the same objects reorganize".
+- **The `explanation` treatment** (ink, geometric, gentle, cut). Its voice, Charon ("warm, curious, measured"), is a provisional choice from published descriptions, not a listening match; Iapetus and Schedar are alternatives.
+- **The `clearframe-explain` skill** (studio guide topic `explain`; routed from AGENTS.md and the clearframe, canvas, library and inspiration skills).
+- **`critique`** now reads the primitives' cues when it asks when the first idea lands.
+- **`examples/settling`**: why a few reviews can mislead, in three beats and both shapes, simulated. Both pass `check` with 0 errors and 0 warnings. Limit: cinema 45/100, because the frames are held and the plot is locked on purpose.
+
 ## A board: several pictures, then the whole
 
 - **`place: [x, y]` (or `[x, y, scale]`)** draws a canvas beat's picture (its `sketch` and its own `elements`) as one panel of a world.

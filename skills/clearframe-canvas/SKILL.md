@@ -7,6 +7,8 @@ description: Draw original animated graphics in ClearFrame with the canvas block
 
 Read [docs/canvas.md](../../docs/canvas.md) for the element reference. The fixed blocks carry evidence; canvas carries explanation. If the narration says *how*, *why*, *through*, *between*, *around*, *until* or *instead*, there is probably a drawing to make.
 
+When the idea is how one quantity behaves (a relationship, an accumulation, noisy evidence, a flow), the `graph`, `accumulate`, `estimate` and `field` props draw it from a formula or a labelled simulation: see `clearframe-explain`.
+
 ## Workflow
 
 1. **Find the picture in the sentence.** Name the mechanism in five words ("demand overflows a fixed pipe"). Choose a metaphor the viewer already knows: a route, a pipe, a scale, a funnel, a ladder, a bridge, orbits, a network, a gap, a wave, a split.

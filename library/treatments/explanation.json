@@ -1,0 +1,28 @@
+{
+  "order": 32,
+  "title": "Visual explanation",
+  "when": "Showing how or why something works on any subject: a relationship between two quantities, small amounts adding up, noisy evidence settling into an estimate, where things flow. For curious viewers who want the idea, not a summary",
+  "film": {
+    "theme": "ink",
+    "type": "geometric",
+    "backdrop": "none",
+    "motion": {
+      "preset": "gentle",
+      "intensity": 0.6
+    },
+    "transition": "cut",
+    "sfx": "off",
+    "voice": {
+      "voice": "Charon",
+      "style": "warm, curious, measured"
+    }
+  },
+  "rules": [
+    "Intuition before symbols: show the picture change, then name it.",
+    "One idea changes at a time; everything else holds still.",
+    "A colour means one thing for the whole film (the input, the total, the estimate).",
+    "Keep the same object in the same place across beats so the eye can follow it.",
+    "Hold after each change long enough to see what it did.",
+    "Cue every move to the word that names it."
+  ]
+}

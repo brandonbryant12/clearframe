@@ -1,3 +1,4 @@
+import { EXPLAIN } from './explain.mjs';
 import { diagramElements } from './system-diagrams.mjs';
 // Prop validation and normalization for each native block. `normalizeProps` (catalog.mjs)
 // runs the checks every block shares, then the block's validator here. A validator may fill
@@ -467,6 +468,12 @@ export const VALIDATORS = {
       delete p.sketchSay;
       delete p.seed;
     }
+    // Visual explanation primitives (film/explain.mjs): a picture that changes, computed from a formula.
+    for (const [k, make] of Object.entries(EXPLAIN))
+      if (p[k] != null) {
+        try { p.elements = [...make(p[k], frame), ...(p.elements ?? [])]; } catch (e) { h.fail(`${k}: ${e.message}`); }
+        delete p[k];
+      }
     // A beat's drawing (its sketch and its own elements) placed as one panel of a larger picture, a
     // world the camera travels: it moves to [x, y] in world pixels, scaled by s.
     if (p.place != null) {

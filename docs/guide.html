@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ClearFrame guide: a living document (docs/guide.html).
-  Last updated: 2026-10-06. Covers CHANGELOG 0.5.0 (unreleased), including the scene engine, the retirement of FFFrames, the browser studio's OpenCode agent and the notes-first studio page.
+  Last updated: 2026-10-07. Covers CHANGELOG 0.5.0 (unreleased), including the scene engine, the retirement of FFFrames, the browser studio's OpenCode agent and the notes-first studio page.
 
   WHEN UPDATING, CONSULT (sources of truth, roughly in this order):
     - CHANGELOG.md: newest section first. It feeds "What's new" and anything it changes below.
@@ -14,7 +14,7 @@
     - README.md, AGENTS.md, docs/canvas.md, docs/style.md, docs/ideas.md, docs/speech.md, docs/continuity.md
     - docs/editing.md and docs/collaboration.md: review state, notes, keeps, decisions, previews, recording edits, the journey
     - docs/agent-studio.md and engine/lib/agent/, engine/agent-plugin/: the browser studio's home page, OpenCode runtime, tools, scope and setup
-    - skills/clearframe*/SKILL.md (clearframe, direction, cinema, canvas, motion, script, library, engine, integrity, dataviz)
+    - skills/clearframe*/SKILL.md (clearframe, direction, cinema, canvas, explain, motion, script, library, engine, integrity, dataviz)
     - examples/night-city/BRIEF.md and storyboard.json (the case study in section 04)
 
   CONVENTIONS
@@ -791,6 +791,7 @@ node engine/cli.mjs runlog my-podcast                      <span class="c"># mea
           <div>
             <p><strong>Declare fills on outlines.</strong> Stroked circles, ellipses and rectangles still default to a solid accent fill. Set <code>fill: "none"</code> for contour rings and wireframes, or an explicit colour for a filled shape. The checks warn about omissions in canvas and nested art.</p>
             <p><code>canvas</code> is a beat you draw. It offers 13 element types with entrances, keyframes, motion along paths, loops and exits, all cueable to speech. Any beat can also carry <code>art.under</code> / <code>art.over</code> layers made of the same elements, placed in frame pixels: an arrow onto a bar, a circle round a number. Start from a <code>sketch</code> and place things with <code>still --grid</code>. <code>view: "auto"</code> fits a drawing into the space below the title.</p>
+            <p>To show how something behaves, four props draw a picture that changes, from a formula or a labelled simulation: <code>graph</code>, <code>accumulate</code>, <code>estimate</code> and <code>field</code>. They show behaviour, never data (<a href="canvas.md">canvas</a>, the <code>clearframe-explain</code> skill).</p>
           </div>
         </div>
         <div class="concept" id="concept-stages">
@@ -1802,6 +1803,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
     <section class="topic" id="whats-new">
       <p class="kicker"><span class="num">09</span><span class="serif">0.5.0, unreleased</span></p>
       <h2>What's new</h2>
+      <p><strong>Explanations: a picture that changes.</strong> Four canvas props draw how something behaves, on any subject. <code>graph</code> shows how an input changes an output: a point rides a curve from a stated formula, such as dose and response, practice and skill, or how busy a desk is and how many wait (an M/M/1 queue). <code>accumulate</code> shows small amounts adding up: steps under a rate lift and stack into the total (savings, rain in a reservoir, a backlog). <code>estimate</code> shows noisy evidence settling: simulated reviews or readings arrive, their average steadies inside a band of ±1 standard error, and the dots gather into the spread. With <code>bias</code>, the average settles just as calmly in the wrong place, because more samples shrink chance, not bias. <code>field</code> shows where things flow: arrows and particles on a chosen field, a qualitative picture, not a fitted crowd or market model. Moves land on words (<code>after</code> times a move from its word), and keys take twelve rate functions adapted from Manim (MIT), such as <code>thereAndBack</code> to point and return or <code>overshoot</code> to settle. The <code>explanation</code> treatment and the <code>clearframe-explain</code> skill (studio guide topic <code>explain</code>) carry the method: intuition before symbols, one change at a time, a colour that means one thing, and holds you can see. Its voice, Charon, is a provisional pick from published descriptions; Iapetus and Schedar are alternatives. How to ask: “Explain why a handful of reviews can mislead, as a picture: the average settling as more arrive.” <a href="../examples/settling/README.md">Settling</a>.</p>
       <p><strong>A board: each moment, then the whole.</strong> <code>place</code> draws a scene's picture as one panel of a world. The camera holds close on each panel, travels between them, then pulls back to show them all side by side, still moving, the way a showreel reveals that its moments belong together. It moves pictures but does not clip them, and on a phone the overview becomes a narrow column. How to ask: “Show the three moments one by one, then pull back to see them together.” <a href="../examples/by-morning/README.md">By morning</a>.</p>
       <p><strong>The studio agent can look at its own renders.</strong> <code>clearframe_look</code> hands the agent one bounded picture: a still, or a motion sheet of a rough cut (frames over time, in reading order, each with its time), one scene at a time, or at phone size. It can judge hierarchy, motion and legibility, which the engine's checks cannot, before it reports. This needs a model that reads images; a text-only model is told to say so. How to ask: “Make the rough cut, look at it, and fix anything that doesn't read on a phone.”</p>
       <p><strong>A person, a product and a city.</strong> <a href="../examples/by-morning/README.md">By morning</a> builds a launch film from three existing set pieces: <code>desk</code> (one person at night, the laptop's light cued to “building”), <code>device</code> (the app) and <code>rooftops</code> (the city at sunrise, its windows cued to “morning”). Its README walks the real path from <code>find</code> to <code>--id</code> to a copied, adapted drawing. How to ask: “A launch film about one person building the app at night and the city using it by morning.”</p>

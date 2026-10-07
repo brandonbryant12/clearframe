@@ -332,7 +332,7 @@ fn ease(name: &str, x: f32) -> f32 {
         "in" => motion::in_cubic(x),
         "out" => motion::out_quart(x),
         "spring" => motion::spring(x),
-        _ => motion::in_out_cubic(x),
+        other => motion::named(other, x).unwrap_or_else(|| motion::in_out_cubic(x)),
     }
 }
 

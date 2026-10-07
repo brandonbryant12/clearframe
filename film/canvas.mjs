@@ -58,6 +58,7 @@ const COMMON = [
   'drawEase',
   'at',
   'say',
+  'after',
   'dur',
   'dist',
   'exit',
@@ -110,7 +111,8 @@ export const MATERIALS = ['thermal', 'chrome', 'gold', 'neon'];
 export const PRINTS = ['benday', 'halftone', 'engraving', 'newsprint', 'letterpress'];
 /** Mosaic tile styles: hand-cut tesserae, LCD pixels, or cross-stitches on cloth. */
 export const MOSAIC_STYLES = ['tesserae', 'pixel', 'stitch'];
-export const EASES = ['inOut', 'in', 'out', 'linear', 'spring'];
+// The last twelve are rate functions adapted from 3b1b/manim (MIT; scene/native/THIRD_PARTY.md).
+export const EASES = ['inOut', 'in', 'out', 'linear', 'spring', 'smooth', 'rushInto', 'rushFrom', 'slowInto', 'doubleSmooth', 'thereAndBack', 'thereAndBackPause', 'runningStart', 'overshoot', 'wiggle', 'lingering', 'decay'];
 export const COLOR_TOKENS = [
   'bg',
   'surface',
@@ -265,6 +267,7 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
             ![
               'at',
               'say',
+              'after',
               'dur',
               'ease',
               'x',
@@ -282,6 +285,7 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
           )
             fail(`${at}.keys[${j}]: unsupported field ${key}`);
         if (k.at == null && k.say == null) fail(`${at}.keys[${j}] needs at (seconds) or say (spoken cue)`);
+        if (k.after != null && (!finite(k.after) || k.after < 0 || k.say == null)) fail(`${at}.keys[${j}].after is seconds (0 or more) after its say cue`);
         if (k.blur != null && (!finite(k.blur) || k.blur < 0 || k.blur > 60))
           fail(`${at}.keys[${j}].blur must be 0–60 px`);
         for (const key of ['at', 'dur', 'x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity', 'tiltX', 'tiltY'])
@@ -307,7 +311,7 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       const r = el.along;
       if (!r || typeof r !== 'object' || typeof r.d !== 'string') fail(`${at}.along needs path data d`);
       for (const key of Object.keys(r))
-        if (!['d', 'at', 'say', 'dur', 'ease', 'rotate', 'loop'].includes(key))
+        if (!['d', 'at', 'say', 'after', 'dur', 'ease', 'rotate', 'loop'].includes(key))
           fail(`${at}.along: unsupported field ${key}`);
       pathData(r.d, `${at}.along.d`, fail);
       if (r.ease != null && !EASES.includes(r.ease)) fail(`${at}.along.ease must be one of ${EASES.join(', ')}`);
@@ -662,9 +666,11 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
     if (still && el.enter == null) el.enter = 'none';
     if (el.say != null) {
       // Type cued to a word is legible as the word is said: its entrance starts a moment early.
-      el.at = Math.max(0, resolve(el.say) - (el.type === 'text' ? 0.2 : 0));
+      // `after` places it that many seconds after the word (choreography relative to the voice).
+      el.at = Math.max(0, resolve(el.say) - (el.type === 'text' && !el.after ? 0.2 : 0) + (el.after ?? 0));
       delete el.say;
     }
+    delete el.after;
     el.at ??= start + i * stagger;
     const enter = defaultEnter(el);
     const chars = String(el.text ?? '').length;
@@ -713,9 +719,10 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
     }
     for (const k of el.keys ?? []) {
       if (k.say != null) {
-        k.at = resolve(k.say);
+        k.at = resolve(k.say) + (k.after ?? 0);
         delete k.say;
       }
+      delete k.after;
       k.dur ??= T.key;
       // `hold: false`: ambient motion (traffic, drifting cloud) runs on past the cut.
       if (k.hold !== false) settle = Math.max(settle, k.at + k.dur);
@@ -724,9 +731,10 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
     if (el.keys) el.keys.sort((a, b) => a.at - b.at);
     if (el.along) {
       if (el.along.say != null) {
-        el.along.at = resolve(el.along.say);
+        el.along.at = resolve(el.along.say) + (el.along.after ?? 0);
         delete el.along.say;
       }
+      delete el.along.after;
       el.along.at ??= el.at;
       el.along.dur ??= T.along;
       settle = Math.max(settle, el.along.at + el.along.dur);

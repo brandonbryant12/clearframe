@@ -70,6 +70,7 @@ What you can change, from lightest to deepest:
 | When things happen | `sketchSay` lands a sketch's named moments on narration words. Cast moves and canvas elements take `say`. | `{"ALL": "Lights"}` |
 | The look | `theme` (palette), `type`, the cast `look`, and the stage `material` (`dither`, `chrome`…) on a shape or a ground. | `"theme": "noir"` |
 | What is drawn | Copy the sketch's elements and edit them: other icons, fewer cards, other positions. In the studio, `clearframe_catalog` topic `sketch` (name, `sketchText`, `sketchSay`) returns the filled elements for the film's shape. In a build script, `sketch(name, preset, {text, say})` from `film/sketches.mjs` does the same. By hand, `node engine/cli.mjs sketch NAME [--vertical]` prints them. Put the result in `props.elements` (without `props.sketch`). | `examples/checkout-at-night` |
+| How something behaves | The `graph`, `accumulate`, `estimate` and `field` props take a formula or a seed, not elements: change the formula, the domain, the labels and the cue words (`find --id mechanism:graph`, `clearframe-explain`). They are never data. | `examples/settling` |
 | Detail, then the whole | `place: [x, y]` draws each beat's picture as a panel of one `world`; the last beat's `view` takes them all in (`find --id mechanism:board`). It does not clip. | `examples/by-morning` (board) |
 | A new reusable picture | A sketch module, or a JSON sketch in the project's `library/sketches/`, so other films can use it by name. | `library/README.md` |
 

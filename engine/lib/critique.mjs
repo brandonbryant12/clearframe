@@ -373,7 +373,11 @@ export function critique(root) {
       'Opens with a greeting or preamble. Lead with the claim, number or question; greet later or never.',
     );
   // What matters is when the first idea lands: a cued number or drawing, else the scene's end.
-  const cues = [first?.props?.land, ...(first?.props?.elements ?? []).map(el => el.say)].filter(
+  // Explanation primitives (film/explain.mjs) cue their moves inside the prop: {show|draw|fill|flow: {say|at}}.
+  const moves = ['graph', 'accumulate', 'estimate', 'field']
+    .flatMap(k => Object.values(first?.props?.[k] ?? {}))
+    .filter(v => v && typeof v === 'object' && !Array.isArray(v));
+  const cues = [first?.props?.land, ...(first?.props?.elements ?? []).map(el => el.say), ...moves.map(v => v.say)].filter(
     c => typeof c === 'string',
   );
   const words = t[0]?.vo?.words ?? [];
@@ -391,7 +395,7 @@ export function critique(root) {
     .filter(Boolean)
     .map(w => w.t0 - (t[0]?.start ?? 0));
   // Elements with a timed entrance land at their time.
-  const timed = [first?.props?.elements ?? [], first?.art?.under ?? [], first?.art?.over ?? []]
+  const timed = [first?.props?.elements ?? [], first?.art?.under ?? [], first?.art?.over ?? [], moves]
     .flat()
     .map(el => el.at)
     .filter(Number.isFinite);
