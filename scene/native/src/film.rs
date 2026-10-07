@@ -301,6 +301,13 @@ fn draw_text(
     marks.push(TextMark { text: value.to_owned(), rect: r, size, alpha: 1.0 });
 }
 
+/// How far the editorial frame sits in from the top and bottom beyond its landscape place. On
+/// a tall frame the platform's own buttons cover the edges, so it keeps to the title-safe
+/// area a phone leaves clear (6% of the height); a source line above it moves up with it.
+pub fn frame_inset(w: f32, h: f32) -> f32 {
+    if h > w { (h * 0.06 - 40.0).max(0.0) } else { 0.0 }
+}
+
 /// The editorial frame: brand, section label, footers and a progress rail, in the colours of
 /// the scene on screen (a toned scene re-derives them).
 pub fn frame(
@@ -314,7 +321,15 @@ pub fn frame(
     marks: &mut Vec<TextMark>,
 ) {
     let text_of = |key: &str| spec.get(key).and_then(Value::as_str).unwrap_or("").to_owned();
-    let margin = if w / h > 1.3 { 120.0 } else { 86.0 };
+    // Its sides keep the margin block content keeps (wider on a tall frame, inside the middle 80%).
+    let margin = if w / h > 1.3 {
+        120.0
+    } else if h > w {
+        (w * 0.115).round()
+    } else {
+        86.0
+    };
+    let inset = frame_inset(w, h);
     let brand = text_of("brand");
     let label =
         if spec.get("label").and_then(Value::as_bool) == Some(false) { String::new() } else { label.to_uppercase() };
@@ -325,14 +340,15 @@ pub fn frame(
     ink.set_color4f(hex(&p.ink, 1.0), None);
     let mut muted = ink.clone();
     muted.set_color4f(hex(&p.muted, 1.0), None);
-    let rail_y = h - 46.0;
+    let rail_y = h - 46.0 - inset;
     let footer_y = rail_y - 16.0;
-    draw_text(canvas, &brand, margin, 100.0, Font::SerifItalic, 44.0, 0.0, &ink, marks);
+    draw_text(canvas, &brand, margin, 100.0 + inset, Font::SerifItalic, 44.0, 0.0, &ink, marks);
     let label_w = text::measure(mono, &label, 20.0, 2.4);
-    draw_text(canvas, &label, w - margin - label_w, 74.0, mono, 20.0, 2.4, &muted, marks);
-    draw_text(canvas, &left, margin, footer_y, mono, 18.0, 2.2, &muted, marks);
-    let right_w = text::measure(mono, &right, 18.0, 2.2);
-    draw_text(canvas, &right, w - margin - right_w, footer_y, mono, 18.0, 2.2, &muted, marks);
+    draw_text(canvas, &label, w - margin - label_w, 74.0 + inset, mono, 20.0, 2.4, &muted, marks);
+    // Footers at the smallest size a phone reads (the audit's floor).
+    draw_text(canvas, &left, margin, footer_y, mono, 20.0, 2.2, &muted, marks);
+    let right_w = text::measure(mono, &right, 20.0, 2.2);
+    draw_text(canvas, &right, w - margin - right_w, footer_y, mono, 20.0, 2.2, &muted, marks);
     if spec.get("progress").and_then(Value::as_bool).unwrap_or(true) {
         let span = w - 2.0 * margin;
         let mut rail = Paint::default();

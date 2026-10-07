@@ -36,6 +36,9 @@ pub fn render(b: &Beat, frame: Frame, ctx: &Ctx) -> Node {
     } else {
         335.0 + portrait_shift
     };
+    // The editorial frame moves in on a tall frame (`film::frame_inset`); content keeps its
+    // distance below the brand.
+    let top = top + if env.framed { crate::film::frame_inset(env.width, env.height) } else { 0.0 };
     let reserve = if low { 176.0 + if s(&b.props, "kicker").trim().is_empty() { 0.0 } else { 40.0 } } else { 0.0 };
     // Letterbox bars take the top and bottom of the frame: headings, content and the
     // source line move inside the picture so nothing important sits under a bar.

@@ -1,12 +1,20 @@
 # Changelog
 
+## The editorial frame fits a vertical cut
+
+- **On a tall frame the editorial frame keeps to the title-safe area a phone leaves clear.** This is the brand, the section label, the footers and the progress rail. They move in to the margin block content keeps and 6% from the top and bottom.
+  - The title's kicker, block content and a source line above the footer move with them.
+  - Footers are 20 px (the audit's floor) in every shape; they were 18.
+- **Measured.** brand-spot vertical went from 16 audit warnings to 0. brand-spot landscape loses its eight 18 px footer warnings and gains nothing. Films without the frame are byte-identical (13 decoded stills compared).
+
 ## Vertical cuts keep a world's words whole
 
 - **A landscape world camera re-framed for a vertical cut now frames what the authored shot shows,** not everything the beat draws. The words of that subject come whole first, then readable (22 px), then inside the title-safe margin, and the frame is never wider than the authored shot.
   - Before, concept-explainer's "nine times the wait" beat centred on its off-shot row labels: the bars ran off the left and the "9×" takeaway fell off the right.
 - **Words the taller frame reaches are taken in whole or left out, not sliced.** This includes labels carried from earlier beats of the same world. A word is taken in only while type stays readable; otherwise the frame slides past it, as long as the subject stays roughly centred. Words that travel, turn or scale are not placed.
 - **Measured.** I scaffolded the eleven playbooks whose vertical cuts re-frame a world camera and ran `check --draft` with main's code and with this change.
-  - Words cut by the frame edge: 14 to 2. Type too small to read: 15, unchanged. Hard to read: 55 to 51. Outside title-safe: 40 to 43.
+  - Words cut by the frame edge: 14 to 2. Type too small to read: 15, unchanged. Outside title-safe: 40 to 43.
+  - Hard to read: the audit's "hard to read" lines went 47 to 44, and the job's "renders at about N px" zoom warnings 8 to 7. Counted together earlier as 55 to 51.
   - The title-safe rise includes cold-open's title. Main sliced it at both edges, but the audit did not flag it because the camera was still moving. It is now whole and close to the edge.
   - Landscape output is byte-identical (re-framing applies only when the frame shape differs).
 - **Still open.** I judged decoded before/after stills, not only counts:

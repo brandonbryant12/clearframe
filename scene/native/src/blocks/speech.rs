@@ -413,7 +413,7 @@ impl<'a, 'c> Draw<'a, 'c> {
             - if env.captions && self.floor >= env.height {
                 if tall { 320.0 } else { 160.0 }
             } else if env.framed && self.floor >= env.height {
-                128.0
+                128.0 + crate::film::frame_inset(env.width, env.height)
             } else {
                 92.0
             })

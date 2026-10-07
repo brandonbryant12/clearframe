@@ -325,8 +325,10 @@ impl<'a, 'c> Draw<'a, 'c> {
             let words = self.draw(pill, px, y, w, Align::Left, &self.p.accent);
             nodes.push(self.rise(words, after + 0.2, 14.0));
         }
-        let kicker_y =
-            self.head_y.map_or(if self.tall() { self.b.environment.height * 0.11 } else { 108.0 }, |y| y + 8.0);
+        // Below the editorial frame's brand when the film has one (it moves in on a tall frame).
+        let env = &self.b.environment;
+        let framed = if env.framed { crate::film::frame_inset(env.width, env.height) } else { 0.0 };
+        let kicker_y = self.head_y.map_or(if self.tall() { env.height * 0.11 + framed } else { 108.0 }, |y| y + 8.0);
         let (kicker, _) = self.kicker(s(props, "kicker"), a.x, kicker_y, a.w, 0.0);
         draw::group(vec![kicker.into(), Node::from(nodes).into()])
     }
