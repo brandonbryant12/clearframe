@@ -35,6 +35,7 @@ import { expandKPIProps } from './kpis.mjs';
 import { expandTeachingProps } from './teaching.mjs';
 import { expandPlotProps } from './plots.mjs';
 import { expandBarsProps } from './bars.mjs';
+import { expandBridgeProps, orderBridgeTimes } from './bridge.mjs';
 import { expandStatProps } from './stat.mjs';
 import { expandHistogramProps } from './histogram.mjs';
 import { expandMultiplesProps } from './multiples.mjs';
@@ -172,7 +173,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     spec = rules(b.block);
   const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.dur };
   const authoredProps = b.block === 'canvas'
-    ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBarsProps(expandPlotProps(expandTeachingProps(expandKPIProps(b.props ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
+    ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(expandKPIProps(b.props ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
     : (b.props ?? {});
   const props = normalizeProps(b.block, authoredProps, {
     vertical: film.vertical,
@@ -227,9 +228,22 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
     return end;
   };
   if (b.block === 'canvas') {
-    if ((b.props?.plot != null || b.props?.bars != null || b.props?.stat != null || b.props?.distribution != null || b.props?.multiples != null) && !sb.sources.length)
+    if ((b.props?.plot != null || b.props?.bars != null || b.props?.bridge != null || b.props?.stat != null || b.props?.distribution != null || b.props?.multiples != null) && !sb.sources.length)
       throw new Error('Quantitative plots need a storyboard.sources entry.');
     settle = Math.max(settle, scheduleArt(props.elements, at, props.stagger ?? 0));
+    // A bridge's last total is the payoff: one cued to the final word leaves nothing to read it in.
+    if (b.props?.bridge != null) {
+      // Each driver floats from the total before it, so columns must arrive in reading order.
+      const spec = b.props.bridge, cued = [false, ...spec.steps.map(x => x.say != null), spec.end?.say != null];
+      const part = (kind, i) => props.elements.filter(e => new RegExp(`-bridge-${kind}-${i}(-\\d+)?$`).test(e.id ?? ''));
+      const times = cued.map((_, i) => part('bar', i)[0]?.at ?? 0), ordered = orderBridgeTimes(times, cued);
+      ordered.forEach((t, i) => { for (const e of [...part('bar', i), ...part('value', i), ...(i ? part('link', i - 1) : [])]) e.at += t - times[i]; });
+      const landed = Math.max(...props.elements.filter(e => /-bridge-(bar|value|link)-\d+(-\d+)?$/.test(e.id ?? '')).map(e => e.at + (e.dur ?? 0)));
+      settle = Math.max(settle, landed);
+      if (b.dur - landed < 1.5)
+        report.warnings.push(`${b.id}: the bridge's last total settles ${landed.toFixed(1)} s into a ${b.dur.toFixed(1)} s beat; cue it earlier or hold the beat (min) so it can be read.`);
+      if (landed > b.dur) throw new Error(`the bridge finishes at ${landed.toFixed(2)} s, after the beat ends; cue the drivers earlier or extend the beat.`);
+    }
     // Camera depth keys resolve their spoken cues; like camera drift, they never hold the beat.
     for (const k of [...(props.dolly ?? []), ...(props.focus?.keys ?? [])]) {
       if (k.say != null) {

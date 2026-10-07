@@ -16,6 +16,7 @@ Choose the visual by the task:
 | Establish an idea | title, statement, chapter, callout, quote, endcard |
 | Make key words land | highlight (marker sweeps), `emphasis` on hero text |
 | Show a number/change | stat, kpis, delta |
+| Explain a change through its drivers (revenue, cost or profit bridge) | canvas `props.bridge` (docs/bridge.md) |
 | Compare quantities/shares/trends | bars, waffle (or icon pictogram), ring, donut, line, funnel |
 | Compare orders of magnitude | magnitude |
 | Explain a process/relation | steps, timeline, equation, flow, cycle |

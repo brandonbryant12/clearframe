@@ -47,6 +47,8 @@ const distributionBeat = (id, distribution, duration = 8) => ({ id, block: 'canv
   props: { distribution: { source, asOf, ...distribution } } });
 const statBeat = (id, stat, duration = 6) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
   props: { stat: { source, asOf, ...stat } } });
+const bridgeBeat = (id, bridge, duration = 8) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
+  props: { bridge: { source, asOf, ...bridge } } });
 const barsBeat = (id, bars, duration = 7) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
   props: { bars: { source, asOf, ...bars } } });
 const beat = (id, plot, duration = 9) => ({ id, block: 'canvas', duration, camera: 'none', exit: 'none',
@@ -158,6 +160,20 @@ function beats(shape) {
       values: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         .map((label, i) => ({ label, value: [4.2, 2.8, -3.5, -6.1, -2.4, 1.1, 3.9, 5.2, 4.4, 6.0, 3.1, 2.2][i] })),
       domain: [-8, 8], ticks: [-8, -4, 0, 4, 8], decimals: 1, prefix: '$',
+    }),
+    // Illustrative drivers that reconcile exactly: 48.2 + 6.1 + 2.4 + 1.3 − 3.0 − 0.9 = 54.1.
+    bridgeBeat('revenue-bridge', {
+      title: 'Revenue grew, even after churn', unit: 'Quarterly revenue, $ millions', prefix: '$', decimals: 1,
+      start: { label: 'Q1 revenue', value: 48.2 },
+      steps: [{ label: 'New customers', value: 6.1 }, { label: 'Expansion', value: 2.4 }, { label: 'Price', value: 1.3 },
+        { label: 'Churn', value: -3.0 }, { label: 'Currency', value: -0.9 }],
+      end: { label: 'Q2 revenue', value: 54.1 }, domain: [0, 60], ticks: [0, 20, 40, 60],
+    }),
+    bridgeBeat('profit-walk', {
+      title: 'Where each dollar of revenue goes', unit: 'Annual results, $ millions', prefix: '$',
+      start: { label: 'Revenue', value: 120 },
+      steps: [{ label: 'Cost of sales', value: -48 }, { label: 'Gross profit', total: true }, { label: 'Operating costs', value: -45 }, { label: 'Interest', value: -6 }],
+      end: { label: 'Profit before tax', value: 21 }, domain: [0, 120], ticks: [0, 40, 80, 120],
     }),
   ];
 }

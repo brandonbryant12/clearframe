@@ -44,8 +44,8 @@ const HELP = `ClearFrame — motion graphics
   doctor | build                      tools and disk headroom; compile the renderer
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]
   viewer [folders…] [--serve] [--port 4317] [--out build/viewer] [--no-render] [--projects projects] [--no-agent]
-                                      one HTML page: films, versions, lens, timeline, notes, building blocks; with --serve, the
-                                      browser studio: new films, an OpenCode conversation per film, editing (docs/agent-studio.md)
+                                      one page: films, versions and sticky notes; with --serve, the studio: new films from an
+                                      idea, an agent conversation per film, notes sent to it (docs/viewer.md, docs/agent-studio.md)
   agent [status|doctor|start|stop]    the studio's isolated OpenCode runtime (docs/agent-studio.md)
   studio <dir> [state|history|undo|redo|set PATH VALUE [--beat ID]|insert BLOCK [--beat AFTER]|sketch NAME|move --beat ID --to N|duplicate|delete --beat ID|treatment ID] [--json]
                                       the studio's validated, undoable edits from the command line (shared history with the UI)

@@ -13,6 +13,7 @@ A chart in a video is not a chart on a page. The viewer can't pause, re-read or 
 |---|---|---|
 | How big is this one number? | `stat` | Tabular-figure counter from a truthful `from`; word units (" days") set small, symbols ("%") larger |
 | Two to four headline metrics | `kpis` | Cards count up in order; keep units comparable |
+| How did we get from A to B? | canvas `props.bridge` | A total, its signed drivers (and subtotals), the new total: a revenue, cost or profit bridge. It must reconcile exactly; add an explicit "Other" rather than hide a gap. Cue each driver with `say`. [docs/bridge.md](../../docs/bridge.md) |
 | What changed? | `delta` | The new value counts from the old one; `better: up/down` colors the change chip, never the only signal (sign + arrow remain) |
 | Compare a few values | `bars` | Zero baseline always; horizontal for long labels; `sort: desc` unless order means something; `focus` dims the rest |
 | Change over time | `line` | Draws left to right with an area wash; round-number ticks; the final value appears at the tip |

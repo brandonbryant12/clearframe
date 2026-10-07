@@ -7,6 +7,7 @@ import { rules } from '../../film/registry.mjs';
 import { elementsExtent as extent } from '../../film/canvas.mjs';
 import { expandPlotProps } from '../../film/plots.mjs';
 import { expandBarsProps } from '../../film/bars.mjs';
+import { expandBridgeProps } from '../../film/bridge.mjs';
 import { expandStatProps } from '../../film/stat.mjs';
 import { expandHistogramProps } from '../../film/histogram.mjs';
 import { expandMultiplesProps } from '../../film/multiples.mjs';
@@ -26,6 +27,8 @@ function asDrawn(b, { width = 1920, height = 1080 } = {}) {
       return { ...b, props: expandPlotProps(b.props, { width, height, beatId: b.id }) };
     if (b.block === 'canvas' && b.props?.bars)
       return { ...b, props: expandBarsProps(b.props, { width, height, beatId: b.id }) };
+    if (b.block === 'canvas' && b.props?.bridge)
+      return { ...b, props: expandBridgeProps(b.props, { width, height, beatId: b.id }) };
     if (b.block === 'canvas' && b.props?.multiples)
       return { ...b, props: expandMultiplesProps(b.props, { width, height, beatId: b.id }) };
     if (b.block === 'canvas' && b.props?.distribution)

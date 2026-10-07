@@ -1,6 +1,6 @@
 # Finance chart templates
 
-Thirteen editorial beats for market and personal-finance commentary, in the `ledger` palette. Each is a `canvas` beat using `props.stat` ([docs](../../docs/stat.md)), `props.plot` ([docs](../../docs/quantitative-plots.md)), `props.bars` ([docs](../../docs/bars.md)) `props.distribution` ([docs](../../docs/distribution-charts.md)) or `props.multiples` ([docs](../../docs/small-multiples.md)), so it stays native, editable and sourced.
+Fifteen editorial beats for market and personal-finance commentary, in the `ledger` palette. Each is a `canvas` beat using `props.stat` ([docs](../../docs/stat.md)), `props.plot` ([docs](../../docs/quantitative-plots.md)), `props.bars` ([docs](../../docs/bars.md)), `props.bridge` ([docs](../../docs/bridge.md)), `props.distribution` ([docs](../../docs/distribution-charts.md)) or `props.multiples` ([docs](../../docs/small-multiples.md)), so it stays native, editable and sourced.
 
 | Beat | Pattern | Use it for |
 |---|---|---|
@@ -17,6 +17,8 @@ Thirteen editorial beats for market and personal-finance commentary, in the `led
 | `return-distribution` | Histogram with a counted threshold and the latest year marked | Return distributions, odds of a loss, any "how often" question |
 | `contributions` | Ranked horizontal bars, signed | Contribution to return, sector or factor attribution |
 | `flows` | Twelve signed monthly bars | Fund flows, cash flows, net buying and selling |
+| `revenue-bridge` | A total, five signed drivers, the new total; drivers float from the running total | Revenue, cost or headcount bridges between two periods; any "how did we get from A to B" |
+| `profit-walk` | Revenue walked down to profit through costs, with a gross-profit subtotal | P&L walks, unit economics, any total built from additions and deductions |
 
 ## Use
 

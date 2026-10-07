@@ -564,6 +564,7 @@
               "donut",
               "magnitude",
               "checklist",
+              "stage",
               "canvas",
               "annotate"
             ]
@@ -2323,6 +2324,79 @@
             "if": {
               "properties": {
                 "block": {
+                  "const": "stage"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "props": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "description": "Scene headline"
+                    },
+                    "kicker": {
+                      "description": "Short eyebrow"
+                    },
+                    "source": {
+                      "description": "Visible attribution"
+                    },
+                    "land": {
+                      "description": "Spoken word or local seconds"
+                    },
+                    "support": {
+                      "description": "Supporting line"
+                    },
+                    "actors": {
+                      "description": "[{id, label, kind: service|database|user|users|queue|process|external|file|client|phone|timer|lock|note|state, x, y (card centre, frame pixels), w?, h?, icon?, status?: neutral|active|added|done|removed|error|waiting, detail?, at|say, z?}]"
+                    },
+                    "links": {
+                      "description": "[{id?, from, to, label?, route?: curve|straight|elbow, bend?, dashed?, color?, arrow?: end|both|none, at|say}] — connectors that follow their actors"
+                    },
+                    "events": {
+                      "description": "[{do: send|pulse|highlight|state|move|show|hide|callout|burst|connect|disconnect|camera, at|say, …}]: send {from, to | via, label, color, dur, burst}; state {actor, status, label}; move {actor, x, y, dur}; callout {actor, text, side, untilSay}; camera {x, y, zoom | follow}"
+                    },
+                    "code": {
+                      "description": "Editor whose lines keep their identity: {commit, file, base?, repo?, context?} from git, or {before, after}, or {lines, steps}; {x, y, w, size, title, say|at, focus, gutter}"
+                    },
+                    "ground": {
+                      "description": "A full-frame GPU material behind the stage: {material: noise|sheen|halftone|grain|glass|chrome|gold|thermal|scanlines, colors, opacity, scale, speed, z}"
+                    },
+                    "under": {
+                      "description": "Native elements (canvas dialect) drawn first"
+                    },
+                    "elements": {
+                      "description": "Native elements drawn after under, before actors — rect|circle|ellipse|line|path|poly|text|icon|image|video|group|particles|spotlight|shader|code|connector (camera: false pins one to the screen); see docs/scene-engine.md"
+                    },
+                    "over": {
+                      "description": "Native elements drawn last"
+                    },
+                    "camera": {
+                      "description": "The stage camera: {x, y, zoom, rotate, z, keys: [{at|say, x, y, zoom, rotate, z, dur, ease}], focus: {z, aperture, keys}}"
+                    },
+                    "shutter": {
+                      "description": "Motion-blur shutter, 0–1 of a frame (0.5 = 180°); 0 for none"
+                    },
+                    "samples": {
+                      "description": "Time samples per frame for motion blur (default 8, at most 32)"
+                    },
+                    "motion": {
+                      "description": "Motion preset for the stage: {preset, intensity}"
+                    },
+                    "z": {
+                      "description": "under (default: the stage is the picture) or over the block content"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "block": {
                   "const": "canvas"
                 }
               }
@@ -2407,6 +2481,9 @@
                     },
                     "bars": {
                       "description": "Signed editorial bar chart: {title, unit, values:[{label, value, highlight?}], domain:[min≤0, max≥0], ticks, decimals?, prefix?, suffix?, orientation?: vertical|horizontal, reference?: {value, label}, colors?: sign|single, asOf, source?, motion?: none|{at,duration}}. Bars grow from zero in order; negative values take the negative colour. See docs/bars.md."
+                    },
+                    "bridge": {
+                      "description": "Metric bridge (waterfall): {title, unit, start:{label, value}, steps:[1–10 {label, value} drivers or {label, total:true} subtotals, each with say?], end:{label, value, say?}, domain:[min≤0, max≥0], ticks, decimals?, prefix?, suffix?, good?: up|down, orientation?: auto|vertical|horizontal, asOf, source?, motion?: none|{at,duration}}. Totals stand on zero; drivers float from the running total and must reconcile to end exactly (add an explicit Other step rather than hide a gap); say cues a driver to its spoken word. See docs/bridge.md."
                     },
                     "multiples": {
                       "description": "Small multiples: {title, unit, x, y (one shared scale, as plot), series:[2–9 {id,label,values:[{x,y}]}], highlight?: id, asOf, source?, motion?}. One small line per series in a grid; ticks on the outer edges; the highlighted panel takes accent2 and the others recede. See docs/small-multiples.md."

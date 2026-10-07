@@ -77,7 +77,7 @@ for (const [f, s] of [
   ['keys (x, y, scale, rotate, opacity, scaleX, scaleY, blur, tiltX, tiltY), along, loops spin/pulse/float/sway/orbit/dash/blink/rock, echo, tilt, shine, glow, shadow, blur, blend, z with dolly and focus, fps stepping, gradients and palette tokens', 'native'],
   ['colour keys (fill/stroke), connector, attach, along {path: id}, video, shader, material presets, particles burst/stream/field up to 4,000, code, camera: false, stage camera with parallax and depth of field, temporal motion blur', 'native (new)'],
   ['enter assemble, exit scatter, rough, print, mosaic, morph, solid, meter, loop level, the canvas `materials` thermal/chrome/gold/neon as filter graphs', 'refused on stages (drawn by the canvas block in canvas/art); native SkSL materials of the same names exist with a different implementation'],
-  ['canvas worlds, `view`/`viewFrom` camera rects, `plates` depth sets, `diagram`, `chart`, `kpi`, `plot`, `bars`, `multiples`, `distribution`, `stat`, `teaching`, `sketch` expansions', 'native (canvas block)'],
+  ['canvas worlds, `view`/`viewFrom` camera rects, `plates` depth sets, `diagram`, `chart`, `kpi`, `plot`, `bars`, `bridge`, `multiples`, `distribution`, `stat`, `teaching`, `sketch` expansions', 'native (canvas block)'],
 ]) out.push(row([f, s]));
 out.push('');
 

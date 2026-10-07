@@ -1,5 +1,10 @@
 # Changelog
 
+## Metric bridges
+
+- **`canvas.props.bridge`** draws a waterfall: start total, up to ten signed drivers and `total: true` subtotals floating from the running total, and the end total, sharing the plot and bar frame, type and palette. It must reconcile within display rounding; a gap is refused with the amount to add as an explicit step. Totals stand on zero (`domain` must include it); `good: down` colours falling costs as good news. `orientation: auto` uses columns on wide frames when every name fits in two lines and rows otherwise (names beside the bars on wide frames, above them on tall ones), never shrinking long names to fit. `say` lands a driver or the end on its word; uncued columns are placed in reading order around cues, spoken cues out of order are refused, and `check` warns when the last total lands less than 1.5 s before the beat ends. Templates `revenue-bridge` and `profit-walk` in `examples/finance-charts` (landscape and vertical). See `docs/bridge.md`.
+- The generated `schema/storyboard.schema.json` and `skills/clearframe-library/references/blocks.md` were behind the catalog (no `stage` block); they are regenerated.
+
 ## The studio page: notes and an agent
 
 - **Rebuilt for people who are not editors.** `viewer --serve` is now a films page with one box (*What are we making?*: your words, wide or tall, any files) and, per film, the picture, a filmstrip of its scenes and two tabs: Notes and Agent. The editing workspace (scenes and library browser, monitor modes, inspector, timeline lanes, Story/Design/Review/Deliver layouts, ⌘K, the Sound tab, Deliver), the lens, file and font browsers, threads and tags, and the building-blocks page are removed. The agent does the editing through the same validated, undoable commands; `clearframe studio` keeps them on the command line.

@@ -1185,6 +1185,101 @@ Items appear unchecked, then each box fills and ticks on its cue.
 }
 ```
 
+## stage
+
+A native GPU stage drawn by the scene engine: actors that keep their identity, links that follow them, packets travelling, callouts riding a moving actor, commit-grounded code edits, GPU materials, particle systems, footage, a 2.5D camera with depth of field and real motion blur.
+
+| Prop | Meaning |
+|---|---|
+| title | Scene headline |
+| kicker | Short eyebrow |
+| source | Visible attribution |
+| land | Spoken word or local seconds |
+| support | Supporting line |
+| actors | [{id, label, kind: service / database / user / users / queue / process / external / file / client / phone / timer / lock / note / state, x, y (card centre, frame pixels), w?, h?, icon?, status?: neutral / active / added / done / removed / error / waiting, detail?, at / say, z?}] |
+| links | [{id?, from, to, label?, route?: curve / straight / elbow, bend?, dashed?, color?, arrow?: end / both / none, at / say}] — connectors that follow their actors |
+| events | [{do: send / pulse / highlight / state / move / show / hide / callout / burst / connect / disconnect / camera, at / say, …}]: send {from, to  /  via, label, color, dur, burst}; state {actor, status, label}; move {actor, x, y, dur}; callout {actor, text, side, untilSay}; camera {x, y, zoom  /  follow} |
+| code | Editor whose lines keep their identity: {commit, file, base?, repo?, context?} from git, or {before, after}, or {lines, steps}; {x, y, w, size, title, say / at, focus, gutter} |
+| ground | A full-frame GPU material behind the stage: {material: noise / sheen / halftone / grain / glass / chrome / gold / thermal / scanlines, colors, opacity, scale, speed, z} |
+| under | Native elements (canvas dialect) drawn first |
+| elements | Native elements drawn after under, before actors — rect / circle / ellipse / line / path / poly / text / icon / image / video / group / particles / spotlight / shader / code / connector (camera: false pins one to the screen); see docs/scene-engine.md |
+| over | Native elements drawn last |
+| camera | The stage camera: {x, y, zoom, rotate, z, keys: [{at / say, x, y, zoom, rotate, z, dur, ease}], focus: {z, aperture, keys}} |
+| shutter | Motion-blur shutter, 0–1 of a frame (0.5 = 180°); 0 for none |
+| samples | Time samples per frame for motion blur (default 8, at most 32) |
+| motion | Motion preset for the stage: {preset, intensity} |
+| z | under (default: the stage is the picture) or over the block content |
+
+```json
+{
+  "id": "stage",
+  "block": "stage",
+  "vo": "Replace this narration.",
+  "props": {
+    "title": "How a stop request travels",
+    "actors": [
+      {
+        "id": "cli",
+        "label": "CLI",
+        "kind": "client",
+        "x": 420,
+        "y": 560
+      },
+      {
+        "id": "daemon",
+        "label": "Daemon",
+        "kind": "service",
+        "x": 960,
+        "y": 560
+      },
+      {
+        "id": "child",
+        "label": "Child",
+        "kind": "process",
+        "x": 1500,
+        "y": 560
+      }
+    ],
+    "links": [
+      {
+        "from": "cli",
+        "to": "daemon",
+        "label": "stop"
+      },
+      {
+        "from": "daemon",
+        "to": "child",
+        "label": "SIGTERM"
+      }
+    ],
+    "events": [
+      {
+        "do": "send",
+        "from": "cli",
+        "to": "daemon",
+        "at": 1.2
+      },
+      {
+        "do": "send",
+        "from": "daemon",
+        "to": "child",
+        "at": 2.4,
+        "burst": true
+      },
+      {
+        "do": "state",
+        "actor": "child",
+        "status": "done",
+        "label": "Exited",
+        "at": 3.6
+      }
+    ],
+    "shutter": 0.5,
+    "source": "Illustrative sample data · replace before publishing"
+  }
+}
+```
+
 ## canvas
 
 Draw anything: shapes, paths, text, icons and images that draw on, pop, travel along paths, loop and leave on spoken cues.
@@ -1216,6 +1311,7 @@ Draw anything: shapes, paths, text, icons and images that draw on, pop, travel a
 | sourceSize | Canvas source font size, 14–72 px; reserves a three-line footer when set. |
 | plot | Sourced multiseries line plot: {title, x:{type:linear / date,label,domain,ticks,...}, y:{type:linear / log,label,domain,ticks,...}, series:[{id,label,values:[{x,y}]}], asOf, source?, motion?:none / {at,duration}, annotation?}. Dates preserve elapsed spacing, null y leaves a gap, all series share explicit scales and a linear reveal clock. See docs/quantitative-plots.md. |
 | bars | Signed editorial bar chart: {title, unit, values:[{label, value, highlight?}], domain:[min≤0, max≥0], ticks, decimals?, prefix?, suffix?, orientation?: vertical / horizontal, reference?: {value, label}, colors?: sign / single, asOf, source?, motion?: none / {at,duration}}. Bars grow from zero in order; negative values take the negative colour. See docs/bars.md. |
+| bridge | Metric bridge (waterfall): {title, unit, start:{label, value}, steps:[1–10 {label, value} drivers or {label, total:true} subtotals, each with say?], end:{label, value, say?}, domain:[min≤0, max≥0], ticks, decimals?, prefix?, suffix?, good?: up / down, orientation?: auto / vertical / horizontal, asOf, source?, motion?: none / {at,duration}}. Totals stand on zero; drivers float from the running total and must reconcile to end exactly (add an explicit Other step rather than hide a gap); say cues a driver to its spoken word. See docs/bridge.md. |
 | multiples | Small multiples: {title, unit, x, y (one shared scale, as plot), series:[2–9 {id,label,values:[{x,y}]}], highlight?: id, asOf, source?, motion?}. One small line per series in a grid; ticks on the outer edges; the highlighted panel takes accent2 and the others recede. See docs/small-multiples.md. |
 | distribution | Editorial histogram: {title, unit, observations:[number / null], edges:[2–12 equal bins], threshold:{value, relation: lt / lte / gt / gte, label}, marker?:{value, label}, prefix?, suffix?, decimals?, tone?: negative / highlight, asOf, source?, motion?}. Counts sit on the bars; the threshold line states how many outcomes qualify. See docs/distribution-charts.md. |
 | stat | A headline figure: {kicker?, value, decimals?, prefix?, suffix?, label, change?: {value, decimals?, suffix?, context, good?: up / down / neutral}, count?, asOf, source?, motion?}. The value counts up natively; the change line is green or red by whether a rise is good news for this measure. See docs/stat.md. |
