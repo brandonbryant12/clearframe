@@ -144,7 +144,7 @@ export function entries() {
 const SYNONYMS = {
   money: 'revenue cost price finance profit payment coin', growth: 'increase rise trend grow up', process: 'flow pipeline steps sequence queue',
   compare: 'versus comparison before after contrast', time: 'timeline history clock deadline latency', people: 'person user customer team',
-  data: 'database chart numbers metric records', idea: 'insight bulb inspiration concept', security: 'lock permission privacy', ship: 'delivery truck logistics box',
+  data: 'database chart numbers metric records', idea: 'insight bulb inspiration concept', security: 'lock permission privacy vault safe', ship: 'delivery truck logistics box',
   bug: 'fix error incident crash', launch: 'reveal product milestone flag', story: 'narrative journey character', calm: 'quiet gentle soft', energetic: 'punchy fast bold kinetic',
   retro: 'pixel print vintage lcd', playful: 'pixel drawn hand fun', premium: 'cinematic gold glass luxury', code: 'pull request commit diff editor',
   explain: 'explainer concept teaching how why', social: 'vertical short clip hook', email: 'envelope message notification', server: 'backend infrastructure service cloud',
@@ -154,7 +154,7 @@ const SYNONYMS = {
   engineer: 'technical system architecture code', developer: 'technical code system pull', architecture: 'system diagram service',
   sales: 'business customer product', customer: 'person user journey', team: 'people person',
   handmade: 'paper cut drawn tactile craft', tactile: 'paper cut handmade', craft: 'paper cut handmade print', collage: 'paper cut layered',
-  private: 'lock security privacy', calendar: 'clock time schedule', app: 'phone product device screen',
+  private: 'lock security privacy vault safe', calendar: 'clock time schedule', app: 'phone product device screen',
 };
 const words = t => String(t ?? '').toLowerCase().match(/[a-z0-9]+/g) ?? [];
 // Words that say nothing about which picture fits.

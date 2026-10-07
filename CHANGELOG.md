@@ -1,5 +1,12 @@
 # Changelog
 
+## Keeping it safe: the vault sketch
+
+- **The `vault` sketch shows keeping things safe.** Cards of data float beside an open vault whose door stands edge-on. On a spoken word they fly into the dark inside. On the next, the door swings shut over them, the wheel turns, bolts slide home and a ring of light settles around the door with its label.
+  - It suits privacy, encryption, backups and compliance.
+  - The vault's inside is near-black on any palette.
+- **`examples/your-data`** shows it in both shapes, 10 s. `check` reports 0 errors and 0 warnings.
+
 ## Faster by taking fewer steps: the shortcut sketch
 
 - **The `shortcut` sketch shows speed as a mechanism.** An old winding route runs through four waits (clocks), and a straight new route draws across. Two tokens leave together at the same speed, measured along each route, and the one on the new route arrives first only because its way is shorter. The picture claims fewer steps, never a measured speed-up.
