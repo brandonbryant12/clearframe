@@ -1,5 +1,16 @@
 # Changelog
 
+## Kinetic stack type stays inside its area
+
+- **A stacked kinetic phrase measures each line's real ink before it settles its size:** the words, the spaces between them and an italic's lean at the end (about 0.15 em on the display serif).
+- **Before,** a word that leans on the next one ("about") was carried down onto the following line without re-checking its width. The fit then accepted lines up to a full base size (118 px) wider than the area.
+  - In podcast-clip, "about starting." ran 871 px in an 830 px area.
+  - The slow push then carried the italic past the title-safe edge.
+- **Measured.**
+  - podcast-clip vertical: 1 warning → 0. The phrase sets slightly smaller, with the same lines. `qa`: 0 pops.
+  - 18 other decoded stack-kinetic stills, from cinematic-explainer, research-digest, sizzle and podcast-clip in both shapes, are byte-identical.
+  - Rust 72/72.
+
 ## style-relay drafts again, and has a portrait layout
 
 - **style-relay failed `check`, and so could not draft, in both shapes.** Its closing overview showed all six plate captions, carried from their own shots, at 9 to 12 px (12 "too small to read" errors).

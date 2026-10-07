@@ -247,7 +247,11 @@ impl<'a, 'c> Draw<'a, 'c> {
                 // One normal word space everywhere (emphasis is bigger, the gap is not), plus a
                 // little room for the italic's overhang.
                 let space = base * scale * 0.24 + if big(w) && serif { size * 0.04 } else { 0.0 };
-                if width + ww > a.w && !lines.last().unwrap().is_empty() {
+                // An italic's ink leans past its advance (measured at about 0.15 em on the
+                // display serif), so a word that ends a line must fit with that overhang too;
+                // otherwise the slow push carries the ink past the title-safe edge.
+                let lean = if big(w) && serif { size * 0.16 } else { 0.0 };
+                if width + ww + lean > a.w && !lines.last().unwrap().is_empty() {
                     lines.push(vec![]);
                     width = 0.0;
                 }
@@ -263,9 +267,20 @@ impl<'a, 'c> Draw<'a, 'c> {
                 }
             }
             let height: f32 = lines.iter().map(|l| l.iter().map(|x| x.2).fold(0.0, f32::max) * 1.0).sum();
-            let widest =
-                lines.iter().map(|l| l.iter().map(|x| x.1 + base * scale * 0.24).sum::<f32>()).fold(0.0, f32::max);
-            if scale <= 0.3 || (height <= a.h && widest <= a.w + base) {
+            // A line's ink: its words, the spaces between them and an italic's lean at its end.
+            // A word carried down above can make the next line too wide: then the type shrinks.
+            let ink = |l: &Vec<(usize, f32, f32)>| {
+                let italic = |&(i, _, _): &(usize, f32, f32)| big(&chunk[i]) && serif;
+                l.iter().map(|x| x.1).sum::<f32>()
+                    + l.iter()
+                        .rev()
+                        .skip(1)
+                        .map(|x| base * scale * 0.24 + if italic(x) { x.2 * 0.04 } else { 0.0 })
+                        .sum::<f32>()
+                    + l.last().map_or(0.0, |x| if italic(x) { x.2 * 0.16 } else { 0.0 })
+            };
+            let widest = lines.iter().map(ink).fold(0.0, f32::max);
+            if scale <= 0.3 || (height <= a.h && widest <= a.w) {
                 break;
             }
             scale *= 0.94;
