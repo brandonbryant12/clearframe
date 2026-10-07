@@ -51,6 +51,17 @@ Choose by audience. A look picked only for variety reads as a gimmick.
 | We make account setup easy (for new customers) | `sketch:maze`, `example:the-way-through`, `sketch:untangle`, `playbook:tutorial` | One lit path through a maze. It admits the process is complicated and shows that someone has found the way. |
 | How a support ticket travels through the team | `example:cast-journey`, `cast-shape:ticket`, `cast-move:travel`, `playbook:process-cast`, `mechanism:world` | One ticket travelling through a drawn world of stations. Following one thing is easier than reading a flowchart. |
 
+## From discovery to adaptation: a human story
+
+Brief: *"A launch film for a small budgeting app that one person built late at night. By morning, the city is using it."* It is built in `examples/by-morning`.
+
+- **`find` on the brief** surfaces `sketch:desk` (one person, one screen), `sketch:device` (here is the app) and `palette:cinema`.
+- **A narrower `find "the city wakes up in the morning" --kind sketch`** surfaces `sketch:rooftops`.
+- **`--id`** shows `device` has slots (`PRODUCT`, `LINE`), while `desk` and `rooftops` have none: their timing is fixed.
+- **So `device` is filled, and `desk` and `rooftops` are copied** (catalog topic `sketch`, or `sketch(name, shape)`) and changed only where the story needs it. The laptop light is cued to "building", and the windows start on "morning".
+
+Why these suit this brief: the light is the through-line, from one screen to the product to a city of windows. They are three existing set pieces, not new ones.
+
 ## Signs the concepts are too close
 
 - They differ only in palette, type or transition.

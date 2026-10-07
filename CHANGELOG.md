@@ -1,5 +1,16 @@
 # Changelog
 
+## A person, a product and a city: by morning
+
+- **`examples/by-morning` is a 15 s launch film built from three existing set pieces.**
+  - `desk` (the person at night) is copied, with its laptop light cued to "building".
+  - `device` (the product) uses its slots.
+  - `rooftops` (the city at sunrise) is copied, with its scattered windows gathered into one group cued to "morning".
+  - The light is the through-line, from one screen to a city of windows.
+  - The README shows the real `find`, `--id` and `sketch` path, and why each piece suits the brief.
+  - Both shapes: `check` reports 0 errors and 0 warnings. `desk` is a wide composition and sits small on a tall frame (noted).
+- **The inspiration skill's concepts reference** gains this discovery-to-adaptation walk-through.
+
 ## One brief, composed and adapted: checkout at night
 
 - **`examples/checkout-at-night` builds a 30 s film for one brief from library pieces, each adapted.** It answers "why checkout slowed every night, what we changed, why it is faster".
