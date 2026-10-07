@@ -1,5 +1,9 @@
 # Changelog
 
+## A new object can travel in
+
+- **`travel` brings an object that is not yet on screen (or has left) in from just past the frame edge** its `enter` names (left by default), level with where it is going. In live run 5 the free agent declared a "regex" pill whose first move was to travel onto the edit operation; the move was silently skipped, so the regex never appeared and the later swap lost its cause. Re-rendered from the agent's unchanged storyboard, the regex now enters along a drawn route and the swap has its cause.
+
 ## A code change is one easy scene
 
 - **A stage holding only `code` makes the code the picture.** By default the editor takes the stage area: 84% of its width, larger type, and an inline before/after diff centred down it. It used to sit in the corner like an editor beside a diagram, leaving most of the frame empty. Author-set `x`, `y`, `w` and `size` still win.

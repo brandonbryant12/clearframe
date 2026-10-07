@@ -257,6 +257,17 @@ test('several journeys in one beat share the keyframe budget, or are refused cle
   assert.ok(b.keys.length <= 24, `journeys then a swap's cause: ${b.keys.length} keys`);
 });
 
+test('a new object can travel in from off the frame (live run 5: "regex" travels onto the edit)', () => {
+  const carry = {}, ctx = () => ({ state: carry.state, objects: carry.objects, threads: carry.threads, look: carry.look, camera: carry.camera, unit: carry.unit, carry });
+  expandCastProps({ cast: { look: 'drawn', objects: [{ id: 'edit', shape: 'doc' }], formations: [{ form: 'scatter', at: 0 }] } }, { ...wide, beatId: 'a' }, ctx());
+  const els = expandCastProps({ cast: { objects: [{ id: 'regex', word: 'regex', color: 'negative', enter: 'left' }], formations: [{ form: 'travel', ids: ['regex'], to: 'edit', at: 0.2, dur: 1 }] } }, { ...wide, beatId: 'b', duration: 3 }, ctx()).elements;
+  const r = els.find(e => e.id === 'b-cast-regex');
+  assert.ok(r && r.x < 0, 'it starts just past the left edge');
+  const end = r.x + r.keys.at(-1).x, edit = carry.state.get('edit');
+  assert.ok(end > 0 && Math.abs(end - edit.x) < 600, `and arrives beside the edit (${end.toFixed(0)} vs ${edit.x.toFixed(0)})`);
+  assert.ok(els.some(e => e.type === 'path' && e.id.includes('trail')), 'drawing its route');
+});
+
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);

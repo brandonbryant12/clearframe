@@ -324,6 +324,23 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
     // until the cast next moves.
     if (f.form === 'travel') {
       const st = f.stagger ?? 0.3, ease = x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+      // An object not yet on screen travels in from just past the frame edge its `enter` names
+      // (left by default), level with where it is going, rather than the move being lost.
+      for (const id of ids) {
+        if (pose.has(id) && !pose.get(id).gone) continue;
+        const o = spec.objects.get(id), dest = f.center ? { x: f.center[0], y: f.center[1] } : pose.get(f.to) ?? { x: frame.width / 2, y: frame.height / 2 };
+        const [hw, hh] = objectExtent(o, size), side = ['right', 'drop', 'rise'].includes(o.enter) ? o.enter : 'left';
+        const start = { left: { x: -hw * 1.3, y: dest.y }, right: { x: frame.width + hw * 1.3, y: dest.y }, drop: { x: dest.x, y: -hh * 1.3 }, rise: { x: dest.x, y: frame.height + hh * 1.3 } }[side];
+        if (groups.has(id)) {
+          // It left earlier in this beat: keep that exit, then step back to the entry unseen.
+          const { el, base } = groups.get(id);
+          el.keys.push({ at: t, x: start.x - base.x, y: start.y - base.y, scale: 1, rotate: 0, opacity: 1, dur: 0 });
+        } else {
+          const g = objectElement(o, `cast-${id}`, size, { ...start, scale: 1, rotate: 0, opacity: 1 }, { at: 0, enter: 'none' }, spec.look);
+          groups.set(id, { el: g, base: start }); elements.push(g);
+        }
+        pose.set(id, { ...start, scale: 1, rotate: 0, opacity: 1, z: ++top });
+      }
       ids.filter(id => pose.has(id) && alive(id)).forEach((id, i) => {
         const p = pose.get(id), { el, base } = group(id);
         let end = f.center ? { x: f.center[0], y: f.center[1] } : pose.get(f.to);
