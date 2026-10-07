@@ -54,7 +54,7 @@ export default {
   order: 71,
   summary:
     'A cut-paper workbench: scraps of coloured paper scattered on a cutting mat fly into place one after another and become one product card, which lifts off the mat as its words type in.',
-  use: 'Building something from parts: scattered ideas or feedback becoming one product, a launch, "how it came together", a design process. Tactile and handmade; best on a light palette (paper, sketchbook, sorbet), where the shadows read. Replace PRODUCT (the card title) and ACTION (the button) with sketchText; land BUILD and REVEAL on words with sketchSay.',
+  use: 'Building something from parts: scattered ideas or feedback becoming one product, a launch, "how it came together", a design process. Tactile and handmade; the paper shadows read best on a light palette (paper, sketchbook, sorbet), and on a dark one the layers separate by colour. Replace PRODUCT (the card title) and ACTION (the button) with sketchText; land BUILD and REVEAL on words with sketchSay.',
   build(w, h) {
     const L = layout(w, h),
       [mx, my, mw, mh] = L.mat,

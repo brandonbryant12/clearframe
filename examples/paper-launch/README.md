@@ -27,7 +27,7 @@ The beat is one sketch with words:
   "sketchSay": { "BUILD": "together", "REVEAL": "Meet" } } }
 ```
 
-It is best on a light palette (`paper`, `sketchbook`, `sorbet`), where the shadows read. It lays out a wide card on a wide frame, and a tall card with the picture above the copy on a vertical one.
+Its paper shadows read best on a light palette (`paper`, `sketchbook`, `sorbet`). On a dark one, such as `ink`, the layers separate by colour instead. It lays out a wide card on a wide frame, and a tall card with the picture above the copy on a vertical one.
 
 ## Make it
 
