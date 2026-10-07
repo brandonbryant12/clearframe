@@ -19,7 +19,7 @@ A film made of one layout per line reads as a slideshow, however well each layou
 
 ## Contract
 
-`props.cast` is `{objects?, formations, seed?}`.
+`props.cast` is `{look?, objects?, formations, seed?}`.
 
 - **Objects** are declared in the first beat that uses the cast; later beats may add more. Each is `{id, icon | word, color, label?, size?, float?, enter?}`:
   - `icon` is any icon name (`clearframe catalog canvas`), drawn on a rounded tile. `word` (up to 14 characters) is drawn on a pill.
@@ -27,19 +27,25 @@ A film made of one layout per line reads as a slideshow, however well each layou
   - `label` is a small caption under the tile.
   - `float` (default on) gives a slow idle drift.
   - `enter` is how a new object arrives on its first formation: `pop`, `drop`, `rise`, `left`, `right` or `fade`. Use `none` to have it stand on frame one, as part of the establishing picture.
+- **Look** is set once, in the cast's first beat, and the cast keeps it:
+  - `tiles` (default): flat rounded tiles with a soft shadow, for clean product and business films.
+  - `drawn`: pen on paper. A hand-drawn ink outline, the colour hatched in, icons in ink, and type and threads by hand. It suits explainers, onboarding and lessons.
+  - `print`: a two-colour press, with the colour laid in a dot screen slightly off register and worn, and poster type. It suits editorial and campaign films.
+  Choose by the audience and the rest of the film's treatment, not for variety's sake.
 - **Formations** (1–12 per beat) each move some objects, on a spoken word (`say`) or at seconds (`at`). An uncued formation follows the previous one by 1.6 s. `ids` limits a formation to those objects; without it, every object still on screen takes part.
 
 | `form` | What happens |
 |---|---|
 | `scatter` | A loose, even spread over the frame, seeded by the ids (the same cast always scatters the same way). |
 | `line` | A row on wide frames, a column on tall ones (`row` and `column` force one). `thread: true` draws a line through the pieces once they settle: they are now one sequence. |
-| `ring`, `cluster` | A circle (`spread`) or a touching hexagonal pile. `beside: id` sets the formation next to an object where it stands. |
+| `ring`, `cluster` | A ring with the frame's proportions (`spread`), or a touching hexagonal pile. `on: id` centres it on an object where it stands (copies gathered around the original); `beside: id` sets it next to an object, on the side facing the middle of the frame. |
 | `hero` | `hero: id` steps forward at 2.3× (`scale`) while the rest recede into a quiet ring. `word` types a line under it. |
 | `swap` | `out` becomes `in` in place: the old shrinks away where it stood, the new grows into its pose. `by: [ids]` names what causes the change: those objects travel onto it and work at it, it gives under each stroke, and the change lands on the cue. |
 | `wave` | A pulse runs through `ids` in order where they stand (each lifts and settles): a sequence playing, a signal travelling. Nothing moves for good, and threads stay. |
-| `exit` | Objects leave along the line from the centre through where they stand, and stay gone unless a later formation names them. |
+| `exit` | Objects leave along the line from the centre through where they stand, and stay gone unless a later formation names them (they come back from where they left). |
+| `mark` | A pen mark drawn on the cast where it stands, cued like any move. `mark: circle` loops what matters, `underline` puts a line under it, and `cross` strikes through what is set aside. `arrow` with `to: id` or `to: [ids]` draws a bowed arrow from each of `ids` to each target. `color` overrides the pen (accent2; negative for a cross). A mark on one object belongs to it: it moves and scales with the object and leaves with it. Otherwise marks fade when the cast next moves, or before the cut. |
 
-`dur`, `stagger` and `ease` tune a formation's motion; `center: [x, y]` and `spread` override its placement. Positions come from the frame, so one storyboard serves landscape and vertical; check both.
+`dur`, `stagger` and `ease` tune a formation's motion; `center: [x, y]` and `spread` override its placement. Every placed object stays whole inside the title-safe area (only `exit` leaves it), so a formation beside an object near an edge, or a wide ring, is pulled back in. Positions come from the frame, so one storyboard serves landscape and vertical; check both.
 
 ## Continuity
 
@@ -65,4 +71,8 @@ Frames remain a pure function of time: the formations compile once into keys on 
 
 Not for evidence: numbers, charts and quotes stay in their own native forms with sources. A cast can carry the objects that stand for them (a chart tile becomes the chart beat that follows).
 
-Start from the playbook: `new DIR --playbook process-cast [--vertical]` scaffolds five cast beats (arrive, sort, focus, change, result) to rewrite with your own objects and moves. Reference: `examples/cast-study` (one cast, five moves, 17 s, landscape and vertical). Tests: `test/cast.test.mjs`.
+Start from the playbook: `new DIR --playbook process-cast [--vertical]` scaffolds five cast beats (arrive, sort, focus, change, result) to rewrite with your own objects and moves. References:
+- `examples/cast-study`: tiles. One cast, five moves, 17 s.
+- `examples/cast-drawn`: the drawn look with marks. Bug triage in 24 s: copies ringed and crossed out, the first underlined, replies drawn back.
+
+Tests: `test/cast.test.mjs`.

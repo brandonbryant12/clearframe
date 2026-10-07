@@ -13,9 +13,13 @@ Short reference for building a first cut without reading every guide. Look up ex
    write each scene as a change to it ("the pieces line up", "a note lands and one changes"),
    rather than a new layout per line.
 3. One `clearframe_edit` batch that replaces the starter: `delete` the sample scenes you will not
-   reuse, `insert` new scenes (`block` or `sketch`, `after` an id), then `set` their `props`, `vo`
-   (narration), `label` and, for numbers, the film's `sources` (`target: film`, `path: sources`).
-   A failed batch writes nothing and tells you why; fix and resend.
+   reuse, `insert` new scenes (`block` or `sketch`, `after` an id, and your own `id` so the same
+   batch can fill them), then `set` their `props`, `vo` (narration), `label` and, for numbers, the
+   film's `sources` (`target: film`, `path: sources`). A failed batch writes nothing and tells you
+   why; fix and resend. For example:
+   `[{"command":"insert","block":"canvas","after":"title","id":"pile"},
+     {"command":"set","target":"beat","beat":"pile","path":"props","value":{"cast":{…}}},
+     {"command":"set","target":"beat","beat":"pile","path":"vo","value":"Reports arrive from everywhere."}]`
 4. `clearframe_render` kind `draft` (the rough cut), then `clearframe_job` with `wait: 90` until it
    finishes. Fix any engine errors it lists and render again.
 5. Report in a few lines: what the cut shows, which scenes are placeholders, what you need.
@@ -30,10 +34,13 @@ Pick from what the material actually contains:
   features): a **cast**, `canvas` with `props.cast`. A few designed objects (icon tiles or word
   pills) persist through consecutive scenes and re-form on spoken words: `scatter`, `line`, `ring`,
   `cluster`, `hero` (one steps forward, the rest recede), `swap` (one becomes another in place;
-  `by` names what causes it), `wave` (a pulse runs through a sequence), `exit`. Declare the objects
+  `by` names what causes it), `wave` (a pulse runs through a sequence), `mark` (a pen circle,
+  underline, cross or arrow), `exit`. `look: "drawn"` draws the cast by hand for explainers and
+  lessons, and `"print"` gives editorial films a press look. Declare the objects
   in the first cast scene; later scenes list only formations. Insert a `canvas` scene and `set` its
   whole `props` (path `props`) so none of the sample drawing remains. Consecutive cast scenes cut
-  invisibly, and one storyboard serves landscape and vertical.
+  invisibly, and one storyboard serves landscape and vertical. Icon names are in `clearframe_catalog`
+  topic `canvas`; the full contract (looks, marks, every move) is `clearframe_guide` topic `cast`.
   ```json
   {"cast": {"objects": [{"id": "report", "icon": "file", "color": "accent", "enter": "none"},
                          {"id": "chart", "icon": "chart-bar", "color": "accent2"}],

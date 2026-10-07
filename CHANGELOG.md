@@ -1,5 +1,24 @@
 # Changelog
 
+## Drawn casts, pen marks, and a smoother agent path
+
+- **Cast looks.** `cast.look` is set once and the cast keeps it:
+  - `tiles` (default).
+  - `drawn`: pen on paper. A hand-drawn ink outline, the colour hatched in, icons in ink, and type and threads by hand.
+  - `print`: a two-colour press, with a dot screen slightly off register and worn, and poster type.
+
+  All three are built from native canvas `rough` and `print`; no new renderer.
+- **`mark` moves** draw on the cast where it stands, cued to a word.
+  - `circle`, `underline` and `cross` belong to their object: they move, scale and leave with it.
+  - `arrow` (`to` one object or a list) draws bowed arrows between objects.
+  - Marks fade when the cast next moves, or before the cut.
+- **Formations stay in frame and say where they are.** `on: id` centres a formation on an object (copies gathered around the original). `beside` now sits on the side facing the middle of the frame. Every placed object is kept whole inside the title-safe area, and rings take the frame's proportions. A formation beside an object near the edge of a vertical frame used to run off it.
+- **Reference short `examples/cast-drawn`** ("Triage, drawn", 24 s): copies ringed and crossed out, the line reordered and the first underlined, the engineer's fix, and replies drawn back to everyone who reported the bug.
+- **The studio agent can build a picture in one edit.**
+  - `insert` takes an `id`, so the same batch can fill the new scene. The first live run spent about ten batches discovering ids and fell back to text slates.
+  - The home page's first message asks for pictures that fit the material in the first cut, with placeholders only for bespoke drawing or imagery.
+  - `clearframe_catalog` topic `canvas` lists icon names, and `clearframe_guide` has a `cast` topic. In the second live run the agent chose a cast but could not find either.
+
 ## Vertical moves that keep type safe, and a cast playbook
 
 - **Slow camera moves no longer push type out of a vertical frame.** On tall frames, block content now starts at 11.5% of the width: the 10% title-safe margin plus room for the slow camera. The automatic push (and authored `in`/`out` pushes and `left`/`right` pans) is capped so the content margin never passes 10%. Before, any push carried edge type outside the safe area: `vertical-short` gave 10 title-safe warnings and now has none.

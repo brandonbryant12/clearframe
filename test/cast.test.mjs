@@ -74,6 +74,23 @@ test('a thread never appears before the pieces it joins; too late in the beat, i
   assert.equal(late.carry.threads.length, 0, 'and none appears after the cut either');
 });
 
+test('objects stay inside the title-safe area, marks ride with their object, and the look carries', () => {
+  const tall = { width: 1080, height: 1920 };
+  const edge = { look: 'drawn', objects: [{ id: 'a', icon: 'file' }, { id: 'b', icon: 'mail' }, { id: 'c', icon: 'star' }],
+    formations: [{ form: 'scatter', at: 0, center: [1000, 300] }, { form: 'cluster', ids: ['b', 'c'], beside: 'a', at: 1 }, { form: 'mark', mark: 'cross', ids: ['b'], at: 2 }, { form: 'exit', ids: ['b'], at: 3 }] };
+  const carry = {}, els = expandCastProps({ cast: edge }, { ...tall, beatId: 'x', duration: 5 }, { carry }).elements;
+  for (const id of ['a', 'b', 'c']) {
+    const g = els.find(e => e.id === `x-cast-${id}`), keys = g.keys.filter(k => k.x != null && k.at < 3);
+    const at = keys.length ? { x: g.x + keys.at(-1).x, y: g.y + keys.at(-1).y } : g;
+    assert.ok(at.x >= 108 && at.x <= 972 && at.y >= 115 && at.y <= 1805, `${id} stays in the safe area (${at.x.toFixed(0)}, ${at.y.toFixed(0)})`);
+  }
+  const b = els.find(e => e.id === 'x-cast-b'), cross = b.children.find(c => c.type === 'path');
+  assert.ok(cross && cross.rough && cross.exitAt == null, 'the cross is drawn by hand inside the object, and leaves with it');
+  assert.ok(b.children.find(c => c.id.endsWith('-tile')).rough?.fill === 'hachure', 'the drawn look hatches the tile');
+  assert.equal(carry.look, 'drawn');
+  assert.throws(() => expandCastProps({ cast: { look: 'print', formations: [{ form: 'wave', at: 0 }] } }, { ...tall, beatId: 'y' }, { objects: carry.objects, state: carry.state, look: carry.look }), /look is set once/);
+});
+
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);

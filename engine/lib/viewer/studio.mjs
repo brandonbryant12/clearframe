@@ -16,6 +16,7 @@ import { ENTERS, EXITS, COLOR_TOKENS, ELEMENT_TYPES } from '../../../film/canvas
 import { items } from '../../../film/library.mjs';
 import { applyTreatment } from '../../../film/treatments.mjs';
 import { sketch, sketchPreset } from '../../../film/sketches.mjs';
+import { ICONS } from '../../../film/icons.mjs';
 import { compilePlan } from '../../../scene/compile.mjs';
 import { LENS_KEYS, LENS_GRADES } from '../../../film/constants.mjs';
 import { textBox, FONT_FILES } from './clearframe.mjs';
@@ -242,17 +243,20 @@ function applyOp(dir, sb, op) {
   if (command === 'insert') {
     const i = op.after == null ? sb.beats.length : sb.beats.findIndex(x => x.id === op.after) + 1;
     if (op.after != null && i === 0) throw fail('That scene no longer exists.');
+    // A chosen id lets later operations in the same batch fill the new scene.
+    if (op.id != null && (typeof op.id !== 'string' || !/^[a-z0-9][a-z0-9-]{0,39}$/.test(op.id))) throw fail('A scene id is lowercase letters, digits and dashes (up to 40).');
+    if (op.id != null && sb.beats.some(x => x.id === op.id)) throw fail(`There is already a scene “${op.id}”.`);
     let beat;
     if (op.sketch) {
       const f = sb.format ?? {}, preset = PRESETS[f.preset] ?? PRESETS.landscape;
       const props = sketch(op.sketch, sketchPreset(f.width ?? preset.width, f.height ?? preset.height));
       if (props.layer) throw fail(`${op.sketch} is scenery: add it to a scene as background art instead.`);
-      beat = { id: uniqueId(sb, op.sketch), block: 'canvas', label: short(op.sketch), duration: 6, props };
+      beat = { id: op.id ?? uniqueId(sb, op.sketch), block: 'canvas', label: short(op.sketch), duration: 6, props };
     } else {
       const meta = blockByName(op.block);
       if (!meta) throw fail(`No native block “${op.block}”.`);
       // A new scene is silent and six seconds long (kinetic type needs words to follow), until you write its narration.
-      beat = { id: uniqueId(sb, op.block), block: op.block, label: short(meta.name[0].toUpperCase() + meta.name.slice(1)),
+      beat = { id: op.id ?? uniqueId(sb, op.block), block: op.block, label: short(meta.name[0].toUpperCase() + meta.name.slice(1)),
         ...(op.block === 'kinetic' ? { vo: 'Write the line these words follow.' } : { duration: 6 }), props: structuredClone(meta.example) };
       // Catalog examples carry the sample-source line; numbers need a matching sources entry to render.
       if (meta.example.source && !(sb.sources ?? []).some(s => s.title === meta.example.source)) sb.sources = [...(sb.sources ?? []), { id: uniqueSource(sb), title: meta.example.source }];
@@ -432,7 +436,7 @@ export function studioSchema() {
     types: items('types').map(t => ({ id: t.id, title: t.title, when: t.when })),
     treatments: items('treatments').map(t => ({ id: t.id, title: t.title, when: t.when })),
     sketches: items('sketches').map(s => { let art = false; try { art = !!sketch(s.id).layer; } catch {} return { id: s.id, summary: s.summary, use: s.use, art }; }),
-    canvas: { types: Object.keys(ELEMENT_TYPES), geometry: Object.fromEntries(Object.entries(ELEMENT_TYPES).map(([k, v]) => [k, v.geometry])), enters: ENTERS, exits: EXITS, colors: COLOR_TOKENS, fonts: Object.keys(FONT_FILES) },
+    canvas: { types: Object.keys(ELEMENT_TYPES), geometry: Object.fromEntries(Object.entries(ELEMENT_TYPES).map(([k, v]) => [k, v.geometry])), enters: ENTERS, exits: EXITS, colors: COLOR_TOKENS, fonts: Object.keys(FONT_FILES), icons: ICONS },
     transitions: TRANSITIONS, backdrops: BACKDROPS, motions: MOTIONS, lens: { keys: LENS_KEYS, grades: LENS_GRADES }, defaults: DEFAULTS, presets: PRESETS,
   };
   return described;

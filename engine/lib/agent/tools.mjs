@@ -18,7 +18,7 @@ const skill = n => `skills/${n}/SKILL.md`;
 export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearframe-library'), cinema: skill('clearframe-cinema'), canvas: skill('clearframe-canvas'), dataviz: skill('clearframe-dataviz'),
   motion: skill('clearframe-motion'), script: skill('clearframe-script'), integrity: skill('clearframe-integrity'), direction: skill('clearframe-direction'), engine: skill('clearframe-engine'),
   review: skill('clearframe-review'), scene: skill('clearframe-scene'), style: 'docs/style.md', 'cinema-notes': 'docs/cinema.md', 'canvas-notes': 'docs/canvas.md', ideas: 'docs/ideas.md',
-  speech: 'docs/speech.md', authoring: 'engine/agent-plugin/AUTHORING.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };
+  speech: 'docs/speech.md', authoring: 'engine/agent-plugin/AUTHORING.md', cast: 'docs/cast.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };
 const TEXT_EXT = new Set(['.md', '.markdown', '.txt', '.csv', '.json', '.srt', '.vtt', '.docx', '.html', '.htm', '.rtf', '.pdf']);
 const SKIP = new Set(['review', 'build', 'node_modules']);
 /**

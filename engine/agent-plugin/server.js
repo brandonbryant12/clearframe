@@ -12,14 +12,14 @@ const OP = {
   description: 'One studio change. command: set (target film|beat, beat, path, value; null removes), insert (block or sketch, after), duplicate (beat), move (beat, to index), delete (beat), treatment (id).',
   properties: { command: { type: 'string', enum: ['set', 'insert', 'duplicate', 'move', 'delete', 'treatment'] }, target: { type: 'string', enum: ['film', 'beat'] },
     beat: str('Scene id'), path: str('Dotted property path, e.g. props.title or vo or duration'), value: { description: 'New JSON value; null removes it' },
-    block: str('Native block name for insert'), sketch: str('Canvas sketch id for insert'), after: str('Insert after this scene id'), to: { type: 'integer' }, id: str('Treatment id') },
+    block: str('Native block name for insert'), sketch: str('Canvas sketch id for insert'), after: str('Insert after this scene id'), to: { type: 'integer' }, id: str('For insert: the new scene\'s id (lowercase, unused), so later operations in the same batch can set its props and vo. For treatment: the treatment id.') },
   required: ['command'],
 };
 
 const TOOLS = [
   ['state', 'Read the film this conversation edits: title, format, look, every scene (id, block, label, timing, narration), engine errors and warnings, the working-copy hash you must pass to edit, undo history, open review notes and render jobs. Pass beat to get that scene\'s full JSON, or full: true for the whole storyboard.',
     obj({ beat: str('Scene id to return in full'), full: { type: 'boolean' } })],
-  ['catalog', 'Look up what the engine accepts instead of guessing: topic blocks (all native blocks), block (one block\'s props and example; pass name), palettes, types, treatments, sketches, canvas (element types, entrances, colours, fonts), transitions, motions, film-fields, beat-fields, playbooks.',
+  ['catalog', 'Look up what the engine accepts instead of guessing: topic blocks (all native blocks), block (one block\'s props and example; pass name), palettes, types, treatments, sketches, canvas (element types, entrances, colours, fonts, icon names), transitions, motions, film-fields, beat-fields, playbooks.',
     obj({ topic: { type: 'string', enum: ['blocks', 'block', 'palettes', 'types', 'treatments', 'sketches', 'canvas', 'transitions', 'motions', 'film-fields', 'beat-fields', 'playbooks'] }, name: str('Block name for topic block') }, ['topic'])],
   ['edit', 'Change the storyboard through the studio: up to 200 operations applied as ONE validated, undoable step labelled for the person. Pass the hash from clearframe_state; if the film changed since, nothing is written and you must re-read. Edits the engine would refuse are not saved and the errors are returned. Changes outside the scope the person pinned (a scene, a layer, a range…) are refused: to go further, ask the person to widen the scope.',
     obj({ hash: str('Working-copy hash from clearframe_state'), label: str('Short past-tense description shown in undo history, e.g. "Rewrote the opening line"'), ops: { anyOf: [{ type: 'array', minItems: 1, maxItems: 200, items: OP }, { type: 'string', description: 'The same array as JSON text' }] } }, ['hash', 'label', 'ops'])],
@@ -35,8 +35,8 @@ const TOOLS = [
     obj({ file: { type: 'string', enum: ['brief', 'direction'] }, text: str('Complete new Markdown') }, ['file', 'text'])],
   ['sound', 'The film\'s sound: narration takes and music bed (free local draft, Google, or recorded), what Google generation would cost, and whether it is available. action draft-voice / draft-music queues a free draft. action request (kind voice|music, reason) asks the person to approve paid Google generation; it never runs without their approval.',
     obj({ action: { type: 'string', enum: ['status', 'draft-voice', 'draft-music', 'request'] }, kind: { type: 'string', enum: ['voice', 'music'] }, reason: str('Why this is worth paying for now') })],
-  ['guide', 'Read ClearFrame craft guidance (instead of reading files outside the project): authoring (short: start here for a first cut), clearframe, library (blocks and playbooks), cinema, canvas, dataviz, motion, script, integrity, direction, engine, review, scene (native stages); and the longer notes: style, cinema-notes, canvas-notes, ideas, speech, images, editing, continuity.',
-    obj({ topic: { type: 'string', enum: ['authoring', 'clearframe', 'library', 'cinema', 'canvas', 'dataviz', 'motion', 'script', 'integrity', 'direction', 'engine', 'review', 'scene', 'style', 'cinema-notes', 'canvas-notes', 'ideas', 'speech', 'images', 'editing', 'continuity'] } }, ['topic'])],
+  ['guide', 'Read ClearFrame craft guidance (instead of reading files outside the project): authoring (short: start here for a first cut), cast (objects that persist across scenes), clearframe, library (blocks and playbooks), cinema, canvas, dataviz, motion, script, integrity, direction, engine, review, scene (native stages); and the longer notes: style, cinema-notes, canvas-notes, ideas, speech, images, editing, continuity.',
+    obj({ topic: { type: 'string', enum: ['authoring', 'cast', 'clearframe', 'library', 'cinema', 'canvas', 'dataviz', 'motion', 'script', 'integrity', 'direction', 'engine', 'review', 'scene', 'style', 'cinema-notes', 'canvas-notes', 'ideas', 'speech', 'images', 'editing', 'continuity'] } }, ['topic'])],
 ];
 
 function bridge(file) {

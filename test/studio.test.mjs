@@ -85,6 +85,10 @@ test('batches, inserts, duplicates, deletes and treatments are single undoable s
   s = run(d, { command: 'insert', block: 'bars', after: 'a' });
   assert.deepEqual(s.created, ['bars']); assert.deepEqual(s.storyboard.beats.map(b => b.id), ['a', 'bars', 'b']);
   assert.ok(s.storyboard.sources.some(x => /sample/i.test(x.title)), 'sample content is labelled and cited');
+  s = run(d, { command: 'batch', label: 'A named scene, filled', ops: [{ command: 'insert', block: 'canvas', after: 'bars', id: 'pile' }, { command: 'set', target: 'beat', beat: 'pile', path: 'props', value: { cast: { objects: [{ id: 'a', icon: 'file' }], formations: [{ form: 'scatter', at: 0 }] } } }] });
+  assert.deepEqual(s.storyboard.beats.map(b => b.id), ['a', 'bars', 'pile', 'b']); assert.ok(s.storyboard.beats[2].props.cast);
+  assert.throws(() => run(d, { command: 'insert', block: 'canvas', id: 'pile' }), /already a scene/);
+  s = run(d, { command: 'undo' });
   s = run(d, { command: 'duplicate', beat: 'bars' }); assert.deepEqual(s.created, ['bars-copy']);
   s = run(d, { command: 'delete', beat: 'a' }); assert.deepEqual(s.storyboard.beats.map(b => b.id), ['bars', 'bars-copy', 'b']);
   s = run(d, { command: 'treatment', id: 'editorial' }); assert.equal(s.storyboard.treatment, 'editorial');

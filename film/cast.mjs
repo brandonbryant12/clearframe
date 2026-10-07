@@ -5,9 +5,10 @@
 // that names the cast starts exactly there, so the objects carry across the cut without a jump.
 //
 //   cast: {
+//     look: tiles | drawn | print,                          first beat; the cast keeps it
 //     objects: [{id, icon | word, color, label, size}],     first beat; later beats may add more
 //     formations: [{form, say|at, ids, hero, word, center, spread, scale, dur, stagger, thread, beside,
-//                   out, in, by}],
+//                   out, in, by, mark, to, color}],
 //   }
 const check = (ok, message) => { if (!ok) throw new Error(`cast: ${message}`); };
 const finite = v => typeof v === 'number' && Number.isFinite(v);
@@ -15,14 +16,18 @@ const own = (o, keys, name) => {
   check(o && typeof o === 'object' && !Array.isArray(o), `${name} must be an object`);
   for (const k of Object.keys(o)) check(keys.includes(k), `unknown ${name}.${k}`);
 };
-export const FORMS = ['scatter', 'row', 'column', 'line', 'ring', 'cluster', 'hero', 'exit', 'swap', 'wave'];
+export const FORMS = ['scatter', 'row', 'column', 'line', 'ring', 'cluster', 'hero', 'exit', 'swap', 'wave', 'mark'];
+export const LOOKS = ['tiles', 'drawn', 'print'];
+const MARKS = ['circle', 'underline', 'cross', 'arrow'];
 const ENTERS = ['pop', 'drop', 'rise', 'left', 'right', 'fade', 'none'];
 const COLORS = ['accent', 'accent2', 'positive', 'negative', 'ink', 'muted', 'surface'];
 // A stable pseudo-random number in [0, 1) from text: the same cast always scatters the same way.
 const hash = s => { let h = 2166136261; for (const c of String(s)) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return ((h >>> 0) % 100000) / 100000; };
 
-export function castSpec(input, known = new Map()) {
-  own(input, ['objects', 'formations', 'seed'], 'cast');
+export function castSpec(input, known = new Map(), knownLook = null) {
+  own(input, ['objects', 'formations', 'seed', 'look'], 'cast');
+  check(input.look == null || LOOKS.includes(input.look), `look is ${LOOKS.join(', ')}`);
+  check(input.look == null || knownLook == null || input.look === knownLook, `look is set once, in the cast's first beat (it is ${knownLook})`);
   const objects = new Map(known);
   for (const [i, o] of (input.objects ?? []).entries()) {
     own(o, ['id', 'icon', 'word', 'color', 'label', 'size', 'float', 'enter'], `objects[${i}]`);
@@ -39,9 +44,15 @@ export function castSpec(input, known = new Map()) {
   check(objects.size >= 1 && objects.size <= 16, 'a cast has 1–16 objects (declare them in its first beat)');
   check(Array.isArray(input.formations) && input.formations.length >= 1 && input.formations.length <= 12, 'formations needs 1–12 entries');
   const formations = input.formations.map((f, i) => {
-    own(f, ['form', 'say', 'at', 'ids', 'hero', 'word', 'center', 'spread', 'scale', 'dur', 'stagger', 'ease', 'thread', 'beside', 'out', 'in', 'by'], `formations[${i}]`);
+    own(f, ['form', 'say', 'at', 'ids', 'hero', 'word', 'center', 'spread', 'scale', 'dur', 'stagger', 'ease', 'thread', 'beside', 'on', 'out', 'in', 'by', 'mark', 'to', 'color'], `formations[${i}]`);
+    if (f.form === 'mark') {
+      check(MARKS.includes(f.mark) && Array.isArray(f.ids) && f.ids.length >= 1, `formations[${i}] (mark) is a ${MARKS.join(', ')} on ids`);
+      check((f.mark === 'arrow') === (f.to != null) && [].concat(f.to ?? []).every(id => objects.has(id)), `formations[${i}]: an arrow mark points to another object or a list of them (to), and only an arrow does`);
+    } else check(f.mark == null && f.to == null, `formations[${i}]: mark and to belong to form mark`);
+    check(f.color == null || COLORS.includes(f.color), `formations[${i}].color is ${COLORS.join(', ')}`);
     if (f.form === 'swap') check(objects.has(f.out) && objects.has(f.in) && f.out !== f.in, `formations[${i}] (swap) names out and in, two objects`);
     check(f.beside == null || objects.has(f.beside), `formations[${i}].beside names an object`);
+    check(f.on == null || (objects.has(f.on) && f.beside == null && f.center == null && !(f.ids ?? []).includes(f.on)), `formations[${i}].on names another object to centre on (not with beside or center)`);
     check(f.by == null || (f.form === 'swap' && Array.isArray(f.by) && f.by.every(id => objects.has(id) && id !== f.out && id !== f.in)),
       `formations[${i}].by lists the objects that cause a swap (only on swap)`);
     check(FORMS.includes(f.form), `formations[${i}].form is ${FORMS.join(', ')}`);
@@ -54,15 +65,19 @@ export function castSpec(input, known = new Map()) {
     for (const k of ['spread', 'scale', 'dur', 'stagger']) check(f[k] == null || (finite(f[k]) && f[k] >= 0), `formations[${i}].${k} is a positive number`);
     return f;
   });
-  return { objects, formations, seed: input.seed ?? 0 };
+  return { objects, formations, seed: input.seed ?? 0, look: input.look ?? knownLook ?? 'tiles' };
 }
 
 /** Where each object stands in one formation: {x, y, scale, rotate, opacity}. */
 export function formationTargets(f, ids, frame, { size, seed = 0, current = new Map() }) {
   const { width: W, height: H } = frame, tall = H > W, u = Math.min(W, H);
-  // `beside` sets the formation next to an object where it now stands, up and to its right.
+  // `beside` sets the formation next to an object where it now stands, on the side facing the middle
+  // of the frame (up and to the right of an object in the middle), so it never runs off an edge.
   const near = f.beside != null ? current.get(f.beside) : null;
-  const [cx, cy] = f.center ?? (near ? [near.x + size * (near.scale ?? 1) * 0.95, near.y - size * (near.scale ?? 1) * 0.75] : [W / 2, H / 2]);
+  const sx = near && near.x > W / 2 + 1 ? -1 : 1, sy = near && near.y < H / 2 - 1 ? 1 : -1;
+  // `on` centres the formation on an object where it stands (a small ring around it, a pile on it).
+  const host = f.on != null ? current.get(f.on) : null;
+  const [cx, cy] = f.center ?? (host ? [host.x, host.y] : near ? [near.x + sx * size * (near.scale ?? 1) * 0.95, near.y + sy * size * (near.scale ?? 1) * 0.75] : [W / 2, H / 2]);
   const spread = f.spread ?? u * 0.34, scale = f.scale ?? 1, n = ids.length, out = new Map();
   const place = (id, x, y, extra = {}) => out.set(id, { x, y, scale, rotate: 0, opacity: 1, ...extra });
   const form = f.form === 'line' ? (tall ? 'column' : 'row') : f.form;
@@ -83,7 +98,9 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
       place(id, form === 'row' ? cx + d : cx, form === 'row' ? cy : cy + d);
     });
   } else if (form === 'ring') {
-    ids.forEach((id, i) => { const a = -Math.PI / 2 + (i / n) * Math.PI * 2; place(id, cx + Math.cos(a) * spread, cy + Math.sin(a) * spread); });
+    // An ellipse with the frame's proportions, kept clear of its edges.
+    const rx = Math.min(spread * (tall ? 0.8 : 1.25), W / 2 - size * 0.9), ry = Math.min(spread * (tall ? 1.25 : 0.8), H / 2 - size * 0.9);
+    ids.forEach((id, i) => { const a = -Math.PI / 2 + (i / n) * Math.PI * 2; place(id, cx + Math.cos(a) * rx, cy + Math.sin(a) * ry); });
   } else if (form === 'cluster') {
     // Hexagonal packing outward from the centre: a pile of objects touching.
     const gap = size * 1.08 * scale, cells = [[0, 0]];
@@ -93,7 +110,7 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
         const [x0, y0, x1, y1] = [Math.cos(a0) * ring, Math.sin(a0) * ring, Math.cos(a1) * ring, Math.sin(a1) * ring];
         cells.push([x0 + (x1 - x0) * (step / ring), y0 + (y1 - y0) * (step / ring)]);
       }
-    ids.forEach((id, i) => place(id, cx + cells[i][0] * gap, cy + cells[i][1] * gap, { rotate: (hash(`${id}c`) - 0.5) * 12 }));
+    ids.forEach((id, i) => place(id, cx + cells[i][0] * gap * sx, cy + cells[i][1] * gap * -sy, { rotate: (hash(`${id}c`) - 0.5) * 12 }));
   } else if (form === 'hero') {
     // One object steps forward; the rest recede into a wide ring, small and quiet. The hero stands
     // centred (its word goes below), so it still holds the frame after the word has gone.
@@ -115,23 +132,47 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
       out.set(id, { x: W / 2 + (dx / d) * far, y: H / 2 + (dy / d) * far, scale: c.scale ?? 1, rotate: (c.rotate ?? 0) + 20, opacity: 0 });
     });
   }
+  // Every placed object stays whole inside the title-safe area (an exit leaves on purpose): a
+  // formation set beside an object near an edge, or a wide ring, is pulled back in.
+  if (form !== 'exit') {
+    const [mx, my] = tall ? [W * 0.1, H * 0.06] : [W * 0.05, H * 0.05];
+    for (const t of out.values()) {
+      const half = size * (t.scale ?? 1) * 0.58;
+      t.x = Math.min(Math.max(t.x, mx + half), W - mx - half);
+      t.y = Math.min(Math.max(t.y, my + half), H - my - half);
+    }
+  }
   return out;
 }
 
+/**
+ * How each look draws an object's tile, its mark and its type. `tiles` are flat rounded tiles with a
+ * soft shadow; `drawn` is pen on paper (an ink outline drawn by hand, the colour hatched in, the
+ * icon in ink, type in a hand); `print` is a two-colour press (the colour laid in a dot screen,
+ * slightly off register, with worn ink).
+ */
+const LOOK = {
+  tiles: { tile: () => ({}), mark: o => (o.color === 'surface' ? 'ink' : 'bg'), font: 'strong', label: 'semibold', shadow: true },
+  drawn: { tile: s => ({ stroke: 'ink', width: Math.max(3, s * 0.028), rough: { amount: 1.4, passes: 2, fill: 'hachure', gap: Math.max(5, s * 0.055), angle: -38, hatchWidth: Math.max(3, s * 0.03) } }),
+    mark: () => 'ink', font: 'hand', label: 'hand', shadow: false },
+  print: { tile: s => ({ print: { screen: 'dots', cell: Math.max(5, Math.round(s * 0.055)), angle: 45, register: [Math.round(s * 0.025), -Math.round(s * 0.015)], wear: 0.25 } }),
+    mark: o => (o.color === 'surface' ? 'ink' : 'bg'), font: 'poster', label: 'semibold', shadow: false },
+};
+
 /** The object as drawn: a group centred on its position (a tile with an icon, or a word on a pill). */
-function objectElement(o, id, size, base, enter) {
-  const s = o.size ?? size, children = [];
+function objectElement(o, id, size, base, enter, look = 'tiles') {
+  const s = o.size ?? size, children = [], L = LOOK[look];
   if (o.word) {
     const w = Math.max(s * 1.4, o.word.length * s * 0.36 + s * 0.6);
-    children.push({ type: 'rect', id: `${id}-tile`, x: -w / 2, y: -s * 0.36, w, h: s * 0.72, r: s * 0.36, fill: o.color, enter: 'none' },
-      { type: 'text', id: `${id}-word`, text: o.word, x: 0, y: s * 0.13, size: s * 0.34, font: 'strong', fill: o.color === 'ink' ? 'bg' : 'ink', anchor: 'middle', fit: w - s * 0.4, enter: 'none' });
+    children.push({ type: 'rect', id: `${id}-tile`, x: -w / 2, y: -s * 0.36, w, h: s * 0.72, r: s * 0.36, fill: o.color, enter: 'none', ...L.tile(s) },
+      { type: 'text', id: `${id}-word`, text: o.word, x: 0, y: s * 0.13, size: s * (look === 'drawn' ? 0.4 : 0.34), font: L.font, fill: look === 'drawn' || o.color !== 'ink' ? 'ink' : 'bg', anchor: 'middle', fit: w - s * 0.4, enter: 'none' });
   } else {
-    children.push({ type: 'rect', id: `${id}-tile`, x: -s / 2, y: -s / 2, w: s, h: s, r: s * 0.26, fill: o.color, enter: 'none' },
-      { type: 'icon', id: `${id}-icon`, name: o.icon, x: 0, y: 0, size: s * 0.52, stroke: o.color === 'surface' ? 'ink' : 'bg', enter: 'none' });
+    children.push({ type: 'rect', id: `${id}-tile`, x: -s / 2, y: -s / 2, w: s, h: s, r: s * 0.26, fill: o.color, enter: 'none', ...L.tile(s) },
+      { type: 'icon', id: `${id}-icon`, name: o.icon, x: 0, y: 0, size: s * 0.52, stroke: L.mark(o), enter: 'none' });
   }
-  if (o.label) children.push({ type: 'text', id: `${id}-label`, text: o.label, x: 0, y: s * 0.5 + s * 0.34, size: Math.max(22, s * 0.2), font: 'semibold', fill: 'muted', anchor: 'middle', enter: 'none' });
+  if (o.label) children.push({ type: 'text', id: `${id}-label`, text: o.label, x: 0, y: s * 0.5 + s * 0.34, size: Math.max(22, s * (look === 'drawn' ? 0.24 : 0.2)), font: L.label, fill: look === 'drawn' ? 'ink' : 'muted', anchor: 'middle', enter: 'none' });
   // The starting pose is a key at 0, so every later key is absolute (opacity and rotation never compound).
-  return { type: 'group', id, x: base.x, y: base.y, shadow: true, children, ...enter,
+  return { type: 'group', id, x: base.x, y: base.y, shadow: L.shadow, children, ...enter,
     keys: [{ at: 0, scale: base.scale ?? 1, rotate: base.rotate ?? 0, opacity: base.opacity ?? 1, dur: 0 }],
     ...(o.float ? { loop: { type: 'float', period: 3.4 + hash(id) * 1.6, amount: 0.35 } } : {}) };
 }
@@ -149,7 +190,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cue
   // A carried object's group, created on first use where the last beat left it.
   const group = id => {
     if (!groups.has(id)) {
-      const g = objectElement(spec.objects.get(id), `cast-${id}`, size, pose.get(id), { at: 0, enter: 'none' });
+      const g = objectElement(spec.objects.get(id), `cast-${id}`, size, pose.get(id), { at: 0, enter: 'none' }, spec.look);
       groups.set(id, { el: g, base: pose.get(id) });
       elements.push(g);
     }
@@ -158,8 +199,8 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cue
   // Formation times: a spoken cue, explicit seconds, or (uncued) evenly after the previous one.
   const times = [];
   spec.formations.forEach((f, k) => times.push(f.say != null ? cue(f.say) : f.at ?? (k === 0 ? 0 : times[k - 1] + 1.6)));
-  // A thread or word lasts until the next formation that moves the cast (a wave leaves it standing).
-  const until = k => times.find((_, j) => j > k && spec.formations[j].form !== 'wave');
+  // A thread or word lasts until the next formation that moves the cast (a wave or a mark leaves it standing).
+  const until = k => times.find((_, j) => j > k && !['wave', 'mark'].includes(spec.formations[j].form));
   // An object that has exited stays gone unless a formation names it again.
   const alive = id => !pose.get(id)?.gone;
   spec.formations.forEach((f, k) => {
@@ -171,6 +212,41 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cue
       ids.filter(id => pose.has(id) && alive(id)).forEach((id, i) => {
         const { el, base } = group(id), p = pose.get(id), at = t + i * (f.stagger ?? 0.16), s = p.scale ?? 1, x = p.x - base.x, y = p.y - base.y;
         el.keys.push({ at, x, y: y - size * 0.22 * (f.scale ?? 1), scale: s * 1.16, dur: 0.2, ease: 'out' }, { at: at + 0.2, x, y, scale: s, dur: 0.34, ease: 'spring' });
+      });
+      return;
+    }
+    // A mark is drawn on the cast where it stands, by hand: a loop around what matters, a line under
+    // it, a cross through what is set aside, an arrow to where it goes. A mark on one object belongs
+    // to it (it moves, scales and leaves with it); it fades when the cast next moves, unless that
+    // move takes the object away, and before the cut. An arrow joins two objects and stays put.
+    if (f.form === 'mark') {
+      const color = f.color ?? (f.mark === 'cross' ? 'negative' : 'accent2');
+      const next = spec.formations.findIndex((g, j) => j > k && !['wave', 'mark'].includes(g.form));
+      const fade = id => next >= 0 ? (spec.formations[next].form === 'exit' && (spec.formations[next].ids ?? []).includes(id) ? null : times[next])
+        : frame.duration > t + 1.6 ? frame.duration - 0.4 : null;
+      const pen = { fill: 'none', stroke: color, cap: 'round', join: 'round', rough: { amount: 1, passes: 2 }, enter: 'draw' };
+      ids.filter(id => pose.has(id) && alive(id)).forEach((id, i) => {
+        const p = pose.get(id), at = t + i * (f.stagger ?? 0.25), seed = hash(`${id}${k}`);
+        if (f.mark !== 'arrow') {
+          // In the object's own coordinates: its centre is the origin and its scale applies to the pen too.
+          const { el } = group(id), r = (spec.objects.get(id).size ?? size) * 0.5, xy = (x, y) => `${x.toFixed(1)} ${y.toFixed(1)}`;
+          const d = f.mark === 'circle'
+            ? Array.from({ length: 29 }, (_, j) => { const a = -2.2 + seed + (j / 28) * Math.PI * 2.15, rr = r * (1.55 + 0.1 * j / 28); return `${j ? 'L' : 'M'}${xy(Math.cos(a) * rr * 1.08, Math.sin(a) * rr * 0.96)}`; }).join(' ')
+            : f.mark === 'underline' ? `M${xy(-r * 1.2, r * 1.42)} Q${xy(0, r * 1.62)} ${xy(r * 1.25, r * 1.36)}`
+            : `M${xy(-r * 1.1, -r * 1.05)} L${xy(r * 1.1, r * 1.1)} M${xy(r * 1.05, -r * 1.1)} L${xy(-r * 1.1, r * 1.05)}`;
+          const out = fade(id);
+          el.children.push({ type: 'path', id: `${el.id}-mark-${k}`, d, ...pen, width: Math.max(5, size * 0.045) / (p.scale ?? 1), at, dur: f.mark === 'circle' ? 0.6 : 0.45,
+            ...(out != null ? { exitAt: Math.max(at + 0.9, out), exit: 'fade' } : {}) });
+          return;
+        }
+        const r = size * (p.scale ?? 1) * 0.5, pt = (x, y) => `${(p.x + x).toFixed(1)} ${(p.y + y).toFixed(1)}`, out = fade(null), width = Math.max(5, size * 0.045);
+        [].concat(f.to).filter(to => pose.has(to) && to !== id).forEach((to, j) => {
+          // From the edge of one to just short of the other, bowed a little: a pen stroke, not a connector.
+          const q = pose.get(to), dx = q.x - p.x, dy = q.y - p.y, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len, rq = size * (q.scale ?? 1) * 0.5;
+          const [ax, ay, bx, by] = [ux * r * 1.2, uy * r * 1.2, dx - ux * rq * 1.4, dy - uy * rq * 1.4], bend = len * 0.16 * (hash(`${id}${to}`) > 0.5 ? 1 : -1);
+          words.push({ type: 'path', id: `cast-mark-${k}-${id}-${to}`, d: `M${pt(ax, ay)} Q${pt((ax + bx) / 2 - uy * bend, (ay + by) / 2 + ux * bend)} ${pt(bx, by)}`,
+            ...pen, width, arrow: 'end', head: width * 3.2, at: at + j * 0.2, dur: 0.45, ...(out != null ? { exitAt: Math.max(at + j * 0.2 + 0.9, out), exit: 'fade' } : {}) });
+        });
       });
       return;
     }
@@ -196,7 +272,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cue
         const from = pose.get(id);
         // Carried objects stand where the last beat left them; new ones arrive in place, on the cue.
         // `enter: 'none'` stands on frame one: the establishing picture is there before anything moves.
-        const g = objectElement(o, `cast-${id}`, size, from ?? to, from || o.enter === 'none' ? { at: 0, enter: 'none' } : { at, enter: o.enter ?? 'pop', dur: o.enter && o.enter !== 'pop' ? 0.8 : 0.5, ...(o.enter && o.enter !== 'pop' && o.enter !== 'fade' ? { dist: size * 4 } : {}) });
+        const g = objectElement(o, `cast-${id}`, size, from ?? to, from || o.enter === 'none' ? { at: 0, enter: 'none' } : { at, enter: o.enter ?? 'pop', dur: o.enter && o.enter !== 'pop' ? 0.8 : 0.5, ...(o.enter && o.enter !== 'pop' && o.enter !== 'fade' ? { dist: size * 4 } : {}) }, spec.look);
         groups.set(id, { el: g, base: from ?? to });
         elements.push(g);
         if (!from) { pose.set(id, { ...to, z: ++top }); return; }
@@ -221,15 +297,15 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cue
         segments.forEach(({ a, b, at }, j) => {
           const d = Math.hypot(b.x - a.x, b.y - a.y) || 1, inset = (size * 0.5 + 14) / d;
           words.push({ type: 'line', id: `cast-thread-${k}-${j + 1}`, x1: a.x + (b.x - a.x) * inset, y1: a.y + (b.y - a.y) * inset, x2: b.x - (b.x - a.x) * inset, y2: b.y - (b.y - a.y) * inset,
-            stroke: 'ink', width: 3, cap: 'round', at, enter: 'draw', dur: 0.35, ...(until(k) != null ? { exitAt: until(k), exit: 'fade' } : {}) });
+            stroke: 'ink', width: spec.look === 'drawn' ? 4 : 3, cap: 'round', ...(spec.look === 'drawn' ? { rough: { amount: 1.2, passes: 2 } } : {}), at, enter: 'draw', dur: 0.35, ...(until(k) != null ? { exitAt: until(k), exit: 'fade' } : {}) });
         });
-        if (until(k) == null) carried = words.filter(w => w.id.startsWith(`cast-thread-${k}-`)).map(({ type, x1, y1, x2, y2, stroke, width, cap }) => ({ type, x1, y1, x2, y2, stroke, width, cap }));
+        if (until(k) == null) carried = words.filter(w => w.id.startsWith(`cast-thread-${k}-`)).map(({ type, x1, y1, x2, y2, stroke, width, cap, rough }) => ({ type, x1, y1, x2, y2, stroke, width, cap, ...(rough ? { rough } : {}) }));
       }
     }
     if (f.form === 'hero' && f.word) {
       const h = targets.get(f.hero), heroSize = size * (f.scale ?? 2.3);
-      words.push({ type: 'text', id: `cast-word-${k}`, text: f.word, x: h.x, y: h.y + heroSize * 0.95, size: u * 0.085,
-        font: 'display', fill: 'ink', anchor: 'middle', at: t + dur * 0.6, enter: 'type', fit: frame.width * 0.8,
+      words.push({ type: 'text', id: `cast-word-${k}`, text: f.word, x: h.x, y: h.y + heroSize * 0.95, size: u * (spec.look === 'drawn' ? 0.1 : 0.085),
+        font: { tiles: 'display', drawn: 'hand', print: 'poster' }[spec.look], fill: 'ink', anchor: 'middle', at: t + dur * 0.6, enter: 'type', fit: frame.width * 0.8,
         // With nothing to replace it, the word leaves before the cut rather than on it.
         ...(until(k) != null ? { exitAt: until(k), exit: 'fade' } : frame.duration > t + dur + 1.2 ? { exitAt: frame.duration - 0.4, exit: 'fade' } : {}) });
     }
@@ -240,7 +316,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cue
   // Objects carried in that no formation moves this beat still stand where they were.
   for (const [id, p] of state) {
     if (groups.has(id) || p.gone || !spec.objects.has(id)) continue;
-    const g = objectElement(spec.objects.get(id), `cast-${id}`, size, p, { at: 0, enter: 'none' });
+    const g = objectElement(spec.objects.get(id), `cast-${id}`, size, p, { at: 0, enter: 'none' }, spec.look);
     groups.set(id, { el: g, base: p });
     elements.unshift(g);
   }
@@ -254,13 +330,13 @@ export function expandCastProps(input, frame, ctx = {}) {
   const { cast, ...rest } = structuredClone(input);
   for (const key of ['plot', 'bars', 'bridge', 'stat', 'distribution', 'multiples', 'kpi', 'teaching', 'chart', 'sketch', 'view', 'viewFrom', 'world'])
     check(rest[key] == null, `cannot combine cast with ${key} (a cast lays itself out for the frame)`);
-  const spec = castSpec(cast, ctx.objects ?? new Map());
+  const spec = castSpec(cast, ctx.objects ?? new Map(), ctx.look ?? null);
   const { elements, state, threads, notes } = castElements(spec, frame, { state: ctx.state, threads: ctx.threads, cue: ctx.cue });
   for (const n of notes) ctx.notes?.push(`${frame.beatId ?? 'cast'}: ${n}`);
   if (frame.beatId) {
     const prefix = el => { el.id = `${frame.beatId}-${el.id}`; for (const c of el.children ?? []) prefix(c); };
     elements.forEach(prefix);
   }
-  if (ctx.carry) Object.assign(ctx.carry, { state, objects: spec.objects, threads });
+  if (ctx.carry) Object.assign(ctx.carry, { state, objects: spec.objects, threads, look: spec.look });
   return { ...rest, view: [0, 0, frame.width, frame.height], elements: [...elements, ...(rest.elements ?? [])] };
 }
