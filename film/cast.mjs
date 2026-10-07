@@ -324,6 +324,9 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
     // until the cast next moves.
     if (f.form === 'travel') {
       const st = f.stagger ?? 0.3, ease = x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+      // A journey needs somewhere to go: an object on screen, or a point.
+      check(f.center != null || (pose.has(f.to) && !pose.get(f.to).gone),
+        `${f.to} is not on screen when ${ids.join(', ')} travel${ids.length > 1 ? '' : 's'} to it; place it first (for example a cluster at a center) or travel to a center point`);
       // An object not yet on screen travels in from just past the frame edge its `enter` names
       // (left by default), level with where it is going, rather than the move being lost.
       for (const id of ids) {

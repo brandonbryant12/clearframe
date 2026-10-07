@@ -268,6 +268,16 @@ test('a new object can travel in from off the frame (live run 5: "regex" travels
   assert.ok(els.some(e => e.type === 'path' && e.id.includes('trail')), 'drawing its route');
 });
 
+test('travel to an object that is not on screen is refused by name, not a crash', () => {
+  // Director repro (01:00): b is declared but never placed; a used to throw a TypeError.
+  const objectsAB = [{ id: 'a', shape: 'ticket' }, { id: 'b', shape: 'person' }];
+  assert.throws(() => expandCastProps({ cast: { objects: objectsAB, formations: [{ form: 'travel', ids: ['a'], to: 'b', at: 0 }] } }, { ...wide, beatId: 'x', duration: 3 }, {}),
+    /cast: b is not on screen when a travels to it; place it first/);
+  // A departed destination is refused the same way.
+  assert.throws(() => expandCastProps({ cast: { objects: objectsAB, formations: [{ form: 'row', at: 0 }, { form: 'exit', ids: ['b'], at: 0.5 }, { form: 'travel', ids: ['a'], to: 'b', at: 2 }] } }, { ...wide, beatId: 'x', duration: 4 }, {}),
+    /b is not on screen/);
+});
+
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);
