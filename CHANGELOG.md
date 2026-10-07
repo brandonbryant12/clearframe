@@ -1,5 +1,17 @@
 # Changelog
 
+## style-relay drafts again, and has a portrait layout
+
+- **style-relay failed `check`, and so could not draft, in both shapes.** Its closing overview showed all six plate captions, carried from their own shots, at 9 to 12 px (12 "too small to read" errors).
+- **Now each plate's caption leaves on the last word of its line** (`exitSay`, a 0.3 s fade), using the world contract for tidying labels before a wide shot. The overview names each making again, once, in type it can be read in (about 22 px), under its plate. The captions stay readable throughout each plate's own shot.
+- **A portrait layout through `tall`.**
+  - The six plates are re-laid as two columns of three, with more room between rows than in landscape. The tour becomes a snake.
+  - Each plate gets a 9:16 shot that holds its number and captions and none of a neighbour's.
+  - The title sits above the grid, out of every plate's shot, and the overview frames the new grid.
+- **Measured.**
+  - `check`: no findings in either shape. On main, landscape had 12 errors; vertical had 25 findings, 12 of them errors. Portrait `qa`: 0 pops, no seam flags.
+  - Landscape `qa` flags a world seam at the plate-3 → plate-4 move: the camera move straddles the cut. Main, force-rendered with the same voice, flags the same kind of seam at plate-4 → plate-5 instead. The compiled camera timing is identical, so the change only moves which cut crosses the measure's threshold.
+
 ## cinematic-explainer's pull-back, authored for portrait
 
 - **`whole` ("One journey, most of it out of sight") has a portrait composition through `tall`.** The camera pulls back from the city, as in landscape, to the whole journey as a band across the frame. "One journey" is set large in the sky above it and "most of it / out of sight" in the ground below. The station pills grow so their labels read at about 27 px.

@@ -777,6 +777,761 @@
         "viewAt": 0,
         "viewDur": 4,
         "viewDrift": 0.02
+      },
+      "tall": {
+        "view": [
+          -684,
+          -1365,
+          3468,
+          6165
+        ],
+        "viewFrom": [
+          -857,
+          -1674,
+          3815,
+          6782
+        ],
+        "elements": [
+          {
+            "type": "group",
+            "x": 0,
+            "y": 0,
+            "at": 0,
+            "dur": 0,
+            "enter": "none",
+            "children": [
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "bg",
+                "shadow": {
+                  "dy": 14,
+                  "blur": 26,
+                  "opacity": 0.18
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 470,
+                "fill": {
+                  "gradient": [
+                    "surface",
+                    "bg"
+                  ]
+                },
+                "mosaic": {
+                  "tile": 20,
+                  "glint": 0.15
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "circle",
+                "cx": 520,
+                "cy": 290,
+                "r": 128,
+                "fill": "accent",
+                "mosaic": {
+                  "tile": 18,
+                  "glint": 0.4
+                },
+                "glow": {
+                  "blur": 30,
+                  "opacity": 0.35
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 470,
+                "w": 800,
+                "h": 330,
+                "fill": {
+                  "gradient": [
+                    "accent2",
+                    "ink"
+                  ]
+                },
+                "mosaic": {
+                  "tile": 20,
+                  "glint": 0.3
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "none",
+                "stroke": "line",
+                "width": 2,
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "text",
+                "text": "01",
+                "x": 400,
+                "y": 896,
+                "size": 72,
+                "font": "serif-italic",
+                "anchor": "middle",
+                "fill": "accent",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "x": 1300,
+            "y": 0,
+            "at": 0,
+            "dur": 0,
+            "enter": "none",
+            "children": [
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "bg",
+                "shadow": {
+                  "dy": 14,
+                  "blur": 26,
+                  "opacity": 0.18
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "bg",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 260,
+                "fill": {
+                  "gradient": [
+                    "accent2",
+                    "bg"
+                  ]
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "circle",
+                "cx": 520,
+                "cy": 290,
+                "r": 128,
+                "fill": "accent",
+                "stroke": "ink",
+                "width": 3,
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 0 470 C 120 436 220 500 340 470 C 460 440 560 504 680 470 C 740 454 780 460 800 470 L 800 800 L 0 800 Z",
+                "fill": "accent2",
+                "stroke": "ink",
+                "width": 3,
+                "print": {
+                  "screen": "lines",
+                  "ink": "bg",
+                  "tone": [
+                    0.42,
+                    0.18
+                  ],
+                  "angle": -8,
+                  "cell": 8
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "none",
+                "stroke": "line",
+                "width": 2,
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "text",
+                "text": "02",
+                "x": 400,
+                "y": 896,
+                "size": 72,
+                "font": "serif-italic",
+                "anchor": "middle",
+                "fill": "accent",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "x": 1300,
+            "y": 1600,
+            "at": 0,
+            "dur": 0,
+            "enter": "none",
+            "children": [
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "bg",
+                "shadow": {
+                  "dy": 14,
+                  "blur": 26,
+                  "opacity": 0.18
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "surface",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "circle",
+                "cx": 520,
+                "cy": 290,
+                "r": 128,
+                "fill": "accent",
+                "mosaic": {
+                  "style": "stitch",
+                  "tile": 20
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 40,
+                "y": 480,
+                "w": 720,
+                "h": 280,
+                "fill": "accent2",
+                "mosaic": {
+                  "style": "stitch",
+                  "tile": 20
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 20,
+                "y": 20,
+                "w": 760,
+                "h": 760,
+                "fill": "none",
+                "stroke": "ink",
+                "width": 6,
+                "mosaic": {
+                  "style": "stitch",
+                  "tile": 20
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "none",
+                "stroke": "line",
+                "width": 2,
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "text",
+                "text": "03",
+                "x": 400,
+                "y": 896,
+                "size": 72,
+                "font": "serif-italic",
+                "anchor": "middle",
+                "fill": "accent",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "x": 0,
+            "y": 1600,
+            "at": 0,
+            "dur": 0,
+            "enter": "none",
+            "children": [
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "bg",
+                "shadow": {
+                  "dy": 14,
+                  "blur": 26,
+                  "opacity": 0.18
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "bg",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "circle",
+                "cx": 520,
+                "cy": 290,
+                "r": 128,
+                "fill": "accent",
+                "print": "letterpress",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 500,
+                "w": 800,
+                "h": 34,
+                "fill": "ink",
+                "print": {
+                  "register": [
+                    0,
+                    0
+                  ],
+                  "wear": 0.4
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 580,
+                "w": 800,
+                "h": 30,
+                "fill": "ink",
+                "print": {
+                  "register": [
+                    0,
+                    0
+                  ],
+                  "wear": 0.4
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 650,
+                "w": 800,
+                "h": 26,
+                "fill": "ink",
+                "print": {
+                  "register": [
+                    0,
+                    0
+                  ],
+                  "wear": 0.4
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 710,
+                "w": 800,
+                "h": 22,
+                "fill": "ink",
+                "print": {
+                  "register": [
+                    0,
+                    0
+                  ],
+                  "wear": 0.4
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 760,
+                "w": 800,
+                "h": 18,
+                "fill": "ink",
+                "print": {
+                  "register": [
+                    0,
+                    0
+                  ],
+                  "wear": 0.4
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "none",
+                "stroke": "line",
+                "width": 2,
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "text",
+                "text": "04",
+                "x": 400,
+                "y": 896,
+                "size": 72,
+                "font": "serif-italic",
+                "anchor": "middle",
+                "fill": "accent",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "x": 0,
+            "y": 3200,
+            "at": 0,
+            "dur": 0,
+            "enter": "none",
+            "children": [
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "bg",
+                "shadow": {
+                  "dy": 14,
+                  "blur": 26,
+                  "opacity": 0.18
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "bg",
+                "print": {
+                  "screen": "dots",
+                  "ink": "accent2",
+                  "tone": [
+                    0.08,
+                    0.36
+                  ],
+                  "cell": 11,
+                  "angle": 15
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "circle",
+                "cx": 520,
+                "cy": 290,
+                "r": 128,
+                "fill": "accent",
+                "stroke": "ink",
+                "width": 6,
+                "print": "newsprint",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "path",
+                "d": "M 0 470 C 120 436 220 500 340 470 C 460 440 560 504 680 470 C 740 454 780 460 800 470 L 800 800 L 0 800 Z",
+                "fill": "accent2",
+                "stroke": "ink",
+                "width": 6,
+                "print": "newsprint",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "none",
+                "stroke": "line",
+                "width": 2,
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "text",
+                "text": "05",
+                "x": 400,
+                "y": 896,
+                "size": 72,
+                "font": "serif-italic",
+                "anchor": "middle",
+                "fill": "accent",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "x": 1300,
+            "y": 3200,
+            "at": 0,
+            "dur": 0,
+            "enter": "none",
+            "children": [
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "bg",
+                "shadow": {
+                  "dy": 14,
+                  "blur": 26,
+                  "opacity": 0.18
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "surface",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "circle",
+                "cx": 520,
+                "cy": 290,
+                "r": 128,
+                "fill": "accent",
+                "mosaic": {
+                  "style": "pixel",
+                  "tile": 22,
+                  "gap": 3
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 475,
+                "w": 800,
+                "h": 325,
+                "fill": "accent2",
+                "mosaic": {
+                  "style": "pixel",
+                  "tile": 22,
+                  "gap": 3
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "line",
+                "x1": 0,
+                "y1": 462,
+                "x2": 800,
+                "y2": 462,
+                "stroke": "ink",
+                "width": 6,
+                "mosaic": {
+                  "style": "pixel",
+                  "tile": 22,
+                  "gap": 3
+                },
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 800,
+                "h": 800,
+                "fill": "none",
+                "stroke": "line",
+                "width": 2,
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              },
+              {
+                "type": "text",
+                "text": "06",
+                "x": 400,
+                "y": 896,
+                "size": 72,
+                "font": "serif-italic",
+                "anchor": "middle",
+                "fill": "accent",
+                "at": 0,
+                "dur": 0,
+                "enter": "none"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "One sun, six makings",
+            "x": 1050,
+            "y": -680,
+            "size": 220,
+            "font": "serif-display",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "rise",
+            "dur": 0.8
+          },
+          {
+            "type": "text",
+            "text": "From the mosaic floor to the pocket screen",
+            "x": 1050,
+            "y": -540,
+            "size": 84,
+            "font": "serif-italic",
+            "anchor": "middle",
+            "fill": "muted",
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.8
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": -56,
+            "w": 520,
+            "h": 6,
+            "fill": "accent",
+            "at": 0.5,
+            "enter": "grow-x",
+            "dur": 0.6
+          }
+        ]
       }
     },
     {
@@ -806,7 +1561,10 @@
             "fill": "ink",
             "at": 0.5,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "hand",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "text",
@@ -819,7 +1577,10 @@
             "fill": "muted",
             "at": 0.65,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "hand",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "path",
@@ -856,6 +1617,82 @@
         ],
         "viewDur": 1.1,
         "viewDrift": 0.03
+      },
+      "tall": {
+        "view": [
+          -150,
+          -473,
+          1100,
+          1956
+        ],
+        "elements": [
+          {
+            "type": "text",
+            "text": "Tesserae",
+            "x": 400,
+            "y": 950,
+            "size": 30,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0.5,
+            "enter": "rise",
+            "dur": 0.5,
+            "exitSay": "hand",
+            "exit": "fade",
+            "exitDur": 0.3
+          },
+          {
+            "type": "text",
+            "text": "Rome, c. 79 AD",
+            "x": 400,
+            "y": 998,
+            "size": 36,
+            "font": "serif-italic",
+            "anchor": "middle",
+            "fill": "muted",
+            "at": 0.65,
+            "enter": "rise",
+            "dur": 0.5,
+            "exitSay": "hand",
+            "exit": "fade",
+            "exitDur": 0.3
+          },
+          {
+            "type": "path",
+            "d": "M 30 170 q 22 -24 44 0 q 22 -24 44 0",
+            "fill": "none",
+            "cap": "round",
+            "stroke": "ink",
+            "width": 12,
+            "mosaic": {
+              "tile": 10
+            },
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.3,
+            "keys": [
+              {
+                "at": 0.3,
+                "x": 560,
+                "y": -40,
+                "dur": 3.2,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "loop": {
+              "type": "float",
+              "period": 0.9,
+              "amount": 10
+            },
+            "exitAt": 3.3,
+            "exit": "fade",
+            "exitDur": 0.3
+          }
+        ]
       }
     },
     {
@@ -885,7 +1722,10 @@
             "fill": "ink",
             "at": 0.5,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "sky",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "text",
@@ -898,7 +1738,10 @@
             "fill": "muted",
             "at": 0.65,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "sky",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "path",
@@ -932,6 +1775,79 @@
         ],
         "viewDur": 1.1,
         "viewDrift": 0.03
+      },
+      "tall": {
+        "view": [
+          1150,
+          -473,
+          1100,
+          1956
+        ],
+        "elements": [
+          {
+            "type": "text",
+            "text": "Woodblock",
+            "x": 1700,
+            "y": 950,
+            "size": 30,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0.5,
+            "enter": "rise",
+            "dur": 0.5,
+            "exitSay": "sky",
+            "exit": "fade",
+            "exitDur": 0.3
+          },
+          {
+            "type": "text",
+            "text": "Edo, 1830s",
+            "x": 1700,
+            "y": 998,
+            "size": 36,
+            "font": "serif-italic",
+            "anchor": "middle",
+            "fill": "muted",
+            "at": 0.65,
+            "enter": "rise",
+            "dur": 0.5,
+            "exitSay": "sky",
+            "exit": "fade",
+            "exitDur": 0.3
+          },
+          {
+            "type": "path",
+            "d": "M 1330 170 q 22 -24 44 0 q 22 -24 44 0",
+            "fill": "none",
+            "cap": "round",
+            "stroke": "ink",
+            "width": 5,
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.3,
+            "keys": [
+              {
+                "at": 0.3,
+                "x": 560,
+                "y": -40,
+                "dur": 3.2,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "loop": {
+              "type": "float",
+              "period": 0.9,
+              "amount": 10
+            },
+            "exitAt": 3.3,
+            "exit": "fade",
+            "exitDur": 0.3
+          }
+        ]
       }
     },
     {
@@ -961,7 +1877,10 @@
             "fill": "ink",
             "at": 0.5,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "time",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "text",
@@ -974,7 +1893,10 @@
             "fill": "muted",
             "at": 0.65,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "time",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "path",
@@ -1012,6 +1934,90 @@
         ],
         "viewDur": 1.1,
         "viewDrift": 0.03
+      },
+      "tall": {
+        "view": [
+          1150,
+          1127,
+          1100,
+          1956
+        ],
+        "elements": [
+          {
+            "type": "group",
+            "x": -1300,
+            "y": 1600,
+            "children": [
+              {
+                "type": "text",
+                "text": "Cross-stitch",
+                "x": 3000,
+                "y": 950,
+                "size": 30,
+                "font": "semibold",
+                "tracking": 0.22,
+                "upper": true,
+                "anchor": "middle",
+                "fill": "ink",
+                "at": 0.5,
+                "enter": "rise",
+                "dur": 0.5,
+                "exitSay": "time",
+                "exit": "fade",
+                "exitDur": 0.3
+              },
+              {
+                "type": "text",
+                "text": "A sampler, 1840s",
+                "x": 3000,
+                "y": 998,
+                "size": 36,
+                "font": "serif-italic",
+                "anchor": "middle",
+                "fill": "muted",
+                "at": 0.65,
+                "enter": "rise",
+                "dur": 0.5,
+                "exitSay": "time",
+                "exit": "fade",
+                "exitDur": 0.3
+              },
+              {
+                "type": "path",
+                "d": "M 2630 170 q 22 -24 44 0 q 22 -24 44 0",
+                "fill": "none",
+                "cap": "round",
+                "stroke": "ink",
+                "width": 8,
+                "mosaic": {
+                  "style": "stitch",
+                  "tile": 14
+                },
+                "at": 0.3,
+                "enter": "fade",
+                "dur": 0.3,
+                "keys": [
+                  {
+                    "at": 0.3,
+                    "x": 560,
+                    "y": -40,
+                    "dur": 3.2,
+                    "ease": "linear",
+                    "hold": false
+                  }
+                ],
+                "loop": {
+                  "type": "float",
+                  "period": 0.9,
+                  "amount": 10
+                },
+                "exitAt": 3.3,
+                "exit": "fade",
+                "exitDur": 0.3
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -1041,7 +2047,10 @@
             "fill": "ink",
             "at": 0.5,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "register",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "text",
@@ -1054,7 +2063,10 @@
             "fill": "muted",
             "at": 0.65,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "register",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "path",
@@ -1091,6 +2103,89 @@
         ],
         "viewDur": 1.1,
         "viewDrift": 0.03
+      },
+      "tall": {
+        "view": [
+          -150,
+          1127,
+          1100,
+          1956
+        ],
+        "elements": [
+          {
+            "type": "group",
+            "x": -2600,
+            "y": 360,
+            "children": [
+              {
+                "type": "text",
+                "text": "Letterpress",
+                "x": 3000,
+                "y": 2190,
+                "size": 30,
+                "font": "semibold",
+                "tracking": 0.22,
+                "upper": true,
+                "anchor": "middle",
+                "fill": "ink",
+                "at": 0.5,
+                "enter": "rise",
+                "dur": 0.5,
+                "exitSay": "register",
+                "exit": "fade",
+                "exitDur": 0.3
+              },
+              {
+                "type": "text",
+                "text": "A two-ink bill, 1890s",
+                "x": 3000,
+                "y": 2238,
+                "size": 36,
+                "font": "serif-italic",
+                "anchor": "middle",
+                "fill": "muted",
+                "at": 0.65,
+                "enter": "rise",
+                "dur": 0.5,
+                "exitSay": "register",
+                "exit": "fade",
+                "exitDur": 0.3
+              },
+              {
+                "type": "path",
+                "d": "M 2630 1410 q 22 -24 44 0 q 22 -24 44 0",
+                "fill": "none",
+                "cap": "round",
+                "stroke": "ink",
+                "width": 8,
+                "print": {
+                  "wear": 0.4
+                },
+                "at": 0.3,
+                "enter": "fade",
+                "dur": 0.3,
+                "keys": [
+                  {
+                    "at": 0.3,
+                    "x": 560,
+                    "y": -40,
+                    "dur": 3.2,
+                    "ease": "linear",
+                    "hold": false
+                  }
+                ],
+                "loop": {
+                  "type": "float",
+                  "period": 0.9,
+                  "amount": 10
+                },
+                "exitAt": 3.3,
+                "exit": "fade",
+                "exitDur": 0.3
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -1120,7 +2215,10 @@
             "fill": "ink",
             "at": 0.5,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "dots",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "text",
@@ -1133,7 +2231,10 @@
             "fill": "muted",
             "at": 0.65,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "dots",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "path",
@@ -1167,6 +2268,86 @@
         ],
         "viewDur": 1.1,
         "viewDrift": 0.03
+      },
+      "tall": {
+        "view": [
+          -150,
+          2727,
+          1100,
+          1956
+        ],
+        "elements": [
+          {
+            "type": "group",
+            "x": -1300,
+            "y": 1960,
+            "children": [
+              {
+                "type": "text",
+                "text": "Newsprint",
+                "x": 1700,
+                "y": 2190,
+                "size": 30,
+                "font": "semibold",
+                "tracking": 0.22,
+                "upper": true,
+                "anchor": "middle",
+                "fill": "ink",
+                "at": 0.5,
+                "enter": "rise",
+                "dur": 0.5,
+                "exitSay": "dots",
+                "exit": "fade",
+                "exitDur": 0.3
+              },
+              {
+                "type": "text",
+                "text": "A comic cover, 1938",
+                "x": 1700,
+                "y": 2238,
+                "size": 36,
+                "font": "serif-italic",
+                "anchor": "middle",
+                "fill": "muted",
+                "at": 0.65,
+                "enter": "rise",
+                "dur": 0.5,
+                "exitSay": "dots",
+                "exit": "fade",
+                "exitDur": 0.3
+              },
+              {
+                "type": "path",
+                "d": "M 1330 1410 q 22 -24 44 0 q 22 -24 44 0",
+                "fill": "none",
+                "cap": "round",
+                "stroke": "ink",
+                "width": 7,
+                "at": 0.3,
+                "enter": "fade",
+                "dur": 0.3,
+                "keys": [
+                  {
+                    "at": 0.3,
+                    "x": 560,
+                    "y": -40,
+                    "dur": 3.2,
+                    "ease": "linear",
+                    "hold": false
+                  }
+                ],
+                "loop": {
+                  "type": "float",
+                  "period": 0.9,
+                  "amount": 10
+                },
+                "exitAt": 3.3,
+                "exit": "fade",
+                "exitDur": 0.3
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -1196,7 +2377,10 @@
             "fill": "ink",
             "at": 0.5,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "deep",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "text",
@@ -1209,7 +2393,10 @@
             "fill": "muted",
             "at": 0.65,
             "enter": "rise",
-            "dur": 0.5
+            "dur": 0.5,
+            "exitSay": "deep",
+            "exit": "fade",
+            "exitDur": 0.3
           },
           {
             "type": "path",
@@ -1248,6 +2435,91 @@
         ],
         "viewDur": 1.1,
         "viewDrift": 0.03
+      },
+      "tall": {
+        "view": [
+          1150,
+          2727,
+          1100,
+          1956
+        ],
+        "elements": [
+          {
+            "type": "group",
+            "x": 1300,
+            "y": 1960,
+            "children": [
+              {
+                "type": "text",
+                "text": "LCD pixels",
+                "x": 400,
+                "y": 2190,
+                "size": 30,
+                "font": "semibold",
+                "tracking": 0.22,
+                "upper": true,
+                "anchor": "middle",
+                "fill": "ink",
+                "at": 0.5,
+                "enter": "rise",
+                "dur": 0.5,
+                "exitSay": "deep",
+                "exit": "fade",
+                "exitDur": 0.3
+              },
+              {
+                "type": "text",
+                "text": "A handheld screen, 1989",
+                "x": 400,
+                "y": 2238,
+                "size": 36,
+                "font": "serif-italic",
+                "anchor": "middle",
+                "fill": "muted",
+                "at": 0.65,
+                "enter": "rise",
+                "dur": 0.5,
+                "exitSay": "deep",
+                "exit": "fade",
+                "exitDur": 0.3
+              },
+              {
+                "type": "path",
+                "d": "M 30 1410 q 22 -24 44 0 q 22 -24 44 0",
+                "fill": "none",
+                "cap": "round",
+                "stroke": "ink",
+                "width": 10,
+                "mosaic": {
+                  "style": "pixel",
+                  "tile": 12,
+                  "gap": 2
+                },
+                "at": 0.3,
+                "enter": "fade",
+                "dur": 0.3,
+                "keys": [
+                  {
+                    "at": 0.3,
+                    "x": 560,
+                    "y": -40,
+                    "dur": 3.2,
+                    "ease": "linear",
+                    "hold": false
+                  }
+                ],
+                "loop": {
+                  "type": "float",
+                  "period": 0.9,
+                  "amount": 10
+                },
+                "exitAt": 3.3,
+                "exit": "fade",
+                "exitDur": 0.3
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -1276,11 +2548,226 @@
             "at": 1.2,
             "enter": "rise",
             "dur": 0.8
+          },
+          {
+            "type": "text",
+            "id": "overview-01",
+            "text": "Tesserae",
+            "x": 400,
+            "y": 990,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 1.6,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "id": "overview-02",
+            "text": "Woodblock",
+            "x": 1700,
+            "y": 990,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 1.7200000000000002,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "id": "overview-03",
+            "text": "Cross-stitch",
+            "x": 3000,
+            "y": 990,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 1.84,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "id": "overview-04",
+            "text": "Letterpress",
+            "x": 3000,
+            "y": 2230,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 1.96,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "id": "overview-05",
+            "text": "Newsprint",
+            "x": 1700,
+            "y": 2230,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 2.08,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "id": "overview-06",
+            "text": "LCD pixels",
+            "x": 400,
+            "y": 2230,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 2.2,
+            "enter": "fade",
+            "dur": 0.5
           }
         ],
         "viewAt": 0,
         "viewDur": 2.4,
         "viewDrift": 0
+      },
+      "tall": {
+        "view": [
+          -684,
+          -1365,
+          3468,
+          6165
+        ],
+        "elements": [
+          {
+            "type": "text",
+            "text": "Only the making changed.",
+            "x": 1050,
+            "y": 4390,
+            "size": 120,
+            "font": "serif-italic",
+            "anchor": "middle",
+            "fill": "accent",
+            "at": 1.2,
+            "enter": "rise",
+            "dur": 0.8
+          },
+          {
+            "type": "text",
+            "id": "overview-01",
+            "text": "Tesserae",
+            "x": 400,
+            "y": 990,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 1.6,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "id": "overview-02",
+            "text": "Woodblock",
+            "x": 1700,
+            "y": 990,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 1.7200000000000002,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "id": "overview-03",
+            "text": "Cross-stitch",
+            "x": 1700,
+            "y": 2590,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 1.84,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "id": "overview-04",
+            "text": "Letterpress",
+            "x": 400,
+            "y": 2590,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 1.96,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "id": "overview-05",
+            "text": "Newsprint",
+            "x": 400,
+            "y": 4190,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 2.08,
+            "enter": "fade",
+            "dur": 0.5
+          },
+          {
+            "type": "text",
+            "id": "overview-06",
+            "text": "LCD pixels",
+            "x": 1700,
+            "y": 4190,
+            "size": 72,
+            "font": "semibold",
+            "tracking": 0.22,
+            "upper": true,
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 2.2,
+            "enter": "fade",
+            "dur": 0.5
+          }
+        ]
       }
     }
   ]
