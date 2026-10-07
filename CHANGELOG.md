@@ -1,5 +1,14 @@
 # Changelog
 
+## Casts hold up better under real authoring (live run 3)
+
+The free agent's third live run, on the current studio path, built a title card and five cast scenes. Its draft exposed three engine affordances, now fixed:
+- **The hero leaving.** When a hero left, the rest stayed faint at the edges of an empty frame. When it exits, merges or is swapped out, the quieted objects now regather.
+- **`spread`.** A `spread` of 4 or less (the agent wrote `1` and `1.1`) is read as a multiple of the default instead of pixels.
+- **Small casts.** A cast of four or fewer gets larger objects. The size is set by the cast's first beat and kept, so adding objects later never resizes them at a cut.
+
+Cast scenes also hold the camera still by default, as diagrams do. Previously `check` warned about an automatic push that the cast linking then removed. The guide now asks for a move per clause of the narration, each cued to one word of it.
+
 ## Composed cast objects
 
 - **`shape`** makes a cast object a small drawn thing instead of an icon on a tile. The shapes are `doc` (a page with a folded corner and lines), `bubble`, `phone`, `card` (with a small bar chart), `person`, `ticket` and `box`. Each is a body in the object's colour that takes the look, with details in the colour that reads on it: hand-drawn and hatched in `drawn`, printed in `print`. The flat colour used by `fill` and `emerge` covers the whole shape. `examples/cast-journey` now sends a ticket stub between drawn people, and the `process-cast` playbook starts from pages, a bubble, a phone and a person.

@@ -201,6 +201,23 @@ test('composed objects are drawn things with their own extent, in every look', (
   assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'q', shape: 'doc', icon: 'file' }], formations: [{ form: 'row', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /one of an icon, a word or a shape/);
 });
 
+test('a small cast gets room, a small spread is a multiple, and the rest return when the hero leaves', () => {
+  // From the free agent's live run 3: three reports, spread 1 and 1.1, and the hero exiting.
+  const three = [{ id: 'r1', icon: 'file' }, { id: 'r2', icon: 'file', color: 'accent2' }, { id: 'r3', icon: 'file' }];
+  const carry = {}, ctx = () => ({ state: carry.state, objects: carry.objects, threads: carry.threads, look: carry.look, camera: carry.camera, unit: carry.unit, carry });
+  const one = expandCastProps({ cast: { objects: three, formations: [{ form: 'scatter', at: 0, spread: 1 }] } }, { ...wide, beatId: 'a' }, ctx()).elements;
+  const xs = one.map(g => g.x);
+  assert.ok(Math.max(...xs) - Math.min(...xs) > 300, 'spread 1 is the normal spread, not one pixel');
+  assert.ok(carry.unit > 1080 * 0.18, 'three objects get larger tiles');
+  const two = expandCastProps({ cast: { objects: [{ id: 'r4', icon: 'file' }], formations: [{ form: 'hero', hero: 'r1', at: 0 }, { form: 'exit', ids: ['r1'], at: 2 }] } }, { ...wide, beatId: 'b' }, ctx()).elements;
+  assert.ok(carry.unit > 1080 * 0.18, 'and keep their size when the cast grows');
+  for (const id of ['r2', 'r3']) {
+    const g = two.find(e => e.id === `b-cast-${id}`);
+    assert.equal(g.keys.at(-1).opacity, 1, `${id} comes back to full when the hero leaves`);
+    assert.ok(g.keys.at(-1).at > 2, 'after it leaves');
+  }
+});
+
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);

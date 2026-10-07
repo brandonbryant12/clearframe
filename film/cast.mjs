@@ -94,12 +94,14 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
   // `on` centres the formation on an object where it stands (a small ring around it, a pile on it).
   const host = f.on != null ? current.get(f.on) : null;
   const [cx, cy] = f.center ?? (host ? [host.x, host.y] : near ? [near.x + sx * size * (near.scale ?? 1) * 0.95, near.y + sy * size * (near.scale ?? 1) * 0.75] : [W / 2, top + A / 2]);
-  const spread = f.spread ?? u * 0.34, scale = f.scale ?? 1, n = ids.length, out = new Map();
+  // `spread` is in frame pixels; a small number (4 or less) reads as a multiple of the default.
+  const wide = f.spread == null ? null : f.spread <= 4 ? f.spread * u * 0.34 : f.spread;
+  const spread = wide ?? u * 0.34, scale = f.scale ?? 1, n = ids.length, out = new Map();
   const place = (id, x, y, extra = {}) => out.set(id, { x, y, scale, rotate: 0, opacity: 1, ...extra });
   const form = f.form === 'line' ? (tall ? 'column' : 'row') : f.form;
   if (form === 'scatter') {
     // A sunflower spiral spread over the frame, jittered by the id: even coverage, never a grid.
-    const rx = (tall ? W * 0.36 : W * 0.38) * (f.spread ? f.spread / (u * 0.34) : 1), ry = (tall ? A * 0.34 : A * 0.33) * (f.spread ? f.spread / (u * 0.34) : 1);
+    const rx = (tall ? W * 0.36 : W * 0.38) * (wide ? wide / (u * 0.34) : 1), ry = (tall ? A * 0.34 : A * 0.33) * (wide ? wide / (u * 0.34) : 1);
     const pts = ids.map((id, i) => {
       const r = Math.sqrt((i + 0.5) / n), a = i * 2.39996 + seed + hash(`${id}${seed}`) * 0.6;
       return [Math.cos(a) * r * rx, Math.sin(a) * r * ry];
@@ -271,12 +273,13 @@ function objectElement(o, id, size, base, enter, look = 'tiles') {
  * Elements for one beat's cast, and the state it ends in. `state`: Map id → pose carried from the
  * previous beat; `cue(v)` resolves a word or seconds to beat time.
  */
-export function castElements(spec, frame, { state = new Map(), threads = [], camera = { zoom: 1, x: 0, y: 0 }, cue = v => (typeof v === 'number' ? v : 0) } = {}) {
+export function castElements(spec, frame, { state = new Map(), threads = [], camera = { zoom: 1, x: 0, y: 0 }, unit, cue = v => (typeof v === 'number' ? v : 0) } = {}) {
   // The camera: one stage holding the whole cast, scaled about the frame's middle and panned toward
   // what it looks at. It carries across cuts like the objects do.
   let cam = { ...camera };
   const camKeys = [];
-  const u = Math.min(frame.width, frame.height), size = u * 0.15;
+  // Object size is set by the cast's first beat and kept: a cast of four or fewer gets more room each.
+  const u = Math.min(frame.width, frame.height), size = unit ?? u * (spec.objects.size <= 4 ? 0.19 : 0.15);
   const pose = new Map(state), groups = new Map(), elements = [], words = [], notes = [], edges = {}, under = [];
   // Draw order carries across cuts too: an object keeps its depth, new ones and anything acting on
   // another come forward.
@@ -289,6 +292,18 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       elements.push(g);
     }
     return groups.get(id);
+  };
+  // A hero quiets the rest; when the hero leaves (exit, merge, swapped out) they regather, loosely,
+  // rather than staying faint at the edges of an empty frame.
+  const release = at => {
+    const quiet = [...pose].filter(([, p]) => p.quiet && !p.gone).map(([id]) => id);
+    if (!quiet.length || [...pose.values()].some(p => p.hero && !p.gone)) return;
+    const back = formationTargets({ form: 'scatter' }, quiet, frame, { size, seed: spec.seed + 97, current: pose, extent: id => objectExtent(spec.objects.get(id), size) });
+    for (const id of quiet) {
+      const { el, base } = group(id), to = back.get(id);
+      el.keys.push({ at, x: to.x - base.x, y: to.y - base.y, scale: to.scale, rotate: to.rotate, opacity: 1, dur: 1.1, ease: 'inOut' });
+      pose.set(id, { ...to, z: pose.get(id).z });
+    }
   };
   // Formation times: a spoken cue, explicit seconds, or (uncued) evenly after the previous one.
   const times = [];
@@ -351,7 +366,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       const hub = f.form === 'merge' ? f.into : f.from, h = pose.get(hub);
       if (!h || !alive(hub)) { notes.push(`${f.form}: ${hub} is not on screen, so nothing moves`); return; }
       const st = f.stagger ?? 0.18, hs = h.scale ?? 1, pulse = [];
-      const out = f.form === 'split' ? formationTargets({ form: 'ring', on: hub, spread: f.spread ?? size * hs * 1.8 }, ids, frame, { size, current: pose, extent: id => objectExtent(spec.objects.get(id), size) }) : null;
+      const out = f.form === 'split' ? formationTargets({ form: 'ring', on: hub, spread: f.spread == null ? size * hs * 1.8 : f.spread <= 4 ? f.spread * size * hs * 1.8 : f.spread }, ids, frame, { size, current: pose, extent: id => objectExtent(spec.objects.get(id), size) }) : null;
       ids.forEach((id, i) => {
         const at = t + i * st;
         if (f.form === 'merge') {
@@ -374,6 +389,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
         }
       });
       if (f.form === 'split') pulse.push(t);
+      else release(t + dur * 0.5);
       const { el, base } = group(hub), x = h.x - base.x, y = h.y - base.y;
       for (const at of pulse) el.keys.push({ at, x, y, scale: hs * 1.12, dur: 0.12, ease: 'out' }, { at: at + 0.12, x, y, scale: hs, dur: 0.3, ease: 'spring' });
       return;
@@ -484,8 +500,10 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       }
       const { el, base } = groups.get(id);
       el.keys.push({ at, x: to.x - base.x, y: to.y - base.y, scale: to.scale, rotate: to.rotate, opacity: to.opacity, dur, ease: f.ease ?? 'inOut' });
-      pose.set(id, { ...to, z: pose.get(id)?.z ?? ++top, gone: f.form === 'exit' || (f.form === 'swap' && id === f.out) });
+      pose.set(id, { ...to, z: pose.get(id)?.z ?? ++top, gone: f.form === 'exit' || (f.form === 'swap' && id === f.out),
+        ...(f.form === 'hero' ? (id === f.hero ? { hero: true } : { quiet: true }) : f.form === 'swap' && id === f.in && pose.get(f.out)?.hero ? { hero: true } : {}) });
     });
+    if (f.form === 'exit' || f.form === 'swap') release(t + 0.1);
     // What causes a swap is drawn over what it changed.
     for (const id of f.form === 'swap' ? f.by ?? [] : []) if (pose.has(id)) pose.set(id, { ...pose.get(id), z: ++top });
     // A thread drawn through the formation once it settles: the pieces are now one sequence. Each
@@ -532,7 +550,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
   // The stage is there from frame one (its contents keep their own entrances).
   const stage = { type: 'group', id: 'cast-stage', x: 0, y: 0, at: 0, enter: 'none', origin: [frame.width / 2, frame.height / 2], children: drawn,
     keys: [{ at: 0, scale: camera.zoom, x: camera.x, y: camera.y, dur: 0 }, ...camKeys] };
-  return { elements: moved ? [stage] : drawn, state: pose, threads: carried, notes, camera: cam, edges };
+  return { elements: moved ? [stage] : drawn, state: pose, threads: carried, notes, camera: cam, edges, unit: size };
 }
 
 export function expandCastProps(input, frame, ctx = {}) {
@@ -545,13 +563,13 @@ export function expandCastProps(input, frame, ctx = {}) {
   if (rest.title || rest.kicker) frame = { ...frame, ...(ctx.heading === 'bottom'
     ? { bottom: frame.height - (frame.height > frame.width ? 430 : frame.height * 0.34) }
     : { top: frame.height > frame.width ? 430 : 300 }) };
-  const { elements, state, threads, notes, camera, edges } = castElements(spec, frame, { state: ctx.state, threads: ctx.threads, camera: ctx.camera, cue: ctx.cue });
+  const { elements, state, threads, notes, camera, edges, unit } = castElements(spec, frame, { state: ctx.state, threads: ctx.threads, camera: ctx.camera, unit: ctx.unit, cue: ctx.cue });
   for (const n of notes) ctx.notes?.push(`${frame.beatId ?? 'cast'}: ${n}`);
   if (frame.beatId) {
     const prefix = el => { el.id = `${frame.beatId}-${el.id}`; for (const c of el.children ?? []) prefix(c); };
     elements.forEach(prefix);
   }
-  if (ctx.carry) Object.assign(ctx.carry, { state, objects: spec.objects, threads, look: spec.look, camera,
+  if (ctx.carry) Object.assign(ctx.carry, { state, objects: spec.objects, threads, look: spec.look, camera, unit,
     ...(edges.fill || edges.emerge ? { edges: { ...ctx.carry.edges, [frame.beatId]: edges } } : {}) });
   // Elements the author adds are scenery for the cast (a panel, a label beside it): drawn beneath it.
   return { ...rest, view: [0, 0, frame.width, frame.height], elements: [...(rest.elements ?? []), ...elements] };

@@ -177,7 +177,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     spec = rules(b.block);
   const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.dur };
   const castProps = b.block === 'canvas' && b.props?.cast != null
-    ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, look: cast.look, camera: cast.camera, heading: b.heading ?? sb.beats[b.index]?.heading ?? sb.heading, cue: cueResolver(b, frame), carry: cast, notes: report.warnings })
+    ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, look: cast.look, camera: cast.camera, unit: cast.unit, heading: b.heading ?? sb.beats[b.index]?.heading ?? sb.heading, cue: cueResolver(b, frame), carry: cast, notes: report.warnings })
     : b.props;
   const authoredProps = b.block === 'canvas'
     ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(expandKPIProps(castProps ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
@@ -516,7 +516,8 @@ function beatLayers(source, b, sb, report) {
   // unless someone asks for a move.
   if (sb.camera != null && (typeof sb.camera === 'object' && sb.camera.to != null))
     throw new Error('the film camera is a default move; push to a detail (camera.to) on a beat');
-  const authoredCamera = source.camera ?? sb.camera ?? (b.block === 'canvas' && source.props?.diagram != null ? 'none' : null);
+  // Diagrams and casts lay themselves out for a still frame (their objects move instead).
+  const authoredCamera = source.camera ?? sb.camera ?? (b.block === 'canvas' && (source.props?.diagram != null || source.props?.cast != null) ? 'none' : null);
   if (authoredCamera != null) {
     const camera = typeof authoredCamera === 'string' ? { move: authoredCamera } : structuredClone(authoredCamera);
     if (
