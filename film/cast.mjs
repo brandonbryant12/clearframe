@@ -16,7 +16,7 @@ const own = (o, keys, name) => {
   check(o && typeof o === 'object' && !Array.isArray(o), `${name} must be an object`);
   for (const k of Object.keys(o)) check(keys.includes(k), `unknown ${name}.${k}`);
 };
-export const FORMS = ['scatter', 'row', 'column', 'line', 'ring', 'cluster', 'hero', 'exit', 'swap', 'wave', 'mark', 'camera', 'fill', 'emerge'];
+export const FORMS = ['scatter', 'row', 'column', 'line', 'ring', 'cluster', 'hero', 'exit', 'swap', 'wave', 'mark', 'camera', 'fill', 'emerge', 'merge', 'split'];
 // The scene tone an object's colour floods the frame with when it fills it (docs/canvas.md, tone).
 export const FILL_TONES = { accent: 'accent', accent2: 'accent2', surface: 'surface', ink: 'invert' };
 export const LOOKS = ['tiles', 'drawn', 'print'];
@@ -46,7 +46,7 @@ export function castSpec(input, known = new Map(), knownLook = null) {
   check(objects.size >= 1 && objects.size <= 16, 'a cast has 1–16 objects (declare them in its first beat)');
   check(Array.isArray(input.formations) && input.formations.length >= 1 && input.formations.length <= 12, 'formations needs 1–12 entries');
   const formations = input.formations.map((f, i) => {
-    own(f, ['form', 'say', 'at', 'ids', 'hero', 'word', 'center', 'spread', 'scale', 'dur', 'stagger', 'ease', 'thread', 'beside', 'on', 'out', 'in', 'by', 'mark', 'to', 'color', 'zoom'], `formations[${i}]`);
+    own(f, ['form', 'say', 'at', 'ids', 'hero', 'word', 'center', 'spread', 'scale', 'dur', 'stagger', 'ease', 'thread', 'beside', 'on', 'out', 'in', 'by', 'mark', 'to', 'color', 'zoom', 'into', 'from'], `formations[${i}]`);
     if (f.form === 'mark') {
       check(MARKS.includes(f.mark) && Array.isArray(f.ids) && f.ids.length >= 1, `formations[${i}] (mark) is a ${MARKS.join(', ')} on ids`);
       check((f.mark === 'arrow') === (f.to != null) && [].concat(f.to ?? []).every(id => objects.has(id)), `formations[${i}]: an arrow mark points to another object or a list of them (to), and only an arrow does`);
@@ -66,6 +66,8 @@ export function castSpec(input, known = new Map(), knownLook = null) {
     check(f.center == null || (Array.isArray(f.center) && f.center.length === 2 && f.center.every(finite)), `formations[${i}].center is [x, y] in frame pixels`);
     for (const k of ['spread', 'scale', 'dur', 'stagger']) check(f[k] == null || (finite(f[k]) && f[k] >= 0), `formations[${i}].${k} is a positive number`);
     check(f.form === 'camera' ? finite(f.zoom) && f.zoom >= 0.6 && f.zoom <= 2.5 : f.zoom == null, `formations[${i}]: zoom (0.6–2.5) belongs to form camera, which needs it`);
+    check(f.form === 'merge' ? objects.has(f.into) && f.ids?.length >= 1 && !f.ids.includes(f.into) : f.into == null, `formations[${i}]: merge folds ids into one other object (into), and only merge takes into`);
+    check(f.form === 'split' ? objects.has(f.from) && f.ids?.length >= 1 && !f.ids.includes(f.from) : f.from == null, `formations[${i}]: split brings ids out of one other object (from), and only split takes from`);
     if (f.form === 'fill' || f.form === 'emerge') {
       check(f.ids?.length === 1, `formations[${i}] (${f.form}) names one object in ids`);
       check(FILL_TONES[objects.get(f.ids[0])?.color ?? 'accent'] != null, `formations[${i}] (${f.form}): ${f.ids[0]} must be accent, accent2, surface or ink, the colours a scene can take as its tone`);
@@ -247,6 +249,40 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
   spec.formations.forEach((f, k) => {
     const t = times[k], stagger = f.stagger ?? 0.06, dur = f.dur ?? 1.1;
     const ids = f.form === 'swap' ? [f.out, f.in] : f.ids ?? [...spec.objects.keys()].filter(id => alive(id) && (f.form !== 'exit' || pose.has(id)));
+    // Causal shapes: copies fold into one (each flies in and is absorbed; the one they join gives a
+    // pulse as each lands), and one breaks out into several (they burst from it into a ring around
+    // it, new objects or ones it absorbed earlier).
+    if (f.form === 'merge' || f.form === 'split') {
+      const hub = f.form === 'merge' ? f.into : f.from, h = pose.get(hub);
+      if (!h || !alive(hub)) { notes.push(`${f.form}: ${hub} is not on screen, so nothing moves`); return; }
+      const st = f.stagger ?? 0.18, hs = h.scale ?? 1, pulse = [];
+      const out = f.form === 'split' ? formationTargets({ form: 'ring', on: hub, spread: f.spread ?? size * hs * 1.8 }, ids, frame, { size, current: pose, extent: id => objectExtent(spec.objects.get(id), size) }) : null;
+      ids.forEach((id, i) => {
+        const at = t + i * st;
+        if (f.form === 'merge') {
+          const p = pose.get(id);
+          if (!p || p.gone) return;
+          const { el, base } = group(id);
+          el.keys.push({ at, x: h.x - base.x, y: h.y - base.y, scale: (p.scale ?? 1) * 0.35, rotate: 0, opacity: 0, dur, ease: f.ease ?? 'in' });
+          pose.set(id, { x: h.x, y: h.y, scale: (p.scale ?? 1) * 0.35, rotate: 0, opacity: 0, z: p.z, gone: true });
+          pulse.push(at + dur * 0.85);
+        } else {
+          // Out of the hub: an object not yet on screen (or absorbed) starts inside it, small.
+          if (!groups.has(id) && (!pose.has(id) || pose.get(id).gone)) {
+            const g = objectElement(spec.objects.get(id), `cast-${id}`, size, { x: h.x, y: h.y, scale: 0.3, opacity: 0 }, { at: 0, enter: 'none' }, spec.look);
+            groups.set(id, { el: g, base: { x: h.x, y: h.y } }); elements.push(g);
+            pose.set(id, { x: h.x, y: h.y, scale: 0.3, opacity: 0, z: (h.z ?? 0) - 0.5 });
+          }
+          const { el, base } = group(id), to = out.get(id);
+          el.keys.push({ at, x: h.x - base.x, y: h.y - base.y, scale: 0.3, opacity: 0, dur: 0 }, { at, x: to.x - base.x, y: to.y - base.y, scale: to.scale, rotate: 0, opacity: 1, dur, ease: f.ease ?? 'out' });
+          pose.set(id, { ...to, z: pose.get(id)?.z ?? ++top });
+        }
+      });
+      if (f.form === 'split') pulse.push(t);
+      const { el, base } = group(hub), x = h.x - base.x, y = h.y - base.y;
+      for (const at of pulse) el.keys.push({ at, x, y, scale: hs * 1.12, dur: 0.12, ease: 'out' }, { at: at + 0.12, x, y, scale: hs, dur: 0.3, ease: 'spring' });
+      return;
+    }
     // An object can become the frame: it travels to the middle and grows past the edges as its face
     // fades and its colour floods in, and the next scene plays on that colour (the job sets its
     // tone and cuts). `emerge` is the way back: out of the last scene's colour, to where it was.

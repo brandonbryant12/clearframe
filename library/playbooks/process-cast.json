@@ -67,18 +67,18 @@
   {
    "id": "sort",
    "block": "canvas",
-   "vo": "So the repeats are set aside, and the rest fall into one line.",
+   "vo": "So the repeats fold into the first, and the rest fall into one line.",
    "tail": 0.9,
    "props": {
     "cast": {
      "formations": [
       {
-       "form": "exit",
+       "form": "merge",
        "ids": [
         "repeat"
        ],
-       "say": "aside",
-       "dur": 0.8
+       "into": "email",
+       "say": "fold"
       },
       {
        "form": "line",

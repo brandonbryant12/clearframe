@@ -155,6 +155,24 @@ test('word pills fit their words and stay whole in the frame; scenery sits under
   }
 });
 
+test('copies merge into one, and later split back out of it', () => {
+  const carry = {}, ctx = () => ({ state: carry.state, objects: carry.objects, threads: carry.threads, look: carry.look, camera: carry.camera, carry });
+  const one = expandCastProps({ cast: { objects, formations: [{ form: 'scatter', at: 0 }, { form: 'merge', ids: ['b', 'c'], into: 'a', at: 1 }] } }, { ...wide, beatId: 'm' }, ctx()).elements;
+  const a = one.find(e => e.id === 'm-cast-a'), b = one.find(e => e.id === 'm-cast-b');
+  assert.equal(b.keys.at(-1).opacity, 0, 'a copy is absorbed');
+  assert.ok(Math.abs(b.x + b.keys.at(-1).x - (a.x + (a.keys.filter(k => k.x != null).at(-1)?.x ?? 0))) < 1e-6, 'into the one it joins');
+  assert.ok(a.keys.some(k => k.scale > 1.1), 'which gives a pulse as each lands');
+  assert.ok(carry.state.get('b').gone && carry.state.get('c').gone);
+  const two = expandCastProps({ cast: { objects: [{ id: 'n', icon: 'bell' }], formations: [{ form: 'split', from: 'a', ids: ['b', 'c', 'n'], at: 0.5 }] } }, { ...wide, beatId: 's' }, ctx()).elements;
+  for (const id of ['b', 'c', 'n']) {
+    const g = two.find(e => e.id === `s-cast-${id}`), last = g.keys.at(-1);
+    assert.equal(last.opacity, 1, `${id} comes out`);
+    const p = carry.state.get(id), h = carry.state.get('a');
+    assert.ok(Math.hypot(p.x - h.x, p.y - h.y) > 162, `${id} stands clear of the one it came out of`);
+  }
+  assert.throws(() => expandCastProps({ cast: { objects, formations: [{ form: 'merge', ids: ['a'], into: 'a', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /merge folds ids into one other object/);
+});
+
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);

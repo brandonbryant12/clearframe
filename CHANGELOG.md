@@ -1,5 +1,9 @@
 # Changelog
 
+## Casts: merge and split
+
+- **`merge`** folds copies into one object (`into`). Each flies in and is absorbed, and the one it joins pulses as it lands. **`split`** is the reverse: objects burst out of one (`from`) into a ring around it, either objects it absorbed earlier or new ones. These are the causal shapes behind "duplicates merge" and "one request fans out". The free agent had faked a merge with a cluster and an exit in its live run. The `process-cast` playbook now folds its repeat into the first report.
+
 ## Casts the agent can actually use
 
 The free studio agent's second live run chose a cast for the support-triage brief: six word pills, a "queue" panel behind them, and the film's bottom headings. Its draft exposed four engine defects, now fixed:
