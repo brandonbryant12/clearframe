@@ -1,5 +1,10 @@
 # Changelog
 
+## A framed title's kicker clears the brand in landscape
+
+- **On a landscape film with the editorial frame, the title's kicker now sits below the brand wordmark.** It used to print over it (brand-spot: "FIELD NOTES overlaps clearframe"). brand-spot landscape: 1 finding → 0.
+- Unframed films are unchanged: 13 decoded stills compared, all byte-identical (the 14th still differs only by the earlier kinetic fit). The vertical framed title is byte-identical too.
+
 ## Kinetic stack type stays inside its area
 
 - **A stacked kinetic phrase measures each line's real ink before it settles its size:** the words, the spaces between them and an italic's lean at the end (about 0.15 em on the display serif).
