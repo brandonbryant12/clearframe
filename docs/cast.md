@@ -49,6 +49,10 @@ Each beat ends with every object's pose (place, scale, rotation, opacity), its d
 - A thread stays until the next move.
 - What acts on another (`by`) is drawn over it, and keeps that depth afterwards.
 
+Threads keep cause before effect: each segment draws once both of its ends have arrived. If a formation is cued so late that it cannot settle before the beat ends, its thread is left out (and not carried), and `check` names the cue to move or the tail to add.
+
+A cast lays itself out for the frame, so it cannot be combined with `view`, `viewFrom` or `world`.
+
 Consecutive cast beats are joined with a cut, no exit, and a still camera (unless the beat sets one). A non-cut transition between them is warned about, because it would hide the continuity. A hero's `word` fades before the cut when nothing replaces it.
 
 Frames remain a pure function of time: the formations compile once into keys on stable groups.
@@ -61,4 +65,4 @@ Frames remain a pure function of time: the formations compile once into keys on 
 
 Not for evidence: numbers, charts and quotes stay in their own native forms with sources. A cast can carry the objects that stand for them (a chart tile becomes the chart beat that follows).
 
-Reference: `examples/cast-study` (one cast, five moves, 17 s, landscape and vertical). Tests: `test/cast.test.mjs`.
+Start from the playbook: `new DIR --playbook process-cast [--vertical]` scaffolds five cast beats (arrive, sort, focus, change, result) to rewrite with your own objects and moves. Reference: `examples/cast-study` (one cast, five moves, 17 s, landscape and vertical). Tests: `test/cast.test.mjs`.

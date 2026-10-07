@@ -27,7 +27,13 @@ Every film directed from the same defaults looks alike. `clearframe muse --seed 
 
 ## 1c. Keep a subject on screen
 
-Decide what stays on screen before choosing blocks: the materials, parts or figure that the story changes. Then write each beat as a move of that picture. Cards are punctuation, never the spine. A `canvas` `props.cast` keeps designed objects through consecutive beats. They scatter, line up, step forward (`hero`), turn into one another (`swap`, with `by` naming the cause), pulse in order (`wave`) and leave, each move on a spoken word. Consecutive cast beats cut invisibly. See `docs/cast.md` and `examples/cast-study`. For systems and code use a film stage, and for a journey use one world.
+Decide what the audience should see for this material before choosing blocks: the thing the story changes, whether that is pieces of a process, the parts of a system, a figure, a product or a place. Where that thing persists, keep it on screen and write each beat as a change to it. Choose the mechanism by the material, not by habit:
+- For things that get sorted, chosen or replaced, a `canvas` `props.cast` keeps designed objects through consecutive beats. They scatter, line up, step forward (`hero`), turn into one another (`swap`, with `by` naming the cause), pulse in order (`wave`) and leave, each move on a spoken word. See `docs/cast.md` and `examples/cast-study`.
+- For systems and code, use a film stage.
+- For a journey or a place, use one world.
+- For a claim that deserves silence, a card.
+
+None of these is the default film shape.
 
 ## 2. Write the shot list before the blocks
 

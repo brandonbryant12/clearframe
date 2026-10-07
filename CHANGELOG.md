@@ -1,5 +1,17 @@
 # Changelog
 
+## Vertical moves that keep type safe, and a cast playbook
+
+- **Slow camera moves no longer push type out of a vertical frame.** On tall frames, block content now starts at 11.5% of the width: the 10% title-safe margin plus room for the slow camera. The automatic push (and authored `in`/`out` pushes and `left`/`right` pans) is capped so the content margin never passes 10%. Before, any push carried edge type outside the safe area: `vertical-short` gave 10 title-safe warnings and now has none.
+- **Marks are measured by their ink.** The frame audit measures a run of punctuation only (a display quotation mark, a bullet) by its glyph outline instead of the font's line box, which reached far below a large mark and reported it overlapping the text under it. The quote block keeps its mark inside the margin on narrower frames and leaves room for its rise.
+- **`process-cast` playbook** ("Follow a few things through a process"), for audiences learning how a workflow, product or team handles its pieces. Requests arrive, repeats are set aside, the rest line up, one matters first, someone takes it on and it changes, and the line moves on. It is built on a cast and ends on the picture. `new DIR --playbook process-cast [--vertical]`.
+- **Casts keep cause before effect.**
+  - A formation's thread draws each segment only after both its ends have arrived. When the beat ends before the formation can settle, the thread is left out with a `check` warning naming the cue to move, instead of a connector appearing before the pieces it joins.
+  - A small scatter is centred in the frame.
+  - A cast lays itself out for the frame, refuses a `view`, `viewFrom` or `world`, and vertical scaffolds no longer give cast, chart or diagram beats a landscape view. A view had shrunk a vertical playbook's cast to 56%.
+- **The agent's authoring guide matches pictures to the material.** It no longer ranks a cast first or caps cards: it lists which mechanism fits which kind of material and audience (a cast, a stage, a world, morphing charts, a sketch, or a card for a claim that deserves silence).
+- Research note: `docs/research/2026-10-shader-effects-assessment.md` reviews shader-effects-inc/shaders (MIT, 199 WebGPU effects) for ideas to implement natively. Dither, pattern transitions and a studio backdrop are worth building; the renderer itself is not adopted.
+
 ## Casts: objects that carry the story
 
 - **`canvas.props.cast`** keeps a cast of designed objects through consecutive canvas beats, so a film can be moves of one picture instead of a card per line.
@@ -15,7 +27,7 @@
   - Reference `examples/cast-study`, docs `docs/cast.md`, tests `test/cast.test.mjs`.
 - **The studio agent starts from what stays on screen.**
   - The cause: `engine/agent-plugin/AUTHORING.md`, the agent's first-cut guide, told it to "decide 5–8 scenes" and listed title, statement, stat, kinetic and endcard as the shapes that render well. That is the main reason films from the agent path read as slideshows.
-  - It now asks for the persisting subject and its moves first. It lists casts, film stages, worlds and morphing charts as the spine, and cards as punctuation (never three in a row).
+  - It now asks what the audience should see for this material first. It matches mechanisms to what the source contains (a cast for things that get sorted or replaced, a stage for systems, a world for journeys, morphing charts for numbers, cards for claims that deserve silence) without ranking them or setting quotas.
 - **Critique sees casts.** Consecutive cast beats count as one carried picture, not "separate drawings in a row".
 
 ## Stages and code that fit the frame

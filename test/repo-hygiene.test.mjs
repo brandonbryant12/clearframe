@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 // The library holds sources. Renders, evidence and review media belong in build/ (ignored).
 // Binaries are allowed only where they are the reusable asset or a fixture.
@@ -29,6 +31,20 @@ test('build caches and compiler output are never tracked', () => {
   const files = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
   const cached = files.filter(f => /(^|\/)\.cache\/|(^|\/)target\/(release|debug)\//.test(f));
   assert.deepEqual(cached.slice(0, 5), [], `${cached.length} build-cache files are tracked; they belong in the ignored .cache/ folders`);
-  for (const dir of ['scene/.cache/target'])
-    assert.ok(execFileSync('git', ['check-ignore', '-q', `${dir}/x`, '--no-index'], { encoding: 'utf8' }) === '', `${dir} must be ignored`);
+  // The ignore rules are checked in a scratch repository holding only this repository's tracked
+  // .gitignore files: a checkout's scene/.cache may be a symlink to a shared warm cache, and git
+  // will not look through a symlink. Rules only in .git/info/exclude would not reach other machines.
+  const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-ignore-'));
+  try {
+    execFileSync('git', ['init', '-q', scratch]);
+    for (const f of files.filter(f => path.basename(f) === '.gitignore')) {
+      fs.mkdirSync(path.join(scratch, path.dirname(f)), { recursive: true });
+      fs.copyFileSync(f, path.join(scratch, f));
+    }
+    for (const p of ['scene/.cache/target/release/clearframe-scene', 'scene/.cache/target/x', '.clearframe/opencode/x', 'build/x.mp4'])
+      assert.doesNotThrow(() => execFileSync('git', ['-C', scratch, 'check-ignore', '-q', '--no-index', p]), `${p} must be ignored by a tracked .gitignore`);
+    assert.throws(() => execFileSync('git', ['-C', scratch, 'check-ignore', '-q', '--no-index', 'film/cast.mjs']), 'sources are not ignored');
+  } finally {
+    fs.rmSync(scratch, { recursive: true, force: true });
+  }
 });

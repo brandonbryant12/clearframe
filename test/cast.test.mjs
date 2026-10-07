@@ -61,6 +61,19 @@ test('consecutive cast beats cut without moving the picture under the objects', 
   assert.ok(order.props.elements.some(e => e.id === 'order-cast-a'), 'the carried objects are in the second beat');
 });
 
+test('a thread never appears before the pieces it joins; too late in the beat, it is left out with a note', () => {
+  const lineUp = at => ({ cast: { objects, formations: [{ form: 'scatter', at: 0 }, { form: 'line', ids: ['a', 'b', 'c'], at, stagger: 0.2, thread: true }] } });
+  const run = (at, duration) => { const notes = [], carry = {}; return { els: expandCastProps(lineUp(at), { ...wide, beatId: 'x', duration }, { notes, carry }).elements, notes, carry }; };
+  const early = run(1, 6), lines = early.els.filter(e => e.type === 'line');
+  assert.equal(lines.length, 2);
+  lines.forEach((l, j) => assert.ok(l.at >= 1 + (j + 1) * 0.2 + 1.1 - 1e-9, `segment ${j + 1} draws after its far end arrives (${l.at})`));
+  assert.equal(early.carry.threads.length, 2, 'a settled thread carries into the next beat');
+  const late = run(4.6, 6);
+  assert.equal(late.els.filter(e => e.type === 'line').length, 0, 'no connector shows before the line has formed');
+  assert.match(late.notes[0], /^x: the thread of formation 2 \(line\) would finish .* after the beat ends/);
+  assert.equal(late.carry.threads.length, 0, 'and none appears after the cut either');
+});
+
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);

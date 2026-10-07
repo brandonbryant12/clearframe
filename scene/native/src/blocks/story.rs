@@ -752,7 +752,8 @@ impl<'a, 'c> Draw<'a, 'c> {
         let p = self.props();
         let indent = if self.wide { 150.0 } else { 0.0 };
         let mark_size = if self.wide { 300.0 } else { 220.0 };
-        let top_pad = if self.wide { 0.0 } else { mark_size * 0.42 };
+        // On narrower frames the mark sits above the text with room for its rise entrance.
+        let top_pad = if self.wide { 0.0 } else { mark_size * 0.52 };
         let quote = self.fit(
             s(p, "text"),
             Style::display(Font::DisplayLight, if self.wide { 70.0 } else { 58.0 }).leading(1.16),
@@ -768,7 +769,8 @@ impl<'a, 'c> Draw<'a, 'c> {
         let mark = self.rise(
             self.run(
                 "“".into(),
-                a.x - mark_size * 0.06,
+                // It hangs into the margin only where the margin is wide enough to hold it.
+                if self.wide { a.x - mark_size * 0.06 } else { a.x },
                 top + mark_size * 0.62,
                 Font::DisplayBold,
                 mark_size,

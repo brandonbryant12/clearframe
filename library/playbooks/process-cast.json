@@ -1,0 +1,202 @@
+{
+ "title": "Follow a few things through a process",
+ "audience": "People learning how a workflow, product or team handles its pieces: new hires, customers, stakeholders",
+ "inputs": "The real things being handled (requests, files, orders, reports, tickets) and what happens to them, step by step",
+ "theme": "paper",
+ "type": "geometric",
+ "motion": "gentle",
+ "backdrop": "none",
+ "transition": "cut",
+ "format": "landscape",
+ "lens": {
+  "handheld": 0
+ },
+ "texture": {
+  "grain": 0.25,
+  "vignette": 0.35
+ },
+ "beats": [
+  {
+   "id": "arrive",
+   "block": "canvas",
+   "vo": "Requests arrive from everywhere at once.",
+   "props": {
+    "cast": {
+     "objects": [
+      {
+       "id": "email",
+       "icon": "mail",
+       "color": "accent",
+       "enter": "none"
+      },
+      {
+       "id": "chat",
+       "icon": "message",
+       "color": "positive",
+       "enter": "none"
+      },
+      {
+       "id": "review",
+       "icon": "star",
+       "color": "accent2",
+       "enter": "drop"
+      },
+      {
+       "id": "call",
+       "icon": "phone",
+       "color": "ink",
+       "enter": "drop"
+      },
+      {
+       "id": "repeat",
+       "icon": "mail",
+       "color": "accent",
+       "enter": "drop"
+      }
+     ],
+     "formations": [
+      {
+       "form": "scatter",
+       "at": 0.3,
+       "stagger": 0.22
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "sort",
+   "block": "canvas",
+   "vo": "So the repeats are set aside, and the rest fall into one line.",
+   "tail": 0.9,
+   "props": {
+    "cast": {
+     "formations": [
+      {
+       "form": "exit",
+       "ids": [
+        "repeat"
+       ],
+       "say": "aside",
+       "dur": 0.8
+      },
+      {
+       "form": "line",
+       "ids": [
+        "email",
+        "chat",
+        "review",
+        "call"
+       ],
+       "say": "rest",
+       "thread": true
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "focus",
+   "block": "canvas",
+   "vo": "One of them matters most right now.",
+   "tail": 0.6,
+   "props": {
+    "cast": {
+     "formations": [
+      {
+       "form": "hero",
+       "hero": "review",
+       "say": "matters",
+       "word": "first"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "change",
+   "block": "canvas",
+   "vo": "But someone takes it on, and it changes.",
+   "tail": 0.9,
+   "props": {
+    "cast": {
+     "objects": [
+      {
+       "id": "owner",
+       "icon": "user",
+       "color": "surface",
+       "enter": "drop"
+      },
+      {
+       "id": "done",
+       "icon": "check",
+       "color": "positive"
+      }
+     ],
+     "formations": [
+      {
+       "form": "cluster",
+       "ids": [
+        "owner"
+       ],
+       "beside": "review",
+       "say": "someone"
+      },
+      {
+       "form": "swap",
+       "out": "review",
+       "in": "done",
+       "by": [
+        "owner"
+       ],
+       "say": "changes",
+       "dur": 0.7
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "result",
+   "block": "canvas",
+   "vo": "So the line moves on, one step better.",
+   "min": 4,
+   "props": {
+    "cast": {
+     "formations": [
+      {
+       "form": "exit",
+       "ids": [
+        "owner"
+       ],
+       "at": 0.1,
+       "dur": 0.7
+      },
+      {
+       "form": "line",
+       "ids": [
+        "email",
+        "chat",
+        "done",
+        "call"
+       ],
+       "say": "line",
+       "thread": true
+      },
+      {
+       "form": "wave",
+       "ids": [
+        "email",
+        "chat",
+        "done",
+        "call"
+       ],
+       "say": "better"
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "note": "A cast keeps the same objects on screen through every cast scene, so the film is moves of one picture rather than a card per line (docs/cast.md). Replace the objects with the real things in your process (choose icons from `clearframe catalog canvas`) and each formation with what actually happens to them, cued with `say` to the word that names the move. Keep the cast for the setup; cut to a chart, stage or card only at the turn or for evidence, and give every number its own sourced form. End on the picture (the line playing) rather than a card. Check both landscape and vertical."
+}

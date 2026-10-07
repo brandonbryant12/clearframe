@@ -69,10 +69,13 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
   if (form === 'scatter') {
     // A sunflower spiral spread over the frame, jittered by the id: even coverage, never a grid.
     const rx = (tall ? W * 0.36 : W * 0.38) * (f.spread ? f.spread / (u * 0.34) : 1), ry = (tall ? H * 0.34 : H * 0.33) * (f.spread ? f.spread / (u * 0.34) : 1);
-    ids.forEach((id, i) => {
+    const pts = ids.map((id, i) => {
       const r = Math.sqrt((i + 0.5) / n), a = i * 2.39996 + seed + hash(`${id}${seed}`) * 0.6;
-      place(id, cx + Math.cos(a) * r * rx, cy + Math.sin(a) * r * ry, { rotate: (hash(`${id}r${seed}`) - 0.5) * 28, scale: scale * (0.85 + hash(`${id}s`) * 0.25) });
+      return [Math.cos(a) * r * rx, Math.sin(a) * r * ry];
     });
+    // A few points of a spiral lean to one side; centre them so the pile sits in the frame's middle.
+    const [mx, my] = [0, 1].map(k => pts.reduce((s, p) => s + p[k], 0) / n);
+    ids.forEach((id, i) => place(id, cx + pts[i][0] - mx, cy + pts[i][1] - my, { rotate: (hash(`${id}r${seed}`) - 0.5) * 28, scale: scale * (0.85 + hash(`${id}s`) * 0.25) }));
   } else if (form === 'row' || form === 'column') {
     const along = form === 'row' ? Math.min(W * 0.84, size * 2 * n) : Math.min(H * 0.66, size * 1.9 * n);
     ids.forEach((id, i) => {
@@ -139,7 +142,7 @@ function objectElement(o, id, size, base, enter) {
  */
 export function castElements(spec, frame, { state = new Map(), threads = [], cue = v => (typeof v === 'number' ? v : 0) } = {}) {
   const u = Math.min(frame.width, frame.height), size = u * 0.15;
-  const pose = new Map(state), groups = new Map(), elements = [], words = [];
+  const pose = new Map(state), groups = new Map(), elements = [], words = [], notes = [];
   // Draw order carries across cuts too: an object keeps its depth, new ones and anything acting on
   // another come forward.
   let carried = [], top = Math.max(0, ...[...state.values()].map(p => p.z ?? 0));
@@ -204,15 +207,24 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cue
     });
     // What causes a swap is drawn over what it changed.
     for (const id of f.form === 'swap' ? f.by ?? [] : []) if (pose.has(id)) pose.set(id, { ...pose.get(id), z: ++top });
-    // A thread drawn through the formation once it settles: the pieces are now one sequence.
+    // A thread drawn through the formation once it settles: the pieces are now one sequence. Each
+    // segment draws only after both its ends have arrived. If the beat ends before the formation can
+    // settle, there is no thread (and none carried): drawing it early would show the line before
+    // the pieces it joins, so the author is told to cue the move earlier or lengthen the beat.
     if (f.thread) {
-      const pts = [...targets.entries()].filter(([, p]) => p.opacity > 0).map(([, p]) => p);
-      for (let i = 1; i < pts.length; i++) {
-        const [a, b] = [pts[i - 1], pts[i]], d = Math.hypot(b.x - a.x, b.y - a.y) || 1, inset = (size * 0.5 + 14) / d;
-        words.push({ type: 'line', id: `cast-thread-${k}-${i}`, x1: a.x + (b.x - a.x) * inset, y1: a.y + (b.y - a.y) * inset, x2: b.x - (b.x - a.x) * inset, y2: b.y - (b.y - a.y) * inset,
-          stroke: 'ink', width: 3, cap: 'round', at: t + dur + (i - 1) * 0.12, enter: 'draw', dur: 0.35, ...(until(k) != null ? { exitAt: until(k), exit: 'fade' } : {}) });
+      const pts = [...targets.entries()].map(([, p], i) => ({ ...p, settle: t + i * stagger + dur })).filter(p => p.opacity > 0);
+      const segments = pts.slice(1).map((b, j) => ({ a: pts[j], b, at: Math.max(b.settle, pts[j].settle, t + dur + j * 0.12) }));
+      const last = segments.at(-1)?.at ?? 0;
+      if (frame.duration && last + 0.35 > frame.duration - 0.1)
+        notes.push(`the thread of formation ${k + 1} (${f.form}${f.say ? ` on "${f.say}"` : ''}) would finish ${(last + 0.35 - frame.duration).toFixed(2)} s after the beat ends, so it is left out; cue the formation earlier or add tail`);
+      else {
+        segments.forEach(({ a, b, at }, j) => {
+          const d = Math.hypot(b.x - a.x, b.y - a.y) || 1, inset = (size * 0.5 + 14) / d;
+          words.push({ type: 'line', id: `cast-thread-${k}-${j + 1}`, x1: a.x + (b.x - a.x) * inset, y1: a.y + (b.y - a.y) * inset, x2: b.x - (b.x - a.x) * inset, y2: b.y - (b.y - a.y) * inset,
+            stroke: 'ink', width: 3, cap: 'round', at, enter: 'draw', dur: 0.35, ...(until(k) != null ? { exitAt: until(k), exit: 'fade' } : {}) });
+        });
+        if (until(k) == null) carried = words.filter(w => w.id.startsWith(`cast-thread-${k}-`)).map(({ type, x1, y1, x2, y2, stroke, width, cap }) => ({ type, x1, y1, x2, y2, stroke, width, cap }));
       }
-      if (until(k) == null) carried = words.filter(w => w.id.startsWith(`cast-thread-${k}-`)).map(({ type, x1, y1, x2, y2, stroke, width, cap }) => ({ type, x1, y1, x2, y2, stroke, width, cap }));
     }
     if (f.form === 'hero' && f.word) {
       const h = targets.get(f.hero), heroSize = size * (f.scale ?? 2.3);
@@ -234,20 +246,21 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cue
   }
   for (const { el } of groups.values()) el.keys.sort((a, b) => a.at - b.at);
   const depth = new Map([...groups].map(([id, { el }]) => [el, pose.get(id)?.z ?? 0]));
-  return { elements: [...elements].sort((a, b) => depth.get(a) - depth.get(b)).concat(words), state: pose, threads: carried };
+  return { elements: [...elements].sort((a, b) => depth.get(a) - depth.get(b)).concat(words), state: pose, threads: carried, notes };
 }
 
 export function expandCastProps(input, frame, ctx = {}) {
   if (input?.cast == null) return input;
   const { cast, ...rest } = structuredClone(input);
-  for (const key of ['plot', 'bars', 'bridge', 'stat', 'distribution', 'multiples', 'kpi', 'teaching', 'chart', 'sketch'])
-    check(rest[key] == null, `cannot combine cast with ${key}`);
+  for (const key of ['plot', 'bars', 'bridge', 'stat', 'distribution', 'multiples', 'kpi', 'teaching', 'chart', 'sketch', 'view', 'viewFrom', 'world'])
+    check(rest[key] == null, `cannot combine cast with ${key} (a cast lays itself out for the frame)`);
   const spec = castSpec(cast, ctx.objects ?? new Map());
-  const { elements, state, threads } = castElements(spec, frame, { state: ctx.state, threads: ctx.threads, cue: ctx.cue });
+  const { elements, state, threads, notes } = castElements(spec, frame, { state: ctx.state, threads: ctx.threads, cue: ctx.cue });
+  for (const n of notes) ctx.notes?.push(`${frame.beatId ?? 'cast'}: ${n}`);
   if (frame.beatId) {
     const prefix = el => { el.id = `${frame.beatId}-${el.id}`; for (const c of el.children ?? []) prefix(c); };
     elements.forEach(prefix);
   }
   if (ctx.carry) Object.assign(ctx.carry, { state, objects: spec.objects, threads });
-  return { ...rest, elements: [...elements, ...(rest.elements ?? [])] };
+  return { ...rest, view: [0, 0, frame.width, frame.height], elements: [...elements, ...(rest.elements ?? [])] };
 }

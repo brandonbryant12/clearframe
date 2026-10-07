@@ -20,9 +20,9 @@ pub fn render(b: &Beat, frame: Frame, ctx: &Ctx) -> Node {
     let env = &b.environment;
     let wide = env.width / env.height > 1.3;
     let tall = env.height > env.width;
-    // Tall frames keep type inside the middle 80% (phone UI covers the edges); the frame audit
-    // holds headings and content to the same margin.
-    let x = if wide { 120.0 } else if tall { (env.width * 0.1).ceil() } else { 86.0 };
+    // Tall frames keep type inside the middle 80% (phone UI covers the edges), the margin the frame
+    // audit holds, plus headroom for the slow camera move (TALL_MARGIN, `camera`).
+    let x = if wide { 120.0 } else if tall { (env.width * TALL_MARGIN).ceil() } else { 86.0 };
     let bottom = if env.captions { if tall { 365.0 } else { 215.0 } } else { 145.0 };
     let hero = HERO.contains(&b.block.as_str()) || matches!(b.block.as_str(), "chapter" | "highlight");
     let portrait_shift = if tall { env.height * 0.11 - 108.0 } else { 0.0 };
@@ -153,6 +153,10 @@ fn push_to<'a>(d: &Draw<'a, '_>, picture: Node) -> Node {
     draw::group(vec![picture.into()]).translate(-cx, -cy).scale(k, k).translate(w / 2.0, h / 2.0)
 }
 
+/// Block content on a tall frame starts this far in: the 10% title-safe margin plus room for the
+/// slow push or pan to move it without carrying type past that margin.
+const TALL_MARGIN: f32 = 0.115;
+
 /// A slow camera move across the whole scene keeps held frames alive. `auto` pushes in
 /// gently on most blocks and holds still where reading must stay steady.
 fn camera<'a>(d: &Draw<'a, '_>, body: Node) -> Node {
@@ -176,6 +180,18 @@ fn camera<'a>(d: &Draw<'a, '_>, body: Node) -> Node {
     }
     let env = &b.environment;
     let (w, h) = (env.width, env.height);
+    // On a tall frame the move stays within the headroom TALL_MARGIN leaves: a push scales the
+    // content margin out to at most the 10% safe margin, a pan shifts it by at most that much.
+    let amount = if h > w {
+        let room = TALL_MARGIN - 0.1;
+        match kind {
+            "in" | "out" => amount.min(((0.5 - 0.1) / (0.5 - TALL_MARGIN) - 1.0) / 0.045),
+            "left" | "right" => amount.min(room / 0.025),
+            _ => amount,
+        }
+    } else {
+        amount
+    };
     let seconds = b.frames as f32 / d.f.fps as f32;
     let x = motion::in_out_cubic(d.t / seconds.max(0.1));
     let (cx, cy) = (w / 2.0, h / 2.0);

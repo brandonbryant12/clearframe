@@ -86,6 +86,15 @@ pub fn text_box(value: &str, x: f32, y: f32, font: Font, size: f32, tracking: f3
     if value.is_empty() {
         return None;
     }
+    // A run of marks only (a display quotation mark, a bullet) is measured by its ink: its line box
+    // reaches far below a mark set high on a large size and would collide with the text under it.
+    if !value.chars().any(char::is_alphanumeric) {
+        if let Some(b) = run_path(value, font, size, tracking).map(|p| p.bounds().to_owned()) {
+            if !b.is_empty() {
+                return Some(b.with_offset((x, y)));
+            }
+        }
+    }
     let (ascent, descent) = text::vertical_metrics(font);
     let w = text::measure(font, value, size, tracking);
     Some(Rect::from_xywh(x, y - ascent * size, w, (ascent + descent) * size))

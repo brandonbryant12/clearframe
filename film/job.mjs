@@ -177,7 +177,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     spec = rules(b.block);
   const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.dur };
   const castProps = b.block === 'canvas' && b.props?.cast != null
-    ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, cue: cueResolver(b, frame), carry: cast })
+    ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, cue: cueResolver(b, frame), carry: cast, notes: report.warnings })
     : b.props;
   const authoredProps = b.block === 'canvas'
     ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(expandKPIProps(castProps ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)

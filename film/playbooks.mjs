@@ -73,8 +73,8 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
       continue;
     }
     if (!name) {
-      // A diagram lays itself out for the frame; a landscape view would squeeze it.
-      if (b.props?.diagram) continue;
+      // Diagrams, casts and charts lay themselves out for the frame; a landscape view would squeeze them.
+      if (['diagram', 'cast', 'plot', 'bars', 'bridge', 'stat', 'multiples', 'distribution', 'kpi', 'teaching'].some(k => b.props?.[k] != null)) continue;
       if ((vertical || book.format === 'vertical') && b.block === 'canvas' && b.props && b.props.view == null)
         b.props.view = [1920, 1080];
       continue;
