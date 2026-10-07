@@ -217,8 +217,8 @@ runs them for the one project the calling session belongs to:
 | Tool | Does |
 | --- | --- |
 | `clearframe_state` | the film: scenes, timing, narration, engine errors, hash, undo, notes, jobs; one scene or the whole storyboard |
-| `clearframe_catalog` | blocks, a block's props, palettes, types, treatments, sketches, canvas, transitions, motions, fields, playbooks |
-| `clearframe_edit` | up to 200 operations as one validated, hash-checked, undoable step, held to the message's scope |
+| `clearframe_catalog` | blocks, a block's props, palettes, types, treatments, sketches, canvas (with icon names), transitions, motions, fields, playbooks |
+| `clearframe_edit` | up to 200 operations as one validated, hash-checked, undoable step, held to the message's scope: `set`, `insert` (with an optional `id`, so the same batch can fill the new scene), `duplicate`, `move`, `delete`, `treatment`, and `playbook` (start over from a playbook's scenes and look, keeping title, format and sources) |
 | `clearframe_render` | still, section, check, draft (rough cut) or captions through the studio's single render queue |
 | `clearframe_job` | a render's status, output, errors; can wait up to 90 s |
 | `clearframe_notes` | review notes (with where each is pinned and the words under it) and replies; `answer` marks a note acted on with one line |

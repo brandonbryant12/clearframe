@@ -17,6 +17,7 @@ import { items } from '../../../film/library.mjs';
 import { applyTreatment } from '../../../film/treatments.mjs';
 import { sketch, sketchPreset } from '../../../film/sketches.mjs';
 import { ICONS } from '../../../film/icons.mjs';
+import { storyboardFor } from '../../../film/playbooks.mjs';
 import { compilePlan } from '../../../scene/compile.mjs';
 import { LENS_KEYS, LENS_GRADES } from '../../../film/constants.mjs';
 import { textBox, FONT_FILES } from './clearframe.mjs';
@@ -279,6 +280,21 @@ function applyOp(dir, sb, op) {
     if (n.kind === 'recording') throw fail('This scene plays the recording: cut its words (the scene goes when its last word does) so the cut can be undone exactly.');
     sb.beats.splice(sb.beats.indexOf(b), 1);
     return `Delete ${short(nameOf(b))}`;
+  }
+  if (command === 'playbook') {
+    // Start the film over from a playbook that fits its material: the playbook's scenes (sample
+    // content, cited as such) and look, keeping this film's title, format, voice and sources.
+    if (sb.beats.some(b => ['recording', 'imported'].includes(narrationOf(dir, b).kind)))
+      throw fail('This film plays recorded narration and its scenes follow the recording; a playbook cannot replace them.');
+    let fresh;
+    try { fresh = storyboardFor(String(op.id ?? ''), { title: sb.title, vertical: sb.format?.preset === 'vertical' }); }
+    catch { throw fail(`No playbook “${op.id}”. clearframe_catalog topic playbooks lists them.`); }
+    sb.beats = fresh.beats;
+    for (const k of ['theme', 'type', 'motion', 'transition', 'backdrop', 'texture', 'lens', 'camera', 'heading', 'textMotion'])
+      if (fresh[k] !== undefined) sb[k] = fresh[k]; else delete sb[k];
+    const ids = new Set((sb.sources ?? []).map(s => s.id));
+    sb.sources = [...(sb.sources ?? []), ...(fresh.sources ?? []).filter(s => !ids.has(s.id))];
+    return `Start from the ${op.id} playbook`;
   }
   if (command === 'treatment') {
     const recording = sb.beats.some(b => narrationOf(dir, b).kind === 'recording');

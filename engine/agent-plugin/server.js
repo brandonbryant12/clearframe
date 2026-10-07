@@ -9,10 +9,10 @@ const obj = (properties, required = []) => ({ type: 'object', properties, requir
 const str = description => ({ type: 'string', description });
 const OP = {
   type: 'object', additionalProperties: true,
-  description: 'One studio change. command: set (target film|beat, beat, path, value; null removes), insert (block or sketch, after), duplicate (beat), move (beat, to index), delete (beat), treatment (id).',
-  properties: { command: { type: 'string', enum: ['set', 'insert', 'duplicate', 'move', 'delete', 'treatment'] }, target: { type: 'string', enum: ['film', 'beat'] },
+  description: 'One studio change. command: set (target film|beat, beat, path, value; null removes), insert (block or sketch, after, id), duplicate (beat), move (beat, to index), delete (beat), treatment (id), playbook (id: replace every scene with that playbook\'s structure and look, keeping title, format and sources; pick one that fits the material from clearframe_catalog topic playbooks).',
+  properties: { command: { type: 'string', enum: ['set', 'insert', 'duplicate', 'move', 'delete', 'treatment', 'playbook'] }, target: { type: 'string', enum: ['film', 'beat'] },
     beat: str('Scene id'), path: str('Dotted property path, e.g. props.title or vo or duration'), value: { description: 'New JSON value; null removes it' },
-    block: str('Native block name for insert'), sketch: str('Canvas sketch id for insert'), after: str('Insert after this scene id'), to: { type: 'integer' }, id: str('For insert: the new scene\'s id (lowercase, unused), so later operations in the same batch can set its props and vo. For treatment: the treatment id.') },
+    block: str('Native block name for insert'), sketch: str('Canvas sketch id for insert'), after: str('Insert after this scene id'), to: { type: 'integer' }, id: str('For insert: the new scene\'s id (lowercase, unused), so later operations in the same batch can set its props and vo. For treatment or playbook: its id.') },
   required: ['command'],
 };
 

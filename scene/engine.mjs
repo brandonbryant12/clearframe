@@ -154,5 +154,25 @@ export function doctor() {
     free = (s.bavail * s.bsize) / 2 ** 30,
     warm = fs.existsSync(path.join(TARGET(), 'release/deps'));
   rows.push({ name: 'Disk headroom', ok: free >= (warm ? 10 : 25), detail: `${free.toFixed(1)} GiB free (${warm ? 'warm cache' : 'cold build'})` });
+  rows.push(fontCheck());
   return rows;
+}
+
+/**
+ * Type is measured and drawn with the bundled fonts only, so a missing or different file changes
+ * every line break: check each against the hash recorded when it was imported.
+ */
+function fontCheck() {
+  const dir = path.join(SCENE, '..', 'film', 'assets', 'fonts');
+  try {
+    const p = JSON.parse(fs.readFileSync(path.join(dir, 'provenance.json'), 'utf8'));
+    const files = [...p.files, ...p.staticInstances, ...p.families.flatMap(f => [...f.files, ...(f.instances ?? [])])];
+    const bad = files.filter(f => {
+      const file = path.join(dir, f.file);
+      return !fs.existsSync(file) || crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex') !== f.sha256;
+    });
+    return { name: 'Bundled fonts', ok: !bad.length, detail: bad.length ? `${bad.length} of ${files.length} missing or changed: ${bad.slice(0, 3).map(f => f.file).join(', ')} (restore film/assets/fonts from git)` : `${files.length} files match their recorded hashes` };
+  } catch (e) {
+    return { name: 'Bundled fonts', ok: false, detail: e.message };
+  }
 }

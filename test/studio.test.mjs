@@ -89,6 +89,10 @@ test('batches, inserts, duplicates, deletes and treatments are single undoable s
   assert.deepEqual(s.storyboard.beats.map(b => b.id), ['a', 'bars', 'pile', 'b']); assert.ok(s.storyboard.beats[2].props.cast);
   assert.throws(() => run(d, { command: 'insert', block: 'canvas', id: 'pile' }), /already a scene/);
   s = run(d, { command: 'undo' });
+  s = run(d, { command: 'playbook', id: 'process-cast' });
+  assert.deepEqual(s.storyboard.beats.map(b => b.id), ['arrive', 'sort', 'focus', 'change', 'result']); assert.equal(s.storyboard.transition, 'cut');
+  assert.throws(() => run(d, { command: 'playbook', id: 'nope' }), /No playbook/);
+  s = run(d, { command: 'undo' }); assert.deepEqual(s.storyboard.beats.map(b => b.id), ['a', 'bars', 'b']);
   s = run(d, { command: 'duplicate', beat: 'bars' }); assert.deepEqual(s.created, ['bars-copy']);
   s = run(d, { command: 'delete', beat: 'a' }); assert.deepEqual(s.storyboard.beats.map(b => b.id), ['bars', 'bars-copy', 'b']);
   s = run(d, { command: 'treatment', id: 'editorial' }); assert.equal(s.storyboard.treatment, 'editorial');

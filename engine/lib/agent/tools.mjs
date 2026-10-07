@@ -19,6 +19,20 @@ export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearfr
   motion: skill('clearframe-motion'), script: skill('clearframe-script'), integrity: skill('clearframe-integrity'), direction: skill('clearframe-direction'), engine: skill('clearframe-engine'),
   review: skill('clearframe-review'), scene: skill('clearframe-scene'), style: 'docs/style.md', 'cinema-notes': 'docs/cinema.md', 'canvas-notes': 'docs/canvas.md', ideas: 'docs/ideas.md',
   speech: 'docs/speech.md', authoring: 'engine/agent-plugin/AUTHORING.md', cast: 'docs/cast.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };
+/**
+ * Operations sent as JSON text. A trailing comma (the commonest slip) is forgiven; anything else is
+ * refused with where it broke, so the model can fix that spot instead of guessing.
+ */
+export function opsFromText(text) {
+  const parse = t => { const v = JSON.parse(t); return Array.isArray(v) ? v : Array.isArray(v?.ops) ? v.ops : v && typeof v === 'object' && v.command ? [v] : null; };
+  let error;
+  for (const t of [text, text.replace(/,(\s*[\]}])/g, '$1')]) {
+    try { const ops = parse(t); if (ops) return ops; } catch (e) { error ??= e; }
+  }
+  const at = Number(/position (\d+)/.exec(error?.message ?? '')?.[1]);
+  const near = Number.isFinite(at) ? ` near “${text.slice(Math.max(0, at - 40), at)}⟨here⟩${text.slice(at, at + 40)}”` : '';
+  throw fail(`ops must be an array of operations. The JSON text did not parse${error ? `: ${error.message}` : ' to an array'}${near}. Send ops as a JSON array (not text) if you can.`);
+}
 const TEXT_EXT = new Set(['.md', '.markdown', '.txt', '.csv', '.json', '.srt', '.vtt', '.docx', '.html', '.htm', '.rtf', '.pdf']);
 const SKIP = new Set(['review', 'build', 'node_modules']);
 /**
@@ -163,7 +177,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       if (paused) throw fail(`${paused.label} is using the working copy. Wait for it (clearframe_job) before editing.`, 409);
       if (typeof input.label !== 'string' || !input.label.trim()) throw fail('Give the change a short label for the undo history.');
       // Some models send the operations as JSON text; accept that, refuse anything else.
-      if (typeof input.ops === 'string') { try { input.ops = JSON.parse(input.ops); } catch { throw fail('ops must be an array of operations (or that array as JSON text).'); } }
+      if (typeof input.ops === 'string') input.ops = opsFromText(input.ops);
       const plan = planOps(dir, input.ops);
       if (input.hash !== plan.hash) throw fail('The film changed since you read it (the person or another editor saved a change). Call clearframe_state and make your change on the current version.', 409);
       // Which request this call answers, from the call's own message: fails closed when it cannot be told.

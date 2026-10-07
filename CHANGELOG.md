@@ -1,5 +1,12 @@
 # Changelog
 
+## The agent can start from the right playbook; doctor checks fonts
+
+- **`playbook` studio command** (`{command: "playbook", id}`): start the film over from a playbook's scenes and look, keeping its title, format and sources. It is refused when the narration is a recording. The agent picks one by what the material is, who it is for and what it needs (`clearframe_catalog` topic `playbooks`) instead of always rebuilding the general starter. It is undoable like any edit.
+- **Edits sent as JSON text are easier to get right.** A trailing comma, or a single operation sent on its own, is accepted. JSON that does not parse is refused with the parser's message and the text around where it broke. On the free model, a failed batch used to come back with no clue and the agent would guess.
+- **"Build it together" offers real choices.** When the material supports genuinely different ways to show it (a cast, a system stage, one world, moving numbers), the first message asks the agent to offer two or three, say who each suits and recommend one. A different palette does not count as a different direction.
+- **`doctor` checks the bundled fonts** against the hashes recorded when they were imported. Every line break is measured with those files, so a missing or changed font on a new machine now shows up before a render.
+
 ## Drawn casts, pen marks, and a smoother agent path
 
 - **Cast looks.** `cast.look` is set once and the cast keeps it:

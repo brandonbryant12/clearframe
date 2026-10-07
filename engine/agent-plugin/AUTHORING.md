@@ -12,7 +12,10 @@ Short reference for building a first cut without reading every guide. Look up ex
    evidence in a few steps, a turn, a landing. Where that thing persists, keep it on screen and
    write each scene as a change to it ("the pieces line up", "a note lands and one changes"),
    rather than a new layout per line.
-3. One `clearframe_edit` batch that replaces the starter: `delete` the sample scenes you will not
+3. If a playbook fits the material better than the starter (`clearframe_catalog` topic `playbooks`:
+   each says what it is for, who it is for and what it needs), start from it with
+   `{"command":"playbook","id":"…"}` and rewrite its scenes; otherwise build on the starter.
+   One `clearframe_edit` batch that replaces the starter: `delete` the sample scenes you will not
    reuse, `insert` new scenes (`block` or `sketch`, `after` an id, and your own `id` so the same
    batch can fill them), then `set` their `props`, `vo` (narration), `label` and, for numbers, the
    film's `sources` (`target: film`, `path: sources`). A failed batch writes nothing and tells you

@@ -9,7 +9,7 @@ import path from 'node:path';
 import { PassThrough } from 'node:stream';
 import { fileURLToPath } from 'node:url';
 import { createAgent, resolveScope, cleanScope, contextBlock, transcript } from '../engine/lib/agent/agent.mjs';
-import { scopeViolation, inside, pictureSize, createTools, voiceRecord } from '../engine/lib/agent/tools.mjs';
+import { scopeViolation, inside, pictureSize, createTools, voiceRecord, opsFromText } from '../engine/lib/agent/tools.mjs';
 import { readLink, updateLink } from '../engine/lib/agent/links.mjs';
 import { uploadToProject, uploadToDraft, createProject, safeName, projectsRoot } from '../engine/lib/agent/projects.mjs';
 import { createRuntime, runtimeConfig, agentPaths, PERMISSIONS } from '../engine/lib/agent/runtime.mjs';
@@ -593,4 +593,10 @@ test('a draft line reports the OS voice that spoke it, not today\'s setting or t
   const tools = createTools({ base: d, jobs: { list: () => [] }, filmOf: () => 'f', pauseOf: () => null, currentScope: () => null });
   assert.match((await tools.files({ dir: d, input: { read: 'assets/vo/b.json' } })).content, /googleSettingsAtTheTime/);
   assert.match(contextBlock({ film: { title: 'F', folder: 'f' } }), /never by the Google voice or style/, 'every message carries the reporting rule');
+});
+
+test('operations sent as JSON text forgive a trailing comma and say where they break', () => {
+  assert.deepEqual(opsFromText('[{"command":"delete","beat":"a"},]'), [{ command: 'delete', beat: 'a' }]);
+  assert.deepEqual(opsFromText('{"command":"delete","beat":"a"}'), [{ command: 'delete', beat: 'a' }], 'one operation on its own');
+  assert.throws(() => opsFromText('[{"command":"set","value":"He said "hi""}]'), /position 36.*near “\[\{"command":"set","value":"He said "⟨here⟩hi/);
 });
