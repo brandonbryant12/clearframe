@@ -10,6 +10,7 @@
   - Both shapes: `check` reports 0 errors and 0 warnings, and the cinema score is 100/100. The README lists every adaptation and the remaining `qa` advisories.
 - **The studio agent's `clearframe_catalog` gains topic `sketch`.** Given a name, with optional `sketchText` and `sketchSay`, it returns the sketch's drawn elements for the film's frame shape. The agent can copy them into `props.elements` and change the picture itself, as `checkout-at-night` does in its build script.
 - **The inspiration skill gains "Adapt it to the brief"**: what can change, from words and voice cues to the look and to copying a sketch's elements, and when to make a new reusable sketch. AUTHORING points there.
+- **`searchlight` works on any palette.** Its dark is near-black instead of the palette's background, so on a light palette it is a dark room, not fog.
 - **`searchlight` gains an optional `SEARCH` moment, a hand-held torch and dust in the air.** The torch sweeps the room before the first find, its pool never stands quite still, and dust drifts through the light.
 - **`shortcut` changes:**
   - its waits pulse and their clocks turn;

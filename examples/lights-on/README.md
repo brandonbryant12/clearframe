@@ -32,7 +32,7 @@ The whole beat is one sketch with words, as in [build.mjs](build.mjs):
 - **`sketchText`** names the finds.
 - **`sketchSay`** lands each of the sketch's named moments on a spoken word: the light reaches a find, and the room lights up.
 
-Without `sketchSay` the light keeps its default seconds. The sketch is best on a dark palette (`noir`, `ink`, `midnight`) and lays itself out for both shapes: three shelving units side by side on a wide frame, and two tall ones on a vertical frame.
+Without `sketchSay` the light keeps its default seconds. The sketch works on any palette. The dark is near-black, and the torch reveals the palette's own colours, so on `paper` it reads as a dark room in a light film. It lays itself out for both shapes: three shelving units side by side on a wide frame, and two tall ones on a vertical frame.
 
 ## Make it
 

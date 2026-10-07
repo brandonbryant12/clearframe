@@ -64,7 +64,7 @@ export default {
   order: 69,
   summary:
     'A dark storeroom searched by one torch: the light finds three things on the shelves in turn, each labelled as it is found, then the lamps come on and a thread joins them.',
-  use: 'Discovery and investigation: what nobody had looked at, finding the cause, an audit, "three things were hiding". Feels like a quiet detective story; best on a dark palette (noir, ink, midnight). Replace FIRST, SECOND and THIRD with sketchText; land the light with sketchSay cues SEARCH (an optional sweep of the room first), FIRST, SECOND, THIRD and ALL (the lights come up).',
+  use: 'Discovery and investigation: what nobody had looked at, finding the cause, an audit, "three things were hiding". Feels like a quiet detective story; works on any palette (the dark is near-black, and the torch shows the palette colours). Replace FIRST, SECOND and THIRD with sketchText; land the light with sketchSay cues SEARCH (an optional sweep of the room first), FIRST, SECOND, THIRD and ALL (the lights come up).',
   build(w, h, { seed } = {}) {
     const L = layout(w, h),
       rand = rng(seed ?? 7),
@@ -118,7 +118,8 @@ export default {
         // Dust drifting through the room: drawn under the dark, so it shows in the torch's pool.
         { type: 'particles', x: 0, y: 0, w, h: L.floor, kind: 'dust', count: tall(w, h) ? 70 : 90, seed: 7, size: 3, speed: 0.6, fill: 'ink', opacity: 0.55, enter: 'none', at: 0 },
         {
-          type: 'spotlight', cx: sx, cy: sy, r, dim: 0.86, enter: 'none', at: 0,
+          // The dark is near-black on any palette (a dark room is dark, even on paper).
+          type: 'spotlight', cx: sx, cy: sy, r, dim: 0.86, fill: '#07090d', enter: 'none', at: 0,
           keys: moves, loop: sway, exit: 'fade', exitCue: 'ALL', exitAt: AT.ALL, exitDur: 0.8,
         },
         // Warm light in the pool, riding with it.
