@@ -154,7 +154,8 @@ const SYNONYMS = {
   engineer: 'technical system architecture code', developer: 'technical code system pull', architecture: 'system diagram service',
   sales: 'business customer product', customer: 'person user journey', team: 'people person',
   handmade: 'paper cut drawn tactile craft', tactile: 'paper cut handmade', craft: 'paper cut handmade print', collage: 'paper cut layered',
-  private: 'lock security privacy vault safe', calendar: 'clock time schedule', app: 'phone product device screen',
+  private: 'lock security privacy vault safe', connect: 'bridge integration link network', integration: 'bridge connect link', partnership: 'bridge connect people', gap: 'bridge',
+ calendar: 'clock time schedule', app: 'phone product device screen',
 };
 const words = t => String(t ?? '').toLowerCase().match(/[a-z0-9]+/g) ?? [];
 // Words that say nothing about which picture fits.

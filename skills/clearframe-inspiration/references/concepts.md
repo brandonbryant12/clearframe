@@ -47,6 +47,7 @@ Choose by audience. A look picked only for variety reads as a gimmick.
 | Our community keeps growing (warm, for members) | `sketch:seedling`, `example:community-grows`, `playbook:personal-story`, `palette:paper` | A plant growing in labelled stages. It shows growth as something alive and earned, and it stays honest because it draws stages, not amounts. |
 | Six tools became one flow (for the team that lived with them) | `sketch:untangle`, `example:one-line`, `sketch:versus`, `block:steps` | The same pieces leaving a tangle for a line. People who knew the old mess recognise the pieces, so the relief lands. `versus` would suit a quicker side-by-side. |
 | Your data stays private (for customers) | `sketch:vault`, `example:your-data`, `cast-shape:lock`, `palette:midnight` | A vault door closing over their things. Trust is easier to feel as a place than to read as a policy. |
+| We integrated with their system (for both teams) | `sketch:bridge`, `example:across`, `sketch:network`, `mechanism:stage` | A bridge built across a gap, then used. Both sides see themselves, and the moment of connection is visible. For engineers, a stage with real services may say more. |
 | How a support ticket travels through the team | `example:cast-journey`, `cast-shape:ticket`, `cast-move:travel`, `playbook:process-cast`, `mechanism:world` | One ticket travelling through a drawn world of stations. Following one thing is easier than reading a flowchart. |
 
 ## Signs the concepts are too close

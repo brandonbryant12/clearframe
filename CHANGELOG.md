@@ -1,5 +1,12 @@
 # Changelog
 
+## Closing a gap: the bridge sketch
+
+- **The `bridge` sketch shows a connection being built.** People stand on one cliff and what they need on the other. On a spoken word, towers rise, planks drop into place across the chasm and cables draw. On the next, cards start crossing and keep crossing.
+  - It suits integration, partnership and access.
+  - On a tall frame the top is left for a headline.
+- **`examples/across`** shows it in both shapes, 10 s. `check` reports 0 errors and 0 warnings.
+
 ## Keeping it safe: the vault sketch
 
 - **The `vault` sketch shows keeping things safe.** Cards of data float beside an open vault whose door stands edge-on. On a spoken word they fly into the dark inside. On the next, the door swings shut over them, the wheel turns, bolts slide home and a ring of light settles around the door with its label.
