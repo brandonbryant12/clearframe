@@ -23,6 +23,10 @@ Short reference for building a first cut without reading every guide. Look up ex
    `[{"command":"insert","block":"canvas","after":"title","id":"pile"},
      {"command":"set","target":"beat","beat":"pile","path":"props","value":{"cast":{…}}},
      {"command":"set","target":"beat","beat":"pile","path":"vo","value":"Reports arrive from everywhere."}]`
+   Get to the first cut quickly and in small steps: one edit for the outline (delete the starter's
+   scenes; insert yours with ids, blocks and narration), then one edit per scene to fill its
+   picture, then the draft. Small edits arrive intact; one huge edit full of code or quoted text is
+   the likeliest to break. Write direction notes after the cut, if at all: the cut is the plan.
 4. `clearframe_render` kind `draft` (the rough cut), then `clearframe_job` with `wait: 90` until it
    finishes. Fix any engine errors it lists and render again.
 5. Report in a few lines: what the cut shows, which scenes are placeholders, what you need.
@@ -61,8 +65,10 @@ Pick from what the material actually contains:
   identity across scenes (`clearframe_guide` topic `scene`), or a `diagram` whose components morph.
   The code itself takes one scene: a `stage` with only `code` shows the change as an editor that
   fills the picture, the changed lines lighting up on the word given by `say`:
-  `{"block":"stage","props":{"title":"The fix","code":{"title":"tools.mjs","before":"…old lines…","after":"…new lines…","say":"scanner"}}}`
-  (or `{"commit":"abc123","file":"path/in/repo.js"}` to read it from git). Pair it with the
+  `{"block":"stage","props":{"title":"The fix","code":{"title":"tools.mjs","before":"…old lines…","after":"…new lines…","say":"scanner"}}}`.
+  Show only the few lines that changed (two to six), copied as plain text. To read the change from
+  git instead, give `commit`, `file` and `window: [first, last]` (line numbers in the new file);
+  without a window, a large change is refused as too long to read. Pair it with the
   mechanism (a diagram or cast before and after) and the evidence (a `stat` with its source).
 - **A journey, a place or a map**: one world the camera travels (`props.world` shared by
   consecutive canvas scenes).
