@@ -12,7 +12,7 @@
 - **The inspiration skill gains "Adapt it to the brief"**: what can change, from words and voice cues to the look and to copying a sketch's elements, and when to make a new reusable sketch. AUTHORING points there.
 - **`searchlight` gains an optional `SEARCH` moment, a hand-held torch and dust in the air.** The torch sweeps the room before the first find, its pool never stands quite still, and dust drifts through the light.
 - **`shortcut` changes:**
-  - its waits pulse;
+  - its waits pulse and their clocks turn;
   - its tokens are larger and leave short trails;
   - its ends stand from the first frame, so a cut into it is never empty.
 

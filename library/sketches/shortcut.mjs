@@ -56,7 +56,7 @@ export default {
         // Each stop on the old route is a wait.
         ...L.stops.map(([x, y], i) => ({ type: 'group', enter: 'pop', at: 0.3 + i * 0.15, dur: 0.3, children: [
           { type: 'circle', cx: x, cy: y, r: round(L.r * 0.7), fill: 'surface', stroke: 'muted', width: 4, loop: { type: 'pulse', period: 1.4 + i * 0.2 } },
-          { type: 'icon', name: 'clock', x, y, size: round(L.r * 0.7), fill: 'muted' },
+          { type: 'icon', name: 'clock', x, y, size: round(L.r * 0.7), fill: 'muted', origin: [x, y], loop: { type: 'spin', period: 3 + i * 0.4 } },
         ] })),
         { type: 'path', d: d(straight), fill: 'none', stroke: 'accent', width: 10, cap: 'round', enter: 'draw', cue: 'SHORTCUT', at: AT.SHORTCUT, dur: 0.8 },
         // The two ends stand from the first frame, so a cut into this beat is never empty.
