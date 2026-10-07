@@ -18,7 +18,7 @@ Charts, KPIs, plots, quotes and kinetic speech stay in their blocks (exact value
 
 ## Authoring rules
 
-1. Positions are frame pixels of the layout frame (1920×1080 landscape, 1080×1920 vertical; the shorter side is 1080). Keep type inside title-safe; `check` audits native type like block type.
+1. Positions are frame pixels of the layout frame (1920×1080 landscape, 1080×1920 vertical; the shorter side is 1080). Keep type inside title-safe; `check` audits native type like block type. Author tall positions for a vertical film: a wide-authored stage in a tall frame is re-laid down the frame automatically (and `check` says so), but only in order, not where you would place it. Code editors fit their frame by themselves (type to the longest line, ≥ 24 px, then hanging wraps).
 2. Cue with `say` (a word of the beat's narration; for film stages the first match in its beats, or `{beat, say}`). Every cue must land inside the stage; late cues fail.
 3. Actor ids are the identities: links, packets (`send`), callouts and `attach` refer to them. Events can be in any order; keys are sorted.
 4. Footage must cover its time on screen, including a dissolve into the next beat; it never loops, and freezes only with `hold: true`.

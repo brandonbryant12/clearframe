@@ -1,5 +1,12 @@
 # Changelog
 
+## Stages and code that fit the frame
+
+- **Code editors never overflow.** A stage `code` editor stays inside the stage area (title-safe, below the heading, above the source line); its type fits the longest line, measured in the mono face's exact advance, down to 24 px, and longer lines wrap at a token boundary with a hanging indent while keeping their identity through the edit. An editor drawn for a wider frame takes the tall frame's height. Previously long lines were clipped at the editor edge and a landscape editor ran off a vertical frame.
+- **Wide stages in tall frames.** A stage whose actors would leave a tall frame is laid down it in the same order (moves and camera keys follow), with a `check` note; callout tags are pulled back inside the area. Stages authored for the frame are untouched.
+- **Tall frames keep blocks inside the middle 80%.** Block content and headings on vertical frames start at 10% of the width (was 86 px), matching the frame audit's title-safe rule; every heading on a vertical film used to warn.
+- Regression tests: `test/stage-fit.test.mjs`. Reproduced on `examples/stage-pr` shown vertically: one error (code cut off by the frame edge) and seven title-safe warnings before; none after.
+
 ## Metric bridges
 
 - **`canvas.props.bridge`** draws a waterfall: start total, up to ten signed drivers and `total: true` subtotals floating from the running total, and the end total, sharing the plot and bar frame, type and palette. It must reconcile within display rounding; a gap is refused with the amount to add as an explicit step. Totals stand on zero (`domain` must include it); `good: down` colours falling costs as good news. `orientation: auto` uses columns on wide frames when every name fits in two lines and rows otherwise (names beside the bars on wide frames, above them on tall ones), never shrinking long names to fit. `say` lands a driver or the end on its word; uncued columns are placed in reading order around cues, spoken cues out of order are refused, and `check` warns when the last total lands less than 1.5 s before the beat ends. Templates `revenue-bridge` and `profit-walk` in `examples/finance-charts` (landscape and vertical). See `docs/bridge.md`.

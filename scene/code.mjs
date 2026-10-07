@@ -92,11 +92,86 @@ export function gitSides({ repo, commit, base, file }) {
 
 const lines = s => s.replace(/\r\n/g, '\n').replace(/\n$/, '').split('\n');
 
+// IBM Plex Mono advances exactly 0.6 em per character, so code widths are measured, not guessed.
+const MONO_ADVANCE = 0.6;
+// The renderer's editor: 0.9 em padding each side and a gutter of three 0.8 em digits plus 1 em.
+const chrome = gutter => 1.8 + (gutter ? 3 * MONO_ADVANCE * 0.8 + 1 : 0);
+export const CODE_MIN_SIZE = 24;
+const lineText = l => l.text ?? (l.spans ?? []).map(sp => sp.text).join('');
+const lineCols = l => (l.indent ?? 0) + lineText(l).length;
+
+/**
+ * Keep an editor inside `area` (title-safe, below the heading) and its lines inside the editor:
+ * the type shrinks to the longest line but never below CODE_MIN_SIZE; a line still too long wraps
+ * at a token boundary with a hanging indent, and its pieces keep the line's identity through steps.
+ */
+export function fitCode(el, area) {
+  if (area) {
+    // An editor drawn for a wider frame takes this frame's height too, not its old height.
+    if (el.x + el.w > area.right + 1 && el.h != null) delete el.h;
+    el.x = Math.max(el.x, area.left);
+    el.w = Math.min(el.w, area.right - el.x);
+    if (el.y < area.top) el.y = area.top;
+    if (el.h == null) el.maxH = area.bottom - el.y;
+    else el.h = Math.min(el.h, area.bottom - el.y);
+  }
+  const room = size => Math.floor((el.w / size - chrome(el.gutter)) / MONO_ADVANCE);
+  const longest = Math.max(1, ...el.lines.map(lineCols));
+  const fit = el.w / (chrome(el.gutter) + MONO_ADVANCE * longest);
+  if (fit >= el.size) return el;
+  el.size = Math.max(Math.floor(fit), Math.min(el.size, CODE_MIN_SIZE));
+  const cols = room(el.size);
+  if (longest <= cols) return el;
+  const pieces = new Map();
+  el.lines = el.lines.flatMap(l => {
+    if (lineCols(l) <= cols) return [l];
+    const out = wrapLine(l, cols);
+    pieces.set(l.id, out.map(x => x.id));
+    return out;
+  });
+  const expand = list => list?.flatMap(id => pieces.get(id) ?? [id]);
+  el.steps = el.steps.map(st => ({ ...st, ...Object.fromEntries(['show', 'add', 'remove', 'focus'].filter(k => st[k]).map(k => [k, expand(st[k])])) }));
+  return el;
+}
+
+/** Split one line's spans into pieces of at most `cols` columns; continuations hang 4 columns deeper. */
+function wrapLine(l, cols) {
+  const spans = l.spans ?? [{ text: l.text ?? '', role: 'plain' }];
+  const indent = l.indent ?? 0, hang = Math.min(indent + 4, Math.max(0, cols - 24));
+  // Break at spaces; a chunk longer than a whole row is cut where the row ends.
+  const tokens = spans.flatMap(sp => (sp.text.match(/\s+|\S+/g) ?? []).map(t => ({ text: t, role: sp.role })));
+  // A word can span roles (`Some(` is a function then punctuation): keep it whole when breaking.
+  const words = [];
+  for (const t of tokens) {
+    const last = words.at(-1), space = /^\s+$/.test(t.text);
+    if (last && !space && !last.space) last.parts.push(t); else words.push({ space, parts: [t] });
+  }
+  const rows = [[]];
+  let used = indent;
+  for (const w of words) {
+    const len = w.parts.reduce((n, t) => n + t.text.length, 0);
+    if (!w.space && used + len > cols && rows.at(-1).length && hang + len <= cols) { rows.push([]); used = hang; }
+    if (w.space && used + len > cols) { rows.push([]); used = hang; continue; }
+    for (const t of w.parts) placePart(t);
+  }
+  function placePart(t) {
+    let text = t.text;
+    if (used === hang && rows.length > 1 && !rows.at(-1).length && /^\s+$/.test(text)) return;
+    while (used + text.length > cols && used < cols) {
+      rows.at(-1).push({ text: text.slice(0, cols - used), role: t.role });
+      text = text.slice(cols - used); rows.push([]); used = hang;
+    }
+    if (text) { rows.at(-1).push({ text, role: t.role }); used += text.length; }
+  }
+  const merge = row => row.reduce((a, sp) => { const last = a.at(-1); if (last && last.role === sp.role) last.text += sp.text; else a.push({ ...sp }); return a; }, []);
+  return rows.filter(r => r.length).map((row, k) => ({ ...l, id: k ? `${l.id}~${k}` : l.id, number: k ? 0 : l.number, indent: k ? hang : indent, spans: merge(row), ...(l.text != null ? { text: undefined } : {}) }));
+}
+
 /**
  * One `code` element. `spec`: {x, y, w, size, title, lang, context, say|at, focus, gutter} with
  * either inline `lines`/`steps`, `before`/`after` text, or `commit` + `file` (+ `base`, `repo`).
  */
-export function codeElement(spec, { cue, where, staged, root = process.cwd() }) {
+export function codeElement(spec, { cue, where, staged, root = process.cwd(), area = null }) {
   const el = { type: 'code', id: spec.id ?? 'code', x: spec.x ?? 120, y: spec.y ?? 300, w: spec.w ?? 1100, size: spec.size ?? 26, gutter: spec.gutter ?? true, enter: spec.enter ?? 'fade', at: spec.appear ?? 0, dur: spec.dur ?? 0.7 };
   if (spec.leading != null) el.leading = spec.leading;
   if (spec.h != null) el.h = spec.h;
@@ -104,7 +179,7 @@ export function codeElement(spec, { cue, where, staged, root = process.cwd() }) 
     el.lines = spec.lines.map(l => (typeof l === 'string' ? { id: l, text: l } : l));
     el.steps = spec.steps.map(st => ({ ...st, at: st.say != null || st.at != null ? cue(st.say ?? st.at) : 0, say: undefined }));
     el.title = spec.title ?? '';
-    return el;
+    return fitHeight(fitCode(el, area), spec, where);
   }
   let before, after, lang = spec.lang ?? '', title = spec.title;
   if (spec.commit) {
@@ -150,18 +225,24 @@ export function codeElement(spec, { cue, where, staged, root = process.cwd() }) 
   const when = spec.say != null || spec.at != null ? cue(spec.say ?? spec.at) : 1.2;
   el.lines = linesOut;
   el.title = title ?? '';
-  // Fit the editor into `h`: the size drops to show every row, but never below what a viewer
-  // can read; too many rows is an error, not small type.
-  if (spec.h != null) {
-    const rows = Math.max(ops.filter(o => o.op !== 'add').length, ops.filter(o => o.op !== 'del').length);
-    const leading = spec.leading ?? 1.5;
-    const fit = Math.floor(spec.h / (rows * leading + (el.title ? 1.9 : 0) + 1.8));
-    if (fit < 20) throw new Error(`${where}: ${rows} rows do not fit ${spec.h} px at a readable size (they would be ${fit} px); narrow the window or give the editor more height`);
-    el.size = Math.min(el.size, fit);
-  }
   el.steps = [
     { at: 0, show: show(['keep', 'del']) },
     { at: when, show: show(['keep', 'add']), add: show(['add']), remove: show(['del']), focus: spec.focus === false ? [] : show(['add']) },
   ];
+  return fitHeight(fitCode(el, area), spec, where);
+}
+
+/**
+ * Fit the editor into `h` (or the area's height): the size drops to show every row, but never below
+ * what a viewer can read; too many rows is an error, not small type.
+ */
+function fitHeight(el, spec, where) {
+  const rows = Math.max(...el.steps.map(st => st.show?.length ?? 0), 1), leading = spec.leading ?? 1.5;
+  const height = el.h ?? el.maxH;
+  delete el.maxH;
+  if (height == null) return el;
+  const fit = Math.floor(height / (rows * leading + (el.title ? 1.9 : 0) + 1.8));
+  if (fit < 20) throw new Error(`${where}: ${rows} rows do not fit ${Math.round(height)} px at a readable size (they would be ${fit} px); narrow the window or give the editor more height`);
+  el.size = Math.min(el.size, fit);
   return el;
 }

@@ -20,7 +20,9 @@ pub fn render(b: &Beat, frame: Frame, ctx: &Ctx) -> Node {
     let env = &b.environment;
     let wide = env.width / env.height > 1.3;
     let tall = env.height > env.width;
-    let x = if wide { 120.0 } else { 86.0 };
+    // Tall frames keep type inside the middle 80% (phone UI covers the edges); the frame audit
+    // holds headings and content to the same margin.
+    let x = if wide { 120.0 } else if tall { (env.width * 0.1).ceil() } else { 86.0 };
     let bottom = if env.captions { if tall { 365.0 } else { 215.0 } } else { 145.0 };
     let hero = HERO.contains(&b.block.as_str()) || matches!(b.block.as_str(), "chapter" | "highlight");
     let portrait_shift = if tall { env.height * 0.11 - 108.0 } else { 0.0 };

@@ -44,13 +44,62 @@ function edgeGap(w, h, dx, dy, margin = 14) {
   return t + margin;
 }
 
+/** Where a stage's actors and code may sit: title-safe, below the heading, above the source line. */
+export function stageArea(frame, { heading = true } = {}) {
+  const tall = frame.height > frame.width, W = frame.width, H = frame.height;
+  return { left: W * (tall ? 0.1 : 0.06), right: W * (tall ? 0.9 : 0.94), top: heading ? (tall ? 430 : 300) : (tall ? 200 : 120), bottom: H * (tall ? 0.88 : 0.86) };
+}
+
+const actorSize = a => {
+  const label = String(a.label ?? a.id);
+  return { w: a.w ?? Math.max(220, 120 + label.length * 17), h: a.h ?? (a.detail ? 132 : 104) };
+};
+
+/**
+ * A stage drawn for a wide frame shown in a tall one would run off the side. Its actors are laid
+ * down the frame instead: left-to-right order becomes top-to-bottom (move targets and camera keys
+ * follow the same mapping), inside the stage area, below any code editor. Returns the spec to
+ * compile and a note when it changed; a stage that already fits is left exactly as authored.
+ */
+export function fitStage(spec, frame, area) {
+  const actors = spec.actors ?? [];
+  if (frame.height <= frame.width || !actors.length) return { spec, note: null };
+  const boxes = actors.map(a => ({ a, ...actorSize(a) }));
+  const moves = (spec.events ?? []).filter(e => e?.do === 'move' && Number.isFinite(e.x));
+  const right = Math.max(...boxes.map(b => b.a.x + b.w / 2), ...moves.map(e => e.x));
+  const left = Math.min(...boxes.map(b => b.a.x - b.w / 2), ...moves.map(e => e.x));
+  if (right <= frame.width && left >= 0) return { spec, note: null };
+  const xs = [...boxes.map(b => b.a.x), ...moves.map(e => e.x)], ys = [...boxes.map(b => b.a.y), ...(spec.events ?? []).filter(e => e?.do === 'move' && Number.isFinite(e.y)).map(e => e.y)];
+  const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  const maxW = Math.max(...boxes.map(b => b.w)), maxH = Math.max(...boxes.map(b => b.h));
+  // With an editor on the same stage, the actors take the lower part of the area.
+  const top = spec.code ? area.top + (area.bottom - area.top) * 0.55 : area.top, bottom = area.bottom;
+  // A centred column: the authored spacing (capped at 420 px), never more than the area holds.
+  const pad = maxH / 2 + 50, k = Math.min(1, (area.right - area.left - maxW) / Math.max(1, y1 - y0));
+  const span = Math.min(bottom - top - 2 * pad, x1 - x0, 420 * Math.max(1, actors.length - 1)), mid = (top + bottom) / 2;
+  const map = (x, y) => ({
+    x: Math.round(frame.width / 2 + (Number.isFinite(y) ? (y - (y0 + y1) / 2) * k : 0)),
+    y: Math.round(x1 > x0 && Number.isFinite(x) ? mid - span / 2 + (x - x0) / (x1 - x0) * span : mid),
+  });
+  const out = structuredClone(spec);
+  for (const a of out.actors) Object.assign(a, map(a.x, a.y));
+  for (const e of out.events ?? []) if (e?.do === 'move') { const m = map(e.x, e.y); if (Number.isFinite(e.x)) e.y = m.y; if (Number.isFinite(e.y)) e.x = m.x; if (!Number.isFinite(e.y)) delete e.x; if (!Number.isFinite(e.x)) delete e.y; }
+  for (const key of out.camera?.keys ?? []) if (Number.isFinite(key.x) || Number.isFinite(key.y)) Object.assign(key, map(key.x, key.y));
+  for (const e of out.events ?? []) if (e?.do === 'camera' && (Number.isFinite(e.x) || Number.isFinite(e.y))) Object.assign(e, map(e.x, e.y));
+  return { spec: out, note: `drawn for a wide frame; its ${actors.length} actors were laid down the tall frame in the same order. Give the stage tall positions for exact placement.` };
+}
+
 /**
  * Compile one stage spec into native elements and a camera. `cue(v, fallback)` turns seconds or
  * a spoken word into layer seconds; `end` is the layer length in seconds.
  */
-export function compileStage(spec, { cue, end, where, frame, staged, root }) {
+export function compileStage(spec, { cue, end, where, frame, staged, root, heading = true, notes = [] }) {
   if (!spec || typeof spec !== 'object' || Array.isArray(spec)) fail(where, 'a stage is an object');
   for (const k of Object.keys(spec)) if (!STAGE_KEYS.includes(k) && !['title', 'kicker', 'source', 'support', 'land'].includes(k)) fail(where, `unknown stage key ${k} (${STAGE_KEYS.join(', ')})`);
+  const area = stageArea(frame, { heading });
+  const fitted = fitStage(spec, frame, area);
+  if (fitted.note) notes.push(`${where}: ${fitted.note}`);
+  spec = fitted.spec;
   const at = (v, fallback) => (v == null ? fallback : cue(v));
   const out = { under: [], actors: [], links: [], effects: [], over: [] };
   const cameraKeys = [];
@@ -108,7 +157,9 @@ export function compileStage(spec, { cue, end, where, frame, staged, root }) {
       arrow: l.arrow ?? 'end', at: appear, enter: 'draw', dur: 0.7, keys: [],
       ...(l.dashed ? { dash: [10, 12], loop: { type: 'dash', period: 1.6 } } : {}),
     };
-    const label = l.label ? { type: 'text', id: `${id}.label`, text: String(l.label).slice(0, 32), attach: { to: id, dx: 0, dy: -24 }, anchor: 'middle', size: 24, font: 'mono', fill: 'muted', at: appear + 0.3, enter: 'fade' } : null;
+    // A label rides above a level link and beside a steep one, so it never sits on the line.
+    const steep = Math.abs(dy) > Math.abs(dx) * 1.2;
+    const label = l.label ? { type: 'text', id: `${id}.label`, text: String(l.label).slice(0, 32), attach: { to: id, dx: steep ? 34 : 0, dy: steep ? 8 : -24 }, anchor: steep ? 'start' : 'middle', size: 24, font: 'mono', fill: 'muted', at: appear + 0.3, enter: 'fade' } : null;
     links.set(id, { spec: l, el, label, appear, from: l.from, to: l.to });
     out.links.push(el);
     if (label) out.links.push(label);
@@ -213,6 +264,11 @@ export function compileStage(spec, { cue, end, where, frame, staged, root }) {
         const off = { top: [0, -(a.h / 2 + 90)], bottom: [0, a.h / 2 + 90], left: [-(a.w / 2 + 230), 0], right: [a.w / 2 + 230, 0] }[side] ?? fail(w0, 'side is top, bottom, left or right');
         const boxW = Math.max(180, 40 + text.length * 14.5),
           boxH = 64;
+        // Keep the box inside the stage area wherever its actor stands (the leader still reaches the actor).
+        const [bx, by] = [a.x + off[0] + (ev.dx ?? 0), a.y + off[1] + (ev.dy ?? 0)];
+        const nudgeX = Math.max(area.left - (bx - boxW / 2), 0) + Math.min(area.right - (bx + boxW / 2), 0);
+        const nudgeY = Math.max(area.top - (by - boxH / 2), 0) + Math.min(area.bottom - (by + boxH / 2), 0);
+        off[0] += nudgeX; off[1] += nudgeY;
         const cid = `${id}`;
         const leave = until != null ? { exitAt: until, exit: 'fade', exitDur: 0.3 } : {};
         out.over.push({
@@ -240,7 +296,7 @@ export function compileStage(spec, { cue, end, where, frame, staged, root }) {
   }
   // Keys must run in time order; events are authored in any order.
   for (const a of actors.values()) for (const el of [a.group, a.card, a.dot]) el.keys.sort((p, q) => p.at - q.at);
-  const code = spec.code ? [codeElement(spec.code, { cue: v => at(v, null), where: `${where}.code`, staged, root })] : [];
+  const code = spec.code ? [codeElement(spec.code, { cue: v => at(v, null), where: `${where}.code`, staged, root, area })] : [];
   const camera = spec.camera ? structuredClone(spec.camera) : {};
   if (camera.keys) camera.keys = camera.keys.map(k => ({ ...k, at: at(k.say ?? k.at, 0), say: undefined }));
   if (camera.focus?.keys) camera.focus.keys = camera.focus.keys.map(k => ({ ...k, at: at(k.say ?? k.at, 0), say: undefined }));

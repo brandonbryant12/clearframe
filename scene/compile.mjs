@@ -100,9 +100,11 @@ export function compilePlan({ root, sb, timing, job, stage, assetFile }, { rough
   const timingBeat = id => timing.beats.find(b => b.id === id);
   const sbBeat = id => sb.beats.find(b => b.id === id);
 
-  const add = ({ id, spec, start, frames, beat, z, cue, where, fade }) => {
+  const add = ({ id, spec, start, frames, beat, z, cue, where, fade, heading = true }) => {
     const end = frames / fps;
-    const { elements, camera } = compileStage(spec, { cue, end, where, frame, root, staged: p => provenance.push({ layer: id, ...p }) });
+    const notes = [];
+    const { elements, camera } = compileStage(spec, { cue, end, where, frame, root, heading, notes, staged: p => provenance.push({ layer: id, ...p }) });
+    warnings.push(...notes);
     resolveTimes(elements, cue, where);
     each(elements, el => {
       if (el.at != null && el.at > end - 1 / fps + 1e-7)
@@ -169,6 +171,8 @@ export function compilePlan({ root, sb, timing, job, stage, assetFile }, { rough
     return [['fade', 'rise', 'zoom', 'wipe', 'push'].includes(jb.transition) ? entrance : 0, ['fade', 'zoom', 'push'].includes(jb.exit) ? 0.32 : 0];
   };
 
+  // A beat with a title or kicker draws a heading; stage content starts below it.
+  const hasHeading = b => !!(b?.props?.title?.trim?.() || b?.props?.kicker?.trim?.());
   for (const tb of timing.beats) {
     const source = sbBeat(tb.id);
     const jb = jobBeat(tb.id);
@@ -176,12 +180,12 @@ export function compilePlan({ root, sb, timing, job, stage, assetFile }, { rough
     const where = tb.id;
     if (tb.block === 'stage') {
       const spec = Object.fromEntries(Object.entries(source.props ?? {}).filter(([k]) => !STAGE_HEADING.includes(k)));
-      add({ id: `${tb.id}/stage`, spec, start: jb.start_frame, frames: jb.frames, beat: tb.id, z: spec.z ?? 'under', cue: beatCue(tb), where: `${where}.props`, fade: fadeFor(jb) });
+      add({ id: `${tb.id}/stage`, spec, start: jb.start_frame, frames: jb.frames, beat: tb.id, z: spec.z ?? 'under', cue: beatCue(tb), where: `${where}.props`, fade: fadeFor(jb), heading: hasHeading(source) });
     }
     const extra = source.stage == null ? [] : Array.isArray(source.stage) ? source.stage : [source.stage];
     extra.forEach((spec, i) => {
       if (!['under', 'over', undefined].includes(spec?.z)) throw new Error(`${where}.stage: z is under or over`);
-      add({ id: `${tb.id}/stage-${i}`, spec, start: jb.start_frame, frames: jb.frames, beat: tb.id, z: spec.z ?? 'over', cue: beatCue(tb), where: `${where}.stage`, fade: fadeFor(jb) });
+      add({ id: `${tb.id}/stage-${i}`, spec, start: jb.start_frame, frames: jb.frames, beat: tb.id, z: spec.z ?? 'over', cue: beatCue(tb), where: `${where}.stage`, fade: fadeFor(jb), heading: hasHeading(source) });
     });
   }
   // Film stages: one layer across beats, on its own clock from the first beat's start.
@@ -213,7 +217,7 @@ export function compilePlan({ root, sb, timing, job, stage, assetFile }, { rough
       throw new Error(`spoken cue "${value}" is not in the stage's narration (${span.map(x => x.id).join(', ')})`);
     };
     const { id, from, to, ...spec } = s;
-    add({ id: `stage:${id}`, spec, start, frames, z: spec.z ?? 'under', cue, where, fade: [0, 0] });
+    add({ id: `stage:${id}`, spec, start, frames, z: spec.z ?? 'under', cue, where, fade: [0, 0], heading: span.some(x => hasHeading(sbBeat(x.id))) });
   }
   const plan = {
     kind: PLAN_KIND,
