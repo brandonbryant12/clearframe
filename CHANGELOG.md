@@ -1,5 +1,15 @@
 # Changelog
 
+## The last portrait type fixes in three playbooks
+
+- **research-digest `hook` and `end`.** The long single lines are set as two shorter lines at phone sizes. The hook is framed over the bunched buses as they pull in; the third enters from the edge, as in landscape.
+- **concept-explainer `title` and `end`.** In portrait the drawing is fitted whole at about 0.44 scale, so the kicker and the end's subline get larger sizes there (about 26 and 28 px, from 15 and 17).
+- **cinematic-explainer `hidden`.** The 90% figure and its sentence are stacked, where side by side they pressed against the frame edge.
+- **Measured.**
+  - Vertical `check`: research-digest 3 → 0 findings, concept-explainer 4 → 2, cinematic-explainer 1 → 0. concept's two left are the `ripple` row labels at the title-safe edge.
+  - Decoded strips show the transitions into and out of each beat.
+  - Landscape scaffolds drop `tall`, and `viewTall` is used only in tall frames.
+
 ## A framed title's kicker clears the brand in landscape
 
 - **On a landscape film with the editorial frame, the title's kicker now sits below the brand wordmark.** It used to print over it (brand-spot: "FIELD NOTES overlaps clearframe"). brand-spot landscape: 1 finding → 0.
