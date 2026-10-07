@@ -599,4 +599,9 @@ test('operations sent as JSON text forgive a trailing comma and say where they b
   assert.deepEqual(opsFromText('[{"command":"delete","beat":"a"},]'), [{ command: 'delete', beat: 'a' }]);
   assert.deepEqual(opsFromText('{"command":"delete","beat":"a"}'), [{ command: 'delete', beat: 'a' }], 'one operation on its own');
   assert.throws(() => opsFromText('[{"command":"set","value":"He said "hi""}]'), /position 36.*near “\[\{"command":"set","value":"He said "⟨here⟩hi/);
+  // Text inside strings is never touched, only real trailing commas.
+  assert.equal(opsFromText('[{"command":"set","value":"literal ,] stays",}]')[0].value, 'literal ,] stays');
+  assert.equal(opsFromText('[{"command":"set","value":"a ,} b"},]')[0].value, 'a ,} b');
+  assert.equal(opsFromText('[{"command":"set","value":"quote \\" ,] and slash \\\\",}]')[0].value, 'quote " ,] and slash \\');
+  assert.deepEqual(opsFromText('[ {"command":"delete","beat":"a"} , \n ]'), [{ command: 'delete', beat: 'a' }]);
 });

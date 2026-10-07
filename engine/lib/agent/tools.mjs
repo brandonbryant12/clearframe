@@ -19,6 +19,29 @@ export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearfr
   motion: skill('clearframe-motion'), script: skill('clearframe-script'), integrity: skill('clearframe-integrity'), direction: skill('clearframe-direction'), engine: skill('clearframe-engine'),
   review: skill('clearframe-review'), scene: skill('clearframe-scene'), style: 'docs/style.md', 'cinema-notes': 'docs/cinema.md', 'canvas-notes': 'docs/canvas.md', ideas: 'docs/ideas.md',
   speech: 'docs/speech.md', authoring: 'engine/agent-plugin/AUTHORING.md', cast: 'docs/cast.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };
+/** Drop commas that close an array or object, reading strings as strings (their text is never touched). */
+function withoutTrailingCommas(text) {
+  let out = '', quoted = false, escaped = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quoted) {
+      out += c;
+      if (escaped) escaped = false;
+      else if (c === '\\') escaped = true;
+      else if (c === '"') quoted = false;
+      continue;
+    }
+    if (c === '"') quoted = true;
+    else if (c === ',') {
+      let j = i + 1;
+      while (j < text.length && /\s/.test(text[j])) j++;
+      if (text[j] === ']' || text[j] === '}') continue;
+    }
+    out += c;
+  }
+  return out;
+}
+
 /**
  * Operations sent as JSON text. A trailing comma (the commonest slip) is forgiven; anything else is
  * refused with where it broke, so the model can fix that spot instead of guessing.
@@ -26,7 +49,7 @@ export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearfr
 export function opsFromText(text) {
   const parse = t => { const v = JSON.parse(t); return Array.isArray(v) ? v : Array.isArray(v?.ops) ? v.ops : v && typeof v === 'object' && v.command ? [v] : null; };
   let error;
-  for (const t of [text, text.replace(/,(\s*[\]}])/g, '$1')]) {
+  for (const t of [text, withoutTrailingCommas(text)]) {
     try { const ops = parse(t); if (ops) return ops; } catch (e) { error ??= e; }
   }
   const at = Number(/position (\d+)/.exec(error?.message ?? '')?.[1]);
