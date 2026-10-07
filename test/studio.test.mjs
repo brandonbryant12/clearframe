@@ -26,6 +26,12 @@ test('studio edits survive reload, undo and redo; stale clients cannot overwrite
   const e = studioCommand(d, { hash: c.hash, command: 'redo' }); assert.equal(e.storyboard.beats[0].props.text, 'Changed');
 });
 
+test('rewording narration keeps a duration someone authored, six seconds included', t => {
+  const d = fixture(t, { version: 2, title: 'Film', music: false, beats: [{ id: 'a', block: 'title', duration: 6, vo: 'Original narration.', props: { text: 'A deliberate hold' } }] });
+  const s = run(d, { command: 'set', target: 'beat', beat: 'a', path: 'vo', value: 'Reworded narration.' });
+  assert.equal(s.storyboard.beats[0].duration, 6); assert.doesNotMatch(s.undoLabel, /follows the narration/);
+});
+
 test('new edit after undo drops redo; reorder preserves scene identity', t => {
   const d = fixture(t);
   let s = run(d, { command: 'beat.move', beat: 'b', direction: -1 });
@@ -87,13 +93,17 @@ test('batches, inserts, duplicates, deletes and treatments are single undoable s
   assert.ok(s.storyboard.sources.some(x => /sample/i.test(x.title)), 'sample content is labelled and cited');
   s = run(d, { command: 'batch', label: 'A named scene, filled', ops: [{ command: 'insert', block: 'canvas', after: 'bars', id: 'pile' }, { command: 'set', target: 'beat', beat: 'pile', path: 'props', value: { cast: { objects: [{ id: 'a', icon: 'file' }], formations: [{ form: 'scatter', at: 0 }] } } }] });
   assert.deepEqual(s.storyboard.beats.map(b => b.id), ['a', 'bars', 'pile', 'b']); assert.ok(s.storyboard.beats[2].props.cast);
-  // Narration sets a new scene's length; the six-second placeholder length goes, a chosen one stays.
+  // A new scene has no length of its own, so its narration sets it; a duration anyone chose stays,
+  // whatever its value (six seconds included), however it was set.
+  assert.equal(s.storyboard.beats[2].duration, undefined);
   s = run(d, { command: 'set', target: 'beat', beat: 'pile', path: 'vo', value: 'Reports arrive from everywhere.' });
-  assert.equal(s.storyboard.beats[2].duration, undefined); assert.match(s.undoLabel, /follows the narration/);
-  s = run(d, { command: 'set', target: 'beat', beat: 'pile', path: 'duration', value: 4.5 });
-  s = run(d, { command: 'set', target: 'beat', beat: 'pile', path: 'vo', value: 'Reports arrive.' });
-  assert.equal(s.storyboard.beats[2].duration, 4.5);
-  for (let i = 0; i < 3; i++) s = run(d, { command: 'undo' });
+  assert.equal(s.storyboard.beats[2].duration, undefined);
+  for (const value of [4.5, 6]) {
+    s = run(d, { command: 'set', target: 'beat', beat: 'pile', path: 'duration', value });
+    s = run(d, { command: 'set', target: 'beat', beat: 'pile', path: 'vo', value: `Reports arrive, ${value}.` });
+    assert.equal(s.storyboard.beats[2].duration, value);
+  }
+  for (let i = 0; i < 5; i++) s = run(d, { command: 'undo' });
   assert.throws(() => run(d, { command: 'insert', block: 'canvas', id: 'pile' }), /already a scene/);
   s = run(d, { command: 'undo' });
   // A film stage spans the scenes it was drawn for, so starting over from a playbook takes it away.

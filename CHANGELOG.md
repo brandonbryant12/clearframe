@@ -1,5 +1,9 @@
 # Changelog
 
+## An authored six-second scene keeps its length
+
+- **A scene the studio inserts no longer gets a duration at all.** It plays for the film's silent-scene length until its narration sets its length. Setting narration never touches a scene's `duration` again. The previous change guessed that any `duration: 6` was the insert placeholder and deleted it when narration changed, which also shortened scenes someone had deliberately set to six seconds. Regression cases: an existing explicit 6, an inserted scene deliberately set to 6, ordinary inserted narration, and a non-6 duration.
+
 ## Night shift: a curated study, and a swap's cause goes home
 
 - **`examples/night-shift`** is a 25-second study in one continuous picture, curated as a capability demonstration. At 2:14 a report slips out of a phone and travels to the one person awake. It fills the screen, becomes the real code fix (lines from `f0bcc0b`, read from git), comes back as a check, travels home and folds into the phone by 6:00. It uses only existing capabilities: drawn composed shapes on `ink`, `split`, `travel`, `camera`, `fill`/`emerge` into a code-only stage, `swap` `by`, `merge`, and type as the clock. check 0 errors and 0 pops in both shapes; critique 89.
