@@ -124,14 +124,14 @@
        "ids": [
         "phone"
        ],
-       "at": 1.7
+       "at": 1.2
       },
       {
        "form": "wave",
        "ids": [
         "phone"
        ],
-       "at": 2.3
+       "at": 1.75
       }
      ]
     }
@@ -307,7 +307,64 @@
   {
    "id": "back",
    "block": "canvas",
-   "vo": "The fix goes back the way the report came.",
+   "vo": "Back on her desk,",
+   "hold": 0.8,
+   "props": {
+    "elements": [
+     {
+      "type": "circle",
+      "id": "lamp",
+      "cx": 540,
+      "cy": 930,
+      "r": 300,
+      "fill": "accent2",
+      "opacity": 0.12,
+      "blur": 60,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "line",
+      "id": "desk",
+      "x1": 300,
+      "y1": 1130,
+      "x2": 780,
+      "y2": 1130,
+      "stroke": "muted",
+      "width": 5,
+      "cap": "round",
+      "rough": {
+       "amount": 1,
+       "passes": 2
+      },
+      "at": 0,
+      "enter": "none"
+     }
+    ],
+    "cast": {
+     "formations": [
+      {
+       "form": "emerge",
+       "ids": [
+        "report"
+       ],
+       "at": 0,
+       "dur": 0.9
+      },
+      {
+       "form": "camera",
+       "zoom": 1,
+       "at": 0.2,
+       "dur": 1.2
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "fixed",
+   "block": "canvas",
+   "vo": "it turns into the fix, then travels home.",
    "hold": 0.9,
    "props": {
     "elements": [
@@ -353,20 +410,6 @@
      ],
      "formations": [
       {
-       "form": "emerge",
-       "ids": [
-        "report"
-       ],
-       "at": 0,
-       "dur": 0.9
-      },
-      {
-       "form": "camera",
-       "zoom": 1,
-       "at": 0.2,
-       "dur": 1.2
-      },
-      {
        "form": "swap",
        "out": "report",
        "in": "check",
@@ -388,7 +431,7 @@
          1300
         ]
        ],
-       "say": "back",
+       "say": "home",
        "dur": 1.6
       }
      ]

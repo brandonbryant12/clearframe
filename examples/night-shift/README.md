@@ -1,6 +1,6 @@
 # Night shift
 
-A 22-second study, curated by hand as a capability demonstration (not the output of the studio agent). It tells a small story in one continuous picture. At 2:14 a.m. a report slips out of someone's phone and travels to the one person awake. She opens it: the report grows into the whole screen, and the screen becomes the code that fixes it, the real lines from commit `f0bcc0b`. The report comes back as a check, travels home and folds into the phone. By 6:00, nobody knows it broke.
+A 25-second study, curated by hand as a capability demonstration (not the output of the studio agent). It tells a small story in one continuous picture. At 2:14 a.m. a report slips out of someone's phone and travels to the one person awake. She opens it: the report grows into the whole screen, and the screen becomes the code that fixes it, the real lines from commit `f0bcc0b`. The report comes back as a check, travels home and folds into the phone. By 6:00, nobody knows it broke.
 
 | Beat | Narration | Picture |
 |---|---|---|
@@ -8,7 +8,8 @@ A 22-second study, curated by hand as a capability demonstration (not the output
 | `report` | "A report slips out of someone's phone and finds the one person awake." | A bubble splits out of the phone (`split`), then travels up to her along a pen route (`travel`, `via`). |
 | `dive` | "She opens it." | The camera leans toward the report (`camera`), and the report fills the screen in amber (`fill`). |
 | `code` | "One stray comma, and the line that drops it." | Not a cast scene: a stage that holds only code, on the amber the fill hands it (tone and cut set by the job). It shows lines 34–39 of `tools.mjs` read from git at `f0bcc0b`, landing on "comma". A hold for reading. |
-| `back` | "The fix goes back the way the report came." | The report shrinks back out of the amber (`emerge`), she works at it and it becomes a check (`swap` `by`), she returns to her desk, and the check travels home. |
+| `back` | "Back on her desk," | The report shrinks back out of the amber onto her desk (`emerge`) and the camera settles. It is its own scene because the flood has to draw over everything. |
+| `fixed` | "it turns into the fix, then travels home." | She works at it and it becomes a check on "fix" (`swap` `by`; she is drawn over what she works on). She straightens up, and the check travels home on "home". The cut from `back` is invisible. |
 | `morning` | "By six, nobody knows it broke." | The check folds into the phone (`merge`), and "6:00" settles where "2:14" was. A closing hold. |
 
 ## What carries it
@@ -35,7 +36,7 @@ node engine/cli.mjs qa build/night-shift
 
 Measured on the 8 GB iMac, with free local draft voice:
 
-- **Render time.** 665 frames in about 8 s in each shape.
-- **Checks.** `check`: 0 errors in both shapes. Its warnings say the clock times are digits ("if they are figures, add a source"); they are times, not figures.
+- **Render time.** 747 frames in about 8.5 s in each shape.
+- **Checks.** `check`: 0 errors in both shapes. Its only warnings say the clock times are digits ("if they are figures, add a source"); they are times, not figures.
 - **`qa`.** 0 pops. The hard changes are the fill and the emerge, as intended, and the holds are the reading and closing holds.
 - **Critique.** 89.

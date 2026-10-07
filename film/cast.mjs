@@ -263,7 +263,8 @@ function objectElement(o, id, size, base, enter, look = 'tiles') {
       face({ type: 'icon', id: `${id}-icon`, name: o.icon, x: 0, y: 0, size: s * 0.52, stroke: L.mark(o), enter: 'none' }));
   }
   // The flat colour an object floods the frame with (fill/emerge) covers its whole extent.
-  const [ex, ey] = objectExtent(o, size), { x, y, w, h, r } = o.shape ? { x: -ex, y: -ey, w: ex * 2, h: ey * 2, r: s * 0.08 } : children[0];
+  // (Rounded like the shape's own body, so a bubble emerging from the flood reads as a bubble.)
+  const [ex, ey] = objectExtent(o, size), { x, y, w, h, r } = o.shape ? { x: -ex, y: -ey, w: ex * 2, h: ey * 2, r: Math.min(children[0].r ?? 0, ex, ey) } : children[0];
   children.splice(1, 0, { type: 'rect', id: `${id}-solid`, x, y, w, h, r, fill: o.color, enter: 'none', keys: [{ at: 0, opacity: base.filled ? 1 : 0, dur: 0 }] });
   if (o.label) children.push({ type: 'text', id: `${id}-label`, text: o.label, x: 0, y: s * 0.5 + s * 0.34, size: Math.max(22, s * (look === 'drawn' ? 0.24 : 0.2)), font: L.label, fill: look === 'drawn' ? 'ink' : 'muted', anchor: 'middle', enter: 'none' });
   // The starting pose is a key at 0, so every later key is absolute (opacity and rotation never compound).

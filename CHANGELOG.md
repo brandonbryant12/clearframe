@@ -2,8 +2,9 @@
 
 ## Night shift: a curated study, and a swap's cause goes home
 
-- **`examples/night-shift`** is a 22-second study in one continuous picture, curated as a capability demonstration. At 2:14 a report slips out of a phone and travels to the one person awake. It fills the screen, becomes the real code fix (lines from `f0bcc0b`, read from git), comes back as a check, travels home and folds into the phone by 6:00. It uses only existing capabilities: drawn composed shapes on `ink`, `split`, `travel`, `camera`, `fill`/`emerge` into a code-only stage, `swap` `by`, `merge`, and type as the clock. check 0 errors and 0 pops in both shapes; critique 89.
+- **`examples/night-shift`** is a 25-second study in one continuous picture, curated as a capability demonstration. At 2:14 a report slips out of a phone and travels to the one person awake. It fills the screen, becomes the real code fix (lines from `f0bcc0b`, read from git), comes back as a check, travels home and folds into the phone by 6:00. It uses only existing capabilities: drawn composed shapes on `ink`, `split`, `travel`, `camera`, `fill`/`emerge` into a code-only stage, `swap` `by`, `merge`, and type as the clock. check 0 errors and 0 pops in both shapes; critique 89.
 - **A swap's cause goes back where it stood, upright,** once the change has landed. It used to stay tilted on the object it worked at for the rest of the film.
+- An emerging shape's flat colour is rounded like the shape's body, so a bubble coming back out of a flood reads as a bubble. The cast doc notes that draw order is set per beat, so give an emerge its own short beat when something will act on the object straight after.
 
 ## Inserted scenes follow their narration
 

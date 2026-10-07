@@ -66,6 +66,8 @@ Threads keep cause before effect: each segment draws once both of its ends have 
 
 A cast lays itself out for the frame, so it cannot be combined with `view`, `viewFrom` or `world`. It keeps clear of the scene's heading, whether at the top or the bottom. Word pills are as long as their words, and every object, pill or tile, is kept whole inside the title-safe area; a scatter pushes apart objects that would land on each other. Elements you add to a cast beat (a panel, a label, a route) are scenery and are drawn beneath the cast.
 
+Draw order is set once per beat. An object emerging from a flood is drawn over everything, while a swap's cause is drawn over what it works on. So when something will act on an object that has just emerged, give the emerge its own short beat; the cut between the two is invisible.
+
 Consecutive cast beats are joined with a cut, no exit, and a still camera (unless the beat sets one). A non-cut transition between them is warned about, because it would hide the continuity. A hero's `word` fades before the cut when nothing replaces it.
 
 Frames remain a pure function of time: the formations compile once into keys on stable groups.
