@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { normalizeProps, THEMES } from '../film/catalog.mjs';
-import { normalizeElements, scheduleElements } from '../film/canvas.mjs';
+import { normalizeElements, scheduleElements, reframeView, elementsExtent } from '../film/canvas.mjs';
 import { createJob, COVER } from '../film/production.mjs';
 import { storyboardFor } from '../film/playbooks.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
@@ -304,4 +304,34 @@ test('the print library loads: era palettes, treatments, sketches and the style-
   const sb = storyboardFor('style-relay');
   assert.equal(sb.theme, 'gallery');
   assert.ok(sb.beats.every(b => b.props.world === 'plates'));
+});
+
+test('a landscape shot re-framed for a tall cut keeps its words whole, readable and on its subject', () => {
+  const tall = 1080 / 1920, inside = (v, el) => {
+    const e = elementsExtent([el]);
+    return e.left >= v[0] && e.left + e.w <= v[0] + v[2] && e.top >= v[1] && e.bottom <= v[1] + v[3];
+  };
+  const sliced = (v, el) => {
+    const e = elementsExtent([el]);
+    return !inside(v, el) && e.left < v[0] + v[2] && e.left + e.w > v[0] && e.top < v[1] + v[3] && e.bottom > v[1];
+  };
+  const same = [0, 0, 1920, 1080];
+  assert.equal(reframeView(same, [], 1920 / 1080), same, 'a matching shape is left alone');
+  // The shot lands on the longest bar and its figure; the row labels are cropped off on purpose.
+  const label = { type: 'text', text: '90% full', x: 430, y: 1000, size: 38, anchor: 'end' };
+  const figure = { type: 'text', text: '9×', x: 1664, y: 1000, size: 64 };
+  const chart = [label, { type: 'rect', x: 460, y: 956, w: 1180, h: 56 }, figure, { type: 'rect', x: 460, y: 828, w: 520, h: 56 }];
+  const v1 = reframeView([700, 530, 1180, 663.75], chart, tall);
+  assert.ok(inside(v1, figure), 'the figure the shot was about stays in the tall frame');
+  assert.ok(!sliced(v1, label), 'a word the frame reaches is whole or left out, never sliced');
+  // A word from an earlier beat beside the new subject: the frame slides past it.
+  const carried = { type: 'group', carried: true, children: [{ type: 'text', text: 'Treatment', x: 2960, y: 520, size: 56, anchor: 'middle' }] };
+  const city = [{ type: 'path', d: 'M 3220 760 L 3500 760 L 3500 900 L 4900 900' }, { type: 'rect', x: 3900, y: 600, w: 1120, h: 220 },
+    { type: 'text', text: 'Your tap', x: 4400, y: 540, size: 56, anchor: 'middle' }];
+  const v2 = reframeView([3300, 0, 1920, 1080], city, tall, [carried]);
+  assert.ok(!sliced(v2, carried.children[0]));
+  // A pull-back keeps all of its subject, even when its labels end up small (they are reported).
+  const whole = [0, 1000, 2000, 3000, 4000].map(x => ({ type: 'text', text: 'STATION', x, y: 400, size: 30 }));
+  const v3 = reframeView([-200, -400, 4600, 2587], whole, tall);
+  assert.ok(whole.every(el => inside(v3, el)), 'nothing in the subject is cropped to enlarge type');
 });

@@ -752,7 +752,12 @@ function linkWorlds(beats, sb, timing, { warnings }) {
       b.props.view =
         tall && b.props.viewTall
           ? b.props.viewTall
-          : reframeView(b.props.view, b.props.elements, timing.width / timing.height);
+          : reframeView(
+              b.props.view,
+              b.props.elements,
+              timing.width / timing.height,
+              last.get(b.props.world)?.props.elements ?? [],
+            );
     }
     if (b.block === 'canvas') delete b.props.viewTall;
     // The camera crops the world on purpose, but a beat's own words must be in its shot.

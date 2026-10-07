@@ -1,5 +1,21 @@
 # Changelog
 
+## Vertical cuts keep a world's words whole
+
+- **A landscape world camera re-framed for a vertical cut now frames what the authored shot shows,** not everything the beat draws. The words of that subject come whole first, then readable (22 px), then inside the title-safe margin, and the frame is never wider than the authored shot.
+  - Before, concept-explainer's "nine times the wait" beat centred on its off-shot row labels: the bars ran off the left and the "9×" takeaway fell off the right.
+- **Words the taller frame reaches are taken in whole or left out, not sliced.** This includes labels carried from earlier beats of the same world. A word is taken in only while type stays readable; otherwise the frame slides past it, as long as the subject stays roughly centred. Words that travel, turn or scale are not placed.
+- **Measured.** I scaffolded the eleven playbooks whose vertical cuts re-frame a world camera and ran `check --draft` with main's code and with this change.
+  - Words cut by the frame edge: 14 to 2. Type too small to read: 15, unchanged. Hard to read: 55 to 51. Outside title-safe: 40 to 43.
+  - The title-safe rise includes cold-open's title. Main sliced it at both edges, but the audit did not flag it because the camera was still moving. It is now whole and close to the edge.
+  - Landscape output is byte-identical (re-framing applies only when the frame shape differs).
+- **Still open.** I judged decoded before/after stills, not only counts:
+  - Wide pull-backs: cinematic-explainer's whole journey is more readable but tight at the edges.
+  - research-digest's moving buses, below its chart, are half in frame.
+  - style-relay's whole pull-back has 10 px labels.
+  - Corner chrome on brand-spot's sketch titles and podcast-clip's kinetic word are outside title-safe. They are not world views and are unchanged.
+  - These need `viewTall` or a vertical layout.
+
 ## An authored six-second scene keeps its length
 
 - **A scene the studio inserts no longer gets a duration at all.** It plays for the film's silent-scene length until its narration sets its length. Setting narration never touches a scene's `duration` again. The previous change guessed that any `duration: 6` was the insert placeholder and deleted it when narration changed, which also shortened scenes someone had deliberately set to six seconds. Regression cases: an existing explicit 6, an inserted scene deliberately set to 6, ordinary inserted narration, and a non-6 duration.
