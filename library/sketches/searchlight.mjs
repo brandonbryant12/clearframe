@@ -115,6 +115,8 @@ export default {
           { type: 'path', d: `M ${x - 34} ${round(L.units[0].boards[0] * 0.45) + 34} L ${x - 14} ${round(L.units[0].boards[0] * 0.45)} L ${x + 14} ${round(L.units[0].boards[0] * 0.45)} L ${x + 34} ${round(L.units[0].boards[0] * 0.45) + 34} Z`, fill: 'muted', enter: 'none', at: 0 },
           { type: 'circle', cx: x, cy: round(L.units[0].boards[0] * 0.45) + 40, r: 12, fill: 'accent2', glow: { blur: 30, opacity: 0.9 }, enter: 'fade', cue: 'ALL', at: AT.ALL, dur: 0.5 },
         ]),
+        // Dust drifting through the room: drawn under the dark, so it shows in the torch's pool.
+        { type: 'particles', x: 0, y: 0, w, h: L.floor, kind: 'dust', count: tall(w, h) ? 70 : 90, seed: 7, size: 3, speed: 0.6, fill: 'ink', opacity: 0.55, enter: 'none', at: 0 },
         {
           type: 'spotlight', cx: sx, cy: sy, r, dim: 0.86, enter: 'none', at: 0,
           keys: moves, loop: sway, exit: 'fade', exitCue: 'ALL', exitAt: AT.ALL, exitDur: 0.8,

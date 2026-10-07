@@ -9,7 +9,7 @@
   - `shortcut` shows the result.
   - Both shapes: `check` reports 0 errors and 0 warnings, and the cinema score is 100/100. The README lists every adaptation and the remaining `qa` advisories.
 - **The inspiration skill gains "Adapt it to the brief"**: what can change, from words and voice cues to the look and to copying a sketch's elements, and when to make a new reusable sketch. AUTHORING points there.
-- **`searchlight` gains an optional `SEARCH` moment and a hand-held torch.** The torch sweeps the room before the first find, and its pool never stands quite still, so the opening is not a held still.
+- **`searchlight` gains an optional `SEARCH` moment, a hand-held torch and dust in the air.** The torch sweeps the room before the first find, its pool never stands quite still, and dust drifts through the light.
 - **`shortcut` changes:**
   - its waits pulse;
   - its tokens are larger and leave short trails;

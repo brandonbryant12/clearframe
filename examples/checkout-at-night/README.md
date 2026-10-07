@@ -6,7 +6,7 @@ A 30-second film built for one specific brief from library pieces, each adapted 
 
 | Beat | Narration | Picture | Library piece and how it was adapted |
 |---|---|---|---|
-| `search` | "Every night, checkout slowed to a crawl, so we went **looking**. First, stale **logs**. Then a retry **storm**. Then a **cron** job. **Lights** on." | A torch sweeps a dark storeroom, finds three things in turn and labels each, then the lamps come on and a thread joins them. A slow push into the room runs throughout. | `searchlight`: the words from the brief (`sketchText`), five moments on the voice (`sketchSay`), plus a `dolly` of the beat's own. |
+| `search` | "Every **night**, checkout slowed to a crawl, so we went looking. First, stale **logs**. Then a retry **storm**. Then a **cron** job. **Lights** on." | A torch sweeps a dark storeroom, finds three things in turn and labels each, then the lamps come on and a thread joins them. A slow push into the room runs throughout. | `searchlight`: the words from the brief (`sketchText`), five moments on the voice (`sketchSay`), plus a `dolly` of the beat's own. |
 | `turn` | "It was **one** problem, not three." | A colour-block statement on the accent, entered with a panel transition. | A `statement` with `tone: accent`. It is the punctuation that breaks a run of three drawings, which critique flags. |
 | `fix` | "Each order hopped between six services. We **pulled** them into one path, and now it **flows**." | Scattered cards and crossing curves glide into one row; a clean line draws through them and a packet flows along it. | `untangle`, **copied and adapted beyond its slots**. Its six cards carry this checkout's own pieces: a cart, logs, the database, the cron clock, retry settings and done. See below. |
 | `result` | "So checkout **skips** the waits. Both **leave** together, at the same speed. The new path is there **first**." | The old route winds through four waiting clocks; the direct one draws across; two trailed tokens race at the same speed, and the direct one arrives first. A push lands on the race. | `shortcut`: words, cues and a `dolly` on "leave". It claims fewer steps, never a measured speed-up. |
@@ -28,7 +28,7 @@ By hand, `node engine/cli.mjs sketch untangle --vertical` prints the same elemen
 - **`check`:** both shapes report 0 errors and 0 warnings (893 frames each, about 8.5 s to render on this Mac).
 - **Critique:** the cinema score is 100/100.
 - **`qa`:** three "picture barely changes" advisories remain:
-  - the dark opening, about 4 s before the torch sweeps;
+  - the dark search before the first find, about 4 s (the torch sweeps on "night", and the voice reaches the first cause at about 5.5 s);
   - the colour-block statement, a deliberate hold of about 3 s;
   - the sparse race, where trails make the motion legible on the phone sheet.
 

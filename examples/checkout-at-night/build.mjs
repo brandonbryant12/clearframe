@@ -40,7 +40,7 @@ for (const shape of ['landscape', 'vertical']) {
         props: {
           sketch: 'searchlight',
           sketchText: { FIRST: 'Stale logs', SECOND: 'Retry storm', THIRD: 'Cron job' },
-          sketchSay: { SEARCH: 'looking', FIRST: 'logs', SECOND: 'storm', THIRD: 'cron', ALL: 'Lights' },
+          sketchSay: { SEARCH: 'night', FIRST: 'logs', SECOND: 'storm', THIRD: 'cron', ALL: 'Lights' },
           // A slow push into the dark room while the light searches.
           dolly: [{ at: 0, z: 0.12, dur: 9, ease: 'inOut' }],
         },
