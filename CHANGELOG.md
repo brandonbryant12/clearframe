@@ -1,5 +1,16 @@
 # Changelog
 
+## The studio agent can look at what it rendered
+
+- **`clearframe_look`** returns one bounded picture of a finished render.
+  - A still comes back scaled down.
+  - A rough cut, section or final comes back as a **motion sheet**: up to 12 frames, each the first frame at or after a stated time of that video, tiled in reading order, so the agent sees how the picture moves, not one frame.
+  - `beat` narrows a rough cut or final to one scene, using that render's own saved timeline, never the working copy. `from`/`to` narrow any video. `phone: true` draws each frame 360 px wide.
+- **How it travels.** The image goes back as a file part of the tool result, which OpenCode passes to the model as an image (`Tool.Content` → `toolFileMedia`). A model without image input gets the text and is told to say so.
+- **Bounds.** Reads are limited to the film's own render or the studio store (real paths, so symlinks cannot escape). Decoding runs one ffmpeg at a time, single-threaded, with a 20 s limit per call. The picture is capped at 900 KB.
+- **Agent guidance.** The instructions no longer say the agent cannot see. AUTHORING adds the step: look at the rough cut, then at single scenes, then at phone size, and fix what you see before reporting.
+- **Fix:** a stray apostrophe in the catalog tool's description stopped the plugin module from parsing (since `486366c`). A test now parses the module and checks every registered tool has a handler.
+
 ## A person, a product and a city: by morning
 
 - **`examples/by-morning` is a 15 s launch film built from three existing set pieces.**

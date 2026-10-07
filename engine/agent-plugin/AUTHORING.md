@@ -35,7 +35,10 @@ line on why it suits them, then pick one and build it; guide topic `inspiration`
    picture, then the draft. Small edits arrive intact; one huge edit full of code or quoted text is
    the likeliest to break. Write direction notes after the cut, if at all: the cut is the plan.
 4. `clearframe_render` kind `draft` (the rough cut), then `clearframe_job` with `wait: 90` until it
-   finishes. Fix any engine errors it lists and render again.
+   finishes. Fix any engine errors it lists and render again. Then `clearframe_look` at it: one
+   motion sheet of the whole cut, then single scenes (`beat`) where something looks wrong, and
+   `phone: true` for a vertical film. Fix what you see (a hierarchy that does not read, a held frame,
+   words too small, a picture that does not change on its line) before you report.
 5. Report in a few lines: what the cut shows, which scenes are placeholders, what you need.
 
 ## Pictures that carry a story

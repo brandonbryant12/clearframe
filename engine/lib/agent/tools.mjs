@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { studioState, studioCommand, studioSchema, planOps } from '../viewer/studio.mjs';
 import { loadViewerNotes, answerNote } from '../viewer/notes.mjs';
@@ -144,6 +145,72 @@ export function inside(dir, rel) {
   return real;
 }
 
+// One ffmpeg at a time for agent looks, each call bounded: a look never ties up the machine.
+let lookChain = Promise.resolve();
+const runBounded = (cmd, args) => {
+  const go = () => new Promise((resolve, reject) =>
+    execFile(cmd, args, { timeout: 20000, maxBuffer: 1 << 20 }, (e, out) => (e ? reject(e) : resolve(String(out)))));
+  const next = lookChain.then(go, go);
+  lookChain = next.catch(() => {});
+  return next;
+};
+
+/**
+ * One bounded picture of a finished render, for an agent to look at: a still scaled down, or a
+ * motion sheet of a video: n frames at the middle of n equal slices of [from, to] video seconds,
+ * each taken by an accurate seek (the first frame at or after that time), tiled four across in
+ * reading order. `phone` draws each frame 360 px wide, as a phone shows it. Returns the JPEG path
+ * and the requested time of each tile. Cached beside the film's other agent previews.
+ */
+export async function lookImage(file, { dir, key, frames = 8, from = null, to = null, phone = false }) {
+  const out = path.join(dir, 'build', 'look', `${key}.jpg`);
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  const probe = async args => (await runBounded('ffprobe', ['-v', 'error', ...args, '-of', 'csv=p=0', file])).trim();
+  const [w, h] = (await probe(['-select_streams', 'v:0', '-show_entries', 'stream=width,height'])).split(',').map(Number);
+  const tall = h > w;
+  if (/\.(png|jpe?g)$/i.test(file)) {
+    const width = phone ? 360 : Math.min(w, tall ? 720 : 1280);
+    if (!fs.existsSync(out)) await runBounded('ffmpeg', ['-v', 'error', '-y', '-threads', '1', '-i', file, '-vf', `scale=${width}:-2`, '-q:v', '4', out]);
+    return { out, times: null, tall, size: [w, h] };
+  }
+  const duration = Number(await probe(['-show_entries', 'format=duration'])) || 0;
+  const n = Math.max(2, Math.min(12, Math.round(frames)));
+  const a = Math.max(0, Math.min(from ?? 0, duration)), b = Math.max(a + 0.1, Math.min(to ?? duration, duration));
+  const times = Array.from({ length: n }, (_, i) => +Math.min(a + (i + 0.5) * (b - a) / n, Math.max(0, duration - 0.05)).toFixed(2));
+  if (!fs.existsSync(out)) {
+    const tile = phone ? 360 : tall ? 270 : 480, cols = Math.min(4, n), rows = Math.ceil(n / cols);
+    const tmp = fs.mkdtempSync(path.join(path.dirname(out), 'frames-'));
+    try {
+      for (const [i, t] of times.entries())
+        await runBounded('ffmpeg', ['-v', 'error', '-y', '-threads', '1', '-ss', String(t), '-i', file, '-frames:v', '1', '-vf', `scale=${tile}:-2`, '-q:v', '4', path.join(tmp, `${String(i).padStart(2, '0')}.jpg`)]);
+      await runBounded('ffmpeg', ['-v', 'error', '-y', '-threads', '1', '-i', path.join(tmp, '%02d.jpg'), '-vf', `tile=${cols}x${rows}:padding=6:color=white`, '-frames:v', '1', '-q:v', '4', out]);
+    } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+  }
+  return { out, times, tall, size: [w, h] };
+}
+
+/**
+ * The file a finished job made, and the timeline it was rendered from: the job's own output (a
+ * still or section in the studio's store), or a rough cut's or final's saved revision video inside
+ * the film. Nothing outside the studio store or the film is ever read.
+ */
+function renderedFile(j, { base, dir }) {
+  // The real file must lie under the real root: a symlink cannot carry a read outside it.
+  const within = (f, root) => { try { const r = fs.realpathSync(root), real = fs.realpathSync(f); return real.startsWith(r + path.sep) ? real : null; } catch { return null; } };
+  const out = j.output && (within(j.output, base) ?? within(j.output, dir));
+  if (out) return { file: out, timeline: null };
+  if (typeof j.revision === 'string' && /^r\d{3,}$/.test(j.revision)) {
+    const revDir = path.join(dir, 'review', 'revisions', j.revision);
+    try {
+      const v = JSON.parse(fs.readFileSync(path.join(revDir, 'revision.json'), 'utf8')).videos?.at(-1);
+      const f = v?.object && within(path.resolve(dir, v.object), dir);
+      const timeline = within(path.join(revDir, 'timeline.json'), dir);
+      if (f) return { file: f, timeline };
+    } catch {}
+  }
+  return null;
+}
+
 export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
   const filmId = dir => filmOf(dir)?.id;
   return {
@@ -265,11 +332,48 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       if (input.id && !list.length) throw fail('No such job for this film.');
       while (input.id && Date.now() < until && !TERMINAL.has(list[0].status)) { await new Promise(r => setTimeout(r, 1000)); list = pick(); }
       const view = j => [`${j.label} (job ${j.id}): ${j.status}${j.progress != null && j.status === 'running' ? ` ${Math.round(j.progress * 100)}%` : ''}`,
-        j.status === 'complete' ? `  output (for the person to view in the studio; you cannot see images, so judge by the engine's checks): ${j.url ?? 'none'}${j.matches === false ? ' — the film changed while or since it rendered; it may not match' : ''}${j.revision ? `; saved revision ${j.revision}` : ''}` : null,
+        j.status === 'complete' ? `  output: ${j.url ?? 'none'} (look at it yourself with clearframe_look; the person views it in the studio)${j.matches === false ? ' — the film changed while or since it rendered; it may not match' : ''}${j.revision ? `; saved revision ${j.revision}` : ''}` : null,
         j.media ? `  actual video: ${j.media.width}×${j.media.height}, ${sec(j.media.duration)} as encoded${j.media.authored ? ` (the film itself is ${sec(j.media.authored)}; the file rounds up to whole frames and audio)` : ''}, ${j.media.audio ? 'with sound' : 'silent'}${j.kind === 'draft' ? ' (a half-size rough cut, not the project size; its narration and music are what the Sound status says was actually made)' : ''}` : null,
         j.errors?.length ? `  engine errors: ${j.errors.join('; ')}` : null, j.status === 'failed' && !j.errors?.length ? `  log: ${clip(j.log?.slice(-1200), 1200)}` : null,
         j.result?.errors ? `  check: ${j.result.errors.length} errors, ${j.result.warnings.length} warnings${j.result.errors.length ? `: ${j.result.errors.slice(0, 6).join('; ')}` : ''}` : null].filter(Boolean).join('\n');
       return { content: list.map(view).join('\n') || 'No render jobs yet for this film.', metadata: { summary: list.length === 1 ? `${list[0].label}: ${list[0].status}` : `${list.length} jobs`, job: input.id ?? null } };
+    },
+
+    // A bounded look at a finished render, so the agent judges the picture itself: one image per call.
+    async look({ dir, input }) {
+      const film = filmId(dir);
+      const done = jobs.list(film).filter(j => j.status === 'complete' && ['still', 'section', 'draft', 'final'].includes(j.kind));
+      const j = input.job ? done.find(x => x.id === input.job) : done.at(-1);
+      if (!j) throw fail(input.job ? `No finished still, section or draft with job id ${input.job}.` : 'Nothing rendered to look at yet: queue a still, section or draft with clearframe_render and follow it with clearframe_job.');
+      const made = renderedFile(j, { base, dir });
+      if (!made) throw fail(`Job ${j.id} has no render of this film on disk (it was cleared, or it is not this film's); render it again.`);
+      const num = v => { if (v == null) return null; const x = Number(v); if (!Number.isFinite(x)) throw fail('from and to are video seconds.'); return x; };
+      let from = num(input.from), to = num(input.to), scope = 'the whole render';
+      if (input.beat) {
+        // The scene's seconds in the video come from the timeline that render was made from, never the
+        // working copy (which may have changed since).
+        let beats = null;
+        try { beats = made.timeline && JSON.parse(fs.readFileSync(made.timeline, 'utf8')).beats; } catch {}
+        if (!beats) throw fail('beat works on a saved rough cut or final (it reads that render\'s own timeline); for a still or section, look at the whole render.');
+        const bt = beats.find(x => x.id === input.beat);
+        if (!bt) throw fail(`That render has no scene ${input.beat}. Its scenes: ${beats.map(x => x.id).join(', ')}.`);
+        [from, to, scope] = [bt.start, bt.end, `scene ${input.beat} (${bt.start.toFixed(2)}–${bt.end.toFixed(2)} s in that render)`];
+      } else if (from != null || to != null) scope = `${from ?? 0}–${to ?? 'end'} s`;
+      const phone = !!input.phone, frames = Number(input.frames) || 8;
+      const key = crypto.createHash('sha1').update(JSON.stringify([j.id, made.file, fs.statSync(made.file).mtimeMs, from, to, phone, frames])).digest('hex').slice(0, 16);
+      let shot;
+      try { shot = await lookImage(made.file, { dir, key, frames, from, to, phone }); } catch (e) { throw fail(`Could not make a picture of job ${j.id}: ${clip(e.message, 300)}`); }
+      const bytes = fs.readFileSync(shot.out);
+      if (bytes.length > 900_000) throw fail('That picture is too large to send; look at fewer frames or one scene.');
+      const what = shot.times
+        ? `A motion sheet of ${j.label} (job ${j.id}), ${scope}: ${shot.times.length} frames in reading order (left to right, then down), each the first frame at or after ${shot.times.map(t => `${t}s`).join(', ')} of that video${phone ? ', drawn 360 px wide as a phone shows it' : ''}.`
+        : `${j.label} (job ${j.id}), ${shot.size.join('×')}${phone ? ', drawn 360 px wide as a phone shows it' : ''}.`;
+      return {
+        content: [what, j.matches === false ? 'It was rendered from an earlier version of the film: re-render before judging recent edits.' : null,
+          'The image is attached. Judge what the engine cannot: the hierarchy of type and shapes, where the eye goes, whether the motion carries the idea from frame to frame, and whether words read at this size. If your model cannot see attached images, say so and rely on clearframe_render check.'].filter(Boolean).join('\n'),
+        images: [{ mime: 'image/jpeg', name: `look-${j.id}.jpg`, data: bytes.toString('base64') }],
+        metadata: { summary: `Looked at ${j.label}${shot.times ? ` (${shot.times.length} frames)` : ''}`, job: j.id },
+      };
     },
 
     notes({ dir, input }) {

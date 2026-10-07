@@ -595,6 +595,15 @@ test('a draft line reports the OS voice that spoke it, not today\'s setting or t
   assert.match(contextBlock({ film: { title: 'F', folder: 'f' } }), /never by the Google voice or style/, 'every message carries the reporting rule');
 });
 
+test('the OpenCode plugin module parses and every tool it registers has a studio handler', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const file = new URL('../engine/agent-plugin/server.js', import.meta.url).pathname;
+  execFileSync(process.execPath, ['--check', file]); // a stray quote in a description breaks every tool
+  const names = [...fs.readFileSync(file, 'utf8').matchAll(/^  \['(\w+)', '/gm)].map(m => m[1]);
+  const handlers = createTools({ base: os.tmpdir(), jobs: { list: () => [] }, filmOf: () => null, pauseOf: () => null, currentScope: () => null });
+  assert.ok(names.includes('look') && names.every(n => typeof handlers[n] === 'function'), `tools without a handler: ${names.filter(n => !handlers[n])}`);
+});
+
 test('operations sent as JSON text forgive a trailing comma and say where they break', () => {
   assert.deepEqual(opsFromText('[{"command":"delete","beat":"a"},]'), [{ command: 'delete', beat: 'a' }]);
   assert.deepEqual(opsFromText('{"command":"delete","beat":"a"}'), [{ command: 'delete', beat: 'a' }], 'one operation on its own');

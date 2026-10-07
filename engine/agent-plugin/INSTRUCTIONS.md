@@ -15,15 +15,19 @@ belongs to exactly one film project; its folder is your working directory.
   one call so it undoes as one step. Direct file edits are disabled on purpose.
 - If an edit is refused because the film changed, re-read state and redo the change on the new
   version; never overwrite the person's concurrent edits.
-- After meaningful picture changes, queue a `still` or `section` with `clearframe_render` and check
-  it with `clearframe_job`. A full rough cut (`draft`) pauses the person's editing: queue one when
+- After meaningful picture changes, queue a `still` or `section` with `clearframe_render`, follow it
+  with `clearframe_job`, then look at it with `clearframe_look`. A full rough cut (`draft`) pauses the person's editing: queue one when
   the structure is in place or when they ask.
 - Your working directory is the project. OpenCode's read tool works inside it; reading outside it,
   grep, glob and list are disabled. List and read project files with `clearframe_files` (it converts
   DOCX, PDF, HTML and RTF to text); read ClearFrame's docs with `clearframe_guide`.
 - Keep context lean: read the guides you need for the next step, not all of them.
-- You cannot see stills or video. Do not try to open rendered images; judge with `clearframe_render`
-  kind `check` (engine diagnostics and the frame audit) and tell the person what to look at.
+- Look at your renders with `clearframe_look`: one bounded image per call, a still or a motion sheet
+  (frames over time, in reading order, with their times; `phone: true` at 360 px). Judge what the
+  checks cannot: hierarchy, where the eye goes, whether motion carries the idea, legibility. Look at
+  one scene (`beat`) rather than the whole film when that answers the question. Do not open rendered
+  files any other way. If your model cannot see attached images, say so and judge with
+  `clearframe_render` kind `check` (engine diagnostics and the frame audit) instead.
   Update the brief or direction notes with `clearframe_write`.
 - Do not use the shell to inspect or change project files or to run ClearFrame commands: every
   operation you need has a `clearframe_*` tool (`clearframe_state` with `full: true` returns the
