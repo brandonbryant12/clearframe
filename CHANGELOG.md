@@ -1,5 +1,12 @@
 # Changelog
 
+## data-story and cold-open draft in vertical again
+
+- **The vertical cuts of data-story and cold-open failed `check`, so `draft` refused them.** One line in each read at 13 px: data-story's "ONE CARD = ONE HOUR OF ONE REQUEST" and cold-open's "Illustrative quotation", the label that marks the quote as fictional.
+- Both beats are landscape drawings fitted whole into the tall frame. Their portrait versions, through `tall`, set those lines (and cold-open's speaker line) at about 22 px.
+- Vertical `check`: 0 errors for both, from 1 each.
+- data-story's legend labels stay at 17 px: their 400-unit spacing leaves no room to grow them without crowding.
+
 ## The last portrait type fixes in three playbooks
 
 - **research-digest `hook` and `end`.** The long single lines are set as two shorter lines at phone sizes. The hook is framed over the bunched buses as they pull in; the third enters from the edge, as in landscape.
