@@ -151,10 +151,29 @@ half4 main(float2 p) {
     return half4(col, 1) * c0.a;
 }"#,
     ),
+    // Ordered (Bayer 4×4) dither in two palette inks: the shape is lit by a soft light that drifts
+    // across it, and its tone is thresholded cell by cell, so shading reads as 1-bit pixels.
+    // `scale` sets the cell (6 px at 1), `amount` the light's reach; `speed: 0` holds the light.
+    // Tone is sampled at each cell's centre, so cells stay square and the pattern stays put.
+    (
+        "dither",
+        r#"
+float b2(float2 a) { return mod(2.0 * a.x + 3.0 * a.y, 4.0); }
+half4 main(float2 p) {
+    float cell = 6.0 * max(scale, 0.2);
+    float2 c = floor(p / cell);
+    float threshold = (4.0 * b2(mod(c, 2.0)) + b2(mod(floor(c / 2.0), 2.0)) + 0.5) / 16.0;
+    float2 q = uv((c + 0.5) * cell);
+    float t = 6.2831 * (time * 0.08 + seed * 0.01);
+    float2 light = float2(0.32 + 0.22 * sin(t), 0.28 + 0.1 * cos(t));
+    float tone = clamp(1.2 - length(q - light) * mix(1.7, 0.9, amount), 0.0, 1.0);
+    return half4(mix(c1.rgb, c0.rgb, half(step(threshold, tone))), 1) * c0.a;
+}"#,
+    ),
 ];
 
 pub const NAMES: &[&str] =
-    &["noise", "sheen", "halftone", "grain", "glass", "chrome", "gold", "thermal", "scanlines", "neon"];
+    &["noise", "sheen", "halftone", "grain", "glass", "chrome", "gold", "thermal", "scanlines", "dither", "neon"];
 
 thread_local! {
     static EFFECTS: RefCell<HashMap<&'static str, RuntimeEffect>> = RefCell::new(HashMap::new());

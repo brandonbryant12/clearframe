@@ -80,6 +80,11 @@ const MECHANISMS = [
   ['tone-handoff', 'An object fills the frame with its colour and the next scene (any block) plays on that colour; emerge brings it back.', 'zooming into a detail, a chart becoming its number, a report becoming its code', 'cast fill / emerge', 'docs/cast.md', MOVES.fill],
   ['art-layer', 'Drawn art under or over any block: an arrow onto a bar, a circle round a word, soft shapes behind a quote.', 'pointing at the part that matters on a chart or card', 'beat art.under / art.over', 'docs/canvas.md', null],
   ['depth-plates', 'Painted depth plates (generated stills split into layers) put the camera inside a place; never carry text or numbers.', 'places, moods, establishing shots', 'canvas plates, layered assets', 'docs/image-direction.md', null],
+  ['dither-light', 'A 1-bit product shot: shapes on a stage painted with the dither material, an ordered dither in two palette inks under a soft light that drifts across them, on a dithered ground.', 'a retro, game-like or tactile product or object reveal; pixel looks with real light and shade', 'block stage, element material dither (and ground)', 'examples/dither-light/README.md',
+    { block: 'stage', props: { ground: { material: 'dither', colors: ['accent2', 'ink'], scale: 2.4, speed: 0.6, opacity: 1 }, elements: [
+      { type: 'rect', x: 1200, y: 300, w: 280, h: 470, r: 40, fill: 'bg', material: { name: 'dither', colors: ['bg', 'accent2'], scale: 1.2, speed: 0.6 }, enter: 'rise', say: 'Meet' },
+      { type: 'circle', cx: 1600, cy: 660, r: 100, fill: 'bg', material: { name: 'dither', colors: ['bg', 'accent2'], scale: 1.2, speed: 0.6 }, enter: 'rise', at: 0.4 },
+      { type: 'text', text: 'Product', x: 200, y: 470, size: 120, font: 'mono', fill: 'bg', enter: 'type', say: 'Meet' }] } }],
   ['kinetic', 'Type that follows the voice word by word, with emphasis words larger in an accent face.', 'quotes, hooks, podcast clips, a line that must land', 'block kinetic', 'docs/speech.md', null],
   ['icons', `A bundled icon set (${ICONS.length} Tabler icons) for canvas elements and cast tiles.`, 'a recognisable thing in one glance', 'canvas icon element, cast object icon', 'film/icons.mjs', null],
 ];

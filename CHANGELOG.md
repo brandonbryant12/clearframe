@@ -1,5 +1,12 @@
 # Changelog
 
+## Light in two inks: the dither material
+
+- **A native `dither` material for stage shapes and grounds.** It is an ordered (Bayer 4×4) dither in two palette inks, `colors: [lit, shadow]`, under a soft light that drifts across the shape. `scale` sets the cell, `amount` the light's reach, and `speed: 0` holds the light. Tone is sampled at each cell's centre, so cells stay square.
+  - It is an independent textbook implementation of the ordered dither in `docs/research/2026-10-shader-effects-assessment.md`, as one SkSL preset beside the others.
+- **`examples/dither-light`** is a 1-bit product shot in both shapes: a product, a sphere and a plinth lit in dither on a dithered ground, with native type. It is 7 s, and `check` reports 0 errors and 0 warnings.
+- **`find --id mechanism:dither-light`** prints a stage to copy.
+
 ## Growth as a plant: the seedling sketch
 
 - **The `seedling` sketch shows growth in three stages.** A seed puts down roots and a shoot, the stem draws up with leaves unfolding at each stage, and a flower opens at the top. Each stage is labelled at its height, and the grown plant sways.

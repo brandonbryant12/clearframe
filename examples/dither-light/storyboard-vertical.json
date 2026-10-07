@@ -1,0 +1,173 @@
+{
+ "version": 2,
+ "title": "Dither light",
+ "logline": "A small product, lit one pixel at a time in two inks.",
+ "format": {
+  "preset": "vertical",
+  "fps": 30
+ },
+ "theme": "lcd",
+ "type": "geometric",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.6
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "captions": false,
+ "music": false,
+ "beats": [
+  {
+   "id": "product",
+   "block": "stage",
+   "hold": 1.6,
+   "vo": "Meet Pocket. Small enough to carry everywhere, simple enough to need nothing else.",
+   "props": {
+    "ground": {
+     "material": "dither",
+     "colors": [
+      "accent2",
+      "ink"
+     ],
+     "scale": 2.4,
+     "speed": 0.6,
+     "opacity": 1
+    },
+    "camera": {
+     "keys": [
+      {
+       "at": 0,
+       "zoom": 1,
+       "dur": 0
+      },
+      {
+       "at": 0.2,
+       "zoom": 1.05,
+       "dur": 6,
+       "ease": "inOut"
+      }
+     ]
+    },
+    "elements": [
+     {
+      "type": "rect",
+      "x": 240,
+      "y": 1300,
+      "w": 600,
+      "h": 120,
+      "r": 8,
+      "fill": "accent2",
+      "material": {
+       "name": "dither",
+       "colors": [
+        "surface",
+        "accent2"
+       ],
+       "scale": 1.4,
+       "speed": 0.6
+      },
+      "enter": "none",
+      "at": 0
+     },
+     {
+      "type": "circle",
+      "cx": 790,
+      "cy": 1180,
+      "r": 120,
+      "fill": "bg",
+      "material": {
+       "name": "dither",
+       "colors": [
+        "bg",
+        "accent2"
+       ],
+       "scale": 1.2,
+       "speed": 0.6
+      },
+      "enter": "rise",
+      "say": "Small",
+      "dur": 0.8
+     },
+     {
+      "type": "rect",
+      "x": 400,
+      "y": 840,
+      "w": 280,
+      "h": 470,
+      "r": 40,
+      "fill": "bg",
+      "material": {
+       "name": "dither",
+       "colors": [
+        "bg",
+        "accent2"
+       ],
+       "scale": 1.2,
+       "speed": 0.6
+      },
+      "enter": "rise",
+      "say": "Pocket",
+      "dur": 0.9
+     },
+     {
+      "type": "rect",
+      "x": 426,
+      "y": 900,
+      "w": 228,
+      "h": 320,
+      "r": 14,
+      "fill": "ink",
+      "material": {
+       "name": "dither",
+       "colors": [
+        "accent2",
+        "ink"
+       ],
+       "scale": 1,
+       "speed": 0.6,
+       "amount": 0.4
+      },
+      "enter": "fade",
+      "say": "Pocket",
+      "dur": 0.9
+     },
+     {
+      "type": "circle",
+      "cx": 540,
+      "cy": 1264,
+      "r": 18,
+      "fill": "ink",
+      "enter": "fade",
+      "say": "Pocket",
+      "dur": 0.9
+     },
+     {
+      "type": "text",
+      "text": "Pocket",
+      "x": 540,
+      "y": 420,
+      "size": 120,
+      "font": "mono",
+      "fill": "bg",
+      "anchor": "middle",
+      "enter": "type",
+      "say": "Pocket"
+     },
+     {
+      "type": "text",
+      "text": "Carry less.",
+      "x": 540,
+      "y": 510,
+      "size": 52,
+      "font": "mono",
+      "fill": "bg",
+      "anchor": "middle",
+      "enter": "fade",
+      "say": "nothing",
+      "dur": 0.6
+     }
+    ]
+   }
+  }
+ ]
+}

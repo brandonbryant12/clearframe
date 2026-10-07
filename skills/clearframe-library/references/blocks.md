@@ -1200,7 +1200,7 @@ A native GPU stage drawn by the scene engine: actors that keep their identity, l
 | links | [{id?, from, to, label?, route?: curve / straight / elbow, bend?, dashed?, color?, arrow?: end / both / none, at / say}] — connectors that follow their actors |
 | events | [{do: send / pulse / highlight / state / move / show / hide / callout / burst / connect / disconnect / camera, at / say, …}]: send {from, to  /  via, label, color, dur, burst}; state {actor, status, label}; move {actor, x, y, dur}; callout {actor, text, side, untilSay}; camera {x, y, zoom  /  follow} |
 | code | Editor whose lines keep their identity: {commit, file, base?, repo?, context?} from git, or {before, after}, or {lines, steps}; {x, y, w, size, title, say / at, focus, gutter} |
-| ground | A full-frame GPU material behind the stage: {material: noise / sheen / halftone / grain / glass / chrome / gold / thermal / scanlines, colors, opacity, scale, speed, z} |
+| ground | A full-frame GPU material behind the stage: {material: noise / sheen / halftone / grain / glass / chrome / gold / thermal / scanlines / dither, colors, opacity, scale, speed, z} |
 | under | Native elements (canvas dialect) drawn first |
 | elements | Native elements drawn after under, before actors — rect / circle / ellipse / line / path / poly / text / icon / image / video / group / particles / spotlight / shader / code / connector (camera: false pins one to the screen); see docs/scene-engine.md |
 | over | Native elements drawn last |

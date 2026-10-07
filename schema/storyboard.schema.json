@@ -2362,7 +2362,7 @@
                       "description": "Editor whose lines keep their identity: {commit, file, base?, repo?, context?} from git, or {before, after}, or {lines, steps}; {x, y, w, size, title, say|at, focus, gutter}"
                     },
                     "ground": {
-                      "description": "A full-frame GPU material behind the stage: {material: noise|sheen|halftone|grain|glass|chrome|gold|thermal|scanlines, colors, opacity, scale, speed, z}"
+                      "description": "A full-frame GPU material behind the stage: {material: noise|sheen|halftone|grain|glass|chrome|gold|thermal|scanlines|dither, colors, opacity, scale, speed, z}"
                     },
                     "under": {
                       "description": "Native elements (canvas dialect) drawn first"

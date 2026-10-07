@@ -12,7 +12,7 @@ Read `docs/scene-engine.md` (design and full reference) and `docs/scene-engine-c
 - A mechanism with **identities that persist**: a request travelling between services, a state machine changing, a component replaced. Use `actors` + `links` + `events` instead of re-drawing a diagram per beat. A film `stages` entry keeps the same actors across several beats.
 - **Code that changed**: `code: {commit, file, window}` reads the exact commit from git, keeps unchanged lines in place, opens room for insertions and closes it for removals. The plan records the commit and blob ids; put the commit in `source`.
 - **Footage with native type**: `video` elements are decoded as GPU textures at the size drawn; title them with `camera: false` text so a camera push does not carry the type off frame.
-- **A look**: `ground` or `material` (noise, sheen, halftone, grain, glass, chrome, gold, thermal, scanlines, neon), `particles` (burst, stream along a link, field), `shutter` for motion blur on fast moves.
+- **A look**: `ground` or `material` (noise, sheen, halftone, grain, glass, chrome, gold, thermal, scanlines, dither, neon), `particles` (burst, stream along a link, field), `shutter` for motion blur on fast moves.
 
 Charts, KPIs, plots, quotes and kinetic speech stay in their blocks (exact values, sources, audits). Put a stage `over` a block for callouts and emphasis, not a re-drawn chart.
 
