@@ -177,7 +177,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       return { content: lines.join('\n'), metadata: { summary: `${sb.beats.length} scenes · ${st.errors.length ? `${st.errors.length} engine errors` : 'engine accepts it'}`, hash: st.hash } };
     },
 
-    catalog({ input }) {
+    catalog({ dir, input }) {
       const s = studioSchema(), topic = input.topic;
       const out = {
         blocks: () => s.blocks.map(b => `${b.name} (${b.category}): ${b.summary}`).join('\n'),
@@ -190,9 +190,23 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
         transitions: () => JSON.stringify(s.transitions), motions: () => JSON.stringify(s.motions),
         'film-fields': () => JSON.stringify(s.film, null, 1), 'beat-fields': () => JSON.stringify(s.beat, null, 1),
         playbooks: async () => (await import('../../../film/playbooks.mjs')).playbooks().map(p => `${p.id}: ${p.title} — ${p.audience}; inputs: ${p.inputs}`).join('\n'),
+        // One search over the whole library (the project's own library/ included): a short mixed
+        // shortlist with what each is and when it fits; `item` gives one entry's exact authoring.
+        find: async () => {
+          const { useProject } = await import('../../../film/library.mjs'), { find, line } = await import('../../../film/discover.mjs');
+          useProject(dir);
+          if (!input.query) throw fail('find needs query: what the film should show or make someone feel, in plain words.');
+          const hits = find(input.query, { limit: 10 });
+          return hits.length ? `${hits.map(line).join('\n')}\n\nclearframe_catalog topic item, name KIND:NAME, for the exact authoring of one.` : 'Nothing matched; try other words (a thing, a feeling, an audience).';
+        },
+        item: async () => {
+          const { useProject } = await import('../../../film/library.mjs'), { detail } = await import('../../../film/discover.mjs');
+          useProject(dir);
+          return JSON.stringify(await detail(String(input.name ?? '')), null, 1);
+        },
       }[topic];
       if (!out) throw fail('Unknown catalog topic.');
-      return Promise.resolve(out()).then(text => ({ content: clip(text, 120000), metadata: { summary: `Looked up ${topic}${input.name ? ` ${input.name}` : ''}` } }));
+      return Promise.resolve(out()).then(text => ({ content: clip(text, 120000), metadata: { summary: `Looked up ${topic}${input.name ? ` ${input.name}` : ''}${input.query ? `: ${String(input.query).slice(0, 60)}` : ''}` } }));
     },
 
     async edit({ dir, input, sessionID, messageID }) {

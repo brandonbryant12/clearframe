@@ -41,6 +41,7 @@ const HELP = `ClearFrame — motion graphics
   motions [--json]                    presets, entrances, exits and backdrops
   icons [--json]                      95 bundled Tabler icons and provenance
   sketch [name] [--vertical]          canvas starting compositions (route, orbit, pipeline…) as JSON
+  find "idea" [--kind k] | --id k:name | --index   search the whole library: a shortlist, then exact authoring
   doctor | build                      tools and disk headroom; compile the renderer
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]
   viewer [folders…] [--serve] [--port 4317] [--out build/viewer] [--no-render] [--projects projects] [--no-agent]
@@ -177,6 +178,8 @@ async function main() {
     'release',
     'checkpoint',
     'projects',
+    'kind',
+    'id',
   ];
   const booleans = [
     'still',
@@ -203,6 +206,7 @@ async function main() {
     'suggest-cuts',
     'shared',
     'no-agent',
+    'index',
   ];
   const { values: o, positionals } = parseArgs({
     args,
@@ -400,6 +404,17 @@ async function main() {
             .join('\n') +
           '\n\nA treatment sets film.type; a storyboard or one beat can set "type" too. Body copy, labels and counters stay in Inter.',
     );
+  if (cmd === 'find') {
+    // One search over the whole library: blocks, sketches, playbooks, looks, cast shapes and moves,
+    // stage mechanisms, examples. A short mixed shortlist, then the exact authoring for one entry.
+    const { find, line, detail, markdown } = await import('../film/discover.mjs');
+    if (o.index) return console.log(markdown());
+    if (o.id) return console.log(JSON.stringify(await detail(o.id), null, 1));
+    if (!positionals[0]) return console.log('clearframe find "what you want to show" [--kind block,sketch,...] [--json] | find --id kind:name | find --index');
+    const hits = find(positionals.join(' '), { kinds: o.kind?.split(','), limit: 10 });
+    if (o.json) return console.log(JSON.stringify(hits, null, 1));
+    return console.log(hits.map(line).join('\n') + '\n\nfind --id KIND:NAME for the exact authoring of one.');
+  }
   if (cmd === 'sketch') {
     if (!positionals[0])
       return console.log(

@@ -1,7 +1,12 @@
 # Authoring a ClearFrame film quickly (studio agent)
 
-Short reference for building a first cut without reading every guide. Look up exact props with
-`clearframe_catalog` (topic `block`, name `…`): each block has a ready example to copy and adapt.
+Short reference for building a first cut without reading every guide. To find what to build with,
+ask the library in plain words: `clearframe_catalog` topic `find`, `query` = the idea, the audience
+and the feeling ("explain our faster checkout to sales", "a playful teaser for a retro game"). It
+returns a short shortlist across blocks, sketches, playbooks, looks, cast shapes and moves, stage
+mechanisms and examples, each saying what it is and when it fits; topic `item` (name `KIND:NAME`)
+gives one entry's exact authoring and a copyable example. One search usually replaces a tour of every
+topic. Exact block props: topic `block`, name `…`.
 
 ## The fastest path to a watchable first cut
 
@@ -12,8 +17,8 @@ Short reference for building a first cut without reading every guide. Look up ex
    evidence in a few steps, a turn, a landing. Where that thing persists, keep it on screen and
    write each scene as a change to it ("the pieces line up", "a note lands and one changes"),
    rather than a new layout per line.
-3. If a playbook fits the material better than the starter (`clearframe_catalog` topic `playbooks`:
-   each says what it is for, who it is for and what it needs), start from it with
+3. If a playbook fits the material better than the starter (the `find` shortlist names fitting ones;
+   topic `playbooks` lists them all, each with what it is for and who it is for), start from it with
    `{"command":"playbook","id":"…"}` and rewrite its scenes; otherwise build on the starter.
    One `clearframe_edit` batch that replaces the starter: `delete` the sample scenes you will not
    reuse, `insert` new scenes (`block` or `sketch`, `after` an id, and your own `id` so the same

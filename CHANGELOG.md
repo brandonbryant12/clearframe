@@ -1,5 +1,15 @@
 # Changelog
 
+## Ask the library in plain words
+
+- **`find "what you want to show"`** searches one generated index of everything a film can be built from:
+  - blocks, sketches, playbooks, directions, treatments, type voices and palettes;
+  - cast shapes, looks and moves, stage elements, ten stage mechanisms (cast, stage, code scene, diagram, world, tone handoff, art layer, depth plates, kinetic, icons), sculptures and the curated examples.
+- It returns a short mixed shortlist (at most three of a kind), each line saying what the entry is and when it fits. `find --id KIND:NAME` prints one entry's exact authoring and a copyable example; `find --index` prints the whole index, kept as `docs/library-index.md`.
+- Everyday words map to the library's own (money, faster, launch, retro, calm), and a figure in the brief brings stat and delta blocks forward. Project and shared library entries take part.
+- The index reads the existing sources of truth (the block catalog, library items, cast shapes and looks, the cast and scene-engine docs, example READMEs), so nothing is listed twice.
+- The studio agent's `clearframe_catalog` gains topics `find` (a plain-words `query`) and `item` (`KIND:NAME`), and its authoring notes now start there.
+
 ## Ten new cast objects and a pixel look
 
 - **Ten composed cast shapes for product, business and systems stories:**

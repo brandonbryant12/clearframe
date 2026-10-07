@@ -254,3 +254,13 @@ test('type voices are library items that reach the job, override per beat and ch
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('the library index finds a short mixed shortlist and gives one entry exact authoring', async () => {
+  const { find, detail } = await import('../film/discover.mjs');
+  const hits = find('a playful retro game launch teaser');
+  assert.ok(hits.length >= 5 && hits.length <= 8, `a short shortlist (${hits.length})`);
+  assert.ok(new Set(hits.map(h => h.kind)).size >= 3, 'it mixes kinds, not one list');
+  assert.ok(hits.some(h => h.id === 'cast-look:pixel'), 'the pixel look surfaces for a retro game');
+  const d = await detail('cast-shape:server');
+  assert.equal(d.example.props.cast.objects[0].shape, 'server', 'detail carries a copyable example');
+});
