@@ -5,7 +5,7 @@ ask the library in plain words: `clearframe_catalog` topic `find`, `query` = the
 and the feeling ("explain our faster checkout to sales", "a playful teaser for a retro game"). It
 returns a short shortlist across blocks, sketches, playbooks, looks, cast shapes and moves, stage
 mechanisms and examples, each saying what it is and when it fits; topic `item` (name `KIND:NAME`)
-gives one entry's exact authoring and a copyable example. One search usually replaces a tour of every
+gives one entry's exact authoring and a copyable example (for a sketch: its `sketchText` slots and `sketchSay` moments to fill from the brief and the narration). One search usually replaces a tour of every
 topic. When the person wants ideas or the brief leaves the picture open, offer two or three concepts that
 differ in the picture's idea (a metaphor, a place, the mechanism, the words, the number), each with a
 line on why it suits them, then pick one and build it; guide topic `inspiration` has the method. Exact block props: topic `block`, name `…`.

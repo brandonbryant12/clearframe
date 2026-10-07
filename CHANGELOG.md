@@ -1,5 +1,11 @@
 # Changelog
 
+## From a tangle to a line: the untangle sketch
+
+- **The `untangle` sketch shows simplification.** Six scattered, turned cards are joined by crossing curves with friction points pulsing on them. On a spoken word the curves let go and the cards glide into one row (a column on tall frames). One clean line then draws through them, and a packet flows along it.
+  - It suits a messy process made simple, before and after a redesign, fewer handoffs, an integration.
+- **`examples/one-line`** shows it in both shapes, 10 s. `check` reports 0 errors and 0 warnings.
+
 ## Light in two inks: the dither material
 
 - **A native `dither` material for stage shapes and grounds.** It is an ordered (Bayer 4×4) dither in two palette inks, `colors: [lit, shadow]`, under a soft light that drifts across the shape. `scale` sets the cell, `amount` the light's reach, and `speed: 0` holds the light. Tone is sampled at each cell's centre, so cells stay square.

@@ -26,7 +26,7 @@ node engine/cli.mjs find --id cast-move:travel                               # s
 `find` returns a short, mixed shortlist. Each line says what the entry is and when it fits. Read the "when" before choosing.
 
 - **Narrow per concept.** Once a concept is in mind, search again with its own words and `--kind`.
-- **Exact authoring.** `--id` prints the props, fields and an example that compiles; copy it and adapt it.
+- **Exact authoring.** `--id` prints the props, fields and an example that compiles; copy it and adapt it. For a sketch, the example lists its text slots (`sketchText`) and named moments (`sketchSay`). Fill the slots with the brief's own words and land each moment on the narration word that names it.
 - **Browse.** `docs/library-index.md` lists everything when a search misses.
 - **Overrides.** A project's or shared library's own entries take part in search.
 

@@ -1,0 +1,38 @@
+{
+ "version": 2,
+ "title": "One line",
+ "logline": "A request that bounced between six tools now flows along one line.",
+ "format": {
+  "preset": "landscape",
+  "fps": 30
+ },
+ "theme": "paper",
+ "type": "geometric",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.7
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "captions": false,
+ "music": false,
+ "beats": [
+  {
+   "id": "untangle",
+   "block": "canvas",
+   "hold": 1.6,
+   "vo": "Every request used to bounce between six tools. We pulled them into one line, and now the work just flows.",
+   "props": {
+    "sketch": "untangle",
+    "sketchText": {
+     "BEFORE": "Six tools",
+     "AFTER": "One line"
+    },
+    "sketchSay": {
+     "UNTANGLE": "pulled",
+     "FLOW": "flows"
+    }
+   }
+  }
+ ]
+}
