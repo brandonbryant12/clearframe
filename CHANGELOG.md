@@ -5,6 +5,7 @@
 - **The `untangle` sketch shows simplification.** Six scattered, turned cards are joined by crossing curves with friction points pulsing on them. On a spoken word the curves let go and the cards glide into one row (a column on tall frames). One clean line then draws through them, and a packet flows along it.
   - It suits a messy process made simple, before and after a redesign, fewer handoffs, an integration.
 - **`examples/one-line`** shows it in both shapes, 10 s. `check` reports 0 errors and 0 warnings.
+- **A misspelt `sketchSay` moment is refused**, and the error names the sketch's real moments, instead of keeping its default seconds without a word.
 
 ## Light in two inks: the dither material
 

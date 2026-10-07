@@ -15,24 +15,26 @@ export const sketchByName = name => item('sketches', name);
  * on an element, a key or an `along` route, `exitCue` on an exit) from `say`, so they land on spoken words instead of
  * their default seconds. Unfilled cues keep their seconds; cue names never reach the plan.
  */
-export function fillSketch(list, { text = {}, say = {} } = {}) {
+export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set()) {
   for (const el of list ?? []) {
     if (el.type === 'text' && text[el.text] != null) el.text = text[el.text];
     for (const t of [el, ...(el.keys ?? []), ...(el.along ? [el.along] : [])]) {
+      if (t.cue != null) cues.add(t.cue);
       if (t.cue != null && say[t.cue] != null) {
         t.say = say[t.cue];
         delete t.at;
       }
       delete t.cue;
     }
+    if (el.exitCue != null) cues.add(el.exitCue);
     if (el.exitCue != null && say[el.exitCue] != null) {
       el.exitSay = say[el.exitCue];
       delete el.exitAt;
     }
     delete el.exitCue;
-    if (el.children) fillSketch(el.children, { text, say });
+    if (el.children) fillSketch(el.children, { text, say }, cues);
   }
-  return list;
+  return cues;
 }
 
 /** A sketch's props for a frame preset; `seed` varies its layout (buildings, ridges, swell); `text` and `say` fill its placeholders. */
@@ -41,7 +43,11 @@ export function sketch(name, preset = 'landscape', { seed, text, say } = {}) {
   if (!s) throw new Error(`Unknown sketch ${name}. Run clearframe sketch to list them.`);
   const [w, h] = frames[preset] ?? frames.landscape;
   const drawn = s.build(w, h, { seed });
-  fillSketch(drawn.elements, { text, say });
+  const cues = fillSketch(drawn.elements, { text, say });
+  // A misspelt moment would otherwise keep its default seconds without a word of warning.
+  const unknown = Object.keys(say ?? {}).filter(k => !cues.has(k));
+  if (unknown.length)
+    throw new Error(`sketchSay: ${name} has no moment ${unknown.join(', ')}${cues.size ? ` (its moments are ${[...cues].join(', ')})` : ' (it has no named moments)'}`);
   return drawn;
 }
 export const SKETCH_FRAMES = frames;
