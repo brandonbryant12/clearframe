@@ -89,6 +89,13 @@ test('batches, inserts, duplicates, deletes and treatments are single undoable s
   assert.deepEqual(s.storyboard.beats.map(b => b.id), ['a', 'bars', 'pile', 'b']); assert.ok(s.storyboard.beats[2].props.cast);
   assert.throws(() => run(d, { command: 'insert', block: 'canvas', id: 'pile' }), /already a scene/);
   s = run(d, { command: 'undo' });
+  // A film stage spans the scenes it was drawn for, so starting over from a playbook takes it away.
+  s = run(d, { command: 'set', target: 'film', path: 'stages', value: [{ id: 'flow', from: 'a', to: 'bars', actors: [{ id: 'x', label: 'X', x: 400, y: 500 }, { id: 'y', label: 'Y', x: 1400, y: 500 }] }] });
+  assert.equal(s.storyboard.stages.length, 1);
+  s = run(d, { command: 'playbook', id: 'process-cast' });
+  assert.equal(s.storyboard.stages, undefined, 'stages for the old scenes are removed, not left dangling');
+  assert.match(s.undoLabel, /removing 1 stage/);
+  s = run(d, { command: 'undo' }); s = run(d, { command: 'undo' });
   s = run(d, { command: 'playbook', id: 'process-cast' });
   assert.deepEqual(s.storyboard.beats.map(b => b.id), ['arrive', 'sort', 'focus', 'change', 'result']); assert.equal(s.storyboard.transition, 'cut');
   assert.throws(() => run(d, { command: 'playbook', id: 'nope' }), /No playbook/);

@@ -294,7 +294,11 @@ function applyOp(dir, sb, op) {
       if (fresh[k] !== undefined) sb[k] = fresh[k]; else delete sb[k];
     const ids = new Set((sb.sources ?? []).map(s => s.id));
     sb.sources = [...(sb.sources ?? []), ...(fresh.sources ?? []).filter(s => !ids.has(s.id))];
-    return `Start from the ${op.id} playbook`;
+    // A film stage spans the scenes it was drawn for; those scenes are gone, so it goes with them.
+    const beats = new Set(sb.beats.map(b => b.id)), stages = (sb.stages ?? []).filter(s => beats.has(s.from) && beats.has(s.to));
+    const dropped = (sb.stages ?? []).length - stages.length;
+    if (stages.length) sb.stages = stages; else delete sb.stages;
+    return `Start from the ${op.id} playbook${dropped ? ` (removing ${dropped} stage${dropped > 1 ? 's' : ''} drawn for the old scenes)` : ''}`;
   }
   if (command === 'treatment') {
     const recording = sb.beats.some(b => narrationOf(dir, b).kind === 'recording');
