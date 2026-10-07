@@ -187,6 +187,20 @@ test('an object travels a curved route to another, drawing its trail beneath the
   assert.throws(() => expandCastProps({ cast: { objects, formations: [{ form: 'travel', ids: ['a'], at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /travel\) moves ids to another object/);
 });
 
+test('composed objects are drawn things with their own extent, in every look', () => {
+  for (const look of ['tiles', 'drawn', 'print']) {
+    const els = expandCastProps({ cast: { look, objects: ['doc', 'bubble', 'phone', 'card', 'person', 'ticket', 'box'].map(shape => ({ id: shape, shape, color: 'accent' })), formations: [{ form: 'row', at: 0 }] } }, { ...wide, beatId: 'g' }, {}).elements;
+    for (const g of els.filter(e => e.type === 'group')) {
+      const body = g.children.find(c => c.id.endsWith('-tile'));
+      assert.ok(body && g.children.length >= 3, `${g.id} has a body and its details`);
+      if (look === 'drawn') assert.ok(body.rough, `${g.id} is drawn by hand`);
+      if (look === 'print') assert.ok(body.print, `${g.id} is printed`);
+    }
+  }
+  assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'q', shape: 'cloud' }], formations: [{ form: 'row', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /shape is doc, bubble/);
+  assert.throws(() => expandCastProps({ cast: { objects: [{ id: 'q', shape: 'doc', icon: 'file' }], formations: [{ form: 'row', at: 0 }] } }, { ...wide, beatId: 'x' }, {}), /one of an icon, a word or a shape/);
+});
+
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);

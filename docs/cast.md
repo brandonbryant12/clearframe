@@ -21,8 +21,9 @@ A film made of one layout per line reads as a slideshow, however well each layou
 
 `props.cast` is `{look?, objects?, formations, seed?}`.
 
-- **Objects** are declared in the first beat that uses the cast; later beats may add more. Each is `{id, icon | word, color, label?, size?, float?, enter?}`:
+- **Objects** are declared in the first beat that uses the cast; later beats may add more. Each is `{id, icon | word | shape, color, label?, size?, float?, enter?}`:
   - `icon` is any icon name (`clearframe catalog canvas`), drawn on a rounded tile. `word` (up to 14 characters) is drawn on a pill.
+  - `shape` is a composed object, a small drawn thing rather than an icon on a tile. The shapes are `doc` (a page with a folded corner and lines), `bubble` (a speech bubble), `phone`, `card` (a card holding a small bar chart), `person` (head and shoulders), `ticket` (a stub with a perforation) and `box` (a parcel with tape). Each takes the look, so in `drawn` it is drawn by hand and hatched. Prefer a shape when the thing has one: a report is a page, a customer is a person.
   - `color` is a palette role (`accent`, `accent2`, `positive`, `negative`, `ink`, `muted`, `surface`).
   - `label` is a small caption under the tile.
   - `float` (default on) gives a slow idle drift.

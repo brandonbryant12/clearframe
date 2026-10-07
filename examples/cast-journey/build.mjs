@@ -7,7 +7,7 @@ import fs from 'node:fs';
 
 const dir = new URL('.', import.meta.url);
 const LAYOUT = {
-  landscape: { W: 1920, H: 1080, desk: [380, 720], eng: [960, 360], home: [1540, 720], via1: [560, 380], via2: [1380, 400] },
+  landscape: { W: 1920, H: 1080, desk: [380, 720], eng: [960, 360], home: [1540, 720], via1: [560, 380], via2: [1150, 640] },
   vertical: { W: 1080, H: 1920, desk: [300, 1480], eng: [780, 960], home: [300, 440], via1: [760, 1380], via2: [400, 760] },
 };
 
@@ -24,16 +24,16 @@ for (const shape of ['landscape', 'vertical']) {
   const beats = [
     { id: 'desk', vo: 'A ticket lands on the support desk.', min: 3,
       cast: { look: 'drawn', objects: [
-        { id: 'ticket', icon: 'mail', color: 'accent', enter: 'drop' },
-        { id: 'engineer', icon: 'user', color: 'surface', enter: 'none' },
-        { id: 'customer', icon: 'user', color: 'accent2', enter: 'none' },
+        { id: 'ticket', shape: 'ticket', color: 'accent', size: 240, enter: 'drop' },
+        { id: 'engineer', shape: 'person', color: 'surface', size: 210, enter: 'none' },
+        { id: 'customer', shape: 'person', color: 'accent2', size: 210, enter: 'none' },
       ], formations: [{ form: 'cluster', ids: ['engineer'], center: at(L.eng), at: 0 }, { form: 'cluster', ids: ['customer'], center: at(L.home), at: 0 },
         { form: 'cluster', ids: ['ticket'], center: at(L.desk), say: 'ticket' }] } },
     { id: 'route', vo: 'It travels to engineering, where someone can fix it.', tail: 0.6,
       cast: { formations: [{ form: 'travel', ids: ['ticket'], to: 'engineer', via: [L.via1], say: 'travels', dur: 2.2 },
         { form: 'mark', mark: 'circle', ids: ['engineer'], say: 'someone' }] } },
     { id: 'fix', vo: 'There, it becomes a fix.', tail: 1.1,
-      cast: { objects: [{ id: 'patch', icon: 'code', color: 'positive' }],
+      cast: { objects: [{ id: 'patch', icon: 'code', color: 'positive', size: 200 }],
         formations: [{ form: 'swap', out: 'ticket', in: 'patch', by: ['engineer'], say: 'fix', dur: 0.7 }] } },
     { id: 'home', vo: 'And the fix travels on, to the customer who asked.', min: 4.5,
       cast: { formations: [{ form: 'cluster', ids: ['engineer'], center: at(L.eng), at: 0.2, dur: 0.9 }, { form: 'travel', ids: ['patch'], to: 'customer', via: [L.via2], say: 'travels', dur: 2.2 },

@@ -32,11 +32,12 @@ export function castSpec(input, known = new Map(), knownLook = null) {
   check(input.look == null || knownLook == null || input.look === knownLook, `look is set once, in the cast's first beat (it is ${knownLook})`);
   const objects = new Map(known);
   for (const [i, o] of (input.objects ?? []).entries()) {
-    own(o, ['id', 'icon', 'word', 'color', 'label', 'size', 'float', 'enter'], `objects[${i}]`);
+    own(o, ['id', 'icon', 'word', 'shape', 'color', 'label', 'size', 'float', 'enter'], `objects[${i}]`);
     check(o.enter == null || ENTERS.includes(o.enter), `objects[${i}].enter is ${ENTERS.join(', ')}`);
     check(typeof o.id === 'string' && /^[a-z0-9][a-z0-9-]*$/.test(o.id), `objects[${i}].id is a lowercase slug`);
     check(!objects.has(o.id) || known.has(o.id), `objects[${i}].id ${o.id} is repeated`);
-    check((o.icon == null) !== (o.word == null), `objects[${i}] is an icon or a word`);
+    check([o.icon, o.word, o.shape].filter(v => v != null).length === 1, `objects[${i}] is one of an icon, a word or a shape`);
+    check(o.shape == null || SHAPES[o.shape] != null, `objects[${i}].shape is ${Object.keys(SHAPES).join(', ')}`);
     check(o.word == null || (typeof o.word === 'string' && o.word.trim() && o.word.length <= 14), `objects[${i}].word is up to 14 characters`);
     check(o.color == null || COLORS.includes(o.color), `objects[${i}].color is ${COLORS.join(', ')}`);
     check(o.label == null || (typeof o.label === 'string' && o.label.length <= 20), `objects[${i}].label is up to 20 characters`);
@@ -189,9 +190,46 @@ const LOOK = {
     mark: o => (o.color === 'surface' ? 'ink' : 'bg'), font: 'poster', label: 'semibold', shadow: false },
 };
 
+/**
+ * Composed objects: a small drawn thing instead of an icon on a tile. Each is a body in the object's
+ * colour (it takes the look: shadow, hand-drawn hatching or print) and a few details in the colour
+ * that reads on it. Geometry is in object units (s is the object's size), centred on its position.
+ */
+const SHAPES = {
+  // A page with a folded corner and lines of text.
+  doc: { extent: [0.36, 0.5], draw: (s, d) => ({ body: { x: -0.36 * s, y: -0.5 * s, w: 0.72 * s, h: s, r: 0.05 * s },
+    details: [{ type: 'poly', points: [[0.16 * s, -0.5 * s], [0.36 * s, -0.3 * s], [0.16 * s, -0.3 * s]], closed: true, fill: d, opacity: 0.85 },
+      ...[-0.16, -0.02, 0.12, 0.26].map((y, i) => ({ type: 'line', x1: -0.22 * s, y1: y * s, x2: (i === 3 ? 0.06 : 0.2) * s, y2: y * s, stroke: d, width: 0.045 * s, cap: 'round' }))] }) },
+  // A speech bubble with three dots.
+  bubble: { extent: [0.5, 0.44], draw: (s, d, c) => ({ body: { x: -0.5 * s, y: -0.44 * s, w: s, h: 0.7 * s, r: 0.3 * s },
+    details: [{ type: 'poly', points: [[-0.3 * s, 0.2 * s], [-0.06 * s, 0.2 * s], [-0.36 * s, 0.44 * s]], closed: true, fill: c, body: true },
+      ...[-0.2, 0, 0.2].map(x => ({ type: 'circle', cx: x * s, cy: -0.09 * s, r: 0.06 * s, fill: d }))] }) },
+  // A phone with its screen lit.
+  phone: { extent: [0.28, 0.5], draw: (s, d) => ({ body: { x: -0.28 * s, y: -0.5 * s, w: 0.56 * s, h: s, r: 0.09 * s },
+    details: [{ type: 'rect', x: -0.22 * s, y: -0.38 * s, w: 0.44 * s, h: 0.7 * s, r: 0.03 * s, fill: d, opacity: 0.9 },
+      { type: 'line', x1: -0.07 * s, y1: 0.42 * s, x2: 0.07 * s, y2: 0.42 * s, stroke: d, width: 0.035 * s, cap: 'round' }] }) },
+  // A card holding a small bar chart.
+  card: { extent: [0.5, 0.38], draw: (s, d) => ({ body: { x: -0.5 * s, y: -0.38 * s, w: s, h: 0.76 * s, r: 0.07 * s },
+    details: [...[0.18, 0.34, 0.25, 0.44].map((h, i) => ({ type: 'rect', x: (-0.32 + i * 0.17) * s, y: (0.24 - h) * s, w: 0.11 * s, h: h * s, r: 0.015 * s, fill: d })),
+      { type: 'line', x1: -0.38 * s, y1: 0.26 * s, x2: 0.38 * s, y2: 0.26 * s, stroke: d, width: 0.03 * s, cap: 'round' }] }) },
+  // A person: head and shoulders.
+  person: { extent: [0.4, 0.5], draw: (s, d, c) => ({ body: { x: -0.4 * s, y: 0.04 * s, w: 0.8 * s, h: 0.46 * s, r: 0.23 * s },
+    details: [{ type: 'circle', cx: 0, cy: -0.24 * s, r: 0.21 * s, fill: c, body: true }] }) },
+  // A ticket stub: a perforation and two notches.
+  ticket: { extent: [0.5, 0.28], draw: (s, d) => ({ body: { x: -0.5 * s, y: -0.28 * s, w: s, h: 0.56 * s, r: 0.05 * s },
+    details: [{ type: 'line', x1: 0.22 * s, y1: -0.2 * s, x2: 0.22 * s, y2: 0.2 * s, stroke: d, width: 0.03 * s, dash: [0.05 * s, 0.05 * s] },
+      ...[-1, 1].map(k => ({ type: 'circle', cx: 0.22 * s, cy: k * 0.28 * s, r: 0.07 * s, fill: 'bg' })),
+      ...[-0.08, 0.08].map((y, i) => ({ type: 'line', x1: -0.36 * s, y1: y * s, x2: (i ? -0.04 : 0.06) * s, y2: y * s, stroke: d, width: 0.04 * s, cap: 'round' }))] }) },
+  // A parcel with its lid and tape.
+  box: { extent: [0.41, 0.4], draw: (s, d) => ({ body: { x: -0.41 * s, y: -0.35 * s, w: 0.82 * s, h: 0.75 * s, r: 0.04 * s },
+    details: [{ type: 'line', x1: -0.41 * s, y1: -0.14 * s, x2: 0.41 * s, y2: -0.14 * s, stroke: d, width: 0.035 * s },
+      { type: 'rect', x: -0.06 * s, y: -0.35 * s, w: 0.12 * s, h: 0.75 * s, fill: d, opacity: 0.55 }] }) },
+};
+
 /** Half the width and height an object takes: a tile is square; a word pill is as long as its word. */
 export function objectExtent(o, size) {
   const s = o.size ?? size;
+  if (o.shape) return SHAPES[o.shape].extent.map(v => v * s);
   return o.word ? [Math.max(s * 0.6, o.word.length * s * 0.3 * 0.29 + s * 0.25), s * 0.3] : [s / 2, s / 2];
 }
 
@@ -207,11 +245,20 @@ function objectElement(o, id, size, base, enter, look = 'tiles') {
     const [hw, hh] = objectExtent(o, size), fs = s * (look === 'drawn' ? 0.36 : 0.3);
     children.push({ type: 'rect', id: `${id}-tile`, x: -hw, y: -hh, w: hw * 2, h: hh * 2, r: hh, fill: o.color, enter: 'none', ...L.tile(s) },
       face({ type: 'text', id: `${id}-word`, text: o.word, x: 0, y: fs * 0.36, size: fs, font: L.font, fill: look === 'drawn' || o.color !== 'ink' ? 'ink' : 'bg', anchor: 'middle', fit: hw * 2 - s * 0.3, enter: 'none' }));
+  } else if (o.shape) {
+    // The body takes the look; parts of the body (a bubble's tail, a person's head) do too, and the
+    // details are drawn in the colour that reads on it (by hand in the drawn look).
+    const { body, details } = SHAPES[o.shape].draw(s, L.mark(o), o.color);
+    children.push({ type: 'rect', id: `${id}-tile`, ...body, fill: o.color, enter: 'none', ...L.tile(s) });
+    details.forEach(({ body: part, ...el }, k) => children.push(part
+      ? { ...el, id: `${id}-part${k}`, enter: 'none', ...L.tile(s) }
+      : face({ ...el, id: `${id}-detail${k}`, enter: 'none', ...(look === 'drawn' && el.type !== 'circle' ? { rough: { amount: 0.8, passes: 1 } } : {}) })));
   } else {
     children.push({ type: 'rect', id: `${id}-tile`, x: -s / 2, y: -s / 2, w: s, h: s, r: s * 0.26, fill: o.color, enter: 'none', ...L.tile(s) },
       face({ type: 'icon', id: `${id}-icon`, name: o.icon, x: 0, y: 0, size: s * 0.52, stroke: L.mark(o), enter: 'none' }));
   }
-  const { x, y, w, h, r } = children[0];
+  // The flat colour an object floods the frame with (fill/emerge) covers its whole extent.
+  const [ex, ey] = objectExtent(o, size), { x, y, w, h, r } = o.shape ? { x: -ex, y: -ey, w: ex * 2, h: ey * 2, r: s * 0.08 } : children[0];
   children.splice(1, 0, { type: 'rect', id: `${id}-solid`, x, y, w, h, r, fill: o.color, enter: 'none', keys: [{ at: 0, opacity: base.filled ? 1 : 0, dur: 0 }] });
   if (o.label) children.push({ type: 'text', id: `${id}-label`, text: o.label, x: 0, y: s * 0.5 + s * 0.34, size: Math.max(22, s * (look === 'drawn' ? 0.24 : 0.2)), font: L.label, fill: look === 'drawn' ? 'ink' : 'muted', anchor: 'middle', enter: 'none' });
   // The starting pose is a key at 0, so every later key is absolute (opacity and rotation never compound).
@@ -264,7 +311,8 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
         let end = f.center ? { x: f.center[0], y: f.center[1] } : pose.get(f.to);
         if (!f.center) {
           // Arrive beside the destination, not on it.
-          const dx = p.x - end.x, dy = p.y - end.y, d = Math.hypot(dx, dy) || 1, gap = size * ((end.scale ?? 1) * 0.5 + 0.75 + i * 0.9);
+          const reach = (oid, sc) => Math.max(...objectExtent(spec.objects.get(oid), size)) * (sc ?? 1);
+          const dx = p.x - end.x, dy = p.y - end.y, d = Math.hypot(dx, dy) || 1, gap = reach(f.to, end.scale) + reach(id, p.scale) * (1 + i * 2) + size * 0.2;
           end = { x: end.x + (dx / d) * gap, y: end.y + (dy / d) * gap };
         }
         // Whole inside the title-safe area, clear of a heading, like every placed object.
@@ -337,7 +385,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       const id = ids[0], p = pose.get(id);
       if (!p || (f.form === 'emerge' && !p.filled)) { notes.push(`${f.form} on ${id}: it ${p ? 'has not filled the frame' : 'is not on screen'}, so nothing moves`); return; }
       const { el, base } = group(id), o = spec.objects.get(id), s = o.size ?? size, solid = el.children.find(c => c.id.endsWith('-solid'));
-      const faces = el.children.filter(c => c.type === 'icon' || c.type === 'text');
+      const faces = el.children.filter(c => c.type === 'icon' || c.type === 'text' || /-detail\d+$/.test(c.id));
       if (f.form === 'fill') {
         const cover = (Math.hypot(frame.width, frame.height) / (s * Math.min(1, cam.zoom))) * 1.15;
         el.keys.push({ at: t, x: frame.width / 2 - base.x, y: frame.height / 2 - base.y, scale: cover, rotate: 0, opacity: 1, dur, ease: f.ease ?? 'in' });

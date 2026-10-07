@@ -1,6 +1,6 @@
 # One ticket, one journey
 
-A 14-second study of a cast travelling through a drawn world. Three stations are drawn as scenery: the support desk, engineering and the customer. One ticket travels between them along routes that sketch themselves ahead of it, becomes a fix at engineering, and travels on to the customer who asked. It is the reference for the cast's `travel` move, and for scenery under a cast.
+A 14-second study of a cast travelling through a drawn world. The cast is composed shapes: a ticket stub and two people. Three stations are drawn as scenery: the support desk, engineering and the customer. One ticket travels between them along routes that sketch themselves ahead of it, becomes a fix at engineering, and travels on to the customer who asked. It is the reference for the cast's `travel` move, and for scenery under a cast.
 
 | Beat | Narration | The move |
 |---|---|---|
@@ -31,6 +31,6 @@ Measured on the 8 GB iMac:
 - **Render time.** 417 frames in 5.0 s.
 - **Checks.** `check`: 0 errors and 0 warnings in both shapes.
 - **`qa`.** 0 pops in both shapes.
-- **Pace.** It is a calm film, at about 1.0 changes/s. Two advisories mark the holds after the swap and at the end.
+- **Pace.** It is a calm film, at about 1.3 changes/s. Two advisories mark the holds after the swap and at the end.
 
 The routes are the motion. Read the trails in motion, not on the contact sheet.

@@ -1,5 +1,10 @@
 # Changelog
 
+## Composed cast objects
+
+- **`shape`** makes a cast object a small drawn thing instead of an icon on a tile. The shapes are `doc` (a page with a folded corner and lines), `bubble`, `phone`, `card` (with a small bar chart), `person`, `ticket` and `box`. Each is a body in the object's colour that takes the look, with details in the colour that reads on it: hand-drawn and hatched in `drawn`, printed in `print`. The flat colour used by `fill` and `emerge` covers the whole shape. `examples/cast-journey` now sends a ticket stub between drawn people, and the `process-cast` playbook starts from pages, a bubble, a phone and a person.
+- `travel` arrives beside its destination at a gap sized from both objects, so large or composed objects no longer land on each other.
+
 ## Casts travel
 
 - **`travel`** sends cast objects along a curved route to another object, arriving beside it, or to a point. The route can pass through `via` waypoints, such as a road or a pipe drawn as scenery, and a pen trail sketches itself just ahead of the traveller. Arrivals are kept inside the title-safe area, and route samples stay within the canvas's 24-keyframe budget. Reference: `examples/cast-journey` ("One ticket, one journey"), in which a ticket travels desk → engineering → customer through three stations drawn under the cast. check 0/0, 0 pops in both shapes.

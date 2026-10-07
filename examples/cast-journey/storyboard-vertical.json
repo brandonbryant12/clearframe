@@ -145,20 +145,23 @@
      "objects": [
       {
        "id": "ticket",
-       "icon": "mail",
+       "shape": "ticket",
        "color": "accent",
+       "size": 240,
        "enter": "drop"
       },
       {
        "id": "engineer",
-       "icon": "user",
+       "shape": "person",
        "color": "surface",
+       "size": 210,
        "enter": "none"
       },
       {
        "id": "customer",
-       "icon": "user",
+       "shape": "person",
        "color": "accent2",
+       "size": 210,
        "enter": "none"
       }
      ],
@@ -466,7 +469,8 @@
       {
        "id": "patch",
        "icon": "code",
-       "color": "positive"
+       "color": "positive",
+       "size": 200
       }
      ],
      "formations": [

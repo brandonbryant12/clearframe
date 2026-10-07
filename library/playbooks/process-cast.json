@@ -25,15 +25,15 @@
      "objects": [
       {
        "id": "email",
-       "icon": "mail",
        "color": "accent",
-       "enter": "none"
+       "enter": "none",
+       "shape": "doc"
       },
       {
        "id": "chat",
-       "icon": "message",
        "color": "positive",
-       "enter": "none"
+       "enter": "none",
+       "shape": "bubble"
       },
       {
        "id": "review",
@@ -43,15 +43,15 @@
       },
       {
        "id": "call",
-       "icon": "phone",
        "color": "ink",
-       "enter": "drop"
+       "enter": "drop",
+       "shape": "phone"
       },
       {
        "id": "repeat",
-       "icon": "mail",
        "color": "accent",
-       "enter": "drop"
+       "enter": "drop",
+       "shape": "doc"
       }
      ],
      "formations": [
@@ -123,9 +123,9 @@
      "objects": [
       {
        "id": "owner",
-       "icon": "user",
        "color": "surface",
-       "enter": "drop"
+       "enter": "drop",
+       "shape": "person"
       },
       {
        "id": "done",

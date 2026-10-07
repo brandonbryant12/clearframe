@@ -34,8 +34,8 @@ but a picture chosen for this source, idea and audience, which changes rather th
 Pick from what the material actually contains:
 
 - **Things that get sorted, chosen, transformed or replaced** (requests, files, sources, steps,
-  features): a **cast**, `canvas` with `props.cast`. A few designed objects (icon tiles or word
-  pills) persist through consecutive scenes and re-form on spoken words: `scatter`, `line`, `ring`,
+  features): a **cast**, `canvas` with `props.cast`. A few designed objects (drawn shapes such as
+  `doc`, `bubble`, `phone`, `card`, `person`, `ticket` or `box`; icon tiles; or word pills) persist through consecutive scenes and re-form on spoken words: `scatter`, `line`, `ring`,
   `cluster`, `hero` (one steps forward, the rest recede), `swap` (one becomes another in place;
   `by` names what causes it), `merge` (copies fold into one, `into`), `split` (several burst out of
   one, `from`), `travel` (a journey along a drawn route, `to` another object, `via` waypoints), `wave` (a pulse runs through a sequence), `mark` (a pen circle,
