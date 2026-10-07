@@ -135,6 +135,7 @@ const SYNONYMS = {
   api: 'service server request backend architecture system', cache: 'database store request service', request: 'packet flow service',
   engineer: 'technical system architecture code', developer: 'technical code system pull', architecture: 'system diagram service',
   sales: 'business customer product', customer: 'person user journey', team: 'people person',
+  handmade: 'paper cut drawn tactile craft', tactile: 'paper cut handmade', craft: 'paper cut handmade print', collage: 'paper cut layered',
   private: 'lock security privacy', calendar: 'clock time schedule', app: 'phone product device screen',
 };
 const words = t => String(t ?? '').toLowerCase().match(/[a-z0-9]+/g) ?? [];

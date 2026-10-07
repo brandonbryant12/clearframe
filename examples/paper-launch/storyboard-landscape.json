@@ -1,0 +1,38 @@
+{
+ "version": 2,
+ "title": "Paper launch",
+ "logline": "A customer note, a sketch and a few lines of copy come together as one app.",
+ "format": {
+  "preset": "landscape",
+  "fps": 30
+ },
+ "theme": "paper",
+ "type": "geometric",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.7
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "captions": false,
+ "music": false,
+ "beats": [
+  {
+   "id": "assemble",
+   "block": "canvas",
+   "hold": 1.4,
+   "vo": "It started as scraps: a customer note, a sketch, a few lines of copy. Put together, they became one app. Meet Tally.",
+   "props": {
+    "sketch": "cut-paper",
+    "sketchText": {
+     "PRODUCT": "Tally",
+     "ACTION": "Get started"
+    },
+    "sketchSay": {
+     "BUILD": "together",
+     "REVEAL": "Meet"
+    }
+   }
+  }
+ ]
+}

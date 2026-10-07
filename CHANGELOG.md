@@ -1,5 +1,13 @@
 # Changelog
 
+## Scraps become one product: a cut-paper workbench
+
+- **The `cut-paper` sketch is a workbench of scraps that become a product.** Scraps of coloured paper lie scattered and turned on a cutting mat. On a spoken word they fly into place, each landing a moment after the last, and become one product card: a frame, a title bar, a picture, lines of copy and a button. The card lifts off the mat as its name types in. Soft shadows keep every layer a separate piece of paper, and a slow push-in keeps the bench alive.
+  - It suits building something from parts: feedback becoming a product, a launch, a design process.
+  - It is best on light palettes, and lays out per shape.
+- **`examples/paper-launch`** shows it in both shapes, 11 s. `check` reports 0 errors and 0 warnings.
+- `find` maps handmade, tactile, craft and collage to the paper looks.
+
 ## One action sets off the rest: a pixel chain reaction
 
 - **The `pixel-chain` sketch is a handheld game level of cause and effect.**

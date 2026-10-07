@@ -40,6 +40,7 @@ Choose by audience. A look picked only for variety reads as a gimmick.
 | Quarterly revenue results for the board | `playbook:quarterly-update`, `block:stat`/`delta`, `example:market-update`, `cast-shape:coin` | Figures first, each with a source, and one drawn driver at most. A board wants the number and its reason, not a metaphor. |
 | Why the app was slow at night (a post-mortem) | `sketch:searchlight`, `example:lights-on`, `playbook:research-investigation`, `palette:noir` | A torch finding each cause in a dark room, then the lights coming on. A post-mortem is a search, and the reveal that it was one problem is the payoff. |
 | One merge ships the whole release (for a developer audience) | `sketch:pixel-chain`, `example:chain-reaction`, `cast-look:pixel`, `palette:lcd` | A game level where one press sets off the rest. A chain of effects in space is easier to follow than a pipeline diagram, and the game look suits developers. |
+| Launch an app built from customer feedback (warm, for customers) | `sketch:cut-paper`, `example:paper-launch`, `playbook:product-reveal`, `palette:paper` | Scraps of paper coming together as the product. It says "made from what you told us" without a word of copy, and the handmade look feels approachable. |
 | How a support ticket travels through the team | `example:cast-journey`, `cast-shape:ticket`, `cast-move:travel`, `playbook:process-cast`, `mechanism:world` | One ticket travelling through a drawn world of stations. Following one thing is easier than reading a flowchart. |
 
 ## Signs the concepts are too close
