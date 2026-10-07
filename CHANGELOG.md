@@ -9,6 +9,9 @@
 - Everyday words map to the library's own (money, faster, launch, retro, calm), and a figure in the brief brings stat and delta blocks forward. Project and shared library entries take part.
 - The index reads the existing sources of truth (the block catalog, library items, cast shapes and looks, the cast and scene-engine docs, example READMEs), so nothing is listed twice.
 - The studio agent's `clearframe_catalog` gains topics `find` (a plain-words `query`) and `item` (`KIND:NAME`), and its authoring notes now start there.
+- Every example `--id` prints compiles as given: a stage example uses the event vocabulary (`send`, `state`), and each cast move carries the objects and fields it needs (`swap` names `out` and `in`, `merge` `into`, `fill` and `emerge` span three beats).
+- A length or count in a brief ("30 seconds") no longer pulls number blocks forward; a percentage, a multiple or an amount still does.
+- **A `clearframe-inspiration` skill** (studio guide topic `inspiration`) turns a brief into two or three distinct concepts, by metaphor, place, mechanism, words or number, each with an everyday reason and the library entries that build it, then picks one and carries on. Its reference calibrates with real shortlists: one idea three ways, and different ideas with different choices.
 
 ## Ten new cast objects and a pixel look
 

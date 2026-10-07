@@ -38,17 +38,45 @@ function tableRows(doc, heading) {
   return out;
 }
 
+// A copyable cast for each move: the objects it needs and the move in context (fill and emerge
+// span beats, so theirs is a three-beat sequence).
+const OBJ = { a: { id: 'a', shape: 'doc', color: 'accent' }, b: { id: 'b', shape: 'person', color: 'surface' }, c: { id: 'c', shape: 'server', color: 'accent2' }, d: { id: 'd', shape: 'box', color: 'accent2' } };
+const ROW = { form: 'line', ids: ['a', 'b', 'c'], at: 0 };
+const castOf = (formations, extra = []) => ({ block: 'canvas', props: { cast: { look: 'drawn', objects: [OBJ.a, OBJ.b, OBJ.c, ...extra], formations } } });
+const MOVES = {
+  scatter: castOf([{ form: 'scatter', ids: ['a', 'b', 'c'], at: 0 }]),
+  line: castOf([{ ...ROW, thread: true }]),
+  ring: castOf([{ form: 'ring', ids: ['a', 'b', 'c'], at: 0 }]),
+  cluster: castOf([{ form: 'cluster', ids: ['a', 'b', 'c'], at: 0 }]),
+  hero: castOf([ROW, { form: 'hero', hero: 'b', word: 'The one who decides', say: 'decides' }]),
+  swap: castOf([ROW, { form: 'swap', out: 'a', in: 'd', by: ['b'], say: 'becomes' }], [OBJ.d]),
+  wave: castOf([ROW, { form: 'wave', ids: ['a', 'b', 'c'], say: 'runs' }]),
+  travel: castOf([ROW, { form: 'travel', ids: ['a'], to: 'c', say: 'goes', dur: 1.2 }]),
+  merge: castOf([ROW, { form: 'merge', ids: ['a', 'b'], into: 'c', say: 'folds' }]),
+  split: castOf([{ form: 'cluster', ids: ['c'], at: 0 }, { form: 'split', from: 'c', ids: ['a', 'b'], say: 'fans' }]),
+  camera: castOf([ROW, { form: 'camera', zoom: 1.6, on: 'b', say: 'closer' }, { form: 'camera', zoom: 1, say: 'back' }]),
+  exit: castOf([ROW, { form: 'exit', ids: ['a'], say: 'leaves' }]),
+  mark: castOf([ROW, { form: 'mark', mark: 'circle', ids: ['b'], say: 'matters' }, { form: 'mark', mark: 'arrow', ids: ['a'], to: 'c', say: 'feeds' }]),
+};
+MOVES.fill = MOVES.emerge = { beats: [
+  castOf([ROW, { form: 'fill', ids: ['a'], say: 'opens', dur: 0.9 }]),
+  { block: 'stat', note: 'any block: it plays on the object\'s colour as its tone' },
+  { block: 'canvas', props: { cast: { formations: [{ form: 'emerge', ids: ['a'], at: 0 }, { ...ROW, at: 1 }] } } },
+] };
+
 // Film-level mechanisms: how a scene can carry an idea beyond one block. Each names its reference.
 const MECHANISMS = [
   ['cast', 'Persistent objects that carry a story across cuts: they gather, queue, rank, travel, merge, split, swap one thing for another and hand the frame to the next scene.', 'a process, a flow of requests, a before/after, a journey, anything with actors that change', 'canvas props.cast', 'docs/cast.md',
     { block: 'canvas', props: { cast: { look: 'drawn', objects: [{ id: 'a', shape: 'ticket', color: 'accent' }, { id: 'b', shape: 'person', color: 'surface' }], formations: [{ form: 'line', at: 0 }, { form: 'travel', ids: ['a'], to: 'b', say: 'reaches' }] } } }],
   ['stage', 'A native GPU stage: actors with stable identities, links that follow them, packets, callouts, commit-grounded code, footage, materials, particles and a 2.5D camera.', 'systems that change over time, technical and PR explainers, architecture', 'block stage, or film stages', 'docs/scene-engine.md',
-    { block: 'stage', props: { actors: [{ id: 'cli', label: 'CLI', x: 500, y: 540 }, { id: 'api', label: 'API', x: 1400, y: 540 }], links: [{ from: 'cli', to: 'api' }], packets: [{ on: 'cli-api', say: 'sends' }] } }],
+    { block: 'stage', props: { actors: [{ id: 'app', label: 'App', kind: 'client', x: 460, y: 600, at: 0.2 }, { id: 'api', label: 'API', kind: 'service', x: 1060, y: 600, at: 0.4 }, { id: 'db', label: 'Database', kind: 'database', x: 1560, y: 600, at: 0.6 }],
+      links: [{ id: 'app-api', from: 'app', to: 'api' }, { id: 'api-db', from: 'api', to: 'db' }],
+      events: [{ do: 'send', from: 'app', to: 'api', label: 'request', say: 'asks' }, { do: 'state', actor: 'api', status: 'active', say: 'checks' }, { do: 'send', from: 'api', to: 'db', say: 'reads' }] } }],
   ['code-scene', 'A code change as one scene: a stage holding only code makes the editor the picture, changed lines lighting up on a spoken word; long lines wrap readably on phones.', 'a pull request, a fix, a before/after in code', 'block stage, props.code', 'docs/scene-engine.md',
     { block: 'stage', props: { code: { title: 'parser.mjs', before: 'if (x) return;', after: 'if (x == null) return;', say: 'null' } } }],
-  ['diagram', 'A system diagram that lays itself out for the frame: components, ranks and flows, editable by id.', 'architecture, how parts connect, data paths', 'canvas props.diagram', 'docs/system-diagrams.md', null],
+  ['diagram', 'A system diagram that lays itself out for the frame: components, ranks and flows, editable by id.', 'architecture, how parts connect, data paths', 'canvas props.diagram; sketch architecture | state-machine | component-change prints one to edit', 'docs/system-diagrams.md', { block: 'canvas', props: { sketch: 'architecture' } }],
   ['world', 'One drawing the camera travels through across several scenes (world + view), so the film moves through a place instead of cutting between slides.', 'a journey, a process in stations, a map, a pull-back to the whole', 'canvas props.world + view', 'docs/canvas.md', null],
-  ['tone-handoff', 'An object fills the frame with its colour and the next scene (any block) plays on that colour; emerge brings it back.', 'zooming into a detail, a chart becoming its number, a report becoming its code', 'cast fill / emerge', 'docs/cast.md', null],
+  ['tone-handoff', 'An object fills the frame with its colour and the next scene (any block) plays on that colour; emerge brings it back.', 'zooming into a detail, a chart becoming its number, a report becoming its code', 'cast fill / emerge', 'docs/cast.md', MOVES.fill],
   ['art-layer', 'Drawn art under or over any block: an arrow onto a bar, a circle round a word, soft shapes behind a quote.', 'pointing at the part that matters on a chart or card', 'beat art.under / art.over', 'docs/canvas.md', null],
   ['depth-plates', 'Painted depth plates (generated stills split into layers) put the camera inside a place; never carry text or numbers.', 'places, moods, establishing shots', 'canvas plates, layered assets', 'docs/image-direction.md', null],
   ['kinetic', 'Type that follows the voice word by word, with emphasis words larger in an accent face.', 'quotes, hooks, podcast clips, a line that must land', 'block kinetic', 'docs/speech.md', null],
@@ -86,7 +114,7 @@ export function entries() {
     const md = read(`examples/${dir}/README.md`);
     if (!md) continue;
     const title = md.match(/^# (.+)$/m)?.[1] ?? dir, para = md.split('\n\n').find(p => p.trim() && !p.startsWith('#')) ?? '';
-    add('example', dir, title, firstSentence(para), '', '', `examples/${dir}/README.md`);
+    add('example', dir, title, firstSentence(para), firstSentence(para.slice(firstSentence(para).length)), '', `examples/${dir}/README.md`);
   }
   cache = out;
   cacheKey = key;
@@ -103,10 +131,14 @@ const SYNONYMS = {
   explain: 'explainer concept teaching how why', social: 'vertical short clip hook', email: 'envelope message notification', server: 'backend infrastructure service cloud',
   faster: 'speed latency delta before after', slower: 'latency delay wait delta', cheaper: 'cost delta saving', percent: 'stat delta kpi figure', number: 'stat kpi figure',
   results: 'stat kpi delta proof evidence', quarter: 'kpi quarterly update', quarterly: 'kpi quarterly update numbers', numbers: 'stat kpi bars chart', teaser: 'trailer hook reveal', thank: 'story personal human',
+  api: 'service server request backend architecture system', cache: 'database store request service', request: 'packet flow service',
+  engineer: 'technical system architecture code', developer: 'technical code system pull', architecture: 'system diagram service',
+  sales: 'business customer product', customer: 'person user journey', team: 'people person',
+  private: 'lock security privacy', calendar: 'clock time schedule', app: 'phone product device screen',
 };
 const words = t => String(t ?? '').toLowerCase().match(/[a-z0-9]+/g) ?? [];
 // Words that say nothing about which picture fits.
-const STOP = new Set('a an the and or of to in on for with about our your their we it its is are be this that these those how why what show make made video film clip one two seconds minutes some into from at by as so very just'.split(' '));
+const STOP = new Set('a an the and or of to in on for with about our your their we it its is are be this that these those how why what show make made video film clip one two second seconds minute minutes long some into from at by as so very just'.split(' '));
 
 /**
  * A short, mixed shortlist for what someone wants to make: at most `perKind` from any one kind so
@@ -114,9 +146,10 @@ const STOP = new Set('a an the and or of to in on for with about our your their 
  * it fits; detail(id) gives the exact authoring.
  */
 export function find(query, { limit = 8, kinds = null, perKind = 3 } = {}) {
-  const q = words(query).filter(w => !STOP.has(w) && !/^\d+$/.test(w));
-  // A figure in the brief ("40%", "3x") asks for the blocks that show one.
-  if (/\d/.test(query)) q.push('number', 'stat', 'delta', 'kpi');
+  // Plurals read as their singular too ("nights" finds night-shift).
+  const q = words(query).filter(w => !STOP.has(w) && !/^\d+$/.test(w)).flatMap(w => w.length > 3 && w.endsWith('s') && !w.endsWith('ss') ? [w, w.slice(0, -1)] : [w]);
+  // A figure in the brief ("40%", "3x", "$2m") asks for the blocks that show one; a length or a count ("30 seconds") does not.
+  if (/\d\s*(%|x\b|×|percent|times\b|k\b|m\b|bn\b|million|billion)|[$€£]\s*\d/i.test(query)) q.push('number', 'stat', 'delta', 'kpi');
   const terms = new Set(q.flatMap(w => [w, ...words(SYNONYMS[w])]));
   const scored = entries()
     .filter(e => !kinds || kinds.includes(e.kind))
@@ -163,8 +196,8 @@ export async function detail(id) {
   } else if (e.kind === 'cast-look') {
     out.example = { block: 'canvas', props: { cast: { look: e.name, objects: [{ id: 'a', shape: 'server', color: 'accent' }, { id: 'b', shape: 'database', color: 'accent2' }, { id: 'c', shape: 'cloud', color: 'surface' }], formations: [{ form: 'line', at: 0, thread: true }] } } };
   } else if (e.kind === 'cast-move') {
-    out.example = { form: e.name, ids: ['a'], say: 'word' };
-    out.note = 'Moves go in props.cast.formations; docs/cast.md lists each move\'s fields.';
+    out.example = MOVES[e.name] ?? MOVES[{ row: 'line', column: 'line' }[e.name]];
+    out.note = 'Moves go in props.cast.formations, cued with say (a spoken word) or at (seconds); docs/cast.md lists every field.';
   } else if (e.kind === 'mechanism') {
     const m = MECHANISMS.find(x => x[0] === e.name);
     if (m[5]) out.example = m[5];

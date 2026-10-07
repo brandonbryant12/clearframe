@@ -15,7 +15,7 @@ const ROOT = fileURLToPath(new URL('../../..', import.meta.url));
 const fail = (message, status = 400) => Object.assign(new Error(message), { status });
 const clip = (s, n) => { s = String(s ?? ''); return s.length > n ? `${s.slice(0, n - 1)}…` : s; };
 const skill = n => `skills/${n}/SKILL.md`;
-export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearframe-library'), cinema: skill('clearframe-cinema'), canvas: skill('clearframe-canvas'), dataviz: skill('clearframe-dataviz'),
+export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearframe-library'), inspiration: skill('clearframe-inspiration'), cinema: skill('clearframe-cinema'), canvas: skill('clearframe-canvas'), dataviz: skill('clearframe-dataviz'),
   motion: skill('clearframe-motion'), script: skill('clearframe-script'), integrity: skill('clearframe-integrity'), direction: skill('clearframe-direction'), engine: skill('clearframe-engine'),
   review: skill('clearframe-review'), scene: skill('clearframe-scene'), style: 'docs/style.md', 'cinema-notes': 'docs/cinema.md', 'canvas-notes': 'docs/canvas.md', 'scene-notes': 'docs/scene-engine.md', ideas: 'docs/ideas.md',
   speech: 'docs/speech.md', authoring: 'engine/agent-plugin/AUTHORING.md', cast: 'docs/cast.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };

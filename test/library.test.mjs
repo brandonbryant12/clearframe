@@ -263,4 +263,10 @@ test('the library index finds a short mixed shortlist and gives one entry exact 
   assert.ok(hits.some(h => h.id === 'cast-look:pixel'), 'the pixel look surfaces for a retro game');
   const d = await detail('cast-shape:server');
   assert.equal(d.example.props.cast.objects[0].shape, 'server', 'detail carries a copyable example');
+  assert.ok(!find('a playful 30 second launch for a calendar app').some(h => h.id === 'block:stat'), 'a length is not a figure');
+  // The examples compile as given: a stage's events, and a move that needs its own fields.
+  const { compileStage } = await import('../scene/recipes.mjs');
+  const { expandCastProps } = await import('../film/cast.mjs');
+  compileStage((await detail('mechanism:stage')).example.props, { cue: () => 1, end: 6, where: 'stage', frame: { width: 1920, height: 1080 } });
+  for (const move of ['swap', 'merge', 'hero', 'mark']) expandCastProps((await detail(`cast-move:${move}`)).example.props, { width: 1080, height: 1920, beatId: 'b', duration: 4 }, { cue: () => 1, carry: {}, notes: [] });
 });

@@ -5,7 +5,7 @@ description: Choose and combine 33 blocks plus native GPU stages, canvas sketche
 
 # Native visual library
 
-Run `node engine/cli.mjs blocks`, `blocks NAME`, `sketch`, `playbooks`, `themes`, `motions` and `icons`. The exact prop reference is [references/blocks.md](references/blocks.md), generated from `film/catalog.mjs`. Starter storyboards live in `recipes/` and are generated from the playbooks.
+Search everything in plain words first: `node engine/cli.mjs find "what you want to show"` returns a short mixed shortlist (blocks, sketches, playbooks, looks, cast shapes and moves, mechanisms, examples), and `find --id KIND:NAME` the exact authoring; `docs/library-index.md` is the whole index, and the `clearframe-inspiration` skill turns a brief into concepts with it. Then run `node engine/cli.mjs blocks`, `blocks NAME`, `sketch`, `playbooks`, `themes`, `motions` and `icons`. The exact prop reference is [references/blocks.md](references/blocks.md), generated from `film/catalog.mjs`. Starter storyboards live in `recipes/` and are generated from the playbooks.
 
 Palettes, treatments, type voices, sketches and playbooks are files in `library/`, one per item. Read [library/README.md](../../library/README.md) before adding one: a new look, arc or composition is a new file, not engine code. A project's own `library/` overrides built-ins by id. So does a shared brand kit passed with `--library DIR`. Those layers are JSON only.
 
