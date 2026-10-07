@@ -326,3 +326,20 @@ test('a drifting art layer spans its resolved beat, even under a second, and nev
   assert.ok(r.job.beats[1].frames / 30 < 1 && r.job.beats[2].frames / 30 > 3);
   assert.match(job(t, { beats: [beat({ drift: 0.5, under: [] })] }).errors.join('\n'), /require art.sketch/);
 });
+
+test('critique judges native stages as drawings, and a film stage as continuity across its cuts', t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-stage-critique-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const actors = [{ id: 'a', label: 'API', x: 600, y: 600 }, { id: 'b', label: 'Queue', x: 1300, y: 600 }];
+  writeJSON(path.join(dir, 'storyboard.json'), {
+    format: { preset: 'landscape' }, camera: 'none',
+    stages: [{ id: 'flow', from: 'one', to: 'three', actors, links: [{ from: 'a', to: 'b' }] }],
+    beats: ['one', 'two', 'three', 'four'].map(id => ({ id, block: 'stage', vo: `Why does the ${id} step wait? The queue answers it, and the worker keeps going.`, props: {} })),
+  });
+  const r = critique(dir);
+  assert.ok(r.summary.drawn >= 4, `stages count as drawn (${r.summary.drawn})`);
+  const said = r.findings.map(f => f.message).join('\n');
+  assert.doesNotMatch(said, /Nothing is drawn/);
+  assert.doesNotMatch(said, /one, two, three|Three drawing scenes in a row/, 'beats inside one film stage are one continuous picture, not a run of cards');
+  assert.doesNotMatch(said, /No question is ever asked/, 'a question opening a line counts');
+});

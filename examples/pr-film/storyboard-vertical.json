@@ -1,0 +1,513 @@
+{
+ "version": 2,
+ "title": "Code that fits the phone",
+ "logline": "A pull-request explainer from ClearFrame commit 92b0762: the symptom, the cause, the new layout, the code that measures, the checks and the limits.",
+ "format": {
+  "preset": "vertical",
+  "fps": 30
+ },
+ "theme": "paper",
+ "type": "inter",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.6
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "camera": "none",
+ "lens": {
+  "handheld": 0
+ },
+ "texture": {
+  "grain": 0.25,
+  "vignette": 0.3
+ },
+ "captions": false,
+ "music": false,
+ "sources": [
+  {
+   "id": "commit",
+   "title": "ClearFrame commit 92b0762 (scene/code.mjs, scene/recipes.mjs, scene/compile.mjs)"
+  },
+  {
+   "id": "audit",
+   "title": "clearframe check --draft on examples/stage-pr shown vertically: 1 error and 7 title-safe warnings at b2b7540, none at 92b0762"
+  },
+  {
+   "id": "tests",
+   "title": "node --test test/stage-fit.test.mjs at 92b0762: 3 of 3 pass"
+  }
+ ],
+ "stages": [
+  {
+   "id": "frames",
+   "from": "cause",
+   "to": "relayout",
+   "z": "under",
+   "actors": [
+    {
+     "id": "cli",
+     "label": "CLI",
+     "kind": "client",
+     "x": 250,
+     "y": 820,
+     "w": 250,
+     "at": 0.3
+    },
+    {
+     "id": "daemon",
+     "label": "Daemon",
+     "kind": "service",
+     "x": 540,
+     "y": 820,
+     "w": 250,
+     "at": 0.5
+    },
+    {
+     "id": "child",
+     "label": "Child",
+     "kind": "process",
+     "x": 830,
+     "y": 820,
+     "w": 250,
+     "at": 0.7
+    }
+   ],
+   "links": [
+    {
+     "from": "cli",
+     "to": "daemon",
+     "route": "straight"
+    },
+    {
+     "from": "daemon",
+     "to": "child",
+     "route": "straight"
+    }
+   ],
+   "under": [
+    {
+     "type": "rect",
+     "id": "wide-frame",
+     "x": 110,
+     "y": 580,
+     "w": 860,
+     "h": 480,
+     "r": 26,
+     "fill": "none",
+     "stroke": "muted",
+     "width": 3,
+     "dash": [
+      14,
+      10
+     ],
+     "at": 0.1,
+     "enter": "fade",
+     "exitSay": {
+      "beat": "cause",
+      "say": "tall"
+     },
+     "exit": "fade"
+    },
+    {
+     "type": "rect",
+     "id": "tall-frame",
+     "x": 320,
+     "y": 410,
+     "w": 440,
+     "h": 820,
+     "r": 26,
+     "fill": "none",
+     "stroke": "ink",
+     "width": 3,
+     "dash": [
+      14,
+      10
+     ],
+     "say": {
+      "beat": "cause",
+      "say": "tall"
+     },
+     "enter": "fade"
+    }
+   ],
+   "events": [
+    {
+     "do": "state",
+     "actor": "cli",
+     "status": "error",
+     "say": {
+      "beat": "cause",
+      "say": "fall"
+     }
+    },
+    {
+     "do": "state",
+     "actor": "child",
+     "status": "error",
+     "say": {
+      "beat": "cause",
+      "say": "fall"
+     }
+    },
+    {
+     "do": "callout",
+     "actor": "child",
+     "text": "off the screen",
+     "side": "bottom",
+     "say": {
+      "beat": "cause",
+      "say": "sides"
+     },
+     "untilSay": {
+      "beat": "relayout",
+      "say": "Now"
+     }
+    },
+    {
+     "do": "move",
+     "actor": "cli",
+     "x": 540,
+     "y": 560,
+     "dur": 1.1,
+     "say": {
+      "beat": "relayout",
+      "say": "laid"
+     }
+    },
+    {
+     "do": "move",
+     "actor": "daemon",
+     "x": 540,
+     "y": 820,
+     "dur": 1.1,
+     "say": {
+      "beat": "relayout",
+      "say": "laid"
+     }
+    },
+    {
+     "do": "move",
+     "actor": "child",
+     "x": 540,
+     "y": 1080,
+     "dur": 1.1,
+     "say": {
+      "beat": "relayout",
+      "say": "laid"
+     }
+    },
+    {
+     "do": "state",
+     "actor": "cli",
+     "status": "done",
+     "say": {
+      "beat": "relayout",
+      "say": "order"
+     }
+    },
+    {
+     "do": "state",
+     "actor": "daemon",
+     "status": "done",
+     "say": {
+      "beat": "relayout",
+      "say": "order"
+     }
+    },
+    {
+     "do": "state",
+     "actor": "child",
+     "status": "done",
+     "say": {
+      "beat": "relayout",
+      "say": "order"
+     }
+    }
+   ]
+  }
+ ],
+ "beats": [
+  {
+   "id": "symptom",
+   "block": "stage",
+   "min": 6,
+   "vo": "Why did the code in our pull-request videos run off a phone screen? The frame audit flagged it, and it was right.",
+   "props": {
+    "source": "Reproduced with clearframe check at b2b7540",
+    "elements": [
+     {
+      "type": "rect",
+      "id": "phone",
+      "x": 200,
+      "y": 330,
+      "w": 420,
+      "h": 820,
+      "r": 48,
+      "fill": "surface",
+      "stroke": "ink",
+      "width": 4,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "rect",
+      "id": "phone-notch",
+      "x": 360,
+      "y": 348,
+      "w": 100,
+      "h": 14,
+      "r": 7,
+      "fill": "line",
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "code-0",
+      "text": "let angle = (w[1].1 - w[0].1)",
+      "x": 234,
+      "y": 480,
+      "size": 24,
+      "font": "mono",
+      "fill": "ink",
+      "at": 0.6,
+      "enter": "type"
+     },
+     {
+      "type": "text",
+      "id": "code-1",
+      "text": "  .atan2(w[1].0 - w[0].0);",
+      "x": 234,
+      "y": 526,
+      "size": 24,
+      "font": "mono",
+      "fill": "ink",
+      "at": 0.85,
+      "enter": "type"
+     },
+     {
+      "type": "text",
+      "id": "code-2",
+      "text": "return Some(((w[0].0 + (w[1].0 - w[0].0) * t,",
+      "x": 234,
+      "y": 572,
+      "size": 24,
+      "font": "mono",
+      "fill": "negative",
+      "at": 1.1,
+      "enter": "type"
+     },
+     {
+      "type": "text",
+      "id": "code-3",
+      "text": "  w[0].1 + (w[1].1 - w[0].1) * t), angle));",
+      "x": 234,
+      "y": 618,
+      "size": 24,
+      "font": "mono",
+      "fill": "negative",
+      "at": 1.35,
+      "enter": "type"
+     },
+     {
+      "type": "line",
+      "id": "edge",
+      "x1": 620,
+      "y1": 440,
+      "x2": 620,
+      "y2": 690,
+      "stroke": "negative",
+      "width": 5,
+      "say": "phone",
+      "enter": "draw"
+     },
+     {
+      "type": "rect",
+      "id": "audit-card",
+      "x": 140,
+      "y": 1330,
+      "w": 800,
+      "h": 200,
+      "r": 18,
+      "fill": "ink",
+      "say": "flagged",
+      "enter": "fade"
+     },
+     {
+      "type": "text",
+      "id": "audit-head",
+      "text": "clearframe check",
+      "x": 176,
+      "y": 1388,
+      "size": 24,
+      "font": "mono",
+      "fill": "muted",
+      "say": "flagged",
+      "enter": "fade"
+     },
+     {
+      "type": "text",
+      "id": "audit-error",
+      "text": "error: code cut off by the frame edge",
+      "x": 176,
+      "y": 1442,
+      "size": 30,
+      "font": "mono",
+      "fill": "bg",
+      "say": "flagged",
+      "enter": "type",
+      "fit": 728
+     },
+     {
+      "type": "text",
+      "id": "audit-warn",
+      "text": "+ 7 title-safe warnings",
+      "x": 176,
+      "y": 1490,
+      "size": 26,
+      "font": "mono",
+      "fill": "accent2",
+      "say": "flagged",
+      "enter": "fade",
+      "fit": 728
+     }
+    ]
+   }
+  },
+  {
+   "id": "cause",
+   "block": "stage",
+   "min": 6,
+   "vo": "The stage was drawn for a wide frame. In a tall one, the same positions fall off both sides.",
+   "props": {
+    "title": "Positions were drawn for a wide frame",
+    "source": "scene/recipes.mjs before 92b0762"
+   }
+  },
+  {
+   "id": "relayout",
+   "block": "stage",
+   "min": 6,
+   "tail": 0.8,
+   "vo": "Now a stage drawn wide is laid down the tall frame in the same order, so every actor stays on screen.",
+   "props": {
+    "source": "scene/recipes.mjs at 92b0762"
+   }
+  },
+  {
+   "id": "measure",
+   "block": "stage",
+   "min": 8,
+   "transition": "panel",
+   "vo": "The code editor measures its longest line in the mono face, and never sets type below twenty-four pixels. A longer line wraps instead of disappearing.",
+   "props": {
+    "title": "The editor measures its longest line",
+    "source": "git show 92b0762 -- scene/code.mjs",
+    "code": {
+     "commit": "92b0762",
+     "file": "scene/code.mjs",
+     "repo": "../..",
+     "window": [
+      118,
+      124
+     ],
+     "say": "measures",
+     "x": 108,
+     "y": 440,
+     "w": 864,
+     "size": 30
+    }
+   }
+  },
+  {
+   "id": "checked",
+   "block": "delta",
+   "min": 7,
+   "tail": 1,
+   "vo": "On the same example, one error and seven warnings went to none, and three new tests keep it that way.",
+   "props": {
+    "title": "Checked on the same example",
+    "from": {
+     "value": 8,
+     "label": "audit findings at b2b7540"
+    },
+    "to": {
+     "value": 0,
+     "label": "at 92b0762"
+    },
+    "better": "down",
+    "land": "error",
+    "change": "all cleared",
+    "support": "1 error and 7 title-safe warnings on stage-pr shown vertically; 3 new tests pass",
+    "source": "clearframe check on examples/stage-pr (vertical); test/stage-fit.test.mjs"
+   }
+  },
+  {
+   "id": "fits",
+   "block": "stage",
+   "min": 7,
+   "tail": 1.2,
+   "transition": "fade",
+   "vo": "Now the code fits the phone. The fit keeps order, not exact placement, and a slow camera push can still drift edge text. That is next.",
+   "props": {
+    "source": "scene/code.mjs at 92b0762: a line too long for the editor wraps with a hanging indent",
+    "elements": [
+     {
+      "type": "rect",
+      "id": "phone",
+      "x": 200,
+      "y": 330,
+      "w": 420,
+      "h": 820,
+      "r": 48,
+      "fill": "surface",
+      "stroke": "ink",
+      "width": 4,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "rect",
+      "id": "phone-notch",
+      "x": 360,
+      "y": 348,
+      "w": 100,
+      "h": 14,
+      "r": 7,
+      "fill": "line",
+      "at": 0,
+      "enter": "none"
+     }
+    ],
+    "code": {
+     "id": "fitted",
+     "x": 220,
+     "y": 420,
+     "w": 380,
+     "size": 30,
+     "gutter": false,
+     "say": "fits",
+     "before": "let angle = (w[1].1 - w[0].1)\n  .atan2(w[1].0 - w[0].0);",
+     "after": "let angle = (w[1].1 - w[0].1)\n  .atan2(w[1].0 - w[0].0);\nreturn Some(((w[0].0 + (w[1].0 - w[0].0) * t, w[0].1 + (w[1].1 - w[0].1) * t), angle));"
+    },
+    "over": [
+     {
+      "type": "text",
+      "id": "limit",
+      "text": "Keeps order, not placement",
+      "x": 540,
+      "y": 1340,
+      "size": 44,
+      "font": "display",
+      "fill": "ink",
+      "anchor": "middle",
+      "say": "order",
+      "enter": "fade",
+      "fit": 860
+     }
+    ]
+   }
+  }
+ ]
+}

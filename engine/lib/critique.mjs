@@ -62,6 +62,22 @@ function asDrawn(b, { width = 1920, height = 1080 } = {}) {
 }
 
 const FAMILY = new Proxy({}, { get: (_, name) => rules(name).family });
+/**
+ * Native stages are drawings: a stage block, a beat's own stage layer, or a film stage spanning
+ * beats (whose actors keep their identity across the cuts between them). Each beat learns the film
+ * stage it belongs to as `_stage`.
+ */
+export function withStages(sb, beats) {
+  const index = new Map(sb.beats.map((b, i) => [b.id, i]));
+  for (const st of sb.stages ?? []) {
+    const [a, z] = [index.get(st.from), index.get(st.to ?? st.from)];
+    if (a == null || z == null) continue;
+    for (let i = a; i <= z; i++) beats[i] = { ...beats[i], _stage: st.id, _stageFirst: i === a ? st : null };
+  }
+  return beats;
+}
+const staged = b => b.block === 'stage' || b.stage != null || b._stage != null;
+const sameStage = (a, b) => a?._stage != null && a._stage === b?._stage;
 // A canvas that holds only type is a type card (poster type), not a drawing.
 const typeCard = b =>
   b.block === 'canvas' && (b.props?.elements ?? []).length > 0 && b.props.elements.every(el => el.type === 'text');
@@ -70,6 +86,7 @@ const family = b => (typeCard(b) ? 'type card' : FAMILY[b.block]);
 // A system diagram's nodes keep their ids too.
 const shapeIds = b => [...(b?.props?.elements ?? []).map(el => el.id), ...(b?.props?.diagram?.nodes ?? []).map(n => `diagram-node-${n.id}`)].filter(Boolean);
 const matched = (a, b) => {
+  if (sameStage(a, b)) return true;
   const ids = new Set(shapeIds(a));
   return shapeIds(b).some(id => ids.has(id));
 };
@@ -80,6 +97,7 @@ const FULL_FRAME = b =>
   b.plate ||
   (b.tone && b.tone !== 'none') ||
   (b.block === 'canvas' && !b.props?.title) ||
+  (b.block === 'stage' && !b.props?.title) ||
   b.block === 'kinetic' ||
   b.props?.align === 'center' ||
   (['title', 'statement', 'endcard', 'chapter', 'highlight', 'quote'].includes(b.block) && !b.props?.title);
@@ -170,6 +188,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
     const before = new Set([...ids(a), ...chartIds(a)]);
     if (
       (b.props?.world && b.props.world === a.props?.world) ||
+      sameStage(a, b) ||
       [...ids(b), ...chartIds(b)].some(id => id !== 'chart' && before.has(id)) ||
       (travelling(a) && travelling(b))
     )
@@ -301,6 +320,8 @@ export function cinemaScore(sb, beats, timed, transitions) {
     first?.plate ||
     (first?.tone && first.tone !== 'none') ||
     (first?.block === 'canvas' && (present(first.props?.elements) || first.props?.plates)) ||
+    (first?.block === 'stage' && (present(first.props?.elements) || present(first.props?.under))) ||
+    present(first?.stage?.under) || present(first?._stageFirst?.under) ||
     present(first?.art?.under) ||
     present(first?.art?.over);
   if (first && !pictured)
@@ -323,7 +344,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
 export function critique(root) {
   const sb = loadStoryboard(root),
     timing = computeTiming(root),
-    beats = sb.beats.map(b => asDrawn(b, sb.format)),
+    beats = withStages(sb, sb.beats.map(b => asDrawn(b, sb.format))),
     out = [];
   const add = (level, where, message) => out.push({ level, where, message });
   const t = timing.beats;
@@ -490,7 +511,7 @@ export function critique(root) {
         `${hidden.length} text element(s) sit under the letterbox bars (${Math.round(bar)} px top and bottom), e.g. "${String(hidden[0].text).slice(0, 24)}". Move them into the picture.`,
       );
   }
-  const drawn = beats.filter(b => b.block === 'canvas' || b.art).length,
+  const drawn = beats.filter(b => b.block === 'canvas' || b.art || staged(b)).length,
     imaged = beats.filter(b => b.plate || ['image', 'video', 'annotate'].includes(b.block)).length;
   if (timing.duration > 40 && !drawn)
     add(
@@ -579,7 +600,8 @@ export function critique(root) {
         'Four beats in a row without a but/so/because. Link beats causally (but… therefore…) or the film becomes a list.',
       );
   }
-  const questions = beats.filter(b => /\?\s*$/.test(b.vo ?? '')).length;
+  // A question opens a loop wherever it falls in the line ("Why did…? The audit flagged it.").
+  const questions = beats.filter(b => /\?(\s|$)/.test(b.vo ?? '')).length;
   if (timing.duration > 45 && !questions)
     add(
       'idea',
