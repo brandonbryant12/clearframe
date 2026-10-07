@@ -1,5 +1,15 @@
 # Changelog
 
+## A playbook scene can be composed again for portrait
+
+- **A playbook beat can carry `tall` props, which replace its props when the project is made vertical.** This is for a composition the camera cannot rescue: viewTall only moves the camera, and the global reframe only frames what is drawn. The props are drawn on a 1080×1920 canvas. Landscape scaffolds drop them, and stay byte-identical.
+- **concept-explainer's "wait in multiples" chart (`curve`, `nine`) is now authored for portrait.**
+  - The row labels sit above their bars, and the type is larger.
+  - In `nine` the lighter rows step back on "ninety", standing in for the landscape cut into a zoom, before the "nine times" line lands.
+  - Before, the vertical cut either lost the row labels or the 9× takeaway.
+  - Vertical `check`: warnings fell from 12 to 4, and none of the four are in these beats. `qa`: 0 pops.
+  - `nine` still reads as a hold to `qa`: two small changes, then a reading hold.
+
 ## The editorial frame fits a vertical cut
 
 - **On a tall frame the editorial frame keeps to the title-safe area a phone leaves clear.** This is the brand, the section label, the footers and the progress rail. They move in to the margin block content keeps and 6% from the top and bottom.

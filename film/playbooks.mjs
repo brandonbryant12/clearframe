@@ -55,6 +55,12 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
   // A sketch's own camera (view, truck, dolly, focus) travels with it. A canvas drawn in
   // landscape frame pixels is fitted whole into a tall frame rather than cropped off-centre.
   for (const b of sb.beats) {
+    // A composition that cannot survive the crop is authored again for the tall frame: a beat's
+    // `tall` props replace its own in a vertical scaffold (frame pixels of 1080×1920).
+    if (b.tall) {
+      if (vertical || book.format === 'vertical') b.props = { ...b.props, ...b.tall };
+      delete b.tall;
+    }
     // A beat's art layer can name a sketch too: `art: {sketch: "ambient"}` (its own layer).
     // It is checked now but kept as shorthand: the job expands it at the final frame size and
     // beat duration (voice can set that later), and scaffold vendors shared sketches.

@@ -335,3 +335,13 @@ test('a landscape shot re-framed for a tall cut keeps its words whole, readable 
   const v3 = reframeView([-200, -400, 4600, 2587], whole, tall);
   assert.ok(whole.every(el => inside(v3, el)), 'nothing in the subject is cropped to enlarge type');
 });
+
+test('a playbook beat can be composed again for a vertical cut, and landscape keeps its own', () => {
+  const nine = sb => sb.beats.find(b => b.id === 'nine');
+  const wide = storyboardFor('concept-explainer'), tall = storyboardFor('concept-explainer', { vertical: true });
+  assert.deepEqual(nine(wide).props.view, [700, 530, 1180, 663.75]);
+  assert.equal(nine(wide).tall, undefined, 'the override is not left in the storyboard');
+  assert.deepEqual(nine(tall).props.view, [1080, 1920]);
+  assert.ok(['50% full', '90% full', '9×'].every(t => nine(tall).props.elements.some(el => el.text === t)), 'row labels and the takeaway both stay');
+  assert.equal(nine(tall).props.source, nine(wide).props.source, 'props it does not replace are kept');
+});

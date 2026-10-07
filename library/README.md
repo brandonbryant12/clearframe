@@ -138,6 +138,7 @@ A sketch should draw a mechanism, a place or a purposeful material composition, 
 ```
 
 - Each beat is a storyboard beat. Its `props` are checked against the block when a project is made.
+- A beat whose composition cannot survive a vertical crop (a chart with its labels beside it) can carry `tall`: props that replace its own when the project is made vertical (`new --vertical`, or the studio's `playbook` command on a vertical film). Draw them on a 1080×1920 canvas with `view: [1080, 1920]`; the scene fits that drawing to its area like any canvas view. Use `viewTall` instead when only the camera needs to change. concept-explainer's `curve` and `nine` show the pattern: in the vertical cut, the row labels move above their bars.
 - A canvas beat can name a sketch instead of listing elements: `"props": {"sketch": "tunnel"}` draws it when the project is made, together with the sketch's own camera (`view`, `viewFrom`, `dolly`, `focus`). Any of those set on the beat win. `"sketchText": {"TITLE": "SIGNAL"}` replaces a sketch's placeholder type. Vertical films redraw every sketch beat for the tall frame.
 - A playbook can set the film's look: `theme`, `motion`, `backdrop`, `texture`, `lens`, `camera` (the default for beats without their own; `none` for a steady film), `heading`, `textMotion` and `transition`. A treatment applied on top still wins.
 - Optional `sources` holds `claim`/`source` entries (with `asOf` when useful), or `id`/`title` entries. They are copied intact into a scaffold, so a playbook can preserve its illustrative assumptions and arithmetic.
