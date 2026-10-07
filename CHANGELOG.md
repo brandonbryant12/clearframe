@@ -1,5 +1,23 @@
 # Changelog
 
+## Casts: objects that carry the story
+
+- **`canvas.props.cast`** keeps a cast of designed objects through consecutive canvas beats, so a film can be moves of one picture instead of a card per line.
+  - Objects are icon tiles or word pills: up to 16, declared in the first cast beat, with optional `enter`; `none` stands them on frame one.
+  - Formations, cued to spoken words:
+    - `scatter`, `line` (a row on wide frames, a column on tall ones), `row`, `column`, `ring` and `cluster` (`beside` an object).
+    - `hero`: one forward with an optional word under it.
+    - `swap`: one becomes another in place. `by` names the cause, which travels onto it and works at it while it gives under each stroke.
+    - `wave`: a pulse through a sequence. `exit`: objects leave.
+  - `thread` draws the sequence once it settles.
+  - Each beat starts from the last one's poses, depth and threads. Consecutive cast beats are joined with a cut, no exit and a still camera, and a non-cut transition between them is warned about.
+  - Positions come from the frame, so one storyboard serves both shapes.
+  - Reference `examples/cast-study`, docs `docs/cast.md`, tests `test/cast.test.mjs`.
+- **The studio agent starts from what stays on screen.**
+  - The cause: `engine/agent-plugin/AUTHORING.md`, the agent's first-cut guide, told it to "decide 5–8 scenes" and listed title, statement, stat, kinetic and endcard as the shapes that render well. That is the main reason films from the agent path read as slideshows.
+  - It now asks for the persisting subject and its moves first. It lists casts, film stages, worlds and morphing charts as the spine, and cards as punctuation (never three in a row).
+- **Critique sees casts.** Consecutive cast beats count as one carried picture, not "separate drawings in a row".
+
 ## Stages and code that fit the frame
 
 - **Code editors never overflow.** A stage `code` editor stays inside the stage area (title-safe, below the heading, above the source line); its type fits the longest line, measured in the mono face's exact advance, down to 24 px, and longer lines wrap at a token boundary with a hanging indent while keeping their identity through the edit. An editor drawn for a wider frame takes the tall frame's height. Previously long lines were clipped at the editor edge and a landscape editor ran off a vertical frame.

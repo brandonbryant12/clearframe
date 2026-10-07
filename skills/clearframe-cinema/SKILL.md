@@ -25,6 +25,10 @@ Read `docs/cinema.md` first: it holds the grammar this skill applies. `critique 
 
 Every film directed from the same defaults looks alike. `clearframe muse --seed N` (or `new DIR --seed random`) draws a creative brief: a twist, a motif, camera and cut signatures, a palette and grade, set pieces and a music feel. Every option is one that works. Use it when the user wants something unique, or when a series needs each episode to feel distinct. Record the seed so the draw can be reproduced.
 
+## 1c. Keep a subject on screen
+
+Decide what stays on screen before choosing blocks: the materials, parts or figure that the story changes. Then write each beat as a move of that picture. Cards are punctuation, never the spine. A `canvas` `props.cast` keeps designed objects through consecutive beats. They scatter, line up, step forward (`hero`), turn into one another (`swap`, with `by` naming the cause), pulse in order (`wave`) and leave, each move on a spoken word. Consecutive cast beats cut invisibly. See `docs/cast.md` and `examples/cast-study`. For systems and code use a film stage, and for a journey use one world.
+
 ## 2. Write the shot list before the blocks
 
 In `DIRECTION.md`, one line per beat: **scale** (wide, medium, close or insert), **camera** (what moves and why), and **the cut** into the next shot (world move, match cut by shared id, flash, whip, or a cut between two moving cameras). Never three identical scales in a row.

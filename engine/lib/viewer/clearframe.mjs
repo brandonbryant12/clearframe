@@ -36,7 +36,7 @@ export function textBox(el) {
 }
 
 export function describeBeat(b) {
-  const CHART = { stat: 'Headline figure', plot: 'Line chart', bars: 'Bar chart', bridge: 'Bridge chart', distribution: 'Distribution', multiples: 'Small multiples', kpi: 'Key figure', chart: 'Chart', teaching: 'Question', sketch: 'Illustration' };
+  const CHART = { stat: 'Headline figure', plot: 'Line chart', bars: 'Bar chart', bridge: 'Bridge chart', cast: 'Cast', distribution: 'Distribution', multiples: 'Small multiples', kpi: 'Key figure', chart: 'Chart', teaching: 'Question', sketch: 'Illustration' };
   const KIND = { title: 'Title card', endcard: 'End card', statement: 'Statement', quote: 'Quote', video: 'Video clip', image: 'Image', kinetic: 'Moving type', chapter: 'Chapter card' };
   const props = b.props ?? {}, chart = Object.keys(CHART).find(k => props[k] != null), spec = chart ? props[chart] : props;
   const onScreen = [spec?.kicker, spec?.title, spec?.label, props.support].filter(t => typeof t === 'string' && t.trim());

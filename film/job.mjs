@@ -36,6 +36,7 @@ import { expandTeachingProps } from './teaching.mjs';
 import { expandPlotProps } from './plots.mjs';
 import { expandBarsProps } from './bars.mjs';
 import { expandBridgeProps, orderBridgeTimes } from './bridge.mjs';
+import { expandCastProps } from './cast.mjs';
 import { expandStatProps } from './stat.mjs';
 import { expandHistogramProps } from './histogram.mjs';
 import { expandMultiplesProps } from './multiples.mjs';
@@ -72,15 +73,18 @@ export function createJob(sb, timing, { draft = false } = {}) {
   });
   const captions = captionCues(timing);
   const beats = [];
+  // A cast's objects and where each beat left them, handed to the next beat that names the cast.
+  const cast = {};
   for (const b of timing.beats) {
     try {
-      beats.push(prepareBeat(b, { sb, timing, film, transitions, captions, report }));
+      beats.push(prepareBeat(b, { sb, timing, film, transitions, captions, report, cast }));
     } catch (e) {
       report.errors.push(`${b.id}: ${e.message}`);
     }
   }
   mirrorExitStyles(beats);
   linkMorphs(beats, sb, timing, report);
+  linkCasts(beats, sb, timing, report);
   linkWorlds(beats, sb, timing, report);
   const frame = frameChrome(sb, beats, report);
   fitGraphicTransitions(beats, timing, report);
@@ -165,15 +169,18 @@ function filmSettings(sb, timing, { errors }) {
 
 // ------------------------------------------------------------------ one beat
 
-function prepareBeat(b, { sb, timing, film, transitions, captions, report }) {
+function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast = {} }) {
   if (b.scene)
     throw new Error('JavaScript scenes are retired. Port this beat to a native block; no browser fallback runs.');
   const frame = 1 / timing.fps,
     source = sb.beats[b.index],
     spec = rules(b.block);
   const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.dur };
+  const castProps = b.block === 'canvas' && b.props?.cast != null
+    ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, cue: cueResolver(b, frame), carry: cast })
+    : b.props;
   const authoredProps = b.block === 'canvas'
-    ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(expandKPIProps(b.props ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
+    ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(expandKPIProps(castProps ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
     : (b.props ?? {});
   const props = normalizeProps(b.block, authoredProps, {
     vertical: film.vertical,
@@ -629,6 +636,22 @@ function mirrorExitStyles(beats) {
   for (let i = 0; i + 1 < beats.length; i++)
     if (beats[i + 1].enter_style && beats[i].exit === beats[i + 1].transition)
       beats[i].exit_style = beats[i + 1].enter_style;
+}
+
+/**
+ * A cast carries its objects across cuts by handing each beat's end state to the next, so the
+ * picture must not move under them: consecutive cast beats cut (no exit, no transition) and hold
+ * the camera still unless the author set one.
+ */
+function linkCasts(beats, sb, timing, { warnings }) {
+  for (let i = 1; i < beats.length; i++) {
+    const [srcA, srcB] = [sb.beats[timing.beats[i - 1].index], sb.beats[timing.beats[i].index]];
+    if (srcA.props?.cast == null || srcB.props?.cast == null || beats[i].block !== 'canvas' || beats[i - 1].block !== 'canvas') continue;
+    if (srcB.transition && srcB.transition !== 'cut') { warnings.push(`${beats[i].id}: the cast carries across from ${beats[i - 1].id}; a ${srcB.transition} transition hides that, use cut.`); continue; }
+    beats[i].transition = 'cut';
+    beats[i - 1].exit = 'none';
+    for (const [beat, src] of [[beats[i - 1], srcA], [beats[i], srcB]]) if (!src.camera) beat.camera = { move: 'none' };
+  }
 }
 
 /**

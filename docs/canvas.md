@@ -104,6 +104,10 @@ Or write it out: `{screen: dots | lines | none, cell, angle, tone, axis, registe
 
 Start from `sketch benday-burst`, `woodblock-wave` or `manifesto`; the `pulp`, `woodblock` and `constructivist` treatments set a film up for them. The look comes from the *Superman in Flight* poster film (one figure through twenty art processes): see `docs/research/2026-10-superman-in-flight.md`.
 
+## Casts: objects that persist across beats
+
+`props.cast` keeps a few designed objects (icon tiles, word pills) on screen through consecutive canvas beats, re-forming on spoken words: `scatter`, `line`, `ring`, `cluster`, `hero`, `swap` (with `by` naming the cause), `wave` and `exit`. Each beat starts where the last left every object, so the cuts are invisible. See [cast.md](cast.md).
+
 ## Worlds: one drawing, a travelling camera
 
 Slides cut from one picture to the next. A world keeps one picture and moves the camera. Give consecutive canvas beats the same `world` name and a camera rect `view: [x, y, w, h]` in world coordinates:

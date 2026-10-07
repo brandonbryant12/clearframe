@@ -6,7 +6,7 @@ A slide holds a layout until the presenter moves on. A shot is a moment in a con
 
 `critique` flags these. Fix them in this order:
 
-1. **A card per line.** Every beat is a self-contained layout, and nothing carries over the cut.
+1. **A card per line.** Every beat is a self-contained layout, and nothing carries over the cut. Keep a subject on screen instead: a [cast](cast.md) of objects that re-forms beat to beat, a film stage, one world the camera travels, or shared ids that morph.
 2. **Build, then freeze.** The scene assembles in a second, then sits still while the voice talks.
 3. **A heading on every scene.** The top-left title is the deck's slide title.
 4. **Locked, flat camera.** No depth, focus or parallax.

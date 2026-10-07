@@ -8,6 +8,7 @@ import { elementsExtent as extent } from '../../film/canvas.mjs';
 import { expandPlotProps } from '../../film/plots.mjs';
 import { expandBarsProps } from '../../film/bars.mjs';
 import { expandBridgeProps } from '../../film/bridge.mjs';
+import { expandCastProps } from '../../film/cast.mjs';
 import { expandStatProps } from '../../film/stat.mjs';
 import { expandHistogramProps } from '../../film/histogram.mjs';
 import { expandMultiplesProps } from '../../film/multiples.mjs';
@@ -16,6 +17,8 @@ import { roughStandIns } from '../../film/prepare.mjs';
 import { sketch, expandArt, sketchPreset } from '../../film/sketches.mjs';
 import { diagramElements } from '../../film/system-diagrams.mjs';
 
+// A cast's objects declared in an earlier beat carry forward into the beats that follow.
+let castCarry = {};
 /**
  * A beat as it will be drawn: a canvas built from a library sketch is judged on the sketch's
  * elements (its loops, keys and first-frame picture), not on the two-line reference to it.
@@ -27,6 +30,8 @@ function asDrawn(b, { width = 1920, height = 1080 } = {}) {
       return { ...b, props: expandPlotProps(b.props, { width, height, beatId: b.id }) };
     if (b.block === 'canvas' && b.props?.bars)
       return { ...b, props: expandBarsProps(b.props, { width, height, beatId: b.id }) };
+    if (b.block === 'canvas' && b.props?.cast)
+      return { ...b, _cast: true, props: expandCastProps(b.props, { width, height, beatId: b.id }, { state: castCarry.state, objects: castCarry.objects, threads: castCarry.threads, carry: castCarry }) };
     if (b.block === 'canvas' && b.props?.bridge)
       return { ...b, props: expandBridgeProps(b.props, { width, height, beatId: b.id }) };
     if (b.block === 'canvas' && b.props?.multiples)
@@ -78,6 +83,8 @@ export function withStages(sb, beats) {
 }
 const staged = b => b.block === 'stage' || b.stage != null || b._stage != null;
 const sameStage = (a, b) => a?._stage != null && a._stage === b?._stage;
+// Consecutive cast beats are one continuous picture: the same objects carry across the cut.
+const sameCast = (a, b) => Boolean(a?._cast && b?._cast);
 // A canvas that holds only type is a type card (poster type), not a drawing.
 const typeCard = b =>
   b.block === 'canvas' && (b.props?.elements ?? []).length > 0 && b.props.elements.every(el => el.type === 'text');
@@ -86,7 +93,7 @@ const family = b => (typeCard(b) ? 'type card' : FAMILY[b.block]);
 // A system diagram's nodes keep their ids too.
 const shapeIds = b => [...(b?.props?.elements ?? []).map(el => el.id), ...(b?.props?.diagram?.nodes ?? []).map(n => `diagram-node-${n.id}`)].filter(Boolean);
 const matched = (a, b) => {
-  if (sameStage(a, b)) return true;
+  if (sameStage(a, b) || sameCast(a, b)) return true;
   const ids = new Set(shapeIds(a));
   return shapeIds(b).some(id => ids.has(id));
 };
@@ -189,6 +196,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
     if (
       (b.props?.world && b.props.world === a.props?.world) ||
       sameStage(a, b) ||
+      sameCast(a, b) ||
       [...ids(b), ...chartIds(b)].some(id => id !== 'chart' && before.has(id)) ||
       (travelling(a) && travelling(b))
     )
@@ -344,7 +352,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
 export function critique(root) {
   const sb = loadStoryboard(root),
     timing = computeTiming(root),
-    beats = withStages(sb, sb.beats.map(b => asDrawn(b, sb.format))),
+    beats = withStages(sb, (castCarry = {}, sb.beats.map(b => asDrawn(b, sb.format)))),
     out = [];
   const add = (level, where, message) => out.push({ level, where, message });
   const t = timing.beats;
