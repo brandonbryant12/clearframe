@@ -272,7 +272,7 @@ test('the library index finds a short mixed shortlist and gives one entry exact 
   const { sketch } = await import('../film/sketches.mjs');
   const lit = JSON.stringify(sketch('searchlight', 'vertical', { text: { FIRST: 'Old logs' }, say: { FIRST: 'logs', ALL: 'Lights' } }).elements);
   assert.ok(lit.includes('"say":"logs"') && lit.includes('"exitSay":"Lights"') && lit.includes('Old logs') && !lit.includes('"cue"'), 'sketchSay cues a sketch');
-  assert.deepEqual(Object.keys((await detail('sketch:searchlight')).example.props.sketchSay).sort(), ['ALL', 'FIRST', 'SECOND', 'THIRD'], 'detail lists the cues to fill');
+  assert.deepEqual(Object.keys((await detail('sketch:searchlight')).example.props.sketchSay).sort(), ['ALL', 'FIRST', 'SEARCH', 'SECOND', 'THIRD'], 'detail lists the cues to fill');
   assert.ok(JSON.stringify(sketch('pixel-chain', 'landscape', { say: { ROLL: 'rolls' } }).elements).includes('"say":"rolls"'), 'a route takes its cue too');
   assert.throws(() => sketch('searchlight', 'landscape', { say: { FIRTS: 'logs' } }), /FIRTS.*FIRST/, 'a misspelt moment names the real ones');
   assert.ok(find('a handmade launch for our app').some(h => h.id === 'sketch:cut-paper'), 'everyday craft words reach the paper workbench');

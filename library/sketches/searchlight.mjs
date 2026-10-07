@@ -5,7 +5,7 @@ import { tall, round, rng } from '../../film/sketch-kit.mjs';
 // is labelled as it is found, and the labels stay. Then the lamps come on, the whole room shows,
 // and a thread joins the three finds: they were one story. The light's moves are named cues
 // (FIRST, SECOND, THIRD, ALL), so a beat's sketchSay lands each on a spoken word.
-const AT = { FIRST: 0.8, SECOND: 2.3, THIRD: 3.8, ALL: 5.4 };
+const AT = { SEARCH: 0.3, FIRST: 2.0, SECOND: 3.5, THIRD: 5.0, ALL: 6.6 };
 
 function layout(w, h) {
   if (tall(w, h)) {
@@ -64,7 +64,7 @@ export default {
   order: 69,
   summary:
     'A dark storeroom searched by one torch: the light finds three things on the shelves in turn, each labelled as it is found, then the lamps come on and a thread joins them.',
-  use: 'Discovery and investigation: what nobody had looked at, finding the cause, an audit, "three things were hiding". Feels like a quiet detective story; best on a dark palette (noir, ink, midnight). Replace FIRST, SECOND and THIRD with sketchText; land the light with sketchSay cues FIRST, SECOND, THIRD and ALL (the lights come up).',
+  use: 'Discovery and investigation: what nobody had looked at, finding the cause, an audit, "three things were hiding". Feels like a quiet detective story; best on a dark palette (noir, ink, midnight). Replace FIRST, SECOND and THIRD with sketchText; land the light with sketchSay cues SEARCH (an optional sweep of the room first), FIRST, SECOND, THIRD and ALL (the lights come up).',
   build(w, h, { seed } = {}) {
     const L = layout(w, h),
       rand = rng(seed ?? 7),
@@ -94,7 +94,13 @@ export default {
     // The torch: a pool of light that leaves the room dark around it, carried find to find.
     const [sx, sy] = L.start,
       r = round(Math.min(w, h) * 0.17);
-    const moves = finds.map((f, i) => ({ cue: LABELS[i], at: AT[LABELS[i]], x: f.x - sx, y: f.b - 70 - sy, dur: 0.7, ease: 'inOut' }));
+    // SEARCH sweeps the torch across the room before anything is found; then it goes find to find.
+    const moves = [
+      { cue: 'SEARCH', at: AT.SEARCH, x: round(w * (tall(w, h) ? 0.2 : 0.3)), y: round(-h * 0.3), dur: 1.5, ease: 'inOut' },
+      ...finds.map((f, i) => ({ cue: LABELS[i], at: AT[LABELS[i]], x: f.x - sx, y: f.b - 70 - sy, dur: 0.7, ease: 'inOut' })),
+    ];
+    // A hand-held torch: the pool never stands quite still.
+    const sway = { type: 'float', period: 2.6, amount: 10 };
     const thread = finds.map((f, i) => `${i ? 'L' : 'M'} ${f.x} ${f.b - 60}`).join(' ');
     return {
       elements: [
@@ -111,12 +117,12 @@ export default {
         ]),
         {
           type: 'spotlight', cx: sx, cy: sy, r, dim: 0.86, enter: 'none', at: 0,
-          keys: moves, exit: 'fade', exitCue: 'ALL', exitAt: AT.ALL, exitDur: 0.8,
+          keys: moves, loop: sway, exit: 'fade', exitCue: 'ALL', exitAt: AT.ALL, exitDur: 0.8,
         },
         // Warm light in the pool, riding with it.
         {
           type: 'circle', cx: sx, cy: sy, r: round(r * 1.05), fill: { gradient: ['accent2', 'accent2'], radial: true, fade: true }, opacity: 0.22, blend: 'screen', enter: 'none', at: 0,
-          keys: moves, exit: 'fade', exitCue: 'ALL', exitAt: AT.ALL, exitDur: 0.8,
+          keys: moves, loop: sway, exit: 'fade', exitCue: 'ALL', exitAt: AT.ALL, exitDur: 0.8,
         },
         // Each find keeps its label once found, fading in as the light arrives.
         ...finds.flatMap((f, i) => [

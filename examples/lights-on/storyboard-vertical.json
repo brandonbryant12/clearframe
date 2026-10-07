@@ -30,6 +30,7 @@
      "THIRD": "Nightly job"
     },
     "sketchSay": {
+     "SEARCH": "looks",
      "FIRST": "logs",
      "SECOND": "queue",
      "THIRD": "job",

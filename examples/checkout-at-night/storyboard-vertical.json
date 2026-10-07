@@ -1,0 +1,545 @@
+{
+ "version": 2,
+ "title": "Checkout at night",
+ "logline": "Three slow-downs that were one problem, the fix that pulled checkout into one path, and why it is faster now.",
+ "format": {
+  "preset": "vertical",
+  "fps": 30
+ },
+ "theme": "ink",
+ "type": "geometric",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.7
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "captions": false,
+ "music": false,
+ "beats": [
+  {
+   "id": "search",
+   "block": "canvas",
+   "tail": 1.8,
+   "vo": "Every night, checkout slowed to a crawl, so we went looking. First, stale logs. Then a retry storm. Then a cron job. Lights on.",
+   "props": {
+    "sketch": "searchlight",
+    "sketchText": {
+     "FIRST": "Stale logs",
+     "SECOND": "Retry storm",
+     "THIRD": "Cron job"
+    },
+    "sketchSay": {
+     "SEARCH": "looking",
+     "FIRST": "logs",
+     "SECOND": "storm",
+     "THIRD": "cron",
+     "ALL": "Lights"
+    },
+    "dolly": [
+     {
+      "at": 0,
+      "z": 0.12,
+      "dur": 9,
+      "ease": "inOut"
+     }
+    ]
+   }
+  },
+  {
+   "id": "turn",
+   "block": "statement",
+   "tone": "accent",
+   "transition": "panel",
+   "tail": 0.6,
+   "vo": "It was one problem, not three.",
+   "props": {
+    "text": "One problem, not three.",
+    "emphasis": [
+     "One problem"
+    ],
+    "align": "center",
+    "land": "one"
+   }
+  },
+  {
+   "id": "fix",
+   "block": "canvas",
+   "transition": "panel",
+   "tail": 0.4,
+   "vo": "Each order hopped between six services. We pulled them into one path, and now it flows.",
+   "props": {
+    "elements": [
+     {
+      "type": "path",
+      "d": "M 330 600 C 639 973.5 120.6 951.9 300 1320 M 760 1480 C 942 1318 682.8 1289.2 800 1120 M 770 760 C 649 1068 490.6 751.2 330 980 M 330 600 C 478 878 593.2 561.2 770 760 M 300 1320 C 602 1193 486.8 1524.2 760 1480 M 800 1120 C 628 838.5 527.2 1176.9 330 980 M 330 980 C 159 790 432.6 790 330 600 M 760 1480 C 1089 1124.5 570.6 1117.3 770 760 M 300 1320 C 162 1136.5 406.8 1158.1 330 980",
+      "fill": "none",
+      "stroke": "muted",
+      "width": 4,
+      "opacity": 0.8,
+      "enter": "none",
+      "at": 0,
+      "exit": "fade",
+      "exitDur": 0.5,
+      "exitSay": "pulled"
+     },
+     {
+      "type": "circle",
+      "cx": 315,
+      "cy": 960,
+      "r": 14,
+      "fill": "negative",
+      "loop": {
+       "type": "pulse",
+       "period": 0.9
+      },
+      "enter": "pop",
+      "at": 0.3,
+      "dur": 0.3,
+      "exit": "fade",
+      "exitDur": 0.4,
+      "exitSay": "pulled"
+     },
+     {
+      "type": "circle",
+      "cx": 550,
+      "cy": 680,
+      "r": 14,
+      "fill": "negative",
+      "loop": {
+       "type": "pulse",
+       "period": 0.9
+      },
+      "enter": "pop",
+      "at": 0.6000000000000001,
+      "dur": 0.3,
+      "exit": "fade",
+      "exitDur": 0.4,
+      "exitSay": "pulled"
+     },
+     {
+      "type": "circle",
+      "cx": 330,
+      "cy": 790,
+      "r": 14,
+      "fill": "negative",
+      "loop": {
+       "type": "pulse",
+       "period": 0.9
+      },
+      "enter": "pop",
+      "at": 0.9000000000000001,
+      "dur": 0.3,
+      "exit": "fade",
+      "exitDur": 0.4,
+      "exitSay": "pulled"
+     },
+     {
+      "type": "path",
+      "d": "M 540 500 L 540 720 L 540 940 L 540 1160 L 540 1380 L 540 1600",
+      "fill": "none",
+      "stroke": "accent",
+      "width": 8,
+      "cap": "round",
+      "enter": "draw",
+      "dur": 1,
+      "say": "flows"
+     },
+     {
+      "type": "group",
+      "enter": "none",
+      "at": 0,
+      "origin": [
+       540,
+       500
+      ],
+      "keys": [
+       {
+        "at": 0,
+        "x": -210,
+        "y": 100,
+        "rotate": -7,
+        "dur": 0
+       },
+       {
+        "x": 0,
+        "y": 0,
+        "rotate": 0,
+        "dur": 0.8,
+        "ease": "inOut",
+        "say": "pulled"
+       }
+      ],
+      "children": [
+       {
+        "type": "rect",
+        "x": 420,
+        "y": 420,
+        "w": 240,
+        "h": 160,
+        "r": 18,
+        "fill": "surface",
+        "stroke": "ink",
+        "width": 3,
+        "shadow": {
+         "dx": 0,
+         "dy": 6,
+         "blur": 14,
+         "opacity": 0.18
+        }
+       },
+       {
+        "type": "icon",
+        "name": "shopping-cart",
+        "x": 540,
+        "y": 500,
+        "size": 88,
+        "fill": "ink"
+       }
+      ]
+     },
+     {
+      "type": "group",
+      "enter": "none",
+      "at": 0,
+      "origin": [
+       540,
+       720
+      ],
+      "keys": [
+       {
+        "at": 0,
+        "x": 220,
+        "y": 760,
+        "rotate": 10,
+        "dur": 0
+       },
+       {
+        "x": 0,
+        "y": 0,
+        "rotate": 0,
+        "dur": 0.9,
+        "ease": "inOut",
+        "say": "pulled"
+       }
+      ],
+      "children": [
+       {
+        "type": "rect",
+        "x": 420,
+        "y": 640,
+        "w": 240,
+        "h": 160,
+        "r": 18,
+        "fill": "surface",
+        "stroke": "ink",
+        "width": 3,
+        "shadow": {
+         "dx": 0,
+         "dy": 6,
+         "blur": 14,
+         "opacity": 0.18
+        }
+       },
+       {
+        "type": "icon",
+        "name": "file",
+        "x": 540,
+        "y": 720,
+        "size": 88,
+        "fill": "ink"
+       }
+      ]
+     },
+     {
+      "type": "group",
+      "enter": "none",
+      "at": 0,
+      "origin": [
+       540,
+       940
+      ],
+      "keys": [
+       {
+        "at": 0,
+        "x": 230,
+        "y": -180,
+        "rotate": -5,
+        "dur": 0
+       },
+       {
+        "x": 0,
+        "y": 0,
+        "rotate": 0,
+        "dur": 1,
+        "ease": "inOut",
+        "say": "pulled"
+       }
+      ],
+      "children": [
+       {
+        "type": "rect",
+        "x": 420,
+        "y": 860,
+        "w": 240,
+        "h": 160,
+        "r": 18,
+        "fill": "surface",
+        "stroke": "ink",
+        "width": 3,
+        "shadow": {
+         "dx": 0,
+         "dy": 6,
+         "blur": 14,
+         "opacity": 0.18
+        }
+       },
+       {
+        "type": "icon",
+        "name": "database",
+        "x": 540,
+        "y": 940,
+        "size": 88,
+        "fill": "ink"
+       }
+      ]
+     },
+     {
+      "type": "group",
+      "enter": "none",
+      "at": 0,
+      "origin": [
+       540,
+       1160
+      ],
+      "keys": [
+       {
+        "at": 0,
+        "x": -240,
+        "y": 160,
+        "rotate": 12,
+        "dur": 0
+       },
+       {
+        "x": 0,
+        "y": 0,
+        "rotate": 0,
+        "dur": 1.1,
+        "ease": "inOut",
+        "say": "pulled"
+       }
+      ],
+      "children": [
+       {
+        "type": "rect",
+        "x": 420,
+        "y": 1080,
+        "w": 240,
+        "h": 160,
+        "r": 18,
+        "fill": "surface",
+        "stroke": "ink",
+        "width": 3,
+        "shadow": {
+         "dx": 0,
+         "dy": 6,
+         "blur": 14,
+         "opacity": 0.18
+        }
+       },
+       {
+        "type": "icon",
+        "name": "clock",
+        "x": 540,
+        "y": 1160,
+        "size": 88,
+        "fill": "ink"
+       }
+      ]
+     },
+     {
+      "type": "group",
+      "enter": "none",
+      "at": 0,
+      "origin": [
+       540,
+       1380
+      ],
+      "keys": [
+       {
+        "at": 0,
+        "x": 260,
+        "y": -260,
+        "rotate": -3,
+        "dur": 0
+       },
+       {
+        "x": 0,
+        "y": 0,
+        "rotate": 0,
+        "dur": 1.2,
+        "ease": "inOut",
+        "say": "pulled"
+       }
+      ],
+      "children": [
+       {
+        "type": "rect",
+        "x": 420,
+        "y": 1300,
+        "w": 240,
+        "h": 160,
+        "r": 18,
+        "fill": "surface",
+        "stroke": "ink",
+        "width": 3,
+        "shadow": {
+         "dx": 0,
+         "dy": 6,
+         "blur": 14,
+         "opacity": 0.18
+        }
+       },
+       {
+        "type": "icon",
+        "name": "settings",
+        "x": 540,
+        "y": 1380,
+        "size": 88,
+        "fill": "ink"
+       }
+      ]
+     },
+     {
+      "type": "group",
+      "enter": "none",
+      "at": 0,
+      "origin": [
+       540,
+       1600
+      ],
+      "keys": [
+       {
+        "at": 0,
+        "x": -210,
+        "y": -620,
+        "rotate": 14,
+        "dur": 0
+       },
+       {
+        "x": 0,
+        "y": 0,
+        "rotate": 0,
+        "dur": 1.3,
+        "ease": "inOut",
+        "say": "pulled"
+       }
+      ],
+      "children": [
+       {
+        "type": "rect",
+        "x": 420,
+        "y": 1520,
+        "w": 240,
+        "h": 160,
+        "r": 18,
+        "fill": "accent",
+        "stroke": "ink",
+        "width": 3,
+        "shadow": {
+         "dx": 0,
+         "dy": 6,
+         "blur": 14,
+         "opacity": 0.18
+        }
+       },
+       {
+        "type": "icon",
+        "name": "check",
+        "x": 540,
+        "y": 1600,
+        "size": 88,
+        "fill": "bg"
+       }
+      ]
+     },
+     {
+      "type": "circle",
+      "cx": 540,
+      "cy": 500,
+      "r": 16,
+      "fill": "accent2",
+      "stroke": "bg",
+      "width": 4,
+      "enter": "pop",
+      "dur": 0.2,
+      "along": {
+       "d": "M 540 500 L 540 720 L 540 940 L 540 1160 L 540 1380 L 540 1600",
+       "dur": 2.4,
+       "ease": "inOut",
+       "loop": true,
+       "say": "flows"
+      },
+      "say": "flows"
+     },
+     {
+      "type": "text",
+      "text": "Six hops",
+      "x": 129.6,
+      "y": 330,
+      "size": 46,
+      "font": "semibold",
+      "fill": "muted",
+      "upper": true,
+      "tracking": 0.08,
+      "enter": "fade",
+      "at": 0.2,
+      "exit": "fade",
+      "exitDur": 0.4,
+      "exitSay": "pulled"
+     },
+     {
+      "type": "text",
+      "text": "One path",
+      "x": 129.6,
+      "y": 330,
+      "size": 46,
+      "font": "semibold",
+      "fill": "accent",
+      "upper": true,
+      "tracking": 0.08,
+      "enter": "fade",
+      "dur": 0.5,
+      "say": "flows"
+     }
+    ]
+   }
+  },
+  {
+   "id": "result",
+   "block": "canvas",
+   "hold": 1.6,
+   "vo": "So checkout skips the waits. Both leave together, at the same speed. The new path is there first.",
+   "props": {
+    "sketch": "shortcut",
+    "sketchText": {
+     "OLD": "Four waits",
+     "NEW": "Direct"
+    },
+    "sketchSay": {
+     "SHORTCUT": "skips",
+     "GO": "leave",
+     "ARRIVE": "first"
+    },
+    "dolly": [
+     {
+      "say": "leave",
+      "z": 0.1,
+      "dur": 3,
+      "ease": "inOut"
+     }
+    ]
+   }
+  }
+ ]
+}

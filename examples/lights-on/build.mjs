@@ -19,7 +19,7 @@ for (const shape of ['landscape', 'vertical']) {
         props: {
           sketch: 'searchlight',
           sketchText: { FIRST: 'Old logs', SECOND: 'Retry queue', THIRD: 'Nightly job' },
-          sketchSay: { FIRST: 'logs', SECOND: 'queue', THIRD: 'job', ALL: 'Lights' },
+          sketchSay: { SEARCH: 'looks', FIRST: 'logs', SECOND: 'queue', THIRD: 'job', ALL: 'Lights' },
         },
       },
     ],

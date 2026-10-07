@@ -14,7 +14,7 @@ A 14-second study of discovery: one torch searches a dark storeroom, finds three
 
 | Narration | Picture |
 |---|---|
-| "Nobody looks in here." | A dark room of shelves, the torch resting on the floor. |
+| "Nobody **looks** in here." | A dark room of shelves; the hand-held torch sweeps across it. |
 | "First, old **logs** filling the disk." | The light crosses to a crate, and its label fades in as the light arrives. |
 | "Then a retry **queue** that never empties." | The light finds a stack of files. The first label stays. |
 | "And a nightly **job** that runs every minute." | The light finds a machine with a blinking light. |
@@ -26,7 +26,7 @@ The whole beat is one sketch with words, as in [build.mjs](build.mjs):
 { "block": "canvas", "props": {
   "sketch": "searchlight",
   "sketchText": { "FIRST": "Old logs", "SECOND": "Retry queue", "THIRD": "Nightly job" },
-  "sketchSay": { "FIRST": "logs", "SECOND": "queue", "THIRD": "job", "ALL": "Lights" } } }
+  "sketchSay": { "SEARCH": "looks", "FIRST": "logs", "SECOND": "queue", "THIRD": "job", "ALL": "Lights" } } }
 ```
 
 - **`sketchText`** names the finds.

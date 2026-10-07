@@ -1,5 +1,20 @@
 # Changelog
 
+## One brief, composed and adapted: checkout at night
+
+- **`examples/checkout-at-night` builds a 30 s film for one brief from library pieces, each adapted.** It answers "why checkout slowed every night, what we changed, why it is faster".
+  - `searchlight` carries the brief's causes.
+  - A colour-block `statement` turns the story.
+  - `untangle` is copied and adapted beyond its slots: its cards are this checkout's own services.
+  - `shortcut` shows the result.
+  - Both shapes: `check` reports 0 errors and 0 warnings, and the cinema score is 100/100. The README lists every adaptation and the remaining `qa` advisories.
+- **The inspiration skill gains "Adapt it to the brief"**: what can change, from words and voice cues to the look and to copying a sketch's elements, and when to make a new reusable sketch. AUTHORING points there.
+- **`searchlight` gains an optional `SEARCH` moment and a hand-held torch.** The torch sweeps the room before the first find, and its pool never stands quite still, so the opening is not a held still.
+- **`shortcut` changes:**
+  - its waits pulse;
+  - its tokens are larger and leave short trails;
+  - its ends stand from the first frame, so a cut into it is never empty.
+
 ## Finding the way: the maze sketch
 
 - **The `maze` sketch shows a way being found.** A seeded maze (a depth-first search on a grid, so a seed always draws the same maze) has a person at the entrance and a check at the exit. On a spoken word the one path through draws on and a token follows it. On the next, the exit lights.

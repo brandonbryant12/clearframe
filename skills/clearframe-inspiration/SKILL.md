@@ -60,7 +60,23 @@ Then recommend one and carry on. By default the agent decides, and the person ca
 
 Choose a look for the audience and the rest of the film, not for variety. Keep to the project's rules: every displayed number is sourced, there are no sample figures as evidence, and there is no text in generated images.
 
-## 4. Preview before building it all
+## 4. Adapt it to the brief
+
+What you can change, from lightest to deepest:
+
+| Change | How | Example |
+|---|---|---|
+| The words | `sketchText` fills a sketch's placeholder type. Cast objects take `label`, and blocks take their props. | `{"FIRST": "Stale logs"}` |
+| When things happen | `sketchSay` lands a sketch's named moments on narration words. Cast moves and canvas elements take `say`. | `{"ALL": "Lights"}` |
+| The look | `theme` (palette), `type`, the cast `look`, and the stage `material` (`dither`, `chrome`…) on a shape or a ground. | `"theme": "noir"` |
+| What is drawn | Copy the sketch's elements and edit them: other icons, fewer cards, other positions. In a build script, `sketch(name, preset, {text, say})` from `film/sketches.mjs` returns the filled elements to change; by hand, `node engine/cli.mjs sketch NAME [--vertical]` prints them. Put the result in `props.elements` (without `props.sketch`). | `examples/checkout-at-night` |
+| A new reusable picture | A sketch module, or a JSON sketch in the project's `library/sketches/`, so other films can use it by name. | `library/README.md` |
+
+- **Start light.** Change words and cues first; copy elements only when the picture itself must change, such as a different number of things, different objects, or a different layout.
+- **Shapes.** A copied drawing is laid out for one frame shape, so copy it once per shape.
+- **Recognisable pieces.** Keep them recognisable: the brief's own objects (its services, its product) make a borrowed composition feel made for it.
+
+## 5. Preview before building it all
 
 - **One beat.** Paste the item's example into a beat, then `still DIR --at S --draft` or `sheet DIR --draft`.
 - **Shape.** Check a vertical frame (`--vertical` scaffold) when the film is for phones.

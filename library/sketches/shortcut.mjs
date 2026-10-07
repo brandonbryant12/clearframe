@@ -45,20 +45,23 @@ export default {
     });
     // Both tokens travel at SPEED, so each route's length alone sets when it arrives.
     const token = (fill, path, len, extra = {}) => ({
-      type: 'circle', cx: L.start[0], cy: L.start[1], r: 18, fill, stroke: 'bg', width: 4, enter: 'pop', cue: 'GO', at: AT.GO, dur: 0.2, ...extra,
+      type: 'circle', cx: L.start[0], cy: L.start[1], r: 26, fill, stroke: 'bg', width: 5, enter: 'pop', cue: 'GO', at: AT.GO, dur: 0.2, ...extra,
       along: { d: path, cue: 'GO', at: AT.GO, dur: round(len / SPEED), ease: 'linear' },
+      // A short trail behind each token, so the race reads as motion even at a glance.
+      echo: { count: 6, lag: 0.05 },
     });
     return {
       elements: [
-        { type: 'path', d: curve, fill: 'none', stroke: 'muted', width: 6, dash: [16, 12], enter: 'draw', at: 0.2, dur: 1.2 },
+        { type: 'path', d: curve, fill: 'none', stroke: 'muted', width: 6, dash: [16, 12], enter: 'draw', at: 0, dur: 1.2 },
         // Each stop on the old route is a wait.
         ...L.stops.map(([x, y], i) => ({ type: 'group', enter: 'pop', at: 0.3 + i * 0.15, dur: 0.3, children: [
-          { type: 'circle', cx: x, cy: y, r: round(L.r * 0.7), fill: 'surface', stroke: 'muted', width: 4 },
+          { type: 'circle', cx: x, cy: y, r: round(L.r * 0.7), fill: 'surface', stroke: 'muted', width: 4, loop: { type: 'pulse', period: 1.4 + i * 0.2 } },
           { type: 'icon', name: 'clock', x, y, size: round(L.r * 0.7), fill: 'muted' },
         ] })),
         { type: 'path', d: d(straight), fill: 'none', stroke: 'accent', width: 10, cap: 'round', enter: 'draw', cue: 'SHORTCUT', at: AT.SHORTCUT, dur: 0.8 },
-        node(L.start, 'user', 'surface'),
-        node(L.end, 'check', 'surface'),
+        // The two ends stand from the first frame, so a cut into this beat is never empty.
+        node(L.start, 'user', 'surface', { enter: 'none', at: 0 }),
+        node(L.end, 'check', 'surface', { enter: 'none', at: 0 }),
         // The finish lights when the first token arrives.
         node(L.end, 'check', 'accent', { enter: 'pop', cue: 'ARRIVE', at: AT.ARRIVE, dur: 0.35 }),
         token('muted', curve, curveLength),
