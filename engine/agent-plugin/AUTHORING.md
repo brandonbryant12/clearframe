@@ -58,6 +58,11 @@ Pick from what the material actually contains:
   Next scene: `{"cast": {"formations": [{"form": "hero", "hero": "chart", "say": "becomes", "word": "the moment"}]}}`.
 - **A system, pipeline or code change**: a film stage, whose actors, links and packets keep their
   identity across scenes (`clearframe_guide` topic `scene`), or a `diagram` whose components morph.
+  The code itself takes one scene: a `stage` with only `code` shows the change as an editor that
+  fills the picture, the changed lines lighting up on the word given by `say`:
+  `{"block":"stage","props":{"title":"The fix","code":{"title":"tools.mjs","before":"…old lines…","after":"…new lines…","say":"scanner"}}}`
+  (or `{"commit":"abc123","file":"path/in/repo.js"}` to read it from git). Pair it with the
+  mechanism (a diagram or cast before and after) and the evidence (a `stat` with its source).
 - **A journey, a place or a map**: one world the camera travels (`props.world` shared by
   consecutive canvas scenes).
 - **Numbers that move**: charts with the same ids across scenes, a `bridge` from one total to

@@ -32,7 +32,8 @@ export function safeName(name) {
 /** The next free variant of a name (notes.txt, notes-2.txt…) as of now; publishing re-checks atomically. */
 const variant = (name, n) => { const ext = path.extname(name), stem = path.basename(name, ext); return n < 2 ? name : `${stem}-${n}${ext}`; };
 const unique = (dir, name) => { let n = 1; while (fs.existsSync(path.join(dir, variant(name, n)))) n++; return variant(name, n); };
-export const slugify = s => String(s ?? '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'film';
+// Cut at 48 characters, then trim a dash the cut may leave ("…-for-the-").
+export const slugify = s => String(s ?? '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48).replace(/-+$/, '') || 'film';
 
 /** A folder inside the project by real path: a symlinked source/ or assets/ cannot lead outside it. */
 function ownFolder(dir, rel) {

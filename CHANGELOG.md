@@ -1,5 +1,11 @@
 # Changelog
 
+## A code change is one easy scene
+
+- **A stage holding only `code` makes the code the picture.** By default the editor takes the stage area: 84% of its width, larger type, and an inline before/after diff centred down it. It used to sit in the corner like an editor beside a diagram, leaving most of the frame empty. Author-set `x`, `y`, `w` and `size` still win.
+- **The authoring guide gives the copyable form.** It shows `{"block":"stage","props":{"code":{"before","after","title","say"}}}` (or a commit and file from git) next to the mechanism and evidence scenes it pairs with. In the fourth live run, given a PR brief, the free agent recognised a code change as stage material but avoided stages as "complex".
+- Film folders named from a long idea no longer end in a dash ("…-for-the-").
+
 ## Fill and travel geometry (director review, midnight)
 
 - **`fill` covers the frame for every object shape.** The cover scale used the object's nominal size, so a phone filled only 1419 px of a 1920 frame (and a page or a ticket fell short too). It is now computed from the flat colour's real extent, allowing for its rounded corners, and through the carried camera's zoom and pan. A shape's parts (a person's head) fade with its face. Encoded check: the frames on both sides of each cut are one flat colour, for a phone filled through a 0.7× panned camera and for a wide word pill, in landscape and vertical.

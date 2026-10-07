@@ -302,7 +302,15 @@ export function compileStage(spec, { cue, end, where, frame, staged, root, headi
   }
   // Keys must run in time order; events are authored in any order.
   for (const a of actors.values()) for (const el of [a.group, a.card, a.dot]) el.keys.sort((p, q) => p.at - q.at);
-  const code = spec.code ? [codeElement(spec.code, { cue: v => at(v, null), where: `${where}.code`, staged, root, area })] : [];
+  // With no actors the code is the picture: by default it takes the stage area (wide, larger type,
+  // an inline diff centred down it) instead of the corner an editor beside a diagram uses.
+  const solo = spec.code && !(spec.actors?.length) ? (() => {
+    const tall = (frame?.height ?? 1080) > (frame?.width ?? 1920), aw = area.right - area.left, ah = area.bottom - area.top, size = tall ? 30 : 36;
+    const lines = Math.max(...[spec.code.before, spec.code.after].map(t => (typeof t === 'string' ? t.split('\n').length : 0)));
+    const h = lines ? (lines + 2.2) * size * 1.55 : 0;
+    return { x: area.left + aw * 0.08, w: aw * 0.84, size, y: lines ? area.top + Math.max(0, (ah - h) * 0.4) : area.top + ah * 0.1 };
+  })() : null;
+  const code = spec.code ? [codeElement({ ...solo, ...spec.code }, { cue: v => at(v, null), where: `${where}.code`, staged, root, area })] : [];
   const camera = spec.camera ? structuredClone(spec.camera) : {};
   if (camera.keys) camera.keys = camera.keys.map(k => ({ ...k, at: at(k.say ?? k.at, 0), say: undefined }));
   if (camera.focus?.keys) camera.focus.keys = camera.focus.keys.map(k => ({ ...k, at: at(k.say ?? k.at, 0), say: undefined }));

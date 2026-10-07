@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { createAgent, resolveScope, cleanScope, contextBlock, transcript } from '../engine/lib/agent/agent.mjs';
 import { scopeViolation, inside, pictureSize, createTools, voiceRecord, opsFromText } from '../engine/lib/agent/tools.mjs';
 import { readLink, updateLink } from '../engine/lib/agent/links.mjs';
-import { uploadToProject, uploadToDraft, createProject, safeName, projectsRoot } from '../engine/lib/agent/projects.mjs';
+import { uploadToProject, uploadToDraft, createProject, safeName, projectsRoot, slugify } from '../engine/lib/agent/projects.mjs';
 import { createRuntime, runtimeConfig, agentPaths, PERMISSIONS } from '../engine/lib/agent/runtime.mjs';
 import { studioState, studioCommand } from '../engine/lib/viewer/studio.mjs';
 
@@ -604,4 +604,9 @@ test('operations sent as JSON text forgive a trailing comma and say where they b
   assert.equal(opsFromText('[{"command":"set","value":"a ,} b"},]')[0].value, 'a ,} b');
   assert.equal(opsFromText('[{"command":"set","value":"quote \\" ,] and slash \\\\",}]')[0].value, 'quote " ,] and slash \\');
   assert.deepEqual(opsFromText('[ {"command":"delete","beat":"a"} , \n ]'), [{ command: 'delete', beat: 'a' }]);
+});
+
+test('a film folder named from a long idea never ends in a dash', () => {
+  assert.equal(slugify('A 30-second explainer of a pull request, for the engineers who review'), 'a-30-second-explainer-of-a-pull-request-for-the');
+  assert.equal(slugify('—'), 'film');
 });
