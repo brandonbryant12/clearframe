@@ -1,5 +1,13 @@
 # Changelog
 
+## A flood covers the frame whatever the shape's body
+
+- **Fill now places the object so its flat colour, which is its body, centres on the frame.** 9d2869a made a shape's flood colour its body exactly, but fill still centred the object's own origin. A person's shoulders hang below that origin, so on a tall frame the flood started at y 1210 of 1920 and could never cover the top (director repro).
+  - Emerge still returns the object to the pose it had before it filled.
+  - A beat that carries a flood without emerging now hides the drawn body and its parts from its first frame, as it already hid the face.
+- **Tests.** The coverage test now transforms the flat colour's actual corners through the object's pose and the camera. It covers every shape plus word and icon objects, both aspect ratios, and three camera states. A second test covers the held flood and the return pose. Both fail on 9d2869a.
+- **Encoded proof.** A person fill and return in both shapes covers the frame and returns. Night shift's bubble is unchanged in look; check 0 errors and qa 0 pops in both shapes.
+
 ## Code reads on a phone; a flood shrinks back cleanly
 
 - **On a tall frame, a code editor wraps long lines at its authored size instead of shrinking them toward 24 px.** A code-only stage there takes the stage's full width at 34 px and is centred down it.

@@ -218,23 +218,56 @@ test('a small cast gets room, a small spread is a multiple, and the rest return 
   }
 });
 
-test('fill covers the whole frame for any object shape, through a zoomed and panned camera', () => {
-  const kinds = [{ shape: 'phone' }, { shape: 'doc' }, { shape: 'ticket' }, { word: 'Login crash' }, { icon: 'file' }];
+test('fill covers the whole frame for every object, through the camera, measured at its transformed corners', () => {
+  const find = (els, id) => { for (const e of els) { if (e.id === id) return e; const c = e.children && find(e.children, id); if (c) return c; } };
+  const kinds = ['doc', 'bubble', 'phone', 'card', 'person', 'ticket', 'box'].map(shape => ({ shape })).concat([{ word: 'Login crash' }, { icon: 'file' }]);
+  const cameras = [null, { form: 'camera', zoom: 0.7, on: 'side', at: 0.5 }, { form: 'camera', zoom: 1.35, on: 'x', at: 0.5 }];
   for (const frame of [wide, { width: 1080, height: 1920 }])
     for (const kind of kinds)
-      for (const camera of [null, { form: 'camera', zoom: 0.7, on: 'side', at: 0.5 }]) {
+      for (const camera of cameras) {
         const cast = { objects: [{ id: 'x', color: 'accent2', size: 120, ...kind }, { id: 'side', icon: 'star' }],
           formations: [{ form: 'row', at: 0 }, ...(camera ? [camera] : []), { form: 'fill', ids: ['x'], at: 2 }] };
-        const carry = {};
-        expandCastProps({ cast }, { ...frame, beatId: 'f' }, { carry });
-        const p = carry.state.get('x'), cam = carry.camera, el = expandCastProps({ cast }, { ...frame, beatId: 'f' }, {}).elements;
-        const find = (els, id) => { for (const e of els) { if (e.id === id) return e; const c = e.children && find(e.children, id); if (c) return c; } };
-        const solid = find(el, 'f-cast-x-solid'), k = p.scale * cam.zoom;
-        // The solid's inscribed rectangle, through the camera, around where the object ends up.
-        const cx = frame.width / 2 + cam.x, cy = frame.height / 2 + cam.y, a = (solid.w / 2 - 0.293 * solid.r) * k, b = (solid.h / 2 - 0.293 * solid.r) * k;
-        const what = `${JSON.stringify(kind)} ${frame.width}x${frame.height}${camera ? ' with camera' : ''}`;
-        assert.ok(cx - a <= 0 && cx + a >= frame.width && cy - b <= 0 && cy + b >= frame.height, `fill covers the frame: ${what}`);
+        const carry = {}, els = expandCastProps({ cast }, { ...frame, beatId: 'f' }, { carry }).elements;
+        const p = carry.state.get('x'), cam = carry.camera, solid = find(els, 'f-cast-x-solid');
+        // The flat colour where it ends: scaled about the object's position, then through the camera
+        // (which scales about the frame's middle and pans).
+        const C = [frame.width / 2, frame.height / 2], k = p.scale * cam.zoom;
+        const screen = (sx, sy) => [C[0] + cam.zoom * (sx - C[0]) + cam.x, C[1] + cam.zoom * (sy - C[1]) + cam.y];
+        const [L, T] = screen(p.x + solid.x * p.scale, p.y + solid.y * p.scale), [R, B] = [L + solid.w * k, T + solid.h * k], rad = (solid.r ?? 0) * k;
+        const inside = ([x, y]) => {
+          if (x < L || x > R || y < T || y > B) return false;
+          const cx = Math.min(Math.max(x, L + rad), R - rad), cy = Math.min(Math.max(y, T + rad), B - rad);
+          return Math.hypot(x - cx, y - cy) <= rad;
+        };
+        const what = `${JSON.stringify(kind)} ${frame.width}x${frame.height}${camera ? ` camera ${camera.zoom}` : ''}`;
+        for (const corner of [[0, 0], [frame.width, 0], [0, frame.height], [frame.width, frame.height]])
+          assert.ok(inside(corner), `fill covers the frame corner ${corner}: ${what} (colour spans ${Math.round(L)},${Math.round(T)} to ${Math.round(R)},${Math.round(B)})`);
       }
+});
+
+test('emerge returns a filled object to where it stood, and a carried flood shows only its colour', () => {
+  for (const shape of ['person', 'bubble']) {
+    const carry = {};
+    const cast = { objects: [{ id: 'x', shape, color: 'accent2', size: 140 }], formations: [{ form: 'row', at: 0 }, { form: 'fill', ids: ['x'], at: 2 }] };
+    expandCastProps({ cast }, { ...wide, beatId: 'a' }, { carry });
+    const before = carry.state.get('x').filled;
+    // The next cast beat starts from the filled pose: the body and its parts are hidden from its
+    // first frame, then come back as it emerges, to the pose it had before it filled.
+    const next = {};
+    const els = expandCastProps({ cast: { formations: [{ form: 'emerge', ids: ['x'], at: 0, dur: 1 }] } }, { ...wide, beatId: 'b' }, {
+      carry: next, state: carry.state, objects: carry.objects, threads: carry.threads, camera: carry.camera, unit: carry.unit }).elements;
+    const find = (list, id) => { for (const e of list) { if (e.id === id) return e; const c = e.children && find(e.children, id); if (c) return c; } };
+    // A beat that carries the flood without emerging shows only its colour too.
+    const held = expandCastProps({ cast: { formations: [{ form: 'camera', zoom: 1, at: 0 }] } }, { ...wide, beatId: 'h' }, {
+      carry: {}, state: carry.state, objects: carry.objects, threads: carry.threads, camera: carry.camera, unit: carry.unit }).elements;
+    for (const c of find(held, 'h-cast-x').children.filter(c => /-(tile|part\d+)$/.test(c.id)))
+      assert.equal(c.keys?.[0]?.opacity, 0, `${shape}: ${c.id} stays hidden in a beat that holds the flood`);
+    const g = find(els, 'b-cast-x');
+    for (const c of g.children.filter(c => /-(tile|part\d+)$/.test(c.id)))
+      assert.equal(c.keys?.[0]?.opacity, 0, `${shape}: ${c.id} is hidden on the first frame of a carried flood`);
+    const after = next.state.get('x');
+    for (const k of ['x', 'y', 'scale']) assert.ok(Math.abs((after[k] ?? 1) - (before[k] ?? 1)) < 1e-6, `${shape}: emerge returns ${k}`);
+  }
 });
 
 test('several journeys in one beat share the keyframe budget, or are refused clearly', () => {

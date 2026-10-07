@@ -246,20 +246,23 @@ function objectElement(o, id, size, base, enter, look = 'tiles') {
   const s = o.size ?? size, children = [], L = LOOK[look];
   // Hidden and shown by keys from frame one (a base opacity would multiply every later key).
   const face = el => (base.filled ? { ...el, keys: [{ at: 0, opacity: 0, dur: 0 }] } : el);
+  // An object that is the frame shows only its flat colour: its drawn body and parts are hidden
+  // too (their outline and hatching would show past the colour's edge as it emerges).
+  const under = el => (base.filled ? { ...el, keys: [{ at: 0, opacity: 0, dur: 0 }] } : el);
   if (o.word) {
     const [hw, hh] = objectExtent(o, size), fs = s * (look === 'drawn' ? 0.36 : 0.3);
-    children.push({ type: 'rect', id: `${id}-tile`, x: -hw, y: -hh, w: hw * 2, h: hh * 2, r: hh, fill: o.color, enter: 'none', ...L.tile(s) },
+    children.push(under({ type: 'rect', id: `${id}-tile`, x: -hw, y: -hh, w: hw * 2, h: hh * 2, r: hh, fill: o.color, enter: 'none', ...L.tile(s) }),
       face({ type: 'text', id: `${id}-word`, text: o.word, x: 0, y: fs * 0.36, size: fs, font: L.font, fill: look === 'drawn' || o.color !== 'ink' ? 'ink' : 'bg', anchor: 'middle', fit: hw * 2 - s * 0.3, enter: 'none' }));
   } else if (o.shape) {
     // The body takes the look; parts of the body (a bubble's tail, a person's head) do too, and the
     // details are drawn in the colour that reads on it (by hand in the drawn look).
     const { body, details } = SHAPES[o.shape].draw(s, L.mark(o), o.color);
-    children.push({ type: 'rect', id: `${id}-tile`, ...body, fill: o.color, enter: 'none', ...L.tile(s) });
+    children.push(under({ type: 'rect', id: `${id}-tile`, ...body, fill: o.color, enter: 'none', ...L.tile(s) }));
     details.forEach(({ body: part, ...el }, k) => children.push(part
-      ? { ...el, id: `${id}-part${k}`, enter: 'none', ...L.tile(s) }
+      ? under({ ...el, id: `${id}-part${k}`, enter: 'none', ...L.tile(s) })
       : face({ ...el, id: `${id}-detail${k}`, enter: 'none', ...(look === 'drawn' && el.type !== 'circle' ? { rough: { amount: 0.8, passes: 1 } } : {}) })));
   } else {
-    children.push({ type: 'rect', id: `${id}-tile`, x: -s / 2, y: -s / 2, w: s, h: s, r: s * 0.26, fill: o.color, enter: 'none', ...L.tile(s) },
+    children.push(under({ type: 'rect', id: `${id}-tile`, x: -s / 2, y: -s / 2, w: s, h: s, r: s * 0.26, fill: o.color, enter: 'none', ...L.tile(s) }),
       face({ type: 'icon', id: `${id}-icon`, name: o.icon, x: 0, y: 0, size: s * 0.52, stroke: L.mark(o), enter: 'none' }));
   }
   // The flat colour an object floods the frame with (fill/emerge) is its body exactly, so the
@@ -445,11 +448,14 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
         // frame edges, after the camera's zoom and pan move the middle of the stage.
         const a = solid.w / 2 - 0.293 * solid.r, b = solid.h / 2 - 0.293 * solid.r, z = cam.zoom;
         const cover = Math.max((frame.width / 2 + Math.abs(cam.x)) / (z * a), (frame.height / 2 + Math.abs(cam.y)) / (z * b)) * 1.06;
-        el.keys.push({ at: t, x: frame.width / 2 - base.x, y: frame.height / 2 - base.y, scale: cover, rotate: 0, opacity: 1, dur, ease: f.ease ?? 'in' });
+        // The flat colour is the body, which need not sit on the object's origin (a person's
+        // shoulders hang below it): place the group so the body's centre, scaled, lands mid-frame.
+        const fx = frame.width / 2 - cover * (solid.x + solid.w / 2), fy = frame.height / 2 - cover * (solid.y + solid.h / 2);
+        el.keys.push({ at: t, x: fx - base.x, y: fy - base.y, scale: cover, rotate: 0, opacity: 1, dur, ease: f.ease ?? 'in' });
         solid.keys.push({ at: t, opacity: 1, dur: dur * 0.6 });
         for (const c of faces) c.keys = [...(c.keys ?? [{ at: 0, opacity: 1, dur: 0 }]), { at: t, opacity: 0, dur: dur * 0.4 }];
         tile.keys = [...(tile.keys ?? [{ at: 0, opacity: 1, dur: 0 }]), { at: t + dur * 0.6, opacity: 0, dur: dur * 0.15 }];
-        pose.set(id, { x: frame.width / 2, y: frame.height / 2, scale: cover, rotate: 0, opacity: 1, z: ++top, filled: { ...p, filled: undefined } });
+        pose.set(id, { x: fx, y: fy, scale: cover, rotate: 0, opacity: 1, z: ++top, filled: { ...p, filled: undefined } });
         edges.fill = FILL_TONES[o.color];
       } else {
         const back = p.filled;
