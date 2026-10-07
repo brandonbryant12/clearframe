@@ -1,0 +1,465 @@
+{
+ "version": 2,
+ "title": "Night shift",
+ "logline": "A curated cast study: a report travels from a phone to the one person awake, becomes the fix, and goes home before morning.",
+ "format": {
+  "preset": "vertical",
+  "fps": 30
+ },
+ "theme": "ink",
+ "type": "geometric",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.7
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "lens": {
+  "handheld": 0,
+  "bloom": 0.25
+ },
+ "texture": {
+  "grain": 0.3,
+  "vignette": 0.45
+ },
+ "captions": false,
+ "music": false,
+ "beats": [
+  {
+   "id": "two",
+   "block": "canvas",
+   "vo": "Two in the morning.",
+   "hold": 1.8,
+   "props": {
+    "elements": [
+     {
+      "type": "circle",
+      "id": "lamp",
+      "cx": 540,
+      "cy": 930,
+      "r": 300,
+      "fill": "accent2",
+      "opacity": 0.12,
+      "blur": 60,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "line",
+      "id": "desk",
+      "x1": 300,
+      "y1": 1130,
+      "x2": 780,
+      "y2": 1130,
+      "stroke": "muted",
+      "width": 5,
+      "cap": "round",
+      "rough": {
+       "amount": 1,
+       "passes": 2
+      },
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "time",
+      "text": "2:14",
+      "x": 540,
+      "y": 470,
+      "size": 210,
+      "font": "display",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0.2,
+      "enter": "fade",
+      "dur": 1.2
+     }
+    ],
+    "cast": {
+     "look": "drawn",
+     "objects": [
+      {
+       "id": "phone",
+       "shape": "phone",
+       "color": "accent",
+       "size": 240,
+       "enter": "none",
+       "float": false
+      },
+      {
+       "id": "person",
+       "shape": "person",
+       "color": "surface",
+       "size": 290,
+       "enter": "none",
+       "float": false
+      }
+     ],
+     "formations": [
+      {
+       "form": "cluster",
+       "ids": [
+        "phone"
+       ],
+       "center": [
+        540,
+        1540
+       ],
+       "at": 0
+      },
+      {
+       "form": "cluster",
+       "ids": [
+        "person"
+       ],
+       "center": [
+        540,
+        1000
+       ],
+       "at": 0
+      },
+      {
+       "form": "wave",
+       "ids": [
+        "phone"
+       ],
+       "at": 1.7
+      },
+      {
+       "form": "wave",
+       "ids": [
+        "phone"
+       ],
+       "at": 2.3
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "report",
+   "block": "canvas",
+   "vo": "A report slips out of someone's phone and finds the one person awake.",
+   "props": {
+    "elements": [
+     {
+      "type": "circle",
+      "id": "lamp",
+      "cx": 540,
+      "cy": 930,
+      "r": 300,
+      "fill": "accent2",
+      "opacity": 0.12,
+      "blur": 60,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "line",
+      "id": "desk",
+      "x1": 300,
+      "y1": 1130,
+      "x2": 780,
+      "y2": 1130,
+      "stroke": "muted",
+      "width": 5,
+      "cap": "round",
+      "rough": {
+       "amount": 1,
+       "passes": 2
+      },
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "time",
+      "text": "2:14",
+      "x": 540,
+      "y": 470,
+      "size": 210,
+      "font": "display",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0,
+      "enter": "none",
+      "exitAt": 0.6,
+      "exit": "fade"
+     }
+    ],
+    "cast": {
+     "objects": [
+      {
+       "id": "report",
+       "shape": "bubble",
+       "color": "accent2",
+       "size": 200,
+       "float": false
+      }
+     ],
+     "formations": [
+      {
+       "form": "split",
+       "from": "phone",
+       "ids": [
+        "report"
+       ],
+       "say": "slips",
+       "spread": 0.6
+      },
+      {
+       "form": "travel",
+       "ids": [
+        "report"
+       ],
+       "to": "person",
+       "via": [
+        [
+         880,
+         1300
+        ]
+       ],
+       "say": "finds",
+       "dur": 1.8
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "dive",
+   "block": "canvas",
+   "vo": "She opens it.",
+   "hold": 0.9,
+   "props": {
+    "elements": [
+     {
+      "type": "circle",
+      "id": "lamp",
+      "cx": 540,
+      "cy": 930,
+      "r": 300,
+      "fill": "accent2",
+      "opacity": 0.12,
+      "blur": 60,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "line",
+      "id": "desk",
+      "x1": 300,
+      "y1": 1130,
+      "x2": 780,
+      "y2": 1130,
+      "stroke": "muted",
+      "width": 5,
+      "cap": "round",
+      "rough": {
+       "amount": 1,
+       "passes": 2
+      },
+      "at": 0,
+      "enter": "none"
+     }
+    ],
+    "cast": {
+     "formations": [
+      {
+       "form": "camera",
+       "zoom": 1.35,
+       "on": "report",
+       "at": 0,
+       "dur": 1.6
+      },
+      {
+       "form": "fill",
+       "ids": [
+        "report"
+       ],
+       "say": "opens",
+       "dur": 0.9
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "code",
+   "block": "stage",
+   "vo": "One stray comma, and the line that drops it.",
+   "hold": 1.2,
+   "props": {
+    "code": {
+     "commit": "f0bcc0b",
+     "file": "engine/lib/agent/tools.mjs",
+     "repo": "../..",
+     "window": [
+      34,
+      39
+     ],
+     "title": "tools.mjs",
+     "say": "comma"
+    }
+   }
+  },
+  {
+   "id": "back",
+   "block": "canvas",
+   "vo": "The fix goes back the way the report came.",
+   "hold": 0.9,
+   "props": {
+    "elements": [
+     {
+      "type": "circle",
+      "id": "lamp",
+      "cx": 540,
+      "cy": 930,
+      "r": 300,
+      "fill": "accent2",
+      "opacity": 0.12,
+      "blur": 60,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "line",
+      "id": "desk",
+      "x1": 300,
+      "y1": 1130,
+      "x2": 780,
+      "y2": 1130,
+      "stroke": "muted",
+      "width": 5,
+      "cap": "round",
+      "rough": {
+       "amount": 1,
+       "passes": 2
+      },
+      "at": 0,
+      "enter": "none"
+     }
+    ],
+    "cast": {
+     "objects": [
+      {
+       "id": "check",
+       "icon": "check",
+       "color": "positive",
+       "size": 190,
+       "float": false
+      }
+     ],
+     "formations": [
+      {
+       "form": "emerge",
+       "ids": [
+        "report"
+       ],
+       "at": 0,
+       "dur": 0.9
+      },
+      {
+       "form": "camera",
+       "zoom": 1,
+       "at": 0.2,
+       "dur": 1.2
+      },
+      {
+       "form": "swap",
+       "out": "report",
+       "in": "check",
+       "by": [
+        "person"
+       ],
+       "say": "fix",
+       "dur": 0.6
+      },
+      {
+       "form": "travel",
+       "ids": [
+        "check"
+       ],
+       "to": "phone",
+       "via": [
+        [
+         250,
+         1300
+        ]
+       ],
+       "say": "back",
+       "dur": 1.6
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "morning",
+   "block": "canvas",
+   "vo": "By six, nobody knows it broke.",
+   "hold": 1.6,
+   "props": {
+    "elements": [
+     {
+      "type": "circle",
+      "id": "lamp",
+      "cx": 540,
+      "cy": 930,
+      "r": 300,
+      "fill": "accent2",
+      "opacity": 0.12,
+      "blur": 60,
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "line",
+      "id": "desk",
+      "x1": 300,
+      "y1": 1130,
+      "x2": 780,
+      "y2": 1130,
+      "stroke": "muted",
+      "width": 5,
+      "cap": "round",
+      "rough": {
+       "amount": 1,
+       "passes": 2
+      },
+      "at": 0,
+      "enter": "none"
+     },
+     {
+      "type": "text",
+      "id": "time",
+      "text": "6:00",
+      "x": 540,
+      "y": 470,
+      "size": 210,
+      "font": "display",
+      "fill": "ink",
+      "anchor": "middle",
+      "at": 0.4,
+      "enter": "fade",
+      "dur": 1.2
+     }
+    ],
+    "cast": {
+     "formations": [
+      {
+       "form": "merge",
+       "ids": [
+        "check"
+       ],
+       "into": "phone",
+       "say": "six",
+       "dur": 0.8
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

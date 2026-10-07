@@ -1,8 +1,13 @@
 # Changelog
 
+## Night shift: a curated study, and a swap's cause goes home
+
+- **`examples/night-shift`** is a 22-second study in one continuous picture, curated as a capability demonstration. At 2:14 a report slips out of a phone and travels to the one person awake. It fills the screen, becomes the real code fix (lines from `f0bcc0b`, read from git), comes back as a check, travels home and folds into the phone by 6:00. It uses only existing capabilities: drawn composed shapes on `ink`, `split`, `travel`, `camera`, `fill`/`emerge` into a code-only stage, `swap` `by`, `merge`, and type as the clock. check 0 errors and 0 pops in both shapes; critique 89.
+- **A swap's cause goes back where it stood, upright,** once the change has landed. It used to stay tilted on the object it worked at for the rest of the film.
+
 ## Inserted scenes follow their narration
 
-- **A scene the studio inserts is six seconds long only until it speaks.** Setting its narration removes that placeholder length, so the voice sets it (hold longer with `tail` or `min`), and the undo label says so. A duration someone chose is kept. In live runs 3 and 5 every inserted scene stayed at exactly 6 s whatever its narration: run 3's scenes held 3 to 11 words each for 6 s, and run 5's first cut ran 42 s for a 30-second brief until the agent hand-set durations.
+- **A scene the studio inserts is six seconds long only until it speaks.** Setting its narration removes that placeholder length, so the voice sets it (hold longer with `hold` or `tail`; `min` cannot stretch a scene inside one continuous narration take), and the undo label says so. A duration someone chose is kept. In live runs 3 and 5 every inserted scene stayed at exactly 6 s whatever its narration: run 3's scenes held 3 to 11 words each for 6 s, and run 5's first cut ran 42 s for a 30-second brief until the agent hand-set durations.
 
 ## A new object can travel in
 

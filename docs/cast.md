@@ -85,6 +85,7 @@ Not for evidence: numbers, charts and quotes stay in their own native forms with
 Start from the playbook: `new DIR --playbook process-cast [--vertical]` scaffolds five cast beats (arrive, sort, focus, change, result) to rewrite with your own objects and moves. References:
 - `examples/cast-study`: tiles. One cast, five moves, 17 s.
 - `examples/cast-journey`: `travel` through a drawn world (three stations as scenery).
+- `examples/night-shift`: a curated study. Split, travel, a camera lean into `fill`, the real code on the fill's colour, `emerge`, `swap` `by`, `merge`, and type as the clock.
 - `examples/cast-drawn`: the drawn look with marks. Bug triage in 24 s: copies ringed and crossed out, the first underlined, replies drawn back.
 
 Tests: `test/cast.test.mjs`.

@@ -84,7 +84,7 @@ export function castSpec(input, known = new Map(), knownLook = null) {
 }
 
 // Keyframes a move adds to an object it touches (a swap's cause works at it; a hub pulses per arrival).
-const KEYS_PER_MOVE = g => ({ wave: 2, swap: 5, merge: 2 * Math.max(1, (g.ids ?? []).length), split: 3, fill: 1, emerge: 1 })[g.form] ?? 1;
+const KEYS_PER_MOVE = g => ({ wave: 2, swap: 6, merge: 2 * Math.max(1, (g.ids ?? []).length), split: 3, fill: 1, emerge: 1 })[g.form] ?? 1;
 
 /** Where each object stands in one formation: {x, y, scale, rotate, opacity}. */
 export function formationTargets(f, ids, frame, { size, seed = 0, current = new Map(), extent = () => [size / 2, size / 2] }) {
@@ -511,11 +511,12 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
     if (f.form === 'swap' && f.by?.length && pose.has(f.out)) {
       const c = pose.get(f.out), reach = size * (c.scale ?? 1) * 0.4, from = Math.max(k ? times[k - 1] + 0.2 : 0, t - 1.2);
       f.by.filter(id => pose.has(id) && alive(id)).forEach((id, i) => {
-        const { el, base } = group(id), x = c.x + reach * (i % 2 ? -1 : 1) - base.x, y = c.y - reach - base.y, s = pose.get(id).scale ?? 1;
+        const p0 = pose.get(id), { el, base } = group(id), x = c.x + reach * (i % 2 ? -1 : 1) - base.x, y = c.y - reach - base.y, s = p0.scale ?? 1;
+        // Then, the change made, it goes back to where it stood, upright.
         el.keys.push({ at: from, x, y, scale: s, rotate: -18, dur: Math.max(0.2, Math.min(0.6, t - from - 0.45)), ease: 'inOut' },
           { at: t - 0.42, rotate: -4, y: y + 6, dur: 0.12 }, { at: t - 0.28, rotate: -22, y, dur: 0.12 }, { at: t - 0.14, rotate: -8, y: y + 6, dur: 0.12 },
-          { at: t, rotate: -18, y, dur: 0.2 });
-        pose.set(id, { ...pose.get(id), x: base.x + x, y: base.y + y, rotate: -18 });
+          { at: t, rotate: -18, y, dur: 0.2 },
+          { at: t + Math.max(0.5, dur * 0.9), x: p0.x - base.x, y: p0.y - base.y, scale: s, rotate: p0.rotate ?? 0, dur: 0.7, ease: 'inOut' });
       });
       // The one being changed gives under each stroke.
       const { el, base } = group(f.out), s0 = c.scale ?? 1, [x, y] = [c.x - base.x, c.y - base.y];
