@@ -1332,6 +1332,1310 @@
       "camera": {
         "move": "in",
         "amount": 0.5
+      },
+      "tall": {
+        "elements": [
+          {
+            "type": "rect",
+            "x": -120,
+            "y": 420,
+            "w": 220,
+            "h": 430,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 110,
+            "y": 690,
+            "w": 130,
+            "h": 160,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 250,
+            "y": 690,
+            "w": 190,
+            "h": 160,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 450,
+            "y": 600,
+            "w": 100,
+            "h": 250,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 560,
+            "y": 600,
+            "w": 160,
+            "h": 250,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 730,
+            "y": 555,
+            "w": 220,
+            "h": 295,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 960,
+            "y": 645,
+            "w": 130,
+            "h": 205,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1100,
+            "y": 690,
+            "w": 190,
+            "h": 160,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1300,
+            "y": 600,
+            "w": 100,
+            "h": 250,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1410,
+            "y": 600,
+            "w": 160,
+            "h": 250,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1580,
+            "y": 420,
+            "w": 220,
+            "h": 430,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1810,
+            "y": 555,
+            "w": 130,
+            "h": 295,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1950,
+            "y": 465,
+            "w": 190,
+            "h": 385,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "at": 0,
+            "enter": "none",
+            "type": "rect",
+            "x": -100,
+            "y": 898,
+            "w": 2120,
+            "h": 420,
+            "fill": {
+              "gradient": ["surface", "bg"],
+              "angle": 90
+            },
+            "opacity": 0.9
+          },
+          {
+            "at": 0,
+            "enter": "none",
+            "type": "rect",
+            "x": -100,
+            "y": 872,
+            "w": 2120,
+            "h": 26,
+            "fill": "line",
+            "opacity": 0.55
+          },
+          {
+            "at": 0,
+            "enter": "none",
+            "type": "line",
+            "x1": -100,
+            "y1": 872,
+            "x2": 2020,
+            "y2": 872,
+            "stroke": "muted",
+            "width": 3
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 840,
+                "dur": 7,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": -981,
+                "cy": 883.6,
+                "rx": 128.8,
+                "ry": 9.8,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -1100,
+                "y": 808,
+                "w": 238,
+                "h": 50.4,
+                "r": 16.8,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-1052.4, 810.8],
+                  [-1018.8, 766],
+                  [-934.8, 766],
+                  [-898.4, 810.8]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-1032.8, 808],
+                  [-1010.4, 775.8],
+                  [-943.2, 775.8],
+                  [-918, 808]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -979.6,
+                "y": 773,
+                "w": 8.4,
+                "h": 36.4,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -1046.8,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -1046.8,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -915.2,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -915.2,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -870.4,
+                "y": 816.4,
+                "w": 9.8,
+                "h": 12.6,
+                "r": 2.8,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -1101.4,
+                "y": 816.4,
+                "w": 8.4,
+                "h": 15.4,
+                "r": 2.8,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 840,
+                "dur": 7,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": -561,
+                "cy": 883.6,
+                "rx": 128.8,
+                "ry": 9.8,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -680,
+                "y": 808,
+                "w": 238,
+                "h": 50.4,
+                "r": 16.8,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-632.4, 810.8],
+                  [-598.8, 766],
+                  [-514.8, 766],
+                  [-478.4, 810.8]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-612.8, 808],
+                  [-590.4, 775.8],
+                  [-523.2, 775.8],
+                  [-498, 808]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -559.6,
+                "y": 773,
+                "w": 8.4,
+                "h": 36.4,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -626.8,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -626.8,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -495.2,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -495.2,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -450.4,
+                "y": 816.4,
+                "w": 9.8,
+                "h": 12.6,
+                "r": 2.8,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -681.4,
+                "y": 816.4,
+                "w": 8.4,
+                "h": 15.4,
+                "r": 2.8,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 840,
+                "dur": 7,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": -141,
+                "cy": 883.6,
+                "rx": 128.8,
+                "ry": 9.8,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -260,
+                "y": 808,
+                "w": 238,
+                "h": 50.4,
+                "r": 16.8,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-212.4, 810.8],
+                  [-178.8, 766],
+                  [-94.8, 766],
+                  [-58.4, 810.8]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-192.8, 808],
+                  [-170.4, 775.8],
+                  [-103.2, 775.8],
+                  [-78, 808]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -139.6,
+                "y": 773,
+                "w": 8.4,
+                "h": 36.4,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -206.8,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -206.8,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -75.19999999999999,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -75.19999999999999,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -30.400000000000006,
+                "y": 816.4,
+                "w": 9.8,
+                "h": 12.6,
+                "r": 2.8,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -261.4,
+                "y": 816.4,
+                "w": 8.4,
+                "h": 15.4,
+                "r": 2.8,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 840,
+                "dur": 7,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 279,
+                "cy": 883.6,
+                "rx": 128.8,
+                "ry": 9.8,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 160,
+                "y": 808,
+                "w": 238,
+                "h": 50.4,
+                "r": 16.8,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [207.6, 810.8],
+                  [241.2, 766],
+                  [325.2, 766],
+                  [361.6, 810.8]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [227.2, 808],
+                  [249.6, 775.8],
+                  [316.8, 775.8],
+                  [342, 808]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 280.4,
+                "y": 773,
+                "w": 8.4,
+                "h": 36.4,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 213.2,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 213.2,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 344.8,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 344.8,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 389.6,
+                "y": 816.4,
+                "w": 9.8,
+                "h": 12.6,
+                "r": 2.8,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 158.6,
+                "y": 816.4,
+                "w": 8.4,
+                "h": 15.4,
+                "r": 2.8,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 840,
+                "dur": 7,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 699,
+                "cy": 883.6,
+                "rx": 128.8,
+                "ry": 9.8,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 580,
+                "y": 808,
+                "w": 238,
+                "h": 50.4,
+                "r": 16.8,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [627.6, 810.8],
+                  [661.2, 766],
+                  [745.2, 766],
+                  [781.6, 810.8]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [647.2, 808],
+                  [669.6, 775.8],
+                  [736.8, 775.8],
+                  [762, 808]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 700.4,
+                "y": 773,
+                "w": 8.4,
+                "h": 36.4,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 633.2,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 633.2,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 764.8,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 764.8,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 809.6,
+                "y": 816.4,
+                "w": 9.8,
+                "h": 12.6,
+                "r": 2.8,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 578.6,
+                "y": 816.4,
+                "w": 8.4,
+                "h": 15.4,
+                "r": 2.8,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 840,
+                "dur": 7,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 1119,
+                "cy": 883.6,
+                "rx": 128.8,
+                "ry": 9.8,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1000,
+                "y": 808,
+                "w": 238,
+                "h": 50.4,
+                "r": 16.8,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1047.6, 810.8],
+                  [1081.2, 766],
+                  [1165.2, 766],
+                  [1201.6, 810.8]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1067.2, 808],
+                  [1089.6, 775.8],
+                  [1156.8, 775.8],
+                  [1182, 808]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1120.4,
+                "y": 773,
+                "w": 8.4,
+                "h": 36.4,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1053.2,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1053.2,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1184.8,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1184.8,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1229.6,
+                "y": 816.4,
+                "w": 9.8,
+                "h": 12.6,
+                "r": 2.8,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 998.6,
+                "y": 816.4,
+                "w": 8.4,
+                "h": 15.4,
+                "r": 2.8,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 840,
+                "dur": 7,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 1539,
+                "cy": 883.6,
+                "rx": 128.8,
+                "ry": 9.8,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1420,
+                "y": 808,
+                "w": 238,
+                "h": 50.4,
+                "r": 16.8,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1467.6, 810.8],
+                  [1501.2, 766],
+                  [1585.2, 766],
+                  [1621.6, 810.8]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1487.2, 808],
+                  [1509.6, 775.8],
+                  [1576.8, 775.8],
+                  [1602, 808]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1540.4,
+                "y": 773,
+                "w": 8.4,
+                "h": 36.4,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1473.2,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1473.2,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1604.8,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1604.8,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1649.6,
+                "y": 816.4,
+                "w": 9.8,
+                "h": 12.6,
+                "r": 2.8,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1418.6,
+                "y": 816.4,
+                "w": 8.4,
+                "h": 15.4,
+                "r": 2.8,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 840,
+                "dur": 7,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 1959,
+                "cy": 883.6,
+                "rx": 128.8,
+                "ry": 9.8,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1840,
+                "y": 808,
+                "w": 238,
+                "h": 50.4,
+                "r": 16.8,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1887.6, 810.8],
+                  [1921.2, 766],
+                  [2005.2, 766],
+                  [2041.6, 810.8]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1907.2, 808],
+                  [1929.6, 775.8],
+                  [1996.8, 775.8],
+                  [2022, 808]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1960.4,
+                "y": 773,
+                "w": 8.4,
+                "h": 36.4,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1893.2,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1893.2,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 2024.8,
+                "cy": 858.4,
+                "r": 23.8,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 2024.8,
+                "cy": 858.4,
+                "r": 8.4,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 2069.6,
+                "y": 816.4,
+                "w": 9.8,
+                "h": 12.6,
+                "r": 2.8,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1838.6,
+                "y": 816.4,
+                "w": 8.4,
+                "h": 15.4,
+                "r": 2.8,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "FIELD NOTES",
+            "x": 960,
+            "y": 300,
+            "size": 60,
+            "font": "mono",
+            "anchor": "middle",
+            "tracking": 0.3,
+            "fill": "accent",
+            "at": 0.1,
+            "enter": "fade",
+            "dur": 0.6
+          },
+          {
+            "type": "text",
+            "text": "Why headroom matters",
+            "x": 960,
+            "y": 470,
+            "size": 170,
+            "font": "serif-display",
+            "anchor": "middle",
+            "fit": 1600,
+            "fill": "ink",
+            "at": 0.3,
+            "enter": "rise",
+            "dur": 0.7
+          }
+        ]
       }
     },
     {
@@ -10522,7 +11826,1580 @@
           }
         ]
       },
-      "hold": 1
+      "hold": 1,
+      "tall": {
+        "elements": [
+          {
+            "type": "rect",
+            "x": -120,
+            "y": 662.5,
+            "w": 190,
+            "h": 137.5,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 80,
+            "y": 613,
+            "w": 100,
+            "h": 187.00000000000003,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 190,
+            "y": 613,
+            "w": 160,
+            "h": 187.00000000000003,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 360,
+            "y": 637.75,
+            "w": 220,
+            "h": 162.25,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 590,
+            "y": 613,
+            "w": 130,
+            "h": 187.00000000000003,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 730,
+            "y": 588.25,
+            "w": 190,
+            "h": 211.75000000000003,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 930,
+            "y": 613,
+            "w": 100,
+            "h": 187.00000000000003,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1040,
+            "y": 712,
+            "w": 160,
+            "h": 88,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1210,
+            "y": 613,
+            "w": 220,
+            "h": 187.00000000000003,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 637.75,
+            "w": 130,
+            "h": 162.25,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1580,
+            "y": 588.25,
+            "w": 190,
+            "h": 211.75000000000003,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1780,
+            "y": 613,
+            "w": 100,
+            "h": 187.00000000000003,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1890,
+            "y": 588.25,
+            "w": 160,
+            "h": 211.75000000000003,
+            "r": 4,
+            "fill": "line",
+            "opacity": 0.45,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "at": 0,
+            "enter": "none",
+            "type": "rect",
+            "x": -100,
+            "y": 848,
+            "w": 2120,
+            "h": 420,
+            "fill": {
+              "gradient": ["surface", "bg"],
+              "angle": 90
+            },
+            "opacity": 0.9
+          },
+          {
+            "at": 0,
+            "enter": "none",
+            "type": "rect",
+            "x": -100,
+            "y": 822,
+            "w": 2120,
+            "h": 26,
+            "fill": "line",
+            "opacity": 0.55
+          },
+          {
+            "at": 0,
+            "enter": "none",
+            "type": "line",
+            "x1": -100,
+            "y1": 822,
+            "x2": 2020,
+            "y2": 822,
+            "stroke": "muted",
+            "width": 3
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 1080,
+                "dur": 9,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": -1115,
+                "cy": 824,
+                "rx": 92,
+                "ry": 7,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -1200,
+                "y": 770,
+                "w": 170,
+                "h": 36,
+                "r": 12,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-1166, 772],
+                  [-1142, 740],
+                  [-1082, 740],
+                  [-1056, 772]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-1152, 770],
+                  [-1136, 747],
+                  [-1088, 747],
+                  [-1070, 770]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -1114,
+                "y": 745,
+                "w": 6,
+                "h": 26,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -1162,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -1162,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -1068,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -1068,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -1036,
+                "y": 776,
+                "w": 7,
+                "h": 9,
+                "r": 2,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -1201,
+                "y": 776,
+                "w": 6,
+                "h": 11,
+                "r": 2,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 1080,
+                "dur": 9,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": -755,
+                "cy": 824,
+                "rx": 92,
+                "ry": 7,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -840,
+                "y": 770,
+                "w": 170,
+                "h": 36,
+                "r": 12,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-806, 772],
+                  [-782, 740],
+                  [-722, 740],
+                  [-696, 772]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-792, 770],
+                  [-776, 747],
+                  [-728, 747],
+                  [-710, 770]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -754,
+                "y": 745,
+                "w": 6,
+                "h": 26,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -802,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -802,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -708,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -708,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -676,
+                "y": 776,
+                "w": 7,
+                "h": 9,
+                "r": 2,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -841,
+                "y": 776,
+                "w": 6,
+                "h": 11,
+                "r": 2,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 1080,
+                "dur": 9,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": -395,
+                "cy": 824,
+                "rx": 92,
+                "ry": 7,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -480,
+                "y": 770,
+                "w": 170,
+                "h": 36,
+                "r": 12,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-446, 772],
+                  [-422, 740],
+                  [-362, 740],
+                  [-336, 772]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-432, 770],
+                  [-416, 747],
+                  [-368, 747],
+                  [-350, 770]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -394,
+                "y": 745,
+                "w": 6,
+                "h": 26,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -442,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -442,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -348,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -348,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -316,
+                "y": 776,
+                "w": 7,
+                "h": 9,
+                "r": 2,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -481,
+                "y": 776,
+                "w": 6,
+                "h": 11,
+                "r": 2,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 1080,
+                "dur": 9,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": -35,
+                "cy": 824,
+                "rx": 92,
+                "ry": 7,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -120,
+                "y": 770,
+                "w": 170,
+                "h": 36,
+                "r": 12,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-86, 772],
+                  [-62, 740],
+                  [-2, 740],
+                  [24, 772]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [-72, 770],
+                  [-56, 747],
+                  [-8, 747],
+                  [10, 770]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -34,
+                "y": 745,
+                "w": 6,
+                "h": 26,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -82,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": -82,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 12,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 12,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 44,
+                "y": 776,
+                "w": 7,
+                "h": 9,
+                "r": 2,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": -121,
+                "y": 776,
+                "w": 6,
+                "h": 11,
+                "r": 2,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 1080,
+                "dur": 9,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 325,
+                "cy": 824,
+                "rx": 92,
+                "ry": 7,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 240,
+                "y": 770,
+                "w": 170,
+                "h": 36,
+                "r": 12,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [274, 772],
+                  [298, 740],
+                  [358, 740],
+                  [384, 772]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [288, 770],
+                  [304, 747],
+                  [352, 747],
+                  [370, 770]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 326,
+                "y": 745,
+                "w": 6,
+                "h": 26,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 278,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 278,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 372,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 372,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 404,
+                "y": 776,
+                "w": 7,
+                "h": 9,
+                "r": 2,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 239,
+                "y": 776,
+                "w": 6,
+                "h": 11,
+                "r": 2,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 1080,
+                "dur": 9,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 685,
+                "cy": 824,
+                "rx": 92,
+                "ry": 7,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 600,
+                "y": 770,
+                "w": 170,
+                "h": 36,
+                "r": 12,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [634, 772],
+                  [658, 740],
+                  [718, 740],
+                  [744, 772]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [648, 770],
+                  [664, 747],
+                  [712, 747],
+                  [730, 770]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 686,
+                "y": 745,
+                "w": 6,
+                "h": 26,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 638,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 638,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 732,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 732,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 764,
+                "y": 776,
+                "w": 7,
+                "h": 9,
+                "r": 2,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 599,
+                "y": 776,
+                "w": 6,
+                "h": 11,
+                "r": 2,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 1080,
+                "dur": 9,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 1045,
+                "cy": 824,
+                "rx": 92,
+                "ry": 7,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 960,
+                "y": 770,
+                "w": 170,
+                "h": 36,
+                "r": 12,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [994, 772],
+                  [1018, 740],
+                  [1078, 740],
+                  [1104, 772]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1008, 770],
+                  [1024, 747],
+                  [1072, 747],
+                  [1090, 770]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1046,
+                "y": 745,
+                "w": 6,
+                "h": 26,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 998,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 998,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1092,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1092,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1124,
+                "y": 776,
+                "w": 7,
+                "h": 9,
+                "r": 2,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 959,
+                "y": 776,
+                "w": 6,
+                "h": 11,
+                "r": 2,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 1080,
+                "dur": 9,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 1405,
+                "cy": 824,
+                "rx": 92,
+                "ry": 7,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1320,
+                "y": 770,
+                "w": 170,
+                "h": 36,
+                "r": 12,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1354, 772],
+                  [1378, 740],
+                  [1438, 740],
+                  [1464, 772]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1368, 770],
+                  [1384, 747],
+                  [1432, 747],
+                  [1450, 770]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1406,
+                "y": 745,
+                "w": 6,
+                "h": 26,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1358,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1358,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1452,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1452,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1484,
+                "y": 776,
+                "w": 7,
+                "h": 9,
+                "r": 2,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1319,
+                "y": 776,
+                "w": 6,
+                "h": 11,
+                "r": 2,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 1080,
+                "dur": 9,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 1765,
+                "cy": 824,
+                "rx": 92,
+                "ry": 7,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1680,
+                "y": 770,
+                "w": 170,
+                "h": 36,
+                "r": 12,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1714, 772],
+                  [1738, 740],
+                  [1798, 740],
+                  [1824, 772]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [1728, 770],
+                  [1744, 747],
+                  [1792, 747],
+                  [1810, 770]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1766,
+                "y": 745,
+                "w": 6,
+                "h": 26,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1718,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1718,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1812,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 1812,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1844,
+                "y": 776,
+                "w": 7,
+                "h": 9,
+                "r": 2,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 1679,
+                "y": 776,
+                "w": 6,
+                "h": 11,
+                "r": 2,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "group",
+            "at": 0,
+            "enter": "none",
+            "keys": [
+              {
+                "at": 0,
+                "x": 1080,
+                "dur": 9,
+                "ease": "linear",
+                "hold": false
+              }
+            ],
+            "children": [
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "ellipse",
+                "cx": 2125,
+                "cy": 824,
+                "rx": 92,
+                "ry": 7,
+                "fill": "ink",
+                "opacity": 0.18
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 2040,
+                "y": 770,
+                "w": 170,
+                "h": 36,
+                "r": 12,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [2074, 772],
+                  [2098, 740],
+                  [2158, 740],
+                  [2184, 772]
+                ],
+                "closed": true,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "poly",
+                "points": [
+                  [2088, 770],
+                  [2104, 747],
+                  [2152, 747],
+                  [2170, 770]
+                ],
+                "closed": true,
+                "fill": "bg",
+                "opacity": 0.72
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 2126,
+                "y": 745,
+                "w": 6,
+                "h": 26,
+                "fill": "muted"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 2078,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 2078,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 2172,
+                "cy": 806,
+                "r": 17,
+                "fill": "ink"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "circle",
+                "cx": 2172,
+                "cy": 806,
+                "r": 6,
+                "fill": "line"
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 2204,
+                "y": 776,
+                "w": 7,
+                "h": 9,
+                "r": 2,
+                "fill": "bg",
+                "opacity": 0.9
+              },
+              {
+                "at": 0,
+                "enter": "none",
+                "type": "rect",
+                "x": 2039,
+                "y": 776,
+                "w": 6,
+                "h": 11,
+                "r": 2,
+                "fill": "accent2",
+                "opacity": 0.45
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Leave room for the unexpected.",
+            "x": 960,
+            "y": 400,
+            "size": 104,
+            "font": "serif-display",
+            "anchor": "middle",
+            "fit": 1560,
+            "fill": "ink",
+            "say": "Leave",
+            "enter": "rise",
+            "dur": 0.7
+          },
+          {
+            "type": "text",
+            "text": "Plan for about 70% full, not 100%.",
+            "x": 960,
+            "y": 506,
+            "size": 64,
+            "anchor": "middle",
+            "fit": 1300,
+            "fill": "muted",
+            "say": "plan",
+            "enter": "fade",
+            "dur": 0.6
+          }
+        ]
+      }
     }
   ]
 }
