@@ -1,5 +1,12 @@
 # Changelog
 
+## Finding the way: the maze sketch
+
+- **The `maze` sketch shows a way being found.** A seeded maze (a depth-first search on a grid, so a seed always draws the same maze) has a person at the entrance and a check at the exit. On a spoken word the one path through draws on and a token follows it. On the next, the exit lights.
+  - It suits onboarding, guidance, and navigating rules or a process.
+- **`examples/the-way-through`** shows it in both shapes, 10 s. `check` reports 0 errors and 0 warnings.
+- **`docs/ideas.md` and the library skill name the morning's compositions** under the story moves they serve.
+
 ## Closing a gap: the bridge sketch
 
 - **The `bridge` sketch shows a connection being built.** People stand on one cliff and what they need on the other. On a spoken word, towers rise, planks drop into place across the chasm and cables draw. On the next, cards start crossing and keep crossing.

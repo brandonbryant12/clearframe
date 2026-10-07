@@ -27,7 +27,7 @@ Choose the visual by the task:
 | Ground a story in imagery | a beat `plate` (full or split, palette `treatment`), image, video, annotate |
 | Follow spoken words | kinetic (highlight, reveal, word; `stack` for poster type) |
 | Explain a mechanism, metaphor or system | canvas (start from `sketch`: route, orbit, pipeline, network, balance, versus, burst) |
-| A story move in one composition, cued to the voice (`sketchText` and `sketchSay`) | `searchlight` (discovery, a hidden cause), `untangle` (simplification), `shortcut` (fewer steps, faster), `bridge` (integration), `vault` (security), `seedling` (growth), `cut-paper` (built from pieces), `pixel-chain` (one action sets off the rest) |
+| A story move in one composition, cued to the voice (`sketchText` and `sketchSay`) | `searchlight` (discovery, a hidden cause), `untangle` (simplification), `shortcut` (fewer steps, faster), `bridge` (integration), `maze` (guidance), `vault` (security), `seedling` (growth), `cut-paper` (built from pieces), `pixel-chain` (one action sets off the rest) |
 | Point at something in any scene | beat `art.over` (arrows, circles, labels placed with `still --grid`) |
 | Punctuate a turn or a number | `tone: accent`, a `panel`/`iris`/`whip` transition, centred `align` |
 | Promo and launch pieces | canvas `sketch`: `sunburst` (opener), `chat` (a conversation on a floating phone), `device` (a window swinging in over a sky), `marquee` (an end card ringed by type); `material` for one word of hero type |

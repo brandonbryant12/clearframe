@@ -155,6 +155,7 @@ const SYNONYMS = {
   sales: 'business customer product', customer: 'person user journey', team: 'people person',
   handmade: 'paper cut drawn tactile craft', tactile: 'paper cut handmade', craft: 'paper cut handmade print', collage: 'paper cut layered',
   private: 'lock security privacy vault safe', connect: 'bridge integration link network', integration: 'bridge connect link', partnership: 'bridge connect people', gap: 'bridge',
+  guide: 'maze path onboarding', confusing: 'maze tangle', onboarding: 'maze guide steps', navigate: 'maze path route',
  calendar: 'clock time schedule', app: 'phone product device screen',
 };
 const words = t => String(t ?? '').toLowerCase().match(/[a-z0-9]+/g) ?? [];

@@ -48,6 +48,7 @@ Choose by audience. A look picked only for variety reads as a gimmick.
 | Six tools became one flow (for the team that lived with them) | `sketch:untangle`, `example:one-line`, `sketch:versus`, `block:steps` | The same pieces leaving a tangle for a line. People who knew the old mess recognise the pieces, so the relief lands. `versus` would suit a quicker side-by-side. |
 | Your data stays private (for customers) | `sketch:vault`, `example:your-data`, `cast-shape:lock`, `palette:midnight` | A vault door closing over their things. Trust is easier to feel as a place than to read as a policy. |
 | We integrated with their system (for both teams) | `sketch:bridge`, `example:across`, `sketch:network`, `mechanism:stage` | A bridge built across a gap, then used. Both sides see themselves, and the moment of connection is visible. For engineers, a stage with real services may say more. |
+| We make account setup easy (for new customers) | `sketch:maze`, `example:the-way-through`, `sketch:untangle`, `playbook:tutorial` | One lit path through a maze. It admits the process is complicated and shows that someone has found the way. |
 | How a support ticket travels through the team | `example:cast-journey`, `cast-shape:ticket`, `cast-move:travel`, `playbook:process-cast`, `mechanism:world` | One ticket travelling through a drawn world of stations. Following one thing is easier than reading a flowchart. |
 
 ## Signs the concepts are too close

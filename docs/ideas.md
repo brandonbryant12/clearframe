@@ -27,6 +27,7 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 - **Build then transform:** draw the broken version, `exit` the broken part on "but", draw the fix in its place.
 - **Untangle:** the `untangle` sketch. Scattered cards and crossing curves glide into one row on a word, then a clean line carries the work: a messy process made simple.
 - **Fewer steps:** the `shortcut` sketch. A winding route through waits and a straight one, with two tokens at the same speed; the direct one arrives first. It shows speed without inventing a figure.
+- **A way through:** the `maze` sketch. A seeded maze, then the one path lit on a word and followed to the exit: guidance through complexity.
 - **A bridge:** the `bridge` sketch. Two sides of a gap, a bridge built on a word, then work crossing it: an integration or a partnership.
 
 ## Change over time
