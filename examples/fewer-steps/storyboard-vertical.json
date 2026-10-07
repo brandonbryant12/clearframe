@@ -1,0 +1,39 @@
+{
+ "version": 2,
+ "title": "Fewer steps",
+ "logline": "Checkout gets faster by skipping the waits, not by running harder.",
+ "format": {
+  "preset": "vertical",
+  "fps": 30
+ },
+ "theme": "ink",
+ "type": "geometric",
+ "motion": {
+  "preset": "gentle",
+  "intensity": 0.7
+ },
+ "transition": "cut",
+ "backdrop": "none",
+ "captions": false,
+ "music": false,
+ "beats": [
+  {
+   "id": "race",
+   "block": "canvas",
+   "hold": 1.4,
+   "vo": "Checkout used to stop and wait four times. The new path skips the waits. Both leave together, at the same speed. The new one is there first.",
+   "props": {
+    "sketch": "shortcut",
+    "sketchText": {
+     "OLD": "Four waits",
+     "NEW": "Direct"
+    },
+    "sketchSay": {
+     "SHORTCUT": "skips",
+     "GO": "leave",
+     "ARRIVE": "first"
+    }
+   }
+  }
+ ]
+}

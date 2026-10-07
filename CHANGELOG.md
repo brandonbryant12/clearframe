@@ -1,5 +1,13 @@
 # Changelog
 
+## Faster by taking fewer steps: the shortcut sketch
+
+- **The `shortcut` sketch shows speed as a mechanism.** An old winding route runs through four waits (clocks), and a straight new route draws across. Two tokens leave together at the same speed, measured along each route, and the one on the new route arrives first only because its way is shorter. The picture claims fewer steps, never a measured speed-up.
+  - It suits a faster checkout, fewer handoffs, a direct integration.
+  - Follow it with a sourced figure if there is one.
+- **`examples/fewer-steps`** shows it in both shapes, 11 s. `check` reports 0 errors and 0 warnings.
+- **Sketch lines in `find` now end with what to fill**: the sketch's `sketchText` words and `sketchSay` moments.
+
 ## From a tangle to a line: the untangle sketch
 
 - **The `untangle` sketch shows simplification.** Six scattered, turned cards are joined by crossing curves with friction points pulsing on them. On a spoken word the curves let go and the cards glide into one row (a column on tall frames). One clean line then draws through them, and a packet flows along it.

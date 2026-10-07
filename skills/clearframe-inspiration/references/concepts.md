@@ -2,7 +2,7 @@
 
 These are drawn from real `find` shortlists. The entries named exist in the library; the reasons are the kind of sentence to give a person.
 
-## One idea, three ways
+## One idea, four ways
 
 Brief: *"Our checkout is 40% faster. Explain it to the sales team."*
 
@@ -15,11 +15,14 @@ Brief: *"Our checkout is 40% faster. Explain it to the sales team."*
    - Why: it shows why it is faster, so they can explain it rather than just quote it.
    - Build with: `cast-shape:phone`, `server` and `clock`; `cast-move:travel` and `swap`; the `tiles` look.
    - Example: `examples/order-journey`.
-3. **The customer's side.** A person taps Buy and is done before the kettle boils. Kinetic words carry the line.
+3. **Fewer steps.** The old route winds through four waits and the new one goes straight, with two tokens racing at the same speed. Then the sourced figure lands.
+   - Why: it explains why it is faster without leaning on the number alone.
+   - Build with: `sketch:shortcut` (`example:fewer-steps`), then a `delta`.
+4. **The customer's side.** A person taps Buy and is done before the kettle boils. Kinetic words carry the line.
    - Why: it is the story a buyer hears, so it suits a pitch deck video.
    - Build with: `cast-shape:person`, `mechanism:kinetic` and `sketch:chat`.
 
-For an internal team, I would lean toward the second. It gives them the mechanism to explain the change in their own words, and the figure can still land at its end. Another audience, or the person's taste, could reasonably favour the first.
+For an internal team, I would lean toward the second or third. It gives them the mechanism to explain the change in their own words, and the figure can still land at its end. Another audience, or the person's taste, could reasonably favour the first.
 
 ## The same story, two looks
 

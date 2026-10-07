@@ -68,4 +68,4 @@ Choose a look for the audience and the rest of the film, not for variety. Keep t
 - **First look.** The first full look is still a rough cut (`draft DIR --rough`); detailed drawing comes after notes.
 - **Phone size.** `qa DIR` writes a 360 px `phone.png`.
 
-Worked calibration (one idea three ways, and different ideas with different choices): [references/concepts.md](references/concepts.md). Read it when unsure how far apart concepts should be.
+Worked calibration (one idea four ways, and different ideas with different choices): [references/concepts.md](references/concepts.md). Read it when unsure how far apart concepts should be.
