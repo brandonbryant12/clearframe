@@ -2512,6 +2512,9 @@
                     "sketchSay": {
                       "description": "Spoken words for a sketch’s named moments, so they land on the voice: {\"FIRST\": \"logs\"} (each sketch’s use lists its cues)"
                     },
+                    "place": {
+                      "description": "Draw this beat’s picture (its sketch and its own elements) as one panel of a world at [x, y] world pixels, or [x, y, scale]: give consecutive beats one world, a panel each and a view on it, then pull back to show them all (a board)"
+                    },
                     "seed": {
                       "description": "Varies a sketch’s seeded layout (buildings, ridges, swell)"
                     },

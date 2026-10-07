@@ -130,6 +130,14 @@ While the camera holds, it drifts in slowly (`viewDrift`, default 3% of the view
 - **Words it reaches.** A tall frame shows far more above and below. Any word it reaches, including words drawn by earlier beats of the same world, is taken in whole while type stays readable, or the frame slides past it as long as the subject stays roughly centred. Words that travel, turn or scale are not placed.
 - **When it cannot work.** A side-by-side composition (a map beside its labels, a wide pull-back with small labels) cannot survive the crop. Give that beat `viewTall: [x, y, w, h]` (9:16), or lay the vertical cut out differently. In a playbook, a beat's `tall` props are that different layout (see `library/README.md`). `check` reports what still does not fit; confirm with `world DIR` and `still` on the vertical project.
 
+**A board: panels of one world, then the whole.** `place: [x, y]` (or `[x, y, scale]`) draws a canvas beat's picture (its `sketch` and its own `elements`) as one panel of a world at those world pixels. Give consecutive beats the same `world`, a panel each with a `view` on it, and a last beat whose `view` takes in all of them. The camera then holds close on each panel in turn, travels across the gaps between them, and pulls back to show them side by side, each still alive on its own clock: the relation between each detail and the whole. A placed panel is flat (its `z` depth layers are dropped, so they cannot slide out of it as the camera travels), and the sketch's own camera (`view`, `dolly`, `focus`) gives way to the world's.
+
+- **No clipping.** `place` moves and scales a drawing but does not clip it. A sketch drawn wider than its frame (`rooftops` pans its own camera) shows past its panel's edge while the camera travels and in the whole view. Cover the margins and gaps in the last beat with rects in the board's `bg`, or choose drawings that stay inside their frame.
+- **Small words.** Words that the whole view would shrink below readable should leave while the camera is on another panel (`exitAt` after their beat).
+- **Tall frames.** Full-height panels pull back to a narrow column, where each reads as a picture strip, not its detail. On a phone, keep the board short or end on one panel.
+
+`examples/by-morning` builds the same story both ways (`storyboard-*.json` as cuts, `storyboard-board-*.json` as a board).
+
 `clearframe world DIR` renders the whole world at its final state with every beat's camera rect outlined and numbered. Use it to lay out stations and choose views before rendering the film, and again after any change of layout.
 
 Good worlds: a journey (source → process → destination), a timeline laid out left to right, a map zooming from region to street, a machine explored part by part, one diagram built up and then revealed whole.

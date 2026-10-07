@@ -23,6 +23,16 @@ These are real outputs, from `node engine/cli.mjs` or the studio agent's `clearf
    - `sketch:desk` and `sketch:rooftops` list no slots or moments. Their timing is fixed, so changing *when* something happens means copying the drawing.
 4. **Copy the drawing.** `sketch('desk', shape)` and `sketch('rooftops', shape)` in [build.mjs](build.mjs) return the elements; in the studio, `clearframe_catalog` topic `sketch` returns them; by hand, use `node engine/cli.mjs sketch NAME --vertical`. The script changes only what the story needs (the light's cue, and the windows' start), keeps each sketch's camera (`dolly`, `view`), and puts the elements in `props.elements`.
 
+## The same story as one board (detail to whole)
+
+`storyboard-board-*.json` tells the same three moments as panels of one world, each placed with `place: [x, y]`. The camera holds close on each panel in turn and travels across the gaps between them (the cuts become camera moves). It then pulls back to show the person, the app and the city side by side, each still alive, with one line under them: "Built at night. Opened by morning."
+
+- **Words.** The product card's words would shrink below readable in the whole view, so (copied from `device`) they leave while the camera is on the city (`exitAt`).
+- **Spill.** `place` does not clip, and `rooftops` is drawn wider than its frame, so the last beat lays background mats over the margins and gaps.
+- **Checks.** Both shapes report 0 errors and 0 warnings in `check`. The motion sheets were made with the studio agent's own `clearframe_look` handler (called by a script, not a model).
+- **Limit:** on a tall frame the three full-height panels pull back to a narrow column, where each reads as a picture strip, not its detail.
+- **Limit:** while the camera travels between panels, `rooftops` still shows a little past its edge.
+
 ## Checks and limits
 
 - **`check`:** both shapes report 0 errors and 0 warnings (about 450 frames each, under 8 s to render on this Mac).

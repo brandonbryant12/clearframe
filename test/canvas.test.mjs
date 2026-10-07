@@ -158,6 +158,18 @@ test('canvas beats count as figures only when they count, and late cues fail', t
   assert.throws(() => normalizeProps('canvas', { elements: [] }), /at least one/);
 });
 
+test('place draws a beat\'s picture as one flat panel of a world, without the sketch\'s own camera', () => {
+  const p = normalizeProps('canvas', { world: 'w', view: [2080, 0, 1920, 1080], place: [2080, 0], sketch: 'rooftops' });
+  const panel = p.elements[0];
+  assert.equal(panel.type, 'group');
+  assert.deepEqual([panel.x, panel.y], [2080, 0]);
+  const deep = list => list.flatMap(el => [el, ...deep(el.children ?? [])]);
+  assert.ok(deep(panel.children).every(el => el.z == null), 'a panel is flat: no depth layer slides out of it');
+  assert.deepEqual(p.view, [2080, 0, 1920, 1080], 'the world camera, not the sketch\'s own, frames the panel');
+  assert.equal(p.viewFrom, undefined);
+  assert.throws(() => normalizeProps('canvas', { world: 'w', view: [0, 0, 1920, 1080], place: [0, 'a'], elements: [{ type: 'circle', r: 4 }] }), /place must be/);
+});
+
 test('beat layers validate art, camera, tone and plate, and pass them to the renderer', t => {
   const sb = base();
   sb.beats = [

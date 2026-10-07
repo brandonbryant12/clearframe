@@ -1,5 +1,15 @@
 # Changelog
 
+## A board: several pictures, then the whole
+
+- **`place: [x, y]` (or `[x, y, scale]`)** draws a canvas beat's picture (its `sketch` and its own `elements`) as one panel of a world.
+  - With consecutive `world` beats, the camera holds close on each panel, travels across the gaps, and pulls back to show them all side by side, each still alive.
+  - A placed panel is flat: `z` is dropped so depth cannot slide out of it. The sketch's own camera gives way to the world's.
+  - `place` does not clip: a drawing made wider than its frame shows past its edge (cover the gaps with `bg` mats in the last beat).
+- **`find "…showreel…"`** surfaces `mechanism:board`, and `--id` prints a three-beat example that passes `check`.
+- **`examples/by-morning`** now tells its story both ways, as cuts and as a board, in both shapes. Both pass `check` with 0 errors and 0 warnings.
+  - Limit: on tall frames the overview is a narrow column of strips.
+
 ## The studio agent can look at what it rendered
 
 - **`clearframe_look`** returns one bounded picture of a finished render.

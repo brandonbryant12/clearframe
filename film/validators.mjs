@@ -458,12 +458,25 @@ export const VALIDATORS = {
       } catch (e) {
         h.fail(e.message);
       }
+      // A placed sketch is a panel of a larger picture: the world's camera frames it, not its own.
+      if (p.place != null) for (const k of ['view', 'viewFrom', 'viewDur', 'dolly', 'focus']) delete drawn[k];
       p.elements = [...drawn.elements, ...(p.elements ?? [])];
       for (const k of ['view', 'viewFrom', 'viewDur', 'dolly', 'focus']) if (drawn[k] != null) p[k] ??= drawn[k];
       delete p.sketch;
       delete p.sketchText;
       delete p.sketchSay;
       delete p.seed;
+    }
+    // A beat's drawing (its sketch and its own elements) placed as one panel of a larger picture, a
+    // world the camera travels: it moves to [x, y] in world pixels, scaled by s.
+    if (p.place != null) {
+      const [px, py, ps = 1] = Array.isArray(p.place) ? p.place : [];
+      if (![px, py, ps].every(Number.isFinite) || ps <= 0 || ps > 4) h.fail('place must be [x, y] or [x, y, scale] in world pixels (scale above 0, up to 4)');
+      // A panel is a flat picture: depth layers would slide out of its frame as the world camera travels.
+      const flat = list => (list ?? []).map(({ z, ...el }) => (el.children ? { ...el, children: flat(el.children) } : el));
+      p.elements = [{ type: 'group', x: px, y: py, enter: 'fade', at: 0, dur: 0.4,
+        ...(ps !== 1 ? { origin: [px, py], keys: [{ at: 0, scale: ps, dur: 0 }] } : {}), children: flat(p.elements) }];
+      delete p.place;
     }
     // A chart drawn as shapes with stable ids, so it can morph into the next beat's chart.
     if (p.chart != null) {
