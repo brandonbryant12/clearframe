@@ -305,12 +305,21 @@ export function compileStage(spec, { cue, end, where, frame, staged, root, headi
   // With no actors the code is the picture: by default it takes the stage area (wide, larger type,
   // an inline diff centred down it) instead of the corner an editor beside a diagram uses.
   const solo = spec.code && !(spec.actors?.length) ? (() => {
-    const tall = (frame?.height ?? 1080) > (frame?.width ?? 1920), aw = area.right - area.left, ah = area.bottom - area.top, size = tall ? 30 : 36;
+    // A tall frame's area is already inside its margins: there the editor takes all of its width,
+    // at a size a phone reads, and long lines wrap (fitCode) rather than shrink.
+    const tall = (frame?.height ?? 1080) > (frame?.width ?? 1920), aw = area.right - area.left, ah = area.bottom - area.top, size = tall ? 34 : 36;
     const lines = Math.max(...[spec.code.before, spec.code.after].map(t => (typeof t === 'string' ? t.split('\n').length : 0)));
     const h = lines ? (lines + 2.2) * size * 1.55 : 0;
-    return { x: area.left + aw * 0.08, w: aw * 0.84, size, y: lines ? area.top + Math.max(0, (ah - h) * 0.4) : area.top + ah * 0.1 };
+    return { x: area.left + (tall ? 0 : aw * 0.08), w: aw * (tall ? 1 : 0.84), size, y: lines ? area.top + Math.max(0, (ah - h) * 0.4) : area.top + ah * 0.1 };
   })() : null;
   const code = spec.code ? [codeElement({ ...solo, ...spec.code }, { cue: v => at(v, null), where: `${where}.code`, staged, root, area })] : [];
+  // Code read from git has no line count until it is fitted: on a tall frame, centre the fitted
+  // editor down the stage as inline code is, rather than leave it near the top.
+  if (solo && (frame?.height ?? 1080) > (frame?.width ?? 1920) && spec.code.y == null && !spec.code.before && !spec.code.after) {
+    const el = code[0], rows = Math.max(...el.steps.map(st => st.show?.length ?? 0), 1);
+    const h = el.size * (rows * (el.leading ?? 1.5) + (el.title ? 1.9 : 0) + 1.8);
+    el.y = area.top + Math.max(0, (area.bottom - area.top - h) * 0.4);
+  }
   const camera = spec.camera ? structuredClone(spec.camera) : {};
   if (camera.keys) camera.keys = camera.keys.map(k => ({ ...k, at: at(k.say ?? k.at, 0), say: undefined }));
   if (camera.focus?.keys) camera.focus.keys = camera.focus.keys.map(k => ({ ...k, at: at(k.say ?? k.at, 0), say: undefined }));

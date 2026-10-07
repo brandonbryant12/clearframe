@@ -1,5 +1,15 @@
 # Changelog
 
+## Code reads on a phone; a flood shrinks back cleanly
+
+- **On a tall frame, a code editor wraps long lines at its authored size instead of shrinking them toward 24 px.** A code-only stage there takes the stage's full width at 34 px and is centred down it.
+  - Night shift's vertical code beat shows the real lines from `f0bcc0b` at 34 px (it was 24 px in a narrower editor), with the two long ones wrapped under hanging indents.
+  - The lines are not changed or shortened. Landscape is byte-identical. The height fit still shrinks type if the rows would not fit.
+- **`emerge` shrinks back as the object's own shape.** A shape's flat colour is now its body exactly (it was a rectangle over the whole extent, tail included). The drawn body is hidden while the object is the frame, so its rough outline and hatching no longer poke past the flood's corners on the way back.
+  - The body only ever switches while the opaque flat colour covers it, so the object never turns see-through.
+  - The drawn body returns as the object lands, with its details.
+  - Cast tests 17/17; cast-study (tile look) fills and emerges as before; Night shift check 0 errors and qa 0 pops in both shapes.
+
 ## data-story and cold-open draft in vertical again
 
 - **The vertical cuts of data-story and cold-open failed `check`, so `draft` refused them.** One line in each read at 13 px: data-story's "ONE CARD = ONE HOUR OF ONE REQUEST" and cold-open's "Illustrative quotation", the label that marks the quote as fictional.

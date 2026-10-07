@@ -120,7 +120,11 @@ export function fitCode(el, area) {
   const longest = Math.max(1, ...el.lines.map(lineCols));
   const fit = el.w / (chrome(el.gutter) + MONO_ADVANCE * longest);
   if (fit >= el.size) return el;
-  el.size = Math.max(Math.floor(fit), Math.min(el.size, CODE_MIN_SIZE));
+  // On a tall frame (a phone) width is short and height plentiful: a long line wraps at the
+  // authored size instead of shrinking toward the floor (the height fit below still shrinks
+  // type when the rows would not fit). Elsewhere it shrinks to the floor first, then wraps.
+  const tall = area && area.bottom - area.top > area.right - area.left;
+  el.size = Math.max(Math.floor(fit), Math.min(el.size, tall ? el.size : CODE_MIN_SIZE));
   const cols = room(el.size);
   if (longest <= cols) return el;
   const pieces = new Map();

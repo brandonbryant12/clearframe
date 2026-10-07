@@ -37,6 +37,7 @@ node engine/cli.mjs qa build/night-shift
 Measured on the 8 GB iMac, with free local draft voice:
 
 - **Render time.** 747 frames in about 8.5 s in each shape.
+- **Phone.** The vertical code is set at 34 px across the full stage width: the commit's real lines, with the two long ones wrapped. It used to be 24 px in a narrower editor.
 - **Checks.** `check`: 0 errors in both shapes. Its only warnings say the clock times are digits ("if they are figures, add a source"); they are times, not figures.
 - **`qa`.** 0 pops. The hard changes are the fill and the emerge, as intended, and the holds are the reading and closing holds.
 - **Critique.** 89.

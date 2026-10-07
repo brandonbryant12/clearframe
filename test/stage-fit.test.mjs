@@ -70,3 +70,12 @@ test('a stage drawn for a wide frame is laid down a tall frame in the same order
   const already = { actors: [{ id: 'a', x: 540, y: 700 }, { id: 'b', x: 540, y: 1200 }] };
   assert.equal(fitStage(already, tall, area).spec, already, 'a stage authored for the frame is untouched');
 });
+
+test('on a tall frame a long line wraps at the authored size; on a wide one it shrinks first', () => {
+  const long = '      if (text[j] === \']\' || text[j] === \'}\') continue;';
+  const make = frame => codeElement({ before: 'let a = 1;\n', after: `let a = 1;\n${long}\n`, size: 34, x: 0, y: 300, w: 760 }, { cue: () => 1, where: 't', area: stageArea(frame) });
+  const portrait = make(tall), landscape = make(wide);
+  assert.equal(portrait.size, 34, 'the phone keeps the authored size');
+  assert.ok(portrait.lines.length > 2 && fits(portrait), 'and wraps the long line instead, inside the editor');
+  assert.ok(landscape.size < 34 && landscape.size >= CODE_MIN_SIZE, `a wide frame still shrinks toward the floor first (${landscape.size} px)`);
+});
