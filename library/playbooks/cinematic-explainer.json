@@ -2638,6 +2638,183 @@
             "exit": "fade"
           }
         ]
+      },
+      "tall": {
+        "view": [
+          -250,
+          -4418,
+          5600,
+          9956
+        ],
+        "viewFrom": [
+          3560,
+          -822,
+          1600,
+          2844
+        ],
+        "elements": [
+          {
+            "type": "text",
+            "text": "One journey",
+            "x": 2450,
+            "y": -1500,
+            "size": 560,
+            "font": "serif-display",
+            "fill": "ink",
+            "anchor": "middle",
+            "at": 2.1,
+            "enter": "rise",
+            "dur": 0.6,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "rect",
+            "x": 638,
+            "y": 387,
+            "w": 1204,
+            "h": 207,
+            "r": 103,
+            "fill": "bg",
+            "opacity": 0.72,
+            "at": 2.2,
+            "enter": "fade",
+            "dur": 0.5,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "text",
+            "text": "RESERVOIR",
+            "x": 1240,
+            "y": 540,
+            "size": 140,
+            "font": "semibold",
+            "tracking": 0.2,
+            "fill": "ink",
+            "anchor": "middle",
+            "at": 2.2,
+            "enter": "fade",
+            "dur": 0.5,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "rect",
+            "x": 2368,
+            "y": 177,
+            "w": 1204,
+            "h": 207,
+            "r": 103,
+            "fill": "bg",
+            "opacity": 0.72,
+            "at": 2.4,
+            "enter": "fade",
+            "dur": 0.5,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "text",
+            "text": "TREATMENT",
+            "x": 2970,
+            "y": 330,
+            "size": 140,
+            "font": "semibold",
+            "tracking": 0.2,
+            "fill": "ink",
+            "anchor": "middle",
+            "at": 2.4,
+            "enter": "fade",
+            "dur": 0.5,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "rect",
+            "x": 3684,
+            "y": 47,
+            "w": 1092,
+            "h": 207,
+            "r": 103,
+            "fill": "bg",
+            "opacity": 0.72,
+            "at": 2.5,
+            "enter": "fade",
+            "dur": 0.5,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "text",
+            "text": "YOUR TAP",
+            "x": 4230,
+            "y": 200,
+            "size": 140,
+            "font": "semibold",
+            "tracking": 0.2,
+            "fill": "ink",
+            "anchor": "middle",
+            "at": 2.5,
+            "enter": "fade",
+            "dur": 0.5,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "path",
+            "d": "M 1505 790 L 2620 790 M 3330 800 L 5600 800",
+            "fill": "none",
+            "stroke": "accent2",
+            "width": 60,
+            "opacity": 0.5,
+            "glow": {
+              "blur": 40,
+              "opacity": 1
+            },
+            "say": "sight",
+            "enter": "draw",
+            "dur": 1.2,
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "text",
+            "text": "most of it",
+            "x": 2450,
+            "y": 2700,
+            "size": 520,
+            "font": "serif-display-italic",
+            "fill": "accent2",
+            "anchor": "middle",
+            "say": "sight",
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          },
+          {
+            "type": "text",
+            "text": "out of sight",
+            "x": 2450,
+            "y": 3320,
+            "size": 520,
+            "font": "serif-display-italic",
+            "fill": "accent2",
+            "anchor": "middle",
+            "say": "sight",
+            "exitAt": 3.8,
+            "exitDur": 0.4,
+            "exit": "fade"
+          }
+        ]
       }
     },
     {

@@ -1,5 +1,11 @@
 # Changelog
 
+## cinematic-explainer's pull-back, authored for portrait
+
+- **`whole` ("One journey, most of it out of sight") has a portrait composition through `tall`.** The camera pulls back from the city, as in landscape, to the whole journey as a band across the frame. "One journey" is set large in the sky above it and "most of it / out of sight" in the ground below. The station pills grow so their labels read at about 27 px.
+- **Before.** The vertical cut showed the whole width with 17 px labels (main), or cropped the city and pressed RESERVOIR against the edge (the global reframe).
+- **Measured.** Vertical `check`: `whole` is clean; the one warning left is in `hidden`. `qa`: 0 pops, and `whole` is not flagged. The decoded strip shows the pull-back and the words landing on cue. The landscape storyboard is byte-identical.
+
 ## research-digest's street, authored for portrait
 
 - **research-digest's street beats have authored 9:16 cameras (`viewTall`).**
