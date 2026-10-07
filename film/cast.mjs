@@ -262,9 +262,10 @@ function objectElement(o, id, size, base, enter, look = 'tiles') {
     children.push({ type: 'rect', id: `${id}-tile`, x: -s / 2, y: -s / 2, w: s, h: s, r: s * 0.26, fill: o.color, enter: 'none', ...L.tile(s) },
       face({ type: 'icon', id: `${id}-icon`, name: o.icon, x: 0, y: 0, size: s * 0.52, stroke: L.mark(o), enter: 'none' }));
   }
-  // The flat colour an object floods the frame with (fill/emerge) covers its whole extent.
-  // (Rounded like the shape's own body, so a bubble emerging from the flood reads as a bubble.)
-  const [ex, ey] = objectExtent(o, size), { x, y, w, h, r } = o.shape ? { x: -ex, y: -ey, w: ex * 2, h: ey * 2, r: Math.min(children[0].r ?? 0, ex, ey) } : children[0];
+  // The flat colour an object floods the frame with (fill/emerge) is its body exactly, so the
+  // flood shrinks back as the object's own shape and the drawn body, its parts and its face
+  // fade in over it where it lands (fill/emerge hide them while it is the frame).
+  const { x, y, w, h, r } = children[0];
   children.splice(1, 0, { type: 'rect', id: `${id}-solid`, x, y, w, h, r, fill: o.color, enter: 'none', keys: [{ at: 0, opacity: base.filled ? 1 : 0, dur: 0 }] });
   if (o.label) children.push({ type: 'text', id: `${id}-label`, text: o.label, x: 0, y: s * 0.5 + s * 0.34, size: Math.max(22, s * (look === 'drawn' ? 0.24 : 0.2)), font: L.label, fill: look === 'drawn' ? 'ink' : 'muted', anchor: 'middle', enter: 'none' });
   // The starting pose is a key at 0, so every later key is absolute (opacity and rotation never compound).
@@ -434,6 +435,10 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       if (!p || (f.form === 'emerge' && !p.filled)) { notes.push(`${f.form} on ${id}: it ${p ? 'has not filled the frame' : 'is not on screen'}, so nothing moves`); return; }
       const { el, base } = group(id), o = spec.objects.get(id), s = o.size ?? size, solid = el.children.find(c => c.id.endsWith('-solid'));
       const faces = el.children.filter(c => c.type === 'icon' || c.type === 'text' || /-(detail|part)\d+$/.test(c.id));
+      // The drawn body under the flat colour is hidden while the object is the frame (its rough
+      // outline and hatching would show past the flat shape's edge as it shrinks back). It only
+      // ever changes while the opaque flat colour covers it, so the object never turns see-through.
+      const tile = el.children.find(c => c.id.endsWith('-tile'));
       if (f.form === 'fill') {
         // Large enough that the flat colour (a rounded rectangle) covers the whole frame through the
         // camera: its inscribed rectangle (half-extent less 0.293 r at each corner) must reach the
@@ -443,11 +448,13 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
         el.keys.push({ at: t, x: frame.width / 2 - base.x, y: frame.height / 2 - base.y, scale: cover, rotate: 0, opacity: 1, dur, ease: f.ease ?? 'in' });
         solid.keys.push({ at: t, opacity: 1, dur: dur * 0.6 });
         for (const c of faces) c.keys = [...(c.keys ?? [{ at: 0, opacity: 1, dur: 0 }]), { at: t, opacity: 0, dur: dur * 0.4 }];
+        tile.keys = [...(tile.keys ?? [{ at: 0, opacity: 1, dur: 0 }]), { at: t + dur * 0.6, opacity: 0, dur: dur * 0.15 }];
         pose.set(id, { x: frame.width / 2, y: frame.height / 2, scale: cover, rotate: 0, opacity: 1, z: ++top, filled: { ...p, filled: undefined } });
         edges.fill = FILL_TONES[o.color];
       } else {
         const back = p.filled;
         el.keys.push({ at: t, x: back.x - base.x, y: back.y - base.y, scale: back.scale ?? 1, rotate: back.rotate ?? 0, opacity: back.opacity ?? 1, dur, ease: f.ease ?? 'out' });
+        tile.keys = [...(tile.keys ?? [{ at: 0, opacity: 0, dur: 0 }]), { at: t + dur * 0.35, opacity: 1, dur: 0 }];
         solid.keys.push({ at: t + dur * 0.35, opacity: 0, dur: dur * 0.5 });
         for (const c of faces) c.keys = [...(c.keys ?? [{ at: 0, opacity: 0, dur: 0 }]), { at: t + dur * 0.45, opacity: 1, dur: dur * 0.4 }];
         pose.set(id, { ...back, z: p.z });
