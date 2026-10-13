@@ -829,6 +829,13 @@ async function main() {
     if (o.json) return console.log(JSON.stringify(r, null, 2));
     const s = r.summary,
       rel = f => path.relative(process.cwd(), f);
+    // The verdict first: agents quote the first line ("held 4%") as the result.
+    let verdict = null;
+    try {
+      const { motionVerdict } = await import('./lib/qa.mjs');
+      verdict = motionVerdict(dir, r);
+      console.log(verdict.lines[0]);
+    } catch {}
     console.log(
       `${s.seconds}s · change ${s.changePerSecond}/s (viral references 8–42; under 2 reads as held) · held ${s.heldSeconds}s · ${s.pops} pop(s) · ${s.loudness ? `${s.loudness.integrated} LUFS, peak ${s.loudness.peak}` : 'no audio'} · ${s.color}`,
     );
@@ -839,11 +846,8 @@ async function main() {
     console.log(
       `${rel(path.join(r.dir, 'timeline.png'))} (one frame per second) · ${rel(path.join(r.dir, 'phone.png'))} (360 px: read it as a phone would)`,
     );
-    // The verdict last: an agent quoted "change 1.87/s" as its verdict and never saw NOT READY.
-    try {
-      const { motionVerdict } = await import('./lib/qa.mjs');
-      console.log(motionVerdict(dir, r).lines.join('\n'));
-    } catch {}
+    // And the whole verdict last, with each edit.
+    if (verdict) console.log(verdict.lines.join('\n'));
     if (r.findings.some(f => f.level === 'error')) process.exitCode = 1;
     return;
   }
