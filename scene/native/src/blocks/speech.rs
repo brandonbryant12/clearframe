@@ -19,7 +19,8 @@ impl<'a, 'c> Draw<'a, 'c> {
             _ => self.p.accent.clone(),
         };
         let role = s(sp, "role");
-        let size = if self.tall() { 32.0 } else { 30.0 };
+        // A tall film is seen at a third of its size on a phone: the speaker must read there.
+        let size = if self.tall() { 42.0 } else { 30.0 };
         let name_w = text::measure(Font::TextStrong, name, size, 0.0);
         let role_w = if role.is_empty() { 0.0 } else { text::measure(Font::Text, role, size * 0.8, 0.0) + 22.0 };
         let (h, pad) = (size * 2.3, size * 0.7);
