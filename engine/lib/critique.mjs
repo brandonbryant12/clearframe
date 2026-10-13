@@ -434,6 +434,12 @@ function critiqueStoryboard(root) {
       if (pal && used && /^#[0-9a-f]{6}$/i.test(pal.accent) && /^#[0-9a-f]{6}$/i.test(pal[role]) && near(pal.accent, pal[role]))
         add('warn', 'film', `In the ${sb.theme} palette the accent and the ${role} colour are the same ${pal.accent} / ${pal[role]}, so ${role === 'negative' ? 'warning marks read as the brand colour' : 'what is good reads as the brand colour'}. Choose a palette that tells them apart (briefing for security and policy films), or mark them in another colour.`);
   } catch {}
+  // A trailer's punctuation in a calm film: an iris grows a flat disc of the accent colour over the
+  // picture, which a reviewer took for a rendering bug in a round-18 phishing film.
+  if (sb.treatment === 'workplace')
+    for (const b of sb.beats)
+      if (['iris', 'flash', 'whip'].includes(b.transition))
+        add('warn', b.id, `transition "${b.transition}" is trailer punctuation (an iris grows a flat disc of the accent colour over the picture; reviewers read it as a glitch in a workplace film): cut, dissolve, move the camera within one world, or use "panel" at a chapter.`);
   // "Portrait" is read as "vertical": two onboarding films for a phone app came out 4:5.
   if (sb.format?.preset === 'portrait')
     add('warn', 'film', 'The format is portrait: 4:5 (1080×1350), a feed post. A film for a phone screen (an app, Reels, Stories, TikTok, "vertical") is format.preset "vertical": 9:16 (1080×1920).');
