@@ -148,7 +148,8 @@ function onScreenWords(props) {
         'mode',
       ].includes(k)
     )
-      (seen.add(v), (n += v.split(/\s+/).filter(Boolean).length));
+      // A bare number (a calendar's days, a tick label, a step's index) is seen, not read.
+      (seen.add(v), (n += v.split(/\s+/).filter(w => w && !/^[\d.,:%$-]+$/.test(w)).length));
     else if (Array.isArray(v)) v.forEach(x => walk(x, k));
     else if (v && typeof v === 'object') for (const [kk, vv] of Object.entries(v)) walk(vv, kk);
   };

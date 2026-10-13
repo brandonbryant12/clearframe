@@ -333,7 +333,7 @@ function readUntil(b, words) {
       (list ?? []).forEach(el => {
         for (const t of [el, ...(el.keys ?? [])]) {
           const at = typeof t.say === 'string' ? findWord(words, t.say) : null;
-          if (at != null) until = Math.max(until, at + (t.after ?? 0) + (t.dur ?? 0.5) + 0.4);
+          if (at != null) until = Math.max(until, at + (t.after ?? 0) + (t.dur ?? 0.5) + 0.6);
         }
         land(el.children);
       });
