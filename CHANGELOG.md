@@ -12,6 +12,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **`choose` fills the winning row as it is said**: a band in the option's colour wipes across the row under its tick. The tick alone changed too little of the frame to see on a phone (or for `qa` to call it a change), and an agent replaced two tables with casts because of it.
 - **A stepping number keeps its figures apart and its note.** Each figure now arrives as the previous one has gone (two figures shared the spot for half a second and `check` refused the overlap when the words came close), and a `note` on a number with several cued values is drawn under its bar instead of dropped.
 - **Cast fixes from the playbook endings.** A hero's word sits below the hero as drawn (its own `size`, its shape and its label; it used the cast's base size and landed on the label of a tall receipt), and the quiet ring around a hero leaves the bottom clear for the word. A `ring` spaces objects evenly along the ellipse instead of by angle, which bunched them at the top and bottom of a tall frame.
 - **A sketch's last moment gets 0.6 s on screen** before the cut (it was 0.4 s, under `check`'s 0.45 s, so a portal saved on the last word always warned), and `critique`'s words-on-screen count skips bare numbers (a calendar's 31 days are seen, not read).

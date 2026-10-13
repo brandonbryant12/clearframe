@@ -125,6 +125,13 @@ export default {
             width: 2,
             enter: 'none',
           })),
+          // The winning row fills with the option's colour as it is said: a tick alone is too
+          // small a change to see on a phone.
+          ...rows.flatMap((row, i) =>
+            wins(row, sides[c])
+              ? [{ type: 'rect', x: r.x + 10, y: round(rowY(c, i) - rh / 2 + 6), w: r.w - 20, h: rh - 12, r: 16, fill: colors[c], opacity: 0.16, enter: 'wipe', dur: 0.45, cue: NAMES[i], at: round(AT[NAMES[i]] + 0.05), after: 0.05 }]
+              : [],
+          ),
           ...rows.map((_, i) => mark(c, i, markX, rowY(c, i))),
           // Stacked cards carry the row names themselves, quieter where the option loses.
           ...(stacked
