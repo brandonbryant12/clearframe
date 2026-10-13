@@ -440,7 +440,7 @@ export function critique(root) {
   // Speech-following type lands as it is said: its first emphasised word, else just after the voice starts.
   if (first?.block === 'kinetic' && words.length) {
     const norm = w => String(w).toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
-    const stress = new Set((first.props?.emphasis ?? []).map(norm));
+    const stress = new Set([].concat(first.props?.emphasis ?? []).map(String).map(norm));
     const hit = words.find(w => stress.has(norm(w.w)));
     landed.push((hit ? hit.t1 : words[0].t0 + 1) - (t[0]?.start ?? 0));
   }
