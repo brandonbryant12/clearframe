@@ -43,12 +43,49 @@ export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set())
   return cues;
 }
 
+/**
+ * A sketch's numbers (`sketchParams`): what it draws from real values, such as how many tokens each
+ * side puts in or which days a window covers. A sketch declares them as
+ * `params: {name: {default, min?, max?, integer?, list?, about}}`; unknown names and values out of
+ * range are refused by name, and missing ones take their defaults.
+ */
+export function sketchParams(s, given = {}) {
+  const spec = s.params ?? {};
+  if (given != null && (typeof given !== 'object' || Array.isArray(given)))
+    throw new Error(`sketchParams for ${s.name} must be an object`);
+  const unknown = Object.keys(given ?? {}).filter(k => !(k in spec));
+  if (unknown.length)
+    throw new Error(
+      `sketchParams: ${s.name} has no ${unknown.join(', ')}${Object.keys(spec).length ? ` (it takes ${Object.keys(spec).join(', ')})` : ' (it takes none)'}`,
+    );
+  const out = {};
+  for (const [k, d] of Object.entries(spec)) {
+    const v = given?.[k] ?? d.default;
+    const check = x => {
+      if (typeof d.default === 'number' || d.min != null) {
+        if (!Number.isFinite(x)) throw new Error(`sketchParams.${k} for ${s.name} must be a number`);
+        if (d.integer && !Number.isInteger(x)) throw new Error(`sketchParams.${k} for ${s.name} must be a whole number`);
+        if ((d.min != null && x < d.min) || (d.max != null && x > d.max))
+          throw new Error(`sketchParams.${k} for ${s.name} must be ${d.min ?? '-∞'}–${d.max ?? '∞'} (got ${x})`);
+      }
+    };
+    if (d.list) {
+      if (!Array.isArray(v) || !v.length) throw new Error(`sketchParams.${k} for ${s.name} must be a list`);
+      if (d.length && (v.length < d.length[0] || v.length > d.length[1]))
+        throw new Error(`sketchParams.${k} for ${s.name} takes ${d.length[0]}–${d.length[1]} values`);
+      v.forEach(check);
+    } else check(v);
+    out[k] = v;
+  }
+  return out;
+}
+
 /** A sketch's props for a frame preset; `seed` varies its layout (buildings, ridges, swell); `text` and `say` fill its placeholders. */
-export function sketch(name, preset = 'landscape', { seed, text, say } = {}) {
+export function sketch(name, preset = 'landscape', { seed, text, say, params } = {}) {
   const s = sketchByName(name);
   if (!s) throw new Error(`Unknown sketch ${name}. Run clearframe sketch to list them.`);
   const [w, h] = frames[preset] ?? frames.landscape;
-  const drawn = s.build(w, h, { seed });
+  const drawn = s.build(w, h, { seed, params: sketchParams(s, params) });
   const cues = fillSketch(drawn.elements, { text, say });
   // A misspelt moment would otherwise keep its default seconds without a word of warning.
   const unknown = Object.keys(say ?? {}).filter(k => !cues.has(k));

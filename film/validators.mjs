@@ -455,7 +455,7 @@ export const VALIDATORS = {
       const preset = ht > w * 1.1 ? (ht > w * 1.5 ? 'vertical' : 'portrait') : w > ht * 1.1 ? 'landscape' : 'square';
       let drawn;
       try {
-        drawn = sketch(p.sketch, preset, { seed: p.seed, text: p.sketchText, say: p.sketchSay });
+        drawn = sketch(p.sketch, preset, { seed: p.seed, text: p.sketchText, say: p.sketchSay, params: p.sketchParams });
       } catch (e) {
         h.fail(e.message);
       }
@@ -466,6 +466,7 @@ export const VALIDATORS = {
       delete p.sketch;
       delete p.sketchText;
       delete p.sketchSay;
+      delete p.sketchParams;
       delete p.seed;
     }
     // Visual explanation primitives (film/explain.mjs): a picture that changes, computed from a formula.

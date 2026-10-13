@@ -90,8 +90,10 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
     const drawn = sketch(name, tallFrame ? 'vertical' : 'landscape', {
       seed: seed == null ? undefined : seed + sb.beats.indexOf(b) * 101,
       say: b.props.sketchSay,
+      params: b.props.sketchParams,
     });
     delete b.props.sketchSay;
+    delete b.props.sketchParams;
     if (tallFrame || !b.props.elements) b.props.elements = drawn.elements;
     // Placeholder type in a sketch ("TITLE") is replaced by the playbook's words.
     const words = b.props.sketchText ?? {};

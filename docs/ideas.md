@@ -70,6 +70,7 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 
 ## Launches and promos
 - **A stage for the name.** `sunburst`: rays turning around a disc, the name wiped across it on the first beat of the music.
+- **Two contributions become one.** `match`: your coins and the company's stack side by side, then merge with the total on top; one coin per unit from `sketchParams`, so the picture agrees with the figure.
 - **The step, done in the app.** `portal`: the cursor opens a section, picks a card, changes one value (3% to 5%) and saves; a confirmation lands and the view leans in on the new value. Each click lands on the word that names it. For "go to Benefits, then Retirement, and change your rate".
 - **The ask, played out.** `chat`: the customer's question typed and sent, three dots, the answer and a heart. Label it as an illustration.
 - **Made from many pieces.** `cut-paper`: scraps on a cutting mat fly into place as the product card, which lifts off as its name types in.

@@ -15,7 +15,7 @@ export default {
   order: 90,
   summary:
     'A task done in an app: the cursor opens a section, picks a card, changes one value and saves; a confirmation lands and the view leans in on the new value.',
-  use: 'Benefits portals, HR and expense apps, banking and settings: "log in, go to Retirement, change your rate", the step a film asks people to take. Replace APP, STEP1 (the section), STEP2 (the card), OTHER (a second card), FIELD, FROM, TO and DONE with sketchText (also Home, Pay, Documents, Welcome back, Save); land CLICK1, CLICK2, CHANGE and SAVE on words with sketchSay.',
+  use: 'Benefits portals, HR and expense apps, banking and settings: "log in, go to Retirement, change your rate", the step a film asks people to take. Replace APP, STEP1 (the section), STEP2 (the card), OTHER (a second card), FIELD, OLD and NEW (its value before and after) and DONE with sketchText (also Home, Pay, Documents, Welcome back, Save); land CLICK1, CLICK2, CHANGE and SAVE on words with sketchSay.',
   build(w, h) {
     const T = tall(w, h);
     // Window, chrome and the two regions: a side menu (landscape) or tabs (tall frames).
@@ -173,14 +173,14 @@ export default {
                 text('FIELD', main.x, fieldY, 30, 'semibold', 'muted', { enter: 'none', fit: main.w }),
                 { type: 'rect', ...box, r: 16, fill: 'bg', stroke: 'line', width: 2, enter: 'none' },
                 { type: 'rect', ...box, r: 16, fill: 'none', stroke: 'accent', width: 5, enter: 'fade', cue: 'CHANGE', at: AT.CHANGE, dur: 0.2 },
-                text('FROM', box.x + 36, round(box.y + box.h / 2 + 22), 64, 'bold', 'muted', {
+                text('OLD', box.x + 36, round(box.y + box.h / 2 + 22), 64, 'bold', 'muted', {
                   enter: 'none',
                   exit: 'fade',
                   exitCue: 'CHANGE',
                   exitAt: AT.CHANGE,
                   exitDur: 0.15,
                 }),
-                text('TO', box.x + 36, round(box.y + box.h / 2 + 22), 64, 'bold', 'accent', { enter: 'type', cue: 'CHANGE', at: AT.CHANGE + 0.2, after: 0.2, dur: 0.4 }),
+                text('NEW', box.x + 36, round(box.y + box.h / 2 + 22), 64, 'bold', 'accent', { enter: 'type', cue: 'CHANGE', at: AT.CHANGE + 0.2, after: 0.2, dur: 0.4 }),
                 {
                   type: 'group',
                   enter: 'none',
