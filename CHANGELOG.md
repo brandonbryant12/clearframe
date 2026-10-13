@@ -17,6 +17,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **`compose` sketch: the same email, one different button.** A draft in a mail window (or a phone in a tall frame) with its file attached; on its words the old button (Attach) is struck through as the file greys, the new one (Share securely) lights and is pressed, and the file uploads and becomes a link with a lock; `expires: true` lands "Expires in 7 days" on the link and `send: true` confirms the send. For a secure link instead of an attachment, Report instead of Delete, encrypt before sending. The client-data brief scored lowest of the bench (3.7–5.1) because its central idea had no picture; lines like "instead of Attach" or "share it securely" now suggest it.
 - **A file name as the source line makes the verdict NOT READY** ("import.mjs" under eight pictures of a round-12 podcast), and `critique` catches a bare file name as well as a path.
 - **`blocks NAME` explains names that are not blocks** (`blocks cast`: a cast is drawn by a canvas beat; `blocks lookback`: a sketch), and docs/cast.md says a cast beat can carry canvas `elements` for a line of type (a Sonnet agent could not find where to put a contact email) and gives the object size and word limits up front.
 - **`critique` says what `portrait` is**: 4:5, a feed post. Two onboarding films asked for "vertical, for the app" came out 1080×1350 because the agents read portrait as vertical (9:16).
