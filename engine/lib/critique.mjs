@@ -642,7 +642,8 @@ export function critique(root) {
         );
       // Moments happen in a fixed order (coins before their total, the bar before its split): words
       // given out of that order make a sketch run backwards.
-      const order = sketchMoments(authored.sketch, authored.sketchParams),
+      const free = sketchByName(authored.sketch)?.freeMoments ?? [],
+        order = sketchMoments(authored.sketch, authored.sketchParams).filter(m => !free.includes(m)),
         spoken = String(sb.beats[i]?.vo ?? '').toLowerCase(),
         heard = order.filter(m => m in authored.sketchSay).map(m => ({ m, w: authored.sketchSay[m], at: spoken.search(new RegExp(`\\b${String(authored.sketchSay[m]).toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`)) }));
       const late = heard.findIndex((h, k) => k > 0 && h.at >= 0 && heard[k - 1].at > h.at);

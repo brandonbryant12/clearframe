@@ -13,6 +13,8 @@ export default {
   keep: true,
   // Weekday headers are real words: replace them only to shorten or translate.
   keepText: WEEK,
+  // Today's ring stands on its own: it may land before the window opens or after it closes.
+  freeMoments: ['TODAY'],
   order: 93,
   summary:
     'A window on a calendar: the month draws, the opening day is marked, the window sweeps across the weeks to the last day, which is circled by hand, and the days outside it fall back. Optional "today" ring; a key says what each mark means.',

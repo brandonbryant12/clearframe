@@ -127,6 +127,7 @@ export function sketchMoments(name, params = {}) {
 /**
  * A sketch's placeholder words (CAPS, three or more characters) with these numbers: what `sketchText`
  * replaces. Words the sketch lists in `keepText` (weekday headers) may stay as drawn, so they are left out.
+ * (A sketch's `freeMoments` are moments that may land on any word, outside the order `sketchMoments` gives.)
  */
 export function sketchWords(name, params = {}) {
   const s = sketchByName(name), out = new Set(), keep = new Set(s?.keepText ?? []);
