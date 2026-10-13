@@ -603,7 +603,14 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
   const sb = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'));
   const timing0 = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8'));
   const timed = timing0.beats ?? [];
-  const typeOnly = b => (TYPE.includes(b.block) && !b.plate && !b.art?.under?.length && !b.stage) || typedCanvas(b);
+  // A figure on a card is read like type: a number chart that shows one value (at most one spoken), or
+  // a stat block. Reviewers called them slides in every round ("the 14%, 3% and 22% cards").
+  const figureCard = b =>
+    !b.plate && !b.stage && !b.art?.under?.length &&
+    (NUMBER_CARDS.includes(b.block) ||
+      (b.block === 'canvas' && b.props?.chart?.kind === 'number' && (b.props.chart.values ?? []).filter(v => v?.say).length <= 1 &&
+        Object.keys(b.props).every(k => k === 'chart' || FRAMING.has(k)) && !(b.props.elements ?? []).length));
+  const typeOnly = b => (TYPE.includes(b.block) && !b.plate && !b.art?.under?.length && !b.stage) || typedCanvas(b) || figureCard(b);
   const typeSeconds = timed.reduce((t, tb, i) => t + (typeOnly(sb.beats[tb.index ?? i] ?? {}) ? (tb.dur ?? tb.end - tb.start) : 0), 0);
   const typeShare = s.seconds ? Math.round((100 * typeSeconds) / s.seconds) : 0;
   const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;
@@ -657,7 +664,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
       : []),
     ...(typeShare >= 50
       ? [
-          `  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures and keep type for the one or two lines worth repeating${fs.existsSync(path.join(dir, 'source', 'recording.wav')) ? ' (for a recording, examples/podcast-pictures shows each idea with its own picture and the captions under it; its build.mjs sets each beat\'s props by id)' : ''}:`,
+          `  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles, a single figure on a card). Moving words are still words on a background: give the ideas pictures and keep type for the one or two lines worth repeating${fs.existsSync(path.join(dir, 'source', 'recording.wav')) ? ' (for a recording, examples/podcast-pictures shows each idea with its own picture and the captions under it; its build.mjs sets each beat\'s props by id)' : ''}:`,
           ...(() => {
             const typed = timed.map((tb, i) => sb.beats[tb.index ?? i]).filter(b => b && typeOnly(b));
             // A sketch that fits the line first; else a line that says figures gets its chart ready to
