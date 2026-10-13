@@ -51,18 +51,23 @@ export function castSpec(input, known = new Map(), knownLook = null) {
       : `a cast has 1–16 objects (this one has ${objects.size}; declare them in its first beat)`,
   );
   check(Array.isArray(input.formations) && input.formations.length >= 1 && input.formations.length <= 12, 'formations needs 1–12 entries');
+  // A misspelt object in a move names the objects there are.
+  const unknown = (...named) => {
+    const bad = named.filter(v => v != null && !objects.has(v));
+    return bad.length ? ` (${bad.map(v => `"${v}"`).join(', ')} is not an object; the objects are ${[...objects.keys()].join(', ')})` : '';
+  };
   const formations = input.formations.map((f, i) => {
     own(f, ['form', 'say', 'at', 'ids', 'hero', 'word', 'center', 'spread', 'scale', 'dur', 'stagger', 'ease', 'thread', 'beside', 'on', 'out', 'in', 'by', 'mark', 'to', 'color', 'zoom', 'into', 'from', 'via', 'trail'], `formations[${i}]`);
     if (f.form === 'mark') {
       check(MARKS.includes(f.mark) && Array.isArray(f.ids) && f.ids.length >= 1, `formations[${i}] (mark) is a ${MARKS.join(', ')} on ids`);
       check((f.mark === 'arrow') === (f.to != null) && [].concat(f.to ?? []).every(id => objects.has(id)), `formations[${i}]: an arrow mark points to another object or a list of them (to), and only an arrow does`);
     } else if (f.form === 'travel') {
-      check(f.ids?.length >= 1 && ((f.to != null && objects.has(f.to) && !f.ids.includes(f.to)) !== (f.center != null)), `formations[${i}] (travel) moves ids to another object (to) or a point (center)`);
+      check(f.ids?.length >= 1 && ((f.to != null && objects.has(f.to) && !f.ids.includes(f.to)) !== (f.center != null)), `formations[${i}] (travel) moves ids to another object (to) or a point (center), e.g. {"form": "travel", "ids": ["coin"], "to": "jar", "say": "…"}${unknown(f.to)}`);
       check(f.via == null || (Array.isArray(f.via) && f.via.length <= 6 && f.via.every(v => Array.isArray(v) && v.length === 2 && v.every(finite))), `formations[${i}].via is up to 6 [x, y] waypoints in frame pixels`);
     } else check(f.mark == null && f.to == null, `formations[${i}]: mark and to belong to form mark (or travel)`);
     check(f.via == null && f.trail == null || f.form === 'travel', `formations[${i}]: via and trail belong to form travel`);
     check(f.color == null || COLORS.includes(f.color), `formations[${i}].color is ${COLORS.join(', ')}`);
-    if (f.form === 'swap') check(objects.has(f.out) && objects.has(f.in) && f.out !== f.in, `formations[${i}] (swap) names out and in, two objects`);
+    if (f.form === 'swap') check(objects.has(f.out) && objects.has(f.in) && f.out !== f.in, `formations[${i}] (swap) names out and in, two objects: one becomes the other where it stands, e.g. {"form": "swap", "out": "envelope", "in": "shield", "say": "…"}${unknown(f.out, f.in)}`);
     check(f.beside == null || objects.has(f.beside), `formations[${i}].beside names an object`);
     check(f.on == null || (objects.has(f.on) && f.beside == null && f.center == null && !(f.ids ?? []).includes(f.on)), `formations[${i}].on names another object to centre on (not with beside or center)`);
     check(f.by == null || (f.form === 'swap' && Array.isArray(f.by) && f.by.every(id => objects.has(id) && id !== f.out && id !== f.in)),
@@ -76,8 +81,8 @@ export function castSpec(input, known = new Map(), knownLook = null) {
     check(f.center == null || (Array.isArray(f.center) && f.center.length === 2 && f.center.every(finite)), `formations[${i}].center is [x, y] in frame pixels`);
     for (const k of ['spread', 'scale', 'dur', 'stagger']) check(f[k] == null || (finite(f[k]) && f[k] >= 0), `formations[${i}].${k} is a positive number`);
     check(f.form === 'camera' ? finite(f.zoom) && f.zoom >= 0.6 && f.zoom <= 2.5 : f.zoom == null, `formations[${i}]: zoom (0.6–2.5) belongs to form camera, which needs it`);
-    check(f.form === 'merge' ? objects.has(f.into) && f.ids?.length >= 1 && !f.ids.includes(f.into) : f.into == null, `formations[${i}]: merge folds ids into one other object (into), and only merge takes into`);
-    check(f.form === 'split' ? objects.has(f.from) && f.ids?.length >= 1 && !f.ids.includes(f.from) : f.from == null, `formations[${i}]: split brings ids out of one other object (from), and only split takes from`);
+    check(f.form === 'merge' ? objects.has(f.into) && f.ids?.length >= 1 && !f.ids.includes(f.into) : f.into == null, `formations[${i}]: merge folds ids into one other object (into), and only merge takes into, e.g. {"form": "merge", "ids": ["pay"], "into": "jar", "say": "…"}${unknown(f.into)}`);
+    check(f.form === 'split' ? objects.has(f.from) && f.ids?.length >= 1 && !f.ids.includes(f.from) : f.from == null, `formations[${i}]: split brings ids out of one other object (from), and only split takes from, e.g. {"form": "split", "ids": ["a", "b"], "from": "hub", "say": "…"}${unknown(f.from)}`);
     if (f.form === 'fill' || f.form === 'emerge') {
       check(f.ids?.length === 1, `formations[${i}] (${f.form}) names one object in ids`);
       check(FILL_TONES[objects.get(f.ids[0])?.color ?? 'accent'] != null, `formations[${i}] (${f.form}): ${f.ids[0]} must be accent, accent2, surface or ink, the colours a scene can take as its tone`);
