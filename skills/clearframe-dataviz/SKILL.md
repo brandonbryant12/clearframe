@@ -47,6 +47,9 @@ Every counter and bar settles on the exact authored value. `check` fails a final
 - Animate from a true baseline: a count may start at 0; a rate that moved from 4.1% to 4.3% should use `from: 4.1`.
 - Label hypothetical or illustrative data as such, on screen. Playbook samples already say so; replace them.
 - Derived figures (funnel step rates, donut shares) are computed from your inputs; the inputs still need a source.
+- **A highlight is never the size and place of a data mark.** A pale full-height box behind one column reads as another bar. Highlight with the axis label, a tint of the mark itself, or the camera.
+- **Check that the parts reconcile before you chart them together** (sleeve returns × weights against the total, segments against the whole). If the source's own figures do not add up, show them separately and flag it to the person; a reviewer from the committee does that sum in seconds.
+- **In a financial film, land a figure rather than count up to it**: a count shows every value on the way (+1.7% on its way to +2.1%), and each frame of it is a figure on screen that the source never states.
 
 ## Labels and color
 

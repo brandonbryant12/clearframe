@@ -78,6 +78,7 @@ It ends with a **motion verdict** that starts READY or NOT READY (a NOT READY dr
 
 ## 6. Truth and tone
 
+- A client letter's figures must reconcile before they share a picture (sleeve returns × weights against the total): if they do not, chart them separately and say so in DIRECTION.md. Land financial figures rather than count up to them; a count shows values the letter never states.
 - Every figure comes from the source document and its beat names that document in `source` ("Alder Street Retirement Plan, 2027"). Counts and scales come from `sketchParams`, never from the drawing, and a sketch number is a figure too: never invent an amount to make a sketch draw money (if the page says "resets to $0", show the reset, not a balance).
 - Keep the brief's must-haves: what it says people must not miss, the dates, the place to act, anything new this year. A film half the length asked for has usually dropped one of them.
 - Attribution is short and in the film's words. No disclaimers on screen ("illustrative only", "not advice"); an example is labelled once ("Example: a $60,000 salary").

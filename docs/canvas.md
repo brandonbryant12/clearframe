@@ -137,6 +137,7 @@ While the camera holds, it drifts in slowly (`viewDrift`, default 3% of the view
 - **No clipping.** `place` moves and scales a drawing but does not clip it. A sketch drawn wider than its frame (`rooftops` pans its own camera) shows past its panel's edge while the camera travels and in the whole view. Cover the margins and gaps in the last beat with rects in the board's `bg`, or choose drawings that stay inside their frame.
 - **Small words.** Words that the whole view would shrink below readable should leave while the camera is on another panel (`exitAt` after their beat).
 - **Tall frames.** Full-height panels pull back to a narrow column, where each reads as a picture strip, not its detail. On a phone, keep the board short or end on one panel.
+- **Neighbours, and no dissolves.** Lay the panels so consecutive beats are neighbours: a diagonal move across the board crosses empty paper, which `draft` reports as a blank frame. Between two panels of one world, let the camera move; a dissolve shows a ghost of the old panel over the new one.
 
 `examples/by-morning` builds the same story both ways (`storyboard-*.json` as cuts, `storyboard-board-*.json` as a board).
 
