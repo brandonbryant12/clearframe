@@ -13,7 +13,9 @@ export const sketchByName = name => item('sketches', name);
 /**
  * Fill a drawn sketch's placeholders: type ("TITLE") from `text`, and named moments (`cue: "FIND"`
  * on an element, a key or an `along` route, `exitCue` on an exit) from `say`, so they land on spoken words instead of
- * their default seconds. Unfilled cues keep their seconds; cue names never reach the plan.
+ * their default seconds. A cued element may also carry `after` (seconds after its moment) with `at` already
+ * including that offset: a filled moment keeps the offset, an unfilled one keeps its seconds. Cue names never
+ * reach the plan.
  */
 export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set()) {
   for (const el of list ?? []) {
@@ -23,6 +25,10 @@ export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set())
       if (t.cue != null && say[t.cue] != null) {
         t.say = say[t.cue];
         delete t.at;
+      } else if (t.cue != null) {
+        // `after` keeps an offset from the moment once it lands on a word; with its default
+        // seconds the offset is already in `at`.
+        delete t.after;
       }
       delete t.cue;
     }

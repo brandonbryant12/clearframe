@@ -3,6 +3,8 @@
 ## Enterprise bench and readable typing
 
 - **`bench/enterprise/`**: mock source documents for the films ClearFrame is mostly asked for (a 401(k) match, open enrollment, HSA or FSA, a client market update, phishing training, an expense policy, a two-voice podcast clip). Every company and figure is fictional; run the same brief through different models and compare the films and their trajectories. `podcast/make-episode.mjs` rebuilds the mock recording locally with the OS voices.
+- **`portal` sketch: a task done in an app.** The cursor opens a section, picks a card, changes one value and saves; a confirmation lands and the window leans in on the new value (the product-demo order: action, response, enlarged result, reading hold). Clicks are named moments (`CLICK1`, `CLICK2`, `CHANGE`, `SAVE`) for `sketchSay`; the cursor travels to its next target while the voice gets there. Landscape and tall frames.
+- **Sketch moments keep their offsets on words.** A cued sketch element may carry `after`; it applies once the moment lands on a spoken word, and is dropped when the moment keeps its default seconds (where `at` already includes it). Before, `after` without a word was refused, and offsets from a moment were lost when it was retimed.
 - **Typing and decoding happen inside the finished text's layout** (canvas block and native stages). Wrapped text no longer re-breaks and re-balances while it types, and centred or right-aligned typed text no longer drifts as it grows: each line keeps the place it will have when the text is complete.
 
 ## Explanations: a picture that changes
