@@ -607,6 +607,23 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
   // A file name shown as the credit ("import.mjs") is on screen in every frame of its beat.
   const fileSources = sb.beats.filter(b => /(^|[\s(/])[\w.-]+\.(mjs|js|json|wav|txt)\b/.test(String(b.props?.source ?? ''))).map(b => b.id);
   const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute || placeholders.length || fileSources.length);
+  // One edit to make first, spelled out: weaker models act on the last concrete line they read and
+  // hand over a NOT READY film when the verdict ends on "fix the beats above".
+  const nextEdit = () => {
+    if (placeholders.length) return `fill ${placeholders[0][1].join(', ')} in ${placeholders[0][0]}'s sketchText.`;
+    if (fileSources.length) return `give ${fileSources[0]} a source line people know (the document's name, not a file).`;
+    if (mute) return 'record the narration (`voice DIR --draft`).';
+    const typed = timed.map((tb, i) => sb.beats[tb.index ?? i]).filter(b => b && typeOnly(b));
+    const picture = typed.map(b => [b, pictureLine(b.vo)]).find(([, l]) => l);
+    if (share >= 40 && worst.length) {
+      const [id] = worst[0], f = fixOf(id);
+      return `${id}: ${f?.fix ?? 'change something on its later words, or shorten it.'}`;
+    }
+    if (typeShare >= 60 && picture) return `${picture[0].id}: ${picture[1]}.`;
+    if (blank.length) return blank[0].trim();
+    if (short) return `the film is ${Math.round(s.seconds)} s of ${sb.length} s: add the brief's next fact as a beat with its own picture.`;
+    return worst.length ? `${worst[0][0]}: ${fixOf(worst[0][0])?.fix ?? 'change something on its later words.'}` : 'fix the first item above.';
+  };
   const lines = [
     `motion: ${ready ? 'READY' : 'NOT READY'} · ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
     ...(overflow
@@ -659,7 +676,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
     ...(q.findings.some(f => f.kind === 'small')
       ? ['  small in the frame:', ...q.findings.filter(f => f.kind === 'small').slice(0, 5).map(f => `    ${f.beat}: fills ${Math.round(f.fill.w * 100)}% × ${Math.round(f.fill.h * 100)}% of the frame. ${f.fix}`)]
       : []),
-    ...(ready ? [] : ['  not ready to hand over: fix the beats above (each is one edit), then run draft again.']),
+    ...(ready ? [] : [`  not ready to hand over. Next edit: ${nextEdit()} Then run draft again, and keep going until it says READY: a NOT READY film is the slideshow it was asked not to be, however complete its facts.`]),
   ];
   return { share, typeShare, ready, lines };
 }
