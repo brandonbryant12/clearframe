@@ -25,6 +25,8 @@ export function chartSpec(spec, fail) {
   spec.values.forEach((v, i) => {
     if (!v || !Number.isFinite(v.value) || v.value < 0) fail(`chart.values[${i}].value must be a nonnegative number`);
     if (typeof v.label !== 'string' || !v.label.trim()) fail(`chart.values[${i}] needs a label`);
+    if (v.say != null && (typeof v.say !== 'string' || !v.say.trim()))
+      fail(`chart.values[${i}].say must be a word of the narration: the value lands when it is spoken`);
   });
   if (spec.box != null && !(Array.isArray(spec.box) && spec.box.length === 4 && spec.box.every(Number.isFinite)))
     fail('chart.box must be [x, y, w, h]');
@@ -56,6 +58,8 @@ export function chartElements(spec, { w, h }) {
     target: values.find(v => v.label === spec.note.to) ?? values.find(v => v.highlight) ?? values[0],
   };
   const fill = v => (v.highlight ? 'accent' : 'muted');
+  // A value with `say` lands on that word (its parts `after` it); otherwise on the stagger.
+  const when = (v, t, offset = 0) => (v.say ? { say: v.say, ...(offset ? { after: r(offset) } : {}) } : { at: r(t + offset) });
   const out = [];
   if (spec.kind === 'bars') {
     // The finding fills the frame: no heading underneath, the narration names it.
@@ -93,7 +97,7 @@ export function chartElements(spec, { w, h }) {
           opacity: v.highlight ? 1 : 0.75,
           enter: 'grow-y',
           origin: [r(cx + col / 2), r(base)],
-          at: r(t),
+          ...when(v, t),
           dur: 0.7,
         },
         {
@@ -106,7 +110,7 @@ export function chartElements(spec, { w, h }) {
           font: 'figures',
           anchor: 'middle',
           fill: 'ink',
-          at: r(t + 0.4),
+          ...when(v, t, 0.4),
           enter: 'rise',
           dur: 0.4,
         },
@@ -120,7 +124,7 @@ export function chartElements(spec, { w, h }) {
           fit: r(col * 1.4),
           anchor: 'middle',
           fill: v.highlight ? 'ink' : 'muted',
-          at: r(t + 0.2),
+          ...when(v, t, 0.2),
           enter: 'fade',
           dur: 0.4,
         },
@@ -147,7 +151,7 @@ export function chartElements(spec, { w, h }) {
         opacity: v.highlight ? 1 : 0.75,
         enter: 'grow-x',
         origin: [r(cx), r(y + bh / 2)],
-        at: r(t),
+        ...when(v, t),
         dur: 0.6,
       });
       if (sw > 190)
@@ -161,7 +165,7 @@ export function chartElements(spec, { w, h }) {
             size: 36,
             fit: r(sw - 16),
             fill: v.highlight ? 'ink' : 'muted',
-            at: r(t + 0.3),
+            ...when(v, t, 0.3),
             enter: 'fade',
             dur: 0.4,
           },
@@ -174,7 +178,7 @@ export function chartElements(spec, { w, h }) {
             size: 64,
             font: 'figures',
             fill: 'ink',
-            at: r(t + 0.4),
+            ...when(v, t, 0.4),
             enter: 'rise',
             dur: 0.4,
           },
@@ -192,7 +196,7 @@ export function chartElements(spec, { w, h }) {
             y2: r(y - 6),
             stroke: 'muted',
             width: 2,
-            at: r(t + 0.3),
+            ...when(v, t, 0.3),
             enter: 'draw',
             dur: 0.3,
           },
@@ -205,7 +209,7 @@ export function chartElements(spec, { w, h }) {
             size: 32,
             anchor: 'end',
             fill: v.highlight ? 'ink' : 'muted',
-            at: r(t + 0.3),
+            ...when(v, t, 0.3),
             enter: 'fade',
             dur: 0.4,
           },
@@ -216,6 +220,42 @@ export function chartElements(spec, { w, h }) {
     });
   } else {
     // number: the figure, large, over its own bar (which can become a bar or a segment next).
+    // When several values carry `say`, the figure steps through them as each is spoken: the
+    // label changes with it, and the bar grows or shrinks to each value on one shared scale.
+    const cued = values.filter(x => x.say);
+    if (cued.length > 1) {
+      const [x, y, bw, bh] = spec.box ?? [w * 0.15, h * 0.24, w * 0.7, h * 0.48];
+      const max = spec.max ?? Math.max(...cued.map(c => c.value)),
+        size = Math.round(Math.min(bh * 0.6, 300)),
+        fy = y + bh * 0.55,
+        barY = fy + size * 0.3 + 100;
+      cued.forEach((v, i) => {
+        const next = cued[i + 1];
+        const leave = next ? { exit: 'fade', exitSay: next.say, exitDur: 0.25 } : {};
+        out.push(
+          { type: 'text', text: format(v.value, spec), x: r(x + bw / 2), y: r(fy), size, fit: r(bw), font: 'figures', anchor: 'middle', fill: v.highlight ? 'accent' : 'ink', say: v.say, enter: 'rise', dur: 0.5, ...leave },
+          { type: 'text', text: v.label, x: r(x + bw / 2), y: r(fy + size * 0.3 + 54), size: 44, fit: r(bw), anchor: 'middle', fill: 'muted', say: v.say, after: 0.2, enter: 'fade', dur: 0.4, ...leave },
+        );
+      });
+      // One bar that follows the figure: it starts at the first value and resizes on each word.
+      const first = cued[0];
+      out.push({
+        type: 'rect',
+        id: first.key,
+        x: r(x),
+        y: r(barY),
+        w: r(bw),
+        h: 18,
+        fill: 'accent',
+        enter: 'grow-x',
+        origin: [r(x), r(barY + 9)],
+        say: first.say,
+        after: 0.3,
+        dur: 0.6,
+        keys: [{ say: first.say, dur: 0, scaleX: first.value / max }, ...cued.slice(1).map(v => ({ say: v.say, after: 0.2, dur: 0.6, scaleX: v.value / max }))],
+      });
+      return out;
+    }
     const v = values.find(x => x.highlight) ?? values[0];
     const [x, y, bw, bh] = spec.box ?? [w * 0.15, h * 0.24, w * 0.7, h * 0.48];
     const max = spec.max ?? v.value,

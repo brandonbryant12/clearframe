@@ -14,8 +14,8 @@ export default {
     'Two contributions become one: your coins drop into a stack, the company’s drop in beside them, and the stacks merge into one with its total on top. One coin per unit, counted from the real figures.',
   use: 'An employer match, a grant on top of savings, a fee that adds to a price, any "you put in this, they add that". Set the counts with sketchParams {you, match, suffix}; replace YOU, EMPLOYER, EACH (what one coin is, e.g. "Each coin: 1% of your pay") and TOTAL (words after the total) with sketchText; land YOU, MATCH and TOTAL on words with sketchSay. The figures need a visible source like any number.',
   params: {
-    you: { default: 5, min: 0, max: 12, integer: true, about: 'coins you put in' },
-    match: { default: 4, min: 0, max: 12, integer: true, about: 'coins the other side adds' },
+    you: { default: 5, min: 0, max: 12, integer: true, about: 'coins you put in', hint: 'One coin per unit: 5 and 4 for 5% and 4% of pay. For money, pick a unit both fit in 12 coins (e.g. $250 a coin) and say so in EACH.' },
+    match: { default: 4, min: 0, max: 12, integer: true, about: 'coins the other side adds', hint: 'One coin per unit: 5 and 4 for 5% and 4% of pay. For money, pick a unit both fit in 12 coins (e.g. $250 a coin) and say so in EACH.' },
     suffix: { default: '%', about: 'unit printed after each count, e.g. "%" (or "" for none)' },
   },
   build(w, h, { params = {} } = {}) {

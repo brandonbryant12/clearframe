@@ -39,7 +39,10 @@ Each fact gets the mechanism that shows it. These are sketches: fill `sketchText
 | "Where the money goes" (a paycheck, a fee, an allocation) | `split` | params `parts` (values that add up) |
 | "It grows over time" (compounding, starting early) | canvas `graph` with `exponential` | `clearframe-explain` |
 | A figure to remember, then compared | canvas `chart` number, then bars in the next beat (they morph) | `clearframe-dataviz` |
+| Several figures in one line ("14% clicked, 3% typed a password, 22% reported") | canvas `chart` with `say` on each value: a `number` steps through them as each is spoken, `bars` grow on their words | one value per figure |
 | A sequence or a group of things | a `cast` of the film's objects (`docs/cast.md`) | objects and formations |
+
+A picture must keep up with its narration: every figure or idea the voice names gets its own moment (a cue, a value's `say`, a sketch moment). Three figures said over one still number is a slide.
 
 Keep something across cuts. Two beats on the same idea share a cast or a world, so the cut is invisible; a new idea can cut hard (`panel` at a chapter). Let the action beat show the step done (`portal`), with the deadline in the voice or on screen, rather than an end card listing it. One kinetic line (`kinetic` `stack`) for the sentence people should repeat is plenty.
 

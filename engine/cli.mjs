@@ -714,8 +714,19 @@ async function main() {
             : share >= 20
               ? 'some scenes hold still under the voice'
               : 'the picture keeps moving with the voice';
+        // Moving words are still words: how much of the film is type on its own.
+        const TYPE = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout'];
+        const sbNow = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'));
+        const timed = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8')).beats ?? [];
+        const typeOnly = b => TYPE.includes(b.block) && !b.plate && !b.art?.under?.length && !b.stage;
+        const typeSeconds = timed.reduce((t, tb, i) => t + (typeOnly(sbNow.beats[tb.index ?? i] ?? {}) ? tb.dur ?? tb.end - tb.start : 0), 0);
+        const typeShare = s.seconds ? Math.round((100 * typeSeconds) / s.seconds) : 0;
+        const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;
         lines.push(
-          `motion: ${s.changePerSecond} change/s; still under the voice ${voicedHeld} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds` : ''}): ${verdict}.`,
+          `motion: ${s.changePerSecond} change/s; still under the voice ${voicedHeld} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds` : ''}): ${said}.`,
+          ...(typeShare >= 50
+            ? [`  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures (the workplace sketches, a cast, a chart with cued values) and keep type for the one or two lines worth repeating.`]
+            : []),
           ...(worst.length ? [`  stillest: ${worst.join(', ')}. Give each a change on its words: a cue on a later word, a key, a world camera move, a cast formation, a sketch moment (sketchSay), or a shorter beat. A deliberate reading hold is fine; mark it with pace: "hold".`] : []),
           `  qa: ${rel(path.join(q.dir, 'phone.png'))} (read it as a phone would)`,
         );

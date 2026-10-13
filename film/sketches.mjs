@@ -46,7 +46,7 @@ export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set())
 /**
  * A sketch's numbers (`sketchParams`): what it draws from real values, such as how many tokens each
  * side puts in or which days a window covers. A sketch declares them as
- * `params: {name: {default, min?, max?, integer?, oneOf?, list?, length?, about}}`; unknown names,
+ * `params: {name: {default, min?, max?, integer?, oneOf?, list?, length?, about, hint?}}` (`hint` follows a refusal: how to express a real figure in this sketch's units); unknown names,
  * values out of range, choices outside `oneOf` and values of the wrong type (number, text, true/false,
  * following the default) are refused by name, and missing ones take their defaults.
  */
@@ -71,7 +71,7 @@ export function sketchParams(s, given = {}) {
         if (!Number.isFinite(x)) throw new Error(`sketchParams.${k} for ${s.name} must be a number`);
         if (d.integer && !Number.isInteger(x)) throw new Error(`sketchParams.${k} for ${s.name} must be a whole number`);
         if ((d.min != null && x < d.min) || (d.max != null && x > d.max))
-          throw new Error(`sketchParams.${k} for ${s.name} must be ${d.min ?? '-∞'}–${d.max ?? '∞'} (got ${x})`);
+          throw new Error(`sketchParams.${k} for ${s.name} must be ${d.min ?? '-∞'}–${d.max ?? '∞'} (got ${x})${d.hint ? `. ${d.hint}` : ''}`);
       }
     };
     if (d.list) {
