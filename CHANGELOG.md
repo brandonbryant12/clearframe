@@ -17,6 +17,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **`blocks NAME` explains names that are not blocks** (`blocks cast`: a cast is drawn by a canvas beat; `blocks lookback`: a sketch), and docs/cast.md says a cast beat can carry canvas `elements` for a line of type (a Sonnet agent could not find where to put a contact email) and gives the object size and word limits up front.
 - **`critique` says what `portrait` is**: 4:5, a feed post. Two onboarding films asked for "vertical, for the app" came out 1080×1350 because the agents read portrait as vertical (9:16).
 - **`lookback` sketch: the lower of two prices, then a discount.** A price line across one offering period; the start and end prices land on their words, the lower one is ringed by hand, a bar drops by the discount to "You pay $34", and optionally the gap to today's price shades in ("$16 below today's price"). `sketchParams {start, end, discount (a fraction), prefix, decimals, gain}`; what you pay is computed and rounded so the printed prices add up. Every share-plan film so far had typed this, the plan's surprising part; lines that say "the lower of the two" now suggest it.
 - **A recording's speakers read as their roles** when no names are given ("Host", "Guest", not "Speaker host"), and `critique` flags a source line that is a file path (a round-10 film credited its figures to "examples/podcast-pictures/build.mjs").

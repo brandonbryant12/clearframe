@@ -726,7 +726,7 @@ const NOT_BLOCKS = {
   text: 'type on its own is a statement or kinetic block.',
   caption: 'captions are a film field: "captions": "pop".',
 };
-function notABlock(name) {
+export function notABlock(name) {
   if (NOT_BLOCKS[name]) return NOT_BLOCKS[name];
   // A sketch's name used as a block ("portal"): it is drawn by a canvas beat.
   if (items('sketches').some(s => s.id === name))

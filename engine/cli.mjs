@@ -345,7 +345,10 @@ async function main() {
     );
   if (cmd === 'blocks') {
     const b = positionals[0] ? BLOCKS.find(b => b.name === positionals[0]) : null;
-    if (positionals[0] && !b) throw new Error(`Unknown block ${positionals[0]}. Run clearframe blocks.`);
+    if (positionals[0] && !b) {
+      const { notABlock } = await import('../film/catalog.mjs');
+      throw new Error(`No block ${positionals[0]}. ${notABlock(positionals[0])}`);
+    }
     if (o.md) return console.log(markdownCatalog());
     if (o.json || b) return console.log(JSON.stringify(b ?? BLOCKS, null, 2));
     const groups = [...new Set(BLOCKS.map(b => b.category))];
