@@ -25,7 +25,7 @@ Judge means (1–10):
 | Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) | | | | | | |
 | Mortgage rate lock | Sonnet | | | | 6.7 | | | | | | | |
 | Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) | | 5.3 (Haiku) | 4.9 (Haiku) | 6.1, 4.7 (Haiku ×2) | 4.7, 4.1 (Haiku ×2) | 5.1, 3.9 (Haiku ×2) |
-| Share purchase plan | Haiku | | | | | | 4.7 | 5.4 | 3.7 | 4.9, 4.3 | | 5.6, 5.1 | |
+| Share purchase plan | Haiku | | | | | | 4.7 | 5.4 | 3.7 | 4.9, 4.3 | | 5.6, 5.1 |
 | First week (vertical) | Haiku | | | | | | 5.4 | 2.7 | 5.3 (Haiku), 6.4 (Sonnet) | 6.1 | 4.6 | 4.9 |
 | Client data rule | Haiku | | | | | | 6.3 | 4.6 | 5.7 | 5.6 | 4.1 | 5.1 |
 | Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | | | | | | | |
