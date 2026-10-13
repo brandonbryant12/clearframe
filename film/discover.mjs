@@ -12,7 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { BLOCKS } from './catalog.mjs';
 import { items, libraryDirs, LIBRARY } from './library.mjs';
-import { sketchByName } from './sketches.mjs';
+import { sketchByName, sketchParams } from './sketches.mjs';
 import { CAST_CATALOG } from './cast.mjs';
 import { ICONS } from './icons.mjs';
 
@@ -115,8 +115,17 @@ function slots(name) {
     for (const c of [el.cue, el.exitCue, el.along?.cue, ...(el.keys ?? []).map(k => k.cue)]) if (c) cues.add(c);
     walk(el.children);
   });
-  try { walk(sketchByName(name).build(1920, 1080, {}).elements); } catch {}
+  try { const s = sketchByName(name); walk(s.build(1920, 1080, { params: sketchParams(s, {}) }).elements); } catch {}
   return { text: [...text], cues: [...cues] };
+}
+/** A canvas beat that uses a sketch: its placeholder words, its named moments and its numbers to fill. */
+export function sketchExample(name) {
+  const { text, cues } = slots(name);
+  const params = Object.fromEntries(Object.entries(sketchByName(name)?.params ?? {}).map(([k, d]) => [k, d.default]));
+  return { block: 'canvas', props: { sketch: name,
+    ...(text.length ? { sketchText: Object.fromEntries(text.map(t => [t, 'your words'])) } : {}),
+    ...(cues.length ? { sketchSay: Object.fromEntries(cues.map(c => [c, 'a spoken word'])) } : {}),
+    ...(Object.keys(params).length ? { sketchParams: params } : {}) } };
 }
 const slotText = ({ text, cues }) => [text.length ? `sketchText ${text.join(', ')}` : '', cues.length ? `sketchSay ${cues.join(', ')}` : ''].filter(Boolean).join('; ');
 
@@ -229,11 +238,9 @@ export async function detail(id) {
     Object.assign(out, { props: Object.keys(b.props ?? {}), example: { block: b.name, props: b.example } });
   } else if (e.kind === 'sketch') {
     // Its placeholder type and named moments, so the example shows what to fill.
-    const { text, cues } = slots(e.name);
-    out.example = { block: 'canvas', props: { sketch: e.name,
-      ...(text.length ? { sketchText: Object.fromEntries(text.map(t => [t, 'your words'])) } : {}),
-      ...(cues.length ? { sketchSay: Object.fromEntries(cues.map(c => [c, 'a spoken word'])) } : {}) } };
-    out.note = `node engine/cli.mjs sketch ${e.name} prints the elements to adapt.${cues.length ? ' sketchSay lands each named moment on a word of the narration.' : ''}`;
+    out.example = sketchExample(e.name);
+    const cues = Object.keys(out.example.props.sketchSay ?? {});
+    out.note = `node engine/cli.mjs sketch ${e.name} prints the elements to adapt.${cues.length ? ' sketchSay lands each named moment on a word of the narration.' : ''}${out.example.props.sketchParams ? ' sketchParams sets the numbers it draws.' : ''}`;
   } else if (e.kind === 'playbook') {
     const p = items('playbooks').find(x => x.id === e.name);
     out.scenes = p.beats.map(b => `${b.id} (${b.block}${b.props?.sketch ? `: ${b.props.sketch}` : ''})${b.vo ? `: ${clean(b.vo).slice(0, 80)}` : ''}`);

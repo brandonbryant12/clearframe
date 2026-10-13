@@ -78,7 +78,7 @@ test('held analysis excludes scope bars, respects open/portrait frames, and stay
   const signal = { d: Array(n).fill(0), skip: Array(n).fill(0), second: Array(n).fill(0), fps };
   const held = timeFindings({ ...signal, beats: [{ id: 'quiet', start: 0, end: 12, vo: { start: 0, end: 12 } }] });
   assert.ok(held.some(f => f.kind === 'held' && f.level === 'warn' && f.seconds === 12));
-  assert.match(held[0].message, /deliberate cinematic holds/);
+  assert.match(held[0].message, /declare a reading hold with pace: "hold"/);
   // Similar-looking quick cuts must not be joined into one long frozen scene.
   const montage = Array.from({ length: 6 }, (_, i) => ({ id: String(i), start: i * 2, end: (i + 1) * 2 }));
   assert.ok(!timeFindings({ ...signal, beats: montage }).some(f => f.kind === 'held'));

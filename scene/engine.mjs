@@ -102,7 +102,19 @@ export async function buildScene({ force = false } = {}) {
   if (fs.existsSync(gate) && process.env.CLEARFRAME_HEAVY_HELD !== '1') {
     const holder = lockHolder();
     if (holder) log.warn(`Heavy-job lock is held by ${holder}; the build starts when it finishes.`);
-    await run(gate, ['--', 'cargo', ...cargo]);
+    // Keep saying so while the lock is someone else's, so a queued build is not taken for a hang.
+    const started = Date.now();
+    const heartbeat = setInterval(() => {
+      const now = lockHolder();
+      if (!now || now.includes(CRATE)) return clearInterval(heartbeat);
+      log.warn(`Still queued (${Math.round((Date.now() - started) / 1000)}s) behind ${now}. The build starts by itself; don't stop this command.`);
+    }, 30000);
+    heartbeat.unref();
+    try {
+      await run(gate, ['--', 'cargo', ...cargo]);
+    } finally {
+      clearInterval(heartbeat);
+    }
   } else await run('cargo', cargo);
   // The build may have waited for the lock while sources changed; cargo compiles what is on
   // disk when it starts. If every source is older than the binary, the binary is current.

@@ -1,0 +1,14 @@
+{
+  "order": 34,
+  "notes": "Warm paper white with deep navy type, a brick-coral accent and a sea teal. Financial services and client films: trustworthy, warm, never a dashboard.",
+  "colors": {
+    "bg": "#fbf8f3",
+    "surface": "#efe8dd",
+    "ink": "#14233c",
+    "muted": "#55607a",
+    "accent": "#b8422b",
+    "accent2": "#1f7a8c",
+    "positive": "#2c7a4b",
+    "negative": "#b3372e"
+  }
+}

@@ -51,8 +51,8 @@ function asDrawn(b, { width = 1920, height = 1080 } = {}) {
   if (b.block !== 'canvas' || !b.props?.sketch) return b;
   const preset = sketchPreset(width, height);
   try {
-    const d = sketch(b.props.sketch, preset, { seed: b.props.seed, text: b.props.sketchText, say: b.props.sketchSay });
-    const { sketch: _s, sketchText: _t, sketchSay: _y, ...rest } = b.props;
+    const d = sketch(b.props.sketch, preset, { seed: b.props.seed, text: b.props.sketchText, say: b.props.sketchSay, params: b.props.sketchParams });
+    const { sketch: _s, sketchText: _t, sketchSay: _y, sketchParams: _p, ...rest } = b.props;
     return { ...b, props: { ...d, ...rest, elements: [...d.elements, ...(b.props.elements ?? [])] } };
   } catch {
     return b;

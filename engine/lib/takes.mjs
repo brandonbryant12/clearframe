@@ -180,6 +180,7 @@ async function heardWordsMany(files, tokenLists, language) {
       '16000',
       joined,
     ]);
+    process.stderr.write(`  measuring words with local Whisper (about a minute per minute of speech; longer while other work runs)…\n`);
     const r = spawnSync(
       'whisper',
       [

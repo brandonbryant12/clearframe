@@ -726,7 +726,7 @@
           </svg>
         </div>
         <p class="scroll-hint">Swipe sideways to see the whole diagram →</p>
-        <figcaption id="pipeline-caption">Everything downstream of <code>storyboard.json</code> is regenerated. <code>draft DIR</code> runs critique, draft voice, check, sheet and a draft MP4 in one pass.</figcaption>
+        <figcaption id="pipeline-caption">Everything downstream of <code>storyboard.json</code> is regenerated. <code>draft DIR</code> runs critique, draft voice, check, sheet, a draft MP4 and <code>qa</code> in one pass, and ends with a motion verdict: how much of the film sits still while the voice talks.</figcaption>
       </figure>
 
       <ol class="stages">
@@ -1690,7 +1690,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>beatmap DIR | TRACK</code></td><td class="wrap">The music's tempo (with half and double) and measured drop, and every cut against its beat grid.</td></tr>
             <tr><td><code>timing</code> · <code>captions DIR</code></td><td class="wrap">Timing JSON; SRT and VTT (measured words required unless <code>--draft</code>).</td></tr>
             <tr class="group"><td colspan="2">Render</td></tr>
-            <tr><td><code>draft DIR [--rough] [--no-render]</code></td><td class="wrap">One pass: critique, draft voice, check, sheet and a draft MP4. <code>--rough</code>: placeholders as slates, the first full-length look.</td></tr>
+            <tr><td><code>draft DIR [--rough] [--no-render]</code></td><td class="wrap">One pass: critique, draft voice, check, sheet, a draft MP4 and <code>qa</code>. Ends with a motion verdict (seconds still under the voice, the stillest beats); over 40% reads as narrated slides. <code>pace: "hold"</code> declares a reading hold. <code>--rough</code>: placeholders as slates, the first full-length look.</td></tr>
             <tr><td><code>render DIR [--draft]</code> · <code>preview DIR</code></td><td class="wrap">Final encode, or a fast review MP4 (<code>--out</code>, <code>--no-audio</code>, <code>--force</code>).</td></tr>
             <tr class="group"><td colspan="2">Review &amp; edit (<code>docs/editing.md</code>)</td></tr>
             <tr><td><code>paper DIR [--suggest-cuts]</code></td><td class="wrap">The paper edit: chapters, timecodes, speakers, intended pictures, transcript, recording times. Suggestions are proposals only.</td></tr>

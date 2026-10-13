@@ -855,7 +855,8 @@ export const hasDigits = list => {
   eachElement(list, el => {
     // Chapter numbering ("01 · Software", "2. Tools") is not a figure.
     const text = String(el.text ?? '').replace(/^\s*\d{1,2}\s*[·.)\-–—:]\s*/, '');
-    if (el.type === 'text' && /\d/.test(text)) found = true;
+    // A lone digit is an index (a step, a tile, a list position), not a figure.
+    if (el.type === 'text' && /\d/.test(text) && !/^\s*\d\s*$/.test(text)) found = true;
   });
   return found;
 };
