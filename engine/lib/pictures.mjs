@@ -68,3 +68,52 @@ export function chartFor(vo, spoken) {
     values: f.map((x, i) => ({ label: `WHAT ${i + 1} IS`, value: x.value, say: x.say })),
   };
 }
+
+/**
+ * A cast ready to paste for the two podcast pictures that come up most: months counted
+ * ("three to six months of expenses": calendar pages that land on each number's word) and money
+ * kept apart ("keep it separate": coins travel from an everyday jar into their own). Null otherwise.
+ */
+export function castFor(vo, spoken) {
+  const text = String(vo);
+  const N = '(\\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)';
+  const months = text.match(new RegExp(`\\b${N}(?:\\s+(?:to|or)\\s+${N})?\\s+months?\\b`, 'i'));
+  if (months) {
+    const count = w => Number(spoken([w]));
+    const lo = count(months[1]), hi = months[2] ? count(months[2]) : null;
+    if (lo >= 1 && lo <= 12 && (hi == null || (hi > lo && hi <= 12))) {
+      const n = hi ?? lo, ids = Array.from({ length: n }, (_, i) => `month-${i + 1}`);
+      const word = w => w;
+      return {
+        cast: {
+          fresh: true,
+          objects: ids.map((id, i) => ({ id, shape: 'calendar', color: i < lo ? 'accent' : 'accent2', size: n <= 6 ? 150 : 110, enter: 'pop' })),
+          formations: [
+            { form: 'row', say: word(months[1]), ids: ids.slice(0, lo) },
+            ...(hi ? [{ form: 'row', say: word(months[2]), ids }] : []),
+          ],
+        },
+      };
+    }
+  }
+  const apart = text.match(/\b(separate|aside|its own|different account)\b/i);
+  if (apart) {
+    const coins = ['coin-1', 'coin-2', 'coin-3', 'coin-4'];
+    return {
+      cast: {
+        fresh: true,
+        objects: [
+          { id: 'everyday', shape: 'jar', color: 'muted', label: 'Everyday', size: 240 },
+          { id: 'saved', shape: 'jar', color: 'positive', label: 'Kept apart', size: 240 },
+          ...coins.map(id => ({ id, shape: 'coin', color: 'accent', size: 80 })),
+        ],
+        formations: [
+          { form: 'row', at: 0, ids: ['everyday', 'saved'] },
+          { form: 'cluster', at: 0.3, ids: coins, beside: 'everyday' },
+          { form: 'merge', say: apart[1].split(/\s+/)[0], ids: coins, into: 'saved' },
+        ],
+      },
+    };
+  }
+  return null;
+}

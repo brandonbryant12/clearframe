@@ -17,6 +17,9 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **The verdict pastes casts too**: a words-only line that counts months ("three to six months") gets calendar pages that land on each number's word, and one that keeps money apart ("keep it separate") gets coins merging from an everyday jar into their own (`castFor`). Both round-10 podcast agents said pictures would take "45 more minutes" and handed over captions.
+- **`cast.fresh: true` starts a new cast.** A cast carries on through the film, past other scenes (by design: `fill` and `emerge` hand objects to a chart and back), so a second cast beat later in a podcast showed the first one's calendar pages over its jars; `fresh` drops what was carried in. The carried-objects messages now name it.
+- **A hold inside a recording is reported**: it plays seconds of silence between two things said.
 - **`qa` finds frames with next to nothing on them while the voice talks** (a hairline, a footer, for 1.5 s or more, sampled every half second), whatever the block; the verdict lists them under "blank under the voice". Round-9 reviewers read such stretches as empty or broken.
 - **Refusals say where a value goes**: a list sketch param given a number shows the list it wants (`[1, 2, 3]`), `size` on a whole cast points to each object's `size` or a camera zoom, and a source line that shows its working with "=" or "equals" ("six months = 180 days") satisfies the figure check.
 - **Three different pictures in a row are a sequence.** `critique`'s "three drawing scenes in a row" now tells drawings apart by what they draw (a sketch's name, a cast, a chart's kind); agents were breaking up runs of different workplace sketches with kinetic type to quiet it, trading pictures for words.

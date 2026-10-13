@@ -29,7 +29,7 @@ const COLORS = ['accent', 'accent2', 'positive', 'negative', 'ink', 'muted', 'su
 const hash = s => { let h = 2166136261; for (const c of String(s)) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return ((h >>> 0) % 100000) / 100000; };
 
 export function castSpec(input, known = new Map(), knownLook = null) {
-  own(input, ['objects', 'formations', 'seed', 'look'], 'cast');
+  own(input, ['objects', 'formations', 'seed', 'look', 'fresh'], 'cast');
   check(input.look == null || LOOKS.includes(input.look), `look is ${LOOKS.join(', ')}`);
   check(input.look == null || knownLook == null || input.look === knownLook, `look is set once, in the cast's first beat (it is ${knownLook})`);
   const objects = new Map(known);
@@ -49,7 +49,7 @@ export function castSpec(input, known = new Map(), knownLook = null) {
   check(
     objects.size >= 1 && objects.size <= 16,
     objects.size > 16 && known.size
-      ? `a cast has 1–16 objects; this one has ${objects.size}: ${known.size} carried from earlier beats of the film's cast and ${objects.size - known.size} new here. Reuse the carried ones by id; a scene without a cast between them starts a new one`
+      ? `a cast has 1–16 objects; this one has ${objects.size}: ${known.size} carried from earlier beats of the film's cast and ${objects.size - known.size} new here. Reuse the carried ones by id, or start a new cast with "fresh": true`
       : `a cast has 1–16 objects (this one has ${objects.size}; declare them in its first beat)`,
   );
   check(Array.isArray(input.formations) && input.formations.length >= 1 && input.formations.length <= 12, 'formations needs 1–12 entries');
@@ -724,7 +724,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
   // A beat that brings in new objects while earlier ones stand untouched piles them up: the
   // frame fills with the last beat's leftovers (seen only on the sheet before this note).
   if (untouched.length >= 2 && [...groups.keys()].some(id => !state.has(id)))
-    notes.push(`${untouched.join(', ')} carried from earlier beats still stand where they were while new objects arrive: move them in this beat's formations, send them off with {"form": "exit", "ids": [${untouched.map(id => `"${id}"`).join(', ')}]}, or put a scene without a cast between the beats`);
+    notes.push(`${untouched.join(', ')} carried from earlier beats still stand where they were while new objects arrive: move them in this beat's formations, send them off with {"form": "exit", "ids": [${untouched.map(id => `"${id}"`).join(', ')}]}, or start this beat's cast with "fresh": true`);
   for (const { el } of groups.values()) el.keys.sort((a, b) => a.at - b.at);
   // The last word on the budget: a scene the renderer would refuse is refused here, by name.
   for (const [id, { el }] of groups) check(el.keys.length <= 24, `${id} has more moves in this beat than one object can carry (${el.keys.length} of 24 keyframes); move some of them to the next beat`);
@@ -742,6 +742,8 @@ export function expandCastProps(input, frame, ctx = {}) {
   const { cast, ...rest } = structuredClone(input);
   for (const key of ['plot', 'bars', 'bridge', 'stat', 'distribution', 'multiples', 'kpi', 'teaching', 'chart', 'sketch', 'view', 'viewFrom', 'world'])
     check(rest[key] == null, `cannot combine cast with ${key} (a cast lays itself out for the frame)`);
+  // `fresh: true` starts a new cast here: nothing carried in from earlier cast beats stays on screen.
+  if (cast.fresh) ctx = { ...ctx, objects: undefined, look: undefined, state: undefined, threads: undefined, camera: undefined };
   const spec = castSpec(cast, ctx.objects ?? new Map(), ctx.look ?? null);
   // A heading takes the top of the frame (as on stages); the cast keeps below it.
   if (rest.title || rest.kicker) frame = { ...frame, ...(ctx.heading === 'bottom'

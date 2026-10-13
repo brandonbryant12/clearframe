@@ -12,7 +12,7 @@ import { measureDrop } from './beatmap.mjs';
 import { sha256 } from '../../scene/engine.mjs';
 import { reviewGeometry } from '../../film/render-geometry.mjs';
 import { COVER } from '../../film/constants.mjs';
-import { pictureFor, chartFor } from './pictures.mjs';
+import { pictureFor, chartFor, castFor } from './pictures.mjs';
 import { sketchByName, sketchWords } from '../../film/sketches.mjs';
 import { spoken } from './word-align.mjs';
 
@@ -578,8 +578,9 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
             // A sketch that fits the line first; else a line that says figures gets its chart ready to
             // paste (the values and the words they land on); else the recipe for its kind of idea.
             const lines = typed.map(b => {
-              const f = pictureFor(b.vo ?? ''), chart = !f?.sketch && chartFor(b.vo ?? '', spoken);
+              const f = pictureFor(b.vo ?? ''), cast = !f?.sketch && castFor(b.vo ?? '', spoken), chart = !f?.sketch && !cast && chartFor(b.vo ?? '', spoken);
               if (f?.sketch) return [b, `the \`${f.sketch}\` sketch (${f.why.toLowerCase().replace(/^this line is /, '')}; \`sketch ${f.sketch}\` prints the beat to paste)`];
+              if (cast) return [b, `paste {"block": "canvas", "props": {"source": "…", ${JSON.stringify(cast).slice(1, -1)}}} (labels and colours are yours)`];
               if (chart) return [b, `paste {"block": "canvas", "props": {"source": "…", "chart": ${JSON.stringify(chart)}}} and name each value (its label)`];
               return [b, f?.use ?? null];
             });

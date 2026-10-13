@@ -19,7 +19,9 @@ A film made of one layout per line reads as a slideshow, however well each layou
 
 ## Contract
 
-`props.cast` is `{look?, objects?, formations, seed?}`.
+`props.cast` is `{look?, objects?, formations, seed?, fresh?}`.
+
+A cast carries on through the film: objects declared in one cast beat are still there, where they stood, in the next beat that has a cast, even with other scenes between (that is how `fill` and `emerge` hand an object to a chart and back). `fresh: true` starts a new cast in this beat instead: nothing carried in stays on screen, and its look may change.
 
 - **Objects** are declared in the first beat that uses the cast; later beats may add more. Each is `{id, icon | word | shape, color, label?, size?, float?, enter?}`:
   - `icon` is any icon name (`clearframe catalog canvas`), drawn on a rounded tile. `word` (up to 14 characters) is drawn on a pill.
