@@ -18,7 +18,7 @@ const clip = (s, n) => { s = String(s ?? ''); return s.length > n ? `${s.slice(0
 const skill = n => `skills/${n}/SKILL.md`;
 export const GUIDES = { clearframe: skill('clearframe'), library: skill('clearframe-library'), inspiration: skill('clearframe-inspiration'), cinema: skill('clearframe-cinema'), canvas: skill('clearframe-canvas'), dataviz: skill('clearframe-dataviz'),
   motion: skill('clearframe-motion'), script: skill('clearframe-script'), integrity: skill('clearframe-integrity'), direction: skill('clearframe-direction'), engine: skill('clearframe-engine'),
-  review: skill('clearframe-review'), scene: skill('clearframe-scene'), explain: skill('clearframe-explain'), style: 'docs/style.md', 'cinema-notes': 'docs/cinema.md', 'canvas-notes': 'docs/canvas.md', 'scene-notes': 'docs/scene-engine.md', ideas: 'docs/ideas.md',
+  review: skill('clearframe-review'), scene: skill('clearframe-scene'), explain: skill('clearframe-explain'), workplace: skill('clearframe-workplace'), style: 'docs/style.md', 'cinema-notes': 'docs/cinema.md', 'canvas-notes': 'docs/canvas.md', 'scene-notes': 'docs/scene-engine.md', ideas: 'docs/ideas.md',
   speech: 'docs/speech.md', authoring: 'engine/agent-plugin/AUTHORING.md', cast: 'docs/cast.md', images: 'docs/image-direction.md', editing: 'docs/editing.md', continuity: 'docs/continuity.md' };
 /** Drop commas that close an array or object, reading strings as strings (their text is never touched). */
 function withoutTrailingCommas(text) {
@@ -279,7 +279,7 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
           let shape = input.shape;
           if (!shape) try { shape = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8')).format?.preset; } catch {}
           shape = ['vertical', 'portrait', 'square'].includes(shape) ? shape : 'landscape';
-          const drawn = sketch(String(input.name ?? ''), shape, { text: input.sketchText, say: input.sketchSay });
+          const drawn = sketch(String(input.name ?? ''), shape, { text: input.sketchText, say: input.sketchSay, params: input.sketchParams });
           return JSON.stringify({ shape, note: 'This sketch drawn for this frame shape, with any sketchText and sketchSay filled. To change the picture itself, put these elements in a canvas beat\'s props.elements (instead of props.sketch) and edit only what the brief needs: icons, labels, positions, how many.', ...drawn }, null, 1);
         },
       }[topic];

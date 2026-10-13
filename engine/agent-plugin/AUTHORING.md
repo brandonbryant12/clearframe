@@ -10,6 +10,10 @@ topic. When the person wants ideas or the brief leaves the picture open, offer t
 differ in the picture's idea (a metaphor, a place, the mechanism, the words, the number), each with a
 line on why it suits them, then pick one and build it; guide topic `inspiration` has the method. Exact block props: topic `block`, name `…`.
 
+## Workplace and financial films
+
+Benefits, a 401(k), open enrollment, pay, policy, training, onboarding and client updates have their own short path: `clearframe_guide` topic `workplace`. Use the `workplace` treatment and one of its playbooks, and give each fact the fill-in-the-blank sketch that shows it: `match` (you put in, they add), `vesting`, `deadline`, `expire` (use it or lose it), `portal` (the step done in the app), `inspect` (signs in a message or receipt), `choose` (two options), `split` (a whole into parts). A sketch beat is `{"block": "canvas", "props": {"sketch": NAME, "sketchText": {…}, "sketchSay": {…}, "sketchParams": {…}}}`; topic `item`, name `sketch:NAME`, shows every slot and number. Numbers come from the source document through `sketchParams`, never from the drawing.
+
 ## The fastest path to a watchable first cut
 
 1. `clearframe_state` once (add `full: true` only if you must see layers).
