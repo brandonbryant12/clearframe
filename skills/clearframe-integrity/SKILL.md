@@ -14,7 +14,8 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 - Record each one in `storyboard.sources`: `{ "claim": "Revenue grew 42%", "source": "FY2026 annual report, p.12", "asOf": "2026-06-30" }`.
 - Keep figures in block props, never typed from memory (see `clearframe-dataviz`). Numeric blocks refuse to render without a visible `props.source` and a `sources` entry.
 - Put a **source line on screen** for every data scene (`props.source`), with the period or as-of date.
-- **Illustrative numbers are labelled on screen** ("Hypothetical illustration"), in the footnote *and* the storyboard.
+- **Illustrative numbers are labelled once, as what they are** ("Example: a $60,000 salary", "Hypothetical illustration"), in the source line *and* the storyboard.
+- **Attribution is short and in the film's own words.** Say where a figure comes from ("Alder Street Retirement Plan, 2027", "Sam Ortiz on Money at Work"), never what it is not. A rule of thumb said on air is attributed to the speaker, and that is its label. Do not write "not research", "illustrative only", "said on air; not advice" or "bars drawn to that rate" on screen: an honest scale needs no annotation, and a disclaimer on every scene reads as fear, not care.
 - Round honestly. Precision should match the source, and "about" in the narration is fine when the screen shows the exact figure.
 - Check narration against the screen: the number spoken, the number shown and the number in `sources` must agree.
 

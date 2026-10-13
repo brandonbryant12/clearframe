@@ -13,7 +13,34 @@ import { cleanVoice, speechSegments } from './audio.mjs';
 import { readPCM } from './levels.mjs';
 import { ffmpeg, hashOf, log, pcmToWav, readJSON, round, writeJSON } from './util.mjs';
 import { cutPoints, timedWords } from './ingest.mjs';
-import { whisperAvailable } from './whisper.mjs';
+import { transcribeWords, whisperAvailable } from './whisper.mjs';
+
+// Which recognizer measured the latest takes' words (recorded with them).
+let heardBy = 'whisper-base';
+
+/**
+ * A beat's words on its own slice clock: ordered, never overlapping, each at least 20 ms, all
+ * inside the slice. A word clamped at the slice end used to collapse to zero length, which the
+ * renderer refuses as an invalid cue.
+ */
+export function fitWords(words, start, sliceDur) {
+  const out = words.map(w => ({
+    w: w.w,
+    t0: Math.max(0, w.t0 - start),
+    t1: Math.min(sliceDur, w.t1 - start),
+    ...(w.estimated ? { estimated: true } : {}),
+  }));
+  const min = Math.min(0.02, sliceDur / Math.max(1, out.length));
+  for (let k = 0; k < out.length; k++) {
+    if (k) out[k].t0 = Math.max(out[k].t0, out[k - 1].t1);
+    out[k].t1 = Math.max(out[k].t1, out[k].t0 + min);
+  }
+  for (let k = out.length - 1; k >= 0; k--) {
+    out[k].t1 = Math.min(out[k].t1, k + 1 < out.length ? out[k + 1].t0 : sliceDur);
+    out[k].t0 = Math.min(out[k].t0, out[k].t1 - min);
+  }
+  return out.map(w => ({ ...w, t0: round(Math.max(0, w.t0), 4), t1: round(w.t1, 4) }));
+}
 import { recordRate } from './voice-rates.mjs';
 
 /**
@@ -180,27 +207,15 @@ async function heardWordsMany(files, tokenLists, language) {
       '16000',
       joined,
     ]);
-    const r = spawnSync(
-      'whisper',
-      [
-        joined,
-        '--model',
-        'base',
-        '--word_timestamps',
-        'True',
-        '--output_format',
-        'json',
-        '--output_dir',
-        tmp,
-        '--fp16',
-        'False',
-        '--language',
-        language ?? 'en',
-      ],
-      { encoding: 'utf8' },
-    );
-    if (r.status !== 0) return files.map(() => null);
-    const heard = timedWords(JSON.parse(fs.readFileSync(path.join(tmp, 'takes.json'), 'utf8')));
+    process.stderr.write(`  measuring words with local Whisper (about a minute per minute of speech without whisper.cpp; longer while other work runs)…\n`);
+    let result;
+    try {
+      result = transcribeWords(joined, { language: language ?? 'en', dir: tmp });
+    } catch {
+      return files.map(() => null);
+    }
+    heardBy = result.provider;
+    const heard = timedWords(result.words);
     return files.map((_, i) => {
       const start = offsets[i],
         end = i + 1 < offsets.length ? offsets[i + 1] : Infinity;
@@ -345,17 +360,7 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
       const file = path.join(P.vo, `${b.id}.wav`);
       fs.writeFileSync(file, pcmToWav(slice, { sampleRate: rate }));
       const sliceDur = slice.length / 2 / rate;
-      const words = perBeat[i].words
-        ? perBeat[i].words
-            .map(w => ({
-              w: w.w,
-              t0: round(Math.max(0, w.t0 - start), 4),
-              t1: round(Math.min(sliceDur, w.t1 - start), 4),
-              ...(w.estimated ? { estimated: true } : {}),
-            }))
-            .map((w, k, arr) => ({ ...w, t0: k ? Math.max(w.t0, arr[k - 1].t1) : w.t0 }))
-            .map(w => ({ ...w, t1: Math.max(w.t1, w.t0 + 0.02) }))
-        : null;
+      const words = perBeat[i].words ? fitWords(perBeat[i].words, start, sliceDur) : null;
       const interpolated = words ? words.filter(w => w.estimated).length : null;
       const clean = words?.map(({ estimated, ...w }) => w);
       const segs = [{ start: perBeat[i].start - start, end: perBeat[i].end - start }];
@@ -377,7 +382,7 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
           ? {
               alignment: {
                 kind: interpolated ? 'estimated' : 'measured',
-                provider: 'whisper-base',
+                provider: heardBy,
                 audioHash: audioHash(file),
                 ...(interpolated ? { interpolatedWords: interpolated } : {}),
               },

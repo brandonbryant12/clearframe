@@ -39,7 +39,7 @@ const HELP = `ClearFrame — motion graphics
   blocks [name] [--json | --md]        ${BLOCKS.length} native building blocks and props
   themes [--json]                     ${Object.keys(THEMES).length} palettes with swatches
   motions [--json]                    presets, entrances, exits and backdrops
-  icons [--json]                      95 bundled Tabler icons and provenance
+  icons [--json]                      132 bundled Tabler icons and provenance
   sketch [name] [--vertical]          canvas starting compositions (route, orbit, pipeline…) as JSON
   find "idea" [--kind k] | --id k:name | --index   search the whole library: a shortlist, then exact authoring
   doctor | build                      tools and disk headroom; compile the renderer
@@ -426,6 +426,14 @@ async function main() {
     // A system diagram prints its editable source, not hundreds of compiled shapes.
     const source = sketchByName(positionals[0]);
     if (source?.diagram) return console.log(JSON.stringify({ title: 'Your headline', diagram: source.diagram }, null, 1));
+    // A sketch with words to replace, moments to cue or numbers to set is used as it is: say how
+    // (on stderr, so stdout stays the drawing to adapt).
+    const { sketchExample } = await import('../film/discover.mjs');
+    const use = sketchExample(positionals[0]);
+    if (use.props.sketchText || use.props.sketchSay || use.props.sketchParams) {
+      const params = Object.entries(source?.params ?? {}).map(([k, d]) => `  ${k}: ${d.about ?? ''} (default ${JSON.stringify(d.default)}${d.min != null || d.max != null ? `, ${d.min ?? ''}–${d.max ?? ''}` : ''})`);
+      console.error(`Use it as a beat (fill the words, cue the moments on narration words, set the numbers):\n${JSON.stringify(use, null, 1)}${params.length ? `\nNumbers:\n${params.join('\n')}` : ''}\nThe drawing below is for adapting by hand.\n`);
+    }
     return console.log(JSON.stringify(sketch(positionals[0], o.vertical ? 'vertical' : 'landscape'), null, 1));
   }
   if (cmd === 'motions')
@@ -655,7 +663,7 @@ async function main() {
     const { critique } = await import('./lib/critique.mjs');
     const c = critique(dir);
     lines.push(
-      `critique: cinema ${c.summary.cinema}/100, ${c.summary.warnings} warning(s), ${c.summary.ideas} idea(s)`,
+      `critique (structure, before rendering): cinema ${c.summary.cinema}/100, ${c.summary.warnings} warning(s), ${c.summary.ideas} idea(s)`,
       ...c.findings.slice(0, 8).map(f => `  ${f.level === 'warn' ? '!' : '·'} ${f.where}: ${f.message}`),
     );
     const g = await import('./lib/generate.mjs');
@@ -686,6 +694,45 @@ async function main() {
       );
       const { writeReviewPage } = await import('./lib/review-page.mjs');
       lines.push(`review page: ${rel(writeReviewPage(dir))}`);
+      // The picture in motion, measured on the encoded film: the honest test of "narrated slides".
+      // critique reads the storyboard's structure; this reads what the viewer actually sees.
+      try {
+        const { qaProject } = await import('./lib/qa.mjs');
+        const q = await qaProject(dir, {});
+        const s = q.summary;
+        let share = 0;
+        // Stretches under the voice: a silent breath or title may hold.
+        const held = q.findings.filter(f => f.kind === 'held' && !f.deliberate && f.level === 'warn');
+        const voicedHeld = Math.round(10 * held.reduce((t, f) => t + f.seconds, 0)) / 10;
+        const byBeat = {};
+        for (const f of held) byBeat[f.beat ?? '?'] = (byBeat[f.beat ?? '?'] ?? 0) + f.seconds;
+        share = s.seconds ? Math.round((100 * voicedHeld) / s.seconds) : 0;
+        const worst = Object.entries(byBeat).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([b, sec]) => `${b} ${sec.toFixed(1)} s`);
+        const verdict =
+          share >= 40 || (share >= 20 && s.changePerSecond < 1.5)
+            ? 'READS AS NARRATED SLIDES: the picture sits still while the voice talks'
+            : share >= 20
+              ? 'some scenes hold still under the voice'
+              : 'the picture keeps moving with the voice';
+        // Moving words are still words: how much of the film is type on its own.
+        const TYPE = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout'];
+        const sbNow = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'));
+        const timed = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8')).beats ?? [];
+        const typeOnly = b => TYPE.includes(b.block) && !b.plate && !b.art?.under?.length && !b.stage;
+        const typeSeconds = timed.reduce((t, tb, i) => t + (typeOnly(sbNow.beats[tb.index ?? i] ?? {}) ? tb.dur ?? tb.end - tb.start : 0), 0);
+        const typeShare = s.seconds ? Math.round((100 * typeSeconds) / s.seconds) : 0;
+        const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;
+        lines.push(
+          `motion: ${s.changePerSecond} change/s; still under the voice ${voicedHeld} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds` : ''}): ${said}.`,
+          ...(typeShare >= 50
+            ? [`  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures (the workplace sketches, a cast, a chart with cued values) and keep type for the one or two lines worth repeating.`]
+            : []),
+          ...(worst.length ? [`  stillest: ${worst.join(', ')}. Give each a change on its words: a cue on a later word, a key, a world camera move, a cast formation, a sketch moment (sketchSay), or a shorter beat. A deliberate reading hold is fine; mark it with pace: "hold".`] : []),
+          `  qa: ${rel(path.join(q.dir, 'phone.png'))} (read it as a phone would)`,
+        );
+      } catch (e) {
+        lines.push(`motion: qa did not run (${e.message.split('\n')[0]})`);
+      }
     }
     lines.push(`done in ${((performance.now() - t0) / 1000).toFixed(1)} s. Open the sheet before anything else.`);
     return console.log(lines.join('\n'));
@@ -798,6 +845,10 @@ async function main() {
   }
   if (cmd === 'preview' && (o.beats || o.range || o.note || o.chapter)) return reviewCommand('range', dir, o, opts, positionals);
   if (cmd === 'render' || cmd === 'preview') {
+    // One GPU render at a time on a shared machine: several agents rendering together exhausted
+    // memory and failed with a bare exit code. Renders take seconds; queueing them is cheap.
+    const { enterGate } = await import('./lib/resource-gate.mjs');
+    if (await enterGate()) return;
     const report = await native.renderProject(dir, { ...opts, draft: cmd === 'preview' || o.draft });
     const { writeReviewPage } = await import('./lib/review-page.mjs');
     report.reviewPage = writeReviewPage(dir);

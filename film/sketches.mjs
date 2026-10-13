@@ -13,7 +13,9 @@ export const sketchByName = name => item('sketches', name);
 /**
  * Fill a drawn sketch's placeholders: type ("TITLE") from `text`, and named moments (`cue: "FIND"`
  * on an element, a key or an `along` route, `exitCue` on an exit) from `say`, so they land on spoken words instead of
- * their default seconds. Unfilled cues keep their seconds; cue names never reach the plan.
+ * their default seconds. A cued element may also carry `after` (seconds after its moment) with `at` already
+ * including that offset: a filled moment keeps the offset, an unfilled one keeps its seconds. Cue names never
+ * reach the plan.
  */
 export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set()) {
   for (const el of list ?? []) {
@@ -23,6 +25,10 @@ export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set())
       if (t.cue != null && say[t.cue] != null) {
         t.say = say[t.cue];
         delete t.at;
+      } else if (t.cue != null) {
+        // `after` keeps an offset from the moment once it lands on a word; with its default
+        // seconds the offset is already in `at`.
+        delete t.after;
       }
       delete t.cue;
     }
@@ -37,12 +43,54 @@ export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set())
   return cues;
 }
 
+/**
+ * A sketch's numbers (`sketchParams`): what it draws from real values, such as how many tokens each
+ * side puts in or which days a window covers. A sketch declares them as
+ * `params: {name: {default, min?, max?, integer?, oneOf?, list?, length?, about, hint?}}` (`hint` follows a refusal: how to express a real figure in this sketch's units); unknown names,
+ * values out of range, choices outside `oneOf` and values of the wrong type (number, text, true/false,
+ * following the default) are refused by name, and missing ones take their defaults.
+ */
+export function sketchParams(s, given = {}) {
+  const spec = s.params ?? {};
+  if (given != null && (typeof given !== 'object' || Array.isArray(given)))
+    throw new Error(`sketchParams for ${s.name} must be an object`);
+  const unknown = Object.keys(given ?? {}).filter(k => !(k in spec));
+  if (unknown.length)
+    throw new Error(
+      `sketchParams: ${s.name} has no ${unknown.join(', ')}${Object.keys(spec).length ? ` (it takes ${Object.keys(spec).join(', ')})` : ' (it takes none)'}`,
+    );
+  const out = {};
+  for (const [k, d] of Object.entries(spec)) {
+    const v = given?.[k] ?? d.default;
+    const check = x => {
+      if (d.oneOf && !d.oneOf.includes(x))
+        throw new Error(`sketchParams.${k} for ${s.name} must be one of ${d.oneOf.map(o => JSON.stringify(o)).join(', ')} (got ${JSON.stringify(x)})`);
+      if (typeof d.default === 'boolean' && typeof x !== 'boolean') throw new Error(`sketchParams.${k} for ${s.name} must be true or false`);
+      if (typeof d.default === 'string' && !d.oneOf && typeof x !== 'string') throw new Error(`sketchParams.${k} for ${s.name} must be text`);
+      if (typeof d.default === 'number' || d.min != null) {
+        if (!Number.isFinite(x)) throw new Error(`sketchParams.${k} for ${s.name} must be a number`);
+        if (d.integer && !Number.isInteger(x)) throw new Error(`sketchParams.${k} for ${s.name} must be a whole number`);
+        if ((d.min != null && x < d.min) || (d.max != null && x > d.max))
+          throw new Error(`sketchParams.${k} for ${s.name} must be ${d.min ?? '-∞'}–${d.max ?? '∞'} (got ${x})${d.hint ? `. ${d.hint}` : ''}`);
+      }
+    };
+    if (d.list) {
+      if (!Array.isArray(v) || !v.length) throw new Error(`sketchParams.${k} for ${s.name} must be a list`);
+      if (d.length && (v.length < d.length[0] || v.length > d.length[1]))
+        throw new Error(`sketchParams.${k} for ${s.name} takes ${d.length[0]}–${d.length[1]} values`);
+      v.forEach(check);
+    } else check(v);
+    out[k] = v;
+  }
+  return out;
+}
+
 /** A sketch's props for a frame preset; `seed` varies its layout (buildings, ridges, swell); `text` and `say` fill its placeholders. */
-export function sketch(name, preset = 'landscape', { seed, text, say } = {}) {
+export function sketch(name, preset = 'landscape', { seed, text, say, params } = {}) {
   const s = sketchByName(name);
   if (!s) throw new Error(`Unknown sketch ${name}. Run clearframe sketch to list them.`);
   const [w, h] = frames[preset] ?? frames.landscape;
-  const drawn = s.build(w, h, { seed });
+  const drawn = s.build(w, h, { seed, params: sketchParams(s, params) });
   const cues = fillSketch(drawn.elements, { text, say });
   // A misspelt moment would otherwise keep its default seconds without a word of warning.
   const unknown = Object.keys(say ?? {}).filter(k => !cues.has(k));
@@ -51,6 +99,17 @@ export function sketch(name, preset = 'landscape', { seed, text, say } = {}) {
   return drawn;
 }
 export const SKETCH_FRAMES = frames;
+
+/** A sketch's named moments (for sketchSay) with these numbers, in drawing order. */
+export function sketchMoments(name, params = {}) {
+  const s = sketchByName(name);
+  if (!s) return [];
+  try {
+    return [...fillSketch(s.build(1920, 1080, { params: sketchParams(s, params) }).elements)];
+  } catch {
+    return [];
+  }
+}
 
 /** The same orientation choice used by canvas sketches and reusable art layers. */
 export function sketchPreset(width = 1920, height = 1080) {

@@ -11,8 +11,54 @@ import { audioHash } from './word-timing.mjs';
 import { ffmpeg, hashOf, readJSON, writeJSON, wavDuration } from './util.mjs';
 import { timedWords } from './ingest.mjs';
 
-export function whisperAvailable() {
-  return spawnSync('whisper', ['--help'], { encoding: 'utf8' }).status === 0;
+/**
+ * whisper.cpp (`whisper-cli`, MIT) with a local ggml model, when one is installed: the same
+ * Whisper weights on the GPU, about ten times faster than the Python CLI and with a fraction of
+ * its CPU, which matters when several films align at once. The model is the file named by
+ * CLEARFRAME_WHISPER_MODEL, or ggml-base(.en).bin in ~/.cache/whisper-cpp
+ * (huggingface.co/ggerganov/whisper.cpp). Returns null without both.
+ */
+export function whisperCpp(language = 'en') {
+  if (spawnSync('whisper-cli', ['--help'], { encoding: 'utf8' }).status !== 0) return null;
+  const env = process.env.CLEARFRAME_WHISPER_MODEL;
+  if (env) return fs.existsSync(env) ? env : null;
+  const dir = path.join(os.homedir(), '.cache/whisper-cpp');
+  const names = language === 'en' ? ['ggml-base.en.bin', 'ggml-base.bin'] : ['ggml-base.bin'];
+  return names.map(n => path.join(dir, n)).find(f => fs.existsSync(f)) ?? null;
+}
+
+export function whisperAvailable(language = 'en') {
+  return !!whisperCpp(language) || spawnSync('whisper', ['--help'], { encoding: 'utf8' }).status === 0;
+}
+
+/**
+ * Words heard in a 16 kHz mono WAV, with their times, as `timedWords` reads them, plus which
+ * recognizer measured them. whisper.cpp splits its output one word per segment (`-ml 1 -sow`);
+ * the Python CLI reports words inside segments.
+ */
+export function transcribeWords(wav, { model = 'base', language = 'en', dir } = {}) {
+  const cpp = model === 'base' ? whisperCpp(language) : null;
+  if (cpp) {
+    const out = path.join(dir, 'cpp');
+    const r = spawnSync('whisper-cli', ['-m', cpp, '-f', wav, '-l', language, '-ml', '1', '-sow', '-oj', '-of', out, '-np'], {
+      encoding: 'utf8',
+    });
+    if (r.status === 0 && fs.existsSync(`${out}.json`)) {
+      const segments = JSON.parse(fs.readFileSync(`${out}.json`, 'utf8')).transcription ?? [];
+      const words = segments
+        .map(s => ({ word: String(s.text ?? '').trim(), start: s.offsets.from / 1000, end: s.offsets.to / 1000 }))
+        .filter(w => w.word && !/^\[.*\]$/.test(w.word));
+      return { words, provider: `whisper.cpp-${path.basename(cpp).replace(/^ggml-|\.bin$/g, '')}` };
+    }
+  }
+  const r = spawnSync(
+    'whisper',
+    [wav, '--model', model, '--word_timestamps', 'True', '--output_format', 'json', '--output_dir', dir, '--fp16', 'False', '--language', language],
+    { encoding: 'utf8' },
+  );
+  if (r.status !== 0) throw new Error(`whisper failed: ${(r.stderr || r.stdout).slice(-800)}`);
+  const json = path.join(dir, `${path.basename(wav).replace(/\.[^.]+$/, '')}.json`);
+  return { words: JSON.parse(fs.readFileSync(json, 'utf8')), provider: `whisper-${model}` };
 }
 
 /** Measure word timings for every current narration take (or `--beat`) with local Whisper. */
@@ -46,26 +92,8 @@ export async function whisperAlign(root, { beat, model = 'base', language } = {}
       `concat=n=${beats.length}:v=0:a=1[out]`;
     const joined = path.join(tmp, 'narration.wav');
     await ffmpeg(['-y', ...inputs, '-filter_complex', filter, '-map', '[out]', '-ac', '1', '-ar', '16000', joined]);
-    const r = spawnSync(
-      'whisper',
-      [
-        joined,
-        '--model',
-        model,
-        '--word_timestamps',
-        'True',
-        '--output_format',
-        'json',
-        '--output_dir',
-        tmp,
-        '--fp16',
-        'False',
-        ...((language ?? sb.voice.language) ? ['--language', language ?? sb.voice.language] : ['--language', 'en']),
-      ],
-      { encoding: 'utf8' },
-    );
-    if (r.status !== 0) throw new Error(`whisper failed: ${(r.stderr || r.stdout).slice(-800)}`);
-    const heard = timedWords(JSON.parse(fs.readFileSync(path.join(tmp, 'narration.json'), 'utf8')));
+    const result = transcribeWords(joined, { model, language: language ?? sb.voice.language ?? 'en', dir: tmp });
+    const heard = timedWords(result.words);
     const report = [];
     beats.forEach((x, i) => {
       const start = offsets[i],
@@ -94,7 +122,7 @@ export async function whisperAlign(root, { beat, model = 'base', language } = {}
         words: clamped,
         alignment: {
           kind: interpolated ? 'estimated' : 'measured',
-          provider: `whisper-${model}`,
+          provider: result.provider,
           audioHash: audioHash(x.wav),
           ...(interpolated ? { interpolatedWords: interpolated } : {}),
           createdAt: new Date().toISOString(),

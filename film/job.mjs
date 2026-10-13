@@ -548,8 +548,9 @@ function beatLayers(source, b, sb, report) {
 }
 
 /** A film whose default camera is still: business films and any storyboard with camera none. */
+// Business and workplace films keep a steady frame while people read: their pictures move, not the camera.
 export const steadyFilm = sb =>
-  sb.treatment === 'business' || (typeof sb.camera === 'string' ? sb.camera : sb.camera?.move) === 'none';
+  ['business', 'workplace'].includes(sb.treatment) || (typeof sb.camera === 'string' ? sb.camera : sb.camera?.move) === 'none';
 
 /**
  * Whole-frame motion has several independent sources — the scene camera, the handheld lens,

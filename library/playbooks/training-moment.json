@@ -1,0 +1,110 @@
+{
+  "order": 4,
+  "title": "Train one habit: the threat, its signs, the right move",
+  "audience": "Everyone in a mandatory training, bored before it starts",
+  "inputs": "Your own results (a simulation, an audit, incidents), the signs that gave it away and the one action people should take",
+  "theme": "briefing",
+  "type": "geometric",
+  "motion": {
+    "preset": "snappy",
+    "intensity": 0.7
+  },
+  "transition": "cut",
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.05
+  },
+  "sources": [
+    {
+      "id": "test",
+      "claim": "14% of employees clicked the link in the spring simulation",
+      "source": "Example Co. phishing simulation, spring (sample: replace with your results)"
+    }
+  ],
+  "note": "Training arc: your own number as the hook, the message itself with its signs marked one by one, the habit done in the tool people use, the line to repeat spoken over it. Replace sketchText, sketchParams and sketchSay with your material (`clearframe sketch NAME`). For a policy or a receipt rather than an email, inspect marks other parts (sender, subject, body, link, attachment). See skills/clearframe-workplace/SKILL.md.",
+  "beats": [
+    {
+      "id": "hook",
+      "block": "canvas",
+      "vo": "In our spring test, fourteen percent of us clicked a link we should not have.",
+      "props": {
+        "source": "Example Co. phishing simulation, spring",
+        "chart": {
+          "kind": "number",
+          "values": [
+            {
+              "label": "clicked the link",
+              "value": 14,
+              "highlight": true
+            }
+          ],
+          "suffix": "%",
+          "box": [
+            360,
+            300,
+            1200,
+            520
+          ]
+        }
+      }
+    },
+    {
+      "id": "signs",
+      "block": "canvas",
+      "vo": "It looked routine. But it was urgent, the sender was almost right, and the link was one nobody expected.",
+      "props": {
+        "sketch": "inspect",
+        "sketchParams": {
+          "marks": [
+            "subject",
+            "sender",
+            "link"
+          ],
+          "color": "negative"
+        },
+        "sketchText": {
+          "FROM": "IT Support <it@examp1e-co.com>",
+          "SUBJECT": "Your account locks in 2 hours",
+          "LINE1": "We detected unusual sign-ins on your account.",
+          "LINE2": "Confirm your password now to keep access.",
+          "BUTTON": "Keep my account",
+          "MARKONE": "Urgency",
+          "MARKTWO": "Almost the right sender",
+          "MARKTHREE": "A link you did not expect"
+        },
+        "sketchSay": {
+          "ONE": "urgent",
+          "TWO": "almost",
+          "THREE": "link"
+        }
+      }
+    },
+    {
+      "id": "habit",
+      "block": "canvas",
+      "pace": "hold",
+      "vo": "So don't click, and don't just delete it. Choose Report, then Phishing, and send it. Three seconds to look, one click to report.",
+      "props": {
+        "sketch": "portal",
+        "sketchText": {
+          "APP": "Mail",
+          "STEP1": "Inbox",
+          "STEP2": "Your account locks in 2 hours",
+          "OTHER": "Team lunch on Friday",
+          "FIELD": "Report as",
+          "OLD": "Not reported",
+          "NEW": "Phishing",
+          "DONE": "Reported: Security replies within an hour"
+        },
+        "sketchSay": {
+          "CLICK1": "don't",
+          "CLICK2": "delete",
+          "CHANGE": "Phishing",
+          "SAVE": "send"
+        }
+      },
+      "hold": 1.5,
+      "transition": "panel"
+    }
+  ]
+}

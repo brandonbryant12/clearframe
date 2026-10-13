@@ -1,0 +1,14 @@
+{
+  "order": 36,
+  "notes": "Cool light grey with near-black type, a confident blue and an amber warning. Training, security and policy films: crisp, alert, readable on any screen.",
+  "colors": {
+    "bg": "#f2f4f7",
+    "surface": "#e1e6ed",
+    "ink": "#111827",
+    "muted": "#4b5563",
+    "accent": "#1d4ed8",
+    "accent2": "#b45309",
+    "positive": "#15803d",
+    "negative": "#b91c1c"
+  }
+}

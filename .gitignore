@@ -43,3 +43,6 @@ real-examples/
 # saved provider credentials, bridge token). Never committed; see docs/agent-studio.md.
 /projects/
 .clearframe/
+
+# Local mock recordings for the enterprise bench (rebuilt by make-episode.mjs)
+bench/**/*.wav

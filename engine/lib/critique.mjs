@@ -14,7 +14,7 @@ import { expandHistogramProps } from '../../film/histogram.mjs';
 import { expandMultiplesProps } from '../../film/multiples.mjs';
 import { createJob, steadyFilm } from '../../film/job.mjs';
 import { roughStandIns } from '../../film/prepare.mjs';
-import { sketch, expandArt, sketchPreset } from '../../film/sketches.mjs';
+import { sketch, expandArt, sketchPreset, sketchMoments } from '../../film/sketches.mjs';
 import { diagramElements } from '../../film/system-diagrams.mjs';
 
 // A cast's objects declared in an earlier beat carry forward into the beats that follow.
@@ -51,8 +51,8 @@ function asDrawn(b, { width = 1920, height = 1080 } = {}) {
   if (b.block !== 'canvas' || !b.props?.sketch) return b;
   const preset = sketchPreset(width, height);
   try {
-    const d = sketch(b.props.sketch, preset, { seed: b.props.seed, text: b.props.sketchText, say: b.props.sketchSay });
-    const { sketch: _s, sketchText: _t, sketchSay: _y, ...rest } = b.props;
+    const d = sketch(b.props.sketch, preset, { seed: b.props.seed, text: b.props.sketchText, say: b.props.sketchSay, params: b.props.sketchParams });
+    const { sketch: _s, sketchText: _t, sketchSay: _y, sketchParams: _p, ...rest } = b.props;
     return { ...b, props: { ...d, ...rest, elements: [...d.elements, ...(b.props.elements ?? [])] } };
   } catch {
     return b;
@@ -153,6 +153,22 @@ function onScreenWords(props) {
   };
   walk(props, '');
   return n;
+}
+
+// Fill-in-the-blank pictures for what workplace narration keeps saying (clearframe-workplace).
+const PICTURES = [
+  [/\b(carr(y|ies) over|use it or lose it|forfeit|resets? to (zero|\$?0)|expires?|lose (it|the rest))\b/i, 'expire', 'This line is about what carries over and what is lost'],
+  [/\b(match(es|ing)?|adds?|puts? in|on top of|top[- ]up|contributes? the same)\b.*(\b(percent|dollars?)\b|[%$])|\b(percent|%).*\b(match(es)?|adds?)\b/i, 'match', 'This line is about one contribution added to another'],
+  [/\bvest(s|ed|ing)?\b|\byours to keep\b.*\byears?\b|\bafter (one|two|three|\d) years?\b/i, 'vesting', 'This line is about what becomes yours over time'],
+  [/\b(deadline|by (january|february|march|april|may|june|july|august|september|october|november|december)|between .* and .*\b\d{1,2}\b|open enrollment runs|within \d+ days|last day)\b/i, 'deadline', 'This line names a window or a deadline'],
+  [/\b(log ?in|portal|open the app|in the app|click|tap|select|go to|toolbar|button)\b/i, 'portal', 'This line is a step done in an app'],
+  [/\b(look for|signs?|tells?|red flags?|watch for|check (the|for)|itemi[sz]ed)\b/i, 'inspect', 'This line points at parts of a message or document'],
+  [/\b(or the|versus|vs\.?|compared? (to|with)|which one|either|instead of)\b/i, 'choose', 'This line compares two options'],
+  [/\b(goes to|breaks? down|split|of your (pay|paycheck)|where (your|the) money goes|take[- ]home)\b/i, 'split', 'This line divides a whole into parts'],
+];
+export function pictureFor(vo) {
+  for (const [re, sketch, why] of PICTURES) if (re.test(vo)) return { sketch, why };
+  return null;
 }
 
 // ------------------------------------------------------------------ cinema
@@ -265,7 +281,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
     return l.grade || l.bloom || l.letterbox || l.leak;
   });
   const glow = beats.some(b => has(b.props, /"(glow|shine|spotlight)"/));
-  if (!lit && !glow && !sb.texture)
+  if (!steady && !lit && !glow && !sb.texture)
     tell(
       'Screen-flat image',
       'no light, lens or texture. Choose a lens (grade, bloom, letterbox, leak), add grain and a vignette, and light the subject (glow, shine, spotlight).',
@@ -572,6 +588,43 @@ export function critique(root) {
       JSON.stringify(b.props ?? {}).match(/"loop"|"keys"|"along"|"steps"/);
     if (d > 8 && !moving && b.block !== 'kinetic')
       add('idea', b.id, `Held ${d.toFixed(1)} s with nothing moving. Inspect the reading hold; shorten it or reveal the next meaningful change if it feels stalled. Do not add camera shake.`);
+    // Type standing in for a picture: say which fill-in-the-blank picture fits its words.
+    const authoredBeat = sb.beats[i];
+    if (['kinetic', 'statement', 'callout', 'list', 'checklist'].includes(authoredBeat?.block) && !authoredBeat.plate) {
+      const fit = pictureFor(authoredBeat.vo ?? '');
+      if (fit)
+        add(
+          'idea',
+          b.id,
+          `${fit.why}: the \`${fit.sketch}\` sketch shows that (node engine/cli.mjs sketch ${fit.sketch} prints the beat to paste). Words on their own read as a slide.`,
+        );
+    }
+    // A sketch whose moments are only partly landed on words: the rest keep their default
+    // seconds and can land before the ones that were moved.
+    const authored = sb.beats[i]?.props;
+    if (authored?.sketch && authored.sketchSay && Object.keys(authored.sketchSay).length) {
+      const left = sketchMoments(authored.sketch, authored.sketchParams).filter(m => !(m in authored.sketchSay));
+      if (left.length)
+        add(
+          'warn',
+          b.id,
+          `sketchSay lands ${Object.keys(authored.sketchSay).join(', ')} on words but not ${left.join(', ')}: those keep their default seconds and can land out of order. Give every moment a word.`,
+        );
+    }
+    // Speech-following type that changes faster than anyone reads: one word at a time, or
+    // two-word groups, across a whole passage. Fine for a few seconds of emphasis.
+    if (b.block === 'kinetic' && d > 5) {
+      const mode = b.props?.mode ?? 'highlight',
+        group = mode === 'word' ? 1 : (b.props?.maxWords ?? 6),
+        spoken = String(b.vo ?? '').split(/\s+/).filter(Boolean).length,
+        each = spoken ? (d * Math.min(group, spoken)) / spoken : d;
+      if (each < 0.9)
+        add(
+          'warn',
+          b.id,
+          `${mode === 'word' ? 'One word at a time' : `${group}-word phrases`} for ${d.toFixed(1)} s: the type changes every ${each.toFixed(1)} s, faster than a viewer reads. Keep that for a few seconds of emphasis; for a passage use mode "highlight" with maxWords 6–8 (a stable phrase that lights up as it is spoken), or give the passage a picture and let captions carry the words.`,
+        );
+    }
     if (d > 0 && words / d > 3.2 && b.block !== 'kinetic')
       add(
         'warn',

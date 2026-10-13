@@ -39,13 +39,19 @@ export function run(bin, args, { cwd = REPO, env = sceneEnv(), capture = false }
     const child = spawn(bin, args, {
       cwd,
       env,
-      stdio: capture ? ['ignore', 'pipe', 'pipe'] : process.env.CLEARFRAME_PROGRESS_STDERR === '1' ? ['inherit', 2, 2] : 'inherit',
+      // Uncaptured runs still show the renderer's stderr live, and keep its tail, so a failure
+      // says why (and the run log records it) instead of only "exited 1".
+      stdio: capture ? ['ignore', 'pipe', 'pipe'] : process.env.CLEARFRAME_PROGRESS_STDERR === '1' ? ['inherit', 2, 'pipe'] : ['inherit', 'inherit', 'pipe'],
     });
     let output = '';
     if (capture) {
       child.stdout.on('data', d => (output += d));
       child.stderr.on('data', d => (output += d));
-    }
+    } else
+      child.stderr.on('data', d => {
+        process.stderr.write(d);
+        output = (output + d).slice(-6000);
+      });
     const stop = s => child.kill(s);
     const interrupt = () => stop('SIGINT'),
       terminate = () => stop('SIGTERM');
@@ -102,7 +108,19 @@ export async function buildScene({ force = false } = {}) {
   if (fs.existsSync(gate) && process.env.CLEARFRAME_HEAVY_HELD !== '1') {
     const holder = lockHolder();
     if (holder) log.warn(`Heavy-job lock is held by ${holder}; the build starts when it finishes.`);
-    await run(gate, ['--', 'cargo', ...cargo]);
+    // Keep saying so while the lock is someone else's, so a queued build is not taken for a hang.
+    const started = Date.now();
+    const heartbeat = setInterval(() => {
+      const now = lockHolder();
+      if (!now || now.includes(CRATE)) return clearInterval(heartbeat);
+      log.warn(`Still queued (${Math.round((Date.now() - started) / 1000)}s) behind ${now}. The build starts by itself; don't stop this command.`);
+    }, 30000);
+    heartbeat.unref();
+    try {
+      await run(gate, ['--', 'cargo', ...cargo]);
+    } finally {
+      clearInterval(heartbeat);
+    }
   } else await run('cargo', cargo);
   // The build may have waited for the lock while sources changed; cargo compiles what is on
   // disk when it starts. If every source is older than the binary, the binary is current.
@@ -155,6 +173,21 @@ export function doctor() {
     warm = fs.existsSync(path.join(TARGET(), 'release/deps'));
   rows.push({ name: 'Disk headroom', ok: free >= (warm ? 10 : 25), detail: `${free.toFixed(1)} GiB free (${warm ? 'warm cache' : 'cold build'})` });
   rows.push(fontCheck());
+  // Free word timings: whisper.cpp with a local model is the fast path; the Python CLI works too.
+  const cpp = spawnSync('whisper-cli', ['--help'], { encoding: 'utf8' }).status === 0;
+  const modelDir = path.join(os.homedir(), '.cache/whisper-cpp');
+  const model = process.env.CLEARFRAME_WHISPER_MODEL ?? ['ggml-base.en.bin', 'ggml-base.bin'].map(n => path.join(modelDir, n)).find(f => fs.existsSync(f));
+  const py = spawnSync('whisper', ['--help'], { encoding: 'utf8' }).status === 0;
+  rows.push({
+    name: 'Word timings',
+    ok: (cpp && !!model) || py,
+    detail:
+      cpp && model
+        ? `whisper.cpp with ${path.basename(model)} (fast, GPU)`
+        : py
+          ? `Python whisper (slow, CPU)${cpp ? `; for ~10× faster alignment put ggml-base.en.bin in ${modelDir}` : ''}`
+          : 'no local Whisper: install whisper-cpp or openai-whisper',
+  });
   return rows;
 }
 
