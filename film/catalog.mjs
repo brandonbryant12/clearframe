@@ -750,7 +750,11 @@ export function normalizeProps(name, input = {}, { vertical = false, width, heig
     throw new Error(`${name}: ${message}`);
   };
   if (!p || typeof p !== 'object' || Array.isArray(p)) fail('props must be an object');
-  for (const key of Object.keys(p)) if (!(key in meta.props)) fail(`unsupported prop ${key}`);
+  for (const key of Object.keys(p))
+    if (!(key in meta.props))
+      fail(
+        `unsupported prop ${key}${name === 'kinetic' && ['text', 'stack', 'lines', 'words', 'phrase', 'phrases'].includes(key) ? `: a kinetic beat's words are its narration (the beat's vo); choose how they show with mode ("highlight", "reveal", "word" or "stack")` : ''} (${name} takes ${Object.keys(meta.props).join(', ')})`,
+      );
   const h = helpers(p, fail, { findPhrase, precision });
   // Checks every block shares: text lengths, one headline, alignment and emphasis phrases.
   for (const key of [

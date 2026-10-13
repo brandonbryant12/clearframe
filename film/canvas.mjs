@@ -157,6 +157,18 @@ export const MAX_ELEMENTS = 600;
 const isColor = v => typeof v === 'string' && (COLOR_TOKENS.includes(v) || /^#[\da-f]{6}$/i.test(v));
 const finite = v => typeof v === 'number' && Number.isFinite(v);
 
+/** Fields from CSS and other tools, and what this dialect calls them. */
+const FIELD_HINTS = {
+  weight: 'the weight is the font: font "bold", "semibold", "regular" or "light"',
+  fontWeight: 'the weight is the font: font "bold", "semibold", "regular" or "light"',
+  fontFamily: 'font names a face: "display", "text", "serif", "mono", "hand"…',
+  fontSize: 'use size (pixels)',
+  align: 'text is placed by anchor: "start", "middle" or "end" at its x',
+  textAlign: 'text is placed by anchor: "start", "middle" or "end" at its x',
+  color: 'use fill with a palette token ("ink", "accent", "muted")',
+  content: 'use text',
+  label: 'a text element draws its words from text',
+};
 /** Validate and clone an element list; `fail(message)` throws with the caller's context. */
 export function normalizeElements(list, where, fail, state = { count: 0 }, depth = 0) {
   if (!Array.isArray(list)) fail(`${where} must be an array of elements`);
@@ -169,7 +181,8 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
     const spec = ELEMENT_TYPES[el.type];
     if (!spec) fail(`${at}.type must be one of ${Object.keys(ELEMENT_TYPES).join(', ')}`);
     for (const key of Object.keys(el))
-      if (!COMMON.includes(key) && !spec.geometry.includes(key)) fail(`${at}: unsupported ${el.type} field ${key}`);
+      if (!COMMON.includes(key) && !spec.geometry.includes(key))
+        fail(`${at}: unsupported ${el.type} field ${key}${FIELD_HINTS[key] ? `: ${FIELD_HINTS[key]}` : ''} (a ${el.type} takes ${spec.geometry.join(', ')}, plus the timing and style fields every element takes)`);
     for (const key of spec.required) if (el[key] == null) fail(`${at}: ${el.type} needs ${key}`);
     // Positions are frame pixels: a word such as "center" was read as 0 and pushed type off the frame.
     for (const key of ['x', 'y', 'cx', 'cy', 'w', 'h'])
