@@ -7,6 +7,8 @@ description: Choose, choreograph and honestly animate numbers and charts in Clea
 
 A chart in a video is not a chart on a page. The viewer can't pause, re-read or hover, so every chart must answer **one question**, reveal it **in the order it is spoken**, and **point** at the answer. All numeric blocks are drawn natively by the renderer from validated props, so values, scales and sources are exactly what the storyboard says; run `node engine/cli.mjs blocks NAME` for exact props.
 
+**Several figures in one line of narration** ("14% clicked, 3% typed a password, 22% reported"): use a canvas `chart` and give each value `say`, the word that names it. `kind: "number"` then steps through the values as each is spoken (the figure, its label and its bar change together on one scale); `kind: "bars"` grows each bar on its word. One still number under three spoken figures reads as a slide. In consecutive canvas beats the same values morph (a number into its bar).
+
 ## Pick the form
 
 | Question | Block | Notes |
