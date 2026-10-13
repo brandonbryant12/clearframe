@@ -63,11 +63,17 @@ export async function analyseVoice(file, text) {
 }
 
 // ------------------------------------------------------------------ local drafts (free, offline)
+/**
+ * Text as the OS voice should read it: macOS `say` reads "the button: not Attach" as "button colon"
+ * and skips an arrow, so a colon before a word and an arrow become a pause. The words are unchanged,
+ * so their timings still match the narration.
+ */
+export const forOsVoice = text => String(text).replace(/(\S):(?=\s)/g, '$1,').replace(/\s*(→|->|=>)\s*/g, ', ');
 /** Draft narration with the OS voice (macOS `say`, Linux `espeak-ng`/`espeak`). For timing only. */
 export async function draftVoice(text, output, { wpm = 150, voice } = {}) {
   const mac = process.platform === 'darwin';
   const pauses = { 'short pause': 350, 'long pause': 800, breath: 250, sigh: 400 };
-  const spoken = text
+  const spoken = forOsVoice(text)
     .replace(/<([^>]+)>/g, (_, tag) =>
       mac && pauses[tag.trim().toLowerCase()] ? ` [[slnc ${pauses[tag.trim().toLowerCase()]}]] ` : ' ',
     )
