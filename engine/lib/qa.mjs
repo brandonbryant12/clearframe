@@ -546,7 +546,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
       : []),
     ...(typeShare >= 50
       ? [
-          `  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures and keep type for the one or two lines worth repeating:`,
+          `  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures and keep type for the one or two lines worth repeating${fs.existsSync(path.join(dir, 'source', 'recording.wav')) ? ' (for a recording, examples/podcast-pictures shows each idea with its own picture and the captions under it; its build.mjs sets each beat\'s props by id)' : ''}:`,
           ...(() => {
             const typed = timed.map((tb, i) => sb.beats[tb.index ?? i]).filter(b => b && typeOnly(b));
             // A sketch that fits the line first; else a line that says figures gets its chart ready to
