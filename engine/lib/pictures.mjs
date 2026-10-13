@@ -1,12 +1,12 @@
 // Fill-in-the-blank pictures for what workplace narration keeps saying (clearframe-workplace).
 const PICTURES = [
+  [/\b((lower|higher|lowest|highest|cheaper) of (the )?(two|both)|whichever (\w+ ){0,3}(is |was )?(lower|higher|cheaper)|starts? at .* (ends?|goes) (at|to))\b/i, null, 'This line compares prices or values over time', 'a canvas `chart` `bars` with a `say` on each value as it is said (the start, the end, what you pay), the one that counts highlighted'],
   [/\b(carr(y|ies) over|use it or lose it|forfeit|resets? to (zero|\$?0)|expires?|lose (it|the rest))\b/i, 'expire', 'This line is about what carries over and what is lost'],
-  [/\b(match(es|ing)?|adds?|puts? in|on top of|top[- ]up|contributes? the same)\b.*(\b(percent|dollars?)\b|[%$])|\b(percent|%).*\b(match(es)?|adds?)\b/i, 'match', 'This line is about one contribution added to another'],
   [/\bvest(s|ed|ing)?\b|\byours to keep\b.*\byears?\b|\bafter (one|two|three|\d) years?\b/i, 'vesting', 'This line is about what becomes yours over time'],
+  [/\b(match(es|ing)?|adds?|puts? in|on top of|top[- ]up|contributes? the same)\b.*(\b(percent|dollars?)\b|[%$])|\b(percent|%).*\b(match(es)?|adds?)\b/i, 'match', 'This line is about one contribution added to another'],
   [/\b(deadline|by (january|february|march|april|may|june|july|august|september|october|november|december)|between .* and .*\b\d{1,2}\b|open enrollment runs|within \d+ days|last day)\b/i, 'deadline', 'This line names a window or a deadline'],
   [/\b(log ?in|portal|open the app|in the app|click|tap|select|go to|toolbar|button)\b/i, 'portal', 'This line is a step done in an app'],
   [/\b(look for|signs?|tells?|red flags?|watch for|check (the|for)|itemi[sz]ed)\b/i, 'inspect', 'This line points at parts of a message or document'],
-  [/\b((lower|higher|lowest|highest|cheaper) of (the )?(two|both)|whichever (\w+ ){0,3}(is |was )?(lower|higher|cheaper)|starts? at .* (ends?|goes) (at|to))\b/i, null, 'This line compares prices or values over time', 'a canvas `chart` `bars` with a `say` on each value as it is said (the start, the end, what you pay), the one that counts highlighted'],
   [/\b(or the|versus|vs\.?|compared? (to|with)|which one|either|instead of)\b/i, 'choose', 'This line compares two options'],
   [/\b(breaks? down|split|of your (pay|paycheck)|where (your|the) money goes|take[- ]home|goes (to|into) (your|the) (\w+ )?(account|fund|plan|savings|taxes|pension))\b/i, 'split', 'This line divides a whole into parts'],
   [/\b(compound(s|ing)?|grows? (to|over|every)|start(ing)? early|over (\w+ )?(\d+|ten|twenty|thirty|forty) years|by the time you retire)\b/i, 'growth', 'This line is about money growing over years'],

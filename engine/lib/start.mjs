@@ -1,4 +1,5 @@
 // Portable intake for an agent-directed film. No generation, guessing of claims, or paid calls.
+import { pictureFor } from './pictures.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { scaffold, artSketches } from '../../film/playbooks.mjs';
@@ -10,6 +11,28 @@ import { readBrand, copyInput, applyBrand } from './brand.mjs';
 const nonempty = v => typeof v === 'string' && v.trim().length > 0;
 
 /** Create a new project as a transaction; a failed intake leaves an existing destination intact. */
+/**
+ * The document's own lines that name a mechanism or a figure, each with the picture that shows it
+ * (engine/lib/pictures.mjs): the first thing an agent reads maps the brief's facts to pictures,
+ * instead of leaving it to swap a playbook's sample beats for sentences.
+ */
+function picturesFor(text) {
+  const lines = String(text)
+    .split(/\n(?=\s*(?:[-*]|\d+\.)\s)|(?<=[.!?])\s+(?=[A-Z])/)
+    .map(x => x.replace(/[*_`#]/g, '').replace(/\s+/g, ' ').replace(/^\s*(?:[-*]|\d+\.)\s*/, '').trim())
+    .filter(x => x.length > 20 && x.length < 400 && !/^(brief|from|for|length|tone)\b/i.test(x));
+  const seen = new Set(), rows = [];
+  for (const line of lines) {
+    const fit = pictureFor(line);
+    if (!fit || seen.has(line)) continue;
+    seen.add(line);
+    rows.push(`- "${line.length > 140 ? `${line.slice(0, 139)}…` : line}" → ${fit.sketch ? `the \`${fit.sketch}\` sketch (\`node engine/cli.mjs sketch ${fit.sketch}\`)` : fit.use}`);
+  }
+  return rows.length
+    ? `## Pictures for this document\n\nEach line of the source that names a mechanism or a figure, and the picture that shows it. Give each fact you keep its own beat with that picture; type is for the one line worth repeating.\n\n${rows.slice(0, 14).join('\n')}\n\n`
+    : '';
+}
+
 export function startProject(destination, options = {}) {
   const { idea, document, brand: brandFile, audience, takeaway } = options;
   const documents = document == null ? [] : (Array.isArray(document) ? document : [document]);
@@ -72,6 +95,7 @@ export function startProject(destination, options = {}) {
     fs.writeFileSync(path.join(project, 'BRIEF.md'), `# Production brief: ${title}\n\n` +
       `Idea: ${idea?.trim() ?? 'Develop the question and turn from EVIDENCE.md.'}\nAudience: ${audience ?? 'To be decided'}\nTakeaway: ${takeaway ?? 'To be decided'}\n` +
       `${brand ? '\nBrand: BRAND.md (assets and rules).\n' : ''}${research ? '\nEvidence: EVIDENCE.md and source/research.json.\n' : ''}\n` +
+      picturesFor(collected.map(d => d.source).join('\n')) +
       `## Starter arc\n${brief.replace(/^# .*\n/, '')}\n## Next pass\n` +
       `1. Choose the question, tension, turn and payoff in DIRECTION.md.\n2. Rewrite the sample beats around the source. Bind every figure to its visible source.\n3. Place the supplied assets where they support the story.\n4. Run critique, then draft; review the complete film before polishing individual shots.\n`);
     fs.appendFileSync(path.join(project, 'DIRECTION.md'), `\n## Intake\nRead BRIEF.md${research ? ', EVIDENCE.md' : ''}${brand ? ' and BRAND.md' : ''}. ` +
