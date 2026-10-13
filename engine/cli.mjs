@@ -726,63 +726,9 @@ async function main() {
       // The picture in motion, measured on the encoded film: the honest test of "narrated slides".
       // critique reads the storyboard's structure; this reads what the viewer actually sees.
       try {
-        const { qaProject } = await import('./lib/qa.mjs');
+        const { qaProject, motionVerdict } = await import('./lib/qa.mjs');
         const q = await qaProject(dir, {});
-        const s = q.summary;
-        let share = 0;
-        // Stretches under the voice: a silent breath or title may hold.
-        const held = q.findings.filter(f => f.kind === 'held' && !f.deliberate && f.level === 'warn');
-        const voicedHeld = Math.round(10 * held.reduce((t, f) => t + f.seconds, 0)) / 10;
-        const byBeat = {};
-        for (const f of held) byBeat[f.beat ?? '?'] = (byBeat[f.beat ?? '?'] ?? 0) + f.seconds;
-        // Reading holds are for a figure or a step to read: about a fifth of a film at most. Past
-        // that, declared holds count as still again (a film of declared holds is still a deck).
-        const allowance = Math.round(2 * s.seconds) / 10,
-          overflow = Math.max(0, Math.round(10 * ((s.deliberateSeconds ?? 0) - allowance)) / 10);
-        share = s.seconds ? Math.round((100 * (voicedHeld + overflow)) / s.seconds) : 0;
-        const worst = Object.entries(byBeat).sort((a, b) => b[1] - a[1]).slice(0, 5);
-        const fixOf = id => held.find(f => f.beat === id && f.fix);
-        const verdict =
-          share >= 40
-            ? 'READS AS NARRATED SLIDES (40% or more): the picture sits still while the voice talks'
-            : share >= 20
-              ? 'some scenes hold still under the voice (20–40%: fix the stillest)'
-              : 'the picture keeps moving with the voice (under 20%)';
-        // Moving words are still words: how much of the film is type on its own.
-        const TYPE = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout'];
-        const sbNow = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'));
-        const timed = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8')).beats ?? [];
-        const typeOnly = b => TYPE.includes(b.block) && !b.plate && !b.art?.under?.length && !b.stage;
-        const typeSeconds = timed.reduce((t, tb, i) => t + (typeOnly(sbNow.beats[tb.index ?? i] ?? {}) ? tb.dur ?? tb.end - tb.start : 0), 0);
-        const typeShare = s.seconds ? Math.round((100 * typeSeconds) / s.seconds) : 0;
-        const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;
-        lines.push(
-          `motion: ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
-          ...(overflow
-            ? [`  holds: ${s.deliberateSeconds} s are declared as reading holds (pace: "hold"), more than a fifth of the film; ${overflow} s of them count as still. A reading hold is for a figure or a step that must be read, not a way past this check.`]
-            : []),
-          ...(typeShare >= 50
-            ? [`  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures (the workplace sketches, a cast, a chart with cued values) and keep type for the one or two lines worth repeating.`]
-            : []),
-          ...(worst.length
-            ? [
-                `  stillest (a deliberate reading hold is fine; mark it with pace: "hold"):`,
-                ...worst.map(([id, sec]) => {
-                  const f = fixOf(id);
-                  return `    ${id} ${sec.toFixed(1)} s still${f?.said ? ` over "${f.said.length > 90 ? `${f.said.slice(0, 89)}…` : f.said}"` : ''}: ${f?.fix ?? 'change something on its later words, or shorten it.'}`;
-                }),
-              ]
-            : []),
-          // The length the person asked for (`new`/`start --length`): agents cut films to half
-          // of it and dropped the brief's facts on the way.
-          ...(sbNow.length && s.seconds < 0.75 * sbNow.length
-            ? [`  length: ${Math.round(s.seconds)} s of the ${sbNow.length} s asked for. Check BRIEF.md for facts the film dropped and give each its picture, or say in DIRECTION.md why it is shorter.`]
-            : sbNow.length && s.seconds > 1.3 * sbNow.length
-              ? [`  length: ${Math.round(s.seconds)} s against the ${sbNow.length} s asked for: cut to the facts that matter.`]
-              : []),
-          ...(share >= 40 || (typeShare >= 60 && share < 40)
-            ? ['  not ready to hand over: fix the beats above (each is one edit), then run draft again.']
-            : []),
+        lines.push(...motionVerdict(dir, q).lines,
           `  qa: ${rel(path.join(q.dir, 'phone.png'))} (read it as a phone would)`,
         );
       } catch (e) {

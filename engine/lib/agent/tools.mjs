@@ -213,6 +213,8 @@ function renderedFile(j, { base, dir }) {
 
 export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
   const filmId = dir => filmOf(dir)?.id;
+  // A finished draft is measured once: the motion verdict `draft` prints on the command line.
+  const verdicts = new Map();
   return {
     state({ dir, input }) {
       const st = studioState(dir), sb = st.storyboard;
@@ -331,11 +333,26 @@ export function createTools({ base, jobs, filmOf, pauseOf, currentScope }) {
       let list = pick();
       if (input.id && !list.length) throw fail('No such job for this film.');
       while (input.id && Date.now() < until && !TERMINAL.has(list[0].status)) { await new Promise(r => setTimeout(r, 1000)); list = pick(); }
+      // Without the verdict, the in-page agent saw "complete" and handed over a film that sat
+      // still under the voice for more than half its length.
+      for (const j of list)
+        if (j.kind === 'draft' && j.status === 'complete' && j.matches !== false && !verdicts.has(j.id)) {
+          try {
+            const made = renderedFile(j, { base, dir });
+            if (made) {
+              const { qaProject, motionVerdict } = await import('../qa.mjs');
+              verdicts.set(j.id, motionVerdict(dir, await qaProject(dir, { video: made.file })).lines.join('\n'));
+            }
+          } catch (e) {
+            verdicts.set(j.id, `motion: not measured (${String(e.message).split('\n')[0]})`);
+          }
+        }
       const view = j => [`${j.label} (job ${j.id}): ${j.status}${j.progress != null && j.status === 'running' ? ` ${Math.round(j.progress * 100)}%` : ''}`,
         j.status === 'complete' ? `  output: ${j.url ?? 'none'} (look at it yourself with clearframe_look; the person views it in the studio)${j.matches === false ? ' — the film changed while or since it rendered; it may not match' : ''}${j.revision ? `; saved revision ${j.revision}` : ''}` : null,
         j.media ? `  actual video: ${j.media.width}×${j.media.height}, ${sec(j.media.duration)} as encoded${j.media.authored ? ` (the film itself is ${sec(j.media.authored)}; the file rounds up to whole frames and audio)` : ''}, ${j.media.audio ? 'with sound' : 'silent'}${j.kind === 'draft' ? ' (a half-size rough cut, not the project size; its narration and music are what the Sound status says was actually made)' : ''}` : null,
         j.errors?.length ? `  engine errors: ${j.errors.join('; ')}` : null, j.status === 'failed' && !j.errors?.length ? `  log: ${clip(j.log?.slice(-1200), 1200)}` : null,
-        j.result?.errors ? `  check: ${j.result.errors.length} errors, ${j.result.warnings.length} warnings${j.result.errors.length ? `: ${j.result.errors.slice(0, 6).join('; ')}` : ''}` : null].filter(Boolean).join('\n');
+        j.result?.errors ? `  check: ${j.result.errors.length} errors, ${j.result.warnings.length} warnings${j.result.errors.length ? `: ${j.result.errors.slice(0, 6).join('; ')}` : ''}` : null,
+        verdicts.get(j.id) ?? null].filter(Boolean).join('\n');
       return { content: list.map(view).join('\n') || 'No render jobs yet for this film.', metadata: { summary: list.length === 1 ? `${list[0].label}: ${list[0].status}` : `${list.length} jobs`, job: input.id ?? null } };
     },
 

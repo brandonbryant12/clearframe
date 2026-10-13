@@ -267,7 +267,8 @@ async function sheets(file, dir, { portrait, seconds }) {
 }
 
 const clip = (t, n) => (t.length > n ? `${t.slice(0, n - 1)}…` : t);
-const TYPE_BLOCKS = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout', 'stat'];
+const TYPE_BLOCKS = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout'];
+const NUMBER_CARDS = ['stat', 'kpis', 'delta', 'magnitude', 'donut', 'waffle', 'compare'];
 /** The change that fits a still beat, from what it is made of. */
 export function stillFix(beat) {
   const p = beat.props ?? {};
@@ -278,6 +279,8 @@ export function stillFix(beat) {
   if (p.cast) return 'Give the cast a formation or a move (a swap, a merge, a hero) on one of those words.';
   if (p.world || beat.stage) return 'Move the camera or an actor on one of those words.';
   if (beat.block === 'canvas') return 'Cue an element or a key (`say`) on one of those words, so the drawing changes while it is explained.';
+  if (NUMBER_CARDS.includes(beat.block))
+    return 'This is a number card: give each figure its own moment as it is said (a canvas `chart` with a `say` on each value, or the sketch for this kind of fact: `match` for money added, `split` for where it goes).';
   if (TYPE_BLOCKS.includes(beat.block))
     return 'This is type on its own: give the idea a picture that changes on those words (`critique` names a sketch for it), or cut the beat to the line.';
   return 'Change something on one of those words, or shorten the beat.';
@@ -413,4 +416,67 @@ export async function qaProject(root, { video, loop = false } = {}) {
     },
   });
   return { dir, summary, findings };
+}
+
+/**
+ * The motion verdict on a measured film (`qaProject`'s result): how long the picture sits still under
+ * the voice, how much of the film is type on its own, the stillest beats with what to change, and the
+ * length against the one asked for. `draft` prints it, and the studio's agent reads it after a draft.
+ */
+export function motionVerdict(dir, q) {
+  const s = q.summary;
+  // Stretches under the voice: a silent breath or title may hold.
+  const held = q.findings.filter(f => f.kind === 'held' && !f.deliberate && f.level === 'warn');
+  const voicedHeld = Math.round(10 * held.reduce((t, f) => t + f.seconds, 0)) / 10;
+  const byBeat = {};
+  for (const f of held) byBeat[f.beat ?? '?'] = (byBeat[f.beat ?? '?'] ?? 0) + f.seconds;
+  // Reading holds are for a figure or a step to read: about a fifth of a film at most. Past
+  // that, declared holds count as still again (a film of declared holds is still a deck).
+  const allowance = Math.round(2 * s.seconds) / 10,
+    overflow = Math.max(0, Math.round(10 * ((s.deliberateSeconds ?? 0) - allowance)) / 10);
+  const share = s.seconds ? Math.round((100 * (voicedHeld + overflow)) / s.seconds) : 0;
+  const worst = Object.entries(byBeat).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const fixOf = id => held.find(f => f.beat === id && f.fix);
+  const verdict =
+    share >= 40
+      ? 'READS AS NARRATED SLIDES (40% or more): the picture sits still while the voice talks'
+      : share >= 20
+        ? 'some scenes hold still under the voice (20–40%: fix the stillest)'
+        : 'the picture keeps moving with the voice (under 20%)';
+  // Moving words are still words: how much of the film is type on its own.
+  const TYPE = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout'];
+  const sb = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'));
+  const timed = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8')).beats ?? [];
+  const typeOnly = b => TYPE.includes(b.block) && !b.plate && !b.art?.under?.length && !b.stage;
+  const typeSeconds = timed.reduce((t, tb, i) => t + (typeOnly(sb.beats[tb.index ?? i] ?? {}) ? (tb.dur ?? tb.end - tb.start) : 0), 0);
+  const typeShare = s.seconds ? Math.round((100 * typeSeconds) / s.seconds) : 0;
+  const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;
+  const ready = !(share >= 40 || (typeShare >= 60 && share < 40));
+  const lines = [
+    `motion: ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
+    ...(overflow
+      ? [`  holds: ${s.deliberateSeconds} s are declared as reading holds (pace: "hold"), more than a fifth of the film; ${overflow} s of them count as still. A reading hold is for a figure or a step that must be read, not a way past this check.`]
+      : []),
+    ...(typeShare >= 50
+      ? [`  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures (the workplace sketches, a cast, a chart with cued values) and keep type for the one or two lines worth repeating.`]
+      : []),
+    ...(worst.length
+      ? [
+          `  stillest (a deliberate reading hold is fine; mark it with pace: "hold"):`,
+          ...worst.map(([id, sec]) => {
+            const f = fixOf(id);
+            return `    ${id} ${sec.toFixed(1)} s still${f?.said ? ` over "${clip(f.said, 90)}"` : ''}: ${f?.fix ?? 'change something on its later words, or shorten it.'}`;
+          }),
+        ]
+      : []),
+    // The length the person asked for (`new`/`start --length`): agents cut films to half
+    // of it and dropped the brief's facts on the way.
+    ...(sb.length && s.seconds < 0.75 * sb.length
+      ? [`  length: ${Math.round(s.seconds)} s of the ${sb.length} s asked for. Check BRIEF.md for facts the film dropped and give each its picture, or say in DIRECTION.md why it is shorter.`]
+      : sb.length && s.seconds > 1.3 * sb.length
+        ? [`  length: ${Math.round(s.seconds)} s against the ${sb.length} s asked for: cut to the facts that matter.`]
+        : []),
+    ...(ready ? [] : ['  not ready to hand over: fix the beats above (each is one edit), then run draft again.']),
+  ];
+  return { share, typeShare, ready, lines };
 }
