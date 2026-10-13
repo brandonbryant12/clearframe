@@ -833,6 +833,11 @@ async function main() {
     console.log(
       `${rel(path.join(r.dir, 'timeline.png'))} (one frame per second) · ${rel(path.join(r.dir, 'phone.png'))} (360 px: read it as a phone would)`,
     );
+    // The verdict last: an agent quoted "change 1.87/s" as its verdict and never saw NOT READY.
+    try {
+      const { motionVerdict } = await import('./lib/qa.mjs');
+      console.log(motionVerdict(dir, r).lines.join('\n'));
+    } catch {}
     if (r.findings.some(f => f.level === 'error')) process.exitCode = 1;
     return;
   }

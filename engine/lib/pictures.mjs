@@ -46,6 +46,12 @@ export function figuresIn(vo, spoken) {
       out.push({ value, say: tokens[i].replace(/[^\p{L}\p{N}$%.-]/gu, '').replace(/[.]$/, ''), prefix: /\$/.test(phrase.join(' ')) || /^dollars?$/.test(after) ? '$' : '', suffix: /%/.test(phrase.join(' ')) || after === 'percent' ? '%' : '' });
     i = j - 1;
   }
+  // A range said once with its scale ("twelve to eighteen thousand dollars") scales both ends.
+  for (let k = 0; k + 1 < out.length; k++) {
+    const a = out[k], b = out[k + 1];
+    if (b.value >= 1000 && a.value < 1000 && a.value * 1000 <= b.value * 2 && new RegExp(`\\b${a.say}\\s+(to|or|and)\\s+${b.say}`, 'i').test(vo))
+      a.value *= b.value >= 1e6 && a.value * 1e6 <= b.value * 2 ? 1e6 : 1000;
+  }
   return out;
 }
 
