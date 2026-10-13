@@ -38,7 +38,8 @@ Each fact gets the mechanism that shows it. These are sketches: fill `sketchText
 | "Look for these signs" (phishing, a receipt, a clause) | `inspect` | words for the message and the three marks |
 | "Option A or option B" (plans, accounts) | `choose` | rows won by a or b, the pick |
 | "Where the money goes" (a paycheck, a fee, an allocation) | `split` | params `parts` (values that add up) |
-| "It grows over time" (compounding, starting early) | canvas `graph` with `exponential` | `clearframe-explain` |
+| "It grows over time" (compounding, starting early, what a habit adds up to) | `growth` | params `years, perYear, rate` (a fraction: 0.05); the last column splits into what you put in and what it grew |
+| "Locked in, whatever the market does" (a rate lock, a price guarantee, a fixed premium) | `hold` | params `lock, rise, fall, floatDown, days`: the market moves, the lock holds, and the gap is what you kept |
 | A figure to remember, then compared | canvas `chart` number, then bars in the next beat (they morph) | `clearframe-dataviz` |
 | Several figures in one line ("14% clicked, 3% typed a password, 22% reported") | canvas `chart` with `say` on each value: a `number` steps through them as each is spoken, `bars` grow on their words | one value per figure |
 | A sequence or a group of things | a `cast` of the film's objects (`docs/cast.md`) | objects and formations |

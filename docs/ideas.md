@@ -35,6 +35,7 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 - **Before/after:** the same element `id` in consecutive canvas beats morphs position, size and colour across a cut.
 - A marker travelling a `route` through dated stops (mono labels for dates).
 - **Growth in stages:** the `seedling` sketch. Roots, leaves and a flower, each stage labelled at its height. It shows growth as stages, not amounts.
+- **Growth as amounts:** the `growth` sketch. A column a year: what you put in rises as a ramp, then the growth climbs onto it and overtakes it late; the last column splits into the two and the total counts up. From `years`, `perYear` and `rate`, so the shown values add up.
 
 ## Atmosphere
 - **Made in code:** a glowing wireframe `solid` (icosa, dodeca, cube) turning beside a claim; a `stars` field under the opening line; a `warp` tunnel under a contrast ("It can… It cannot…"). The `tech` treatment and `sizzle` playbook put these together.
@@ -44,6 +45,7 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 
 ## Tension and trade-off
 - **Balance** sketch tipping on the "but" (`keys` with `ease: spring`).
+- **What a lock keeps:** the `hold` sketch. A locked rate or price holds its line while the market rises past it, the gap shades in as what you kept, and with a float-down the lock steps down when the market falls.
 - **Tug of war:** two groups moving with opposing `keys`.
 - **Split screen:** `versus`, or a split `plate` beside a number.
 
