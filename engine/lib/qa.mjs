@@ -76,6 +76,34 @@ export function localDifference(a, b, width, height, skipBottom = 0) {
   return best;
 }
 
+/**
+ * Where the picture sits in one decoded frame: the bounding box of 4×4-pixel cells that differ
+ * from the background (the median of the frame's top and side edges), above a band at the bottom
+ * for the source line and captions. Shares of the frame's width and height, and the box's centre.
+ * A lone line of small type (a source, a footnote) does not fill a cell, so it does not count.
+ */
+export function pictureExtent(frame, width, height, skipBottom = 0) {
+  const edge = [];
+  for (let x = 0; x < width; x++) edge.push(frame[x]);
+  for (let y = 0; y < height - skipBottom; y++) edge.push(frame[y * width], frame[y * width + width - 1]);
+  const bg = median(edge),
+    C = 4,
+    rows = height - skipBottom;
+  let x0 = Infinity, y0 = Infinity, x1 = -1, y1 = -1;
+  for (let ty = 0; ty < rows; ty += C)
+    for (let tx = 0; tx < width; tx += C) {
+      let on = 0;
+      for (let y = ty; y < Math.min(rows, ty + C); y++)
+        for (let x = tx; x < Math.min(width, tx + C); x++) if (Math.abs(frame[y * width + x] - bg) > 16) on++;
+      if (on >= 5) {
+        x0 = Math.min(x0, tx); y0 = Math.min(y0, ty);
+        x1 = Math.max(x1, Math.min(width, tx + C)); y1 = Math.max(y1, Math.min(rows, ty + C));
+      }
+    }
+  if (x1 < 0) return { w: 0, h: 0, cx: 0.5, cy: 0.5 };
+  return { w: (x1 - x0) / width, h: (y1 - y0) / rows, cx: (x0 + x1) / 2 / width, cy: (y0 + y1) / 2 / rows };
+}
+
 const diff = (a, b) => {
   let s = 0;
   for (let k = 0; k < a.length; k++) s += Math.abs(a[k] - b[k]);
@@ -286,6 +314,15 @@ export function stillFix(beat) {
   return 'Change something on one of those words, or shorten the beat.';
 }
 
+/** How to make a beat's picture fill its frame, from what it is made of. */
+function sizeFix(beat) {
+  const p = beat.props ?? {};
+  if (p.cast) return 'Give the objects a larger `size` (up to 360), a `spread` for the formation, or a camera `zoom` on the cast.';
+  if (p.chart || p.box) return 'Give the chart a larger `box` ([x, y, w, h] in frame pixels).';
+  if (beat.block === 'canvas') return 'Fit the drawing to the space with `view: "auto"` (its bounds, enlarged up to 2×), or draw it larger.';
+  return 'Use the space: a larger size, or a layout that spans the frame.';
+}
+
 export async function qaProject(root, { video, loop = false } = {}) {
   const file = path.resolve(video ?? path.join(root, 'build/video.mp4'));
   if (!fs.existsSync(file)) throw new Error(`No film at ${file}; render first.`);
@@ -336,6 +373,31 @@ export async function qaProject(root, { video, loop = false } = {}) {
   );
   const holds = new Set(sb.beats.filter(b => b.pace === 'hold').map(b => b.id));
   const findings = timeFindings({ d, skip, second, local, fps, beats, worlds, covers, holds });
+  // A picture that has landed but fills a corner of the frame: judges read it as unfinished, and
+  // on a phone it is a small thing in an empty field. Measured late in the beat, once built.
+  const band = Math.round(h * 0.12);
+  for (const b of beats) {
+    // Type sets its own size (a short line is short on purpose); this is about pictures.
+    if (TYPE_BLOCKS.includes(sb.beats[b.index]?.block)) continue;
+    const i = Math.min(n - 1, Math.round((b.start + Math.max(0.5, Math.min(b.dur * 0.85, b.dur - 0.3))) * fps));
+    const e = pictureExtent(film.at(i), w, h, band);
+    if (e.w === 0) continue;
+    const small = (e.w < 0.5 && e.h < 0.5) || e.w * e.h < 0.12;
+    const corner = Math.abs(e.cx - 0.5) > 0.22 || Math.abs(e.cy - 0.5) > 0.22
+      ? `${e.cy < 0.35 ? 'top' : e.cy > 0.65 ? 'bottom' : ''}${e.cx < 0.35 ? (e.cy < 0.35 || e.cy > 0.65 ? ' left' : 'left') : e.cx > 0.65 ? (e.cy < 0.35 || e.cy > 0.65 ? ' right' : 'right') : ''}`
+      : '';
+    if (!small) continue;
+    findings.push({
+      level: 'warn',
+      kind: 'small',
+      t: r2(i / fps),
+      frame: i,
+      beat: b.id,
+      fill: { w: r2(e.w), h: r2(e.h) },
+      fix: sizeFix(sb.beats[b.index] ?? {}),
+      message: `the picture fills ${Math.round(e.w * 100)}% of the width and ${Math.round(e.h * 100)}% of the height${corner ? `, in the ${corner}` : ''}: a small thing in an empty frame, smaller still on a phone. ${sizeFix(sb.beats[b.index] ?? {})}`,
+    });
+  }
   // A still stretch under the voice says what was said over it and what would move there.
   for (const f of findings) {
     if (f.kind !== 'held' || f.level !== 'warn' || !f.beat) continue;
@@ -482,6 +544,9 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
         ? [`  length: ${Math.round(s.seconds)} s against the ${sb.length} s asked for: cut to the facts that matter.`]
         : []),
     ...(blank.length ? ['  blank under the voice:', ...blank] : []),
+    ...(q.findings.some(f => f.kind === 'small')
+      ? ['  small in the frame:', ...q.findings.filter(f => f.kind === 'small').slice(0, 5).map(f => `    ${f.beat}: fills ${Math.round(f.fill.w * 100)}% × ${Math.round(f.fill.h * 100)}% of the frame. ${f.fix}`)]
+      : []),
     ...(ready ? [] : ['  not ready to hand over: fix the beats above (each is one edit), then run draft again.']),
   ];
   return { share, typeShare, ready, lines };

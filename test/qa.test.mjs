@@ -227,3 +227,12 @@ test('music.drop starts the song so its measured drop plays on the chosen beat',
   fs.writeFileSync(path.join(root, 'storyboard.json'), JSON.stringify(sb));
   assert.equal(computeTiming(root).music.offset, -1.5);
 });
+
+test('pictureExtent measures where the picture sits, ignoring a line of small type', async () => {
+  const { pictureExtent } = await import('../engine/lib/qa.mjs');
+  const w = 128, h = 72, frame = new Uint8Array(w * h).fill(240);
+  for (let y = 10; y < 30; y++) for (let x = 10; x < 40; x++) frame[y * w + x] = 40; // a block, top left
+  for (let x = 4; x < 60; x++) frame[60 * w + x] = 90; // a one-pixel source line near the bottom
+  const e = pictureExtent(frame, w, h, Math.round(h * 0.12));
+  assert.ok(e.w < 0.3 && e.h < 0.42 && e.cx < 0.35 && e.cy < 0.4, JSON.stringify(e));
+});
