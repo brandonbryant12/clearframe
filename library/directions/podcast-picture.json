@@ -1,0 +1,17 @@
+{
+  "order": 2,
+  "title": "A picture for every idea",
+  "materials": ["podcast"],
+  "playbook": "podcast-clip",
+  "treatment": "workplace",
+  "when": "A finance, benefits or business conversation where the guest explains things (rules of thumb, numbers, how something works) and the clip goes to social feeds.",
+  "story": "Open on the question the host asks; let each of the guest's ideas land as its own picture; close on the line worth repeating.",
+  "picture": "Every guest line gets a small drawing of its idea (a sketch with its numbers, a cast object, tiles that count months, a jar, a mug with the quote on it); host lines stay short poster type; readable pop captions run under everything with the speaker's chip; one or two objects come back across the clip.",
+  "pace": "Cut when the thought changes, not on every sentence; hold a picture while its idea is being explained; never let type change faster than it can be read.",
+  "rules": [
+    "Keep the recording as recorded; pictures follow the words, never the other way round.",
+    "Attribute rules of thumb to the speaker in one short line (\"Sam, on air\"), not with disclaimers.",
+    "Pictures carry the idea; captions carry the words. Kinetic type only for the line worth repeating.",
+    "Draw the guest's own examples (their numbers, their objects) rather than stock metaphors."
+  ]
+}
