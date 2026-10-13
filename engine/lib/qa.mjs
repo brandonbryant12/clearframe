@@ -202,12 +202,17 @@ export function timeFindings({ d, skip, second, local = [], fps, beats = [], wor
       const voiced = beats.some(x => x.vo && x.vo.start < e.t && x.vo.end > s.t);
       // `pace: "hold"` on a beat declares a reading hold: still reported, never as a slide.
       const deliberate = holds.has(s.beat);
+      // Something did change here, in one area, but below what reads as motion (a thin line drawing
+      // on, a small figure, a pale glow): the fix is a bolder change, not "change something".
+      let peak = 0;
+      for (let k = i; k <= j; k++) if (Number.isFinite(local[k])) peak = Math.max(peak, local[k]);
       findings.push({
         level: voiced && !deliberate ? 'warn' : 'note',
         kind: 'held',
         ...s,
         end: e.t,
         seconds: r2(seconds),
+        ...(peak >= 3.5 ? { faint: r2(peak) } : {}),
         ...(deliberate ? { deliberate: true } : {}),
         message: deliberate
           ? `the picture holds for ${r2(seconds)} s (${s.t}–${e.t} s): a declared reading hold (pace: "hold")`
@@ -490,6 +495,8 @@ export async function qaProject(root, { video, loop = false } = {}) {
     const tb = beats.find(b => b.id === f.beat);
     f.said = (tb?.vo?.words ?? []).filter(w => w.t0 >= f.t - 0.05 && w.t0 < f.end).map(w => w.w).join(' ');
     f.fix = stillFix(sb.beats[tb?.index] ?? {});
+    if (f.faint)
+      f.fix = `Something does change here, but it is too thin, small or pale to read as motion (its busiest area changes ${f.faint} where ${HELD.local} reads as motion): make that change bolder (a filled shape rather than a thin line, a larger figure, a solid chip rather than a glow), move the object it belongs to, or move the camera onto it.`;
     // Still to the end of a drawing whose moments have all landed: the rest of the line is
     // another idea, and it needs a beat and a picture of its own rather than more of this one.
     const authored = sb.beats[tb?.index] ?? {};
