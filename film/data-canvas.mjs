@@ -21,7 +21,9 @@ export function chartSpec(spec, fail) {
   if (!spec || typeof spec !== 'object' || Array.isArray(spec)) fail('chart must be {kind, values, …}');
   if (!['bars', 'stack', 'number'].includes(spec.kind)) fail('chart.kind must be bars, stack or number');
   if (!Array.isArray(spec.values) || !spec.values.length || spec.values.length > 12)
-    fail('chart.values must be 1–12 {label, value}');
+    fail(
+      `chart.values must be 1–12 {label, value}, like "values": [{"label": "Link expires after", "value": 7, "say": "seven"}]${['rows', 'data', 'items', 'bars', 'series', 'value', 'number'].filter(k => spec[k] != null).map(k => ` (it has ${k}: the figures go in values)`).join('')}`,
+    );
   spec.values.forEach((v, i) => {
     if (!v || !Number.isFinite(v.value) || v.value < 0) fail(`chart.values[${i}].value must be a nonnegative number`);
     if (typeof v.label !== 'string' || !v.label.trim()) fail(`chart.values[${i}] needs a label`);

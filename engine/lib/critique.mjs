@@ -190,7 +190,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
   const ids = b =>
     new Set([...(b.props?.elements ?? []).map(el => el.id), ...diagramIds(b), ...(b.props?.chart ? ['chart'] : [])].filter(Boolean));
   const chartIds = b =>
-    b.props?.chart ? b.props.chart.values.map(v => `${b.props.chart.id ?? 'chart'}-${v.id ?? v.label}`) : [];
+    Array.isArray(b.props?.chart?.values) ? b.props.chart.values.map(v => `${b.props.chart.id ?? 'chart'}-${v?.id ?? v?.label}`) : [];
   for (let i = 1; i < n; i++) {
     const [a, b] = [beats[i - 1], beats[i]];
     const before = new Set([...ids(a), ...chartIds(a)]);
