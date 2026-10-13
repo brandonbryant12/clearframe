@@ -12,6 +12,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **Errors from the round-7 podcast agent explain themselves.** A block name that is really a beat field or a canvas prop (`tone`, `plate`, `camera`, `sketch`, `cast`, `chart`) says where it goes, and a misspelt one names the nearest blocks. `align` on an imported recording says its words were measured at import, or which beats' `vo` no longer match the recording (recorded narration is edited with cut, split and merge, never by rewriting `vo`).
 - **`render` reports the motion verdict too** (on stderr, and as `motion` in its JSON report). The round-7 podcast agent rendered with `render --draft`, never ran `draft`, never saw that its film was 100% type, and reported "0 held frames".
 - **`portal` is a phone in a vertical film** unless `device: "desktop"` is asked for (`device` defaults to `auto`): a browser window in a 9:16 frame was cropped at the edges and its type unreadable on the phone the film was made for.
 - **The verdict names the beats that are only words**, each with the picture `critique` would give it (now shared from `engine/lib/pictures.mjs`), so a film that is 71% type gets a list of edits instead of a share.

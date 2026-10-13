@@ -714,9 +714,34 @@ export function palette(theme = 'paper') {
   return result;
 }
 
+// Names agents reach for as blocks that are beat fields or canvas props.
+const NOT_BLOCKS = {
+  tone: 'tone is a beat field that colour-blocks any scene: "tone": "accent" (accent, accent2, invert, surface; docs/style.md).',
+  plate: 'plate is a beat field: footage or a still behind any scene, "plate": {"file": "…"}.',
+  camera: 'camera is a beat field: "camera": {"move": "in"}.',
+  sketch: 'a sketch is drawn by a canvas beat: {"block": "canvas", "props": {"sketch": "NAME"}} (clearframe sketch NAME).',
+  cast: 'a cast is drawn by a canvas beat: {"block": "canvas", "props": {"cast": {…}}} (docs/cast.md).',
+  chart: 'a chart is drawn by a canvas beat: {"block": "canvas", "props": {"chart": {"kind": "bars", "values": […]}}}.',
+  number: 'one figure is a stat block, or a canvas chart {"kind": "number"}.',
+  text: 'type on its own is a statement or kinetic block.',
+  caption: 'captions are a film field: "captions": "pop".',
+};
+function notABlock(name) {
+  if (NOT_BLOCKS[name]) return NOT_BLOCKS[name];
+  // The nearest real names, by edit distance.
+  const d = (a, b) => {
+    const m = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+    for (let j = 1; j <= b.length; j++) m[0][j] = j;
+    for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) m[i][j] = Math.min(m[i - 1][j] + 1, m[i][j - 1] + 1, m[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return m[a.length][b.length];
+  };
+  const near = BLOCKS.map(b => [b.name, d(String(name), b.name)]).sort((a, b) => a[1] - b[1]).filter(([, k]) => k <= 3).slice(0, 3).map(([n]) => n);
+  return `${near.length ? `Did you mean ${near.join(', ')}? ` : ''}Run clearframe blocks for the list.`;
+}
+
 export function normalizeProps(name, input = {}, { vertical = false, width, height, assets = [], resolve } = {}) {
   const meta = blockByName(name);
-  if (!meta) throw new Error(`No native block "${name}". Run clearframe blocks; legacy scenes need an explicit port.`);
+  if (!meta) throw new Error(`No native block "${name}". ${notABlock(name)}`);
   const p = structuredClone(input);
   const fail = message => {
     throw new Error(`${name}: ${message}`);

@@ -73,7 +73,19 @@ export async function whisperAlign(root, { beat, model = 'base', language } = {}
     .filter(b => b.vo && (!beat || b.id === beat))
     .map(b => ({ b, wav: path.join(P.vo, `${b.id}.wav`), metaFile: path.join(P.vo, `${b.id}.json`) }))
     .filter(x => fs.existsSync(x.wav) && readJSON(x.metaFile, null)?.textHash === hashOf(x.b.vo));
-  if (!beats.length) throw new Error('No current narration takes to align; record or import voice first.');
+  if (!beats.length) {
+    // An imported recording is its own narration: ingest measured its words already, and its
+    // takes stop matching when someone rewrites `vo` instead of cutting the recording.
+    if (fs.existsSync(path.join(root, 'source', 'recording.wav'))) {
+      const changed = sb.beats.filter(b => b.vo && (!beat || b.id === beat) && fs.existsSync(path.join(P.vo, `${b.id}.json`)) && readJSON(path.join(P.vo, `${b.id}.json`), null)?.textHash !== hashOf(b.vo)).map(b => b.id);
+      throw new Error(
+        changed.length
+          ? `This film plays an imported recording, and the vo of ${changed.slice(0, 6).join(', ')}${changed.length > 6 ? ' …' : ''} no longer matches what was recorded. A recording is edited with cut, uncut, split and merge (docs/editing.md), never by rewriting vo: put the words back (or ingest again) and use those.`
+          : 'This film plays an imported recording, whose words were measured when it was ingested (source/words.json); there are no voice takes to align. Its timings are already measured: go on with sheet and draft.',
+      );
+    }
+    throw new Error('No current narration takes to align; record or import voice first.');
+  }
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-whisper-'));
   try {
     // One pass: beats separated by a second of silence, so no word straddles two takes.
