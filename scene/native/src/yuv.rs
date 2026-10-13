@@ -59,6 +59,102 @@ pub fn rgba_to_i420(rgba: &[u8], width: usize, height: usize, y: Plane, u: Plane
     }
 }
 
+/// The same conversion on the GPU: three one-channel surfaces drawn from the frame with SkSL
+/// (luma per pixel, each chroma plane from its 2×2 block) and read back straight into the
+/// encoder's planes — 1.5 bytes a pixel cross to the CPU instead of 4, and the CPU is left to
+/// the encoder.
+pub struct GpuI420 {
+    planes: [sk::Surface; 3],
+}
+
+const LUMA: &str = "uniform shader img; uniform float3 k;
+float4 main(float2 p) {
+    float3 c = float3(img.eval(p).rgb) * 255.0;
+    return float4(0, 0, 0, (16.0 + dot(c, k)) / 255.0);
+}";
+const CHROMA: &str = "uniform shader img; uniform float3 k;
+float4 main(float2 p) {
+    float2 q = floor(p) * 2.0 + 0.5;
+    float3 s = float3(img.eval(q).rgb) + float3(img.eval(q + float2(1, 0)).rgb)
+             + float3(img.eval(q + float2(0, 1)).rgb) + float3(img.eval(q + float2(1, 1)).rgb);
+    return float4(0, 0, 0, (128.0 + dot(s * (255.0 / 4.0), k)) / 255.0);
+}";
+
+use skia_safe as sk;
+
+fn effect(source: &'static str) -> Result<sk::RuntimeEffect, String> {
+    sk::RuntimeEffect::make_for_shader(source, None).map_err(|e| format!("yuv shader: {e}"))
+}
+
+fn coefficients(k: &[i32; 3]) -> sk::Data {
+    let bytes: Vec<u8> = k.iter().flat_map(|c| (*c as f32 / 65536.0).to_ne_bytes()).collect();
+    sk::Data::new_copy(&bytes)
+}
+
+impl GpuI420 {
+    /// One-channel planes on the engine's GPU context; `None` without a GPU.
+    pub fn new(engine: &mut crate::compose::Engine) -> Result<Option<Self>, String> {
+        let (w, h) = (engine.width, engine.height);
+        let Some(gpu) = engine.gpu.as_mut() else { return Ok(None) };
+        let mut plane = |pw: i32, ph: i32| {
+            let info = sk::ImageInfo::new((pw, ph), sk::ColorType::Alpha8, sk::AlphaType::Premul, None);
+            sk::gpu::surfaces::render_target(
+                &mut gpu.context,
+                sk::gpu::Budgeted::Yes,
+                &info,
+                None,
+                sk::gpu::SurfaceOrigin::TopLeft,
+                None,
+                false,
+                None,
+            )
+            .ok_or_else(|| format!("cannot create a {pw}x{ph} one-channel surface"))
+        };
+        let (cw, ch) = ((w + 1) / 2, (h + 1) / 2);
+        Ok(Some(GpuI420 { planes: [plane(w, h)?, plane(cw, ch)?, plane(cw, ch)?] }))
+    }
+
+    /// Convert the engine's current frame into `y`, `u` and `v`.
+    pub fn read(&mut self, engine: &mut crate::compose::Engine, out: [Plane; 3]) -> Result<(), String> {
+        thread_local! {
+            static EFFECTS: (sk::RuntimeEffect, sk::RuntimeEffect) =
+                (effect(LUMA).expect("luma shader"), effect(CHROMA).expect("chroma shader"));
+        }
+        let image = engine.surface.image_snapshot();
+        let source = image
+            .to_shader((sk::TileMode::Clamp, sk::TileMode::Clamp), sk::SamplingOptions::default(), None)
+            .ok_or("cannot sample the frame")?;
+        EFFECTS.with(|(luma, chroma)| -> Result<(), String> {
+            for (i, (effect, k)) in [(luma, &Y), (chroma, &CB), (chroma, &CR)].into_iter().enumerate() {
+                let shader = effect
+                    .make_shader(coefficients(k), &[source.clone().into()], None)
+                    .ok_or("cannot make the yuv shader")?;
+                let surface = &mut self.planes[i];
+                let (pw, ph) = (surface.width(), surface.height());
+                let mut paint = sk::Paint::default();
+                paint.set_shader(shader);
+                paint.set_blend_mode(sk::BlendMode::Src);
+                surface.canvas().draw_rect(sk::Rect::from_wh(pw as f32, ph as f32), &paint);
+            }
+            Ok(())
+        })?;
+        if let Some(g) = engine.gpu.as_mut() {
+            g.context.flush_and_submit();
+        }
+        for (surface, plane) in self.planes.iter_mut().zip(out) {
+            let (pw, ph) = (surface.width(), surface.height());
+            let info = sk::ImageInfo::new((pw, ph), sk::ColorType::Alpha8, sk::AlphaType::Premul, None);
+            if plane.data.len() < plane.stride * (ph as usize - 1) + pw as usize {
+                return Err("a yuv plane is smaller than the frame".into());
+            }
+            if !surface.read_pixels(&info, plane.data, plane.stride, (0, 0)) {
+                return Err(format!("failed to read a {pw}x{ph} yuv plane back"));
+            }
+        }
+        Ok(())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

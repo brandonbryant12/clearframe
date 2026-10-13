@@ -15,7 +15,7 @@ use crate::yuv;
 use fframes::{
     AVPixelFormat, AudioMap, AudioTimelineSamples, Color, Duration, EncoderOptions, FFramesContext, FFramesLogger,
     FFramesLoggerVariant, FFramesRenderBackend, FFramesRendererError, FFramesRendererResult, Frame, FramePool,
-    FrameScheduler, RenderOptions, ResolvedRenderingTimeline, SegmentWriter, Svgr, Video, usvgr,
+    FrameScheduler, RenderOptions, ResolvedRenderingTimeline, SegmentWriter, Svgr, Video, VideoFrame, usvgr,
 };
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
@@ -47,6 +47,23 @@ impl<const W: usize, const H: usize, const FPS: usize> Video for Film<W, H, FPS>
     fn render_frame<'a>(&'a self, _frame: Frame, _ctx: &FFramesContext<'a, '_>) -> Svgr<'a> {
         Svgr::empty()
     }
+}
+
+/// The shortest segment fframes may cut: whole GOPs (250 frames, where the single-stream
+/// encode placed its keyframes) for anything longer than four GOPs — fframes' default of one
+/// second puts a keyframe every second and costs ~3× the bytes on an explainer's held frames
+/// at the same CRF — and whole seconds that cut a short film into about four segments, so it
+/// still encodes in parallel. It depends only on the frame count, never on the number of
+/// workers, so every worker count encodes the same bytes.
+fn segment_frames(frames: usize, fps: usize, gop: usize) -> usize {
+    let fps = fps.max(1);
+    ((frames / 4 / fps) * fps).clamp(fps, gop.max(fps))
+}
+
+/// What a worker hands its encoder thread: encoder-ready planes, or RGBA to convert.
+enum Picture {
+    Yuv(VideoFrame),
+    Rgba(Vec<u8>),
 }
 
 /// Draws the claimed frames with one ClearFrame engine per fframes render worker.
@@ -95,13 +112,10 @@ impl FFramesRenderBackend for Backend<'_> {
         let range = render_options.output_frame_range(ctx.duration_in_frames);
         let offset = range.start;
         let size = &ctx.current_video_size;
-        // Segments are whole GOPs (250 frames, as the single-stream encode placed its
-        // keyframes), not fframes' default of one second: a keyframe a second costs ~3× the
-        // bytes on the long held frames of an explainer at the same CRF.
         let scheduler = FrameScheduler::new(
             range.len(),
             self.workers.max(1),
-            render_options.video_encoder_options.gop_size.max(1) as usize,
+            segment_frames(range.len(), ctx.time_base.fps, render_options.video_encoder_options.gop_size.max(1) as usize),
         );
         let writer = SegmentWriter::new(
             &directory,
@@ -130,44 +144,55 @@ impl FFramesRenderBackend for Backend<'_> {
                 )));
             }
             let _ = stats.backend.set(engine.backend());
+            let chunk = |err| FFramesRendererError::RenderChunkError(worker, err);
+            // yuv420p/BT.601 frames are converted by ClearFrame (chroma averaged per 2×2 block,
+            // yuv.rs): on the GPU when there is one, else on this worker's encoder thread. Any
+            // other negotiated format goes through fframes' own converter.
+            let i420 = writer.encoder_input().pixel_format == AVPixelFormat::AV_PIX_FMT_YUV420P
+                && writer.encoder_input().color_matrix == fframes::pix_fmt::YuvMatrix::Bt601;
+            let pool = if i420 { Some(FramePool::new(AVPixelFormat::AV_PIX_FMT_YUV420P, w, h).map_err(chunk)?) } else { None };
+            let mut gpu_yuv = match (&pool, std::env::var("CLEARFRAME_GPU_YUV").as_deref() != Ok("0")) {
+                (Some(_), true) => yuv::GpuI420::new(&mut engine).map_err(FFramesRendererError::Custom)?,
+                _ => None,
+            };
+            let ch = (h as usize).div_ceil(2);
+            let planes = |frame: &VideoFrame| {
+                let plane = |i: usize, rows: usize| {
+                    let (data, stride) = frame.plane(i);
+                    // SAFETY: the pool allocated `stride × rows` bytes for plane i of this frame,
+                    // and nothing else writes it until the frame is submitted.
+                    yuv::Plane { data: unsafe { std::slice::from_raw_parts_mut(data, stride as usize * rows) }, stride: stride as usize }
+                };
+                [plane(0, h as usize), plane(1, ch), plane(2, ch)]
+            };
             // Drawing overlaps encoding: this worker's encoder thread takes its frames in claim
-            // order (a segment's frames stay in order) through a queue of two, and hands the
-            // buffers back so no frame allocates.
-            let (to_encoder, frames) = sync_channel::<(fframes::FrameClaim, Vec<u8>)>(2);
+            // order (a segment's frames stay in order) through a queue of two; RGBA buffers come
+            // back for reuse, so no frame allocates.
+            let (to_encoder, frames) = sync_channel::<(fframes::FrameClaim, Picture)>(2);
             let (to_painter, spare) = sync_channel::<Vec<u8>>(3);
             for _ in 0..3 {
                 let _ = to_painter.send(Vec::new());
             }
             std::thread::scope(|s| -> FFramesRendererResult<()> {
-                let writer = &writer;
+                let (writer, pool) = (&writer, &pool);
                 let encoder = s.spawn(move || -> FFramesRendererResult<()> {
-                    let chunk = |err| FFramesRendererError::RenderChunkError(worker, err);
-                    // yuv420p frames are converted here (chroma averaged per 2×2 block, see
-                    // yuv.rs); any other negotiated format goes through fframes' converter.
-                    let i420 = writer.encoder_input().pixel_format == AVPixelFormat::AV_PIX_FMT_YUV420P
-                        && writer.encoder_input().color_matrix == fframes::pix_fmt::YuvMatrix::Bt601;
-                    let pool = if i420 { Some(FramePool::new(AVPixelFormat::AV_PIX_FMT_YUV420P, w, h).map_err(chunk)?) } else { None };
-                    for (claim, pixels) in frames {
+                    for (claim, picture) in frames {
                         let t = Instant::now();
-                        match &pool {
-                            Some(pool) => {
+                        match (picture, pool) {
+                            (Picture::Yuv(frame), _) => writer.submit_frame(claim, frame).map_err(chunk)?,
+                            (Picture::Rgba(pixels), Some(pool)) => {
                                 let frame = pool.get().map_err(chunk)?;
-                                let ch = (h as usize).div_ceil(2);
-                                let plane = |i: usize, rows: usize| {
-                                    let (data, stride) = frame.plane(i);
-                                    // SAFETY: the pool allocated `stride × rows` bytes for plane i of this frame.
-                                    yuv::Plane {
-                                        data: unsafe { std::slice::from_raw_parts_mut(data, stride as usize * rows) },
-                                        stride: stride as usize,
-                                    }
-                                };
-                                yuv::rgba_to_i420(&pixels, w as usize, h as usize, plane(0, h as usize), plane(1, ch), plane(2, ch));
+                                let [y, u, v] = planes(&frame);
+                                yuv::rgba_to_i420(&pixels, w as usize, h as usize, y, u, v);
                                 writer.submit_frame(claim, frame).map_err(chunk)?;
+                                let _ = to_painter.send(pixels);
                             }
-                            None => writer.submit(claim, &pixels).map_err(chunk)?,
+                            (Picture::Rgba(pixels), None) => {
+                                writer.submit(claim, &pixels).map_err(chunk)?;
+                                let _ = to_painter.send(pixels);
+                            }
                         }
                         stats.encode_us.fetch_add(us(t), Ordering::Relaxed);
-                        let _ = to_painter.send(pixels);
                     }
                     Ok(())
                 });
@@ -178,14 +203,24 @@ impl FFramesRenderBackend for Backend<'_> {
                             return Ok(());
                         }
                         let frame = claim.frame + offset;
-                        let mut pixels = spare.recv().unwrap_or_default();
                         let t = Instant::now();
                         engine.render(frame).map_err(|e| FFramesRendererError::Custom(format!("frame {frame}: {e}")))?;
                         stats.draw_us.fetch_add(us(t), Ordering::Relaxed);
                         let t = Instant::now();
-                        engine.read(&mut pixels).map_err(FFramesRendererError::Custom)?;
+                        let picture = match (&mut gpu_yuv, pool) {
+                            (Some(conv), Some(pool)) => {
+                                let out = pool.get().map_err(chunk)?;
+                                conv.read(&mut engine, planes(&out)).map_err(FFramesRendererError::Custom)?;
+                                Picture::Yuv(out)
+                            }
+                            _ => {
+                                let mut pixels = spare.recv().unwrap_or_default();
+                                engine.read(&mut pixels).map_err(FFramesRendererError::Custom)?;
+                                Picture::Rgba(pixels)
+                            }
+                        };
                         stats.read_us.fetch_add(us(t), Ordering::Relaxed);
-                        if to_encoder.send((claim, pixels)).is_err() {
+                        if to_encoder.send((claim, picture)).is_err() {
                             break; // the encoder stopped; its error is reported below
                         }
                         stats.frames.fetch_add(1, Ordering::Relaxed);

@@ -1,6 +1,6 @@
 # The scene engine
 
-ClearFrame renders every film with the **scene engine** (`scene/`), its only renderer: a ClearFrame-owned scene plan evaluated frame by frame and drawn with Skia on the GPU (Metal on macOS). It draws everything on screen itself: the 33 blocks, native stages, film compositing and footage. Its dependencies are Skia, Metal, a text shaper and the FFmpeg tools. FFFrames, which drew ClearFrame films until October 2026, is retired; its revision and notice are kept in `archive/fframes/`.
+ClearFrame renders every film with the **scene engine** (`scene/`), its only renderer: a ClearFrame-owned scene plan evaluated frame by frame and drawn with Skia on the GPU (Metal on macOS). It draws everything on screen itself: the 33 blocks, native stages, film compositing and footage. Its dependencies are Skia, Metal, a text shaper, the FFmpeg tools and **fframes** (MIT, pinned in `archive/fframes/upstream.json`), which is the film runtime for renders: fframes schedules the frames, encodes GOP-aligned segments in parallel with in-process FFmpeg/libx264 and concatenates them, while each of its render workers draws with this engine. See [Returning to fframes](fframes-return.md) for the design and the measured parity, speed and memory.
 
 This page is the design and the authoring reference. The plan review that chose this design is summarised under [Decisions](#decisions); [coverage](scene-engine-coverage.md) lists every block, sketch, treatment and playbook with its state.
 
@@ -16,7 +16,9 @@ clearframe-scene --plan plan.json  (scene/native, Rust)
                          → stages under → beats (ground │ native under │ block content │ native over)
                          → stages over → chrome] → leak → editorial frame → grain → letterbox → guides
     commands:   frame LIST │ render [A..B] │ inspect │ audit │ bench │ info │ serve
-                ─► raw H.264 (FFmpeg pipe, two threads) ─► the existing finisher: packet timeline,
+    render:     fframes runtime (runtime.rs): GOP-aligned segments, two workers, each an engine
+                drawing its frames → BT.601 4:2:0 converted on the GPU (yuv.rs) → in-process libx264
+                per segment → concatenated H.264 ─► the existing finisher: packet timeline,
                    one audio mix, mux with colour tags, decoded frame-count check, receipt, revision
 ```
 
@@ -129,7 +131,7 @@ The decoder's regression tests (a delayed final B-frame, a higher film rate, a n
 | | |
 |---|---|
 | `frame 120,4.2s -o DIR` | PNG stills (frames, or seconds rounded to the nearest frame) |
-| `render [A..B] -o OUT.mp4 [--report R.json]` | H.264 of film frames [A, B) on the film's own clock; draw and readback times in the report |
+| `render [A..B] -o OUT.mp4 [--report R.json]` | H.264 of film frames [A, B) on the film's own clock, through the fframes runtime (`CLEARFRAME_RENDER_WORKERS` 1–4, default 2; `CLEARFRAME_ENCODER_THREADS` per segment, default 2; `CLEARFRAME_RUNTIME=scene` for the engine's own FFmpeg pipe); draw, readback and encode times in the report |
 | `inspect [--every 0.25s]` | sampled frames that cannot be drawn (overflowing text, missing media, stage errors) and type cut by the canvas edge, in the text report `check` reads; exit 2 on errors |
 | `audit FILE` | the frame audit (held type cut by the frame or letterbox, over other type or a subject, too small) over block type **and** native type |
 | `bench [A..B]` | draw + readback per frame, without encoding |
@@ -145,6 +147,7 @@ A range is film frames [A, B) of the full plan: every beat keeps its place, a st
 
 - **Independent implementation, no Psychopomp code.** The upstream repository has no license (re-checked through the GitHub API on 2026-10-05: `license: null`, `main` 6fca3bc). Ideas are taken from the research (actors with persistent identity, an event vocabulary compiled to time tracks, packets on connectors, callouts riding moving objects, stepped code diffs); no upstream code or assets.
 - **Skia (Ganesh/Metal) directly, not wgpu.** Skia gives anti-aliased vectors, gradients, image filters, SkSL runtime shaders and glyph drawing in one GPU canvas. `skia-safe 0.153.3` with a prebuilt-binary feature set builds without compiling Skia. wgpu would have needed a new text and vector stack, plus a cold build of new crates on an 8 GB machine.
+- **fframes is the runtime again (2026-10-12), not the painter.** A custom `FFramesRenderBackend` (`runtime.rs`) lets fframes own scheduling, parallel GOP-aligned encoding and concatenation while every pixel stays this engine's; converting the display list to usvgr trees was rejected (a second implementation of every visual). ClearFrame converts frames to 4:2:0 itself (2×2 chroma average, on the GPU) because fframes' built-in converter point-samples chroma and measured ~3 dB worse against the engine's stills. Details and evidence: [fframes-return.md](fframes-return.md).
 - **One renderer, no fallback.** FFFrames was removed outright rather than kept selectable. The block code was always ClearFrame's own and was moved, not rewritten: layout, fitting, chart scales, diagram geometry, speech and caption timing are the same functions. Only their output changed, from an SVG tree for usvg to a display list for Skia.
 - **A display list, not SVG text.** Blocks build typed nodes from Skia values. There are no id references, no converter and no per-frame SVG parsing; SVG remains only an asset format.
 - **Footage through the FFmpeg tools.** One process per open clip replaced a statically linked FFmpeg and a vendored decoder patch, and the same exact-end rule is now a tested property of `media.rs`.
@@ -155,5 +158,6 @@ A range is film frames [A, B) of the full plan: every beat keeps its place, a st
 - The canvas element dialect has two implementations: the canvas block (`blocks/canvas*.rs`) and native stages (`nodes.rs`). Stages refuse the canvas-only features by name.
 - Particles are batched draws, not GPU compute; thousands, not millions.
 - Motion blur multiplies a stage's draw cost by its samples.
-- GPU output is deterministic on one backend; bit-identical pixels across GPUs are not promised. The raster fallback (no Metal) is untested outside macOS.
+- GPU output is deterministic on one backend; bit-identical pixels across GPUs are not promised. Encoded bytes depend on the segment cuts, which depend only on the frame count (never the worker count).
+- The renderer binary statically links fframes' prebuilt FFmpeg with libx264 (GPL); see fframes-return.md, Risks. The raster fallback (no Metal) is untested outside macOS.
 - `serve` keeps one plan open; reopening leaks the previous job's parsed film (small) for the life of the process.

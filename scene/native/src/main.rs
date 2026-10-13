@@ -1,9 +1,10 @@
-//! `clearframe-scene`: ClearFrame's GPU scene engine.
+//! `clearframe-scene`: ClearFrame's GPU scene engine, rendering through the fframes runtime.
 //!
 //!   clearframe-scene --plan build/scene/plan.json [--scale S] [--draft] <command>
 //!     info                         format, backend and layers as JSON
 //!     frame <list> -o DIR          PNG stills: frames (`120`) or seconds (`4.2s`), comma separated
-//!     render [A..B] -o OUT.mp4     H.264 of film frames [A, B) on the film's own clock
+//!     render [A..B] -o OUT.mp4     H.264 of film frames [A, B) on the film's own clock, through
+//!                                  fframes (runtime.rs; CLEARFRAME_RUNTIME=scene for the old pipe)
 //!     inspect [--every S]          sampled diagnostics; exit 2 on errors
 //!     audit FILE                   frame audit JSON (held type cut, covered or too small)
 //!     bench [A..B]                 draw + readback timings without encoding
@@ -209,10 +210,10 @@ fn info(engine: &Engine) -> serde_json::Value {
     })
 }
 
-/// `CLEARFRAME_RUNTIME=fframes` renders through fframes (src/runtime.rs); `scene` keeps the
-/// engine's own FFmpeg pipe.
+/// Renders run through fframes (src/runtime.rs); `CLEARFRAME_RUNTIME=scene` keeps the engine's
+/// own FFmpeg pipe for comparison.
 fn runtime_is_fframes() -> bool {
-    std::env::var("CLEARFRAME_RUNTIME").map(|v| v == "fframes").unwrap_or(false)
+    std::env::var("CLEARFRAME_RUNTIME").map(|v| v != "scene").unwrap_or(true)
 }
 
 fn scale_for(args_scale: Option<f32>, draft: bool) -> f32 {
