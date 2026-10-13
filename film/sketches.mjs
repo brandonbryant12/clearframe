@@ -46,8 +46,9 @@ export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set())
 /**
  * A sketch's numbers (`sketchParams`): what it draws from real values, such as how many tokens each
  * side puts in or which days a window covers. A sketch declares them as
- * `params: {name: {default, min?, max?, integer?, list?, about}}`; unknown names and values out of
- * range are refused by name, and missing ones take their defaults.
+ * `params: {name: {default, min?, max?, integer?, oneOf?, list?, length?, about}}`; unknown names,
+ * values out of range, choices outside `oneOf` and values of the wrong type (number, text, true/false,
+ * following the default) are refused by name, and missing ones take their defaults.
  */
 export function sketchParams(s, given = {}) {
   const spec = s.params ?? {};
@@ -62,6 +63,10 @@ export function sketchParams(s, given = {}) {
   for (const [k, d] of Object.entries(spec)) {
     const v = given?.[k] ?? d.default;
     const check = x => {
+      if (d.oneOf && !d.oneOf.includes(x))
+        throw new Error(`sketchParams.${k} for ${s.name} must be one of ${d.oneOf.map(o => JSON.stringify(o)).join(', ')} (got ${JSON.stringify(x)})`);
+      if (typeof d.default === 'boolean' && typeof x !== 'boolean') throw new Error(`sketchParams.${k} for ${s.name} must be true or false`);
+      if (typeof d.default === 'string' && !d.oneOf && typeof x !== 'string') throw new Error(`sketchParams.${k} for ${s.name} must be text`);
       if (typeof d.default === 'number' || d.min != null) {
         if (!Number.isFinite(x)) throw new Error(`sketchParams.${k} for ${s.name} must be a number`);
         if (d.integer && !Number.isInteger(x)) throw new Error(`sketchParams.${k} for ${s.name} must be a whole number`);
@@ -94,6 +99,17 @@ export function sketch(name, preset = 'landscape', { seed, text, say, params } =
   return drawn;
 }
 export const SKETCH_FRAMES = frames;
+
+/** A sketch's named moments (for sketchSay), in drawing order. */
+export function sketchMoments(name) {
+  const s = sketchByName(name);
+  if (!s) return [];
+  try {
+    return [...fillSketch(s.build(1920, 1080, { params: sketchParams(s, {}) }).elements)];
+  } catch {
+    return [];
+  }
+}
 
 /** The same orientation choice used by canvas sketches and reusable art layers. */
 export function sketchPreset(width = 1920, height = 1080) {

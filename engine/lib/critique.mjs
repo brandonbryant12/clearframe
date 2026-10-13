@@ -14,7 +14,7 @@ import { expandHistogramProps } from '../../film/histogram.mjs';
 import { expandMultiplesProps } from '../../film/multiples.mjs';
 import { createJob, steadyFilm } from '../../film/job.mjs';
 import { roughStandIns } from '../../film/prepare.mjs';
-import { sketch, expandArt, sketchPreset } from '../../film/sketches.mjs';
+import { sketch, expandArt, sketchPreset, sketchMoments } from '../../film/sketches.mjs';
 import { diagramElements } from '../../film/system-diagrams.mjs';
 
 // A cast's objects declared in an earlier beat carry forward into the beats that follow.
@@ -572,6 +572,18 @@ export function critique(root) {
       JSON.stringify(b.props ?? {}).match(/"loop"|"keys"|"along"|"steps"/);
     if (d > 8 && !moving && b.block !== 'kinetic')
       add('idea', b.id, `Held ${d.toFixed(1)} s with nothing moving. Inspect the reading hold; shorten it or reveal the next meaningful change if it feels stalled. Do not add camera shake.`);
+    // A sketch whose moments are only partly landed on words: the rest keep their default
+    // seconds and can land before the ones that were moved.
+    const authored = sb.beats[i]?.props;
+    if (authored?.sketch && authored.sketchSay && Object.keys(authored.sketchSay).length) {
+      const left = sketchMoments(authored.sketch).filter(m => !(m in authored.sketchSay));
+      if (left.length)
+        add(
+          'warn',
+          b.id,
+          `sketchSay lands ${Object.keys(authored.sketchSay).join(', ')} on words but not ${left.join(', ')}: those keep their default seconds and can land out of order. Give every moment a word.`,
+        );
+    }
     // Speech-following type that changes faster than anyone reads: one word at a time, or
     // two-word groups, across a whole passage. Fine for a few seconds of emphasis.
     if (b.block === 'kinetic' && d > 5) {
