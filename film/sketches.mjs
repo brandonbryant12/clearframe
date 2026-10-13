@@ -46,7 +46,7 @@ export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set())
 /**
  * A sketch's numbers (`sketchParams`): what it draws from real values, such as how many tokens each
  * side puts in or which days a window covers. A sketch declares them as
- * `params: {name: {default, min?, max?, integer?, oneOf?, list?, length?, about, hint?}}` (`hint` follows a refusal: how to express a real figure in this sketch's units); unknown names,
+ * `params: {name: {default, min?, max?, integer?, oneOf?, list?, length?, about, hint?, figure?}}` (`hint` follows a refusal: how to express a real figure in this sketch's units; `figure: false` marks structure, such as the days in a month, that `critique` need not find in the source); unknown names,
  * values out of range, choices outside `oneOf` and values of the wrong type (number, text, true/false,
  * following the default) are refused by name, and missing ones take their defaults.
  */

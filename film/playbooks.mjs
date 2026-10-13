@@ -143,6 +143,8 @@ export function scaffold(dir, options = {}) {
       'concept-explainer',
     sb = storyboardFor(id, options),
     book = playbooks().find(p => p.id === id);
+  // The length the person asked for, in seconds: `draft` says when the film falls well short of it.
+  if (options.length) sb.length = options.length;
   const variantKey = options.seed ?? path.basename(path.resolve(dir));
   const look = options.treatment && !options.theme ? pickVariant(treatmentById(options.treatment)?.variants, variantKey) : null;
   if (options.treatment) {

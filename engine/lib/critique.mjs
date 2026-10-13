@@ -16,6 +16,7 @@ import { createJob, steadyFilm } from '../../film/job.mjs';
 import { roughStandIns } from '../../film/prepare.mjs';
 import { sketch, expandArt, sketchPreset, sketchMoments, sketchWords, sketchByName } from '../../film/sketches.mjs';
 import { diagramElements } from '../../film/system-diagrams.mjs';
+import { sourceNumbers, unsourcedFigures } from './figures.mjs';
 
 // A cast's objects declared in an earlier beat carry forward into the beats that follow.
 let castCarry = {};
@@ -379,6 +380,19 @@ export function critique(root) {
   }
   for (const e of job.errors ?? []) add('error', 'check', e);
   for (const w of job.warnings ?? []) add('warn', 'check', w);
+  // Figures the author typed that the source documents never state: usually an invented
+  // amount to make a sketch draw money.
+  const numbers = sourceNumbers(root);
+  if (numbers)
+    for (const b of sb.beats) {
+      const loose = unsourcedFigures(b, numbers);
+      if (loose.length)
+        add(
+          'warn',
+          b.id,
+          `${loose.slice(0, 4).map(f => `${f.text}${f.where.startsWith('sketchParams') ? ` (${f.where})` : ''}`).join(', ')} ${loose.length > 1 ? 'are' : 'is'} in no source document (${numbers.files.join(', ')}). Every figure comes from the source: take it out; if it is worked out from the source, say how in the beat's source line ("Benefits guide 2027; 26 × $6"); if it is a made-up example (a sample receipt), label it once on screen ("Example").`,
+        );
+    }
   // Hook.
   const first = beats[0],
     firstDur = t[0]?.dur ?? 0;

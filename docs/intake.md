@@ -6,7 +6,7 @@ ClearFrame is a standalone, agent-directed proof of concept. Its inputs and outp
 node engine/cli.mjs start film \
   --idea 'What should the viewer understand?' \
   --document report.pdf --brand brand.json \
-  --audience 'Business owners' --takeaway 'The decision the evidence supports' \
+  --audience 'Business owners' --takeaway 'The decision the evidence supports' --length 75 \
   --playbook cash-flow --treatment editorial
 ```
 

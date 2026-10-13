@@ -20,8 +20,8 @@ import * as native from '../film/production.mjs';
 
 const HELP = `ClearFrame — motion graphics
 
-  new <dir> [--direction ID] [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical] [--seed N|random]
-  start <dir> [--idea text] [--document report.md ...] [--brand brand.json] [--audience text] [--takeaway text]
+  new <dir> [--direction ID] [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical] [--seed N|random] [--length seconds]
+  start <dir> [--idea text] [--document report.md ...] [--brand brand.json] [--audience text] [--takeaway text] [--length seconds]
                                       portable source + brand intake; accepts --direction, --playbook, --treatment, --vertical
   directions [research|podcast] [--json] optional story/picture/pace starting points; custom JSON in library/directions
   muse [--seed N] [--light] [--json]  a seeded creative brief: twist, motif, camera, cuts, look, set pieces, music
@@ -115,6 +115,7 @@ async function main() {
   const [cmd, ...args] = process.argv.slice(2);
   const strings = [
     'duration',
+    'length',
     'scale',
     'idea',
     'document',
@@ -238,6 +239,7 @@ async function main() {
     ...o,
     only: o.only?.split(','),
     budget: num('budget'),
+    length: num('length'),
     at: o.at == null ? undefined : parseTime(o.at),
     pos: num('pos'),
     scale: num('scale'),
@@ -770,6 +772,13 @@ async function main() {
                 }),
               ]
             : []),
+          // The length the person asked for (`new`/`start --length`): agents cut films to half
+          // of it and dropped the brief's facts on the way.
+          ...(sbNow.length && s.seconds < 0.75 * sbNow.length
+            ? [`  length: ${Math.round(s.seconds)} s of the ${sbNow.length} s asked for. Check BRIEF.md for facts the film dropped and give each its picture, or say in DIRECTION.md why it is shorter.`]
+            : sbNow.length && s.seconds > 1.3 * sbNow.length
+              ? [`  length: ${Math.round(s.seconds)} s against the ${sbNow.length} s asked for: cut to the facts that matter.`]
+              : []),
           ...(share >= 40 || (typeShare >= 60 && share < 40)
             ? ['  not ready to hand over: fix the beats above (each is one edit), then run draft again.']
             : []),

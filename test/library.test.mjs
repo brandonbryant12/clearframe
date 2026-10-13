@@ -298,3 +298,13 @@ test('sketch moments are listed in the order they happen, and an early exit word
   assert.equal(bar.exitAt, 0.95, 'the exit waits for the entrance');
   assert.throws(() => scheduleElements([{ type: 'rect', say: 'later', exit: 'fade', exitSay: 'first' }], { start: 0, entrance: 0.6, resolve }), /"later".*"first"/);
 });
+
+test('figures typed into a beat are checked against the source document; sketch params count, structure does not', async () => {
+  const { unsourcedFigures } = await import('../engine/lib/figures.mjs');
+  const numbers = { files: ['source/brief.md'], values: new Set([750, 1500, 4, 21, 2027, 0]) };
+  const beat = sketchParams => ({ props: { source: 'Benefits guide 2027', sketch: 'expire', sketchParams } });
+  assert.deepEqual(unsourcedFigures(beat({ total: 3, keep: 0, each: 800, prefix: '$' }), numbers).map(f => f.where), ['sketchParams.each']);
+  assert.deepEqual(unsourcedFigures({ props: { sketch: 'deadline', sketchParams: { days: 30, start: 3, end: 21 } } }, numbers), [], 'days in a month are structure');
+  assert.deepEqual(unsourcedFigures({ props: { chart: { kind: 'bars', values: [{ label: 'HSA', value: 1500 }, { label: 'rate', value: 0.04 }] } } }, numbers), [], 'a fraction matches its percentage');
+  assert.deepEqual(unsourcedFigures({ props: { elements: [{ type: 'text', text: 'Example receipt: $36.00' }] } }, numbers), [], 'a labelled example is not a claim');
+});

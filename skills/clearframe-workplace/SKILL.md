@@ -18,8 +18,10 @@ From the source document, write in `DIRECTION.md`:
 ## 2. Scaffold
 
 ```
-node engine/cli.mjs new DIR --treatment workplace --playbook PLAYBOOK
+node engine/cli.mjs start DIR --document SOURCE.md --playbook PLAYBOOK --treatment workplace --length SECONDS --audience "…" --takeaway "…"
 ```
+
+`start` copies the source document into the project (`source/`) and lists every figure in it in `EVIDENCE.md`; `critique` then names any figure you typed (a word, a chart value, a sketch number) that the document never states, and `draft` says when the film falls well short of the length asked for (a short film usually dropped the brief's facts). With no document, `new DIR --treatment workplace --playbook PLAYBOOK --length SECONDS`.
 
 Playbooks: `benefit-explainer` (a benefit and how to use it), `day-in-the-life` (one person and one object of theirs through the moments a benefit touches), `policy-change` (what changed and what to do), `client-update` (a calm market or portfolio update for clients), `training-moment` (a threat or mistake, the signs, the habit). They are starting arcs: if yours is a decision, a story or a comparison, reorder or swap beats rather than forcing it into one. Each beat already has a picture with placeholder words: replace the words, keep the pictures. The treatment gives each project one of six looks (clean, notebook, brief, meadow, poster, daylight: a palette, a type voice and clean, hand-drawn or printed lines), picked from the folder name and written into DIRECTION.md, so films from the same playbook don't share a face. Keep it, or choose by subject with `--theme` (`meridian` financial, `meadow` benefits and health, `briefing` training, security and policy); a brand kit overrides all of them. Screens (`portal`, `inspect`) stay crisp in a drawn or printed film.
 
@@ -72,7 +74,8 @@ It ends with a **motion verdict**: how long the picture sits still while the voi
 
 ## 6. Truth and tone
 
-- Every figure comes from the source document and its beat names that document in `source` ("Alder Street Retirement Plan, 2027"). Counts and scales come from `sketchParams`, never from the drawing.
+- Every figure comes from the source document and its beat names that document in `source` ("Alder Street Retirement Plan, 2027"). Counts and scales come from `sketchParams`, never from the drawing, and a sketch number is a figure too: never invent an amount to make a sketch draw money (if the page says "resets to $0", show the reset, not a balance).
+- Keep the brief's must-haves: what it says people must not miss, the dates, the place to act, anything new this year. A film half the length asked for has usually dropped one of them.
 - Attribution is short and in the film's words. No disclaimers on screen ("illustrative only", "not advice"); an example is labelled once ("Example: a $60,000 salary").
 - Warm and plain, a little wit, never fear. Explain jargon with the picture, not a definition.
 
