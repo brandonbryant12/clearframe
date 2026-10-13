@@ -22,45 +22,32 @@
   "beats": [
     {
       "id": "quarter",
-      "block": "line",
-      "vo": "It was a quarter with one sharp dip. Shares fell in early August, and had recovered by mid-September.",
+      "block": "canvas",
+      "vo": "It was a quarter with one sharp dip. Shares fell 6.4 percent from August 4 to August 19. We rebalanced the next day, and they were back by September 12.",
       "props": {
-        "title": "Your equity holdings through the quarter",
-        "series": [
-          100,
-          101.2,
-          102,
-          101.1,
-          97.4,
-          95.6,
-          96.9,
-          99,
-          100.8,
-          101.9,
-          102.3,
-          102.1
-        ],
-        "labels": [
-          "Jul",
-          "",
-          "",
-          "",
-          "Aug",
-          "",
-          "",
-          "",
-          "Sep",
-          "",
-          "",
-          "Sep 30"
-        ],
-        "min": 90,
-        "max": 105,
-        "format": {
-          "decimals": 0
+        "source": "Example Wealth quarterly letter · as of Sep 30",
+        "sketch": "drawdown",
+        "sketchParams": {
+          "start": "2027-08-04",
+          "low": "2027-08-19",
+          "drop": 6.4,
+          "act": "2027-08-20",
+          "back": "2027-09-12"
         },
-        "drawSay": "quarter",
-        "source": "Example Wealth quarterly letter · index, July 1 = 100 · as of Sep 30"
+        "sketchText": {
+          "TITLE": "Shares in your portfolio",
+          "SUBTITLE": "Change in value since August 4",
+          "ACTLABEL": "Rebalanced Aug 20",
+          "ACTNOTE": "bought shares",
+          "BACKLABEL": "Back by Sep 12"
+        },
+        "sketchSay": {
+          "OPEN": "quarter",
+          "FALL": "fell",
+          "LOW": "percent",
+          "ACT": "rebalanced",
+          "RECOVER": "back"
+        }
       }
     },
     {
