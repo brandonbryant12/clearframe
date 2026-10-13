@@ -12,7 +12,7 @@ import { measureDrop } from './beatmap.mjs';
 import { sha256 } from '../../scene/engine.mjs';
 import { reviewGeometry } from '../../film/render-geometry.mjs';
 import { COVER } from '../../film/constants.mjs';
-import { pictureFor, chartFor, castFor } from './pictures.mjs';
+import { pictureFor, chartFor, castFor, figuresIn } from './pictures.mjs';
 import { sketchByName, sketchWords } from '../../film/sketches.mjs';
 import { spoken } from './word-align.mjs';
 
@@ -300,9 +300,32 @@ async function sheets(file, dir, { portrait, seconds }) {
 const clip = (t, n) => (t.length > n ? `${t.slice(0, n - 1)}…` : t);
 const TYPE_BLOCKS = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout'];
 const NUMBER_CARDS = ['stat', 'kpis', 'delta', 'magnitude', 'donut', 'waffle', 'compare'];
+/** Canvas props that set the frame or credit it, not a picture. */
+const FRAMING = new Set(['elements', 'source', 'view', 'viewFrom', 'camera', 'background', 'ground', 'title', 'subtitle', 'eyebrow', 'kicker', 'align', 'type', 'look']);
+/**
+ * A canvas beat that is only lines of type (text, with boxes or rules behind it): a statement written as
+ * elements. Round-13 films moved their actions and closes there, past the checks for type on its own.
+ */
+export function typedCanvas(beat) {
+  const p = beat?.props ?? {};
+  if (beat?.block !== 'canvas' || beat.plate || beat.stage || beat.art?.under?.length || !Array.isArray(p.elements)) return false;
+  if (Object.keys(p).some(k => !FRAMING.has(k))) return false;
+  let text = 0, other = 0;
+  const walk = list => (list ?? []).forEach(el => {
+    if (el.type === 'text') text++;
+    else if (el.type === 'group') walk(el.children);
+    else if (!['rect', 'line'].includes(el.type) || el.keys || el.along || el.loop) other++;
+  });
+  walk(p.elements);
+  return text > 0 && other === 0;
+}
 /** The change that fits a still beat, from what it is made of. */
 export function stillFix(beat) {
   const p = beat.props ?? {};
+  if (typedCanvas(beat)) {
+    const f = pictureFor(beat.vo ?? '');
+    return `This is type on its own, drawn on a canvas: give the idea a picture that changes on those words (${f?.sketch ? `the \`${f.sketch}\` sketch: \`sketch ${f.sketch}\` prints the beat to paste` : f?.use ?? 'a sketch from `sketch`, a cast of the film\'s objects, or a chart with a `say` on each value'}), or fold the line into the next picture's narration.`;
+  }
   if (p.sketch)
     return `Land a later moment of the ${p.sketch} sketch on one of those words (sketchSay; \`sketch ${p.sketch}\` lists its moments in order), or shorten the beat to its last moment.`;
   if (p.chart)
@@ -431,7 +454,12 @@ export async function qaProject(root, { video, loop = false } = {}) {
     // Still to the end of a drawing whose moments have all landed: the rest of the line is
     // another idea, and it needs a beat and a picture of its own rather than more of this one.
     const authored = sb.beats[tb?.index] ?? {};
-    if (tb && f.end >= tb.end - 0.4 && (authored.props?.sketch || authored.props?.chart || authored.props?.cast) && /[.!?]\s+\S+\s+\S/.test(f.said)) {
+    // A chart that shows one figure while the voice says another: the missing value goes in the chart.
+    const charted = new Set(JSON.stringify(authored.props?.chart?.values ?? []).match(/-?\d+(\.\d+)?/g) ?? []);
+    const missing = authored.props?.chart ? figuresIn(f.said, spoken).filter(x => !charted.has(String(x.value))) : [];
+    if (missing.length) {
+      f.fix = `The voice says ${missing.map(x => x.say).join(', ')} and the chart does not show ${missing.length > 1 ? 'them' : 'it'}: add ${missing.map(x => `{"label": "…", "value": ${x.value}, "say": "${x.say}"}`).join(', ')} to the chart's \`values\`${authored.props.chart.kind === 'number' ? ' (a number steps to each value on its word)' : ''}.`;
+    } else if (tb && f.end >= tb.end - 0.4 && (authored.props?.sketch || authored.props?.chart || authored.props?.cast) && /[.!?]\s+\S+\s+\S/.test(f.said)) {
       const next = pictureFor(f.said);
       f.fix = `Its picture has finished while the voice goes on: give "${clip(f.said, 70)}" a beat of its own${next ? ` with ${next.sketch ? `the \`${next.sketch}\` sketch` : next.use}` : ' and a picture of its own'}, or cut those words. (A longer film needs more pictures, not more words over one.)`;
     }
@@ -550,7 +578,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
   const TYPE = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout'];
   const sb = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'));
   const timed = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8')).beats ?? [];
-  const typeOnly = b => TYPE.includes(b.block) && !b.plate && !b.art?.under?.length && !b.stage;
+  const typeOnly = b => (TYPE.includes(b.block) && !b.plate && !b.art?.under?.length && !b.stage) || typedCanvas(b);
   const typeSeconds = timed.reduce((t, tb, i) => t + (typeOnly(sb.beats[tb.index ?? i] ?? {}) ? (tb.dur ?? tb.end - tb.start) : 0), 0);
   const typeShare = s.seconds ? Math.round((100 * typeSeconds) / s.seconds) : 0;
   const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;

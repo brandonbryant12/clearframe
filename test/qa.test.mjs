@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { timeFindings, deliveryFindings, pictureDifference, qaProject } from '../engine/lib/qa.mjs';
+import { timeFindings, deliveryFindings, pictureDifference, qaProject, typedCanvas, stillFix } from '../engine/lib/qa.mjs';
 import { findDrop, findTempo, cutsOnGrid } from '../engine/lib/beatmap.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
 import { ffmpeg } from '../engine/lib/util.mjs';
@@ -245,4 +245,12 @@ test('a line that says figures becomes a chart ready to paste, each value on its
   assert.equal(c.kind, 'bars');
   assert.equal(c.prefix, '$');
   assert.equal(chartFor('Pick one of three plans.', spoken), null, 'small counts are not figures');
+});
+
+test('a canvas of lines of type counts as type on its own and is pointed at a picture', () => {
+  const typed = { block: 'canvas', vo: 'Click Report. Then Phishing. In Outlook it is one click.', props: { source: 'Q2 report', elements: [{ type: 'text', text: 'Click Report' }, { type: 'group', children: [{ type: 'rect' }, { type: 'text', text: 'Report' }] }] } };
+  assert.equal(typedCanvas(typed), true);
+  assert.match(stillFix(typed), /type on its own.*`portal`/);
+  assert.equal(typedCanvas({ block: 'canvas', props: { chart: { kind: 'number', values: [] }, elements: [{ type: 'text', text: 'x' }] } }), false);
+  assert.equal(typedCanvas({ block: 'canvas', props: { elements: [{ type: 'text', text: 'x' }, { type: 'circle' }] } }), false);
 });
