@@ -4,7 +4,7 @@
 // the checks described in Raphaël Aubry's "the bugs (and the checks that catch them)" (2026).
 import fs from 'node:fs';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { computeTiming } from './timing.mjs';
 import { loadStoryboard } from './project.mjs';
 import { ffmpeg, ffmpegBin, writeJSON } from './util.mjs';
@@ -47,7 +47,7 @@ function decode(file, w, h) {
   const r = spawnSync(
     ffmpegBin(),
     [
-      '-v', 'error', '-threads', '2', '-filter_threads', '2', '-i', file, '-an',
+      '-v', 'error', '-threads', '4', '-filter_threads', '2', '-i', file, '-an',
       '-vf', `scale=${w}:${h}:flags=area,format=gray`, '-threads', '2', '-f', 'rawvideo', '-',
     ],
     { maxBuffer: 2 ** 31 - 1 },
@@ -262,15 +262,21 @@ function probeStreams(file) {
   return JSON.parse(r.stdout);
 }
 
+/** Integrated loudness and true peak; runs beside the picture decode (qaProject starts it first). */
 function measureLoudness(file) {
-  const r = spawnSync(
-    ffmpegBin(),
-    [
+  return new Promise(resolve => {
+    const child = spawn(ffmpegBin(), [
       '-hide_banner', '-nostats', '-threads', '2', '-filter_threads', '2', '-i', file,
       '-map', '0:a:0', '-af', 'ebur128=peak=true', '-threads', '2', '-f', 'null', '-',
-    ],
-    { encoding: 'utf8', maxBuffer: 2 ** 28 },
-  );
+    ]);
+    let err = '';
+    child.stderr.on('data', d => (err = (err + d).slice(-20000)));
+    child.on('error', () => resolve(null));
+    child.on('close', () => resolve(loudnessOf(err)));
+  });
+}
+function loudnessOf(stderr) {
+  const r = { stderr };
   const tail = r.stderr.slice(r.stderr.lastIndexOf('Summary:'));
   const i = tail.match(/I:\s+(-?[\d.]+) LUFS/),
     p = tail.match(/Peak:\s+(-?[\d.]+) dBFS/);
@@ -386,6 +392,15 @@ export async function qaProject(root, { video, loop = false } = {}) {
   });
   const v = probe.streams.find(s => s.codec_type === 'video');
   const [w, h] = grid(v.width, v.height);
+  // The sheets and the loudness read the same file as the picture analysis: started first, they
+  // run beside the decode instead of after it.
+  const dir = path.join(root, 'build', 'qa');
+  fs.mkdirSync(dir, { recursive: true });
+  const portrait = v.height > v.width;
+  const counted = Number(v.nb_frames) > 0 ? Number(v.nb_frames) : timing.frames;
+  const sheeting = sheets(file, dir, { portrait, seconds: counted / timing.fps });
+  sheeting.catch(() => {});
+  const hearing = probe.streams.some(s => s.codec_type === 'audio') ? measureLoudness(file) : Promise.resolve(null);
   const film = decode(file, w, h);
   const n = film.frames,
     fps = timing.fps,
@@ -506,7 +521,7 @@ export async function qaProject(root, { video, loop = false } = {}) {
         message: `loop seam ${r2(seam)} against ${r2(typical)} between neighbours: the restart shows`,
       });
   }
-  const loudness = probe.streams.some(s => s.codec_type === 'audio') ? measureLoudness(file) : null;
+  const loudness = await hearing;
   findings.push(
     ...deliveryFindings(probe, {
       loudness,
@@ -531,12 +546,8 @@ export async function qaProject(root, { video, loop = false } = {}) {
             : `no drop heard near ${drop.film} s: the bass does not jump there in the mix`,
       });
   }
-  const dir = path.join(root, 'build', 'qa');
-  fs.mkdirSync(dir, { recursive: true });
-  const portrait = v.height > v.width;
   // The phone sheet is what a viewer's thumb sees: 360 px wide frames.
-  const seconds = n / fps;
-  await sheets(file, dir, { portrait, seconds });
+  await sheeting;
   const change = second.filter(Number.isFinite);
   const summary = {
     seconds: r2(n / fps),
