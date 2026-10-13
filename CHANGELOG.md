@@ -1,5 +1,9 @@
 # Changelog
 
+## Opus films: what an excellent film needed
+
+- **`enter: "none"` means on screen from the cut.** A canvas element with no entrance and no time waited for the scene's cue, so every cut flashed an empty first frame; a round-18 Opus agent found it only by decoding frame 0 (no sheet shows it), and reviewers had called out "empty frames at cuts" all night. Top-level elements with `enter: "none"` and no `at` or `say` now stand from frame 0; a group's contents still start with their group.
+
 ## Faster renders
 
 - **Final renders use three x264 threads per segment.** A final render waits on the encoder (medium preset), a draft on the GPU: the third thread takes a 48 s final from 10.6 s to 9.1 s for about 60 MiB more, and drafts stay at two (`CLEARFRAME_ENCODER_THREADS` still overrides).

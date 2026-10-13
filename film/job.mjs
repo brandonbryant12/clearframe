@@ -225,7 +225,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
           `${b.id}: stroked ${el.type}${el.id ? ` "${el.id}"` : ''} has no explicit fill; the native default is solid accent and can hide layers behind it. Set fill: "none" for an outline, or choose an explicit fill colour.`,
         );
     });
-    const end = scheduleElements(list, { start, stagger, entrance, resolve: v => cue(v), limit: b.dur });
+    const end = scheduleElements(list, { start, stagger, entrance, resolve: v => cue(v), limit: b.dur, ground: true });
     eachElement(list, el => {
       if (el.at > b.dur - frame + 1e-7)
         throw new Error(

@@ -677,9 +677,13 @@ const defaultEnter = el =>
  * count, keyframe and path move has finished (ambient loops continue by design).
  * `resolve(value)` maps a number (seconds) or spoken phrase to scene seconds.
  */
-export function scheduleElements(list, { start, stagger = 0, entrance, resolve, limit = Infinity, still = false }) {
+export function scheduleElements(list, { start, stagger = 0, entrance, resolve, limit = Infinity, still = false, ground = false }) {
   let settle = start;
   list.forEach((el, i) => {
+    // `enter: "none"` with no time is the scene's ground: on screen from the cut. It used to wait
+    // for the scene's cue, so every cut flashed an empty frame first (no sheet shows it; a round-18
+    // film found it by decoding frame 0). Inside a group, contents still start with their group.
+    if (ground && el.enter === 'none' && el.at == null && el.say == null) el.at = 0;
     // A group placed with no entrance places its contents with none: children that do not
     // ask for one would otherwise draw or fade in on the cut frame.
     if (still && el.enter == null) el.enter = 'none';
