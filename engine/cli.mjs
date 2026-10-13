@@ -859,7 +859,17 @@ async function main() {
     const report = await native.renderProject(dir, { ...opts, draft: cmd === 'preview' || o.draft });
     const { writeReviewPage } = await import('./lib/review-page.mjs');
     report.reviewPage = writeReviewPage(dir);
-    return console.log(JSON.stringify(report, null, 2));
+    // The motion verdict `draft` prints: agents who render directly never saw it and handed over
+    // films that were all words. Stdout stays the JSON report; the verdict goes to stderr.
+    let verdict = null;
+    try {
+      const { qaProject, motionVerdict } = await import('./lib/qa.mjs');
+      verdict = motionVerdict(dir, await qaProject(dir, {}), { warnings: report.check?.warnings ?? report.warnings ?? [] });
+      report.motion = { ready: verdict.ready, still: verdict.share, words: verdict.typeShare };
+    } catch {}
+    console.log(JSON.stringify(report, null, 2));
+    if (verdict) console.error(`${verdict.lines.join('\n')}\n${verdict.ready ? 'READY' : 'NOT READY to hand over: fix what the motion verdict names, then render again.'}`);
+    return;
   }
   throw new Error(`Unknown command ${cmd}. Run clearframe help.`);
 }
