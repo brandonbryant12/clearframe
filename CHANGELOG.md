@@ -1,5 +1,10 @@
 # Changelog
 
+## Enterprise bench and readable typing
+
+- **`bench/enterprise/`**: mock source documents for the films ClearFrame is mostly asked for (a 401(k) match, open enrollment, HSA or FSA, a client market update, phishing training, an expense policy, a two-voice podcast clip). Every company and figure is fictional; run the same brief through different models and compare the films and their trajectories. `podcast/make-episode.mjs` rebuilds the mock recording locally with the OS voices.
+- **Typing and decoding happen inside the finished text's layout** (canvas block and native stages). Wrapped text no longer re-breaks and re-balances while it types, and centred or right-aligned typed text no longer drifts as it grows: each line keeps the place it will have when the text is complete.
+
 ## Explanations: a picture that changes
 
 - **Four canvas props draw how something behaves**, from a stated formula or a seeded simulation, cued to the voice (`film/explain.mjs`). They expand into plain elements, so they combine with a beat's own elements and work as `place` panels.

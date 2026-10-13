@@ -1311,32 +1311,12 @@ impl<'a, 'c> Draw<'a, 'c> {
         if el.get("upper").and_then(Value::as_bool).unwrap_or(false) {
             value = value.to_uppercase();
         }
-        if reveal < 1.0 {
-            let chars = value.chars().count();
-            value = value.chars().take((chars as f32 * reveal).ceil() as usize).collect();
-        }
-        // Decode: each character cycles through glyphs of the text itself until it locks,
-        // left to right. Hash-driven, so every frame is reproducible.
-        if s(el, "enter") == "scramble" {
-            let dur = f(el, "dur", 0.9).max(0.01);
-            let pool: Vec<char> = value.chars().filter(|c| c.is_alphanumeric()).collect();
-            let chars: Vec<char> = value.chars().collect();
-            let tick = (local * 18.0).floor() as u64;
-            value = chars
-                .iter()
-                .enumerate()
-                .map(|(i, &c)| {
-                    let lock = dur * (0.25 + 0.75 * i as f32 / chars.len().max(1) as f32);
-                    if local >= lock || !c.is_alphanumeric() || pool.is_empty() {
-                        c
-                    } else {
-                        let h =
-                            (i as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15) ^ tick.wrapping_mul(0xC2B2_AE3D_27D4_EB4F);
-                        pool[(h >> 33) as usize % pool.len()]
-                    }
-                })
-                .collect();
-        }
+        // Typing and decoding happen inside the finished text's layout: lines break, balance and
+        // anchor where the whole text will sit, so words never jump between lines or drift.
+        let full = value.clone();
+        let total = full.chars().count();
+        let shown = if reveal < 1.0 { (total as f32 * reveal).ceil() as usize } else { total };
+        let scramble = s(el, "enter") == "scramble";
         let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
         let align = match s(el, "anchor") {
             "middle" => Align::Center,
@@ -1353,22 +1333,41 @@ impl<'a, 'c> Draw<'a, 'c> {
                 upper: false,
                 balance: true,
             };
-            let layout = self.fit(&value, style, width.max(1.0), f(el, "height", size * 8.0).max(size));
+            let layout = self.fit(&full, style, width.max(1.0), f(el, "height", size * 8.0).max(size));
             let left = match align {
                 Align::Center => x - width / 2.0,
                 Align::Right => x - width,
                 Align::Left => x,
             };
-            return self.draw(&layout, left, y - layout.baseline, width, align, fill);
+            if shown >= total && !scramble {
+                return self.draw(&layout, left, y - layout.baseline, width, align, fill);
+            }
+            // Each line keeps its full width (so alignment holds) and shows its share of the
+            // characters typed so far; the break between lines counts as one character.
+            let mut partial = (*layout).clone();
+            let mut budget = shown;
+            let mut offset = 0;
+            for line in &mut partial.lines {
+                let count = line.text.chars().count();
+                let mut text: String = line.text.chars().take(budget).collect();
+                if scramble {
+                    text = text::decode(&text, &full, local, f(el, "dur", 0.9), offset, total);
+                }
+                line.text = text;
+                budget = budget.saturating_sub(count + 1);
+                offset += count + 1;
+            }
+            return self.draw(&partial, left, y - layout.baseline, width, align, fill);
+        }
+        if shown < total {
+            value = full.chars().take(shown).collect();
+        }
+        if scramble {
+            value = text::decode(&value, &full, local, f(el, "dur", 0.9), 0, total);
         }
         // `fit`: the widest a single line may be. A long title shrinks to fit instead of
         // running off the frame; the final text decides, so a decode or reveal never jumps.
         if let Some(fit) = num(el, "fit") {
-            let full = if el.get("upper").and_then(Value::as_bool).unwrap_or(false) {
-                s(el, "text").to_uppercase()
-            } else {
-                s(el, "text").to_owned()
-            };
             let natural = text::measure(font, &full, size, tracking);
             if natural > fit && natural > 0.0 {
                 size *= fit / natural;
@@ -1376,9 +1375,10 @@ impl<'a, 'c> Draw<'a, 'c> {
             }
         }
         let w = text::measure(font, &value, size, tracking);
-        let final_w = if el.get("count").is_some() {
-            let count = &el["count"];
-            text::measure(
+        if let Some(count) = el.get("count") {
+            // Counters keep their final anchor so a centred number never drifts while counting;
+            // a right-aligned number keeps its right edge.
+            let final_w = text::measure(
                 font,
                 &format_number(
                     n(count, "to", 0.0),
@@ -1389,14 +1389,19 @@ impl<'a, 'c> Draw<'a, 'c> {
                 size,
                 tracking,
             )
-            .max(w)
-        } else {
-            w
-        };
-        // Counters keep their final anchor so a centred number never drifts while counting.
+            .max(w);
+            let left = match align {
+                Align::Center => x - final_w / 2.0 + (final_w - w) / 2.0,
+                Align::Right => x - w,
+                Align::Left => x,
+            };
+            return self.run(value, left, y, font, size, tracking, fill);
+        }
+        // Typed or decoding text starts where the finished text will start.
+        let final_w = text::measure(font, &full, size, tracking);
         let left = match align {
-            Align::Center => x - final_w / 2.0 + (final_w - w) / 2.0,
-            Align::Right => x - w,
+            Align::Center => x - final_w / 2.0,
+            Align::Right => x - final_w,
             Align::Left => x,
         };
         self.run(value, left, y, font, size, tracking, fill)
@@ -1708,6 +1713,7 @@ fn travel(from: [f32; 4], to: [f32; 4], q: f32) -> [f32; 4] {
         (lerp(from[0] + from[2] / 2.0, to[0] + to[2] / 2.0), lerp(from[1] + from[3] / 2.0, to[1] + to[3] / 2.0));
     [cx - w / 2.0, cy - h / 2.0, w, h]
 }
+
 
 #[cfg(test)]
 mod tests {

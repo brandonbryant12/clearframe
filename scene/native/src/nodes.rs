@@ -1359,29 +1359,12 @@ fn text_element(
     if flag(el, "upper") {
         value = value.to_uppercase();
     }
-    if reveal < 1.0 {
-        let chars = value.chars().count();
-        value = value.chars().take((chars as f32 * reveal).ceil() as usize).collect();
-    }
-    if s(el, "enter") == "scramble" {
-        let dur = f(el, "dur", 0.9).max(0.01);
-        let pool: Vec<char> = value.chars().filter(|c| c.is_alphanumeric()).collect();
-        let chars: Vec<char> = value.chars().collect();
-        let tick = (local * 18.0).floor() as u64;
-        value = chars
-            .iter()
-            .enumerate()
-            .map(|(i, &c)| {
-                let lock = dur * (0.25 + 0.75 * i as f32 / chars.len().max(1) as f32);
-                if local >= lock || !c.is_alphanumeric() || pool.is_empty() {
-                    c
-                } else {
-                    let h = (i as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15) ^ tick.wrapping_mul(0xC2B2_AE3D_27D4_EB4F);
-                    pool[(h >> 33) as usize % pool.len()]
-                }
-            })
-            .collect();
-    }
+    // Typing and decoding happen inside the finished text's layout (see the canvas block).
+    let full = value.clone();
+    let total = full.chars().count();
+    let shown = if reveal < 1.0 { (total as f32 * reveal).ceil() as usize } else { total };
+    let scramble = s(el, "enter") == "scramble";
+    let decode_dur = f(el, "dur", 0.9);
     let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
     let anchor = s(el, "anchor");
     let mut p = Paint::default();
@@ -1409,13 +1392,13 @@ fn text_element(
             balance: true,
         };
         let max_h = f(el, "height", size * 8.0).max(size);
-        let layout = match text::fit(&value, style, width.max(1.0), max_h) {
+        let layout = match text::fit(&full, style, width.max(1.0), max_h) {
             Ok(l) => l,
             Err(o) => {
                 scope.errors.push(format!(
                     "Text overflow in native element {:?}: \"{}\" needs {:.0}×{:.0} at {:.0}px in {:.0}×{:.0}. Shorten or reflow it.",
                     s(el, "id"),
-                    value,
+                    full,
                     o.width,
                     o.height,
                     o.size,
@@ -1425,19 +1408,33 @@ fn text_element(
                 return;
             }
         };
+        let (mut budget, mut offset) = (shown, 0);
         for (i, line) in layout.lines.iter().enumerate() {
             let left = match anchor {
                 "middle" => x - line.width / 2.0,
                 "end" => x - line.width,
                 _ => x,
             };
-            runs.push((line.text.clone(), left, y + i as f32 * layout.line_height, line.width));
+            let count = line.text.chars().count();
+            let mut piece: String = line.text.chars().take(budget).collect();
+            if scramble {
+                piece = text::decode(&piece, &full, local, decode_dur, offset, total);
+            }
+            budget = budget.saturating_sub(count + 1);
+            offset += count + 1;
+            let w = if piece.len() == line.text.len() { line.width } else { fonts::measure(font, &piece, layout.size, layout.tracking_px) };
+            runs.push((piece, left, y + i as f32 * layout.line_height, w));
         }
         size = layout.size;
         tracking = layout.tracking_px;
     } else {
+        if shown < total {
+            value = full.chars().take(shown).collect();
+        }
+        if scramble {
+            value = text::decode(&value, &full, local, decode_dur, 0, total);
+        }
         if let Some(fit) = num(el, "fit") {
-            let full = if flag(el, "upper") { s(el, "text").to_uppercase() } else { s(el, "text").to_owned() };
             let natural = fonts::measure(font, &full, size, tracking);
             if natural > fit && natural > 0.0 {
                 size *= fit / natural;
@@ -1458,11 +1455,14 @@ fn text_element(
                 tracking,
             )
             .max(w),
-            None => w,
+            // Typed or decoding text starts where the finished text will start.
+            None => fonts::measure(font, &full, size, tracking),
         };
-        let left = match anchor {
-            "middle" => x - final_w / 2.0 + (final_w - w) / 2.0,
-            "end" => x - w,
+        let left = match (anchor, el.get("count").is_some()) {
+            ("middle", true) => x - final_w / 2.0 + (final_w - w) / 2.0,
+            ("middle", false) => x - final_w / 2.0,
+            ("end", true) => x - w,
+            ("end", false) => x - final_w,
             _ => x,
         };
         runs.push((value, left, y, w));

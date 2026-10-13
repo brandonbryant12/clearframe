@@ -253,6 +253,29 @@ fn faces() -> &'static [rustybuzz::Face<'static>] {
 }
 
 /// The first non-space character the bundled font cannot draw (tests check the voices' coverage).
+/// Decode: each character cycles through glyphs of the finished text until it locks, left to
+/// right across the whole text (`offset` places this piece in it). Hash-driven, so every frame
+/// is reproducible.
+pub fn decode(value: &str, full: &str, local: f32, dur: f32, offset: usize, total: usize) -> String {
+    let dur = dur.max(0.01);
+    let pool: Vec<char> = full.chars().filter(|c| c.is_alphanumeric()).collect();
+    let tick = (local * 18.0).floor() as u64;
+    value
+        .chars()
+        .enumerate()
+        .map(|(i, c)| {
+            let i = i + offset;
+            let lock = dur * (0.25 + 0.75 * i as f32 / total.max(1) as f32);
+            if local >= lock || !c.is_alphanumeric() || pool.is_empty() {
+                c
+            } else {
+                let h = (i as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15) ^ tick.wrapping_mul(0xC2B2_AE3D_27D4_EB4F);
+                pool[(h >> 33) as usize % pool.len()]
+            }
+        })
+        .collect()
+}
+
 #[cfg(test)]
 pub fn covers(font: Font, text: &str) -> Option<char> {
     let face = &faces()[font.index()];
