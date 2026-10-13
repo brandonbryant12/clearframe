@@ -2,7 +2,6 @@
 
 ## A tidier catalog
 
-- **No `codex-heavy` instructions.** AGENTS.md, the skills, the setup and verification docs, the guide and the scripts' usage lines no longer tell anyone to wrap renders, builds or test suites in `codex-heavy` or to pass `CLEARFRAME_HEAVY_HELD`; they say to run one full render or test suite at a time on a small machine. The renderer still waits on that lock if it is installed.
 - **The `cinematic` look is gone.** The `cinematic` treatment (letterbox 2.39, a teal-orange grade, bloom, handheld) and its `cinematic-explainer` playbook and recipe are removed: workplace and financial films were the target, and a film look borrowed for an explainer crowded `treatments`, `playbooks`, `find` and the studio agent's catalog. To explain how something works, use the `explanation` or `workplace` treatment; genre films keep `trailer`, `documentary`, `keynote` and `cutpaper`. The lens itself (letterbox, grades, bloom) stays for those genres, and the `cinema` palette stays for `zoom-journey` and the By morning example. `docs/library-index.md` and `recipes/README.md` are regenerated, which also adds the workplace playbooks and sketches they had missed.
 
 ## Opus films: what an excellent film needed
