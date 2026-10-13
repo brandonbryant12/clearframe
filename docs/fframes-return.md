@@ -150,6 +150,23 @@ builds take 10–50 s as before.
 Tests on the branch: Rust 75/75 (with new 4:2:0 tests), Node 413 (412 pass, 1 skipped; the studio
 test needs a `build/` folder in a fresh worktree).
 
+### Where a render's time goes (2026-10-13)
+
+A 48 s workplace draft (1,454 frames at 1080p, static grain, voice only), measured per phase:
+
+| Step | Before | After | What changed |
+|---|---|---|---|
+| native render (fframes, 2 workers) | 5.5 s | 4.4 s | grain noise cached per engine (frames bit-identical); one YUV readback a frame instead of three (same bytes) |
+| audio mix | 3.0 s, after the render | 0.4–0.8 s, beside the render | `ebur128` instead of `loudnorm`'s 192 kHz analysis; mixed and AAC-encoded while the picture renders |
+| mux | 1.1 s | 0.05 s | stream copy of the pre-encoded audio |
+| decoded frame count | 1.0 s | 0.6 s | four decode threads |
+| `qa` | 2.8 s | 1.7 s | sheets and loudness read the film beside the picture decode |
+| whole `draft` | about 14.5 s | 9.5–9.9 s | |
+
+A draft is GPU-bound: readback (where each worker waits for its frame) is most of the time, about a third of it a fixed cost per frame that resolution does not change, and a third worker gains 10%. Skia's Ganesh bindings do not expose asynchronous readback, which is what pipelining the next frame behind it would need. A final render is encoder-bound (x264 medium): three encoder threads per segment take it from 10.6 to 9.1 s (`CLEARFRAME_ENCODER_THREADS`, now the default for finals); one worker with four threads is 9.5 s at 519 MiB instead of 880, but GPU-bound films (footage) need the second worker. `superfast` for drafts saved 8% and doubled the file, so drafts stay `veryfast`.
+
+With the mix running beside the render, moving it into fframes' `AudioMap` (stage 3 below) would no longer shorten a render; it remains worth doing only for audio-reactive pictures.
+
 ## Staged migration
 
 1. **Runtime for `render`** — done: `runtime.rs`, parity above.
