@@ -44,7 +44,12 @@ export function castSpec(input, known = new Map(), knownLook = null) {
     check(o.size == null || (finite(o.size) && o.size >= 48 && o.size <= 360), `objects[${i}].size is 48–360 px`);
     objects.set(o.id, { color: 'accent', float: true, ...o });
   }
-  check(objects.size >= 1 && objects.size <= 16, 'a cast has 1–16 objects (declare them in its first beat)');
+  check(
+    objects.size >= 1 && objects.size <= 16,
+    objects.size > 16 && known.size
+      ? `a cast has 1–16 objects; this one has ${objects.size}: ${known.size} carried from earlier beats of the film's cast and ${objects.size - known.size} new here. Reuse the carried ones by id; a scene without a cast between them starts a new one`
+      : `a cast has 1–16 objects (this one has ${objects.size}; declare them in its first beat)`,
+  );
   check(Array.isArray(input.formations) && input.formations.length >= 1 && input.formations.length <= 12, 'formations needs 1–12 entries');
   const formations = input.formations.map((f, i) => {
     own(f, ['form', 'say', 'at', 'ids', 'hero', 'word', 'center', 'spread', 'scale', 'dur', 'stagger', 'ease', 'thread', 'beside', 'on', 'out', 'in', 'by', 'mark', 'to', 'color', 'zoom', 'into', 'from', 'via', 'trail'], `formations[${i}]`);
