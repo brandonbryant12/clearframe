@@ -656,13 +656,17 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
     castNotes = castOverlaps(sb, { width: q.width ?? timing0.width ?? 1920, height: q.height ?? timing0.height ?? 1080 });
   } catch {}
   const overlaps = [...new Set([...warnings, ...castNotes])].map(w => w.match(/^([^:]+): overlap: (.*)$/)).filter(Boolean);
-  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute || placeholders.length || fileSources.length || overlaps.length);
+  // An error qa found in time (a one-frame pop, a jumping seam) is on screen: a round-19 film read
+  // READY with a counter jittering as its digits changed width, found only in qa.json.
+  const broken = q.findings.filter(f => f.level === 'error');
+  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute || placeholders.length || fileSources.length || overlaps.length || broken.length);
   // One edit to make first, spelled out: weaker models act on the last concrete line they read and
   // hand over a NOT READY film when the verdict ends on "fix the beats above".
   const nextEdit = () => {
     if (placeholders.length) return `fill ${placeholders[0][1].join(', ')} in ${placeholders[0][0]}'s sketchText.`;
     if (fileSources.length) return `give ${fileSources[0]} a source line people know (the document's name, not a file).`;
     if (mute) return 'record the narration (`voice DIR --draft`).';
+    if (broken.length) return `${broken[0].beat ?? 'the film'} at ${broken[0].t ?? '?'} s: ${broken[0].message}.`;
     if (overlaps.length) return `${overlaps[0][1]}: ${overlaps[0][2]}.`;
     const typed = timed.map((tb, i) => sb.beats[tb.index ?? i]).filter(b => b && typeOnly(b));
     const picture = typed.map(b => [b, pictureLine(b.vo)]).find(([, l]) => l);
@@ -722,6 +726,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
       : []),
     ...(blank.length ? ['  blank under the voice:', ...blank] : []),
     ...(overlaps.length ? ['  objects on top of each other:', ...overlaps.map(m => `    ${m[1]}: ${m[2]}`)] : []),
+    ...(broken.length ? ['  errors in time (see build/qa/qa.json):', ...broken.slice(0, 5).map(f => `    ${f.beat ?? ''} ${f.t ?? ''} s: ${f.message}`)] : []),
     ...(fileSources.length
       ? [`  a file name shown as the source line in ${fileSources.join(', ')}: credit who said it or the document people know ("Sam, on air"; "Kestrel Benefits Guide 2027").`]
       : []),
