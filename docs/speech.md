@@ -52,3 +52,7 @@ People read about three words a second while they listen, and need a phrase on s
 - For a passage, use `highlight` with `maxWords` 6–8 (a stable phrase that lights up as it is spoken). `word` and two-word groups are for a few seconds of emphasis: a hook, a punchline, a name. `critique` warns when a kinetic beat changes its type faster than every 0.9 s for more than five seconds.
 - Not every line needs its words on screen as the picture. In a podcast clip, give the explanation a drawing (a sketch, a cast, a chart) and let the captions carry the words underneath; keep kinetic type for the two or three lines worth remembering.
 - Burned captions hold whole phrases: plate captions (`captions: true`) show up to twelve words on a wide frame; pop captions (`captions: "pop"`) up to five words on a tall frame and six on a wide one, for up to 2.6 s.
+
+## Faster local word timings
+
+`align --whisper` and draft voice takes measure words with whisper.cpp (`whisper-cli`, MIT) when a local ggml model is installed: the same Whisper weights on the GPU, about ten times faster than the Python CLI and with a small fraction of its CPU, which matters when several films align at once. Put `ggml-base.en.bin` (from huggingface.co/ggerganov/whisper.cpp) in `~/.cache/whisper-cpp`, or name a model with `CLEARFRAME_WHISPER_MODEL`. Without it the Python `whisper` CLI is used. Each take records which recognizer measured it (`alignment.provider`); `doctor` shows which one you have.

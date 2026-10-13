@@ -13,7 +13,10 @@ import { cleanVoice, speechSegments } from './audio.mjs';
 import { readPCM } from './levels.mjs';
 import { ffmpeg, hashOf, log, pcmToWav, readJSON, round, writeJSON } from './util.mjs';
 import { cutPoints, timedWords } from './ingest.mjs';
-import { whisperAvailable } from './whisper.mjs';
+import { transcribeWords, whisperAvailable } from './whisper.mjs';
+
+// Which recognizer measured the latest takes' words (recorded with them).
+let heardBy = 'whisper-base';
 import { recordRate } from './voice-rates.mjs';
 
 /**
@@ -180,28 +183,15 @@ async function heardWordsMany(files, tokenLists, language) {
       '16000',
       joined,
     ]);
-    process.stderr.write(`  measuring words with local Whisper (about a minute per minute of speech; longer while other work runs)…\n`);
-    const r = spawnSync(
-      'whisper',
-      [
-        joined,
-        '--model',
-        'base',
-        '--word_timestamps',
-        'True',
-        '--output_format',
-        'json',
-        '--output_dir',
-        tmp,
-        '--fp16',
-        'False',
-        '--language',
-        language ?? 'en',
-      ],
-      { encoding: 'utf8' },
-    );
-    if (r.status !== 0) return files.map(() => null);
-    const heard = timedWords(JSON.parse(fs.readFileSync(path.join(tmp, 'takes.json'), 'utf8')));
+    process.stderr.write(`  measuring words with local Whisper (about a minute per minute of speech without whisper.cpp; longer while other work runs)…\n`);
+    let result;
+    try {
+      result = transcribeWords(joined, { language: language ?? 'en', dir: tmp });
+    } catch {
+      return files.map(() => null);
+    }
+    heardBy = result.provider;
+    const heard = timedWords(result.words);
     return files.map((_, i) => {
       const start = offsets[i],
         end = i + 1 < offsets.length ? offsets[i + 1] : Infinity;
@@ -378,7 +368,7 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
           ? {
               alignment: {
                 kind: interpolated ? 'estimated' : 'measured',
-                provider: 'whisper-base',
+                provider: heardBy,
                 audioHash: audioHash(file),
                 ...(interpolated ? { interpolatedWords: interpolated } : {}),
               },

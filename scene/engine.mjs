@@ -167,6 +167,21 @@ export function doctor() {
     warm = fs.existsSync(path.join(TARGET(), 'release/deps'));
   rows.push({ name: 'Disk headroom', ok: free >= (warm ? 10 : 25), detail: `${free.toFixed(1)} GiB free (${warm ? 'warm cache' : 'cold build'})` });
   rows.push(fontCheck());
+  // Free word timings: whisper.cpp with a local model is the fast path; the Python CLI works too.
+  const cpp = spawnSync('whisper-cli', ['--help'], { encoding: 'utf8' }).status === 0;
+  const modelDir = path.join(os.homedir(), '.cache/whisper-cpp');
+  const model = process.env.CLEARFRAME_WHISPER_MODEL ?? ['ggml-base.en.bin', 'ggml-base.bin'].map(n => path.join(modelDir, n)).find(f => fs.existsSync(f));
+  const py = spawnSync('whisper', ['--help'], { encoding: 'utf8' }).status === 0;
+  rows.push({
+    name: 'Word timings',
+    ok: (cpp && !!model) || py,
+    detail:
+      cpp && model
+        ? `whisper.cpp with ${path.basename(model)} (fast, GPU)`
+        : py
+          ? `Python whisper (slow, CPU)${cpp ? `; for ~10× faster alignment put ggml-base.en.bin in ${modelDir}` : ''}`
+          : 'no local Whisper: install whisper-cpp or openai-whisper',
+  });
   return rows;
 }
 
