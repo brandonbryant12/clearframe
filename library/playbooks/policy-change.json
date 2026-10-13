@@ -132,7 +132,7 @@
               "SAVE": "submit"
             }
           },
-          "transition": "panel"
+          "transition": "cut"
         },
         {
           "id": "close",
@@ -200,7 +200,7 @@
               ]
             }
           },
-          "transition": "panel"
+          "transition": "cut"
         }
       ]
     },
@@ -211,7 +211,7 @@
         {
           "id": "which",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "A card slip only shows the total. The itemised receipt shows the place and every item. Snap that one, in the Expenses app, within 30 days.",
           "props": {
             "source": "Example Co. expense policy",
@@ -288,7 +288,7 @@
         {
           "id": "snap",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "hold": 0.6,
           "vo": "In the Expenses app on your phone, tap New claim, snap the receipt, check the amount, and submit. Do it the day you spend.",
           "props": {
@@ -318,7 +318,7 @@
         {
           "id": "window",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "Spent on March 1st? The 30th is your last day. Today is the 12th, so claim it now.",
           "props": {
             "source": "Example Co. expense policy",

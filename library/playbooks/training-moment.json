@@ -105,7 +105,7 @@
               "SAVE": "send"
             }
           },
-          "transition": "panel"
+          "transition": "cut"
         },
         {
           "id": "close",
@@ -145,7 +145,7 @@
               ]
             }
           },
-          "transition": "panel"
+          "transition": "cut"
         }
       ]
     },
@@ -156,7 +156,7 @@
         {
           "id": "everyone",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "Delete it, and only your copy goes. Everyone else still has theirs. Report it, and Security can pull every copy. So choose Report, then Phishing, the moment you spot one.",
           "props": {
             "cast": {
@@ -282,7 +282,7 @@
         {
           "id": "report",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "hold": 0.6,
           "vo": "On your phone: open the Inbox, tap the message, choose Phishing, and send. Security does the rest.",
           "props": {
@@ -312,7 +312,7 @@
         {
           "id": "next",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "The next one will look different. Ask: is it rushing you? Who really sent it? Where does the link go? Then report it.",
           "props": {
             "sketch": "inspect",

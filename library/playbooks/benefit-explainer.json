@@ -115,7 +115,7 @@
               "SAVE": "save"
             }
           },
-          "transition": "panel"
+          "transition": "cut"
         },
         {
           "id": "close",
@@ -169,7 +169,7 @@
               ]
             }
           },
-          "transition": "panel"
+          "transition": "cut"
         }
       ]
     },
@@ -180,7 +180,7 @@
         {
           "id": "raise",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "Raise your rate from 3% to 5% in the benefits portal, and the company adds 4%. That's 9% of your pay, from your next payday on.",
           "props": {
             "source": "Example Co. retirement plan summary",
@@ -217,7 +217,7 @@
         {
           "id": "step",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "hold": 0.6,
           "vo": "On your phone, open Benefits, then Retirement, set 5% and save. It starts with your next paycheck.",
           "props": {
@@ -247,7 +247,7 @@
         {
           "id": "close",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "From then on, the company's full 4% lands every payday. None of it left on the table.",
           "props": {
             "source": "Example Co. retirement plan summary",

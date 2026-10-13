@@ -13,6 +13,7 @@ import { sha256 } from '../../scene/engine.mjs';
 import { reviewGeometry } from '../../film/render-geometry.mjs';
 import { COVER } from '../../film/constants.mjs';
 import { pictureFor, chartFor } from './pictures.mjs';
+import { sketchByName, sketchWords } from '../../film/sketches.mjs';
 import { spoken } from './word-align.mjs';
 
 // Analysis grid: the long side at 128 px is enough to see a pop or a jump, and small enough
@@ -532,7 +533,12 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
   // Narration that was never voiced plays as a silent film of words (a podcast built without its recording).
   const narrated = timed.filter(tb => tb.vo?.text), unvoiced = narrated.filter(tb => !tb.vo?.src);
   const mute = narrated.length > 0 && unvoiced.length > narrated.length / 2;
-  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute);
+  // A sketch's placeholder word left in ("LINE2") is on screen as itself.
+  const placeholders = sb.beats
+    .filter(b => b.props?.sketch && sketchByName(b.props.sketch)?.keep)
+    .map(b => [b.id, sketchWords(b.props.sketch, b.props.sketchParams).filter(w => !(w in (b.props.sketchText ?? {})))])
+    .filter(([, left]) => left.length);
+  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute || placeholders.length);
   const lines = [
     `motion: ${ready ? 'READY' : 'NOT READY'} · ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
     ...(overflow
@@ -581,6 +587,9 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
       ? [`  sound: ${unvoiced.length} of ${narrated.length} beats have narration but no voice, so the film plays their words in silence. Record it free with \`voice DIR --draft\`, or, for a recording (a podcast, an interview), import it with \`ingest DIR --audio FILE\` so the film plays the recording itself.`]
       : []),
     ...(blank.length ? ['  blank under the voice:', ...blank] : []),
+    ...(placeholders.length
+      ? [`  placeholders on screen: ${placeholders.map(([id, left]) => `${id} (${left.join(', ')})`).join('; ')}. Fill each in sketchText, or change sketchParams so the sketch does not draw it.`]
+      : []),
     ...(q.findings.some(f => f.kind === 'small')
       ? ['  small in the frame:', ...q.findings.filter(f => f.kind === 'small').slice(0, 5).map(f => `    ${f.beat}: fills ${Math.round(f.fill.w * 100)}% × ${Math.round(f.fill.h * 100)}% of the frame. ${f.fix}`)]
       : []),

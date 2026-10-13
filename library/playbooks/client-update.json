@@ -189,7 +189,7 @@
               ]
             }
           },
-          "transition": "panel"
+          "transition": "cut"
         }
       ]
     },
@@ -200,7 +200,7 @@
         {
           "id": "again",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "One dip, in August. We rebalanced on August 20, and by September 30 it had recovered. Your plan never changed. To talk it through, book a review in the Example Wealth app this month.",
           "props": {
             "source": "Example Wealth quarterly letter · index, July 1 = 100 · as of Sep 30",
@@ -1271,7 +1271,7 @@
         {
           "id": "talk",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "hold": 0.6,
           "vo": "In the app, tap My adviser, Book a review, pick a time this month, and confirm. Your adviser will call you.",
           "props": {
@@ -1300,7 +1300,7 @@
         {
           "id": "held",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "Your mix is where we set it: 60% shares, 35% bonds, 5% cash.",
           "props": {
             "source": "Example Wealth quarterly letter · target mix · as of Sep 30",

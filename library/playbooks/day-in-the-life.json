@@ -139,7 +139,7 @@
         {
           "id": "step",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "She set it up once, in the benefits portal: Retirement, five percent, save. Then she got back to her first week.",
           "props": {
             "sketch": "portal",
@@ -164,7 +164,7 @@
         {
           "id": "close",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "Five minutes, once. Every paycheck after, her money works with the company's.",
           "props": {
             "cast": {
@@ -221,7 +221,7 @@
         {
           "id": "step",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "hold": 2,
           "vo": "On her phone, week one: Benefits, then Retirement, 5%, and save.",
           "props": {
@@ -251,7 +251,7 @@
         {
           "id": "adds-up",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "pace": "hold",
           "vo": "Her $450 a month, at 5% a year, comes to about $377,000 in 30 years.",
           "props": {
@@ -285,7 +285,7 @@
         {
           "id": "year",
           "block": "canvas",
-          "transition": "panel",
+          "transition": "cut",
           "vo": "A year on, 12 paychecks in, Priya hasn't thought about it once. Every one put $450 toward her retirement. Yours takes 5 minutes in the benefits portal, before your next paycheck.",
           "props": {
             "source": "Example Co. benefits guide · $250 + $200 a month",
