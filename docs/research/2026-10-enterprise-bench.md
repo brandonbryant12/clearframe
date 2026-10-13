@@ -12,23 +12,23 @@ A night of brute-force iteration on the films ClearFrame is mostly asked for: be
 
 Judge means (1–10):
 
-| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 | Round 9 | Round 10 | Round 11 | Round 12 | Round 13 | Round 14 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 401(k) match | Haiku | 3.1 | 6.6 | | | | | | | | | | | | |
-| Phishing training | Haiku | 5.0 | 5.9 | | | | | | | | | | | 5.1 | 5.6 |
-| HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 | | | | | | | | | | | |
-| Expense policy | Haiku | | | 6.1 | | | | | | | | | | | |
-| MFA rollout | Haiku | | | | 5.3 | | | | | | | | | | |
-| Parental leave | Haiku | | | | 6.1 | | | | | | | | | | |
-| Fraud alert (vertical) | Haiku | | | | 5.7 | | | | | | | | | | |
-| Open enrollment | Sonnet / Haiku | 6.4 (Sonnet) | | | | 6.1 (Haiku) | | | | | 6.0 (Haiku) | | 5.9 (Haiku) | | 5.6 (Haiku) |
-| Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) | | | | | | | | | |
-| Mortgage rate lock | Sonnet | | | | 6.7 | | | | | | | | | | |
-| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) | | 5.3 (Haiku) | 4.9 (Haiku) | 6.1, 4.7 (Haiku ×2) | 4.7, 4.1 (Haiku ×2) | 5.1, 3.9 (Haiku ×2) | 5.0, 3.9 (Haiku); 7.4 (Sonnet) | | |
-| Share purchase plan | Haiku / Sonnet | | | | | | 4.7 | 5.4 | 3.7 | 4.9, 4.3 | | 5.6, 5.1 | 5.0 (Haiku); 6.6 (Sonnet) | | |
-| First week (vertical) | Haiku | | | | | | 5.4 | 2.7 | 5.3 (Haiku), 6.4 (Sonnet) | 6.1 | 4.6 | 4.9 | 5.0 | | |
-| Client data rule | Haiku | | | | | | 6.3 | 4.6 | 5.7 | 5.6 | 4.1 | 5.1 | 3.7 | 5.4, 4.4 (Haiku ×2) | 4.7 (Haiku); 6.0 (Sonnet) |
-| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | | | | | | | | | | |
+| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 | Round 9 | Round 10 | Round 11 | Round 12 | Round 13 | Round 14 | Round 15 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 401(k) match | Haiku | 3.1 | 6.6 | | | | | | | | | | | | | |
+| Phishing training | Haiku | 5.0 | 5.9 | | | | | | | | | | | 5.1 | 5.6 | 5.7 |
+| HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 | | | | | | | | | | | | |
+| Expense policy | Haiku | | | 6.1 | | | | | | | | | | | | |
+| MFA rollout | Haiku | | | | 5.3 | | | | | | | | | | | |
+| Parental leave | Haiku | | | | 6.1 | | | | | | | | | | | |
+| Fraud alert (vertical) | Haiku | | | | 5.7 | | | | | | | | | | | |
+| Open enrollment | Sonnet / Haiku | 6.4 (Sonnet) | | | | 6.1 (Haiku) | | | | | 6.0 (Haiku) | | 5.9 (Haiku) | | 5.6 (Haiku) | 5.6 (Haiku) |
+| Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) | | | | | | | | | | |
+| Mortgage rate lock | Sonnet | | | | 6.7 | | | | | | | | | | | |
+| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) | | 5.3 (Haiku) | 4.9 (Haiku) | 6.1, 4.7 (Haiku ×2) | 4.7, 4.1 (Haiku ×2) | 5.1, 3.9 (Haiku ×2) | 5.0, 3.9 (Haiku); 7.4 (Sonnet) | | | |
+| Share purchase plan | Haiku / Sonnet | | | | | | 4.7 | 5.4 | 3.7 | 4.9, 4.3 | | 5.6, 5.1 | 5.0 (Haiku); 6.6 (Sonnet) | | | |
+| First week (vertical) | Haiku | | | | | | 5.4 | 2.7 | 5.3 (Haiku), 6.4 (Sonnet) | 6.1 | 4.6 | 4.9 | 5.0 | | | |
+| Client data rule | Haiku | | | | | | 6.3 | 4.6 | 5.7 | 5.6 | 4.1 | 5.1 | 3.7 | 5.4, 4.4 (Haiku ×2) | 4.7 (Haiku); 6.0 (Sonnet) | 4.4 |
+| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | | | | | | | | | | | |
 
 Haiku's mean rose from 4.1 to 5.4 to 6.5 on the briefs the kit was tuned on, then sat at 5.5–5.8 on new briefs (rounds 4–6), fell to 4.5 in round 7 and came back to 4.9 in round 8 (where Sonnet made the same first-week brief at 6.4) and 5.3 in round 9, where the first Haiku podcast with pictures scored 6.1. Sonnet stayed around 7. The reference film shows the ceiling of the kit as it stands: clear (9) but not yet distinctive (5). Rounds 4 and 5 were the test of generalisation, and they found the next layer of problems: not the pictures themselves, but how agents fill them in, when they stop, and what they invent.
 
@@ -95,13 +95,16 @@ The one paid test: two Veo 3.1 Lite clips (an office morning, a city street; $0.
     → Type drawn on a canvas counts as type on its own and is offered a picture; a NOT READY verdict ends on one spelled-out edit; a chart missing a spoken figure gets the value to paste; a cast for mail sent to the wrong person; link expiry routes to `compose`; refused fields name their replacement (`font: "bold"`, `anchor`); the draft voice reads a colon as a pause.
 22. **Round 14: Haiku 5.3, Sonnet 6.0, and the first Haiku agent that kept going.** The phishing agent worked sixteen minutes, followed the overlap note to `"fresh": true` and grew its film from 28 to 51 s (5.6); the two others stopped at 29 and 32 s of 50 and 75. Sonnet's client-data film (6.0) was READY with a padlock carried large from its opening under a new row of objects, labels colliding; a chart written with `rows` crashed `critique` for half an hour; an enrollment film made without a source document narrated a $3,000 the brief never states. The reviewer's best moment was again `compose`.
     → Cast objects standing on each other make the verdict NOT READY; a short film is quoted the source's facts it never states; the `rows` crash is fixed; figures with no source document to check are named; `inspect` presses Report on the email it marked (`report: true`), so phishing films' action is the same email.
+23. **Round 15: two of three Haiku films READY, and one READY film the reviewer called a slideshow.** Phishing (5.7, eleven beats, 48 s) and client data were handed over READY, the first Haiku READY films since round 12; enrollment stopped at 34 s of 75 (5.6). The client-data film passed with three one-value `number` charts, a title and a list around its one `compose` beat (29 of 38 s), one of them a declared reading hold; the reviewer scored it 3 for slideshow and 4.4 overall. Two agents lost half an hour each to `critique` crashing with a bare TypeError on a shape it did not expect (`rows` for `values`, `emphasis` as one word).
+    → A single figure on a card counts as type on its own (that film now reads NOT READY; films the reviewer scored 5 and up keep their verdicts); `critique` never ends in a bare TypeError.
 
-## What twelve rounds say
+## What fifteen rounds say
 
 - **A missing picture is the first ceiling, and the cheapest to lift.** Every brief that gained a picture for its central idea moved: the share plan from 3.7–4.9 to 5.1–5.6 once `lookback` drew "the lower of two prices"; the podcast from all-caption films to pictured ones once a worked example and paste-ready casts existed. Agents of every size type the idea they cannot draw.
 - **Weaker models act on concrete edits, not on scores or principles.** The verdict that moved films names the beat, quotes what is said over it and hands over the props to paste. Generic advice ("land a later moment", "give the ideas pictures") was read as optional or as a cost ("45 more minutes").
 - **Every strict check teaches a shortcut until the next one closes it.** Agents declared every beat a hold, made every beat kinetic, cut films to half their length, reported the one good number off the verdict, and read `qa`'s first line instead of the verdict. Each became a rule: hold budgets, a words share, a length floor, READY first, exit code 2.
 - **The verdict tracks the reviewer.** Films handed over at NOT READY scored lowest in every round from 8 on; the scores move ±0.6 round to round on three to six Haiku films, so the per-brief trend is the signal, not one round's mean.
+- **Concrete, quoted edits buy persistence too.** In rounds 13 and 14 Haiku agents stopped after ten to sixteen minutes, usually at half the length asked, calling the film complete. After the verdict began to end on one spelled-out next edit and to quote the source's facts the film never states, two of three round-15 films reached READY (one by growing from three beats to eleven). A pass/fail line is only as good as what it counts: the one READY film the reviewer disliked was made of figure cards the verdict counted as pictures.
 - **The ceiling is the model, not the kit, for persistence.** Sonnet made READY films on the hardest briefs (share plan, podcast) with its own pictures, in about half the time box; Haiku still hands over NOT READY films about half the time and leaves films short of the length asked.
 
 ## Open problems
