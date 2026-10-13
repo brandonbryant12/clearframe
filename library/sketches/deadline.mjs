@@ -11,6 +11,8 @@ const WEEK = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 export default {
   name: 'deadline',
   keep: true,
+  // Weekday headers are real words: replace them only to shorten or translate.
+  keepText: WEEK,
   order: 93,
   summary:
     'A window on a calendar: the month draws, the opening day is marked, the window sweeps across the weeks to the last day, which is circled by hand, and the days outside it fall back. Optional "today" ring; a key says what each mark means.',

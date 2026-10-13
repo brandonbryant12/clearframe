@@ -225,7 +225,7 @@ export function chartElements(spec, { w, h }) {
     const cued = values.filter(x => x.say);
     if (cued.length > 1) {
       const [x, y, bw, bh] = spec.box ?? [w * 0.15, h * 0.24, w * 0.7, h * 0.48];
-      const max = spec.max ?? Math.max(...cued.map(c => c.value)),
+      const max = spec.max ?? (Math.max(...cued.map(c => c.value)) || 1),
         size = Math.round(Math.min(bh * 0.6, 300)),
         fy = y + bh * 0.55,
         barY = fy + size * 0.3 + 100;
@@ -289,19 +289,35 @@ export function chartElements(spec, { w, h }) {
         enter: 'fade',
         dur: 0.5,
       },
-      {
-        type: 'rect',
-        id: v.key,
-        x: r(x),
-        y: r(y + bh * 0.55 + size * 0.3 + 100),
-        w: r((v.value / max) * bw),
-        h: 18,
-        fill: 'accent',
-        enter: 'grow-x',
-        origin: [r(x), r(y + bh * 0.55 + size * 0.3 + 109)],
-        at: r(at + 0.5),
-        dur: 0.7,
-      },
+      // A zero ("your balance: $0") is an empty track rather than a bar of no width.
+      max > 0 && v.value > 0
+        ? {
+            type: 'rect',
+            id: v.key,
+            x: r(x),
+            y: r(y + bh * 0.55 + size * 0.3 + 100),
+            w: r((v.value / max) * bw),
+            h: 18,
+            fill: 'accent',
+            enter: 'grow-x',
+            origin: [r(x), r(y + bh * 0.55 + size * 0.3 + 109)],
+            at: r(at + 0.5),
+            dur: 0.7,
+          }
+        : {
+            type: 'rect',
+            id: v.key,
+            x: r(x),
+            y: r(y + bh * 0.55 + size * 0.3 + 100),
+            w: r(bw),
+            h: 18,
+            fill: 'none',
+            stroke: 'muted',
+            width: 2,
+            enter: 'fade',
+            at: r(at + 0.5),
+            dur: 0.5,
+          },
     );
     if (note) out.push(...noteElements(note, x + bw / 2, y + bh * 0.55 + size * 0.3 + 150, { left: x, right: x + bw }));
   }

@@ -104,6 +104,7 @@ const VALIDATE = {
         'title',
         'audience',
         'inputs',
+        'recording',
         'sources',
         'beats',
         'theme',

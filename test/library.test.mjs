@@ -284,3 +284,17 @@ test('the library index finds a short mixed shortlist and gives one entry exact 
   assert.ok(drawn.shape === 'vertical' && JSON.stringify(drawn.elements).includes('"say":"flows"'), 'catalog topic sketch returns filled elements for the shape');
   for (const move of ['swap', 'merge', 'hero', 'mark']) expandCastProps((await detail(`cast-move:${move}`)).example.props, { width: 1080, height: 1920, beatId: 'b', duration: 4 }, { cue: () => 1, carry: {}, notes: [] });
 });
+
+test('sketch moments are listed in the order they happen, and an early exit word waits for a timed entrance', async () => {
+  // Agents fill moments with narration words in the listed order: match drew TOTAL first in its
+  // source, which made coins leave before they arrived.
+  const { sketchMoments } = await import('../film/sketches.mjs');
+  assert.deepEqual(sketchMoments('match'), ['YOU', 'MATCH', 'TOTAL']);
+  assert.deepEqual(sketchMoments('expire'), ['FILL', 'YEAREND', 'KEEP']);
+  const { scheduleElements } = await import('../film/canvas.mjs');
+  const words = { first: 0, later: 2 }, resolve = v => (typeof v === 'number' ? v : words[v]);
+  const bar = { type: 'rect', at: 0.35, dur: 0.6, exit: 'fade', exitSay: 'first' };
+  scheduleElements([bar], { start: 0, entrance: 0.6, resolve });
+  assert.equal(bar.exitAt, 0.95, 'the exit waits for the entrance');
+  assert.throws(() => scheduleElements([{ type: 'rect', say: 'later', exit: 'fade', exitSay: 'first' }], { start: 0, entrance: 0.6, resolve }), /"later".*"first"/);
+});

@@ -60,7 +60,7 @@ Select a moment whose own language has the intended arc. Keep speaker identity, 
 
 ```sh
 node engine/cli.mjs ingest /tmp/podcast-recording --audio episode.wav --from 120 --to 165 --vertical
-node engine/cli.mjs new /tmp/podcast-study --playbook podcast-thread --treatment calm --vertical
+node engine/cli.mjs new /tmp/podcast-study --playbook podcast-thread --treatment calm --vertical --sample
 ```
 
 Use the study as a visual reference while editing the imported project's native storyboard. Review the actual audio and measured words at each change of thought. Inspect both frame shapes before rendering the final cut.

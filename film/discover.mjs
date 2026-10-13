@@ -12,7 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { BLOCKS } from './catalog.mjs';
 import { items, libraryDirs, LIBRARY } from './library.mjs';
-import { sketchByName, sketchParams } from './sketches.mjs';
+import { sketchByName, sketchParams, sketchMoments } from './sketches.mjs';
 import { CAST_CATALOG } from './cast.mjs';
 import { ICONS } from './icons.mjs';
 
@@ -116,7 +116,9 @@ function slots(name) {
     walk(el.children);
   });
   try { const s = sketchByName(name); walk(s.build(1920, 1080, { params: sketchParams(s, {}) }).elements); } catch {}
-  return { text: [...text], cues: [...cues] };
+  // Moments in the order they happen, which is the order narration words fill them.
+  const order = sketchMoments(name);
+  return { text: [...text], cues: [...order.filter(c => cues.has(c)), ...[...cues].filter(c => !order.includes(c))] };
 }
 /** A canvas beat that uses a sketch: its placeholder words, its named moments and its numbers to fill. */
 export function sketchExample(name) {

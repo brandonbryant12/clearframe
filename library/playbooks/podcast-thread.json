@@ -2,6 +2,7 @@
   "order": 44,
   "title": "Follow one podcast idea as a spacious visual essay",
   "audience": "Listeners who want to stay with one thought rather than scan a wall of captions",
+  "recording": true,
   "inputs": "An exact recording excerpt and measured word timestamps, one tension, a concrete example and a reframe already present in the excerpt",
   "theme": "forest",
   "type": "bookish",

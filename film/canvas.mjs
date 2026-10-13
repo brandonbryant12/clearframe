@@ -665,6 +665,7 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
     // A group placed with no entrance places its contents with none: children that do not
     // ask for one would otherwise draw or fade in on the cut frame.
     if (still && el.enter == null) el.enter = 'none';
+    const enterWord = el.say;
     if (el.say != null) {
       // Type cued to a word is legible as the word is said: its entrance starts a moment early.
       // `after` places it that many seconds after the word (choreography relative to the voice).
@@ -692,8 +693,17 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
     settle = Math.max(settle, el.at + el.dur);
     if (el.type === 'text' && el.count) settle = Math.max(settle, el.at + el.count.dur);
     if (el.exitSay != null) {
-      el.exitAt = resolve(el.exitSay);
+      const word = el.exitSay;
+      el.exitAt = resolve(word);
       delete el.exitSay;
+      // An exit on a word said before an entrance timed in seconds (a sketch's whole bar that
+      // splits on the first word) waits for the entrance to finish. Two words in the wrong
+      // order are a mistake to fix, so they still refuse, quoting both.
+      if (el.exitAt < el.at && enterWord == null) el.exitAt = el.at + el.dur;
+      else if (el.exitAt < el.at)
+        throw new Error(
+          `an element that enters on "${enterWord}" (${el.at.toFixed(2)}s) exits on "${word}" (${el.exitAt.toFixed(2)}s), which is said first: swap the words, or in a sketch give its moments words in the order sketch NAME lists them`,
+        );
     }
     if (el.exitAt != null) {
       el.exitDur ??= entrance;

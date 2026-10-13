@@ -127,6 +127,12 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
 }
 /** Library refs for the art sketches a storyboard names, so shared ones travel with it. */
 export const artSketches = sb => sb.beats.filter(b => b.art?.sketch).map(b => ['sketches', b.art.sketch]);
+/** The playbook a `new` with these options starts from (direction, treatment and default applied). */
+export function playbookFor(options = {}) {
+  options = directionOptions(options);
+  const id = options.playbook ?? options.recipe ?? (options.treatment && treatmentById(options.treatment)?.playbook) ?? 'concept-explainer';
+  return playbooks().find(p => p.id === id) ?? { id };
+}
 export function scaffold(dir, options = {}) {
   if (fs.existsSync(dir) && fs.readdirSync(dir).length) throw new Error(`${dir} is not empty`);
   options = directionOptions(options);

@@ -2,6 +2,7 @@
   "order": 25,
   "title": "Cut a podcast moment into a vertical social clip",
   "audience": "Listeners scrolling a feed",
+  "recording": true,
   "inputs": "A recording and word timestamps (clearframe ingest --audio), one self-contained moment of 30–60 s",
   "beats": [
     {

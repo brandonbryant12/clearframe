@@ -10,7 +10,7 @@ import { startRun, finishRun } from './lib/runlog.mjs';
 import { parseTime } from './lib/notes.mjs';
 import { REVIEW, reviewCommand } from './lib/review-cli.mjs';
 import { BLOCKS, THEMES, THEME_NOTES, MOTIONS, TRANSITIONS, BACKDROPS, markdownCatalog } from '../film/catalog.mjs';
-import { playbooks, scaffold, writeGallery } from '../film/playbooks.mjs';
+import { playbooks, playbookFor, scaffold, writeGallery } from '../film/playbooks.mjs';
 import { ICONS, ICON_SOURCE } from '../film/icons.mjs';
 import { sketches, sketch, sketchByName } from '../film/sketches.mjs';
 import { treatments } from '../film/treatments.mjs';
@@ -194,6 +194,7 @@ async function main() {
     'transcribe',
     'help',
     'grid',
+    'sample',
     'sketches',
     'whisper',
     'no-render',
@@ -299,6 +300,13 @@ async function main() {
   }
   if (cmd === 'new') {
     const dir = path.resolve(positionals[0] ?? 'my-video');
+    // A playbook cut from a recording, scaffolded on its own, puts sample narration where the
+    // recording belongs; agents then laid the episode under it as music, out of sync.
+    const book = playbookFor(opts);
+    if (book.recording && !o.sample)
+      throw new Error(
+        `${book.id} cuts a recording: its narration is the recording's own words with measured timings. Import it instead:\n  clearframe ingest ${positionals[0] ?? 'DIR'} --audio episode.wav [--script turns.txt] [--speakers host=Name:Host,guest=Name:Guest] [--vertical] --direction ${o.direction ?? (book.id === 'podcast-clip' ? 'podcast-picture' : 'ID')}\nThen replace its captions with pictures beat by beat. (To read the sample playbook anyway: new DIR --playbook ${book.id} --sample.)`,
+      );
     const sb = scaffold(dir, opts);
     const rel = path.relative(process.cwd(), dir) || '.';
     return console.log(
@@ -434,7 +442,8 @@ async function main() {
     const use = sketchExample(positionals[0]);
     if (use.props.sketchText || use.props.sketchSay || use.props.sketchParams) {
       const params = Object.entries(source?.params ?? {}).map(([k, d]) => `  ${k}: ${d.about ?? ''} (default ${JSON.stringify(d.default)}${d.min != null || d.max != null ? `, ${d.min ?? ''}–${d.max ?? ''}` : ''})`);
-      console.error(`Use it as a beat (fill the words, cue the moments on narration words, set the numbers):\n${JSON.stringify(use, null, 1)}${params.length ? `\nNumbers:\n${params.join('\n')}` : ''}\nThe drawing below is for adapting by hand.\n`);
+      const moments = Object.keys(use.props.sketchSay ?? {});
+      console.error(`Use it as a beat (fill the words, cue the moments on narration words, set the numbers):\n${JSON.stringify(use, null, 1)}${params.length ? `\nNumbers:\n${params.join('\n')}` : ''}${moments.length > 1 ? `\nMoments happen in this order: ${moments.join(' → ')}. Give them words the narration says in the same order.` : ''}\nThe drawing below is for adapting by hand.\n`);
     }
     return console.log(JSON.stringify(sketch(positionals[0], o.vertical ? 'vertical' : 'landscape'), null, 1));
   }
