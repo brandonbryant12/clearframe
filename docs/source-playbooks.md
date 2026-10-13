@@ -18,7 +18,7 @@ These playbooks are examples of complete arcs. They are editable storyboards, no
 node engine/cli.mjs directions research
 node engine/cli.mjs directions podcast
 node engine/cli.mjs start /tmp/report-film --document report.md --direction research-evidence
-node engine/cli.mjs ingest /tmp/episode-film --audio episode.wav --words words.json --direction podcast-thread
+node engine/cli.mjs ingest /tmp/episode-film --audio episode.wav --direction podcast-thread
 ```
 
 Directions combine a starting arc, treatment and story/picture/pace guidance. The defaults are independent: `--playbook`, `--treatment` and `--theme` can override them. Tags suggest suitable material; they do not limit which source can use a direction. Add a custom `library/directions/*.json` through `--library DIR`, or author directly without choosing a profile. See [the JSON contract](../library/README.md#directions).
@@ -59,7 +59,7 @@ For a real podcast, import the recording and measured word timestamps. The recor
 Select a moment whose own language has the intended arc. Keep speaker identity, word order, meaningful pauses and context intact. If the excerpt has a different shape, change the storyboard to fit it. A held picture can span several spoken ideas; a new scene is not required for every sentence. The sample's 2.8-second hold is an artistic choice for the demonstration, not an instruction to extend every imported recording.
 
 ```sh
-node engine/cli.mjs ingest /tmp/podcast-recording --audio episode.wav --words words.json --from 120 --to 165 --vertical
+node engine/cli.mjs ingest /tmp/podcast-recording --audio episode.wav --from 120 --to 165 --vertical
 node engine/cli.mjs new /tmp/podcast-study --playbook podcast-thread --treatment calm --vertical
 ```
 
