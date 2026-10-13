@@ -737,7 +737,8 @@ async function main() {
         const allowance = Math.round(2 * s.seconds) / 10,
           overflow = Math.max(0, Math.round(10 * ((s.deliberateSeconds ?? 0) - allowance)) / 10);
         share = s.seconds ? Math.round((100 * (voicedHeld + overflow)) / s.seconds) : 0;
-        const worst = Object.entries(byBeat).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([b, sec]) => `${b} ${sec.toFixed(1)} s`);
+        const worst = Object.entries(byBeat).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        const fixOf = id => held.find(f => f.beat === id && f.fix);
         const verdict =
           share >= 40
             ? 'READS AS NARRATED SLIDES (40% or more): the picture sits still while the voice talks'
@@ -760,7 +761,18 @@ async function main() {
           ...(typeShare >= 50
             ? [`  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures (the workplace sketches, a cast, a chart with cued values) and keep type for the one or two lines worth repeating.`]
             : []),
-          ...(worst.length ? [`  stillest: ${worst.join(', ')}. Give each a change on its words: a cue on a later word, a key, a world camera move, a cast formation, a sketch moment (sketchSay), or a shorter beat. A deliberate reading hold is fine; mark it with pace: "hold".`] : []),
+          ...(worst.length
+            ? [
+                `  stillest (a deliberate reading hold is fine; mark it with pace: "hold"):`,
+                ...worst.map(([id, sec]) => {
+                  const f = fixOf(id);
+                  return `    ${id} ${sec.toFixed(1)} s still${f?.said ? ` over "${f.said.length > 90 ? `${f.said.slice(0, 89)}…` : f.said}"` : ''}: ${f?.fix ?? 'change something on its later words, or shorten it.'}`;
+                }),
+              ]
+            : []),
+          ...(share >= 40 || (typeShare >= 60 && share < 40)
+            ? ['  not ready to hand over: fix the beats above (each is one edit), then run draft again.']
+            : []),
           `  qa: ${rel(path.join(q.dir, 'phone.png'))} (read it as a phone would)`,
         );
       } catch (e) {

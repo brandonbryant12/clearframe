@@ -266,6 +266,23 @@ async function sheets(file, dir, { portrait, seconds }) {
   ]);
 }
 
+const clip = (t, n) => (t.length > n ? `${t.slice(0, n - 1)}…` : t);
+const TYPE_BLOCKS = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout', 'stat'];
+/** The change that fits a still beat, from what it is made of. */
+export function stillFix(beat) {
+  const p = beat.props ?? {};
+  if (p.sketch)
+    return `Land a later moment of the ${p.sketch} sketch on one of those words (sketchSay; \`sketch ${p.sketch}\` lists its moments in order), or shorten the beat to its last moment.`;
+  if (p.chart)
+    return `Give each chart value a \`say\` word from that line so each figure lands as it is spoken${p.chart.kind === 'number' ? ' (a number with several cued values steps through them)' : ''}, or add a \`note\` on the word that makes the point.`;
+  if (p.cast) return 'Give the cast a formation or a move (a swap, a merge, a hero) on one of those words.';
+  if (p.world || beat.stage) return 'Move the camera or an actor on one of those words.';
+  if (beat.block === 'canvas') return 'Cue an element or a key (`say`) on one of those words, so the drawing changes while it is explained.';
+  if (TYPE_BLOCKS.includes(beat.block))
+    return 'This is type on its own: give the idea a picture that changes on those words (`critique` names a sketch for it), or cut the beat to the line.';
+  return 'Change something on one of those words, or shorten the beat.';
+}
+
 export async function qaProject(root, { video, loop = false } = {}) {
   const file = path.resolve(video ?? path.join(root, 'build/video.mp4'));
   if (!fs.existsSync(file)) throw new Error(`No film at ${file}; render first.`);
@@ -316,6 +333,14 @@ export async function qaProject(root, { video, loop = false } = {}) {
   );
   const holds = new Set(sb.beats.filter(b => b.pace === 'hold').map(b => b.id));
   const findings = timeFindings({ d, skip, second, local, fps, beats, worlds, covers, holds });
+  // A still stretch under the voice says what was said over it and what would move there.
+  for (const f of findings) {
+    if (f.kind !== 'held' || f.level !== 'warn' || !f.beat) continue;
+    const tb = beats.find(b => b.id === f.beat);
+    f.said = (tb?.vo?.words ?? []).filter(w => w.t0 >= f.t - 0.05 && w.t0 < f.end).map(w => w.w).join(' ');
+    f.fix = stillFix(sb.beats[tb?.index] ?? {});
+    f.message = `the picture sits still for ${f.seconds} s (${f.t}–${f.end} s) while the voice says "${clip(f.said, 120)}": a viewer sees a slide. ${f.fix}`;
+  }
   if (!same)
     findings.unshift({
       level: 'warn',

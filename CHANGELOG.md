@@ -12,6 +12,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **The motion verdict says what to change, beat by beat.** Each still stretch quotes what the voice says over it and the edit that fits the beat (a later sketch moment, a `say` on each chart value, a cast formation, a camera move, a picture instead of type); a verdict over 40% ends "not ready to hand over". A round-5 agent read the old generic advice, called 55% still "a polish issue" and stopped five minutes into an hour.
 - **Sketch moments are listed in the order they happen.** `sketch NAME` printed moments in source order (match: TOTAL, YOU, MATCH; expire: YEAREND before FILL), agents filled them with narration words in that order, and the sketch ran backwards until `check` refused "an element exits before it enters"; two of three round-5 films dropped a sketch for plain bars over it. The example now lists them in time order with a line saying so; `critique` warns when sketchSay words are said out of order, and the refusal quotes both words.
 - **An exit cued on a word said before a seconds-timed entrance waits for it** (a split whose whole bar enters at 0.35 s and splits on the first word) instead of refusing.
 - **`critique` catches sketch words left as placeholders** ("STEP4" on screen after adding a fourth step), moments put in `sketchText` instead of `sketchSay`, and misspelt words. Sketches may list `keepText` (the calendar's weekday headers) that are fine as drawn.
