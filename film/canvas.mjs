@@ -64,6 +64,7 @@ const COMMON = [
   'exit',
   'exitAt',
   'exitSay',
+  'exitAfter',
   'exitDur',
   'keys',
   'loop',
@@ -695,6 +696,8 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
       delete el.say;
     }
     delete el.after;
+    if (el.exitAfter != null && (el.exitSay == null || !Number.isFinite(el.exitAfter) || el.exitAfter < 0))
+      throw new Error('exitAfter is the seconds (0 or more) an exit waits after its exitSay word: give the element an exitSay and a number');
     el.at ??= start + i * stagger;
     const enter = defaultEnter(el);
     const chars = String(el.text ?? '').length;
@@ -716,8 +719,10 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
     if (el.type === 'text' && el.count) settle = Math.max(settle, el.at + el.count.dur);
     if (el.exitSay != null) {
       const word = el.exitSay;
-      el.exitAt = resolve(word);
+      // `exitAfter` leaves that many seconds after the word, as `after` does for an entrance.
+      el.exitAt = resolve(word) + (el.exitAfter ?? 0);
       delete el.exitSay;
+      delete el.exitAfter;
       // An exit on a word said before an entrance timed in seconds (a sketch's whole bar that
       // splits on the first word) waits for the entrance to finish. Two words in the wrong
       // order are a mistake to fix, so they still refuse, quoting both.

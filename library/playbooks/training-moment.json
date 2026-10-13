@@ -157,7 +157,7 @@
           "id": "everyone",
           "block": "canvas",
           "transition": "cut",
-          "vo": "Delete it, and only your copy goes. Everyone else still has theirs. Report it, and Security can pull every copy. So choose Report, then Phishing, the moment you spot one.",
+          "vo": "Delete it, and only your copy goes. Everyone else still has theirs. Report it, and Security hears about it. So choose Report, then Phishing, the moment you spot one.",
           "props": {
             "cast": {
               "objects": [

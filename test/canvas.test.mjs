@@ -357,3 +357,15 @@ test('a playbook beat can be composed again for a vertical cut, and landscape ke
   assert.ok(['50% full', '90% full', '9×'].every(t => nine(tall).props.elements.some(el => el.text === t)), 'row labels and the takeaway both stay');
   assert.equal(nine(tall).props.source, nine(wide).props.source, 'props it does not replace are kept');
 });
+
+test('exitAfter leaves that many seconds after the exitSay word, and enter none stands from the cut', async () => {
+  const { scheduleElements } = await import('../film/canvas.mjs');
+  const list = [
+    { type: 'rect', x: 0, y: 0, w: 10, h: 10, enter: 'none' },
+    { type: 'rect', x: 0, y: 0, w: 10, h: 10, at: 0, exitSay: 'go', exitAfter: 0.5 },
+  ];
+  scheduleElements(list, { start: 1.2, entrance: 0.5, resolve: () => 2, ground: true });
+  assert.equal(list[0].at, 0);
+  assert.equal(list[1].exitAt, 2.5);
+  assert.throws(() => scheduleElements([{ type: 'rect', x: 0, y: 0, w: 1, h: 1, exitAfter: 1 }], { start: 0, entrance: 0.5, resolve: () => 0 }), /exitSay/);
+});
