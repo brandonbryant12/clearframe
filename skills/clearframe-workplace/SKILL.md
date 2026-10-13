@@ -11,7 +11,7 @@ The people watching were sent this film; they did not choose it. They give it fi
 
 From the source document, write in `DIRECTION.md`:
 
-- **The action**: what the viewer does afterwards, where and by when ("raise your rate to 5% in the benefits portal").
+- **The action**: what the viewer does afterwards, where and by when ("raise your rate to 5% in the benefits portal"). Show it briefly; it is not the ending.
 - **The hook**: what they lose or gain if they don't, in one line. Open on it in the first five seconds. Never open on a welcome or the company's name.
 - **Three facts** that make the action obvious. More than four and the film becomes a policy document; leave the rest to the guide it links to.
 
@@ -21,7 +21,7 @@ From the source document, write in `DIRECTION.md`:
 node engine/cli.mjs new DIR --treatment workplace --playbook PLAYBOOK
 ```
 
-Playbooks: `benefit-explainer` (a benefit and how to use it), `policy-change` (what changed and what to do), `client-update` (a calm market or portfolio update for clients), `training-moment` (a threat or mistake, the signs, the habit). Each beat already has a picture with placeholder words: replace the words, keep the pictures. The treatment gives each project one of six looks (clean, notebook, brief, meadow, poster, daylight: a palette, a type voice and clean, hand-drawn or printed lines), picked from the folder name and written into DIRECTION.md, so films from the same playbook don't share a face. Keep it, or choose by subject with `--theme` (`meridian` financial, `meadow` benefits and health, `briefing` training, security and policy); a brand kit overrides all of them. Screens (`portal`, `inspect`) stay crisp in a drawn or printed film.
+Playbooks: `benefit-explainer` (a benefit and how to use it), `day-in-the-life` (one person and one object of theirs through the moments a benefit touches), `policy-change` (what changed and what to do), `client-update` (a calm market or portfolio update for clients), `training-moment` (a threat or mistake, the signs, the habit). They are starting arcs: if yours is a decision, a story or a comparison, reorder or swap beats rather than forcing it into one. Each beat already has a picture with placeholder words: replace the words, keep the pictures. The treatment gives each project one of six looks (clean, notebook, brief, meadow, poster, daylight: a palette, a type voice and clean, hand-drawn or printed lines), picked from the folder name and written into DIRECTION.md, so films from the same playbook don't share a face. Keep it, or choose by subject with `--theme` (`meridian` financial, `meadow` benefits and health, `briefing` training, security and policy); a brand kit overrides all of them. Screens (`portal`, `inspect`) stay crisp in a drawn or printed film.
 
 ## 3. One picture per fact
 
@@ -34,7 +34,7 @@ Each fact gets the mechanism that shows it. These are sketches: fill `sketchText
 | "It becomes yours over time" (vesting, eligibility) | `vesting` | params `steps` (percentages) |
 | "Between these dates" (enrollment, a deadline) | `deadline` | params `days, firstWeekday, start, end` |
 | "It doesn't carry over" (use it or lose it, a reset to zero) | `expire` | params `total, keep` |
-| "Go to the app and change X" (the action, almost always) | `portal` | words for the menu, the field, old and new values |
+| "Go to the app and change X" (the action, almost always) | `portal` (`device: "phone"` for a mobile app) | words for the menu, the field, old and new values; one sentence of narration |
 | "Look for these signs" (phishing, a receipt, a clause) | `inspect` | words for the message and the three marks |
 | "Option A or option B" (plans, accounts) | `choose` | rows won by a or b, the pick |
 | "Where the money goes" (a paycheck, a fee, an allocation) | `split` | params `parts` (values that add up) |
@@ -45,7 +45,7 @@ Each fact gets the mechanism that shows it. These are sketches: fill `sketchText
 
 A picture must keep up with its narration: every figure or idea the voice names gets its own moment (a cue, a value's `say`, a sketch moment). Three figures said over one still number is a slide.
 
-Give the film one object of its own, and keep it across cuts: a `cast` of the film's objects (`paycheck`, `jar`, `calendar`, `badge`, `house`, `umbrella`, `receipt`, `person`, `coin`) that opens the film and comes back at the end (a paycheck that splits, a jar that fills, a badge for a new hire). It is what makes this film this film and not the last one. Two beats on the same idea share a cast or a world, so the cut is invisible; a new idea can cut hard (`panel` at a chapter). Let the action beat show the step done (`portal`), with the deadline in the voice or on screen, rather than an end card listing it. One kinetic line (`kinetic` `stack`) for the sentence people should repeat is plenty.
+Give the film one object of its own, and keep it across cuts: a `cast` of the film's objects (`paycheck`, `jar`, `calendar`, `badge`, `house`, `umbrella`, `receipt`, `person`, `coin`) that opens the film and comes back at the end (a paycheck that splits, a jar that fills, a badge for a new hire). It is what makes this film this film and not the last one. Two beats on the same idea share a cast or a world, so the cut is invisible; a new idea can cut hard (`panel` at a chapter). Show the step done (`portal`) in one sentence, not a held screen: every film that ends on the same app mock-up looks like the last one. Then close on the film's own picture (its object changed: the jar full, the calendar checked, the person with the paycheck), with the deadline or the line to repeat in the voice. One kinetic line (`kinetic` `stack`) for the sentence people should repeat is plenty.
 
 ## People and places: greyed B-roll
 

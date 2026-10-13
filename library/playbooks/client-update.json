@@ -111,8 +111,6 @@
     {
       "id": "talk",
       "block": "canvas",
-      "pace": "hold",
-      "hold": 1.0,
       "vo": "If you would like to talk it through, open My adviser, choose Book a review, pick a time, and confirm.",
       "props": {
         "sketch": "portal",

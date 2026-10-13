@@ -106,8 +106,6 @@
     {
       "id": "step",
       "block": "canvas",
-      "pace": "hold",
-      "hold": 1.5,
       "vo": "The app does the work. Open New claim, snap the receipt, check the amount, and submit. Itemised, within thirty days, in the app.",
       "props": {
         "sketch": "portal",

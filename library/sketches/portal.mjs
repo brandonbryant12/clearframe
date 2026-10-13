@@ -16,11 +16,23 @@ export default {
   order: 90,
   summary:
     'A task done in an app: the cursor opens a section, picks a card, changes one value and saves; a confirmation lands and the view leans in on the new value.',
-  use: 'Benefits portals, HR and expense apps, banking and settings: "log in, go to Retirement, change your rate", the step a film asks people to take. Replace APP, STEP1 (the section), STEP2 (the card), OTHER (a second card), FIELD, OLD and NEW (its value before and after) and DONE with sketchText (also Home, Pay, Documents, Welcome back, Save); land CLICK1, CLICK2, CHANGE and SAVE on words with sketchSay.',
-  build(w, h) {
-    const T = tall(w, h);
+  use: 'Benefits portals, HR and expense apps, banking and settings: "log in, go to Retirement, change your rate", the step a film asks people to take. Set sketchParams.device to "phone" for a mobile app (a sign-in app, a bank app, an expenses app) or keep the desktop browser. Replace APP, STEP1 (the section), STEP2 (the card), OTHER (a second card), FIELD, OLD and NEW (its value before and after) and DONE with sketchText (also Home, Pay, Documents, Welcome back, Save); land CLICK1, CLICK2, CHANGE and SAVE on words with sketchSay.',
+  params: {
+    device: { default: 'desktop', oneOf: ['desktop', 'phone'], about: 'desktop: a browser window with a side menu; phone: the same steps in a phone app with tabs' },
+  },
+  build(w, h, { params = {} } = {}) {
+    const phone = params.device === 'phone';
+    // Tabs instead of a side menu on tall frames and in a phone, which is a tall frame of its own.
+    const T = tall(w, h) || phone;
     // Window, chrome and the two regions: a side menu (landscape) or tabs (tall frames).
-    const win = T ? { x: 70, y: 430, w: 940, h: 1160 } : { x: 300, y: 150, w: 1320, h: 780 };
+    const win = phone
+      ? tall(w, h)
+        ? { x: 190, y: 380, w: 700, h: 1240 }
+        : { x: round(w / 2 - 290), y: 120, w: 580, h: 820 }
+      : T
+        ? { x: 70, y: 430, w: 940, h: 1160 }
+        : { x: 300, y: 150, w: 1320, h: 780 };
+    const corner = phone ? 64 : 24;
     const bar = 68;
     const nav = T
       ? { x: win.x, y: win.y + bar, w: win.w, h: 92 }
@@ -99,12 +111,14 @@ export default {
             },
           ],
           children: [
-            { type: 'rect', ...win, r: 24, fill: 'surface', stroke: 'line', width: 2, enter: 'none' },
-            { type: 'rect', x: win.x, y: win.y, w: win.w, h: bar, r: 24, fill: 'bg', enter: 'none' },
+            { type: 'rect', ...win, r: corner, fill: 'surface', stroke: phone ? 'ink' : 'line', width: phone ? 10 : 2, enter: 'none' },
+            { type: 'rect', x: win.x, y: win.y, w: win.w, h: bar, r: corner, fill: 'bg', enter: 'none' },
             { type: 'rect', x: win.x, y: win.y + bar - 24, w: win.w, h: 24, fill: 'bg', enter: 'none' },
             { type: 'line', x1: win.x, y1: win.y + bar, x2: win.x + win.w, y2: win.y + bar, stroke: 'line', width: 2, enter: 'none' },
-            ...[0, 1, 2].map(i => ({ type: 'circle', cx: win.x + 36 + i * 26, cy: win.y + bar / 2, r: 8, fill: 'line', enter: 'none' })),
-            text('APP', round(win.x + win.w / 2), win.y + bar / 2 + 10, 28, 'semibold', 'muted', { anchor: 'middle', enter: 'none' }),
+            ...(phone
+              ? [{ type: 'rect', x: round(win.x + win.w / 2 - 60), y: win.y + 14, w: 120, h: 14, r: 7, fill: 'ink', enter: 'none' }]
+              : [0, 1, 2].map(i => ({ type: 'circle', cx: win.x + 36 + i * 26, cy: win.y + bar / 2, r: 8, fill: 'line', enter: 'none' }))),
+            text('APP', round(win.x + win.w / 2), win.y + bar / 2 + (phone ? 22 : 10), 28, 'semibold', 'muted', { anchor: 'middle', fit: win.w - 120, enter: 'none' }),
             T
               ? { type: 'line', x1: nav.x, y1: nav.y + nav.h, x2: nav.x + nav.w, y2: nav.y + nav.h, stroke: 'line', width: 2, enter: 'none' }
               : { type: 'rect', x: nav.x, y: nav.y, w: nav.w, h: nav.h - 24, fill: 'bg', enter: 'none' },
@@ -221,12 +235,10 @@ export default {
         // The cursor: on its way to the first target as the scene opens, then to each next one
         // just after a click; it leaves once the work is saved.
         {
-          type: 'path',
-          d: cursorPath(start[0], start[1]),
-          fill: 'ink',
-          stroke: 'surface',
-          width: 3,
-          join: 'round',
+          // A phone is tapped: a soft fingertip instead of a pointer.
+          ...(phone
+            ? { type: 'circle', cx: start[0], cy: start[1], r: 30, fill: 'ink', opacity: 0.28, stroke: 'surface', width: 3 }
+            : { type: 'path', d: cursorPath(start[0], start[1]), fill: 'ink', stroke: 'surface', width: 3, join: 'round' }),
           enter: 'fade',
           at: 0.2,
           dur: 0.3,

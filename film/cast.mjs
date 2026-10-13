@@ -430,7 +430,12 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
         if (pose.has(id) && !pose.get(id).gone) continue;
         const o = spec.objects.get(id), dest = f.center ? { x: f.center[0], y: f.center[1] } : pose.get(f.to) ?? { x: frame.width / 2, y: frame.height / 2 };
         const [hw, hh] = objectExtent(o, size), side = ['right', 'drop', 'rise'].includes(o.enter) ? o.enter : 'left';
-        const start = { left: { x: -hw * 1.3, y: dest.y }, right: { x: frame.width + hw * 1.3, y: dest.y }, drop: { x: dest.x, y: -hh * 1.3 }, rise: { x: dest.x, y: frame.height + hh * 1.3 } }[side];
+        // Its label hangs below it and can be wider than it: start far enough out that neither shows.
+        const s0 = o.size ?? size,
+          labelW = o.label ? o.label.length * Math.max(22, s0 * 0.2) * 0.32 : 0,
+          labelDown = o.label ? s0 * 0.34 + Math.max(22, s0 * 0.2) + 12 : 0,
+          ox = Math.max(hw, labelW) * 1.3 + 60; // and its soft shadow
+        const start = { left: { x: -ox, y: dest.y }, right: { x: frame.width + ox, y: dest.y }, drop: { x: dest.x, y: -(hh * 1.3 + labelDown + 60) }, rise: { x: dest.x, y: frame.height + hh * 1.3 } }[side];
         if (groups.has(id)) {
           // It left earlier in this beat: keep that exit, then step back to the entry unseen.
           const { el, base } = groups.get(id);

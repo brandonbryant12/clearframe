@@ -89,7 +89,6 @@
     {
       "id": "step",
       "block": "canvas",
-      "pace": "hold",
       "vo": "To change it, open Benefits, then Retirement. Set your rate to five percent, and save. Two minutes today, free money with every paycheck after.",
       "props": {
         "sketch": "portal",
@@ -110,7 +109,6 @@
           "SAVE": "save"
         }
       },
-      "hold": 1.5,
       "transition": "panel"
     }
   ]
