@@ -694,6 +694,9 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       }
     }
     if (f.form === 'hero' && f.word) {
+      const lbl = spec.objects.get(f.hero)?.label;
+      if (lbl && lbl.trim().toLowerCase() === String(f.word).trim().toLowerCase())
+        notes.push(`hero ${f.hero}: its word "${f.word}" repeats its label; the word is for what this moment says about it ("Snap this one", "Yours after 3 years")`);
       // Below the hero as drawn: its own size (not the cast's), its shape's height and its label.
       const h = targets.get(f.hero), ho = spec.objects.get(f.hero), s0 = ho?.size ?? size, hs = f.scale ?? 2.3,
         wordSize = u * (spec.look === 'drawn' ? 0.1 : 0.085),
