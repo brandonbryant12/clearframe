@@ -162,6 +162,26 @@ function onScreenWords(props) {
   return n;
 }
 
+/**
+ * Words a camera rect (`view: [x, y, w, h]`) actually shows: text elements whose position, after
+ * their groups' offsets, falls inside the shot. A world drawn once and travelled holds every card's
+ * words; a beat reads only the card it frames. Null without a camera rect.
+ */
+function shotWords(props) {
+  const v = props.view;
+  if (!Array.isArray(v) || v.length !== 4 || !Array.isArray(props.elements)) return null;
+  let n = 0;
+  const walk = (list, dx, dy) =>
+    (list ?? []).forEach(el => {
+      const x = (el.x ?? 0) + dx, y = (el.y ?? 0) + dy;
+      if (el.type === 'group') return walk(el.children, x, y);
+      if (el.type === 'text' && typeof el.text === 'string' && x >= v[0] && x <= v[0] + v[2] && y >= v[1] && y <= v[1] + v[3])
+        n += el.text.split(/\s+/).filter(w => w && !/^[\d.,:%$-]+$/.test(w)).length;
+    });
+  walk(props.elements, 0, 0);
+  return n;
+}
+
 export { pictureFor } from './pictures.mjs';
 
 // ------------------------------------------------------------------ cinema
@@ -659,7 +679,7 @@ function critiqueStoryboard(root) {
   // Stillness and density.
   beats.forEach((b, i) => {
     const d = t[i]?.dur ?? 0,
-      words = b._words ?? onScreenWords(b.props ?? {});
+      words = b._words ?? shotWords(b.props ?? {}) ?? onScreenWords(b.props ?? {});
     const moving =
       (b.camera !== 'none' && b.camera?.move !== 'none') ||
       b.plate ||

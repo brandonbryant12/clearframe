@@ -2,6 +2,7 @@
 
 ## Opus films: what an excellent film needed
 
+- **`critique` counts the words a camera shows.** In a world drawn once and travelled, a beat with a camera rect counted every card's words ("hook: 61 words on screen for 7.7 s", most of them off camera); it now counts the text inside its shot.
 - **A board's camera no longer travels to empty paper.** When the move to the next panel starts in the outgoing beat's tail (so it lands on the first word), that panel had not been drawn yet: the round-18 market film showed blank frames mid-pan and its agent pre-drew every card by hand, and `examples/by-morning`'s board crossed a black field on its way to the city. The next panel's ground (what stands from its first frame) is now drawn ahead as the camera sets off, and removed at the cut where the panel takes over.
 - **Craft lines from the market and share-plan films:** a highlight is never the size and place of a data mark; reconcile a letter's parts before charting them together; land financial figures instead of counting up through values the source never states (dataviz and workplace skills); lay a board's panels as neighbours and move between them rather than dissolve (docs/canvas.md).
 - **`voice.pronounce` respells words for the free voice.** The OS voice said "Alder Street" as "all their street", so an Opus agent kept the company name out of the narration; `"voice": {"pronounce": {"Alder": "All-der"}}` changes only what the voice reads, never the narration, captions or timings.
