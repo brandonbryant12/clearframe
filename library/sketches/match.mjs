@@ -62,6 +62,25 @@ export default {
       elements: [
         // The floor the stacks stand on.
         { type: 'ellipse', cx: mid, cy: base + t + 10, rx: round(gap / 2 + rx * 1.6), ry: round(ry * 1.4), fill: 'wash', enter: 'fade', at: 0, dur: 0.5 },
+        // Two empty places from the first frame: the picture is set before a coin falls.
+        ...[x1, x2].map((x, i) => ({
+          type: 'ellipse',
+          cx: x,
+          cy: base,
+          rx,
+          ry,
+          fill: 'none',
+          stroke: 'line',
+          width: 3,
+          dash: [10, 8],
+          enter: 'fade',
+          at: 0.1 + i * 0.2,
+          dur: 0.4,
+          exit: 'fade',
+          exitCue: 'TOTAL',
+          exitAt: AT.TOTAL,
+          exitDur: 0.25,
+        })),
         // Your stack and its count; it moves to the middle when the two merge.
         {
           type: 'group',
@@ -104,13 +123,12 @@ export default {
         },
         // Names under the stacks, gone once there is one stack.
         ...[
-          [x1, 'YOU', 'YOU', AT.YOU],
-          [x2, 'EMPLOYER', 'MATCH', AT.MATCH],
-        ].map(([x, text, cue, at]) =>
+          [x1, 'YOU', 0.15],
+          [x2, 'EMPLOYER', 0.35],
+        ].map(([x, text, at]) =>
           label(text, x, base + t + 90, 40, 'semibold', 'ink', {
             fit: gap - 40,
             enter: 'fade',
-            cue,
             at,
             exit: 'fade',
             exitCue: 'TOTAL',
