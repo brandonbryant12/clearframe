@@ -519,7 +519,9 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
   const typeSeconds = timed.reduce((t, tb, i) => t + (typeOnly(sb.beats[tb.index ?? i] ?? {}) ? (tb.dur ?? tb.end - tb.start) : 0), 0);
   const typeShare = s.seconds ? Math.round((100 * typeSeconds) / s.seconds) : 0;
   const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;
-  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length);
+  // Well short of the length asked for means facts were dropped to pass the other tests.
+  const short = sb.length && s.seconds < 0.6 * sb.length;
+  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short);
   const lines = [
     `motion: ${ready ? 'READY' : 'NOT READY'} · ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
     ...(overflow
@@ -555,7 +557,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
     // The length the person asked for (`new`/`start --length`): agents cut films to half
     // of it and dropped the brief's facts on the way.
     ...(sb.length && s.seconds < 0.75 * sb.length
-      ? [`  length: ${Math.round(s.seconds)} s of the ${sb.length} s asked for. Check BRIEF.md for facts the film dropped and give each its picture, or say in DIRECTION.md why it is shorter.`]
+      ? [`  length: ${Math.round(s.seconds)} s of the ${sb.length} s asked for${short ? ' (under 60%: not ready)' : ''}. Check BRIEF.md and EVIDENCE.md for the facts the film dropped and give each its own beat and picture (a longer film needs more pictures, not more words over the same ones), or say in DIRECTION.md why it is shorter.`]
       : sb.length && s.seconds > 1.3 * sb.length
         ? [`  length: ${Math.round(s.seconds)} s against the ${sb.length} s asked for: cut to the facts that matter.`]
         : []),
