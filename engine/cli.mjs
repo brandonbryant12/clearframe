@@ -663,7 +663,7 @@ async function main() {
     const { critique } = await import('./lib/critique.mjs');
     const c = critique(dir);
     lines.push(
-      `critique: cinema ${c.summary.cinema}/100, ${c.summary.warnings} warning(s), ${c.summary.ideas} idea(s)`,
+      `critique (structure, before rendering): cinema ${c.summary.cinema}/100, ${c.summary.warnings} warning(s), ${c.summary.ideas} idea(s)`,
       ...c.findings.slice(0, 8).map(f => `  ${f.level === 'warn' ? '!' : '·'} ${f.where}: ${f.message}`),
     );
     const g = await import('./lib/generate.mjs');
@@ -694,6 +694,34 @@ async function main() {
       );
       const { writeReviewPage } = await import('./lib/review-page.mjs');
       lines.push(`review page: ${rel(writeReviewPage(dir))}`);
+      // The picture in motion, measured on the encoded film: the honest test of "narrated slides".
+      // critique reads the storyboard's structure; this reads what the viewer actually sees.
+      try {
+        const { qaProject } = await import('./lib/qa.mjs');
+        const q = await qaProject(dir, {});
+        const s = q.summary;
+        let share = 0;
+        // Stretches under the voice: a silent breath or title may hold.
+        const held = q.findings.filter(f => f.kind === 'held' && !f.deliberate && f.level === 'warn');
+        const voicedHeld = Math.round(10 * held.reduce((t, f) => t + f.seconds, 0)) / 10;
+        const byBeat = {};
+        for (const f of held) byBeat[f.beat ?? '?'] = (byBeat[f.beat ?? '?'] ?? 0) + f.seconds;
+        share = s.seconds ? Math.round((100 * voicedHeld) / s.seconds) : 0;
+        const worst = Object.entries(byBeat).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([b, sec]) => `${b} ${sec.toFixed(1)} s`);
+        const verdict =
+          share >= 40 || (share >= 20 && s.changePerSecond < 1.5)
+            ? 'READS AS NARRATED SLIDES: the picture sits still while the voice talks'
+            : share >= 20
+              ? 'some scenes hold still under the voice'
+              : 'the picture keeps moving with the voice';
+        lines.push(
+          `motion: ${s.changePerSecond} change/s; still under the voice ${voicedHeld} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds` : ''}): ${verdict}.`,
+          ...(worst.length ? [`  stillest: ${worst.join(', ')}. Give each a change on its words: a cue on a later word, a key, a world camera move, a cast formation, a sketch moment (sketchSay), or a shorter beat. A deliberate reading hold is fine; mark it with pace: "hold".`] : []),
+          `  qa: ${rel(path.join(q.dir, 'phone.png'))} (read it as a phone would)`,
+        );
+      } catch (e) {
+        lines.push(`motion: qa did not run (${e.message.split('\n')[0]})`);
+      }
     }
     lines.push(`done in ${((performance.now() - t0) / 1000).toFixed(1)} s. Open the sheet before anything else.`);
     return console.log(lines.join('\n'));

@@ -1,0 +1,14 @@
+{
+  "order": 35,
+  "notes": "Oat cream with a forest green accent and a soft plum. Benefits, health and wellbeing films: calm, kind and clear.",
+  "colors": {
+    "bg": "#f6f4ec",
+    "surface": "#e7e4d6",
+    "ink": "#1d2b22",
+    "muted": "#59655a",
+    "accent": "#2c6e49",
+    "accent2": "#8a4f9e",
+    "positive": "#2c6e49",
+    "negative": "#b0413e"
+  }
+}

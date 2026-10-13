@@ -68,7 +68,7 @@ const r2 = n => Math.round(n * 100) / 100;
  * d[i] = difference between frame i-1 and i; skip[i] = difference between i-1 and i+1;
  * second[i] = difference between frame i and the frame one second earlier.
  */
-export function timeFindings({ d, skip, second, fps, beats = [], worlds = {}, covers = {} }) {
+export function timeFindings({ d, skip, second, fps, beats = [], worlds = {}, covers = {}, holds = new Set() }) {
   const n = d.length;
   const beatAt = t => beats.find(b => t >= b.start && t < b.end) ?? beats.at(-1);
   const where = i => {
@@ -142,13 +142,20 @@ export function timeFindings({ d, skip, second, fps, beats = [], worlds = {}, co
       const s = where(i),
         e = where(j);
       const voiced = beats.some(x => x.vo && x.vo.start < e.t && x.vo.end > s.t);
+      // `pace: "hold"` on a beat declares a reading hold: still reported, never as a slide.
+      const deliberate = holds.has(s.beat);
       findings.push({
-        level: voiced ? 'warn' : 'note',
+        level: voiced && !deliberate ? 'warn' : 'note',
         kind: 'held',
         ...s,
         end: e.t,
         seconds: r2(seconds),
-        message: `the picture barely changes for ${r2(seconds)} s (${s.t}–${e.t} s)${voiced ? ' during the narration span' : ''}: review for an unintended freeze or an empty late-cue lead-in. Slow pushes, dark scenes and deliberate cinematic holds can also trigger this advisory; judge the shot in motion before changing its pacing`,
+        ...(deliberate ? { deliberate: true } : {}),
+        message: deliberate
+          ? `the picture holds for ${r2(seconds)} s (${s.t}–${e.t} s): a declared reading hold (pace: "hold")`
+          : voiced
+            ? `the picture sits still for ${r2(seconds)} s (${s.t}–${e.t} s) while the voice talks: a viewer sees a slide. Change something on a later word (a cue, a key, a camera move, a cast formation), shorten the beat, or declare a reading hold with pace: "hold"`
+            : `the picture sits still for ${r2(seconds)} s (${s.t}–${e.t} s) with no voice: fine for a breath or a title, long for anything else`,
       });
     }
     i = j;
@@ -278,7 +285,8 @@ export async function qaProject(root, { video, loop = false } = {}) {
       return [b.id, COVER[t] ?? (t === 'cut' ? [0, 0] : [0.35, 0.35])];
     }),
   );
-  const findings = timeFindings({ d, skip, second, fps, beats, worlds, covers });
+  const holds = new Set(sb.beats.filter(b => b.pace === 'hold').map(b => b.id));
+  const findings = timeFindings({ d, skip, second, fps, beats, worlds, covers, holds });
   if (!same)
     findings.unshift({
       level: 'warn',
@@ -332,7 +340,8 @@ export async function qaProject(root, { video, loop = false } = {}) {
     seconds: r2(n / fps),
     frames: n,
     changePerSecond: r2(median(change)),
-    heldSeconds: r2(findings.filter(f => f.kind === 'held').reduce((s, f) => s + f.seconds, 0)),
+    heldSeconds: r2(findings.filter(f => f.kind === 'held' && !f.deliberate).reduce((s, f) => s + f.seconds, 0)),
+    deliberateSeconds: r2(findings.filter(f => f.kind === 'held' && f.deliberate).reduce((s, f) => s + f.seconds, 0)),
     pops: findings.filter(f => f.kind === 'pop').length,
     loudness,
     color: [v.color_primaries, v.color_transfer, v.color_space, v.color_range].join('/'),
