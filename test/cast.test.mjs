@@ -1,7 +1,7 @@
 // A cast carries the same objects across cuts: each beat starts exactly where the last one left them.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { expandCastProps } from '../film/cast.mjs';
+import { expandCastProps, castOverlaps } from '../film/cast.mjs';
 
 const wide = { width: 1920, height: 1080 };
 const objects = [{ id: 'a', icon: 'file' }, { id: 'b', icon: 'chart-bar', color: 'accent2' }, { id: 'c', icon: 'photo', enter: 'none' }];
@@ -314,4 +314,16 @@ test('travel to an object that is not on screen is refused by name, not a crash'
 test('a cast names only objects it declared', () => {
   assert.throws(() => film([{ objects, formations: [{ form: 'hero', hero: 'z', at: 0 }] }]), /hero/);
   assert.throws(() => film([{ objects, formations: [{ form: 'line', ids: ['a'], by: ['b'], at: 0 }] }]), /by lists/);
+});
+
+test('a new formation laid over objects carried from an earlier beat is named, and fresh clears it', () => {
+  const sb = { beats: [
+    { id: 'a', block: 'canvas', props: { cast: { objects: [{ id: 'lock', shape: 'lock', color: 'accent' }, { id: 'mail', shape: 'envelope', color: 'muted' }], formations: [{ form: 'row', at: 0, ids: ['lock', 'mail'] }, { form: 'hero', hero: 'lock', at: 0.5 }] } } },
+    { id: 'b', block: 'canvas', props: { cast: { objects: [{ id: 'usb', shape: 'box', color: 'muted' }, { id: 'app', shape: 'cloud', color: 'muted' }, { id: 'ss', shape: 'lock', color: 'accent' }], formations: [{ form: 'line', at: 0, ids: ['usb', 'app', 'ss'] }] } } },
+  ] };
+  const notes = castOverlaps(sb);
+  assert.equal(notes.length, 1);
+  assert.match(notes[0], /^b: overlap: .*lock.*carried from an earlier beat.*"fresh": true/);
+  sb.beats[1].props.cast.fresh = true;
+  assert.deepEqual(castOverlaps(sb), []);
 });

@@ -14,6 +14,7 @@ import { reviewGeometry } from '../../film/render-geometry.mjs';
 import { COVER } from '../../film/constants.mjs';
 import { pictureFor, chartFor, castFor, figuresIn } from './pictures.mjs';
 import { sketchByName, sketchWords } from '../../film/sketches.mjs';
+import { castOverlaps } from '../../film/cast.mjs';
 import { spoken } from './word-align.mjs';
 
 // Analysis grid: the long side at 128 px is enough to see a pop or a jump, and small enough
@@ -599,7 +600,8 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
   // Moving words are still words: how much of the film is type on its own.
   const TYPE = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout'];
   const sb = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'));
-  const timed = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8')).beats ?? [];
+  const timing0 = JSON.parse(fs.readFileSync(path.join(dir, 'build/timing.json'), 'utf8'));
+  const timed = timing0.beats ?? [];
   const typeOnly = b => (TYPE.includes(b.block) && !b.plate && !b.art?.under?.length && !b.stage) || typedCanvas(b);
   const typeSeconds = timed.reduce((t, tb, i) => t + (typeOnly(sb.beats[tb.index ?? i] ?? {}) ? (tb.dur ?? tb.end - tb.start) : 0), 0);
   const typeShare = s.seconds ? Math.round((100 * typeSeconds) / s.seconds) : 0;
@@ -616,13 +618,20 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
     .filter(([, left]) => left.length);
   // A file name shown as the credit ("import.mjs") is on screen in every frame of its beat.
   const fileSources = sb.beats.filter(b => /(^|[\s(/])[\w.-]+\.(mjs|js|json|wav|txt)\b/.test(String(b.props?.source ?? ''))).map(b => b.id);
-  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute || placeholders.length || fileSources.length);
+  // Cast objects standing on each other (objects carried from an earlier beat under a new formation).
+  let castNotes = [];
+  try {
+    castNotes = castOverlaps(sb, { width: q.width ?? timing0.width ?? 1920, height: q.height ?? timing0.height ?? 1080 });
+  } catch {}
+  const overlaps = [...new Set([...warnings, ...castNotes])].map(w => w.match(/^([^:]+): overlap: (.*)$/)).filter(Boolean);
+  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute || placeholders.length || fileSources.length || overlaps.length);
   // One edit to make first, spelled out: weaker models act on the last concrete line they read and
   // hand over a NOT READY film when the verdict ends on "fix the beats above".
   const nextEdit = () => {
     if (placeholders.length) return `fill ${placeholders[0][1].join(', ')} in ${placeholders[0][0]}'s sketchText.`;
     if (fileSources.length) return `give ${fileSources[0]} a source line people know (the document's name, not a file).`;
     if (mute) return 'record the narration (`voice DIR --draft`).';
+    if (overlaps.length) return `${overlaps[0][1]}: ${overlaps[0][2]}.`;
     const typed = timed.map((tb, i) => sb.beats[tb.index ?? i]).filter(b => b && typeOnly(b));
     const picture = typed.map(b => [b, pictureLine(b.vo)]).find(([, l]) => l);
     if (share >= 40 && worst.length) {
@@ -677,6 +686,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
       ? [`  sound: ${unvoiced.length} of ${narrated.length} beats have narration but no voice, so the film plays their words in silence. Record it free with \`voice DIR --draft\`, or, for a recording (a podcast, an interview), import it with \`ingest DIR --audio FILE\` so the film plays the recording itself.`]
       : []),
     ...(blank.length ? ['  blank under the voice:', ...blank] : []),
+    ...(overlaps.length ? ['  objects on top of each other:', ...overlaps.map(m => `    ${m[1]}: ${m[2]}`)] : []),
     ...(fileSources.length
       ? [`  a file name shown as the source line in ${fileSources.join(', ')}: credit who said it or the document people know ("Sam, on air"; "Kestrel Benefits Guide 2027").`]
       : []),

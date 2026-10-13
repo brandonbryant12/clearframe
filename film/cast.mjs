@@ -674,6 +674,27 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
         ...(f.form === 'hero' ? (id === f.hero ? { hero: true } : { quiet: true }) : f.form === 'swap' && id === f.in && pose.get(f.out)?.hero ? { hero: true } : {}) });
     });
     if (f.form === 'exit' || f.form === 'swap') release(t + 0.1);
+    // Two objects standing on each other once a formation settles: usually a new formation laid over
+    // objects carried from an earlier beat (a hero still large in the middle). Said once per beat.
+    // (A swap's workers stand on what they change, by design; an exit's regathering settles at the next move.)
+    if (!notes.some(n => n.startsWith('overlap:')) && !(f.form === 'swap' && f.by?.length) && !['exit', 'wave'].includes(f.form)) {
+      const shown = [...pose].filter(([id, p]) => !p.gone && !p.quiet && !p.filled && (p.opacity ?? 1) > 0.5 && spec.objects.has(id));
+      // Each object's drawn box (half extents) at its pose; overlapping by over a third of the smaller.
+      const box = (id, p) => objectExtent(spec.objects.get(id), size).map(v => v * (p.scale ?? 1));
+      for (let a = 0; a < shown.length; a++)
+        for (let b = a + 1; b < shown.length; b++) {
+          const [ia, pa] = shown[a], [ib, pb] = shown[b], [aw, ah] = box(ia, pa), [bw, bh] = box(ib, pb);
+          const ox = Math.max(0, Math.min(pa.x + aw, pb.x + bw) - Math.max(pa.x - aw, pb.x - bw)),
+            oy = Math.max(0, Math.min(pa.y + ah, pb.y + bh) - Math.max(pa.y - ah, pb.y - bh));
+          // A small thing on a large one (coins by their jar) is a composition, not a collision.
+          const [small, large] = [Math.min(aw * ah, bw * bh), Math.max(aw * ah, bw * bh)];
+          if (small > 0.15 * large && ox * oy > 0.25 * 4 * small) {
+            notes.push(`overlap: after formation ${k + 1} (${f.form}${f.say ? ` on "${f.say}"` : ''}) ${ia} and ${ib} stand on each other${state.has(ia) || state.has(ib) ? ` (${[ia, ib].filter(id => state.has(id)).join(' and ')} carried from an earlier beat)` : ''}: start this beat's cast with "fresh": true, send carried objects off with {"form": "exit", "ids": [...]}, or place them apart`);
+            a = shown.length;
+            break;
+          }
+        }
+    }
     // What causes a swap is drawn over what it changed.
     for (const id of f.form === 'swap' ? f.by ?? [] : []) if (pose.has(id)) pose.set(id, { ...pose.get(id), z: ++top });
     // A thread drawn through the formation once it settles: the pieces are now one sequence. Each
@@ -735,6 +756,23 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
   const stage = { type: 'group', id: 'cast-stage', x: 0, y: 0, at: 0, enter: 'none', origin: [frame.width / 2, frame.height / 2], children: drawn,
     keys: [{ at: 0, scale: camera.zoom, x: camera.x, y: camera.y, dur: 0 }, ...camKeys] };
   return { elements: moved ? [stage] : drawn, state: pose, threads: carried, notes, camera: cam, edges, unit: size };
+}
+
+/**
+ * Cast objects standing on each other anywhere in a storyboard, as `beat: overlap: …` lines: the same
+ * notes `createJob` reports, without building the job (for the motion verdict).
+ */
+export function castOverlaps(sb, { width = 1920, height = 1080 } = {}) {
+  const carry = {}, notes = [];
+  for (const b of sb.beats ?? []) {
+    if (b.block !== 'canvas' || b.props?.cast == null) continue;
+    try {
+      expandCastProps(b.props, { width, height, beatId: b.id }, { state: carry.state, objects: carry.objects, threads: carry.threads, look: carry.look, camera: carry.camera, unit: carry.unit, heading: b.heading ?? sb.heading, carry, notes });
+    } catch {
+      // An invalid cast is reported by check; nothing to measure here.
+    }
+  }
+  return notes.filter(n => /^[^:]+: overlap: /.test(n));
 }
 
 export function expandCastProps(input, frame, ctx = {}) {
