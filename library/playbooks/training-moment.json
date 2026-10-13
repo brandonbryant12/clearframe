@@ -79,7 +79,7 @@
     {
       "id": "habit",
       "block": "canvas",
-      "vo": "So don't click, and don't just delete it. Choose Report, then Phishing, and send it. Three seconds to look, one click to report.",
+      "vo": "So don't click, and don't just delete it. Choose Report, then Phishing, and send it.",
       "props": {
         "sketch": "portal",
         "sketchText": {
@@ -97,6 +97,46 @@
           "CLICK2": "delete",
           "CHANGE": "Phishing",
           "SAVE": "send"
+        }
+      },
+      "transition": "panel"
+    },
+    {
+      "id": "close",
+      "block": "canvas",
+      "vo": "Three seconds to look. One click to report.",
+      "props": {
+        "cast": {
+          "look": "tiles",
+          "objects": [
+            {
+              "id": "mail",
+              "shape": "envelope",
+              "color": "negative",
+              "label": "Suspicious email",
+              "enter": "pop"
+            },
+            {
+              "id": "shield",
+              "icon": "shield",
+              "color": "positive",
+              "label": "Reported",
+              "enter": "pop"
+            }
+          ],
+          "formations": [
+            {
+              "form": "hero",
+              "hero": "mail",
+              "say": "look"
+            },
+            {
+              "form": "swap",
+              "out": "mail",
+              "in": "shield",
+              "say": "report"
+            }
+          ]
         }
       },
       "transition": "panel"

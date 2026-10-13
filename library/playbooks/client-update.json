@@ -131,6 +131,59 @@
           "SAVE": "confirm"
         }
       }
+    },
+    {
+      "id": "close",
+      "block": "canvas",
+      "vo": "Your adviser is here when you want to talk it through.",
+      "props": {
+        "cast": {
+          "look": "tiles",
+          "objects": [
+            {
+              "id": "you",
+              "shape": "person",
+              "color": "accent",
+              "label": "You",
+              "enter": "pop"
+            },
+            {
+              "id": "adviser",
+              "shape": "person",
+              "color": "accent2",
+              "label": "Your adviser",
+              "enter": "pop"
+            },
+            {
+              "id": "cal",
+              "shape": "calendar",
+              "color": "surface",
+              "label": "A time for you",
+              "enter": "pop"
+            }
+          ],
+          "formations": [
+            {
+              "form": "line",
+              "at": 0,
+              "ids": [
+                "you",
+                "adviser"
+              ]
+            },
+            {
+              "form": "line",
+              "say": "talk",
+              "ids": [
+                "you",
+                "cal",
+                "adviser"
+              ]
+            }
+          ]
+        }
+      },
+      "transition": "panel"
     }
   ]
 }

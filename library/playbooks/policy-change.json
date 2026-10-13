@@ -106,7 +106,7 @@
     {
       "id": "step",
       "block": "canvas",
-      "vo": "The app does the work. Open New claim, snap the receipt, check the amount, and submit. Itemised, within thirty days, in the app.",
+      "vo": "The app does the work. Open New claim, snap the receipt, check the amount, and submit.",
       "props": {
         "sketch": "portal",
         "sketchText": {
@@ -124,6 +124,74 @@
           "CLICK2": "snap",
           "CHANGE": "amount",
           "SAVE": "submit"
+        }
+      },
+      "transition": "panel"
+    },
+    {
+      "id": "close",
+      "block": "canvas",
+      "vo": "Itemised. Within thirty days. In the app.",
+      "props": {
+        "cast": {
+          "look": "tiles",
+          "objects": [
+            {
+              "id": "receipt",
+              "shape": "receipt",
+              "color": "surface",
+              "label": "Itemised",
+              "enter": "pop"
+            },
+            {
+              "id": "cal",
+              "shape": "calendar",
+              "color": "accent",
+              "label": "Within 30 days",
+              "enter": "pop"
+            },
+            {
+              "id": "phone",
+              "shape": "phone",
+              "color": "accent2",
+              "label": "In the app",
+              "enter": "pop"
+            }
+          ],
+          "formations": [
+            {
+              "form": "line",
+              "say": "Itemised",
+              "ids": [
+                "receipt"
+              ]
+            },
+            {
+              "form": "line",
+              "say": "Within",
+              "ids": [
+                "receipt",
+                "cal"
+              ]
+            },
+            {
+              "form": "line",
+              "say": "app",
+              "ids": [
+                "receipt",
+                "cal",
+                "phone"
+              ]
+            },
+            {
+              "form": "mark",
+              "mark": "circle",
+              "ids": [
+                "phone"
+              ],
+              "say": "app"
+            }
+          ]
         }
       },
       "transition": "panel"

@@ -89,7 +89,7 @@
     {
       "id": "step",
       "block": "canvas",
-      "vo": "To change it, open Benefits, then Retirement. Set your rate to five percent, and save. Two minutes today, free money with every paycheck after.",
+      "vo": "To change it, open Benefits, then Retirement. Set your rate to five percent, and save.",
       "props": {
         "sketch": "portal",
         "sketchText": {
@@ -107,6 +107,60 @@
           "CLICK2": "Retirement",
           "CHANGE": "five",
           "SAVE": "save"
+        }
+      },
+      "transition": "panel"
+    },
+    {
+      "id": "close",
+      "block": "canvas",
+      "vo": "Two minutes today. Free money, with every paycheck after.",
+      "props": {
+        "cast": {
+          "look": "tiles",
+          "objects": [
+            {
+              "id": "pay",
+              "shape": "paycheck",
+              "color": "accent",
+              "label": "Every paycheck",
+              "enter": "left",
+              "size": 210
+            },
+            {
+              "id": "jar",
+              "shape": "jar",
+              "color": "positive",
+              "label": "Your retirement",
+              "enter": "pop",
+              "size": 340
+            }
+          ],
+          "formations": [
+            {
+              "form": "line",
+              "at": 0,
+              "ids": [
+                "jar"
+              ]
+            },
+            {
+              "form": "travel",
+              "ids": [
+                "pay"
+              ],
+              "to": "jar",
+              "say": "Free"
+            },
+            {
+              "form": "merge",
+              "ids": [
+                "pay"
+              ],
+              "into": "jar",
+              "say": "every"
+            }
+          ]
         }
       },
       "transition": "panel"
