@@ -147,12 +147,30 @@ export function classifyAudit(findings, { rough = false, allowed = [], job } = {
   const errors = [],
     warnings = [],
     craft = [];
-  for (const a of findings) {
-    const line = `${a.beat}: ${a.message} (${Number(a.seconds ?? 0).toFixed(1)} s)`;
+  // Warnings of one kind in one beat read as one finding: a caption line or a word-by-word
+  // phrase is many pieces of type, and a list of each word buries the errors.
+  const grouped = new Map();
+  for (const a of findings)
     if (a.level !== 'error') {
-      warnings.push(line);
+      const key = `${a.beat}\0${a.kind ?? a.message}`;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(a);
+    }
+  for (const group of grouped.values()) {
+    const [a] = group;
+    const at = `(${Number(a.seconds ?? 0).toFixed(1)} s)`;
+    if (group.length < 3) {
+      for (const g of group) warnings.push(`${g.beat}: ${g.message} (${Number(g.seconds ?? 0).toFixed(1)} s)`);
       continue;
     }
+    const words = [...new Set(group.map(g => g.text).filter(Boolean))];
+    const sample = words.slice(0, 6).join(' ');
+    const rest = a.message.replace(/^".*?" /, '').replace(/^(runs|is) /, m => (m === 'runs ' ? 'run ' : 'are '));
+    warnings.push(`${a.beat}: ${words.length} pieces of type ("${sample}${words.length > 6 ? '…' : ''}") ${rest} ${at}`);
+  }
+  for (const a of findings) {
+    const line = `${a.beat}: ${a.message} (${Number(a.seconds ?? 0).toFixed(1)} s)`;
+    if (a.level !== 'error') continue;
     const text = norm(a.text);
     const mine = rough && text ? allowed.filter(x => x.beat === a.beat && norm(x.text).includes(text)) : [];
     const jb = job?.beats?.find(x => x.id === a.beat);

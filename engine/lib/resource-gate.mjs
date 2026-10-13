@@ -41,6 +41,23 @@ export async function enterGate() {
     });
     child.stdout.on('end', () => { if (pending) process.stdout.write(pending); });
   }
+  // While the gate waits, say so every 20 s and name what holds it, so a queued render is not
+  // mistaken for a hang (the gate starts the command only once it holds the lock).
+  const started = Date.now();
+  const heartbeat = setInterval(() => {
+    const running = spawnSync('pgrep', ['-P', String(child.pid)], { encoding: 'utf8' }).stdout.trim();
+    if (running) return clearInterval(heartbeat);
+    let holder = 'another local build or render';
+    try {
+      const owner = fs.readFileSync(`/private/tmp/codex-heavy-${process.getuid()}.lock`, 'utf8').trim();
+      const work = spawnSync('pgrep', ['-P', owner], { encoding: 'utf8' }).stdout.trim().split('\n')[0];
+      const command = work && spawnSync('ps', ['-o', 'command=', '-p', work], { encoding: 'utf8' }).stdout.trim();
+      if (command) holder = command.replace(/\/Users\/[^ ]*\//g, '').slice(0, 110);
+    } catch {}
+    const waited = Math.round((Date.now() - started) / 1000);
+    process.stderr.write(`  queued ${waited}s behind: ${holder}. Waiting is normal; this command starts by itself when the renderer is free.\n`);
+  }, 20000);
+  heartbeat.unref();
   const stop = () => child.kill('SIGINT'),
     terminate = () => child.kill('SIGTERM');
   process.once('SIGINT', stop);
@@ -49,6 +66,7 @@ export async function enterGate() {
     child.on('error', reject);
     child.on('close', code => resolve(code ?? 1));
   });
+  clearInterval(heartbeat);
   process.removeListener('SIGINT', stop);
   process.removeListener('SIGTERM', terminate);
   return true;
