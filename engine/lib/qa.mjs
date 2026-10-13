@@ -15,6 +15,7 @@ import { COVER } from '../../film/constants.mjs';
 import { pictureFor, chartFor, castFor, figuresIn } from './pictures.mjs';
 import { sketchByName, sketchWords } from '../../film/sketches.mjs';
 import { castOverlaps } from '../../film/cast.mjs';
+import { droppedFacts } from './figures.mjs';
 import { spoken } from './word-align.mjs';
 
 // Analysis grid: the long side at 128 px is enough to see a pop or a jump, and small enough
@@ -608,6 +609,12 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
   const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;
   // Well short of the length asked for means facts were dropped to pass the other tests.
   const short = sb.length && s.seconds < 0.6 * sb.length;
+  // What a short film left out, from its source document: the next beats, spelled out.
+  let dropped = [];
+  if (sb.length && s.seconds < 0.75 * sb.length)
+    try {
+      dropped = droppedFacts(dir, sb, { spokenNumbers: vo => figuresIn(vo, spoken).map(f => f.value) }) ?? [];
+    } catch {}
   // Narration that was never voiced plays as a silent film of words (a podcast built without its recording).
   const narrated = timed.filter(tb => tb.vo?.text), unvoiced = narrated.filter(tb => !tb.vo?.src);
   const mute = narrated.length > 0 && unvoiced.length > narrated.length / 2;
@@ -640,7 +647,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
     }
     if (typeShare >= 60 && picture) return `${picture[0].id}: ${picture[1]}.`;
     if (blank.length) return blank[0].trim();
-    if (short) return `the film is ${Math.round(s.seconds)} s of ${sb.length} s: add the brief's next fact as a beat with its own picture.`;
+    if (short) return `the film is ${Math.round(s.seconds)} s of ${sb.length} s: add the brief's next fact as a beat with its own picture${dropped.length ? ` ("${dropped[0]}")` : ''}.`;
     return worst.length ? `${worst[0][0]}: ${fixOf(worst[0][0])?.fix ?? 'change something on its later words.'}` : 'fix the first item above.';
   };
   const lines = [
@@ -678,7 +685,10 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
     // The length the person asked for (`new`/`start --length`): agents cut films to half
     // of it and dropped the brief's facts on the way.
     ...(sb.length && s.seconds < 0.75 * sb.length
-      ? [`  length: ${Math.round(s.seconds)} s of the ${sb.length} s asked for${short ? ' (under 60%: not ready)' : ''}. Check BRIEF.md and EVIDENCE.md for the facts the film dropped and give each its own beat and picture (a longer film needs more pictures, not more words over the same ones)${short ? ': a reason in DIRECTION.md does not make it ready; only the person can ask for a shorter film' : ', or say in DIRECTION.md why it is shorter'}.`]
+      ? [
+          `  length: ${Math.round(s.seconds)} s of the ${sb.length} s asked for${short ? ' (under 60%: not ready)' : ''}. Check BRIEF.md and EVIDENCE.md for the facts the film dropped and give each its own beat and picture (a longer film needs more pictures, not more words over the same ones)${short ? ': a reason in DIRECTION.md does not make it ready; only the person can ask for a shorter film' : ', or say in DIRECTION.md why it is shorter'}.`,
+          ...(dropped.length ? [`  the source says, and the film never does (each could be a beat with its own picture):`, ...dropped.slice(0, 5).map(l => `    "${l}"`)] : []),
+        ]
       : sb.length && s.seconds > 1.3 * sb.length
         ? [`  length: ${Math.round(s.seconds)} s against the ${sb.length} s asked for: cut to the facts that matter.`]
         : []),

@@ -308,3 +308,14 @@ test('figures typed into a beat are checked against the source document; sketch 
   assert.deepEqual(unsourcedFigures({ props: { chart: { kind: 'bars', values: [{ label: 'HSA', value: 1500 }, { label: 'rate', value: 0.04 }] } } }, numbers), [], 'a fraction matches its percentage');
   assert.deepEqual(unsourcedFigures({ props: { elements: [{ type: 'text', text: 'Example receipt: $36.00' }] } }, numbers), [], 'a labelled example is not a claim');
 });
+
+test('a short film is told which facts of its source it never states', async () => {
+  const { droppedFacts } = await import('../engine/lib/figures.mjs');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-dropped-'));
+  fs.mkdirSync(path.join(root, 'source'));
+  fs.writeFileSync(path.join(root, 'source', 'document.md'), '**For:** 420 advisers\n\n## Source: Policy RC-31\n\n- Last year **27** emails went to the wrong person.\n- Personal email, USB drives and consumer file-sharing apps are not allowed\n  for client documents.\n\n## Tone\n\nMatter-of-fact and respectful of busy people.\n');
+  const sb = { beats: [{ id: 'a', vo: 'Last year, 27 emails went astray.', props: {} }] };
+  assert.deepEqual(droppedFacts(root, sb), ['Personal email, USB drives and consumer file-sharing apps are not allowed for client documents.']);
+  sb.beats.push({ id: 'b', vo: 'No personal email, no USB drives, no consumer apps for client documents.', props: {} });
+  assert.deepEqual(droppedFacts(root, sb), []);
+});

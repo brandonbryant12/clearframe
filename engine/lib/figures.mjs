@@ -70,3 +70,56 @@ export function unsourcedFigures(beat, numbers) {
   const seen = new Set();
   return authoredFigures(beat).filter(f => !found(f.value) && !seen.has(f.text) && seen.add(f.text));
 }
+
+/**
+ * Facts in the source documents the film never states: a bullet or sentence whose figures appear
+ * nowhere in the film (narration, sketch numbers, charts, words on screen), or, with no figures, most
+ * of whose words are never said or shown. These are the next beats for a film well short of its length.
+ * Small whole numbers (counts, list markers) and years are not figures. Null without a source document.
+ */
+export function droppedFacts(root, sb, { spokenNumbers = () => [] } = {}) {
+  const dir = path.join(root, 'source');
+  let files = [];
+  try {
+    files = fs.readdirSync(dir, { recursive: true }).map(String).filter(f => /\.(md|markdown|txt)$/i.test(f) && !/original/i.test(f));
+  } catch {
+    return null;
+  }
+  if (!files.length) return null;
+  const said = new Set(), text = [];
+  for (const b of sb.beats ?? []) {
+    const shown = JSON.stringify(b.props ?? {});
+    text.push(String(b.vo ?? ''), shown);
+    for (const m of shown.matchAll(NUMBER)) said.add(value(m[0]));
+    for (const m of String(b.vo ?? '').matchAll(NUMBER)) said.add(value(m[0]));
+    for (const v of spokenNumbers(b.vo ?? '')) said.add(v);
+  }
+  const STOP = new Set(['through', 'never', 'about', 'their', 'there', 'which', 'would', 'could', 'should', 'after', 'before', 'every', 'other', 'these', 'those', 'where', 'while', 'being', 'using', 'under', 'first', 'thing', 'things', 'still', 'within', 'without']);
+  const stem = w => w.toLowerCase().replace(/[^a-z]/g, '').replace(/(ing|ed|es|s)$/, '');
+  const words = new Set(text.join(' ').split(/[^A-Za-z-]+/).flatMap(w => w.split('-')).map(stem).filter(Boolean));
+  const has = v => said.has(v) || said.has(v * 100) || said.has(v / 100);
+  // Bullets wrap onto indented lines: join them into one fact each.
+  const facts = [];
+  for (const f of files) {
+    const body = fs.readFileSync(path.join(dir, f), 'utf8').replace(/\n[ \t]+(?=\S)/g, ' ');
+    // A brief keeps its facts under a "Source" heading; its tone and audience notes are not facts.
+    const sourced = /^#+\s*source/im.test(body);
+    let inSource = !sourced;
+    for (const raw of body.split('\n')) {
+      if (/^#/.test(raw.trim())) {
+        inSource = !sourced || /^#+\s*source/i.test(raw.trim());
+        continue;
+      }
+      const line = raw.replace(/^[\s>*-]+|\*\*/g, '').trim();
+      if (inSource && line && !/^(from|for|length|brief|after watching|tone)\s*:/i.test(line)) facts.push(line);
+    }
+  }
+  const out = [];
+  for (const line of facts) {
+    const figures = [...line.matchAll(NUMBER)].map(m => value(m[0])).filter(v => !(Number.isInteger(v) && v <= 12) && !(v >= 1990 && v <= 2100));
+    const content = [...new Set(line.split(/[^A-Za-z-]+/).flatMap(w => w.split('-')).filter(w => w.length >= 5 && !STOP.has(w.toLowerCase())).map(stem))];
+    const missing = figures.length ? !figures.some(has) : content.length >= 4 && content.filter(w => words.has(w)).length / content.length < 0.4;
+    if (missing) out.push(line.length > 150 ? `${line.slice(0, 149)}…` : line);
+  }
+  return out;
+}
