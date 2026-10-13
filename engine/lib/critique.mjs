@@ -458,8 +458,8 @@ function critiqueStoryboard(root) {
   // picture, which a reviewer took for a rendering bug in a round-18 phishing film.
   if (sb.treatment === 'workplace')
     for (const b of sb.beats)
-      if (['iris', 'flash', 'whip'].includes(b.transition))
-        add('warn', b.id, `transition "${b.transition}" is trailer punctuation (an iris grows a flat disc of the accent colour over the picture; reviewers read it as a glitch in a workplace film): cut, dissolve, move the camera within one world, or use "panel" at a chapter.`);
+      if (['iris', 'flash', 'whip', 'panel'].includes(b.transition))
+        add('warn', b.id, `transition "${b.transition}" covers the picture with a flat slab or disc of colour (reviewers read it as a rendering fault in a workplace film): cut, dissolve, "push" at a chapter, or move the camera within one world.`);
   // "Portrait" is read as "vertical": two onboarding films for a phone app came out 4:5.
   if (sb.format?.preset === 'portrait')
     add('warn', 'film', 'The format is portrait: 4:5 (1080×1350), a feed post. A film for a phone screen (an app, Reels, Stories, TikTok, "vertical") is format.preset "vertical": 9:16 (1080×1920).');
