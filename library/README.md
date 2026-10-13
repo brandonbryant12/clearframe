@@ -74,6 +74,7 @@ Add `library/directions/my-idea.json` to a shared library, then use `--library D
 }
 ```
 
+- `variants` (optional): whole looks to choose between, `[{name, film: {theme, type, …}, beats: {rough | print | …}}]`. `new` picks one per project from its folder name (or `--seed`), so two films from one treatment don't share a face; `--theme` overrides the pick. DIRECTION.md records the look. `workplace` has six (clean, notebook, brief, meadow, poster, daylight).
 - `film` holds storyboard-level settings, copied onto the storyboard. `film.theme` must name a palette; `film.type` (optional) names a type voice, and is what keeps two treatments from reading as the same brand.
 - `beats` holds defaults applied only where the author has not set them. `rough: false` strips pencil strokes that an arc was scaffolded with; the film looks use it. Every key is optional:
   - `graphic`: the transition used at chapter starts;

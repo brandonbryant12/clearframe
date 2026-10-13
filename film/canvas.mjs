@@ -316,7 +316,8 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       pathData(r.d, `${at}.along.d`, fail);
       if (r.ease != null && !EASES.includes(r.ease)) fail(`${at}.along.ease must be one of ${EASES.join(', ')}`);
     }
-    if (el.rough === false) delete el.rough;
+    // An element's own opt-out outlives the beat's rough, which is applied after validation.
+    if (el.rough === false) el.rough = null;
     else if (el.rough != null) el.rough = roughSpec(el.rough, `${at}.rough`, fail);
     if (el.mosaic === false) delete el.mosaic;
     else if (el.mosaic != null) {

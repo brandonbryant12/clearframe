@@ -21,7 +21,7 @@ From the source document, write in `DIRECTION.md`:
 node engine/cli.mjs new DIR --treatment workplace --playbook PLAYBOOK
 ```
 
-Playbooks: `benefit-explainer` (a benefit and how to use it), `policy-change` (what changed and what to do), `client-update` (a calm market or portfolio update for clients), `training-moment` (a threat or mistake, the signs, the habit). Each beat already has a picture with placeholder words: replace the words, keep the pictures. Palettes for the treatment: `meridian` (financial, the default), `meadow` (benefits, health), `briefing` (training, security, policy); a brand kit overrides them.
+Playbooks: `benefit-explainer` (a benefit and how to use it), `policy-change` (what changed and what to do), `client-update` (a calm market or portfolio update for clients), `training-moment` (a threat or mistake, the signs, the habit). Each beat already has a picture with placeholder words: replace the words, keep the pictures. The treatment gives each project one of six looks (clean, notebook, brief, meadow, poster, daylight: a palette, a type voice and clean, hand-drawn or printed lines), picked from the folder name and written into DIRECTION.md, so films from the same playbook don't share a face. Keep it, or choose by subject with `--theme` (`meridian` financial, `meadow` benefits and health, `briefing` training, security and policy); a brand kit overrides all of them. Screens (`portal`, `inspect`) stay crisp in a drawn or printed film.
 
 ## 3. One picture per fact
 

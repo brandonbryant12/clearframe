@@ -1,4 +1,4 @@
-import { round, tall, body } from '../../film/sketch-kit.mjs';
+import { crisp, round, tall, body } from '../../film/sketch-kit.mjs';
 
 // Look closely at a message: an email card arrives (sender, subject, two body lines, a link
 // button and, if asked, an attachment), then up to three of its parts are marked in turn. Each
@@ -194,7 +194,7 @@ export default {
     };
 
     return {
-      elements: [
+      elements: crisp([
         {
           type: 'group',
           enter: 'none',
@@ -207,7 +207,7 @@ export default {
             ...markEls,
           ],
         },
-      ],
+      ]),
     };
   },
 };

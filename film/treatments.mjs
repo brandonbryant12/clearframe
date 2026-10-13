@@ -12,10 +12,24 @@ export const treatmentById = id => item('treatments', id);
  * Apply a treatment to a storyboard: film-level look plus beat defaults the author has not
  * set. Returns the storyboard (mutated) so `new` can write it.
  */
-export function applyTreatment(sb, id, { recording = false } = {}) {
+/** The variant a project gets: the same key always picks the same look. */
+export function pickVariant(variants, key) {
+  if (!Array.isArray(variants) || !variants.length || key == null) return null;
+  let h = 2166136261;
+  for (const c of String(key)) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
+  return variants[h % variants.length];
+}
+
+export function applyTreatment(sb, id, { recording = false, variant } = {}) {
   const found = treatmentById(id);
   if (!found) throw new Error(`Unknown treatment ${id}. Run clearframe treatments.`);
-  const t = { ...found, beats: found.beats ?? {} };
+  // A treatment may offer whole looks (palette, type voice, drawing style) to choose between, so
+  // two films from one treatment don't share a face; `variant` is a project key (its folder name
+  // or seed) and always picks the same look.
+  const v = pickVariant(found.variants, variant);
+  const t = v
+    ? { ...found, film: { ...found.film, ...(v.film ?? {}) }, beats: { ...(found.beats ?? {}), ...(v.beats ?? {}) }, look: v.name }
+    : { ...found, beats: found.beats ?? {} };
   const { voice, ...film } = t.film;
   // A playbook's own cutting (cut, dissolve) is part of its grammar: the treatment's film-wide
   // transition only replaces the default fade, never a playbook's choice.

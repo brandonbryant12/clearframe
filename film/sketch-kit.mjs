@@ -44,3 +44,17 @@ export function rng(seed = 1) {
  * authored until the camera moves, so a far ring must be drawn at its apparent size).
  */
 export const seen = (size, z) => size / (1 + z);
+
+/**
+ * A screen stays a screen: its elements opt out of a film's hand-drawn, printed or mosaic look
+ * (rough, print, mosaic), so an app or an email reads as crisp UI inside a drawn film.
+ */
+export function crisp(elements) {
+  const walk = list =>
+    (list ?? []).forEach(el => {
+      Object.assign(el, { rough: false, print: false, mosaic: false });
+      walk(el.children);
+    });
+  walk(elements);
+  return elements;
+}

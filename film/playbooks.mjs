@@ -6,7 +6,7 @@ import { wireframePNG } from './wireframe.mjs';
 import { sketches, sketch, sketchByName, expandArt, SKETCH_FRAMES as SKETCH_SIZE } from './sketches.mjs';
 import { items, vendor } from './library.mjs';
 import { muse, museMarkdown } from './muse.mjs';
-import { applyTreatment, directionTemplate, treatmentById } from './treatments.mjs';
+import { applyTreatment, directionTemplate, pickVariant, treatmentById } from './treatments.mjs';
 import { directionOptions, directionMarkdown, directionRefs } from './directions.mjs';
 
 // Playbooks: starting story arcs, one JSON file each in library/playbooks (plus any in a
@@ -137,8 +137,10 @@ export function scaffold(dir, options = {}) {
       'concept-explainer',
     sb = storyboardFor(id, options),
     book = playbooks().find(p => p.id === id);
+  const variantKey = options.seed ?? path.basename(path.resolve(dir));
+  const look = options.treatment && !options.theme ? pickVariant(treatmentById(options.treatment)?.variants, variantKey) : null;
   if (options.treatment) {
-    applyTreatment(sb, options.treatment);
+    applyTreatment(sb, options.treatment, { variant: options.theme ? null : variantKey });
     if (options.theme) sb.theme = options.theme;
   }
   // A creative seed varies the look on top of the arc and treatment, and briefs the director.
@@ -168,6 +170,7 @@ export function scaffold(dir, options = {}) {
   fs.writeFileSync(
     path.join(dir, 'DIRECTION.md'),
     directionTemplate(sb, options.treatment ? treatmentById(options.treatment) : null) +
+      (look ? `\n## Look\n\nThe ${options.treatment} treatment's \`${look.name}\` look (picked for this project; another folder or \`--seed\` picks another): palette \`${sb.theme}\`, type \`${sb.type ?? 'inter'}\`${look.beats?.rough ? ', drawn by hand' : look.beats?.print ? `, printed (${typeof look.beats.print === 'string' ? look.beats.print : 'print'})` : ', clean lines'}. Keep it unless the brand or the brief asks for another; it is what keeps this film from looking like the last one.\n` : '') +
       directionMarkdown(options.direction) +
       (drawn ? `\n${museMarkdown(drawn)}` : ''),
   );

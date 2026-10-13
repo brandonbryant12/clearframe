@@ -35,5 +35,64 @@
     "Headings only for chapters: the picture and the voice carry each scene.",
     "Figures come from the source document, counted one unit per token or drawn to scale, with the document named in the source line. Plain attribution, no disclaimers.",
     "Warm, plain words. No fear, no jargon without a picture."
+  ],
+  "variants": [
+    {
+      "name": "clean",
+      "film": {
+        "theme": "meridian",
+        "type": "geometric"
+      }
+    },
+    {
+      "name": "notebook",
+      "film": {
+        "theme": "paper",
+        "type": "bookish"
+      },
+      "beats": {
+        "rough": {
+          "amount": 1.1,
+          "boil": 6
+        }
+      }
+    },
+    {
+      "name": "brief",
+      "film": {
+        "theme": "briefing",
+        "type": "inter"
+      }
+    },
+    {
+      "name": "meadow",
+      "film": {
+        "theme": "meadow",
+        "type": "geometric"
+      }
+    },
+    {
+      "name": "poster",
+      "film": {
+        "theme": "sorbet",
+        "type": "wide"
+      },
+      "beats": {
+        "print": "benday"
+      }
+    },
+    {
+      "name": "daylight",
+      "film": {
+        "theme": "daylight",
+        "type": "inter"
+      },
+      "beats": {
+        "rough": {
+          "amount": 0.7,
+          "boil": 4
+        }
+      }
+    }
   ]
 }

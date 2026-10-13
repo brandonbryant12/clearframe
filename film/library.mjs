@@ -65,7 +65,17 @@ const VALIDATE = {
     }
   },
   treatments(item, where) {
-    known(item, ['order', 'title', 'when', 'film', 'beats', 'rules', 'playbook'], where);
+    known(item, ['order', 'title', 'when', 'film', 'beats', 'rules', 'playbook', 'variants'], where);
+    if (item.variants != null) {
+      if (!Array.isArray(item.variants) || !item.variants.length) throw new Error(`${where}: variants must be a non-empty list`);
+      item.variants.forEach((v, i) => {
+        known(v, ['name', 'film', 'beats'], `${where} variants[${i}]`);
+        if (typeof v.name !== 'string' || !v.name.trim()) throw new Error(`${where}: variants[${i}] needs a name`);
+        if (v.film?.theme != null && !palettes()[v.film.theme]) throw new Error(`${where}: variants[${i}].film.theme "${v.film.theme}" is not a palette`);
+        if (v.film?.type != null && !items('types').some(t => t.id === v.film.type))
+          throw new Error(`${where}: variants[${i}].film.type "${v.film.type}" is not a type voice`);
+      });
+    }
     if (!item.title || !item.when) throw new Error(`${where}: needs title and when`);
     if (!item.film || typeof item.film !== 'object') throw new Error(`${where}: needs film settings`);
     if (item.film.theme != null && typeof item.film.theme === 'string' && !palettes()[item.film.theme])

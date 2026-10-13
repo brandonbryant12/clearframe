@@ -1,4 +1,4 @@
-import { round, tall } from '../../film/sketch-kit.mjs';
+import { crisp, round, tall } from '../../film/sketch-kit.mjs';
 
 // A task done in an app, step by step: the cursor opens a section, picks a card, changes one
 // value and saves; a confirmation lands and the view leans in on the new value. Every click is
@@ -76,7 +76,7 @@ export default {
     });
     const text = (t, x, y, size, font, fill, extra = {}) => ({ type: 'text', text: t, x, y, size, font, fill, ...extra });
     return {
-      elements: [
+      elements: crisp([
         {
           type: 'group',
           enter: 'rise',
@@ -238,7 +238,7 @@ export default {
             { cue: 'SAVE', at: AT.SAVE + 0.7, after: 0.7, dur: 0.3, opacity: 0 },
           ],
         },
-      ],
+      ]),
     };
   },
 };
