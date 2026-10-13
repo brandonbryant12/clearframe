@@ -2,6 +2,7 @@
 
 ## Opus films: what an excellent film needed
 
+- **`voice.pronounce` respells words for the free voice.** The OS voice said "Alder Street" as "all their street", so an Opus agent kept the company name out of the narration; `"voice": {"pronounce": {"Alder": "All-der"}}` changes only what the voice reads, never the narration, captions or timings.
 - **Drawings are not figures, and a brief's header is not evidence.** `critique` no longer reads a polyline's `points` inside drawn elements as invented figures ("575.3 is in no source document", on a hand-adapted price chart), and `start` no longer lists a brief's From/For/Length lines ("55+", "90 seconds", "16:9") in EVIDENCE.md as figures to source.
 - **No trailer punctuation in workplace films.** An iris grows a flat disc of the accent colour over the picture; the round-18 reviewer called it the worst moment of the round ("looks like a rendering bug"). `critique` warns on `iris`, `flash` and `whip` in the workplace treatment, and the skill says to cut, dissolve, move within one world or use `panel` at a chapter.
 - **The verdict says when a change is too faint, not absent.** Two Opus agents lost three and four drafts to stretches scored still while a thin line drew on, a small figure landed or a pale glow pulsed, told to "change something on those words". A still stretch whose busiest area did change, below what reads as motion, now says so and asks for a bolder change (a filled shape, a larger figure, the object or the camera moving).

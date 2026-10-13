@@ -120,7 +120,7 @@ async function draftTake(sb, spec, out) {
     };
     if (process.platform !== 'darwin')
       throw new Error('Draft takes need macOS say; record per beat instead (voice.takes: "beat").');
-    const clean = t => forOsVoice(t).replace(/<([^>]+)>/g, ' [[slnc 350]] ').replace(/\|[^|]*\|/g, ' ');
+    const clean = t => forOsVoice(t, sb.voice.pronounce).replace(/<([^>]+)>/g, ' [[slnc 350]] ').replace(/\|[^|]*\|/g, ' ');
     if (!spec.cast) {
       const f = path.join(tmp, 'take.aiff');
       say(spec.parts.map(p => clean(p.text)).join(' [[slnc 420]] '), sb.voice.draftVoice, f);

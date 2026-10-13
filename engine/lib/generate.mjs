@@ -190,7 +190,7 @@ export async function voice(root, { draft = false, force = false, only, budget, 
       await cleanVoice(raw, wavFile);
       fs.rmSync(raw, { force: true });
     } else {
-      await draftVoice(b.vo, wavFile, { wpm: sb.voice.wpm, voice: sb.voice.draftVoice });
+      await draftVoice(b.vo, wavFile, { wpm: sb.voice.wpm, voice: sb.voice.draftVoice, pronounce: sb.voice.pronounce });
     }
     const a = await analyseVoice(wavFile, b.vo);
     writeJSON(metaFile, {

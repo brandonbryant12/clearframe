@@ -66,7 +66,7 @@ Put it under big type (a kinetic hook or close) or a simple picture. Under a det
 
 ## 4. Narration
 
-One idea per beat, written for the ear: short sentences, figures as digits, the word that names each moment said where the picture should move (that word goes in `sketchSay`). `voice DIR --draft` is free and local; it measures its words with Whisper, which takes about a minute per minute of speech, longer while other work runs. Wait for it.
+One idea per beat, written for the ear: short sentences, figures as digits, the word that names each moment said where the picture should move (that word goes in `sketchSay`). `voice DIR --draft` is free and local (if it says a name wrong, respell it for the voice only: `"voice": {"pronounce": {"Alder": "All-der"}}`); it measures its words with Whisper, which takes about a minute per minute of speech, longer while other work runs. Wait for it.
 
 ## 5. Draft and read the verdict
 

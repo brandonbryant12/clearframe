@@ -68,12 +68,19 @@ export async function analyseVoice(file, text) {
  * and skips an arrow, so a colon before a word and an arrow become a pause. The words are unchanged,
  * so their timings still match the narration.
  */
-export const forOsVoice = text => String(text).replace(/(\S):(?=\s)/g, '$1,').replace(/\s*(→|->|=>)\s*/g, ', ');
+export const forOsVoice = (text, pronounce = {}) => {
+  let t = String(text);
+  // `voice.pronounce` respells words the OS voice says wrong ("Alder": "All-der"); the narration,
+  // its captions and its word timings keep the written word.
+  for (const [word, said] of Object.entries(pronounce ?? {}))
+    if (word && typeof said === 'string') t = t.replace(new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g'), said);
+  return t.replace(/(\S):(?=\s)/g, '$1,').replace(/\s*(→|->|=>)\s*/g, ', ');
+};
 /** Draft narration with the OS voice (macOS `say`, Linux `espeak-ng`/`espeak`). For timing only. */
-export async function draftVoice(text, output, { wpm = 150, voice } = {}) {
+export async function draftVoice(text, output, { wpm = 150, voice, pronounce } = {}) {
   const mac = process.platform === 'darwin';
   const pauses = { 'short pause': 350, 'long pause': 800, breath: 250, sigh: 400 };
-  const spoken = forOsVoice(text)
+  const spoken = forOsVoice(text, pronounce)
     .replace(/<([^>]+)>/g, (_, tag) =>
       mac && pauses[tag.trim().toLowerCase()] ? ` [[slnc ${pauses[tag.trim().toLowerCase()]}]] ` : ' ',
     )
