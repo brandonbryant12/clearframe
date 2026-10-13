@@ -42,6 +42,8 @@ pub struct Engine {
     palette: Palette,
     /// Native type drawn in the last frame (for the audit).
     pub marks: Vec<TextMark>,
+    /// The grain's noise at the output size (film::grain).
+    grain: film::GrainCache,
 }
 
 impl Engine {
@@ -95,6 +97,7 @@ impl Engine {
             logical,
             palette,
             marks: vec![],
+            grain: film::GrainCache::default(),
         })
     }
 
@@ -186,7 +189,7 @@ impl Engine {
                 &mut self.marks,
             );
         }
-        film::grain(canvas, &self.film.texture, lw, lh, &self.palette, seconds);
+        film::grain(canvas, &self.film.texture, lw, lh, &self.palette, seconds, &mut self.grain);
         film::letterbox(canvas, bar, lw, lh);
         if self.film.guides {
             film::guides(canvas, lw, lh);

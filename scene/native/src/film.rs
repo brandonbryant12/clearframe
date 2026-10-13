@@ -209,8 +209,17 @@ pub fn vignette(canvas: &Canvas, texture: &Value, w: f32, h: f32, p: &Palette) {
     canvas.draw_rect(Rect::from_wh(w, h), &paint);
 }
 
+/// The grain's noise drawn once at the output size: the same for every frame of static grain, and
+/// for the four or so frames each animated seed lasts. Fractal noise evaluated per pixel per frame
+/// was a sixth of a draft's render time. Kept per engine, so the image stays on its GPU context.
+#[derive(Default)]
+pub struct GrainCache {
+    key: Option<(i32, i32, i32, [u32; 9])>,
+    image: Option<sk::Image>,
+}
+
 /// Grain over everything: static unless `animate`, then it changes eight times a second.
-pub fn grain(canvas: &Canvas, texture: &Value, w: f32, h: f32, p: &Palette, seconds: f32) {
+pub fn grain(canvas: &Canvas, texture: &Value, w: f32, h: f32, p: &Palette, seconds: f32, cache: &mut GrainCache) {
     let g = amount(texture, "grain");
     if g <= 0.0 {
         return;
@@ -218,12 +227,44 @@ pub fn grain(canvas: &Canvas, texture: &Value, w: f32, h: f32, p: &Palette, seco
     let animate = texture.get("animate").and_then(Value::as_bool).unwrap_or(texture.as_str() == Some("film"));
     let seed = if animate { ((seconds * 8.0).floor() as i32 % 97 + 1) as f32 } else { 7.0 };
     let opacity = g * if p.dark { 0.16 } else { 0.12 };
-    let mut paint = Paint::default();
-    paint.set_shader(grain_shader(seed));
-    canvas.save_layer_alpha_f(None, opacity);
-    paint.set_blend_mode(BlendMode::Overlay);
-    canvas.draw_rect(Rect::from_wh(w, h), &paint);
-    canvas.restore();
+    // Opaque grey noise in an empty layer (Overlay over nothing is the noise itself), composited at
+    // `opacity`: the noise image drawn at that opacity, in device pixels, is the same picture.
+    let m = canvas.local_to_device_as_3x3();
+    let info = canvas.image_info();
+    let mut values = [0.0f32; 9];
+    m.get_9(&mut values);
+    let key = (info.width(), info.height(), seed as i32, values.map(f32::to_bits));
+    if cache.key != Some(key) {
+        cache.image = canvas.new_surface(&info, None).map(|mut surface| {
+            let c = surface.canvas();
+            c.clear(sk::Color::TRANSPARENT);
+            c.concat(&m);
+            let mut paint = Paint::default();
+            paint.set_shader(grain_shader(seed));
+            paint.set_blend_mode(BlendMode::Overlay);
+            c.draw_rect(Rect::from_wh(w, h), &paint);
+            surface.image_snapshot()
+        });
+        cache.key = Some(key);
+    }
+    match &cache.image {
+        Some(image) => {
+            let mut paint = Paint::default();
+            paint.set_alpha_f(opacity);
+            canvas.save();
+            canvas.reset_matrix();
+            canvas.draw_image(image, (0, 0), Some(&paint));
+            canvas.restore();
+        }
+        None => {
+            let mut paint = Paint::default();
+            paint.set_shader(grain_shader(seed));
+            canvas.save_layer_alpha_f(None, opacity);
+            paint.set_blend_mode(BlendMode::Overlay);
+            canvas.draw_rect(Rect::from_wh(w, h), &paint);
+            canvas.restore();
+        }
+    }
 }
 
 /// Fractal noise turned to opaque grey (the channels averaged, alpha set to 1): the grain's
