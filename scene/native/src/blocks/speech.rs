@@ -429,7 +429,8 @@ impl<'a, 'c> Draw<'a, 'c> {
         let source_height = if self.props().get("sourceSize").is_some() { source_size * 3.6 } else { 60.0 };
         let source_y = (self.floor.min(env.height)
             - if env.captions && self.floor >= env.height {
-                if tall { 320.0 } else { 160.0 }
+                // Tall pop captions take two lines under a speaker chip: the credit goes above both.
+                if tall { 430.0 } else { 160.0 }
             } else if env.framed && self.floor >= env.height {
                 128.0 + crate::film::frame_inset(env.width, env.height)
             } else {
