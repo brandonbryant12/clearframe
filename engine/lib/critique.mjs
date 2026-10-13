@@ -155,6 +155,22 @@ function onScreenWords(props) {
   return n;
 }
 
+// Fill-in-the-blank pictures for what workplace narration keeps saying (clearframe-workplace).
+const PICTURES = [
+  [/\b(carr(y|ies) over|use it or lose it|forfeit|resets? to (zero|\$?0)|expires?|lose (it|the rest))\b/i, 'expire', 'This line is about what carries over and what is lost'],
+  [/\b(match(es|ing)?|adds?|puts? in|on top of|top[- ]up|contributes? the same)\b.*(\b(percent|dollars?)\b|[%$])|\b(percent|%).*\b(match(es)?|adds?)\b/i, 'match', 'This line is about one contribution added to another'],
+  [/\bvest(s|ed|ing)?\b|\byours to keep\b.*\byears?\b|\bafter (one|two|three|\d) years?\b/i, 'vesting', 'This line is about what becomes yours over time'],
+  [/\b(deadline|by (january|february|march|april|may|june|july|august|september|october|november|december)|between .* and .*\b\d{1,2}\b|open enrollment runs|within \d+ days|last day)\b/i, 'deadline', 'This line names a window or a deadline'],
+  [/\b(log ?in|portal|open the app|in the app|click|tap|select|go to|toolbar|button)\b/i, 'portal', 'This line is a step done in an app'],
+  [/\b(look for|signs?|tells?|red flags?|watch for|check (the|for)|itemi[sz]ed)\b/i, 'inspect', 'This line points at parts of a message or document'],
+  [/\b(or the|versus|vs\.?|compared? (to|with)|which one|either|instead of)\b/i, 'choose', 'This line compares two options'],
+  [/\b(goes to|breaks? down|split|of your (pay|paycheck)|where (your|the) money goes|take[- ]home)\b/i, 'split', 'This line divides a whole into parts'],
+];
+export function pictureFor(vo) {
+  for (const [re, sketch, why] of PICTURES) if (re.test(vo)) return { sketch, why };
+  return null;
+}
+
 // ------------------------------------------------------------------ cinema
 
 const has = (v, re) => re.test(JSON.stringify(v ?? {}));
@@ -572,6 +588,17 @@ export function critique(root) {
       JSON.stringify(b.props ?? {}).match(/"loop"|"keys"|"along"|"steps"/);
     if (d > 8 && !moving && b.block !== 'kinetic')
       add('idea', b.id, `Held ${d.toFixed(1)} s with nothing moving. Inspect the reading hold; shorten it or reveal the next meaningful change if it feels stalled. Do not add camera shake.`);
+    // Type standing in for a picture: say which fill-in-the-blank picture fits its words.
+    const authoredBeat = sb.beats[i];
+    if (['kinetic', 'statement', 'callout', 'list', 'checklist'].includes(authoredBeat?.block) && !authoredBeat.plate) {
+      const fit = pictureFor(authoredBeat.vo ?? '');
+      if (fit)
+        add(
+          'idea',
+          b.id,
+          `${fit.why}: the \`${fit.sketch}\` sketch shows that (node engine/cli.mjs sketch ${fit.sketch} prints the beat to paste). Words on their own read as a slide.`,
+        );
+    }
     // A sketch whose moments are only partly landed on words: the rest keep their default
     // seconds and can land before the ones that were moved.
     const authored = sb.beats[i]?.props;
