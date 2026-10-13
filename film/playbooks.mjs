@@ -137,6 +137,13 @@ export function storyboardFor(id, { title, theme, vertical, seed, ending } = {})
 }
 /** Library refs for the art sketches a storyboard names, so shared ones travel with it. */
 export const artSketches = sb => sb.beats.filter(b => b.art?.sketch).map(b => ['sketches', b.art.sketch]);
+/** A note when a treatment made for certain playbooks starts from another (workplace from product-walkthrough). */
+export function playbookNote(options = {}) {
+  const t = options.treatment && treatmentById(options.treatment), book = playbookFor(options);
+  if (!t?.playbooks?.length || t.playbooks.includes(book.id)) return null;
+  return `Note: the ${options.treatment} treatment is made for the ${t.playbooks.join(', ')} playbooks; ${book.id} is not one of them, and its beats are not this treatment's pictures. Start again with one of those unless the brief really is a ${book.id}.`;
+}
+
 /** The playbook a `new` with these options starts from (direction, treatment and default applied). */
 export function playbookFor(options = {}) {
   options = directionOptions(options);

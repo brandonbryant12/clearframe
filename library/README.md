@@ -83,6 +83,7 @@ Add `library/directions/my-idea.json` to a shared library, then use `--library D
   - `kinetic`: the kinetic mode.
 - `rules` end up in the project's `DIRECTION.md`.
 - `playbook` (optional) names the arc this look is made for. `new --treatment ID` and `ingest --treatment ID` start from it when no `--playbook` is given; for example, `cinematic` starts from `cinematic-explainer`.
+- `playbooks` (optional) lists every arc the treatment is made for; `new` and `start` print a note when another playbook is chosen with it (`workplace` lists its five).
 
 ## Types
 

@@ -65,7 +65,7 @@ const VALIDATE = {
     }
   },
   treatments(item, where) {
-    known(item, ['order', 'title', 'when', 'film', 'beats', 'rules', 'playbook', 'variants'], where);
+    known(item, ['order', 'title', 'when', 'film', 'beats', 'rules', 'playbook', 'playbooks', 'variants'], where);
     if (item.variants != null) {
       if (!Array.isArray(item.variants) || !item.variants.length) throw new Error(`${where}: variants must be a non-empty list`);
       item.variants.forEach((v, i) => {

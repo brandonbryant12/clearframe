@@ -10,7 +10,7 @@ import { startRun, finishRun } from './lib/runlog.mjs';
 import { parseTime } from './lib/notes.mjs';
 import { REVIEW, reviewCommand } from './lib/review-cli.mjs';
 import { BLOCKS, THEMES, THEME_NOTES, MOTIONS, TRANSITIONS, BACKDROPS, markdownCatalog } from '../film/catalog.mjs';
-import { playbooks, playbookFor, scaffold, writeGallery } from '../film/playbooks.mjs';
+import { playbooks, playbookFor, playbookNote, scaffold, writeGallery } from '../film/playbooks.mjs';
 import { ICONS, ICON_SOURCE } from '../film/icons.mjs';
 import { sketches, sketch, sketchByName } from '../film/sketches.mjs';
 import { treatments } from '../film/treatments.mjs';
@@ -298,6 +298,8 @@ async function main() {
     if (!positionals[0]) throw new Error('start needs a new project directory');
     const { startProject } = await import('./lib/start.mjs');
     const r = startProject(positionals[0], opts);
+    const note = playbookNote(opts);
+    if (note) console.error(note);
     return console.log(o.json ? JSON.stringify(r, null, 2) :
       `Created ${positionals[0]}: ${r.inputs.length} document, ${r.assets.length} brand assets. Read BRIEF.md${r.evidence ? ' and EVIDENCE.md' : ''}; rewrite the sample beats, then run critique and draft.`);
   }
@@ -312,6 +314,8 @@ async function main() {
       );
     const sb = scaffold(dir, opts);
     const rel = path.relative(process.cwd(), dir) || '.';
+    const note = playbookNote(opts);
+    if (note) console.error(note);
     return console.log(
       `Created ${rel} (${sb.beats.length} beats, ${typeof sb.theme === 'string' ? sb.theme : sb.theme.base} palette). Replace the illustrative claims, then:\n  clearframe sheet ${rel} --draft     # contact sheet to review\n  clearframe voice ${rel} --draft     # free local narration\n  clearframe render ${rel} --draft    # fast review MP4`,
     );
