@@ -735,7 +735,8 @@ async function writeRecording(
   [...ids].forEach((id, i) => {
     const given = speakers[id] ?? {};
     cast[id] = {
-      name: given.name ?? `Speaker ${id}`,
+      // A role-named turn ("host:", "guest:") reads as its role; a bare id as "Speaker N".
+      name: given.name ?? (/^[a-z]+$/i.test(id) ? id[0].toUpperCase() + id.slice(1) : `Speaker ${id}`),
       ...(given.role ? { role: given.role } : {}),
       color: given.color ?? (i % 2 ? 'accent2' : 'accent'),
     };

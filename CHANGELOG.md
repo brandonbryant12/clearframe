@@ -17,6 +17,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **A recording's speakers read as their roles** when no names are given ("Host", "Guest", not "Speaker host"), and `critique` flags a source line that is a file path (a round-10 film credited its figures to "examples/podcast-pictures/build.mjs").
 - **Icons answer to common names** (`x` is `close`, `warning` is `alert`, `dollar` is `cash`, `email` is `mail`, `document` is `file`, and so on), and an unknown icon names the nearest bundled ones. A round-10 agent wanted an "x", found none, and dropped the picture for words.
 - **An empty `sketchText` word removes that line of type** (`"EACH": ""`), instead of failing later as "text needs text or count".
 - **A position that is not a number is refused, with the fix**: `x: "center"` was read as 0 and the type ran off the frame ("cut off by the frame edge"); now the error says to set `x` to half the frame width with `anchor: "middle"`.
