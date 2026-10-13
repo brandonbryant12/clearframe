@@ -12,6 +12,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **`portal` is a phone in a vertical film** unless `device: "desktop"` is asked for (`device` defaults to `auto`): a browser window in a 9:16 frame was cropped at the edges and its type unreadable on the phone the film was made for.
 - **The verdict names the beats that are only words**, each with the picture `critique` would give it (now shared from `engine/lib/pictures.mjs`), so a film that is 71% type gets a list of edits instead of a share.
 - **A hard cut lands on the drawing's ground.** A canvas beat entered by a cut shows its cards, panels and images that start the beat on its first frame instead of rising them in; a sketch's card rising from nothing left a blank frame or two after every cut, which a reviewer took for render glitches. Details, words and later moments still enter.
 - **A kinetic hook lands as it is said.** `critique` timed a speech-following opening by its scene's end ("the first idea lands 8.6 s in") because type that builds with the voice has no cue; it now lands on its first emphasised word.

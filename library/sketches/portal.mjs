@@ -16,12 +16,13 @@ export default {
   order: 90,
   summary:
     'A task done in an app: the cursor opens a section, picks a card, changes one value and saves; a confirmation lands and the view leans in on the new value.',
-  use: 'Benefits portals, HR and expense apps, banking and settings: "log in, go to Retirement, change your rate", the step a film asks people to take. Set sketchParams.device to "phone" for a mobile app (a sign-in app, a bank app, an expenses app) or keep the desktop browser. Replace APP, STEP1 (the section), STEP2 (the card), OTHER (a second card), FIELD, OLD and NEW (its value before and after) and DONE with sketchText (also Home, Pay, Documents, Welcome back, Save); land CLICK1, CLICK2, CHANGE and SAVE on words with sketchSay.',
+  use: 'Benefits portals, HR and expense apps, banking and settings: "log in, go to Retirement, change your rate", the step a film asks people to take. Set sketchParams.device to "phone" for a mobile app (a sign-in app, a bank app, an expenses app) or "desktop" for a browser; by default a vertical film gets the phone. Replace APP, STEP1 (the section), STEP2 (the card), OTHER (a second card), FIELD, OLD and NEW (its value before and after) and DONE with sketchText (also Home, Pay, Documents, Welcome back, Save); land CLICK1, CLICK2, CHANGE and SAVE on words with sketchSay.',
   params: {
-    device: { default: 'desktop', oneOf: ['desktop', 'phone'], about: 'desktop: a browser window with a side menu; phone: the same steps in a phone app with tabs' },
+    device: { default: 'auto', oneOf: ['auto', 'desktop', 'phone'], about: 'desktop: a browser window with a side menu; phone: the same steps in a phone app with tabs; auto (the default): a phone in a tall frame, a browser otherwise' },
   },
   build(w, h, { params = {} } = {}) {
-    const phone = params.device === 'phone';
+    // A browser window in a 9:16 frame is cropped and tiny; a tall frame gets the phone unless asked.
+    const phone = params.device === 'phone' || (params.device !== 'desktop' && h > w * 1.2);
     // Tabs instead of a side menu on tall frames and in a phone, which is a tall frame of its own.
     const T = tall(w, h) || phone;
     // Window, chrome and the two regions: a side menu (landscape) or tabs (tall frames).
