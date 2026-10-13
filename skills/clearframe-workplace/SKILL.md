@@ -45,6 +45,7 @@ Each fact gets the mechanism that shows it. These are sketches: fill `sketchText
 | A figure to remember, then compared | canvas `chart` number, then bars in the next beat (they morph) | `clearframe-dataviz` |
 | Several figures in one line ("14% clicked, 3% typed a password, 22% reported") | canvas `chart` with `say` on each value: a `number` steps through them as each is spoken, `bars` grow on their words | one value per figure |
 | A sequence or a group of things | a `cast` of the film's objects (`docs/cast.md`) | objects and formations |
+| "Would you spot it?" (training: a quick check before the answer) | a `teaching` question beat, then its answer beat (`docs/teaching-sequences.md`) | `prompt`, three `options`, `correctIndex`, a one-line `explanation`; a reading hold on the question |
 
 A picture must keep up with its narration: every figure or idea the voice names gets its own moment (a cue, a value's `say`, a sketch moment). Three figures said over one still number is a slide.
 
