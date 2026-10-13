@@ -478,7 +478,10 @@ impl<'a, 'c> Draw<'a, 'c> {
         let top = a.y + ((a.h - group) * 0.45).max(0.0);
         let cue = self.b.cue_seconds;
         let current = self.count(from, value, self.count_at(), 1.4);
-        let e = self.enter(cue - 0.1);
+        // A figure that counts up from zero arrives when its count starts: "$0 more a month" on
+        // screen while the voice gets to the number would state a figure nobody gave.
+        let arrive = if from == 0.0 { cue.max(self.count_at() - 0.15) } else { cue };
+        let e = self.enter(arrive - 0.1);
         let centered = self.centered();
         let (number, width) = self.numeral(
             current,

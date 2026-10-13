@@ -13,6 +13,7 @@
 ## Enterprise bench and readable typing
 
 - **Workplace films start from one skill, `clearframe-workplace`.** On the first enterprise bench, weaker models read twenty skills, threw away a topic-specific scaffold they could not adapt, and fell back to a sentence per card. The new path is short: the `workplace` treatment, four playbooks (`benefit-explainer`, `policy-change`, `client-update`, `training-moment`) and a table from each kind of fact to the fill-in-the-blank sketch that shows it (`match`, `vesting`, `deadline`, `expire`, `portal`, `inspect`, `choose`, `split`). AGENTS.md and the `clearframe` skill send workplace and financial-services requests there first.
+- **A `stat` never shows a zero it was not given.** A figure counting up from zero now arrives when its count starts (its `land` word) instead of reading "$0 more a month" while the voice gets there; the label and source can sit on screen first.
 - **Declared reading holds have a budget.** One agent marked every beat `pace: "hold"` and the verdict read 0 s still; holds beyond a fifth of the film now count as still, and `draft` says so.
 - **Cues find part of a hyphenated word** ("approved" in "pre-approved"), and a cue that is not found names the beat's narration so it can be fixed in one try.
 - **`sheet --grid` and `still --grid` work again**: the guides job now gets its own scene plan.
