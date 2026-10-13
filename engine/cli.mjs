@@ -728,7 +728,7 @@ async function main() {
       try {
         const { qaProject, motionVerdict } = await import('./lib/qa.mjs');
         const q = await qaProject(dir, {});
-        lines.push(...motionVerdict(dir, q).lines,
+        lines.push(...motionVerdict(dir, q, { warnings: r.warnings }).lines,
           `  qa: ${rel(path.join(q.dir, 'phone.png'))} (read it as a phone would)`,
         );
       } catch (e) {

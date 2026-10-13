@@ -423,8 +423,13 @@ export async function qaProject(root, { video, loop = false } = {}) {
  * the voice, how much of the film is type on its own, the stillest beats with what to change, and the
  * length against the one asked for. `draft` prints it, and the studio's agent reads it after a draft.
  */
-export function motionVerdict(dir, q) {
+export function motionVerdict(dir, q, { warnings = [] } = {}) {
   const s = q.summary;
+  // The voice talking over an empty scene (check's pacing warning): never fine, whatever the share.
+  const blank = warnings
+    .map(w => w.match(/^([^:]+): the voice starts ([\d.]+) s before/))
+    .filter(m => m && Number(m[2]) >= 2)
+    .map(m => `    ${m[1]}: the voice talks for ${m[2]} s over an empty scene. Put the picture on screen by the first word (cue it to an earlier word, or draw its frame at 0 and only the change on the late word).`);
   // Stretches under the voice: a silent breath or title may hold.
   const held = q.findings.filter(f => f.kind === 'held' && !f.deliberate && f.level === 'warn');
   const voicedHeld = Math.round(10 * held.reduce((t, f) => t + f.seconds, 0)) / 10;
@@ -451,7 +456,7 @@ export function motionVerdict(dir, q) {
   const typeSeconds = timed.reduce((t, tb, i) => t + (typeOnly(sb.beats[tb.index ?? i] ?? {}) ? (tb.dur ?? tb.end - tb.start) : 0), 0);
   const typeShare = s.seconds ? Math.round((100 * typeSeconds) / s.seconds) : 0;
   const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;
-  const ready = !(share >= 40 || (typeShare >= 60 && share < 40));
+  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length);
   const lines = [
     `motion: ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
     ...(overflow
@@ -476,6 +481,7 @@ export function motionVerdict(dir, q) {
       : sb.length && s.seconds > 1.3 * sb.length
         ? [`  length: ${Math.round(s.seconds)} s against the ${sb.length} s asked for: cut to the facts that matter.`]
         : []),
+    ...(blank.length ? ['  blank under the voice:', ...blank] : []),
     ...(ready ? [] : ['  not ready to hand over: fix the beats above (each is one edit), then run draft again.']),
   ];
   return { share, typeShare, ready, lines };
