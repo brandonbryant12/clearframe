@@ -110,7 +110,7 @@ The one paid test: two Veo 3.1 Lite clips (an office morning, a city street; $0.
 
 ## Open problems
 
-- **Length by talking longer.** Once short films were told what they left out, agents met the length with longer narration over the same pictures (round 16: beats of 10–14 s). A beat's narration much longer than its picture's last moment is the next thing for the verdict to name before rendering, beat by beat.
+- **Length by talking longer.** Once short films were told what they left out, agents met the length with longer narration over the same pictures (round 16: beats of 10–14 s). `critique` now warns before rendering when a beat runs over 9.5 s with two or more sentences on one picture; whether agents act on a warning (rather than a NOT READY) is untested.
 
 - **Haiku persistence.** About half of Haiku's films are handed over at NOT READY even when the verdict lists each edit and pastes the props; Sonnet rarely does. A rough-cut-and-notes loop driven by the harness (render, read the verdict, apply the pasted edits, render again) may need to be a command rather than advice.
 - **Length versus pictures.** Agents keep films short rather than find more pictures; the paste-ready beats cover months, money kept apart, figures and price comparisons, and nothing else yet.

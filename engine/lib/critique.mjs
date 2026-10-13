@@ -639,6 +639,11 @@ function critiqueStoryboard(root) {
       JSON.stringify(b.props ?? {}).match(/"loop"|"keys"|"along"|"steps"/);
     if (d > 8 && !moving && b.block !== 'kinetic')
       add('idea', b.id, `Held ${d.toFixed(1)} s with nothing moving. Inspect the reading hold; shorten it or reveal the next meaningful change if it feels stalled. Do not add camera shake.`);
+    // Length reached by talking longer over the same picture (round 16: five beats of 10–14 s, a closing
+    // "0" held for 12 s). Two or more sentences over one picture this long are two beats.
+    const sentences = String(b.vo ?? '').split(/(?<=[.!?])\s+/).filter(x => /\w/.test(x)).length;
+    if (d > 9.5 && sentences >= 2 && b.pace !== 'hold' && b.block !== 'kinetic' && !b.props?.cast && !staged(b))
+      add('warn', b.id, `${d.toFixed(1)} s and ${sentences} sentences on one picture: a viewer has seen it all long before the voice is done. Split the line into beats, each with its own picture (a longer film needs more pictures, not more words over one).`);
     // The source line is read by people: a storyboard source id ("q2-phishing") is a slug, not
     // an attribution.
     const shown = String(sb.beats[i]?.props?.source ?? '');
