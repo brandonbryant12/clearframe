@@ -4,6 +4,10 @@ A running, honest assessment. Since 2026-09-30, scores come from an independent 
 
 **Baseline:** 2026-09-30. The evidence is the default output of `new --playbook research-digest --treatment editorial` and `new --playbook data-story --treatment noir`, drafted and read as contact sheets, plus the films made so far.
 
+## Enterprise bench, 2026-10-12
+
+The target audience is now workplace and financial-services films (benefits, policy, training, client updates, podcasts), made by weaker models as well as strong ones. A fresh Sonnet judge scores films made by Haiku and Sonnet agents from mock briefs (`bench/enterprise`, rubric in `JUDGE.md`, 1–10). Haiku's mean went from 4.1 (round 1: a sentence per card) to 6.5 (round 3, with the workplace kit); Sonnet stayed near 7; the kit used by hand scored 7.0 but only 5/10 for distinctiveness. Details and what changed: [the enterprise bench](research/2026-10-enterprise-bench.md). Cinematic looks (letterbox, grades, trailer structure) are not the goal for these films: a picture that changes with the voice is.
+
 ## The verdict
 
 ClearFrame is excellent plumbing with a slideshow at the end of the pipe. The engine is fast, deterministic, honest about numbers and precise about speech. Out of the box, though, it produces what the user called "a slideshow turned into a video". That is fair: the default structure is a card per line of narration, each card built from empty, held still and cut away.
