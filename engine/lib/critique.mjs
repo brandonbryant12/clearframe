@@ -16,7 +16,7 @@ import { createJob, steadyFilm } from '../../film/job.mjs';
 import { roughStandIns } from '../../film/prepare.mjs';
 import { sketch, expandArt, sketchPreset, sketchMoments, sketchWords, sketchByName } from '../../film/sketches.mjs';
 import { diagramElements } from '../../film/system-diagrams.mjs';
-import { sourceNumbers, unsourcedFigures } from './figures.mjs';
+import { sourceNumbers, unsourcedFigures, authoredFigures } from './figures.mjs';
 import { pictureFor } from './pictures.mjs';
 
 // A cast's objects declared in an earlier beat carry forward into the beats that follow.
@@ -384,6 +384,13 @@ export function critique(root) {
           `${loose.slice(0, 4).map(f => `${f.text}${f.where.startsWith('sketchParams') ? ` (${f.where})` : ''}`).join(', ')} ${loose.length > 1 ? 'are' : 'is'} in no source document (${numbers.files.join(', ')}). Every figure comes from the source: take it out; if it is worked out from the source, say how in the beat's source line ("Benefits guide 2027; 26 × $6"); if it is a made-up example (a sample receipt), label it once on screen ("Example").`,
         );
     }
+  // With no source document nothing can be checked: a round-14 enrollment film made with `new`
+  // narrated a $3,000 the brief never states.
+  if (!numbers) {
+    const shown = sb.beats.flatMap(b => authoredFigures(b).map(f => f.text));
+    if (shown.length >= 2)
+      add('warn', 'film', `${shown.length} figures on screen (${[...new Set(shown)].slice(0, 4).join(', ')}…) and no source document to check them against: put the document they come from in source/ (\`start DIR --document FILE\` does it), so critique can name any figure it never states.`);
+  }
   // "Portrait" is read as "vertical": two onboarding films for a phone app came out 4:5.
   if (sb.format?.preset === 'portrait')
     add('warn', 'film', 'The format is portrait: 4:5 (1080×1350), a feed post. A film for a phone screen (an app, Reels, Stories, TikTok, "vertical") is format.preset "vertical": 9:16 (1080×1920).');
