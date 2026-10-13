@@ -5,7 +5,6 @@
 - **A warning in the brand's colour is named.** `critique` warns when a film marks warnings (or good things) in a palette whose accent is the same colour: `meridian`'s accent and warning red are one red, so a phishing film's marks read as decoration, and `meadow`'s accent is its positive green; it suggests `briefing` for security and policy films.
 - **The training playbook no longer says what a source rarely does.** Its report-not-delete ending narrated "Security can pull every copy", which agents kept and reviewers flagged as unsourced; it now says "Report it, and Security hears about it".
 - **`exitAfter`** leaves a set time after an `exitSay` word (an Opus agent had to fake it with opacity keys), and the workplace skill says what a pointer needs to read as motion: move the thing it touches.
-
 - **`enter: "none"` means on screen from the cut.** A canvas element with no entrance and no time waited for the scene's cue, so every cut flashed an empty first frame; a round-18 Opus agent found it only by decoding frame 0 (no sheet shows it), and reviewers had called out "empty frames at cuts" all night. Top-level elements with `enter: "none"` and no `at` or `say` now stand from frame 0; a group's contents still start with their group.
 
 ## Faster renders
