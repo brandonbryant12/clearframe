@@ -754,6 +754,9 @@ async function main() {
     lines.push(
       `done in ${((performance.now() - t0) / 1000).toFixed(1)} s. ${notReady ? 'NOT READY to hand over: fix what the motion verdict names, then draft again.' : 'Open the sheet before anything else.'}`,
     );
+    // Exit 2 (not 1: the render worked) so a NOT READY film reads as unfinished to whoever ran it.
+    // A rough cut is a first look and may be unfinished.
+    if (notReady && !rough) process.exitCode = 2;
     return console.log(lines.join('\n'));
   }
   if (cmd === 'checkpoints') {
