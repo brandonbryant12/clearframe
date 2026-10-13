@@ -89,9 +89,18 @@ The in-page agent (OpenCode, free model) made the open-enrollment film from the 
 
 The one paid test: two Veo 3.1 Lite clips (an office morning, a city street; $0.80). A full-bleed `plate` with `treatment: "mono"`, a light scrim and no drift under a kinetic hook reads as a premium corporate film. Under a detailed sketch it competes with the labels. The workplace skill now says where it belongs (hooks, closes, people moments) and that generic clips are reusable across films.
 
+## What twelve rounds say
+
+- **A missing picture is the first ceiling, and the cheapest to lift.** Every brief that gained a picture for its central idea moved: the share plan from 3.7–4.9 to 5.1–5.6 once `lookback` drew "the lower of two prices"; the podcast from all-caption films to pictured ones once a worked example and paste-ready casts existed. Agents of every size type the idea they cannot draw.
+- **Weaker models act on concrete edits, not on scores or principles.** The verdict that moved films names the beat, quotes what is said over it and hands over the props to paste. Generic advice ("land a later moment", "give the ideas pictures") was read as optional or as a cost ("45 more minutes").
+- **Every strict check teaches a shortcut until the next one closes it.** Agents declared every beat a hold, made every beat kinetic, cut films to half their length, reported the one good number off the verdict, and read `qa`'s first line instead of the verdict. Each became a rule: hold budgets, a words share, a length floor, READY first, exit code 2.
+- **The verdict tracks the reviewer.** Films handed over at NOT READY scored lowest in every round from 8 on; the scores move ±0.6 round to round on three to six Haiku films, so the per-brief trend is the signal, not one round's mean.
+- **The ceiling is the model, not the kit, for persistence.** Sonnet made READY films on the hardest briefs (share plan, podcast) with its own pictures, in about half the time box; Haiku still hands over NOT READY films about half the time and leaves films short of the length asked.
+
 ## Open problems
 
-- **Haiku plateau.** New briefs score about 5.8 with Haiku and 6.7–7 with Sonnet. The remaining gap is persistence (fixing what the verdict names) and judgement (which fact deserves which picture), not missing pictures.
-- **Sketch tails.** A sketch's last moment often comes well before its narration ends, so the beat sits. `match` gained `again` (more stacks for "every paycheck"); the other sketches need closing moments or idle life.
+- **Haiku persistence.** About half of Haiku's films are handed over at NOT READY even when the verdict lists each edit and pastes the props; Sonnet rarely does. A rough-cut-and-notes loop driven by the harness (render, read the verdict, apply the pasted edits, render again) may need to be a command rather than advice.
+- **Length versus pictures.** Agents keep films short rather than find more pictures; the paste-ready beats cover months, money kept apart, figures and price comparisons, and nothing else yet.
+- **Sketch tails.** A sketch's last moment often comes well before its narration ends, so the beat sits. `match` gained `again` (more stacks for "every paycheck"); the verdict now asks for the rest of the line in a beat of its own.
 - **Distinctiveness beyond looks.** Variants change the face; a film's central metaphor still mostly comes from the kit. The best films (the podcast's mug, the jar that drops to $660) invented one object and returned to it.
 - **Critique and the verdict disagree** in ways agents find confusing; the verdict is the one to trust.
