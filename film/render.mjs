@@ -541,10 +541,27 @@ export async function worldMap(root, { draft = true, rough = false, name, out } 
 }
 export async function sheetProject(
   root,
-  { draft = false, rough = false, per = 3, columns = per, thumb = 400, out, grid = false } = {},
+  { draft = false, rough = false, per, columns, thumb, out, grid = false } = {},
 ) {
   let ctx = await phase('prepare', () => prepareProject(root, { draft, rough }));
   if (grid) ctx = withGuides(ctx);
+  // Unless asked otherwise, a sheet stays an image a person (or a model) can open and read:
+  // about 4,000 px tall at most. Long films take two beats a row, then one frame a beat in a
+  // wider grid, then smaller tiles.
+  {
+    const beats = ctx.timing.beats.length,
+      aspect = (ctx.timing.height ?? 1080) / (ctx.timing.width ?? 1920),
+      tall = t => Math.ceil((beats * p) / c) * (t * aspect + 8);
+    let p = per ?? 3,
+      c = columns ?? (per == null ? 3 : per),
+      t = thumb ?? 400;
+    if (per == null && columns == null) {
+      if (tall(t) > 4000) c = 6;
+      if (tall(t) > 4000) [p, c] = [1, aspect > 1 ? 8 : 6];
+      if (tall(t) > 4000) t = Math.max(160, Math.floor((t * 4000) / tall(t)));
+    }
+    [per, columns, thumb] = [p, c, t];
+  }
   if (
     !Number.isInteger(columns) ||
     columns < 1 ||
