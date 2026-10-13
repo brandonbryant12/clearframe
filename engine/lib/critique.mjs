@@ -664,6 +664,9 @@ export function critique(root) {
       if (other.length)
         add('warn', b.id, `sketchText names ${other.join(', ')}, which ${authored.sketch} does not draw with these sketchParams (its words are ${words.join(', ')}): misspelt, or a step the params removed.`);
     }
+    // A hold on a slice of an imported recording plays silence in the middle of the conversation.
+    if (sb.beats[i]?.hold && t[i]?.vo?.provider === 'imported' && i < t.length - 1 && t[i + 1]?.vo?.provider === 'imported')
+      add('warn', b.id, `hold adds ${sb.beats[i].hold} s of silence inside the recording, between two things said. Let the picture move instead (a cue on a later word), or put the hold on the last beat.`);
     // Speech-following type that changes faster than anyone reads: one word at a time, or
     // two-word groups, across a whole passage. Fine for a few seconds of emphasis.
     if (b.block === 'kinetic' && d > 5) {
