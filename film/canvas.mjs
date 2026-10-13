@@ -1,7 +1,7 @@
 // Author-drawn canvas elements: validation with author-facing messages, cue resolution and
 // exact scheduling. Used by the `canvas` block and by every beat's `art` layers. The renderer
 // (scene/native/src/blocks/canvas.rs) re-validates structure and draws what this module prepares.
-import { ICONS } from './icons.mjs';
+import { ICONS, iconAlias, iconHint } from './icons.mjs';
 import { CANVAS_TIMING as T } from './constants.mjs';
 
 export const ELEMENT_TYPES = {
@@ -396,7 +396,8 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
         break;
       }
       case 'icon':
-        if (!ICONS.includes(el.name)) fail(`${at}: unknown icon ${el.name}; run clearframe icons`);
+        if (!iconAlias(el.name)) fail(`${at}: ${iconHint(el.name)}`);
+        el.name = iconAlias(el.name);
         break;
       case 'meter':
         if (el.style != null && !['bars', 'mirror', 'ring', 'wave'].includes(el.style))

@@ -3,7 +3,7 @@ import { diagramElements } from './system-diagrams.mjs';
 // Prop validation and normalization for each native block. `normalizeProps` (catalog.mjs)
 // runs the checks every block shares, then the block's validator here. A validator may fill
 // defaults (decimals, scales, orientation) so the renderer never guesses.
-import { ICONS } from './icons.mjs';
+import { ICONS, iconAlias, iconHint } from './icons.mjs';
 import {
   normalizeElements,
   roughSpec,
@@ -33,7 +33,7 @@ export function helpers(p, fail, { findPhrase, precision }) {
     findPhrase,
     precision,
     icon: (value, field) => {
-      if (value != null && !ICONS.includes(value)) fail(`${field}: unknown icon ${value}; run clearframe icons`);
+      if (value != null && !ICONS.includes(value)) fail(`${field}: ${iconHint(value)}${iconAlias(value) ? `: use "${iconAlias(value)}"` : ''}`);
     },
     unit: (value, field) => {
       if (!Number.isFinite(value) || value < 0 || value > 1) fail(`${field} must be a number from 0 to 1`);
@@ -101,7 +101,7 @@ function nodes(key, min, max, allowed, { iconRequired = false, stagger = true } 
       if (!it.label?.trim()) h.fail('every node needs a label');
       h.text(it.detail, 'detail', 70);
       if ((iconRequired || it.icon != null) && !ICONS.includes(it.icon))
-        h.fail(`unknown icon ${it.icon}; run clearframe icons`);
+        h.fail(`${iconHint(it.icon)}${iconAlias(it.icon) ? `: use "${iconAlias(it.icon)}"` : ''}`);
     });
     if (stagger) {
       p.stagger ??= 0.45;
