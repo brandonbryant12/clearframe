@@ -171,6 +171,7 @@ const FIELD_HINTS = {
   color: 'use fill with a palette token ("ink", "accent", "muted")',
   content: 'use text',
   label: 'a text element draws its words from text',
+  icon: 'an icon element names its icon with name ("mail", "trash")',
 };
 /**
  * A sound on an element (as it enters) or on a key (as it moves): a built-in effect by name, or

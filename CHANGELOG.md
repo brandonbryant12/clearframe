@@ -2,6 +2,7 @@
 
 ## Opus films: what an excellent film needed
 
+- **A `trash` icon** (Tabler, MIT, at the pinned revision with its hash; `bin`, `delete` and `garbage` find it): an Opus agent drew a bin by hand for "don't just delete it". An icon element given `icon` instead of `name` is told which field names it.
 - **Sound on a moment.** A canvas element can carry `sound` (as it enters) and so can each of its `keys` (as it moves): a built-in effect by name or `{name, volume}`, mixed with the film's other effects at its `sfx` level. An Opus agent wanted the click, the yank and the press to be heard; effects had only followed cuts.
 - **A warning in the brand's colour is named.** `critique` warns when a film marks warnings (or good things) in a palette whose accent is the same colour: `meridian`'s accent and warning red are one red, so a phishing film's marks read as decoration, and `meadow`'s accent is its positive green; it suggests `briefing` for security and policy films.
 - **The training playbook no longer says what a source rarely does.** Its report-not-delete ending narrated "Security can pull every copy", which agents kept and reviewers flagged as unsourced; it now says "Report it, and Security hears about it".

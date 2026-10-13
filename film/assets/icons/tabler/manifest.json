@@ -800,6 +800,12 @@
       "upstreamPath": "icons/outline/wallet.svg",
       "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/wallet.svg",
       "sha256": "4f08d6965f6d9bd97ecd94eb78432631fbd2fb0e4061ec8629ad420735020052"
+    },
+    {
+      "file": "trash.svg",
+      "upstreamPath": "icons/outline/trash.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/trash.svg",
+      "sha256": "28587eb685afab185034d3fe0e192000a38a4f384e5de8c5c6da2512991d89ff"
     }
   ]
 }

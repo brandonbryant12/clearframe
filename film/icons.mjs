@@ -8,6 +8,7 @@ export const ICON_SOURCE = { repository: manifest.repository, revision: manifest
 const ALIASES = {
   x: 'close', cross: 'close', cancel: 'close', 'circle-x': 'close', warning: 'alert', 'alert-triangle': 'alert', danger: 'alert',
   dollar: 'cash', money: 'cash', 'currency-dollar': 'cash', email: 'mail', envelope: 'mail', person: 'user', people: 'users',
+  bin: 'trash', delete: 'trash', garbage: 'trash', 'trash-can': 'trash', 'trash-2': 'trash',
   document: 'file', doc: 'file', 'file-text': 'file', time: 'clock', padlock: 'lock', tick: 'check', ok: 'check',
   'circle-check': 'check', savings: 'piggy-bank', 'building-bank': 'bank', house: 'home', idea: 'lightbulb', cart: 'shopping-cart',
   graph: 'chart-line', chart: 'chart-bar', smartphone: 'phone', mobile: 'phone', computer: 'laptop', 'id-badge': 'badge',
