@@ -1,5 +1,6 @@
 // Voice-first timing. Every scene's length comes from the narration it carries,
 // plus a lead-in (visual lands before the voice) and a tail (let it breathe).
+import { sketch } from '../../film/sketches.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { loadStoryboard, paths } from './project.mjs';
@@ -320,6 +321,24 @@ function readUntil(b, words) {
   walk(b.art?.under);
   walk(b.art?.over);
   if (b.props?.chart?.note) cued(b.props.chart.note.say, b.props.chart.note.text);
+  // A sketch's moments land on words with offsets after them (a coin drops 0.45 s after its word,
+  // the view leans in after the save): the beat lasts until the last of them has landed, instead
+  // of failing when the moment is on the narration's last word.
+  if (b.props?.sketch && b.props.sketchSay) {
+    let drawn = null;
+    try {
+      drawn = sketch(b.props.sketch, 'landscape', { text: b.props.sketchText, say: b.props.sketchSay, params: b.props.sketchParams });
+    } catch {}
+    const land = list =>
+      (list ?? []).forEach(el => {
+        for (const t of [el, ...(el.keys ?? [])]) {
+          const at = typeof t.say === 'string' ? findWord(words, t.say) : null;
+          if (at != null) until = Math.max(until, at + (t.after ?? 0) + (t.dur ?? 0.5) + 0.4);
+        }
+        land(el.children);
+      });
+    land(drawn?.elements);
+  }
   return until;
 }
 
