@@ -47,6 +47,8 @@ export function chartSpec(spec, fail) {
 
 /** The chart as canvas elements in a `w`×`h` frame. */
 export function chartElements(spec, { w, h }) {
+  // One bar compares nothing and fills its box (a reviewer took it for a render bug): one value is a number.
+  if (spec.kind === 'bars' && spec.values.length === 1) spec = { ...spec, kind: 'number' };
   // A chart is mostly drawn by the first spoken word: an early start and a quick stagger.
   const id = spec.id ?? 'chart',
     at = spec.at ?? 0.05,
@@ -276,7 +278,8 @@ export function chartElements(spec, { w, h }) {
         font: 'figures',
         anchor: 'middle',
         fill: 'ink',
-        at,
+        // A figure with a word lands on it; its label and empty track hold the frame until then.
+        ...(v.say ? { say: v.say } : { at }),
         enter: 'rise',
         dur: 0.6,
       },
@@ -306,7 +309,7 @@ export function chartElements(spec, { w, h }) {
             fill: 'accent',
             enter: 'grow-x',
             origin: [r(x), r(y + bh * 0.55 + size * 0.3 + 109)],
-            at: r(at + 0.5),
+            ...(v.say ? { say: v.say, after: 0.3 } : { at: r(at + 0.5) }),
             dur: 0.7,
           }
         : {
