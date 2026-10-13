@@ -867,7 +867,15 @@ function linkWorlds(beats, sb, timing, { warnings }) {
         if (room < -at) b.props.viewDur = Math.max(0.8, Math.min(b.props.viewDur, land + room));
         at = Math.max(land - b.props.viewDur, -room);
       }
-      if (at < 0) a.props.viewNext = { to: b.props.view, at: a.frames / fps + at, dur: b.props.viewDur };
+      if (at < 0) {
+        a.props.viewNext = { to: b.props.view, at: a.frames / fps + at, dur: b.props.viewDur };
+        // The camera leaves for the next panel before its beat begins: draw that panel's ground (what
+        // stands from its first frame) ahead, so the move does not cross empty paper (a round-18 board
+        // film showed blank frames mid-pan). It goes at the cut, where the panel itself takes over.
+        const ground = groundOf(b.props.elements.filter(el => !el.carried && !el.behind));
+        if (ground.length)
+          a.props.elements.push({ type: 'group', at: Math.max(0, a.props.viewNext.at), enter: 'fade', dur: 0.3, exitAt: a.frames / fps, exit: 'none', exitDur: 0, children: ground });
+      }
       b.props.viewAt = at;
       b.settle_seconds = Math.max(b.settle_seconds, at + b.props.viewDur);
     }
@@ -877,6 +885,28 @@ function linkWorlds(beats, sb, timing, { warnings }) {
     ])
       if (!s.camera) beat.camera = { move: 'none' };
   }
+}
+
+/**
+ * What of a list of drawn elements stands from its first frame, as a still copy: elements with no
+ * entrance at 0 (and groups that open at 0, such as a placed panel), their first-frame keys only,
+ * without ids (ids pair shapes across cuts for morphs) or exits.
+ */
+function groundOf(list) {
+  const out = [];
+  for (const el of list ?? []) {
+    const opens = (el.at ?? 0) <= 0.05 && (el.enter === 'none' || (el.type === 'group' && (el.at ?? 0) <= 0.05));
+    if (!opens || el.exitAt != null && el.exitAt <= 0.05) continue;
+    const { id, keys, exitAt, exitSay, exit, exitDur, children, enter, dur, ...rest } = el;
+    const first = (keys ?? []).filter(k => (k.at ?? 0) <= 0 && (k.dur ?? 0) === 0);
+    const copy = { ...rest, at: 0, enter: 'none', ...(first.length ? { keys: first } : {}) };
+    if (el.type === 'group') {
+      copy.children = groundOf(children);
+      if (!copy.children.length) continue;
+    }
+    out.push(copy);
+  }
+  return out;
 }
 
 function frameChrome(sb, beats, { errors }) {
