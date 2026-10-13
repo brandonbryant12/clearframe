@@ -123,7 +123,7 @@ test('graphic contracts reject unknown assets and invalid phase clocks while pre
   );
 });
 test('all bundled icon bytes match the MIT source manifest', () => {
-  assert.equal(ICONS.length, 95);
+  assert.equal(ICONS.length, 132);
   assert.equal(ICON_SOURCE.license, 'MIT');
   const dir = new URL('../film/assets/icons/tabler/', import.meta.url),
     manifest = JSON.parse(fs.readFileSync(new URL('manifest.json', dir)));

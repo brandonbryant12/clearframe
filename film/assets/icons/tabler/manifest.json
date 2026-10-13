@@ -578,6 +578,228 @@
       "upstreamPath": "icons/outline/wifi.svg",
       "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/wifi.svg",
       "sha256": "de89c60aaeeb7282d90a45a75fa1d134376deceb7f12945dfdd42686bd999a19"
+    },
+    {
+      "file": "alarm.svg",
+      "upstreamPath": "icons/outline/alarm.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/alarm.svg",
+      "sha256": "c04c8a0b770e9a088637fb0ab4d240e44e6b4494b03337053c6093c698824e11"
+    },
+    {
+      "file": "armchair.svg",
+      "upstreamPath": "icons/outline/armchair.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/armchair.svg",
+      "sha256": "2ea2dcdfa7dc83f908f8a3fc58d63afa876ed116d20dae0b7008e168e2a470a0"
+    },
+    {
+      "file": "badge.svg",
+      "upstreamPath": "icons/outline/id-badge.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/id-badge.svg",
+      "sha256": "f1b543ade034d01fb489c8c469c47dac1f9eb7ed44d0e2d9eb5960f6aa8d1420"
+    },
+    {
+      "file": "bank.svg",
+      "upstreamPath": "icons/outline/building-bank.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/building-bank.svg",
+      "sha256": "ba532c2d12e97465ee586d59cb824fd2ecfa351cbfc055d87df4ef775a1e17e4"
+    },
+    {
+      "file": "beach.svg",
+      "upstreamPath": "icons/outline/beach.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/beach.svg",
+      "sha256": "ac81fb7a6d6252c484bba20d4dfef70064786d79005be7dfdaf280c083db8b78"
+    },
+    {
+      "file": "calculator.svg",
+      "upstreamPath": "icons/outline/calculator.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/calculator.svg",
+      "sha256": "8579ecd4981afe130e70240b3776534f1b76faefa3cf09d116409078d87115dc"
+    },
+    {
+      "file": "calendar-event.svg",
+      "upstreamPath": "icons/outline/calendar-event.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/calendar-event.svg",
+      "sha256": "63ea485308307c968964cd6f5d9b80f91418efd3f15a2cc4f04535e7aa322076"
+    },
+    {
+      "file": "care.svg",
+      "upstreamPath": "icons/outline/heart-handshake.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/heart-handshake.svg",
+      "sha256": "217aae10c0f6e16bb72df00c49087f350f35786aef1f88ea03a2bfe43170253a"
+    },
+    {
+      "file": "cash.svg",
+      "upstreamPath": "icons/outline/cash-banknote.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/cash-banknote.svg",
+      "sha256": "53d0e84c9d351800468859d369ae559890a4ddc0057797cf563607b443203a99"
+    },
+    {
+      "file": "chart-donut.svg",
+      "upstreamPath": "icons/outline/chart-donut.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/chart-donut.svg",
+      "sha256": "59724e6221486522880aa41901b5c921589344607dd747f3b6f502251f261cbb"
+    },
+    {
+      "file": "checklist.svg",
+      "upstreamPath": "icons/outline/clipboard-check.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/clipboard-check.svg",
+      "sha256": "339eb6deb19f8933157abf194ab5d1915cc18d5eed463488f8a63c16117e3d23"
+    },
+    {
+      "file": "click.svg",
+      "upstreamPath": "icons/outline/click.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/click.svg",
+      "sha256": "b7f744659ada0d49252f92a0c381b394fd3def9825a8a72d136b9e3abfea3653"
+    },
+    {
+      "file": "coins.svg",
+      "upstreamPath": "icons/outline/coins.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/coins.svg",
+      "sha256": "e95bc6abd9d8db7f4132ca936bcc2aae9e33454842d197dfb6f2d9de1354e86f"
+    },
+    {
+      "file": "credit-card.svg",
+      "upstreamPath": "icons/outline/credit-card.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/credit-card.svg",
+      "sha256": "82fd8520ea854b323beb9f58241ba1995a3456b821bbebc82b812971b2cb5b95"
+    },
+    {
+      "file": "cursor.svg",
+      "upstreamPath": "icons/outline/pointer.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/pointer.svg",
+      "sha256": "24ef013c5faf8451d4c883e0b4ae802f999852e7006c2eb23aef1dfb66890a84"
+    },
+    {
+      "file": "exit.svg",
+      "upstreamPath": "icons/outline/door-exit.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/door-exit.svg",
+      "sha256": "f7674f9c8b3a91fdd9f1ee29e567bb3ab5be9b3842fb22d89b1b668225966d65"
+    },
+    {
+      "file": "first-aid.svg",
+      "upstreamPath": "icons/outline/first-aid-kit.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/first-aid-kit.svg",
+      "sha256": "be04acda03eaf4e465222125c61e0295685d585c76b09bb5ce16b2f73c530a0d"
+    },
+    {
+      "file": "forward.svg",
+      "upstreamPath": "icons/outline/mail-forward.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/mail-forward.svg",
+      "sha256": "7dd2787757503f606673eba9ddde8a2001cb99b9355a113d2c7c7696b37b4fa8"
+    },
+    {
+      "file": "gauge.svg",
+      "upstreamPath": "icons/outline/gauge.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/gauge.svg",
+      "sha256": "b226d26b9b8f030d9ce66d58cdd25f5a287ebf9fffbd7f24c9da7c0e4fa7ca87"
+    },
+    {
+      "file": "glasses.svg",
+      "upstreamPath": "icons/outline/eyeglass.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/eyeglass.svg",
+      "sha256": "5061791515b2cb110d0efa1ca86a65bd7b9e231422d527095a9fdcc1a559dabe"
+    },
+    {
+      "file": "hook.svg",
+      "upstreamPath": "icons/outline/fish-hook.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/fish-hook.svg",
+      "sha256": "591a4a802cbd55e2dce9c668ec42ff2bd372a71ae313d282e969fe7906eccd44"
+    },
+    {
+      "file": "hourglass.svg",
+      "upstreamPath": "icons/outline/hourglass.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/hourglass.svg",
+      "sha256": "64316d209522bc02b8a205184af4143584d7a4de7b5cb7c1ef8a84aec7aebd3e"
+    },
+    {
+      "file": "invoice.svg",
+      "upstreamPath": "icons/outline/file-invoice.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/file-invoice.svg",
+      "sha256": "45779a471679113b58a1239d6db9b019f7f585d5e38077c5cb5d3e7b1768d166"
+    },
+    {
+      "file": "mail-open.svg",
+      "upstreamPath": "icons/outline/mail-opened.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/mail-opened.svg",
+      "sha256": "c56098b1b8f15242591ed9ea6d3fcbb0c7f5432ae5077b5a8ffe55ca170f0e3b"
+    },
+    {
+      "file": "percent.svg",
+      "upstreamPath": "icons/outline/percentage.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/percentage.svg",
+      "sha256": "f14f110278bb96f3f4c02da05728bdc6901cc878928d0de4694d39c589dd6b27"
+    },
+    {
+      "file": "piggy-bank.svg",
+      "upstreamPath": "icons/outline/pig-money.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/pig-money.svg",
+      "sha256": "cc8634af2a74b85ddf6cbb1d077c715d032cc0c0da4cf7ae4b6fddf242e631c8"
+    },
+    {
+      "file": "pill.svg",
+      "upstreamPath": "icons/outline/pill.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/pill.svg",
+      "sha256": "673a694d8369f3d99405dda247aa439535662d40d8adea3993aa647a21c238f8"
+    },
+    {
+      "file": "plant.svg",
+      "upstreamPath": "icons/outline/plant.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/plant.svg",
+      "sha256": "533f905afc30117c4bc1172c1e288a2af46afb6e29f13fda81baad0e27240750"
+    },
+    {
+      "file": "receipt.svg",
+      "upstreamPath": "icons/outline/receipt.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/receipt.svg",
+      "sha256": "208759bfe80417013207cb1d07ccdd8ead398b51ec49abb1333de8356bfb0dfa"
+    },
+    {
+      "file": "report-money.svg",
+      "upstreamPath": "icons/outline/report-money.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/report-money.svg",
+      "sha256": "9d659864d4bbeac1ccdeb0109fbb5e19323ded891977391b4c2899a4734539f2"
+    },
+    {
+      "file": "split.svg",
+      "upstreamPath": "icons/outline/arrows-split.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/arrows-split.svg",
+      "sha256": "78baf808fe236a5d7045f96b30d7f7adf282211c2e777dc6f26837e92fae2bd1"
+    },
+    {
+      "file": "stethoscope.svg",
+      "upstreamPath": "icons/outline/stethoscope.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/stethoscope.svg",
+      "sha256": "2efbfbc7e8e2426847aacbce6193dc46eb03b1bfd6496176ca3f7b3895fcd1e4"
+    },
+    {
+      "file": "tap.svg",
+      "upstreamPath": "icons/outline/hand-click.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/hand-click.svg",
+      "sha256": "f8b8366de8d788bcd037a43cfe6ec690fbf34401d410b560897463cd98ec9ac2"
+    },
+    {
+      "file": "tooth.svg",
+      "upstreamPath": "icons/outline/dental.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/dental.svg",
+      "sha256": "b33717c3b263c0607e3c99ee7b71899630c27ea8d8c49c79842a3c2168dc63e4"
+    },
+    {
+      "file": "umbrella.svg",
+      "upstreamPath": "icons/outline/umbrella.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/umbrella.svg",
+      "sha256": "971f52c82b1ee2b52f650ee77770151001cc2c867a0ac22db94487e0477a6cea"
+    },
+    {
+      "file": "unlock.svg",
+      "upstreamPath": "icons/outline/lock-open.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/lock-open.svg",
+      "sha256": "91e8115cc397641e0ea529a073850179f8cbe6f28e86a64ca839e4be229b3450"
+    },
+    {
+      "file": "wallet.svg",
+      "upstreamPath": "icons/outline/wallet.svg",
+      "url": "https://raw.githubusercontent.com/tabler/tabler-icons/74929e50416e2b7c0abb8368cdc74bdcb2560ab6/icons/outline/wallet.svg",
+      "sha256": "4f08d6965f6d9bd97ecd94eb78432631fbd2fb0e4061ec8629ad420735020052"
     }
   ]
 }

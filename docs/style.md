@@ -132,7 +132,7 @@ Inside a scene, elements are choreographed: headlines rise line by line, accent 
 - **Speech:** `kinetic` highlight/reveal/word modes, and `stack`: poster type that builds word by word as spoken, `emphasis` words larger in the accent, phrases breaking at sentences. Burned captions sit on a soft plate for legibility.
 - **Drawing:** `canvas` for anything else: routes, systems, metaphors, custom diagrams and typographic moments; `art` layers to annotate any block. Start from `clearframe sketch`.
 
-`icon-grid`, `flow`, `cycle`, `callout` and `waffle` use the 95 bundled MIT Tabler icons (`clearframe icons`). Portrait flows stack vertically. `breathing` uses explicit `{label, seconds, scale}` phases with cross-faded labels; adapt the pace to the viewer and do not infer health benefits.
+`icon-grid`, `flow`, `cycle`, `callout` and `waffle` use the 132 bundled MIT Tabler icons (`clearframe icons`). Portrait flows stack vertically. `breathing` uses explicit `{label, seconds, scale}` phases with cross-faded labels; adapt the pace to the viewer and do not infer health benefits.
 
 ## Review
 

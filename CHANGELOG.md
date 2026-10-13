@@ -3,6 +3,7 @@
 ## Enterprise bench and readable typing
 
 - **`bench/enterprise/`**: mock source documents for the films ClearFrame is mostly asked for (a 401(k) match, open enrollment, HSA or FSA, a client market update, phishing training, an expense policy, a two-voice podcast clip). Every company and figure is fictional; run the same brief through different models and compare the films and their trajectories. `podcast/make-episode.mjs` rebuilds the mock recording locally with the OS voices.
+- **37 more icons for money, benefits, health and work** (MIT Tabler at the pinned revision, 132 in all): `wallet`, `credit-card`, `receipt`, `cash`, `coins`, `piggy-bank`, `bank`, `percent`, `calculator`, `pill`, `stethoscope`, `tooth`, `glasses`, `umbrella`, `hook`, `cursor`, `click`, `tap`, `hourglass`, `exit`, `badge`, `calendar-event`, `checklist`, `invoice`, `report-money`, `care`, `unlock`, `alarm`, `mail-open`, `forward`, `chart-donut`, `split`, `first-aid`, `armchair`, `beach`, `plant`, `gauge`.
 - **Typing and decoding happen inside the finished text's layout** (canvas block and native stages). Wrapped text no longer re-breaks and re-balances while it types, and centred or right-aligned typed text no longer drifts as it grows: each line keeps the place it will have when the text is complete.
 
 ## Explanations: a picture that changes
