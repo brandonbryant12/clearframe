@@ -572,6 +572,20 @@ export function critique(root) {
       JSON.stringify(b.props ?? {}).match(/"loop"|"keys"|"along"|"steps"/);
     if (d > 8 && !moving && b.block !== 'kinetic')
       add('idea', b.id, `Held ${d.toFixed(1)} s with nothing moving. Inspect the reading hold; shorten it or reveal the next meaningful change if it feels stalled. Do not add camera shake.`);
+    // Speech-following type that changes faster than anyone reads: one word at a time, or
+    // two-word groups, across a whole passage. Fine for a few seconds of emphasis.
+    if (b.block === 'kinetic' && d > 5) {
+      const mode = b.props?.mode ?? 'highlight',
+        group = mode === 'word' ? 1 : (b.props?.maxWords ?? 6),
+        spoken = String(b.vo ?? '').split(/\s+/).filter(Boolean).length,
+        each = spoken ? (d * Math.min(group, spoken)) / spoken : d;
+      if (each < 0.9)
+        add(
+          'warn',
+          b.id,
+          `${mode === 'word' ? 'One word at a time' : `${group}-word phrases`} for ${d.toFixed(1)} s: the type changes every ${each.toFixed(1)} s, faster than a viewer reads. Keep that for a few seconds of emphasis; for a passage use mode "highlight" with maxWords 6–8 (a stable phrase that lights up as it is spoken), or give the passage a picture and let captions carry the words.`,
+        );
+    }
     if (d > 0 && words / d > 3.2 && b.block !== 'kinetic')
       add(
         'warn',

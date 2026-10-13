@@ -44,3 +44,11 @@ Kinetic phrase grouping also respects `maxGap` (default 0.6 seconds) and `maxDur
 A recording imported with `ingest --audio` keeps its master (`source/recording.wav`) and its transcript on the master's clock (`source/words.json`). Cutting words, sentences or pauses (`cut`), splitting and merging beats (`split`, `merge`) and undoing any of it (`uncut`) rebuild each beat's slice from that master; see `docs/editing.md`. Cuts start and end inside pauses and last whole frames, so kept words move by exact sample counts and **measured timings stay measured**; words that were interpolated stay estimates. Editing a recorded beat's `vo` by hand breaks this: the text no longer matches the audio, the beat loses its recording and falls back to estimated timing. Re-align (`align --whisper --beat ID`) only after replacing audio; a source edit does not need it.
 
 Generated narration is different: changing one line re-records the whole take it belongs to (the film by default, a chapter with `voice.takes: "chapter"`), so batch line edits before a paid take. Re-recording part of a take is not supported.
+
+## Readable at the speed of speech
+
+People read about three words a second while they listen, and need a phrase on screen for at least a second to take it in. Type that changes faster than that is noise, however well it moves.
+
+- For a passage, use `highlight` with `maxWords` 6–8 (a stable phrase that lights up as it is spoken). `word` and two-word groups are for a few seconds of emphasis: a hook, a punchline, a name. `critique` warns when a kinetic beat changes its type faster than every 0.9 s for more than five seconds.
+- Not every line needs its words on screen as the picture. In a podcast clip, give the explanation a drawing (a sketch, a cast, a chart) and let the captions carry the words underneath; keep kinetic type for the two or three lines worth remembering.
+- Burned captions hold whole phrases: plate captions (`captions: true`) show up to twelve words on a wide frame; pop captions (`captions: "pop"`) up to five words on a tall frame and six on a wide one, for up to 2.6 s.
