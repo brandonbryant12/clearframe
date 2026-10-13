@@ -708,12 +708,18 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
   const first = until(-1);
   threads.forEach((l, i) => words.unshift({ ...l, id: `cast-thread-in-${i}`, at: 0, enter: 'none', ...(first != null ? { exitAt: Math.max(0.01, first), exit: 'fade' } : {}) }));
   // Objects carried in that no formation moves this beat still stand where they were.
+  const untouched = [];
   for (const [id, p] of state) {
     if (groups.has(id) || p.gone || !spec.objects.has(id)) continue;
     const g = objectElement(spec.objects.get(id), `cast-${id}`, size, p, { at: 0, enter: 'none' }, spec.look);
     groups.set(id, { el: g, base: p });
     elements.unshift(g);
+    untouched.push(id);
   }
+  // A beat that brings in new objects while earlier ones stand untouched piles them up: the
+  // frame fills with the last beat's leftovers (seen only on the sheet before this note).
+  if (untouched.length >= 2 && [...groups.keys()].some(id => !state.has(id)))
+    notes.push(`${untouched.join(', ')} carried from earlier beats still stand where they were while new objects arrive: move them in this beat's formations, send them off with {"form": "exit", "ids": [${untouched.map(id => `"${id}"`).join(', ')}]}, or put a scene without a cast between the beats`);
   for (const { el } of groups.values()) el.keys.sort((a, b) => a.at - b.at);
   // The last word on the budget: a scene the renderer would refuse is refused here, by name.
   for (const [id, { el }] of groups) check(el.keys.length <= 24, `${id} has more moves in this beat than one object can carry (${el.keys.length} of 24 keyframes); move some of them to the next beat`);

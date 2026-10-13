@@ -236,3 +236,13 @@ test('pictureExtent measures where the picture sits, ignoring a line of small ty
   const e = pictureExtent(frame, w, h, Math.round(h * 0.12));
   assert.ok(e.w < 0.3 && e.h < 0.42 && e.cx < 0.35 && e.cy < 0.4, JSON.stringify(e));
 });
+
+test('a line that says figures becomes a chart ready to paste, each value on its word', async () => {
+  const { chartFor } = await import('../engine/lib/pictures.mjs');
+  const { spoken } = await import('../engine/lib/word-align.mjs');
+  const c = chartFor('For example: price starts at forty dollars, goes to fifty, you pay thirty-four.', spoken);
+  assert.deepEqual(c.values.map(v => [v.value, v.say]), [[40, 'forty'], [50, 'fifty'], [34, 'thirty-four']]);
+  assert.equal(c.kind, 'bars');
+  assert.equal(c.prefix, '$');
+  assert.equal(chartFor('Pick one of three plans.', spoken), null, 'small counts are not figures');
+});

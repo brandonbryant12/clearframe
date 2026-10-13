@@ -22,3 +22,42 @@ export function pictureFor(vo) {
   for (const [re, sketch, why, use] of PICTURES) if (re.test(vo)) return { sketch, why, use };
   return null;
 }
+
+const NUMBER_WORD = /^(zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|billion|and|point)$/;
+/**
+ * The figures a line says, in order, each with the word it starts on (for a value's `say`):
+ * "starts at forty dollars, goes to fifty, you pay thirty-four" → 40, 50, 34. Small counts
+ * (one to ten, said alone) are left out: they are usually not figures.
+ */
+export function figuresIn(vo, spoken) {
+  const tokens = String(vo).split(/\s+/).filter(Boolean), out = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const clean = t => t.toLowerCase().replace(/[^a-z0-9.$%-]/g, '').replace(/[.]+$/, '');
+    const first = clean(tokens[i]);
+    const isNum = t => /\d/.test(t) || t.split('-').every(p => NUMBER_WORD.test(p) && p !== 'and' && p !== 'point');
+    if (!first || !isNum(first)) continue;
+    let j = i + 1;
+    while (j < tokens.length && (isNum(clean(tokens[j])) || /^(and|point)$/.test(clean(tokens[j])))) j++;
+    const phrase = tokens.slice(i, j), after = clean(tokens[j] ?? '');
+    const said = spoken(phrase.map(clean)).split(/\s+/)[0] ?? '';
+    const value = Number(said.replace(/[$,%]/g, ''));
+    if (Number.isFinite(value) && !(value <= 10 && Number.isInteger(value) && !/[$%]/.test(phrase.join(' ') + after) && !/^(percent|dollars?|points?)$/.test(after)))
+      out.push({ value, say: tokens[i].replace(/[^\p{L}\p{N}$%.-]/gu, '').replace(/[.]$/, ''), prefix: /\$/.test(phrase.join(' ')) || /^dollars?$/.test(after) ? '$' : '', suffix: /%/.test(phrase.join(' ')) || after === 'percent' ? '%' : '' });
+    i = j - 1;
+  }
+  return out;
+}
+
+/** A canvas beat's chart for a line's figures, ready to paste: one figure is a number, several are bars. */
+export function chartFor(vo, spoken) {
+  const f = figuresIn(vo, spoken).slice(0, 6);
+  if (!f.length) return null;
+  // One currency or percent sign said once ("forty dollars, fifty, thirty-four") covers the set.
+  const prefix = f.some(x => x.prefix === '$') && !f.some(x => x.suffix) ? '$' : '', suffix = f.some(x => x.suffix === '%') && !f.some(x => x.prefix) ? '%' : '';
+  return {
+    kind: f.length === 1 ? 'number' : 'bars',
+    ...(prefix ? { prefix } : {}),
+    ...(suffix ? { suffix } : {}),
+    values: f.map((x, i) => ({ label: `WHAT ${i + 1} IS`, value: x.value, say: x.say })),
+  };
+}

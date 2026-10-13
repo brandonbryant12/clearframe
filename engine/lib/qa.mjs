@@ -12,7 +12,8 @@ import { measureDrop } from './beatmap.mjs';
 import { sha256 } from '../../scene/engine.mjs';
 import { reviewGeometry } from '../../film/render-geometry.mjs';
 import { COVER } from '../../film/constants.mjs';
-import { pictureFor } from './pictures.mjs';
+import { pictureFor, chartFor } from './pictures.mjs';
+import { spoken } from './word-align.mjs';
 
 // Analysis grid: the long side at 128 px is enough to see a pop or a jump, and small enough
 // to hold a few minutes of film in memory.
@@ -538,13 +539,18 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
       ? [
           `  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures and keep type for the one or two lines worth repeating:`,
           ...(() => {
-            const typed = timed.map((tb, i) => sb.beats[tb.index ?? i]).filter(b => b && typeOnly(b)),
-              fits = typed.map(b => [b, pictureFor(b.vo ?? '')]),
-              rest = fits.filter(([, f]) => !f).map(([b]) => b.id);
+            const typed = timed.map((tb, i) => sb.beats[tb.index ?? i]).filter(b => b && typeOnly(b));
+            // A sketch that fits the line first; else a line that says figures gets its chart ready to
+            // paste (the values and the words they land on); else the recipe for its kind of idea.
+            const lines = typed.map(b => {
+              const f = pictureFor(b.vo ?? ''), chart = !f?.sketch && chartFor(b.vo ?? '', spoken);
+              if (f?.sketch) return [b, `the \`${f.sketch}\` sketch (${f.why.toLowerCase().replace(/^this line is /, '')}; \`sketch ${f.sketch}\` prints the beat to paste)`];
+              if (chart) return [b, `paste {"block": "canvas", "props": {"source": "…", "chart": ${JSON.stringify(chart)}}} and name each value (its label)`];
+              return [b, f?.use ?? null];
+            });
+            const rest = lines.filter(([, l]) => !l).map(([b]) => b.id);
             return [
-              ...fits
-                .filter(([, f]) => f)
-                .map(([b, f]) => `    ${b.id}: ${f.sketch ? `the \`${f.sketch}\` sketch (${f.why.toLowerCase().replace(/^this line is /, '')})` : f.use}`),
+              ...lines.filter(([, l]) => l).map(([b, l]) => `    ${b.id}: ${l}`),
               ...(rest.length
                 ? [`    ${rest.join(', ')}: a picture of what each line says (a sketch: \`sketch\` lists them; a cast of the film's objects; a chart with a \`say\` on each value), or fold the line into the next picture's narration`]
                 : []),
