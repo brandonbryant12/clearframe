@@ -12,6 +12,7 @@ import { measureDrop } from './beatmap.mjs';
 import { sha256 } from '../../scene/engine.mjs';
 import { reviewGeometry } from '../../film/render-geometry.mjs';
 import { COVER } from '../../film/constants.mjs';
+import { pictureFor } from './pictures.mjs';
 
 // Analysis grid: the long side at 128 px is enough to see a pop or a jump, and small enough
 // to hold a few minutes of film in memory.
@@ -525,7 +526,22 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
       ? [`  holds: ${s.deliberateSeconds} s are declared as reading holds (pace: "hold"), more than a fifth of the film; ${overflow} s of them count as still. A reading hold is for a figure or a step that must be read, not a way past this check.`]
       : []),
     ...(typeShare >= 50
-      ? [`  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures (the workplace sketches, a cast, a chart with cued values) and keep type for the one or two lines worth repeating.`]
+      ? [
+          `  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures and keep type for the one or two lines worth repeating:`,
+          ...(() => {
+            const typed = timed.map((tb, i) => sb.beats[tb.index ?? i]).filter(b => b && typeOnly(b)),
+              fits = typed.map(b => [b, pictureFor(b.vo ?? '')]),
+              rest = fits.filter(([, f]) => !f).map(([b]) => b.id);
+            return [
+              ...fits
+                .filter(([, f]) => f)
+                .map(([b, f]) => `    ${b.id}: ${f.sketch ? `the \`${f.sketch}\` sketch (${f.why.toLowerCase().replace(/^this line is /, '')})` : f.use}`),
+              ...(rest.length
+                ? [`    ${rest.join(', ')}: a picture of what each line says (a sketch: \`sketch\` lists them; a cast of the film's objects; a chart with a \`say\` on each value), or fold the line into the next picture's narration`]
+                : []),
+            ];
+          })(),
+        ]
       : []),
     ...(worst.length
       ? [
