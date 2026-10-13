@@ -64,7 +64,14 @@ pub fn rgba_to_i420(rgba: &[u8], width: usize, height: usize, y: Plane, u: Plane
 /// encoder's planes — 1.5 bytes a pixel cross to the CPU instead of 4, and the CPU is left to
 /// the encoder.
 pub struct GpuI420 {
-    planes: [sk::Surface; 3],
+    /// All three planes in one one-channel surface, read back in one go: luma over the full width,
+    /// then Cb and Cr side by side below it. Ganesh's `read_pixels` waits for all submitted GPU work,
+    /// so three reads a frame were three waits.
+    packed: sk::Surface,
+    /// The packed planes on the CPU, copied out into the encoder's planes.
+    scratch: Vec<u8>,
+    width: i32,
+    height: i32,
 }
 
 const LUMA: &str = "uniform shader img; uniform float3 k;
@@ -111,7 +118,8 @@ impl GpuI420 {
             .ok_or_else(|| format!("cannot create a {pw}x{ph} one-channel surface"))
         };
         let (cw, ch) = ((w + 1) / 2, (h + 1) / 2);
-        Ok(Some(GpuI420 { planes: [plane(w, h)?, plane(cw, ch)?, plane(cw, ch)?] }))
+        let pw = w.max(2 * cw);
+        Ok(Some(GpuI420 { packed: plane(pw, h + ch)?, scratch: vec![0; (pw * (h + ch)) as usize], width: w, height: h }))
     }
 
     /// Convert the engine's current frame into `y`, `u` and `v`.
@@ -124,31 +132,42 @@ impl GpuI420 {
         let source = image
             .to_shader((sk::TileMode::Clamp, sk::TileMode::Clamp), sk::SamplingOptions::default(), None)
             .ok_or("cannot sample the frame")?;
+        let (w, h) = (self.width, self.height);
+        let (cw, ch) = ((w + 1) / 2, (h + 1) / 2);
         EFFECTS.with(|(luma, chroma)| -> Result<(), String> {
-            for (i, (effect, k)) in [(luma, &Y), (chroma, &CB), (chroma, &CR)].into_iter().enumerate() {
+            // Each plane's shader sees its own coordinates (the translate moves only where it lands).
+            let canvas = self.packed.canvas();
+            for (effect, k, (x, y), (pw, ph)) in [(luma, &Y, (0, 0), (w, h)), (chroma, &CB, (0, h), (cw, ch)), (chroma, &CR, (cw, h), (cw, ch))] {
                 let shader = effect
                     .make_shader(coefficients(k), &[source.clone().into()], None)
                     .ok_or("cannot make the yuv shader")?;
-                let surface = &mut self.planes[i];
-                let (pw, ph) = (surface.width(), surface.height());
                 let mut paint = sk::Paint::default();
                 paint.set_shader(shader);
                 paint.set_blend_mode(sk::BlendMode::Src);
-                surface.canvas().draw_rect(sk::Rect::from_wh(pw as f32, ph as f32), &paint);
+                canvas.save();
+                canvas.translate((x as f32, y as f32));
+                canvas.draw_rect(sk::Rect::from_wh(pw as f32, ph as f32), &paint);
+                canvas.restore();
             }
             Ok(())
         })?;
         if let Some(g) = engine.gpu.as_mut() {
             g.context.flush_and_submit();
         }
-        for (surface, plane) in self.planes.iter_mut().zip(out) {
-            let (pw, ph) = (surface.width(), surface.height());
-            let info = sk::ImageInfo::new((pw, ph), sk::ColorType::Alpha8, sk::AlphaType::Premul, None);
-            if plane.data.len() < plane.stride * (ph as usize - 1) + pw as usize {
+        let (pw, rows) = (self.packed.width(), self.packed.height());
+        let info = sk::ImageInfo::new((pw, rows), sk::ColorType::Alpha8, sk::AlphaType::Premul, None);
+        if !self.packed.read_pixels(&info, &mut self.scratch, pw as usize, (0, 0)) {
+            return Err(format!("failed to read the {pw}x{rows} yuv planes back"));
+        }
+        let [y, u, v] = out;
+        let (w, h, cw, ch, pw) = (w as usize, h as usize, cw as usize, ch as usize, pw as usize);
+        for (plane, (x0, y0), (pw_, ph_)) in [(y, (0, 0), (w, h)), (u, (0, h), (cw, ch)), (v, (cw, h), (cw, ch))] {
+            if plane.data.len() < plane.stride * (ph_ - 1) + pw_ {
                 return Err("a yuv plane is smaller than the frame".into());
             }
-            if !surface.read_pixels(&info, plane.data, plane.stride, (0, 0)) {
-                return Err(format!("failed to read a {pw}x{ph} yuv plane back"));
+            for row in 0..ph_ {
+                let from = (y0 + row) * pw + x0;
+                plane.data[row * plane.stride..row * plane.stride + pw_].copy_from_slice(&self.scratch[from..from + pw_]);
             }
         }
         Ok(())
