@@ -564,7 +564,9 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
     .filter(b => b.props?.sketch && sketchByName(b.props.sketch)?.keep)
     .map(b => [b.id, sketchWords(b.props.sketch, b.props.sketchParams).filter(w => !(w in (b.props.sketchText ?? {})))])
     .filter(([, left]) => left.length);
-  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute || placeholders.length);
+  // A file name shown as the credit ("import.mjs") is on screen in every frame of its beat.
+  const fileSources = sb.beats.filter(b => /(^|[\s(/])[\w.-]+\.(mjs|js|json|wav|txt)\b/.test(String(b.props?.source ?? ''))).map(b => b.id);
+  const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length || short || mute || placeholders.length || fileSources.length);
   const lines = [
     `motion: ${ready ? 'READY' : 'NOT READY'} · ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
     ...(overflow
@@ -614,6 +616,9 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
       ? [`  sound: ${unvoiced.length} of ${narrated.length} beats have narration but no voice, so the film plays their words in silence. Record it free with \`voice DIR --draft\`, or, for a recording (a podcast, an interview), import it with \`ingest DIR --audio FILE\` so the film plays the recording itself.`]
       : []),
     ...(blank.length ? ['  blank under the voice:', ...blank] : []),
+    ...(fileSources.length
+      ? [`  a file name shown as the source line in ${fileSources.join(', ')}: credit who said it or the document people know ("Sam, on air"; "Kestrel Benefits Guide 2027").`]
+      : []),
     ...(placeholders.length
       ? [`  placeholders on screen: ${placeholders.map(([id, left]) => `${id} (${left.join(', ')})`).join('; ')}. Fill each in sketchText, or change sketchParams so the sketch does not draw it.`]
       : []),
