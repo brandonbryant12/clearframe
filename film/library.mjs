@@ -125,10 +125,15 @@ const VALIDATE = {
         'transition',
         'sfx',
         'music',
+        'endings',
       ],
       where,
     );
     if (!item.title || !item.audience || !item.inputs) throw new Error(`${where}: needs title, audience and inputs`);
+    // Alternative closing beats, one picked per project, so films from one playbook don't share an ending.
+    if (item.endings != null && (!Array.isArray(item.endings) || item.endings.some(e =>
+      !e || typeof e.name !== 'string' || typeof e.about !== 'string' || !Array.isArray(e.beats) || !e.beats.length)))
+      throw new Error(`${where}: endings must be [{name, about, beats: [...]}]`);
     if (item.sources != null && (!Array.isArray(item.sources) || item.sources.some(s =>
       !s || typeof s !== 'object' || Array.isArray(s) ||
       !((typeof s.claim === 'string' && s.claim.trim() && typeof s.source === 'string' && s.source.trim()) ||

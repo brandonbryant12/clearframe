@@ -85,85 +85,93 @@
           "THREE": "all"
         }
       }
-    },
+    }
+  ],
+  "endings": [
     {
-      "id": "step",
-      "block": "canvas",
-      "vo": "To change it, open Benefits, then Retirement. Set your rate to five percent, and save.",
-      "props": {
-        "sketch": "portal",
-        "sketchText": {
-          "APP": "Example Co. Benefits",
-          "STEP1": "Benefits",
-          "STEP2": "Retirement",
-          "OTHER": "Health & dental",
-          "FIELD": "Contribution rate",
-          "OLD": "3%",
-          "NEW": "5%",
-          "DONE": "Saved: starts with your next paycheck"
+      "name": "app-then-object",
+      "about": "the step done in the app on a desktop, then the film’s own object changed (a cast close).",
+      "beats": [
+        {
+          "id": "step",
+          "block": "canvas",
+          "vo": "To change it, open Benefits, then Retirement. Set your rate to five percent, and save.",
+          "props": {
+            "sketch": "portal",
+            "sketchText": {
+              "APP": "Example Co. Benefits",
+              "STEP1": "Benefits",
+              "STEP2": "Retirement",
+              "OTHER": "Health & dental",
+              "FIELD": "Contribution rate",
+              "OLD": "3%",
+              "NEW": "5%",
+              "DONE": "Saved: starts with your next paycheck"
+            },
+            "sketchSay": {
+              "CLICK1": "Benefits",
+              "CLICK2": "Retirement",
+              "CHANGE": "five",
+              "SAVE": "save"
+            }
+          },
+          "transition": "panel"
         },
-        "sketchSay": {
-          "CLICK1": "Benefits",
-          "CLICK2": "Retirement",
-          "CHANGE": "five",
-          "SAVE": "save"
-        }
-      },
-      "transition": "panel"
-    },
-    {
-      "id": "close",
-      "block": "canvas",
-      "vo": "Two minutes today. Free money, with every paycheck after.",
-      "props": {
-        "cast": {
-          "look": "tiles",
-          "objects": [
-            {
-              "id": "pay",
-              "shape": "paycheck",
-              "color": "accent",
-              "label": "Every paycheck",
-              "enter": "left",
-              "size": 210
-            },
-            {
-              "id": "jar",
-              "shape": "jar",
-              "color": "positive",
-              "label": "Your retirement",
-              "enter": "pop",
-              "size": 340
-            }
-          ],
-          "formations": [
-            {
-              "form": "line",
-              "at": 0,
-              "ids": [
-                "jar"
+        {
+          "id": "close",
+          "block": "canvas",
+          "vo": "Two minutes today. Free money, with every paycheck after.",
+          "props": {
+            "cast": {
+              "look": "tiles",
+              "objects": [
+                {
+                  "id": "pay",
+                  "shape": "paycheck",
+                  "color": "accent",
+                  "label": "Every paycheck",
+                  "enter": "left",
+                  "size": 210
+                },
+                {
+                  "id": "jar",
+                  "shape": "jar",
+                  "color": "positive",
+                  "label": "Your retirement",
+                  "enter": "pop",
+                  "size": 340
+                }
+              ],
+              "formations": [
+                {
+                  "form": "line",
+                  "at": 0,
+                  "ids": [
+                    "jar"
+                  ]
+                },
+                {
+                  "form": "travel",
+                  "ids": [
+                    "pay"
+                  ],
+                  "to": "jar",
+                  "say": "Free"
+                },
+                {
+                  "form": "merge",
+                  "ids": [
+                    "pay"
+                  ],
+                  "into": "jar",
+                  "say": "every"
+                }
               ]
-            },
-            {
-              "form": "travel",
-              "ids": [
-                "pay"
-              ],
-              "to": "jar",
-              "say": "Free"
-            },
-            {
-              "form": "merge",
-              "ids": [
-                "pay"
-              ],
-              "into": "jar",
-              "say": "every"
             }
-          ]
+          },
+          "transition": "panel"
         }
-      },
-      "transition": "panel"
+      ]
     }
   ]
 }

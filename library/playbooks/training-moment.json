@@ -75,71 +75,79 @@
           "THREE": "link"
         }
       }
-    },
+    }
+  ],
+  "endings": [
     {
-      "id": "habit",
-      "block": "canvas",
-      "vo": "So don't click, and don't just delete it. Choose Report, then Phishing, and send it.",
-      "props": {
-        "sketch": "portal",
-        "sketchText": {
-          "APP": "Mail",
-          "STEP1": "Inbox",
-          "STEP2": "Your account locks in 2 hours",
-          "OTHER": "Team lunch on Friday",
-          "FIELD": "Report as",
-          "OLD": "Not reported",
-          "NEW": "Phishing",
-          "DONE": "Reported: Security replies within an hour"
+      "name": "app-then-object",
+      "about": "the step done in the app on a desktop, then the film’s own object changed (a cast close).",
+      "beats": [
+        {
+          "id": "habit",
+          "block": "canvas",
+          "vo": "So don't click, and don't just delete it. Choose Report, then Phishing, and send it.",
+          "props": {
+            "sketch": "portal",
+            "sketchText": {
+              "APP": "Mail",
+              "STEP1": "Inbox",
+              "STEP2": "Your account locks in 2 hours",
+              "OTHER": "Team lunch on Friday",
+              "FIELD": "Report as",
+              "OLD": "Not reported",
+              "NEW": "Phishing",
+              "DONE": "Reported: Security replies within an hour"
+            },
+            "sketchSay": {
+              "CLICK1": "don't",
+              "CLICK2": "delete",
+              "CHANGE": "Phishing",
+              "SAVE": "send"
+            }
+          },
+          "transition": "panel"
         },
-        "sketchSay": {
-          "CLICK1": "don't",
-          "CLICK2": "delete",
-          "CHANGE": "Phishing",
-          "SAVE": "send"
-        }
-      },
-      "transition": "panel"
-    },
-    {
-      "id": "close",
-      "block": "canvas",
-      "vo": "Three seconds to look. One click to report.",
-      "props": {
-        "cast": {
-          "look": "tiles",
-          "objects": [
-            {
-              "id": "mail",
-              "shape": "envelope",
-              "color": "negative",
-              "label": "Suspicious email",
-              "enter": "pop"
-            },
-            {
-              "id": "shield",
-              "icon": "shield",
-              "color": "positive",
-              "label": "Reported",
-              "enter": "pop"
+        {
+          "id": "close",
+          "block": "canvas",
+          "vo": "Three seconds to look. One click to report.",
+          "props": {
+            "cast": {
+              "look": "tiles",
+              "objects": [
+                {
+                  "id": "mail",
+                  "shape": "envelope",
+                  "color": "negative",
+                  "label": "Suspicious email",
+                  "enter": "pop"
+                },
+                {
+                  "id": "shield",
+                  "icon": "shield",
+                  "color": "positive",
+                  "label": "Reported",
+                  "enter": "pop"
+                }
+              ],
+              "formations": [
+                {
+                  "form": "hero",
+                  "hero": "mail",
+                  "say": "look"
+                },
+                {
+                  "form": "swap",
+                  "out": "mail",
+                  "in": "shield",
+                  "say": "report"
+                }
+              ]
             }
-          ],
-          "formations": [
-            {
-              "form": "hero",
-              "hero": "mail",
-              "say": "look"
-            },
-            {
-              "form": "swap",
-              "out": "mail",
-              "in": "shield",
-              "say": "report"
-            }
-          ]
+          },
+          "transition": "panel"
         }
-      },
-      "transition": "panel"
+      ]
     }
   ]
 }

@@ -29,12 +29,12 @@
         "series": [
           100,
           101.2,
-          102.0,
+          102,
           101.1,
           97.4,
           95.6,
           96.9,
-          99.0,
+          99,
           100.8,
           101.9,
           102.3,
@@ -107,83 +107,91 @@
         ],
         "source": "Example Wealth Investment Committee, quarterly letter"
       }
-    },
+    }
+  ],
+  "endings": [
     {
-      "id": "talk",
-      "block": "canvas",
-      "vo": "If you would like to talk it through, open My adviser, choose Book a review, pick a time, and confirm.",
-      "props": {
-        "sketch": "portal",
-        "sketchText": {
-          "APP": "Example Wealth",
-          "STEP1": "My adviser",
-          "STEP2": "Book a review",
-          "OTHER": "Documents",
-          "FIELD": "Time",
-          "OLD": "Choose a time",
-          "NEW": "Tue 10:30",
-          "DONE": "Booked: your adviser will call on Tuesday"
+      "name": "app-then-object",
+      "about": "the step done in the app on a desktop, then the film’s own object changed (a cast close).",
+      "beats": [
+        {
+          "id": "talk",
+          "block": "canvas",
+          "vo": "If you would like to talk it through, open My adviser, choose Book a review, pick a time, and confirm.",
+          "props": {
+            "sketch": "portal",
+            "sketchText": {
+              "APP": "Example Wealth",
+              "STEP1": "My adviser",
+              "STEP2": "Book a review",
+              "OTHER": "Documents",
+              "FIELD": "Time",
+              "OLD": "Choose a time",
+              "NEW": "Tue 10:30",
+              "DONE": "Booked: your adviser will call on Tuesday"
+            },
+            "sketchSay": {
+              "CLICK1": "adviser",
+              "CLICK2": "review",
+              "CHANGE": "time",
+              "SAVE": "confirm"
+            }
+          }
         },
-        "sketchSay": {
-          "CLICK1": "adviser",
-          "CLICK2": "review",
-          "CHANGE": "time",
-          "SAVE": "confirm"
-        }
-      }
-    },
-    {
-      "id": "close",
-      "block": "canvas",
-      "vo": "Your adviser is here when you want to talk it through.",
-      "props": {
-        "cast": {
-          "look": "tiles",
-          "objects": [
-            {
-              "id": "you",
-              "shape": "person",
-              "color": "accent",
-              "label": "You",
-              "enter": "pop"
-            },
-            {
-              "id": "adviser",
-              "shape": "person",
-              "color": "accent2",
-              "label": "Your adviser",
-              "enter": "pop"
-            },
-            {
-              "id": "cal",
-              "shape": "calendar",
-              "color": "surface",
-              "label": "A time for you",
-              "enter": "pop"
-            }
-          ],
-          "formations": [
-            {
-              "form": "line",
-              "at": 0,
-              "ids": [
-                "you",
-                "adviser"
-              ]
-            },
-            {
-              "form": "line",
-              "say": "talk",
-              "ids": [
-                "you",
-                "cal",
-                "adviser"
+        {
+          "id": "close",
+          "block": "canvas",
+          "vo": "Your adviser is here when you want to talk it through.",
+          "props": {
+            "cast": {
+              "look": "tiles",
+              "objects": [
+                {
+                  "id": "you",
+                  "shape": "person",
+                  "color": "accent",
+                  "label": "You",
+                  "enter": "pop"
+                },
+                {
+                  "id": "adviser",
+                  "shape": "person",
+                  "color": "accent2",
+                  "label": "Your adviser",
+                  "enter": "pop"
+                },
+                {
+                  "id": "cal",
+                  "shape": "calendar",
+                  "color": "surface",
+                  "label": "A time for you",
+                  "enter": "pop"
+                }
+              ],
+              "formations": [
+                {
+                  "form": "line",
+                  "at": 0,
+                  "ids": [
+                    "you",
+                    "adviser"
+                  ]
+                },
+                {
+                  "form": "line",
+                  "say": "talk",
+                  "ids": [
+                    "you",
+                    "cal",
+                    "adviser"
+                  ]
+                }
               ]
             }
-          ]
+          },
+          "transition": "panel"
         }
-      },
-      "transition": "panel"
+      ]
     }
   ]
 }

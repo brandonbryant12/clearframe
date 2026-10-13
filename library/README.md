@@ -144,6 +144,7 @@ A sketch should draw a mechanism, a place or a purposeful material composition, 
 - A playbook can set the film's look: `theme`, `motion`, `backdrop`, `texture`, `lens`, `camera` (the default for beats without their own; `none` for a steady film), `heading`, `textMotion` and `transition`. A treatment applied on top still wins.
 - Optional `sources` holds `claim`/`source` entries (with `asOf` when useful), or `id`/`title` entries. They are copied intact into a scaffold, so a playbook can preserve its illustrative assumptions and arithmetic.
 - Sample figures must be marked as illustrative, with `source: "Illustrative sample data · replace before publishing"`.
+- Optional `endings`: `[{name, about, beats}]`, alternative closing beats appended after `beats`. `new`/`start` pick one per project (from the folder name or `--seed`, like a treatment's looks; `--ending NAME` chooses) and DIRECTION.md says which; without a pick, the first. Films from one playbook then don't all end on the same picture.
 - A playbook is a starting structure, not a template to fill in. Keep it to the arc and let the author adapt it.
 
 ## Layers: project and shared libraries

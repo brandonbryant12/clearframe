@@ -102,99 +102,107 @@
         }
       },
       "hold": 1.2
-    },
+    }
+  ],
+  "endings": [
     {
-      "id": "step",
-      "block": "canvas",
-      "vo": "The app does the work. Open New claim, snap the receipt, check the amount, and submit.",
-      "props": {
-        "sketch": "portal",
-        "sketchText": {
-          "APP": "Example Co. Expenses",
-          "STEP1": "New claim",
-          "STEP2": "Snap a receipt",
-          "OTHER": "Mileage",
-          "FIELD": "Amount",
-          "OLD": "$0.00",
-          "NEW": "$39.10",
-          "DONE": "Submitted: paid in about 5 business days"
+      "name": "app-then-object",
+      "about": "the step done in the app on a desktop, then the film’s own object changed (a cast close).",
+      "beats": [
+        {
+          "id": "step",
+          "block": "canvas",
+          "vo": "The app does the work. Open New claim, snap the receipt, check the amount, and submit.",
+          "props": {
+            "sketch": "portal",
+            "sketchText": {
+              "APP": "Example Co. Expenses",
+              "STEP1": "New claim",
+              "STEP2": "Snap a receipt",
+              "OTHER": "Mileage",
+              "FIELD": "Amount",
+              "OLD": "$0.00",
+              "NEW": "$39.10",
+              "DONE": "Submitted: paid in about 5 business days"
+            },
+            "sketchSay": {
+              "CLICK1": "New",
+              "CLICK2": "snap",
+              "CHANGE": "amount",
+              "SAVE": "submit"
+            }
+          },
+          "transition": "panel"
         },
-        "sketchSay": {
-          "CLICK1": "New",
-          "CLICK2": "snap",
-          "CHANGE": "amount",
-          "SAVE": "submit"
-        }
-      },
-      "transition": "panel"
-    },
-    {
-      "id": "close",
-      "block": "canvas",
-      "vo": "Itemised. Within thirty days. In the app.",
-      "props": {
-        "cast": {
-          "look": "tiles",
-          "objects": [
-            {
-              "id": "receipt",
-              "shape": "receipt",
-              "color": "surface",
-              "label": "Itemised",
-              "enter": "pop"
-            },
-            {
-              "id": "cal",
-              "shape": "calendar",
-              "color": "accent",
-              "label": "Within 30 days",
-              "enter": "pop"
-            },
-            {
-              "id": "phone",
-              "shape": "phone",
-              "color": "accent2",
-              "label": "In the app",
-              "enter": "pop"
-            }
-          ],
-          "formations": [
-            {
-              "form": "line",
-              "say": "Itemised",
-              "ids": [
-                "receipt"
-              ]
-            },
-            {
-              "form": "line",
-              "say": "Within",
-              "ids": [
-                "receipt",
-                "cal"
-              ]
-            },
-            {
-              "form": "line",
-              "say": "app",
-              "ids": [
-                "receipt",
-                "cal",
-                "phone"
-              ]
-            },
-            {
-              "form": "mark",
-              "mark": "circle",
-              "ids": [
-                "phone"
+        {
+          "id": "close",
+          "block": "canvas",
+          "vo": "Itemised. Within thirty days. In the app.",
+          "props": {
+            "cast": {
+              "look": "tiles",
+              "objects": [
+                {
+                  "id": "receipt",
+                  "shape": "receipt",
+                  "color": "surface",
+                  "label": "Itemised",
+                  "enter": "pop"
+                },
+                {
+                  "id": "cal",
+                  "shape": "calendar",
+                  "color": "accent",
+                  "label": "Within 30 days",
+                  "enter": "pop"
+                },
+                {
+                  "id": "phone",
+                  "shape": "phone",
+                  "color": "accent2",
+                  "label": "In the app",
+                  "enter": "pop"
+                }
               ],
-              "say": "app"
+              "formations": [
+                {
+                  "form": "line",
+                  "say": "Itemised",
+                  "ids": [
+                    "receipt"
+                  ]
+                },
+                {
+                  "form": "line",
+                  "say": "Within",
+                  "ids": [
+                    "receipt",
+                    "cal"
+                  ]
+                },
+                {
+                  "form": "line",
+                  "say": "app",
+                  "ids": [
+                    "receipt",
+                    "cal",
+                    "phone"
+                  ]
+                },
+                {
+                  "form": "mark",
+                  "mark": "circle",
+                  "ids": [
+                    "phone"
+                  ],
+                  "say": "app"
+                }
+              ]
             }
-          ]
+          },
+          "transition": "panel"
         }
-      },
-      "transition": "panel"
+      ]
     }
   ]
 }

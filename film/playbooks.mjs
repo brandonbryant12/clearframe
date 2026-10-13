@@ -13,9 +13,19 @@ import { directionOptions, directionMarkdown, directionRefs } from './directions
 // project's library/). A beat that names a `sketch` is redrawn for the requested frame.
 export const playbooks = () => items('playbooks');
 
-export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
+/** A playbook's ending by name (or its first): the closing beats appended to its body. */
+export function endingFor(book, name) {
+  if (!book?.endings?.length) return null;
+  if (name == null) return book.endings[0];
+  const found = book.endings.find(e => e.name === name);
+  if (!found) throw new Error(`${book.id} has no ending ${name} (its endings are ${book.endings.map(e => e.name).join(', ')})`);
+  return found;
+}
+
+export function storyboardFor(id, { title, theme, vertical, seed, ending } = {}) {
   const book = playbooks().find(p => p.id === id);
   if (!book) throw new Error(`Unknown playbook ${id}`);
+  const close = endingFor(book, ending);
   const sb = {
     version: 2,
     title: title ?? book.title,
@@ -49,7 +59,7 @@ export function storyboardFor(id, { title, theme, vertical, seed } = {}) {
       lighting: 'Soft, diffuse',
       motion: 'Slow left-to-right movement',
     },
-    beats: structuredClone(book.beats),
+    beats: structuredClone([...book.beats, ...(close?.beats ?? [])]),
   };
   // Sketch coordinates are frame pixels: re-draw them for the requested frame.
   // A sketch's own camera (view, truck, dolly, focus) travels with it. A canvas drawn in
@@ -141,11 +151,13 @@ export function scaffold(dir, options = {}) {
       options.recipe ??
       (options.treatment && treatmentById(options.treatment)?.playbook) ??
       'concept-explainer',
-    sb = storyboardFor(id, options),
     book = playbooks().find(p => p.id === id);
+  const variantKey = options.seed ?? path.basename(path.resolve(dir));
+  // Like a treatment's looks, a playbook's endings are picked per project (or named with --ending).
+  const ending = options.ending ? endingFor(book, options.ending) : pickVariant(book?.endings, `${variantKey}/ending`);
+  const sb = storyboardFor(id, { ...options, ending: ending?.name });
   // The length the person asked for, in seconds: `draft` says when the film falls well short of it.
   if (options.length) sb.length = options.length;
-  const variantKey = options.seed ?? path.basename(path.resolve(dir));
   const look = options.treatment && !options.theme ? pickVariant(treatmentById(options.treatment)?.variants, variantKey) : null;
   if (options.treatment) {
     applyTreatment(sb, options.treatment, { variant: options.theme ? null : variantKey });
@@ -178,6 +190,7 @@ export function scaffold(dir, options = {}) {
   fs.writeFileSync(
     path.join(dir, 'DIRECTION.md'),
     directionTemplate(sb, options.treatment ? treatmentById(options.treatment) : null) +
+      (ending && book.endings.length > 1 ? `\n## Ending\n\nThe ${id} playbook's \`${ending.name}\` ending (picked for this project; another folder, \`--seed\` or \`--ending NAME\` picks another: ${book.endings.map(e => e.name).join(', ')}): ${ending.about}\n` : '') +
       (look ? `\n## Look\n\nThe ${options.treatment} treatment's \`${look.name}\` look (picked for this project; another folder or \`--seed\` picks another): palette \`${sb.theme}\`, type \`${sb.type ?? 'inter'}\`${look.beats?.rough ? ', drawn by hand' : look.beats?.print ? `, printed (${typeof look.beats.print === 'string' ? look.beats.print : 'print'})` : ', clean lines'}. Keep it unless the brand or the brief asks for another; it is what keeps this film from looking like the last one.\n` : '') +
       directionMarkdown(options.direction) +
       (drawn ? `\n${museMarkdown(drawn)}` : ''),

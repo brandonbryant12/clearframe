@@ -20,7 +20,7 @@ import * as native from '../film/production.mjs';
 
 const HELP = `ClearFrame — motion graphics
 
-  new <dir> [--direction ID] [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical] [--seed N|random] [--length seconds]
+  new <dir> [--direction ID] [--playbook concept-explainer] [--treatment editorial] [--theme midnight] [--vertical] [--seed N|random] [--length seconds] [--ending NAME]
   start <dir> [--idea text] [--document report.md ...] [--brand brand.json] [--audience text] [--takeaway text] [--length seconds]
                                       portable source + brand intake; accepts --direction, --playbook, --treatment, --vertical
   directions [research|podcast] [--json] optional story/picture/pace starting points; custom JSON in library/directions
@@ -116,6 +116,7 @@ async function main() {
   const strings = [
     'duration',
     'length',
+    'ending',
     'scale',
     'idea',
     'document',

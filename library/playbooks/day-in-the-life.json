@@ -129,82 +129,90 @@
           "TOTAL": "every"
         }
       }
-    },
+    }
+  ],
+  "endings": [
     {
-      "id": "step",
-      "block": "canvas",
-      "transition": "panel",
-      "vo": "She set it up once, in the benefits portal: Retirement, five percent, save. Then she got back to her first week.",
-      "props": {
-        "sketch": "portal",
-        "sketchText": {
-          "APP": "Example Co. Benefits",
-          "STEP1": "Benefits",
-          "STEP2": "Retirement",
-          "OTHER": "Health & dental",
-          "FIELD": "Contribution rate",
-          "OLD": "0%",
-          "NEW": "5%",
-          "DONE": "Saved: from her next paycheck"
+      "name": "app-then-object",
+      "about": "the step done in the app on a desktop, then the film’s own object changed (a cast close).",
+      "beats": [
+        {
+          "id": "step",
+          "block": "canvas",
+          "transition": "panel",
+          "vo": "She set it up once, in the benefits portal: Retirement, five percent, save. Then she got back to her first week.",
+          "props": {
+            "sketch": "portal",
+            "sketchText": {
+              "APP": "Example Co. Benefits",
+              "STEP1": "Benefits",
+              "STEP2": "Retirement",
+              "OTHER": "Health & dental",
+              "FIELD": "Contribution rate",
+              "OLD": "0%",
+              "NEW": "5%",
+              "DONE": "Saved: from her next paycheck"
+            },
+            "sketchSay": {
+              "CLICK1": "portal",
+              "CLICK2": "Retirement",
+              "CHANGE": "five",
+              "SAVE": "save"
+            }
+          }
         },
-        "sketchSay": {
-          "CLICK1": "portal",
-          "CLICK2": "Retirement",
-          "CHANGE": "five",
-          "SAVE": "save"
-        }
-      }
-    },
-    {
-      "id": "close",
-      "block": "canvas",
-      "transition": "panel",
-      "vo": "Five minutes, once. Every paycheck after, her money works with the company's.",
-      "props": {
-        "cast": {
-          "objects": [
-            {
-              "id": "jar",
-              "shape": "jar",
-              "color": "positive",
-              "label": "Her retirement",
-              "enter": "pop"
-            }
-          ],
-          "formations": [
-            {
-              "form": "exit",
-              "ids": [
-                "badge"
+        {
+          "id": "close",
+          "block": "canvas",
+          "transition": "panel",
+          "vo": "Five minutes, once. Every paycheck after, her money works with the company's.",
+          "props": {
+            "cast": {
+              "objects": [
+                {
+                  "id": "jar",
+                  "shape": "jar",
+                  "color": "positive",
+                  "label": "Her retirement",
+                  "enter": "pop"
+                }
               ],
-              "at": 0
-            },
-            {
-              "form": "line",
-              "at": 0.3,
-              "ids": [
-                "priya",
-                "pay",
-                "jar"
+              "formations": [
+                {
+                  "form": "exit",
+                  "ids": [
+                    "badge"
+                  ],
+                  "at": 0
+                },
+                {
+                  "form": "line",
+                  "at": 0.3,
+                  "ids": [
+                    "priya",
+                    "pay",
+                    "jar"
+                  ]
+                },
+                {
+                  "form": "travel",
+                  "ids": [
+                    "pay"
+                  ],
+                  "to": "jar",
+                  "say": "paycheck"
+                },
+                {
+                  "form": "hero",
+                  "hero": "jar",
+                  "say": "works",
+                  "word": "Five minutes, once"
+                }
               ]
-            },
-            {
-              "form": "travel",
-              "ids": [
-                "pay"
-              ],
-              "to": "jar",
-              "say": "paycheck"
-            },
-            {
-              "form": "hero",
-              "hero": "jar",
-              "say": "works",
-              "word": "Five minutes, once"
             }
-          ]
+          }
         }
-      }
+      ]
     }
   ]
 }
