@@ -46,6 +46,16 @@ A picture must keep up with its narration: every figure or idea the voice names 
 
 Keep something across cuts. Two beats on the same idea share a cast or a world, so the cut is invisible; a new idea can cut hard (`panel` at a chapter). Let the action beat show the step done (`portal`), with the deadline in the voice or on screen, rather than an end card listing it. One kinetic line (`kinetic` `stack`) for the sentence people should repeat is plenty.
 
+## People and places: greyed B-roll
+
+Workplace films are about people, and the sketches have none. A few seconds of footage behind the hook, a close or a turn, greyed out so the type reads, puts the film in a real office or a real morning:
+
+```json
+"plate": { "file": "assets/clips/office-morning.mp4", "side": "full", "treatment": "mono", "scrim": 0.75, "drift": "none", "offset": 0.5 }
+```
+
+Put it under big type (a kinetic hook or close) or a simple picture. Under a detailed sketch with small labels it competes: raise `scrim` to 0.85 or keep that beat on plain ground. Footage never carries a figure or a word; generic clips (an office, a street, a kitchen table) are reusable across films, so keep a local folder of them. Generating one costs money (`veo-video`, about $0.20–0.40 a clip at 720p); with no budget, leave it out.
+
 ## 4. Narration
 
 One idea per beat, written for the ear: short sentences, figures as digits, the word that names each moment said where the picture should move (that word goes in `sketchSay`). `voice DIR --draft` is free and local; it measures its words with Whisper, which takes about a minute per minute of speech, longer while other work runs. Wait for it.
