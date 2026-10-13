@@ -556,7 +556,7 @@ export const BLOCKS = [
       kpi:
         'Editable native dimensional KPI: {form: pedestal|comparison|rail|seesaw|stack, label, unit?, value?, values?:[{label,value}], total?, domain?:[0,max], prefix?, suffix?, decimals?:0–3, motion?:none|reveal|stagger|emphasis|{preset,duration,stagger}, focus?, source?}. Comparison front heights share one zero-based scale; rail and stack lengths use an explicit total. Seesaw has two comparable values and qualitative tilt. Seesaw/stack require a unit. Every form needs an exact visible source. See docs/kpi-direction.md.',
       sourceElement: 'Id of a top-level static native text element used as the visible source instead of the automatic footer. Requires storyboard sources, at:0, enter:none, size >=28, opaque ink fill, no effects/exits/keys/transforms. Frame audit still verifies bounds and overlap.',
-      sourceSize: 'Canvas source font size, 14–72 px; reserves a three-line footer when set.',
+      sourceSize: 'Canvas source font size, 14–72 px (default 22, or 30 in a tall frame); reserves a three-line footer when set.',
       plot:
         'Sourced multiseries line plot: {title, x:{type:linear|date,label,domain,ticks,...}, y:{type:linear|log,label,domain,ticks,...}, series:[{id,label,values:[{x,y}]}], asOf, source?, motion?:none|{at,duration}, annotation?}. Dates preserve elapsed spacing, null y leaves a gap, all series share explicit scales and a linear reveal clock. See docs/quantitative-plots.md.',
       bars:

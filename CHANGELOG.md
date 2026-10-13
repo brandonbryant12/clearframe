@@ -12,6 +12,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **A vertical film's source line is 30 px** (22 px before, about 7 px on the phone it is made for; landscape stays 22 px). Every round's reviewer called the attribution unreadable at phone size.
 - **A placeholder word on screen is NOT READY.** `critique` warned about "LINE2" in a round-8 film and the agent handed it over anyway; the verdict now lists every unfilled sketch word, and the check runs whether or not `sketchText` was given.
 - **Workplace playbooks cut instead of `panel` wipes.** Three reviewers in a row took a frame caught mid-wipe (a coloured bar at the edge) for a render glitch; corporate films cut.
 - **`COMMAND --help` prints that command's lines**, not the whole help; and a date said as "on the 15th", "by Friday" or "30 days from" reads as a deadline in the document's picture map.

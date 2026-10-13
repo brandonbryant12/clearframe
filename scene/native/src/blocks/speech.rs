@@ -424,7 +424,8 @@ impl<'a, 'c> Draw<'a, 'c> {
     pub(crate) fn footer(&self) -> Node {
         let env = &self.b.environment;
         let tall = env.height > env.width;
-        let source_size = n(self.props(), "sourceSize", 22.0) as f32;
+        // A tall film is watched on a phone at a third of its size: its credit stays readable there.
+        let source_size = n(self.props(), "sourceSize", if tall { 30.0 } else { 22.0 }) as f32;
         let source_height = if self.props().get("sourceSize").is_some() { source_size * 3.6 } else { 60.0 };
         let source_y = (self.floor.min(env.height)
             - if env.captions && self.floor >= env.height {
