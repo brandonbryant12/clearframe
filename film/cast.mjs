@@ -141,7 +141,16 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
   } else if (form === 'ring') {
     // An ellipse with the frame's proportions, kept clear of its edges.
     const rx = Math.min(spread * (tall ? 0.8 : 1.25), W / 2 - size * 0.9), ry = Math.min(spread * (tall ? 1.25 : 0.8), A / 2 - size * 0.9);
-    ids.forEach((id, i) => { const a = -Math.PI / 2 + (i / n) * Math.PI * 2; place(id, cx + Math.cos(a) * rx, cy + Math.sin(a) * ry); });
+    // Equal steps along the ellipse, not equal angles (which bunch objects at the ends of its long axis).
+    const K = 360, pts = [], lens = [0];
+    for (let k = 0; k <= K; k++) { const a = -Math.PI / 2 + (k / K) * Math.PI * 2; pts.push([Math.cos(a) * rx, Math.sin(a) * ry]); }
+    for (let k = 1; k <= K; k++) lens.push(lens[k - 1] + Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]));
+    let k = 0;
+    ids.forEach((id, i) => {
+      const want = (i / n) * lens[K];
+      while (k < K && lens[k + 1] < want) k++;
+      place(id, cx + pts[k][0], cy + pts[k][1]);
+    });
   } else if (form === 'cluster') {
     // Hexagonal packing outward from the centre: a pile of objects touching.
     const gap = size * 1.08 * scale, cells = [[0, 0]];
@@ -157,8 +166,10 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
     // centred (its word goes below), so it still holds the frame after the word has gone.
     const others = ids.filter(id => id !== f.hero), heroAt = [cx, cy - (f.word ? u * 0.08 : 0)];
     place(f.hero, heroAt[0], heroAt[1], { scale: (f.scale ?? 2.3) });
+    // With a word under the hero, the ring leaves the bottom clear for it.
+    const gap = f.word ? 0.75 : 0, a0 = f.word ? Math.PI / 2 + gap : -Math.PI / 2;
     others.forEach((id, i) => {
-      const a = -Math.PI / 2 + ((i + 0.5) / others.length) * Math.PI * 2;
+      const a = a0 + ((i + 0.5) / others.length) * (Math.PI * 2 - 2 * gap);
       out.set(id, { x: cx + Math.cos(a) * (tall ? W * 0.4 : W * 0.42), y: cy + Math.sin(a) * (tall ? A * 0.36 : A * 0.4), scale: 0.6, rotate: 0, opacity: 0.35 });
     });
   } else if (form === 'swap') {
@@ -678,8 +689,11 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       }
     }
     if (f.form === 'hero' && f.word) {
-      const h = targets.get(f.hero), heroSize = size * (f.scale ?? 2.3);
-      words.push({ type: 'text', id: `cast-word-${k}`, text: f.word, x: h.x, y: h.y + heroSize * 0.95, size: u * (spec.look === 'drawn' ? 0.1 : 0.085),
+      // Below the hero as drawn: its own size (not the cast's), its shape's height and its label.
+      const h = targets.get(f.hero), ho = spec.objects.get(f.hero), s0 = ho?.size ?? size, hs = f.scale ?? 2.3,
+        wordSize = u * (spec.look === 'drawn' ? 0.1 : 0.085),
+        below = ho?.label ? (0.84 * s0 + Math.max(22, s0 * 0.2) * 0.6) * hs + wordSize : Math.max(0.95 * s0, objectExtent(ho ?? {}, size)[1] + 0.3 * s0) * hs;
+      words.push({ type: 'text', id: `cast-word-${k}`, text: f.word, x: h.x, y: Math.min(h.y + below, frame.height - wordSize * 0.6), size: wordSize,
         font: { tiles: 'display', drawn: 'hand', print: 'poster' }[spec.look], fill: 'ink', anchor: 'middle', at: t + dur * 0.6, enter: 'type', fit: frame.width * 0.8,
         // With nothing to replace it, the word leaves before the cut rather than on it.
         ...(until(k) != null ? { exitAt: until(k), exit: 'fade' } : frame.duration > t + dur + 1.2 ? { exitAt: frame.duration - 0.4, exit: 'fade' } : {}) });
