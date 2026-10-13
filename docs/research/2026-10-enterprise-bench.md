@@ -12,25 +12,25 @@ A night of brute-force iteration on the films ClearFrame is mostly asked for: be
 
 Judge means (1–10):
 
-| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 |
-|---|---|---|---|---|---|---|---|---|---|
-| 401(k) match | Haiku | 3.1 | 6.6 | | | | | | |
-| Phishing training | Haiku | 5.0 | 5.9 | | | | | | |
-| HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 | | | | | |
-| Expense policy | Haiku | | | 6.1 | | | | | |
-| MFA rollout | Haiku | | | | 5.3 | | | | |
-| Parental leave | Haiku | | | | 6.1 | | | | |
-| Fraud alert (vertical) | Haiku | | | | 5.7 | | | | |
-| Open enrollment | Sonnet / Haiku | 6.4 (Sonnet) | | | | 6.1 (Haiku) | | | |
-| Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) | | | |
-| Mortgage rate lock | Sonnet | | | | 6.7 | | | | |
-| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) | | 5.3 (Haiku) | 4.9 (Haiku) |
-| Share purchase plan | Haiku | | | | | | 4.7 | 5.4 | 3.7 |
-| First week (vertical) | Haiku | | | | | | 5.4 | 2.7 | 5.3 (Haiku), 6.4 (Sonnet) |
-| Client data rule | Haiku | | | | | | 6.3 | 4.6 | 5.7 |
-| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | | | | |
+| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 | Round 9 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 401(k) match | Haiku | 3.1 | 6.6 | | | | | | | |
+| Phishing training | Haiku | 5.0 | 5.9 | | | | | | | |
+| HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 | | | | | | |
+| Expense policy | Haiku | | | 6.1 | | | | | | |
+| MFA rollout | Haiku | | | | 5.3 | | | | | |
+| Parental leave | Haiku | | | | 6.1 | | | | | |
+| Fraud alert (vertical) | Haiku | | | | 5.7 | | | | | |
+| Open enrollment | Sonnet / Haiku | 6.4 (Sonnet) | | | | 6.1 (Haiku) | | | | |
+| Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) | | | | |
+| Mortgage rate lock | Sonnet | | | | 6.7 | | | | | |
+| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) | | 5.3 (Haiku) | 4.9 (Haiku) | 6.1, 4.7 (Haiku ×2) |
+| Share purchase plan | Haiku | | | | | | 4.7 | 5.4 | 3.7 | 4.9, 4.3 |
+| First week (vertical) | Haiku | | | | | | 5.4 | 2.7 | 5.3 (Haiku), 6.4 (Sonnet) | 6.1 |
+| Client data rule | Haiku | | | | | | 6.3 | 4.6 | 5.7 | 5.6 |
+| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | | | | | |
 
-Haiku's mean rose from 4.1 to 5.4 to 6.5 on the briefs the kit was tuned on, then sat at 5.5–5.8 on new briefs (rounds 4–6), fell to 4.5 in round 7 and came back to 4.9 in round 8, where Sonnet made the same first-week brief at 6.4. Sonnet stayed around 7. The reference film shows the ceiling of the kit as it stands: clear (9) but not yet distinctive (5). Rounds 4 and 5 were the test of generalisation, and they found the next layer of problems: not the pictures themselves, but how agents fill them in, when they stop, and what they invent.
+Haiku's mean rose from 4.1 to 5.4 to 6.5 on the briefs the kit was tuned on, then sat at 5.5–5.8 on new briefs (rounds 4–6), fell to 4.5 in round 7 and came back to 4.9 in round 8 (where Sonnet made the same first-week brief at 6.4) and 5.3 in round 9, where the first Haiku podcast with pictures scored 6.1. Sonnet stayed around 7. The reference film shows the ceiling of the kit as it stands: clear (9) but not yet distinctive (5). Rounds 4 and 5 were the test of generalisation, and they found the next layer of problems: not the pictures themselves, but how agents fill them in, when they stop, and what they invent.
 
 ## What the trajectories showed, and what changed
 
@@ -71,6 +71,9 @@ Also from the research tracker (issue #9): the wrapped-typewriter re-layout (typ
 
 16. **Round 8: the verdict worked when it named a concrete edit.** The client-data agent took its film from 41% to 28% still by splitting its hook and cueing its chart values, as the verdict said. The share-plan agent read "a chart with a `say` on each value" as "a custom canvas bars chart" and stopped at 100% type; the podcast agent never imported the episode and handed over captions over sound effects; another left "LINE2" on screen past a `critique` warning.
     → The verdict pastes a ready chart read from the line's own figures, calls unvoiced narration and on-screen placeholders NOT READY, and AGENTS.md routes recordings to `ingest` in their own line. Workplace playbooks cut instead of wiping (three reviewers called a frame caught mid-wipe a glitch).
+
+17. **Round 9: a worked example moved the podcast.** With `examples/podcast-pictures` in the routing, one of two Haiku podcast agents copied its pattern (a jar through all 23 beats, its own `build.mjs` setting props by beat id) and scored 6.1, the best Haiku podcast of the night; the other read only `qa`'s summary line, never saw NOT READY and handed over captions (4.7). The verdict's READY tracked the reviewer: the two films handed over at NOT READY scored lowest.
+    → `qa` ends with the verdict too, a NOT READY `draft` exits with code 2, `qa` finds near-empty frames under the voice, and different drawings in a row no longer count as a slide run (agents had been breaking runs of sketches with kinetic type).
 
 ## The studio's free model
 
