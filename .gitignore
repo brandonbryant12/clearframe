@@ -1,5 +1,7 @@
 node_modules/
 **/build/
+# Leftovers of the retired FFFrames layout (its build cache and paired comparison renders).
+/fframes/
 .DS_Store
 *.log
 .env
