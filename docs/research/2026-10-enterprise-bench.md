@@ -12,8 +12,8 @@ A night of brute-force iteration on the films ClearFrame is mostly asked for: be
 
 Judge means (1–10):
 
-| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 |
-|---|---|---|---|---|---|---|
+| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 |
+|---|---|---|---|---|---|---|---|
 | 401(k) match | Haiku | 3.1 | 6.6 | | | |
 | Phishing training | Haiku | 5.0 | 5.9 | | | |
 | HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 | | |
@@ -24,10 +24,13 @@ Judge means (1–10):
 | Open enrollment | Sonnet / Haiku | 6.4 (Sonnet) | | | | 6.1 (Haiku) |
 | Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) |
 | Mortgage rate lock | Sonnet | | | | 6.7 | |
-| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) |
-| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | |
+| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) | |
+| Share purchase plan | Haiku | | | | | | 4.7 |
+| First week (vertical) | Haiku | | | | | | 5.4 |
+| Client data rule | Haiku | | | | | | 6.3 |
+| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | | |
 
-Haiku's mean rose from 4.1 to 5.4 to 6.5 on the briefs the kit was tuned on, then sat at 5.7–5.8 on new briefs (rounds 4 and 5). Sonnet stayed around 7. The reference film shows the ceiling of the kit as it stands: clear (9) but not yet distinctive (5). Rounds 4 and 5 were the test of generalisation, and they found the next layer of problems: not the pictures themselves, but how agents fill them in, when they stop, and what they invent.
+Haiku's mean rose from 4.1 to 5.4 to 6.5 on the briefs the kit was tuned on, then sat at 5.5–5.8 on new briefs (rounds 4–6). Sonnet stayed around 7. The reference film shows the ceiling of the kit as it stands: clear (9) but not yet distinctive (5). Rounds 4 and 5 were the test of generalisation, and they found the next layer of problems: not the pictures themselves, but how agents fill them in, when they stop, and what they invent.
 
 ## What the trajectories showed, and what changed
 
@@ -58,6 +61,10 @@ Also from the research tracker (issue #9): the wrapped-typewriter re-layout (typ
     → `critique` checks every typed figure (words, chart and stat values, sketch params) against the source document in the project, and the workplace path starts from it (`start --document … --length …`); `draft` says when a film falls well short of the length asked for.
 12. **A podcast played as a music bed.** Scaffolding `podcast-clip` with `new` gave sample narration; the agent put the real episode under it as `music`, so no word on screen matched the voice.
     → `new` refuses a recording playbook and prints the `ingest --audio` line (`--sample` to read the sample).
+
+13. **What reviewers called render glitches were scenes starting empty.** A sketch's card rising from nothing after every hard cut left blank frames; a bar chart with one value filled its box with a block of colour; a number cued to a late word left its beat empty.
+    → A cut lands on the drawing's ground (cards and panels at the start are there on the first frame); one bar draws as a number; a single number lands on its word with its label already there.
+14. **Agents read the good number.** "Still 0 s (0%)" was quoted as success off a verdict that went on to say the film was 71% type, 18 s short and not ready. The verdict now leads with READY or NOT READY, repeats it as `draft`'s last line, names each words-only beat with a picture for it, and the workplace skill says the film is done only at READY.
 
 ## The studio's free model
 
