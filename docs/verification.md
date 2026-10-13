@@ -128,14 +128,14 @@ The disk guard initially stopped the build at 15.2 GiB free. After inactive brow
 
 ## Reproduce
 
-Use the shared heavy gate, with at least 20 GiB available for a warm native build (30 GiB cold):
+Keep at least 20 GiB available for a warm native build (30 GiB cold):
 
 ```sh
-/Users/brandon/.local/bin/codex-heavy -- npm test
+npm test
 # Once, to create the offline measured speech fixture on macOS:
-/Users/brandon/.local/bin/codex-heavy -- node scripts/smoke-native.mjs
+node scripts/smoke-native.mjs
 # Use a fresh output path; existing evidence is deliberately not overwritten.
-/Users/brandon/.local/bin/codex-heavy -- node scripts/verify-native.mjs build/native-verification-new
+node scripts/verify-native.mjs build/native-verification-new
 ```
 
 The integration script builds/tests Rust, checks/sheets all blocks in landscape and vertical, checks representative and new blocks in square and portrait, encodes the full gallery, a 60 fps sample and a 451-frame final-frame regression, compares one frame across all palettes, and creates decoded boundary reviews. If `build/speech-smoke` exists, it also renders the measured speech modes and a non-kinetic caption overlay. Open the sheets/review pages and listen to complete MP4s after running it.

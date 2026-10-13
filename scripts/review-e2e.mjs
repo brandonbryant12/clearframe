@@ -10,7 +10,7 @@
 // in for a person's replies and are not anyone's real review. The voices are synthetic: this
 // is not listening evidence, and the timings describe this machine and this fixture only.
 //
-//   codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node scripts/review-e2e.mjs OUT_DIR
+//   node scripts/review-e2e.mjs OUT_DIR
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

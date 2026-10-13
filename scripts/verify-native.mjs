@@ -1,4 +1,4 @@
-// Native integration checks. Run through codex-heavy, after the Node contract suite.
+// Native integration checks. Run after the Node contract suite.
 import fs from 'node:fs';
 import path from 'node:path';
 import { writeGallery } from '../film/playbooks.mjs';

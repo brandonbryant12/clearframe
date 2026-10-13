@@ -6,7 +6,7 @@
 // drawn and compared with each reference still by PSNR, so a change in the picture is measured
 // against what the library looked like before, without a second renderer.
 //
-//   codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node scripts/engine-parity.mjs OUT [--reference DIR] [playbook | project-dir …]
+//   node scripts/engine-parity.mjs OUT [--reference DIR] [playbook | project-dir …]
 //
 // A project directory (one with storyboard.json, e.g. from `clearframe gallery DIR [--sketches]`)
 // is used as it is instead of being scaffolded. Writes OUT/report.json and OUT/<name>/stills/*.png.

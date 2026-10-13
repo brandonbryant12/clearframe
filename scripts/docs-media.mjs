@@ -1,5 +1,5 @@
-// Regenerate the README images from the current renderer. Run through codex-heavy:
-//   /Users/brandon/.local/bin/codex-heavy -- node scripts/docs-media.mjs
+// Regenerate the README images from the current renderer:
+//   node scripts/docs-media.mjs
 // Writes docs/media/{blocks.jpg, blocks-vertical.jpg, looks.png, data-story.jpg}.
 import fs from 'node:fs';
 import path from 'node:path';

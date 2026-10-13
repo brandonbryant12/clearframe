@@ -26,7 +26,7 @@ The three examples are library studies, not complete narrative films. Their repe
 node examples/material-studies/make.mjs
 node engine/cli.mjs check examples/material-studies --draft
 node engine/cli.mjs sheet examples/material-studies --draft
-/Users/brandon/.local/bin/codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node engine/cli.mjs render examples/material-studies --draft
+node engine/cli.mjs render examples/material-studies --draft
 node engine/cli.mjs qa examples/material-studies
 ```
 

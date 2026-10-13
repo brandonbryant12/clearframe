@@ -108,7 +108,6 @@ Rough (--rough, a draft for first review) also renders declared placeholders (a 
 generated asset not paid for yet) as labelled slates, and canvas/art elements marked "unfinished" as drawn.
 Only frame-audit findings about that declared text become "craft"; every other type, source, figure, audio,
 timing and schema check still fails. Every full render saves a revision in review/revisions/.
-Native work automatically uses the local codex-heavy gate when available.
 Paid generation needs GEMINI_API_KEY; rendering and word-file imports are free.
 `;
 async function main() {

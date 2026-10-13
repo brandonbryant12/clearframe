@@ -61,7 +61,7 @@ node engine/cli.mjs qa film
 node engine/cli.mjs render film
 ```
 
-Run full renders/drafts through the local `codex-heavy` gate as described in AGENTS.md. `--scale` accepts 0.25–1 for drafts, default 1. It reduces the output raster, leaving authored coordinates, narration, frame rate, frame count and sound timing unchanged. Dimensions round to even values for H.264; 1080×1350 at 0.5 becomes 540×676. Stills, contact sheets and layout diagnostics keep authored dimensions.
+`--scale` accepts 0.25–1 for drafts, default 1. It reduces the output raster, leaving authored coordinates, narration, frame rate, frame count and sound timing unchanged. Dimensions round to even values for H.264; 1080×1350 at 0.5 becomes 540×676. Stills, contact sheets and layout diagnostics keep authored dimensions.
 
 The render receipt records both authored and encoded dimensions, scale, draft state, hashes and elapsed rendering/finishing time. `qa` recognizes a scaled draft only when its receipt matches the actual MP4 hash and current storyboard. It records the review size in `qa.json`. Final rendering rejects reduced scale. A small preview establishes timing and composition; review full-resolution type and assets before delivery.
 

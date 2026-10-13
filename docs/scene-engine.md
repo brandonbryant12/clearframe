@@ -28,7 +28,7 @@ Every frame is a pure function of its number and the prepared inputs (job, plan,
 
 The prepared manifest and every receipt record the renderer's source hash (its Rust sources, `Cargo.toml`, `Cargo.lock` and the shared `film/constants.json`), the plan's SHA-256, font hashes and input hashes. A render fails if any of them change during the render.
 
-`clearframe build` builds the renderer, and every render command builds it first when its sources changed. The Cargo target lives in `scene/.cache/target` (ignored). Builds use one Cargo job through `codex-heavy`. `skia-safe` is pinned with the feature set rust-skia publishes prebuilt binaries for (`gl, metal, svg`), so Skia itself is never compiled.
+`clearframe build` builds the renderer, and every render command builds it first when its sources changed. The Cargo target lives in `scene/.cache/target` (ignored). Builds use one Cargo job. `skia-safe` is pinned with the feature set rust-skia publishes prebuilt binaries for (`gl, metal, svg`), so Skia itself is never compiled.
 
 ## Native stages
 

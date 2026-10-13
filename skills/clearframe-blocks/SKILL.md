@@ -25,7 +25,7 @@ Read `film/README.md`, `film/SETUP.md`, `film/DESIGN.md`, `film/AGENTS.md` and `
    - Skip hidden elements instead of drawing them at zero opacity.
    - If a block counts or stages items, give it `settle`/`staged` rules in `film/registry.mjs` so check can prove the final values are shown.
 4. **Media comes only from prepared local assets.** Footage goes through `media.rs`: each open clip is an `ffmpeg` pipe at the drawn size; timing comes from `ffprobe` timestamps, relative to the scene and its explicit source offset; the end is exclusive. Fail on missing or short media; never hide gaps with loops or placeholders.
-5. **Honour resource limits:** the codex-heavy gate, one Cargo job, at most two workers anywhere, one Metal context. Keep the warm cache in `scene/.cache` and the disk headroom. Never run competing builds.
+5. **Honour resource limits:** one Cargo job, at most two workers anywhere, one Metal context. Keep the warm cache in `scene/.cache` and the disk headroom. Never run competing builds.
 6. **Verify:**
    - Run focused Rust tests (`cargo test` in `scene/native`) and the Node contract tests.
    - Run `check`, then render PNGs and open them. Compare against earlier stills with `scripts/engine-parity.mjs --reference`.

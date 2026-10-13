@@ -5,7 +5,7 @@
 // and frame count, and that a still drawn directly matches the same frame decoded from the full
 // film and from the range (PSNR), so stills, ranges and films share one clock.
 //
-//   codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node scripts/engine-formats.mjs OUT
+//   node scripts/engine-formats.mjs OUT
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';

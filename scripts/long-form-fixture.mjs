@@ -5,7 +5,7 @@
 // and the script is generated from a short set of lines: this measures the pipeline on a long
 // timeline, not recognition quality or a real conversation.
 //
-//   codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node scripts/long-form-fixture.mjs OUT [--minutes 7] [--no-render]
+//   node scripts/long-form-fixture.mjs OUT [--minutes 7] [--no-render]
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';

@@ -42,7 +42,7 @@ Review state lives in `DIR/review/` (`docs/editing.md`): every full render saves
 
 For a full 1080p final, give the calling shell/harness at least **300,000 ms (five minutes)** for rendering and audio finishing; longer films may need more. This is an external harness allowance, not a CLI flag or a render duration cap. With a session-based executor, yield and resume the same running process instead of restarting it at 120 seconds. Keep progress updates under a minute apart.
 
-Compilation, retained pipelines and optional sculpture asset passes automatically enter or inherit the heavy gate. On this 8 GB Mac, run full renders and full test suites through `/Users/brandon/.local/bin/codex-heavy -- <command>` as well; when wrapping a render, pass `env CLEARFRAME_HEAVY_HELD=1` after `--` to avoid a nested build lock. Keep at least 20 GiB free for expensive work.
+On this 8 GB Mac, run one full render or full test suite at a time. Keep at least 20 GiB free for expensive work.
 
 Compilation uses one Cargo job and names the lock holder while waiting. Small checks can run directly. No browser or npm runtime dependencies are required.
 

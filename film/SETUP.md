@@ -14,22 +14,22 @@ On macOS:
 
 ```sh
 xcode-select --install
-/Users/brandon/.local/bin/codex-heavy -- brew install ffmpeg
+brew install ffmpeg
 # Install Rust from https://rustup.rs if ~/.cargo/bin/rustc is unavailable.
 export PATH="$HOME/.cargo/bin:$PATH"
 node engine/cli.mjs doctor
 node engine/cli.mjs build
 ```
 
-The CLI prefers `~/.cargo/bin` ahead of an older Homebrew Rust. `build` compiles the renderer into `scene/.cache/target` (ignored) with one Cargo job through the heavy-job gate. Builds are release builds against `Cargo.lock`, and nested workers are capped at two. The gate is detected automatically; an outer gate is recognized without deadlocking. Every render command rebuilds the renderer first when its sources changed. A warm build of the crate takes under a minute on this Mac.
+The CLI prefers `~/.cargo/bin` ahead of an older Homebrew Rust. `build` compiles the renderer into `scene/.cache/target` (ignored) with one Cargo job. Builds are release builds against `Cargo.lock`, and nested workers are capped at two. Every render command rebuilds the renderer first when its sources changed. A warm build of the crate takes under a minute on this Mac.
 
 Before building, check free disk: allow **25 GiB for a cold build** (the prebuilt Skia download and the dependency graph) and keep **10 GiB free with a warm cache**. `scene/.cache` is reusable and ignored; deleting it forces a cold build. Project `build/` outputs can be regenerated; keep original recordings and source media.
 
 The active Node workflow needs no npm packages. `npm ci` can establish the empty dependency lock. For full tests:
 
 ```sh
-/Users/brandon/.local/bin/codex-heavy -- npm test
-/Users/brandon/.local/bin/codex-heavy -- env CARGO_TARGET_DIR=scene/.cache/target cargo test --manifest-path scene/native/Cargo.toml --release --locked --jobs 1 -- --test-threads=2
+npm test
+env CARGO_TARGET_DIR=scene/.cache/target cargo test --manifest-path scene/native/Cargo.toml --release --locked --jobs 1 -- --test-threads=2
 ```
 
 ## Optional dimensional art setup
@@ -74,6 +74,6 @@ Media is staged into the prepared folder automatically and fonts load from there
 
 `preview` creates a review MP4. A live native editor or player is not part of this release. Set `GEMINI_API_KEY` only for explicitly requested paid media generation. Audio and timestamp imports stay offline.
 
-Full high-resolution finals need at least a **five-minute (300,000 ms) external execution allowance**, including the shared audio mix and mux. Longer films can take more than that: use a resumable process session and monitor it, rather than treating a yield as failure or launching duplicate renders. The CLI imposes no 120-second render deadline. To gate a render externally, use `/Users/brandon/.local/bin/codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node engine/cli.mjs render DIR`, so the same lock is not taken twice.
+Full high-resolution finals need at least a **five-minute (300,000 ms) external execution allowance**, including the shared audio mix and mux. Longer films can take more than that: use a resumable process session and monitor it, rather than treating a yield as failure or launching duplicate renders. The CLI imposes no 120-second render deadline.
 
 FFFrames drew ClearFrame films (as `svgr!` trees) until early October 2026. Since 2026-10-12 it is back as the runtime only: ClearFrame's engine draws every frame through a custom render backend, and fframes schedules, encodes and concatenates (`CLEARFRAME_RENDER_WORKERS`, default 2; `CLEARFRAME_ENCODER_THREADS` per segment, default 2). Its revision and MIT notice are in `../archive/fframes/`; see `../docs/fframes-return.md`.

@@ -41,7 +41,7 @@ Run `critique`, inspect a draft sheet, then run `check`, render and review the c
 On the shared 8 GB Mac, use the heavy-work gate for a full render:
 
 ```sh
-/Users/brandon/.local/bin/codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node engine/cli.mjs render /tmp/cash-flow-demo --draft
+node engine/cli.mjs render /tmp/cash-flow-demo --draft
 node engine/cli.mjs review /tmp/cash-flow-demo
 node engine/cli.mjs qa /tmp/cash-flow-demo
 ```

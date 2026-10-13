@@ -11,7 +11,7 @@
 // Each command runs `--repeat` times (default 2) and every run is reported. The numbers describe
 // this machine and these projects; they are not a general speed claim.
 //
-//   codex-heavy -- env CLEARFRAME_HEAVY_HELD=1 node scripts/engine-bench.mjs OUT PROJECT… [--repeat N]
+//   node scripts/engine-bench.mjs OUT PROJECT… [--repeat N]
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';

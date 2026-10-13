@@ -10,6 +10,6 @@
 - **Speech timing.** Word intervals are local to their beat, end-exclusive and ordered. Preserve silence gaps and backward seeking. Never manufacture missing timestamps.
 - **Honest numbers.** Numeric animations keep their units and exact final values; chart geometry shares a zero baseline and an explicit domain. Focus opacity and duration are authored values.
 - **Entrances.** They play over a persistent background; they are not cross-dissolves between two active scenes.
-- **Resources.** Builds and full renders go through codex-heavy: one Cargo job, at most two nested workers, one Metal context. Do not reinstall dependencies or discard the warm cache in `scene/.cache`.
+- **Resources.** One Cargo job, at most two nested workers, one Metal context. Do not reinstall dependencies or discard the warm cache in `scene/.cache`.
 - **Colour.** Output uses BT.601 limited-range conversion with `smpte170m` tags. Keep the tags matching; BT.709 delivery needs a genuine matrix conversion.
 - **Verify.** Run the Rust and Node tests, inspect frames and contact sheets, check encoded dimensions, frame rate and decoded frame count, and listen to the shared mix. Report mocks, compilation, visual inspection and paid API execution as separate evidence.
