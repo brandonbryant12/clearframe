@@ -1,5 +1,10 @@
 # Changelog
 
+## Three things by Friday: the week sketch
+
+- **`week` draws one working week** for onboarding and "due this week" lines that name days, not dates. Two agents in a row had to invent a month and dates the brief never stated to use `deadline`. Today is marked; up to four task cards drop into their days on their words (`ONE` … `FOUR`), each with an empty to-do box; the due day is circled by hand with a short label (`DUE`); and with `after: true` a muted card past the week's edge says what happens if the day is missed (`AFTER`). On that word a faint copy of the due label rides an arrow out of the week, so missing the day reads as something that slips. `sketchParams {days: 5|7, today, due, tasks, after}` are day indices (0 = Monday), marked as structure, not figures.
+- **Every frame shape.** Wide frames lay the days out as columns, with a weekend narrowed and a day holding three or four tasks widened. Square, portrait and vertical frames stack them as an agenda of rows sized to fill the frame. Type never drops below what a phone reads; a crowded week rises into the space a title would use instead. In the workplace table and `docs/ideas.md`.
+
 ## fframes is the film runtime again
 
 - **`render` runs through [fframes](https://github.com/dmtrKovalenko/fframes)** (MIT core, pinned to `62f6673`; `archive/fframes/upstream.json`, `scene/native/THIRD_PARTY.md`). fframes owns the film as a timeline and the export: it cuts the frames into the same GOP-aligned segments on every render, encodes them in parallel with in-process FFmpeg and libx264 at the same CRF, preset, adaptive quantisation and 250-frame GOP, and concatenates them. Its render workers each open a ClearFrame engine, which draws every frame exactly as before (`scene/native/src/runtime.rs`, a custom `FFramesRenderBackend`; no fframes source is copied or patched).
@@ -12,6 +17,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **`examples/podcast-pictures`: a podcast clip with a picture for every idea.** `build.mjs` makes the mock episode, imports it as recorded (vertical, with the script and speakers) and gives 22 of its 23 beats a picture of the guest's own objects and numbers: a jar that is the cash, calendar pages that count months, the month's costs, bars for $12,000 to $18,000, a hundred coins that go grey at 3% a year, a separate savings jar, a mug for the line to repeat. Captions stay under everything; one line stays type. It checks each beat's words before changing its props and never touches the recording or timing. `draft`: READY, 0% still, 3% type alone. The `podcast-picture` direction, the direction skill and AGENTS.md point to it.
 - **A vertical film's source line is 30 px** (22 px before, about 7 px on the phone it is made for; landscape stays 22 px). Every round's reviewer called the attribution unreadable at phone size.
 - **A placeholder word on screen is NOT READY.** `critique` warned about "LINE2" in a round-8 film and the agent handed it over anyway; the verdict now lists every unfilled sketch word, and the check runs whether or not `sketchText` was given.
 - **Workplace playbooks cut instead of `panel` wipes.** Three reviewers in a row took a frame caught mid-wipe (a coloured bar at the edge) for a render glitch; corporate films cut.
