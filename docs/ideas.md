@@ -74,6 +74,7 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 - **A stage for the name.** `sunburst`: rays turning around a disc, the name wiped across it on the first beat of the music.
 - **Yours over time.** `vesting`: a timeline of steps, each lock springing open as a column grows to that step's share; a cliff year shakes its lock shut. Shares from `sketchParams.steps`.
 - **A window on a calendar.** `deadline`: a month card where the opening day fills, a band sweeps to the last day and it is circled by hand; days outside dim. For enrollment windows and claim deadlines.
+- **Three things by Friday.** `week`: one working week (columns in a wide frame, an agenda of rows in a tall one) with today marked; each task drops into its day as it is named, the due day is circled by hand, and an optional muted card past the week's edge says what slips if it is missed. For onboarding and "due this week", with no month or dates to invent.
 - **Use it or lose it.** `expire`: a jar fills with one coin per unit; at year end a carry-over line draws, the coins above it turn red and lift away, and what is kept hops.
 - **Look closely.** `inspect`: an email or receipt arrives and up to three of its parts are marked in turn with a ring and a label (phishing tells, a receipt's must-haves).
 - **Two options, row by row.** `choose`: two cards, a tick per row for the one that wins it, then one is picked and lifts forward.

@@ -35,6 +35,7 @@ Each fact gets the mechanism that shows it. These are sketches: fill `sketchText
 | "If you raised it from 3% to 5%…" (what if: one change, its consequence) | `match` with `fromYou`, `fromMatch` | opens on today's coins; only the added ones drop |
 | "It becomes yours over time" (vesting, eligibility) | `vesting` | params `steps` (percentages) |
 | "Between these dates" (enrollment, a deadline) | `deadline` | params `days, firstWeekday, start, end` |
+| "Three things by Friday" (a week with a due day: onboarding, "due this week", "miss Friday and it's the 30th") | `week` | params `today, due, tasks` (day indices, 0 = Mon), `after: true` for the consequence; no month or dates to invent |
 | "It doesn't carry over" (use it or lose it, a reset to zero) | `expire` | params `total, keep` |
 | "Go to the app and change X" (the action, almost always) | `portal` (`device: "phone"` for a mobile app) | words for the menu, the field, old and new values; one sentence of narration |
 | "Look for these signs" (phishing, a receipt, a clause) | `inspect` | words for the message and the three marks |
