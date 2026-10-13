@@ -439,7 +439,13 @@ export function critique(root) {
         firstDur,
       );
   if (lands > 5.5) add('warn', first.id, `The first idea lands ${lands.toFixed(1)} s in. Land it inside 3–5 s.`);
-  // Sameness.
+  // Sameness. Drawings are told apart by what they draw (a sketch's name, a cast, a chart's kind):
+  // three different workplace pictures in a row are a sequence, not a slide run, and the old rule
+  // pushed agents to swap a picture for kinetic type to break it up.
+  const pictureOf = i => {
+    const p = sb.beats[i]?.props ?? {};
+    return p.sketch ?? (p.cast ? 'cast' : p.chart ? `chart-${p.chart.kind}` : null);
+  };
   let run = 1;
   for (let i = 1; i < beats.length; i++) {
     // A world is one continuous picture on purpose; the camera move is the change.
@@ -453,6 +459,7 @@ export function critique(root) {
       !world &&
       !shot(beats[i]) &&
       !matched(beats[i - 1], beats[i]) &&
+      !(pictureOf(i) && pictureOf(i - 1) && pictureOf(i) !== pictureOf(i - 1)) &&
       beats[i].vo
         ? run + 1
         : 1;
