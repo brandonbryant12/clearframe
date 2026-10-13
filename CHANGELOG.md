@@ -1,5 +1,9 @@
 # Changelog
 
+## Faster renders
+
+- **The sound is mixed while the picture renders.** The mix depends only on the timing, so it and its AAC encode now run beside the native render and the mux is a stream copy. Measuring loudness with `ebur128` (the meter `qa` reads) instead of `loudnorm`'s analysis, which resampled to 192 kHz, takes the mix from 2.4–3.5 s to 0.4–0.8 s on bench films (the same −14 LUFS, still deterministic), and the decoded frame count that validates every render uses four threads (1.2 → 0.6 s). A 48 s draft renders in 9.6 s instead of 12–13 s; the streams' durations are unchanged.
+
 ## Three things by Friday: the week sketch
 
 - **`week` draws one working week** for onboarding and "due this week" lines that name days, not dates. Two agents in a row had to invent a month and dates the brief never stated to use `deadline`. Today is marked; up to four task cards drop into their days on their words (`ONE` … `FOUR`), each with an empty to-do box; the due day is circled by hand with a short label (`DUE`); and with `after: true` a muted card past the week's edge says what happens if the day is missed (`AFTER`). On that word a copy of the due label rides an arrow out of the week, so missing the day reads as something that slips. `sketchParams {days: 5|7, today, due, tasks, after}` are day indices (0 = Monday), marked as structure, not figures.

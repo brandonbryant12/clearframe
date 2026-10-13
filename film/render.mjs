@@ -9,7 +9,7 @@ import { COVER } from './constants.mjs';
 import { prepareProject, nativeCommand, unchanged } from './prepare.mjs';
 import { renderGeometry } from './render-geometry.mjs';
 import { soundDesign } from './sound.mjs';
-import { mix, mux } from '../engine/lib/audio.mjs';
+import { mix, mux, encodeAudio } from '../engine/lib/audio.mjs';
 import { captionCues, toVTT } from '../engine/lib/timing.mjs';
 import { ffmpeg, ffmpegBin, writeJSON, log } from '../engine/lib/util.mjs';
 import { phase, record } from '../engine/lib/runlog.mjs';
@@ -19,7 +19,8 @@ import { snapshot, attachVideo } from '../engine/lib/revisions.mjs';
 export function validateVideo(file, { width, height, fps, frames }) {
   const r = spawnSync(
     'ffprobe',
-    ['-v', 'error', '-threads', '2', '-count_frames', '-show_streams', '-of', 'json', file],
+    // Every frame is decoded (a broken segment fails here); four threads halve the wait.
+    ['-v', 'error', '-threads', '4', '-count_frames', '-show_streams', '-of', 'json', file],
     { encoding: 'utf8' },
   );
   if (r.status !== 0) throw new Error(r.stderr || 'ffprobe failed');
@@ -87,20 +88,30 @@ export async function renderProject(
     raw = path.join(ctx.dir, `${token}-raw.mp4`),
     silent = path.join(ctx.dir, `${token}-video.mp4`),
     audio = path.join(ctx.dir, `${token}-mix.wav`),
+    encoded = path.join(ctx.dir, `${token}-mix.m4a`),
     finished = path.join(ctx.dir, `${token}-final.mp4`);
   const start = performance.now();
   const fast = draft || rough;
+  let sound = Promise.resolve(null);
   try {
     await phase('native-build', () => buildScene());
+    const soundCues = soundDesign(ctx.job, ctx.sb.sfx);
+    // The cue sheet, for review: what plays where (bench waveforms mark these).
+    writeJSON(path.join(root, 'build/cues.json'), soundCues);
+    // The sound depends on the timing, never on the picture: it is mixed and encoded while the
+    // renderer draws (a third of a draft's time went to the two after it), and muxed by copy.
+    sound = noAudio
+      ? Promise.resolve(null)
+      : phase('mix', () => mix(root, ctx.timing, audio, ctx.sb.mix, soundCues)).then(track =>
+          track ? phase('audio-encode', () => encodeAudio(track, encoded)) : null,
+        );
+    sound.catch(() => {});
     // Scale only the output raster; layout, frame rate, speech and source media clocks stay authored.
     await phase('native-render', () => nativeCommand(ctx, 'render', [...(fast ? ['--draft', '--scale', String(scale)] : []), '-o', raw]), {
       frames: ctx.job.frames,
     });
     await phase('timeline', () => packetTimeline(raw, silent));
-    const soundCues = soundDesign(ctx.job, ctx.sb.sfx);
-    // The cue sheet, for review: what plays where (bench waveforms mark these).
-    writeJSON(path.join(root, 'build/cues.json'), soundCues);
-    const track = noAudio ? null : await phase('mix', () => mix(root, ctx.timing, audio, ctx.sb.mix, soundCues));
+    const track = await sound;
     await phase('mux', () => mux(silent, track, finished));
     // Decode/count the complete deliverable once, after muxing and before publication.
     const probe = await phase('validate-output', () => validateVideo(finished, expected));
@@ -150,7 +161,9 @@ export async function renderProject(
     }
     return report;
   } finally {
-    for (const f of [raw, silent, audio, finished]) fs.rmSync(f, { force: true });
+    // A render that failed while the sound was still mixing waits for it before cleaning up.
+    await sound.catch(() => {});
+    for (const f of [raw, silent, audio, encoded, finished]) fs.rmSync(f, { force: true });
   }
 }
 

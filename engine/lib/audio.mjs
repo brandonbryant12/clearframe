@@ -274,21 +274,23 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
       'pcm_f32le',
       pre,
     ]);
-    const target = `I=${loudness}:TP=-1.5:LRA=20`;
+    // Integrated loudness (EBU R128, the meter `qa` reads). ebur128 measures at the file's own rate;
+    // loudnorm's analysis upsampled to 192 kHz and took 1.6 s a pass on a 50 s film, most of a draft's mix.
     const integrated = file => {
-      const probe = spawnSync(
-        'ffmpeg',
-        ['-hide_banner', '-i', file, '-af', `loudnorm=${target}:print_format=json`, '-f', 'null', '-'],
-        { encoding: 'utf8' },
-      ).stderr;
-      return Number(JSON.parse(probe.slice(probe.lastIndexOf('{'), probe.lastIndexOf('}') + 1)).input_i);
+      const probe = spawnSync('ffmpeg', ['-hide_banner', '-nostats', '-i', file, '-af', 'ebur128=framelog=quiet', '-f', 'null', '-'], {
+        encoding: 'utf8',
+      }).stderr;
+      const all = [...probe.matchAll(/I:\s+(-?[\d.]+) LUFS/g)];
+      return all.length ? Number(all.at(-1)[1]) : NaN;
     };
     // Mastered as an engineer would: one gain to the target, then a peak limiter for the few
     // hits that would cross the ceiling. (loudnorm's linear mode silently falls back to its
     // compressor when the gain would cross the ceiling, and flattens the film again.) A peaky
     // mix (a kick-led bed, hits) loses loudness in the limiter, so the result is measured and
     // the gain corrected, up to three passes, until it sits within half a unit of the target.
-    let gain = loudness - integrated(pre);
+    // A mix with nothing above the gate (ebur128 reads -70) keeps its level rather than gaining 56 dB.
+    const measured = integrated(pre);
+    let gain = Number.isFinite(measured) && measured > -69 ? loudness - measured : 0;
     for (let pass = 0; pass < 3; pass++) {
       await ffmpeg([
         '-y',
@@ -302,8 +304,8 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
         'pcm_s16le',
         output,
       ]);
-      const short = loudness - integrated(output);
-      if (Math.abs(short) <= 0.5) break;
+      const after = integrated(output), short = loudness - after;
+      if (!Number.isFinite(after) || after <= -69 || Math.abs(short) <= 0.5) break;
       gain += short;
     }
   } finally {
@@ -330,7 +332,22 @@ const TAGS = [
 ];
 
 /** Mux native sRGB/BT.601 video + mixed audio into the deliverable. */
+/**
+ * The mix as AAC, ready to mux by copy: encoded while the renderer draws (the mix depends only on
+ * the timing), so muxing is a stream copy. Padded a quarter second past the film so the video is
+ * always the shorter stream and `-shortest` never drops a last frame.
+ */
+export async function encodeAudio(wav, output) {
+  await ffmpeg(['-y', '-i', wav, '-af', 'apad=pad_dur=0.25', '-c:a', 'aac', '-b:a', '192k', output]);
+  return output;
+}
+
 export async function mux(video, audio, output) {
+  // Audio already encoded (encodeAudio) is copied; a WAV (a range preview's cut) is encoded here.
+  if (audio && /\.(m4a|aac)$/i.test(audio)) {
+    await ffmpeg(['-y', '-i', video, '-i', audio, '-map', '0:v:0', '-map', '1:a:0', '-c:v', 'copy', ...TAGS, '-c:a', 'copy', '-shortest', '-movflags', '+faststart', output]);
+    return output;
+  }
   if (!audio) {
     await ffmpeg(['-y', '-i', video, '-map', '0:v:0', '-c:v', 'copy', ...TAGS, '-movflags', '+faststart', output]);
     return output;
