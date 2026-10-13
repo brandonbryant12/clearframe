@@ -318,7 +318,10 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
   const hold = frames / timing.fps - settle;
   if (hold >= 0 && hold < 0.45 && b.index < timing.beats.length - 1 && b.block !== 'kinetic')
     report.warnings.push(
-      `${b.id}: the last element lands ${hold.toFixed(2)} s before the cut. Cue it earlier, or add hold/tail so it can be read.`,
+      b.vo?.provider === 'imported'
+        ? // A recording's beats cannot be lengthened without silence in the conversation.
+          `${b.id}: the last element lands ${hold.toFixed(2)} s before the cut. Cue it on an earlier word, or let it carry into the next beat's picture.`
+        : `${b.id}: the last element lands ${hold.toFixed(2)} s before the cut. Cue it earlier, or add hold/tail so it can be read.`,
     );
   return {
     id: b.id,

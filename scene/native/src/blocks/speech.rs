@@ -353,7 +353,15 @@ impl<'a, 'c> Draw<'a, 'c> {
         }
         let chunk = &words[window.clone()];
         let font = Font::DisplayBold;
-        let max_w = self.area.w * if tall { 0.92 } else { 0.72 };
+        // Within the title-safe band of the frame, whatever the beat's area (a full-frame canvas
+        // left the captions running past it, and phone UI covers a tall frame's edges).
+        let (band_x, band_w) = {
+            let m = env.width * if tall { 0.1 } else { 0.05 };
+            let l = self.area.x.max(m);
+            let r = (self.area.x + self.area.w).min(env.width - m);
+            (l, (r - l).max(1.0))
+        };
+        let max_w = band_w * if tall { 0.94 } else { 0.72 };
         let mut size: f32 = if tall { 78.0 } else { 60.0 };
         let (mut lines, mut space);
         loop {
@@ -378,7 +386,8 @@ impl<'a, 'c> Draw<'a, 'c> {
         }
         let line_h = size * 1.12;
         // Centred in the band the layout keeps free for captions, clear of the source line.
-        let centre_y = env.height - if tall { 200.0 } else { 88.0 };
+        // Two tall lines centred 240 px up keep their descenders out of the bottom 6% safe margin.
+        let centre_y = env.height - if tall { 240.0 } else { 88.0 };
         let top = centre_y - lines.len() as f32 * line_h / 2.0;
         let current = active_word(words, self.t);
         let outline = (size * 0.16).round();
@@ -386,7 +395,7 @@ impl<'a, 'c> Draw<'a, 'c> {
         let mut front = vec![];
         for (li, line) in lines.iter().enumerate() {
             let width = line.iter().map(|(_, w)| w).sum::<f32>() + space * line.len().saturating_sub(1) as f32;
-            let mut x = self.area.x + (self.area.w - width) / 2.0;
+            let mut x = band_x + (band_w - width) / 2.0;
             let baseline = top + li as f32 * line_h + size * 0.9;
             for &(i, w) in line {
                 let word = &chunk[i];
