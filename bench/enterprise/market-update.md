@@ -10,7 +10,8 @@
 - Balanced model portfolio: **+2.1%** for the quarter, **+7.8%** year to date.
 - The quarter had one sharp drop: from August 4 to August 19 the equity sleeve fell **6.4%**, then
   recovered by September 12.
-- Bonds did the stabilising: the bond sleeve returned **+1.3%** in the quarter while equities were flat.
+- Bonds did the stabilising: the bond sleeve held steady through the drop and returned **+1.3%** in the
+  quarter; equities ended the quarter **+2.6%** and cash **+1.2%** (so 60% × 2.6 + 35% × 1.3 + 5% × 1.2 ≈ +2.1%).
 - Committee decision: no change to the target mix (**60% equities / 35% bonds / 5% cash**). Rebalanced on
   August 20, buying equities after the drop.
 - What's next: "We expect more of the same: noisy months, and a plan that doesn't need to react to each
