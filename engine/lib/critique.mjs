@@ -350,7 +350,29 @@ export function cinemaScore(sb, beats, timed, transitions) {
   return { score: Math.max(0, Math.round(100 - 11 * tells.length)), tells };
 }
 
+/**
+ * The critique, never a bare TypeError: an unexpected shape the checks below did not foresee (a list
+ * written as one word) reports the storyboard's own errors, which `createJob` names, and the failure.
+ */
 export function critique(root) {
+  try {
+    return critiqueStoryboard(root);
+  } catch (e) {
+    if (!(e instanceof TypeError)) throw e;
+    const findings = [];
+    try {
+      const sb = loadStoryboard(root), timing = computeTiming(root);
+      const job = createJob(sb, timing, { draft: true });
+      for (const x of job.errors ?? []) findings.push({ level: 'error', where: 'check', message: x });
+    } catch (x) {
+      findings.push({ level: 'error', where: 'check', message: x.message });
+    }
+    findings.push({ level: 'error', where: 'critique', message: `stopped on a storyboard shape it did not expect (${e.message}); fix the errors above, then run critique again` });
+    return { summary: { cinema: 0, beats: 0, seconds: 0, families: 0, drawn: 0, imaged: 0, graphicTransitions: 0, tones: 0, warnings: 0, ideas: 0, errors: findings.length }, findings };
+  }
+}
+
+function critiqueStoryboard(root) {
   const sb = loadStoryboard(root),
     timing = computeTiming(root),
     beats = withStages(sb, (castCarry = {}, sb.beats.map(b => asDrawn(b, sb.format)))),
