@@ -1,7 +1,10 @@
 # Returning to fframes
 
-**Status: in progress on branch `fframes-return`.** Numbers below are measured on this machine
-(M1 iMac, 8 GB, macOS) unless marked otherwise. Sections marked _planned_ are not built yet.
+**Status: stages 1 and 2 done on branch `fframes-return`** — every render runs through fframes;
+`CLEARFRAME_RUNTIME=scene` keeps the old FFmpeg pipe for comparison. Numbers below were measured
+on this machine (M1 iMac, 8 GB, macOS 26) on 2026-10-12 while other agents were working, so each
+timing is the best (and median) of interleaved runs, with the load average recorded. Sections
+marked _planned_ are not built yet.
 
 ## Decision
 
@@ -55,8 +58,9 @@ worker checks that its engine draws at fframes' output size.
 |---|---|---|
 | `main.rs` `render [A..B]` | **fframes** (`runtime::render` → `fframes::render` with `runtime::Backend`) | Range renders keep the film clock through `RenderOptions::frame_range` |
 | `main.rs` `frame`, `inspect`, `audit`, `bench`, `info`, `serve` | ClearFrame engine | Stills and diagnostics need no encoder; they draw with the same `Engine` the fframes workers use |
-| `encode.rs` (FFmpeg child, RGBA pipe, BT.601 limited, libx264 2 threads) | **fframes** `SegmentWriter` (in-process libav, libx264, one codec thread per segment, segments in parallel) | Same CRF/preset/aq-mode/GOP; kept as the `CLEARFRAME_RUNTIME=scene` path while parity is checked |
-| `gpu.rs` (Metal context, surfaces, readback) | ClearFrame | One Metal context per fframes worker |
+| `encode.rs` (FFmpeg child, RGBA pipe, BT.601 limited, libx264 2 threads) | **fframes** `SegmentWriter` (in-process libav, libx264, two codec threads per segment, two segments at once) | Same CRF/preset/aq-mode/250-frame keyframe interval; `encode.rs` stays as the `CLEARFRAME_RUNTIME=scene` path until it is deleted |
+| RGBA → YUV (FFmpeg's `scale` filter in the child) | ClearFrame `yuv.rs`, on the GPU | fframes' own converter point-samples chroma (measured ~3 dB worse) |
+| `gpu.rs` (Metal context, surfaces, readback) | ClearFrame | One Metal context per fframes worker; readback is three one-channel planes |
 | `compose.rs` (beats, dissolves, stages, motion blur, lens, chrome, grain, letterbox) | ClearFrame | Unchanged |
 | `blocks/*`, `nodes.rs`, `draw.rs`, `paint.rs`, `fx.rs`, `text.rs`, `fonts.rs`, `materials.rs`, `icons.rs`, `geometry.rs`, `motion.rs`, `numbers.rs`, `design.rs` | ClearFrame | Unchanged |
 | `media.rs` footage (ffmpeg/ffprobe pipes, exact timestamps, any seek order) | ClearFrame for now; fframes `get_synced_video_frame` is the candidate | Each worker has its own decoders; segment starts seek accurately |
@@ -68,8 +72,9 @@ worker checks that its engine draws at fframes' output size.
 ## What is gained, what is at risk
 
 Gained now: parallel GOP-aligned segment encoding with deterministic cuts; in-process encoding
-(no RGBA pipe to a child process); fframes' render runtime and its upstream fixes (#202 failed
-conversions, #215 abort latency, #200 BT.709 when we choose it).
+(no RGBA pipe to a child process); GPU 4:2:0 conversion (a third of the readback); about a third
+less render time on encode-bound films; fframes' render runtime and its upstream fixes (#202
+failed conversions, #215 abort latency, #200 BT.709 when we choose it).
 
 Available next through the same runtime: `AudioMap` mixing and `analyze_audio`; FFT audio
 features for audio-reactive pictures; the native preview player; `Shader`/svgr overlay layers
@@ -91,13 +96,65 @@ Risks:
 
 ## Evidence
 
-_Filled in from measured runs; see below._
+Method: the same prepared plan rendered by the native binary with each runtime
+(`clearframe-scene --plan … render`), wall time and peak resident memory of the whole process
+tree (engine + FFmpeg child for the old pipe) sampled every 0.1 s; decoded pictures compared
+with FFmpeg's `psnr`/`ssim` between runtimes, and each runtime's decoded frames compared in RGB
+with the engine's own PNG stills of the same frames ("truth"), including frames on both sides
+of a segment cut. Scripts are not committed (they live with the evidence in the scratchpad);
+the commands are reproducible from this description.
+
+### Pictures
+
+| Film (1920×1080, 30 fps, final quality) | Between runtimes | Against the engine's stills (RGB PSNR) |
+|---|---|---|
+| `examples/native-explainer` (530 frames) | PSNR 58.5 dB, SSIM 0.99977 | frames 15, 120, 239, 240, 241, 400, 529: old pipe 40.91–44.96 dB, fframes 40.98–44.96 dB (within ±0.3 dB; cut at 240) |
+| `examples/finance-charts` (3,630 frames) | PSNR 60.6 dB, SSIM 0.99979 | frames 120, 900, 1800, 2700, 3600: old pipe 44.28–47.11 dB, fframes 44.39–47.12 dB (equal or better at every frame) |
+| `examples/stage-footage` (378 frames; footage, motion blur, depth of field) | PSNR 52.1 dB, SSIM 0.99526 | frames 10, 120, 249, 250, 251, 300, 377: within 0.06 dB |
+
+Both runtimes produce the same frame count, size, rate, pixel format and colour tags; the Node
+finisher's decoded frame-count validation, colour tags and range-preview clock check (43.7–46.4
+dB against film frames) pass through the new path.
+
+Two fframes defaults were measured and replaced:
+
+- **Chroma.** fframes' built-in yuv420p converter takes each 2×2 block's top-left pixel and floors
+  it; against the stills it was 2.8–3.1 dB worse (charts frame 120: 43.98 vs 47.11 dB).
+  `yuv.rs` averages the block and rounds, on the GPU (SkSL into three one-channel planes read
+  straight into the encoder's frame: 1.5 bytes a pixel cross to the CPU instead of 4), with a CPU
+  fallback that does the same.
+- **Segment length.** fframes' default minimum segment is one second, so the charts film was cut
+  into 121 one-second segments, each opening with a keyframe: 7.48 MB against the old pipe's
+  2.58 MB at the same CRF. Whole-GOP segments (250 frames; whole seconds cutting short films into
+  about four) give 2.70 MB (+5%).
+
+### Speed and memory
+
+Best (median) wall time of interleaved runs, whole process tree peak:
+
+| Film | Old pipe | fframes runtime (2 workers × 2 x264 threads) | Load average |
+|---|---|---|---|
+| finance-charts, final (121 s) | 16.90 s (17.29) · 750 MiB | **10.89 s (11.46)** · 880–1,107 MiB | 10–19 |
+| finance-charts, draft 960×540 | 6.51 s (6.71) · 157 MiB | **4.66 s (5.01)** · 218 MiB | 8–9 |
+| native-explainer, final (17.7 s) | 4.43 s (4.64) · 746 MiB | **2.96 s (3.15)** · 950 MiB | 6–8 |
+| stage-footage, final (12.6 s) | 15.94 s (16.43) · 1,351 MiB | 14.42 s (16.15) · 1,339 MiB; 1 worker 19.65 s | 13–26 |
+
+Encode-bound films (charts, type, held frames) render about a third faster: x264 runs in two
+segments at once and the CPU no longer converts RGBA. GPU-bound films (footage, motion blur) are
+at parity: two Metal contexts share one GPU. Peak memory is up to ~350 MiB higher with two
+workers; `CLEARFRAME_RENDER_WORKERS=1` keeps it near the old pipe. The binary grows from 19 MB to
+38 MB (static FFmpeg + x264). A cold build of the new dependencies took 19 minutes with one Cargo
+job (the image crate's AVIF encoder, which fframes enables, is the slowest part); incremental
+builds take 10–50 s as before.
+
+Tests on the branch: Rust 75/75 (with new 4:2:0 tests), Node 413 (412 pass, 1 skipped; the studio
+test needs a `build/` folder in a fresh worktree).
 
 ## Staged migration
 
-1. **Runtime for `render`** behind `CLEARFRAME_RUNTIME=fframes` (done when parity holds).
-2. **Default runtime**: fframes renders every film; `CLEARFRAME_RUNTIME=scene` keeps the old pipe
-   for comparison until it is deleted.
+1. **Runtime for `render`** — done: `runtime.rs`, parity above.
+2. **Default runtime** — done: fframes renders every film; `CLEARFRAME_RUNTIME=scene` keeps the old
+   pipe (`encode.rs`) for comparison until it is deleted.
 3. _Planned:_ audio through `AudioMap` (bed looping, ducking, gate, room tone, loudness target),
    compared against the Node mix with `analyze_audio` and the existing `qa` loudness checks.
 4. _Planned:_ fframes interfaces for authors: audio features for audio-reactive canvases, svgr/
