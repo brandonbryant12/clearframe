@@ -405,6 +405,13 @@ export async function qaProject(root, { video, loop = false } = {}) {
     const tb = beats.find(b => b.id === f.beat);
     f.said = (tb?.vo?.words ?? []).filter(w => w.t0 >= f.t - 0.05 && w.t0 < f.end).map(w => w.w).join(' ');
     f.fix = stillFix(sb.beats[tb?.index] ?? {});
+    // Still to the end of a drawing whose moments have all landed: the rest of the line is
+    // another idea, and it needs a beat and a picture of its own rather than more of this one.
+    const authored = sb.beats[tb?.index] ?? {};
+    if (tb && f.end >= tb.end - 0.4 && (authored.props?.sketch || authored.props?.chart || authored.props?.cast) && /[.!?]\s+\S+\s+\S/.test(f.said)) {
+      const next = pictureFor(f.said);
+      f.fix = `Its picture has finished while the voice goes on: give "${clip(f.said, 70)}" a beat of its own${next ? ` with ${next.sketch ? `the \`${next.sketch}\` sketch` : next.use}` : ' and a picture of its own'}, or cut those words. (A longer film needs more pictures, not more words over one.)`;
+    }
     f.message = `the picture sits still for ${f.seconds} s (${f.t}–${f.end} s) while the voice says "${clip(f.said, 120)}": a viewer sees a slide. ${f.fix}`;
   }
   if (!same)
