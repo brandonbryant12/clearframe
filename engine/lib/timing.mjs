@@ -223,7 +223,10 @@ export function computeTiming(root, { storyboard } = {}) {
     let natural = vo ? Math.max(0, lead) + vo.duration + tail + (b.hold ?? 0) : sb.pacing.silentBeat + (b.hold ?? 0);
     // Words cued to the narration must stay up long enough to be read: a note on the last
     // spoken word would otherwise flash for a fraction of a second before the cut.
-    if (vo) natural = Math.max(natural, Math.max(0, lead) + readUntil(b, vo.words));
+    // Not inside an imported recording, though: its next slice follows straight on, and stretching
+    // this one would insert silence into the conversation (7 s in one podcast). A voice take may
+    // pause for its picture.
+    if (vo && !(continuousTail && vo.provider === 'imported')) natural = Math.max(natural, Math.max(0, lead) + readUntil(b, vo.words));
     // Stretching a slice of a continuous recording would insert silence into it.
     const dur =
       b.duration ?? (continuousLead || continuousTail ? natural : Math.max(b.min ?? sb.pacing.minBeat, natural));
