@@ -45,7 +45,8 @@ export function authoredFigures(beat) {
       // A count, an index or a step ("Step 2", "3 coins") is not a figure to source.
       for (const m of v.matchAll(NUMBER)) if (!(value(m[0]) <= 12 && Number.isInteger(value(m[0])))) out.push({ text: m[0], value: value(m[0]), where });
     } else if (typeof v === 'number') {
-      if (['value', 'values', 'from', 'to', 'target', 'number'].includes(key) || where.startsWith('sketchParams'))
+      // A line drawn from made-up points is invented evidence too (`series`, `points`).
+      if (['value', 'values', 'from', 'to', 'target', 'number', 'series', 'points'].includes(key) || where.startsWith('sketchParams'))
         if (!(Math.abs(v) <= 12 && Number.isInteger(v))) out.push({ text: String(v), value: v, where });
     } else if (Array.isArray(v)) v.forEach(x => walk(x, key, where));
     else if (typeof v === 'object') for (const [k, x] of Object.entries(v)) walk(x, k, where.startsWith('sketchParams') ? `sketchParams.${k}` : k === 'sketchParams' ? 'sketchParams' : where);
