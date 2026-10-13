@@ -381,6 +381,9 @@ export function critique(root) {
           `${loose.slice(0, 4).map(f => `${f.text}${f.where.startsWith('sketchParams') ? ` (${f.where})` : ''}`).join(', ')} ${loose.length > 1 ? 'are' : 'is'} in no source document (${numbers.files.join(', ')}). Every figure comes from the source: take it out; if it is worked out from the source, say how in the beat's source line ("Benefits guide 2027; 26 × $6"); if it is a made-up example (a sample receipt), label it once on screen ("Example").`,
         );
     }
+  // "Portrait" is read as "vertical": two onboarding films for a phone app came out 4:5.
+  if (sb.format?.preset === 'portrait')
+    add('warn', 'film', 'The format is portrait: 4:5 (1080×1350), a feed post. A film for a phone screen (an app, Reels, Stories, TikTok, "vertical") is format.preset "vertical": 9:16 (1080×1920).');
   // Hook.
   const first = beats[0],
     firstDur = t[0]?.dur ?? 0;
