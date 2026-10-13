@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
+import { spawnSync } from 'node:child_process';
 import { parseArgs } from 'node:util';
 import { resolveProject } from './lib/project.mjs';
 import { writeJSON } from './lib/util.mjs';
@@ -33,7 +35,7 @@ const HELP = `ClearFrame — motion graphics
   reference <video> [--out dir]       cut rhythm, keyframe sheet, palette and motion of a reference film
   ingest <dir> --markdown report.md [--treatment noir]   evidence brief (figures, sources, tensions, tables) + storyboard + DIRECTION.md
                                       (also .txt, .html, .docx, .rtf; .pdf with pdftotext)
-  ingest <dir> --audio episode.wav --words words.json [--script turns.txt] [--brand brand.json] [--from s] [--to s] [--speakers host=Maya:Host,guest=Sam:Guest] [--vertical]
+  ingest <dir> --audio episode.wav [--words words.json] [--script turns.txt] [--brand brand.json] [--from s] [--to s] [--speakers host=Maya:Host,guest=Sam:Guest] [--vertical]
                                       a recording as gapless beats with measured word timings and speakers
   playbooks | recipes                 ${playbooks().length} narrative starting points
   blocks [name] [--json | --md]        ${BLOCKS.length} native building blocks and props
@@ -541,7 +543,22 @@ async function main() {
             return [id.trim(), { name: name?.trim() || `Speaker ${id}`, ...(role ? { role: role.trim() } : {}) }];
           }),
       );
-      const words = o.words ? JSON.parse(fs.readFileSync(o.words, 'utf8')) : null;
+      // No word file: measure the words locally with Whisper (whisper.cpp when a model is
+      // installed), free, the same way draft voice takes are measured.
+      let words = o.words ? JSON.parse(fs.readFileSync(o.words, 'utf8')) : null;
+      if (!words) {
+        const { transcribeWords, whisperAvailable } = await import('./lib/whisper.mjs');
+        if (!whisperAvailable()) throw new Error('ingest --audio needs --words FILE, or local Whisper to measure them (install whisper-cpp or openai-whisper).');
+        const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-ingest-'));
+        try {
+          const wav = path.join(tmp, 'audio16k.wav');
+          spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', o.audio, '-ar', '16000', '-ac', '1', wav]);
+          process.stderr.write('  no --words given: measuring the recording with local Whisper…\n');
+          words = transcribeWords(wav, { dir: tmp }).words;
+        } finally {
+          fs.rmSync(tmp, { recursive: true, force: true });
+        }
+      }
       const script = o.script
         ? o.script.endsWith('.json')
           ? JSON.parse(fs.readFileSync(o.script, 'utf8'))
@@ -567,7 +584,7 @@ async function main() {
         `Imported ${r.beats} beats (${r.duration}s, ${r.words} words${r.speakers.length ? `, speakers ${r.speakers.join(', ')}` : ''}${r.interpolated != null ? `; script aligned, ${r.interpolated} word(s) interpolated` : ''}) into ${path.relative(process.cwd(), dir)}. Read BRIEF.md, then give the beats pictures.`,
       );
     }
-    throw new Error('ingest needs --markdown FILE or --audio FILE --words FILE');
+    throw new Error('ingest needs --markdown FILE or --audio FILE (with --words FILE, or local Whisper measures them)');
   }
   if (cmd === 'beatmap' && positionals[0] && fs.statSync(positionals[0]).isFile()) {
     const { analyseTrack } = await import('./lib/beatmap.mjs');

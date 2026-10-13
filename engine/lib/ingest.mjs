@@ -849,7 +849,7 @@ async function writeRecording(
 export async function ingestRecording(destination, options = {}) {
   const root = path.resolve(destination);
   if (fs.existsSync(root) && (!fs.statSync(root).isDirectory() || fs.readdirSync(root).length))
-    throw new Error(`${root} is not empty; ingest a recording into a new directory.`);
+    throw new Error(`${root} is not empty (it holds ${fs.readdirSync(root).slice(0, 4).join(', ')}); ingest writes a whole new project, so give it a folder that does not exist yet and keep your own files elsewhere.`);
   const { readBrand } = await import('./brand.mjs');
   const { useProject } = await import('../../film/library.mjs');
   useProject(null);

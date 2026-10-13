@@ -134,7 +134,9 @@ export async function whisperAlign(root, { beat, model = 'base', language } = {}
       });
       report.push({
         id: x.b.id,
-        status: interpolated ? `${interpolated} word(s) interpolated (estimated)` : 'measured',
+        status: interpolated
+          ? `${interpolated} word(s) interpolated (estimated): ${words.filter(w => w.estimated).slice(0, 6).map(w => `"${w.w}"`).join(', ')}. Whisper heard something else there; reword the line so it is said as written (spell a figure the way it is spoken, or the reverse) and record it again`
+          : 'measured',
       });
     });
     return report;
