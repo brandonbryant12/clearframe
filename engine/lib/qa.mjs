@@ -352,6 +352,15 @@ export function stillFix(beat) {
   return 'Change something on one of those words, or shorten the beat.';
 }
 
+/** How to fill a beat's empty opening, from what it is made of. */
+function emptyFix(beat) {
+  const p = beat?.props ?? {};
+  const cue = (JSON.stringify(p.chart?.values ?? []).match(/"say":"([^"]+)"/) ?? [])[1];
+  if (p.chart && cue)
+    return `its chart waits for "${cue}" with only its label showing: land the first value on one of the first words the voice says (its \`say\`), or start the line on the figure`;
+  if (p.sketch) return `land the ${p.sketch} sketch's first moment on one of the first words (sketchSay), or open the line on that moment`;
+  return "put the scene's picture on its first frame (its card, its chart, its object) and animate only the change on the words";
+}
 /** How to make a beat's picture fill its frame, from what it is made of. */
 function sizeFix(beat) {
   const p = beat.props ?? {};
@@ -422,7 +431,8 @@ export async function qaProject(root, { video, loop = false } = {}) {
       const voiced = beats.some(x => x.vo && x.vo.start < to / fps && x.vo.end > from / fps);
       if (seconds >= 1.5 && voiced && b && !holds.has(b.id))
         findings.push({ level: 'warn', kind: 'empty', t: r2(from / fps), end: r2(to / fps), frame: from, beat: b.id, seconds: r2(seconds),
-          message: `next to nothing on screen for ${r2(seconds)} s (${r2(from / fps)}–${r2(to / fps)} s) while the voice talks: put the scene's picture on its first frame (its card, its chart, its object) and animate only the change on the words` });
+          fix: emptyFix(sb.beats[b.index]),
+          message: `next to nothing on screen for ${r2(seconds)} s (${r2(from / fps)}–${r2(to / fps)} s) while the voice talks: ${emptyFix(sb.beats[b.index])}` });
       from = null;
     };
     for (let i = 0; i < n; i += step) {
@@ -566,7 +576,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
       .map(m => `    ${m[1]}: the voice talks for ${m[2]} s over an empty scene. Put the picture on screen by the first word (cue it to an earlier word, or draw its frame at 0 and only the change on the late word).`),
     ...q.findings
       .filter(f => f.kind === 'empty')
-      .map(f => `    ${f.beat}: next to nothing on screen for ${f.seconds} s (${f.t}–${f.end} s) under the voice. Put its picture (card, chart, object) on the first frame and animate only the change on the words.`),
+      .map(f => `    ${f.beat}: next to nothing on screen for ${f.seconds} s (${f.t}–${f.end} s) under the voice: ${f.fix ?? 'put its picture (card, chart, object) on the first frame and animate only the change on the words'}.`),
   ];
   // Stretches under the voice: a silent breath or title may hold.
   const held = q.findings.filter(f => f.kind === 'held' && !f.deliberate && f.level === 'warn');
@@ -659,7 +669,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
     // The length the person asked for (`new`/`start --length`): agents cut films to half
     // of it and dropped the brief's facts on the way.
     ...(sb.length && s.seconds < 0.75 * sb.length
-      ? [`  length: ${Math.round(s.seconds)} s of the ${sb.length} s asked for${short ? ' (under 60%: not ready)' : ''}. Check BRIEF.md and EVIDENCE.md for the facts the film dropped and give each its own beat and picture (a longer film needs more pictures, not more words over the same ones), or say in DIRECTION.md why it is shorter.`]
+      ? [`  length: ${Math.round(s.seconds)} s of the ${sb.length} s asked for${short ? ' (under 60%: not ready)' : ''}. Check BRIEF.md and EVIDENCE.md for the facts the film dropped and give each its own beat and picture (a longer film needs more pictures, not more words over the same ones)${short ? ': a reason in DIRECTION.md does not make it ready; only the person can ask for a shorter film' : ', or say in DIRECTION.md why it is shorter'}.`]
       : sb.length && s.seconds > 1.3 * sb.length
         ? [`  length: ${Math.round(s.seconds)} s against the ${sb.length} s asked for: cut to the facts that matter.`]
         : []),
