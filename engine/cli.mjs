@@ -723,7 +723,11 @@ async function main() {
         const voicedHeld = Math.round(10 * held.reduce((t, f) => t + f.seconds, 0)) / 10;
         const byBeat = {};
         for (const f of held) byBeat[f.beat ?? '?'] = (byBeat[f.beat ?? '?'] ?? 0) + f.seconds;
-        share = s.seconds ? Math.round((100 * voicedHeld) / s.seconds) : 0;
+        // Reading holds are for a figure or a step to read: about a fifth of a film at most. Past
+        // that, declared holds count as still again (a film of declared holds is still a deck).
+        const allowance = Math.round(2 * s.seconds) / 10,
+          overflow = Math.max(0, Math.round(10 * ((s.deliberateSeconds ?? 0) - allowance)) / 10);
+        share = s.seconds ? Math.round((100 * (voicedHeld + overflow)) / s.seconds) : 0;
         const worst = Object.entries(byBeat).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([b, sec]) => `${b} ${sec.toFixed(1)} s`);
         const verdict =
           share >= 40
@@ -740,7 +744,10 @@ async function main() {
         const typeShare = s.seconds ? Math.round((100 * typeSeconds) / s.seconds) : 0;
         const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;
         lines.push(
-          `motion: ${s.changePerSecond} change/s; still under the voice ${voicedHeld} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds` : ''}): ${said}.`,
+          `motion: ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
+          ...(overflow
+            ? [`  holds: ${s.deliberateSeconds} s are declared as reading holds (pace: "hold"), more than a fifth of the film; ${overflow} s of them count as still. A reading hold is for a figure or a step that must be read, not a way past this check.`]
+            : []),
           ...(typeShare >= 50
             ? [`  words: ${typeShare}% of the film is type on its own (kinetic, statements, titles). Moving words are still words on a background: give the ideas pictures (the workplace sketches, a cast, a chart with cued values) and keep type for the one or two lines worth repeating.`]
             : []),

@@ -345,13 +345,17 @@ function readUntil(b, words) {
 export function findWord(words, query, nth = 0) {
   const q = query.split(/\s+/).map(norm).filter(Boolean);
   if (!q.length) return null;
-  let seen = 0;
-  for (let i = 0; i + q.length <= words.length; i++) {
-    if (q.every((part, j) => norm(words[i + j].w) === part)) {
-      if (seen++ === nth) return words[i].t0;
+  const search = list => {
+    let seen = 0;
+    for (let i = 0; i + q.length <= list.length; i++) {
+      if (q.every((part, j) => norm(list[i + j].w) === part)) {
+        if (seen++ === nth) return list[i].t0;
+      }
     }
-  }
-  return null;
+    return null;
+  };
+  // A cue can name part of a hyphenated or slashed word ("approved" in "pre-approved").
+  return search(words) ?? search(words.flatMap(w => String(w.w).split(/[-–—/]/).filter(Boolean).map(part => ({ w: part, t0: w.t0 }))));
 }
 
 function musicInfo(root, sb, beats) {

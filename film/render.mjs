@@ -425,6 +425,10 @@ function withGuides(ctx) {
   const dir = path.join(ctx.dir, `guides-${crypto.randomUUID()}`);
   fs.mkdirSync(dir);
   writeJSON(path.join(dir, 'job.json'), { ...ctx.job, guides: true });
+  // The renderer opens plan.json, which names its job and media relative to itself: point them
+  // back at the prepared media and at this job with guides.
+  const plan = JSON.parse(fs.readFileSync(path.join(ctx.dir, 'plan.json'), 'utf8'));
+  writeJSON(path.join(dir, 'plan.json'), { ...plan, job: 'job.json', media: path.join(ctx.dir, plan.media ?? 'media') });
   return { ...ctx, dir, cleanup: () => fs.rmSync(dir, { recursive: true, force: true }) };
 }
 export async function stillProject(root, { draft = false, rough = false, at, beat, pos = 0.6, out, grid = false } = {}) {

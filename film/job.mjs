@@ -348,7 +348,10 @@ function cueResolver(b, frame) {
       return value;
     }
     const t = findWord(b.vo?.words ?? [], String(value));
-    if (t == null) throw new Error(`Spoken cue "${value}" not found`);
+    if (t == null) {
+      const said = (b.vo?.words ?? []).map(w => w.w).join(' ');
+      throw new Error(`Spoken cue "${value}" not found in this beat's narration${said ? ` ("${said.length > 140 ? `${said.slice(0, 140)}…` : said}")` : ' (the beat has no narration)'}: use a word it says, spelled as it is written there`);
+    }
     return Math.max(0, t - b.start);
   };
 }
