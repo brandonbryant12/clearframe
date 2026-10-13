@@ -319,13 +319,25 @@ export function typedCanvas(beat) {
   walk(p.elements);
   return text > 0 && other === 0;
 }
+/**
+ * The picture for a line, ready to act on: a sketch that fits it; else a cast of the film's objects
+ * (with the line's figure for the beat after); else the chart for its figures; else the recipe for its
+ * kind of idea. Null when nothing fits.
+ */
+export function pictureLine(vo) {
+  const f = pictureFor(vo ?? '');
+  if (f?.sketch) return `the \`${f.sketch}\` sketch (${f.why.toLowerCase().replace(/^this line is /, '')}; \`sketch ${f.sketch}\` prints the beat to paste)`;
+  const cast = castFor(vo ?? '', spoken), chart = chartFor(vo ?? '', spoken);
+  if (cast)
+    return `paste {"block": "canvas", "props": {"source": "…", ${JSON.stringify(cast).slice(1, -1)}}} (labels and colours are yours)${chart ? `, then the figure${chart.values.length > 1 ? 's' : ''} it says (${chart.values.map(v => v.say).join(', ')}) as a canvas \`chart\` in the beat after` : ''}`;
+  if (chart) return `paste {"block": "canvas", "props": {"source": "…", "chart": ${JSON.stringify(chart)}}} and name each value (its label)`;
+  return f?.use ?? null;
+}
 /** The change that fits a still beat, from what it is made of. */
 export function stillFix(beat) {
   const p = beat.props ?? {};
-  if (typedCanvas(beat)) {
-    const f = pictureFor(beat.vo ?? '');
-    return `This is type on its own, drawn on a canvas: give the idea a picture that changes on those words (${f?.sketch ? `the \`${f.sketch}\` sketch: \`sketch ${f.sketch}\` prints the beat to paste` : f?.use ?? 'a sketch from `sketch`, a cast of the film\'s objects, or a chart with a `say` on each value'}), or fold the line into the next picture's narration.`;
-  }
+  if (typedCanvas(beat))
+    return `This is type on its own, drawn on a canvas: give the idea a picture that changes on those words (${pictureLine(beat.vo) ?? 'a sketch from `sketch`, a cast of the film\'s objects, or a chart with a `say` on each value'}), or fold the line into the next picture's narration.`;
   if (p.sketch)
     return `Land a later moment of the ${p.sketch} sketch on one of those words (sketchSay; \`sketch ${p.sketch}\` lists its moments in order), or shorten the beat to its last moment.`;
   if (p.chart)
@@ -607,13 +619,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
             const typed = timed.map((tb, i) => sb.beats[tb.index ?? i]).filter(b => b && typeOnly(b));
             // A sketch that fits the line first; else a line that says figures gets its chart ready to
             // paste (the values and the words they land on); else the recipe for its kind of idea.
-            const lines = typed.map(b => {
-              const f = pictureFor(b.vo ?? ''), cast = !f?.sketch && castFor(b.vo ?? '', spoken), chart = !f?.sketch && !cast && chartFor(b.vo ?? '', spoken);
-              if (f?.sketch) return [b, `the \`${f.sketch}\` sketch (${f.why.toLowerCase().replace(/^this line is /, '')}; \`sketch ${f.sketch}\` prints the beat to paste)`];
-              if (cast) return [b, `paste {"block": "canvas", "props": {"source": "…", ${JSON.stringify(cast).slice(1, -1)}}} (labels and colours are yours)`];
-              if (chart) return [b, `paste {"block": "canvas", "props": {"source": "…", "chart": ${JSON.stringify(chart)}}} and name each value (its label)`];
-              return [b, f?.use ?? null];
-            });
+            const lines = typed.map(b => [b, pictureLine(b.vo)]);
             const rest = lines.filter(([, l]) => !l).map(([b]) => b.id);
             return [
               ...lines.filter(([, l]) => l).map(([b, l]) => `    ${b.id}: ${l}`),

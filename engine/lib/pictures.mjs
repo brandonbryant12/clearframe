@@ -10,7 +10,8 @@ const PICTURES = [
   [/\b(match(es|ing)?|adds?|puts? in|on top of|top[- ]up|contributes? the same)\b.*(\b(percent|dollars?)\b|[%$])|\b(percent|%).*\b(match(es)?|adds?)\b/i, 'match', 'This line is about one contribution added to another'],
   [/\b((by|before|on) (monday|tuesday|wednesday|thursday|friday)|this week|first week|by the end of the week)\b/i, 'week', 'This line names days of one week'],
   [/\b(deadline|by (january|february|march|april|may|june|july|august|september|october|november|december)|(on|by) the \d{1,2}(st|nd|rd|th)|between .* and .*\b\d{1,2}\b|open enrollment runs|within \d+ days|\d+ days (from|after|to)|last day)\b/i, 'deadline', 'This line names a window or a deadline'],
-  [/\b(log ?in|sign(s|ed)? in|portal|open the app|in the app|click|tap|select|go to|toolbar|button)\b/i, 'portal', 'This line is a step done in an app'],
+  // "Emails go to the wrong inbox" is not a step in an app: go to names a place in one.
+  [/\b(log ?in|sign(s|ed)? in|portal|open the app|in the app|click|tap|select|go to (the |your )?(\w+ ){0,2}(portal|app|site|page|settings|menu|tab|screen|website)|toolbar|button)\b/i, 'portal', 'This line is a step done in an app'],
   [/\b(look for|signs\b(?! in)|sign of|tells?|red flags?|watch for|check (the|for)|itemi[sz]ed)\b/i, 'inspect', 'This line points at parts of a message or document'],
   [/\b(or the|versus|vs\.?|compared? (to|with)|which one|either|instead of)\b/i, 'choose', 'This line compares two options'],
   [/\b(breaks? down|split|of your (pay|paycheck)|where (your|the) money goes|take[- ]home|goes (to|into) (your|the) (\w+ )?(account|fund|plan|savings|taxes|pension))\b/i, 'split', 'This line divides a whole into parts'],
@@ -99,6 +100,27 @@ export function castFor(vo, spoken) {
         },
       };
     }
+  }
+  // Mail that reaches the wrong person ("27 emails went to the wrong person"): the envelope leaves
+  // you, passes the client and lands with someone else.
+  const astray = text.match(/\b(wrong (person|people|inbox(es)?|recipients?|address(es)?|client)|misdirected|misaddressed|sent to the wrong)\b/i);
+  if (astray) {
+    return {
+      cast: {
+        fresh: true,
+        objects: [
+          { id: 'you', shape: 'person', color: 'ink', label: 'You', size: 250 },
+          { id: 'client', shape: 'person', color: 'positive', label: 'Client', size: 250 },
+          { id: 'stranger', shape: 'person', color: 'negative', label: 'Wrong person', size: 250 },
+          { id: 'mail', shape: 'envelope', color: 'accent2', size: 150 },
+        ],
+        formations: [
+          { form: 'row', at: 0, ids: ['you', 'client', 'stranger'] },
+          { form: 'cluster', at: 0.3, ids: ['mail'], beside: 'you' },
+          { form: 'travel', say: astray[1].split(/\s+/).pop(), ids: ['mail'], to: 'stranger' },
+        ],
+      },
+    };
   }
   const apart = text.match(/\b(separate|aside|its own|different account)\b/i);
   if (apart) {
