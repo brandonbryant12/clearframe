@@ -18,7 +18,7 @@ import { COVER } from '../../film/constants.mjs';
 const LONG = 128;
 // Mean absolute grey difference (0–255) over one second. The viral references we measured
 // never drop under 3 for even 2.5 s (medians 8–42); a held slide sits under 1.
-export const HELD = { change: 2, seconds: 2.5 };
+export const HELD = { change: 2, seconds: 2.5, local: 7 };
 
 /** Compare the active picture, excluding authored horizontal bars (same rule as lens.rs).
  * The caller passes the original aspect to avoid analysis-grid rounding changing the crop.
@@ -52,6 +52,30 @@ function decode(file, w, h) {
   return { frames: Math.floor(r.stdout.length / n), at: i => r.stdout.subarray(i * n, (i + 1) * n), size: n };
 }
 
+/**
+ * The largest change in any 16×16 cell of the analysis grid (about 240 px at 1080p), above a
+ * band at the bottom (burned captions change with every phrase and are not the picture). A coin
+ * dropping, a value typed or a menu opening is small next to the whole frame but plain in its
+ * cell; the frame average alone called such a picture held.
+ */
+export function localDifference(a, b, width, height, skipBottom = 0) {
+  const T = 16,
+    rows = height - skipBottom;
+  let best = 0;
+  for (let ty = 0; ty < rows; ty += T)
+    for (let tx = 0; tx < width; tx += T) {
+      let sum = 0,
+        n = 0;
+      for (let y = ty; y < Math.min(rows, ty + T); y++)
+        for (let x = tx; x < Math.min(width, tx + T); x++) {
+          sum += Math.abs(a[y * width + x] - b[y * width + x]);
+          n++;
+        }
+      if (n && sum / n > best) best = sum / n;
+    }
+  return best;
+}
+
 const diff = (a, b) => {
   let s = 0;
   for (let k = 0; k < a.length; k++) s += Math.abs(a[k] - b[k]);
@@ -68,7 +92,7 @@ const r2 = n => Math.round(n * 100) / 100;
  * d[i] = difference between frame i-1 and i; skip[i] = difference between i-1 and i+1;
  * second[i] = difference between frame i and the frame one second earlier.
  */
-export function timeFindings({ d, skip, second, fps, beats = [], worlds = {}, covers = {}, holds = new Set() }) {
+export function timeFindings({ d, skip, second, local = [], fps, beats = [], worlds = {}, covers = {}, holds = new Set() }) {
   const n = d.length;
   const beatAt = t => beats.find(b => t >= b.start && t < b.end) ?? beats.at(-1);
   const where = i => {
@@ -132,7 +156,8 @@ export function timeFindings({ d, skip, second, fps, beats = [], worlds = {}, co
   const F = Math.round(fps);
   const held = new Uint8Array(n);
   for (let i = F; i < n; i++)
-    if (beatAt(i / fps) === beatAt((i - F) / fps) && second[i] < HELD.change) held.fill(1, i - F, i + 1);
+    if (beatAt(i / fps) === beatAt((i - F) / fps) && second[i] < HELD.change && (local[i] ?? 0) < HELD.local)
+      held.fill(1, i - F, i + 1);
   for (let i = 0; i < n; i++) {
     if (!held[i]) continue;
     let j = i;
@@ -261,7 +286,10 @@ export async function qaProject(root, { video, loop = false } = {}) {
     F = Math.round(fps);
   const d = [0],
     skip = [0],
-    second = [];
+    second = [],
+    local = [];
+  // Burned captions sit in the bottom of the frame; their phrases are not the picture moving.
+  const captionBand = sb.captions ? Math.round(h * (h > w ? 0.24 : 0.16)) : 0;
   const same = timing.frames === n;
   const beats = same ? timing.beats : [];
   const letterboxes = beats.map(b => sb.beats[b.index].lens?.letterbox ?? sb.lens?.letterbox ?? 0);
@@ -277,6 +305,7 @@ export async function qaProject(root, { video, loop = false } = {}) {
         ? pictureDifference(film.at(i - F), film.at(i), w, h, letterboxes[beatIndex] ?? 0, v.width / v.height)
         : Infinity,
     );
+    local.push(i >= F && withinBeat ? localDifference(film.at(i - F), film.at(i), w, h, captionBand) : Infinity);
   }
   const worlds = Object.fromEntries(sb.beats.map(b => [b.id, b.props?.world ?? null]));
   const covers = Object.fromEntries(
@@ -286,7 +315,7 @@ export async function qaProject(root, { video, loop = false } = {}) {
     }),
   );
   const holds = new Set(sb.beats.filter(b => b.pace === 'hold').map(b => b.id));
-  const findings = timeFindings({ d, skip, second, fps, beats, worlds, covers, holds });
+  const findings = timeFindings({ d, skip, second, local, fps, beats, worlds, covers, holds });
   if (!same)
     findings.unshift({
       level: 'warn',

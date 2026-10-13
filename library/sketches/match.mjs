@@ -4,7 +4,7 @@ import { round, tall } from '../../film/sketch-kit.mjs';
 // them, then the two stacks come together into one with its total on top. One coin is one unit
 // (a percent of pay, a dollar, a share), so the picture agrees with the figures: the counts come
 // from sketchParams, not from the drawing. Moments: YOU, MATCH, TOTAL.
-const AT = { YOU: 0.5, MATCH: 2.4, TOTAL: 4.6 };
+const AT = { YOU: 0.5, MATCH: 2.4, TOTAL: 4.6, AGAIN: 7.2 };
 
 export default {
   name: 'match',
@@ -12,13 +12,14 @@ export default {
   order: 91,
   summary:
     'Two contributions become one: your coins drop into a stack, the company’s drop in beside them, and the stacks merge into one with its total on top. One coin per unit, counted from the real figures.',
-  use: 'An employer match, a grant on top of savings, a fee that adds to a price, any "you put in this, they add that". Set the counts with sketchParams {you, match, suffix}; for a what-if (raise 3% to 5%) add {fromYou, fromMatch}: the beat opens on the current coins and only the added ones drop; replace YOU, EMPLOYER, EACH (what one coin is, e.g. "Each coin: 1% of your pay") and TOTAL (words after the total) with sketchText; land YOU, MATCH and TOTAL on words with sketchSay. The figures need a visible source like any number.',
+  use: 'An employer match, a grant on top of savings, a fee that adds to a price, any "you put in this, they add that". Set the counts with sketchParams {you, match, suffix}; for a what-if (raise 3% to 5%) add {fromYou, fromMatch}: the beat opens on the current coins and only the added ones drop; {again: 3} lines up more stacks like the total on AGAIN ("every paycheck"), with AGAIN as the line under them; replace YOU, EMPLOYER, EACH (what one coin is, e.g. "Each coin: 1% of your pay") and TOTAL (words after the total) with sketchText; land YOU, MATCH and TOTAL on words with sketchSay. The figures need a visible source like any number.',
   params: {
     you: { default: 5, min: 0, max: 12, integer: true, about: 'coins you put in', hint: 'One coin per unit: 5 and 4 for 5% and 4% of pay. For money, pick a unit both fit in 12 coins (e.g. $250 a coin) and say so in EACH.' },
     match: { default: 4, min: 0, max: 12, integer: true, about: 'coins the other side adds', hint: 'One coin per unit: 5 and 4 for 5% and 4% of pay. For money, pick a unit both fit in 12 coins (e.g. $250 a coin) and say so in EACH.' },
     suffix: { default: '%', about: 'unit printed after each count, e.g. "%" (or "" for none)' },
     fromYou: { default: 0, min: 0, max: 12, integer: true, about: 'what if: coins already yours on the first frame (the current state), e.g. 3 when raising 3% to 5%' },
     fromMatch: { default: 0, min: 0, max: 12, integer: true, about: 'what if: the company coins already there on the first frame, e.g. 3' },
+    again: { default: 0, min: 0, max: 5, integer: true, about: 'every paycheck: on AGAIN, this many more stacks like the total line up beside it (0 for none)' },
   },
   build(w, h, { params = {} } = {}) {
     const you = params.you ?? 5,
@@ -27,7 +28,8 @@ export default {
     // What if: the picture opens on the current state (fromYou, fromMatch) and only the coins
     // the change adds drop in on their words, so one beat shows the before and the after.
     const fromYou = Math.min(params.fromYou ?? 0, you),
-      fromMatch = Math.min(params.fromMatch ?? 0, match);
+      fromMatch = Math.min(params.fromMatch ?? 0, match),
+      again = params.again ?? 0;
     const T = tall(w, h);
     const rx = T ? 190 : 150,
       ry = T ? 50 : 40,
@@ -146,8 +148,54 @@ export default {
         ),
         // The total over the merged stack, and what it is.
         label(`${total}${suffix}`, mid, top(total), 96, 'bold', 'ink', { enter: 'pop', cue: 'TOTAL', at: AT.TOTAL + 1.0, after: 1.0, dur: 0.4 }),
-        label('TOTAL', mid, base + t + 90, 40, 'semibold', 'ink', { fit: w - 240, enter: 'rise', cue: 'TOTAL', at: AT.TOTAL + 1.2, after: 1.2 }),
+        label('TOTAL', mid, base + t + 90, 40, 'semibold', 'ink', {
+          fit: w - 240,
+          enter: 'rise',
+          cue: 'TOTAL',
+          at: AT.TOTAL + 1.2,
+          after: 1.2,
+          ...(again ? { exit: 'fade', exitCue: 'AGAIN', exitAt: AT.AGAIN, exitDur: 0.25 } : {}),
+        }),
         label('EACH', mid, base + t + 150, 28, 'regular', 'muted', { fit: w - 240, enter: 'fade', at: AT.YOU + 0.6 }),
+        // Every paycheck: smaller copies of the total line up beside it, one after another, and
+        // the line under the stacks says so (AGAIN).
+        ...Array.from({ length: again }, (_, k) => {
+          const k1 = k + 1,
+            sc = 0.5,
+            srx = round(rx * sc),
+            sry = round(ry * sc),
+            st = round(t * sc),
+            sstep = round(step * sc),
+            sx = round(mid + (T ? 0 : rx + 70) + k1 * (srx * 2 + 34) * (T ? 0 : 1)),
+            // Tall frames have room above the total, not below its labels.
+            sy = T ? round(top(total) - 150) : base + round(t - st),
+            ox = T ? round(mid - ((again - 1) * (srx * 2 + 30)) / 2 + k * (srx * 2 + 30)) : sx;
+          const coins = Array.from({ length: total }, (_, i) => {
+            const y = round(sy - i * sstep),
+              fill = i < you ? 'accent' : 'accent2';
+            return [
+              { type: 'rect', x: ox - srx, y, w: 2 * srx, h: st, fill, enter: 'none' },
+              { type: 'ellipse', cx: ox, cy: y + st, rx: srx, ry: sry, fill, enter: 'none' },
+              { type: 'ellipse', cx: ox, cy: y, rx: srx, ry: sry, fill, stroke: 'bg', width: 1.5, enter: 'none' },
+            ];
+          }).flat();
+          return {
+            type: 'group',
+            enter: 'drop',
+            dist: 160,
+            cue: 'AGAIN',
+            at: round(AT.AGAIN + k * 0.28),
+            after: round(k * 0.28),
+            dur: 0.45,
+            opacity: round(1 - k * 0.12),
+            children: coins,
+          };
+        }),
+        ...(again
+          ? [
+              label('AGAIN', mid, base + t + 90, 40, 'semibold', 'ink', { fit: w - 240, enter: 'rise', cue: 'AGAIN', at: AT.AGAIN + 0.4, after: 0.4 }),
+            ]
+          : []),
       ],
     };
   },

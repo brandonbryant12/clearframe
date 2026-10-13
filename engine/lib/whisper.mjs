@@ -112,8 +112,12 @@ export async function whisperAlign(root, { beat, model = 'base', language } = {}
       const clamped = words
         .map(w => ({ w: w.w, t0: Math.min(w.t0, duration - 0.02), t1: Math.min(w.t1, duration) }))
         .map((w, k, a) => ({ ...w, t0: k ? Math.max(w.t0, a[k - 1].t1) : w.t0 }));
-      if (clamped.some(w => w.t1 <= w.t0)) {
-        report.push({ id: x.b.id, status: 'timings did not fit the take' });
+      const misfit = clamped.filter(w => w.t1 <= w.t0);
+      if (misfit.length) {
+        report.push({
+          id: x.b.id,
+          status: `timings did not fit the take: ${misfit.length} word(s) heard past its end (${duration.toFixed(2)} s), first "${misfit[0].w}" at ${misfit[0].t0.toFixed(2)} s. The take is shorter than its words: re-record the voice for this beat (voice --draft) so narration and audio match`,
+        });
         return;
       }
       const meta = readJSON(x.metaFile);

@@ -709,11 +709,11 @@ async function main() {
         share = s.seconds ? Math.round((100 * voicedHeld) / s.seconds) : 0;
         const worst = Object.entries(byBeat).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([b, sec]) => `${b} ${sec.toFixed(1)} s`);
         const verdict =
-          share >= 40 || (share >= 20 && s.changePerSecond < 1.5)
-            ? 'READS AS NARRATED SLIDES: the picture sits still while the voice talks'
+          share >= 40
+            ? 'READS AS NARRATED SLIDES (40% or more): the picture sits still while the voice talks'
             : share >= 20
-              ? 'some scenes hold still under the voice'
-              : 'the picture keeps moving with the voice';
+              ? 'some scenes hold still under the voice (20–40%: fix the stillest)'
+              : 'the picture keeps moving with the voice (under 20%)';
         // Moving words are still words: how much of the film is type on its own.
         const TYPE = ['kinetic', 'statement', 'title', 'quote', 'endcard', 'chapter', 'list', 'checklist', 'callout'];
         const sbNow = JSON.parse(fs.readFileSync(path.join(dir, 'storyboard.json'), 'utf8'));
