@@ -45,7 +45,7 @@ Each fact gets the mechanism that shows it. These are sketches: fill `sketchText
 
 A picture must keep up with its narration: every figure or idea the voice names gets its own moment (a cue, a value's `say`, a sketch moment). Three figures said over one still number is a slide.
 
-Keep something across cuts. Two beats on the same idea share a cast or a world, so the cut is invisible; a new idea can cut hard (`panel` at a chapter). Let the action beat show the step done (`portal`), with the deadline in the voice or on screen, rather than an end card listing it. One kinetic line (`kinetic` `stack`) for the sentence people should repeat is plenty.
+Give the film one object of its own, and keep it across cuts: a `cast` of the film's objects (`paycheck`, `jar`, `calendar`, `badge`, `house`, `umbrella`, `receipt`, `person`, `coin`) that opens the film and comes back at the end (a paycheck that splits, a jar that fills, a badge for a new hire). It is what makes this film this film and not the last one. Two beats on the same idea share a cast or a world, so the cut is invisible; a new idea can cut hard (`panel` at a chapter). Let the action beat show the step done (`portal`), with the deadline in the voice or on screen, rather than an end card listing it. One kinetic line (`kinetic` `stack`) for the sentence people should repeat is plenty.
 
 ## People and places: greyed B-roll
 

@@ -276,6 +276,41 @@ const SHAPES = {
     details: [{ type: 'rect', x: 0.14 * s, y: -0.18 * s, w: 0.32 * s, h: 0.32 * s, r: 0.07 * s, fill: c, body: true },
       { type: 'rect', x: 0.22 * s, y: -0.12 * s, w: 0.15 * s, h: 0.1 * s, r: 0.02 * s, fill: d },
       ...[-0.3, 0.27].map(x => ({ type: 'circle', cx: x * s, cy: 0.2 * s, r: 0.11 * s, fill: 'ink' }))] }) },
+  // A paycheck: a long slip with an amount box, lines and a signature.
+  paycheck: { about: 'a paycheck: pay, salary, a paycheck deduction, take-home pay, payday', extent: [0.5, 0.26], draw: (s, d) => ({ body: { x: -0.5 * s, y: -0.26 * s, w: s, h: 0.52 * s, r: 0.04 * s },
+    details: [{ type: 'rect', x: 0.16 * s, y: -0.16 * s, w: 0.26 * s, h: 0.14 * s, r: 0.02 * s, fill: d, opacity: 0.85 },
+      ...[-0.1, 0.04].map((y, i) => ({ type: 'line', x1: -0.4 * s, y1: y * s, x2: (i ? -0.02 : 0.06) * s, y2: y * s, stroke: d, width: 0.035 * s, cap: 'round' })),
+      { type: 'path', d: `M ${0.1 * s} ${0.16 * s} q ${0.05 * s} ${-0.08 * s} ${0.1 * s} 0 t ${0.1 * s} 0 t ${0.1 * s} 0`, fill: 'none', stroke: d, width: 0.03 * s, cap: 'round' }] }) },
+  // A calendar page: a binding bar and a grid of days, one ringed.
+  calendar: { about: 'a calendar page: a date, a deadline, an enrollment window, a schedule, a month', extent: [0.42, 0.46], draw: (s, d, c) => ({ body: { x: -0.42 * s, y: -0.38 * s, w: 0.84 * s, h: 0.84 * s, r: 0.06 * s },
+    details: [{ type: 'rect', x: -0.42 * s, y: -0.38 * s, w: 0.84 * s, h: 0.2 * s, r: 0.06 * s, fill: d, opacity: 0.85 },
+      ...[-0.22, 0.22].map(x => ({ type: 'line', x1: x * s, y1: -0.46 * s, x2: x * s, y2: -0.3 * s, stroke: 'ink', width: 0.05 * s, cap: 'round' })),
+      ...[0, 1, 2].flatMap(r => [0, 1, 2, 3].map(k => ({ type: 'circle', cx: (-0.27 + k * 0.18) * s, cy: (-0.04 + r * 0.16) * s, r: 0.035 * s, fill: d }))),
+      { type: 'circle', cx: 0.27 * s, cy: 0.28 * s, r: 0.09 * s, fill: 'none', stroke: d, width: 0.03 * s }] }) },
+  // A savings jar: a glass with a lid and a coin slot.
+  jar: { about: 'a savings jar: savings, an account that fills, an HSA or FSA, a fund, a reserve', extent: [0.36, 0.5], draw: (s, d, c) => ({ body: { x: -0.34 * s, y: -0.3 * s, w: 0.68 * s, h: 0.8 * s, r: 0.14 * s },
+    details: [{ type: 'rect', x: -0.36 * s, y: -0.46 * s, w: 0.72 * s, h: 0.16 * s, r: 0.04 * s, fill: d, opacity: 0.9 },
+      { type: 'line', x1: -0.1 * s, y1: -0.38 * s, x2: 0.1 * s, y2: -0.38 * s, stroke: c, width: 0.04 * s, cap: 'round' },
+      { type: 'line', x1: -0.2 * s, y1: -0.12 * s, x2: -0.2 * s, y2: 0.3 * s, stroke: d, width: 0.04 * s, cap: 'round', opacity: 0.6 }] }) },
+  // A house: walls, a roof and a door.
+  house: { about: 'a house: home, a mortgage, rent, family, where someone lives', extent: [0.46, 0.5], draw: (s, d, c) => ({ body: { x: -0.36 * s, y: -0.06 * s, w: 0.72 * s, h: 0.56 * s, r: 0.03 * s },
+    details: [{ type: 'poly', points: [[-0.46 * s, -0.04 * s], [0, -0.48 * s], [0.46 * s, -0.04 * s]], closed: true, fill: c, body: true },
+      { type: 'rect', x: -0.08 * s, y: 0.18 * s, w: 0.16 * s, h: 0.32 * s, r: 0.02 * s, fill: d },
+      { type: 'rect', x: 0.16 * s, y: 0.06 * s, w: 0.12 * s, h: 0.12 * s, r: 0.01 * s, fill: d, opacity: 0.8 }] }) },
+  // An ID badge on its clip: a photo circle and two lines.
+  badge: { about: 'an ID badge: an employee, a new hire, a login, identity, access', extent: [0.32, 0.5], draw: (s, d, c) => ({ body: { x: -0.32 * s, y: -0.38 * s, w: 0.64 * s, h: 0.88 * s, r: 0.07 * s },
+    details: [{ type: 'rect', x: -0.08 * s, y: -0.5 * s, w: 0.16 * s, h: 0.18 * s, r: 0.03 * s, fill: 'ink' },
+      { type: 'circle', cx: 0, cy: -0.08 * s, r: 0.14 * s, fill: d },
+      ...[0.18, 0.3].map((y, i) => ({ type: 'line', x1: -0.18 * s, y1: y * s, x2: (i ? 0.08 : 0.18) * s, y2: y * s, stroke: d, width: 0.04 * s, cap: 'round' }))] }) },
+  // An umbrella: a canopy and a hooked handle.
+  umbrella: { about: 'an umbrella: insurance, cover, protection, a safety net, a rainy day', extent: [0.5, 0.5], draw: (s, d, c) => ({ body: { x: -0.03 * s, y: -0.12 * s, w: 0.06 * s, h: 0.5 * s, r: 0.03 * s },
+    details: [{ type: 'path', d: `M ${-0.5 * s} ${-0.06 * s} Q 0 ${-0.62 * s} ${0.5 * s} ${-0.06 * s} Q ${0.33 * s} ${-0.14 * s} ${0.17 * s} ${-0.06 * s} Q 0 ${-0.14 * s} ${-0.17 * s} ${-0.06 * s} Q ${-0.33 * s} ${-0.14 * s} ${-0.5 * s} ${-0.06 * s} Z`, fill: c, body: true },
+      { type: 'path', d: `M 0 ${0.38 * s} q 0 ${0.12 * s} ${-0.1 * s} ${0.1 * s}`, fill: 'none', stroke: c, width: 0.06 * s, cap: 'round' }] }) },
+  // A receipt: a strip with a torn edge, lines and a total.
+  receipt: { about: 'a receipt: an expense, a purchase, a claim, proof of payment', extent: [0.3, 0.5], draw: (s, d) => ({ body: { x: -0.3 * s, y: -0.5 * s, w: 0.6 * s, h: 0.92 * s, r: 0.02 * s },
+    details: [{ type: 'poly', points: Array.from({ length: 7 }, (_, k) => [(-0.3 + k * 0.1) * s, (k % 2 ? 0.5 : 0.42) * s]), closed: false, fill: 'none', stroke: d, width: 0.03 * s },
+      ...[-0.32, -0.2, -0.08].map(y => ({ type: 'line', x1: -0.18 * s, y1: y * s, x2: 0.18 * s, y2: y * s, stroke: d, width: 0.035 * s, cap: 'round' })),
+      { type: 'line', x1: -0.18 * s, y1: 0.12 * s, x2: 0.18 * s, y2: 0.12 * s, stroke: d, width: 0.06 * s, cap: 'round' }] }) },
   // A flag on a pole: a goal reached.
   flag: { about: 'a flag on a pole: a milestone, a goal, a launch, a finish line, arrival', extent: [0.4, 0.5], draw: (s, d) => ({ body: { x: -0.24 * s, y: -0.46 * s, w: 0.62 * s, h: 0.36 * s, r: 0.03 * s },
     details: [{ type: 'line', x1: -0.28 * s, y1: -0.5 * s, x2: -0.28 * s, y2: 0.5 * s, stroke: 'ink', width: 0.05 * s, cap: 'round' }] }) },
