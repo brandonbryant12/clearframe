@@ -19,7 +19,12 @@ test('the renderer identity covers its sources, lockfile and the shared constant
   assert.match(sceneHash(), /^[0-9a-f]{64}$/);
   const manifest = fs.readFileSync(new URL('../scene/native/Cargo.toml', import.meta.url), 'utf8');
   const lock = fs.readFileSync(new URL('../scene/native/Cargo.lock', import.meta.url), 'utf8');
-  for (const text of [manifest, lock]) assert.doesNotMatch(text, /fframes|usvgr|ffmpeg-sys/i, 'no FFFrames crate is a dependency');
+  // fframes is the runtime, pinned to the exact revision recorded with its MIT notice.
+  const upstream = JSON.parse(fs.readFileSync(new URL('../archive/fframes/upstream.json', import.meta.url), 'utf8'));
+  assert.match(upstream.revision, /^[0-9a-f]{40}$/);
+  assert.ok(manifest.includes(`fframes = { git = "https://github.com/dmtrKovalenko/fframes", rev = "${upstream.revision}"`), 'fframes is pinned to upstream.json');
+  assert.ok(lock.includes(`git+https://github.com/dmtrKovalenko/fframes?rev=${upstream.revision}#${upstream.revision}`));
+  assert.doesNotMatch(manifest, /fframes_skia_renderer|fframes-skia-renderer/, 'ClearFrame draws its own frames');
   assert.match(manifest, /skia-safe = \{ version = "=0\.153\.3"/);
 });
 

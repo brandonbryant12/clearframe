@@ -2,7 +2,7 @@
 
 **Start here:** [`docs/guide.html`](docs/guide.html) is the guide to how ClearFrame works and how to prompt it for great films. Open it in a browser.
 
-Agent-directed motion graphics rendered natively by the **ClearFrame scene engine** (Skia on the GPU; `docs/scene-engine.md`). A film is one `storyboard.json`, recorded speech and optional media. The engine draws every frame itself from a compiled scene plan. It draws native GPU stages (actors, packets, commit-grounded code, footage, materials, particles, camera and motion blur) and the blocks' type, numbers, charts, diagrams and captions. Google models supply speech, music, images and the occasional footage insert.
+Agent-directed motion graphics rendered natively by the **ClearFrame scene engine** (Skia on the GPU; `docs/scene-engine.md`), with [fframes](https://github.com/dmtrKovalenko/fframes) as the film runtime that schedules, encodes and assembles the frames (`docs/fframes-return.md`). A film is one `storyboard.json`, recorded speech and optional media. The engine draws every frame itself from a compiled scene plan. It draws native GPU stages (actors, packets, commit-grounded code, footage, materials, particles, camera and motion blur) and the blocks' type, numbers, charts, diagrams and captions. Google models supply speech, music, images and the occasional footage insert.
 
 ![Every native block, paper palette](docs/media/blocks.jpg)
 

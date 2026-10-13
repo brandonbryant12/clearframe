@@ -5,7 +5,7 @@ description: Author native GPU stages for ClearFrame films (actors with stable i
 
 # Native stages and the scene engine
 
-Read `docs/scene-engine.md` (design and full reference) and `docs/scene-engine-coverage.md` (every block, sketch, treatment and playbook with its measured state). The scene engine is ClearFrame's only renderer: blocks, stages, compositing and footage.
+Read `docs/scene-engine.md` (design and full reference) and `docs/scene-engine-coverage.md` (every block, sketch, treatment and playbook with its measured state). The scene engine is ClearFrame's only renderer: blocks, stages, compositing and footage. Renders run through fframes as the runtime (`scene/native/src/runtime.rs`; `docs/fframes-return.md`): change pictures in the engine, and scheduling, encoding or segment rules in `runtime.rs`.
 
 ## When to use a stage
 

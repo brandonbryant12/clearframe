@@ -41,3 +41,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## fframes (dmtrKovalenko/fframes) — the film runtime
+
+`Cargo.toml` depends on the `fframes` crate from https://github.com/dmtrKovalenko/fframes at
+revision `62f66735e16f19942fdb56c1b7f2590c53e7434c` (MIT; licence SHA-256
+`648577feb8515d23cb9c762aafcb295397bc2f3a88f0dc3358c9eafc64c48d33`, notice in
+`archive/fframes/UPSTREAM-LICENSE.txt`, provenance in `archive/fframes/upstream.json`).
+`src/runtime.rs` implements fframes' public `FFramesRenderBackend` trait; no fframes source is
+copied or patched. Its `h264` and `libav-agree-gpl` features link the prebuilt static FFmpeg of
+`ffmpeg-sys-fframes` 9.0.0 with libx264, which is GPL: see `docs/fframes-return.md`, Risks.
