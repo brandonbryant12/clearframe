@@ -12,23 +12,23 @@ A night of brute-force iteration on the films ClearFrame is mostly asked for: be
 
 Judge means (1–10):
 
-| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 | Round 9 | Round 10 | Round 11 | Round 12 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 401(k) match | Haiku | 3.1 | 6.6 | | | | | | | | | | |
-| Phishing training | Haiku | 5.0 | 5.9 | | | | | | | | | | |
-| HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 | | | | | | | | | |
-| Expense policy | Haiku | | | 6.1 | | | | | | | | | |
-| MFA rollout | Haiku | | | | 5.3 | | | | | | | | |
-| Parental leave | Haiku | | | | 6.1 | | | | | | | | |
-| Fraud alert (vertical) | Haiku | | | | 5.7 | | | | | | | | |
-| Open enrollment | Sonnet / Haiku | 6.4 (Sonnet) | | | | 6.1 (Haiku) | | | | | 6.0 (Haiku) | | 5.9 (Haiku) |
-| Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) | | | | | | | |
-| Mortgage rate lock | Sonnet | | | | 6.7 | | | | | | | | |
-| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) | | 5.3 (Haiku) | 4.9 (Haiku) | 6.1, 4.7 (Haiku ×2) | 4.7, 4.1 (Haiku ×2) | 5.1, 3.9 (Haiku ×2) | 5.0, 3.9 (Haiku); 7.4 (Sonnet) |
-| Share purchase plan | Haiku / Sonnet | | | | | | 4.7 | 5.4 | 3.7 | 4.9, 4.3 | | 5.6, 5.1 | 5.0 (Haiku); 6.6 (Sonnet) |
-| First week (vertical) | Haiku | | | | | | 5.4 | 2.7 | 5.3 (Haiku), 6.4 (Sonnet) | 6.1 | 4.6 | 4.9 | 5.0 |
-| Client data rule | Haiku | | | | | | 6.3 | 4.6 | 5.7 | 5.6 | 4.1 | 5.1 | 3.7 |
-| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | | | | | | | | |
+| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 | Round 9 | Round 10 | Round 11 | Round 12 | Round 13 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 401(k) match | Haiku | 3.1 | 6.6 | | | | | | | | | | | |
+| Phishing training | Haiku | 5.0 | 5.9 | | | | | | | | | | | 5.1 |
+| HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 | | | | | | | | | | |
+| Expense policy | Haiku | | | 6.1 | | | | | | | | | | |
+| MFA rollout | Haiku | | | | 5.3 | | | | | | | | | |
+| Parental leave | Haiku | | | | 6.1 | | | | | | | | | |
+| Fraud alert (vertical) | Haiku | | | | 5.7 | | | | | | | | | |
+| Open enrollment | Sonnet / Haiku | 6.4 (Sonnet) | | | | 6.1 (Haiku) | | | | | 6.0 (Haiku) | | 5.9 (Haiku) | |
+| Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) | | | | | | | | |
+| Mortgage rate lock | Sonnet | | | | 6.7 | | | | | | | | | |
+| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) | | 5.3 (Haiku) | 4.9 (Haiku) | 6.1, 4.7 (Haiku ×2) | 4.7, 4.1 (Haiku ×2) | 5.1, 3.9 (Haiku ×2) | 5.0, 3.9 (Haiku); 7.4 (Sonnet) | |
+| Share purchase plan | Haiku / Sonnet | | | | | | 4.7 | 5.4 | 3.7 | 4.9, 4.3 | | 5.6, 5.1 | 5.0 (Haiku); 6.6 (Sonnet) | |
+| First week (vertical) | Haiku | | | | | | 5.4 | 2.7 | 5.3 (Haiku), 6.4 (Sonnet) | 6.1 | 4.6 | 4.9 | 5.0 | |
+| Client data rule | Haiku | | | | | | 6.3 | 4.6 | 5.7 | 5.6 | 4.1 | 5.1 | 3.7 | 5.4, 4.4 (Haiku ×2) |
+| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | | | | | | | | | |
 
 Haiku's mean rose from 4.1 to 5.4 to 6.5 on the briefs the kit was tuned on, then sat at 5.5–5.8 on new briefs (rounds 4–6), fell to 4.5 in round 7 and came back to 4.9 in round 8 (where Sonnet made the same first-week brief at 6.4) and 5.3 in round 9, where the first Haiku podcast with pictures scored 6.1. Sonnet stayed around 7. The reference film shows the ceiling of the kit as it stands: clear (9) but not yet distinctive (5). Rounds 4 and 5 were the test of generalisation, and they found the next layer of problems: not the pictures themselves, but how agents fill them in, when they stop, and what they invent.
 
@@ -91,6 +91,8 @@ The one paid test: two Veo 3.1 Lite clips (an office morning, a city street; $0.
 
 20. **Round 12, with every fix: Haiku 4.75, Sonnet 7.0.** Sonnet's podcast (7.4) drew a six-cell "months of cash" battery that turns into rent, groceries, insurance and the car while a counter runs in step with the voice, the reviewer's best moment of the night; its share plan (6.6) used `lookback`. Haiku's share plan, open enrollment and one podcast were READY and pictured (5.0–5.9); the client-data brief, whose central idea ("the same email, one different button") still had no picture, scored lowest (3.7).
     → A `compose` sketch for that picture; a file name as a source line ("import.mjs") makes the verdict NOT READY.
+21. **Round 13: the new picture was found, then the agents stopped.** Both client-data films used `compose` unprompted (5.4 and 4.4, from 3.7), and the reviewer's best moment was Attach struck through as Share securely lit and the PDF became a link. All three Haiku agents handed over NOT READY films after ten to thirteen minutes of a 75-minute time box, two calling them "functionally complete" at about half the length asked. The phishing film had moved its action, response and close into canvas text elements, past the type-only checks; one film drew a link that expires as the `expire` jar. The free OS voice read "button:" as "button colon".
+    → Type drawn on a canvas counts as type on its own and is offered a picture; a NOT READY verdict ends on one spelled-out edit; a chart missing a spoken figure gets the value to paste; a cast for mail sent to the wrong person; link expiry routes to `compose`; refused fields name their replacement (`font: "bold"`, `anchor`); the draft voice reads a colon as a pause.
 
 ## What twelve rounds say
 
