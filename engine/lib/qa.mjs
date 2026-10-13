@@ -520,7 +520,7 @@ export function motionVerdict(dir, q, { warnings = [] } = {}) {
   const said = typeShare >= 60 && share < 40 ? 'the picture moves, but as words: type over a background reads as narrated slides too' : verdict;
   const ready = !(share >= 40 || (typeShare >= 60 && share < 40) || blank.length);
   const lines = [
-    `motion: ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
+    `motion: ${ready ? 'READY' : 'NOT READY'} · ${s.changePerSecond} change/s; still under the voice ${Math.round(10 * (voicedHeld + overflow)) / 10} s of ${s.seconds} s (${share}%${s.deliberateSeconds ? `; ${s.deliberateSeconds} s more declared as reading holds${overflow ? `, ${overflow} s of them over budget and counted above` : ''}` : ''}): ${said}.`,
     ...(overflow
       ? [`  holds: ${s.deliberateSeconds} s are declared as reading holds (pace: "hold"), more than a fifth of the film; ${overflow} s of them count as still. A reading hold is for a figure or a step that must be read, not a way past this check.`]
       : []),

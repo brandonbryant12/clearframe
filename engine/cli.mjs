@@ -701,6 +701,7 @@ async function main() {
     // --rough: the first full-length look. Declared placeholders render as slates; only audit
     // findings about declared stand-ins become craft; every other check still blocks.
     const rough = !!o.rough;
+    let notReady = false;
     const r = await native.checkProject(dir, { draft: true, rough });
     lines.push(
       `check${rough ? ' (rough)' : ''}: ${r.errors.length} error(s), ${r.warnings.length} warning(s)${rough ? `, ${r.craft.length} craft finding(s) left for later, ${r.placeholders.length} placeholder(s)` : ''}`,
@@ -728,14 +729,18 @@ async function main() {
       try {
         const { qaProject, motionVerdict } = await import('./lib/qa.mjs');
         const q = await qaProject(dir, {});
-        lines.push(...motionVerdict(dir, q, { warnings: r.warnings }).lines,
+        const v = motionVerdict(dir, q, { warnings: r.warnings });
+        notReady = !v.ready;
+        lines.push(...v.lines,
           `  qa: ${rel(path.join(q.dir, 'phone.png'))} (read it as a phone would)`,
         );
       } catch (e) {
         lines.push(`motion: qa did not run (${e.message.split('\n')[0]})`);
       }
     }
-    lines.push(`done in ${((performance.now() - t0) / 1000).toFixed(1)} s. Open the sheet before anything else.`);
+    lines.push(
+      `done in ${((performance.now() - t0) / 1000).toFixed(1)} s. ${notReady ? 'NOT READY to hand over: fix what the motion verdict names, then draft again.' : 'Open the sheet before anything else.'}`,
+    );
     return console.log(lines.join('\n'));
   }
   if (cmd === 'checkpoints') {
