@@ -845,6 +845,10 @@ async function main() {
   }
   if (cmd === 'preview' && (o.beats || o.range || o.note || o.chapter)) return reviewCommand('range', dir, o, opts, positionals);
   if (cmd === 'render' || cmd === 'preview') {
+    // One GPU render at a time on a shared machine: several agents rendering together exhausted
+    // memory and failed with a bare exit code. Renders take seconds; queueing them is cheap.
+    const { enterGate } = await import('./lib/resource-gate.mjs');
+    if (await enterGate()) return;
     const report = await native.renderProject(dir, { ...opts, draft: cmd === 'preview' || o.draft });
     const { writeReviewPage } = await import('./lib/review-page.mjs');
     report.reviewPage = writeReviewPage(dir);

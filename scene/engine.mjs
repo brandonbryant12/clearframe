@@ -39,13 +39,19 @@ export function run(bin, args, { cwd = REPO, env = sceneEnv(), capture = false }
     const child = spawn(bin, args, {
       cwd,
       env,
-      stdio: capture ? ['ignore', 'pipe', 'pipe'] : process.env.CLEARFRAME_PROGRESS_STDERR === '1' ? ['inherit', 2, 2] : 'inherit',
+      // Uncaptured runs still show the renderer's stderr live, and keep its tail, so a failure
+      // says why (and the run log records it) instead of only "exited 1".
+      stdio: capture ? ['ignore', 'pipe', 'pipe'] : process.env.CLEARFRAME_PROGRESS_STDERR === '1' ? ['inherit', 2, 'pipe'] : ['inherit', 'inherit', 'pipe'],
     });
     let output = '';
     if (capture) {
       child.stdout.on('data', d => (output += d));
       child.stderr.on('data', d => (output += d));
-    }
+    } else
+      child.stderr.on('data', d => {
+        process.stderr.write(d);
+        output = (output + d).slice(-6000);
+      });
     const stop = s => child.kill(s);
     const interrupt = () => stop('SIGINT'),
       terminate = () => stop('SIGTERM');
