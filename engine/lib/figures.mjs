@@ -38,8 +38,9 @@ export function authoredFigures(beat) {
   const out = [];
   // A sketch's structural numbers (the days in a month) are marked `figure: false` in its params.
   const spec = (beat.props?.sketch && sketchByName(beat.props.sketch)?.params) || {};
-  const walk = (v, key, where) => {
-    if (v == null || SKIP.has(key)) return;
+  // Inside drawn elements a `points` list is geometry (a polyline's corners), not a chart's data.
+  const walk = (v, key, where, drawn = false) => {
+    if (v == null || SKIP.has(key) || (drawn && key === 'points')) return;
     if (where.startsWith('sketchParams.') && spec[where.split('.')[1]]?.figure === false) return;
     if (typeof v === 'string') {
       // A count, an index or a step ("Step 2", "3 coins") is not a figure to source.
@@ -48,8 +49,9 @@ export function authoredFigures(beat) {
       // A line drawn from made-up points is invented evidence too (`series`, `points`).
       if (['value', 'values', 'from', 'to', 'target', 'number', 'series', 'points'].includes(key) || where.startsWith('sketchParams'))
         if (!(Math.abs(v) <= 12 && Number.isInteger(v))) out.push({ text: String(v), value: v, where });
-    } else if (Array.isArray(v)) v.forEach(x => walk(x, key, where));
-    else if (typeof v === 'object') for (const [k, x] of Object.entries(v)) walk(x, k, where.startsWith('sketchParams') ? `sketchParams.${k}` : k === 'sketchParams' ? 'sketchParams' : where);
+    } else if (Array.isArray(v)) v.forEach(x => walk(x, key, where, drawn || ['elements', 'children', 'under', 'over'].includes(key)));
+    else if (typeof v === 'object')
+      for (const [k, x] of Object.entries(v)) walk(x, k, where.startsWith('sketchParams') ? `sketchParams.${k}` : k === 'sketchParams' ? 'sketchParams' : where, drawn);
   };
   walk(beat.props ?? {}, 'props', 'props');
   return out;

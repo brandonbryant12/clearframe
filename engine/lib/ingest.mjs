@@ -230,7 +230,10 @@ export function parseResearch(markdown) {
           .replace(/(\b[A-Z][\w-]*\s)(\d+(?:\.\d+)?)(?![\d.,]|\s?(?:%|×|[kKMB]\b))/g, (m, name, num) =>
             NAMED.test(name.trim()) ? m : name + ' '.repeat(num.length),
           );
-        for (const m of scrubbed.matchAll(FIGURE)) {
+        // A brief's own header ("For: 4,200 employees", "Length: 90 seconds, 16:9") describes the film,
+        // not the facts in it: EVIDENCE.md listed those as unsourced figures to put on screen.
+        const header = /^(from|for|length|format|audience|after watching they should)\s*:/i.test(sentence);
+        for (const m of header ? [] : scrubbed.matchAll(FIGURE)) {
           const token = m[0].trim().replace(/,$/, '');
           // A number in a series ("8 → 34 → 61") is a figure even when it is small.
           const series =
