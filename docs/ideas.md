@@ -70,6 +70,12 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 
 ## Launches and promos
 - **A stage for the name.** `sunburst`: rays turning around a disc, the name wiped across it on the first beat of the music.
+- **Yours over time.** `vesting`: a timeline of steps, each lock springing open as a column grows to that step's share; a cliff year shakes its lock shut. Shares from `sketchParams.steps`.
+- **A window on a calendar.** `deadline`: a month card where the opening day fills, a band sweeps to the last day and it is circled by hand; days outside dim. For enrollment windows and claim deadlines.
+- **Use it or lose it.** `expire`: a jar fills with one coin per unit; at year end a carry-over line draws, the coins above it turn red and lift away, and what is kept hops.
+- **Look closely.** `inspect`: an email or receipt arrives and up to three of its parts are marked in turn with a ring and a label (phishing tells, a receipt's must-haves).
+- **Two options, row by row.** `choose`: two cards, a tick per row for the one that wins it, then one is picked and lifts forward.
+- **A whole into its parts.** `split`: one bar (a paycheck, a fee, a portfolio) splits into proportional segments that drop into labelled lanes, values printed from `sketchParams`; the remainder is highlighted.
 - **Two contributions become one.** `match`: your coins and the company's stack side by side, then merge with the total on top; one coin per unit from `sketchParams`, so the picture agrees with the figure.
 - **The step, done in the app.** `portal`: the cursor opens a section, picks a card, changes one value (3% to 5%) and saves; a confirmation lands and the view leans in on the new value. Each click lands on the word that names it. For "go to Benefits, then Retirement, and change your rate".
 - **The ask, played out.** `chat`: the customer's question typed and sent, three dots, the answer and a heart. Label it as an illustration.

@@ -8,6 +8,7 @@ const AT = { YOU: 0.5, MATCH: 2.4, TOTAL: 4.6 };
 
 export default {
   name: 'match',
+  keep: true,
   order: 91,
   summary:
     'Two contributions become one: your coins drop into a stack, the company’s drop in beside them, and the stacks merge into one with its total on top. One coin per unit, counted from the real figures.',

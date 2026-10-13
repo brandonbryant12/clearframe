@@ -1,0 +1,39 @@
+{
+  "order": 2,
+  "title": "Workplace explainer",
+  "when": "Benefits, retirement, pay, policy, training, onboarding and client updates at a company or a financial firm: films people are sent, not films they chose",
+  "film": {
+    "theme": "meridian",
+    "type": "geometric",
+    "backdrop": "none",
+    "texture": {
+      "grain": 0.05
+    },
+    "motion": {
+      "preset": "snappy",
+      "intensity": 0.6
+    },
+    "transition": "cut",
+    "sfx": "subtle",
+    "lens": {
+      "handheld": 0,
+      "blur": 0
+    },
+    "voice": {
+      "style": "warm, plain, a little playful"
+    }
+  },
+  "beats": {
+    "graphic": "panel",
+    "emphasisStyle": "accent"
+  },
+  "rules": [
+    "Show each idea as something that changes on its word: coins that stack, a lock that opens, a window on a calendar, a value changed in the app. Start from the workplace sketches (portal, match, vesting, deadline, expire, inspect, choose, split; `find` names the one that fits) and fill their words, moments and numbers.",
+    "Keep something on screen across cuts: a cast of the film's own objects (a paycheck, coins, a calendar, a person) that re-forms beat to beat, or one world the camera moves through.",
+    "Open on what the viewer could lose or gain in the first five seconds, not on a welcome.",
+    "End on the step, done in the app (the portal sketch) with its deadline, not on a card that lists it.",
+    "Headings only for chapters: the picture and the voice carry each scene.",
+    "Figures come from the source document, counted one unit per token or drawn to scale, with the document named in the source line. Plain attribution, no disclaimers.",
+    "Warm, plain words. No fear, no jargon without a picture."
+  ]
+}

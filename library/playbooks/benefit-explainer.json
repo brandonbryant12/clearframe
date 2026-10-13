@@ -1,0 +1,132 @@
+{
+  "order": 2,
+  "title": "Explain a benefit and the one step to take",
+  "audience": "Employees who were sent the film and will give it five seconds",
+  "inputs": "The plan summary: what the company adds, what the employee keeps and when, where in the portal to act and any deadline",
+  "theme": "meridian",
+  "type": "geometric",
+  "motion": {
+    "preset": "snappy",
+    "intensity": 0.6
+  },
+  "transition": "cut",
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.05
+  },
+  "sources": [
+    {
+      "id": "plan",
+      "claim": "Example Co. matches 100% of the first 3% and 50% of the next 2%; the match vests 33/66/100% over three years",
+      "source": "Example Co. retirement plan summary (sample: replace with your plan document)"
+    }
+  ],
+  "note": "Workplace arc: the gain in five seconds, the rule as coins, what you keep and when, the step done in the app, one line to repeat. Every picture is a fill-in-the-blank sketch: replace sketchText with the plan's words, sketchParams with its figures and sketchSay with the narration word each moment lands on (`clearframe sketch NAME` names every slot). Add expire (use it or lose it), deadline (an enrollment window) or choose (two plans) where the plan has one. See skills/clearframe-workplace/SKILL.md.",
+  "beats": [
+    {
+      "id": "hook",
+      "block": "kinetic",
+      "vo": "Every paycheck, there is free money on the table. Most of us leave some of it there.",
+      "props": {
+        "mode": "stack",
+        "align": "center",
+        "emphasis": [
+          "free",
+          "leave"
+        ],
+        "source": ""
+      }
+    },
+    {
+      "id": "rule",
+      "block": "canvas",
+      "vo": "Put in five percent of your pay, and the company adds four. That is nine percent, every paycheck.",
+      "props": {
+        "source": "Example Co. retirement plan summary",
+        "sketch": "match",
+        "sketchParams": {
+          "you": 5,
+          "match": 4,
+          "suffix": "%"
+        },
+        "sketchText": {
+          "YOU": "You put in",
+          "EMPLOYER": "Example Co. adds",
+          "EACH": "Each coin is 1% of your pay",
+          "TOTAL": "of your pay, every paycheck"
+        },
+        "sketchSay": {
+          "YOU": "five",
+          "MATCH": "adds",
+          "TOTAL": "nine"
+        }
+      }
+    },
+    {
+      "id": "keep",
+      "block": "canvas",
+      "vo": "The company's part becomes yours over time: a third after one year, two thirds after the second, and all of it after the third.",
+      "props": {
+        "source": "Example Co. retirement plan summary",
+        "sketch": "vesting",
+        "sketchParams": {
+          "steps": [
+            33,
+            66,
+            100
+          ]
+        },
+        "sketchText": {
+          "STEP1": "Year 1",
+          "STEP2": "Year 2",
+          "STEP3": "Year 3",
+          "WHAT": "The company's part you keep"
+        },
+        "sketchSay": {
+          "ONE": "one",
+          "TWO": "second",
+          "THREE": "all"
+        }
+      }
+    },
+    {
+      "id": "step",
+      "block": "canvas",
+      "pace": "hold",
+      "vo": "To change it, open Benefits, then Retirement. Set your rate to five percent, and save. It starts with your next paycheck.",
+      "props": {
+        "sketch": "portal",
+        "sketchText": {
+          "APP": "Example Co. Benefits",
+          "STEP1": "Benefits",
+          "STEP2": "Retirement",
+          "OTHER": "Health & dental",
+          "FIELD": "Contribution rate",
+          "OLD": "3%",
+          "NEW": "5%",
+          "DONE": "Saved: starts with your next paycheck"
+        },
+        "sketchSay": {
+          "CLICK1": "Benefits",
+          "CLICK2": "Retirement",
+          "CHANGE": "five",
+          "SAVE": "save"
+        }
+      },
+      "hold": 1.0
+    },
+    {
+      "id": "close",
+      "block": "kinetic",
+      "vo": "Two minutes today. Free money with every paycheck after.",
+      "props": {
+        "mode": "stack",
+        "align": "center",
+        "emphasis": [
+          "today"
+        ],
+        "source": ""
+      }
+    }
+  ]
+}

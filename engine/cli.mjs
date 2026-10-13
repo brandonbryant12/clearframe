@@ -431,7 +431,7 @@ async function main() {
     const { sketchExample } = await import('../film/discover.mjs');
     const use = sketchExample(positionals[0]);
     if (use.props.sketchText || use.props.sketchSay || use.props.sketchParams) {
-      const params = Object.entries(source?.params ?? {}).map(([k, d]) => `  ${k}: ${d.about ?? ''} (default ${JSON.stringify(d.default)}${d.min != null ? `, ${d.min}–${d.max}` : ''})`);
+      const params = Object.entries(source?.params ?? {}).map(([k, d]) => `  ${k}: ${d.about ?? ''} (default ${JSON.stringify(d.default)}${d.min != null || d.max != null ? `, ${d.min ?? ''}–${d.max ?? ''}` : ''})`);
       console.error(`Use it as a beat (fill the words, cue the moments on narration words, set the numbers):\n${JSON.stringify(use, null, 1)}${params.length ? `\nNumbers:\n${params.join('\n')}` : ''}\nThe drawing below is for adapting by hand.\n`);
     }
     return console.log(JSON.stringify(sketch(positionals[0], o.vertical ? 'vertical' : 'landscape'), null, 1));

@@ -3,6 +3,8 @@ name: clearframe-cinema
 description: Make a ClearFrame film cinematic instead of a narrated slideshow — genre structures (trailer, cold open, product reveal, cinematic explainer, title sequence, zoom journey), shot lists, depth and camera (z, dolly, rack focus, push to a detail), the film lens (letterbox, grade, bloom, handheld, motion blur) and sound that follows the edit. Use when a film "looks like slides", when someone asks for something cinematic, dramatic, dynamic or trailer-like, or to raise a low cinema score from critique.
 ---
 
+> **Not for workplace films.** Letterbox, grades, handheld and trailer structures suit brand spots, launches and trailers. A benefits, policy, training or client film is not slides because its picture changes with the voice (`clearframe-workplace`), not because it borrows a film look; a trailer look on an HR film reads as a costume.
+
 # Shots, not slides
 
 Read `docs/cinema.md` first: it holds the grammar this skill applies. `critique DIR` prints a cinema score out of 100 and names the tells it finds. Aim for 90+, or be able to defend each remaining tell.

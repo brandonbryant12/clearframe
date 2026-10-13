@@ -12,6 +12,7 @@ const cursorPath = (x, y) =>
 
 export default {
   name: 'portal',
+  keep: true,
   order: 90,
   summary:
     'A task done in an app: the cursor opens a section, picks a card, changes one value and saves; a confirmation lands and the view leans in on the new value.',
@@ -42,9 +43,8 @@ export default {
     const fieldY = main.y + 120;
     const box = { x: main.x, y: fieldY + 28, w: T ? main.w : 420, h: 110 };
     const save = { x: main.x, y: box.y + box.h + 48, w: 220, h: 76 };
-    const toast = T
-      ? { x: win.x + 120, y: win.y + win.h - 150, w: win.w - 240, h: 92 }
-      : { x: win.x + win.w - 640, y: win.y + win.h - 132, w: 600, h: 92 };
+    // The confirmation lands under the button, so the lean-in on the new value keeps it in frame.
+    const toast = { x: main.x, y: save.y + save.h + 36, w: Math.min(main.w, T ? main.w : 640), h: 92 };
     const [vx, vy] = centre(box);
     // The cursor starts low in the window and visits each target before its click.
     const start = T ? [win.x + win.w - 160, win.y + win.h - 260] : [win.x + win.w - 220, win.y + win.h - 200];
@@ -63,11 +63,13 @@ export default {
       cy: targets[i][1],
       r: 46,
       fill: 'accent',
-      opacity: 0,
       enter: 'none',
       at: 0,
       origin: targets[i],
+      // Keys multiply the element's own opacity, so the ripple starts hidden by a key, not by
+      // `opacity: 0` (which no key could lift).
       keys: [
+        { at: 0, dur: 0, opacity: 0 },
         { cue, at: AT[cue], dur: 0, opacity: 0.35, scale: 0.3 },
         { cue, at: AT[cue], dur: 0.55, ease: 'out', opacity: 0, scale: 1.5 },
       ],
@@ -174,13 +176,14 @@ export default {
                 { type: 'rect', ...box, r: 16, fill: 'bg', stroke: 'line', width: 2, enter: 'none' },
                 { type: 'rect', ...box, r: 16, fill: 'none', stroke: 'accent', width: 5, enter: 'fade', cue: 'CHANGE', at: AT.CHANGE, dur: 0.2 },
                 text('OLD', box.x + 36, round(box.y + box.h / 2 + 22), 64, 'bold', 'muted', {
+                  fit: box.w - 72,
                   enter: 'none',
                   exit: 'fade',
                   exitCue: 'CHANGE',
                   exitAt: AT.CHANGE,
                   exitDur: 0.15,
                 }),
-                text('NEW', box.x + 36, round(box.y + box.h / 2 + 22), 64, 'bold', 'accent', { enter: 'type', cue: 'CHANGE', at: AT.CHANGE + 0.2, after: 0.2, dur: 0.4 }),
+                text('NEW', box.x + 36, round(box.y + box.h / 2 + 22), 64, 'bold', 'accent', { fit: box.w - 72, enter: 'type', cue: 'CHANGE', at: AT.CHANGE + 0.2, after: 0.2, dur: 0.4 }),
                 {
                   type: 'group',
                   enter: 'none',

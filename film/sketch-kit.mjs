@@ -1,6 +1,9 @@
 // Helpers for authoring sketches: frame presets and layout conveniences shared by the
 // parametric sketches in library/sketches. A sketch module exports
-// { name, summary, use, build(w, h) } and may import anything here.
+// { name, summary, use, build(w, h, {seed, params}) } and may import anything here. A
+// fill-in-the-blank sketch also sets `keep: true` (playbooks keep it as a reference with its
+// sketchText, sketchSay and sketchParams instead of copying its drawing) and may declare
+// `params` (see sketchParams in sketches.mjs).
 export const frames = { landscape: [1920, 1080], vertical: [1080, 1920], square: [1080, 1080], portrait: [1080, 1350] };
 export const tall = (w, h) => h > w * 1.1;
 export const round = v => Math.round(v * 10) / 10;
