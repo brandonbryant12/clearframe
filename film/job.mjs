@@ -238,6 +238,15 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     if ((b.props?.plot != null || b.props?.bars != null || b.props?.bridge != null || b.props?.stat != null || b.props?.distribution != null || b.props?.multiples != null) && !sb.sources.length)
       throw new Error('Quantitative plots need a storyboard.sources entry.');
     settle = Math.max(settle, scheduleArt(props.elements, at, props.stagger ?? 0));
+    // A hard cut lands on the drawing's ground: its cards and panels at the start are there on
+    // the first frame instead of rising in, which left a blank frame or two after every cut (a
+    // reviewer called them render glitches). Details, words and later moments still enter.
+    if (b.index > 0 && transitions[b.index] === 'cut' && !sb.beats[b.index - 1]?.props?.world)
+      for (const el of props.elements ?? [])
+        if (el.at <= 0.05 && ['rect', 'group', 'image'].includes(el.type) && ['rise', 'fade', 'pop', 'scale', undefined].includes(el.enter)) {
+          el.enter = 'none';
+          el.dur = 0;
+        }
     // A bridge's last total is the payoff: one cued to the final word leaves nothing to read it in.
     if (b.props?.bridge != null) {
       // Each driver floats from the total before it, so columns must arrive in reading order.

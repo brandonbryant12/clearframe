@@ -12,6 +12,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **A hard cut lands on the drawing's ground.** A canvas beat entered by a cut shows its cards, panels and images that start the beat on its first frame instead of rising them in; a sketch's card rising from nothing left a blank frame or two after every cut, which a reviewer took for render glitches. Details, words and later moments still enter.
 - **A kinetic hook lands as it is said.** `critique` timed a speech-following opening by its scene's end ("the first idea lands 8.6 s in") because type that builds with the voice has no cue; it now lands on its first emphasised word.
 - **The verdict leads with READY or NOT READY**, and `draft`'s last line repeats it. A round-6 agent read "still under the voice 0 s (0%)" off a verdict that went on to say the film was 71% type and 18 s short, and reported it ready. `critique` also suggests a chart with a `say` on each price for "the lower of two prices" (it suggested `choose`, and `split` for "goes to fifty").
 - **`choose` fills the winning row as it is said**: a band in the option's colour wipes across the row under its tick. The tick alone changed too little of the frame to see on a phone (or for `qa` to call it a change), and an agent replaced two tables with casts because of it.
