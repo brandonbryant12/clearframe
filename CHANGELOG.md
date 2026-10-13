@@ -17,6 +17,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **A position that is not a number is refused, with the fix**: `x: "center"` was read as 0 and the type ran off the frame ("cut off by the frame edge"); now the error says to set `x` to half the frame width with `anchor: "middle"`.
 - **The verdict pastes casts too**: a words-only line that counts months ("three to six months") gets calendar pages that land on each number's word, and one that keeps money apart ("keep it separate") gets coins merging from an everyday jar into their own (`castFor`). Both round-10 podcast agents said pictures would take "45 more minutes" and handed over captions.
 - **`cast.fresh: true` starts a new cast.** A cast carries on through the film, past other scenes (by design: `fill` and `emerge` hand objects to a chart and back), so a second cast beat later in a podcast showed the first one's calendar pages over its jars; `fresh` drops what was carried in. The carried-objects messages now name it.
 - **A hold inside a recording is reported**: it plays seconds of silence between two things said.

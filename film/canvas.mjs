@@ -171,6 +171,10 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
     for (const key of Object.keys(el))
       if (!COMMON.includes(key) && !spec.geometry.includes(key)) fail(`${at}: unsupported ${el.type} field ${key}`);
     for (const key of spec.required) if (el[key] == null) fail(`${at}: ${el.type} needs ${key}`);
+    // Positions are frame pixels: a word such as "center" was read as 0 and pushed type off the frame.
+    for (const key of ['x', 'y', 'cx', 'cy', 'w', 'h'])
+      if (el[key] != null && typeof el[key] !== 'number')
+        fail(`${at}.${key} must be a number of frame pixels (got ${JSON.stringify(el[key])})${key === 'x' ? '; to centre type, set x to half the frame width (960, or 540 in a vertical frame) with anchor: "middle"' : ''}`);
     for (const [key, value] of Object.entries(el)) {
       if (
         [
