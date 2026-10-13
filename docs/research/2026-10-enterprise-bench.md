@@ -12,18 +12,22 @@ A night of brute-force iteration on the films ClearFrame is mostly asked for: be
 
 Judge means (1–10):
 
-| Film | Model | Round 1 | Round 2 | Round 3 |
-|---|---|---|---|---|
-| 401(k) match | Haiku | 3.1 | 6.6 | |
-| Phishing training | Haiku | 5.0 | 5.9 | |
-| HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 |
-| Expense policy | Haiku | | | 6.1 |
-| Open enrollment | Sonnet | 6.4 | | |
-| Client market update | Sonnet | | 6.9 | |
-| Podcast clip (vertical) | Sonnet | 7.7 | | 7.4 |
-| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | |
+| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 |
+|---|---|---|---|---|---|---|
+| 401(k) match | Haiku | 3.1 | 6.6 | | | |
+| Phishing training | Haiku | 5.0 | 5.9 | | | |
+| HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 | | |
+| Expense policy | Haiku | | | 6.1 | | |
+| MFA rollout | Haiku | | | | 5.3 | |
+| Parental leave | Haiku | | | | 6.1 | |
+| Fraud alert (vertical) | Haiku | | | | 5.7 | |
+| Open enrollment | Sonnet / Haiku | 6.4 (Sonnet) | | | | 6.1 (Haiku) |
+| Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) |
+| Mortgage rate lock | Sonnet | | | | 6.7 | |
+| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) |
+| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | |
 
-Haiku's mean rose from 4.1 to 5.4 to 6.5 across the rounds. Sonnet stayed around 7. The reference film shows the ceiling of the kit as it stands: clear (9) but not yet distinctive (5).
+Haiku's mean rose from 4.1 to 5.4 to 6.5 on the briefs the kit was tuned on, then sat at 5.7–5.8 on new briefs (rounds 4 and 5). Sonnet stayed around 7. The reference film shows the ceiling of the kit as it stands: clear (9) but not yet distinctive (5). Rounds 4 and 5 were the test of generalisation, and they found the next layer of problems: not the pictures themselves, but how agents fill them in, when they stop, and what they invent.
 
 ## What the trajectories showed, and what changed
 
@@ -44,13 +48,28 @@ Haiku's mean rose from 4.1 to 5.4 to 6.5 across the rounds. Sonnet stayed around
 
 Also from the research tracker (issue #9): the wrapped-typewriter re-layout (typing now happens inside the finished layout), the product-UI recipe (`portal`: action, response, enlarged result), the parent–child data split (`split`), the counterfactual beat (`match` with `fromYou`/`fromMatch`: today's coins, then only the change), and fframes as the runtime (merged: parallel GOP-aligned encoding, 52–60 dB parity, about a third faster on encode-bound films; `docs/fframes-return.md`).
 
+8. **Every film ended the same way** (round 4: four of four; round 5: three of three): the step in the `portal` mock-up, then a row of cast icons. Every workplace playbook ended portal + cast, and agents keep the scaffold's ending.
+   → Playbook `endings`: alternative closing beats picked per project like the treatment's looks (`--ending NAME` chooses), recorded in DIRECTION.md. The workplace playbooks gained bookends (the opening picture returning changed), a phone step, a calendar close and a what-it-adds-up-to close.
+9. **Sketches ran backwards.** `sketch NAME` listed moments in the order the sketch's source draws them (match: TOTAL, YOU, MATCH; expire: YEAREND before FILL). Agents filled them with narration words in that order; the coins left before they arrived, `check` refused "an element exits before it enters", and two of three round-5 films replaced the sketch with plain bars. Others left "STEP4" on screen after adding a step, or put a moment in `sketchText`.
+   → Moments listed in time order with a line saying so; `critique` warns when sketchSay words are said out of order, when a placeholder word would show, and when a moment sits among the words; an exit word before a seconds-timed entrance waits for it.
+10. **Agents stopped at "narrated slides".** A Haiku agent read 55% still, called it "a polish issue for later" and handed over five minutes into an hour. The free studio model saw "complete" on its render and stopped at 58%.
+    → The verdict quotes what the voice says over each still stretch and names the fix that fits the beat (a later sketch moment, a `say` on each chart value, a cast move, a picture for type, a chart for a number card), ends "not ready to hand over" above 40%, and the studio's job tool now reports it after a draft.
+11. **Invented figures and dropped facts.** A sketch drew "−$2,400" from an invented `each: 800` (the page says the FSA resets to $0); films ran 30–41 s against 75–90 s briefs and lost the dates and the new benefit the brief named.
+    → `critique` checks every typed figure (words, chart and stat values, sketch params) against the source document in the project, and the workplace path starts from it (`start --document … --length …`); `draft` says when a film falls well short of the length asked for.
+12. **A podcast played as a music bed.** Scaffolding `podcast-clip` with `new` gave sample narration; the agent put the real episode under it as `music`, so no word on screen matched the voice.
+    → `new` refuses a recording playbook and prints the `ingest --audio` line (`--sample` to read the sample).
+
+## The studio's free model
+
+The in-page agent (OpenCode, free model) made the open-enrollment film from the same brief: a complete 59-second cut with every fact and the right dates, using `choose`, `deadline` and `portal`, but `kpis`, `delta`, `stat` and `endcard` cards for the figures; 58% still under the voice. It first stalled for twelve minutes on a shell permission nobody was watching (reading `storyboard.json`; declining it pointed it back to the ClearFrame tools, and it carried on). It had no motion verdict to read; now it does.
+
 ## Greyed B-roll
 
 The one paid test: two Veo 3.1 Lite clips (an office morning, a city street; $0.80). A full-bleed `plate` with `treatment: "mono"`, a light scrim and no drift under a kinetic hook reads as a premium corporate film. Under a detailed sketch it competes with the labels. The workplace skill now says where it belongs (hooks, closes, people moments) and that generic clips are reusable across films.
 
 ## Open problems
 
+- **Haiku plateau.** New briefs score about 5.8 with Haiku and 6.7–7 with Sonnet. The remaining gap is persistence (fixing what the verdict names) and judgement (which fact deserves which picture), not missing pictures.
 - **Sketch tails.** A sketch's last moment often comes well before its narration ends, so the beat sits. `match` gained `again` (more stacks for "every paycheck"); the other sketches need closing moments or idle life.
-- **Late cues.** A moment cued on the last word, with offsets after it, runs past the beat and fails `check`; beats should extend to fit instead of refusing.
 - **Distinctiveness beyond looks.** Variants change the face; a film's central metaphor still mostly comes from the kit. The best films (the podcast's mug, the jar that drops to $660) invented one object and returned to it.
 - **Critique and the verdict disagree** in ways agents find confusing; the verdict is the one to trust.
