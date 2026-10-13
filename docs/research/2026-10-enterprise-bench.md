@@ -68,7 +68,7 @@ Also from the research tracker (issue #9): the wrapped-typewriter re-layout (typ
 
 ## The studio's free model
 
-The in-page agent (OpenCode, free model) made the open-enrollment film from the same brief: a complete 59-second cut with every fact and the right dates, using `choose`, `deadline` and `portal`, but `kpis`, `delta`, `stat` and `endcard` cards for the figures; 58% still under the voice. It first stalled for twelve minutes on a shell permission nobody was watching (reading `storyboard.json`; declining it pointed it back to the ClearFrame tools, and it carried on). It had no motion verdict to read; now it does.
+The in-page agent (OpenCode, free model) made the open-enrollment film from the same brief: a complete 59-second cut with every fact and the right dates, using `choose`, `deadline` and `portal`, but `kpis`, `delta`, `stat` and `endcard` cards for the figures; 58% still under the voice. It first stalled for twelve minutes on a shell permission nobody was watching (reading `storyboard.json`; declining it pointed it back to the ClearFrame tools, and it carried on). It had no motion verdict to read. With the verdict added to its job tool and one note from a person ("it feels like a slideshow"), it cued the bars to their figures, moved its cast, counted the sessions and built the close word by word: 57% still to 16% in one pass, with no paid model. Its revised opening still put a few small coins in a corner of the frame, which is why `qa` now measures how much of the frame a picture fills.
 
 ## Greyed B-roll
 
