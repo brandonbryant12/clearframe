@@ -221,7 +221,15 @@ async function main() {
       ...booleans.map(k => [k, { type: 'boolean' }]),
     ]),
   });
-  if (!cmd || cmd === 'help' || o.help) return console.log(HELP);
+  if (!cmd || cmd === 'help') return console.log(HELP);
+  // `COMMAND --help`: that command's lines from the help, not all of it.
+  if (o.help) {
+    const lines = HELP.split('\n'), at = lines.findIndex(l => new RegExp(`^  ${cmd}( |$)`).test(l));
+    if (at < 0) return console.log(HELP);
+    let end = at + 1;
+    while (end < lines.length && /^ {6,}\S/.test(lines[end])) end++;
+    return console.log(lines.slice(at, end).join('\n'));
+  }
   // --library DIR layers a shared library (brand kit, team templates) like CLEARFRAME_LIBRARY.
   if (o.library) {
     process.env.CLEARFRAME_LIBRARY = [process.env.CLEARFRAME_LIBRARY, path.resolve(o.library)]

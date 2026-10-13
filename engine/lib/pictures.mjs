@@ -4,7 +4,7 @@ const PICTURES = [
   [/\b(carr(y|ies) over|use it or lose it|forfeit|resets? to (zero|\$?0)|expires?|lose (it|the rest))\b/i, 'expire', 'This line is about what carries over and what is lost'],
   [/\bvest(s|ed|ing)?\b|\byours to keep\b.*\byears?\b|\bafter (one|two|three|\d) years?\b/i, 'vesting', 'This line is about what becomes yours over time'],
   [/\b(match(es|ing)?|adds?|puts? in|on top of|top[- ]up|contributes? the same)\b.*(\b(percent|dollars?)\b|[%$])|\b(percent|%).*\b(match(es)?|adds?)\b/i, 'match', 'This line is about one contribution added to another'],
-  [/\b(deadline|by (january|february|march|april|may|june|july|august|september|october|november|december)|between .* and .*\b\d{1,2}\b|open enrollment runs|within \d+ days|last day)\b/i, 'deadline', 'This line names a window or a deadline'],
+  [/\b(deadline|by (january|february|march|april|may|june|july|august|september|october|november|december|friday|monday|tuesday|wednesday|thursday)|(on|by) the \d{1,2}(st|nd|rd|th)|between .* and .*\b\d{1,2}\b|open enrollment runs|within \d+ days|\d+ days (from|after|to)|last day)\b/i, 'deadline', 'This line names a window or a deadline'],
   [/\b(log ?in|sign(s|ed)? in|portal|open the app|in the app|click|tap|select|go to|toolbar|button)\b/i, 'portal', 'This line is a step done in an app'],
   [/\b(look for|signs\b(?! in)|sign of|tells?|red flags?|watch for|check (the|for)|itemi[sz]ed)\b/i, 'inspect', 'This line points at parts of a message or document'],
   [/\b(or the|versus|vs\.?|compared? (to|with)|which one|either|instead of)\b/i, 'choose', 'This line compares two options'],

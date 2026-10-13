@@ -12,6 +12,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **`COMMAND --help` prints that command's lines**, not the whole help; and a date said as "on the 15th", "by Friday" or "30 days from" reads as a deadline in the document's picture map.
 - **A film whose narration was never voiced is NOT READY.** A round-8 podcast agent scaffolded `vertical-short`, never ingested the episode or ran a voice, rendered straight away and handed over 57 seconds of captions with only sound effects under them. The verdict now says so and names `voice --draft`, or `ingest --audio` for a recording; AGENTS.md routes recordings to `ingest` in its own line.
 - **The verdict hands over a chart to paste.** A words-only beat that says figures ("starts at forty dollars, goes to fifty, you pay thirty-four") gets `{"block": "canvas", "props": {"chart": {"kind": "bars", "prefix": "$", "values": [{"value": 40, "say": "forty"}, …]}}}` with its values read from the narration (`figuresIn`, `chartFor` in engine/lib/pictures.mjs). A round-8 agent read "a chart with a `say` on each value", decided that was "a custom canvas bars chart" beyond the library, and handed over a film that was 100% type.
 - **Cast objects carried from earlier beats that stand untouched while new ones arrive are reported**, with the `exit` formation that clears them: a Sonnet agent found its frame filling with the last beats' leftovers only on the sheet.
