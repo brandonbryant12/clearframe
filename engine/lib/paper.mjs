@@ -3,6 +3,7 @@
 // be, the transcript, and the recording's own time for each beat. Cuts already applied show
 // as [cut c004: “…”]. Striking words with ~~…~~ and running `cut DIR --paper FILE` cuts
 // exactly those words from the recording; nothing is cut until then.
+import { pictureFor } from './pictures.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { computeTiming } from './timing.mjs';
@@ -24,7 +25,12 @@ const t = s => formatTime(s);
 function pictureOf(b, raw) {
   if (raw.placeholder) return `placeholder: ${typeof raw.placeholder === 'string' ? raw.placeholder : raw.placeholder.text}`;
   if (raw.visual) return raw.visual;
-  if (raw.block === 'kinetic') return 'the words on screen (kinetic captions)';
+  if (raw.block === 'kinetic') {
+    // Where the line names a mechanism, say which picture would show it: an imported episode is
+    // all captions at first, and the paper edit is the plan an agent reads before the storyboard.
+    const fit = pictureFor(raw.vo ?? '');
+    return `the words on screen (kinetic captions)${fit ? `; could be ${fit.sketch ? `the \`${fit.sketch}\` sketch` : fit.use}` : ''}`;
+  }
   if (raw.block === 'canvas') return `drawing${raw.props?.world ? ` in world “${raw.props.world}”` : ''}${raw.props?.title ? `: ${raw.props.title}` : ''}`;
   return `${raw.block}${raw.props?.title ? `: ${raw.props.title}` : raw.props?.text ? `: ${raw.props.text}` : ''}`;
 }

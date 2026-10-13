@@ -12,6 +12,8 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **`align --whisper` keeps an imported recording's measured words.** Each slice was measured at import against the whole recording and its script; re-measuring a slice alone lost words at its edges and turned 12 of 23 beats of a podcast back into estimates. Those takes are kept unless `--force`.
+- **The paper edit suggests a picture for caption beats** that name a mechanism or a figure (months counted, money shrinking or kept apart, growth, a lock, a figure said out loud): an imported episode starts as all captions, and the paper edit is the plan an agent reads first.
 - **Errors from the round-7 podcast agent explain themselves.** A block name that is really a beat field or a canvas prop (`tone`, `plate`, `camera`, `sketch`, `cast`, `chart`) says where it goes, and a misspelt one names the nearest blocks. `align` on an imported recording says its words were measured at import, or which beats' `vo` no longer match the recording (recorded narration is edited with cut, split and merge, never by rewriting `vo`).
 - **`render` reports the motion verdict too** (on stderr, and as `motion` in its JSON report). The round-7 podcast agent rendered with `render --draft`, never ran `draft`, never saw that its film was 100% type, and reported "0 held frames".
 - **`portal` is a phone in a vertical film** unless `device: "desktop"` is asked for (`device` defaults to `auto`): a browser window in a 9:16 frame was cropped at the edges and its type unreadable on the phone the film was made for.

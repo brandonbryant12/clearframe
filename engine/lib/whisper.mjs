@@ -62,7 +62,7 @@ export function transcribeWords(wav, { model = 'base', language = 'en', dir } = 
 }
 
 /** Measure word timings for every current narration take (or `--beat`) with local Whisper. */
-export async function whisperAlign(root, { beat, model = 'base', language } = {}) {
+export async function whisperAlign(root, { beat, model = 'base', language, force = false } = {}) {
   if (!whisperAvailable())
     throw new Error(
       'Local Whisper is not installed. Install it (brew install openai-whisper, or pip install openai-whisper), or use align --transcribe (paid) or --words.',
@@ -73,6 +73,13 @@ export async function whisperAlign(root, { beat, model = 'base', language } = {}
     .filter(b => b.vo && (!beat || b.id === beat))
     .map(b => ({ b, wav: path.join(P.vo, `${b.id}.wav`), metaFile: path.join(P.vo, `${b.id}.json`) }))
     .filter(x => fs.existsSync(x.wav) && readJSON(x.metaFile, null)?.textHash === hashOf(x.b.vo));
+  // A slice of an imported recording was measured at import against the whole recording and its
+  // script; measuring the slice alone again only loses words at its edges.
+  const kept = force ? [] : beats.filter(x => { const m = readJSON(x.metaFile, null); return m?.provider === 'imported' && m.alignment?.kind === 'measured'; });
+  if (kept.length) {
+    beats.splice(0, beats.length, ...beats.filter(x => !kept.includes(x)));
+    if (!beats.length) return kept.map(x => ({ id: x.b.id, status: 'measured from the recording at import (kept; --force re-measures the slice alone)' }));
+  }
   if (!beats.length) {
     // An imported recording is its own narration: ingest measured its words already, and its
     // takes stop matching when someone rewrites `vo` instead of cutting the recording.
@@ -151,7 +158,7 @@ export async function whisperAlign(root, { beat, model = 'base', language } = {}
           : 'measured',
       });
     });
-    return report;
+    return [...kept.map(x => ({ id: x.b.id, status: 'measured from the recording at import (kept)' })), ...report];
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
   }

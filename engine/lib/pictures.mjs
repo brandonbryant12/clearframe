@@ -14,6 +14,8 @@ const PICTURES = [
   [/\b((one|two|three|four|five|six|\d+)( to (three|six|nine|twelve|\d+))? months? of)\b/i, null, 'This line counts months', 'a `cast` of `calendar` tiles, one per month, that appear as the months are said (docs/cast.md)'],
   [/\b(inflation|buys? (about )?\w+ (percent )?less|loses? (value|purchasing power))\b/i, null, 'This line is about money shrinking in value', 'a canvas `chart` `number` that steps down through the values as they are said (a `say` on each), or a `jar` cast that empties a little on the word'],
   [/\b(separate|its own account|a different account|set (it )?aside|out of sight)\b/i, null, 'This line is about keeping money apart', 'a `cast` with two `jar`s (or a `jar` and a `paycheck`): coins move into their own jar on the word'],
+  // Last: a figure said out loud, whatever it is about.
+  [/\b(hundred|thousand|million|billion) (dollars|pounds|euros)\b|\$\s?\d|\b\w+ percent\b|\d+(\.\d+)?%/i, null, 'This line says a figure', 'a canvas `chart` `number` that lands on the figure as it is said (a `say` on the value; several figures step through), with what it counts as its label'],
 ];
 /** The picture that fits a line of narration: a sketch, or a recipe when no sketch does. */
 export function pictureFor(vo) {

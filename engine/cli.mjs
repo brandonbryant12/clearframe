@@ -651,7 +651,7 @@ async function main() {
   }
   if (cmd === 'align' && o.whisper) {
     const { whisperAlign } = await import('./lib/whisper.mjs');
-    const report = await whisperAlign(dir, { beat: o.beat, model: o.model });
+    const report = await whisperAlign(dir, { beat: o.beat, model: o.model, force: o.force });
     return console.log(report.map(r => `${r.id.padEnd(16)} ${r.status}`).join('\n'));
   }
   if (cmd === 'align') {
