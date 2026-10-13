@@ -310,7 +310,9 @@ pub fn render(plan: &Path, scale: f32, draft: bool, a: usize, b: usize, out: &Pa
     let stats = Arc::new(Stats::default());
     let start = Instant::now();
     let tmp: PathBuf = out.with_extension("segments");
-    let threads = std::env::var("CLEARFRAME_ENCODER_THREADS").ok().and_then(|s| s.parse::<u8>().ok()).unwrap_or(2).clamp(1, 4);
+    // A final render waits on x264 (medium preset): a third thread per segment took a 48 s film from
+    // 10.6 to 9.1 s for 60 MiB; a draft (veryfast) waits on the GPU, where threads change nothing.
+    let threads = std::env::var("CLEARFRAME_ENCODER_THREADS").ok().and_then(|s| s.parse::<u8>().ok()).unwrap_or(if draft { 2 } else { 3 }).clamp(1, 4);
     let owned = x264(draft, &threads.to_string());
     let params: Vec<(&str, &str)> = owned.iter().map(|(k, v)| (*k, v.as_str())).collect();
     let options = RenderOptions {

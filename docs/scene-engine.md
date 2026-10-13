@@ -131,7 +131,7 @@ The decoder's regression tests (a delayed final B-frame, a higher film rate, a n
 | | |
 |---|---|
 | `frame 120,4.2s -o DIR` | PNG stills (frames, or seconds rounded to the nearest frame) |
-| `render [A..B] -o OUT.mp4 [--report R.json]` | H.264 of film frames [A, B) on the film's own clock, through the fframes runtime (`CLEARFRAME_RENDER_WORKERS` 1–4, default 2; `CLEARFRAME_ENCODER_THREADS` per segment, default 2; `CLEARFRAME_RUNTIME=scene` for the engine's own FFmpeg pipe); draw, readback and encode times in the report |
+| `render [A..B] -o OUT.mp4 [--report R.json]` | H.264 of film frames [A, B) on the film's own clock, through the fframes runtime (`CLEARFRAME_RENDER_WORKERS` 1–4, default 2; `CLEARFRAME_ENCODER_THREADS` per segment, default 3 for a final render and 2 for a draft; `CLEARFRAME_RUNTIME=scene` for the engine's own FFmpeg pipe); draw, readback and encode times in the report |
 | `inspect [--every 0.25s]` | sampled frames that cannot be drawn (overflowing text, missing media, stage errors) and type cut by the canvas edge, in the text report `check` reads; exit 2 on errors |
 | `audit FILE` | the frame audit (held type cut by the frame or letterbox, over other type or a subject, too small) over block type **and** native type |
 | `bench [A..B]` | draw + readback per frame, without encoding |
