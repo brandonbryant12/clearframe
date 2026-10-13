@@ -55,7 +55,10 @@ function asDrawn(b, { width = 1920, height = 1080 } = {}) {
   try {
     const d = sketch(b.props.sketch, preset, { seed: b.props.seed, text: b.props.sketchText, say: b.props.sketchSay, params: b.props.sketchParams });
     const { sketch: _s, sketchText: _t, sketchSay: _y, sketchParams: _p, ...rest } = b.props;
-    return { ...b, props: { ...d, ...rest, elements: [...d.elements, ...(b.props.elements ?? [])] } };
+    // The words read are the ones written in (its sketchText and any elements added): a sketch's own
+    // chrome ("New message", "Cancel", "Send") is recognised, not read, and must not trip the reading pace.
+    const _words = onScreenWords({ text: b.props.sketchText ?? {}, elements: b.props.elements ?? [] });
+    return { ...b, _words, props: { ...d, ...rest, elements: [...d.elements, ...(b.props.elements ?? [])] } };
   } catch {
     return b;
   }
@@ -600,7 +603,7 @@ export function critique(root) {
   // Stillness and density.
   beats.forEach((b, i) => {
     const d = t[i]?.dur ?? 0,
-      words = onScreenWords(b.props ?? {});
+      words = b._words ?? onScreenWords(b.props ?? {});
     const moving =
       (b.camera !== 'none' && b.camera?.move !== 'none') ||
       b.plate ||
