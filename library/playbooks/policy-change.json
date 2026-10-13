@@ -21,7 +21,7 @@
       "source": "Example Co. expense policy and 2027 claims data (sample: replace with yours)"
     }
   ],
-  "note": "Policy arc: the cost of getting it wrong as your own number, the document people must get right with its parts marked, the new deadline on a calendar, the step done in the app, one line to repeat. Replace sketchText, sketchParams and sketchSay with the policy's words and figures (`clearframe sketch NAME`). See skills/clearframe-workplace/SKILL.md.",
+  "note": "Policy arc: the cost of getting it wrong as your own number, the document people must get right with its parts marked, the new deadline on a calendar, the step done in the app, the line to repeat spoken over the finished step. Replace sketchText, sketchParams and sketchSay with the policy's words and figures (`clearframe sketch NAME`). See skills/clearframe-workplace/SKILL.md.",
   "beats": [
     {
       "id": "hook",
@@ -110,8 +110,8 @@
       "id": "step",
       "block": "canvas",
       "pace": "hold",
-      "hold": 1.0,
-      "vo": "The app does the work. Open New claim, snap the receipt, check the amount, and submit.",
+      "hold": 1.5,
+      "vo": "The app does the work. Open New claim, snap the receipt, check the amount, and submit. Itemised, within thirty days, in the app.",
       "props": {
         "sketch": "portal",
         "sketchText": {
@@ -130,20 +130,8 @@
           "CHANGE": "amount",
           "SAVE": "submit"
         }
-      }
-    },
-    {
-      "id": "close",
-      "block": "kinetic",
-      "vo": "Itemised. Within thirty days. In the app.",
-      "props": {
-        "mode": "stack",
-        "align": "center",
-        "emphasis": [
-          "thirty"
-        ],
-        "source": ""
-      }
+      },
+      "transition": "panel"
     }
   ]
 }

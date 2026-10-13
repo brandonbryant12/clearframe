@@ -281,7 +281,7 @@ export function cinemaScore(sb, beats, timed, transitions) {
     return l.grade || l.bloom || l.letterbox || l.leak;
   });
   const glow = beats.some(b => has(b.props, /"(glow|shine|spotlight)"/));
-  if (!lit && !glow && !sb.texture)
+  if (!steady && !lit && !glow && !sb.texture)
     tell(
       'Screen-flat image',
       'no light, lens or texture. Choose a lens (grade, bloom, letterbox, leak), add grain and a vignette, and light the subject (glow, shine, spotlight).',
@@ -603,7 +603,7 @@ export function critique(root) {
     // seconds and can land before the ones that were moved.
     const authored = sb.beats[i]?.props;
     if (authored?.sketch && authored.sketchSay && Object.keys(authored.sketchSay).length) {
-      const left = sketchMoments(authored.sketch).filter(m => !(m in authored.sketchSay));
+      const left = sketchMoments(authored.sketch, authored.sketchParams).filter(m => !(m in authored.sketchSay));
       if (left.length)
         add(
           'warn',

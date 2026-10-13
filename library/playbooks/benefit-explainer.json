@@ -21,7 +21,7 @@
       "source": "Example Co. retirement plan summary (sample: replace with your plan document)"
     }
   ],
-  "note": "Workplace arc: the gain in five seconds, the rule as coins, what you keep and when, the step done in the app, one line to repeat. Every picture is a fill-in-the-blank sketch: replace sketchText with the plan's words, sketchParams with its figures and sketchSay with the narration word each moment lands on (`clearframe sketch NAME` names every slot). Add expire (use it or lose it), deadline (an enrollment window) or choose (two plans) where the plan has one. See skills/clearframe-workplace/SKILL.md.",
+  "note": "Workplace arc: the gain in five seconds, the rule as coins, what you keep and when, the step done in the app, the line to repeat spoken over the finished step. Every picture is a fill-in-the-blank sketch: replace sketchText with the plan's words, sketchParams with its figures and sketchSay with the narration word each moment lands on (`clearframe sketch NAME` names every slot). Add expire (use it or lose it), deadline (an enrollment window) or choose (two plans) where the plan has one. See skills/clearframe-workplace/SKILL.md.",
   "beats": [
     {
       "id": "hook",
@@ -93,7 +93,7 @@
       "id": "step",
       "block": "canvas",
       "pace": "hold",
-      "vo": "To change it, open Benefits, then Retirement. Set your rate to five percent, and save. It starts with your next paycheck.",
+      "vo": "To change it, open Benefits, then Retirement. Set your rate to five percent, and save. Two minutes today, free money with every paycheck after.",
       "props": {
         "sketch": "portal",
         "sketchText": {
@@ -113,20 +113,8 @@
           "SAVE": "save"
         }
       },
-      "hold": 1.0
-    },
-    {
-      "id": "close",
-      "block": "kinetic",
-      "vo": "Two minutes today. Free money with every paycheck after.",
-      "props": {
-        "mode": "stack",
-        "align": "center",
-        "emphasis": [
-          "today"
-        ],
-        "source": ""
-      }
+      "hold": 1.5,
+      "transition": "panel"
     }
   ]
 }

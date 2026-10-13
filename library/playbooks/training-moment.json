@@ -21,7 +21,7 @@
       "source": "Example Co. phishing simulation, spring (sample: replace with your results)"
     }
   ],
-  "note": "Training arc: your own number as the hook, the message itself with its signs marked one by one, the habit done in the tool people use, the reason it matters. Replace sketchText, sketchParams and sketchSay with your material (`clearframe sketch NAME`). For a policy or a receipt rather than an email, inspect marks other parts (sender, subject, body, link, attachment). See skills/clearframe-workplace/SKILL.md.",
+  "note": "Training arc: your own number as the hook, the message itself with its signs marked one by one, the habit done in the tool people use, the line to repeat spoken over it. Replace sketchText, sketchParams and sketchSay with your material (`clearframe sketch NAME`). For a policy or a receipt rather than an email, inspect marks other parts (sender, subject, body, link, attachment). See skills/clearframe-workplace/SKILL.md.",
   "beats": [
     {
       "id": "hook",
@@ -83,7 +83,7 @@
       "id": "habit",
       "block": "canvas",
       "pace": "hold",
-      "vo": "So don't click, and don't just delete it. Choose Report, then Phishing, and send it.",
+      "vo": "So don't click, and don't just delete it. Choose Report, then Phishing, and send it. Three seconds to look, one click to report.",
       "props": {
         "sketch": "portal",
         "sketchText": {
@@ -103,21 +103,8 @@
           "SAVE": "send"
         }
       },
-      "hold": 1.0
-    },
-    {
-      "id": "close",
-      "block": "kinetic",
-      "vo": "Three seconds to look. One click to report.",
-      "props": {
-        "mode": "stack",
-        "align": "center",
-        "emphasis": [
-          "look",
-          "report"
-        ],
-        "source": ""
-      }
+      "hold": 1.5,
+      "transition": "panel"
     }
   ]
 }

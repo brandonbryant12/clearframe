@@ -100,12 +100,12 @@ export function sketch(name, preset = 'landscape', { seed, text, say, params } =
 }
 export const SKETCH_FRAMES = frames;
 
-/** A sketch's named moments (for sketchSay), in drawing order. */
-export function sketchMoments(name) {
+/** A sketch's named moments (for sketchSay) with these numbers, in drawing order. */
+export function sketchMoments(name, params = {}) {
   const s = sketchByName(name);
   if (!s) return [];
   try {
-    return [...fillSketch(s.build(1920, 1080, { params: sketchParams(s, {}) }).elements)];
+    return [...fillSketch(s.build(1920, 1080, { params: sketchParams(s, params) }).elements)];
   } catch {
     return [];
   }
