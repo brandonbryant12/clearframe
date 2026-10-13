@@ -91,7 +91,8 @@
           "TWO": "bonds",
           "THREE": "cash"
         }
-      }
+      },
+      "hold": 1.2
     },
     {
       "id": "decision",
