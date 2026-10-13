@@ -359,7 +359,10 @@ pub fn render(plan: &Path, scale: f32, draft: bool, a: usize, b: usize, out: &Pa
         _ => return Err(format!("unsupported canvas {width}x{height}")),
     };
     let _ = std::fs::remove_dir_all(&tmp);
-    result.map_err(|e| format!("fframes render failed: {e:?}"))?;
+    result.map_err(|e| match e {
+        FFramesRendererError::Custom(message) => message,
+        other => format!("fframes render failed: {}", format!("{other:?}").trim()),
+    })?;
     let ms = |v: &AtomicU64| v.load(Ordering::Relaxed) as f64 / 1e3;
     Ok(serde_json::json!({
         "runtime": "fframes", "frames": stats.frames.load(Ordering::Relaxed), "range": [a, b],
