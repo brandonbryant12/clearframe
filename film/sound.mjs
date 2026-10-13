@@ -38,6 +38,16 @@ export function soundDesign(job, sfx) {
     // A world camera travelling to its next stop.
     if (b.block === 'canvas' && b.props.viewFrom && (b.props.viewDur ?? 1.2) <= 2.5)
       add('whoosh', start + (b.props.viewAt ?? 0), 0.18, 2);
+    // Sounds the author placed on an element (as it enters) or on its keys (as it moves): a click
+    // as the pointer presses, a whoosh as the email is yanked out. Heavier than the automatic ones.
+    const authored = list =>
+      (list ?? []).forEach(el => {
+        const hit = (v, at) => at != null && add(typeof v === 'string' ? v : v.name, start + at, typeof v === 'object' && v.volume != null ? v.volume : 0.3, 4);
+        if (el.sound != null) hit(el.sound, el.at);
+        for (const k of el.keys ?? []) if (k.sound != null) hit(k.sound, k.at);
+        authored(el.children);
+      });
+    if (b.block === 'canvas') authored(b.props.elements);
     let pops = 0,
       grows = 0;
     for (const el of [...(b.block === 'canvas' ? b.props.elements : []), ...(b.art?.over ?? [])]) {

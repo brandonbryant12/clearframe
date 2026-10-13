@@ -60,6 +60,7 @@ Use `props.source` and optional `sourceSize` for the automatic footer. For a cus
 | `along` | `{d, say|at, dur, ease, rotate}`: the element's origin travels along a path (a marker on a route, a packet through a pipe). |
 | `loop` | `{type: spin|pulse|float|sway|orbit|dash|blink|rock, period, amount}`: ambient motion after the entrance, eased in. `dash` marches a dashed stroke. `spin` with an `origin` orbits a centre. |
 | `exit`, `exitSay` / `exitAt`, `exitAfter`, `exitDur` | Leave mid-scene: `fade, shrink, fall, lift, undraw, wipe, blur, scatter (mosaic), none`. Use it to build, then transform: draw a problem, clear it, draw the fix. `exitAfter` waits that many seconds after the `exitSay` word, as `after` does for an entrance. |
+| `sound` | A built-in effect as the element enters, or on one of its `keys` as it moves (`click`, `whoosh`, `pop`, `tock`, `thud`, `chime` …; or `{name, volume}`): the pointer's click, the email yanked away. The film's `sfx` level scales it. |
 
 All element times are **scene seconds** (from the beat's start). The `timing DIR` output lists words in **film seconds**; subtract the beat's `start` to cue by time. A key can only cue to its own beat's words.
 

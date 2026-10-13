@@ -3,6 +3,7 @@
 // (scene/native/src/blocks/canvas.rs) re-validates structure and draws what this module prepares.
 import { ICONS, iconAlias, iconHint } from './icons.mjs';
 import { CANVAS_TIMING as T } from './constants.mjs';
+import { SFX } from '../engine/lib/sfx.mjs';
 
 export const ELEMENT_TYPES = {
   rect: { geometry: ['x', 'y', 'w', 'h', 'r'], required: ['w', 'h'] },
@@ -66,6 +67,7 @@ const COMMON = [
   'exitSay',
   'exitAfter',
   'exitDur',
+  'sound',
   'keys',
   'loop',
   'along',
@@ -170,6 +172,16 @@ const FIELD_HINTS = {
   content: 'use text',
   label: 'a text element draws its words from text',
 };
+/**
+ * A sound on an element (as it enters) or on a key (as it moves): a built-in effect by name, or
+ * `{name, volume}` (0–1). The mix places it with the film's other effects (`sfx`).
+ */
+function checkSound(v, where, fail) {
+  const name = typeof v === 'string' ? v : v?.name;
+  if (typeof name !== 'string' || !SFX[name])
+    fail(`${where} must name a built-in sound (${Object.keys(SFX).join(', ')}), or be {name, volume}`);
+  if (typeof v === 'object' && v.volume != null && !(Number.isFinite(v.volume) && v.volume >= 0 && v.volume <= 1)) fail(`${where}.volume must be 0–1`);
+}
 /** Validate and clone an element list; `fail(message)` throws with the caller's context. */
 export function normalizeElements(list, where, fail, state = { count: 0 }, depth = 0) {
   if (!Array.isArray(list)) fail(`${where} must be an array of elements`);
@@ -185,6 +197,7 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       if (!COMMON.includes(key) && !spec.geometry.includes(key))
         fail(`${at}: unsupported ${el.type} field ${key}${FIELD_HINTS[key] ? `: ${FIELD_HINTS[key]}` : ''} (a ${el.type} takes ${spec.geometry.join(', ')}, plus the timing and style fields every element takes)`);
     for (const key of spec.required) if (el[key] == null) fail(`${at}: ${el.type} needs ${key}`);
+    if (el.sound != null) checkSound(el.sound, `${at}.sound`, fail);
     // Positions are frame pixels: a word such as "center" was read as 0 and pushed type off the frame.
     for (const key of ['x', 'y', 'cx', 'cy', 'w', 'h'])
       if (el[key] != null && typeof el[key] !== 'number')
@@ -299,9 +312,11 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
               'hold',
               'tiltX',
               'tiltY',
+              'sound',
             ].includes(key)
           )
             fail(`${at}.keys[${j}]: unsupported field ${key}`);
+        if (k.sound != null) checkSound(k.sound, `${at}.keys[${j}].sound`, fail);
         if (k.at == null && k.say == null) fail(`${at}.keys[${j}] needs at (seconds) or say (spoken cue)`);
         if (k.after != null && (!finite(k.after) || k.after < 0 || k.say == null)) fail(`${at}.keys[${j}].after is seconds (0 or more) after its say cue`);
         if (k.blur != null && (!finite(k.blur) || k.blur < 0 || k.blur > 60))

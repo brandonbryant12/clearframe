@@ -2,6 +2,7 @@
 
 ## Opus films: what an excellent film needed
 
+- **Sound on a moment.** A canvas element can carry `sound` (as it enters) and so can each of its `keys` (as it moves): a built-in effect by name or `{name, volume}`, mixed with the film's other effects at its `sfx` level. An Opus agent wanted the click, the yank and the press to be heard; effects had only followed cuts.
 - **A warning in the brand's colour is named.** `critique` warns when a film marks warnings (or good things) in a palette whose accent is the same colour: `meridian`'s accent and warning red are one red, so a phishing film's marks read as decoration, and `meadow`'s accent is its positive green; it suggests `briefing` for security and policy films.
 - **The training playbook no longer says what a source rarely does.** Its report-not-delete ending narrated "Security can pull every copy", which agents kept and reviewers flagged as unsourced; it now says "Report it, and Security hears about it".
 - **`exitAfter`** leaves a set time after an `exitSay` word (an Opus agent had to fake it with opacity keys), and the workplace skill says what a pointer needs to read as motion: move the thing it touches.
