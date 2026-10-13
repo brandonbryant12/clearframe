@@ -1,5 +1,5 @@
 // The production native vocabulary. Metadata, validation, CLI help and examples share this file.
-import { palettes, paletteNotes, PALETTE_KEYS } from './library.mjs';
+import { palettes, paletteNotes, PALETTE_KEYS, items } from './library.mjs';
 import { helpers, VALIDATORS } from './validators.mjs';
 // Palettes live in library/palettes (one JSON file each, plus any in a project's library/).
 export const THEMES = new Proxy(
@@ -728,6 +728,9 @@ const NOT_BLOCKS = {
 };
 function notABlock(name) {
   if (NOT_BLOCKS[name]) return NOT_BLOCKS[name];
+  // A sketch's name used as a block ("portal"): it is drawn by a canvas beat.
+  if (items('sketches').some(s => s.id === name))
+    return `${name} is a sketch, drawn by a canvas beat: {"block": "canvas", "props": {"sketch": "${name}", "sketchText": {…}, "sketchSay": {…}}} (node engine/cli.mjs sketch ${name} prints the beat to paste).`;
   // The nearest real names, by edit distance.
   const d = (a, b) => {
     const m = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
