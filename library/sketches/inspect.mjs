@@ -12,6 +12,12 @@ import { crisp, round, tall, body } from '../../film/sketch-kit.mjs';
 // reaches the button, which lights solid and is pressed; the marks fade, a shield pops up and the
 // whole message shrinks into it, the shield pulses and a confirmation pops up under it. Every step
 // is a solid change over a large part of the frame, so it reads on a phone and in a pale palette.
+// With `choices`, the two wrong moves come first, on the same card: on CLICK the pointer reaches
+// the link, the card is tugged and a no sign lands on the button; on DELETE it reaches a bin in
+// the toolbar, the card starts to fold into it and a no sign lands on the bin; then REPORT.
+// One card across two beats: the first ends after the marks (`end: "marked"`: the toolbar is
+// drawn, the later moments are left out) and the second opens on the card as it stands then
+// (`start: "marked"`), so only CLICK, DELETE and REPORT remain to cue.
 const PARTS = ['sender', 'subject', 'body', 'link', 'attachment'];
 const NAMES = ['ONE', 'TWO', 'THREE'];
 const LABELS = ['MARKONE', 'MARKTWO', 'MARKTHREE'];
@@ -19,6 +25,17 @@ const ICON = { negative: 'alert', positive: 'check', accent: 'search', accent2: 
 const AT = { OPEN: 0.3, ONE: 1.8, TWO: 3.5, THREE: 5.2 };
 // REPORT's default second: this long after the last mark (its label has landed by then).
 const REPORT_AFTER = 1.9;
+// With choices, CLICK takes REPORT's place and DELETE and REPORT follow this far apart.
+const CHOICE_GAP = 1.5;
+// CLICK and DELETE, in seconds after the moment: the pointer reaches the control and presses it
+// as the card reacts, then the no sign lands (quick: "don't just delete it. Report it" leaves
+// under a second between the words).
+const CHOICE = { reach: 0.4, sign: 0.5 };
+// In a beat that opens on the marked card, the first moment left comes this soon after the cut.
+const RESUME_AT = 0.5;
+// The moments a marked card has had, and the ones that follow them.
+const SHOWN = new Set(['OPEN', ...NAMES]);
+const LATER = new Set(['CLICK', 'DELETE', 'REPORT']);
 const cursorPath = (x, y, k) =>
   `M ${x} ${y} L ${x} ${round(y + 40 * k)} L ${round(x + 10 * k)} ${round(y + 31 * k)} L ${round(x + 17 * k)} ${round(y + 47 * k)} L ${round(x + 25 * k)} ${round(y + 44 * k)} L ${round(x + 18 * k)} ${round(y + 28 * k)} L ${round(x + 31 * k)} ${round(y + 28 * k)} Z`;
 
@@ -27,8 +44,8 @@ export default {
   order: 95,
   keep: true,
   summary:
-    'Look closely at a message: an email card arrives, then up to three of its parts are ringed in turn, each with a connector out to a short label, and the view leans in on each mark; optionally the same message is then reported, its Report phish button pressed and the message shrinking into a security shield with a confirmation.',
-  use: 'Phishing tells (an urgent subject, an almost-right sender, an unexpected link), a receipt’s or payslip’s must-haves, the line in a notice to check. Replace FROM (the sender line, up to about 40 characters), SUBJECT (up to about 40), LINE1 and LINE2 (two short body lines), BUTTON (the link’s words), FILE (the attachment’s name, when drawn) and MARKONE, MARKTWO, MARKTHREE (the labels, two to four words each) with sketchText; land OPEN (the card arriving) and ONE, TWO, THREE (one per mark) on words with sketchSay. sketchParams: marks (which part each mark rings, in order: sender, subject, body, link or attachment), attachment (true draws the attachment chip), color (negative for warning signs, positive for what to look for, accent for points of interest) and report. For phishing training, report true makes the action the same email instead of a slide: the message carries a Report phish button in its toolbar from the first frame (fill REPORTBUTTON, one or two words, e.g. "Report phish") and a last moment, REPORT, comes after THREE (the order is OPEN, ONE, TWO, THREE, REPORT): on it the pointer presses the button, which lights; the marks fade, the message shrinks into a security shield and a confirmation pops up (fill REPORTED, up to about 30 characters, e.g. "Reported to Security. Thanks."). Land REPORT on the word that says the action ("report").',
+    'Look closely at a message: an email card arrives, then up to three of its parts are ringed in turn, each with a connector out to a short label, and the view leans in on each mark; optionally the same message is then reported, its Report phish button pressed and the message shrinking into a security shield with a confirmation (after a refused click and a refused delete, with choices), in the same beat or in a second beat on the same card.',
+  use: 'Phishing tells (an urgent subject, an almost-right sender, an unexpected link), a receipt’s or payslip’s must-haves, the line in a notice to check. Replace FROM (the sender line, up to about 40 characters), SUBJECT (up to about 40), LINE1 and LINE2 (two short body lines), BUTTON (the link’s words), FILE (the attachment’s name, when drawn) and MARKONE, MARKTWO, MARKTHREE (the labels, two to four words each) with sketchText; land OPEN (the card arriving) and ONE, TWO, THREE (one per mark) on words with sketchSay. sketchParams: marks (which part each mark rings, in order: sender, subject, body, link or attachment), attachment (true draws the attachment chip), color (negative for warning signs, positive for what to look for, accent for points of interest) and report. For phishing training, report true makes the action the same email instead of a slide: the message carries a Report phish button in its toolbar from the first frame (fill REPORTBUTTON, one or two words, e.g. "Report phish") and a last moment, REPORT, comes after THREE (the order is OPEN, ONE, TWO, THREE, REPORT): on it the pointer presses the button, which lights; the marks fade, the message shrinks into a security shield and a confirmation pops up (fill REPORTED, up to about 30 characters, e.g. "Reported to Security. Thanks."). Land REPORT on the word that says the action ("report"). For "don’t click, don’t just delete, report", choices true (with report) adds a bin to the toolbar and two moments between THREE and REPORT (the order is OPEN, ONE, TWO, THREE, CLICK, DELETE, REPORT): on CLICK the pointer presses the link, the card is tugged and a no sign lands on the button; on DELETE it presses the bin, the card starts to fold into it and a no sign lands on the bin. Land them on "click" and "delete". To give the signs and the habit a beat each on one card, give both beats the same sketchParams plus end "marked" on the first (it stops after THREE, toolbar already drawn) and start "marked" on the second (it opens on the marked card, so its moments are only CLICK, DELETE and REPORT), transition "cut" on the second and camera "none" on the first (the default slow push would leave the card larger than the second beat opens on it).',
   params: {
     marks: {
       default: ['subject', 'sender', 'link'],
@@ -43,6 +60,23 @@ export default {
       about:
         'true adds the Report phish step: a REPORTBUTTON button in the message’s toolbar from the first frame, and a last moment, REPORT, after the marks (order OPEN → ONE → TWO → THREE → REPORT), on which the pointer presses the button, the marks fade, the message shrinks into a security shield and a confirmation (REPORTED) pops up',
     },
+    choices: {
+      default: false,
+      about:
+        'true (with report) does "don’t click, don’t just delete, report" on the same email: a bin joins the toolbar and two moments come before REPORT (order OPEN → ONE → TWO → THREE → CLICK → DELETE → REPORT): on CLICK the pointer reaches the link, the card is tugged and a no sign lands on the button; on DELETE it reaches the bin, the card starts to fold into it and a no sign lands on the bin',
+    },
+    start: {
+      default: 'open',
+      oneOf: ['open', 'marked'],
+      about:
+        'open (the default): the card arrives on OPEN. marked (with report): a second beat on the same card: it stands from the first frame with its marks and labels drawn and the view leaning in as after THREE, so only CLICK, DELETE (with choices) and REPORT remain to cue (order CLICK → DELETE → REPORT). Give the beat before it the same sketchParams with end "marked" and camera "none", and cut between them',
+    },
+    end: {
+      default: 'last',
+      oneOf: ['last', 'marked'],
+      about:
+        'last (the default): the beat runs to its last moment. marked (with report): the beat ends after THREE with the report toolbar (and the bin, with choices) already drawn, leaving CLICK, DELETE and REPORT to the next beat (start "marked", the same sketchParams otherwise), so the card is the same on both sides of the cut; give this beat camera "none" so the default push does not enlarge it',
+    },
   },
   build(w, h, { params = {} } = {}) {
     const marks = params.marks ?? ['subject', 'sender', 'link'];
@@ -55,8 +89,22 @@ export default {
     if (params.attachment != null && typeof params.attachment !== 'boolean')
       throw new Error('sketchParams.attachment for inspect must be true or false');
     if (params.report != null && typeof params.report !== 'boolean') throw new Error('sketchParams.report for inspect must be true or false');
+    if (params.choices != null && typeof params.choices !== 'boolean') throw new Error('sketchParams.choices for inspect must be true or false');
+    if (params.start != null && !['open', 'marked'].includes(params.start)) throw new Error('sketchParams.start for inspect must be "open" or "marked"');
+    if (params.end != null && !['last', 'marked'].includes(params.end)) throw new Error('sketchParams.end for inspect must be "last" or "marked"');
     const attach = params.attachment === true || marks.includes('attachment');
     const report = params.report === true;
+    const choices = params.choices === true;
+    // A beat that opens on the marked card (start) or stops at it (end) shares the card with a
+    // beat that reports it.
+    const standing = params.start === 'marked',
+      stopping = params.end === 'marked';
+    if (choices && !report) throw new Error('sketchParams.choices for inspect needs report: true (CLICK and DELETE come before REPORT)');
+    if ((standing || stopping) && !report)
+      throw new Error(
+        `sketchParams.${standing ? 'start' : 'end'} "marked" for inspect needs report: true: it splits the marks and the report step (CLICK, DELETE with choices, REPORT) into two beats on one card`,
+      );
+    if (standing && stopping) throw new Error('sketchParams for inspect: start "marked" with end "marked" leaves no moment; use one on each of two beats');
 
     const T = tall(w, h);
     const b = body(w, h);
@@ -135,8 +183,12 @@ export default {
     // pointer travels, the button lights and is pressed, the marks fade, the shield pops up, the
     // message shrinks into it, the shield pulses as it lands and the confirmation pops up.
     const STEP = { light: 0.4, fade: 0.5, shield: 0.7, fly: 0.85, land: 1.5, toast: 1.6 };
-    const reportAt = round(AT[NAMES[marks.length - 1]] + REPORT_AFTER);
-    const cued = (dt, extra = {}) => ({ cue: 'REPORT', at: round(reportAt + dt), ...(dt ? { after: round(dt) } : {}), ...extra });
+    // The first moment after the marks (CLICK with choices, else REPORT): after the last label
+    // has landed, or just after the cut on a card that opens marked.
+    const resume = standing ? RESUME_AT : round(AT[NAMES[marks.length - 1]] + REPORT_AFTER);
+    const momentAt = { CLICK: resume, DELETE: round(resume + CHOICE_GAP), REPORT: choices ? round(resume + 2 * CHOICE_GAP) : resume };
+    const timedOn = (cue, dt = 0, extra = {}) => ({ cue, at: round(momentAt[cue] + dt), ...(dt ? { after: round(dt) } : {}), ...extra });
+    const cued = (dt, extra = {}) => timedOn('REPORT', dt, extra);
 
     // The toolbar: a strip along the card's top (back, move and mark-unread chrome at the left) with
     // the Report phish button at its right, outlined until REPORT lights it solid.
@@ -153,6 +205,19 @@ export default {
       ];
     };
     const chrome = round(bar * 0.36);
+    // With choices, a bin (delete) follows the folder and mail icons, drawn in their line weight
+    // (the icon set has no bin).
+    const binC = [round(card.x + pad + chrome * 6.5), round(card.y + bar / 2)];
+    const binEls = () => {
+      const [x, y] = binC,
+        s = chrome,
+        P = (dx, dy) => `${round(x + dx * s)} ${round(y + dy * s)}`;
+      const ink = { fill: 'none', stroke: 'muted', width: 3, cap: 'round', join: 'round', enter: 'none' };
+      return [
+        { type: 'path', d: `M ${P(-0.42, -0.26)} L ${P(0.42, -0.26)} M ${P(-0.13, -0.26)} L ${P(-0.13, -0.41)} L ${P(0.13, -0.41)} L ${P(0.13, -0.26)}`, ...ink },
+        { type: 'path', d: `M ${P(-0.31, -0.13)} L ${P(-0.25, 0.42)} L ${P(0.25, 0.42)} L ${P(0.31, -0.13)} M ${P(-0.09, -0.02)} L ${P(-0.09, 0.28)} M ${P(0.09, -0.02)} L ${P(0.09, 0.28)}`, ...ink },
+      ];
+    };
     const toolbar = report
       ? [
           { type: 'rect', x: card.x + 1, y: card.y + 1, w: cw - 2, h: bar - 1, r: 27, fill: 'bg', enter: 'none' },
@@ -169,6 +234,7 @@ export default {
             enter: 'none',
           },
           ...['folder', 'mail'].map((name, i) => ({ type: 'icon', name, x: round(card.x + pad + chrome * (2.4 + 1.9 * i)), y: round(card.y + bar / 2), size: chrome, stroke: 'muted', enter: 'none' })),
+          ...(choices ? binEls() : []),
           {
             type: 'group',
             enter: 'none',
@@ -204,10 +270,14 @@ export default {
         text('LINE1', inner.x, round(Y(rows.body) + fs.line * 0.86), fs.line, 'regular', 'ink', { fit: inner.w }),
         text('LINE2', inner.x, round(Y(rows.body) + fs.line * 2.36), fs.line, 'regular', 'ink', { fit: inner.w }),
       ]),
-      arrive(3, [
-        { type: 'rect', x: inner.x, y: Y(rows.link), w: bw, h: bh, r: bh / 2, fill: 'accent', enter: 'none' },
-        text('BUTTON', round(inner.x + bw / 2), round(Y(rows.link) + bh / 2 + fs.button * 0.36), fs.button, 'semibold', 'bg', { anchor: 'middle', fit: bw - 48 }),
-      ]),
+      {
+        ...arrive(3, [
+          { type: 'rect', x: inner.x, y: Y(rows.link), w: bw, h: bh, r: bh / 2, fill: 'accent', enter: 'none' },
+          text('BUTTON', round(inner.x + bw / 2), round(Y(rows.link) + bh / 2 + fs.button * 0.36), fs.button, 'semibold', 'bg', { anchor: 'middle', fit: bw - 48 }),
+        ]),
+        // With choices, the link greys out as its no sign lands on CLICK.
+        ...(choices ? { keys: [timedOn('CLICK', CHOICE.sign, { dur: 0.3, opacity: 0.4 })] } : {}),
+      },
       ...(attach
         ? [
             arrive(4, [
@@ -366,22 +436,109 @@ export default {
       ...cued(0),
       keys: [cued(0, { dur: STEP.light, ease: 'inOut', x: tip[0], y: tip[1] }), cued(STEP.light + 0.35, { dur: 0.3, ease: 'in', x: tip[0] + 40, y: tip[1] + 60, opacity: 0 })],
     };
+
+    // CHOICES (choices: true): the two wrong moves, each refused on the card itself. On CLICK the
+    // view settles square, the pointer comes in from below the link and presses it, the card is
+    // tugged up (the pointer with it), the link greys and a no sign lands on it. On DELETE the
+    // pointer moves up to the bin and presses it, the card shrinks toward the bin (about the bin
+    // itself, so it stays under the pointer), holds and springs back, and a no sign lands on the
+    // bin. The no signs fade with the marks on REPORT, and the same pointer goes on from the bin to
+    // Report phish.
+    const linkC = [round(inner.x + bw / 2), round(Y(rows.link) + bh / 2)];
+    const noSign = (c, r, cue, dt) => {
+      const wN = side ? 10 : 9,
+        d = round(r * 0.7);
+      return {
+        type: 'group',
+        origin: c,
+        enter: 'pop',
+        dur: 0.3,
+        ...timedOn(cue, dt),
+        children: [
+          { type: 'circle', cx: c[0], cy: c[1], r, fill: 'bg', opacity: 0.55, enter: 'none' },
+          { type: 'circle', cx: c[0], cy: c[1], r, fill: 'none', stroke: 'negative', width: wN, enter: 'none' },
+          { type: 'line', x1: c[0] - d, y1: c[1] - d, x2: c[0] + d, y2: c[1] + d, stroke: 'negative', width: wN, cap: 'round', enter: 'none' },
+        ],
+      };
+    };
+    const refused = choices ? [noSign(linkC, round(bh * 0.72), 'CLICK', CHOICE.sign), noSign(binC, round(bar * 0.44), 'DELETE', CHOICE.sign)] : [];
+    const fold = 0.84,
+      tug = side ? -46 : -56;
+    const choiceKeys = choices
+      ? [
+          timedOn('CLICK', 0, { dur: CHOICE.reach, ease: 'inOut', scale: 1, x: 0, y: 0 }),
+          timedOn('CLICK', CHOICE.reach, { dur: 0.5, ease: 'thereAndBack', y: tug, rotate: side ? -1.5 : -1 }),
+          timedOn('DELETE', CHOICE.reach, { dur: 0.75, ease: 'thereAndBackPause', scale: fold, x: round((1 - fold) * (binC[0] - O[0])), y: round((1 - fold) * (binC[1] - O[1])) }),
+        ]
+      : [];
+    const p0 = [Math.min(w - round(60 * k), linkC[0] + (side ? 240 : 190)), Math.min(h - round(90 * k), linkC[1] + (side ? 220 : 260))];
+    const toTip = c => ({ x: round(c[0] + 6 - p0[0]), y: round(c[1] + 8 - p0[1]) });
+    // The pointer presses the link on its right half, clear of the no sign and of a label under it.
+    const linkHit = [round(linkC[0] + bw * 0.24), round(linkC[1] - bh * 0.2)];
+    const press = cue => timedOn(cue, CHOICE.reach, { dur: 0.25, ease: 'thereAndBack', scale: 0.82 });
+    const guide = choices && {
+      type: 'path',
+      d: cursorPath(p0[0], p0[1], k),
+      fill: 'ink',
+      stroke: 'surface',
+      width: 3,
+      join: 'round',
+      enter: 'fade',
+      dur: 0.15,
+      origin: p0,
+      ...timedOn('CLICK'),
+      keys: [
+        timedOn('CLICK', 0, { dur: CHOICE.reach, ease: 'inOut', ...toTip(linkHit) }),
+        press('CLICK'),
+        // Caught: the pointer is yanked up with the card, and let go.
+        timedOn('CLICK', CHOICE.reach, { dur: 0.5, ease: 'thereAndBack', y: toTip(linkHit).y + tug }),
+        timedOn('DELETE', 0, { dur: CHOICE.reach, ease: 'inOut', ...toTip(binC) }),
+        press('DELETE'),
+        cued(0, { dur: STEP.light, ease: 'inOut', ...toTip(btnC) }),
+        cued(STEP.light + 0.35, { dur: 0.3, ease: 'in', x: toTip(btnC).x + 40, y: toTip(btnC).y + 60, opacity: 0 }),
+      ],
+    };
+
+    // A card that opens marked stands from the first frame as THREE left it: its entrances done
+    // and the view held in the last lean.
+    const stand = list =>
+      list.map(el => {
+        const out = { ...el };
+        if (SHOWN.has(out.cue)) {
+          for (const key of ['cue', 'at', 'after', 'dur', 'dist']) delete out[key];
+          out.enter = 'none';
+        }
+        if (out.children) out.children = stand(out.children);
+        return out;
+      });
+    const leaned = () => {
+      const { scale: s, x, y } = lean(marks.at(-1), marks.length - 1);
+      return [{ at: 0, dur: 0, scale: s, x, y }];
+    };
+    // A card that stops marked keeps everything the later moments would change, as it stood.
+    const prune = list =>
+      list.flatMap(el => {
+        if (LATER.has(el.cue)) return [];
+        const out = { ...el };
+        if (out.keys) {
+          out.keys = out.keys.filter(key => !LATER.has(key.cue));
+          if (!out.keys.length) delete out.keys;
+        }
+        if (out.children) out.children = prune(out.children);
+        return [out];
+      });
+    const marksGroup = { type: 'group', enter: 'none', keys: [cued(STEP.fade, { dur: 0.3, opacity: 0 })], children: [...markEls, ...refused] };
+    const view = {
+      type: 'group',
+      enter: 'none',
+      ...(standing ? { at: 0 } : { cue: 'OPEN', at: AT.OPEN }),
+      origin: O,
+      keys: [...(standing ? leaned() : marks.map(lean)), ...choiceKeys, cued(0, { dur: STEP.light, ease: 'inOut', scale: 1, x: 0, y: 0 }), ...leave],
+      children: standing ? stand([cardGroup, marksGroup]) : [cardGroup, marksGroup],
+    };
+    if (stopping) return { elements: crisp(prune([view])) };
     return {
-      elements: crisp([
-        {
-          type: 'group',
-          enter: 'none',
-          cue: 'OPEN',
-          at: AT.OPEN,
-          origin: O,
-          keys: [...marks.map(lean), cued(0, { dur: STEP.light, ease: 'inOut', scale: 1, x: 0, y: 0 }), ...leave],
-          children: [cardGroup, { type: 'group', enter: 'none', keys: [cued(STEP.fade, { dur: 0.3, opacity: 0 })], children: markEls }],
-        },
-        ripple(btnC, round(btn.h * 0.8), STEP.light),
-        shield,
-        done,
-        pointer,
-      ]),
+      elements: crisp([view, ripple(btnC, round(btn.h * 0.8), STEP.light), shield, done, guide || pointer]),
     };
   },
 };

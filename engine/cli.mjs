@@ -462,7 +462,12 @@ async function main() {
       const params = Object.entries(source?.params ?? {}).map(([k, d]) => `  ${k}: ${d.about ?? ''} (default ${JSON.stringify(d.default)}${d.min != null || d.max != null ? `, ${d.min ?? ''}–${d.max ?? ''}` : ''})`);
       const free = (source?.freeMoments ?? []).filter(m => m in (use.props.sketchSay ?? {})),
         moments = Object.keys(use.props.sketchSay ?? {}).filter(m => !free.includes(m));
-      console.error(`Use it as a beat (fill the words, cue the moments on narration words, set the numbers):\n${JSON.stringify(use, null, 1)}${params.length ? `\nNumbers:\n${params.join('\n')}` : ''}${moments.length > 1 ? `\nMoments happen in this order: ${moments.join(' → ')}. Give them words the narration says in the same order.${free.length ? ` ${free.join(', ')} may land on any word.` : ''}` : ''}\nThe drawing below is for adapting by hand.\n`);
+      // Options that add moments (report, choices, expires, send): the order with all of them on.
+      const { sketchMoments } = await import('../film/sketches.mjs');
+      const flags = Object.entries(source?.params ?? {}).filter(([, d]) => d.default === false).map(([k]) => k);
+      const full = flags.length ? sketchMoments(positionals[0], Object.fromEntries(flags.map(k => [k, true]))) : [];
+      const more = full.length > moments.length + free.length ? `\nWith ${flags.join(', ')} on: ${full.filter(m => !free.includes(m)).join(' → ')}.` : '';
+      console.error(`Use it as a beat (fill the words, cue the moments on narration words, set the numbers):\n${JSON.stringify(use, null, 1)}${params.length ? `\nNumbers:\n${params.join('\n')}` : ''}${moments.length > 1 ? `\nMoments happen in this order: ${moments.join(' → ')}. Give them words the narration says in the same order.${free.length ? ` ${free.join(', ')} may land on any word.` : ''}${more}` : ''}\nThe drawing below is for adapting by hand.\n`);
     }
     return console.log(JSON.stringify(sketch(positionals[0], o.vertical ? 'vertical' : 'landscape'), null, 1));
   }
