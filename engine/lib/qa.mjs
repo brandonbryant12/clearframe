@@ -376,6 +376,27 @@ export async function qaProject(root, { video, loop = false } = {}) {
   );
   const holds = new Set(sb.beats.filter(b => b.pace === 'hold').map(b => b.id));
   const findings = timeFindings({ d, skip, second, local, fps, beats, worlds, covers, holds });
+  // A frame with next to nothing on it (a hairline, a footer) while the voice talks: reviewers
+  // read the first seconds of four films as empty or broken. Sampled every half second.
+  {
+    const step = Math.max(1, Math.round(fps / 2)), band0 = Math.round(h * 0.12);
+    let from = null;
+    const close = (to, i) => {
+      if (from == null) return;
+      const seconds = (to - from) / fps, b = beats.find(x => from / fps >= x.start && from / fps < x.end);
+      const voiced = beats.some(x => x.vo && x.vo.start < to / fps && x.vo.end > from / fps);
+      if (seconds >= 1.5 && voiced && b && !holds.has(b.id))
+        findings.push({ level: 'warn', kind: 'empty', t: r2(from / fps), end: r2(to / fps), frame: from, beat: b.id, seconds: r2(seconds),
+          message: `next to nothing on screen for ${r2(seconds)} s (${r2(from / fps)}–${r2(to / fps)} s) while the voice talks: put the scene's picture on its first frame (its card, its chart, its object) and animate only the change on the words` });
+      from = null;
+    };
+    for (let i = 0; i < n; i += step) {
+      const e = pictureExtent(film.at(i), w, h, band0);
+      if (e.w * e.h < 0.02) from ??= i;
+      else close(i, i);
+    }
+    close(n, n);
+  }
   // A picture that has landed but fills a corner of the frame: judges read it as unfinished, and
   // on a phone it is a small thing in an empty field. Measured late in the beat, once built.
   const band = Math.round(h * 0.12);
@@ -498,10 +519,15 @@ export async function qaProject(root, { video, loop = false } = {}) {
 export function motionVerdict(dir, q, { warnings = [] } = {}) {
   const s = q.summary;
   // The voice talking over an empty scene (check's pacing warning): never fine, whatever the share.
-  const blank = warnings
-    .map(w => w.match(/^([^:]+): the voice starts ([\d.]+) s before/))
-    .filter(m => m && Number(m[2]) >= 2)
-    .map(m => `    ${m[1]}: the voice talks for ${m[2]} s over an empty scene. Put the picture on screen by the first word (cue it to an earlier word, or draw its frame at 0 and only the change on the late word).`);
+  const blank = [
+    ...warnings
+      .map(w => w.match(/^([^:]+): the voice starts ([\d.]+) s before/))
+      .filter(m => m && Number(m[2]) >= 2)
+      .map(m => `    ${m[1]}: the voice talks for ${m[2]} s over an empty scene. Put the picture on screen by the first word (cue it to an earlier word, or draw its frame at 0 and only the change on the late word).`),
+    ...q.findings
+      .filter(f => f.kind === 'empty')
+      .map(f => `    ${f.beat}: next to nothing on screen for ${f.seconds} s (${f.t}–${f.end} s) under the voice. Put its picture (card, chart, object) on the first frame and animate only the change on the words.`),
+  ];
   // Stretches under the voice: a silent breath or title may hold.
   const held = q.findings.filter(f => f.kind === 'held' && !f.deliberate && f.level === 'warn');
   const voicedHeld = Math.round(10 * held.reduce((t, f) => t + f.seconds, 0)) / 10;

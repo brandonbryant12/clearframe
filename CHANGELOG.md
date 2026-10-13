@@ -17,6 +17,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **`qa` finds frames with next to nothing on them while the voice talks** (a hairline, a footer, for 1.5 s or more, sampled every half second), whatever the block; the verdict lists them under "blank under the voice". Round-9 reviewers read such stretches as empty or broken.
 - **Refusals say where a value goes**: a list sketch param given a number shows the list it wants (`[1, 2, 3]`), `size` on a whole cast points to each object's `size` or a camera zoom, and a source line that shows its working with "=" or "equals" ("six months = 180 days") satisfies the figure check.
 - **Three different pictures in a row are a sequence.** `critique`'s "three drawing scenes in a row" now tells drawings apart by what they draw (a sketch's name, a cast, a chart's kind); agents were breaking up runs of different workplace sketches with kinetic type to quiet it, trading pictures for words.
 - **`qa` ends with the verdict as well** (`draft`, `render` and the studio already did): a round-9 agent ran `render` then `qa`, quoted qa's "change 1.87/s" as its motion verdict and never saw NOT READY. A spoken range carries its scale to both ends in the paste-ready chart ("twelve to eighteen thousand" is 12,000 and 18,000).
