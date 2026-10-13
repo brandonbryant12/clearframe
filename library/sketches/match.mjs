@@ -12,16 +12,22 @@ export default {
   order: 91,
   summary:
     'Two contributions become one: your coins drop into a stack, the company’s drop in beside them, and the stacks merge into one with its total on top. One coin per unit, counted from the real figures.',
-  use: 'An employer match, a grant on top of savings, a fee that adds to a price, any "you put in this, they add that". Set the counts with sketchParams {you, match, suffix}; replace YOU, EMPLOYER, EACH (what one coin is, e.g. "Each coin: 1% of your pay") and TOTAL (words after the total) with sketchText; land YOU, MATCH and TOTAL on words with sketchSay. The figures need a visible source like any number.',
+  use: 'An employer match, a grant on top of savings, a fee that adds to a price, any "you put in this, they add that". Set the counts with sketchParams {you, match, suffix}; for a what-if (raise 3% to 5%) add {fromYou, fromMatch}: the beat opens on the current coins and only the added ones drop; replace YOU, EMPLOYER, EACH (what one coin is, e.g. "Each coin: 1% of your pay") and TOTAL (words after the total) with sketchText; land YOU, MATCH and TOTAL on words with sketchSay. The figures need a visible source like any number.',
   params: {
     you: { default: 5, min: 0, max: 12, integer: true, about: 'coins you put in', hint: 'One coin per unit: 5 and 4 for 5% and 4% of pay. For money, pick a unit both fit in 12 coins (e.g. $250 a coin) and say so in EACH.' },
     match: { default: 4, min: 0, max: 12, integer: true, about: 'coins the other side adds', hint: 'One coin per unit: 5 and 4 for 5% and 4% of pay. For money, pick a unit both fit in 12 coins (e.g. $250 a coin) and say so in EACH.' },
     suffix: { default: '%', about: 'unit printed after each count, e.g. "%" (or "" for none)' },
+    fromYou: { default: 0, min: 0, max: 12, integer: true, about: 'what if: coins already yours on the first frame (the current state), e.g. 3 when raising 3% to 5%' },
+    fromMatch: { default: 0, min: 0, max: 12, integer: true, about: 'what if: the company coins already there on the first frame, e.g. 3' },
   },
   build(w, h, { params = {} } = {}) {
     const you = params.you ?? 5,
       match = params.match ?? 4,
       suffix = params.suffix ?? '%';
+    // What if: the picture opens on the current state (fromYou, fromMatch) and only the coins
+    // the change adds drop in on their words, so one beat shows the before and the after.
+    const fromYou = Math.min(params.fromYou ?? 0, you),
+      fromMatch = Math.min(params.fromMatch ?? 0, match);
     const T = tall(w, h);
     const rx = T ? 190 : 150,
       ry = T ? 50 : 40,
@@ -32,16 +38,13 @@ export default {
     const [x1, x2] = [round(w / 2 - gap / 2), round(w / 2 + gap / 2)];
     // When the stacks merge, both travel to the middle and the company's coins sit on yours.
     const mid = round(w / 2);
-    const coin = (x, i, fill, at, cue) => {
+    const coin = (x, i, fill, at, cue, ready = false) => {
       const y = round(base - i * step);
       return {
         type: 'group',
-        enter: 'drop',
-        dist: 260,
-        cue,
-        at,
-        after: round(at - AT[cue]),
-        dur: 0.42,
+        ...(ready
+          ? { enter: 'none', at: 0 }
+          : { enter: 'drop', dist: 260, cue, at, after: round(at - AT[cue]), dur: 0.42 }),
         children: [
           { type: 'ellipse', cx: x, cy: y + t, rx, ry, fill, enter: 'none' },
           { type: 'rect', x: x - rx, y, w: 2 * rx, h: t, fill, enter: 'none' },
@@ -52,8 +55,31 @@ export default {
         ],
       };
     };
-    const yours = Array.from({ length: you }, (_, i) => coin(x1, i, 'accent', round(AT.YOU + i * 0.14), 'YOU'));
-    const theirs = Array.from({ length: match }, (_, i) => coin(x2, i, 'accent2', round(AT.MATCH + i * 0.14), 'MATCH'));
+    const yours = Array.from({ length: you }, (_, i) =>
+      coin(x1, i, 'accent', round(AT.YOU + Math.max(0, i - fromYou) * 0.14), 'YOU', i < fromYou),
+    );
+    const theirs = Array.from({ length: match }, (_, i) =>
+      coin(x2, i, 'accent2', round(AT.MATCH + Math.max(0, i - fromMatch) * 0.14), 'MATCH', i < fromMatch),
+    );
+    // The count above a stack: the current one from the first frame, the new one on its word.
+    const counts = (x, from, to, prefix, fill, cue) => {
+      const landed = round((to - from) * 0.14 + 0.2);
+      const now = {
+        enter: 'rise',
+        cue,
+        at: round(AT[cue] + landed),
+        after: landed,
+        exit: 'fade',
+        exitCue: 'TOTAL',
+        exitAt: AT.TOTAL,
+        exitDur: 0.25,
+      };
+      if (!from || from === to) return [label(`${prefix}${to}${suffix}`, x, top(to), 64, 'bold', fill, now)];
+      return [
+        label(`${prefix}${from}${suffix}`, x, top(from), 64, 'bold', fill, { enter: 'fade', at: 0.2, exit: 'fade', exitCue: cue, exitAt: AT[cue], exitDur: 0.2 }),
+        label(`${prefix}${to}${suffix}`, x, top(to), 64, 'bold', fill, now),
+      ];
+    };
     const top = n => round(base - Math.max(n - 1, 0) * step - ry - 40);
     const label = (text, x, y, size, font, fill, extra = {}) => ({ type: 'text', text, x, y, size, font, fill, anchor: 'middle', ...extra });
     const merge = { cue: 'TOTAL', at: AT.TOTAL, dur: 1.1, ease: 'inOut' };
@@ -89,16 +115,7 @@ export default {
           keys: [{ ...merge, x: mid - x1 }],
           children: [
             ...yours,
-            label(`${you}${suffix}`, x1, top(you), 64, 'bold', 'accent', {
-              enter: 'rise',
-              cue: 'YOU',
-              at: round(AT.YOU + you * 0.14 + 0.2),
-              after: round(you * 0.14 + 0.2),
-              exit: 'fade',
-              exitCue: 'TOTAL',
-              exitAt: AT.TOTAL,
-              exitDur: 0.25,
-            }),
+            ...counts(x1, fromYou, you, '', 'accent', 'YOU'),
           ],
         },
         // The company's stack lands on top of yours.
@@ -109,16 +126,7 @@ export default {
           keys: [{ ...merge, x: mid - x2, y: -you * step }],
           children: [
             ...theirs,
-            label(`+${match}${suffix}`, x2, top(match), 64, 'bold', 'accent2', {
-              enter: 'rise',
-              cue: 'MATCH',
-              at: round(AT.MATCH + match * 0.14 + 0.2),
-              after: round(match * 0.14 + 0.2),
-              exit: 'fade',
-              exitCue: 'TOTAL',
-              exitAt: AT.TOTAL,
-              exitDur: 0.25,
-            }),
+            ...counts(x2, fromMatch, match, '+', 'accent2', 'MATCH'),
           ],
         },
         // Names under the stacks, gone once there is one stack.

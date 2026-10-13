@@ -30,6 +30,7 @@ Each fact gets the mechanism that shows it. These are sketches: fill `sketchText
 | The fact says… | Picture | Fill |
 |---|---|---|
 | "You put in X, they add Y" (a match, a grant, a top-up) | `match` | params `{you, match, suffix}`: one coin per unit |
+| "If you raised it from 3% to 5%…" (what if: one change, its consequence) | `match` with `fromYou`, `fromMatch` | opens on today's coins; only the added ones drop |
 | "It becomes yours over time" (vesting, eligibility) | `vesting` | params `steps` (percentages) |
 | "Between these dates" (enrollment, a deadline) | `deadline` | params `days, firstWeekday, start, end` |
 | "It doesn't carry over" (use it or lose it, a reset to zero) | `expire` | params `total, keep` |
