@@ -24,7 +24,7 @@ Write these four lines at the top of `DIRECTION.md`:
 Then choose 3–5 claims from the brief that carry the answer. Everything else goes to the source card. Link beats with *but* or *therefore*, never "and then". Open a loop in the first 5 seconds and close it at the peak. A 60–90 s film has roughly 12–18 beats.
 
 ## 3. Choose the look
-- `clearframe treatments` lists art directions. Report looks: editorial, noir, kinetic, sketchbook, blueprint, audiogram, brand, calm. Film looks: cinematic, trailer, documentary, keynote. Start with `new DIR --playbook NAME --treatment ID` (or apply one to ingested material), then adapt.
+- `clearframe treatments` lists art directions. Report looks: editorial, noir, kinetic, sketchbook, blueprint, audiogram, brand, calm. Film looks: trailer, documentary, keynote. Start with `new DIR --playbook NAME --treatment ID` (or apply one to ingested material), then adapt.
 - Genre playbooks start from shots, not cards: `trailer` (cold open, montage, silence, title, button), `cold-open` (a documentary that starts mid-scene), `product-reveal` (a dark stage, parts, specs as inserts, the whole).
 - If there is a reference video, run `clearframe reference VIDEO`. Read `REFERENCE.md`, open `sheet.png` and `opening.png`, and write **Keep** (rhythm, camera, type roles, transitions) and **Change** (brand, copy, subject) in `DIRECTION.md`. The fewer creative decisions left to guesswork, the better the film.
 - The user's direction ("make it feel like a Vox explainer", "punchy for TikTok", "calm and warm") maps to a treatment plus overrides. Say which you chose and why.

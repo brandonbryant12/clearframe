@@ -541,7 +541,7 @@ async function main() {
     startRun(dir, cmd, args);
     if (o.markdown) {
       const { storyboardFor, artSketches } = await import('../film/playbooks.mjs');
-      // A film look starts from its genre's shots (cinematic → cinematic-explainer), not a deck.
+      // A film look starts from its genre's shots (trailer → trailer, documentary → cold-open), not a deck.
       const playbook = chosen.playbook ?? (chosen.treatment && treatmentById(chosen.treatment)?.playbook) ?? 'research-digest';
       const r = ingestMarkdown(dir, o.markdown, {
         playbook,

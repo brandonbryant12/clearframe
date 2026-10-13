@@ -17,7 +17,6 @@ const FILMS = [
     why: 'what ingest starts from, in a report look',
   },
   { name: 'concept-explainer', args: ['--playbook', 'concept-explainer'], why: 'what `new` starts from' },
-  { name: 'cinematic-explainer', args: ['--treatment', 'cinematic'], why: 'a film look applied to an explainer' },
   { name: 'trailer', args: ['--treatment', 'trailer'], why: 'a genre film' },
   { name: 'cold-open', args: ['--treatment', 'documentary'], why: 'a documentary opening' },
   { name: 'product-reveal', args: ['--treatment', 'keynote'], why: 'a product film' },

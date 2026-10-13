@@ -31,6 +31,13 @@ test('chapter takes and per-beat styles are still available on request', () => {
   assert.equal(takeSpec(sb, planTakes(sb)[0], 'gemini').parts[0].style, 'intrigued');
 });
 
+test('a draft take records again when its respellings or speed change; a real take does not', () => {
+  const spec = (voice, provider) => JSON.stringify(takeSpec(film(voice), planTakes(film(voice))[0], provider));
+  assert.notEqual(spec({}, 'local'), spec({ pronounce: { Seven: 'Sev-en' } }, 'local'));
+  assert.notEqual(spec({}, 'local'), spec({ wpm: 170 }, 'local'));
+  assert.equal(spec({}, 'gemini'), spec({ pronounce: { Seven: 'Sev-en' }, wpm: 170 }, 'gemini'));
+});
+
 test('mosaic specs accept the andamento, build and recolour options and reject nonsense', () => {
   const fail = m => {
     throw new Error(m);

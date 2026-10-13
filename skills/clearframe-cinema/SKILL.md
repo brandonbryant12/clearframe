@@ -1,6 +1,6 @@
 ---
 name: clearframe-cinema
-description: Make a ClearFrame film cinematic instead of a narrated slideshow — genre structures (trailer, cold open, product reveal, cinematic explainer, title sequence, zoom journey), shot lists, depth and camera (z, dolly, rack focus, push to a detail), the film lens (letterbox, grade, bloom, handheld, motion blur) and sound that follows the edit. Use when a film "looks like slides", when someone asks for something cinematic, dramatic, dynamic or trailer-like, or to raise a low cinema score from critique.
+description: Make a ClearFrame film cinematic instead of a narrated slideshow — genre structures (trailer, cold open, product reveal, title sequence, zoom journey), shot lists, depth and camera (z, dolly, rack focus, push to a detail), the film lens (letterbox, grade, bloom, handheld, motion blur) and sound that follows the edit. Use when a film "looks like slides", when someone asks for something cinematic, dramatic, dynamic or trailer-like, or to raise a low cinema score from critique.
 ---
 
 > **Not for workplace films.** Letterbox, grades, handheld and trailer structures suit brand spots, launches and trailers. A benefits, policy, training or client film is not slides because its picture changes with the voice (`clearframe-workplace`), not because it borrows a film look; a trailer look on an HR film reads as a costume.
@@ -13,15 +13,14 @@ Read `docs/cinema.md` first: it holds the grammar this skill applies. `critique 
 
 | The job | Treatment | Playbook |
 |---|---|---|
-| Explain how something works, as a film | `cinematic` | `cinematic-explainer` (establishing shot, the question, one world, the figure, a silence, the whole) |
 | Build anticipation (launch, teaser, season) | `trailer` | `trailer` (cold open, montage with flash cuts, silence, title, button) |
 | A true story or case study | `documentary` | `cold-open` (a detail, the place, a voice, the scale, the title late) |
 | A product or feature | `keynote` | `product-reveal` (dark stage, part in close-up, specs as inserts, the whole) |
 | An opener for a series or podcast | `cutpaper` | `title-sequence` (shapes that become each other across cuts) |
-| Scale: one thing within everything | `cinematic` | `zoom-journey` (one camera from a planet down to one window) |
+| Scale: one thing within everything | — (the playbook carries its look) | `zoom-journey` (one camera from a planet down to one window) |
 | A report, with evidence | any report look | `research-digest`, `data-story` (already shot as films) |
 
-`new DIR --treatment ID` starts from the treatment's playbook. So does `ingest DIR --markdown report.md --treatment cinematic`.
+`new DIR --treatment ID` starts from the treatment's playbook. So does `ingest DIR --markdown report.md --treatment documentary`. To explain how something works, use `clearframe-explain` or, for workplace films, `clearframe-workplace`.
 
 ## 1b. Start somewhere different
 

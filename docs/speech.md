@@ -55,6 +55,6 @@ People read about three words a second while they listen, and need a phrase on s
 
 ## Faster local word timings
 
-The free OS voice (`voice --draft`) reads `voice.pronounce` respellings (`{"Alder": "All-der"}`) in place of the written words; the narration, captions and word timings keep the written word.
+The free OS voice (`voice --draft`) reads `voice.pronounce` respellings (`{"Alder": "All-der"}`) in place of the written words; the narration, captions and word timings keep the written word. Changing a respelling, `wpm` or `draftVoice` records the draft take again on the next `voice --draft`.
 
 `align --whisper` and draft voice takes measure words with whisper.cpp (`whisper-cli`, MIT) when a local ggml model is installed: the same Whisper weights on the GPU, about ten times faster than the Python CLI and with a small fraction of its CPU, which matters when several films align at once. Put `ggml-base.en.bin` (from huggingface.co/ggerganov/whisper.cpp) in `~/.cache/whisper-cpp`, or name a model with `CLEARFRAME_WHISPER_MODEL`. Without it the Python `whisper` CLI is used. Each take records which recognizer measured it (`alignment.provider`); `doctor` shows which one you have.

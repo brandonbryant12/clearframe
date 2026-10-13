@@ -1,7 +1,7 @@
 // Generative assets, cached by content hash so nothing is paid for twice.
 // Order of preference: code (free) → draft (free, local) → Gemini (paid, only what the storyboard asks for).
 import fs from 'node:fs';
-import { planTakes, takeSpec } from './takes.mjs';
+import { draftSettings, planTakes, takeSpec } from './takes.mjs';
 import { CHROMA, keyOut } from './plates.mjs';
 import path from 'node:path';
 import { analyseVoice, cleanVoice, draftMusic, draftVoice } from './audio.mjs';
@@ -68,6 +68,7 @@ function voiceSpec(sb, b, provider) {
     style: b.style ?? sb.voice.style ?? '',
     language: sb.voice.language ?? null,
     text: b.vo,
+    ...draftSettings(sb, provider),
   };
 }
 

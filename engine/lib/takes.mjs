@@ -93,7 +93,18 @@ export function takeSpec(sb, take, provider) {
       style: (sb.voice.perBeatStyle ? b.style : null) ?? sb.voice.cast?.[b.speaker]?.style ?? sb.voice.style ?? '',
       ...(cast ? { speaker: b.speaker } : {}),
     })),
+    ...draftSettings(sb, provider),
   };
+}
+
+/** What changes a free draft take besides its words: the OS voice, its speed and the respellings it
+ * reads. Part of a local take's hash, so editing `voice.pronounce` or `wpm` records it again. */
+export function draftSettings(sb, provider) {
+  if (provider !== 'local') return {};
+  const { wpm, draftVoice, pronounce } = sb.voice;
+  const cast = sb.voice.cast ? Object.fromEntries(Object.entries(sb.voice.cast).map(([k, c]) => [k, c.draftVoice ?? null])) : null;
+  const set = Object.fromEntries(Object.entries({ wpm, draftVoice, pronounce, cast }).filter(([, v]) => v != null));
+  return Object.keys(set).length ? { draft: set } : {};
 }
 
 /** The OS voice a draft take speaks with: one name, or one per speaker for a cast. */
@@ -264,8 +275,8 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
       continue;
     }
     let bounds = null,
-      // The OS voice that actually spoke a draft take. A reused take keeps its own record (the draft
-      // voice is not part of the take's hash); one recorded before voices were noted stays unknown.
+      // The OS voice that actually spoke a draft take. A reused take keeps its own record; one
+      // recorded before voices were noted stays unknown.
       osVoice = null;
     if (!force && meta?.hash === hash && fs.existsSync(wav)) {
       bounds = meta.bounds ?? null;

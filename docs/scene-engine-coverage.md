@@ -186,7 +186,6 @@ The block gallery (`clearframe gallery`, every catalog example, landscape and ve
 | `calm` | glow | {"grain":0.2} | "—" |
 | `mosaic` | mosaic | {"grain":0.15,"vignette":0.55} | "—" |
 | `tech` | none | {"grain":0.18,"vignette":0.6} | "—" |
-| `cinematic` | none | {"grain":0.35,"vignette":0.5,"animate":true} | {"letterbox":2.39,"grade":"teal-orange","gradeAmount":0.6,"bloom":0.2,"leak":0.15,"handheld":0.15,"blur":0.4} |
 | `trailer` | none | {"grain":0.4,"vignette":0.6,"animate":true} | {"letterbox":2.39,"grade":"bleach","gradeAmount":0.5,"bloom":0.2,"handheld":0.3,"blur":0.5} |
 | `documentary` | none | {"grain":0.45,"vignette":0.45,"animate":true} | {"grade":"warm","gradeAmount":0.5,"bloom":0.25,"leak":0.25,"handheld":0.35,"blur":0.5} |
 | `keynote` | none | {"grain":0.3,"vignette":0.55} | {"grade":"cool","gradeAmount":0.3,"bloom":0.3,"blur":0.5} |
@@ -223,7 +222,6 @@ All 45 built-in playbooks, scaffolded with their sample copy, prepared as rough 
 | `brand-spot` | 1920x1080@30 | 4 | title, canvas, endcard | 1 audit error(s) on sample copy: open: "FIELD NOTES" overlaps "clearframe" (1.8 s)… | 66.8 |
 | `cash-flow` | 1920x1080@30 | 6 | canvas, statement, bars, delta, endcard | pass | 51.7 |
 | `checklist-guide` | 1920x1080@30 | 6 | title, checklist, icon-grid, canvas, callout, endcard | pass | 54.3 |
-| `cinematic-explainer` | 1920x1080@30 | 9 | canvas, kinetic | pass | 49.5 |
 | `cold-open` | 1920x1080@30 | 8 | canvas | pass | 49.6 |
 | `concept-explainer` | 1920x1080@30 | 8 | canvas | pass | 51.2 |
 | `cooking-guide` | 1920x1080@30 | 5 | title, icon-grid, flow, canvas, endcard | pass | 57.9 |

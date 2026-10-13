@@ -4,10 +4,15 @@ Generated from film/playbooks.mjs. These are adaptable starting structures with 
 
 - **concept-explainer**: Explain a mechanism. Inputs: One concept, an example, a caveat.
 - **quarterly-update**: Report progress with context. Inputs: Comparable metrics, dates, denominators, decisions.
+- **benefit-explainer**: Explain a benefit and the one step to take. Inputs: The plan summary: what the company adds, what the employee keeps and when, where in the portal to act and any deadline.
 - **decision-memo**: Make a trade-off explicit. Inputs: Two options, consistent criteria, recommendation.
+- **policy-change**: Explain a policy change and what to do now. Inputs: The policy before and after, the one rule people break most (with your own number), the deadline and where to act.
 - **research-summary**: Separate a finding from its limits. Inputs: Source, method, result, uncertainty.
 - **incident-review**: Explain an incident without blame. Inputs: Verified timeline, impact, mitigation, follow-up.
+- **training-moment**: Train one habit: the threat, its signs, the right move. Inputs: Your own results (a simulation, an audit, incidents), the signs that gave it away and the one action people should take.
+- **client-update**: Update clients calmly: the quarter, what held, what was done, how to talk. Inputs: The quarterly letter: returns as of the quarter end, the sharpest move and its recovery, the target mix, the committee's decision, how to book a review.
 - **product-walkthrough**: Show a workflow and its payoff. Inputs: User problem, real steps, proof of outcome.
+- **day-in-the-life**: Follow one person through a benefit. Inputs: One realistic person (a role, not a real employee), the moments the benefit touches in their week, the figures from the plan document and the step they take.
 - **vertical-short**: One idea for a small screen. Inputs: One claim, one example, one takeaway.
 - **speech-story**: Let speech drive the typography. Inputs: A recording, exact transcript, measured word timestamps.
 - **myth-buster**: Correct a misconception. Inputs: Myth, evidence, correction, caveat.
@@ -34,7 +39,16 @@ Generated from film/playbooks.mjs. These are adaptable starting structures with 
 - **trailer**: A trailer: a cold open, a rising montage, a silence, the title and a button. Inputs: One promise, three images of what it touches, a title, a date or call to action.
 - **cold-open**: A documentary cold open: a detail, the place, a voice, the scale, then the title. Inputs: One vivid detail with a time and place, a first-hand quote, one sourced figure, a title.
 - **product-reveal**: A product reveal: darkness, a part in close-up, specs as inserts, then the whole object. Inputs: The product (a drawing like the ring here, or a render), two sourced specs, the name, availability.
-- **cinematic-explainer**: A cinematic explainer: an establishing shot, a question, one world explored, the figure, a silence, the whole. Inputs: A place or system with three to five stops, the question it answers, one sourced figure, the takeaway.
 - **title-sequence**: A title sequence: bold cut-paper shapes that become each other on the beat, ending on the title. Inputs: A title, a season or series line, the day it airs, a music bed with a clear beat.
 - **zoom-journey**: A zoom journey: one continuous camera from a planet down to a single lit window, then all the way back. Inputs: Four nested scales (the whole, a region, a place, one detail) and the line that connects the smallest to the largest.
 - **style-relay**: A style relay: one subject on a sheet of plates, each made a different way, travelled by one camera. Inputs: One subject that survives every version, four to eight eras or processes in order, and one line for each about how it was made.
+- **cash-flow**: Follow the money until it becomes usable cash. Inputs: An approved description of the mechanism, cash dates and amounts on one basis, opening balance, constraints and brand assets.
+- **scenario-lab**: Test a financial decision against several possible futures. Inputs: The decision, a shared starting point, explicitly defined scenarios on the same basis, assumptions, decision triggers and approved brand assets.
+- **material-etudes**: Ways of seeing: three native material studies. Inputs: No external assets, narration or factual claims; adapt the studies around an actual story.
+- **risk-tradeoffs**: Inspect the opportunity and the risk in the same frame. Inputs: Approved benefit and risk statements, current product terms, fees and access conditions, the audience's question and authorised brand assets.
+- **dimensional-kpis**: Dimensional data — editable native templates. Inputs: Replace illustrative values, labels, units, scale and visible source before publication.
+- **research-investigation**: Investigate a report through its evidence and its missing test. Inputs: A research brief, exact claims and citations, methods, limitations and the comparison that could change the conclusion.
+- **podcast-thread**: Follow one podcast idea as a spacious visual essay. Inputs: An exact recording excerpt and measured word timestamps, one tension, a concrete example and a reframe already present in the excerpt.
+- **teaching-sequences**: Think, reveal, explain. Inputs: Replace the illustrative question, answer, worked explanation and exact source; give each reading phase a useful hold.
+- **pr-walkthrough**: Explain a pull request. Inputs: The actual PR diff, verified before/after behavior, and validation evidence.
+- **process-cast**: Follow a few things through a process. Inputs: The real things being handled (requests, files, orders, reports, tickets) and what happens to them, step by step.
