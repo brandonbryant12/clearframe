@@ -5,12 +5,18 @@
   "inputs": "The quarterly letter: returns as of the quarter end, the sharpest move and its recovery, the target mix, the committee's decision, how to book a review",
   "theme": "meridian",
   "type": "inter",
-  "motion": { "preset": "gentle", "intensity": 0.5 },
+  "motion": "gentle",
   "transition": "cut",
   "sfx": "subtle",
-  "texture": { "grain": 0.05 },
+  "texture": {
+    "grain": 0.05
+  },
   "sources": [
-    { "id": "letter", "claim": "Equity sleeve index path through the quarter; target mix 60/35/5; rebalanced August 20", "source": "Example Wealth quarterly letter, as of September 30 (sample: replace with your letter)" }
+    {
+      "id": "letter",
+      "claim": "Equity sleeve index path through the quarter; target mix 60/35/5; rebalanced August 20",
+      "source": "Example Wealth quarterly letter, as of September 30 (sample: replace with your letter)"
+    }
   ],
   "note": "Client arc: the quarter as one calm line (the drop and the recovery), the mix that held, what the committee did, one sentence of outlook in the committee's words, and the way to talk to an adviser done in the app. No predictions. Every figure as of the quarter end, from the letter. Replace the series, sketchText, sketchParams and sketchSay with your letter's figures and words (`clearframe sketch NAME`). See skills/clearframe-workplace/SKILL.md.",
   "beats": [
@@ -20,11 +26,39 @@
       "vo": "It was a quarter with one sharp dip. Shares fell in early August, and had recovered by mid-September.",
       "props": {
         "title": "Your equity holdings through the quarter",
-        "series": [100, 101.2, 102.0, 101.1, 97.4, 95.6, 96.9, 99.0, 100.8, 101.9, 102.3, 102.1],
-        "labels": ["Jul", "", "", "", "Aug", "", "", "", "Sep", "", "", "Sep 30"],
+        "series": [
+          100,
+          101.2,
+          102.0,
+          101.1,
+          97.4,
+          95.6,
+          96.9,
+          99.0,
+          100.8,
+          101.9,
+          102.3,
+          102.1
+        ],
+        "labels": [
+          "Jul",
+          "",
+          "",
+          "",
+          "Aug",
+          "",
+          "",
+          "",
+          "Sep",
+          "",
+          "",
+          "Sep 30"
+        ],
         "min": 90,
         "max": 105,
-        "format": { "decimals": 0 },
+        "format": {
+          "decimals": 0
+        },
         "drawSay": "quarter",
         "source": "Example Wealth quarterly letter · index, July 1 = 100 · as of Sep 30"
       }
@@ -36,16 +70,42 @@
       "props": {
         "source": "Example Wealth quarterly letter · target mix · as of Sep 30",
         "sketch": "split",
-        "sketchParams": { "parts": [60, 35, 5], "suffix": "%", "total": false },
-        "sketchText": { "WHOLE": "Your balanced portfolio", "PARTONE": "Shares", "PARTTWO": "Bonds", "PARTTHREE": "Cash" },
-        "sketchSay": { "SPLIT": "mix", "ONE": "shares", "TWO": "bonds", "THREE": "cash" }
+        "sketchParams": {
+          "parts": [
+            60,
+            35,
+            5
+          ],
+          "suffix": "%",
+          "total": false
+        },
+        "sketchText": {
+          "WHOLE": "Your balanced portfolio",
+          "PARTONE": "Shares",
+          "PARTTWO": "Bonds",
+          "PARTTHREE": "Cash"
+        },
+        "sketchSay": {
+          "SPLIT": "mix",
+          "ONE": "shares",
+          "TWO": "bonds",
+          "THREE": "cash"
+        }
       }
     },
     {
       "id": "decision",
       "block": "kinetic",
       "vo": "After the dip, we rebalanced, buying shares at lower prices. The plan did not need to react to the noise.",
-      "props": { "mode": "stack", "align": "left", "emphasis": ["rebalanced", "noise"], "source": "Example Wealth Investment Committee, quarterly letter" }
+      "props": {
+        "mode": "stack",
+        "align": "left",
+        "emphasis": [
+          "rebalanced",
+          "noise"
+        ],
+        "source": "Example Wealth Investment Committee, quarterly letter"
+      }
     },
     {
       "id": "talk",
@@ -55,8 +115,22 @@
       "vo": "If you would like to talk it through, open My adviser, choose Book a review, pick a time, and confirm.",
       "props": {
         "sketch": "portal",
-        "sketchText": { "APP": "Example Wealth", "STEP1": "My adviser", "STEP2": "Book a review", "OTHER": "Documents", "FIELD": "Time", "OLD": "Choose a time", "NEW": "Tue 10:30", "DONE": "Booked: your adviser will call on Tuesday" },
-        "sketchSay": { "CLICK1": "adviser", "CLICK2": "review", "CHANGE": "time", "SAVE": "confirm" }
+        "sketchText": {
+          "APP": "Example Wealth",
+          "STEP1": "My adviser",
+          "STEP2": "Book a review",
+          "OTHER": "Documents",
+          "FIELD": "Time",
+          "OLD": "Choose a time",
+          "NEW": "Tue 10:30",
+          "DONE": "Booked: your adviser will call on Tuesday"
+        },
+        "sketchSay": {
+          "CLICK1": "adviser",
+          "CLICK2": "review",
+          "CHANGE": "time",
+          "SAVE": "confirm"
+        }
       }
     }
   ]

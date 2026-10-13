@@ -5,10 +5,7 @@
   "inputs": "The plan summary: what the company adds, what the employee keeps and when, where in the portal to act and any deadline",
   "theme": "meridian",
   "type": "geometric",
-  "motion": {
-    "preset": "snappy",
-    "intensity": 0.6
-  },
+  "motion": "snappy",
   "transition": "cut",
   "sfx": "subtle",
   "texture": {

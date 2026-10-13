@@ -5,10 +5,7 @@
   "inputs": "The policy before and after, the one rule people break most (with your own number), the deadline and where to act",
   "theme": "briefing",
   "type": "geometric",
-  "motion": {
-    "preset": "snappy",
-    "intensity": 0.6
-  },
+  "motion": "snappy",
   "transition": "cut",
   "sfx": "subtle",
   "texture": {

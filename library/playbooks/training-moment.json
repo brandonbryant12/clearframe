@@ -5,10 +5,7 @@
   "inputs": "Your own results (a simulation, an audit, incidents), the signs that gave it away and the one action people should take",
   "theme": "briefing",
   "type": "geometric",
-  "motion": {
-    "preset": "snappy",
-    "intensity": 0.7
-  },
+  "motion": "snappy",
   "transition": "cut",
   "sfx": "subtle",
   "texture": {
