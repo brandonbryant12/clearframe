@@ -340,7 +340,9 @@ impl<'a, 'c> Draw<'a, 'c> {
     fn pop_captions(&self, tall: bool) -> Node {
         let env = &self.b.environment;
         let words = &self.b.words;
-        let window = phrase_window(words, self.t, if tall { 3 } else { 4 }, 0.5, 1.8, true);
+        // Phrases long enough to read ahead (about 1.5–2.5 s each): three-word bursts that
+        // change every second read as flicker, however punchy.
+        let window = phrase_window(words, self.t, if tall { 5 } else { 6 }, 0.5, 2.6, true);
         let (first, last) = match (words.get(window.start), window.end.checked_sub(1).and_then(|i| words.get(i))) {
             (Some(a), Some(b)) => (a, b),
             _ => return empty(),

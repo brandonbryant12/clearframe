@@ -35,6 +35,17 @@ ALIASES = {
     "tree": "tree", "trending-down": "trending-down", "trending-up": "trending-up",
     "trophy": "trophy", "truck": "truck", "user": "user", "user-check": "user-check",
     "users": "users", "video": "video", "wifi": "wifi",
+    # Money, benefits, health and work: the everyday vocabulary of enterprise films.
+    "wallet": "wallet", "credit-card": "credit-card", "receipt": "receipt", "cash": "cash-banknote",
+    "coins": "coins", "piggy-bank": "pig-money", "bank": "building-bank", "percent": "percentage",
+    "calculator": "calculator", "pill": "pill", "stethoscope": "stethoscope", "tooth": "dental",
+    "glasses": "eyeglass", "umbrella": "umbrella", "hook": "fish-hook", "cursor": "pointer",
+    "click": "click", "tap": "hand-click", "hourglass": "hourglass", "exit": "door-exit",
+    "badge": "id-badge", "calendar-event": "calendar-event", "checklist": "clipboard-check",
+    "invoice": "file-invoice", "report-money": "report-money", "care": "heart-handshake",
+    "unlock": "lock-open", "alarm": "alarm", "mail-open": "mail-opened", "forward": "mail-forward",
+    "chart-donut": "chart-donut", "split": "arrows-split", "first-aid": "first-aid-kit",
+    "armchair": "armchair", "beach": "beach", "plant": "plant", "gauge": "gauge",
 }
 
 
