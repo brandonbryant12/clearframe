@@ -12,23 +12,23 @@ A night of brute-force iteration on the films ClearFrame is mostly asked for: be
 
 Judge means (1–10):
 
-| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 | Round 9 | Round 10 | Round 11 | Round 12 | Round 13 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 401(k) match | Haiku | 3.1 | 6.6 | | | | | | | | | | | |
-| Phishing training | Haiku | 5.0 | 5.9 | | | | | | | | | | | 5.1 |
-| HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 | | | | | | | | | | |
-| Expense policy | Haiku | | | 6.1 | | | | | | | | | | |
-| MFA rollout | Haiku | | | | 5.3 | | | | | | | | | |
-| Parental leave | Haiku | | | | 6.1 | | | | | | | | | |
-| Fraud alert (vertical) | Haiku | | | | 5.7 | | | | | | | | | |
-| Open enrollment | Sonnet / Haiku | 6.4 (Sonnet) | | | | 6.1 (Haiku) | | | | | 6.0 (Haiku) | | 5.9 (Haiku) | |
-| Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) | | | | | | | | |
-| Mortgage rate lock | Sonnet | | | | 6.7 | | | | | | | | | |
-| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) | | 5.3 (Haiku) | 4.9 (Haiku) | 6.1, 4.7 (Haiku ×2) | 4.7, 4.1 (Haiku ×2) | 5.1, 3.9 (Haiku ×2) | 5.0, 3.9 (Haiku); 7.4 (Sonnet) | |
-| Share purchase plan | Haiku / Sonnet | | | | | | 4.7 | 5.4 | 3.7 | 4.9, 4.3 | | 5.6, 5.1 | 5.0 (Haiku); 6.6 (Sonnet) | |
-| First week (vertical) | Haiku | | | | | | 5.4 | 2.7 | 5.3 (Haiku), 6.4 (Sonnet) | 6.1 | 4.6 | 4.9 | 5.0 | |
-| Client data rule | Haiku | | | | | | 6.3 | 4.6 | 5.7 | 5.6 | 4.1 | 5.1 | 3.7 | 5.4, 4.4 (Haiku ×2) |
-| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | | | | | | | | | |
+| Film | Model | Round 1 | Round 2 | Round 3 | Round 4 | Round 5 | Round 6 | Round 7 | Round 8 | Round 9 | Round 10 | Round 11 | Round 12 | Round 13 | Round 14 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 401(k) match | Haiku | 3.1 | 6.6 | | | | | | | | | | | | |
+| Phishing training | Haiku | 5.0 | 5.9 | | | | | | | | | | | 5.1 | 5.6 |
+| HSA or FSA | Haiku | | 3.7 (all kinetic words) | 6.9 | | | | | | | | | | | |
+| Expense policy | Haiku | | | 6.1 | | | | | | | | | | | |
+| MFA rollout | Haiku | | | | 5.3 | | | | | | | | | | |
+| Parental leave | Haiku | | | | 6.1 | | | | | | | | | | |
+| Fraud alert (vertical) | Haiku | | | | 5.7 | | | | | | | | | | |
+| Open enrollment | Sonnet / Haiku | 6.4 (Sonnet) | | | | 6.1 (Haiku) | | | | | 6.0 (Haiku) | | 5.9 (Haiku) | | 5.6 (Haiku) |
+| Client market update | Sonnet / Haiku | | 6.9 (Sonnet) | | | 5.6 (Haiku) | | | | | | | | | |
+| Mortgage rate lock | Sonnet | | | | 6.7 | | | | | | | | | | |
+| Podcast clip (vertical) | Sonnet / Haiku | 7.7 (Sonnet) | | 7.4 (Sonnet) | | 5.7 (Haiku) | | 5.3 (Haiku) | 4.9 (Haiku) | 6.1, 4.7 (Haiku ×2) | 4.7, 4.1 (Haiku ×2) | 5.1, 3.9 (Haiku ×2) | 5.0, 3.9 (Haiku); 7.4 (Sonnet) | | |
+| Share purchase plan | Haiku / Sonnet | | | | | | 4.7 | 5.4 | 3.7 | 4.9, 4.3 | | 5.6, 5.1 | 5.0 (Haiku); 6.6 (Sonnet) | | |
+| First week (vertical) | Haiku | | | | | | 5.4 | 2.7 | 5.3 (Haiku), 6.4 (Sonnet) | 6.1 | 4.6 | 4.9 | 5.0 | | |
+| Client data rule | Haiku | | | | | | 6.3 | 4.6 | 5.7 | 5.6 | 4.1 | 5.1 | 3.7 | 5.4, 4.4 (Haiku ×2) | 4.7 (Haiku); 6.0 (Sonnet) |
+| Reference: the kit used by hand (`examples/workplace-401k`) | Opus | | 7.0 | | | | | | | | | | | | |
 
 Haiku's mean rose from 4.1 to 5.4 to 6.5 on the briefs the kit was tuned on, then sat at 5.5–5.8 on new briefs (rounds 4–6), fell to 4.5 in round 7 and came back to 4.9 in round 8 (where Sonnet made the same first-week brief at 6.4) and 5.3 in round 9, where the first Haiku podcast with pictures scored 6.1. Sonnet stayed around 7. The reference film shows the ceiling of the kit as it stands: clear (9) but not yet distinctive (5). Rounds 4 and 5 were the test of generalisation, and they found the next layer of problems: not the pictures themselves, but how agents fill them in, when they stop, and what they invent.
 
@@ -93,6 +93,8 @@ The one paid test: two Veo 3.1 Lite clips (an office morning, a city street; $0.
     → A `compose` sketch for that picture; a file name as a source line ("import.mjs") makes the verdict NOT READY.
 21. **Round 13: the new picture was found, then the agents stopped.** Both client-data films used `compose` unprompted (5.4 and 4.4, from 3.7), and the reviewer's best moment was Attach struck through as Share securely lit and the PDF became a link. All three Haiku agents handed over NOT READY films after ten to thirteen minutes of a 75-minute time box, two calling them "functionally complete" at about half the length asked. The phishing film had moved its action, response and close into canvas text elements, past the type-only checks; one film drew a link that expires as the `expire` jar. The free OS voice read "button:" as "button colon".
     → Type drawn on a canvas counts as type on its own and is offered a picture; a NOT READY verdict ends on one spelled-out edit; a chart missing a spoken figure gets the value to paste; a cast for mail sent to the wrong person; link expiry routes to `compose`; refused fields name their replacement (`font: "bold"`, `anchor`); the draft voice reads a colon as a pause.
+22. **Round 14: Haiku 5.3, Sonnet 6.0, and the first Haiku agent that kept going.** The phishing agent worked sixteen minutes, followed the overlap note to `"fresh": true` and grew its film from 28 to 51 s (5.6); the two others stopped at 29 and 32 s of 50 and 75. Sonnet's client-data film (6.0) was READY with a padlock carried large from its opening under a new row of objects, labels colliding; a chart written with `rows` crashed `critique` for half an hour; an enrollment film made without a source document narrated a $3,000 the brief never states. The reviewer's best moment was again `compose`.
+    → Cast objects standing on each other make the verdict NOT READY; a short film is quoted the source's facts it never states; the `rows` crash is fixed; figures with no source document to check are named; `inspect` presses Report on the email it marked (`report: true`), so phishing films' action is the same email.
 
 ## What twelve rounds say
 
