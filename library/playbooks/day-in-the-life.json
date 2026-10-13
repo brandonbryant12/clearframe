@@ -213,6 +213,372 @@
           }
         }
       ]
+    },
+    {
+      "name": "phone-then-growth",
+      "about": "the step done on her phone in one sentence, then what her $450 a month adds up to over 30 years, labelled once as an example.",
+      "beats": [
+        {
+          "id": "step",
+          "block": "canvas",
+          "transition": "panel",
+          "hold": 2,
+          "vo": "On her phone, week one: Benefits, then Retirement, 5%, and save.",
+          "props": {
+            "source": "Example Co. benefits guide",
+            "sketch": "portal",
+            "sketchParams": {
+              "device": "phone"
+            },
+            "sketchText": {
+              "APP": "Example Co. Benefits",
+              "STEP1": "Benefits",
+              "STEP2": "Retirement",
+              "OTHER": "Health & dental",
+              "FIELD": "Contribution rate",
+              "OLD": "0%",
+              "NEW": "5%",
+              "DONE": "Saved: from her next paycheck"
+            },
+            "sketchSay": {
+              "CLICK1": "Benefits",
+              "CLICK2": "Retirement",
+              "CHANGE": "5",
+              "SAVE": "save"
+            }
+          }
+        },
+        {
+          "id": "adds-up",
+          "block": "canvas",
+          "transition": "panel",
+          "pace": "hold",
+          "vo": "Her $450 a month, at 5% a year, comes to about $377,000 in 30 years.",
+          "props": {
+            "source": "Example Co. benefits guide · $250 + $200 a month",
+            "sketch": "growth",
+            "sketchParams": {
+              "years": 30,
+              "perYear": 5400,
+              "rate": 0.05,
+              "prefix": "$"
+            },
+            "sketchText": {
+              "BASIS": "Example: $450 a month, 5% a year",
+              "PUTIN": "saved",
+              "GREW": "growth",
+              "TOTAL": "after 30 years"
+            },
+            "sketchSay": {
+              "START": "450",
+              "GROW": "5",
+              "TOTAL": "377,000"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "a-year-on",
+      "about": "the opening cast a year on: her week-one badge gone, Priya at the centre of a ring of the year’s 12 paychecks, and the step said to the viewer.",
+      "beats": [
+        {
+          "id": "year",
+          "block": "canvas",
+          "transition": "panel",
+          "vo": "A year on, 12 paychecks in, Priya hasn't thought about it once. Every one put $450 toward her retirement. Yours takes 5 minutes in the benefits portal, before your next paycheck.",
+          "props": {
+            "source": "Example Co. benefits guide · $250 + $200 a month",
+            "cast": {
+              "objects": [
+                {
+                  "id": "pay2",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay3",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay4",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay5",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay6",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay7",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay8",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay9",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay10",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay11",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay12",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                }
+              ],
+              "formations": [
+                {
+                  "form": "exit",
+                  "ids": [
+                    "badge"
+                  ],
+                  "say": "year"
+                },
+                {
+                  "form": "ring",
+                  "on": "priya",
+                  "ids": [
+                    "pay",
+                    "pay2",
+                    "pay3",
+                    "pay4",
+                    "pay5",
+                    "pay6",
+                    "pay7",
+                    "pay8",
+                    "pay9",
+                    "pay10",
+                    "pay11",
+                    "pay12"
+                  ],
+                  "say": "paychecks",
+                  "stagger": 0.06,
+                  "spread": 1.2
+                },
+                {
+                  "form": "wave",
+                  "ids": [
+                    "pay",
+                    "pay2",
+                    "pay3",
+                    "pay4",
+                    "pay5",
+                    "pay6",
+                    "pay7",
+                    "pay8",
+                    "pay9",
+                    "pay10",
+                    "pay11",
+                    "pay12"
+                  ],
+                  "say": "Every"
+                },
+                {
+                  "form": "hero",
+                  "hero": "priya",
+                  "say": "Yours",
+                  "word": "One year in"
+                },
+                {
+                  "form": "camera",
+                  "zoom": 0.9,
+                  "dur": 2,
+                  "ease": "out",
+                  "say": "portal"
+                }
+              ]
+            }
+          },
+          "tall": {
+            "source": "Example Co. benefits guide · $250 + $200 a month",
+            "cast": {
+              "objects": [
+                {
+                  "id": "pay2",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay3",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay4",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay5",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay6",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay7",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay8",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay9",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay10",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay11",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                },
+                {
+                  "id": "pay12",
+                  "shape": "paycheck",
+                  "color": "positive",
+                  "enter": "pop",
+                  "size": 118
+                }
+              ],
+              "formations": [
+                {
+                  "form": "exit",
+                  "ids": [
+                    "badge"
+                  ],
+                  "say": "year"
+                },
+                {
+                  "form": "ring",
+                  "on": "priya",
+                  "ids": [
+                    "pay",
+                    "pay2",
+                    "pay3",
+                    "pay4",
+                    "pay5",
+                    "pay6",
+                    "pay7",
+                    "pay8",
+                    "pay9",
+                    "pay10",
+                    "pay11",
+                    "pay12"
+                  ],
+                  "say": "paychecks",
+                  "stagger": 0.06,
+                  "spread": 1.5
+                },
+                {
+                  "form": "wave",
+                  "ids": [
+                    "pay",
+                    "pay2",
+                    "pay3",
+                    "pay4",
+                    "pay5",
+                    "pay6",
+                    "pay7",
+                    "pay8",
+                    "pay9",
+                    "pay10",
+                    "pay11",
+                    "pay12"
+                  ],
+                  "say": "Every"
+                },
+                {
+                  "form": "hero",
+                  "hero": "priya",
+                  "say": "Yours",
+                  "word": "One year in"
+                },
+                {
+                  "form": "camera",
+                  "zoom": 0.9,
+                  "dur": 2,
+                  "ease": "out",
+                  "say": "portal"
+                }
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

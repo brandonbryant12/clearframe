@@ -203,6 +203,147 @@
           "transition": "panel"
         }
       ]
+    },
+    {
+      "name": "slip-or-receipt",
+      "about": "the card slip and the itemised receipt side by side: the slip steps up with only its total, then the receipt steps forward as the one to snap, with where and by when said over it.",
+      "beats": [
+        {
+          "id": "which",
+          "block": "canvas",
+          "transition": "panel",
+          "vo": "A card slip only shows the total. The itemised receipt shows the place and every item. Snap that one, in the Expenses app, within 30 days.",
+          "props": {
+            "source": "Example Co. expense policy",
+            "cast": {
+              "objects": [
+                {
+                  "id": "slip",
+                  "shape": "ticket",
+                  "color": "muted",
+                  "label": "Card slip",
+                  "enter": "none",
+                  "size": 210
+                },
+                {
+                  "id": "itemised",
+                  "shape": "receipt",
+                  "color": "accent",
+                  "label": "Itemised receipt",
+                  "enter": "none",
+                  "size": 210
+                }
+              ],
+              "formations": [
+                {
+                  "form": "line",
+                  "at": 0,
+                  "ids": [
+                    "slip",
+                    "itemised"
+                  ]
+                },
+                {
+                  "form": "hero",
+                  "hero": "slip",
+                  "say": "total",
+                  "word": "Only the total"
+                },
+                {
+                  "form": "hero",
+                  "hero": "itemised",
+                  "say": "place"
+                },
+                {
+                  "form": "exit",
+                  "ids": [
+                    "slip"
+                  ],
+                  "say": "Snap"
+                },
+                {
+                  "form": "camera",
+                  "zoom": 0.95,
+                  "dur": 1.2,
+                  "ease": "out",
+                  "say": "Snap"
+                },
+                {
+                  "form": "camera",
+                  "zoom": 0.88,
+                  "dur": 1.6,
+                  "ease": "out",
+                  "say": "within"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "phone-then-window",
+      "about": "the claim done on a phone in one sentence, then the month’s calendar again with today marked and the last day circled, the action said over it.",
+      "beats": [
+        {
+          "id": "snap",
+          "block": "canvas",
+          "transition": "panel",
+          "hold": 0.6,
+          "vo": "In the Expenses app on your phone, tap New claim, snap the receipt, check the amount, and submit. Do it the day you spend.",
+          "props": {
+            "source": "Example Co. expense policy",
+            "sketch": "portal",
+            "sketchParams": {
+              "device": "phone"
+            },
+            "sketchText": {
+              "APP": "Example Co. Expenses",
+              "STEP1": "New claim",
+              "STEP2": "Snap a receipt",
+              "OTHER": "Mileage",
+              "FIELD": "Amount",
+              "OLD": "$0.00",
+              "NEW": "$39.10",
+              "DONE": "Submitted for approval"
+            },
+            "sketchSay": {
+              "CLICK1": "New",
+              "CLICK2": "snap",
+              "CHANGE": "amount",
+              "SAVE": "submit"
+            }
+          }
+        },
+        {
+          "id": "window",
+          "block": "canvas",
+          "transition": "panel",
+          "vo": "Spent on March 1st? The 30th is your last day. Today is the 12th, so claim it now.",
+          "props": {
+            "source": "Example Co. expense policy",
+            "sketch": "deadline",
+            "sketchParams": {
+              "days": 31,
+              "firstWeekday": 3,
+              "start": 1,
+              "end": 30,
+              "today": 12
+            },
+            "sketchText": {
+              "MONTH": "March",
+              "OPENS": "You spend",
+              "CLOSES": "Last day to claim",
+              "TODAY": "Today"
+            },
+            "sketchSay": {
+              "OPEN": "1st",
+              "CLOSE": "30th",
+              "TODAY": "Today"
+            }
+          }
+        }
+      ]
     }
   ]
 }

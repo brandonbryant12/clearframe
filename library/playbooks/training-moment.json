@@ -148,6 +148,201 @@
           "transition": "panel"
         }
       ]
+    },
+    {
+      "name": "report-not-delete",
+      "about": "the same email in six inboxes: deleting yours leaves the rest, reporting it pulls every copy, with where and when said over it.",
+      "beats": [
+        {
+          "id": "everyone",
+          "block": "canvas",
+          "transition": "panel",
+          "vo": "Delete it, and only your copy goes. Everyone else still has theirs. Report it, and Security can pull every copy. So choose Report, then Phishing, the moment you spot one.",
+          "props": {
+            "cast": {
+              "objects": [
+                {
+                  "id": "mine",
+                  "shape": "envelope",
+                  "color": "negative",
+                  "label": "Your copy",
+                  "enter": "none"
+                },
+                {
+                  "id": "copy1",
+                  "shape": "envelope",
+                  "color": "negative",
+                  "enter": "none"
+                },
+                {
+                  "id": "copy2",
+                  "shape": "envelope",
+                  "color": "negative",
+                  "enter": "none"
+                },
+                {
+                  "id": "copy3",
+                  "shape": "envelope",
+                  "color": "negative",
+                  "enter": "none"
+                },
+                {
+                  "id": "copy4",
+                  "shape": "envelope",
+                  "color": "negative",
+                  "enter": "none"
+                },
+                {
+                  "id": "copy5",
+                  "shape": "envelope",
+                  "color": "negative",
+                  "enter": "none"
+                }
+              ],
+              "formations": [
+                {
+                  "form": "line",
+                  "at": 0,
+                  "ids": [
+                    "mine"
+                  ]
+                },
+                {
+                  "form": "ring",
+                  "at": 0,
+                  "on": "mine",
+                  "ids": [
+                    "copy1",
+                    "copy2",
+                    "copy3",
+                    "copy4",
+                    "copy5"
+                  ]
+                },
+                {
+                  "form": "exit",
+                  "ids": [
+                    "mine"
+                  ],
+                  "say": "goes"
+                },
+                {
+                  "form": "mark",
+                  "mark": "circle",
+                  "ids": [
+                    "copy1",
+                    "copy2",
+                    "copy3",
+                    "copy4",
+                    "copy5"
+                  ],
+                  "say": "theirs"
+                },
+                {
+                  "form": "line",
+                  "ids": [
+                    "mine"
+                  ],
+                  "say": "Report"
+                },
+                {
+                  "form": "exit",
+                  "ids": [
+                    "copy1",
+                    "copy2",
+                    "copy3",
+                    "copy4",
+                    "copy5"
+                  ],
+                  "say": "pull"
+                },
+                {
+                  "form": "hero",
+                  "hero": "mine",
+                  "say": "choose",
+                  "word": "Gone from every inbox"
+                },
+                {
+                  "form": "camera",
+                  "zoom": 0.9,
+                  "dur": 2,
+                  "ease": "out",
+                  "say": "Phishing"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "phone-then-next-one",
+      "about": "the report done on a phone in one sentence, then a different scam checked with the same three questions, so the habit carries to the next one.",
+      "beats": [
+        {
+          "id": "report",
+          "block": "canvas",
+          "transition": "panel",
+          "hold": 0.6,
+          "vo": "On your phone: open the Inbox, tap the message, choose Phishing, and send. Security does the rest.",
+          "props": {
+            "source": "Example Co. phishing simulation, spring",
+            "sketch": "portal",
+            "sketchParams": {
+              "device": "phone"
+            },
+            "sketchText": {
+              "APP": "Mail",
+              "STEP1": "Inbox",
+              "STEP2": "Your account locks in 2 hours",
+              "OTHER": "Team lunch on Friday",
+              "FIELD": "Report as",
+              "OLD": "Not reported",
+              "NEW": "Phishing",
+              "DONE": "Reported to Security"
+            },
+            "sketchSay": {
+              "CLICK1": "Inbox",
+              "CLICK2": "message",
+              "CHANGE": "Phishing",
+              "SAVE": "send"
+            }
+          }
+        },
+        {
+          "id": "next",
+          "block": "canvas",
+          "transition": "panel",
+          "vo": "The next one will look different. Ask: is it rushing you? Who really sent it? Where does the link go? Then report it.",
+          "props": {
+            "sketch": "inspect",
+            "sketchParams": {
+              "marks": [
+                "subject",
+                "sender",
+                "link"
+              ],
+              "color": "accent"
+            },
+            "sketchText": {
+              "FROM": "Parcel Desk <alerts@parceldesk-support.net>",
+              "SUBJECT": "Parcel on hold",
+              "LINE1": "Delivery failed.",
+              "LINE2": "Pay a small fee to rebook.",
+              "BUTTON": "Pay now",
+              "MARKONE": "Rushing you?",
+              "MARKTWO": "Who sent it?",
+              "MARKTHREE": "Where does it go?"
+            },
+            "sketchSay": {
+              "OPEN": "next",
+              "ONE": "rushing",
+              "TWO": "sent",
+              "THREE": "link"
+            }
+          }
+        }
+      ]
     }
   ]
 }

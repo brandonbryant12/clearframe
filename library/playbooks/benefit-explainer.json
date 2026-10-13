@@ -172,6 +172,103 @@
           "transition": "panel"
         }
       ]
+    },
+    {
+      "name": "coins-from-three",
+      "about": "the coins come back as a what-if: today’s 3% and its match stand, raising it to 5% in the portal drops in only the added coins, and a stack lines up for every paycheck after.",
+      "beats": [
+        {
+          "id": "raise",
+          "block": "canvas",
+          "transition": "panel",
+          "vo": "Raise your rate from 3% to 5% in the benefits portal, and the company adds 4%. That's 9% of your pay, from your next payday on.",
+          "props": {
+            "source": "Example Co. retirement plan summary",
+            "sketch": "match",
+            "sketchParams": {
+              "you": 5,
+              "match": 4,
+              "suffix": "%",
+              "fromYou": 3,
+              "fromMatch": 3,
+              "again": 3
+            },
+            "sketchText": {
+              "YOU": "You put in",
+              "EMPLOYER": "Example Co. adds",
+              "EACH": "Each coin is 1% of your pay",
+              "TOTAL": "of your pay, this paycheck",
+              "AGAIN": "and every paycheck after"
+            },
+            "sketchSay": {
+              "YOU": "5",
+              "MATCH": "company",
+              "TOTAL": "9",
+              "AGAIN": "payday"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "phone-then-jar",
+      "about": "the step said once on a phone, then a jar the company’s full match fills every payday, with nothing left on the table.",
+      "beats": [
+        {
+          "id": "step",
+          "block": "canvas",
+          "transition": "panel",
+          "hold": 0.6,
+          "vo": "On your phone, open Benefits, then Retirement, set 5% and save. It starts with your next paycheck.",
+          "props": {
+            "source": "Example Co. retirement plan summary",
+            "sketch": "portal",
+            "sketchParams": {
+              "device": "phone"
+            },
+            "sketchText": {
+              "APP": "Example Co. Benefits",
+              "STEP1": "Benefits",
+              "STEP2": "Retirement",
+              "OTHER": "Health & dental",
+              "FIELD": "Contribution rate",
+              "OLD": "3%",
+              "NEW": "5%",
+              "DONE": "Saved: starts with your next paycheck"
+            },
+            "sketchSay": {
+              "CLICK1": "Benefits",
+              "CLICK2": "Retirement",
+              "CHANGE": "5",
+              "SAVE": "save"
+            }
+          }
+        },
+        {
+          "id": "close",
+          "block": "canvas",
+          "transition": "panel",
+          "vo": "From then on, the company's full 4% lands every payday. None of it left on the table.",
+          "props": {
+            "source": "Example Co. retirement plan summary",
+            "sketch": "expire",
+            "sketchParams": {
+              "total": 4,
+              "keep": 4,
+              "suffix": "%"
+            },
+            "sketchText": {
+              "YEAREND": "Every payday",
+              "KEEP": "from Example Co., none left on the table"
+            },
+            "sketchSay": {
+              "FILL": "4",
+              "YEAREND": "payday",
+              "KEEP": "None"
+            }
+          }
+        }
+      ]
     }
   ]
 }
