@@ -1,5 +1,7 @@
 // Fill-in-the-blank pictures for what workplace narration keeps saying (clearframe-workplace).
 const PICTURES = [
+  // Before the comparison below: a price taken as the lower of two, then a discount (a share plan's lookback).
+  [/\b(lower of (the )?(two|both)|lower of (the )?(\w+ ){0,2}(price|prices|values?)|whichever (\w+ ){0,3}(is |was )?(lower|cheaper)|look-?back|(percent|%) (off|below|less than) the lower)\b/i, 'lookback', 'This line takes the lower of two prices, then a discount'],
   [/\b((lower|higher|lowest|highest|cheaper) of (the )?(two|both)|whichever (\w+ ){0,3}(is |was )?(lower|higher|cheaper)|starts? at .* (ends?|goes) (at|to))\b/i, null, 'This line compares prices or values over time', 'a canvas `chart` `bars` with a `say` on each value as it is said (the start, the end, what you pay), the one that counts highlighted'],
   [/\b(carr(y|ies) over|use it or lose it|forfeit|resets? to (zero|\$?0)|expires?|lose (it|the rest))\b/i, 'expire', 'This line is about what carries over and what is lost'],
   [/\bvest(s|ed|ing)?\b|\byours to keep\b.*\byears?\b|\bafter (one|two|three|\d) years?\b/i, 'vesting', 'This line is about what becomes yours over time'],

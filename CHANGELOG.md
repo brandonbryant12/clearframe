@@ -17,6 +17,7 @@
 - **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
 ## Enterprise bench and readable typing
 
+- **`lookback` sketch: the lower of two prices, then a discount.** A price line across one offering period; the start and end prices land on their words, the lower one is ringed by hand, a bar drops by the discount to "You pay $34", and optionally the gap to today's price shades in ("$16 below today's price"). `sketchParams {start, end, discount (a fraction), prefix, decimals, gain}`; what you pay is computed and rounded so the printed prices add up. Every share-plan film so far had typed this, the plan's surprising part; lines that say "the lower of the two" now suggest it.
 - **A recording's speakers read as their roles** when no names are given ("Host", "Guest", not "Speaker host"), and `critique` flags a source line that is a file path (a round-10 film credited its figures to "examples/podcast-pictures/build.mjs").
 - **Icons answer to common names** (`x` is `close`, `warning` is `alert`, `dollar` is `cash`, `email` is `mail`, `document` is `file`, and so on), and an unknown icon names the nearest bundled ones. A round-10 agent wanted an "x", found none, and dropped the picture for words.
 - **An empty `sketchText` word removes that line of type** (`"EACH": ""`), instead of failing later as "text needs text or count".

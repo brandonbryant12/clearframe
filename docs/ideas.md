@@ -46,6 +46,7 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 ## Tension and trade-off
 - **Balance** sketch tipping on the "but" (`keys` with `ease: spring`).
 - **What a lock keeps:** the `hold` sketch. A locked rate or price holds its line while the market rises past it, the gap shades in as what you kept, and with a float-down the lock steps down when the market falls.
+- **The lower of two prices, then a discount:** the `lookback` sketch. A price line across one offering period, its first-day and last-day prices tagged, the lower one circled by hand and carried to the purchase, where a bar drops by the discount to the price you pay; optionally the gap to the last day's price is bracketed. For a share purchase plan's lookback, where words alone fail.
 - **Tug of war:** two groups moving with opposing `keys`.
 - **Split screen:** `versus`, or a split `plate` beside a number.
 
