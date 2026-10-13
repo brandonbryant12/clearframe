@@ -75,7 +75,8 @@ export function sketchParams(s, given = {}) {
       }
     };
     if (d.list) {
-      if (!Array.isArray(v) || !v.length) throw new Error(`sketchParams.${k} for ${s.name} must be a list`);
+      if (!Array.isArray(v) || !v.length)
+        throw new Error(`sketchParams.${k} for ${s.name} must be a list, like ${JSON.stringify(d.default)} (got ${JSON.stringify(v)})${d.about ? `: ${d.about}` : ''}`);
       if (d.length && (v.length < d.length[0] || v.length > d.length[1]))
         throw new Error(`sketchParams.${k} for ${s.name} takes ${d.length[0]}–${d.length[1]} values`);
       v.forEach(check);

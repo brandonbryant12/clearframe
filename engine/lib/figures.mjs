@@ -61,7 +61,7 @@ export function authoredFigures(beat) {
  */
 export function unsourcedFigures(beat, numbers) {
   const said = JSON.stringify(beat.props ?? {});
-  if (/\bexample\b|e\.g\./i.test(said) || /illustrat|calculat|worked out|×/i.test(String(beat.props?.source ?? ''))) return [];
+  if (/\bexample\b|e\.g\./i.test(said) || /illustrat|calculat|worked out|×|=|\bequals?\b|\bis about\b/i.test(String(beat.props?.source ?? ''))) return [];
   const found = v => {
     const a = Math.abs(v);
     for (const s of numbers.values) if (Math.abs(s - a) < 1e-9 || Math.abs(s - a * 100) < 1e-6 || Math.abs(s * 100 - a) < 1e-6) return true;

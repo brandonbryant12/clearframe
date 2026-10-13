@@ -12,9 +12,11 @@
 //   }
 const check = (ok, message) => { if (!ok) throw new Error(`cast: ${message}`); };
 const finite = v => typeof v === 'number' && Number.isFinite(v);
+// Fields agents put on the wrong level, and where they go.
+const MOVED = { 'cast.size': 'size is set on each object (objects[].size, 48–360 px); a camera formation ({"form": "camera", "zoom": 1.4}) enlarges the whole cast' };
 const own = (o, keys, name) => {
   check(o && typeof o === 'object' && !Array.isArray(o), `${name} must be an object`);
-  for (const k of Object.keys(o)) check(keys.includes(k), `unknown ${name}.${k}`);
+  for (const k of Object.keys(o)) check(keys.includes(k), `unknown ${name}.${k}${MOVED[`${name}.${k}`] ? `: ${MOVED[`${name}.${k}`]}` : ''}`);
 };
 export const FORMS = ['scatter', 'row', 'column', 'line', 'ring', 'cluster', 'hero', 'exit', 'swap', 'wave', 'mark', 'camera', 'fill', 'emerge', 'merge', 'split', 'travel'];
 // The scene tone an object's colour floods the frame with when it fills it (docs/canvas.md, tone).
