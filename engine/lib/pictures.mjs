@@ -10,6 +10,8 @@ const PICTURES = [
   [/\b(match(es|ing)?|adds?|puts? in|on top of|top[- ]up|contributes? the same)\b.*(\b(percent|dollars?)\b|[%$])|\b(percent|%).*\b(match(es)?|adds?)\b/i, 'match', 'This line is about one contribution added to another'],
   [/\b((by|before|on) (monday|tuesday|wednesday|thursday|friday)|this week|first week|by the end of the week)\b/i, 'week', 'This line names days of one week'],
   [/\b(deadline|by (january|february|march|april|may|june|july|august|september|october|november|december)|(on|by) the \d{1,2}(st|nd|rd|th)|between .* and .*\b\d{1,2}\b|open enrollment runs|within \d+ days|\d+ days (from|after|to)|last day)\b/i, 'deadline', 'This line names a window or a deadline'],
+  // The Report step on a suspicious message: the same email the signs were marked on, its button pressed.
+  [/\b(report (phish|phishing|it|the (e-?mail|message))|(press|click|tap|hit|use)(es|ing)? (the )?report\b|report (phish )?button)/i, 'inspect', 'This line is the Report step on a suspicious message (`report: true` presses Report on the same email and sends it to Security)'],
   // "Emails go to the wrong inbox" is not a step in an app: go to names a place in one.
   [/\b(log ?in|sign(s|ed)? in|portal|open the app|in the app|click|tap|select|go to (the |your )?(\w+ ){0,2}(portal|app|site|page|settings|menu|tab|screen|website)|toolbar|button)\b/i, 'portal', 'This line is a step done in an app'],
   [/\b(look for|signs\b(?! in)|sign of|tells?|red flags?|watch for|check (the|for)|itemi[sz]ed)\b/i, 'inspect', 'This line points at parts of a message or document'],
