@@ -100,6 +100,24 @@ The one paid test: two Veo 3.1 Lite clips (an office morning, a city street; $0.
 24. **Round 16: none READY, and a new way to be short of pictures.** All three Haiku films reached or neared their length (phishing 60 s, MFA 48 s) by stretching narration over the same pictures: five beats of 10–14 s in phishing, whose closing "0" held for 12 s (5.4); MFA (4.7) left a caption alone on screen while the voice explained hardware keys, though its password coin gaining a "one tap" coin to make "2 = Protected" was the reviewer's best moment; client data stopped at 22 s (4.6). Phishing used `inspect`'s new Report step. The verdict named each long beat and its fix; the agents stopped anyway.
 25. **Round 17 (not judged): from long beats to figure cards.** With `critique` warning about long beats, the MFA agent went the other way: six short beats of figure cards (66% type, 25 s of 50), NOT READY. The phishing agent put `inspect`'s Report step in a three-word beat of its own, where it waited behind the marks and ran past the cut; it dropped the beat and stopped at 16 s of 60. A sketch moment's earliest time should be stated where it is chosen: REPORT belongs in the beat that marks the signs.
 
+## Opus rounds: what an excellent film needs (from round 18)
+
+After round 17 the bench changed purpose: Opus agents make the films, to a stated bar ("a film a head of comms would be proud to send"), with about 90 minutes and the free local voice, and each writes LEARNINGS.md: its best moments and exactly how they are built, what it could not make, its weakest beat, and the kit changes that would have helped. The same reviewer scores them.
+
+| Film (Opus) | Round 18 | Notes |
+|---|---|---|
+| Share purchase plan | 7.3 | The plan guide's example chart flips in place to the opposite case while "You pay $34" stays; a crowd of 44 colours in under "Managers only", struck out |
+| Phishing training | 6.7 | "Spot the hook": the fake email lowered into the inbox on a fishing line and yanked out on "bit"; the hook stays through the film |
+| Client market update | 6.1 | One world on a desk, one camera; only the letter's three points on a real-day axis; flat second half |
+
+Mean 6.7, against 4.9 for Haiku in round 16 and the 7.0 of the kit used by hand. Every Opus film found its own idea (a hook, a flip, a desk) and drew it beat by beat in a generator script; each also ran its own fresh reviewer mid-way and acted on it.
+
+What their learnings changed the same morning:
+- **Bugs only a frame decode shows**: `enter: "none"` elements waited for the scene cue, so every cut opened on an empty frame.
+- **Recipes the films built by hand**: `inspect` across two beats (`end`/`start: "marked"`) with don't click / don't delete / report (`choices`); a `drawdown` sketch for a market letter's fall and recovery; `sound` on an element or a key; `exitAfter`; a `trash` icon; `voice.pronounce` for names the free voice says wrong.
+- **Advice that cost drafts**: the verdict now says when a change was too faint rather than absent (two agents lost three and four drafts to it); a palette whose accent is its warning red, trailer transitions (`iris`) in a calm film, playbook narration that asserts what a source rarely says, polyline coordinates read as figures, and a brief's header read as evidence are all named or fixed.
+- **Truth**: the mock market letter's figures did not reconcile (60% flat equities and 35% bonds at +1.3% cannot make +2.1%); every earlier film had charted them. The brief is corrected, and the skills say to reconcile a letter's parts before charting them together and to land financial figures rather than count up to them.
+
 ## What fifteen rounds say
 
 - **A missing picture is the first ceiling, and the cheapest to lift.** Every brief that gained a picture for its central idea moved: the share plan from 3.7–4.9 to 5.1–5.6 once `lookback` drew "the lower of two prices"; the podcast from all-caption films to pictured ones once a worked example and paste-ready casts existed. Agents of every size type the idea they cannot draw.
