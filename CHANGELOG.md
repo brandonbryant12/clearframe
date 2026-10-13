@@ -1,5 +1,13 @@
 # Changelog
 
+## fframes is the film runtime again
+
+- **`render` runs through [fframes](https://github.com/dmtrKovalenko/fframes)** (MIT core, pinned to `62f6673`; `archive/fframes/upstream.json`, `scene/native/THIRD_PARTY.md`). fframes owns the film as a timeline and the export: it cuts the frames into the same GOP-aligned segments on every render, encodes them in parallel with in-process FFmpeg and libx264 at the same CRF, preset, adaptive quantisation and 250-frame GOP, and concatenates them. Its render workers each open a ClearFrame engine, which draws every frame exactly as before (`scene/native/src/runtime.rs`, a custom `FFramesRenderBackend`; no fframes source is copied or patched).
+- **Nothing about the picture changes.** Blocks, stages, materials, motion blur, the lens and film compositing are the same code; stills, `inspect`, `audit`, `bench` and the studio's `serve` frames draw with the engine directly. The Node finisher still mixes, tags, muxes and validates.
+- **`CLEARFRAME_RUNTIME=scene`** keeps the engine's own FFmpeg pipe for comparison; `CLEARFRAME_RENDER_WORKERS` (1–4, default 2) sets fframes' parallel segments.
+- **Why, and what comes next:** [docs/fframes-return.md](docs/fframes-return.md) maps every scene-engine piece, records the parity, speed and memory evidence, and stages the rest (the audio mix through fframes' `AudioMap`, its audio analysis and FFT features, svgr/`Shader` overlay layers, fframes-3d once released).
+- **Licensing note.** The `h264` + `libav-agree-gpl` features statically link a GPL FFmpeg with x264 into the renderer binary.
+
 ## Explanations: a picture that changes
 
 - **Four canvas props draw how something behaves**, from a stated formula or a seeded simulation, cued to the voice (`film/explain.mjs`). They expand into plain elements, so they combine with a beat's own elements and work as `place` panels.

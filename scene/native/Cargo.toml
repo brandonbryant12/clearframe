@@ -24,6 +24,11 @@ rustybuzz = "0.12"
 kurbo = "0.11.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+# fframes (MIT core, pinned; archive/fframes/upstream.json) is the film runtime: the timeline,
+# GOP-aligned segments encoded in parallel with in-process FFmpeg/libx264, concatenation and
+# muxing. ClearFrame's engine draws every frame into it (src/runtime.rs). FFmpeg is linked
+# statically from ffmpeg-sys-fframes' prebuilt GPL+x264 archive (cached per machine).
+fframes = { git = "https://github.com/dmtrKovalenko/fframes", rev = "62f66735e16f19942fdb56c1b7f2590c53e7434c", default-features = false, features = ["h264", "libav-agree-gpl"] }
 
 [profile.release]
 debug = false

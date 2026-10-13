@@ -1,18 +1,23 @@
 {
   "repository": "https://github.com/dmtrKovalenko/fframes",
-  "revision": "055bb6b9dcbbcca6532206847d43ea8e81fa2a0b",
-  "reviewedAt": "2026-10-03",
-  "crateVersion": "1.2.0",
+  "revision": "62f66735e16f19942fdb56c1b7f2590c53e7434c",
+  "committedAt": "2026-10-12T14:55:50-07:00",
+  "reviewedAt": "2026-10-12",
+  "crateVersion": "1.2.0 (main after the v1.2.0 release: #200, #202, #208, #213, #215)",
   "minimumRustEdition": "2024",
+  "use": "Cargo git dependency of scene/native (crate `fframes`, features h264 + libav-agree-gpl, default features off): the film runtime (Video, FrameScheduler, SegmentWriter, concatenator). No fframes source is copied or patched.",
   "sources": [
+    "AGENTS.md",
     "skills/fframes-video/SKILL.md",
-    "skills/fframes-video/references/api.md",
-    "skills/fframes-video/references/design.md",
-    "skills/fframes-video/references/audio.md",
-    "cargo-fframes/templates/main_skia.rs.tmpl",
-    "film/src/renderer/cli.rs",
-    "fframes-skia-renderer/src/skia_pipeline.rs"
+    "fframes/src/renderer/render_backend.rs",
+    "fframes/src/renderer/cpu.rs",
+    "fframes/src/renderer/scheduler.rs",
+    "fframes/src/renderer/segment_writer.rs",
+    "fframes/src/renderer/concatenator.rs"
   ],
-  "release": "https://github.com/dmtrKovalenko/fframes/releases/tag/v1.2.0",
-  "license": "MIT"
+  "previousRevision": "055bb6b9dcbbcca6532206847d43ea8e81fa2a0b",
+  "license": "MIT",
+  "licenseFile": "UPSTREAM-LICENSE.txt",
+  "licenseSha256": "648577feb8515d23cb9c762aafcb295397bc2f3a88f0dc3358c9eafc64c48d33",
+  "linkedThirdParty": "ffmpeg-sys-fframes 9.0.0 prebuilt static FFmpeg with libx264 (GPL build, cached under ~/Library/Caches/ffmpeg-sys-fframes); see docs/fframes-return.md, Risks"
 }
