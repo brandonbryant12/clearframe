@@ -253,7 +253,7 @@ test('the library index finds a short mixed shortlist and gives one entry exact 
   assert.deepEqual(Object.keys((await detail('sketch:searchlight')).example.props.sketchSay).sort(), ['ALL', 'FIRST', 'SEARCH', 'SECOND', 'THIRD'], 'detail lists the cues to fill');
   assert.ok(JSON.stringify(sketch('vesting', 'landscape', { say: { ONE: 'one' } }).elements).includes('"say":"one"'), 'a workplace sketch takes its cue too');
   assert.throws(() => sketch('searchlight', 'landscape', { say: { FIRTS: 'logs' } }), /FIRTS.*FIRST/, 'a misspelt moment names the real ones');
-  assert.ok(find('a handmade launch for our app').some(h => h.id === 'sketch:cut-paper'), 'everyday craft words reach the paper workbench');
+  assert.ok(find('how do I claim my expenses in the app').some(h => h.id === 'mechanism:app'), 'everyday words reach the app screen');
   // The studio agent can take a sketch's drawn elements to adapt the picture itself.
   const { createTools } = await import('../engine/lib/agent/tools.mjs');
   const project = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-sketch-'));

@@ -41,7 +41,7 @@ An Opus bench film (an expense-policy explainer built with `document`, `marks`, 
 - **`was-now` fills the frame.** Its stack (what it is, the old number, the bar, the new number, the note) is centred in the safe height instead of sitting under an empty heading band, with larger type and room for a two-line title; a new number too wide for a short window sits just right of its end.
 - **A morph carries a static `scale`.** A group drawn at the same size in two beats and given a `scale` in the second now shrinks or grows across the cut.
 - **`expense-policy` example.** A 35-second policy change from library pieces only: `share` for the hook and the close, the card slip stamped beside the itemised receipt, the same receipt carried by id into the `app`, and `was-now` for the window cut from 60 days to 30.
-- **Eleven more sketches fail the bar** on a second pass and are gone (see below).
+- **Twelve more sketches fail the bar** on a second pass and are gone (see below), the last `cut-paper`: a wireframe product card whose copy was grey bars no author could replace.
 
 ## A smaller library with a bar
 

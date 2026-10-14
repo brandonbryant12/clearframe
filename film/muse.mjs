@@ -67,7 +67,6 @@ const SET_PIECES = [
   'maze',
   'portal',
   'searchlight',
-  'cut-paper',
   'chat',
 ];
 

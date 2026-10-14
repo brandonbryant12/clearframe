@@ -86,7 +86,6 @@ Each is a sketch to fill (`sketchText`, `sketchSay`, `sketchParams`); `skills/cl
 
 ## Launches
 - **The ask, played out.** `chat`: the customer's question typed and sent, three dots, the answer and a heart. Label it as an illustration.
-- **Made from many pieces.** `cut-paper`: scraps on a cutting mat fly into place as the product card, which lifts off as its name types in.
 - **The product in space.** `device`: a window swinging in from edge-on and turning gently, chips floating around it; put a real screenshot inside for a real product.
 - **One word as a material.** `material: "chrome"` (or gold) on the product name, held under a push-in. Once in a film.
 - **The drop lands on the reveal.** `beatmap DIR` to find it, `music.drop: {beat}` to place it.
