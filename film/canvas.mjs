@@ -4,6 +4,7 @@
 import { ICONS, iconAlias, iconHint } from './icons.mjs';
 import { checkPointer } from './pointer.mjs';
 import { expandReceipt, RECEIPT_FIELDS } from './receipt.mjs';
+import { expandApp, APP_FIELDS } from './app.mjs';
 import { CANVAS_TIMING as T, retired } from './constants.mjs';
 import { SFX } from '../engine/lib/sfx.mjs';
 
@@ -39,6 +40,8 @@ export const ELEMENT_TYPES = {
   document: { geometry: ['x', 'y', 'w', 'h', 'title', 'kicker', 'sections', 'size', 'scroll', 'marks'], required: ['w', 'h', 'sections'] },
   // A receipt or card slip drawn from its lines; it becomes a group with ids on its parts (film/receipt.mjs).
   receipt: { geometry: RECEIPT_FIELDS, required: ['merchant'] },
+  // An app screen (a window or a phone) with tabs, fields, an upload slot and a button; a group with ids on its parts (film/app.mjs).
+  app: { geometry: APP_FIELDS, required: ['title'] },
   // A cursor that travels to elements by id and presses them; expanded before scheduling (film/pointer.mjs).
   pointer: { geometry: ['to', 'steps', 'from', 'point', 'press', 'style', 'size', 'leave', 'sound'], required: [] },
   image: { geometry: ['asset', 'file', 'x', 'y', 'w', 'h', 'r', 'fit', 'treatment'], required: ['w', 'h'] },
@@ -278,7 +281,7 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
   return list.map((input, i) => {
     const at = `${where}[${i}]`;
     if (!input || typeof input !== 'object' || Array.isArray(input)) fail(`${at} must be an object`);
-    const el = structuredClone(input.type === 'receipt' ? expandReceipt(input, at, fail) : input);
+    const el = structuredClone(input.type === 'receipt' ? expandReceipt(input, at, fail) : input.type === 'app' ? expandApp(input, at, fail) : input);
     if (++state.count > MAX_ELEMENTS) fail(`a canvas holds at most ${MAX_ELEMENTS} elements`);
     const spec = ELEMENT_TYPES[el.type];
     if (!spec) fail(`${at}.type must be one of ${Object.keys(ELEMENT_TYPES).join(', ')}`);

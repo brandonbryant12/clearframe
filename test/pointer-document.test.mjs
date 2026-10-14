@@ -90,3 +90,18 @@ test('a receipt is drawn from its lines, refuses a total they do not add up to, 
   assert.throws(() => normalizeElements([{ ...receipt, marks: [{ words: 'Lobster' }] }], 'elements', fail), /not printed on the receipt/);
   assert.throws(() => normalizeElements([{ type: 'receipt', merchant: 'Harbor Grill', slip: true, items: receipt.items, total: 1 }], 'elements', fail), /card slip prints no items/);
 });
+
+test('an app screen names its parts for the pointer, opens on its word and turns its button into the confirmation', () => {
+  const app = { type: 'app', id: 'hub', title: 'Kestrel Hub', tabs: ['Benefits', 'Claims'], heading: 'New claim', open: { say: 'Claims' }, upload: { label: 'Add receipt', receipt: { merchant: 'Clearview Optical', items: [{ name: 'Frames', price: 160 }] }, say: 'receipt' }, fields: [{ label: 'Amount', value: '$160.00', say: 'receipt', after: 0.7 }], button: { label: 'Submit', done: 'Claim sent', say: 'Submit' } };
+  const list = normalizeElements([app, { type: 'pointer', steps: [{ to: 'hub-tab-claims', say: 'Claims' }, { to: 'hub-upload', say: 'receipt' }, { to: 'hub-button', say: 'Submit' }] }], 'elements', fail);
+  const ids = new Map();
+  const walk = l => l.forEach(el => (el.id && ids.set(el.id, el), el.children && walk(el.children)));
+  walk(list);
+  for (const id of ['hub-tab-benefits', 'hub-tab-claims', 'hub-upload', 'hub-field-amount', 'hub-button', 'hub-done', 'hub-photo']) assert.ok(ids.has(id), id);
+  assert.equal(ids.get('hub-button').exitSay, 'Submit', 'the button gives way on its word');
+  assert.equal(ids.get('hub-done').say, 'Submit', 'and the confirmation takes its place');
+  assert.ok(JSON.stringify(ids.get('hub-photo')).includes('"type":"rect"') && !JSON.stringify(ids.get('hub-photo')).includes('Frames'), 'the photo is too small to read, so its lines are bars');
+  expandPointers(list, { width: 1920, height: 1080 });
+  assert.throws(() => normalizeElements([{ ...app, fields: [{ label: 'Amount', value: 'x'.repeat(30) }] }], 'elements', fail), /up to 24 characters/);
+  assert.throws(() => normalizeElements([{ ...app, button: { label: 'Submit', done: 'Sent' } }], 'elements', fail), /needs say/);
+});

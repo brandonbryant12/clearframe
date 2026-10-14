@@ -159,307 +159,74 @@
             ]
           },
           {
-            "type": "rect",
+            "type": "app",
+            "id": "hub",
             "x": 800,
             "y": 110,
-            "w": 940,
-            "h": 690,
-            "r": 30,
-            "fill": "paper",
-            "shadow": true,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "text",
-            "text": "Kestrel Hub",
-            "x": 848,
-            "y": 188,
-            "size": 40,
-            "font": "display",
-            "fill": "ink",
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "group",
-            "id": "benefits",
-            "x": 1232,
-            "y": 142,
-            "at": 0,
-            "enter": "none",
-            "children": [
-              {
-                "type": "rect",
-                "x": 0,
-                "y": 0,
-                "w": 220,
-                "h": 72,
-                "r": 15.84,
-                "fill": "surface",
-                "stroke": "muted",
-                "width": 2
-              },
-              {
-                "type": "text",
-                "text": "Benefits",
-                "x": 110,
-                "y": 46.08,
-                "size": 32,
-                "anchor": "middle",
-                "font": "strong",
-                "fill": "ink"
-              }
-            ]
-          },
-          {
-            "type": "group",
-            "id": "claims",
-            "x": 1472,
-            "y": 142,
-            "at": 0,
-            "enter": "none",
-            "children": [
-              {
-                "type": "rect",
-                "x": 0,
-                "y": 0,
-                "w": 220,
-                "h": 72,
-                "r": 15.84,
-                "fill": "surface",
-                "stroke": "muted",
-                "width": 2
-              },
-              {
-                "type": "text",
-                "text": "Claims",
-                "x": 110,
-                "y": 46.08,
-                "size": 32,
-                "anchor": "middle",
-                "font": "strong",
-                "fill": "ink"
-              }
-            ]
-          },
-          {
-            "type": "line",
-            "x1": 800,
-            "y1": 246,
-            "x2": 1740,
-            "y2": 246,
-            "stroke": "line",
-            "width": 2,
-            "at": 0,
-            "enter": "none"
-          },
-          {
-            "type": "group",
-            "say": "Claims",
-            "after": 0.3,
-            "enter": "rise",
-            "dist": 24,
-            "children": [
-              {
-                "type": "text",
-                "text": "New claim",
-                "x": 848,
-                "y": 332,
-                "size": 44,
-                "font": "strong",
-                "fill": "ink"
-              },
-              {
-                "type": "group",
-                "id": "upload",
-                "children": [
+            "title": "Kestrel Hub",
+            "tabs": [
+              "Benefits",
+              "Claims"
+            ],
+            "heading": "New claim",
+            "open": {
+              "say": "Claims",
+              "after": 0.3
+            },
+            "upload": {
+              "label": "Add receipt",
+              "receipt": {
+                "merchant": "Clearview Optical",
+                "detail": "Mar 3, 2027",
+                "items": [
                   {
-                    "type": "rect",
-                    "x": 848,
-                    "y": 410,
-                    "w": 300,
-                    "h": 230,
-                    "r": 18,
-                    "fill": "none",
-                    "stroke": "muted",
-                    "width": 3,
-                    "dash": [
-                      12,
-                      9
-                    ]
+                    "qty": 1,
+                    "name": "Frames",
+                    "price": 160
                   },
                   {
-                    "type": "text",
-                    "text": "Add receipt",
-                    "x": 998,
-                    "y": 686,
-                    "size": 30,
-                    "anchor": "middle",
-                    "fill": "muted"
+                    "qty": 2,
+                    "name": "Lenses",
+                    "price": 50
                   }
                 ]
               },
+              "say": "receipt",
+              "after": 0.35
+            },
+            "fields": [
               {
-                "type": "text",
-                "text": "Amount",
-                "x": 1188,
-                "y": 440,
-                "size": 30,
-                "fill": "muted"
+                "label": "Amount",
+                "value": "$210.00",
+                "say": "receipt",
+                "after": 0.75
               },
               {
-                "type": "rect",
-                "x": 1188,
-                "y": 462,
-                "w": 504,
-                "h": 84,
-                "r": 14,
-                "fill": "bg",
-                "stroke": "line",
-                "width": 2
-              },
-              {
-                "type": "text",
-                "text": "Category",
-                "x": 1188,
-                "y": 592,
-                "size": 30,
-                "fill": "muted"
-              },
-              {
-                "type": "text",
-                "text": "Vision",
-                "x": 1214,
-                "y": 642,
-                "size": 36,
-                "font": "strong",
-                "fill": "ink"
-              }
-            ]
-          },
-          {
-            "type": "receipt",
-            "id": "receipt-photo",
-            "x": 897,
-            "y": 442,
-            "size": 30,
-            "merchant": "Clearview Optical",
-            "detail": "Mar 3, 2027",
-            "items": [
-              {
-                "qty": 1,
-                "name": "Frames",
-                "price": 160
-              },
-              {
-                "qty": 2,
-                "name": "Lenses",
-                "price": 50
+                "label": "Category",
+                "value": "Vision"
               }
             ],
-            "scale": 0.42,
-            "origin": [
-              897,
-              442
-            ],
-            "say": "receipt",
-            "after": 0.35,
-            "enter": "pop"
-          },
-          {
-            "type": "text",
-            "text": "$210.00",
-            "x": 1214,
-            "y": 518,
-            "size": 40,
-            "font": "figures",
-            "fill": "ink",
-            "say": "receipt",
-            "after": 0.75,
-            "enter": "type",
-            "dur": 0.45
-          },
-          {
-            "type": "group",
-            "id": "submit",
-            "x": 1362,
-            "y": 660,
+            "button": {
+              "label": "Submit",
+              "done": "Claim sent",
+              "say": "Submit"
+            },
             "at": 0,
-            "enter": "none",
-            "children": [
-              {
-                "type": "rect",
-                "x": 0,
-                "y": 0,
-                "w": 330,
-                "h": 92,
-                "r": 20.24,
-                "fill": "accent",
-                "stroke": "none",
-                "width": 2
-              },
-              {
-                "type": "text",
-                "text": "Submit",
-                "x": 165,
-                "y": 58.88,
-                "size": 34,
-                "anchor": "middle",
-                "font": "strong",
-                "fill": "bg"
-              }
-            ],
-            "exitSay": "Submit",
-            "exitAfter": 0.3,
-            "exit": "fade"
-          },
-          {
-            "type": "group",
-            "id": "sent",
-            "x": 1362,
-            "y": 660,
-            "enter": "pop",
-            "children": [
-              {
-                "type": "rect",
-                "x": 0,
-                "y": 0,
-                "w": 330,
-                "h": 92,
-                "r": 20.24,
-                "fill": "positive",
-                "stroke": "none",
-                "width": 2
-              },
-              {
-                "type": "text",
-                "text": "Claim sent",
-                "x": 165,
-                "y": 58.88,
-                "size": 34,
-                "anchor": "middle",
-                "font": "strong",
-                "fill": "bg"
-              }
-            ],
-            "say": "Submit",
-            "after": 0.3,
-            "dur": 0.3
+            "enter": "none"
           },
           {
             "type": "pointer",
             "steps": [
               {
-                "to": "benefits",
+                "to": "hub-tab-benefits",
                 "say": "Benefits"
               },
               {
-                "to": "claims",
+                "to": "hub-tab-claims",
                 "say": "Claims"
               },
               {
-                "to": "upload",
+                "to": "hub-upload",
                 "say": "receipt",
                 "point": [
                   0.5,
@@ -467,7 +234,7 @@
                 ]
               },
               {
-                "to": "submit",
+                "to": "hub-button",
                 "say": "Submit"
               }
             ]
