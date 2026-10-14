@@ -184,7 +184,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     spec = rules(b.block);
   const helperFrame = { width: timing.width, height: timing.height, beatId: b.id, duration: b.dur };
   const castProps = b.block === 'canvas' && b.props?.cast != null
-    ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, look: cast.look, camera: cast.camera, unit: cast.unit, heading: b.heading ?? sb.beats[b.index]?.heading ?? sb.heading, cue: cueResolver(b, frame), carry: cast, notes: report.warnings })
+    ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, look: cast.look, camera: cast.camera, unit: cast.unit, heading: b.heading ?? sb.beats[b.index]?.heading ?? sb.heading, cue: cueResolver(b, frame), carry: cast, notes: report.warnings, captions: Boolean(film.captions && b.vo) })
     : b.props;
   const authoredProps = b.block === 'canvas'
     ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(castProps ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)

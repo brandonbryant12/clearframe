@@ -99,7 +99,7 @@ export function castSpec(input, known = new Map(), knownLook = null) {
 const KEYS_PER_MOVE = g => ({ wave: 2, swap: 6, merge: 2 * Math.max(1, (g.ids ?? []).length), split: 3, fill: 1, emerge: 1 })[g.form] ?? 1;
 
 /** Where each object stands in one formation: {x, y, scale, rotate, opacity}. */
-export function formationTargets(f, ids, frame, { size, seed = 0, current = new Map(), extent = () => [size / 2, size / 2] }) {
+export function formationTargets(f, ids, frame, { size, seed = 0, current = new Map(), extent = () => [size / 2, size / 2], below = () => 0 }) {
   // A heading takes a band of the frame (`frame.top` or `frame.bottom`); the cast keeps to the rest.
   const { width: W, height: H } = frame, tall = H > W, u = Math.min(W, H), top = frame.top ?? 0, bottom = frame.bottom ?? H, A = bottom - top;
   // `beside` sets the formation next to an object where it now stands, on the side facing the middle
@@ -198,7 +198,8 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
     for (const [id, t] of out) {
       const [hw, hh] = extent(id).map(v => v * (t.scale ?? 1) * 1.16);
       t.x = Math.min(Math.max(t.x, mx + hw), W - mx - hw);
-      t.y = Math.min(Math.max(t.y, Math.max(my, top) + hh), Math.min(H - my, bottom) - hh);
+      // (A label hangs below its object, so the object stands higher by it.)
+      t.y = Math.min(Math.max(t.y, Math.max(my, top) + hh), Math.min(H - my, bottom) - Math.max(hh, below(id) * (t.scale ?? 1)));
     }
   }
   return out;
@@ -346,6 +347,12 @@ export const CAST_CATALOG = {
 };
 
 /** Half the width and height an object takes: a tile is square; a word pill is as long as its word. */
+/** How far below its centre an object's label reaches (0 without one). */
+export function labelBelow(o, size) {
+  const s = o.size ?? size;
+  return o.label ? s * 0.84 + Math.max(22, s * 0.2) * 0.3 : 0;
+}
+
 export function objectExtent(o, size) {
   const s = o.size ?? size;
   if (o.shape) return SHAPES[o.shape].extent.map(v => v * s);
@@ -421,7 +428,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
   const release = at => {
     const quiet = [...pose].filter(([, p]) => p.quiet && !p.gone).map(([id]) => id);
     if (!quiet.length || [...pose.values()].some(p => p.hero && !p.gone)) return;
-    const back = formationTargets({ form: 'scatter' }, quiet, frame, { size, seed: spec.seed + 97, current: pose, extent: id => objectExtent(spec.objects.get(id), size) });
+    const back = formationTargets({ form: 'scatter' }, quiet, frame, { size, seed: spec.seed + 97, current: pose, extent: id => objectExtent(spec.objects.get(id), size), below: id => labelBelow(spec.objects.get(id), size) });
     for (const id of quiet) {
       const { el, base } = group(id), to = back.get(id);
       el.keys.push({ at, x: to.x - base.x, y: to.y - base.y, scale: to.scale, rotate: to.rotate, opacity: 1, dur: 1.1, ease: 'inOut' });
@@ -522,7 +529,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       const hub = f.form === 'merge' ? f.into : f.from, h = pose.get(hub);
       if (!h || !alive(hub)) { notes.push(`${f.form}: ${hub} is not on screen, so nothing moves`); return; }
       const st = f.stagger ?? 0.18, hs = h.scale ?? 1, pulse = [];
-      const out = f.form === 'split' ? formationTargets({ form: 'ring', on: hub, spread: f.spread == null ? size * hs * 1.8 : f.spread <= 4 ? f.spread * size * hs * 1.8 : f.spread }, ids, frame, { size, current: pose, extent: id => objectExtent(spec.objects.get(id), size) }) : null;
+      const out = f.form === 'split' ? formationTargets({ form: 'ring', on: hub, spread: f.spread == null ? size * hs * 1.8 : f.spread <= 4 ? f.spread * size * hs * 1.8 : f.spread }, ids, frame, { size, current: pose, extent: id => objectExtent(spec.objects.get(id), size), below: id => labelBelow(spec.objects.get(id), size) }) : null;
       ids.forEach((id, i) => {
         const at = t + i * st;
         if (f.form === 'merge') {
@@ -656,7 +663,7 @@ export function castElements(spec, frame, { state = new Map(), threads = [], cam
       const { el, base } = group(f.out), s0 = c.scale ?? 1, [x, y] = [c.x - base.x, c.y - base.y];
       for (const [dt, k] of [[0.42, 0.95], [0.28, 1.02], [0.14, 0.95]]) el.keys.push({ at: t - dt, x, y, scale: s0 * k, dur: 0.12 });
     }
-    const targets = formationTargets(f, ids, frame, { size, seed: spec.seed + k, current: pose, extent: id => objectExtent(spec.objects.get(id), size) });
+    const targets = formationTargets(f, ids, frame, { size, seed: spec.seed + k, current: pose, extent: id => objectExtent(spec.objects.get(id), size), below: id => labelBelow(spec.objects.get(id), size) });
     [...targets.keys()].forEach((id, i) => {
       const to = targets.get(id), at = Math.max(0, t + i * stagger), o = spec.objects.get(id);
       if (!groups.has(id)) {
@@ -787,6 +794,8 @@ export function expandCastProps(input, frame, ctx = {}) {
   if (rest.title || rest.kicker) frame = { ...frame, ...(ctx.heading === 'bottom'
     ? { bottom: frame.height - (frame.height > frame.width ? 430 : frame.height * 0.34) }
     : { top: frame.height > frame.width ? 430 : 300 }) };
+  // Captions take the bottom of the frame (the band the frame audit keeps type out of).
+  if (ctx.captions) frame = { ...frame, bottom: Math.min(frame.bottom ?? frame.height, frame.height * 0.78) };
   const { elements, state, threads, notes, camera, edges, unit } = castElements(spec, frame, { state: ctx.state, threads: ctx.threads, camera: ctx.camera, unit: ctx.unit, cue: ctx.cue });
   for (const n of notes) ctx.notes?.push(`${frame.beatId ?? 'cast'}: ${n}`);
   if (frame.beatId) {

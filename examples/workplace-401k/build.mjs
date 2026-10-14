@@ -101,6 +101,8 @@ const film = vertical => ({
           DONE: 'Saved: starts with your next paycheck',
         },
         sketchSay: { CLICK1: 'Benefits', CLICK2: 'Retirement', CHANGE: 'five', SAVE: 'save' },
+        // The rates on the screen are the plan's figures, so they carry its name too.
+        source: PLAN,
       },
     },
   ],
