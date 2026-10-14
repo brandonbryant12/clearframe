@@ -1,5 +1,17 @@
 # Changelog
 
+## What a bench film found in the new pieces
+
+An Opus bench film (an expense-policy explainer built with `document`, `marks`, `pointer`, `limit` and captions) reported where each piece fought it. Each was fixed and checked against its frames:
+
+- **`document` stays on the clause.** A scroll key brings its section into focus and the rest of the page steps back to 40%, so a key still lands on its word when the page already shows that section. Text stays inside the page's margin and fades into the paper before it, so no line is cut in half by the page edge, and a section brought up sits below the head's fade with its heading whole. `critique` counts the sections the voice brings up as the words to read, not the whole page.
+- **A circle round a phrase is a loop.** An ellipse round "$90 per person" cut the corners of its first and last letters; a phrase now gets a loop with straight sides and round ends that reaches just past them.
+- **`stamp` marks.** `marks: [{words, style: "stamp", label: "Not a receipt"}]` presses a short verdict over the words it rules on: boxed capitals at a slight angle, in the warning colour, with the card's surface as its face so it covers what it judges instead of tangling with it. The frame audit reads it apart from the type beneath.
+- **The pointer reads as a hand.** The fingertip is a pale disc with a ring and a soft shadow (it was a flat grey dot), a ring spreads from every press, and after the last press the pointer moves off what it pressed so the change is seen.
+- **`limit` reads on a phone.** Its amounts and labels are larger (labels sat at the 20 px floor), the used amount rides the fill's end instead of waiting pale at its final place, and a segment too short for its pair puts it beside the track with room made for it.
+- **Checks that say what they mean.** Text a clip hides is no longer judged as visible (a caption no longer "covers" a line the page has clipped); the motion verdict no longer quotes the change that ended before a still stretch as a too-faint one; new projects stop writing `captions: "auto"`, which read as a choice against the default.
+- **Eleven more sketches fail the bar** on a second pass and are gone (see below).
+
 ## A smaller library with a bar
 
 The library had been filled loosely, and agents reach for whatever is listed: a bouncing `pop`, flash and iris cuts, a riser before every silent beat, comic bursts and blurry set pieces were turning up in benefits and policy films. Everything was audited against a six-point bar (one job; reads at 360 px; restrained motion; real content attached to its target; a professional register; works and is distinct), written into `library/README.md` with its research in `docs/research/2026-10-component-bar.md`. What failed was removed; what earned a place was built.

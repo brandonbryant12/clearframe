@@ -85,7 +85,8 @@ export function expandPointers(list, { width = 1920, height = 1080 } = {}) {
     // cursor travels on a gentle curve rather than a ruler line.
     const xs = [],
       ys = [],
-      press = [];
+      press = [],
+      ripple = [];
     let here = from;
     for (const s of steps) {
       const dur = travel(here, s.spot);
@@ -93,16 +94,28 @@ export function expandPointers(list, { width = 1920, height = 1080 } = {}) {
       ys.push({ ...when(s, -(dur + 0.12)), y: s.spot[1] - from[1], dur, ease: 'out' });
       if (s.press) {
         press.push({ ...when(s), scale: 0.84, dur: 0.18, ease: 'thereAndBack', ...(p.sound === false ? {} : { sound: p.sound ?? 'click' }) });
+        // A ring spreads from the point pressed and is gone in half a second: the press reads
+        // even where the cursor covers what it pressed.
+        ripple.push({ ...when(s), scale: 0.5, opacity: 0.6, dur: 0 }, { ...when(s), scale: 1.9, opacity: 0, dur: 0.5, ease: 'out' });
         // The thing pressed answers: it dips, then settles where it was.
         if (s.target) s.target.el.keys = [...(s.target.el.keys ?? []), { ...when(s, 0.02), scale: 0.965, dur: 0.22, ease: 'thereAndBack' }];
       }
       here = s.spot;
     }
-    const k = size / 40;
-    const cursor = touch
-      ? { type: 'circle', cx: 0, cy: 0, r: size / 2, fill: 'ink', opacity: 0.26, stroke: 'bg', width: Math.max(2, size * 0.05) }
-      : { type: 'path', d: ARROW.replace(/-?\d+(\.\d+)?/g, n => String(Math.round(Number(n) * k * 10) / 10)), fill: 'ink', stroke: 'bg', width: Math.max(2, 3 * k), join: 'round' };
     const last = steps.at(-1);
+    // After the last press the hand moves off what it pressed, so the change it made is seen.
+    if (last.press && !p.leave) {
+      xs.push({ ...when(last, 0.45), x: last.spot[0] - from[0] + size * 1.2, dur: 0.7, ease: 'inOut' });
+      ys.push({ ...when(last, 0.45), y: last.spot[1] - from[1] + size * 0.9, dur: 0.7, ease: 'inOut' });
+    }
+    const k = size / 40;
+    // A fingertip as screen recordings show one: a pale disc with a ring and a soft shadow, light
+    // enough to see what is under it. The arrow is the system pointer.
+    const cursor = touch
+      ? { type: 'circle', cx: 0, cy: 0, r: size / 2, fill: 'bg', opacity: 0.82, stroke: 'ink', width: Math.max(2, size * 0.045), shadow: true }
+      : { type: 'path', d: ARROW.replace(/-?\d+(\.\d+)?/g, n => String(Math.round(Number(n) * k * 10) / 10)), fill: 'ink', stroke: 'bg', width: Math.max(2, 3 * k), join: 'round' };
+    // Unseen until the first press (a key's opacity multiplies the element's).
+    const ring = { type: 'circle', cx: 0, cy: 0, r: size * (touch ? 0.5 : 0.42), fill: 'none', stroke: 'ink', width: Math.max(2, size * 0.05), enter: 'none', origin: [0, 0], keys: [{ at: 0, dur: 0, opacity: 0 }, ...ripple] };
     list[i] = {
       type: 'group',
       ...(p.id ? { id: p.id } : {}),
@@ -114,7 +127,7 @@ export function expandPointers(list, { width = 1920, height = 1080 } = {}) {
       dur: 0.25,
       keys: xs,
       ...(p.leave ? { ...(last.say != null ? { exitSay: last.say, exitAfter: 0.7 } : { exitAt: last.at + 0.7 }), exit: 'fade' } : {}),
-      children: [{ type: 'group', x: 0, y: 0, enter: 'none', keys: ys, children: [{ ...cursor, enter: 'none', origin: [0, 0], keys: press }] }],
+      children: [{ type: 'group', x: 0, y: 0, enter: 'none', keys: ys, children: [...(ripple.length ? [ring] : []), { ...cursor, enter: 'none', origin: [0, 0], keys: press }] }],
     };
   }
   return list;

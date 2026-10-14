@@ -18,9 +18,12 @@ test('a pointer travels to its target and presses it on the word, and the target
   const travel = cursor.keys[0];
   assert.ok(travel.at + travel.dur < 3 && travel.at + travel.dur > 2.7, 'it arrives just before the word');
   assert.ok(Math.abs(cursor.x + travel.x - (900 + 320 * 0.66)) < 0.01, 'it rests on the button, right of its label');
-  const press = cursor.children[0].children[0].keys[0];
+  const [ring, arrow] = cursor.children[0].children;
+  const press = arrow.keys[0];
   assert.equal(press.at, 3);
   assert.equal(press.sound, 'click');
+  assert.ok(ring.keys.some(k => k.at === 3 && k.opacity > 0), 'a ring spreads from the point pressed');
+  assert.ok(cursor.keys.at(-1).at > 3 && cursor.keys.at(-1).x > travel.x, 'after the last press it moves off what it pressed');
   assert.ok(target.keys[0].at > 3 && target.keys[0].ease === 'thereAndBack', 'the button dips and comes back');
   assert.ok(cursor.at < travel.at, 'it is on screen before it sets off');
   assert.throws(() => expandPointers([{ type: 'pointer', to: 'nowhere', say: 'x' }]), /no element has id "nowhere"/);
@@ -34,10 +37,11 @@ test('a pointer visits several steps, and a tall frame gets a fingertip', () => 
   );
   expandPointers(list, { width: 1080, height: 1920 });
   const cursor = list[2];
-  assert.equal(cursor.keys.length, 2);
-  assert.equal(cursor.children[0].children[0].type, 'circle', 'a phone is tapped, not clicked');
-  assert.equal(cursor.children[0].children[0].keys.length, 1, 'only the pressed step presses');
-  assert.equal(cursor.children[0].children[0].keys[0].sound, undefined, 'sound: false is silent');
+  assert.equal(cursor.keys.length, 2, 'a last step that only hovers stays where it is');
+  const tip = cursor.children[0].children.at(-1);
+  assert.equal(tip.type, 'circle', 'a phone is tapped, not clicked');
+  assert.equal(tip.keys.length, 1, 'only the pressed step presses');
+  assert.equal(tip.keys[0].sound, undefined, 'sound: false is silent');
   assert.equal(list[1].keys, undefined, 'a step that only hovers leaves its target alone');
 });
 

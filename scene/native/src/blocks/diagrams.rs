@@ -261,15 +261,6 @@ pub(super) fn connector<'a>(x1: f32, y1: f32, x2: f32, y2: f32, progress: f32, c
     ])
 }
 
-/// An icon centred in a soft badge.
-fn badge<'a>(icon: &str, cx: f32, cy: f32, radius: f32, fill: &str, color: &str) -> Node {
-    let glyph = radius * 1.12;
-    draw::group(vec![
-        draw::circle(cx, cy, radius).fill(&fill).node(),
-        crate::icons::render(icon, cx - glyph / 2.0, cy - glyph / 2.0, glyph, color).into(),
-    ])
-}
-
 impl<'a, 'c> Draw<'a, 'c> {
     /// Keep an optional support line inside the normal content reserve.
     fn diagram_area(&self) -> (Area, Node) {
@@ -288,7 +279,6 @@ impl<'a, 'c> Draw<'a, 'c> {
         );
         (Area { h: a.h - reserve - 12.0, ..a }, self.rise(line, self.b.cue_seconds + 0.8, 10.0))
     }
-
 
     pub(super) fn flow(&self) -> Node {
         let (a, support) = self.diagram_area();

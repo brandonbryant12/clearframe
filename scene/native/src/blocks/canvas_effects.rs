@@ -1167,15 +1167,67 @@ impl<'a, 'c> Draw<'a, 'c> {
                     }
                 }
                 "circle" => {
-                    let (cx, cy, rx, ry) = ((l + r) / 2.0, (t + b) / 2.0, (r - l) / 2.0 + pad, (b - t) / 2.0 + pad * 0.7);
+                    let (cx, cy, hw, hh) = ((l + r) / 2.0, (t + b) / 2.0, (r - l) / 2.0, (b - t) / 2.0);
+                    let ry = hh + pad * 0.85;
                     // From the upper left round past the start: the ends overlap, as a hand's do.
-                    let pts: Vec<_> = (0..=56)
-                        .map(|i| {
-                            let a = -2.3 + (TAU + 0.45) * i as f32 / 56.0;
-                            (cx + rx * a.cos(), cy + ry * a.sin())
-                        })
-                        .collect();
+                    let pts: Vec<_> = if hw > hh * 1.6 {
+                        // A phrase: a loop with straight sides and round ends, reaching just far
+                        // enough past the first and last letters that their corners stay inside
+                        // (an ellipse round a phrase cuts its corners, or swallows its neighbours).
+                        let reach = ry - (ry * ry - hh * hh).max(0.0).sqrt() + pad * 0.2;
+                        let half = (hw + reach - ry).max(0.0);
+                        let (left, right) = (cx - half, cx + half);
+                        let cap = |c: f32, a0: f32, a1: f32, n: usize| -> Vec<(f32, f32)> {
+                            (0..n).map(|i| a0 + (a1 - a0) * i as f32 / n as f32).map(|a| (c + ry * a.cos(), cy + ry * a.sin())).collect()
+                        };
+                        let half_pi = std::f32::consts::FRAC_PI_2;
+                        let mut pts = cap(left, -2.3, -half_pi, 6);
+                        pts.extend(cap(right, -half_pi, half_pi, 14));
+                        pts.extend(cap(left, half_pi, TAU - 2.3 + 0.45, 18));
+                        pts.push((left + ry * (TAU - 1.85f32).cos(), cy + ry * (TAU - 1.85f32).sin()));
+                        pts
+                    } else {
+                        let rx = hw + pad;
+                        (0..=56)
+                            .map(|i| {
+                                let a = -2.3 + (TAU + 0.45) * i as f32 / 56.0;
+                                (cx + rx * a.cos(), cy + ry * a.sin())
+                            })
+                            .collect()
+                    };
                     over.push(stroke(&pts, k, 0));
+                }
+                "stamp" => {
+                    // A rubber stamp pressed over the words it judges (PAID, RETURNED, NOT A
+                    // RECEIPT): boxed capitals at a slight angle, set down in a fifth of a second
+                    // with no bounce. It sits over type on purpose, so the audit reads it apart.
+                    let label = s(mark, "label").to_uppercase();
+                    if label.trim().is_empty() {
+                        continue;
+                    }
+                    let (cx, cy) = ((l + r) / 2.0, (t + b) / 2.0);
+                    let px = f(mark, "size", (size * 1.05).max(28.0));
+                    let font = text_font(&serde_json::json!({ "font": "strong" }));
+                    let tracking = px * 0.08;
+                    let tw = text::measure(font, &label, px, tracking);
+                    let (bw, bh) = (tw + px * 0.9, px * 1.5);
+                    let edge = (px * 0.08).max(2.5);
+                    let corners = [(cx - bw / 2.0, cy - bh / 2.0), (cx + bw / 2.0, cy - bh / 2.0), (cx + bw / 2.0, cy + bh / 2.0), (cx - bw / 2.0, cy + bh / 2.0), (cx - bw / 2.0, cy - bh / 2.0)];
+                    let d = if amount > 0.0 { rough_contour(&corners, amount * 0.6, seed) } else { format!("M {} {} L {} {} L {} {} L {} {} Z", corners[0].0, corners[0].1, corners[1].0, corners[1].1, corners[2].0, corners[2].1, corners[3].0, corners[3].1) };
+                    let press = motion::out_cubic(motion::clamp01((now - at) / 0.2));
+                    // The stamp covers what it rules on: its face is the card's surface, so the
+                    // verdict reads instead of tangling with the words beneath it.
+                    let face = self.paint(mark.get("fill"), "surface");
+                    let stamp = draw::group(vec![
+                        draw::path(d.clone()).paint_fill(&face).opacity(0.94).node(),
+                        draw::path(d).paint_stroke(&color, edge).round().node(),
+                        draw::text(label, cx - tw / 2.0, cy + px * 0.36, font, px, tracking, &color),
+                    ])
+                    .opacity(0.92 * press)
+                    .scale_about(1.0 + 0.16 * (1.0 - press), cx, cy)
+                    .rotate_about(f(mark, "rotate", -6.0), cx, cy)
+                    .id("cf-stamp");
+                    over.push(stamp);
                 }
                 "box" => {
                     let (x0, y0, x1, y1) = (l - pad, t - pad * 0.6, r + pad, b + pad * 0.6);

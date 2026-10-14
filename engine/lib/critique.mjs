@@ -108,12 +108,26 @@ const FULL_FRAME = b =>
   b.props?.align === 'center' ||
   (['title', 'statement', 'endcard', 'chapter', 'highlight', 'quote'].includes(b.block) && !b.props?.title);
 
+const countWords = t => String(t ?? '').split(/\s+/).filter(w => w && !/^[\d.,:%$-]+$/.test(w)).length;
+/** What a viewer reads on a document page: the sections the voice brings into focus, or the
+ * title and first section when nothing scrolls. The rest is seen as a page, not read. */
+function documentWords(el) {
+  const sections = Array.isArray(el.sections) ? el.sections : [];
+  const find = to =>
+    Number.isInteger(to) ? to : sections.findIndex(sec => `${sec.heading ?? ''} ${sec.text ?? ''}`.toLowerCase().includes(String(to).toLowerCase()));
+  const read = new Set((el.scroll ?? []).map(k => find(k.to)).filter(i => i >= 0 && i < sections.length));
+  if (!read.size && sections.length) read.add(0);
+  // A page that scrolls has left its title behind by the time the reading starts.
+  return (el.scroll?.length ? 0 : countWords(el.title)) + [...read].reduce((n, i) => n + countWords(sections[i].heading) + countWords(sections[i].text), 0);
+}
+
 function onScreenWords(props) {
   let n = 0;
   // A phrase repeated (a marquee, an echo) is read once.
   const seen = new Set();
   const walk = (v, k) => {
-    if (
+    if (v && typeof v === 'object' && v.type === 'document') n += documentWords(v);
+    else if (
       typeof v === 'string' &&
       !seen.has(v) &&
       ![
@@ -175,6 +189,7 @@ function shotWords(props) {
     (list ?? []).forEach(el => {
       const x = (el.x ?? 0) + dx, y = (el.y ?? 0) + dy;
       if (el.type === 'group') return walk(el.children, x, y);
+      if (el.type === 'document' && x < v[0] + v[2] && x + (el.w ?? 0) > v[0] && y < v[1] + v[3] && y + (el.h ?? 0) > v[1]) n += documentWords(el);
       if (el.type === 'text' && typeof el.text === 'string' && x >= v[0] && x <= v[0] + v[2] && y >= v[1] && y <= v[1] + v[3])
         n += el.text.split(/\s+/).filter(w => w && !/^[\d.,:%$-]+$/.test(w)).length;
     });

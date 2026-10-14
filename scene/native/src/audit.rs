@@ -55,6 +55,10 @@ pub fn scan(tree: &Node) -> Scan {
                 out.captions.extend(bounds.map(rect));
                 return false;
             }
+            // A stamp is set over the type it judges on purpose.
+            if group.id == "cf-stamp" {
+                return false;
+            }
             if group.id.contains("-subject-") && opacity > 0.5 {
                 out.subjects.extend(bounds.map(rect));
             }

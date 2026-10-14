@@ -148,9 +148,13 @@ test('marks name whole words of their text, land on their word and hold the scen
     [text([{ words: 'money', colour: 'accent' }]), /unsupported field colour/],
     [text([]), /1–4 marks/],
     [{ type: 'text', text: '', count: { to: 3 }, marks: [{ words: '3' }] }, /counted number/],
+    [text([{ words: 'money', style: 'stamp' }]), /label must be/],
+    [text([{ words: 'money', label: 'Paid' }]), /belongs to a stamp/],
   ])
     assert.throws(() => normalizeElements([bad], 'elements', fail), message, JSON.stringify(bad));
   assert.doesNotThrow(() => normalizeElements([text([{ words: 'FORFEITED' }], { upper: true })], 'elements', fail));
+  const [stamped] = normalizeElements([text([{ words: 'Unused money', style: 'stamp', label: 'Forfeited' }])], 'elements', fail);
+  assert.equal(stamped.marks[0].color, 'negative', 'a stamp is in the palette\'s warning colour unless it says otherwise');
 });
 
 test('canvas beats count as figures only when they count, and late cues fail', t => {

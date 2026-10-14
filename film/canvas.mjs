@@ -187,8 +187,8 @@ function checkSound(v, where, fail) {
     fail(`${where} must name a built-in sound (${Object.keys(SFX).join(', ')}), or be {name, volume}`);
   if (typeof v === 'object' && v.volume != null && !(Number.isFinite(v.volume) && v.volume >= 0 && v.volume <= 1)) fail(`${where}.volume must be 0–1`);
 }
-export const MARK_STYLES = ['highlight', 'underline', 'circle', 'box', 'strike', 'cross'];
-const MARK_FIELDS = ['words', 'style', 'color', 'at', 'say', 'after', 'dur', 'width', 'pad', 'rough'];
+export const MARK_STYLES = ['highlight', 'underline', 'circle', 'box', 'strike', 'cross', 'stamp'];
+const MARK_FIELDS = ['words', 'style', 'color', 'at', 'say', 'after', 'dur', 'width', 'pad', 'rough', 'label', 'size', 'rotate', 'fill'];
 /** Whether `phrase` occurs in `text` on word boundaries, as the renderer's `find_words` matches it. */
 function hasWords(text, phrase) {
   const flat = text.split(/\s+/).join(' ');
@@ -217,7 +217,15 @@ function textMarks(el, at, fail) {
       if (m[key] != null && (!finite(m[key]) || m[key] < 0)) fail(`${where}.${key} must be a nonnegative number`);
     if (m.rough != null && typeof m.rough !== 'boolean') fail(`${where}.rough must be true or false`);
     if (m.say != null && (typeof m.say !== 'string' || !m.say.trim())) fail(`${where}.say must be a spoken word`);
-    return { ...m, words, style: m.style ?? 'highlight' };
+    // A stamp prints its own short verdict over the words (PAID, RETURNED); other marks draw only.
+    if (m.style === 'stamp') {
+      if (typeof m.label !== 'string' || !m.label.trim() || m.label.length > 24) fail(`${where}.label must be the stamp's words, up to 24 characters (e.g. "Not a receipt")`);
+      if (m.size != null && (!finite(m.size) || m.size < 20 || m.size > 160)) fail(`${where}.size must be 20–160`);
+      if (m.rotate != null && (!finite(m.rotate) || Math.abs(m.rotate) > 20)) fail(`${where}.rotate must be within ±20 degrees`);
+      if (m.fill != null && !isColor(m.fill)) fail(`${where}.fill must be a palette token or #rrggbb (the stamp's face, the card's surface by default)`);
+    } else
+      for (const key of ['label', 'size', 'rotate', 'fill']) if (m[key] != null) fail(`${where}.${key} belongs to a stamp (style: "stamp")`);
+    return { ...m, words, style: m.style ?? 'highlight', ...(m.style === 'stamp' ? { color: m.color ?? 'negative' } : {}) };
   });
 }
 

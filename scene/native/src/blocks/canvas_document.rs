@@ -14,6 +14,9 @@ struct Piece {
     section: Option<usize>,
 }
 
+/// How far a section the voice is not on steps back once a scroll key names another.
+const DIMMED: f32 = 0.4;
+
 impl<'a, 'c> Draw<'a, 'c> {
     /// The page laid out top to bottom: kicker, title, a rule, then each section's heading and text.
     fn document_pieces(&self, el: &Value) -> (Vec<Piece>, Vec<f32>, f32) {
@@ -81,17 +84,28 @@ impl<'a, 'c> Draw<'a, 'c> {
         let size = f(el, "size", 30.0).clamp(14.0, 72.0);
         let (pieces, tops, content) = self.document_pieces(el);
         // Scrolling: each key brings its section to the top of the frame, eased, never past the end.
+        // The section it names comes into focus and the rest of the page steps back, so a key
+        // still lands on its word when the page already shows that section.
         let room = (content - h).max(0.0);
+        // The text stays inside the page's margin; at an edge with more beyond it (below until
+        // the end is in view, above once it has scrolled) it fades into the paper first. A
+        // section brought up sits just below the head's fade, so its heading reads in full.
+        let inset = size * 0.8;
+        let (foot, head) = ((h * 0.16).min(size * 3.0), size * 1.3);
         let mut offset = 0.0f32;
+        let mut focus = vec![1.0f32; tops.len() + 1];
         for key in arr(el, "scroll") {
             let at = f(key, "at", 0.0);
             if now < at {
                 break;
             }
             let Some(i) = Self::document_section(el, key.get("to").unwrap_or(&Value::Null)) else { continue };
-            let target = (tops.get(i).copied().unwrap_or(0.0) - size * 1.2).clamp(0.0, room);
+            let target = (tops.get(i).copied().unwrap_or(0.0) - inset - head).clamp(0.0, room);
             let k = motion::in_out_cubic((now - at) / f(key, "dur", 0.9).max(0.05));
             offset += (target - offset) * k;
+            for (j, v) in focus.iter_mut().enumerate() {
+                *v += (if j == i { 1.0 } else { DIMMED } - *v) * k;
+            }
         }
         let paper = match el.get("fill") {
             Some(v) => self.paint(Some(v), "bg"),
@@ -132,26 +146,25 @@ impl<'a, 'c> Draw<'a, 'c> {
                 }
             }
             let node = self.canvas_text(&t, &ink, 1.0, now);
-            nodes.push(self.marked(&t, node, now));
+            // The kicker and title step back with the sections that are not in focus.
+            let weight = focus[piece.section.unwrap_or(tops.len())];
+            nodes.push(self.marked(&t, node, now).opacity(weight));
             if role == "title" {
                 let rule_y = y + piece.bottom - offset + size * 0.45;
                 nodes.push(draw::rect(x + size * 1.4, rule_y, w - size * 2.8, 2.0).paint_fill(&self.p.muted).opacity(0.35).node());
             }
         }
-        // The page fades into its own colour at an edge with more beyond it: below until the end
-        // is in view, above once it has scrolled, so no paragraph is cut by a hard edge.
-        let fade = (h * 0.16).min(size * 3.0);
         let edge = |from: f32, to: f32| {
             let ink = draw::linear((0.0, from), (0.0, to), &[(0.0, paper.as_str(), 0.0), (1.0, paper.as_str(), 1.0)], skia_safe::TileMode::Clamp, None);
             draw::rect(x, from.min(to), w, (to - from).abs()).fill_ink(ink).node()
         };
         let more = Node::from(vec![
-            if offset < room - 1.0 { edge(y + h - fade, y + h) } else { draw::empty() },
-            if offset > 1.0 { edge(y + fade * 0.8, y) } else { draw::empty() },
+            if offset < room - 1.0 { edge(y + h - inset - foot, y + h - inset) } else { draw::empty() },
+            if offset > 1.0 { edge(y + inset + head, y + inset) } else { draw::empty() },
         ]);
         let r = size * 0.5;
         let page = draw::rounded_rect(x, y, w, h, r, r).paint_fill(&paper).node();
-        let body = draw::group(vec![Node::from(nodes), more]).clip(draw::rounded_rect(x, y, w, h, r, r).path);
+        let body = draw::group(vec![Node::from(nodes), more]).clip_rect(x, y + inset + 2.0, w, h - inset * 2.0 - 4.0);
         draw::group(vec![page, body])
     }
 }

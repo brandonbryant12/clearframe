@@ -717,11 +717,12 @@ impl Node {
     }
 
     /// Walk groups and text with absolute bounds, inherited opacity and whether a clip or mask
-    /// is in effect. `visit` returns false to skip a group's children.
+    /// is in effect. A text's bounds are cut to the clips around it, and text a clip hides
+    /// entirely is not visited. `visit` returns false to skip a group's children.
     pub fn visit<'n>(&'n self, visit: &mut impl FnMut(Seen<'n>) -> bool) {
-        self.visit_in(&Matrix::default(), 1.0, false, visit);
+        self.visit_in(&Matrix::default(), 1.0, false, None, visit);
     }
-    fn visit_in<'n>(&'n self, m: &Matrix, opacity: f32, masked: bool, visit: &mut impl FnMut(Seen<'n>) -> bool) {
+    fn visit_in<'n>(&'n self, m: &Matrix, opacity: f32, masked: bool, clip: Option<Rect>, visit: &mut impl FnMut(Seen<'n>) -> bool) {
         match self {
             Node::Group(g) => {
                 let o = opacity * g.opacity;
@@ -734,14 +735,28 @@ impl Node {
                     return;
                 }
                 let masked = masked || g.clip.is_some() || g.mask.is_some();
+                let clip = match &g.clip {
+                    Some(path) => {
+                        let mut r = inner.map_rect(path.bounds()).0;
+                        if clip.is_some_and(|c| !r.intersect(c)) {
+                            return;
+                        }
+                        Some(r)
+                    }
+                    None => clip,
+                };
                 for c in &g.children {
-                    c.visit_in(&inner, o, masked, visit);
+                    c.visit_in(&inner, o, masked, clip, visit);
                 }
             }
             Node::Text(t) => {
                 if let Some(b) = fonts::text_box(&t.value, t.x, t.y, t.font, t.size, t.tracking) {
                     let scale = (m.scale_x() * m.scale_y() - m.skew_x() * m.skew_y()).abs().sqrt();
-                    visit(Seen::Text { text: t, bounds: m.map_rect(b).0, opacity: opacity * t.color.a, scale, masked });
+                    let mut bounds = m.map_rect(b).0;
+                    if clip.is_some_and(|c| !bounds.intersect(c)) {
+                        return;
+                    }
+                    visit(Seen::Text { text: t, bounds, opacity: opacity * t.color.a, scale, masked });
                 }
             }
             _ => {}
