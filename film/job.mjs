@@ -319,6 +319,17 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
           throw new Error(m);
         }, face);
   checkNarration(b, frame, film.captions, report, b.block === 'kinetic' ? face : null);
+  for (const word of ambiguous.get(b) ?? []) {
+    // Suggest the cue with the word after its last saying, which the line says once.
+    const said = (b.vo?.words ?? []).map(w => String(w.w).replace(/[^\p{L}\p{N}'-]/gu, ''));
+    const q = word.toLowerCase().split(/\s+/);
+    let last = -1;
+    for (let i = 0; i + q.length <= said.length; i++) if (q.every((p, j) => said[i + j].toLowerCase() === p)) last = i;
+    const next = last >= 0 ? said[last + q.length] : null;
+    report.warnings.push(
+      `${b.id}: the cue "${word}" is said more than once in this line and lands on the first time it is said; name a longer phrase that is said once${next ? ` (for the later one, "${word} ${next}")` : ''}.`,
+    );
+  }
   const transition = transitions[b.index];
   if (!TRANSITIONS.includes(transition))
     throw new Error(retired('transition', transition) ?? `Unsupported native transition ${transition}; use ${TRANSITIONS.join(', ')}`);
@@ -363,6 +374,8 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
 }
 
 /** Seconds or a spoken word/phrase → scene seconds. */
+/** Spoken cues a beat says more than once, by beat (see cueResolver). */
+const ambiguous = new WeakMap();
 function cueResolver(b, frame) {
   return (value, fallback = 0.35) => {
     if (value == null) return Math.min(fallback, Math.max(0, b.dur - frame));
@@ -372,6 +385,9 @@ function cueResolver(b, frame) {
       return value;
     }
     const t = findWord(b.vo?.words ?? [], String(value));
+    // A word said twice cues on its first saying: "New" in "every new parent… New request"
+    // landed four seconds early. Noted once per beat (prepareBeat reports it).
+    if (t != null && findWord(b.vo?.words ?? [], String(value), 1) != null) (ambiguous.get(b) ?? ambiguous.set(b, new Set()).get(b)).add(String(value));
     if (t == null) {
       const said = (b.vo?.words ?? []).map(w => w.w).join(' ');
       throw new Error(`Spoken cue "${value}" not found in this beat's narration${said ? ` ("${said.length > 140 ? `${said.slice(0, 140)}…` : said}")` : ' (the beat has no narration)'}: use a word it says, spelled as it is written there`);

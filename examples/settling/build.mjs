@@ -34,7 +34,7 @@ for (const shape of ['landscape', 'vertical']) {
         props: { graph: {
           fn: { kind: 'power', a: 1, p: -0.5 }, x: { domain: [1, 20], label: 'Number of reviews' }, y: { domain: [0, 1.08], label: 'How much the average wobbles' },
           draw: { say: 'narrowing', dur: 1.4 }, sweep: { from: 1, to: 20, say: 'shrinks', dur: 4 },
-          marks: [{ x: 1, label: 'one', say: 'Four' }, { x: 4, label: 'four: half', say: 'half' }, // A long label on a flat stretch rises to clear the curve; on a narrow phone plot it would float away from its mark.
+          marks: [{ x: 1, label: 'one', say: 'Four reviews' }, { x: 4, label: 'four: half', say: 'half as much as one' }, // A long label on a flat stretch rises to clear the curve; on a narrow phone plot it would float away from its mark.
             { x: 16, label: shape === 'vertical' ? 'sixteen' : 'sixteen: half again', say: 'sixteen' }],
         } },
       },

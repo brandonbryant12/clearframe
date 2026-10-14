@@ -87,12 +87,12 @@
       {
        "x": 1,
        "label": "one",
-       "say": "Four"
+       "say": "Four reviews"
       },
       {
        "x": 4,
        "label": "four: half",
-       "say": "half"
+       "say": "half as much as one"
       },
       {
        "x": 16,
