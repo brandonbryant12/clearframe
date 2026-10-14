@@ -117,3 +117,20 @@ test('crumbs land each step on its word, end on the accent colour, and wrap afte
   assert.ok(narrow.children.at(-1).children[0].y > 0, 'a row too wide wraps');
   assert.throws(() => normalizeElements([{ type: 'crumbs', items: ['One'] }], 'elements', fail), /2–5 steps/);
 });
+
+test('an app with pages opens each on its word and names every row, field and button', () => {
+  const app = { type: 'app', id: 'hub', title: 'Alder People', pages: [
+    { heading: 'Home', rows: ['Pay', 'Leave'] },
+    { heading: 'Leave', rows: ['Holiday', 'Family leave'], say: 'Leave', after: 0.3 },
+    { heading: 'Family leave', fields: [{ label: 'Weeks', value: '16', say: 'weeks' }], button: { label: 'Send request', done: 'Sent', say: 'send' }, say: 'Family', after: 0.3 },
+  ] };
+  const [group] = normalizeElements([app], 'elements', fail);
+  const pages = group.children.filter(c => c.type === 'group' && !c.id);
+  assert.equal(pages.length, 3);
+  assert.equal(pages[1].say, 'Leave', 'a page opens on its word');
+  assert.equal(pages[0].exitSay, 'Leave', 'and the page before it leaves on the same word');
+  const ids = JSON.stringify(group).match(/"id":"hub-[a-z-]+"/g).map(m => m.slice(6, -1));
+  for (const id of ['hub-row-pay', 'hub-row-leave', 'hub-row-family-leave', 'hub-field-weeks', 'hub-button', 'hub-done']) assert.ok(ids.includes(id), id);
+  assert.throws(() => normalizeElements([{ ...app, heading: 'Home' }], 'elements', fail), /belongs to a page/);
+  assert.throws(() => normalizeElements([{ ...app, pages: [app.pages[0], { heading: 'x', rows: ['a'] }] }], 'elements', fail), /needs say/);
+});
