@@ -1042,7 +1042,7 @@ impl<'a, 'c> Draw<'a, 'c> {
     /// Where `words` fall in a text element laid out exactly as `canvas_text` lays it out: the
     /// (left, right, baseline) of every line piece they cover, and the size the text is drawn at.
     fn mark_pieces(&self, el: &Value, words: &str) -> (Vec<(f32, f32, f32)>, f32) {
-        let font = text_font(el);
+        let font = self.canvas_font(el);
         let mut size = f(el, "size", 48.0).max(0.2);
         let mut tracking = f(el, "tracking", 0.0) * size;
         let upper = el.get("upper").and_then(Value::as_bool).unwrap_or(false);

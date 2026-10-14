@@ -1312,8 +1312,14 @@ impl<'a, 'c> Draw<'a, 'c> {
         }
     }
 
+    /// A canvas text's face: `display` is the film's (or the scene's) type voice, as headlines
+    /// in blocks are; every other font names one face.
+    pub(super) fn canvas_font(&self, el: &Value) -> Font {
+        if s(el, "font") == "display" { self.voice().regular() } else { text_font(el) }
+    }
+
     fn canvas_text(&self, el: &Value, fill: &str, reveal: f32, local: f32) -> Node {
-        let font = text_font(el);
+        let font = self.canvas_font(el);
         // Sizes are in the canvas's own units: a world label can be under a unit tall.
         let mut size = f(el, "size", 48.0).max(0.2);
         let mut tracking = f(el, "tracking", 0.0) * size;

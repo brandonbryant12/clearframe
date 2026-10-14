@@ -28,7 +28,7 @@ impl<'a, 'c> Draw<'a, 'c> {
         let mut y = pad;
         let place = |pieces: &mut Vec<Piece>, y: &mut f32, text: &str, font: &str, px: f32, leading: f32, section: Option<usize>, extra: Value| {
             let style = Style {
-                font: text_font(&json!({ "font": font, "size": px })),
+                font: self.canvas_font(&json!({ "font": font, "size": px })),
                 size: px,
                 leading,
                 tracking: f(&extra, "tracking", 0.0),
