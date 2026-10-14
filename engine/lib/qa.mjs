@@ -181,10 +181,13 @@ export function timeFindings({ d, skip, second, local = [], fps, beats = [], wor
   // Held picture: every frame within a second of a frame it barely differs from (under
   // HELD.change), for at least HELD.seconds. A silent beat may hold on purpose.
   const F = Math.round(fps);
-  const held = new Uint8Array(n);
+  const held = new Uint8Array(n),
+    still = new Uint8Array(n);
   for (let i = F; i < n; i++)
-    if (beatAt(i / fps) === beatAt((i - F) / fps) && second[i] < HELD.change && (local[i] ?? 0) < HELD.local)
+    if (beatAt(i / fps) === beatAt((i - F) / fps) && second[i] < HELD.change && (local[i] ?? 0) < HELD.local) {
       held.fill(1, i - F, i + 1);
+      still[i] = 1;
+    }
   for (let i = 0; i < n; i++) {
     if (!held[i]) continue;
     let j = i;
@@ -197,9 +200,11 @@ export function timeFindings({ d, skip, second, local = [], fps, beats = [], wor
       // `pace: "hold"` on a beat declares a reading hold: still reported, never as a slide.
       const deliberate = holds.has(s.beat);
       // Something did change here, in one area, but below what reads as motion (a thin line drawing
-      // on, a small figure, a pale glow): the fix is a bolder change, not "change something".
+      // on, a small figure, a pale glow): the fix is a bolder change, not "change something". Only
+      // frames that are themselves still count: the stretch opens with the second before it, when
+      // the last real change finished.
       let peak = 0;
-      for (let k = i; k <= j; k++) if (Number.isFinite(local[k])) peak = Math.max(peak, local[k]);
+      for (let k = i; k <= j; k++) if (still[k] && Number.isFinite(local[k])) peak = Math.max(peak, local[k]);
       findings.push({
         level: voiced && !deliberate ? 'warn' : 'note',
         kind: 'held',

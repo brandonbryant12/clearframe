@@ -36,8 +36,8 @@ export function storyboardFor(id, { title, theme, vertical, seed, ending } = {})
     transition: book.transition ?? 'fade',
     backdrop: book.backdrop ?? 'none',
     chrome: false,
-    // Captions are on for every narrated film unless a playbook (or the author) turns them off.
-    captions: book.captions ?? 'auto',
+    // Captions are on for every narrated film; a playbook that turns them off says so.
+    ...(book.captions != null ? { captions: book.captions } : {}),
     // A produced film has a score and sound that follows the picture: a draft bed is free
     // (music --draft); the final bed is paid and runs only after plan and approval.
     music: book.music ?? {},
