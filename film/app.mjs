@@ -15,10 +15,11 @@ const round = v => Math.round(v);
 const when = (spec, extra = 0) => (spec?.say != null ? { say: spec.say, after: (spec.after ?? 0) + extra } : spec?.at != null ? { at: spec.at + extra } : null);
 
 /** The elements an app element draws; `fail(message)` throws with the caller's context. */
-export function expandApp(input, at, fail) {
+export function expandApp(input, at, fail, canvas) {
   for (const key of Object.keys(input))
     if (key !== 'type' && !APP_FIELDS.includes(key) && !TIMING.includes(key)) fail(`${at}: unsupported app field ${key} (an app takes ${APP_FIELDS.join(', ')}, plus the timing fields every element takes)`);
-  const { type, x = 0, y = 0, w: width, h: height, device = 'window', title, tabs = [], heading, open, upload, fields = [], button, pages, size = 32, ...rest } = input;
+  // A tall frame gets the phone unless told otherwise, as `portal` does.
+  const { type, x = 0, y = 0, w: width, h: height, device = canvas && canvas.height > canvas.width * 1.2 ? 'phone' : 'window', title, tabs = [], heading, open, upload, fields = [], button, pages, size = 32, ...rest } = input;
   const id = rest.id ?? 'app';
   const phone = device === 'phone';
   if (!['window', 'phone'].includes(device)) fail(`${at}.device must be window or phone`);

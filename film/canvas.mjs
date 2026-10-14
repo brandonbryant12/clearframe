@@ -285,7 +285,7 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
     const at = `${where}[${i}]`;
     if (!input || typeof input !== 'object' || Array.isArray(input)) fail(`${at} must be an object`);
     const MACROS = { receipt: expandReceipt, app: expandApp, crumbs: expandCrumbs };
-    const el = structuredClone(MACROS[input.type] ? MACROS[input.type](input, at, fail) : input);
+    const el = structuredClone(MACROS[input.type] ? MACROS[input.type](input, at, fail, state.frame) : input);
     if (++state.count > MAX_ELEMENTS) fail(`a canvas holds at most ${MAX_ELEMENTS} elements`);
     const spec = ELEMENT_TYPES[el.type];
     if (!spec) fail(`${at}.type must be one of ${Object.keys(ELEMENT_TYPES).join(', ')}`);
