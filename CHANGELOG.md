@@ -10,6 +10,7 @@ An Opus bench film (an expense-policy explainer built with `document`, `marks`, 
 - **The pointer reads as a hand.** The fingertip is a pale disc with a ring and a soft shadow (it was a flat grey dot), a ring spreads from every press, and after the last press the pointer moves off what it pressed so the change is seen.
 - **`limit` reads on a phone.** Its amounts and labels are larger (labels sat at the 20 px floor), the used amount rides the fill's end instead of waiting pale at its final place, and a segment too short for its pair puts it beside the track with room made for it.
 - **Checks that say what they mean.** Text a clip hides is no longer judged as visible (a caption no longer "covers" a line the page has clipped); the motion verdict no longer quotes the change that ended before a still stretch as a too-faint one; new projects stop writing `captions: "auto"`, which read as a choice against the default.
+- **A static `scale` on any element.** A drawing reused at another size is a group with `scale: 0.5` (about its centre, or `origin`), instead of a script that rewrites every coordinate; keyed scale multiplies it, and layout checks measure it as drawn.
 - **Eleven more sketches fail the bar** on a second pass and are gone (see below).
 
 ## A smaller library with a bar

@@ -646,6 +646,8 @@ impl<'a, 'c> Draw<'a, 'c> {
             });
         let mut pose = Pose::identity();
         pose.rotate = f(el, "rotate", 0.0);
+        let scale = f(el, "scale", 1.0).max(0.0);
+        (pose.sx, pose.sy) = (scale, scale);
         pose.alpha = f(el, "opacity", 1.0);
         (pose.tx, pose.ty) = keyed_tilt(el, now);
         let distance = self.m.distance(f(el, "dist", 48.0));

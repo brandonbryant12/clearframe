@@ -153,6 +153,9 @@ test('marks name whole words of their text, land on their word and hold the scen
   ])
     assert.throws(() => normalizeElements([bad], 'elements', fail), message, JSON.stringify(bad));
   assert.doesNotThrow(() => normalizeElements([text([{ words: 'FORFEITED' }], { upper: true })], 'elements', fail));
+  const card = { type: 'group', x: 1000, y: 300, scale: 0.5, children: [{ type: 'rect', x: 0, y: 0, w: 400, h: 260 }] };
+  assert.deepEqual(elementsExtent([card]), { w: 200, h: 130, left: 1100, top: 365, bottom: 495 }, 'a scaled group is measured as drawn, about its centre');
+  assert.throws(() => normalizeElements([{ ...card, scale: 0 }], 'elements', fail), /scale must be/);
   const [stamped] = normalizeElements([text([{ words: 'Unused money', style: 'stamp', label: 'Forfeited' }])], 'elements', fail);
   assert.equal(stamped.marks[0].color, 'negative', 'a stamp is in the palette\'s warning colour unless it says otherwise');
 });

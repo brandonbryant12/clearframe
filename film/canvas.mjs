@@ -60,6 +60,7 @@ const COMMON = [
   'cap',
   'join',
   'rotate',
+  'scale',
   'origin',
   'blend',
   'enter',
@@ -322,6 +323,9 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       fail(`${at}.depth must be above 0 and at most 1 (1 moves with the world; smaller is farther away)`);
     if (el.opacity != null && (!finite(el.opacity) || el.opacity < 0 || el.opacity > 1))
       fail(`${at}.opacity must be 0–1`);
+    // A drawing reused at another size: scaled about its origin (its centre unless given), and
+    // keyed scale multiplies it.
+    if (el.scale != null && (!finite(el.scale) || el.scale < 0.05 || el.scale > 20)) fail(`${at}.scale must be 0.05–20`);
     if (el.z != null && (!finite(el.z) || el.z <= -0.9 || el.z > 50))
       fail(`${at}.z must be above -0.9 and at most 50 (0 is the picture plane; larger is farther away)`);
     if (el.blur != null && (!finite(el.blur) || el.blur < 0 || el.blur > 60)) fail(`${at}.blur must be 0–60 px`);
@@ -1078,7 +1082,16 @@ export function elementsExtent(elements) {
   const walk = (list, dx = 0, dy = 0) => {
     for (const el of list) {
       const n = k => el[k] ?? 0;
-      if (el.type === 'group') walk(el.children ?? [], dx + n('x'), dy + n('y'));
+      if (el.type === 'group' && el.scale != null && el.scale !== 1) {
+        const e = elementsExtent(el.children ?? []);
+        if (!e) continue;
+        // As the renderer scales it: about its origin, given in the frame around the group
+        // (the centre of what it draws unless given).
+        const [l0, t0] = [n('x') + e.left, n('y') + e.top];
+        const [ox, oy] = el.origin ?? [l0 + e.w / 2, t0 + e.h / 2];
+        const at = (x, y) => [dx + ox + (x - ox) * el.scale, dy + oy + (y - oy) * el.scale];
+        grow(...at(l0, t0), ...at(l0 + e.w, t0 + e.h));
+      } else if (el.type === 'group') walk(el.children ?? [], dx + n('x'), dy + n('y'));
       else if (['rect', 'image', 'meter', 'particles', 'document'].includes(el.type))
         grow(dx + n('x'), dy + n('y'), dx + n('x') + n('w'), dy + n('y') + n('h'));
       else if (el.type === 'solid') {
