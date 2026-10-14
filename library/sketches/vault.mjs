@@ -10,7 +10,8 @@ const ICONS = ['file', 'user', 'mail', 'chart-bar', 'database'];
 function layout(w, h) {
   if (tall(w, h))
     return { vault: [540, 1220], R: 300, items: [[230, 470], [520, 400], [820, 480], [330, 690], [740, 700]], card: 150, label: [540, 1640], size: 52 };
-  return { vault: [1290, 520], R: 270, items: [[260, 330], [560, 250], [340, 620], [640, 520], [470, 820]], card: 140, label: [1290, 930], size: 48 };
+  // Vault, cards and label all above the caption band (the bottom quarter of the frame).
+  return { vault: [1290, 430], R: 240, items: [[260, 290], [560, 210], [340, 540], [640, 450], [470, 680]], card: 140, label: [1290, 800], size: 48 };
 }
 
 export default {

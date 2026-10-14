@@ -11,10 +11,11 @@ export default {
   use: 'A customer asking for something, a product answering, a support exchange, "what people actually ask". Replace HELLO, ASK and REPLY (each up to about 40 characters) with sketchText; cue the beats with keys or say on the copied elements.',
   build(w, h) {
     const tallFrame = h > w,
-      pw = round(tallFrame ? w * 0.7 : h * 0.46),
+      pw = round(tallFrame ? w * 0.7 : h * 0.4),
       ph = round(pw * 1.9),
       px = round(w / 2 - pw / 2),
-      py = round(h / 2 - ph / 2),
+      // A wide frame keeps the whole phone above the caption band (its bottom quarter).
+      py = round(tallFrame ? h / 2 - ph / 2 : Math.max(24, Math.min(h / 2 - ph / 2, h * 0.75 - ph))),
       pad = round(pw * 0.06),
       inner = pw - 2 * pad,
       bw = round(inner * 0.78),

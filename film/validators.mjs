@@ -456,14 +456,15 @@ export const VALIDATORS = {
       }
       // A placed sketch is a panel of a larger picture: the world's camera frames it, not its own.
       if (p.place != null) for (const k of ['view', 'viewFrom', 'viewDur', 'dolly', 'focus']) delete drawn[k];
-      // A fill-in-the-blank sketch under captions: when its drawing reaches the caption band and
-      // the top of the frame is empty (no heading, no camera), the camera looks that much lower,
-      // so the caption never sits on its coins, buttons or labels (and the beat's own elements
-      // stay where they were drawn against it).
-      else if (frame.captions && sketchByName(p.sketch)?.keep && !drawn.view && p.view == null && !p.title) {
+      // A sketch under captions: when its drawing reaches the caption band and the top of the
+      // frame is empty (no heading, no camera), the camera looks that much lower, so the caption
+      // never sits on its coins, buttons or labels (and the beat's own elements stay where they
+      // were drawn against it). A scene whose ground runs to the frame's foot stays as drawn: a
+      // caption over the ground is a caption over a picture.
+      else if (frame.captions && !drawn.view && p.view == null && !p.title) {
         const tall = ht > w * 1.1;
         const e = elementsExtent(drawn.elements.filter(el => !(el.w >= w * 0.9)));
-        const lift = e ? Math.min(e.bottom - ht * (tall ? 0.8 : 0.75), e.top - ht * (tall ? 0.07 : 0.06)) : 0;
+        const lift = e && e.bottom < ht - 20 ? Math.min(e.bottom - ht * (tall ? 0.8 : 0.75), e.top - ht * (tall ? 0.07 : 0.06)) : 0;
         if (lift > 4) drawn.view = [0, Math.round(lift), w, ht];
       }
       p.elements = [...drawn.elements, ...(p.elements ?? [])];
