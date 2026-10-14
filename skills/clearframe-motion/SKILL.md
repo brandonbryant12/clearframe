@@ -20,16 +20,16 @@ Read `docs/style.md` (vocabulary) and `docs/canvas.md` (drawing). The audience a
 7. **A screen-flat image.** No light on the subject, no texture.
 8. **An edit set by the voice alone.** Every cut on a sentence boundary.
 
-Write a shot list in `DIRECTION.md` before the blocks: one line per beat with its **scale** (wide, medium, close, insert), its **camera** (what moves and why) and **the cut** into the next shot. Never three identical scales in a row.
+Write a shot list in `DIRECTION.md` before the blocks: one line per beat with its **scale** (wide, medium, close, insert), its **camera** (what moves and why) and **the cut** into the next shot (a cut, and what carries across it; or `into` the element the next scene lives in). Never three identical scales in a row.
 
 ## The principles
 
 1. **Motion carries meaning.** Things that connect draw a line; things that grow grow; things that travel move along a path; things that stop being true leave. Pick the verb in the narration and animate that verb.
 2. **Stage, then pay off.** Ground first (axis, rule, faint path), subject second, change third, landing on the stressed word (`say`). Viewers read motion before text.
-3. **Rhythm is contrast.** Alternate dense and sparse, fast and slow, small and full-frame. Plan a pulse across the film: hook (fast, bold), build (steady), turn (a `push` or a `tone` scene), payoff (hold), exit. Three identical scenes in a row are a deck.
+3. **Rhythm is contrast.** Alternate dense and sparse, fast and slow, small and full-frame. Plan a pulse across the film: hook (fast, bold), build (steady), turn (an `into`, a `push` or a `tone` scene), payoff (hold), exit. Three identical scenes in a row are a deck.
 4. **The picture never waits for the voice.** Something must be on screen by the first spoken word of every scene: the setting, the ground line, the card a number will count on. The engine pulls an empty drawing forward to the first word and reports it in `check`. `pace: "hold"` keeps a deliberate wait.
 5. **Motion has a purpose.** Business and technical films use locked cameras while people read (`business` sets the film `camera: "none"`). Reveal nodes, draw connections and remove obsolete components on cues. Deliberate reading holds are valid. Never add wobble or ambient loops to satisfy a score.
-6. **Continuity across cuts.** A world move, a cast that re-forms or a match on a shared id cuts invisibly. Mark a chapter with `push` or `panel`; a `panel` into an accent-`tone` scene becomes the background. `cut` and `fade` within a sequence.
+6. **Continuity across cuts.** A film cuts by default, and a cut that carries something reads as one film: a world move, a cast that re-forms or a match on a shared id cuts invisibly. At a turn, go `into` an element of the last scene (`into: "id"`: through the app screen, the page, one of the 31 tiles) so the next scene happens inside it, or `push` to the next step of a sequence (the two scenes move as one strip). `fade` dips through the ground for a change of chapter or of time. Captions hold still across all of them. `rise` and `zoom`, which built a scene up from an empty frame, are retired.
 7. **Hierarchy through scale.** One hero per frame, drawn big (poster type, a large numeral, a single word). Supporting text at least a third smaller.
 8. **Point at the words.** To show what matters in a form, a policy or a screen, put `marks` on the text itself (`highlight`, `underline`, `circle`, `box`, `strike`, `cross`, each on its word; `stamp` with a `label` presses a verdict over them, once a film); they stay attached through every move.
 9. **Type has a voice.** `textMotion` sets how display type arrives: `lines` is calm, `words` is conversational. Pick one for the film.

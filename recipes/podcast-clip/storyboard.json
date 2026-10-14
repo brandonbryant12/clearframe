@@ -11,7 +11,7 @@
     "preset": "snappy",
     "intensity": 0.65
   },
-  "transition": "fade",
+  "transition": "cut",
   "backdrop": "none",
   "chrome": false,
   "music": {},

@@ -645,7 +645,7 @@ const RETIRED_BLOCKS = {
 export const MOTIONS = ['gentle', 'snappy', 'spring'];
 // Retired names (iris, whip, flash, dissolve; glow, dots, mosaic) are refused with a replacement:
 // RETIRED in constants.mjs.
-export const TRANSITIONS = ['cut', 'fade', 'rise', 'wipe', 'push', 'zoom', 'panel'];
+export const TRANSITIONS = ['cut', 'fade', 'wipe', 'push', 'panel', 'into'];
 export const BACKDROPS = ['none', 'grid', 'paper'];
 export const CANVASES = [
   [1920, 1080],

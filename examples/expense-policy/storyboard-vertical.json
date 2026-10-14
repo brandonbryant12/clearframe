@@ -58,6 +58,7 @@
     {
       "id": "slip",
       "block": "canvas",
+      "into": "share-31",
       "vo": "A card slip is not a receipt. Over twenty-five dollars, we need the itemised one: what you bought, and what it cost.",
       "props": {
         "source": "Fairhaven Travel & Expense Policy v4, effective January 1, 2028 (fictional); the receipt is an example",

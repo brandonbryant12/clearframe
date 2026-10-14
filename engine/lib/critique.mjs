@@ -237,7 +237,10 @@ export function filmScore(sb, beats, timed, transitions) {
       (travelling(a) && travelling(b))
     )
       carried++;
-    else if (transitions[i] === 'panel') carried += 0.5;
+    // Going into an element of the last scene carries the eye through it; a push or a panel
+    // carries a movement across.
+    else if (transitions[i] === 'into') carried++;
+    else if (['panel', 'push'].includes(transitions[i])) carried += 0.5;
   }
   if (carried < (n - 1) / 4)
     tell(
@@ -652,13 +655,13 @@ function critiqueStoryboard(root) {
       );
   }
   // Transitions.
-  const transitions = beats.map(b => b.transition ?? sb.transition ?? 'fade');
-  const graphic = transitions.filter(x => x === 'panel').length;
+  const transitions = beats.map(b => (b.into != null ? 'into' : (b.transition ?? sb.transition ?? 'cut')));
+  const graphic = transitions.filter(x => x === 'panel' || x === 'wipe').length;
   if (beats.length >= 6 && new Set(transitions.slice(1)).size === 1)
     add(
       'idea',
       'film',
-      `Every cut is a ${transitions[1]}. Mark the story's turns with a push or a camera move through one world; cut within a sequence.`,
+      `Every cut is a ${transitions[1]}. Mark the story's turns: go into an element of the last scene (into: its id), push to the next step, or move the camera through one world; cut within a sequence.`,
     );
   if (graphic > Math.max(2, beats.length / 3))
     add(

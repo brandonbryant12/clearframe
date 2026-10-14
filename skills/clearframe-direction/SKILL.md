@@ -47,7 +47,7 @@ First decide whether the film is **one world** or a **sequence of scenes**. When
 Fill the beat plan table in `DIRECTION.md`: purpose, picture, **shot scale** and landing word. Never three identical scales in a row. Every cut needs a reason: a world move, a morph, a match cut, a `push` or `panel` at a chapter, or a cut between two moving cameras. For places and journeys, build three planes with `z` and let the camera dolly or truck; rack focus on the word that shifts attention. Mechanisms to start from: `sketch route|pipeline|network|balance|versus`, and the workplace pictures (`match`, `vesting`, `deadline`, `limit`, `portal`…). Use `docs/ideas.md`: hooks, scale, mechanism, change, tension, hidden-in-the-average, people, turns, endings. Per minute, aim for:
 - at least one drawn mechanism (canvas);
 - one colour-block punctuation;
-- one or two `push` or `panel` transitions at turns;
+- cuts within a sequence, carrying an object across by id; at one or two turns an `into` (through an element of the last scene) or a `push`;
 - imagery (plates) where the world matters;
 - kinetic type where the words are the picture.
 

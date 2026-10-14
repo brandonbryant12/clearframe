@@ -1,5 +1,15 @@
 # Changelog
 
+## Transitions that carry the film
+
+Every non-cut transition except `wipe` passed through an empty frame: the old scene vanished and the new one built itself up from nothing, a slide coming in, and new projects used a `fade` between every line. Transitions were judged frame by frame and rebuilt around what carries a film across a cut:
+
+- **A film cuts by default.** New projects and unset beats `cut` (`auto` fades only where the chapter changes). Cuts carry the film when something crosses them: an element with the same id morphs, a `world` travels.
+- **`into`: through an element into the next scene.** `into: "id"` on a beat takes the camera forward through that element of the previous canvas scene (an app screen, a policy page, one tile of a share) until it overfills the frame; the old scene fades behind it and the new one comes up from slightly closer and settles. The `expense-policy` example goes into the 31st returned claim to arrive at the card slip.
+- **`push` is a push.** The old scene and the new one now move as one strip, the old leaving as the new arrives, instead of the old one disappearing before the new one slides in.
+- **Captions hold still.** Captions and the source line are drawn once, outside the moving pictures, across a push, a wipe or an into.
+- **`rise` and `zoom` are retired** (and the `zoom` exit), refused by name with their replacements: each built the scene up out of an empty frame.
+
 ## What a bench film found in the new pieces
 
 An Opus bench film (an expense-policy explainer built with `document`, `marks`, `pointer`, `limit` and captions) reported where each piece fought it. Each was fixed and checked against its frames:

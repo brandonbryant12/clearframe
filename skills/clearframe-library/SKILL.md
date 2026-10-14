@@ -31,7 +31,7 @@ Choose the visual by the task:
 | Explain how or why something behaves | canvas `graph` (an input changes an output), `accumulate` (small amounts add up), `estimate` (noisy evidence settles; simulated), `field` (where things flow); the `explanation` treatment; `clearframe-explain` |
 | A story move in one composition, cued to the voice (`sketchText` and `sketchSay`) | `searchlight` (discovery, a hidden cause), `untangle` (simplification), `shortcut` (fewer steps, faster), `bridge` (integration), `maze` (guidance), `vault` (security), `cut-paper` (built from pieces) |
 | Point at something in any scene | beat `art.over` (arrows, circles, labels placed with `still --grid`) |
-| Punctuate a turn or a number | `tone: accent`, a `push` or `panel` transition, centred `align` |
+| Punctuate a turn or a number | `tone: accent`, an `into` (through an element of the last scene) or `push` transition, centred `align` |
 | Product and launch pieces | canvas `sketch`: `chat` (a conversation on a floating phone), `device` (a window swinging in over a sky); the `product-reveal` playbook and `keynote` treatment |
 | A distinct typographic voice | the treatment's `film.type` (or storyboard `type`): `inter` (the default), `geometric`, `bookish`; `types` lists them. Emphasis follows the voice (accent colour, weight, italic); `emphasisStyle: serif` on a beat still wins |
 | Hand-drawn or printed matter | `rough` strokes (the `sketchbook` treatment), the `cutpaper` treatment; `print` (halftone, engraving, letterpress) where the subject is printed matter, and plate `treatment: halftone` |

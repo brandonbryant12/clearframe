@@ -38,6 +38,11 @@ pub struct Ctx {
 /// opacity of its words (below 1 for the outgoing beat of a dissolve, whose words clear before
 /// the pictures cross); `part` 0 draws everything, 1 only its ground (tone and plate), 2 all
 /// but its ground, so native layers can sit between the two.
+/// Draw the next beats with their footer (0), without it (1) or only it (2).
+pub fn set_footer(mode: u8) {
+    scenes::FOOTER.with(|f| f.set(mode));
+}
+
 pub fn draw_beat(film: &Film, beat: usize, local: usize, global: usize, ctx: &Ctx, alpha: f32, part: u8) -> Node {
     let b = &film.beats[beat];
     scenes::PART.with(|p| p.set(part));
@@ -87,7 +92,7 @@ pub const BLOCKS: &[&str] = &[
 /// Scene entrances. `panel` is a graphic transition: the outgoing scene's exit and the incoming
 /// entrance share one continuous movement across the cut. Retired names (iris, whip, flash,
 /// dissolve) are refused with a replacement by the job builder (`RETIRED` in film/constants.mjs).
-pub const TRANSITIONS: &[&str] = &["cut", "fade", "rise", "wipe", "push", "zoom", "panel"];
+pub const TRANSITIONS: &[&str] = &["cut", "fade", "wipe", "push", "panel", "into"];
 /// Film backdrops (`""` is a job written without one).
 pub const BACKDROPS: &[&str] = &["", "none", "grid", "paper"];
 
@@ -145,7 +150,11 @@ pub struct Beat {
     pub count_seconds: Option<f32>,
     #[serde(default = "cut")]
     pub transition: String,
-    /// How the scene leaves: none, fade, push, zoom or wipe (set from the next entrance).
+    /// An `into` transition's element in the previous scene, [x, y, w, h] in frame pixels: the
+    /// camera goes through it into this scene.
+    #[serde(default)]
+    pub into: Option<[f32; 4]>,
+    /// How the scene leaves: none, fade, push, wipe or panel (set from the next entrance).
     #[serde(default = "none")]
     pub exit: String,
     /// Scene seconds by which every value and staged element has reached its final state;

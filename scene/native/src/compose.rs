@@ -145,6 +145,7 @@ impl Engine {
             // The edge sits on a whole output pixel and neither side is antialiased, so the two
             // scenes meet without a seam of background between them.
             let x = (lw * edge * scale).round() / scale;
+            blocks::set_footer(1);
             if i > 0 {
                 let prev = &self.film.beats[i - 1];
                 canvas.save();
@@ -160,6 +161,62 @@ impl Engine {
             canvas.clip_rect(Rect::from_ltrb(0.0, 0.0, x, lh), None, Some(false));
             self.beat(canvas, i, local, frame, &mut errors);
             canvas.restore();
+            self.footer(canvas, i, local, frame, &mut errors);
+        } else if i > 0 && beat.transition == "push" && (local as f32 / fps) < push_seconds(beat) {
+            // A push: the leaving scene and the arriving one are one strip, so the frame is never
+            // empty; the arriving scene's own offset is the other half (blocks/compositor.rs).
+            let m = MotionStyle::new(&beat.environment.motion.preset, beat.environment.motion.intensity);
+            let p = motion::out_expo(local as f32 / fps / (m.duration() + 0.15));
+            let prev = &self.film.beats[i - 1];
+            blocks::set_footer(1);
+            canvas.save();
+            canvas.translate((-lw * p, 0.0));
+            let marks = self.marks.len();
+            self.beat(canvas, i - 1, prev.frames + local, frame, &mut errors);
+            self.marks.truncate(marks);
+            canvas.restore();
+            self.beat(canvas, i, local, frame, &mut errors);
+            self.footer(canvas, i, local, frame, &mut errors);
+        } else if let (true, Some([rx, ry, rw, rh])) = (i > 0 && beat.transition == "into", beat.into) {
+            if (local as f32 / fps) < motion::INTO_SECONDS {
+                // Into: the camera goes forward through an element of the leaving scene (a screen,
+                // a page, a tile) until it overfills the frame and the scene has faded behind it;
+                // the arriving scene comes up on its own ground from slightly closer and settles,
+                // so the move carries through the cut without one scene's type over the other's.
+                let e = local as f32 / fps / motion::INTO_SECONDS;
+                let z = motion::in_out_cubic((e / 0.7).min(1.0));
+                let big = (lw / rw.max(1.0)).max(lh / rh.max(1.0)) * 1.08;
+                let s = big.max(1.0).powf(z);
+                let (cx, cy) = (rx + rw / 2.0, ry + rh / 2.0);
+                let gone = motion::clamp01((e - 0.38) / 0.3);
+                let prev = &self.film.beats[i - 1];
+                blocks::set_footer(1);
+                if gone < 1.0 {
+                    canvas.save();
+                    canvas.translate((cx + (lw / 2.0 - cx) * z, cy + (lh / 2.0 - cy) * z));
+                    canvas.scale((s, s));
+                    canvas.translate((-cx, -cy));
+                    canvas.save_layer_alpha_f(None, 1.0 - motion::in_out_cubic(gone));
+                    let marks = self.marks.len();
+                    self.beat(canvas, i - 1, prev.frames + local, frame, &mut errors);
+                    self.marks.truncate(marks);
+                    canvas.restore();
+                    canvas.restore();
+                }
+                let q = motion::in_out_cubic(motion::clamp01((e - 0.55) / 0.45));
+                if q > 0.0 {
+                    let k = 1.0 + 0.06 * (1.0 - q);
+                    canvas.save_layer_alpha_f(None, q);
+                    canvas.translate((lw / 2.0, lh / 2.0));
+                    canvas.scale((k, k));
+                    canvas.translate((-lw / 2.0, -lh / 2.0));
+                    self.beat(canvas, i, local, frame, &mut errors);
+                    canvas.restore();
+                }
+                self.footer(canvas, i, local, frame, &mut errors);
+            } else {
+                self.beat(canvas, i, local, frame, &mut errors);
+            }
         } else {
             self.beat(canvas, i, local, frame, &mut errors);
         }
@@ -219,6 +276,17 @@ impl Engine {
         if over {
             self.layers_of(canvas, Some(&id), Depth::Over, beat_frame, errors);
         }
+    }
+
+    /// A beat's captions and source line on their own, still and whole over a transition; the
+    /// beats around it were drawn without theirs. Leaves footers on for what follows.
+    fn footer(&mut self, canvas: &Canvas, index: usize, local: usize, frame: usize, errors: &mut Vec<String>) {
+        blocks::set_footer(2);
+        match self.block(index, local, frame, 0) {
+            Ok(node) => draw::paint(canvas, &node),
+            Err(e) => errors.push(e),
+        }
+        blocks::set_footer(0);
     }
 
     fn stages(&mut self, canvas: &Canvas, frame: usize, z: Depth, errors: &mut Vec<String>) {
@@ -437,4 +505,9 @@ pub fn encode_png(pixels: &[u8], width: i32, height: i32) -> Result<Vec<u8>, Str
 
 fn paint_color(hex: &str) -> sk::Color {
     crate::paint::color(crate::paint::hex(hex, 1.0))
+}
+
+/// Seconds a push holds the leaving scene beside the arriving one.
+fn push_seconds(beat: &blocks::Beat) -> f32 {
+    MotionStyle::new(&beat.environment.motion.preset, beat.environment.motion.intensity).duration() + 0.15
 }

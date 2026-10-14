@@ -161,6 +161,9 @@ thread_local! {
     /// Which part of a beat to draw: 0 everything, 1 only its ground (tone and plate), 2 all
     /// but its ground. The scene engine draws native layers between the two.
     pub(crate) static PART: std::cell::Cell<u8> = const { std::cell::Cell::new(0) };
+    /// The scene's footer (captions and source line): 0 with the scene, 1 without it, 2 only
+    /// it. A transition moves scenes, never the words read over them.
+    pub(crate) static FOOTER: std::cell::Cell<u8> = const { std::cell::Cell::new(0) };
 }
 
 /// Words that lean on the next one: a phrase should not end on them.

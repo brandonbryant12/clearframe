@@ -157,11 +157,10 @@
       "enum": [
         "cut",
         "fade",
-        "rise",
         "wipe",
         "push",
-        "zoom",
         "panel",
+        "into",
         "auto"
       ]
     },
@@ -561,13 +560,16 @@
             "enum": [
               "cut",
               "fade",
-              "rise",
               "wipe",
               "push",
-              "zoom",
               "panel",
+              "into",
               "auto"
             ]
+          },
+          "into": {
+            "type": "string",
+            "description": "Go through this element of the previous canvas beat (its id) into this scene"
           },
           "exit": {
             "enum": [
@@ -575,7 +577,6 @@
               "none",
               "fade",
               "push",
-              "zoom",
               "wipe",
               "panel"
             ]
@@ -2303,7 +2304,7 @@
                       "description": "Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views"
                     },
                     "elements": {
-                      "description": "[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid|document|pointer, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine, tilt, material, mosaic, print}] (≤ 600); text takes marks: [{words, style: highlight|underline|circle|box|strike|cross, say|at}] drawn on its own words; document is a page of real sections that scrolls to one on a word; pointer {to: an element id, say} presses it — see docs/canvas.md"
+                      "description": "[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid|document|pointer|receipt|app, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine, tilt, material, mosaic, print}] (≤ 600); text takes marks: [{words, style: highlight|underline|circle|box|strike|cross|stamp, say|at, label (stamp)}] drawn on its own words; document is a page of real sections that scrolls to one on a word; pointer {to: an element id, say} presses it — see docs/canvas.md"
                     },
                     "stagger": {
                       "description": "Seconds between top-level elements without a cue (0–3)"

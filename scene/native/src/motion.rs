@@ -15,6 +15,9 @@ pub fn out_expo(x: f32) -> f32 {
     let x = clamp01(x);
     if x >= 1.0 { 1.0 } else { 1.0 - 2f32.powf(-10.0 * x) }
 }
+/// Seconds an `into` transition takes to go through its element into the next scene.
+pub const INTO_SECONDS: f32 = 0.9;
+
 pub fn in_out_cubic(x: f32) -> f32 {
     let x = clamp01(x);
     if x < 0.5 { 4.0 * x * x * x } else { 1.0 - (-2.0 * x + 2.0).powi(3) / 2.0 }
@@ -183,7 +186,6 @@ pub enum ExitKind {
     None,
     Fade,
     Push,
-    Zoom,
     Wipe,
     Panel,
 }
@@ -193,7 +195,6 @@ impl ExitKind {
             "none" => Self::None,
             "fade" => Self::Fade,
             "push" => Self::Push,
-            "zoom" => Self::Zoom,
             "wipe" => Self::Wipe,
             "panel" => Self::Panel,
             _ => return None,

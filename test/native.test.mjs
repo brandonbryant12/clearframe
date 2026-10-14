@@ -631,7 +631,7 @@ test('new blocks reject values that cannot be drawn honestly', () => {
   assert.equal(normalizeProps('chapter', { text: 'Part one' }).title, 'Part one');
 });
 test('each scene exits the way the next one enters, and the film ends on a fade', t => {
-  const beats = ['fade', 'cut', 'push', 'zoom', 'wipe', 'rise'].map((transition, i) => ({
+  const beats = ['fade', 'cut', 'push', 'wipe', 'fade', 'panel'].map((transition, i) => ({
     id: `b${i}`,
     block: 'statement',
     duration: 2,
@@ -640,21 +640,43 @@ test('each scene exits the way the next one enters, and the film ends on a fade'
   }));
   const first = job(t, beats);
   assert.deepEqual(first.errors, []);
-  // A wipe's edge crosses the outgoing scene held whole, so the scene before a wipe stays.
+  // A push carries the outgoing scene off beside the next one and a wipe's edge crosses it held
+  // whole, so the scene before either stays; a cut is a cut.
   assert.deepEqual(
     first.job.beats.map(b => b.exit),
-    ['none', 'push', 'zoom', 'none', 'fade', 'fade'],
+    ['none', 'none', 'none', 'fade', 'panel', 'fade'],
   );
   beats[5].exit = 'none';
   beats[0].exit = 'wipe';
   assert.deepEqual(
     job(t, beats).job.beats.map(b => b.exit),
-    ['wipe', 'push', 'zoom', 'none', 'fade', 'none'],
+    ['wipe', 'none', 'none', 'fade', 'panel', 'none'],
   );
   beats[1].exit = 'dissolve';
   assert.match(job(t, beats).errors.join(), /exit must be/);
   beats[1].exit = 'whip';
   assert.match(job(t, beats).errors.join(), /exit "whip" was retired: .*use push/);
+  delete beats[1].exit;
+  beats[2].transition = 'rise';
+  assert.match(job(t, beats).errors.join(), /transition "rise" was retired: .*use cut/);
+  beats[2].transition = 'zoom';
+  assert.match(job(t, beats).errors.join(), /transition "zoom" was retired: .*into/);
+});
+
+test('a film cuts by default, and into goes through an element of the last canvas scene', t => {
+  const card = { type: 'rect', id: 'screen', x: 600, y: 200, w: 400, h: 300, fill: 'surface' };
+  const beats = [
+    { id: 'a', block: 'canvas', duration: 2, props: { elements: [{ type: 'group', x: 100, y: 50, children: [card] }] } },
+    { id: 'b', block: 'canvas', duration: 2, into: 'screen', props: { elements: [{ type: 'rect', x: 0, y: 0, w: 100, h: 100 }] } },
+    { id: 'c', block: 'statement', duration: 2, props: { text: 'Next' } },
+  ];
+  const { job: j, errors } = job(t, beats);
+  assert.deepEqual(errors, []);
+  assert.deepEqual(j.beats.map(b => b.transition), ['cut', 'into', 'cut'], 'cut unless told otherwise');
+  assert.deepEqual(j.beats[1].into, [700, 250, 400, 300], 'the element in frame pixels, through its group');
+  assert.equal(j.beats[0].exit, 'none', 'the scene gone through stays until the camera is through it');
+  beats[1].into = 'nowhere';
+  assert.match(job(t, beats).errors.join(), /into "nowhere" names no element/);
 });
 test('a beat that ends before its numbers finish counting fails, but drafts only warn', t => {
   const sb = {

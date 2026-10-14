@@ -11,7 +11,7 @@
     "preset": "spring",
     "intensity": 0.65
   },
-  "transition": "fade",
+  "transition": "cut",
   "backdrop": "paper",
   "chrome": false,
   "music": {},

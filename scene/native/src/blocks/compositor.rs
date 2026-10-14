@@ -306,31 +306,31 @@ fn scene_motion<'a>(d: &Draw<'a, '_>, plate: Node, content: Node, footer: Node) 
         2 => (empty(), content, footer),
         _ => (plate, content, footer),
     };
+    let (plate, content, footer) = match super::FOOTER.with(|f| f.get()) {
+        1 => (plate, content, empty()),
+        2 => (empty(), empty(), footer),
+        _ => (plate, content, footer),
+    };
     let b = d.b;
     let env = &b.environment;
     let (w, h) = (env.width, env.height);
     let content = camera(d, content);
     let enter = d.m.enter(d.t);
-    let distance = d.m.distance(36.0);
     let reveal = motion::reveal_seconds(&b.transition);
     let reveal_p = if reveal > 0.0 { motion::out_cubic(d.t / reveal) } else { 1.0 };
     let mut cover = empty();
     let none = Matrix::default();
     let (opacity, transform) = match b.transition.as_str() {
         "fade" => (enter.alpha, none),
-        "rise" => (enter.alpha, Matrix::translate((0.0, distance * (1.0 - enter.travel)))),
         "push" => (1.0, Matrix::translate((w * (1.0 - motion::out_expo(d.t / (d.m.duration() + 0.15))), 0.0))),
-        "zoom" => {
-            let scale = 1.0 - 0.05 * d.m.intensity * (1.0 - enter.travel);
-            (enter.alpha, Matrix::scale_translate((scale, scale), (w * (1.0 - scale) / 2.0, h * (1.0 - scale) / 2.0)))
-        }
         "panel" => {
             if reveal_p < 1.0 {
                 cover = panel(d, -w * reveal_p, true);
             }
             (1.0, none)
         }
-        // "wipe" and "cut" draw the scene whole: the wipe's edge clips the frame in compose.rs.
+        // "wipe", "into" and "cut" draw the scene whole: the frame compositor (compose.rs) clips
+        // a wipe's edge and carries an into through the last scene.
         _ => (1.0, none),
     };
     let seconds = b.frames as f32 / d.f.fps as f32;
@@ -370,12 +370,6 @@ fn scene_motion<'a>(d: &Draw<'a, '_>, plate: Node, content: Node, footer: Node) 
             ExitKind::Push => {
                 exit_opacity = 1.0 - x * 0.6;
                 exit_transform = Matrix::translate((-w * 0.35 * x, 0.0));
-            }
-            ExitKind::Zoom => {
-                let scale = 1.0 + 0.04 * d.m.intensity.max(0.3) * x;
-                exit_opacity = 1.0 - x;
-                exit_transform =
-                    Matrix::scale_translate((scale, scale), (w * (1.0 - scale) / 2.0, h * (1.0 - scale) / 2.0));
             }
             ExitKind::Wipe => {
                 exit_clip = (w * x, w - w * x);

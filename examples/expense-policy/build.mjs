@@ -60,6 +60,8 @@ function film(vertical) {
       {
         id: 'slip',
         block: 'canvas',
+        // Through one of the claims that came back, into the paper that sent it back.
+        into: 'share-31',
         vo: 'A card slip is not a receipt. Over twenty-five dollars, we need the itemised one: what you bought, and what it cost.',
         props: {
           source: `${POLICY}; the receipt is an example`,

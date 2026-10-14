@@ -33,7 +33,7 @@ export function storyboardFor(id, { title, theme, vertical, seed, ending } = {})
     format: { preset: vertical ? 'vertical' : (book.format ?? 'landscape'), fps: 30 },
     theme: theme ?? book.theme ?? 'paper',
     motion: { preset: book.motion ?? 'gentle', intensity: 0.65 },
-    transition: book.transition ?? 'fade',
+    transition: book.transition ?? 'cut',
     backdrop: book.backdrop ?? 'none',
     chrome: false,
     // Captions are on for every narrated film; a playbook that turns them off says so.

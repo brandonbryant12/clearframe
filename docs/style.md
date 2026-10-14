@@ -6,7 +6,7 @@ A consistent visual language can still contain many distinct forms. Start with t
 {
   "theme": { "base": "midnight", "accent": "#b4bcff" },
   "motion": { "preset": "gentle", "intensity": 0.65 },
-  "transition": "fade",
+  "transition": "cut",
   "backdrop": "none",
   "texture": { "grain": 0.2, "vignette": 0.3 }
 }
@@ -94,7 +94,7 @@ Every preset keeps `ink`, `muted` and `accent` at ≥ 4.5:1 against `bg`, and `a
 
 Opacity never overshoots, and values never do: counters, bars, rings and fills use non-overshooting curves and always settle on the exact authored number. `check` fails a final render when a beat ends before its numbers finish counting.
 
-**Entrances** (`transition`, global or per beat): `auto` (a `rise` where the chapter changes, a `fade` elsewhere), `cut`, `fade`, `rise`, `wipe`, `push`, `zoom`, and `panel` (an accent panel with a second-accent edge sweeps across and off, carrying one movement across the cut). **Exits** mirror the next scene's entrance automatically: a scene before a push slides away, one before a wipe wipes off, one before a cut simply cuts, one before a panel is covered by it. The final scene fades out. Override with a beat's `exit`: `auto`, `none`, `fade`, `push`, `zoom`, `wipe`, `panel`. Exits never start before the last spoken word of the beat or before its entrance has finished; when the outgoing scene has no room to finish a panel, `check` warns and uses a fade. Scenes are never cross-dissolved over each other. The `iris`, `whip`, `flash` and `dissolve` transitions (and `transitionOrigin`) were retired and are refused by name with a replacement.
+**Transitions** (`transition`, global or per beat). A film **cuts** unless told otherwise: a dip between every line is a deck of slides, and professional films cut between most shots, carrying something across (an element with the same id morphs into the next scene; a `world` lets the camera travel). For a story's turns: **`into`** (set `into: "id"` on the beat) takes the camera forward through that element of the previous canvas scene, an app screen, a page, one tile of a share, until it overfills the frame, and the new scene comes up inside it; **`push`** moves the old scene and the new one as one strip, for the next step in a sequence; **`fade`** dips briefly through the ground, for a change of chapter or of time; **`wipe`** crosses the old scene with an edge; **`panel`** sweeps an accent panel across (never in a workplace film, where it reads as a fault). `auto` fades where the chapter changes and cuts elsewhere. Captions and the source line hold still across every transition; only the pictures move. Exits mirror the next entrance (a scene before a push, a wipe or an into stays whole until the next one takes it). Override with a beat's `exit`: `auto`, `none`, `fade`, `push`, `wipe`, `panel`. Exits never start before the last spoken word of the beat or before its entrance has finished. Scenes are never cross-dissolved over each other. Retired and refused by name: `iris`, `whip`, `flash`, `dissolve`, `rise` and `zoom` (each with its replacement).
 
 **Camera:** every scene gets a slow move (`camera: auto` pushes in gently, except kinetic text and footage). Set `camera` per beat to `in`, `out`, `left`, `right`, `up`, `down` or `none`, or `{move, amount: 0–1}`. Plates drift independently of the content, which gives parallax.
 

@@ -9,14 +9,19 @@ export const COVER = CONSTANTS.cover;
 export const CANVAS_TIMING = CONSTANTS.canvas;
 /** Seconds a wipe's edge takes to cross the frame (`motion::wipe_seconds` in the renderer). */
 export const wipeSeconds = (preset, sceneSeconds) => Math.min(ENTRANCE[preset ?? 'gentle'] + 0.25, sceneSeconds / 2);
+/** Seconds an `into` transition takes to go through its element (`motion::INTO_SECONDS`). */
+export const INTO_SECONDS = 0.9;
 /** Seconds prepared beat `index` stays on screen past its end: held ahead of the next beat's
- * wipe edge, so its footage must run that much longer. */
+ * wipe edge, beside its push or zoomed through by its into, so its footage must run that much longer. */
 export function heldTail(job, index) {
   const next = job.beats[index + 1];
-  return next?.transition === 'wipe' ? wipeSeconds(next.motion?.preset, next.frames / job.fps) : 0;
+  if (next?.transition === 'wipe') return wipeSeconds(next.motion?.preset, next.frames / job.fps);
+  if (next?.transition === 'push') return ENTRANCE[next.motion?.preset ?? 'gentle'] + 0.15;
+  if (next?.transition === 'into') return INTO_SECONDS;
+  return 0;
 }
 
-export const EXITS = ['auto', 'none', 'fade', 'push', 'zoom', 'wipe', 'panel'];
+export const EXITS = ['auto', 'none', 'fade', 'push', 'wipe', 'panel'];
 /**
  * Vocabulary retired because it fell below the bar of an enterprise or financial film. A
  * storyboard that still names one is refused with the reason and what to use instead, so an old
@@ -28,6 +33,8 @@ export const RETIRED = {
     whip: 'a motion-blurred whip pan is trailer grammar; use push, or a camera move within one world',
     flash: 'a white-out flash cut reads as a fault in a calm film; use cut, or fade',
     dissolve: 'a double exposure duplicates fade and scenes are never cross-dissolved (docs/style.md); use fade',
+    rise: 'it built each scene up out of an empty frame, a slide coming in; use cut, or fade at a change of chapter',
+    zoom: 'a scene scaling in from an empty frame reads as a slide transition; use cut, into (through an element of the last scene), or a camera move',
   },
   backdrop: {
     glow: 'it laid muddy blobs behind the type; use none, or paper',
@@ -44,7 +51,7 @@ export const RETIRED = {
   },
 };
 // A scene exit mirrors a transition, so a retired transition is a retired exit.
-RETIRED.sceneExit = { iris: RETIRED.transition.iris, whip: RETIRED.transition.whip };
+RETIRED.sceneExit = { iris: RETIRED.transition.iris, whip: RETIRED.transition.whip, zoom: RETIRED.transition.zoom };
 const LABEL = { transition: 'transition', backdrop: 'backdrop', enter: 'entrance', exit: 'exit', sceneExit: 'exit' };
 /** The refusal for retired vocabulary (`kind` is a key of RETIRED), or null if `name` is current. */
 export function retired(kind, name) {

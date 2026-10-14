@@ -67,8 +67,11 @@ export function createJob(sb, timing, { draft = false } = {}) {
   if (filmRetired) report.errors.push(filmRetired);
   const transitions = timing.beats.map(b => {
     // A film-wide transition never applies to the first frame: the film opens on its picture.
-    let t = sb.beats[b.index].transition ?? (b.index === 0 ? 'cut' : filmRetired ? 'fade' : (sb.transition ?? 'fade'));
-    if (t === 'auto') t = b.index && timing.beats[b.index - 1].chapter !== b.chapter ? 'rise' : 'fade';
+    // A film cuts unless told otherwise: a dip between every line is a deck of slides. A beat
+    // that names an element to go `into` takes that transition.
+    if (sb.beats[b.index].into != null) return 'into';
+    let t = sb.beats[b.index].transition ?? (b.index === 0 ? 'cut' : filmRetired ? 'cut' : (sb.transition ?? 'cut'));
+    if (t === 'auto') t = b.index && timing.beats[b.index - 1].chapter !== b.chapter ? 'fade' : 'cut';
     return t;
   });
   const captions = captionCues(timing);
@@ -86,6 +89,7 @@ export function createJob(sb, timing, { draft = false } = {}) {
   linkMorphs(beats, sb, timing, report);
   linkCasts(beats, sb, timing, report, cast);
   linkWorlds(beats, sb, timing, report);
+  linkInto(beats, sb, timing, report);
   const frame = frameChrome(sb, beats, report);
   fitGraphicTransitions(beats, timing, report);
   filmWarnings(sb, timing, film.theme, report);
@@ -628,13 +632,54 @@ function checkNarration(b, frame, captions, report, face = null) {
   }
 }
 
+/**
+ * A beat that goes `into` an element of the previous canvas beat (a screen, a page, a tile): the
+ * element's box in frame pixels, through that beat's camera, for the compositor to zoom through.
+ */
+function linkInto(beats, sb, timing, report) {
+  for (let i = 0; i < beats.length; i++) {
+    const b = beats[i],
+      id = sb.beats.find(s => s.id === b.id)?.into;
+    if (b.transition !== 'into') continue;
+    const prev = beats[i - 1];
+    if (typeof id !== 'string' || !id.trim()) {
+      report.errors.push(`${b.id}: transition "into" needs into: the id of an element in the previous canvas beat to go through`);
+      continue;
+    }
+    if (!prev || prev.block !== 'canvas') {
+      report.errors.push(`${b.id}: into "${id}" needs a canvas beat before it to go through; use cut or fade here`);
+      continue;
+    }
+    let found = null;
+    const walk = (list, dx, dy) =>
+      (list ?? []).forEach(el => {
+        if (found) return;
+        if (el.id === id) {
+          const e = elementsExtent([el]);
+          if (e) found = { ...e, left: e.left + dx, top: e.top + dy };
+        } else if (el.type === 'group') walk(el.children, dx + (el.x ?? 0), dy + (el.y ?? 0));
+      });
+    walk(prev.props?.elements, 0, 0);
+    if (!found || found.w < 4 || found.h < 4) {
+      report.errors.push(`${b.id}: into "${id}" names no element of ${prev.id} (give the screen, page or tile to go through that id)`);
+      continue;
+    }
+    // Through the previous beat's camera, if it has one: world pixels to frame pixels.
+    const [vx, vy, vw, vh] = Array.isArray(prev.props?.view) && prev.props.view.length === 4 ? prev.props.view : [0, 0, null, null];
+    const [W, H] = [timing.width, timing.height];
+    const kx = vw ? W / vw : 1,
+      ky = vh ? H / vh : 1;
+    b.into = [(found.left - vx) * kx, (found.top - vy) * ky, found.w * kx, found.h * ky].map(v => Math.round(v * 10) / 10);
+  }
+}
+
 /** A scene's exit mirrors the next scene's entrance unless authored. */
 function exitFor(authored, next) {
   if (authored !== 'auto') return authored;
   if (next == null) return 'fade';
-  // A wipe's edge crosses this scene held whole (compose.rs), so it does not leave first.
-  if (next === 'cut' || next === 'wipe') return 'none';
-  if (next === 'rise') return 'fade';
+  // A wipe's edge crosses this scene held whole, a push carries it off beside the next one and
+  // an into goes through it (compose.rs), so it does not leave first.
+  if (['cut', 'wipe', 'push', 'into'].includes(next)) return 'none';
   return next;
 }
 

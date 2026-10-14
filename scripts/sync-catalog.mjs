@@ -167,6 +167,7 @@ const schema = {
           hold: { type: 'number', minimum: 0 },
           min: { type: 'number', minimum: 0 },
           transition: { enum: [...TRANSITIONS, 'auto'] },
+          into: { type: 'string', description: 'Go through this element of the previous canvas beat (its id) into this scene' },
           exit: { enum: EXITS },
           motion,
           props: object,
