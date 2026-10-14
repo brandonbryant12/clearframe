@@ -26,15 +26,17 @@ export default {
     const { total = 100, count = 31, cols = 10, tone = 'accent', fix = false, unit = '' } = params;
     if (count > total) throw new Error(`sketchParams.count (${count}) is more than the total (${total}) for share`);
     const T = h > w * 1.1;
-    // A wide frame's grid uses the height a heading would take: the share is the whole picture.
-    const b = T ? body(w, h) : { ...body(w, h), y: 170, h: 660 };
+    // The grid uses the height a heading would take: the share is the whole picture.
+    const b = T ? { ...body(w, h), y: round(h * 0.16), h: round(h * 0.62) } : { ...body(w, h), y: 170, h: 660 };
     const rows = Math.ceil(total / cols);
     // The grid as large as the body allows: the left of a wide frame, the top of a tall one.
     const cell = round(T ? Math.min(b.w / cols, (b.h - 420) / rows) : Math.min((b.w * 0.42) / cols, b.h / rows));
     const gap = Math.max(4, round(cell * 0.16));
     const size = cell - gap;
-    const gx = round(T ? b.x + (b.w - cell * cols) / 2 : b.x),
-      gy = round(b.y + (T ? 0 : (b.h - cell * rows) / 2));
+    // Left-aligned with its figure, as an editorial chart is.
+    const gx = round(b.x),
+      // Centred in the height: on a tall frame with the figure and its words under the grid.
+      gy = round(b.y + Math.max(0, T ? (b.h - (cell * rows + 330)) / 2 : (b.h - cell * rows) / 2));
     const tile = i => ({ x: gx + (i % cols) * cell, y: gy + Math.floor(i / cols) * cell });
     const r = round(size * 0.18);
     const els = [];
