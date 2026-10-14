@@ -36,6 +36,8 @@ When the idea is how one quantity behaves (a relationship, an accumulation, nois
 - Turn flat things in space: `tilt: [x, y]` on a group (a window, a phone, a ticket, a box face with type on it), flipped in with `tiltY` keys from edge-on and kept alive with `loop: {type: "rock"}`, plus a `shadow` so it floats. Start from `sketch chat`.
 - One word can be a material: `material: "chrome" | "gold" | "thermal"` (or your own `map`) paints display type by its own depth. At most one hero word in a product film, rarely in a workplace one; never body text, never figures that need reading.
 - Atmosphere is cheap: a `particles` field (`embers`, `rain`, `snow`, `dust`, `bubbles`) under a scene keeps a hold alive. One field per scene, low count, palette colour.
+- Draw the real thing from what is on it, not from shapes: a `document` for a policy's own words, a `receipt` for the paper a claim turns on (its total is checked against its lines), an `app` for the screen the step happens on (tabs, fields that fill in, a button that becomes its confirmation). Each names its parts, so `marks` and a `pointer` find them by id; a receipt drawn too small to read prints its lines as bars.
+- Keep the picture off the caption band (the bottom quarter of a wide frame, fifth of a tall one): a sketch with room above is framed lower for you, but a drawing you place yourself has to stay above it.
 - Text inside canvas is display text: short labels, not sentences. Long thoughts belong in narration or a `statement`.
 
 ## Honesty
