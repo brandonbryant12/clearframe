@@ -183,6 +183,7 @@
             "id": "exp",
             "x": 800,
             "y": 110,
+            "w": 940,
             "title": "Fairhaven Expenses",
             "heading": "New claim",
             "upload": {

@@ -99,7 +99,7 @@ function film(vertical) {
             {
               type: 'app',
               id: 'exp',
-              ...(vertical ? { x: 200, y: 520, device: 'phone', w: 680 } : { x: 800, y: 110 }),
+              ...(vertical ? { x: 200, y: 520, device: 'phone', w: 680 } : { x: 800, y: 110, w: 940 }),
               title: 'Fairhaven Expenses',
               heading: 'New claim',
               upload: { label: 'Photograph receipt', receipt: lunch, say: 'Photograph', after: 0.4 },

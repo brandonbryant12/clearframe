@@ -27,7 +27,8 @@ export function expandApp(input, at, fail, canvas) {
   if (!Array.isArray(tabs) || tabs.length > 3 || tabs.some(t => typeof t !== 'string' || !t.trim() || t.length > 14)) fail(`${at}.tabs must be up to three short tab names`);
   if (!Number.isFinite(size) || size < 24 || size > 48) fail(`${at}.size must be 24–48 (the field type, in px)`);
   const s = size;
-  const w = width ?? (phone ? 640 : 940);
+  // A window that is the scene's subject fills it; one beside something else says how wide.
+  const w = width ?? (phone ? 640 : 1180);
   const pad = phone ? 44 : 48;
   const inner = w - pad * 2;
   const els = [];

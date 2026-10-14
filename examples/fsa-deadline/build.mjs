@@ -29,7 +29,7 @@ function film(vertical) {
     {
       type: 'app',
       id: 'hub',
-      ...(vertical ? { x: 200, y: 470, device: 'phone', w: 680 } : { x: 800, y: 110 }),
+      ...(vertical ? { x: 200, y: 470, device: 'phone', w: 680 } : { x: 800, y: 110, w: 940 }),
       title: 'Kestrel Hub',
       tabs: ['Benefits', 'Claims'],
       heading: 'New claim',

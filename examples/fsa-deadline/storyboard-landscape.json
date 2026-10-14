@@ -164,6 +164,7 @@
             "id": "hub",
             "x": 800,
             "y": 110,
+            "w": 940,
             "title": "Kestrel Hub",
             "tabs": [
               "Benefits",
