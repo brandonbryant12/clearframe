@@ -6,8 +6,9 @@ import { round } from '../../film/sketch-kit.mjs';
 // line, hits it (the line turns red there) and comes back, and what it becomes ("$0") lands in
 // its empty slot. With `bookend` the board opens where that left it, and on FIX the card that
 // stayed crosses too and is ticked: the close of a film that opened on the board.
-// Moments: CARD1 … CARDn (each card's word) and RESET; with bookend, FIX only.
-const AT = { CARD1: 1.0, CARD2: 1.7, CARD3: 2.4, CARD4: 3.1, CARD5: 3.8, RESET: 4.6, FIX: 1.0 };
+// Moments: CARD1 … CARDn (each card's word) and RESET; with bookend, FIX (the reset clears) and
+// CROSS (the card that stayed crosses).
+const AT = { CARD1: 1.0, CARD2: 1.7, CARD3: 2.4, CARD4: 3.1, CARD5: 3.8, RESET: 4.6, FIX: 1.0, CROSS: 1.25 };
 
 export default {
   name: 'carryover',
@@ -15,12 +16,12 @@ export default {
   order: 96,
   summary:
     'What carries into next year and what does not: this year’s elections beside next year’s empty slots; each that carries over crosses the line on its word and is ticked, and one that does not hits the line and comes back while what it becomes ("$0") lands in its slot; with bookend the board opens where that left it and the card that stayed crosses too.',
-  use: 'Open enrollment and plan-year rules: "do nothing and your medical, dental and vision carry over, but your FSA election resets to $0". Set sketchParams {count, stays, icons}: count cards (2–5), stays the 1-based numbers of the cards that do not carry over, icons optional icon names per card (see icons); replace BEFORE (e.g. "This year"), AFTER (e.g. "From January 1"), ITEM1 … ITEMn (e.g. "Medical") and RESET (what a card that stays becomes, a word or two, e.g. "$0" or "Lapses") with sketchText; land CARD1 … CARDn and RESET on words with sketchSay. The reset chips carry ids (carryover-reset-N) for an into. To close the film on the same board, give the closing beat the same params and words plus bookend: true: it opens with the cards where the hook left them, and on FIX (land it on "re-elect") the reset chip clears and the card that stayed crosses and is ticked.',
+  use: 'Open enrollment and plan-year rules: "do nothing and your medical, dental and vision carry over, but your FSA election resets to $0". Set sketchParams {count, stays, icons}: count cards (2–5), stays the 1-based numbers of the cards that do not carry over, icons optional icon names per card (see icons); replace BEFORE (e.g. "This year"), AFTER (e.g. "From January 1"), ITEM1 … ITEMn (e.g. "Medical") and RESET (what a card that stays becomes, a word or two, e.g. "$0" or "Lapses") with sketchText; land CARD1 … CARDn and RESET on words with sketchSay. The reset chips carry ids (carryover-reset-N) for an into. To close the film on the same board, give the closing beat the same params and words plus bookend: true: it opens with the cards where the hook left them, and on FIX (land it on the word that fixes it, "re-elect") the reset chip clears, and on CROSS (e.g. "all four") the card that stayed crosses and is ticked.',
   params: {
     count: { default: 4, min: 2, max: 5, integer: true, figure: false, about: 'how many elections (cards)' },
     stays: { default: [4], list: true, length: [1, 4], min: 1, max: 5, integer: true, figure: false, about: 'the 1-based numbers of the cards that do not carry over' },
     icons: { default: [], about: 'optional icon names, one per card (see icons)' },
-    bookend: { default: false, about: 'true opens with the board decided (carried cards across, the reset chip in the slots of the cards that stayed); on FIX the chip clears and those cards cross and are ticked' },
+    bookend: { default: false, about: 'true opens with the board decided (carried cards across, the reset chip in the slots of the cards that stayed); on FIX the chip clears and on CROSS those cards cross and are ticked' },
   },
   build(w, h, { params = {}, text: words = {} } = {}) {
     const { count = 4, stays = [4], icons = [], bookend = false } = params;
@@ -83,7 +84,7 @@ export default {
       // across once they are fixed.
       const keys = bookend
         ? stay
-          ? [{ ...on('FIX', 0.25), dur: 0.8, ease: 'inOut', x: across, sound: 'chime' }]
+          ? [{ ...on('CROSS', 0), dur: 0.8, ease: 'inOut', x: across, sound: 'chime' }]
           : []
         : stay
           ? [
@@ -103,7 +104,7 @@ export default {
           ...(icon ? [{ type: 'icon', name: icon, x: left + round(start / 2 + 2), y: round(y + cardH / 2), size: T ? 48 : 48, stroke: 'accent' }] : []),
           text(`ITEM${i + 1}`, left + start, round(y + cardH / 2 + size * 0.36), size, 'strong', 'ink', { fit: colW - start - 84 }),
           // The tick a card gets on the far side (in a bookend, the card that stayed gets it on FIX).
-          ...(stay ? (bookend ? tick(y, dt => on('FIX', dt + 0.25)) : []) : tick(y, bookend ? null : dt => on(cue, dt))),
+          ...(stay ? (bookend ? tick(y, dt => on('CROSS', dt)) : []) : tick(y, bookend ? null : dt => on(cue, dt))),
         ],
       });
       if (!stay) continue;

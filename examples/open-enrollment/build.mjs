@@ -149,7 +149,7 @@ function film(vertical) {
         id: 'close',
         block: 'canvas',
         vo: 'Make your FSA election by the nineteenth, and all four come with you.',
-        props: { ...board, sketchParams: { ...board.sketchParams, bookend: true }, sketchSay: { FIX: 'election' } },
+        props: { ...board, sketchParams: { ...board.sketchParams, bookend: true }, sketchSay: { FIX: 'election', CROSS: 'four' } },
         hold: 1.2,
       },
     ],

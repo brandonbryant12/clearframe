@@ -285,7 +285,8 @@
         },
         "source": "Northwind Benefits Guide 2028, Open enrollment (fictional)",
         "sketchSay": {
-          "FIX": "election"
+          "FIX": "election",
+          "CROSS": "four"
         }
       },
       "hold": 1.2
