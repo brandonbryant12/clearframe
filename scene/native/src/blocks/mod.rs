@@ -63,7 +63,6 @@ pub const BLOCKS: &[&str] = &[
     "timeline",
     "funnel",
     "quote",
-    "list",
     "matrix",
     "equation",
     "callout",
@@ -71,7 +70,6 @@ pub const BLOCKS: &[&str] = &[
     "image",
     "video",
     "kinetic",
-    "icon-grid",
     "flow",
     "cycle",
     "breathing",
@@ -415,12 +413,6 @@ mod tests {
     fn diagrams_render_labels_icons_support_and_captions_and_seek_deterministically() {
         let examples = [
             (
-                "icon-grid",
-                serde_json::json!({"items":[
-                {"icon":"book-open","label":"Read","detail":"Keep a field notebook"},
-                {"icon":"leaf","label":"Observe","detail":"Look for new growth","at":1.2}]}),
-            ),
-            (
                 "flow",
                 serde_json::json!({"nodes":[
                 {"icon":"utensils","label":"Prepare","detail":"Lay out the ingredients"},
@@ -481,8 +473,8 @@ mod tests {
     #[test]
     fn diagram_jobs_reject_unknown_icons_and_invalid_phase_durations() {
         let mut value = job();
-        value["beats"][0]["block"] = "icon-grid".into();
-        value["beats"][0]["props"] = serde_json::json!({"items":[{"icon":"untrusted.svg","label":"A"}]});
+        value["beats"][0]["block"] = "flow".into();
+        value["beats"][0]["props"] = serde_json::json!({"nodes":[{"icon":"untrusted.svg","label":"A"},{"label":"B"}]});
         assert!(Film::from_json(&serde_json::to_vec(&value).unwrap()).is_err());
         value["beats"][0]["block"] = "breathing".into();
         value["beats"][0]["props"] =

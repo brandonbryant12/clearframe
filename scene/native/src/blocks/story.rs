@@ -817,42 +817,6 @@ impl<'a, 'c> Draw<'a, 'c> {
         ]);
         draw::group(vec![mark.into(), body.into(), self.rise(byline, after, 12.0).into()])
     }
-    pub(crate) fn list(&self) -> Node {
-        let a = self.area;
-        let items = arr(self.props(), "items");
-        let row_h = (a.h / items.len().max(1) as f32).min(170.0);
-        let top = a.y + ((a.h - row_h * items.len() as f32) * 0.35).max(0.0);
-        let mut shapes = vec![];
-        for (i, item) in items.iter().enumerate() {
-            let y = top + i as f32 * row_h;
-            let time = at(item, self.b.cue_seconds, i);
-            let grow = self.m.grow(self.t - time, 0.6);
-            let index_w = if self.wide { 110.0 } else { 92.0 };
-            let value = nonempty(s(item, "text"), item.as_str().unwrap_or(""));
-            let layout = self.fit(
-                value,
-                Style::display(Font::Display, if self.wide { 46.0 } else { 42.0 }).leading(1.12),
-                a.w - index_w,
-                row_h - 36.0,
-            );
-            let number = self.run(
-                format!("{:02}", i + 1),
-                a.x,
-                y + 20.0 + layout.baseline,
-                Font::DisplayBold,
-                layout.size.min(46.0),
-                0.0,
-                &self.p.accent,
-            );
-            let line = rect(a.x, y, a.w * grow, 2.0, &self.p.line());
-            let text = self.draw(&layout, a.x + index_w, y + 20.0, a.w - index_w, Align::Left, &self.p.ink);
-            shapes.push(draw::group(vec![
-                line.into(),
-                self.rise(draw::group(vec![number.into(), text.into()]), time, 20.0).into(),
-            ]));
-        }
-        Node::from(shapes)
-    }
     pub(crate) fn matrix(&self) -> Node {
         let a = self.area;
         let p = self.props();

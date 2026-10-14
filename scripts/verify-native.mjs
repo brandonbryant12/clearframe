@@ -88,7 +88,6 @@ for (const [name, preset] of [
       'flow',
       'cycle',
       'breathing',
-      'icon-grid',
       'chapter',
       'highlight',
       'donut',
@@ -167,24 +166,6 @@ for (const preset of ['landscape', 'vertical']) {
           support: 'Six nodes with caption and source space.',
           source,
         },
-      },
-      {
-        id: 'grid-eight',
-        block: 'icon-grid',
-        duration: 5,
-        props: {
-          title: 'Eight related observations',
-          items,
-          columns: 4,
-          support: 'A dense grid still needs readable labels.',
-          source,
-        },
-      },
-      {
-        id: 'grid-one',
-        block: 'icon-grid',
-        duration: 5,
-        props: { title: 'One continuous list', items, columns: 1, source },
       },
       {
         id: 'flow-six',

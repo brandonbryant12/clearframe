@@ -241,13 +241,6 @@ export const BLOCKS = [
     },
   ),
   b(
-    'list',
-    'text',
-    'A short staged checklist or set of takeaways.',
-    { items: '[string or {text,say}] (2–5)' },
-    { title: 'Three things to remember', items: ['Name the owner', 'Make the next step clear', 'Close the loop'] },
-  ),
-  b(
     'matrix',
     'decisions',
     'A compact comparison grid for two to four criteria; one column can be highlighted.',
@@ -343,25 +336,6 @@ export const BLOCKS = [
     },
     { mode: 'highlight', align: 'left', maxWords: 6, source: '' },
     { vo: 'Make every word land exactly when you hear it.' },
-  ),
-  b(
-    'icon-grid',
-    'graphics',
-    'A paced composition of licensed vector icons, labels and optional details.',
-    {
-      items: '[{icon,label,detail?,say?}] (1–8)',
-      columns: '1–4; automatic if omitted',
-      stagger: 'Delay between arrivals, 0–2 seconds',
-    },
-    {
-      title: 'Pack for a curious afternoon',
-      items: [
-        { icon: 'book-open', label: 'Read', detail: 'Bring a field guide' },
-        { icon: 'camera', label: 'Notice', detail: 'Record a small detail' },
-        { icon: 'compass', label: 'Explore', detail: 'Choose a new path' },
-        { icon: 'pencil', label: 'Reflect', detail: 'Keep a short note' },
-      ],
-    },
   ),
   b(
     'flow',
@@ -663,6 +637,11 @@ export const BLOCKS = [
   ),
 ];
 export const blockByName = name => BLOCKS.find(b => b.name === name);
+// A bulleted list is the slide a film should not be; an icon grid is a list with pictures.
+const RETIRED_BLOCKS = {
+  list: 'a list of takeaways is a slide; use checklist (items that change on their words), a canvas cast of the things themselves, or kinetic for the one line to remember',
+  'icon-grid': 'a grid of icons is a decorated list; draw the things as a canvas cast that re-forms on the voice, or use checklist',
+};
 export const MOTIONS = ['gentle', 'snappy', 'spring'];
 // Retired names (iris, whip, flash, dissolve; glow, dots, mosaic) are refused with a replacement:
 // RETIRED in constants.mjs.
@@ -744,6 +723,7 @@ export function notABlock(name) {
 
 export function normalizeProps(name, input = {}, { vertical = false, width, height, assets = [], resolve } = {}) {
   const meta = blockByName(name);
+  if (RETIRED_BLOCKS[name]) throw new Error(`block "${name}" was retired: ${RETIRED_BLOCKS[name]}`);
   if (!meta) throw new Error(`No native block "${name}". ${notABlock(name)}`);
   const p = structuredClone(input);
   const fail = message => {

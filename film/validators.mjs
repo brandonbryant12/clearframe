@@ -263,7 +263,6 @@ export const VALIDATORS = {
   },
   steps: sequence(['title', 'detail', 'label', 'say'], 'title'),
   timeline: sequence(['title', 'detail', 'label', 'say'], 'title'),
-  list: sequence(['text', 'say'], 'text'),
   funnel: (p, h) => {
     sequence(['label', 'value', 'say'], 'label')(p, h);
     p.items.forEach((it, i) => {
@@ -323,11 +322,6 @@ export const VALIDATORS = {
       p.maxDuration > 15
     )
       h.fail('kinetic maxGap must be 0–5 and maxDuration 0.5–15 seconds');
-  },
-  'icon-grid': (p, h) => {
-    nodes('items', 1, 8, ['icon', 'label', 'detail', 'say'], { iconRequired: true })(p, h);
-    if (p.columns != null && (!Number.isInteger(p.columns) || p.columns < 1 || p.columns > 4))
-      h.fail('columns must be 1–4');
   },
   flow: (p, h, { vertical }) => {
     nodes('nodes', 2, 6, ['icon', 'label', 'detail', 'say'])(p, h);

@@ -19,7 +19,6 @@ export const REGISTRY = {
   highlight: { ...hero, ...staged('phrases', 0.7, 0.6, () => 0.8) },
   quote: hero,
   callout: hero,
-  list: { ...staged('items', 0, 0.45), family: 'type', tock: true },
   checklist: {
     family: 'type',
     ...staged('items', 0.6, 0.55, e => Math.max(e, 0.4)),
@@ -81,7 +80,6 @@ export const REGISTRY = {
   steps: { family: 'diagram', ...staged('items', 0, 0.45), tock: true },
   timeline: { family: 'diagram', ...staged('items', 0, 0.45), tock: true },
   flow: { family: 'diagram', ...staged('nodes', 0, null), tock: true },
-  'icon-grid': { family: 'diagram', ...staged('items', 0, null), tock: true },
   cycle: { family: 'diagram' },
   equation: { family: 'diagram' },
   breathing: { family: 'motion' },

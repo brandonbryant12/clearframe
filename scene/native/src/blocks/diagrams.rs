@@ -64,13 +64,11 @@ pub(crate) fn validate(block: &str, props: &Value) -> Result<(), &'static str> {
         _ => {}
     }
     let entries = match block {
-        "icon-grid" => arr(props, "items"),
         "flow" | "cycle" => arr(props, "nodes"),
         "breathing" => arr(props, "phases"),
         _ => return Ok(()),
     };
     let (min_count, max_count) = match block {
-        "icon-grid" => (1, 8),
         "cycle" => (3, 6),
         _ => (2, 6),
     };
@@ -82,7 +80,7 @@ pub(crate) fn validate(block: &str, props: &Value) -> Result<(), &'static str> {
             return Err("diagram labels must not be empty");
         }
         let icon = s(entry, "icon");
-        if (block == "icon-grid" || !icon.is_empty()) && !crate::icons::supported(icon) {
+        if !icon.is_empty() && !crate::icons::supported(icon) {
             return Err("unsupported native icon");
         }
         if let Some(time) = entry.get("at") {
@@ -96,7 +94,7 @@ pub(crate) fn validate(block: &str, props: &Value) -> Result<(), &'static str> {
         value.is_finite() && (min..=max).contains(&value)
     };
     match block {
-        "icon-grid" | "flow" if !bounded("stagger", 0.45, 0.0, 2.0) => return Err("stagger must be 0..2"),
+        "flow" if !bounded("stagger", 0.45, 0.0, 2.0) => return Err("stagger must be 0..2"),
         "cycle" if !bounded("period", 8.0, 2.0, 60.0) => return Err("cycle period must be 2..60"),
         "breathing" => {
             if !bounded("minScale", 0.55, 0.2, 1.0)
@@ -291,76 +289,6 @@ impl<'a, 'c> Draw<'a, 'c> {
         (Area { h: a.h - reserve - 12.0, ..a }, self.rise(line, self.b.cue_seconds + 0.8, 10.0))
     }
 
-    pub(super) fn icon_grid(&self) -> Node {
-        let (a, support) = self.diagram_area();
-        let items = arr(self.props(), "items");
-        let default_columns = if self.wide { items.len().min(4) } else { items.len().min(2) };
-        let columns = (n(self.props(), "columns", default_columns.max(1) as f64) as usize).clamp(1, 4);
-        let rows = items.len().max(1).div_ceil(columns);
-        let cellw = a.w / columns as f32;
-        let cellh = (a.h / rows as f32).min(if columns == 1 { 170.0 } else { 330.0 });
-        let a = Area { y: a.y + ((a.h - cellh * rows as f32) * 0.4).max(0.0), ..a };
-        let gap = 28.0_f32.min(cellw * 0.1);
-        let stagger = n(self.props(), "stagger", 0.45) as f32;
-        let compact = cellh < 230.0 || columns == 1;
-        let mut shapes = vec![];
-        for (index, item) in items.iter().enumerate() {
-            let x = a.x + (index % columns) as f32 * cellw;
-            let y = a.y + (index / columns) as f32 * cellh;
-            let inline = cellh < 120.0 && cellw > 600.0 && !s(item, "detail").is_empty();
-            let icon_size = if inline {
-                (cellh * 0.46).clamp(30.0, 64.0)
-            } else if compact {
-                (cellh * 0.46).clamp(40.0, 76.0)
-            } else {
-                (cellh * 0.28).clamp(72.0, 110.0)
-            };
-            let icon_y = y + if inline { (cellh - icon_size) * 0.5 } else { 12.0 };
-            let (cx, cy) = (x + icon_size / 2.0, icon_y + icon_size / 2.0);
-            let time = staged_at(item, self.b.cue_seconds, index, stagger);
-            let icon = self.pop(
-                badge(s(item, "icon"), cx, cy, icon_size / 2.0, &self.p.wash(&self.p.accent), &self.p.accent),
-                time,
-                cx,
-                cy,
-            );
-            let tx = x + if compact { icon_size + if inline { 18.0 } else { 24.0 } } else { 0.0 };
-            let ty = y + if inline {
-                6.0
-            } else if compact {
-                12.0
-            } else {
-                icon_size + 34.0
-            };
-            let tw = cellw - gap - (tx - x);
-            let detail = s(item, "detail");
-            let available = cellh - (ty - y) - if inline { 6.0 } else { 18.0 };
-            let labelh = if detail.is_empty() { available } else { available * 0.46 };
-            let label_box = if inline {
-                Area { x: tx, y: ty, w: tw * 0.36, h: available }
-            } else {
-                Area { x: tx, y: ty, w: tw, h: labelh }
-            };
-            let label = self.fit(
-                s(item, "label"),
-                Style::display(Font::Display, if compact { 32.0 } else { 38.0 }),
-                label_box.w,
-                label_box.h,
-            );
-            let detail_box = if inline {
-                Area { x: tx + tw * 0.40, y: ty, w: tw * 0.60, h: available }
-            } else {
-                Area { x: tx, y: ty + label.height() + 8.0, w: tw, h: (available - label.height() - 8.0).max(0.0) }
-            };
-            let (detail, _) = self.para(detail, detail_box, Style::text(26.0), &self.p.muted, Align::Left);
-            let text = draw::group(vec![
-                self.draw(&label, label_box.x, label_box.y, label_box.w, Align::Left, &self.p.ink).into(),
-                detail.into(),
-            ]);
-            shapes.push(draw::group(vec![icon.into(), self.rise(text, time + 0.08, 16.0).into()]));
-        }
-        draw::group(vec![shapes.into(), support.into()])
-    }
 
     pub(super) fn flow(&self) -> Node {
         let (a, support) = self.diagram_area();

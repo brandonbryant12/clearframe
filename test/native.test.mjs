@@ -26,8 +26,8 @@ function project(t, sb) {
   writeJSON(path.join(dir, 'storyboard.json'), sb);
   return dir;
 }
-test('all 34 catalog examples (33 blocks and the stage) validate in landscape and vertical without mutating author input', () => {
-  assert.equal(BLOCKS.length, 34);
+test('all 32 catalog examples (31 blocks and the stage) validate in landscape and vertical without mutating author input', () => {
+  assert.equal(BLOCKS.length, 32);
   for (const b of BLOCKS)
     for (const vertical of [false, true]) {
       const before = JSON.stringify(b.example);
@@ -63,7 +63,8 @@ test('graphic contracts reject unknown assets and invalid phase clocks while pre
     ).orientation,
     'vertical',
   );
-  assert.throws(() => normalizeProps('icon-grid', { items: [{ icon: 'nonexistent', label: 'Bad' }] }), /unknown icon/);
+  assert.throws(() => normalizeProps('flow', { nodes: [{ icon: 'nonexistent', label: 'Bad' }, { label: 'Fine' }] }), /unknown icon/);
+  assert.throws(() => normalizeProps('list', { items: ['a', 'b'] }), /retired: a list of takeaways is a slide/);
   assert.throws(
     () => normalizeProps('cycle', { nodes: [{ label: 'A' }, { label: 'B' }, { label: 'C' }], period: 0 }),
     /period/,
@@ -143,20 +144,20 @@ test('dense automatic arrivals finish before the last frame; late authored cues 
   sb.beats = [
     {
       id: 'dense',
-      block: 'icon-grid',
+      block: 'flow',
       duration: 1.5,
-      props: { items: Array.from({ length: 8 }, (_, i) => ({ icon: 'leaf', label: `Leaf ${i}` })) },
+      props: { nodes: Array.from({ length: 6 }, (_, i) => ({ icon: 'leaf', label: `Leaf ${i}` })) },
     },
   ];
   let root = project(t, sb),
     r = createJob(loadStoryboard(root), computeTiming(root));
   assert.deepEqual(r.errors, []);
-  assert.ok(r.job.beats[0].props.items.every(it => it.at + 0.55 <= 1.5 - 1 / 30));
-  sb.beats[0].props.items[7].say = 1.4;
+  assert.ok(r.job.beats[0].props.nodes.every(it => it.at + 0.55 <= 1.5 - 1 / 30));
+  sb.beats[0].props.nodes[5].say = 1.4;
   root = project(t, sb);
   r = createJob(loadStoryboard(root), computeTiming(root));
   assert.match(r.errors.join(), /too late/);
-  delete sb.beats[0].props.items[7].say;
+  delete sb.beats[0].props.nodes[5].say;
   sb.beats[0].duration = 0.2;
   root = project(t, sb);
   assert.match(createJob(loadStoryboard(root), computeTiming(root)).errors.join(), /too short/);
@@ -166,7 +167,7 @@ test('dense automatic arrivals finish before the last frame; late authored cues 
   r = createJob(loadStoryboard(root), computeTiming(root));
   assert.deepEqual(r.errors, []);
   assert.ok(
-    r.job.beats[0].props.items.every(it => it.at === 0.9),
+    r.job.beats[0].props.nodes.every(it => it.at === 0.9),
     'An explicit scene cue must never move earlier',
   );
   sb.beats[0].props.land = 1.1;
