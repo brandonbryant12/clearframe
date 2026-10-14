@@ -53,3 +53,31 @@ Licensing: the crate is MIT. The rough-notation recipes it ports are MIT (roughj
 **Deferred: `map`.** A route between places on a clean vector basemap is a real job for client and market films (fframes-components' `map-flyover` had the right idea and the wrong build). Natural Earth outlines would serve, but they are public domain rather than MIT, so importing them is a decision for the owner under the AGENTS.md asset rule.
 
 The library cull, with each item's verdict, is listed in the CHANGELOG entry for this change.
+
+## Second pass: what two bench films asked for
+
+Two Opus bench films were made with the new pieces (an expense policy and a parental-leave policy, both local voice and Whisper only), each writing down where the pieces fought it. Everything below answers a named defect or a piece the film had to hand-build; nothing was added for completeness.
+
+| The film reported | What changed |
+|---|---|
+| A document scroll that could not move did nothing on its word; a half line at the page edge; specks of scrolled-past descenders; captions sat on dimmed page text | A scroll key brings its section into focus and the rest of the page steps back; text stays inside the margin and the fades end in solid paper drawn over it; caption placement counts stepped-back type |
+| A circle round a phrase cut its letters; a stamp over type was refused, then sized from its label and see-through | A phrase gets a loop with round ends; `stamp` marks cover the words they rule on, opaque |
+| The fingertip read as a stray dot; the pointer covered what it had pressed | A pale disc with a ring and shadow, a ring on each press, and the pointer moves off after its last press |
+| `limit`'s labels at the 20 px floor, its amount drawn ahead of the fill | Larger type, the amount rides the fill's end |
+| Forty lines for a receipt, a hundred rects for a share, a phone form and forty cues for a path through an app, a breadcrumb row by hand | `receipt` (drawn from its lines, total checked), `share` (one tile each, also a year of weeks), `app` (fields, upload slot, a button that becomes its confirmation, `pages` with rows to tap), `crumbs` |
+| "Was 60, now 30" had no picture | `was-now` |
+| A coordinate scaler written by hand; a scaled group that did not grow across a cut | Static `scale`, carried by a morph |
+| `say: "New"` landed four seconds early on an earlier "new" | `check` names a cue said twice and suggests the phrase said once |
+| Canvas headlines ignored the film's type voice | `display` follows it |
+
+Two of the films' own suggestions were declined: a tiers mode for `limit` (one job per sketch; two caps are a chart) and squares for `was-now` (`share` draws a year of weeks).
+
+## Transitions
+
+Judged frame by frame across the same cut, every transition except `wipe` passed through an empty frame: the outgoing scene vanished and the incoming one built itself up from nothing, which is exactly a slide coming in, and new projects defaulted to a `fade` between every line. Professional explainers mostly cut, and the cut carries the film when something crosses it (a shared id that morphs, a camera travelling one world). So:
+
+- **Cut is the default.** `auto` fades only where the chapter changes.
+- **`into: "id"`**, the one transition added: the camera goes forward through an element of the last scene (an app screen, a page, one tile of a share) until it overfills the frame, the old scene fades behind it, and the new one comes up from slightly closer and settles. Its first version cross-dissolved too early and double-exposed the two scenes' type; the dissolve now starts only once the old scene is mostly gone. Its reverse, a pull-back from inside one of the scene's own elements, is already the canvas camera (`viewFrom`), so it got documentation, not vocabulary.
+- **`push` is a real push**: both scenes move as one strip, drawn by the frame compositor the way `wipe` already was.
+- **Captions and the source line hold still** across every transition; only the pictures move.
+- **Retired**: `rise` and `zoom` (and the `zoom` exit), the two build-ins from an empty frame.
