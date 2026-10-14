@@ -46,7 +46,7 @@ export function teachingElements(p, { width = 1920, height = 1080, duration } = 
   check(!split || !tall, 'split layout needs a landscape frame; use full or custom canvas in portrait');
   if (duration != null && p.phase === 'answer') check(p.explainAt + 1 <= duration, 'answer beat must leave at least one second after explainAt');
   const u = Math.min(width, height), x = width * 0.12, w = width * (split ? 0.34 : 0.76),
-    titleSize = u * (split ? 0.047 : 0.061), bodySize = u * (split ? 0.035 : 0.046),
+    titleSize = u * (split ? 0.05 : 0.068), bodySize = u * (split ? 0.038 : 0.052),
     optionTop = height * (tall ? 0.39 : 0.43), optionStep = height * (tall ? 0.102 : 0.108),
     explainY = height * (tall ? 0.79 : 0.80), answer = p.phase === 'answer',
     appear = at => ({ at, enter: p.motion === 'none' ? 'none' : 'fade', dur: 0.25 });
@@ -60,7 +60,7 @@ export function teachingElements(p, { width = 1920, height = 1080, duration } = 
         elements.push(line('teach-answer-rule', x + u * 0.065, y + bodySize * 0.31, x + w, y + bodySize * 0.31, { stroke: 'accent', width: 4, ...appear(p.revealAt) }));
       }
     });
-    if (answer) elements.push(text('teach-answer-label', `Answer ${String.fromCharCode(65 + p.correctIndex)}`, x, height * (tall ? 0.735 : 0.755), u * 0.032, w, { font: 'mono', fill: 'accent', ...appear(p.revealAt) }));
+    if (answer) elements.push(text('teach-answer-label', `Answer ${String.fromCharCode(65 + p.correctIndex)}`, x, height * (tall ? 0.735 : 0.755), u * 0.042, w, { font: 'strong', fill: 'accent', ...appear(p.revealAt) }));
   } else {
     const y = height * (tall ? 0.39 : 0.405), gapY = height * (tall ? 0.50 : 0.54), afterY = height * (tall ? 0.60 : 0.655);
     elements.push(text('teach-before', p.before, x, y, bodySize, w),
@@ -68,8 +68,8 @@ export function teachingElements(p, { width = 1920, height = 1080, duration } = 
     if (p.after) elements.push(text('teach-after', p.after, x, afterY, bodySize, w));
     if (answer) elements.push(text('teach-filled-answer', p.answer, x, gapY, bodySize * 1.18, w, { fill: 'accent', ...appear(p.revealAt) }));
   }
-  if (answer) elements.push(text('teach-explanation', p.explanation, x, explainY, u * (split ? 0.028 : 0.032), w, { font: 'text', fill: 'muted', ...appear(p.explainAt) }));
-  else elements.push(text('teach-reading', 'Pause and consider.', x, height * 0.80, u * 0.028, w, { font: 'mono', fill: 'muted' }));
+  if (answer) elements.push(text('teach-explanation', p.explanation, x, explainY, u * (split ? 0.032 : 0.038), w, { font: 'text', fill: 'muted', ...appear(p.explainAt) }));
+  else elements.push(text('teach-reading', 'Pause and consider.', x, height * 0.80, u * 0.036, w, { font: 'text', fill: 'muted' }));
   return elements;
 }
 

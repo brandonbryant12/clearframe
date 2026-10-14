@@ -206,7 +206,9 @@ export function diagramElements(input, { width = 1920, height = 1080, resolve } 
     'area must be [x, y, w, h] in 0–1 of the frame, at least 0.2 wide and tall');
   const area = { x: width * box[0], y: height * box[1], w: width * box[2], h: height * box[3] };
   const cols = across ? ranks : widest, rows = across ? widest : ranks;
-  const nw = Math.min(u * 0.29, (area.w / cols) * (across ? 0.62 : 0.72)), nh = Math.min(u * 0.15, (area.h / rows) * (across ? 0.55 : 0.5));
+  // A short row gives its boxes more of the width (longer names stay large); a long one keeps
+  // room on its connectors for their labels.
+  const nw = Math.min(u * 0.29, (area.w / cols) * (across ? (cols <= 4 ? 0.7 : 0.62) : 0.72)), nh = Math.min(u * 0.15, (area.h / rows) * (across ? 0.55 : 0.5));
   const size = Math.min(u * 0.034, nh * 0.27);
   check(nw >= u * 0.13 && nh >= u * 0.065,
     `${ranks} steps deep × ${widest} wide is too dense for this ${width}×${height} frame; split the shot, change direction, or widen area`);
@@ -220,6 +222,7 @@ export function diagramElements(input, { width = 1920, height = 1080, resolve } 
     check(fits(n.label, roomOf(n), 'strong'), `${n.id}: "${n.label}" cannot be read at this size (${Math.round(roomOf(n))} px wide); shorten it or put fewer components in a rank`);
   // Component names share one size: the largest at which the longest still fits.
   const nameSize = Math.max(legible, Math.min(size, ...[...N.values()].map(n => roomOf(n) / (n.label.length * 0.54))));
+  const edgeSize = Math.max(legible, Math.min(size * 0.85, nameSize * 0.9));
   const centre = new Map();
   for (const s of slots) {
     // Ranks run along the main axis; each rank is centred on a grid of `widest` lanes.
@@ -352,7 +355,8 @@ export function diagramElements(input, { width = 1920, height = 1080, resolve } 
   for (const e of E.values()) {
     const r = routes.get(e.id);
     if (r.label || !e.label) continue;
-    const font = size * 0.78, width = e.label.length * em.mono * font;
+    // Edge labels sit a step below the components they connect, never under the phone floor.
+    const font = edgeSize, width = e.label.length * em.mono * font;
     const others = segments.filter(x => x.id !== e.id);
     r.label = labelSpot(r.pts, { font, width, prefer: r.twoWay ? r.sign : 0 }, spot =>
       10 * others.filter(x => crosses(x.p, x.q, spot)).length + 10 * boxes.filter(b => meets(b, spot)).length +
@@ -386,7 +390,7 @@ export function diagramElements(input, { width = 1920, height = 1080, resolve } 
       const until = rest[k + 1]?.[0];
       out.push({ ...line(COLOR[s]), enter: 'fade', dur: TIME.change, ...(until != null ? { at: t, exitAt: until + TIME.change, exitDur: 0.01 } : span(t, e.exitAt)) });
     });
-    if (e.label) out.push({ type: 'text', id: `diagram-edge-${e.id}-label`, text: e.label, ...r.label, size: size * 0.78, fill: 'ink', font: 'mono', enter: 'fade', dur: TIME.node, ...span(e.at + TIME.edge * 0.5, e.exitAt) });
+    if (e.label) out.push({ type: 'text', id: `diagram-edge-${e.id}-label`, text: e.label, ...r.label, size: edgeSize, fill: 'ink', font: 'mono', enter: 'fade', dur: TIME.node, ...span(e.at + TIME.edge * 0.5, e.exitAt) });
   }
   // Requests: a token per hop that slips behind each component (it is "handled" there).
   const pulses = new Map(), late = [];
