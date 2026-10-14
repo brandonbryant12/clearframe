@@ -168,9 +168,11 @@ export function expandApp(input, at, fail, canvas) {
     });
     h = Math.max(...built.map(b => b.bottom), height ?? 0);
     built.forEach(({ panel }, k) => {
-      const opens = k > 0 ? { ...when(pages[k]), enter: 'right', dist: 40, dur: 0.35 } : {};
+      // The page that is leaving clears quickly as the next one slides in a moment later, so
+      // the two screens' words never sit on top of each other.
+      const opens = k > 0 ? { ...when(pages[k], 0.2), enter: 'right', dist: 40, dur: 0.35 } : {};
       const next = pages[k + 1] && when(pages[k + 1]);
-      const leaves = next ? { ...(next.say != null ? { exitSay: next.say, exitAfter: next.after } : { exitAt: next.at }), exit: 'fade' } : {};
+      const leaves = next ? { ...(next.say != null ? { exitSay: next.say, exitAfter: next.after } : { exitAt: next.at }), exit: 'fade', exitDur: 0.15 } : {};
       els.push({ type: 'group', ...opens, ...leaves, children: panel });
     });
   } else {
