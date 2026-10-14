@@ -25,53 +25,81 @@ const button = (id, x, y, w, h, label, { fill = 'surface', ink = 'ink', size = 3
 
 function film(vertical) {
   const [W, H] = vertical ? [1080, 1920] : [1920, 1080];
-  // The app: a window (or a phone screen) with a menu, the claims panel and Submit.
-  const app = vertical
-    ? { x: 90, y: 300, w: 900, h: 1180 }
-    : { x: 230, y: 150, w: 1460, h: 760 };
-  const col = vertical ? [app.x + 50, app.x + 50] : [app.x + 50, app.x + 450];
+  // The receipt itself, and the app it goes into: a window (a phone screen on the tall frame)
+  // with its tabs, a new-claim panel with an upload slot, the amount, and Submit. Everything the
+  // pointer presses has an id; everything stays above the caption band.
+  const app = vertical ? { x: 90, y: 760, w: 900, h: 760 } : { x: 800, y: 110, w: 940, h: 690 };
+  const pad = 48;
+  const receiptAt = vertical ? { x: 300, y: 150 } : { x: 170, y: 150 };
+  const slot = vertical
+    ? { x: app.x + pad, y: app.y + 330, w: 330, h: 220 }
+    : { x: app.x + pad, y: app.y + 300, w: 300, h: 230 };
+  const shrink = 0.42;
+  const field = { x: slot.x + slot.w + 40, w: app.x + app.w - pad - (slot.x + slot.w + 40) };
+  const submit = { x: app.x + app.w - pad - 330, y: app.y + app.h - pad - 92, w: 330, h: 92 };
+  const lines = {
+    merchant: 'Clearview Optical',
+    detail: 'Mar 3, 2027',
+    items: [
+      { qty: 1, name: 'Frames', price: 160 },
+      { qty: 2, name: 'Lenses', price: 50 },
+    ],
+  };
+  // The photo is the receipt at the size of an attachment, centred in the slot (its paper is
+  // 16 lines wide and about 13 tall at this type size).
+  const photo = { w: 30 * 16 * shrink, h: 395 * shrink };
   const appElements = [
-    { type: 'rect', ...app, r: 28, fill: 'bg', stroke: 'muted', width: 2, at: 0, enter: 'none' },
-    { type: 'text', text: 'Kestrel Hub', x: app.x + 50, y: app.y + 82, size: 42, font: 'display', fill: 'ink', at: 0, enter: 'none' },
-    button('benefits', col[0], app.y + 140, vertical ? 380 : 330, 84, 'Benefits'),
-    button('pay', vertical ? col[0] + 420 : col[0], vertical ? app.y + 140 : app.y + 250, vertical ? 380 : 330, 84, 'Pay'),
-    button('claims', vertical ? col[0] : col[1], vertical ? app.y + 270 : app.y + 140, vertical ? 800 : 420, 84, 'Claims'),
-    // The claim being made: the receipt is real, so it is named.
+    // The paper receipt stays on the desk; its total is boxed as the voice says "receipt".
+    { type: 'receipt', id: 'receipt', ...receiptAt, size: 30, ...lines, at: 0, enter: 'none', marks: [{ words: '$210.00', style: 'box', say: 'receipt' }] },
+    { type: 'rect', ...app, r: 30, fill: 'paper', shadow: true, at: 0, enter: 'none' },
+    { type: 'text', text: 'Kestrel Hub', x: app.x + pad, y: app.y + 78, size: 40, font: 'display', fill: 'ink', at: 0, enter: 'none' },
+    button('benefits', app.x + app.w - pad - 460, app.y + 32, 220, 72, 'Benefits', { size: 32 }),
+    button('claims', app.x + app.w - pad - 220, app.y + 32, 220, 72, 'Claims', { size: 32 }),
+    { type: 'line', x1: app.x, y1: app.y + 136, x2: app.x + app.w, y2: app.y + 136, stroke: 'line', width: 2, at: 0, enter: 'none' },
+    // The new claim, opened by Claims.
     {
       type: 'group',
-      id: 'receipt',
-      x: vertical ? col[0] : col[1],
-      y: vertical ? app.y + 420 : app.y + 270,
       say: 'Claims',
-      after: 0.35,
+      after: 0.3,
       enter: 'rise',
+      dist: 24,
       children: [
-        { type: 'rect', x: 0, y: 0, w: vertical ? 800 : 860, h: 150, r: 20, fill: 'surface' },
-        { type: 'icon', name: 'receipt', x: 70, y: 75, size: 64, stroke: 'accent2' },
-        { type: 'text', text: 'Optician receipt', x: 130, y: 66, size: 34, font: 'strong', fill: 'ink' },
-        { type: 'text', text: 'Glasses, $210', x: 130, y: 112, size: 30, fill: 'muted' },
+        { type: 'text', text: 'New claim', x: app.x + pad, y: app.y + 222, size: 44, font: 'strong', fill: 'ink' },
+        { type: 'group', id: 'upload', children: [
+          { type: 'rect', ...slot, r: 18, fill: 'none', stroke: 'muted', width: 3, dash: [12, 9] },
+          { type: 'text', text: 'Add receipt', x: slot.x + slot.w / 2, y: slot.y + slot.h + 46, size: 30, anchor: 'middle', fill: 'muted' },
+        ] },
+        { type: 'text', text: 'Amount', x: field.x, y: slot.y + 30, size: 30, fill: 'muted' },
+        { type: 'rect', x: field.x, y: slot.y + 52, w: field.w, h: 84, r: 14, fill: 'bg', stroke: 'line', width: 2 },
+        { type: 'text', text: 'Category', x: field.x, y: slot.y + 182, size: 30, fill: 'muted' },
+        { type: 'text', text: 'Vision', x: field.x + 26, y: slot.y + 232, size: 36, font: 'strong', fill: 'ink' },
       ],
     },
-    button('submit', app.x + app.w - (vertical ? 450 : 410), app.y + app.h - (vertical ? 160 : 140), vertical ? 400 : 360, 90, 'Submit', { fill: 'accent', ink: 'bg' }),
+    // Its photo lands in the upload slot.
     {
-      type: 'text',
-      text: 'Claim sent',
-      x: app.x + app.w - (vertical ? 450 : 410) - 40,
-      y: app.y + app.h - (vertical ? 100 : 80),
-      size: 34,
-      anchor: 'end',
-      font: 'strong',
-      fill: 'positive',
-      say: 'Submit',
-      after: 0.45,
-      enter: 'rise',
+      type: 'receipt',
+      id: 'receipt-photo',
+      x: Math.round(slot.x + (slot.w - photo.w) / 2),
+      y: Math.round(slot.y + (slot.h - photo.h) / 2),
+      size: 30,
+      ...lines,
+      scale: shrink,
+      origin: [Math.round(slot.x + (slot.w - photo.w) / 2), Math.round(slot.y + (slot.h - photo.h) / 2)],
+      say: 'receipt',
+      after: 0.35,
+      enter: 'pop',
     },
+    // The amount is read off the receipt once it lands.
+    { type: 'text', text: '$210.00', x: field.x + 26, y: slot.y + 108, size: 40, font: 'figures', fill: 'ink', say: 'receipt', after: 0.75, enter: 'type', dur: 0.45 },
+    // Submit, pressed, becomes the confirmation in its place.
+    { ...button('submit', submit.x, submit.y, submit.w, submit.h, 'Submit', { fill: 'accent', ink: 'bg' }), exitSay: 'Submit', exitAfter: 0.3, exit: 'fade' },
+    { ...button('sent', submit.x, submit.y, submit.w, submit.h, 'Claim sent', { fill: 'positive', ink: 'bg' }), at: undefined, say: 'Submit', after: 0.3, enter: 'pop', dur: 0.3 },
     {
       type: 'pointer',
       steps: [
         { to: 'benefits', say: 'Benefits' },
         { to: 'claims', say: 'Claims' },
-        { to: 'receipt', say: 'receipt', point: [0.8, 0.6] },
+        { to: 'upload', say: 'receipt', point: [0.5, 0.5] },
         { to: 'submit', say: 'Submit' },
       ],
     },

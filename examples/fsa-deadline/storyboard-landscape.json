@@ -129,24 +129,53 @@
         "source": "Kestrel flexible spending account plan document, 2027 (fictional)",
         "elements": [
           {
-            "type": "rect",
-            "x": 230,
+            "type": "receipt",
+            "id": "receipt",
+            "x": 170,
             "y": 150,
-            "w": 1460,
-            "h": 760,
-            "r": 28,
-            "fill": "bg",
-            "stroke": "muted",
-            "width": 2,
+            "size": 30,
+            "merchant": "Clearview Optical",
+            "detail": "Mar 3, 2027",
+            "items": [
+              {
+                "qty": 1,
+                "name": "Frames",
+                "price": 160
+              },
+              {
+                "qty": 2,
+                "name": "Lenses",
+                "price": 50
+              }
+            ],
+            "at": 0,
+            "enter": "none",
+            "marks": [
+              {
+                "words": "$210.00",
+                "style": "box",
+                "say": "receipt"
+              }
+            ]
+          },
+          {
+            "type": "rect",
+            "x": 800,
+            "y": 110,
+            "w": 940,
+            "h": 690,
+            "r": 30,
+            "fill": "paper",
+            "shadow": true,
             "at": 0,
             "enter": "none"
           },
           {
             "type": "text",
             "text": "Kestrel Hub",
-            "x": 280,
-            "y": 232,
-            "size": 42,
+            "x": 848,
+            "y": 188,
+            "size": 40,
             "font": "display",
             "fill": "ink",
             "at": 0,
@@ -155,8 +184,8 @@
           {
             "type": "group",
             "id": "benefits",
-            "x": 280,
-            "y": 290,
+            "x": 1232,
+            "y": 142,
             "at": 0,
             "enter": "none",
             "children": [
@@ -164,9 +193,9 @@
                 "type": "rect",
                 "x": 0,
                 "y": 0,
-                "w": 330,
-                "h": 84,
-                "r": 18.48,
+                "w": 220,
+                "h": 72,
+                "r": 15.84,
                 "fill": "surface",
                 "stroke": "muted",
                 "width": 2
@@ -174,40 +203,9 @@
               {
                 "type": "text",
                 "text": "Benefits",
-                "x": 165,
-                "y": 53.76,
-                "size": 34,
-                "anchor": "middle",
-                "font": "strong",
-                "fill": "ink"
-              }
-            ]
-          },
-          {
-            "type": "group",
-            "id": "pay",
-            "x": 280,
-            "y": 400,
-            "at": 0,
-            "enter": "none",
-            "children": [
-              {
-                "type": "rect",
-                "x": 0,
-                "y": 0,
-                "w": 330,
-                "h": 84,
-                "r": 18.48,
-                "fill": "surface",
-                "stroke": "muted",
-                "width": 2
-              },
-              {
-                "type": "text",
-                "text": "Pay",
-                "x": 165,
-                "y": 53.76,
-                "size": 34,
+                "x": 110,
+                "y": 46.08,
+                "size": 32,
                 "anchor": "middle",
                 "font": "strong",
                 "fill": "ink"
@@ -217,8 +215,8 @@
           {
             "type": "group",
             "id": "claims",
-            "x": 680,
-            "y": 290,
+            "x": 1472,
+            "y": 142,
             "at": 0,
             "enter": "none",
             "children": [
@@ -226,9 +224,9 @@
                 "type": "rect",
                 "x": 0,
                 "y": 0,
-                "w": 420,
-                "h": 84,
-                "r": 18.48,
+                "w": 220,
+                "h": 72,
+                "r": 15.84,
                 "fill": "surface",
                 "stroke": "muted",
                 "width": 2
@@ -236,9 +234,9 @@
               {
                 "type": "text",
                 "text": "Claims",
-                "x": 210,
-                "y": 53.76,
-                "size": 34,
+                "x": 110,
+                "y": 46.08,
+                "size": 32,
                 "anchor": "middle",
                 "font": "strong",
                 "fill": "ink"
@@ -246,55 +244,147 @@
             ]
           },
           {
+            "type": "line",
+            "x1": 800,
+            "y1": 246,
+            "x2": 1740,
+            "y2": 246,
+            "stroke": "line",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
             "type": "group",
-            "id": "receipt",
-            "x": 680,
-            "y": 420,
             "say": "Claims",
-            "after": 0.35,
+            "after": 0.3,
             "enter": "rise",
+            "dist": 24,
             "children": [
               {
-                "type": "rect",
-                "x": 0,
-                "y": 0,
-                "w": 860,
-                "h": 150,
-                "r": 20,
-                "fill": "surface"
-              },
-              {
-                "type": "icon",
-                "name": "receipt",
-                "x": 70,
-                "y": 75,
-                "size": 64,
-                "stroke": "accent2"
-              },
-              {
                 "type": "text",
-                "text": "Optician receipt",
-                "x": 130,
-                "y": 66,
-                "size": 34,
+                "text": "New claim",
+                "x": 848,
+                "y": 332,
+                "size": 44,
                 "font": "strong",
                 "fill": "ink"
               },
               {
+                "type": "group",
+                "id": "upload",
+                "children": [
+                  {
+                    "type": "rect",
+                    "x": 848,
+                    "y": 410,
+                    "w": 300,
+                    "h": 230,
+                    "r": 18,
+                    "fill": "none",
+                    "stroke": "muted",
+                    "width": 3,
+                    "dash": [
+                      12,
+                      9
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "Add receipt",
+                    "x": 998,
+                    "y": 686,
+                    "size": 30,
+                    "anchor": "middle",
+                    "fill": "muted"
+                  }
+                ]
+              },
+              {
                 "type": "text",
-                "text": "Glasses, $210",
-                "x": 130,
-                "y": 112,
+                "text": "Amount",
+                "x": 1188,
+                "y": 440,
                 "size": 30,
                 "fill": "muted"
+              },
+              {
+                "type": "rect",
+                "x": 1188,
+                "y": 462,
+                "w": 504,
+                "h": 84,
+                "r": 14,
+                "fill": "bg",
+                "stroke": "line",
+                "width": 2
+              },
+              {
+                "type": "text",
+                "text": "Category",
+                "x": 1188,
+                "y": 592,
+                "size": 30,
+                "fill": "muted"
+              },
+              {
+                "type": "text",
+                "text": "Vision",
+                "x": 1214,
+                "y": 642,
+                "size": 36,
+                "font": "strong",
+                "fill": "ink"
               }
             ]
           },
           {
+            "type": "receipt",
+            "id": "receipt-photo",
+            "x": 897,
+            "y": 442,
+            "size": 30,
+            "merchant": "Clearview Optical",
+            "detail": "Mar 3, 2027",
+            "items": [
+              {
+                "qty": 1,
+                "name": "Frames",
+                "price": 160
+              },
+              {
+                "qty": 2,
+                "name": "Lenses",
+                "price": 50
+              }
+            ],
+            "scale": 0.42,
+            "origin": [
+              897,
+              442
+            ],
+            "say": "receipt",
+            "after": 0.35,
+            "enter": "pop"
+          },
+          {
+            "type": "text",
+            "text": "$210.00",
+            "x": 1214,
+            "y": 518,
+            "size": 40,
+            "font": "figures",
+            "fill": "ink",
+            "say": "receipt",
+            "after": 0.75,
+            "enter": "type",
+            "dur": 0.45
+          },
+          {
             "type": "group",
             "id": "submit",
-            "x": 1280,
-            "y": 770,
+            "x": 1362,
+            "y": 660,
             "at": 0,
             "enter": "none",
             "children": [
@@ -302,9 +392,9 @@
                 "type": "rect",
                 "x": 0,
                 "y": 0,
-                "w": 360,
-                "h": 90,
-                "r": 19.8,
+                "w": 330,
+                "h": 92,
+                "r": 20.24,
                 "fill": "accent",
                 "stroke": "none",
                 "width": 2
@@ -312,27 +402,50 @@
               {
                 "type": "text",
                 "text": "Submit",
-                "x": 180,
-                "y": 57.6,
+                "x": 165,
+                "y": 58.88,
                 "size": 34,
                 "anchor": "middle",
                 "font": "strong",
                 "fill": "bg"
               }
-            ]
+            ],
+            "exitSay": "Submit",
+            "exitAfter": 0.3,
+            "exit": "fade"
           },
           {
-            "type": "text",
-            "text": "Claim sent",
-            "x": 1240,
-            "y": 830,
-            "size": 34,
-            "anchor": "end",
-            "font": "strong",
-            "fill": "positive",
+            "type": "group",
+            "id": "sent",
+            "x": 1362,
+            "y": 660,
+            "enter": "pop",
+            "children": [
+              {
+                "type": "rect",
+                "x": 0,
+                "y": 0,
+                "w": 330,
+                "h": 92,
+                "r": 20.24,
+                "fill": "positive",
+                "stroke": "none",
+                "width": 2
+              },
+              {
+                "type": "text",
+                "text": "Claim sent",
+                "x": 165,
+                "y": 58.88,
+                "size": 34,
+                "anchor": "middle",
+                "font": "strong",
+                "fill": "bg"
+              }
+            ],
             "say": "Submit",
-            "after": 0.45,
-            "enter": "rise"
+            "after": 0.3,
+            "dur": 0.3
           },
           {
             "type": "pointer",
@@ -346,11 +459,11 @@
                 "say": "Claims"
               },
               {
-                "to": "receipt",
+                "to": "upload",
                 "say": "receipt",
                 "point": [
-                  0.8,
-                  0.6
+                  0.5,
+                  0.5
                 ]
               },
               {

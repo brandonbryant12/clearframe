@@ -13,10 +13,11 @@ import {
   printSpec,
   applyPrint,
   depthKeys,
+  elementsExtent,
 } from './canvas.mjs';
 import { plateElements } from '../engine/lib/plates.mjs';
 import { chartSpec, chartElements } from './data-canvas.mjs';
-import { sketch } from './sketches.mjs';
+import { sketch, sketchByName } from './sketches.mjs';
 
 /** Validation helpers bound to one block's props and error prefix. */
 export function helpers(p, fail, { findPhrase, precision }) {
@@ -455,6 +456,15 @@ export const VALIDATORS = {
       }
       // A placed sketch is a panel of a larger picture: the world's camera frames it, not its own.
       if (p.place != null) for (const k of ['view', 'viewFrom', 'viewDur', 'dolly', 'focus']) delete drawn[k];
+      // A fill-in-the-blank sketch under captions: when its drawing reaches the caption band and
+      // the top of the frame is empty (no heading, no camera), it moves up into that room, so the
+      // caption never sits on its coins, buttons or labels.
+      else if (frame.captions && sketchByName(p.sketch)?.keep && !drawn.view && !p.title) {
+        const tall = ht > w * 1.1;
+        const e = elementsExtent(drawn.elements.filter(el => !(el.w >= w * 0.9)));
+        const lift = e ? Math.min(e.bottom - ht * (tall ? 0.82 : 0.77), e.top - ht * (tall ? 0.08 : 0.07)) : 0;
+        if (lift > 4) drawn.elements = [{ type: 'group', y: -Math.round(lift), at: 0, enter: 'none', children: drawn.elements }];
+      }
       p.elements = [...drawn.elements, ...(p.elements ?? [])];
       for (const k of ['view', 'viewFrom', 'viewDur', 'dolly', 'focus']) if (drawn[k] != null) p[k] ??= drawn[k];
       delete p.sketch;

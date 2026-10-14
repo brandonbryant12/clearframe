@@ -190,6 +190,8 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     width: timing.width,
     height: timing.height,
     assets: sb.assets,
+    // A captioned beat keeps its drawing out of the caption band where it can.
+    captions: Boolean(film.captions && b.vo),
     // Spoken cues resolve before a system diagram compiles, so its derived timing is exact.
     resolve: cueResolver(b, frame),
   });

@@ -125,6 +125,19 @@ export function expandReceipt(input, at, fail) {
       (home.marks ??= []).push({ ...m, words });
     });
   }
+  // Drawn smaller than type can be read (a photo in an upload slot, a thumbnail on a phone): its
+  // lines print as bars of their length, the way a thumbnail shows them.
+  const scale = Number.isFinite(rest.scale) ? rest.scale : 1;
+  if (scale * s < 18) {
+    if (marks != null) fail(`${at}.marks: at scale ${scale} its type is ${Math.round(scale * s)} px, too small to mark; mark a receipt drawn at reading size`);
+    const bar = t => {
+      const bw = Math.min(mono(t.text, t.size), w - pad * 2), bh = Math.max(4, t.size * 0.42);
+      const left = t.anchor === 'middle' ? t.x - bw / 2 : t.anchor === 'end' ? t.x - bw : t.x;
+      return { type: 'rect', x: round(left), y: round(t.y - t.size * 0.5), w: round(bw), h: round(bh), r: round(bh / 2), fill: t.fill === 'muted' ? 'muted' : 'ink', opacity: t.fill === 'muted' ? 0.35 : 0.55, ...(t.id ? { id: t.id } : {}) };
+    };
+    const bars = list => list.map(el => (el.type === 'text' ? bar(el) : el.children ? { ...el, children: bars(el.children) } : el));
+    els.splice(0, els.length, ...bars(els));
+  }
   // The receipt enters as one piece: its parts wait for the group.
   const still = list => list.map(el => ({ ...el, enter: 'none', ...(el.children ? { children: still(el.children) } : {}) }));
   return { type: 'group', ...rest, id, x, y, children: still([paper, ...els]) };

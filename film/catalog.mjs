@@ -721,7 +721,7 @@ export function notABlock(name) {
   return `${near.length ? `Did you mean ${near.join(', ')}? ` : ''}Run clearframe blocks for the list.`;
 }
 
-export function normalizeProps(name, input = {}, { vertical = false, width, height, assets = [], resolve } = {}) {
+export function normalizeProps(name, input = {}, { vertical = false, width, height, assets = [], resolve, captions = false } = {}) {
   const meta = blockByName(name);
   if (RETIRED_BLOCKS[name]) throw new Error(`block "${name}" was retired: ${RETIRED_BLOCKS[name]}`);
   if (!meta) throw new Error(`No native block "${name}". ${notABlock(name)}`);
@@ -789,6 +789,7 @@ export function normalizeProps(name, input = {}, { vertical = false, width, heig
     height: height ?? (vertical ? 1920 : 1080),
     assets,
     resolve,
+    captions,
   });
   if (p.decimals != null && (!Number.isInteger(p.decimals) || p.decimals < 0 || p.decimals > 8))
     fail('decimals must be 0–8');
