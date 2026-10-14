@@ -138,7 +138,8 @@ export default {
       halo = wide ? 62 : 60,
       lineW = wide ? 12 : 11;
     const top0 = wide ? 96 : phone ? round(h * 0.1) : round(h * 0.08);
-    const bottom0 = round(h - (wide ? 162 : 172) - (h > w ? Math.max(0, h * 0.06 - 40) : 0));
+    // The months stay above the caption band (the bottom quarter of a wide frame, fifth of a tall one).
+    const bottom0 = round(h * (h > w ? 0.8 : 0.75));
     let titleY = top0 + cap(F.title),
       subY = titleY + F.sub * 1.5;
     let band = subY + (wide ? 40 : 46);
