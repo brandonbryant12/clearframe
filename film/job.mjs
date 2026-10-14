@@ -667,13 +667,16 @@ function linkInto(beats, sb, timing, report) {
       continue;
     }
     let found = null;
+    // Where an element ends up: its keys' last offsets (a stack that has moved to the middle).
+    const moved = el => (el.keys ?? []).reduce(([x, y], k) => [k.x ?? x, k.y ?? y], [0, 0]);
     const walk = (list, dx, dy) =>
       (list ?? []).forEach(el => {
         if (found) return;
+        const [kx, ky] = moved(el);
         if (el.id === id) {
           const e = elementsExtent([el]);
-          if (e) found = { ...e, left: e.left + dx, top: e.top + dy };
-        } else if (el.type === 'group') walk(el.children, dx + (el.x ?? 0), dy + (el.y ?? 0));
+          if (e) found = { ...e, left: e.left + dx + kx, top: e.top + dy + ky };
+        } else if (el.type === 'group') walk(el.children, dx + (el.x ?? 0) + kx, dy + (el.y ?? 0) + ky);
       });
     walk(prev.props?.elements, 0, 0);
     if (!found || found.w < 4 || found.h < 4) {

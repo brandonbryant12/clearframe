@@ -31,15 +31,10 @@ const film = vertical => ({
   ],
   beats: [
     {
-      id: 'hook',
-      block: 'kinetic',
-      vo: 'Most new hires leave free money on the table. Here is how much.',
-      props: { mode: 'stack', align: 'center', emphasis: ['free', 'much'], source: '' },
-    },
-    {
+      // The film opens on its picture: today's coins are on screen from the first frame.
       id: 'raise',
       block: 'canvas',
-      vo: 'Right now you save three percent, and Alder Street adds three. Raise it to five, and they add four. That is nine percent of your pay, every paycheck.',
+      vo: 'Most new hires leave free money on the table. Right now you save three percent, and Alder Street adds three. Raise it to five, and they add four. That is nine percent of your pay, every paycheck.',
       props: {
         source: PLAN,
         sketch: 'match',
@@ -51,16 +46,20 @@ const film = vertical => ({
     {
       id: 'dollars',
       block: 'canvas',
+      // Into the company's coins: what the match is worth, in dollars.
+      into: 'match-theirs',
       vo: 'On a sixty thousand dollar salary, the match goes from eighteen hundred dollars a year to twenty-four hundred. Six hundred more, for two points.',
       props: {
         source: `${PLAN} · example: a $60,000 salary`,
         // The salary lands first, so the lead-in has its own fact instead of an empty baseline.
         elements: [
-          { type: 'text', text: 'On a $60,000 salary', x: vertical ? 108 : 192, y: vertical ? 420 : 104, size: vertical ? 54 : 50, font: 'strong', fill: 'muted', say: 'sixty' },
+          { type: 'text', text: 'On a $60,000 salary', x: vertical ? 132 : 192, y: vertical ? 420 : 130, size: vertical ? 54 : 50, font: 'strong', fill: 'muted', say: 'sixty' },
         ],
         chart: {
           kind: 'bars',
           prefix: '$',
+          // Clear of the lead-in above and the captions below, with room for the top value.
+          ...(vertical ? {} : { box: [192, 250, 1536, 430] }),
           values: [
             { label: 'Match at 3%', value: 1800, say: 'eighteen' },
             { label: 'Match at 5%', value: 2400, say: 'twenty-four', highlight: true },
@@ -84,7 +83,8 @@ const film = vertical => ({
     {
       id: 'step',
       block: 'canvas',
-      transition: 'panel',
+      // From what you keep to the step that gets it: the app arrives as the next screen.
+      transition: 'push',
       pace: 'hold',
       hold: 1.5,
       vo: 'It takes two minutes. Open Benefits, then Retirement. Set your rate to five percent, and save. Free money, every paycheck after.',

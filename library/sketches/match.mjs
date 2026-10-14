@@ -112,6 +112,7 @@ export default {
         // Your stack and its count; it moves to the middle when the two merge.
         {
           type: 'group',
+          id: 'match-yours',
           enter: 'none',
           at: 0,
           keys: [{ ...merge, x: mid - x1 }],
@@ -120,9 +121,10 @@ export default {
             ...counts(x1, fromYou, you, '', 'accent', 'YOU'),
           ],
         },
-        // The company's stack lands on top of yours.
+        // The company's stack lands on top of yours (an `into` can go through it: match-theirs).
         {
           type: 'group',
+          id: 'match-theirs',
           enter: 'none',
           at: 0,
           keys: [{ ...merge, x: mid - x2, y: -you * step }],

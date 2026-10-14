@@ -4,11 +4,10 @@ A 45-second benefits film made only from the workplace kit (`skills/clearframe-w
 
 | Beat | Narration (moments in bold) | Picture | Piece |
 |---|---|---|---|
-| `hook` | "Most new hires leave **free** money on the table. Here is how **much**." | Poster type, built word by word | `kinetic` stack |
-| `raise` | "Right now you save three percent, and Alder Street adds three. Raise it to **five**, and they add **four**. That is **nine** percent of your pay, **every** paycheck." | Today's coins (3 and 3) are on screen; two of yours and one of theirs drop in; the stacks merge into 9%; three more stacks line up for every paycheck | `match` with `fromYou`/`fromMatch` (what if) and `again` |
-| `dollars` | "On a sixty thousand dollar salary, the match goes from **eighteen** hundred dollars a year to **twenty-four** hundred. **Six** hundred more, for two points." | Two bars grow on their words; a note marks +$600 | canvas `chart` bars with `say` on each value and a `note` |
+| `raise` | "Most new hires leave free money on the table. Right now you save three percent, and Alder Street adds three. Raise it to **five**, and they add **four**. That is **nine** percent of your pay, **every** paycheck." | Today's coins (3 and 3) are on screen; two of yours and one of theirs drop in; the stacks merge into 9%; three more stacks line up for every paycheck | `match` with `fromYou`/`fromMatch` (what if) and `again` |
+| `dollars` (going `into` the company's coins) | "On a sixty thousand dollar salary, the match goes from **eighteen** hundred dollars a year to **twenty-four** hundred. **Six** hundred more, for two points." | Two bars grow on their words; a note marks +$600 | canvas `chart` bars with `say` on each value and a `note` |
 | `keep` | "The match becomes yours over three years: a third after the **first**, two thirds after the **second**, and **all** of it after the third." | A timeline whose locks open as the column grows to each share | `vesting` |
-| `step` | "It takes two minutes. Open **Benefits**, then **Retirement**. Set your rate to **five** percent, and **save**. Free money, every paycheck after." | The portal: the cursor opens Benefits, picks Retirement, changes 3% to 5%, saves; the window leans in on the new value | `portal`, entered with a `panel` cut at the turn |
+| `step` | "It takes two minutes. Open **Benefits**, then **Retirement**. Set your rate to **five** percent, and **save**. Free money, every paycheck after." | The portal: the cursor opens Benefits, picks Retirement, changes 3% to 5%, saves; the window leans in on the new value | `portal`, arriving with a `push` (the next step) |
 
 `node examples/workplace-401k/build.mjs` writes `storyboard-landscape.json` and `storyboard-vertical.json` (pop captions on the tall frame). Copy one into a project directory as `storyboard.json` and run `node engine/cli.mjs draft DIR`.
 
@@ -16,4 +15,5 @@ A 45-second benefits film made only from the workplace kit (`skills/clearframe-w
 
 - Drafted with the local OS voice and whisper.cpp word timings; no synthesis was paid for. `draft` reports the picture still under the voice for about 30% of the film (the dollars bars and the vesting schedule hold to be read), under 20% outside them.
 - Figures come from the fictional plan summary and are named in each beat's source line; the salary is labelled as an example once.
-- Greyed B-roll behind the hook (`plate` with `treatment: "mono"`, see the skill) suits this film but needs footage; the example ships without it.
+- The film opens on its picture (today's coins), not on a card of words, and its cuts carry the film: the camera goes into Alder Street's coins to arrive at their worth in dollars, and the app arrives with a push.
+- Greyed B-roll behind the opening (`plate` with `treatment: "mono"`, see the skill) suits this film but needs footage; the example ships without it.

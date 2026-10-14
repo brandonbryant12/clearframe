@@ -31,23 +31,9 @@
   ],
   "beats": [
     {
-      "id": "hook",
-      "block": "kinetic",
-      "vo": "Most new hires leave free money on the table. Here is how much.",
-      "props": {
-        "mode": "stack",
-        "align": "center",
-        "emphasis": [
-          "free",
-          "much"
-        ],
-        "source": ""
-      }
-    },
-    {
       "id": "raise",
       "block": "canvas",
-      "vo": "Right now you save three percent, and Alder Street adds three. Raise it to five, and they add four. That is nine percent of your pay, every paycheck.",
+      "vo": "Most new hires leave free money on the table. Right now you save three percent, and Alder Street adds three. Raise it to five, and they add four. That is nine percent of your pay, every paycheck.",
       "props": {
         "source": "Alder Street Retirement Plan summary, 2027 plan year",
         "sketch": "match",
@@ -77,6 +63,7 @@
     {
       "id": "dollars",
       "block": "canvas",
+      "into": "match-theirs",
       "vo": "On a sixty thousand dollar salary, the match goes from eighteen hundred dollars a year to twenty-four hundred. Six hundred more, for two points.",
       "props": {
         "source": "Alder Street Retirement Plan summary, 2027 plan year · example: a $60,000 salary",
@@ -84,7 +71,7 @@
           {
             "type": "text",
             "text": "On a $60,000 salary",
-            "x": 108,
+            "x": 132,
             "y": 420,
             "size": 54,
             "font": "strong",
@@ -146,7 +133,7 @@
     {
       "id": "step",
       "block": "canvas",
-      "transition": "panel",
+      "transition": "push",
       "pace": "hold",
       "hold": 1.5,
       "vo": "It takes two minutes. Open Benefits, then Retirement. Set your rate to five percent, and save. Free money, every paycheck after.",
