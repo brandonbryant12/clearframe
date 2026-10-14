@@ -127,7 +127,11 @@ function onScreenWords(props) {
   const seen = new Set();
   const walk = (v, k) => {
     if (v && typeof v === 'object' && v.type === 'document') n += documentWords(v);
-    else if (
+    // An app's pages are seen one at a time: its name and tabs, and its busiest page.
+    else if (v && typeof v === 'object' && v.type === 'app' && Array.isArray(v.pages)) {
+      const words = o => (typeof o === 'string' ? countWords(o) : Array.isArray(o) ? o.reduce((k, x) => k + words(x), 0) : o && typeof o === 'object' ? Object.entries(o).reduce((k, [key, x]) => k + (['say', 'id'].includes(key) ? 0 : words(x)), 0) : 0);
+      n += words(v.title) + words(v.tabs ?? []) + Math.max(...v.pages.map(words));
+    } else if (
       typeof v === 'string' &&
       !seen.has(v) &&
       ![
