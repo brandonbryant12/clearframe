@@ -109,8 +109,7 @@ impl<'a, 'c> Draw<'a, 'c> {
         }
         let paper = match el.get("fill") {
             Some(v) => self.paint(Some(v), "bg"),
-            None if self.p.dark => self.p.surface.clone(),
-            None => crate::design::mix(&self.p.bg, "#ffffff", 0.72),
+            None => self.p.paper(),
         };
         // Marks belong to the paragraph that holds their words (or the section they name).
         let marks = arr(el, "marks");

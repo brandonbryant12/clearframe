@@ -46,7 +46,7 @@ const ENTERS: &[&str] =
 const EXITS: &[&str] = &["fade", "shrink", "fall", "lift", "undraw", "wipe", "blur", "none"];
 const LOOPS: &[&str] = &["spin", "pulse", "float", "sway", "orbit", "dash", "blink", "level", "rock"];
 const TOKENS: &[&str] =
-    &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "none"];
+    &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "paper", "none"];
 
 fn finite(v: &Value) -> bool {
     match v {
@@ -439,6 +439,7 @@ impl<'a, 'c> Draw<'a, 'c> {
                 "line" => p.line(),
                 "wash" => p.wash(&p.accent),
                 "wash2" => p.wash(&p.accent2),
+                "paper" => p.paper(),
                 "none" => "none".into(),
                 hex if crate::design::parse(hex).is_some() => hex.to_owned(),
                 _ => fallback.to_owned(),

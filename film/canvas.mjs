@@ -3,6 +3,7 @@
 // (scene/native/src/blocks/canvas.rs) re-validates structure and draws what this module prepares.
 import { ICONS, iconAlias, iconHint } from './icons.mjs';
 import { checkPointer } from './pointer.mjs';
+import { expandReceipt, RECEIPT_FIELDS } from './receipt.mjs';
 import { CANVAS_TIMING as T, retired } from './constants.mjs';
 import { SFX } from '../engine/lib/sfx.mjs';
 
@@ -36,6 +37,8 @@ export const ELEMENT_TYPES = {
   icon: { geometry: ['name', 'x', 'y', 'size'], required: ['name'] },
   // A page of real text that scrolls to the section the voice names (scene/native/src/blocks/canvas_document.rs).
   document: { geometry: ['x', 'y', 'w', 'h', 'title', 'kicker', 'sections', 'size', 'scroll', 'marks'], required: ['w', 'h', 'sections'] },
+  // A receipt or card slip drawn from its lines; it becomes a group with ids on its parts (film/receipt.mjs).
+  receipt: { geometry: RECEIPT_FIELDS, required: ['merchant'] },
   // A cursor that travels to elements by id and presses them; expanded before scheduling (film/pointer.mjs).
   pointer: { geometry: ['to', 'steps', 'from', 'point', 'press', 'style', 'size', 'leave', 'sound'], required: [] },
   image: { geometry: ['asset', 'file', 'x', 'y', 'w', 'h', 'r', 'fit', 'treatment'], required: ['w', 'h'] },
@@ -133,6 +136,7 @@ export const COLOR_TOKENS = [
   'line',
   'wash',
   'wash2',
+  'paper',
   'none',
 ];
 export const TREATMENTS = ['none', 'mono', 'duotone', 'tint', 'blur', 'soft', 'halftone', 'engraving'];
@@ -223,7 +227,7 @@ function textMarks(el, at, fail) {
       if (typeof m.label !== 'string' || !m.label.trim() || m.label.length > 24) fail(`${where}.label must be the stamp's words, up to 24 characters (e.g. "Not a receipt")`);
       if (m.size != null && (!finite(m.size) || m.size < 20 || m.size > 160)) fail(`${where}.size must be 20–160`);
       if (m.rotate != null && (!finite(m.rotate) || Math.abs(m.rotate) > 20)) fail(`${where}.rotate must be within ±20 degrees`);
-      if (m.fill != null && !isColor(m.fill)) fail(`${where}.fill must be a palette token or #rrggbb (the stamp's face, the card's surface by default)`);
+      if (m.fill != null && !isColor(m.fill)) fail(`${where}.fill must be a palette token or #rrggbb (the stamp's face, paper by default)`);
     } else
       for (const key of ['label', 'size', 'rotate', 'fill']) if (m[key] != null) fail(`${where}.${key} belongs to a stamp (style: "stamp")`);
     return { ...m, words, style: m.style ?? 'highlight', ...(m.style === 'stamp' ? { color: m.color ?? 'negative' } : {}) };
@@ -274,7 +278,7 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
   return list.map((input, i) => {
     const at = `${where}[${i}]`;
     if (!input || typeof input !== 'object' || Array.isArray(input)) fail(`${at} must be an object`);
-    const el = structuredClone(input);
+    const el = structuredClone(input.type === 'receipt' ? expandReceipt(input, at, fail) : input);
     if (++state.count > MAX_ELEMENTS) fail(`a canvas holds at most ${MAX_ELEMENTS} elements`);
     const spec = ELEMENT_TYPES[el.type];
     if (!spec) fail(`${at}.type must be one of ${Object.keys(ELEMENT_TYPES).join(', ')}`);

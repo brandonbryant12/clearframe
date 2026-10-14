@@ -1215,9 +1215,9 @@ impl<'a, 'c> Draw<'a, 'c> {
                     let corners = [(cx - bw / 2.0, cy - bh / 2.0), (cx + bw / 2.0, cy - bh / 2.0), (cx + bw / 2.0, cy + bh / 2.0), (cx - bw / 2.0, cy + bh / 2.0), (cx - bw / 2.0, cy - bh / 2.0)];
                     let d = if amount > 0.0 { rough_contour(&corners, amount * 0.6, seed) } else { format!("M {} {} L {} {} L {} {} L {} {} Z", corners[0].0, corners[0].1, corners[1].0, corners[1].1, corners[2].0, corners[2].1, corners[3].0, corners[3].1) };
                     let press = motion::out_cubic(motion::clamp01((now - at) / 0.2));
-                    // The stamp covers what it rules on: its face is the card's surface, so the
+                    // The stamp covers what it rules on: its face is paper, so the
                     // verdict reads instead of tangling with the words beneath it.
-                    let face = self.paint(mark.get("fill"), "surface");
+                    let face = self.paint(mark.get("fill"), "paper");
                     let stamp = draw::group(vec![
                         draw::path(d.clone()).paint_fill(&face).opacity(0.94).node(),
                         draw::path(d).paint_stroke(&color, edge).round().node(),

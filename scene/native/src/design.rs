@@ -81,6 +81,11 @@ impl Palette {
         mix(&self.surface, &self.muted, if self.dark { 0.32 } else { 0.28 })
     }
     /// A soft accent wash for markers, focus areas and badges.
+    /// A page on this ground: near white on a light palette, the raised surface on a dark one
+    /// (a document, a receipt, a form).
+    pub fn paper(&self) -> String {
+        if self.dark { self.surface.clone() } else { mix(&self.bg, "#ffffff", 0.72) }
+    }
     pub fn wash(&self, color: &str) -> String {
         mix(&self.bg, color, if self.dark { 0.26 } else { 0.18 })
     }

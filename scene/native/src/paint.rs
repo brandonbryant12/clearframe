@@ -6,7 +6,7 @@ use serde_json::Value;
 use skia_safe::{self as sk, Color4f, Point, Shader, TileMode, gradient_shader};
 
 pub const TOKENS: &[&str] =
-    &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "none"];
+    &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "paper", "none"];
 
 /// `#rrggbb` → linear-free sRGB colour with alpha.
 pub fn hex(hex: &str, alpha: f32) -> Color4f {
@@ -32,6 +32,7 @@ pub fn token(p: &Palette, name: &str, fallback: &str) -> Option<String> {
         "line" => p.line(),
         "wash" => p.wash(&p.accent),
         "wash2" => p.wash(&p.accent2),
+        "paper" => p.paper(),
         "none" => return None,
         h if design::parse(h).is_some() => h.to_owned(),
         _ => return if fallback == "none" { None } else { token(p, fallback, "ink") },

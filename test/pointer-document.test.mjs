@@ -73,3 +73,20 @@ test('a document holds real sections, scrolls to one on its word and marks its w
   ])
     assert.throws(() => normalizeElements([bad], 'elements', fail), message);
 });
+
+test('a receipt is drawn from its lines, refuses a total they do not add up to, and names its parts', () => {
+  const receipt = { type: 'receipt', id: 'lunch', x: 600, y: 100, merchant: 'Harbor Grill', items: [{ qty: 2, name: 'Crab cakes', price: 32 }, { qty: 1, name: 'Iced tea', price: 4.5 }], tax: 3.06, marks: [{ words: 'Crab cakes', style: 'highlight', say: 'itemised' }] };
+  const list = normalizeElements([receipt, { type: 'pointer', to: 'lunch-total', say: 'total' }], 'elements', fail);
+  const [group] = list;
+  assert.equal(group.type, 'group');
+  const texts = [];
+  const walk = l => l.forEach(el => (el.type === 'text' ? texts.push(el) : el.children && walk(el.children)));
+  walk(group.children);
+  assert.ok(texts.some(t => t.text === '$39.56'), 'the total is the sum of the lines');
+  assert.equal(texts.find(t => t.text === 'Crab cakes').marks[0].say, 'itemised', 'a mark goes to the line that prints its words');
+  expandPointers(list, { width: 1920, height: 1080 });
+  assert.ok(group.children.some(c => c.id === 'lunch-total' && c.keys?.length), 'a pointer finds the total by id and presses it');
+  assert.throws(() => normalizeElements([{ ...receipt, total: 40 }], 'elements', fail), /add up to \$39\.56/);
+  assert.throws(() => normalizeElements([{ ...receipt, marks: [{ words: 'Lobster' }] }], 'elements', fail), /not printed on the receipt/);
+  assert.throws(() => normalizeElements([{ type: 'receipt', merchant: 'Harbor Grill', slip: true, items: receipt.items, total: 1 }], 'elements', fail), /card slip prints no items/);
+});
