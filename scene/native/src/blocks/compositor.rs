@@ -53,8 +53,9 @@ fn caption_top(d: &Draw<'_, '_>) -> bool {
         let (x0, x1) = (env.width * 0.12, env.width * 0.88);
         texts
             .iter()
-            // Type under a clip (a page scrolled past its frame) is not what the viewer sees.
-            .filter(|t| t.opacity >= 0.5 && !t.masked)
+            // Type a clip hides is already cut to what shows; type stepped back (a page's other
+            // sections) is still type a caption would sit on.
+            .filter(|t| t.opacity >= 0.2)
             .map(|t| {
                 let [x, y, w, h] = t.rect;
                 ((x + w).min(x1) - x.max(x0)).max(0.0) * ((y + h).min(y1) - y.max(y0)).max(0.0)

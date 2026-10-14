@@ -1215,7 +1215,8 @@ impl<'a, 'c> Draw<'a, 'c> {
                     let font = text_font(&serde_json::json!({ "font": "strong" }));
                     let tracking = px * 0.08;
                     let tw = text::measure(font, &label, px, tracking);
-                    let (bw, bh) = (tw + px * 0.9, px * 1.5);
+                    // At least as large as the words it rules on, so none of them shows round it.
+                    let (bw, bh) = ((tw + px * 0.9).max(r - l + pad * 2.0), (px * 1.5).max(b - t + pad * 1.2));
                     let edge = (px * 0.08).max(2.5);
                     let corners = [(cx - bw / 2.0, cy - bh / 2.0), (cx + bw / 2.0, cy - bh / 2.0), (cx + bw / 2.0, cy + bh / 2.0), (cx - bw / 2.0, cy + bh / 2.0), (cx - bw / 2.0, cy - bh / 2.0)];
                     let d = if amount > 0.0 { rough_contour(&corners, amount * 0.6, seed) } else { format!("M {} {} L {} {} L {} {} L {} {} Z", corners[0].0, corners[0].1, corners[1].0, corners[1].1, corners[2].0, corners[2].1, corners[3].0, corners[3].1) };
@@ -1224,7 +1225,7 @@ impl<'a, 'c> Draw<'a, 'c> {
                     // verdict reads instead of tangling with the words beneath it.
                     let face = self.paint(mark.get("fill"), "paper");
                     let stamp = draw::group(vec![
-                        draw::path(d.clone()).paint_fill(&face).opacity(0.94).node(),
+                        draw::path(d.clone()).paint_fill(&face).node(),
                         draw::path(d).paint_stroke(&color, edge).round().node(),
                         draw::text(label, cx - tw / 2.0, cy + px * 0.36, font, px, tracking, &color),
                     ])

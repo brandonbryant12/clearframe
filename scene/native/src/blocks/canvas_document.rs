@@ -91,6 +91,9 @@ impl<'a, 'c> Draw<'a, 'c> {
         // the end is in view, above once it has scrolled) it fades into the paper first. A
         // section brought up sits just below the head's fade, so its heading reads in full.
         let inset = size * 0.8;
+        // Each fading edge ends in a band of solid paper, so no descender of a line scrolled past
+        // shows as a speck at the margin.
+        let solid = size * 0.5;
         let (foot, head) = ((h * 0.16).min(size * 3.0), size * 1.3);
         let mut offset = 0.0f32;
         let mut focus = vec![1.0f32; tops.len() + 1];
@@ -100,7 +103,7 @@ impl<'a, 'c> Draw<'a, 'c> {
                 break;
             }
             let Some(i) = Self::document_section(el, key.get("to").unwrap_or(&Value::Null)) else { continue };
-            let target = (tops.get(i).copied().unwrap_or(0.0) - inset - head).clamp(0.0, room);
+            let target = (tops.get(i).copied().unwrap_or(0.0) - inset - solid - head).clamp(0.0, room);
             let k = motion::in_out_cubic((now - at) / f(key, "dur", 0.9).max(0.05));
             offset += (target - offset) * k;
             for (j, v) in focus.iter_mut().enumerate() {
@@ -158,12 +161,23 @@ impl<'a, 'c> Draw<'a, 'c> {
             draw::rect(x, from.min(to), w, (to - from).abs()).fill_ink(ink).node()
         };
         let more = Node::from(vec![
-            if offset < room - 1.0 { edge(y + h - inset - foot, y + h - inset) } else { draw::empty() },
-            if offset > 1.0 { edge(y + inset + head, y + inset) } else { draw::empty() },
+            if offset < room - 1.0 {
+                Node::from(vec![edge(y + h - inset - solid - foot, y + h - inset - solid), draw::rect(x, y + h - inset - solid - 2.0, w, solid + 4.0).paint_fill(&paper).node()])
+            } else {
+                draw::empty()
+            },
+            if offset > 1.0 {
+                // (The bands overlap the clip and the fade by a few pixels: no anti-aliased seam.)
+                Node::from(vec![edge(y + inset + solid + head, y + inset + solid), draw::rect(x, y + inset - 2.0, w, solid + 4.0).paint_fill(&paper).node()])
+            } else {
+                draw::empty()
+            },
         ]);
         let r = size * 0.5;
         let page = draw::rounded_rect(x, y, w, h, r, r).paint_fill(&paper).node();
-        let body = draw::group(vec![Node::from(nodes), more]).clip_rect(x, y + inset + 2.0, w, h - inset * 2.0 - 4.0);
-        draw::group(vec![page, body])
+        // The fades lie over the clipped text, not inside its clip: the clip's anti-aliased edge
+        // is then always under solid paper.
+        let body = Node::from(nodes).clip_rect(x, y + inset, w, h - inset * 2.0);
+        draw::group(vec![page, body, more])
     }
 }
