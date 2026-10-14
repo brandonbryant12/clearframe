@@ -438,9 +438,9 @@ export async function checkProject(root, options = {}) {
 }
 
 /** Drop "cut off by the canvas edge" notes inside moves that carry type past the edge on
- * purpose: a world camera travelling, and push/zoom entrances and exits. */
+ * purpose: a world camera travelling, a push, and the camera going into an element. */
 function withoutCameraCuts(report, job) {
-  const moving = ['push', 'zoom'],
+  const moving = ['push', 'into'],
     edge = Math.ceil(0.8 * job.fps);
   const moves = job.beats.flatMap(b => {
     const out = [];
