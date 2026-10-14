@@ -22,8 +22,6 @@ export function soundDesign(job, sfx) {
     // Only a fast flight whooshes; a slow creep is felt, not heard.
     const flight = b.block === 'canvas' && b.props.dolly?.find(k => Math.abs(k.z) / Math.max(0.1, k.dur ?? 1.2) > 0.8);
     if (flight) add('whoosh', start + flight.at, 0.16, 1);
-    for (const el of b.block === 'canvas' ? b.props.elements : [])
-      if (el.shine?.at != null) add('shimmer', start + el.shine.at, 0.18, 1);
     spec.sounds?.(b, add, t);
     if (spec.tock && level !== 'subtle')
       for (const it of b.props.items ?? b.props.nodes ?? []) if (it.at != null) add('tock', start + it.at, 0.14, 0);

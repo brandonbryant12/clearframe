@@ -324,8 +324,7 @@ pub struct Scope<'a> {
     pub locating: bool,
     /// Group nesting: the camera and depth apply once, at the layer's top level.
     pub depth: u32,
-    /// Opacity of type: below 1 while an outgoing beat runs on under a dissolve (its words
-    /// clear first; only the pictures cross), as in the block layer.
+    /// Opacity of type, as in the block layer (always 1 since the dissolve was retired).
     pub words: f32,
 }
 

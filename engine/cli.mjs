@@ -29,7 +29,7 @@ const HELP = `ClearFrame — motion graphics
   treatments [--json]                 art direction presets: look, motion, voice, sound and rules
   types [--json]                      type voices: display family and emphasis per treatment (storyboard "type")
   reference <video> [--out dir]       cut rhythm, keyframe sheet, palette and motion of a reference film
-  ingest <dir> --markdown report.md [--treatment noir]   evidence brief (figures, sources, tensions, tables) + storyboard + DIRECTION.md
+  ingest <dir> --markdown report.md [--treatment research-study]   evidence brief (figures, sources, tensions, tables) + storyboard + DIRECTION.md
                                       (also .txt, .html, .docx, .rtf; .pdf with pdftotext)
   ingest <dir> --audio episode.wav [--words words.json] [--script turns.txt] [--brand brand.json] [--from s] [--to s] [--speakers host=Maya:Host,guest=Sam:Guest] [--vertical]
                                       a recording as gapless beats with measured word timings and speakers

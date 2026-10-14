@@ -1,6 +1,6 @@
 # Footage-led films
 
-Explainers stay native, with generated footage as a sparse insert (`continuity.maxGeneratedShare`, default 20%). Sizzle reels, trailers and brand spots invert that: the picture is generated motion, and native work supplies the type, end card, grade and sound. Raise `maxGeneratedShare` deliberately for these films and keep every word and number native.
+Explainers stay native, with generated footage as a sparse insert (`continuity.maxGeneratedShare`, default 20%). Sizzle reels, trailers and brand spots invert that: the picture is generated motion, and native work supplies the type, end card, texture and sound. Raise `maxGeneratedShare` deliberately for these films and keep every word and number native.
 
 ## 1. Keyframes before motion
 
@@ -40,7 +40,7 @@ Draft on cheap models, then render each chosen shot once on the expensive one. I
 
 - Titles and the end card are native: a soft shadow under the type for legibility over moving plates, the title-safe area for every format, a real logo file.
 - A title can be revealed by the action it follows (forged in the wake of a flame, wiped by a pass-by), timed to beats one or two after the drop.
-- Finish with a light grade, vignette and grain over the whole film so plates from different models sit together, then loudness-normalise (`qa` reports −14 LUFS for social).
+- Finish with grain and a vignette over the whole film (film `texture`) so plates from different models sit together (there is no colour grade: ask every generation for the film's palette and light), then loudness-normalise (`qa` reports −14 LUFS for social).
 
 ## 6. Review
 

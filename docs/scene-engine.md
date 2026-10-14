@@ -1,6 +1,6 @@
 # The scene engine
 
-ClearFrame renders every film with the **scene engine** (`scene/`), its only renderer: a ClearFrame-owned scene plan evaluated frame by frame and drawn with Skia on the GPU (Metal on macOS). It draws everything on screen itself: the 33 blocks, native stages, film compositing and footage. Its dependencies are Skia, Metal, a text shaper, the FFmpeg tools and **fframes** (MIT, pinned in `archive/fframes/upstream.json`), which is the film runtime for renders: fframes schedules the frames, encodes GOP-aligned segments in parallel with in-process FFmpeg/libx264 and concatenates them, while each of its render workers draws with this engine. See [Returning to fframes](fframes-return.md) for the design and the measured parity, speed and memory.
+ClearFrame renders every film with the **scene engine** (`scene/`), its only renderer: a ClearFrame-owned scene plan evaluated frame by frame and drawn with Skia on the GPU (Metal on macOS). It draws everything on screen itself: the 31 blocks, native stages, film compositing and footage. Its dependencies are Skia, Metal, a text shaper, the FFmpeg tools and **fframes** (MIT, pinned in `archive/fframes/upstream.json`), which is the film runtime for renders: fframes schedules the frames, encodes GOP-aligned segments in parallel with in-process FFmpeg/libx264 and concatenates them, while each of its render workers draws with this engine. See [Returning to fframes](fframes-return.md) for the design and the measured parity, speed and memory.
 
 This page is the design and the authoring reference. The plan review that chose this design is summarised under [Decisions](#decisions); [coverage](scene-engine-coverage.md) lists every block, sketch, treatment and playbook with its state.
 
@@ -12,9 +12,9 @@ storyboard.json ─► timing, words, sources, data transforms           (unchan
                 ─► compilePlan (scene/compile.mjs) → build/native/plan.json  native stages, cues resolved,
                                                                           media staged by content hash
 clearframe-scene --plan plan.json  (scene/native, Rust)
-    per frame:  clear → [lens layer: handheld → background → backdrop → vignette
-                         → stages under → beats (ground │ native under │ block content │ native over)
-                         → stages over → chrome] → leak → editorial frame → grain → letterbox → guides
+    per frame:  clear → background → backdrop → vignette
+                → stages under → beats (ground │ native under │ block content │ native over)
+                → stages over → chrome → editorial frame → grain → guides
     commands:   frame LIST │ render [A..B] │ inspect │ audit │ bench │ info │ serve
     render:     fframes runtime (runtime.rs): GOP-aligned segments, two workers, each an engine
                 drawing its frames → BT.601 4:2:0 converted on the GPU (yuv.rs) → in-process libx264
@@ -54,7 +54,7 @@ Times are seconds on the stage's clock or spoken cues (`say`): a word in the bea
 
 ### Elements: the canvas dialect, drawn natively
 
-Stage elements use the canvas block's vocabulary ([canvas.md](canvas.md)): `rect, circle, ellipse, line, path, poly, text, icon, image, group, particles, spotlight` with `fill/stroke` tokens and gradients, `enter` (fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, scramble, blur, none), `at/say/dur`, `keys` (x, y, scale, rotate, opacity, scaleX, scaleY, blur, tiltX, tiltY — and now **fill/stroke colours**), `along`, `loop` (spin, pulse, float, sway, orbit, dash, blink, rock), `exit`/`exitAt`/`exitSay`, `echo`, `tilt`, `shine`, `glow`, `shadow`, `blur`, `blend`, `z`, `fps`. The rules (default entrances and durations, keys easing from the previous state, values that never overshoot, stroke draw-on) follow the canvas block (`scene/native/src/blocks/canvas.rs`), so an element means the same thing in a canvas and on a stage.
+Stage elements use the canvas block's vocabulary ([canvas.md](canvas.md)): `rect, circle, ellipse, line, path, poly, text, icon, image, group, particles, spotlight` with `fill/stroke` tokens and gradients, `enter` (fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, none), `at/say/dur`, `keys` (x, y, scale, rotate, opacity, scaleX, scaleY, blur, tiltX, tiltY — and now **fill/stroke colours**), `along`, `loop` (spin, pulse, float, sway, orbit, dash, blink, rock), `exit`/`exitAt`/`exitSay`, `echo`, `tilt`, `shine`, `glow`, `shadow`, `blur`, `blend`, `z`, `fps`. The rules (default entrances and durations, keys easing from the previous state, values that never overshoot, stroke draw-on) follow the canvas block (`scene/native/src/blocks/canvas.rs`), so an element means the same thing in a canvas and on a stage.
 
 Features the canvas block draws but stages do not — `rough`, `print`, `mosaic`, `morph`, `solid`, `meter`, `loop: level` — are **refused by name** when a stage uses them (`box uses rough, which the canvas block draws; native stages do not`). Keep them in a `canvas` beat or `art`.
 
@@ -62,7 +62,7 @@ New element types and properties only the engine draws:
 
 | | |
 |---|---|
-| `video` | Footage as a GPU texture: `{file|asset, x, y, w, h, r, fit: cover|contain, focusX, focusY, offset, rate, hold, treatment}`. Decoded at the size drawn (see [footage](#footage)). A clip shorter than its time on screen — including a following dissolve — fails at prepare time; footage never loops, and freezes only with `hold: true`. |
+| `video` | Footage as a GPU texture: `{file|asset, x, y, w, h, r, fit: cover|contain, focusX, focusY, offset, rate, hold, treatment}`. Decoded at the size drawn (see [footage](#footage)). A clip shorter than its time on screen — including the time a following wipe holds it — fails at prepare time; footage never loops, and freezes only with `hold: true`. |
 | `shader` | A rectangle filled with an SkSL material (below). |
 | `material` | On any shape or text: `noise, sheen, halftone, grain, glass, chrome, gold, thermal, scanlines, dither` (SkSL runtime shaders over the element's bounds, palette colours, seeded and time-driven) or `neon` (a bright core with a glow). `{name, colors: [tokens], scale, amount, speed, seed}`. `dither` is an ordered (Bayer 4×4) dither in two inks, `colors: [lit, shadow]`, under a soft light that drifts across the shape (`speed: 0` holds it); `scale` sets the cell (6 px at 1). It gives 1-bit, Game Boy-style shading to products and objects, and works as a `ground` too. |
 | `particles` | The canvas kinds (dust, embers, rain, snow, bubbles, stars) plus `burst` (seeded emitter: velocity, spread, angle, gravity, drag, life), `stream` (particles flowing along a path element by id) and `field` (a noise-steered drift). Up to 4,000 per element, batched by opacity. Pure functions of time. |
@@ -97,7 +97,7 @@ Each frame places every element first (twice, so an element can follow one liste
 
 ## Blocks
 
-The 33 blocks are drawn by `scene/native/src/blocks/` (the block code ClearFrame has always owned, moved into the renderer). Each block builds a **display list** for its frame (`draw::Node`): groups with a transform, opacity, clip, mask, blend mode or filter; shapes (Skia paths with fills, gradients and strokes); text runs; and pictures. `draw::paint` draws it on the frame's GPU canvas, and the frame audit reads the same tree, so what is judged is exactly what is drawn.
+The 31 blocks are drawn by `scene/native/src/blocks/` (the block code ClearFrame has always owned, moved into the renderer). Each block builds a **display list** for its frame (`draw::Node`): groups with a transform, opacity, clip, mask, blend mode or filter; shapes (Skia paths with fills, gradients and strokes); text runs; and pictures. `draw::paint` draws it on the frame's GPU canvas, and the frame audit reads the same tree, so what is judged is exactly what is drawn.
 
 - **Type** is shaped once, with rustybuzz over the bundled OFL fonts. The same shaping measures, wraps and fits the text, and the glyphs are drawn by id with Skia typefaces built from those files, so measurement and pixels cannot disagree. A text that does not fit its box fails the frame, with the scene and box named, instead of spilling.
 - **Effects** keep SVG filter semantics (`fx.rs`): shadows, glows, blurs, image treatments (mono, duotone, tint, blur, soft), the thermal look and worn print are Skia image-filter graphs confined to their region, in linear-light or sRGB as authored.
@@ -109,9 +109,9 @@ A beat with native `under` layers is drawn in two parts: its ground (tone, plate
 
 The engine composites the film itself:
 
-- **Backdrop** `grid, dots, glow, paper, mosaic`, **texture** (grain and vignette), `chrome`, the editorial `frame` and the review grid. Paper and grain are Skia's fractal noise with fixed colour matrices; grain is opaque grey at the texture's opacity.
-- **Lens**: grade (a saturation matrix and transfer tables), bloom (threshold, blur, screen) and chromatic aberration (channel split and offset), as one GPU image-filter graph over the picture. Handheld, light leaks and letterbox bars are drawn over it.
-- **Dissolves** are two real layers: the outgoing beat (its block and its native layers) runs on under the incoming one, whose layer fades up. The outgoing words clear in the first third.
+- **Backdrop** `none, grid, paper`, **texture** (grain and vignette), `chrome`, the editorial `frame` and the review grid. Paper and grain are Skia's fractal noise with fixed colour matrices; grain is opaque grey at the texture's opacity.
+- **Lens**: only the motion-blur shutter (`lens.blur`). The film-look lens (grades, bloom, aberration, light leaks, handheld drift, letterbox bars) was retired; a storyboard that sets one of those keys is refused by name.
+- **Wipes** hold the outgoing beat (its block and its native layers) ahead of the incoming edge, with the incoming beat drawn behind it, so the frame is never empty. Scenes are never cross-dissolved.
 
 ## Footage
 
@@ -133,7 +133,7 @@ The decoder's regression tests (a delayed final B-frame, a higher film rate, a n
 | `frame 120,4.2s -o DIR` | PNG stills (frames, or seconds rounded to the nearest frame) |
 | `render [A..B] -o OUT.mp4 [--report R.json]` | H.264 of film frames [A, B) on the film's own clock, through the fframes runtime (`CLEARFRAME_RENDER_WORKERS` 1–4, default 2; `CLEARFRAME_ENCODER_THREADS` per segment, default 3 for a final render and 2 for a draft; `CLEARFRAME_RUNTIME=scene` for the engine's own FFmpeg pipe); draw, readback and encode times in the report |
 | `inspect [--every 0.25s]` | sampled frames that cannot be drawn (overflowing text, missing media, stage errors) and type cut by the canvas edge, in the text report `check` reads; exit 2 on errors |
-| `audit FILE` | the frame audit (held type cut by the frame or letterbox, over other type or a subject, too small) over block type **and** native type |
+| `audit FILE` | the frame audit (held type cut by the frame, over other type or a subject, too small) over block type **and** native type |
 | `bench [A..B]` | draw + readback per frame, without encoding |
 | `serve` | JSON lines on stdin: `{id, cmd: open|frame|render|inspect|audit|info|quit, …}`; the GPU context, fonts, decoders and shader programs stay warm between requests |
 
@@ -141,7 +141,7 @@ The Node side never calls these directly: `scene/engine.mjs` maps the commands `
 
 ## Range renders keep the film's clock
 
-A range is film frames [A, B) of the full plan: every beat keeps its place, a stage spanning the range keeps its state, and a dissolve into the range still shows the outgoing beat. The finisher cuts the matching samples from the full mix and checks the first, last and first-cut frames against frames drawn directly at those film positions (PSNR, as before). Stills, sheets, ranges and full films all call the same frame function.
+A range is film frames [A, B) of the full plan: every beat keeps its place, a stage spanning the range keeps its state, and a wipe into the range still shows the outgoing beat. The finisher cuts the matching samples from the full mix and checks the first, last and first-cut frames against frames drawn directly at those film positions (PSNR, as before). Stills, sheets, ranges and full films all call the same frame function.
 
 ## Decisions
 

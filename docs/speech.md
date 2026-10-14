@@ -1,16 +1,16 @@
 # Speech that follows the words
 
-`kinetic` has three modes: `highlight` keeps a stable phrase, dims words not yet spoken and accents the current one; `reveal` lifts each word into view as it is spoken; `word` shows one word at a time with a small pop, holding it through pauses shorter than `maxGap` so the screen does not blink between words (longer silences still clear; timestamps are never altered). Set `maxWords` (1–10) and `align` (`left` or `center`). Phrase captions can also be burned into any narrated film with `captions: true` (`auto` enables them for vertical formats); they sit on a soft background plate so they stay legible over charts and footage. A scene's exit never starts before its last spoken word.
+`kinetic` has three modes: `highlight` keeps a stable phrase, dims words not yet spoken and accents the current one; `reveal` lifts each word into view as it is spoken; `word` shows one word at a time with a small pop, holding it through pauses shorter than `maxGap` so the screen does not blink between words (longer silences still clear; timestamps are never altered). Set `maxWords` (1–10) and `align` (`left` or `center`). Captions are burned into every narrated film unless it sets `captions: false`, to the broadcast standard described under [Readable at the speed of speech](#readable-at-the-speed-of-speech). A scene's exit never starts before its last spoken word.
 
 The renderer uses ordered, end-exclusive word intervals. Silence gaps remain gaps; seeking backward gives the same frame. A final kinetic or captioned render requires **measured word timestamps tied to the exact audio file**. A local voice or Gemini TTS take has estimated words until aligned. Estimated syllable/phrase timing is useful for drafts and is never silently promoted to measured alignment.
 
 ## Import a recording and its timestamps
 
-Create a speech-story project, then import each beat's original recording, exact transcript and word file:
+For a whole recording, `ingest DIR --audio FILE` is the usual route (it splits the recording into beats and measures the words). To set one beat's speech by hand, create a project with a `kinetic` beat, then import its original recording, exact transcript and word file:
 
 ```sh
-node engine/cli.mjs new my-speech --playbook speech-story
-node engine/cli.mjs speech my-speech --beat kinetic --audio take.wav --transcript transcript.txt --words words.json
+node engine/cli.mjs new my-speech --playbook podcast-clip --vertical
+node engine/cli.mjs speech my-speech --beat hook --audio take.wav --transcript transcript.txt --words words.json
 node engine/cli.mjs sheet my-speech --draft
 ```
 

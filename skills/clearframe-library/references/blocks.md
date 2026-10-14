@@ -539,36 +539,6 @@ A sourced human voice in light display type with an oversized mark.
 }
 ```
 
-## list
-
-A short staged checklist or set of takeaways.
-
-| Prop | Meaning |
-|---|---|
-| title | Scene headline |
-| kicker | Short eyebrow |
-| source | Visible attribution |
-| land | Spoken word or local seconds |
-| support | Supporting line |
-| items | [string or {text,say}] (2–5) |
-
-```json
-{
-  "id": "list",
-  "block": "list",
-  "vo": "Replace this narration.",
-  "props": {
-    "title": "Three things to remember",
-    "items": [
-      "Name the owner",
-      "Make the next step clear",
-      "Close the loop"
-    ],
-    "source": "Illustrative sample data · replace before publishing"
-  }
-}
-```
-
 ## matrix
 
 A compact comparison grid for two to four criteria; one column can be highlighted.
@@ -814,55 +784,6 @@ Speech-following words: highlight a phrase, reveal words, one at a time, or stac
     "align": "left",
     "maxWords": 6,
     "source": ""
-  }
-}
-```
-
-## icon-grid
-
-A paced composition of licensed vector icons, labels and optional details.
-
-| Prop | Meaning |
-|---|---|
-| title | Scene headline |
-| kicker | Short eyebrow |
-| source | Visible attribution |
-| land | Spoken word or local seconds |
-| support | Supporting line |
-| items | [{icon,label,detail?,say?}] (1–8) |
-| columns | 1–4; automatic if omitted |
-| stagger | Delay between arrivals, 0–2 seconds |
-
-```json
-{
-  "id": "icon-grid",
-  "block": "icon-grid",
-  "vo": "Replace this narration.",
-  "props": {
-    "title": "Pack for a curious afternoon",
-    "items": [
-      {
-        "icon": "book-open",
-        "label": "Read",
-        "detail": "Bring a field guide"
-      },
-      {
-        "icon": "camera",
-        "label": "Notice",
-        "detail": "Record a small detail"
-      },
-      {
-        "icon": "compass",
-        "label": "Explore",
-        "detail": "Choose a new path"
-      },
-      {
-        "icon": "pencil",
-        "label": "Reflect",
-        "detail": "Keep a short note"
-      }
-    ],
-    "source": "Illustrative sample data · replace before publishing"
   }
 }
 ```
@@ -1298,21 +1219,20 @@ Draw anything: shapes, paths, text, icons and images that draw on, pop, travel a
 | viewDrift | After arriving, the camera keeps easing in by this fraction of the view (worlds default 0.03) |
 | viewTall | Camera rect for tall (vertical) frames; otherwise the view is re-framed on the beat’s own foreground |
 | world | Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views |
-| elements | [{type: rect / circle / ellipse / line / path / poly / text / icon / image / group / meter / spotlight / particles / solid, geometry, fill, stroke, width, enter, say / at, dur, keys, loop, along, exit, exitSay / exitAt, z, blur, shine, tilt, material, mosaic, print}] (≤ 600) — see docs/canvas.md |
+| elements | [{type: rect / circle / ellipse / line / path / poly / text / icon / image / group / meter / spotlight / particles / solid / document / pointer, geometry, fill, stroke, width, enter, say / at, dur, keys, loop, along, exit, exitSay / exitAt, z, blur, shine, tilt, material, mosaic, print}] (≤ 600); text takes marks: [{words, style: highlight / underline / circle / box / strike / cross, say / at}] drawn on its own words; document is a page of real sections that scrolls to one on a word; pointer {to: an element id, say} presses it — see docs/canvas.md |
 | stagger | Seconds between top-level elements without a cue (0–3) |
 | rough | Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure / solid, gap} (an element can set rough: false) |
 | mosaic | Lay every shape in tiles: true or {tile, gap, jitter, flow: rows / rings / contour, style: tesserae / pixel / stitch, outline, build: sweep / radial / random, shade, shine, grout, axis} (an element can set mosaic: false) |
 | print | Print every shape: benday / halftone / engraving / newsprint / letterpress or {screen: dots / lines / none, cell, angle, tone, axis, register: [dx, dy], wear, ink} (an element can set print: false) |
 | dolly | Fly the camera through depth: keys [{say / at, z, dur, ease}]. Elements with z are drawn in perspective; the camera passes them as its z reaches theirs |
 | focus | Depth of field for elements with z: {z (the focus plane), aperture 0–3 (1 natural), keys [{say / at, z, dur}] for a rack focus} |
-| chart | A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars / stack / number, values: [{label, value, highlight, id}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (the note replaces a heading: an annotation on the stressed word) |
-| kpi | Editable native dimensional KPI: {form: pedestal / comparison / rail / seesaw / stack, label, unit?, value?, values?:[{label,value}], total?, domain?:[0,max], prefix?, suffix?, decimals?:0–3, motion?:none / reveal / stagger / emphasis / {preset,duration,stagger}, focus?, source?}. Comparison front heights share one zero-based scale; rail and stack lengths use an explicit total. Seesaw has two comparable values and qualitative tilt. Seesaw/stack require a unit. Every form needs an exact visible source. See docs/kpi-direction.md. |
+| chart | A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars / stack / number, values: [{label, value, highlight, id, say}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (say lands a value on its spoken word; a number with several cued values steps through them; the note replaces a heading: an annotation on the stressed word) |
 | sourceElement | Id of a top-level static native text element used as the visible source instead of the automatic footer. Requires storyboard sources, at:0, enter:none, size >=28, opaque ink fill, no effects/exits/keys/transforms. Frame audit still verifies bounds and overlap. |
-| sourceSize | Canvas source font size, 14–72 px; reserves a three-line footer when set. |
+| sourceSize | Canvas source font size, 14–72 px (default 22, or 30 in a tall frame); reserves a three-line footer when set. |
 | plot | Sourced multiseries line plot: {title, x:{type:linear / date,label,domain,ticks,...}, y:{type:linear / log,label,domain,ticks,...}, series:[{id,label,values:[{x,y}]}], asOf, source?, motion?:none / {at,duration}, annotation?}. Dates preserve elapsed spacing, null y leaves a gap, all series share explicit scales and a linear reveal clock. See docs/quantitative-plots.md. |
 | bars | Signed editorial bar chart: {title, unit, values:[{label, value, highlight?}], domain:[min≤0, max≥0], ticks, decimals?, prefix?, suffix?, orientation?: vertical / horizontal, reference?: {value, label}, colors?: sign / single, asOf, source?, motion?: none / {at,duration}}. Bars grow from zero in order; negative values take the negative colour. See docs/bars.md. |
 | bridge | Metric bridge (waterfall): {title, unit, start:{label, value}, steps:[1–10 {label, value} drivers or {label, total:true} subtotals, each with say?], end:{label, value, say?}, domain:[min≤0, max≥0], ticks, decimals?, prefix?, suffix?, good?: up / down, orientation?: auto / vertical / horizontal, asOf, source?, motion?: none / {at,duration}}. Totals stand on zero; drivers float from the running total and must reconcile to end exactly (add an explicit Other step rather than hide a gap); say cues a driver to its spoken word. See docs/bridge.md. |
-| cast | A cast of objects that persists across consecutive canvas beats and re-forms as the idea develops, instead of a new card per line: {look?: tiles / drawn / print (first beat), objects:[1–16 {id, icon / word / shape: doc / bubble / phone / card / person / ticket / box, color, label?, size?, float?, enter?: pop / drop / rise / left / right / fade / none}] (declared in the first cast beat; later beats may add more), formations:[1–12 {form: scatter / line / row / column / ring / cluster / hero / swap / wave / merge / split / travel / mark / camera / fill / emerge / exit, say / at, ids?, hero?, word?, on?, beside?, out?, in?, by?, into?, from?, via?, trail?, mark?: circle / underline / cross / arrow, to?, color?, zoom?, thread?, center?, spread?, scale?, dur?, stagger?, ease?}]}. merge folds ids into one object (into) and split bursts them back out of one (from); travel sends ids along a curved route (via waypoints) to another object (to) or a point, a pen trail sketching ahead; camera zooms the whole cast (carried across cuts); fill grows one object into the frame so the next scene of any block plays on its colour (the job sets the tone of that scene and the cuts), and emerge brings it back in a later cast beat. Each beat starts where the last one left every object, so consecutive cast beats cut invisibly (transition cut, camera still). hero brings one forward and quiets the rest; swap turns one object into another in place, with by naming what causes it; wave runs through a sequence where it stands; mark draws a pen mark on objects (an arrow to others); exit sends objects off-frame. drawn is pen on paper, print a two-colour press. Positions come from the frame and stay title-safe, so one storyboard serves landscape and vertical. See docs/cast.md. |
+| cast | A cast of objects that persists across consecutive canvas beats and re-forms as the idea develops, instead of a new card per line: {look?: tiles / drawn / print (first beat), objects:[1–16 {id, icon / word / shape: doc / bubble / phone / card / person / ticket / box / server / database / cloud / coin / lock / bulb / clock / envelope / truck / flag / paycheck / calendar / jar / house / badge / umbrella / receipt, color, label?, size?, float?, enter?: pop / drop / rise / left / right / fade / none}] (declared in the first cast beat; later beats may add more), formations:[1–12 {form: scatter / line / row / column / ring / cluster / hero / swap / wave / merge / split / travel / mark / camera / fill / emerge / exit, say / at, ids?, hero?, word?, on?, beside?, out?, in?, by?, into?, from?, via?, trail?, mark?: circle / underline / cross / arrow, to?, color?, zoom?, thread?, center?, spread?, scale?, dur?, stagger?, ease?}]}. merge folds ids into one object (into) and split bursts them back out of one (from); travel sends ids along a curved route (via waypoints) to another object (to) or a point, a pen trail sketching ahead; camera zooms the whole cast (carried across cuts); fill grows one object into the frame so the next scene of any block plays on its colour (the job sets the tone of that scene and the cuts), and emerge brings it back in a later cast beat. Each beat starts where the last one left every object, so consecutive cast beats cut invisibly (transition cut, camera still). hero brings one forward and quiets the rest; swap turns one object into another in place, with by naming what causes it; wave runs through a sequence where it stands; mark draws a pen mark on objects (an arrow to others); exit sends objects off-frame. drawn is pen on paper, print a two-colour press. Positions come from the frame and stay title-safe, so one storyboard serves landscape and vertical. See docs/cast.md. |
 | multiples | Small multiples: {title, unit, x, y (one shared scale, as plot), series:[2–9 {id,label,values:[{x,y}]}], highlight?: id, asOf, source?, motion?}. One small line per series in a grid; ticks on the outer edges; the highlighted panel takes accent2 and the others recede. See docs/small-multiples.md. |
 | distribution | Editorial histogram: {title, unit, observations:[number / null], edges:[2–12 equal bins], threshold:{value, relation: lt / lte / gt / gte, label}, marker?:{value, label}, prefix?, suffix?, decimals?, tone?: negative / highlight, asOf, source?, motion?}. Counts sit on the bars; the threshold line states how many outcomes qualify. See docs/distribution-charts.md. |
 | stat | A headline figure: {kicker?, value, decimals?, prefix?, suffix?, label, change?: {value, decimals?, suffix?, context, good?: up / down / neutral}, count?, asOf, source?, motion?}. The value counts up natively; the change line is green or red by whether a rise is good news for this measure. See docs/stat.md. |
@@ -1321,6 +1241,7 @@ Draw anything: shapes, paths, text, icons and images that draw on, pop, travel a
 | diagram | Native system diagram whose components keep their identity while the story changes it: {direction?:auto / horizontal / vertical, area?:[x,y,w,h], nodes:[{id,label,kind?:service / database / user / queue / state / external,status?:neutral / active / added / removed / error,x?,y?,replaces?,at? / say?,exitAt? / exitSay?}], edges:[{id?,from,to,label?,status?,style?:solid / dashed,flow?,at? / say?}], steps?:[{at / say, add / remove / replace+with / set:{id:status} / send:[node ids] (+label, dur)}], groups?:[{id,label,nodes}]}. Up to 8 nodes, laid out in ranks along the edges; connectors wait for both ends, leave with removed components and route around others. Shared ids morph across consecutive canvas beats. clearframe sketch architecture / component-change / state-machine prints a starting diagram. See docs/system-diagrams.md. |
 | sketchText | Replacement words for a sketch’s placeholder type: {"TITLE": "Your words"} |
 | sketchSay | Spoken words for a sketch’s named moments, so they land on the voice: {"FIRST": "logs"} (each sketch’s use lists its cues) |
+| sketchParams | Numbers a sketch draws from (`clearframe sketch NAME` lists them): {"you": 5, "match": 4} draws five tokens and four, so the picture agrees with the figures |
 | graph | How an input changes an output: {fn:{kind: linear (m,b) / power (a·x^p) / exponential (a·e^(kx)) / logistic (L,k,x0) / saturating (L(1−e^(−kx))) / log (a·ln(1+kx)) / queue (M/M/1 at utilisation 0≤x<1; measure: inSystem ρ/(1−ρ) / waiting ρ²/(1−ρ) / time 1/(1−ρ)) / wave (A,period,phase) / bell (mu,sigma) / constant (c)}, x:{domain:[a,b], label}, y?:{domain, label}, box?, draw?:{say / at,dur}, sweep?:{from,to,say / at,dur}, marks?:[{x,label,say / at}]}. The curve draws; on sweep the input moves and a point rides the curve with guides to both axes. Computed from the formula; no tick numbers, so it shows a shape, not data (film/explain.mjs) |
 | accumulate | Small amounts adding up: {rate:{kind,…} / number, x:{domain,label}, rateLabel?, totalLabel?, steps?:4–24, box?, fill?:{say / at,dur}, stack?:{say / at,dur}}. The rate curve is cut into equal steps (midpoint amounts) that appear in order, then lift and stack into a column whose height is their sum, normalised to the plot height (not on the rate axis) (film/explain.mjs) |
 | estimate | Noisy measurements settling: {value?, spread?, bias?, count?:8–60, seed?, label?, meanLabel?, trueLabel?, box?, show?:{say / at,dur}, band?, gather?:{say / at,dur}}. Seeded simulated measurements arrive; the running average and its ±1 standard-error band (spread/√n, for these independent samples) narrow — not a confidence guarantee; more samples shrink random error only, not bias; gather slides the same dots into a histogram of the spread. bias centres the samples off the true value, so the average settles in the wrong place. Labelled Simulated (film/explain.mjs) |

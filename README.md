@@ -17,7 +17,7 @@ Agent-directed motion graphics rendered natively by the **ClearFrame scene engin
   - cut, fade, or carry one movement across the cut with `push`, `wipe` or `panel`.
 
   Films take an editorial `frame`, grain and a vignette. See [canvas.md](docs/canvas.md) and [ideas.md](docs/ideas.md).
-- **33 native blocks** for evidence and structure: hero type, counters, KPI cards, deltas, bars, lines, waffles, rings, donuts, funnels, area-true magnitudes, steps, timelines, flows, cycles, checklists, annotated screenshots, kinetic type (including poster `stack` type that builds as spoken). `clearframe blocks NAME` prints props and an example.
+- **31 native blocks** for evidence and structure: hero type, counters, KPI cards, deltas, bars, lines, waffles, rings, donuts, funnels, area-true magnitudes, steps, timelines, flows, cycles, checklists, annotated screenshots, kinetic type (including poster `stack` type that builds as spoken). `clearframe blocks NAME` prints props and an example.
 - **A creative library** ([library/](library/README.md)): palettes, treatments, sketches, playbooks and optional direction profiles, one file per item, validated on load. A project's own `library/` or a shared brand kit (`--library DIR`) adds or overrides them.
   - `treatments`: art directions such as workplace, business, editorial, sketchbook, blueprint and explanation. Everything in the library meets [the bar](library/README.md#the-bar): one job, reads on a phone, restrained motion, real content, a professional register.
   - `sketch`: canvas starting compositions for mechanisms (route, pipeline, network…) and for workplace facts (`match`, `vesting`, `deadline`, `limit`, `expire`, `portal`, `inspect`, `choose`, `split`).

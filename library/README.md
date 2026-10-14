@@ -27,8 +27,6 @@ The file name is the id (`library/palettes/noir.json` is `noir`). Files starting
 
 The native creative catalog is validated when the engine starts, so a bad file fails immediately and names itself. Run `node --test test/library.test.mjs` after adding one.
 
-The canvas `kpi` shorthand (`canvas.props.kpi`) generates fixed-depth geometry and native type, with no prepared media. See the [form, data and motion guide](../docs/kpi-direction.md) when choosing between flat graphics, native dimensional KPIs and true 3D inserts.
-
 ## Directions
 
 Directions help choose a starting form; they never constrain what a storyboard may contain. The built-ins combine story and visual grammar for research and podcasts. The `materials` tags filter suggestions and can use your own terms. `--playbook`, `--treatment` and `--theme` override the suggested defaults independently. A brand kit retains its own palette/type rules.

@@ -508,7 +508,6 @@
               "timeline",
               "funnel",
               "quote",
-              "list",
               "matrix",
               "equation",
               "callout",
@@ -516,7 +515,6 @@
               "image",
               "video",
               "kinetic",
-              "icon-grid",
               "flow",
               "cycle",
               "breathing",
@@ -1498,43 +1496,6 @@
             "if": {
               "properties": {
                 "block": {
-                  "const": "list"
-                }
-              }
-            },
-            "then": {
-              "properties": {
-                "props": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "properties": {
-                    "title": {
-                      "description": "Scene headline"
-                    },
-                    "kicker": {
-                      "description": "Short eyebrow"
-                    },
-                    "source": {
-                      "description": "Visible attribution"
-                    },
-                    "land": {
-                      "description": "Spoken word or local seconds"
-                    },
-                    "support": {
-                      "description": "Supporting line"
-                    },
-                    "items": {
-                      "description": "[string or {text,say}] (2–5)"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "block": {
                   "const": "matrix"
                 }
               }
@@ -1871,49 +1832,6 @@
                     },
                     "maxDuration": {
                       "description": "Maximum phrase span, 0.5–15 seconds (default 4); never split a timed word"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "block": {
-                  "const": "icon-grid"
-                }
-              }
-            },
-            "then": {
-              "properties": {
-                "props": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "properties": {
-                    "title": {
-                      "description": "Scene headline"
-                    },
-                    "kicker": {
-                      "description": "Short eyebrow"
-                    },
-                    "source": {
-                      "description": "Visible attribution"
-                    },
-                    "land": {
-                      "description": "Spoken word or local seconds"
-                    },
-                    "support": {
-                      "description": "Supporting line"
-                    },
-                    "items": {
-                      "description": "[{icon,label,detail?,say?}] (1–8)"
-                    },
-                    "columns": {
-                      "description": "1–4; automatic if omitted"
-                    },
-                    "stagger": {
-                      "description": "Delay between arrivals, 0–2 seconds"
                     }
                   }
                 }
@@ -2407,9 +2325,6 @@
                     },
                     "chart": {
                       "description": "A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars|stack|number, values: [{label, value, highlight, id, say}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (say lands a value on its spoken word; a number with several cued values steps through them; the note replaces a heading: an annotation on the stressed word)"
-                    },
-                    "kpi": {
-                      "description": "Editable native dimensional KPI: {form: pedestal|comparison|rail|seesaw|stack, label, unit?, value?, values?:[{label,value}], total?, domain?:[0,max], prefix?, suffix?, decimals?:0–3, motion?:none|reveal|stagger|emphasis|{preset,duration,stagger}, focus?, source?}. Comparison front heights share one zero-based scale; rail and stack lengths use an explicit total. Seesaw has two comparable values and qualitative tilt. Seesaw/stack require a unit. Every form needs an exact visible source. See docs/kpi-direction.md."
                     },
                     "sourceElement": {
                       "description": "Id of a top-level static native text element used as the visible source instead of the automatic footer. Requires storyboard sources, at:0, enter:none, size >=28, opaque ink fill, no effects/exits/keys/transforms. Frame audit still verifies bounds and overlap."

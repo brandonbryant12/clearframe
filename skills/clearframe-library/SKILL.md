@@ -1,6 +1,6 @@
 ---
 name: clearframe-library
-description: Choose and combine 33 blocks plus native GPU stages, canvas sketches, beat layers (plate, tone, camera, art) and adaptable narrative playbooks. Use for graphic selection, palette and motion variation, charts, diagrams, drawings, media plates, kinetic text and native library extensions.
+description: Choose and combine 31 blocks plus native GPU stages, canvas sketches, beat layers (plate, tone, camera, art) and adaptable narrative playbooks. Use for graphic selection, palette and motion variation, charts, diagrams, drawings, media plates, kinetic text and native library extensions.
 ---
 
 # Native visual library
@@ -20,10 +20,9 @@ Choose the visual by the task:
 | Compare quantities/shares/trends | bars, waffle (or icon pictogram), ring, donut, line, funnel |
 | Compare orders of magnitude | magnitude |
 | Explain a process/relation | steps, timeline, equation, flow, cycle |
-| Compose symbols or a paced visual | icon-grid, breathing |
-| Walk through a routine | checklist |
+| A paced visual (breathing) | breathing |
+| Walk through a routine, or summarize | checklist |
 | Compare choices | compare, matrix |
-| Summarize | list |
 | Ground a story in imagery | a beat `plate` (full or split, palette `treatment`), image, video, annotate |
 | Follow spoken words | kinetic (highlight, reveal, word; `stack` for poster type) |
 | Explain a mechanism, metaphor or system | canvas (start from `sketch`: route, orbit, pipeline, network, balance, versus) |

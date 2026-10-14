@@ -1,0 +1,226 @@
+{
+  "version": 2,
+  "title": "Follow one person through a benefit",
+  "logline": "Follow one person through a benefit",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "meadow",
+  "motion": {
+    "preset": "snappy",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": "auto",
+  "music": {},
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.05
+  },
+  "type": "geometric",
+  "sources": [
+    {
+      "id": "plan",
+      "claim": "On a $60,000 salary, 5% is $250 a month and the company adds $200",
+      "source": "Example Co. benefits guide (sample: replace with your plan document)"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "meet",
+      "block": "canvas",
+      "vo": "This is Priya. It's her first week, and her first paycheck is on its way.",
+      "props": {
+        "cast": {
+          "look": "tiles",
+          "objects": [
+            {
+              "id": "priya",
+              "shape": "person",
+              "color": "accent",
+              "label": "Priya",
+              "enter": "none"
+            },
+            {
+              "id": "badge",
+              "shape": "badge",
+              "color": "accent2",
+              "label": "Week one",
+              "enter": "none"
+            },
+            {
+              "id": "pay",
+              "shape": "paycheck",
+              "color": "positive",
+              "label": "First paycheck",
+              "enter": "drop"
+            }
+          ],
+          "formations": [
+            {
+              "form": "line",
+              "at": 0,
+              "ids": [
+                "priya",
+                "badge"
+              ]
+            },
+            {
+              "form": "travel",
+              "ids": [
+                "pay"
+              ],
+              "to": "priya",
+              "say": "paycheck"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "where",
+      "block": "canvas",
+      "vo": "Before it reaches her, it splits: taxes, her health plan, her retirement, and what she takes home.",
+      "props": {
+        "source": "Example Co. benefits guide · example: a $60,000 salary",
+        "sketch": "split",
+        "sketchParams": {
+          "parts": [
+            22,
+            6,
+            5,
+            67
+          ],
+          "suffix": "%",
+          "total": false
+        },
+        "sketchText": {
+          "WHOLE": "Priya's paycheck",
+          "PARTONE": "Taxes",
+          "PARTTWO": "Health plan",
+          "PARTTHREE": "Retirement",
+          "PARTFOUR": "Take-home"
+        },
+        "sketchSay": {
+          "SPLIT": "splits",
+          "ONE": "taxes",
+          "TWO": "health",
+          "THREE": "retirement",
+          "FOUR": "home",
+          "REST": "takes"
+        }
+      }
+    },
+    {
+      "id": "match",
+      "block": "canvas",
+      "vo": "Her five percent for retirement isn't alone. Example Co. adds four more, every paycheck.",
+      "props": {
+        "source": "Example Co. benefits guide",
+        "sketch": "match",
+        "sketchParams": {
+          "you": 5,
+          "match": 4,
+          "suffix": "%"
+        },
+        "sketchText": {
+          "YOU": "Priya puts in",
+          "EMPLOYER": "Example Co. adds",
+          "EACH": "Each coin is 1% of her pay",
+          "TOTAL": "of her pay, every paycheck"
+        },
+        "sketchSay": {
+          "YOU": "five",
+          "MATCH": "adds",
+          "TOTAL": "every"
+        }
+      }
+    },
+    {
+      "id": "step",
+      "block": "canvas",
+      "transition": "cut",
+      "vo": "She set it up once, in the benefits portal: Retirement, five percent, save. Then she got back to her first week.",
+      "props": {
+        "sketch": "portal",
+        "sketchText": {
+          "APP": "Example Co. Benefits",
+          "STEP1": "Benefits",
+          "STEP2": "Retirement",
+          "OTHER": "Health & dental",
+          "FIELD": "Contribution rate",
+          "OLD": "0%",
+          "NEW": "5%",
+          "DONE": "Saved: from her next paycheck"
+        },
+        "sketchSay": {
+          "CLICK1": "portal",
+          "CLICK2": "Retirement",
+          "CHANGE": "five",
+          "SAVE": "save"
+        }
+      }
+    },
+    {
+      "id": "close",
+      "block": "canvas",
+      "transition": "cut",
+      "vo": "Five minutes, once. Every paycheck after, her money works with the company's.",
+      "props": {
+        "cast": {
+          "objects": [
+            {
+              "id": "jar",
+              "shape": "jar",
+              "color": "positive",
+              "label": "Her retirement",
+              "enter": "pop"
+            }
+          ],
+          "formations": [
+            {
+              "form": "exit",
+              "ids": [
+                "badge"
+              ],
+              "at": 0
+            },
+            {
+              "form": "line",
+              "at": 0.3,
+              "ids": [
+                "priya",
+                "pay",
+                "jar"
+              ]
+            },
+            {
+              "form": "travel",
+              "ids": [
+                "pay"
+              ],
+              "to": "jar",
+              "say": "paycheck"
+            },
+            {
+              "form": "hero",
+              "hero": "jar",
+              "say": "works",
+              "word": "Five minutes, once"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

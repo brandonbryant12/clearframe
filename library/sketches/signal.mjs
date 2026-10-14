@@ -9,7 +9,7 @@ export default {
   order: 8,
   summary:
     'A signal in the dark: a hairline of light, a point of light with an anamorphic streak, a waveform trembling out of the flat line and growing.',
-  use: 'The first seconds of a trailer or teaser ("it begins as a whisper"), a cold open about sound, radio, a heartbeat or a message. Cue the wave to the word that names it.',
+  use: 'Something faint becoming clear: a signal found in noise, a call that gets through, an alert that rises above the rest ("it begins as a whisper"). Cue the wave to the word that names it.',
   build(w, h) {
     const tallFrame = h > w,
       cx = round(w / 2),

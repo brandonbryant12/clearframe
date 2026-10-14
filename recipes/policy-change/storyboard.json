@@ -1,0 +1,216 @@
+{
+  "version": 2,
+  "title": "Explain a policy change and what to do now",
+  "logline": "Explain a policy change and what to do now",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "briefing",
+  "motion": {
+    "preset": "snappy",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": "auto",
+  "music": {},
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.05
+  },
+  "type": "geometric",
+  "sources": [
+    {
+      "id": "policy",
+      "claim": "31% of claims were returned for a missing or non-itemised receipt",
+      "source": "Example Co. expense policy and 2027 claims data (sample: replace with yours)"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "hook",
+      "block": "canvas",
+      "vo": "Last year, almost a third of our expense claims came back.",
+      "props": {
+        "source": "Example Co. 2027 claims data",
+        "chart": {
+          "kind": "number",
+          "values": [
+            {
+              "label": "of claims came back",
+              "value": 31,
+              "highlight": true
+            }
+          ],
+          "suffix": "%",
+          "box": [
+            360,
+            300,
+            1200,
+            520
+          ]
+        }
+      }
+    },
+    {
+      "id": "receipt",
+      "block": "canvas",
+      "vo": "Mostly for one reason. A receipt needs the place, every item, and the total. A card slip is not a receipt.",
+      "props": {
+        "source": "Example Co. expense policy",
+        "sketch": "inspect",
+        "sketchParams": {
+          "marks": [
+            "sender",
+            "body",
+            "link"
+          ],
+          "color": "positive"
+        },
+        "sketchText": {
+          "FROM": "Harbor Grill, 14 Dock Street",
+          "SUBJECT": "Receipt #4471",
+          "LINE1": "2 × lunch special  $36.00",
+          "LINE2": "Tax $3.10 · Total $39.10",
+          "BUTTON": "Card ending 4417",
+          "MARKONE": "The place",
+          "MARKTWO": "Every item",
+          "MARKTHREE": "Not just the card slip"
+        },
+        "sketchSay": {
+          "ONE": "place",
+          "TWO": "item",
+          "THREE": "card"
+        }
+      }
+    },
+    {
+      "id": "deadline",
+      "block": "canvas",
+      "vo": "And the window is shorter now. From the day you spend, you have thirty days to claim, not sixty.",
+      "props": {
+        "source": "Example Co. expense policy",
+        "sketch": "deadline",
+        "sketchParams": {
+          "days": 31,
+          "firstWeekday": 3,
+          "start": 1,
+          "end": 30,
+          "today": 0
+        },
+        "sketchText": {
+          "MONTH": "March",
+          "OPENS": "You spend",
+          "CLOSES": "Last day to claim"
+        },
+        "sketchSay": {
+          "OPEN": "spend",
+          "CLOSE": "thirty"
+        }
+      },
+      "hold": 1.2
+    },
+    {
+      "id": "step",
+      "block": "canvas",
+      "vo": "The app does the work. Open New claim, snap the receipt, check the amount, and submit.",
+      "props": {
+        "sketch": "portal",
+        "sketchText": {
+          "APP": "Example Co. Expenses",
+          "STEP1": "New claim",
+          "STEP2": "Snap a receipt",
+          "OTHER": "Mileage",
+          "FIELD": "Amount",
+          "OLD": "$0.00",
+          "NEW": "$39.10",
+          "DONE": "Submitted: paid in about 5 business days"
+        },
+        "sketchSay": {
+          "CLICK1": "New",
+          "CLICK2": "snap",
+          "CHANGE": "amount",
+          "SAVE": "submit"
+        }
+      },
+      "transition": "cut"
+    },
+    {
+      "id": "close",
+      "block": "canvas",
+      "vo": "Itemised. Within thirty days. In the app.",
+      "props": {
+        "cast": {
+          "look": "tiles",
+          "objects": [
+            {
+              "id": "receipt",
+              "shape": "receipt",
+              "color": "surface",
+              "label": "Itemised",
+              "enter": "pop"
+            },
+            {
+              "id": "cal",
+              "shape": "calendar",
+              "color": "accent",
+              "label": "Within 30 days",
+              "enter": "pop"
+            },
+            {
+              "id": "phone",
+              "shape": "phone",
+              "color": "accent2",
+              "label": "In the app",
+              "enter": "pop"
+            }
+          ],
+          "formations": [
+            {
+              "form": "line",
+              "say": "Itemised",
+              "ids": [
+                "receipt"
+              ]
+            },
+            {
+              "form": "line",
+              "say": "Within",
+              "ids": [
+                "receipt",
+                "cal"
+              ]
+            },
+            {
+              "form": "line",
+              "say": "app",
+              "ids": [
+                "receipt",
+                "cal",
+                "phone"
+              ]
+            },
+            {
+              "form": "mark",
+              "mark": "circle",
+              "ids": [
+                "phone"
+              ],
+              "say": "app"
+            }
+          ]
+        }
+      },
+      "transition": "cut"
+    }
+  ]
+}

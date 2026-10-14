@@ -20,8 +20,8 @@ ClearFrame goes back to [fframes](https://github.com/dmtrKovalenko/fframes) (MIT
   (`analyze_audio`: LUFS, true peak, silent ranges), and expose its other interfaces
   (FFT `visualize_audio_frame`, `Shader`, synced video frames, the native preview player,
   the CLI's `strip`/`onion`/`inspect`, and fframes-3d once it is released).
-- ClearFrame keeps drawing every pixel with its display list on a Skia canvas: the 33 blocks,
-  native stages, materials, motion blur, the lens and film compositing (`scene/native/src/`
+- ClearFrame keeps drawing every pixel with its display list on a Skia canvas: the 31 blocks,
+  native stages, materials, motion blur and film compositing (`scene/native/src/`
   `blocks/*`, `nodes.rs`, `draw.rs`, `text.rs`, `compose.rs`). fframes calls it through a custom
   `FFramesRenderBackend` (`scene/native/src/runtime.rs`).
 
@@ -61,13 +61,13 @@ worker checks that its engine draws at fframes' output size.
 | `encode.rs` (FFmpeg child, RGBA pipe, BT.601 limited, libx264 2 threads) | **fframes** `SegmentWriter` (in-process libav, libx264, two codec threads per segment, two segments at once) | Same CRF/preset/aq-mode/250-frame keyframe interval; `encode.rs` stays as the `CLEARFRAME_RUNTIME=scene` path until it is deleted |
 | RGBA → YUV (FFmpeg's `scale` filter in the child) | ClearFrame `yuv.rs`, on the GPU | fframes' own converter point-samples chroma (measured ~3 dB worse) |
 | `gpu.rs` (Metal context, surfaces, readback) | ClearFrame | One Metal context per fframes worker; readback is three one-channel planes |
-| `compose.rs` (beats, dissolves, stages, motion blur, lens, chrome, grain, letterbox) | ClearFrame | Unchanged |
+| `compose.rs` (beats, wipes, stages, motion blur, chrome, grain) | ClearFrame | Unchanged |
 | `blocks/*`, `nodes.rs`, `draw.rs`, `paint.rs`, `fx.rs`, `text.rs`, `fonts.rs`, `materials.rs`, `icons.rs`, `geometry.rs`, `motion.rs`, `numbers.rs`, `design.rs` | ClearFrame | Unchanged |
 | `media.rs` footage (ffmpeg/ffprobe pipes, exact timestamps, any seek order) | ClearFrame for now; fframes `get_synced_video_frame` is the candidate | Each worker has its own decoders; segment starts seek accurately |
-| `film.rs` (backdrop, grain, leaks, frame, letterbox) | ClearFrame | |
+| `film.rs` (backdrop, grain, frame) | ClearFrame | |
 | `audit.rs`, `inspect.rs` | ClearFrame | fframes' `inspect` checks svgr trees, which ClearFrame does not build |
 | Node finisher: packet timeline, mix, loudness, mux, tags, frame-count check, receipt | Node, unchanged | The fframes MP4 has no audio stream; the finisher muxes the mix as before |
-| Audio mix (`engine/lib/audio.mjs`) | _planned:_ fframes `AudioMap` + `analyze_audio` | Needs bed looping, the silent-beat gate, room tone and two-pass loudness matched first |
+| Audio mix (`engine/lib/audio.mjs`) | _planned:_ fframes `AudioMap` + `analyze_audio` | Needs bed looping, the silent-beat gate and two-pass loudness matched first |
 
 ## What is gained, what is at risk
 
@@ -108,7 +108,7 @@ the commands are reproducible from this description.
 
 | Film (1920×1080, 30 fps, final quality) | Between runtimes | Against the engine's stills (RGB PSNR) |
 |---|---|---|
-| `examples/native-explainer` (530 frames) | PSNR 58.5 dB, SSIM 0.99977 | frames 15, 120, 239, 240, 241, 400, 529: old pipe 40.91–44.96 dB, fframes 40.98–44.96 dB (within ±0.3 dB; cut at 240) |
+| native-explainer (530 frames; example since removed) | PSNR 58.5 dB, SSIM 0.99977 | frames 15, 120, 239, 240, 241, 400, 529: old pipe 40.91–44.96 dB, fframes 40.98–44.96 dB (within ±0.3 dB; cut at 240) |
 | `examples/finance-charts` (3,630 frames) | PSNR 60.6 dB, SSIM 0.99979 | frames 120, 900, 1800, 2700, 3600: old pipe 44.28–47.11 dB, fframes 44.39–47.12 dB (equal or better at every frame) |
 | stage-footage (378 frames; footage, motion blur, depth of field; example since removed) | PSNR 52.1 dB, SSIM 0.99526 | frames 10, 120, 249, 250, 251, 300, 377: within 0.06 dB |
 

@@ -5,7 +5,7 @@ description: Turn a video idea into a few distinct visual concepts and find the 
 
 # From an idea to pictures
 
-The library is large: blocks, 60+ sketches, 40+ playbooks, palettes, type voices, cast objects in four looks, stage mechanisms and worked examples. Don't tour it. Search it with the brief, offer a few distinct ideas, then open only the pieces the chosen idea needs.
+The library holds blocks, sketches, playbooks, palettes, type voices, cast objects in four looks, stage mechanisms and worked examples, each kept because it meets the bar in `library/README.md`. Don't tour it. Search it with the brief, offer a few distinct ideas, then open only the pieces the chosen idea needs.
 
 ## 1. Read the brief for three things
 
@@ -18,7 +18,7 @@ Infer them from the material and the wording. Ask only when the subject itself i
 ## 2. Search in plain words
 
 ```sh
-node engine/cli.mjs find "a playful teaser for a retro game, for players"   # studio: clearframe_catalog topic find, query
+node engine/cli.mjs find "remind staff their FSA money expires in December"  # studio: clearframe_catalog topic find, query
 node engine/cli.mjs find "order delivery" --kind cast-shape,cast-look,example
 node engine/cli.mjs find --id cast-move:travel                               # studio: topic item, name KIND:NAME
 ```
@@ -34,7 +34,7 @@ node engine/cli.mjs find --id cast-move:travel                               # s
 |---|---|
 | `example` | A finished, curated film to copy from (a README and storyboards) |
 | `playbook`, `direction` | A whole arc to start from (`new DIR --playbook`, `--direction`) |
-| `treatment`, `palette`, `type` | The look and the voice: grade, colours, type |
+| `treatment`, `palette`, `type` | The look and the voice: colours, motion, type |
 | `sketch` | A drawn starting picture for one scene (`canvas` `sketch`) |
 | `cast-shape`, `cast-look`, `cast-move` | Objects that persist across cuts, drawn in a look and moved on spoken words |
 | `mechanism`, `stage-element` | Systems, code, worlds the camera travels, a colour handoff between scenes |
@@ -69,9 +69,9 @@ What you can change, from lightest to deepest:
 | The words | `sketchText` fills a sketch's placeholder type. Cast objects take `label`, and blocks take their props. | `{"FIRST": "Stale logs"}` |
 | When things happen | `sketchSay` lands a sketch's named moments on narration words. Cast moves and canvas elements take `say`. | `{"ALL": "Lights"}` |
 | The look | `theme` (palette), `type`, the cast `look`, and the stage `material` (`dither`, `chrome`…) on a shape or a ground. | `"theme": "noir"` |
-| What is drawn | Copy the sketch's elements and edit them: other icons, fewer cards, other positions. In the studio, `clearframe_catalog` topic `sketch` (name, `sketchText`, `sketchSay`) returns the filled elements for the film's shape. In a build script, `sketch(name, preset, {text, say})` from `film/sketches.mjs` does the same. By hand, `node engine/cli.mjs sketch NAME [--vertical]` prints them. Put the result in `props.elements` (without `props.sketch`). | `examples/checkout-at-night` |
+| What is drawn | Copy the sketch's elements and edit them: other icons, fewer cards, other positions. In the studio, `clearframe_catalog` topic `sketch` (name, `sketchText`, `sketchSay`) returns the filled elements for the film's shape. In a build script, `sketch(name, preset, {text, say})` from `film/sketches.mjs` does the same. By hand, `node engine/cli.mjs sketch NAME [--vertical]` prints them. Put the result in `props.elements` (without `props.sketch`). | `sketch shortcut` |
 | How something behaves | The `graph`, `accumulate`, `estimate` and `field` props take a formula or a seed, not elements: change the formula, the domain, the labels and the cue words (`find --id mechanism:graph`, `clearframe-explain`). They are never data. | `examples/settling` |
-| Detail, then the whole | `place: [x, y]` draws each beat's picture as a panel of one `world`; the last beat's `view` takes them all in (`find --id mechanism:board`). It does not clip. | `examples/by-morning` (board) |
+| Detail, then the whole | `place: [x, y]` draws each beat's picture as a panel of one `world`; the last beat's `view` takes them all in (`find --id mechanism:board`). It does not clip. | `find --id mechanism:board` |
 | A new reusable picture | A sketch module, or a JSON sketch in the project's `library/sketches/`, so other films can use it by name. | `library/README.md` |
 
 - **Start light.** Change words and cues first; copy elements only when the picture itself must change, such as a different number of things, different objects, or a different layout.

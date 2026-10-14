@@ -1,0 +1,185 @@
+{
+  "version": 2,
+  "title": "Explain a benefit and the one step to take",
+  "logline": "Explain a benefit and the one step to take",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "meridian",
+  "motion": {
+    "preset": "snappy",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": "auto",
+  "music": {},
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.05
+  },
+  "type": "geometric",
+  "sources": [
+    {
+      "id": "plan",
+      "claim": "Example Co. matches 100% of the first 3% and 50% of the next 2%; the match vests 33/66/100% over three years",
+      "source": "Example Co. retirement plan summary (sample: replace with your plan document)"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "hook",
+      "block": "kinetic",
+      "vo": "Every paycheck, there is free money on the table. Most of us leave some of it there.",
+      "props": {
+        "mode": "stack",
+        "align": "center",
+        "emphasis": [
+          "free",
+          "leave"
+        ],
+        "source": ""
+      }
+    },
+    {
+      "id": "rule",
+      "block": "canvas",
+      "vo": "Put in five percent of your pay, and the company adds four. That is nine percent, every paycheck.",
+      "props": {
+        "source": "Example Co. retirement plan summary",
+        "sketch": "match",
+        "sketchParams": {
+          "you": 5,
+          "match": 4,
+          "suffix": "%"
+        },
+        "sketchText": {
+          "YOU": "You put in",
+          "EMPLOYER": "Example Co. adds",
+          "EACH": "Each coin is 1% of your pay",
+          "TOTAL": "of your pay, every paycheck"
+        },
+        "sketchSay": {
+          "YOU": "five",
+          "MATCH": "adds",
+          "TOTAL": "nine"
+        }
+      }
+    },
+    {
+      "id": "keep",
+      "block": "canvas",
+      "vo": "A third of the company's part is yours after one year, two thirds after two, and all of it after three. Stay that long, and every coin it added stays yours.",
+      "props": {
+        "source": "Example Co. retirement plan summary",
+        "sketch": "vesting",
+        "sketchParams": {
+          "steps": [
+            33,
+            66,
+            100
+          ]
+        },
+        "sketchText": {
+          "STEP1": "Year 1",
+          "STEP2": "Year 2",
+          "STEP3": "Year 3",
+          "WHAT": "The company's part you keep"
+        },
+        "sketchSay": {
+          "ONE": "one",
+          "TWO": "thirds",
+          "THREE": "all"
+        }
+      }
+    },
+    {
+      "id": "step",
+      "block": "canvas",
+      "vo": "To change it, open Benefits, then Retirement. Set your rate to five percent, and save.",
+      "props": {
+        "sketch": "portal",
+        "sketchText": {
+          "APP": "Example Co. Benefits",
+          "STEP1": "Benefits",
+          "STEP2": "Retirement",
+          "OTHER": "Health & dental",
+          "FIELD": "Contribution rate",
+          "OLD": "3%",
+          "NEW": "5%",
+          "DONE": "Saved: starts with your next paycheck"
+        },
+        "sketchSay": {
+          "CLICK1": "Benefits",
+          "CLICK2": "Retirement",
+          "CHANGE": "five",
+          "SAVE": "save"
+        }
+      },
+      "transition": "cut"
+    },
+    {
+      "id": "close",
+      "block": "canvas",
+      "vo": "Two minutes today. Free money, with every paycheck after.",
+      "props": {
+        "cast": {
+          "look": "tiles",
+          "objects": [
+            {
+              "id": "pay",
+              "shape": "paycheck",
+              "color": "accent",
+              "label": "Every paycheck",
+              "enter": "left",
+              "size": 210
+            },
+            {
+              "id": "jar",
+              "shape": "jar",
+              "color": "positive",
+              "label": "Your retirement",
+              "enter": "pop",
+              "size": 340
+            }
+          ],
+          "formations": [
+            {
+              "form": "line",
+              "at": 0,
+              "ids": [
+                "jar"
+              ]
+            },
+            {
+              "form": "travel",
+              "ids": [
+                "pay"
+              ],
+              "to": "jar",
+              "say": "Free"
+            },
+            {
+              "form": "merge",
+              "ids": [
+                "pay"
+              ],
+              "into": "jar",
+              "say": "every"
+            }
+          ]
+        }
+      },
+      "transition": "cut"
+    }
+  ]
+}

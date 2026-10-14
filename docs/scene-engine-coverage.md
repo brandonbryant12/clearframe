@@ -32,7 +32,7 @@ Backdrops in the catalog: none, grid, paper — all drawn natively.
 
 ## Blocks
 
-34 blocks, each drawn as a display list (`scene/native/src/blocks/`); `stage` beats are native stages under the block's heading.
+32 blocks, each drawn as a display list (`scene/native/src/blocks/`); `stage` beats are native stages under the block's heading.
 
 The block gallery (`clearframe gallery`, every catalog example, landscape and vertical); PSNR per block against the FFFrames-era gallery.
 
@@ -52,7 +52,6 @@ The block gallery (`clearframe gallery`, every catalog example, landscape and ve
 | `timeline` | diagrams | native | 51.9 / 51.1 | none (gallery only) |
 | `funnel` | charts | native | 51.4 / 52.0 | none (gallery only) |
 | `quote` | story | native | 51.3 / 52.3 | 1: podcast-clip |
-| `list` | text | native | 53.3 / 50.0 | none (gallery only) |
 | `matrix` | decisions | native | 53.3 / 49.7 | none (gallery only) |
 | `equation` | diagrams | native | 52.5 / 51.2 | none (gallery only) |
 | `callout` | text | native | 53.1 / 51.4 | 1: scenario-lab |
@@ -60,7 +59,6 @@ The block gallery (`clearframe gallery`, every catalog example, landscape and ve
 | `image` | media | native | 53.0 / 51.7 | none (gallery only) |
 | `video` | media | native | 54.2 / 52.0 | none (gallery only) |
 | `kinetic` | speech | native | 51.7 / 54.7 | 2: podcast-clip, research-digest |
-| `icon-grid` | graphics | native | 52.9 / 52.3 | none (gallery only) |
 | `flow` | diagrams | native | 53.4 / 51.7 | none (gallery only) |
 | `cycle` | diagrams | native | 51.1 / 51.1 | none (gallery only) |
 | `breathing` | motion | native | 52.0 / 50.4 | none (gallery only) |

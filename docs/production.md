@@ -53,7 +53,7 @@ npm run verify:pipeline -- /path/to/new-evidence --quick
 npm run verify:pipeline -- /path/to/new-evidence
 ```
 
-The quick run exercises the cash-flow fixture. The full run also exercises scenario, risk, research-investigation and podcast-thread films in landscape and vertical. Both run the actual CLI and verify:
+The quick run exercises the cash-flow fixture. The full run also exercises the scenario-lab, benefit-explainer, research-digest and podcast-clip films in landscape and vertical. Both run the actual CLI and verify:
 
 - document/brand intake survives removal of its original kit;
 - each pipeline report parses as JSON, stages pass and artifact files exist;

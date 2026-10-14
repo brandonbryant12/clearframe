@@ -105,43 +105,10 @@ export async function draftVoice(text, output, { wpm = 150, voice, pronounce } =
   fs.rmSync(raw, { force: true });
 }
 
-/**
- * A trailer bed that follows the edit: a sub drone and a pitch-dropping pulse on the beat
- * build toward the first silence, the bed cuts dead through every silent beat, and a low
- * sustained chord carries whatever follows (the title, the button).
- */
-async function pulseMusic(output, { seconds, bpm, silences }) {
-  const beat = 60 / bpm,
-    peak = silences[0]?.[0] ?? seconds;
-  const tau = `mod(t,${beat.toFixed(4)})`;
-  const build = `min(1,0.2+0.8*t/${peak.toFixed(2)})`;
-  const kick = `0.55*sin(2*PI*(58*${tau}-34*${tau}*${tau}))*exp(-9*${tau})`;
-  const drone = '(0.13*sin(2*PI*55*t)+0.07*sin(2*PI*82.41*t))';
-  const tick = `0.07*(random(0)*2-1)*exp(-70*mod(t,${(beat / 2).toFixed(4)}))`;
-  const pre = `(${drone}+${kick})*${build}+${tick}*pow(${build},3)`;
-  const post =
-    '(0.14*sin(2*PI*55*t)+0.1*sin(2*PI*110*t)+0.07*sin(2*PI*164.81*t)+0.05*sin(2*PI*220*t))*min(1,(t-' +
-    peak.toFixed(2) +
-    ')/1.5)';
-  const gate = silences.map(([a, b]) => `(1-between(t,${a.toFixed(2)},${b.toFixed(2)}))`).join('*') || '1';
-  const expr = `${gate}*if(lt(t,${peak.toFixed(2)}),${pre},${post})*0.8`;
-  await ffmpeg([
-    '-y',
-    '-f',
-    'lavfi',
-    '-i',
-    `aevalsrc=exprs='${expr}|${expr}':s=48000:d=${seconds}`,
-    '-af',
-    `lowpass=f=5000,afade=t=in:d=0.5,afade=t=out:st=${Math.max(0, seconds - 2)}:d=2`,
-    '-c:a',
-    'pcm_s16le',
-    output,
-  ]);
-}
-
-/** Draft music bed: a soft, slow chord pad (or a trailer `pulse`), synthesised by ffmpeg. */
-export async function draftMusic(output, { seconds = 60, bpm = 72, style = 'pad', silences = [] } = {}) {
-  if (style === 'pulse') return pulseMusic(output, { seconds, bpm, silences });
+/** Draft music bed: a soft, slow chord pad, synthesised by ffmpeg. */
+export async function draftMusic(output, { seconds = 60, bpm = 72, style = 'pad' } = {}) {
+  // The trailer `pulse` bed (a kick building to a silence that cuts dead) was retired with cinema.
+  if (style !== 'pad') throw new Error(`music.style "${style}" was retired: the draft bed is a calm pad; brief a composed bed (Lyria) for anything else`);
   const bar = (60 / bpm) * 4; // one chord per bar
   const chords = [
     // Am9 · Fmaj7 · C(add9) · G6 — calm, unresolved, professional

@@ -66,9 +66,10 @@ export function chartElements(spec, { w, h }) {
   const when = (v, t, offset = 0) => (v.say ? { say: v.say, ...(offset ? { after: r(offset) } : {}) } : { at: r(t + offset) });
   const out = [];
   if (spec.kind === 'bars') {
-    // The finding fills the frame: no heading underneath, the narration names it.
+    // The finding fills the frame: no heading underneath, the narration names it. Its labels
+    // and note stay above the caption band at the foot of the frame.
     const [x, y, bw, bh] =
-      spec.box ?? (tall ? [w * 0.1, h * 0.26, w * 0.8, h * 0.4] : [w * 0.1, h * 0.17, w * 0.8, h * 0.56]);
+      spec.box ?? (tall ? [w * 0.1, h * 0.26, w * 0.8, h * 0.4] : [w * 0.1, h * 0.14, w * 0.8, h * 0.5]);
     const max = spec.max ?? Math.max(...values.map(v => v.value), 1);
     const n = values.length,
       col = bw / (n + (n - 1) * 0.45),

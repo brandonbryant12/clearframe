@@ -48,7 +48,7 @@ const film = [
   ['Vertical canvas with film texture', 'replaced', 'vertical'],
 ];
 for (const [what, , key] of film) out.push(row([what, 'native', fmt(fxdb(key))]));
-out.push(row(['Dissolve (two pictures crossing)', 'native: two real layers; the outgoing native stage runs on under the incoming beat', 'visual inspection (footage fixture)']));
+out.push(row(['Wipe (two pictures split by one moving edge)', 'native: both beats drawn, the outgoing native stage runs on until the edge crosses it', 'visual inspection (footage fixture)']));
 out.push(row(['Review grid (`--grid`)', 'native', 'unverified by comparison']));
 out.push(row(['Lens motion blur (`lens.blur`) on canvas keys and camera', 'native (directional smear in the canvas block)', '—']));
 out.push(row(['Native motion blur (`shutter`, `samples`)', 'native: temporal accumulation in half float', 'stage fixtures']));
@@ -73,7 +73,7 @@ for (const [f, s] of [
   ['keys (x, y, scale, rotate, opacity, scaleX, scaleY, blur, tiltX, tiltY), along, loops spin/pulse/float/sway/orbit/dash/blink/rock, echo, tilt, shine, glow, shadow, blur, blend, z with dolly and focus, fps stepping, gradients and palette tokens', 'native'],
   ['colour keys (fill/stroke), connector, attach, along {path: id}, video, shader, material presets, particles burst/stream/field up to 4,000, code, camera: false, stage camera with parallax and depth of field, temporal motion blur', 'native (new)'],
   ['rough, print, mosaic, morph, solid, meter, loop level, the canvas `materials` thermal/chrome/gold/neon as filter graphs', 'refused on stages (drawn by the canvas block in canvas/art); native SkSL materials of the same names exist with a different implementation'],
-  ['canvas worlds, `view`/`viewFrom` camera rects, `plates` depth sets, `diagram`, `chart`, `kpi`, `plot`, `bars`, `bridge`, `cast`, `multiples`, `distribution`, `stat`, `teaching`, `sketch` expansions', 'native (canvas block)'],
+  ['canvas worlds, `view`/`viewFrom` camera rects, `plates` depth sets, `diagram`, `chart`, `document`, `pointer`, `plot`, `bars`, `bridge`, `cast`, `multiples`, `distribution`, `stat`, `teaching`, `sketch` expansions', 'native (canvas block)'],
 ]) out.push(row([f, s]));
 out.push('');
 
@@ -81,7 +81,7 @@ out.push('## Sketches', '');
 out.push(`${sketches().length} public sketches expand into canvas elements in \`film/sketches.mjs\` and are drawn by the canvas block. The sketch gallery (\`clearframe gallery DIR --sketches\`, landscape), PSNR per sketch against the FFFrames-era gallery:`, '');
 out.push(row(['Sketch', 'Landscape (dB)']), row(['---', '---']));
 for (const sk of sketches()) out.push(row([`\`${sk.id}\``, fmt(galleryDb('sketches-landscape', sk.id))]));
-out.push('', '`globe`, `component-change` and `state-machine` were left out of the measured sketch gallery: the gallery cannot prepare them (a `tilt` value the canvas validator rejects; elements cued after the gallery beat ends), as on `main`. They are unverified here. The block and sketch galleries\' sample copy also fails a few frame-audit checks (a quote mark over its text in vertical, overlapping route labels, a marquee word at the edge), the same findings as in the FFFrames-era run.', '');
+out.push('', 'The sketch gallery prepares every sketch (each beat as long as its last cue). Its sample copy fails a few frame-audit checks (a quote mark over its text in vertical, overlapping route labels), as in the FFFrames-era run.', '');
 
 out.push('## Treatments, type voices and directions', '');
 out.push(`${treatments().length} treatments set palette, backdrop, texture, lens, motion, transitions and type. Film-level settings are native, compared above. ${types().length} type voices resolve to the bundled font files; type is shaped once with rustybuzz and drawn as the outlines of those glyphs. ${directions().length} directions are authoring guidance and do not touch the renderer.`, '');

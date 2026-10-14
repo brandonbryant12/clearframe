@@ -35,7 +35,7 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 
 ## 4. Accessibility
 
-- Export captions for every deliverable (`clearframe captions`). Burn them in for vertical and social (`"captions": true`, on by default for vertical).
+- Captions are burned in for every narrated film by default, to a broadcast standard (two lines of at most 42 characters, 28 on a vertical frame, timed to the measured words; `docs/speech.md`). Keep them on; `captions: false` is for a deliverable whose player adds its own. Export the same cues as SRT/VTT for every deliverable (`clearframe captions`). `check` warns when a caption covers the picture's type.
 - Never encode meaning in colour alone. Pair colour with a sign, an arrow or a label.
 - No flashing: nothing faster than 3 flashes per second, and no full-frame strobes.
 - Narration should describe the key visual ("the line doubles by year three"), so the film works for listeners too.
@@ -60,7 +60,7 @@ Professional audiences forgive plain design. They don't forgive a wrong number. 
 3. Read the final contact sheet: each on-screen number matches `sources` and the narration.
 4. Hypotheticals are labelled on screen, and the source or as-of line is present on every data scene.
 5. Footnotes and disclosures meet size and hold time.
-6. `clearframe captions` has been exported. Vertical deliverables have captions burned in.
+6. Captions are burned in (or, with `captions: false`, the player carries them) and `clearframe captions` has been exported.
 7. The delivery message lists the sources, what was AI-generated (voice, music, images, footage) and the spend.
 
 - The renderer links skia-safe (MIT; Skia BSD-3), metal (MIT/Apache-2.0), rustybuzz (MIT) and kurbo (MIT/Apache-2.0). It encodes and decodes through the system FFmpeg tools (libx264 is GPL), as separate processes; review codec licensing for your distribution. Bundled Inter includes its OFL notice. Archived browser dependencies are not installed by the active package.

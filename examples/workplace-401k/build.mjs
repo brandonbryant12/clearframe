@@ -19,7 +19,7 @@ const film = vertical => ({
   backdrop: 'none',
   texture: { grain: 0.05 },
   sfx: 'subtle',
-  captions: vertical ? 'pop' : false,
+  // Captions are on (broadcast style), as on every narrated film: most people watch muted.
   music: false,
   voice: { style: 'warm, plain, a little playful' },
   sources: [
@@ -54,6 +54,10 @@ const film = vertical => ({
       vo: 'On a sixty thousand dollar salary, the match goes from eighteen hundred dollars a year to twenty-four hundred. Six hundred more, for two points.',
       props: {
         source: `${PLAN} · example: a $60,000 salary`,
+        // The salary lands first, so the lead-in has its own fact instead of an empty baseline.
+        elements: [
+          { type: 'text', text: 'On a $60,000 salary', x: vertical ? 108 : 192, y: vertical ? 420 : 104, size: vertical ? 54 : 50, font: 'strong', fill: 'muted', say: 'sixty' },
+        ],
         chart: {
           kind: 'bars',
           prefix: '$',

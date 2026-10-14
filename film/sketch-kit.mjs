@@ -8,10 +8,11 @@ export const frames = { landscape: [1920, 1080], vertical: [1080, 1920], square:
 export const tall = (w, h) => h > w * 1.1;
 export const round = v => Math.round(v * 10) / 10;
 
-/** Body region below a title (y from ~330) and above the footer, in frame pixels. */
+/** Body region below a title (y from ~330) and above the caption band and source line at the
+ *  foot of the frame (captions are on for every narrated film), in frame pixels. */
 export function body(w, h) {
   const top = tall(w, h) ? h * 0.11 + 330 : 330;
-  return { x: tall(w, h) ? 86 : 120, y: top, w: w - (tall(w, h) ? 172 : 240), h: h - top - (tall(w, h) ? 240 : 150) };
+  return { x: tall(w, h) ? 86 : 120, y: top, w: w - (tall(w, h) ? 172 : 240), h: h - top - (tall(w, h) ? 400 : 250) };
 }
 
 /** A smooth curve through points (Catmull-Rom converted to cubic Béziers). */

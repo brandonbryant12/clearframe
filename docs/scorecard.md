@@ -16,25 +16,25 @@ Cinematic capability exists: worlds, a travelling camera, canvas, mosaic, morphs
 
 ## Scores
 
-"Base" is 2026-09-30 before the cinema loop; "Now" is after it. Scores are for what the defaults and the library produce, not what an expert could hand-build.
+"Base" is 2026-09-30 before the cinema loop; "Now" is after it. Scores are for what the defaults and the library produce, not what an expert could hand-build. On 2026-10-14 the library was cut to what meets [the bar](../library/README.md#the-bar): the film looks, flash cuts, set pieces and trailer sound that earned some of these points were removed, so the evidence below describes what remains and the numbers have not been re-judged since.
 
 | # | Dimension | Base | Now | Evidence now | Next |
 |---|---|---|---|---|---|
-| 1 | **Continuity**: shots, not slides | 1.5 | 4 | Worlds, match cuts, flash cuts, moving cameras; canvas charts morph across cuts (a number into its bar, a stack into bars), now in the default data story. | Morphs between block types (stat → bars) without rebuilding them in canvas. |
-| 2 | **Camera and depth** | 2 | 4.5 | `z` perspective and parallax, `dolly`, rack `focus`, motion blur on camera and element moves, handheld, and a push to a detail on a spoken word. | A camera on world beats that orbits (3D) rather than pans. |
-| 3 | **Composition and scale** | 2 | 3.5 | Set pieces are full-bleed; `camera.to` turns any chart into a close-up on its finding. Charts still open as a band in a big room. | Push-ins on more report chart beats by default. |
-| 4 | **Motion craft** | 3 | 4 | Set pieces keep moving; fast moves smear; number scenes push in; a silence gives the edit a breath. | Secondary motion on chart blocks during holds. |
-| 5 | **Look**: light, lens and grade | 2 | 4 | `lens`: letterbox, grade, bloom, aberration, leaks. `shine`, glow and bokeh from depth of field. | A `lens` on the report treatments too (subtle grade and bloom). |
-| 6 | **Imagery** | 2.5 | 4.5 | Generated depth plates (painted far layer, cut-out subject and foreground) put the camera inside painted places; vector set pieces cover abstract and data scenes; anonymous people (`desk`, `crowd`, plate subjects). | A library of reusable plates per brand. |
-| 7 | **Editing grammar** | 3 | 3.5 | `flash`, match cuts, silence beats; critique measures rhythm. | Beat-synced cuts on the music. |
-| 8 | **Typography** | 3.5 | 4 | Tracked title reveals with light sweeps, poster cards that wrap, type as image. | Masked reveals (type through a shape). |
-| 9 | **Sound** | 2.5 | 4 | Cinema cues on picture events; composed music briefed from the edit; any bed gated through silences (−32 dB in the trailer final). | Beat-synced cuts. |
-| 10 | **Voice and sync** | 4 | 4 | Unchanged. | Genre reads: trailer, documentary. |
+| 1 | **Continuity**: shots, not slides | 1.5 | 4 | Worlds, match cuts, a `cast` that persists across cuts, moving cameras; canvas charts morph across cuts (a number into its bar, a stack into bars), now in the default data story. | Morphs between block types (stat → bars) without rebuilding them in canvas. |
+| 2 | **Camera and depth** | 2 | 4.5 | `z` perspective and parallax, `dolly`, rack `focus`, motion blur on camera and element moves, and a push to a detail on a spoken word. | A camera on world beats that orbits (3D) rather than pans. |
+| 3 | **Composition and scale** | 2 | 3.5 | Worlds and plates are full-bleed; `camera.to` turns any chart into a close-up on its finding. Charts still open as a band in a big room. | Push-ins on more report chart beats by default. |
+| 4 | **Motion craft** | 3 | 4 | Sketches move on spoken words; fast moves smear; number scenes push in; a silence gives the edit a breath; `pop` settles without overshoot. | Secondary motion on chart blocks during holds. |
+| 5 | **Look**: light and texture | 2 | 4 | Grain, vignette, `shine`, glow and depth of field. The film-look lens (letterbox, grade, bloom, aberration, leaks) was retired on 2026-10-14. | Light that explains: a lit subject, a spotlight on the finding. |
+| 6 | **Imagery** | 2.5 | 4.5 | Generated depth plates (painted far layer, cut-out subject and foreground) put the camera inside painted places; drawn mechanisms cover abstract and data scenes; anonymous plate subjects. | A library of reusable plates per brand. |
+| 7 | **Editing grammar** | 3 | 3.5 | Match cuts, `push` and `panel` at turns, silence beats; critique measures rhythm. | Beat-synced cuts on the music. |
+| 8 | **Typography** | 3.5 | 4 | Tracked title reveals, poster type that builds as spoken, `marks` attached to their words. | Masked reveals (type through a shape). |
+| 9 | **Sound** | 2.5 | 4 | Quiet cues on picture events (a counter landing, a chapter turn, authored `sound`); composed music briefed from the edit; any bed gated through silences. | Beat-synced cuts. |
+| 10 | **Voice and sync** | 4 | 4 | Captions on by default, to a broadcast standard, timed to measured words. | Keep it. |
 | 11 | **Honesty and data** | 4.5 | 4.5 | Set pieces label sample values; routes say they are illustrative. | Keep it. |
-| 12 | **Tooling and review** | 4 | 4.5 | Cinema score from the eight tells; letterbox and flat-depth checks; review strips; a fresh-model authoring test that found nine tool issues. | Run the fresh-model test after every loop. |
+| 12 | **Tooling and review** | 4 | 4.5 | A film score from the eight tells; flat-depth and caption-over-type checks; review strips; a fresh-model authoring test that found nine tool issues. | Run the fresh-model test after every loop. |
 | 13 | **Speed and efficiency** | 4 | 4.5 | A 27 s graded final renders in about 85 s; drafts now predict the final (learned voice rates, continuous-take timing); lock-waiting builds no longer rebuild twice; `plan` no longer double-counts take voices. | Cache rendered beats between drafts. |
-| 14 | **Library and scale** | 4 | 4.5 | 19 palettes, 15 treatments, 35 playbooks, 19 sketches, all files. | Characters and a sound library. |
-| 15 | **Default outcome** | 2 | 4 | All 35 playbooks score 63–100; `ingest` and `new` start from films; a seeded `muse` keeps first drafts from looking alike; `checkpoints` puts a human where it matters. | Another fresh-model test on a report brief. |
+| 14 | **Library and scale** | 4 | 4.5 | Cut to what meets the bar: 15 palettes, 10 treatments, 3 type voices, 18 playbooks, 45 sketches, all files. | Characters and a sound library. |
+| 15 | **Default outcome** | 2 | 4 | `ingest` and `new` start from films; a seeded `muse` keeps first drafts from looking alike; `checkpoints` puts a human where it matters. | Another fresh-model test on a report brief. |
 
 **Builder's own estimate: 4.3. Independent review, round 1: 3.1 / 5.** The independent score is the one that counts (see the review log below); the builder's estimate was inflated.
 
@@ -48,19 +48,19 @@ These are the signatures a viewer notices, in order of damage. `critique` should
 4. **A locked camera and a flat plane.** No depth, focus or parallax outside worlds.
 5. **Small subject, big room.** Content occupies a band in the middle, with no close-ups and no full-bleed.
 6. **Same grammar every beat.** The same layout, the same entrance and the same fade.
-7. **Screen-flat image.** No light, lens or grade, so it reads as UI rather than film.
+7. **Screen-flat image.** No light on the subject and no texture, so it reads as UI rather than film.
 8. **Edit set only by the voice.** Every cut sits on a sentence boundary, and there are no montage or hit cuts.
 
 ## What industry practice says (the rules this loop adopts)
 
 - **Transitions are the story** (motion design). An object's identity survives the cut: it transforms, it is followed, or the camera moves to it. Material motion calls these container transform and shared axis. Title designers call them match cuts.
-- **Three planes** (film and animation staging). Foreground, midground and background, each moving at its own rate. Depth is the cheapest cinematic signal there is.
+- **Three planes** (film and animation staging). Foreground, midground and background, each moving at its own rate, when the film has a place to be in.
 - **Motivated camera.** Push in on a revelation, pull out for context, and track with motion. Use a slow drift, never a dead lock-off, except as a deliberate beat.
 - **Shot-scale variety.** Establishing, then medium, then close-up or insert, then a return. Never five mediums in a row.
 - **Hold with life.** Secondary motion, drift, light and particles keep a held frame alive (the 12 principles: follow-through, overlap, secondary action).
-- **Light and lens sell reality.** Rim light, bloom, light sweeps, grain, a grade, letterbox and a 180° shutter for motion blur.
-- **Rhythm.** Contrast fast against slow. Silence before an impact, a hit on the title, a button at the end. Trailers are built on this.
-- **Type as image.** Big, masked, lit and placed in space (Saul Bass, Kyle Cooper, Apple keynotes).
+- **Light sells reality.** A lit subject, light sweeps, grain and a 180° shutter for motion blur. (Grades, bloom and letterbox were tried and removed on 2026-10-14: in a benefits or policy film they read as a trailer.)
+- **Rhythm.** Contrast fast against slow, and leave a silence before the point that matters.
+- **Type as image.** Big, placed with intent, built on the voice (Apple keynotes, the FT's and Bloomberg's explainers).
 
 ## Next loop
 

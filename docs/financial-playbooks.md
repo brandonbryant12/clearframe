@@ -6,7 +6,7 @@ These arcs turn an approved financial explanation into a short film. They begin 
 |---|---|---|---|
 | `cash-flow` | A payment can exist before its cash is available; the sample balance carries the timing gap | `cash-lock`: a payment waits at a clearing gate, then moves into available cash | Actual availability rules, dates, same-period flows and reconciled opening/closing balances |
 | `scenario-lab` | A decision depends on assumptions; compare possible outcomes on one basis | `scenario-origin` then `scenario-outcomes`: one camera pulls back from a common origin to reveal the possibilities | Defined assumptions, comparable scenario inputs, limits and the signal that would trigger a review |
-| `risk-tradeoffs` | A headline benefit needs equally visible conditions and limitations | `risk-lens`: a lens inspects access, price and potential loss | Approved benefit/risk statements, current terms, fees and access conditions |
+| `client-update` | The quarter, what held, what was done and how to talk about it, calmly | `drawdown`: only the letter's stated points on a real-day axis; `split`: the target mix | The quarterly letter: returns as of the quarter end, the sharpest move and its recovery, the target mix, the committee's decision |
 
 The drawings are qualitative. Path lengths, positions, marker sizes and animation timings do not represent amounts, probabilities, time to settlement or risk scores. Scenario branches have equal-size markers and no probability shading. Native chart blocks carry the quantitative evidence. The `scenario-fork` sketch offers the complete diagram as one shot; the playbook splits it into a close origin shot and a wider outcomes shot in the same world so narration continues to reveal the picture.
 
@@ -15,7 +15,7 @@ The drawings are qualitative. Path lengths, positions, marker sizes and animatio
 ```sh
 node engine/cli.mjs new /tmp/cash-flow-demo --playbook cash-flow
 node engine/cli.mjs new /tmp/scenario-demo --playbook scenario-lab
-node engine/cli.mjs new /tmp/risk-demo --playbook risk-tradeoffs
+node engine/cli.mjs new /tmp/client-demo --playbook client-update
 node engine/cli.mjs new /tmp/scenario-vertical-demo --playbook scenario-lab --vertical
 node engine/cli.mjs critique /tmp/cash-flow-demo
 node engine/cli.mjs voice /tmp/cash-flow-demo --draft
@@ -28,11 +28,11 @@ The cash example reconciles as **$60k opening + $40k collections - $70k payments
 
 ## Direct the adaptation
 
-Start with the audience's question and keep only the scenes that answer it. A settlement explanation needs the gate; a product risk story needs the lens. Use approved documents to replace placeholder statements before directing the narration. The opening and final questions are prompts to adapt, not a recommendation to buy, sell or select a financial product.
+Start with the audience's question and keep only the scenes that answer it. A settlement explanation needs the gate; a product risk story needs the `risk-lens` sketch, which inspects access, price and potential loss as separate questions. Use approved documents to replace placeholder statements before directing the narration. The opening and final questions are prompts to adapt, not a recommendation to buy, sell or select a financial product.
 
 The financial drawings use local animation times for their reusable reference motion. After changing the narration, cue the important gate opening, branch reveal or lens move to an exact spoken phrase with `say`; review before and after the action. Keep the initial ground visible at `at: 0` and `enter: "none"`. Preserve short silence before the final question. A slow camera push supports inspection; a graphic wipe marks a change of argument.
 
-Keep material limitations as visible and audible as the benefit. `scenario-lab` gives its uncertainty a full spoken scene. `risk-tradeoffs` puts benefit questions and limitation questions in equal columns. Sources in a footer do not replace a readable disclosure. Before publishing, review the actual terms and narrative through the appropriate approval process for the intended audience.
+Keep material limitations as visible and audible as the benefit. `scenario-lab` gives its uncertainty a full spoken scene. A product's limitations get a scene as large as its benefit. Sources in a footer do not replace a readable disclosure. Before publishing, review the actual terms and narrative through the appropriate approval process for the intended audience.
 
 ## Review the film
 

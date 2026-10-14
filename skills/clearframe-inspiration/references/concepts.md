@@ -14,7 +14,7 @@ Brief: *"Our checkout is 40% faster. Explain it to the sales team."*
 2. **One order's journey.** A phone sends an order that travels to the server and comes back, and a clock beside it shrinks.
    - Why: it shows why it is faster, so they can explain it rather than just quote it.
    - Build with: `cast-shape:phone`, `server` and `clock`; `cast-move:travel` and `swap`; the `tiles` look.
-   - Example: `examples/order-journey`.
+   - Example: `examples/cast-journey` (the same move, with a ticket).
 3. **Fewer steps.** The old route winds through four waits and the new one goes straight, with two tokens racing at the same speed. Then the sourced figure lands.
    - Why: it explains why it is faster without leaning on the number alone.
    - Build with: `sketch:shortcut` (`example:fewer-steps`), then a `delta`.
@@ -26,10 +26,10 @@ For an internal team, I would lean toward the second or third. It gives them the
 
 ## The same story, two looks
 
-`examples/order-journey` tells one story in two looks:
+A cast takes one look for the whole film, and the look says who the film is for:
 
-- `drawn` on `ink` reads as a warm explainer;
-- `pixel` on `lcd` reads as a playful teaser for a game or developer audience.
+- `tiles` on `meridian` or `paper` reads as a clear product or business film;
+- `drawn` on `sketchbook` reads as a warm explainer for new hires or customers.
 
 Choose by audience. A look picked only for variety reads as a gimmick.
 
@@ -37,30 +37,28 @@ Choose by audience. A look picked only for variety reads as a gimmick.
 
 | Brief | What the shortlist offered | A good choice, and why |
 |---|---|---|
-| A calm thank-you to the nurses who work nights | `treatment:calm`, `sketch:desk`, `example:night-shift`, `palette:ink`, `cast-look:drawn` | One continuous drawn night (`night-shift` as the model), slow, with no figures. Gratitude needs a held picture, not a chart. |
+| Remind staff that FSA money expires at year end | `example:fsa-deadline`, `sketch:expire`, `sketch:deadline`, `treatment:workplace`, `palette:meadow` | The jar that keeps only the carry-over, then the plan's own words scrolled to the rule and marked, then the claim pressed in the app. People act on a rule they have seen in the document, and on a step they have seen done. |
 | Explain how our API caches requests, to engineers | `playbook:pr-walkthrough`, `sketch:architecture`, `mechanism:stage`, `cast-shape:server`/`database`, `treatment:blueprint` | A stage with real actors and `send` events, plus a `code-scene` for the cache key. Engineers trust the mechanism they can see. |
-| A playful teaser for a retro game launch | `cast-look:pixel`, `palette:lcd`, `sketch:pixel-skyline`, `treatment:trailer`, `cast-shape:flag` | Pixel art on `lcd` with stepped motion and a trailer rhythm. The look is the promise of the game. |
-| Quarterly revenue results for the board | `playbook:quarterly-update`, `block:stat`/`delta`, `example:market-update`, `cast-shape:coin` | Figures first, each with a source, with drawing kept to what explains a figure. For this board, the number and its reason probably matter more than a metaphor. |
-| Why the app was slow at night (a post-mortem) | `sketch:searchlight`, `example:lights-on`, `playbook:research-investigation`, `palette:noir` | A torch finding each cause in a dark room, then the lights coming on. A post-mortem is a search, and the reveal that it was one problem is the payoff. |
-| One merge ships the whole release (for a developer audience) | `sketch:pixel-chain`, `example:chain-reaction`, `cast-look:pixel`, `palette:lcd` | A game level where one press sets off the rest. A chain of effects in space is easier to follow than a pipeline diagram, and the game look suits developers. |
-| Launch an app built from customer feedback (warm, for customers) | `sketch:cut-paper`, `example:paper-launch`, `playbook:product-reveal`, `palette:paper` | Scraps of paper coming together as the product. It says "made from what you told us" without a word of copy, and the handmade look feels approachable. |
-| Our community keeps growing (warm, for members) | `sketch:seedling`, `example:community-grows`, `playbook:personal-story`, `palette:paper` | A plant growing in labelled stages. It shows growth as something alive and earned, and it stays honest because it draws stages, not amounts. |
+| Quarterly revenue results for the board | `playbook:data-story`, `block:stat`/`delta`, `example:market-update`, `cast-shape:coin` | Figures first, each with a source, with drawing kept to what explains a figure. For this board, the number and its reason probably matter more than a metaphor. |
+| Why the app was slow at night (a post-mortem) | `sketch:searchlight`, `sketch:evidence-gap`, `treatment:business`, `palette:noir` | A torch finding each cause in a dark room, then the lights coming on. A post-mortem is a search, and the reveal that it was one problem is the payoff. |
+| What one pull request changes (for its reviewers) | `playbook:pr-walkthrough`, `example:pr-film`, `sketch:component-change`, `treatment:business` | The component swapped in place on the diagram, the real diff beside it, then the check that proves it. Reviewers trust a change they can watch happen to the system they know. |
+| Launch an app built from customer feedback (warm, for customers) | `sketch:cut-paper`, `playbook:product-reveal`, `palette:paper` | Scraps of paper coming together as the product. It says "made from what you told us" without a word of copy, and the handmade look feels approachable. |
+| Our community keeps growing (warm, for members) | `sketch:seedling`, `treatment:sketchbook`, `palette:meadow` | A plant growing in labelled stages. It shows growth as something alive and earned, and it stays honest because it draws stages, not amounts. |
 | Six tools became one flow (for the team that lived with them) | `sketch:untangle`, `example:one-line`, `sketch:versus`, `block:steps` | The same pieces leaving a tangle for a line. People who knew the old mess recognise the pieces, so the relief lands. `versus` would suit a quicker side-by-side. |
-| Your data stays private (for customers) | `sketch:vault`, `example:your-data`, `cast-shape:lock`, `palette:midnight` | A vault door closing over their things. Trust is easier to feel as a place than to read as a policy. |
-| We integrated with their system (for both teams) | `sketch:bridge`, `example:across`, `sketch:network`, `mechanism:stage` | A bridge built across a gap, then used. Both sides see themselves, and the moment of connection is visible. For engineers, a stage with real services may say more. |
-| We make account setup easy (for new customers) | `sketch:maze`, `example:the-way-through`, `sketch:untangle`, `playbook:tutorial` | One lit path through a maze. It admits the process is complicated and shows that someone has found the way. |
+| Your data stays private (for customers) | `sketch:vault`, `cast-shape:lock`, `palette:midnight` | A vault door closing over their things. Trust is easier to feel as a place than to read as a policy. |
+| We integrated with their system (for both teams) | `sketch:bridge`, `sketch:network`, `mechanism:stage` | A bridge built across a gap, then used. Both sides see themselves, and the moment of connection is visible. For engineers, a stage with real services may say more. |
+| We make account setup easy (for new customers) | `sketch:maze`, `sketch:portal`, `sketch:untangle`, `treatment:workplace` | One lit path through a maze, then the step itself done in the app. It admits the process is complicated and shows that someone has found the way. |
 | How a support ticket travels through the team | `example:cast-journey`, `cast-shape:ticket`, `cast-move:travel`, `playbook:process-cast`, `mechanism:world` | One ticket travelling through a drawn world of stations. Following one thing is easier than reading a flowchart. |
 
-## From discovery to adaptation: a human story
+## From discovery to adaptation: a benefits film
 
-Brief: *"A launch film for a small budgeting app that one person built late at night. By morning, the city is using it."* It is built in `examples/by-morning`.
+Brief: *"Most of our people lose some of their FSA money every December. Tell them the rule and how to claim before the deadline."* It is built in `examples/fsa-deadline`.
 
-- **`find` on the brief** surfaces `sketch:desk` (one person, one screen), `sketch:device` (here is the app) and `palette:cinema`.
-- **A narrower `find "the city wakes up in the morning" --kind sketch`** surfaces `sketch:rooftops`.
-- **`--id`** shows `device` has slots (`PRODUCT`, `LINE`), while `desk` and `rooftops` have none: their timing is fixed.
-- **So `device` is filled, and `desk` and `rooftops` are copied** (catalog topic `sketch`, or `sketch(name, shape)`) and changed only where the story needs it. The laptop light is cued to "building", and the windows start on "morning".
+- **`find` on the brief** surfaces `sketch:expire` (use it or lose it), `sketch:deadline` (a window on a calendar) and `example:fsa-deadline`, whose README names the other two pieces: the canvas `document` and `pointer` (`docs/canvas.md`).
+- **`--id`** shows `expire` takes its counts as `sketchParams` and its moments as `sketchSay`, so it is filled, not copied. The `document` holds the plan's own sections; its `scroll` and `marks` land on the words the voice reads.
+- **The step is drawn in the app,** with an id on every control, so the `pointer` presses them by name and follows them if the layout changes.
 
-Why these suit this brief: the light is the through-line, from one screen to the product to a city of windows. They are three existing set pieces, not new ones.
+Why these suit this brief: the money, the rule and the step are three different pictures of one fact, and each lands on the word that names it. They are existing pieces, filled with the plan's own words.
 
 ## Signs the concepts are too close
 

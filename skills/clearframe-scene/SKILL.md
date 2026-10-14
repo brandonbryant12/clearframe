@@ -21,8 +21,8 @@ Charts, KPIs, plots, quotes and kinetic speech stay in their blocks (exact value
 1. Positions are frame pixels of the layout frame (1920×1080 landscape, 1080×1920 vertical; the shorter side is 1080). Keep type inside title-safe; `check` audits native type like block type. Author tall positions for a vertical film: a wide-authored stage in a tall frame is re-laid down the frame automatically (and `check` says so), but only in order, not where you would place it. Code editors fit their frame by themselves (type to the longest line, ≥ 24 px, then hanging wraps).
 2. Cue with `say` (a word of the beat's narration; for film stages the first match in its beats, or `{beat, say}`). Every cue must land inside the stage; late cues fail.
 3. Actor ids are the identities: links, packets (`send`), callouts and `attach` refer to them. Events can be in any order; keys are sorted.
-4. Footage must cover its time on screen, including a dissolve into the next beat; it never loops, and freezes only with `hold: true`.
-5. Canvas-only features (`rough`, `print`, `mosaic`, `morph`, `solid`, `meter`, `loop: level`, `assemble`/`scatter`) are refused on stages by name. Use a `canvas` beat or `art` for them.
+4. Footage must cover its time on screen, including the time a `wipe` into the next beat holds it; it never loops, and freezes only with `hold: true`.
+5. Canvas-only features (`rough`, `print`, `mosaic`, `morph`, `solid`, `meter`, `loop: level`) are refused on stages by name. Use a `canvas` beat or `art` for them.
 6. Keep steady films steady: no `camera` keys or `shutter` on a business/report stage unless the brief asks for movement.
 7. Run `sheet`, `check`, then render and look at decoded frames around every cut and camera move.
 
@@ -45,7 +45,7 @@ Example: `examples/stage-pr` (a film stage across beats, a callout riding a came
 
 ## Engine development
 
-- Sources: `scene/native/src` — `plan.rs` (contract), `compose.rs` (frame order, dissolves, motion blur), `film.rs` (backdrop, texture, chrome, frame, lens, letterbox), `nodes.rs` (elements, recipes' targets, camera), `materials.rs` (SkSL), `media.rs` (footage/images, bounded), `fonts.rs` (glyph outlines from the rustybuzz shaping that measured them), `draw.rs` (the blocks' display list and painter), `fx.rs` (filter graphs), `blocks/` (the 33 blocks), `encode.rs` (FFmpeg pipe), `inspect.rs` (inspect + audit). JS: `scene/compile.mjs`, `scene/recipes.mjs`, `scene/code.mjs`, `scene/engine.mjs`.
+- Sources: `scene/native/src` — `plan.rs` (contract), `compose.rs` (frame order, wipes, motion blur), `film.rs` (backdrop, texture, chrome, frame), `nodes.rs` (elements, recipes' targets, camera), `materials.rs` (SkSL), `media.rs` (footage/images, bounded), `fonts.rs` (glyph outlines from the rustybuzz shaping that measured them), `draw.rs` (the blocks' display list and painter), `fx.rs` (filter graphs), `blocks/` (the 31 blocks), `encode.rs` (FFmpeg pipe), `inspect.rs` (inspect + audit). JS: `scene/compile.mjs`, `scene/recipes.mjs`, `scene/code.mjs`, `scene/engine.mjs`.
 - Frame output is a pure function of the frame and prepared inputs. Anything random is hash-derived from a seed; no wall clock.
 - Measure a change in the picture against earlier stills: `scripts/engine-parity.mjs OUT --reference DIR` (library) and `scripts/engine-effects.mjs OUT --reference DIR` (film-level effects). The retained FFFrames-era stills in `build/parity` and `build/engine-effects` are such references.
 - Build: `node engine/cli.mjs build` (one Cargo job). Tests: `node --test test/scene-engine.test.mjs`; Rust: `env CARGO_TARGET_DIR=scene/.cache/target cargo test --manifest-path scene/native/Cargo.toml --release --locked --jobs 1 -- --test-threads=2`.

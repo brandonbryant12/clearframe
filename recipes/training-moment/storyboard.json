@@ -1,0 +1,163 @@
+{
+  "version": 2,
+  "title": "Train one habit: the threat, its signs, the right move",
+  "logline": "Train one habit: the threat, its signs, the right move",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "briefing",
+  "motion": {
+    "preset": "snappy",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": "auto",
+  "music": {},
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.05
+  },
+  "type": "geometric",
+  "sources": [
+    {
+      "id": "test",
+      "claim": "14% of employees clicked the link in the spring simulation",
+      "source": "Example Co. phishing simulation, spring (sample: replace with your results)"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "hook",
+      "block": "canvas",
+      "vo": "In our spring test, fourteen percent of us clicked a link we should not have.",
+      "props": {
+        "source": "Example Co. phishing simulation, spring",
+        "chart": {
+          "kind": "number",
+          "values": [
+            {
+              "label": "clicked the link",
+              "value": 14,
+              "highlight": true
+            }
+          ],
+          "suffix": "%",
+          "box": [
+            360,
+            300,
+            1200,
+            520
+          ]
+        }
+      }
+    },
+    {
+      "id": "signs",
+      "block": "canvas",
+      "vo": "It looked routine. But it was urgent, the sender was almost right, and the link was one nobody expected.",
+      "props": {
+        "sketch": "inspect",
+        "sketchParams": {
+          "marks": [
+            "subject",
+            "sender",
+            "link"
+          ],
+          "color": "negative"
+        },
+        "sketchText": {
+          "FROM": "IT Support <it@examp1e-co.com>",
+          "SUBJECT": "Your account locks in 2 hours",
+          "LINE1": "We detected unusual sign-ins on your account.",
+          "LINE2": "Confirm your password now to keep access.",
+          "BUTTON": "Keep my account",
+          "MARKONE": "Urgency",
+          "MARKTWO": "Almost the right sender",
+          "MARKTHREE": "A link you did not expect"
+        },
+        "sketchSay": {
+          "ONE": "urgent",
+          "TWO": "almost",
+          "THREE": "link"
+        }
+      }
+    },
+    {
+      "id": "habit",
+      "block": "canvas",
+      "vo": "So don't click, and don't just delete it. Choose Report, then Phishing, and send it.",
+      "props": {
+        "sketch": "portal",
+        "sketchText": {
+          "APP": "Mail",
+          "STEP1": "Inbox",
+          "STEP2": "Your account locks in 2 hours",
+          "OTHER": "Team lunch on Friday",
+          "FIELD": "Report as",
+          "OLD": "Not reported",
+          "NEW": "Phishing",
+          "DONE": "Reported: Security replies within an hour",
+          "Pay": "Sent",
+          "Documents": "Drafts"
+        },
+        "sketchSay": {
+          "CLICK1": "don't",
+          "CLICK2": "delete",
+          "CHANGE": "Phishing",
+          "SAVE": "send"
+        }
+      },
+      "transition": "cut"
+    },
+    {
+      "id": "close",
+      "block": "canvas",
+      "vo": "Three seconds to look. One click to report.",
+      "props": {
+        "cast": {
+          "look": "tiles",
+          "objects": [
+            {
+              "id": "mail",
+              "shape": "envelope",
+              "color": "negative",
+              "label": "Suspicious email",
+              "enter": "pop"
+            },
+            {
+              "id": "shield",
+              "icon": "shield",
+              "color": "positive",
+              "label": "Reported",
+              "enter": "pop"
+            }
+          ],
+          "formations": [
+            {
+              "form": "hero",
+              "hero": "mail",
+              "say": "look"
+            },
+            {
+              "form": "swap",
+              "out": "mail",
+              "in": "shield",
+              "say": "report"
+            }
+          ]
+        }
+      },
+      "transition": "cut"
+    }
+  ]
+}

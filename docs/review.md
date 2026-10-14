@@ -15,7 +15,7 @@ Score against professional work in the same category, not against earlier ClearF
 
 | Score | Means                                                                                                                  |
 | ----- | ---------------------------------------------------------------------------------------------------------------------- |
-| **5** | Indistinguishable from top studio work: Apple keynote films, Kurzgesagt, Vox, a feature-film trailer house, Saul Bass. |
+| **5** | Indistinguishable from top studio work in the category: Apple keynote films, Kurzgesagt, Vox, FT and Bloomberg graphics. |
 | **4** | Strong professional work that a demanding client would accept. The flaws are only visible to an expert.                |
 | **3** | Competent but visibly templated or flawed. A client would ask for changes.                                             |
 | **2** | Amateur, or slides with motion.                                                                                        |

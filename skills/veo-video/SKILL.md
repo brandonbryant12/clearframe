@@ -70,5 +70,5 @@ Structure: **camera move → subject → light → palette → pace → exclusio
 ## Don't
 
 - Don't rely on it for text, numbers, charts, UI, logos, faces or recognisable people.
-- No fast motion, handheld shake, whip pans or "epic" drone swoops. They fight the calm grammar. A `sizzle` or `trailer` brief may ask for that energy; then follow the field notes above.
+- No fast motion, handheld shake, whip pans or "epic" drone swoops. They fight the calm grammar. A footage-led brief (a sizzle reel or brand spot: `docs/hero-footage.md`) may ask for that energy; then follow the field notes above.
 - Don't generate footage to fill time. If a beat feels empty, the script or the visual idea is the problem.

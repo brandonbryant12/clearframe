@@ -1,0 +1,192 @@
+{
+  "version": 2,
+  "title": "Update clients calmly: the quarter, what held, what was done, how to talk",
+  "logline": "Update clients calmly: the quarter, what held, what was done, how to talk",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "meridian",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": "auto",
+  "music": {},
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.05
+  },
+  "type": "inter",
+  "sources": [
+    {
+      "id": "letter",
+      "claim": "Equity sleeve index path through the quarter; target mix 60/35/5; rebalanced August 20",
+      "source": "Example Wealth quarterly letter, as of September 30 (sample: replace with your letter)"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "quarter",
+      "block": "canvas",
+      "vo": "It was a quarter with one sharp dip. Shares fell 6.4 percent from August 4 to August 19. We rebalanced the next day, and they were back by September 12.",
+      "props": {
+        "source": "Example Wealth quarterly letter · as of Sep 30",
+        "sketch": "drawdown",
+        "sketchParams": {
+          "start": "2027-08-04",
+          "low": "2027-08-19",
+          "drop": 6.4,
+          "act": "2027-08-20",
+          "back": "2027-09-12"
+        },
+        "sketchText": {
+          "TITLE": "Shares in your portfolio",
+          "SUBTITLE": "Change in value since August 4",
+          "ACTLABEL": "Rebalanced Aug 20",
+          "ACTNOTE": "bought shares",
+          "BACKLABEL": "Back by Sep 12"
+        },
+        "sketchSay": {
+          "OPEN": "quarter",
+          "FALL": "fell",
+          "LOW": "percent",
+          "ACT": "rebalanced",
+          "RECOVER": "back"
+        }
+      }
+    },
+    {
+      "id": "mix",
+      "block": "canvas",
+      "vo": "Through it, your mix stayed where we set it: shares, bonds, and a little cash.",
+      "props": {
+        "source": "Example Wealth quarterly letter · target mix · as of Sep 30",
+        "sketch": "split",
+        "sketchParams": {
+          "parts": [
+            60,
+            35,
+            5
+          ],
+          "suffix": "%",
+          "total": false
+        },
+        "sketchText": {
+          "WHOLE": "Your balanced portfolio",
+          "PARTONE": "Shares",
+          "PARTTWO": "Bonds",
+          "PARTTHREE": "Cash"
+        },
+        "sketchSay": {
+          "SPLIT": "mix",
+          "ONE": "shares",
+          "TWO": "bonds",
+          "THREE": "cash"
+        }
+      },
+      "hold": 1.2
+    },
+    {
+      "id": "decision",
+      "block": "kinetic",
+      "vo": "After the dip, we rebalanced, buying shares at lower prices. The plan did not need to react to the noise.",
+      "props": {
+        "mode": "stack",
+        "align": "left",
+        "emphasis": [
+          "rebalanced",
+          "noise"
+        ],
+        "source": "Example Wealth Investment Committee, quarterly letter"
+      }
+    },
+    {
+      "id": "talk",
+      "block": "canvas",
+      "vo": "If you would like to talk it through, open My adviser, choose Book a review, pick a time, and confirm.",
+      "props": {
+        "sketch": "portal",
+        "sketchText": {
+          "APP": "Example Wealth",
+          "STEP1": "My adviser",
+          "STEP2": "Book a review",
+          "OTHER": "Documents",
+          "FIELD": "Time",
+          "OLD": "Choose a time",
+          "NEW": "Tue 10:30",
+          "DONE": "Booked: your adviser will call on Tuesday"
+        },
+        "sketchSay": {
+          "CLICK1": "adviser",
+          "CLICK2": "review",
+          "CHANGE": "time",
+          "SAVE": "confirm"
+        }
+      }
+    },
+    {
+      "id": "close",
+      "block": "canvas",
+      "vo": "Your adviser is here when you want to talk it through.",
+      "props": {
+        "cast": {
+          "look": "tiles",
+          "objects": [
+            {
+              "id": "you",
+              "shape": "person",
+              "color": "accent",
+              "label": "You",
+              "enter": "pop"
+            },
+            {
+              "id": "adviser",
+              "shape": "person",
+              "color": "accent2",
+              "label": "Your adviser",
+              "enter": "pop"
+            },
+            {
+              "id": "cal",
+              "shape": "calendar",
+              "color": "surface",
+              "label": "A time for you",
+              "enter": "pop"
+            }
+          ],
+          "formations": [
+            {
+              "form": "line",
+              "at": 0,
+              "ids": [
+                "you",
+                "adviser"
+              ]
+            },
+            {
+              "form": "line",
+              "say": "talk",
+              "ids": [
+                "you",
+                "cal",
+                "adviser"
+              ]
+            }
+          ]
+        }
+      },
+      "transition": "cut"
+    }
+  ]
+}

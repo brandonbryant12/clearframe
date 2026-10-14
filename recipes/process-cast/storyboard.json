@@ -1,0 +1,233 @@
+{
+  "version": 2,
+  "title": "Follow a few things through a process",
+  "logline": "Follow a few things through a process",
+  "format": {
+    "preset": "landscape",
+    "fps": 30
+  },
+  "theme": "paper",
+  "motion": {
+    "preset": "gentle",
+    "intensity": 0.65
+  },
+  "transition": "cut",
+  "backdrop": "none",
+  "chrome": false,
+  "captions": "auto",
+  "music": {},
+  "sfx": "subtle",
+  "texture": {
+    "grain": 0.25,
+    "vignette": 0.35
+  },
+  "type": "geometric",
+  "sources": [
+    {
+      "id": "sample",
+      "title": "Hypothetical sample data and fictional quotations — replace before publishing"
+    }
+  ],
+  "continuity": {
+    "maxGeneratedShare": 0.2,
+    "treatment": "Restrained editorial graphics, generous space, no generated text",
+    "camera": "Locked or a slow push",
+    "lighting": "Soft, diffuse",
+    "motion": "Slow left-to-right movement"
+  },
+  "beats": [
+    {
+      "id": "arrive",
+      "block": "canvas",
+      "vo": "Requests arrive from everywhere at once.",
+      "props": {
+        "cast": {
+          "objects": [
+            {
+              "id": "email",
+              "color": "accent",
+              "enter": "none",
+              "shape": "doc",
+              "label": "Email"
+            },
+            {
+              "id": "chat",
+              "color": "positive",
+              "enter": "none",
+              "shape": "bubble",
+              "label": "Chat"
+            },
+            {
+              "id": "review",
+              "icon": "star",
+              "color": "accent2",
+              "enter": "drop",
+              "label": "Review"
+            },
+            {
+              "id": "call",
+              "color": "ink",
+              "enter": "drop",
+              "shape": "phone",
+              "label": "Call"
+            },
+            {
+              "id": "repeat",
+              "color": "accent",
+              "enter": "drop",
+              "shape": "doc",
+              "label": "Repeat email"
+            }
+          ],
+          "formations": [
+            {
+              "form": "scatter",
+              "at": 0.3,
+              "stagger": 0.22
+            }
+          ]
+        },
+        "title": "1 · Requests arrive"
+      }
+    },
+    {
+      "id": "sort",
+      "block": "canvas",
+      "vo": "So the repeats fold into the first, and the rest fall into one line.",
+      "tail": 0.9,
+      "props": {
+        "cast": {
+          "formations": [
+            {
+              "form": "merge",
+              "ids": [
+                "repeat"
+              ],
+              "into": "email",
+              "say": "fold"
+            },
+            {
+              "form": "line",
+              "ids": [
+                "email",
+                "chat",
+                "review",
+                "call"
+              ],
+              "say": "rest",
+              "thread": true
+            }
+          ]
+        },
+        "title": "2 · Sort them"
+      }
+    },
+    {
+      "id": "focus",
+      "block": "canvas",
+      "vo": "One of them matters most right now.",
+      "tail": 0.6,
+      "props": {
+        "cast": {
+          "formations": [
+            {
+              "form": "hero",
+              "hero": "review",
+              "say": "matters",
+              "word": "first"
+            }
+          ]
+        },
+        "title": "3 · Pick the first"
+      }
+    },
+    {
+      "id": "change",
+      "block": "canvas",
+      "vo": "But someone takes it on, and it changes.",
+      "tail": 0.9,
+      "props": {
+        "cast": {
+          "objects": [
+            {
+              "id": "owner",
+              "color": "surface",
+              "enter": "drop",
+              "shape": "person",
+              "label": "Owner"
+            },
+            {
+              "id": "done",
+              "icon": "check",
+              "color": "positive",
+              "label": "Resolved"
+            }
+          ],
+          "formations": [
+            {
+              "form": "cluster",
+              "ids": [
+                "owner"
+              ],
+              "beside": "review",
+              "say": "someone"
+            },
+            {
+              "form": "swap",
+              "out": "review",
+              "in": "done",
+              "by": [
+                "owner"
+              ],
+              "say": "changes",
+              "dur": 0.7
+            }
+          ]
+        },
+        "title": "4 · Take it on"
+      }
+    },
+    {
+      "id": "result",
+      "block": "canvas",
+      "vo": "So the line moves on, one step better.",
+      "min": 4,
+      "props": {
+        "cast": {
+          "formations": [
+            {
+              "form": "exit",
+              "ids": [
+                "owner"
+              ],
+              "at": 0.1,
+              "dur": 0.7
+            },
+            {
+              "form": "line",
+              "ids": [
+                "email",
+                "chat",
+                "done",
+                "call"
+              ],
+              "say": "line",
+              "thread": true
+            },
+            {
+              "form": "wave",
+              "ids": [
+                "email",
+                "chat",
+                "done",
+                "call"
+              ],
+              "say": "better"
+            }
+          ]
+        },
+        "title": "5 · Move on"
+      }
+    }
+  ]
+}

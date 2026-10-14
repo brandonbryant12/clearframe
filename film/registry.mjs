@@ -15,7 +15,8 @@ export const REGISTRY = {
   title: hero,
   statement: hero,
   endcard: hero,
-  chapter: { ...hero, sounds: (b, add, t) => add('whoosh', t.start, 0.2, 2) },
+  // A chapter card arrives silently, as everything does unless an element names a sound.
+  chapter: { ...hero },
   highlight: { ...hero, ...staged('phrases', 0.7, 0.6, () => 0.8) },
   quote: hero,
   callout: hero,
