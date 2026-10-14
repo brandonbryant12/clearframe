@@ -105,6 +105,8 @@ test('share draws one tile each, names its tiles, and prints a share of a hundre
   assert.equal(props.elements.find(e => e.count).count.suffix, '%');
   assert.equal(sketch('share', 'landscape', { params: { total: 20, count: 6, cols: 5 } }).elements.find(e => e.count).count.suffix, ' in 20');
   assert.throws(() => sketch('share', 'landscape', { params: { total: 20, count: 30 } }), /more than the total/);
+  const year = sketch('share', 'landscape', { params: { total: 52, count: 16, cols: 13, unit: 'weeks' } });
+  assert.equal(year.elements.find(e => e.count).count.suffix, ' weeks', 'a year of weeks prints its unit');
 });
 
 test('a creative seed is reproducible, varies the look and the set pieces, and briefs the director', async t => {

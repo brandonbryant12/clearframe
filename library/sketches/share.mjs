@@ -13,16 +13,17 @@ export default {
   order: 95,
   summary:
     'A share of a whole, one tile each: the whole on screen, the share filling in reading order on its word as its figure counts up, the rest stepping back, and (with fix) the share turning to the good colour at the close.',
-  use: 'One figure that is a share of people, claims, emails or accounts: "31 percent of expense claims came back", "six in twenty of us have not named a beneficiary". Set sketchParams {total, count, cols, tone, fix}; the figure prints as a percentage when total is 100 ("31%") and as "6 in 20" otherwise; replace WHAT (what follows the figure, e.g. "of expense claims came back last year", "have not named a beneficiary") with sketchText; land COUNT, ISOLATE and, with fix, FIX on words with sketchSay. fix shows what the film asks for, not a result: say so in the narration. The figure needs a visible source.',
+  use: 'One figure that is a share of people, claims, emails or accounts, or of a year: "31 percent of expense claims came back", "six in twenty of us have not named a beneficiary", "sixteen weeks of paid leave" (total 52, cols 13, unit "weeks"). Set sketchParams {total, count, cols, unit, tone, fix}; the figure prints as a percentage when total is 100 ("31%"), as "6 in 20" otherwise, or as the count and its unit ("16 weeks"); replace WHAT (what follows the figure, e.g. "of expense claims came back last year", "have not named a beneficiary") with sketchText; land COUNT, ISOLATE and, with fix, FIX on words with sketchSay. fix shows what the film asks for, not a result: say so in the narration. The figure needs a visible source.',
   params: {
     total: { default: 100, min: 10, max: 100, integer: true, about: 'tiles in the whole (100 shows a percentage)' },
     count: { default: 31, min: 1, max: 100, integer: true, about: 'tiles in the share' },
-    cols: { default: 10, min: 5, max: 10, integer: true, figure: false, about: 'tiles per row' },
+    cols: { default: 10, min: 5, max: 13, integer: true, figure: false, about: 'tiles per row (13 lays a year out as four rows of weeks)' },
+    unit: { default: '', about: 'what one tile is, printed after the count ("weeks" prints "16 weeks"); empty prints a percentage of 100, or "6 in 20"' },
     tone: { default: 'accent', oneOf: ['accent', 'negative'], about: 'the share\'s colour: accent, or negative for something that went wrong' },
     fix: { default: false, about: 'at FIX the share turns to the good colour (the close of a film that asks for a change)' },
   },
   build(w, h, { params = {} } = {}) {
-    const { total = 100, count = 31, cols = 10, tone = 'accent', fix = false } = params;
+    const { total = 100, count = 31, cols = 10, tone = 'accent', fix = false, unit = '' } = params;
     if (count > total) throw new Error(`sketchParams.count (${count}) is more than the total (${total}) for share`);
     const T = h > w * 1.1;
     // A wide frame's grid uses the height a heading would take: the share is the whole picture.
@@ -55,10 +56,10 @@ export default {
         children: Array.from({ length: count }, (_, k) => count - 1 - k).map(i => ({ type: 'rect', ...tile(i), w: size, h: size, r, fill: 'positive', enter: 'fade', dur: 0.3 })),
       });
     // The figure and what it counts: right of the grid, or under it on a tall frame.
-    const figure = total === 100 ? { suffix: '%' } : { suffix: ` in ${total}` };
+    const figure = unit.trim() ? { suffix: ` ${unit.trim()}` } : total === 100 ? { suffix: '%' } : { suffix: ` in ${total}` };
     const fx = T ? b.x : gx + cell * cols + round(b.w * 0.07),
       fy = T ? gy + cell * rows + 180 : round(gy + (cell * rows) / 2 + 20);
-    const big = T ? 190 : total === 100 ? 200 : 150;
+    const big = T ? (unit.trim() ? 150 : 190) : total === 100 && !unit.trim() ? 200 : 150;
     // With fix, the figure and its words step back as the share turns: they are last year's.
     const recede = fix ? { keys: [{ cue: 'FIX', at: AT.FIX, opacity: 0.35, dur: 0.6 }] } : {};
     els.push({ type: 'text', count: { from: 0, to: count, dur: Math.max(0.6, step * count + 0.3), ...figure }, x: fx, y: fy, size: big, font: 'display', fill: tone, cue: 'COUNT', at: AT.COUNT, enter: 'fade', dur: 0.3, ...recede });
