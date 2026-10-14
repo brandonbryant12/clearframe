@@ -390,11 +390,13 @@ fn scene_motion<'a>(d: &Draw<'a, '_>, plate: Node, content: Node, footer: Node) 
     };
     let content = layer(draw::group(vec![tone.into(), plate.into(), content.into()]), opacity, transform, None, h);
     let exit_clip = (exit_clip.0 > 0.5).then_some(exit_clip);
-    let scene = layer(draw::group(vec![content.into(), footer.into()]), exit_opacity, exit_transform, exit_clip, h);
+    let scene = layer(content, exit_opacity, exit_transform, exit_clip, h);
+    let footer = layer(footer, exit_opacity, exit_transform, exit_clip, h);
     if part == 1 {
         return scene;
     }
-    draw::group(vec![scene.into(), cover.into(), exit_cover.into()])
+    // A panel sweeps over the picture, never over the words read across it.
+    draw::group(vec![scene.into(), cover.into(), exit_cover.into(), footer.into()])
 }
 
 /// Wrap a layer in opacity/transform/clip groups only when they change anything.

@@ -297,3 +297,15 @@ test('a short film is told which facts of its source it never states', async () 
   sb.beats.push({ id: 'b', vo: 'No personal email, no USB drives, no consumer apps for client documents.', props: {} });
   assert.deepEqual(droppedFacts(root, sb), []);
 });
+
+test('a sketch moment on a word keeps the sequence it draws', () => {
+  // was-now strikes the old figure, draws the cut span and lands the new figure after CHANGE.
+  const drawn = sketch('was-now', 'landscape', { params: { was: 60, now: 30 }, say: { CHANGE: 'thirty' } });
+  const offsets = [];
+  const walk = list => list.forEach(el => {
+    for (const t of [el, ...(el.keys ?? []), ...(el.marks ?? [])]) if (t.say === 'thirty') offsets.push(t.after ?? 0);
+    walk(el.children ?? []);
+  });
+  walk(drawn.elements);
+  assert.ok(offsets.includes(0) && Math.max(...offsets) >= 1, `offsets after the word: ${offsets.join(', ')}`);
+});

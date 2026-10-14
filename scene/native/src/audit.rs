@@ -160,10 +160,17 @@ pub fn judge(now: &Scan, next: &Scan, w: f32, h: f32) -> Vec<Finding> {
             );
         }
     }
-    // A caption over the picture's own type hides one or the other. Labels sit in buttons and
-    // cards a little larger than their type, so the type's box is taken a little taller.
+    // A caption over the picture's own type hides one or the other, even type stepped back (a
+    // struck old figure, a page's other sections). Labels sit in buttons and cards a little
+    // larger than their type, so the type's box is taken a little taller.
+    let shown: Vec<&Seen> = now
+        .texts
+        .iter()
+        .filter(|t| t.opacity >= 0.3)
+        .filter(|t| next.texts.iter().any(|n| n.text == t.text && (0..4).all(|i| (n.rect[i] - t.rect[i]).abs() < 3.0)))
+        .collect();
     for c in &now.captions {
-        for t in &held {
+        for t in &shown {
             let [x, y, tw, th] = t.rect;
             let (ow, oh) = overlap([x, y - th * 0.25, tw, th * 1.5], *c);
             if ow > 2.0 && oh > 2.0 {

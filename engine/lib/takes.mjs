@@ -44,6 +44,65 @@ export function fitWords(words, start, sliceDur) {
 import { recordRate } from './voice-rates.mjs';
 
 /**
+ * Move each boundary between a take's beats into the real pause nearest it (one of at least
+ * `shortest` seconds, within `reach` of where the words put it). Alignment can misplace a short
+ * first word ("And", "Or") across the pause between lines, and a cut set by the words then
+ * slices it into the line before; the pause is where the line actually changes. Words left on
+ * the wrong side of it are spread over the speech beside the pause and marked estimated.
+ */
+export function snapToPauses(perBeat, segments, { reach = 1.2, shortest = 0.25 } = {}) {
+  const gaps = segments
+    .slice(1)
+    .map((s, i) => ({ start: segments[i].end, end: s.start }))
+    .filter(g => g.end - g.start >= shortest);
+  // Nearer is better, and a longer pause is likelier to be the one between lines.
+  const score = (g, mid) => Math.abs((g.start + g.end) / 2 - mid) - 0.5 * (g.end - g.start);
+  for (let i = 0; i + 1 < perBeat.length; i++) {
+    const [a, b] = [perBeat[i], perBeat[i + 1]];
+    const mid = (a.end + b.start) / 2;
+    const best = gaps
+      .filter(g => Math.abs((g.start + g.end) / 2 - mid) <= reach && g.start > a.start && g.end < b.end)
+      .sort((x, y) => score(x, mid) - score(y, mid))[0];
+    if (!best) continue;
+    [a.end, b.start] = [best.start, best.end];
+    if (a.words) a.words = respread(a.words, a.start, a.end, 'tail');
+    if (b.words) b.words = respread(b.words, b.start, b.end, 'head');
+  }
+  return perBeat;
+}
+
+/** Spread the words at one end of a line that fall outside [from, to] over the speech beside that edge. */
+function respread(words, from, to, end) {
+  const out = words.map(w => ({ ...w }));
+  const n = out.length;
+  const span = (list, t0, t1) => {
+    const letters = list.reduce((k, w) => k + Math.max(1, w.w.length), 0);
+    let t = t0;
+    for (const w of list) {
+      const d = ((t1 - t0) * Math.max(1, w.w.length)) / letters;
+      Object.assign(w, { t0: t, t1: t + d, estimated: true });
+      t += d;
+    }
+  };
+  if (end === 'head') {
+    let m = 0;
+    while (m < n && out[m].t0 < from - 0.01) m++;
+    if (!m) return out;
+    const until = m < n ? Math.max(out[m].t0, from + 0.08 * m) : Math.min(to, from + 0.3 * m);
+    span(out.slice(0, m), from, until);
+    for (let k = m; k < n; k++) out[k].t0 = Math.max(out[k].t0, out[k - 1].t1);
+  } else {
+    let j = n;
+    while (j > 0 && out[j - 1].t1 > to + 0.01) j--;
+    if (j === n) return out;
+    const after = j > 0 ? Math.min(out[j - 1].t1, to - 0.08 * (n - j)) : Math.max(from, to - 0.3 * (n - j));
+    span(out.slice(j), after, to);
+    for (let k = j - 1; k >= 0; k--) out[k].t1 = Math.min(out[k].t1, out[k + 1].t0);
+  }
+  return out;
+}
+
+/**
  * Narrated beats grouped into takes. `film` (the default) records the whole narration in one
  * continuous take, which keeps one voice, one energy and one room tone from the first line
  * to the last; it splits at a chapter boundary only past ~8 minutes, well inside Gemini TTS
@@ -325,6 +384,8 @@ export async function recordTakes(root, sb, { draft, force, synthesize }) {
         end: perBeat?.[i]?.end ?? g.at(-1).t1,
         words: g,
       }));
+      // Without known part boundaries, cut in the pauses the voice made between lines.
+      if (!bounds && perBeat.length > 1) snapToPauses(perBeat, (await speechSegments(wav)).segments);
       measured = true;
     } else if (!perBeat) {
       // No recognizer: the take's pauses, matched to the parts by expected length.

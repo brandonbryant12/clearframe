@@ -1224,21 +1224,30 @@ impl<'a, 'c> Draw<'a, 'c> {
                     // The stamp covers what it rules on: its face is paper, so the
                     // verdict reads instead of tangling with the words beneath it.
                     let face = self.paint(mark.get("fill"), "paper");
+                    // The face is opaque, so on a toned ground the words it rules on do not ghost
+                    // through; only the ink is a little thin, as stamped ink is.
                     let stamp = draw::group(vec![
                         draw::path(d.clone()).paint_fill(&face).node(),
-                        draw::path(d).paint_stroke(&color, edge).round().node(),
-                        draw::text(label, cx - tw / 2.0, cy + px * 0.36, font, px, tracking, &color),
+                        draw::group(vec![
+                            draw::path(d).paint_stroke(&color, edge).round().node(),
+                            draw::text(label, cx - tw / 2.0, cy + px * 0.36, font, px, tracking, &color),
+                        ])
+                        .opacity(0.92)
+                        .into(),
                     ])
-                    .opacity(0.92 * press)
+                    .opacity(press)
                     .scale_about(1.0 + 0.16 * (1.0 - press), cx, cy)
                     .rotate_about(f(mark, "rotate", -6.0), cx, cy)
                     .id("cf-stamp");
                     over.push(stamp);
                 }
                 "box" => {
-                    let (x0, y0, x1, y1) = (l - pad, t - pad * 0.6, r + pad, b + pad * 0.6);
-                    let pts = [(x0, y0), (x1, y0), (x1, y1), (x0, y1), (x0, y0 + pad * 0.3)];
-                    over.push(stroke(&pts, k, 0));
+                    // One box per line a phrase takes, as a hand boxes a wrapped phrase.
+                    for (i, &(a, z, base)) in pieces.iter().enumerate() {
+                        let (x0, y0, x1, y1) = (a - pad, base - size * 0.74 - pad * 0.6, z + pad, base + size * 0.2 + pad * 0.6);
+                        let pts = [(x0, y0), (x1, y0), (x1, y1), (x0, y1), (x0, y0 + pad * 0.3)];
+                        over.push(stroke(&pts, if pieces.len() > 1 { share(i) } else { k }, i as u64));
+                    }
                 }
                 "cross" => {
                     let (x0, y0, x1, y1) = (l - pad * 0.3, t, r + pad * 0.3, b);

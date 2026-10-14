@@ -196,7 +196,17 @@ impl Engine {
                     canvas.translate((cx + (lw / 2.0 - cx) * z, cy + (lh / 2.0 - cy) * z));
                     canvas.scale((s, s));
                     canvas.translate((-cx, -cy));
-                    canvas.save_layer_alpha_f(None, 1.0 - motion::in_out_cubic(gone));
+                    // Rushing past the camera, the scene blurs: giant type reads as motion, not
+                    // as a fragment of a word.
+                    let mut paint = Paint::default();
+                    paint.set_alpha_f(1.0 - motion::in_out_cubic(gone));
+                    // In frame pixels it grows with the zoom; the layer is scaled by the zoom, so
+                    // it is set divided by it.
+                    let sigma = (10.0 * (s - 1.0)).min(48.0) / s.max(1.0);
+                    if sigma > 0.3 {
+                        paint.set_image_filter(sk::image_filters::blur((sigma, sigma), None, None, None));
+                    }
+                    canvas.save_layer(&sk::canvas::SaveLayerRec::default().paint(&paint));
                     let marks = self.marks.len();
                     self.beat(canvas, i - 1, prev.frames + local, frame, &mut errors);
                     self.marks.truncate(marks);

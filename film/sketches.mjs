@@ -17,13 +17,17 @@ export const sketchByName = name => item('sketches', name);
  * including that offset: a filled moment keeps the offset, an unfilled one keeps its seconds. Cue names never
  * reach the plan.
  */
-export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set()) {
+export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set(), base = momentTimes(list)) {
+  // A part set some seconds after its moment keeps that offset once the moment is on a word.
+  const offset = (cue, at) => (at != null && base[cue] != null && at - base[cue] > 0.01 ? Math.round((at - base[cue]) * 1000) / 1000 : null);
   for (const el of list ?? []) {
     if (el.type === 'text' && text[el.text] != null) el.text = text[el.text];
     for (const t of [el, ...(el.keys ?? []), ...(el.along ? [el.along] : []), ...(el.marks ?? [])]) {
       if (t.cue != null) cues.add(t.cue);
       if (t.cue != null && say[t.cue] != null) {
         t.say = say[t.cue];
+        t.after ??= offset(t.cue, t.at) ?? undefined;
+        if (t.after === undefined) delete t.after;
         delete t.at;
       } else if (t.cue != null) {
         // `after` keeps an offset from the moment once it lands on a word; with its default
@@ -35,10 +39,12 @@ export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set())
     if (el.exitCue != null) cues.add(el.exitCue);
     if (el.exitCue != null && say[el.exitCue] != null) {
       el.exitSay = say[el.exitCue];
+      const off = el.exitAfter ?? offset(el.exitCue, el.exitAt);
+      if (off != null) el.exitAfter = off;
       delete el.exitAt;
     }
     delete el.exitCue;
-    if (el.children) fillSketch(el.children, { text, say }, cues);
+    if (el.children) fillSketch(el.children, { text, say }, cues, base);
   }
   // An empty word ("EACH": "") takes that line of type out of the drawing; it used to fail later
   // as "text needs text or count".
@@ -95,7 +101,8 @@ export function sketch(name, preset = 'landscape', { seed, text, say, params } =
   const s = sketchByName(name);
   if (!s) throw new Error(`Unknown sketch ${name}. Run clearframe sketch to list them.`);
   const [w, h] = frames[preset] ?? frames.landscape;
-  const drawn = s.build(w, h, { seed, params: sketchParams(s, params) });
+  // The words come too, for a sketch that sizes a chip to its word; they are filled in below.
+  const drawn = s.build(w, h, { seed, params: sketchParams(s, params), text: text ?? {} });
   const cues = fillSketch(drawn.elements, { text, say });
   // A misspelt moment would otherwise keep its default seconds without a word of warning.
   const unknown = Object.keys(say ?? {}).filter(k => !cues.has(k));
@@ -104,6 +111,20 @@ export function sketch(name, preset = 'landscape', { seed, text, say, params } =
   return drawn;
 }
 export const SKETCH_FRAMES = frames;
+
+/** Each moment's time in a drawing: the earliest default second of anything cued on it. */
+function momentTimes(list) {
+  const first = {};
+  const note = (cue, at) => cue != null && at != null && (first[cue] = Math.min(first[cue] ?? Infinity, at));
+  const walk = l =>
+    (l ?? []).forEach(el => {
+      for (const t of [el, ...(el.keys ?? []), ...(el.along ? [el.along] : []), ...(el.marks ?? [])]) note(t.cue, t.at);
+      note(el.exitCue, el.exitAt);
+      walk(el.children);
+    });
+  walk(list);
+  return first;
+}
 
 /**
  * A sketch's named moments (for sketchSay) with these numbers, in the order they happen (each by its

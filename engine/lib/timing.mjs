@@ -348,17 +348,20 @@ function readUntil(b, words) {
 export function findWord(words, query, nth = 0) {
   const q = query.split(/\s+/).map(norm).filter(Boolean);
   if (!q.length) return null;
-  const search = list => {
+  const search = (list, want = nth) => {
     let seen = 0;
     for (let i = 0; i + q.length <= list.length; i++) {
       if (q.every((part, j) => norm(list[i + j].w) === part)) {
-        if (seen++ === nth) return list[i].t0;
+        if (seen++ === want) return list[i].t0;
       }
     }
     return null;
   };
-  // A cue can name part of a hyphenated or slashed word ("approved" in "pre-approved").
-  return search(words) ?? search(words.flatMap(w => String(w.w).split(/[-–—/]/).filter(Boolean).map(part => ({ w: part, t0: w.t0 }))));
+  // A cue can name part of a hyphenated or slashed word ("approved" in "pre-approved"), but only
+  // when no whole word matches: "fifty" is the whole word, not the start of "fifty-six".
+  const whole = search(words, 0);
+  if (whole != null) return nth === 0 ? whole : search(words);
+  return search(words.flatMap(w => String(w.w).split(/[-–—/]/).filter(Boolean).map(part => ({ w: part, t0: w.t0 }))));
 }
 
 function musicInfo(root, sb, beats) {

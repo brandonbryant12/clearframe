@@ -742,6 +742,22 @@ function linkCasts(beats, sb, timing, { warnings }, cast = {}) {
 }
 
 /**
+ * Fold keys that only move an element (x, y) into its geometry, so a morph starts where they left
+ * it. False, leaving the state as it was, when they do more (scale, rotate, opacity) or the
+ * element's position is not a field (a path).
+ */
+function movedBy(state, keys) {
+  const timing = new Set(['at', 'say', 'after', 'dur', 'ease', 'hold', 'sound']);
+  if (keys.some(k => Object.keys(k).some(f => !timing.has(f) && f !== 'x' && f !== 'y'))) return false;
+  const [dx, dy] = keys.reduce(([x, y], k) => [k.x ?? x, k.y ?? y], [0, 0]);
+  const fields = { group: [['x'], ['y']], rect: [['x'], ['y']], text: [['x'], ['y']], icon: [['x'], ['y']], image: [['x'], ['y']], circle: [['cx'], ['cy']], ellipse: [['cx'], ['cy']], line: [['x1', 'x2'], ['y1', 'y2']] }[state.type];
+  if (!fields) return false;
+  for (const f of fields[0]) state[f] = (state[f] ?? 0) + dx;
+  for (const f of fields[1]) state[f] = (state[f] ?? 0) + dy;
+  return true;
+}
+
+/**
  * Morph by id: an element whose id also appears in the previous beat animates from that
  * element's geometry and colour across the cut, like Magic Move.
  */
@@ -762,7 +778,9 @@ function linkMorphs(beats, sb, timing, { warnings }) {
       const from = el.id && prev.get(el.id);
       if (!from) continue;
       const { morph, echo, keys, loop, along, exitAt, exitDur, exit, ...state } = from;
-      if (keys?.length)
+      // Where keys that only move it left it (a card that slid across), the morph starts there.
+      const moved = keys?.length ? movedBy(state, keys) : true;
+      if (!moved)
         warnings.push(`${beats[i].id}: morph source "${el.id}" has keys; the morph starts from its unkeyed geometry.`);
       el.morph = { from: { ...state, at: 0, dur: 0, enter: 'none' }, dur: el.morphDur ?? 0.8 };
       // A group's contents arrive with it; they are already on screen across the cut, while

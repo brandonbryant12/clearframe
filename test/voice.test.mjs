@@ -1,7 +1,7 @@
 // Voice takes: one continuous Gemini take per film, read as one text with one style.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { planTakes, takeSpec } from '../engine/lib/takes.mjs';
+import { planTakes, snapToPauses, takeSpec } from '../engine/lib/takes.mjs';
 import { buildRequest } from '../skills/gemini-tts/scripts/tts.mjs';
 import { mosaicSpec } from '../film/canvas.mjs';
 
@@ -36,6 +36,19 @@ test('a draft take records again when its respellings or speed change; a real ta
   assert.notEqual(spec({}, 'local'), spec({ pronounce: { Seven: 'Sev-en' } }, 'local'));
   assert.notEqual(spec({}, 'local'), spec({ wpm: 170 }, 'local'));
   assert.equal(spec({}, 'gemini'), spec({ pronounce: { Seven: 'Sev-en' }, wpm: 170 }, 'gemini'));
+});
+
+test('a take is cut in the pause between lines even when a short first word is misplaced across it', () => {
+  // Alignment put "And new" before the pause; the voice said them after it.
+  const per = [
+    { start: 0.2, end: 2.9, words: [{ w: 'families', t0: 2.4, t1: 2.9 }] },
+    { start: 2.95, end: 5, words: [{ w: 'And', t0: 2.95, t1: 3.02 }, { w: 'new', t0: 3.02, t1: 3.1 }, { w: 'this', t0: 3.8, t1: 4 }, { w: 'year', t0: 4, t1: 4.4 }] },
+  ];
+  const [a, b] = snapToPauses(per, [{ start: 0.2, end: 3.1 }, { start: 3.52, end: 5 }]);
+  assert.equal(a.end, 3.1);
+  assert.equal(b.start, 3.52);
+  assert.ok(b.words[0].t0 >= 3.52 && b.words[0].estimated && b.words[1].estimated);
+  assert.equal(b.words[2].t0, 3.8, 'a word the alignment placed well keeps its time');
 });
 
 test('mosaic specs accept the andamento, build and recolour options and reject nonsense', () => {

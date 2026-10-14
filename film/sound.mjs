@@ -36,6 +36,11 @@ export function soundDesign(job, sfx) {
         const hit = (v, at) => at != null && add(typeof v === 'string' ? v : v.name, start + at, typeof v === 'object' && v.volume != null ? v.volume : 0.3, 4);
         if (el.sound != null) hit(el.sound, el.at);
         for (const k of el.keys ?? []) if (k.sound != null) hit(k.sound, k.at);
+        // A mark's sound as it lands; a stamp is pressed with a thud (it sets down in 0.2 s).
+        for (const m of el.marks ?? []) {
+          const v = m.sound ?? (m.style === 'stamp' ? 'thud' : false);
+          if (v !== false) hit(v, m.at + (m.style === 'stamp' ? 0.15 : 0));
+        }
         authored(el.children);
       });
     if (b.block === 'canvas') authored(b.props.elements);
