@@ -55,8 +55,15 @@ export function expandApp(input, at, fail, canvas) {
     const head = tabH + 64;
     els.push(text(title, pad, head / 2 + s * 0.42, s * 1.3, 'display', 'ink'));
     const tw = Math.max(...tabs.map(t => t.length * s * 0.62 + s * 1.6), s * 6);
-    tabs.forEach((t, i) => els.push(pill(`${id}-tab-${slug(t)}`, w - pad - (tabs.length - i) * tw - (tabs.length - 1 - i) * 16, (head - tabH) / 2, tw, tabH, t)));
-    cy = head;
+    const row = tabs.length * tw + Math.max(0, tabs.length - 1) * 16;
+    // Tabs to the right of the name when there is room for both, else on a row under it.
+    if (pad + title.length * s * 1.3 * 0.56 + 48 + row <= w - pad) {
+      tabs.forEach((t, i) => els.push(pill(`${id}-tab-${slug(t)}`, w - pad - (tabs.length - i) * tw - (tabs.length - 1 - i) * 16, (head - tabH) / 2, tw, tabH, t)));
+      cy = head;
+    } else {
+      tabs.forEach((t, i) => els.push(pill(`${id}-tab-${slug(t)}`, pad + i * (tw + 16), head - 8, tw, tabH, t)));
+      cy = head + (tabs.length ? tabH + 20 : 0);
+    }
   }
   els.push({ type: 'line', x1: 0, y1: round(cy), x2: round(w), y2: round(cy), stroke: 'line', width: 2 });
   const label = (t, lx, ly) => text(t, lx, ly, s * 0.9, 'text', 'muted');
@@ -171,7 +178,7 @@ export function expandApp(input, at, fail, canvas) {
     built.forEach(({ panel }, k) => {
       // The page that is leaving clears quickly as the next one slides in a moment later, so
       // the two screens' words never sit on top of each other.
-      const opens = k > 0 ? { ...when(pages[k], 0.2), enter: 'right', dist: 40, dur: 0.35 } : {};
+      const opens = k > 0 ? { ...when(pages[k], 0.2), enter: 'right', dist: 72, dur: 0.35 } : {};
       const next = pages[k + 1] && when(pages[k + 1]);
       const leaves = next ? { ...(next.say != null ? { exitSay: next.say, exitAfter: next.after } : { exitAt: next.at }), exit: 'fade', exitDur: 0.15 } : {};
       els.push({ type: 'group', ...opens, ...leaves, children: panel });

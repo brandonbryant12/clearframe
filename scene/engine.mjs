@@ -172,6 +172,8 @@ export function doctor() {
     free = (s.bavail * s.bsize) / 2 ** 30,
     warm = fs.existsSync(path.join(TARGET(), 'release/deps'));
   rows.push({ name: 'Disk headroom', ok: free >= (warm ? 10 : 25), detail: `${free.toFixed(1)} GiB free (${warm ? 'warm cache' : 'cold build'})` });
+  // A full render or the full test suite wants more than a warm build does (AGENTS.md).
+  rows.push({ name: 'Render headroom', ok: free >= 20, detail: free >= 20 ? `${free.toFixed(1)} GiB free` : `${free.toFixed(1)} GiB free: keep 20 GiB before a full render or the full test suite (clear old build/ outputs)` });
   rows.push(fontCheck());
   // Free word timings: whisper.cpp with a local model is the fast path; the Python CLI works too.
   const cpp = spawnSync('whisper-cli', ['--help'], { encoding: 'utf8' }).status === 0;

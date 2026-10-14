@@ -150,7 +150,7 @@ export default {
         }),
       );
       // The step on the timeline: a node with its padlock.
-      els.push({ type: 'circle', cx: x, cy: chart.line, r: node, fill: 'surface', stroke: 'line', width: 3, enter: 'pop', at: round(0.25 + i * 0.07), dur: 0.4 });
+      els.push({ type: 'circle', id: `vesting-step-${i + 1}`, cx: x, cy: chart.line, r: node, fill: 'surface', stroke: 'line', width: 3, enter: 'pop', at: round(0.25 + i * 0.07), dur: 0.4 });
       const shut = padlock(x, chart.line, lockScale, 'muted');
       const shutLock = {
         type: 'group',

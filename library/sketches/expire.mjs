@@ -67,6 +67,7 @@ export default {
     els.push({ type: 'ellipse', cx, cy: bottom + 6, rx: round(jw * 0.68), ry: round(ry * 1.5), fill: 'wash', opacity: 0.8, enter: 'none', at: 0 });
     els.push({
       type: 'path',
+      id: 'expire-jar',
       d: `M ${L} ${top} L ${L} ${bottom - 30} Q ${L} ${bottom} ${L + 30} ${bottom + 4} Q ${cx} ${round(bottom + ry * 1.2)} ${R - 30} ${bottom + 4} Q ${R} ${bottom} ${R} ${bottom - 30} L ${R} ${top}`,
       fill: 'surface',
       opacity: 0.85,

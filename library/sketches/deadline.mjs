@@ -72,21 +72,21 @@ export default {
     };
     const els = [];
     // The card: the month, the weekday row, a hairline under it.
-    els.push({ type: 'rect', x: card.x, y: card.y, w: card.w, h: card.h, r: 28, fill: 'surface', enter: 'rise', dist: 40, at: 0, dur: 0.6, shadow: { blur: 40, dy: 18, opacity: 0.14 } });
-    els.push(text('MONTH', card.x + pad + 10, card.y + (stacked ? 78 : small ? 56 : 62), stacked ? 52 : small ? 36 : 44, 'bold', 'ink', { fit: round(card.w - 2 * pad - 20), enter: 'fade', at: 0.2, dur: 0.4 }));
+    // The month is on screen from the first frame; only the window and its marks arrive.
+    els.push({ type: 'rect', x: card.x, y: card.y, w: card.w, h: card.h, r: 28, fill: 'surface', enter: 'none', at: 0, shadow: { blur: 40, dy: 18, opacity: 0.14 } });
+    els.push(text('MONTH', card.x + pad + 10, card.y + (stacked ? 78 : small ? 56 : 62), stacked ? 52 : small ? 36 : 44, 'bold', 'ink', { fit: round(card.w - 2 * pad - 20), enter: 'none', at: 0 }));
     WEEK.forEach((d, i) =>
       els.push(
         text(d, round(card.x + pad + i * cw + cw / 2), card.y + headH - (stacked ? 34 : 26), stacked || small ? 28 : 30, 'semibold', 'muted', {
           anchor: 'middle',
           fit: cw - 6,
           tracking: 0.06,
-          enter: 'fade',
-          at: round(0.25 + i * 0.02),
-          dur: 0.3,
+          enter: 'none',
+          at: 0,
         }),
       ),
     );
-    els.push({ type: 'line', x1: card.x + pad, y1: card.y + headH - 8, x2: round(card.x + card.w - pad), y2: card.y + headH - 8, stroke: 'line', width: 2, enter: 'draw', at: 0.3, dur: 0.5 });
+    els.push({ type: 'line', x1: card.x + pad, y1: card.y + headH - 8, x2: round(card.x + card.w - pad), y2: card.y + headH - 8, stroke: 'line', width: 2, enter: 'none', at: 0 });
     // The open window: one band per week, sweeping on from the opening day to the last.
     const span = end - start + 1;
     const sweep = Math.min(1.5, Math.max(0.6, span * 0.07));
@@ -117,21 +117,22 @@ export default {
       const outside = i < start || i > end;
       els.push(
         num(i, 'ink', {
-          enter: 'fade',
-          at: round(0.3 + Math.floor((firstWeekday + i - 1) / 7) * 0.06),
-          dur: 0.35,
+          enter: 'none',
+          at: 0,
           ...(outside && i !== today ? { keys: [cued('CLOSE', 0.3, { dur: 0.6, opacity: 0.38 })] } : {}),
         }),
       );
     }
     // The opening day, filled.
     const [sx, sy] = cell(start);
-    els.push({ type: 'circle', cx: sx, cy: sy, r: R, fill: 'accent', enter: 'pop', dur: 0.4, ...cued('OPEN', 0) });
+    // The opening and closing days carry ids (deadline-open, deadline-close): an `into` or a
+    // pointer can find them.
+    els.push({ type: 'circle', id: 'deadline-open', cx: sx, cy: sy, r: R, fill: 'accent', enter: 'pop', dur: 0.4, ...cued('OPEN', 0) });
     els.push(num(start, 'bg', { enter: 'fade', dur: 0.2, ...cued('OPEN', 0.05) }));
     // The last day, filled and circled by hand.
     const [ex, ey] = cell(end);
     if (end !== start) {
-      els.push({ type: 'circle', cx: ex, cy: ey, r: R, fill: 'accent', enter: 'pop', dur: 0.4, ...cued('CLOSE', 0) });
+      els.push({ type: 'circle', id: 'deadline-close', cx: ex, cy: ey, r: R, fill: 'accent', enter: 'pop', dur: 0.4, ...cued('CLOSE', 0) });
       els.push(num(end, 'bg', { enter: 'fade', dur: 0.2, ...cued('CLOSE', 0.05) }));
     }
     els.push({ type: 'path', d: ring(ex, ey, R + 9), fill: 'none', stroke: 'accent2', width: 5, cap: 'round', join: 'round', enter: 'draw', dur: 0.7, loop: { type: 'pulse', period: 2.6, amount: 0.05 }, ...cued('CLOSE', 0.15) });

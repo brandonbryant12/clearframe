@@ -68,7 +68,7 @@ export default {
     const grow = [{ cue: 'FILL', at: AT.FILL, dur: 0, scaleX: 0 }, { cue: 'FILL', at: AT.FILL, dur: 1.2, ease: 'out', scaleX: 1 }];
     if (fillW > 0)
       els.push({
-        type: 'rect', x: x0, y: ty, w: fillW, h: trackH, r: round(Math.min(trackH / 2, fillW / 2)), fill: tone, enter: 'none',
+        type: 'rect', id: 'limit-used', x: x0, y: ty, w: fillW, h: trackH, r: round(Math.min(trackH / 2, fillW / 2)), fill: tone, enter: 'none',
         origin: [x0, ty + trackH / 2], cue: 'FILL', at: AT.FILL, keys: grow,
       });
     const amount = (x, y, anchor, ink) =>

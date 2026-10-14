@@ -78,7 +78,7 @@ export default {
     // CHANGE: the window that counts now sweeps in from zero to the new end, which is ruled and
     // named below the bar.
     els.push({
-      type: 'rect', x: x0, y: ty, w: nowX - x0, h: barH, r, fill: 'accent', enter: 'none', origin: [x0, ty + barH / 2], cue: 'CHANGE', at: AT.CHANGE,
+      type: 'rect', id: 'was-now-new', x: x0, y: ty, w: nowX - x0, h: barH, r, fill: 'accent', enter: 'none', origin: [x0, ty + barH / 2], cue: 'CHANGE', at: AT.CHANGE,
       keys: [{ cue: 'CHANGE', at: AT.CHANGE, dur: 0, scaleX: 0 }, { cue: 'CHANGE', at: AT.CHANGE + 0.25, dur: 0.9, ease: 'out', scaleX: 1 }],
     });
     els.push({ type: 'line', x1: nowX, y1: ty - 14, x2: nowX, y2: ty + barH + 14, stroke: 'ink', width: 5, cap: 'round', enter: 'draw', cue: 'CHANGE', at: AT.CHANGE + 1.0, dur: 0.3 });
@@ -98,7 +98,10 @@ export default {
       // (Below a cut span only when the new number is not already standing in it.)
       const inSpan = room >= (T ? 330 : 380) && (fitsLeft || !shorter);
       const y = inSpan ? (shorter ? below.amount - big * 0.3 : above.amount - big * 0.3) : below.label + small * 2.2;
-      els.push(text('NOTE', inSpan ? from + 40 : x0, round(y), small, 'text', 'ink', { width: round(inSpan ? room : W), enter: 'rise', dist: 14, cue: 'NOTE', at: AT.NOTE, dur: 0.45 }));
+      // On its own line it still sits on the side where the change happened.
+      const right = !inSpan && (from + to) / 2 > x0 + W / 2;
+      const noteW = round(inSpan ? room : T ? W : Math.min(W, 820));
+      els.push(text('NOTE', inSpan ? from + 40 : right ? x0 + W : x0, round(y), small, 'text', 'ink', { width: noteW, ...(right ? { anchor: 'end' } : {}), enter: 'rise', dist: 14, cue: 'NOTE', at: AT.NOTE, dur: 0.45 }));
       if (inSpan) els.push({ type: 'line', x1: from + 20, y1: round(y - small * 0.9), x2: from + 20, y2: round(y + small * 1.6), stroke: 'accent', width: 4, cap: 'round', enter: 'draw', cue: 'NOTE', at: AT.NOTE, dur: 0.3 });
     }
     return { elements: els };
