@@ -10,9 +10,9 @@ Every non-cut transition except `wipe` passed through an empty frame: the old sc
 - **Captions hold still.** Captions and the source line are drawn once, outside the moving pictures, across a push, a wipe or an into.
 - **`rise` and `zoom` are retired** (and the `zoom` exit), refused by name with their replacements: each built the scene up out of an empty frame.
 
-## What a bench film found in the new pieces
+## What two bench films found, and the pieces they asked for
 
-An Opus bench film (an expense-policy explainer built with `document`, `marks`, `pointer`, `limit` and captions) reported where each piece fought it. Each was fixed and checked against its frames:
+Two Opus bench films (an expense-policy and a parental-leave explainer, local voice and Whisper only) reported where each new piece fought them and what they had to hand-build. Each defect was fixed and each missing piece built, then checked against its frames in both shapes:
 
 - **`document` stays on the clause.** A scroll key brings its section into focus and the rest of the page steps back to 40%, so a key still lands on its word when the page already shows that section. Text stays inside the page's margin and fades into the paper before it, so no line is cut in half by the page edge, and a section brought up sits below the head's fade with its heading whole. `critique` counts the sections the voice brings up as the words to read, not the whole page.
 - **A circle round a phrase is a loop.** An ellipse round "$90 per person" cut the corners of its first and last letters; a phrase now gets a loop with straight sides and round ends that reaches just past them.
