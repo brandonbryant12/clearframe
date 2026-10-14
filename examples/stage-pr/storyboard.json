@@ -118,8 +118,8 @@
           },
           "attach": {
             "to": "end",
-            "dx": -1500,
-            "dy": -600
+            "dx": -1470,
+            "dy": -545
           },
           "enter": "pop",
           "exit": "fade",
@@ -135,8 +135,8 @@
           "text": "\u2026and reappears here",
           "attach": {
             "to": "ghost",
-            "dx": 170,
-            "dy": 120
+            "dx": 160,
+            "dy": 10
           },
           "size": 28,
           "font": "strong",
