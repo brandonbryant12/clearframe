@@ -280,7 +280,7 @@ export function computeTiming(root, { storyboard } = {}) {
       backdrop: sb.backdrop ?? 'none',
       chrome: sb.chrome === true,
       captions: sb.captions ?? 'auto',
-      transition: sb.transition ?? 'fade',
+      transition: sb.transition ?? 'cut',
       sfx: sb.sfx ?? false,
       voiceProvider: sb.voice.provider,
     },
