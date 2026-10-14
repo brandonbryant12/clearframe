@@ -5,6 +5,7 @@ import { ICONS, iconAlias, iconHint } from './icons.mjs';
 import { checkPointer } from './pointer.mjs';
 import { expandReceipt, RECEIPT_FIELDS } from './receipt.mjs';
 import { expandApp, APP_FIELDS } from './app.mjs';
+import { expandCrumbs, CRUMB_FIELDS } from './crumbs.mjs';
 import { CANVAS_TIMING as T, retired } from './constants.mjs';
 import { SFX } from '../engine/lib/sfx.mjs';
 
@@ -42,6 +43,8 @@ export const ELEMENT_TYPES = {
   receipt: { geometry: RECEIPT_FIELDS, required: ['merchant'] },
   // An app screen (a window or a phone) with tabs, fields, an upload slot and a button; a group with ids on its parts (film/app.mjs).
   app: { geometry: APP_FIELDS, required: ['title'] },
+  // Where to go in an app ("Leave › Family leave › New request"): chips on their words (film/crumbs.mjs).
+  crumbs: { geometry: CRUMB_FIELDS, required: ['items'] },
   // A cursor that travels to elements by id and presses them; expanded before scheduling (film/pointer.mjs).
   pointer: { geometry: ['to', 'steps', 'from', 'point', 'press', 'style', 'size', 'leave', 'sound'], required: [] },
   image: { geometry: ['asset', 'file', 'x', 'y', 'w', 'h', 'r', 'fit', 'treatment'], required: ['w', 'h'] },
@@ -281,7 +284,8 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
   return list.map((input, i) => {
     const at = `${where}[${i}]`;
     if (!input || typeof input !== 'object' || Array.isArray(input)) fail(`${at} must be an object`);
-    const el = structuredClone(input.type === 'receipt' ? expandReceipt(input, at, fail) : input.type === 'app' ? expandApp(input, at, fail) : input);
+    const MACROS = { receipt: expandReceipt, app: expandApp, crumbs: expandCrumbs };
+    const el = structuredClone(MACROS[input.type] ? MACROS[input.type](input, at, fail) : input);
     if (++state.count > MAX_ELEMENTS) fail(`a canvas holds at most ${MAX_ELEMENTS} elements`);
     const spec = ELEMENT_TYPES[el.type];
     if (!spec) fail(`${at}.type must be one of ${Object.keys(ELEMENT_TYPES).join(', ')}`);
@@ -1090,10 +1094,10 @@ export function elementsExtent(elements) {
     for (const el of list) {
       const n = k => el[k] ?? 0;
       // A receipt or an app is measured as the group it becomes.
-      if (el.type === 'receipt' || el.type === 'app') {
+      if (['receipt', 'app', 'crumbs'].includes(el.type)) {
         let drawn = null;
         try {
-          drawn = (el.type === 'receipt' ? expandReceipt : expandApp)(el, 'element', m => {
+          drawn = { receipt: expandReceipt, app: expandApp, crumbs: expandCrumbs }[el.type](el, 'element', m => {
             throw new Error(m);
           });
         } catch {}

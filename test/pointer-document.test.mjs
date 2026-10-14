@@ -105,3 +105,15 @@ test('an app screen names its parts for the pointer, opens on its word and turns
   assert.throws(() => normalizeElements([{ ...app, fields: [{ label: 'Amount', value: 'x'.repeat(30) }] }], 'elements', fail), /up to 24 characters/);
   assert.throws(() => normalizeElements([{ ...app, button: { label: 'Submit', done: 'Sent' } }], 'elements', fail), /needs say/);
 });
+
+test('crumbs land each step on its word, end on the accent colour, and wrap after a chevron', () => {
+  const [row] = normalizeElements([{ type: 'crumbs', id: 'path', x: 100, y: 100, items: [{ label: 'Leave', say: 'Leave' }, { label: 'Family leave', say: 'Family' }, 'New request'] }], 'elements', fail);
+  const chips = row.children.filter(c => c.type === 'group');
+  assert.deepEqual(chips.map(c => c.id), ['path-1', 'path-2', 'path-3']);
+  assert.equal(chips[1].say, 'Family');
+  assert.equal(chips[2].children[0].fill, 'accent', 'the last step is where you end up');
+  assert.equal(row.children.filter(c => c.type === 'path').length, 2, 'a chevron between each step');
+  const [narrow] = normalizeElements([{ type: 'crumbs', w: 500, items: ['Leave', 'Family leave', 'New request'] }], 'elements', fail);
+  assert.ok(narrow.children.at(-1).children[0].y > 0, 'a row too wide wraps');
+  assert.throws(() => normalizeElements([{ type: 'crumbs', items: ['One'] }], 'elements', fail), /2–5 steps/);
+});
