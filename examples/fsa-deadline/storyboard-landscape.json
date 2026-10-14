@@ -59,6 +59,15 @@
       "id": "plan",
       "block": "canvas",
       "vo": "It is all in your plan document. Up to six hundred forty dollars carries over. Anything above that you have not claimed is forfeited at the end of the plan year.",
+      "camera": {
+        "to": [
+          380,
+          440,
+          1180,
+          664
+        ],
+        "say": "claimed"
+      },
       "props": {
         "source": "Kestrel flexible spending account plan document, 2027 (fictional)",
         "elements": [

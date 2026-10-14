@@ -94,6 +94,9 @@ function film(vertical) {
         id: 'plan',
         block: 'canvas',
         vo: 'It is all in your plan document. Up to six hundred forty dollars carries over. Anything above that you have not claimed is forfeited at the end of the plan year.',
+        // Closer on the clause as it is read (it sits at the foot of the page). On a tall frame the
+        // page already spans the safe width, so it stays as it is.
+        ...(vertical ? {} : { camera: { to: [380, 440, 1180, 664], say: 'claimed' } }),
         props: {
           source: PLAN,
           elements: [
