@@ -43,7 +43,8 @@
           "fromYou": 3,
           "fromMatch": 3,
           "suffix": "%",
-          "again": 3
+          "again": 3,
+          "start": "empty"
         },
         "sketchText": {
           "YOU": "You put in",
@@ -53,6 +54,8 @@
           "AGAIN": "every paycheck, all year"
         },
         "sketchSay": {
+          "NOWYOU": "save",
+          "NOWMATCH": "adds",
           "YOU": "five",
           "MATCH": "four",
           "TOTAL": "nine",
