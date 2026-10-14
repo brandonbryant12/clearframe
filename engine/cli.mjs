@@ -27,10 +27,6 @@ const HELP = `ClearFrame — motion graphics
   muse [--seed N] [--light] [--json]  a seeded creative brief: twist, motif, camera, cuts, look, set pieces, music
   checkpoints <dir> [--mode guided|one-shot] [--json]   where a human decides (intent, truth, story, words, spend, picture, final) and what is open
   treatments [--json]                 art direction presets: look, motion, voice, sound and rules
-  asset-anchors ASSET-DIR --definition FILE --out NEW-JSON   export checked static anchors and copy zones
-  sculptures [--json]                original 3D asset recipes; optional offline Blender
-  sculpture ID --out NEW-DIR [--draft] [--still] [--vertical] [--theme ID] [--duration 4] [--fps 24] [--seed N]
-                                      baked .blend + PNG + MP4; --phase-seconds timing.json sets named phase durations; --dry-run prints settings
   types [--json]                      type voices: display family and emphasis per treatment (storyboard "type")
   reference <video> [--out dir]       cut rhythm, keyframe sheet, palette and motion of a reference film
   ingest <dir> --markdown report.md [--treatment noir]   evidence brief (figures, sources, tensions, tables) + storyboard + DIRECTION.md
@@ -149,11 +145,9 @@ async function main() {
     'to',
     'speakers',
     'fps',
-    'phase-seconds',
     'port',
     'script',
     'model',
-    'definition',
     'assets',
     'note',
     'rev',
@@ -266,35 +260,6 @@ async function main() {
   if (o.seed != null) {
     opts.seed = o.seed === 'random' ? Math.floor(Math.random() * 100000) : Number(o.seed);
     if (!Number.isInteger(opts.seed)) throw new Error('--seed must be an integer or "random"');
-  }
-  if (cmd === 'asset-anchors') {
-    if (!positionals[0] || !o.definition || !o.out) throw new Error('asset-anchors needs ASSET-DIR --definition FILE --out NEW-JSON');
-    const { enterGate } = await import('./lib/resource-gate.mjs');
-    if (await enterGate()) return;
-    const { exportAssetAnchors } = await import('./lib/asset-anchors.mjs');
-    const result = await exportAssetAnchors({assetDir:positionals[0],definition:JSON.parse(fs.readFileSync(o.definition,'utf8')),out:o.out});
-    return console.log(o.json ? JSON.stringify(result,null,2) : `${result.anchors.length} static anchors; ${result.copyZones.length} copy zones; ${result.checks.frames} source frames checked: ${path.resolve(o.out)}`);
-  }
-  if (cmd === 'sculptures') {
-    const { sculptures } = await import('./lib/sculptures.mjs');
-    const found = sculptures();
-    return console.log(o.json ? JSON.stringify(found, null, 2) : found.map(s =>
-      `${s.id.padEnd(22)} ${s.title}\n  ${s.use}\n  ${s.description}\n  ${s.theme} palette · ${s.duration}s ${s.loop ? 'loop' : 'reveal'} · ${s.copy}`,
-    ).join('\n\n'));
-  }
-  if (cmd === 'sculpture') {
-    const { sculptureConfig, renderSculpture } = await import('./lib/sculptures.mjs');
-    const settings = { ...opts, duration: num('duration'), fps: num('fps') };
-    if (o['phase-seconds'] !== undefined) settings.phaseSeconds = JSON.parse(fs.readFileSync(o['phase-seconds'], 'utf8'));
-    const config = sculptureConfig(positionals[0], settings);
-    if (o['dry-run']) return console.log(JSON.stringify(config, null, 2));
-    if (!o.out) throw new Error('sculpture needs --out NEW-DIRECTORY.');
-    if (o.json) process.env.CLEARFRAME_PROGRESS_STDERR = '1';
-    const { enterGate } = await import('./lib/resource-gate.mjs');
-    if (await enterGate()) return;
-    const report = await renderSculpture(positionals[0], o.out, settings);
-    return console.log(o.json ? JSON.stringify(report, null, 2) :
-      `${report.title}: ${report.status} in ${report.seconds.toFixed(1)}s. Assets and receipt: ${path.resolve(o.out)}`);
   }
   if (cmd === 'muse') {
     const { muse, museMarkdown } = await import('../film/muse.mjs');
@@ -477,7 +442,7 @@ async function main() {
           presets: MOTIONS,
           intensity: '0–1',
           transitions: TRANSITIONS,
-          exits: 'auto (mirror the next entrance) | none | fade | push | zoom | wipe | panel | iris | whip',
+          exits: 'auto (mirror the next entrance) | none | fade | push | zoom | wipe | panel',
           backdrops: BACKDROPS,
         },
         null,
@@ -540,7 +505,7 @@ async function main() {
     startRun(dir, cmd, args);
     if (o.markdown) {
       const { storyboardFor, artSketches } = await import('../film/playbooks.mjs');
-      // A film look starts from its genre's shots (trailer → trailer, documentary → cold-open), not a deck.
+      // A treatment starts from the playbook it names (keynote → product-reveal), not a deck.
       const playbook = chosen.playbook ?? (chosen.treatment && treatmentById(chosen.treatment)?.playbook) ?? 'research-digest';
       const r = ingestMarkdown(dir, o.markdown, {
         playbook,
@@ -712,7 +677,7 @@ async function main() {
     const { critique } = await import('./lib/critique.mjs');
     const c = critique(dir);
     lines.push(
-      `critique (structure, before rendering): cinema ${c.summary.cinema}/100, ${c.summary.warnings} warning(s), ${c.summary.ideas} idea(s)`,
+      `critique (structure, before rendering): film ${c.summary.film}/100, ${c.summary.warnings} warning(s), ${c.summary.ideas} idea(s)`,
       ...c.findings.slice(0, 8).map(f => `  ${f.level === 'warn' ? '!' : '·'} ${f.where}: ${f.message}`),
     );
     const g = await import('./lib/generate.mjs');
@@ -801,7 +766,7 @@ async function main() {
     if (o.json) return console.log(JSON.stringify(r, null, 2));
     const s = r.summary;
     console.log(
-      `cinema ${s.cinema}/100 · ${s.beats} beats · ${s.seconds}s · ${s.families} scene families · ${s.drawn} drawn · ${s.imaged} with imagery · ${s.graphicTransitions} graphic transitions · ${s.tones} colour blocks`,
+      `film ${s.film}/100 · ${s.beats} beats · ${s.seconds}s · ${s.families} scene families · ${s.drawn} drawn · ${s.imaged} with imagery · ${s.graphicTransitions} graphic transitions · ${s.tones} colour blocks`,
     );
     return console.log(
       r.findings.length

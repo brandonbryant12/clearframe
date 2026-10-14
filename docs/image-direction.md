@@ -20,20 +20,13 @@ The deterministic guarantee begins with the saved storyboard, assets, palette, f
 5. Rebuild with existing primitives. Put the reusable composition in `library/sketches/`, a colour family in `library/palettes/`, and directing defaults in `library/treatments/`. Use a fixed seed where layout varies; animation must depend on frame time, never wall time or live randomness.
 6. Render the native version, review it at phone size and in the full MP4, then revise. Similarity to the concept is optional; good typography, meaningful motion and controllability are required.
 
-Keep the two prompts and reference images as provenance, outside the runtime dependency path. The worked example is [material studies](design/material-studies/README.md): two built-in imagegen passes informed the folded paper, optical rims and inflated ring. None of those sketches loads a generated PNG.
+Keep the two prompts and reference images as provenance, outside the runtime dependency path.
 
-## Useful prompt families
+## What to ask for
 
-Use these as starting briefs, not another fixed visual vocabulary. Find the material or mechanism that supports the story.
+Ask for the object or place the story is about (the product, the document, the office, the harbour the shipment leaves from), not an abstract decoration to put behind the words: a decorative object with no job fails the library's bar (`library/README.md`). Name the material, the light and the empty region for copy, and forbid text, numbers and logos.
 
-- **Porcelain and paper:** “A single folded architectural ribbon, three broad faces, pale studio, soft contact shadow, clear shared fold edges, quiet left half for copy. No text or marks.” Rebuild with polygons, token gradients and one restrained float.
-- **Optical glass:** “Two overlapping lenses, visible double rims, broad restrained highlights, one small opaque sphere, pale studio, no complex refraction, no writing.” Rebuild with translucent discs, explicit `fill: "none"` rims and separate caustic shapes.
-- **Soft inflated forms:** “One hollow ring and diagonal capsule, satin rubber, clear front/back occlusion, few broad tonal regions, spacious composition, no lettering.” Rebuild with annular strokes, rounded rectangles and a front arc; move related parts as a group.
-- **Botanical or cellular:** “An abstract seed pod or lobed organism, asymmetric but simple silhouette, translucent membrane, few internal layers, no scientific labels.” Rebuild the shape if repeatable geometry matters; use a cutout if organic complexity is the point. Do not imply scientific accuracy.
-- **Print and fabric:** “Folded translucent vellum / woven silk / embossed card, raking light, one broad gesture, no distressed text.” Consider a prepared texture behind native shapes, or use token-painted contours when brand control is strict.
-- **Dark mineral:** “Angular crystalline forms, large facets, restrained edge glow, charcoal studio, uncluttered silhouette.” Rebuild as polygon facets; avoid adding unrelated HUD widgets.
-
-A refinement prompt should name one change: “Keep the composition and materials. Simplify each object into at most four visible layers with broad gradients and clean occlusion. Preserve the empty copy region.” The saved [actual prompts](design/material-studies/prompts.json) show the two iterations used here.
+A refinement prompt should name one change: “Keep the composition and materials. Simplify each object into at most four visible layers with broad gradients and clean occlusion. Preserve the empty copy region.”
 
 ## Motion-first asset decisions
 
@@ -43,16 +36,4 @@ Built-in imagegen is the default when available. Copy any chosen project-bound r
 
 ## Reuse the deterministic library
 
-```json
-{
-  "id": "reveal",
-  "block": "statement",
-  "duration": 4,
-  "art": { "sketch": "glass-orbits", "seed": 17, "opacity": 0.8, "drift": 0.5 },
-  "props": { "text": "Your approved message" }
-}
-```
-
-`art.sketch` can sit beneath any block. For these compositions, position short copy in the left half (landscape) or top third (portrait), preferably with native canvas text. Default centred blocks can overlap the hero: inspect them. `art.under` appends authored background details, and `art.over` stays above the block. `opacity` and `drift` affect the selected sketch, not authored additions. Give repeated uses of one material different seeds so consecutive beats are related but not identical; add `drift` so ambient art moves like a camera instead of sitting as a still behind the copy. Only sketches marked `layer: "under"` with no scene camera/world can be used here; use `props.sketch` for a complete canvas scene.
-
-For detailed shape or timing changes, run `node engine/cli.mjs sketch inflated-loop`, copy its elements into your storyboard, then edit native geometry, `fill`, `stroke`, `loop` and `keys`. Palette tokens remain live. All ten material sketches and the city/landscape sketches respond to `seed`; most mechanism sketches ignore it. Shared/project JSON sketches retain their authored coordinates; supply format variants for the frames you use.
+Put a rebuilt composition in `library/sketches/` (a project's own library for brand art). A sketch that declares `layer: "under"` can then sit beneath any block as `art: {sketch: NAME, seed, opacity, drift}`; run `node engine/cli.mjs sketch NAME` to copy its elements into a storyboard and edit native geometry, `fill`, `stroke`, `loop` and `keys`. Palette tokens remain live.

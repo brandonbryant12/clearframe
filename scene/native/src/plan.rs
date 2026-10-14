@@ -38,7 +38,7 @@ pub struct Layer {
     /// their elements' identities) across the cuts between them.
     pub start: usize,
     pub frames: usize,
-    /// The beat this layer belongs to; drawn with that beat (inside its dissolves). `None`
+    /// The beat this layer belongs to; drawn with that beat (also ahead of a wipe). `None`
     /// for a stage that spans beats, drawn once around them.
     #[serde(default)]
     pub beat: Option<String>,

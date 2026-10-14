@@ -58,7 +58,7 @@ async function verify() {
     brand.assets = [{ id: 'approved-art', file: 'approved-art.png', role: 'illustrative test artwork' }];
     fs.writeFileSync(path.join(kit, 'brand.json'), JSON.stringify(brand));
     fs.copyFileSync(path.join(repo, 'examples/financial-intake/report.md'), path.join(kit, 'report.md'));
-    const base = ['cash-flow', ...(quick ? [] : ['scenario-lab', 'risk-tradeoffs', 'research-investigation', 'podcast-thread'])];
+    const base = ['cash-flow', ...(quick ? [] : ['scenario-lab', 'benefit-explainer', 'research-digest', 'podcast-clip'])];
     for (const book of base) for (const vertical of (quick ? [false] : [false, true])) {
       const name = book + (vertical ? '-vertical' : ''), dir = path.join(out, name);
       const setup = book === 'cash-flow' && !vertical

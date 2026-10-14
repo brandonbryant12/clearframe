@@ -8,51 +8,35 @@ Agent-directed motion graphics rendered natively by the **ClearFrame scene engin
 
 ## What it makes
 
-- **Shots, not slides.** Film grammar is built in ([docs/cinema.md](docs/cinema.md)):
-  - a film `lens`: letterbox, colour grade, bloom, light leaks, handheld sway and motion blur;
-  - real depth: `z` layers in perspective, a `dolly` through them, a rack `focus` on a spoken word;
-  - genre playbooks: trailer, cold open, product reveal, title sequence, zoom journey;
-  - set pieces to start from: horizon, skyline, ocean, tunnel, terrain, data landscape, globe, title reveal.
-
-  `critique` scores every storyboard against the eight tells of a slideshow.
-
-  - generated depth plates: a painted far layer, a cut-out subject and cut-out foreground from image generation, staged in depth so the camera moves through painted scenes.
-
-  ![A generated depth plate: a sharp painted boat, the harbour in soft focus behind it, letterboxed](docs/media/plates.jpg)
-
-  ![Frames from the genre playbooks: a tunnel flight, a dawn, a title reveal, a data landscape in rack focus, a lit product, a cut-paper title, a chart close-up, a night city, a globe with routes](docs/media/cinema.jpg)
-- **Motion graphics, not slides.** Every scene can:
-  - draw its own art (`canvas`: paths that draw on, markers travelling along routes, echo trails, morphs across cuts, spotlights, meters, hand-drawn pencil strokes);
+- **Films, not slides.** The picture changes with the voice. A subject stays on screen across cuts (a `cast` of the film's objects, one drawn `world` the camera travels, a stage); `marks` point at the exact words of a form, policy or screen; the camera pushes to the detail on the word that names it. `critique` scores every storyboard against the eight tells of a slideshow, and `draft` measures how long the encoded picture sits still under the voice.
+- **Captions to a broadcast standard**, on by default: two lines at most, broken where a reader pauses, timed to the measured words, white on a translucent box, moved to the top when the picture has type of its own at the bottom; the same cues go to SRT and VTT.
+- **Drawn mechanisms.** Every scene can:
+  - draw its own art (`canvas`: paths that draw on, markers travelling along routes, morphs across cuts, meters, hand-drawn pencil strokes, `marks` on the words they point at, a `document` of real text, a `pointer` that presses controls by id);
   - sit on imagery (full or split `plate` with duotone and tint treatments);
-  - flood the frame with colour (`tone`) and drift with a slow `camera`;
-  - cut with `panel`, `iris` or `whip` transitions that carry one movement across the cut.
+  - flood the frame with colour (`tone`) at a turn, and push in with a `camera` that moves for a reason;
+  - cut, fade, or carry one movement across the cut with `push`, `wipe` or `panel`.
 
   Films take an editorial `frame`, grain and a vignette. See [canvas.md](docs/canvas.md) and [ideas.md](docs/ideas.md).
 - **33 native blocks** for evidence and structure: hero type, counters, KPI cards, deltas, bars, lines, waffles, rings, donuts, funnels, area-true magnitudes, steps, timelines, flows, cycles, checklists, annotated screenshots, kinetic type (including poster `stack` type that builds as spoken). `clearframe blocks NAME` prints props and an example.
 - **A creative library** ([library/](library/README.md)): palettes, treatments, sketches, playbooks and optional direction profiles, one file per item, validated on load. A project's own `library/` or a shared brand kit (`--library DIR`) adds or overrides them.
-  - `treatments`: art directions such as editorial, noir, kinetic, sketchbook, blueprint, mosaic and tech.
-  - `sketch`: canvas starting compositions for mechanisms (route, orbit, pipeline, network…).
-  - `sculptures`: eight original 3D operations, with an optional headless Blender asset pass. Retain editable scenes and prepared clips, then compose native text and evidence. [Asset workflow](docs/sculptures.md).
-  - Native `die-cut-aperture`, `moire-signal` and `folded-louvers` sketches add paper, optical and hinged forms with contrasting `paper-theatre` and `interference` treatments. [Material studies](docs/art-direction-studies.md).
-  - `canvas.props.kpi`: editable dimensional headlines, comparisons, progress rails, seesaws and contribution stacks, with restrained motion. [Flat graphics, native depth and true 3D](docs/kpi-direction.md).
+  - `treatments`: art directions such as workplace, business, editorial, sketchbook, blueprint and explanation. Everything in the library meets [the bar](library/README.md#the-bar): one job, reads on a phone, restrained motion, real content, a professional register.
+  - `sketch`: canvas starting compositions for mechanisms (route, pipeline, network…) and for workplace facts (`match`, `vesting`, `deadline`, `limit`, `expire`, `portal`, `inspect`, `choose`, `split`).
   - `canvas.props.teaching`: readable question, answer and explanation phases for multiple choice and fill-in-the-blank films. [Teaching sequences](docs/teaching-sequences.md).
   - `reference VIDEO`: the cut rhythm, keyframes, palette and motion of a film to borrow from.
   - `critique`: flags deck-like runs, stillness, text density, weak hooks and "and then" story chains.
   - `directions research|podcast`: optional story, picture and pace combinations. `--direction ID` seeds a project; explicit playbook/treatment/theme choices override it. Custom JSON profiles and fully authored canvas scenes keep the space open.
-  - `playbooks`: starting arcs, including `journey` (one drawing, a travelling camera) and `sizzle` (a brand reel).
+  - `playbooks`: starting arcs, including `benefit-explainer`, `policy-change` and `journey` (one drawing, a travelling camera).
 - **From material to film:**
   - `ingest --markdown` turns a research report (or HTML/DOCX/PDF) into an evidence brief of figures, sources, tensions and chart-ready tables.
   - `ingest --audio` turns a podcast or talk into gapless beats with measured word timings, speakers and live meters.
   - The `clearframe-direction` skill walks from brief to story to look to pictures to review.
 - **Type:** Inter, Inter Display and tabular figures; Instrument Serif for the italic accent word; IBM Plex Mono for labels and code; Architects Daughter for hand lettering. All are measured with the same shaper that draws them. Palettes (`clearframe themes`) are contrast-checked on load and in every tone.
-- **Voice that performs:** Gemini 3.8 TTS reads the whole narration as one continuous take with one short style, so the voice stays consistent. Energy is written into the words. Also two-voice conversations, and word timings measured for free with local Whisper (`align --whisper`). Sound design (`sfx`) lands on visual peaks.
+- **Voice that performs:** Gemini 3.8 TTS reads the whole narration as one continuous take with one short style, so the voice stays consistent. Energy is written into the words. Also two-voice conversations, and word timings measured for free with local Whisper (`align --whisper`). Quiet sound cues (`sfx`) land on counters and chapter turns; an element's own `sound` plays where it is authored.
 - **Honest numbers:** every figure needs a visible source; counters land on the exact value; `check` refuses what would mislead. See [speech timing](docs/speech.md) and the integrity skill.
 
 ## Start
 
 Requires Node 20.10+, Rust 1.88+ and FFmpeg/ffprobe with libx264. Follow [native setup](film/SETUP.md) before the first build. There are no npm runtime dependencies and no browser.
-
-Blender is an **optional separate installation** for preparing new 3D sculpture assets. The bundled clips, native KPI forms and teaching templates work without it. See [dimensional art setup](film/SETUP.md#optional-dimensional-art-setup) for executable checks, `BLENDER_BIN`, resource limits and replay commands using the included assets. No pip packages, addons or new npm dependencies are required.
 
 ```sh
 node engine/cli.mjs doctor
@@ -81,7 +65,7 @@ node engine/cli.mjs pipeline my-film --draft --scale 0.5
 
 Research and podcasts can start from an evidence investigation, a mechanism, field notes, a visual essay, kinetic type or a drawn explanation. [Source adaptation and creative freedom](docs/source-playbooks.md) · [Custom directions](library/README.md#directions). The agent still authors the film from the actual source.
 
-Financial arcs: `cash-flow`, `scenario-lab` and `risk-tradeoffs`, with native animated mechanisms. [Intake and brand kit](docs/intake.md) · [Financial playbooks](docs/financial-playbooks.md) · [Free example](examples/financial-intake/README.md). The focus is a mature standalone production pipeline, exercised through its CLI before any host integration. [Production method and harness](docs/production.md) · [Measured pipeline efficiencies](docs/performance.md).
+Financial arcs: `cash-flow`, `scenario-lab` and `client-update`, with native animated mechanisms. [Intake and brand kit](docs/intake.md) · [Financial playbooks](docs/financial-playbooks.md) · [Free example](examples/financial-intake/README.md). The focus is a mature standalone production pipeline, exercised through its CLI before any host integration. [Production method and harness](docs/production.md) · [Measured pipeline efficiencies](docs/performance.md).
 
 ## From a document or recording
 

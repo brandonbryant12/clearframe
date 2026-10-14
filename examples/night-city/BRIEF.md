@@ -10,7 +10,7 @@ It began as nine slide-like scenes, each a heading over a graphic. Four rounds w
   - the street plan lies under the ground (tilt down);
   - the survey sits beside it.
   - The last beat pulls back to the opening shot, changed.
-- **An interruption, then a return.** The kinetic turn ("not shared evenly") is a colour-blocked card with an iris. The next world beat resumes from the camera's last view.
+- **An interruption, then a return.** The kinetic turn ("not shared evenly") is a colour-blocked card on a hard cut. The next world beat resumes from the camera's last view.
 - **The world changes state.** A `behind: true` day sky fades in on "day" and out on "sunset" / "after dark", under everything already drawn.
 - **Show the phenomenon.** The hook sets the sun, drops both thermometers (`keys` with `scaleY`), and turns the gap into "7°C" on "Seven". A later beat re-uses the same roof: the heat fills it, then a cool roof drains it.
 - **Land on the words.** Each camera move starts as the previous line ends and arrives by the new line's first word. Far buildings (`depth: 0.55`) give parallax. The opening's 7°C bracket fades while the chart plays and re-draws on "Seven" in the callback.

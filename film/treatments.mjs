@@ -31,14 +31,13 @@ export function applyTreatment(sb, id, { recording = false, variant } = {}) {
     ? { ...found, film: { ...found.film, ...(v.film ?? {}) }, beats: { ...(found.beats ?? {}), ...(v.beats ?? {}) }, look: v.name }
     : { ...found, beats: found.beats ?? {} };
   const { voice, ...film } = t.film;
-  // A playbook's own cutting (cut, dissolve) is part of its grammar: the treatment's film-wide
+  // A playbook's own cutting (cut, push) is part of its grammar: the treatment's film-wide
   // transition only replaces the default fade, never a playbook's choice.
   const cutting = sb.transition && sb.transition !== 'fade' ? sb.transition : null;
   const visual = ['theme', 'type', 'backdrop', 'texture', 'motion', 'textMotion', 'frame', 'sfx', 'lens', 'camera', 'heading', 'chrome'];
   Object.assign(sb, structuredClone(recording ? Object.fromEntries(Object.entries(film).filter(([key]) => visual.includes(key))) : film));
   if (cutting) sb.transition = cutting;
   if (voice && !recording) sb.voice = { ...(sb.voice ?? {}), ...voice };
-  if (film.frame?.brand === 'brand' && sb.frame) sb.frame.brand = sb.title ?? 'Brand';
   const chapterStarts = new Set(
     sb.beats.map((b, i) => (i && b.chapter && b.chapter !== sb.beats[i - 1].chapter ? i : -1)),
   );

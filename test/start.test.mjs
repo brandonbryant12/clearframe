@@ -25,7 +25,7 @@ test('idea, evidence and a brand become a movable project without relabeling sam
   fs.mkdirSync(kit);
   const png = wireframePNG(palette('paper'));
   fs.writeFileSync(path.join(kit, 'logo.png'), png);
-  fs.writeFileSync(path.join(kit, 'brand.json'), JSON.stringify({ name: 'Example Studio', theme: 'ink', type: 'didone',
+  fs.writeFileSync(path.join(kit, 'brand.json'), JSON.stringify({ name: 'Example Studio', theme: 'ink', type: 'bookish',
     voiceStyle: 'Warm and clear', rules: ['Keep the original logo'], assets: [{ id: 'logo', file: 'logo.png', role: 'closing identity' }] }));
   const report = path.join(dir, 'report.md');
   fs.writeFileSync(report, '# Cash timing\n\nThe illustrative reserve is $40 [1].\n\n## Sources\n1. Demonstration ledger https://example.org/ledger\n');
@@ -42,7 +42,7 @@ test('idea, evidence and a brand become a movable project without relabeling sam
   fs.unlinkSync(report);
   const moved = path.join(dir, 'moved'); fs.renameSync(root, moved);
   const sb = loadStoryboard(moved);
-  assert.equal(sb.type, 'didone');
+  assert.equal(sb.type, 'bookish');
   assert.equal(sb.voice.style, 'Warm and clear');
   assert.deepEqual(createJob(sb, computeTiming(moved), { draft: true }).errors, []);
   assert.deepEqual(fs.readFileSync(path.join(moved, sb.assets[0].file)), png);

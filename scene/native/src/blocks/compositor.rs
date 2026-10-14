@@ -1,7 +1,7 @@
 //! The scene compositor: layout areas (including split plates), the camera, the plate and tone
 //! layers, entrances and exits, and the graphic transitions that span a cut.
 use super::*;
-use skia_safe::{Matrix, Rect, TileMode, image_filters};
+use skia_safe::Matrix;
 
 const HERO: [&str; 3] = ["title", "statement", "endcard"];
 
@@ -17,13 +17,82 @@ pub(crate) fn plate_side(plate: &Value, tall: bool) -> &str {
 }
 
 pub fn render(b: &Beat, frame: Frame, ctx: &Ctx) -> Node {
+    let (mut d, plate, content) = picture(b, frame, ctx);
+    d.caption_top = caption_top(&d);
+    let footer = d.footer();
+    scene_motion(&d, plate, content, footer)
+}
+
+/// Captions move to the top of the frame for a caption whose picture has type of its own where
+/// the caption would sit, if the top is clear. Judged once per caption, on the picture as the
+/// caption ends (when the most has arrived), so a caption never jumps while it is read.
+fn caption_top(d: &Draw<'_, '_>) -> bool {
+    use std::collections::HashMap;
+    use std::sync::{Mutex, OnceLock};
+    let b = d.b;
+    let env = &b.environment;
+    // Footage keeps its decoder moving forward; a kinetic beat is its own caption.
+    if !env.captions || env.caption_style == "pop" || matches!(b.block.as_str(), "kinetic" | "video") {
+        return false;
+    }
+    let Some(index) = b.captions.iter().position(|c| d.t >= c.start && d.t < c.end) else { return false };
+    static PLACED: OnceLock<Mutex<HashMap<(String, usize, usize), bool>>> = OnceLock::new();
+    let key = (b.id.clone(), b.start_frame, index);
+    if let Some(top) = PLACED.get_or_init(Default::default).lock().unwrap().get(&key) {
+        return *top;
+    }
+    let cue = &b.captions[index];
+    let fps = d.f.fps as f32;
+    let probe = ((cue.end * fps).ceil() as usize).saturating_sub(1).max((cue.start * fps).ceil() as usize).min(b.frames.saturating_sub(1));
+    let (_, _, content) = picture(b, Frame::new(probe, d.f.global_index - d.f.index + probe, d.f.fps), d.ctx);
+    let texts = crate::audit::scan(&content).texts;
+    let lines = cue.lines.len().max(1);
+    // How much of the picture's type a caption there would cover.
+    let covered = |top: bool| {
+        let (_, _, y0, y1) = caption_band(env, lines, top, d.bar);
+        let (x0, x1) = (env.width * 0.12, env.width * 0.88);
+        texts
+            .iter()
+            // Type under a clip (a page scrolled past its frame) is not what the viewer sees.
+            .filter(|t| t.opacity >= 0.5 && !t.masked)
+            .map(|t| {
+                let [x, y, w, h] = t.rect;
+                ((x + w).min(x1) - x.max(x0)).max(0.0) * ((y + h).min(y1) - y.max(y0)).max(0.0)
+            })
+            .sum::<f32>()
+    };
+    let low = covered(false);
+    let top = low > 0.0 && covered(true) < low;
+    PLACED.get_or_init(Default::default).lock().unwrap().insert(key, top);
+    top
+}
+
+/// Where standard captions sit: (type size, line height, top, bottom) of `lines` lines, low in
+/// the frame (above a letterbox bar) or high. Tall frames keep clear of the phone's own UI.
+pub(crate) fn caption_band(env: &crate::blocks::Environment, lines: usize, top: bool, bar: f32) -> (f32, f32, f32, f32) {
+    let tall = env.height > env.width;
+    let unit = env.width.min(env.height) / 1080.0;
+    let size = if tall { 56.0 } else { 44.0 } * unit;
+    let line_h = size * 1.22;
+    let block = lines as f32 * line_h;
+    let y = if top {
+        bar + env.height * if tall { 0.085 } else { 0.06 }
+    } else {
+        // Just above the source line at the foot of the frame.
+        env.height - bar - if tall { 190.0 * unit } else { 124.0 * unit } - block
+    };
+    (size, line_h, y, y + block)
+}
+
+/// A beat's picture (its ground and everything above it but the footer) at a frame.
+fn picture<'a, 'c>(b: &'a Beat, frame: Frame, ctx: &'c Ctx) -> (Draw<'a, 'c>, Node, Node) {
     let env = &b.environment;
     let wide = env.width / env.height > 1.3;
     let tall = env.height > env.width;
     // Tall frames keep type inside the middle 80% (phone UI covers the edges), the margin the frame
     // audit holds, plus headroom for the slow camera move (TALL_MARGIN, `camera`).
     let x = if wide { 120.0 } else if tall { (env.width * TALL_MARGIN).ceil() } else { 86.0 };
-    let bottom = if env.captions { if tall { 365.0 } else { 215.0 } } else { 145.0 };
+    let bottom = if env.captions { if tall { 365.0 } else { 240.0 } } else { 145.0 };
     let hero = HERO.contains(&b.block.as_str()) || matches!(b.block.as_str(), "chapter" | "highlight");
     let portrait_shift = if tall { env.height * 0.11 - 108.0 } else { 0.0 };
     let headless = s(&b.props, "title").trim().is_empty() && s(&b.props, "kicker").trim().is_empty();
@@ -40,9 +109,9 @@ pub fn render(b: &Beat, frame: Frame, ctx: &Ctx) -> Node {
     // distance below the brand.
     let top = top + if env.framed { crate::film::frame_inset(env.width, env.height) } else { 0.0 };
     let reserve = if low { 176.0 + if s(&b.props, "kicker").trim().is_empty() { 0.0 } else { 40.0 } } else { 0.0 };
-    // Letterbox bars take the top and bottom of the frame: headings, content and the
-    // source line move inside the picture so nothing important sits under a bar.
-    let bar = crate::lens::bar(crate::lens::Lens::from(&b.lens).letterbox, env.width, env.height);
+    // Letterbox bars were retired with the film looks: no bar takes the top or bottom of the
+    // frame (`d.bar` stays 0 for the caption band and the layout below).
+    let bar = 0.0f32;
     // Headings move below the bar; hero scenes already sit clear of it unless it is tall.
     let (lift, drop) = ((bar - 50.0).max(0.0), (bar - 30.0).max(0.0));
     let (top, bottom) = (top + if hero { (bar + 60.0 - top).max(0.0) } else { lift }, bottom + drop);
@@ -124,8 +193,7 @@ pub fn render(b: &Beat, frame: Frame, ctx: &Ctx) -> Node {
         _ => header,
     };
     let content = draw::group(vec![header.into(), picture.into()]);
-    let footer = d.footer();
-    scene_motion(&d, plate, content, footer)
+    (d, plate, content)
 }
 
 /// `camera: {to: [x, y, w, h], at, dur}`: from the full frame into a frame-pixel rect, at a
@@ -209,68 +277,29 @@ fn camera<'a>(d: &Draw<'a, '_>, body: Node) -> Node {
     }
 }
 
-/// Colour and origin of a graphic transition (film palette tokens; origin 0–1).
-fn cover_style(d: &Draw<'_, '_>, entering: bool) -> (String, String, (f32, f32)) {
+/// Colour of a graphic transition (a film palette token; the film accent by default).
+fn cover_color(d: &Draw<'_, '_>, entering: bool) -> String {
     let style = if entering { d.b.enter_style.as_ref() } else { d.b.exit_style.as_ref() };
-    let token = |name: &str, fallback: &str| -> String {
-        let p = &d.base;
-        match name {
-            "accent" => p.accent.clone(),
-            "accent2" => p.accent2.clone(),
-            "ink" => p.ink.clone(),
-            "bg" => p.bg.clone(),
-            "surface" => p.surface.clone(),
-            _ => fallback.to_owned(),
-        }
-    };
-    let color = token(style.map_or("", |v| s(v, "color")), &d.base.accent);
-    // The band/ring takes the other accent, or the accent when the cover is already accent2.
-    let edge = if color == d.base.accent { d.base.accent2.clone() } else { d.base.accent.clone() };
-    let origin = style
-        .map(|v| arr(v, "origin"))
-        .filter(|o| o.len() == 2)
-        .map(|o| (o[0].as_f64().unwrap_or(0.5) as f32, o[1].as_f64().unwrap_or(0.5) as f32))
-        .unwrap_or((0.5, 0.5));
-    (color, edge, origin)
-}
-
-/// A frame-wide panel with a thin band on its leading edge.
-fn panel<'a>(d: &Draw<'a, '_>, x: f32, leading_left: bool, entering: bool) -> Node {
-    let env = &d.b.environment;
-    let (w, h) = (env.width, env.height);
-    let (color, edge, _) = cover_style(d, entering);
-    let band = w * 0.055;
-    let band_x = if leading_left { x - band } else { x + w };
-    draw::group(vec![rect(x, 0.0, w, h, &color).into(), rect(band_x, 0.0, band, h, &edge).into()])
-}
-
-/// A colour field with a circular window of radius `r` around the transition origin.
-fn iris<'a>(d: &Draw<'a, '_>, progress: f32, window: bool) -> Node {
-    let env = &d.b.environment;
-    let (w, h) = (env.width, env.height);
-    let (color, edge, (ox, oy)) = cover_style(d, window);
-    let (cx, cy) = (w * ox.clamp(0.0, 1.0), h * oy.clamp(0.0, 1.0));
-    // Radius that reaches the farthest corner from the origin.
-    let far = [(0.0, 0.0), (w, 0.0), (0.0, h), (w, h)]
-        .iter()
-        .map(|(x, y): &(f32, f32)| (x - cx).hypot(y - cy))
-        .fold(0.0, f32::max);
-    let r = progress * far + if window { 1.0 } else { 0.0 };
-    let circle = format!("M {} {cy} a {r} {r} 0 1 0 {} 0 a {r} {r} 0 1 0 {} 0 Z", cx - r, 2.0 * r, -2.0 * r);
-    if window {
-        let d_path = format!("M 0 0 H {w} V {h} H 0 Z {circle}");
-        draw::group(vec![
-            draw::path(d_path).fill(color).even_odd().node(),
-            draw::circle(cx, cy, r).stroke(edge, 14.0).node(),
-        ])
-    } else {
-        draw::group(vec![draw::circle(cx, cy, r).fill(color).node(), draw::circle(cx, cy, r).stroke(edge, 14.0).node()])
+    let p = &d.base;
+    match style.map_or("", |v| s(v, "color")) {
+        "accent2" => p.accent2.clone(),
+        "ink" => p.ink.clone(),
+        "bg" => p.bg.clone(),
+        "surface" => p.surface.clone(),
+        _ => p.accent.clone(),
     }
 }
 
+/// A frame-wide panel of one flat colour, its leading edge at `x`.
+fn panel<'a>(d: &Draw<'a, '_>, x: f32, entering: bool) -> Node {
+    let env = &d.b.environment;
+    rect(x, 0.0, env.width, env.height, &cover_color(d, entering))
+}
+
 /// The scene-level entrance over the persistent backdrop, then the exit that mirrors the
-/// next scene's entrance. Neither cross-dissolves two scenes; graphic transitions (panel,
-/// iris, whip) are one movement split across the cut.
+/// next scene's entrance. Neither cross-dissolves two scenes; a panel is one movement split
+/// across the cut, and a wipe's edge is drawn by the frame compositor (`compose.rs`), which
+/// holds the outgoing scene ahead of it.
 fn scene_motion<'a>(d: &Draw<'a, '_>, plate: Node, content: Node, footer: Node) -> Node {
     let part = super::PART.with(|p| p.get());
     let (plate, content, footer) = match part {
@@ -286,47 +315,24 @@ fn scene_motion<'a>(d: &Draw<'a, '_>, plate: Node, content: Node, footer: Node) 
     let distance = d.m.distance(36.0);
     let reveal = motion::reveal_seconds(&b.transition);
     let reveal_p = if reveal > 0.0 { motion::out_cubic(d.t / reveal) } else { 1.0 };
-    let mut blur = 0.0;
     let mut cover = empty();
     let none = Matrix::default();
-    let (opacity, transform, clip) = match b.transition.as_str() {
-        "fade" => (enter.alpha, none, w),
-        "rise" => (enter.alpha, Matrix::translate((0.0, distance * (1.0 - enter.travel))), w),
-        "push" => (1.0, Matrix::translate((w * (1.0 - motion::out_expo(d.t / (d.m.duration() + 0.15))), 0.0)), w),
+    let (opacity, transform) = match b.transition.as_str() {
+        "fade" => (enter.alpha, none),
+        "rise" => (enter.alpha, Matrix::translate((0.0, distance * (1.0 - enter.travel)))),
+        "push" => (1.0, Matrix::translate((w * (1.0 - motion::out_expo(d.t / (d.m.duration() + 0.15))), 0.0))),
         "zoom" => {
             let scale = 1.0 - 0.05 * d.m.intensity * (1.0 - enter.travel);
-            (
-                enter.alpha,
-                Matrix::scale_translate((scale, scale), (w * (1.0 - scale) / 2.0, h * (1.0 - scale) / 2.0)),
-                w,
-            )
+            (enter.alpha, Matrix::scale_translate((scale, scale), (w * (1.0 - scale) / 2.0, h * (1.0 - scale) / 2.0)))
         }
-        "wipe" => (1.0, none, w * motion::in_out_cubic(d.t / (d.m.duration() + 0.25))),
         "panel" => {
             if reveal_p < 1.0 {
-                cover = panel(d, -w * reveal_p, false, true);
+                cover = panel(d, -w * reveal_p, true);
             }
-            (1.0, none, w)
+            (1.0, none)
         }
-        "iris" => {
-            if reveal_p < 1.0 {
-                cover = iris(d, reveal_p, true);
-            }
-            (1.0, none, w)
-        }
-        "whip" => {
-            blur = 24.0 * (1.0 - reveal_p);
-            (1.0, Matrix::translate((w * 0.22 * (1.0 - reveal_p), 0.0)), w)
-        }
-        // A trailer's flash cut: a few frames of white light, gone before the shot is read.
-        "flash" => {
-            let a = (1.0 - motion::clamp01(d.t / 0.22)).powi(3);
-            if a > 0.004 {
-                cover = draw::rect(0.0, 0.0, w, h).fill("#ffffff").opacity(a).node();
-            }
-            (1.0, none, w)
-        }
-        _ => (1.0, none, w),
+        // "wipe" and "cut" draw the scene whole: the wipe's edge clips the frame in compose.rs.
+        _ => (1.0, none),
     };
     let seconds = b.frames as f32 / d.f.fps as f32;
     let final_scene = env.index + 1 == env.total;
@@ -375,12 +381,7 @@ fn scene_motion<'a>(d: &Draw<'a, '_>, plate: Node, content: Node, footer: Node) 
             ExitKind::Wipe => {
                 exit_clip = (w * x, w - w * x);
             }
-            ExitKind::Panel => exit_cover = panel(d, w * (1.0 - x), true, false),
-            ExitKind::Iris => exit_cover = iris(d, x, false),
-            ExitKind::Whip => {
-                exit_transform = Matrix::translate((-w * 0.22 * x, 0.0));
-                blur = blur.max(38.0 * x);
-            }
+            ExitKind::Panel => exit_cover = panel(d, w * (1.0 - x), false),
             ExitKind::None => {}
         }
         if final_scene && exit_kind.cover_seconds().is_some() {
@@ -389,30 +390,14 @@ fn scene_motion<'a>(d: &Draw<'a, '_>, plate: Node, content: Node, footer: Node) 
             exit_transform = none;
         }
     }
-    if clip <= 0.0 {
-        return layer(footer, exit_opacity, exit_transform, None, h);
-    }
     let tone = if part != 2 && b.tone.as_deref().is_some_and(|t| !t.is_empty() && t != "none") {
         rect(0.0, 0.0, w, h, &d.p.bg)
     } else {
         empty()
     };
-    let content = layer(
-        draw::group(vec![tone.into(), plate.into(), content.into()]),
-        opacity,
-        transform,
-        (clip < w - 0.5).then_some((0.0, clip)),
-        h,
-    );
+    let content = layer(draw::group(vec![tone.into(), plate.into(), content.into()]), opacity, transform, None, h);
     let exit_clip = (exit_clip.0 > 0.5).then_some(exit_clip);
     let scene = layer(draw::group(vec![content.into(), footer.into()]), exit_opacity, exit_transform, exit_clip, h);
-    // A whip is a horizontal motion blur on the moving scene only; the backdrop stays sharp.
-    let scene = if blur > 0.3 {
-        let filter = image_filters::blur((blur, 0.0), TileMode::Decal, None, None);
-        scene.filter_in(filter, Rect::from_xywh(-w * 0.1, 0.0, w * 1.2, h))
-    } else {
-        scene
-    };
     if part == 1 {
         return scene;
     }

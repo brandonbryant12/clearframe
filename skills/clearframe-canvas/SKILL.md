@@ -15,7 +15,7 @@ When the idea is how one quantity behaves (a relationship, an accumulation, nois
 2. **Start from a sketch.** `node engine/cli.mjs sketch` lists compositions; `sketch NAME [--vertical]` prints props. Adapt labels, counts, colours and cues. Keep its staging (ground → subject → change).
 3. **Cue to the voice.** Put `say` on the element that answers the stressed word. Let the ground appear first, before the voice needs it.
 4. **Look.** `still DIR --beat ID --pos 0.4 --grid`, then `--pos 0.95`. Read coordinates off the grid to fix placement. Check the vertical cut too if you deliver one.
-5. **Annotate blocks with art.** An arrow onto the bar that matters, a circle round a number, soft shapes under a quote: `art.over` / `art.under` on any beat, placed from a `--grid` still.
+5. **Annotate blocks with art.** An arrow onto the bar that matters, soft shapes under a quote: `art.over` / `art.under` on any beat, placed from a `--grid` still. To point at words (ring the button to press, strike the old label, highlight the clause), put `marks` on the text element itself (`{words, style: highlight|underline|circle|box|strike|cross, say}`): the renderer finds the words, so nothing is placed by coordinates and the mark follows the text through moves and edits.
 
 ## Composition rules
 

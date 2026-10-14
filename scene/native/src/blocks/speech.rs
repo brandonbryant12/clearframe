@@ -411,7 +411,6 @@ impl<'a, 'c> Draw<'a, 'c> {
                         draw::group(vec![pill.into(), label.into()])
                             .translate(-cx, -cy)
                             .scale(pop, pop)
-                            .rotate_about(-2.0, 0.0, 0.0)
                             .translate(cx, cy),
                     );
                 } else {
@@ -431,6 +430,35 @@ impl<'a, 'c> Draw<'a, 'c> {
         let scale = 0.9 + 0.1 * e.travel;
         draw::group(vec![back.into(), front.into()]).opacity(e.alpha).scale_about(scale, cx, cy)
     }
+    /// Captions to a broadcast standard: the caption's own lines (broken where a reader pauses,
+    /// by `captionCues`), white type on a translucent near-black box that hugs each line (the
+    /// boxed style of streaming players, which reads over any picture, light or dark), centred
+    /// low in the frame, or high when the picture has type of its own down there. They cut on
+    /// and off with the speech, as subtitles do: no fades, no motion.
+    fn standard_captions(&self) -> Node {
+        let env = &self.b.environment;
+        let Some(cue) = self.b.captions.iter().find(|c| self.t >= c.start && self.t < c.end) else { return empty() };
+        let lines: Vec<&str> =
+            if cue.lines.is_empty() { vec![cue.text.as_str()] } else { cue.lines.iter().map(String::as_str).collect() };
+        let (size, line_h, top, _) = super::compositor::caption_band(env, lines.len(), self.caption_top, self.bar);
+        let font = Font::TextStrong;
+        // A line too long for the frame's safe width (a long word, a narrow frame) is set smaller.
+        let room = env.width * if env.height > env.width { 0.8 } else { 0.86 };
+        let widest = lines.iter().map(|l| text::measure(font, l, size, 0.0)).fold(0.0, f32::max) + size * 0.7;
+        let size = if widest > room { size * room / widest } else { size };
+        let (pad, rise) = (size * 0.34, size * 0.06);
+        let mut boxes = vec![];
+        let mut words = vec![];
+        for (i, line) in lines.iter().enumerate() {
+            let w = text::measure(font, line, size, 0.0);
+            let x = (env.width - w) / 2.0;
+            let row = top + i as f32 * line_h;
+            // Each line's box butts against the next, so a two-line caption is one stepped shape.
+            boxes.push(rounded(x - pad, row - rise, w + pad * 2.0, line_h + rise * 2.0, size * 0.16, "#0c0c0e"));
+            words.push(self.run(line.to_string(), x, row + line_h * 0.76, font, size, 0.0, "#ffffff"));
+        }
+        draw::group(vec![draw::group(boxes).opacity(0.78), draw::group(words)]).id("cf-captions")
+    }
     pub(crate) fn footer(&self) -> Node {
         let env = &self.b.environment;
         let tall = env.height > env.width;
@@ -438,8 +466,10 @@ impl<'a, 'c> Draw<'a, 'c> {
         let source_size = n(self.props(), "sourceSize", if tall { 30.0 } else { 22.0 }) as f32;
         let source_height = if self.props().get("sourceSize").is_some() { source_size * 3.6 } else { 60.0 };
         let source_y = (self.floor.min(env.height)
-            - if env.captions && self.floor >= env.height {
-                // Tall pop captions take two lines under a speaker chip: the credit goes above both.
+            - if env.captions && env.caption_style == "pop" && self.floor >= env.height {
+                // Tall pop captions take two lines under a speaker chip: the credit goes above
+                // both. Standard captions sit above the credit instead (`caption_band`), so the
+                // credit keeps its place at the foot of the frame, clear of the picture.
                 if tall { 430.0 } else { 160.0 }
             } else if env.framed && self.floor >= env.height {
                 128.0 + crate::film::frame_inset(env.width, env.height)
@@ -488,34 +518,7 @@ impl<'a, 'c> Draw<'a, 'c> {
         if env.captions && self.b.block != "kinetic" && env.caption_style == "pop" && !self.b.words.is_empty() {
             captions = self.pop_captions(tall);
         } else if env.captions && self.b.block != "kinetic" {
-            let box_ = Area {
-                x: self.area.x,
-                y: env.height - (self.bar - 20.0).max(0.0) - if tall { 242.0 } else { 104.0 },
-                w: self.area.w,
-                h: if tall { 112.0 } else { 78.0 },
-            };
-            if !self.b.words.is_empty() {
-                captions = self.word_layout(
-                    &self.b.words,
-                    box_,
-                    34.0,
-                    "highlight",
-                    true,
-                    if self.wide { 12 } else { 7 },
-                    0.6,
-                    4.0,
-                    true,
-                );
-            } else if let Some(cue) = self.b.captions.iter().find(|c| self.t >= c.start && self.t < c.end) {
-                let layout = self.fit(&cue.text, Style::strong(32.0), box_.w - 44.0, box_.h);
-                let (w, h) = (layout.width() + 44.0, layout.height() + 24.0);
-                let x = box_.x + (box_.w - w) / 2.0;
-                let y = box_.y + (box_.h - h) / 2.0;
-                captions = draw::group(vec![
-                    draw::group(vec![rounded(x, y, w, h, 18.0, &self.p.bg).into()]).opacity(0.88),
-                    self.draw(&layout, x + 22.0, y + 12.0, layout.width(), Align::Left, &self.p.ink).into(),
-                ]);
-            }
+            captions = self.standard_captions();
         }
         let tag = self.speaker_tag(source_y - 28.0);
         draw::group(vec![source.into(), tag.into(), captions.into()])

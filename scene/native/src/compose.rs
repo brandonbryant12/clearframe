@@ -1,13 +1,11 @@
 //! The frame compositor. One Skia GPU canvas per frame, in this order:
 //!
-//! 1. background colour, then — inside the lens layer (grade, bloom and aberration as one GPU
-//!    filter graph) and the handheld transform — the backdrop, vignette, every beat on screen
-//!    and the film chrome;
+//! 1. background colour, then the backdrop, vignette, every beat on screen and the film chrome;
 //! 2. for each beat: its ground (tone, plate) from its block, native `under` layers, the
-//!    block content, native `over` layers. A dissolve draws the outgoing beat under the
-//!    incoming one as two real layers;
+//!    block content, native `over` layers. A wipe draws the outgoing beat, held, ahead of the
+//!    edge and the incoming one behind it, so the frame is never empty;
 //! 3. stages (native layers spanning beats) around the beats;
-//! 4. light leaks, the editorial frame, grain, letterbox bars and review guides on top.
+//! 4. the editorial frame, grain and review guides on top.
 //!
 //! Native layers with a shutter are sampled several times inside the frame interval and
 //! accumulated in half-float, which is real temporal motion blur rather than a smear.
@@ -16,7 +14,6 @@ use crate::design::Palette;
 use crate::draw::{self, Node};
 use crate::film;
 use crate::gpu::{self, Gpu};
-use crate::lens::Lens;
 use crate::media::Media;
 use crate::motion::{self, MotionStyle};
 use crate::nodes::{self, Camera, Scope, TextMark};
@@ -120,17 +117,6 @@ impl Engine {
         let fps = self.plan.format.fps as f32;
         let seconds = frame as f32 / fps;
         let i = self.beat_at(frame);
-        let mut lens = Lens::from(&self.film.beats[i].lens);
-        // Bloom lifts highlights out of a dark picture; on light paper it only softens shapes.
-        if !self.palette.dark {
-            lens.bloom = 0.0;
-        }
-        let mut bar = film::bar(&lens, lw, lh);
-        if i > 0 {
-            let before = film::bar(&Lens::from(&self.film.beats[i - 1].lens), lw, lh);
-            let q = motion::in_out_cubic(motion::clamp01((frame - self.film.beats[i].start_frame) as f32 / fps / 0.7));
-            bar = before + (bar - before) * q;
-        }
         let scale = self.width as f32 / lw;
         let mut surface = self.surface.clone();
         let canvas = surface.canvas();
@@ -138,33 +124,44 @@ impl Engine {
         canvas.reset_matrix();
         canvas.clear(paint_color(&self.palette.bg));
         canvas.scale((scale, scale));
-        // 1. The picture, through the lens.
+        // 1. The picture.
         canvas.save();
-        if let Some(filter) = film::lens_filter(&lens, lh) {
-            let mut lp = Paint::default();
-            lp.set_image_filter(filter);
-            canvas.save_layer(&sk::canvas::SaveLayerRec::default().paint(&lp));
-        }
-        film::handheld(canvas, lens.handheld, seconds, lw, lh);
         let mut bg = Paint::default();
         bg.set_color(paint_color(&self.palette.bg));
         canvas.draw_rect(Rect::from_wh(lw, lh), &bg);
-        film::backdrop(canvas, &self.film.backdrop, lw, lh, &self.palette, seconds);
+        film::backdrop(canvas, &self.film.backdrop, lw, lh, &self.palette);
         film::vignette(canvas, &self.film.texture, lw, lh, &self.palette);
         self.stages(canvas, frame, Depth::Under, &mut errors);
         let beat = &self.film.beats[i];
         let local = frame - beat.start_frame;
-        let span = ((0.7 * fps) as usize).min(beat.frames / 2).max(1);
-        if beat.transition == "dissolve" && i > 0 && local < span {
-            let prev = &self.film.beats[i - 1];
-            let q = motion::in_out_cubic((local as f32 + 1.0) / span as f32);
-            let words = (1.0 - (local as f32 + 1.0) / (span as f32 * 0.35)).clamp(0.0, 1.0);
-            self.beat(canvas, i - 1, prev.frames + local, frame, words, &mut errors);
-            canvas.save_layer_alpha_f(None, q);
-            self.beat(canvas, i, local, frame, 1.0, &mut errors);
+        let edge = if beat.transition == "wipe" {
+            let motion = &beat.environment.motion;
+            let m = MotionStyle::new(&motion.preset, motion.intensity);
+            motion::wipe_edge(&m, local as f32 / fps, beat.frames as f32 / fps)
+        } else {
+            1.0
+        };
+        if edge < 1.0 {
+            // The edge sits on a whole output pixel and neither side is antialiased, so the two
+            // scenes meet without a seam of background between them.
+            let x = (lw * edge * scale).round() / scale;
+            if i > 0 {
+                let prev = &self.film.beats[i - 1];
+                canvas.save();
+                canvas.clip_rect(Rect::from_ltrb(x, 0.0, lw, lh), None, Some(false));
+                // The leaving scene's type is on its way out under the edge: the frame audit
+                // judges only the scene that is arriving.
+                let marks = self.marks.len();
+                self.beat(canvas, i - 1, prev.frames + local, frame, &mut errors);
+                self.marks.truncate(marks);
+                canvas.restore();
+            }
+            canvas.save();
+            canvas.clip_rect(Rect::from_ltrb(0.0, 0.0, x, lh), None, Some(false));
+            self.beat(canvas, i, local, frame, &mut errors);
             canvas.restore();
         } else {
-            self.beat(canvas, i, local, frame, 1.0, &mut errors);
+            self.beat(canvas, i, local, frame, &mut errors);
         }
         self.stages(canvas, frame, Depth::Over, &mut errors);
         if self.film.chrome {
@@ -173,7 +170,6 @@ impl Engine {
         }
         canvas.restore();
         // 4. Over the picture.
-        film::leak(canvas, lens.leak, seconds, lw, lh, &self.palette);
         if let Some(spec) = self.film.frame.clone() {
             let tone = self.film.beats[i].tone.clone().unwrap_or_default();
             let palette = Palette::from_theme(&self.film.theme).toned(&tone);
@@ -190,7 +186,6 @@ impl Engine {
             );
         }
         film::grain(canvas, &self.film.texture, lw, lh, &self.palette, seconds, &mut self.grain);
-        film::letterbox(canvas, bar, lw, lh);
         if self.film.guides {
             film::guides(canvas, lw, lh);
         }
@@ -201,59 +196,43 @@ impl Engine {
 
     /// One beat at its own frame `local`: ground, native under layers, block content, native
     /// over layers. Without native layers the block layer is drawn whole.
-    fn beat(
-        &mut self,
-        canvas: &Canvas,
-        index: usize,
-        local: usize,
-        frame: usize,
-        words: f32,
-        errors: &mut Vec<String>,
-    ) {
+    fn beat(&mut self, canvas: &Canvas, index: usize, local: usize, frame: usize, errors: &mut Vec<String>) {
         let id = self.film.beats[index].id.clone();
         let has = |z: Depth| self.plan.layers.iter().any(|l| l.beat.as_deref() == Some(id.as_str()) && l.z == z);
         let (under, over) = (has(Depth::Under), has(Depth::Over));
-        // The layer's own clock follows the beat frame being drawn (a dissolve's outgoing beat
-        // runs on past its end).
+        // The layer's own clock follows the beat frame being drawn (the beat a wipe holds ahead
+        // of its edge runs on past its end).
         let beat_frame = self.film.beats[index].start_frame + local;
-        let block = |part: u8, errors: &mut Vec<String>| match self.block(index, local, frame, words, part) {
+        let block = |part: u8, errors: &mut Vec<String>| match self.block(index, local, frame, part) {
             Ok(node) => draw::paint(canvas, &node),
             Err(e) => errors.push(e),
         };
         if under {
             block(1, errors);
-            self.layers_of(canvas, Some(&id), Depth::Under, beat_frame, words, errors);
-            self.block(index, local, frame, words, 2)
+            self.layers_of(canvas, Some(&id), Depth::Under, beat_frame, errors);
+            self.block(index, local, frame, 2)
                 .map(|n| draw::paint(canvas, &n))
                 .unwrap_or_else(|e| errors.push(e));
         } else {
             block(0, errors);
         }
         if over {
-            self.layers_of(canvas, Some(&id), Depth::Over, beat_frame, words, errors);
+            self.layers_of(canvas, Some(&id), Depth::Over, beat_frame, errors);
         }
     }
 
     fn stages(&mut self, canvas: &Canvas, frame: usize, z: Depth, errors: &mut Vec<String>) {
-        self.layers_of(canvas, None, z, frame, 1.0, errors);
+        self.layers_of(canvas, None, z, frame, errors);
     }
 
-    fn layers_of(
-        &mut self,
-        canvas: &Canvas,
-        beat: Option<&str>,
-        z: Depth,
-        frame: usize,
-        words: f32,
-        errors: &mut Vec<String>,
-    ) {
+    fn layers_of(&mut self, canvas: &Canvas, beat: Option<&str>, z: Depth, frame: usize, errors: &mut Vec<String>) {
         let picked: Vec<usize> = self
             .plan
             .layers
             .iter()
             .enumerate()
-            // A beat's own layers run on with the beat (a dissolve shows the outgoing beat past
-            // its last frame); stages are drawn over their span.
+            // A beat's own layers run on with the beat (a wipe holds the outgoing beat past its
+            // last frame); stages are drawn over their span.
             .filter(|(_, l)| {
                 l.beat.as_deref() == beat
                     && l.z == z
@@ -263,7 +242,7 @@ impl Engine {
             .map(|(i, _)| i)
             .collect();
         for i in picked {
-            if let Err(e) = self.layer(canvas, i, frame, words) {
+            if let Err(e) = self.layer(canvas, i, frame) {
                 errors.push(e);
             }
         }
@@ -308,7 +287,7 @@ impl Engine {
     }
 
     /// Draw native layer `index` at film frame `frame` (motion-blurred when it has a shutter).
-    fn layer(&mut self, canvas: &Canvas, index: usize, frame: usize, words: f32) -> Result<(), String> {
+    fn layer(&mut self, canvas: &Canvas, index: usize, frame: usize) -> Result<(), String> {
         let layer = self.plan.layers[index].clone();
         let fps = self.plan.format.fps as f32;
         let t = self.plan.layer_seconds(&layer, frame as f32);
@@ -335,7 +314,6 @@ impl Engine {
             }
             let mut media = self.ctx.media.borrow_mut();
             let mut scope = Self::scope(&mut media, &self.film, &layer, &palette, fps, pixel, t, self.logical);
-            scope.words = words;
             nodes::draw(canvas, &mut scope, &layer.elements, 0.0, 0.0, t);
             if alpha < 0.999 {
                 canvas.restore();
@@ -385,7 +363,6 @@ impl Engine {
             let mut media = self.ctx.media.borrow_mut();
             let mut scope = Self::scope(&mut media, &self.film, &layer, &palette, fps, pixel, ts, self.logical);
             scope.sample = ts - t;
-            scope.words = words;
             nodes::draw(sc, &mut scope, &layer.elements, 0.0, 0.0, ts);
             sc.restore();
             errors.extend(scope.errors);
@@ -416,11 +393,11 @@ impl Engine {
 
     /// Beat `index`'s block at its frame `local` (film frame `frame`). A block that cannot be
     /// drawn (text that does not fit its box, missing media) fails the frame with its reason.
-    fn block(&self, index: usize, local: usize, frame: usize, words: f32, part: u8) -> Result<Node, String> {
+    fn block(&self, index: usize, local: usize, frame: usize, part: u8) -> Result<Node, String> {
         let film = &self.film;
         let ctx = &self.ctx;
         std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            blocks::draw_beat(film, index, local, frame, ctx, words, part)
+            blocks::draw_beat(film, index, local, frame, ctx, 1.0, part)
         }))
         .map_err(|e| {
             let why = e
@@ -438,7 +415,7 @@ impl Engine {
         let b = &self.film.beats[i];
         let (id, local) = (b.id.clone(), frame - b.start_frame);
         let k = self.plan.format.width as f32 / self.logical.0;
-        Ok((id, self.block(i, local, frame, 1.0, 0)?.scale(k, k)))
+        Ok((id, self.block(i, local, frame, 0)?.scale(k, k)))
     }
 }
 

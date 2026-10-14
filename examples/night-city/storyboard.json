@@ -2099,7 +2099,7 @@
     {
       "id": "turn",
       "block": "kinetic",
-      "transition": "iris",
+      "transition": "cut",
       "tone": "accent2",
       "vo": "But the heat is not shared evenly.",
       "tail": 1.0,
@@ -2658,7 +2658,7 @@
         ],
         "source": "City Health Dept. (synthetic) [3]"
       },
-      "transition": "iris",
+      "transition": "cut",
       "tail": 0.6
     },
     {
@@ -4082,7 +4082,7 @@
         "source": "Synthetic Climate Lab (test) [1]"
       },
       "tail": 1.2,
-      "transition": "iris"
+      "transition": "cut"
     }
   ]
 }

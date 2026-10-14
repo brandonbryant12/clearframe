@@ -166,13 +166,13 @@ impl MotionStyle {
             _ => out_cubic(elapsed / duration),
         }
     }
-    /// Scale pop for markers and badges; springs overshoot, others settle.
+    /// Scale settle for markers and badges. Never overshoots, under any preset: a figure or
+    /// label that bounces past its size reads as a toy, not as information arriving.
     pub fn pop(&self, elapsed: f32) -> f32 {
         let x = elapsed / self.duration();
         match self.preset {
-            Preset::Spring => spring(x),
             Preset::Snappy => out_expo(x),
-            Preset::Gentle => out_quart(x),
+            Preset::Spring | Preset::Gentle => out_quart(x),
         }
     }
 }
@@ -186,8 +186,6 @@ pub enum ExitKind {
     Zoom,
     Wipe,
     Panel,
-    Iris,
-    Whip,
 }
 impl ExitKind {
     pub fn parse(value: &str) -> Option<Self> {
@@ -198,22 +196,28 @@ impl ExitKind {
             "zoom" => Self::Zoom,
             "wipe" => Self::Wipe,
             "panel" => Self::Panel,
-            "iris" => Self::Iris,
-            "whip" => Self::Whip,
             _ => return None,
         })
     }
-    /// Graphic transitions cover the cut: the exit must finish, so it may start a little
+    /// A graphic transition covers the cut: the exit must finish, so it may start a little
     /// earlier than a fade would. `production.mjs` mirrors these seconds.
     pub fn cover_seconds(self) -> Option<f32> {
-        let key = match self {
-            Self::Panel => "panel",
-            Self::Iris => "iris",
-            Self::Whip => "whip",
-            _ => return None,
-        };
-        Some(crate::constants::get().cover[key][0])
+        match self {
+            Self::Panel => Some(crate::constants::get().cover["panel"][0]),
+            _ => None,
+        }
     }
+}
+/// A wipe: one edge crosses the frame left to right over the incoming scene's first moments,
+/// the incoming scene behind it and the outgoing one, held, ahead of it, so the frame is never
+/// empty. Seconds the edge takes (at most half the incoming scene); `scene/compile.mjs` keeps
+/// the outgoing scene's footage on screen for as long.
+pub fn wipe_seconds(m: &MotionStyle, scene_seconds: f32) -> f32 {
+    (m.duration() + 0.25).min(scene_seconds * 0.5).max(1.0 / 60.0)
+}
+/// Where the wipe's edge is, 0–1 across the frame, `t` seconds into the incoming scene.
+pub fn wipe_edge(m: &MotionStyle, t: f32, scene_seconds: f32) -> f32 {
+    in_out_cubic(t / wipe_seconds(m, scene_seconds))
 }
 /// Seconds the incoming half of a graphic transition takes.
 pub fn reveal_seconds(kind: &str) -> f32 {
@@ -273,6 +277,13 @@ mod tests {
         assert!(peak > 1.02 && peak < 1.12, "peak {peak}");
         assert!((0..=100).all(|i| motion.enter(i as f32 / 100.0).alpha <= 1.0));
         assert!((0..=100).all(|i| motion.grow(i as f32 / 100.0, 1.0) <= 1.0), "values never overshoot");
+    }
+    #[test]
+    fn a_pop_settles_without_passing_its_size() {
+        for preset in ["gentle", "snappy", "spring"] {
+            let motion = MotionStyle::new(preset, 1.0);
+            assert!((0..=100).all(|i| motion.pop(i as f32 / 100.0) <= 1.0), "{preset}");
+        }
     }
     #[test]
     fn entrances_complete_within_the_nominal_duration_for_scheduling() {

@@ -85,7 +85,7 @@ pub(super) fn bounds(el: &Value) -> (f32, f32, f32, f32) {
             let r = f(el, "size", 120.0);
             (f(el, "cx", 0.0) - r, f(el, "cy", 0.0) - r, 2.0 * r, 2.0 * r)
         }
-        "rect" | "image" | "meter" | "particles" => {
+        "rect" | "image" | "meter" | "particles" | "document" => {
             (f(el, "x", 0.0), f(el, "y", 0.0), f(el, "w", 0.0), f(el, "h", 0.0))
         }
         "spotlight" if el.get("cx").is_some() => {

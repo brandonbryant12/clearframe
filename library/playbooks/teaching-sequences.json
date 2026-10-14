@@ -37,7 +37,75 @@
           "motion": "fade",
           "revealAt": 0.25,
           "explainAt": 1.1
-        }
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x1": 1200,
+            "y1": 570,
+            "x2": 1640,
+            "y2": 570,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1240,
+            "y": 346,
+            "w": 150,
+            "h": 224,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.4
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 280,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.4
+          },
+          {
+            "type": "text",
+            "text": "4%",
+            "x": 1315,
+            "y": 324,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.4
+          },
+          {
+            "type": "text",
+            "text": "5%",
+            "x": 1515,
+            "y": 268,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0.3,
+            "enter": "fade",
+            "dur": 0.4
+          }
+        ]
+      },
+      "tall": {
+        "elements": []
       }
     },
     {
@@ -61,7 +129,95 @@
           "motion": "fade",
           "revealAt": 0.25,
           "explainAt": 1.1
-        }
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x1": 1200,
+            "y1": 570,
+            "x2": 1640,
+            "y2": 570,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1240,
+            "y": 346,
+            "w": 150,
+            "h": 224,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 280,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "4%",
+            "x": 1315,
+            "y": 324,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "5%",
+            "x": 1515,
+            "y": 268,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 56,
+            "r": 6,
+            "fill": "accent",
+            "at": 0.25,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "type": "text",
+            "text": "+1 point",
+            "x": 1614,
+            "y": 332,
+            "size": 40,
+            "font": "semibold",
+            "fill": "accent",
+            "at": 0.25,
+            "enter": "fade",
+            "dur": 0.25
+          }
+        ]
+      },
+      "tall": {
+        "elements": []
       }
     },
     {
@@ -82,7 +238,71 @@
           "motion": "fade",
           "revealAt": 0.25,
           "explainAt": 1.1
-        }
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x1": 1200,
+            "y1": 570,
+            "x2": 1640,
+            "y2": 570,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1240,
+            "y": 346,
+            "w": 150,
+            "h": 224,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 280,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "4%",
+            "x": 1315,
+            "y": 324,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "5%",
+            "x": 1515,
+            "y": 268,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          }
+        ]
+      },
+      "tall": {
+        "elements": []
       }
     },
     {
@@ -103,9 +323,97 @@
           "motion": "fade",
           "revealAt": 0.25,
           "explainAt": 1.1
-        }
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x1": 1200,
+            "y1": 570,
+            "x2": 1640,
+            "y2": 570,
+            "stroke": "muted",
+            "width": 2,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1240,
+            "y": 346,
+            "w": 150,
+            "h": 224,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 280,
+            "r": 6,
+            "fill": "muted",
+            "opacity": 0.3,
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "4%",
+            "x": 1315,
+            "y": 324,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "text",
+            "text": "5%",
+            "x": 1515,
+            "y": 268,
+            "size": 52,
+            "font": "figures",
+            "anchor": "middle",
+            "fill": "ink",
+            "at": 0,
+            "enter": "none"
+          },
+          {
+            "type": "rect",
+            "x": 1440,
+            "y": 290,
+            "w": 150,
+            "h": 56,
+            "r": 6,
+            "fill": "accent",
+            "at": 0.25,
+            "enter": "fade",
+            "dur": 0.25
+          },
+          {
+            "type": "text",
+            "text": "+1 point",
+            "x": 1614,
+            "y": 332,
+            "size": 40,
+            "font": "semibold",
+            "fill": "accent",
+            "at": 0.25,
+            "enter": "fade",
+            "dur": 0.25
+          }
+        ]
+      },
+      "tall": {
+        "elements": []
       }
     }
   ],
-  "note": "A linear video sequence, not a clickable quiz. Text and phase durations stay editable. Show an image poster while viewers read; a one-way answer clip may begin in the answer beat. Match any selected 3D object to the correctIndex before use. Keep the complete answer and explanation visible after the reveal."
+  "note": "A linear video sequence, not a clickable quiz. The two rates stand to scale in the right half (a point lights in the answers); redraw them for your question, and drop them in a vertical cut. Text and phase durations stay editable. Show an image poster while viewers read; a one-way answer clip may begin in the answer beat. Match any selected 3D object to the correctIndex before use. Keep the complete answer and explanation visible after the reveal."
 }

@@ -644,11 +644,14 @@ export async function lookbookProject(root, { draft = false, rough = false, beat
   fs.mkdirSync(temp);
   const file = path.resolve(out ?? path.join(root, 'build/looks.png')),
     themes = Object.keys(THEMES);
+  // The renderer opens plan.json, which names its job and media relative to itself.
+  const plan = JSON.parse(fs.readFileSync(path.join(ctx.dir, 'plan.json'), 'utf8'));
   try {
     for (const [i, name] of themes.entries()) {
       const dir = path.join(temp, name);
       fs.mkdirSync(dir);
       writeJSON(path.join(dir, 'job.json'), { ...ctx.job, theme: palette(name) });
+      writeJSON(path.join(dir, 'plan.json'), { ...plan, job: 'job.json', media: path.join(ctx.dir, plan.media ?? 'media') });
       await singleFrame({ ...ctx, dir }, time, path.join(temp, `tile-${String(i).padStart(4, '0')}.png`));
     }
     fs.mkdirSync(path.dirname(file), { recursive: true });

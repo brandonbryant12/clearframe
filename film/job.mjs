@@ -23,20 +23,21 @@ import {
   CAMERA_MOVES,
   TRANSITION_COLORS,
   TEXT_MOTIONS,
-  LENS_GRADES,
+  retired,
   LENS_KEYS,
+  RETIRED_LENS,
 } from './constants.mjs';
 import { glyphCheck } from './glyphs.mjs';
 import { typeById } from './library.mjs';
 import { voiceOf, voiceFace, DEFAULT_VOICE } from './type.mjs';
 import { rules } from './registry.mjs';
 import { expandArt } from './sketches.mjs';
-import { expandKPIProps } from './kpis.mjs';
 import { expandTeachingProps } from './teaching.mjs';
 import { expandPlotProps } from './plots.mjs';
 import { expandBarsProps } from './bars.mjs';
 import { expandBridgeProps, orderBridgeTimes } from './bridge.mjs';
 import { expandCastProps } from './cast.mjs';
+import { expandPointers } from './pointer.mjs';
 import { expandStatProps } from './stat.mjs';
 import { expandHistogramProps } from './histogram.mjs';
 import { expandMultiplesProps } from './multiples.mjs';
@@ -45,18 +46,14 @@ import { captionCues, findWord } from '../engine/lib/timing.mjs';
 const unit = v => Number.isFinite(v) && v >= 0 && v <= 1;
 const validMotion = m => MOTIONS.includes(m.preset) && unit(m.intensity);
 
-/** Check a film or beat `lens`; letterbox false (or 0) removes the bars. */
+/** Check a film or beat `lens`: `blur`, the motion-blur shutter (0–1), is its one setting. */
 export function lensSpec(v, where = 'lens') {
   if (v == null) return null;
   if (typeof v !== 'object' || Array.isArray(v)) throw new Error(`${where} must be an object`);
   for (const [k, x] of Object.entries(v)) {
+    if (RETIRED_LENS.includes(k)) throw new Error(`${where}.${k} was retired: the library no longer uses film looks; remove it`);
     if (!LENS_KEYS.includes(k)) throw new Error(`${where}.${k} is not a lens setting (${LENS_KEYS.join(', ')})`);
-    if (k === 'letterbox') {
-      if (!(x === false || x === 0 || (Number.isFinite(x) && x >= 1.5 && x <= 3)))
-        throw new Error(`${where}.letterbox must be a picture aspect from 1.5 to 3 (2.39 scope, 2, 1.85) or false`);
-    } else if (k === 'grade') {
-      if (!LENS_GRADES.includes(x)) throw new Error(`${where}.grade must be ${LENS_GRADES.join(', ')}`);
-    } else if (!unit(x)) throw new Error(`${where}.${k} must be 0–1`);
+    if (!unit(x)) throw new Error(`${where}.${k} must be 0–1`);
   }
   return v;
 }
@@ -65,9 +62,12 @@ export function lensSpec(v, where = 'lens') {
 export function createJob(sb, timing, { draft = false } = {}) {
   const report = { errors: [], warnings: [], draft };
   const film = filmSettings(sb, timing, report);
+  // A retired film-wide transition is reported once, here; its beats fall back to a fade.
+  const filmRetired = retired('transition', sb.transition);
+  if (filmRetired) report.errors.push(filmRetired);
   const transitions = timing.beats.map(b => {
     // A film-wide transition never applies to the first frame: the film opens on its picture.
-    let t = sb.beats[b.index].transition ?? (b.index === 0 ? 'cut' : (sb.transition ?? 'fade'));
+    let t = sb.beats[b.index].transition ?? (b.index === 0 ? 'cut' : filmRetired ? 'fade' : (sb.transition ?? 'fade'));
     if (t === 'auto') t = b.index && timing.beats[b.index - 1].chapter !== b.chapter ? 'rise' : 'fade';
     return t;
   });
@@ -126,7 +126,7 @@ function filmSettings(sb, timing, { errors }) {
   if (sb.captions != null && ![true, false, 'auto', 'off', 'pop'].includes(sb.captions))
     errors.push('captions must be true, false, auto, off or pop.');
   const backdrop = sb.backdrop ?? 'none';
-  if (!BACKDROPS.includes(backdrop)) errors.push(`Native backdrop must be ${BACKDROPS.join(', ')}.`);
+  if (!BACKDROPS.includes(backdrop)) errors.push(retired('backdrop', backdrop) ?? `Native backdrop must be ${BACKDROPS.join(', ')}.`);
   const texture = sb.texture ?? null;
   const textureOk =
     texture == null ||
@@ -160,8 +160,9 @@ function filmSettings(sb, timing, { errors }) {
     theme: palette(sb.theme ?? 'paper'),
     motion,
     vertical,
-    captions: sb.captions === true || sb.captions === 'pop' || ((sb.captions ?? 'auto') === 'auto' && vertical),
-    captionStyle: sb.captions === 'pop' ? 'pop' : 'plate',
+    // Captions are on for any narrated film unless it opts out: most people watch muted.
+    captions: sb.captions === true || sb.captions === 'pop' || ((sb.captions ?? 'auto') === 'auto' && sb.beats.some(b => b.vo)),
+    captionStyle: sb.captions === 'pop' ? 'pop' : 'standard',
     backdrop,
     texture,
   };
@@ -172,6 +173,8 @@ function filmSettings(sb, timing, { errors }) {
 function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast = {} }) {
   if (b.scene)
     throw new Error('JavaScript scenes are retired. Port this beat to a native block; no browser fallback runs.');
+  if (b.block === 'canvas' && b.props?.kpi != null)
+    throw new Error('canvas kpi was retired: its extruded 3D forms decorated figures rather than showing them (and a seesaw sank on the lighter side); use the kpis or stat block, or a canvas chart');
   const frame = 1 / timing.fps,
     source = sb.beats[b.index],
     spec = rules(b.block);
@@ -180,7 +183,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     ? expandCastProps(b.props, helperFrame, { state: cast.state, objects: cast.objects, threads: cast.threads, look: cast.look, camera: cast.camera, unit: cast.unit, heading: b.heading ?? sb.beats[b.index]?.heading ?? sb.heading, cue: cueResolver(b, frame), carry: cast, notes: report.warnings })
     : b.props;
   const authoredProps = b.block === 'canvas'
-    ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(expandKPIProps(castProps ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
+    ? expandMultiplesProps(expandHistogramProps(expandStatProps(expandBridgeProps(expandBarsProps(expandPlotProps(expandTeachingProps(castProps ?? {}, helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame), helperFrame)
     : (b.props ?? {});
   const props = normalizeProps(b.block, authoredProps, {
     vertical: film.vertical,
@@ -225,6 +228,8 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
           `${b.id}: stroked ${el.type}${el.id ? ` "${el.id}"` : ''} has no explicit fill; the native default is solid accent and can hide layers behind it. Set fill: "none" for an outline, or choose an explicit fill colour.`,
         );
     });
+    // A pointer becomes a cursor that travels to its targets and presses them on their words.
+    expandPointers(list, { width: timing.width, height: timing.height });
     const end = scheduleElements(list, { start, stagger, entrance, resolve: v => cue(v), limit: b.dur, ground: true });
     eachElement(list, el => {
       if (el.at > b.dur - frame + 1e-7)
@@ -309,9 +314,10 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
         }, face);
   checkNarration(b, frame, film.captions, report, b.block === 'kinetic' ? face : null);
   const transition = transitions[b.index];
-  if (!TRANSITIONS.includes(transition)) throw new Error(`Unsupported native transition ${transition}`);
+  if (!TRANSITIONS.includes(transition))
+    throw new Error(retired('transition', transition) ?? `Unsupported native transition ${transition}; use ${TRANSITIONS.join(', ')}`);
   const authoredExit = source.exit ?? 'auto';
-  if (!EXITS.includes(authoredExit)) throw new Error(`exit must be ${EXITS.join(', ')}`);
+  if (!EXITS.includes(authoredExit)) throw new Error(retired('sceneExit', authoredExit) ?? `exit must be ${EXITS.join(', ')}`);
   const startFrame = Math.round(b.start * timing.fps),
     frames = Math.round(b.end * timing.fps) - startFrame;
   // Something that arrives just before the cut is seen for a blink; viewers need ~0.5 s.
@@ -346,7 +352,7 @@ function prepareBeat(b, { sb, timing, film, transitions, captions, report, cast 
     // rounding must not drop the next beat's first caption into this one with no length.
     captions: captions
       .filter(c => c.start >= b.start - frame / 2 && c.start < b.end - frame / 2)
-      .map(c => ({ start: Math.max(0, c.start - b.start), end: Math.min(c.end, b.end) - b.start, text: c.text })),
+      .map(c => ({ start: Math.max(0, c.start - b.start), end: Math.min(c.end, b.end) - b.start, text: c.text, lines: c.lines })),
   };
 }
 
@@ -484,11 +490,8 @@ function beatLayers(source, b, sb, report) {
   // The lens is resolved per beat: film settings, then the beat's own.
   const lens = { ...(sb.lens ?? {}), ...(lensSpec(source.lens) ?? {}) };
   const steady = steadyFilm(sb);
-  if (steady && lens.handheld > 0)
-    report.warnings.push(`${source.id}: this is a steady film (camera: none${sb.treatment === 'business' ? ', business treatment' : ''}) but the lens adds handheld sway; set lens.handheld: 0 unless the brief explicitly calls for it.`);
   if (source.plate && (source.plate.side ?? 'full') === 'full')
     report.warnings.push(`${source.id}: inspect native text over background media at opening, middle, end and lighting changes, including 360 px. Blur/scrim alone does not prove legibility; use a split or opaque panel if needed.`);
-  if (lens.letterbox === false) lens.letterbox = 0;
   if (Object.keys(lens).length) out.lens = lens;
   const heading = source.heading ?? sb.heading;
   if (heading != null) {
@@ -499,22 +502,19 @@ function beatLayers(source, b, sb, report) {
     if (!TEXT_MOTIONS.includes(source.textMotion)) throw new Error(`textMotion must be ${TEXT_MOTIONS.join(', ')}`);
     out.text_motion = source.textMotion;
   }
-  // A scene's own type voice (a trailer card inside a didone film); `inter` opts back out.
+  // A scene's own type voice (a bookish chapter inside a geometric film); `inter` opts back out.
   if (source.type != null) out.type = voiceOf(source.type, typeById(source.type)) ?? DEFAULT_VOICE;
   if (source.tone != null) {
     if (!TONES.includes(source.tone)) throw new Error(`tone must be ${TONES.join(', ')}`);
     out.tone = source.tone;
   }
-  if (source.transitionColor != null || source.transitionOrigin != null) {
-    if (source.transitionColor != null && !TRANSITION_COLORS.includes(source.transitionColor))
+  // The origin placed the retired iris; a panel always crosses the whole frame.
+  if (source.transitionOrigin != null)
+    throw new Error('transitionOrigin was retired with the iris transition: remove it (a panel crosses the whole frame)');
+  if (source.transitionColor != null) {
+    if (!TRANSITION_COLORS.includes(source.transitionColor))
       throw new Error(`transitionColor must be ${TRANSITION_COLORS.join(', ')}`);
-    const o = source.transitionOrigin;
-    if (o != null && !(Array.isArray(o) && o.length === 2 && o.every(unit)))
-      throw new Error('transitionOrigin must be [x, y] from 0 to 1');
-    out.enter_style = {
-      ...(source.transitionColor ? { color: source.transitionColor } : {}),
-      ...(o ? { origin: o } : {}),
-    };
+    out.enter_style = { color: source.transitionColor };
   }
   if (source.label != null && (typeof source.label !== 'string' || source.label.length > 40))
     throw new Error('label must be text up to 40 characters');
@@ -558,7 +558,7 @@ function beatLayers(source, b, sb, report) {
   if (source.plate != null) out.plate = plateSpec(source.plate, b.block);
   // A steady film's plates hold still too; a drift is something a beat asks for.
   if (out.plate && steady) out.plate.drift ??= 'none';
-  motionStack(source, b, sb, out, lens, report);
+  footageDrift(source, sb, out, report);
   return out;
 }
 
@@ -568,28 +568,16 @@ export const steadyFilm = sb =>
   ['business', 'workplace'].includes(sb.treatment) || (typeof sb.camera === 'string' ? sb.camera : sb.camera?.move) === 'none';
 
 /**
- * Whole-frame motion has several independent sources — the scene camera, the handheld lens,
- * a drifting plate and the movement inside footage. Each is fine alone; stacked they read as
- * shake, and nothing moving inside the footage can be steadied by the native camera.
+ * Footage carries its own camera motion: a plate's drift on top of it reads as shake, and
+ * nothing moving inside the footage can be steadied by the native camera.
  */
-function motionStack(source, b, sb, out, lens, report) {
-  const moves = [];
-  const cam = out.camera, move = cam?.to ? 'push' : (cam?.move ?? 'auto');
-  const holds = ['kinetic', 'video', 'annotate', 'breathing'].includes(b.block);
-  if (move === 'push') moves.push('a push to a detail');
-  else if (move === 'auto' ? !holds : move !== 'none') moves.push(move === 'auto' ? 'the automatic slow push' : `camera ${move}`);
-  if (lens.handheld > 0) moves.push(`handheld ${lens.handheld}`);
-  if (out.plate && (out.plate.drift ?? 'in') !== 'none') moves.push(`plate drift ${out.plate.drift ?? 'in'}`);
-  const ref = out.plate ?? (b.block === 'video' ? source.props : null);
-  const asset = ref?.asset != null ? sb.assets?.find(a => a.id === ref.asset) : null;
-  const footage = !!ref && (asset?.kind === 'clip' || /\.(mp4|mov|webm|m4v)$/i.test(ref.file ?? ''));
-  if (footage && (lens.handheld > 0 || (out.plate && (out.plate.drift ?? 'in') !== 'none')))
+function footageDrift(source, sb, out, report) {
+  const drift = out.plate?.drift ?? 'in';
+  if (!out.plate || drift === 'none') return;
+  const asset = out.plate.asset != null ? sb.assets?.find(a => a.id === out.plate.asset) : null;
+  if (asset?.kind === 'clip' || /\.(mp4|mov|webm|m4v)$/i.test(out.plate.file ?? ''))
     report.warnings.push(
-      `${source.id}: footage carries its own camera motion; ${moves.filter(m => m.startsWith('handheld') || m.startsWith('plate')).join(' and ')} on top of it reads as shake. Set plate.drift: "none" and lens.handheld: 0 for this beat, and ask the generator for a locked camera.`,
-    );
-  else if (moves.length >= 3 || (moves.length >= 2 && lens.handheld > 0))
-    report.warnings.push(
-      `${source.id}: ${moves.join(', ')} move the whole frame at once. Keep the one move that reveals something and still the rest.`,
+      `${source.id}: footage carries its own camera motion; plate drift ${drift} on top of it reads as shake. Set plate.drift: "none" for this beat, and ask the generator for a locked camera.`,
     );
 }
 
@@ -642,7 +630,8 @@ function checkNarration(b, frame, captions, report, face = null) {
 function exitFor(authored, next) {
   if (authored !== 'auto') return authored;
   if (next == null) return 'fade';
-  if (next === 'cut' || next === 'flash' || next === 'dissolve') return 'none';
+  // A wipe's edge crosses this scene held whole (compose.rs), so it does not leave first.
+  if (next === 'cut' || next === 'wipe') return 'none';
   if (next === 'rise') return 'fade';
   return next;
 }

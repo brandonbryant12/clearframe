@@ -15,9 +15,6 @@
  "transition": "cut",
  "backdrop": "none",
  "camera": "none",
- "lens": {
-  "handheld": 0
- },
  "texture": {
   "grain": 0.25,
   "vignette": 0.3

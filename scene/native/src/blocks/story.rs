@@ -912,8 +912,10 @@ impl<'a, 'c> Draw<'a, 'c> {
                 )
                 .0,
             );
+            // Cell values are the answer the table gives: set in ink, never a light grey that
+            // vanishes on a light ground at phone size. The chosen column also takes the weight.
             for (j, value) in arr(row, "values").iter().enumerate() {
-                let color = if highlight == Some(j) { &self.p.ink } else { &self.p.muted };
+                let style = if highlight == Some(j) { Style::strong(30.0) } else { Style::text(30.0) };
                 cells.push(
                     self.para(
                         value.as_str().unwrap_or(""),
@@ -923,8 +925,8 @@ impl<'a, 'c> Draw<'a, 'c> {
                             w: col_w - 40.0,
                             h: row_h - 36.0,
                         },
-                        Style::text(30.0),
-                        color,
+                        style,
+                        &self.p.ink,
                         Align::Left,
                     )
                     .0,

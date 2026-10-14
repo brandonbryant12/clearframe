@@ -12,7 +12,6 @@
     "transition": "cut",
     "sfx": "subtle",
     "lens": {
-      "handheld": 0,
       "blur": 0
     },
     "camera": "none"

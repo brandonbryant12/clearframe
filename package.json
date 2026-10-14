@@ -12,8 +12,7 @@
     "test": "node --test --test-concurrency=2 test/*.test.mjs",
     "test:native": "node --test --test-concurrency=2 test/native.test.mjs test/scene-engine.test.mjs",
     "catalog:sync": "node scripts/sync-catalog.mjs",
-    "verify:pipeline": "node scripts/verify-pipeline.mjs",
-    "verify:sculptures": "node scripts/verify-sculptures.mjs"
+    "verify:pipeline": "node scripts/verify-pipeline.mjs"
   },
   "engines": {
     "node": ">=20.10"

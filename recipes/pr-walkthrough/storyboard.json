@@ -14,12 +14,9 @@
   "transition": "cut",
   "backdrop": "none",
   "chrome": false,
-  "captions": false,
+  "captions": "auto",
   "music": {},
   "sfx": "subtle",
-  "lens": {
-    "handheld": 0
-  },
   "camera": "none",
   "sources": [
     {

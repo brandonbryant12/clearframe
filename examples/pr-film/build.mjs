@@ -47,7 +47,7 @@ function storyboard(shape) {
     title: 'Code that fits the phone',
     logline: 'A pull-request explainer from ClearFrame commit 92b0762: the symptom, the cause, the new layout, the code that measures, the checks and the limits.',
     format: { preset: shape, fps: 30 },
-    theme: 'paper', type: 'inter', motion: { preset: 'gentle', intensity: 0.6 }, transition: 'cut', backdrop: 'none', camera: 'none', lens: { handheld: 0 },
+    theme: 'paper', type: 'inter', motion: { preset: 'gentle', intensity: 0.6 }, transition: 'cut', backdrop: 'none', camera: 'none',
     texture: { grain: 0.25, vignette: 0.3 },
     captions: false, music: false,
     sources: [

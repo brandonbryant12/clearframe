@@ -33,10 +33,10 @@ test('directions seed different visual structures, allow overrides and do not al
     assert.match(fs.readFileSync(path.join(dir, 'DIRECTION.md'), 'utf8'), /starting hypothesis/);
   }
   assert.equal(new Set(signatures).size, 3, 'the choices change the picture and structure, not just the palette');
-  const options = directionOptions({ direction: 'research-evidence', playbook: 'podcast-thread', treatment: 'blueprint', theme: 'paper' });
+  const options = directionOptions({ direction: 'research-evidence', playbook: 'podcast-clip', treatment: 'blueprint', theme: 'paper' });
   const sb = scaffold(path.join(root, 'combined'), options);
   assert.equal(sb.treatment, 'blueprint'); assert.equal(sb.theme, 'paper');
-  assert.equal(sb.beats.length, items('playbooks').find(b => b.id === 'podcast-thread').beats.length);
+  assert.equal(sb.beats.length, items('playbooks').find(b => b.id === 'podcast-clip').beats.length);
   assert.ok(directions('podcast').some(d => d.id === 'research-mechanism'), 'source tags suggest; they do not restrict');
 });
 
@@ -44,7 +44,7 @@ test('custom directions and their overridden defaults remain portable after thei
   const root = temp(t), library = path.join(root, 'kit'), dir = path.join(root, 'film');
   write(path.join(library, 'directions/house.json'), { ...directions()[0], id: 'house', title: 'A new idea', playbook: 'house', treatment: 'house' });
   write(path.join(library, 'playbooks/house.json'), { title: 'House', audience: 'a', inputs: 'a', beats: [{ id: 'a', block: 'statement', duration: 2, props: { text: 'Original scene' } }] });
-  write(path.join(library, 'treatments/house.json'), { title: 'House', when: 'New films', film: { theme: 'paper', type: 'didone' } });
+  write(path.join(library, 'treatments/house.json'), { title: 'House', when: 'New films', film: { theme: 'paper', type: 'bookish' } });
   write(path.join(library, 'palettes/override.json'), { colors: items('palettes')[0].colors });
   write(path.join(library, 'playbooks/override.json'), { title: 'Override', audience: 'a', inputs: 'a', beats: [{ id: 'a', block: 'statement', duration: 2, props: { text: 'Override scene' } }] });
   write(path.join(library, 'treatments/override.json'), { title: 'Override', when: 'Selected independently', playbook: 'override', film: { theme: 'override' } });

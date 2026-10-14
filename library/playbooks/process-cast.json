@@ -8,9 +8,6 @@
  "backdrop": "none",
  "transition": "cut",
  "format": "landscape",
- "lens": {
-  "handheld": 0
- },
  "texture": {
   "grain": 0.25,
   "vignette": 0.35
@@ -27,31 +24,36 @@
        "id": "email",
        "color": "accent",
        "enter": "none",
-       "shape": "doc"
+       "shape": "doc",
+       "label": "Email"
       },
       {
        "id": "chat",
        "color": "positive",
        "enter": "none",
-       "shape": "bubble"
+       "shape": "bubble",
+       "label": "Chat"
       },
       {
        "id": "review",
        "icon": "star",
        "color": "accent2",
-       "enter": "drop"
+       "enter": "drop",
+       "label": "Review"
       },
       {
        "id": "call",
        "color": "ink",
        "enter": "drop",
-       "shape": "phone"
+       "shape": "phone",
+       "label": "Call"
       },
       {
        "id": "repeat",
        "color": "accent",
        "enter": "drop",
-       "shape": "doc"
+       "shape": "doc",
+       "label": "Repeat email"
       }
      ],
      "formations": [
@@ -61,7 +63,8 @@
        "stagger": 0.22
       }
      ]
-    }
+    },
+    "title": "1 · Requests arrive"
    }
   },
   {
@@ -92,7 +95,8 @@
        "thread": true
       }
      ]
-    }
+    },
+    "title": "2 · Sort them"
    }
   },
   {
@@ -110,7 +114,8 @@
        "word": "first"
       }
      ]
-    }
+    },
+    "title": "3 · Pick the first"
    }
   },
   {
@@ -125,12 +130,14 @@
        "id": "owner",
        "color": "surface",
        "enter": "drop",
-       "shape": "person"
+       "shape": "person",
+       "label": "Owner"
       },
       {
        "id": "done",
        "icon": "check",
-       "color": "positive"
+       "color": "positive",
+       "label": "Resolved"
       }
      ],
      "formations": [
@@ -153,7 +160,8 @@
        "dur": 0.7
       }
      ]
-    }
+    },
+    "title": "4 · Take it on"
    }
   },
   {
@@ -194,7 +202,8 @@
        "say": "better"
       }
      ]
-    }
+    },
+    "title": "5 · Move on"
    }
   }
  ],

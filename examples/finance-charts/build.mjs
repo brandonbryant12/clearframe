@@ -180,7 +180,7 @@ function beats(shape) {
 
 for (const [shape, preset] of [['landscape', 'landscape'], ['vertical', 'vertical']]) {
   const storyboard = {
-    version: 2, title: 'Finance chart templates', format: { preset, fps: 30 }, theme: 'ledger', type: 'geometric',
+    version: 2, title: 'Finance chart templates', format: { preset, fps: 30 }, theme: 'ink', type: 'geometric',
     backdrop: 'none', motion: { preset: 'gentle', intensity: 0.35 }, transition: 'cut', sfx: 'off', captions: false, music: false,
     sources: [{ claim: 'All series are illustrative templates, not market data.', source, asOf }],
     beats: beats(shape),

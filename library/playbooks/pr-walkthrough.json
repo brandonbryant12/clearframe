@@ -7,9 +7,6 @@
   "backdrop": "none",
   "transition": "cut",
   "format": "landscape",
-  "lens": {
-    "handheld": 0
-  },
   "camera": "none",
   "beats": [
     {

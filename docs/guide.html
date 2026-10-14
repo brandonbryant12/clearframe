@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <!--
   ClearFrame guide: a living document (docs/guide.html).
-  Last updated: 2026-10-12. Covers CHANGELOG 0.5.0 (unreleased), including the scene engine, fframes as the film runtime again, the browser studio's OpenCode agent and the notes-first studio page.
+  Last updated: 2026-10-14. Covers CHANGELOG 0.5.0 (unreleased), including the scene engine, fframes as the film runtime again, the browser studio's OpenCode agent, the notes-first studio page and the audited library ("A smaller library with a bar": cinema, film looks and junk items removed; broadcast captions on by default; canvas marks, document and pointer).
 
   WHEN UPDATING, CONSULT (sources of truth, roughly in this order):
     - CHANGELOG.md: newest section first. It feeds "What's new" and anything it changes below.
     - CLI output: node engine/cli.mjs help | treatments | playbooks | themes [--json] | blocks [NAME] | motions | sketch | icons
       (these are cheap and print the exact current lists; they don't build or render anything)
     - schema/storyboard.schema.json: film and beat fields (transition, exit, tone, camera, plate, captions, textMotion, heading, sfx, format)
-    - film/canvas.mjs: canvas element types, enters, exits, loops, keys, eases, fonts, colour tokens, effects (glow, shadow, rough, echo, depth, behind)
+    - film/canvas.mjs: canvas element types, enters, exits, loops, keys, eases, fonts, colour tokens, effects (glow, shadow, rough, echo, depth, behind), marks
+    - film/constants.mjs RETIRED and RETIRED_LENS: vocabulary that is refused by name (never list it as current); film/sound.mjs: the sounds placed automatically
     - docs/scene-engine.md and scene/{compile,recipes,code,engine}.mjs: the scene engine, native stages and what they refuse; docs/scene-engine-coverage.md (generated)
     - docs/fframes-return.md and scene/native/src/runtime.rs: fframes as the render runtime (segments, workers, encoder settings, evidence)
-    - library/ (README.md + one file per palette, treatment, sketch, playbook and optional direction): what each item sets
+    - library/ (README.md, including "The bar", + one file per palette, treatment, sketch, playbook and optional direction): what each item sets
     - README.md, AGENTS.md, docs/canvas.md, docs/style.md, docs/ideas.md, docs/speech.md, docs/continuity.md
     - docs/editing.md and docs/collaboration.md: review state, notes, keeps, decisions, previews, recording edits, the journey
     - docs/agent-studio.md and engine/lib/agent/, engine/agent-plugin/: the browser studio's home page, OpenCode runtime, tools, scope and setup
-    - skills/clearframe*/SKILL.md (clearframe, direction, cinema, canvas, explain, motion, script, library, engine, integrity, dataviz)
+    - skills/clearframe*/SKILL.md (clearframe, workplace, direction, canvas, explain, motion, script, library, engine, integrity, dataviz)
     - examples/night-city/BRIEF.md and storyboard.json (the case study in section 04)
 
   CONVENTIONS
@@ -546,7 +547,7 @@
       <summary><span class="mono-label">Contents</span><span class="toc-current">What it is</span></summary>
       <div class="toc-body">
         <a class="toc-brand" href="#top">Clear<span>Frame</span></a>
-        <p class="toc-meta">GUIDE · 2026-10-04</p>
+        <p class="toc-meta">GUIDE · 2026-10-14</p>
         <ol>
           <li><a href="#what-it-is"><span class="n">01</span>What it is</a></li>
           <li><a href="#how-it-works"><span class="n">02</span>How it works</a>
@@ -585,9 +586,9 @@
       <h1>The ClearFrame guide <em>how it works, and how to direct it</em></h1>
       <p class="lede">ClearFrame turns research reports, podcasts, scripts and briefs into narrated motion-graphics films, drawn natively in Rust. This guide covers the pipeline, the vocabulary and, above all, how to ask for a film worth watching.</p>
       <ul class="meta">
-        <li class="updated">Last updated: 2026-10-05</li>
+        <li class="updated">Last updated: 2026-10-14</li>
         <li>Covers 0.5.0 (unreleased)</li>
-        <li>33 blocks · 19 palettes</li>
+        <li>33 blocks · 15 palettes</li>
         <li>Open creative library · editable storyboards</li>
       </ul>
     </header>
@@ -596,7 +597,7 @@
     <section class="topic" id="technical-feedback"><h2>Technical films and review</h2>
 <p>Start a PR explainer with <code>new FILM --playbook pr-walkthrough --treatment business</code>. A system is one <code>canvas.props.diagram</code>: components with stable ids (user, service, database, queue, state, external), connectors (dashed, flowing) and groups, changed over time by <code>steps</code> — <code>add</code>, <code>remove</code>, <code>replace</code>&nbsp;…&nbsp;<code>with</code>, <code>set</code> a status, and <code>send</code> a request along the connections — each cued to a spoken word. Beats that share node ids morph, so the system carries across cuts instead of being redrawn. <code>clearframe sketch architecture</code> (or <code>component-change</code>, <code>state-machine</code>) prints an editable starting diagram. Layout follows the connections and adapts to wide and tall frames; connectors take separate ports and runs and detour around components. <a href="system-diagrams.md">Diagram contract</a>.</p>
 <p>How to ask: “Explain PR 214 from the diff: show the old request path, mark the removed call, add the queue in its place, and send one request through the new path.”</p>
-<p>Business frames stay steady: the treatment sets the film <code>camera: "none"</code> (a default for every beat, including ones added later; plates then hold still) and <code>lens.handheld: 0</code>; diagram beats hold still by default. <code>check</code> warns when camera, handheld, plate drift and footage motion stack. Motion explains a change; a reading hold is valid.</p>
+<p>Business frames stay steady: the treatment sets the film <code>camera: "none"</code> (a default for every beat, including ones added later; plates then hold still) and <code>lens.blur: 0</code>; diagram beats hold still by default. <code>check</code> warns when a plate's drift stacks on footage that already moves. Motion explains a change; a reading hold is valid.</p>
 <p>Choose background or half-screen B-roll before generation (a diagram can take <code>area</code> on one half). <code>plan</code> lists footage that cannot cover its beat plus offset, beats longer than one generated take, and the same seconds shown twice; <code>clips</code> refuses to pay for such a take, and looping is rejected. Inspect text against moving footage at opening, middle, end and lighting changes, including phone size. Blur alone is insufficient. <a href="continuity.md">B-roll review</a>.</p>
 <p><strong>Watch, leave notes, let the agent edit.</strong> <code>viewer --serve</code> is a page for the people a film is for, not for editors. The home page asks <em>What are we making?</em> (your words, wide or tall, any files) and creates the project with its own OpenCode conversation, which drafts a first cut. A film opens on its picture and a filmstrip of its scenes. Click anywhere on the picture to leave a sticky note on that spot at that moment (it keeps the words on screen under it), or write one for the whole film; <em>Send N notes to the agent</em> sends them as one message. The Agent tab beside the picture holds the conversation: one folded line of steps per request, the reply, approvals for commands and paid sound, Stop, and Undo for the newest request's edits. The agent answers each note it acted on in one line; you say <em>Looks good</em> or <em>Not yet</em>, and approve a version in your own words. New versions appear while the page is open. Opened as a file, the page plays films and keeps notes in the browser, and the notes go out as a message to paste into Claude Code. <a href="viewer.md">The studio page</a> · setup in <a href="agent-studio.md">agent-studio.md</a>.</p>
 <p>How to ask: pin a note on the chart's label, “this should land on the word ‘half’”, then a second on the closing card, “end on the question, not the logo”, and send both.</p>
@@ -791,7 +792,7 @@ node engine/cli.mjs runlog my-podcast                      <span class="c"># mea
           <h3>Canvas &amp; art<small>draw what blocks can't</small></h3>
           <div>
             <p><strong>Declare fills on outlines.</strong> Stroked circles, ellipses and rectangles still default to a solid accent fill. Set <code>fill: "none"</code> for contour rings and wireframes, or an explicit colour for a filled shape. The checks warn about omissions in canvas and nested art.</p>
-            <p><code>canvas</code> is a beat you draw. It offers 13 element types with entrances, keyframes, motion along paths, loops and exits, all cueable to speech. Any beat can also carry <code>art.under</code> / <code>art.over</code> layers made of the same elements, placed in frame pixels: an arrow onto a bar, a circle round a number. Start from a <code>sketch</code> and place things with <code>still --grid</code>. <code>view: "auto"</code> fits a drawing into the space below the title.</p>
+            <p><code>canvas</code> is a beat you draw. It offers 16 element types with entrances, keyframes, motion along paths, loops and exits, all cueable to speech. Three of them point at real content instead of at coordinates: <code>marks</code> on a text element ring, underline, box, strike, cross or highlight its own words; a <code>document</code> is a page of real text that scrolls to the section the voice reads; a <code>pointer</code> presses elements by id, the step in the app (<a href="../examples/fsa-deadline/README.md">FSA deadline</a> uses all three). Any beat can also carry <code>art.under</code> / <code>art.over</code> layers made of the same elements, placed in frame pixels: an arrow onto a bar, a circle round a number. Start from a <code>sketch</code> and place things with <code>still --grid</code>. <code>view: "auto"</code> fits a drawing into the space below the title.</p>
             <p>To show how something behaves, four props draw a picture that changes, from a formula or a labelled simulation: <code>graph</code>, <code>accumulate</code>, <code>estimate</code> and <code>field</code>. They show behaviour, never data (<a href="canvas.md">canvas</a>, the <code>clearframe-explain</code> skill).</p>
           </div>
         </div>
@@ -813,7 +814,7 @@ node engine/cli.mjs runlog my-podcast                      <span class="c"># mea
         <div class="concept" id="concept-treatments">
           <h3>Treatments<small>art direction in one word</small></h3>
           <div>
-            <p>A treatment sets the palette, <strong>type voice</strong> (<code>film.type</code>: the display family and emphasis for titles, statements, endcards, chapters and kinetic text; <code>types</code> lists <code>inter</code>, <code>didone</code>, <code>wide</code>, <code>geometric</code>, <code>condensed</code>, <code>bookish</code>, <code>typewriter</code>), backdrop, texture, frame, motion, transition grammar, voice style and sound, plus some beat defaults. It also writes its rules into DIRECTION.md. Each is a file in <code>library/treatments/</code>, and a project can add its own. Built-ins include <code>editorial</code>, <code>noir</code>, <code>kinetic</code>, <code>sketchbook</code>, <code>blueprint</code>, <code>audiogram</code>, <code>brand</code>, <code>calm</code>, <code>mosaic</code>, <code>tech</code>, <code>monolith</code>, <code>atelier</code> and the print and craft looks (<code>pulp</code>, <code>woodblock</code>, <code>constructivist</code>, <code>deco</code>, <code>handheld</code>, <code>sampler</code>, <code>gallery</code>). Apply one with <code>new DIR --playbook NAME --treatment ID</code>, then adapt it. It is a starting direction, not a limit.</p>
+            <p>A treatment sets the palette, <strong>type voice</strong> (<code>film.type</code>: the display family and emphasis for titles, statements, endcards, chapters and kinetic text; <code>types</code> lists <code>inter</code>, <code>geometric</code> and <code>bookish</code>), backdrop, texture, frame, motion, transition grammar, voice style and sound, plus some beat defaults. It also writes its rules into DIRECTION.md. Each is a file in <code>library/treatments/</code>, and a project can add its own. The ten built-ins are <code>workplace</code>, <code>editorial</code>, <code>business</code>, <code>explanation</code>, <code>sketchbook</code>, <code>blueprint</code>, <code>audiogram</code>, <code>research-study</code>, <code>keynote</code> and <code>cutpaper</code>. Apply one with <code>new DIR --playbook NAME --treatment ID</code>, then adapt it. It is a starting direction, not a limit.</p>
           </div>
         </div>
         <div class="concept" id="concept-palettes">
@@ -825,19 +826,19 @@ node engine/cli.mjs runlog my-podcast                      <span class="c"># mea
         <div class="concept" id="concept-motion">
           <h3>Motion &amp; text motion<small>how things arrive</small></h3>
           <div>
-            <p><code>motion.preset</code> is <code>gentle</code>, <code>snappy</code> or <code>spring</code>, and <code>intensity</code> (0–1) scales travel. Values never overshoot. <code>textMotion</code> controls how display type arrives: <code>lines</code> (the default), <code>words</code>, <code>letters</code> or <code>cascade</code>. Use one mode for the film and break it for one or two moments. Scene headings always rise as a line. <code>heading: "bottom"</code> sets a scene's title as a lower third.</p>
+            <p><code>motion.preset</code> is <code>gentle</code>, <code>snappy</code> or <code>spring</code>, and <code>intensity</code> (0–1) scales travel. Values never overshoot, and a <code>pop</code> settles in from 86% of its size without passing full size under any preset. <code>textMotion</code> controls how display type arrives: <code>lines</code> (the default), <code>words</code>, <code>letters</code> or <code>cascade</code>. Use one mode for the film and break it for one or two moments. Scene headings always rise as a line. <code>heading: "bottom"</code> sets a scene's title as a lower third.</p>
           </div>
         </div>
         <div class="concept" id="concept-transitions">
           <h3>Transitions<small>cuts with meaning</small></h3>
           <div>
-            <p>The entrances are <code>cut</code>, <code>fade</code>, <code>rise</code>, <code>wipe</code>, <code>push</code> and <code>zoom</code>, plus three graphic ones, <code>panel</code>, <code>iris</code> and <code>whip</code>, that carry one movement across the cut. Exits mirror the next entrance automatically, and scenes never cross-dissolve. Graphic transitions belong at turns in the story. Use <code>cut</code> for rhythm and <code>push</code> for sequence.</p>
+            <p>The entrances are <code>cut</code>, <code>fade</code>, <code>rise</code>, <code>wipe</code>, <code>push</code> and <code>zoom</code>, plus one graphic one, <code>panel</code>, that carries one movement across the cut. Exits mirror the next entrance automatically, and scenes never cross-dissolve. A panel belongs at a turn in the story. Use <code>cut</code> for rhythm and <code>push</code> for sequence. The retired <code>iris</code>, <code>whip</code>, <code>flash</code> and <code>dissolve</code> are refused by name, with what to use instead.</p>
           </div>
         </div>
         <div class="concept" id="concept-captions">
-          <h3>Captions<small>plate · pop · kinetic</small></h3>
+          <h3>Captions<small>standard · pop · kinetic</small></h3>
           <div>
-            <p><code>captions: true</code> burns phrase captions onto a soft plate, and <code>"auto"</code> turns them on for vertical formats. <code>"pop"</code> gives social captions: heavy outlined phrases of three or four words, with the spoken word on a tilted accent pill. The <code>kinetic</code> block makes speech itself the picture, in <code>highlight</code>, <code>reveal</code>, <code>word</code> or <code>stack</code> mode. Final captioned or kinetic renders need <strong>measured</strong> word timings.</p>
+            <p>Every narrated film is captioned unless it sets <code>captions: false</code>, to a broadcast standard (after Netflix's English timed-text guide): at most two lines of 42 characters (28 on a vertical frame), timed to the measured words, white Inter SemiBold on a translucent near-black box that hugs each line, cut on and off with the speech and never across a cut. A caption whose picture has type in the bottom band moves to the top, and <code>check</code> warns when a caption still covers the picture's type. The same cues go to the SRT and VTT. <code>"pop"</code> is the social style for vertical clips: a few words at a time in heavy type, the spoken word in an accent pill. The <code>kinetic</code> block makes speech itself the picture, in <code>highlight</code>, <code>reveal</code>, <code>word</code> or <code>stack</code> mode. Final captioned or kinetic renders need <strong>measured</strong> word timings (<a href="speech.md">speech</a>).</p>
           </div>
         </div>
         <div class="concept" id="concept-honesty">
@@ -869,7 +870,7 @@ node engine/cli.mjs runlog my-podcast                      <span class="c"># mea
       <span class="k">"props"</span>: { "view": "auto", "elements": [
         { "type": "path", "d": "M 0 200 C 300 200 500 0 800 0",
           "stroke": "accent", "width": 8, "arrow": "end", "say": "handoff" } ] } },
-    { <span class="k">"id"</span>: "turn", <span class="k">"block"</span>: "kinetic", <span class="k">"transition"</span>: "iris", <span class="k">"tone"</span>: "accent2",
+    { <span class="k">"id"</span>: "turn", <span class="k">"block"</span>: "kinetic", <span class="k">"transition"</span>: "panel", <span class="k">"tone"</span>: "accent2",
       <span class="k">"vo"</span>: "So the fix is not speed. It is fewer handoffs.",
       <span class="k">"props"</span>: { "mode": "stack", "emphasis": ["fewer"], "align": "center" } }
   ]
@@ -889,38 +890,38 @@ node engine/cli.mjs runlog my-podcast                      <span class="c"># mea
         <li><div><strong>One picture per idea.</strong>Choose the picture by what the sentence <em>does</em>, not by what it is about (<code>docs/ideas.md</code>). When the narration says <em>how, why, through, between, until</em> or <em>instead</em>, draw the mechanism rather than the words.</div></li>
         <li><div><strong>Land on the word.</strong>Each beat has one landing word (two at most), the stressed word at the end of the sentence. Cue the visual to it with <code>land</code> or <code>say</code>. Counts finish as the number is said, and world cameras arrive by the new line's first word.</div></li>
         <li><div><strong>Travel instead of cutting.</strong>A process, a place, a chain of causes or a system should be one <code>world</code> with a travelling camera, not five separate drawings. Lay stations out in story order so the camera never re-crosses old material, and finish with a pull-back to the opening shot, changed.</div></li>
-        <li><div><strong>Punctuate rarely.</strong>Use one or two <code>tone</code> scenes per minute and graphic transitions only at turns. Everything else cuts, pushes or fades. <code>critique</code> warns when punctuation stops meaning anything.</div></li>
-        <li><div><strong>Something always breathes.</strong>Keep something moving: camera drift, a loop on the subject, a drifting plate, ambient <code>art.under</code>, a <code>particles</code> field. Hold still only on purpose.</div></li>
+        <li><div><strong>Punctuate rarely.</strong>Use one or two <code>tone</code> scenes per minute and a <code>panel</code> only at a turn. Everything else cuts, pushes or fades. <code>critique</code> warns when punctuation stops meaning anything.</div></li>
+        <li><div><strong>The picture changes with the voice.</strong>Something changes on each stressed word: a coin drops, a lock opens, a clause is marked, a value is pressed. Hold still on purpose (a reading hold, <code>pace: "hold"</code>), and never add wobble or ambient loops to fill a hold. <code>draft</code>'s motion verdict measures how long the picture sits still under the voice.</div></li>
         <li><div><strong>Look, then ask a fresh reviewer.</strong>Diagnostics can't judge taste. Open the sheet, watch the draft, then have a reviewer with no authorship bias judge it against DIRECTION.md. Keep the same reviewer across rounds so it can say which notes are resolved. Sort its notes into <strong>tool problems</strong> (fix the engine and every film benefits) and <strong>film choices</strong> (fix the storyboard).</div></li>
       </ol>
 
       <div class="note">
         <span class="mono-label">Per minute of film, aim for</span>
         <ul>
-          <li>at least one drawn mechanism (canvas), one colour-block punctuation, and one or two graphic transitions at turns;</li>
+          <li>at least one drawn mechanism (canvas), one colour-block punctuation, and a <code>panel</code> or <code>push</code> at the turn;</li>
           <li>imagery (plates) where the world matters, and kinetic type where the words are the picture;</li>
           <li>a hook that lands inside 3 s, about 3 on-screen words per second, and narration at 140–160 wpm.</li>
         </ul>
       </div>
 
-      <h3 id="cinema">Shots, not slides: the cinema score</h3>
-      <p>A slide holds a layout until the presenter moves on. A shot is a moment in continuous time, with a camera that has a point of view. <code>critique</code> scores every storyboard out of 100 against the eight tells of a slideshow, and each tell it finds names the fix. The full grammar is in <code>docs/cinema.md</code>, and <code>docs/scorecard.md</code> tracks how close the defaults get.</p>
+      <h3 id="cinema">Films, not slides: the film score</h3>
+      <p>These films are sent by companies to employees and clients. They stop being slides because the picture changes with the voice, not because they borrow a film look: there are no letterbox bars, grades, flash cuts or swells in the library. <code>critique</code> prints a film score (<code>film N/100</code>) from the eight tells of a slideshow, and each tell it finds names the fix. The tells, the shot list to write before the blocks (each beat's scale, its camera and why, and the cut into the next shot), a subject that stays on screen and a camera that moves for a reason are in <code>skills/clearframe-motion/SKILL.md</code>.</p>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Tell</th><th>What answers it</th></tr></thead>
           <tbody>
-            <tr><td>A card per line</td><td class="wrap">Carry something across each cut: a <code>world</code>, a morph by shared <code>id</code>, a match cut, <code>whip</code> or <code>flash</code>, or a cut between two moving cameras</td></tr>
-            <tr><td>Build, then freeze</td><td class="wrap">Inspect each hold against the brief. Keep business reading frames steady; reveal meaningful changes or shorten accidental holds. Never add shake to satisfy the score.</td></tr>
-            <tr><td>A heading on every scene</td><td class="wrap">Titles in the picture, lower thirds (<code>heading: "bottom"</code>), or no title at all</td></tr>
-            <tr><td>Locked, flat camera</td><td class="wrap">For cinematic work, depth and a purposeful move can help. The business treatment deliberately keeps reading frames locked.</td></tr>
+            <tr><td>A card per line</td><td class="wrap">Keep a subject on screen: a <code>cast</code> of the film's objects that re-forms beat to beat, one <code>world</code> the camera travels, a film stage, or shared ids that morph</td></tr>
+            <tr><td>Build, then freeze</td><td class="wrap">Land each change on its word. Keep reading frames steady on purpose; never add wobble to satisfy the score.</td></tr>
+            <tr><td>A heading on every scene</td><td class="wrap">Headings mark chapters only: titles in the picture, lower thirds (<code>heading: "bottom"</code>), or no title at all</td></tr>
+            <tr><td>Locked, flat camera on every beat</td><td class="wrap">Push to the detail that matters (<code>camera: {to: [x, y, w, h], say}</code>), or truck through a world. The business treatment keeps reading frames locked by design.</td></tr>
             <tr><td>Small subject, big room</td><td class="wrap">Shot-scale variety: full-bleed type, plates, tones, close camera rects</td></tr>
-            <tr><td>The same grammar every beat</td><td class="wrap">Alternate wide and close, dense and bare; give turns a different cut</td></tr>
-            <tr><td>A screen-flat image</td><td class="wrap">A <code>lens</code> (grade, bloom, letterbox, leak), grain, and light in the scene (<code>glow</code>, <code>shine</code>, <code>spotlight</code>)</td></tr>
-            <tr><td>An edit set by the voice alone</td><td class="wrap">Rhythm: quick cuts into a long hold, a silent beat before the payoff, a button at the end</td></tr>
+            <tr><td>The same grammar every beat</td><td class="wrap">Vary the layout, the entrance and the cut; give the turn a <code>push</code> or a <code>panel</code></td></tr>
+            <tr><td>A screen-flat image</td><td class="wrap">Light on the subject (<code>shine</code>, <code>spotlight</code>, element <code>glow</code> on things that give light), texture, a plate with a <code>duotone</code> or <code>tint</code></td></tr>
+            <tr><td>An edit set by the voice alone</td><td class="wrap">Cut on action or on the stressed word, not only on sentence ends</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="small">Baseline: the default data-story scaffold scores 38 and the trailer playbook scores 100. A high score doesn't make a film good, but a low one reliably means slides.</p>
+      <p class="small">The score is structural and can be gamed: the default <code>data-story</code> scaffold scores 67 and night city 100. The real measure is the encoded film, <code>draft</code>'s motion verdict (seconds still under the voice), and looking at it.</p>
 
       <h3 id="case-study">Case study: <span class="serif-em">night city</span></h3>
       <p><code>examples/night-city</code> is a 47-second explainer built from a synthetic research brief on urban night heat. Every figure in it is sample data from made-up sources and is labelled that way. It is there to show craft, not facts. It went through repeated rounds with an independent reviewer.</p>
@@ -947,8 +948,8 @@ node engine/cli.mjs runlog my-podcast                      <span class="c"># mea
             <tr><td><code>belief</code></td><td class="wrap">"It's only a few degrees, right?"</td><td class="wrap">A push in on one quoted line, landing on "only".</td></tr>
             <tr><td><code>day-night</code></td><td class="wrap">"By day, the gap is small… after sunset, it can reach seven."</td><td class="wrap">The camera tilts up, and the chart becomes the sky. A <code>behind: true</code> day sky fades in on "day" and out at sunset.</td></tr>
             <tr><td><code>mechanism</code></td><td class="wrap">"Asphalt and dark roofs soak up almost all of the sunlight…"</td><td class="wrap">A push into one roof, where the heat fills it and <code>glow</code> lights the hot surface.</td></tr>
-            <tr><td><code>turn</code></td><td class="wrap">"But the heat is not shared evenly."</td><td class="wrap">The interruption: a kinetic <code>stack</code> on an <code>accent2</code> tone with an <code>iris</code>, and serif emphasis on "not" and "evenly".</td></tr>
-            <tr><td><code>hotspots</code></td><td class="wrap">"…twelve percent of streets produced forty percent of heat emergencies."</td><td class="wrap">An iris back into the world, which resumes from the last view. The camera tilts down to the street plan under the ground.</td></tr>
+            <tr><td><code>turn</code></td><td class="wrap">"But the heat is not shared evenly."</td><td class="wrap">The interruption: a hard cut to a kinetic <code>stack</code> on an <code>accent2</code> tone, with serif emphasis on "not" and "evenly".</td></tr>
+            <tr><td><code>hotspots</code></td><td class="wrap">"…twelve percent of streets produced forty percent of heat emergencies."</td><td class="wrap">A cut back into the world, which resumes from the last view. The camera tilts down to the street plan under the ground.</td></tr>
             <tr><td><code>works</code></td><td class="wrap">"Cool roofs cut rooftop heat by twenty to thirty degrees…"</td><td class="wrap">Back on the same roof, where a cool roof drains the heat.</td></tr>
             <tr><td><code>gap</code></td><td class="wrap">"Yet only eighteen of a hundred cities surveyed have a heat plan."</td><td class="wrap">The survey sits beside the plan: 100 shapes, with 18 lit in the accent on "eighteen".</td></tr>
             <tr><td><code>end</code></td><td class="wrap">"Seven degrees, every night. Start with the hottest blocks."</td><td class="wrap">A pull-back to the opening shot, changed. The 7°C bracket re-draws on "Seven" as a callback.</td></tr>
@@ -1044,8 +1045,10 @@ It must not feel like an HR slideshow. Free only: local draft voice, no paid gen
 
 Follow the clearframe-workplace skill: start from the document (start --document … --length …), the workplace
 treatment, a playbook (benefit-explainer, policy-change, client-update, training-moment or day-in-the-life),
-and one fill-in-the-blank picture per fact (match, vesting, deadline, week, expire, portal, inspect, choose,
-split, growth, hold, lookback, compose, drawdown). Every figure comes from the document and names it; critique names any it cannot find there.
+and one fill-in-the-blank picture per fact (match, vesting, deadline, limit, week, expire, portal, inspect, choose,
+split, growth, hold, lookback, compose, drawdown). Where the rule itself is the evidence, show the plan's own words
+in a canvas document and mark the clause as it is read; do the step in the app with a pointer that presses each
+control by id (examples/fsa-deadline). Every figure comes from the document and names it; critique names any it cannot find there.
 Run draft and fix what the verdict names until it says the picture keeps moving with the voice.</pre>
         </figure>
 
@@ -1073,7 +1076,7 @@ Keep my wording. Where a line breaks the clearframe-script rules (one idea per b
 - Split the script into beats of 5–15 spoken words and mark each beat's landing word.
 - Record the narration as one continuous take with one short style (the default). Write the energy into the lines: a fragment for the hook, a question, a pause before the key number.
 - Start from the <span class="ph">[concept-explainer]</span> playbook and the <span class="ph">[editorial]</span> treatment. Fill the beat plan in DIRECTION.md (purpose, picture, landing word) before building.
-- Draw mechanisms on canvas. Use tone and graphic transitions only at the turn.
+- Draw mechanisms on canvas. Use a tone and a panel only at the turn.
 - Draft voice only; measure the words with align --whisper.
 
 Script:
@@ -1081,14 +1084,14 @@ Script:
         </figure>
 
         <figure class="prompt-card" id="tpl-brand">
-          <figcaption><span class="mono-label">Template</span><strong>Brand spot</strong></figcaption>
-<pre class="prompt">Make a <span class="ph">[20–30]</span>-second brand spot for <span class="ph">[brand]</span> announcing <span class="ph">[one idea]</span>.
+          <figcaption><span class="mono-label">Template</span><strong>Product or feature announcement</strong></figcaption>
+<pre class="prompt">Make a <span class="ph">[30–45]</span>-second film for <span class="ph">[customers]</span> announcing <span class="ph">[one feature]</span> of <span class="ph">[product]</span>.
 
-- Use the brand-spot playbook and the brand treatment. Brand colours: accent <span class="ph">[#hex]</span>, accent2 <span class="ph">[#hex]</span>, as theme overrides on <span class="ph">[paper]</span>. Tell me if check warns about contrast.
-- Frame brand text: <span class="ph">[Brand]</span>. Use only the assets I provide (<span class="ph">[assets/logo.png]</span>). Don't redraw or generate a logo, people or product shots.
-- One idea, three supporting beats, and one call to action on the endcard: <span class="ph">[CTA]</span>.
-- Carry the hero object across cuts (morph by id, or an iris from its position). Echo trails or stepped copies can turn one shape into a composition.
-- sfx: normal. Show me looks for the hero beat before you build the rest.</pre>
+- Use the product-reveal playbook and the keynote treatment. Brand colours: accent <span class="ph">[#hex]</span>, accent2 <span class="ph">[#hex]</span>, as theme overrides on <span class="ph">[stage]</span>. Tell me if check warns about contrast.
+- Frame brand text: <span class="ph">[Brand]</span>. Use only the assets I provide (<span class="ph">[assets/logo.png]</span>, a real screenshot for the device window). Don't redraw or generate a logo, people or product shots.
+- One idea, two sourced specs, and one call to action on the endcard: <span class="ph">[CTA]</span>.
+- Carry the hero object across cuts (morph by shared id) and light it (shine, spotlight). No flashes, swells or lens looks.
+- sfx: subtle. Show me looks for the hero beat before you build the rest.</pre>
         </figure>
 
         <figure class="prompt-card" id="tpl-data">
@@ -1109,20 +1112,20 @@ Script:
 - Stops in story order: <span class="ph">[1 …]</span>, <span class="ph">[2 …]</span>, <span class="ph">[3 …]</span>, <span class="ph">[4 …]</span>. Lay them out so the camera never re-crosses old material, and finish on a pull-back to the opening shot, changed.
 - Before rendering, run world DIR and show me the map with the numbered camera rects.
 - Keep it alive: far layers at depth below 1 for parallax, behind: true for a change of state (<span class="ph">[the sky turning to night]</span>), glow on things that give light, a light particles field where it adds atmosphere, and labels that leave (exitAt) while the camera is away.
-- Interrupt the world once, at the turn: a kinetic card on a tone, with an iris in and out.
+- Interrupt the world once, at the turn: a kinetic card on a tone, cut in and out; the world resumes where the camera left it.
 - Every camera move should arrive by the first word of its line.</pre>
         </figure>
 
         <figure class="prompt-card" id="tpl-genre">
-          <figcaption><span class="mono-label">Template</span><strong>A trailer, documentary or reveal</strong></figcaption>
-<pre class="prompt">Make a <span class="ph">[45–60 s]</span> film about <span class="ph">[the idea, or reports/brief.md]</span>. It must not feel like slides. Read docs/cinema.md first.
+          <figcaption><span class="mono-label">Template</span><strong>A reveal or a title sequence</strong></figcaption>
+<pre class="prompt">Make a <span class="ph">[30–45 s]</span> <span class="ph">[product reveal | title sequence]</span> for <span class="ph">[the product, or the series]</span>. It must not feel like slides. Read skills/clearframe-motion/SKILL.md first.
 
-Genre: <span class="ph">[trailer | cold-open documentary | product reveal]</span>. Treatment: <span class="ph">[trailer | documentary | keynote]</span>.
+Playbook and treatment: <span class="ph">[product-reveal with keynote | title-sequence with cutpaper]</span>.
 
-1. Write a shot list in DIRECTION.md before any blocks: each beat's scale (wide, medium, close, insert), its camera move and why, and how it connects to the next shot.
-2. Build places in three planes with z and move the camera through them (dolly, truck, rack focus on the word that shifts attention). Start from sketch void, tunnel, skyline, horizon or title and make them yours.
-3. Give the edit rhythm: at least one silent beat before the payoff, montage shots that shorten, and a button at the end.
-4. Run critique until the cinema score is 90 or above, or every remaining tell is a choice you can defend. Then draft, open the sheet, and have a fresh reviewer judge it as film, not as slides.</pre>
+1. Write a shot list in DIRECTION.md before any blocks: each beat's scale (wide, medium, close, insert), its camera and why it moves, and the cut into the next shot. Never three identical scales in a row.
+2. Keep one subject on screen: one drawn object lit on the stage, or shapes that become each other across cuts (the same element id morphs). Push to the detail on the word that names it.
+3. Specs, names and dates are native type with a source. Nothing flashes, swells or bounces.
+4. Run critique until every remaining tell in the film score is a choice you can defend. Then draft until the motion verdict says READY, open the sheet, and have a fresh reviewer judge it as film, not as slides.</pre>
         </figure>
 
         <figure class="prompt-card" id="tpl-brand-kit">
@@ -1144,7 +1147,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
 - Set format.preset to vertical. World cameras re-frame on each beat's own foreground. Where a side-by-side composition can't survive the crop, set viewTall or lay that beat out differently.
 - Check with world DIR and sheet --draft on the vertical project. Fix any text that reaches outside a beat's view or renders too small.
 - Tighten to <span class="ph">[30–45]</span> s, keeping the hook, the turn and the payoff. The first idea lands by 3 s.
-- Set captions: "pop", and keep every source line readable at phone size.</pre>
+- Set captions: "pop" for the social cut, and keep every source line readable at phone size.</pre>
         </figure>
       </section>
 
@@ -1156,25 +1159,29 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <figcaption><span class="mono-label">Style</span><strong>Sketchbook</strong></figcaption>
 <pre class="prompt">Style: the sketchbook treatment, a hand-drawn explainer. Rough strokes that draw on as they are named. Hand lettering for labels, with display type only for the one big word. Red pencil (accent) for the subject, blue (accent2) for motion and notes. Stepped motion at 12 fps with a gentle line boil, and text arriving word by word.</pre>
           </figure>
-          <figure class="prompt-card" id="style-noir">
-            <figcaption><span class="mono-label">Style</span><strong>Noir</strong></figcaption>
-<pre class="prompt">Style: the noir treatment, documentary in feel. Noir palette on the glow backdrop, with heavy grain and vignette. Duotone plates carry place and people and drift slowly. Gold only for the thing the viewer must remember. Hold longer than feels safe on the turn; iris only into the revelation. Voice: low, measured, intimate.</pre>
+          <figure class="prompt-card" id="style-workplace">
+            <figcaption><span class="mono-label">Style</span><strong>Workplace</strong></figcaption>
+<pre class="prompt">Style: the workplace treatment, a film people are sent rather than one they chose. Meridian palette (meadow for health and wellbeing, briefing for training and policy), geometric type, snappy but restrained motion, cuts, and a push at the chapter turn. One object of the film's own stays across cuts (a cast: a paycheck, a jar, a calendar). Each fact is a workplace sketch that changes on its word (match, vesting, deadline, limit, expire); the plan's own words in a document with the clause marked; the step in the app pressed by a pointer. sfx: subtle.</pre>
           </figure>
-          <figure class="prompt-card" id="style-kinetic">
-            <figcaption><span class="mono-label">Style</span><strong>Kinetic</strong></figcaption>
-<pre class="prompt">Style: the kinetic treatment, a manifesto that stops the scroll. Pop palette, snappy motion, cascade type. The words are the picture: a kinetic stack with one or two emphasis words per phrase, in phrases of 3–6 words. Cut on the beat, whip only between ideas, and a tone scene every 10–15 s. sfx: punchy.</pre>
+          <figure class="prompt-card" id="style-editorial">
+            <figcaption><span class="mono-label">Style</span><strong>Editorial</strong></figcaption>
+<pre class="prompt">Style: the editorial treatment, a report told calmly. Porcelain palette, Inter with the single feeling word in serif italic, gentle motion, fades, and a panel only at chapter turns. One claim per beat, with the number landing on the stressed word. Colour-block (tone: accent) the one figure the film is about. Every figure sourced and dated on screen.</pre>
           </figure>
-          <figure class="prompt-card" id="style-mosaic">
-            <figcaption><span class="mono-label">Style</span><strong>Mosaic</strong></figcaption>
-<pre class="prompt">Style: the mosaic treatment, a film laid in tiles. Mosaic palette on the mosaic backdrop. Hero shapes set in tesserae, drawn big enough for at least 12 tiles across. Shapes assemble tile by tile on their cue (enter: assemble) and scatter when they stop being true (exit: scatter). Rings for round things, contour rows for shapes that should read hand-laid, and glow on the gold tiles (moon, stars, windows). Use a recolor front for time passing (dusk to night), and build: fly for the hero's entrance. Iris only at chapter turns.</pre>
+          <figure class="prompt-card" id="style-blueprint">
+            <figcaption><span class="mono-label">Style</span><strong>Blueprint</strong></figcaption>
+<pre class="prompt">Style: the blueprint treatment, a technical walkthrough. Blueprint palette on the grid backdrop, geometric type with mono labels, snappy motion and a push between steps. Every part is labelled in mono, and lines draw on in the order the voice names them. Technical terms type on (enter: type). One system diagram built across several beats (morph by id), with packets travelling along its links.</pre>
           </figure>
-          <figure class="prompt-card" id="style-print">
-            <figcaption><span class="mono-label">Style</span><strong>Printed</strong></figcaption>
-<pre class="prompt">Style: printed, like a 1938 comic cover (the pulp treatment; woodblock, constructivist or handheld for other eras). Every shape is printed: flat process colour a few pixels off register under a black key line, Ben-Day dots for tints and skies, worn ink on the type. Photos become halftones in the palette's ink (plate treatment halftone). Draw the force of each moment (start from benday-burst) and cut on the hit. Keep charts clean with print: false and every figure sourced.</pre>
+          <figure class="prompt-card" id="style-explanation">
+            <figcaption><span class="mono-label">Style</span><strong>Explanation</strong></figcaption>
+<pre class="prompt">Style: the explanation treatment, a picture that changes. Ink palette, geometric type, gentle motion, cuts. Intuition before symbols: show the picture change, then name it. One idea changes at a time, a colour means one thing for the whole film, and the same object stays in the same place across beats. Draw it with graph, accumulate, estimate or field from a stated formula or a labelled simulation, and hold after each change long enough to see what it did.</pre>
+          </figure>
+          <figure class="prompt-card" id="style-cutpaper">
+            <figcaption><span class="mono-label">Style</span><strong>Cut paper</strong></figcaption>
+<pre class="prompt">Style: the cutpaper treatment, a title sequence. Bass palette on the paper backdrop, snappy motion, letters arriving one by one, cuts on the music. Flat shapes in two or three colours with solid rough edges: no gradients, glows or lens effects. Shapes become each other across cuts (the same element id morphs), and the title is set in poster capitals like one more shape.</pre>
           </figure>
           <figure class="prompt-card" id="style-custom">
             <figcaption><span class="mono-label">Style</span><strong>A look with no preset</strong></figcaption>
-<pre class="prompt">Style: <span class="ph">[a risograph print look]</span>. No treatment matches it, so map it to existing primitives and tell me the mapping before you build. For example: <span class="ph">[pop]</span> palette, heavy static grain, blend: multiply on overlapping shapes, echo step copies offset a few pixels for misregistration, stepped motion (fps 12). Nothing drawn may imply data. Render one beat with looks DIR --beat ID --draft so I can compare palettes first.</pre>
+<pre class="prompt">Style: <span class="ph">[a printed annual-report look]</span>. No treatment matches it, so map it to existing primitives and tell me the mapping before you build. For example: <span class="ph">[paper]</span> palette with our accent as an override, bookish type for headlines, plates with treatment: halftone, light static grain, gentle motion and fades. Nothing drawn may imply data. Render one beat with looks DIR --beat ID --draft so I can compare palettes first.</pre>
           </figure>
         </div>
       </section>
@@ -1198,7 +1205,7 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
           <figure class="prompt-card"><figcaption><strong>Numbers on the word</strong></figcaption>
 <pre class="prompt">Land every number on its word: add land to each stat, delta and chart so the count finishes as it is said. Then check that the narration, the screen and the sources all agree.</pre></figure>
           <figure class="prompt-card"><figcaption><strong>Unfreeze a hold</strong></figcaption>
-<pre class="prompt">Something freezes around <span class="ph">[0:24]</span>. Add a loop on the subject, a drift or ambient art under the text, or split the beat in two.</pre></figure>
+<pre class="prompt">Something freezes around <span class="ph">[0:24]</span> while the voice talks. Land a change on the word being said there (a mark on the clause, a value counting, the next step drawing on), or split the beat in two. If it is a deliberate reading hold, declare it with pace: "hold". Don't add wobble or ambient loops to fill it.</pre></figure>
           <figure class="prompt-card"><figcaption><strong>Measure the words</strong></figcaption>
 <pre class="prompt">Measure the words with align --whisper, then run check. Tell me which beats still have estimated timing, and don't call interpolated timestamps measured.</pre></figure>
           <figure class="prompt-card"><figcaption><strong>Rough cut before polish</strong></figcaption>
@@ -1253,7 +1260,8 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
               <tr><td class="wrap">"Generate a few clips to test the renderer."</td><td class="wrap">"Draft voice and local renders. Run plan and ask me before any paid call."</td><td class="wrap">No paid calls merely to test code.</td></tr>
               <tr><td class="wrap">"Make it all AI footage."</td><td class="wrap">"Native graphics carry the information, with at most a short insert."</td><td class="wrap">The default review threshold is 20% of runtime, and footage is illustration, not evidence.</td></tr>
               <tr><td class="wrap">"Put the whole paragraph on screen."</td><td class="wrap">"One sentence on screen; the voice carries the rest."</td><td class="wrap">Viewers read about 3 words a second while listening, and text that overflows fails.</td></tr>
-              <tr><td class="wrap">"Iris between every scene." / "Colour-block every beat."</td><td class="wrap">"Graphic transitions and tones only at turns."</td><td class="wrap">Punctuation stops meaning anything when it's everywhere, and critique warns.</td></tr>
+              <tr><td class="wrap">"A panel between every scene." / "Colour-block every beat."</td><td class="wrap">"A panel and a tone only at turns."</td><td class="wrap">Punctuation stops meaning anything when it's everywhere, and critique warns.</td></tr>
+              <tr><td class="wrap">"Make it cinematic: letterbox, a grade, flash cuts, a riser."</td><td class="wrap">"Make the picture change with the voice, on its words."</td><td class="wrap">Film looks were retired and are refused by name: under a benefits or policy film they read as a sales pitch.</td></tr>
               <tr><td class="wrap">"Clean up the podcast wording."</td><td class="wrap">"Keep vo verbatim; give the moments pictures."</td><td class="wrap"><code>vo</code> must match the recording.</td></tr>
               <tr><td class="wrap">"Check passes, ship it."</td><td class="wrap">"Open the sheet, watch the draft, then run a fresh review."</td><td class="wrap">Diagnostics don't establish visual quality or factual correctness.</td></tr>
               <tr><td class="wrap">"Make it feel revolutionary."</td><td class="wrap">"Calm, calibrated language: tends to, about, likely."</td><td class="wrap">Hype and slogans read as slop.</td></tr>
@@ -1275,64 +1283,42 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
         <table>
           <thead><tr><th>Treatment</th><th>Look</th><th>Best for</th><th>Signature rules</th></tr></thead>
           <tbody>
-            <tr><td><code>editorial</code></td><td class="wrap">paper · gentle · fade · grain · editorial frame · serif emphasis · panel at chapter turns · sfx subtle</td><td class="wrap">Reports, research digests, analysis with a few strong numbers</td><td class="wrap">One claim per beat; colour-block the one figure the film is about.</td></tr>
-            <tr><td><code>noir</code></td><td class="wrap">noir · glow backdrop · heavy grain + vignette · gentle · fade · iris at chapter turns</td><td class="wrap">True stories, investigations, history, premium reveals</td><td class="wrap">Duotone plates; hold on the turn; gold only for what must be remembered.</td></tr>
-            <tr><td><code>kinetic</code></td><td class="wrap">pop · <strong>wide</strong> voice (capitals, marker emphasis) · snappy · <code>cascade</code> text · cut · kinetic stack · whip at chapter turns · sfx punchy</td><td class="wrap">Social cuts, launches, opinion pieces, scroll-stopping hooks</td><td class="wrap">Words are the picture; a tone every 10–15 s; phrases of 3–6 words.</td></tr>
-            <tr><td><code>sketchbook</code></td><td class="wrap">sketchbook · paper backdrop · spring · <code>words</code> text · cut · rough strokes with boil · hand font · 12 fps steps</td><td class="wrap">How things work, lessons, whiteboard explainers</td><td class="wrap">Draw the mechanism; hand lettering for labels; red for the subject, blue for notes.</td></tr>
-            <tr><td><code>blueprint</code></td><td class="wrap">blueprint · <strong>typewriter</strong> voice · grid backdrop · snappy · push · mono labels · frame · wipe at chapter turns</td><td class="wrap">Engineering, systems, architecture, technical walkthroughs</td><td class="wrap">Label every part in mono; scramble for terms; one system built across beats.</td></tr>
-            <tr><td><code>audiogram</code></td><td class="wrap">electric · glow · snappy · <code>words</code> text · cut · kinetic highlight · whip at chapter turns · sfx off</td><td class="wrap">Podcast and interview clips, conversations, talks</td><td class="wrap">Never edit vo; speaker tags; draw a concrete noun every 8–15 s.</td></tr>
-            <tr><td><code>brand</code></td><td class="wrap">paper · <strong>didone</strong> voice (Playfair with its italic) · spring · cut · persistent frame · iris at chapter turns · sfx normal</td><td class="wrap">Brand intros, announcements, product moments</td><td class="wrap">Echo trails and stepped copies; carry the hero across cuts.</td></tr>
-            <tr><td><code>calm</code></td><td class="wrap">forest · glow · gentle (low intensity) · fade · sfx off</td><td class="wrap">Wellbeing, reflective stories, gentle tutorials, children</td><td class="wrap">Slow everything; no graphic transitions; nothing flashes.</td></tr>
-            <tr class="group"><td colspan="4">Film looks: each sets a <code>lens</code></td></tr>
-            <tr><td><code>trailer</code></td><td class="wrap">noir · <strong>condensed</strong> voice (Big Shoulders capitals, underlined) · letterbox · bleach grade · bloom · aberration · handheld · <code>letters</code> text · cut and flash · sfx normal</td><td class="wrap">Launches, announcements, teasers: anticipation, not explanation</td><td class="wrap">Cold open, rising montage, silence, title, button; white-on-black type cards.</td></tr>
-            <tr><td><code>documentary</code></td><td class="wrap">ember · warm grade · leak · handheld · heavy grain · lower thirds · fade</td><td class="wrap">True stories, reportage, case studies</td><td class="wrap">Start mid-scene; handheld when observing, locked for data; real imagery graded in.</td></tr>
-            <tr><td><code>keynote</code></td><td class="wrap">stage palette · <strong>geometric</strong> voice (Space Grotesk light, bold emphasis) · cool grade · bloom · iris at chapter turns</td><td class="wrap">Product reveals and feature launches</td><td class="wrap">One lit object; parts, then the whole; specs as full-frame inserts.</td></tr>
-            <tr><td><code>cutpaper</code></td><td class="wrap">bass palette · paper backdrop · snappy · <code>letters</code> text · cut · solid rough edges · no lens</td><td class="wrap">Title sequences, series and podcast intros, posters in motion</td><td class="wrap">Flat shapes that become each other across cuts; condensed caps set like shapes; cut on the music.</td></tr>
-            <tr><td colspan="4" class="wrap small">Each film look names its playbook: <code>new DIR --treatment documentary</code> or <code>ingest DIR --markdown report.md --treatment documentary</code> starts from <code>cold-open</code> rather than a deck-shaped report arc (trailer → trailer, keynote → product-reveal, cutpaper → title-sequence).</td></tr>
-            <tr class="group"><td colspan="4">Report and craft looks</td></tr>
-            <tr><td><code>mosaic</code></td><td class="wrap">mosaic palette · mosaic backdrop · gentle · <code>words</code> text · cut · canvas <code>mosaic</code> tiles · iris at chapter turns · sfx subtle</td><td class="wrap">Stories, heritage and culture, nature: anything that should feel handmade and luminous</td><td class="wrap">Shapes assemble tile by tile and scatter when no longer true; rings for round things, rows for walls and skies; glow on gold tiles.</td></tr>
-            <tr class="group"><td colspan="4">Print and craft looks (after <em>Superman in Flight</em>: one subject made by many processes)</td></tr>
-            <tr><td><code>pulp</code></td><td class="wrap">newsprint palette · <strong>condensed</strong> voice · paper · snappy · canvas <code>print: newsprint</code> · panel at chapter turns · sfx punchy</td><td class="wrap">Origin stories, action and stakes, myth-busting</td><td class="wrap">Colour off register under a black key line; Ben-Day tints, not opacity; one action per panel; captions in boxes.</td></tr>
-            <tr><td><code>woodblock</code></td><td class="wrap">woodblock palette · paper · gentle · serif emphasis · wipe at chapter turns</td><td class="wrap">Water, weather, journeys, quiet drama</td><td class="wrap">Flat colour in ink key lines; bokashi gradients; the sea cut in engraved lines; a small distant subject for scale.</td></tr>
-            <tr><td><code>constructivist</code></td><td class="wrap">constructivist palette · <strong>condensed</strong> voice · snappy · canvas <code>print: letterpress</code> · wipe</td><td class="wrap">Manifestos, campaigns, numbers stated as demands</td><td class="wrap">Two inks and cream; everything leans on a diagonal; photographs as halftones; cut hard.</td></tr>
-            <tr><td><code>deco</code></td><td class="wrap">deco palette · <strong>bookish</strong> voice (DM Serif Display with its italic) · glow · bloom · <code>letters</code> text · fade · iris at chapter turns</td><td class="wrap">Premieres, launches, cities, invitations</td><td class="wrap">Gradients, never outlines; symmetry and sunbursts; gold takes the shine.</td></tr>
-            <tr><td><code>handheld</code></td><td class="wrap">lcd palette · <strong>typewriter</strong> voice · canvas <code>mosaic</code> style pixel · mono type · stepped motion (12 fps) · cut</td><td class="wrap">Games, retro technology, levels and progress</td><td class="wrap">Four shades only; shapes in pixels with pixel-edge outlines; move in whole cells.</td></tr>
-            <tr><td><code>sampler</code></td><td class="wrap">gallery palette · paper · gentle · canvas <code>mosaic</code> style stitch · serif emphasis · fade</td><td class="wrap">Home, craft, care, heritage</td><td class="wrap">Cross-stitch motifs assembled row by row inside a stitched border; words stay native type.</td></tr>
-            <tr><td><code>gallery</code></td><td class="wrap">gallery palette · paper · gentle · cut · starts from <code>style-relay</code></td><td class="wrap">Histories, comparisons across eras or styles, catalogues</td><td class="wrap">A sheet of plates travelled by one camera; same subject, a different process per plate; cross each border on a downbeat.</td></tr>
-            <tr class="group"><td colspan="4">Typographic looks (each sets a <code>type</code> voice; <code>tech</code> is now <strong>wide</strong>, <code>arena</code> and <code>buoyant</code> <strong>geometric</strong>)</td></tr>
-            <tr><td><code>monolith</code></td><td class="wrap">concrete palette · <strong>wide</strong> voice (Archivo Expanded capitals, marker emphasis) · grid backdrop · snappy at full intensity · <code>words</code> text · push · wipe at chapter turns · sfx punchy · starts from <code>sizzle</code></td><td class="wrap">Manifestos, campaigns, architecture, sport, hard launches</td><td class="wrap">Six-word headlines; rectangles, rules and the grid only; a slab of accent behind one number; everything arrives by pushing.</td></tr>
-            <tr><td><code>atelier</code></td><td class="wrap">porcelain palette · <strong>didone</strong> voice (Playfair with its italic) · gentle · zoom · iris at chapter turns · lower thirds · warm grade · sfx off · starts from <code>creative-process</code></td><td class="wrap">Fashion, craft, interiors, food and culture told like a magazine feature</td><td class="wrap">Short statements with the feeling word in italic; two thirds of the frame empty; materials and depth plates; move like a slow lens.</td></tr>
+            <tr><td><code>workplace</code></td><td class="wrap">meridian · <strong>geometric</strong> voice · snappy · cut · push at chapter turns · faint grain · no motion blur · sfx subtle · one of five looks per project (clean, notebook, brief, meadow, daylight) · starts from <code>benefit-explainer</code></td><td class="wrap">Benefits, retirement, pay, policy, training, onboarding and client updates: films people are sent, not films they chose</td><td class="wrap">Each fact is a workplace sketch that changes on its word; one object of the film's own across cuts; open on what the viewer could lose or gain; headings only for chapters.</td></tr>
+            <tr><td><code>editorial</code></td><td class="wrap">porcelain · inter · gentle · fade · grain · serif emphasis · panel at chapter turns · sfx subtle</td><td class="wrap">Reports, research digests, analysis with a few strong numbers</td><td class="wrap">One claim per beat; the number lands on the stressed word; colour-block the one figure the film is about.</td></tr>
+            <tr><td><code>business</code></td><td class="wrap">paper · inter · gentle (low intensity) · cut · film <code>camera: "none"</code> · <code>lens.blur: 0</code> · no rough strokes · sfx subtle</td><td class="wrap">Business reports, architecture walkthroughs and pull request explainers</td><td class="wrap">The camera stays locked while people read and moves only to reveal a relationship; staged nodes and drawn connectors; no repeating B-roll.</td></tr>
+            <tr><td><code>explanation</code></td><td class="wrap">ink · <strong>geometric</strong> voice · gentle · cut · sfx off</td><td class="wrap">How or why something works, on any subject: the idea, not a summary</td><td class="wrap">Intuition before symbols; one idea changes at a time; a colour means one thing for the whole film; hold after each change.</td></tr>
+            <tr><td><code>sketchbook</code></td><td class="wrap">sketchbook · paper backdrop · gentle · <code>words</code> text · cut · rough strokes with boil · 12 fps steps · sfx subtle</td><td class="wrap">How things work, lessons, whiteboard explainers</td><td class="wrap">Draw the mechanism; hand lettering only for a big word; red for the subject, blue for motion and notes.</td></tr>
+            <tr><td><code>blueprint</code></td><td class="wrap">blueprint · <strong>geometric</strong> voice · grid backdrop · snappy · push · mono labels · wipe at chapter turns · sfx subtle</td><td class="wrap">Engineering, systems, architecture, technical walkthroughs</td><td class="wrap">Label every part in mono; terms type on (<code>enter: type</code>); one system diagram built across beats.</td></tr>
+            <tr><td><code>audiogram</code></td><td class="wrap">ink · grain · snappy · <code>words</code> text · cut · kinetic highlight · push at chapter turns · sfx off</td><td class="wrap">Podcast and interview clips, conversations, talks</td><td class="wrap">Never edit vo; speaker tags; draw a concrete noun every 8–15 s; open on the hook moment.</td></tr>
+            <tr><td><code>research-study</code></td><td class="wrap">research-paper · inter · gentle (low intensity) · cut · fade at chapter turns · sfx off</td><td class="wrap">Paired measured series, clearly identified intervals, restrained explanatory inserts</td><td class="wrap">Observations in charcoal, a comparator in orange; explicit units; an interval has a stated meaning and exact dates.</td></tr>
+            <tr><td><code>keynote</code></td><td class="wrap">stage palette · <strong>geometric</strong> voice · grain + vignette · gentle · <code>lines</code> text · cut · motion blur · sfx subtle · starts from <code>product-reveal</code></td><td class="wrap">Product reveals and feature launches</td><td class="wrap">One lit object; parts, then the whole; specs as inserts with a source; type beside the object, never over it.</td></tr>
+            <tr><td><code>cutpaper</code></td><td class="wrap">bass palette · paper backdrop · snappy · <code>letters</code> text · cut · solid rough edges · sfx normal · starts from <code>title-sequence</code></td><td class="wrap">Title sequences, series and podcast intros, posters in motion</td><td class="wrap">Flat shapes that become each other across cuts; condensed caps set like shapes; cut on the music.</td></tr>
+            <tr><td colspan="4" class="wrap small">A treatment that names a playbook starts from it: <code>new DIR --treatment keynote</code> scaffolds <code>product-reveal</code>, <code>cutpaper</code> scaffolds <code>title-sequence</code>. The film-look treatments (trailer, documentary, kinetic and the rest) were removed in the library audit; <code>treatments</code> lists what remains.</td></tr>
           </tbody>
         </table>
       </div>
 
       <h3 id="vocab-palettes">Palettes</h3>
-      <p class="small">The swatches show <code>bg</code>, <code>ink</code>, <code>accent</code> and <code>accent2</code>. Use them as <code>"theme": "noir"</code> or <code>{"base": "noir", "accent": "#…"}</code>.</p>
+      <p class="small">The swatches show <code>bg</code>, <code>ink</code>, <code>accent</code> and <code>accent2</code>. Use them as <code>"theme": "meridian"</code> or <code>{"base": "meridian", "accent": "#…"}</code>. <code>themes</code> lists all 15.</p>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Palette</th><th>Swatch</th><th>Character</th></tr></thead>
           <tbody>
+            <tr><td><code>meridian</code></td><td><span class="sw"><i style="--c:#fbf8f3"></i><i style="--c:#14233c"></i><i style="--c:#b8422b"></i><i style="--c:#1f7a8c"></i></span></td><td class="wrap">Warm paper white with deep navy type, a brick-coral accent and a sea teal. Financial services and client films (the workplace default).</td></tr>
+            <tr><td><code>meadow</code></td><td><span class="sw"><i style="--c:#f6f4ec"></i><i style="--c:#1d2b22"></i><i style="--c:#2c6e49"></i><i style="--c:#8a4f9e"></i></span></td><td class="wrap">Oat cream with a forest green accent and a soft plum. Benefits, health and wellbeing films.</td></tr>
+            <tr><td><code>briefing</code></td><td><span class="sw"><i style="--c:#f2f4f7"></i><i style="--c:#111827"></i><i style="--c:#1d4ed8"></i><i style="--c:#b45309"></i></span></td><td class="wrap">Cool light grey with near-black type, a confident blue and an amber warning. Training, security and policy films.</td></tr>
+            <tr><td><code>daylight</code></td><td><span class="sw"><i style="--c:#f4f7fa"></i><i style="--c:#172c38"></i><i style="--c:#176b70"></i><i style="--c:#7956ae"></i></span></td><td class="wrap">Cool porcelain with deep teal and violet. Airy professional films.</td></tr>
             <tr><td><code>paper</code></td><td><span class="sw"><i style="--c:#f5f3ed"></i><i style="--c:#222831"></i><i style="--c:#315cce"></i><i style="--c:#c2641f"></i></span></td><td class="wrap">Warm off-white, ink-blue accent. Calm reports and explainers.</td></tr>
-            <tr><td><code>ink</code></td><td><span class="sw"><i style="--c:#101721"></i><i style="--c:#f4f4ed"></i><i style="--c:#76cbb8"></i><i style="--c:#f0b86e"></i></span></td><td class="wrap">Deep slate with mint and amber. Night-time, technical, reflective.</td></tr>
-            <tr><td><code>editorial</code></td><td><span class="sw"><i style="--c:#f7efe1"></i><i style="--c:#34281f"></i><i style="--c:#b13e2e"></i><i style="--c:#2f6b6f"></i></span></td><td class="wrap">Newsprint cream with brick red and teal. Stories, essays, culture.</td></tr>
-            <tr><td><code>signal</code></td><td><span class="sw"><i style="--c:#edf3f8"></i><i style="--c:#102e46"></i><i style="--c:#006dae"></i><i style="--c:#c75a12"></i></span></td><td class="wrap">Cool paper with strong blue. Product, data, operational updates.</td></tr>
+            <tr><td><code>porcelain</code></td><td><span class="sw"><i style="--c:#f6f1ea"></i><i style="--c:#1a1816"></i><i style="--c:#8c2f39"></i><i style="--c:#4d6a6d"></i></span></td><td class="wrap">Porcelain paper, near-black ink, an oxblood rose and a slate teal. Editorial reports, craft and culture.</td></tr>
+            <tr><td><code>research-paper</code></td><td><span class="sw"><i style="--c:#fafafa"></i><i style="--c:#24272c"></i><i style="--c:#b0572a"></i><i style="--c:#6a5a9c"></i></span></td><td class="wrap">White research field, charcoal observations, a burnt-orange comparison and a restrained violet second series.</td></tr>
+            <tr><td><code>ink</code></td><td><span class="sw"><i style="--c:#101721"></i><i style="--c:#f4f4ed"></i><i style="--c:#76cbb8"></i><i style="--c:#f0b86e"></i></span></td><td class="wrap">Deep slate with mint and amber. Night-time, technical, reflective; explanations and audiograms.</td></tr>
             <tr><td><code>midnight</code></td><td><span class="sw"><i style="--c:#0c1024"></i><i style="--c:#eef0ff"></i><i style="--c:#9aa5ff"></i><i style="--c:#ffb86b"></i></span></td><td class="wrap">Indigo night with periwinkle and apricot. Launches, science, big ideas.</td></tr>
-            <tr><td><code>forest</code></td><td><span class="sw"><i style="--c:#0f1d17"></i><i style="--c:#eef5ee"></i><i style="--c:#a3dc7f"></i><i style="--c:#f2c35b"></i></span></td><td class="wrap">Deep green with lime and gold. Nature, food, travel, sustainability.</td></tr>
-            <tr><td><code>ember</code></td><td><span class="sw"><i style="--c:#1b1311"></i><i style="--c:#fbefe6"></i><i style="--c:#ff8a57"></i><i style="--c:#ffd27a"></i></span></td><td class="wrap">Charred brown with coral and saffron. Warm personal stories.</td></tr>
-            <tr><td><code>mono</code></td><td><span class="sw"><i style="--c:#fafafa"></i><i style="--c:#111111"></i><i style="--c:#d12f1f"></i><i style="--c:#111111"></i></span></td><td class="wrap">Black on white with a single red. Stark data, manifestos, myth-busting.</td></tr>
-            <tr><td><code>pop</code></td><td><span class="sw"><i style="--c:#ffd84a"></i><i style="--c:#141414"></i><i style="--c:#b01030"></i><i style="--c:#1d3fbf"></i></span></td><td class="wrap">Poster yellow with crimson and cobalt. Loud social cuts, bold claims.</td></tr>
-            <tr><td><code>electric</code></td><td><span class="sw"><i style="--c:#08080f"></i><i style="--c:#f4f4ff"></i><i style="--c:#5cf2d6"></i><i style="--c:#ff5ccd"></i></span></td><td class="wrap">Near-black with neon mint and magenta. Tech, culture, nightlife.</td></tr>
+            <tr><td><code>mono</code></td><td><span class="sw"><i style="--c:#fafafa"></i><i style="--c:#111111"></i><i style="--c:#d12f1f"></i><i style="--c:#111111"></i></span></td><td class="wrap">Black on white with a single red. Stark data.</td></tr>
             <tr><td><code>blueprint</code></td><td><span class="sw"><i style="--c:#0d2b52"></i><i style="--c:#f1f6ff"></i><i style="--c:#7fd4ff"></i><i style="--c:#ffd166"></i></span></td><td class="wrap">Drafting blue with sky and amber lines. Engineering, diagrams.</td></tr>
-            <tr><td><code>clay</code></td><td><span class="sw"><i style="--c:#efe3d6"></i><i style="--c:#2b1d17"></i><i style="--c:#a8431f"></i><i style="--c:#2e5f6e"></i></span></td><td class="wrap">Terracotta paper with rust and teal. Craft, history, warm documentary.</td></tr>
-            <tr><td><code>noir</code></td><td><span class="sw"><i style="--c:#111111"></i><i style="--c:#f2efe9"></i><i style="--c:#e9c46a"></i><i style="--c:#e76f51"></i></span></td><td class="wrap">Cinema black with gold and vermilion. Drama, true stories, reveals.</td></tr>
             <tr><td><code>sketchbook</code></td><td><span class="sw"><i style="--c:#f2ecdf"></i><i style="--c:#433e39"></i><i style="--c:#c2344d"></i><i style="--c:#3a67b3"></i></span></td><td class="wrap">Drawing paper with graphite, red and blue pencil. Hand-drawn explainers.</td></tr>
-            <tr><td><code>mosaic</code></td><td><span class="sw"><i style="--c:#16225e"></i><i style="--c:#f3ead3"></i><i style="--c:#e9b949"></i><i style="--c:#e2643c"></i></span></td><td class="wrap">Ultramarine ground with ivory, gold, coral and turquoise tesserae. Pairs with the mosaic backdrop and canvas mosaic.</td></tr>
-            <tr><td><code>gallery</code></td><td><span class="sw"><i style="--c:#f3f0e8"></i><i style="--c:#1c2236"></i><i style="--c:#b5242c"></i><i style="--c:#2f5d8a"></i></span></td><td class="wrap">The museum catalogue: cream stock, midnight ink, an oxblood rule. Plates, captions, histories.</td></tr>
-            <tr><td><code>woodblock</code></td><td><span class="sw"><i style="--c:#ecdfc2"></i><i style="--c:#1a1814"></i><i style="--c:#1f3a6b"></i><i style="--c:#c23b22"></i></span></td><td class="wrap">Ukiyo-e: Prussian blue and beni red on washi. Water, weather, journeys.</td></tr>
-            <tr><td><code>newsprint</code></td><td><span class="sw"><i style="--c:#efe3bf"></i><i style="--c:#141210"></i><i style="--c:#b8261d"></i><i style="--c:#2e64c6"></i></span></td><td class="wrap">A 1938 comic cover: process colours on yellowed newsprint, black key lines.</td></tr>
-            <tr><td><code>constructivist</code></td><td><span class="sw"><i style="--c:#ece2cc"></i><i style="--c:#16130f"></i><i style="--c:#bd281d"></i><i style="--c:#8a5a14"></i></span></td><td class="wrap">Two inks and cream, ochre for a third voice. Manifestos and campaigns.</td></tr>
-            <tr><td><code>deco</code></td><td><span class="sw"><i style="--c:#0b1733"></i><i style="--c:#f2e6c9"></i><i style="--c:#d9a840"></i><i style="--c:#3fa1a8"></i></span></td><td class="wrap">A streamline poster at night: navy, gold, cream and a teal sea. Premieres and launches.</td></tr>
-            <tr><td><code>lcd</code></td><td><span class="sw"><i style="--c:#9bbc0f"></i><i style="--c:#0f380f"></i><i style="--c:#1a451a"></i><i style="--c:#306230"></i></span></td><td class="wrap">A 1989 handheld: four shades of green. Games, retro tech, step-by-step logic.</td></tr>
+            <tr><td><code>stage</code></td><td><span class="sw"><i style="--c:#050507"></i><i style="--c:#f5f5f7"></i><i style="--c:#3b9eff"></i><i style="--c:#c77dff"></i></span></td><td class="wrap">A near-black keynote stage, white type and one electric blue: the object is lit, everything else falls away.</td></tr>
+            <tr><td><code>noir</code></td><td><span class="sw"><i style="--c:#111111"></i><i style="--c:#f2efe9"></i><i style="--c:#e9c46a"></i><i style="--c:#e76f51"></i></span></td><td class="wrap">Deep black with gold and vermilion. Serious stories and premium reveals.</td></tr>
+            <tr><td><code>bass</code></td><td><span class="sw"><i style="--c:#efe6d2"></i><i style="--c:#141414"></i><i style="--c:#c2241b"></i><i style="--c:#1f3f73"></i></span></td><td class="wrap">Cut paper: cream stock, black, a hot red and a deep navy. Title sequences and posters.</td></tr>
           </tbody>
         </table>
       </div>
@@ -1353,21 +1339,17 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>word</code></td><td class="wrap"><code>maxGap</code></td><td class="wrap">One word at a time, held through pauses shorter than <code>maxGap</code>.</td></tr>
             <tr><td><code>stack</code></td><td class="wrap"><code>emphasis</code>, <code>emphasisStyle</code>, <code>upper</code></td><td class="wrap">Poster type that builds word by word and breaks at sentences, with emphasis words larger in the accent.</td></tr>
             <tr class="group"><td colspan="3"><code>captions</code> (film)</td></tr>
-            <tr><td><code>true</code></td><td class="wrap"></td><td class="wrap">Phrase captions on a soft plate.</td></tr>
-            <tr><td><code>"auto"</code></td><td class="wrap"></td><td class="wrap">On for vertical formats.</td></tr>
-            <tr><td><code>"pop"</code></td><td class="wrap"></td><td class="wrap">Social captions: heavy outlined 3–4 word phrases, with the spoken word on a tilted accent pill.</td></tr>
+            <tr><td><code>"auto"</code></td><td class="wrap">default</td><td class="wrap">On for every narrated film, to the broadcast standard: two lines of at most 42 characters (28 vertical), timed to the measured words, white on a translucent box, moved to the top when the picture has type in the bottom band. <code>check</code> warns when a caption covers the picture's type.</td></tr>
+            <tr><td><code>true</code></td><td class="wrap"></td><td class="wrap">The same standard captions, set explicitly.</td></tr>
+            <tr><td><code>"pop"</code></td><td class="wrap"></td><td class="wrap">Social captions for vertical clips: a few words at a time in heavy type, the spoken word in an accent pill.</td></tr>
             <tr><td><code>false</code> / <code>"off"</code></td><td class="wrap"></td><td class="wrap">No burned captions (<code>captions DIR</code> still exports SRT/VTT).</td></tr>
             <tr class="group"><td colspan="3"><code>type</code> (film default, usually from the treatment, or per beat): the display family for titles, statements, endcards, chapters, highlights, scene headers and kinetic text. Body copy, labels, sources, captions and counters stay in Inter.</td></tr>
             <tr><td><code>inter</code></td><td class="wrap">default</td><td class="wrap">Inter Display; emphasis in the accent colour. The look every film had before 0.5.</td></tr>
-            <tr><td><code>didone</code></td><td class="wrap">Playfair Display</td><td class="wrap">Magazine authority; emphasis in its own italic; lining figures.</td></tr>
-            <tr><td><code>wide</code></td><td class="wrap">Archivo Expanded ExtraBold</td><td class="wrap">Capitals; the phrase sits on an accent marker. Loud at thumbnail size.</td></tr>
             <tr><td><code>geometric</code></td><td class="wrap">Space Grotesk</td><td class="wrap">Light headline, the phrase in Bold: emphasis by weight, no italic.</td></tr>
-            <tr><td><code>condensed</code></td><td class="wrap">Big Shoulders Display ExtraBold</td><td class="wrap">Capitals stacked tight; the phrase underlined in the accent.</td></tr>
-            <tr><td><code>bookish</code></td><td class="wrap">DM Serif Display</td><td class="wrap">A friendlier display serif with its italic.</td></tr>
-            <tr><td><code>typewriter</code></td><td class="wrap">IBM Plex Mono</td><td class="wrap">Every headline in mono, emphasis underlined.</td></tr>
+            <tr><td><code>bookish</code></td><td class="wrap">DM Serif Display</td><td class="wrap">A friendlier display serif with its italic, for histories and lessons.</td></tr>
             <tr class="group"><td colspan="3">Headings &amp; emphasis</td></tr>
             <tr><td><code>heading</code></td><td class="wrap"><code>top</code> · <code>bottom</code></td><td class="wrap">Title above the picture, or as a lower third with an accent rule.</td></tr>
-            <tr><td><code>emphasis</code></td><td class="wrap">≤ 4 whole-word phrases</td><td class="wrap">Phrases on title, statement, chapter, quote, callout, endcard, drawn the way the voice says (accent, italic, weight, marker, underline).</td></tr>
+            <tr><td><code>emphasis</code></td><td class="wrap">≤ 4 whole-word phrases</td><td class="wrap">Phrases on title, statement, chapter, quote, callout, endcard, drawn the way the voice says (accent colour, italic, weight).</td></tr>
             <tr><td><code>emphasisStyle</code></td><td class="wrap"><code>serif</code> · <code>accent</code></td><td class="wrap">A beat's own choice over the voice: Instrument Serif italic (the editorial feeling word) or plain accent colour.</td></tr>
           </tbody>
         </table>
@@ -1381,15 +1363,12 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr><td><code>cut</code></td><td class="wrap">A hard cut. The heading is already in place, so the cut lands on a composed frame.</td><td class="wrap">Rhythm within a sequence</td></tr>
             <tr><td><code>fade</code> · <code>rise</code> · <code>wipe</code> · <code>zoom</code></td><td class="wrap">Standard entrances. The outgoing scene exits to match.</td><td class="wrap">Calm films, general flow</td></tr>
             <tr><td><code>push</code></td><td class="wrap">The previous scene slides away.</td><td class="wrap">Sequence, the next step</td></tr>
-            <tr><td><code>panel</code></td><td class="wrap">An accent panel with a second-accent edge sweeps across and off. Into an accent-<code>tone</code> scene, the panel becomes the background.</td><td class="wrap">Chapter turns</td></tr>
-            <tr><td><code>iris</code></td><td class="wrap">An accent circle closes the scene and opens the next. <code>transitionOrigin: [x, y]</code> (0–1) sets its centre.</td><td class="wrap">A revelation; leaving and re-entering a world</td></tr>
-            <tr><td><code>whip</code></td><td class="wrap">A fast horizontal move with motion blur.</td><td class="wrap">Between ideas in energetic cuts</td></tr>
-            <tr><td><code>flash</code></td><td class="wrap">The new shot arrives out of a burst of white light.</td><td class="wrap">Trailer montage, and onto a title after a silence</td></tr>
-            <tr><td><code>dissolve</code></td><td class="wrap">A true crossfade: the outgoing shot keeps running under the incoming one for 0.7 s (a <code>fade</code> dips through the backdrop instead).</td><td class="wrap">Time passing in one place (night to dawn), scale to scale, memory</td></tr>
+            <tr><td><code>panel</code></td><td class="wrap">An accent panel with a second-accent edge sweeps across the whole frame and off. Into an accent-<code>tone</code> scene, the panel becomes the background.</td><td class="wrap">Chapter turns</td></tr>
             <tr><td><code>auto</code></td><td class="wrap"><code>rise</code> where the chapter changes, <code>fade</code> otherwise. With nothing set, the film default is <code>fade</code>, except on the first beat: a film opens on its picture, never on a fade from black.</td><td class="wrap">Chaptered films</td></tr>
             <tr class="group"><td colspan="3">Beat <code>exit</code> &amp; colour</td></tr>
-            <tr><td><code>exit</code></td><td class="wrap"><code>auto</code> (mirror the next entrance), <code>none</code>, <code>fade</code>, <code>push</code>, <code>zoom</code>, <code>wipe</code>, <code>panel</code>, <code>iris</code>, <code>whip</code>. An exit never starts before the beat's last spoken word.</td><td class="wrap">Overrides only</td></tr>
-            <tr><td><code>transitionColor</code></td><td class="wrap"><code>accent</code>, <code>accent2</code>, <code>ink</code>, <code>bg</code>, <code>surface</code></td><td class="wrap">Graphic covers</td></tr>
+            <tr><td><code>exit</code></td><td class="wrap"><code>auto</code> (mirror the next entrance), <code>none</code>, <code>fade</code>, <code>push</code>, <code>zoom</code>, <code>wipe</code>, <code>panel</code>. An exit never starts before the beat's last spoken word.</td><td class="wrap">Overrides only</td></tr>
+            <tr><td><code>transitionColor</code></td><td class="wrap"><code>accent</code>, <code>accent2</code>, <code>ink</code>, <code>bg</code>, <code>surface</code></td><td class="wrap">The panel's colour</td></tr>
+            <tr><td colspan="3" class="wrap small">Retired and refused by name, each with its replacement: <code>iris</code> (use fade, push, or a camera move within one world), <code>whip</code> (push), <code>flash</code> (cut or fade), <code>dissolve</code> (fade), and <code>transitionOrigin</code>, which placed the iris.</td></tr>
           </tbody>
         </table>
       </div>
@@ -1428,13 +1407,13 @@ Colours: <span class="ph">[#0b1f33 navy, #ffb000 amber, #4fd1c5 teal]</span>. Vo
             <tr class="group"><td colspan="2">Film level</td></tr>
             <tr><td><code>format</code></td><td class="wrap"><code>preset</code>: landscape, vertical, square, portrait; <code>fps</code>: 24, 25, 30, 50, 60</td></tr>
             <tr><td><code>motion</code></td><td class="wrap"><code>preset</code>: gentle (0.55 s quartic), snappy (0.30 s exponential), spring (0.72 s damped); <code>intensity</code> 0–1</td></tr>
-            <tr><td><code>backdrop</code></td><td class="wrap"><code>none</code>, <code>dots</code>, <code>grid</code>, <code>glow</code> (slow drifting light pools), <code>paper</code>, <code>mosaic</code> (static cached tiles)</td></tr>
+            <tr><td><code>backdrop</code></td><td class="wrap"><code>none</code>, <code>grid</code>, <code>paper</code> (the retired <code>glow</code>, <code>dots</code> and <code>mosaic</code> are refused by name)</td></tr>
             <tr><td><code>texture</code></td><td class="wrap"><code>film</code>, <code>grain</code>, <code>vignette</code>, <code>none</code>, or <code>{grain, vignette, animate}</code></td></tr>
-            <tr><td><code>type</code></td><td class="wrap">a voice from <code>library/types/</code>: <code>inter</code>, <code>didone</code>, <code>wide</code>, <code>geometric</code>, <code>condensed</code>, <code>bookish</code>, <code>typewriter</code> (also per beat; see <a href="#vocab-type">Type</a>)</td></tr>
-            <tr><td><code>lens</code></td><td class="wrap">film-wide, and on any beat (beat keys override): <code>letterbox</code> 1.5–3 or <code>false</code> (landscape only; content moves inside the bars), <code>grade</code> (teal-orange, warm, cool, bleach, mono, noir, sepia) with <code>gradeAmount</code>, <code>bloom</code>, <code>aberration</code>, <code>leak</code>, <code>handheld</code>, and <code>blur</code> (motion blur on camera moves; 0.5 is a 180° shutter), each 0–1. See <code>docs/cinema.md</code>.</td></tr>
+            <tr><td><code>type</code></td><td class="wrap">a voice from <code>library/types/</code>: <code>inter</code>, <code>geometric</code>, <code>bookish</code> (also per beat; see <a href="#vocab-type">Type</a>)</td></tr>
+            <tr><td><code>lens</code></td><td class="wrap">film-wide, and on any beat (beat keys override): <code>blur</code> 0–1, motion blur on fast camera and element moves (0.5 is a 180° shutter; <code>0</code> turns it off). That is the lens's only setting: the film looks <code>letterbox</code>, <code>grade</code>, <code>gradeAmount</code>, <code>bloom</code>, <code>aberration</code>, <code>leak</code> and <code>handheld</code> were retired and are refused by name.</td></tr>
             <tr><td><code>frame</code></td><td class="wrap"><code>true</code> or <code>{brand, left, right, label, progress}</code>: a serif-italic brand, a section label, mono footers and a progress rail</td></tr>
-            <tr><td><code>sfx</code></td><td class="wrap"><code>off</code>, <code>subtle</code>, <code>normal</code>, <code>punchy</code>: whooshes into graphic transitions and fast camera moves, thuds on hero numbers, ticks and pops on counts and arrivals. For cinema: a <strong>hit</strong> on every <code>flash</code> cut, a <strong>riser</strong> that ends where a silent beat begins, <strong>room tone</strong> under the silence, and a <strong>shimmer</strong> as <code>shine</code> sweeps a title.</td></tr>
-            <tr><td><code>music</code></td><td class="wrap"><code>false</code> or <code>{style: "pad" | "pulse", bpm, volume, prompt, …}</code>. The free draft bed is a calm pad, or a <code>pulse</code> that builds to the first silence, cuts dead through it and carries the title (trailers). The paid bed is Lyria. <code>drop: {beat, at, song}</code> starts the track so its drop (measured by <code>beatmap</code>, or <code>song</code> seconds) plays on that beat.</td></tr>
+            <tr><td><code>sfx</code></td><td class="wrap"><code>off</code>, <code>subtle</code>, <code>normal</code>, <code>punchy</code>: quiet cues placed on the picture's own events. A whoosh on a <code>chapter</code> card and on a fast camera flight or world move, a shimmer as <code>shine</code> sweeps, a soft thud as a hero number or a canvas count lands, ticks on <code>kpis</code>, tocks on <code>checklist</code> items (and, above <code>subtle</code>, on list, steps, timeline and flow items), one soft tock as a chart's bars grow. <code>punchy</code> adds a thud on <code>tone</code> scenes and ticks on a kinetic stack's emphasis words. Arrivals, transitions and silent beats are silent: there is no automatic bloop, riser, drone or hit. A sound you want is authored: <code>sound</code> on a canvas element (as it enters) or on its keys (as it moves), or a beat's <code>sfx</code> list.</td></tr>
+            <tr><td><code>music</code></td><td class="wrap"><code>false</code> or <code>{style, bpm, volume, prompt, …}</code>. The free draft bed is a calm, slow chord pad; the paid bed is Lyria. Any bed dips to nothing through a beat with no voice. <code>drop: {beat, at, song}</code> starts the track so its drop (measured by <code>beatmap</code>, or <code>song</code> seconds) plays on that beat.</td></tr>
             <tr><td><code>voice</code></td><td class="wrap"><code>takes: "film"</code> (the default: one continuous take), <code>"chapter"</code> or <code>"beat"</code>; <code>style</code> (2–6 words, one for the film); <code>voice</code>; <code>cast</code> for two voices (one conversational take); <code>perBeatStyle</code> (not recommended)</td></tr>
             <tr><td><code>pacing</code></td><td class="wrap"><code>lead</code>, <code>tail</code>, <code>minBeat</code>, <code>silentBeat</code>, <code>outro</code></td></tr>
             <tr><td><code>continuity</code></td><td class="wrap"><code>maxGeneratedShare</code>, <code>treatment</code>, <code>lighting</code>, <code>camera</code>, <code>motion</code>, <code>motif</code>, <code>refs</code> (≤ 2), for generated inserts</td></tr>

@@ -44,7 +44,7 @@ Statuses have deliberately narrow meanings:
 | `checked-no-render` | Story critique, input/layout checks and the matching sheet completed |
 | `ready-for-review` | Checks, encode, encoded QA and boundary evidence completed |
 
-`ready-for-review` does not mean the story, factual claims or artistic quality were approved. Cinema scores, held-frame diagnostics and layout advisories guide review; they do not replace it. A final encode can still contain local synthetic narration or illustrative data; voice/source provenance remains visible in the receipt and storyboard.
+`ready-for-review` does not mean the story, factual claims or artistic quality were approved. Film scores, held-frame diagnostics and layout advisories guide review; they do not replace it. A final encode can still contain local synthetic narration or illustrative data; voice/source provenance remains visible in the receipt and storyboard.
 
 ## Reusable regression harness
 

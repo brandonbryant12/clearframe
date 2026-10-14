@@ -41,7 +41,7 @@ export function authorStoryboard(base, facts, revised = false) {
     logline: 'A modest weekly decline, set beside three dated economic signals.',
     format: { preset: 'landscape', fps: 30 },
     theme: { base: 'ink', bg: '#0b1825', surface: '#142c3c', ink: '#eff5ed', muted: '#a8becb', accent: '#81e2bc', accent2: '#ffc77a', positive: '#81e2bc', negative: '#ffad98' },
-    type: 'typewriter', motion: { preset: 'gentle', intensity: 0.65 }, transition: 'cut', backdrop: 'none',
+    type: 'inter', motion: { preset: 'gentle', intensity: 0.65 }, transition: 'cut', backdrop: 'none',
     music: false, sfx: 'subtle', captions: false, chrome: false,
     sources: facts.sources.map(s => ({ claim: s.title, source: s.url })),
     continuity: { treatment: 'Independent Market Notes identity; navy, mint and warm amber.', camera: 'Wide chart, close evidence inserts, paired gauges, final synthesis.', motion: 'Trace data over time; keep reading surfaces steady. No decorative stock chart.' },

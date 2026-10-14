@@ -19,9 +19,6 @@
     "transition": "cut",
     "sfx": "subtle",
     "lens": {
-      "grade": "cool",
-      "gradeAmount": 0.3,
-      "bloom": 0.3,
       "blur": 0.5
     },
     "voice": {

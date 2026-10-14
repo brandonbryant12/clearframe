@@ -15,9 +15,6 @@
   "transition": "cut",
   "backdrop": "none",
   "camera": "none",
-  "lens": {
-    "handheld": 0
-  },
   "captions": false,
   "music": false,
   "sources": [

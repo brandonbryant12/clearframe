@@ -51,7 +51,13 @@ People read about three words a second while they listen, and need a phrase on s
 
 - For a passage, use `highlight` with `maxWords` 6–8 (a stable phrase that lights up as it is spoken). `word` and two-word groups are for a few seconds of emphasis: a hook, a punchline, a name. `critique` warns when a kinetic beat changes its type faster than every 0.9 s for more than five seconds.
 - Not every line needs its words on screen as the picture. In a podcast clip, give the explanation a drawing (a sketch, a cast, a chart) and let the captions carry the words underneath; keep kinetic type for the two or three lines worth remembering.
-- Burned captions hold whole phrases: plate captions (`captions: true`) show up to twelve words on a wide frame; pop captions (`captions: "pop"`) up to five words on a tall frame and six on a wide one, for up to 2.6 s.
+- Captions are on for every narrated film (`captions: false` opts out) and follow a broadcast standard, after Netflix's English timed-text style guide. The same cues are burned in and written to `build/captions.srt` and `.vtt`:
+  - **Segmentation.** At most two lines of 42 characters (28 on a vertical frame), one sentence per caption where it fits, and a new caption after a pause.
+  - **Line breaks.** Lines break after punctuation or before a conjunction or preposition, never after "the", "of" or "to". A caption is one line when it fits, otherwise two balanced lines with the longer underneath.
+  - **Timing.** At most 20 characters a second. Each caption is on screen for at least 5/6 s and at most 7 s and holds a moment after the voice. Captions 2 frames apart close up when less than half a second separates them, and none runs across a cut.
+  - **Look.** White Inter SemiBold on a translucent near-black box that hugs each line, so it reads over any picture. Captions cut on and off with the speech, with no animation.
+  - **Placement.** Low in the frame, or high for a caption whose picture has type of its own in the bottom band (judged once per caption, so it never jumps). `check` warns when a caption still covers the picture's type: keep the bottom band clear in close-ups.
+  - **Pop.** `captions: "pop"` is the social style for vertical clips: a few words at a time in heavy type, the spoken word in an accent pill.
 
 ## Faster local word timings
 

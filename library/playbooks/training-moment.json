@@ -96,7 +96,9 @@
               "FIELD": "Report as",
               "OLD": "Not reported",
               "NEW": "Phishing",
-              "DONE": "Reported: Security replies within an hour"
+              "DONE": "Reported: Security replies within an hour",
+              "Pay": "Sent",
+              "Documents": "Drafts"
             },
             "sketchSay": {
               "CLICK1": "don't",
@@ -299,7 +301,9 @@
               "FIELD": "Report as",
               "OLD": "Not reported",
               "NEW": "Phishing",
-              "DONE": "Reported to Security"
+              "DONE": "Reported to Security",
+              "Pay": "Sent",
+              "Documents": "Drafts"
             },
             "sketchSay": {
               "CLICK1": "Inbox",

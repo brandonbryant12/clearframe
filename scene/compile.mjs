@@ -14,12 +14,12 @@ import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { compileStage } from './recipes.mjs';
 import { findWord } from '../engine/lib/timing.mjs';
-import { ENTRANCE } from '../film/constants.mjs';
+import { ENTRANCE, retired, heldTail } from '../film/constants.mjs';
 
 export const PLAN_KIND = 'clearframe.scene';
 export const PLAN_VERSION = 1;
 const NATIVE_TYPES = ['rect', 'circle', 'ellipse', 'line', 'path', 'poly', 'text', 'icon', 'image', 'group', 'particles', 'spotlight', 'video', 'shader', 'code', 'connector'];
-const BLOCK_ONLY = ['rough', 'print', 'mosaic', 'morph', 'solid', 'meter'];
+const BLOCK_ONLY = ['rough', 'print', 'mosaic', 'morph', 'solid', 'meter', 'marks'];
 const STAGE_HEADING = ['title', 'kicker', 'source', 'support', 'land'];
 
 const sha256 = b => crypto.createHash('sha256').update(b).digest('hex');
@@ -40,6 +40,8 @@ function resolveTimes(list, cue, where) {
     for (const k of BLOCK_ONLY)
       if (el[k] != null || el.loop?.type === 'level')
         throw new Error(`${where}: ${el.id ?? el.type} uses ${el[k] != null ? k : 'loop level'}, which the canvas block draws; native stages do not. Put it in canvas/art, or remove it.`);
+    const gone = retired('enter', el.enter) ?? retired('exit', el.exit);
+    if (gone) throw new Error(`${where}: ${el.id ?? el.type}: ${gone}`);
     if (el.say != null) {
       el.at = Math.max(0, cue(el.say) - (el.type === 'text' ? 0.2 : 0));
       delete el.say;
@@ -117,9 +119,9 @@ export function compilePlan({ root, sb, timing, job, stage, assetFile }, { rough
         delete el.asset;
         if (el.type === 'video') {
           const duration = probeDuration(file);
-          // Footage is shown from its entrance to its exit (or the stage's end).
-          // A dissolve into the next beat keeps this beat's picture on screen while it fades.
-          const tail = beat ? dissolveTail(beat) : 0;
+          // Footage is shown from its entrance to its exit (or the stage's end). A wipe into the
+          // next beat holds this beat's picture on screen ahead of its edge.
+          const tail = beat ? heldTail(job, job.beats.findIndex(b => b.id === beat)) : 0;
           const shown = Math.max(0, Math.min(el.exitAt ?? end + tail, end + tail) - (el.at ?? 0)) * (el.rate ?? 1);
           const need = (el.offset ?? 0) + shown;
           if (!el.hold && need > duration + 1 / fps + 1e-6)
@@ -149,12 +151,6 @@ export function compilePlan({ root, sb, timing, job, stage, assetFile }, { rough
     layers.push(layer);
   };
 
-  // Seconds a beat stays on screen under the next beat's dissolve (the compositor's span).
-  const dissolveTail = id => {
-    const i = job.beats.findIndex(b => b.id === id);
-    const next = job.beats[i + 1];
-    return next?.transition === 'dissolve' ? Math.max(1, Math.min(Math.floor(0.7 * fps), Math.floor(next.frames / 2))) / fps : 0;
-  };
   const beatCue = b => (value, fallback = 0) => {
     if (value == null) return fallback;
     if (typeof value === 'number') {
@@ -165,10 +161,10 @@ export function compilePlan({ root, sb, timing, job, stage, assetFile }, { rough
     if (t == null) throw new Error(`spoken cue "${value}" is not in ${b.id}'s narration`);
     return Math.max(0, t - b.start);
   };
-  // Fade a beat's native layer with the beat's own entrance and exit (dissolves are composited).
+  // Fade a beat's native layer with the beat's own entrance and exit (a wipe's edge reveals it).
   const fadeFor = jb => {
     const entrance = ENTRANCE[jb.motion?.preset ?? 'gentle'];
-    return [['fade', 'rise', 'zoom', 'wipe', 'push'].includes(jb.transition) ? entrance : 0, ['fade', 'zoom', 'push'].includes(jb.exit) ? 0.32 : 0];
+    return [['fade', 'rise', 'zoom', 'push'].includes(jb.transition) ? entrance : 0, ['fade', 'zoom', 'push'].includes(jb.exit) ? 0.32 : 0];
   };
 
   // A beat with a title or kicker draws a heading; stage content starts below it.

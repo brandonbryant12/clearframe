@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Writes docs/scene-engine-coverage.md: every block, sketch, treatment, type voice, direction,
-// sculpture and playbook with how the renderer draws it, from the code and from the reference
+// Writes docs/scene-engine-coverage.md: every block, sketch, treatment, type voice, direction
+// and playbook with how the renderer draws it, from the code and from the reference
 // comparisons (scripts/engine-parity.mjs and scripts/engine-effects.mjs with --reference) and
 // benchmark (scripts/engine-bench.mjs) reports.
 //
@@ -27,7 +27,6 @@ const gallery = read(values.gallery) ?? [];
 // PSNR of one gallery beat (a block or a sketch) in a gallery project, e.g. blocks-landscape.
 const galleryDb = (project, beat) => gallery.find(g => g.playbook === project)?.psnr?.find(p => p.beat === beat)?.db;
 const fmt = db => (db == null ? '—' : db >= 98 ? 'identical' : db.toFixed(1));
-const sculptures = fs.readdirSync('library/sculptures').filter(f => f.endsWith('.json')).map(f => f.slice(0, -5));
 const row = cells => `| ${cells.join(' | ')} |`;
 const out = [];
 out.push('# Scene engine coverage', '');
@@ -42,14 +41,11 @@ out.push(row(['Feature', 'State', 'PSNR vs FFFrames-era still (dB)']), row(['---
 const fxdb = name => fx?.find(r => r.variant === name)?.psnr;
 const film = [
   ['Background colour, block content (no effects)', 'replaced (compositor) + block layer', 'plain'],
-  ['Backdrop paper', 'replaced', 'paper'], ['Backdrop glow', 'replaced', 'glow'], ['Backdrop glow on a dark palette', 'replaced', 'noirGlow'],
-  ['Backdrop grid', 'replaced', 'grid'], ['Backdrop dots', 'replaced', 'dots'], ['Backdrop mosaic', 'replaced', 'mosaic'],
+  ['Backdrop paper', 'replaced', 'paper'], ['Backdrop paper on a dark palette', 'native (new)', 'paperDark'], ['Backdrop grid', 'replaced', 'grid'],
   ['Texture grain (static)', 'replaced', 'grain'], ['Texture grain on a dark palette', 'replaced', 'grainDark'], ['Animated grain on a dark palette', 'replaced', 'grainDarkAnim'], ['Texture film (animated grain + vignette)', 'replaced', 'grainAnim'],
-  ['Texture vignette', 'replaced', 'vignette'], ['Lens grade teal-orange', 'replaced', 'teal'], ['Lens grade mono', 'replaced', 'mono'], ['Lens grade sepia', 'replaced', 'sepia'],
-  ['Lens bloom (dark palettes)', 'replaced', 'bloomDark'], ['Lens aberration', 'replaced', 'aberration'], ['Lens leak', 'replaced', 'leak'],
-  ['Lens letterbox', 'replaced', 'letterbox'], ['Lens handheld', 'replaced', 'handheld'],
+  ['Texture vignette', 'replaced', 'vignette'],
   ['Film chrome (title + progress)', 'replaced', 'chrome'], ['Editorial frame (brand, label, footers, rail)', 'replaced', 'frame'],
-  ['Vertical canvas with film texture and warm grade', 'replaced', 'vertical'],
+  ['Vertical canvas with film texture', 'replaced', 'vertical'],
 ];
 for (const [what, , key] of film) out.push(row([what, 'native', fmt(fxdb(key))]));
 out.push(row(['Dissolve (two pictures crossing)', 'native: two real layers; the outgoing native stage runs on under the incoming beat', 'visual inspection (footage fixture)']));
@@ -73,10 +69,10 @@ out.push('## Canvas features on native stages', '');
 out.push(row(['Feature', 'State']), row(['---', '---']));
 for (const [f, s] of [
   ['rect, circle, ellipse, line, path, poly, text, icon, image, group, particles (dust, embers, rain, snow, bubbles, stars), spotlight', 'native'],
-  ['enter fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, scramble, blur, none; exits fade, shrink, fall, lift, undraw, wipe, blur, none', 'native'],
+  ['enter fade, pop, rise, drop, left, right, grow, grow-x, grow-y, draw, wipe, wipe-up, type, none; exits fade, shrink, fall, lift, undraw, wipe, blur, none', 'native'],
   ['keys (x, y, scale, rotate, opacity, scaleX, scaleY, blur, tiltX, tiltY), along, loops spin/pulse/float/sway/orbit/dash/blink/rock, echo, tilt, shine, glow, shadow, blur, blend, z with dolly and focus, fps stepping, gradients and palette tokens', 'native'],
   ['colour keys (fill/stroke), connector, attach, along {path: id}, video, shader, material presets, particles burst/stream/field up to 4,000, code, camera: false, stage camera with parallax and depth of field, temporal motion blur', 'native (new)'],
-  ['enter assemble, exit scatter, rough, print, mosaic, morph, solid, meter, loop level, the canvas `materials` thermal/chrome/gold/neon as filter graphs', 'refused on stages (drawn by the canvas block in canvas/art); native SkSL materials of the same names exist with a different implementation'],
+  ['rough, print, mosaic, morph, solid, meter, loop level, the canvas `materials` thermal/chrome/gold/neon as filter graphs', 'refused on stages (drawn by the canvas block in canvas/art); native SkSL materials of the same names exist with a different implementation'],
   ['canvas worlds, `view`/`viewFrom` camera rects, `plates` depth sets, `diagram`, `chart`, `kpi`, `plot`, `bars`, `bridge`, `cast`, `multiples`, `distribution`, `stat`, `teaching`, `sketch` expansions', 'native (canvas block)'],
 ]) out.push(row([f, s]));
 out.push('');
@@ -93,9 +89,6 @@ out.push(row(['Treatment', 'Backdrop', 'Texture', 'Lens']), row(['---', '---', '
 for (const t of treatments()) out.push(row([`\`${t.id}\``, t.film?.backdrop ?? '—', JSON.stringify(t.film?.texture ?? '—'), JSON.stringify(t.film?.lens ?? '—')]));
 out.push('', `Type voices: ${types().map(t => `\`${t.id}\``).join(', ')}. Directions: ${directions().map(d => `\`${d.id}\``).join(', ')}.`, '');
 
-out.push('## Sculptures (Blender assets)', '');
-out.push(`${sculptures.length} definitions (${sculptures.map(s => `\`${s}\``).join(', ')}). Blender remains optional true-3D asset preparation; its clips reach films as plates, \`video\` blocks or native \`video\` elements on a stage (exercised by \`examples/stage-footage\` and the teaching-3D trajectory), all decoded by \`media.rs\` through the FFmpeg tools.`, '');
-
 out.push('## Playbooks', '');
 out.push(`All ${playbooks().length} built-in playbooks, scaffolded with their sample copy, prepared as rough cuts, checked (inspect + frame audit) and drawn at the moments of the FFFrames-era run (one still per beat at 65 % of the beat). Errors are the frame audit's, on sample copy; they are the same findings the FFFrames-era run reported.`, '');
 out.push(row(['Playbook', 'Format', 'Beats', 'Blocks', 'Check', 'Min PSNR vs FFFrames-era stills (dB)']), row(['---', '---', '---', '---', '---', '---']));
@@ -108,7 +101,7 @@ if (bench) {
   if (before) out.push(`The last two columns are the same project's full export measured on ${before.when.slice(0, 10)}, before the retirement: the scene engine with FFFrames block layers, and FFFrames alone.`, '');
   out.push(row(['Project', 'Format', 'Frames', 'Cold start + still (ms)', 'Warm still (ms)', '60-frame range (ms)', 'Full (ms)', 'Full fps', 'Peak RSS (MiB)', 'Peak temp (MiB)', 'Full before: scene + FFFrames layers (ms)', 'Full before: FFFrames (ms)']), row(Array(12).fill('---')));
   const was = (p, e) => before?.summary.find(r => r.project === p && r.engine === e)?.fullMs ?? '—';
-  const label = p => ({ film: 'long-form recording (7.6 min, synthetic voices)', 'footage-h': 'stage-footage landscape', 'footage-v': 'stage-footage vertical' })[p] ?? p;
+  const label = p => ({ film: 'long-form recording (7.6 min, synthetic voices)', 'footage-h': 'footage stage landscape', 'footage-v': 'footage stage vertical' })[p] ?? p;
   for (const s of bench.summary) out.push(row([label(s.project), s.format, s.frames, s.coldStillMs, s.warmStillMs, s.rangeMs, s.fullMs, s.fullFps, s.peakMiB, s.tempMiB, was(s.project, 'scene'), was(s.project, 'fframes')]));
   out.push('');
 }

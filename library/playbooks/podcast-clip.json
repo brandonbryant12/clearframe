@@ -14,7 +14,10 @@
         "align": "left",
         "maxWords": 6,
         "source": "",
-        "emphasis": ["nobody", "starting"],
+        "emphasis": [
+          "nobody",
+          "starting"
+        ],
         "emphasisStyle": "serif"
       },
       "speaker": "host",
@@ -31,7 +34,7 @@
         "source": ""
       },
       "speaker": "guest",
-      "transition": "whip"
+      "transition": "cut"
     },
     {
       "id": "pull",
@@ -45,7 +48,7 @@
       },
       "speaker": "guest",
       "transition": "panel",
-      "tone": "accent"
+      "tone": "surface"
     },
     {
       "id": "close",
@@ -56,10 +59,13 @@
         "align": "left",
         "maxWords": 6,
         "source": "",
-        "emphasis": ["badly", "today"]
+        "emphasis": [
+          "badly",
+          "today"
+        ]
       },
       "speaker": "host",
-      "transition": "whip"
+      "transition": "cut"
     },
     {
       "id": "end",
@@ -72,16 +78,15 @@
         "text": "Hear the whole conversation.",
         "align": "center"
       },
-      "transition": "iris"
+      "transition": "cut"
     }
   ],
-  "theme": "electric",
-  "backdrop": "glow",
+  "theme": "ink",
+  "backdrop": "none",
   "motion": "snappy",
   "format": "vertical",
   "texture": {
-    "grain": 0.3,
-    "vignette": 0.5
+    "grain": 0.3
   },
   "speakers": {
     "host": {

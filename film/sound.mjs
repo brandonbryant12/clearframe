@@ -17,15 +17,8 @@ export function soundDesign(job, sfx) {
     const start = b.start_frame / job.fps,
       spec = rules(b.block);
     const t = { start, cue: start + b.cue_seconds, level };
-    if (['panel', 'iris', 'whip'].includes(b.transition) && start > 0) add('whoosh', start - 0.3, 0.3, 3);
-    // Cinema: a hit on a flash cut; a silent beat gets room tone, and the swell before it
-    // ends where the silence begins (crescendo, then nothing, then the hit).
-    // The hit lands well above the dialogue: it is the punctuation of the edit.
-    if (b.transition === 'flash' && start > 0) add('hit', start, 0.95, 5);
-    if (!b.words.length && b.frames / job.fps >= 1 && start > 0) {
-      add('drone', start, 0.06, 1);
-      if (start >= 3) add('riser', start - 2.5, 0.3, 2);
-    }
+    // No automatic swells, drones or hits: trailer punctuation under a benefits or policy film
+    // reads as a sales pitch. An author who wants one names it (`sound` on an element or key).
     // Only a fast flight whooshes; a slow creep is felt, not heard.
     const flight = b.block === 'canvas' && b.props.dolly?.find(k => Math.abs(k.z) / Math.max(0.1, k.dur ?? 1.2) > 0.8);
     if (flight) add('whoosh', start + flight.at, 0.16, 1);
@@ -48,8 +41,7 @@ export function soundDesign(job, sfx) {
         authored(el.children);
       });
     if (b.block === 'canvas') authored(b.props.elements);
-    let pops = 0,
-      grows = 0;
+    let grows = 0;
     for (const el of [...(b.block === 'canvas' ? b.props.elements : []), ...(b.art?.over ?? [])]) {
       if (el.type === 'text' && el.count) add('thud', start + el.at + el.count.dur, 0.28, 3);
       // A bar growing into place lands with a soft tock, one per value.
@@ -58,13 +50,7 @@ export function soundDesign(job, sfx) {
         add('tock', start + el.at + (el.dur ?? 0.6) * 0.8, 0.12, 0);
         grows++;
       }
-      else if (
-        (el.enter === 'pop' || (el.enter == null && ['circle', 'icon'].includes(el.type))) &&
-        pops < (level === 'punchy' ? 8 : 4)
-      ) {
-        add('pop', start + el.at, 0.16, 0);
-        pops++;
-      }
+      // Arrivals are silent: a bloop on every icon and dot made films sound like a phone game.
     }
     if (level === 'punchy' && b.block === 'kinetic' && b.props.mode === 'stack') {
       const keys = new Set([].concat(b.props.emphasis ?? []).flatMap(e => String(e).toLowerCase().split(/\s+/)));

@@ -10,16 +10,14 @@
       "vo": "Big numbers are hard to picture until you compare them.",
       "props": {
         "text": "Big numbers need a comparison.",
-        "emphasis": ["comparison"],
-        "support": "Measure the wait, not just the workload.",
+        "emphasis": [
+          "comparison"
+        ],
         "source": "Illustrative sample data · replace before publishing"
-      },
-      "art": {
-        "sketch": "ambient"
       },
       "camera": {
         "move": "in",
-        "amount": 0.8
+        "amount": 0.4
       }
     },
     {
@@ -47,7 +45,7 @@
       },
       "camera": {
         "move": "in",
-        "amount": 0.8
+        "amount": 0.4
       }
     },
     {
@@ -65,14 +63,7 @@
       },
       "camera": {
         "move": "in",
-        "amount": 0.8
-      }
-    },
-    {
-      "id": "pause",
-      "block": "canvas",
-      "props": {
-        "sketch": "pause"
+        "amount": 0.4
       }
     },
     {
@@ -81,12 +72,13 @@
       "vo": "A comparison turns an abstract number into a picture you can hold.",
       "props": {
         "text": "A comparison turns an abstract number into a picture.",
-        "phrases": ["a picture"],
-        "support": "Look at the distribution, not just the middle.",
+        "phrases": [
+          "a picture"
+        ],
         "source": "Illustrative sample data · replace before publishing",
         "align": "center"
       },
-      "transition": "iris"
+      "transition": "cut"
     },
     {
       "id": "endcard",
@@ -108,10 +100,6 @@
     "vignette": 0.35
   },
   "lens": {
-    "grade": "warm",
-    "gradeAmount": 0.25,
-    "bloom": 0.2,
-    "handheld": 0.1,
     "blur": 0.5
   }
 }

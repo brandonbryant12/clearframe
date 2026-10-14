@@ -373,7 +373,7 @@ const beats = [
     id: 'end',
     block: 'canvas',
     vo: 'Space the buses evenly, and the wait shrinks. The method and its limits are in the full study.',
-    transition: 'dissolve',
+    transition: 'fade',
     props: { view: SKY, source: SAMPLE, elements: after },
     hold: 1,
   },
@@ -393,7 +393,7 @@ const book = {
   textMotion: 'words',
   transition: 'cut',
   sfx: 'subtle',
-  lens: { grade: 'warm', gradeAmount: 0.35, leak: 0.1, handheld: 0.15, blur: 0.5 },
+  lens: { blur: 0.5 },
   beats,
 };
 fs.writeFileSync('library/playbooks/research-digest.json', JSON.stringify(book, null, 2) + '\n');

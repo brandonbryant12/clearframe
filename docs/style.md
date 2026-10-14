@@ -129,7 +129,7 @@ Inside a scene, elements are choreographed: headlines rise line by line, accent 
 - **Numbers:** `stat`, `kpis` (cards), `delta` (counts from the old value; change chip), `bars`, `line`, `waffle` (optionally `icon: "user"` pictograms), `ring`, `donut`, `funnel` (derived step rates), `magnitude` (area-true squares).
 - **Structure:** `steps`, `timeline`, `flow`, `cycle`, `icon-grid`, `checklist` (boxes tick on cue), `matrix` (optional highlighted column), `compare`, `list`, `equation`.
 - **Media:** `image`/`video` plates keep their own aspect ratio in rounded masks (`fit: cover` to fill, `drift: true` for a slow push-in); `annotate` adds numbered pins, a legend and an optional focus region to a screenshot.
-- **Speech:** `kinetic` highlight/reveal/word modes, and `stack`: poster type that builds word by word as spoken, `emphasis` words larger in the accent, phrases breaking at sentences. Burned captions sit on a soft plate for legibility.
+- **Speech:** `kinetic` highlight/reveal/word modes, and `stack`: poster type that builds word by word as spoken, `emphasis` words larger in the accent, phrases breaking at sentences. Captions (on by default) are broadcast-standard: two lines at most, white on a translucent dark box, timed to the words (`docs/speech.md`).
 - **Drawing:** `canvas` for anything else: routes, systems, metaphors, custom diagrams and typographic moments; `art` layers to annotate any block. Start from `clearframe sketch`.
 
 `icon-grid`, `flow`, `cycle`, `callout` and `waffle` use the 132 bundled MIT Tabler icons (`clearframe icons`). Portrait flows stack vertically. `breathing` uses explicit `{label, seconds, scale}` phases with cross-faded labels; adapt the pace to the viewer and do not infer health benefits.

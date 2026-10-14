@@ -1,5 +1,5 @@
 // A seeded creative brief. Models (and people) reach for the same choices every time; a muse
-// draws a structural twist, a motif, a camera and cut signature, a palette, a grade, set pieces
+// draws a structural twist, a motif, a camera and cut signature, a palette, set pieces
 // and a music feel from curated options, so every film starts somewhere different, and the
 // seed makes any draw reproducible. Every option is one that works; variety never costs taste.
 import { rng } from './sketch-kit.mjs';
@@ -28,21 +28,20 @@ const MOTIFS = [
   'a path that is walked, then seen from above',
 ];
 const CAMERAS = [
-  { note: 'slow, constant push-ins', lens: { handheld: 0.05 } },
-  { note: 'lateral tracking shots with parallax', lens: { handheld: 0.1 } },
-  { note: 'handheld and close', lens: { handheld: 0.35 } },
-  { note: 'locked-off frames with one sudden move', lens: { handheld: 0 } },
-  { note: 'fly-throughs, dollying through depth', lens: { handheld: 0.12 } },
+  { note: 'slow, constant push-ins' },
+  { note: 'lateral tracking shots with parallax' },
+  { note: 'a push to the detail that matters in each scene' },
+  { note: 'locked-off frames with one sudden move' },
+  { note: 'fly-throughs, dollying through depth' },
 ];
 const CUTS = [
   { note: 'match cuts on shape (morph by id)', transition: 'cut' },
   { note: 'hard cuts on action', transition: 'cut' },
-  { note: 'flash cuts at the turns', transition: 'cut', turn: 'flash' },
-  { note: 'an iris into each key moment', transition: 'fade', turn: 'iris' },
-  { note: 'whips between chapters', transition: 'cut', turn: 'whip' },
+  { note: 'a push at each turn of the story', transition: 'cut', turn: 'push' },
+  { note: 'fades into each key moment, cuts within a sequence', transition: 'fade' },
+  { note: 'the camera travels through one world between chapters', transition: 'cut' },
 ];
 const TYPE = ['lines', 'words', 'letters', 'cascade'];
-const GRADES = ['teal-orange', 'warm', 'cool', 'bleach', 'mono', 'noir', 'sepia'];
 const MUSIC = [
   'sparse piano and air',
   'a pulsing synth bass that builds',
@@ -51,25 +50,30 @@ const MUSIC = [
   'an ambient drone with a slow heartbeat',
   'a solo cello, close and warm',
 ];
+// Mechanism sketches in library/sketches: pictures of how something works, to build a scene on.
 const SET_PIECES = [
-  'void',
-  'tunnel',
-  'skyline',
-  'horizon',
-  'ocean',
-  'road',
-  'terrain',
-  'landscape',
-  'globe',
-  'crowd',
-  'desk',
+  'route',
+  'pipeline',
+  'network',
+  'balance',
+  'versus',
+  'split',
+  'match',
+  'vesting',
+  'deadline',
+  'untangle',
+  'shortcut',
+  'vault',
+  'bridge',
+  'maze',
+  'portal',
+  'seedling',
+  'searchlight',
+  'cut-paper',
+  'device',
+  'chat',
+  'orbit',
   'signal',
-  'wires',
-  'citygrid',
-  'mast',
-  'harbor',
-  'rooftops',
-  'queue',
 ];
 
 const luminance = hex => {
@@ -100,10 +104,9 @@ export function muse(seed, { dark = true } = {}) {
     cuts: cut.note,
     textMotion: pick(TYPE),
     palette: pick(palettes).id,
-    grade: pick(GRADES),
     setPieces: pieces,
     music: pick(MUSIC),
-    apply: { transition: cut.transition, turn: cut.turn, lens: camera.lens },
+    apply: { transition: cut.transition, turn: cut.turn },
   };
 }
 
@@ -118,7 +121,7 @@ A starting point drawn from curated options (\`clearframe muse --seed ${m.seed}\
 - **Camera:** ${m.camera}
 - **Cuts:** ${m.cuts}
 - **Type:** ${m.textMotion}
-- **Look:** the \`${m.palette}\` palette, a ${m.grade} grade
+- **Look:** the \`${m.palette}\` palette
 - **Set pieces to try:** ${m.setPieces.map(s => `\`${s}\``).join(', ')}
 - **Music:** ${m.music}
 `;

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // The review benchmark: a fixed set of films scaffolded from scratch and drafted for free, so
-// every review round judges the same thing. For each film: the cinema score, a contact sheet
+// every review round judges the same thing. For each film: the film score, a contact sheet
 // and a strip of decoded frames around every cut. Writes build/bench/REPORT.md for a reviewer.
 //   node scripts/bench.mjs [--only name,name] [--no-strips]
 import fs from 'node:fs';
@@ -17,12 +17,12 @@ const FILMS = [
     why: 'what ingest starts from, in a report look',
   },
   { name: 'concept-explainer', args: ['--playbook', 'concept-explainer'], why: 'what `new` starts from' },
-  { name: 'trailer', args: ['--treatment', 'trailer'], why: 'a genre film' },
-  { name: 'cold-open', args: ['--treatment', 'documentary'], why: 'a documentary opening' },
+  { name: 'benefit-explainer', args: ['--treatment', 'workplace'], why: 'a workplace benefits film' },
+  { name: 'cash-flow', args: ['--playbook', 'cash-flow'], why: 'a financial mechanism' },
   { name: 'product-reveal', args: ['--treatment', 'keynote'], why: 'a product film' },
   { name: 'title-sequence', args: ['--treatment', 'cutpaper'], why: 'a motion-design opener' },
-  { name: 'zoom-journey', args: ['--playbook', 'zoom-journey'], why: 'one continuous camera through scales' },
-  { name: 'trailer-vertical', args: ['--treatment', 'trailer', '--vertical'], why: 'a vertical social cut' },
+  { name: 'journey', args: ['--playbook', 'journey'], why: 'one travelling camera through a drawing' },
+  { name: 'benefit-vertical', args: ['--treatment', 'workplace', '--vertical'], why: 'a vertical social cut' },
   // Generated imagery without new spend: a copy of a project whose depth plates are cached.
   {
     name: 'plates-harbor',
@@ -118,7 +118,7 @@ for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name)))
     const check = JSON.parse(cli('check', dir, '--draft').stdout || '{}');
     rows.push({
       ...f,
-      score: crit.match(/cinema (\d+)\/100/)?.[1],
+      score: crit.match(/film (\d+)\/100/)?.[1],
       sheet: fs.existsSync(sheet) ? sheet : null,
       strip: latestStrip(dir),
       audio:
@@ -151,7 +151,7 @@ for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name)))
     }
   }
   const crit = cli('critique', dir).stdout;
-  const score = crit.match(/cinema (\d+)\/100/)?.[1];
+  const score = crit.match(/film (\d+)\/100/)?.[1];
   const sheet = path.join(dir, 'sheet.png');
   const sh = cli('sheet', dir, '--draft', '--out', sheet);
   let strip = null,
@@ -180,7 +180,7 @@ for (const f of FILMS.filter(f => reportOnly || !only || only.includes(f.name)))
     motion: strip ? motionOf(dir) : null,
   });
   console.log(
-    `${f.name.padEnd(20)} cinema ${score ?? '?'}  ${fs.existsSync(sheet) ? 'sheet' : 'NO SHEET'}${strip ? ' + strip' : ''}`,
+    `${f.name.padEnd(20)} film ${score ?? '?'}  ${fs.existsSync(sheet) ? 'sheet' : 'NO SHEET'}${strip ? ' + strip' : ''}`,
   );
 }
 

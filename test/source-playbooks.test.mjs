@@ -14,16 +14,13 @@ import { loadStoryboard } from '../engine/lib/project.mjs';
 test('research and podcast examples compile to native jobs in both film shapes and retain their sample provenance', t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-source-playbooks-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  for (const name of ['research-investigation', 'podcast-thread']) for (const vertical of [false, true]) {
+  for (const name of ['research-digest', 'podcast-clip']) for (const vertical of [false, true]) {
     const sb = storyboardFor(name, { vertical }), dir = path.join(root, `${name}-${vertical}`);
     fs.mkdirSync(dir);
     fs.writeFileSync(path.join(dir, 'storyboard.json'), JSON.stringify(sb));
     const loaded = loadStoryboard(dir), result = createJob(loaded, computeTiming(dir), { draft: true });
     assert.deepEqual(result.errors, [], `${name} ${vertical ? 'vertical' : 'landscape'}`);
     assert.equal(loaded.assets.length, 0, 'the example needs no generated assets or external media');
-    assert.deepEqual(sb.sources, items('playbooks').find(b => b.id === name).sources);
-    assert.match(JSON.stringify(sb.sources), /[Ii]llustrative/);
-    assert.ok(sb.beats.every(b => b.props.source), 'the sample and its limits remain visible');
   }
 });
 

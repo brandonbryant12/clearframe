@@ -21,9 +21,6 @@ archive/browser/recipes/*/assets/
 archive/comparison/examples/paired/assets/vo/
 archive/comparison/examples/paired/assets/music/
 
-# Generated placeholder screenshot for the screen-walkthrough recipe (text-free wireframe).
-!recipes/screen-walkthrough/assets/
-
 # Variable sources for the display voices are fetched by scene/native/tools/generate-fonts.py, hash-checked, not committed.
 film/assets/fonts/source/*
 !film/assets/fonts/source/Inter.ttf

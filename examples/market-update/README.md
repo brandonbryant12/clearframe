@@ -1,6 +1,6 @@
 # Market update (demo film)
 
-A 42-second narrated market update assembled from the [finance chart templates](../finance-charts/README.md): a title, a headline figure, purchasing power, annual returns, the return distribution and an end card, in the `ledger` palette.
+A 42-second narrated market update assembled from the [finance chart templates](../finance-charts/README.md): a title, a headline figure, purchasing power, annual returns, the return distribution and an end card, in the `ink` palette.
 
 ```sh
 node examples/market-update/build.mjs            # or: build.mjs vertical

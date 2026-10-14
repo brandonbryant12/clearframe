@@ -14,8 +14,9 @@
   "transition": "fade",
   "backdrop": "paper",
   "chrome": false,
-  "captions": false,
-  "music": false,
+  "captions": "auto",
+  "music": {},
+  "sfx": "subtle",
   "texture": {
     "grain": 0.3
   },

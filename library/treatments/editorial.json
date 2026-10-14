@@ -3,7 +3,7 @@
   "title": "Editorial data film",
   "when": "Reports, research digests, analysis with a few strong numbers",
   "film": {
-    "theme": "paper",
+    "theme": "porcelain",
     "backdrop": "none",
     "texture": {
       "grain": 0.3
@@ -13,11 +13,6 @@
       "intensity": 0.65
     },
     "transition": "fade",
-    "frame": {
-      "brand": "Brief",
-      "label": false,
-      "progress": false
-    },
     "sfx": "subtle",
     "voice": {
       "style": "clear, warm, quietly confident"

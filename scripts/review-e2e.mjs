@@ -92,14 +92,14 @@ check('Whisper word file', fs.existsSync(words));
 
 // ------------------------------------------------------------------ 2. plan and rough cut
 cf('ingest the recording', 'ingest', FILM, '--audio', episode, '--words', words, '--script', path.join(src, 'script.txt'), '--speakers', 'HOST=Maya:Host,GUEST=Sam:Guest');
-// The agent's plan, kept small: chapters, a dissolve at the turn, and two pictures declared as
+// The agent's plan, kept small: chapters, a wipe at the turn, and two pictures declared as
 // placeholders (so the rough cut shows where drawings will go without drawing them yet).
 const plan = sb();
 const n = plan.beats.length;
 plan.beats.forEach((b, i) => (b.chapter = i < n / 3 ? 'The question' : i < (2 * n) / 3 ? 'The explosion' : 'What to do'));
 const explode = plan.beats.find(b => /ninety percent busy/.test(b.vo)) ?? plan.beats[Math.floor(n / 2)];
 explode.placeholder = 'a desk whose queue grows faster as it gets busier';
-explode.transition = 'dissolve';
+explode.transition = 'wipe';
 const slack = plan.beats.find(b => /slack/i.test(b.vo) && b !== explode);
 if (slack) slack.placeholder = 'a little slack: an empty chair that keeps the line short';
 save(plan);
@@ -136,7 +136,7 @@ const p1 = JSON.parse(fs.readFileSync(path.join(FILM, 'review/compare', `${r1}-$
 const pass1 = p1.passages[0];
 check('picture edit: only its beat changed in content', p1.report.beats.filter(b => b.status === 'content').map(b => b.id).join() === explode.id, p1.report.summary.join(' '));
 check('picture edit: before and after cover the same frames', JSON.stringify(pass1.before.range.frames) === JSON.stringify(pass1.after.range.frames), JSON.stringify(pass1.after.range.frames));
-check('the passage crosses the dissolve into the edited beat', pass1.after.range.frames[0] < target.startFrame && pass1.after.beats.length >= 2, pass1.after.beats.map(b => b.id).join(', '));
+check('the passage crosses the wipe into the edited beat', pass1.after.range.frames[0] < target.startFrame && pass1.after.beats.length >= 2, pass1.after.beats.map(b => b.id).join(', '));
 check('preview clock verified against directly drawn frames', pass1.after.verified?.every(v => v.psnr >= 35 && (v.neighbour == null || v.neighbour <= v.psnr + 0.5)), JSON.stringify(pass1.after.verified));
 check('preview audio is cut from the full mix', pass1.after.audio?.from === 'the full film mix', JSON.stringify(pass1.after.audio?.film));
 check('before/after files decode to the passage length', frames(pass1.before.output) === pass1.before.frames && frames(pass1.after.output) === pass1.after.frames);

@@ -4,6 +4,7 @@ import { BLOCKS, THEMES, MOTIONS, TRANSITIONS, BACKDROPS, FRAME_RATES, markdownC
 import { wireframePNG } from '../film/wireframe.mjs';
 import { playbooks, storyboardFor } from '../film/playbooks.mjs';
 import { types } from '../film/library.mjs';
+import { EXITS } from '../film/constants.mjs';
 const text = { type: 'string' },
   number = { type: 'number' },
   bool = { type: 'boolean' },
@@ -63,7 +64,12 @@ const schema = {
         },
       ],
     },
-    lens: { type: 'object', description: 'Film lens: letterbox, grade, gradeAmount, bloom, aberration, leak, handheld (sway; 0 for business), blur' },
+    lens: {
+      type: 'object',
+      additionalProperties: false,
+      description: 'Film lens: blur, the shutter for motion blur on fast moves (the film looks letterbox, grade, gradeAmount, bloom, aberration, leak and handheld were retired)',
+      properties: { blur: { type: 'number', minimum: 0, maximum: 1 } },
+    },
     speakers: object,
     frame: {
       oneOf: [
@@ -161,7 +167,7 @@ const schema = {
           hold: { type: 'number', minimum: 0 },
           min: { type: 'number', minimum: 0 },
           transition: { enum: [...TRANSITIONS, 'auto'] },
-          exit: { enum: ['auto', 'none', 'fade', 'push', 'zoom', 'wipe', 'panel', 'iris', 'whip'] },
+          exit: { enum: EXITS },
           motion,
           props: object,
           sfx: { type: 'array', items: object },
@@ -180,12 +186,6 @@ const schema = {
           },
           note: text,
           transitionColor: { enum: ['accent', 'accent2', 'ink', 'bg', 'surface'] },
-          transitionOrigin: {
-            type: 'array',
-            minItems: 2,
-            maxItems: 2,
-            items: { type: 'number', minimum: 0, maximum: 1 },
-          },
           camera: {
             oneOf: [
               { enum: ['auto', 'none', 'in', 'out', 'left', 'right', 'up', 'down'] },

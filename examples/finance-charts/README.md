@@ -1,6 +1,6 @@
 # Finance chart templates
 
-Fifteen editorial beats for market and personal-finance commentary, in the `ledger` palette. Each is a `canvas` beat using `props.stat` ([docs](../../docs/stat.md)), `props.plot` ([docs](../../docs/quantitative-plots.md)), `props.bars` ([docs](../../docs/bars.md)), `props.bridge` ([docs](../../docs/bridge.md)), `props.distribution` ([docs](../../docs/distribution-charts.md)) or `props.multiples` ([docs](../../docs/small-multiples.md)), so it stays native, editable and sourced.
+Fifteen editorial beats for market and personal-finance commentary, in the `ink` palette. Each is a `canvas` beat using `props.stat` ([docs](../../docs/stat.md)), `props.plot` ([docs](../../docs/quantitative-plots.md)), `props.bars` ([docs](../../docs/bars.md)), `props.bridge` ([docs](../../docs/bridge.md)), `props.distribution` ([docs](../../docs/distribution-charts.md)) or `props.multiples` ([docs](../../docs/small-multiples.md)), so it stays native, editable and sourced.
 
 | Beat | Pattern | Use it for |
 |---|---|---|

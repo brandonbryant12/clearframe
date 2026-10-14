@@ -100,7 +100,7 @@ test('graphic contracts reject unknown assets and invalid phase clocks while pre
     p.phases.map(p => p.scale),
     ['expand', 'contract'],
   );
-  const sb = storyboardFor('science-lesson');
+  const sb = storyboardFor('concept-explainer');
   sb.beats = [
     {
       id: 'flow',
@@ -139,7 +139,7 @@ test('all bundled icon bytes match the MIT source manifest', () => {
     );
 });
 test('dense automatic arrivals finish before the last frame; late authored cues fail', t => {
-  const sb = storyboardFor('science-lesson');
+  const sb = storyboardFor('concept-explainer');
   sb.beats = [
     {
       id: 'dense',
@@ -190,7 +190,7 @@ test('encoded review samples both sides of cuts and uses end-exclusive word fram
   assert.throws(() => reviewSamples(timing, { beat: 'missing' }), /No beat/);
 });
 test('encoded review refuses a video whose receipt no longer matches its bytes', async t => {
-  const root = project(t, storyboardFor('science-lesson')),
+  const root = project(t, storyboardFor('concept-explainer')),
     file = path.join(root, 'build/video.mp4');
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, 'replaced bytes');
@@ -198,7 +198,7 @@ test('encoded review refuses a video whose receipt no longer matches its bytes',
   await assert.rejects(reviewProject(root), /Video changed/);
 });
 test('scaffold refuses to overwrite a project', t => {
-  const dir = project(t, storyboardFor('speech-story'));
+  const dir = project(t, storyboardFor('podcast-clip'));
   assert.throws(() => scaffold(dir), /not empty/);
 });
 test('palettes accept scoped hex overrides and reject typos', () => {
@@ -333,7 +333,7 @@ test('word selection is end-exclusive, gap-aware, and stable under backward seek
   assert.doesNotMatch(toSRT([{ start: 0, end: 0.4, text: 'Hello' }]), /00:00:00,550/);
 });
 test('final kinetic rejects estimates, accepts measured words, then rejects replaced audio', t => {
-  const sb = storyboardFor('speech-story');
+  const sb = storyboardFor('podcast-clip');
   sb.beats = [{ id: 'speech', block: 'kinetic', vo: 'Hello world', props: { mode: 'highlight' } }];
   const root = project(t, sb),
     vo = path.join(root, 'assets/vo');
@@ -375,7 +375,7 @@ test('a final native job preserves quantized timing and known word boundaries', 
   );
 });
 test('Omni request uses documented fields, MP4 URI delivery and reference order', t => {
-  const dir = project(t, storyboardFor('documentary-hybrid'));
+  const dir = project(t, storyboardFor('concept-explainer'));
   const ref = path.join(dir, 'ref.png');
   fs.writeFileSync(ref, 'image');
   const r = omni.buildRequest({ prompt: 'One continuous shot', refs: [ref], previousInteractionId: 'previous' });
@@ -388,13 +388,13 @@ test('Omni request uses documented fields, MP4 URI delivery and reference order'
   assert.throws(() => omni.estimateCost({ resolution: '4k' }), /720p/);
 });
 test('clip cache changes with palette, continuity instructions and reference bytes', t => {
-  const root = project(t, storyboardFor('documentary-hybrid')),
+  const root = project(t, storyboardFor('concept-explainer')),
     sb = loadStoryboard(root),
     a = { id: 'plate', prompt: 'A quiet room', image: 'reference.png', seconds: 4 };
   fs.writeFileSync(path.join(root, 'reference.png'), 'one');
   const before = clipSpec(root, sb, a);
   assert.match(before.prompt, /No written words/);
-  assert.match(before.prompt, /#f7efe1/);
+  assert.match(before.prompt, /#f5f3ed/);
   fs.writeFileSync(path.join(root, 'reference.png'), 'two');
   assert.notEqual(clipSpec(root, sb, a).hash, before.hash);
   assert.notEqual(clipSpec(root, { ...sb, theme: 'ink' }, a).hash, before.hash);
@@ -446,7 +446,7 @@ test('Omni handles inline REST output without a live paid call', async t => {
 });
 
 test('draft generation preserves imported aligned recordings unless forced', async t => {
-  const sb = storyboardFor('speech-story');
+  const sb = storyboardFor('podcast-clip');
   sb.beats = [{ id: 'speech', block: 'kinetic', vo: 'Hello', props: { mode: 'word' } }];
   const root = project(t, sb),
     dir = path.join(root, 'assets/vo');
@@ -462,7 +462,7 @@ test('draft generation preserves imported aligned recordings unless forced', asy
 });
 
 test('speech transcription uploads only the selected take, aligns it, and deletes the upload', async t => {
-  const sb = storyboardFor('speech-story');
+  const sb = storyboardFor('podcast-clip');
   sb.beats = [{ id: 'speech', block: 'kinetic', vo: 'Hello', props: { mode: 'word' } }];
   const root = project(t, sb),
     dir = path.join(root, 'assets/vo');
@@ -519,7 +519,7 @@ test('speech transcription uploads only the selected take, aligns it, and delete
 });
 
 test('upload refuses a redirecting or foreign resumable destination', async t => {
-  const dir = project(t, storyboardFor('speech-story')),
+  const dir = project(t, storyboardFor('podcast-clip')),
     file = path.join(dir, 'take.wav');
   fs.writeFileSync(file, pcmToWav(Buffer.alloc(48000)));
   t.mock.method(
@@ -639,18 +639,21 @@ test('each scene exits the way the next one enters, and the film ends on a fade'
   }));
   const first = job(t, beats);
   assert.deepEqual(first.errors, []);
+  // A wipe's edge crosses the outgoing scene held whole, so the scene before a wipe stays.
   assert.deepEqual(
     first.job.beats.map(b => b.exit),
-    ['none', 'push', 'zoom', 'wipe', 'fade', 'fade'],
+    ['none', 'push', 'zoom', 'none', 'fade', 'fade'],
   );
   beats[5].exit = 'none';
   beats[0].exit = 'wipe';
   assert.deepEqual(
     job(t, beats).job.beats.map(b => b.exit),
-    ['wipe', 'push', 'zoom', 'wipe', 'fade', 'none'],
+    ['wipe', 'push', 'zoom', 'none', 'fade', 'none'],
   );
   beats[1].exit = 'dissolve';
   assert.match(job(t, beats).errors.join(), /exit must be/);
+  beats[1].exit = 'whip';
+  assert.match(job(t, beats).errors.join(), /exit "whip" was retired: .*use push/);
 });
 test('a beat that ends before its numbers finish counting fails, but drafts only warn', t => {
   const sb = {
@@ -740,15 +743,11 @@ test('bundled font instances and their tabular figures match recorded provenance
     for (const i of f.instances ?? []) assert.ok(families.ranges[i.file], `${i.file} has glyph coverage`);
 });
 test('placeholder screenshots are deterministic PNGs and scaffold with their playbook', t => {
-  const a = wireframePNG(THEMES.signal),
-    b = wireframePNG(THEMES.signal);
+  const a = wireframePNG(THEMES.briefing),
+    b = wireframePNG(THEMES.briefing);
   assert.ok(a.equals(b));
   assert.equal(a.subarray(1, 4).toString(), 'PNG');
   assert.notDeepEqual(wireframePNG(THEMES.ink), a);
-  const dir = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'cf-scaffold-')), 'walk');
-  t.after(() => fs.rmSync(path.dirname(dir), { recursive: true, force: true }));
-  scaffold(dir, { playbook: 'screen-walkthrough' });
-  assert.ok(fs.readFileSync(path.join(dir, 'assets/screen.png')).subarray(1, 4).toString() === 'PNG');
 });
 
 test('settle times include labels, and every beat tells the renderer when its values are final', t => {

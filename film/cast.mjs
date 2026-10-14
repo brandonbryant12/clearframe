@@ -221,7 +221,7 @@ const LOOK = {
   print: { about: 'a two-colour press: colour in a dot screen, slightly off register, worn ink; editorial, retro, poster',
     tile: s => ({ print: { screen: 'dots', cell: Math.max(5, Math.round(s * 0.055)), angle: 45, register: [Math.round(s * 0.025), -Math.round(s * 0.015)], wear: 0.25 } }),
     mark: o => (o.color === 'surface' ? 'ink' : 'bg'), font: 'poster', label: 'semibold', shadow: false },
-  pixel: { about: 'pixel art: bodies and details laid in square screen cells with a one-cell outline, mono type; games, retro tech, playful systems (pairs with the lcd palette)',
+  pixel: { about: 'pixel art: bodies and details laid in square screen cells with a one-cell outline, mono type; games, retro tech, playful systems',
     tile: s => ({ stroke: 'ink', width: Math.max(3, s * 0.03), mosaic: { style: 'pixel', tile: pixelCell(s), outline: true } }),
     mark: () => 'ink', font: 'mono', label: 'mono', shadow: false },
 };

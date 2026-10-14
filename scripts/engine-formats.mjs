@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Every ClearFrame canvas × every frame rate through the renderer: a two-beat film with a
-// block, a dissolve and a native stage (a packet on a link, text pinned to the screen, motion
+// block, a wipe and a native stage (a packet on a link, text pinned to the screen, motion
 // blur) rendered in full and as a mid-motion range. Checks the decoded dimensions, frame rate
 // and frame count, and that a still drawn directly matches the same frame decoded from the full
 // film and from the range (PSNR), so stills, ranges and films share one clock.
@@ -37,7 +37,7 @@ for (const [w, h] of CANVASES)
       beats: [
         { id: 'a', block: 'statement', duration: 1.5, props: { text: 'Formats and rates' } },
         {
-          id: 'b', block: 'stage', duration: 2, transition: 'dissolve',
+          id: 'b', block: 'stage', duration: 2, transition: 'wipe',
           props: {
             title: 'A packet in flight', source: 'Format test', shutter: 0.5, samples: 4,
             actors: [{ id: 'x', label: 'From', x: W * 0.25, y: H * 0.55 }, { id: 'y', label: 'To', x: W * 0.75, y: H * 0.55 }],

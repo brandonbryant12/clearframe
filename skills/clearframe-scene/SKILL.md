@@ -41,7 +41,7 @@ Charts, KPIs, plots, quotes and kinetic speech stay in their blocks (exact value
     "shutter": 0.5 } }
 ```
 
-Examples: `examples/stage-pr` (a film stage across beats, a callout riding a camera move, a code edit from a commit) and `examples/stage-footage/make.mjs` (portrait/landscape footage stages).
+Example: `examples/stage-pr` (a film stage across beats, a callout riding a camera move, a code edit from a commit).
 
 ## Engine development
 

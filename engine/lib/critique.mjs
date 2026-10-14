@@ -184,20 +184,19 @@ function shotWords(props) {
 
 export { pictureFor } from './pictures.mjs';
 
-// ------------------------------------------------------------------ cinema
+// ------------------------------------------------------------------ film score
 
 const has = (v, re) => re.test(JSON.stringify(v ?? {}));
 const DEPTH = /"(z|dolly|focus|depth|tilt)"\s*:/;
 const LIFE = /"(loop|keys|along|dolly|steps)"\s*:|"type"\s*:\s*"particles"/;
 
 /**
- * The eight tells of a slideshow (docs/cinema.md), measured from the storyboard. Each tell
+ * The eight tells of a slideshow (skills/clearframe-motion), measured from the storyboard. Each tell
  * found costs 12.5 points of 100; the fixes point at the controls that answer it.
  */
-export function cinemaScore(sb, beats, timed, transitions) {
+export function filmScore(sb, beats, timed, transitions) {
   const tells = [];
   const tell = (name, fix) => tells.push({ name, fix });
-  const lens = b => ({ ...(sb.lens ?? {}), ...(b.lens ?? {}) });
   const n = beats.length;
   if (n < 3) return { score: 100, tells };
   // 1. Continuity: worlds, morphs by shared id, graphic wipes, or a cut between two moving
@@ -223,15 +222,14 @@ export function cinemaScore(sb, beats, timed, transitions) {
       (travelling(a) && travelling(b))
     )
       carried++;
-    else if (['panel', 'iris', 'whip', 'flash', 'dissolve'].includes(transitions[i])) carried += 0.5;
+    else if (transitions[i] === 'panel') carried += 0.5;
   }
   if (carried < (n - 1) / 4)
     tell(
       'Card per line',
-      `only ${carried} of ${n - 1} cuts carry anything across. Make runs of drawings one world, morph a shape into the next scene (same id), or cut on a whip.`,
+      `only ${carried} of ${n - 1} cuts carry anything across. Make runs of drawings one world, keep a cast of the film's objects, or morph a shape into the next scene (same id).`,
     );
   // 2. Build, then freeze: what still moves once the scene has landed.
-  // A handheld lens alone is not life: a slide that wobbles is still a slide.
   const alive = b =>
     b.plate?.drift ||
     (b.block === 'canvas' && (b.props?.world || b.props?.viewFrom || has(b.props, LIFE))) ||
@@ -289,15 +287,11 @@ export function cinemaScore(sb, beats, timed, transitions) {
       `${kinds} kind${kinds === 1 ? '' : 's'} of scene and one kind of cut. Alternate wide and close, dense and bare, and give the story's turns a different cut.`,
     );
   // 7. Screen-flat image.
-  const lit = beats.some(b => {
-    const l = lens(b);
-    return l.grade || l.bloom || l.letterbox || l.leak;
-  });
   const glow = beats.some(b => has(b.props, /"(glow|shine|spotlight)"/));
-  if (!steady && !lit && !glow && !sb.texture)
+  if (!steady && !glow && !sb.texture)
     tell(
       'Screen-flat image',
-      'no light, lens or texture. Choose a lens (grade, bloom, letterbox, leak), add grain and a vignette, and light the subject (glow, shine, spotlight).',
+      'no light or texture. Add a little grain, and light the subject (shine, spotlight) where it matters.',
     );
   // 10. Cards, not shots: type and charts on a plain field, with no place or picture behind.
   const TYPE_CARDS = [
@@ -389,7 +383,7 @@ export function critique(root) {
       findings.push({ level: 'error', where: 'check', message: x.message });
     }
     findings.push({ level: 'error', where: 'critique', message: `stopped on a storyboard shape it did not expect (${e.message}); fix the errors above, then run critique again` });
-    return { summary: { cinema: 0, beats: 0, seconds: 0, families: 0, drawn: 0, imaged: 0, graphicTransitions: 0, tones: 0, warnings: 0, ideas: 0, errors: findings.length }, findings };
+    return { summary: { film: 0, beats: 0, seconds: 0, families: 0, drawn: 0, imaged: 0, graphicTransitions: 0, tones: 0, warnings: 0, ideas: 0, errors: findings.length }, findings };
   }
 }
 
@@ -400,7 +394,7 @@ function critiqueStoryboard(root) {
     out = [];
   const add = (level, where, message) => out.push({ level, where, message });
   const t = timing.beats;
-  // What `check` would refuse comes first: a storyboard that cannot render has no cinema.
+  // What `check` would refuse comes first: a storyboard that cannot render has no score.
   let job;
   try {
     // Declared placeholders and unfinished elements are judged as a rough cut shows them, and
@@ -454,12 +448,12 @@ function critiqueStoryboard(root) {
       if (pal && used && /^#[0-9a-f]{6}$/i.test(pal.accent) && /^#[0-9a-f]{6}$/i.test(pal[role]) && near(pal.accent, pal[role]))
         add('warn', 'film', `In the ${sb.theme} palette the accent and the ${role} colour are the same ${pal.accent} / ${pal[role]}, so ${role === 'negative' ? 'warning marks read as the brand colour' : 'what is good reads as the brand colour'}. Choose a palette that tells them apart (briefing for security and policy films), or mark them in another colour.`);
   } catch {}
-  // A trailer's punctuation in a calm film: an iris grows a flat disc of the accent colour over the
-  // picture, which a reviewer took for a rendering bug in a round-18 phishing film.
+  // A trailer's punctuation in a calm film: a flat field of the accent colour sweeping over the
+  // picture reads as a rendering fault (a round-18 phishing film's reviewer took it for a bug).
   if (sb.treatment === 'workplace')
     for (const b of sb.beats)
-      if (['iris', 'flash', 'whip', 'panel'].includes(b.transition))
-        add('warn', b.id, `transition "${b.transition}" covers the picture with a flat slab or disc of colour (reviewers read it as a rendering fault in a workplace film): cut, dissolve, "push" at a chapter, or move the camera within one world.`);
+      if (b.transition === 'panel')
+        add('warn', b.id, `transition "panel" covers the picture with a flat slab of colour (reviewers read it as a rendering fault in a workplace film): cut, fade, "push" at a chapter, or move the camera within one world.`);
   // "Portrait" is read as "vertical": two onboarding films for a phone app came out 4:5.
   if (sb.format?.preset === 'portrait')
     add('warn', 'film', 'The format is portrait: 4:5 (1080×1350), a feed post. A film for a phone screen (an app, Reels, Stories, TikTok, "vertical") is format.preset "vertical": 9:16 (1080×1920).');
@@ -614,22 +608,6 @@ function critiqueStoryboard(root) {
         `heading: bottom puts the title where this drawing reaches (y ${Math.round(box.bottom)}). Set view: "auto" so the drawing fits above it, or keep the heading at the top.`,
       );
   }
-  // Letterbox bars cover the top and bottom of landscape frames; frame-pixel type must sit inside.
-  const { width: W, height: H } = sb.format;
-  for (const b of beats.filter(x => x.block === 'canvas' && !x.props?.view)) {
-    const aspect = { ...(sb.lens ?? {}), ...(b.lens ?? {}) }.letterbox;
-    const bar = aspect && W > H && W / aspect < H ? (H - W / aspect) / 2 : 0;
-    if (!bar) continue;
-    const hidden = (b.props.elements ?? []).filter(
-      el => el.type === 'text' && (el.y - (el.size ?? 48) < bar || el.y > H - bar),
-    );
-    if (hidden.length)
-      add(
-        'warn',
-        b.id,
-        `${hidden.length} text element(s) sit under the letterbox bars (${Math.round(bar)} px top and bottom), e.g. "${String(hidden[0].text).slice(0, 24)}". Move them into the picture.`,
-      );
-  }
   const drawn = beats.filter(b => b.block === 'canvas' || b.art || staged(b)).length,
     imaged = beats.filter(b => b.plate || ['image', 'video', 'annotate'].includes(b.block)).length;
   if (timing.duration > 40 && !drawn)
@@ -660,12 +638,12 @@ function critiqueStoryboard(root) {
   }
   // Transitions.
   const transitions = beats.map(b => b.transition ?? sb.transition ?? 'fade');
-  const graphic = transitions.filter(x => ['panel', 'iris', 'whip'].includes(x)).length;
+  const graphic = transitions.filter(x => x === 'panel').length;
   if (beats.length >= 6 && new Set(transitions.slice(1)).size === 1)
     add(
       'idea',
       'film',
-      `Every cut is a ${transitions[1]}. Mark the story's turns with a panel, iris or whip; cut within a sequence.`,
+      `Every cut is a ${transitions[1]}. Mark the story's turns with a push or a camera move through one world; cut within a sequence.`,
     );
   if (graphic > Math.max(2, beats.length / 3))
     add(
@@ -860,18 +838,6 @@ function critiqueStoryboard(root) {
       directions[0].id,
       'Stage directions in the narration text will be read aloud. Use an inline tag (<short pause>, <breath>) or the voice style instead.',
     );
-  // A film look promises depth: a lens over flat drawings reads as a filtered slide.
-  const filmLook = beats.some(b => {
-    const l = { ...(sb.lens ?? {}), ...(b.lens ?? {}) };
-    return l.letterbox || l.grade;
-  });
-  const drawings = beats.filter(b => b.block === 'canvas');
-  if (filmLook && drawings.length && !drawings.some(b => /"(z|depth)"\s*:/.test(JSON.stringify(b.props))))
-    add(
-      'idea',
-      'film',
-      'The film has a lens but every drawing is flat. Give places three planes: z on a far layer, the subject and one soft near layer, then let the camera move through them (docs/canvas.md, Depth).',
-    );
   // One dataset per film: the same label must show the same value (and unit) everywhere.
   const shown = new Map();
   const record = (label, value, unit, id) => {
@@ -897,10 +863,10 @@ function critiqueStoryboard(root) {
         `"${seen[0].label}" shows ${distinct.map(x => `${x.value}${x.unit} in ${x.id}`).join(' and ')}. One label, one value: the viewer reads a contradiction. Rename the label if these are different measures.`,
       );
   }
-  const cinema = cinemaScore(sb, beats, t, transitions);
-  for (const tell of cinema.tells) add('idea', 'cinema', `${tell.name}: ${tell.fix}`);
+  const film = filmScore(sb, beats, t, transitions);
+  for (const tell of film.tells) add('idea', 'film', `${tell.name}: ${tell.fix}`);
   const summary = {
-    cinema: cinema.score,
+    film: film.score,
     beats: beats.length,
     seconds: +timing.duration.toFixed(1),
     families: [...new Set(beats.map(family))].length,

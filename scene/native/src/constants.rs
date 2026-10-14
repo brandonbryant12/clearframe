@@ -8,7 +8,6 @@ use std::sync::OnceLock;
 #[serde(rename_all = "camelCase")]
 pub struct CanvasTiming {
     pub draw: f32,
-    pub scramble: f32,
     pub grow: f32,
     pub key: f32,
     pub along: f32,

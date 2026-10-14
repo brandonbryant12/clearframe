@@ -43,10 +43,8 @@ pub const TYPES: &[&str] = &[
     "code",
     "connector",
 ];
-pub const ENTERS: &[&str] = &[
-    "fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type",
-    "scramble", "blur", "none",
-];
+pub const ENTERS: &[&str] =
+    &["fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type", "none"];
 pub const EXITS: &[&str] = &["fade", "shrink", "fall", "lift", "undraw", "wipe", "blur", "none"];
 pub const LOOPS: &[&str] = &["spin", "pulse", "float", "sway", "orbit", "dash", "blink", "rock"];
 /// Canvas features the native evaluator does not draw. A plan using them is refused with the
@@ -581,7 +579,6 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
         "draw" => c.draw,
         "type" => (text_len * c.type_per_char).clamp(c.type_min, c.type_max),
         "grow" | "grow-x" | "grow-y" | "wipe" | "wipe-up" => c.grow,
-        "scramble" => c.scramble,
         "none" => 0.0,
         _ => scope.motion.duration(),
     };
@@ -633,9 +630,9 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
     (pose.tx, pose.ty) = keyed_tilt(el, now);
     let distance = scope.motion.distance(f(el, "dist", 48.0));
     match enter {
-        "fade" | "blur" => pose.alpha *= e.alpha,
+        "fade" => pose.alpha *= e.alpha,
         "pop" => {
-            let k = 0.55 + 0.45 * scope.motion.pop(local * scope.motion.duration() / dur.max(0.01));
+            let k = 0.86 + 0.14 * scope.motion.pop(local * scope.motion.duration() / dur.max(0.01));
             pose.sx *= k;
             pose.sy *= k;
             pose.alpha *= e.alpha;
@@ -804,11 +801,7 @@ fn element(canvas: &Canvas, scope: &mut Scope, el: &Value, default_at: f32, now:
         1.0
     };
     let draw_on = if exit == "undraw" { draw_on * (1.0 - q) } else { draw_on };
-    let mut blur = match (enter, exit) {
-        ("blur", _) if e.alpha < 1.0 => 14.0 * (1.0 - e.alpha),
-        (_, "blur") if q > 0.0 => 14.0 * q,
-        _ => 0.0,
-    };
+    let mut blur = if exit == "blur" && q > 0.0 { 14.0 * q } else { 0.0 };
     blur += key[7].max(0.0);
     let (fz, aperture) = scope.camera.focus;
     if let (Some(_), true, false) = (z, aperture > 0.0, kind == "text") {
@@ -1359,12 +1352,10 @@ fn text_element(
     if flag(el, "upper") {
         value = value.to_uppercase();
     }
-    // Typing and decoding happen inside the finished text's layout (see the canvas block).
+    // Typing happens inside the finished text's layout (see the canvas block).
     let full = value.clone();
     let total = full.chars().count();
     let shown = if reveal < 1.0 { (total as f32 * reveal).ceil() as usize } else { total };
-    let scramble = s(el, "enter") == "scramble";
-    let decode_dur = f(el, "dur", 0.9);
     let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
     let anchor = s(el, "anchor");
     let mut p = Paint::default();
@@ -1408,7 +1399,7 @@ fn text_element(
                 return;
             }
         };
-        let (mut budget, mut offset) = (shown, 0);
+        let mut budget = shown;
         for (i, line) in layout.lines.iter().enumerate() {
             let left = match anchor {
                 "middle" => x - line.width / 2.0,
@@ -1416,12 +1407,8 @@ fn text_element(
                 _ => x,
             };
             let count = line.text.chars().count();
-            let mut piece: String = line.text.chars().take(budget).collect();
-            if scramble {
-                piece = text::decode(&piece, &full, local, decode_dur, offset, total);
-            }
+            let piece: String = line.text.chars().take(budget).collect();
             budget = budget.saturating_sub(count + 1);
-            offset += count + 1;
             let w = if piece.len() == line.text.len() { line.width } else { fonts::measure(font, &piece, layout.size, layout.tracking_px) };
             runs.push((piece, left, y + i as f32 * layout.line_height, w));
         }
@@ -1430,9 +1417,6 @@ fn text_element(
     } else {
         if shown < total {
             value = full.chars().take(shown).collect();
-        }
-        if scramble {
-            value = text::decode(&value, &full, local, decode_dur, 0, total);
         }
         if let Some(fit) = num(el, "fit") {
             let natural = fonts::measure(font, &full, size, tracking);

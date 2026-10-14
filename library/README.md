@@ -11,13 +11,23 @@ Everything creative that is not engine code lives here, one file per item. To ad
 | `playbooks/` | a narrative arc: beats with blocks, sample props and voice-over | `new --playbook`, `playbooks` |
 | `directions/` | optional source-aware story, picture and pace guidance plus playbook/treatment defaults | `directions`, `new/start/ingest --direction` |
 | `types/` | a type voice: the display family and emphasis for titles, statements, chapters, endcards and kinetic text | `type` in a storyboard or a treatment's `film`, `types` |
-| `sculptures/` | trusted built-in JSON brief + Python scene recipe for an original offline 3D insert | `sculptures`, `sculpture ID --out NEW-DIR` |
+
+## The bar
+
+A smaller library of good pieces makes better films than a large one with junk in it: agents reach for whatever is listed. Before adding anything (and when reviewing what is here), check it against all six. Render it (`gallery --sketches`, `sheet`, `looks`) and look at the settled frame at phone size before committing. The reasoning and the research behind it are in [the component bar](../docs/research/2026-10-component-bar.md).
+
+1. **One job.** It shows something the narration says changing (a mechanism, a comparison, a step), or it is a necessary neutral surface. Decoration on its own fails.
+2. **Reads on a phone.** The settled frame reads at 360 px wide: one first thing to read, nothing cut off, overlapping or empty.
+3. **Restrained motion.** Arrivals and moves have a purpose. Information never bounces past its size; nothing flashes, glitches or shakes for emphasis.
+4. **Real content.** Copy and numbers are parameters, and anything that points (a ring, a strike, a highlight) is attached to what it points at (`marks` on canvas text), not placed by coordinates.
+5. **Professional register.** The films are for companies and financial firms. No comic bursts, halftone pop art, synthwave grids, hyperspace tunnels, retro sunbursts, neon, lens flares or trailer looks; no blur standing in for depth; no placeholder titles.
+6. **Works and is distinct.** It validates and renders, its cues fit its beat, and it is not a near-duplicate of something better already here.
 
 The file name is the id (`library/palettes/noir.json` is `noir`). Files starting with `_` are ignored, so `_draft.json` stays out of listings. `order` sets the listing position. Items without it sort after the numbered ones, by id.
 
-The native creative catalog is validated when the engine starts, so a bad file fails immediately and names itself. Run `node --test test/library.test.mjs` after adding one. Optional sculptures validate when listed or rendered and are deliberately outside shared/project JSON loading; external library data never executes Python. See [sculptures](../docs/sculptures.md).
+The native creative catalog is validated when the engine starts, so a bad file fails immediately and names itself. Run `node --test test/library.test.mjs` after adding one.
 
-`dimensional-kpis` is an editable native playbook, with no prepared media or Blender dependency. Its `canvas.props.kpi` values generate fixed-depth geometry and native type. See the [form, data and motion guide](../docs/kpi-direction.md) when choosing between flat graphics, native dimensional KPIs and true 3D inserts.
+The canvas `kpi` shorthand (`canvas.props.kpi`) generates fixed-depth geometry and native type, with no prepared media. See the [form, data and motion guide](../docs/kpi-direction.md) when choosing between flat graphics, native dimensional KPIs and true 3D inserts.
 
 ## Directions
 
@@ -67,22 +77,22 @@ Add `library/directions/my-idea.json` to a shared library, then use `--library D
   "order": 10,
   "title": "Quiet lesson",
   "when": "Wellbeing, reflective stories, gentle tutorials",
-  "film": { "theme": "forest", "type": "bookish", "backdrop": "glow", "motion": { "preset": "gentle", "intensity": 0.35 },
+  "film": { "theme": "meadow", "type": "bookish", "backdrop": "none", "motion": { "preset": "gentle", "intensity": 0.35 },
             "transition": "fade", "sfx": "off", "voice": { "style": "soft, slow, reassuring" } },
-  "beats": { "graphic": "fade", "emphasisStyle": "serif", "rough": 0.6, "kinetic": "words", "font": "mono", "fps": 12, "mosaic": {} },
+  "beats": { "graphic": "fade", "emphasisStyle": "serif", "rough": 0.6, "kinetic": "words", "font": "mono", "fps": 12 },
   "rules": ["Short imperative rules the author should follow."]
 }
 ```
 
-- `variants` (optional): whole looks to choose between, `[{name, film: {theme, type, …}, beats: {rough | print | …}}]`. `new` picks one per project from its folder name (or `--seed`), so two films from one treatment don't share a face; `--theme` overrides the pick. DIRECTION.md records the look. `workplace` has six (clean, notebook, brief, meadow, poster, daylight).
+- `variants` (optional): whole looks to choose between, `[{name, film: {theme, type, …}, beats: {rough | print | …}}]`. `new` picks one per project from its folder name (or `--seed`), so two films from one treatment don't share a face; `--theme` overrides the pick. DIRECTION.md records the look. `workplace` has five (clean, notebook, brief, meadow, daylight).
 - `film` holds storyboard-level settings, copied onto the storyboard. `film.theme` must name a palette; `film.type` (optional) names a type voice, and is what keeps two treatments from reading as the same brand.
 - `beats` holds defaults applied only where the author has not set them. `rough: false` strips pencil strokes that an arc was scaffolded with; the film looks use it. Every key is optional:
   - `graphic`: the transition used at chapter starts;
   - `emphasisStyle`: `serif` or `accent` for title, statement and endcard, an explicit choice that overrides the voice's emphasis;
-  - `rough`, `mosaic`, `print`, `font` and `fps`: for canvas;
+  - `rough`, `print`, `font` and `fps`: for canvas;
   - `kinetic`: the kinetic mode.
 - `rules` end up in the project's `DIRECTION.md`.
-- `playbook` (optional) names the arc this look is made for. `new --treatment ID` and `ingest --treatment ID` start from it when no `--playbook` is given; for example, `documentary` starts from `cold-open`.
+- `playbook` (optional) names the arc this look is made for. `new --treatment ID` and `ingest --treatment ID` start from it when no `--playbook` is given; for example, `keynote` starts from `product-reveal`.
 - `playbooks` (optional) lists every arc the treatment is made for; `new` and `start` print a note when another playbook is chosen with it (`workplace` lists its five).
 
 ## Types
@@ -90,9 +100,9 @@ Add `library/directions/my-idea.json` to a shared library, then use `--library D
 ```json
 {
   "order": 2,
-  "title": "Didone editorial",
-  "when": "Keynotes, premieres, fashion, culture and brand films that want magazine authority",
-  "display": "playfair", "emphasis": "italic", "case": "mixed", "tracking": -0.01, "leading": 0.98
+  "title": "Display serif",
+  "when": "Documentaries, histories and lessons that want a warm serif headline",
+  "display": "dm-serif", "emphasis": "italic", "case": "mixed", "tracking": -0.005, "leading": 0.98
 }
 ```
 
@@ -100,7 +110,7 @@ Add `library/directions/my-idea.json` to a shared library, then use `--library D
 - `emphasis` says how `emphasis` phrases are drawn: `accent` (colour), `serif` (italic Instrument Serif, the editorial feeling word), `italic` (the family's own italic; the loader rejects it for a family without one), `weight` (a light headline with the phrase in bold; needs a light weight), `marker` (an accent block behind the phrase, ink in the background colour) or `underline` (an accent rule). A beat's own `emphasisStyle: serif | accent` still wins.
 - `case: upper` sets titles, statements, endcards, chapter titles and kinetic stacks in capitals (scene headers stay mixed). `tracking` is letter-spacing in em (−0.1 to 0.3); `leading` multiplies each block's line height (0.8 to 1.3).
 - The voice reaches titles, statements, endcards, chapters, highlights, scene headers and kinetic text. Body copy, labels, sources, captions and counters stay in Inter (counters need its tabular figures). Display text is glyph-checked against the voice's face before rendering.
-- Built-ins: `inter`, `didone`, `wide`, `geometric`, `condensed`, `bookish`, `typewriter`. Run `clearframe types`. A storyboard sets `"type": "didone"`; a beat can set its own `type` (`inter` opts back out). The job carries the resolved voice, so a project renders without the library that defined it, and `new` copies a shared voice into the project like a palette.
+- Built-ins: `inter`, `geometric`, `bookish`. Run `clearframe types`. A storyboard sets `"type": "bookish"`; a beat can set its own `type` (`inter` opts back out). The job carries the resolved voice, so a project renders without the library that defined it, and `new` copies a shared voice into the project like a palette.
 
 ## Sketches
 
@@ -120,7 +130,7 @@ A sketch is canvas props (`elements`, and optionally `world`). There are two way
   - `smoothPath`;
   - `frames`.
 
-A sketch should draw a mechanism, a place or a purposeful material composition, not a slide. Background sketches declare `layer: "under"` and can be used in any storyboard as `art: {sketch: "paper-fold", seed: 17, opacity: 0.8, drift: 0.5}`. Authored `under` additions and `over` layers are preserved. A material sketch reads `seed` from `build(w, h, {seed})` through `jitter(seed)` in `_material-kit.mjs`: zero without a seed, so the reference layout never changes, and small enough to keep the copy region clear. Scene cameras/worlds belong in `props.sketch`, not background art. Built-in parametric art redraws at the actual frame dimensions; project JSON art uses its authored coordinates. See `docs/image-direction.md` for imagegen-inspired deterministic design and `docs/design/material-studies/index.html` for the atlas. Read `skills/clearframe-canvas/SKILL.md` before writing one.
+A sketch draws a mechanism that changes on the voice (a match that stacks, a lock that opens, a route that shortens), not a decoration or a slide: see [the bar](#the-bar). Background sketches declare `layer: "under"` and can be used in any storyboard as `art: {sketch: NAME, opacity: 0.8}`; authored `under` additions and `over` layers are preserved. Scene cameras/worlds belong in `props.sketch`, not background art. Built-in parametric art redraws at the actual frame dimensions; project JSON art uses its authored coordinates. Read `skills/clearframe-canvas/SKILL.md` before writing one.
 
 ## Playbooks
 
@@ -130,7 +140,7 @@ A sketch should draw a mechanism, a place or a purposeful material composition, 
   "title": "What the film does, in one line",
   "audience": "Who it is for",
   "inputs": "What the author must bring",
-  "theme": "paper", "motion": "gentle", "backdrop": "glow", "format": "landscape",
+  "theme": "paper", "motion": "gentle", "backdrop": "none", "format": "landscape",
   "beats": [
     { "id": "hook", "block": "statement", "vo": "…", "props": { "text": "…" } },
     { "id": "how", "block": "canvas", "vo": "…", "props": { "sketch": "pipeline", "elements": [ … ] } }
@@ -141,7 +151,7 @@ A sketch should draw a mechanism, a place or a purposeful material composition, 
 
 - Each beat is a storyboard beat. Its `props` are checked against the block when a project is made.
 - A beat whose composition cannot survive a vertical crop (a chart with its labels beside it) can carry `tall`: props that replace its own when the project is made vertical (`new --vertical`, or the studio's `playbook` command on a vertical film). Draw them on a 1080×1920 canvas with `view: [1080, 1920]`; the scene fits that drawing to its area like any canvas view. Use `viewTall` instead when only the camera needs to change. concept-explainer's `curve` and `nine` show the pattern: in the vertical cut, the row labels move above their bars.
-- A canvas beat can name a sketch instead of listing elements: `"props": {"sketch": "tunnel"}` draws it when the project is made, together with the sketch's own camera (`view`, `viewFrom`, `dolly`, `focus`). Any of those set on the beat win. `"sketchText": {"TITLE": "SIGNAL"}` replaces a sketch's placeholder type. Vertical films redraw every sketch beat for the tall frame.
+- A canvas beat can name a sketch instead of listing elements: `"props": {"sketch": "cash-lock"}` draws it when the project is made, together with the sketch's own camera (`view`, `viewFrom`, `dolly`, `focus`). Any of those set on the beat win. `"sketchText": {"CLEARING": "Settlement"}` replaces a sketch's placeholder type. Vertical films redraw every sketch beat for the tall frame.
 - A playbook can set the film's look: `theme`, `motion`, `backdrop`, `texture`, `lens`, `camera` (the default for beats without their own; `none` for a steady film), `heading`, `textMotion` and `transition`. A treatment applied on top still wins.
 - Optional `sources` holds `claim`/`source` entries (with `asOf` when useful), or `id`/`title` entries. They are copied intact into a scaffold, so a playbook can preserve its illustrative assumptions and arithmetic.
 - Sample figures must be marked as illustrative, with `source: "Illustrative sample data · replace before publishing"`.

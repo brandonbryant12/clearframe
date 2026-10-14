@@ -240,6 +240,8 @@ pub(crate) struct Draw<'a, 'c> {
     pub floor: f32,
     /// Letterbox bar height on this beat (captions sit above it).
     pub bar: f32,
+    /// This frame's caption sits at the top: the picture has type of its own in the caption band.
+    pub caption_top: bool,
     /// How far the heading moves down to clear a letterbox bar.
     pub lift: f32,
     /// Centre of a world camera at this frame, for elements drawn with parallax (`depth`).
@@ -271,6 +273,7 @@ impl<'a, 'c> Draw<'a, 'c> {
             head_y: None,
             floor: env.height,
             bar: 0.0,
+            caption_top: false,
             lift: 0.0,
             camera: Cell::new(None),
             depth: Cell::new((0.0, None)),
@@ -657,7 +660,7 @@ impl<'a, 'c> Draw<'a, 'c> {
         if e.done() {
             return body;
         }
-        let scale = 0.6 + 0.4 * self.m.pop(self.t - time);
+        let scale = 0.86 + 0.14 * self.m.pop(self.t - time);
         draw::group(vec![body.into()]).opacity(e.alpha).scale_about(scale, cx, cy)
     }
     /// Current value of a count from `from` to `to` starting at `time`.
@@ -856,8 +859,8 @@ mod tests {
     #[test]
     fn words_follow_half_open_timestamps_and_seek_backwards() {
         let words = vec![
-            Caption { text: "one".into(), start: 0.1, end: 0.5 },
-            Caption { text: "two".into(), start: 0.6, end: 1.0 },
+            Caption { text: "one".into(), start: 0.1, end: 0.5, lines: vec![] },
+            Caption { text: "two".into(), start: 0.6, end: 1.0, lines: vec![] },
         ];
         assert_eq!(active_word(&words, 0.0), None);
         assert_eq!(active_word(&words, 0.1), Some(0));
@@ -869,11 +872,11 @@ mod tests {
     #[test]
     fn phrases_split_on_word_limit_silence_and_duration_without_changing_timestamps() {
         let words = vec![
-            Caption { text: "Observe".into(), start: 0.0, end: 0.4 },
-            Caption { text: "closely".into(), start: 0.5, end: 0.9 },
-            Caption { text: "Then".into(), start: 2.0, end: 2.3 },
-            Caption { text: "begin".into(), start: 2.4, end: 2.8 },
-            Caption { text: "again".into(), start: 2.9, end: 3.4 },
+            Caption { text: "Observe".into(), start: 0.0, end: 0.4, lines: vec![] },
+            Caption { text: "closely".into(), start: 0.5, end: 0.9, lines: vec![] },
+            Caption { text: "Then".into(), start: 2.0, end: 2.3, lines: vec![] },
+            Caption { text: "begin".into(), start: 2.4, end: 2.8, lines: vec![] },
+            Caption { text: "again".into(), start: 2.9, end: 3.4, lines: vec![] },
         ];
         assert_eq!(word_window(&words, 0.2, 7, 0.6, 4.0), 0..2);
         assert_eq!(word_window(&words, 1.8, 7, 0.6, 4.0), 0..2);
@@ -889,7 +892,7 @@ mod tests {
         let words: Vec<Caption> = "The problem was never too few buses."
             .split(' ')
             .enumerate()
-            .map(|(i, w)| Caption { text: w.into(), start: i as f32 * 0.3, end: i as f32 * 0.3 + 0.25 })
+            .map(|(i, w)| Caption { text: w.into(), start: i as f32 * 0.3, end: i as f32 * 0.3 + 0.25, lines: vec![] })
             .collect();
         // "The problem was never too" would strand "too": it starts the next phrase instead.
         assert_eq!(phrase_window(&words, 0.1, 5, 0.6, 9.0, true), 0..4);

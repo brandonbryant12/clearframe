@@ -22,12 +22,10 @@ Run on the same Apple Silicon iMac (M1, 8 GB). Every step was free and local, th
   - Text gradients spanned the glyph outline instead of SVG's metric text box.
   - Material shaders on outlined text were evaluated at a shifted origin.
 - **Footage colour:**
-  - The bundled Blender clips are encoded and tagged BT.709. The old decoder always converted with BT.601, which shifted reds: a solid (200, 50, 75) came back as (187, 32, 75). The new decoder follows the tags and returns (200, 49, 75).
+  - Clips encoded and tagged BT.709 were always converted with BT.601 by the old decoder, which shifted reds: a solid (200, 50, 75) came back as (187, 32, 75). The new decoder follows the tags and returns (200, 49, 75).
   - Untagged BT.601 clips are unchanged.
 - **Fixtures** (whole-video PSNR against the earlier MP4s): finance landscape 60.8 and vertical 61.2 dB, dimensional KPIs 63.3, teaching sequences 66.4, material studies 53.0, research 49.1, teaching-3D 46.2, stage-pr 39.0, stage-materials 38.7, night-city 38.5, stage footage landscape 35.7 and vertical 30.1.
   - Drawn from the same prepared plans with the pre-retirement binary, the lower films agree at 52.4 dB (night-city), 47–59 dB (stage-pr) and 38–49 dB (stage-materials). The rest of their gap is inputs that changed after those MP4s were made, glyph-edge anti-aliasing, and the BT.709 correction in footage.
-  - The teaching-3D trajectory completes its pipeline (check, sheet, render, QA, phone sheet, timeline, boundaries) with the same QA findings as before.
-  - The feature-launch trajectory still fails on looping B-roll, as before.
 - **Review loop:** `scripts/review-e2e.mjs` passes 21 of 21 checks.
 - **Studio, over its HTTP API only** (the browser extension was not connected):
   - A note posted with a pin, a `#pace` tag and a reply reached the engine's review record on the right beat and revision.

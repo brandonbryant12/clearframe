@@ -62,7 +62,7 @@
     {
       "id": "keep",
       "block": "canvas",
-      "vo": "The company's part becomes yours over time: a third after one year, two thirds after the second, and all of it after the third.",
+      "vo": "A third of the company's part is yours after one year, two thirds after two, and all of it after three. Stay that long, and every coin it added stays yours.",
       "props": {
         "source": "Example Co. retirement plan summary",
         "sketch": "vesting",
@@ -81,7 +81,7 @@
         },
         "sketchSay": {
           "ONE": "one",
-          "TWO": "second",
+          "TWO": "thirds",
           "THREE": "all"
         }
       }

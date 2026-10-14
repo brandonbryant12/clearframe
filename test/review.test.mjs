@@ -36,7 +36,7 @@ const edit = (root, fn) => {
 const human = { role: 'human', name: 'Ana' };
 const now = async root => ({ id: null, timeline: (await workingTimeline(root)).timeline });
 
-/** A generated-narration film: statements, a dissolve, a two-stop canvas world. */
+/** A generated-narration film: statements, a wipe, a two-stop canvas world. */
 function draftProject(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-review-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
@@ -59,7 +59,7 @@ function draftProject(t) {
     music: false,
     beats: [
       { id: 'open', block: 'statement', vo: 'Queues are everywhere.', props: { text: 'Queues are everywhere.' } },
-      { id: 'turn', block: 'statement', transition: 'dissolve', vo: 'But nobody sees them.', props: { text: 'Nobody sees them.' } },
+      { id: 'turn', block: 'statement', transition: 'wipe', vo: 'But nobody sees them.', props: { text: 'Nobody sees them.' } },
       stop('desk', [0, 0, 1920, 1080], 'The desk'),
       stop('door', [1920, 0, 1920, 1080], 'The door'),
       { id: 'end', block: 'statement', vo: 'Measure the wait.', props: { text: 'Measure the wait.' } },
@@ -174,8 +174,8 @@ test('the impact report separates own changes, neighbours, worlds, timing and fi
   let r = impact(A, (await now(root)).timeline);
   const status = id => r.beats.find(b => b.id === id)?.status;
   assert.equal(status('open'), 'content');
-  assert.equal(status('turn'), 'appearance', 'a dissolve draws the beat before it');
-  assert.match(r.beats.find(b => b.id === 'turn').reasons[0], /dissolve entrance draws open/);
+  assert.equal(status('turn'), 'appearance', 'a wipe draws the beat before it');
+  assert.match(r.beats.find(b => b.id === 'turn').reasons[0], /wipe entrance draws open/);
   assert.equal(status('desk'), 'unchanged');
   edit(root, sb => {
     sb.beats[0].props.text = 'Queues are everywhere.';

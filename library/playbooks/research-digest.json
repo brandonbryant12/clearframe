@@ -16,10 +16,6 @@
   "transition": "cut",
   "sfx": "subtle",
   "lens": {
-    "grade": "warm",
-    "gradeAmount": 0.35,
-    "leak": 0.1,
-    "handheld": 0.15,
     "blur": 0.5
   },
   "beats": [
@@ -7897,7 +7893,7 @@
       "id": "end",
       "block": "canvas",
       "vo": "Space the buses evenly, and the wait shrinks. The method and its limits are in the full study.",
-      "transition": "dissolve",
+      "transition": "fade",
       "props": {
         "view": [100, -80, 1920, 1080],
         "source": "Illustrative sample data · replace before publishing",

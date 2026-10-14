@@ -110,7 +110,7 @@ the commands are reproducible from this description.
 |---|---|---|
 | `examples/native-explainer` (530 frames) | PSNR 58.5 dB, SSIM 0.99977 | frames 15, 120, 239, 240, 241, 400, 529: old pipe 40.91–44.96 dB, fframes 40.98–44.96 dB (within ±0.3 dB; cut at 240) |
 | `examples/finance-charts` (3,630 frames) | PSNR 60.6 dB, SSIM 0.99979 | frames 120, 900, 1800, 2700, 3600: old pipe 44.28–47.11 dB, fframes 44.39–47.12 dB (equal or better at every frame) |
-| `examples/stage-footage` (378 frames; footage, motion blur, depth of field) | PSNR 52.1 dB, SSIM 0.99526 | frames 10, 120, 249, 250, 251, 300, 377: within 0.06 dB |
+| stage-footage (378 frames; footage, motion blur, depth of field; example since removed) | PSNR 52.1 dB, SSIM 0.99526 | frames 10, 120, 249, 250, 251, 300, 377: within 0.06 dB |
 
 Both runtimes produce the same frame count, size, rate, pixel format and colour tags; the Node
 finisher's decoded frame-count validation, colour tags and range-preview clock check (43.7–46.4

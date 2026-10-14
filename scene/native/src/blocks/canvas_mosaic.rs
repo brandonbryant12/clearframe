@@ -1,9 +1,9 @@
 //! Mosaic: shapes laid in tesserae. A filled shape becomes small square tiles on a grout bed,
 //! laid in running-bond rows or concentric rings (the andamento follows the form), with an
 //! outline row tracing its contour; a stroke becomes a beaded line of tiles. Every tile has
-//! its own shade, a small shine and a place in the build order, so shapes can assemble tile
-//! by tile and scatter back into loose tesserae. Layouts depend only on the element and its
-//! seed, and are cached; tiles are batched by colour into a handful of paths per element.
+//! its own shade, a small shine and a place in the build order, so a stroke draws tile by
+//! tile. Layouts depend only on the element and its seed, and are cached; tiles are batched by
+//! colour into a handful of paths per element.
 use super::*;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex, OnceLock};
@@ -428,20 +428,8 @@ fn lay(el: &Value, spec: &Value, seed: u64, filled: bool, occluders: &[Vec<(f32,
 }
 
 impl<'a, 'c> Draw<'a, 'c> {
-    /// Render an element as a mosaic. `assemble` (0..1) builds it tile by tile, `draw` lays a
-    /// beaded line along its path, `scatter` (0..1) throws the tiles loose.
-    #[allow(clippy::too_many_arguments)]
-    pub(super) fn mosaic(
-        &self,
-        el: &Value,
-        spec: &Value,
-        fill: &str,
-        stroke: &str,
-        draw: f32,
-        assemble: f32,
-        scatter: f32,
-        now: f32,
-    ) -> Node {
+    /// Render an element as a mosaic; `draw` (0..1) lays a beaded line along its path.
+    pub(super) fn mosaic(&self, el: &Value, spec: &Value, fill: &str, stroke: &str, draw: f32, now: f32) -> Node {
         use std::hash::{Hash, Hasher};
         let mut hasher = std::collections::hash_map::DefaultHasher::new();
         el.to_string().hash(&mut hasher);
@@ -630,13 +618,9 @@ impl<'a, 'c> Draw<'a, 'c> {
             (layout.cx, layout.cy + 600.0)
         };
         let spread = f(spec, "spread", 220.0).max(0.0);
-        // Where a tile is at this moment: dropping in, flying in, settled, or thrown by scatter.
+        // Where a tile is at this moment: dropping in or flying in as its stroke draws, or settled.
         let place = |i: usize, t: &Tile| -> Option<(f32, f32, f32, f32, f32)> {
-            let p = motion::clamp01((assemble - t.order * 0.7) / 0.3).min(if t.class == 1 && !filled {
-                motion::clamp01((draw - t.order) * 8.0 + 1.0)
-            } else {
-                1.0
-            });
+            let p = if t.class == 1 && !filled { motion::clamp01((draw - t.order) * 8.0 + 1.0) } else { 1.0 };
             if p <= 0.001 {
                 return None;
             }
@@ -653,20 +637,9 @@ impl<'a, 'c> Draw<'a, 'c> {
                 a = t.angle + (1.0 - q) * noise(seed ^ 0x57, i as u64) * 2.5;
                 k = 0.7 + 0.3 * q;
             }
-            if scatter > 0.0 {
-                let h = unit(t.order.to_bits() as u64 ^ i as u64, 77);
-                let (dx, dy) = (t.x - layout.cx, t.y - layout.cy);
-                let len = dx.hypot(dy).max(1.0);
-                let q = motion::in_cubic(scatter);
-                let dist = (80.0 + 260.0 * h) * q;
-                x += dx / len * dist + noise(i as u64, 3) * 40.0 * q;
-                y += dy / len * dist + 180.0 * q * q;
-                a += noise(i as u64, 5) * 3.0 * q;
-                k *= 1.0 - 0.3 * q;
-            }
             Some((x, y, a, t.w * k, t.h * k))
         };
-        let settled = assemble >= 1.0 && scatter <= 0.0 && (filled || draw >= 1.0) && !flipping;
+        let settled = (filled || draw >= 1.0) && !flipping;
         let key = {
             let mut h = std::collections::hash_map::DefaultHasher::new();
             (lkey, &body, &line, &grout, &stops, depth.to_bits(), shine.to_bits(), passed, style).hash(&mut h);
@@ -683,7 +656,7 @@ impl<'a, 'c> Draw<'a, 'c> {
                 // The grout bed exists only where tiles are, so nothing shows before they arrive;
                 // a settled shape lays its bed as one outline instead. Pixels and stitches have
                 // no bed: the screen or the cloth shows between them.
-                if scatter <= 0.0 && !grid && !(settled && !layout.outline.is_empty()) {
+                if !grid && !(settled && !layout.outline.is_empty()) {
                     quad(x, y, w + layout.gap * 1.3, h + layout.gap * 1.3, a, &t.cut, &mut bed);
                 }
                 let level = (t.shade * 2.0).round().clamp(-2.0, 2.0) as i8;
@@ -740,7 +713,7 @@ impl<'a, 'c> Draw<'a, 'c> {
         let mut nodes: Vec<_> =
             parts.iter().map(|(color, opacity, d)| draw::path(&d).fill(&color).opacity(*opacity).node()).collect();
         // Glints change every frame; they are the only per-frame work on a settled mosaic.
-        if glint > 0.0 && scatter <= 0.0 {
+        if glint > 0.0 {
             for (i, t) in layout.tiles.iter().enumerate() {
                 let period = 3.0 + 5.0 * unit(seed ^ 0x61, i as u64);
                 let phase = unit(seed ^ 0x67, i as u64);
@@ -759,7 +732,6 @@ impl<'a, 'c> Draw<'a, 'c> {
                 nodes.push(draw::path(d).fill("#fffbe8").opacity(0.25 + 0.25 * level as f32).node());
             }
         }
-        let fade = 1.0 - motion::clamp01((scatter - 0.75) / 0.25);
-        draw::group(vec![nodes.into()]).opacity(fade)
+        draw::group(vec![nodes.into()])
     }
 }

@@ -14,8 +14,6 @@ export default {
     return {
       dolly: [{ at: 0, z: 0.045, dur: 6 }],
       elements: [
-        { id: 'scenario-origin-glow', type: 'circle', cx: start[0], cy: start[1], r: 90, fill: 'none', stroke: 'line', width: 2,
-          z: 4, at: 0, enter: 'none', loop: { type: 'pulse', period: 5, amount: 0.04 } },
         { id: 'scenario-origin-dot', type: 'circle', cx: start[0], cy: start[1], r: 25, fill: 'ink', at: 0, enter: 'none' },
         { id: 'scenario-origin-label', type: 'text', text: 'TODAY', x: start[0] + (vertical ? 40 : 0), y: start[1] + 94,
           size: 40, anchor: 'middle', fit: 200, font: 'semibold', fill: 'ink', at: 0, enter: 'none' },

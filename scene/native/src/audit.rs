@@ -1,5 +1,5 @@
 //! The frame audit: what a director would send back, found in each drawn frame. Text cut
-//! by the frame edge or the letterbox, text printed over other text or over the subject, and
+//! by the frame edge, text printed over other text or over the subject, and
 //! type too small to read. `check` fails on any error. Only text that is held on screen is
 //! judged: type crossing the edge in a whip or a camera move is the move, not a mistake.
 use crate::draw::{self, Node};
@@ -25,8 +25,9 @@ pub struct Seen {
 #[derive(Default, Debug)]
 pub struct Scan {
     pub texts: Vec<Seen>,
-    pub bars: Vec<[f32; 4]>,
     pub subjects: Vec<[f32; 4]>,
+    /// Burned-in captions: judged as boxes the picture's type must keep clear of, not as type.
+    pub captions: Vec<[f32; 4]>,
 }
 
 #[derive(Serialize, Clone, Debug, PartialEq)]
@@ -42,7 +43,7 @@ fn rect(r: skia_safe::Rect) -> [f32; 4] {
 }
 
 /// Everything the audit judges in a drawn tree: type (with its opacity, size and whether a
-/// clip or mask cuts it on purpose), letterbox bars and the picture's subject.
+/// clip or mask cuts it on purpose) and the picture's subject.
 pub fn scan(tree: &Node) -> Scan {
     let mut out = Scan::default();
     tree.visit(&mut |seen| match seen {
@@ -50,8 +51,8 @@ pub fn scan(tree: &Node) -> Scan {
             if opacity < 0.05 {
                 return false;
             }
-            if group.id.starts_with("cf-bar") {
-                out.bars.extend(bounds.map(rect));
+            if group.id == "cf-captions" {
+                out.captions.extend(bounds.map(rect));
                 return false;
             }
             if group.id.contains("-subject-") && opacity > 0.5 {
@@ -125,9 +126,6 @@ pub fn judge(now: &Scan, next: &Scan, w: f32, h: f32) -> Vec<Finding> {
                 ),
             );
         }
-        if t.bars_cut(&now.bars) {
-            push("error", "letterbox", &t.text, format!("{} is cut by the letterbox bars", quote(&t.text)));
-        }
         let area = (tw * th).max(1.0);
         if now.subjects.iter().any(|s| {
             let (ow, oh) = overlap(t.rect, *s);
@@ -158,6 +156,26 @@ pub fn judge(now: &Scan, next: &Scan, w: f32, h: f32) -> Vec<Finding> {
             );
         }
     }
+    // A caption over the picture's own type hides one or the other. Labels sit in buttons and
+    // cards a little larger than their type, so the type's box is taken a little taller.
+    for c in &now.captions {
+        for t in &held {
+            let [x, y, tw, th] = t.rect;
+            let (ow, oh) = overlap([x, y - th * 0.25, tw, th * 1.5], *c);
+            if ow > 2.0 && oh > 2.0 {
+                push(
+                    "warning",
+                    "caption",
+                    &t.text,
+                    format!(
+                        "the caption covers {}: keep the picture's type out of the caption band (the bottom {:.0}% of the frame, or the top when the bottom is busy)",
+                        quote(&t.text),
+                        100.0 * (h - c[1]) / h
+                    ),
+                );
+            }
+        }
+    }
     for (i, a) in held.iter().enumerate() {
         for b in held.iter().skip(i + 1) {
             // A highlight drawn over its own line, or a glow under its text, is one text.
@@ -176,15 +194,6 @@ pub fn judge(now: &Scan, next: &Scan, w: f32, h: f32) -> Vec<Finding> {
     found
 }
 
-impl Seen {
-    fn bars_cut(&self, bars: &[[f32; 4]]) -> bool {
-        bars.iter().any(|b| {
-            let (ow, oh) = overlap(self.rect, *b);
-            ow > 2.0 && oh > 2.0
-        })
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -194,7 +203,7 @@ mod tests {
     }
 
     #[test]
-    fn judges_held_text_for_edges_bars_subjects_overlap_and_size() {
+    fn judges_held_text_for_edges_subjects_overlap_and_size() {
         let now = Scan {
             texts: vec![
                 seen("THE NIGHT SHIFT", [-300.0, 400.0, 2500.0, 200.0], 200.0),
@@ -205,12 +214,12 @@ mod tests {
                 seen("B", [120.0, 110.0, 100.0, 50.0], 50.0),
                 seen("next line", [100.0, 140.0, 100.0, 50.0], 50.0),
             ],
-            bars: vec![[0.0, 940.0, 1920.0, 140.0]],
             subjects: vec![[650.0, 300.0, 500.0, 400.0]],
+            captions: vec![[600.0, 960.0, 700.0, 50.0]],
         };
         let found = judge(&now, &now, 1920.0, 1080.0);
         let kinds: Vec<_> = found.iter().map(|f| f.kind).collect();
-        for kind in ["edge", "letterbox", "subject", "small", "overlap"] {
+        for kind in ["edge", "subject", "small", "overlap", "caption"] {
             assert!(kinds.contains(&kind), "{kind} not found in {found:?}");
         }
         assert!(!found.iter().any(|f| f.message.contains("next line")), "tight leading is not a collision");

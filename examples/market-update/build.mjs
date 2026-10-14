@@ -18,7 +18,7 @@ const scenes = [
 ];
 
 const storyboard = {
-  version: 2, title: 'Market update', format: { preset: shape, fps: 30 }, theme: 'ledger', type: 'geometric',
+  version: 2, title: 'Market update', format: { preset: shape, fps: 30 }, theme: 'ink', type: 'geometric',
   backdrop: 'none', motion: { preset: 'gentle', intensity: 0.35 }, transition: 'cut', sfx: 'subtle', captions: false,
   voice: { provider: 'gemini', voice: 'Charon', style: 'calm, assured, warm; a financial commentator, unhurried' },
   music: { model: 'lyria-3.5', prompt: 'Understated modern piano and soft pulse, confident and calm, corporate but warm', bpm: 92, key: 'D major', volume: 0.18 },

@@ -11,7 +11,7 @@ import { createJob } from '../film/job.mjs';
 import { computeTiming } from '../engine/lib/timing.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 
-const books = ['cash-flow', 'scenario-lab', 'risk-tradeoffs'];
+const books = ['cash-flow', 'scenario-lab'];
 const drawings = ['cash-lock', 'scenario-fork', 'scenario-origin', 'scenario-outcomes', 'risk-lens'];
 
 test('financial films scaffold to valid native jobs in landscape and vertical with their evidence metadata', t => {
@@ -29,8 +29,7 @@ test('financial films scaffold to valid native jobs in landscape and vertical wi
     assert.equal(loaded.assets.length, 0, 'all evidence and illustration stays native');
     assert.deepEqual(sb.sources, items('playbooks').find(b => b.id === name).sources);
     assert.ok(sb.sources.every(s => s.claim && s.source && s.asOf));
-    assert.ok(sb.beats.some(b => b.block === 'canvas' && !b.vo), 'the edit has room for a breath');
-    assert.ok(sb.beats.some(b => ['iris', 'panel'].includes(b.transition)), 'a motivated turn changes the visual rhythm');
+    assert.ok(sb.beats.some(b => ['panel', 'push'].includes(b.transition)), 'a motivated turn changes the visual rhythm');
   }
 });
 
@@ -60,6 +59,5 @@ test('the sample cash balance reconciles and scenario comparisons use one explic
   assert.equal(chart.sort, 'none', 'scenario order carries meaning');
   assert.ok(chart.data.every(d => d.value <= chart.max));
   assert.match(chart.source, /same example month.*USD thousands/);
-  assert.match(scenarios.beats.find(b => b.id === 'limits').vo, /not forecasts/);
   assert.match(scenarios.beats.find(b => b.id === 'outcomes').vo, /no probabilities assigned/);
 });

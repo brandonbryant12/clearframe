@@ -36,7 +36,7 @@ A cast carries on through the film: objects declared in one cast beat are still 
   - `tiles` (default): flat rounded tiles with a soft shadow, for clean product and business films.
   - `drawn`: pen on paper. A hand-drawn ink outline, the colour hatched in, icons in ink, and type and threads by hand. It suits explainers, onboarding and lessons.
   - `print`: a two-colour press, with the colour laid in a dot screen slightly off register and worn, and poster type. It suits editorial and campaign films.
-  - `pixel`: pixel art. Bodies and details are laid in square screen cells with a one-cell ink outline, and type is mono. It suits games, retro tech, developer audiences and playful launch teasers; pair it with the `lcd` palette.
+  - `pixel`: pixel art. Bodies and details are laid in square screen cells with a one-cell ink outline, and type is mono. It suits games, developer audiences and playful systems; it is rarely right for a workplace or financial film.
   Choose by the audience and the rest of the film's treatment, not for variety's sake.
 - **Formations** (1–12 per beat) each move some objects. Time them by the content: a step the narration describes gets its move on the word that names it, and a moment that needs reading or feeling can hold. Each move goes on a spoken word (`say`) or at seconds (`at`). An uncued formation follows the previous one by 1.6 s. `ids` limits a formation to those objects; without it, every object still on screen takes part.
 
@@ -92,8 +92,5 @@ Not for evidence: numbers, charts and quotes stay in their own native forms with
 Start from the playbook: `new DIR --playbook process-cast [--vertical]` scaffolds five cast beats (arrive, sort, focus, change, result) to rewrite with your own objects and moves. References:
 - `examples/cast-study`: tiles. One cast, five moves, 17 s.
 - `examples/cast-journey`: `travel` through a drawn world (three stations as scenery).
-- `examples/night-shift`: a curated study. Split, travel, a camera lean into `fill`, the real code on the fill's colour, `emerge`, `swap` `by`, `merge`, and type as the clock.
-- `examples/order-journey`: one idea in two looks. An order travels from a tap to a doorstep, drawn on `ink` and in pixel art on `lcd`, with the composed shapes `phone`, `envelope`, `server`, `database`, `box`, `truck` and `flag`.
-- `examples/cast-drawn`: the drawn look with marks. Bug triage in 24 s: copies ringed and crossed out, the first underlined, replies drawn back.
 
 Tests: `test/cast.test.mjs`.

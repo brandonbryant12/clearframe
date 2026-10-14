@@ -44,7 +44,7 @@ for (const shape of ['landscape', 'vertical']) {
     title: 'One ticket, one journey',
     logline: 'A drawn world: a support ticket travels to engineering, becomes a fix, and travels on to the customer who asked.',
     format: { preset: shape, fps: 30 },
-    theme: 'paper', type: 'geometric', motion: { preset: 'gentle', intensity: 0.7 }, transition: 'cut', backdrop: 'none', lens: { handheld: 0 },
+    theme: 'paper', type: 'geometric', motion: { preset: 'gentle', intensity: 0.7 }, transition: 'cut', backdrop: 'none',
     texture: { grain: 0.35, vignette: 0.3 }, captions: false, music: false,
     beats: beats.map(({ id, vo, cast, min, tail }) => ({ id, block: 'canvas', vo, ...(min ? { min } : {}), ...(tail ? { tail } : {}), props: { elements: scenery, cast } })),
   };

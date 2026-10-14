@@ -19,7 +19,7 @@ import { sketch, sketchPreset } from '../../../film/sketches.mjs';
 import { ICONS } from '../../../film/icons.mjs';
 import { storyboardFor } from '../../../film/playbooks.mjs';
 import { compilePlan } from '../../../scene/compile.mjs';
-import { LENS_KEYS, LENS_GRADES } from '../../../film/constants.mjs';
+import { LENS_KEYS } from '../../../film/constants.mjs';
 import { textBox, FONT_FILES } from './clearframe.mjs';
 import { ROOT } from './media.mjs';
 
@@ -459,7 +459,7 @@ export function studioSchema() {
     treatments: items('treatments').map(t => ({ id: t.id, title: t.title, when: t.when })),
     sketches: items('sketches').map(s => { let art = false; try { art = !!sketch(s.id).layer; } catch {} return { id: s.id, summary: s.summary, use: s.use, art }; }),
     canvas: { types: Object.keys(ELEMENT_TYPES), geometry: Object.fromEntries(Object.entries(ELEMENT_TYPES).map(([k, v]) => [k, v.geometry])), enters: ENTERS, exits: EXITS, colors: COLOR_TOKENS, fonts: Object.keys(FONT_FILES), icons: ICONS },
-    transitions: TRANSITIONS, backdrops: BACKDROPS, motions: MOTIONS, lens: { keys: LENS_KEYS, grades: LENS_GRADES }, defaults: DEFAULTS, presets: PRESETS,
+    transitions: TRANSITIONS, backdrops: BACKDROPS, motions: MOTIONS, lens: { keys: LENS_KEYS }, defaults: DEFAULTS, presets: PRESETS,
   };
   return described;
 }

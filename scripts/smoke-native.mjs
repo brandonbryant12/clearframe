@@ -10,8 +10,10 @@ import { checkProject, renderProject, sheetProject } from '../film/production.mj
 const root = path.resolve(process.argv[2] ?? 'build/speech-smoke');
 if (fs.existsSync(path.join(root, 'storyboard.json')))
   throw new Error('Smoke fixture already exists; choose a new output path in the script to retain evidence.');
-scaffold(root, { playbook: 'speech-story', theme: 'ink' });
+scaffold(root, { playbook: 'concept-explainer', theme: 'ink' });
 const sb = JSON.parse(fs.readFileSync(path.join(root, 'storyboard.json'), 'utf8'));
+// Speech-following text is the subject: one kinetic beat.
+sb.beats = [{ id: 'speech', block: 'kinetic', props: {} }];
 const words = ['Make', 'each', 'word', 'count.'];
 const folder = path.join(root, 'assets/source');
 fs.mkdirSync(folder, { recursive: true });

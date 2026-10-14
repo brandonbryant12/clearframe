@@ -63,16 +63,14 @@ test('qa reads the export the way a platform does', () => {
   assert.deepEqual(ok, []);
 });
 
-test('held analysis excludes scope bars, respects open/portrait frames, and stays advisory', () => {
+test('held analysis compares the whole picture and stays advisory', () => {
   const width = 128,
     height = 72;
   const a = Buffer.alloc(width * height),
     b = Buffer.alloc(width * height);
   b.fill(2, 10 * width, 62 * width);
-  assert.ok(pictureDifference(a, b, width, height) < 2);
-  assert.equal(pictureDifference(a, b, width, height, 2.39, 16 / 9), 2);
-  assert.equal(pictureDifference(a, b, width, height, false), pictureDifference(a, b, width, height));
-  assert.equal(pictureDifference(a, b, 72, 128, 2.39), pictureDifference(a, b, 72, 128));
+  assert.ok(pictureDifference(a, b) > 1 && pictureDifference(a, b) < 2);
+  assert.equal(pictureDifference(a, a), 0);
   const fps = 30,
     n = 360;
   const signal = { d: Array(n).fill(0), skip: Array(n).fill(0), second: Array(n).fill(0), fps };
@@ -92,10 +90,9 @@ test('encoded QA writes per-shot held findings and analysis metadata', async t =
     path.join(root, 'storyboard.json'),
     JSON.stringify({
       format: { width: 640, height: 360, fps: 30 },
-      lens: { letterbox: 2.39 },
       beats: [
         { id: 'scope', block: 'statement', duration: 3, props: { text: 'A pause' } },
-        { id: 'open', block: 'statement', duration: 3, lens: { letterbox: false }, props: { text: 'Another pause' } },
+        { id: 'open', block: 'statement', duration: 3, props: { text: 'Another pause' } },
       ],
     }),
   );
@@ -131,7 +128,7 @@ test('encoded QA writes per-shot held findings and analysis metadata', async t =
   );
   const report = JSON.parse(fs.readFileSync(path.join(result.dir, 'qa.json')));
   assert.equal(report.heldAnalysis.advisory, true);
-  assert.match(report.heldAnalysis.region, /excluding authored letterbox/);
+  assert.match(report.heldAnalysis.region, /full frame, within each beat/);
   assert.ok(fs.statSync(path.join(result.dir, 'phone.png')).size > 0);
 });
 

@@ -539,7 +539,7 @@ export const BLOCKS = [
       world:
         'Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views',
       elements:
-        '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine, tilt, material, mosaic, print}] (≤ 600) — see docs/canvas.md',
+        '[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid|document|pointer, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine, tilt, material, mosaic, print}] (≤ 600); text takes marks: [{words, style: highlight|underline|circle|box|strike|cross, say|at}] drawn on its own words; document is a page of real sections that scrolls to one on a word; pointer {to: an element id, say} presses it — see docs/canvas.md',
       stagger: 'Seconds between top-level elements without a cue (0–3)',
       rough:
         'Hand-drawn strokes for every shape: true or {amount, passes, boil, fill: hachure|solid, gap} (an element can set rough: false)',
@@ -553,8 +553,6 @@ export const BLOCKS = [
         'Depth of field for elements with z: {z (the focus plane), aperture 0–3 (1 natural), keys [{say|at, z, dur}] for a rack focus}',
       chart:
         'A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars|stack|number, values: [{label, value, highlight, id, say}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (say lands a value on its spoken word; a number with several cued values steps through them; the note replaces a heading: an annotation on the stressed word)',
-      kpi:
-        'Editable native dimensional KPI: {form: pedestal|comparison|rail|seesaw|stack, label, unit?, value?, values?:[{label,value}], total?, domain?:[0,max], prefix?, suffix?, decimals?:0–3, motion?:none|reveal|stagger|emphasis|{preset,duration,stagger}, focus?, source?}. Comparison front heights share one zero-based scale; rail and stack lengths use an explicit total. Seesaw has two comparable values and qualitative tilt. Seesaw/stack require a unit. Every form needs an exact visible source. See docs/kpi-direction.md.',
       sourceElement: 'Id of a top-level static native text element used as the visible source instead of the automatic footer. Requires storyboard sources, at:0, enter:none, size >=28, opaque ink fill, no effects/exits/keys/transforms. Frame audit still verifies bounds and overlap.',
       sourceSize: 'Canvas source font size, 14–72 px (default 22, or 30 in a tall frame); reserves a three-line footer when set.',
       plot:
@@ -666,8 +664,10 @@ export const BLOCKS = [
 ];
 export const blockByName = name => BLOCKS.find(b => b.name === name);
 export const MOTIONS = ['gentle', 'snappy', 'spring'];
-export const TRANSITIONS = ['cut', 'fade', 'rise', 'wipe', 'push', 'zoom', 'panel', 'iris', 'whip', 'flash', 'dissolve'];
-export const BACKDROPS = ['none', 'dots', 'grid', 'glow', 'paper', 'mosaic'];
+// Retired names (iris, whip, flash, dissolve; glow, dots, mosaic) are refused with a replacement:
+// RETIRED in constants.mjs.
+export const TRANSITIONS = ['cut', 'fade', 'rise', 'wipe', 'push', 'zoom', 'panel'];
+export const BACKDROPS = ['none', 'grid', 'paper'];
 export const CANVASES = [
   [1920, 1080],
   [1080, 1920],
@@ -724,7 +724,7 @@ const NOT_BLOCKS = {
   chart: 'a chart is drawn by a canvas beat: {"block": "canvas", "props": {"chart": {"kind": "bars", "values": […]}}}.',
   number: 'one figure is a stat block, or a canvas chart {"kind": "number"}.',
   text: 'type on its own is a statement or kinetic block.',
-  caption: 'captions are a film field: "captions": "pop".',
+  caption: 'captions are a film field, on by default for narrated films (broadcast-standard; false opts out, "pop" for social clips).',
 };
 export function notABlock(name) {
   if (NOT_BLOCKS[name]) return NOT_BLOCKS[name];

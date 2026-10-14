@@ -1,9 +1,8 @@
 //! Checks before a render: `inspect` (frames that cannot be drawn and type cut by the canvas
-//! edge, over sampled frames, in the text report the Node `check` reads) and the frame audit (held type cut by the frame or the letterbox, printed over other type or a
+//! edge, over sampled frames, in the text report the Node `check` reads) and the frame audit (held type cut by the frame, printed over other type or a
 //! subject, or too small), judged over block type *and* native type together.
 use crate::audit::{self, Scan, Seen};
 use crate::compose::Engine;
-use crate::lens::Lens;
 use crate::nodes::TextMark;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -44,16 +43,6 @@ fn scan(engine: &mut Engine, frame: usize) -> Result<Scan, String> {
     let (_, tree) = engine.block_tree(frame)?;
     let mut out = audit::scan(&tree);
     out.texts.extend(seen(engine, &marks));
-    // Letterbox bars are drawn by the engine, not the block layer.
-    let i = engine.film.beats.iter().rposition(|b| b.start_frame <= frame).unwrap_or(0);
-    let lens = Lens::from(&engine.film.beats[i].lens);
-    let bar = crate::film::bar(&lens, engine.logical.0, engine.logical.1) * engine.plan.format.width as f32
-        / engine.logical.0;
-    let (w, h) = (engine.plan.format.width as f32, engine.plan.format.height as f32);
-    if bar > 0.25 {
-        out.bars.push([0.0, 0.0, w, bar]);
-        out.bars.push([0.0, h - bar, w, bar]);
-    }
     Ok(out)
 }
 

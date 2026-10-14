@@ -35,7 +35,7 @@ for (const shape of ['landscape', 'vertical']) {
     title: 'One cast, five moves',
     logline: 'A cast study: the same objects carry the story across every cut, moving into a pile, a sequence, a hero, a swap and back into the sequence.',
     format: { preset: shape, fps: 30 },
-    theme: 'paper', type: 'geometric', motion: { preset: 'gentle', intensity: 0.7 }, transition: 'cut', backdrop: 'none', lens: { handheld: 0 },
+    theme: 'paper', type: 'geometric', motion: { preset: 'gentle', intensity: 0.7 }, transition: 'cut', backdrop: 'none',
     texture: { grain: 0.25, vignette: 0.35 }, captions: false, music: false,
     sources: [{ id: 'render', title: 'clearframe draft of examples/cast-study, 520 frames in 6.3 s on an 8 GB iMac (README)', date: '2026-10-06' }],
     beats: beats.map(({ id, vo, cast, min, tail, block, props }) => ({ id, block: block ?? 'canvas', vo, ...(min ? { min } : {}), ...(tail ? { tail } : {}), props: props ?? { cast } })),

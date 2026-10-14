@@ -61,36 +61,18 @@
           "enum": [
             "paper",
             "ink",
-            "editorial",
-            "signal",
             "midnight",
-            "forest",
-            "ember",
             "mono",
-            "pop",
-            "electric",
             "blueprint",
-            "clay",
             "noir",
             "sketchbook",
-            "mosaic",
-            "neon",
-            "cinema",
             "stage",
             "bass",
             "daylight",
-            "sorbet",
-            "concrete",
             "porcelain",
-            "gallery",
-            "vellum",
-            "oscilloscope",
-            "woodblock",
-            "newsprint",
-            "constructivist",
-            "deco",
-            "lcd",
-            "ledger",
+            "meridian",
+            "meadow",
+            "briefing",
             "research-paper"
           ]
         },
@@ -102,36 +84,18 @@
               "enum": [
                 "paper",
                 "ink",
-                "editorial",
-                "signal",
                 "midnight",
-                "forest",
-                "ember",
                 "mono",
-                "pop",
-                "electric",
                 "blueprint",
-                "clay",
                 "noir",
                 "sketchbook",
-                "mosaic",
-                "neon",
-                "cinema",
                 "stage",
                 "bass",
                 "daylight",
-                "sorbet",
-                "concrete",
                 "porcelain",
-                "gallery",
-                "vellum",
-                "oscilloscope",
-                "woodblock",
-                "newsprint",
-                "constructivist",
-                "deco",
-                "lcd",
-                "ledger",
+                "meridian",
+                "meadow",
+                "briefing",
                 "research-paper"
               ]
             },
@@ -198,21 +162,14 @@
         "push",
         "zoom",
         "panel",
-        "iris",
-        "whip",
-        "flash",
-        "dissolve",
         "auto"
       ]
     },
     "backdrop": {
       "enum": [
         "none",
-        "dots",
         "grid",
-        "glow",
-        "paper",
-        "mosaic"
+        "paper"
       ]
     },
     "chrome": {
@@ -282,7 +239,15 @@
     },
     "lens": {
       "type": "object",
-      "description": "Film lens: letterbox, grade, gradeAmount, bloom, aberration, leak, handheld (sway; 0 for business), blur"
+      "additionalProperties": false,
+      "description": "Film lens: blur, the shutter for motion blur on fast moves (the film looks letterbox, grade, gradeAmount, bloom, aberration, leak and handheld were retired)",
+      "properties": {
+        "blur": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
     },
     "speakers": {
       "type": "object"
@@ -335,12 +300,8 @@
     "type": {
       "enum": [
         "inter",
-        "didone",
-        "wide",
         "geometric",
-        "condensed",
-        "bookish",
-        "typewriter"
+        "bookish"
       ],
       "description": "Type voice: the display family and emphasis for titles, statements, chapters, endcards and kinetic text (clearframe types)"
     },
@@ -607,10 +568,6 @@
               "push",
               "zoom",
               "panel",
-              "iris",
-              "whip",
-              "flash",
-              "dissolve",
               "auto"
             ]
           },
@@ -622,9 +579,7 @@
               "push",
               "zoom",
               "wipe",
-              "panel",
-              "iris",
-              "whip"
+              "panel"
             ]
           },
           "motion": {
@@ -676,12 +631,8 @@
           "type": {
             "enum": [
               "inter",
-              "didone",
-              "wide",
               "geometric",
-              "condensed",
-              "bookish",
-              "typewriter"
+              "bookish"
             ],
             "description": "Type voice for this scene (inter opts out of the film voice)"
           },
@@ -714,16 +665,6 @@
               "bg",
               "surface"
             ]
-          },
-          "transitionOrigin": {
-            "type": "array",
-            "minItems": 2,
-            "maxItems": 2,
-            "items": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
-            }
           },
           "camera": {
             "oneOf": [
@@ -2444,7 +2385,7 @@
                       "description": "Name shared by consecutive canvas beats that form one continuous drawing: each inherits what came before, cuts invisibly, and the camera travels between their views"
                     },
                     "elements": {
-                      "description": "[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine, tilt, material, mosaic, print}] (≤ 600) — see docs/canvas.md"
+                      "description": "[{type: rect|circle|ellipse|line|path|poly|text|icon|image|group|meter|spotlight|particles|solid|document|pointer, geometry, fill, stroke, width, enter, say|at, dur, keys, loop, along, exit, exitSay|exitAt, z, blur, shine, tilt, material, mosaic, print}] (≤ 600); text takes marks: [{words, style: highlight|underline|circle|box|strike|cross, say|at}] drawn on its own words; document is a page of real sections that scrolls to one on a word; pointer {to: an element id, say} presses it — see docs/canvas.md"
                     },
                     "stagger": {
                       "description": "Seconds between top-level elements without a cue (0–3)"
@@ -2465,7 +2406,7 @@
                       "description": "Depth of field for elements with z: {z (the focus plane), aperture 0–3 (1 natural), keys [{say|at, z, dur}] for a rack focus}"
                     },
                     "chart": {
-                      "description": "A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars|stack|number, values: [{label, value, highlight, id}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (the note replaces a heading: an annotation on the stressed word)"
+                      "description": "A chart drawn as canvas shapes with stable ids, so consecutive canvas charts morph into each other (a number into its bar, a stacked bar into bars): {kind: bars|stack|number, values: [{label, value, highlight, id, say}], box: [x, y, w, h], max, prefix, suffix, decimals, id, note: {text, to, say}} (say lands a value on its spoken word; a number with several cued values steps through them; the note replaces a heading: an annotation on the stressed word)"
                     },
                     "kpi": {
                       "description": "Editable native dimensional KPI: {form: pedestal|comparison|rail|seesaw|stack, label, unit?, value?, values?:[{label,value}], total?, domain?:[0,max], prefix?, suffix?, decimals?:0–3, motion?:none|reveal|stagger|emphasis|{preset,duration,stagger}, focus?, source?}. Comparison front heights share one zero-based scale; rail and stack lengths use an explicit total. Seesaw has two comparable values and qualitative tilt. Seesaw/stack require a unit. Every form needs an exact visible source. See docs/kpi-direction.md."
@@ -2474,7 +2415,7 @@
                       "description": "Id of a top-level static native text element used as the visible source instead of the automatic footer. Requires storyboard sources, at:0, enter:none, size >=28, opaque ink fill, no effects/exits/keys/transforms. Frame audit still verifies bounds and overlap."
                     },
                     "sourceSize": {
-                      "description": "Canvas source font size, 14–72 px; reserves a three-line footer when set."
+                      "description": "Canvas source font size, 14–72 px (default 22, or 30 in a tall frame); reserves a three-line footer when set."
                     },
                     "plot": {
                       "description": "Sourced multiseries line plot: {title, x:{type:linear|date,label,domain,ticks,...}, y:{type:linear|log,label,domain,ticks,...}, series:[{id,label,values:[{x,y}]}], asOf, source?, motion?:none|{at,duration}, annotation?}. Dates preserve elapsed spacing, null y leaves a gap, all series share explicit scales and a linear reveal clock. See docs/quantitative-plots.md."
@@ -2486,7 +2427,7 @@
                       "description": "Metric bridge (waterfall): {title, unit, start:{label, value}, steps:[1–10 {label, value} drivers or {label, total:true} subtotals, each with say?], end:{label, value, say?}, domain:[min≤0, max≥0], ticks, decimals?, prefix?, suffix?, good?: up|down, orientation?: auto|vertical|horizontal, asOf, source?, motion?: none|{at,duration}}. Totals stand on zero; drivers float from the running total and must reconcile to end exactly (add an explicit Other step rather than hide a gap); say cues a driver to its spoken word. See docs/bridge.md."
                     },
                     "cast": {
-                      "description": "A cast of objects that persists across consecutive canvas beats and re-forms as the idea develops, instead of a new card per line: {look?: tiles|drawn|print (first beat), objects:[1–16 {id, icon|word|shape: doc|bubble|phone|card|person|ticket|box, color, label?, size?, float?, enter?: pop|drop|rise|left|right|fade|none}] (declared in the first cast beat; later beats may add more), formations:[1–12 {form: scatter|line|row|column|ring|cluster|hero|swap|wave|merge|split|travel|mark|camera|fill|emerge|exit, say|at, ids?, hero?, word?, on?, beside?, out?, in?, by?, into?, from?, via?, trail?, mark?: circle|underline|cross|arrow, to?, color?, zoom?, thread?, center?, spread?, scale?, dur?, stagger?, ease?}]}. merge folds ids into one object (into) and split bursts them back out of one (from); travel sends ids along a curved route (via waypoints) to another object (to) or a point, a pen trail sketching ahead; camera zooms the whole cast (carried across cuts); fill grows one object into the frame so the next scene of any block plays on its colour (the job sets the tone of that scene and the cuts), and emerge brings it back in a later cast beat. Each beat starts where the last one left every object, so consecutive cast beats cut invisibly (transition cut, camera still). hero brings one forward and quiets the rest; swap turns one object into another in place, with by naming what causes it; wave runs through a sequence where it stands; mark draws a pen mark on objects (an arrow to others); exit sends objects off-frame. drawn is pen on paper, print a two-colour press. Positions come from the frame and stay title-safe, so one storyboard serves landscape and vertical. See docs/cast.md."
+                      "description": "A cast of objects that persists across consecutive canvas beats and re-forms as the idea develops, instead of a new card per line: {look?: tiles|drawn|print (first beat), objects:[1–16 {id, icon|word|shape: doc|bubble|phone|card|person|ticket|box|server|database|cloud|coin|lock|bulb|clock|envelope|truck|flag|paycheck|calendar|jar|house|badge|umbrella|receipt, color, label?, size?, float?, enter?: pop|drop|rise|left|right|fade|none}] (declared in the first cast beat; later beats may add more), formations:[1–12 {form: scatter|line|row|column|ring|cluster|hero|swap|wave|merge|split|travel|mark|camera|fill|emerge|exit, say|at, ids?, hero?, word?, on?, beside?, out?, in?, by?, into?, from?, via?, trail?, mark?: circle|underline|cross|arrow, to?, color?, zoom?, thread?, center?, spread?, scale?, dur?, stagger?, ease?}]}. merge folds ids into one object (into) and split bursts them back out of one (from); travel sends ids along a curved route (via waypoints) to another object (to) or a point, a pen trail sketching ahead; camera zooms the whole cast (carried across cuts); fill grows one object into the frame so the next scene of any block plays on its colour (the job sets the tone of that scene and the cuts), and emerge brings it back in a later cast beat. Each beat starts where the last one left every object, so consecutive cast beats cut invisibly (transition cut, camera still). hero brings one forward and quiets the rest; swap turns one object into another in place, with by naming what causes it; wave runs through a sequence where it stands; mark draws a pen mark on objects (an arrow to others); exit sends objects off-frame. drawn is pen on paper, print a two-colour press. Positions come from the frame and stay title-safe, so one storyboard serves landscape and vertical. See docs/cast.md."
                     },
                     "multiples": {
                       "description": "Small multiples: {title, unit, x, y (one shared scale, as plot), series:[2–9 {id,label,values:[{x,y}]}], highlight?: id, asOf, source?, motion?}. One small line per series in a grid; ticks on the outer edges; the highlighted panel takes accent2 and the others recede. See docs/small-multiples.md."
@@ -2511,6 +2452,9 @@
                     },
                     "sketchSay": {
                       "description": "Spoken words for a sketch’s named moments, so they land on the voice: {\"FIRST\": \"logs\"} (each sketch’s use lists its cues)"
+                    },
+                    "sketchParams": {
+                      "description": "Numbers a sketch draws from (`clearframe sketch NAME` lists them): {\"you\": 5, \"match\": 4} draws five tokens and four, so the picture agrees with the figures"
                     },
                     "graph": {
                       "description": "How an input changes an output: {fn:{kind: linear (m,b)|power (a·x^p)|exponential (a·e^(kx))|logistic (L,k,x0)|saturating (L(1−e^(−kx)))|log (a·ln(1+kx))|queue (M/M/1 at utilisation 0≤x<1; measure: inSystem ρ/(1−ρ)|waiting ρ²/(1−ρ)|time 1/(1−ρ))|wave (A,period,phase)|bell (mu,sigma)|constant (c)}, x:{domain:[a,b], label}, y?:{domain, label}, box?, draw?:{say|at,dur}, sweep?:{from,to,say|at,dur}, marks?:[{x,label,say|at}]}. The curve draws; on sweep the input moves and a point rides the curve with guides to both axes. Computed from the formula; no tick numbers, so it shows a shape, not data (film/explain.mjs)"

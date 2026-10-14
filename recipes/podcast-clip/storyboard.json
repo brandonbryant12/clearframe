@@ -6,19 +6,19 @@
     "preset": "vertical",
     "fps": 30
   },
-  "theme": "electric",
+  "theme": "ink",
   "motion": {
     "preset": "snappy",
     "intensity": 0.65
   },
   "transition": "fade",
-  "backdrop": "glow",
+  "backdrop": "none",
   "chrome": false,
-  "captions": false,
-  "music": false,
+  "captions": "auto",
+  "music": {},
+  "sfx": "subtle",
   "texture": {
-    "grain": 0.3,
-    "vignette": 0.5
+    "grain": 0.3
   },
   "speakers": {
     "host": {
@@ -75,7 +75,7 @@
         "source": ""
       },
       "speaker": "guest",
-      "transition": "whip"
+      "transition": "cut"
     },
     {
       "id": "pull",
@@ -89,7 +89,7 @@
       },
       "speaker": "guest",
       "transition": "panel",
-      "tone": "accent"
+      "tone": "surface"
     },
     {
       "id": "close",
@@ -106,7 +106,7 @@
         ]
       },
       "speaker": "host",
-      "transition": "whip"
+      "transition": "cut"
     },
     {
       "id": "end",
@@ -119,7 +119,7 @@
         "text": "Hear the whole conversation.",
         "align": "center"
       },
-      "transition": "iris"
+      "transition": "cut"
     }
   ]
 }

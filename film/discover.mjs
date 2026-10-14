@@ -1,5 +1,5 @@
 // Discovery: one compact, searchable index over everything a film can be built from — native
-// blocks, canvas sketches, playbooks, directions, treatments, palettes, type voices, sculptures,
+// blocks, canvas sketches, playbooks, directions, treatments, palettes, type voices,
 // cast moves, shapes and looks, stage mechanisms, film mechanisms and the curated examples.
 //
 // It is generated from each thing's own definition (and a project's or shared library's
@@ -88,19 +88,14 @@ const MECHANISMS = [
     { block: 'canvas', props: { elements: [{ type: 'circle', cx: 960, cy: 540, r: 80, fill: 'accent', origin: [960, 540], keys: [{ say: 'this', scale: 1.4, dur: 0.6, ease: 'thereAndBack' }] }] } }],
   ['board', 'Several pictures as panels of one world (place: [x, y]): the camera holds close on each, travels across the gaps, then pulls back to show them side by side, each still alive: the relation between each detail and the whole.', 'a showreel, a recap, a product tour, a story in a few moments, "together they are…"', 'canvas props.world + view + place', 'docs/canvas.md',
     { beats: [
-      { block: 'canvas', props: { world: 'board', view: [0, 0, 1920, 1080], place: [0, 0], sketch: 'desk' } },
-      { block: 'canvas', props: { world: 'board', view: [2080, 0, 1920, 1080], place: [2080, 0], sketch: 'rooftops' } },
+      { block: 'canvas', props: { world: 'board', view: [0, 0, 1920, 1080], place: [0, 0], sketch: 'compose' } },
+      { block: 'canvas', props: { world: 'board', view: [2080, 0, 1920, 1080], place: [2080, 0], sketch: 'portal' } },
       { block: 'canvas', props: { world: 'board', view: [-260, -530, 4520, 2543], elements: [{ type: 'text', text: 'The line that ties them together', x: 1960, y: 1400, size: 150, anchor: 'middle', say: 'together' }] } },
     ], note: 'place moves and scales a drawing but does not clip it: cover gaps with bg rects in the last beat if a drawing spills. Words the whole view would shrink should exitAt after their beat.' }],
   ['world', 'One drawing the camera travels through across several scenes (world + view), so the film moves through a place instead of cutting between slides.', 'a journey, a process in stations, a map, a pull-back to the whole', 'canvas props.world + view', 'docs/canvas.md', null],
   ['tone-handoff', 'An object fills the frame with its colour and the next scene (any block) plays on that colour; emerge brings it back.', 'zooming into a detail, a chart becoming its number, a report becoming its code', 'cast fill / emerge', 'docs/cast.md', MOVES.fill],
   ['art-layer', 'Drawn art under or over any block: an arrow onto a bar, a circle round a word, soft shapes behind a quote.', 'pointing at the part that matters on a chart or card', 'beat art.under / art.over', 'docs/canvas.md', null],
   ['depth-plates', 'Painted depth plates (generated stills split into layers) put the camera inside a place; never carry text or numbers.', 'places, moods, establishing shots', 'canvas plates, layered assets', 'docs/image-direction.md', null],
-  ['dither-light', 'A 1-bit product shot: shapes on a stage painted with the dither material, an ordered dither in two palette inks under a soft light that drifts across them, on a dithered ground.', 'a retro, game-like or tactile product or object reveal; pixel looks with real light and shade', 'block stage, element material dither (and ground)', 'examples/dither-light/README.md',
-    { block: 'stage', props: { ground: { material: 'dither', colors: ['accent2', 'ink'], scale: 2.4, speed: 0.6, opacity: 1 }, elements: [
-      { type: 'rect', x: 1200, y: 300, w: 280, h: 470, r: 40, fill: 'bg', material: { name: 'dither', colors: ['bg', 'accent2'], scale: 1.2, speed: 0.6 }, enter: 'rise', say: 'Meet' },
-      { type: 'circle', cx: 1600, cy: 660, r: 100, fill: 'bg', material: { name: 'dither', colors: ['bg', 'accent2'], scale: 1.2, speed: 0.6 }, enter: 'rise', at: 0.4 },
-      { type: 'text', text: 'Product', x: 200, y: 470, size: 120, font: 'mono', fill: 'bg', enter: 'type', say: 'Meet' }] } }],
   ['kinetic', 'Type that follows the voice word by word, with emphasis words larger in an accent face.', 'quotes, hooks, podcast clips, a line that must land', 'block kinetic', 'docs/speech.md', null],
   ['icons', `A bundled icon set (${ICONS.length} Tabler icons) for canvas elements and cast tiles.`, 'a recognisable thing in one glance', 'canvas icon element, cast object icon', 'film/icons.mjs', null],
 ];
@@ -143,12 +138,6 @@ export function entries() {
   for (const t of items('treatments')) add('treatment', t.id, t.title, t.title, t.when, '', `new DIR --treatment ${t.id}`);
   for (const t of items('types')) add('type', t.id, t.title, t.title, t.when, '', `"type": "${t.id}"`);
   for (const p of items('palettes')) add('palette', p.id, p.id, p.notes, p.notes, '', `"theme": "${p.id}"`);
-  for (const f of fs.existsSync(path.join(LIBRARY, 'sculptures')) ? fs.readdirSync(path.join(LIBRARY, 'sculptures')).filter(f => f.endsWith('.json')) : []) {
-    try {
-      const s = JSON.parse(read(`library/sculptures/${f}`));
-      add('sculpture', f.replace(/\.json$/, ''), s.title, s.description ?? s.use, s.use, 'Blender to prepare new assets', `sculptures; sculpture ${f.replace(/\.json$/, '')}`);
-    } catch {}
-  }
   for (const [ids, text] of tableRows(read('docs/cast.md'), '| `form` |'))
     for (const name of ids) add('cast-move', name, name, firstSentence(text), text.slice(firstSentence(text).length), 'a cast', 'docs/cast.md');
   for (const s of CAST_CATALOG.shapes) add('cast-shape', s.id, s.id, s.about, s.about, 'a cast object: {"shape": "' + s.id + '"}', 'docs/cast.md');

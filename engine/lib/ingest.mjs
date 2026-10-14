@@ -807,7 +807,6 @@ async function writeRecording(
     theme: theme ?? 'midnight',
     motion: { preset: 'snappy', intensity: 0.7 },
     transition: 'cut',
-    backdrop: 'glow',
     texture: { grain: 0.3, vignette: 0.4 },
     // Speech stays on screen when a beat becomes a picture: social pop captions on a vertical
     // clip, phrase captions on a plate otherwise (kinetic beats never double them).

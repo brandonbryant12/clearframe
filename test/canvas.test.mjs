@@ -132,6 +132,27 @@ test('canvas scheduling resolves spoken cues, staggers groups and reports when e
   assert.ok(!('say' in list[0]) && !('exitSay' in list[3]), 'cues are replaced by resolved seconds');
 });
 
+test('marks name whole words of their text, land on their word and hold the scene until drawn', () => {
+  const text = (marks, extra = {}) => ({ type: 'text', text: 'Unused money is forfeited at year end.', at: 0.2, marks, ...extra });
+  const list = normalizeElements([text([{ words: 'forfeited', style: 'circle', say: 'forfeited' }, { words: 'year  end' }])], 'elements', fail);
+  assert.equal(list[0].marks[1].style, 'highlight', 'a mark is a highlight unless it says otherwise');
+  assert.equal(list[0].marks[1].words, 'year end', 'whitespace is normalised as the layout joins it');
+  const settle = scheduleElements(list, { start: 0, entrance: 0.5, resolve: v => ({ forfeited: 2 })[v] });
+  assert.equal(list[0].marks[0].at, 2);
+  assert.ok(!('say' in list[0].marks[0]));
+  assert.equal(list[0].marks[1].at, 0.2 + 0.5, 'an uncued mark waits for its text to arrive');
+  assert.equal(settle, 2 + list[0].marks[0].dur);
+  for (const [bad, message] of [
+    [text([{ words: 'feit' }]), /not whole words/],
+    [text([{ words: 'money', style: 'glow' }]), /style must be/],
+    [text([{ words: 'money', colour: 'accent' }]), /unsupported field colour/],
+    [text([]), /1–4 marks/],
+    [{ type: 'text', text: '', count: { to: 3 }, marks: [{ words: '3' }] }, /counted number/],
+  ])
+    assert.throws(() => normalizeElements([bad], 'elements', fail), message, JSON.stringify(bad));
+  assert.doesNotThrow(() => normalizeElements([text([{ words: 'FORFEITED' }], { upper: true })], 'elements', fail));
+});
+
 test('canvas beats count as figures only when they count, and late cues fail', t => {
   const sb = base();
   sb.beats = [
@@ -159,7 +180,7 @@ test('canvas beats count as figures only when they count, and late cues fail', t
 });
 
 test('place draws a beat\'s picture as one flat panel of a world, without the sketch\'s own camera', () => {
-  const p = normalizeProps('canvas', { world: 'w', view: [2080, 0, 1920, 1080], place: [2080, 0], sketch: 'rooftops' });
+  const p = normalizeProps('canvas', { world: 'w', view: [2080, 0, 1920, 1080], place: [2080, 0], sketch: 'cash-lock' });
   const panel = p.elements[0];
   assert.equal(panel.type, 'group');
   assert.deepEqual([panel.x, panel.y], [2080, 0]);
@@ -231,23 +252,56 @@ test('graphic transitions mirror across the cut and fall back to a fade when the
   const sb = base();
   sb.beats = [
     { id: 'a', block: 'statement', duration: 3, props: { text: 'One' } },
-    { id: 'b', block: 'statement', duration: 3, transition: 'iris', props: { text: 'Two' } },
+    { id: 'b', block: 'statement', duration: 3, transition: 'panel', props: { text: 'Two' } },
   ];
   let r = job(t, sb);
   assert.deepEqual(r.errors, []);
-  assert.equal(r.job.beats[0].exit, 'iris');
-  assert.equal(r.job.beats[1].transition, 'iris');
+  assert.equal(r.job.beats[0].exit, 'panel');
+  assert.equal(r.job.beats[1].transition, 'panel');
   // The outgoing beat settles too late for the cover to finish before the cut.
   sb.beats[0].duration = 1.0;
   r = job(t, sb);
   assert.equal(r.job.beats[0].exit, 'fade');
   assert.equal(r.job.beats[1].transition, 'fade');
-  assert.match(r.warnings.join(), /no room for the iris transition/);
-  assert.deepEqual(Object.keys(COVER).sort(), ['iris', 'panel', 'whip']);
+  assert.match(r.warnings.join(), /no room for the panel transition/);
+  assert.deepEqual(Object.keys(COVER), ['panel']);
+  // A wipe's edge crosses the outgoing scene held whole: it does not leave before the cut.
+  sb.beats[0].duration = 3;
+  sb.beats[1].transition = 'wipe';
+  assert.equal(job(t, sb).job.beats[0].exit, 'none');
+});
+
+test('retired vocabulary is refused by name, with what to use instead', t => {
+  const sb = base();
+  sb.beats = [
+    { id: 'a', block: 'statement', duration: 2, props: { text: 'One' } },
+    { id: 'b', block: 'statement', duration: 2, transition: 'iris', props: { text: 'Two' } },
+  ];
+  assert.match(job(t, sb).errors.join(), /b: transition "iris" was retired: .*use fade, push/);
+  sb.beats[1].transition = 'fade';
+  sb.transition = 'dissolve';
+  const once = job(t, sb).errors;
+  assert.equal(once.length, 1, 'a film-wide retired transition is reported once');
+  assert.match(once[0], /transition "dissolve" was retired: .*use fade/);
+  delete sb.transition;
+  sb.backdrop = 'glow';
+  assert.match(job(t, sb).errors.join(), /backdrop "glow" was retired: .*use none, or paper/);
+  delete sb.backdrop;
+  sb.beats[1].transitionOrigin = [0.5, 0.5];
+  assert.match(job(t, sb).errors.join(), /transitionOrigin was retired/);
+  for (const [el, re] of [
+    [{ type: 'text', text: 'Hi', enter: 'scramble' }, /entrance "scramble" was retired: .*use type, or rise/],
+    [{ type: 'rect', w: 1, h: 1, enter: 'blur' }, /entrance "blur" was retired: .*use fade/],
+    [{ type: 'rect', w: 1, h: 1, enter: 'assemble' }, /entrance "assemble" was retired/],
+    [{ type: 'rect', w: 1, h: 1, exit: 'scatter' }, /exit "scatter" was retired: .*use fade, or shrink/],
+  ])
+    assert.throws(() => normalizeElements([el], 'els', fail), re);
+  // A blur exit (a focus pull out) stays.
+  assert.doesNotThrow(() => normalizeElements([{ type: 'rect', w: 1, h: 1, exit: 'blur' }], 'els', fail));
 });
 
 test('palettes, kinetic stack mode and centred layouts are part of the contract', () => {
-  assert.ok(Object.keys(THEMES).length >= 16);
+  assert.ok(Object.keys(THEMES).length >= 15);
   const k = normalizeProps('kinetic', { mode: 'stack', emphasis: ['film'] });
   assert.equal(k.align, 'center');
   assert.throws(() => normalizeProps('kinetic', { mode: 'highlight', emphasis: ['x'] }), /stack mode/);
@@ -311,12 +365,6 @@ test('print finishes and mosaic styles validate, apply canvas-wide and reach the
   );
 });
 
-test('the print library loads: era palettes, treatments, sketches and the style-relay playbook', () => {
-  for (const id of ['gallery', 'woodblock', 'newsprint', 'constructivist', 'deco', 'lcd']) assert.ok(THEMES[id], id);
-  const sb = storyboardFor('style-relay');
-  assert.equal(sb.theme, 'gallery');
-  assert.ok(sb.beats.every(b => b.props.world === 'plates'));
-});
 
 test('a landscape shot re-framed for a tall cut keeps its words whole, readable and on its subject', () => {
   const tall = 1080 / 1920, inside = (v, el) => {

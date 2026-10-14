@@ -70,7 +70,7 @@ test('the job refuses a bridge whose spoken cue puts a driver after the next one
   const { createJob } = await import('../film/job.mjs');
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-bridge-'));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
-  const sb = steps => ({ version: 2, title: 'Bridge order', format: { preset: 'landscape' }, theme: 'ledger', sources: [{ claim: 'Illustrative', source: 'Illustrative data', asOf: '2026-10-04' }],
+  const sb = steps => ({ version: 2, title: 'Bridge order', format: { preset: 'landscape' }, theme: 'ink', sources: [{ claim: 'Illustrative', source: 'Illustrative data', asOf: '2026-10-04' }],
     beats: [{ id: 'walk', block: 'canvas', min: 9, camera: 'none', vo: 'New customers came first, then churn took some back, and currency barely moved.', props: { bridge: { ...base, steps } } }] });
   const job = steps => { fs.writeFileSync(path.join(dir, 'storyboard.json'), JSON.stringify(sb(steps))); return createJob(loadStoryboard(dir), computeTiming(dir), { draft: true }); };
   assert.match(job([{ ...base.steps[0], say: 'currency' }, { ...base.steps[1], say: 'customers' }, base.steps[2]]).errors.join('\n'), /column 3 is cued at .* before column 2/);

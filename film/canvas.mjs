@@ -2,7 +2,8 @@
 // exact scheduling. Used by the `canvas` block and by every beat's `art` layers. The renderer
 // (scene/native/src/blocks/canvas.rs) re-validates structure and draws what this module prepares.
 import { ICONS, iconAlias, iconHint } from './icons.mjs';
-import { CANVAS_TIMING as T } from './constants.mjs';
+import { checkPointer } from './pointer.mjs';
+import { CANVAS_TIMING as T, retired } from './constants.mjs';
 import { SFX } from '../engine/lib/sfx.mjs';
 
 export const ELEMENT_TYPES = {
@@ -27,10 +28,16 @@ export const ELEMENT_TYPES = {
       'upper',
       'count',
       'fit',
+      'marks',
+      'balance',
     ],
     required: [],
   },
   icon: { geometry: ['name', 'x', 'y', 'size'], required: ['name'] },
+  // A page of real text that scrolls to the section the voice names (scene/native/src/blocks/canvas_document.rs).
+  document: { geometry: ['x', 'y', 'w', 'h', 'title', 'kicker', 'sections', 'size', 'scroll', 'marks'], required: ['w', 'h', 'sections'] },
+  // A cursor that travels to elements by id and presses them; expanded before scheduling (film/pointer.mjs).
+  pointer: { geometry: ['to', 'steps', 'from', 'point', 'press', 'style', 'size', 'leave', 'sound'], required: [] },
   image: { geometry: ['asset', 'file', 'x', 'y', 'w', 'h', 'r', 'fit', 'treatment'], required: ['w', 'h'] },
   group: { geometry: ['children', 'x', 'y', 'stagger'], required: ['children'] },
   meter: { geometry: ['x', 'y', 'w', 'h', 'bars', 'style', 'step', 'gap', 'r'], required: ['w', 'h'] },
@@ -102,12 +109,9 @@ export const ENTERS = [
   'wipe',
   'wipe-up',
   'type',
-  'scramble',
-  'blur',
   'none',
-  'assemble',
 ];
-export const EXITS = ['fade', 'shrink', 'fall', 'lift', 'undraw', 'wipe', 'blur', 'none', 'scatter'];
+export const EXITS = ['fade', 'shrink', 'fall', 'lift', 'undraw', 'wipe', 'blur', 'none'];
 export const LOOPS = ['spin', 'pulse', 'float', 'sway', 'orbit', 'dash', 'blink', 'level', 'rock'];
 export const MATERIALS = ['thermal', 'chrome', 'gold', 'neon'];
 /** Print finishes: the look of one printing process each (see `printSpec`). */
@@ -183,6 +187,77 @@ function checkSound(v, where, fail) {
     fail(`${where} must name a built-in sound (${Object.keys(SFX).join(', ')}), or be {name, volume}`);
   if (typeof v === 'object' && v.volume != null && !(Number.isFinite(v.volume) && v.volume >= 0 && v.volume <= 1)) fail(`${where}.volume must be 0–1`);
 }
+export const MARK_STYLES = ['highlight', 'underline', 'circle', 'box', 'strike', 'cross'];
+const MARK_FIELDS = ['words', 'style', 'color', 'at', 'say', 'after', 'dur', 'width', 'pad', 'rough'];
+/** Whether `phrase` occurs in `text` on word boundaries, as the renderer's `find_words` matches it. */
+function hasWords(text, phrase) {
+  const flat = text.split(/\s+/).join(' ');
+  const word = c => c != null && /[\p{L}\p{N}]/u.test(c);
+  for (let i = flat.indexOf(phrase); i >= 0; i = flat.indexOf(phrase, i + 1))
+    if (!word(flat[i - 1]) && !word(flat[i + phrase.length])) return true;
+  return false;
+}
+/** A text element's `marks`: hand-drawn emphasis attached to its own words, each on a cue. */
+function textMarks(el, at, fail) {
+  if (!Array.isArray(el.marks) || el.marks.length < 1 || el.marks.length > 4)
+    fail(`${at}.marks must be 1–4 marks: {words, style: ${MARK_STYLES.join('|')}, say|at}`);
+  if (el.count != null) fail(`${at}.marks: a counted number has no fixed words to mark`);
+  const text = el.upper ? el.text.toUpperCase() : el.text;
+  return el.marks.map((m, i) => {
+    const where = `${at}.marks[${i}]`;
+    if (!m || typeof m !== 'object' || Array.isArray(m)) fail(`${where} must be an object`);
+    for (const key of Object.keys(m)) if (!MARK_FIELDS.includes(key)) fail(`${where}: unsupported field ${key} (a mark takes ${MARK_FIELDS.join(', ')})`);
+    if (typeof m.words !== 'string' || !m.words.trim()) fail(`${where}.words must name words of the text`);
+    const words = m.words.trim().split(/\s+/).join(' ');
+    const find = el.upper ? words.toUpperCase() : words;
+    if (!hasWords(text, find)) fail(`${where}.words "${words}" are not whole words of the text "${el.text}"`);
+    if (m.style != null && !MARK_STYLES.includes(m.style)) fail(`${where}.style must be ${MARK_STYLES.join(', ')}`);
+    if (m.color != null && !isColor(m.color)) fail(`${where}.color must be a palette token or #rrggbb`);
+    for (const key of ['at', 'after', 'dur', 'width', 'pad'])
+      if (m[key] != null && (!finite(m[key]) || m[key] < 0)) fail(`${where}.${key} must be a nonnegative number`);
+    if (m.rough != null && typeof m.rough !== 'boolean') fail(`${where}.rough must be true or false`);
+    if (m.say != null && (typeof m.say !== 'string' || !m.say.trim())) fail(`${where}.say must be a spoken word`);
+    return { ...m, words, style: m.style ?? 'highlight' };
+  });
+}
+
+/** A document: real sections (a heading and its text), what the camera scrolls to, what is marked. */
+function checkDocument(el, at, fail) {
+  // A page reads as paper on its ground with a soft shadow, unless the author says otherwise.
+  el.shadow ??= true;
+  if (!Array.isArray(el.sections) || el.sections.length < 1 || el.sections.length > 12)
+    fail(`${at}.sections must be 1–12 sections: {heading, text} in the document's own words`);
+  el.sections.forEach((sec, i) => {
+    if (!sec || typeof sec !== 'object' || typeof sec.text !== 'string' || !sec.text.trim() || sec.text.length > 700)
+      fail(`${at}.sections[${i}].text must be the section's words (up to 700 characters)`);
+    if (sec.heading != null && (typeof sec.heading !== 'string' || sec.heading.length > 90)) fail(`${at}.sections[${i}].heading must be up to 90 characters`);
+    for (const key of Object.keys(sec)) if (!['heading', 'text'].includes(key)) fail(`${at}.sections[${i}]: unsupported field ${key}`);
+  });
+  for (const key of ['title', 'kicker'])
+    if (el[key] != null && (typeof el[key] !== 'string' || el[key].length > 120)) fail(`${at}.${key} must be up to 120 characters`);
+  if (el.size != null && !(finite(el.size) && el.size >= 14 && el.size <= 72)) fail(`${at}.size must be 14–72 px (the body text)`);
+  if (el.scroll != null) {
+    if (!Array.isArray(el.scroll) || el.scroll.length > 8) fail(`${at}.scroll must be up to 8 moves: {to: a section index or words of its heading, say|at, dur}`);
+    el.scroll.forEach((k, i) => {
+      const ok = Number.isInteger(k?.to) ? k.to >= 0 && k.to < el.sections.length : typeof k?.to === 'string' && el.sections.some(sec => `${sec.heading ?? ''} ${sec.text}`.toLowerCase().includes(k.to.toLowerCase()));
+      if (!ok) fail(`${at}.scroll[${i}].to must be a section index or words from a section's heading or text`);
+      if (k.say == null && k.at == null) fail(`${at}.scroll[${i}] needs say or at`);
+      for (const key of Object.keys(k)) if (!['to', 'say', 'at', 'after', 'dur'].includes(key)) fail(`${at}.scroll[${i}]: unsupported field ${key}`);
+    });
+  }
+  if (el.marks != null) {
+    const sections = el.sections.map(sec => sec.text);
+    el.marks = el.marks.map((m, i) => {
+      const where = `${at}.marks[${i}]`;
+      const body = Number.isInteger(m?.section) ? sections[m.section] : sections.find(t => hasWords(t, String(m?.words ?? '').trim().split(/\s+/).join(' ')));
+      if (body == null) fail(`${where}.words must be whole words of one section's text (or give section: N)`);
+      const { section, ...mark } = m;
+      const [checked] = textMarks({ text: body, marks: [mark] }, `${at}.marks`, msg => fail(msg.replace(`${at}.marks.marks[0]`, where)));
+      return section == null ? checked : { ...checked, section };
+    });
+  }
+}
+
 /** Validate and clone an element list; `fail(message)` throws with the caller's context. */
 export function normalizeElements(list, where, fail, state = { count: 0 }, depth = 0) {
   if (!Array.isArray(list)) fail(`${where} must be an array of elements`);
@@ -198,7 +273,7 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
       if (!COMMON.includes(key) && !spec.geometry.includes(key))
         fail(`${at}: unsupported ${el.type} field ${key}${FIELD_HINTS[key] ? `: ${FIELD_HINTS[key]}` : ''} (a ${el.type} takes ${spec.geometry.join(', ')}, plus the timing and style fields every element takes)`);
     for (const key of spec.required) if (el[key] == null) fail(`${at}: ${el.type} needs ${key}`);
-    if (el.sound != null) checkSound(el.sound, `${at}.sound`, fail);
+    if (el.sound != null && !(el.type === 'pointer' && el.sound === false)) checkSound(el.sound, `${at}.sound`, fail);
     // Positions are frame pixels: a word such as "center" was read as 0 and pushed type off the frame.
     for (const key of ['x', 'y', 'cx', 'cy', 'w', 'h'])
       if (el[key] != null && typeof el[key] !== 'number')
@@ -218,6 +293,13 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
           'dash',
           'echo',
           'rough',
+          'marks',
+          'sections',
+          'scroll',
+          'steps',
+          'from',
+          'point',
+          'to',
         ].includes(key)
       )
         continue;
@@ -258,12 +340,14 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
         `${at}.${key} must be a palette token (${COLOR_TOKENS.join(', ')}), #rrggbb, or {gradient:[2–4 colors], angle, radial, fade}`,
       );
     }
-    if (el.enter != null && !ENTERS.includes(el.enter)) fail(`${at}.enter must be one of ${ENTERS.join(', ')}`);
+    if (el.enter != null && !ENTERS.includes(el.enter))
+      fail(retired('enter', el.enter) ? `${at}: ${retired('enter', el.enter)}` : `${at}.enter must be one of ${ENTERS.join(', ')}`);
     if (el.drawEase != null && (el.enter !== 'draw' || !['out','linear'].includes(el.drawEase)))
       fail(`${at}.drawEase needs enter draw and must be out or linear`);
-    if (el.exit != null && !EXITS.includes(el.exit)) fail(`${at}.exit must be one of ${EXITS.join(', ')}`);
+    if (el.exit != null && !EXITS.includes(el.exit))
+      fail(retired('exit', el.exit) ? `${at}: ${retired('exit', el.exit)}` : `${at}.exit must be one of ${EXITS.join(', ')}`);
     if ((el.exitAt != null || el.exitSay != null) && el.exit == null) el.exit = 'fade';
-    if (['type', 'scramble'].includes(el.enter) && el.type !== 'text')
+    if (el.enter === 'type' && el.type !== 'text')
       fail(`${at}: enter "${el.enter}" is for text elements`);
     if (el.fps != null && (!finite(el.fps) || el.fps < 2 || el.fps > 60))
       fail(`${at}.fps must be 2–60 (stepped motion, e.g. 12 for "on twos")`);
@@ -423,8 +507,15 @@ export function normalizeElements(list, where, fail, state = { count: 0 }, depth
           )
             fail(`${at}.count needs finite from, decimals 0–8 and a positive dur`);
         }
+        if (el.marks != null) el.marks = textMarks(el, at, fail);
         break;
       }
+      case 'document':
+        checkDocument(el, at, fail);
+        break;
+      case 'pointer':
+        checkPointer(el, at, fail);
+        break;
       case 'icon':
         if (!iconAlias(el.name)) fail(`${at}: ${iconHint(el.name)}`);
         el.name = iconAlias(el.name);
@@ -720,17 +811,13 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
     el.dur ??=
       enter === 'draw'
         ? T.draw
-        : enter === 'assemble'
-          ? T.draw * 1.3
-          : enter === 'type'
-            ? Math.min(T.typeMax, Math.max(T.typeMin, chars * T.typePerChar))
-            : enter === 'scramble'
-              ? T.scramble
-              : ['grow', 'grow-x', 'grow-y', 'wipe', 'wipe-up'].includes(enter)
-                ? T.grow
-                : enter === 'none'
-                  ? 0
-                  : entrance;
+        : enter === 'type'
+          ? Math.min(T.typeMax, Math.max(T.typeMin, chars * T.typePerChar))
+          : ['grow', 'grow-x', 'grow-y', 'wipe', 'wipe-up'].includes(enter)
+            ? T.grow
+            : enter === 'none'
+              ? 0
+              : entrance;
     settle = Math.max(settle, el.at + el.dur);
     if (el.type === 'text' && el.count) settle = Math.max(settle, el.at + el.count.dur);
     if (el.exitSay != null) {
@@ -763,6 +850,28 @@ export function scheduleElements(list, { start, stagger = 0, entrance, resolve, 
       }
       r.dur ??= 1.2;
       settle = Math.max(settle, r.at + r.dur);
+    }
+    // A document scrolls to a section on its word.
+    for (const k of el.type === 'document' ? (el.scroll ?? []) : []) {
+      if (k.say != null) {
+        k.at = resolve(k.say) + (k.after ?? 0);
+        delete k.say;
+      }
+      delete k.after;
+      k.at = Math.max(k.at ?? el.at, el.at);
+      k.dur ??= 0.9;
+      settle = Math.max(settle, k.at + k.dur);
+    }
+    // A mark lands on its word (or `after` seconds after it), once its text is there.
+    for (const m of el.marks ?? []) {
+      if (m.say != null) {
+        m.at = resolve(m.say) + (m.after ?? 0);
+        delete m.say;
+      }
+      delete m.after;
+      m.at = Math.max(m.at ?? el.at + el.dur, el.at);
+      m.dur ??= m.style === 'highlight' ? 0.5 : m.style === 'cross' ? 0.6 : 0.55;
+      settle = Math.max(settle, m.at + m.dur);
     }
     if (el.shine) {
       if (el.shine.say != null) {
@@ -911,6 +1020,7 @@ export const hasDigits = list => {
     const text = String(el.text ?? '').replace(/^\s*\d{1,2}\s*[·.)\-–—:]\s*/, '');
     // A lone digit is an index (a step, a tile, a list position), not a figure.
     if (el.type === 'text' && /\d/.test(text) && !/^\s*\d\s*$/.test(text)) found = true;
+    if (el.type === 'document' && el.sections?.some(sec => /\d/.test(`${sec.heading ?? ''} ${sec.text}`))) found = true;
   });
   return found;
 };
@@ -961,7 +1071,7 @@ export function elementsExtent(elements) {
     for (const el of list) {
       const n = k => el[k] ?? 0;
       if (el.type === 'group') walk(el.children ?? [], dx + n('x'), dy + n('y'));
-      else if (['rect', 'image', 'meter', 'particles'].includes(el.type))
+      else if (['rect', 'image', 'meter', 'particles', 'document'].includes(el.type))
         grow(dx + n('x'), dy + n('y'), dx + n('x') + n('w'), dy + n('y') + n('h'));
       else if (el.type === 'solid') {
         const r = el.size ?? 120;

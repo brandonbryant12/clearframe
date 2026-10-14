@@ -1,7 +1,13 @@
 {
   "order": 2,
   "playbook": "benefit-explainer",
-  "playbooks": ["benefit-explainer", "day-in-the-life", "policy-change", "client-update", "training-moment"],
+  "playbooks": [
+    "benefit-explainer",
+    "day-in-the-life",
+    "policy-change",
+    "client-update",
+    "training-moment"
+  ],
   "title": "Workplace explainer",
   "when": "Benefits, retirement, pay, policy, training, onboarding and client updates at a company or a financial firm: films people are sent, not films they chose",
   "film": {
@@ -18,7 +24,6 @@
     "transition": "cut",
     "sfx": "subtle",
     "lens": {
-      "handheld": 0,
       "blur": 0
     },
     "voice": {
@@ -71,16 +76,6 @@
       "film": {
         "theme": "meadow",
         "type": "geometric"
-      }
-    },
-    {
-      "name": "poster",
-      "film": {
-        "theme": "sorbet",
-        "type": "wide"
-      },
-      "beats": {
-        "print": "benday"
       }
     },
     {

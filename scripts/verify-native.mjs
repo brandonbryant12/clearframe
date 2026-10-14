@@ -109,7 +109,7 @@ writeJSON(path.join(compact, 'storyboard.json'), {
   version: 2,
   title: '60 fps timing check',
   format: { width: 640, height: 360, fps: 60 },
-  theme: 'signal',
+  theme: 'briefing',
   music: false,
   captions: false,
   sources: [{ title: 'Synthetic verification' }],
@@ -151,7 +151,7 @@ for (const preset of ['landscape', 'vertical']) {
     version: 2,
     title: 'Dense layout review',
     format: { preset, fps: 30 },
-    theme: 'signal',
+    theme: 'briefing',
     music: false,
     captions: true,
     chrome: true,
@@ -214,7 +214,7 @@ if (fs.existsSync(speech)) {
   sb.beats[0].block = 'title';
   sb.beats[0].props = { text: 'Let the voice lead', support: 'A native caption follows the recording.' };
   sb.captions = true;
-  sb.theme = 'editorial';
+  sb.theme = 'porcelain';
   writeJSON(path.join(captions, 'storyboard.json'), sb);
   const captionCheck = await checkProject(captions);
   if (captionCheck.errors.length) throw new Error(captionCheck.errors.join('\n'));

@@ -3,11 +3,10 @@
   "title": "Podcast audiogram",
   "when": "Clips from interviews and podcasts, conversations, talks",
   "film": {
-    "theme": "electric",
-    "backdrop": "glow",
+    "theme": "ink",
+    "backdrop": "none",
     "texture": {
-      "grain": 0.3,
-      "vignette": 0.5
+      "grain": 0.3
     },
     "motion": {
       "preset": "snappy",
@@ -19,7 +18,7 @@
   },
   "beats": {
     "kinetic": "highlight",
-    "graphic": "whip"
+    "graphic": "push"
   },
   "rules": [
     "The recording is the spine: never edit vo; give the moments pictures.",

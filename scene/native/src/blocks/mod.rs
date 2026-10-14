@@ -86,16 +86,21 @@ pub const BLOCKS: &[&str] = &[
     // keeps its heading, source line, captions, speaker and transitions.
     "stage",
 ];
-/// Scene entrances. `panel`, `iris` and `whip` are graphic transitions: the outgoing scene's
-/// exit and the incoming entrance share one continuous movement across the cut.
-pub const TRANSITIONS: &[&str] =
-    &["cut", "fade", "rise", "wipe", "push", "zoom", "panel", "iris", "whip", "flash", "dissolve"];
+/// Scene entrances. `panel` is a graphic transition: the outgoing scene's exit and the incoming
+/// entrance share one continuous movement across the cut. Retired names (iris, whip, flash,
+/// dissolve) are refused with a replacement by the job builder (`RETIRED` in film/constants.mjs).
+pub const TRANSITIONS: &[&str] = &["cut", "fade", "rise", "wipe", "push", "zoom", "panel"];
+/// Film backdrops (`""` is a job written without one).
+pub const BACKDROPS: &[&str] = &["", "none", "grid", "paper"];
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Caption {
     pub start: f32,
     pub end: f32,
     pub text: String,
+    /// The caption's lines, broken where a reader pauses (`captionCues`); words carry none.
+    #[serde(default)]
+    pub lines: Vec<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -169,8 +174,8 @@ pub struct Beat {
     /// re-derives readable text colours for it.
     #[serde(default)]
     pub tone: Option<String>,
-    /// Graphic-transition styling for this scene's entrance and exit: `{color, origin: [x, y]}`
-    /// with a palette token and a 0–1 origin (iris centre, panel direction).
+    /// Graphic-transition styling for this scene's entrance and exit: `{color}`, a palette token
+    /// for the panel.
     #[serde(default)]
     pub enter_style: Option<Value>,
     #[serde(default)]
@@ -194,8 +199,8 @@ pub struct Beat {
     /// Voice level per scene frame, 0–100, prepared from this beat's narration audio.
     #[serde(default)]
     pub levels: Vec<u8>,
-    /// The resolved lens for this beat (film `lens` merged with the beat's): letterbox,
-    /// grade, bloom, aberration, leak, handheld and motion blur.
+    /// The resolved lens for this beat (film `lens` merged with the beat's): the motion-blur
+    /// shutter, `blur`.
     #[serde(default)]
     pub lens: Value,
     #[serde(skip)]
@@ -204,8 +209,8 @@ pub struct Beat {
 fn cut() -> String {
     "cut".into()
 }
-fn plate() -> String {
-    "plate".into()
+fn standard() -> String {
+    "standard".into()
 }
 fn lines() -> String {
     "lines".into()
@@ -245,7 +250,7 @@ pub struct Film {
     /// The type voice resolved from `library/types`; absent for the default Inter look.
     #[serde(default, rename = "type")]
     pub type_voice: Option<text::Voice>,
-    #[serde(default = "plate")]
+    #[serde(default = "standard")]
     pub caption_style: String,
     /// Editorial frame chrome: brand, section label, footers and a progress line.
     #[serde(default)]
@@ -270,6 +275,9 @@ impl Film {
             || ![24, 25, 30, 50, 60].contains(&film.fps)
         {
             return Err("job requires version 2, a supported canvas, and 24/25/30/50/60 fps".into());
+        }
+        if !BACKDROPS.contains(&film.backdrop.as_str()) {
+            return Err(format!("job backdrop {:?} is not one of none, grid, paper", film.backdrop).into());
         }
         let scale = 1080.0 / film.width.min(film.height) as f32;
         let total = film.beats.len();

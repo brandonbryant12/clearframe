@@ -1030,3 +1030,166 @@ fn edges_of(v: &[[f32; 3]]) -> Vec<(usize, usize)> {
     }
     out
 }
+
+/// Hand-drawn marks on a text element's own words: rough-notation's vocabulary (MIT,
+/// rough-stuff/rough-notation), drawn natively from the text's measured layout.
+impl<'a, 'c> Draw<'a, 'c> {
+    /// Where `words` fall in a text element laid out exactly as `canvas_text` lays it out: the
+    /// (left, right, baseline) of every line piece they cover, and the size the text is drawn at.
+    fn mark_pieces(&self, el: &Value, words: &str) -> (Vec<(f32, f32, f32)>, f32) {
+        let font = text_font(el);
+        let mut size = f(el, "size", 48.0).max(0.2);
+        let mut tracking = f(el, "tracking", 0.0) * size;
+        let upper = el.get("upper").and_then(Value::as_bool).unwrap_or(false);
+        let case = |t: &str| if upper { t.to_uppercase() } else { t.to_owned() };
+        let (full, words) = (case(s(el, "text")), case(words));
+        let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
+        let anchor = s(el, "anchor");
+        let place = |left: f32, width: f32, content: f32| match anchor {
+            "middle" => left + (width - content) / 2.0,
+            "end" => left + width - content,
+            _ => left,
+        };
+        if let Some(width) = num(el, "width") {
+            let style = Style {
+                font,
+                size,
+                leading: f(el, "leading", 1.15),
+                tracking: f(el, "tracking", 0.0),
+                upper: false,
+                balance: el.get("balance").and_then(Value::as_bool).unwrap_or(true),
+            };
+            let layout = self.fit(&full, style, width.max(1.0), f(el, "height", size * 8.0).max(size));
+            let left = place(x, 0.0, width);
+            let top = y - layout.baseline;
+            let pieces = text::phrase_pieces(&layout, &words)
+                .into_iter()
+                .map(|(line, a, b)| {
+                    let lx = place(left, width, layout.lines[line].width);
+                    (lx + a, lx + b, top + line as f32 * layout.line_height + layout.baseline)
+                })
+                .collect();
+            return (pieces, layout.size);
+        }
+        if let Some(fit) = num(el, "fit") {
+            let natural = text::measure(font, &full, size, tracking);
+            if natural > fit && natural > 0.0 {
+                size *= fit / natural;
+                tracking *= fit / natural;
+            }
+        }
+        let Some(start) = text::find_words(&full, &words) else { return (vec![], size) };
+        let left = place(x, 0.0, text::measure(font, &full, size, tracking));
+        let a = if start == 0 { 0.0 } else { text::measure(font, &full[..start], size, tracking) + tracking };
+        let b = a + text::measure(font, &full[start..start + words.len()], size, tracking);
+        (vec![(left + a, left + b, y)], size)
+    }
+
+    /// A text element with its `marks`: a marker band swept behind the words, or an underline,
+    /// circle, box, strike-through or cross drawn on over them from each mark's cue. Marks are
+    /// part of the text's node, so they move, tilt and leave with it.
+    pub(super) fn marked(&self, el: &Value, text: Node, now: f32) -> Node {
+        let marks = arr(el, "marks");
+        if marks.is_empty() {
+            return text;
+        }
+        use std::hash::{Hash, Hasher};
+        let (mut behind, mut over) = (vec![], vec![]);
+        for (index, mark) in marks.iter().enumerate() {
+            let words = s(mark, "words");
+            let (pieces, size) = self.mark_pieces(el, words);
+            let at = f(mark, "at", 0.0);
+            if pieces.is_empty() || now <= at {
+                continue;
+            }
+            let k = self.m.grow(now - at, f(mark, "dur", 0.6).max(0.01));
+            let style = nonempty(s(mark, "style"), "highlight");
+            let color = self.paint(mark.get("color"), "accent");
+            let width = f(mark, "width", (size * 0.09).clamp(2.5, 16.0));
+            let pad = f(mark, "pad", size * 0.22);
+            let amount = if mark.get("rough").and_then(Value::as_bool) == Some(false) {
+                0.0
+            } else {
+                (size * 0.03).clamp(0.6, 3.0)
+            };
+            let mut hasher = std::collections::hash_map::DefaultHasher::new();
+            (s(el, "text"), words, style, index).hash(&mut hasher);
+            let seed = hasher.finish();
+            // One confident stroke along `pts`, drawn on to `k` (a hand never needs two passes).
+            let stroke = |pts: &[(f32, f32)], k: f32, salt: u64| -> Node {
+                if k <= 0.0 || pts.len() < 2 {
+                    return draw::empty();
+                }
+                let d = if amount > 0.0 {
+                    rough_contour(pts, amount, seed ^ salt)
+                } else {
+                    pts.iter()
+                        .enumerate()
+                        .map(|(i, p)| format!("{} {:.1} {:.1}", if i == 0 { "M" } else { "L" }, p.0, p.1))
+                        .collect::<Vec<_>>()
+                        .join(" ")
+                };
+                let len =
+                    pts.windows(2).map(|w| (w[1].0 - w[0].0).hypot(w[1].1 - w[0].1)).sum::<f32>() * 1.1 + 4.0 * amount + 8.0;
+                let shape = draw::path(d).paint_stroke(&color, width).round();
+                if k < 0.999 { shape.dash_str(format!("{} {}", len, len * 2.0 + 10.0), len * (1.0 - k)) } else { shape }
+                    .node()
+            };
+            // Reading order: a sweep or a line crosses each line piece in turn.
+            let total: f32 = pieces.iter().map(|(a, b, _)| b - a).sum::<f32>().max(1.0);
+            let share = |i: usize| {
+                let before: f32 = pieces[..i].iter().map(|(a, b, _)| b - a).sum();
+                motion::clamp01((k * total - before) / (pieces[i].1 - pieces[i].0).max(1.0))
+            };
+            let (l, r) = pieces.iter().fold((f32::MAX, f32::MIN), |(l, r), p| (l.min(p.0), r.max(p.1)));
+            let (t, b) = pieces.iter().fold((f32::MAX, f32::MIN), |(t, b), p| (t.min(p.2 - size * 0.74), b.max(p.2 + size * 0.2)));
+            match style {
+                "highlight" => {
+                    let bands: Vec<Node> = (0..pieces.len())
+                        .map(|i| {
+                            let (a, z, base) = pieces[i];
+                            let w = (z - a + size * 0.16) * share(i);
+                            if w <= 0.0 {
+                                return draw::empty();
+                            }
+                            draw::rounded_rect(a - size * 0.08, base - size * 0.7, w, size * 0.86, size * 0.08, size * 0.08)
+                                .paint_fill(&color)
+                                .node()
+                        })
+                        .collect();
+                    behind.push(Node::from(bands).opacity(if self.p.dark { 0.34 } else { 0.24 }));
+                }
+                "underline" | "strike" => {
+                    let (drop, rise) = if style == "underline" { (0.16, 0.12) } else { (-0.3, -0.34) };
+                    for (i, &(a, z, base)) in pieces.iter().enumerate() {
+                        let pts = [(a - size * 0.06, base + size * drop), (z + size * 0.06, base + size * rise)];
+                        over.push(stroke(&pts, share(i), i as u64));
+                    }
+                }
+                "circle" => {
+                    let (cx, cy, rx, ry) = ((l + r) / 2.0, (t + b) / 2.0, (r - l) / 2.0 + pad, (b - t) / 2.0 + pad * 0.7);
+                    // From the upper left round past the start: the ends overlap, as a hand's do.
+                    let pts: Vec<_> = (0..=56)
+                        .map(|i| {
+                            let a = -2.3 + (TAU + 0.45) * i as f32 / 56.0;
+                            (cx + rx * a.cos(), cy + ry * a.sin())
+                        })
+                        .collect();
+                    over.push(stroke(&pts, k, 0));
+                }
+                "box" => {
+                    let (x0, y0, x1, y1) = (l - pad, t - pad * 0.6, r + pad, b + pad * 0.6);
+                    let pts = [(x0, y0), (x1, y0), (x1, y1), (x0, y1), (x0, y0 + pad * 0.3)];
+                    over.push(stroke(&pts, k, 0));
+                }
+                "cross" => {
+                    let (x0, y0, x1, y1) = (l - pad * 0.3, t, r + pad * 0.3, b);
+                    over.push(stroke(&[(x0, y0), (x1, y1)], motion::clamp01(k * 2.0), 1));
+                    over.push(stroke(&[(x1, y0), (x0, y1)], motion::clamp01(k * 2.0 - 1.0), 2));
+                }
+                _ => {}
+            }
+        }
+        draw::group(vec![Node::from(behind), text, Node::from(over)])
+    }
+}

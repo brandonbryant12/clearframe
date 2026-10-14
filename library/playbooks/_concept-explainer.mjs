@@ -456,7 +456,7 @@ const beats = [
     id: 'end',
     block: 'canvas',
     vo: 'Leave room for the unexpected: plan for about seventy percent, not a hundred.',
-    transition: 'dissolve',
+    transition: 'fade',
     props: { source: MATH, elements: after },
     hold: 1,
   },
@@ -473,7 +473,7 @@ const book = {
   transition: 'cut',
   sfx: 'subtle',
   texture: { grain: 0.2, vignette: 0.35 },
-  lens: { grade: 'warm', gradeAmount: 0.3, handheld: 0.1, blur: 0.5 },
+  lens: { blur: 0.5 },
   note: 'One idea, one example, one curve, all on one road. Draw the mechanism with the example (a brake rippling through full traffic), show the curve it implies (computed from a formula, so its source is the formula), find the jam close up for the turn, and end on the road flowing again (library/playbooks/_concept-explainer.mjs). Replace the example with yours and keep every comparator visible (×, of what).',
   beats,
 };

@@ -5,7 +5,7 @@
   "preset": "landscape",
   "fps": 30
  },
- "theme": "ledger",
+ "theme": "ink",
  "type": "geometric",
  "backdrop": "none",
  "motion": {

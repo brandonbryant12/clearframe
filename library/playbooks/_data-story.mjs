@@ -1,34 +1,37 @@
 // Generates data-story.json (run from the repository root: node library/playbooks/_data-story.mjs).
-// A data film that never leaves its place: a queue of requests in a lit room. The camera finds
-// one request and the wait it faces is set into the room; the wait becomes a hundred request
-// cards, one per hour, and the edit cuts in to each stage; the spread follows, cut in to the
-// few that wait longest; the film ends on the line, now shorter. Shots run three to four
-// seconds and cut on what changes in the picture. One dataset: 4.2 days ≈ 100 h = 52 + 30 + 12 + 6.
+// A data film made of one object: a request card. One card asks how long a request takes and
+// carries its average wait; it becomes the first of a hundred cards, one per hour, and the edit
+// cuts in to each stage; the spread follows, cut in to the few that wait longest; the film ends
+// on the hundred cards with the waiting lit. Shots run three to four seconds and cut on what
+// changes in the picture. One dataset: 4.2 days ≈ 100 h = 52 + 30 + 12 + 6.
 import fs from 'node:fs';
-import queue from '../sketches/queue.mjs';
 
 const W = 1920,
   H = 1080;
 const SAMPLE = 'Illustrative sample data · replace before publishing';
-const room = queue.build(W, H);
-const ours = room.elements.find(el => el.type === 'group' && el.children.some(c => c.glow))?.z ?? 2.4;
 const r = v => Math.round(v * 10) / 10;
 
-// The room behind a chart: the same queue, out of focus and dimmed, so every number is seen
-// in the place it describes.
-const behind = (dim = 0.42) => [
-  { type: 'group', at: 0, enter: 'none', blur: 14, opacity: 0.55, children: room.elements.map(el => ({ ...el })) },
-  { type: 'rect', x: 0, y: 0, w: W, h: H, fill: 'bg', opacity: dim, at: 0, enter: 'none' },
+// ------------------------------------------------------------------ one request
+// The card the whole film is made of: a body (id `request`, so it morphs from shot to shot)
+// and a header line inside it, drawn at any size.
+const card = (x, y, w, h, extra = {}) => [
+  { id: 'request', type: 'rect', x, y, w, h, r: r(h * 0.14), fill: 'accent', at: 0, enter: 'none', ...extra },
+  { type: 'rect', x: r(x + w * 0.14), y: r(y + h * 0.24), w: r(w * 0.45), h: r(Math.max(6, h * 0.12)), r: r(Math.max(3, h * 0.06)), fill: 'bg', opacity: 0.55, at: 0.5, enter: 'fade', dur: 0.4 },
+];
+const opening = [
+  ...card(780, 330, 360, 272, { at: 0.2, enter: 'pop', dur: 0.45 }),
+  { type: 'text', text: 'ONE REQUEST', x: 960, y: 270, size: 34, font: 'mono', tracking: 0.2, anchor: 'middle', fill: 'muted', at: 0.1, enter: 'fade', dur: 0.5 },
+  { type: 'text', text: 'How long does it take?', x: 960, y: 760, size: 96, font: 'display', anchor: 'middle', fit: 1500, fill: 'ink', say: 'long', enter: 'rise', dur: 0.6 },
 ];
 
-// ------------------------------------------------------------------ the wait, set into the room
-// Not a stat card: the figure stands in the upper third of the room, beside the line it
-// describes, while focus stays on our request.
+// ------------------------------------------------------------------ the wait, beside the card
+// Not a stat card: the figure stands beside the request it describes.
 const waitType = [
+  ...card(220, 400, 240, 182),
   {
     type: 'text',
-    x: 150,
-    y: 300,
+    x: 560,
+    y: 540,
     size: 190,
     font: 'figures',
     fill: 'ink',
@@ -40,8 +43,8 @@ const waitType = [
   {
     type: 'text',
     text: 'average time to resolve one request',
-    x: 156,
-    y: 372,
+    x: 566,
+    y: 612,
     size: 44,
     fill: 'muted',
     say: 'days',
@@ -173,8 +176,19 @@ const spread = note => ({
   ...(note ? { at: 0, note: { text: 'the few that pull the average up', to: '2+ weeks', say: 'weeks' } } : {}),
 });
 
-// The end: the same room, a shorter line, our request near the front.
-const after = queue.build(W, H, { count: 7, ours: 1 });
+// The first card is the request from the opening, arriving in its cell; the rest pop in after it.
+const grid = cards.map((c, i) => (i ? c.el : null));
+const firstCell = [...card(cards[0].x, cards[0].y, CW, CH)];
+
+const hoursElements = size => [
+  { type: 'text', text: 'ONE CARD = ONE HOUR OF ONE REQUEST', x: GX, y: GY - 50, size, font: 'mono', tracking: 0.12, fill: 'muted', at: 0.1, enter: 'fade', dur: 0.5 },
+  ...firstCell,
+  ...grid.filter(Boolean),
+  ...legend,
+];
+
+// The end: the hundred cards again, the hours spent waiting lit and the rest stepped back.
+const after = cards.map(c => ({ ...c.el, at: 0, enter: 'none', ...(c.stage === 'Queue' ? {} : { opacity: 0.2 }) }));
 
 const shot = (id, vo, label, extra = {}) => {
   const s = stageShot(label);
@@ -185,55 +199,27 @@ const shot = (id, vo, label, extra = {}) => {
     transition: 'cut',
     // Held still (no drift): the crop's edges sit in the gaps between cards.
     props: { source: SAMPLE, view: s.view, viewDrift: 0, elements: s.elements },
-    art: { under: behind() },
     ...extra,
   };
 };
 
 const beats = [
-  { id: 'open', block: 'canvas', vo: 'How long does one request really take?', props: { sketch: 'queue' } },
+  { id: 'open', block: 'canvas', vo: 'How long does one request really take?', props: { elements: opening } },
   {
     id: 'wait',
     block: 'canvas',
     vo: 'On average, four point two days.',
     transition: 'cut',
-    props: {
-      source: SAMPLE,
-      dolly: [
-        { at: 0, z: 2.1, dur: 0 },
-        { at: 0, z: 2.3, dur: 4, ease: 'out' },
-      ],
-      focus: { z: ours, aperture: 0.8 },
-      elements: [...room.elements, ...waitType],
-    },
+    props: { source: SAMPLE, elements: waitType },
   },
   {
     id: 'hours',
     block: 'canvas',
     vo: 'About a hundred hours. Here is where they go.',
-    transition: 'dissolve',
-    props: {
-      source: SAMPLE,
-      elements: [
-        {
-          type: 'text',
-          text: 'ONE CARD = ONE HOUR OF ONE REQUEST',
-          x: GX,
-          y: GY - 50,
-          size: 30,
-          font: 'mono',
-          tracking: 0.12,
-          fill: 'muted',
-          at: 0.1,
-          enter: 'fade',
-          dur: 0.5,
-        },
-        ...cards.map(c => c.el),
-        ...legend,
-      ],
-    },
-    art: { under: behind() },
-    camera: { move: 'in', amount: 0.4 },
+    transition: 'cut',
+    props: { source: SAMPLE, elements: hoursElements(30) },
+    // The vertical cut fits the whole grid into a narrow frame: its key line is set larger.
+    tall: { elements: hoursElements(50) },
   },
   shot('queue', 'Fifty-two are spent waiting in a queue.', 'Queue'),
   shot('routing', 'Thirty more go to passing it between teams.', 'Routing'),
@@ -242,9 +228,8 @@ const beats = [
     id: 'shape',
     block: 'canvas',
     vo: 'But the average hides the shape.',
-    transition: 'whip',
+    transition: 'cut',
     props: { source: SAMPLE, chart: spread(false), elements: [] },
-    art: { under: behind(0.5) },
   },
   {
     id: 'tail',
@@ -252,27 +237,22 @@ const beats = [
     vo: 'Almost half are resolved the same day. A few wait for weeks.',
     transition: 'cut',
     props: { source: SAMPLE, view: [760, 324, 1315.6, 740], chart: spread(true), elements: [] },
-    art: { under: behind(0.5) },
     hold: 0.6,
   },
   {
     id: 'end',
     block: 'canvas',
-    vo: 'Measure the whole wait, and start with the requests that wait longest.',
-    transition: 'dissolve',
+    vo: 'Measure the whole wait: more than half of it is time spent in a queue.',
+    transition: 'cut',
     props: {
-      dolly: [
-        { at: 0, z: 0.9, dur: 0 },
-        { at: 0, z: 0.2, dur: 7, ease: 'out' },
-      ],
-      focus: { z: after.focus.z, aperture: 0.7 },
+      source: SAMPLE,
       elements: [
-        ...after.elements,
+        ...after,
         {
           type: 'text',
           text: 'Measure the whole wait.',
           x: 960,
-          y: 250,
+          y: 790,
           size: 104,
           font: 'display',
           anchor: 'middle',
@@ -284,14 +264,14 @@ const beats = [
         },
         {
           type: 'text',
-          text: 'Start with the requests that wait longest.',
+          text: '52 of its 100 hours are spent waiting in a queue.',
           x: 960,
-          y: 330,
+          y: 870,
           size: 40,
           anchor: 'middle',
           fit: 1400,
           fill: 'muted',
-          say: 'start',
+          say: 'half',
           enter: 'fade',
           dur: 0.6,
         },
@@ -313,8 +293,8 @@ const book = {
   transition: 'cut',
   sfx: 'subtle',
   texture: { grain: 0.3, vignette: 0.45 },
-  lens: { grade: 'cool', gradeAmount: 0.3, handheld: 0.12, blur: 0.5 },
-  note: 'One dataset carries the film, in one place: the queue the numbers describe. The average wait (4.2 days ≈ 100 hours) becomes a hundred request cards, one per hour; the edit cuts in to each stage (52 + 30 + 12 + 6), then to the spread and its tail, always in front of the same room. Shots run three to four seconds and cut on what changes in the picture. Replace the figures and keep them consistent; draw the place your numbers describe (library/playbooks/_data-story.mjs); end on it, not on a card.',
+  lens: { blur: 0.5 },
+  note: 'One dataset carries the film, in one object: a request card. The card that asks the question carries the average wait (4.2 days ≈ 100 hours), then becomes the first of a hundred cards, one per hour; the edit cuts in to each stage (52 + 30 + 12 + 6), then to the spread and its tail, and ends on the hundred cards with the waiting lit. Shots run three to four seconds and cut on what changes in the picture. Replace the figures and keep them consistent; draw the thing your numbers count (library/playbooks/_data-story.mjs); end on it, not on a card of text.',
   beats,
 };
 fs.writeFileSync('library/playbooks/data-story.json', JSON.stringify(book, null, 2) + '\n');

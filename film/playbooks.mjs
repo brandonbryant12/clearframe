@@ -36,7 +36,8 @@ export function storyboardFor(id, { title, theme, vertical, seed, ending } = {})
     transition: book.transition ?? 'fade',
     backdrop: book.backdrop ?? 'none',
     chrome: false,
-    captions: book.captions ?? false,
+    // Captions are on for every narrated film unless a playbook (or the author) turns them off.
+    captions: book.captions ?? 'auto',
     // A produced film has a score and sound that follows the picture: a draft bed is free
     // (music --draft); the final bed is paid and runs only after plan and approval.
     music: book.music ?? {},
@@ -137,7 +138,7 @@ export function storyboardFor(id, { title, theme, vertical, seed, ending } = {})
 }
 /** Library refs for the art sketches a storyboard names, so shared ones travel with it. */
 export const artSketches = sb => sb.beats.filter(b => b.art?.sketch).map(b => ['sketches', b.art.sketch]);
-/** A note when a treatment made for certain playbooks starts from another (workplace from product-walkthrough). */
+/** A note when a treatment made for certain playbooks starts from another (workplace from data-story). */
 export function playbookNote(options = {}) {
   const t = options.treatment && treatmentById(options.treatment), book = playbookFor(options);
   if (!t?.playbooks?.length || t.playbooks.includes(book.id)) return null;
@@ -174,14 +175,7 @@ export function scaffold(dir, options = {}) {
   const drawn = options.seed != null ? muse(options.seed) : null;
   if (drawn) {
     if (!options.theme) sb.theme = drawn.palette;
-    sb.lens = {
-      gradeAmount: 0.45,
-      bloom: 0.25,
-      blur: 0.5,
-      ...(sb.lens ?? {}),
-      grade: drawn.grade,
-      ...drawn.apply.lens,
-    };
+    sb.lens = { blur: 0.5, ...(sb.lens ?? {}) };
     sb.textMotion = drawn.textMotion;
     sb.transition = drawn.apply.transition;
   }
@@ -227,28 +221,38 @@ const GALLERY_SECONDS = {
   delta: 5,
   canvas: 5,
 };
-/** Every canvas sketch as its own beat (ambient sketches sit under a statement). */
+/** The last timed cue in a sketch's elements (children included), in seconds. */
+function lastCue(elements = []) {
+  return elements.reduce(
+    (end, el) => Math.max(end, (el.at ?? 0) + (el.dur ?? 0), el.exitAt ?? 0, lastCue(el.children)),
+    0,
+  );
+}
+/** Every canvas sketch as its own beat (ambient sketches sit under a statement), long enough
+ *  for its last cue to settle. */
 export function sketchGallery({ vertical = false, theme = 'paper', only } = {}) {
   const sb = storyboardFor('concept-explainer', { theme, vertical });
   sb.title = 'Canvas sketches';
-  sb.backdrop = 'glow';
+  // Sketches that count up their sample figures still need a visible source.
+  sb.sources = [{ id: 'sample', title: 'Illustrative sample figures' }];
   sb.beats = sketches()
     .filter(s => !only || only.includes(s.name))
     .map(s => {
       const props = sketch(s.name, vertical ? 'vertical' : 'landscape');
+      const duration = Math.max(5, Math.ceil(lastCue(props.elements) + 1.5));
       return props.layer === 'under'
         ? {
             id: s.name,
             block: 'statement',
-            duration: 5,
+            duration,
             art: { under: props.elements },
             props: { text: 'A held frame that still breathes.' },
           }
         : {
             id: s.name,
             block: 'canvas',
-            duration: 5,
-            props: { kicker: 'Sketch', title: s.name[0].toUpperCase() + s.name.slice(1), elements: props.elements,
+            duration,
+            props: { kicker: 'Sketch', title: s.name[0].toUpperCase() + s.name.slice(1), elements: props.elements, source: 'Illustrative sample figures',
               ...Object.fromEntries(['view', 'viewFrom', 'viewDur', 'dolly', 'focus'].filter(k => props[k] != null).map(k => [k, props[k]])) },
           };
     });

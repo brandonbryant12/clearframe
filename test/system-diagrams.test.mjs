@@ -126,9 +126,7 @@ test('steady films: the film camera applies to every beat, plates hold still, an
   assert.deepEqual(r.job.beats.map(b => b.camera?.move), ['none', 'in', 'none']);
   assert.equal(r.job.beats[2].plate.drift, 'none');
   assert(!r.warnings.some(w => /shake|whole frame/.test(w)));
-  const loose = film([{ id: 'f', block: 'statement', duration: 3, lens: { handheld: 0.3 }, plate: { file: 'clip.mp4' }, props: { text: 'Shaky' } }]);
+  const loose = film([{ id: 'f', block: 'statement', duration: 3, plate: { file: 'clip.mp4', drift: 'left' }, props: { text: 'Shaky' } }]);
   r = job(t, loose);
   assert(r.warnings.some(w => /footage carries its own camera motion/.test(w)));
-  const stacked = film([{ id: 'g', block: 'statement', duration: 3, camera: 'left', lens: { handheld: 0.2 }, props: { text: 'Busy' } }]);
-  assert(job(t, stacked).warnings.some(w => /move the whole frame at once/.test(w)));
 });

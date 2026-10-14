@@ -10,11 +10,9 @@ import path from 'node:path';
 const ALLOWED = [
   /^film\/assets\//,                        // bundled fonts and icons
   /^scene\/native\/tests\/fixtures\//,      // decoder fixtures
-  /^examples\/sculptures\/[^/]+\//,         // prepared 3D clips, posters and editable scenes
   /^docs\/media\//,                         // guide illustrations
   /^docs\/design\/material-studies\/[^/]+\.png$/,
   /^archive\//,                             // retired renderer, recovery only
-  /^recipes\/screen-walkthrough\/assets\//,
   /^examples\/trajectories\/[^/]+\/[^/]+\.png$/,     // source photos that ingest examples start from
 ];
 const BINARY = /\.(png|jpe?g|gif|webp|mp4|mov|webm|mkv|wav|mp3|m4a|aac|blend|exr|vdb|zip|tar|gz)$/i;

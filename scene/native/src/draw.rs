@@ -32,7 +32,7 @@ pub struct Group {
     /// The region a filter may draw in (its input and output), in the group's space.
     pub region: Option<Rect>,
     pub blend: Option<BlendMode>,
-    /// Audit tags: `cf-bar…` (letterbox bars) and `…-subject-…` (the picture's subject).
+    /// Audit tags: `…-subject-…` (the picture's subject).
     pub id: String,
 }
 

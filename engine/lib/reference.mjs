@@ -212,7 +212,7 @@ ${palette.map(p => `- ${p.hex} — ${p.share}% of the frame`).join('\n')}
 
 ## Motion
 - Energy per second: ${spark(energy)} (mean ${mean.toFixed(1)}: **${summary.motion.feel}**).
-- ${summary.motion.feel === 'energetic' ? 'Use snappy motion at high intensity, cuts and whips, stepped or kinetic type.' : summary.motion.feel === 'steady' ? 'Use gentle or spring motion around 0.6–0.8 intensity; let something move in every held frame.' : 'Use gentle motion at low intensity, long holds and fades; motion comes from the camera and slow drifts.'}
+- ${summary.motion.feel === 'energetic' ? 'Use snappy motion at high intensity, hard cuts and pushes, stepped or kinetic type.' : summary.motion.feel === 'steady' ? 'Use gentle or spring motion around 0.6–0.8 intensity; let something move in every held frame.' : 'Use gentle motion at low intensity, long holds and fades; motion comes from the camera and slow drifts.'}
 `,
     );
     return summary;

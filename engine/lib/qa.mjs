@@ -25,15 +25,9 @@ const LONG = 128;
 // never drop under 3 for even 2.5 s (medians 8–42); a held slide sits under 1.
 export const HELD = { change: 2, seconds: 2.5, local: 7 };
 
-/** Compare the active picture, excluding authored horizontal bars (same rule as lens.rs).
- * The caller passes the original aspect to avoid analysis-grid rounding changing the crop.
- */
-export function pictureDifference(a, b, width, height, letterbox = 0, aspect = width / height) {
-  const bar =
-    letterbox > aspect && aspect > 1
-      ? Math.min(Math.floor((height - 1) / 2), Math.ceil((height * (1 - aspect / letterbox)) / 2))
-      : 0;
-  return diff(a.subarray(bar * width, (height - bar) * width), b.subarray(bar * width, (height - bar) * width));
+/** How much the whole picture changed between two frames. */
+export function pictureDifference(a, b) {
+  return diff(a, b);
 }
 
 function grid(width, height) {
@@ -418,7 +412,6 @@ export async function qaProject(root, { video, loop = false } = {}) {
   const captionBand = sb.captions ? Math.round(h * (h > w ? 0.24 : 0.16)) : 0;
   const same = timing.frames === n;
   const beats = same ? timing.beats : [];
-  const letterboxes = beats.map(b => sb.beats[b.index].lens?.letterbox ?? sb.lens?.letterbox ?? 0);
   let beatIndex = 0;
   for (let i = 1; i < n; i++) d.push(diff(film.at(i - 1), film.at(i)));
   for (let i = 1; i < n - 1; i++) skip.push(diff(film.at(i - 1), film.at(i + 1)));
@@ -426,11 +419,7 @@ export async function qaProject(root, { video, loop = false } = {}) {
   for (let i = 0; i < n; i++) {
     while (beatIndex + 1 < beats.length && i / fps >= beats[beatIndex].end) beatIndex++;
     const withinBeat = !same || !beats.length || (i - F) / fps >= beats[beatIndex].start;
-    second.push(
-      i >= F && withinBeat
-        ? pictureDifference(film.at(i - F), film.at(i), w, h, letterboxes[beatIndex] ?? 0, v.width / v.height)
-        : Infinity,
-    );
+    second.push(i >= F && withinBeat ? pictureDifference(film.at(i - F), film.at(i)) : Infinity);
     local.push(i >= F && withinBeat ? localDifference(film.at(i - F), film.at(i), w, h, captionBand) : Infinity);
   }
   const worlds = Object.fromEntries(sb.beats.map(b => [b.id, b.props?.world ?? null]));
@@ -574,7 +563,7 @@ export async function qaProject(root, { video, loop = false } = {}) {
     change: change.map(r2),
     heldAnalysis: {
       ...HELD,
-      region: same ? 'active picture excluding authored letterbox bars' : 'full frame (timeline mismatch)',
+      region: same ? 'full frame, within each beat' : 'full frame (timeline mismatch)',
       advisory: true,
     },
   });

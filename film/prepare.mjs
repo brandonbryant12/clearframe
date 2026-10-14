@@ -5,6 +5,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { eachElement, usesLevels } from './canvas.mjs';
 import { createJob } from './job.mjs';
+import { heldTail } from './constants.mjs';
 import { FILM as ROOT, sha256, sceneHash, engineCommand } from '../scene/engine.mjs';
 import { compilePlan, writePlan } from '../scene/compile.mjs';
 import { voiceLevels } from '../engine/lib/levels.mjs';
@@ -266,11 +267,13 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
           encoding: 'utf8',
         });
         const duration = Number(JSON.parse(probe.stdout || '{}').format?.duration);
-        if (!(duration - (b.plate.offset ?? 0) + 1 / result.job.fps >= b.frames / result.job.fps))
+        // A wipe into the next beat holds this one on screen ahead of its edge.
+        const shown = b.frames / result.job.fps + heldTail(result.job, result.job.beats.indexOf(b));
+        if (!(duration - (b.plate.offset ?? 0) + 1 / result.job.fps >= shown))
           throw new Error(
-            `${b.id}: plate footage is shorter than the beat; trim the beat or use a longer clip; B-roll does not loop.`,
+            `${b.id}: plate footage is shorter than the beat${shown > b.frames / result.job.fps ? ' and the wipe after it' : ''}; trim the beat or use a longer clip; B-roll does not loop.`,
           );
-        footage.push({ beat: b.id, index: result.job.beats.indexOf(b), source: rel, offset: b.plate.offset ?? 0, seconds: b.frames / result.job.fps });
+        footage.push({ beat: b.id, index: result.job.beats.indexOf(b), source: rel, offset: b.plate.offset ?? 0, seconds: shown });
       }
     }
   }
@@ -297,9 +300,10 @@ export function prepareProjectSync(root, { draft = false, rough = false } = {}) 
         });
         if (probe.status !== 0) throw new Error(`Cannot probe clip ${rel}`);
         const duration = Number(JSON.parse(probe.stdout).format?.duration);
-        if (!Number.isFinite(duration) || duration - (prop.offset ?? 0) + 1 / timing.fps < b.frames / timing.fps)
-          throw new Error(`${b.id}: clip is shorter than the authored beat; trim the beat or provide a longer clip.`);
-        footage.push({ beat: b.id, index: result.job.beats.indexOf(b), source: rel, offset: prop.offset ?? 0, seconds: b.frames / timing.fps });
+        const shown = b.frames / timing.fps + heldTail(result.job, result.job.beats.indexOf(b));
+        if (!Number.isFinite(duration) || duration - (prop.offset ?? 0) + 1 / timing.fps < shown)
+          throw new Error(`${b.id}: clip is shorter than the authored beat${shown > b.frames / timing.fps ? ' and the wipe after it' : ''}; trim the beat or provide a longer clip.`);
+        footage.push({ beat: b.id, index: result.job.beats.indexOf(b), source: rel, offset: prop.offset ?? 0, seconds: shown });
       }
     }
   // The scene plan: native stages and their footage, compiled for the renderer.
@@ -407,7 +411,7 @@ export async function checkProject(root, options = {}) {
   } catch (e) {
     errors.push(e.message);
   }
-  // The frame audit: held type cut by the frame or the letterbox, printed over other type or
+  // The frame audit: held type cut by the frame, printed over other type or
   // the subject, or too small to read. A director would send any of these back. A rough cut
   // relaxes only what is declared unfinished (see classifyAudit); everything else still fails.
   try {
@@ -434,9 +438,9 @@ export async function checkProject(root, options = {}) {
 }
 
 /** Drop "cut off by the canvas edge" notes inside moves that carry type past the edge on
- * purpose: a world camera travelling, and push/whip/zoom entrances and exits. */
+ * purpose: a world camera travelling, and push/zoom entrances and exits. */
 function withoutCameraCuts(report, job) {
-  const moving = ['push', 'whip', 'zoom'],
+  const moving = ['push', 'zoom'],
     edge = Math.ceil(0.8 * job.fps);
   const moves = job.beats.flatMap(b => {
     const out = [];

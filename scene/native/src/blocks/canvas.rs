@@ -11,6 +11,8 @@ use std::collections::HashMap;
 use std::f32::consts::{PI, TAU};
 use std::sync::Mutex;
 
+#[path = "canvas_document.rs"]
+mod document;
 #[path = "canvas_effects.rs"]
 mod effects;
 #[path = "canvas_geometry.rs"]
@@ -24,6 +26,7 @@ use geometry::*;
 pub(crate) const MAX_ELEMENTS: usize = 600;
 const TYPES: &[&str] = &[
     "rect",
+    "document",
     "circle",
     "ellipse",
     "line",
@@ -38,11 +41,9 @@ const TYPES: &[&str] = &[
     "particles",
     "solid",
 ];
-const ENTERS: &[&str] = &[
-    "fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type",
-    "scramble", "blur", "none", "assemble",
-];
-const EXITS: &[&str] = &["fade", "shrink", "fall", "lift", "undraw", "wipe", "blur", "none", "scatter"];
+const ENTERS: &[&str] =
+    &["fade", "pop", "rise", "drop", "left", "right", "grow", "grow-x", "grow-y", "draw", "wipe", "wipe-up", "type", "none"];
+const EXITS: &[&str] = &["fade", "shrink", "fall", "lift", "undraw", "wipe", "blur", "none"];
 const LOOPS: &[&str] = &["spin", "pulse", "float", "sway", "orbit", "dash", "blink", "level", "rock"];
 const TOKENS: &[&str] =
     &["bg", "surface", "ink", "muted", "accent", "accent2", "positive", "negative", "line", "wash", "wash2", "none"];
@@ -165,6 +166,11 @@ pub(crate) fn validate_elements(elements: &[Value], depth: usize, count: &mut us
             "icon" => {
                 if !crate::icons::supported(s(el, "name")) {
                     return Err("unsupported native icon");
+                }
+            }
+            "document" => {
+                if arr(el, "sections").is_empty() || f(el, "w", 0.0) <= 0.0 || f(el, "h", 0.0) <= 0.0 {
+                    return Err("canvas document needs sections and a positive w and h");
                 }
             }
             "meter" => {
@@ -596,10 +602,8 @@ impl<'a, 'c> Draw<'a, 'c> {
         let c = &crate::constants::get().canvas;
         let default_dur = match enter {
             "draw" => c.draw,
-            "assemble" => c.draw * 1.3,
             "type" => (text_len * c.type_per_char).clamp(c.type_min, c.type_max),
             "grow" | "grow-x" | "grow-y" | "wipe" | "wipe-up" => c.grow,
-            "scramble" => c.scramble,
             "none" => 0.0,
             _ => self.m.duration(),
         };
@@ -646,9 +650,9 @@ impl<'a, 'c> Draw<'a, 'c> {
         (pose.tx, pose.ty) = keyed_tilt(el, now);
         let distance = self.m.distance(f(el, "dist", 48.0));
         match enter {
-            "fade" | "blur" => pose.alpha *= e.alpha,
+            "fade" => pose.alpha *= e.alpha,
             "pop" => {
-                let k = 0.55 + 0.45 * self.m.pop(local * self.m.duration() / dur.max(0.01));
+                let k = 0.86 + 0.14 * self.m.pop(local * self.m.duration() / dur.max(0.01));
                 pose.sx *= k;
                 pose.sy *= k;
                 pose.alpha *= e.alpha;
@@ -808,20 +812,8 @@ impl<'a, 'c> Draw<'a, 'c> {
                 let stroked = matches!(kind, "line" | "path" | "poly");
                 let fill = self.paint(el.get("fill"), if stroked { "none" } else { "accent" });
                 let stroke = self.paint(el.get("stroke"), if stroked { "ink" } else { "none" });
-                let assemble =
-                    if enter == "assemble" { if dur <= 0.0 { 1.0 } else { motion::clamp01(local / dur) } } else { 1.0 };
-                let scatter = if exit == "scatter" { q } else { 0.0 };
                 let defaults = Value::Object(Default::default());
-                self.mosaic(
-                    el,
-                    if spec.is_object() { spec } else { &defaults },
-                    &fill,
-                    &stroke,
-                    draw,
-                    assemble,
-                    scatter,
-                    now,
-                )
+                self.mosaic(el, if spec.is_object() { spec } else { &defaults }, &fill, &stroke, draw, now)
             }
             _ => self.shape(
                 el,
@@ -874,11 +866,7 @@ impl<'a, 'c> Draw<'a, 'c> {
         // Focus: blur in or out, an authored or keyed `blur`, and depth of field (distance
         // from the focus plane as a circle of confusion on screen; elements without `z` are
         // overlays and stay sharp).
-        let mut blur = match (enter, exit) {
-            ("blur", _) if e.alpha < 1.0 => 14.0 * (1.0 - e.alpha),
-            (_, "blur") if q > 0.0 => 14.0 * q,
-            _ => 0.0,
-        };
+        let mut blur = if exit == "blur" && q > 0.0 { 14.0 * q } else { 0.0 };
         let mut authored = f(el, "blur", 0.0);
         for key in arr(el, "keys") {
             let start = f(key, "at", 0.0);
@@ -1231,8 +1219,11 @@ impl<'a, 'c> Draw<'a, 'c> {
                 Node::from(nodes)
             }
             // Gradient type: the runs are drawn opaque and show the gradient through them.
-            "text" if is_gradient(&fill) => gradient_text(self.canvas_text(el, "#ffffff", reveal, local), &fill),
-            "text" => self.canvas_text(el, &fill, reveal, local),
+            "text" if is_gradient(&fill) => {
+                self.marked(el, gradient_text(self.canvas_text(el, "#ffffff", reveal, local), &fill), now)
+            }
+            "text" => self.marked(el, self.canvas_text(el, &fill, reveal, local), now),
+            "document" => self.document(el, now),
             "icon" => {
                 let size = f(el, "size", 64.0);
                 let color = self.paint(el.get("stroke").or(el.get("fill")), "accent");
@@ -1311,12 +1302,11 @@ impl<'a, 'c> Draw<'a, 'c> {
         if el.get("upper").and_then(Value::as_bool).unwrap_or(false) {
             value = value.to_uppercase();
         }
-        // Typing and decoding happen inside the finished text's layout: lines break, balance and
-        // anchor where the whole text will sit, so words never jump between lines or drift.
+        // Typing happens inside the finished text's layout: lines break, balance and anchor where
+        // the whole text will sit, so words never jump between lines or drift.
         let full = value.clone();
         let total = full.chars().count();
         let shown = if reveal < 1.0 { (total as f32 * reveal).ceil() as usize } else { total };
-        let scramble = s(el, "enter") == "scramble";
         let (x, y) = (f(el, "x", 0.0), f(el, "y", 0.0));
         let align = match s(el, "anchor") {
             "middle" => Align::Center,
@@ -1331,7 +1321,8 @@ impl<'a, 'c> Draw<'a, 'c> {
                 leading: f(el, "leading", 1.15),
                 tracking: f(el, "tracking", 0.0),
                 upper: false,
-                balance: true,
+                // Headlines balance their lines; body copy (`balance: false`) fills the measure.
+                balance: el.get("balance").and_then(Value::as_bool).unwrap_or(true),
             };
             let layout = self.fit(&full, style, width.max(1.0), f(el, "height", size * 8.0).max(size));
             let left = match align {
@@ -1339,34 +1330,25 @@ impl<'a, 'c> Draw<'a, 'c> {
                 Align::Right => x - width,
                 Align::Left => x,
             };
-            if shown >= total && !scramble {
+            if shown >= total {
                 return self.draw(&layout, left, y - layout.baseline, width, align, fill);
             }
             // Each line keeps its full width (so alignment holds) and shows its share of the
             // characters typed so far; the break between lines counts as one character.
             let mut partial = (*layout).clone();
             let mut budget = shown;
-            let mut offset = 0;
             for line in &mut partial.lines {
                 let count = line.text.chars().count();
-                let mut text: String = line.text.chars().take(budget).collect();
-                if scramble {
-                    text = text::decode(&text, &full, local, f(el, "dur", 0.9), offset, total);
-                }
-                line.text = text;
+                line.text = line.text.chars().take(budget).collect();
                 budget = budget.saturating_sub(count + 1);
-                offset += count + 1;
             }
             return self.draw(&partial, left, y - layout.baseline, width, align, fill);
         }
         if shown < total {
             value = full.chars().take(shown).collect();
         }
-        if scramble {
-            value = text::decode(&value, &full, local, f(el, "dur", 0.9), 0, total);
-        }
         // `fit`: the widest a single line may be. A long title shrinks to fit instead of
-        // running off the frame; the final text decides, so a decode or reveal never jumps.
+        // running off the frame; the final text decides, so a reveal never jumps.
         if let Some(fit) = num(el, "fit") {
             let natural = text::measure(font, &full, size, tracking);
             if natural > fit && natural > 0.0 {
@@ -1782,7 +1764,7 @@ mod tests {
                 {"type":"rect","x":1500,"y":200,"w":200,"h":200,"at":0,"dur":0,"morph":{"from":{"type":"circle","cx":1400,"cy":300,"r":60},"dur":1}},
                 {"type":"meter","x":600,"y":900,"w":600,"h":100,"style":"mirror","at":0,"dur":0},
                 {"type":"spotlight","cx":960,"cy":540,"r":120,"at":0.5,"dur":0.4},
-                {"type":"text","text":"Decode 2026","x":200,"y":150,"size":48,"enter":"scramble","at":0,"dur":1.2},
+                {"type":"text","text":"Typed 2026","x":200,"y":150,"size":48,"enter":"type","at":0,"dur":1.2},
                 {"type":"text","text":"PRO","x":900,"y":500,"size":200,"material":"thermal","at":0,"dur":0},
                 {"type":"rect","x":1200,"y":600,"w":400,"h":260,"r":20,"fill":"surface","tilt":[12,-20],
                  "keys":[{"at":0,"tiltY":70,"dur":0},{"at":0,"tiltY":-20,"dur":1}],"loop":{"type":"rock","period":3,"amount":6},"at":0,"dur":0}]}}]});
@@ -1792,7 +1774,7 @@ mod tests {
         let render = |i| format!("{:?}", crate::blocks::draw_beat(&film, 0, i, i, &ctx, 1.0, 0));
         let (early, late) = (render(7), render(40));
         assert_ne!(early, late, "the scene must animate");
-        assert_eq!(early, render(7), "seeking back reproduces the frame exactly, boil and scramble included");
+        assert_eq!(early, render(7), "seeking back reproduces the frame exactly, boil and typing included");
         assert_eq!(render(88), render(88));
     }
     #[test]
@@ -1819,6 +1801,11 @@ mod tests {
             serde_json::json!({"elements":[{"type":"rect","material":"plasma"}]}),
             serde_json::json!({"elements":[{"type":"rect","tilt":[10]}]}),
             serde_json::json!({"elements":[{"type":"rect","enter":"explode"}]}),
+            // Retired: the job refuses them by name; a hand-written job is refused here.
+            serde_json::json!({"elements":[{"type":"text","text":"x","enter":"scramble"}]}),
+            serde_json::json!({"elements":[{"type":"rect","enter":"blur"}]}),
+            serde_json::json!({"elements":[{"type":"rect","enter":"assemble"}]}),
+            serde_json::json!({"elements":[{"type":"rect","exit":"scatter"}]}),
             serde_json::json!({"view":[0,10],"elements":[{"type":"rect"}]}),
         ] {
             assert!(validate(&bad).is_err(), "{bad}");
