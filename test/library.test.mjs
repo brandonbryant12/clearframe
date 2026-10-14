@@ -95,13 +95,25 @@ test('was-now draws both numbers to one scale and refuses a change that changes 
   assert.throws(() => sketch('was-now', 'landscape', { params: { was: 30, now: 30 } }), /nothing changes/);
 });
 
+test('share draws one tile each, names its tiles, and prints a share of a hundred as a percentage', () => {
+  const props = sketch('share', 'landscape', { params: { count: 31, fix: true }, say: { COUNT: 'thirty-one', FIX: 'never' } });
+  const groups = props.elements.filter(e => e.type === 'group');
+  assert.equal(groups[0].children.length, 100, 'the whole, one tile each');
+  assert.equal(groups[1].children.length, 31, 'the share');
+  assert.equal(groups[1].children[30].id, 'share-31', 'tiles carry ids for a match cut');
+  assert.equal(groups[1].say, 'thirty-one');
+  assert.equal(props.elements.find(e => e.count).count.suffix, '%');
+  assert.equal(sketch('share', 'landscape', { params: { total: 20, count: 6, cols: 5 } }).elements.find(e => e.count).count.suffix, ' in 20');
+  assert.throws(() => sketch('share', 'landscape', { params: { total: 20, count: 30 } }), /more than the total/);
+});
+
 test('a creative seed is reproducible, varies the look and the set pieces, and briefs the director', async t => {
   const { muse } = await import('../film/muse.mjs');
   assert.deepEqual(muse(42), muse(42));
   const draws = new Set([1, 2, 3, 4, 5, 6, 7, 8].map(s => JSON.stringify([muse(s).palette, muse(s).twist])));
   assert.ok(draws.size >= 6, 'different seeds start somewhere different');
   // The October 2026 set: every frame shape builds and validates as canvas elements.
-  for (const name of ['chat', 'limit', 'was-now'])
+  for (const name of ['chat', 'limit', 'was-now', 'share'])
     for (const preset of ['landscape', 'vertical', 'square', 'portrait']) {
       const els = sketch(name, preset).elements;
       assert.ok(els.length > 0, `${name} ${preset}`);
