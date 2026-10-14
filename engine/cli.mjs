@@ -38,7 +38,7 @@ const HELP = `ClearFrame — motion graphics
   themes [--json]                     ${Object.keys(THEMES).length} palettes with swatches
   motions [--json]                    presets, entrances, exits and backdrops
   icons [--json]                      132 bundled Tabler icons and provenance
-  sketch [name] [--vertical]          canvas starting compositions (route, orbit, pipeline…) as JSON
+  sketch [name] [--vertical]          canvas starting compositions (route, pipeline, balance…) as JSON
   find "idea" [--kind k] | --id k:name | --index   search the whole library: a shortlist, then exact authoring
   doctor | build                      tools and disk headroom; compile the renderer
   gallery <new-dir> [--vertical] [--theme ink] [--only bars,kinetic] [--sketches]

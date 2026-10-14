@@ -42,7 +42,7 @@ Write a shot list in `DIRECTION.md` before the blocks: one line per beat with it
 |---|---|
 | Hook, verdict, turning point | kinetic `stack` with `emphasis`, `statement` centred, `tone: accent` |
 | A number that must land | `stat` on `tone` or beside a split `plate`; count in step with the voice |
-| How something works | `canvas` (route, pipeline, network, balance, the workplace sketches) or `flow`/`cycle` |
+| How something works | `canvas` (route, pipeline, balance, the workplace sketches) or `flow`/`cycle` |
 | Evidence | chart blocks, annotated with `art.over` arrows and circles |
 | A document, form or screen | draw it once; `marks` on its words; change it in place |
 | Place, people, texture of the world | `plate` (full with scrim, or split) with a `duotone`/`tint` treatment so it belongs to the palette |

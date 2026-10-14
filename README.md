@@ -20,7 +20,7 @@ Agent-directed motion graphics rendered natively by the **ClearFrame scene engin
 - **31 native blocks** for evidence and structure: hero type, counters, KPI cards, deltas, bars, lines, waffles, rings, donuts, funnels, area-true magnitudes, steps, timelines, flows, cycles, checklists, annotated screenshots, kinetic type (including poster `stack` type that builds as spoken). `clearframe blocks NAME` prints props and an example.
 - **A creative library** ([library/](library/README.md)): palettes, treatments, sketches, playbooks and optional direction profiles, one file per item, validated on load. A project's own `library/` or a shared brand kit (`--library DIR`) adds or overrides them.
   - `treatments`: art directions such as workplace, business, editorial, sketchbook, blueprint and explanation. Everything in the library meets [the bar](library/README.md#the-bar): one job, reads on a phone, restrained motion, real content, a professional register.
-  - `sketch`: canvas starting compositions for mechanisms (route, pipeline, network…) and for workplace facts (`match`, `vesting`, `deadline`, `limit`, `expire`, `portal`, `inspect`, `choose`, `split`).
+  - `sketch`: canvas starting compositions for mechanisms (route, pipeline, balance…) and for workplace facts (`match`, `vesting`, `deadline`, `limit`, `expire`, `portal`, `inspect`, `choose`, `split`).
   - `canvas.props.teaching`: readable question, answer and explanation phases for multiple choice and fill-in-the-blank films. [Teaching sequences](docs/teaching-sequences.md).
   - `reference VIDEO`: the cut rhythm, keyframes, palette and motion of a film to borrow from.
   - `critique`: flags deck-like runs, stillness, text density, weak hooks and "and then" story chains.

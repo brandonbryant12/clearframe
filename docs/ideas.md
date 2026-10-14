@@ -23,7 +23,7 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 - **Machinery:** gears (`circle` + spokes, `spin` loops in opposite directions).
 - **Zoom in, zoom out:** a `world` whose views push from the whole system into one part and back out again.
 - **Accumulation:** a container filling (`grow-y`), a meter rising, stacked blocks landing with `pop`.
-- **System:** `orbit` or `network` sketch; the hub `pulse`s.
+- **System:** the `architecture` sketch, or a native `stage` with real services and `send` events.
 - **Build then transform:** draw the broken version, `exit` the broken part on "but", draw the fix in its place.
 - **Untangle:** the `untangle` sketch. Scattered cards and crossing curves glide into one row on a word, then a clean line carries the work: a messy process made simple.
 - **Fewer steps:** the `shortcut` sketch. A winding route through waits and a straight one, with two tokens at the same speed; the direct one arrives first. It shows speed without inventing a figure.
@@ -34,7 +34,6 @@ A film is a sequence of moves: a hook, a tension, a mechanism, a turn, a payoff.
 - `line` with an `art.over` arrow and label on the turning point, cued to the word that names it.
 - **Before/after:** the same element `id` in consecutive canvas beats morphs position, size and colour across a cut.
 - A marker travelling a `route` through dated stops (mono labels for dates).
-- **Growth in stages:** the `seedling` sketch. Roots, leaves and a flower, each stage labelled at its height. It shows growth as stages, not amounts.
 - **Growth as amounts:** the `growth` sketch. A column a year: what you put in rises as a ramp, then the growth climbs onto it and overtakes it late; the last column splits into the two and the total counts up. From `years`, `perYear` and `rate`, so the shown values add up.
 
 ## Atmosphere

@@ -8,7 +8,7 @@
   "treatment": "research-study",
   "when": "An argument rests on several kinds of evidence.",
   "story": "Observation, inference, missing comparison, then the test that could change the conclusion.",
-  "picture": "A desk of source fragments; annotate and move between details in one physical space.",
+  "picture": "The report's own pages (a canvas `document`), each claim marked on the words that make it; the camera moves between details of one page.",
   "pace": "Patient reading, purposeful pushes, one decisive reveal.",
   "rules": [
     "Keep observation and inference visibly distinct.",

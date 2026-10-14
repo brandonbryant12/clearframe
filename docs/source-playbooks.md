@@ -7,9 +7,8 @@ These playbooks and directions are examples of complete arcs. They are editable 
 | Starting point | Narrative move | Picture and edit | Bring from the source |
 |---|---|---|---|
 | `research-digest` playbook | A surprising fact opens a question; explore its mechanism in a place | A continuous illustrated world; the camera discovers evidence inside it | One consistent dataset, the setting, mechanism, tension and supported takeaway |
-| `research-evidence` direction (`research-digest` + `research-study`) | Question → observation/inference → missing test → qualified conclusion | A desk of source fragments (`evidence-desk`, `evidence-gap`), annotations, a held question | Exact claims, methods, counterevidence, limitations and citations |
+| `research-evidence` direction (`research-digest` + `research-study`) | Question → observation/inference → missing test → qualified conclusion | The report's own pages (canvas `document`), each claim marked on its words (`marks`), a held question | Exact claims, methods, counterevidence, limitations and citations |
 | `data-story` playbook | Establish the main finding, explain the support, close on the implication | A few sourced figures that build and morph across cuts | A small set of compatible findings and their sources |
-| `podcast-thread` direction (`podcast-clip` + `audiogram`) | Stay with one tension, concrete example and reframe | Sparse type, one thread that becomes a knot then an open loop (`thread-knot`, `thread-opening`), slower camera travel, space after the thought | The exact recording, measured words and a self-contained moment whose own language carries this arc |
 | `podcast-clip` playbook | A compact hook, answer and memorable line | Quick typographic changes, speaker distinction and a social end card | The exact recording, measured words, actual speaker identity and verified quotation |
 | `podcast-picture` direction (`podcast-clip` + `workplace`) | Each idea the guest explains gets its own picture | Small drawn pictures over readable captions (`examples/podcast-pictures`) | The exact recording and measured words |
 
@@ -19,7 +18,7 @@ These playbooks and directions are examples of complete arcs. They are editable 
 node engine/cli.mjs directions research
 node engine/cli.mjs directions podcast
 node engine/cli.mjs start /tmp/report-film --document report.md --direction research-evidence
-node engine/cli.mjs ingest /tmp/episode-film --audio episode.wav --direction podcast-thread
+node engine/cli.mjs ingest /tmp/episode-film --audio episode.wav --direction podcast-picture
 ```
 
 Directions combine a starting arc, treatment and story/picture/pace guidance. The defaults are independent: `--playbook`, `--treatment` and `--theme` can override them. Tags suggest suitable material; they do not limit which source can use a direction. Add a custom `library/directions/*.json` through `--library DIR`, or author directly without choosing a profile. See [the JSON contract](../library/README.md#directions).
@@ -36,11 +35,7 @@ Vary a film at several levels before trying a new palette:
 - **Time:** leave a pause where the thought needs one; quicken only where the source supports it.
 - **Voice:** decide what the picture adds to the spoken words and which few words deserve to remain on screen.
 
-The research and podcast threads deliberately contrast. The evidence direction cuts between paper objects and annotations. The `podcast-thread` direction stays with a single line as the camera travels. Colour changes alone do not create that difference.
-
-The research drawings are native, reusable canvases. `evidence-desk` separates what was observed from what was inferred. `evidence-gap` makes a missing test visible as an absent part of a manuscript. Neither depicts effect size or reproduces a real source page. Replace their labels and metaphors when the actual report calls for a different investigation.
-
-The podcast drawings are `thread-knot` and `thread-opening`. Give consecutive beats the same `world` name to join the thread. Their shared endpoint and cameras adapt to landscape, vertical, square and portrait drawings. The opening's small `meter` reads actual narration audio. It is not a fabricated waveform. The metaphor carries no numerical values.
+The research and podcast directions deliberately contrast. The evidence direction stays on the report's own page: a canvas `document` scrolls to the passage and `marks` circle, underline or highlight the words that make the claim as they are read. The `podcast-picture` direction gives each idea the guest explains its own small drawing over readable captions. Colour changes alone do not create that difference.
 
 ## Preserve the research
 
@@ -60,7 +55,7 @@ For a real podcast, import the recording and measured word timestamps. The recor
 Select a moment whose own language has the intended arc. Keep speaker identity, word order, meaningful pauses and context intact. If the excerpt has a different shape, change the storyboard to fit it. A held picture can span several spoken ideas; a new scene is not required for every sentence. A held picture is an artistic choice, not an instruction to extend every imported recording.
 
 ```sh
-node engine/cli.mjs ingest /tmp/podcast-recording --audio episode.wav --from 120 --to 165 --vertical --direction podcast-thread
+node engine/cli.mjs ingest /tmp/podcast-recording --audio episode.wav --from 120 --to 165 --vertical --direction podcast-picture
 ```
 
 Use `examples/podcast-pictures` as a visual reference while editing the imported project's native storyboard. Review the actual audio and measured words at each change of thought. Inspect both frame shapes before rendering the final cut.

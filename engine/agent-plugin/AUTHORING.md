@@ -88,8 +88,8 @@ Pick from what the material actually contains:
   consecutive canvas scenes).
 - **Numbers that move**: charts with the same ids across scenes, a `bridge` from one total to
   another, drivers cued to the words that name them.
-- **A mechanism or metaphor**: a `sketch` (`route`, `pipeline`, `orbit`, `balance`, `versus`,
-  `burst`, `network`…; `clearframe_catalog` topic `sketches`), then adjust its text elements.
+- **A mechanism or metaphor**: a `sketch` (`route`, `pipeline`, `balance`, `versus`,
+  `cash-lock`, `architecture`…; `clearframe_catalog` topic `sketches`), then adjust its text elements.
 - **A claim, a figure or a quote that deserves silence**: a `statement`, `stat` or `quote` card.
   A run of quiet evidence cards can be right for a sober audience; the problem is cards standing in
   for pictures the material has.

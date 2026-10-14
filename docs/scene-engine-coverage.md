@@ -12,18 +12,19 @@ Measured by `scripts/engine-effects.mjs --reference` (frame 30 of a one-beat fil
 
 | Feature | State | PSNR vs FFFrames-era still (dB) |
 | --- | --- | --- |
-| Background colour, block content (no effects) | native | 75.6 |
-| Backdrop paper | native | 61.8 |
+| Background colour, block content (no effects) | native | — |
+| Backdrop paper | native | — |
 | Backdrop paper on a dark palette | native | — |
-| Backdrop grid | native | 73.0 |
-| Texture grain (static) | native | 64.8 |
-| Texture grain on a dark palette | native | 64.1 |
-| Animated grain on a dark palette | native | 63.5 |
-| Texture film (animated grain + vignette) | native | 57.6 |
-| Texture vignette | native | 57.9 |
-| Film chrome (title + progress) | native | 75.6 |
-| Editorial frame (brand, label, footers, rail) | native | 75.6 |
+| Backdrop grid | native | — |
+| Texture grain (static) | native | — |
+| Texture grain on a dark palette | native | — |
+| Animated grain on a dark palette | native | — |
+| Texture film (animated grain + vignette) | native | — |
+| Texture vignette | native | — |
+| Film chrome (title + progress) | native | — |
+| Editorial frame (brand, label, footers, rail) | native | — |
 | Vertical canvas with film texture | native | — |
+| Wipe (two pictures split by one moving edge) | native: both beats drawn, the outgoing native stage runs on until the edge crosses it | visual inspection (footage fixture) |
 | Review grid (`--grid`) | native | unverified by comparison |
 | Lens motion blur (`lens.blur`) on canvas keys and camera | native (directional smear in the canvas block) | — |
 | Native motion blur (`shutter`, `samples`) | native: temporal accumulation in half float | stage fixtures |
@@ -38,38 +39,38 @@ The block gallery (`clearframe gallery`, every catalog example, landscape and ve
 
 | Block | Category | State | Gallery PSNR landscape / vertical (dB) | Playbooks exercising it (parity run) |
 | --- | --- | --- | --- | --- |
-| `title` | story | native | 51.4 / 49.7 | none (gallery only) |
-| `statement` | story | native | 51.6 / 52.1 | 3: cash-flow, scale-explainer, scenario-lab |
-| `stat` | numbers | native | 52.8 / 54.3 | none (gallery only) |
-| `kpis` | numbers | native | 52.2 / 51.3 | none (gallery only) |
-| `bars` | charts | native | 52.7 / 51.4 | 2: cash-flow, scenario-lab |
-| `line` | charts | native | 54.5 / 50.7 | none (gallery only) |
-| `waffle` | charts | native | 51.6 / 50.9 | 1: scale-explainer |
-| `ring` | charts | native | 51.4 / 51.0 | none (gallery only) |
-| `delta` | numbers | native | 51.6 / 53.3 | 1: cash-flow |
-| `compare` | decisions | native | 51.1 / 51.6 | none (gallery only) |
-| `steps` | diagrams | native | 51.4 / 50.5 | none (gallery only) |
-| `timeline` | diagrams | native | 51.9 / 51.1 | none (gallery only) |
-| `funnel` | charts | native | 51.4 / 52.0 | none (gallery only) |
-| `quote` | story | native | 51.3 / 52.3 | 1: podcast-clip |
-| `matrix` | decisions | native | 53.3 / 49.7 | none (gallery only) |
-| `equation` | diagrams | native | 52.5 / 51.2 | none (gallery only) |
-| `callout` | text | native | 53.1 / 51.4 | 1: scenario-lab |
-| `endcard` | story | native | 52.5 / 51.0 | 4: cash-flow, journey, podcast-clip, scale-explainer |
-| `image` | media | native | 53.0 / 51.7 | none (gallery only) |
-| `video` | media | native | 54.2 / 52.0 | none (gallery only) |
-| `kinetic` | speech | native | 51.7 / 54.7 | 2: podcast-clip, research-digest |
-| `flow` | diagrams | native | 53.4 / 51.7 | none (gallery only) |
-| `cycle` | diagrams | native | 51.1 / 51.1 | none (gallery only) |
-| `breathing` | motion | native | 52.0 / 50.4 | none (gallery only) |
-| `chapter` | story | native | 52.5 / 51.5 | none (gallery only) |
-| `highlight` | text | native | 53.1 / 49.9 | 1: scale-explainer |
-| `donut` | charts | native | 52.4 / 50.1 | none (gallery only) |
-| `magnitude` | charts | native | 50.9 / 50.7 | 1: scale-explainer |
-| `checklist` | text | native | 51.8 / 50.8 | none (gallery only) |
+| `title` | story | native | — / — | none (gallery only) |
+| `statement` | story | native | — / — | none (gallery only) |
+| `stat` | numbers | native | — / — | none (gallery only) |
+| `kpis` | numbers | native | — / — | none (gallery only) |
+| `bars` | charts | native | — / — | none (gallery only) |
+| `line` | charts | native | — / — | none (gallery only) |
+| `waffle` | charts | native | — / — | none (gallery only) |
+| `ring` | charts | native | — / — | none (gallery only) |
+| `delta` | numbers | native | — / — | none (gallery only) |
+| `compare` | decisions | native | — / — | none (gallery only) |
+| `steps` | diagrams | native | — / — | none (gallery only) |
+| `timeline` | diagrams | native | — / — | none (gallery only) |
+| `funnel` | charts | native | — / — | none (gallery only) |
+| `quote` | story | native | — / — | none (gallery only) |
+| `matrix` | decisions | native | — / — | none (gallery only) |
+| `equation` | diagrams | native | — / — | none (gallery only) |
+| `callout` | text | native | — / — | none (gallery only) |
+| `endcard` | story | native | — / — | none (gallery only) |
+| `image` | media | native | — / — | none (gallery only) |
+| `video` | media | native | — / — | none (gallery only) |
+| `kinetic` | speech | native | — / — | none (gallery only) |
+| `flow` | diagrams | native | — / — | none (gallery only) |
+| `cycle` | diagrams | native | — / — | none (gallery only) |
+| `breathing` | motion | native | — / — | none (gallery only) |
+| `chapter` | story | native | — / — | none (gallery only) |
+| `highlight` | text | native | — / — | none (gallery only) |
+| `donut` | charts | native | — / — | none (gallery only) |
+| `magnitude` | charts | native | — / — | none (gallery only) |
+| `checklist` | text | native | — / — | none (gallery only) |
 | `stage` | graphics | native | new (fixtures) | none (gallery only) |
-| `canvas` | graphics | native | 50.7 / 50.3 | 11: cash-flow, concept-explainer, data-story, journey, pr-walkthrough, product-reveal, … |
-| `annotate` | media | native | 52.3 / 51.0 | none (gallery only) |
+| `canvas` | graphics | native | — / — | none (gallery only) |
+| `annotate` | media | native | — / — | none (gallery only) |
 
 ## Canvas features on native stages
 
@@ -80,35 +81,25 @@ The block gallery (`clearframe gallery`, every catalog example, landscape and ve
 | keys (x, y, scale, rotate, opacity, scaleX, scaleY, blur, tiltX, tiltY), along, loops spin/pulse/float/sway/orbit/dash/blink/rock, echo, tilt, shine, glow, shadow, blur, blend, z with dolly and focus, fps stepping, gradients and palette tokens | native |
 | colour keys (fill/stroke), connector, attach, along {path: id}, video, shader, material presets, particles burst/stream/field up to 4,000, code, camera: false, stage camera with parallax and depth of field, temporal motion blur | native (new) |
 | rough, print, mosaic, morph, solid, meter, loop level, the canvas `materials` thermal/chrome/gold/neon as filter graphs | refused on stages (drawn by the canvas block in canvas/art); native SkSL materials of the same names exist with a different implementation |
-| canvas worlds, `view`/`viewFrom` camera rects, `plates` depth sets, `diagram`, `chart`, `plot`, `bars`, `bridge`, `cast`, `multiples`, `distribution`, `stat`, `teaching`, `sketch` expansions | native (canvas block) |
+| canvas worlds, `view`/`viewFrom` camera rects, `plates` depth sets, `diagram`, `chart`, `document`, `pointer`, `plot`, `bars`, `bridge`, `cast`, `multiples`, `distribution`, `stat`, `teaching`, `sketch` expansions | native (canvas block) |
 
 ## Sketches
 
-44 public sketches expand into canvas elements in `film/sketches.mjs` and are drawn by the canvas block. The sketch gallery (`clearframe gallery DIR --sketches`, landscape), PSNR per sketch against the FFFrames-era gallery:
+34 public sketches expand into canvas elements in `film/sketches.mjs` and are drawn by the canvas block. The sketch gallery (`clearframe gallery DIR --sketches`, landscape), PSNR per sketch against the FFFrames-era gallery:
 
 | Sketch | Landscape (dB) |
 | --- | --- |
-| `route` | 54.6 |
-| `orbit` | 54.8 |
-| `pipeline` | 54.7 |
-| `network` | 54.9 |
-| `balance` | 54.3 |
-| `versus` | 54.6 |
-| `signal` | 54.1 |
-| `chat` | 54.5 |
-| `device` | 54.4 |
-| `cash-lock` | 54.1 |
-| `scenario-fork` | 54.6 |
-| `risk-lens` | 53.5 |
-| `scenario-origin` | 54.3 |
-| `scenario-outcomes` | 54.1 |
-| `evidence-desk` | 55.7 |
-| `evidence-gap` | 56.0 |
-| `thread-knot` | 55.0 |
-| `thread-opening` | 54.7 |
+| `route` | — |
+| `pipeline` | — |
+| `balance` | — |
+| `versus` | — |
+| `chat` | — |
+| `cash-lock` | — |
+| `scenario-fork` | — |
+| `scenario-origin` | — |
+| `scenario-outcomes` | — |
 | `searchlight` | — |
 | `cut-paper` | — |
-| `seedling` | — |
 | `untangle` | — |
 | `shortcut` | — |
 | `vault` | — |
@@ -129,15 +120,15 @@ The block gallery (`clearframe gallery`, every catalog example, landscape and ve
 | `lookback` | — |
 | `compose` | — |
 | `drawdown` | — |
-| `architecture` | 40.0 |
+| `architecture` | — |
 | `component-change` | — |
 | `state-machine` | — |
 
-`component-change` and `state-machine` were left out of the measured sketch gallery (their elements were cued after the gallery beat ended), and the workplace sketches from `searchlight` on postdate it; a dash means unmeasured here, not failing. The block and sketch galleries' sample copy also fails a few frame-audit checks (a quote mark over its text in vertical, overlapping route labels), the same findings as in the FFFrames-era run.
+The sketch gallery prepares every sketch (each beat as long as its last cue). Its sample copy fails a few frame-audit checks (a quote mark over its text in vertical, overlapping route labels), as in the FFFrames-era run.
 
 ## Treatments, type voices and directions
 
-10 treatments set palette, backdrop, texture, lens, motion, transitions and type. Film-level settings are native, compared above. 3 type voices resolve to the bundled font files; type is shaped once with rustybuzz and drawn as the outlines of those glyphs. 7 directions are authoring guidance and do not touch the renderer.
+10 treatments set palette, backdrop, texture, lens, motion, transitions and type. Film-level settings are native, compared above. 3 type voices resolve to the bundled font files; type is shaped once with rustybuzz and drawn as the outlines of those glyphs. 6 directions are authoring guidance and do not touch the renderer.
 
 | Treatment | Backdrop | Texture | Lens |
 | --- | --- | --- | --- |
@@ -152,7 +143,7 @@ The block gallery (`clearframe gallery`, every catalog example, landscape and ve
 | `business` | none | "—" | {"blur":0} |
 | `research-study` | none | "—" | "—" |
 
-Type voices: `inter`, `geometric`, `bookish`. Directions: `research-evidence`, `research-mechanism`, `podcast-picture`, `research-fieldnotes`, `podcast-thread`, `podcast-kinetic`, `podcast-sketch`.
+Type voices: `inter`, `geometric`, `bookish`. Directions: `research-evidence`, `research-mechanism`, `podcast-picture`, `research-fieldnotes`, `podcast-kinetic`, `podcast-sketch`.
 
 ## Playbooks
 
@@ -160,32 +151,4 @@ All 18 built-in playbooks, scaffolded with their sample copy, prepared as rough 
 
 | Playbook | Format | Beats | Blocks | Check | Min PSNR vs FFFrames-era stills (dB) |
 | --- | --- | --- | --- | --- | --- |
-| `cash-flow` | 1920x1080@30 | 6 | canvas, statement, bars, delta, endcard | pass | 51.7 |
-| `concept-explainer` | 1920x1080@30 | 8 | canvas | pass | 51.2 |
-| `data-story` | 1920x1080@30 | 9 | canvas | pass | 50.3 |
-| `journey` | 1920x1080@30 | 5 | canvas, endcard | pass | 61.5 |
-| `podcast-clip` | 1080x1920@30 | 5 | kinetic, quote, endcard | pass | 57.3 |
-| `pr-walkthrough` | 1920x1080@30 | 3 | canvas | pass | 91.9 |
-| `product-reveal` | 1920x1080@30 | 7 | canvas | pass | 49.9 |
-| `research-digest` | 1920x1080@30 | 10 | canvas, kinetic | pass | 55.8 |
-| `scale-explainer` | 1920x1080@30 | 6 | statement, magnitude, waffle, canvas, highlight, endcard | pass | 51.9 |
-| `scenario-lab` | 1920x1080@30 | 7 | statement, canvas, bars, callout | pass | 63.5 |
-| `teaching-sequences` | 1920x1080@30 | 4 | canvas | pass | identical |
-| `title-sequence` | 1920x1080@30 | 6 | canvas | pass | 61.8 |
 
-The parity run predates `benefit-explainer`, `client-update`, `day-in-the-life`, `policy-change`, `process-cast` and `training-moment`, so they have no row here; the block table counts only the playbooks above.
-
-## Measurements
-
-From `scripts/engine-bench.mjs` (2026-10-06T00:26:27.813Z), Apple M1 with 8 GB, each command run 2× (best shown), at each project's resolution and frame rate: final libx264 CRF 16 medium; range libx264 CRF 21 veryfast at full scale. Picture only (audio finishing is separate). "Peak" sums the renderer process and its children (the FFmpeg encoder and footage decoders included). These describe this machine and these projects only.
-
-The last two columns are the same project's full export measured on 2026-10-05, before the retirement: the scene engine with FFFrames block layers, and FFFrames alone.
-
-| Project | Format | Frames | Cold start + still (ms) | Warm still (ms) | 60-frame range (ms) | Full (ms) | Full fps | Peak RSS (MiB) | Peak temp (MiB) | Full before: scene + FFFrames layers (ms) | Full before: FFFrames (ms) |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| native-explainer | 1920x1080@30 | 594 | 101 | 7 | 389 | 4588 | 129.5 | 748 | 4 | 4566 | 8801 |
-| data-story | 1920x1080@30 | 1017 | 248 | 42 | 4530 | 45802 | 22.2 | 662 | 14 | 36514 | 50644 |
-| trailer | 1920x1080@30 | 546 | 150 | 37 | 825 | 23336 | 23.4 | 887 | 16.4 | 23518 | 41335 |
-| vertical-short | 1080x1920@30 | 299 | 168 | 31 | 509 | 6722 | 44.5 | 728 | 3.5 | 7181 | 12856 |
-| cash-flow | 1920x1080@30 | 1165 | 168 | 19 | 597 | 16866 | 69.1 | 743 | 7.9 | 18616 | 34384 |
-| long-form recording (7.6 min, synthetic voices) | 1920x1080@30 | 13628 | 171 | 32 | 541 | 311062 | 43.8 | 731 | 170.6 | 318895 | 556817 |

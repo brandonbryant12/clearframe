@@ -12,7 +12,7 @@ import { computeTiming } from '../engine/lib/timing.mjs';
 import { loadStoryboard } from '../engine/lib/project.mjs';
 
 const books = ['cash-flow', 'scenario-lab'];
-const drawings = ['cash-lock', 'scenario-fork', 'scenario-origin', 'scenario-outcomes', 'risk-lens'];
+const drawings = ['cash-lock', 'scenario-fork', 'scenario-origin', 'scenario-outcomes'];
 
 test('financial films scaffold to valid native jobs in landscape and vertical with their evidence metadata', t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cf-financial-'));

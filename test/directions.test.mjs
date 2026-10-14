@@ -56,8 +56,8 @@ test('custom directions and their overridden defaults remain portable after thei
   assert.equal(directions().find(d => d.id === 'house').title, 'A new idea');
   assert.deepEqual(createJob(sb, computeTiming(dir), { draft: true }).errors, []);
   // Camera properties must survive the catalog preview as well as the actual playbook.
-  const gallery = sketchGallery({ only: ['thread-opening'] });
-  assert.ok(gallery.beats[0].props.view[0] > 0, 'off-origin drawing keeps its camera in gallery');
+  const gallery = sketchGallery({ only: ['scenario-origin'] });
+  assert.ok(gallery.beats[0].props.view[1] > 0, 'off-origin drawing keeps its camera in gallery');
 });
 
 test('podcast looks preserve exact source audio, cut times, words, speakers and measured alignment', async t => {
@@ -71,7 +71,7 @@ test('podcast looks preserve exact source audio, cut times, words, speakers and 
   const words = [{ w: 'One', t0: 0.1, t1: 0.7, speaker: 'host' }, { w: 'thought.', t0: 0.8, t1: 1.6, speaker: 'host' },
     { w: 'A', t0: 2.1, t1: 2.4, speaker: 'guest' }, { w: 'reply.', t0: 2.5, t1: 3.8, speaker: 'guest' }];
   const runs = [];
-  for (const direction of [undefined, 'podcast-thread', 'podcast-kinetic', 'podcast-sketch']) {
+  for (const direction of [undefined, 'podcast-picture', 'podcast-kinetic', 'podcast-sketch']) {
     const dir = path.join(root, direction ?? 'plain');
     await ingestRecording(dir, { audio, words, direction, playbook: 'cash-flow', brand });
     assert.match(fs.readFileSync(path.join(dir, 'DIRECTION.md'), 'utf8'), /cash-flow/);

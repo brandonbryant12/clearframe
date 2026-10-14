@@ -54,7 +54,6 @@ const MUSIC = [
 const SET_PIECES = [
   'route',
   'pipeline',
-  'network',
   'balance',
   'versus',
   'split',
@@ -67,13 +66,9 @@ const SET_PIECES = [
   'bridge',
   'maze',
   'portal',
-  'seedling',
   'searchlight',
   'cut-paper',
-  'device',
   'chat',
-  'orbit',
-  'signal',
 ];
 
 const luminance = hex => {

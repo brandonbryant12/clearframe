@@ -17,7 +17,7 @@ A consistent visual language can still contain many distinct forms. Start with t
 A film is not a slide deck with narration. The usual tells: every beat the same layout, a title top-left over a static graphic, the same fade between every scene, nothing moving once it has entered, no imagery. Counter them deliberately:
 
 - **Vary the frame.** Alternate full-bleed moments (`plate`, `tone`, kinetic `stack`, a centred statement) with dense information scenes. Two data scenes in a row want different layouts; a split `plate` beside a `stat` is a different picture from a `stat` on a colour block.
-- **Draw the mechanism.** When the narration explains how or why, use `canvas` (a route, a flow, a balance, a network) instead of a list of words.
+- **Draw the mechanism.** When the narration explains how or why, use `canvas` (a route, a flow, a balance, a gate) instead of a list of words.
 - **Carry motion across cuts.** Keep a subject on screen through the cut (a world the camera travels, a `cast`, a shared id that morphs). Use `push` or `panel` at a turn in the story (not every cut) and `cut` for rhythm.
 - **Move with purpose.** The renderer has an automatic slow push, but business/technical films use `business` (film `camera: none`, no motion blur). Hold text still for reading; animate the change being explained. Never add shake to satisfy a score.
 - **Punctuate.** One or two `tone` scenes per minute, on the numbers or verdicts that matter.

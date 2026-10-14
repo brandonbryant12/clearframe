@@ -28,7 +28,7 @@ The cash example reconciles as **$60k opening + $40k collections - $70k payments
 
 ## Direct the adaptation
 
-Start with the audience's question and keep only the scenes that answer it. A settlement explanation needs the gate; a product risk story needs the `risk-lens` sketch, which inspects access, price and potential loss as separate questions. Use approved documents to replace placeholder statements before directing the narration. The opening and final questions are prompts to adapt, not a recommendation to buy, sell or select a financial product.
+Start with the audience's question and keep only the scenes that answer it. A settlement explanation needs the gate. Use approved documents to replace placeholder statements before directing the narration. The opening and final questions are prompts to adapt, not a recommendation to buy, sell or select a financial product.
 
 The financial drawings use local animation times for their reusable reference motion. After changing the narration, cue the important gate opening, branch reveal or lens move to an exact spoken phrase with `say`; review before and after the action. Keep the initial ground visible at `at: 0` and `enter: "none"`. Preserve short silence before the final question. A slow camera push supports inspection; a graphic wipe marks a change of argument.
 
