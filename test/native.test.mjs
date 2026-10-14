@@ -675,6 +675,9 @@ test('a film cuts by default, and into goes through an element of the last canva
   assert.deepEqual(j.beats.map(b => b.transition), ['cut', 'into', 'cut'], 'cut unless told otherwise');
   assert.deepEqual(j.beats[1].into, [700, 250, 400, 300], 'the element in frame pixels, through its group');
   assert.equal(j.beats[0].exit, 'none', 'the scene gone through stays until the camera is through it');
+  // An element that has moved by its keys is entered where it stands.
+  beats[0].props.elements[0].keys = [{ at: 0.5, x: 200, y: -50 }];
+  assert.deepEqual(job(t, beats).job.beats[1].into, [900, 200, 400, 300], 'into follows the keyed move');
   beats[1].into = 'nowhere';
   assert.match(job(t, beats).errors.join(), /into "nowhere" names no element/);
 });
