@@ -4,12 +4,15 @@ const NUM = String.raw`(\$?\d[\d,.]*|(twenty|thirty|forty|fifty|sixty|seventy|ei
 // Small counts too, for shares ("one in four").
 const COUNT = String.raw`(\$?\d[\d,.]*|(one|two|three|four|five|six|seven|eight|nine|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|ten|eleven|twelve|\w+teen|hundred)(-\w+)?)`;
 const UNIT = String.raw`( (days?|weeks?|months?|years?|dollars?|percent|hours?))?`;
+// (Not a contribution that changes: "raise it to five and they add four" is the match's what-if.)
 const CHANGED = new RegExp(
+  '^(?!.*\\b(match(es)?|adds?|puts? in|contribut\\w*)\\b).*(?:' +
   [
     `\\b${NUM}${UNIT}( \\w+){0,3},? (not|instead of|down from|up from) ${NUM}\\b`,
-    `\\b(cut|shorten|reduc|rais|increas|extend|lower|chang|mov|drop|ris|went|go)\\w* (\\w+ ){0,4}from ${NUM}${UNIT} (down |up )?to ${NUM}\\b`,
-    `\\b(was|used to be) ${NUM}${UNIT}[^.!?]{0,40}\\bnow\\b`,
-  ].join('|'),
+    `\\b(cut|shorten|reduc|rais|increas|extend|lower|chang|mov|drop|ris|doubl|went|go)\\w* (\\w+ ){0,4}from ${COUNT}${UNIT} (down |up )?to ${COUNT}\\b`,
+    `\\b(was|used to be) ${COUNT}${UNIT}[^.!?]{0,40}\\bnow\\b`,
+  ].join('|') +
+  ')',
   'i',
 );
 const PICTURES = [
@@ -41,6 +44,8 @@ const PICTURES = [
   [/\b((one|two|three|four|five|six|\d+)( to (three|six|nine|twelve|\d+))? months? of)\b/i, null, 'This line counts months', 'a `cast` of `calendar` tiles, one per month, that appear as the months are said (docs/cast.md)'],
   [/\b(inflation|buys? (about )?\w+ (percent )?less|loses? (value|purchasing power))\b/i, null, 'This line is about money shrinking in value', 'a canvas `chart` `number` that steps down through the values as they are said (a `say` on each), or a `jar` cast that empties a little on the word'],
   [/\b(separate|its own account|a different account|set (it )?aside|out of sight)\b/i, null, 'This line is about keeping money apart', 'a `cast` with two `jar`s (or a `jar` and a `paycheck`): coins move into their own jar on the word'],
+  // Weeks of a year: "sixteen weeks of paid leave" is a share of the year's 52.
+  [new RegExp(`\\b${COUNT} weeks? of (paid |unpaid |full-pay )?(leave|holiday|vacation|time off|parental leave)\\b`, 'i'), 'share', 'This line is weeks of a year (share with total 52, cols 13, unit "weeks")'],
   // A share of people or things: "31 percent of expense claims", "one in four of us".
   [new RegExp(`\\b${COUNT}( percent|%| in (every )?${COUNT}| out of (every )?${COUNT}) of (the |our |all |your |every )?(\\w+ ){0,2}(us|you|people|employees|staff|members|colleagues|hires|claims|emails|messages|accounts|customers|clients|requests|applications|reports|returns|forms)\\b`, 'i'), 'share', 'This line is a share of people or things'],
   // Last: a figure said out loud, whatever it is about.
