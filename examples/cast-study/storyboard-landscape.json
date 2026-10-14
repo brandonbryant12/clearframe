@@ -38,36 +38,42 @@
       {
        "id": "report",
        "icon": "file",
+       "label": "Report",
        "color": "accent",
        "enter": "none"
       },
       {
        "id": "chart",
        "icon": "chart-bar",
+       "label": "Chart",
        "color": "accent2",
        "enter": "none"
       },
       {
        "id": "quote",
        "icon": "message",
+       "label": "Quote",
        "color": "positive",
        "enter": "drop"
       },
       {
        "id": "voice",
        "icon": "microphone",
+       "label": "Interview",
        "color": "ink",
        "enter": "none"
       },
       {
        "id": "photo",
        "icon": "photo",
+       "label": "Photo",
        "color": "negative",
        "enter": "drop"
       },
       {
        "id": "idea",
        "icon": "lightbulb",
+       "label": "Idea",
        "color": "surface"
       }
      ],

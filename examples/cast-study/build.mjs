@@ -11,9 +11,9 @@ const sequence = ['report', 'chart', 'quote', 'voice', 'photo'];
 const beats = [
   { id: 'pile', vo: 'Every film starts as a pile of material.',
     cast: { objects: [
-      { id: 'report', icon: 'file', color: 'accent', enter: 'none' }, { id: 'chart', icon: 'chart-bar', color: 'accent2', enter: 'none' },
-      { id: 'quote', icon: 'message', color: 'positive', enter: 'drop' }, { id: 'voice', icon: 'microphone', color: 'ink', enter: 'none' },
-      { id: 'photo', icon: 'photo', color: 'negative', enter: 'drop' }, { id: 'idea', icon: 'lightbulb', color: 'surface' },
+      { id: 'report', icon: 'file', label: 'Report', color: 'accent', enter: 'none' }, { id: 'chart', icon: 'chart-bar', label: 'Chart', color: 'accent2', enter: 'none' },
+      { id: 'quote', icon: 'message', label: 'Quote', color: 'positive', enter: 'drop' }, { id: 'voice', icon: 'microphone', label: 'Interview', color: 'ink', enter: 'none' },
+      { id: 'photo', icon: 'photo', label: 'Photo', color: 'negative', enter: 'drop' }, { id: 'idea', icon: 'lightbulb', label: 'Idea', color: 'surface' },
     ], formations: [{ form: 'scatter', at: 0.3, stagger: 0.22 }] } },
   { id: 'order', vo: 'So the agent pulls what matters into an order.', tail: 0.9,
     cast: { formations: [{ form: 'exit', ids: ['idea'], say: 'pulls', dur: 0.8 }, { form: 'line', ids: sequence, say: 'pulls', thread: true }] } },
