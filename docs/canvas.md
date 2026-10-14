@@ -118,6 +118,10 @@ Use print where the subject is printed matter (a statement, a newspaper clipping
 
 `props.cast` keeps a few designed objects (icon tiles, word pills) on screen through consecutive canvas beats, re-forming on spoken words: `scatter`, `line`, `ring`, `cluster`, `hero`, `swap` (with `by` naming the cause), `wave` and `exit`. Each beat starts where the last left every object, so the cuts are invisible. See [cast.md](cast.md).
 
+## Across the cut: the same id, or into it
+
+An element with the same `id` in consecutive canvas beats morphs from where it was to where it is (position, size, colour, a static `scale`), so the cut carries it. To go somewhere new through something already on screen, give the next beat `into: "id"`: the camera goes forward through that element (an app screen, a page, one tile of a `share`) until it overfills the frame, and the new scene comes up inside it. It follows the element to where its keys leave it, so a stack that has moved to the middle is entered where it stands.
+
 ## Worlds: one drawing, a travelling camera
 
 Slides cut from one picture to the next. A world keeps one picture and moves the camera. Give consecutive canvas beats the same `world` name and a camera rect `view: [x, y, w, h]` in world coordinates:
