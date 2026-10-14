@@ -232,4 +232,19 @@ mod tests {
         let only_title = Scan { texts: vec![now.texts[0].clone()], ..Default::default() };
         assert!(judge(&only_title, &moving, 1920.0, 1080.0).is_empty(), "text in motion is not judged");
     }
+
+    #[test]
+    fn text_a_clip_hides_is_not_seen_and_a_stamp_is_read_apart() {
+        let font = crate::text::Font::Text;
+        let page = draw::group(vec![
+            draw::text("on the page", 100.0, 200.0, font, 40.0, 0.0, "#000000"),
+            draw::text("below the page", 100.0, 900.0, font, 40.0, 0.0, "#000000"),
+        ])
+        .clip_rect(0.0, 0.0, 800.0, 600.0);
+        let stamp = draw::group(vec![draw::text("PAID", 100.0, 200.0, font, 40.0, 0.0, "#c00000")]).id("cf-stamp");
+        let scan = scan(&draw::group(vec![page, stamp]));
+        let texts: Vec<_> = scan.texts.iter().map(|t| t.text.as_str()).collect();
+        assert_eq!(texts, ["on the page"], "the clipped line and the stamp are not judged as the page's type");
+        assert!(scan.texts[0].rect[3] > 0.0 && scan.texts[0].rect[1] + scan.texts[0].rect[3] <= 600.0);
+    }
 }
