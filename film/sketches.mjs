@@ -20,7 +20,7 @@ export const sketchByName = name => item('sketches', name);
 export function fillSketch(list, { text = {}, say = {} } = {}, cues = new Set()) {
   for (const el of list ?? []) {
     if (el.type === 'text' && text[el.text] != null) el.text = text[el.text];
-    for (const t of [el, ...(el.keys ?? []), ...(el.along ? [el.along] : [])]) {
+    for (const t of [el, ...(el.keys ?? []), ...(el.along ? [el.along] : []), ...(el.marks ?? [])]) {
       if (t.cue != null) cues.add(t.cue);
       if (t.cue != null && say[t.cue] != null) {
         t.say = say[t.cue];
@@ -116,7 +116,7 @@ export function sketchMoments(name, params = {}) {
   const first = new Map(), note = (cue, at) => cue != null && first.set(cue, Math.min(first.get(cue) ?? Infinity, at ?? Infinity));
   const walk = list => (list ?? []).forEach(el => {
     note(el.cue, el.at);
-    for (const k of el.keys ?? []) note(k.cue, k.at);
+    for (const k of [...(el.keys ?? []), ...(el.marks ?? [])]) note(k.cue, k.at);
     if (el.along) note(el.along.cue, el.along.at ?? el.at);
     note(el.exitCue, el.exitAt);
     walk(el.children);

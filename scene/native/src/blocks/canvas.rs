@@ -1103,7 +1103,30 @@ impl<'a, 'c> Draw<'a, 'c> {
             .map(|v| v.max(0.0).to_string())
             .collect::<Vec<_>>()
             .join(" ");
-        let (dasharray, dashoffset) = if drawing {
+        let (dasharray, dashoffset) = if drawing && !custom_dash.is_empty() {
+            // A dashed stroke drawn on keeps its dashes: its own pattern up to the drawn length,
+            // then a gap past the end.
+            let mut pattern: Vec<f32> = arr(el, "dash").iter().filter_map(Value::as_f64).map(|v| v.max(0.0) as f32).collect();
+            if pattern.len() % 2 == 1 {
+                pattern.extend(pattern.clone());
+            }
+            let (visible, period) = (length * draw, pattern.iter().sum::<f32>());
+            let (mut out, mut at) = (vec![], 0.0f32);
+            'reveal: while period > 0.0 {
+                for (i, &l) in pattern.iter().enumerate() {
+                    if at >= visible || out.len() >= 4000 {
+                        break 'reveal;
+                    }
+                    out.push(if i % 2 == 0 { l.min(visible - at) } else { l });
+                    at += l;
+                }
+            }
+            if out.len() % 2 == 0 {
+                out.push(0.0);
+            }
+            out.push(length * 2.0 + 10.0);
+            (out.iter().map(|v| format!("{v:.2}")).collect::<Vec<_>>().join(" "), 0.0)
+        } else if drawing {
             (format!("{} {}", length.max(0.001), length * 2.0 + 10.0), length * (1.0 - draw))
         } else if !custom_dash.is_empty() {
             let period: f32 = arr(el, "dash").iter().filter_map(Value::as_f64).sum::<f64>() as f32;

@@ -1,5 +1,18 @@
 // Fill-in-the-blank pictures for what workplace narration keeps saying (clearframe-workplace).
+// A number said as a figure or in words ("60", "$3,300", "sixty", "thirty-five").
+const NUM = String.raw`(\$?\d[\d,.]*|(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|ten|eleven|twelve|\w+teen|hundred)(-\w+)?)`;
+const UNIT = String.raw`( (days?|weeks?|months?|years?|dollars?|percent|hours?))?`;
+const CHANGED = new RegExp(
+  [
+    `\\b${NUM}${UNIT}( \\w+){0,3},? (not|instead of|down from|up from) ${NUM}\\b`,
+    `\\b(cut|shorten|reduc|rais|increas|extend|lower|chang|mov|drop|ris|went|go)\\w* (\\w+ ){0,4}from ${NUM}${UNIT} (down |up )?to ${NUM}\\b`,
+    `\\b(was|used to be) ${NUM}${UNIT}[^.!?]{0,40}\\bnow\\b`,
+  ].join('|'),
+  'i',
+);
 const PICTURES = [
+  // Before the deadline and the comparisons below: a rule's number that changed ("30 days, not 60").
+  [CHANGED, 'was-now', 'This line says a number changed: what it was and what it is now'],
   // Before the comparison below: a price taken as the lower of two, then a discount (a share plan's lookback).
   [/\b(lower of (the )?(two|both)|lower of (the )?(\w+ ){0,2}(price|prices|values?)|whichever (\w+ ){0,3}(is |was )?(lower|cheaper)|look-?back|(percent|%) (off|below|less than) the lower)\b/i, 'lookback', 'This line takes the lower of two prices, then a discount'],
   // Before the comparison below: a sharp fall between two dates and the recovery (a market letter's drawdown).

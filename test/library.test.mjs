@@ -85,13 +85,23 @@ test('a project library adds and overrides items by id, JSON only', () => {
   assert.notEqual(palette('noir').bg, '#000000');
 });
 
+test('was-now draws both numbers to one scale and refuses a change that changes nothing', () => {
+  const props = sketch('was-now', 'landscape', { params: { was: 60, now: 30, note: true }, say: { CHANGE: 'thirty' } });
+  const bars = props.elements.filter(e => e.type === 'rect' && e.fill === 'wash');
+  const sweep = props.elements.find(e => e.fill === 'accent');
+  assert.equal(bars.at(-1).x + bars.at(-1).w - sweep.x, 2 * sweep.w, 'the old window is twice the new one, as 60 is to 30');
+  assert.equal(bars.at(-1).exitSay, 'thirty', 'the part that no longer counts falls away on the word');
+  assert.ok(props.elements.some(e => e.marks?.[0]?.style === 'strike' && e.marks[0].say === 'thirty'), 'the old number is struck on the same word');
+  assert.throws(() => sketch('was-now', 'landscape', { params: { was: 30, now: 30 } }), /nothing changes/);
+});
+
 test('a creative seed is reproducible, varies the look and the set pieces, and briefs the director', async t => {
   const { muse } = await import('../film/muse.mjs');
   assert.deepEqual(muse(42), muse(42));
   const draws = new Set([1, 2, 3, 4, 5, 6, 7, 8].map(s => JSON.stringify([muse(s).palette, muse(s).twist])));
   assert.ok(draws.size >= 6, 'different seeds start somewhere different');
   // The October 2026 set: every frame shape builds and validates as canvas elements.
-  for (const name of ['chat', 'limit'])
+  for (const name of ['chat', 'limit', 'was-now'])
     for (const preset of ['landscape', 'vertical', 'square', 'portrait']) {
       const els = sketch(name, preset).elements;
       assert.ok(els.length > 0, `${name} ${preset}`);
