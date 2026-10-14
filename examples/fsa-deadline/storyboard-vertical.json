@@ -124,6 +124,7 @@
     {
       "id": "claim",
       "block": "canvas",
+      "transition": "push",
       "vo": "So claim it before then. Open Benefits, choose Claims, add your receipt, and press Submit.",
       "props": {
         "source": "Kestrel flexible spending account plan document, 2027 (fictional)",
@@ -246,16 +247,26 @@
     },
     {
       "id": "close",
-      "block": "kinetic",
+      "block": "canvas",
       "vo": "Claim it by December thirty-first.",
       "props": {
-        "mode": "stack",
-        "align": "center",
-        "emphasis": [
-          "December",
-          "thirty-first"
-        ],
-        "source": ""
+        "sketch": "deadline",
+        "sketchParams": {
+          "days": 31,
+          "firstWeekday": 3,
+          "start": 1,
+          "end": 31
+        },
+        "sketchText": {
+          "MONTH": "December 2027",
+          "OPENS": "Claim now",
+          "CLOSES": "Last day to claim"
+        },
+        "sketchSay": {
+          "OPEN": "Claim",
+          "CLOSE": "thirty-first"
+        },
+        "source": "Kestrel flexible spending account plan document, 2027 (fictional)"
       }
     }
   ]

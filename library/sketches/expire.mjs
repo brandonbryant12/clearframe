@@ -62,8 +62,9 @@ export default {
       { type: 'ellipse', cx, cy: y, rx: round(rx * 0.68), ry: round(cry * 0.68), fill: 'none', stroke: 'bg', width: 3, opacity: 0.5, enter: 'none' },
     ];
 
-    // The glass: its back, tinted; a shadow under it.
-    els.push({ type: 'ellipse', cx, cy: bottom + 6, rx: round(jw * 0.68), ry: round(ry * 1.5), fill: 'wash', opacity: 0.8, enter: 'fade', at: 0, dur: 0.5 });
+    // The glass: its back, tinted; a shadow under it. On screen from the first frame: the film
+    // opens on the jar, and only the coins arrive.
+    els.push({ type: 'ellipse', cx, cy: bottom + 6, rx: round(jw * 0.68), ry: round(ry * 1.5), fill: 'wash', opacity: 0.8, enter: 'none', at: 0 });
     els.push({
       type: 'path',
       d: `M ${L} ${top} L ${L} ${bottom - 30} Q ${L} ${bottom} ${L + 30} ${bottom + 4} Q ${cx} ${round(bottom + ry * 1.2)} ${R - 30} ${bottom + 4} Q ${R} ${bottom} ${R} ${bottom - 30} L ${R} ${top}`,
@@ -72,11 +73,10 @@ export default {
       stroke: 'line',
       width: 4,
       join: 'round',
-      enter: 'fade',
+      enter: 'none',
       at: 0,
-      dur: 0.5,
     });
-    els.push({ type: 'ellipse', cx, cy: top, rx: jw / 2, ry, fill: 'bg', stroke: 'line', width: 4, enter: 'fade', at: 0, dur: 0.5 });
+    els.push({ type: 'ellipse', cx, cy: top, rx: jw / 2, ry, fill: 'bg', stroke: 'line', width: 4, enter: 'none', at: 0 });
 
     // The carry-over level: the plane of the top face of the last coin kept, drawn as a ring
     // round the glass in the coins' own perspective.
@@ -135,16 +135,15 @@ export default {
       });
     }
     // The front of the glass: a highlight down its left side.
-    els.push({ type: 'rect', x: L + 14, y: top + ry + 18, w: 12, h: bottom - top - ry - 70, r: 6, fill: 'bg', opacity: 0.45, enter: 'fade', at: 0.2, dur: 0.5 });
+    els.push({ type: 'rect', x: L + 14, y: top + ry + 18, w: 12, h: bottom - top - ry - 70, r: 6, fill: 'bg', opacity: 0.45, enter: 'none', at: 0 });
     els.push({
       type: 'path',
       d: `M ${L} ${top} A ${jw / 2} ${ry} 0 0 0 ${R} ${top}`,
       fill: 'none',
       stroke: 'line',
       width: 4,
-      enter: 'fade',
+      enter: 'none',
       at: 0,
-      dur: 0.5,
     });
 
     // The carry-over line, drawn across at year end and kept moving.

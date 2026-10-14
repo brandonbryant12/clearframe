@@ -124,14 +124,23 @@ function film(vertical) {
       {
         id: 'claim',
         block: 'canvas',
+        // From the rule to the step: the next screen arrives as the page leaves.
+        transition: 'push',
         vo: 'So claim it before then. Open Benefits, choose Claims, add your receipt, and press Submit.',
         props: { source: PLAN, elements: appElements },
       },
       {
         id: 'close',
-        block: 'kinetic',
+        block: 'canvas',
         vo: 'Claim it by December thirty-first.',
-        props: { mode: 'stack', align: 'center', emphasis: ['December', 'thirty-first'], source: '' },
+        // The film ends on the picture of its one date, not on a card of words.
+        props: {
+          sketch: 'deadline',
+          sketchParams: { days: 31, firstWeekday: 3, start: 1, end: 31 },
+          sketchText: { MONTH: 'December 2027', OPENS: 'Claim now', CLOSES: 'Last day to claim' },
+          sketchSay: { OPEN: 'Claim', CLOSE: 'thirty-first' },
+          source: PLAN,
+        },
       },
     ],
   };
