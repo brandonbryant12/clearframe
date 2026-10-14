@@ -131,9 +131,9 @@
           {
             "type": "receipt",
             "id": "receipt",
-            "x": 332,
-            "y": 56,
-            "size": 26,
+            "x": 348,
+            "y": 118,
+            "size": 24,
             "merchant": "Clearview Optical",
             "detail": "Mar 3, 2027",
             "items": [

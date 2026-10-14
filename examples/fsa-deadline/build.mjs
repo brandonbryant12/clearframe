@@ -25,7 +25,7 @@ function film(vertical) {
   };
   const appElements = [
     // The paper receipt stays on the desk; its total is boxed as the voice says "receipt".
-    { type: 'receipt', id: 'receipt', ...(vertical ? { x: 332, y: 56, size: 26 } : { x: 170, y: 150, size: 30 }), ...lines, at: 0, enter: 'none', marks: [{ words: '$210.00', style: 'box', say: 'receipt' }] },
+    { type: 'receipt', id: 'receipt', ...(vertical ? { x: 348, y: 118, size: 24 } : { x: 170, y: 150, size: 30 }), ...lines, at: 0, enter: 'none', marks: [{ words: '$210.00', style: 'box', say: 'receipt' }] },
     {
       type: 'app',
       id: 'hub',

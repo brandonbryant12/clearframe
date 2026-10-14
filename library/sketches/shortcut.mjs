@@ -10,7 +10,7 @@ const SPEED = 900; // px per second, the same for both tokens
 
 function layout(w, h) {
   if (tall(w, h))
-    return { start: [540, 420], end: [540, 1600], stops: [[250, 650], [830, 900], [250, 1150], [830, 1400]], oldTag: [120, 300], newTag: [600, 560], size: 44, r: 70 };
+    return { start: [540, 420], end: [540, 1600], stops: [[250, 650], [830, 900], [250, 1150], [830, 1400]], oldTag: [150, 300], newTag: [600, 560], size: 44, r: 70 };
   return { start: [220, 540], end: [1700, 540], stops: [[520, 260], [860, 820], [1200, 260], [1500, 820]], oldTag: [400, 170], newTag: [960, 500], size: 40, r: 66 };
 }
 const length = pts => pts.slice(1).reduce((s, p, i) => s + Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]), 0);

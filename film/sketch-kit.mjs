@@ -12,7 +12,10 @@ export const round = v => Math.round(v * 10) / 10;
  *  foot of the frame (captions are on for every narrated film), in frame pixels. */
 export function body(w, h) {
   const top = tall(w, h) ? h * 0.11 + 330 : 330;
-  return { x: tall(w, h) ? 86 : 120, y: top, w: w - (tall(w, h) ? 172 : 240), h: h - top - (tall(w, h) ? 400 : 250) };
+  // Side margins keep type title-safe: a tall frame's content starts at 11.5% of its width, so
+  // the slow camera push never carries it past 10% (scene/native compositor); a wide one at 120 px.
+  const side = tall(w, h) ? Math.round(w * 0.115) + 4 : 120;
+  return { x: side, y: top, w: w - side * 2, h: h - top - (tall(w, h) ? 400 : 250) };
 }
 
 /** A smooth curve through points (Catmull-Rom converted to cubic Béziers). */

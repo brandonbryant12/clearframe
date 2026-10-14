@@ -9,7 +9,7 @@ export default {
     const r = body(w, h),
       cx = round(r.x + r.w / 2),
       base = round(r.y + r.h * (tall(w, h) ? 0.7 : 0.95)),
-      span = Math.min(r.w * 0.8, 1100),
+      span = Math.min(r.w * (tall(w, h) ? 0.7 : 0.8), 1100),
       top = round(base - Math.min(r.h * 0.55, 340));
     const pan = (x, label, color) => ({
       type: 'group',

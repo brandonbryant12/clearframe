@@ -1089,6 +1089,17 @@ export function elementsExtent(elements) {
   const walk = (list, dx = 0, dy = 0) => {
     for (const el of list) {
       const n = k => el[k] ?? 0;
+      // A receipt or an app is measured as the group it becomes.
+      if (el.type === 'receipt' || el.type === 'app') {
+        let drawn = null;
+        try {
+          drawn = (el.type === 'receipt' ? expandReceipt : expandApp)(el, 'element', m => {
+            throw new Error(m);
+          });
+        } catch {}
+        if (drawn) walk([drawn], dx, dy);
+        continue;
+      }
       if (el.type === 'group' && el.scale != null && el.scale !== 1) {
         const e = elementsExtent(el.children ?? []);
         if (!e) continue;
@@ -1126,9 +1137,12 @@ export function elementsExtent(elements) {
           ).length;
         // Native single-line fitting caps the advance. Do not report the unfitted title
         // outside its camera while the renderer correctly shrinks it into this width.
-        const w = el.width ?? Math.min(el.fit ?? Infinity, chars * size * (el.font === 'mono' ? 0.62 : 0.54));
+        const advance = chars * size * (el.font === 'mono' ? 0.62 : 0.54);
+        const w = el.width ?? Math.min(el.fit ?? Infinity, advance);
         const x0 = el.anchor === 'middle' ? n('x') - w / 2 : el.anchor === 'end' ? n('x') - w : n('x');
-        grow(dx + x0, dy + n('y') - size * 0.8, dx + x0 + w, dy + n('y') + size * 0.25);
+        // Text with a width wraps: its lines stack down from the first baseline.
+        const lines = el.width ? Math.max(1, Math.ceil(advance / Math.max(1, el.width))) : 1;
+        grow(dx + x0, dy + n('y') - size * 0.8, dx + x0 + w, dy + n('y') + size * 0.25 + (lines - 1) * size * (el.leading ?? 1.15));
       } else if (el.type === 'path' && typeof el.d === 'string') {
         for (const [x, y] of pathPoints(el.d)) grow(dx + x, dy + y, dx + x, dy + y);
       }

@@ -290,6 +290,11 @@ impl<'a, 'c> Draw<'a, 'c> {
                     o.insert(key.into(), serde_json::json!(a + (b - a) * k));
                 }
             }
+            // A static scale grows or shrinks across the cut (unset is 1).
+            let (a, b) = (f(from, "scale", 1.0), f(to, "scale", 1.0));
+            if (a - b).abs() > 1e-6 {
+                o.insert("scale".into(), serde_json::json!(a + (b - a) * k));
+            }
         } else if let (Some((a, closed_a)), Some((b, closed_b))) = (morph_outline(from), morph_outline(to)) {
             // Different shapes (or paths): blend resampled outlines.
             const N: usize = 97;

@@ -29,7 +29,7 @@ export default {
     const b = T ? body(w, h) : { ...body(w, h), y: 170, h: 660 };
     const rows = Math.ceil(total / cols);
     // The grid as large as the body allows: the left of a wide frame, the top of a tall one.
-    const cell = round(T ? Math.min(b.w / cols, (b.h - 300) / rows) : Math.min((b.w * 0.42) / cols, b.h / rows));
+    const cell = round(T ? Math.min(b.w / cols, (b.h - 420) / rows) : Math.min((b.w * 0.42) / cols, b.h / rows));
     const gap = Math.max(4, round(cell * 0.16));
     const size = cell - gap;
     const gx = round(T ? b.x + (b.w - cell * cols) / 2 : b.x),
@@ -57,10 +57,12 @@ export default {
     // The figure and what it counts: right of the grid, or under it on a tall frame.
     const figure = total === 100 ? { suffix: '%' } : { suffix: ` in ${total}` };
     const fx = T ? b.x : gx + cell * cols + round(b.w * 0.07),
-      fy = T ? gy + cell * rows + 190 : round(gy + (cell * rows) / 2 + 20);
+      fy = T ? gy + cell * rows + 180 : round(gy + (cell * rows) / 2 + 20);
     const big = T ? 190 : total === 100 ? 200 : 150;
-    els.push({ type: 'text', count: { from: 0, to: count, dur: Math.max(0.6, step * count + 0.3), ...figure }, x: fx, y: fy, size: big, font: 'display', fill: tone, cue: 'COUNT', at: AT.COUNT, enter: 'fade', dur: 0.3 });
-    els.push({ type: 'text', text: 'WHAT', x: fx, y: fy + (T ? 90 : 84), size: T ? 50 : 52, font: 'strong', fill: 'ink', width: round(T ? b.w : b.x + b.w - fx), cue: 'COUNT', at: AT.COUNT + 0.5, enter: 'rise', dist: 16, dur: 0.45 });
+    // With fix, the figure and its words step back as the share turns: they are last year's.
+    const recede = fix ? { keys: [{ cue: 'FIX', at: AT.FIX, opacity: 0.35, dur: 0.6 }] } : {};
+    els.push({ type: 'text', count: { from: 0, to: count, dur: Math.max(0.6, step * count + 0.3), ...figure }, x: fx, y: fy, size: big, font: 'display', fill: tone, cue: 'COUNT', at: AT.COUNT, enter: 'fade', dur: 0.3, ...recede });
+    els.push({ type: 'text', text: 'WHAT', x: fx, y: fy + (T ? 90 : 84), size: T ? 50 : 52, font: 'strong', fill: 'ink', width: round(T ? b.w : b.x + b.w - fx), cue: 'COUNT', at: AT.COUNT + 0.5, enter: 'rise', dist: 16, dur: 0.45, ...recede });
     return { elements: els };
   },
 };

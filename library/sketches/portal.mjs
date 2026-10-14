@@ -60,7 +60,13 @@ export default {
     // The confirmation lands under the button, so the lean-in on the new value keeps it in frame.
     const toast = { x: main.x, y: save.y + save.h + 36, w: Math.min(main.w, T ? main.w : 640), h: 92 };
     const [vx, vy] = centre(box);
-    const lean = T ? 1.18 : 1.3;
+    // The lean-in keeps the app's name below the top of the title-safe area and the confirmation
+    // above the caption band: no larger, and no further toward the middle, than both allow.
+    const appTop = win.y + bar / 2 + (phone ? 22 : 10) - 26,
+      floor = h * (tall(w, h) ? 0.8 : 0.75) - 16,
+      ceiling = h * (tall(w, h) ? 0.06 : 0.05) + 32;
+    const lean = Math.min(T ? 1.18 : 1.3, (floor - ceiling) / (toast.y + toast.h - appTop));
+    const drift = Math.min(Math.max((h / 2 - vy) * 0.55, ceiling - vy - (appTop - vy) * lean), floor - vy - (toast.y + toast.h - vy) * lean);
     // The cursor starts low in the window and visits each target before its click.
     const start = T ? [win.x + win.w - 160, win.y + win.h - 260] : [win.x + win.w - 220, win.y + win.h - 200];
     const targets = [centre(item(1)), centre(card(0)), [vx, vy], centre(save)];
@@ -110,8 +116,7 @@ export default {
               ease: 'inOut',
               scale: lean,
               x: round((w / 2 - vx) * 0.55),
-              // Toward the middle, but never so far that the confirmation meets the caption band.
-              y: round(Math.min((h / 2 - vy) * 0.55, h * (tall(w, h) ? 0.8 : 0.75) - 16 - vy - (toast.y + toast.h - vy) * lean)),
+              y: round(drift),
             },
           ],
           children: [

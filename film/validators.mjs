@@ -464,7 +464,7 @@ export const VALIDATORS = {
       else if (frame.captions && !drawn.view && p.view == null && !p.title) {
         const tall = ht > w * 1.1;
         const e = elementsExtent(drawn.elements.filter(el => !(el.w >= w * 0.9)));
-        const lift = e && e.bottom < ht - 20 ? Math.min(e.bottom - ht * (tall ? 0.8 : 0.75), e.top - ht * (tall ? 0.07 : 0.06)) : 0;
+        const lift = e && e.bottom < ht - 20 ? Math.min(e.bottom - ht * (tall ? 0.8 : 0.75), e.top - ht * (tall ? 0.1 : 0.08)) : 0;
         if (lift > 4) drawn.view = [0, Math.round(lift), w, ht];
       }
       p.elements = [...drawn.elements, ...(p.elements ?? [])];

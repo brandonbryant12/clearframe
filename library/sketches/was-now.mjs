@@ -36,18 +36,24 @@ export default {
     const X = v => round(x0 + (W * v) / Math.max(was, now));
     const [wasX, nowX] = [X(was), X(now)];
     // A phone reads these: the numbers at a figure's size, the labels well above the floor.
-    const big = T ? 72 : 64,
-      small = T ? 44 : 40,
-      barH = T ? 84 : 72;
+    const big = T ? 80 : 72,
+      small = T ? 48 : 44,
+      barH = T ? 84 : 72,
+      titleSize = T ? 54 : 56;
     const pair = big * 0.72 + small * 1.35;
-    const titleY = round(b.y + (T ? 46 : 40));
-    const ty = round(Math.max(titleY + 30 + pair + 28, b.y + b.h * (T ? 0.36 : 0.44)));
+    // The whole stack (what it is, the old number, the bar, the new number and the note) is
+    // centred in the frame's safe height: no band is held empty for a heading the beat lacks.
+    // (Room for the title to wrap once: the old number stands under it, at the old end.)
+    const stack = titleSize * 2.2 + 30 + pair + 28 + barH + 28 + pair + (note ? small * 1.6 : 0);
+    const [safeTop, safeBottom] = [h * (T ? 0.12 : 0.1), h * (T ? 0.78 : 0.74)];
+    const titleY = round(safeTop + Math.max(0, (safeBottom - safeTop - stack) / 2) + titleSize * 0.8);
+    const ty = round(titleY + titleSize * 1.2 + 30 + pair + 28);
     // The old number stands above the bar at its end, the new one below at its own: they never
     // collide, however close the two ends are.
     const above = { amount: round(ty - 28 - small * 1.35), label: round(ty - 28) };
     const below = { amount: round(ty + barH + 28 + big * 0.72), label: round(ty + barH + 28 + big * 0.72 + small * 1.35) };
 
-    els.push(text('WHAT', x0, titleY, T ? 50 : 52, 'strong', 'ink', { width: W, at: 0, enter: 'none' }));
+    els.push(text('WHAT', x0, titleY, titleSize, 'strong', 'ink', { width: W, at: 0, enter: 'none' }));
     // The old window, on screen from the first frame. When it shortens it is two overlapping
     // pills of one opaque colour, seamless until the part beyond the new end falls away.
     const r = round(barH / 2);
@@ -56,7 +62,7 @@ export default {
       els.push(pill(x0, nowX));
       els.push(pill(nowX - barH, wasX, { exit: 'fall', exitCue: 'CHANGE', exitAt: AT.CHANGE }));
       // What was lost stays drawn as an outline, so the old reach is still seen.
-      els.push({ type: 'rect', x: nowX + 8, y: ty, w: wasX - nowX - 8, h: barH, r, fill: 'none', stroke: 'negative', width: 4, dash: [14, 10], enter: 'draw', cue: 'CHANGE', at: AT.CHANGE + 0.6, dur: 0.6 });
+      els.push({ type: 'rect', x: nowX + 10, y: ty, w: wasX - nowX - 20, h: barH, r, fill: 'none', stroke: 'negative', width: 4, dash: [14, 10], enter: 'draw', cue: 'CHANGE', at: AT.CHANGE + 0.6, dur: 0.6 });
     } else els.push(pill(x0, wasX));
     // The old end: a rule, its number and its label; struck on the change.
     els.push({ type: 'line', x1: wasX, y1: ty - 14, x2: wasX, y2: ty + barH + 14, stroke: 'muted', width: 4, cap: 'round', at: 0, enter: 'none' });
@@ -76,15 +82,21 @@ export default {
       keys: [{ cue: 'CHANGE', at: AT.CHANGE, dur: 0, scaleX: 0 }, { cue: 'CHANGE', at: AT.CHANGE + 0.25, dur: 0.9, ease: 'out', scaleX: 1 }],
     });
     els.push({ type: 'line', x1: nowX, y1: ty - 14, x2: nowX, y2: ty + barH + 14, stroke: 'ink', width: 5, cap: 'round', enter: 'draw', cue: 'CHANGE', at: AT.CHANGE + 1.0, dur: 0.3 });
-    els.push(text(money(now), nowX, below.amount, big, 'bold', 'accent', { anchor: 'end', enter: 'rise', dist: 18, cue: 'CHANGE', at: AT.CHANGE + 1.05, dur: 0.45 }));
-    els.push(text('NOWLABEL', nowX, below.label, small, 'strong', 'ink', { anchor: 'end', enter: 'fade', cue: 'CHANGE', at: AT.CHANGE + 1.3, dur: 0.4 }));
+    // The new number sits left of its end, under the window it measures; when the window is too
+    // short to hold it there, it sits just right of the end instead.
+    const span = (chars, size) => chars * size * 0.56;
+    const fitsLeft = nowX - x0 >= Math.max(span(money(now).length, big), span(14, small));
+    const nowAt = fitsLeft ? { x: nowX, anchor: 'end' } : { x: nowX + 24, anchor: 'start' };
+    els.push(text(money(now), nowAt.x, below.amount, big, 'bold', 'accent', { anchor: nowAt.anchor, enter: 'rise', dist: 18, cue: 'CHANGE', at: AT.CHANGE + 1.05, dur: 0.45 }));
+    els.push(text('NOWLABEL', nowAt.x, below.label, small, 'strong', 'ink', { anchor: nowAt.anchor, enter: 'fade', cue: 'CHANGE', at: AT.CHANGE + 1.3, dur: 0.4 }));
 
     // NOTE: what happens in the part that changed, set in that span (below the bar where it was
     // cut, above it where it grew), or on its own line when the span is too narrow to hold it.
     if (note) {
       const [from, to] = shorter ? [nowX, wasX] : [wasX, nowX];
       const room = to - from - 48;
-      const inSpan = room >= (T ? 330 : 380);
+      // (Below a cut span only when the new number is not already standing in it.)
+      const inSpan = room >= (T ? 330 : 380) && (fitsLeft || !shorter);
       const y = inSpan ? (shorter ? below.amount - big * 0.3 : above.amount - big * 0.3) : below.label + small * 2.2;
       els.push(text('NOTE', inSpan ? from + 40 : x0, round(y), small, 'text', 'ink', { width: round(inSpan ? room : W), enter: 'rise', dist: 14, cue: 'NOTE', at: AT.NOTE, dur: 0.45 }));
       if (inSpan) els.push({ type: 'line', x1: from + 20, y1: round(y - small * 0.9), x2: from + 20, y2: round(y + small * 1.6), stroke: 'accent', width: 4, cap: 'round', enter: 'draw', cue: 'NOTE', at: AT.NOTE, dur: 0.3 });

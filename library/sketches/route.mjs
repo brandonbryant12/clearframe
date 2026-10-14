@@ -10,10 +10,10 @@ export default {
       n = 4;
     const stops = tall(w, h)
       ? [
-          [r.x + r.w * 0.2, r.y + r.h * 0.92],
-          [r.x + r.w * 0.8, r.y + r.h * 0.64],
-          [r.x + r.w * 0.22, r.y + r.h * 0.36],
-          [r.x + r.w * 0.78, r.y + r.h * 0.08],
+          [r.x + r.w * 0.3, r.y + r.h * 0.92],
+          [r.x + r.w * 0.7, r.y + r.h * 0.64],
+          [r.x + r.w * 0.3, r.y + r.h * 0.36],
+          [r.x + r.w * 0.7, r.y + r.h * 0.08],
         ]
       : [
           [r.x + r.w * 0.06, r.y + r.h * 0.78],
