@@ -26,13 +26,14 @@ export default {
     // Tabs instead of a side menu on tall frames and in a phone, which is a tall frame of its own.
     const T = tall(w, h) || phone;
     // Window, chrome and the two regions: a side menu (landscape) or tabs (tall frames).
+    // Each stays above the caption band (the bottom quarter of a wide frame, fifth of a tall one).
     const win = phone
       ? tall(w, h)
-        ? { x: 190, y: 380, w: 700, h: 1240 }
-        : { x: round(w / 2 - 290), y: 120, w: 580, h: 820 }
+        ? { x: 190, y: 300, w: 700, h: 1220 }
+        : { x: round(w / 2 - 280), y: 90, w: 560, h: 720 }
       : T
-        ? { x: 70, y: 430, w: 940, h: 1160 }
-        : { x: 300, y: 150, w: 1320, h: 780 };
+        ? { x: 70, y: 360, w: 940, h: 1160 }
+        : { x: 300, y: 100, w: 1320, h: 710 };
     const corner = phone ? 64 : 24;
     const bar = 68;
     const nav = T
@@ -59,6 +60,7 @@ export default {
     // The confirmation lands under the button, so the lean-in on the new value keeps it in frame.
     const toast = { x: main.x, y: save.y + save.h + 36, w: Math.min(main.w, T ? main.w : 640), h: 92 };
     const [vx, vy] = centre(box);
+    const lean = T ? 1.18 : 1.3;
     // The cursor starts low in the window and visits each target before its click.
     const start = T ? [win.x + win.w - 160, win.y + win.h - 260] : [win.x + win.w - 220, win.y + win.h - 200];
     const targets = [centre(item(1)), centre(card(0)), [vx, vy], centre(save)];
@@ -106,9 +108,10 @@ export default {
               after: 0.9,
               dur: 1.3,
               ease: 'inOut',
-              scale: T ? 1.18 : 1.3,
+              scale: lean,
               x: round((w / 2 - vx) * 0.55),
-              y: round((h / 2 - vy) * 0.55),
+              // Toward the middle, but never so far that the confirmation meets the caption band.
+              y: round(Math.min((h / 2 - vy) * 0.55, h * (tall(w, h) ? 0.8 : 0.75) - 16 - vy - (toast.y + toast.h - vy) * lean)),
             },
           ],
           children: [
