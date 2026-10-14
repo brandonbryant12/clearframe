@@ -11,7 +11,7 @@ import { ffmpeg, ffmpegBin, writeJSON } from './util.mjs';
 import { measureDrop } from './beatmap.mjs';
 import { sha256 } from '../../scene/engine.mjs';
 import { reviewGeometry } from '../../film/render-geometry.mjs';
-import { COVER } from '../../film/constants.mjs';
+import { COVER, INTO_SECONDS } from '../../film/constants.mjs';
 import { pictureFor, chartFor, castFor, figuresIn } from './pictures.mjs';
 import { sketchByName, sketchWords } from '../../film/sketches.mjs';
 import { castOverlaps } from '../../film/cast.mjs';
@@ -430,8 +430,10 @@ export async function qaProject(root, { video, loop = false } = {}) {
   const worlds = Object.fromEntries(sb.beats.map(b => [b.id, b.props?.world ?? null]));
   const covers = Object.fromEntries(
     sb.beats.map(b => {
-      const t = b.transition ?? sb.transition ?? 'fade';
-      return [b.id, COVER[t] ?? (t === 'cut' ? [0, 0] : [0.35, 0.35])];
+      // A film cuts unless told otherwise; an into and a push move through their first second.
+      const t = b.into != null ? 'into' : (b.transition ?? sb.transition ?? 'cut');
+      const span = { cut: [0, 0], into: [0, INTO_SECONDS], push: [0, 0.6] }[t];
+      return [b.id, COVER[t] ?? span ?? [0.35, 0.35]];
     }),
   );
   const holds = new Set(sb.beats.filter(b => b.pace === 'hold').map(b => b.id));
