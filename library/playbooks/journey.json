@@ -11,7 +11,7 @@
       "tail": 0.7,
       "props": {
         "world": "journey",
-        "view": [0, 0, 1920, 1080],
+        "view": [60, 0, 1920, 1080],
         "rough": true,
         "elements": [
           {
@@ -71,7 +71,7 @@
       "tail": 0.7,
       "props": {
         "world": "journey",
-        "view": [1500, 0, 1920, 1080],
+        "view": [1450, 0, 1920, 1080],
         "rough": true,
         "elements": [
           {
