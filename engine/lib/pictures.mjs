@@ -11,6 +11,7 @@ const CHANGED = new RegExp(
     `\\b${NUM}${UNIT}( \\w+){0,3},? (not|instead of|down from|up from) ${NUM}\\b`,
     `\\b(cut|shorten|reduc|rais|increas|extend|lower|chang|mov|drop|ris|doubl|went|go)\\w* (\\w+ ){0,4}from ${COUNT}${UNIT} (down |up )?to ${COUNT}\\b`,
     `\\b(was|used to be) ${COUNT}${UNIT}[^.!?]{0,40}\\bnow\\b`,
+    `\\b${NUM}${UNIT}( \\w+){0,4},? (becomes?|goes (up|down) to|rises to|falls to) (a |an )?${NUM}\\b`,
   ].join('|') +
   ')',
   'i',
@@ -18,6 +19,8 @@ const CHANGED = new RegExp(
 const PICTURES = [
   // Before the deadline and the comparisons below: a rule's number that changed ("30 days, not 60").
   [CHANGED, 'was-now', 'This line says a number changed: what it was and what it is now'],
+  // A small amount every period and what it comes to ("$6 more a paycheck… $156 a year").
+  [/\b(each|every|per|a) (paycheck|pay ?period|pay ?check|month|week)\b[^.]*[.,]?[^.]*\b(a year|per year|annually|in a year|all year|comes to|adds up)\b/i, 'every', 'This line is a small amount every period and what it comes to'],
   // Before the comparison below: a price taken as the lower of two, then a discount (a share plan's lookback).
   [/\b(lower of (the )?(two|both)|lower of (the )?(\w+ ){0,2}(price|prices|values?)|whichever (\w+ ){0,3}(is |was )?(lower|cheaper)|look-?back|(percent|%) (off|below|less than) the lower)\b/i, 'lookback', 'This line takes the lower of two prices, then a discount'],
   // Before the comparison below: a sharp fall between two dates and the recovery (a market letter's drawdown).

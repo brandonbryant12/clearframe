@@ -41,7 +41,7 @@
       "props": {
         "world": "journey",
         "view": [
-          0,
+          60,
           0,
           1920,
           1080
@@ -106,7 +106,7 @@
       "props": {
         "world": "journey",
         "view": [
-          1500,
+          1450,
           0,
           1920,
           1080
@@ -178,6 +178,7 @@
     },
     {
       "id": "city",
+      "hold": 0.6,
       "block": "canvas",
       "vo": "Then a second network runs it under the streets, to every tap.",
       "tail": 0.7,
