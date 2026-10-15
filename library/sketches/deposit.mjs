@@ -32,11 +32,14 @@ export default {
     // Where the month stands, and where the cards stand: side by side on a wide frame, the month
     // above the cards on a tall one. Everything sits above the caption band.
     const side = T ? round(w * 0.115) + 4 : 160;
-    const chip = T ? { x: side, y: round(h * 0.17), w: 330, h: 120 } : { x: side, y: round(h * 0.3), w: 360, h: 128 };
     const cardH = 290,
       gap = T ? 40 : 36;
+    // On a tall frame the month and the cards are one stack, centred in the safe height.
+    const tallStack = 72 + 120 + 100 + n * cardH + (n - 1) * gap;
+    const tallTop = round(h * 0.12 + Math.max(0, (h * 0.66 - tallStack) / 2) + 72);
+    const chip = T ? { x: side, y: tallTop, w: 330, h: 120 } : { x: side, y: round(h * 0.3), w: 360, h: 128 };
     const area = T
-      ? { x: side, y: chip.y + chip.h + 120, w: w - side * 2 }
+      ? { x: side, y: chip.y + chip.h + 100, w: w - side * 2 }
       : { x: 720, y: round(h * 0.42 - (n * cardH + (n - 1) * gap) / 2), w: w - 720 - side };
     // WHO and the month it lands.
     els.push(text('WHO', chip.x, chip.y - 32, 40, 'strong', 'muted', still));
