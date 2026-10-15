@@ -229,6 +229,8 @@ const beats = [
     block: 'canvas',
     vo: 'But the average hides the shape.',
     transition: 'cut',
+    // A chart to read, held still: a push would carry its tallest label past the safe line.
+    camera: 'none',
     props: { source: SAMPLE, chart: spread(false), elements: [] },
   },
   {

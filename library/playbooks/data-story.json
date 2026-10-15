@@ -14722,6 +14722,7 @@
       "block": "canvas",
       "vo": "But the average hides the shape.",
       "transition": "cut",
+      "camera": "none",
       "props": {
         "source": "Illustrative sample data · replace before publishing",
         "chart": {

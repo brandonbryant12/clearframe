@@ -84,7 +84,7 @@
         "max": 80,
         "sort": "none",
         "orientation": "horizontal",
-        "growSay": "collections",
+        "growSay": "example",
         "focus": {
           "label": "Payments",
           "say": "70 thousand",
