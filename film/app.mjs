@@ -154,6 +154,19 @@ export function expandApp(input, at, fail, canvas) {
       if (f.value != null) {
         const typed = when(f);
         if (f.value.length * s * 0.6 > fw - s * 1.6) fail(`${at2}.value "${f.value}" is too long for the field: shorten it or widen the app (w)`);
+        // The field takes focus as its value types in, as an app's does, and lets it go after (or
+        // as the next field takes it, when that one types on the same word or clock).
+        if (typed) {
+          const next = fields.slice(i + 1).map(g => g.value != null && when(g)).find(Boolean);
+          const same = next && (typed.say != null ? next.say === typed.say : next.at != null);
+          const until = same ? Math.min((typed.say != null ? typed.after : typed.at) + 1.1, (typed.say != null ? next.after : next.at) - 0.02) : (typed.say != null ? typed.after : typed.at) + 1.1;
+          panel.push({
+            type: 'rect', x: round(fx), y: round(top + s * 1.4), w: round(fw), h: fieldH, r: 14, fill: 'none', stroke: 'accent', width: 4,
+            ...(typed.say != null ? { say: typed.say, after: Math.max(0, typed.after - 0.1) } : { at: Math.max(0, typed.at - 0.1) }),
+            enter: 'fade', dur: 0.12, exit: 'fade', exitDur: same ? 0.12 : 0.35,
+            ...(typed.say != null ? { exitSay: typed.say, exitAfter: round(until * 100) / 100 } : { exitAt: round(until * 100) / 100 }),
+          });
+        }
         panel.push(text(f.value, fx + s * 0.8, top + s * 1.4 + fieldH * 0.66, s * 1.15, 'strong', 'ink', typed ? { ...typed, enter: 'type', dur: 0.45 } : {}));
       }
     });
@@ -183,6 +196,8 @@ export function expandApp(input, at, fail, canvas) {
       const k = Math.min((slot.w - 36) / rw, 0.5);
       const [px, py0] = [round(slot.x + (slot.w - rw * k) / 2), round(slot.y + 16)];
       const lands = when(upload);
+      // The slot's dashed edge turns solid as the photo lands in it.
+      if (lands) panel.push({ type: 'rect', ...slot, r: 18, fill: 'none', stroke: 'accent', width: 4, ...lands, enter: 'fade', dur: 0.2 });
       panel.push(expandReceipt({ type: 'receipt', ...upload.receipt, id: uid(`${id}-photo`, page), x: px, y: py0, scale: k, origin: [px, py0], shadow: false, ...(lands ?? {}), enter: lands ? 'pop' : 'none' }, `${where}.upload.receipt`, fail));
     }
     return { panel, bottom };
