@@ -1277,7 +1277,7 @@
               "DONE": "Booked: your adviser will call you"
             },
             "sketchSay": {
-              "CLICK1": "adviser",
+              "CLICK1": "My adviser",
               "CLICK2": "Book",
               "CHANGE": "time",
               "SAVE": "confirm"

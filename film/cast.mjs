@@ -125,7 +125,11 @@ export function formationTargets(f, ids, frame, { size, seed = 0, current = new 
     const [mx, my] = [0, 1].map(k => pts.reduce((s, p) => s + p[k], 0) / n);
     // Wide objects (word pills) would land on each other: push overlapping pairs apart along their
     // shallower overlap until none touch. Deterministic, a few dozen passes at most.
-    const box = ids.map(id => extent(id).map(v => v * scale + size * 0.08));
+    // (Counting the label that hangs below an object, so no object lands on another's name.)
+    const box = ids.map(id => {
+      const [hw, hh] = extent(id);
+      return [hw * scale + size * 0.08, Math.max(hh, below(id)) * scale + size * 0.08];
+    });
     for (let pass = 0; pass < 40; pass++) {
       let moved = false;
       for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
@@ -794,8 +798,8 @@ export function expandCastProps(input, frame, ctx = {}) {
   if (rest.title || rest.kicker) frame = { ...frame, ...(ctx.heading === 'bottom'
     ? { bottom: frame.height - (frame.height > frame.width ? 430 : frame.height * 0.34) }
     : { top: frame.height > frame.width ? 430 : 300 }) };
-  // Captions take the bottom of the frame (the band the frame audit keeps type out of).
-  if (ctx.captions) frame = { ...frame, bottom: Math.min(frame.bottom ?? frame.height, frame.height * 0.78) };
+  // Captions take the bottom of the frame (the band the frame audit keeps type out of, with a margin).
+  if (ctx.captions) frame = { ...frame, bottom: Math.min(frame.bottom ?? frame.height, frame.height * 0.75) };
   const { elements, state, threads, notes, camera, edges, unit } = castElements(spec, frame, { state: ctx.state, threads: ctx.threads, camera: ctx.camera, unit: ctx.unit, cue: ctx.cue });
   for (const n of notes) ctx.notes?.push(`${frame.beatId ?? 'cast'}: ${n}`);
   if (frame.beatId) {
