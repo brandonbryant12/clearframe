@@ -86,7 +86,7 @@ function film(vertical) {
           sketch: 'expire',
           sketchParams: { total: 5, keep: 1, each: 640, prefix: '$' },
           sketchText: { KEEP: 'carries into next year', LOSE: 'is gone', YEAREND: 'Dec 31' },
-          sketchSay: { FILL: 'thousand', YEAREND: 'December', KEEP: 'carries' },
+          sketchSay: { FILL: 'dollars', YEAREND: 'December', KEEP: 'carries' },
           source: PLAN,
         },
       },

@@ -48,7 +48,7 @@
           "YEAREND": "Dec 31"
         },
         "sketchSay": {
-          "FILL": "thousand",
+          "FILL": "dollars",
           "YEAREND": "December",
           "KEEP": "carries"
         },
