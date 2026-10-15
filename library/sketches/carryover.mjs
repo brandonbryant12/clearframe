@@ -46,7 +46,10 @@ export default {
     const cardH = round(Math.min(T ? 140 : 118, (room - (count - 1) * gap) / count));
     // One type size for every card, the largest the longest label fits at (about 0.58 em a letter
     // in the strong face), between the icon and the tick.
-    const start = icons.length ? (T ? 92 : 100) : 34;
+    // Beside the label on a wide frame; above it on a tall one, where the columns are narrow and
+    // the label needs the card's whole width to be read on a phone.
+    const above = T && icons.length > 0;
+    const start = icons.length && !above ? 100 : 34;
     const longest = Math.max(8, ...Array.from({ length: count }, (_, i) => String(words[`ITEM${i + 1}`] ?? '').length));
     const size = round(Math.max(32, Math.min(T ? 44 : 50, cardH * 0.42, (colW - start - 84) / (longest * 0.58))));
     const stackH = count * cardH + (count - 1) * gap;
@@ -101,8 +104,8 @@ export default {
         ...(keys.length ? { keys } : {}),
         children: [
           { type: 'rect', x: left, y, w: colW, h: cardH, r: 20, fill: 'surface', stroke: 'line', width: 2, shadow: true },
-          ...(icon ? [{ type: 'icon', name: icon, x: left + round(start / 2 + 2), y: round(y + cardH / 2), size: T ? 48 : 48, stroke: 'accent' }] : []),
-          text(`ITEM${i + 1}`, left + start, round(y + cardH / 2 + size * 0.36), size, 'strong', 'ink', { fit: colW - start - 84 }),
+          ...(icon ? [{ type: 'icon', name: icon, x: above ? left + 56 : left + 52, y: above ? y + 40 : round(y + cardH / 2), size: above ? 40 : 48, stroke: 'accent' }] : []),
+          text(`ITEM${i + 1}`, left + start, above ? round(y + cardH - 28) : round(y + cardH / 2 + size * 0.36), size, 'strong', 'ink', { fit: colW - start - 84 }),
           // The tick a card gets on the far side (in a bookend, the card that stayed gets it on FIX).
           ...(stay ? (bookend ? tick(y, dt => on('CROSS', dt)) : []) : tick(y, bookend ? null : dt => on(cue, dt))),
         ],
