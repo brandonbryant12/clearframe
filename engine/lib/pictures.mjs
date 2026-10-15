@@ -28,6 +28,8 @@ const PICTURES = [
   // Before expire: elections that carry into next year (and the one that does not), not money that is lost.
   [/\b((do nothing|don'?t (do anything|make (any )?changes))\b[^.]*\b(carr(y|ies)|rolls?|stays?) (over|forward|into|the same)|(elections?|coverage|plans?|choices) (\w+ ){0,3}(carr(y|ies)|rolls?) (over|forward|into))\b/i, 'carryover', 'This line says which elections carry into next year and which do not'],
   [/\b(carr(y|ies) over|use it or lose it|forfeit|resets? to (zero|\$?0)|expires?|lose (it|the rest))\b/i, 'expire', 'This line is about what carries over and what is lost'],
+  // Before match: the employer's money landing in your account (an HSA seed, a grant), not a match on yours.
+  [/\b(puts?|deposits?|adds?|contributes?|seeds?|credits?)\b[^.]{0,40}\b(into|to|in) your (hsa|health savings|savings|account|fund)/i, 'deposit', 'This line is money the employer puts into your account'],
   [/\bvest(s|ed|ing)?\b|\byours to keep\b.*\byears?\b|\bafter (one|two|three|\d) years?\b/i, 'vesting', 'This line is about what becomes yours over time'],
   [/\b(match(es|ing)?|adds?|puts? in|on top of|top[- ]up|contributes? the same)\b.*(\b(percent|dollars?)\b|[%$])|\b(percent|%).*\b(match(es)?|adds?)\b/i, 'match', 'This line is about one contribution added to another'],
   [/\b((by|before|on) (monday|tuesday|wednesday|thursday|friday)|this week|first week|by the end of the week)\b/i, 'week', 'This line names days of one week'],

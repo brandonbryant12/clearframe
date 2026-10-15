@@ -85,7 +85,7 @@ The block gallery (`clearframe gallery`, every catalog example, landscape and ve
 
 ## Sketches
 
-36 public sketches expand into canvas elements in `film/sketches.mjs` and are drawn by the canvas block. The sketch gallery (`clearframe gallery DIR --sketches`, landscape), PSNR per sketch against the FFFrames-era gallery:
+37 public sketches expand into canvas elements in `film/sketches.mjs` and are drawn by the canvas block. The sketch gallery (`clearframe gallery DIR --sketches`, landscape), PSNR per sketch against the FFFrames-era gallery:
 
 | Sketch | Landscape (dB) |
 | --- | --- |
@@ -115,6 +115,7 @@ The block gallery (`clearframe gallery`, every catalog example, landscape and ve
 | `share` | — |
 | `carryover` | — |
 | `choose` | — |
+| `deposit` | — |
 | `split` | — |
 | `hold` | — |
 | `growth` | — |
