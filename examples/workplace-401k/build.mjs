@@ -71,7 +71,7 @@ const film = vertical => ({
     {
       id: 'keep',
       block: 'canvas',
-      vo: 'The match becomes yours over three years: a third after the first, two thirds after the second, and all of it after the third. Your own money is always yours.',
+      vo: 'A third of the match is yours after the first year, two thirds after the second, and all of it after the third. Your own money is always yours.',
       props: {
         source: PLAN,
         sketch: 'vesting',
