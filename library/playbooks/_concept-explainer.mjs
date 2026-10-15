@@ -412,6 +412,7 @@ const beats = [
     block: 'canvas',
     vo: 'One driver taps the brakes.',
     transition: 'cut',
+    hold: 0.5,
     props: { world: 'road', view: [1240, 200, 760, 427.5], viewDrift: 0, source: SCENARIO, elements: ripple },
     sfx: [{ src: 'brake', at: 'word:taps', volume: 0.25 }],
   },

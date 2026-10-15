@@ -416,7 +416,7 @@ const beats = [
   {
     id: 'glow',
     block: 'canvas',
-    duration: 1.4,
+    duration: 1.6,
     transition: 'cut',
     props: {
       world: 'reveal',
@@ -448,7 +448,7 @@ const beats = [
     id: 'whole',
     block: 'canvas',
     vo: 'Meet Halo.',
-    hold: 1.4,
+    hold: 1.7,
     props: {
       world: 'reveal',
       view: [0, 0, 1920, 1080],
