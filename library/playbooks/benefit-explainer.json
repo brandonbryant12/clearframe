@@ -97,6 +97,7 @@
           "block": "canvas",
           "vo": "To change it, open Benefits, then Retirement. Set your rate to five percent, and save.",
           "props": {
+            "source": "Example Co. retirement plan summary",
             "sketch": "portal",
             "sketchText": {
               "APP": "Example Co. Benefits",

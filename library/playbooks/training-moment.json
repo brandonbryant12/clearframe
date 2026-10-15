@@ -50,6 +50,7 @@
       "block": "canvas",
       "vo": "It looked routine. But it was urgent, the sender was almost right, and the link was one nobody expected.",
       "props": {
+        "source": "Example Co. phishing simulation, spring",
         "sketch": "inspect",
         "sketchParams": {
           "marks": [
