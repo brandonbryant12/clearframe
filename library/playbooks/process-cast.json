@@ -120,6 +120,7 @@
   },
   {
    "id": "change",
+   "hold": 0.6,
    "block": "canvas",
    "vo": "But someone takes it on, and it changes.",
    "tail": 0.9,

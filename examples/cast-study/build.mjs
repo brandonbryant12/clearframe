@@ -17,7 +17,7 @@ const beats = [
     ], formations: [{ form: 'scatter', at: 0.3, stagger: 0.22 }] } },
   { id: 'order', vo: 'So the agent pulls what matters into an order.', tail: 0.9,
     cast: { formations: [{ form: 'exit', ids: ['idea'], say: 'pulls', dur: 0.8 }, { form: 'line', ids: sequence, say: 'pulls', thread: true }] } },
-  { id: 'moment', vo: 'One piece becomes the moment on screen.', tail: 0.8,
+  { id: 'moment', vo: 'One piece becomes the moment on screen.', tail: 1.2,
     cast: { formations: [{ form: 'hero', hero: 'chart', say: 'becomes', word: 'the moment' }, { form: 'fill', ids: ['chart'], say: 'screen', dur: 0.9 }] } },
   // Not a cast beat: a sourced figure on the chart's colour, which the fill hands it.
   { id: 'figure', vo: 'Here, about six seconds to render the whole draft.', block: 'stat',

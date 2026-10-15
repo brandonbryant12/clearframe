@@ -22,6 +22,7 @@
   "beats": [
     {
       "id": "meet",
+      "hold": 0.6,
       "block": "canvas",
       "vo": "This is Priya. It's her first week, and her first paycheck is on its way.",
       "props": {

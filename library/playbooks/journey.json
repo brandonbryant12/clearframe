@@ -139,6 +139,7 @@
     },
     {
       "id": "city",
+      "hold": 0.6,
       "block": "canvas",
       "vo": "Then a second network runs it under the streets, to every tap.",
       "tail": 0.7,
