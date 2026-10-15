@@ -742,18 +742,24 @@ function linkCasts(beats, sb, timing, { warnings }, cast = {}) {
 }
 
 /**
- * Fold keys that only move an element (x, y) into its geometry, so a morph starts where they left
- * it. False, leaving the state as it was, when they do more (scale, rotate, opacity) or the
- * element's position is not a field (a path).
+ * Fold where an element's keys leave it (moved, scaled, turned, faded) into its state, so a morph
+ * starts there. False, leaving the state as it was, when they do what a state cannot hold (blur,
+ * tilt, a stretch in one direction) or the element's position is not a field (a path).
  */
 function movedBy(state, keys) {
   const timing = new Set(['at', 'say', 'after', 'dur', 'ease', 'hold', 'sound']);
-  if (keys.some(k => Object.keys(k).some(f => !timing.has(f) && f !== 'x' && f !== 'y'))) return false;
-  const [dx, dy] = keys.reduce(([x, y], k) => [k.x ?? x, k.y ?? y], [0, 0]);
+  const held = new Set(['x', 'y', 'scale', 'scaleX', 'scaleY', 'rotate', 'opacity']);
+  if (keys.some(k => Object.keys(k).some(f => !timing.has(f) && !held.has(f)))) return false;
+  const end = keys.reduce((e, k) => ({ ...e, ...Object.fromEntries(Object.entries(k).filter(([f]) => held.has(f))) }), {});
+  const { x: dx = 0, y: dy = 0, scaleX = end.scale ?? 1, scaleY = end.scale ?? 1, rotate = 0, opacity = 1 } = end;
+  if (Math.abs(scaleX - scaleY) > 1e-6) return false;
   const fields = { group: [['x'], ['y']], rect: [['x'], ['y']], text: [['x'], ['y']], icon: [['x'], ['y']], image: [['x'], ['y']], circle: [['cx'], ['cy']], ellipse: [['cx'], ['cy']], line: [['x1', 'x2'], ['y1', 'y2']] }[state.type];
-  if (!fields) return false;
-  for (const f of fields[0]) state[f] = (state[f] ?? 0) + dx;
-  for (const f of fields[1]) state[f] = (state[f] ?? 0) + dy;
+  if (!fields && (dx || dy)) return false;
+  for (const f of fields?.[0] ?? []) state[f] = (state[f] ?? 0) + dx;
+  for (const f of fields?.[1] ?? []) state[f] = (state[f] ?? 0) + dy;
+  if (scaleX !== 1) state.scale = (state.scale ?? 1) * scaleX;
+  if (rotate) state.rotate = (state.rotate ?? 0) + rotate;
+  if (opacity !== 1) state.opacity = (state.opacity ?? 1) * opacity;
   return true;
 }
 

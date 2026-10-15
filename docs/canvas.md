@@ -120,7 +120,7 @@ Use print where the subject is printed matter (a statement, a newspaper clipping
 
 ## Across the cut: the same id, or into it
 
-An element with the same `id` in consecutive canvas beats morphs from where it was to where it is (position, size, colour, a static `scale`), so the cut carries it. Where keys moved it (a card that slid across), the morph starts where they left it; keys that scale, turn or fade it are not followed, and `check` says so. To go somewhere new through something already on screen, give the next beat `into: "id"`: the camera goes forward through that element (an app screen, a page, one tile of a `share`) until it overfills the frame, and the new scene comes up inside it. It follows the element to where its keys leave it, so a stack that has moved to the middle is entered where it stands.
+An element with the same `id` in consecutive canvas beats morphs from where it was to where it is (position, size, colour, a static `scale`), so the cut carries it. Where keys left it (a card that slid across, a sun that grew in), the morph starts there; keys a state cannot hold (blur, tilt, a stretch in one direction) are not followed, and `check` says so. To go somewhere new through something already on screen, give the next beat `into: "id"`: the camera goes forward through that element (an app screen, a page, one tile of a `share`) until it overfills the frame, and the new scene comes up inside it. It follows the element to where its keys leave it, so a stack that has moved to the middle is entered where it stands.
 
 ## Worlds: one drawing, a travelling camera
 
