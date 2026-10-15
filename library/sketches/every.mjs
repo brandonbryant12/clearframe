@@ -18,13 +18,14 @@ export default {
     amount: { default: 6, min: 0.01, max: 1e7, about: 'the amount each period' },
     prefix: { default: '$', about: 'printed before each amount' },
     decimals: { default: 0, min: 0, max: 2, integer: true, figure: false, about: 'decimals the source prints' },
-    sign: { default: '+', oneOf: ['+', '−', ''], about: 'a change up (+), down (−), or a plain amount ("")' },
+    sign: { default: '+', oneOf: ['+', '−', '-', ''], about: 'a change up (+), down (− or -), or a plain amount ("")' },
     tone: { default: 'accent', oneOf: ['accent', 'negative', 'positive'], about: 'colour of the amounts: negative for a cost, positive for a saving' },
   },
   build(w, h, { params = {} } = {}) {
     const { count = 26, amount = 6, prefix = '$', decimals = 0, sign = '+', tone = 'accent' } = params;
     const T = h > w * 1.1;
-    const fmt = v => `${sign}${prefix}${v.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`;
+    // A hyphen is printed as the minus sign it stands for.
+    const fmt = v => `${sign === '-' ? '−' : sign}${prefix}${v.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`;
     const total = Math.round(count * amount * 10 ** decimals) / 10 ** decimals;
     const text = (t, x, y, size, font, fill, extra = {}) => ({ type: 'text', text: t, x, y, size, font, fill, ...extra });
     const els = [];
