@@ -128,6 +128,25 @@ export function alignScript(tokens, heard, { window = 6 } = {}) {
       matched++;
       continue;
     }
+    // One written word heard as two or three ("myKestrel" as "my Kestrel", "401(k)" as "401 k"),
+    // or two written words heard as one: the same letters over a measured span.
+    const joined = (list, at, n) => (at + n <= list.length ? list.slice(at, at + n).map(x => x.key).join('') : null);
+    const split = [2, 3].find(n => S[i].key && joined(A, j, n) === S[i].key);
+    if (split) {
+      out[i] = { w: S[i].w, t0: A[j].t0, t1: A[j + split - 1].t1, ...(A.slice(j, j + split).some(x => x.estimated) ? { estimated: true } : {}) };
+      i++;
+      j += split;
+      matched++;
+      continue;
+    }
+    const fused = [2, 3].find(n => A[j].key && joined(S, i, n) === A[j].key);
+    if (fused) {
+      spread(i, i + fused, A[j].t0, A[j].t1, Boolean(A[j].estimated));
+      i += fused;
+      j++;
+      matched += fused;
+      continue;
+    }
     // Resynchronise on the nearest pair of equal words ahead in both sequences.
     let best = null;
     for (let d = 1; d <= window * 2 && !best; d++)

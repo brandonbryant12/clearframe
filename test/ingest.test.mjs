@@ -59,3 +59,10 @@ test('script alignment keeps the script spelling, times substitutions, and never
   const { words } = scriptedWords(heard, scriptTurns('HOST: Trees help a lot'));
   assert.ok(words.every(w => w.speaker === 'HOST'));
 });
+
+test('a brand name heard as two words is measured, not estimated', () => {
+  const heard = [['open', 0, 0.3], ['my', 0.35, 0.5], ['Kestrel', 0.5, 0.9], ['then', 1, 1.2]].map(([w, t0, t1]) => ({ w, t0, t1 }));
+  const r = alignScript(['open', 'myKestrel', 'then'], heard);
+  assert.equal(r.interpolated, 0);
+  assert.deepEqual([r.words[1].t0, r.words[1].t1], [0.35, 0.9]);
+});
