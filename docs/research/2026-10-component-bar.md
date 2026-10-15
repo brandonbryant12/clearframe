@@ -81,3 +81,13 @@ Judged frame by frame across the same cut, every transition except `wipe` passed
 - **`push` is a real push**: both scenes move as one strip, drawn by the frame compositor the way `wipe` already was.
 - **Captions and the source line hold still** across every transition; only the pictures move.
 - **Retired**: `rise` and `zoom` (and the `zoom` exit), the two build-ins from an empty frame.
+
+## Third pass: the open-enrollment bench film
+
+The third bench film (open enrollment, local voice and Whisper) ranked what it had to hand-build. Each item was judged against the same bar and its frames checked in both shapes:
+
+- **Built:** `carryover` (its first-ranked gap; the reset lands in next year's empty slot, and `bookend` closes on the same board), `deposit` (the employer's money landing in an account: a deposit line, then the balance, never a count through unstated figures), app row badges, `was-now` and `match` openings that move on the figures the line names first, and an `open-enrollment` example.
+- **Fixed in the renderer:** a panel under the captions; an `into` through type blurs instead of showing a fragment of a word; a box per wrapped line; dimmed type counted by the caption check; an opaque stamp face.
+- **Fixed in the engine:** a sketch moment bound to a word kept only its first part on the word and collapsed the rest of its sequence onto it; morphs now start where keys left an element; draft takes are cut in the real pause; a name heard as two words is measured; casts keep above the captions.
+- **Declined: `fade` as a cross-dissolve.** The film said the dip through the ground left the voice over an empty frame for about 0.2 s. A dissolve was built and reverted: two scenes' type overprinting is the double exposure the library retired (`dissolve`), the dip is short and only used at a chapter change, and `into` already carries a turn without one.
+- **Left for later:** a per-paycheck delta picture ("$6 more on each of 26 paychecks"; `was-now` with a push covers most of it), and the `journey` sample's stops that open on a nearly empty frame while the camera travels.
