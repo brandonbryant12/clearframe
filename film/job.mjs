@@ -864,7 +864,10 @@ function linkWorlds(beats, sb, timing, { warnings }) {
     if (v)
       for (const el of b.props.elements.filter(el => el.type === 'text' && !el.carried)) {
         const e = elementsExtent([el]);
-        if (e && (e.left < v[0] || e.top < v[1] || e.left + e.w > v[0] + v[2] || e.bottom > v[1] + v[3]))
+        // Cut by the edge of the shot. (Wholly outside it is off-shot on purpose: a close-up on one
+        // bar of a chart the beat draws whole.)
+        const inside = e && e.left < v[0] + v[2] && e.left + e.w > v[0] && e.top < v[1] + v[3] && e.bottom > v[1];
+        if (inside && (e.left < v[0] || e.top < v[1] || e.left + e.w > v[0] + v[2] || e.bottom > v[1] + v[3]))
           warnings.push(`${b.id}: text "${String(el.text).slice(0, 30)}" reaches outside this beat's camera view.`);
         // Through the camera, a label's size on screen is its size times the zoom.
         const zoom =
