@@ -177,7 +177,7 @@ export async function mix(root, timing, output, { loudness = -14, voiceGain = 1 
   for (const s of allSfx) {
     const file = await resolveCue(root, s.name);
     if (!file) {
-      log.warn(`sfx missing: ${s.name} (built-ins: ${Object.keys(SFX).join(', ')})`);
+      log.warn(`sfx missing: ${s.name} (built-ins: ${Object.keys(SFX).join(', ')}; a file must be inside the project)`);
       continue;
     }
     const i = add(file);

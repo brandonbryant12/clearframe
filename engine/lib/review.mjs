@@ -5,7 +5,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { computeTiming } from './timing.mjs';
 import { ffmpeg, readJSON, writeJSON } from './util.mjs';
-const sha = data => crypto.createHash('sha256').update(data).digest('hex');
+import { bindVideo, recheck } from './evidence.mjs';
 const escape = text =>
   String(text).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
@@ -41,16 +41,13 @@ export function reviewSamples(timing, { beat } = {}) {
 
 export async function reviewProject(root, { video, beat, directory } = {}) {
   const file = path.resolve(video ?? path.join(root, 'build/video.mp4'));
-  const report = readJSON(`${file}.json`);
-  if (sha(fs.readFileSync(file)) !== report.outputSha256)
-    throw new Error('Video changed since rendering; render again before review.');
-  for (const [relative, hash] of Object.entries(report.hashes)) {
-    if (sha(fs.readFileSync(path.join(root, relative))) !== hash)
-      throw new Error(`Input changed since rendering: ${relative}. Render again before review.`);
-  }
   const timing = computeTiming(root);
-  if (timing.frames !== report.frames || timing.fps !== report.fps)
-    throw new Error('Timeline differs from the encoded video. Render again before review.');
+  // Frames are labelled with the working copy's beats and words, so the video must be the render
+  // of the working copy: the same receipt check qa makes (engine/lib/evidence.mjs).
+  const evidence = bindVideo(root, file, { timing });
+  if (evidence.scope === 'unbound') throw new Error('No render receipt beside the video; render again before review.');
+  if (evidence.scope !== 'bound') throw new Error(`${evidence.problems.join('. ')}. Render again before review.`);
+  const report = readJSON(`${file}.json`);
   const samples = reviewSamples(timing, { beat });
   const dir = directory ? path.resolve(directory) : path.join(root, 'build', `review-${crypto.randomUUID()}`);
   // Never overwrite or clean up a caller-owned review directory.
@@ -85,6 +82,8 @@ export async function reviewProject(root, { video, beat, directory } = {}) {
     samples.forEach((s, i) => {
       s.image = images[i];
     });
+    const replaced = recheck(evidence);
+    if (replaced) throw new Error(`${replaced}; review again.`);
     // One tiled image of every sample, in order, so a reviewer (human or model) reads it at a glance.
     await ffmpeg([
       '-y',
@@ -105,6 +104,7 @@ export async function reviewProject(root, { video, beat, directory } = {}) {
       outputSha256: report.outputSha256,
       inputId: report.inputId,
       draft: report.draft,
+      evidence,
       samples,
     });
     const cards = samples

@@ -795,6 +795,9 @@ async function main() {
   if (cmd === 'qa') {
     const { qaProject } = await import('./lib/qa.mjs');
     const r = await qaProject(dir, { video: o.video, loop: o.loop });
+    // An error (a broken receipt, a one-frame pop) fails the command in either output mode:
+    // automation reads --json and the exit status, not the printed lines.
+    if (r.findings.some(f => f.level === 'error')) process.exitCode = 1;
     if (o.json) return console.log(JSON.stringify(r, null, 2));
     const s = r.summary,
       rel = f => path.relative(process.cwd(), f);
@@ -806,8 +809,11 @@ async function main() {
       console.log(verdict.lines[0]);
     } catch {}
     console.log(
-      `${s.seconds}s · change ${s.changePerSecond}/s (viral references 8–42; under 2 reads as held) · held ${s.heldSeconds}s · ${s.pops} pop(s) · ${s.loudness ? `${s.loudness.integrated} LUFS, peak ${s.loudness.peak}` : 'no audio'} · ${s.color}`,
+      `${s.seconds}s · change ${s.changePerSecond}/s (viral references 8–42; under 2 reads as held) · held ${s.heldSeconds}s · ${s.pops} pop(s) · ${s.loudness ? `${s.loudness.integrated} LUFS, peak ${s.loudness.peak}` : s.audio ? 'sound NOT MEASURED' : 'no audio'} · ${s.color}`,
     );
+    // Which film these numbers are about: bound to its receipt, or this file alone.
+    const { evidenceLine } = await import('./lib/evidence.mjs');
+    console.log(evidenceLine(r.evidence));
     for (const f of r.findings)
       console.log(
         `${f.level === 'error' ? '✗' : f.level === 'warn' ? '!' : '·'} ${(f.t != null ? `${f.t}s${f.beat ? ` ${f.beat}` : ''}` : f.kind).padEnd(22)} ${f.message}`,
@@ -817,7 +823,6 @@ async function main() {
     );
     // And the whole verdict last, with each edit.
     if (verdict) console.log(verdict.lines.join('\n'));
-    if (r.findings.some(f => f.level === 'error')) process.exitCode = 1;
     return;
   }
   if (cmd === 'beatmap') {

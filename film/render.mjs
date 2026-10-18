@@ -37,8 +37,16 @@ export function validateVideo(file, { width, height, fps, frames }) {
     throw new Error('Native output dimensions, frame rate or decoded frame count differ from the storyboard.');
   return { video: v, audio: streams.find(s => s.codec_type === 'audio') ?? null };
 }
-// The encoder settings live in scene/native/src/encode.rs; these labels describe them.
+// The encoder settings live in scene/native/src/runtime.rs (`x264`); these labels describe them.
 export const ENCODERS = { draft: 'draft (x264 veryfast, CRF 21)', final: 'final (x264 medium, CRF 16)' };
+
+/** The finishing step's code, by content (repo-relative path → sha256), recorded in every receipt
+ * and checked by `qa` and `review`: these files decide what is heard and where. */
+export const FINISHING_SOURCES = ['film/render.mjs', 'engine/lib/audio.mjs', 'engine/lib/sfx.mjs', 'film/sound.mjs'];
+/** Of those, the code that turns a cue sheet and recordings into the mixed samples. */
+const MIXING_SOURCES = ['engine/lib/audio.mjs', 'engine/lib/sfx.mjs'];
+export const finishingSources = () =>
+  Object.fromEntries(FINISHING_SOURCES.map(rel => [rel, sha256(fs.readFileSync(new URL(`../${rel}`, import.meta.url)))]));
 
 /** Rebuild the MP4 timeline from the packets themselves (an edit list that ends a frame early
  * makes players drop the final frame); frames are copied bit-for-bit. */
@@ -136,11 +144,8 @@ export async function renderProject(
       colorTransfer: probe.video.color_transfer ?? null,
       colorPrimaries: probe.video.color_primaries ?? null,
       colorRange: probe.video.color_range ?? null,
-      // The native source hash excludes the JavaScript finishing step.
-      finishingSourceHashes: {
-        'film/render.mjs': sha256(fs.readFileSync(new URL(import.meta.url))),
-        'engine/lib/audio.mjs': sha256(fs.readFileSync(new URL('../engine/lib/audio.mjs', import.meta.url))),
-      },
+      // The native source hash excludes the JavaScript finishing step: the mix, its cues and where they land.
+      finishingSourceHashes: finishingSources(),
       outputSha256: await phase('hash', () => sha256File(output)),
       voiceProviders: [...new Set(ctx.timing.beats.map(b => b.vo?.provider).filter(Boolean))],
       ...(fast ? { notValidated: unvalidated(ctx, check) } : {}),
@@ -222,8 +227,13 @@ async function fullMix(root, ctx) {
         beats: ctx.timing.beats.map(b => [b.vo?.src, b.vo?.start, b.sfx, b.start, b.end, !!b.vo]),
         music: ctx.timing.music,
         duration: ctx.timing.duration,
-        // Only what can be heard: a picture-only edit reuses the mix.
-        audio: Object.entries(ctx.manifest.hashes).filter(([k]) => /^assets\/(vo|music|sfx)\//.test(k) || k === ctx.timing.music?.src),
+        // Only what can be heard, by content: a picture-only edit reuses the mix, and a recording,
+        // a bed or a cue file replaced in place (or a built-in cue's recipe) never does.
+        audio: [...new Set([...ctx.timing.beats.map(b => b.vo?.src), ctx.timing.music?.src].filter(Boolean))].map(k => [k, ctx.manifest.hashes[k] ?? null]),
+        sounds: ctx.manifest.sounds ?? {},
+        // And by the code that mixes it (cue placement is already in `cues`): a new mixer never
+        // reuses a mix the old one made, and a picture-code edit still keeps the sound.
+        mixer: Object.fromEntries(MIXING_SOURCES.map(rel => [rel, finishingSources()[rel]])),
         mix: ctx.sb.mix,
         cues,
       }),
@@ -253,6 +263,8 @@ export function loudness(file) {
     ['-hide_banner', '-nostats', '-i', file, '-map', '0:a:0', '-af', 'ebur128=peak=true', '-f', 'null', '-'],
     { encoding: 'utf8', maxBuffer: 2 ** 28 },
   );
+  // A meter that failed part-way may still have printed numbers: only a clean exit measures.
+  if (r.status !== 0) return null;
   const tail = r.stderr.slice(r.stderr.lastIndexOf('Summary:'));
   const i = tail.match(/I:\s+(-?[\d.]+) LUFS/),
     p = tail.match(/Peak:\s+(-?[\d.]+) dBFS/);

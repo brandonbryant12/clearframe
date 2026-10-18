@@ -18,6 +18,9 @@ function markdown(report) {
     `\nSource project: ${report.project}\n\n| Stage | Seconds | Result |\n| --- | ---: | --- |\n` +
     report.stages.map(s => `| ${s.name} | ${s.seconds?.toFixed(2) ?? '—'} | ${s.status} |`).join('\n') +
     `\n\n## Artifacts\n${Object.values(report.artifacts).map(v => `- ${link(v)}`).join('\n')}\n` +
+    (report.qa?.evidence
+      ? `\n## QA evidence\nScope: **${report.qa.evidence.scope}** (${report.qa.evidence.coverage} coverage) · video sha256 \`${report.qa.evidence.videoSha256}\` · input id \`${report.qa.evidence.inputId ?? '—'}\`${report.qa.evidence.revision ? ` · revision ${report.qa.evidence.revision}` : ''}\n\nChecked: ${report.qa.evidence.checked.join('; ')}.${report.qa.evidence.unchecked.length ? ` Not checked: ${report.qa.evidence.unchecked.join('; ')}.` : ''}\n`
+      : '') +
     (report.error ? `\n## Failure\n${report.error}\n` : '') +
     `\n## Review queue\n` +
     report.reviewQueue.map(r => `- [ ] ${r}`).join('\n') +
@@ -91,7 +94,11 @@ export async function runPipeline(root, { draft = false, scale = 1, noRender = f
         }
         const errors = qa.findings.filter(f => f.level === 'error');
         if (errors.length) throw new Error(errors.map(f => f.message).join('\n'));
-        return { summary: qa.summary, findings: qa.findings };
+        // The measurements must be of the film this run rendered, bound to its receipt.
+        // A fresh render's receipt records every identity, so its coverage is full.
+        if (qa.evidence?.scope !== 'bound' || qa.evidence.coverage !== 'full' || qa.evidence.videoSha256 !== report.render.outputSha256)
+          throw new Error(`QA is not fully bound to this run's render (${qa.evidence?.scope ?? 'no evidence'}${qa.evidence?.coverage ? `, ${qa.evidence.coverage} coverage` : ''}); start a fresh pipeline run.`);
+        return { summary: qa.summary, findings: qa.findings, evidence: qa.evidence };
       });
       const boundaries = path.join(dir, 'boundaries');
       await stage('boundary-review', () => reviewProject(root, { video, directory: boundaries }));
